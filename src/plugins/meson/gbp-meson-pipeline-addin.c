@@ -115,7 +115,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_autofree gchar *build_ninja = NULL;
   g_autofree gchar *crossbuild_file = NULL;
   IdeBuildSystem *build_system;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeContext *context;
   IdeRuntime *runtime;
   IdeToolchain *toolchain;
@@ -143,7 +143,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
   srcdir = ide_build_pipeline_get_srcdir (pipeline);
 
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (srcdir != NULL);
 
@@ -157,7 +157,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
     }
 
   if (ninja == NULL)
-    ninja = ide_configuration_getenv (config, "NINJA");
+    ninja = ide_config_getenv (config, "NINJA");
 
   if (ninja == NULL)
     {
@@ -173,11 +173,11 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       NULL == (install_launcher = ide_build_pipeline_create_launcher (pipeline, &error)))
     IDE_GOTO (failure);
 
-  prefix = ide_configuration_get_prefix (config);
-  config_opts = ide_configuration_get_config_opts (config);
-  parallel = ide_configuration_get_parallelism (config);
+  prefix = ide_config_get_prefix (config);
+  config_opts = ide_config_get_config_opts (config);
+  parallel = ide_config_get_parallelism (config);
 
-  if (NULL == (meson = ide_configuration_getenv (config, "MESON")))
+  if (NULL == (meson = ide_config_getenv (config, "MESON")))
     meson = "meson";
 
   if (!ide_runtime_contains_program_in_path (runtime, meson, NULL))

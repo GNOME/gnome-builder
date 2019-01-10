@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include "ide-build-target.h"
-#include "ide-configuration.h"
+#include "ide-config.h"
 #include "ide-runtime.h"
 #include "ide-runner.h"
 #include "ide-toolchain.h"
@@ -138,14 +138,14 @@ ide_runtime_contains_program_in_path (IdeRuntime   *self,
 
 static void
 ide_runtime_real_prepare_configuration (IdeRuntime       *self,
-                                        IdeConfiguration *configuration)
+                                        IdeConfig *configuration)
 {
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
   g_assert (IDE_IS_RUNTIME (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_CONFIG (configuration));
 
-  if (NULL == ide_configuration_get_prefix (configuration))
+  if (NULL == ide_config_get_prefix (configuration))
     {
       g_autofree gchar *install_path = NULL;
       g_autofree gchar *project_id = NULL;
@@ -161,7 +161,7 @@ ide_runtime_real_prepare_configuration (IdeRuntime       *self,
                                        priv->id,
                                        NULL);
 
-      ide_configuration_set_prefix (configuration, install_path);
+      ide_config_set_prefix (configuration, install_path);
     }
 }
 
@@ -519,10 +519,10 @@ ide_runtime_create_launcher (IdeRuntime  *self,
 
 void
 ide_runtime_prepare_configuration (IdeRuntime       *self,
-                                   IdeConfiguration *configuration)
+                                   IdeConfig *configuration)
 {
   g_return_if_fail (IDE_IS_RUNTIME (self));
-  g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
+  g_return_if_fail (IDE_IS_CONFIG (configuration));
 
   IDE_RUNTIME_GET_CLASS (self)->prepare_configuration (self, configuration);
 }

@@ -45,7 +45,7 @@ typedef struct
 
 typedef struct
 {
-  IdeConfiguration *config;
+  IdeConfig *config;
   gchar            *runtime_id;
   gchar            *name;
   gchar            *arch;
@@ -629,7 +629,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_autofree gchar *branch = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeToolchain *toolchain;
   BootstrapState *state;
   const gchar *runtime_id;
@@ -649,7 +649,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   triplet = ide_toolchain_get_host_triplet (toolchain);
   build_arch = ide_triplet_get_arch (triplet);
   config = ide_build_pipeline_get_configuration (pipeline);
-  runtime_id = ide_configuration_get_runtime_id (config);
+  runtime_id = ide_config_get_runtime_id (config);
 
   if (runtime_id == NULL ||
       !g_str_has_prefix (runtime_id, "flatpak:") ||

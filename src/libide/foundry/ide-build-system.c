@@ -31,7 +31,7 @@
 #include "ide-build-manager.h"
 #include "ide-build-pipeline.h"
 #include "ide-build-system.h"
-#include "ide-configuration.h"
+#include "ide-config.h"
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
 #include "ide-toolchain.h"
@@ -465,7 +465,7 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
     {
       g_autofree gchar *name = NULL;
       g_autofree gchar *branch = NULL;
-      IdeConfiguration *config;
+      IdeConfig *config;
       const gchar *config_id;
       const gchar *runtime_id;
       IdeRuntime *runtime;
@@ -475,7 +475,7 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       vcs = ide_vcs_from_context (context);
       config = ide_build_pipeline_get_configuration (pipeline);
-      config_id = ide_configuration_get_id (config);
+      config_id = ide_config_get_id (config);
       runtime = ide_build_pipeline_get_runtime (pipeline);
       runtime_id = ide_runtime_get_id (runtime);
       branch = ide_vcs_get_branch_name (vcs);

@@ -26,7 +26,7 @@
 
 struct _IdeBuildconfigConfiguration
 {
-  IdeConfiguration   parent_instance;
+  IdeConfig   parent_instance;
 
   gchar            **prebuild;
   gchar            **postbuild;
@@ -39,7 +39,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeBuildconfigConfiguration, ide_buildconfig_configuration, IDE_TYPE_CONFIGURATION)
+G_DEFINE_TYPE (IdeBuildconfigConfiguration, ide_buildconfig_configuration, IDE_TYPE_CONFIG)
 
 static GParamSpec *properties [N_PROPS];
 

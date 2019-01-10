@@ -34,7 +34,7 @@ struct _GbpBuilduiConfigSurface
 {
   IdeSurface               parent_instance;
 
-  IdeConfigurationManager *config_manager;
+  IdeConfigManager *config_manager;
 
   GtkListBox              *config_list_box;
   GtkPaned                *paned;
@@ -47,7 +47,7 @@ struct _GbpBuilduiConfigSurface
 typedef struct
 {
   DzlPreferences   *view;
-  IdeConfiguration *config;
+  IdeConfig *config;
 } AddinState;
 
 G_DEFINE_TYPE (GbpBuilduiConfigSurface, gbp_buildui_config_surface, IDE_TYPE_SURFACE)
@@ -84,7 +84,7 @@ gbp_buildui_config_surface_row_selected_cb (GbpBuilduiConfigSurface *self,
                                             GtkListBox              *list_box)
 {
   g_autoptr(PeasExtensionSet) set = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   AddinState state = {0};
   GtkWidget *child2;
 
@@ -134,7 +134,7 @@ gbp_buildui_config_surface_row_selected_cb (GbpBuilduiConfigSurface *self,
   gtk_container_add (GTK_CONTAINER (self->paned), GTK_WIDGET (self->preferences));
 
   config = g_object_get_data (G_OBJECT (row), "CONFIG");
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   set = peas_extension_set_new (peas_engine_get_default (),
                                 IDE_TYPE_CONFIG_VIEW_ADDIN,
@@ -153,16 +153,16 @@ gbp_buildui_config_surface_create_row_cb (gpointer item,
                                           gpointer user_data)
 {
   GbpBuilduiConfigSurface *self = user_data;
-  IdeConfiguration *config = item;
+  IdeConfig *config = item;
   const gchar *title;
   GtkWidget *row;
   GtkWidget *label;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_CONFIG_SURFACE (self));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
-  title = ide_configuration_get_display_name (config);
+  title = ide_config_get_display_name (config);
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
@@ -185,10 +185,10 @@ gbp_buildui_config_surface_create_row_cb (gpointer item,
 
 static void
 gbp_buildui_config_surface_set_config_manager (GbpBuilduiConfigSurface *self,
-                                               IdeConfigurationManager *config_manager)
+                                               IdeConfigManager *config_manager)
 {
   g_assert (GBP_IS_BUILDUI_CONFIG_SURFACE (self));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (config_manager));
+  g_assert (IDE_IS_CONFIG_MANAGER (config_manager));
   g_assert (self->config_manager == NULL);
 
   g_set_object (&self->config_manager, config_manager);
@@ -279,7 +279,7 @@ gbp_buildui_config_surface_class_init (GbpBuilduiConfigSurfaceClass *klass)
     g_param_spec_object ("config-manager",
                          "Config Manager",
                          "The configuration manager",
-                         IDE_TYPE_CONFIGURATION_MANAGER,
+                         IDE_TYPE_CONFIG_MANAGER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -307,11 +307,11 @@ static void
 gbp_buildui_config_surface_set_config_cb (GtkWidget *widget,
                                           gpointer   user_data)
 {
-  IdeConfiguration *config = user_data;
+  IdeConfig *config = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GTK_IS_LIST_BOX_ROW (widget));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   if (g_object_get_data (G_OBJECT (widget), "CONFIG") == (gpointer)config)
     {
@@ -323,11 +323,11 @@ gbp_buildui_config_surface_set_config_cb (GtkWidget *widget,
 
 void
 gbp_buildui_config_surface_set_config (GbpBuilduiConfigSurface *self,
-                                       IdeConfiguration        *config)
+                                       IdeConfig        *config)
 {
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (GBP_IS_BUILDUI_CONFIG_SURFACE (self));
-  g_return_if_fail (IDE_IS_CONFIGURATION (config));
+  g_return_if_fail (IDE_IS_CONFIG (config));
 
   gtk_container_foreach (GTK_CONTAINER (self->config_list_box),
                          gbp_buildui_config_surface_set_config_cb,

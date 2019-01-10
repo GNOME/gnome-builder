@@ -207,7 +207,7 @@ ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline  *pipeline,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *cache_path = NULL;
   const gchar *make = "make";
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeRuntime *runtime;
 
   IDE_ENTRY;
@@ -215,7 +215,7 @@ ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline  *pipeline,
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (pipeline), NULL);
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  runtime = ide_configuration_get_runtime (config);
+  runtime = ide_config_get_runtime (config);
 
   cache_path = ide_build_pipeline_build_builddir_path (pipeline, "Makecache", NULL);
 

@@ -93,16 +93,16 @@ add_suffix:
 }
 
 static gchar *
-get_next_id (IdeConfigurationManager *manager,
+get_next_id (IdeConfigManager *manager,
              const gchar             *id)
 {
   g_autoptr(GPtrArray) tries = NULL;
 
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
+  g_assert (IDE_IS_CONFIG_MANAGER (manager));
 
   tries = g_ptr_array_new_with_free_func (g_free);
 
-  while (ide_configuration_manager_get_configuration (manager, id))
+  while (ide_config_manager_get_configuration (manager, id))
     {
       g_autofree gchar *next = gen_next_id (id);
       id = next;
@@ -113,13 +113,13 @@ get_next_id (IdeConfigurationManager *manager,
 }
 
 static void
-load_string (IdeConfiguration *config,
+load_string (IdeConfig *config,
              GKeyFile         *key_file,
              const gchar      *group,
              const gchar      *key,
              const gchar      *property)
 {
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (key_file != NULL);
   g_assert (group != NULL);
   g_assert (key != NULL);
@@ -135,13 +135,13 @@ load_string (IdeConfiguration *config,
 }
 
 static void
-load_strv (IdeConfiguration *config,
+load_strv (IdeConfig *config,
            GKeyFile         *key_file,
            const gchar      *group,
            const gchar      *key,
            const gchar      *property)
 {
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (key_file != NULL);
   g_assert (group != NULL);
   g_assert (key != NULL);
@@ -159,7 +159,7 @@ load_strv (IdeConfiguration *config,
 }
 
 static void
-load_environ (IdeConfiguration *config,
+load_environ (IdeConfig *config,
               GKeyFile         *key_file,
               const gchar      *group)
 {
@@ -167,11 +167,11 @@ load_environ (IdeConfiguration *config,
   g_auto(GStrv) keys = NULL;
   gsize len = 0;
 
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (key_file != NULL);
   g_assert (group != NULL);
 
-  environment = ide_configuration_get_environment (config);
+  environment = ide_config_get_environment (config);
   keys = g_key_file_get_keys (key_file, group, &len, NULL);
 
   for (gsize i = 0; i < len; i++)
@@ -184,11 +184,11 @@ load_environ (IdeConfiguration *config,
     }
 }
 
-static IdeConfiguration *
+static IdeConfig *
 ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvider *self,
                                                const gchar                         *config_id)
 {
-  g_autoptr(IdeConfiguration) config = NULL;
+  g_autoptr(IdeConfig) config = NULL;
   g_autofree gchar *env_group = NULL;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
@@ -213,9 +213,9 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
   if (g_key_file_has_key (self->key_file, config_id, "builddir", NULL))
     {
       if (g_key_file_get_boolean (self->key_file, config_id, "builddir", NULL))
-        ide_configuration_set_locality (config, IDE_BUILD_LOCALITY_OUT_OF_TREE);
+        ide_config_set_locality (config, IDE_BUILD_LOCALITY_OUT_OF_TREE);
       else
-        ide_configuration_set_locality (config, IDE_BUILD_LOCALITY_IN_TREE);
+        ide_config_set_locality (config, IDE_BUILD_LOCALITY_IN_TREE);
     }
 
   env_group = g_strdup_printf ("%s.environment", config_id);
@@ -226,13 +226,13 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
 }
 
 static void
-ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *provider,
+ide_buildconfig_configuration_provider_load_async (IdeConfigProvider *provider,
                                                    GCancellable             *cancellable,
                                                    GAsyncReadyCallback       callback,
                                                    gpointer                  user_data)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
-  g_autoptr(IdeConfiguration) fallback = NULL;
+  g_autoptr(IdeConfig) fallback = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *path = NULL;
@@ -271,15 +271,15 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *pro
 
   for (gsize i = 0; i < len; i++)
     {
-      g_autoptr(IdeConfiguration) config = NULL;
+      g_autoptr(IdeConfig) config = NULL;
       const gchar *group = groups[i];
 
       if (strchr (group, '.') != NULL)
         continue;
 
       config = ide_buildconfig_configuration_provider_create (self, group);
-      ide_configuration_set_dirty (config, FALSE);
-      ide_configuration_provider_emit_added (provider, config);
+      ide_config_set_dirty (config, FALSE);
+      ide_config_provider_emit_added (provider, config);
     }
 
   if (self->configs->len > 0)
@@ -294,15 +294,15 @@ add_default:
                            "runtime-id", "host",
                            "toolchain-id", "default",
                            NULL);
-  ide_configuration_set_dirty (fallback, FALSE);
-  ide_configuration_provider_emit_added (provider, fallback);
+  ide_config_set_dirty (fallback, FALSE);
+  ide_config_provider_emit_added (provider, fallback);
 
 complete:
   ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
-ide_buildconfig_configuration_provider_load_finish (IdeConfigurationProvider  *provider,
+ide_buildconfig_configuration_provider_load_finish (IdeConfigProvider  *provider,
                                                     GAsyncResult              *result,
                                                     GError                   **error)
 {
@@ -333,7 +333,7 @@ ide_buildconfig_configuration_provider_save_cb (GObject      *object,
 }
 
 static void
-ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *provider,
+ide_buildconfig_configuration_provider_save_async (IdeConfigProvider *provider,
                                                    GCancellable             *cancellable,
                                                    GAsyncReadyCallback       callback,
                                                    gpointer                  user_data)
@@ -347,7 +347,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
   g_auto(GStrv) groups = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *data = NULL;
-  IdeConfigurationManager *manager;
+  IdeConfigManager *manager;
   IdeContext *context;
   gboolean dirty = FALSE;
   gsize length = 0;
@@ -365,8 +365,8 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
   /* If no configs are dirty, short circuit to avoid writing any files to disk. */
   for (guint i = 0; !dirty && i < self->configs->len; i++)
     {
-      IdeConfiguration *config = g_ptr_array_index (self->configs, i);
-      dirty |= ide_configuration_get_dirty (config);
+      IdeConfig *config = g_ptr_array_index (self->configs, i);
+      dirty |= ide_config_get_dirty (config);
     }
 
   if (!dirty)
@@ -376,7 +376,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_configuration_manager_from_context (context);
+  manager = ide_config_manager_from_context (context);
   path = ide_context_build_filename (context, DOT_BUILDCONFIG, NULL);
   file = g_file_new_for_path (path);
 
@@ -392,16 +392,16 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
   for (guint i = 0; i < self->configs->len; i++)
     {
-      IdeConfiguration *config = g_ptr_array_index (self->configs, i);
+      IdeConfig *config = g_ptr_array_index (self->configs, i);
       g_autofree gchar *env_group = NULL;
       const gchar *config_id;
       IdeEnvironment *env;
       guint n_items;
 
-      if (!ide_configuration_get_dirty (config))
+      if (!ide_config_get_dirty (config))
         continue;
 
-      config_id = ide_configuration_get_id (config);
+      config_id = ide_config_get_id (config);
       env_group = g_strdup_printf ("%s.environment", config_id);
 
       /*
@@ -413,7 +413,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
 #define PERSIST_STRING_KEY(key, getter) \
       g_key_file_set_string (self->key_file, config_id, key, \
-                             ide_configuration_##getter (config) ?: "")
+                             ide_config_##getter (config) ?: "")
 #define PERSIST_STRV_KEY(key, getter) G_STMT_START { \
       const gchar * const *val = ide_buildconfig_configuration_##getter (IDE_BUILDCONFIG_CONFIGURATION (config)); \
       gsize vlen = val ? g_strv_length ((gchar **)val) : 0; \
@@ -433,19 +433,19 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 #undef PERSIST_STRING_KEY
 #undef PERSIST_STRV_KEY
 
-      if (ide_configuration_get_locality (config) == IDE_BUILD_LOCALITY_IN_TREE)
+      if (ide_config_get_locality (config) == IDE_BUILD_LOCALITY_IN_TREE)
         g_key_file_set_boolean (self->key_file, config_id, "builddir", FALSE);
-      else if (ide_configuration_get_locality (config) == IDE_BUILD_LOCALITY_OUT_OF_TREE)
+      else if (ide_config_get_locality (config) == IDE_BUILD_LOCALITY_OUT_OF_TREE)
         g_key_file_set_boolean (self->key_file, config_id, "builddir", TRUE);
       else
         g_key_file_remove_key (self->key_file, config_id, "builddir", NULL);
 
-      if (config == ide_configuration_manager_get_current (manager))
+      if (config == ide_config_manager_get_current (manager))
         g_key_file_set_boolean (self->key_file, config_id, "default", TRUE);
       else
         g_key_file_remove_key (self->key_file, config_id, "default", NULL);
 
-      env = ide_configuration_get_environment (config);
+      env = ide_config_get_environment (config);
 
       /*
        * Remove all environment keys that are no longer specified in the
@@ -482,7 +482,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
             g_key_file_set_string (self->key_file, env_group, key, value ?: "");
         }
 
-      ide_configuration_set_dirty (config, FALSE);
+      ide_config_set_dirty (config, FALSE);
     }
 
   /* Now truncate any old groups in the keyfile. */
@@ -524,7 +524,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 }
 
 static gboolean
-ide_buildconfig_configuration_provider_save_finish (IdeConfigurationProvider  *provider,
+ide_buildconfig_configuration_provider_save_finish (IdeConfigProvider  *provider,
                                                     GAsyncResult              *result,
                                                     GError                   **error)
 {
@@ -536,11 +536,11 @@ ide_buildconfig_configuration_provider_save_finish (IdeConfigurationProvider  *p
 }
 
 static void
-ide_buildconfig_configuration_provider_delete (IdeConfigurationProvider *provider,
-                                               IdeConfiguration         *config)
+ide_buildconfig_configuration_provider_delete (IdeConfigProvider *provider,
+                                               IdeConfig         *config)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
-  g_autoptr(IdeConfiguration) hold = NULL;
+  g_autoptr(IdeConfig) hold = NULL;
   g_autofree gchar *env = NULL;
   const gchar *config_id;
   gboolean had_group;
@@ -555,11 +555,11 @@ ide_buildconfig_configuration_provider_delete (IdeConfigurationProvider *provide
   if (!g_ptr_array_remove (self->configs, hold))
     {
       g_critical ("No such configuration %s",
-                  ide_configuration_get_id (hold));
+                  ide_config_get_id (hold));
       return;
     }
 
-  config_id = ide_configuration_get_id (config);
+  config_id = ide_config_get_id (config);
   had_group = g_key_file_has_group (self->key_file, config_id);
   env = g_strdup_printf ("%s.environment", config_id);
   g_key_file_remove_group (self->key_file, config_id, NULL);
@@ -578,7 +578,7 @@ ide_buildconfig_configuration_provider_delete (IdeConfigurationProvider *provide
    */
   if (self->configs->len == 0)
     {
-      g_autoptr(IdeConfiguration) new_config = NULL;
+      g_autoptr(IdeConfig) new_config = NULL;
 
       /* "Default" is not translated because .buildconfig can be checked in */
       new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
@@ -593,23 +593,23 @@ ide_buildconfig_configuration_provider_delete (IdeConfigurationProvider *provide
        * Only persist this back if there was data in the keyfile
        * before we were requested to delete the build-config.
        */
-      ide_configuration_set_dirty (new_config, had_group);
-      ide_configuration_provider_emit_added (provider, new_config);
+      ide_config_set_dirty (new_config, had_group);
+      ide_config_provider_emit_added (provider, new_config);
     }
 
-  ide_configuration_provider_emit_removed (provider, hold);
+  ide_config_provider_emit_removed (provider, hold);
 }
 
 static void
-ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *provider,
-                                                  IdeConfiguration         *config)
+ide_buildconfig_configuration_provider_duplicate (IdeConfigProvider *provider,
+                                                  IdeConfig         *config)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
-  g_autoptr(IdeConfiguration) new_config = NULL;
+  g_autoptr(IdeConfig) new_config = NULL;
   g_autofree GParamSpec **pspecs = NULL;
   g_autofree gchar *new_config_id = NULL;
   g_autofree gchar *new_name = NULL;
-  IdeConfigurationManager *manager;
+  IdeConfigManager *manager;
   IdeEnvironment *env;
   const gchar *config_id;
   const gchar *name;
@@ -617,26 +617,26 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
   guint n_pspecs = 0;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION (config));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  manager = ide_configuration_manager_from_context (context);
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
+  manager = ide_config_manager_from_context (context);
+  g_assert (IDE_IS_CONFIG_MANAGER (manager));
 
-  config_id = ide_configuration_get_id (config);
+  config_id = ide_config_get_id (config);
   g_return_if_fail (config_id != NULL);
 
   new_config_id = get_next_id (manager, config_id);
   g_return_if_fail (new_config_id != NULL);
 
-  name = ide_configuration_get_display_name (config);
+  name = ide_config_get_display_name (config);
   /* translators: %s is replaced with the name of the configuration */
   new_name = g_strdup_printf (_("%s (Copy)"), name);
 
-  env = ide_configuration_get_environment (config);
+  env = ide_config_get_environment (config);
 
   new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
                              "id", new_config_id,
@@ -644,7 +644,7 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
                              "parent", self,
                              NULL);
 
-  ide_environment_copy_into (env, ide_configuration_get_environment (new_config), TRUE);
+  ide_environment_copy_into (env, ide_config_get_environment (new_config), TRUE);
 
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (new_config), &n_pspecs);
 
@@ -670,12 +670,12 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
         }
     }
 
-  ide_configuration_set_dirty (new_config, TRUE);
-  ide_configuration_provider_emit_added (provider, new_config);
+  ide_config_set_dirty (new_config, TRUE);
+  ide_config_provider_emit_added (provider, new_config);
 }
 
 static void
-ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provider)
+ide_buildconfig_configuration_provider_unload (IdeConfigProvider *provider)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
   g_autoptr(GPtrArray) configs = NULL;
@@ -688,32 +688,32 @@ ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provide
 
   for (guint i = 0; i < configs->len; i++)
     {
-      IdeConfiguration *config = g_ptr_array_index (configs, i);
-      ide_configuration_provider_emit_removed (provider, config);
+      IdeConfig *config = g_ptr_array_index (configs, i);
+      ide_config_provider_emit_removed (provider, config);
     }
 }
 
 static void
-ide_buildconfig_configuration_provider_added (IdeConfigurationProvider *provider,
-                                              IdeConfiguration         *config)
+ide_buildconfig_configuration_provider_added (IdeConfigProvider *provider,
+                                              IdeConfig         *config)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (self->configs != NULL);
 
   g_ptr_array_add (self->configs, g_object_ref (config));
 }
 
 static void
-ide_buildconfig_configuration_provider_removed (IdeConfigurationProvider *provider,
-                                                IdeConfiguration         *config)
+ide_buildconfig_configuration_provider_removed (IdeConfigProvider *provider,
+                                                IdeConfig         *config)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (self->configs != NULL);
 
   /* It's possible we already removed it by now */
@@ -723,7 +723,7 @@ ide_buildconfig_configuration_provider_removed (IdeConfigurationProvider *provid
 }
 
 static void
-configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
+configuration_provider_iface_init (IdeConfigProviderInterface *iface)
 {
   iface->added = ide_buildconfig_configuration_provider_added;
   iface->removed = ide_buildconfig_configuration_provider_removed;
@@ -739,7 +739,7 @@ configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
 G_DEFINE_TYPE_WITH_CODE (IdeBuildconfigConfigurationProvider,
                          ide_buildconfig_configuration_provider,
                          IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIG_PROVIDER,
                                                 configuration_provider_iface_init))
 
 static void

@@ -38,8 +38,8 @@ gbp_flatpak_build_target_provider_get_targets_async (IdeBuildTargetProvider *pro
   GbpFlatpakBuildTargetProvider *self = (GbpFlatpakBuildTargetProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) targets = NULL;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   IdeContext *context;
 
   g_assert (GBP_IS_FLATPAK_BUILD_TARGET_PROVIDER (self));
@@ -50,8 +50,8 @@ gbp_flatpak_build_target_provider_get_targets_async (IdeBuildTargetProvider *pro
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
 
   targets = g_ptr_array_new_with_free_func (g_object_unref);
 

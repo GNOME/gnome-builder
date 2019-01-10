@@ -441,9 +441,9 @@ gbp_cmake_build_system_get_build_flags_cb (GObject      *object,
   g_autoptr(GFile) directory = NULL;
   g_auto(GStrv) system_includes = NULL;
   g_auto(GStrv) build_flags = NULL;
-  IdeConfigurationManager *config_manager;
+  IdeConfigManager *config_manager;
   IdeContext *context;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeRuntime *runtime;
   GFile *file;
 
@@ -464,9 +464,9 @@ gbp_cmake_build_system_get_build_flags_cb (GObject      *object,
 
   /* Get non-standard system includes */
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  if ((runtime = ide_configuration_get_runtime (config)))
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  if ((runtime = ide_config_get_runtime (config)))
     system_includes = ide_runtime_get_system_include_dirs (runtime);
 
   build_flags = ide_compile_commands_lookup (compile_commands,

@@ -86,27 +86,27 @@ gbp_buildui_runtime_row_init (GbpBuilduiRuntimeRow *self)
 static void
 notify_config_runtime_id (GbpBuilduiRuntimeRow *self,
                           GParamSpec           *pspec,
-                          IdeConfiguration     *config)
+                          IdeConfig     *config)
 {
   g_assert (GBP_IS_BUILDUI_RUNTIME_ROW (self));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   gtk_widget_set_visible (GTK_WIDGET (self->image),
                           ide_str_equal0 (self->runtime_id,
-                                          ide_configuration_get_runtime_id (config)));
+                                          ide_config_get_runtime_id (config)));
 }
 
 GtkWidget *
 gbp_buildui_runtime_row_new (IdeRuntime       *runtime,
-                             IdeConfiguration *config)
+                             IdeConfig *config)
 {
   GbpBuilduiRuntimeRow *self;
   gboolean sensitive;
 
   g_return_val_if_fail (IDE_IS_RUNTIME (runtime), NULL);
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (config), NULL);
+  g_return_val_if_fail (IDE_IS_CONFIG (config), NULL);
 
-  sensitive = ide_configuration_supports_runtime (config, runtime);
+  sensitive = ide_config_supports_runtime (config, runtime);
 
   self = g_object_new (GBP_TYPE_BUILDUI_RUNTIME_ROW,
                        "sensitive", sensitive,
@@ -123,7 +123,7 @@ gbp_buildui_runtime_row_new (IdeRuntime       *runtime,
                            G_CONNECT_SWAPPED);
   gtk_widget_set_visible (GTK_WIDGET (self->image),
                           ide_str_equal0 (self->runtime_id,
-                                          ide_configuration_get_runtime_id (config)));
+                                          ide_config_get_runtime_id (config)));
 
   return GTK_WIDGET (self);
 }

@@ -688,7 +688,7 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
     const gchar *name;
     GType        child_type;
   } groups[] = {
-    { "config-manager", IDE_TYPE_CONFIGURATION_MANAGER },
+    { "config-manager", IDE_TYPE_CONFIG_MANAGER },
     { "build-manager", IDE_TYPE_BUILD_MANAGER },
     { "device-manager", IDE_TYPE_DEVICE_MANAGER },
     { "run-manager", IDE_TYPE_RUN_MANAGER },

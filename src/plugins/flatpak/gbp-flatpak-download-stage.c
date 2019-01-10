@@ -54,7 +54,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
                                   GCancellable     *cancellable)
 {
   GbpFlatpakDownloadStage *self = (GbpFlatpakDownloadStage *)stage;
-  IdeConfiguration *config;
+  IdeConfig *config;
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *manifest_path = NULL;
   g_autofree gchar *stop_at_option = NULL;
@@ -77,7 +77,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
     }
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  g_assert (!config || IDE_IS_CONFIGURATION (config));
+  g_assert (!config || IDE_IS_CONFIG (config));
 
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     {

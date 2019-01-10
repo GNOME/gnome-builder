@@ -30,7 +30,7 @@
 
 #include "ide-build-private.h"
 #include "ide-build-pipeline.h"
-#include "ide-configuration.h"
+#include "ide-config.h"
 #include "ide-device.h"
 #include "ide-simple-toolchain.h"
 #include "ide-toolchain.h"
@@ -504,7 +504,7 @@ _ide_toolchain_manager_prepare_async (IdeToolchainManager  *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeToolchain) toolchain = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   PrepareState *state;
   const gchar *toolchain_id;
 
@@ -515,7 +515,7 @@ _ide_toolchain_manager_prepare_async (IdeToolchainManager  *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  toolchain_id = ide_configuration_get_toolchain_id (config);
+  toolchain_id = ide_config_get_toolchain_id (config);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, _ide_toolchain_manager_prepare_async);

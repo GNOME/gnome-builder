@@ -25,7 +25,7 @@
 #include <libide-threading.h>
 
 #include "ide-build-pipeline.h"
-#include "ide-configuration.h"
+#include "ide-config.h"
 #include "ide-foundry-compat.h"
 #include "ide-runtime.h"
 #include "ide-runtime-manager.h"
@@ -121,7 +121,7 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
                                            gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   const gchar *runtime_id;
 
   IDE_ENTRY;
@@ -135,7 +135,7 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  runtime_id = ide_configuration_get_runtime_id (config);
+  runtime_id = ide_config_get_runtime_id (config);
   ide_task_set_task_data (task, g_strdup (runtime_id), g_free);
 
   if (runtime_id == NULL)

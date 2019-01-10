@@ -29,7 +29,7 @@
 
 struct _GbpFlatpakManifest
 {
-  IdeConfiguration  parent_instance;
+  IdeConfig  parent_instance;
 
   GFile            *file;
   GFileMonitor     *file_monitor;
@@ -58,7 +58,7 @@ struct _GbpFlatpakManifest
 
 static void initable_iface_init (GInitableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakManifest, gbp_flatpak_manifest, IDE_TYPE_CONFIGURATION,
+G_DEFINE_TYPE_WITH_CODE (GbpFlatpakManifest, gbp_flatpak_manifest, IDE_TYPE_CONFIG,
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 
 enum {
@@ -108,7 +108,7 @@ validate_properties (GbpFlatpakManifest  *self,
     branch = self->runtime_version;
 
   runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", name, arch, branch);
-  ide_configuration_set_runtime_id (IDE_CONFIGURATION (self), runtime_id);
+  ide_config_set_runtime_id (IDE_CONFIG (self), runtime_id);
 
   return TRUE;
 }
@@ -214,7 +214,7 @@ discover_environ (GbpFlatpakManifest *self,
   JsonObject *obj;
   const gchar *str;
 
-  g_assert (IDE_IS_CONFIGURATION (self));
+  g_assert (IDE_IS_CONFIG (self));
 
   if (!json_object_has_member (root, "build-options"))
     return;
@@ -222,7 +222,7 @@ discover_environ (GbpFlatpakManifest *self,
   if (!(build_options = json_object_get_object_member (root, "build-options")))
     return;
 
-  env = ide_configuration_get_environment (IDE_CONFIGURATION (self));
+  env = ide_config_get_environment (IDE_CONFIG (self));
 
   if (json_object_has_member (build_options, "env") &&
       (obj = json_object_get_object_member (build_options, "env")))
@@ -249,7 +249,7 @@ discover_environ (GbpFlatpakManifest *self,
 
   if (json_object_has_member (build_options, "append-path") &&
       (str = json_object_get_string_member (build_options, "append-path")))
-    ide_configuration_set_append_path (IDE_CONFIGURATION (self), str);
+    ide_config_set_append_path (IDE_CONFIG (self), str);
 }
 
 static JsonObject *
@@ -374,14 +374,14 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
     }
 
   display_name = g_file_get_basename (self->file);
-  ide_configuration_set_display_name (IDE_CONFIGURATION (self), display_name);
+  ide_config_set_display_name (IDE_CONFIG (self), display_name);
 
   context = ide_object_ref_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
   dir_name = g_file_get_basename (workdir);
   root_obj = json_node_get_object (root);
 
-  ide_configuration_set_build_commands_dir (IDE_CONFIGURATION (self), workdir);
+  ide_config_set_build_commands_dir (IDE_CONFIG (self), workdir);
 
   if (!(primary = discover_primary_module (self, root_obj, dir_name, TRUE, error)))
     return FALSE;
@@ -402,7 +402,7 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
       return FALSE;
     }
 
-  ide_configuration_set_app_id (IDE_CONFIGURATION (self), app_id);
+  ide_config_set_app_id (IDE_CONFIG (self), app_id);
 
   discover_string_field (root_obj, "runtime", &self->runtime);
   discover_string_field (root_obj, "runtime-version", &self->runtime_version);
@@ -413,7 +413,7 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   discover_strv_field (root_obj, "sdk-extensions", &self->sdk_extensions);
 
   if (discover_strv_as_quoted (root_obj, "x-run-args", &run_args))
-    ide_configuration_set_run_opts (IDE_CONFIGURATION (self), run_args);
+    ide_config_set_run_opts (IDE_CONFIG (self), run_args);
 
   if (discover_strv_field (primary, "config-opts", &self->config_opts))
     {
@@ -435,22 +435,22 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
             g_string_append (gstr, opt);
         }
 
-      ide_configuration_set_config_opts (IDE_CONFIGURATION (self), gstr->str);
+      ide_config_set_config_opts (IDE_CONFIG (self), gstr->str);
     }
 
   if (discover_strv_field (primary, "build-commands", &build_commands))
-    ide_configuration_set_build_commands (IDE_CONFIGURATION (self),
+    ide_config_set_build_commands (IDE_CONFIG (self),
                                           (const gchar * const *)build_commands);
 
   if (discover_strv_field (primary, "post-install", &post_install))
-    ide_configuration_set_post_install_commands (IDE_CONFIGURATION (self),
+    ide_config_set_post_install_commands (IDE_CONFIG (self),
                                                  (const gchar * const *)post_install);
 
   if (json_object_has_member (primary, "builddir") &&
       json_object_get_boolean_member (primary, "builddir"))
-    ide_configuration_set_locality (IDE_CONFIGURATION (self), IDE_BUILD_LOCALITY_OUT_OF_TREE);
+    ide_config_set_locality (IDE_CONFIG (self), IDE_BUILD_LOCALITY_OUT_OF_TREE);
   else
-    ide_configuration_set_locality (IDE_CONFIGURATION (self), IDE_BUILD_LOCALITY_IN_TREE);
+    ide_config_set_locality (IDE_CONFIG (self), IDE_BUILD_LOCALITY_IN_TREE);
 
   discover_environ (self, root_obj);
 
@@ -460,7 +460,7 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   if (!validate_properties (self, error))
     return FALSE;
 
-  ide_configuration_set_dirty (IDE_CONFIGURATION (self), FALSE);
+  ide_config_set_dirty (IDE_CONFIG (self), FALSE);
 
   return TRUE;
 }
@@ -472,7 +472,7 @@ initable_iface_init (GInitableIface *iface)
 }
 
 static gboolean
-gbp_flatpak_manifest_supports_runtime (IdeConfiguration *config,
+gbp_flatpak_manifest_supports_runtime (IdeConfig *config,
                                        IdeRuntime       *runtime)
 {
   g_assert (GBP_IS_FLATPAK_MANIFEST (config));
@@ -616,7 +616,7 @@ static void
 gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeConfigurationClass *config_class = IDE_CONFIGURATION_CLASS (klass);
+  IdeConfigClass *config_class = IDE_CONFIG_CLASS (klass);
 
   object_class->finalize = gbp_flatpak_manifest_finalize;
   object_class->get_property = gbp_flatpak_manifest_get_property;
@@ -649,7 +649,7 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
 static void
 gbp_flatpak_manifest_init (GbpFlatpakManifest *self)
 {
-  ide_configuration_set_prefix (IDE_CONFIGURATION (self), "/app");
+  ide_config_set_prefix (IDE_CONFIG (self), "/app");
 }
 
 GbpFlatpakManifest *
@@ -778,7 +778,7 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
 
   obj = json_node_get_object (self->root);
 
-  if ((runtime_id = ide_configuration_get_runtime_id (IDE_CONFIGURATION (self))))
+  if ((runtime_id = ide_config_get_runtime_id (IDE_CONFIG (self))))
     {
       g_autofree gchar *id = NULL;
       g_autofree gchar *arch = NULL;
@@ -794,7 +794,7 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
         }
     }
 
-  if ((app_id = ide_configuration_get_app_id (IDE_CONFIGURATION (self))))
+  if ((app_id = ide_config_get_app_id (IDE_CONFIG (self))))
   {
     /* Be friendly to old? style "id" fields */
     if (json_object_has_member (obj, "id"))
@@ -810,7 +810,7 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
   env_obj = json_object_new ();
   json_object_set_object_member (build_options, "env", env_obj);
 
-  env = ide_configuration_get_environment (IDE_CONFIGURATION (self));
+  env = ide_config_get_environment (IDE_CONFIG (self));
   n_items = g_list_model_get_n_items (G_LIST_MODEL (env));
 
   for (guint i = 0; i < n_items; i++)
@@ -832,12 +832,12 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
         json_object_set_string_member (env_obj, key, value);
     }
 
-  if (ide_configuration_get_locality (IDE_CONFIGURATION (self)) == IDE_BUILD_LOCALITY_OUT_OF_TREE)
+  if (ide_config_get_locality (IDE_CONFIG (self)) == IDE_BUILD_LOCALITY_OUT_OF_TREE)
     json_object_set_boolean_member (self->primary, "builddir", TRUE);
   else if (json_object_has_member (self->primary, "builddir"))
     json_object_remove_member (self->primary, "builddir");
 
-  if (!(config_opts = ide_configuration_get_config_opts (IDE_CONFIGURATION (self))))
+  if (!(config_opts = ide_config_get_config_opts (IDE_CONFIG (self))))
     {
       if (json_object_has_member (self->primary, "config-opts"))
         json_object_remove_member (self->primary, "config-opts");
@@ -884,7 +884,7 @@ gbp_flatpak_manifest_save_cb (GObject      *object,
     }
 
   self = ide_task_get_source_object (task);
-  ide_configuration_set_dirty (IDE_CONFIGURATION (self), FALSE);
+  ide_config_set_dirty (IDE_CONFIG (self), FALSE);
   ide_task_return_boolean (task, TRUE);
 
   gbp_flatpak_manifest_unblock_monitor (self);

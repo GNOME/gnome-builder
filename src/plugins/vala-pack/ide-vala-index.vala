@@ -521,7 +521,7 @@ namespace Ide
 		string? get_versioned_vapidir ()
 		{
 			try {
-				var pkgname = "libvala-%s".printf (Config.VALA_VERSION);
+				var pkgname = "libvala-%s".printf (ValaConfig.VALA_VERSION);
 				string outstr = null;
 				var subprocess = new GLib.Subprocess (GLib.SubprocessFlags.STDOUT_PIPE,
 					                                  "pkg-config",

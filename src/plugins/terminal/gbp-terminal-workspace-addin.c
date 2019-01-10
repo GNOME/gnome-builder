@@ -47,16 +47,16 @@ static IdeRuntime *
 find_runtime (IdeWorkspace *workspace)
 {
   IdeContext *context;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
 
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   context = ide_workspace_get_context (workspace);
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
 
-  return ide_configuration_get_runtime (config);
+  return ide_config_get_runtime (config);
 }
 
 static gchar *

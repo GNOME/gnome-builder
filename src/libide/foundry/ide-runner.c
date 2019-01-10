@@ -31,8 +31,8 @@
 #include <unistd.h>
 
 #include "ide-build-target.h"
-#include "ide-configuration-manager.h"
-#include "ide-configuration.h"
+#include "ide-config-manager.h"
+#include "ide-config.h"
 #include "ide-foundry-compat.h"
 #include "ide-runner-addin.h"
 #include "ide-runner.h"
@@ -187,18 +187,18 @@ static IdeSubprocessLauncher *
 ide_runner_real_create_launcher (IdeRunner *self)
 {
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-  IdeConfigurationManager *config_manager;
+  IdeConfigManager *config_manager;
   IdeSubprocessLauncher *ret;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeContext *context;
   IdeRuntime *runtime;
 
   g_assert (IDE_IS_RUNNER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  runtime = ide_configuration_get_runtime (config);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  runtime = ide_config_get_runtime (config);
 
   ret = ide_runtime_create_launcher (runtime, NULL);
 
@@ -218,8 +218,8 @@ ide_runner_real_run_async (IdeRunner           *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   const gchar *identifier;
   IdeContext *context;
   IdeRuntime *runtime;
@@ -234,9 +234,9 @@ ide_runner_real_run_async (IdeRunner           *self,
   ide_task_set_source_tag (task, ide_runner_real_run_async);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  runtime = ide_configuration_get_runtime (config);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  runtime = ide_config_get_runtime (config);
 
   if (runtime != NULL)
     launcher = IDE_RUNNER_GET_CLASS (self)->create_launcher (self);
@@ -1286,8 +1286,8 @@ ide_runner_take_fd (IdeRunner *self,
 IdeRuntime *
 ide_runner_get_runtime (IdeRunner *self)
 {
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   IdeContext *context;
   IdeRuntime *runtime;
 
@@ -1297,9 +1297,9 @@ ide_runner_get_runtime (IdeRunner *self)
     return IDE_RUNNER_GET_CLASS (self)->get_runtime (self);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  runtime = ide_configuration_get_runtime (config);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  runtime = ide_config_get_runtime (config);
 
   return runtime != NULL ? g_object_ref (runtime) : NULL;
 }

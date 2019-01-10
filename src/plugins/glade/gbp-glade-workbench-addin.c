@@ -248,14 +248,14 @@ on_build_pipeline_changed_cb (GbpGladeWorkbenchAddin *self,
 
   if (pipeline != NULL)
     {
-      IdeConfiguration *config = ide_build_pipeline_get_configuration (pipeline);
+      IdeConfig *config = ide_build_pipeline_get_configuration (pipeline);
       IdeRuntime *runtime = ide_build_pipeline_get_runtime (pipeline);
       g_autoptr(GFile) translated = NULL;
       g_autoptr(GFile) catalog_file = NULL;
 
       if (config != NULL)
         {
-          const gchar *prefix = ide_configuration_get_prefix (config);
+          const gchar *prefix = ide_config_get_prefix (config);
           g_autofree gchar *path = g_build_filename (prefix, "share/glade/catalogs", NULL);
 
           if (!g_hash_table_contains (self->catalog_paths, path))

@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, GBP, BUILDUI_RUNTIME_ROW, GtkListBoxRow)
 
 GtkWidget   *gbp_buildui_runtime_row_new    (IdeRuntime           *runtime,
-                                             IdeConfiguration     *config);
+                                             IdeConfig     *config);
 const gchar *gbp_buildui_runtime_row_get_id (GbpBuilduiRuntimeRow *self);
 
 G_END_DECLS

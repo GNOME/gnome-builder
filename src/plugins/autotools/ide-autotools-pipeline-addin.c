@@ -202,7 +202,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
-  IdeConfiguration *configuration;
+  IdeConfig *configuration;
   IdeToolchain *toolchain;
   g_autofree gchar *configure_path = NULL;
   g_autofree gchar *host_arg = NULL;
@@ -264,8 +264,8 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
    * them to configure.
    */
 
-  config_opts = ide_configuration_get_config_opts (configuration);
-  prefix = ide_configuration_get_prefix (configuration);
+  config_opts = ide_config_get_config_opts (configuration);
+  prefix = ide_config_get_prefix (configuration);
 
   if (prefix != NULL)
     {
@@ -325,7 +325,7 @@ register_make_stage (IdeAutotoolsPipelineAddin  *self,
                      const gchar                *clean_target)
 {
   g_autoptr(IdeBuildStage) stage = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   guint stage_id;
   gint parallel;
 
@@ -333,7 +333,7 @@ register_make_stage (IdeAutotoolsPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  parallel = ide_configuration_get_parallelism (config);
+  parallel = ide_config_get_parallelism (config);
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_MAKE_STAGE,
                         "name", _("Building project"),

@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 #include <libide-threading.h>
 
-#include "ide-configuration.h"
+#include "ide-config.h"
 #include "ide-device.h"
 #include "ide-device-info.h"
 
@@ -309,10 +309,10 @@ ide_device_init (IdeDevice *self)
 
 void
 ide_device_prepare_configuration (IdeDevice        *self,
-                                  IdeConfiguration *configuration)
+                                  IdeConfig *configuration)
 {
   g_assert (IDE_IS_DEVICE (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_CONFIG (configuration));
 
   if (IDE_DEVICE_GET_CLASS (self)->prepare_configuration)
     IDE_DEVICE_GET_CLASS (self)->prepare_configuration (self, configuration);

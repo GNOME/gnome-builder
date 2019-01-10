@@ -84,7 +84,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_autofree gchar *project_file_name = NULL;
   g_autofree gchar *srcdir = NULL;
   IdeBuildSystem *build_system;
-  IdeConfiguration *configuration;
+  IdeConfig *configuration;
   IdeContext *context;
   IdeRuntime *runtime;
   IdeToolchain *toolchain;
@@ -118,11 +118,11 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   else
     srcdir = g_strdup (ide_build_pipeline_get_srcdir (pipeline));
 
-  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_CONFIG (configuration));
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (srcdir != NULL);
 
-  if (!(cmake = ide_configuration_getenv (configuration, "CMAKE")))
+  if (!(cmake = ide_config_getenv (configuration, "CMAKE")))
     cmake = "cmake";
 
   for (guint i = 0; i < G_N_ELEMENTS (ninja_names); i++)
@@ -146,9 +146,9 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       NULL == (install_launcher = ide_build_pipeline_create_launcher (pipeline, &error)))
     IDE_GOTO (failure);
 
-  prefix = ide_configuration_get_prefix (configuration);
-  config_opts = ide_configuration_get_config_opts (configuration);
-  parallelism = ide_configuration_get_parallelism (configuration);
+  prefix = ide_config_get_prefix (configuration);
+  config_opts = ide_config_get_config_opts (configuration);
+  parallelism = ide_config_get_parallelism (configuration);
 
   /* Create the toolchain file if required */
   if (GBP_IS_CMAKE_TOOLCHAIN (toolchain))

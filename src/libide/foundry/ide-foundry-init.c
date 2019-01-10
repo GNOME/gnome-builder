@@ -26,7 +26,7 @@
 
 #include "ide-build-manager.h"
 #include "ide-device-manager.h"
-#include "ide-configuration-manager.h"
+#include "ide-config-manager.h"
 #include "ide-foundry-init.h"
 #include "ide-run-manager.h"
 #include "ide-runtime-manager.h"
@@ -101,7 +101,7 @@ _ide_foundry_init_async (IdeContext          *context,
     IDE_TYPE_DEVICE_MANAGER,
     IDE_TYPE_RUNTIME_MANAGER,
     IDE_TYPE_TOOLCHAIN_MANAGER,
-    IDE_TYPE_CONFIGURATION_MANAGER,
+    IDE_TYPE_CONFIG_MANAGER,
     IDE_TYPE_BUILD_MANAGER,
     IDE_TYPE_RUN_MANAGER,
     IDE_TYPE_TEST_MANAGER,

@@ -1,4 +1,4 @@
-/* ide-configuration-manager.h
+/* ide-config-manager.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -30,41 +30,41 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CONFIGURATION_MANAGER (ide_configuration_manager_get_type())
+#define IDE_TYPE_CONFIG_MANAGER (ide_config_manager_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeConfigurationManager, ide_configuration_manager, IDE, CONFIGURATION_MANAGER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeConfigManager, ide_config_manager, IDE, CONFIG_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeConfigurationManager *ide_configuration_manager_from_context (IdeContext *context);
+IdeConfigManager *ide_config_manager_from_context (IdeContext *context);
 IDE_AVAILABLE_IN_3_32
-IdeConfigurationManager *ide_configuration_manager_ref_from_context (IdeContext *context);
+IdeConfigManager *ide_config_manager_ref_from_context (IdeContext *context);
 IDE_AVAILABLE_IN_3_32
-IdeConfiguration *ide_configuration_manager_get_current       (IdeConfigurationManager  *self);
+IdeConfig *ide_config_manager_get_current       (IdeConfigManager  *self);
 IDE_AVAILABLE_IN_3_32
-IdeConfiguration *ide_configuration_manager_ref_current       (IdeConfigurationManager  *self);
+IdeConfig *ide_config_manager_ref_current       (IdeConfigManager  *self);
 IDE_AVAILABLE_IN_3_32
-void              ide_configuration_manager_set_current       (IdeConfigurationManager  *self,
-                                                               IdeConfiguration         *configuration);
+void              ide_config_manager_set_current       (IdeConfigManager  *self,
+                                                               IdeConfig         *configuration);
 IDE_AVAILABLE_IN_3_32
-IdeConfiguration *ide_configuration_manager_get_configuration (IdeConfigurationManager  *self,
+IdeConfig *ide_config_manager_get_configuration (IdeConfigManager  *self,
                                                                const gchar              *id);
 IDE_AVAILABLE_IN_3_32
-void              ide_configuration_manager_duplicate         (IdeConfigurationManager  *self,
-                                                               IdeConfiguration         *config);
+void              ide_config_manager_duplicate         (IdeConfigManager  *self,
+                                                               IdeConfig         *config);
 IDE_AVAILABLE_IN_3_32
-void              ide_configuration_manager_delete            (IdeConfigurationManager  *self,
-                                                               IdeConfiguration         *config);
+void              ide_config_manager_delete            (IdeConfigManager  *self,
+                                                               IdeConfig         *config);
 IDE_AVAILABLE_IN_3_32
-void              ide_configuration_manager_save_async        (IdeConfigurationManager  *self,
+void              ide_config_manager_save_async        (IdeConfigManager  *self,
                                                                GCancellable             *cancellable,
                                                                GAsyncReadyCallback       callback,
                                                                gpointer                  user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean          ide_configuration_manager_save_finish       (IdeConfigurationManager  *self,
+gboolean          ide_config_manager_save_finish       (IdeConfigManager  *self,
                                                                GAsyncResult             *result,
                                                                GError                  **error);
 IDE_AVAILABLE_IN_3_32
-gboolean          ide_configuration_manager_get_ready         (IdeConfigurationManager  *self);
+gboolean          ide_config_manager_get_ready         (IdeConfigManager  *self);
 
 G_END_DECLS

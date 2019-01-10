@@ -37,12 +37,12 @@ struct _IdeConfigViewAddinInterface
 
   void (*load) (IdeConfigViewAddin *self,
                 DzlPreferences     *preferences,
-                IdeConfiguration   *configuration);
+                IdeConfig   *configuration);
 };
 
 IDE_AVAILABLE_IN_3_32
 void ide_config_view_addin_load (IdeConfigViewAddin *self,
                                  DzlPreferences     *preferences,
-                                 IdeConfiguration   *configuration);
+                                 IdeConfig   *configuration);
 
 G_END_DECLS

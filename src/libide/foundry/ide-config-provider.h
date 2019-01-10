@@ -1,4 +1,4 @@
-/* ide-configuration-provider.h
+/* ide-config-provider.h
  *
  * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
@@ -31,70 +31,70 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CONFIGURATION_PROVIDER (ide_configuration_provider_get_type ())
+#define IDE_TYPE_CONFIG_PROVIDER (ide_config_provider_get_type ())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, IDE, CONFIGURATION_PROVIDER, IdeObject)
+G_DECLARE_INTERFACE (IdeConfigProvider, ide_config_provider, IDE, CONFIG_PROVIDER, IdeObject)
 
-struct _IdeConfigurationProviderInterface
+struct _IdeConfigProviderInterface
 {
   GTypeInterface parent_iface;
 
-  void     (*added)          (IdeConfigurationProvider  *self,
-                              IdeConfiguration          *config);
-  void     (*removed)        (IdeConfigurationProvider  *self,
-                              IdeConfiguration          *config);
-  void     (*load_async)     (IdeConfigurationProvider  *self,
+  void     (*added)          (IdeConfigProvider  *self,
+                              IdeConfig          *config);
+  void     (*removed)        (IdeConfigProvider  *self,
+                              IdeConfig          *config);
+  void     (*load_async)     (IdeConfigProvider  *self,
                               GCancellable              *cancellable,
                               GAsyncReadyCallback        callback,
                               gpointer                   user_data);
-  gboolean (*load_finish)    (IdeConfigurationProvider  *self,
+  gboolean (*load_finish)    (IdeConfigProvider  *self,
                               GAsyncResult              *result,
                               GError                   **error);
-  void     (*save_async)     (IdeConfigurationProvider  *self,
+  void     (*save_async)     (IdeConfigProvider  *self,
                               GCancellable              *cancellable,
                               GAsyncReadyCallback        callback,
                               gpointer                   user_data);
-  gboolean (*save_finish)    (IdeConfigurationProvider  *self,
+  gboolean (*save_finish)    (IdeConfigProvider  *self,
                               GAsyncResult              *result,
                               GError                   **error);
-  void     (*delete)         (IdeConfigurationProvider  *self,
-                              IdeConfiguration          *config);
-  void     (*duplicate)      (IdeConfigurationProvider  *self,
-                              IdeConfiguration          *config);
-  void     (*unload)         (IdeConfigurationProvider  *self);
+  void     (*delete)         (IdeConfigProvider  *self,
+                              IdeConfig          *config);
+  void     (*duplicate)      (IdeConfigProvider  *self,
+                              IdeConfig          *config);
+  void     (*unload)         (IdeConfigProvider  *self);
 };
 
 IDE_AVAILABLE_IN_3_32
-void     ide_configuration_provider_emit_added    (IdeConfigurationProvider  *self,
-                                                   IdeConfiguration          *config);
+void     ide_config_provider_emit_added    (IdeConfigProvider  *self,
+                                                   IdeConfig          *config);
 IDE_AVAILABLE_IN_3_32
-void     ide_configuration_provider_emit_removed  (IdeConfigurationProvider  *self,
-                                                   IdeConfiguration          *config);
+void     ide_config_provider_emit_removed  (IdeConfigProvider  *self,
+                                                   IdeConfig          *config);
 IDE_AVAILABLE_IN_3_32
-void     ide_configuration_provider_load_async    (IdeConfigurationProvider  *self,
+void     ide_config_provider_load_async    (IdeConfigProvider  *self,
                                                    GCancellable              *cancellable,
                                                    GAsyncReadyCallback        callback,
                                                    gpointer                   user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_configuration_provider_load_finish   (IdeConfigurationProvider  *self,
+gboolean ide_config_provider_load_finish   (IdeConfigProvider  *self,
                                                    GAsyncResult              *result,
                                                    GError                   **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_configuration_provider_save_async    (IdeConfigurationProvider  *self,
+void     ide_config_provider_save_async    (IdeConfigProvider  *self,
                                                    GCancellable              *cancellable,
                                                    GAsyncReadyCallback        callback,
                                                    gpointer                   user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_configuration_provider_save_finish   (IdeConfigurationProvider  *self,
+gboolean ide_config_provider_save_finish   (IdeConfigProvider  *self,
                                                    GAsyncResult              *result,
                                                    GError                   **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_configuration_provider_delete        (IdeConfigurationProvider  *self,
-                                                   IdeConfiguration          *config);
-void     ide_configuration_provider_duplicate     (IdeConfigurationProvider  *self,
-                                                   IdeConfiguration          *config);
+void     ide_config_provider_delete        (IdeConfigProvider  *self,
+                                                   IdeConfig          *config);
+void     ide_config_provider_duplicate     (IdeConfigProvider  *self,
+                                                   IdeConfig          *config);
 IDE_AVAILABLE_IN_3_32
-void     ide_configuration_provider_unload        (IdeConfigurationProvider  *self);
+void     ide_config_provider_unload        (IdeConfigProvider  *self);
 
 G_END_DECLS

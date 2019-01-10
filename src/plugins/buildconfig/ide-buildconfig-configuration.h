@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILDCONFIG_CONFIGURATION (ide_buildconfig_configuration_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeBuildconfigConfiguration, ide_buildconfig_configuration, IDE, BUILDCONFIG_CONFIGURATION, IdeConfiguration)
+G_DECLARE_FINAL_TYPE (IdeBuildconfigConfiguration, ide_buildconfig_configuration, IDE, BUILDCONFIG_CONFIGURATION, IdeConfig)
 
 const gchar * const *ide_buildconfig_configuration_get_prebuild  (IdeBuildconfigConfiguration *self);
 void                 ide_buildconfig_configuration_set_prebuild  (IdeBuildconfigConfiguration *self,

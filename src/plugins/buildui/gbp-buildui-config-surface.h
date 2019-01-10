@@ -30,6 +30,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpBuilduiConfigSurface, gbp_buildui_config_surface, GBP, BUILDUI_CONFIG_SURFACE, IdeSurface)
 
 void gbp_buildui_config_surface_set_config (GbpBuilduiConfigSurface *self,
-                                            IdeConfiguration        *config);
+                                            IdeConfig        *config);
 
 G_END_DECLS

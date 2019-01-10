@@ -1,4 +1,4 @@
-/* ide-configuration-private.h
+/* ide-config-private.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include "ide-configuration.h"
+#include "ide-config.h"
 
 G_BEGIN_DECLS
 
-void _ide_configuration_attach (IdeConfiguration *self);
+void _ide_config_attach (IdeConfig *self);
 
 G_END_DECLS

@@ -65,7 +65,7 @@ gbp_deviced_deploy_strategy_load_async (IdeDeployStrategy   *strategy,
 {
   GbpDevicedDeployStrategy *self = (GbpDevicedDeployStrategy *)strategy;
   g_autoptr(IdeTask) task = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeDevice *device;
 
   IDE_ENTRY;
@@ -180,7 +180,7 @@ deploy_get_commit_cb (GObject      *object,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeToolchain *toolchain;
   const gchar *arch;
   const gchar *app_id;
@@ -207,7 +207,7 @@ deploy_get_commit_cb (GObject      *object,
   arch = ide_triplet_get_arch (triplet);
   staging_dir = gbp_flatpak_get_staging_dir (state->pipeline);
   repo_dir = gbp_flatpak_get_repo_dir (context);
-  app_id = ide_configuration_get_app_id (config);
+  app_id = ide_config_get_app_id (config);
 #if 0
   if (commit_id != NULL)
     name = g_strdup_printf ("%s-%s.flatpak", app_id, commit_id);
@@ -308,7 +308,7 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   GbpDevicedDeployStrategy *self = (GbpDevicedDeployStrategy *)strategy;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   DeployState *state;
   const gchar *app_id;
   const gchar *arch;
@@ -329,7 +329,7 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);
   arch = ide_triplet_get_arch (triplet);
-  app_id = ide_configuration_get_app_id (config);
+  app_id = ide_config_get_app_id (config);
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (config));
   g_assert (GBP_IS_DEVICED_DEVICE (device));

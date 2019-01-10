@@ -46,7 +46,7 @@ struct _IdeDeviceClass
   IdeObjectClass parent;
 
   void           (*prepare_configuration) (IdeDevice            *self,
-                                           IdeConfiguration     *configuration);
+                                           IdeConfig     *configuration);
   void           (*get_info_async)        (IdeDevice            *self,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
@@ -78,7 +78,7 @@ void           ide_device_set_id                (IdeDevice             *self,
                                                  const gchar           *id);
 IDE_AVAILABLE_IN_3_32
 void           ide_device_prepare_configuration (IdeDevice             *self,
-                                                 IdeConfiguration      *configuration);
+                                                 IdeConfig      *configuration);
 IDE_AVAILABLE_IN_3_32
 void           ide_device_get_info_async        (IdeDevice             *self,
                                                  GCancellable          *cancellable,

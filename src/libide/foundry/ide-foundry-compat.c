@@ -25,7 +25,7 @@
 #include "ide-build-manager.h"
 #include "ide-build-system.h"
 #include "ide-device-manager.h"
-#include "ide-configuration-manager.h"
+#include "ide-config-manager.h"
 #include "ide-foundry-compat.h"
 #include "ide-run-manager.h"
 #include "ide-runtime-manager.h"
@@ -131,19 +131,19 @@ ide_build_system_from_context (IdeContext *context)
 }
 
 /**
- * ide_configuration_manager_from_context:
+ * ide_config_manager_from_context:
  * @context: a #IdeContext
  *
- * Returns: (transfer none): an #IdeConfigurationManager
+ * Returns: (transfer none): an #IdeConfigManager
  *
  * Since: 3.32
  */
-IdeConfigurationManager *
-ide_configuration_manager_from_context (IdeContext *context)
+IdeConfigManager *
+ide_config_manager_from_context (IdeContext *context)
 {
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  return ensure_child_typed_borrowed (context, IDE_TYPE_CONFIGURATION_MANAGER);
+  return ensure_child_typed_borrowed (context, IDE_TYPE_CONFIG_MANAGER);
 }
 
 /**

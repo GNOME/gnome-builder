@@ -168,14 +168,14 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       const gchar *builddir = NULL;
       const gchar *project_path = NULL;
       const gchar * const *build_args = NULL;
-      g_autoptr(IdeConfigurationManager) config_manager = NULL;
+      g_autoptr(IdeConfigManager) config_manager = NULL;
       g_autoptr(IdeContext) context = NULL;
-      IdeConfiguration *configuration;
+      IdeConfig *configuration;
       IdeVcs *vcs;
 
       context = ide_object_ref_context (IDE_OBJECT (self));
-      config_manager = ide_configuration_manager_ref_from_context (context);
-      configuration = ide_configuration_manager_ref_current (config_manager);
+      config_manager = ide_config_manager_ref_from_context (context);
+      configuration = ide_config_manager_ref_current (config_manager);
 
       build_path = get_staging_directory (self);
       builddir = get_builddir (self);
@@ -224,7 +224,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           ide_subprocess_launcher_push_argv (ret, filesystem_option_build);
         }
 
-      new_environ = ide_configuration_get_environ (IDE_CONFIGURATION (configuration));
+      new_environ = ide_config_get_environ (IDE_CONFIG (configuration));
 
       if (!strv_empty (new_environ))
         {
@@ -273,8 +273,8 @@ get_binary_name (GbpFlatpakRuntime *self,
                  IdeBuildTarget    *build_target)
 {
   IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-  IdeConfigurationManager *config_manager = ide_configuration_manager_from_context (context);
-  IdeConfiguration *config = ide_configuration_manager_get_current (config_manager);
+  IdeConfigManager *config_manager = ide_config_manager_from_context (context);
+  IdeConfig *config = ide_config_manager_get_current (config_manager);
   g_autofree gchar *build_target_name = ide_build_target_get_name (build_target);
   g_auto(GStrv) argv = ide_build_target_get_argv (build_target);
 
@@ -333,12 +333,12 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
 
 static void
 gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
-                                           IdeConfiguration *configuration)
+                                           IdeConfig *configuration)
 {
   g_assert (GBP_IS_FLATPAK_RUNTIME (runtime));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_CONFIG (configuration));
 
-  ide_configuration_set_prefix (configuration, "/app");
+  ide_config_set_prefix (configuration, "/app");
 }
 
 static void

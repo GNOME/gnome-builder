@@ -71,7 +71,7 @@ ide_buildconfig_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 {
   const gchar * const *prebuild;
   const gchar * const *postbuild;
-  IdeConfiguration *config;
+  IdeConfig *config;
   g_auto(GStrv) env = NULL;
 
   IDE_ENTRY;
@@ -84,7 +84,7 @@ ide_buildconfig_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (!IDE_IS_BUILDCONFIG_CONFIGURATION (config))
     return;
 
-  env = ide_configuration_get_environ (config);
+  env = ide_config_get_environ (config);
 
   prebuild = ide_buildconfig_configuration_get_prebuild (IDE_BUILDCONFIG_CONFIGURATION (config));
   postbuild = ide_buildconfig_configuration_get_postbuild (IDE_BUILDCONFIG_CONFIGURATION (config));

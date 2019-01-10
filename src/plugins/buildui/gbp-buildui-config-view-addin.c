@@ -82,11 +82,11 @@ static GtkWidget *
 create_stack_list_row (gpointer item,
                        gpointer user_data)
 {
-  IdeConfiguration *config = user_data;
+  IdeConfig *config = user_data;
   GtkWidget *row;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   if (IDE_IS_RUNTIME (item))
     return gbp_buildui_runtime_row_new (item, config);
@@ -136,20 +136,20 @@ on_runtime_row_activated_cb (DzlStackList  *stack_list,
                              GtkListBoxRow *row,
                              gpointer       user_data)
 {
-  IdeConfiguration *config = user_data;
+  IdeConfig *config = user_data;
   gpointer item;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (DZL_IS_STACK_LIST (stack_list));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   if (GBP_IS_BUILDUI_RUNTIME_ROW (row))
     {
       const gchar *id;
 
       id = gbp_buildui_runtime_row_get_id (GBP_BUILDUI_RUNTIME_ROW (row));
-      ide_configuration_set_runtime_id (config, id);
+      ide_config_set_runtime_id (config, id);
 
       {
         GtkWidget *box;
@@ -185,7 +185,7 @@ on_runtime_row_activated_cb (DzlStackList  *stack_list,
 }
 
 static GtkWidget *
-create_runtime_box (IdeConfiguration  *config,
+create_runtime_box (IdeConfig  *config,
                     IdeRuntimeManager *runtime_manager)
 {
   g_autoptr(GbpBuilduiRuntimeCategories) filter = NULL;
@@ -196,7 +196,7 @@ create_runtime_box (IdeConfiguration  *config,
   GtkWidget *frame;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
 
   filter = gbp_buildui_runtime_categories_new (runtime_manager, NULL);
@@ -229,7 +229,7 @@ create_runtime_box (IdeConfiguration  *config,
                            config,
                            0);
 
-  if ((runtime = ide_configuration_get_runtime (config)) &&
+  if ((runtime = ide_config_get_runtime (config)) &&
       (category = ide_runtime_get_category (runtime)))
     {
       g_autoptr(GString) prefix = g_string_new (NULL);
@@ -258,7 +258,7 @@ create_runtime_box (IdeConfiguration  *config,
 }
 
 static void
-notify_toolchain_id (IdeConfiguration *config,
+notify_toolchain_id (IdeConfig *config,
                      GParamSpec       *pspec,
                      GtkImage         *image)
 {
@@ -266,10 +266,10 @@ notify_toolchain_id (IdeConfiguration *config,
   const gchar *current;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (GTK_IS_IMAGE (image));
 
-  toolchain_id = ide_configuration_get_toolchain_id (config);
+  toolchain_id = ide_config_get_toolchain_id (config);
   current = g_object_get_data (G_OBJECT (image), "TOOLCHAIN_ID");
 
   gtk_widget_set_visible (GTK_WIDGET (image), ide_str_equal0 (toolchain_id, current));
@@ -280,7 +280,7 @@ create_toolchain_row (gpointer item,
                       gpointer user_data)
 {
   IdeToolchain *toolchain = item;
-  IdeConfiguration *config = user_data;
+  IdeConfig *config = user_data;
   const gchar *toolchain_id;
   GtkWidget *label;
   GtkWidget *row;
@@ -289,7 +289,7 @@ create_toolchain_row (gpointer item,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TOOLCHAIN (toolchain));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   toolchain_id = ide_toolchain_get_id (toolchain);
 
@@ -332,30 +332,30 @@ create_toolchain_row (gpointer item,
 static void
 on_toolchain_row_activated_cb (GtkListBox       *list_box,
                                GtkListBoxRow    *row,
-                               IdeConfiguration *config)
+                               IdeConfig *config)
 {
   const gchar *toolchain_id;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GTK_IS_LIST_BOX (list_box));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   if ((toolchain_id = g_object_get_data (G_OBJECT (row), "TOOLCHAIN_ID")))
-    ide_configuration_set_toolchain_id (config, toolchain_id);
+    ide_config_set_toolchain_id (config, toolchain_id);
 
   gtk_list_box_unselect_all (list_box);
 }
 
 static GtkWidget *
-create_toolchain_box (IdeConfiguration    *config,
+create_toolchain_box (IdeConfig    *config,
                       IdeToolchainManager *toolchain_manager)
 {
   GtkScrolledWindow *scroller;
   GtkListBox *list_box;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
   g_assert (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
@@ -386,7 +386,7 @@ create_toolchain_box (IdeConfiguration    *config,
 static void
 gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
                                     DzlPreferences     *preferences,
-                                    IdeConfiguration   *config)
+                                    IdeConfig   *config)
 {
   GbpBuilduiConfigViewAddin *self = (GbpBuilduiConfigViewAddin *)addin;
   IdeToolchainManager *toolchain_manager;
@@ -411,7 +411,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_CONFIG_VIEW_ADDIN (self));
   g_assert (DZL_IS_PREFERENCES (preferences));
-  g_assert (IDE_IS_CONFIGURATION (config));
+  g_assert (IDE_IS_CONFIG (config));
 
   /* Get manager objects */
   context = ide_object_get_context (IDE_OBJECT (config));
@@ -442,7 +442,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
       button = g_object_new (GTK_TYPE_BUTTON,
                              "visible", TRUE,
                              "action-name", actions[i].action,
-                             "action-target", g_variant_new_string (ide_configuration_get_id (config)),
+                             "action-target", g_variant_new_string (ide_config_get_id (config)),
                              "label", g_dgettext (GETTEXT_PACKAGE, actions[i].label),
                              "tooltip-text", g_dgettext (GETTEXT_PACKAGE, actions[i].tooltip),
                              NULL);
@@ -452,7 +452,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
     }
 
   /* Add description info */
-  add_description_row (preferences, "general", "general", _("Name"), ide_configuration_get_display_name (config), NULL);
+  add_description_row (preferences, "general", "general", _("Name"), ide_config_get_display_name (config), NULL);
   add_description_row (preferences, "general", "general", _("Source Directory"), g_file_peek_path (workdir), NULL);
   add_description_row (preferences, "general", "general", _("Build System"), ide_build_system_get_display_name (build_system), NULL);
 
@@ -485,7 +485,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
   dzl_preferences_add_custom (preferences, "general", "toolchain", create_toolchain_box (config, toolchain_manager), NULL, 10);
 
   /* Add environment selector */
-  environ = ide_configuration_get_environment (config);
+  environ = ide_config_get_environment (config);
   dzl_preferences_add_custom (preferences, "environ", "build",
                               g_object_new (GTK_TYPE_FRAME,
                                             "visible", TRUE,

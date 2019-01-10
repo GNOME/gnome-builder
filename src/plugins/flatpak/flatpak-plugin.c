@@ -49,7 +49,7 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
                                               IDE_TYPE_BUILD_TARGET_PROVIDER,
                                               GBP_TYPE_FLATPAK_BUILD_TARGET_PROVIDER);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_CONFIGURATION_PROVIDER,
+                                              IDE_TYPE_CONFIG_PROVIDER,
                                               GBP_TYPE_FLATPAK_CONFIGURATION_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DEPENDENCY_UPDATER,

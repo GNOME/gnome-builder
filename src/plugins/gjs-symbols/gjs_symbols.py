@@ -263,7 +263,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
         unsaved_file = Ide.UnsavedFiles.from_context(context).get_unsaved_file(file_)
 
         if context.has_project():
-            runtime = Ide.ConfigurationManager.from_context(context).get_current().get_runtime()
+            runtime = Ide.ConfigManager.from_context(context).get_current().get_runtime()
             launcher = runtime.create_launcher()
         else:
             launcher = Ide.SubprocessLauncher.new(0)

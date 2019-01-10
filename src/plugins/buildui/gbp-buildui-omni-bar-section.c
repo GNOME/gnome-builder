@@ -82,10 +82,10 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
 
   if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
     {
-      IdeConfiguration *config = ide_build_pipeline_get_configuration (pipeline);
-      const gchar *config_id = ide_configuration_get_id (config);
-      const gchar *display_name = ide_configuration_get_display_name (config);
-      IdeRuntime *runtime = ide_configuration_get_runtime (config);
+      IdeConfig *config = ide_build_pipeline_get_configuration (pipeline);
+      const gchar *config_id = ide_config_get_id (config);
+      const gchar *display_name = ide_config_get_display_name (config);
+      IdeRuntime *runtime = ide_config_get_runtime (config);
       const gchar *name = NULL;
 
       gtk_label_set_label (self->popover_config_label, display_name);

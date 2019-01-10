@@ -1,4 +1,4 @@
-/* ide-configuration.h
+/* ide-config.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -31,10 +31,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CONFIGURATION (ide_configuration_get_type())
+#define IDE_TYPE_CONFIG (ide_config_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeConfiguration, ide_configuration, IDE, CONFIGURATION, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeConfig, ide_config, IDE, CONFIG, IdeObject)
 
 typedef enum
 {
@@ -43,14 +43,14 @@ typedef enum
   IDE_BUILD_LOCALITY_DEFAULT     = IDE_BUILD_LOCALITY_IN_TREE | IDE_BUILD_LOCALITY_OUT_OF_TREE,
 } IdeBuildLocality;
 
-struct _IdeConfigurationClass
+struct _IdeConfigClass
 {
   IdeObjectClass parent;
 
-  IdeRuntime *(*get_runtime)      (IdeConfiguration *self);
-  void        (*set_runtime)      (IdeConfiguration *self,
+  IdeRuntime *(*get_runtime)      (IdeConfig *self);
+  void        (*set_runtime)      (IdeConfig *self,
                                    IdeRuntime       *runtime);
-  gboolean    (*supports_runtime) (IdeConfiguration *self,
+  gboolean    (*supports_runtime) (IdeConfig *self,
                                    IdeRuntime       *runtime);
 
   /*< private >*/
@@ -58,156 +58,156 @@ struct _IdeConfigurationClass
 };
 
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_append_path           (IdeConfiguration      *self);
+const gchar          *ide_config_get_append_path           (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_append_path           (IdeConfiguration      *self,
+void                  ide_config_set_append_path           (IdeConfig      *self,
                                                                    const gchar           *append_path);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_id                    (IdeConfiguration      *self);
+const gchar          *ide_config_get_id                    (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_runtime_id            (IdeConfiguration      *self);
+const gchar          *ide_config_get_runtime_id            (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_runtime_id            (IdeConfiguration      *self,
+void                  ide_config_set_runtime_id            (IdeConfig      *self,
                                                                    const gchar           *runtime_id);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_toolchain_id          (IdeConfiguration      *self);
+const gchar          *ide_config_get_toolchain_id          (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_toolchain_id          (IdeConfiguration      *self,
+void                  ide_config_set_toolchain_id          (IdeConfig      *self,
                                                                    const gchar           *toolchain_id);
 IDE_AVAILABLE_IN_3_32
-gboolean              ide_configuration_get_dirty                 (IdeConfiguration      *self);
+gboolean              ide_config_get_dirty                 (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_dirty                 (IdeConfiguration      *self,
+void                  ide_config_set_dirty                 (IdeConfig      *self,
                                                                    gboolean               dirty);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_display_name          (IdeConfiguration      *self);
+const gchar          *ide_config_get_display_name          (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_display_name          (IdeConfiguration      *self,
+void                  ide_config_set_display_name          (IdeConfig      *self,
                                                                    const gchar           *display_name);
 IDE_AVAILABLE_IN_3_32
-IdeBuildLocality      ide_configuration_get_locality              (IdeConfiguration      *self);
+IdeBuildLocality      ide_config_get_locality              (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_locality              (IdeConfiguration      *self,
+void                  ide_config_set_locality              (IdeConfig      *self,
                                                                    IdeBuildLocality       locality);
 IDE_AVAILABLE_IN_3_32
-gboolean              ide_configuration_get_ready                 (IdeConfiguration      *self);
+gboolean              ide_config_get_ready                 (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-IdeRuntime           *ide_configuration_get_runtime               (IdeConfiguration      *self);
+IdeRuntime           *ide_config_get_runtime               (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_runtime               (IdeConfiguration      *self,
+void                  ide_config_set_runtime               (IdeConfig      *self,
                                                                    IdeRuntime            *runtime);
 IDE_AVAILABLE_IN_3_32
-IdeToolchain         *ide_configuration_get_toolchain             (IdeConfiguration      *self);
+IdeToolchain         *ide_config_get_toolchain             (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_toolchain             (IdeConfiguration      *self,
+void                  ide_config_set_toolchain             (IdeConfig      *self,
                                                                    IdeToolchain          *toolchain);
 IDE_AVAILABLE_IN_3_32
-gchar               **ide_configuration_get_environ               (IdeConfiguration      *self);
+gchar               **ide_config_get_environ               (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_getenv                    (IdeConfiguration      *self,
+const gchar          *ide_config_getenv                    (IdeConfig      *self,
                                                                    const gchar           *key);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_setenv                    (IdeConfiguration      *self,
+void                  ide_config_setenv                    (IdeConfig      *self,
                                                                    const gchar           *key,
                                                                    const gchar           *value);
 IDE_AVAILABLE_IN_3_32
-gboolean              ide_configuration_get_debug                 (IdeConfiguration      *self);
+gboolean              ide_config_get_debug                 (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_debug                 (IdeConfiguration      *self,
+void                  ide_config_set_debug                 (IdeConfig      *self,
                                                                    gboolean               debug);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_prefix                (IdeConfiguration      *self);
+const gchar          *ide_config_get_prefix                (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_prefix                (IdeConfiguration      *self,
+void                  ide_config_set_prefix                (IdeConfig      *self,
                                                                    const gchar           *prefix);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_config_opts           (IdeConfiguration      *self);
+const gchar          *ide_config_get_config_opts           (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_config_opts           (IdeConfiguration      *self,
+void                  ide_config_set_config_opts           (IdeConfig      *self,
                                                                    const gchar           *config_opts);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_run_opts              (IdeConfiguration      *self);
+const gchar          *ide_config_get_run_opts              (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_run_opts              (IdeConfiguration      *self,
+void                  ide_config_set_run_opts              (IdeConfig      *self,
                                                                    const gchar           *run_opts);
 IDE_AVAILABLE_IN_3_32
-const gchar * const  *ide_configuration_get_build_commands        (IdeConfiguration      *self);
+const gchar * const  *ide_config_get_build_commands        (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_build_commands        (IdeConfiguration      *self,
+void                  ide_config_set_build_commands        (IdeConfig      *self,
                                                                    const gchar *const    *build_commands);
 IDE_AVAILABLE_IN_3_32
-GFile                *ide_configuration_get_build_commands_dir    (IdeConfiguration      *self);
+GFile                *ide_config_get_build_commands_dir    (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_build_commands_dir    (IdeConfiguration      *self,
+void                  ide_config_set_build_commands_dir    (IdeConfig      *self,
                                                                    GFile                 *build_commands_dir);
 IDE_AVAILABLE_IN_3_32
-const gchar * const  *ide_configuration_get_post_install_commands (IdeConfiguration      *self);
+const gchar * const  *ide_config_get_post_install_commands (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_post_install_commands (IdeConfiguration      *self,
+void                  ide_config_set_post_install_commands (IdeConfig      *self,
                                                                    const gchar *const    *post_install_commands);
 IDE_AVAILABLE_IN_3_32
-gint                  ide_configuration_get_parallelism           (IdeConfiguration      *self);
+gint                  ide_config_get_parallelism           (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_parallelism           (IdeConfiguration      *self,
+void                  ide_config_set_parallelism           (IdeConfig      *self,
                                                                    gint                   parallelism);
 IDE_AVAILABLE_IN_3_32
-IdeEnvironment       *ide_configuration_get_environment           (IdeConfiguration      *self);
+IdeEnvironment       *ide_config_get_environment           (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_environment           (IdeConfiguration      *self,
+void                  ide_config_set_environment           (IdeConfig      *self,
                                                                    IdeEnvironment        *environment);
 IDE_AVAILABLE_IN_3_32
-guint                 ide_configuration_get_sequence              (IdeConfiguration      *self);
+guint                 ide_config_get_sequence              (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_app_id                (IdeConfiguration      *self);
+const gchar          *ide_config_get_app_id                (IdeConfig      *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_app_id                (IdeConfiguration      *self,
+void                  ide_config_set_app_id                (IdeConfig      *self,
                                                                    const gchar           *app_id);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_apply_path                (IdeConfiguration      *self,
+void                  ide_config_apply_path                (IdeConfig      *self,
                                                                    IdeSubprocessLauncher *launcher);
 IDE_AVAILABLE_IN_3_32
-gboolean              ide_configuration_supports_runtime          (IdeConfiguration      *self,
+gboolean              ide_config_supports_runtime          (IdeConfig      *self,
                                                                    IdeRuntime            *runtime);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_configuration_get_internal_string       (IdeConfiguration      *self,
+const gchar          *ide_config_get_internal_string       (IdeConfig      *self,
                                                                    const gchar           *key);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_internal_string       (IdeConfiguration      *self,
+void                  ide_config_set_internal_string       (IdeConfig      *self,
                                                                    const gchar           *key,
                                                                    const gchar           *value);
 IDE_AVAILABLE_IN_3_32
-const gchar * const  *ide_configuration_get_internal_strv         (IdeConfiguration      *self,
+const gchar * const  *ide_config_get_internal_strv         (IdeConfig      *self,
                                                                    const gchar           *key);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_internal_strv         (IdeConfiguration      *self,
+void                  ide_config_set_internal_strv         (IdeConfig      *self,
                                                                    const gchar           *key,
                                                                    const gchar *const    *value);
 IDE_AVAILABLE_IN_3_32
-gboolean              ide_configuration_get_internal_boolean      (IdeConfiguration      *self,
+gboolean              ide_config_get_internal_boolean      (IdeConfig      *self,
                                                                    const gchar           *key);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_internal_boolean      (IdeConfiguration      *self,
+void                  ide_config_set_internal_boolean      (IdeConfig      *self,
                                                                    const gchar           *key,
                                                                    gboolean               value);
 IDE_AVAILABLE_IN_3_32
-gint                  ide_configuration_get_internal_int          (IdeConfiguration      *self,
+gint                  ide_config_get_internal_int          (IdeConfig      *self,
                                                                    const gchar           *key);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_internal_int          (IdeConfiguration      *self,
+void                  ide_config_set_internal_int          (IdeConfig      *self,
                                                                    const gchar           *key,
                                                                    gint                   value);
 IDE_AVAILABLE_IN_3_32
-gint64                ide_configuration_get_internal_int64        (IdeConfiguration      *self,
+gint64                ide_config_get_internal_int64        (IdeConfig      *self,
                                                                    const gchar           *key);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_internal_int64        (IdeConfiguration      *self,
+void                  ide_config_set_internal_int64        (IdeConfig      *self,
                                                                    const gchar           *key,
                                                                    gint64                 value);
 IDE_AVAILABLE_IN_3_32
-gpointer              ide_configuration_get_internal_object       (IdeConfiguration      *self,
+gpointer              ide_config_get_internal_object       (IdeConfig      *self,
                                                                    const gchar           *key);
 IDE_AVAILABLE_IN_3_32
-void                  ide_configuration_set_internal_object       (IdeConfiguration      *self,
+void                  ide_config_set_internal_object       (IdeConfig      *self,
                                                                    const gchar           *key,
                                                                    gpointer               instance);
 

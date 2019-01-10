@@ -189,7 +189,7 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
   else
     {
       IdeContext *context = ide_workbench_get_context (self->workbench);
-      IdeConfigurationManager *config_manager = ide_configuration_manager_from_context (context);
+      IdeConfigManager *config_manager = ide_config_manager_from_context (context);
 
       /* TODO: It would be nice to have a cleaner way to re-setup the pipeline
        *       because we know it is invalidated.

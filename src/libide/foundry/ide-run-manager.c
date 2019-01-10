@@ -31,8 +31,8 @@
 #include "ide-build-system.h"
 #include "ide-build-target-provider.h"
 #include "ide-build-target.h"
-#include "ide-configuration-manager.h"
-#include "ide-configuration.h"
+#include "ide-config-manager.h"
+#include "ide-config.h"
 #include "ide-foundry-compat.h"
 #include "ide-run-manager-private.h"
 #include "ide-run-manager.h"
@@ -423,8 +423,8 @@ do_run_async (IdeRunManager *self,
   g_autofree gchar *title = NULL;
   IdeBuildTarget *build_target;
   IdeContext *context;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   IdeEnvironment *environment;
   IdeRuntime *runtime;
   g_autoptr(IdeRunner) runner = NULL;
@@ -442,9 +442,9 @@ do_run_async (IdeRunManager *self,
   g_assert (IDE_IS_BUILD_TARGET (build_target));
   g_assert (IDE_IS_CONTEXT (context));
 
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  runtime = ide_configuration_get_runtime (config);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  runtime = ide_config_get_runtime (config);
 
   if (runtime == NULL)
     {
@@ -453,7 +453,7 @@ do_run_async (IdeRunManager *self,
                                  IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
                                  "%s “%s”",
                                  _("Failed to locate runtime"),
-                                 ide_configuration_get_runtime_id (config));
+                                 ide_config_get_runtime_id (config));
       IDE_EXIT;
     }
 
@@ -464,7 +464,7 @@ do_run_async (IdeRunManager *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Add our run arguments if specified in the config. */
-  if (NULL != (run_opts = ide_configuration_get_run_opts (config)))
+  if (NULL != (run_opts = ide_config_get_run_opts (config)))
     {
       g_auto(GStrv) argv = NULL;
       gint argc;
@@ -483,7 +483,7 @@ do_run_async (IdeRunManager *self,
    */
   environment = ide_runner_get_environment (runner);
   ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
-  ide_environment_copy_into (ide_configuration_get_environment (config), environment, TRUE);
+  ide_environment_copy_into (ide_config_get_environment (config), environment, TRUE);
 
   g_signal_emit (self, signals [RUN], 0, runner);
 

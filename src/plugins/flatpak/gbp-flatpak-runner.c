@@ -56,8 +56,8 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
   g_autofree gchar *doc_portal = NULL;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   IdeEnvironment *env;
   g_auto(GStrv) environ_ = NULL;
   const gchar *app_id;
@@ -68,9 +68,9 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  app_id = ide_configuration_get_app_id (config);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  app_id = ide_config_get_app_id (config);
 
   doc_portal = g_strdup_printf ("--bind-mount=/run/user/%u/doc=/run/user/%u/doc/by-app/%s",
                                 getuid (), getuid (), app_id);

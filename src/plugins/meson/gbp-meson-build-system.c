@@ -448,8 +448,8 @@ gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(GHashTable) ret = NULL;
   g_auto(GStrv) system_includes = NULL;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   IdeContext *context;
   IdeRuntime *runtime;
   GPtrArray *files;
@@ -469,9 +469,9 @@ gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
 
   /* Get non-standard system includes */
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  if (NULL != (runtime = ide_configuration_get_runtime (config)))
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  if (NULL != (runtime = ide_config_get_runtime (config)))
     system_includes = ide_runtime_get_system_include_dirs (runtime);
 
   ret = g_hash_table_new_full (g_file_hash,
@@ -505,9 +505,9 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
   g_autoptr(GFile) directory = NULL;
   g_auto(GStrv) system_includes = NULL;
   g_auto(GStrv) ret = NULL;
-  IdeConfigurationManager *config_manager;
+  IdeConfigManager *config_manager;
   IdeContext *context;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeRuntime *runtime;
   GFile *file;
 
@@ -528,9 +528,9 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
 
   /* Get non-standard system includes */
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  if (NULL != (runtime = ide_configuration_get_runtime (config)))
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  if (NULL != (runtime = ide_config_get_runtime (config)))
     system_includes = ide_runtime_get_system_include_dirs (runtime);
 
   ret = ide_compile_commands_lookup (compile_commands,
@@ -636,7 +636,7 @@ gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
                                      IdeBuildPipeline *pipeline)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeBuildLocality locality;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
@@ -648,7 +648,7 @@ gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
    */
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  locality = ide_configuration_get_locality (config);
+  locality = ide_config_get_locality (config);
 
   if ((locality & IDE_BUILD_LOCALITY_OUT_OF_TREE) == 0)
     {

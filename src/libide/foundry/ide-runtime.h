@@ -55,7 +55,7 @@ struct _IdeRuntimeClass
   IdeSubprocessLauncher  *(*create_launcher)          (IdeRuntime           *self,
                                                        GError              **error);
   void                    (*prepare_configuration)    (IdeRuntime           *self,
-                                                       IdeConfiguration     *configuration);
+                                                       IdeConfig     *configuration);
   IdeRunner              *(*create_runner)            (IdeRuntime           *self,
                                                        IdeBuildTarget       *build_target);
   GFile                  *(*translate_file)           (IdeRuntime           *self,
@@ -83,7 +83,7 @@ IdeRunner             *ide_runtime_create_runner            (IdeRuntime         
                                                              IdeBuildTarget       *build_target);
 IDE_AVAILABLE_IN_3_32
 void                   ide_runtime_prepare_configuration    (IdeRuntime           *self,
-                                                             IdeConfiguration     *configuration);
+                                                             IdeConfig     *configuration);
 IDE_AVAILABLE_IN_3_32
 IdeRuntime            *ide_runtime_new                      (const gchar          *id,
                                                              const gchar          *title);

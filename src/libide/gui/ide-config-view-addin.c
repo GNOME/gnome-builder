@@ -34,12 +34,12 @@ ide_config_view_addin_default_init (IdeConfigViewAddinInterface *iface)
 void
 ide_config_view_addin_load (IdeConfigViewAddin *self,
                             DzlPreferences     *preferences,
-                            IdeConfiguration   *configuration)
+                            IdeConfig   *configuration)
 {
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONFIG_VIEW_ADDIN (self));
   g_return_if_fail (DZL_IS_PREFERENCES (preferences));
-  g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
+  g_return_if_fail (IDE_IS_CONFIG (configuration));
 
   if (IDE_CONFIG_VIEW_ADDIN_GET_IFACE (self)->load)
     IDE_CONFIG_VIEW_ADDIN_GET_IFACE (self)->load (self, preferences, configuration);

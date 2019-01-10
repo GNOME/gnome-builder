@@ -7,7 +7,7 @@ libvala_version = run_command(valac.cmd_array()[0], '--api-version').stdout().st
 libvala = dependency('libvala-@0@'.format(libvala_version))
 
 vala_sources = [
-  'config.vapi',
+  'valaconfig.vapi',
   'ide-vala-service.vala',
   'ide-vala-code-indexer.vala',
   'ide-vala-completion.vala',

@@ -1,5 +1,5 @@
 [CCode (cprefix = "", lower_case_cprefix = "", cheader_filename = "")]
-namespace Config {
+namespace ValaConfig {
 	public const string PACKAGE_DATADIR;
 	public const string VALA_VERSION;
 }

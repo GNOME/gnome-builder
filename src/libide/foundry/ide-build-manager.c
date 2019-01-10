@@ -31,8 +31,8 @@
 #include "ide-build-manager.h"
 #include "ide-build-pipeline.h"
 #include "ide-build-private.h"
-#include "ide-configuration-manager.h"
-#include "ide-configuration.h"
+#include "ide-config-manager.h"
+#include "ide-config.h"
 #include "ide-device-info.h"
 #include "ide-device-manager.h"
 #include "ide-device.h"
@@ -516,9 +516,9 @@ static void
 ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 {
   g_autoptr(IdeTask) task = NULL;
-  IdeConfigurationManager *config_manager;
+  IdeConfigManager *config_manager;
   IdeDeviceManager *device_manager;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeContext *context;
   IdeDevice *device;
 
@@ -561,10 +561,10 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   if (ide_object_in_destruction (IDE_OBJECT (context)))
     IDE_EXIT;
 
-  config_manager = ide_configuration_manager_from_context (context);
+  config_manager = ide_config_manager_from_context (context);
   device_manager = ide_device_manager_from_context (context);
 
-  config = ide_configuration_manager_get_current (config_manager);
+  config = ide_config_manager_get_current (config_manager);
   device = ide_device_manager_get_device (device_manager);
 
   /*
@@ -641,7 +641,7 @@ initable_init (GInitable     *initable,
                GError       **error)
 {
   IdeBuildManager *self = (IdeBuildManager *)initable;
-  IdeConfigurationManager *config_manager;
+  IdeConfigManager *config_manager;
   IdeDeviceManager *device_manager;
   IdeContext *context;
   IdeVcs *vcs;
@@ -652,7 +652,7 @@ initable_init (GInitable     *initable,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_configuration_manager_from_context (context);
+  config_manager = ide_config_manager_from_context (context);
   device_manager = ide_device_manager_from_context (context);
   vcs = ide_vcs_from_context (context);
 

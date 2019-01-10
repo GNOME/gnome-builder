@@ -271,7 +271,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *sdk = NULL;
   g_autofree gchar *arch = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeRuntime *runtime;
   const gchar *app_id;
   const gchar *platform;
@@ -298,7 +298,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
   arch = get_arch_option (pipeline);
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
-  app_id = ide_configuration_get_app_id (config);
+  app_id = ide_config_get_app_id (config);
   platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
   sdk = gbp_flatpak_runtime_get_sdk_name (GBP_FLATPAK_RUNTIME (runtime));
   branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
@@ -406,7 +406,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *manifest_path = NULL;
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *stop_at_option = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   const gchar *primary_module;
   const gchar *src_dir;
   guint stage_id;
@@ -485,7 +485,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *staging_dir = NULL;
   const gchar * const *finish_args;
   const gchar *command;
-  IdeConfiguration *config;
+  IdeConfig *config;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -536,7 +536,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *arch = NULL;
   g_autofree gchar *repo_dir = NULL;
   g_autofree gchar *staging_dir = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -608,7 +608,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *dest_path = NULL;
   g_autofree gchar *arch = NULL;
   g_autofree gchar *name = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   const gchar *app_id;
   guint stage_id;
 
@@ -623,7 +623,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
   repo_dir = gbp_flatpak_get_repo_dir (context);
 
-  app_id = ide_configuration_get_app_id (config);
+  app_id = ide_config_get_app_id (config);
   name = g_strdup_printf ("%s.flatpak", app_id);
   dest_path = g_build_filename (staging_dir, name, NULL);
 
@@ -640,7 +640,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   /* TODO:
    *
    * We probably need to provide UI/config opt to tweak the branch name
-   * if (ide_configuration_get_is_release (config))
+   * if (ide_config_get_is_release (config))
    */
   ide_subprocess_launcher_push_argv (launcher, "master");
 
@@ -673,7 +673,7 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 {
   GbpFlatpakPipelineAddin *self = (GbpFlatpakPipelineAddin *)addin;
   g_autoptr(GError) error = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   IdeContext *context;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));

@@ -136,16 +136,16 @@ static gchar *
 get_runtime_sysroot (IdeContext  *context,
                      const gchar *path)
 {
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   IdeRuntime *runtime;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONTEXT (context));
 
-  config_manager = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (config_manager);
-  runtime = ide_configuration_get_runtime (config);
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  runtime = ide_config_get_runtime (config);
 
   if (runtime != NULL)
     {

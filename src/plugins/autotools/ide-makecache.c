@@ -1454,8 +1454,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   g_autoptr(GPtrArray) makedirs = NULL;
   g_autoptr(GPtrArray) targets = NULL;
   g_autofree gchar *stdout_buf = NULL;
-  IdeConfigurationManager *configmgr;
-  IdeConfiguration *config;
+  IdeConfigManager *configmgr;
+  IdeConfig *config;
   IdeContext *context;
   IdeRuntime *runtime;
   GFile *build_dir = task_data;
@@ -1481,9 +1481,9 @@ ide_makecache_get_build_targets_worker (GTask        *task,
    */
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  configmgr = ide_configuration_manager_from_context (context);
-  config = ide_configuration_manager_get_current (configmgr);
-  runtime = ide_configuration_get_runtime (config);
+  configmgr = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (configmgr);
+  runtime = ide_config_get_runtime (config);
 
   if (runtime != NULL)
     launcher = ide_runtime_create_launcher (runtime, NULL);

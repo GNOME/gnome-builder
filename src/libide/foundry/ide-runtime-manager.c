@@ -29,7 +29,7 @@
 
 #include "ide-build-pipeline.h"
 #include "ide-build-private.h"
-#include "ide-configuration.h"
+#include "ide-config.h"
 #include "ide-device.h"
 #include "ide-runtime.h"
 #include "ide-runtime-manager.h"
@@ -340,7 +340,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
                                     gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  IdeConfiguration *config;
+  IdeConfig *config;
   PrepareState *state;
   const gchar *runtime_id;
   InstallLookup lookup = { 0 };
@@ -352,7 +352,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  runtime_id = ide_configuration_get_runtime_id (config);
+  runtime_id = ide_config_get_runtime_id (config);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, _ide_runtime_manager_prepare_async);

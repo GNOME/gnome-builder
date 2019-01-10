@@ -177,8 +177,8 @@ on_edit_config_cb (GSimpleAction *action,
                    gpointer       user_data)
 {
   GbpBuilduiWorkspaceAddin *self = user_data;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
+  IdeConfigManager *config_manager;
+  IdeConfig *config;
   IdeContext *context;
   const gchar *id;
 
@@ -189,9 +189,9 @@ on_edit_config_cb (GSimpleAction *action,
   ide_workspace_set_visible_surface_name (self->workspace, "buildui");
 
   context = ide_widget_get_context (GTK_WIDGET (self->workspace));
-  config_manager = ide_configuration_manager_from_context (context);
+  config_manager = ide_config_manager_from_context (context);
   id = g_variant_get_string (param, NULL);
-  config = ide_configuration_manager_get_configuration (config_manager, id);
+  config = ide_config_manager_get_configuration (config_manager, id);
 
   if (config != NULL)
     gbp_buildui_config_surface_set_config (self->surface, config);
@@ -207,7 +207,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpBuilduiWorkspaceAddin *self = (GbpBuilduiWorkspaceAddin *)addin;
-  IdeConfigurationManager *config_manager;
+  IdeConfigManager *config_manager;
   PangoAttrList *small_attrs = NULL;
   IdeEditorSidebar *sidebar;
   IdeBuildManager *build_manager;
@@ -233,7 +233,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
   context = ide_workbench_get_context (workbench);
   build_manager = ide_build_manager_from_context (context);
-  config_manager = ide_configuration_manager_from_context (context);
+  config_manager = ide_config_manager_from_context (context);
 
   small_attrs = pango_attr_list_new ();
   pango_attr_list_insert (small_attrs, pango_attr_scale_new (0.833333));

@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_MANIFEST (gbp_flatpak_manifest_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakManifest, gbp_flatpak_manifest, GBP, FLATPAK_MANIFEST, IdeConfiguration)
+G_DECLARE_FINAL_TYPE (GbpFlatpakManifest, gbp_flatpak_manifest, GBP, FLATPAK_MANIFEST, IdeConfig)
 
 GbpFlatpakManifest  *gbp_flatpak_manifest_new                (GFile                *file,
                                                               const gchar          *id);
