@@ -27,9 +27,4 @@ G_BEGIN_DECLS
 guint ide_doc_seq_acquire (void);
 void  ide_doc_seq_release (guint seq_id);
 
-typedef gboolean (*gb_project_tree_action_enable_cb) (gboolean);
-
-void register_tree_action_build_check(gb_project_tree_action_enable_cb cb);
-void register_tree_action_rebuild_check(gb_project_tree_action_enable_cb cb);
-
 G_END_DECLS

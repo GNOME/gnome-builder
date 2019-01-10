@@ -43,12 +43,13 @@ G_DEFINE_TYPE_WITH_CODE (IdeGolangBuildSystem,
 
 enum {
   PROP_0,
+  PROP_PROJECT_FILE,
   PROP_GOROOT,
   PROP_GOPATH,
-  LAST_PROP,
+  N_PROPS,
 };
 
-static GParamSpec *properties [LAST_PROP];
+static GParamSpec *properties [N_PROPS];
 
 static void
 ide_golang_build_system_constructed (GObject *object)
@@ -225,21 +226,28 @@ ide_golang_build_system_class_init (IdeGolangBuildSystemClass *klass)
   object_class->get_property = ide_golang_build_system_get_property;
   object_class->set_property = ide_golang_build_system_set_property;
 
+  properties [PROP_PROJECT_FILE] =
+    g_param_spec_object ("project-file",
+                         "Go main package",
+                         "The main package path.",
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_GOROOT] =
     g_param_spec_string ("project-goroot",
                          "Project GOROOT",
-                         "The name of the project tarball GGOOOO.",
+                         "The path to GOROOT.",
                          "/usr/lib/go",
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_GOPATH] =
     g_param_spec_string ("project-gopath",
                          "Project GOPATH",
-                         "The path of the project file BURP.",
+                         "The path to GOPATH.",
                          "~/go",
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
