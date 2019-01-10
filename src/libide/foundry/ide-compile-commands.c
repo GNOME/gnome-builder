@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <json-glib/json-glib.h>
 #include <libide-threading.h>
 #include <string.h>
