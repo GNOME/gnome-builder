@@ -1,4 +1,4 @@
-/* gbp-grep-plugin.c
+/* gbp-grep-tree-addin.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,15 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
-#include <libpeas/peas.h>
+#pragma once
 
-#include "gbp-grep-project-tree-addin.h"
+#include <glib-object.h>
 
-void
-gbp_grep_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PROJECT_TREE_ADDIN,
-                                              GBP_TYPE_GREP_PROJECT_TREE_ADDIN);
-}
+G_BEGIN_DECLS
+
+#define GBP_TYPE_GREP_TREE_ADDIN (gbp_grep_tree_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpGrepTreeAddin, gbp_grep_tree_addin, GBP, GREP_TREE_ADDIN, GObject)
+
+G_END_DECLS
