@@ -1,4 +1,4 @@
-/* gbp-glade-view-actions.c
+/* gbp-glade-page-actions.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-glade-view-actions"
+#define G_LOG_DOMAIN "gbp-glade-page-actions"
 
 #include "config.h"
 
@@ -27,34 +27,34 @@
 #include "gbp-glade-private.h"
 
 static void
-gbp_glade_view_action_save (GSimpleAction *action,
+gbp_glade_page_action_save (GSimpleAction *action,
                             GVariant      *param,
                             gpointer       user_data)
 {
-  GbpGladeView *self = user_data;
+  GbpGladePage *self = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GBP_IS_GLADE_PAGE (self));
 
-  if (!_gbp_glade_view_save (self, &error))
+  if (!_gbp_glade_page_save (self, &error))
     /* translators: %s is replaced with the specific error message */
-    ide_widget_warning (self, _("Failed to save glade document: %s"), error->message);
+    g_warning (_("Failed to save glade document: %s"), error->message);
 }
 
 static void
-gbp_glade_view_action_preview (GSimpleAction *action,
+gbp_glade_page_action_preview (GSimpleAction *action,
                                GVariant      *param,
                                gpointer       user_data)
 {
-  GbpGladeView *self = user_data;
+  GbpGladePage *self = user_data;
   GladeProject *project;
   GList *toplevels;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GBP_IS_GLADE_PAGE (self));
 
-  project = gbp_glade_view_get_project (self);
+  project = gbp_glade_page_get_project (self);
   toplevels = glade_project_toplevels (project);
 
   /* Just preview the first toplevel. To preview others, they need to
@@ -74,11 +74,11 @@ gbp_glade_view_action_preview (GSimpleAction *action,
 }
 
 static void
-gbp_glade_view_action_pointer_mode (GSimpleAction *action,
+gbp_glade_page_action_pointer_mode (GSimpleAction *action,
                                     GVariant      *param,
                                     gpointer       user_data)
 {
-  GbpGladeView *self = user_data;
+  GbpGladePage *self = user_data;
   g_autoptr(GEnumClass) klass = NULL;
   GladeProject *project;
   const gchar *nick;
@@ -88,9 +88,9 @@ gbp_glade_view_action_pointer_mode (GSimpleAction *action,
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (param != NULL);
   g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
-  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GBP_IS_GLADE_PAGE (self));
 
-  project = gbp_glade_view_get_project (self);
+  project = gbp_glade_page_get_project (self);
   nick = g_variant_get_string (param, NULL);
 
   /* No GType to lookup from public API yet */
@@ -103,15 +103,15 @@ gbp_glade_view_action_pointer_mode (GSimpleAction *action,
 }
 
 static void
-gbp_glade_view_action_paste (GSimpleAction *action,
+gbp_glade_page_action_paste (GSimpleAction *action,
                              GVariant      *param,
                              gpointer       user_data)
 {
-  GbpGladeView *self = user_data;
+  GbpGladePage *self = user_data;
   GtkWidget *placeholder;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GBP_IS_GLADE_PAGE (self));
 
   placeholder = glade_util_get_placeholder_from_pointer (GTK_CONTAINER (self));
   glade_project_command_paste (self->project, placeholder ? GLADE_PLACEHOLDER (placeholder) : NULL);
@@ -119,14 +119,14 @@ gbp_glade_view_action_paste (GSimpleAction *action,
 
 #define WRAP_PROJECT_ACTION(name, func)                 \
 static void                                             \
-gbp_glade_view_action_##name (GSimpleAction *action,    \
+gbp_glade_page_action_##name (GSimpleAction *action,    \
                               GVariant      *param,     \
                               gpointer       user_data) \
 {                                                       \
-  GbpGladeView *self = user_data;                       \
+  GbpGladePage *self = user_data;                       \
                                                         \
   g_assert (G_IS_SIMPLE_ACTION (action));               \
-  g_assert (GBP_IS_GLADE_VIEW (self));                  \
+  g_assert (GBP_IS_GLADE_PAGE (self));                  \
                                                         \
   glade_project_##func (self->project);                 \
 }
@@ -138,24 +138,24 @@ WRAP_PROJECT_ACTION (redo, redo)
 WRAP_PROJECT_ACTION (undo, undo)
 
 static GActionEntry actions[] = {
-  { "cut", gbp_glade_view_action_cut },
-  { "copy", gbp_glade_view_action_copy },
-  { "paste", gbp_glade_view_action_paste },
-  { "delete", gbp_glade_view_action_delete },
-  { "redo", gbp_glade_view_action_redo },
-  { "undo", gbp_glade_view_action_undo },
-  { "save", gbp_glade_view_action_save },
-  { "preview", gbp_glade_view_action_preview },
-  { "pointer-mode", gbp_glade_view_action_pointer_mode, "s" },
+  { "cut", gbp_glade_page_action_cut },
+  { "copy", gbp_glade_page_action_copy },
+  { "paste", gbp_glade_page_action_paste },
+  { "delete", gbp_glade_page_action_delete },
+  { "redo", gbp_glade_page_action_redo },
+  { "undo", gbp_glade_page_action_undo },
+  { "save", gbp_glade_page_action_save },
+  { "preview", gbp_glade_page_action_preview },
+  { "pointer-mode", gbp_glade_page_action_pointer_mode, "s" },
 };
 
 void
-_gbp_glade_view_update_actions (GbpGladeView *self)
+_gbp_glade_page_update_actions (GbpGladePage *self)
 {
   GladeCommand *redo;
   GladeCommand *undo;
 
-  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GBP_IS_GLADE_PAGE (self));
   g_assert (GLADE_IS_PROJECT (self->project));
 
   redo = glade_project_next_redo_item (self->project);
@@ -170,11 +170,11 @@ _gbp_glade_view_update_actions (GbpGladeView *self)
 }
 
 void
-_gbp_glade_view_init_actions (GbpGladeView *self)
+_gbp_glade_page_init_actions (GbpGladePage *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
 
-  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GBP_IS_GLADE_PAGE (self));
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group),
@@ -185,5 +185,5 @@ _gbp_glade_view_init_actions (GbpGladeView *self)
                                   "glade-view",
                                   G_ACTION_GROUP (group));
 
-  _gbp_glade_view_update_actions (self);
+  _gbp_glade_page_update_actions (self);
 }

@@ -1,4 +1,4 @@
-@import url("resource:///org/gnome/builder/plugins/glade-plugin/themes/Adwaita-shared.css");
+@import url("resource:///plugins/glade/themes/Adwaita-shared.css");
 
 /* Draw our grid over the glade background pattern */
 gbpgladeview viewport {

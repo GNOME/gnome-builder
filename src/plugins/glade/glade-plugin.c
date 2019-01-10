@@ -1,4 +1,4 @@
-/* gbp-glade-plugin.c
+/* glade-plugin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,16 +20,19 @@
 
 #define G_LOG_DOMAIN "gbp-glade-plugin"
 
+#include "config.h"
+
 #include <gladeui/glade.h>
-#include <ide.h>
+#include <libide-editor.h>
+#include <libide-gui.h>
 #include <libpeas/peas.h>
 
 #include "gbp-glade-editor-addin.h"
-#include "gbp-glade-layout-stack-addin.h"
+#include "gbp-glade-frame-addin.h"
 #include "gbp-glade-workbench-addin.h"
 
-void
-gbp_glade_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_glade_register_types (PeasObjectModule *module)
 {
   glade_init ();
 
@@ -37,8 +40,8 @@ gbp_glade_register_types (PeasObjectModule *module)
                                               IDE_TYPE_EDITOR_ADDIN,
                                               GBP_TYPE_GLADE_EDITOR_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                              GBP_TYPE_GLADE_LAYOUT_STACK_ADDIN);
+                                              IDE_TYPE_FRAME_ADDIN,
+                                              GBP_TYPE_GLADE_FRAME_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_GLADE_WORKBENCH_ADDIN);

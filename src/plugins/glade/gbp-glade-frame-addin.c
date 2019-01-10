@@ -1,4 +1,4 @@
-/* gbp-glade-layout-stack-addin.c
+/* gbp-glade-frame-addin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,17 +18,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-glade-layout-stack-addin"
+#define G_LOG_DOMAIN "gbp-glade-frame-addin"
 
 #include "config.h"
 
 #include <glib/gi18n.h>
 #include <gladeui/glade.h>
+#include <libide-editor.h>
 
-#include "gbp-glade-layout-stack-addin.h"
-#include "gbp-glade-view.h"
+#include "gbp-glade-frame-addin.h"
+#include "gbp-glade-page.h"
 
-struct _GbpGladeLayoutStackAddin
+struct _GbpGladeFrameAddin
 {
   GObject         parent_instance;
   GtkMenuButton  *button;
@@ -37,22 +38,22 @@ struct _GbpGladeLayoutStackAddin
   GtkButton      *toggle_source;
   GladeInspector *inspector;
   DzlSignalGroup *project_signals;
-  IdeLayoutView  *view;
+  IdePage        *view;
 };
 
-static void layout_stack_addin_iface_init (IdeLayoutStackAddinInterface *iface);
+static void frame_addin_iface_init (IdeFrameAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpGladeLayoutStackAddin, gbp_glade_layout_stack_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                                layout_stack_addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpGladeFrameAddin, gbp_glade_frame_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_FRAME_ADDIN,
+                                                frame_addin_iface_init))
 
 static void
-gbp_glade_layout_stack_addin_selection_changed_cb (GbpGladeLayoutStackAddin *self,
+gbp_glade_frame_addin_selection_changed_cb (GbpGladeFrameAddin *self,
                                                    GladeProject             *project)
 {
   GList *selection = NULL;
 
-  g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
   g_assert (!project || GLADE_IS_PROJECT (project));
 
   if (project != NULL)
@@ -92,9 +93,9 @@ gbp_glade_layout_stack_addin_selection_changed_cb (GbpGladeLayoutStackAddin *sel
 }
 
 static void
-gbp_glade_layout_stack_addin_dispose (GObject *object)
+gbp_glade_frame_addin_dispose (GObject *object)
 {
-  GbpGladeLayoutStackAddin *self = (GbpGladeLayoutStackAddin *)object;
+  GbpGladeFrameAddin *self = (GbpGladeFrameAddin *)object;
 
   if (self->project_signals != NULL)
     {
@@ -102,25 +103,25 @@ gbp_glade_layout_stack_addin_dispose (GObject *object)
       g_clear_object (&self->project_signals);
     }
 
-  G_OBJECT_CLASS (gbp_glade_layout_stack_addin_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gbp_glade_frame_addin_parent_class)->dispose (object);
 }
 
 static void
-gbp_glade_layout_stack_addin_class_init (GbpGladeLayoutStackAddinClass *klass)
+gbp_glade_frame_addin_class_init (GbpGladeFrameAddinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = gbp_glade_layout_stack_addin_dispose;
+  object_class->dispose = gbp_glade_frame_addin_dispose;
 }
 
 static void
-gbp_glade_layout_stack_addin_init (GbpGladeLayoutStackAddin *self)
+gbp_glade_frame_addin_init (GbpGladeFrameAddin *self)
 {
   self->project_signals = dzl_signal_group_new (GLADE_TYPE_PROJECT);
 
   dzl_signal_group_connect_object (self->project_signals,
                                    "selection-changed",
-                                   G_CALLBACK (gbp_glade_layout_stack_addin_selection_changed_cb),
+                                   G_CALLBACK (gbp_glade_frame_addin_selection_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 }
@@ -144,7 +145,7 @@ find_view_cb (GtkWidget *widget,
   struct {
     GFile         *file;
     GType          type;
-    IdeLayoutView *view;
+    IdePage *view;
   } *lookup = user_data;
   GFile *file;
 
@@ -153,14 +154,14 @@ find_view_cb (GtkWidget *widget,
 
   if (g_type_is_a (G_OBJECT_TYPE (widget), lookup->type))
     {
-      if (IDE_IS_EDITOR_VIEW (widget))
+      if (IDE_IS_EDITOR_PAGE (widget))
         {
-          IdeBuffer *buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (widget));
-          file = ide_file_get_file (ide_buffer_get_file (buffer));
+          IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (widget));
+          file = ide_buffer_get_file (buffer);
         }
-      else if (GBP_IS_GLADE_VIEW (widget))
+      else if (GBP_IS_GLADE_PAGE (widget))
         {
-          file = gbp_glade_view_get_file (GBP_GLADE_VIEW (widget));
+          file = gbp_glade_page_get_file (GBP_GLADE_PAGE (widget));
         }
       else
         {
@@ -168,11 +169,11 @@ find_view_cb (GtkWidget *widget,
         }
 
       if (g_file_equal (lookup->file, file))
-        lookup->view = IDE_LAYOUT_VIEW (widget);
+        lookup->view = IDE_PAGE (widget);
     }
 }
 
-static IdeLayoutView *
+static IdePage *
 find_view_by_file_and_type (IdeWorkbench *workbench,
                             GFile        *file,
                             GType         type)
@@ -180,46 +181,45 @@ find_view_by_file_and_type (IdeWorkbench *workbench,
   struct {
     GFile         *file;
     GType          type;
-    IdeLayoutView *view;
+    IdePage *view;
   } lookup = { file, type, NULL };
 
   g_assert (IDE_IS_WORKBENCH (workbench));
   g_assert (G_IS_FILE (file));
-  g_assert (type == IDE_TYPE_EDITOR_VIEW || type == GBP_TYPE_GLADE_VIEW);
+  g_assert (type == IDE_TYPE_EDITOR_PAGE || type == GBP_TYPE_GLADE_PAGE);
 
-  ide_workbench_views_foreach (workbench, find_view_cb, &lookup);
+  ide_workbench_foreach_page (workbench, find_view_cb, &lookup);
 
   return lookup.view;
 }
 
 static void
-on_toggle_source_clicked_cb (GbpGladeLayoutStackAddin *self,
+on_toggle_source_clicked_cb (GbpGladeFrameAddin *self,
                              GtkButton                *toggle_source)
 {
   IdeWorkbench *workbench;
-  IdeLayoutView *other;
+  IdePage *other;
   const gchar *hint;
   GFile *gfile;
   GType type;
 
-  g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
   g_assert (GTK_IS_BUTTON (toggle_source));
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (toggle_source));
 
-  if (IDE_IS_EDITOR_VIEW (self->view))
+  if (IDE_IS_EDITOR_PAGE (self->view))
     {
-      IdeBuffer *buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (self->view));
-      IdeFile *file = ide_buffer_get_file (buffer);
+      IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (self->view));
 
-      gfile = ide_file_get_file (file);
-      type = GBP_TYPE_GLADE_VIEW;
+      gfile = ide_buffer_get_file (buffer);
+      type = GBP_TYPE_GLADE_PAGE;
       hint = "glade";
     }
-  else if (GBP_IS_GLADE_VIEW (self->view))
+  else if (GBP_IS_GLADE_PAGE (self->view))
     {
-      gfile = gbp_glade_view_get_file (GBP_GLADE_VIEW (self->view));
-      type = IDE_TYPE_EDITOR_VIEW;
+      gfile = gbp_glade_page_get_file (GBP_GLADE_PAGE (self->view));
+      type = IDE_TYPE_EDITOR_PAGE;
       hint = "editor";
     }
   else
@@ -229,33 +229,31 @@ on_toggle_source_clicked_cb (GbpGladeLayoutStackAddin *self,
 
   if (!(other = find_view_by_file_and_type (workbench, gfile, type)))
     {
-      g_autoptr(IdeUri) uri = ide_uri_new_from_file (gfile);
-
-      ide_workbench_open_uri_async (workbench,
-                                    uri,
-                                    hint,
-                                    IDE_WORKBENCH_OPEN_FLAGS_NONE,
-                                    NULL, NULL, NULL);
+      ide_workbench_open_async (workbench,
+                                gfile,
+                                hint,
+                                IDE_BUFFER_OPEN_FLAGS_NONE,
+                                NULL, NULL, NULL);
     }
   else
     {
-      ide_workbench_focus (workbench, GTK_WIDGET (other));
+      gtk_widget_grab_focus (GTK_WIDGET (other));
     }
 }
 
 static void
-gbp_glade_layout_stack_addin_load (IdeLayoutStackAddin *addin,
-                                   IdeLayoutStack      *stack)
+gbp_glade_frame_addin_load (IdeFrameAddin *addin,
+                                   IdeFrame      *stack)
 {
-  GbpGladeLayoutStackAddin *self = (GbpGladeLayoutStackAddin *)addin;
+  GbpGladeFrameAddin *self = (GbpGladeFrameAddin *)addin;
   GtkPopover *popover;
   GtkWidget *header;
   GtkBox *box;
 
-  g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
+  g_assert (IDE_IS_FRAME (stack));
 
-  header = ide_layout_stack_get_titlebar (stack);
+  header = ide_frame_get_titlebar (stack);
 
   popover = g_object_new (GTK_TYPE_POPOVER,
                           "width-request", 400,
@@ -276,7 +274,7 @@ gbp_glade_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->button);
-  ide_layout_stack_header_add_custom_title (IDE_LAYOUT_STACK_HEADER (header),
+  ide_frame_header_add_custom_title (IDE_FRAME_HEADER (header),
                                             GTK_WIDGET (self->button),
                                             200);
 
@@ -330,13 +328,13 @@ gbp_glade_layout_stack_addin_load (IdeLayoutStackAddin *addin,
 }
 
 static void
-gbp_glade_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
-                                     IdeLayoutStack      *stack)
+gbp_glade_frame_addin_unload (IdeFrameAddin *addin,
+                                     IdeFrame      *stack)
 {
-  GbpGladeLayoutStackAddin *self = (GbpGladeLayoutStackAddin *)addin;
+  GbpGladeFrameAddin *self = (GbpGladeFrameAddin *)addin;
 
-  g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
+  g_assert (IDE_IS_FRAME (stack));
 
   self->view = NULL;
 
@@ -348,14 +346,14 @@ gbp_glade_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
 }
 
 static void
-gbp_glade_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
-                                       IdeLayoutView       *view)
+gbp_glade_frame_addin_set_view (IdeFrameAddin *addin,
+                                       IdePage       *view)
 {
-  GbpGladeLayoutStackAddin *self = (GbpGladeLayoutStackAddin *)addin;
+  GbpGladeFrameAddin *self = (GbpGladeFrameAddin *)addin;
   GladeProject *project = NULL;
 
-  g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
+  g_assert (!view || IDE_IS_PAGE (view));
 
   self->view = view;
 
@@ -363,14 +361,14 @@ gbp_glade_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
    * Update related widgetry from view change.
    */
 
-  if (GBP_IS_GLADE_VIEW (view))
-    project = gbp_glade_view_get_project (GBP_GLADE_VIEW (view));
+  if (GBP_IS_GLADE_PAGE (view))
+    project = gbp_glade_page_get_project (GBP_GLADE_PAGE (view));
 
   glade_inspector_set_project (self->inspector, project);
   gtk_widget_set_visible (GTK_WIDGET (self->button), project != NULL);
 
   dzl_signal_group_set_target (self->project_signals, project);
-  gbp_glade_layout_stack_addin_selection_changed_cb (self, project);
+  gbp_glade_frame_addin_selection_changed_cb (self, project);
 
   /*
    * If this is an editor view and a UI file, we can allow the user
@@ -379,12 +377,11 @@ gbp_glade_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
 
   gtk_widget_hide (GTK_WIDGET (self->toggle_source));
 
-  if (IDE_IS_EDITOR_VIEW (view))
+  if (IDE_IS_EDITOR_PAGE (view))
     {
-      IdeBuffer *buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (view));
-      IdeFile *file = ide_buffer_get_file (buffer);
-      GFile *gfile = ide_file_get_file (file);
-      g_autofree gchar *name = g_file_get_basename (gfile);
+      IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (view));
+      GFile *file = ide_buffer_get_file (buffer);
+      g_autofree gchar *name = g_file_get_basename (file);
 
       if (g_str_has_suffix (name, ".ui"))
         {
@@ -394,7 +391,7 @@ gbp_glade_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
           gtk_widget_show (GTK_WIDGET (self->toggle_source));
         }
     }
-  else if (GBP_IS_GLADE_VIEW (view))
+  else if (GBP_IS_GLADE_PAGE (view))
     {
       gtk_button_set_label (self->toggle_source, _("View Source"));
       gtk_widget_set_tooltip_text (GTK_WIDGET (self->toggle_source),
@@ -404,9 +401,9 @@ gbp_glade_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
 }
 
 static void
-layout_stack_addin_iface_init (IdeLayoutStackAddinInterface *iface)
+frame_addin_iface_init (IdeFrameAddinInterface *iface)
 {
-  iface->load = gbp_glade_layout_stack_addin_load;
-  iface->unload = gbp_glade_layout_stack_addin_unload;
-  iface->set_view = gbp_glade_layout_stack_addin_set_view;
+  iface->load = gbp_glade_frame_addin_load;
+  iface->unload = gbp_glade_frame_addin_unload;
+  iface->set_page = gbp_glade_frame_addin_set_view;
 }

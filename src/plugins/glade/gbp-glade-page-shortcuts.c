@@ -1,4 +1,4 @@
-/* gbp-glade-view-shortcuts.c
+/* gbp-glade-page-shortcuts.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-glade-view-shortcuts"
+#define G_LOG_DOMAIN "gbp-glade-page-shortcuts"
 
 #include "config.h"
 
@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "gbp-glade-private.h"
-#include "gbp-glade-view.h"
+#include "gbp-glade-page.h"
 
 #define I_(s) (g_intern_static_string(s))
 
@@ -57,7 +57,7 @@ static DzlShortcutEntry glade_view_shortcuts[] = {
 };
 
 void
-_gbp_glade_view_init_shortcuts (GtkWidget *widget)
+_gbp_glade_page_init_shortcuts (GtkWidget *widget)
 {
   DzlShortcutController *controller;
 

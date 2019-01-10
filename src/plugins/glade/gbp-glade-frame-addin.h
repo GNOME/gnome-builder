@@ -1,4 +1,4 @@
-/* gbp-glade-layout-stack-addin.h
+/* gbp-glade-frame-addin.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GLADE_LAYOUT_STACK_ADDIN (gbp_glade_layout_stack_addin_get_type())
+#define GBP_TYPE_GLADE_FRAME_ADDIN (gbp_glade_frame_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGladeLayoutStackAddin, gbp_glade_layout_stack_addin, GBP, GLADE_LAYOUT_STACK_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpGladeFrameAddin, gbp_glade_frame_addin, GBP, GLADE_FRAME_ADDIN, GObject)
 
 G_END_DECLS

@@ -22,40 +22,72 @@
 
 #include "config.h"
 
-#include "gbp-glade-view.h"
+#include <libide-gui.h>
+
+#include "gbp-glade-page.h"
 #include "gbp-glade-workbench-addin.h"
 
 struct _GbpGladeWorkbenchAddin
 {
-  GObject       parent_instance;
-  IdeWorkbench *workbench;
-  GHashTable   *catalog_paths;
+  GObject          parent_instance;
+  IdeWorkbench    *workbench;
+  IdeBuildManager *build_manager;
+  GHashTable      *catalog_paths;
 };
 
 typedef struct
 {
   GFile        *file;
-  GbpGladeView *view;
-} LocateView;
+  GbpGladePage *view;
+} LocatePage;
 
-static gchar *
-gbp_glade_workbench_addin_get_id (IdeWorkbenchAddin *addin)
+static void
+find_most_recent_editor_cb (GtkWidget *widget,
+                            gpointer   user_data)
 {
-  return g_strdup ("glade");
+  IdeSurface **surface = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKSPACE (widget));
+
+  if (*surface == NULL)
+    *surface = ide_workspace_get_surface_by_name (IDE_WORKSPACE (widget), "editor");
+}
+
+static IdeSurface *
+find_most_recent_editor (GbpGladeWorkbenchAddin *self)
+{
+  IdeSurface *surface = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKBENCH (self->workbench));
+
+  ide_workbench_foreach_workspace (self->workbench,
+                                   find_most_recent_editor_cb,
+                                   &surface);
+
+  return surface;
 }
 
 static gboolean
 gbp_glade_workbench_addin_can_open (IdeWorkbenchAddin *addin,
-                                    IdeUri            *uri,
+                                    GFile             *file,
                                     const gchar       *content_type,
                                     gint              *priority)
 {
+  GbpGladeWorkbenchAddin *self = (GbpGladeWorkbenchAddin *)addin;
   const gchar *path;
 
-  g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_FILE (file));
+  g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
   g_assert (priority != NULL);
 
-  path = ide_uri_get_path (uri);
+  /* Ignore all open requests unless we have a surface */
+  if (!find_most_recent_editor (self))
+    return FALSE;
+
+  path = g_file_peek_path (file);
 
   if (g_strcmp0 (content_type, "application/x-gtk-builder") == 0 ||
       g_strcmp0 (content_type, "application/x-designer") == 0 ||
@@ -73,23 +105,23 @@ gbp_glade_workbench_addin_open_cb (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
 {
-  GbpGladeView *view = (GbpGladeView *)object;
+  GbpGladePage *view = (GbpGladePage *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
   GladeProject *project;
   GList *toplevels;
 
-  g_assert (GBP_IS_GLADE_VIEW (view));
+  g_assert (GBP_IS_GLADE_PAGE (view));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!gbp_glade_view_load_file_finish (view, result, &error))
+  if (!gbp_glade_page_load_file_finish (view, result, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  project = gbp_glade_view_get_project (view);
+  project = gbp_glade_page_get_project (view);
   toplevels = glade_project_toplevels (project);
 
   /* Select the first toplevel so that we don't start with a non-existant
@@ -102,74 +134,81 @@ gbp_glade_workbench_addin_open_cb (GObject      *object,
 }
 
 static void
-locate_view (GtkWidget *view,
+locate_page (GtkWidget *view,
              gpointer   user_data)
 {
-  LocateView *locate = user_data;
+  LocatePage *locate = user_data;
   GFile *file;
 
-  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_PAGE (view));
   g_assert (locate != NULL);
 
   if (locate->view != NULL)
     return;
 
-  if (!GBP_IS_GLADE_VIEW (view))
+  if (!GBP_IS_GLADE_PAGE (view))
     return;
 
-  file = gbp_glade_view_get_file (GBP_GLADE_VIEW (view));
+  file = gbp_glade_page_get_file (GBP_GLADE_PAGE (view));
   if (g_file_equal (file, locate->file))
-    locate->view = GBP_GLADE_VIEW (view);
+    locate->view = GBP_GLADE_PAGE (view);
 }
 
 static void
-gbp_glade_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
-                                      IdeUri                *uri,
-                                      const gchar           *content_type,
-                                      IdeWorkbenchOpenFlags  flags,
-                                      GCancellable          *cancellable,
-                                      GAsyncReadyCallback    callback,
-                                      gpointer               user_data)
+gbp_glade_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
+                                      GFile               *file,
+                                      const gchar         *content_type,
+                                      IdeBufferOpenFlags   flags,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
 {
   GbpGladeWorkbenchAddin *self = (GbpGladeWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GFile) file = NULL;
-  IdePerspective *editor;
-  GbpGladeView *view;
-  LocateView locate = { 0 };
+  GbpGladePage *view;
+  IdeSurface *editor;
+  LocatePage locate = { 0 };
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
-  g_assert (uri != NULL);
+  g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_glade_workbench_addin_open_async);
 
-  editor = ide_workbench_get_perspective_by_name (self->workbench, "editor");
-  file = ide_uri_to_file (uri);
+  if (!(editor = find_most_recent_editor (self)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Cannot open, not in project mode");
+      return;
+    }
 
   /* First try to find an existing view for the file */
   locate.file = file;
-  ide_workbench_views_foreach (self->workbench, locate_view, &locate);
+  ide_workbench_foreach_page (self->workbench, locate_page, &locate);
   if (locate.view != NULL)
     {
-      ide_workbench_focus (self->workbench, GTK_WIDGET (locate.view));
+      ide_widget_reveal_and_grab (GTK_WIDGET (locate.view));
       ide_task_return_boolean (task, TRUE);
       return;
     }
 
-  view = gbp_glade_view_new ();
+  view = gbp_glade_page_new ();
   gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (view));
   gtk_widget_show (GTK_WIDGET (view));
 
-  gbp_glade_view_load_file_async (view,
+  gbp_glade_page_load_file_async (view,
                                   file,
                                   cancellable,
                                   gbp_glade_workbench_addin_open_cb,
                                   g_steal_pointer (&task));
 
-  ide_workbench_focus (self->workbench, GTK_WIDGET (view));
+  ide_widget_reveal_and_grab (GTK_WIDGET (view));
 }
 
 static gboolean
@@ -257,14 +296,26 @@ gbp_glade_workbench_addin_load (IdeWorkbenchAddin *addin,
                                 IdeWorkbench      *workbench)
 {
   GbpGladeWorkbenchAddin *self = (GbpGladeWorkbenchAddin *)addin;
-  IdeBuildManager *build_manager;
-  IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   self->workbench = workbench;
   self->catalog_paths = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+}
+
+static void
+gbp_glade_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
+                                          IdeProjectInfo    *project_info)
+{
+  GbpGladeWorkbenchAddin *self = (GbpGladeWorkbenchAddin *)addin;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
 
   /*
    * We want to watch the build pipeline for changes to the current
@@ -278,10 +329,11 @@ gbp_glade_workbench_addin_load (IdeWorkbenchAddin *addin,
    * the runtime is a foreign mount.
    */
 
-  context = ide_workbench_get_context (workbench);
-  build_manager = ide_context_get_build_manager (context);
+  context = ide_workbench_get_context (self->workbench);
+  build_manager = ide_build_manager_from_context (context);
 
-  g_signal_connect_object (build_manager,
+  self->build_manager = g_object_ref (build_manager);
+  g_signal_connect_object (self->build_manager,
                            "notify::pipeline",
                            G_CALLBACK (on_build_pipeline_changed_cb),
                            self,
@@ -296,20 +348,19 @@ gbp_glade_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
   GbpGladeWorkbenchAddin *self = (GbpGladeWorkbenchAddin *)addin;
-  IdeBuildManager *build_manager;
-  IdeContext *context;
   const gchar *path;
   GHashTableIter iter;
 
   g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  context = ide_workbench_get_context (workbench);
-  build_manager = ide_context_get_build_manager (context);
-
-  g_signal_handlers_disconnect_by_func (build_manager,
-                                        G_CALLBACK (on_build_pipeline_changed_cb),
-                                        self);
+  if (self->build_manager != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->build_manager,
+                                            G_CALLBACK (on_build_pipeline_changed_cb),
+                                            self);
+      g_clear_object (&self->build_manager);
+    }
 
   g_hash_table_iter_init (&iter, self->catalog_paths);
   while (g_hash_table_iter_next (&iter, (gpointer *)&path, NULL))
@@ -327,7 +378,7 @@ gbp_glade_workbench_addin_unload (IdeWorkbenchAddin *addin,
 static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
-  iface->get_id = gbp_glade_workbench_addin_get_id;
+  iface->project_loaded = gbp_glade_workbench_addin_project_loaded;
   iface->load = gbp_glade_workbench_addin_load;
   iface->unload = gbp_glade_workbench_addin_unload;
   iface->can_open = gbp_glade_workbench_addin_can_open;

@@ -1,4 +1,4 @@
-/* gbp-glade-view.h
+/* gbp-glade-page.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -21,24 +21,24 @@
 #pragma once
 
 #include <gladeui/glade.h>
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GLADE_VIEW (gbp_glade_view_get_type())
+#define GBP_TYPE_GLADE_PAGE (gbp_glade_page_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGladeView, gbp_glade_view, GBP, GLADE_VIEW, IdeLayoutView)
+G_DECLARE_FINAL_TYPE (GbpGladePage, gbp_glade_page, GBP, GLADE_PAGE, IdePage)
 
-GbpGladeView *gbp_glade_view_new              (void);
-GFile        *gbp_glade_view_get_file         (GbpGladeView         *self);
-void          gbp_glade_view_load_file_async  (GbpGladeView         *self,
+GbpGladePage *gbp_glade_page_new              (void);
+GFile        *gbp_glade_page_get_file         (GbpGladePage         *self);
+void          gbp_glade_page_load_file_async  (GbpGladePage         *self,
                                                GFile                *file,
                                                GCancellable         *cancellable,
                                                GAsyncReadyCallback   callback,
                                                gpointer              user_data);
-gboolean      gbp_glade_view_load_file_finish (GbpGladeView         *self,
+gboolean      gbp_glade_page_load_file_finish (GbpGladePage         *self,
                                                GAsyncResult         *result,
                                                GError              **error);
-GladeProject *gbp_glade_view_get_project      (GbpGladeView         *self);
+GladeProject *gbp_glade_page_get_project      (GbpGladePage         *self);
 
 G_END_DECLS
