@@ -1,4 +1,4 @@
-/* gbp-qemu-plugin.c
+/* qemu-plugin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,13 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include "config.h"
+
+#include <libide-foundry.h>
 #include <libpeas/peas.h>
 
 #include "gbp-qemu-device-provider.h"
 
-void
-gbp_qemu_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_qemu_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_DEVICE_PROVIDER, GBP_TYPE_QEMU_DEVICE_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DEVICE_PROVIDER,
+                                              GBP_TYPE_QEMU_DEVICE_PROVIDER);
 }
