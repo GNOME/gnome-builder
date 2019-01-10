@@ -1,4 +1,4 @@
-/* gb-file-search-provider.c
+/* gbp-file-search-provider.c
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,52 +18,55 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gb-file-search-provider"
+#define G_LOG_DOMAIN "gbp-file-search-provider"
 
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-projects.h>
+#include <libide-search.h>
+#include <libide-vcs.h>
 #include <libpeas/peas.h>
 
-#include "gb-file-search-provider.h"
-#include "gb-file-search-index.h"
+#include "gbp-file-search-provider.h"
+#include "gbp-file-search-index.h"
 
-struct _GbFileSearchProvider
+struct _GbpFileSearchProvider
 {
-  IdeObject          parent_instance;
-  GbFileSearchIndex *index;
+  IdeObject           parent_instance;
+  GbpFileSearchIndex *index;
 };
 
 static void search_provider_iface_init (IdeSearchProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbFileSearchProvider,
-                         gb_file_search_provider,
+G_DEFINE_TYPE_WITH_CODE (GbpFileSearchProvider,
+                         gbp_file_search_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
 
 static void
-gb_file_search_provider_search_async (IdeSearchProvider   *provider,
+gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
                                       const gchar         *search_terms,
                                       guint                max_results,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
                                       gpointer             user_data)
 {
-  GbFileSearchProvider *self = (GbFileSearchProvider *)provider;
+  GbpFileSearchProvider *self = (GbpFileSearchProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) results = NULL;
 
-  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (search_terms != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gb_file_search_provider_search_async);
+  ide_task_set_source_tag (task, gbp_file_search_provider_search_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->index != NULL)
-    results = gb_file_search_index_populate (self->index, search_terms, max_results);
+    results = gbp_file_search_index_populate (self->index, search_terms, max_results);
   else
     results = g_ptr_array_new_with_free_func (g_object_unref);
 
@@ -71,13 +74,13 @@ gb_file_search_provider_search_async (IdeSearchProvider   *provider,
 }
 
 static GPtrArray *
-gb_file_search_provider_search_finish (IdeSearchProvider  *provider,
+gbp_file_search_provider_search_finish (IdeSearchProvider  *provider,
                                        GAsyncResult       *result,
                                        GError            **error)
 {
   GPtrArray *ret;
 
-  g_assert (GB_IS_FILE_SEARCH_PROVIDER (provider));
+  g_assert (GBP_IS_FILE_SEARCH_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
@@ -86,100 +89,96 @@ gb_file_search_provider_search_finish (IdeSearchProvider  *provider,
 }
 
 static void
-on_buffer_loaded (GbFileSearchProvider *self,
+on_buffer_loaded (GbpFileSearchProvider *self,
                   IdeBuffer            *buffer,
                   IdeBufferManager     *bufmgr)
 {
   g_autofree gchar *relative_path = NULL;
-  IdeContext *context;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GFile) workdir = NULL;
   IdeVcs *vcs;
   GFile *file;
-  GFile *workdir;
 
-  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
 
   if (self->index == NULL)
     return;
 
-  file = ide_file_get_file (ide_buffer_get_file (buffer));
-  context = ide_buffer_get_context (buffer);
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  file = ide_buffer_get_file (buffer);
+  context = ide_buffer_ref_context (buffer);
+  vcs = ide_vcs_from_context (context);
+  workdir = ide_context_ref_workdir (context);
   relative_path = g_file_get_relative_path (workdir, file);
 
   if ((relative_path != NULL) &&
       !ide_vcs_is_ignored (vcs, file, NULL) &&
-      !gb_file_search_index_contains (self->index, relative_path))
-    gb_file_search_index_insert (self->index, relative_path);
+      !gbp_file_search_index_contains (self->index, relative_path))
+    gbp_file_search_index_insert (self->index, relative_path);
 }
 
 static void
-on_file_renamed (GbFileSearchProvider *self,
+on_file_renamed (GbpFileSearchProvider *self,
                  GFile                *src_file,
                  GFile                *dst_file,
                  IdeProject           *project)
 {
   g_autofree gchar *old_path = NULL;
   g_autofree gchar *new_path = NULL;
+  g_autoptr(GFile) workdir = NULL;
   IdeContext *context;
-  IdeVcs *vcs;
-  GFile *workdir;
 
-  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (G_IS_FILE (src_file));
   g_assert (G_IS_FILE (dst_file));
   g_assert (IDE_IS_PROJECT (project));
-  g_assert (GB_IS_FILE_SEARCH_INDEX (self->index));
+  g_assert (GBP_IS_FILE_SEARCH_INDEX (self->index));
 
   context = ide_object_get_context (IDE_OBJECT (project));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  workdir = ide_context_ref_workdir (context);
 
   if (NULL != (old_path = g_file_get_relative_path (workdir, src_file)))
-    gb_file_search_index_remove (self->index, old_path);
+    gbp_file_search_index_remove (self->index, old_path);
 
   if (NULL != (new_path = g_file_get_relative_path (workdir, dst_file)))
-    gb_file_search_index_insert (self->index, new_path);
+    gbp_file_search_index_insert (self->index, new_path);
 }
 
 static void
-on_file_trashed (GbFileSearchProvider *self,
+on_file_trashed (GbpFileSearchProvider *self,
                  GFile                *file,
                  IdeProject           *project)
 {
   g_autofree gchar *path = NULL;
+  g_autoptr(GFile) workdir = NULL;
   IdeContext *context;
-  IdeVcs *vcs;
-  GFile *workdir;
 
-  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (G_IS_FILE (file));
   g_assert (IDE_IS_PROJECT (project));
-  g_assert (GB_IS_FILE_SEARCH_INDEX (self->index));
+  g_assert (GBP_IS_FILE_SEARCH_INDEX (self->index));
 
   context = ide_object_get_context (IDE_OBJECT (project));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  workdir = ide_context_ref_workdir (context);
 
   if (NULL != (path = g_file_get_relative_path (workdir, file)))
-    gb_file_search_index_remove (self->index, path);
+    gbp_file_search_index_remove (self->index, path);
 }
 
 static void
-gb_file_search_provider_build_cb (GObject      *object,
+gbp_file_search_provider_build_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
-  GbFileSearchIndex *index = (GbFileSearchIndex *)object;
-  g_autoptr(GbFileSearchProvider) self = user_data;
+  GbpFileSearchIndex *index = (GbpFileSearchIndex *)object;
+  g_autoptr(GbpFileSearchProvider) self = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (GB_IS_FILE_SEARCH_INDEX (index));
-  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (GBP_IS_FILE_SEARCH_INDEX (index));
+  g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
 
-  if (!gb_file_search_index_build_finish (index, result, &error))
+  if (!gbp_file_search_index_build_finish (index, result, &error))
     {
       g_warning ("%s", error->message);
       return;
@@ -190,7 +189,7 @@ gb_file_search_provider_build_cb (GObject      *object,
 
 #if 0
 static void
-gb_file_search_provider_activate (IdeSearchProvider *provider,
+gbp_file_search_provider_activate (IdeSearchProvider *provider,
                                   GtkWidget         *row,
                                   IdeSearchResult   *result)
 {
@@ -206,13 +205,13 @@ gb_file_search_provider_activate (IdeSearchProvider *provider,
     {
       g_autofree gchar *path = NULL;
       g_autoptr(GFile) file = NULL;
+      g_autoptr(GFile) workdir = NULL;
       IdeContext *context;
       IdeVcs *vcs;
-      GFile *workdir;
 
       context = ide_workbench_get_context (IDE_WORKBENCH (toplevel));
-      vcs = ide_context_get_vcs (context);
-      workdir = ide_vcs_get_working_directory (vcs);
+      vcs = ide_vcs_from_context (context);
+      workdir = ide_context_ref_workdir (context);
       g_object_get (result, "path", &path, NULL);
       file = g_file_get_child (workdir, path);
 
@@ -229,56 +228,64 @@ gb_file_search_provider_activate (IdeSearchProvider *provider,
 #endif
 
 static void
-gb_file_search_provider_vcs_changed_cb (GbFileSearchProvider *self,
-                                        IdeVcs               *vcs)
+gbp_file_search_provider_vcs_changed_cb (GbpFileSearchProvider *self,
+                                         IdeVcs                *vcs)
 {
-  g_autoptr(GbFileSearchIndex) index = NULL;
+  g_autoptr(GbpFileSearchIndex) index = NULL;
+  g_autoptr(GFile) workdir = NULL;
   IdeContext *context;
-  GFile *workdir;
 
   IDE_ENTRY;
 
-  g_return_if_fail (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_return_if_fail (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_return_if_fail (IDE_IS_VCS (vcs));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  workdir = ide_vcs_get_working_directory (vcs);
+  workdir = ide_context_ref_workdir (context);
 
-  index = g_object_new (GB_TYPE_FILE_SEARCH_INDEX,
-                        "context", context,
+  index = g_object_new (GBP_TYPE_FILE_SEARCH_INDEX,
                         "root-directory", workdir,
                         NULL);
 
-  gb_file_search_index_build_async (index,
-                                    NULL,
-                                    gb_file_search_provider_build_cb,
-                                    g_object_ref (self));
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (index));
+
+  gbp_file_search_index_build_async (index,
+                                     NULL,
+                                     gbp_file_search_provider_build_cb,
+                                     g_object_ref (self));
 
   IDE_EXIT;
 }
 
 static void
-gb_file_search_provider_constructed (GObject *object)
+gbp_file_search_provider_parent_set (IdeObject *object,
+                                     IdeObject *parent)
 {
-  GbFileSearchProvider *self = (GbFileSearchProvider *)object;
-  g_autoptr(GbFileSearchIndex) index = NULL;
+  GbpFileSearchProvider *self = (GbpFileSearchProvider *)object;
+  g_autoptr(GbpFileSearchIndex) index = NULL;
+  g_autoptr(GFile) workdir = NULL;
   IdeBufferManager *bufmgr;
   IdeContext *context;
   IdeProject *project;
   IdeVcs *vcs;
-  GFile *workdir;
+
+  g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  bufmgr = ide_context_get_buffer_manager (context);
-  project = ide_context_get_project (context);
-  vcs = ide_context_get_vcs (context);
+  bufmgr = ide_buffer_manager_from_context (context);
+  project = ide_project_from_context (context);
+  vcs = ide_vcs_from_context (context);
 
-  workdir = ide_vcs_get_working_directory (vcs);
+  workdir = ide_context_ref_workdir (context);
 
   g_signal_connect_object (vcs,
                            "changed",
-                           G_CALLBACK (gb_file_search_provider_vcs_changed_cb),
+                           G_CALLBACK (gbp_file_search_provider_vcs_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -300,54 +307,55 @@ gb_file_search_provider_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  index = g_object_new (GB_TYPE_FILE_SEARCH_INDEX,
-                        "context", context,
+  index = g_object_new (GBP_TYPE_FILE_SEARCH_INDEX,
                         "root-directory", workdir,
                         NULL);
 
-  gb_file_search_index_build_async (index,
-                                    NULL,
-                                    gb_file_search_provider_build_cb,
-                                    g_object_ref (self));
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (index));
 
-  G_OBJECT_CLASS (gb_file_search_provider_parent_class)->constructed (object);
+  gbp_file_search_index_build_async (index,
+                                     NULL,
+                                     gbp_file_search_provider_build_cb,
+                                     g_object_ref (self));
 }
 
 static void
-gb_file_search_provider_finalize (GObject *object)
+gbp_file_search_provider_finalize (GObject *object)
 {
-  GbFileSearchProvider *self = (GbFileSearchProvider *)object;
+  GbpFileSearchProvider *self = (GbpFileSearchProvider *)object;
 
   g_clear_object (&self->index);
 
-  G_OBJECT_CLASS (gb_file_search_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_file_search_provider_parent_class)->finalize (object);
 }
 
 static void
-gb_file_search_provider_class_init (GbFileSearchProviderClass *klass)
+gbp_file_search_provider_class_init (GbpFileSearchProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->constructed = gb_file_search_provider_constructed;
-  object_class->finalize = gb_file_search_provider_finalize;
+  object_class->finalize = gbp_file_search_provider_finalize;
+
+  i_object_class->parent_set = gbp_file_search_provider_parent_set;
 }
 
 static void
-gb_file_search_provider_init (GbFileSearchProvider *self)
+gbp_file_search_provider_init (GbpFileSearchProvider *self)
 {
 }
 
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
-  iface->search_async = gb_file_search_provider_search_async;
-  iface->search_finish = gb_file_search_provider_search_finish;
+  iface->search_async = gbp_file_search_provider_search_async;
+  iface->search_finish = gbp_file_search_provider_search_finish;
 }
 
 void
-gb_file_search_register_types (PeasObjectModule *module)
+gbp_file_search_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SEARCH_PROVIDER,
-                                              GB_TYPE_FILE_SEARCH_PROVIDER);
+                                              GBP_TYPE_FILE_SEARCH_PROVIDER);
 }

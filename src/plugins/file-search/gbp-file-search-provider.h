@@ -1,4 +1,4 @@
-/* gb-file-search-result.h
+/* gbp-file-search-provider.h
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-search.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_FILE_SEARCH_RESULT (gb_file_search_result_get_type())
+#define GBP_TYPE_FILE_SEARCH_PROVIDER (gbp_file_search_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbFileSearchResult, gb_file_search_result, GB, FILE_SEARCH_RESULT, IdeSearchResult)
+G_DECLARE_FINAL_TYPE (GbpFileSearchProvider, gbp_file_search_provider, GBP, FILE_SEARCH_PROVIDER, IdeObject)
 
 G_END_DECLS

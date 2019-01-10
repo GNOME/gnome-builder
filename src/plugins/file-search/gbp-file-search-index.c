@@ -1,4 +1,4 @@
-/* gb-file-search-index.c
+/* gbp-file-search-index.c
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,16 +18,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gb-file-search-index"
+#define G_LOG_DOMAIN "gbp-file-search-index"
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-search.h>
+#include <libide-code.h>
+#include <libide-vcs.h>
 #include <string.h>
 
-#include "gb-file-search-index.h"
-#include "gb-file-search-result.h"
+#include "gbp-file-search-index.h"
+#include "gbp-file-search-result.h"
 
-struct _GbFileSearchIndex
+struct _GbpFileSearchIndex
 {
   IdeObject             parent_instance;
 
@@ -35,7 +37,7 @@ struct _GbFileSearchIndex
   DzlFuzzyMutableIndex *fuzzy;
 };
 
-G_DEFINE_TYPE (GbFileSearchIndex, gb_file_search_index, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE (GbpFileSearchIndex, gbp_file_search_index, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -46,10 +48,10 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
-gb_file_search_index_set_root_directory (GbFileSearchIndex *self,
+gbp_file_search_index_set_root_directory (GbpFileSearchIndex *self,
                                          GFile             *root_directory)
 {
-  g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
+  g_return_if_fail (GBP_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (!root_directory || G_IS_FILE (root_directory));
 
   if (g_set_object (&self->root_directory, root_directory))
@@ -61,23 +63,23 @@ gb_file_search_index_set_root_directory (GbFileSearchIndex *self,
 }
 
 static void
-gb_file_search_index_finalize (GObject *object)
+gbp_file_search_index_finalize (GObject *object)
 {
-  GbFileSearchIndex *self = (GbFileSearchIndex *)object;
+  GbpFileSearchIndex *self = (GbpFileSearchIndex *)object;
 
   g_clear_object (&self->root_directory);
   g_clear_pointer (&self->fuzzy, dzl_fuzzy_mutable_index_unref);
 
-  G_OBJECT_CLASS (gb_file_search_index_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_file_search_index_parent_class)->finalize (object);
 }
 
 static void
-gb_file_search_index_get_property (GObject    *object,
+gbp_file_search_index_get_property (GObject    *object,
                                    guint       prop_id,
                                    GValue     *value,
                                    GParamSpec *pspec)
 {
-  GbFileSearchIndex *self = GB_FILE_SEARCH_INDEX (object);
+  GbpFileSearchIndex *self = GBP_FILE_SEARCH_INDEX (object);
 
   switch (prop_id)
     {
@@ -91,17 +93,17 @@ gb_file_search_index_get_property (GObject    *object,
 }
 
 static void
-gb_file_search_index_set_property (GObject      *object,
+gbp_file_search_index_set_property (GObject      *object,
                                    guint         prop_id,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
-  GbFileSearchIndex *self = GB_FILE_SEARCH_INDEX (object);
+  GbpFileSearchIndex *self = GBP_FILE_SEARCH_INDEX (object);
 
   switch (prop_id)
     {
     case PROP_ROOT_DIRECTORY:
-      gb_file_search_index_set_root_directory (self, g_value_get_object (value));
+      gbp_file_search_index_set_root_directory (self, g_value_get_object (value));
       break;
 
     default:
@@ -110,13 +112,13 @@ gb_file_search_index_set_property (GObject      *object,
 }
 
 static void
-gb_file_search_index_class_init (GbFileSearchIndexClass *klass)
+gbp_file_search_index_class_init (GbpFileSearchIndexClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gb_file_search_index_finalize;
-  object_class->get_property = gb_file_search_index_get_property;
-  object_class->set_property = gb_file_search_index_set_property;
+  object_class->finalize = gbp_file_search_index_finalize;
+  object_class->get_property = gbp_file_search_index_get_property;
+  object_class->set_property = gbp_file_search_index_set_property;
 
   properties [PROP_ROOT_DIRECTORY] =
     g_param_spec_object ("root-directory",
@@ -129,7 +131,7 @@ gb_file_search_index_class_init (GbFileSearchIndexClass *klass)
 }
 
 static void
-gb_file_search_index_init (GbFileSearchIndex *self)
+gbp_file_search_index_init (GbpFileSearchIndex *self)
 {
 }
 
@@ -228,26 +230,26 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
 }
 
 static void
-gb_file_search_index_builder (IdeTask      *task,
+gbp_file_search_index_builder (IdeTask      *task,
                               gpointer      source_object,
                               gpointer      task_data,
                               GCancellable *cancellable)
 {
-  GbFileSearchIndex *self = source_object;
+  GbpFileSearchIndex *self = source_object;
   g_autoptr(GTimer) timer = NULL;
+  g_autoptr(IdeVcs) vcs = NULL;
+  g_autoptr(IdeContext) context = NULL;
   GFile *directory = task_data;
-  IdeContext *context;
-  IdeVcs *vcs;
   DzlFuzzyMutableIndex *fuzzy;
   gdouble elapsed;
 
   g_assert (IDE_IS_TASK (task));
-  g_assert (GB_IS_FILE_SEARCH_INDEX (self));
+  g_assert (GBP_IS_FILE_SEARCH_INDEX (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (G_IS_FILE (directory));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  vcs = ide_vcs_ref_from_context (context);
 
   timer = g_timer_new ();
 
@@ -267,18 +269,18 @@ gb_file_search_index_builder (IdeTask      *task,
 }
 
 void
-gb_file_search_index_build_async (GbFileSearchIndex   *self,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
+gbp_file_search_index_build_async (GbpFileSearchIndex  *self,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
 
-  g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
+  g_return_if_fail (GBP_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gb_file_search_index_build_async);
+  ide_task_set_source_tag (task, gbp_file_search_index_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->root_directory == NULL)
@@ -291,17 +293,17 @@ gb_file_search_index_build_async (GbFileSearchIndex   *self,
     }
 
   ide_task_set_task_data (task, g_object_ref (self->root_directory), g_object_unref);
-  ide_task_run_in_thread (task, gb_file_search_index_builder);
+  ide_task_run_in_thread (task, gbp_file_search_index_builder);
 }
 
 gboolean
-gb_file_search_index_build_finish (GbFileSearchIndex  *self,
+gbp_file_search_index_build_finish (GbpFileSearchIndex  *self,
                                    GAsyncResult       *result,
                                    GError            **error)
 {
   IdeTask *task = (IdeTask *)result;
 
-  g_return_val_if_fail (GB_IS_FILE_SEARCH_INDEX (self), FALSE);
+  g_return_val_if_fail (GBP_IS_FILE_SEARCH_INDEX (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
@@ -309,7 +311,7 @@ gb_file_search_index_build_finish (GbFileSearchIndex  *self,
 }
 
 GPtrArray *
-gb_file_search_index_populate (GbFileSearchIndex *self,
+gbp_file_search_index_populate (GbpFileSearchIndex *self,
                                const gchar       *query,
                                gsize              max_results)
 {
@@ -320,7 +322,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
   IdeContext *context;
   gsize i;
 
-  g_return_val_if_fail (GB_IS_FILE_SEARCH_INDEX (self), NULL);
+  g_return_val_if_fail (GBP_IS_FILE_SEARCH_INDEX (self), NULL);
   g_return_val_if_fail (query != NULL, NULL);
 
   if (self->fuzzy == NULL)
@@ -348,7 +350,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
 
       if (ide_search_reducer_accepts (&reducer, match->score))
         {
-          g_autoptr(GbFileSearchResult) result = NULL;
+          g_autoptr(GbpFileSearchResult) result = NULL;
           g_autofree gchar *escaped = NULL;
           g_autofree gchar *markup = NULL;
           g_autofree gchar *free_me = NULL;
@@ -367,7 +369,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           if ((content_type = g_content_type_guess (filename, NULL, 0, NULL)))
             themed_icon = ide_g_content_type_get_symbolic_icon (content_type);
 
-          result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
+          result = g_object_new (GBP_TYPE_FILE_SEARCH_RESULT,
                                  "context", context,
                                  "score", match->score,
                                  "title", markup,
@@ -385,10 +387,10 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
 }
 
 gboolean
-gb_file_search_index_contains (GbFileSearchIndex *self,
+gbp_file_search_index_contains (GbpFileSearchIndex *self,
                                const gchar       *relative_path)
 {
-  g_return_val_if_fail (GB_IS_FILE_SEARCH_INDEX (self), FALSE);
+  g_return_val_if_fail (GBP_IS_FILE_SEARCH_INDEX (self), FALSE);
   g_return_val_if_fail (relative_path != NULL, FALSE);
   g_return_val_if_fail (self->fuzzy != NULL, FALSE);
 
@@ -396,10 +398,10 @@ gb_file_search_index_contains (GbFileSearchIndex *self,
 }
 
 void
-gb_file_search_index_insert (GbFileSearchIndex *self,
+gbp_file_search_index_insert (GbpFileSearchIndex *self,
                              const gchar       *relative_path)
 {
-  g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
+  g_return_if_fail (GBP_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (relative_path != NULL);
   g_return_if_fail (self->fuzzy != NULL);
 
@@ -407,10 +409,10 @@ gb_file_search_index_insert (GbFileSearchIndex *self,
 }
 
 void
-gb_file_search_index_remove (GbFileSearchIndex *self,
+gbp_file_search_index_remove (GbpFileSearchIndex *self,
                              const gchar       *relative_path)
 {
-  g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
+  g_return_if_fail (GBP_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (relative_path != NULL);
   g_return_if_fail (self->fuzzy != NULL);
 

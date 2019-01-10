@@ -1,4 +1,4 @@
-/* gb-file-search-index.h
+/* gbp-file-search-index.h
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -20,29 +20,29 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-search.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_FILE_SEARCH_INDEX (gb_file_search_index_get_type())
+#define GBP_TYPE_FILE_SEARCH_INDEX (gbp_file_search_index_get_type())
 
-G_DECLARE_FINAL_TYPE (GbFileSearchIndex, gb_file_search_index, GB, FILE_SEARCH_INDEX, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpFileSearchIndex, gbp_file_search_index, GBP, FILE_SEARCH_INDEX, IdeObject)
 
-GPtrArray *gb_file_search_index_populate     (GbFileSearchIndex    *self,
+GPtrArray *gbp_file_search_index_populate     (GbpFileSearchIndex    *self,
                                               const gchar          *query,
                                               gsize                 max_results);
-void       gb_file_search_index_build_async  (GbFileSearchIndex    *self,
+void       gbp_file_search_index_build_async  (GbpFileSearchIndex    *self,
                                               GCancellable         *cancellable,
                                               GAsyncReadyCallback   callback,
                                               gpointer              user_data);
-gboolean   gb_file_search_index_build_finish (GbFileSearchIndex    *self,
+gboolean   gbp_file_search_index_build_finish (GbpFileSearchIndex    *self,
                                               GAsyncResult         *result,
                                               GError              **error);
-gboolean   gb_file_search_index_contains     (GbFileSearchIndex    *self,
+gboolean   gbp_file_search_index_contains     (GbpFileSearchIndex    *self,
                                               const gchar          *relative_path);
-void       gb_file_search_index_insert       (GbFileSearchIndex    *self,
+void       gbp_file_search_index_insert       (GbpFileSearchIndex    *self,
                                               const gchar          *relative_path);
-void       gb_file_search_index_remove       (GbFileSearchIndex    *self,
+void       gbp_file_search_index_remove       (GbpFileSearchIndex    *self,
                                               const gchar          *relative_path);
 
 G_END_DECLS

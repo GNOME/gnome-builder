@@ -1,6 +1,6 @@
-/* gb-file-search-provider.h
+/* file-search-plugin.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#define G_LOG_DOMAIN "file-search-plugin"
 
-#include <ide.h>
+#include "config.h"
 
-G_BEGIN_DECLS
+#include <libide-search.h>
+#include <libpeas/peas.h>
 
-#define GB_TYPE_FILE_SEARCH_PROVIDER (gb_file_search_provider_get_type())
+#include "gbp-file-search-provider.h"
 
-G_DECLARE_FINAL_TYPE (GbFileSearchProvider, gb_file_search_provider,
-                      GB, FILE_SEARCH_PROVIDER, IdeObject)
-
-G_END_DECLS
+void
+_gbp_file_search_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SEARCH_PROVIDER,
+                                              GBP_TYPE_FILE_SEARCH_PROVIDER);
+}
