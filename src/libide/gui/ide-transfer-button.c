@@ -24,12 +24,8 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-debug.h"
-
-#include "application/ide-application.h"
-#include "transfers/ide-transfer-button.h"
-#include "transfers/ide-transfer-manager.h"
-#include "util/ide-gtk.h"
+#include "ide-gui-global.h"
+#include "ide-transfer-button.h"
 
 typedef struct
 {
@@ -157,7 +153,7 @@ ide_transfer_button_clicked (GtkButton *button)
   dzl_progress_button_set_show_progress (DZL_PROGRESS_BUTTON (self), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
 
-  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
+  transfer_manager = ide_transfer_manager_get_default ();
 
   /* TODO: Cancellable state */
   g_clear_object (&priv->cancellable);

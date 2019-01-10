@@ -1,4 +1,4 @@
-/* ide-pkcon-transfer.h
+/* ide-transfer-button.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,18 +20,29 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
 
-#include "transfers/ide-transfer.h"
+#include <dazzle.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PKCON_TRANSFER (ide_pkcon_transfer_get_type())
+#define IDE_TYPE_TRANSFER_BUTTON (ide_transfer_button_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdePkconTransfer, ide_pkcon_transfer, IDE, PKCON_TRANSFER, IdeTransfer)
+G_DECLARE_DERIVABLE_TYPE (IdeTransferButton, ide_transfer_button, IDE, TRANSFER_BUTTON, DzlProgressButton)
+
+struct _IdeTransferButtonClass
+{
+  DzlProgressButtonClass parent_class;
+
+  /*< private >*/
+  gpointer _reserved[8];
+};
 
 IDE_AVAILABLE_IN_3_32
-IdePkconTransfer *ide_pkcon_transfer_new (const gchar * const *packages);
+GtkWidget *ide_transfer_button_new (IdeTransfer *transfer);
 
 G_END_DECLS
