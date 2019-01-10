@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Description=Trim trailing whitespace when saving buffers
+Embedded=_gbp_trim_spaces_register_types
+Hidden=true
+Module=trim-spaces
+Name=Trim Spaces
