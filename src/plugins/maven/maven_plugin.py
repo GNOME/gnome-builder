@@ -116,7 +116,7 @@ class MavenBuildTarget(Ide.Object, Ide.BuildTarget):
 
     def do_get_cwd(self):
         context = self.get_context()
-        project_file = context.get_project_file()
+        project_file = Ide.BuildSystem.from_context(context).project_file
         return project_file.get_parent().get_path()
 
     def do_get_argv(self):
