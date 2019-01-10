@@ -72,7 +72,7 @@ ide_snippet_completion_provider_load (IdeCompletionProvider *provider,
   g_assert (IDE_IS_SNIPPET_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  storage = ide_context_get_snippets (context);
+  storage = ide_snippet_storage_from_context (context);
   self->model = ide_snippet_model_new (storage);
 }
 

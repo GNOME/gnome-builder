@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
+  <gresource prefix="/plugins/snippets">
     <file>snippets.plugin</file>
   </gresource>
-  <gresource prefix="/org/gnome/builder/plugins/snippets-plugin">
+  <gresource prefix="/org/gnome/builder">
+    <!-- compressing these would mean we waste heap to maintain internal
+         pointers, so we don't compress them. -->
+    <file>snippets/chdr.snippets</file>
+    <file>snippets/c.snippets</file>
+    <file>snippets/gobject.snippets</file>
+    <file>snippets/java.snippets</file>
+    <file>snippets/js.snippets</file>
+    <file>snippets/licenses.snippets</file>
+    <file>snippets/main.snippets</file>
+    <file>snippets/python.snippets</file>
+    <file>snippets/rpmspec.snippets</file>
+    <file>snippets/rust.snippets</file>
+    <file>snippets/shebang.snippets</file>
+    <file>snippets/vala.snippets</file>
+    <file>snippets/xml.snippets</file>
   </gresource>
 </gresources>

@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-gui.h>
 
 #include "ide-snippet-preferences-addin.h"
 
