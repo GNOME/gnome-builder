@@ -1,2 +1,0 @@
-*.ref unowned
-Task.new.callback type="GLib.TaskReadyCallback" scope="async"
