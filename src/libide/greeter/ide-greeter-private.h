@@ -1,6 +1,6 @@
-/* ide-greeter-perspective.h
+/* ide-greeter-private.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,13 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <libide-projects.h>
 
-#include "projects/ide-recent-projects.h"
+#include "ide-greeter-workspace.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GREETER_PERSPECTIVE (ide_greeter_perspective_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeGreeterPerspective, ide_greeter_perspective, IDE, GREETER_PERSPECTIVE, GtkBin)
-
-void ide_greeter_perspective_show_genesis_view (IdeGreeterPerspective *self,
-                                                const gchar *genesis_addin_name,
-                                                const gchar *manifest);
+void _ide_greeter_workspace_init_actions   (IdeGreeterWorkspace *self);
+void _ide_greeter_workspace_init_shortcuts (IdeGreeterWorkspace *self);
 
 G_END_DECLS
