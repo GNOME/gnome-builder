@@ -24,7 +24,6 @@
 
 #define IDE_CORE_INSIDE
 
-#include "ide-build-ident.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-global.h"

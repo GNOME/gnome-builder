@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <ide-build-ident.h>
 #include <libide-projects.h>
 
 #include "ide-application.h"
