@@ -1,6 +1,6 @@
-/* ide-git-vcs-config.h
+/* gbp-git-index-monitor.h
  *
- * Copyright 2016 Akshaya Kakkilaya <akshaya.kakkilaya@gmail.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 
 #pragma once
 
-#include <ide.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_VCS_CONFIG (ide_git_vcs_config_get_type())
+#define GBP_TYPE_GIT_INDEX_MONITOR (gbp_git_index_monitor_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitVcsConfig, ide_git_vcs_config, IDE, GIT_VCS_CONFIG, GObject)
+G_DECLARE_FINAL_TYPE (GbpGitIndexMonitor, gbp_git_index_monitor, GBP, GIT_INDEX_MONITOR, GObject)
 
-IdeGitVcsConfig *ide_git_vcs_config_new (void);
+GbpGitIndexMonitor *gbp_git_index_monitor_new (GFile *repository_dir);
 
 G_END_DECLS

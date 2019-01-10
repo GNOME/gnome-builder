@@ -1,6 +1,6 @@
-/* ide-git-submodule-stage.h
+/* gbp-git-vcs-initializer.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-vcs.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_SUBMODULE_STAGE (ide_git_submodule_stage_get_type())
+#define GBP_TYPE_GIT_VCS_INITIALIZER (gbp_git_vcs_initializer_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitSubmoduleStage, ide_git_submodule_stage, IDE, GIT_SUBMODULE_STAGE, IdeBuildStageLauncher)
-
-IdeGitSubmoduleStage *ide_git_submodule_stage_new          (IdeContext           *context);
-void                  ide_git_submodule_stage_force_update (IdeGitSubmoduleStage *self);
+G_DECLARE_FINAL_TYPE (GbpGitVcsInitializer, gbp_git_vcs_initializer, GBP, GIT_VCS_INITIALIZER, GObject)
 
 G_END_DECLS

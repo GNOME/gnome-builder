@@ -1,4 +1,4 @@
-/* ide-git-vcs.h
+/* gbp-git-remote-callbacks.h
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -20,12 +20,18 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libgit2-glib/ggit.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_VCS (ide_git_vcs_get_type())
+#define GBP_TYPE_GIT_REMOTE_CALLBACKS (gbp_git_remote_callbacks_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitVcs, ide_git_vcs, IDE, GIT_VCS, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpGitRemoteCallbacks, gbp_git_remote_callbacks, GBP, GIT_REMOTE_CALLBACKS, GgitRemoteCallbacks)
+
+GgitRemoteCallbacks *gbp_git_remote_callbacks_new          (IdeNotification       *progress);
+gdouble              gbp_git_remote_callbacks_get_fraction (GbpGitRemoteCallbacks *self);
+IdeNotification     *gbp_git_remote_callbacks_get_progress (GbpGitRemoteCallbacks *self);
+void                 gbp_git_remote_callbacks_cancel       (GbpGitRemoteCallbacks *self);
 
 G_END_DECLS

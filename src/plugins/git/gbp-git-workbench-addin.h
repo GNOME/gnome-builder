@@ -1,4 +1,4 @@
-/* ide-git-pipeline-addin.h
+/* gbp-git-workbench-addin.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_PIPELINE_ADDIN (ide_git_pipeline_addin_get_type())
+#define GBP_TYPE_GIT_WORKBENCH_ADDIN (gbp_git_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitPipelineAddin, ide_git_pipeline_addin, IDE, GIT_PIPELINE_ADDIN, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpGitWorkbenchAddin, gbp_git_workbench_addin, GBP, GIT_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS

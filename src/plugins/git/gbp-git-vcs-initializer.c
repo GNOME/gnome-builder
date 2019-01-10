@@ -1,4 +1,4 @@
-/* ide-git-vcs-initializer.c
+/* gbp-git-vcs-initializer.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,32 +18,37 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gbp-git-vcs-initializer"
+
+#include "config.h"
+
 #include <libgit2-glib/ggit.h>
+#include <libide-threading.h>
 
-#include "ide-git-vcs-initializer.h"
+#include "gbp-git-vcs-initializer.h"
 
-struct _IdeGitVcsInitializer
+struct _GbpGitVcsInitializer
 {
   GObject parent_instance;
 };
 
 static void vcs_initializer_init (IdeVcsInitializerInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeGitVcsInitializer, ide_git_vcs_initializer, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GbpGitVcsInitializer, gbp_git_vcs_initializer, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_INITIALIZER, vcs_initializer_init))
 
 static void
-ide_git_vcs_initializer_class_init (IdeGitVcsInitializerClass *klass)
+gbp_git_vcs_initializer_class_init (GbpGitVcsInitializerClass *klass)
 {
 }
 
 static void
-ide_git_vcs_initializer_init (IdeGitVcsInitializer *self)
+gbp_git_vcs_initializer_init (GbpGitVcsInitializer *self)
 {
 }
 
 static void
-ide_git_vcs_initializer_initialize_worker (IdeTask      *task,
+gbp_git_vcs_initializer_initialize_worker (IdeTask      *task,
                                            gpointer      source_object,
                                            gpointer      task_data,
                                            GCancellable *cancellable)
@@ -53,7 +58,7 @@ ide_git_vcs_initializer_initialize_worker (IdeTask      *task,
   GFile *file = task_data;
 
   g_assert (IDE_IS_TASK (task));
-  g_assert (IDE_IS_GIT_VCS_INITIALIZER (source_object));
+  g_assert (GBP_IS_GIT_VCS_INITIALIZER (source_object));
   g_assert (G_IS_FILE (file));
 
   repository = ggit_repository_init_repository (file, FALSE, &error);
@@ -65,37 +70,37 @@ ide_git_vcs_initializer_initialize_worker (IdeTask      *task,
 }
 
 static void
-ide_git_vcs_initializer_initialize_async (IdeVcsInitializer   *initializer,
+gbp_git_vcs_initializer_initialize_async (IdeVcsInitializer   *initializer,
                                           GFile               *file,
                                           GCancellable        *cancellable,
                                           GAsyncReadyCallback  callback,
                                           gpointer             user_data)
 {
-  IdeGitVcsInitializer *self = (IdeGitVcsInitializer *)initializer;
+  GbpGitVcsInitializer *self = (GbpGitVcsInitializer *)initializer;
   g_autoptr(IdeTask) task = NULL;
 
-  g_return_if_fail (IDE_IS_GIT_VCS_INITIALIZER (self));
+  g_return_if_fail (GBP_IS_GIT_VCS_INITIALIZER (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  ide_task_run_in_thread (task, ide_git_vcs_initializer_initialize_worker);
+  ide_task_run_in_thread (task, gbp_git_vcs_initializer_initialize_worker);
 }
 
 static gboolean
-ide_git_vcs_initializer_initialize_finish (IdeVcsInitializer  *initializer,
+gbp_git_vcs_initializer_initialize_finish (IdeVcsInitializer  *initializer,
                                            GAsyncResult       *result,
                                            GError            **error)
 {
-  g_return_val_if_fail (IDE_IS_GIT_VCS_INITIALIZER (initializer), FALSE);
+  g_return_val_if_fail (GBP_IS_GIT_VCS_INITIALIZER (initializer), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static gchar *
-ide_git_vcs_initializer_get_title (IdeVcsInitializer *initilizer)
+gbp_git_vcs_initializer_get_title (IdeVcsInitializer *initilizer)
 {
   return g_strdup ("Git");
 }
@@ -103,7 +108,7 @@ ide_git_vcs_initializer_get_title (IdeVcsInitializer *initilizer)
 static void
 vcs_initializer_init (IdeVcsInitializerInterface *iface)
 {
-  iface->get_title = ide_git_vcs_initializer_get_title;
-  iface->initialize_async = ide_git_vcs_initializer_initialize_async;
-  iface->initialize_finish = ide_git_vcs_initializer_initialize_finish;
+  iface->get_title = gbp_git_vcs_initializer_get_title;
+  iface->initialize_async = gbp_git_vcs_initializer_initialize_async;
+  iface->initialize_finish = gbp_git_vcs_initializer_initialize_finish;
 }

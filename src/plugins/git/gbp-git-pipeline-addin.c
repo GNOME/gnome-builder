@@ -1,4 +1,4 @@
-/* ide-git-pipeline-addin.c
+/* gbp-git-pipeline-addin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,64 +18,65 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-git-pipeline-addin"
+#define G_LOG_DOMAIN "gbp-git-pipeline-addin"
 
 #include "config.h"
 
+#include <libide-foundry.h>
 #include <glib/gi18n.h>
 
-#include "ide-git-pipeline-addin.h"
-#include "ide-git-submodule-stage.h"
-#include "ide-git-vcs.h"
+#include "gbp-git-pipeline-addin.h"
+#include "gbp-git-submodule-stage.h"
+#include "gbp-git-vcs.h"
 
-struct _IdeGitPipelineAddin
+struct _GbpGitPipelineAddin
 {
   IdeObject parent_instance;
 };
 
 static void
-ide_git_pipeline_addin_load (IdeBuildPipelineAddin *addin,
+gbp_git_pipeline_addin_load (IdeBuildPipelineAddin *addin,
                              IdeBuildPipeline      *pipeline)
 {
-  g_autoptr(IdeGitSubmoduleStage) submodule = NULL;
+  g_autoptr(GbpGitSubmoduleStage) submodule = NULL;
   IdeContext *context;
   IdeVcs *vcs;
   guint stage_id;
 
-  g_assert (IDE_IS_GIT_PIPELINE_ADDIN (addin));
+  g_assert (GBP_IS_GIT_PIPELINE_ADDIN (addin));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (addin));
-  vcs = ide_context_get_vcs (context);
+  vcs = ide_vcs_from_context (context);
 
   /* Ignore everything if this isn't a git-based repository */
-  if (!IDE_IS_GIT_VCS (vcs))
+  if (!GBP_IS_GIT_VCS (vcs))
     return;
 
-  submodule = ide_git_submodule_stage_new (context);
-  stage_id = ide_build_pipeline_connect (pipeline,
-                                         IDE_BUILD_PHASE_DOWNLOADS,
-                                         100,
-                                         IDE_BUILD_STAGE (submodule));
+  submodule = gbp_git_submodule_stage_new (context);
+  stage_id = ide_build_pipeline_attach (pipeline,
+                                        IDE_BUILD_PHASE_DOWNLOADS,
+                                        100,
+                                        IDE_BUILD_STAGE (submodule));
   ide_build_pipeline_addin_track (addin, stage_id);
 }
 
 static void
 build_pipeline_addin_iface_init (IdeBuildPipelineAddinInterface *iface)
 {
-  iface->load = ide_git_pipeline_addin_load;
+  iface->load = gbp_git_pipeline_addin_load;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeGitPipelineAddin, ide_git_pipeline_addin, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbpGitPipelineAddin, gbp_git_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN,
                                                 build_pipeline_addin_iface_init))
 
 static void
-ide_git_pipeline_addin_class_init (IdeGitPipelineAddinClass *klass)
+gbp_git_pipeline_addin_class_init (GbpGitPipelineAddinClass *klass)
 {
 }
 
 static void
-ide_git_pipeline_addin_init (IdeGitPipelineAddin *self)
+gbp_git_pipeline_addin_init (GbpGitPipelineAddin *self)
 {
 }

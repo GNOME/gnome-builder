@@ -1,6 +1,6 @@
-/* ide-git-clone-widget.h
+/* gbp-git-vcs.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,23 +20,22 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
-#include "vcs/ide-vcs-uri.h"
+#include <libgit2-glib/ggit.h>
+#include <libide-vcs.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_CLONE_WIDGET (ide_git_clone_widget_get_type())
+#define GBP_TYPE_GIT_VCS (gbp_git_vcs_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitCloneWidget, ide_git_clone_widget, IDE, GIT_CLONE_WIDGET, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpGitVcs, gbp_git_vcs, GBP, GIT_VCS, IdeObject)
 
-void     ide_git_clone_widget_set_uri      (IdeGitCloneWidget    *self,
-                                            IdeVcsUri            *uri);
-void     ide_git_clone_widget_clone_async  (IdeGitCloneWidget    *self,
+GFile          *gbp_git_vcs_get_location   (GbpGitVcs            *self);
+GgitRepository *gbp_git_vcs_get_repository (GbpGitVcs            *self);
+void            gbp_git_vcs_reload_async   (GbpGitVcs            *self,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,
                                             gpointer              user_data);
-gboolean ide_git_clone_widget_clone_finish (IdeGitCloneWidget    *self,
+gboolean        gbp_git_vcs_reload_finish  (GbpGitVcs            *self,
                                             GAsyncResult         *result,
                                             GError              **error);
 

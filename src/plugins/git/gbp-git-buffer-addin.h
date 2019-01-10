@@ -1,6 +1,6 @@
-/* ide-git-buffer-change-monitor.h
+/* gbp-git-buffer-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_BUFFER_CHANGE_MONITOR (ide_git_buffer_change_monitor_get_type())
+#define GBP_TYPE_GIT_BUFFER_ADDIN (gbp_git_buffer_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitBufferChangeMonitor, ide_git_buffer_change_monitor,
-                      IDE, GIT_BUFFER_CHANGE_MONITOR, IdeBufferChangeMonitor)
+G_DECLARE_FINAL_TYPE (GbpGitBufferAddin, gbp_git_buffer_addin, GBP, GIT_BUFFER_ADDIN, GObject)
 
 G_END_DECLS

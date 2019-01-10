@@ -1,6 +1,6 @@
-/* ide-git-remote-callbacks.h
+/* gbp-git-pipeline-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,12 @@
 
 #pragma once
 
-#include <libgit2-glib/ggit.h>
-#include <ide.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_REMOTE_CALLBACKS (ide_git_remote_callbacks_get_type())
+#define GBP_TYPE_GIT_PIPELINE_ADDIN (gbp_git_pipeline_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitRemoteCallbacks, ide_git_remote_callbacks,
-                      IDE, GIT_REMOTE_CALLBACKS, GgitRemoteCallbacks)
-
-GgitRemoteCallbacks *ide_git_remote_callbacks_new          (void);
-gdouble              ide_git_remote_callbacks_get_fraction (IdeGitRemoteCallbacks *self);
-IdeProgress         *ide_git_remote_callbacks_get_progress (IdeGitRemoteCallbacks *self);
-void                 ide_git_remote_callbacks_cancel       (IdeGitRemoteCallbacks *self);
+G_DECLARE_FINAL_TYPE (GbpGitPipelineAddin, gbp_git_pipeline_addin, GBP, GIT_PIPELINE_ADDIN, IdeObject)
 
 G_END_DECLS

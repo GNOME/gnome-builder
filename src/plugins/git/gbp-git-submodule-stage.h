@@ -1,6 +1,6 @@
-/* ide-git-genesis-addin.h
+/* gbp-git-submodule-stage.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,15 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_GENESIS_ADDIN (ide_git_genesis_addin_get_type())
+#define GBP_TYPE_GIT_SUBMODULE_STAGE (gbp_git_submodule_stage_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitGenesisAddin, ide_git_genesis_addin, IDE, GIT_GENESIS_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, GBP, GIT_SUBMODULE_STAGE, IdeBuildStageLauncher)
+
+GbpGitSubmoduleStage *gbp_git_submodule_stage_new          (IdeContext           *context);
+void                  gbp_git_submodule_stage_force_update (GbpGitSubmoduleStage *self);
 
 G_END_DECLS

@@ -1,4 +1,4 @@
-/* ide-git-vcs-config.c
+/* gbp-git-vcs-config.c
  *
  * Copyright 2016 Akshaya Kakkilaya <akshaya.kakkilaya@gmail.com>
  *
@@ -18,11 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gbp-git-vcs-config"
+
+#include "config.h"
+
 #include <libgit2-glib/ggit.h>
+#include <libide-vcs.h>
 
-#include "ide-git-vcs-config.h"
+#include "gbp-git-vcs-config.h"
 
-struct _IdeGitVcsConfig
+struct _GbpGitVcsConfig
 {
   GObject     parent_instance;
 
@@ -31,17 +36,17 @@ struct _IdeGitVcsConfig
 
 static void vcs_config_init (IdeVcsConfigInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeGitVcsConfig, ide_git_vcs_config, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GbpGitVcsConfig, gbp_git_vcs_config, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CONFIG, vcs_config_init))
 
-IdeGitVcsConfig *
-ide_git_vcs_config_new (void)
+GbpGitVcsConfig *
+gbp_git_vcs_config_new (void)
 {
-  return g_object_new (IDE_TYPE_GIT_VCS_CONFIG, NULL);
+  return g_object_new (GBP_TYPE_GIT_VCS_CONFIG, NULL);
 }
 
 static void
-ide_git_vcs_config_get_string (GgitConfig  *config,
+gbp_git_vcs_config_get_string (GgitConfig  *config,
                                const gchar *key,
                                GValue      *value,
                                GError     **error)
@@ -57,7 +62,7 @@ ide_git_vcs_config_get_string (GgitConfig  *config,
 }
 
 static void
-ide_git_vcs_config_set_string (GgitConfig   *config,
+gbp_git_vcs_config_set_string (GgitConfig   *config,
                                const gchar  *key,
                                const GValue *value,
                                GError      **error)
@@ -74,16 +79,16 @@ ide_git_vcs_config_set_string (GgitConfig   *config,
 }
 
 static void
-ide_git_vcs_config_get_config (IdeVcsConfig    *self,
+gbp_git_vcs_config_get_config (IdeVcsConfig    *self,
                                IdeVcsConfigType type,
                                GValue          *value)
 {
   g_autoptr(GgitConfig) config = NULL;
   GgitConfig *orig_config;
 
-  g_return_if_fail (IDE_IS_GIT_VCS_CONFIG (self));
+  g_return_if_fail (GBP_IS_GIT_VCS_CONFIG (self));
 
-  orig_config = IDE_GIT_VCS_CONFIG (self)->config;
+  orig_config = GBP_GIT_VCS_CONFIG (self)->config;
   config = ggit_config_snapshot (orig_config, NULL);
 
   if(config == NULL)
@@ -92,11 +97,11 @@ ide_git_vcs_config_get_config (IdeVcsConfig    *self,
   switch (type)
     {
     case IDE_VCS_CONFIG_FULL_NAME:
-      ide_git_vcs_config_get_string (config, "user.name", value, NULL);
+      gbp_git_vcs_config_get_string (config, "user.name", value, NULL);
       break;
 
     case IDE_VCS_CONFIG_EMAIL:
-      ide_git_vcs_config_get_string (config, "user.email", value, NULL);
+      gbp_git_vcs_config_get_string (config, "user.email", value, NULL);
       break;
 
     default:
@@ -105,24 +110,24 @@ ide_git_vcs_config_get_config (IdeVcsConfig    *self,
 }
 
 static void
-ide_git_vcs_config_set_config (IdeVcsConfig    *self,
+gbp_git_vcs_config_set_config (IdeVcsConfig    *self,
                                IdeVcsConfigType type,
                                const GValue    *value)
 {
   GgitConfig *config;
 
-  g_return_if_fail (IDE_IS_GIT_VCS_CONFIG (self));
+  g_return_if_fail (GBP_IS_GIT_VCS_CONFIG (self));
 
-  config = IDE_GIT_VCS_CONFIG (self)->config;
+  config = GBP_GIT_VCS_CONFIG (self)->config;
 
   switch (type)
     {
     case IDE_VCS_CONFIG_FULL_NAME:
-      ide_git_vcs_config_set_string (config, "user.name", value, NULL);
+      gbp_git_vcs_config_set_string (config, "user.name", value, NULL);
       break;
 
     case IDE_VCS_CONFIG_EMAIL:
-      ide_git_vcs_config_set_string (config, "user.email", value, NULL);
+      gbp_git_vcs_config_set_string (config, "user.email", value, NULL);
       break;
 
     default:
@@ -131,9 +136,9 @@ ide_git_vcs_config_set_config (IdeVcsConfig    *self,
 }
 
 static void
-ide_git_vcs_config_constructed (GObject *object)
+gbp_git_vcs_config_constructed (GObject *object)
 {
-  IdeGitVcsConfig *self = IDE_GIT_VCS_CONFIG (object);
+  GbpGitVcsConfig *self = GBP_GIT_VCS_CONFIG (object);
 
   g_autoptr(GFile) global_file = NULL;
 
@@ -147,36 +152,36 @@ ide_git_vcs_config_constructed (GObject *object)
 
   self->config = ggit_config_new_from_file (global_file, NULL);
 
-  G_OBJECT_CLASS (ide_git_vcs_config_parent_class)->constructed (object);
+  G_OBJECT_CLASS (gbp_git_vcs_config_parent_class)->constructed (object);
 }
 
 static void
-ide_git_vcs_config_finalize (GObject *object)
+gbp_git_vcs_config_finalize (GObject *object)
 {
-  IdeGitVcsConfig *self = IDE_GIT_VCS_CONFIG (object);
+  GbpGitVcsConfig *self = GBP_GIT_VCS_CONFIG (object);
 
   g_object_unref (self->config);
 
-  G_OBJECT_CLASS (ide_git_vcs_config_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_git_vcs_config_parent_class)->finalize (object);
 }
 
 static void
 vcs_config_init (IdeVcsConfigInterface *iface)
 {
-  iface->get_config = ide_git_vcs_config_get_config;
-  iface->set_config = ide_git_vcs_config_set_config;
+  iface->get_config = gbp_git_vcs_config_get_config;
+  iface->set_config = gbp_git_vcs_config_set_config;
 }
 
 static void
-ide_git_vcs_config_class_init (IdeGitVcsConfigClass *klass)
+gbp_git_vcs_config_class_init (GbpGitVcsConfigClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_git_vcs_config_constructed;
-  object_class->finalize = ide_git_vcs_config_finalize;
+  object_class->constructed = gbp_git_vcs_config_constructed;
+  object_class->finalize = gbp_git_vcs_config_finalize;
 }
 
 static void
-ide_git_vcs_config_init (IdeGitVcsConfig *self)
+gbp_git_vcs_config_init (GbpGitVcsConfig *self)
 {
 }

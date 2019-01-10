@@ -1,4 +1,4 @@
-/* ide-git-dependency-updater.c
+/* gbp-git-dependency-updater.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,14 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-git-dependency-updater"
+#define G_LOG_DOMAIN "gbp-git-dependency-updater"
 
 #include "config.h"
 
-#include "ide-git-dependency-updater.h"
-#include "ide-git-submodule-stage.h"
+#include "gbp-git-dependency-updater.h"
+#include "gbp-git-submodule-stage.h"
 
-struct _IdeGitDependencyUpdater
+struct _GbpGitDependencyUpdater
 {
   IdeObject parent_instance;
 };
@@ -34,18 +34,18 @@ static void
 find_submodule_stage_cb (gpointer data,
                          gpointer user_data)
 {
-  IdeGitSubmoduleStage **stage = user_data;
+  GbpGitSubmoduleStage **stage = user_data;
 
   g_assert (IDE_IS_BUILD_STAGE (data));
   g_assert (stage != NULL);
   g_assert (*stage == NULL || IDE_IS_BUILD_STAGE (*stage));
 
-  if (IDE_IS_GIT_SUBMODULE_STAGE (data))
-    *stage = IDE_GIT_SUBMODULE_STAGE (data);
+  if (GBP_IS_GIT_SUBMODULE_STAGE (data))
+    *stage = GBP_GIT_SUBMODULE_STAGE (data);
 }
 
 static void
-ide_git_dependency_updater_update_cb (GObject      *object,
+gbp_git_dependency_updater_update_cb (GObject      *object,
                                       GAsyncResult *result,
                                       gpointer      user_data)
 {
@@ -68,28 +68,28 @@ ide_git_dependency_updater_update_cb (GObject      *object,
 }
 
 static void
-ide_git_dependency_updater_update_async (IdeDependencyUpdater *self,
+gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
                                          GCancellable         *cancellable,
                                          GAsyncReadyCallback   callback,
                                          gpointer              user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  IdeGitSubmoduleStage *stage = NULL;
+  GbpGitSubmoduleStage *stage = NULL;
   IdeBuildPipeline *pipeline;
   IdeBuildManager *manager;
   IdeContext *context;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_GIT_DEPENDENCY_UPDATER (self));
+  g_assert (GBP_IS_GIT_DEPENDENCY_UPDATER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_git_dependency_updater_update_async);
+  ide_task_set_source_tag (task, gbp_git_dependency_updater_update_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_context_get_build_manager (context);
+  manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (manager);
 
   g_assert (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
@@ -113,7 +113,7 @@ ide_git_dependency_updater_update_async (IdeDependencyUpdater *self,
       IDE_EXIT;
     }
 
-  ide_git_submodule_stage_force_update (stage);
+  gbp_git_submodule_stage_force_update (stage);
 
   /* Ensure downloads and everything past it is invalidated */
   ide_build_pipeline_invalidate_phase (pipeline, IDE_BUILD_PHASE_DOWNLOADS);
@@ -127,18 +127,19 @@ ide_git_dependency_updater_update_async (IdeDependencyUpdater *self,
   ide_build_manager_rebuild_async (manager,
                                    IDE_BUILD_PHASE_CONFIGURE,
                                    NULL,
-				   ide_git_dependency_updater_update_cb,
+                                   NULL,
+                                   gbp_git_dependency_updater_update_cb,
                                    g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_git_dependency_updater_update_finish (IdeDependencyUpdater  *self,
+gbp_git_dependency_updater_update_finish (IdeDependencyUpdater  *self,
                                           GAsyncResult          *result,
                                           GError               **error)
 {
-  g_assert (IDE_IS_GIT_DEPENDENCY_UPDATER (self));
+  g_assert (GBP_IS_GIT_DEPENDENCY_UPDATER (self));
   g_assert (IDE_IS_TASK (result));
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
@@ -147,20 +148,20 @@ ide_git_dependency_updater_update_finish (IdeDependencyUpdater  *self,
 static void
 dependency_updater_iface_init (IdeDependencyUpdaterInterface *iface)
 {
-  iface->update_async = ide_git_dependency_updater_update_async;
-  iface->update_finish = ide_git_dependency_updater_update_finish;
+  iface->update_async = gbp_git_dependency_updater_update_async;
+  iface->update_finish = gbp_git_dependency_updater_update_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeGitDependencyUpdater, ide_git_dependency_updater, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbpGitDependencyUpdater, gbp_git_dependency_updater, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_DEPENDENCY_UPDATER,
                                                 dependency_updater_iface_init))
 
 static void
-ide_git_dependency_updater_class_init (IdeGitDependencyUpdaterClass *klass)
+gbp_git_dependency_updater_class_init (GbpGitDependencyUpdaterClass *klass)
 {
 }
 
 static void
-ide_git_dependency_updater_init (IdeGitDependencyUpdater *self)
+gbp_git_dependency_updater_init (GbpGitDependencyUpdater *self)
 {
 }

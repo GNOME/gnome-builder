@@ -1,4 +1,4 @@
-/* ide-git-dependency-updater.h
+/* gbp-git-dependency-updater.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_GIT_DEPENDENCY_UPDATER (ide_git_dependency_updater_get_type())
+#define GBP_TYPE_GIT_DEPENDENCY_UPDATER (gbp_git_dependency_updater_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitDependencyUpdater, ide_git_dependency_updater, IDE, GIT_DEPENDENCY_UPDATER, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpGitDependencyUpdater, gbp_git_dependency_updater, GBP, GIT_DEPENDENCY_UPDATER, IdeObject)
 
 G_END_DECLS
