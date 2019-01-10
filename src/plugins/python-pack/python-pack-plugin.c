@@ -18,12 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
+#include <libide-sourceview.h>
 
 #include "ide-python-indenter.h"
 
-void
-ide_python_pack_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_python_pack_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_PYTHON_INDENTER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_INDENTER,
+                                              IDE_TYPE_PYTHON_INDENTER);
 }
