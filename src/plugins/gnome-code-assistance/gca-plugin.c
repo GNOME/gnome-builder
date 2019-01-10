@@ -19,23 +19,18 @@
  */
 
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-gui.h>
 
 #include "ide-gca-diagnostic-provider.h"
 #include "ide-gca-preferences-addin.h"
-#include "ide-gca-service.h"
 
-void
-ide_gca_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_gca_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_SERVICE,
-                                              IDE_TYPE_GCA_SERVICE);
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_GCA_DIAGNOSTIC_PROVIDER);
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               IDE_TYPE_GCA_PREFERENCES_ADDIN);

@@ -22,6 +22,7 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libide-threading.h>
 
 #include "ide-gca-service.h"
 
@@ -35,8 +36,7 @@ struct _IdeGcaService
   gulong           bus_closed_handler;
 };
 
-G_DEFINE_TYPE_EXTENDED (IdeGcaService, ide_gca_service, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, NULL))
+G_DEFINE_TYPE (IdeGcaService, ide_gca_service, IDE_TYPE_OBJECT)
 
 static void
 on_bus_closed (GDBusConnection *bus,
@@ -218,8 +218,6 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
  * Completes an asynchronous request to load a Gca proxy.
  *
  * Returns: (transfer full): a #GcaService or %NULL upon failure.
- *
- * Since: 3.32
  */
 GcaService *
 ide_gca_service_get_proxy_finish (IdeGcaService  *self,
@@ -263,4 +261,15 @@ ide_gca_service_init (IdeGcaService *self)
 {
   self->proxy_cache = g_hash_table_new_full (g_str_hash, g_str_equal,
                                              g_free, g_object_unref);
+}
+
+IdeGcaService *
+ide_gca_service_from_context (IdeContext *context)
+{
+  g_autoptr(IdeGcaService) self = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  self = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_GCA_SERVICE);
+  return ide_context_peek_child_typed (context, IDE_TYPE_GCA_SERVICE);
 }
