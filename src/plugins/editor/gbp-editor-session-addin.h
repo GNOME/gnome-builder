@@ -1,6 +1,6 @@
-/* ide-editor-print-operation.h
+/* gbp-editor-session-addin.h
  *
- * Copyright 2015 Paolo Borelli <pborelli@gnome.org>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include "ide-editor-page.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_PRINT_OPERATION (ide_editor_print_operation_get_type())
+#define GBP_TYPE_EDITOR_SESSION_ADDIN (gbp_editor_session_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, IDE, EDITOR_PRINT_OPERATION, GtkPrintOperation)
-
-IdeEditorPrintOperation *ide_editor_print_operation_new (IdeSourceView *view);
+G_DECLARE_FINAL_TYPE (GbpEditorSessionAddin, gbp_editor_session_addin, GBP, EDITOR_SESSION_ADDIN, IdeObject)
 
 G_END_DECLS

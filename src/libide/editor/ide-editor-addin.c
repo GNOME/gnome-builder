@@ -22,22 +22,22 @@
 
 #include "config.h"
 
-#include "editor/ide-editor-addin.h"
-#include "editor/ide-editor-private.h"
+#include "ide-editor-addin.h"
+#include "ide-editor-private.h"
 
 /**
  * SECTION:ide-editor-addin
  * @title: IdeEditorAddin
- * @short_description: Addins for the editor perspective
+ * @short_description: Addins for the editor surface
  *
  * The #IdeEditorAddin interface provides a simplified interface for
  * plugins that want to perform operations in, or extend, the editor
- * perspective.
+ * surface.
  *
  * This differs from the #IdeWorkbenchAddin in that you are given access
- * to the editor perspective directly. This can be convenient if all you
- * need to do is add panels or perform view tracking of the current
- * focus view.
+ * to the editor surface directly. This can be convenient if all you
+ * need to do is add panels or perform page tracking of the current
+ * focus page.
  *
  * Since: 3.32
  */
@@ -52,7 +52,7 @@ ide_editor_addin_default_init (IdeEditorAddinInterface *iface)
 /**
  * ide_editor_addin_load:
  * @self: an #IdeEditorAddin
- * @perspective: an #IdeEditorPeprsective
+ * @surface: an #IdeEditorPeprsective
  *
  * This method is called to load the addin.
  *
@@ -61,20 +61,20 @@ ide_editor_addin_default_init (IdeEditorAddinInterface *iface)
  * Since: 3.32
  */
 void
-ide_editor_addin_load (IdeEditorAddin       *self,
-                       IdeEditorPerspective *perspective)
+ide_editor_addin_load (IdeEditorAddin   *self,
+                       IdeEditorSurface *surface)
 {
   g_return_if_fail (IDE_IS_EDITOR_ADDIN (self));
-  g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (perspective));
+  g_return_if_fail (IDE_IS_EDITOR_SURFACE (surface));
 
   if (IDE_EDITOR_ADDIN_GET_IFACE (self)->load)
-    IDE_EDITOR_ADDIN_GET_IFACE (self)->load (self, perspective);
+    IDE_EDITOR_ADDIN_GET_IFACE (self)->load (self, surface);
 }
 
 /**
  * ide_editor_addin_unload:
  * @self: an #IdeEditorAddin
- * @perspective: an #IdeEditorPerspective
+ * @surface: an #IdeEditorSurface
  *
  * This method is called to unload the addin.
  *
@@ -84,52 +84,52 @@ ide_editor_addin_load (IdeEditorAddin       *self,
  * Since: 3.32
  */
 void
-ide_editor_addin_unload (IdeEditorAddin       *self,
-                         IdeEditorPerspective *perspective)
+ide_editor_addin_unload (IdeEditorAddin   *self,
+                         IdeEditorSurface *surface)
 {
   g_return_if_fail (IDE_IS_EDITOR_ADDIN (self));
-  g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (perspective));
+  g_return_if_fail (IDE_IS_EDITOR_SURFACE (surface));
 
   if (IDE_EDITOR_ADDIN_GET_IFACE (self)->unload)
-    IDE_EDITOR_ADDIN_GET_IFACE (self)->unload (self, perspective);
+    IDE_EDITOR_ADDIN_GET_IFACE (self)->unload (self, surface);
 }
 
 /**
- * ide_editor_addin_view_set:
+ * ide_editor_addin_page_set:
  * @self: an #IdeEditorAddin
- * @view: (nullable): an #IdeLayoutView or %NULL
+ * @page: (nullable): an #IdePage or %NULL
  *
- * This function is called when the current view has changed in the
- * editor perspective. This could happen when the user focus another
- * view, either with the keyboard, mouse, touch, or by opening a new
+ * This function is called when the current page has changed in the
+ * editor surface. This could happen when the user focus another
+ * page, either with the keyboard, mouse, touch, or by opening a new
  * buffer.
  *
- * Note that @view may not be an #IdeEditorView, so consumers of this
+ * Note that @page may not be an #IdeEditorView, so consumers of this
  * interface should take appropriate action based on the type.
  *
- * When the last view is removed, @view will be %NULL to indicate to the
- * addin that there is no active view.
+ * When the last page is removed, @page will be %NULL to indicate to the
+ * addin that there is no active page.
  *
  * Since: 3.32
  */
 void
-ide_editor_addin_view_set (IdeEditorAddin *self,
-                           IdeLayoutView  *view)
+ide_editor_addin_page_set (IdeEditorAddin *self,
+                           IdePage        *page)
 {
   g_return_if_fail (IDE_IS_EDITOR_ADDIN (self));
-  g_return_if_fail (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_return_if_fail (!page || IDE_IS_PAGE (page));
 
-  if (IDE_EDITOR_ADDIN_GET_IFACE (self)->view_set)
-    IDE_EDITOR_ADDIN_GET_IFACE (self)->view_set (self, view);
+  if (IDE_EDITOR_ADDIN_GET_IFACE (self)->page_set)
+    IDE_EDITOR_ADDIN_GET_IFACE (self)->page_set (self, page);
 }
 
 /**
  * ide_editor_addin_find_by_module_name:
- * @editor: an #IdeEditorPerspective
+ * @editor: an #IdeEditorSurface
  * @module_name: the module name of the addin
  *
  * This function allows locating an #IdeEditorAddin that is attached
- * to the #IdeEditorPerspective by the addin module name. The module name
+ * to the #IdeEditorSurface by the addin module name. The module name
  * should match the value specified in the ".plugin" module definition.
  *
  * Returns: (transfer none) (nullable): An #IdeEditorAddin or %NULL
@@ -137,14 +137,17 @@ ide_editor_addin_view_set (IdeEditorAddin *self,
  * Since: 3.32
  */
 IdeEditorAddin *
-ide_editor_addin_find_by_module_name (IdeEditorPerspective *editor,
-                                      const gchar          *module_name)
+ide_editor_addin_find_by_module_name (IdeEditorSurface *editor,
+                                      const gchar      *module_name)
 {
   PeasExtension *ret = NULL;
   PeasPluginInfo *plugin_info;
 
-  g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (editor), NULL);
+  g_return_val_if_fail (IDE_IS_EDITOR_SURFACE (editor), NULL);
   g_return_val_if_fail (module_name != NULL, NULL);
+
+  if (editor->addins == NULL)
+    return NULL;
 
   plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), module_name);
 

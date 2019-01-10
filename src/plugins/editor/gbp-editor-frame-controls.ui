@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpEditorFrameControls" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <child>
+      <object class="GtkButton" id="warning_button">
+        <property name="visible">false</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">dialog-warning-symbolic</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="goto_line_button">
+        <property name="popover">goto_line_popover</property>
+        <property name="focus-on-click">false</property>
+        <property name="tooltip-text" translatable="yes">Go to line number</property>
+        <property name="valign">baseline</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="valign">baseline</property>
+            <property name="visible">true</property>
+            <child type="center">
+              <object class="GtkLabel">
+                <property name="label">:</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="DzlSimpleLabel" id="line_label">
+                <property name="label">1</property>
+                <property name="width-chars">3</property>
+                <property name="xalign">1.0</property>
+                <property name="valign">baseline</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="pack-type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="DzlSimpleLabel" id="column_label">
+                <property name="label">1</property>
+                <property name="width-chars">3</property>
+                <property name="xalign">0.0</property>
+                <property name="valign">baseline</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="range_label">
+                <property name="valign">baseline</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="DzlSimplePopover" id="goto_line_popover">
+    <property name="title" translatable="yes">Go to Line</property>
+    <property name="button-text" translatable="yes">Go</property>
+  </object>
+</interface>

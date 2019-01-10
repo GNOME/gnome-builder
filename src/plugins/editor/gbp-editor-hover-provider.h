@@ -1,6 +1,6 @@
-/* ide-editor-print-operation.h
+/* gbp-editor-hover-provider.h
  *
- * Copyright 2015 Paolo Borelli <pborelli@gnome.org>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include "ide-editor-page.h"
+#include "ide-hover-provider.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_PRINT_OPERATION (ide_editor_print_operation_get_type())
+#define GBP_TYPE_EDITOR_HOVER_PROVIDER (gbp_editor_hover_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, IDE, EDITOR_PRINT_OPERATION, GtkPrintOperation)
-
-IdeEditorPrintOperation *ide_editor_print_operation_new (IdeSourceView *view);
+G_DECLARE_FINAL_TYPE (GbpEditorHoverProvider, gbp_editor_hover_provider, GBP, EDITOR_HOVER_PROVIDER, GObject)
 
 G_END_DECLS

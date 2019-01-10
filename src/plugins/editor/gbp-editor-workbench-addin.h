@@ -1,6 +1,6 @@
-/* ide-editor-print-operation.h
+/* gbp-editor-workbench-addin.h
  *
- * Copyright 2015 Paolo Borelli <pborelli@gnome.org>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include "ide-editor-page.h"
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_PRINT_OPERATION (ide_editor_print_operation_get_type())
+#define GBP_TYPE_EDITOR_WORKBENCH_ADDIN (gbp_editor_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, IDE, EDITOR_PRINT_OPERATION, GtkPrintOperation)
-
-IdeEditorPrintOperation *ide_editor_print_operation_new (IdeSourceView *view);
+G_DECLARE_FINAL_TYPE (GbpEditorWorkbenchAddin, gbp_editor_workbench_addin, GBP, EDITOR_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS

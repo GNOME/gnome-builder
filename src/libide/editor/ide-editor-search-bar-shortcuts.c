@@ -22,8 +22,8 @@
 
 #include "config.h"
 
-#include "editor/ide-editor-private.h"
-#include "editor/ide-editor-search-bar.h"
+#include "ide-editor-private.h"
+#include "ide-editor-search-bar.h"
 
 static void
 ide_editor_search_bar_shortcuts_activate_previous (GtkWidget *widget,

@@ -1,6 +1,6 @@
-/* ide-editor-print-operation.h
+/* ide-editor-settings-dialog.h
  *
- * Copyright 2015 Paolo Borelli <pborelli@gnome.org>
+ * Copyright 2018 Christian Hergert <unknown@domain.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,15 @@
 
 #pragma once
 
-#include "ide-editor-page.h"
+#include <gtk/gtk.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_PRINT_OPERATION (ide_editor_print_operation_get_type())
+#define IDE_TYPE_EDITOR_SETTINGS_DIALOG (ide_editor_settings_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, IDE, EDITOR_PRINT_OPERATION, GtkPrintOperation)
+G_DECLARE_FINAL_TYPE (IdeEditorSettingsDialog, ide_editor_settings_dialog, IDE, EDITOR_SETTINGS_DIALOG, GtkDialog)
 
-IdeEditorPrintOperation *ide_editor_print_operation_new (IdeSourceView *view);
+IdeEditorSettingsDialog *ide_editor_settings_dialog_new (IdeEditorPage *page);
 
 G_END_DECLS

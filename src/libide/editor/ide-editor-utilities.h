@@ -20,16 +20,19 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_EDITOR_INSIDE) && !defined (IDE_EDITOR_COMPILATION)
+# error "Only <libide-editor.h> can be included directly."
+#endif
 
-#include "layout/ide-layout-pane.h"
+#include <libide-core.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_UTILITIES (ide_editor_utilities_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeEditorUtilities, ide_editor_utilities, IDE, EDITOR_UTILITIES, IdeLayoutPane)
+G_DECLARE_FINAL_TYPE (IdeEditorUtilities, ide_editor_utilities, IDE, EDITOR_UTILITIES, IdePanel)
 
 /* Use GtkContainer api to add your DzlDockWidget */
 

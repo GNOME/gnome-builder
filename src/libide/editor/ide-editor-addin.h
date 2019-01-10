@@ -20,10 +20,14 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_EDITOR_INSIDE) && !defined (IDE_EDITOR_COMPILATION)
+# error "Only <libide-editor.h> can be included directly."
+#endif
 
-#include "editor/ide-editor-perspective.h"
-#include "layout/ide-layout-view.h"
+#include <libide-core.h>
+#include <libide-gui.h>
+
+#include "ide-editor-surface.h"
 
 G_BEGIN_DECLS
 
@@ -36,26 +40,26 @@ struct _IdeEditorAddinInterface
 {
   GTypeInterface parent_iface;
 
-  void (*load)     (IdeEditorAddin       *self,
-                    IdeEditorPerspective *perspective);
-  void (*unload)   (IdeEditorAddin       *self,
-                    IdeEditorPerspective *perspective);
-  void (*view_set) (IdeEditorAddin       *self,
-                    IdeLayoutView        *view);
+  void (*load)     (IdeEditorAddin   *self,
+                    IdeEditorSurface *surface);
+  void (*unload)   (IdeEditorAddin   *self,
+                    IdeEditorSurface *surface);
+  void (*page_set) (IdeEditorAddin   *self,
+                    IdePage          *page);
 };
 
 IDE_AVAILABLE_IN_3_32
-void ide_editor_addin_load     (IdeEditorAddin       *self,
-                                IdeEditorPerspective *perspective);
+void ide_editor_addin_load     (IdeEditorAddin   *self,
+                                IdeEditorSurface *surface);
 IDE_AVAILABLE_IN_3_32
-void ide_editor_addin_unload   (IdeEditorAddin       *self,
-                                IdeEditorPerspective *perspective);
+void ide_editor_addin_unload   (IdeEditorAddin   *self,
+                                IdeEditorSurface *surface);
 IDE_AVAILABLE_IN_3_32
-void ide_editor_addin_view_set (IdeEditorAddin       *self,
-                                IdeLayoutView        *view);
+void ide_editor_addin_page_set (IdeEditorAddin   *self,
+                                IdePage          *page);
 
 IDE_AVAILABLE_IN_3_32
-IdeEditorAddin *ide_editor_addin_find_by_module_name (IdeEditorPerspective *editor,
-                                                      const gchar          *module_name);
+IdeEditorAddin *ide_editor_addin_find_by_module_name (IdeEditorSurface *editor,
+                                                      const gchar      *module_name);
 
 G_END_DECLS

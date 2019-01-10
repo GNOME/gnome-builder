@@ -23,7 +23,7 @@
 #include <dazzle.h>
 #include <gtksourceview/gtksource.h>
 
-#include "editor/ide-editor-search.h"
+#include "ide-editor-search.h"
 
 G_BEGIN_DECLS
 
