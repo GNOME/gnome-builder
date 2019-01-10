@@ -1,10 +1,14 @@
 [Plugin]
-Module=make_plugin
-Loader=python3
-Name=Make
-Description=Provides support for Makefile projects without autotools
 Authors=Matthew Leeds <mleeds@redhat.com>
-Copyright=Copyright © 2017 Matthew Leeds
 Builtin=true
-X-Project-File-Filter-Pattern=Makefile
+Copyright=Copyright © 2017 Matthew Leeds
+Depends=editor;buildui;
+Description=Provides support for Makefile projects without autotools
+Hidden=true
+Loader=python3
+Module=make_plugin
+Name=Make
+X-Has-Resources=true
 X-Project-File-Filter-Name=Makefile Project
+X-Project-File-Filter-Pattern=Makefile
+X-Builder-ABI=@PACKAGE_ABI@
