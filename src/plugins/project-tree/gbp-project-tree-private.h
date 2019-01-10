@@ -1,6 +1,6 @@
-/* gb-rename-file-popover.h
+/* gbp-project-tree-private.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,21 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <libide-gui.h>
+#include <libide-tree.h>
+
+#include "gbp-project-tree-pane.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_RENAME_FILE_POPOVER (gb_rename_file_popover_get_type())
+struct _GbpProjectTreePane
+{
+  IdePane       parent_instance;
+  IdeTree      *tree;
+  guint         has_loaded : 1;
+};
 
-G_DECLARE_FINAL_TYPE (GbRenameFilePopover, gb_rename_file_popover,
-                      GB, RENAME_FILE_POPOVER, GtkPopover)
-
-GFile *gb_rename_file_popover_get_file (GbRenameFilePopover *self);
+void _gbp_project_tree_pane_init_actions   (GbpProjectTreePane *self);
+void _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self);
 
 G_END_DECLS

@@ -1,6 +1,6 @@
-/* gb-vcs-tree-builder.h
+/* gbp-project-tree-workspace-addin.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_VCS_TREE_BUILDER (gb_vcs_tree_builder_get_type())
+#define GBP_TYPE_PROJECT_TREE_WORKSPACE_ADDIN (gbp_project_tree_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbVcsTreeBuilder, gb_vcs_tree_builder, GB, VCS_TREE_BUILDER, DzlTreeBuilder)
-
-DzlTreeBuilder *gb_vcs_tree_builder_new (void);
+G_DECLARE_FINAL_TYPE (GbpProjectTreeWorkspaceAddin, gbp_project_tree_workspace_addin, GBP, PROJECT_TREE_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

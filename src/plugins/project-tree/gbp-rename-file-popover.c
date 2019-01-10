@@ -1,4 +1,4 @@
-/* gb-rename-file-popover.c
+/* gbp-rename-file-popover.c
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,17 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gbp-rename-file-popover"
+
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-gui.h>
 
-#include "gb-rename-file-popover.h"
+#include "gbp-rename-file-popover.h"
 
-struct _GbRenameFilePopover
+struct _GbpRenameFilePopover
 {
   GtkPopover    parent_instance;
 
   GCancellable *cancellable;
   GFile        *file;
+  IdeTask      *task;
 
   GtkEntry     *entry;
   GtkButton    *button;
@@ -42,32 +45,32 @@ enum {
   PROP_0,
   PROP_FILE,
   PROP_IS_DIRECTORY,
-  LAST_PROP
+  N_PROPS
 };
 
 enum {
   RENAME_FILE,
-  LAST_SIGNAL
+  N_SIGNALS
 };
 
-G_DEFINE_TYPE (GbRenameFilePopover, gb_rename_file_popover, GTK_TYPE_POPOVER)
+G_DEFINE_TYPE (GbpRenameFilePopover, gbp_rename_file_popover, GTK_TYPE_POPOVER)
 
-static GParamSpec *properties [LAST_PROP];
-static guint signals [LAST_SIGNAL];
+static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 GFile *
-gb_rename_file_popover_get_file (GbRenameFilePopover *self)
+gbp_rename_file_popover_get_file (GbpRenameFilePopover *self)
 {
-  g_return_val_if_fail (GB_IS_RENAME_FILE_POPOVER (self), NULL);
+  g_return_val_if_fail (GBP_IS_RENAME_FILE_POPOVER (self), NULL);
 
   return self->file;
 }
 
 static void
-gb_rename_file_popover_set_file (GbRenameFilePopover *self,
+gbp_rename_file_popover_set_file (GbpRenameFilePopover *self,
                                  GFile               *file)
 {
-  g_return_if_fail (GB_IS_RENAME_FILE_POPOVER (self));
+  g_return_if_fail (GBP_IS_RENAME_FILE_POPOVER (self));
   g_return_if_fail (G_IS_FILE (file));
 
   if (g_set_object (&self->file, file))
@@ -89,10 +92,10 @@ gb_rename_file_popover_set_file (GbRenameFilePopover *self,
 }
 
 static void
-gb_rename_file_popover_set_is_directory (GbRenameFilePopover *self,
+gbp_rename_file_popover_set_is_directory (GbpRenameFilePopover *self,
                                          gboolean             is_directory)
 {
-  g_return_if_fail (GB_IS_RENAME_FILE_POPOVER (self));
+  g_return_if_fail (GBP_IS_RENAME_FILE_POPOVER (self));
 
   is_directory = !!is_directory;
 
@@ -104,13 +107,13 @@ gb_rename_file_popover_set_is_directory (GbRenameFilePopover *self,
 }
 
 static void
-gb_rename_file_popover__file_query_info (GObject      *object,
+gbp_rename_file_popover__file_query_info (GObject      *object,
                                          GAsyncResult *result,
                                          gpointer      user_data)
 {
   GFile *file = (GFile *)object;
   g_autoptr(GFileInfo) file_info = NULL;
-  g_autoptr(GbRenameFilePopover) self = user_data;
+  g_autoptr(GbpRenameFilePopover) self = user_data;
   g_autoptr(GError) error = NULL;
   GFileType file_type;
 
@@ -147,14 +150,14 @@ gb_rename_file_popover__file_query_info (GObject      *object,
 }
 
 static void
-gb_rename_file_popover__entry_changed (GbRenameFilePopover *self,
+gbp_rename_file_popover__entry_changed (GbpRenameFilePopover *self,
                                        GtkEntry            *entry)
 {
   g_autoptr(GFile) parent = NULL;
   g_autoptr(GFile) file = NULL;
   const gchar *text;
 
-  g_assert (GB_IS_RENAME_FILE_POPOVER (self));
+  g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
   g_assert (self->file != NULL);
   g_assert (G_IS_FILE (self->file));
@@ -163,7 +166,7 @@ gb_rename_file_popover__entry_changed (GbRenameFilePopover *self,
   gtk_label_set_label (self->message, NULL);
 
   text = gtk_entry_get_text (entry);
-  if (dzl_str_empty0 (text))
+  if (ide_str_empty0 (text))
     return;
 
   if (self->cancellable)
@@ -182,15 +185,15 @@ gb_rename_file_popover__entry_changed (GbRenameFilePopover *self,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_DEFAULT,
                            self->cancellable,
-                           gb_rename_file_popover__file_query_info,
+                           gbp_rename_file_popover__file_query_info,
                            g_object_ref (self));
 }
 
 static void
-gb_rename_file_popover__entry_activate (GbRenameFilePopover *self,
+gbp_rename_file_popover__entry_activate (GbpRenameFilePopover *self,
                                         GtkEntry            *entry)
 {
-  g_assert (GB_IS_RENAME_FILE_POPOVER (self));
+  g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   if (gtk_widget_get_sensitive (GTK_WIDGET (self->button)))
@@ -198,14 +201,14 @@ gb_rename_file_popover__entry_activate (GbRenameFilePopover *self,
 }
 
 static void
-gb_rename_file_popover__entry_focus_in_event (GbRenameFilePopover *self,
+gbp_rename_file_popover__entry_focus_in_event (GbpRenameFilePopover *self,
                                               GdkEvent            *event,
                                               GtkEntry            *entry)
 {
   const gchar *name;
   const gchar *tmp;
 
-  g_assert (GB_IS_RENAME_FILE_POPOVER (self));
+  g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   name = gtk_entry_get_text (entry);
@@ -215,20 +218,21 @@ gb_rename_file_popover__entry_focus_in_event (GbRenameFilePopover *self,
 }
 
 static void
-gb_rename_file_popover__button_clicked (GbRenameFilePopover *self,
+gbp_rename_file_popover__button_clicked (GbpRenameFilePopover *self,
                                         GtkButton           *button)
 {
   g_autoptr(GFile) file = NULL;
   g_autoptr(GFile) parent = NULL;
+  g_autoptr(IdeTask) task = NULL;
   const gchar *path;
 
-  g_assert (GB_IS_RENAME_FILE_POPOVER (self));
+  g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
   g_assert (GTK_IS_BUTTON (button));
   g_assert (self->file != NULL);
   g_assert (G_IS_FILE (self->file));
 
   path = gtk_entry_get_text (self->entry);
-  if (dzl_str_empty0 (path))
+  if (ide_str_empty0 (path))
     return;
 
   parent = g_file_get_parent (self->file);
@@ -238,12 +242,32 @@ gb_rename_file_popover__button_clicked (GbRenameFilePopover *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self->button), FALSE);
 
   g_signal_emit (self, signals [RENAME_FILE], 0, self->file, file);
+
+  /* Complete our async op */
+  if ((task = g_steal_pointer (&self->task)))
+    ide_task_return_pointer (task, g_steal_pointer (&file), g_object_unref);
 }
 
 static void
-gb_rename_file_popover_finalize (GObject *object)
+gbp_rename_file_popover_closed (GtkPopover *popover)
 {
-  GbRenameFilePopover *self = (GbRenameFilePopover *)object;
+  g_autoptr(IdeTask) task = NULL;
+  GbpRenameFilePopover *self = (GbpRenameFilePopover *)popover;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
+
+  if ((task = g_steal_pointer (&self->task)))
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_CANCELLED,
+                               "The popover was cancelled");
+}
+
+static void
+gbp_rename_file_popover_finalize (GObject *object)
+{
+  GbpRenameFilePopover *self = (GbpRenameFilePopover *)object;
 
   if (self->cancellable != NULL)
     {
@@ -254,16 +278,18 @@ gb_rename_file_popover_finalize (GObject *object)
 
   g_clear_object (&self->file);
 
-  G_OBJECT_CLASS (gb_rename_file_popover_parent_class)->finalize (object);
+  g_assert (self->task == NULL);
+
+  G_OBJECT_CLASS (gbp_rename_file_popover_parent_class)->finalize (object);
 }
 
 static void
-gb_rename_file_popover_get_property (GObject    *object,
+gbp_rename_file_popover_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  GbRenameFilePopover *self = GB_RENAME_FILE_POPOVER (object);
+  GbpRenameFilePopover *self = GBP_RENAME_FILE_POPOVER (object);
 
   switch (prop_id)
     {
@@ -281,21 +307,21 @@ gb_rename_file_popover_get_property (GObject    *object,
 }
 
 static void
-gb_rename_file_popover_set_property (GObject      *object,
+gbp_rename_file_popover_set_property (GObject      *object,
                                      guint         prop_id,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  GbRenameFilePopover *self = GB_RENAME_FILE_POPOVER (object);
+  GbpRenameFilePopover *self = GBP_RENAME_FILE_POPOVER (object);
 
   switch (prop_id)
     {
     case PROP_FILE:
-      gb_rename_file_popover_set_file (self, g_value_get_object (value));
+      gbp_rename_file_popover_set_file (self, g_value_get_object (value));
       break;
 
     case PROP_IS_DIRECTORY:
-      gb_rename_file_popover_set_is_directory (self, g_value_get_boolean (value));
+      gbp_rename_file_popover_set_is_directory (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -304,14 +330,17 @@ gb_rename_file_popover_set_property (GObject      *object,
 }
 
 static void
-gb_rename_file_popover_class_init (GbRenameFilePopoverClass *klass)
+gbp_rename_file_popover_class_init (GbpRenameFilePopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkPopoverClass *popover_class = GTK_POPOVER_CLASS (klass);
 
-  object_class->finalize = gb_rename_file_popover_finalize;
-  object_class->get_property = gb_rename_file_popover_get_property;
-  object_class->set_property = gb_rename_file_popover_set_property;
+  object_class->finalize = gbp_rename_file_popover_finalize;
+  object_class->get_property = gbp_rename_file_popover_get_property;
+  object_class->set_property = gbp_rename_file_popover_set_property;
+
+  popover_class->closed = gbp_rename_file_popover_closed;
 
   properties [PROP_FILE] =
     g_param_spec_object ("file",
@@ -327,7 +356,7 @@ gb_rename_file_popover_class_init (GbRenameFilePopoverClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals [RENAME_FILE] =
     g_signal_new ("rename-file",
@@ -340,39 +369,84 @@ gb_rename_file_popover_class_init (GbRenameFilePopoverClass *klass)
                   G_TYPE_FILE,
                   G_TYPE_FILE);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/project-tree-plugin/gb-rename-file-popover.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbRenameFilePopover, button);
-  gtk_widget_class_bind_template_child (widget_class, GbRenameFilePopover, entry);
-  gtk_widget_class_bind_template_child (widget_class, GbRenameFilePopover, label);
-  gtk_widget_class_bind_template_child (widget_class, GbRenameFilePopover, message);
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/project-tree/gbp-rename-file-popover.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpRenameFilePopover, button);
+  gtk_widget_class_bind_template_child (widget_class, GbpRenameFilePopover, entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpRenameFilePopover, label);
+  gtk_widget_class_bind_template_child (widget_class, GbpRenameFilePopover, message);
 }
 
 static void
-gb_rename_file_popover_init (GbRenameFilePopover *self)
+gbp_rename_file_popover_init (GbpRenameFilePopover *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect_object (self->entry,
                            "changed",
-                           G_CALLBACK (gb_rename_file_popover__entry_changed),
+                           G_CALLBACK (gbp_rename_file_popover__entry_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->entry,
                            "activate",
-                           G_CALLBACK (gb_rename_file_popover__entry_activate),
+                           G_CALLBACK (gbp_rename_file_popover__entry_activate),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->button,
                            "clicked",
-                           G_CALLBACK (gb_rename_file_popover__button_clicked),
+                           G_CALLBACK (gbp_rename_file_popover__button_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->entry,
                            "focus-in-event",
-                           G_CALLBACK (gb_rename_file_popover__entry_focus_in_event),
+                           G_CALLBACK (gbp_rename_file_popover__entry_focus_in_event),
                            self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+}
+
+void
+gbp_rename_file_popover_display_async (GbpRenameFilePopover *self,
+                                       IdeTree              *tree,
+                                       IdeTreeNode          *node,
+                                       GCancellable         *cancellable,
+                                       GAsyncReadyCallback   callback,
+                                       gpointer              user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GBP_IS_RENAME_FILE_POPOVER (self));
+  g_return_if_fail (IDE_IS_TREE (tree));
+  g_return_if_fail (IDE_IS_TREE_NODE (node));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_rename_file_popover_display_async);
+
+  if (self->task != NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Already displayed popover");
+      return;
+    }
+
+  self->task = g_steal_pointer (&task);
+
+  ide_tree_show_popover_at_node (tree, node, GTK_POPOVER (self));
+}
+
+GFile *
+gbp_rename_file_popover_display_finish (GbpRenameFilePopover  *self,
+                                        GAsyncResult          *result,
+                                        GError               **error)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (GBP_IS_RENAME_FILE_POPOVER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }

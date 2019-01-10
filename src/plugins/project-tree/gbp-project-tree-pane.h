@@ -1,6 +1,6 @@
-/* gb-project-tree-builder.h
+/* gbp-project-tree-pane.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_PROJECT_TREE_BUILDER (gb_project_tree_builder_get_type())
+#define GBP_TYPE_PROJECT_TREE_PANE (gbp_project_tree_pane_get_type())
 
-G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB, PROJECT_TREE_BUILDER, DzlTreeBuilder)
-
-DzlTreeBuilder *gb_project_tree_builder_new (void);
+G_DECLARE_FINAL_TYPE (GbpProjectTreePane, gbp_project_tree_pane, GBP, PROJECT_TREE_PANE, IdePane)
 
 G_END_DECLS

@@ -5,3 +5,11 @@ ideeditorsidebar treeview.project-tree {
   -gtk-icon-source: none;
   padding-left: 6px;
 }
+
+.vcs-added {
+  color: @success_color;
+}
+
+.vcs-changed {
+  color: @warning_color;
+}

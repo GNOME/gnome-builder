@@ -1,6 +1,6 @@
-/* gb-project-tree-addin.h
+/* gbp-project-tree-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_PROJECT_TREE_ADDIN (gb_project_tree_addin_get_type())
+#define GBP_TYPE_PROJECT_TREE_ADDIN (gbp_project_tree_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbProjectTreeAddin, gb_project_tree_addin, GB, PROJECT_TREE_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpProjectTreeAddin, gbp_project_tree_addin, GBP, PROJECT_TREE_ADDIN, GObject)
 
 G_END_DECLS

@@ -1,6 +1,6 @@
-/* gb-project-tree-editor-addin.h
+/* gbp-project-tree.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-tree.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_PROJECT_TREE_EDITOR_ADDIN (gb_project_tree_editor_addin_get_type())
+#define GBP_TYPE_PROJECT_TREE (gbp_project_tree_get_type())
 
-G_DECLARE_FINAL_TYPE (GbProjectTreeEditorAddin, gb_project_tree_editor_addin, GB, PROJECT_TREE_EDITOR_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpProjectTree, gbp_project_tree, GBP, PROJECT_TREE, IdeTree)
 
 G_END_DECLS

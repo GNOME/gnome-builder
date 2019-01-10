@@ -1,4 +1,4 @@
-/* gb-new-file-popover.c
+/* gbp-new-file-popover.c
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,18 +18,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gbp-new-file-popover"
+
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-gui.h>
+#include <libide-threading.h>
 
-#include "gb-new-file-popover.h"
+#include "gbp-new-file-popover.h"
 
-struct _GbNewFilePopover
+struct _GbpNewFilePopover
 {
   GtkPopover    parent_instance;
 
   GFileType     file_type;
   GFile        *directory;
-  GCancellable *cancellable;
+  IdeTask      *task;
 
   GtkButton    *button;
   GtkEntry     *entry;
@@ -37,31 +40,26 @@ struct _GbNewFilePopover
   GtkLabel     *title;
 };
 
-G_DEFINE_TYPE (GbNewFilePopover, gb_new_file_popover, GTK_TYPE_POPOVER)
+G_DEFINE_TYPE (GbpNewFilePopover, gbp_new_file_popover, GTK_TYPE_POPOVER)
 
 enum {
   PROP_0,
   PROP_DIRECTORY,
   PROP_FILE_TYPE,
-  LAST_PROP
+  N_PROPS
 };
 
-enum {
-  CREATE_FILE,
-  LAST_SIGNAL
-};
-
-static GParamSpec *properties [LAST_PROP];
-static guint       signals [LAST_SIGNAL];
+static GParamSpec *properties [N_PROPS];
 
 static void
-gb_new_file_popover__button_clicked (GbNewFilePopover *self,
+gbp_new_file_popover_button_clicked (GbpNewFilePopover *self,
                                      GtkButton        *button)
 {
   g_autoptr(GFile) file = NULL;
+  g_autoptr(IdeTask) task = NULL;
   const gchar *path;
 
-  g_assert (GB_IS_NEW_FILE_POPOVER (self));
+  g_assert (GBP_IS_NEW_FILE_POPOVER (self));
   g_assert (GTK_IS_BUTTON (button));
 
   if (self->directory == NULL)
@@ -73,14 +71,15 @@ gb_new_file_popover__button_clicked (GbNewFilePopover *self,
 
   file = g_file_get_child (self->directory, path);
 
-  g_signal_emit (self, signals [CREATE_FILE], 0, file, self->file_type);
+  if ((task = g_steal_pointer (&self->task)))
+    ide_task_return_pointer (task, g_steal_pointer (&file), g_object_unref);
 }
 
 static void
-gb_new_file_popover__entry_activate (GbNewFilePopover *self,
+gbp_new_file_popover_entry_activate (GbpNewFilePopover *self,
                                      GtkEntry         *entry)
 {
-  g_assert (GB_IS_NEW_FILE_POPOVER (self));
+  g_assert (GBP_IS_NEW_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   if (gtk_widget_get_sensitive (GTK_WIDGET (self->button)))
@@ -88,13 +87,13 @@ gb_new_file_popover__entry_activate (GbNewFilePopover *self,
 }
 
 static void
-gb_new_file_popover__query_info_cb (GObject      *object,
+gbp_new_file_popover_query_info_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
   GFile *file = (GFile *)object;
   g_autoptr(GFileInfo) file_info = NULL;
-  g_autoptr(GbNewFilePopover) self = user_data;
+  g_autoptr(GbpNewFilePopover) self = user_data;
   g_autoptr(GError) error = NULL;
   GFileType file_type;
 
@@ -131,21 +130,15 @@ gb_new_file_popover__query_info_cb (GObject      *object,
 }
 
 static void
-gb_new_file_popover_check_exists (GbNewFilePopover *self,
-                                  GFile            *directory,
-                                  const gchar      *path)
+gbp_new_file_popover_check_exists (GbpNewFilePopover *self,
+                                   GFile             *directory,
+                                   const gchar       *path)
 {
   g_autoptr(GFile) child = NULL;
+  GCancellable *cancellable = NULL;
 
-  g_assert (GB_IS_NEW_FILE_POPOVER (self));
+  g_assert (GBP_IS_NEW_FILE_POPOVER (self));
   g_assert (!directory || G_IS_FILE (directory));
-
-  if (self->cancellable != NULL)
-    {
-      if (!g_cancellable_is_cancelled (self->cancellable))
-        g_cancellable_cancel (self->cancellable);
-      g_clear_object (&self->cancellable);
-    }
 
   gtk_label_set_label (self->message, NULL);
   gtk_widget_set_sensitive (GTK_WIDGET (self->button), FALSE);
@@ -153,69 +146,83 @@ gb_new_file_popover_check_exists (GbNewFilePopover *self,
   if (directory == NULL)
     return;
 
-  if (dzl_str_empty0 (path))
+  if (ide_str_empty0 (path))
     return;
 
   child = g_file_get_child (directory, path);
 
-  self->cancellable = g_cancellable_new ();
+  if (self->task)
+    cancellable = ide_task_get_cancellable (self->task);
 
   g_file_query_info_async (child,
                            G_FILE_ATTRIBUTE_STANDARD_TYPE,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_DEFAULT,
-                           self->cancellable,
-                           gb_new_file_popover__query_info_cb,
+                           cancellable,
+                           gbp_new_file_popover_query_info_cb,
                            g_object_ref (self));
 
 }
 
 static void
-gb_new_file_popover__entry_changed (GbNewFilePopover *self,
+gbp_new_file_popover_entry_changed (GbpNewFilePopover *self,
                                     GtkEntry         *entry)
 {
   const gchar *text;
 
-  g_assert (GB_IS_NEW_FILE_POPOVER (self));
+  g_assert (GBP_IS_NEW_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   text = gtk_entry_get_text (entry);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->button), !dzl_str_empty0 (text));
 
-  gb_new_file_popover_check_exists (self, self->directory, text);
+  gbp_new_file_popover_check_exists (self, self->directory, text);
 }
 
 static void
-gb_new_file_popover_finalize (GObject *object)
+gbp_new_file_popover_closed (GtkPopover *popover)
 {
-  GbNewFilePopover *self = (GbNewFilePopover *)object;
+  GbpNewFilePopover *self = (GbpNewFilePopover *)popover;
+  g_autoptr(IdeTask) task = NULL;
 
-  if (self->cancellable && !g_cancellable_is_cancelled (self->cancellable))
-    g_cancellable_cancel (self->cancellable);
+  g_assert (GBP_IS_NEW_FILE_POPOVER (self));
 
-  g_clear_object (&self->cancellable);
+  if ((task = g_steal_pointer (&self->task)))
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_CANCELLED,
+                               "The popover was closed");
+}
+
+static void
+gbp_new_file_popover_finalize (GObject *object)
+{
+  GbpNewFilePopover *self = (GbpNewFilePopover *)object;
+
+  g_assert (self->task == NULL);
+
   g_clear_object (&self->directory);
 
-  G_OBJECT_CLASS (gb_new_file_popover_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_new_file_popover_parent_class)->finalize (object);
 }
 
 static void
-gb_new_file_popover_get_property (GObject    *object,
-                                  guint       prop_id,
-                                  GValue     *value,
-                                  GParamSpec *pspec)
+gbp_new_file_popover_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
 {
-  GbNewFilePopover *self = GB_NEW_FILE_POPOVER(object);
+  GbpNewFilePopover *self = GBP_NEW_FILE_POPOVER(object);
 
   switch (prop_id)
     {
     case PROP_DIRECTORY:
-      g_value_set_object (value, gb_new_file_popover_get_directory (self));
+      g_value_set_object (value, gbp_new_file_popover_get_directory (self));
       break;
 
     case PROP_FILE_TYPE:
-      g_value_set_enum (value, gb_new_file_popover_get_file_type (self));
+      g_value_set_enum (value, gbp_new_file_popover_get_file_type (self));
       break;
 
     default:
@@ -224,7 +231,7 @@ gb_new_file_popover_get_property (GObject    *object,
 }
 
 /**
- * gb_new_file_popover_set_property:
+ * gbp_new_file_popover_set_property:
  * @object: (in): a #GObject.
  * @prop_id: (in): The property identifier.
  * @value: (in): The given property.
@@ -235,21 +242,21 @@ gb_new_file_popover_get_property (GObject    *object,
  * Since: 3.32
  */
 static void
-gb_new_file_popover_set_property (GObject      *object,
-                                  guint         prop_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
+gbp_new_file_popover_set_property (GObject      *object,
+                                   guint         prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
 {
-  GbNewFilePopover *self = GB_NEW_FILE_POPOVER(object);
+  GbpNewFilePopover *self = GBP_NEW_FILE_POPOVER(object);
 
   switch (prop_id)
     {
     case PROP_DIRECTORY:
-      gb_new_file_popover_set_directory (self, g_value_get_object (value));
+      gbp_new_file_popover_set_directory (self, g_value_get_object (value));
       break;
 
     case PROP_FILE_TYPE:
-      gb_new_file_popover_set_file_type (self, g_value_get_enum (value));
+      gbp_new_file_popover_set_file_type (self, g_value_get_enum (value));
       break;
 
     default:
@@ -258,14 +265,17 @@ gb_new_file_popover_set_property (GObject      *object,
 }
 
 static void
-gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
+gbp_new_file_popover_class_init (GbpNewFilePopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkPopoverClass *popover_class = GTK_POPOVER_CLASS (klass);
 
-  object_class->finalize = gb_new_file_popover_finalize;
-  object_class->get_property = gb_new_file_popover_get_property;
-  object_class->set_property = gb_new_file_popover_set_property;
+  object_class->finalize = gbp_new_file_popover_finalize;
+  object_class->get_property = gbp_new_file_popover_get_property;
+  object_class->set_property = gbp_new_file_popover_set_property;
+
+  popover_class->closed = gbp_new_file_popover_closed;
 
   properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
@@ -282,28 +292,17 @@ gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
                        G_FILE_TYPE_REGULAR,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  signals [CREATE_FILE] =
-    g_signal_new ("create-file",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_FIRST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  2,
-                  G_TYPE_FILE,
-                  G_TYPE_FILE_TYPE);
-
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/project-tree-plugin/gb-new-file-popover.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbNewFilePopover, button);
-  gtk_widget_class_bind_template_child (widget_class, GbNewFilePopover, entry);
-  gtk_widget_class_bind_template_child (widget_class, GbNewFilePopover, message);
-  gtk_widget_class_bind_template_child (widget_class, GbNewFilePopover, title);
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/project-tree/gbp-new-file-popover.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpNewFilePopover, button);
+  gtk_widget_class_bind_template_child (widget_class, GbpNewFilePopover, entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpNewFilePopover, message);
+  gtk_widget_class_bind_template_child (widget_class, GbpNewFilePopover, title);
 }
 
 static void
-gb_new_file_popover_init (GbNewFilePopover *self)
+gbp_new_file_popover_init (GbpNewFilePopover *self)
 {
   self->file_type = G_FILE_TYPE_REGULAR;
 
@@ -311,36 +310,36 @@ gb_new_file_popover_init (GbNewFilePopover *self)
 
   g_signal_connect_object (self->entry,
                            "activate",
-                           G_CALLBACK (gb_new_file_popover__entry_activate),
+                           G_CALLBACK (gbp_new_file_popover_entry_activate),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->entry,
                            "changed",
-                           G_CALLBACK (gb_new_file_popover__entry_changed),
+                           G_CALLBACK (gbp_new_file_popover_entry_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->button,
                            "clicked",
-                           G_CALLBACK (gb_new_file_popover__button_clicked),
+                           G_CALLBACK (gbp_new_file_popover_button_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 }
 
 GFileType
-gb_new_file_popover_get_file_type (GbNewFilePopover *self)
+gbp_new_file_popover_get_file_type (GbpNewFilePopover *self)
 {
-  g_return_val_if_fail (GB_IS_NEW_FILE_POPOVER (self), 0);
+  g_return_val_if_fail (GBP_IS_NEW_FILE_POPOVER (self), 0);
 
   return self->file_type;
 }
 
 void
-gb_new_file_popover_set_file_type (GbNewFilePopover *self,
-                                   GFileType         file_type)
+gbp_new_file_popover_set_file_type (GbpNewFilePopover *self,
+                                    GFileType          file_type)
 {
-  g_return_if_fail (GB_IS_NEW_FILE_POPOVER (self));
+  g_return_if_fail (GBP_IS_NEW_FILE_POPOVER (self));
   g_return_if_fail ((file_type == G_FILE_TYPE_REGULAR) ||
                     (file_type == G_FILE_TYPE_DIRECTORY));
 
@@ -358,10 +357,10 @@ gb_new_file_popover_set_file_type (GbNewFilePopover *self,
 }
 
 void
-gb_new_file_popover_set_directory (GbNewFilePopover *self,
-                                   GFile            *directory)
+gbp_new_file_popover_set_directory (GbpNewFilePopover *self,
+                                    GFile             *directory)
 {
-  g_return_if_fail (GB_IS_NEW_FILE_POPOVER (self));
+  g_return_if_fail (GBP_IS_NEW_FILE_POPOVER (self));
   g_return_if_fail (G_IS_FILE (directory));
 
   if (g_set_object (&self->directory, directory))
@@ -369,22 +368,54 @@ gb_new_file_popover_set_directory (GbNewFilePopover *self,
       const gchar *path;
 
       path = gtk_entry_get_text (self->entry);
-      gb_new_file_popover_check_exists (self, directory, path);
+      gbp_new_file_popover_check_exists (self, directory, path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
     }
 }
 
 /**
- * gb_new_file_popover_get_directory:
+ * gbp_new_file_popover_get_directory:
  *
  * Returns: (transfer none) (nullable): a #GFile or %NULL.
  *
  * Since: 3.32
  */
 GFile *
-gb_new_file_popover_get_directory (GbNewFilePopover *self)
+gbp_new_file_popover_get_directory (GbpNewFilePopover *self)
 {
-  g_return_val_if_fail (GB_IS_NEW_FILE_POPOVER (self), NULL);
+  g_return_val_if_fail (GBP_IS_NEW_FILE_POPOVER (self), NULL);
 
   return self->directory;
+}
+
+void
+gbp_new_file_popover_display_async (GbpNewFilePopover   *self,
+                                    IdeTree             *tree,
+                                    IdeTreeNode         *node,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_return_if_fail (GBP_IS_NEW_FILE_POPOVER (self));
+  g_return_if_fail (IDE_IS_TREE (tree));
+  g_return_if_fail (IDE_IS_TREE_NODE (node));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (self->task == NULL);
+
+  self->task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (self->task, gbp_new_file_popover_display_async);
+
+  ide_tree_expand_node (tree, node);
+  ide_tree_show_popover_at_node (tree, node, GTK_POPOVER (self));
+}
+
+GFile *
+gbp_new_file_popover_display_finish (GbpNewFilePopover  *self,
+                                     GAsyncResult       *result,
+                                     GError            **error)
+{
+  g_return_val_if_fail (GBP_IS_NEW_FILE_POPOVER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
