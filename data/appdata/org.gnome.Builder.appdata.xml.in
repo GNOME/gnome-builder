@@ -82,6 +82,23 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.31.4" date="2019-01-09">
+      <description>
+        <p>
+          This release contains a major refactor of much of Builder.
+          Many UI components have been refreshed and many APIs available to plugins have been simplified and improved.
+          We expect a number of bugs as fallout from the refactor, and are looking for users to help test and report issues back to us.
+        </p>
+        <ul>
+          <li>Initial multi-monitor support.</li>
+          <li>Initial support for non-project mode when opening files from the command line.</li>
+          <li>A number of new command-line options have been added.</li>
+          <li>Many new and simplified plugin interfaces.</li>
+          <li>Support for external plugins by requiring specific ABI checks.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.31.1" date="2018-10-08">
       <description>
         <p>

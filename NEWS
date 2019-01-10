@@ -1,4 +1,29 @@
 ==============
+Version 3.31.4
+==============
+
+Changes since last release:
+
+ • A large number of changes as part of refactoring the core of Builder.
+ • Basic support for multiple workspace windows for a project. Such is useful
+   in multi-monitor setups.
+ • Add --clone, --greeter, --manifest, --editor command line options.
+ • Opening files via .desktop mimetypes should no longer open a project,
+   only the source file.
+ • Various build system information has been coalesced into the project tree.
+ • Many meson_options.txt changes including a number of plugin options
+   were simplified.
+ • Configuration view has been abstracted to allow plugins to extend build
+   preferences.
+
+We expect there to be a number of bugs found during the following releases
+due to the magnitude of refactoring this cycle. We appreciate those taking
+time to file good bug reports for us.
+
+We also anticipate a lot of translation updates so translation teams may want
+to get a head start sooner rather than later.
+
+==============
 Version 3.31.1
 ==============
 
