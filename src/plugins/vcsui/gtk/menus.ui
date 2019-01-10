@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!--
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-placeholder2">
+      <submenu id="project-tree-menu-version-control">
+        <attribute name="label" translatable="yes">Version Control</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Restore File</attribute>
+          <attribute name="action">vcsui.restore-file</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Browse History</attribute>
+          <attribute name="action">vcsui.browse-history</attribute>
+        </item>
+      </submenu>
+    </section>
+  </menu>
+  -->
+</interface>

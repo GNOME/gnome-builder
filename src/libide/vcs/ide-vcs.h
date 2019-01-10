@@ -20,12 +20,13 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_VCS_INSIDE) && !defined (IDE_VCS_COMPILATION)
+# error "Only <libide-vcs.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
-#include "ide-object.h"
-#include "vcs/ide-vcs-config.h"
+#include "ide-vcs-config.h"
 
 G_BEGIN_DECLS
 
@@ -38,9 +39,7 @@ struct _IdeVcsInterface
 {
   GTypeInterface            parent_interface;
 
-  GFile                  *(*get_working_directory)     (IdeVcs               *self);
-  IdeBufferChangeMonitor *(*get_buffer_change_monitor) (IdeVcs               *self,
-                                                        IdeBuffer            *buffer);
+  GFile                  *(*get_workdir)               (IdeVcs               *self);
   gboolean                (*is_ignored)                (IdeVcs               *self,
                                                         GFile                *file,
                                                         GError              **error);
@@ -61,21 +60,11 @@ struct _IdeVcsInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void                    ide_vcs_register_ignored          (const gchar          *pattern);
+IdeVcs                 *ide_vcs_from_context              (IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
-IdeBufferChangeMonitor *ide_vcs_get_buffer_change_monitor (IdeVcs               *self,
-                                                           IdeBuffer            *buffer);
+IdeVcs                 *ide_vcs_ref_from_context          (IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
-GFile                  *ide_vcs_get_working_directory     (IdeVcs               *self);
-IDE_AVAILABLE_IN_3_32
-void                    ide_vcs_new_async                 (IdeContext           *context,
-                                                           int                   io_priority,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-IdeVcs                 *ide_vcs_new_finish                (GAsyncResult         *result,
-                                                           GError              **error);
+GFile                  *ide_vcs_get_workdir               (IdeVcs               *self);
 IDE_AVAILABLE_IN_3_32
 gboolean                ide_vcs_is_ignored                (IdeVcs               *self,
                                                            GFile                *file,

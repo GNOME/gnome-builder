@@ -22,9 +22,8 @@
 
 #include "config.h"
 
-#include "ide-enums.h"
-
-#include "vcs/ide-vcs-file-info.h"
+#include "ide-vcs-enums.h"
+#include "ide-vcs-file-info.h"
 
 typedef struct
 {
@@ -180,7 +179,7 @@ ide_vcs_file_info_class_init (IdeVcsFileInfoClass *klass)
                        IDE_TYPE_VCS_FILE_STATUS,
                        IDE_VCS_FILE_STATUS_UNCHANGED,
                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
