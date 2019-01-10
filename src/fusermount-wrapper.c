@@ -21,11 +21,9 @@
 #include "config.h"
 
 #include <errno.h>
-#include <ide.h>
+#include <libide-threading.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#include "threading/ide-thread-pool.h"
 
 static gint exit_code;
 
