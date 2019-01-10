@@ -1,4 +1,4 @@
-/* ide-support-plugin.c
+/* support-plugin.c
  *
  * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -19,12 +19,12 @@
  */
 
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-gui.h>
 
 #include "ide-support-application-addin.h"
 
-void
-ide_support_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_support_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
