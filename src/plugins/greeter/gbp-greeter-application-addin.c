@@ -207,12 +207,27 @@ gbp_greeter_application_addin_unload (IdeApplicationAddin *addin,
 }
 
 static void
+gbp_greeter_application_addin_activate (IdeApplicationAddin *addin,
+                                        IdeApplication      *app)
+{
+  GtkWindow *window;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (addin));
+  g_assert (IDE_IS_APPLICATION (app));
+
+  if (!(window = gtk_application_get_active_window (GTK_APPLICATION (app))))
+    present_greeter_with_surface (NULL, NULL, addin);
+}
+
+static void
 application_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
   iface->load = gbp_greeter_application_addin_load;
   iface->unload = gbp_greeter_application_addin_unload;
   iface->add_option_entries = gbp_greeter_application_addin_add_option_entries;
   iface->handle_command_line = gbp_greeter_application_addin_handle_command_line;
+  iface->activate = gbp_greeter_application_addin_activate;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpGreeterApplicationAddin, gbp_greeter_application_addin, G_TYPE_OBJECT,
