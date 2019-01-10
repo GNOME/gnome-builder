@@ -3,7 +3,7 @@
 #
 # __init__.py
 #
-# Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+# Copyright 2016 Christian Hergert <chergert@redhat.com>
 # Copyright 2017 Georg Vienna <georg.vienna@himbarsoft.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,15 +20,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gi
 import os
 import re
 import pty
 import stat
-
-gi.require_version('Dazzle', '1.0')
-gi.require_version('Ide', '1.0')
-gi.require_version('Gtk', '3.0')
 
 from gi.repository import Dazzle
 from gi.repository import GLib
@@ -41,7 +36,7 @@ from gi.repository import Peas
 _ = Ide.gettext
 
 def get_resource(path):
-    full_path = os.path.join('/org/gnome/builder/plugins/rustup_plugin', path)
+    full_path = os.path.join('/plugins/rustup_plugin', path)
     return Gio.resources_lookup_data(full_path, 0).get_data()
 
 def get_module_data_path(name):
@@ -73,18 +68,14 @@ def looks_like_channel(channel):
 
 class RustUpWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     """
-    The RustUpWorkbenchAddin is a helper to handle open workbenches.
-    It manages the set of open workbenches stored in the application addin.
+    The RustUpWorkbenchAddin is a helper to handle open workspaces.
+    It manages the set of open workspaces stored in the application addin.
     """
-    def do_load(self, workbench):
-        RustupApplicationAddin.instance.add_workbench(workbench)
-        def unload(workbench, context):
-            RustupApplicationAddin.instance.workbenches.discard(workbench)
-        workbench.connect('unload', unload)
+    def do_workspace_added(self, workspace):
+        RustupApplicationAddin.instance.add_workspace(workspace)
 
-    def do_unload(self, workbench):
-        if RustupApplicationAddin.instance:
-            RustupApplicationAddin.instance.workbenches.discard(workbench)
+    def do_workspace_removed(self, workspace):
+        RustupApplicationAddin.instance.workspaces.discard(workspace)
 
 _NO_RUSTUP = _('Rustup not installed')
 
@@ -112,7 +103,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
 
     def do_load(self, application):
         RustupApplicationAddin.instance = self
-        self.workbenches = set()
+        self.workspaces = set()
         self.active_transfer = None
         self.has_rustup = False
         self.rustup_version = _NO_RUSTUP
@@ -210,27 +201,27 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             pass
         self.emit('rustup_changed')
 
-    def add_workbench(self, workbench):
+    def add_workspace(self, workspace):
         # recheck if rustup was installed outside of gnome-builder
-        def is_active(workbench, active):
-            if workbench.is_active ():
+        def is_active(workspace, active):
+            if workspace.is_active ():
                 if self.active_transfer is None:
                     RustupApplicationAddin.instance.check_rustup()
-        workbench.connect('notify::is-active', is_active)
+        workspace.connect('notify::is-active', is_active)
         # call us if a transfer completes (could be the active_transfer)
-        transfer_manager = Gio.Application.get_default().get_transfer_manager()
+        transfer_manager = Ide.TransferManager.get_default()
         transfer_manager.connect('transfer-completed', self.transfer_completed)
         transfer_manager.connect('transfer-failed', self.transfer_failed)
-        self.workbenches.add(workbench)
+        self.workspaces.add(workspace)
 
     def transfer_completed(self, transfer_manager, transfer):
-        # reset the active transfer on completion, ensures that new workbenches dont get an old transfer
+        # reset the active transfer on completion, ensures that new workspaces dont get an old transfer
         if self.active_transfer == transfer:
             self.active_transfer = None
             self.notify('busy')
 
     def transfer_failed(self, transfer_manager, transfer, error):
-        # reset the active transfer on error, ensures that new workbenches dont get an old transfer
+        # reset the active transfer on error, ensures that new workspaces dont get an old transfer
         if self.active_transfer == transfer:
             self.active_transfer = None
             self.notify('busy')
@@ -238,7 +229,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
     def run_transfer(self, transfer):
         self.active_transfer = transfer
         self.notify('busy')
-        transfer_manager = Gio.Application.get_default().get_transfer_manager()
+        transfer_manager = Ide.TransferManager.get_default()
         transfer_manager.execute_async(transfer)
 
     def install(self):
@@ -390,7 +381,8 @@ class RustupInstaller(Ide.Transfer):
                         try:
                             self.props.progress = float(percent)/100
                         except Exception as te:
-                            print('_read_line_cb', self.state, line, te)
+                            if type(te) is not ValueError:
+                                print('_read_line_cb', self.state, line, te)
                 elif self.state == _STATE_DOWN_COMP or self.state == _STATE_SYNC_UPDATE or self.state == _STATE_CHECK_UPDATE_SELF  or self.state == _STATE_DOWN_UPDATE_SELF:
                     # the first progress can be empty, skip it
                     if length > 0:
