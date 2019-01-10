@@ -22,7 +22,8 @@
 
 #include <glib/gi18n.h>
 
-#include "sourceview/ide-source-view-capture.h"
+#include "ide-source-view-capture.h"
+#include "ide-source-view-private.h"
 
 typedef struct
 {

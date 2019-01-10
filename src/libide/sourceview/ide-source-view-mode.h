@@ -1,6 +1,7 @@
 /* ide-source-view-mode.h
  *
  * Copyright 2015 Alexander Larsson <alexl@redhat.com>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +23,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-types.h"
-#include "sourceview/ide-source-view.h"
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
@@ -45,9 +45,9 @@ void                   ide_source_view_mode_set_has_selection            (IdeSou
                                                                           gboolean               has_selection);
 IdeSourceViewMode     *_ide_source_view_mode_new                         (GtkWidget             *view,
                                                                           const char            *mode,
-                                                                          IdeSourceViewModeType  type) G_GNUC_INTERNAL;
+                                                                          IdeSourceViewModeType  type);
 gboolean               _ide_source_view_mode_do_event                    (IdeSourceViewMode     *mode,
                                                                           GdkEventKey           *event,
-                                                                          gboolean              *remove) G_GNUC_INTERNAL;
+                                                                          gboolean              *remove);
 
 G_END_DECLS

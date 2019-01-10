@@ -1,6 +1,6 @@
-/* ide-line-change-gutter-renderer.h
+/* ide-completion-window.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,21 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
+#if !defined (IDE_SOURCEVIEW_INSIDE) && !defined (IDE_SOURCEVIEW_COMPILATION)
+# error "Only <libide-sourceview.h> can be included directly."
+#endif
+
+#include <gtk/gtk.h>
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER (ide_line_change_gutter_renderer_get_type())
+#define IDE_TYPE_COMPLETION_WINDOW (ide_completion_window_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, IDE, LINE_CHANGE_GUTTER_RENDERER, GtkSourceGutterRenderer)
+G_DECLARE_FINAL_TYPE (IdeCompletionWindow, ide_completion_window, IDE, COMPLETION_WINDOW, GtkWindow)
+
+IdeCompletionContext *ide_completion_window_get_context (IdeCompletionWindow  *self);
+void                  ide_completion_window_set_context (IdeCompletionWindow  *self,
+                                                         IdeCompletionContext *context);
 
 G_END_DECLS

@@ -22,10 +22,9 @@
 
 #include "config.h"
 
-#include "ide-context.h"
-#include "ide-debug.h"
+#include <libide-code.h>
 
-#include "sourceview/ide-indenter.h"
+#include "ide-indenter.h"
 
 G_DEFINE_INTERFACE (IdeIndenter, ide_indenter, IDE_TYPE_OBJECT)
 

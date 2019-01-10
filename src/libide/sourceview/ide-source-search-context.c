@@ -22,8 +22,9 @@
 
 #include "config.h"
 
-#include "sourceview/ide-source-search-context.h"
-#include "threading/ide-task.h"
+#include <libide-threading.h>
+
+#include "ide-source-search-context.h"
 
 typedef struct
 {

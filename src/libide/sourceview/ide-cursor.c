@@ -24,9 +24,9 @@
 
 #include <dazzle.h>
 
-#include "sourceview/ide-source-view.h"
-#include "sourceview/ide-cursor.h"
-#include "sourceview/ide-text-util.h"
+#include "ide-source-view.h"
+#include "ide-cursor.h"
+#include "ide-text-util.h"
 
 struct _IdeCursor
 {

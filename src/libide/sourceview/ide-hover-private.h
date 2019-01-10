@@ -1,6 +1,6 @@
-/* ide-line-change-gutter-renderer.h
+/* ide-hover-private.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,20 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
-#include <libide-core.h>
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER (ide_line_change_gutter_renderer_get_type())
+#define IDE_TYPE_HOVER (ide_hover_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, IDE, LINE_CHANGE_GUTTER_RENDERER, GtkSourceGutterRenderer)
+G_DECLARE_FINAL_TYPE (IdeHover, ide_hover, IDE, HOVER, GObject)
+
+IdeHover *_ide_hover_new          (IdeSourceView     *view);
+void      _ide_hover_display      (IdeHover          *self,
+                                   const GtkTextIter *iter);
+void      _ide_hover_set_context  (IdeHover          *self,
+                                   IdeContext        *context);
+void      _ide_hover_set_language (IdeHover          *self,
+                                   const gchar       *language);
 
 G_END_DECLS
