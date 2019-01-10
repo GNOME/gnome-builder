@@ -1,10 +1,12 @@
 [Plugin]
-Module=html_preview
-Loader=python3
-Name=HTML, reStructuredText and Markdown Preview
-Description=Live preview of HTML, reStructuredText and Markdown documents.
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Depends=webkit
+Copyright=Copyright © 2015 Christian Hergert
+Depends=webkit;
+Description=Live preview of HTML, reStructuredText and Markdown documents.
+Loader=python3
+Module=html_preview
+Name=HTML, reStructuredText and Markdown Preview
 X-Editor-View-Languages=*
+X-Builder-ABI=@PACKAGE_ABI@
+X-Has-Resources=true
