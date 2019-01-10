@@ -1,9 +1,0 @@
-[Plugin]
-Module=testing
-Name=Testing
-Description=Unit testing for Builder
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2017 Christian Hergert
-Builtin=true
-Hidden=true
-Embedded=ide_test_register_types
