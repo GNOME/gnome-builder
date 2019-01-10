@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.24 -->
+  <template class="IdeHeaderBar" parent="GtkHeaderBar">
+    <child>
+      <object class="DzlPriorityBox" id="primary">
+        <property name="hexpand">true</property>
+        <property name="margin-end">6</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+      </object>
+      <packing>
+        <property name="pack-type">start</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="DzlPriorityBox" id="secondary">
+        <property name="hexpand">true</property>
+        <property name="margin-start">6</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkToggleButton" id="fullscreen_button">
+                <property name="action-name">win.fullscreen</property>
+                <property name="focus-on-click">false</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage" id="fullscreen_image">
+                    <property name="icon-name">view-fullscreen-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="DzlMenuButton" id="menu_button">
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="show-accels">true</property>
+                <property name="show-icons">true</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="priority">-1000000</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </template>
+  <object class="DzlShortcutTooltip" id="fullscreen_tooltip">
+    <property name="command-id">org.gnome.builder.workspace.fullscreen</property>
+    <property name="widget">fullscreen_button</property>
+  </object>
+  <object class="DzlShortcutTooltip" id="menu_tooltip">
+    <property name="command-id">org.gnome.builder.workspace.show-menu</property>
+    <property name="widget">menu_button</property>
+  </object>
+</interface>
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkShortcutsShortcut" id="run_shortcut">
+  </object>
+  <object class="GtkLabel" id="run_tooltip_message">
+    <property name="label" translatable="yes">The project cannot be run while the build pipeline is being set up</property>
+    <property name="visible">true</property>
+  </object>
+  <template class="IdeRunButton" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <style>
+      <class name="linked"/>
+    </style>
+    <child>
+      <object class="GtkButton" id="button">
+        <property name="action-name">run-manager.run</property>
+        <property name="focus-on-click">false</property>
+        <property name="has-tooltip">true</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="button_image">
+            <property name="icon-name">media-playback-start-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="stop_button">
+        <property name="action-name">run-manager.stop</property>
+        <property name="focus-on-click">false</property>
+        <property name="tooltip-text" translatable="yes">Stop running</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">media-playback-stop-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="DzlMenuButton" id="menu_button">
+        <property name="focus-on-click">false</property>
+        <property name="icon-name">pan-down-symbolic</property>
+        <property name="menu-id">run-menu</property>
+        <property name="show-accels">true</property>
+        <property name="show-arrow">false</property>
+        <property name="show-icons">true</property>
+        <property name="tooltip-text" translatable="yes">Change run options</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="image-button"/>
+          <class name="run-arrow-button"/>
+        </style>
+      </object>
+    </child>
+  </template>
+  <object class="DzlShortcutTooltip" id="tooltip">
+    <property name="widget">button</property>
+  </object>
+</interface>

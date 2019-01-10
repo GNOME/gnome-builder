@@ -1,0 +1,49 @@
+<interface>
+  <template class="IdeEnvironmentEditorRow" parent="GtkListBoxRow">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="spacing">12</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkEntry" id="key_entry">
+            <property name="has-frame">false</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="eq_label">
+            <property name="label">=</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="value_entry">
+            <property name="hexpand">true</property>
+            <property name="has-frame">false</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="delete_button">
+            <property name="visible">true</property>
+            <property name="tooltip-text" translatable="yes">Remove environment variable</property>
+            <style>
+              <class name="image-button"/>
+              <class name="flat"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">list-remove-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

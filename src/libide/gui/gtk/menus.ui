@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-primary-workspace-surfaces-menu">
+    <section id="ide-primary-workspace-surfaces-menu-section">
+      <attribute name="label" translatable="yes">Switch Surface</attribute>
+    </section>
+  </menu>
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-projects-section"/>
+    <section id="ide-primary-workspace-menu-placeholder1"/>
+    <section id="ide-primary-workspace-menu-open-section">
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-open</attribute>
+        <attribute name="label" translatable="yes">Open File…</attribute>
+        <attribute name="action">workbench.open</attribute>
+        <attribute name="accel">&lt;primary&gt;o</attribute>
+      </item>
+    </section>
+    <section id="ide-primary-workspace-menu-placeholder2"/>
+    <section id="ide-primary-workspace-menu-close-section">
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-close-project</attribute>
+        <attribute name="label" translatable="yes">Close Project</attribute>
+        <attribute name="action">workbench.close</attribute>
+      </item>
+    </section>
+    <section id="ide-primary-workspace-menu-placeholder3"/>
+    <section id="ide-primary-workspace-menu-app-section">
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-preferences</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="accel">&lt;primary&gt;comma</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-shortcuts</attribute>
+        <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
+        <attribute name="action">app.shortcuts</attribute>
+        <attribute name="accel">&lt;primary&gt;question</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-help</attribute>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">app.help</attribute>
+        <attribute name="accel">F1</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-about</attribute>
+        <attribute name="label" translatable="yes">About Builder</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+    <section id="ide-primary-workspace-menu-quit-section">
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-quit</attribute>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="action">app.quit</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-primary-workspace-new-menu">
+    <section id="new-document-section">
+    </section>
+    <section id="open-document-section">
+      <item>
+        <attribute name="id">open-file</attribute>
+        <attribute name="label" translatable="yes">Open File…</attribute>
+        <attribute name="action">workbench.open</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="run-menu">
+    <section id="run-menu-section">
+      <attribute name="label" translatable="yes">Run Options</attribute>
+      <item>
+        <attribute name="id">default-run-handler</attribute>
+        <attribute name="action">run-manager.run-with-handler</attribute>
+        <attribute name="target">run</attribute>
+        <attribute name="label" translatable="yes">Run</attribute>
+        <attribute name="verb-icon-name">media-playback-start-symbolic</attribute>
+        <attribute name="accel">&lt;Control&gt;F5</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
+
