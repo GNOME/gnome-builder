@@ -1,4 +1,4 @@
-/* ide-project-edit-private.h
+/* ide-template-provider.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,14 +20,29 @@
 
 #pragma once
 
-#include "buffers/ide-buffer.h"
-#include "projects/ide-project-edit.h"
+#if !defined (IDE_PROJECTS_INSIDE) && !defined (IDE_PROJECTS_COMPILATION)
+# error "Only <libide-projects.h> can be included directly."
+#endif
+
+#include <libide-core.h>
+
+#include "ide-project-template.h"
 
 G_BEGIN_DECLS
 
-void _ide_project_edit_prepare (IdeProjectEdit *self,
-                                IdeBuffer      *buffer);
-void _ide_project_edit_apply   (IdeProjectEdit *self,
-                                IdeBuffer      *buffer);
+#define IDE_TYPE_TEMPLATE_PROVIDER (ide_template_provider_get_type())
+
+IDE_AVAILABLE_IN_3_32
+G_DECLARE_INTERFACE (IdeTemplateProvider, ide_template_provider, IDE, TEMPLATE_PROVIDER, GObject)
+
+struct _IdeTemplateProviderInterface
+{
+  GTypeInterface parent_iface;
+
+  GList *(*get_project_templates) (IdeTemplateProvider *self);
+};
+
+IDE_AVAILABLE_IN_3_32
+GList *ide_template_provider_get_project_templates (IdeTemplateProvider *self);
 
 G_END_DECLS

@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include "doap/ide-doap-person.h"
+#include "ide-doap-person.h"
 
 struct _IdeDoapPerson
 {

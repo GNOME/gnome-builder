@@ -1,6 +1,6 @@
 /* ide-doap.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,17 +24,14 @@
 
 #include <glib/gi18n.h>
 
-#include "doap/ide-doap.h"
+#include "ide-doap.h"
+#include "xml-reader-private.h"
 
-#include "doap/xml-reader.h"
-
-/*
- * TODO: We don't do any XMLNS checking or anything here.
- */
+/* TODO: We don't do any XMLNS checking or anything here. */
 
 struct _IdeDoap
 {
-  GObject parent_instance;
+  GObject    parent_instance;
 
   gchar     *bug_database;
   gchar     *category;
@@ -249,7 +246,7 @@ ide_doap_set_shortdesc (IdeDoap     *self,
  *
  *
  *
- * Returns: (transfer none) (element-type Ide.DoapPerson): a #GList of #IdeDoapPerson.
+ * Returns: (transfer none) (element-type IdeDoapPerson): a #GList of #IdeDoapPerson.
  *
  * Since: 3.32
  */

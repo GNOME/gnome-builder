@@ -26,11 +26,10 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
-#include "projects/ide-project-info.h"
+#include "ide-project-info.h"
 
 /**
  * SECTION:ideprojectinfo:
@@ -47,6 +46,7 @@ struct _IdeProjectInfo
 {
   GObject     parent_instance;
 
+  gchar      *id;
   IdeDoap    *doap;
   GDateTime  *last_modified_at;
   GFile      *directory;
@@ -55,7 +55,7 @@ struct _IdeProjectInfo
   gchar      *name;
   gchar      *description;
   gchar     **languages;
-  IdeVcsUri  *vcs_uri;
+  gchar      *vcs_uri;
 
   gint        priority;
 
@@ -71,6 +71,7 @@ enum {
   PROP_DIRECTORY,
   PROP_DOAP,
   PROP_FILE,
+  PROP_ID,
   PROP_IS_RECENT,
   PROP_LANGUAGES,
   PROP_LAST_MODIFIED_AT,
@@ -224,7 +225,7 @@ ide_project_info_set_build_system_name (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!dzl_str_equal0 (self->build_system_name, build_system_name))
+  if (!ide_str_equal0 (self->build_system_name, build_system_name))
     {
       g_free (self->build_system_name);
       self->build_system_name = g_strdup (build_system_name);
@@ -246,7 +247,7 @@ ide_project_info_set_description (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!dzl_str_equal0 (self->description, description))
+  if (!ide_str_equal0 (self->description, description))
     {
       g_free (self->description);
       self->description = g_strdup (description);
@@ -268,7 +269,7 @@ ide_project_info_set_name (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!dzl_str_equal0 (self->name, name))
+  if (!ide_str_equal0 (self->name, name))
     {
       g_free (self->name);
       self->name = g_strdup (name);
@@ -340,6 +341,7 @@ ide_project_info_finalize (GObject *object)
 {
   IdeProjectInfo *self = (IdeProjectInfo *)object;
 
+  g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->last_modified_at, g_date_time_unref);
   g_clear_pointer (&self->build_system_name, g_free);
   g_clear_pointer (&self->description, g_free);
@@ -381,6 +383,10 @@ ide_project_info_get_property (GObject    *object,
       g_value_set_object (value, ide_project_info_get_file (self));
       break;
 
+    case PROP_ID:
+      g_value_set_string (value, ide_project_info_get_id (self));
+      break;
+
     case PROP_IS_RECENT:
       g_value_set_boolean (value, ide_project_info_get_is_recent (self));
       break;
@@ -402,7 +408,7 @@ ide_project_info_get_property (GObject    *object,
       break;
 
     case PROP_VCS_URI:
-      g_value_set_boxed (value, ide_project_info_get_vcs_uri (self));
+      g_value_set_string (value, ide_project_info_get_vcs_uri (self));
       break;
 
     default:
@@ -440,6 +446,10 @@ ide_project_info_set_property (GObject      *object,
       ide_project_info_set_file (self, g_value_get_object (value));
       break;
 
+    case PROP_ID:
+      ide_project_info_set_id (self, g_value_get_string (value));
+      break;
+
     case PROP_IS_RECENT:
       ide_project_info_set_is_recent (self, g_value_get_boolean (value));
       break;
@@ -461,7 +471,7 @@ ide_project_info_set_property (GObject      *object,
       break;
 
     case PROP_VCS_URI:
-      ide_project_info_set_vcs_uri (self, g_value_get_boxed (value));
+      ide_project_info_set_vcs_uri (self, g_value_get_string (value));
       break;
 
     default:
@@ -483,63 +493,70 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          "Build System name",
                          "Build System name",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
                          "Description",
                          "The project description.",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ID] =
+    g_param_spec_string ("id",
+                         "Id",
+                         "The identifier for the project",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "The project name.",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
                          "Directory",
                          "The project directory.",
                          G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DOAP] =
     g_param_spec_object ("doap",
                          "DOAP",
                          "A DOAP describing the project.",
                          IDE_TYPE_DOAP,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FILE] =
     g_param_spec_object ("file",
                          "File",
                          "The toplevel project file.",
                          G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_IS_RECENT] =
     g_param_spec_boolean ("is-recent",
                           "Is Recent",
                           "Is Recent",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_LANGUAGES] =
     g_param_spec_boxed ("languages",
                         "Languages",
                         "Languages",
                         G_TYPE_STRV,
-                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_LAST_MODIFIED_AT] =
     g_param_spec_boxed ("last-modified-at",
                         "Last Modified At",
                         "Last Modified At",
                         G_TYPE_DATE_TIME,
-                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
@@ -548,14 +565,14 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                       G_MININT,
                       G_MAXINT,
                       0,
-                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                      (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_VCS_URI] =
-    g_param_spec_boxed ("vcs-uri",
-                        "Vcs Uri",
-                        "The vcs uri of the project, in case it is not local",
-                        IDE_TYPE_VCS_URI,
-                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+    g_param_spec_string ("vcs-uri",
+                         "Vcs Uri",
+                         "The VCS URI of the project, in case it is not local",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -579,6 +596,9 @@ ide_project_info_compare (IdeProjectInfo *info1,
 
   g_assert (IDE_IS_PROJECT_INFO (info1));
   g_assert (IDE_IS_PROJECT_INFO (info2));
+
+  if (info1 == info2)
+    return 0;
 
   prio1 = ide_project_info_get_priority (info1);
   prio2 = ide_project_info_get_priority (info2);
@@ -609,7 +629,7 @@ ide_project_info_compare (IdeProjectInfo *info1,
  * ide_project_info_get_vcs_uri:
  * @self: an #IdeProjectInfo
  *
- * Gets the #IdeVcsUri for the project info. This should be set with the
+ * Gets the VCS URI for the project info. This should be set with the
  * remote URI for the version control system. It can be used to clone the
  * project when activated from the greeter.
  *
@@ -617,7 +637,7 @@ ide_project_info_compare (IdeProjectInfo *info1,
  *
  * Since: 3.32
  */
-IdeVcsUri *
+const gchar *
 ide_project_info_get_vcs_uri (IdeProjectInfo *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
@@ -627,14 +647,114 @@ ide_project_info_get_vcs_uri (IdeProjectInfo *self)
 
 void
 ide_project_info_set_vcs_uri (IdeProjectInfo *self,
-                              IdeVcsUri      *vcs_uri)
+                              const gchar    *vcs_uri)
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (self->vcs_uri != vcs_uri)
+  if (!ide_str_equal0 (self->vcs_uri, vcs_uri))
     {
-      g_clear_pointer (&self->vcs_uri, ide_vcs_uri_unref);
-      self->vcs_uri = ide_vcs_uri_ref (vcs_uri);
+      g_free (self->vcs_uri);
+      self->vcs_uri = g_strdup (vcs_uri);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VCS_URI]);
+    }
+}
+
+IdeProjectInfo *
+ide_project_info_new (void)
+{
+  return g_object_new (IDE_TYPE_PROJECT_INFO, NULL);
+}
+
+/**
+ * ide_project_info_equal:
+ * @self: a #IdeProjectInfo
+ * @other: a #IdeProjectInfo
+ *
+ * This function will check to see if information about @self and @other are
+ * similar enough that a request to open @other would instead activate
+ * @self. This is useful when a user tries to open the same project twice.
+ *
+ * However, some case is taken to ensure that things like the build system
+ * are the same so that a project may be opened twice with two build systems
+ * as is sometimes necessary when projects are porting to a new build
+ * system.
+ *
+ * Returns: %TRUE if @self and @other are the same project and similar
+ *   enough to be considered equal.
+ *
+ * Since: 3.32
+ */
+gboolean
+ide_project_info_equal (IdeProjectInfo *self,
+                        IdeProjectInfo *other)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (other), FALSE);
+
+  if (!self->file || !other->file ||
+      !g_file_equal (self->file, other->file))
+    {
+      if (!self->directory || !other->directory ||
+          !g_file_equal (self->directory, other->directory))
+        return FALSE;
+    }
+
+  /* build-system only set in one of the project-info?
+   * That's fine, we'll consider them the same to avoid over
+   * activating a second workbench
+   */
+  if ((!self->build_system_name && other->build_system_name) ||
+      (self->build_system_name && !other->build_system_name))
+    return TRUE;
+
+  return ide_str_equal0 (self->build_system_name, other->build_system_name);
+}
+
+const gchar *
+ide_project_info_get_id (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  if (!self->id && self->directory)
+    self->id = g_file_get_basename (self->directory);
+
+  if (!self->id && self->file)
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (self->file);
+      self->id = g_file_get_basename (parent);
+    }
+
+  if (!self->id && self->doap)
+    self->id = g_strdup (ide_doap_get_name (self->doap));
+
+  if (!self->id && self->vcs_uri)
+    {
+      const gchar *path = self->vcs_uri;
+
+      if (strstr (path, "//"))
+        path = strstr (path, "//") + 1;
+
+      if (strchr (path, '/'))
+        path = strchr (path, '/');
+      else if (strrchr (path, ':'))
+        path = strrchr (path, ':');
+
+      self->id = g_path_get_basename (path);
+    }
+
+  return self->id;
+}
+
+void
+ide_project_info_set_id (IdeProjectInfo *self,
+                         const gchar    *id)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  if (!ide_str_equal0 (id, self->id))
+    {
+      g_free (self->id);
+      self->id = g_strdup (id);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
     }
 }

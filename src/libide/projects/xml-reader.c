@@ -14,13 +14,15 @@
  *
  * Author:
  *   Christian Hergert  <chris@dronelabs.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <glib/gi18n.h>
 #include <string.h>
 #include <libxml/xmlreader.h>
 
-#include "doap/xml-reader.h"
+#include "xml-reader-private.h"
 
 #define XML_TO_CHAR(s)  ((char *) (s))
 #define CHAR_TO_XML(s)  ((unsigned char *) (s))

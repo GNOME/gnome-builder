@@ -1,6 +1,6 @@
 /* ide-project.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,7 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
-
-#include "ide-object.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -32,21 +30,7 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeProject, ide_project, IDE, PROJECT, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-gchar           *ide_project_create_id          (const gchar          *name);
-IDE_AVAILABLE_IN_3_32
-IdeProjectItem  *ide_project_get_root           (IdeProject           *self);
-IDE_AVAILABLE_IN_3_32
-const gchar     *ide_project_get_name           (IdeProject           *self);
-IDE_AVAILABLE_IN_3_32
-const gchar     *ide_project_get_id             (IdeProject           *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_project_reader_lock        (IdeProject           *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_project_reader_unlock      (IdeProject           *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_project_writer_lock        (IdeProject           *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_project_writer_unlock      (IdeProject           *self);
+IdeProject      *ide_project_from_context       (IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
 void             ide_project_rename_file_async  (IdeProject           *self,
                                                  GFile                *orig_file,
@@ -68,7 +52,5 @@ IDE_AVAILABLE_IN_3_32
 gboolean         ide_project_trash_file_finish  (IdeProject           *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
-void             _ide_project_set_name          (IdeProject           *project,
-                                                 const gchar          *name) G_GNUC_INTERNAL;
 
 G_END_DECLS

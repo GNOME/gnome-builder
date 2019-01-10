@@ -1,4 +1,4 @@
-/* ide-project-item.h
+/* ide-doap-person.h
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -20,33 +20,30 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_PROJECTS_INSIDE) && !defined (IDE_PROJECTS_COMPILATION)
+# error "Only <libide-projects.h> can be included directly."
+#endif
 
-#include "ide-object.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PROJECT_ITEM (ide_project_item_get_type())
+#define IDE_TYPE_DOAP_PERSON (ide_doap_person_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeProjectItem, ide_project_item, IDE, PROJECT_ITEM, IdeObject)
-
-struct _IdeProjectItemClass
-{
-  IdeObjectClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (IdeDoapPerson, ide_doap_person, IDE, DOAP_PERSON, GObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeProjectItem *ide_project_item_new          (IdeProjectItem *parent);
+IdeDoapPerson *ide_doap_person_new       (void);
 IDE_AVAILABLE_IN_3_32
-IdeProjectItem *ide_project_item_get_parent   (IdeProjectItem *item);
+const gchar   *ide_doap_person_get_name  (IdeDoapPerson *self);
 IDE_AVAILABLE_IN_3_32
-void            ide_project_item_append       (IdeProjectItem *item,
-                                               IdeProjectItem *child);
+void           ide_doap_person_set_name  (IdeDoapPerson *self,
+                                          const gchar   *name);
 IDE_AVAILABLE_IN_3_32
-void            ide_project_item_remove       (IdeProjectItem *item,
-                                               IdeProjectItem *child);
+const gchar   *ide_doap_person_get_email (IdeDoapPerson *self);
 IDE_AVAILABLE_IN_3_32
-GSequence      *ide_project_item_get_children (IdeProjectItem *item);
+void           ide_doap_person_set_email (IdeDoapPerson *self,
+                                          const gchar   *email);
 
 G_END_DECLS

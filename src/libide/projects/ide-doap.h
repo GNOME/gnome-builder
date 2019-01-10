@@ -1,6 +1,6 @@
 /* ide-doap.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_PROJECTS_INSIDE) && !defined (IDE_PROJECTS_COMPILATION)
+# error "Only <libide-projects.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
-#include "doap/ide-doap-person.h"
+#include "ide-doap-person.h"
 
 G_BEGIN_DECLS
 

@@ -1,4 +1,4 @@
-/* ide-project-tree-addin.h
+/* ide-projects-global.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,31 +20,17 @@
 
 #pragma once
 
-#include <dazzle.h>
+#if !defined (IDE_PROJECTS_INSIDE) && !defined (IDE_PROJECTS_COMPILATION)
+# error "Only <libide-projects.h> can be included directly."
+#endif
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PROJECT_TREE_ADDIN (ide_project_tree_addin_get_type())
-
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeProjectTreeAddin, ide_project_tree_addin, IDE, PROJECT_TREE_ADDIN, GObject)
-
-struct _IdeProjectTreeAddinInterface
-{
-  GTypeInterface parent_iface;
-
-  void (*load)   (IdeProjectTreeAddin *self,
-                  DzlTree             *tree);
-  void (*unload) (IdeProjectTreeAddin *self,
-                  DzlTree             *tree);
-};
-
+const gchar *ide_get_projects_dir  (void);
 IDE_AVAILABLE_IN_3_32
-void ide_project_tree_addin_load   (IdeProjectTreeAddin *self,
-                                    DzlTree             *tree);
-IDE_AVAILABLE_IN_3_32
-void ide_project_tree_addin_unload (IdeProjectTreeAddin *self,
-                                    DzlTree             *tree);
+gchar       *ide_create_project_id (const gchar *name);
 
 G_END_DECLS
