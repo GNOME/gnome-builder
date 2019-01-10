@@ -3,8 +3,8 @@
 #
 # npm_plugin.py
 #
-# Copyright 2016 Christian Hergert <chris@dronelabs.com>
-#               2017 Giovanni Campagna <gcampagn@cs.stanford.edu>
+# Copyright 2016-2018 Christian Hergert <chergert@redhat.com>
+# Copyright 2017 Giovanni Campagna <gcampagn@cs.stanford.edu>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,16 +25,21 @@ import threading
 import os
 import json
 
-gi.require_version('Ide', '1.0')
-
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Ide
 
-Ide.vcs_register_ignored('node_modules')
+Ide.g_file_add_ignored_pattern('node_modules')
 
-class NPMBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
+class NPMBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.props.glob = 'package.json'
+        self.props.hint = 'npm_plugin'
+        self.props.priority = 100
+
+class NPMBuildSystem(Ide.Object, Ide.BuildSystem):
     project_file = GObject.Property(type=Gio.File)
 
     def do_get_id(self):
@@ -43,35 +48,8 @@ class NPMBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_display_name(self):
         return 'NPM (node.js)'
 
-    def do_init_async(self, io_priority, cancellable, callback, data):
-        task = Gio.Task.new(self, cancellable, callback)
-
-        # This is all done synchronously, doing it in a thread would probably
-        # be somewhat ideal although unnecessary at this time.
-
-        try:
-            # Maybe this is a package.json
-            if self.props.project_file.get_basename() in ('package.json',):
-                task.return_boolean(True)
-                return
-
-            # Maybe this is a directory with a package.json
-            if self.props.project_file.query_file_type(0) == Gio.FileType.DIRECTORY:
-                child = self.props.project_file.get_child('package.json')
-                if child.query_exists(None):
-                    self.props.project_file = child
-                    task.return_boolean(True)
-                    return
-        except Exception as ex:
-            task.return_error(ex)
-
-        task.return_error(Ide.NotSupportedError())
-
-    def do_init_finish(self, task):
-        return task.propagate_boolean()
-
     def do_get_priority(self):
-        return -100
+        return 100
 
 
 class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
@@ -82,7 +60,7 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
     def do_load(self, pipeline):
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         # Ignore pipeline unless this is a npm/nodejs project
         if type(build_system) != NPMBuildSystem:
@@ -109,7 +87,7 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         fetch_launcher.push_argv('install')
         stage = Ide.BuildStageLauncher.new(context, fetch_launcher)
         stage.set_name(_("Downloading npm dependencies"))
-        self.track(pipeline.connect(Ide.BuildPhase.DOWNLOADS, 0, stage))
+        self.track(pipeline.attach(Ide.BuildPhase.DOWNLOADS, 0, stage))
 
 
 # The scripts used by the npm build system during build
@@ -137,8 +115,7 @@ class NPMBuildTarget(Ide.Object, Ide.BuildTarget):
 
     def do_get_cwd(self):
         context = self.get_context()
-        project_file = context.get_project_file()
-        return project_file.get_parent().get_path()
+        return context.ref_workdir().get_path()
 
     def do_get_language(self):
         return 'js'
@@ -203,7 +180,7 @@ class NPMBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != NPMBuildSystem:
             task.return_error(GLib.Error('Not NPM build system',
@@ -211,7 +188,7 @@ class NPMBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        project_file = context.get_project_file()
+        project_file = build_system.project_file
         project_file.load_contents_async(cancellable, self._on_package_json_loaded, task)
 
     def do_get_targets_finish(self, result):
