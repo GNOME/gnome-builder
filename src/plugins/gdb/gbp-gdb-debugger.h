@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-debugger.h>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wredundant-decls"

@@ -1,4 +1,4 @@
-/* gbp-gdb-plugin.c
+/* gdb-plugin.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,12 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
+#include <libide-debugger.h>
 
 #include "gbp-gdb-debugger.h"
 
-void
-gbp_gdb_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_gdb_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_DEBUGGER, GBP_TYPE_GDB_DEBUGGER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DEBUGGER,
+                                              GBP_TYPE_GDB_DEBUGGER);
 }
