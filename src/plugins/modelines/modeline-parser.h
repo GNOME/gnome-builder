@@ -23,8 +23,7 @@
 
 #include <glib.h>
 #include <gtksourceview/gtksource.h>
-
-#include "files/ide-file-settings.h"
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 

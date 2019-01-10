@@ -1,4 +1,4 @@
-/* ide-modelines-file-settings.c
+/* gbp-modelines-file-settings.c
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,77 +18,81 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-modelines-file-settings"
+#define G_LOG_DOMAIN "gbp-modelines-file-settings"
 
 #include "config.h"
 
+#include <libide-code.h>
 #include <glib/gi18n.h>
 
-#include "ide-context.h"
+#include "gbp-modelines-file-settings.h"
+#include "modeline-parser.h"
 
-#include "buffers/ide-buffer-manager.h"
-#include "buffers/ide-buffer.h"
-#include "modelines/ide-modelines-file-settings.h"
-#include "modelines/modeline-parser.h"
-
-struct _IdeModelinesFileSettings
+struct _GbpModelinesFileSettings
 {
   IdeFileSettings parent_instance;
 };
 
-G_DEFINE_TYPE (IdeModelinesFileSettings, ide_modelines_file_settings, IDE_TYPE_FILE_SETTINGS)
+G_DEFINE_TYPE (GbpModelinesFileSettings, gbp_modelines_file_settings, IDE_TYPE_FILE_SETTINGS)
+
+static gboolean
+buffer_file_matches (GbpModelinesFileSettings *self,
+                     IdeBuffer                *buffer)
+{
+  GFile *our_file;
+  GFile *buffer_file;
+
+  g_assert (GBP_IS_MODELINES_FILE_SETTINGS (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  buffer_file = ide_buffer_get_file (buffer);
+  our_file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self));
+
+  return g_file_equal (buffer_file, our_file);
+}
 
 static void
-buffer_loaded_cb (IdeModelinesFileSettings *self,
+buffer_loaded_cb (GbpModelinesFileSettings *self,
                   IdeBuffer                *buffer,
                   IdeBufferManager         *buffer_manager)
 {
-  IdeFile *our_file;
-  IdeFile *buffer_file;
-
-  g_assert (IDE_IS_MODELINES_FILE_SETTINGS (self));
+  g_assert (GBP_IS_MODELINES_FILE_SETTINGS (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  if ((buffer_file = ide_buffer_get_file (buffer)) &&
-      (our_file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self))) &&
-      ide_file_equal (buffer_file, our_file))
-    {
-      modeline_parser_apply_modeline (GTK_TEXT_BUFFER (buffer), IDE_FILE_SETTINGS (self));
-    }
+  if (buffer_file_matches (self, buffer))
+    modeline_parser_apply_modeline (GTK_TEXT_BUFFER (buffer), IDE_FILE_SETTINGS (self));
 }
 
 static void
-buffer_saved_cb (IdeModelinesFileSettings *self,
+buffer_saved_cb (GbpModelinesFileSettings *self,
                  IdeBuffer                *buffer,
                  IdeBufferManager         *buffer_manager)
 {
-  IdeFile *our_file;
-  IdeFile *buffer_file;
-
-  g_assert (IDE_IS_MODELINES_FILE_SETTINGS (self));
+  g_assert (GBP_IS_MODELINES_FILE_SETTINGS (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  if ((buffer_file = ide_buffer_get_file (buffer)) &&
-      (our_file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self))) &&
-      ide_file_equal (buffer_file, our_file))
-    {
-      modeline_parser_apply_modeline (GTK_TEXT_BUFFER (buffer), IDE_FILE_SETTINGS (self));
-    }
+  if (buffer_file_matches (self, buffer))
+    modeline_parser_apply_modeline (GTK_TEXT_BUFFER (buffer), IDE_FILE_SETTINGS (self));
 }
 
 static void
-ide_modelines_file_settings_constructed (GObject *object)
+gbp_modelines_file_settings_parent_set (IdeObject *object,
+                                        IdeObject *parent)
 {
-  IdeModelinesFileSettings *self = (IdeModelinesFileSettings *)object;
+  GbpModelinesFileSettings *self = (GbpModelinesFileSettings *)object;
   IdeBufferManager *buffer_manager;
   IdeContext *context;
 
-  G_OBJECT_CLASS (ide_modelines_file_settings_parent_class)->constructed (object);
+  g_assert (IDE_IS_OBJECT (object));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  buffer_manager = ide_context_get_buffer_manager (context);
+  buffer_manager = ide_buffer_manager_from_context (context);
 
   g_signal_connect_object (buffer_manager,
                            "buffer-loaded",
@@ -104,14 +108,14 @@ ide_modelines_file_settings_constructed (GObject *object)
 }
 
 static void
-ide_modelines_file_settings_class_init (IdeModelinesFileSettingsClass *klass)
+gbp_modelines_file_settings_class_init (GbpModelinesFileSettingsClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_modelines_file_settings_constructed;
+  i_object_class->parent_set = gbp_modelines_file_settings_parent_set;
 }
 
 static void
-ide_modelines_file_settings_init (IdeModelinesFileSettings *self)
+gbp_modelines_file_settings_init (GbpModelinesFileSettings *self)
 {
 }

@@ -1,6 +1,6 @@
-/* ide-modelines-file-settings.h
+/* modelines-plugin.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#define G_LOG_DOMAIN "modelines-plugin"
 
-#include "files/ide-file-settings.h"
+#include "config.h"
 
-G_BEGIN_DECLS
+#include <libpeas/peas.h>
+#include <libide-code.h>
 
-#define IDE_TYPE_MODELINES_FILE_SETTINGS (ide_modelines_file_settings_get_type())
+#include "gbp-modelines-file-settings.h"
 
-G_DECLARE_FINAL_TYPE (IdeModelinesFileSettings, ide_modelines_file_settings,
-                      IDE, MODELINES_FILE_SETTINGS, IdeFileSettings)
-
-G_END_DECLS
+_IDE_EXTERN void
+_gbp_modelines_register_types (PeasObjectModule *module)
+{
+  g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
+                                  GBP_TYPE_MODELINES_FILE_SETTINGS,
+                                  IDE_FILE_SETTINGS_EXTENSION_POINT".modelines",
+                                  -100);
+}
