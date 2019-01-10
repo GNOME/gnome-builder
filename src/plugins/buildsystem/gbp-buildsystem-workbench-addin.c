@@ -238,6 +238,7 @@ gbp_buildsystem_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
   ide_task_set_task_data (task, g_object_ref (project_info), g_object_unref);
 
   directory = ide_project_info_get_directory (project_info);
+  g_assert (G_IS_FILE (directory));
 
   discover_async (self,
                   directory,

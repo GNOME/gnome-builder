@@ -1087,6 +1087,7 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
   const gchar *project_id;
   LoadProject *lp;
   GFile *directory;
+  GFile *file;
 
   IDE_ENTRY;
 
@@ -1122,6 +1123,25 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
       ide_context_set_project_id (self->context, generated);
     }
 
+  if (!ide_project_info_get_directory (project_info) &&
+      !ide_project_info_get_file (project_info))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "No file or directory provided to load as project");
+      IDE_EXIT;
+    }
+
+  /* Fallback to using directory as file if necessary */
+  if (!(file = ide_project_info_get_file (project_info)))
+    {
+      file = ide_project_info_get_directory (project_info);
+      g_assert (G_IS_FILE (file));
+
+      ide_project_info_set_file (project_info, file);
+    }
+
   /*
    * Track the directory root based on project info. If we didn't get a
    * directory set, then take the parent of the project file.
@@ -1133,8 +1153,6 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
     }
   else
     {
-      GFile *file = ide_project_info_get_file (project_info);
-
       if (g_file_query_file_type (file, G_FILE_COPY_NOFOLLOW_SYMLINKS, NULL) == G_FILE_TYPE_DIRECTORY)
         {
           ide_context_set_workdir (self->context, file);
