@@ -1,6 +1,4 @@
-#include <ide.h>
-
-#include "util/ide-glib.h"
+#include <libide-io.h>
 
 static void
 test_uncanonical_file (void)

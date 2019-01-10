@@ -1,4 +1,4 @@
-/* test-ide-doap.c
+/* test-doap.c
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include <libide-projects.h>
 
 static void
 test_load_from_file (void)
@@ -34,7 +34,7 @@ test_load_from_file (void)
   doap = ide_doap_new ();
   g_object_add_weak_pointer (G_OBJECT (doap), (gpointer *)&doap);
 
-  file = g_file_new_for_path (TEST_DATA_DIR"/project1/project1.doap");
+  file = g_file_new_for_path (TEST_DATA_DIR"/test.doap");
 
   ret = ide_doap_load_from_file (doap, file, NULL, &error);
   g_assert_no_error (error);

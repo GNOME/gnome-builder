@@ -1,6 +1,6 @@
-/* test-iter.c
+/* test-text-iter.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright © 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
-
-#include "sourceview/ide-text-iter.h"
+#include <libide-sourceview.h>
 
 static void
 test_current_symbol (void)
@@ -54,7 +50,7 @@ test_current_symbol (void)
       GtkTextIter iter;
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, i);
-      word = _ide_text_iter_current_symbol (&iter, NULL);
+      word = ide_text_iter_current_symbol (&iter, NULL);
 
       g_assert_cmpstr (word, ==, expected[i]);
     }

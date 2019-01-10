@@ -1,4 +1,4 @@
-/* test-ide-task.c
+/* test-task.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include <libide-threading.h>
 
 static gboolean
 complete_int (gpointer data)

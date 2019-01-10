@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 static void
 test_compile_commands_basic (void)
@@ -42,7 +42,7 @@ test_compile_commands_basic (void)
   g_assert (NULL == ide_compile_commands_lookup (commands, missing, NULL, NULL, NULL));
 
   /* Now load our test file */
-  data_path = g_build_filename (TEST_DATA_DIR, "test-ide-compile-commands.json", NULL);
+  data_path = g_build_filename (TEST_DATA_DIR, "test-compile-commands.json", NULL);
   data_file = g_file_new_for_path (data_path);
   r = ide_compile_commands_load (commands, data_file, NULL, &error);
   g_assert_no_error (error);

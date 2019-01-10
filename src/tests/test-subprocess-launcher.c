@@ -1,4 +1,4 @@
-/* test-ide-subprocess-launcher.c
+/* test-subprocess-launcher.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,7 +20,7 @@
 
 #include <fcntl.h>
 #include <glib/gstdio.h>
-#include <ide.h>
+#include <libide-threading.h>
 #include <unistd.h>
 
 static void
@@ -107,7 +107,7 @@ test_stdout_fd (void)
 
 static int
 check_args (IdeSubprocessLauncher *launcher,
-            gchar *argv0,
+            const gchar *argv0,
             ...)
 {
   va_list args;
