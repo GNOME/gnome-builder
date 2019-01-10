@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libide-gui.h>
+
 #include "ide-golang-preferences-addin.h"
 #include "ide-golang-application-addin.h"
 

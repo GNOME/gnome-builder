@@ -1,4 +1,4 @@
-if get_option('with_golang')
+if get_option('plugin_golang')
 
 install_data('org.gnome.builder.plugins.golang.gschema.xml',
   install_dir: schema_dir)
@@ -23,7 +23,7 @@ golang_sources = [
   'ide-golang-preferences-addin.h'
 ]
 
-gnome_builder_plugins_sources += files(golang_sources)
-gnome_builder_plugins_sources += golang_resources[0]
+plugins_sources += files(golang_sources)
+plugins_sources += golang_resources[0]
 
 endif

@@ -307,6 +307,7 @@ ide_golang_go_stage_clean_finish (IdeBuildStage  *stage,
 static void
 ide_golang_go_stage_query (IdeBuildStage    *stage,
                            IdeBuildPipeline *pipeline,
+                           GPtrArray        *targets,
                            GCancellable     *cancellable)
 {
   IDE_ENTRY;

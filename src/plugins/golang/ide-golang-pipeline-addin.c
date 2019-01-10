@@ -20,8 +20,6 @@
 
 #include <glib/gi18n.h>
 
-#include <ide.h>
-
 #include "ide-golang-pipeline-addin.h"
 #include "ide-golang-build-system.h"
 #include "ide-golang-go-stage.h"

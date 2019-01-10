@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include <gio/gio.h>
-#include <ide.h>
 #include <string.h>
 
 #include "ide-golang-build-system.h"
@@ -63,7 +62,7 @@ ide_golang_build_system_constructed (GObject *object)
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  buffer_manager = ide_context_get_buffer_manager (context);
+  buffer_manager = ide_buffer_manager_from_context (context);
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 }
 
@@ -143,9 +142,10 @@ ide_golang_build_system_get_priority (IdeBuildSystem *system)
   return 0;
 }
 
+
 static void
-ide_golang_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
-                                                  IdeFile             *file,
+ide_golang_build_system_get_build_flags_async (IdeBuildSystem         *build_system,
+                                                  GFile               *file,
                                                   GCancellable        *cancellable,
                                                   GAsyncReadyCallback  callback,
                                                   gpointer             user_data)
@@ -156,7 +156,7 @@ ide_golang_build_system_get_build_flags_async (IdeBuildSystem      *build_system
   IDE_ENTRY;
 
   g_assert (IDE_IS_GOLANG_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_FILE (file));
+  g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);

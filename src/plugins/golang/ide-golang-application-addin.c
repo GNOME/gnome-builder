@@ -17,7 +17,8 @@
  */
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-foundry.h>
+#include <libide-editor.h>
 
 #include "ide-golang-application-addin.h"
 

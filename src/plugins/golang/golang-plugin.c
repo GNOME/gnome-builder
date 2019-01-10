@@ -17,7 +17,8 @@
  */
 
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-foundry.h>
+#include <libide-editor.h>
 
 #include "ide-golang-build-system.h"
 #include "ide-golang-application-addin.h"
