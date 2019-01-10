@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<palette id="basic" _name="Basic" gettext-domain="gnome-builder">
+<palette id="basic" name="Basic">
 
   <color name="color_hex6"           value="#808080"/>
   <color name="color_hex3"           value="#1aF"/>
