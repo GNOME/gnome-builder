@@ -1,4 +1,4 @@
-/* gbp-todo-workbench-addin.h
+/* gbp-todo-workspace-addin.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_TODO_WORKBENCH_ADDIN (gbp_todo_workbench_addin_get_type())
+#define GBP_TYPE_TODO_WORKSPACE_ADDIN (gbp_todo_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTodoWorkbenchAddin, gbp_todo_workbench_addin, GBP, TODO_WORKBENCH_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpTodoWorkspaceAddin, gbp_todo_workspace_addin, GBP, TODO_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

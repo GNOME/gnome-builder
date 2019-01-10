@@ -1,9 +1,10 @@
 [Plugin]
-Module=todo-plugin
-Name=To-Do Tracker
-Description=Find and present To-Do items from source code
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015-2017 Christian Hergert
 Builtin=true
-Depends=editor
-Embedded=gbp_todo_register_types
+Copyright=Copyright © 2015-2018 Christian Hergert
+Depends=editor;
+Description=Find and present To-Do items from source code
+Embedded=_gbp_todo_register_types
+Module=todo
+Name=To-Do Tracker
+X-Workspace-Kind=primary;

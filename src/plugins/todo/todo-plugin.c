@@ -1,4 +1,4 @@
-/* gbp-todo-plugin.c
+/* todo-plugin.c
  *
  * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,15 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-gui.h>
 
-#include "gbp-todo-workbench-addin.h"
+#include "gbp-todo-workspace-addin.h"
 
-void
-gbp_todo_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_todo_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_TODO_WORKBENCH_ADDIN);
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_TODO_WORKSPACE_ADDIN);
 }

@@ -1,4 +1,4 @@
-/* gbp-todo-workbench-addin.c
+/* gbp-todo-workspace-addin.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,14 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-todo-workbench-addin"
+#define G_LOG_DOMAIN "gbp-todo-workspace-addin"
 
+#include <libide-editor.h>
 #include <glib/gi18n.h>
 
-#include "gbp-todo-workbench-addin.h"
+#include "gbp-todo-workspace-addin.h"
 #include "gbp-todo-panel.h"
 
-struct _GbpTodoWorkbenchAddin
+struct _GbpTodoWorkspaceAddin
 {
   GObject       parent_instance;
 
@@ -39,15 +40,15 @@ struct _GbpTodoWorkbenchAddin
 };
 
 static void
-gbp_todo_workbench_addin_mine_cb (GObject      *object,
+gbp_todo_workspace_addin_mine_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
   GbpTodoModel *model = (GbpTodoModel *)object;
-  g_autoptr(GbpTodoWorkbenchAddin) self = user_data;
+  g_autoptr(GbpTodoWorkspaceAddin) self = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (GBP_IS_TODO_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_TODO_WORKSPACE_ADDIN (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_TODO_MODEL (model));
 
@@ -55,17 +56,17 @@ gbp_todo_workbench_addin_mine_cb (GObject      *object,
   self->is_global_mining = FALSE;
 
   if (!gbp_todo_model_mine_finish (model, result, &error))
-    ide_widget_warning (self->panel, "todo: %s", error->message);
+    g_warning ("todo: %s", error->message);
 
   if (self->panel != NULL)
     gbp_todo_panel_make_ready (self->panel);
 }
 
 static void
-gbp_todo_workbench_addin_presented_cb (GbpTodoWorkbenchAddin *self,
+gbp_todo_workspace_addin_presented_cb (GbpTodoWorkspaceAddin *self,
                                        GbpTodoPanel          *panel)
 {
-  g_assert (GBP_IS_TODO_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_TODO_WORKSPACE_ADDIN (self));
   g_assert (GBP_IS_TODO_PANEL (panel));
 
   if (self->has_presented)
@@ -77,19 +78,18 @@ gbp_todo_workbench_addin_presented_cb (GbpTodoWorkbenchAddin *self,
   gbp_todo_model_mine_async (self->model,
                              self->workdir,
                              self->cancellable,
-                             gbp_todo_workbench_addin_mine_cb,
+                             gbp_todo_workspace_addin_mine_cb,
                              g_object_ref (self));
 }
 
 static void
-gbp_todo_workbench_addin_buffer_saved (GbpTodoWorkbenchAddin *self,
+gbp_todo_workspace_addin_buffer_saved (GbpTodoWorkspaceAddin *self,
                                        IdeBuffer             *buffer,
                                        IdeBufferManager      *bufmgr)
 {
-  IdeFile *file;
-  GFile *gfile;
+  GFile *file;
 
-  g_assert (GBP_IS_TODO_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_TODO_WORKSPACE_ADDIN (self));
   g_assert (self->model != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
@@ -98,43 +98,42 @@ gbp_todo_workbench_addin_buffer_saved (GbpTodoWorkbenchAddin *self,
     return;
 
   file = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (file);
   gbp_todo_model_mine_async (self->model,
-                             gfile,
+                             file,
                              self->cancellable,
-                             gbp_todo_workbench_addin_mine_cb,
+                             gbp_todo_workspace_addin_mine_cb,
                              g_object_ref (self));
 }
 
 static void
-gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
-                               IdeWorkbench      *workbench)
+gbp_todo_workspace_addin_load (IdeWorkspaceAddin *addin,
+                               IdeWorkspace      *workspace)
 {
-  GbpTodoWorkbenchAddin *self = (GbpTodoWorkbenchAddin *)addin;
+  GbpTodoWorkspaceAddin *self = (GbpTodoWorkspaceAddin *)addin;
   IdeEditorSidebar *sidebar;
   IdeBufferManager *bufmgr;
-  IdePerspective *editor;
+  IdeSurface *editor;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
 
-  g_assert (GBP_IS_TODO_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (GBP_IS_TODO_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
   self->cancellable = g_cancellable_new ();
 
-  context = ide_workbench_get_context (workbench);
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
-  bufmgr = ide_context_get_buffer_manager (context);
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-  sidebar = ide_editor_perspective_get_sidebar (IDE_EDITOR_PERSPECTIVE (editor));
+  context = ide_workspace_get_context (workspace);
+  vcs = ide_vcs_from_context (context);
+  workdir = ide_vcs_get_workdir (vcs);
+  bufmgr = ide_buffer_manager_from_context (context);
+  editor = ide_workspace_get_surface_by_name (workspace, "editor");
+  sidebar = ide_editor_surface_get_sidebar (IDE_EDITOR_SURFACE (editor));
 
   self->workdir = g_object_ref (workdir);
 
   g_signal_connect_object (bufmgr,
                            "buffer-saved",
-                           G_CALLBACK (gbp_todo_workbench_addin_buffer_saved),
+                           G_CALLBACK (gbp_todo_workspace_addin_buffer_saved),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -146,7 +145,7 @@ gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
                               NULL);
   g_signal_connect_object (self->panel,
                            "presented",
-                           G_CALLBACK (gbp_todo_workbench_addin_presented_cb),
+                           G_CALLBACK (gbp_todo_workspace_addin_presented_cb),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect (self->panel,
@@ -163,27 +162,28 @@ gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
 }
 
 static void
-gbp_todo_workbench_addin_unload (IdeWorkbenchAddin *addin,
-                                 IdeWorkbench      *workbench)
+gbp_todo_workspace_addin_unload (IdeWorkspaceAddin *addin,
+                                 IdeWorkspace      *workspace)
 {
-  GbpTodoWorkbenchAddin *self = (GbpTodoWorkbenchAddin *)addin;
+  GbpTodoWorkspaceAddin *self = (GbpTodoWorkspaceAddin *)addin;
   IdeBufferManager *bufmgr;
   IdeContext *context;
 
-  g_assert (GBP_IS_TODO_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (GBP_IS_TODO_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
 
-  context = ide_workbench_get_context (workbench);
-  bufmgr = ide_context_get_buffer_manager (context);
+  context = ide_widget_get_context (GTK_WIDGET (workspace));
+  bufmgr = ide_buffer_manager_from_context (context);
 
   g_signal_handlers_disconnect_by_func (bufmgr,
-                                        G_CALLBACK (gbp_todo_workbench_addin_buffer_saved),
+                                        G_CALLBACK (gbp_todo_workspace_addin_buffer_saved),
                                         self);
 
-  gtk_widget_destroy (GTK_WIDGET (self->panel));
+  if (self->panel != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->panel));
 
   g_assert (self->panel == NULL);
 
@@ -192,22 +192,22 @@ gbp_todo_workbench_addin_unload (IdeWorkbenchAddin *addin,
 }
 
 static void
-workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
+workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
-  iface->load = gbp_todo_workbench_addin_load;
-  iface->unload = gbp_todo_workbench_addin_unload;
+  iface->load = gbp_todo_workspace_addin_load;
+  iface->unload = gbp_todo_workspace_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpTodoWorkbenchAddin, gbp_todo_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,
-                                                workbench_addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpTodoWorkspaceAddin, gbp_todo_workspace_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN,
+                                                workspace_addin_iface_init))
 
 static void
-gbp_todo_workbench_addin_class_init (GbpTodoWorkbenchAddinClass *klass)
+gbp_todo_workspace_addin_class_init (GbpTodoWorkspaceAddinClass *klass)
 {
 }
 
 static void
-gbp_todo_workbench_addin_init (GbpTodoWorkbenchAddin *self)
+gbp_todo_workspace_addin_init (GbpTodoWorkspaceAddin *self)
 {
 }
