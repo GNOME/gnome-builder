@@ -1,8 +1,9 @@
 [Plugin]
+Authors=Patrick Griffis <tingping@tingping.se>
+Builtin=true
+Copyright=Copyright © 2016 Patrick Griffis
+Description=Provides support for building with JHBuild
+Loader=python3
 Module=jhbuild_plugin
 Name=JHBuild
-Description=Provides support for building with JHBuild
-Authors=Patrick Griffis <tingping@tingping.se>
-Copyright=Copyright © 2016 Patrick Griffis
-Loader=python3
-Builtin=true
+X-Builder-ABI=@PACKAGE_ABI@

@@ -16,18 +16,20 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
-import gi
 import os
-
-gi.require_version('Ide', '1.0')
 
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import Ide
 
+_ = Ide.gettext
+
 class JhbuildRuntime(Ide.Runtime):
+    __gtype_name__ = 'JhbuildRuntime'
 
     def __init__(self, *args, **kwargs):
         self.jhbuild_path = kwargs.get('executable_path', None)
@@ -86,7 +88,8 @@ class JhbuildRuntime(Ide.Runtime):
         except GLib.Error:
             return False
 
-class JhbuildRuntimeProvider(GObject.Object, Ide.RuntimeProvider):
+class JhbuildRuntimeProvider(Ide.Object, Ide.RuntimeProvider):
+    __gtype_name__ = 'JhbuildRuntimeProvider'
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -115,15 +118,16 @@ class JhbuildRuntimeProvider(GObject.Object, Ide.RuntimeProvider):
     def do_load(self, manager):
         jhbuild_path = self._get_jhbuild_path()
         if jhbuild_path is not None:
-            context = manager.get_context()
-            runtime = JhbuildRuntime(context=context,
-                                     id='jhbuild',
+            runtime = JhbuildRuntime(id='jhbuild',
+                                     category=_('Host System'),
                                      display_name='JHBuild',
                                      executable_path=jhbuild_path)
+            self.append(runtime)
             manager.add(runtime)
             self.runtimes.append(runtime)
 
     def do_unload(self, manager):
         for runtime in self.runtimes:
             manager.remove(runtime)
+            runtime.destroy()
         self.runtimes = []
