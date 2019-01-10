@@ -23,7 +23,7 @@
 
 #include "config.h"
 
-#include "sourceview/ide-source-search-context.h"
+#include <libide-sourceview.h>
 
 #include "gbp-word-proposal.h"
 #include "gbp-word-proposals.h"
@@ -327,7 +327,7 @@ gbp_word_proposals_populate_finish (GbpWordProposals  *self,
 
   if (old_len || self->items->len)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->items->len);
-  
+
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
