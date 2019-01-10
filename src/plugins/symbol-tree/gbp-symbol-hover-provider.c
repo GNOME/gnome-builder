@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+#include <libide-code.h>
+#include <libide-gui.h>
+#include <libide-editor.h>
 #include <glib/gi18n.h>
 
 #include "gbp-symbol-hover-provider.h"
@@ -34,28 +37,24 @@ struct _GbpSymbolHoverProvider
 };
 
 static gboolean
-on_activate_link (GbpSymbolHoverProvider *self,
-                  const gchar            *uristr,
-                  GtkLabel               *label)
+on_activate_link (GtkLabel    *label,
+                  const gchar *uristr,
+                  IdeLocation *location)
 {
-  IdeWorkbench *workbench;
-  g_autoptr(IdeUri) uri = NULL;
+  IdeWorkspace *workspace;
+  IdeSurface *surface;
 
-  g_assert (GBP_IS_SYMBOL_HOVER_PROVIDER (self));
   g_assert (uristr != NULL);
   g_assert (GTK_IS_LABEL (label));
+  g_assert (IDE_IS_LOCATION (location));
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (label));
-  uri = ide_uri_new (uristr, 0, NULL);
-
-  if (!uri || !workbench)
+  if (!(workspace = ide_widget_get_workspace (GTK_WIDGET (label))))
     return FALSE;
 
-  ide_workbench_open_uri_async (workbench,
-                                uri,
-                                "editor",
-                                IDE_WORKBENCH_OPEN_FLAGS_NONE,
-                                NULL, NULL, NULL);
+  if (!(surface = ide_workspace_get_surface_by_name (workspace, "editor")))
+    return FALSE;
+
+  ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (surface), location);
 
   return TRUE;
 }
@@ -77,12 +76,11 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   const gchar *name;
   GtkWidget *box;
   struct {
-    const gchar       *kind;
-    IdeSourceLocation *loc;
-  } loc[3] = {
+    const gchar *kind;
+    IdeLocation *loc;
+  } loc[] = {
+    { _("Location"), NULL },
     { _("Declaration"), NULL },
-    { _("Definition"), NULL },
-    { _("Canonical"), NULL },
   };
 
   g_assert (IDE_IS_BUFFER (buffer));
@@ -102,11 +100,10 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   g_assert (context != NULL);
   g_assert (IDE_IS_HOVER_CONTEXT (context));
 
-  loc[0].loc = ide_symbol_get_declaration_location (symbol);
-  loc[1].loc = ide_symbol_get_definition_location (symbol);
-  loc[2].loc = ide_symbol_get_canonical_location (symbol);
+  loc[0].loc = ide_symbol_get_location (symbol);
+  loc[1].loc = ide_symbol_get_header_location (symbol);
 
-  if (!loc[0].loc && !loc[1].loc && !loc[2].loc)
+  if (!loc[0].loc && !loc[1].loc)
     {
       ide_task_return_boolean (task, TRUE);
       return;
@@ -138,13 +135,10 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
       if (loc[i].loc != NULL)
         {
           GtkWidget *label;
-          g_autoptr(IdeUri) uri = ide_source_location_get_uri (loc[i].loc);
-          g_autoptr(GFile) file = ide_uri_to_file (uri);
-          g_autofree gchar *uristr = ide_uri_to_string (uri, 0);
+          GFile *file = ide_location_get_file (loc[i].loc);
           g_autofree gchar *base = g_file_get_basename (file);
-          g_autofree gchar *escaped = g_markup_escape_text (uristr, -1);
-          g_autofree gchar *markup = g_strdup_printf ("<span size='smaller'>%s: <a href='%s'>%s</a></span>",
-                                                      loc[i].kind, escaped, base);
+          g_autofree gchar *markup = g_strdup_printf ("<span size='smaller'>%s: <a href='#'>%s</a></span>",
+                                                      loc[i].kind, base);
 
           label = g_object_new (GTK_TYPE_LABEL,
                                 "visible", TRUE,
@@ -152,11 +146,12 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
                                 "use-markup", TRUE,
                                 "label", markup,
                                 NULL);
-          g_signal_connect_object (label,
-                                   "activate-link",
-                                   G_CALLBACK (on_activate_link),
-                                   self,
-                                   G_CONNECT_SWAPPED);
+          g_signal_connect_data (label,
+                                 "activate-link",
+                                 G_CALLBACK (on_activate_link),
+                                 g_object_ref (loc[i].loc),
+                                 (GClosureNotify)g_object_unref,
+                                 0);
           gtk_container_add (GTK_CONTAINER (box), label);
         }
     }

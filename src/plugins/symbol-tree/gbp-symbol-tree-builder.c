@@ -21,7 +21,8 @@
 #define G_LOG_DOMAIN "gbp-symbol-tree-builder"
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-editor.h>
+#include <libide-gui.h>
 
 #include "gbp-symbol-tree-builder.h"
 
@@ -95,10 +96,10 @@ gbp_symbol_tree_builder_get_location_cb (GObject      *object,
 {
   IdeSymbolNode *node = (IdeSymbolNode *)object;
   g_autoptr(GbpSymbolTreeBuilder) self = user_data;
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(IdeLocation) location = NULL;
   g_autoptr(GError) error = NULL;
-  IdePerspective *editor;
-  IdeWorkbench *workbench;
+  IdeSurface *editor;
+  IdeWorkspace *workspace;
   DzlTree *tree;
 
   IDE_ENTRY;
@@ -117,10 +118,10 @@ gbp_symbol_tree_builder_get_location_cb (GObject      *object,
     }
 
   tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
-  workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+  workspace = ide_widget_get_workspace (GTK_WIDGET (tree));
+  editor = ide_workspace_get_surface_by_name (workspace, "editor");
 
-  ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+  ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), location);
 
   IDE_EXIT;
 }

@@ -1,4 +1,4 @@
-/* gbp-symbol-layout-stack-addin.h
+/* gbp-symbol-frame-addin.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SYMBOL_LAYOUT_STACK_ADDIN (gbp_symbol_layout_stack_addin_get_type())
+#define GBP_TYPE_SYMBOL_FRAME_ADDIN (gbp_symbol_frame_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSymbolLayoutStackAddin, gbp_symbol_layout_stack_addin, GBP, SYMBOL_LAYOUT_STACK_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpSymbolFrameAddin, gbp_symbol_frame_addin, GBP, SYMBOL_FRAME_ADDIN, GObject)
 
 G_END_DECLS
