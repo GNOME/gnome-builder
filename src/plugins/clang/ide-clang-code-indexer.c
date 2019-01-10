@@ -71,7 +71,7 @@ ide_clang_code_indexer_index_file_async (IdeCodeIndexer      *indexer,
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
   g_autoptr(IdeTask) task = NULL;
-  IdeClangClient *client;
+  g_autoptr(IdeClangClient) client = NULL;
   IdeContext *context;
 
   g_assert (IDE_IS_CLANG_CODE_INDEXER (self));
@@ -95,7 +95,7 @@ ide_clang_code_indexer_index_file_async (IdeCodeIndexer      *indexer,
   ide_task_set_task_data (task, g_file_get_path (file), g_free);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
 
   ide_clang_client_index_file_async (client,
                                      file,
@@ -138,7 +138,7 @@ ide_clang_code_indexer_generate_key_cb (GObject       *object,
 
 static void
 ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
-                                           IdeSourceLocation    *location,
+                                           IdeLocation    *location,
                                            const gchar * const  *args,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
@@ -146,9 +146,8 @@ ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
   g_autoptr(IdeTask) task = NULL;
-  IdeClangClient *client;
+  g_autoptr(IdeClangClient) client = NULL;
   IdeContext *context;
-  IdeFile *ifile;
   GFile *file;
   guint line;
   guint column;
@@ -163,12 +162,11 @@ ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
   ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
 
-  ifile = ide_source_location_get_file (location);
-  file = ide_file_get_file (ifile);
-  line = ide_source_location_get_line (location);
-  column = ide_source_location_get_line_offset (location);
+  file = ide_location_get_file (location);
+  line = ide_location_get_line (location);
+  column = ide_location_get_line_offset (location);
 
   ide_clang_client_get_index_key_async (client,
                                         file,

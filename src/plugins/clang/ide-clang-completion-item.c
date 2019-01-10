@@ -22,6 +22,7 @@
 
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
+#include <libide-foundry.h>
 
 #include "ide-clang-completion-item.h"
 
@@ -55,24 +56,24 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
     case CXCursor_ObjCClassMethodDecl:
     case CXCursor_ObjCInstanceMethodDecl:
       self->icon_name = "lang-method-symbolic";
-      self->kind = IDE_SYMBOL_METHOD;
+      self->kind = IDE_SYMBOL_KIND_METHOD;
       break;
 
     case CXCursor_ConversionFunction:
     case CXCursor_FunctionDecl:
     case CXCursor_FunctionTemplate:
       self->icon_name = "lang-function-symbolic";
-      self->kind = IDE_SYMBOL_FUNCTION;
+      self->kind = IDE_SYMBOL_KIND_FUNCTION;
       break;
 
     case CXCursor_FieldDecl:
       self->icon_name = "lang-struct-field-symbolic";
-      self->kind = IDE_SYMBOL_FIELD;
+      self->kind = IDE_SYMBOL_KIND_FIELD;
       break;
 
     case CXCursor_VarDecl:
       self->icon_name = "lang-variable-symbolic";
-      self->kind = IDE_SYMBOL_VARIABLE;
+      self->kind = IDE_SYMBOL_KIND_VARIABLE;
       /* local? */
       break;
 
@@ -80,7 +81,7 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
     case CXCursor_NamespaceAlias:
     case CXCursor_NamespaceRef:
       self->icon_name = "lang-namespace-symbolic";
-      self->kind = IDE_SYMBOL_NAMESPACE;
+      self->kind = IDE_SYMBOL_KIND_NAMESPACE;
       break;
 
     case CXCursor_ParmDecl:
@@ -92,12 +93,12 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
 
     case CXCursor_StructDecl:
       self->icon_name = "lang-struct-symbolic";
-      self->kind = IDE_SYMBOL_STRUCT;
+      self->kind = IDE_SYMBOL_KIND_STRUCT;
       break;
 
     case CXCursor_UnionDecl:
       self->icon_name  = "lang-union-symbolic";
-      self->kind = IDE_SYMBOL_UNION;
+      self->kind = IDE_SYMBOL_KIND_UNION;
       break;
 
     case CXCursor_ClassDecl:
@@ -116,23 +117,23 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
     case CXCursor_TemplateTypeParameter:
     case CXCursor_TemplateTemplateParameter:
       self->icon_name  = "lang-class-symbolic";
-      self->kind = IDE_SYMBOL_CLASS;
+      self->kind = IDE_SYMBOL_KIND_CLASS;
       break;
 
     case CXCursor_MacroDefinition:
     case CXCursor_MacroExpansion:
       self->icon_name = "lang-define-symbolic";
-      self->kind = IDE_SYMBOL_MACRO;
+      self->kind = IDE_SYMBOL_KIND_MACRO;
       break;
 
     case CXCursor_EnumConstantDecl:
       self->icon_name = "lang-enum-value-symbolic";
-      self->kind = IDE_SYMBOL_ENUM_VALUE;
+      self->kind = IDE_SYMBOL_KIND_ENUM_VALUE;
       break;
 
     case CXCursor_EnumDecl:
       self->icon_name = "lang-enum-symbolic";
-      self->kind = IDE_SYMBOL_ENUM;
+      self->kind = IDE_SYMBOL_KIND_ENUM;
       break;
 
     case CXCursor_NotImplemented:
@@ -185,7 +186,7 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_Informative:
-          if (dzl_str_equal0 (text, "const "))
+          if (ide_str_equal0 (text, "const "))
             g_string_append (markup, text);
           break;
 
