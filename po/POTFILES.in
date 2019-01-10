@@ -277,6 +277,7 @@ src/plugins/messages/gbp-messages-panel.ui
 src/plugins/modelines/gbp-modelines-file-settings.c
 src/plugins/newcomers/gbp-newcomers-section.ui
 src/plugins/notification/ide-notification-addin.c
+src/plugins/npm/npm_plugin.py
 src/plugins/omni-gutter/gbp-omni-gutter-renderer.c
 src/plugins/phpize/phpize_plugin.py
 src/plugins/project-tree/gbp-new-file-popover.c

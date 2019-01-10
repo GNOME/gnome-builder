@@ -32,6 +32,8 @@ from gi.repository import Ide
 
 Ide.g_file_add_ignored_pattern('node_modules')
 
+_ = Ide.gettext
+
 class NPMBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
