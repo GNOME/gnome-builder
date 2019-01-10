@@ -648,7 +648,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);
   build_arch = ide_triplet_get_arch (triplet);
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   runtime_id = ide_config_get_runtime_id (config);
 
   if (runtime_id == NULL ||

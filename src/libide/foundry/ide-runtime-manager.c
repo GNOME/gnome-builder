@@ -351,7 +351,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   runtime_id = ide_config_get_runtime_id (config);
 
   task = ide_task_new (self, cancellable, callback, user_data);

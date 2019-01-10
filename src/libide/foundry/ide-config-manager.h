@@ -47,7 +47,7 @@ IDE_AVAILABLE_IN_3_32
 void              ide_config_manager_set_current       (IdeConfigManager  *self,
                                                                IdeConfig         *configuration);
 IDE_AVAILABLE_IN_3_32
-IdeConfig *ide_config_manager_get_configuration (IdeConfigManager  *self,
+IdeConfig *ide_config_manager_get_config (IdeConfigManager  *self,
                                                                const gchar              *id);
 IDE_AVAILABLE_IN_3_32
 void              ide_config_manager_duplicate         (IdeConfigManager  *self,

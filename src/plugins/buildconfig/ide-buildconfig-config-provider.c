@@ -102,7 +102,7 @@ get_next_id (IdeConfigManager *manager,
 
   tries = g_ptr_array_new_with_free_func (g_free);
 
-  while (ide_config_manager_get_configuration (manager, id))
+  while (ide_config_manager_get_config (manager, id))
     {
       g_autofree gchar *next = gen_next_id (id);
       id = next;

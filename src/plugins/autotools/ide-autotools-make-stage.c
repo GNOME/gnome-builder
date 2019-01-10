@@ -92,7 +92,7 @@ create_launcher (IdeAutotoolsMakeStage  *self,
 
   if (self->make == NULL)
     {
-      IdeConfig *config = ide_build_pipeline_get_configuration (pipeline);
+      IdeConfig *config = ide_build_pipeline_get_config (pipeline);
       IdeRuntime *runtime = ide_config_get_runtime (config);
 
       if (ide_runtime_contains_program_in_path (runtime, "gmake", cancellable))

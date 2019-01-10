@@ -17,7 +17,7 @@ The current build configuration can be accessed from the ``Ide.ConfigurationMana
 
 .. code-block:: py
 
-   config_manager = context.get_configuration_manager()
+   config_manager = context.get_config()
    config = config_manager.get_current()
    runtime = config.get_runtime()
 

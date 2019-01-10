@@ -109,7 +109,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_object_get (build_system, "project-file", &project_file, NULL);
   project_file_name = g_file_get_basename (project_file);
 
-  configuration = ide_build_pipeline_get_configuration (pipeline);
+  configuration = ide_build_pipeline_get_config (pipeline);
   runtime = ide_build_pipeline_get_runtime (pipeline);
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
 

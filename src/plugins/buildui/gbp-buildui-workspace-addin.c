@@ -191,7 +191,7 @@ on_edit_config_cb (GSimpleAction *action,
   context = ide_widget_get_context (GTK_WIDGET (self->workspace));
   config_manager = ide_config_manager_from_context (context);
   id = g_variant_get_string (param, NULL);
-  config = ide_config_manager_get_configuration (config_manager, id);
+  config = ide_config_manager_get_config (config_manager, id);
 
   if (config != NULL)
     gbp_buildui_config_surface_set_config (self->surface, config);

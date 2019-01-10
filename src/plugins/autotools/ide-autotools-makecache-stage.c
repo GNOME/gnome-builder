@@ -214,7 +214,7 @@ ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline  *pipeline,
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (pipeline), NULL);
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   runtime = ide_config_get_runtime (config);
 
   cache_path = ide_build_pipeline_build_builddir_path (pipeline, "Makecache", NULL);

@@ -90,7 +90,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
             return
 
         cargo_toml = build_system.props.project_file.get_path()
-        config = pipeline.get_configuration()
+        config = pipeline.get_config()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
 

@@ -67,7 +67,7 @@ class MavenPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         if type(build_system) != MavenBuildSystem:
             return
 
-        config = pipeline.get_configuration()
+        config = pipeline.get_config()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
         srcdir = pipeline.get_srcdir()

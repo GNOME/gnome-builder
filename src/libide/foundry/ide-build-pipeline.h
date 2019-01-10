@@ -83,7 +83,7 @@ gboolean               ide_build_pipeline_is_ready                (IdeBuildPipel
 IDE_AVAILABLE_IN_3_32
 gboolean               ide_build_pipeline_get_busy                (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_32
-IdeConfig      *ide_build_pipeline_get_configuration       (IdeBuildPipeline       *self);
+IdeConfig      *ide_build_pipeline_get_config       (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_32
 IdeDevice             *ide_build_pipeline_get_device              (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_32

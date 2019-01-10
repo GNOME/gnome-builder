@@ -284,7 +284,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
   launcher = create_subprocess_launcher ();
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   runtime = ide_build_pipeline_get_runtime (pipeline);
 
   if (!GBP_IS_FLATPAK_RUNTIME (runtime))
@@ -415,7 +415,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
 
   /* If there is no manifest, then there are no dependencies
    * to build for this configuration.
@@ -492,7 +492,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
@@ -543,7 +543,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
@@ -616,7 +616,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
@@ -679,7 +679,7 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
 
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     {

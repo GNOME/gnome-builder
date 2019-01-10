@@ -141,7 +141,7 @@ struct _IdeBuildPipeline
    * the real configuration so that we do not need to synchronize
    * with the UI process for accesses.
    */
-  IdeConfig *configuration;
+  IdeConfig *config;
 
   /*
    * The device we are building for. This allows components to setup
@@ -365,7 +365,7 @@ G_DEFINE_TYPE_WITH_CODE (IdeBuildPipeline, ide_build_pipeline, IDE_TYPE_OBJECT,
 enum {
   PROP_0,
   PROP_BUSY,
-  PROP_CONFIGURATION,
+  PROP_CONFIG,
   PROP_DEVICE,
   PROP_MESSAGE,
   PROP_PHASE,
@@ -826,7 +826,7 @@ ide_build_pipeline_get_phase (IdeBuildPipeline *self)
 }
 
 /**
- * ide_build_pipeline_get_configuration:
+ * ide_build_pipeline_get_config:
  *
  * Gets the #IdeConfig to use for the pipeline.
  *
@@ -835,11 +835,11 @@ ide_build_pipeline_get_phase (IdeBuildPipeline *self)
  * Since: 3.32
  */
 IdeConfig *
-ide_build_pipeline_get_configuration (IdeBuildPipeline *self)
+ide_build_pipeline_get_config (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
-  return self->configuration;
+  return self->config;
 }
 
 static void
@@ -1006,12 +1006,12 @@ register_build_commands_stage (IdeBuildPipeline *self,
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONTEXT (context));
-  g_assert (IDE_IS_CONFIG (self->configuration));
+  g_assert (IDE_IS_CONFIG (self->config));
 
-  if (NULL == (build_commands = ide_config_get_build_commands (self->configuration)))
+  if (NULL == (build_commands = ide_config_get_build_commands (self->config)))
     return;
 
-  if ((rundir = ide_config_get_build_commands_dir (self->configuration)))
+  if ((rundir = ide_config_get_build_commands_dir (self->config)))
     rundir_path = g_file_get_path (rundir);
 
   for (guint i = 0; build_commands[i]; i++)
@@ -1057,9 +1057,9 @@ register_post_install_commands_stage (IdeBuildPipeline *self,
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONTEXT (context));
-  g_assert (IDE_IS_CONFIG (self->configuration));
+  g_assert (IDE_IS_CONFIG (self->config));
 
-  post_install_commands = ide_config_get_post_install_commands (self->configuration);
+  post_install_commands = ide_config_get_post_install_commands (self->config);
   if (post_install_commands == NULL)
     return;
   for (guint i = 0; post_install_commands[i]; i++)
@@ -1333,7 +1333,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->device);
   g_clear_object (&self->runtime);
   g_clear_object (&self->toolchain);
-  g_clear_object (&self->configuration);
+  g_clear_object (&self->config);
   g_clear_pointer (&self->pipeline, g_array_unref);
   g_clear_pointer (&self->srcdir, g_free);
   g_clear_pointer (&self->builddir, g_free);
@@ -1388,7 +1388,7 @@ ide_build_pipeline_initable_init (GInitable     *initable,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (IDE_IS_CONFIG (self->configuration));
+  g_assert (IDE_IS_CONFIG (self->config));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   g_debug ("initializing build pipeline with device %s",
@@ -1429,13 +1429,13 @@ ide_build_pipeline_initable_init (GInitable     *initable,
                               ide_build_pipeline_intercept_pty_master_cb,
                               self);
 
-  g_signal_connect_object (self->configuration,
+  g_signal_connect_object (self->config,
                            "notify::ready",
                            G_CALLBACK (ide_build_pipeline_notify_ready),
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_build_pipeline_notify_ready (self, NULL, self->configuration);
+  ide_build_pipeline_notify_ready (self, NULL, self->config);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PTY]);
 
@@ -1461,7 +1461,7 @@ ide_build_pipeline_parent_set (IdeObject *object,
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (!parent || IDE_IS_OBJECT (parent));
-  g_assert (IDE_IS_CONFIG (self->configuration));
+  g_assert (IDE_IS_CONFIG (self->config));
 
   if (parent == NULL)
     return;
@@ -1491,8 +1491,8 @@ ide_build_pipeline_get_property (GObject    *object,
       g_value_set_boolean (value, self->busy);
       break;
 
-    case PROP_CONFIGURATION:
-      g_value_set_object (value, ide_build_pipeline_get_configuration (self));
+    case PROP_CONFIG:
+      g_value_set_object (value, ide_build_pipeline_get_config (self));
       break;
 
     case PROP_MESSAGE:
@@ -1522,8 +1522,8 @@ ide_build_pipeline_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CONFIGURATION:
-      self->configuration = g_value_dup_object (value);
+    case PROP_CONFIG:
+      self->config = g_value_dup_object (value);
       break;
 
     case PROP_DEVICE:
@@ -1569,8 +1569,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    *
    * Since: 3.32
    */
-  properties [PROP_CONFIGURATION] =
-    g_param_spec_object ("configuration",
+  properties [PROP_CONFIG] =
+    g_param_spec_object ("config",
                          "Configuration",
                          "Configuration",
                          IDE_TYPE_CONFIG,
@@ -1972,7 +1972,7 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
    * build operation completes. If the configuration is no longer valid,
    * go ahead and unload the pipeline.
    */
-  if (!ide_config_get_ready (self->configuration))
+  if (!ide_config_get_ready (self->config))
     ide_build_pipeline_unload (self);
   else
     ide_build_pipeline_queue_flush (self);
@@ -2909,7 +2909,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
-  runtime = ide_config_get_runtime (self->configuration);
+  runtime = ide_config_get_runtime (self->config);
 
   if (runtime == NULL)
     {
@@ -2917,7 +2917,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
                    G_IO_ERROR,
                    G_IO_ERROR_FAILED,
                    "The runtime %s is missing",
-                   ide_config_get_runtime_id (self->configuration));
+                   ide_config_get_runtime_id (self->config));
       return NULL;
     }
 
@@ -2925,7 +2925,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
 
   if (ret != NULL)
     {
-      IdeEnvironment *env = ide_config_get_environment (self->configuration);
+      IdeEnvironment *env = ide_config_get_environment (self->config);
 
       ide_subprocess_launcher_set_clear_env (ret, TRUE);
       ide_subprocess_launcher_overlay_environment (ret, env);
@@ -2935,7 +2935,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE));
-      ide_config_apply_path (self->configuration, ret);
+      ide_config_apply_path (self->config, ret);
     }
 
   return g_steal_pointer (&ret);
@@ -3956,7 +3956,7 @@ _ide_build_pipeline_set_toolchain (IdeBuildPipeline *self,
 
   ide_object_lock (IDE_OBJECT (self));
   if (g_set_object (&self->toolchain, toolchain))
-    ide_config_set_toolchain (self->configuration, toolchain);
+    ide_config_set_toolchain (self->config, toolchain);
   ide_object_unlock (IDE_OBJECT (self));
 }
 
@@ -4006,8 +4006,8 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
   manager = ide_toolchain_manager_from_context (context);
   g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (manager));
 
-  toolchain = ide_config_get_toolchain (self->configuration);
-  runtime = ide_config_get_runtime (self->configuration);
+  toolchain = ide_config_get_toolchain (self->config);
+  runtime = ide_config_get_runtime (self->config);
   device_triplet = ide_device_info_get_host_triplet (info);
   toolchain_triplet = ide_toolchain_get_host_triplet (toolchain);
 

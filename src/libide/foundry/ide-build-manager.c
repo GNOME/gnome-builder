@@ -577,7 +577,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    */
   ide_build_manager_set_can_build (self, FALSE);
   self->pipeline = g_object_new (IDE_TYPE_BUILD_PIPELINE,
-                                 "configuration", config,
+                                 "config", config,
                                  "device", device,
                                  NULL);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (self->pipeline));

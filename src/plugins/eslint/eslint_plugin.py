@@ -58,7 +58,7 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
             pipeline = build_manager.get_pipeline()
             if pipeline is not None:
                 srcdir = pipeline.get_srcdir()
-            runtime = pipeline.get_configuration().get_runtime()
+            runtime = pipeline.get_config().get_runtime()
             launcher = runtime.create_launcher()
 
         if launcher is None:

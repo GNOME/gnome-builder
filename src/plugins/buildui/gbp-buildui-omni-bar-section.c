@@ -82,7 +82,7 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
 
   if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
     {
-      IdeConfig *config = ide_build_pipeline_get_configuration (pipeline);
+      IdeConfig *config = ide_build_pipeline_get_config (pipeline);
       const gchar *config_id = ide_config_get_id (config);
       const gchar *display_name = ide_config_get_display_name (config);
       IdeRuntime *runtime = ide_config_get_runtime (config);

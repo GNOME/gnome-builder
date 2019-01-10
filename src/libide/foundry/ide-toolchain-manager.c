@@ -514,7 +514,7 @@ _ide_toolchain_manager_prepare_async (IdeToolchainManager  *self,
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   toolchain_id = ide_config_get_toolchain_id (config);
 
   task = g_task_new (self, cancellable, callback, user_data);

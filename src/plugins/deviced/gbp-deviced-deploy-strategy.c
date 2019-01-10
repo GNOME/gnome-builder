@@ -77,7 +77,7 @@ gbp_deviced_deploy_strategy_load_async (IdeDeployStrategy   *strategy,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_deviced_deploy_strategy_load_async);
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
 
   if (!(device = ide_build_pipeline_get_device (pipeline)) ||
       !GBP_IS_DEVICED_DEVICE (device) ||
@@ -201,7 +201,7 @@ deploy_get_commit_cb (GObject      *object,
   commit_id = gbp_deviced_device_get_commit_finish (device, result, NULL);
 
   context = ide_object_get_context (IDE_OBJECT (state->pipeline));
-  config = ide_build_pipeline_get_configuration (state->pipeline);
+  config = ide_build_pipeline_get_config (state->pipeline);
   toolchain = ide_build_pipeline_get_toolchain (state->pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);
   arch = ide_triplet_get_arch (triplet);
@@ -324,7 +324,7 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_deviced_deploy_strategy_deploy_async);
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   device = ide_build_pipeline_get_device (pipeline);
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);

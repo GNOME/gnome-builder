@@ -138,7 +138,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
     IDE_GOTO (failure);
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   runtime = ide_build_pipeline_get_runtime (pipeline);
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
   srcdir = ide_build_pipeline_get_srcdir (pipeline);

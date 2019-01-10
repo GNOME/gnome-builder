@@ -83,7 +83,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         if type(build_system) != MakeBuildSystem:
             return
 
-        config = pipeline.get_configuration()
+        config = pipeline.get_config()
         runtime = config.get_runtime()
 
         # If the configuration has set $MAKE, then use it.

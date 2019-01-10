@@ -79,7 +79,7 @@ ide_buildconfig_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_assert (IDE_IS_BUILDCONFIG_PIPELINE_ADDIN (addin));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
 
   if (!IDE_IS_BUILDCONFIG_CONFIG (config))
     return;

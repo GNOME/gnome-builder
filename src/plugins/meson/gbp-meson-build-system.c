@@ -647,7 +647,7 @@ gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
    * then use "_build" as our build directory to build in-tree.
    */
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   locality = ide_config_get_locality (config);
 
   if ((locality & IDE_BUILD_LOCALITY_OUT_OF_TREE) == 0)

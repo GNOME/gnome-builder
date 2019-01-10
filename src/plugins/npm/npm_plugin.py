@@ -69,7 +69,7 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
             return
 
         package_json = build_system.props.project_file
-        config = pipeline.get_configuration()
+        config = pipeline.get_config()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
 

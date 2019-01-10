@@ -226,7 +226,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, configure_path);
 
   /* --host=triplet */
-  configuration = ide_build_pipeline_get_configuration (pipeline);
+  configuration = ide_build_pipeline_get_config (pipeline);
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);
   host_arg = g_strdup_printf ("--host=%s", ide_triplet_get_full_name (triplet));
@@ -332,7 +332,7 @@ register_make_stage (IdeAutotoolsPipelineAddin  *self,
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   parallel = ide_config_get_parallelism (config);
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_MAKE_STAGE,

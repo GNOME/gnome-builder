@@ -248,7 +248,7 @@ on_build_pipeline_changed_cb (GbpGladeWorkbenchAddin *self,
 
   if (pipeline != NULL)
     {
-      IdeConfig *config = ide_build_pipeline_get_configuration (pipeline);
+      IdeConfig *config = ide_build_pipeline_get_config (pipeline);
       IdeRuntime *runtime = ide_build_pipeline_get_runtime (pipeline);
       g_autoptr(GFile) translated = NULL;
       g_autoptr(GFile) catalog_file = NULL;

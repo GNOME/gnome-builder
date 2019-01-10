@@ -177,7 +177,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         if type(build_system) != PHPizeBuildSystem:
             return
 
-        config = pipeline.get_configuration()
+        config = pipeline.get_config()
         runtime = config.get_runtime()
 
         srcdir = pipeline.get_srcdir()

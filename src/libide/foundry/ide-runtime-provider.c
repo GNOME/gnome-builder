@@ -134,7 +134,7 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
   ide_task_set_source_tag (task, ide_runtime_provider_real_bootstrap_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   runtime_id = ide_config_get_runtime_id (config);
   ide_task_set_task_data (task, g_strdup (runtime_id), g_free);
 

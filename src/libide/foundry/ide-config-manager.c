@@ -115,7 +115,7 @@ ide_config_manager_actions_current (IdeConfigManager *self,
 
   id = g_variant_get_string (param, NULL);
 
-  if ((config = ide_config_manager_get_configuration (self, id)))
+  if ((config = ide_config_manager_get_config (self, id)))
     ide_config_manager_set_current (self, config);
 }
 
@@ -132,7 +132,7 @@ ide_config_manager_actions_duplicate (IdeConfigManager *self,
 
   id = g_variant_get_string (param, NULL);
 
-  if ((config = ide_config_manager_get_configuration (self, id)))
+  if ((config = ide_config_manager_get_config (self, id)))
     ide_config_manager_duplicate (self, config);
 }
 
@@ -149,7 +149,7 @@ ide_config_manager_actions_delete (IdeConfigManager *self,
 
   id = g_variant_get_string (param, NULL);
 
-  if ((config = ide_config_manager_get_configuration (self, id)))
+  if ((config = ide_config_manager_get_config (self, id)))
     ide_config_manager_delete (self, config);
 }
 
@@ -270,7 +270,7 @@ ide_config_manager_save_finish (IdeConfigManager  *self,
 }
 
 /**
- * ide_config_manager_get_configuration:
+ * ide_config_manager_get_config:
  * @self: An #IdeConfigManager
  * @id: The string identifier of the configuration
  *
@@ -282,7 +282,7 @@ ide_config_manager_save_finish (IdeConfigManager  *self,
  * Since: 3.32
  */
 IdeConfig *
-ide_config_manager_get_configuration (IdeConfigManager *self,
+ide_config_manager_get_config (IdeConfigManager *self,
                                              const gchar             *id)
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
@@ -767,7 +767,7 @@ notify_providers_loaded (IdeConfigManager *self,
       const gchar *str = g_variant_get_string (user_value, NULL);
       IdeConfig *config;
 
-      if ((config = ide_config_manager_get_configuration (self, str)))
+      if ((config = ide_config_manager_get_config (self, str)))
         {
           if (config != self->current)
             ide_config_manager_set_current (self, config);

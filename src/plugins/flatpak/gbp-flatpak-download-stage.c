@@ -76,7 +76,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       return;
     }
 
-  config = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_config (pipeline);
   g_assert (!config || IDE_IS_CONFIG (config));
 
   if (!GBP_IS_FLATPAK_MANIFEST (config))
