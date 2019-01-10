@@ -20,7 +20,7 @@
 
 #define G_LOG_DOMAIN "code-index-symbol-resolver"
 
-#include "ide-code-index-service.h"
+#include "gbp-code-index-workbench-addin.h"
 #include "ide-code-index-symbol-resolver.h"
 
 static void
@@ -29,12 +29,12 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
                                           gpointer      user_data)
 {
   IdeCodeIndexer *code_indexer = (IdeCodeIndexer *)object;
+  GbpCodeIndexWorkbenchAddin *addin = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *key = NULL;
   IdeCodeIndexSymbolResolver *self;
-  IdeCodeIndexService *service;
   IdeCodeIndexIndex *index;
   IdeContext *context;
 
@@ -55,10 +55,10 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
-  g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
+  addin = gbp_code_index_workbench_addin_from_context (context);
+  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (addin));
 
-  index = ide_code_index_service_get_index (service);
+  index = gbp_code_index_workbench_addin_get_index (addin);
   g_assert (IDE_IS_CODE_INDEX_INDEX (index));
 
   symbol = ide_code_index_index_lookup_symbol (index, key);
@@ -66,7 +66,7 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   if (symbol != NULL)
     ide_task_return_pointer (task,
                              g_steal_pointer (&symbol),
-                             (GDestroyNotify)ide_symbol_unref);
+                             g_object_unref);
   else
     ide_task_return_new_error (task,
                                G_IO_ERROR,
@@ -77,7 +77,7 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
 typedef struct
 {
   IdeCodeIndexer    *code_indexer;
-  IdeSourceLocation *location;
+  IdeLocation *location;
 } LookupSymbol;
 
 static void
@@ -86,7 +86,7 @@ lookup_symbol_free (gpointer data)
   LookupSymbol *state = data;
 
   g_clear_object (&state->code_indexer);
-  g_clear_pointer (&state->location, ide_source_location_unref);
+  g_clear_object (&state->location);
   g_slice_free (LookupSymbol, state);
 }
 
@@ -132,20 +132,20 @@ ide_code_index_symbol_resolver_lookup_flags_cb (GObject      *object,
 
 static void
 ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
-                                                    IdeSourceLocation   *location,
+                                                    IdeLocation   *location,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data)
 {
   IdeCodeIndexSymbolResolver *self = (IdeCodeIndexSymbolResolver *)resolver;
+  GbpCodeIndexWorkbenchAddin *addin;
   g_autoptr(IdeTask) task = NULL;
-  IdeCodeIndexService *service;
   IdeCodeIndexer *code_indexer;
   IdeBuildSystem *build_system;
   const gchar *path;
   IdeContext *context;
-  IdeFile *file;
   LookupSymbol *lookup;
+  GFile *file;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
@@ -159,14 +159,14 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
-  g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
+  addin = gbp_code_index_workbench_addin_from_context (context);
+  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (addin));
 
-  file = ide_source_location_get_file (location);
-  path = ide_file_get_path (file);
+  file = ide_location_get_file (location);
+  path = g_file_peek_path (file);
   g_assert (path != NULL);
 
-  code_indexer = ide_code_index_service_get_code_indexer (service, path);
+  code_indexer = gbp_code_index_workbench_addin_get_code_indexer (addin, path);
   g_assert (!code_indexer || IDE_IS_CODE_INDEXER (code_indexer));
 
   if (code_indexer == NULL)
@@ -178,12 +178,12 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
       return;
     }
 
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
 
   lookup = g_slice_new0 (LookupSymbol);
   lookup->code_indexer = g_object_ref (code_indexer);
-  lookup->location = ide_source_location_ref (location);
+  lookup->location = g_object_ref (location);
 
   ide_task_set_task_data (task, lookup, lookup_symbol_free);
 

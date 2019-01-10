@@ -1,6 +1,7 @@
 /* code-index-plugin.c
  *
  * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,25 +19,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#include "config.h"
 
-#include "ide-code-index-service.h"
+#include <libpeas/peas.h>
+#include <libide-foundry.h>
+#include <libide-gui.h>
+#include <libide-search.h>
+
 #include "ide-code-index-search-provider.h"
 #include "ide-code-index-symbol-resolver.h"
+#include "gbp-code-index-workbench-addin.h"
 
-void
-ide_code_index_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_code_index_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_SERVICE,
-                                              IDE_TYPE_CODE_INDEX_SERVICE);
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SEARCH_PROVIDER,
                                               IDE_TYPE_CODE_INDEX_SEARCH_PROVIDER);
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SYMBOL_RESOLVER,
                                               IDE_TYPE_CODE_INDEX_SYMBOL_RESOLVER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_CODE_INDEX_WORKBENCH_ADDIN);
 }

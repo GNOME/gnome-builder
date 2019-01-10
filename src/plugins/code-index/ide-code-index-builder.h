@@ -21,10 +21,9 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 #include "ide-code-index-index.h"
-#include "ide-code-index-service.h"
 
 G_BEGIN_DECLS
 
@@ -32,8 +31,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexBuilder, ide_code_index_builder, IDE, CODE_INDEX_BUILDER, IdeObject)
 
-IdeCodeIndexBuilder *ide_code_index_builder_new          (IdeContext           *context,
-                                                          IdeCodeIndexService  *service,
+IdeCodeIndexBuilder *ide_code_index_builder_new          (IdeObject            *parent,
                                                           IdeCodeIndexIndex    *index);
 void                 ide_code_index_builder_drop_caches  (IdeCodeIndexBuilder  *self);
 void                 ide_code_index_builder_build_async  (IdeCodeIndexBuilder  *self,

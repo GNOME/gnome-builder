@@ -1,28 +1,21 @@
-if get_option('with_code_index')
+if get_option('plugin_code_index')
 
-code_index_resources = gnome.compile_resources(    
-  'ide-code-index-resources',                      
-  'code-index.gresource.xml',                      
-  c_name: 'ide_code_index',                        
-)                                           
-
-code_index_sources = [
+plugins_sources += files([
   'code-index-plugin.c',
   'ide-code-index-builder.c',
-  'ide-code-index-builder.h',
   'ide-code-index-index.c',
-  'ide-code-index-index.h',
   'ide-code-index-search-provider.c',
-  'ide-code-index-search-provider.h',
   'ide-code-index-search-result.c',
-  'ide-code-index-search-result.h',
-  'ide-code-index-service.c',
-  'ide-code-index-service.h',
+  'gbp-code-index-workbench-addin.c',
   'ide-code-index-symbol-resolver.c',
-  'ide-code-index-symbol-resolver.h',
-]
+])
 
-gnome_builder_plugins_sources += files(code_index_sources)
-gnome_builder_plugins_sources += code_index_resources[0]
+plugin_code_index_resources = gnome.compile_resources(
+  'code-index-resources',
+  'code-index.gresource.xml',
+  c_name: 'gbp_code_index',
+)
+
+plugins_sources += plugin_code_index_resources[0]
 
 endif

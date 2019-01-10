@@ -20,9 +20,12 @@
 
 #define G_LOG_DOMAIN "ide-code-index-search-provider"
 
+#include <libide-code.h>
+#include <libide-foundry.h>
+
 #include "ide-code-index-search-provider.h"
-#include "ide-code-index-service.h"
 #include "ide-code-index-index.h"
+#include "gbp-code-index-workbench-addin.h"
 
 static void
 populate_cb (GObject      *object,
@@ -57,8 +60,8 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
                                              gpointer             user_data)
 {
   IdeCodeIndexSearchProvider *self = (IdeCodeIndexSearchProvider *)provider;
+  GbpCodeIndexWorkbenchAddin *addin = NULL;
   g_autoptr(IdeTask) task = NULL;
-  IdeCodeIndexService *service;
   IdeCodeIndexIndex *index;
   IdeContext *context;
 
@@ -72,10 +75,17 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
-  g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
+  if (!ide_context_has_project (context) ||
+      !(addin = gbp_code_index_workbench_addin_from_context (context)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Code index requires a project");
+      IDE_EXIT;
+    }
 
-  index = ide_code_index_service_get_index (service);
+  index = gbp_code_index_workbench_addin_get_index (addin);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_code_index_search_provider_search_async);
