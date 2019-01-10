@@ -18,9 +18,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <editorconfig/editorconfig.h>
+#define G_LOG_DOMAIN "editorconfig-glib"
 
-#include "editorconfig/editorconfig-glib.h"
+#include "config.h"
+
+#include <editorconfig.h>
+
+#include "editorconfig-glib.h"
 
 static void
 _g_value_free (gpointer data)

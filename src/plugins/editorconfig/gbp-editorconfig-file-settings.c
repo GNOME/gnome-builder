@@ -1,4 +1,4 @@
-/* ide-editorconfig-file-settings.c
+/* gbp-editorconfig-file-settings.c
  *
  * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,45 +18,42 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "editorconfig"
+#define G_LOG_DOMAIN "gbp-editorconfig-file-settings"
 
 #include "config.h"
 
-#include "editorconfig/editorconfig-glib.h"
 #include <glib/gi18n.h>
+#include <libide-threading.h>
 
-#include "ide-debug.h"
+#include "editorconfig-glib.h"
+#include "gbp-editorconfig-file-settings.h"
 
-#include "editorconfig/ide-editorconfig-file-settings.h"
-#include "files/ide-file.h"
-#include "threading/ide-task.h"
-
-struct _IdeEditorconfigFileSettings
+struct _GbpEditorconfigFileSettings
 {
   IdeFileSettings parent_instance;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeEditorconfigFileSettings,
-                        ide_editorconfig_file_settings,
+G_DEFINE_TYPE_EXTENDED (GbpEditorconfigFileSettings,
+                        gbp_editorconfig_file_settings,
                         IDE_TYPE_FILE_SETTINGS,
                         0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                async_initable_iface_init))
 
 static void
-ide_editorconfig_file_settings_class_init (IdeEditorconfigFileSettingsClass *klass)
+gbp_editorconfig_file_settings_class_init (GbpEditorconfigFileSettingsClass *klass)
 {
 }
 
 static void
-ide_editorconfig_file_settings_init (IdeEditorconfigFileSettings *self)
+gbp_editorconfig_file_settings_init (GbpEditorconfigFileSettings *self)
 {
 }
 
 static void
-ide_editorconfig_file_settings_init_worker (IdeTask      *task,
+gbp_editorconfig_file_settings_init_worker (IdeTask      *task,
                                             gpointer      source_object,
                                             gpointer      task_data,
                                             GCancellable *cancellable)
@@ -68,7 +65,7 @@ ide_editorconfig_file_settings_init_worker (IdeTask      *task,
   gpointer k, v;
 
   g_assert (IDE_IS_TASK (task));
-  g_assert (IDE_IS_EDITORCONFIG_FILE_SETTINGS (source_object));
+  g_assert (GBP_IS_EDITORCONFIG_FILE_SETTINGS (source_object));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -134,29 +131,25 @@ ide_editorconfig_file_settings_init_worker (IdeTask      *task,
 }
 
 static void
-ide_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
+gbp_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
                                            gint                 io_priority,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
 {
-  IdeEditorconfigFileSettings *self = (IdeEditorconfigFileSettings *)initable;
+  GbpEditorconfigFileSettings *self = (GbpEditorconfigFileSettings *)initable;
   g_autoptr(IdeTask) task = NULL;
-  IdeFile *file;
-  GFile *gfile = NULL;
+  GFile *file;
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_EDITORCONFIG_FILE_SETTINGS (self));
+  g_return_if_fail (GBP_IS_EDITORCONFIG_FILE_SETTINGS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_editorconfig_file_settings_init_async);
 
-  file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self));
-  if (file)
-    gfile = ide_file_get_file (file);
-
-  if (!gfile)
+  if (!(file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self))))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -165,14 +158,14 @@ ide_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
       IDE_EXIT;
     }
 
-  ide_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
-  ide_task_run_in_thread (task, ide_editorconfig_file_settings_init_worker);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_run_in_thread (task, gbp_editorconfig_file_settings_init_worker);
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_editorconfig_file_settings_init_finish (GAsyncInitable  *initable,
+gbp_editorconfig_file_settings_init_finish (GAsyncInitable  *initable,
                                             GAsyncResult    *result,
                                             GError         **error)
 {
@@ -190,6 +183,6 @@ ide_editorconfig_file_settings_init_finish (GAsyncInitable  *initable,
 static void
 async_initable_iface_init (GAsyncInitableIface *iface)
 {
-  iface->init_async = ide_editorconfig_file_settings_init_async;
-  iface->init_finish = ide_editorconfig_file_settings_init_finish;
+  iface->init_async = gbp_editorconfig_file_settings_init_async;
+  iface->init_finish = gbp_editorconfig_file_settings_init_finish;
 }
