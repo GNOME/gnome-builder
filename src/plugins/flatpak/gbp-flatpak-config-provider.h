@@ -1,4 +1,4 @@
-/* gbp-flatpak-configuration-provider.h
+/* gbp-flatpak-config-provider.h
  *
  * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
  *
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_FLATPAK_CONFIGURATION_PROVIDER (gbp_flatpak_configuration_provider_get_type())
+#define GBP_TYPE_FLATPAK_CONFIG_PROVIDER (gbp_flatpak_config_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakConfigurationProvider, gbp_flatpak_configuration_provider, GBP, FLATPAK_CONFIGURATION_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpFlatpakConfigProvider, gbp_flatpak_config_provider, GBP, FLATPAK_CONFIG_PROVIDER, IdeObject)
 
 G_END_DECLS

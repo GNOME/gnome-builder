@@ -30,7 +30,7 @@
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-build-system-discovery.h"
 #include "gbp-flatpak-build-target-provider.h"
-#include "gbp-flatpak-configuration-provider.h"
+#include "gbp-flatpak-config-provider.h"
 #include "gbp-flatpak-dependency-updater.h"
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-preferences-addin.h"
@@ -50,7 +50,7 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
                                               GBP_TYPE_FLATPAK_BUILD_TARGET_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIG_PROVIDER,
-                                              GBP_TYPE_FLATPAK_CONFIGURATION_PROVIDER);
+                                              GBP_TYPE_FLATPAK_CONFIG_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DEPENDENCY_UPDATER,
                                               GBP_TYPE_FLATPAK_DEPENDENCY_UPDATER);
