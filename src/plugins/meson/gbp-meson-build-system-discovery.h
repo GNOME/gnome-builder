@@ -1,6 +1,6 @@
-/* gbp-meson-build-system.h
+/* gbp-meson-build-system-discovery.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,13 @@
 
 #pragma once
 
-#include <libide-foundry.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MESON_BUILD_SYSTEM (gbp_meson_build_system_get_type())
+#define GBP_TYPE_MESON_BUILD_SYSTEM_DISCOVERY     (gbp_meson_build_system_discovery_get_type())
+#define GBP_MESON_BUILD_SYSTEM_DISCOVERY_PRIORITY (100)
 
-G_DECLARE_FINAL_TYPE (GbpMesonBuildSystem, gbp_meson_build_system, GBP, MESON_BUILD_SYSTEM, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpMesonBuildSystemDiscovery, gbp_meson_build_system_discovery, GBP, MESON_BUILD_SYSTEM_DISCOVERY, GObject)
 
 G_END_DECLS

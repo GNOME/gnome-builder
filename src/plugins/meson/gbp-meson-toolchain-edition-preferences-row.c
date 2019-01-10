@@ -439,7 +439,7 @@ gbp_meson_toolchain_edition_preferences_row_class_init (GbpMesonToolchainEdition
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/meson-plugin/gbp-meson-toolchain-edition-preferences-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolchainEditionPreferencesRow, display_name);
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolchainEditionPreferencesRow, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolchainEditionPreferencesRow, name_entry);

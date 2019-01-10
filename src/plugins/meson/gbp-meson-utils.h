@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 

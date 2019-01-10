@@ -217,7 +217,7 @@ gbp_meson_tool_row_class_init (GbpMesonToolRowClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/meson-plugin/gbp-meson-tool-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/meson/gbp-meson-tool-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolRow, name_label);
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolRow, delete_button);
 }

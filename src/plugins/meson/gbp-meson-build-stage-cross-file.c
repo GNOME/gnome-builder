@@ -49,6 +49,7 @@ add_lang_executable (const gchar *lang,
 static void
 gbp_meson_build_stage_cross_file_query (IdeBuildStage    *stage,
                                         IdeBuildPipeline *pipeline,
+                                        GPtrArray        *targets,
                                         GCancellable     *cancellable)
 {
   GbpMesonBuildStageCrossFile *self = (GbpMesonBuildStageCrossFile *)stage;
@@ -178,7 +179,6 @@ gbp_meson_build_stage_cross_file_class_init (GbpMesonBuildStageCrossFileClass *k
 static void
 gbp_meson_build_stage_cross_file_init (GbpMesonBuildStageCrossFile *self)
 {
-  
 }
 
 GbpMesonBuildStageCrossFile *
