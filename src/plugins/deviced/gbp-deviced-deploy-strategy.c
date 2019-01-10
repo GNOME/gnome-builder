@@ -87,7 +87,7 @@ gbp_deviced_deploy_strategy_load_async (IdeDeployStrategy   *strategy,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_SUPPORTED,
                                  "%s is not supported by %s",
-                                 G_OBJECT_TYPE_NAME (device),
+                                 device ?  G_OBJECT_TYPE_NAME (device) : "(nil)",
                                  G_OBJECT_TYPE_NAME (self));
       IDE_EXIT;
     }

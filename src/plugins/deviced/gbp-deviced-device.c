@@ -316,14 +316,13 @@ gbp_deviced_device_init (GbpDevicedDevice *self)
 }
 
 GbpDevicedDevice *
-gbp_deviced_device_new (IdeContext *context,
-                        DevdDevice *device)
+gbp_deviced_device_new (DevdDevice *device)
 {
   g_autofree gchar *id = NULL;
   const gchar *name;
   const gchar *icon_name;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (DEVD_IS_DEVICE (device), NULL);
 
   id = g_strdup_printf ("deviced:%s", devd_device_get_id (device));
@@ -332,7 +331,6 @@ gbp_deviced_device_new (IdeContext *context,
 
   return g_object_new (GBP_TYPE_DEVICED_DEVICE,
                        "id", id,
-                       "context", context,
                        "device", device,
                        "display-name", name,
                        "icon-name", icon_name,

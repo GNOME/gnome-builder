@@ -1,4 +1,4 @@
-/* gbp-deviced-plugin.c
+/* deviced-plugin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,15 +18,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#define G_LOG_DOMAIN "deviced-plugin"
+
+#include "config.h"
+
+#include <libide-foundry.h>
 #include <libpeas/peas.h>
 
 #include "gbp-deviced-device-provider.h"
 #include "gbp-deviced-deploy-strategy.h"
 
-void
-gbp_deviced_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_deviced_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_DEVICE_PROVIDER, GBP_TYPE_DEVICED_DEVICE_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_DEPLOY_STRATEGY, GBP_TYPE_DEVICED_DEPLOY_STRATEGY);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DEVICE_PROVIDER,
+                                              GBP_TYPE_DEVICED_DEVICE_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DEPLOY_STRATEGY,
+                                              GBP_TYPE_DEVICED_DEPLOY_STRATEGY);
 }
