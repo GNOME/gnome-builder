@@ -22,10 +22,11 @@
 
 #include "config.h"
 
+#include <libide-core.h>
 #include <gobject/gvaluecollector.h>
 #include <stdlib.h>
 
-#include "plugins/ide-extension-util.h"
+#include "ide-extension-util-private.h"
 
 gboolean
 ide_extension_util_can_use_plugin (PeasEngine     *engine,
@@ -39,7 +40,8 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
   g_autoptr(GSettings) settings = NULL;
 
   g_return_val_if_fail (plugin_info != NULL, FALSE);
-  g_return_val_if_fail (g_type_is_a (interface_type, G_TYPE_INTERFACE), FALSE);
+  g_return_val_if_fail (g_type_is_a (interface_type, G_TYPE_INTERFACE) ||
+                        g_type_is_a (interface_type, G_TYPE_OBJECT), FALSE);
   g_return_val_if_fail (priority != NULL, FALSE);
 
   *priority = 0;
@@ -49,7 +51,18 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
    * information to do so.
    */
   if ((key != NULL) && (value == NULL))
-    return FALSE;
+    {
+      const gchar *found;
+
+      /* If the plugin has the key and its empty, or doesn't have the key,
+       * then we can assume it wants the equivalent of "*".
+       */
+      found = peas_plugin_info_get_external_data (plugin_info, key);
+      if (ide_str_empty0 (found))
+        return TRUE;
+
+      return FALSE;
+    }
 
   /*
    * If the plugin isn't loaded, then we shouldn't use it.
@@ -70,12 +83,15 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
   if (key != NULL)
     {
       g_autofree gchar *priority_name = NULL;
+      g_autofree gchar *delimit = NULL;
       g_auto(GStrv) values_array = NULL;
       const gchar *values;
       const gchar *priority_value;
 
       values = peas_plugin_info_get_external_data (plugin_info, key);
-      values_array = g_strsplit (values ? values : "", ",", 0);
+      /* Canonicalize input (for both , and ;) */
+      delimit = g_strdelimit (g_strdup (values ? values : ""), ";,", ';');
+      values_array = g_strsplit (delimit, ";", 0);
 
       /* An empty value implies "*" to match anything */
       if (!values || g_strv_contains ((const gchar * const *)values_array, "*"))
@@ -256,7 +272,7 @@ ide_extension_new (PeasEngine     *engine,
   va_list args;
 
   g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
-  g_return_val_if_fail (G_TYPE_IS_INTERFACE (type), NULL);
+  g_return_val_if_fail (G_TYPE_IS_INTERFACE (type) || G_TYPE_IS_OBJECT (type), NULL);
 
   if (engine == NULL)
     engine = peas_engine_get_default ();
