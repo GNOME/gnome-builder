@@ -22,9 +22,13 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaService: Ide.Object, Ide.Service
+	public class ValaService: Ide.Object
 	{
 		Ide.ValaIndex _index;
+
+		public static Ide.ValaService from_context (Ide.Context context) {
+			return (Ide.ValaService)context.ensure_child_typed (typeof (ValaService));
+		}
 
 		public unowned string get_name () {
 			return typeof (Ide.ValaService).name ();
@@ -36,10 +40,10 @@ namespace Ide
 					this._index = new Ide.ValaIndex (this.get_context ());
 
 					Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
-						Ide.Vcs vcs = this.get_context ().get_vcs ();
+						var workdir = this.ref_context ().ref_workdir ();
 						var files = new ArrayList<GLib.File> ();
 
-						load_directory (vcs.get_working_directory (), null, files);
+						load_directory (workdir, null, files);
 
 						if (files.size > 0) {
 							this._index.add_files.begin (files, null, () => {
@@ -51,12 +55,6 @@ namespace Ide
 
 				return this._index;
 			}
-		}
-
-		public void start () {
-		}
-
-		public void stop () {
 		}
 
 		public void load_directory (GLib.File directory,
