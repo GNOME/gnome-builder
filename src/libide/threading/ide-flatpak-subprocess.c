@@ -14,31 +14,29 @@
  *          Ryan Lortie <desrt@desrt.ca>
  *          Alexander Larsson <alexl@redhat.com>
  *          Christian Hergert <chergert@redhat.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-breakout-subprocess"
+#define G_LOG_DOMAIN "ide-flatpak-subprocess"
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 #include <gio/gunixfdlist.h>
 #include <glib-unix.h>
+#include <libide-core.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "ide-debug.h"
-
-#include "application/ide-application.h"
-#include "subprocess/ide-breakout-subprocess.h"
-#include "subprocess/ide-breakout-subprocess-private.h"
-#include "util/ide-glib.h"
+#include "ide-flatpak-subprocess-private.h"
+#include "ide-gtask-private.h"
 
 #ifndef FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV
 # define FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV (1 << 0)
@@ -53,9 +51,7 @@
  * for all subprocesses so that we can have exit-on-close => false).
  */
 
-DZL_DEFINE_COUNTER (instances, "Subprocess", "HostCommand Instances", "Number of IdeBreakoutSubprocess instances")
-
-struct _IdeBreakoutSubprocess
+struct _IdeFlatpakSubprocess
 {
   GObject parent_instance;
 
@@ -172,12 +168,12 @@ enum {
   N_PROPS
 };
 
-static void              ide_breakout_subprocess_sync_complete        (IdeBreakoutSubprocess  *self,
+static void              ide_flatpak_subprocess_sync_complete        (IdeFlatpakSubprocess  *self,
                                                                        GAsyncResult          **result);
-static void              ide_breakout_subprocess_sync_done            (GObject                *object,
+static void              ide_flatpak_subprocess_sync_done            (GObject                *object,
                                                                        GAsyncResult           *result,
                                                                        gpointer                user_data);
-static CommunicateState *ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess  *subprocess,
+static CommunicateState *ide_flatpak_subprocess_communicate_internal (IdeFlatpakSubprocess  *subprocess,
                                                                        gboolean                add_nul,
                                                                        GBytes                 *stdin_buf,
                                                                        GCancellable           *cancellable,
@@ -187,54 +183,54 @@ static CommunicateState *ide_breakout_subprocess_communicate_internal (IdeBreako
 static GParamSpec *properties [N_PROPS];
 
 static const gchar *
-ide_breakout_subprocess_get_identifier (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_identifier (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   return self->identifier;
 }
 
 static GInputStream *
-ide_breakout_subprocess_get_stdout_pipe (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_stdout_pipe (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   return self->stdout_pipe;
 }
 
 static GInputStream *
-ide_breakout_subprocess_get_stderr_pipe (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_stderr_pipe (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   return self->stderr_pipe;
 }
 
 static GOutputStream *
-ide_breakout_subprocess_get_stdin_pipe (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_stdin_pipe (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   return self->stdin_pipe;
 }
 
 static void
-ide_breakout_subprocess_wait_cb (GObject      *object,
+ide_flatpak_subprocess_wait_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)object;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)object;
   gboolean *completed = user_data;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (completed != NULL);
 
   ide_subprocess_wait_finish (IDE_SUBPROCESS (self), result, NULL);
@@ -246,13 +242,13 @@ ide_breakout_subprocess_wait_cb (GObject      *object,
 }
 
 static gboolean
-ide_breakout_subprocess_wait (IdeSubprocess  *subprocess,
+ide_flatpak_subprocess_wait (IdeSubprocess  *subprocess,
                               GCancellable   *cancellable,
                               GError        **error)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   g_object_ref (self);
 
@@ -277,7 +273,7 @@ ide_breakout_subprocess_wait (IdeSubprocess  *subprocess,
 
       ide_subprocess_wait_async (IDE_SUBPROCESS (self),
                                  cancellable,
-                                 ide_breakout_subprocess_wait_cb,
+                                 ide_flatpak_subprocess_wait_cb,
                                  &completed);
 
       while (!completed)
@@ -295,20 +291,20 @@ cleanup:
 }
 
 static void
-ide_breakout_subprocess_wait_async (IdeSubprocess       *subprocess,
+ide_flatpak_subprocess_wait_async (IdeSubprocess       *subprocess,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GMutexLocker) locker = NULL;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_breakout_subprocess_wait_async);
+  g_task_set_source_tag (task, ide_flatpak_subprocess_wait_async);
   g_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
 
   locker = g_mutex_locker_new (&self->waiter_mutex);
@@ -323,28 +319,28 @@ ide_breakout_subprocess_wait_async (IdeSubprocess       *subprocess,
 }
 
 static gboolean
-ide_breakout_subprocess_wait_finish (IdeSubprocess  *subprocess,
+ide_flatpak_subprocess_wait_finish (IdeSubprocess  *subprocess,
                                      GAsyncResult   *result,
                                      GError        **error)
 {
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
   g_assert (G_IS_TASK (result));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
-ide_breakout_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
+ide_flatpak_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
                                                 const char          *stdin_buf,
                                                 GCancellable        *cancellable,
                                                 GAsyncReadyCallback  callback,
                                                 gpointer             user_data)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
   g_autoptr(GBytes) stdin_bytes = NULL;
   size_t stdin_buf_len = 0;
 
-  g_return_if_fail (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
+  g_return_if_fail (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
   g_return_if_fail (stdin_buf == NULL || (self->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
@@ -352,7 +348,7 @@ ide_breakout_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
     stdin_buf_len = strlen (stdin_buf);
   stdin_bytes = g_bytes_new (stdin_buf, stdin_buf_len);
 
-  ide_breakout_subprocess_communicate_internal (self, TRUE, stdin_bytes, cancellable, callback, user_data);
+  ide_flatpak_subprocess_communicate_internal (self, TRUE, stdin_bytes, cancellable, callback, user_data);
 }
 
 static gboolean
@@ -398,7 +394,7 @@ communicate_result_validate_utf8 (const char            *stream_name,
 }
 
 static gboolean
-ide_breakout_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
+ide_flatpak_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
                                                  GAsyncResult   *result,
                                                  char          **stdout_buf,
                                                  char          **stderr_buf,
@@ -409,7 +405,7 @@ ide_breakout_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_BREAKOUT_SUBPROCESS (subprocess), FALSE);
+  g_return_val_if_fail (IDE_IS_FLATPAK_SUBPROCESS (subprocess), FALSE);
   g_return_val_if_fail (g_task_is_valid (result, subprocess), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -434,14 +430,14 @@ ide_breakout_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
 }
 
 static gboolean
-ide_breakout_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
+ide_flatpak_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
                                           const char     *stdin_buf,
                                           GCancellable   *cancellable,
                                           char          **stdout_buf,
                                           char          **stderr_buf,
                                           GError        **error)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
   g_autoptr(GAsyncResult) result = NULL;
   g_autoptr(GBytes) stdin_bytes = NULL;
   size_t stdin_buf_len = 0;
@@ -449,7 +445,7 @@ ide_breakout_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_BREAKOUT_SUBPROCESS (subprocess), FALSE);
+  g_return_val_if_fail (IDE_IS_FLATPAK_SUBPROCESS (subprocess), FALSE);
   g_return_val_if_fail (stdin_buf == NULL || (self->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -458,44 +454,44 @@ ide_breakout_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
     stdin_buf_len = strlen (stdin_buf);
   stdin_bytes = g_bytes_new (stdin_buf, stdin_buf_len);
 
-  ide_breakout_subprocess_communicate_internal (self,
+  ide_flatpak_subprocess_communicate_internal (self,
                                                 TRUE,
                                                 stdin_bytes,
                                                 cancellable,
-                                                ide_breakout_subprocess_sync_done,
+                                                ide_flatpak_subprocess_sync_done,
                                                 &result);
-  ide_breakout_subprocess_sync_complete (self, &result);
+  ide_flatpak_subprocess_sync_complete (self, &result);
   success = ide_subprocess_communicate_utf8_finish (subprocess, result, stdout_buf, stderr_buf, error);
 
   IDE_RETURN (success);
 }
 
 static gboolean
-ide_breakout_subprocess_get_successful (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_successful (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   return WIFEXITED (self->status) && WEXITSTATUS (self->status) == 0;
 }
 
 static gboolean
-ide_breakout_subprocess_get_if_exited (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_if_exited (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   return WIFEXITED (self->status);
 }
 
 static gint
-ide_breakout_subprocess_get_exit_status (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_exit_status (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (self->client_has_exited);
 
   if (!WIFEXITED (self->status))
@@ -505,47 +501,47 @@ ide_breakout_subprocess_get_exit_status (IdeSubprocess *subprocess)
 }
 
 static gboolean
-ide_breakout_subprocess_get_if_signaled (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_if_signaled (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (self->client_has_exited == TRUE);
 
   return WIFSIGNALED (self->status);
 }
 
 static gint
-ide_breakout_subprocess_get_term_sig (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_term_sig (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (self->client_has_exited == TRUE);
 
   return WTERMSIG (self->status);
 }
 
 static gint
-ide_breakout_subprocess_get_status (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_get_status (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (self->client_has_exited == TRUE);
 
   return self->status;
 }
 
 static void
-ide_breakout_subprocess_send_signal (IdeSubprocess *subprocess,
+ide_flatpak_subprocess_send_signal (IdeSubprocess *subprocess,
                                      gint           signal_num)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   /* Signal delivery is not guaranteed, so we can drop this on the floor. */
   if (self->client_has_exited || self->connection == NULL)
@@ -567,15 +563,15 @@ ide_breakout_subprocess_send_signal (IdeSubprocess *subprocess,
 }
 
 static void
-ide_breakout_subprocess_force_exit (IdeSubprocess *subprocess)
+ide_flatpak_subprocess_force_exit (IdeSubprocess *subprocess)
 {
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
 
-  ide_breakout_subprocess_send_signal (subprocess, SIGKILL);
+  ide_flatpak_subprocess_send_signal (subprocess, SIGKILL);
 }
 
 static void
-ide_breakout_subprocess_sync_complete (IdeBreakoutSubprocess  *self,
+ide_flatpak_subprocess_sync_complete (IdeFlatpakSubprocess  *self,
                                        GAsyncResult          **result)
 {
   g_autoptr(GMainContext) free_me = NULL;
@@ -583,7 +579,7 @@ ide_breakout_subprocess_sync_complete (IdeBreakoutSubprocess  *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (result != NULL);
   g_assert (*result == NULL || G_IS_ASYNC_RESULT (*result));
 
@@ -606,16 +602,16 @@ ide_breakout_subprocess_sync_complete (IdeBreakoutSubprocess  *self,
 }
 
 static void
-ide_breakout_subprocess_sync_done (GObject      *object,
+ide_flatpak_subprocess_sync_done (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)object;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)object;
   GAsyncResult **ret = user_data;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (ret != NULL);
   g_assert (*ret == NULL);
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -671,7 +667,7 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
                                           gpointer      user_data)
 {
   CommunicateState *state;
-  IdeBreakoutSubprocess *subprocess;
+  IdeFlatpakSubprocess *subprocess;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
   gpointer source;
@@ -739,7 +735,7 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
 }
 
 static CommunicateState *
-ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
+ide_flatpak_subprocess_communicate_internal (IdeFlatpakSubprocess *subprocess,
                                               gboolean               add_nul,
                                               GBytes                *stdin_buf,
                                               GCancellable          *cancellable,
@@ -751,11 +747,11 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (subprocess, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_breakout_subprocess_communicate_internal);
+  g_task_set_source_tag (task, ide_flatpak_subprocess_communicate_internal);
   g_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
 
   state = g_slice_new0 (CommunicateState);
@@ -816,22 +812,22 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
 }
 
 static void
-ide_breakout_subprocess_communicate_async (IdeSubprocess       *subprocess,
+ide_flatpak_subprocess_communicate_async (IdeSubprocess       *subprocess,
                                            GBytes              *stdin_buf,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_breakout_subprocess_communicate_internal (self, FALSE, stdin_buf, cancellable, callback, user_data);
+  ide_flatpak_subprocess_communicate_internal (self, FALSE, stdin_buf, cancellable, callback, user_data);
 }
 
 static gboolean
-ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
+ide_flatpak_subprocess_communicate_finish (IdeSubprocess  *subprocess,
                                             GAsyncResult   *result,
                                             GBytes        **stdout_buf,
                                             GBytes        **stderr_buf,
@@ -843,7 +839,7 @@ ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
   g_assert (G_IS_TASK (task));
 
   g_object_ref (task);
@@ -873,31 +869,31 @@ ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
 }
 
 static gboolean
-ide_breakout_subprocess_communicate (IdeSubprocess  *subprocess,
+ide_flatpak_subprocess_communicate (IdeSubprocess  *subprocess,
                                      GBytes         *stdin_buf,
                                      GCancellable   *cancellable,
                                      GBytes        **stdout_buf,
                                      GBytes        **stderr_buf,
                                      GError        **error)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
   g_autoptr(GAsyncResult) result = NULL;
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_breakout_subprocess_communicate_internal (self,
+  ide_flatpak_subprocess_communicate_internal (self,
                                                 FALSE,
                                                 stdin_buf,
                                                 cancellable,
-                                                ide_breakout_subprocess_sync_done,
+                                                ide_flatpak_subprocess_sync_done,
                                                 &result);
-  ide_breakout_subprocess_sync_complete (self, &result);
+  ide_flatpak_subprocess_sync_complete (self, &result);
 
-  ret = ide_breakout_subprocess_communicate_finish (subprocess, result, stdout_buf, stderr_buf, error);
+  ret = ide_flatpak_subprocess_communicate_finish (subprocess, result, stdout_buf, stderr_buf, error);
 
   IDE_RETURN (ret);
 }
@@ -905,37 +901,37 @@ ide_breakout_subprocess_communicate (IdeSubprocess  *subprocess,
 static void
 subprocess_iface_init (IdeSubprocessInterface *iface)
 {
-  iface->get_identifier = ide_breakout_subprocess_get_identifier;
-  iface->get_stdout_pipe = ide_breakout_subprocess_get_stdout_pipe;
-  iface->get_stderr_pipe = ide_breakout_subprocess_get_stderr_pipe;
-  iface->get_stdin_pipe = ide_breakout_subprocess_get_stdin_pipe;
-  iface->wait = ide_breakout_subprocess_wait;
-  iface->wait_async = ide_breakout_subprocess_wait_async;
-  iface->wait_finish = ide_breakout_subprocess_wait_finish;
-  iface->get_successful = ide_breakout_subprocess_get_successful;
-  iface->get_if_exited = ide_breakout_subprocess_get_if_exited;
-  iface->get_exit_status = ide_breakout_subprocess_get_exit_status;
-  iface->get_if_signaled = ide_breakout_subprocess_get_if_signaled;
-  iface->get_term_sig = ide_breakout_subprocess_get_term_sig;
-  iface->get_status = ide_breakout_subprocess_get_status;
-  iface->send_signal = ide_breakout_subprocess_send_signal;
-  iface->force_exit = ide_breakout_subprocess_force_exit;
-  iface->communicate = ide_breakout_subprocess_communicate;
-  iface->communicate_utf8 = ide_breakout_subprocess_communicate_utf8;
-  iface->communicate_async = ide_breakout_subprocess_communicate_async;
-  iface->communicate_finish = ide_breakout_subprocess_communicate_finish;
-  iface->communicate_utf8_async = ide_breakout_subprocess_communicate_utf8_async;
-  iface->communicate_utf8_finish = ide_breakout_subprocess_communicate_utf8_finish;
+  iface->get_identifier = ide_flatpak_subprocess_get_identifier;
+  iface->get_stdout_pipe = ide_flatpak_subprocess_get_stdout_pipe;
+  iface->get_stderr_pipe = ide_flatpak_subprocess_get_stderr_pipe;
+  iface->get_stdin_pipe = ide_flatpak_subprocess_get_stdin_pipe;
+  iface->wait = ide_flatpak_subprocess_wait;
+  iface->wait_async = ide_flatpak_subprocess_wait_async;
+  iface->wait_finish = ide_flatpak_subprocess_wait_finish;
+  iface->get_successful = ide_flatpak_subprocess_get_successful;
+  iface->get_if_exited = ide_flatpak_subprocess_get_if_exited;
+  iface->get_exit_status = ide_flatpak_subprocess_get_exit_status;
+  iface->get_if_signaled = ide_flatpak_subprocess_get_if_signaled;
+  iface->get_term_sig = ide_flatpak_subprocess_get_term_sig;
+  iface->get_status = ide_flatpak_subprocess_get_status;
+  iface->send_signal = ide_flatpak_subprocess_send_signal;
+  iface->force_exit = ide_flatpak_subprocess_force_exit;
+  iface->communicate = ide_flatpak_subprocess_communicate;
+  iface->communicate_utf8 = ide_flatpak_subprocess_communicate_utf8;
+  iface->communicate_async = ide_flatpak_subprocess_communicate_async;
+  iface->communicate_finish = ide_flatpak_subprocess_communicate_finish;
+  iface->communicate_utf8_async = ide_flatpak_subprocess_communicate_utf8_async;
+  iface->communicate_utf8_finish = ide_flatpak_subprocess_communicate_utf8_finish;
 }
 
 static gboolean
 sigterm_handler (gpointer user_data)
 {
-  IdeBreakoutSubprocess *self = user_data;
+  IdeFlatpakSubprocess *self = user_data;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   g_dbus_connection_call_sync (self->connection,
                                "org.freedesktop.Flatpak",
@@ -955,11 +951,11 @@ sigterm_handler (gpointer user_data)
 static gboolean
 sigint_handler (gpointer user_data)
 {
-  IdeBreakoutSubprocess *self = user_data;
+  IdeFlatpakSubprocess *self = user_data;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   g_dbus_connection_call_sync (self->connection,
                                "org.freedesktop.Flatpak",
@@ -1031,14 +1027,14 @@ maybe_create_output_stream (GOutputStream **ret,
 }
 
 static void
-ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
+ide_flatpak_subprocess_complete_command_locked (IdeFlatpakSubprocess *self,
                                                  gint                   exit_status)
 {
   GList *waiting;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (G_IS_DBUS_CONNECTION (self->connection));
 
   self->client_has_exited = TRUE;
@@ -1052,8 +1048,8 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
   g_clear_pointer (&self->identifier, g_free);
 
   /* Remove our sources used for signal propagation */
-  dzl_clear_source (&self->sigint_id);
-  dzl_clear_source (&self->sigterm_id);
+  g_clear_handle_id (&self->sigint_id, g_source_remove);
+  g_clear_handle_id (&self->sigterm_id, g_source_remove);
 
   /* Complete async workers */
   waiting = g_steal_pointer (&self->waiting);
@@ -1090,8 +1086,8 @@ host_command_exited_cb (GDBusConnection *connection,
                         GVariant        *parameters,
                         gpointer         user_data)
 {
-  g_autoptr(IdeBreakoutSubprocess) finalize_protect = NULL;
-  IdeBreakoutSubprocess *self = user_data;
+  g_autoptr(IdeFlatpakSubprocess) finalize_protect = NULL;
+  IdeFlatpakSubprocess *self = user_data;
   g_autoptr(GMutexLocker) locker = NULL;
   guint32 client_pid = 0;
   guint32 exit_status = 0;
@@ -1099,7 +1095,7 @@ host_command_exited_cb (GDBusConnection *connection,
   IDE_ENTRY;
 
   g_assert (G_IS_DBUS_CONNECTION (connection));
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   finalize_protect = g_object_ref (self);
 
@@ -1124,19 +1120,19 @@ host_command_exited_cb (GDBusConnection *connection,
       self->exited_subscription = 0;
     }
 
-  ide_breakout_subprocess_complete_command_locked (self, exit_status);
+  ide_flatpak_subprocess_complete_command_locked (self, exit_status);
 
   IDE_EXIT;
 }
 
 static void
-ide_breakout_subprocess_cancelled (IdeBreakoutSubprocess *self,
+ide_flatpak_subprocess_cancelled (IdeFlatpakSubprocess *self,
                                    GCancellable          *cancellable)
 {
   IDE_ENTRY;
 
   g_assert (G_IS_CANCELLABLE (cancellable));
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   ide_subprocess_force_exit (IDE_SUBPROCESS (self));
 
@@ -1156,7 +1152,7 @@ maybe_close (gint *fd)
 }
 
 static void
-ide_breakout_subprocess_connection_closed (IdeBreakoutSubprocess *self,
+ide_flatpak_subprocess_connection_closed (IdeFlatpakSubprocess *self,
                                            gboolean               remote_peer_vanished,
                                            const GError          *error,
                                            GDBusConnection       *connection)
@@ -1165,7 +1161,7 @@ ide_breakout_subprocess_connection_closed (IdeBreakoutSubprocess *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (G_IS_DBUS_CONNECTION (connection));
 
   locker = g_mutex_locker_new (&self->waiter_mutex);
@@ -1173,17 +1169,17 @@ ide_breakout_subprocess_connection_closed (IdeBreakoutSubprocess *self,
   IDE_TRACE_MSG ("Synthesizing failure for client pid %u", (guint)self->client_pid);
 
   self->exited_subscription = 0;
-  ide_breakout_subprocess_complete_command_locked (self, -1);
+  ide_flatpak_subprocess_complete_command_locked (self, -1);
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_breakout_subprocess_initable_init (GInitable     *initable,
+ide_flatpak_subprocess_initable_init (GInitable     *initable,
                                        GCancellable  *cancellable,
                                        GError       **error)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)initable;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)initable;
   g_autoptr(GVariantBuilder) fd_builder = g_variant_builder_new (G_VARIANT_TYPE ("a{uh}"));
   g_autoptr(GVariantBuilder) env_builder = g_variant_builder_new (G_VARIANT_TYPE ("a{ss}"));
   g_autoptr(GUnixFDList) fd_list = g_unix_fd_list_new ();
@@ -1200,7 +1196,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /*
@@ -1459,7 +1455,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
   self->connection_closed_handler =
     g_signal_connect_object (self->connection,
                              "closed",
-                             G_CALLBACK (ide_breakout_subprocess_connection_closed),
+                             G_CALLBACK (ide_flatpak_subprocess_connection_closed),
                              self,
                              G_CONNECT_SWAPPED);
 
@@ -1512,11 +1508,11 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
     {
       g_signal_connect_object (cancellable,
                                "cancelled",
-                               G_CALLBACK (ide_breakout_subprocess_cancelled),
+                               G_CALLBACK (ide_flatpak_subprocess_cancelled),
                                self,
                                G_CONNECT_SWAPPED);
       if (g_cancellable_is_cancelled (cancellable) && !self->client_has_exited)
-        ide_breakout_subprocess_force_exit (IDE_SUBPROCESS (self));
+        ide_flatpak_subprocess_force_exit (IDE_SUBPROCESS (self));
     }
 
   ret = TRUE;
@@ -1541,19 +1537,19 @@ cleanup_fds:
 static void
 initiable_iface_init (GInitableIface *iface)
 {
-  iface->init = ide_breakout_subprocess_initable_init;
+  iface->init = ide_flatpak_subprocess_initable_init;
 }
 
-G_DEFINE_TYPE_EXTENDED (IdeBreakoutSubprocess, ide_breakout_subprocess, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeFlatpakSubprocess, ide_flatpak_subprocess, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initiable_iface_init)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SUBPROCESS, subprocess_iface_init))
 
 static void
-ide_breakout_subprocess_dispose (GObject *object)
+ide_flatpak_subprocess_dispose (GObject *object)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)object;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)object;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
 
   if (self->exited_subscription != 0)
     {
@@ -1569,16 +1565,16 @@ ide_breakout_subprocess_dispose (GObject *object)
   if (self->waiting != NULL)
     g_warning ("improper disposal while async operations are active!");
 
-  dzl_clear_source (&self->sigint_id);
-  dzl_clear_source (&self->sigterm_id);
+  g_clear_handle_id (&self->sigint_id, g_source_remove);
+  g_clear_handle_id (&self->sigterm_id, g_source_remove);
 
-  G_OBJECT_CLASS (ide_breakout_subprocess_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ide_flatpak_subprocess_parent_class)->dispose (object);
 }
 
 static void
-ide_breakout_subprocess_finalize (GObject *object)
+ide_flatpak_subprocess_finalize (GObject *object)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)object;
+  IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)object;
 
   IDE_ENTRY;
 
@@ -1614,20 +1610,18 @@ ide_breakout_subprocess_finalize (GObject *object)
     close (self->fd_mapping[i].source_fd);
   g_clear_pointer (&self->fd_mapping, g_free);
 
-  G_OBJECT_CLASS (ide_breakout_subprocess_parent_class)->finalize (object);
-
-  DZL_COUNTER_DEC (instances);
+  G_OBJECT_CLASS (ide_flatpak_subprocess_parent_class)->finalize (object);
 
   IDE_EXIT;
 }
 
 static void
-ide_breakout_subprocess_get_property (GObject    *object,
+ide_flatpak_subprocess_get_property (GObject    *object,
                                       guint       prop_id,
                                       GValue     *value,
                                       GParamSpec *pspec)
 {
-  IdeBreakoutSubprocess *self = IDE_BREAKOUT_SUBPROCESS (object);
+  IdeFlatpakSubprocess *self = IDE_FLATPAK_SUBPROCESS (object);
 
   switch (prop_id)
     {
@@ -1653,12 +1647,12 @@ ide_breakout_subprocess_get_property (GObject    *object,
 }
 
 static void
-ide_breakout_subprocess_set_property (GObject      *object,
+ide_flatpak_subprocess_set_property (GObject      *object,
                                       guint         prop_id,
                                       const GValue *value,
                                       GParamSpec   *pspec)
 {
-  IdeBreakoutSubprocess *self = IDE_BREAKOUT_SUBPROCESS (object);
+  IdeFlatpakSubprocess *self = IDE_FLATPAK_SUBPROCESS (object);
 
   switch (prop_id)
     {
@@ -1684,14 +1678,14 @@ ide_breakout_subprocess_set_property (GObject      *object,
 }
 
 static void
-ide_breakout_subprocess_class_init (IdeBreakoutSubprocessClass *klass)
+ide_flatpak_subprocess_class_init (IdeFlatpakSubprocessClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_breakout_subprocess_dispose;
-  object_class->finalize = ide_breakout_subprocess_finalize;
-  object_class->get_property = ide_breakout_subprocess_get_property;
-  object_class->set_property = ide_breakout_subprocess_set_property;
+  object_class->dispose = ide_flatpak_subprocess_dispose;
+  object_class->finalize = ide_flatpak_subprocess_finalize;
+  object_class->get_property = ide_flatpak_subprocess_get_property;
+  object_class->set_property = ide_flatpak_subprocess_set_property;
 
   properties [PROP_CWD] =
     g_param_spec_string ("cwd",
@@ -1726,11 +1720,9 @@ ide_breakout_subprocess_class_init (IdeBreakoutSubprocessClass *klass)
 }
 
 static void
-ide_breakout_subprocess_init (IdeBreakoutSubprocess *self)
+ide_flatpak_subprocess_init (IdeFlatpakSubprocess *self)
 {
   IDE_ENTRY;
-
-  DZL_COUNTER_INC (instances);
 
   self->stdin_fd = -1;
   self->stdout_fd = -1;
@@ -1743,7 +1735,7 @@ ide_breakout_subprocess_init (IdeBreakoutSubprocess *self)
 }
 
 IdeSubprocess *
-_ide_breakout_subprocess_new (const gchar                 *cwd,
+_ide_flatpak_subprocess_new (const gchar                 *cwd,
                               const gchar * const         *argv,
                               const gchar * const         *env,
                               GSubprocessFlags             flags,
@@ -1756,12 +1748,12 @@ _ide_breakout_subprocess_new (const gchar                 *cwd,
                               GCancellable                *cancellable,
                               GError                     **error)
 {
-  g_autoptr(IdeBreakoutSubprocess) ret = NULL;
+  g_autoptr(IdeFlatpakSubprocess) ret = NULL;
 
   g_return_val_if_fail (argv != NULL, NULL);
   g_return_val_if_fail (argv[0] != NULL, NULL);
 
-  ret = g_object_new (IDE_TYPE_BREAKOUT_SUBPROCESS,
+  ret = g_object_new (IDE_TYPE_FLATPAK_SUBPROCESS,
                       "cwd", cwd,
                       "argv", argv,
                       "env", env,

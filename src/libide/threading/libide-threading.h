@@ -1,4 +1,4 @@
-/* ide-thread-private.h
+/* ide-threading.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,11 +20,16 @@
 
 #pragma once
 
-#include <glib.h>
+#include <libide-core.h>
 
-G_BEGIN_DECLS
+#define IDE_THREADING_INSIDE
 
-void _ide_thread_pool_init (gboolean is_worker);
-void _ide_dump_tasks       (void);
+#include "ide-environment.h"
+#include "ide-environment-variable.h"
+#include "ide-subprocess-launcher.h"
+#include "ide-subprocess-supervisor.h"
+#include "ide-subprocess.h"
+#include "ide-task.h"
+#include "ide-thread-pool.h"
 
-G_END_DECLS
+#undef IDE_THREADING_INSIDE

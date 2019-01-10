@@ -1,6 +1,6 @@
-/* ide-thread-private.h
+/* ide-simple-subprocess-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,20 @@
 
 #pragma once
 
-#include <glib.h>
+#include "ide-subprocess.h"
 
 G_BEGIN_DECLS
 
-void _ide_thread_pool_init (gboolean is_worker);
-void _ide_dump_tasks       (void);
+#define IDE_TYPE_SIMPLE_SUBPROCESS (ide_simple_subprocess_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeSimpleSubprocess, ide_simple_subprocess, IDE, SIMPLE_SUBPROCESS, GObject)
+
+struct _IdeSimpleSubprocess
+{
+  GObject      parent_instance;
+  GSubprocess *subprocess;
+};
+
+IdeSubprocess *ide_simple_subprocess_new (GSubprocess *subprocess);
 
 G_END_DECLS

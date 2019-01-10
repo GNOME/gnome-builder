@@ -21,11 +21,18 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libide-core.h>
 
-#include "threading/ide-task.h"
-#include "threading/ide-thread-pool.h"
-#include "threading/ide-thread-private.h"
+#include "ide-task.h"
+#include "ide-thread-pool.h"
+#include "ide-thread-private.h"
+
+/* From GDK_PRIORITY_REDRAW */
+#define PRIORITY_REDRAW (G_PRIORITY_HIGH_IDLE + 20)
+
+#if 0
+# define ENABLE_TIME_CHART
+#endif
 
 /**
  * SECTION:ide-task
@@ -237,6 +244,11 @@ typedef struct
    */
   gpointer source_tag;
 
+#ifdef ENABLE_TIME_CHART
+  /* The time the task was created */
+  gint64 begin_time;
+#endif
+
   /*
    * Our priority for scheduling tasks in the particular workqueue.
    */
@@ -319,8 +331,6 @@ static void     ide_task_release        (IdeTask           *self,
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeTaskData, ide_task_data_free);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeTaskResult, ide_task_result_free);
-
-DZL_DEFINE_COUNTER (instances, "Tasks", "Instances", "Number of active tasks")
 
 G_DEFINE_TYPE_WITH_CODE (IdeTask, ide_task, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeTask)
@@ -623,8 +633,6 @@ ide_task_finalize (GObject *object)
   g_mutex_clear (&priv->mutex);
 
   G_OBJECT_CLASS (ide_task_parent_class)->finalize (object);
-
-  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -676,14 +684,12 @@ ide_task_init (IdeTask *self)
 {
   IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
-  DZL_COUNTER_INC (instances);
-
   g_mutex_init (&priv->mutex);
 
   priv->check_cancellable = TRUE;
   priv->release_on_propagate = TRUE;
   priv->priority = G_PRIORITY_DEFAULT;
-  priv->complete_priority = GDK_PRIORITY_REDRAW + 1;
+  priv->complete_priority = PRIORITY_REDRAW + 1;
   priv->main_context = g_main_context_ref_thread_default ();
   priv->global_link.data = self;
 
@@ -764,13 +770,16 @@ IdeTask *
   priv->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
   priv->callback = callback;
   priv->user_data = user_data;
+#ifdef ENABLE_TIME_CHART
+  priv->begin_time = g_get_monotonic_time ();
+#endif
 
   return g_steal_pointer (&self);
 }
 
 /**
  * ide_task_is_valid:
- * @self: (nullable) (type Ide.Task): a #IdeTask
+ * @self: (nullable) (type IdeTask): a #IdeTask
  * @source_object: (nullable): a #GObject or %NULL
  *
  * Checks if @source_object matches the object the task was created with.
@@ -978,6 +987,12 @@ ide_task_return_cb (gpointer user_data)
    */
   self = g_steal_pointer (&result->task);
   priv = ide_task_get_instance_private (self);
+
+#ifdef ENABLE_TIME_CHART
+  g_message ("TASK-END: %s: duration=%lf",
+             priv->name,
+             (g_get_monotonic_time () - priv->begin_time) / (gdouble)G_USEC_PER_SEC);
+#endif
 
   g_mutex_lock (&priv->mutex);
 
@@ -2061,6 +2076,10 @@ ide_task_set_name (IdeTask *self,
   g_mutex_lock (&priv->mutex);
   priv->name = name;
   g_mutex_unlock (&priv->mutex);
+
+#ifdef ENABLE_TIME_CHART
+  g_message ("TASK-BEGIN: %s", name);
+#endif
 }
 
 /**
@@ -2132,7 +2151,7 @@ async_result_init_iface (GAsyncResultIface *iface)
 }
 
 void
-ide_dump_tasks (void)
+_ide_dump_tasks (void)
 {
   guint i = 0;
 

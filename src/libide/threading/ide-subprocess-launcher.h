@@ -20,11 +20,15 @@
 
 #pragma once
 
+#if !defined (IDE_THREADING_INSIDE) && !defined (IDE_THREADING_COMPILATION)
+# error "Only <libide-threading.h> can be included directly."
+#endif
+
 #include <gio/gio.h>
+#include <libide-core.h>
 
-#include "ide-version-macros.h"
-
-#include "ide-types.h"
+#include "ide-subprocess.h"
+#include "ide-environment.h"
 
 G_BEGIN_DECLS
 
@@ -42,14 +46,7 @@ struct _IdeSubprocessLauncherClass
                            GError                **error);
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
+  gpointer _reserved[8];
 };
 
 IDE_AVAILABLE_IN_3_32

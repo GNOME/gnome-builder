@@ -20,10 +20,14 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_THREADING_INSIDE) && !defined (IDE_THREADING_COMPILATION)
+# error "Only <libide-threading.h> can be included directly."
+#endif
 
-#include "subprocess/ide-subprocess.h"
-#include "subprocess/ide-subprocess-launcher.h"
+#include <libide-core.h>
+
+#include "ide-subprocess.h"
+#include "ide-subprocess-launcher.h"
 
 G_BEGIN_DECLS
 

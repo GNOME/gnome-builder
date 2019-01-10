@@ -22,15 +22,9 @@
 
 #include "config.h"
 
-#include "ide-debug.h"
+#include <libide-core.h>
 
-#include "subprocess/ide-simple-subprocess.h"
-
-struct _IdeSimpleSubprocess
-{
-  GObject      parent_instance;
-  GSubprocess *subprocess;
-};
+#include "ide-simple-subprocess-private.h"
 
 static void subprocess_iface_init (IdeSubprocessInterface *iface);
 

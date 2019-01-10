@@ -23,10 +23,9 @@
 #include "config.h"
 
 #include <string.h>
+#include <libide-core.h>
 
-#include "ide-debug.h"
-
-#include "subprocess/ide-subprocess.h"
+#include "ide-subprocess.h"
 
 G_DEFINE_INTERFACE (IdeSubprocess, ide_subprocess, G_TYPE_OBJECT)
 

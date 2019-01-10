@@ -22,9 +22,9 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-#include <fcntl.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <libide-core.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,15 +33,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "ide-debug.h"
+#include "ide-environment.h"
+#include "ide-environment-variable.h"
+#include "ide-flatpak-subprocess-private.h"
+#include "ide-simple-subprocess-private.h"
+#include "ide-subprocess-launcher.h"
 
-#include "buildsystem/ide-environment-variable.h"
-#include "buildsystem/ide-environment.h"
-#include "subprocess/ide-breakout-subprocess.h"
-#include "subprocess/ide-breakout-subprocess-private.h"
-#include "subprocess/ide-simple-subprocess.h"
-#include "subprocess/ide-subprocess-launcher.h"
-#include "util/ide-flatpak.h"
+#define is_flatpak() (ide_get_process_kind() == IDE_PROCESS_KIND_FLATPAK)
 
 typedef struct
 {
@@ -145,7 +143,7 @@ ide_subprocess_launcher_kill_host_process (GCancellable  *cancellable,
   IDE_ENTRY;
 
   g_assert (G_IS_CANCELLABLE (cancellable));
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
 
   g_signal_handlers_disconnect_by_func (cancellable,
                                         G_CALLBACK (ide_subprocess_launcher_kill_host_process),
@@ -165,19 +163,19 @@ ide_subprocess_launcher_new (GSubprocessFlags flags)
 }
 
 static gboolean
-should_use_breakout_process (IdeSubprocessLauncher *self)
+should_use_flatpak_process (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (g_getenv ("IDE_USE_BREAKOUT_SUBPROCESS") != NULL)
+  if (g_getenv ("IDE_USE_FLATPAK_SUBPROCESS") != NULL)
     return TRUE;
 
   if (!priv->run_on_host)
     return FALSE;
 
-  return ide_is_flatpak ();
+  return is_flatpak ();
 }
 
 static void
@@ -223,7 +221,7 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
   if (priv->stderr_fd != -1)
     stderr_fd = dup (priv->stderr_fd);
 
-  process = _ide_breakout_subprocess_new (priv->cwd,
+  process = _ide_flatpak_subprocess_new (priv->cwd,
                                           (const gchar * const *)priv->argv->pdata,
                                           (const gchar * const *)priv->environ,
                                           priv->flags,
@@ -383,6 +381,8 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
+  IdeSubprocess *ret;
+  GError *local_error = NULL;
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -390,7 +390,7 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
   task = g_task_new (self, cancellable, NULL, NULL);
   g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn);
 
-  if (priv->clear_env || (ide_is_flatpak () && priv->run_on_host))
+  if (priv->clear_env || (is_flatpak () && priv->run_on_host))
     {
       /*
        * Many things break without at least PATH, HOME, etc. being set.
@@ -404,12 +404,22 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
       ide_subprocess_launcher_setenv (self, "LANG", g_getenv ("LANG"), FALSE);
     }
 
-  if (should_use_breakout_process (self))
+  if (should_use_flatpak_process (self))
     ide_subprocess_launcher_spawn_host_worker (task, self, NULL, cancellable);
   else
     ide_subprocess_launcher_spawn_worker (task, self, NULL, cancellable);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, &local_error);
+
+  if (!ret && !local_error)
+    local_error = g_error_new (G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "An unkonwn error occurred while spawning");
+
+  if (local_error != NULL)
+    g_propagate_error (error, g_steal_pointer (&local_error));
+
+  return g_steal_pointer (&ret);
 }
 
 static void
@@ -724,10 +734,10 @@ ide_subprocess_launcher_set_cwd (IdeSubprocessLauncher *self,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (dzl_str_empty0 (cwd))
+  if (ide_str_empty0 (cwd))
     cwd = ".";
 
-  if (!dzl_str_equal0 (priv->cwd, cwd))
+  if (!ide_str_equal0 (priv->cwd, cwd))
     {
       g_free (priv->cwd);
       priv->cwd = g_strdup (cwd);
@@ -766,7 +776,7 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
           key = ide_environment_variable_get_key (var);
           value = ide_environment_variable_get_value (var);
 
-          if (!dzl_str_empty0 (key))
+          if (!ide_str_empty0 (key))
             ide_subprocess_launcher_setenv (self, key, value ?: "", TRUE);
         }
     }

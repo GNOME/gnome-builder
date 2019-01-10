@@ -1,4 +1,4 @@
-/* ide-breakout-subprocess-private.h
+/* ide-flatpak-subprocess-private.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,9 +20,13 @@
 
 #pragma once
 
-#include "subprocess/ide-breakout-subprocess.h"
+#include "ide-subprocess.h"
 
 G_BEGIN_DECLS
+
+#define IDE_TYPE_FLATPAK_SUBPROCESS (ide_flatpak_subprocess_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeFlatpakSubprocess, ide_flatpak_subprocess, IDE, FLATPAK_SUBPROCESS, GObject)
 
 typedef struct
 {
@@ -30,7 +34,7 @@ typedef struct
   gint dest_fd;
 } IdeBreakoutFdMapping;
 
-IdeSubprocess *_ide_breakout_subprocess_new (const gchar                 *cwd,
+IdeSubprocess *_ide_flatpak_subprocess_new (const gchar                 *cwd,
                                              const gchar * const         *argv,
                                              const gchar * const         *env,
                                              GSubprocessFlags             flags,

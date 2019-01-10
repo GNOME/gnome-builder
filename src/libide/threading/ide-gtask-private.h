@@ -1,6 +1,6 @@
-/* ide-simple-subprocess.h
+/* ide-gtask-private.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,18 @@
 
 #pragma once
 
-#include "subprocess/ide-subprocess.h"
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SIMPLE_SUBPROCESS (ide_simple_subprocess_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeSimpleSubprocess, ide_simple_subprocess, IDE, SIMPLE_SUBPROCESS, GObject)
-
-IdeSubprocess *ide_simple_subprocess_new (GSubprocess *subprocess);
+void ide_g_task_return_boolean_from_main (GTask          *task,
+                                          gboolean        value);
+void ide_g_task_return_int_from_main     (GTask          *task,
+                                          gint            value);
+void ide_g_task_return_pointer_from_main (GTask          *task,
+                                          gpointer        value,
+                                          GDestroyNotify  notify);
+void ide_g_task_return_error_from_main   (GTask          *task,
+                                          GError         *error);
 
 G_END_DECLS

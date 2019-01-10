@@ -20,9 +20,12 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_THREADING_INSIDE) && !defined (IDE_THREADING_COMPILATION)
+# error "Only <libide-threading.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <gio/gio.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -93,85 +96,85 @@ struct _IdeSubprocessInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-const gchar   *ide_subprocess_get_identifier     (IdeSubprocess *self);
+const gchar   *ide_subprocess_get_identifier          (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-GInputStream  *ide_subprocess_get_stdout_pipe    (IdeSubprocess *self);
+GInputStream  *ide_subprocess_get_stdout_pipe         (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-GInputStream  *ide_subprocess_get_stderr_pipe    (IdeSubprocess *self);
+GInputStream  *ide_subprocess_get_stderr_pipe         (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-GOutputStream *ide_subprocess_get_stdin_pipe     (IdeSubprocess *self);
+GOutputStream *ide_subprocess_get_stdin_pipe          (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_wait               (IdeSubprocess        *self,
-                                                  GCancellable         *cancellable,
-                                                  GError              **error);
+gboolean       ide_subprocess_wait                    (IdeSubprocess        *self,
+                                                       GCancellable         *cancellable,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_wait_check         (IdeSubprocess        *self,
-                                                  GCancellable         *cancellable,
-                                                  GError              **error);
+gboolean       ide_subprocess_wait_check              (IdeSubprocess        *self,
+                                                       GCancellable         *cancellable,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-void           ide_subprocess_wait_async         (IdeSubprocess        *self,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
+void           ide_subprocess_wait_async              (IdeSubprocess        *self,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_wait_finish        (IdeSubprocess        *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
+gboolean       ide_subprocess_wait_finish             (IdeSubprocess        *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-void           ide_subprocess_wait_check_async   (IdeSubprocess        *self,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
+void           ide_subprocess_wait_check_async        (IdeSubprocess        *self,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_wait_check_finish  (IdeSubprocess        *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
+gboolean       ide_subprocess_wait_check_finish       (IdeSubprocess        *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_check_exit_status  (IdeSubprocess        *self,
-                                                  GError              **error);
+gboolean       ide_subprocess_check_exit_status       (IdeSubprocess        *self,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_get_successful     (IdeSubprocess        *self);
+gboolean       ide_subprocess_get_successful          (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_get_if_exited      (IdeSubprocess        *self);
+gboolean       ide_subprocess_get_if_exited           (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-gint           ide_subprocess_get_exit_status    (IdeSubprocess        *self);
+gint           ide_subprocess_get_exit_status         (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_get_if_signaled    (IdeSubprocess        *self);
+gboolean       ide_subprocess_get_if_signaled         (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-gint           ide_subprocess_get_term_sig       (IdeSubprocess        *self);
+gint           ide_subprocess_get_term_sig            (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-gint           ide_subprocess_get_status         (IdeSubprocess        *self);
+gint           ide_subprocess_get_status              (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-void           ide_subprocess_send_signal        (IdeSubprocess        *self,
-                                                  gint                  signal_num);
+void           ide_subprocess_send_signal             (IdeSubprocess        *self,
+                                                       gint                  signal_num);
 IDE_AVAILABLE_IN_3_32
-void           ide_subprocess_force_exit         (IdeSubprocess        *self);
+void           ide_subprocess_force_exit              (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_communicate        (IdeSubprocess        *self,
-                                                  GBytes               *stdin_buf,
-                                                  GCancellable         *cancellable,
-                                                  GBytes              **stdout_buf,
-                                                  GBytes              **stderr_buf,
-                                                  GError              **error);
+gboolean       ide_subprocess_communicate             (IdeSubprocess        *self,
+                                                       GBytes               *stdin_buf,
+                                                       GCancellable         *cancellable,
+                                                       GBytes              **stdout_buf,
+                                                       GBytes              **stderr_buf,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_communicate_utf8   (IdeSubprocess        *self,
-                                                  const gchar          *stdin_buf,
-                                                  GCancellable         *cancellable,
-                                                  gchar               **stdout_buf,
-                                                  gchar               **stderr_buf,
-                                                  GError              **error);
+gboolean       ide_subprocess_communicate_utf8        (IdeSubprocess        *self,
+                                                       const gchar          *stdin_buf,
+                                                       GCancellable         *cancellable,
+                                                       gchar               **stdout_buf,
+                                                       gchar               **stderr_buf,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-void           ide_subprocess_communicate_async  (IdeSubprocess        *self,
-                                                  GBytes               *stdin_buf,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
+void           ide_subprocess_communicate_async       (IdeSubprocess        *self,
+                                                       GBytes               *stdin_buf,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean       ide_subprocess_communicate_finish (IdeSubprocess        *self,
-                                                  GAsyncResult         *result,
-                                                  GBytes              **stdout_buf,
-                                                  GBytes              **stderr_buf,
-                                                  GError              **error);
+gboolean       ide_subprocess_communicate_finish      (IdeSubprocess        *self,
+                                                       GAsyncResult         *result,
+                                                       GBytes              **stdout_buf,
+                                                       GBytes              **stderr_buf,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
 void           ide_subprocess_communicate_utf8_async  (IdeSubprocess        *self,
                                                        const gchar          *stdin_buf,

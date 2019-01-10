@@ -20,9 +20,12 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_THREADING_INSIDE) && !defined (IDE_THREADING_COMPILATION)
+# error "Only <libide-threading.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <gio/gio.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -41,6 +44,8 @@ typedef enum
  * IdeThreadFunc:
  * @user_data: (closure) (transfer full): The closure for the callback.
  *
+ *
+ * Since: 3.32
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 

@@ -22,10 +22,10 @@
 
 #include "config.h"
 
-#include "ide-debug.h"
+#include <libide-core.h>
 
-#include "subprocess/ide-subprocess.h"
-#include "subprocess/ide-subprocess-supervisor.h"
+#include "ide-subprocess.h"
+#include "ide-subprocess-supervisor.h"
 
 /*
  * We will rate limit supervision to once per RATE_LIMIT_THRESHOLD_SECONDS
