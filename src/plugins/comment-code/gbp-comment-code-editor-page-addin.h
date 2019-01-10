@@ -1,4 +1,4 @@
-/* gbp-comment-code-plugin.c
+/* gbp-comment-code-editor-page-addin.h
  *
  * Copyright 2016 sebastien lafargue <slafargue@gnome.org>
  *
@@ -18,15 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
-#include <libpeas/peas.h>
+#pragma once
 
-#include "gbp-comment-code-view-addin.h"
+G_BEGIN_DECLS
 
-void
-gbp_comment_code_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              GBP_TYPE_COMMENT_CODE_VIEW_ADDIN);
-}
+#include <glib-object.h>
+
+#define GBP_TYPE_COMMENT_CODE_EDITOR_PAGE_ADDIN (gbp_comment_code_editor_page_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpCommentCodeEditorPageAddin, gbp_comment_code_editor_page_addin, GBP, COMMENT_CODE_EDITOR_PAGE_ADDIN, GObject)
+
+G_END_DECLS

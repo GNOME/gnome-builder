@@ -1,4 +1,4 @@
-/* gbp-comment-code-view-addin.c
+/* gbp-comment-code-editor-page-addin.c
  *
  * Copyright 2016 sebastien lafargue <slafargue@gnome.org>
  *
@@ -20,29 +20,26 @@
 
 #include "config.h"
 
-#include <glib.h>
-#include <glib/gi18n.h>
 #include <dazzle.h>
+#include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <libide-editor.h>
 
-#include "sourceview/ide-text-iter.h"
-
-#include "gbp-comment-code-view-addin.h"
+#include "gbp-comment-code-editor-page-addin.h"
 
 #define I_(s) g_intern_static_string(s)
 
-struct _GbpCommentCodeViewAddin
+struct _GbpCommentCodeEditorPageAddin
 {
   GObject        parent_instance;
 
-  IdeEditorView *editor_view;
+  IdeEditorPage *editor_view;
 };
 
-static void editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface);
+static void editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbpCommentCodeViewAddin, gbp_comment_code_view_addin, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, editor_view_addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpCommentCodeEditorPageAddin, gbp_comment_code_editor_page_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_view_addin_iface_init))
 
 /* If there's only empty lines, G_MAXINT is returned */
 static gint
@@ -94,7 +91,7 @@ is_line_commentable (GtkTextBuffer *buffer,
         return FALSE;
     }
 
-  if (_ide_text_iter_find_chars_forward (&iter, NULL, NULL, start_tag, TRUE))
+  if (ide_text_iter_find_chars_forward (&iter, NULL, NULL, start_tag, TRUE))
     return FALSE;
 
   return TRUE;
@@ -125,7 +122,7 @@ is_line_uncommentable (GtkTextBuffer *buffer,
         return FALSE;
     }
 
-  if (_ide_text_iter_find_chars_forward (&iter, NULL, start_tag_end, start_tag, TRUE))
+  if (ide_text_iter_find_chars_forward (&iter, NULL, start_tag_end, start_tag, TRUE))
     {
       *start_tag_begin = iter;
       return TRUE;
@@ -138,12 +135,12 @@ is_line_uncommentable (GtkTextBuffer *buffer,
  * Empty lines or containing only spaces or tabs are skipped.
  */
 static void
-gbp_comment_code_view_addin_comment_line (GtkTextBuffer *buffer,
-                                          const gchar   *start_tag,
-                                          const gchar   *end_tag,
-                                          gint           line,
-                                          gint           start_offset,
-                                          gboolean       is_block_tag)
+gbp_comment_code_editor_page_addin_comment_line (GtkTextBuffer *buffer,
+                                                 const gchar   *start_tag,
+                                                 const gchar   *end_tag,
+                                                 gint           line,
+                                                 gint           start_offset,
+                                                 gboolean       is_block_tag)
 {
   g_autofree gchar *start_tag_str = NULL;
   g_autofree gchar *end_tag_str = NULL;
@@ -172,7 +169,7 @@ gbp_comment_code_view_addin_comment_line (GtkTextBuffer *buffer,
   end_of_line = start;
   gtk_text_iter_forward_to_line_end (&end_of_line);
 
-  while ((res = _ide_text_iter_find_chars_forward (&start, &end_of_line, NULL, start_tag, FALSE)))
+  while ((res = ide_text_iter_find_chars_forward (&start, &end_of_line, NULL, start_tag, FALSE)))
     {
       previous = start;
       gtk_text_iter_backward_char (&previous);
@@ -194,11 +191,11 @@ gbp_comment_code_view_addin_comment_line (GtkTextBuffer *buffer,
 }
 
 static void
-gbp_comment_code_view_addin_uncomment_line (GtkTextBuffer *buffer,
-                                            const gchar   *start_tag,
-                                            const gchar   *end_tag,
-                                            gint           line,
-                                            gboolean       is_block_tag)
+gbp_comment_code_editor_page_addin_uncomment_line (GtkTextBuffer *buffer,
+                                                   const gchar   *start_tag,
+                                                   const gchar   *end_tag,
+                                                   gint           line,
+                                                   gboolean       is_block_tag)
 {
   GtkTextIter end_of_line;
   GtkTextIter tag_begin;
@@ -229,7 +226,7 @@ gbp_comment_code_view_addin_uncomment_line (GtkTextBuffer *buffer,
 
   end_of_line = tag_begin;
   gtk_text_iter_forward_to_line_end (&end_of_line);
-  while ((res = _ide_text_iter_find_chars_forward (&tag_begin, &end_of_line, &tag_end, end_tag, FALSE)))
+  while ((res = ide_text_iter_find_chars_forward (&tag_begin, &end_of_line, &tag_end, end_tag, FALSE)))
     {
       previous = tag_begin;
       gtk_text_iter_backward_char (&previous);
@@ -264,12 +261,12 @@ gbp_comment_code_view_addin_uncomment_line (GtkTextBuffer *buffer,
 }
 
 static void
-gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
-                                            GVariant      *variant,
-                                            gpointer       user_data)
+gbp_comment_code_editor_page_addin_comment_action (GSimpleAction *action,
+                                                   GVariant      *variant,
+                                                   gpointer       user_data)
 {
-  GbpCommentCodeViewAddin *self = GBP_COMMENT_CODE_VIEW_ADDIN (user_data);
-  IdeEditorView *editor_view = self->editor_view;
+  GbpCommentCodeEditorPageAddin *self = GBP_COMMENT_CODE_EDITOR_PAGE_ADDIN (user_data);
+  IdeEditorPage *editor_view = self->editor_view;
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
   const gchar *param;
@@ -286,9 +283,10 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
   gboolean block_comment = TRUE;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
-  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_buffer (editor_view));
-  source_view = ide_editor_view_get_view (editor_view);
+  buffer = GTK_TEXT_BUFFER (ide_editor_page_get_buffer (editor_view));
+  source_view = ide_editor_page_get_view (editor_view);
   if (source_view == NULL || !GTK_SOURCE_IS_VIEW (source_view))
     return;
 
@@ -346,7 +344,7 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
       gtk_text_buffer_begin_user_action (buffer);
 
       for (gint line = start_line; line <= end_line; ++line)
-        gbp_comment_code_view_addin_comment_line (buffer, start_tag, end_tag, line, indent, block_comment);
+        gbp_comment_code_editor_page_addin_comment_line (buffer, start_tag, end_tag, line, indent, block_comment);
 
       gtk_text_buffer_end_user_action (buffer);
       ide_completion_unblock_interactive (completion);
@@ -357,7 +355,7 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
       gtk_text_buffer_begin_user_action (buffer);
 
       for (gint line = start_line; line <= end_line; ++line)
-        gbp_comment_code_view_addin_uncomment_line (buffer, start_tag, end_tag, line, block_comment);
+        gbp_comment_code_editor_page_addin_uncomment_line (buffer, start_tag, end_tag, line, block_comment);
 
       gtk_text_buffer_end_user_action (buffer);
       ide_completion_unblock_interactive (completion);
@@ -380,26 +378,30 @@ static const DzlShortcutEntry comment_code_shortcut_entries[] = {
     NC_("shortcut window", "Uncomment the code") },
 };
 
+static const GActionEntry actions[] = {
+  { "comment-code", gbp_comment_code_editor_page_addin_comment_action, "s" },
+};
+
 static void
-gbp_comment_code_view_addin_load (IdeEditorViewAddin *addin,
-                                  IdeEditorView      *view)
+gbp_comment_code_editor_page_addin_load (IdeEditorPageAddin *addin,
+                                         IdeEditorPage      *view)
 {
-  GbpCommentCodeViewAddin *self;
+  GbpCommentCodeEditorPageAddin *self;
+  g_autoptr(GSimpleActionGroup) group = NULL;
   DzlShortcutController *controller;
-  GActionGroup *group;
-  GSimpleAction *action;
 
-  g_assert (GBP_IS_COMMENT_CODE_VIEW_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GBP_IS_COMMENT_CODE_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
-  self = GBP_COMMENT_CODE_VIEW_ADDIN (addin);
+  self = GBP_COMMENT_CODE_EDITOR_PAGE_ADDIN (addin);
   self->editor_view = view;
 
-  action = g_simple_action_new ("comment-code", G_VARIANT_TYPE_STRING);
-  g_signal_connect_object (action, "activate", G_CALLBACK (gbp_comment_code_view_addin_comment_action), self, 0);
-
-  group = gtk_widget_get_action_group (GTK_WIDGET (view), "view");
-  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (view), "comment-code", G_ACTION_GROUP (group));
 
   controller = dzl_shortcut_controller_find (GTK_WIDGET (view));
   dzl_shortcut_controller_add_command_action (controller,
@@ -421,31 +423,28 @@ gbp_comment_code_view_addin_load (IdeEditorViewAddin *addin,
 }
 
 static void
-gbp_comment_code_view_addin_unload (IdeEditorViewAddin *addin,
-                                    IdeEditorView      *view)
+gbp_comment_code_editor_page_addin_unload (IdeEditorPageAddin *addin,
+                                           IdeEditorPage      *view)
 {
-  GActionGroup *group;
+  g_assert (GBP_IS_COMMENT_CODE_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
-  g_assert (GBP_IS_COMMENT_CODE_VIEW_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
-
-  group = gtk_widget_get_action_group (GTK_WIDGET (view), "view");
-  g_action_map_remove_action (G_ACTION_MAP (group), "comment-code");
+  gtk_widget_insert_action_group (GTK_WIDGET (view), "comment-code", NULL);
 }
 
 static void
-gbp_comment_code_view_addin_class_init (GbpCommentCodeViewAddinClass *klass)
-{
-}
-
-static void
-gbp_comment_code_view_addin_init (GbpCommentCodeViewAddin *self)
+gbp_comment_code_editor_page_addin_class_init (GbpCommentCodeEditorPageAddinClass *klass)
 {
 }
 
 static void
-editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface)
+gbp_comment_code_editor_page_addin_init (GbpCommentCodeEditorPageAddin *self)
 {
-  iface->load = gbp_comment_code_view_addin_load;
-  iface->unload = gbp_comment_code_view_addin_unload;
+}
+
+static void
+editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface)
+{
+  iface->load = gbp_comment_code_editor_page_addin_load;
+  iface->unload = gbp_comment_code_editor_page_addin_unload;
 }
