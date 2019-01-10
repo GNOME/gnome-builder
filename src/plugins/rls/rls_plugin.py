@@ -2,7 +2,7 @@
 
 # rust_langserv_plugin.py
 #
-# Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+# Copyright 2016 Christian Hergert <chergert@redhat.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@ by bridging them to our supervised Rust Language Server.
 import gi
 import os
 
-gi.require_version('Ide', '1.0')
-
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
@@ -35,13 +33,17 @@ from gi.repository import Ide
 
 DEV_MODE = False
 
-class RustService(Ide.Object, Ide.Service):
+class RlsService(Ide.Object):
     _client = None
     _has_started = False
     _supervisor = None
     _monitor = None
 
-    @GObject.Property(type=Ide.LangservClient)
+    @classmethod
+    def from_context(klass, context):
+        return context.ensure_child_typed(RlsService)
+
+    @GObject.Property(type=Ide.LspClient)
     def client(self):
         return self._client
 
@@ -50,22 +52,26 @@ class RustService(Ide.Object, Ide.Service):
         self._client = value
         self.notify('client')
 
-    def do_context_loaded(self):
+    def do_parent_set(self, parent):
         """
         After the context has been loaded, we want to watch the project
         Cargo.toml for changes if we find one. That will allow us to
         restart the process as necessary to pick up changes.
         """
+        if parent is None:
+            return
+
         context = self.get_context()
-        project_file = context.get_project_file()
-        if project_file is not None:
-            if project_file.get_basename() == 'Cargo.toml':
-                try:
-                    self._monitor = project_file.monitor(0, None)
-                    self._monitor.set_rate_limit(5 * 1000) # 5 Seconds
-                    self._monitor.connect('changed', self._monitor_changed_cb)
-                except Exception as ex:
-                    Ide.debug('Failed to monitor Cargo.toml for changes:', repr(ex))
+        workdir = context.ref_workdir()
+        cargo_toml = workdir.get_child('Cargo.toml')
+
+        if cargo_toml.query_exists():
+            try:
+                self._monitor = cargo_toml.monitor(0, None)
+                self._monitor.set_rate_limit(5 * 1000) # 5 Seconds
+                self._monitor.connect('changed', self._monitor_changed_cb)
+            except Exception as ex:
+                Ide.debug('Failed to monitor Cargo.toml for changes:', repr(ex))
 
     def _monitor_changed_cb(self, monitor, file, other_file, event_type):
         """
@@ -81,7 +87,7 @@ class RustService(Ide.Object, Ide.Service):
     def do_stop(self):
         """
         Stops the Rust Language Server upon request to shutdown the
-        RustService.
+        RlsService.
         """
         if self._monitor is not None:
             monitor, self._monitor = self._monitor, None
@@ -100,7 +106,7 @@ class RustService(Ide.Object, Ide.Service):
         Ide.SubprocessSupervisor.
 
         Various extension points (diagnostics, symbol providers, etc) use
-        the RustService to access the rust components they need.
+        the RlsService to access the rust components they need.
         """
         # To avoid starting the `rls` process unconditionally at startup,
         # we lazily start it when the first provider tries to bind a client
@@ -119,7 +125,7 @@ class RustService(Ide.Object, Ide.Service):
                 launcher.setenv('RUST_LOG', 'debug', True)
 
             # Locate the directory of the project and run rls from there.
-            workdir = self.get_context().get_vcs().get_working_directory()
+            workdir = self.get_context().ref_workdir()
             launcher.set_cwd(workdir.get_path())
 
             # If rls was installed with Cargo, try to discover that
@@ -149,7 +155,7 @@ class RustService(Ide.Object, Ide.Service):
         """
         This callback is executed when the `rls` process is spawned.
         We can use the stdin/stdout to create a channel for our
-        LangservClient.
+        LspClient.
         """
         stdin = subprocess.get_stdin_pipe()
         stdout = subprocess.get_stdout_pipe()
@@ -157,8 +163,10 @@ class RustService(Ide.Object, Ide.Service):
 
         if self._client:
             self._client.stop()
+            self._client.destroy()
 
-        self._client = Ide.LangservClient.new(self.get_context(), io_stream)
+        self._client = Ide.LspClient.new(io_stream)
+        self.append(self._client)
         self._client.add_language('rust')
         self._client.start()
         self.notify('client')
@@ -206,41 +214,41 @@ class RustService(Ide.Object, Ide.Service):
         our `rls` process has crashed.
         """
         context = provider.get_context()
-        self = context.get_service_typed(RustService)
+        self = RlsService.from_context(context)
         self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
-class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
+class RlsDiagnosticProvider(Ide.LspDiagnosticProvider):
     def do_load(self):
-        RustService.bind_client(self)
+        RlsService.bind_client(self)
 
-class RustCompletionProvider(Ide.LangservCompletionProvider):
+class RlsCompletionProvider(Ide.LspCompletionProvider):
     def do_load(self, context):
-        RustService.bind_client(self)
+        RlsService.bind_client(self)
 
     def do_get_priority(self, context):
         # This provider only activates when it is very likely that we
         # want the results. So use high priority (negative is better).
         return -1000
 
-class RustRenameProvider(Ide.LangservRenameProvider):
+class RlsRenameProvider(Ide.LspRenameProvider):
     def do_load(self):
-        RustService.bind_client(self)
+        RlsService.bind_client(self)
 
-class RustSymbolResolver(Ide.LangservSymbolResolver):
+class RlsSymbolResolver(Ide.LspSymbolResolver):
     def do_load(self):
-        RustService.bind_client(self)
+        RlsService.bind_client(self)
 
-class RustHighlighter(Ide.LangservHighlighter):
+class RlsHighlighter(Ide.LspHighlighter):
     def do_load(self):
-        RustService.bind_client(self)
+        RlsService.bind_client(self)
 
-class RustFormatter(Ide.LangservFormatter):
+class RlsFormatter(Ide.LspFormatter):
     def do_load(self):
-        RustService.bind_client(self)
+        RlsService.bind_client(self)
 
-class RustHoverProvider(Ide.LangservHoverProvider):
+class RlsHoverProvider(Ide.LspHoverProvider):
     def do_prepare(self):
         self.props.category = 'Rust'
         self.props.priority = 200
-        RustService.bind_client(self)
+        RlsService.bind_client(self)

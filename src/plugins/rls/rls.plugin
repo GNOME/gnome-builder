@@ -1,11 +1,12 @@
 [Plugin]
-Module=rust_langserv_plugin
-Loader=python3
-Name=Rust Language Server Integration
-Description=Provides auto-completion, diagnostics, and other IDE features
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2016 Christian Hergert
 Builtin=true
+Copyright=Copyright © 2016-2018 Christian Hergert
+Description=Provides auto-completion, diagnostics, and other IDE features
+Loader=python3
+Hidden=true
+Module=rls_plugin
+Name=Rust Language Server Integration
 X-Completion-Provider-Languages=rust
 X-Diagnostic-Provider-Languages=rust
 X-Formatter-Languages=rust
@@ -13,3 +14,4 @@ X-Highlighter-Languages=rust
 X-Hover-Provider-Languages=rust
 X-Rename-Provider-Languages=rust
 X-Symbol-Resolver-Languages=rust
+X-Builder-ABI=@PACKAGE_ABI@
