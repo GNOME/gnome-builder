@@ -1,4 +1,4 @@
-/* ide-langserv-highlighter.h
+/* ide-lsp-diagnostic-provider.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,34 +20,33 @@
 
 #pragma once
 
-#include "ide-object.h"
-#include "ide-version-macros.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
 
-#include "highlighting/ide-highlighter.h"
-#include "langserv/ide-langserv-client.h"
+#include <libide-code.h>
+
+#include "ide-lsp-client.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LANGSERV_HIGHLIGHTER (ide_langserv_highlighter_get_type())
+#define IDE_TYPE_LSP_DIAGNOSTIC_PROVIDER (ide_lsp_diagnostic_provider_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeLangservHighlighter, ide_langserv_highlighter, IDE, LANGSERV_HIGHLIGHTER, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspDiagnosticProvider, ide_lsp_diagnostic_provider, IDE, LSP_DIAGNOSTIC_PROVIDER, IdeObject)
 
-struct _IdeLangservHighlighterClass
+struct _IdeLspDiagnosticProviderClass
 {
   IdeObjectClass parent_class;
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
+  gpointer _reserved[16];
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeLangservClient *ide_langserv_highlighter_get_client (IdeLangservHighlighter *self);
+IdeLspClient *ide_lsp_diagnostic_provider_get_client (IdeLspDiagnosticProvider *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_highlighter_set_client (IdeLangservHighlighter *self,
-                                                        IdeLangservClient      *client);
+void               ide_lsp_diagnostic_provider_set_client (IdeLspDiagnosticProvider *self,
+                                                                IdeLspClient             *client);
 
 G_END_DECLS

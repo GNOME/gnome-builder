@@ -1,4 +1,4 @@
-/* ide-langserv-completion-provider.h
+/* ide-lsp-symbol-resolver.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,34 +20,33 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
 
-#include "ide-object.h"
+#include <libide-code.h>
 
-#include "completion/ide-completion-provider.h"
-#include "langserv/ide-langserv-client.h"
+#include "ide-lsp-client.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LANGSERV_COMPLETION_PROVIDER (ide_langserv_completion_provider_get_type())
-
-#define IDE_LANGSERV_COMPLETION_PROVIDER_PRIORITY 200
+#define IDE_TYPE_LSP_SYMBOL_RESOLVER (ide_lsp_symbol_resolver_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeLangservCompletionProvider, ide_langserv_completion_provider, IDE, LANGSERV_COMPLETION_PROVIDER, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspSymbolResolver, ide_lsp_symbol_resolver, IDE, LSP_SYMBOL_RESOLVER, IdeObject)
 
-struct _IdeLangservCompletionProviderClass
+struct _IdeLspSymbolResolverClass
 {
   IdeObjectClass parent_class;
 
   /*< private >*/
-  gpointer _reserved[8];
+  gpointer _reserved[16];
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeLangservClient *ide_langserv_completion_provider_get_client (IdeLangservCompletionProvider *self);
+IdeLspClient *ide_lsp_symbol_resolver_get_client (IdeLspSymbolResolver *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_completion_provider_set_client (IdeLangservCompletionProvider *self,
-                                                                IdeLangservClient             *client);
+void               ide_lsp_symbol_resolver_set_client (IdeLspSymbolResolver *self,
+                                                            IdeLspClient         *client);
 
 G_END_DECLS

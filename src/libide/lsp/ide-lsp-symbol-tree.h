@@ -1,4 +1,4 @@
-/* ide-langserv-symbol-tree-private.h
+/* ide-lsp-symbol-tree.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,10 +20,17 @@
 
 #pragma once
 
-#include "langserv/ide-langserv-symbol-tree.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
+
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
-IdeLangservSymbolTree *ide_langserv_symbol_tree_new (GPtrArray *symbols);
+#define IDE_TYPE_LSP_SYMBOL_TREE (ide_lsp_symbol_tree_get_type())
+
+IDE_AVAILABLE_IN_3_32
+G_DECLARE_FINAL_TYPE (IdeLspSymbolTree, ide_lsp_symbol_tree, IDE, LSP_SYMBOL_TREE, GObject)
 
 G_END_DECLS

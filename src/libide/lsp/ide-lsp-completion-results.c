@@ -1,4 +1,4 @@
-/* ide-langserv-completion-results.c
+/* ide-lsp-completion-results.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,17 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-completion-results.h"
+#define G_LOG_DOMAIN "ide-lsp-completion-results.h"
 
 #include "config.h"
 
-#include "ide-debug.h"
+#include <libide-sourceview.h>
 
-#include "completion/ide-completion.h"
-#include "langserv/ide-langserv-completion-item.h"
-#include "langserv/ide-langserv-completion-results.h"
+#include "ide-lsp-completion-item.h"
+#include "ide-lsp-completion-results.h"
 
-struct _IdeLangservCompletionResults
+struct _IdeLspCompletionResults
 {
   GObject   parent_instance;
   GVariant *results;
@@ -43,43 +42,43 @@ typedef struct
 
 static void list_model_iface_init (GListModelInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeLangservCompletionResults, ide_langserv_completion_results, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (IdeLspCompletionResults, ide_lsp_completion_results, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static void
-ide_langserv_completion_results_finalize (GObject *object)
+ide_lsp_completion_results_finalize (GObject *object)
 {
-  IdeLangservCompletionResults *self = (IdeLangservCompletionResults *)object;
+  IdeLspCompletionResults *self = (IdeLspCompletionResults *)object;
 
   g_clear_pointer (&self->results, g_variant_unref);
   g_clear_pointer (&self->items, g_array_unref);
 
-  G_OBJECT_CLASS (ide_langserv_completion_results_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_completion_results_parent_class)->finalize (object);
 }
 
 static void
-ide_langserv_completion_results_class_init (IdeLangservCompletionResultsClass *klass)
+ide_lsp_completion_results_class_init (IdeLspCompletionResultsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_langserv_completion_results_finalize;
+  object_class->finalize = ide_lsp_completion_results_finalize;
 }
 
 static void
-ide_langserv_completion_results_init (IdeLangservCompletionResults *self)
+ide_lsp_completion_results_init (IdeLspCompletionResults *self)
 {
   self->items = g_array_new (FALSE, FALSE, sizeof (Item));
 }
 
-IdeLangservCompletionResults *
-ide_langserv_completion_results_new (GVariant *results)
+IdeLspCompletionResults *
+ide_lsp_completion_results_new (GVariant *results)
 {
-  IdeLangservCompletionResults *self;
+  IdeLspCompletionResults *self;
   g_autoptr(GVariant) items = NULL;
 
   g_return_val_if_fail (results != NULL, NULL);
 
-  self = g_object_new (IDE_TYPE_LANGSERV_COMPLETION_RESULTS, NULL);
+  self = g_object_new (IDE_TYPE_LSP_COMPLETION_RESULTS, NULL);
   self->results = g_variant_ref_sink (results);
 
   /* Possibly unwrap the {items: []} style result. */
@@ -94,50 +93,50 @@ ide_langserv_completion_results_new (GVariant *results)
         self->results = g_steal_pointer (&items);
     }
 
-  ide_langserv_completion_results_refilter (self, NULL);
+  ide_lsp_completion_results_refilter (self, NULL);
 
   return self;
 }
 
 static GType
-ide_langserv_completion_results_get_item_type (GListModel *model)
+ide_lsp_completion_results_get_item_type (GListModel *model)
 {
-  return IDE_TYPE_LANGSERV_COMPLETION_ITEM;
+  return IDE_TYPE_LSP_COMPLETION_ITEM;
 }
 
 static guint
-ide_langserv_completion_results_get_n_items (GListModel *model)
+ide_lsp_completion_results_get_n_items (GListModel *model)
 {
-  IdeLangservCompletionResults *self = (IdeLangservCompletionResults *)model;
+  IdeLspCompletionResults *self = (IdeLspCompletionResults *)model;
 
-  g_assert (IDE_IS_LANGSERV_COMPLETION_RESULTS (self));
+  g_assert (IDE_IS_LSP_COMPLETION_RESULTS (self));
 
   return self->items->len;
 }
 
 static gpointer
-ide_langserv_completion_results_get_item (GListModel *model,
+ide_lsp_completion_results_get_item (GListModel *model,
                                           guint       position)
 {
-  IdeLangservCompletionResults *self = (IdeLangservCompletionResults *)model;
+  IdeLspCompletionResults *self = (IdeLspCompletionResults *)model;
   g_autoptr(GVariant) child = NULL;
   const Item *item;
 
-  g_assert (IDE_IS_LANGSERV_COMPLETION_RESULTS (self));
+  g_assert (IDE_IS_LSP_COMPLETION_RESULTS (self));
   g_assert (self->results != NULL);
 
   item = &g_array_index (self->items, Item, position);
   child = g_variant_get_child_value (self->results, item->index);
 
-  return ide_langserv_completion_item_new (child);
+  return ide_lsp_completion_item_new (child);
 }
 
 static void
 list_model_iface_init (GListModelInterface *iface)
 {
-  iface->get_item = ide_langserv_completion_results_get_item;
-  iface->get_n_items = ide_langserv_completion_results_get_n_items;
-  iface->get_item_type = ide_langserv_completion_results_get_item_type;
+  iface->get_item = ide_lsp_completion_results_get_item;
+  iface->get_n_items = ide_lsp_completion_results_get_n_items;
+  iface->get_item_type = ide_lsp_completion_results_get_item_type;
 }
 
 static gint
@@ -148,7 +147,7 @@ compare_items (const Item *a,
 }
 
 void
-ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
+ide_lsp_completion_results_refilter (IdeLspCompletionResults *self,
                                           const gchar                  *typed_text)
 {
   g_autofree gchar *query = NULL;
@@ -157,7 +156,7 @@ ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
   guint index = 0;
   guint old_len;
 
-  g_return_if_fail (IDE_IS_LANGSERV_COMPLETION_RESULTS (self));
+  g_return_if_fail (IDE_IS_LSP_COMPLETION_RESULTS (self));
 
   if ((old_len = self->items->len))
     g_array_remove_range (self->items, 0, old_len);

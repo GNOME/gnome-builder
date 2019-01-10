@@ -1,4 +1,4 @@
-/* ide-langserv-completion-provider.c
+/* ide-lsp-completion-provider.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,37 +18,30 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-completion-provider"
+#define G_LOG_DOMAIN "ide-lsp-completion-provider"
 
 #include "config.h"
 
+#include <libide-code.h>
+#include <libide-sourceview.h>
+#include <libide-threading.h>
 #include <jsonrpc-glib.h>
 
-#include "ide-debug.h"
-
-#include "buffers/ide-buffer.h"
-#include "completion/ide-completion-context.h"
-#include "completion/ide-completion-provider.h"
-#include "completion/ide-completion-list-box-row.h"
-#include "langserv/ide-langserv-completion-provider.h"
-#include "langserv/ide-langserv-completion-item.h"
-#include "langserv/ide-langserv-completion-results.h"
-#include "langserv/ide-langserv-util.h"
-#include "snippets/ide-snippet.h"
-#include "sourceview/ide-source-view.h"
-#include "symbols/ide-symbol.h"
-#include "threading/ide-task.h"
+#include "ide-lsp-completion-provider.h"
+#include "ide-lsp-completion-item.h"
+#include "ide-lsp-completion-results.h"
+#include "ide-lsp-util.h"
 
 typedef struct
 {
-  IdeLangservClient *client;
+  IdeLspClient *client;
   gchar *word;
-} IdeLangservCompletionProviderPrivate;
+} IdeLspCompletionProviderPrivate;
 
 static void provider_iface_init (IdeCompletionProviderInterface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLangservCompletionProvider, ide_langserv_completion_provider, IDE_TYPE_OBJECT,
-                                  G_ADD_PRIVATE (IdeLangservCompletionProvider)
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLspCompletionProvider, ide_lsp_completion_provider, IDE_TYPE_OBJECT,
+                                  G_ADD_PRIVATE (IdeLspCompletionProvider)
                                   G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 enum {
@@ -60,29 +53,29 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_langserv_completion_provider_finalize (GObject *object)
+ide_lsp_completion_provider_finalize (GObject *object)
 {
-  IdeLangservCompletionProvider *self = (IdeLangservCompletionProvider *)object;
-  IdeLangservCompletionProviderPrivate *priv = ide_langserv_completion_provider_get_instance_private (self);
+  IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)object;
+  IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
 
   g_clear_object (&priv->client);
   g_clear_pointer (&priv->word, g_free);
 
-  G_OBJECT_CLASS (ide_langserv_completion_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_completion_provider_parent_class)->finalize (object);
 }
 
 static void
-ide_langserv_completion_provider_get_property (GObject    *object,
+ide_lsp_completion_provider_get_property (GObject    *object,
                                                guint       prop_id,
                                                GValue     *value,
                                                GParamSpec *pspec)
 {
-  IdeLangservCompletionProvider *self = IDE_LANGSERV_COMPLETION_PROVIDER (object);
+  IdeLspCompletionProvider *self = IDE_LSP_COMPLETION_PROVIDER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      g_value_set_object (value, ide_langserv_completion_provider_get_client (self));
+      g_value_set_object (value, ide_lsp_completion_provider_get_client (self));
       break;
 
     default:
@@ -91,17 +84,17 @@ ide_langserv_completion_provider_get_property (GObject    *object,
 }
 
 static void
-ide_langserv_completion_provider_set_property (GObject      *object,
+ide_lsp_completion_provider_set_property (GObject      *object,
                                                guint         prop_id,
                                                const GValue *value,
                                                GParamSpec   *pspec)
 {
-  IdeLangservCompletionProvider *self = IDE_LANGSERV_COMPLETION_PROVIDER (object);
+  IdeLspCompletionProvider *self = IDE_LSP_COMPLETION_PROVIDER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      ide_langserv_completion_provider_set_client (self, g_value_get_object (value));
+      ide_lsp_completion_provider_set_client (self, g_value_get_object (value));
       break;
 
     default:
@@ -110,99 +103,97 @@ ide_langserv_completion_provider_set_property (GObject      *object,
 }
 
 static void
-ide_langserv_completion_provider_class_init (IdeLangservCompletionProviderClass *klass)
+ide_lsp_completion_provider_class_init (IdeLspCompletionProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_langserv_completion_provider_finalize;
-  object_class->get_property = ide_langserv_completion_provider_get_property;
-  object_class->set_property = ide_langserv_completion_provider_set_property;
+  object_class->finalize = ide_lsp_completion_provider_finalize;
+  object_class->get_property = ide_lsp_completion_provider_get_property;
+  object_class->set_property = ide_lsp_completion_provider_set_property;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
                          "Client",
                          "The Language Server client",
-                         IDE_TYPE_LANGSERV_CLIENT,
+                         IDE_TYPE_LSP_CLIENT,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
-ide_langserv_completion_provider_init (IdeLangservCompletionProvider *self)
+ide_lsp_completion_provider_init (IdeLspCompletionProvider *self)
 {
 }
 
 /**
- * ide_langserv_completion_provider_get_client:
- * @self: An #IdeLangservCompletionProvider
+ * ide_lsp_completion_provider_get_client:
+ * @self: An #IdeLspCompletionProvider
  *
  * Gets the client for the completion provider.
  *
- * Returns: (transfer none) (nullable): An #IdeLangservClient or %NULL
- *
- * Since: 3.32
+ * Returns: (transfer none) (nullable): An #IdeLspClient or %NULL
  */
-IdeLangservClient *
-ide_langserv_completion_provider_get_client (IdeLangservCompletionProvider *self)
+IdeLspClient *
+ide_lsp_completion_provider_get_client (IdeLspCompletionProvider *self)
 {
-  IdeLangservCompletionProviderPrivate *priv = ide_langserv_completion_provider_get_instance_private (self);
+  IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_COMPLETION_PROVIDER (self), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_COMPLETION_PROVIDER (self), NULL);
 
   return priv->client;
 }
 
 void
-ide_langserv_completion_provider_set_client (IdeLangservCompletionProvider *self,
-                                             IdeLangservClient             *client)
+ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
+                                             IdeLspClient             *client)
 {
-  IdeLangservCompletionProviderPrivate *priv = ide_langserv_completion_provider_get_instance_private (self);
+  IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_LANGSERV_COMPLETION_PROVIDER (self));
-  g_return_if_fail (!client || IDE_IS_LANGSERV_CLIENT (client));
+  g_return_if_fail (IDE_IS_LSP_COMPLETION_PROVIDER (self));
+  g_return_if_fail (!client || IDE_IS_LSP_CLIENT (client));
 
   if (g_set_object (&priv->client, client))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
 }
 
 static gint
-ide_langserv_completion_provider_get_priority (IdeCompletionProvider *provider,
+ide_lsp_completion_provider_get_priority (IdeCompletionProvider *provider,
                                                IdeCompletionContext  *context)
 {
-  return IDE_LANGSERV_COMPLETION_PROVIDER_PRIORITY;
+  return IDE_LSP_COMPLETION_PROVIDER_PRIORITY;
 }
 
 static void
-ide_langserv_completion_provider_complete_cb (GObject      *object,
+ide_lsp_completion_provider_complete_cb (GObject      *object,
                                               GAsyncResult *result,
                                               gpointer      user_data)
 {
-  IdeLangservCompletionProviderPrivate *priv;
-  IdeLangservCompletionProvider *self;
-  IdeLangservClient *client = (IdeLangservClient *)object;
+  IdeLspCompletionProviderPrivate *priv;
+  IdeLspCompletionProvider *self;
+  IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeLangservCompletionResults *ret;
+  IdeLspCompletionResults *ret;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
 
-  if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
+  if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   self = ide_task_get_source_object (task);
-  priv = ide_langserv_completion_provider_get_instance_private (self);
+  priv = ide_lsp_completion_provider_get_instance_private (self);
 
-  ret = ide_langserv_completion_results_new (return_value);
+  ret = ide_lsp_completion_results_new (return_value);
   if (priv->word != NULL && *priv->word != 0)
-    ide_langserv_completion_results_refilter (ret, priv->word);
+    ide_lsp_completion_results_refilter (ret, priv->word);
 
   ide_task_return_object (task, g_steal_pointer (&ret));
 
@@ -210,14 +201,14 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
 }
 
 static void
-ide_langserv_completion_provider_populate_async (IdeCompletionProvider  *provider,
+ide_lsp_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                                  IdeCompletionContext   *context,
                                                  GCancellable           *cancellable,
                                                  GAsyncReadyCallback     callback,
                                                  gpointer                user_data)
 {
-  IdeLangservCompletionProvider *self = (IdeLangservCompletionProvider *)provider;
-  IdeLangservCompletionProviderPrivate *priv = ide_langserv_completion_provider_get_instance_private (self);
+  IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
+  IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
@@ -228,11 +219,11 @@ ide_langserv_completion_provider_populate_async (IdeCompletionProvider  *provide
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_completion_provider_populate_async);
+  ide_task_set_source_tag (task, ide_lsp_completion_provider_populate_async);
 
   if (priv->client == NULL)
     {
@@ -249,7 +240,7 @@ ide_langserv_completion_provider_populate_async (IdeCompletionProvider  *provide
   priv->word = ide_completion_context_get_word (context);
 
   buffer = ide_completion_context_get_buffer (context);
-  uri = ide_buffer_get_uri (IDE_BUFFER (buffer));
+  uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
 
   line = gtk_text_iter_get_line (&iter);
   column = gtk_text_iter_get_line_offset (&iter);
@@ -264,18 +255,18 @@ ide_langserv_completion_provider_populate_async (IdeCompletionProvider  *provide
     "}"
   );
 
-  ide_langserv_client_call_async (priv->client,
+  ide_lsp_client_call_async (priv->client,
                                   "textDocument/completion",
                                   params,
                                   cancellable,
-                                  ide_langserv_completion_provider_complete_cb,
+                                  ide_lsp_completion_provider_complete_cb,
                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static GListModel *
-ide_langserv_completion_provider_populate_finish (IdeCompletionProvider  *provider,
+ide_lsp_completion_provider_populate_finish (IdeCompletionProvider  *provider,
                                                   GAsyncResult           *result,
                                                   GError                **error)
 {
@@ -292,48 +283,48 @@ ide_langserv_completion_provider_populate_finish (IdeCompletionProvider  *provid
 }
 
 static gboolean
-ide_langserv_completion_provider_refilter (IdeCompletionProvider *provider,
+ide_lsp_completion_provider_refilter (IdeCompletionProvider *provider,
                                            IdeCompletionContext  *context,
                                            GListModel            *model)
 {
-  IdeLangservCompletionResults *results = (IdeLangservCompletionResults *)model;
+  IdeLspCompletionResults *results = (IdeLspCompletionResults *)model;
   g_autofree gchar *word = NULL;
 
-  g_assert (IDE_IS_LANGSERV_COMPLETION_PROVIDER (provider));
+  g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_LANGSERV_COMPLETION_RESULTS (results));
+  g_assert (IDE_IS_LSP_COMPLETION_RESULTS (results));
 
   word = ide_completion_context_get_word (context);
-  ide_langserv_completion_results_refilter (results, word);
+  ide_lsp_completion_results_refilter (results, word);
 
   return TRUE;
 }
 
 static void
-ide_langserv_completion_provider_display_proposal (IdeCompletionProvider   *provider,
+ide_lsp_completion_provider_display_proposal (IdeCompletionProvider   *provider,
                                                    IdeCompletionListBoxRow *row,
                                                    IdeCompletionContext    *context,
                                                    const gchar             *typed_text,
                                                    IdeCompletionProposal   *proposal)
 {
-  IdeLangservCompletionItem *item = (IdeLangservCompletionItem *)proposal;
+  IdeLspCompletionItem *item = (IdeLspCompletionItem *)proposal;
   g_autofree gchar *markup = NULL;
 
-  g_assert (IDE_IS_LANGSERV_COMPLETION_PROVIDER (provider));
+  g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_LANGSERV_COMPLETION_ITEM (proposal));
+  g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
 
-  markup = ide_langserv_completion_item_get_markup (item, typed_text);
+  markup = ide_lsp_completion_item_get_markup (item, typed_text);
 
-  ide_completion_list_box_row_set_icon_name (row, ide_langserv_completion_item_get_icon_name (item));
+  ide_completion_list_box_row_set_icon_name (row, ide_lsp_completion_item_get_icon_name (item));
   ide_completion_list_box_row_set_left (row, NULL);
   ide_completion_list_box_row_set_center_markup (row, markup);
   ide_completion_list_box_row_set_right (row, NULL);
 }
 
 static void
-ide_langserv_completion_provider_activate_proposal (IdeCompletionProvider *provider,
+ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
                                                     IdeCompletionContext  *context,
                                                     IdeCompletionProposal *proposal,
                                                     const GdkEventKey     *key)
@@ -345,12 +336,12 @@ ide_langserv_completion_provider_activate_proposal (IdeCompletionProvider *provi
 
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_LANGSERV_COMPLETION_ITEM (proposal));
+  g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
 
   buffer = ide_completion_context_get_buffer (context);
   view = ide_completion_context_get_view (context);
 
-  snippet = ide_langserv_completion_item_get_snippet (IDE_LANGSERV_COMPLETION_ITEM (proposal));
+  snippet = ide_lsp_completion_item_get_snippet (IDE_LSP_COMPLETION_ITEM (proposal));
 
   gtk_text_buffer_begin_user_action (buffer);
   if (ide_completion_context_get_bounds (context, &begin, &end))
@@ -360,23 +351,23 @@ ide_langserv_completion_provider_activate_proposal (IdeCompletionProvider *provi
 }
 
 static gchar *
-ide_langserv_completion_provider_get_comment (IdeCompletionProvider *provider,
+ide_lsp_completion_provider_get_comment (IdeCompletionProvider *provider,
                                               IdeCompletionProposal *proposal)
 {
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_LANGSERV_COMPLETION_ITEM (proposal));
+  g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
 
-  return g_strdup (ide_langserv_completion_item_get_detail (IDE_LANGSERV_COMPLETION_ITEM (proposal)));
+  return g_strdup (ide_lsp_completion_item_get_detail (IDE_LSP_COMPLETION_ITEM (proposal)));
 }
 
 static void
 provider_iface_init (IdeCompletionProviderInterface *iface)
 {
-  iface->get_priority = ide_langserv_completion_provider_get_priority;
-  iface->populate_async = ide_langserv_completion_provider_populate_async;
-  iface->populate_finish = ide_langserv_completion_provider_populate_finish;
-  iface->refilter = ide_langserv_completion_provider_refilter;
-  iface->display_proposal = ide_langserv_completion_provider_display_proposal;
-  iface->activate_proposal = ide_langserv_completion_provider_activate_proposal;
-  iface->get_comment = ide_langserv_completion_provider_get_comment;
+  iface->get_priority = ide_lsp_completion_provider_get_priority;
+  iface->populate_async = ide_lsp_completion_provider_populate_async;
+  iface->populate_finish = ide_lsp_completion_provider_populate_finish;
+  iface->refilter = ide_lsp_completion_provider_refilter;
+  iface->display_proposal = ide_lsp_completion_provider_display_proposal;
+  iface->activate_proposal = ide_lsp_completion_provider_activate_proposal;
+  iface->get_comment = ide_lsp_completion_provider_get_comment;
 }

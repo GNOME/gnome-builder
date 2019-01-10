@@ -1,4 +1,4 @@
-/* ide-langserv-symbol-tree.h
+/* ide-lsp-highlighter.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,15 +20,33 @@
 
 #pragma once
 
-#include "symbols/ide-symbol-tree.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-code.h>
+
+#include "ide-lsp-client.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LANGSERV_SYMBOL_TREE (ide_langserv_symbol_tree_get_type())
+#define IDE_TYPE_LSP_HIGHLIGHTER (ide_lsp_highlighter_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeLangservSymbolTree, ide_langserv_symbol_tree, IDE, LANGSERV_SYMBOL_TREE, GObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspHighlighter, ide_lsp_highlighter, IDE, LSP_HIGHLIGHTER, IdeObject)
+
+struct _IdeLspHighlighterClass
+{
+  IdeObjectClass parent_class;
+
+  /*< private >*/
+  gpointer _reserved[8];
+};
+
+IDE_AVAILABLE_IN_3_32
+IdeLspClient *ide_lsp_highlighter_get_client (IdeLspHighlighter *self);
+IDE_AVAILABLE_IN_3_32
+void               ide_lsp_highlighter_set_client (IdeLspHighlighter *self,
+                                                        IdeLspClient      *client);
 
 G_END_DECLS

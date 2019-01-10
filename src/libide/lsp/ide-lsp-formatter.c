@@ -1,4 +1,4 @@
-/* ide-langserv-formatter.c
+/* ide-lsp-formatter.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,28 +18,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-formatter"
+#define G_LOG_DOMAIN "ide-lsp-formatter"
 
 #include "config.h"
 
 #include <jsonrpc-glib.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
+#include <libide-code.h>
+#include <libide-threading.h>
 
-#include "buffers/ide-buffer.h"
-#include "buffers/ide-buffer-manager.h"
-#include "diagnostics/ide-source-location.h"
-#include "diagnostics/ide-source-range.h"
-#include "langserv/ide-langserv-formatter.h"
-#include "projects/ide-project-edit.h"
-#include "threading/ide-task.h"
-#include "util/ide-glib.h"
+#include "ide-lsp-formatter.h"
 
 typedef struct
 {
-  IdeLangservClient *client;
-} IdeLangservFormatterPrivate;
+  IdeLspClient *client;
+} IdeLspFormatterPrivate;
 
 enum {
   PROP_0,
@@ -49,67 +42,65 @@ enum {
 
 static void formatter_iface_init (IdeFormatterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeLangservFormatter, ide_langserv_formatter, IDE_TYPE_OBJECT,
-                         G_ADD_PRIVATE (IdeLangservFormatter)
+G_DEFINE_TYPE_WITH_CODE (IdeLspFormatter, ide_lsp_formatter, IDE_TYPE_OBJECT,
+                         G_ADD_PRIVATE (IdeLspFormatter)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_FORMATTER, formatter_iface_init))
 
 static GParamSpec *properties [N_PROPS];
 
 /**
- * ide_langserv_formatter_get_client:
- * @self: a #IdeLangservFormatter
+ * ide_lsp_formatter_get_client:
+ * @self: a #IdeLspFormatter
  *
  * Gets the client to use for the formatter.
  *
- * Returns: (transfer none): An #IdeLangservClient or %NULL.
- *
- * Since: 3.32
+ * Returns: (transfer none): An #IdeLspClient or %NULL.
  */
-IdeLangservClient *
-ide_langserv_formatter_get_client (IdeLangservFormatter *self)
+IdeLspClient *
+ide_lsp_formatter_get_client (IdeLspFormatter *self)
 {
-  IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
+  IdeLspFormatterPrivate *priv = ide_lsp_formatter_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_FORMATTER (self), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_FORMATTER (self), NULL);
 
   return priv->client;
 }
 
 void
-ide_langserv_formatter_set_client (IdeLangservFormatter *self,
-                                   IdeLangservClient    *client)
+ide_lsp_formatter_set_client (IdeLspFormatter *self,
+                              IdeLspClient    *client)
 {
-  IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
+  IdeLspFormatterPrivate *priv = ide_lsp_formatter_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_LANGSERV_FORMATTER (self));
+  g_return_if_fail (IDE_IS_LSP_FORMATTER (self));
 
   if (g_set_object (&priv->client, client))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
 }
 
 static void
-ide_langserv_formatter_finalize (GObject *object)
+ide_lsp_formatter_finalize (GObject *object)
 {
-  IdeLangservFormatter *self = (IdeLangservFormatter *)object;
-  IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
+  IdeLspFormatter *self = (IdeLspFormatter *)object;
+  IdeLspFormatterPrivate *priv = ide_lsp_formatter_get_instance_private (self);
 
   g_clear_object (&priv->client);
 
-  G_OBJECT_CLASS (ide_langserv_formatter_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_formatter_parent_class)->finalize (object);
 }
 
 static void
-ide_langserv_formatter_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
+ide_lsp_formatter_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
 {
-  IdeLangservFormatter *self = IDE_LANGSERV_FORMATTER (object);
+  IdeLspFormatter *self = IDE_LSP_FORMATTER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      g_value_set_object (value, ide_langserv_formatter_get_client (self));
+      g_value_set_object (value, ide_lsp_formatter_get_client (self));
       break;
 
     default:
@@ -118,17 +109,17 @@ ide_langserv_formatter_get_property (GObject    *object,
 }
 
 static void
-ide_langserv_formatter_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
+ide_lsp_formatter_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
 {
-  IdeLangservFormatter *self = IDE_LANGSERV_FORMATTER (object);
+  IdeLspFormatter *self = IDE_LSP_FORMATTER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      ide_langserv_formatter_set_client (self, g_value_get_object (value));
+      ide_lsp_formatter_set_client (self, g_value_get_object (value));
       break;
 
     default:
@@ -137,44 +128,44 @@ ide_langserv_formatter_set_property (GObject      *object,
 }
 
 static void
-ide_langserv_formatter_class_init (IdeLangservFormatterClass *klass)
+ide_lsp_formatter_class_init (IdeLspFormatterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_langserv_formatter_finalize;
-  object_class->get_property = ide_langserv_formatter_get_property;
-  object_class->set_property = ide_langserv_formatter_set_property;
+  object_class->finalize = ide_lsp_formatter_finalize;
+  object_class->get_property = ide_lsp_formatter_get_property;
+  object_class->set_property = ide_lsp_formatter_set_property;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
                          "Client",
                          "The client to communicate over",
-                         IDE_TYPE_LANGSERV_CLIENT,
+                         IDE_TYPE_LSP_CLIENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
-ide_langserv_formatter_init (IdeLangservFormatter *self)
+ide_lsp_formatter_init (IdeLspFormatter *self)
 {
 }
 
 static void
-ide_langserv_formatter_apply_changes (IdeLangservFormatter *self,
-                                      IdeBuffer            *buffer,
-                                      GVariant             *text_edits)
+ide_lsp_formatter_apply_changes (IdeLspFormatter *self,
+                                 IdeBuffer       *buffer,
+                                 GVariant        *text_edits)
 {
-  g_autoptr(GPtrArray) project_edits = NULL;
+  g_autoptr(GPtrArray) edits = NULL;
+  g_autoptr(IdeContext) context = NULL;
   IdeBufferManager *buffer_manager;
-  IdeContext *context;
   GVariant *text_edit;
-  IdeFile *ifile;
+  GFile *file;
   GVariantIter iter;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_FORMATTER (self));
+  g_assert (IDE_IS_LSP_FORMATTER (self));
   g_assert (text_edits != NULL);
 
   if (!g_variant_is_container (text_edits))
@@ -183,17 +174,16 @@ ide_langserv_formatter_apply_changes (IdeLangservFormatter *self,
       IDE_EXIT;
     }
 
-  ifile = ide_buffer_get_file (buffer);
-  project_edits = g_ptr_array_new_with_free_func (g_object_unref);
+  file = ide_buffer_get_file (buffer);
+  edits = g_ptr_array_new_with_free_func (g_object_unref);
 
   g_variant_iter_init (&iter, text_edits);
 
   while (g_variant_iter_loop (&iter, "v", &text_edit))
     {
-      g_autoptr(IdeSourceLocation) begin_location = NULL;
-      g_autoptr(IdeSourceLocation) end_location = NULL;
-      g_autoptr(IdeSourceRange) range = NULL;
-      g_autoptr(IdeProjectEdit) edit = NULL;
+      g_autoptr(IdeLocation) begin_location = NULL;
+      g_autoptr(IdeLocation) end_location = NULL;
+      g_autoptr(IdeRange) range = NULL;
       const gchar *new_text = NULL;
       gboolean success;
       struct {
@@ -221,44 +211,39 @@ ide_langserv_formatter_apply_changes (IdeLangservFormatter *self,
           continue;
         }
 
-      begin_location = ide_source_location_new (ifile, begin.line, begin.column, 0);
-      end_location = ide_source_location_new (ifile, end.line, end.column, 0);
-      range = ide_source_range_new (begin_location, end_location);
+      begin_location = ide_location_new (file, begin.line, begin.column);
+      end_location = ide_location_new (file, end.line, end.column);
+      range = ide_range_new (begin_location, end_location);
 
-      edit = g_object_new (IDE_TYPE_PROJECT_EDIT,
-                           "range", range,
-                           "replacement", new_text,
-                           NULL);
-
-      g_ptr_array_add (project_edits, g_steal_pointer (&edit));
+      g_ptr_array_add (edits, ide_text_edit_new (range, new_text));
     }
 
-  context = ide_buffer_get_context (buffer);
-  buffer_manager = ide_context_get_buffer_manager (context);
+  context = ide_buffer_ref_context (buffer);
+  buffer_manager = ide_buffer_manager_from_context (context);
 
   ide_buffer_manager_apply_edits_async (buffer_manager,
-                                        IDE_PTR_ARRAY_STEAL_FULL (&project_edits),
+                                        IDE_PTR_ARRAY_STEAL_FULL (&edits),
                                         NULL, NULL, NULL);
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_formatter_format_call_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
+ide_lsp_formatter_format_call_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
 {
-  IdeLangservClient *client = (IdeLangservClient *)object;
+  IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) reply = NULL;
-  IdeLangservFormatter *self;
+  IdeLspFormatter *self;
   IdeBuffer *buffer;
 
-  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (client));
+  g_return_if_fail (IDE_IS_LSP_CLIENT (client));
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
 
-  if (!ide_langserv_client_call_finish (client, result, &reply, &error))
+  if (!ide_lsp_client_call_finish (client, result, &reply, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -267,24 +252,24 @@ ide_langserv_formatter_format_call_cb (GObject      *object,
   self = ide_task_get_source_object (task);
   buffer = ide_task_get_task_data (task);
 
-  g_assert (IDE_IS_LANGSERV_FORMATTER (self));
+  g_assert (IDE_IS_LSP_FORMATTER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  ide_langserv_formatter_apply_changes (self, buffer, reply);
+  ide_lsp_formatter_apply_changes (self, buffer, reply);
 
   ide_task_return_boolean (task, TRUE);
 }
 
 static void
-ide_langserv_formatter_format_async (IdeFormatter        *formatter,
-                                     IdeBuffer           *buffer,
-                                     IdeFormatterOptions *options,
-                                     GCancellable        *cancellable,
-                                     GAsyncReadyCallback  callback,
-                                     gpointer             user_data)
+ide_lsp_formatter_format_async (IdeFormatter        *formatter,
+                                IdeBuffer           *buffer,
+                                IdeFormatterOptions *options,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
 {
-  IdeLangservFormatter *self = (IdeLangservFormatter *)formatter;
-  IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
+  IdeLspFormatter *self = (IdeLspFormatter *)formatter;
+  IdeLspFormatterPrivate *priv = ide_lsp_formatter_get_instance_private (self);
   g_autoptr(GVariant) params = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *uri = NULL;
@@ -295,18 +280,18 @@ ide_langserv_formatter_format_async (IdeFormatter        *formatter,
   gint tab_size;
   gboolean insert_spaces;
 
-  g_assert (IDE_IS_LANGSERV_FORMATTER (self));
+  g_assert (IDE_IS_LSP_FORMATTER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_formatter_format_async);
+  ide_task_set_source_tag (task, ide_lsp_formatter_format_async);
   ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
   gtk_text_iter_order (&begin, &end);
 
   version = ide_buffer_get_change_count (buffer);
-  uri = ide_buffer_get_uri (buffer);
+  uri = ide_buffer_dup_uri (buffer);
   text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (buffer), &begin, &end, TRUE);
 
   tab_size = ide_formatter_options_get_tab_width (options);
@@ -324,18 +309,18 @@ ide_langserv_formatter_format_async (IdeFormatter        *formatter,
     "}"
   );
 
-  ide_langserv_client_call_async (priv->client,
+  ide_lsp_client_call_async (priv->client,
                                   "textDocument/formatting",
                                   params,
                                   cancellable,
-                                  ide_langserv_formatter_format_call_cb,
+                                  ide_lsp_formatter_format_call_cb,
                                   g_steal_pointer (&task));
 }
 
 static gboolean
-ide_langserv_formatter_format_finish (IdeFormatter  *self,
-                                      GAsyncResult  *result,
-                                      GError       **error)
+ide_lsp_formatter_format_finish (IdeFormatter  *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
 {
   g_assert (IDE_IS_FORMATTER (self));
   g_assert (IDE_IS_TASK (result));
@@ -344,17 +329,17 @@ ide_langserv_formatter_format_finish (IdeFormatter  *self,
 }
 
 static void
-ide_langserv_formatter_format_range_async (IdeFormatter        *formatter,
-                                           IdeBuffer           *buffer,
-                                           IdeFormatterOptions *options,
-                                           const GtkTextIter   *begin,
-                                           const GtkTextIter   *end,
-                                           GCancellable        *cancellable,
-                                           GAsyncReadyCallback  callback,
-                                           gpointer             user_data)
+ide_lsp_formatter_format_range_async (IdeFormatter        *formatter,
+                                      IdeBuffer           *buffer,
+                                      IdeFormatterOptions *options,
+                                      const GtkTextIter   *begin,
+                                      const GtkTextIter   *end,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
 {
-  IdeLangservFormatter *self = (IdeLangservFormatter *)formatter;
-  IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
+  IdeLspFormatter *self = (IdeLspFormatter *)formatter;
+  IdeLspFormatterPrivate *priv = ide_lsp_formatter_get_instance_private (self);
   g_autoptr(GVariant) params = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *uri = NULL;
@@ -367,11 +352,11 @@ ide_langserv_formatter_format_range_async (IdeFormatter        *formatter,
     gint character;
   } b, e;
 
-  g_assert (IDE_IS_LANGSERV_FORMATTER (self));
+  g_assert (IDE_IS_LSP_FORMATTER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_formatter_format_async);
+  ide_task_set_source_tag (task, ide_lsp_formatter_format_async);
   ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
 
   if (gtk_text_iter_compare (begin, end) > 0)
@@ -382,7 +367,7 @@ ide_langserv_formatter_format_range_async (IdeFormatter        *formatter,
     }
 
   version = ide_buffer_get_change_count (buffer);
-  uri = ide_buffer_get_uri (buffer);
+  uri = ide_buffer_dup_uri (buffer);
   text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (buffer), begin, end, TRUE);
 
   tab_size = ide_formatter_options_get_tab_width (options);
@@ -416,18 +401,18 @@ ide_langserv_formatter_format_range_async (IdeFormatter        *formatter,
     "}"
   );
 
-  ide_langserv_client_call_async (priv->client,
-                                  "textDocument/rangeFormatting",
-                                  params,
-                                  cancellable,
-                                  ide_langserv_formatter_format_call_cb,
-                                  g_steal_pointer (&task));
+  ide_lsp_client_call_async (priv->client,
+                             "textDocument/rangeFormatting",
+                             params,
+                             cancellable,
+                             ide_lsp_formatter_format_call_cb,
+                             g_steal_pointer (&task));
 }
 
 static gboolean
-ide_langserv_formatter_format_range_finish (IdeFormatter  *self,
-                                            GAsyncResult  *result,
-                                            GError       **error)
+ide_lsp_formatter_format_range_finish (IdeFormatter  *self,
+                                       GAsyncResult  *result,
+                                       GError       **error)
 {
   g_assert (IDE_IS_FORMATTER (self));
   g_assert (IDE_IS_TASK (result));
@@ -438,8 +423,8 @@ ide_langserv_formatter_format_range_finish (IdeFormatter  *self,
 static void
 formatter_iface_init (IdeFormatterInterface *iface)
 {
-  iface->format_async = ide_langserv_formatter_format_async;
-  iface->format_finish = ide_langserv_formatter_format_finish;
-  iface->format_range_async = ide_langserv_formatter_format_range_async;
-  iface->format_range_finish = ide_langserv_formatter_format_range_finish;
+  iface->format_async = ide_lsp_formatter_format_async;
+  iface->format_finish = ide_lsp_formatter_format_finish;
+  iface->format_range_async = ide_lsp_formatter_format_range_async;
+  iface->format_range_finish = ide_lsp_formatter_format_range_finish;
 }

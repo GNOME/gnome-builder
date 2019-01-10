@@ -20,6 +20,10 @@
 
 #pragma once
 
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
+
 G_BEGIN_DECLS
 
 typedef enum

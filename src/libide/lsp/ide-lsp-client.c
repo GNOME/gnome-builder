@@ -1,4 +1,4 @@
-/* ide-langserv-client.c
+/* ide-lsp-client.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-client"
+#define G_LOG_DOMAIN "ide-lsp-client"
 
 #include "config.h"
 
@@ -26,23 +26,13 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <jsonrpc-glib.h>
+#include <libide-code.h>
+#include <libide-projects.h>
+#include <libide-sourceview.h>
+#include <libide-threading.h>
 #include <unistd.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
-
-#include "application/ide-application.h"
-#include "buffers/ide-buffer.h"
-#include "buffers/ide-buffer-manager.h"
-#include "diagnostics/ide-diagnostic.h"
-#include "diagnostics/ide-diagnostics.h"
-#include "diagnostics/ide-source-location.h"
-#include "diagnostics/ide-source-range.h"
-#include "langserv/ide-langserv-client.h"
-#include "projects/ide-project.h"
-#include "vcs/ide-vcs.h"
-#include "threading/ide-task.h"
-#include "util/ide-glib.h"
+#include "ide-lsp-client.h"
 
 typedef struct
 {
@@ -52,9 +42,9 @@ typedef struct
   GIOStream      *io_stream;
   GHashTable     *diagnostics_by_file;
   GPtrArray      *languages;
-} IdeLangservClientPrivate;
+} IdeLspClientPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservClient, ide_langserv_client, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
 
 enum {
   FILE_CHANGE_TYPE_CREATED = 1,
@@ -86,7 +76,7 @@ static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
 static gboolean
-ide_langserv_client_supports_buffer (IdeLangservClient *self,
+ide_lsp_client_supports_buffer (IdeLspClient *self,
                                      IdeBuffer         *buffer)
 {
   GtkSourceLanguage *language;
@@ -94,7 +84,7 @@ ide_langserv_client_supports_buffer (IdeLangservClient *self,
   gboolean ret = FALSE;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
@@ -107,16 +97,16 @@ ide_langserv_client_supports_buffer (IdeLangservClient *self,
 }
 
 static void
-ide_langserv_client_clear_diagnostics (IdeLangservClient *self,
-                                       const gchar       *uri)
+ide_lsp_client_clear_diagnostics (IdeLspClient *self,
+                                  const gchar  *uri)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(GFile) file = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (uri != NULL);
 
   IDE_TRACE_MSG ("Clearing diagnostics for %s", uri);
@@ -128,9 +118,9 @@ ide_langserv_client_clear_diagnostics (IdeLangservClient *self,
 }
 
 static void
-ide_langserv_client_buffer_saved (IdeLangservClient *self,
-                                  IdeBuffer         *buffer,
-                                  IdeBufferManager  *buffer_manager)
+ide_lsp_client_buffer_saved (IdeLspClient     *self,
+                             IdeBuffer        *buffer,
+                             IdeBufferManager *buffer_manager)
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
@@ -138,14 +128,14 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  if (!ide_langserv_client_supports_buffer (self, buffer))
+  if (!ide_lsp_client_supports_buffer (self, buffer))
     IDE_EXIT;
 
-  uri = ide_buffer_get_uri (buffer);
+  uri = ide_buffer_dup_uri (buffer);
 
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
@@ -153,8 +143,7 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_send_notification_async (self, "textDocument/didSave",
-                                               params, NULL, NULL, NULL);
+  ide_lsp_client_send_notification_async (self, "textDocument/didSave", params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -165,11 +154,11 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
  */
 
 static void
-ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
-                                        GtkTextIter       *location,
-                                        const gchar       *new_text,
-                                        gint               len,
-                                        IdeBuffer         *buffer)
+ide_lsp_client_buffer_insert_text (IdeLspClient *self,
+                                   GtkTextIter  *location,
+                                   const gchar  *new_text,
+                                   gint          len,
+                                   IdeBuffer    *buffer)
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
@@ -181,13 +170,13 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
   copy = g_strndup (new_text, len);
 
-  uri = ide_buffer_get_uri (buffer);
+  uri = ide_buffer_dup_uri (buffer);
   version = (gint64)ide_buffer_get_change_count (buffer);
 
   line = gtk_text_iter_get_line (location);
@@ -215,14 +204,14 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
       "}",
     "]");
 
-  ide_langserv_client_send_notification_async (self, "textDocument/didChange",
+  ide_lsp_client_send_notification_async (self, "textDocument/didChange",
                                                params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
+ide_lsp_client_buffer_delete_range (IdeLspClient *self,
                                          GtkTextIter       *begin_iter,
                                          GtkTextIter       *end_iter,
                                          IdeBuffer         *buffer)
@@ -242,12 +231,12 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (begin_iter != NULL);
   g_assert (end_iter != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  uri = ide_buffer_get_uri (buffer);
+  uri = ide_buffer_dup_uri (buffer);
   version = (gint)ide_buffer_get_change_count (buffer);
 
   copy_begin = *begin_iter;
@@ -284,14 +273,14 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
       "}",
     "]");
 
-  ide_langserv_client_send_notification_async (self, "textDocument/didChange",
+  ide_lsp_client_send_notification_async (self, "textDocument/didChange",
                                                params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_client_buffer_loaded (IdeLangservClient *self,
+ide_lsp_client_buffer_loaded (IdeLspClient *self,
                                    IdeBuffer         *buffer,
                                    IdeBufferManager  *buffer_manager)
 {
@@ -307,26 +296,26 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  if (!ide_langserv_client_supports_buffer (self, buffer))
+  if (!ide_lsp_client_supports_buffer (self, buffer))
     IDE_EXIT;
 
   g_signal_connect_object (buffer,
                            "insert-text",
-                           G_CALLBACK (ide_langserv_client_buffer_insert_text),
+                           G_CALLBACK (ide_lsp_client_buffer_insert_text),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (buffer,
                            "delete-range",
-                           G_CALLBACK (ide_langserv_client_buffer_delete_range),
+                           G_CALLBACK (ide_lsp_client_buffer_delete_range),
                            self,
                            G_CONNECT_SWAPPED);
 
-  uri = ide_buffer_get_uri (buffer);
+  uri = ide_buffer_dup_uri (buffer);
   version = (gint64)ide_buffer_get_change_count (buffer);
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
@@ -347,14 +336,14 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_send_notification_async (self, "textDocument/didOpen",
+  ide_lsp_client_send_notification_async (self, "textDocument/didOpen",
                                                params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
+ide_lsp_client_buffer_unloaded (IdeLspClient *self,
                                      IdeBuffer         *buffer,
                                      IdeBufferManager  *buffer_manager)
 {
@@ -364,14 +353,14 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  if (!ide_langserv_client_supports_buffer (self, buffer))
+  if (!ide_lsp_client_supports_buffer (self, buffer))
     IDE_EXIT;
 
-  uri = ide_buffer_get_uri (buffer);
+  uri = ide_buffer_dup_uri (buffer);
 
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
@@ -379,21 +368,21 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_send_notification_async (self, "textDocument/didClose",
+  ide_lsp_client_send_notification_async (self, "textDocument/didClose",
                                                params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_client_buffer_manager_bind (IdeLangservClient *self,
+ide_lsp_client_buffer_manager_bind (IdeLspClient *self,
                                          IdeBufferManager  *buffer_manager,
                                          DzlSignalGroup    *signal_group)
 {
   guint n_items;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
   g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
 
@@ -404,15 +393,15 @@ ide_langserv_client_buffer_manager_bind (IdeLangservClient *self,
       g_autoptr(IdeBuffer) buffer = NULL;
 
       buffer = g_list_model_get_item (G_LIST_MODEL (buffer_manager), i);
-      ide_langserv_client_buffer_loaded (self, buffer, buffer_manager);
+      ide_lsp_client_buffer_loaded (self, buffer, buffer_manager);
     }
 }
 
 static void
-ide_langserv_client_buffer_manager_unbind (IdeLangservClient *self,
+ide_lsp_client_buffer_manager_unbind (IdeLspClient *self,
                                            DzlSignalGroup    *signal_group)
 {
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
 
   /* TODO: We need to track everything we've notified so that we
@@ -421,7 +410,7 @@ ide_langserv_client_buffer_manager_unbind (IdeLangservClient *self,
 }
 
 static void
-ide_langserv_client_project_file_trashed (IdeLangservClient *self,
+ide_lsp_client_project_file_trashed (IdeLspClient *self,
                                           GFile             *file,
                                           IdeProject        *project)
 {
@@ -431,7 +420,7 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (G_IS_FILE (file));
   g_assert (IDE_IS_PROJECT (project));
 
@@ -446,19 +435,19 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
     "]"
   );
 
-  ide_langserv_client_send_notification_async (self, "workspace/didChangeWatchedFiles",
+  ide_lsp_client_send_notification_async (self, "workspace/didChangeWatchedFiles",
                                                params, NULL, NULL, NULL);
 
-  ide_langserv_client_clear_diagnostics (self, uri);
+  ide_lsp_client_clear_diagnostics (self, uri);
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_client_project_file_renamed (IdeLangservClient *self,
-                                          GFile             *src,
-                                          GFile             *dst,
-                                          IdeProject        *project)
+ide_lsp_client_project_file_renamed (IdeLspClient *self,
+                                     GFile        *src,
+                                     GFile        *dst,
+                                     IdeProject   *project)
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *src_uri = NULL;
@@ -467,7 +456,7 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (G_IS_FILE (src));
   g_assert (G_IS_FILE (dst));
   g_assert (IDE_IS_PROJECT (project));
@@ -488,32 +477,33 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
     "]"
   );
 
-  ide_langserv_client_send_notification_async (self, "workspace/didChangeWatchedFiles",
+  ide_lsp_client_send_notification_async (self, "workspace/didChangeWatchedFiles",
                                                params, NULL, NULL, NULL);
 
-  ide_langserv_client_clear_diagnostics (self, src_uri);
+  ide_lsp_client_clear_diagnostics (self, src_uri);
 
   IDE_EXIT;
 }
 
 static IdeDiagnostics *
-ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
-                                           IdeFile           *file,
-                                           GVariantIter      *diagnostics)
+ide_lsp_client_translate_diagnostics (IdeLspClient *self,
+                                      GFile        *file,
+                                      GVariantIter *diagnostics)
 {
   g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(IdeDiagnostics) ret = NULL;
   GVariant *value;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (diagnostics != NULL);
 
-  ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
 
   while (g_variant_iter_loop (diagnostics, "v", &value))
     {
-      g_autoptr(IdeSourceLocation) begin_loc = NULL;
-      g_autoptr(IdeSourceLocation) end_loc = NULL;
+      g_autoptr(IdeLocation) begin_loc = NULL;
+      g_autoptr(IdeLocation) end_loc = NULL;
       g_autoptr(IdeDiagnostic) diag = NULL;
       g_autoptr(GVariant) range = NULL;
       const gchar *message = NULL;
@@ -550,8 +540,8 @@ ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
       if (!success)
         continue;
 
-      begin_loc = ide_source_location_new (file, begin.line, begin.column, 0);
-      end_loc = ide_source_location_new (file, end.line, end.column, 0);
+      begin_loc = ide_location_new (file, begin.line, begin.column);
+      end_loc = ide_location_new (file, end.line, end.column);
 
       switch (severity)
         {
@@ -571,19 +561,27 @@ ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
         }
 
       diag = ide_diagnostic_new (severity, message, begin_loc);
-      ide_diagnostic_take_range (diag, ide_source_range_new (begin_loc, end_loc));
+      ide_diagnostic_take_range (diag, ide_range_new (begin_loc, end_loc));
 
       g_ptr_array_add (ar, g_steal_pointer (&diag));
     }
 
-  return ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&ar));
+  ret = ide_diagnostics_new ();
+
+  if (ar != NULL)
+    {
+      for (guint i = 0; i < ar->len; i++)
+        ide_diagnostics_add (ret, g_ptr_array_index (ar, i));
+    }
+
+  return g_steal_pointer (&ret);
 }
 
 static void
-ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
-                                                       GVariant          *params)
+ide_lsp_client_text_document_publish_diagnostics (IdeLspClient *self,
+                                                  GVariant     *params)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(GVariantIter) json_diagnostics = NULL;
   const gchar *uri = NULL;
   gboolean success;
@@ -591,7 +589,7 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (params != NULL);
 
   success = JSONRPC_MESSAGE_PARSE (params,
@@ -601,16 +599,12 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
 
   if (success)
     {
-      g_autoptr(IdeFile) ifile = NULL;
       g_autoptr(GFile) file = NULL;
       g_autoptr(IdeDiagnostics) diagnostics = NULL;
-      IdeContext *context;
 
-      context = ide_object_get_context (IDE_OBJECT (self));
       file = g_file_new_for_uri (uri);
-      ifile = ide_file_new (context, file);
 
-      diagnostics = ide_langserv_client_translate_diagnostics (self, ifile, json_diagnostics);
+      diagnostics = ide_lsp_client_translate_diagnostics (self, file, json_diagnostics);
 
       IDE_TRACE_MSG ("%"G_GSIZE_FORMAT" diagnostics received for %s",
                      diagnostics ? ide_diagnostics_get_size (diagnostics) : 0,
@@ -623,7 +617,7 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
        */
       g_hash_table_insert (priv->diagnostics_by_file,
                            g_object_ref (file),
-                           ide_diagnostics_ref (diagnostics));
+                           g_object_ref (diagnostics));
 
       g_signal_emit (self, signals [PUBLISHED_DIAGNOSTICS], 0, file, diagnostics);
     }
@@ -632,37 +626,37 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
 }
 
 static void
-ide_langserv_client_real_notification (IdeLangservClient *self,
-                                       const gchar       *method,
-                                       GVariant          *params)
+ide_lsp_client_real_notification (IdeLspClient *self,
+                                  const gchar  *method,
+                                  GVariant     *params)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (method != NULL);
 
   if (params != NULL)
     {
       if (g_str_equal (method, "textDocument/publishDiagnostics"))
-        ide_langserv_client_text_document_publish_diagnostics (self, params);
+        ide_lsp_client_text_document_publish_diagnostics (self, params);
     }
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_client_send_notification (IdeLangservClient *self,
-                                       const gchar       *method,
-                                       GVariant          *params,
-                                       JsonrpcClient     *rpc_client)
+ide_lsp_client_send_notification (IdeLspClient  *self,
+                                  const gchar   *method,
+                                  GVariant      *params,
+                                  JsonrpcClient *rpc_client)
 {
   GQuark detail;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (method != NULL);
   g_assert (JSONRPC_IS_CLIENT (rpc_client));
 
@@ -682,10 +676,10 @@ ide_langserv_client_send_notification (IdeLangservClient *self,
 }
 
 static void
-ide_langserv_client_finalize (GObject *object)
+ide_lsp_client_finalize (GObject *object)
 {
-  IdeLangservClient *self = (IdeLangservClient *)object;
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClient *self = (IdeLspClient *)object;
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
@@ -695,17 +689,17 @@ ide_langserv_client_finalize (GObject *object)
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);
 
-  G_OBJECT_CLASS (ide_langserv_client_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_client_parent_class)->finalize (object);
 }
 
 static gboolean
-ide_langserv_client_real_supports_language (IdeLangservClient *self,
-                                            const gchar       *language_id)
+ide_lsp_client_real_supports_language (IdeLspClient *self,
+                                       const gchar  *language_id)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (language_id != NULL);
 
   for (guint i = 0; i < priv->languages->len; i++)
@@ -720,13 +714,13 @@ ide_langserv_client_real_supports_language (IdeLangservClient *self,
 }
 
 static void
-ide_langserv_client_get_property (GObject    *object,
-                                  guint       prop_id,
-                                  GValue     *value,
-                                  GParamSpec *pspec)
+ide_lsp_client_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
 {
-  IdeLangservClient *self = IDE_LANGSERV_CLIENT (object);
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClient *self = IDE_LSP_CLIENT (object);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -740,13 +734,13 @@ ide_langserv_client_get_property (GObject    *object,
 }
 
 static void
-ide_langserv_client_set_property (GObject      *object,
-                                  guint         prop_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
+ide_lsp_client_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
 {
-  IdeLangservClient *self = IDE_LANGSERV_CLIENT (object);
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClient *self = IDE_LSP_CLIENT (object);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -760,16 +754,16 @@ ide_langserv_client_set_property (GObject      *object,
 }
 
 static void
-ide_langserv_client_class_init (IdeLangservClientClass *klass)
+ide_lsp_client_class_init (IdeLspClientClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_langserv_client_finalize;
-  object_class->get_property = ide_langserv_client_get_property;
-  object_class->set_property = ide_langserv_client_set_property;
+  object_class->finalize = ide_lsp_client_finalize;
+  object_class->get_property = ide_lsp_client_get_property;
+  object_class->set_property = ide_lsp_client_set_property;
 
-  klass->notification = ide_langserv_client_real_notification;
-  klass->supports_language = ide_langserv_client_real_supports_language;
+  klass->notification = ide_lsp_client_real_notification;
+  klass->supports_language = ide_lsp_client_real_supports_language;
 
   properties [PROP_IO_STREAM] =
     g_param_spec_object ("io-stream",
@@ -784,7 +778,7 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
     g_signal_new ("notification",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
-                  G_STRUCT_OFFSET (IdeLangservClientClass, notification),
+                  G_STRUCT_OFFSET (IdeLspClientClass, notification),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
@@ -795,7 +789,7 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
     g_signal_new ("supports-language",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeLangservClientClass, supports_language),
+                  G_STRUCT_OFFSET (IdeLspClientClass, supports_language),
                   g_signal_accumulator_true_handled, NULL,
                   NULL,
                   G_TYPE_BOOLEAN,
@@ -806,7 +800,7 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
     g_signal_new ("published-diagnostics",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeLangservClientClass, published_diagnostics),
+                  G_STRUCT_OFFSET (IdeLspClientClass, published_diagnostics),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
@@ -816,9 +810,9 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
 }
 
 static void
-ide_langserv_client_init (IdeLangservClient *self)
+ide_lsp_client_init (IdeLspClient *self)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
@@ -827,34 +821,34 @@ ide_langserv_client_init (IdeLangservClient *self)
   priv->diagnostics_by_file = g_hash_table_new_full ((GHashFunc)g_file_hash,
                                                      (GEqualFunc)g_file_equal,
                                                      g_object_unref,
-                                                     (GDestroyNotify)ide_diagnostics_unref);
+                                                     (GDestroyNotify)g_object_unref);
 
   priv->buffer_manager_signals = dzl_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
   dzl_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-loaded",
-                                   G_CALLBACK (ide_langserv_client_buffer_loaded),
+                                   G_CALLBACK (ide_lsp_client_buffer_loaded),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-saved",
-                                   G_CALLBACK (ide_langserv_client_buffer_saved),
+                                   G_CALLBACK (ide_lsp_client_buffer_saved),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-unloaded",
-                                   G_CALLBACK (ide_langserv_client_buffer_unloaded),
+                                   G_CALLBACK (ide_lsp_client_buffer_unloaded),
                                    self,
                                    G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->buffer_manager_signals,
                            "bind",
-                           G_CALLBACK (ide_langserv_client_buffer_manager_bind),
+                           G_CALLBACK (ide_lsp_client_buffer_manager_bind),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (priv->buffer_manager_signals,
                            "unbind",
-                           G_CALLBACK (ide_langserv_client_buffer_manager_unbind),
+                           G_CALLBACK (ide_lsp_client_buffer_manager_unbind),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -862,24 +856,24 @@ ide_langserv_client_init (IdeLangservClient *self)
 
   dzl_signal_group_connect_object (priv->project_signals,
                                    "file-trashed",
-                                   G_CALLBACK (ide_langserv_client_project_file_trashed),
+                                   G_CALLBACK (ide_lsp_client_project_file_trashed),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->project_signals,
                                    "file-renamed",
-                                   G_CALLBACK (ide_langserv_client_project_file_renamed),
+                                   G_CALLBACK (ide_lsp_client_project_file_renamed),
                                    self,
                                    G_CONNECT_SWAPPED);
 }
 
 static void
-ide_langserv_client_initialize_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
+ide_lsp_client_initialize_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
 {
   JsonrpcClient *rpc_client = (JsonrpcClient *)object;
-  g_autoptr(IdeLangservClient) self = user_data;
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(IdeLspClient) self = user_data;
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GError) error = NULL;
   IdeBufferManager *buffer_manager;
@@ -891,13 +885,13 @@ ide_langserv_client_initialize_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (JSONRPC_IS_CLIENT (rpc_client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
 
   if (!jsonrpc_client_call_finish (rpc_client, result, &reply, &error))
     {
       /* translators: %s is replaced with the error message */
       g_debug (_("Failed to initialize language server: %s"), error->message);
-      ide_langserv_client_stop (self);
+      ide_lsp_client_stop (self);
       IDE_EXIT;
     }
 
@@ -911,42 +905,39 @@ ide_langserv_client_initialize_cb (GObject      *object,
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  buffer_manager = ide_context_get_buffer_manager (context);
+  buffer_manager = ide_buffer_manager_from_context (context);
   dzl_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
 
-  project = ide_context_get_project (context);
+  project = ide_project_from_context (context);
   dzl_signal_group_set_target (priv->project_signals, project);
 
   IDE_EXIT;
 }
 
-IdeLangservClient *
-ide_langserv_client_new (IdeContext *context,
-                         GIOStream  *io_stream)
+IdeLspClient *
+ide_lsp_client_new (GIOStream *io_stream)
 {
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (G_IS_IO_STREAM (io_stream), NULL);
 
-  return g_object_new (IDE_TYPE_LANGSERV_CLIENT,
-                       "context", context,
+  return g_object_new (IDE_TYPE_LSP_CLIENT,
                        "io-stream", io_stream,
                        NULL);
 }
 
 void
-ide_langserv_client_start (IdeLangservClient *self)
+ide_lsp_client_start (IdeLspClient *self)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *root_path = NULL;
   g_autofree gchar *root_uri = NULL;
   IdeContext *context;
-  IdeVcs *vcs;
   GFile *workdir;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -962,12 +953,11 @@ ide_langserv_client_start (IdeLangservClient *self)
 
   g_signal_connect_object (priv->rpc_client,
                            "notification",
-                           G_CALLBACK (ide_langserv_client_send_notification),
+                           G_CALLBACK (ide_lsp_client_send_notification),
                            self,
                            G_CONNECT_SWAPPED);
 
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  workdir = ide_context_ref_workdir (context);
   root_path = g_file_get_path (workdir);
   root_uri = g_file_get_uri (workdir);
 
@@ -988,33 +978,33 @@ ide_langserv_client_start (IdeLangservClient *self)
                              "initialize",
                              params,
                              NULL,
-                             ide_langserv_client_initialize_cb,
+                             ide_lsp_client_initialize_cb,
                              g_object_ref (self));
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_client_close_cb (GObject      *object,
-                              GAsyncResult *result,
-                              gpointer      user_data)
+ide_lsp_client_close_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
 {
-  g_autoptr(IdeLangservClient) self = user_data;
+  g_autoptr(IdeLspClient) self = user_data;
   JsonrpcClient *client = (JsonrpcClient *)object;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
 
   jsonrpc_client_close_finish (client, result, NULL);
 }
 
 static void
-ide_langserv_client_shutdown_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
+ide_lsp_client_shutdown_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
 {
-  g_autoptr(IdeLangservClient) self = user_data;
+  g_autoptr(IdeLspClient) self = user_data;
   JsonrpcClient *client = (JsonrpcClient *)object;
   g_autoptr(GError) error = NULL;
 
@@ -1023,28 +1013,28 @@ ide_langserv_client_shutdown_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (JSONRPC_IS_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_LSP_CLIENT (self));
 
   if (!jsonrpc_client_call_finish (client, result, NULL, &error))
     g_debug ("%s", error->message);
   else
     jsonrpc_client_close_async (client,
                                 NULL,
-                                ide_langserv_client_close_cb,
+                                ide_lsp_client_close_cb,
                                 g_steal_pointer (&self));
 
   IDE_EXIT;
 }
 
 void
-ide_langserv_client_stop (IdeLangservClient *self)
+ide_lsp_client_stop (IdeLspClient *self)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
 
   if (priv->rpc_client != NULL)
     {
@@ -1052,7 +1042,7 @@ ide_langserv_client_stop (IdeLangservClient *self)
                                  "shutdown",
                                  NULL,
                                  NULL,
-                                 ide_langserv_client_shutdown_cb,
+                                 ide_lsp_client_shutdown_cb,
                                  g_object_ref (self));
       g_clear_object (&priv->rpc_client);
     }
@@ -1061,9 +1051,9 @@ ide_langserv_client_stop (IdeLangservClient *self)
 }
 
 static void
-ide_langserv_client_call_cb (GObject      *object,
-                             GAsyncResult *result,
-                             gpointer      user_data)
+ide_lsp_client_call_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
 {
   JsonrpcClient *client = (JsonrpcClient *)object;
   g_autoptr(GVariant) reply = NULL;
@@ -1088,8 +1078,8 @@ ide_langserv_client_call_cb (GObject      *object,
 }
 
 /**
- * ide_langserv_client_call_async:
- * @self: An #IdeLangservClient
+ * ide_lsp_client_call_async:
+ * @self: An #IdeLspClient
  * @method: the method to call
  * @params: (nullable) (transfer none): An #GVariant or %NULL
  * @cancellable: (nullable): A cancellable or %NULL
@@ -1100,29 +1090,29 @@ ide_langserv_client_call_cb (GObject      *object,
  *
  * If @params is floating, it's floating reference is consumed.
  *
- * Since: 3.32
+ * Since: 3.26
  */
 void
-ide_langserv_client_call_async (IdeLangservClient   *self,
-                                const gchar         *method,
-                                GVariant            *params,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
+ide_lsp_client_call_async (IdeLspClient        *self,
+                           const gchar         *method,
+                           GVariant            *params,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
   g_return_if_fail (method != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!priv->rpc_client || JSONRPC_IS_CLIENT (priv->rpc_client));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_client_call_async);
+  ide_task_set_source_tag (task, ide_lsp_client_call_async);
 
   if (priv->rpc_client == NULL)
     ide_task_return_new_error (task,
@@ -1134,24 +1124,24 @@ ide_langserv_client_call_async (IdeLangservClient   *self,
                                method,
                                params,
                                cancellable,
-                               ide_langserv_client_call_cb,
+                               ide_lsp_client_call_cb,
                                g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 gboolean
-ide_langserv_client_call_finish (IdeLangservClient  *self,
-                                 GAsyncResult       *result,
-                                 GVariant          **return_value,
-                                 GError            **error)
+ide_lsp_client_call_finish (IdeLspClient  *self,
+                            GAsyncResult  *result,
+                            GVariant     **return_value,
+                            GError       **error)
 {
   g_autoptr(GVariant) local_return_value = NULL;
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   local_return_value = ide_task_propagate_pointer (IDE_TASK (result), error);
@@ -1164,9 +1154,9 @@ ide_langserv_client_call_finish (IdeLangservClient  *self,
 }
 
 static void
-ide_langserv_client_send_notification_cb (GObject      *object,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
+ide_lsp_client_send_notification_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
 {
   JsonrpcClient *client = (JsonrpcClient *)object;
   g_autoptr(IdeTask) task = user_data;
@@ -1188,8 +1178,8 @@ ide_langserv_client_send_notification_cb (GObject      *object,
 }
 
 /**
- * ide_langserv_client_send_notification_async:
- * @self: An #IdeLangservClient
+ * ide_lsp_client_send_notification_async:
+ * @self: An #IdeLspClient
  * @method: the method to notification
  * @params: (nullable) (transfer none): An #GVariant or %NULL
  * @cancellable: (nullable): A cancellable or %NULL
@@ -1200,28 +1190,28 @@ ide_langserv_client_send_notification_cb (GObject      *object,
  *
  * If @params is floating, it's reference is consumed.
  *
- * Since: 3.32
+ * Since: 3.26
  */
 void
-ide_langserv_client_send_notification_async (IdeLangservClient   *self,
-                                             const gchar         *method,
-                                             GVariant            *params,
-                                             GCancellable        *cancellable,
-                                             GAsyncReadyCallback  notificationback,
-                                             gpointer             user_data)
+ide_lsp_client_send_notification_async (IdeLspClient        *self,
+                                        const gchar         *method,
+                                        GVariant            *params,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  notificationback,
+                                        gpointer             user_data)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
   g_return_if_fail (method != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, notificationback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_client_send_notification_async);
+  ide_task_set_source_tag (task, ide_lsp_client_send_notification_async);
 
   if (priv->rpc_client == NULL)
     ide_task_return_new_error (task,
@@ -1233,23 +1223,23 @@ ide_langserv_client_send_notification_async (IdeLangservClient   *self,
                                             method,
                                             params,
                                             cancellable,
-                                            ide_langserv_client_send_notification_cb,
+                                            ide_lsp_client_send_notification_cb,
                                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 gboolean
-ide_langserv_client_send_notification_finish (IdeLangservClient  *self,
-                                              GAsyncResult       *result,
-                                              GError            **error)
+ide_lsp_client_send_notification_finish (IdeLspClient  *self,
+                                         GAsyncResult  *result,
+                                         GError       **error)
 {
   gboolean ret;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
-  g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
@@ -1258,62 +1248,62 @@ ide_langserv_client_send_notification_finish (IdeLangservClient  *self,
 }
 
 void
-ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
-                                           GFile               *file,
-                                           GCancellable        *cancellable,
-                                           GAsyncReadyCallback  callback,
-                                           gpointer             user_data)
+ide_lsp_client_get_diagnostics_async (IdeLspClient        *self,
+                                      GFile               *file,
+                                      GBytes              *content,
+                                      const gchar         *lang_id,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   IdeDiagnostics *diagnostics;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_client_get_diagnostics_async);
+  ide_task_set_source_tag (task, ide_lsp_client_get_diagnostics_async);
 
   diagnostics = g_hash_table_lookup (priv->diagnostics_by_file, file);
 
   if (diagnostics != NULL)
     ide_task_return_pointer (task,
-                             ide_diagnostics_ref (diagnostics),
-                             (GDestroyNotify)ide_diagnostics_unref);
+                             g_object_ref (diagnostics),
+                             (GDestroyNotify)g_object_unref);
   else
     ide_task_return_pointer (task,
-                             ide_diagnostics_new (NULL),
-                             (GDestroyNotify)ide_diagnostics_unref);
+                             ide_diagnostics_new (),
+                             (GDestroyNotify)g_object_unref);
 }
 
 /**
- * ide_langserv_client_get_diagnostics_finish:
- * @self: an #IdeLangservClient
+ * ide_lsp_client_get_diagnostics_finish:
+ * @self: an #IdeLspClient
  * @result: a #GAsyncResult
  * @diagnostics: (nullable) (out): A location for a #IdeDiagnostics or %NULL
  * @error: A location for a #GError or %NULL
  *
- * Completes a request to ide_langserv_client_get_diagnostics_async().
+ * Completes a request to ide_lsp_client_get_diagnostics_async().
  *
  * Returns: %TRUE if successful and @diagnostics is set, otherwise %FALSE
  *   and @error is set.
- *
- * Since: 3.32
  */
 gboolean
-ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,
-                                            GAsyncResult       *result,
-                                            IdeDiagnostics    **diagnostics,
-                                            GError            **error)
+ide_lsp_client_get_diagnostics_finish (IdeLspClient    *self,
+                                       GAsyncResult    *result,
+                                       IdeDiagnostics **diagnostics,
+                                       GError         **error)
 {
   g_autoptr(IdeDiagnostics) local_diagnostics = NULL;
   g_autoptr(GError) local_error = NULL;
   gboolean ret;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
-  g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   local_diagnostics = ide_task_propagate_pointer (IDE_TASK (result), &local_error);
@@ -1329,13 +1319,13 @@ ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,
 }
 
 void
-ide_langserv_client_add_language (IdeLangservClient *self,
-                                  const gchar       *language_id)
+ide_lsp_client_add_language (IdeLspClient *self,
+                             const gchar  *language_id)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
   g_return_if_fail (language_id != NULL);
 
   g_ptr_array_add (priv->languages, g_strdup (language_id));

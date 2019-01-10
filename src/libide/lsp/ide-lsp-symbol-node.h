@@ -1,4 +1,4 @@
-/* ide-langserv-symbol-node-private.h
+/* ide-lsp-symbol-node.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,24 +20,23 @@
 
 #pragma once
 
-#include "langserv/ide-langserv-symbol-node.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
+
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
-struct _IdeLangservSymbolNode
-{
-  IdeSymbolNode parent_instance;
-  GNode         gnode;
-};
+#define IDE_TYPE_LSP_SYMBOL_NODE (ide_lsp_symbol_node_get_type())
 
+IDE_AVAILABLE_IN_3_32
+G_DECLARE_FINAL_TYPE (IdeLspSymbolNode, ide_lsp_symbol_node, IDE, LSP_SYMBOL_NODE, IdeSymbolNode)
 
-IdeLangservSymbolNode *ide_langserv_symbol_node_new (GFile       *file,
-                                                     const gchar *name,
-                                                     const gchar *parent_name,
-                                                     gint         kind,
-                                                     guint        begin_line,
-                                                     guint        begin_column,
-                                                     guint        end_line,
-                                                     guint        end_column);
+IDE_AVAILABLE_IN_3_32
+const gchar *ide_lsp_symbol_node_get_parent_name (IdeLspSymbolNode *self);
+IDE_AVAILABLE_IN_3_32
+gboolean     ide_lsp_symbol_node_is_parent_of    (IdeLspSymbolNode *self,
+                                                       IdeLspSymbolNode *other);
 
 G_END_DECLS

@@ -1,4 +1,4 @@
-/* ide-langserv-rename-provider.h
+/* ide-lsp-completion-provider.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,37 +20,35 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
 
-#include "langserv/ide-langserv-client.h"
-#include "rename/ide-rename-provider.h"
+#include <libide-sourceview.h>
+
+#include "ide-lsp-client.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LANGSERV_RENAME_PROVIDER (ide_langserv_rename_provider_get_type())
+#define IDE_TYPE_LSP_COMPLETION_PROVIDER (ide_lsp_completion_provider_get_type())
+
+#define IDE_LSP_COMPLETION_PROVIDER_PRIORITY 200
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeLangservRenameProvider, ide_langserv_rename_provider, IDE, LANGSERV_RENAME_PROVIDER, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspCompletionProvider, ide_lsp_completion_provider, IDE, LSP_COMPLETION_PROVIDER, IdeObject)
 
-struct _IdeLangservRenameProviderClass
+struct _IdeLspCompletionProviderClass
 {
-  IdeObjectClass parent_instance;
+  IdeObjectClass parent_class;
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
+  gpointer _reserved[8];
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeLangservClient *ide_langserv_rename_provider_get_client (IdeLangservRenameProvider *self);
+IdeLspClient *ide_lsp_completion_provider_get_client (IdeLspCompletionProvider *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_rename_provider_set_client (IdeLangservRenameProvider *self,
-                                                            IdeLangservClient         *client);
+void               ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
+                                                                IdeLspClient             *client);
 
 G_END_DECLS

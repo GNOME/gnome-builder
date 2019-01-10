@@ -1,4 +1,4 @@
-/* ide-langserv-rename-provider.c
+/* ide-lsp-rename-provider.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,32 +18,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-rename-provider"
+#define G_LOG_DOMAIN "ide-lsp-rename-provider"
 
 #include "config.h"
 
 #include <jsonrpc-glib.h>
+#include <libide-code.h>
+#include <libide-threading.h>
 
-#include "ide-debug.h"
-
-#include "buffers/ide-buffer.h"
-#include "files/ide-file.h"
-#include "langserv/ide-langserv-client.h"
-#include "langserv/ide-langserv-rename-provider.h"
-#include "diagnostics/ide-source-location.h"
-#include "threading/ide-task.h"
-#include "util/ide-glib.h"
+#include "ide-lsp-client.h"
+#include "ide-lsp-rename-provider.h"
 
 typedef struct
 {
-  IdeLangservClient *client;
+  IdeLspClient *client;
   IdeBuffer         *buffer;
-} IdeLangservRenameProviderPrivate;
+} IdeLspRenameProviderPrivate;
 
 static void rename_provider_iface_init (IdeRenameProviderInterface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLangservRenameProvider, ide_langserv_rename_provider, IDE_TYPE_OBJECT,
-                                  G_ADD_PRIVATE (IdeLangservRenameProvider)
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLspRenameProvider, ide_lsp_rename_provider, IDE_TYPE_OBJECT,
+                                  G_ADD_PRIVATE (IdeLspRenameProvider)
                                   G_IMPLEMENT_INTERFACE (IDE_TYPE_RENAME_PROVIDER, rename_provider_iface_init))
 
 enum {
@@ -56,38 +51,38 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_langserv_rename_provider_set_buffer (IdeLangservRenameProvider *self,
+ide_lsp_rename_provider_set_buffer (IdeLspRenameProvider *self,
                                          IdeBuffer                 *buffer)
 {
-  IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
+  IdeLspRenameProviderPrivate *priv = ide_lsp_rename_provider_get_instance_private (self);
 
   g_set_weak_pointer (&priv->buffer, buffer);
 }
 
 static void
-ide_langserv_rename_provider_finalize (GObject *object)
+ide_lsp_rename_provider_finalize (GObject *object)
 {
-  IdeLangservRenameProvider *self = (IdeLangservRenameProvider *)object;
-  IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
+  IdeLspRenameProvider *self = (IdeLspRenameProvider *)object;
+  IdeLspRenameProviderPrivate *priv = ide_lsp_rename_provider_get_instance_private (self);
 
   g_clear_object (&priv->client);
   g_clear_weak_pointer (&priv->buffer);
 
-  G_OBJECT_CLASS (ide_langserv_rename_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_rename_provider_parent_class)->finalize (object);
 }
 
 static void
-ide_langserv_rename_provider_get_property (GObject    *object,
+ide_lsp_rename_provider_get_property (GObject    *object,
                                            guint       prop_id,
                                            GValue     *value,
                                            GParamSpec *pspec)
 {
-  IdeLangservRenameProvider *self = IDE_LANGSERV_RENAME_PROVIDER (object);
+  IdeLspRenameProvider *self = IDE_LSP_RENAME_PROVIDER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      g_value_set_object (value, ide_langserv_rename_provider_get_client (self));
+      g_value_set_object (value, ide_lsp_rename_provider_get_client (self));
       break;
 
     default:
@@ -96,21 +91,21 @@ ide_langserv_rename_provider_get_property (GObject    *object,
 }
 
 static void
-ide_langserv_rename_provider_set_property (GObject      *object,
+ide_lsp_rename_provider_set_property (GObject      *object,
                                            guint         prop_id,
                                            const GValue *value,
                                            GParamSpec   *pspec)
 {
-  IdeLangservRenameProvider *self = IDE_LANGSERV_RENAME_PROVIDER (object);
+  IdeLspRenameProvider *self = IDE_LSP_RENAME_PROVIDER (object);
 
   switch (prop_id)
     {
     case PROP_BUFFER:
-      ide_langserv_rename_provider_set_buffer (self, g_value_get_object (value));
+      ide_lsp_rename_provider_set_buffer (self, g_value_get_object (value));
       break;
 
     case PROP_CLIENT:
-      ide_langserv_rename_provider_set_client (self, g_value_get_object (value));
+      ide_lsp_rename_provider_set_client (self, g_value_get_object (value));
       break;
 
     default:
@@ -119,19 +114,19 @@ ide_langserv_rename_provider_set_property (GObject      *object,
 }
 
 static void
-ide_langserv_rename_provider_class_init (IdeLangservRenameProviderClass *klass)
+ide_lsp_rename_provider_class_init (IdeLspRenameProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_langserv_rename_provider_finalize;
-  object_class->get_property = ide_langserv_rename_provider_get_property;
-  object_class->set_property = ide_langserv_rename_provider_set_property;
+  object_class->finalize = ide_lsp_rename_provider_finalize;
+  object_class->get_property = ide_lsp_rename_provider_get_property;
+  object_class->set_property = ide_lsp_rename_provider_set_property;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
                          "Client",
                          "The Language Server client",
-                         IDE_TYPE_LANGSERV_CLIENT,
+                         IDE_TYPE_LSP_CLIENT,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_BUFFER] =
@@ -145,35 +140,34 @@ ide_langserv_rename_provider_class_init (IdeLangservRenameProviderClass *klass)
 }
 
 static void
-ide_langserv_rename_provider_init (IdeLangservRenameProvider *self)
+ide_lsp_rename_provider_init (IdeLspRenameProvider *self)
 {
 }
 
 static void
-ide_langserv_rename_provider_rename_cb (GObject      *object,
+ide_lsp_rename_provider_rename_cb (GObject      *object,
                                         GAsyncResult *result,
                                         gpointer      user_data)
 {
-  IdeLangservClient *client = (IdeLangservClient *)object;
-  IdeLangservRenameProvider *self;
+  IdeLspClient *client = (IdeLspClient *)object;
+  IdeLspRenameProvider *self;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) ret = NULL;
   g_autoptr(GVariantIter) changes_by_uri = NULL;
-  IdeContext *context;
   const gchar *uri;
   GVariant *changes;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
   self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_LANGSERV_RENAME_PROVIDER (self));
+  g_assert (IDE_IS_LSP_RENAME_PROVIDER (self));
 
-  if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
+  if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -182,14 +176,11 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
   if (!JSONRPC_MESSAGE_PARSE (return_value, "changes", JSONRPC_MESSAGE_GET_ITER (&changes_by_uri)))
     IDE_EXIT;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
   while (g_variant_iter_loop (changes_by_uri, "{sv}", &uri, &changes))
     {
       g_autoptr(GFile) gfile = g_file_new_for_uri (uri);
-      g_autoptr(IdeFile) ifile = ide_file_new (context, gfile);
       GVariantIter changes_iter;
       GVariant *change;
 
@@ -200,10 +191,9 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
 
       while (g_variant_iter_loop (&changes_iter, "v", &change))
         {
-          g_autoptr(IdeSourceLocation) begin_location = NULL;
-          g_autoptr(IdeSourceLocation) end_location = NULL;
-          g_autoptr(IdeSourceRange) range = NULL;
-          g_autoptr(IdeProjectEdit) edit = NULL;
+          g_autoptr(IdeLocation) begin_location = NULL;
+          g_autoptr(IdeLocation) end_location = NULL;
+          g_autoptr(IdeRange) range = NULL;
           const gchar *new_text = NULL;
           gboolean success;
           struct {
@@ -231,16 +221,11 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
               continue;
             }
 
-          begin_location = ide_source_location_new (ifile, begin.line, begin.column, 0);
-          end_location = ide_source_location_new (ifile, end.line, end.column, 0);
-          range = ide_source_range_new (begin_location, end_location);
+          begin_location = ide_location_new (gfile, begin.line, begin.column);
+          end_location = ide_location_new (gfile, end.line, end.column);
+          range = ide_range_new (begin_location, end_location);
 
-          edit = g_object_new (IDE_TYPE_PROJECT_EDIT,
-                               "range", range,
-                               "replacement", new_text,
-                               NULL);
-
-          g_ptr_array_add (ret, g_steal_pointer (&edit));
+          g_ptr_array_add (ret, ide_text_edit_new (range, new_text));
         }
     }
 
@@ -250,22 +235,21 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
 }
 
 static void
-ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
-                                           IdeSourceLocation   *location,
+ide_lsp_rename_provider_rename_async (IdeRenameProvider   *provider,
+                                           IdeLocation   *location,
                                            const gchar         *new_name,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
 {
-  IdeLangservRenameProvider *self = (IdeLangservRenameProvider *)provider;
-  IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
+  IdeLspRenameProvider *self = (IdeLspRenameProvider *)provider;
+  IdeLspRenameProviderPrivate *priv = ide_lsp_rename_provider_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *text = NULL;
   g_autofree gchar *uri = NULL;
   GtkTextIter begin;
   GtkTextIter end;
-  IdeFile *ifile;
   GFile *gfile;
   gint64 version;
   gint line;
@@ -273,13 +257,13 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_RENAME_PROVIDER (self));
+  g_assert (IDE_IS_LSP_RENAME_PROVIDER (self));
   g_assert (location != NULL);
   g_assert (new_name != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_rename_provider_rename_async);
+  ide_task_set_source_tag (task, ide_lsp_rename_provider_rename_async);
 
   if (priv->client == NULL)
     {
@@ -290,12 +274,11 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
       IDE_EXIT;
     }
 
-  ifile = ide_source_location_get_file (location);
-  gfile = ide_file_get_file (ifile);
+  gfile = ide_location_get_file (location);
   uri = g_file_get_uri (gfile);
 
-  line = ide_source_location_get_line (location);
-  column = ide_source_location_get_line_offset (location);
+  line = ide_location_get_line (location);
+  column = ide_location_get_line_offset (location);
 
   version = ide_buffer_get_change_count (priv->buffer);
 
@@ -315,18 +298,18 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
     "newName", JSONRPC_MESSAGE_PUT_STRING (new_name)
   );
 
-  ide_langserv_client_call_async (priv->client,
+  ide_lsp_client_call_async (priv->client,
                                   "textDocument/rename",
                                   params,
                                   cancellable,
-                                  ide_langserv_rename_provider_rename_cb,
+                                  ide_lsp_rename_provider_rename_cb,
                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_langserv_rename_provider_rename_finish (IdeRenameProvider  *provider,
+ide_lsp_rename_provider_rename_finish (IdeRenameProvider  *provider,
                                             GAsyncResult       *result,
                                             GPtrArray         **edits,
                                             GError            **error)
@@ -336,7 +319,7 @@ ide_langserv_rename_provider_rename_finish (IdeRenameProvider  *provider,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_RENAME_PROVIDER (provider));
+  g_assert (IDE_IS_LSP_RENAME_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
   ar = ide_task_propagate_pointer (IDE_TASK (result), error);
@@ -351,35 +334,33 @@ ide_langserv_rename_provider_rename_finish (IdeRenameProvider  *provider,
 static void
 rename_provider_iface_init (IdeRenameProviderInterface *iface)
 {
-  iface->rename_async = ide_langserv_rename_provider_rename_async;
-  iface->rename_finish = ide_langserv_rename_provider_rename_finish;
+  iface->rename_async = ide_lsp_rename_provider_rename_async;
+  iface->rename_finish = ide_lsp_rename_provider_rename_finish;
 }
 
 /**
- * ide_langserv_rename_provider_get_client:
+ * ide_lsp_rename_provider_get_client:
  *
- * Returns: (transfer none) (nullable): an #IdeLangservClient or %NULL.
- *
- * Since: 3.32
+ * Returns: (transfer none) (nullable): an #IdeLspClient or %NULL.
  */
-IdeLangservClient *
-ide_langserv_rename_provider_get_client (IdeLangservRenameProvider *self)
+IdeLspClient *
+ide_lsp_rename_provider_get_client (IdeLspRenameProvider *self)
 {
-  IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
+  IdeLspRenameProviderPrivate *priv = ide_lsp_rename_provider_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_RENAME_PROVIDER (self), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_RENAME_PROVIDER (self), NULL);
 
   return priv->client;
 }
 
 void
-ide_langserv_rename_provider_set_client (IdeLangservRenameProvider *self,
-                                         IdeLangservClient         *client)
+ide_lsp_rename_provider_set_client (IdeLspRenameProvider *self,
+                                         IdeLspClient         *client)
 {
-  IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
+  IdeLspRenameProviderPrivate *priv = ide_lsp_rename_provider_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_LANGSERV_RENAME_PROVIDER (self));
-  g_return_if_fail (!client || IDE_IS_LANGSERV_CLIENT (client));
+  g_return_if_fail (IDE_IS_LSP_RENAME_PROVIDER (self));
+  g_return_if_fail (!client || IDE_IS_LSP_CLIENT (client));
 
   if (g_set_object (&priv->client, client))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);

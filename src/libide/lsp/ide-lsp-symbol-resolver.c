@@ -1,4 +1,4 @@
-/* ide-langserv-symbol-resolver.c
+/* ide-lsp-symbol-resolver.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,34 +18,30 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-symbol-resolver"
+#define G_LOG_DOMAIN "ide-lsp-symbol-resolver"
 
 #include "config.h"
 
 #include <jsonrpc-glib.h>
 
-#include "ide-debug.h"
+#include <libide-code.h>
+#include <libide-threading.h>
 
-#include "diagnostics/ide-source-location.h"
-#include "diagnostics/ide-source-range.h"
-#include "files/ide-file.h"
-#include "langserv/ide-langserv-symbol-node.h"
-#include "langserv/ide-langserv-symbol-node-private.h"
-#include "langserv/ide-langserv-symbol-resolver.h"
-#include "langserv/ide-langserv-symbol-tree.h"
-#include "langserv/ide-langserv-symbol-tree-private.h"
-#include "threading/ide-task.h"
-#include "util/ide-glib.h"
+#include "ide-lsp-symbol-node.h"
+#include "ide-lsp-symbol-node-private.h"
+#include "ide-lsp-symbol-resolver.h"
+#include "ide-lsp-symbol-tree.h"
+#include "ide-lsp-symbol-tree-private.h"
 
 typedef struct
 {
-  IdeLangservClient *client;
-} IdeLangservSymbolResolverPrivate;
+  IdeLspClient *client;
+} IdeLspSymbolResolverPrivate;
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLangservSymbolResolver, ide_langserv_symbol_resolver, IDE_TYPE_OBJECT,
-                                  G_ADD_PRIVATE (IdeLangservSymbolResolver)
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLspSymbolResolver, ide_lsp_symbol_resolver, IDE_TYPE_OBJECT,
+                                  G_ADD_PRIVATE (IdeLspSymbolResolver)
                                   G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 enum {
@@ -57,28 +53,28 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_langserv_symbol_resolver_finalize (GObject *object)
+ide_lsp_symbol_resolver_finalize (GObject *object)
 {
-  IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)object;
-  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)object;
+  IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
 
   g_clear_object (&priv->client);
 
-  G_OBJECT_CLASS (ide_langserv_symbol_resolver_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_symbol_resolver_parent_class)->finalize (object);
 }
 
 static void
-ide_langserv_symbol_resolver_get_property (GObject    *object,
+ide_lsp_symbol_resolver_get_property (GObject    *object,
                                            guint       prop_id,
                                            GValue     *value,
                                            GParamSpec *pspec)
 {
-  IdeLangservSymbolResolver *self = IDE_LANGSERV_SYMBOL_RESOLVER (object);
+  IdeLspSymbolResolver *self = IDE_LSP_SYMBOL_RESOLVER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      g_value_set_object (value, ide_langserv_symbol_resolver_get_client (self));
+      g_value_set_object (value, ide_lsp_symbol_resolver_get_client (self));
       break;
 
     default:
@@ -87,17 +83,17 @@ ide_langserv_symbol_resolver_get_property (GObject    *object,
 }
 
 static void
-ide_langserv_symbol_resolver_set_property (GObject      *object,
+ide_lsp_symbol_resolver_set_property (GObject      *object,
                                            guint         prop_id,
                                            const GValue *value,
                                            GParamSpec   *pspec)
 {
-  IdeLangservSymbolResolver *self = IDE_LANGSERV_SYMBOL_RESOLVER (object);
+  IdeLspSymbolResolver *self = IDE_LSP_SYMBOL_RESOLVER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      ide_langserv_symbol_resolver_set_client (self, g_value_get_object (value));
+      ide_lsp_symbol_resolver_set_client (self, g_value_get_object (value));
       break;
 
     default:
@@ -106,75 +102,72 @@ ide_langserv_symbol_resolver_set_property (GObject      *object,
 }
 
 static void
-ide_langserv_symbol_resolver_class_init (IdeLangservSymbolResolverClass *klass)
+ide_lsp_symbol_resolver_class_init (IdeLspSymbolResolverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_langserv_symbol_resolver_finalize;
-  object_class->get_property = ide_langserv_symbol_resolver_get_property;
-  object_class->set_property = ide_langserv_symbol_resolver_set_property;
+  object_class->finalize = ide_lsp_symbol_resolver_finalize;
+  object_class->get_property = ide_lsp_symbol_resolver_get_property;
+  object_class->set_property = ide_lsp_symbol_resolver_set_property;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
                          "Client",
                          "The Language Server client",
-                         IDE_TYPE_LANGSERV_CLIENT,
+                         IDE_TYPE_LSP_CLIENT,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
-ide_langserv_symbol_resolver_init (IdeLangservSymbolResolver *self)
+ide_lsp_symbol_resolver_init (IdeLspSymbolResolver *self)
 {
 }
 
 /**
- * ide_langserv_symbol_resolver_get_client:
+ * ide_lsp_symbol_resolver_get_client:
  *
  * Gets the client used by the symbol resolver.
  *
- * Returns: (transfer none) (nullable): An #IdeLangservClient or %NULL.
- *
- * Since: 3.32
+ * Returns: (transfer none) (nullable): An #IdeLspClient or %NULL.
  */
-IdeLangservClient *
-ide_langserv_symbol_resolver_get_client (IdeLangservSymbolResolver *self)
+IdeLspClient *
+ide_lsp_symbol_resolver_get_client (IdeLspSymbolResolver *self)
 {
-  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_SYMBOL_RESOLVER (self), NULL);
 
   return priv->client;
 }
 
 void
-ide_langserv_symbol_resolver_set_client (IdeLangservSymbolResolver *self,
-                                         IdeLangservClient         *client)
+ide_lsp_symbol_resolver_set_client (IdeLspSymbolResolver *self,
+                                         IdeLspClient         *client)
 {
-  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
-  g_return_if_fail (!client || IDE_IS_LANGSERV_CLIENT (client));
+  g_return_if_fail (IDE_IS_LSP_SYMBOL_RESOLVER (self));
+  g_return_if_fail (!client || IDE_IS_LSP_CLIENT (client));
 
   if (g_set_object (&priv->client, client))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
 }
 
 static void
-ide_langserv_symbol_resolver_definition_cb (GObject      *object,
+ide_lsp_symbol_resolver_definition_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
 {
-  IdeLangservClient *client = (IdeLangservClient *)object;
-  IdeLangservSymbolResolver *self;
+  IdeLspClient *client = (IdeLspClient *)object;
+  IdeLspSymbolResolver *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(IdeSymbol) symbol = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) gfile = NULL;
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(IdeLocation) location = NULL;
   g_autoptr(GVariant) variant = NULL;
   GVariantIter iter;
   const gchar *uri;
@@ -186,13 +179,13 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
   self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_LSP_SYMBOL_RESOLVER (self));
 
-  if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
+  if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -237,40 +230,38 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
                  uri, (gint)begin.line + 1, (gint)begin.column + 1);
 
   gfile = g_file_new_for_uri (uri);
-  ifile = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), gfile);
-  location = ide_source_location_new (ifile, begin.line, begin.column, 0);
-  symbol = ide_symbol_new ("", IDE_SYMBOL_NONE, IDE_SYMBOL_FLAGS_NONE, location, location, location);
+  location = ide_location_new (gfile, begin.line, begin.column);
+  symbol = ide_symbol_new ("", IDE_SYMBOL_KIND_NONE, IDE_SYMBOL_FLAGS_NONE, location, location);
 
-  ide_task_return_pointer (task, g_steal_pointer (&symbol), (GDestroyNotify)ide_symbol_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&symbol), g_object_unref);
 
   IDE_EXIT;
 }
 
 static void
-ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
-                                                  IdeSourceLocation   *location,
+ide_lsp_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
+                                                  IdeLocation   *location,
                                                   GCancellable        *cancellable,
                                                   GAsyncReadyCallback  callback,
                                                   gpointer             user_data)
 {
-  IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
-  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)resolver;
+  IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
-  IdeFile *ifile;
   GFile *gfile;
   gint line;
   gint column;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_LSP_SYMBOL_RESOLVER (self));
   g_assert (location != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_symbol_resolver_lookup_symbol_async);
+  ide_task_set_source_tag (task, ide_lsp_symbol_resolver_lookup_symbol_async);
 
   if (priv->client == NULL)
     {
@@ -282,8 +273,7 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
       IDE_EXIT;
     }
 
-  if (NULL == (ifile = ide_source_location_get_file (location)) ||
-      NULL == (gfile = ide_file_get_file (ifile)))
+  if (!(gfile = ide_location_get_file (location)))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -293,8 +283,8 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
     }
 
   uri = g_file_get_uri (gfile);
-  line = ide_source_location_get_line (location);
-  column = ide_source_location_get_line_offset (location);
+  line = ide_location_get_line (location);
+  column = ide_location_get_line_offset (location);
 
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
@@ -306,18 +296,18 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
     "}"
   );
 
-  ide_langserv_client_call_async (priv->client,
+  ide_lsp_client_call_async (priv->client,
                                   "textDocument/definition",
                                   params,
                                   cancellable,
-                                  ide_langserv_symbol_resolver_definition_cb,
+                                  ide_lsp_symbol_resolver_definition_cb,
                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static IdeSymbol *
-ide_langserv_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
+ide_lsp_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
                                                    GAsyncResult       *result,
                                                    GError            **error)
 {
@@ -325,7 +315,7 @@ ide_langserv_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (resolver), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_SYMBOL_RESOLVER (resolver), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
@@ -334,13 +324,13 @@ ide_langserv_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
 }
 
 static void
-ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
+ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
                                                  GAsyncResult *result,
                                                  gpointer      user_data)
 {
-  IdeLangservClient *client = (IdeLangservClient *)object;
+  IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(IdeLangservSymbolTree) tree = NULL;
+  g_autoptr(IdeLspSymbolTree) tree = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GPtrArray) symbols = NULL;
@@ -349,10 +339,10 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
+  if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -373,7 +363,7 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
 
   while (g_variant_iter_loop (&iter, "v", &node))
     {
-      g_autoptr(IdeLangservSymbolNode) symbol = NULL;
+      g_autoptr(IdeLspSymbolNode) symbol = NULL;
       g_autoptr(GFile) file = NULL;
       const gchar *name = NULL;
       const gchar *container_name = NULL;
@@ -415,14 +405,14 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
 
       file = g_file_new_for_uri (uri);
 
-      symbol = ide_langserv_symbol_node_new (file, name, container_name, kind,
+      symbol = ide_lsp_symbol_node_new (file, name, container_name, kind,
                                              begin.line, begin.column,
                                              end.line, end.column);
 
       g_ptr_array_add (symbols, g_steal_pointer (&symbol));
     }
 
-  tree = ide_langserv_symbol_tree_new (IDE_PTR_ARRAY_STEAL_FULL (&symbols));
+  tree = ide_lsp_symbol_tree_new (IDE_PTR_ARRAY_STEAL_FULL (&symbols));
 
   ide_task_return_pointer (task, g_steal_pointer (&tree), g_object_unref);
 
@@ -430,27 +420,27 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
 }
 
 static void
-ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
+ide_lsp_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                     GFile               *file,
-                                                    IdeBuffer           *buffer,
+                                                    GBytes              *bytes,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data)
 {
-  IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
-  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)resolver;
+  IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_LSP_SYMBOL_RESOLVER (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_symbol_resolver_get_symbol_tree_async);
+  ide_task_set_source_tag (task, ide_lsp_symbol_resolver_get_symbol_tree_async);
 
   if (priv->client == NULL)
     {
@@ -469,18 +459,18 @@ ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolve
     "}"
   );
 
-  ide_langserv_client_call_async (priv->client,
+  ide_lsp_client_call_async (priv->client,
                                   "textDocument/documentSymbol",
                                   params,
                                   cancellable,
-                                  ide_langserv_symbol_resolver_document_symbol_cb,
+                                  ide_lsp_symbol_resolver_document_symbol_cb,
                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static IdeSymbolTree *
-ide_langserv_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
+ide_lsp_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
                                                      GAsyncResult       *result,
                                                      GError            **error)
 {
@@ -488,7 +478,7 @@ ide_langserv_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolve
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (resolver), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_SYMBOL_RESOLVER (resolver), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
@@ -497,28 +487,25 @@ ide_langserv_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolve
 }
 
 static void
-ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
+ide_lsp_symbol_resolver_find_references_cb (GObject      *object,
                                                  GAsyncResult *result,
                                                  gpointer      user_data)
 {
-  IdeLangservClient *client = (IdeLangservClient *)object;
+  IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GPtrArray) references = NULL;
   g_autoptr(GError) error = NULL;
-  IdeLangservSymbolResolver *self;
   GVariant *locationv;
   GVariantIter iter;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  self = ide_task_get_source_object (task);
-
-  if (!ide_langserv_client_call_finish (client, result, &reply, &error))
+  if (!ide_lsp_client_call_finish (client, result, &reply, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -534,16 +521,15 @@ ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  references = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_source_range_unref);
+  references = g_ptr_array_new_with_free_func (g_object_unref);
 
   g_variant_iter_init (&iter, reply);
 
   while (g_variant_iter_loop (&iter, "v", &locationv))
     {
-      g_autoptr(IdeSourceLocation) begin_loc = NULL;
-      g_autoptr(IdeSourceLocation) end_loc = NULL;
-      g_autoptr(IdeSourceRange) range = NULL;
-      g_autoptr(IdeFile) ifile = NULL;
+      g_autoptr(IdeLocation) begin_loc = NULL;
+      g_autoptr(IdeLocation) end_loc = NULL;
+      g_autoptr(IdeRange) range = NULL;
       const gchar *uri = NULL;
       GFile *gfile;
       gboolean success;
@@ -576,11 +562,10 @@ ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
         }
 
       gfile = g_file_new_for_uri (uri);
-      ifile = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), gfile);
 
-      begin_loc = ide_source_location_new (ifile, begin.line, begin.line_offset, 0);
-      end_loc = ide_source_location_new (ifile, end.line, end.line_offset, 0);
-      range = ide_source_range_new (begin_loc, end_loc);
+      begin_loc = ide_location_new (gfile, begin.line, begin.line_offset);
+      end_loc = ide_location_new (gfile, end.line, end.line_offset);
+      range = ide_range_new (begin_loc, end_loc);
 
       g_ptr_array_add (references, g_steal_pointer (&range));
     }
@@ -591,40 +576,37 @@ ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
 }
 
 static void
-ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolver,
-                                                    IdeSourceLocation   *location,
+ide_lsp_symbol_resolver_find_references_async (IdeSymbolResolver   *resolver,
+                                                    IdeLocation         *location,
+                                                    const gchar         *language_id,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data)
 {
-  IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
-  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)resolver;
+  IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
-  const gchar *language_id;
-  IdeFile *file;
   GFile *gfile;
   guint line;
   guint line_offset;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_LSP_SYMBOL_RESOLVER (self));
   g_assert (location != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_symbol_resolver_find_references_async);
+  ide_task_set_source_tag (task, ide_lsp_symbol_resolver_find_references_async);
 
-  file = ide_source_location_get_file (location);
-  gfile = ide_file_get_file (file);
+  gfile = ide_location_get_file (location);
   uri = g_file_get_uri (gfile);
 
-  line = ide_source_location_get_line (location);
-  line_offset = ide_source_location_get_line_offset (location);
+  line = ide_location_get_line (location);
+  line_offset = ide_location_get_line_offset (location);
 
-  language_id = ide_file_get_language_id (file);
   if (language_id == NULL)
     language_id = "plain";
 
@@ -642,18 +624,18 @@ ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolve
     "}"
   );
 
-  ide_langserv_client_call_async (priv->client,
+  ide_lsp_client_call_async (priv->client,
                                   "textDocument/references",
                                   params,
                                   cancellable,
-                                  ide_langserv_symbol_resolver_find_references_cb,
+                                  ide_lsp_symbol_resolver_find_references_cb,
                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static GPtrArray *
-ide_langserv_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
+ide_lsp_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
                                                      GAsyncResult       *result,
                                                      GError            **error)
 {
@@ -661,7 +643,7 @@ ide_langserv_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_LSP_SYMBOL_RESOLVER (self));
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
@@ -674,10 +656,10 @@ ide_langserv_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
 static void
 symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
 {
-  iface->lookup_symbol_async = ide_langserv_symbol_resolver_lookup_symbol_async;
-  iface->lookup_symbol_finish = ide_langserv_symbol_resolver_lookup_symbol_finish;
-  iface->get_symbol_tree_async = ide_langserv_symbol_resolver_get_symbol_tree_async;
-  iface->get_symbol_tree_finish = ide_langserv_symbol_resolver_get_symbol_tree_finish;
-  iface->find_references_async = ide_langserv_symbol_resolver_find_references_async;
-  iface->find_references_finish = ide_langserv_symbol_resolver_find_references_finish;
+  iface->lookup_symbol_async = ide_lsp_symbol_resolver_lookup_symbol_async;
+  iface->lookup_symbol_finish = ide_lsp_symbol_resolver_lookup_symbol_finish;
+  iface->get_symbol_tree_async = ide_lsp_symbol_resolver_get_symbol_tree_async;
+  iface->get_symbol_tree_finish = ide_lsp_symbol_resolver_get_symbol_tree_finish;
+  iface->find_references_async = ide_lsp_symbol_resolver_find_references_async;
+  iface->find_references_finish = ide_lsp_symbol_resolver_find_references_finish;
 }

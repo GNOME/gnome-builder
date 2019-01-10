@@ -1,4 +1,4 @@
-/* ide-langserv-completion-item.h
+/* ide-lsp-completion-item.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,30 +20,31 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
 
-#include "completion/ide-completion-proposal.h"
-#include "snippets/ide-snippet.h"
+#include <libide-sourceview.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LANGSERV_COMPLETION_ITEM (ide_langserv_completion_item_get_type())
+#define IDE_TYPE_LSP_COMPLETION_ITEM (ide_lsp_completion_item_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeLangservCompletionItem, ide_langserv_completion_item, IDE, LANGSERV_COMPLETION_ITEM, GObject)
+G_DECLARE_FINAL_TYPE (IdeLspCompletionItem, ide_lsp_completion_item, IDE, LSP_COMPLETION_ITEM, GObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeLangservCompletionItem *ide_langserv_completion_item_new             (GVariant *variant);
+IdeLspCompletionItem *ide_lsp_completion_item_new             (GVariant *variant);
 IDE_AVAILABLE_IN_3_32
-const gchar               *ide_langserv_completion_item_get_icon_name   (IdeLangservCompletionItem *self);
+const gchar               *ide_lsp_completion_item_get_icon_name   (IdeLspCompletionItem *self);
 IDE_AVAILABLE_IN_3_32
-const gchar               *ide_langserv_completion_item_get_return_type (IdeLangservCompletionItem *self);
+const gchar               *ide_lsp_completion_item_get_return_type (IdeLspCompletionItem *self);
 IDE_AVAILABLE_IN_3_32
-const gchar               *ide_langserv_completion_item_get_detail      (IdeLangservCompletionItem *self);
+const gchar               *ide_lsp_completion_item_get_detail      (IdeLspCompletionItem *self);
 IDE_AVAILABLE_IN_3_32
-gchar                     *ide_langserv_completion_item_get_markup      (IdeLangservCompletionItem *self,
+gchar                     *ide_lsp_completion_item_get_markup      (IdeLspCompletionItem *self,
                                                                          const gchar               *typed_text);
 IDE_AVAILABLE_IN_3_32
-IdeSnippet                *ide_langserv_completion_item_get_snippet     (IdeLangservCompletionItem *self);
+IdeSnippet                *ide_lsp_completion_item_get_snippet     (IdeLspCompletionItem *self);
 
 G_END_DECLS

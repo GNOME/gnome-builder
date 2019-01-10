@@ -1,4 +1,4 @@
-/* ide-langserv-client.h
+/* ide-lsp-client.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,82 +20,78 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
 
-#include "ide-object.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LANGSERV_CLIENT (ide_langserv_client_get_type())
+#define IDE_TYPE_LSP_CLIENT (ide_lsp_client_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeLangservClient, ide_langserv_client, IDE, LANGSERV_CLIENT, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspClient, ide_lsp_client, IDE, LSP_CLIENT, IdeObject)
 
-struct _IdeLangservClientClass
+struct _IdeLspClientClass
 {
   IdeObjectClass parent_class;
 
-  void     (*notification)          (IdeLangservClient *self,
+  void     (*notification)          (IdeLspClient *self,
                                      const gchar       *method,
                                      GVariant          *params);
-  gboolean (*supports_language)     (IdeLangservClient *self,
+  gboolean (*supports_language)     (IdeLspClient *self,
                                      const gchar       *language_id);
-  void     (*published_diagnostics) (IdeLangservClient *self,
+  void     (*published_diagnostics) (IdeLspClient *self,
                                      GFile             *file,
                                      IdeDiagnostics    *diagnostics);
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
+  gpointer _reserved[16];
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeLangservClient *ide_langserv_client_new                      (IdeContext           *context,
-                                                                 GIOStream            *io_stream);
+IdeLspClient *ide_lsp_client_new                      (GIOStream            *io_stream);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_client_add_language             (IdeLangservClient    *self,
+void               ide_lsp_client_add_language             (IdeLspClient    *self,
                                                                  const gchar          *language_id);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_client_start                    (IdeLangservClient    *self);
+void               ide_lsp_client_start                    (IdeLspClient    *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_client_stop                     (IdeLangservClient    *self);
+void               ide_lsp_client_stop                     (IdeLspClient    *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_client_call_async               (IdeLangservClient    *self,
+void               ide_lsp_client_call_async               (IdeLspClient    *self,
                                                                  const gchar          *method,
                                                                  GVariant             *params,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_langserv_client_call_finish              (IdeLangservClient    *self,
+gboolean           ide_lsp_client_call_finish              (IdeLspClient    *self,
                                                                  GAsyncResult         *result,
                                                                  GVariant            **return_value,
                                                                  GError              **error);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_client_send_notification_async  (IdeLangservClient    *self,
+void               ide_lsp_client_send_notification_async  (IdeLspClient    *self,
                                                                  const gchar          *method,
                                                                  GVariant             *params,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   notificationback,
                                                                  gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_langserv_client_send_notification_finish (IdeLangservClient    *self,
+gboolean           ide_lsp_client_send_notification_finish (IdeLspClient    *self,
                                                                  GAsyncResult         *result,
                                                                  GError              **error);
 IDE_AVAILABLE_IN_3_32
-void               ide_langserv_client_get_diagnostics_async    (IdeLangservClient    *self,
+void               ide_lsp_client_get_diagnostics_async    (IdeLspClient    *self,
                                                                  GFile                *file,
+                                                                 GBytes *content,
+                                                                 const gchar *lang_id,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_langserv_client_get_diagnostics_finish   (IdeLangservClient    *self,
+gboolean           ide_lsp_client_get_diagnostics_finish   (IdeLspClient    *self,
                                                                  GAsyncResult         *result,
                                                                  IdeDiagnostics      **diagnostics,
                                                                  GError              **error);

@@ -1,6 +1,6 @@
-/* ide-langserv-util.h
+/* ide-lsp-symbol-tree-private.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,10 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
-
-#include "symbols/ide-symbol.h"
+#include "ide-lsp-symbol-tree.h"
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
-IdeSymbolKind ide_langserv_decode_symbol_kind     (guint kind);
-IDE_AVAILABLE_IN_3_32
-IdeSymbolKind ide_langserv_decode_completion_kind (guint kind);
+IdeLspSymbolTree *ide_lsp_symbol_tree_new (GPtrArray *symbols);
 
 G_END_DECLS

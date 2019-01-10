@@ -1,4 +1,4 @@
-/* ide-langserv-highlighter.c
+/* ide-lsp-highlighter.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,18 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-highlighter"
+#define G_LOG_DOMAIN "ide-lsp-highlighter"
 
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-code.h>
 #include <jsonrpc-glib.h>
 
-#include "ide-debug.h"
-
-#include "highlighting/ide-highlight-engine.h"
-#include "highlighting/ide-highlight-index.h"
-#include "langserv/ide-langserv-highlighter.h"
+#include "ide-lsp-highlighter.h"
 
 #define DELAY_TIMEOUT_MSEC 333
 
@@ -44,7 +41,7 @@ typedef struct
 {
   IdeHighlightEngine *engine;
 
-  IdeLangservClient  *client;
+  IdeLspClient  *client;
   IdeHighlightIndex  *index;
   DzlSignalGroup     *buffer_signals;
 
@@ -52,13 +49,13 @@ typedef struct
 
   guint               active : 1;
   guint               dirty : 1;
-} IdeLangservHighlighterPrivate;
+} IdeLspHighlighterPrivate;
 
 static void highlighter_iface_init                (IdeHighlighterInterface *iface);
-static void ide_langserv_highlighter_queue_update (IdeLangservHighlighter  *self);
+static void ide_lsp_highlighter_queue_update (IdeLspHighlighter  *self);
 
-G_DEFINE_TYPE_WITH_CODE (IdeLangservHighlighter, ide_langserv_highlighter, IDE_TYPE_OBJECT,
-                         G_ADD_PRIVATE (IdeLangservHighlighter)
+G_DEFINE_TYPE_WITH_CODE (IdeLspHighlighter, ide_lsp_highlighter, IDE_TYPE_OBJECT,
+                         G_ADD_PRIVATE (IdeLspHighlighter)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
 
 enum {
@@ -70,14 +67,14 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_langserv_highlighter_set_index (IdeLangservHighlighter *self,
+ide_lsp_highlighter_set_index (IdeLspHighlighter *self,
                                     IdeHighlightIndex      *index)
 {
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
 
   g_clear_pointer (&priv->index, ide_highlight_index_unref);
   if (index != NULL)
@@ -95,26 +92,26 @@ ide_langserv_highlighter_set_index (IdeLangservHighlighter *self,
 }
 
 static void
-ide_langserv_highlighter_document_symbol_cb (GObject      *object,
+ide_lsp_highlighter_document_symbol_cb (GObject      *object,
                                              GAsyncResult *result,
                                              gpointer      user_data)
 {
-  IdeLangservClient *client = (IdeLangservClient *)object;
-  g_autoptr(IdeLangservHighlighter) self = user_data;
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspClient *client = (IdeLspClient *)object;
+  g_autoptr(IdeLspHighlighter) self = user_data;
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
   GVariantIter iter;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
 
   priv->active = FALSE;
 
-  if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
+  if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_debug ("%s", error->message);
@@ -181,22 +178,22 @@ ide_langserv_highlighter_document_symbol_cb (GObject      *object,
             ide_highlight_index_insert (index, name, (gpointer)tag);
         }
 
-      ide_langserv_highlighter_set_index (self, index);
+      ide_lsp_highlighter_set_index (self, index);
     }
 
   if (priv->dirty)
-    ide_langserv_highlighter_queue_update (self);
+    ide_lsp_highlighter_queue_update (self);
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_langserv_highlighter_update_symbols (gpointer data)
+ide_lsp_highlighter_update_symbols (gpointer data)
 {
-  IdeLangservHighlighter *self = data;
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighter *self = data;
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
-  g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
 
   priv->queued_update = 0;
 
@@ -207,7 +204,7 @@ ide_langserv_highlighter_update_symbols (gpointer data)
       IdeBuffer *buffer;
 
       buffer = ide_highlight_engine_get_buffer (priv->engine);
-      uri = ide_buffer_get_uri (buffer);
+      uri = ide_buffer_dup_uri (buffer);
 
       params = JSONRPC_MESSAGE_NEW (
         "textDocument", "{",
@@ -218,11 +215,11 @@ ide_langserv_highlighter_update_symbols (gpointer data)
       priv->active = TRUE;
       priv->dirty = FALSE;
 
-      ide_langserv_client_call_async (priv->client,
+      ide_lsp_client_call_async (priv->client,
                                       "textDocument/documentSymbol",
                                       params,
                                       NULL,
-                                      ide_langserv_highlighter_document_symbol_cb,
+                                      ide_lsp_highlighter_document_symbol_cb,
                                       g_object_ref (self));
     }
 
@@ -230,13 +227,13 @@ ide_langserv_highlighter_update_symbols (gpointer data)
 }
 
 static void
-ide_langserv_highlighter_queue_update (IdeLangservHighlighter *self)
+ide_lsp_highlighter_queue_update (IdeLspHighlighter *self)
 {
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
 
   priv->dirty = TRUE;
 
@@ -248,7 +245,7 @@ ide_langserv_highlighter_queue_update (IdeLangservHighlighter *self)
   if (priv->queued_update == 0 && priv->active == FALSE)
     {
       priv->queued_update = g_timeout_add (DELAY_TIMEOUT_MSEC,
-                                           ide_langserv_highlighter_update_symbols,
+                                           ide_lsp_highlighter_update_symbols,
                                            self);
     }
 
@@ -256,20 +253,20 @@ ide_langserv_highlighter_queue_update (IdeLangservHighlighter *self)
 }
 
 static void
-ide_langserv_highlighter_buffer_line_flags_changed (IdeLangservHighlighter *self,
+ide_lsp_highlighter_buffer_line_flags_changed (IdeLspHighlighter *self,
                                                     IdeBuffer              *buffer)
 {
-  g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  ide_langserv_highlighter_queue_update (self);
+  ide_lsp_highlighter_queue_update (self);
 }
 
 static void
-ide_langserv_highlighter_dispose (GObject *object)
+ide_lsp_highlighter_dispose (GObject *object)
 {
-  IdeLangservHighlighter *self = (IdeLangservHighlighter *)object;
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighter *self = (IdeLspHighlighter *)object;
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
   priv->engine = NULL;
 
@@ -279,21 +276,21 @@ ide_langserv_highlighter_dispose (GObject *object)
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->client);
 
-  G_OBJECT_CLASS (ide_langserv_highlighter_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ide_lsp_highlighter_parent_class)->dispose (object);
 }
 
 static void
-ide_langserv_highlighter_get_property (GObject    *object,
+ide_lsp_highlighter_get_property (GObject    *object,
                                        guint       prop_id,
                                        GValue     *value,
                                        GParamSpec *pspec)
 {
-  IdeLangservHighlighter *self = IDE_LANGSERV_HIGHLIGHTER (object);
+  IdeLspHighlighter *self = IDE_LSP_HIGHLIGHTER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      g_value_set_object (value, ide_langserv_highlighter_get_client (self));
+      g_value_set_object (value, ide_lsp_highlighter_get_client (self));
       break;
 
     default:
@@ -302,17 +299,17 @@ ide_langserv_highlighter_get_property (GObject    *object,
 }
 
 static void
-ide_langserv_highlighter_set_property (GObject      *object,
+ide_lsp_highlighter_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
                                        GParamSpec   *pspec)
 {
-  IdeLangservHighlighter *self = IDE_LANGSERV_HIGHLIGHTER (object);
+  IdeLspHighlighter *self = IDE_LSP_HIGHLIGHTER (object);
 
   switch (prop_id)
     {
     case PROP_CLIENT:
-      ide_langserv_highlighter_set_client (self, g_value_get_object (value));
+      ide_lsp_highlighter_set_client (self, g_value_get_object (value));
       break;
 
     default:
@@ -321,28 +318,28 @@ ide_langserv_highlighter_set_property (GObject      *object,
 }
 
 static void
-ide_langserv_highlighter_class_init (IdeLangservHighlighterClass *klass)
+ide_lsp_highlighter_class_init (IdeLspHighlighterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_langserv_highlighter_dispose;
-  object_class->get_property = ide_langserv_highlighter_get_property;
-  object_class->set_property = ide_langserv_highlighter_set_property;
+  object_class->dispose = ide_lsp_highlighter_dispose;
+  object_class->get_property = ide_lsp_highlighter_get_property;
+  object_class->set_property = ide_lsp_highlighter_set_property;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
                          "Client",
                          "Client",
-                         IDE_TYPE_LANGSERV_CLIENT,
+                         IDE_TYPE_LSP_CLIENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
-ide_langserv_highlighter_init (IdeLangservHighlighter *self)
+ide_lsp_highlighter_init (IdeLspHighlighter *self)
 {
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
   priv->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
@@ -356,40 +353,38 @@ ide_langserv_highlighter_init (IdeLangservHighlighter *self)
    */
   dzl_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
-                                   G_CALLBACK (ide_langserv_highlighter_buffer_line_flags_changed),
+                                   G_CALLBACK (ide_lsp_highlighter_buffer_line_flags_changed),
                                    self,
                                    G_CONNECT_SWAPPED);
 }
 
 /**
- * ide_langserv_highlighter_get_client:
+ * ide_lsp_highlighter_get_client:
  *
- * Returns: (transfer none) (nullable): An #IdeLangservHighlighter or %NULL.
- *
- * Since: 3.32
+ * Returns: (transfer none) (nullable): An #IdeLspHighlighter or %NULL.
  */
-IdeLangservClient *
-ide_langserv_highlighter_get_client (IdeLangservHighlighter *self)
+IdeLspClient *
+ide_lsp_highlighter_get_client (IdeLspHighlighter *self)
 {
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_HIGHLIGHTER (self), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_HIGHLIGHTER (self), NULL);
 
   return priv->client;
 }
 
 void
-ide_langserv_highlighter_set_client (IdeLangservHighlighter *self,
-                                     IdeLangservClient      *client)
+ide_lsp_highlighter_set_client (IdeLspHighlighter *self,
+                                     IdeLspClient      *client)
 {
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_LANGSERV_HIGHLIGHTER (self));
-  g_return_if_fail (!client || IDE_IS_LANGSERV_CLIENT (client));
+  g_return_if_fail (IDE_IS_LSP_HIGHLIGHTER (self));
+  g_return_if_fail (!client || IDE_IS_LSP_CLIENT (client));
 
   if (g_set_object (&priv->client, client))
     {
-      ide_langserv_highlighter_queue_update (self);
+      ide_lsp_highlighter_queue_update (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
     }
 }
@@ -424,19 +419,19 @@ select_next_word (GtkTextIter *begin,
 }
 
 static void
-ide_langserv_highlighter_update (IdeHighlighter       *highlighter,
+ide_lsp_highlighter_update (IdeHighlighter       *highlighter,
                                  IdeHighlightCallback  callback,
                                  const GtkTextIter    *range_begin,
                                  const GtkTextIter    *range_end,
                                  GtkTextIter          *location)
 {
-  IdeLangservHighlighter *self = (IdeLangservHighlighter *)highlighter;
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighter *self = (IdeLspHighlighter *)highlighter;
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
   GtkSourceBuffer *source_buffer;
   GtkTextIter begin;
   GtkTextIter end;
 
-  g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
   g_assert (callback != NULL);
 
   if (priv->index == NULL)
@@ -488,15 +483,15 @@ completed:
 }
 
 static void
-ide_langserv_highlighter_set_engine (IdeHighlighter     *highlighter,
+ide_lsp_highlighter_set_engine (IdeHighlighter     *highlighter,
                                      IdeHighlightEngine *engine)
 {
-  IdeLangservHighlighter *self = (IdeLangservHighlighter *)highlighter;
-  IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
+  IdeLspHighlighter *self = (IdeLspHighlighter *)highlighter;
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
   g_assert (!engine || IDE_IS_HIGHLIGHT_ENGINE (engine));
 
   priv->engine = engine;
@@ -509,7 +504,7 @@ ide_langserv_highlighter_set_engine (IdeHighlighter     *highlighter,
 
       buffer = ide_highlight_engine_get_buffer (engine);
       dzl_signal_group_set_target (priv->buffer_signals, buffer);
-      ide_langserv_highlighter_queue_update (self);
+      ide_lsp_highlighter_queue_update (self);
     }
 
   IDE_EXIT;
@@ -518,6 +513,6 @@ ide_langserv_highlighter_set_engine (IdeHighlighter     *highlighter,
 static void
 highlighter_iface_init (IdeHighlighterInterface *iface)
 {
-  iface->update = ide_langserv_highlighter_update;
-  iface->set_engine = ide_langserv_highlighter_set_engine;
+  iface->update = ide_lsp_highlighter_update;
+  iface->set_engine = ide_lsp_highlighter_set_engine;
 }

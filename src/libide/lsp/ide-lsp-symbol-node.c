@@ -1,4 +1,4 @@
-/* ide-langserv-symbol-node.c
+/* ide-lsp-symbol-node.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,18 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-langserv-symbol-node"
+#define G_LOG_DOMAIN "ide-lsp-symbol-node"
 
 #include "config.h"
 
-#include "ide-debug.h"
+#include <libide-code.h>
+#include <libide-threading.h>
 
-#include "diagnostics/ide-source-location.h"
-#include "files/ide-file.h"
-#include "langserv/ide-langserv-symbol-node.h"
-#include "langserv/ide-langserv-symbol-node-private.h"
-#include "langserv/ide-langserv-util.h"
-#include "threading/ide-task.h"
+#include "ide-lsp-symbol-node.h"
+#include "ide-lsp-symbol-node-private.h"
+#include "ide-lsp-util.h"
 
 typedef struct
 {
@@ -44,9 +42,9 @@ typedef struct
   IdeSymbolKind kind;
   Location begin;
   Location end;
-} IdeLangservSymbolNodePrivate;
+} IdeLspSymbolNodePrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservSymbolNode, ide_langserv_symbol_node, IDE_TYPE_SYMBOL_NODE)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeLspSymbolNode, ide_lsp_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 static inline gint
 location_compare (const Location *a,
@@ -62,42 +60,38 @@ location_compare (const Location *a,
 }
 
 static void
-ide_langserv_symbol_node_get_location_async (IdeSymbolNode       *node,
+ide_lsp_symbol_node_get_location_async (IdeSymbolNode       *node,
                                              GCancellable        *cancellable,
                                              GAsyncReadyCallback  callback,
                                              gpointer             user_data)
 {
-  IdeLangservSymbolNode *self = (IdeLangservSymbolNode *)node;
-  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
+  IdeLspSymbolNode *self = (IdeLspSymbolNode *)node;
+  IdeLspSymbolNodePrivate *priv = ide_lsp_symbol_node_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
-  g_autoptr(IdeSourceLocation) location = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_SYMBOL_NODE (node));
+  g_assert (IDE_IS_LSP_SYMBOL_NODE (node));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_langserv_symbol_node_get_location_async);
-
-  ifile = ide_file_new (NULL, priv->file);
-  location = ide_source_location_new (ifile, priv->begin.line, priv->begin.column, 0);
-
-  ide_task_return_pointer (task, g_steal_pointer (&location), (GDestroyNotify)ide_source_location_unref);
+  ide_task_set_source_tag (task, ide_lsp_symbol_node_get_location_async);
+  ide_task_return_pointer (task,
+                           ide_location_new (priv->file, priv->begin.line, priv->begin.column),
+                           g_object_unref);
 
   IDE_EXIT;
 }
 
-static IdeSourceLocation *
-ide_langserv_symbol_node_get_location_finish (IdeSymbolNode  *node,
+static IdeLocation *
+ide_lsp_symbol_node_get_location_finish (IdeSymbolNode  *node,
                                               GAsyncResult   *result,
                                               GError        **error)
 {
-  IdeSourceLocation *ret;
+  IdeLocation *ret;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_SYMBOL_NODE (node));
+  g_assert (IDE_IS_LSP_SYMBOL_NODE (node));
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
@@ -106,37 +100,37 @@ ide_langserv_symbol_node_get_location_finish (IdeSymbolNode  *node,
 }
 
 static void
-ide_langserv_symbol_node_finalize (GObject *object)
+ide_lsp_symbol_node_finalize (GObject *object)
 {
-  IdeLangservSymbolNode *self = (IdeLangservSymbolNode *)object;
-  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
+  IdeLspSymbolNode *self = (IdeLspSymbolNode *)object;
+  IdeLspSymbolNodePrivate *priv = ide_lsp_symbol_node_get_instance_private (self);
 
   g_clear_pointer (&priv->parent_name, g_free);
   g_clear_object (&priv->file);
 
-  G_OBJECT_CLASS (ide_langserv_symbol_node_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_symbol_node_parent_class)->finalize (object);
 }
 
 static void
-ide_langserv_symbol_node_class_init (IdeLangservSymbolNodeClass *klass)
+ide_lsp_symbol_node_class_init (IdeLspSymbolNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeSymbolNodeClass *symbol_node_class = IDE_SYMBOL_NODE_CLASS (klass);
 
-  object_class->finalize = ide_langserv_symbol_node_finalize;
+  object_class->finalize = ide_lsp_symbol_node_finalize;
 
-  symbol_node_class->get_location_async = ide_langserv_symbol_node_get_location_async;
-  symbol_node_class->get_location_finish = ide_langserv_symbol_node_get_location_finish;
+  symbol_node_class->get_location_async = ide_lsp_symbol_node_get_location_async;
+  symbol_node_class->get_location_finish = ide_lsp_symbol_node_get_location_finish;
 }
 
 static void
-ide_langserv_symbol_node_init (IdeLangservSymbolNode *self)
+ide_lsp_symbol_node_init (IdeLspSymbolNode *self)
 {
   self->gnode.data = self;
 }
 
-IdeLangservSymbolNode *
-ide_langserv_symbol_node_new (GFile       *file,
+IdeLspSymbolNode *
+ide_lsp_symbol_node_new (GFile       *file,
                               const gchar *name,
                               const gchar *parent_name,
                               gint         kind,
@@ -145,19 +139,19 @@ ide_langserv_symbol_node_new (GFile       *file,
                               guint        end_line,
                               guint        end_column)
 {
-  IdeLangservSymbolNode *self;
-  IdeLangservSymbolNodePrivate *priv;
+  IdeLspSymbolNode *self;
+  IdeLspSymbolNodePrivate *priv;
 
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
-  kind = ide_langserv_decode_symbol_kind (kind);
+  kind = ide_lsp_decode_symbol_kind (kind);
 
-  self = g_object_new (IDE_TYPE_LANGSERV_SYMBOL_NODE,
+  self = g_object_new (IDE_TYPE_LSP_SYMBOL_NODE,
                        "flags", 0,
                        "kind", kind,
                        "name", name,
                        NULL);
-  priv = ide_langserv_symbol_node_get_instance_private (self);
+  priv = ide_lsp_symbol_node_get_instance_private (self);
 
   priv->file = g_object_ref (file);
   priv->parent_name = g_strdup (parent_name);
@@ -170,24 +164,24 @@ ide_langserv_symbol_node_new (GFile       *file,
 }
 
 const gchar *
-ide_langserv_symbol_node_get_parent_name (IdeLangservSymbolNode *self)
+ide_lsp_symbol_node_get_parent_name (IdeLspSymbolNode *self)
 {
-  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
+  IdeLspSymbolNodePrivate *priv = ide_lsp_symbol_node_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (self), NULL);
+  g_return_val_if_fail (IDE_IS_LSP_SYMBOL_NODE (self), NULL);
 
   return priv->parent_name;
 }
 
 gboolean
-ide_langserv_symbol_node_is_parent_of (IdeLangservSymbolNode *self,
-                                       IdeLangservSymbolNode *other)
+ide_lsp_symbol_node_is_parent_of (IdeLspSymbolNode *self,
+                                       IdeLspSymbolNode *other)
 {
-  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
-  IdeLangservSymbolNodePrivate *opriv = ide_langserv_symbol_node_get_instance_private (other);
+  IdeLspSymbolNodePrivate *priv = ide_lsp_symbol_node_get_instance_private (self);
+  IdeLspSymbolNodePrivate *opriv = ide_lsp_symbol_node_get_instance_private (other);
 
-  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (self), FALSE);
-  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (other), FALSE);
+  g_return_val_if_fail (IDE_IS_LSP_SYMBOL_NODE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_LSP_SYMBOL_NODE (other), FALSE);
 
   return (location_compare (&priv->begin, &opriv->begin) <= 0) &&
          (location_compare (&priv->end, &opriv->end) >= 0);

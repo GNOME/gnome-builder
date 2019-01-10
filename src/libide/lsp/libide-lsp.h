@@ -1,4 +1,4 @@
-/* ide-langserv-completion-results.h
+/* libide-lsp.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,19 +20,23 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <libide-core.h>
 
-G_BEGIN_DECLS
+#define IDE_LSP_INSIDE
 
-#define IDE_TYPE_LANGSERV_COMPLETION_RESULTS (ide_langserv_completion_results_get_type())
+#include "ide-lsp-types.h"
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeLangservCompletionResults, ide_langserv_completion_results, IDE, LANGSERV_COMPLETION_RESULTS, GObject)
+#include "ide-lsp-client.h"
+#include "ide-lsp-completion-item.h"
+#include "ide-lsp-completion-provider.h"
+#include "ide-lsp-completion-results.h"
+#include "ide-lsp-diagnostic-provider.h"
+#include "ide-lsp-formatter.h"
+#include "ide-lsp-highlighter.h"
+#include "ide-lsp-hover-provider.h"
+#include "ide-lsp-rename-provider.h"
+#include "ide-lsp-symbol-node.h"
+#include "ide-lsp-symbol-resolver.h"
+#include "ide-lsp-symbol-tree.h"
 
-IDE_AVAILABLE_IN_3_32
-IdeLangservCompletionResults *ide_langserv_completion_results_new      (GVariant                     *results);
-IDE_AVAILABLE_IN_3_32
-void                          ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
-                                                                        const gchar                  *typed_text);
-
-G_END_DECLS
+#undef IDE_LSP_INSIDE
