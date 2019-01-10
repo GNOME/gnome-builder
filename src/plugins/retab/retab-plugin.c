@@ -1,4 +1,4 @@
-/* gbp-retab-plugin.c
+/* retab-plugin.c
  *
  * Copyright 2017 Lucie Charvat <luci.charvat@gmail.com>
  *
@@ -18,15 +18,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#define G_LOG_DOMAIN "retab-plugin"
+
+#include "config.h"
+
+#include <libide-editor.h>
 #include <libpeas/peas.h>
 
-#include "gbp-retab-view-addin.h"
+#include "gbp-retab-editor-page-addin.h"
 
-void
-gbp_retab_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_retab_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              GBP_TYPE_RETAB_VIEW_ADDIN);
+                                              IDE_TYPE_EDITOR_PAGE_ADDIN,
+                                              GBP_TYPE_RETAB_EDITOR_PAGE_ADDIN);
 }

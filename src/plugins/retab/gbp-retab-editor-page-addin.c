@@ -1,5 +1,5 @@
 
-/* gbp-retab-view-addin.c
+/* gbp-retab-editor-page-addin.c
  *
  * Copyright 2017 Lucie Charvat <luci.charvat@gmail.com>
  *
@@ -19,19 +19,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <glib.h>
+#define G_LOG_DOMAIN "gbp-retab-editor-page-addin"
+
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <libide-editor.h>
 
-#include "sourceview/ide-text-iter.h"
+#include "gbp-retab-editor-page-addin.h"
 
-#include "gbp-retab-view-addin.h"
-
-struct _GbpRetabViewAddin
+struct _GbpRetabEditorPageAddin
 {
   GObject        parent_instance;
-  IdeEditorView *editor_view;
+  IdeEditorPage *editor_view;
 };
 
 static gint
@@ -56,7 +57,7 @@ get_buffer_range_indent (GtkTextBuffer *buffer,
 /* Removes indent that is mean to be changes and inserts
  * tabs and/or spaces insted */
 static void
-gbp_retab_view_addin_retab (GtkTextBuffer *buffer,
+gbp_retab_editor_page_addin_retab (GtkTextBuffer *buffer,
                             gint           line,
                             gint           tab_width,
                             gint           indent,
@@ -113,11 +114,11 @@ gbp_retab_view_addin_retab (GtkTextBuffer *buffer,
 }
 
 static void
-gbp_retab_view_addin_action (GSimpleAction *action,
+gbp_retab_editor_page_addin_action (GSimpleAction *action,
                              GVariant      *variant,
                              gpointer       user_data)
 {
-  GbpRetabViewAddin *self = user_data;
+  GbpRetabEditorPageAddin *self = user_data;
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
   IdeCompletion *completion;
@@ -130,11 +131,11 @@ gbp_retab_view_addin_action (GSimpleAction *action,
   gboolean editable;
   gboolean to_spaces;
 
-  g_assert (GBP_IS_RETAB_VIEW_ADDIN (self));
+  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
 
-  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_buffer (self->editor_view));
-  source_view = ide_editor_view_get_view (self->editor_view);
+  buffer = GTK_TEXT_BUFFER (ide_editor_page_get_buffer (self->editor_view));
+  source_view = ide_editor_page_get_view (self->editor_view);
 
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
@@ -162,7 +163,7 @@ gbp_retab_view_addin_action (GSimpleAction *action,
     {
       indent = get_buffer_range_indent (buffer, line, to_spaces);
       if (indent > 0)
-        gbp_retab_view_addin_retab (buffer, line, tab_width, indent, to_spaces);
+        gbp_retab_editor_page_addin_retab (buffer, line, tab_width, indent, to_spaces);
     }
 
   gtk_text_buffer_end_user_action (buffer);
@@ -170,56 +171,56 @@ gbp_retab_view_addin_action (GSimpleAction *action,
 }
 
 static const GActionEntry actions[] = {
-  { "retab", gbp_retab_view_addin_action },
+  { "retab", gbp_retab_editor_page_addin_action },
 };
 
 static void
-gbp_retab_view_addin_load (IdeEditorViewAddin *addin,
-                           IdeEditorView      *view)
+gbp_retab_editor_page_addin_load (IdeEditorPageAddin *addin,
+                           IdeEditorPage      *view)
 {
-  GbpRetabViewAddin *self = (GbpRetabViewAddin *)addin;
+  GbpRetabEditorPageAddin *self = (GbpRetabEditorPageAddin *)addin;
   GActionGroup *group;
 
-  g_assert (GBP_IS_RETAB_VIEW_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   self->editor_view = view;
 
-  group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-view");
+  group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-page");
   g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), self);
 }
 
 static void
-gbp_retab_view_addin_unload (IdeEditorViewAddin *addin,
-                             IdeEditorView      *view)
+gbp_retab_editor_page_addin_unload (IdeEditorPageAddin *addin,
+                             IdeEditorPage      *view)
 {
   GActionGroup *group;
 
-  g_assert (GBP_IS_RETAB_VIEW_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
-  group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-view");
+  group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-page");
   g_action_map_remove_action (G_ACTION_MAP (group), "retab");
 }
 
 static void
-editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface)
+editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface)
 {
-  iface->load = gbp_retab_view_addin_load;
-  iface->unload = gbp_retab_view_addin_unload;
+  iface->load = gbp_retab_editor_page_addin_load;
+  iface->unload = gbp_retab_editor_page_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpRetabViewAddin, gbp_retab_view_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN,
+G_DEFINE_TYPE_WITH_CODE (GbpRetabEditorPageAddin, gbp_retab_editor_page_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN,
                                                 editor_view_addin_iface_init))
 
 
 static void
-gbp_retab_view_addin_class_init (GbpRetabViewAddinClass *klass)
+gbp_retab_editor_page_addin_class_init (GbpRetabEditorPageAddinClass *klass)
 {
 }
 
 static void
-gbp_retab_view_addin_init (GbpRetabViewAddin *self)
+gbp_retab_editor_page_addin_init (GbpRetabEditorPageAddin *self)
 {
 }

@@ -1,18 +1,16 @@
-if get_option('with_retab')
+if get_option('plugin_retab')
 
-retab_resources = gnome.compile_resources(
-  'gbp-retab-resources',
+plugins_sources += files([
+  'retab-plugin.c',
+  'gbp-retab-editor-page-addin.c',
+])
+
+plugin_retab_resources = gnome.compile_resources(
+  'retab-resources',
   'retab.gresource.xml',
   c_name: 'gbp_retab',
 )
 
-retab_sources = [
-  'gbp-retab-plugin.c',
-  'gbp-retab-view-addin.c',
-  'gbp-retab-view-addin.h',
-]
-
-gnome_builder_plugins_sources += files(retab_sources)
-gnome_builder_plugins_sources += retab_resources[0]
+plugins_sources += plugin_retab_resources[0]
 
 endif

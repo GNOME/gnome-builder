@@ -1,4 +1,4 @@
-/* gbp-retab-view-addin.h
+/* gbp-retab-editor-page-addin.h
  *
  * Copyright 2017 Lucie Charvat <luci.charvat@gmail.com>
  *
@@ -22,8 +22,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_RETAB_VIEW_ADDIN (gbp_retab_view_addin_get_type())
+#define GBP_TYPE_RETAB_EDITOR_PAGE_ADDIN (gbp_retab_editor_page_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpRetabViewAddin, gbp_retab_view_addin, GBP, RETAB_VIEW_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpRetabEditorPageAddin, gbp_retab_editor_page_addin, GBP, RETAB_EDITOR_PAGE_ADDIN, GObject)
 
 G_END_DECLS
