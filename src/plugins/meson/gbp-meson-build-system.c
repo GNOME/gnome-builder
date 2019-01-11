@@ -33,6 +33,7 @@ struct _GbpMesonBuildSystem
   GFile              *project_file;
   IdeCompileCommands *compile_commands;
   GFileMonitor       *monitor;
+  gchar              *project_version;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface     *iface);
@@ -353,6 +354,7 @@ gbp_meson_build_system_finalize (GObject *object)
   g_clear_object (&self->project_file);
   g_clear_object (&self->compile_commands);
   g_clear_object (&self->monitor);
+  g_clear_pointer (&self->project_version, g_free);
 
   G_OBJECT_CLASS (gbp_meson_build_system_parent_class)->finalize (object);
 }
@@ -675,6 +677,17 @@ gbp_meson_build_system_supports_toolchain (IdeBuildSystem *self,
   return FALSE;
 }
 
+static gchar *
+gbp_meson_build_system_get_project_version (IdeBuildSystem *build_system)
+{
+  GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
+
+  return g_strdup (self->project_version);
+}
+
 static void
 build_system_iface_init (IdeBuildSystemInterface *iface)
 {
@@ -686,7 +699,55 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_build_flags_for_files_async = gbp_meson_build_system_get_build_flags_for_files_async;
   iface->get_build_flags_for_files_finish = gbp_meson_build_system_get_build_flags_for_files_finish;
   iface->get_builddir = gbp_meson_build_system_get_builddir;
+  iface->get_project_version = gbp_meson_build_system_get_project_version;
   iface->supports_toolchain = gbp_meson_build_system_supports_toolchain;
+}
+
+static void
+extract_metadata (GbpMesonBuildSystem *self,
+                  const gchar         *contents)
+{
+  const gchar *ptr;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (contents != NULL);
+
+  ptr = strstr (contents, "version:");
+
+  if (ptr > contents)
+    {
+      const gchar *prev = ptr - 1;
+      gunichar ch = g_utf8_get_char (prev);
+
+      if (g_unichar_isspace (ch) || ch == ',')
+        {
+          const gchar *begin;
+          const gchar *end;
+
+          ptr++;
+
+          for (ptr++; *ptr && *ptr != '\''; ptr = g_utf8_next_char (ptr)) ;
+          if (!*ptr)
+            goto failure;
+
+          ptr++;
+          begin = ptr;
+
+          for (ptr++; *ptr && *ptr != '\''; ptr = g_utf8_next_char (ptr)) ;
+          if (!*ptr)
+            goto failure;
+
+          end = ptr;
+
+          g_free (self->project_version);
+          self->project_version = g_strndup (begin, end - begin);
+        }
+    }
+
+failure:
+
+  return;
 }
 
 static void
@@ -718,8 +779,10 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)initable;
   g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *contents = NULL;
   IdeBuildManager *build_manager;
   IdeContext *context;
+  gsize len = 0;
 
   IDE_ENTRY;
 
@@ -737,6 +800,13 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
   ide_task_set_source_tag (task, gbp_meson_build_system_init_async);
   ide_task_set_priority (task, io_priority);
   ide_task_set_task_data (task, g_object_ref (self->project_file), g_object_unref);
+
+  if (g_file_load_contents (self->project_file, cancellable, &contents, &len, NULL, NULL))
+    extract_metadata (self, contents);
+  else
+    g_print ("Failed to read: %s\n", g_file_peek_path (self->project_file));
+
+  g_print ("Version: %s\n", self->project_version);
 
   /*
    * We want to be notified of any changes to the current build manager.
