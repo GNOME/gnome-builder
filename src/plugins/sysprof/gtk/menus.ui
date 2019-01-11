@@ -15,7 +15,7 @@
       <item>
         <attribute name="accel">&lt;alt&gt;3</attribute>
         <attribute name="action">win.surface</attribute>
-        <attribute name="after">surface-menu-config</attribute>
+        <attribute name="before">surface-menu-config</attribute>
         <attribute name="id">surface-menu-profiler</attribute>
         <attribute name="label" translatable="yes">Profiler</attribute>
         <attribute name="role">normal</attribute>

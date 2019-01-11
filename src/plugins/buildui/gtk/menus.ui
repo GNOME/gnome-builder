@@ -3,7 +3,7 @@
   <menu id="ide-primary-workspace-surfaces-menu">
     <section id="ide-primary-workspace-surfaces-menu-section">
       <item>
-        <attribute name="accel">&lt;alt&gt;2</attribute>
+        <attribute name="accel">&lt;alt&gt;comma</attribute>
         <attribute name="id">surface-menu-config</attribute>
         <attribute name="label" translatable="yes">Build Preferences</attribute>
         <attribute name="role">normal</attribute>
