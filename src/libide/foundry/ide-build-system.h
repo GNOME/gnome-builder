@@ -63,6 +63,7 @@ struct _IdeBuildSystemInterface
   gchar      *(*get_display_name)                  (IdeBuildSystem       *self);
   gboolean    (*supports_toolchain)                (IdeBuildSystem       *self,
                                                     IdeToolchain         *toolchain);
+  gchar      *(*get_project_version)               (IdeBuildSystem       *self);
 };
 
 IDE_AVAILABLE_IN_3_32
@@ -76,6 +77,8 @@ gint             ide_build_system_get_priority                     (IdeBuildSyst
 IDE_AVAILABLE_IN_3_32
 gchar           *ide_build_system_get_builddir                     (IdeBuildSystem       *self,
                                                                     IdeBuildPipeline     *pipeline);
+IDE_AVAILABLE_IN_3_32
+gchar           *ide_build_system_get_project_version              (IdeBuildSystem       *self);
 IDE_AVAILABLE_IN_3_32
 void             ide_build_system_get_build_flags_async            (IdeBuildSystem       *self,
                                                                     GFile                *file,

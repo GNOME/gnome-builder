@@ -672,3 +672,26 @@ ide_build_system_supports_toolchain (IdeBuildSystem *self,
 
   return FALSE;
 }
+
+/**
+ * ide_build_system_get_project_version:
+ * @self: a #IdeBuildSystem
+ *
+ * If the build system supports it, gets the project version as configured
+ * in the build system's configuration files.
+ *
+ * Returns: (transfer full) (nullable): a string containing the project version
+ *
+ * Since: 3.32
+ */
+gchar *
+ide_build_system_get_project_version (IdeBuildSystem *self)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_project_version)
+    return IDE_BUILD_SYSTEM_GET_IFACE (self)->get_project_version (self);
+
+  return NULL;
+}
