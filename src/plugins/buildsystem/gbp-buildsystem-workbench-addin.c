@@ -213,6 +213,13 @@ discover_cb (GObject      *object,
 
   ide_workbench_set_build_system (self->workbench, build_system);
 
+  if (G_IS_ASYNC_INITABLE (build_system))
+    g_async_initable_init_async (G_ASYNC_INITABLE (build_system),
+                                 G_PRIORITY_DEFAULT,
+                                 NULL, NULL, NULL);
+  else if (G_IS_INITABLE (build_system))
+    g_initable_init (G_INITABLE (build_system), NULL, NULL);
+
   ide_task_return_boolean (task, TRUE);
 }
 
