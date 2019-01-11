@@ -37,10 +37,12 @@ transpose_version (gchar *str)
 
   g_assert (str);
 
+  /* Only use Major.Minor as version number */
+
   if ((dot = strchr (str, '.')))
     {
       dot++;
-      if ((dot = strchr (str, '.')))
+      if ((dot = strchr (dot, '.')))
         *dot = 0;
     }
 }
