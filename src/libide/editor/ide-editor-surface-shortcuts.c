@@ -100,6 +100,12 @@ _ide_editor_surface_init_shortcuts (IdeEditorSurface *self)
                                               DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("editor.close-all"));
 
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor.focus"),
+                                              "<alt>1",
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              "win.surface('editor')");
+
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              editor_surface_entries,
                                              G_N_ELEMENTS (editor_surface_entries),

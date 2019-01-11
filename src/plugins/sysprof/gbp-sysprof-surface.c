@@ -104,6 +104,7 @@ gbp_sysprof_surface_class_init (GbpSysprofSurfaceClass *klass)
 static void
 gbp_sysprof_surface_init (GbpSysprofSurface *self)
 {
+  DzlShortcutController *controller;
   SpSelection *selection;
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -111,6 +112,13 @@ gbp_sysprof_surface_init (GbpSysprofSurface *self)
   gtk_widget_set_name (GTK_WIDGET (self), "profiler");
   ide_surface_set_icon_name (IDE_SURFACE (self), "utilities-system-monitor-symbolic");
   ide_surface_set_title (IDE_SURFACE (self), _("Profiler"));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.sysprof.focus",
+                                              "<alt>2",
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              "win.surface('profiler')");
 
   g_signal_connect_object (self->info_bar_close,
                            "clicked",

@@ -292,6 +292,8 @@ gbp_buildui_config_surface_class_init (GbpBuilduiConfigSurfaceClass *klass)
 static void
 gbp_buildui_config_surface_init (GbpBuilduiConfigSurface *self)
 {
+  DzlShortcutController *controller;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_list_box_set_header_func (self->config_list_box, header_func_cb, NULL, NULL);
@@ -301,6 +303,13 @@ gbp_buildui_config_surface_init (GbpBuilduiConfigSurface *self)
                            G_CALLBACK (gbp_buildui_config_surface_row_selected_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.buildui.focus",
+                                              "<alt>comma",
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              "win.surface('buildui')");
 }
 
 static void
