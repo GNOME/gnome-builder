@@ -1267,6 +1267,30 @@ ide_workbench_action_inspector (IdeWorkbench *self,
 }
 
 static void
+ide_workbench_action_close_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  IdeWorkbench *self = (IdeWorkbench *)object;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (user_data == NULL);
+
+  if (ide_workbench_unload_finish (self, result, NULL))
+    {
+      IdeApplication *app = IDE_APPLICATION_DEFAULT;
+      GtkWindow *active;
+
+      if (!(active = gtk_application_get_active_window (GTK_APPLICATION (app))))
+        g_application_activate (G_APPLICATION (app));
+      else
+        ide_gtk_window_present (active);
+    }
+}
+
+static void
 ide_workbench_action_close (IdeWorkbench *self,
                             GVariant     *param)
 {
@@ -1274,7 +1298,10 @@ ide_workbench_action_close (IdeWorkbench *self,
   g_assert (param == NULL);
 
   if (self->unloaded == FALSE)
-    ide_workbench_unload_async (self, NULL, NULL, NULL);
+    ide_workbench_unload_async (self,
+                                NULL,
+                                ide_workbench_action_close_cb,
+                                NULL);
 }
 
 static void
