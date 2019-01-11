@@ -803,10 +803,6 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
 
   if (g_file_load_contents (self->project_file, cancellable, &contents, &len, NULL, NULL))
     extract_metadata (self, contents);
-  else
-    g_print ("Failed to read: %s\n", g_file_peek_path (self->project_file));
-
-  g_print ("Version: %s\n", self->project_version);
 
   /*
    * We want to be notified of any changes to the current build manager.
