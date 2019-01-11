@@ -59,7 +59,7 @@ src/libide/editor/ide-editor-workspace.ui
 src/libide/foundry/ide-build-manager.c
 src/libide/foundry/ide-build-pipeline.c
 src/libide/foundry/ide-build-stage-transfer.c
-src/libide/foundry/ide-configuration-manager.c
+src/libide/foundry/ide-config-manager.c
 src/libide/foundry/ide-device-manager.c
 src/libide/foundry/ide-device.c
 src/libide/foundry/ide-fallback-build-system.c
@@ -139,7 +139,7 @@ src/plugins/beautifier/gb-beautifier-editor-addin.c
 src/plugins/beautifier/gb-beautifier-helper.c
 src/plugins/beautifier/gb-beautifier-process.c
 src/plugins/beautifier/gtk/menus.ui
-src/plugins/buildconfig/ide-buildconfig-configuration-provider.c
+src/plugins/buildconfig/ide-buildconfig-config-provider.c
 src/plugins/buildui/gbp-buildui-config-surface.c
 src/plugins/buildui/gbp-buildui-config-view-addin.c
 src/plugins/buildui/gbp-buildui-log-pane.c
@@ -223,7 +223,7 @@ src/plugins/file-search/gbp-file-search-provider.c
 src/plugins/flatpak/gbp-flatpak-application-addin.c
 src/plugins/flatpak/gbp-flatpak-clone-widget.c
 src/plugins/flatpak/gbp-flatpak-clone-widget.ui
-src/plugins/flatpak/gbp-flatpak-configuration-provider.c
+src/plugins/flatpak/gbp-flatpak-config-provider.c
 src/plugins/flatpak/gbp-flatpak-download-stage.c
 src/plugins/flatpak/gbp-flatpak-pipeline-addin.c
 src/plugins/flatpak/gbp-flatpak-preferences-addin.c
