@@ -26,10 +26,12 @@ struct _IdeGolangApplicationAddin
 {
   GObject parent_instance;
   gchar *golang_version;
+  GRegex *go_version_regex;
 };
 
 static void application_addin_iface_init (IdeApplicationAddinInterface *iface);
 static IdeGolangApplicationAddin *golang_application_addin = NULL;
+static const gchar *goversion_pattern = "^go version (.*)\n?$";
 
 G_DEFINE_TYPE_EXTENDED (IdeGolangApplicationAddin,
                         ide_golang_application_addin,
@@ -46,10 +48,19 @@ ide_golang_application_addin_class_init (IdeGolangApplicationAddinClass *klass)
 static void
 ide_golang_application_addin_init (IdeGolangApplicationAddin *addin)
 {
+  g_autoptr(GError) error = NULL;
+
+  if (!(addin->go_version_regex = g_regex_new (goversion_pattern, G_REGEX_MULTILINE, 0, &error)))
+    {
+      g_assert(error != NULL);
+      g_error("Unable to create regex when parsing golang version: %s", error->message);
+      IDE_EXIT;
+    }
+
   addin->golang_version = g_strdup("unknown");
 }
 
-static const gchar *goversion_pattern = "^go version (.*)\n?$";
+
 
 static void
 ide_golang_application_addin_load (IdeApplicationAddin *addin,
@@ -59,7 +70,6 @@ ide_golang_application_addin_load (IdeApplicationAddin *addin,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autofree gchar *stdoutstr = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GRegex) regex = NULL;
   g_autoptr(GMatchInfo) match_info = NULL;
   IdeGolangApplicationAddin *self = (IdeGolangApplicationAddin *)addin;
 
@@ -71,17 +81,6 @@ ide_golang_application_addin_load (IdeApplicationAddin *addin,
   g_assert (IDE_IS_APPLICATION (application));
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-  if (launcher == NULL)
-    {
-      g_set_error (&error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_FAILED,
-                   "An unknown error ocurred");
-
-      g_error ("%s", error->message);
-      g_error_free (error);
-      IDE_EXIT;
-    }
 
   ide_subprocess_launcher_push_argv (launcher, "go");
   ide_subprocess_launcher_push_argv (launcher, "version");
@@ -92,7 +91,6 @@ ide_golang_application_addin_load (IdeApplicationAddin *addin,
     {
       g_assert (error != NULL);
       g_error ("%s", error->message);
-      g_error_free (error);
       IDE_EXIT;
     }
 
@@ -110,21 +108,14 @@ ide_golang_application_addin_load (IdeApplicationAddin *addin,
       IDE_EXIT;
     }
 
-  if (!(regex = g_regex_new (goversion_pattern, G_REGEX_MULTILINE, 0, &error)))
-    {
-      g_assert(error != NULL);
-      g_error("Unable to create regex when parsing golang version: %s", error->message);
-      IDE_EXIT;
-    }
-
   // Search for golang version and return immediately when found.
-  g_regex_match (regex, stdoutstr, 0, &match_info);
+  g_regex_match (self->go_version_regex, stdoutstr, 0, &match_info);
   while (g_match_info_matches (match_info))
     {
       gint begin = 0;
       gint end = 0;
 
-      if (g_match_info_fetch_pos (match_info, 1, &begin, &end))
+      if (g_match_info_fetch_pos (match_info, 1, &begin, &end) && begin >= 0 && end > begin)
         {
           g_free (self->golang_version);
           self->golang_version = g_strndup(&stdoutstr[begin], end - begin);
@@ -142,8 +133,11 @@ static void
 ide_golang_application_addin_unload (IdeApplicationAddin *addin,
                                       IdeApplication      *application)
 {
+  IdeGolangApplicationAddin *self = (IdeGolangApplicationAddin *)addin;
+
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
   g_assert (IDE_IS_APPLICATION (application));
+  g_free(self->go_version_regex);
 }
 
 

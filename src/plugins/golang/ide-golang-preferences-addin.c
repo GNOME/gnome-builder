@@ -61,7 +61,7 @@ ide_golang_create_preferences_page (IdePreferencesAddin *addin)
                                                  "label", "unknown");
   GtkStyleContext *context;
 
-  GString *version_str = g_string_new ("<small>");
+  g_autoptr(GString) version_str = g_string_new ("<small>");
   g_string_append (version_str, golang_get_go_version());
   g_string_append(version_str, "</small>");
 
@@ -74,8 +74,6 @@ ide_golang_create_preferences_page (IdePreferencesAddin *addin)
   gtk_box_pack_start (GTK_BOX(vbox), version_value_label, TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX(box), vbox, TRUE, TRUE, 0);
-
-  g_string_free(version_str, TRUE);
   return box;
 }
 

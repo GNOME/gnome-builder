@@ -124,8 +124,8 @@ create_launcher (IdeGolangGoStage  *self,
 
 static void
 ide_golang_go_stage_wait_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
+                             GAsyncResult *result,
+                             gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(IdeTask) task = user_data;
