@@ -115,6 +115,9 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
   g_assert (G_IS_FILE (directory));
   g_assert (G_IS_FILE (destination));
 
+  if (g_cancellable_is_cancelled (cancellable))
+    return FALSE;
+
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_VCS);
 
@@ -198,7 +201,7 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
   if (enumerator == NULL)
     IDE_GOTO (finish_subprocess);
 
-  while (NULL != (infoptr = g_file_enumerator_next_file (enumerator, cancellable, &error)))
+  while ((infoptr = g_file_enumerator_next_file (enumerator, cancellable, &error)))
     {
       g_autoptr(GFileInfo) info = infoptr;
       const gchar *name;
