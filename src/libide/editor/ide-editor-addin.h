@@ -49,15 +49,14 @@ struct _IdeEditorAddinInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void ide_editor_addin_load     (IdeEditorAddin   *self,
-                                IdeEditorSurface *surface);
+void            ide_editor_addin_load                (IdeEditorAddin   *self,
+                                                      IdeEditorSurface *surface);
 IDE_AVAILABLE_IN_3_32
-void ide_editor_addin_unload   (IdeEditorAddin   *self,
-                                IdeEditorSurface *surface);
+void            ide_editor_addin_unload              (IdeEditorAddin   *self,
+                                                      IdeEditorSurface *surface);
 IDE_AVAILABLE_IN_3_32
-void ide_editor_addin_page_set (IdeEditorAddin   *self,
-                                IdePage          *page);
-
+void            ide_editor_addin_page_set            (IdeEditorAddin   *self,
+                                                      IdePage          *page);
 IDE_AVAILABLE_IN_3_32
 IdeEditorAddin *ide_editor_addin_find_by_module_name (IdeEditorSurface *editor,
                                                       const gchar      *module_name);

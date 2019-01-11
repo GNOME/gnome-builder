@@ -62,31 +62,31 @@ struct _IdeDeviceClass
 IDE_AVAILABLE_IN_3_32
 GQuark         ide_device_error_quark           (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_3_32
-const gchar   *ide_device_get_display_name      (IdeDevice             *self);
+const gchar   *ide_device_get_display_name      (IdeDevice            *self);
 IDE_AVAILABLE_IN_3_32
-void           ide_device_set_display_name      (IdeDevice             *self,
-                                                 const gchar           *display_name);
+void           ide_device_set_display_name      (IdeDevice            *self,
+                                                 const gchar          *display_name);
 IDE_AVAILABLE_IN_3_32
-const gchar   *ide_device_get_icon_name         (IdeDevice             *self);
+const gchar   *ide_device_get_icon_name         (IdeDevice            *self);
 IDE_AVAILABLE_IN_3_32
-void           ide_device_set_icon_name         (IdeDevice             *self,
-                                                 const gchar           *icon_name);
+void           ide_device_set_icon_name         (IdeDevice            *self,
+                                                 const gchar          *icon_name);
 IDE_AVAILABLE_IN_3_32
-const gchar   *ide_device_get_id                (IdeDevice             *self);
+const gchar   *ide_device_get_id                (IdeDevice            *self);
 IDE_AVAILABLE_IN_3_32
-void           ide_device_set_id                (IdeDevice             *self,
-                                                 const gchar           *id);
+void           ide_device_set_id                (IdeDevice            *self,
+                                                 const gchar          *id);
 IDE_AVAILABLE_IN_3_32
-void           ide_device_prepare_configuration (IdeDevice             *self,
-                                                 IdeConfig      *configuration);
+void           ide_device_prepare_configuration (IdeDevice            *self,
+                                                 IdeConfig            *configuration);
 IDE_AVAILABLE_IN_3_32
-void           ide_device_get_info_async        (IdeDevice             *self,
-                                                 GCancellable          *cancellable,
-                                                 GAsyncReadyCallback    callback,
-                                                 gpointer               user_data);
+void           ide_device_get_info_async        (IdeDevice            *self,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-IdeDeviceInfo *ide_device_get_info_finish       (IdeDevice             *self,
-                                                 GAsyncResult          *result,
-                                                 GError               **error);
+IdeDeviceInfo *ide_device_get_info_finish       (IdeDevice            *self,
+                                                 GAsyncResult         *result,
+                                                 GError              **error);
 
 G_END_DECLS

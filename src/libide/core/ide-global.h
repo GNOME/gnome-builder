@@ -39,28 +39,28 @@ typedef enum
 #define ide_is_flatpak() (ide_get_process_kind() == IDE_PROCESS_KIND_FLATPAK)
 
 IDE_AVAILABLE_IN_3_32
-const gchar    *ide_gettext             (const gchar *message);
+const gchar    *ide_gettext              (const gchar *message);
 IDE_AVAILABLE_IN_3_32
-GThread        *ide_get_main_thread     (void);
+GThread        *ide_get_main_thread      (void);
 IDE_AVAILABLE_IN_3_32
-IdeProcessKind  ide_get_process_kind    (void);
+IdeProcessKind  ide_get_process_kind     (void);
 IDE_AVAILABLE_IN_3_32
-const gchar    *ide_get_application_id  (void);
+const gchar    *ide_get_application_id   (void);
 IDE_AVAILABLE_IN_3_32
-void            ide_set_application_id  (const gchar *app_id);
+void            ide_set_application_id   (const gchar *app_id);
 IDE_AVAILABLE_IN_3_32
-const gchar    *ide_get_program_name    (void);
+const gchar    *ide_get_program_name     (void);
 IDE_AVAILABLE_IN_3_32
-gchar          *ide_get_system_arch     (void);
+gchar          *ide_get_system_arch      (void);
 IDE_AVAILABLE_IN_3_32
-const gchar    *ide_get_system_type     (void);
+const gchar    *ide_get_system_type      (void);
 IDE_AVAILABLE_IN_3_32
-gchar          *ide_create_host_triplet (const gchar *arch,
-                                         const gchar *kernel,
-                                         const gchar *system);
+gchar          *ide_create_host_triplet  (const gchar *arch,
+                                          const gchar *kernel,
+                                          const gchar *system);
 IDE_AVAILABLE_IN_3_32
-gsize          ide_get_system_page_size (void) G_GNUC_CONST;
+gsize           ide_get_system_page_size (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_3_32
-gchar         *ide_get_relocatable_path (const gchar *path);
+gchar          *ide_get_relocatable_path (const gchar *path);
 
 G_END_DECLS

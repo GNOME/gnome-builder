@@ -37,41 +37,41 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSnippet, ide_snippet, IDE, SNIPPET, GObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeSnippet              *ide_snippet_new              (const gchar     *trigger,
-                                                       const gchar     *language);
+IdeSnippet        *ide_snippet_new             (const gchar     *trigger,
+                                                const gchar     *language);
 IDE_AVAILABLE_IN_3_32
-IdeSnippet              *ide_snippet_copy             (IdeSnippet      *self);
+IdeSnippet        *ide_snippet_copy            (IdeSnippet      *self);
 IDE_AVAILABLE_IN_3_32
-const gchar             *ide_snippet_get_trigger      (IdeSnippet      *self);
+const gchar       *ide_snippet_get_trigger     (IdeSnippet      *self);
 IDE_AVAILABLE_IN_3_32
-void                     ide_snippet_set_trigger      (IdeSnippet      *self,
-                                                       const gchar     *trigger);
+void               ide_snippet_set_trigger     (IdeSnippet      *self,
+                                                const gchar     *trigger);
 IDE_AVAILABLE_IN_3_32
-const gchar             *ide_snippet_get_language     (IdeSnippet      *self);
+const gchar       *ide_snippet_get_language    (IdeSnippet      *self);
 IDE_AVAILABLE_IN_3_32
-void                     ide_snippet_set_language     (IdeSnippet      *self,
-                                                       const gchar     *language);
+void               ide_snippet_set_language    (IdeSnippet      *self,
+                                                const gchar     *language);
 IDE_AVAILABLE_IN_3_32
-const gchar             *ide_snippet_get_description  (IdeSnippet      *self);
+const gchar       *ide_snippet_get_description (IdeSnippet      *self);
 IDE_AVAILABLE_IN_3_32
-void                     ide_snippet_set_description  (IdeSnippet      *self,
-                                                       const gchar     *description);
+void               ide_snippet_set_description (IdeSnippet      *self,
+                                                const gchar     *description);
 IDE_AVAILABLE_IN_3_32
-void                     ide_snippet_add_chunk        (IdeSnippet      *self,
-                                                       IdeSnippetChunk *chunk);
+void               ide_snippet_add_chunk       (IdeSnippet      *self,
+                                                IdeSnippetChunk *chunk);
 IDE_AVAILABLE_IN_3_32
-guint                    ide_snippet_get_n_chunks     (IdeSnippet      *self);
+guint              ide_snippet_get_n_chunks    (IdeSnippet      *self);
 IDE_AVAILABLE_IN_3_32
-gint                     ide_snippet_get_tab_stop     (IdeSnippet      *self);
+gint               ide_snippet_get_tab_stop    (IdeSnippet      *self);
 IDE_AVAILABLE_IN_3_32
-IdeSnippetChunk         *ide_snippet_get_nth_chunk    (IdeSnippet      *self,
-                                                       guint            n);
+IdeSnippetChunk   *ide_snippet_get_nth_chunk   (IdeSnippet      *self,
+                                                guint            n);
 IDE_AVAILABLE_IN_3_32
-void                     ide_snippet_get_chunk_range  (IdeSnippet      *self,
-                                                       IdeSnippetChunk *chunk,
-                                                       GtkTextIter     *begin,
-                                                       GtkTextIter     *end);
+void               ide_snippet_get_chunk_range (IdeSnippet      *self,
+                                                IdeSnippetChunk *chunk,
+                                                GtkTextIter     *begin,
+                                                GtkTextIter     *end);
 IDE_AVAILABLE_IN_3_32
-IdeSnippetContext       *ide_snippet_get_context      (IdeSnippet      *self);
+IdeSnippetContext *ide_snippet_get_context     (IdeSnippet      *self);
 
 G_END_DECLS

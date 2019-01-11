@@ -46,12 +46,12 @@ struct _IdeSimpleToolchainClass
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeSimpleToolchain  *ide_simple_toolchain_new                    (const gchar         *id,
-                                                                  const gchar         *display_name);
+IdeSimpleToolchain *ide_simple_toolchain_new                   (const gchar        *id,
+                                                                const gchar        *display_name);
 IDE_AVAILABLE_IN_3_32
-void                 ide_simple_toolchain_set_tool_for_language  (IdeSimpleToolchain  *self,
-                                                                  const gchar         *language,
-                                                                  const gchar         *tool_id,
-                                                                  const gchar         *tool_path);
+void                ide_simple_toolchain_set_tool_for_language (IdeSimpleToolchain *self,
+                                                                const gchar        *language,
+                                                                const gchar        *tool_id,
+                                                                const gchar        *tool_path);
 
 G_END_DECLS

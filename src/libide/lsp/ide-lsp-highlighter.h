@@ -46,7 +46,7 @@ struct _IdeLspHighlighterClass
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_highlighter_get_client (IdeLspHighlighter *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_highlighter_set_client (IdeLspHighlighter *self,
-                                                        IdeLspClient      *client);
+void          ide_lsp_highlighter_set_client (IdeLspHighlighter *self,
+                                              IdeLspClient      *client);
 
 G_END_DECLS

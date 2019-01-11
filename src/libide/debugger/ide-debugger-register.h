@@ -41,7 +41,7 @@ IDE_AVAILABLE_IN_3_32
 gint                 ide_debugger_register_compare   (IdeDebuggerRegister *a,
                                                       IdeDebuggerRegister *b);
 IDE_AVAILABLE_IN_3_32
-IdeDebuggerRegister *ide_debugger_register_new       (const gchar *id);
+IdeDebuggerRegister *ide_debugger_register_new       (const gchar         *id);
 IDE_AVAILABLE_IN_3_32
 const gchar         *ide_debugger_register_get_id    (IdeDebuggerRegister *self);
 IDE_AVAILABLE_IN_3_32

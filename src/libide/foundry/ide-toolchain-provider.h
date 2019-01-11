@@ -57,22 +57,22 @@ struct _IdeToolchainProviderInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void        ide_toolchain_provider_load_async   (IdeToolchainProvider  *self,
-                                                 GCancellable          *cancellable,
-                                                 GAsyncReadyCallback    callback,
-                                                 gpointer               user_data);
+void     ide_toolchain_provider_load_async   (IdeToolchainProvider  *self,
+                                              GCancellable          *cancellable,
+                                              GAsyncReadyCallback    callback,
+                                              gpointer               user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean    ide_toolchain_provider_load_finish  (IdeToolchainProvider  *self,
-                                                 GAsyncResult          *result,
-                                                 GError               **error);
+gboolean ide_toolchain_provider_load_finish  (IdeToolchainProvider  *self,
+                                              GAsyncResult          *result,
+                                              GError               **error);
 IDE_AVAILABLE_IN_3_32
-void        ide_toolchain_provider_unload       (IdeToolchainProvider  *self,
-                                                 IdeToolchainManager   *manager);
+void     ide_toolchain_provider_unload       (IdeToolchainProvider  *self,
+                                              IdeToolchainManager   *manager);
 IDE_AVAILABLE_IN_3_32
-void        ide_toolchain_provider_emit_added   (IdeToolchainProvider  *self,
-                                                 IdeToolchain          *toolchain);
+void     ide_toolchain_provider_emit_added   (IdeToolchainProvider  *self,
+                                              IdeToolchain          *toolchain);
 IDE_AVAILABLE_IN_3_32
-void        ide_toolchain_provider_emit_removed (IdeToolchainProvider  *self,
-                                                 IdeToolchain          *toolchain);
+void     ide_toolchain_provider_emit_removed (IdeToolchainProvider  *self,
+                                              IdeToolchain          *toolchain);
 
 G_END_DECLS

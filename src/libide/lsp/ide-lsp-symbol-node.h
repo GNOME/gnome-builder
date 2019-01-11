@@ -37,6 +37,6 @@ IDE_AVAILABLE_IN_3_32
 const gchar *ide_lsp_symbol_node_get_parent_name (IdeLspSymbolNode *self);
 IDE_AVAILABLE_IN_3_32
 gboolean     ide_lsp_symbol_node_is_parent_of    (IdeLspSymbolNode *self,
-                                                       IdeLspSymbolNode *other);
+                                                  IdeLspSymbolNode *other);
 
 G_END_DECLS

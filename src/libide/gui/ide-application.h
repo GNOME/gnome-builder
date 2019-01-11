@@ -39,45 +39,45 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, DzlApplication)
 
 IDE_AVAILABLE_IN_3_32
-gboolean         ide_application_has_network         (IdeApplication           *self);
+gboolean       ide_application_has_network         (IdeApplication           *self);
 IDE_AVAILABLE_IN_3_32
-gchar          **ide_application_get_argv            (IdeApplication           *self,
-                                                      GApplicationCommandLine  *cmdline);
+gchar        **ide_application_get_argv            (IdeApplication           *self,
+                                                    GApplicationCommandLine  *cmdline);
 IDE_AVAILABLE_IN_3_32
-GDateTime       *ide_application_get_started_at      (IdeApplication           *self);
+GDateTime     *ide_application_get_started_at      (IdeApplication           *self);
 IDE_AVAILABLE_IN_3_32
-void             ide_application_open_project_async  (IdeApplication           *self,
-                                                      IdeProjectInfo           *project_info,
-                                                      GType                     workspace_type,
-                                                      GCancellable             *cancellable,
-                                                      GAsyncReadyCallback       callback,
-                                                      gpointer                  user_data);
+void           ide_application_open_project_async  (IdeApplication           *self,
+                                                    IdeProjectInfo           *project_info,
+                                                    GType                     workspace_type,
+                                                    GCancellable             *cancellable,
+                                                    GAsyncReadyCallback       callback,
+                                                    gpointer                  user_data);
 IDE_AVAILABLE_IN_3_32
-IdeWorkbench    *ide_application_open_project_finish (IdeApplication           *self,
-                                                      GAsyncResult             *result,
-                                                      GError                  **error);
+IdeWorkbench  *ide_application_open_project_finish (IdeApplication           *self,
+                                                    GAsyncResult             *result,
+                                                    GError                  **error);
 IDE_AVAILABLE_IN_3_32
-void             ide_application_set_workspace_type  (IdeApplication           *self,
-                                                      GType                     workspace_type);
+void           ide_application_set_workspace_type  (IdeApplication           *self,
+                                                    GType                     workspace_type);
 IDE_AVAILABLE_IN_3_32
-void             ide_application_add_workbench       (IdeApplication           *self,
-                                                      IdeWorkbench             *workbench);
+void           ide_application_add_workbench       (IdeApplication           *self,
+                                                    IdeWorkbench             *workbench);
 IDE_AVAILABLE_IN_3_32
-void             ide_application_remove_workbench    (IdeApplication           *self,
-                                                      IdeWorkbench             *workbench);
+void           ide_application_remove_workbench    (IdeApplication           *self,
+                                                    IdeWorkbench             *workbench);
 IDE_AVAILABLE_IN_3_32
-void             ide_application_foreach_workbench   (IdeApplication           *self,
-                                                      GFunc                     callback,
-                                                      gpointer                  user_data);
+void           ide_application_foreach_workbench   (IdeApplication           *self,
+                                                    GFunc                     callback,
+                                                    gpointer                  user_data);
 IDE_AVAILABLE_IN_3_32
-void             ide_application_get_worker_async    (IdeApplication           *self,
-                                                      const gchar              *plugin_name,
-                                                      GCancellable             *cancellable,
-                                                      GAsyncReadyCallback       callback,
-                                                      gpointer                  user_data);
+void           ide_application_get_worker_async    (IdeApplication           *self,
+                                                    const gchar              *plugin_name,
+                                                    GCancellable             *cancellable,
+                                                    GAsyncReadyCallback       callback,
+                                                    gpointer                  user_data);
 IDE_AVAILABLE_IN_3_32
-GDBusProxy      *ide_application_get_worker_finish   (IdeApplication           *self,
-                                                      GAsyncResult             *result,
-                                                      GError                  **error);
+GDBusProxy    *ide_application_get_worker_finish   (IdeApplication           *self,
+                                                    GAsyncResult             *result,
+                                                    GError                  **error);
 
 G_END_DECLS

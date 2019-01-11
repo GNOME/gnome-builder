@@ -38,9 +38,9 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeToolchainManager, ide_toolchain_manager, IDE, TOOLCHAIN_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeToolchain *ide_toolchain_manager_get_toolchain (IdeToolchainManager  *self,
-                                                   const gchar          *id);
+IdeToolchain *ide_toolchain_manager_get_toolchain (IdeToolchainManager *self,
+                                                   const gchar         *id);
 IDE_AVAILABLE_IN_3_32
-gboolean      ide_toolchain_manager_is_loaded     (IdeToolchainManager  *self);
+gboolean      ide_toolchain_manager_is_loaded     (IdeToolchainManager *self);
 
 G_END_DECLS

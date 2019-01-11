@@ -37,22 +37,22 @@ typedef void (*IdeWidgetContextHandler) (GtkWidget  *widget,
                                          IdeContext *context);
 
 IDE_AVAILABLE_IN_3_32
-void          ide_widget_set_context_handler (gpointer                 widget,
-                                              IdeWidgetContextHandler  handler);
+void          ide_widget_set_context_handler (gpointer                  widget,
+                                              IdeWidgetContextHandler   handler);
 IDE_AVAILABLE_IN_3_32
-IdeContext   *ide_widget_get_context         (GtkWidget               *widget);
+IdeContext   *ide_widget_get_context         (GtkWidget                *widget);
 IDE_AVAILABLE_IN_3_32
-void          ide_widget_reveal_and_grab     (GtkWidget               *widget);
+void          ide_widget_reveal_and_grab     (GtkWidget                *widget);
 IDE_AVAILABLE_IN_3_32
-IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
+IdeWorkbench *ide_widget_get_workbench       (GtkWidget                *widget);
 IDE_AVAILABLE_IN_3_32
-IdeWorkspace *ide_widget_get_workspace       (GtkWidget               *widget);
+IdeWorkspace *ide_widget_get_workspace       (GtkWidget                *widget);
 IDE_AVAILABLE_IN_3_32
-gboolean      ide_gtk_show_uri_on_window     (GtkWindow               *window,
-                                              const gchar             *uri,
-                                              gint64                   timestamp,
-                                              GError                 **error);
+gboolean      ide_gtk_show_uri_on_window     (GtkWindow                *window,
+                                              const gchar              *uri,
+                                              gint64                    timestamp,
+                                              GError                  **error);
 IDE_AVAILABLE_IN_3_32
-void          ide_gtk_window_present         (GtkWindow               *window);
+void          ide_gtk_window_present         (GtkWindow                *window);
 
 G_END_DECLS

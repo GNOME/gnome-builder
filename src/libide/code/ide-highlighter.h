@@ -78,13 +78,13 @@ struct _IdeHighlighterInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void ide_highlighter_load                    (IdeHighlighter       *self);
+void ide_highlighter_load   (IdeHighlighter       *self);
 IDE_AVAILABLE_IN_3_32
-void ide_highlighter_update                  (IdeHighlighter       *self,
-                                              IdeHighlightCallback  callback,
-                                              const GtkTextIter    *range_begin,
-                                              const GtkTextIter    *range_end,
-                                              GtkTextIter          *location);
+void ide_highlighter_update (IdeHighlighter       *self,
+                             IdeHighlightCallback  callback,
+                             const GtkTextIter    *range_begin,
+                             const GtkTextIter    *range_end,
+                             GtkTextIter          *location);
 void _ide_highlighter_set_highlighter_engine (IdeHighlighter       *self,
                                               IdeHighlightEngine   *highlight_engine) G_GNUC_INTERNAL;
 

@@ -53,7 +53,7 @@ IDE_AVAILABLE_IN_3_32
 gint               ide_snippet_chunk_get_tab_stop (IdeSnippetChunk   *chunk);
 IDE_AVAILABLE_IN_3_32
 void               ide_snippet_chunk_set_tab_stop (IdeSnippetChunk   *chunk,
-                                                   gint              tab_stop);
+                                                   gint               tab_stop);
 IDE_AVAILABLE_IN_3_32
 const gchar       *ide_snippet_chunk_get_text     (IdeSnippetChunk   *chunk);
 IDE_AVAILABLE_IN_3_32
@@ -63,6 +63,6 @@ IDE_AVAILABLE_IN_3_32
 gboolean           ide_snippet_chunk_get_text_set (IdeSnippetChunk   *chunk);
 IDE_AVAILABLE_IN_3_32
 void               ide_snippet_chunk_set_text_set (IdeSnippetChunk   *chunk,
-                                                   gboolean          text_set);
+                                                   gboolean           text_set);
 
 G_END_DECLS

@@ -46,7 +46,7 @@ struct _IdeLspDiagnosticProviderClass
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_diagnostic_provider_get_client (IdeLspDiagnosticProvider *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_diagnostic_provider_set_client (IdeLspDiagnosticProvider *self,
-                                                                IdeLspClient             *client);
+void          ide_lsp_diagnostic_provider_set_client (IdeLspDiagnosticProvider *self,
+                                                      IdeLspClient             *client);
 
 G_END_DECLS

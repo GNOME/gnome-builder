@@ -41,7 +41,7 @@ IDE_AVAILABLE_IN_3_32
 gint                    ide_debugger_thread_group_compare       (IdeDebuggerThreadGroup *a,
                                                                  IdeDebuggerThreadGroup *b);
 IDE_AVAILABLE_IN_3_32
-IdeDebuggerThreadGroup *ide_debugger_thread_group_new           (const gchar *id);
+IdeDebuggerThreadGroup *ide_debugger_thread_group_new           (const gchar            *id);
 IDE_AVAILABLE_IN_3_32
 const gchar            *ide_debugger_thread_group_get_id        (IdeDebuggerThreadGroup *self);
 IDE_AVAILABLE_IN_3_32

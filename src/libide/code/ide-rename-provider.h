@@ -54,20 +54,20 @@ struct _IdeRenameProviderInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void      ide_rename_provider_load          (IdeRenameProvider     *self);
+void     ide_rename_provider_load          (IdeRenameProvider    *self);
 IDE_AVAILABLE_IN_3_32
-void      ide_rename_provider_unload        (IdeRenameProvider     *self);
+void     ide_rename_provider_unload        (IdeRenameProvider    *self);
 IDE_AVAILABLE_IN_3_32
-void      ide_rename_provider_rename_async  (IdeRenameProvider     *self,
-                                             IdeLocation           *location,
-                                             const gchar           *new_name,
-                                             GCancellable          *cancellable,
-                                             GAsyncReadyCallback    callback,
-                                             gpointer               user_data);
+void     ide_rename_provider_rename_async  (IdeRenameProvider    *self,
+                                            IdeLocation          *location,
+                                            const gchar          *new_name,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean  ide_rename_provider_rename_finish (IdeRenameProvider     *self,
-                                             GAsyncResult          *result,
-                                             GPtrArray            **edits,
-                                             GError               **error);
+gboolean ide_rename_provider_rename_finish (IdeRenameProvider    *self,
+                                            GAsyncResult         *result,
+                                            GPtrArray           **edits,
+                                            GError              **error);
 
 G_END_DECLS

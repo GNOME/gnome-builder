@@ -46,25 +46,25 @@ struct _IdeSearchResultClass
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeSearchResult   *ide_search_result_new                 (void);
+IdeSearchResult *ide_search_result_new          (void);
 IDE_AVAILABLE_IN_3_32
-void               ide_search_result_activate            (IdeSearchResult       *self,
-                                                          GtkWidget             *last_focus);
+void             ide_search_result_activate     (IdeSearchResult *self,
+                                                 GtkWidget       *last_focus);
 IDE_AVAILABLE_IN_3_32
-gint               ide_search_result_compare             (gconstpointer          a,
-                                                          gconstpointer          b);
+gint             ide_search_result_compare      (gconstpointer    a,
+                                                 gconstpointer    b);
 IDE_AVAILABLE_IN_3_32
-gint               ide_search_result_get_priority        (IdeSearchResult       *self);
+gint             ide_search_result_get_priority (IdeSearchResult *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_search_result_set_priority        (IdeSearchResult       *self,
-                                                          gint                   priority);
+void             ide_search_result_set_priority (IdeSearchResult *self,
+                                                 gint             priority);
 IDE_AVAILABLE_IN_3_32
-gfloat             ide_search_result_get_score           (IdeSearchResult       *self);
+gfloat           ide_search_result_get_score    (IdeSearchResult *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_search_result_set_score           (IdeSearchResult       *self,
-                                                          gfloat                 score);
+void             ide_search_result_set_score    (IdeSearchResult *self,
+                                                 gfloat           score);
 IDE_AVAILABLE_IN_3_32
-void               ide_search_result_set_icon            (IdeSearchResult       *self,
-                                                          GIcon                 *icon);
+void             ide_search_result_set_icon     (IdeSearchResult *self,
+                                                 GIcon           *icon);
 
 G_END_DECLS

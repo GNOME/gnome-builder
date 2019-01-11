@@ -50,61 +50,61 @@ struct _IdeDebuggerBreakpointClass
 };
 
 IDE_AVAILABLE_IN_3_32
-gint                    ide_debugger_breakpoint_compare          (IdeDebuggerBreakpoint  *a,
-                                                                  IdeDebuggerBreakpoint  *b);
+gint                    ide_debugger_breakpoint_compare         (IdeDebuggerBreakpoint  *a,
+                                                                 IdeDebuggerBreakpoint  *b);
 IDE_AVAILABLE_IN_3_32
-IdeDebuggerBreakpoint  *ide_debugger_breakpoint_new              (const gchar            *id);
+IdeDebuggerBreakpoint  *ide_debugger_breakpoint_new             (const gchar            *id);
 IDE_AVAILABLE_IN_3_32
-const gchar            *ide_debugger_breakpoint_get_id           (IdeDebuggerBreakpoint  *self);
+const gchar            *ide_debugger_breakpoint_get_id          (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-gboolean                ide_debugger_breakpoint_get_enabled      (IdeDebuggerBreakpoint  *self);
+gboolean                ide_debugger_breakpoint_get_enabled     (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_enabled      (IdeDebuggerBreakpoint  *self,
-                                                                  gboolean                enabled);
+void                    ide_debugger_breakpoint_set_enabled     (IdeDebuggerBreakpoint  *self,
+                                                                 gboolean                enabled);
 IDE_AVAILABLE_IN_3_32
-IdeDebuggerBreakMode    ide_debugger_breakpoint_get_mode         (IdeDebuggerBreakpoint  *self);
+IdeDebuggerBreakMode    ide_debugger_breakpoint_get_mode        (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_mode         (IdeDebuggerBreakpoint  *self,
-                                                                  IdeDebuggerBreakMode    mode);
+void                    ide_debugger_breakpoint_set_mode        (IdeDebuggerBreakpoint  *self,
+                                                                 IdeDebuggerBreakMode    mode);
 IDE_AVAILABLE_IN_3_32
-IdeDebuggerDisposition  ide_debugger_breakpoint_get_disposition  (IdeDebuggerBreakpoint  *self);
+IdeDebuggerDisposition  ide_debugger_breakpoint_get_disposition (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_disposition  (IdeDebuggerBreakpoint  *self,
-                                                                  IdeDebuggerDisposition  disposition);
+void                    ide_debugger_breakpoint_set_disposition (IdeDebuggerBreakpoint  *self,
+                                                                 IdeDebuggerDisposition  disposition);
 IDE_AVAILABLE_IN_3_32
-IdeDebuggerAddress      ide_debugger_breakpoint_get_address      (IdeDebuggerBreakpoint  *self);
+IdeDebuggerAddress      ide_debugger_breakpoint_get_address     (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_address      (IdeDebuggerBreakpoint  *self,
-                                                                  IdeDebuggerAddress      address);
+void                    ide_debugger_breakpoint_set_address     (IdeDebuggerBreakpoint  *self,
+                                                                 IdeDebuggerAddress      address);
 IDE_AVAILABLE_IN_3_32
-const gchar            *ide_debugger_breakpoint_get_spec         (IdeDebuggerBreakpoint  *self);
+const gchar            *ide_debugger_breakpoint_get_spec        (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_spec         (IdeDebuggerBreakpoint  *self,
-                                                                  const gchar            *spec);
+void                    ide_debugger_breakpoint_set_spec        (IdeDebuggerBreakpoint  *self,
+                                                                 const gchar            *spec);
 IDE_AVAILABLE_IN_3_32
-const gchar            *ide_debugger_breakpoint_get_function     (IdeDebuggerBreakpoint  *self);
+const gchar            *ide_debugger_breakpoint_get_function    (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_function     (IdeDebuggerBreakpoint *self,
-                                                                  const gchar           *function);
+void                    ide_debugger_breakpoint_set_function    (IdeDebuggerBreakpoint  *self,
+                                                                 const gchar            *function);
 IDE_AVAILABLE_IN_3_32
-const gchar            *ide_debugger_breakpoint_get_file         (IdeDebuggerBreakpoint  *self);
+const gchar            *ide_debugger_breakpoint_get_file        (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_file         (IdeDebuggerBreakpoint  *self,
-                                                                  const gchar            *file);
+void                    ide_debugger_breakpoint_set_file        (IdeDebuggerBreakpoint  *self,
+                                                                 const gchar            *file);
 IDE_AVAILABLE_IN_3_32
-guint                   ide_debugger_breakpoint_get_line         (IdeDebuggerBreakpoint  *self);
+guint                   ide_debugger_breakpoint_get_line        (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_line         (IdeDebuggerBreakpoint  *self,
-                                                                  guint                   line);
+void                    ide_debugger_breakpoint_set_line        (IdeDebuggerBreakpoint  *self,
+                                                                 guint                   line);
 IDE_AVAILABLE_IN_3_32
-gint64                  ide_debugger_breakpoint_get_count        (IdeDebuggerBreakpoint  *self);
+gint64                  ide_debugger_breakpoint_get_count       (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_count        (IdeDebuggerBreakpoint  *self,
-                                                                  gint64                  count);
+void                    ide_debugger_breakpoint_set_count       (IdeDebuggerBreakpoint  *self,
+                                                                 gint64                  count);
 IDE_AVAILABLE_IN_3_32
-const gchar            *ide_debugger_breakpoint_get_thread       (IdeDebuggerBreakpoint  *self);
+const gchar            *ide_debugger_breakpoint_get_thread      (IdeDebuggerBreakpoint  *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debugger_breakpoint_set_thread       (IdeDebuggerBreakpoint  *self,
-                                                                  const gchar            *thread);
+void                    ide_debugger_breakpoint_set_thread      (IdeDebuggerBreakpoint  *self,
+                                                                 const gchar            *thread);
 
 G_END_DECLS

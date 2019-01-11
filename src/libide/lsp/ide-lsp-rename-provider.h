@@ -46,7 +46,7 @@ struct _IdeLspRenameProviderClass
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_rename_provider_get_client (IdeLspRenameProvider *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_rename_provider_set_client (IdeLspRenameProvider *self,
-                                                            IdeLspClient         *client);
+void          ide_lsp_rename_provider_set_client (IdeLspRenameProvider *self,
+                                                  IdeLspClient         *client);
 
 G_END_DECLS

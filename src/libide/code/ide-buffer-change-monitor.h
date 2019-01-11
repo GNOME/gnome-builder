@@ -68,19 +68,19 @@ struct _IdeBufferChangeMonitorClass
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeBuffer          *ide_buffer_change_monitor_get_buffer     (IdeBufferChangeMonitor            *self);
+IdeBuffer           *ide_buffer_change_monitor_get_buffer     (IdeBufferChangeMonitor            *self);
 IDE_AVAILABLE_IN_3_32
-void                ide_buffer_change_monitor_emit_changed   (IdeBufferChangeMonitor            *self);
+void                 ide_buffer_change_monitor_emit_changed   (IdeBufferChangeMonitor            *self);
 IDE_AVAILABLE_IN_3_32
-void                ide_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            *self,
-                                                              guint                              line_begin,
-                                                              guint                              line_end,
-                                                              IdeBufferChangeMonitorForeachFunc  callback,
-                                                              gpointer                           user_data);
+void                 ide_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            *self,
+                                                               guint                              line_begin,
+                                                               guint                              line_end,
+                                                               IdeBufferChangeMonitorForeachFunc  callback,
+                                                               gpointer                           user_data);
 IDE_AVAILABLE_IN_3_32
-IdeBufferLineChange ide_buffer_change_monitor_get_change     (IdeBufferChangeMonitor            *self,
-                                                              guint                              line);
+IdeBufferLineChange  ide_buffer_change_monitor_get_change     (IdeBufferChangeMonitor            *self,
+                                                               guint                              line);
 IDE_AVAILABLE_IN_3_32
-void                ide_buffer_change_monitor_reload         (IdeBufferChangeMonitor            *self);
+void                 ide_buffer_change_monitor_reload         (IdeBufferChangeMonitor            *self);
 
 G_END_DECLS

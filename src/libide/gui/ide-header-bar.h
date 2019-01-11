@@ -43,25 +43,25 @@ struct _IdeHeaderBarClass
 };
 
 IDE_AVAILABLE_IN_3_32
-GtkWidget   *ide_header_bar_new                       (void);
+GtkWidget   *ide_header_bar_new                        (void);
 IDE_AVAILABLE_IN_3_32
-void         ide_header_bar_add_primary               (IdeHeaderBar *self,
-                                                       GtkWidget    *widget);
+void         ide_header_bar_add_primary                (IdeHeaderBar *self,
+                                                        GtkWidget    *widget);
 IDE_AVAILABLE_IN_3_32
-void         ide_header_bar_add_center_left           (IdeHeaderBar *self,
-                                                       GtkWidget    *widget);
+void         ide_header_bar_add_center_left            (IdeHeaderBar *self,
+                                                        GtkWidget    *widget);
 IDE_AVAILABLE_IN_3_32
-void         ide_header_bar_add_secondary             (IdeHeaderBar *self,
-                                                       GtkWidget    *widget);
+void         ide_header_bar_add_secondary              (IdeHeaderBar *self,
+                                                        GtkWidget    *widget);
 IDE_AVAILABLE_IN_3_32
-const gchar *ide_header_bar_get_menu_id               (IdeHeaderBar *self);
+const gchar *ide_header_bar_get_menu_id                (IdeHeaderBar *self);
 IDE_AVAILABLE_IN_3_32
-void         ide_header_bar_set_menu_id               (IdeHeaderBar *self,
-                                                       const gchar  *menu_id);
+void         ide_header_bar_set_menu_id                (IdeHeaderBar *self,
+                                                        const gchar  *menu_id);
 IDE_AVAILABLE_IN_3_32
-gboolean    ide_header_bar_get_show_fullscreen_button (IdeHeaderBar *self);
+gboolean     ide_header_bar_get_show_fullscreen_button (IdeHeaderBar *self);
 IDE_AVAILABLE_IN_3_32
-void        ide_header_bar_set_show_fullscreen_button (IdeHeaderBar *self,
-                                                       gboolean      show_fullscreen_button);
+void         ide_header_bar_set_show_fullscreen_button (IdeHeaderBar *self,
+                                                        gboolean      show_fullscreen_button);
 
 G_END_DECLS

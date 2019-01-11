@@ -63,81 +63,80 @@ struct _IdeRunnerClass
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeRunner         *ide_runner_new             (IdeContext           *context);
+IdeRunner         *ide_runner_new              (IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_runner_get_failed      (IdeRunner            *self);
+gboolean           ide_runner_get_failed       (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_failed      (IdeRunner            *self,
-                                               gboolean              failed);
+void               ide_runner_set_failed       (IdeRunner            *self,
+                                                gboolean              failed);
 IDE_AVAILABLE_IN_3_32
-IdeRuntime        *ide_runner_get_runtime     (IdeRunner            *self);
+IdeRuntime        *ide_runner_get_runtime      (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_force_quit      (IdeRunner            *self);
+void               ide_runner_force_quit       (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-IdeEnvironment    *ide_runner_get_environment (IdeRunner            *self);
+IdeEnvironment    *ide_runner_get_environment  (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_run_async       (IdeRunner            *self,
-                                               GCancellable         *cancellable,
-                                               GAsyncReadyCallback   callback,
-                                               gpointer              user_data);
+void               ide_runner_run_async        (IdeRunner            *self,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_runner_run_finish      (IdeRunner            *self,
-                                               GAsyncResult         *result,
-                                               GError              **error);
+gboolean           ide_runner_run_finish       (IdeRunner            *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
 IDE_AVAILABLE_IN_3_32
-GSubprocessFlags   ide_runner_get_flags       (IdeRunner            *self);
+GSubprocessFlags   ide_runner_get_flags        (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_flags       (IdeRunner            *self,
-                                               GSubprocessFlags      flags);
+void               ide_runner_set_flags        (IdeRunner            *self,
+                                                GSubprocessFlags      flags);
 IDE_AVAILABLE_IN_3_32
-const gchar       *ide_runner_get_cwd         (IdeRunner            *self);
+const gchar       *ide_runner_get_cwd          (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_cwd         (IdeRunner            *self,
-                                               const gchar          *cwd);
+void               ide_runner_set_cwd          (IdeRunner            *self,
+                                                const gchar          *cwd);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_runner_get_clear_env   (IdeRunner            *self);
+gboolean           ide_runner_get_clear_env    (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_clear_env   (IdeRunner            *self,
-                                               gboolean              clear_env);
+void               ide_runner_set_clear_env    (IdeRunner            *self,
+                                                gboolean              clear_env);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_prepend_argv    (IdeRunner            *self,
-                                               const gchar          *param);
+void               ide_runner_prepend_argv     (IdeRunner            *self,
+                                                const gchar          *param);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_append_argv     (IdeRunner            *self,
-                                               const gchar          *param);
+void               ide_runner_append_argv      (IdeRunner            *self,
+                                                const gchar          *param);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_push_args       (IdeRunner            *self,
-                                               const gchar * const  *args);
+void               ide_runner_push_args        (IdeRunner            *self,
+                                                const gchar * const  *args);
 IDE_AVAILABLE_IN_3_32
-gchar            **ide_runner_get_argv        (IdeRunner            *self);
+gchar            **ide_runner_get_argv         (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_argv        (IdeRunner            *self,
-                                               const gchar * const  *argv);
+void               ide_runner_set_argv         (IdeRunner            *self,
+                                                const gchar * const  *argv);
 IDE_AVAILABLE_IN_3_32
-gint               ide_runner_take_fd         (IdeRunner            *self,
-                                               gint                  source_fd,
-                                               gint                  dest_fd);
+gint               ide_runner_take_fd          (IdeRunner            *self,
+                                                gint                  source_fd,
+                                                gint                  dest_fd);
 IDE_AVAILABLE_IN_3_32
-GOutputStream     *ide_runner_get_stdin       (IdeRunner            *self);
+GOutputStream     *ide_runner_get_stdin        (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-GInputStream      *ide_runner_get_stdout      (IdeRunner            *self);
+GInputStream      *ide_runner_get_stdout       (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-GInputStream      *ide_runner_get_stderr      (IdeRunner            *self);
+GInputStream      *ide_runner_get_stderr       (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_runner_get_run_on_host (IdeRunner            *self);
+gboolean           ide_runner_get_run_on_host  (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_run_on_host (IdeRunner            *self,
-                                               gboolean              run_on_host);
+void               ide_runner_set_run_on_host  (IdeRunner            *self,
+                                                gboolean              run_on_host);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_tty         (IdeRunner            *self,
-                                               int                   tty_fd);
+void               ide_runner_set_tty          (IdeRunner            *self,
+                                                int                   tty_fd);
 IDE_AVAILABLE_IN_3_32
-gint               ide_runner_steal_tty       (IdeRunner            *self);
-
+gint               ide_runner_steal_tty        (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-IdeBuildTarget    *ide_runner_get_build_target(IdeRunner            *self);
+IdeBuildTarget    *ide_runner_get_build_target (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_build_target(IdeRunner            *self,
-                                               IdeBuildTarget       *build_target);
+void               ide_runner_set_build_target (IdeRunner            *self,
+                                                IdeBuildTarget       *build_target);
 
 G_END_DECLS

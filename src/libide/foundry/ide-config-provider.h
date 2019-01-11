@@ -66,35 +66,35 @@ struct _IdeConfigProviderInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void     ide_config_provider_emit_added    (IdeConfigProvider  *self,
-                                                   IdeConfig          *config);
+void     ide_config_provider_emit_added   (IdeConfigProvider    *self,
+                                           IdeConfig            *config);
 IDE_AVAILABLE_IN_3_32
-void     ide_config_provider_emit_removed  (IdeConfigProvider  *self,
-                                                   IdeConfig          *config);
+void     ide_config_provider_emit_removed (IdeConfigProvider    *self,
+                                           IdeConfig            *config);
 IDE_AVAILABLE_IN_3_32
-void     ide_config_provider_load_async    (IdeConfigProvider  *self,
-                                                   GCancellable              *cancellable,
-                                                   GAsyncReadyCallback        callback,
-                                                   gpointer                   user_data);
+void     ide_config_provider_load_async   (IdeConfigProvider    *self,
+                                           GCancellable         *cancellable,
+                                           GAsyncReadyCallback   callback,
+                                           gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_config_provider_load_finish   (IdeConfigProvider  *self,
-                                                   GAsyncResult              *result,
-                                                   GError                   **error);
+gboolean ide_config_provider_load_finish  (IdeConfigProvider    *self,
+                                           GAsyncResult         *result,
+                                           GError              **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_config_provider_save_async    (IdeConfigProvider  *self,
-                                                   GCancellable              *cancellable,
-                                                   GAsyncReadyCallback        callback,
-                                                   gpointer                   user_data);
+void     ide_config_provider_save_async   (IdeConfigProvider    *self,
+                                           GCancellable         *cancellable,
+                                           GAsyncReadyCallback   callback,
+                                           gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_config_provider_save_finish   (IdeConfigProvider  *self,
-                                                   GAsyncResult              *result,
-                                                   GError                   **error);
+gboolean ide_config_provider_save_finish  (IdeConfigProvider    *self,
+                                           GAsyncResult         *result,
+                                           GError              **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_config_provider_delete        (IdeConfigProvider  *self,
-                                                   IdeConfig          *config);
-void     ide_config_provider_duplicate     (IdeConfigProvider  *self,
-                                                   IdeConfig          *config);
+void     ide_config_provider_delete       (IdeConfigProvider    *self,
+                                           IdeConfig            *config);
+void     ide_config_provider_duplicate    (IdeConfigProvider    *self,
+                                           IdeConfig            *config);
 IDE_AVAILABLE_IN_3_32
-void     ide_config_provider_unload        (IdeConfigProvider  *self);
+void     ide_config_provider_unload       (IdeConfigProvider    *self);
 
 G_END_DECLS

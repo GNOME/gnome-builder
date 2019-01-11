@@ -38,7 +38,7 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletion, ide_completion, IDE, COMPLETION, GObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeCompletionDisplay *ide_completion_get_display         (IdeCompletion *self);
+IdeCompletionDisplay *ide_completion_get_display         (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
 GtkSourceView        *ide_completion_get_view            (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32

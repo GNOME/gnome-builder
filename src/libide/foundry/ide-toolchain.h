@@ -69,26 +69,26 @@ struct _IdeToolchainClass
 #define IDE_TOOLCHAIN_LANGUAGE_D         "d"
 
 IDE_AVAILABLE_IN_3_32
-const gchar   *ide_toolchain_get_id                (IdeToolchain  *self);
+const gchar *ide_toolchain_get_id                (IdeToolchain *self);
 IDE_AVAILABLE_IN_3_32
-void           ide_toolchain_set_id                (IdeToolchain  *self,
-                                                    const gchar   *id);
+void         ide_toolchain_set_id                (IdeToolchain *self,
+                                                  const gchar  *id);
 IDE_AVAILABLE_IN_3_32
-const gchar   *ide_toolchain_get_display_name      (IdeToolchain  *self);
+const gchar *ide_toolchain_get_display_name      (IdeToolchain *self);
 IDE_AVAILABLE_IN_3_32
-void           ide_toolchain_set_display_name      (IdeToolchain  *self,
-                                                    const gchar   *display_name);
+void         ide_toolchain_set_display_name      (IdeToolchain *self,
+                                                  const gchar  *display_name);
 IDE_AVAILABLE_IN_3_32
-IdeTriplet    *ide_toolchain_get_host_triplet      (IdeToolchain  *self);
+IdeTriplet  *ide_toolchain_get_host_triplet      (IdeToolchain *self);
 IDE_AVAILABLE_IN_3_32
-void           ide_toolchain_set_host_triplet      (IdeToolchain  *self,
-                                                    IdeTriplet    *host_triplet);
+void         ide_toolchain_set_host_triplet      (IdeToolchain *self,
+                                                  IdeTriplet   *host_triplet);
 IDE_AVAILABLE_IN_3_32
-const gchar   *ide_toolchain_get_tool_for_language (IdeToolchain  *self,
-                                                    const gchar   *language,
-                                                    const gchar   *tool_id);
+const gchar *ide_toolchain_get_tool_for_language (IdeToolchain *self,
+                                                  const gchar  *language,
+                                                  const gchar  *tool_id);
 IDE_AVAILABLE_IN_3_32
-GHashTable    *ide_toolchain_get_tools_for_id      (IdeToolchain  *self,
-                                                    const gchar   *tool_id);
+GHashTable  *ide_toolchain_get_tools_for_id      (IdeToolchain *self,
+                                                  const gchar  *tool_id);
 
 G_END_DECLS

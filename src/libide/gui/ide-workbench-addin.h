@@ -88,72 +88,72 @@ struct _IdeWorkbenchAddinInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_load                  (IdeWorkbenchAddin    *self,
-                                                    IdeWorkbench         *workbench);
+void               ide_workbench_addin_load                  (IdeWorkbenchAddin    *self,
+                                                              IdeWorkbench         *workbench);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_unload                (IdeWorkbenchAddin    *self,
-                                                    IdeWorkbench         *workbench);
+void               ide_workbench_addin_unload                (IdeWorkbenchAddin    *self,
+                                                              IdeWorkbench         *workbench);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_load_project_async    (IdeWorkbenchAddin    *self,
-                                                    IdeProjectInfo       *project_info,
-                                                    GCancellable         *cancellable,
-                                                    GAsyncReadyCallback   callback,
-                                                    gpointer              user_data);
+void               ide_workbench_addin_load_project_async    (IdeWorkbenchAddin    *self,
+                                                              IdeProjectInfo       *project_info,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_workbench_addin_load_project_finish   (IdeWorkbenchAddin    *self,
-                                                    GAsyncResult         *result,
-                                                    GError              **error);
+gboolean           ide_workbench_addin_load_project_finish   (IdeWorkbenchAddin    *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_unload_project_async  (IdeWorkbenchAddin    *self,
-                                                    IdeProjectInfo       *project_info,
-                                                    GCancellable         *cancellable,
-                                                    GAsyncReadyCallback   callback,
-                                                    gpointer              user_data);
+void               ide_workbench_addin_unload_project_async  (IdeWorkbenchAddin    *self,
+                                                              IdeProjectInfo       *project_info,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_workbench_addin_unload_project_finish (IdeWorkbenchAddin    *self,
-                                                    GAsyncResult         *result,
-                                                    GError              **error);
+gboolean           ide_workbench_addin_unload_project_finish (IdeWorkbenchAddin    *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_project_loaded        (IdeWorkbenchAddin    *self,
-                                                    IdeProjectInfo       *project_info);
+void               ide_workbench_addin_project_loaded        (IdeWorkbenchAddin    *self,
+                                                              IdeProjectInfo       *project_info);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_workspace_added       (IdeWorkbenchAddin    *self,
-                                                    IdeWorkspace         *workspace);
+void               ide_workbench_addin_workspace_added       (IdeWorkbenchAddin    *self,
+                                                              IdeWorkspace         *workspace);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_workspace_removed     (IdeWorkbenchAddin    *self,
-                                                    IdeWorkspace         *workspace);
+void               ide_workbench_addin_workspace_removed     (IdeWorkbenchAddin    *self,
+                                                              IdeWorkspace         *workspace);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_workbench_addin_can_open              (IdeWorkbenchAddin    *self,
-                                                    GFile                *file,
-                                                    const gchar          *content_type,
-                                                    gint                 *priority);
+gboolean           ide_workbench_addin_can_open              (IdeWorkbenchAddin    *self,
+                                                              GFile                *file,
+                                                              const gchar          *content_type,
+                                                              gint                 *priority);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_open_async            (IdeWorkbenchAddin    *self,
-                                                    GFile                *file,
-                                                    const gchar          *content_type,
-                                                    IdeBufferOpenFlags    flags,
-                                                    GCancellable         *cancellable,
-                                                    GAsyncReadyCallback   callback,
-                                                    gpointer              user_data);
+void               ide_workbench_addin_open_async            (IdeWorkbenchAddin    *self,
+                                                              GFile                *file,
+                                                              const gchar          *content_type,
+                                                              IdeBufferOpenFlags    flags,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_open_at_async         (IdeWorkbenchAddin    *self,
-                                                    GFile                *file,
-                                                    const gchar          *content_type,
-                                                    gint                  at_line,
-                                                    gint                  at_line_offset,
-                                                    IdeBufferOpenFlags    flags,
-                                                    GCancellable         *cancellable,
-                                                    GAsyncReadyCallback   callback,
-                                                    gpointer              user_data);
+void               ide_workbench_addin_open_at_async         (IdeWorkbenchAddin    *self,
+                                                              GFile                *file,
+                                                              const gchar          *content_type,
+                                                              gint                  at_line,
+                                                              gint                  at_line_offset,
+                                                              IdeBufferOpenFlags    flags,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_workbench_addin_open_finish           (IdeWorkbenchAddin    *self,
-                                                    GAsyncResult         *result,
-                                                    GError              **error);
+gboolean           ide_workbench_addin_open_finish           (IdeWorkbenchAddin    *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_workbench_addin_vcs_changed           (IdeWorkbenchAddin    *self,
-                                                    IdeVcs               *vcs);
+void               ide_workbench_addin_vcs_changed           (IdeWorkbenchAddin    *self,
+                                                              IdeVcs               *vcs);
 IDE_AVAILABLE_IN_3_32
-IdeWorkbenchAddin *ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
-                                                            const gchar  *module_name);
+IdeWorkbenchAddin *ide_workbench_addin_find_by_module_name   (IdeWorkbench         *workbench,
+                                                              const gchar          *module_name);
 
 G_END_DECLS

@@ -46,7 +46,7 @@ struct _IdeLspHoverProviderClass
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_hover_provider_get_client (IdeLspHoverProvider *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_hover_provider_set_client (IdeLspHoverProvider *self,
-                                                           IdeLspClient        *client);
+void          ide_lsp_hover_provider_set_client (IdeLspHoverProvider *self,
+                                                 IdeLspClient        *client);
 
 G_END_DECLS

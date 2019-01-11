@@ -68,52 +68,52 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeBufferManager, ide_buffer_manager, IDE, BUFFER_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeBufferManager *ide_buffer_manager_from_context       (IdeContext           *context);
+IdeBufferManager *ide_buffer_manager_from_context       (IdeContext            *context);
 IDE_AVAILABLE_IN_3_32
-void              ide_buffer_manager_foreach            (IdeBufferManager     *self,
-                                                         IdeBufferForeachFunc  foreach_func,
-                                                         gpointer              user_data);
+void              ide_buffer_manager_foreach            (IdeBufferManager      *self,
+                                                         IdeBufferForeachFunc   foreach_func,
+                                                         gpointer               user_data);
 IDE_AVAILABLE_IN_3_32
-void              ide_buffer_manager_load_file_async    (IdeBufferManager     *self,
-                                                         GFile                *file,
-                                                         IdeBufferOpenFlags    flags,
-                                                         GCancellable         *cancellable,
-                                                         IdeNotification     **notif,
-                                                         GAsyncReadyCallback   callback,
-                                                         gpointer              user_data);
+void              ide_buffer_manager_load_file_async    (IdeBufferManager      *self,
+                                                         GFile                 *file,
+                                                         IdeBufferOpenFlags     flags,
+                                                         GCancellable          *cancellable,
+                                                         IdeNotification      **notif,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
 IDE_AVAILABLE_IN_3_32
-IdeBuffer        *ide_buffer_manager_load_file_finish   (IdeBufferManager     *self,
-                                                         GAsyncResult         *result,
-                                                         GError              **error);
+IdeBuffer        *ide_buffer_manager_load_file_finish   (IdeBufferManager      *self,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
 IDE_AVAILABLE_IN_3_32
-void              ide_buffer_manager_save_all_async     (IdeBufferManager     *self,
-                                                         GCancellable         *cancellable,
-                                                         GAsyncReadyCallback   callback,
-                                                         gpointer              user_data);
+void              ide_buffer_manager_save_all_async     (IdeBufferManager      *self,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean          ide_buffer_manager_save_all_finish    (IdeBufferManager     *self,
-                                                         GAsyncResult         *result,
-                                                         GError              **error);
+gboolean          ide_buffer_manager_save_all_finish    (IdeBufferManager      *self,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
 IDE_AVAILABLE_IN_3_32
-gboolean          ide_buffer_manager_has_file           (IdeBufferManager     *self,
-                                                         GFile                *file);
+gboolean          ide_buffer_manager_has_file           (IdeBufferManager      *self,
+                                                         GFile                 *file);
 IDE_AVAILABLE_IN_3_32
-IdeBuffer        *ide_buffer_manager_find_buffer        (IdeBufferManager     *self,
-                                                         GFile                *file);
+IdeBuffer        *ide_buffer_manager_find_buffer        (IdeBufferManager      *self,
+                                                         GFile                 *file);
 IDE_AVAILABLE_IN_3_32
-gssize            ide_buffer_manager_get_max_file_size  (IdeBufferManager     *self);
+gssize            ide_buffer_manager_get_max_file_size  (IdeBufferManager      *self);
 IDE_AVAILABLE_IN_3_32
-void              ide_buffer_manager_set_max_file_size  (IdeBufferManager     *self,
-                                                         gssize                max_file_size);
+void              ide_buffer_manager_set_max_file_size  (IdeBufferManager      *self,
+                                                         gssize                 max_file_size);
 IDE_AVAILABLE_IN_3_32
-void              ide_buffer_manager_apply_edits_async  (IdeBufferManager     *self,
-                                                         GPtrArray            *edits,
-                                                         GCancellable         *cancellable,
-                                                         GAsyncReadyCallback   callback,
-                                                         gpointer              user_data);
+void              ide_buffer_manager_apply_edits_async  (IdeBufferManager      *self,
+                                                         GPtrArray             *edits,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean          ide_buffer_manager_apply_edits_finish (IdeBufferManager     *self,
-                                                         GAsyncResult         *result,
-                                                         GError              **error);
+gboolean          ide_buffer_manager_apply_edits_finish (IdeBufferManager      *self,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
 
 G_END_DECLS

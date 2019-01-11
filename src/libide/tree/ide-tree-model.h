@@ -34,39 +34,39 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeTreeModel, ide_tree_model, IDE, TREE_MODEL, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeTree      *ide_tree_model_get_tree          (IdeTreeModel *self);
+IdeTree     *ide_tree_model_get_tree          (IdeTreeModel         *self);
 IDE_AVAILABLE_IN_3_32
-IdeTreeNode  *ide_tree_model_get_root          (IdeTreeModel *self);
+IdeTreeNode *ide_tree_model_get_root          (IdeTreeModel         *self);
 IDE_AVAILABLE_IN_3_32
-void          ide_tree_model_set_root          (IdeTreeModel *self,
-                                                IdeTreeNode  *root);
+void         ide_tree_model_set_root          (IdeTreeModel         *self,
+                                               IdeTreeNode          *root);
 IDE_AVAILABLE_IN_3_32
-const gchar  *ide_tree_model_get_kind          (IdeTreeModel *self);
+const gchar *ide_tree_model_get_kind          (IdeTreeModel         *self);
 IDE_AVAILABLE_IN_3_32
-void          ide_tree_model_set_kind          (IdeTreeModel *self,
-                                                const gchar  *kind);
+void         ide_tree_model_set_kind          (IdeTreeModel         *self,
+                                               const gchar          *kind);
 IDE_AVAILABLE_IN_3_32
-IdeTreeNode  *ide_tree_model_get_node          (IdeTreeModel *self,
-                                                GtkTreeIter  *iter);
+IdeTreeNode *ide_tree_model_get_node          (IdeTreeModel         *self,
+                                               GtkTreeIter          *iter);
 IDE_AVAILABLE_IN_3_32
-GtkTreePath  *ide_tree_model_get_path_for_node (IdeTreeModel *self,
-                                                IdeTreeNode  *node);
+GtkTreePath *ide_tree_model_get_path_for_node (IdeTreeModel         *self,
+                                               IdeTreeNode          *node);
 IDE_AVAILABLE_IN_3_32
-gboolean      ide_tree_model_get_iter_for_node (IdeTreeModel *self,
-                                                GtkTreeIter  *iter,
-                                                IdeTreeNode  *node);
+gboolean     ide_tree_model_get_iter_for_node (IdeTreeModel         *self,
+                                               GtkTreeIter          *iter,
+                                               IdeTreeNode          *node);
 IDE_AVAILABLE_IN_3_32
-void          ide_tree_model_invalidate        (IdeTreeModel *self,
-                                                IdeTreeNode  *node);
+void         ide_tree_model_invalidate        (IdeTreeModel         *self,
+                                               IdeTreeNode          *node);
 IDE_AVAILABLE_IN_3_32
-void          ide_tree_model_expand_async      (IdeTreeModel         *self,
-                                                IdeTreeNode          *node,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
+void         ide_tree_model_expand_async      (IdeTreeModel         *self,
+                                               IdeTreeNode          *node,
+                                               GCancellable         *cancellable,
+                                               GAsyncReadyCallback   callback,
+                                               gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean      ide_tree_model_expand_finish     (IdeTreeModel         *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
+gboolean     ide_tree_model_expand_finish     (IdeTreeModel         *self,
+                                               GAsyncResult         *result,
+                                               GError              **error);
 
 G_END_DECLS

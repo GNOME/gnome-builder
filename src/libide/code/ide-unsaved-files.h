@@ -68,12 +68,12 @@ IDE_AVAILABLE_IN_3_32
 gint64           ide_unsaved_files_get_sequence     (IdeUnsavedFiles      *files);
 IDE_AVAILABLE_IN_3_32
 IdeUnsavedFile  *ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles      *self,
-                                                    GFile                *file);
+                                                     GFile                *file);
 IDE_AVAILABLE_IN_3_32
 void             ide_unsaved_files_clear            (IdeUnsavedFiles      *self);
 IDE_AVAILABLE_IN_3_32
 gboolean         ide_unsaved_files_contains         (IdeUnsavedFiles      *self,
-                                                    GFile                *file);
+                                                     GFile                *file);
 IDE_AVAILABLE_IN_3_32
 void             ide_unsaved_files_reap_async       (IdeUnsavedFiles      *self,
                                                      GCancellable         *cancellable,

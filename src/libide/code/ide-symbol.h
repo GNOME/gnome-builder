@@ -104,26 +104,26 @@ struct _IdeSymbolClass
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeSymbol      *ide_symbol_new                 (const gchar     *name,
-                                                IdeSymbolKind    kind,
-                                                IdeSymbolFlags   flags,
-                                                IdeLocation     *location,
-                                                IdeLocation     *header_location);
+IdeSymbol      *ide_symbol_new                 (const gchar    *name,
+                                                IdeSymbolKind   kind,
+                                                IdeSymbolFlags  flags,
+                                                IdeLocation    *location,
+                                                IdeLocation    *header_location);
 IDE_AVAILABLE_IN_3_32
-IdeSymbolKind   ide_symbol_get_kind            (IdeSymbol       *self);
+IdeSymbolKind   ide_symbol_get_kind            (IdeSymbol      *self);
 IDE_AVAILABLE_IN_3_32
-IdeSymbolFlags  ide_symbol_get_flags           (IdeSymbol       *self);
+IdeSymbolFlags  ide_symbol_get_flags           (IdeSymbol      *self);
 IDE_AVAILABLE_IN_3_32
-const gchar    *ide_symbol_get_name            (IdeSymbol       *self);
+const gchar    *ide_symbol_get_name            (IdeSymbol      *self);
 IDE_AVAILABLE_IN_3_32
-IdeLocation    *ide_symbol_get_location        (IdeSymbol       *self);
+IdeLocation    *ide_symbol_get_location        (IdeSymbol      *self);
 IDE_AVAILABLE_IN_3_32
-IdeLocation    *ide_symbol_get_header_location (IdeSymbol       *self);
+IdeLocation    *ide_symbol_get_header_location (IdeSymbol      *self);
 IDE_AVAILABLE_IN_3_32
-IdeSymbol      *ide_symbol_new_from_variant    (GVariant        *variant);
+IdeSymbol      *ide_symbol_new_from_variant    (GVariant       *variant);
 IDE_AVAILABLE_IN_3_32
-GVariant       *ide_symbol_to_variant          (IdeSymbol       *self);
+GVariant       *ide_symbol_to_variant          (IdeSymbol      *self);
 IDE_AVAILABLE_IN_3_32
-const gchar    *ide_symbol_kind_get_icon_name  (IdeSymbolKind    kind);
+const gchar    *ide_symbol_kind_get_icon_name  (IdeSymbolKind   kind);
 
 G_END_DECLS

@@ -70,49 +70,49 @@ struct _IdeRuntimeClass
 };
 
 IDE_AVAILABLE_IN_3_32
-GQuark                 ide_runtime_error_quark              (void) G_GNUC_CONST;
+GQuark                  ide_runtime_error_quark              (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_3_32
-gboolean               ide_runtime_contains_program_in_path (IdeRuntime           *self,
-                                                             const gchar          *program,
-                                                             GCancellable         *cancellable);
+gboolean                ide_runtime_contains_program_in_path (IdeRuntime      *self,
+                                                              const gchar     *program,
+                                                              GCancellable    *cancellable);
 IDE_AVAILABLE_IN_3_32
-IdeSubprocessLauncher *ide_runtime_create_launcher          (IdeRuntime           *self,
-                                                             GError              **error);
+IdeSubprocessLauncher  *ide_runtime_create_launcher          (IdeRuntime      *self,
+                                                              GError         **error);
 IDE_AVAILABLE_IN_3_32
-IdeRunner             *ide_runtime_create_runner            (IdeRuntime           *self,
-                                                             IdeBuildTarget       *build_target);
+IdeRunner              *ide_runtime_create_runner            (IdeRuntime      *self,
+                                                              IdeBuildTarget  *build_target);
 IDE_AVAILABLE_IN_3_32
-void                   ide_runtime_prepare_configuration    (IdeRuntime           *self,
-                                                             IdeConfig     *configuration);
+void                    ide_runtime_prepare_configuration    (IdeRuntime      *self,
+                                                              IdeConfig       *configuration);
 IDE_AVAILABLE_IN_3_32
-IdeRuntime            *ide_runtime_new                      (const gchar          *id,
-                                                             const gchar          *title);
+IdeRuntime             *ide_runtime_new                      (const gchar     *id,
+                                                              const gchar     *title);
 IDE_AVAILABLE_IN_3_32
-const gchar           *ide_runtime_get_id                   (IdeRuntime           *self);
+const gchar            *ide_runtime_get_id                   (IdeRuntime      *self);
 IDE_AVAILABLE_IN_3_32
-void                   ide_runtime_set_id                   (IdeRuntime           *self,
-                                                             const gchar          *id);
+void                    ide_runtime_set_id                   (IdeRuntime      *self,
+                                                              const gchar     *id);
 IDE_AVAILABLE_IN_3_32
-const gchar           *ide_runtime_get_category             (IdeRuntime           *self);
+const gchar            *ide_runtime_get_category             (IdeRuntime      *self);
 IDE_AVAILABLE_IN_3_32
-void                   ide_runtime_set_category             (IdeRuntime           *self,
-                                                             const gchar          *category);
+void                    ide_runtime_set_category             (IdeRuntime      *self,
+                                                              const gchar     *category);
 IDE_AVAILABLE_IN_3_32
-const gchar           *ide_runtime_get_display_name         (IdeRuntime           *self);
+const gchar            *ide_runtime_get_display_name         (IdeRuntime      *self);
 IDE_AVAILABLE_IN_3_32
-void                   ide_runtime_set_display_name         (IdeRuntime           *self,
-                                                             const gchar          *display_name);
+void                    ide_runtime_set_display_name         (IdeRuntime      *self,
+                                                              const gchar     *display_name);
 IDE_AVAILABLE_IN_3_32
-GFile                 *ide_runtime_translate_file           (IdeRuntime           *self,
-                                                             GFile                *file);
+GFile                  *ide_runtime_translate_file           (IdeRuntime      *self,
+                                                              GFile           *file);
 IDE_AVAILABLE_IN_3_32
-gchar                **ide_runtime_get_system_include_dirs  (IdeRuntime           *self);
+gchar                 **ide_runtime_get_system_include_dirs  (IdeRuntime      *self);
 IDE_AVAILABLE_IN_3_32
-gchar                 *ide_runtime_get_arch                 (IdeRuntime           *self);
+gchar                  *ide_runtime_get_arch                 (IdeRuntime      *self);
 IDE_AVAILABLE_IN_3_32
-IdeTriplet            *ide_runtime_get_triplet              (IdeRuntime           *self);
+IdeTriplet             *ide_runtime_get_triplet              (IdeRuntime      *self);
 IDE_AVAILABLE_IN_3_32
-gboolean               ide_runtime_supports_toolchain       (IdeRuntime           *self,
-                                                             IdeToolchain         *toolchain);
+gboolean                ide_runtime_supports_toolchain       (IdeRuntime      *self,
+                                                              IdeToolchain    *toolchain);
 
 G_END_DECLS

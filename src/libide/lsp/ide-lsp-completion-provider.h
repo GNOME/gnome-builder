@@ -48,7 +48,7 @@ struct _IdeLspCompletionProviderClass
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_completion_provider_get_client (IdeLspCompletionProvider *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
-                                                                IdeLspClient             *client);
+void          ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
+                                                      IdeLspClient             *client);
 
 G_END_DECLS

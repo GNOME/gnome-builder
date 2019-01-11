@@ -38,22 +38,22 @@ typedef struct
 } IdeSearchReducer;
 
 IDE_AVAILABLE_IN_3_32
-void       ide_search_reducer_init    (IdeSearchReducer  *reducer,
-                                       gsize              max_results);
+void       ide_search_reducer_init    (IdeSearchReducer *reducer,
+                                       gsize             max_results);
 IDE_AVAILABLE_IN_3_32
-gboolean   ide_search_reducer_accepts (IdeSearchReducer  *reducer,
-                                       gfloat             score);
+gboolean   ide_search_reducer_accepts (IdeSearchReducer *reducer,
+                                       gfloat            score);
 IDE_AVAILABLE_IN_3_32
-void       ide_search_reducer_take    (IdeSearchReducer  *reducer,
-                                       IdeSearchResult   *result);
+void       ide_search_reducer_take    (IdeSearchReducer *reducer,
+                                       IdeSearchResult  *result);
 IDE_AVAILABLE_IN_3_32
-void       ide_search_reducer_push    (IdeSearchReducer  *reducer,
-                                       IdeSearchResult   *result);
+void       ide_search_reducer_push    (IdeSearchReducer *reducer,
+                                       IdeSearchResult  *result);
 IDE_AVAILABLE_IN_3_32
-void       ide_search_reducer_destroy (IdeSearchReducer  *reducer);
+void       ide_search_reducer_destroy (IdeSearchReducer *reducer);
 IDE_AVAILABLE_IN_3_32
-GPtrArray *ide_search_reducer_free    (IdeSearchReducer  *reducer,
-                                       gboolean           free_results);
+GPtrArray *ide_search_reducer_free    (IdeSearchReducer *reducer,
+                                       gboolean          free_results);
 
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (IdeSearchReducer, ide_search_reducer_destroy)
 

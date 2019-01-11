@@ -46,7 +46,7 @@ struct _IdeLspSymbolResolverClass
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_symbol_resolver_get_client (IdeLspSymbolResolver *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_symbol_resolver_set_client (IdeLspSymbolResolver *self,
-                                                            IdeLspClient         *client);
+void          ide_lsp_symbol_resolver_set_client (IdeLspSymbolResolver *self,
+                                                  IdeLspClient         *client);
 
 G_END_DECLS

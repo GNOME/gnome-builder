@@ -32,17 +32,17 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDiagnosticsManager, ide_diagnostics_manager, IDE, DIAGNOSTICS_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeDiagnosticsManager *ide_diagnostics_manager_from_context (IdeContext *context);
+IdeDiagnosticsManager *ide_diagnostics_manager_from_context             (IdeContext            *context);
 IDE_AVAILABLE_IN_3_32
-gboolean        ide_diagnostics_manager_get_busy                 (IdeDiagnosticsManager *self);
+gboolean               ide_diagnostics_manager_get_busy                 (IdeDiagnosticsManager *self);
 IDE_AVAILABLE_IN_3_32
-IdeDiagnostics *ide_diagnostics_manager_get_diagnostics_for_file (IdeDiagnosticsManager *self,
-                                                                  GFile                 *file);
+IdeDiagnostics        *ide_diagnostics_manager_get_diagnostics_for_file (IdeDiagnosticsManager *self,
+                                                                         GFile                 *file);
 IDE_AVAILABLE_IN_3_32
-guint           ide_diagnostics_manager_get_sequence_for_file    (IdeDiagnosticsManager *self,
-                                                                  GFile                 *file);
+guint                  ide_diagnostics_manager_get_sequence_for_file    (IdeDiagnosticsManager *self,
+                                                                         GFile                 *file);
 IDE_AVAILABLE_IN_3_32
-void            ide_diagnostics_manager_rediagnose               (IdeDiagnosticsManager *self,
-                                                                  IdeBuffer             *buffer);
+void                   ide_diagnostics_manager_rediagnose               (IdeDiagnosticsManager *self,
+                                                                         IdeBuffer             *buffer);
 
 G_END_DECLS

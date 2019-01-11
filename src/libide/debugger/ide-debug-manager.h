@@ -35,25 +35,25 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDebugManager, ide_debug_manager, IDE, DEBUG_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeDebugManager        *ide_debug_manager_from_context             (IdeContext             *context);
+IdeDebugManager        *ide_debug_manager_from_context             (IdeContext       *context);
 IDE_AVAILABLE_IN_3_32
-IdeDebugger            *ide_debug_manager_get_debugger             (IdeDebugManager        *self);
+IdeDebugger            *ide_debug_manager_get_debugger             (IdeDebugManager  *self);
 IDE_AVAILABLE_IN_3_32
-gboolean                ide_debug_manager_get_active               (IdeDebugManager        *self);
+gboolean                ide_debug_manager_get_active               (IdeDebugManager  *self);
 IDE_AVAILABLE_IN_3_32
-gboolean                ide_debug_manager_start                    (IdeDebugManager        *self,
-                                                                    IdeRunner              *runner,
-                                                                    GError                **error);
+gboolean                ide_debug_manager_start                    (IdeDebugManager  *self,
+                                                                    IdeRunner        *runner,
+                                                                    GError          **error);
 IDE_AVAILABLE_IN_3_32
-void                    ide_debug_manager_stop                     (IdeDebugManager        *self);
+void                    ide_debug_manager_stop                     (IdeDebugManager  *self);
 IDE_AVAILABLE_IN_3_32
-IdeDebuggerBreakpoints *ide_debug_manager_get_breakpoints_for_file (IdeDebugManager        *self,
-                                                                    GFile                  *file);
+IdeDebuggerBreakpoints *ide_debug_manager_get_breakpoints_for_file (IdeDebugManager  *self,
+                                                                    GFile            *file);
 IDE_AVAILABLE_IN_3_32
-gboolean                ide_debug_manager_supports_language        (IdeDebugManager        *self,
-                                                                    const gchar            *language_id);
+gboolean                ide_debug_manager_supports_language        (IdeDebugManager  *self,
+                                                                    const gchar      *language_id);
 IDE_AVAILABLE_IN_3_32
-IdeDebugger            *ide_debug_manager_find_debugger            (IdeDebugManager        *self,
-                                                                    IdeRunner              *runner);
+IdeDebugger            *ide_debug_manager_find_debugger            (IdeDebugManager  *self,
+                                                                    IdeRunner        *runner);
 
 G_END_DECLS

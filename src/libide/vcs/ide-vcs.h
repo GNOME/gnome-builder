@@ -60,38 +60,38 @@ struct _IdeVcsInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeVcs                 *ide_vcs_from_context              (IdeContext           *context);
+IdeVcs       *ide_vcs_from_context       (IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
-IdeVcs                 *ide_vcs_ref_from_context          (IdeContext           *context);
+IdeVcs       *ide_vcs_ref_from_context   (IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
-GFile                  *ide_vcs_get_workdir               (IdeVcs               *self);
+GFile        *ide_vcs_get_workdir        (IdeVcs               *self);
 IDE_AVAILABLE_IN_3_32
-gboolean                ide_vcs_is_ignored                (IdeVcs               *self,
-                                                           GFile                *file,
-                                                           GError              **error);
+gboolean      ide_vcs_is_ignored         (IdeVcs               *self,
+                                          GFile                *file,
+                                          GError              **error);
 IDE_AVAILABLE_IN_3_32
-gboolean                ide_vcs_path_is_ignored           (IdeVcs               *self,
-                                                           const gchar          *path,
-                                                           GError              **error);
+gboolean      ide_vcs_path_is_ignored    (IdeVcs               *self,
+                                          const gchar          *path,
+                                          GError              **error);
 IDE_AVAILABLE_IN_3_32
-gint                    ide_vcs_get_priority              (IdeVcs               *self);
+gint          ide_vcs_get_priority       (IdeVcs               *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_vcs_emit_changed              (IdeVcs               *self);
+void          ide_vcs_emit_changed       (IdeVcs               *self);
 IDE_AVAILABLE_IN_3_32
-IdeVcsConfig           *ide_vcs_get_config                (IdeVcs               *self);
+IdeVcsConfig *ide_vcs_get_config         (IdeVcs               *self);
 IDE_AVAILABLE_IN_3_32
-gchar                  *ide_vcs_get_branch_name           (IdeVcs               *self);
+gchar        *ide_vcs_get_branch_name    (IdeVcs               *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_vcs_list_status_async         (IdeVcs               *self,
-                                                           GFile                *directory_or_file,
-                                                           gboolean              include_descendants,
-                                                           gint                  io_priority,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data);
+void          ide_vcs_list_status_async  (IdeVcs               *self,
+                                          GFile                *directory_or_file,
+                                          gboolean              include_descendants,
+                                          gint                  io_priority,
+                                          GCancellable         *cancellable,
+                                          GAsyncReadyCallback   callback,
+                                          gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-GListModel             *ide_vcs_list_status_finish        (IdeVcs               *self,
-                                                           GAsyncResult         *result,
-                                                           GError              **error);
+GListModel   *ide_vcs_list_status_finish (IdeVcs               *self,
+                                          GAsyncResult         *result,
+                                          GError              **error);
 
 G_END_DECLS

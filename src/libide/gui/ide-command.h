@@ -49,18 +49,18 @@ struct _IdeCommandInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-gchar   *ide_command_get_title    (IdeCommand           *self);
+gchar    *ide_command_get_title    (IdeCommand           *self);
 IDE_AVAILABLE_IN_3_32
-gchar   *ide_command_get_subtitle (IdeCommand           *self);
+gchar    *ide_command_get_subtitle (IdeCommand           *self);
 IDE_AVAILABLE_IN_3_32
-void     ide_command_run_async    (IdeCommand           *self,
-                                   GCancellable         *cancellable,
-                                   GAsyncReadyCallback   callback,
-                                   gpointer              user_data);
+void      ide_command_run_async    (IdeCommand           *self,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_command_run_finish   (IdeCommand           *self,
-                                   GAsyncResult         *result,
-                                   GError              **error);
+gboolean  ide_command_run_finish   (IdeCommand           *self,
+                                    GAsyncResult         *result,
+                                    GError              **error);
 
 
 G_END_DECLS

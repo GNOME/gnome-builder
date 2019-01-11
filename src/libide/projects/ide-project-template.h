@@ -56,19 +56,19 @@ struct _IdeProjectTemplateInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-gchar      *ide_project_template_get_id          (IdeProjectTemplate  *self);
+gchar      *ide_project_template_get_id          (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_3_32
-gint        ide_project_template_get_priority    (IdeProjectTemplate  *self);
+gint        ide_project_template_get_priority    (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_3_32
-gchar      *ide_project_template_get_name        (IdeProjectTemplate  *self);
+gchar      *ide_project_template_get_name        (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_3_32
-gchar      *ide_project_template_get_description (IdeProjectTemplate  *self);
+gchar      *ide_project_template_get_description (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_3_32
-GtkWidget  *ide_project_template_get_widget      (IdeProjectTemplate  *self);
+GtkWidget  *ide_project_template_get_widget      (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_3_32
-gchar     **ide_project_template_get_languages   (IdeProjectTemplate  *self);
+gchar     **ide_project_template_get_languages   (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_3_32
-gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate  *self);
+gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_3_32
 void        ide_project_template_expand_async    (IdeProjectTemplate   *self,
                                                   GHashTable           *params,

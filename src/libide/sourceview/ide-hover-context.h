@@ -36,16 +36,16 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeHoverContext, ide_hover_context, IDE, HOVER_CONTEXT, GObject)
 
 IDE_AVAILABLE_IN_3_32
-void     ide_hover_context_add_content  (IdeHoverContext      *self,
-                                         gint                  priority,
-                                         const gchar          *title,
-                                         IdeMarkedContent     *content);
+void     ide_hover_context_add_content (IdeHoverContext  *self,
+                                        gint              priority,
+                                        const gchar      *title,
+                                        IdeMarkedContent *content);
 IDE_AVAILABLE_IN_3_32
-void     ide_hover_context_add_widget   (IdeHoverContext      *self,
-                                         gint                  priority,
-                                         const gchar          *title,
-                                         GtkWidget            *widget);
+void     ide_hover_context_add_widget  (IdeHoverContext  *self,
+                                        gint              priority,
+                                        const gchar      *title,
+                                        GtkWidget        *widget);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_hover_context_has_content  (IdeHoverContext      *self);
+gboolean ide_hover_context_has_content (IdeHoverContext  *self);
 
 G_END_DECLS

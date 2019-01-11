@@ -36,15 +36,15 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeRuntimeManager, ide_runtime_manager, IDE, RUNTIME_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeRuntimeManager       *ide_runtime_manager_from_context       (IdeContext *context);
+IdeRuntimeManager *ide_runtime_manager_from_context (IdeContext        *context);
 IDE_AVAILABLE_IN_3_32
-IdeRuntime *ide_runtime_manager_get_runtime (IdeRuntimeManager    *self,
-                                             const gchar          *id);
+IdeRuntime        *ide_runtime_manager_get_runtime  (IdeRuntimeManager *self,
+                                                     const gchar       *id);
 IDE_AVAILABLE_IN_3_32
-void        ide_runtime_manager_add         (IdeRuntimeManager    *self,
-                                             IdeRuntime           *runtime);
+void               ide_runtime_manager_add          (IdeRuntimeManager *self,
+                                                     IdeRuntime        *runtime);
 IDE_AVAILABLE_IN_3_32
-void        ide_runtime_manager_remove      (IdeRuntimeManager    *self,
-                                             IdeRuntime           *runtime);
+void               ide_runtime_manager_remove       (IdeRuntimeManager *self,
+                                                     IdeRuntime        *runtime);
 
 G_END_DECLS

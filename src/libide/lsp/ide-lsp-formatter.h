@@ -44,9 +44,9 @@ struct _IdeLspFormatter
 };
 
 IDE_AVAILABLE_IN_3_32
-void                  ide_lsp_formatter_set_client (IdeLspFormatter *self,
-                                                         IdeLspClient    *client);
+void          ide_lsp_formatter_set_client (IdeLspFormatter *self,
+                                            IdeLspClient    *client);
 IDE_AVAILABLE_IN_3_32
-IdeLspClient    *ide_lsp_formatter_get_client (IdeLspFormatter *self);
+IdeLspClient *ide_lsp_formatter_get_client (IdeLspFormatter *self);
 
 G_END_DECLS

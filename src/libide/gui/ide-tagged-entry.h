@@ -77,57 +77,46 @@ struct _IdeTaggedEntryTagClass
 };
 
 IDE_AVAILABLE_IN_3_32
-GType ide_tagged_entry_get_type (void) G_GNUC_CONST;
-
+GType              ide_tagged_entry_get_type                 (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_3_32
-IdeTaggedEntry *ide_tagged_entry_new (void);
-
+IdeTaggedEntry    *ide_tagged_entry_new                      (void);
 IDE_AVAILABLE_IN_3_32
-void     ide_tagged_entry_set_tag_button_visible (IdeTaggedEntry *self,
-                                                 gboolean       visible);
+void               ide_tagged_entry_set_tag_button_visible   (IdeTaggedEntry        *self,
+                                                              gboolean               visible);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_tagged_entry_get_tag_button_visible (IdeTaggedEntry *self);
-
+gboolean           ide_tagged_entry_get_tag_button_visible   (IdeTaggedEntry        *self);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_tagged_entry_insert_tag (IdeTaggedEntry    *self,
-                                     IdeTaggedEntryTag *tag,
-                                     gint              position);
-
+gboolean           ide_tagged_entry_insert_tag               (IdeTaggedEntry        *self,
+                                                              IdeTaggedEntryTag     *tag,
+                                                              gint                   position);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_tagged_entry_add_tag (IdeTaggedEntry    *self,
-                                  IdeTaggedEntryTag *tag);
-
+gboolean           ide_tagged_entry_add_tag                  (IdeTaggedEntry        *self,
+                                                              IdeTaggedEntryTag     *tag);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_tagged_entry_remove_tag (IdeTaggedEntry *self,
-                                     IdeTaggedEntryTag *tag);
-
+gboolean           ide_tagged_entry_remove_tag               (IdeTaggedEntry        *self,
+                                                              IdeTaggedEntryTag     *tag);
 IDE_AVAILABLE_IN_3_32
-GType ide_tagged_entry_tag_get_type (void) G_GNUC_CONST;
-
+GType              ide_tagged_entry_tag_get_type             (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_3_32
-IdeTaggedEntryTag *ide_tagged_entry_tag_new (const gchar *label);
-
+IdeTaggedEntryTag *ide_tagged_entry_tag_new                  (const gchar           *label);
 IDE_AVAILABLE_IN_3_32
-void ide_tagged_entry_tag_set_label (IdeTaggedEntryTag *tag,
-                                    const gchar *label);
+void               ide_tagged_entry_tag_set_label            (IdeTaggedEntryTag     *tag,
+                                                              const gchar           *label);
 IDE_AVAILABLE_IN_3_32
-const gchar *ide_tagged_entry_tag_get_label (IdeTaggedEntryTag *tag);
-
+const gchar       *ide_tagged_entry_tag_get_label            (IdeTaggedEntryTag     *tag);
 IDE_AVAILABLE_IN_3_32
-void ide_tagged_entry_tag_set_has_close_button (IdeTaggedEntryTag *tag,
-                                               gboolean has_close_button);
+void               ide_tagged_entry_tag_set_has_close_button (IdeTaggedEntryTag     *tag,
+                                                              gboolean               has_close_button);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_tagged_entry_tag_get_has_close_button (IdeTaggedEntryTag *tag);
-
+gboolean           ide_tagged_entry_tag_get_has_close_button (IdeTaggedEntryTag     *tag);
 IDE_AVAILABLE_IN_3_32
-void ide_tagged_entry_tag_set_style (IdeTaggedEntryTag *tag,
-                                    const gchar *style);
+void               ide_tagged_entry_tag_set_style            (IdeTaggedEntryTag     *tag,
+                                                              const gchar           *style);
 IDE_AVAILABLE_IN_3_32
-const gchar *ide_tagged_entry_tag_get_style (IdeTaggedEntryTag *tag);
-
+const gchar       *ide_tagged_entry_tag_get_style            (IdeTaggedEntryTag     *tag);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_tagged_entry_tag_get_area (IdeTaggedEntryTag      *tag,
-                                       cairo_rectangle_int_t *rect);
+gboolean           ide_tagged_entry_tag_get_area             (IdeTaggedEntryTag     *tag,
+                                                              cairo_rectangle_int_t *rect);
 
 G_END_DECLS
 

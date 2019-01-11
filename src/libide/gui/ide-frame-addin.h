@@ -50,13 +50,13 @@ struct _IdeFrameAddinInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void                 ide_frame_addin_load          (IdeFrameAddin *self,
+void           ide_frame_addin_load                (IdeFrameAddin *self,
                                                     IdeFrame      *frame);
 IDE_AVAILABLE_IN_3_32
-void                 ide_frame_addin_unload        (IdeFrameAddin *self,
+void           ide_frame_addin_unload              (IdeFrameAddin *self,
                                                     IdeFrame      *frame);
 IDE_AVAILABLE_IN_3_32
-void                 ide_frame_addin_set_page      (IdeFrameAddin *self,
+void           ide_frame_addin_set_page            (IdeFrameAddin *self,
                                                     IdePage       *page);
 IDE_AVAILABLE_IN_3_32
 IdeFrameAddin *ide_frame_addin_find_by_module_name (IdeFrame      *frame,

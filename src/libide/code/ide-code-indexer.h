@@ -60,26 +60,26 @@ struct _IdeCodeIndexerInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void                  ide_code_indexer_index_file_async    (IdeCodeIndexer       *self,
-                                                            GFile                *file,
-                                                            const gchar * const  *build_flags,
-                                                            GCancellable         *cancellable,
-                                                            GAsyncReadyCallback   callback,
-                                                            gpointer              user_data);
+void                 ide_code_indexer_index_file_async    (IdeCodeIndexer       *self,
+                                                           GFile                *file,
+                                                           const gchar * const  *build_flags,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-IdeCodeIndexEntries  *ide_code_indexer_index_file_finish   (IdeCodeIndexer       *self,
-                                                            GAsyncResult         *result,
-                                                            GError              **error);
+IdeCodeIndexEntries *ide_code_indexer_index_file_finish   (IdeCodeIndexer       *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
 IDE_AVAILABLE_IN_3_32
-void                  ide_code_indexer_generate_key_async  (IdeCodeIndexer       *self,
-                                                            IdeLocation          *location,
-                                                            const gchar * const  *build_flags,
-                                                            GCancellable         *cancellable,
-                                                            GAsyncReadyCallback   callback,
-                                                            gpointer              user_data);
+void                 ide_code_indexer_generate_key_async  (IdeCodeIndexer       *self,
+                                                           IdeLocation          *location,
+                                                           const gchar * const  *build_flags,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gchar                *ide_code_indexer_generate_key_finish (IdeCodeIndexer       *self,
-                                                            GAsyncResult         *result,
-                                                            GError              **error);
+gchar               *ide_code_indexer_generate_key_finish (IdeCodeIndexer       *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
 
 G_END_DECLS

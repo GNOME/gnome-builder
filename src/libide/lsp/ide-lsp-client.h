@@ -53,47 +53,47 @@ struct _IdeLspClientClass
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_client_new                      (GIOStream            *io_stream);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_client_add_language             (IdeLspClient    *self,
-                                                                 const gchar          *language_id);
+void          ide_lsp_client_add_language             (IdeLspClient         *self,
+                                                       const gchar          *language_id);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_client_start                    (IdeLspClient    *self);
+void          ide_lsp_client_start                    (IdeLspClient         *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_client_stop                     (IdeLspClient    *self);
+void          ide_lsp_client_stop                     (IdeLspClient         *self);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_client_call_async               (IdeLspClient    *self,
-                                                                 const gchar          *method,
-                                                                 GVariant             *params,
-                                                                 GCancellable         *cancellable,
-                                                                 GAsyncReadyCallback   callback,
-                                                                 gpointer              user_data);
+void          ide_lsp_client_call_async               (IdeLspClient         *self,
+                                                       const gchar          *method,
+                                                       GVariant             *params,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_lsp_client_call_finish              (IdeLspClient    *self,
-                                                                 GAsyncResult         *result,
-                                                                 GVariant            **return_value,
-                                                                 GError              **error);
+gboolean      ide_lsp_client_call_finish              (IdeLspClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GVariant            **return_value,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_client_send_notification_async  (IdeLspClient    *self,
-                                                                 const gchar          *method,
-                                                                 GVariant             *params,
-                                                                 GCancellable         *cancellable,
-                                                                 GAsyncReadyCallback   notificationback,
-                                                                 gpointer              user_data);
+void          ide_lsp_client_send_notification_async  (IdeLspClient         *self,
+                                                       const gchar          *method,
+                                                       GVariant             *params,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   notificationback,
+                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_lsp_client_send_notification_finish (IdeLspClient    *self,
-                                                                 GAsyncResult         *result,
-                                                                 GError              **error);
+gboolean      ide_lsp_client_send_notification_finish (IdeLspClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-void               ide_lsp_client_get_diagnostics_async    (IdeLspClient    *self,
-                                                                 GFile                *file,
-                                                                 GBytes *content,
-                                                                 const gchar *lang_id,
-                                                                 GCancellable         *cancellable,
-                                                                 GAsyncReadyCallback   callback,
-                                                                 gpointer              user_data);
+void          ide_lsp_client_get_diagnostics_async    (IdeLspClient         *self,
+                                                       GFile                *file,
+                                                       GBytes               *content,
+                                                       const gchar          *lang_id,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean           ide_lsp_client_get_diagnostics_finish   (IdeLspClient    *self,
-                                                                 GAsyncResult         *result,
-                                                                 IdeDiagnostics      **diagnostics,
-                                                                 GError              **error);
+gboolean      ide_lsp_client_get_diagnostics_finish   (IdeLspClient         *self,
+                                                       GAsyncResult         *result,
+                                                       IdeDiagnostics      **diagnostics,
+                                                       GError              **error);
 
 G_END_DECLS

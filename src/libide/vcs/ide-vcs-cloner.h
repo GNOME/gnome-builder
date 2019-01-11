@@ -51,23 +51,23 @@ struct _IdeVcsClonerInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-gchar   *ide_vcs_cloner_get_title    (IdeVcsCloner         *self);
+gchar    *ide_vcs_cloner_get_title    (IdeVcsCloner         *self);
 IDE_AVAILABLE_IN_3_32
-void     ide_vcs_cloner_clone_async  (IdeVcsCloner         *self,
-                                      const gchar          *uri,
-                                      const gchar          *destination,
-                                      GVariantDict         *options,
-                                      GCancellable         *cancellable,
-                                      IdeNotification     **progress,
-                                      GAsyncReadyCallback   callback,
-                                      gpointer              user_data);
+void      ide_vcs_cloner_clone_async  (IdeVcsCloner         *self,
+                                       const gchar          *uri,
+                                       const gchar          *destination,
+                                       GVariantDict         *options,
+                                       GCancellable         *cancellable,
+                                       IdeNotification     **progress,
+                                       GAsyncReadyCallback   callback,
+                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_vcs_cloner_clone_finish (IdeVcsCloner         *self,
-                                      GAsyncResult         *result,
-                                      GError              **error);
+gboolean  ide_vcs_cloner_clone_finish (IdeVcsCloner         *self,
+                                       GAsyncResult         *result,
+                                       GError              **error);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_vcs_cloner_validate_uri (IdeVcsCloner         *self,
-                                      const gchar          *uri,
-                                      gchar               **errmsg);
+gboolean  ide_vcs_cloner_validate_uri (IdeVcsCloner         *self,
+                                       const gchar          *uri,
+                                       gchar               **errmsg);
 
 G_END_DECLS

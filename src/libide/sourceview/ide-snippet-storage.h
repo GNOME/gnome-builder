@@ -52,22 +52,22 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSnippetStorage, ide_snippet_storage, IDE, SNIPPET_STORAGE, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeSnippetStorage *ide_snippet_storage_from_context (IdeContext *context);
+IdeSnippetStorage *ide_snippet_storage_from_context (IdeContext               *context);
 IDE_AVAILABLE_IN_3_32
-IdeSnippetStorage *ide_snippet_storage_new         (void);
+IdeSnippetStorage *ide_snippet_storage_new          (void);
 IDE_AVAILABLE_IN_3_32
-void               ide_snippet_storage_add         (IdeSnippetStorage         *self,
-                                                    const gchar               *default_scope,
-                                                    GBytes                    *bytes);
+void               ide_snippet_storage_add          (IdeSnippetStorage        *self,
+                                                     const gchar              *default_scope,
+                                                     GBytes                   *bytes);
 IDE_AVAILABLE_IN_3_32
-void               ide_snippet_storage_foreach     (IdeSnippetStorage         *self,
-                                                    IdeSnippetStorageForeach   foreach,
-                                                    gpointer                   user_data);
+void               ide_snippet_storage_foreach      (IdeSnippetStorage        *self,
+                                                     IdeSnippetStorageForeach  foreach,
+                                                     gpointer                  user_data);
 IDE_AVAILABLE_IN_3_32
-void               ide_snippet_storage_query       (IdeSnippetStorage         *self,
-                                                    const gchar               *lang,
-                                                    const gchar               *prefix,
-                                                    IdeSnippetStorageForeach   foreach,
-                                                    gpointer                   user_data);
+void               ide_snippet_storage_query        (IdeSnippetStorage        *self,
+                                                     const gchar              *lang,
+                                                     const gchar              *prefix,
+                                                     IdeSnippetStorageForeach  foreach,
+                                                     gpointer                  user_data);
 
 G_END_DECLS

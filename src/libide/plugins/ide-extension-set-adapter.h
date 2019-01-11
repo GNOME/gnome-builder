@@ -40,37 +40,37 @@ typedef void (*IdeExtensionSetAdapterForeachFunc) (IdeExtensionSetAdapter *set,
                                                    gpointer                user_data);
 
 IDE_AVAILABLE_IN_3_32
-IdeExtensionSetAdapter *ide_extension_set_adapter_new                (IdeObject                         *parent,
-                                                                      PeasEngine                        *engine,
-                                                                      GType                              interface_type,
-                                                                      const gchar                       *key,
-                                                                      const gchar                       *value);
+IdeExtensionSetAdapter *ide_extension_set_adapter_new                 (IdeObject                         *parent,
+                                                                       PeasEngine                        *engine,
+                                                                       GType                              interface_type,
+                                                                       const gchar                       *key,
+                                                                       const gchar                       *value);
 IDE_AVAILABLE_IN_3_32
-PeasEngine             *ide_extension_set_adapter_get_engine         (IdeExtensionSetAdapter            *self);
+PeasEngine             *ide_extension_set_adapter_get_engine          (IdeExtensionSetAdapter            *self);
 IDE_AVAILABLE_IN_3_32
-GType                   ide_extension_set_adapter_get_interface_type (IdeExtensionSetAdapter            *self);
+GType                   ide_extension_set_adapter_get_interface_type  (IdeExtensionSetAdapter            *self);
 IDE_AVAILABLE_IN_3_32
-const gchar            *ide_extension_set_adapter_get_key            (IdeExtensionSetAdapter            *self);
+const gchar            *ide_extension_set_adapter_get_key             (IdeExtensionSetAdapter            *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_extension_set_adapter_set_key            (IdeExtensionSetAdapter            *self,
-                                                                      const gchar                       *key);
+void                    ide_extension_set_adapter_set_key             (IdeExtensionSetAdapter            *self,
+                                                                       const gchar                       *key);
 IDE_AVAILABLE_IN_3_32
-const gchar            *ide_extension_set_adapter_get_value          (IdeExtensionSetAdapter            *self);
+const gchar            *ide_extension_set_adapter_get_value           (IdeExtensionSetAdapter            *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_extension_set_adapter_set_value          (IdeExtensionSetAdapter            *self,
-                                                                      const gchar                       *value);
+void                    ide_extension_set_adapter_set_value           (IdeExtensionSetAdapter            *self,
+                                                                       const gchar                       *value);
 IDE_AVAILABLE_IN_3_32
-guint                   ide_extension_set_adapter_get_n_extensions   (IdeExtensionSetAdapter            *self);
+guint                   ide_extension_set_adapter_get_n_extensions    (IdeExtensionSetAdapter            *self);
 IDE_AVAILABLE_IN_3_32
-void                    ide_extension_set_adapter_foreach            (IdeExtensionSetAdapter            *self,
-                                                                      IdeExtensionSetAdapterForeachFunc  foreach_func,
-                                                                      gpointer                           user_data);
+void                    ide_extension_set_adapter_foreach             (IdeExtensionSetAdapter            *self,
+                                                                       IdeExtensionSetAdapterForeachFunc  foreach_func,
+                                                                       gpointer                           user_data);
 IDE_AVAILABLE_IN_3_32
-void                    ide_extension_set_adapter_foreach_by_priority(IdeExtensionSetAdapter            *self,
-                                                                      IdeExtensionSetAdapterForeachFunc  foreach_func,
-                                                                      gpointer                           user_data);
+void                    ide_extension_set_adapter_foreach_by_priority (IdeExtensionSetAdapter            *self,
+                                                                       IdeExtensionSetAdapterForeachFunc  foreach_func,
+                                                                       gpointer                           user_data);
 IDE_AVAILABLE_IN_3_32
-PeasExtension          *ide_extension_set_adapter_get_extension      (IdeExtensionSetAdapter            *self,
-                                                                      PeasPluginInfo                    *plugin_info);
+PeasExtension          *ide_extension_set_adapter_get_extension       (IdeExtensionSetAdapter            *self,
+                                                                       PeasPluginInfo                    *plugin_info);
 
 G_END_DECLS
