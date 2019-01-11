@@ -658,6 +658,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
           ide_task_chain (existing_task, task);
           IDE_EXIT;
         }
+
+      buffer = g_object_ref (existing);
     }
   else
     {
@@ -674,6 +676,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   /* We might have listeners tracking new buffers. Apply some rules to
    * determine if we need the UI to create a new view for the buffer.
    */
+  g_assert (buffer != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
   create_new_view = !(flags & IDE_BUFFER_OPEN_FLAGS_NO_VIEW) &&
                      (is_new || (flags & IDE_BUFFER_OPEN_FLAGS_BACKGROUND) == 0);
   g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer, create_new_view);
