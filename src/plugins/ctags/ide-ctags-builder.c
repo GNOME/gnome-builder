@@ -319,7 +319,8 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
   ide_task_set_source_tag (task, ide_ctags_builder_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW + 200);
 
-  if (ide_object_in_destruction (IDE_OBJECT (self)))
+  if (ide_object_in_destruction (IDE_OBJECT (self)) ||
+      !(context = ide_object_get_context (IDE_OBJECT (self))))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -342,7 +343,6 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
    * reused even between configuration changes. Primarily, we want to avoid
    * putting things in the source tree.
    */
-  context = ide_object_get_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
   relative_path = g_file_get_relative_path (workdir, directory_or_file);
   destination_path = ide_context_cache_filename (context, "ctags", relative_path, NULL);
