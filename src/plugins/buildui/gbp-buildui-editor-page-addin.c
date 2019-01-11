@@ -30,21 +30,35 @@ struct _GbpBuilduiEditorPageAddin
   GObject parent_instance;
 };
 
-static void
-transpose_version (gchar *str)
+static gboolean
+parse_version (const gchar *str,
+               gint        *major,
+               gint        *minor)
 {
-  gchar *dot;
+  g_autofree gchar *copy = g_strdup (str);
+  const gchar *begin = str;
+  gchar *ptr;
 
-  g_assert (str);
+  ptr = copy;
+  *major = 0;
+  *minor = 0;
 
-  /* Only use Major.Minor as version number */
-
-  if ((dot = strchr (str, '.')))
+  if ((ptr = strchr (ptr, '.')))
     {
-      dot++;
-      if ((dot = strchr (dot, '.')))
-        *dot = 0;
+      *ptr = 0;
+
+      *major = g_ascii_strtoll (begin, NULL, 10);
+      begin = ptr + 1;
+
+      if ((ptr = strchr (ptr, '.')))
+        *ptr = 0;
+
+      *minor = g_ascii_strtoll (begin, NULL, 10);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 static void
@@ -71,7 +85,23 @@ on_push_snippet_cb (GbpBuilduiEditorPageAddin *self,
       if (build_system != NULL)
         {
           if ((project_version = ide_build_system_get_project_version (build_system)))
-            transpose_version (project_version);
+            {
+              gint major = 0;
+              gint minor = 0;
+
+              if (parse_version (project_version, &major, &minor))
+                {
+                  /* TODO: We might need to come up with a way to make this
+                   *       a project setting, but this seems like a reasonable
+                   *       default for how we do semantif versioning in GNOME.
+                   */
+                  if (minor % 2 == 1)
+                    minor++;
+
+                  g_free (project_version);
+                  project_version = g_strdup_printf ("%d.%d", major, minor);
+                }
+            }
         }
     }
 
