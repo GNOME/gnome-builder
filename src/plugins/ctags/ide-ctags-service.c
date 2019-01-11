@@ -107,9 +107,8 @@ is_supported_language (const gchar *lang_id)
 static void
 show_notification (IdeCtagsService *self)
 {
-  g_autoptr(IdeObject) root = NULL;
+  g_autoptr(IdeContext) context = NULL;
   g_autoptr(IdeNotification) notif = NULL;
-  g_autoptr(IdeNotifications) notifs = NULL;
   g_autoptr(GIcon) icon = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -123,8 +122,8 @@ show_notification (IdeCtagsService *self)
 
   g_assert (self->notif == NULL);
 
-  root = ide_object_ref_root (IDE_OBJECT (self));
-  notifs = ide_object_get_child_typed (root, IDE_TYPE_NOTIFICATIONS);
+  if (!(context = ide_object_ref_context (IDE_OBJECT (self))))
+    return;
 
   notif = ide_notification_new ();
   icon = g_icon_new_for_string ("media-playback-pause-symbolic", NULL);
@@ -133,7 +132,7 @@ show_notification (IdeCtagsService *self)
   ide_notification_set_has_progress (notif, TRUE);
   ide_notification_set_progress_is_imprecise (notif, TRUE);
   ide_notification_add_button (notif, NULL, icon, "win.pause-ctags");
-  ide_notifications_add_notification (notifs, notif);
+  ide_notification_attach (notif, IDE_OBJECT (context));
 
   self->notif = g_steal_pointer (&notif);
 }
