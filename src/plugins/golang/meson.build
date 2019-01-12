@@ -15,6 +15,8 @@ golang_sources = [
   'ide-golang-application-addin.h',
   'ide-golang-build-system.c',
   'ide-golang-build-system.h',
+  'ide-golang-build-system-discovery.c',
+  'ide-golang-build-system-discovery.h',
   'ide-golang-go-stage.c',
   'ide-golang-go-stage.h',
   'ide-golang-pipeline-addin.c',
