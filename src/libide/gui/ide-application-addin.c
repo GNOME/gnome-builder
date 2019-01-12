@@ -85,6 +85,33 @@ ide_application_addin_activate (IdeApplicationAddin *self,
 }
 
 /**
+ * ide_application_addin_open:
+ * @self: a #IdeApplicationAddin
+ * @application: an #ideApplication
+ * @files: an array of #GFile
+ * @n_files: number of #GFile elements in @files
+ * @hint: hint
+ *
+ * This function is activated when the GApplication::open signal is
+ * emitted.
+ *
+ * Since: 3.32
+ */
+void
+ide_application_addin_open (IdeApplicationAddin  *self,
+                            IdeApplication       *application,
+                            GFile               **files,
+                            gint                  n_files,
+                            const gchar          *hint)
+{
+  g_return_if_fail (IDE_IS_APPLICATION_ADDIN (self));
+  g_return_if_fail (IDE_IS_APPLICATION (application));
+
+  if (IDE_APPLICATION_ADDIN_GET_IFACE (self)->open)
+    IDE_APPLICATION_ADDIN_GET_IFACE (self)->open (self, application, files, n_files, hint);
+}
+
+/**
  * ide_application_addin_load:
  * @self: An #IdeApplicationAddin.
  * @application: An #IdeApplication.
