@@ -302,10 +302,11 @@ ide_application_open (GApplication  *app,
                       const gchar   *hint)
 {
   IdeApplication *self = (IdeApplication*)app;
-  g_autofree OpenData *data = NULL;
+  OpenData *data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
+  g_assert (files);
   g_assert (n_files > 0);
   g_assert (hint);
 
@@ -319,6 +320,7 @@ ide_application_open (GApplication  *app,
     peas_extension_set_foreach (self->addins,
                                 ide_application_open_cb,
                                 data);
+  g_slice_free (OpenData, data);
 }
 
 static void
