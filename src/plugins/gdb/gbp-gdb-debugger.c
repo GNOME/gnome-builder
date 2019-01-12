@@ -1984,6 +1984,7 @@ gbp_gdb_debugger_list_locals_async (IdeDebugger         *debugger,
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *command = NULL;
   guint depth;
+  const gchar *tid = NULL;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (IDE_IS_DEBUGGER_THREAD (thread));
@@ -1994,14 +1995,13 @@ gbp_gdb_debugger_list_locals_async (IdeDebugger         *debugger,
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, gbp_gdb_debugger_list_locals_async);
 
+  tid = ide_debugger_thread_get_id (thread);
   depth = ide_debugger_frame_get_depth (frame);
-  command = g_strdup_printf ("9999-stack-select-frame %u\n"
-                             "@@@@-stack-list-locals --simple-values\n"
-                             "9999-stack-select-frame",
-                             depth);
+  command = g_strdup_printf ("@@@@-stack-list-variables --thread %s --frame %u --simple-values\n",
+                             tid, depth);
 
   gbp_gdb_debugger_exec_async (self,
-                               thread,
+                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_list_locals_cb,
