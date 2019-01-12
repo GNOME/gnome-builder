@@ -538,9 +538,11 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
 {
   IdeDebuggerStopReason stop_reason;
   g_autoptr(IdeDebuggerBreakpoint) breakpoint = NULL;
+  g_autoptr(IdeDebuggerThread) thread = NULL;
   g_autofree gchar *file = NULL;
   g_autofree gchar *fullname = NULL;
-  G_GNUC_UNUSED const gchar *thread_id = NULL;
+  const gchar *thread_id = NULL;
+  const gchar *group_id = NULL;
   const struct gdbwire_mi_result *iter;
   const gchar *id = NULL;
   const gchar *reason = NULL;
@@ -573,6 +575,8 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
             disp = iter->variant.cstring;
           else if (g_strcmp0 (iter->variable, "bkptno") == 0)
             id = iter->variant.cstring;
+          else if (g_strcmp0 (iter->variable, "group-id") == 0)
+            group_id = iter->variant.cstring;
         }
       else if (iter->kind == GDBWIRE_MI_TUPLE)
         {
@@ -656,6 +660,10 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
 
   gbp_gdb_debugger_reload_breakpoints (self);
 
+  thread = ide_debugger_thread_new (thread_id);
+  ide_debugger_thread_set_group (thread, group_id);
+
+  ide_debugger_emit_thread_selected (IDE_DEBUGGER (self), thread);
   ide_debugger_emit_stopped (IDE_DEBUGGER (self), stop_reason, breakpoint);
 }
 
