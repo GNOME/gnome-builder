@@ -632,6 +632,7 @@ init_vcs_cb (GObject      *object,
 
   project_info = ide_project_info_new ();
   ide_project_info_set_file (project_info, project_file);
+  ide_project_info_set_directory (project_info, project_file);
 
   workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE);
   ide_greeter_workspace_open_project (IDE_GREETER_WORKSPACE (workspace), project_info);
@@ -684,6 +685,7 @@ extract_cb (GObject      *object,
 
       project_info = ide_project_info_new ();
       ide_project_info_set_file (project_info, project_file);
+      ide_project_info_set_directory (project_info, project_file);
 
       workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE);
       ide_greeter_workspace_open_project (IDE_GREETER_WORKSPACE (workspace), project_info);
