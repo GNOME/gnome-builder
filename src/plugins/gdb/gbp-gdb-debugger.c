@@ -929,22 +929,26 @@ gbp_gdb_debugger_output_callback (void                     *context,
   switch (output->kind)
     {
     case GDBWIRE_MI_OUTPUT_PARSE_ERROR:
+      DEBUG_LOG ("from-gdb (ERR)", output->line);
       ide_object_warning (self, "Failed to parse gdb communication: %s", output->line);
       gdbwire_mi_output_free (output);
       gbp_gdb_debugger_panic (self);
       break;
 
     case GDBWIRE_MI_OUTPUT_OOB:
+      DEBUG_LOG ("from-gdb (OOB)", output->line);
       gbp_gdb_debugger_handle_oob (self, output);
       gdbwire_mi_output_free (output);
       break;
 
     case GDBWIRE_MI_OUTPUT_RESULT:
+      DEBUG_LOG ("from-gdb (RES)", output->line);
       /* handle result steals output pointer */
       gbp_gdb_debugger_handle_result (self, output);
       break;
 
     case GDBWIRE_MI_OUTPUT_PROMPT:
+      DEBUG_LOG ("from-gdb (INP)", output->line);
       /* Ignore prompt for now */
       gdbwire_mi_output_free (output);
       break;
@@ -2901,9 +2905,6 @@ gbp_gdb_debugger_exec_finish (GbpGdbDebugger  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
-
-  if (ret != NULL)
-    DEBUG_LOG ("from-gdb", ret->line);
 
   return g_steal_pointer (&ret);
 }
