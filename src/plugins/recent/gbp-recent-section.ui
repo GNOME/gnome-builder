@@ -58,7 +58,7 @@
                     <child>
                       <object class="GtkListBox" id="listbox">
                         <property name="visible">true</property>
-                        <property name="selection-mode">none</property>
+                        <property name="selection-mode">browse</property>
                         <signal name="row-activated" swapped="true" object="GbpRecentSection" handler="gbp_recent_section_row_activated"/>
                       </object>
                     </child>

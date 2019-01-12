@@ -2,7 +2,8 @@
 <gresources>
   <gresource prefix="/plugins/recent">
     <file>recent.plugin</file>
-    <file>gbp-recent-project-row.ui</file>
-    <file>gbp-recent-section.ui</file>
+    <file preprocess="xml-stripblanks">gbp-recent-project-row.ui</file>
+    <file preprocess="xml-stripblanks">gbp-recent-section.ui</file>
+    <file>themes/shared.css</file>
   </gresource>
 </gresources>
