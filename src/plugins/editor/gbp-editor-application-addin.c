@@ -63,6 +63,19 @@ get_common_ancestor (GPtrArray *files)
   return g_steal_pointer (&ancestor);
 }
 
+static inline GFile*
+get_common_ancestor_array (GFile **files, gint n_files)
+{
+  g_autoptr (GPtrArray) fileptrs = NULL;
+
+  fileptrs = g_ptr_array_sized_new (n_files);
+
+  for (guint i = 0; i < n_files; i++)
+    g_ptr_array_add (fileptrs, files[i]);
+
+  return get_common_ancestor (fileptrs);
+}
+
 static void
 gbp_editor_application_addin_add_option_entries (IdeApplicationAddin *addin,
                                                  IdeApplication      *app)
@@ -84,22 +97,21 @@ gbp_editor_application_addin_open_all_cb (GObject      *object,
                                           GAsyncResult *result,
                                           gpointer      user_data)
 {
-  IdeWorkbench *workbench = (IdeWorkbench *)object;
-  g_autoptr(GApplicationCommandLine) cmdline = user_data;
+  IdeWorkbench *workbench = (IdeWorkbench *) object;
+  g_autoptr(GApplicationCommandLine) cmdline = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_WORKBENCH (workbench));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
 
+  cmdline = G_APPLICATION_COMMAND_LINE (user_data);
   if (!ide_workbench_open_finish (workbench, result, &error))
     {
-      g_application_command_line_printerr (cmdline, "%s\n", error->message);
-      g_application_command_line_set_exit_status (cmdline, EXIT_FAILURE);
-      return;
+      if (error && cmdline != NULL)
+        g_application_command_line_printerr (cmdline, "%s\n", error->message);
     }
-
-  g_application_command_line_set_exit_status (cmdline, EXIT_SUCCESS);
+  if (cmdline != NULL)
+    g_application_command_line_set_exit_status (cmdline, error == NULL ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 static void
@@ -179,10 +191,57 @@ gbp_editor_application_addin_handle_command_line (IdeApplicationAddin     *addin
 }
 
 static void
+gbp_editor_application_addin_open (IdeApplicationAddin  *addin,
+                                   IdeApplication       *application,
+                                   GFile               **files,
+                                   gint                  n_files,
+                                   const gchar          *hint)
+{
+  g_autoptr(IdeWorkbench) workbench = NULL;
+  IdeEditorWorkspace *workspace;
+  g_autoptr(GFile) workdir = NULL;
+  IdeContext *context;
+
+  workbench = ide_workbench_new ();
+  ide_application_add_workbench (application, workbench);
+
+  workdir = get_common_ancestor_array (files, n_files);
+  context = ide_workbench_get_context (workbench);
+
+  /* Setup the working directory to top-most common ancestor of the
+   * files. That way we can still get somewhat localized search results
+   * and other workspace features.
+   */
+  if (workdir != NULL)
+    ide_context_set_workdir (context, workdir);
+
+  workspace = ide_editor_workspace_new (application);
+  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+  /* Since we are opening a toplevel window, we want to restore it using
+   * the same window sizing as the primary IDE window.
+   */
+  _ide_window_settings_register (GTK_WINDOW (workspace));
+
+  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+
+
+  ide_workbench_open_all_async (workbench,
+                                files,
+                                n_files,
+                                "editor",
+                                NULL,
+                                gbp_editor_application_addin_open_all_cb,
+                                NULL);
+
+}
+
+static void
 cmdline_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
   iface->add_option_entries = gbp_editor_application_addin_add_option_entries;
   iface->handle_command_line = gbp_editor_application_addin_handle_command_line;
+  iface->open = gbp_editor_application_addin_open;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditorApplicationAddin, gbp_editor_application_addin, G_TYPE_OBJECT,
