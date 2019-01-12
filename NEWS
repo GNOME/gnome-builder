@@ -1,4 +1,20 @@
 ==============
+Version 3.30.3
+==============
+
+ • Shortcut fixes.
+ • Fix for possible heap corruption when unloading pages.
+ • Keep "flatpak build" quiet when communicating with gdb.
+ • Emit thread-selected when gdb has *stopped event.
+ • Gdb plugin now uses --frame and --thread.
+ • Fixes for rust hover provider via RLS.
+ • Gtk-Sharp template now uses updated SDK extension.
+
+Updated Translations:
+
+  Esperanto, French, Spanish
+
+==============
 Version 3.30.2
 ==============
 

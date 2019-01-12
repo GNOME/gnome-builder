@@ -82,6 +82,19 @@
 
   <releases>
 
+    <release version="3.30.3" date="2019-01-12">
+      <description>
+        <p>
+          Builder 3.30.3 is a bug-fix release.
+        </p>
+        <ul>
+          <li>Various crashes were fixed.</li>
+          <li>Gdb debugger improvements.</li>
+          <li>Template improvements.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.30.2" date="2018-10-30">
       <description>
         <p>
