@@ -270,6 +270,57 @@ ide_application_activate (GApplication *app)
   IDE_EXIT;
 }
 
+typedef struct
+{
+  IdeApplication *self;
+  GFile **files;
+  gint n_files;
+  const gchar *hint;
+} OpenData;
+
+static void
+ide_application_open_cb (PeasExtensionSet *set,
+                         PeasPluginInfo   *plugin_info,
+                         PeasExtension    *exten,
+                         gpointer          user_data)
+{
+  IdeApplicationAddin *app_addin = (IdeApplicationAddin*) exten;
+  OpenData *data = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_APPLICATION_ADDIN (app_addin));
+  g_assert (IDE_IS_APPLICATION (data->self));
+
+  ide_application_addin_open (app_addin, data->self, data->files, data->n_files, data->hint);
+}
+
+static void
+ide_application_open (GApplication  *app,
+                      GFile        **files,
+                      gint           n_files,
+                      const gchar   *hint)
+{
+  IdeApplication *self = (IdeApplication*)app;
+  g_autofree OpenData *data = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (n_files > 0);
+  g_assert (hint);
+
+  data = g_slice_new0(OpenData);
+  data->self = self;
+  data->files = files;
+  data->n_files = n_files;
+  data->hint = hint;
+
+  if (self->addins != NULL)
+    peas_extension_set_foreach (self->addins,
+                                ide_application_open_cb,
+                                data);
+}
+
 static void
 ide_application_dispose (GObject *object)
 {
@@ -305,6 +356,7 @@ ide_application_class_init (IdeApplicationClass *klass)
   object_class->dispose = ide_application_dispose;
 
   app_class->activate = ide_application_activate;
+  app_class->open = ide_application_open;
   app_class->add_platform_data = ide_application_add_platform_data;
   app_class->command_line = ide_application_command_line;
   app_class->local_command_line = ide_application_local_command_line;
@@ -340,7 +392,7 @@ _ide_application_new (gboolean     standalone,
                       const gchar *plugin,
                       const gchar *dbus_address)
 {
-  GApplicationFlags flags = G_APPLICATION_HANDLES_COMMAND_LINE;
+  GApplicationFlags flags = G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN;
   IdeApplication *self;
 
   if (standalone || ide_str_equal0 (type, "worker"))
