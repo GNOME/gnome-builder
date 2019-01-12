@@ -28,7 +28,9 @@
 
 #include "gbp-devhelp-hover-provider.h"
 
-#define DEVHELP_HOVER_PROVIDER_PRIORITY 200
+/* Given devhelp #671 issue, set a small priority
+ * so it stays as the last element on the popover */
+#define DEVHELP_HOVER_PROVIDER_PRIORITY 90
 
 struct _GbpDevhelpHoverProvider
 {
