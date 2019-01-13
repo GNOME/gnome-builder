@@ -25,7 +25,7 @@
         </child>
         <child type="left">
           <object class="DzlPriorityBox" id="left_box">
-            <property name="spacing">10</property>
+            <property name="spacing">6</property>
             <property name="hexpand">false</property>
             <property name="homogeneous">true</property>
             <property name="visible">true</property>
