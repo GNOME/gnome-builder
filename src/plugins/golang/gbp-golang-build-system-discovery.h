@@ -22,8 +22,8 @@
 
 G_BEGIN_DECLS
 
-#define TYPE_GOLANG_BUILD_SYSTEM_DISCOVERY (golang_build_system_discovery_get_type())
+#define TYPE_GOLANG_BUILD_SYSTEM_DISCOVERY (gbp_golang_build_system_discovery_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGolangBuildSystemDiscovery, golang_build_system_discovery, GBP, GOLANG_BUILD_SYSTEM_DISCOVERY, GObject)
+G_DECLARE_FINAL_TYPE (GbpGolangBuildSystemDiscovery, gbp_golang_build_system_discovery, GBP, GOLANG_BUILD_SYSTEM_DISCOVERY, GObject)
 
 G_END_DECLS
