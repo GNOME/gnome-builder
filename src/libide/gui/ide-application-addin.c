@@ -88,9 +88,9 @@ ide_application_addin_activate (IdeApplicationAddin *self,
  * ide_application_addin_open:
  * @self: a #IdeApplicationAddin
  * @application: an #ideApplication
- * @files: an array of #GFile
- * @n_files: number of #GFile elements in @files
- * @hint: hint
+ * @files: (array length=n_files) (element-type GFile): an array of #GFiles
+ * @n_files: the length of @files
+ * @hint: a hint provided by the calling instance
  *
  * This function is activated when the #GApplication::open signal is emitted.
  *
