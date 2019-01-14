@@ -62,6 +62,20 @@ present_greeter_with_surface (GSimpleAction *action,
 }
 
 static void
+new_window (GSimpleAction *action,
+            GVariant      *param,
+            gpointer       user_data)
+{
+  GbpGreeterApplicationAddin *self = user_data;
+
+  g_assert (!action || G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (self));
+  g_assert (IDE_IS_APPLICATION (self->application));
+
+  present_greeter_with_surface (NULL, NULL, self);
+}
+
+static void
 open_project (GSimpleAction *action,
               GVariant      *param,
               gpointer       user_data)
@@ -89,6 +103,7 @@ open_project (GSimpleAction *action,
 static const GActionEntry actions[] = {
   { "present-greeter-with-surface", present_greeter_with_surface, "s" },
   { "open-project", open_project },
+  { "new-window", new_window },
 };
 
 static void
