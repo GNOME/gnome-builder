@@ -557,6 +557,9 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
 
+  if (ide_task_had_error (task))
+    return;
+
   self = ide_task_get_source_object (task);
   state = ide_task_get_task_data (task);
 
