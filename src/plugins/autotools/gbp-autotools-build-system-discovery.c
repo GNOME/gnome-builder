@@ -44,6 +44,6 @@ gbp_autotools_build_system_discovery_init (GbpAutotoolsBuildSystemDiscovery *sel
   g_object_set (self,
                 "glob", "configure.ac",
                 "hint", "autotools",
-                "priority", 0,
+                "priority", -300,
                 NULL);
 }
