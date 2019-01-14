@@ -40,11 +40,20 @@ ide_greeter_workspace_dialog_response (IdeGreeterWorkspace  *self,
     {
       g_autoptr(IdeProjectInfo) project_info = NULL;
       g_autoptr(GFile) project_file = NULL;
+      GtkFileFilter *filter;
 
       project_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
 
       project_info = ide_project_info_new ();
       ide_project_info_set_file (project_info, project_file);
+
+      if ((filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog))))
+        {
+          const gchar *module_name = g_object_get_data (G_OBJECT (filter), "MODULE_NAME");
+
+          if (module_name != NULL)
+            ide_project_info_set_build_system_hint (project_info, module_name);
+        }
 
       ide_greeter_workspace_open_project (self, project_info);
     }
@@ -150,6 +159,10 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
       filter = gtk_file_filter_new ();
 
       gtk_file_filter_set_name (filter, name);
+      g_object_set_data_full (G_OBJECT (filter),
+                              "MODULE_NAME",
+                              g_strdup (peas_plugin_info_get_module_name (plugin_info)),
+                              g_free);
 
       for (i = 0; patterns [i] != NULL; i++)
         {

@@ -27,11 +27,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RECENT_PROJECTS (ide_recent_projects_get_type())
 
-#define IDE_RECENT_PROJECTS_GROUP                     "X-GNOME-Builder-Project"
-#define IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX     "X-GNOME-Builder-Language:"
-#define IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX "X-GNOME-Builder-Build-System:"
-#define IDE_RECENT_PROJECTS_DIRECTORY                 "X-GNOME-Builder-Directory:"
-#define IDE_RECENT_PROJECTS_BOOKMARK_FILENAME         "recent-projects.xbel"
+#define IDE_RECENT_PROJECTS_GROUP                          "X-GNOME-Builder-Project"
+#define IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX          "X-GNOME-Builder-Language:"
+#define IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX      "X-GNOME-Builder-Build-System:"
+#define IDE_RECENT_PROJECTS_BUILD_SYSTEM_HINT_GROUP_PREFIX "X-GNOME-Builder-Build-System-Hint:"
+#define IDE_RECENT_PROJECTS_DIRECTORY                      "X-GNOME-Builder-Directory:"
+#define IDE_RECENT_PROJECTS_BOOKMARK_FILENAME              "recent-projects.xbel"
 
 IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeRecentProjects, ide_recent_projects, IDE, RECENT_PROJECTS, GObject)

@@ -113,6 +113,7 @@ discovery_worker (IdeTask      *task,
 static void
 discover_async (GbpBuildsystemWorkbenchAddin *self,
                 GFile                        *directory,
+                const gchar                  *hint,
                 GCancellable                 *cancellable,
                 GAsyncReadyCallback           callback,
                 gpointer                      user_data)
@@ -138,6 +139,17 @@ discover_async (GbpBuildsystemWorkbenchAddin *self,
                                               peas_engine_get_default (),
                                               IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
                                               NULL, NULL);
+
+  /* If we have a hint here, we want to lock in this build system
+   * instead of allowing another to override it. So in that case,
+   * raise the priority (by lowering the value).
+   */
+  if (hint != NULL)
+    {
+      state->best_match = g_intern_string (hint);
+      state->best_match_priority = G_MININT;
+    }
+
   ide_task_set_task_data (task, state, discovery_free);
   ide_task_run_in_thread (task, discovery_worker);
 }
@@ -232,6 +244,7 @@ gbp_buildsystem_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
 {
   GbpBuildsystemWorkbenchAddin *self = (GbpBuildsystemWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
+  const gchar *hint;
   GFile *directory;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -247,8 +260,11 @@ gbp_buildsystem_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
   directory = ide_project_info_get_directory (project_info);
   g_assert (G_IS_FILE (directory));
 
+  hint = ide_project_info_get_build_system_hint (project_info);
+
   discover_async (self,
                   directory,
+                  hint,
                   cancellable,
                   discover_cb,
                   g_steal_pointer (&task));

@@ -57,6 +57,8 @@ IDE_AVAILABLE_IN_3_32
 void                 ide_project_info_set_doap              (IdeProjectInfo  *self,
                                                              IdeDoap         *doap);
 IDE_AVAILABLE_IN_3_32
+const gchar         *ide_project_info_get_build_system_hint (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
 const gchar         *ide_project_info_get_build_system_name (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_3_32
 const gchar         *ide_project_info_get_description       (IdeProjectInfo  *self);
@@ -80,6 +82,9 @@ const gchar         *ide_project_info_get_vcs_uri           (IdeProjectInfo  *se
 IDE_AVAILABLE_IN_3_32
 void                 ide_project_info_set_file              (IdeProjectInfo  *self,
                                                              GFile           *file);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_build_system_hint (IdeProjectInfo  *self,
+                                                             const gchar     *build_system_hint);
 IDE_AVAILABLE_IN_3_32
 void                 ide_project_info_set_build_system_name (IdeProjectInfo  *self,
                                                              const gchar     *build_system_name);

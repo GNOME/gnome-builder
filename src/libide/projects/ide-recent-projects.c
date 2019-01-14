@@ -155,6 +155,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
       g_autoptr(IdeProjectInfo) project_info = NULL;
       g_autofree gchar *name = NULL;
       g_autofree gchar *description = NULL;
+      const gchar *build_system_hint = NULL;
       const gchar *build_system_name = NULL;
       const gchar *uri = uris[z];
       const gchar *diruri = NULL;
@@ -205,10 +206,13 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
             g_ptr_array_add (languages, groups [i] + strlen (IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX));
           else if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX))
             build_system_name = groups [i] + strlen (IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX);
+          else if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_BUILD_SYSTEM_HINT_GROUP_PREFIX))
+            build_system_hint = groups [i] + strlen (IDE_RECENT_PROJECTS_BUILD_SYSTEM_HINT_GROUP_PREFIX);
         }
       g_ptr_array_add (languages, NULL);
 
       project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
+                                   "build-system-hint", build_system_hint,
                                    "build-system-name", build_system_name,
                                    "description", description,
                                    "directory", directory,
