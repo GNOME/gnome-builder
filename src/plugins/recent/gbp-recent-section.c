@@ -459,6 +459,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
       gtk_box_set_spacing (GTK_BOX (content_area), 12);
 
       scroller = gtk_scrolled_window_new (NULL, NULL);
+      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroller), GTK_SHADOW_IN);
       gtk_widget_set_vexpand (scroller, TRUE);
       gtk_container_add (GTK_CONTAINER (content_area), scroller);
       gtk_widget_show (scroller);
