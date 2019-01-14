@@ -130,6 +130,7 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
   for (; list != NULL; list = list->next)
     {
       PeasPluginInfo *plugin_info = list->data;
+      const gchar *module_name = peas_plugin_info_get_module_name (plugin_info);
       GtkFileFilter *filter;
       const gchar *pattern;
       const gchar *content_type;
@@ -159,10 +160,9 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
       filter = gtk_file_filter_new ();
 
       gtk_file_filter_set_name (filter, name);
-      g_object_set_data_full (G_OBJECT (filter),
-                              "MODULE_NAME",
-                              g_strdup (peas_plugin_info_get_module_name (plugin_info)),
-                              g_free);
+
+      if (!ide_str_equal0 (module_name, "greeter"))
+        g_object_set_data_full (G_OBJECT (filter), "MODULE_NAME", g_strdup (module_name), g_free);
 
       for (i = 0; patterns [i] != NULL; i++)
         {

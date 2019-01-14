@@ -260,7 +260,10 @@ gbp_buildsystem_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
   directory = ide_project_info_get_directory (project_info);
   g_assert (G_IS_FILE (directory));
 
+  /* Get the hint, but ignore if it is "greeter" */
   hint = ide_project_info_get_build_system_hint (project_info);
+  if (ide_str_equal0 (hint, "greeter"))
+    hint = NULL;
 
   discover_async (self,
                   directory,
