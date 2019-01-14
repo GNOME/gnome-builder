@@ -39,7 +39,7 @@
                     <property name="layout_style">end</property>
                     <child>
                       <object class="GtkButton">
-                        <property name="action-name">editor-view.reload</property>
+                        <property name="action-name">editor-page.reload</property>
                         <property name="label" translatable="yes">_Reload</property>
                         <property name="visible">true</property>
                         <property name="receives_default">true</property>

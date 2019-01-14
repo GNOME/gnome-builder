@@ -60,6 +60,8 @@ ide_editor_page_actions_reload_cb (GObject      *object,
     {
       ide_editor_page_scroll_to_line (self, 0);
     }
+
+  gtk_revealer_set_reveal_child (self->modified_revealer, FALSE);
 }
 
 static void
