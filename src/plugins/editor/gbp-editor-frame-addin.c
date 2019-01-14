@@ -31,18 +31,70 @@
 struct _GbpEditorFrameAddin
 {
   GObject                 parent_instance;
+  IdeFrame               *frame;
   GbpEditorFrameControls *controls;
 };
+
+static void
+open_in_new_workspace_cb (GSimpleAction *action,
+                          GVariant      *variant,
+                          gpointer       user_data)
+{
+  GbpEditorFrameAddin *self = user_data;
+  IdeEditorWorkspace *workspace;
+  IdeWorkbench *workbench;
+  IdeSurface *editor;
+  IdePage *page;
+  IdePage *split_page;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_FRAME (self->frame));
+
+  if (!(page = ide_frame_get_visible_child (self->frame)))
+    {
+      g_warning ("No page available to split");
+      return;
+    }
+
+  if (!ide_page_get_can_split (page))
+    {
+      g_warning ("Attempt to split a page that cannot be split");
+      return;
+    }
+
+  if (!(split_page = ide_page_create_split (page)))
+    {
+      g_warning ("%s failed to create a split", G_OBJECT_TYPE_NAME (page));
+      return;
+    }
+
+  g_assert (IDE_IS_PAGE (split_page));
+
+  workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self->frame));
+  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+  editor = ide_workspace_get_surface_by_name (IDE_WORKSPACE (workspace), "editor");
+  gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (split_page));
+
+  ide_gtk_window_present (GTK_WINDOW (workspace));
+}
 
 static void
 gbp_editor_frame_addin_load (IdeFrameAddin *addin,
                              IdeFrame      *stack)
 {
   GbpEditorFrameAddin *self = (GbpEditorFrameAddin *)addin;
+  g_autoptr(GSimpleActionGroup) actions = NULL;
   GtkWidget *header;
+  static const GActionEntry entries[] = {
+    { "open-in-new-workspace", open_in_new_workspace_cb },
+  };
 
   g_assert (GBP_IS_EDITOR_FRAME_ADDIN (self));
   g_assert (IDE_IS_FRAME (stack));
+
+  self->frame = stack;
 
   header = ide_frame_get_titlebar (stack);
 
@@ -55,6 +107,15 @@ gbp_editor_frame_addin_load (IdeFrameAddin *addin,
                                      "pack-type", GTK_PACK_END,
                                      "priority", 100,
                                      NULL);
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries,
+                                   G_N_ELEMENTS (entries),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (stack),
+                                  "editor-frame-addin",
+                                  G_ACTION_GROUP (actions));
 }
 
 static void
@@ -66,8 +127,12 @@ gbp_editor_frame_addin_unload (IdeFrameAddin *addin,
   g_assert (GBP_IS_EDITOR_FRAME_ADDIN (self));
   g_assert (IDE_IS_FRAME (stack));
 
+  gtk_widget_insert_action_group (GTK_WIDGET (stack), "editor-frame-addin", NULL);
+
   if (self->controls != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->controls));
+
+  self->frame = NULL;
 }
 
 static void

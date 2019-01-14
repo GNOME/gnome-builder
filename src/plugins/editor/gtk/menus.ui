@@ -129,6 +129,11 @@
         <attribute name="target" type="s">""</attribute>
       </item>
       <item>
+        <attribute name="id">editor-document-open-in-new-workspace</attribute>
+        <attribute name="label" translatable="yes">Open in New Workspace</attribute>
+        <attribute name="action">editor-frame-addin.open-in-new-workspace</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Split</attribute>
         <attribute name="action">frame.split-page</attribute>
         <attribute name="target" type="s">""</attribute>
