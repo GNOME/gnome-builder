@@ -25,7 +25,7 @@
 G_BEGIN_DECLS
 
 #define GBP_TYPE_MESON_BUILD_SYSTEM_DISCOVERY     (gbp_meson_build_system_discovery_get_type())
-#define GBP_MESON_BUILD_SYSTEM_DISCOVERY_PRIORITY (100)
+#define GBP_MESON_BUILD_SYSTEM_DISCOVERY_PRIORITY (-400)
 
 G_DECLARE_FINAL_TYPE (GbpMesonBuildSystemDiscovery, gbp_meson_build_system_discovery, GBP, MESON_BUILD_SYSTEM_DISCOVERY, GObject)
 
