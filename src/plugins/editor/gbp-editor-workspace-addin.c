@@ -116,6 +116,9 @@ bind_buffer_manager (GbpEditorWorkspaceAddin *self,
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
   g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
 
+  if (self->surface == NULL)
+    return;
+
   n_items = g_list_model_get_n_items (G_LIST_MODEL (buffer_manager));
 
   for (guint i = 0; i < n_items; i++)
