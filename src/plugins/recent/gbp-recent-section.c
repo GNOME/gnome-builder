@@ -466,6 +466,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
 
       view = gtk_text_view_new ();
       gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+      gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       gtk_container_add (GTK_CONTAINER (scroller), view);
       gtk_widget_show (view);
