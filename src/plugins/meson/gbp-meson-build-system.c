@@ -347,6 +347,24 @@ gbp_meson_build_system_load_commands_finish (GbpMesonBuildSystem  *self,
 }
 
 static void
+gbp_meson_build_system_set_project_file (GbpMesonBuildSystem *self,
+                                         GFile               *file)
+{
+  g_autofree gchar *name = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (G_IS_FILE (file));
+
+  name = g_file_get_basename (file);
+
+  if (ide_str_equal0 (name, "meson.build"))
+    self->project_file = g_file_dup (file);
+  else
+    self->project_file = g_file_get_child (file, "meson.build");
+}
+
+static void
 gbp_meson_build_system_finalize (GObject *object)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
@@ -389,7 +407,7 @@ gbp_meson_build_system_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_PROJECT_FILE:
-      self->project_file = g_value_dup_object (value);
+      gbp_meson_build_system_set_project_file (self, g_value_get_object (value));
       break;
 
     default:
