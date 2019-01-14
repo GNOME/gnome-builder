@@ -199,6 +199,10 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
           else if (dzl_str_equal0 (buildsystem, "simple"))
             buildsystem = "directory";
 
+          /* Set priority higher than normal discoveries */
+          if (priority != NULL)
+            *priority = -1000;
+
           ret = g_strdup (buildsystem);
           IDE_TRACE_MSG ("Discovered buildsystem of type \"%s\"", ret);
           IDE_RETURN (ret);
