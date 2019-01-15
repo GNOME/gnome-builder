@@ -1883,6 +1883,8 @@ _ide_buffer_set_changed_on_volume (IdeBuffer *self,
   if (changed_on_volume != self->changed_on_volume)
     {
       self->changed_on_volume = changed_on_volume;
+      if (changed_on_volume)
+        gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (self), TRUE);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CHANGED_ON_VOLUME]);
     }
 }
