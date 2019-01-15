@@ -119,6 +119,8 @@ void           ide_tree_node_prepend                (IdeTreeNode         *self,
 IDE_AVAILABLE_IN_3_32
 void           ide_tree_node_append                 (IdeTreeNode         *self,
                                                      IdeTreeNode         *child);
+void           ide_tree_node_insert_sorted          (IdeTreeNode         *self,
+                                                     IdeTreeNode         *child);
 IDE_AVAILABLE_IN_3_32
 void           ide_tree_node_insert_before          (IdeTreeNode         *self,
                                                      IdeTreeNode         *child);
