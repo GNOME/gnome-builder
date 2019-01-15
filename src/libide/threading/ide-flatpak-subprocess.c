@@ -38,9 +38,8 @@
 #include "ide-flatpak-subprocess-private.h"
 #include "ide-gtask-private.h"
 
-#ifndef FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV
-# define FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV (1 << 0)
-#endif
+#define FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV (1 << 0)
+#define FLATPAK_HOST_COMMAND_FLAGS_WATCH_BUS (1 << 1)
 
 /*
  * One very non-ideal thing about this implementation is that we use a new
@@ -1193,6 +1192,7 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
   gint stdout_handle = -1;
   gint stderr_handle = -1;
   gboolean ret = FALSE;
+  guint flags = FLATPAK_HOST_COMMAND_FLAGS_WATCH_BUS;
 
   IDE_ENTRY;
 
@@ -1229,6 +1229,9 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
     IDE_RETURN (FALSE);
 
   g_dbus_connection_set_exit_on_close (self->connection, FALSE);
+
+  if (self->clear_env)
+    flags |= FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV;
 
 
   /*
@@ -1471,7 +1474,7 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
                           self->argv,
                           g_variant_builder_end (g_steal_pointer (&fd_builder)),
                           g_variant_builder_end (g_steal_pointer (&env_builder)),
-                          self->clear_env ? FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV : 0);
+                          flags);
   g_variant_take_ref (params);
 
 #ifdef IDE_ENABLE_TRACE
