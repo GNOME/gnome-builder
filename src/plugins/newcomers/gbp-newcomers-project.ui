@@ -13,6 +13,9 @@
             <property name="visible">true</property>
             <child>
               <object class="GtkImage" id="icon">
+                <style>
+                  <class name="icon-dropshadow"/>
+                </style>
                 <property name="expand">true</property>
                 <property name="pixel-size">96</property>
                 <property name="visible">true</property>
