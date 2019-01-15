@@ -42,6 +42,7 @@ struct _GbpBuilduiOmniBarSection
   GtkLabel       *popover_build_message;
   GtkLabel       *popover_build_result_label;
   GtkLabel       *popover_config_label;
+  GtkLabel       *popover_device_label;
   GtkLabel       *popover_errors_label;
   GtkLabel       *popover_last_build_time_label;
   GtkLabel       *popover_project_label;
@@ -75,6 +76,10 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
                                               IdeBuildManager          *build_manager)
 {
   IdeBuildPipeline *pipeline;
+  const gchar *device_name = NULL;
+  const gchar *runtime_name = NULL;
+  const gchar *config_id = "";
+  const gchar *display_name = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_OMNI_BAR_SECTION (self));
@@ -83,23 +88,25 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
   if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
     {
       IdeConfig *config = ide_build_pipeline_get_config (pipeline);
-      const gchar *config_id = ide_config_get_id (config);
-      const gchar *display_name = ide_config_get_display_name (config);
       IdeRuntime *runtime = ide_config_get_runtime (config);
-      const gchar *name = NULL;
+      IdeDevice *device = ide_build_pipeline_get_device (pipeline);
 
-      gtk_label_set_label (self->popover_config_label, display_name);
+      config_id = ide_config_get_id (config);
+      display_name = ide_config_get_display_name (config);
 
       if (runtime != NULL)
-        name = ide_runtime_get_display_name (runtime);
+        runtime_name = ide_runtime_get_display_name (runtime);
+      if (runtime_name == NULL)
+        runtime_name = ide_runtime_get_id (runtime);
 
-      if (name == NULL)
-        name = ide_runtime_get_id (runtime);
-
-      gtk_label_set_label (self->popover_runtime_label, name);
-
-      gtk_actionable_set_action_target (GTK_ACTIONABLE (self->configure_button), "s", config_id);
+      if (device != NULL)
+        device_name = ide_device_get_display_name (device);
     }
+
+  gtk_label_set_label (self->popover_config_label, display_name);
+  gtk_label_set_label (self->popover_device_label, device_name);
+  gtk_label_set_label (self->popover_runtime_label, runtime_name);
+  gtk_actionable_set_action_target (GTK_ACTIONABLE (self->configure_button), "s", config_id);
 }
 
 static void
@@ -288,6 +295,7 @@ gbp_buildui_omni_bar_section_class_init (GbpBuilduiOmniBarSectionClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_build_result_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_config_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_details_revealer);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_device_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_errors_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_project_label);
