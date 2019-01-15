@@ -347,6 +347,30 @@ collect_files (GFile *file,
   return g_steal_pointer (&list);
 }
 
+static int
+node_compare (IdeTreeNode *node,
+              IdeTreeNode *child)
+{
+  gint cmp;
+  const gchar *child_name, *node_name;
+  g_autofree gchar *collated_child = NULL;
+  g_autofree gchar *collated_node = NULL;
+
+  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (IDE_IS_TREE_NODE (child));
+
+  child_name = ide_tree_node_get_display_name (child);
+  node_name = ide_tree_node_get_display_name (node);
+
+  collated_child = g_utf8_collate_key_for_filename (child_name, -1);
+  collated_node = g_utf8_collate_key_for_filename (node_name, -1);
+
+  cmp = g_strcmp0 (collated_child, collated_node);
+
+  return cmp > 0 ? cmp : 0;
+}
+
+
 static void
 gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
                                  GFile               *file)
@@ -409,8 +433,7 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
       project_file = ide_project_file_new (directory, info);
       node = create_file_node (project_file);
 
-      /* TODO: Sort item */
-      ide_tree_node_append (parent, node);
+      ide_tree_node_insert_sorted (parent, node, node_compare);
     }
 
   IDE_EXIT;
