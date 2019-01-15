@@ -1496,6 +1496,18 @@ ide_buffer_save_file_async (IdeBuffer            *self,
       source_file = alternate;
     }
 
+  /* Possibly avoid any writing if we can detect a no-change state */
+  if (file == NULL || g_file_equal (file, ide_buffer_get_file (self)))
+    {
+      if (!self->changed_on_volume &&
+          !gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self)))
+        {
+          ide_notification_set_progress (local_notif, 1.0);
+          ide_task_return_boolean (task, TRUE);
+          IDE_GOTO (set_out_param);
+        }
+    }
+
   if (self->addins != NULL)
     {
       IdeBufferFileSave closure = { self, file };
@@ -1515,6 +1527,7 @@ ide_buffer_save_file_async (IdeBuffer            *self,
                                     ide_buffer_save_file_cb,
                                     g_steal_pointer (&task));
 
+set_out_param:
   if (notif != NULL)
     *notif = g_steal_pointer (&local_notif);
 
