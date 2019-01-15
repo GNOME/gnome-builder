@@ -131,7 +131,7 @@
   bind "<ctrl>c" { "action" ("app", "quit", "") };
   bind "0" { "action" ("frame", "close-page", "") };
   bind "k" { "action" ("frame", "close-page", "") };
-  bind "<ctrl>f" { "action" ("win", "open-with-dialog", "") };
+  bind "<ctrl>f" { "action" ("workbench", "open", "") };
   bind "<ctrl>s" { "action" ("editor-page", "save", "") };
   bind "s" { "action" ("win", "save-all", "") };
   bind "<ctrl>b" { "action" ("frame", "show-list", "") };

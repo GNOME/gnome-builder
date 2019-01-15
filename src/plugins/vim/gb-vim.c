@@ -465,7 +465,7 @@ gb_vim_command_edit (GtkWidget      *active_widget,
 
   if (ide_str_empty0 (options))
     {
-      dzl_gtk_widget_action (GTK_WIDGET (active_widget), "win", "open-with-dialog", NULL);
+      dzl_gtk_widget_action (GTK_WIDGET (active_widget), "workbench", "open", NULL);
       return TRUE;
     }
 

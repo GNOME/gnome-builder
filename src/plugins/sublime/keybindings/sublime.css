@@ -3,7 +3,7 @@
 @binding-set sublime-ide-source-view
 {
   bind "<ctrl>n" { "action" ("editor", "new-file", "") };
-  bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
+  bind "<ctrl>o" { "action" ("workbench", "open", "") };
   bind "<ctrl>s" { "action" ("editor-page", "save", "") };
   bind "<ctrl><shift>s" { "action" ("editor-page", "save-as", "") };
   bind "<ctrl>w" { "action" ("frame", "close-page", "") };
