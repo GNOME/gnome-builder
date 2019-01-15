@@ -1547,14 +1547,20 @@ ide_task_propagate_locked (IdeTask            *self,
         *error = g_error_copy (priv->result->u.v_error);
     }
   else if ((priv->check_cancellable && g_cancellable_is_cancelled (priv->cancellable)) ||
-           priv->result->type == IDE_TASK_RESULT_CANCELLED ||
-           (IDE_IS_OBJECT (priv->source_object) &&
-            ide_object_in_destruction (IDE_OBJECT (priv->source_object))))
+           priv->result->type == IDE_TASK_RESULT_CANCELLED)
     {
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_CANCELLED,
                    "The operation was cancelled");
+    }
+  else if (IDE_IS_OBJECT (priv->source_object) &&
+           ide_object_in_destruction (IDE_OBJECT (priv->source_object)))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_CANCELLED,
+                   "The object was destroyed while the task executed");
     }
   else if (priv->result->type != expected_type)
     {
