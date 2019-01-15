@@ -409,8 +409,7 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
       project_file = ide_project_file_new (directory, info);
       node = create_file_node (project_file);
 
-      /* TODO: Sort item */
-      ide_tree_node_append (parent, node);
+      ide_tree_node_insert_sorted (parent, node);
     }
 
   IDE_EXIT;
