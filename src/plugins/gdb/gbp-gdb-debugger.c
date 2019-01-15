@@ -1899,9 +1899,10 @@ gbp_gdb_debugger_modify_breakpoint_finish (IdeDebugger   *debugger,
 }
 
 static void
-gbp_gdb_debugger_list_locals_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
+gbp_gdb_debugger_list_variables_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data,
+                                    gboolean      arguments)
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)object;
   g_autoptr(GError) error = NULL;
@@ -1929,7 +1930,7 @@ gbp_gdb_debugger_list_locals_cb (GObject      *object,
   res = output->variant.result_record->result;
 
   if (res->kind == GDBWIRE_MI_LIST &&
-      g_strcmp0 (res->variable, "locals") == 0)
+      g_strcmp0 (res->variable, "variables") == 0)
     {
       struct gdbwire_mi_result *iter;
 
@@ -1942,6 +1943,7 @@ gbp_gdb_debugger_list_locals_cb (GObject      *object,
               G_GNUC_UNUSED const gchar *value = NULL;
               const gchar *type = NULL;
               const gchar *name = NULL;
+              gboolean is_arg = FALSE;
 
               for (titer = iter->variant.result; titer; titer = titer->next)
                 {
@@ -1953,10 +1955,12 @@ gbp_gdb_debugger_list_locals_cb (GObject      *object,
                         type = titer->variant.cstring;
                       else if (g_strcmp0 (titer->variable, "value") == 0)
                         value = titer->variant.cstring;
+                      else if (g_strcmp0 (titer->variable, "arg") == 0)
+                        is_arg |= g_strcmp0 (titer->variant.cstring, "1") == 0;
                     }
                 }
 
-              if (name == NULL)
+              if ((name == NULL) || (arguments != is_arg))
                 continue;
 
               var = ide_debugger_variable_new (name);
@@ -1976,6 +1980,14 @@ gbp_gdb_debugger_list_locals_cb (GObject      *object,
 
 cleanup:
   g_clear_pointer (&output, gdbwire_mi_output_free);
+}
+
+static void
+gbp_gdb_debugger_list_locals_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  gbp_gdb_debugger_list_variables_cb (object, result, user_data, FALSE);
 }
 
 static void
