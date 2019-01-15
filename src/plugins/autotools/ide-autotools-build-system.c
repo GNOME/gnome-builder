@@ -392,7 +392,7 @@ ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (!ide_build_manager_execute_finish (build_manager, result, &error))
+  if (!ide_build_manager_build_finish (build_manager, result, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -462,7 +462,7 @@ ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_sys
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
 
-  ide_build_manager_execute_async (build_manager,
+  ide_build_manager_build_async (build_manager,
                                    IDE_PIPELINE_PHASE_CONFIGURE,
                                    NULL,
                                    cancellable,

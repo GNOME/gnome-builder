@@ -108,7 +108,7 @@ gbp_cmake_build_system_ensure_config_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_build_manager_execute_finish (build_manager, result, &error))
+  if (!ide_build_manager_build_finish (build_manager, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -134,7 +134,7 @@ gbp_cmake_build_system_ensure_config_async (GbpCMakeBuildSystem *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
 
-  ide_build_manager_execute_async (build_manager,
+  ide_build_manager_build_async (build_manager,
                                    IDE_PIPELINE_PHASE_CONFIGURE,
                                    NULL,
                                    cancellable,

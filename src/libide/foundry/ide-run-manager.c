@@ -569,7 +569,7 @@ ide_run_manager_install_cb (GObject      *object,
   self = ide_task_get_source_object (task);
   g_assert (IDE_IS_RUN_MANAGER (self));
 
-  if (!ide_build_manager_execute_finish (build_manager, result, &error))
+  if (!ide_build_manager_build_finish (build_manager, result, &error))
     {
       /* We want to let the consumer know there was a build error
        * (but don't need to pass the specific error code) so that
@@ -653,7 +653,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_build_manager_execute_async (build_manager,
+  ide_build_manager_build_async (build_manager,
                                    IDE_PIPELINE_PHASE_INSTALL,
                                    NULL,
                                    ide_task_get_cancellable (task),

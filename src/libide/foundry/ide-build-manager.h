@@ -73,14 +73,14 @@ gboolean          ide_build_manager_rebuild_finish      (IdeBuildManager      *s
                                                          GAsyncResult         *result,
                                                          GError              **error);
 IDE_AVAILABLE_IN_3_32
-void              ide_build_manager_execute_async       (IdeBuildManager      *self,
+void              ide_build_manager_build_async       (IdeBuildManager      *self,
                                                          IdePipelinePhase         phase,
                                                          GPtrArray            *targets,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
                                                          gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean          ide_build_manager_execute_finish      (IdeBuildManager      *self,
+gboolean          ide_build_manager_build_finish      (IdeBuildManager      *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);
 IDE_AVAILABLE_IN_3_32

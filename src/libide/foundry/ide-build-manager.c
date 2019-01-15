@@ -52,7 +52,7 @@
  * as well as providing common high-level actions to plugins.
  *
  * You can use various async operations such as
- * ide_build_manager_execute_async(), ide_build_manager_clean_async(), or
+ * ide_build_manager_build_async(), ide_build_manager_clean_async(), or
  * ide_build_manager_rebuild_async() to build, clean, and rebuild respectively
  * without needing to track the build pipeline.
  *
@@ -1083,7 +1083,7 @@ ide_build_manager_action_build (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_execute_async (self, IDE_PIPELINE_PHASE_BUILD, NULL, NULL, NULL, NULL);
+  ide_build_manager_build_async (self, IDE_PIPELINE_PHASE_BUILD, NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1122,7 +1122,7 @@ ide_build_manager_action_install (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_execute_async (self, IDE_PIPELINE_PHASE_INSTALL, NULL, NULL, NULL, NULL);
+  ide_build_manager_build_async (self, IDE_PIPELINE_PHASE_INSTALL, NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1135,7 +1135,7 @@ ide_build_manager_action_export (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_execute_async (self, IDE_PIPELINE_PHASE_EXPORT, NULL, NULL, NULL, NULL);
+  ide_build_manager_build_async (self, IDE_PIPELINE_PHASE_EXPORT, NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1426,7 +1426,7 @@ ide_build_manager_save_all_cb (GObject      *object,
 }
 
 /**
- * ide_build_manager_execute_async:
+ * ide_build_manager_build_async:
  * @self: An #IdeBuildManager
  * @phase: An #IdePipelinePhase or 0
  * @targets: (nullable) (element-type IdeBuildTarget): an array of
@@ -1438,17 +1438,17 @@ ide_build_manager_save_all_cb (GObject      *object,
  * This function will request that @phase is completed in the underlying
  * build pipeline and execute a build. Upon completion, @callback will be
  * executed and it can determine the success or failure of the operation
- * using ide_build_manager_execute_finish().
+ * using ide_build_manager_build_finish().
  *
  * Since: 3.32
  */
 void
-ide_build_manager_execute_async (IdeBuildManager     *self,
-                                 IdePipelinePhase        phase,
-                                 GPtrArray           *targets,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
+ide_build_manager_build_async (IdeBuildManager     *self,
+                               IdePipelinePhase     phase,
+                               GPtrArray           *targets,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   IdeBufferManager *buffer_manager;
@@ -1463,7 +1463,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
   cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_build_manager_execute_async);
+  ide_task_set_source_tag (task, ide_build_manager_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_return_on_cancel (task, TRUE);
 
@@ -1534,21 +1534,21 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
 }
 
 /**
- * ide_build_manager_execute_finish:
+ * ide_build_manager_build_finish:
  * @self: An #IdeBuildManager
  * @result: a #GAsyncResult
  * @error: A location for a #GError or %NULL
  *
- * Completes a request to ide_build_manager_execute_async().
+ * Completes a request to ide_build_manager_build_async().
  *
  * Returns: %TRUE if successful, otherwise %FALSE and @error is set.
  *
  * Since: 3.32
  */
 gboolean
-ide_build_manager_execute_finish (IdeBuildManager  *self,
-                                  GAsyncResult     *result,
-                                  GError          **error)
+ide_build_manager_build_finish (IdeBuildManager  *self,
+                                GAsyncResult     *result,
+                                GError          **error)
 {
   gboolean ret;
 
