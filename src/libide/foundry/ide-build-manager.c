@@ -1511,7 +1511,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       buffer_manager = ide_buffer_manager_from_context (context);
       ide_buffer_manager_save_all_async (buffer_manager,
-                                         cancellable,
+                                         NULL,
                                          ide_build_manager_save_all_cb,
                                          g_steal_pointer (&task));
       IDE_EXIT;
