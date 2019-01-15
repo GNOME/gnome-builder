@@ -135,7 +135,7 @@ gbp_cmake_build_system_ensure_config_async (GbpCMakeBuildSystem *self,
   build_manager = ide_build_manager_from_context (context);
 
   ide_build_manager_execute_async (build_manager,
-                                   IDE_BUILD_PHASE_CONFIGURE,
+                                   IDE_PIPELINE_PHASE_CONFIGURE,
                                    NULL,
                                    cancellable,
                                    gbp_cmake_build_system_ensure_config_cb,
@@ -193,7 +193,7 @@ gbp_cmake_build_system_load_commands_config_cb (GObject      *object,
   g_autoptr(GFile) file = NULL;
   g_autofree gchar *path = NULL;
   IdeBuildManager *build_manager;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   GCancellable *cancellable;
   IdeContext *context;
 
@@ -221,7 +221,7 @@ gbp_cmake_build_system_load_commands_config_cb (GObject      *object,
       return;
     }
 
-  path = ide_build_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
+  path = ide_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
 
   if (!g_file_test (path, G_FILE_TEST_IS_REGULAR))
     {
@@ -254,7 +254,7 @@ gbp_cmake_build_system_load_commands_async (GbpCMakeBuildSystem *self,
 {
   g_autoptr(IdeTask) task = NULL;
   IdeBuildManager *build_manager;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeContext *context;
 
   g_assert (GBP_IS_CMAKE_BUILD_SYSTEM (self));
@@ -292,7 +292,7 @@ gbp_cmake_build_system_load_commands_async (GbpCMakeBuildSystem *self,
     {
       g_autofree gchar *path = NULL;
 
-      path = ide_build_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
+      path = ide_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
 
       if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
         {

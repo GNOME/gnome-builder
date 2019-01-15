@@ -35,6 +35,6 @@ _gbp_buildconfig_register_types (PeasObjectModule *module)
                                               IDE_TYPE_CONFIG_PROVIDER,
                                               IDE_TYPE_BUILDCONFIG_CONFIG_PROVIDER);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                              IDE_TYPE_PIPELINE_ADDIN,
                                               IDE_TYPE_BUILDCONFIG_PIPELINE_ADDIN);
 }

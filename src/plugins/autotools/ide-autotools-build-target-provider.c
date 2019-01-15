@@ -35,7 +35,7 @@ find_makecache_from_stage (gpointer data,
                            gpointer user_data)
 {
   IdeMakecache **makecache = user_data;
-  IdeBuildStage *stage = data;
+  IdePipelineStage *stage = data;
 
   if (*makecache != NULL)
     return;
@@ -79,7 +79,7 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
   IdeAutotoolsBuildTargetProvider *self = (IdeAutotoolsBuildTargetProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) builddir_file = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
   IdeBuildSystem *build_system;
   IdeMakecache *makecache = NULL;
@@ -109,7 +109,7 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
 
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
-  builddir = ide_build_pipeline_get_builddir (pipeline);
+  builddir = ide_pipeline_get_builddir (pipeline);
   builddir_file = g_file_new_for_path (builddir);
 
   /*
@@ -119,7 +119,7 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
    * into the appropriate build target).
    */
 
-  ide_build_pipeline_foreach_stage (pipeline, find_makecache_from_stage, &makecache);
+  ide_pipeline_foreach_stage (pipeline, find_makecache_from_stage, &makecache);
 
   if (makecache == NULL)
     {

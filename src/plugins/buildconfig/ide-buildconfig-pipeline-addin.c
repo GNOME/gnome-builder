@@ -29,9 +29,9 @@
 #include "ide-buildconfig-pipeline-addin.h"
 
 static void
-add_command (IdeBuildPipelineAddin  *addin,
-             IdeBuildPipeline       *pipeline,
-             IdeBuildPhase           phase,
+add_command (IdePipelineAddin  *addin,
+             IdePipeline       *pipeline,
+             IdePipelinePhase           phase,
              gint                    priority,
              const gchar            *command_text,
              gchar                 **env)
@@ -48,7 +48,7 @@ add_command (IdeBuildPipelineAddin  *addin,
       return;
     }
 
-  launcher = ide_build_pipeline_create_launcher (pipeline, NULL);
+  launcher = ide_pipeline_create_launcher (pipeline, NULL);
 
   if (launcher == NULL)
     {
@@ -61,13 +61,13 @@ add_command (IdeBuildPipelineAddin  *addin,
 
   ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)env);
 
-  stage_id = ide_build_pipeline_attach_launcher (pipeline, phase, priority, launcher);
-  ide_build_pipeline_addin_track (addin, stage_id);
+  stage_id = ide_pipeline_attach_launcher (pipeline, phase, priority, launcher);
+  ide_pipeline_addin_track (addin, stage_id);
 }
 
 static void
-ide_buildconfig_pipeline_addin_load (IdeBuildPipelineAddin *addin,
-                                     IdeBuildPipeline      *pipeline)
+ide_buildconfig_pipeline_addin_load (IdePipelineAddin *addin,
+                                     IdePipeline      *pipeline)
 {
   const gchar * const *prebuild;
   const gchar * const *postbuild;
@@ -77,9 +77,9 @@ ide_buildconfig_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILDCONFIG_PIPELINE_ADDIN (addin));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  config = ide_build_pipeline_get_config (pipeline);
+  config = ide_pipeline_get_config (pipeline);
 
   if (!IDE_IS_BUILDCONFIG_CONFIG (config))
     return;
@@ -92,26 +92,26 @@ ide_buildconfig_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (prebuild != NULL)
     {
       for (guint i = 0; prebuild[i]; i++)
-        add_command (addin, pipeline, IDE_BUILD_PHASE_BUILD|IDE_BUILD_PHASE_BEFORE, i, prebuild[i], env);
+        add_command (addin, pipeline, IDE_PIPELINE_PHASE_BUILD|IDE_PIPELINE_PHASE_BEFORE, i, prebuild[i], env);
     }
 
   if (postbuild != NULL)
     {
       for (guint i = 0; postbuild[i]; i++)
-        add_command (addin, pipeline, IDE_BUILD_PHASE_BUILD|IDE_BUILD_PHASE_AFTER, i, postbuild[i], env);
+        add_command (addin, pipeline, IDE_PIPELINE_PHASE_BUILD|IDE_PIPELINE_PHASE_AFTER, i, postbuild[i], env);
     }
 
   IDE_EXIT;
 }
 
 static void
-pipeline_addin_init (IdeBuildPipelineAddinInterface *iface)
+pipeline_addin_init (IdePipelineAddinInterface *iface)
 {
   iface->load = ide_buildconfig_pipeline_addin_load;
 }
 
 struct _IdeBuildconfigPipelineAddin { IdeObject parent_instance; };
 G_DEFINE_TYPE_EXTENDED (IdeBuildconfigPipelineAddin, ide_buildconfig_pipeline_addin, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN, pipeline_addin_init))
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, pipeline_addin_init))
 static void ide_buildconfig_pipeline_addin_class_init (IdeBuildconfigPipelineAddinClass *klass) { }
 static void ide_buildconfig_pipeline_addin_init (IdeBuildconfigPipelineAddin *self) { }

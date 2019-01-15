@@ -30,21 +30,21 @@
 
 static gboolean
 register_autoreconf_stage (IdeAutotoolsPipelineAddin  *self,
-                           IdeBuildPipeline           *pipeline,
+                           IdePipeline           *pipeline,
                            GError                    **error)
 {
   g_autofree gchar *configure_path = NULL;
-  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autoptr(IdePipelineStage) stage = NULL;
   const gchar *srcdir;
   gboolean completed;
   guint stage_id;
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  configure_path = ide_build_pipeline_build_srcdir_path (pipeline, "configure", NULL);
+  configure_path = ide_pipeline_build_srcdir_path (pipeline, "configure", NULL);
   completed = g_file_test (configure_path, G_FILE_TEST_IS_REGULAR);
-  srcdir = ide_build_pipeline_get_srcdir (pipeline);
+  srcdir = ide_pipeline_get_srcdir (pipeline);
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_AUTOGEN_STAGE,
                         "name", _("Bootstrapping build system"),
@@ -52,9 +52,9 @@ register_autoreconf_stage (IdeAutotoolsPipelineAddin  *self,
                         "srcdir", srcdir,
                         NULL);
 
-  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_AUTOGEN, 0, stage);
+  stage_id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_AUTOGEN, 0, stage);
 
-  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
+  ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
 }
@@ -93,10 +93,10 @@ compare_mtime (const gchar *path_a,
 
 static void
 check_configure_status (IdeAutotoolsPipelineAddin *self,
-                        IdeBuildPipeline          *pipeline,
+                        IdePipeline          *pipeline,
                         GPtrArray                 *targets,
                         GCancellable              *cancellable,
-                        IdeBuildStage             *stage)
+                        IdePipelineStage             *stage)
 {
   g_autofree gchar *configure_ac = NULL;
   g_autofree gchar *configure = NULL;
@@ -106,14 +106,14 @@ check_configure_status (IdeAutotoolsPipelineAddin *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
-  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  configure = ide_build_pipeline_build_srcdir_path (pipeline, "configure", NULL);
-  configure_ac = ide_build_pipeline_build_srcdir_path (pipeline, "configure.ac", NULL);
-  config_status = ide_build_pipeline_build_builddir_path (pipeline, "config.status", NULL);
-  makefile = ide_build_pipeline_build_builddir_path (pipeline, "Makefile", NULL);
+  configure = ide_pipeline_build_srcdir_path (pipeline, "configure", NULL);
+  configure_ac = ide_pipeline_build_srcdir_path (pipeline, "configure.ac", NULL);
+  config_status = ide_pipeline_build_builddir_path (pipeline, "config.status", NULL);
+  makefile = ide_pipeline_build_builddir_path (pipeline, "Makefile", NULL);
 
   IDE_TRACE_MSG (" configure.ac is at %s", configure_ac);
   IDE_TRACE_MSG (" configure is at %s", configure);
@@ -132,7 +132,7 @@ check_configure_status (IdeAutotoolsPipelineAddin *self,
       !g_file_test (config_status, G_FILE_TEST_IS_REGULAR) ||
       !g_file_test (makefile, G_FILE_TEST_IS_REGULAR))
     {
-      ide_build_stage_set_completed (stage, FALSE);
+      ide_pipeline_stage_set_completed (stage, FALSE);
       IDE_EXIT;
     }
 
@@ -149,11 +149,11 @@ check_configure_status (IdeAutotoolsPipelineAddin *self,
        * if the configure args match what we expect. But this is a bit more
        * complicated than simply a string comparison.
        */
-      ide_build_stage_set_completed (stage, TRUE);
+      ide_pipeline_stage_set_completed (stage, TRUE);
       IDE_EXIT;
     }
 
-  ide_build_stage_set_completed (stage, FALSE);
+  ide_pipeline_stage_set_completed (stage, FALSE);
 
   IDE_EXIT;
 }
@@ -197,11 +197,11 @@ add_compiler_env_variables (gpointer key,
 
 static gboolean
 register_configure_stage (IdeAutotoolsPipelineAddin  *self,
-                          IdeBuildPipeline           *pipeline,
+                          IdePipeline           *pipeline,
                           GError                    **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autoptr(IdePipelineStage) stage = NULL;
   IdeConfig *configuration;
   IdeToolchain *toolchain;
   g_autofree gchar *configure_path = NULL;
@@ -212,9 +212,9 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   guint stage_id;
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, error)))
+  if (NULL == (launcher = ide_pipeline_create_launcher (pipeline, error)))
     return FALSE;
 
   ide_subprocess_launcher_set_flags (launcher,
@@ -222,12 +222,12 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
                                      G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                      G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
-  configure_path = ide_build_pipeline_build_srcdir_path (pipeline, "configure", NULL);
+  configure_path = ide_pipeline_build_srcdir_path (pipeline, "configure", NULL);
   ide_subprocess_launcher_push_argv (launcher, configure_path);
 
   /* --host=triplet */
-  configuration = ide_build_pipeline_get_config (pipeline);
-  toolchain = ide_build_pipeline_get_toolchain (pipeline);
+  configuration = ide_pipeline_get_config (pipeline);
+  toolchain = ide_pipeline_get_toolchain (pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);
   host_arg = g_strdup_printf ("--host=%s", ide_triplet_get_full_name (triplet));
   ide_subprocess_launcher_push_argv (launcher, host_arg);
@@ -285,7 +285,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
         ide_subprocess_launcher_push_argv (launcher, argv[i]);
     }
 
-  stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                         "name", _("Configuring project"),
                         "launcher", launcher,
                         NULL);
@@ -309,30 +309,30 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_CONFIGURE, 0, stage);
+  stage_id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_CONFIGURE, 0, stage);
 
-  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
+  ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
 }
 
 static gboolean
 register_make_stage (IdeAutotoolsPipelineAddin  *self,
-                     IdeBuildPipeline           *pipeline,
-                     IdeBuildPhase               phase,
+                     IdePipeline           *pipeline,
+                     IdePipelinePhase               phase,
                      GError                    **error,
                      const gchar                *target,
                      const gchar                *clean_target)
 {
-  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autoptr(IdePipelineStage) stage = NULL;
   IdeConfig *config;
   guint stage_id;
   gint parallel;
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  config = ide_build_pipeline_get_config (pipeline);
+  config = ide_pipeline_get_config (pipeline);
   parallel = ide_config_get_parallelism (config);
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_MAKE_STAGE,
@@ -342,40 +342,40 @@ register_make_stage (IdeAutotoolsPipelineAddin  *self,
                         "target", target,
                         NULL);
 
-  stage_id = ide_build_pipeline_attach (pipeline, phase, 0, stage);
-  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
+  stage_id = ide_pipeline_attach (pipeline, phase, 0, stage);
+  ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
 }
 
 static gboolean
 register_makecache_stage (IdeAutotoolsPipelineAddin  *self,
-                          IdeBuildPipeline           *pipeline,
+                          IdePipeline           *pipeline,
                           GError                    **error)
 {
-  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autoptr(IdePipelineStage) stage = NULL;
   guint stage_id;
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   if (NULL == (stage = ide_autotools_makecache_stage_new_for_pipeline (pipeline, error)))
     return FALSE;
 
-  ide_build_stage_set_name (stage, _("Caching build commands"));
+  ide_pipeline_stage_set_name (stage, _("Caching build commands"));
 
-  stage_id = ide_build_pipeline_attach (pipeline,
-                                        IDE_BUILD_PHASE_CONFIGURE | IDE_BUILD_PHASE_AFTER,
+  stage_id = ide_pipeline_attach (pipeline,
+                                        IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
                                         0,
                                         stage);
-  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
+  ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
 }
 
 static void
-ide_autotools_pipeline_addin_load (IdeBuildPipelineAddin *addin,
-                                   IdeBuildPipeline      *pipeline)
+ide_autotools_pipeline_addin_load (IdePipelineAddin *addin,
+                                   IdePipeline      *pipeline)
 {
   IdeAutotoolsPipelineAddin *self = (IdeAutotoolsPipelineAddin *)addin;
   g_autoptr(GError) error = NULL;
@@ -383,7 +383,7 @@ ide_autotools_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   IdeContext *context;
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (addin));
   build_system = ide_build_system_from_context (context);
@@ -394,8 +394,8 @@ ide_autotools_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (!register_autoreconf_stage (self, pipeline, &error) ||
       !register_configure_stage (self, pipeline, &error) ||
       !register_makecache_stage (self, pipeline, &error) ||
-      !register_make_stage (self, pipeline, IDE_BUILD_PHASE_BUILD, &error, "all", "clean") ||
-      !register_make_stage (self, pipeline, IDE_BUILD_PHASE_INSTALL, &error, "install", NULL))
+      !register_make_stage (self, pipeline, IDE_PIPELINE_PHASE_BUILD, &error, "all", "clean") ||
+      !register_make_stage (self, pipeline, IDE_PIPELINE_PHASE_INSTALL, &error, "install", NULL))
     {
       g_assert (error != NULL);
       g_warning ("Failed to create autotools launcher: %s", error->message);
@@ -406,7 +406,7 @@ ide_autotools_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 /* GObject Boilerplate */
 
 static void
-addin_iface_init (IdeBuildPipelineAddinInterface *iface)
+addin_iface_init (IdePipelineAddinInterface *iface)
 {
   iface->load = ide_autotools_pipeline_addin_load;
 }
@@ -414,7 +414,7 @@ addin_iface_init (IdeBuildPipelineAddinInterface *iface)
 struct _IdeAutotoolsPipelineAddin { IdeObject parent; };
 
 G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsPipelineAddin, ide_autotools_pipeline_addin, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN, addin_iface_init))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))
 
 static void
 ide_autotools_pipeline_addin_class_init (IdeAutotoolsPipelineAddinClass *klass)

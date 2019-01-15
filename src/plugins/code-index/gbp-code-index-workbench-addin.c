@@ -151,7 +151,7 @@ unregister_notification (GbpCodeIndexWorkbenchAddin *self)
 static gboolean
 delay_until_build_completes (GbpCodeIndexWorkbenchAddin *self)
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
@@ -168,9 +168,9 @@ delay_until_build_completes (GbpCodeIndexWorkbenchAddin *self)
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   pipeline = ide_build_manager_get_pipeline (build_manager);
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  if (pipeline == NULL || !ide_build_pipeline_has_configured (pipeline))
+  if (pipeline == NULL || !ide_pipeline_has_configured (pipeline))
     {
       self->delayed_build_reqeusted = TRUE;
       return TRUE;
@@ -295,7 +295,7 @@ gbp_code_index_workbench_addin_build (GbpCodeIndexWorkbenchAddin *self,
   /*
    * If the build system is currently failed, then don't try to
    * do any indexing now. We'll wait for a successful build that
-   * at least reaches IDE_BUILD_PHASE_CONFIGURE and then trigger
+   * at least reaches IDE_PIPELINE_PHASE_CONFIGURE and then trigger
    * after that.
    */
   if (delay_until_build_completes (self))
@@ -425,16 +425,16 @@ gbp_code_index_workbench_addin_file_renamed (GbpCodeIndexWorkbenchAddin *self,
 
 static void
 gbp_code_index_workbench_addin_build_finished (GbpCodeIndexWorkbenchAddin *self,
-                                               IdeBuildPipeline           *pipeline,
+                                               IdePipeline           *pipeline,
                                                IdeBuildManager            *build_manager)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   if (self->delayed_build_reqeusted &&
-      ide_build_pipeline_has_configured (pipeline))
+      ide_pipeline_has_configured (pipeline))
     {
       g_autoptr(GFile) workdir = NULL;
       IdeContext *context;

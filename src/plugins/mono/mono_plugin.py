@@ -11,7 +11,7 @@ _ERROR_REGEX = ("(?<filename>[a-zA-Z0-9\\-\\.\\/_]+.cs)" +
                 "(?<code>CS[0-9]+): " +
                 "(?<message>.*)")
 
-class MonoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+class MonoPipelineAddin(Ide.Object, Ide.PipelineAddin):
 
     def do_load(self, pipeline):
         self.error_format = pipeline.add_error_format(_ERROR_REGEX, GLib.RegexCompileFlags.OPTIMIZE)

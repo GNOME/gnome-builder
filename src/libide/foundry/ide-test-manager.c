@@ -27,7 +27,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-build-manager.h"
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-foundry-compat.h"
 #include "ide-test-manager.h"
 #include "ide-test-private.h"
@@ -701,7 +701,7 @@ ide_test_manager_run_async (IdeTestManager      *self,
                             gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeTestProvider *provider;
   IdeBuildManager *build_manager;
   IdeContext *context;

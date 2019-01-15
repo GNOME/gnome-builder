@@ -91,7 +91,7 @@ gbp_meson_build_system_ensure_config_async (GbpMesonBuildSystem *self,
   build_manager = ide_build_manager_from_context (context);
 
   ide_build_manager_execute_async (build_manager,
-                                   IDE_BUILD_PHASE_CONFIGURE,
+                                   IDE_PIPELINE_PHASE_CONFIGURE,
                                    NULL,
                                    cancellable,
                                    gbp_meson_build_system_ensure_config_cb,
@@ -192,7 +192,7 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
   g_autoptr(GFile) file = NULL;
   g_autofree gchar *path = NULL;
   IdeBuildManager *build_manager;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   GCancellable *cancellable;
   IdeContext *context;
 
@@ -220,7 +220,7 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
       return;
     }
 
-  path = ide_build_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
+  path = ide_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
 
   if (!g_file_test (path, G_FILE_TEST_IS_REGULAR))
     {
@@ -254,7 +254,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *path = NULL;
   IdeBuildManager *build_manager;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeContext *context;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
@@ -293,7 +293,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
    * here about whether or not it is setup fully. It may be delayed due
    * to device initialization.
    */
-  if (pipeline == NULL || !ide_build_pipeline_is_ready (pipeline))
+  if (pipeline == NULL || !ide_pipeline_is_ready (pipeline))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -302,7 +302,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
       return;
     }
 
-  path = ide_build_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
+  path = ide_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
 
   if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
     {
@@ -653,21 +653,21 @@ gbp_meson_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *build_
 
 static gchar *
 gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
-                                     IdeBuildPipeline *pipeline)
+                                     IdePipeline *pipeline)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
   IdeConfig *config;
   IdeBuildLocality locality;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   /*
    * If the build configuration requires that we do an in tree build (yuck),
    * then use "_build" as our build directory to build in-tree.
    */
 
-  config = ide_build_pipeline_get_config (pipeline);
+  config = ide_pipeline_get_config (pipeline);
   locality = ide_config_get_locality (config);
 
   if ((locality & IDE_BUILD_LOCALITY_OUT_OF_TREE) == 0)

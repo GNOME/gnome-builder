@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-test-provider.h"
 #include "ide-test-private.h"
 
@@ -49,7 +49,7 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_test_provider_real_run_async (IdeTestProvider     *self,
                                   IdeTest             *test,
-                                  IdeBuildPipeline    *pipeline,
+                                  IdePipeline    *pipeline,
                                   GCancellable        *cancellable,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
@@ -266,14 +266,14 @@ ide_test_provider_clear (IdeTestProvider *self)
 void
 ide_test_provider_run_async (IdeTestProvider     *self,
                              IdeTest             *test,
-                             IdeBuildPipeline    *pipeline,
+                             IdePipeline    *pipeline,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
                              gpointer             user_data)
 {
   g_return_if_fail (IDE_IS_TEST_PROVIDER (self));
   g_return_if_fail (IDE_IS_TEST (test));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_TEST_PROVIDER_GET_CLASS (self)->run_async (self,

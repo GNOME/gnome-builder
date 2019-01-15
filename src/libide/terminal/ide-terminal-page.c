@@ -183,7 +183,7 @@ gbp_terminal_respawn (IdeTerminalPage *self,
   g_autoptr(GError) error = NULL;
   g_autofree gchar *workpath = NULL;
   g_autofree gchar *shell = NULL;
-  IdeBuildPipeline *pipeline = NULL;
+  IdePipeline *pipeline = NULL;
   IdeWorkbench *workbench;
   IdeContext *context;
   VtePty *pty = NULL;
@@ -269,8 +269,8 @@ gbp_terminal_respawn (IdeTerminalPage *self,
 
           if (pipeline != NULL)
             {
-              ide_environment_setenv (env, "BUILDDIR", ide_build_pipeline_get_builddir (pipeline));
-              ide_environment_setenv (env, "SRCDIR", ide_build_pipeline_get_srcdir (pipeline));
+              ide_environment_setenv (env, "BUILDDIR", ide_pipeline_get_builddir (pipeline));
+              ide_environment_setenv (env, "SRCDIR", ide_pipeline_get_srcdir (pipeline));
             }
 
           ide_runner_run_async (runner,
@@ -311,8 +311,8 @@ gbp_terminal_respawn (IdeTerminalPage *self,
 
   if (pipeline != NULL)
     {
-      ide_subprocess_launcher_setenv (launcher, "BUILDDIR", ide_build_pipeline_get_builddir (pipeline), TRUE);
-      ide_subprocess_launcher_setenv (launcher, "SRCDIR", ide_build_pipeline_get_srcdir (pipeline), TRUE);
+      ide_subprocess_launcher_setenv (launcher, "BUILDDIR", ide_pipeline_get_builddir (pipeline), TRUE);
+      ide_subprocess_launcher_setenv (launcher, "SRCDIR", ide_pipeline_get_srcdir (pipeline), TRUE);
     }
 
   tty_fd = -1;

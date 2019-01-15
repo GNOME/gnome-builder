@@ -84,7 +84,7 @@ gbp_gdb_debugger_parent_set (IdeObject *object,
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)object;
   IdeBuildManager *build_manager;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   const gchar *builddir;
   IdeContext *context;
 
@@ -104,7 +104,7 @@ gbp_gdb_debugger_parent_set (IdeObject *object,
 
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
-  builddir = ide_build_pipeline_get_builddir (pipeline);
+  builddir = ide_pipeline_get_builddir (pipeline);
 
   g_clear_object (&self->builddir);
   self->builddir = g_file_new_for_path (builddir);

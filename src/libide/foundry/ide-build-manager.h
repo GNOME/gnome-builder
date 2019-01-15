@@ -26,7 +26,7 @@
 
 #include <libide-core.h>
 
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 
 G_BEGIN_DECLS
 
@@ -58,12 +58,12 @@ void              ide_build_manager_invalidate          (IdeBuildManager      *s
 IDE_AVAILABLE_IN_3_32
 void              ide_build_manager_cancel              (IdeBuildManager      *self);
 IDE_AVAILABLE_IN_3_32
-IdeBuildPipeline *ide_build_manager_get_pipeline        (IdeBuildManager      *self);
+IdePipeline *ide_build_manager_get_pipeline        (IdeBuildManager      *self);
 IDE_AVAILABLE_IN_3_32
-IdeBuildPipeline *ide_build_manager_ref_pipeline        (IdeBuildManager      *self);
+IdePipeline *ide_build_manager_ref_pipeline        (IdeBuildManager      *self);
 IDE_AVAILABLE_IN_3_32
 void              ide_build_manager_rebuild_async       (IdeBuildManager      *self,
-                                                         IdeBuildPhase         phase,
+                                                         IdePipelinePhase         phase,
                                                          GPtrArray            *targets,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
@@ -74,7 +74,7 @@ gboolean          ide_build_manager_rebuild_finish      (IdeBuildManager      *s
                                                          GError              **error);
 IDE_AVAILABLE_IN_3_32
 void              ide_build_manager_execute_async       (IdeBuildManager      *self,
-                                                         IdeBuildPhase         phase,
+                                                         IdePipelinePhase         phase,
                                                          GPtrArray            *targets,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
@@ -85,7 +85,7 @@ gboolean          ide_build_manager_execute_finish      (IdeBuildManager      *s
                                                          GError              **error);
 IDE_AVAILABLE_IN_3_32
 void              ide_build_manager_clean_async         (IdeBuildManager      *self,
-                                                         IdeBuildPhase         phase,
+                                                         IdePipelinePhase         phase,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
                                                          gpointer              user_data);

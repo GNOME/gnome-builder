@@ -26,7 +26,7 @@
 #include <libide-editor.h>
 #include <libide-foundry.h>
 
-#include "ide-build-stage-private.h"
+#include "ide-pipeline-stage-private.h"
 
 #include "gbp-buildui-pane.h"
 #include "gbp-buildui-stage-row.h"
@@ -37,7 +37,7 @@ struct _GbpBuilduiPane
 
   /* Owned references */
   GHashTable          *diags_hash;
-  IdeBuildPipeline    *pipeline;
+  IdePipeline    *pipeline;
   DzlSignalGroup      *pipeline_signals;
 
   /* Template widgets */
@@ -91,7 +91,7 @@ set_errors_label (GbpBuilduiPane *self,
 static void
 gbp_buildui_pane_diagnostic (GbpBuilduiPane   *self,
                              IdeDiagnostic    *diagnostic,
-                             IdeBuildPipeline *pipeline)
+                             IdePipeline *pipeline)
 {
   IdeDiagnosticSeverity severity;
   guint hash;
@@ -100,7 +100,7 @@ gbp_buildui_pane_diagnostic (GbpBuilduiPane   *self,
 
   g_assert (GBP_IS_BUILDUI_PANE (self));
   g_assert (diagnostic != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   severity = ide_diagnostic_get_severity (diagnostic);
 
@@ -173,15 +173,15 @@ gbp_buildui_pane_update_running_time (GbpBuilduiPane *self)
 
 static void
 gbp_buildui_pane_started (GbpBuilduiPane   *self,
-                          IdeBuildPhase     phase,
-                          IdeBuildPipeline *pipeline)
+                          IdePipelinePhase     phase,
+                          IdePipeline *pipeline)
 {
   IDE_ENTRY;
 
   g_assert (GBP_IS_BUILDUI_PANE (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  if (phase >= IDE_BUILD_PHASE_BUILD)
+  if (phase >= IDE_PIPELINE_PHASE_BUILD)
     {
       self->error_count = 0;
       self->warning_count = 0;
@@ -200,9 +200,9 @@ static GtkWidget *
 gbp_buildui_pane_create_stage_row_cb (gpointer data,
                                      gpointer user_data)
 {
-  IdeBuildStage *stage = data;
+  IdePipelineStage *stage = data;
 
-  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
   g_assert (GBP_IS_BUILDUI_PANE (user_data));
 
   return gbp_buildui_stage_row_new (stage);
@@ -210,11 +210,11 @@ gbp_buildui_pane_create_stage_row_cb (gpointer data,
 
 static void
 gbp_buildui_pane_bind_pipeline (GbpBuilduiPane   *self,
-                                IdeBuildPipeline *pipeline,
+                                IdePipeline *pipeline,
                                 DzlSignalGroup   *signals)
 {
   g_assert (GBP_IS_BUILDUI_PANE (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (G_IS_LIST_MODEL (pipeline));
   g_assert (self->pipeline == NULL);
   g_assert (DZL_IS_SIGNAL_GROUP (signals));
@@ -242,7 +242,7 @@ gbp_buildui_pane_unbind_pipeline (GbpBuilduiPane *self,
                                   DzlSignalGroup *signals)
 {
   g_return_if_fail (GBP_IS_BUILDUI_PANE (self));
-  g_return_if_fail (!self->pipeline || IDE_IS_BUILD_PIPELINE (self->pipeline));
+  g_return_if_fail (!self->pipeline || IDE_IS_PIPELINE (self->pipeline));
 
   g_clear_object (&self->pipeline);
 
@@ -259,10 +259,10 @@ gbp_buildui_pane_unbind_pipeline (GbpBuilduiPane *self,
 
 void
 gbp_buildui_pane_set_pipeline (GbpBuilduiPane   *self,
-                               IdeBuildPipeline *pipeline)
+                               IdePipeline *pipeline)
 {
   g_return_if_fail (GBP_IS_BUILDUI_PANE (self));
-  g_return_if_fail (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
+  g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
 
   if (self->pipeline_signals != NULL)
     dzl_signal_group_set_target (self->pipeline_signals, pipeline);
@@ -361,7 +361,7 @@ gbp_buildui_pane_notify_message (GbpBuilduiPane  *self,
                                  IdeBuildManager *build_manager)
 {
   g_autofree gchar *message = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   GtkStyleContext *style;
 
   g_assert (GBP_IS_BUILDUI_PANE (self));
@@ -374,7 +374,7 @@ gbp_buildui_pane_notify_message (GbpBuilduiPane  *self,
 
   style = gtk_widget_get_style_context (GTK_WIDGET (self->build_status_label));
 
-  if (ide_build_pipeline_get_phase (pipeline) == IDE_BUILD_PHASE_FAILED)
+  if (ide_pipeline_get_phase (pipeline) == IDE_PIPELINE_PHASE_FAILED)
     gtk_style_context_add_class (style, GTK_STYLE_CLASS_ERROR);
   else
     gtk_style_context_remove_class (style, GTK_STYLE_CLASS_ERROR);
@@ -507,8 +507,8 @@ gbp_buildui_pane_stage_row_activated (GbpBuilduiPane     *self,
                                       GbpBuilduiStageRow *row,
                                       GtkListBox         *list_box)
 {
-  IdeBuildStage *stage;
-  IdeBuildPhase phase;
+  IdePipelineStage *stage;
+  IdePipelinePhase phase;
 
   g_assert (GBP_IS_BUILDUI_PANE (self));
   g_assert (GBP_IS_BUILDUI_STAGE_ROW (row));
@@ -518,12 +518,12 @@ gbp_buildui_pane_stage_row_activated (GbpBuilduiPane     *self,
     return;
 
   stage = gbp_buildui_stage_row_get_stage (row);
-  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
 
-  phase = _ide_build_stage_get_phase (stage);
+  phase = _ide_pipeline_stage_get_phase (stage);
 
-  ide_build_pipeline_build_async (self->pipeline,
-                                  phase & IDE_BUILD_PHASE_MASK,
+  ide_pipeline_build_async (self->pipeline,
+                                  phase & IDE_PIPELINE_PHASE_MASK,
                                   NULL, NULL, NULL);
 }
 
@@ -596,7 +596,7 @@ gbp_buildui_pane_class_init (GbpBuilduiPaneClass *klass)
     g_param_spec_object ("pipeline",
                          NULL,
                          NULL,
-                         IDE_TYPE_BUILD_PIPELINE,
+                         IDE_TYPE_PIPELINE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -625,7 +625,7 @@ gbp_buildui_pane_init (GbpBuilduiPane *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
+  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_PIPELINE);
 
   g_signal_connect_object (self->pipeline_signals,
                            "bind",

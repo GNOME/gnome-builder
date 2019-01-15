@@ -196,19 +196,19 @@ static void
 invalidate_makecache_stage (gpointer data,
                             gpointer user_data)
 {
-  IdeBuildStage *stage = data;
+  IdePipelineStage *stage = data;
 
   if (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (stage))
-    ide_build_stage_set_completed (stage, FALSE);
+    ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
 static void
 evict_makecache (IdeContext *context)
 {
   IdeBuildManager *build_manager = ide_build_manager_from_context (context);
-  IdeBuildPipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+  IdePipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  ide_build_pipeline_foreach_stage (pipeline, invalidate_makecache_stage, NULL);
+  ide_pipeline_foreach_stage (pipeline, invalidate_makecache_stage, NULL);
 }
 
 static gboolean
@@ -332,7 +332,7 @@ find_makecache_stage (gpointer data,
                       gpointer user_data)
 {
   IdeMakecache **makecache = user_data;
-  IdeBuildStage *stage = data;
+  IdePipelineStage *stage = data;
 
   if (*makecache != NULL)
     return;
@@ -376,7 +376,7 @@ ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeMakecache *makecache = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   GCancellable *cancellable;
   GFile *file;
 
@@ -407,7 +407,7 @@ ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
    * into the appropriate build target).
    */
 
-  ide_build_pipeline_foreach_stage (pipeline, find_makecache_stage, &makecache);
+  ide_pipeline_foreach_stage (pipeline, find_makecache_stage, &makecache);
 
   if (makecache != NULL)
     {
@@ -463,7 +463,7 @@ ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_sys
   build_manager = ide_build_manager_from_context (context);
 
   ide_build_manager_execute_async (build_manager,
-                                   IDE_BUILD_PHASE_CONFIGURE,
+                                   IDE_PIPELINE_PHASE_CONFIGURE,
                                    NULL,
                                    cancellable,
                                    ide_autotools_build_system_get_build_flags_execute_cb,
@@ -485,7 +485,7 @@ ide_autotools_build_system_get_build_flags_finish (IdeBuildSystem  *build_system
 
 static gchar *
 ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
-                                         IdeBuildPipeline *pipeline)
+                                         IdePipeline *pipeline)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
   g_autoptr(GFile) makefile = NULL;
@@ -494,7 +494,7 @@ ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
   GFile *workdir;
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   /*
    * If there is a Makefile in the build directory, then the project has been

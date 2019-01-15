@@ -75,7 +75,7 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
                                               GParamSpec               *pspec,
                                               IdeBuildManager          *build_manager)
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   const gchar *device_name = NULL;
   const gchar *runtime_name = NULL;
   const gchar *config_id = "";
@@ -87,9 +87,9 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
 
   if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
     {
-      IdeConfig *config = ide_build_pipeline_get_config (pipeline);
+      IdeConfig *config = ide_pipeline_get_config (pipeline);
       IdeRuntime *runtime = ide_config_get_runtime (config);
-      IdeDevice *device = ide_build_pipeline_get_device (pipeline);
+      IdeDevice *device = ide_pipeline_get_device (pipeline);
 
       config_id = ide_config_get_id (config);
       display_name = ide_config_get_display_name (config);
@@ -179,14 +179,14 @@ gbp_buildui_omni_bar_section_notify_message (GbpBuilduiOmniBarSection *self,
 
 static void
 gbp_buildui_omni_bar_section_build_started (GbpBuilduiOmniBarSection *self,
-                                            IdeBuildPipeline         *pipeline,
+                                            IdePipeline         *pipeline,
                                             IdeBuildManager          *build_manager)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_OMNI_BAR_SECTION (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   gtk_revealer_set_reveal_child (self->popover_details_revealer, TRUE);
@@ -199,14 +199,14 @@ gbp_buildui_omni_bar_section_build_started (GbpBuilduiOmniBarSection *self,
 
 static void
 gbp_buildui_omni_bar_section_build_failed (GbpBuilduiOmniBarSection *self,
-                                           IdeBuildPipeline         *pipeline,
+                                           IdePipeline         *pipeline,
                                            IdeBuildManager          *build_manager)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_OMNI_BAR_SECTION (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   gtk_label_set_label (self->popover_build_result_label, _("Failed"));
@@ -217,14 +217,14 @@ gbp_buildui_omni_bar_section_build_failed (GbpBuilduiOmniBarSection *self,
 
 static void
 gbp_buildui_omni_bar_section_build_finished (GbpBuilduiOmniBarSection *self,
-                                             IdeBuildPipeline         *pipeline,
+                                             IdePipeline         *pipeline,
                                              IdeBuildManager          *build_manager)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_OMNI_BAR_SECTION (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   gtk_label_set_label (self->popover_build_result_label, _("Success"));

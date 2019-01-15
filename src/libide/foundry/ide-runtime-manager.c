@@ -27,7 +27,7 @@
 #include <libide-threading.h>
 #include <libpeas/peas.h>
 
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-build-private.h"
 #include "ide-config.h"
 #include "ide-device.h"
@@ -52,7 +52,7 @@ typedef struct
 
 typedef struct
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   gchar            *runtime_id;
 } PrepareState;
 
@@ -334,7 +334,7 @@ ide_runtime_manager_prepare_cb (GObject      *object,
 
 void
 _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
-                                    IdeBuildPipeline    *pipeline,
+                                    IdePipeline    *pipeline,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
@@ -348,10 +348,10 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  config = ide_build_pipeline_get_config (pipeline);
+  config = ide_pipeline_get_config (pipeline);
   runtime_id = ide_config_get_runtime_id (config);
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -436,7 +436,7 @@ _ide_runtime_manager_prepare_finish (IdeRuntimeManager  *self,
   g_return_val_if_fail (!ret || IDE_IS_RUNTIME (ret), FALSE);
 
   if (IDE_IS_RUNTIME (ret))
-    _ide_build_pipeline_set_runtime (state->pipeline, ret);
+    _ide_pipeline_set_runtime (state->pipeline, ret);
 
   IDE_RETURN (ret != NULL);
 }

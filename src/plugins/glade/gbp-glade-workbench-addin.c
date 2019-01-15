@@ -223,11 +223,11 @@ gbp_glade_workbench_addin_open_finish (IdeWorkbenchAddin  *addin,
 }
 
 static void
-on_build_pipeline_changed_cb (GbpGladeWorkbenchAddin *self,
+on_pipeline_changed_cb (GbpGladeWorkbenchAddin *self,
                               GParamSpec             *pspec,
                               IdeBuildManager        *build_manager)
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   GHashTableIter iter;
   const gchar *key;
 
@@ -248,8 +248,8 @@ on_build_pipeline_changed_cb (GbpGladeWorkbenchAddin *self,
 
   if (pipeline != NULL)
     {
-      IdeConfig *config = ide_build_pipeline_get_config (pipeline);
-      IdeRuntime *runtime = ide_build_pipeline_get_runtime (pipeline);
+      IdeConfig *config = ide_pipeline_get_config (pipeline);
+      IdeRuntime *runtime = ide_pipeline_get_runtime (pipeline);
       g_autoptr(GFile) translated = NULL;
       g_autoptr(GFile) catalog_file = NULL;
 
@@ -335,12 +335,12 @@ gbp_glade_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
   self->build_manager = g_object_ref (build_manager);
   g_signal_connect_object (self->build_manager,
                            "notify::pipeline",
-                           G_CALLBACK (on_build_pipeline_changed_cb),
+                           G_CALLBACK (on_pipeline_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
   /* Update catalogs */
-  on_build_pipeline_changed_cb (self, NULL, build_manager);
+  on_pipeline_changed_cb (self, NULL, build_manager);
 }
 
 static void
@@ -357,7 +357,7 @@ gbp_glade_workbench_addin_unload (IdeWorkbenchAddin *addin,
   if (self->build_manager != NULL)
     {
       g_signal_handlers_disconnect_by_func (self->build_manager,
-                                            G_CALLBACK (on_build_pipeline_changed_cb),
+                                            G_CALLBACK (on_pipeline_changed_cb),
                                             self);
       g_clear_object (&self->build_manager);
     }

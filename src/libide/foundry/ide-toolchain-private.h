@@ -27,7 +27,7 @@
 G_BEGIN_DECLS
 
 void     _ide_toolchain_manager_prepare_async  (IdeToolchainManager  *self,
-                                                IdeBuildPipeline     *pipeline,
+                                                IdePipeline     *pipeline,
                                                 GCancellable         *cancellable,
                                                 GAsyncReadyCallback   callback,
                                                 gpointer              user_data);

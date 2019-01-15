@@ -64,13 +64,13 @@ find_builddir (IdeWorkspace *workspace)
 {
   IdeContext *context;
   IdeBuildManager *build_manager;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   const gchar *builddir = NULL;
 
   if ((context = ide_workspace_get_context (workspace)) &&
       (build_manager = ide_build_manager_from_context (context)) &&
       (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
-      (builddir = ide_build_pipeline_get_builddir (pipeline)) &&
+      (builddir = ide_pipeline_get_builddir (pipeline)) &&
       g_file_test (builddir, G_FILE_TEST_IS_DIR))
     return g_strdup (builddir);
 

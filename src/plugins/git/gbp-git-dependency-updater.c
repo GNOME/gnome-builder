@@ -36,9 +36,9 @@ find_submodule_stage_cb (gpointer data,
 {
   GbpGitSubmoduleStage **stage = user_data;
 
-  g_assert (IDE_IS_BUILD_STAGE (data));
+  g_assert (IDE_IS_PIPELINE_STAGE (data));
   g_assert (stage != NULL);
-  g_assert (*stage == NULL || IDE_IS_BUILD_STAGE (*stage));
+  g_assert (*stage == NULL || IDE_IS_PIPELINE_STAGE (*stage));
 
   if (GBP_IS_GIT_SUBMODULE_STAGE (data))
     *stage = GBP_GIT_SUBMODULE_STAGE (data);
@@ -75,7 +75,7 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
 {
   g_autoptr(IdeTask) task = NULL;
   GbpGitSubmoduleStage *stage = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *manager;
   IdeContext *context;
 
@@ -92,7 +92,7 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
   manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (manager);
 
-  g_assert (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
 
   if (pipeline == NULL)
     {
@@ -104,7 +104,7 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
     }
 
   /* Find the submodule stage and tell it to download updates one time */
-  ide_build_pipeline_foreach_stage (pipeline, find_submodule_stage_cb, &stage);
+  ide_pipeline_foreach_stage (pipeline, find_submodule_stage_cb, &stage);
 
   if (stage == NULL)
     {
@@ -116,7 +116,7 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
   gbp_git_submodule_stage_force_update (stage);
 
   /* Ensure downloads and everything past it is invalidated */
-  ide_build_pipeline_invalidate_phase (pipeline, IDE_BUILD_PHASE_DOWNLOADS);
+  ide_pipeline_invalidate_phase (pipeline, IDE_PIPELINE_PHASE_DOWNLOADS);
 
   /* Start building all the way up to the project configure so that
    * the user knows if the updates broke their configuration or anything.
@@ -125,7 +125,7 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
    *       race with other updaters.
    */
   ide_build_manager_rebuild_async (manager,
-                                   IDE_BUILD_PHASE_CONFIGURE,
+                                   IDE_PIPELINE_PHASE_CONFIGURE,
                                    NULL,
                                    NULL,
                                    gbp_git_dependency_updater_update_cb,

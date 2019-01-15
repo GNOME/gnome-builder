@@ -54,7 +54,7 @@ class MavenBuildSystem(Ide.Object, Ide.BuildSystem):
     def do_get_priority(self):
         return 2000
 
-class MavenPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+class MavenPipelineAddin(Ide.Object, Ide.PipelineAddin):
     """
     The MavenPipelineAddin is responsible for creating the necessary build
     stages and attaching them to phases of the build pipeline.
@@ -85,20 +85,20 @@ class MavenPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher.push_argv("mvn")
         clean_launcher.push_argv('clean')
 
-        build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.connect(Ide.PipelinePhase.BUILD, 0, build_stage))
 
         install_launcher = pipeline.create_launcher()
         install_launcher.set_cwd(srcdir)
         install_launcher.push_argv('mvn')
         install_launcher.push_argv('install')
         install_launcher.push_argv('-Dmaven.test.skip=true')
-        install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        install_stage = Ide.PipelineStageLauncher.new(context, install_launcher)
         install_stage.set_name(_("Installing project"))
-        self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
+        self.track(pipeline.connect(Ide.PipelinePhase.INSTALL, 0, install_stage))
 
     def _query(self, stage, pipeline, cancellable):
         stage.set_completed(False)

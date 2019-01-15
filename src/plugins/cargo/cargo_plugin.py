@@ -69,7 +69,7 @@ def locate_cargo_from_config(config):
 
     return cargo
 
-class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
     """
     The CargoPipelineAddin is responsible for creating the necessary build
     stages and attaching them to phases of the build pipeline.
@@ -104,7 +104,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         fetch_launcher.push_argv('fetch')
         fetch_launcher.push_argv('--manifest-path')
         fetch_launcher.push_argv(cargo_toml)
-        self.track(pipeline.attach_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
+        self.track(pipeline.attach_launcher(Ide.PipelinePhase.DOWNLOADS, 0, fetch_launcher))
 
         # Now create our launcher to build the project
         build_launcher = pipeline.create_launcher()
@@ -139,11 +139,11 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher.push_argv('--manifest-path')
         clean_launcher.push_argv(cargo_toml)
 
-        build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.attach(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
     def do_unload(self, pipeline):
         if self.error_format_id:

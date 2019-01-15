@@ -1,4 +1,4 @@
-/* ide-build-stage-mkdirs.c
+/* ide-pipeline-stage-mkdirs.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-build-stage-mkdirs"
+#define G_LOG_DOMAIN "ide-pipeline-stage-mkdirs"
 
 #include "config.h"
 
@@ -29,8 +29,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "ide-build-pipeline.h"
-#include "ide-build-stage-mkdirs.h"
+#include "ide-pipeline.h"
+#include "ide-pipeline-stage-mkdirs.h"
 
 typedef struct
 {
@@ -43,9 +43,9 @@ typedef struct
 typedef struct
 {
   GArray *paths;
-} IdeBuildStageMkdirsPrivate;
+} IdePipelineStageMkdirsPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildStageMkdirs, ide_build_stage_mkdirs, IDE_TYPE_BUILD_STAGE)
+G_DEFINE_TYPE_WITH_PRIVATE (IdePipelineStageMkdirs, ide_pipeline_stage_mkdirs, IDE_TYPE_PIPELINE_STAGE)
 
 static void
 clear_path (gpointer data)
@@ -56,18 +56,18 @@ clear_path (gpointer data)
 }
 
 static void
-ide_build_stage_mkdirs_query (IdeBuildStage    *stage,
-                              IdeBuildPipeline *pipeline,
+ide_pipeline_stage_mkdirs_query (IdePipelineStage    *stage,
+                              IdePipeline *pipeline,
                               GPtrArray        *targets,
                               GCancellable     *cancellable)
 {
-  IdeBuildStageMkdirs *self = (IdeBuildStageMkdirs *)stage;
-  IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
+  IdePipelineStageMkdirs *self = (IdePipelineStageMkdirs *)stage;
+  IdePipelineStageMkdirsPrivate *priv = ide_pipeline_stage_mkdirs_get_instance_private (self);
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_STAGE_MKDIRS (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE_STAGE_MKDIRS (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   for (guint i = 0; i < priv->paths->len; i++)
@@ -76,31 +76,31 @@ ide_build_stage_mkdirs_query (IdeBuildStage    *stage,
 
       if (!g_file_test (path->path, G_FILE_TEST_EXISTS))
         {
-          ide_build_stage_set_completed (stage, FALSE);
+          ide_pipeline_stage_set_completed (stage, FALSE);
           IDE_EXIT;
         }
     }
 
-  ide_build_stage_set_completed (stage, TRUE);
+  ide_pipeline_stage_set_completed (stage, TRUE);
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_build_stage_mkdirs_execute (IdeBuildStage     *stage,
-                                IdeBuildPipeline  *pipeline,
+ide_pipeline_stage_mkdirs_build (IdePipelineStage     *stage,
+                                IdePipeline  *pipeline,
                                 GCancellable      *cancellable,
                                 GError           **error)
 {
-  IdeBuildStageMkdirs *self = (IdeBuildStageMkdirs *)stage;
-  IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
+  IdePipelineStageMkdirs *self = (IdePipelineStageMkdirs *)stage;
+  IdePipelineStageMkdirsPrivate *priv = ide_pipeline_stage_mkdirs_get_instance_private (self);
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_STAGE_MKDIRS (self));
+  g_assert (IDE_IS_PIPELINE_STAGE_MKDIRS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_build_stage_set_active (stage, TRUE);
+  ide_pipeline_stage_set_active (stage, TRUE);
 
   for (guint i = 0; i < priv->paths->len; i++)
     {
@@ -112,7 +112,7 @@ ide_build_stage_mkdirs_execute (IdeBuildStage     *stage,
         continue;
 
       message = g_strdup_printf ("Creating directory “%s”", path->path);
-      ide_build_stage_log (IDE_BUILD_STAGE (stage), IDE_BUILD_LOG_STDOUT, message, -1);
+      ide_pipeline_stage_log (IDE_PIPELINE_STAGE (stage), IDE_BUILD_LOG_STDOUT, message, -1);
 
       if (path->with_parents)
         r = g_mkdir_with_parents (path->path, path->mode);
@@ -129,22 +129,22 @@ ide_build_stage_mkdirs_execute (IdeBuildStage     *stage,
         }
     }
 
-  ide_build_stage_set_active (stage, FALSE);
+  ide_pipeline_stage_set_active (stage, FALSE);
 
   IDE_RETURN (TRUE);
 }
 
 static void
-ide_build_stage_mkdirs_reap (IdeBuildStage      *stage,
+ide_pipeline_stage_mkdirs_reap (IdePipelineStage      *stage,
                              DzlDirectoryReaper *reaper)
 {
-  IdeBuildStageMkdirs *self = (IdeBuildStageMkdirs *)stage;
-  IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
+  IdePipelineStageMkdirs *self = (IdePipelineStageMkdirs *)stage;
+  IdePipelineStageMkdirsPrivate *priv = ide_pipeline_stage_mkdirs_get_instance_private (self);
 
-  g_assert (IDE_IS_BUILD_STAGE_MKDIRS (self));
+  g_assert (IDE_IS_PIPELINE_STAGE_MKDIRS (self));
   g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
 
-  ide_build_stage_set_active (stage, TRUE);
+  ide_pipeline_stage_set_active (stage, TRUE);
 
   for (guint i = 0; i < priv->paths->len; i++)
     {
@@ -157,60 +157,60 @@ ide_build_stage_mkdirs_reap (IdeBuildStage      *stage,
         }
     }
 
-  ide_build_stage_set_active (stage, FALSE);
+  ide_pipeline_stage_set_active (stage, FALSE);
 }
 
 static void
-ide_build_stage_mkdirs_finalize (GObject *object)
+ide_pipeline_stage_mkdirs_finalize (GObject *object)
 {
-  IdeBuildStageMkdirs *self = (IdeBuildStageMkdirs *)object;
-  IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
+  IdePipelineStageMkdirs *self = (IdePipelineStageMkdirs *)object;
+  IdePipelineStageMkdirsPrivate *priv = ide_pipeline_stage_mkdirs_get_instance_private (self);
 
   g_clear_pointer (&priv->paths, g_array_unref);
 
-  G_OBJECT_CLASS (ide_build_stage_mkdirs_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_pipeline_stage_mkdirs_parent_class)->finalize (object);
 }
 
 static void
-ide_build_stage_mkdirs_class_init (IdeBuildStageMkdirsClass *klass)
+ide_pipeline_stage_mkdirs_class_init (IdePipelineStageMkdirsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeBuildStageClass *stage_class = IDE_BUILD_STAGE_CLASS (klass);
+  IdePipelineStageClass *stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
-  object_class->finalize = ide_build_stage_mkdirs_finalize;
+  object_class->finalize = ide_pipeline_stage_mkdirs_finalize;
 
-  stage_class->execute = ide_build_stage_mkdirs_execute;
-  stage_class->query = ide_build_stage_mkdirs_query;
-  stage_class->reap = ide_build_stage_mkdirs_reap;
+  stage_class->build = ide_pipeline_stage_mkdirs_build;
+  stage_class->query = ide_pipeline_stage_mkdirs_query;
+  stage_class->reap = ide_pipeline_stage_mkdirs_reap;
 }
 
 static void
-ide_build_stage_mkdirs_init (IdeBuildStageMkdirs *self)
+ide_pipeline_stage_mkdirs_init (IdePipelineStageMkdirs *self)
 {
-  IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
+  IdePipelineStageMkdirsPrivate *priv = ide_pipeline_stage_mkdirs_get_instance_private (self);
 
   priv->paths = g_array_new (FALSE, FALSE, sizeof (Path));
   g_array_set_clear_func (priv->paths, clear_path);
 }
 
-IdeBuildStage *
-ide_build_stage_mkdirs_new (IdeContext *context)
+IdePipelineStage *
+ide_pipeline_stage_mkdirs_new (IdeContext *context)
 {
-  return g_object_new (IDE_TYPE_BUILD_STAGE_MKDIRS,
+  return g_object_new (IDE_TYPE_PIPELINE_STAGE_MKDIRS,
                        NULL);
 }
 
 void
-ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
+ide_pipeline_stage_mkdirs_add_path (IdePipelineStageMkdirs *self,
                                  const gchar         *path,
                                  gboolean             with_parents,
                                  gint                 mode,
                                  gboolean             remove_on_rebuild)
 {
-  IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
+  IdePipelineStageMkdirsPrivate *priv = ide_pipeline_stage_mkdirs_get_instance_private (self);
   Path ele = { 0 };
 
-  g_return_if_fail (IDE_IS_BUILD_STAGE_MKDIRS (self));
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE_MKDIRS (self));
   g_return_if_fail (path != NULL);
 
   ele.path = g_strdup (path);

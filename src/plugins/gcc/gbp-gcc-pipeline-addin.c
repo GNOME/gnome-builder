@@ -40,41 +40,41 @@ struct _GbpGccPipelineAddin
 };
 
 static void
-gbp_gcc_pipeline_addin_load (IdeBuildPipelineAddin *addin,
-                             IdeBuildPipeline      *pipeline)
+gbp_gcc_pipeline_addin_load (IdePipelineAddin *addin,
+                             IdePipeline      *pipeline)
 {
   GbpGccPipelineAddin *self = (GbpGccPipelineAddin *)addin;
 
   g_assert (GBP_IS_GCC_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  self->error_format_id = ide_build_pipeline_add_error_format (pipeline,
+  self->error_format_id = ide_pipeline_add_error_format (pipeline,
                                                                ERROR_FORMAT_REGEX,
                                                                G_REGEX_CASELESS);
 }
 
 static void
-gbp_gcc_pipeline_addin_unload (IdeBuildPipelineAddin *addin,
-                               IdeBuildPipeline      *pipeline)
+gbp_gcc_pipeline_addin_unload (IdePipelineAddin *addin,
+                               IdePipeline      *pipeline)
 {
   GbpGccPipelineAddin *self = (GbpGccPipelineAddin *)addin;
 
   g_assert (GBP_IS_GCC_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
-  ide_build_pipeline_remove_error_format (pipeline, self->error_format_id);
+  ide_pipeline_remove_error_format (pipeline, self->error_format_id);
   self->error_format_id = 0;
 }
 
 static void
-addin_iface_init (IdeBuildPipelineAddinInterface *iface)
+addin_iface_init (IdePipelineAddinInterface *iface)
 {
   iface->load = gbp_gcc_pipeline_addin_load;
   iface->unload = gbp_gcc_pipeline_addin_unload;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpGccPipelineAddin, gbp_gcc_pipeline_addin, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN, addin_iface_init))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))
 
 static void gbp_gcc_pipeline_addin_class_init (GbpGccPipelineAddinClass *klass) { }
 static void gbp_gcc_pipeline_addin_init (GbpGccPipelineAddin *self) { }

@@ -24,14 +24,14 @@
 
 #include "ide-debug.h"
 
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-deploy-strategy.h"
 
 G_DEFINE_ABSTRACT_TYPE (IdeDeployStrategy, ide_deploy_strategy, IDE_TYPE_OBJECT)
 
 static void
 ide_deploy_strategy_real_load_async (IdeDeployStrategy   *self,
-                                     IdeBuildPipeline    *pipeline,
+                                     IdePipeline    *pipeline,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
@@ -58,7 +58,7 @@ ide_deploy_strategy_real_load_finish (IdeDeployStrategy  *self,
 
 static void
 ide_deploy_strategy_real_deploy_async (IdeDeployStrategy     *self,
-                                       IdeBuildPipeline      *pipeline,
+                                       IdePipeline      *pipeline,
                                        GFileProgressCallback  progress,
                                        gpointer               progress_data,
                                        GDestroyNotify         progress_data_destroy,
@@ -103,7 +103,7 @@ ide_deploy_strategy_init (IdeDeployStrategy *self)
 /**
  * ide_deploy_strategy_load_async:
  * @self: an #IdeDeployStrategy
- * @pipeline: an #IdeBuildPipeline
+ * @pipeline: an #IdePipeline
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: a callback to execute upon completion
  * @user_data: closure data for @callback
@@ -123,7 +123,7 @@ ide_deploy_strategy_init (IdeDeployStrategy *self)
  */
 void
 ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
-                                IdeBuildPipeline    *pipeline,
+                                IdePipeline    *pipeline,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
@@ -131,7 +131,7 @@ ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEPLOY_STRATEGY (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_DEPLOY_STRATEGY_GET_CLASS (self)->load_async (self, pipeline, cancellable, callback, user_data);
@@ -172,7 +172,7 @@ ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
 /**
  * ide_deploy_strategy_deploy_async:
  * @self: a #IdeDeployStrategy
- * @pipeline: an #IdeBuildPipeline
+ * @pipeline: an #IdePipeline
  * @progress: (nullable) (closure progress_data) (scope notified):
  *   a #GFileProgressCallback or %NULL
  * @progress_data: (nullable): closure data for @progress or %NULL
@@ -191,7 +191,7 @@ ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
  */
 void
 ide_deploy_strategy_deploy_async (IdeDeployStrategy     *self,
-                                  IdeBuildPipeline      *pipeline,
+                                  IdePipeline      *pipeline,
                                   GFileProgressCallback  progress,
                                   gpointer               progress_data,
                                   GDestroyNotify         progress_data_destroy,
@@ -202,7 +202,7 @@ ide_deploy_strategy_deploy_async (IdeDeployStrategy     *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEPLOY_STRATEGY (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_DEPLOY_STRATEGY_GET_CLASS (self)->deploy_async (self,

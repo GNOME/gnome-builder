@@ -36,8 +36,8 @@ struct _GbpMesonPipelineAddin
 static const gchar *ninja_names[] = { "ninja", "ninja-build" };
 
 static void
-on_build_stage_query (IdeBuildStage    *stage,
-                      IdeBuildPipeline *pipeline,
+on_build_stage_query (IdePipelineStage    *stage,
+                      IdePipeline *pipeline,
                       GPtrArray        *targets,
                       GCancellable     *cancellable)
 {
@@ -45,15 +45,15 @@ on_build_stage_query (IdeBuildStage    *stage,
   g_autoptr(GPtrArray) replace = NULL;
   const gchar * const *argv;
 
-  g_assert (IDE_IS_BUILD_STAGE (stage));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Defer to ninja to determine completed status */
-  ide_build_stage_set_completed (stage, FALSE);
+  ide_pipeline_stage_set_completed (stage, FALSE);
 
   /* Clear any previous argv items from a possible previous build */
-  launcher = ide_build_stage_launcher_get_launcher (IDE_BUILD_STAGE_LAUNCHER (stage));
+  launcher = ide_pipeline_stage_launcher_get_launcher (IDE_PIPELINE_STAGE_LAUNCHER (stage));
   argv = ide_subprocess_launcher_get_argv (launcher);
   replace = g_ptr_array_new_with_free_func (g_free);
   for (guint i = 0; argv[i]; i++)
@@ -86,31 +86,31 @@ on_build_stage_query (IdeBuildStage    *stage,
 }
 
 static void
-on_install_stage_query (IdeBuildStage    *stage,
-                        IdeBuildPipeline *pipeline,
+on_install_stage_query (IdePipelineStage    *stage,
+                        IdePipeline *pipeline,
                         GPtrArray        *targets,
                         GCancellable     *cancellable)
 {
-  g_assert (IDE_IS_BUILD_STAGE (stage));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Defer to ninja to determine completed status */
-  ide_build_stage_set_completed (stage, FALSE);
+  ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
 static void
-gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
-                               IdeBuildPipeline      *pipeline)
+gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
+                               IdePipeline      *pipeline)
 {
   GbpMesonPipelineAddin *self = (GbpMesonPipelineAddin *)addin;
   g_autoptr(IdeSubprocessLauncher) config_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
-  g_autoptr(IdeBuildStage) build_stage = NULL;
-  g_autoptr(IdeBuildStage) config_stage = NULL;
-  g_autoptr(IdeBuildStage) install_stage = NULL;
+  g_autoptr(IdePipelineStage) build_stage = NULL;
+  g_autoptr(IdePipelineStage) config_stage = NULL;
+  g_autoptr(IdePipelineStage) install_stage = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *build_ninja = NULL;
   g_autofree gchar *crossbuild_file = NULL;
@@ -130,7 +130,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   IDE_ENTRY;
 
   g_assert (GBP_IS_MESON_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -138,10 +138,10 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
     IDE_GOTO (failure);
 
-  config = ide_build_pipeline_get_config (pipeline);
-  runtime = ide_build_pipeline_get_runtime (pipeline);
-  toolchain = ide_build_pipeline_get_toolchain (pipeline);
-  srcdir = ide_build_pipeline_get_srcdir (pipeline);
+  config = ide_pipeline_get_config (pipeline);
+  runtime = ide_pipeline_get_runtime (pipeline);
+  toolchain = ide_pipeline_get_toolchain (pipeline);
+  srcdir = ide_pipeline_get_srcdir (pipeline);
 
   g_assert (IDE_IS_CONFIG (config));
   g_assert (IDE_IS_RUNTIME (runtime));
@@ -167,10 +167,10 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
     }
 
   /* Create all our launchers up front */
-  if (NULL == (config_launcher = ide_build_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (build_launcher = ide_build_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (clean_launcher = ide_build_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (install_launcher = ide_build_pipeline_create_launcher (pipeline, &error)))
+  if (NULL == (config_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
+      NULL == (build_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
+      NULL == (clean_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
+      NULL == (install_launcher = ide_pipeline_create_launcher (pipeline, &error)))
     IDE_GOTO (failure);
 
   prefix = ide_config_get_prefix (config);
@@ -193,8 +193,8 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       cross_file_stage = gbp_meson_build_stage_cross_file_new (context, toolchain);
       crossbuild_file = gbp_meson_build_stage_cross_file_get_path (cross_file_stage, pipeline);
 
-      id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_PREPARE, 0, IDE_BUILD_STAGE (cross_file_stage));
-      ide_build_pipeline_addin_track (addin, id);
+      id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, IDE_PIPELINE_STAGE (cross_file_stage));
+      ide_pipeline_addin_track (addin, id);
     }
 
   /* Setup our meson configure stage. */
@@ -221,18 +221,18 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       ide_subprocess_launcher_push_args (config_launcher, (const gchar * const *)argv);
     }
 
-  config_stage = ide_build_stage_launcher_new (context, config_launcher);
-  ide_build_stage_set_name (config_stage, _("Configuring project"));
-  build_ninja = ide_build_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
+  config_stage = ide_pipeline_stage_launcher_new (context, config_launcher);
+  ide_pipeline_stage_set_name (config_stage, _("Configuring project"));
+  build_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
   if (g_file_test (build_ninja, G_FILE_TEST_IS_REGULAR))
-    ide_build_stage_set_completed (config_stage, TRUE);
+    ide_pipeline_stage_set_completed (config_stage, TRUE);
 
-  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_CONFIGURE, 0, config_stage);
-  ide_build_pipeline_addin_track (addin, id);
+  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_CONFIGURE, 0, config_stage);
+  ide_pipeline_addin_track (addin, id);
 
   /*
    * Register the build launcher which will perform the incremental
-   * build of the project when the IDE_BUILD_PHASE_BUILD phase is
+   * build of the project when the IDE_PIPELINE_PHASE_BUILD phase is
    * requested of the pipeline.
    */
   ide_subprocess_launcher_push_argv (build_launcher, ninja);
@@ -248,23 +248,23 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   ide_subprocess_launcher_push_argv (clean_launcher, "clean");
 
-  build_stage = ide_build_stage_launcher_new (context, build_launcher);
-  ide_build_stage_launcher_set_clean_launcher (IDE_BUILD_STAGE_LAUNCHER (build_stage), clean_launcher);
-  ide_build_stage_set_check_stdout (build_stage, TRUE);
-  ide_build_stage_set_name (build_stage, _("Building project"));
+  build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
+  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
+  ide_pipeline_stage_set_check_stdout (build_stage, TRUE);
+  ide_pipeline_stage_set_name (build_stage, _("Building project"));
   g_signal_connect (build_stage, "query", G_CALLBACK (on_build_stage_query), NULL);
 
-  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_BUILD, 0, build_stage);
-  ide_build_pipeline_addin_track (addin, id);
+  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
+  ide_pipeline_addin_track (addin, id);
 
   /* Setup our install stage */
   ide_subprocess_launcher_push_argv (install_launcher, ninja);
   ide_subprocess_launcher_push_argv (install_launcher, "install");
-  install_stage = ide_build_stage_launcher_new (context, install_launcher);
-  ide_build_stage_set_name (install_stage, _("Installing project"));
+  install_stage = ide_pipeline_stage_launcher_new (context, install_launcher);
+  ide_pipeline_stage_set_name (install_stage, _("Installing project"));
   g_signal_connect (install_stage, "query", G_CALLBACK (on_install_stage_query), NULL);
-  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_INSTALL, 0, install_stage);
-  ide_build_pipeline_addin_track (addin, id);
+  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_INSTALL, 0, install_stage);
+  ide_pipeline_addin_track (addin, id);
 
   IDE_EXIT;
 
@@ -274,14 +274,14 @@ failure:
 }
 
 static void
-build_pipeline_addin_iface_init (IdeBuildPipelineAddinInterface *iface)
+pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 {
   iface->load = gbp_meson_pipeline_addin_load;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpMesonPipelineAddin, gbp_meson_pipeline_addin, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN,
-                                                build_pipeline_addin_iface_init))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN,
+                                                pipeline_addin_iface_init))
 
 static void
 gbp_meson_pipeline_addin_class_init (GbpMesonPipelineAddinClass *klass)

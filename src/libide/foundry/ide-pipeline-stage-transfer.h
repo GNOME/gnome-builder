@@ -1,4 +1,4 @@
-/* ide-build-stage-transfer.h
+/* ide-pipeline-stage-transfer.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -26,17 +26,17 @@
 
 #include <libide-core.h>
 
-#include "ide-build-stage.h"
+#include "ide-pipeline-stage.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUILD_STAGE_TRANSFER (ide_build_stage_transfer_get_type())
+#define IDE_TYPE_PIPELINE_STAGE_TRANSFER (ide_pipeline_stage_transfer_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeBuildStageTransfer, ide_build_stage_transfer, IDE, BUILD_STAGE_TRANSFER, IdeBuildStage)
+G_DECLARE_FINAL_TYPE (IdePipelineStageTransfer, ide_pipeline_stage_transfer, IDE, PIPELINE_STAGE_TRANSFER, IdePipelineStage)
 
 IDE_AVAILABLE_IN_3_32
-IdeBuildStageTransfer *ide_build_stage_transfer_new (IdeContext  *context,
-                                                     IdeTransfer *transfer);
+IdePipelineStageTransfer *ide_pipeline_stage_transfer_new (IdeContext  *context,
+                                                           IdeTransfer *transfer);
 
 G_END_DECLS

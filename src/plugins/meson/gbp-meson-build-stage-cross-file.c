@@ -29,11 +29,11 @@
 
 struct _GbpMesonBuildStageCrossFile
 {
-  IdeBuildStage parent_instance;
+  IdePipelineStage parent_instance;
   IdeToolchain *toolchain;
 };
 
-G_DEFINE_TYPE (GbpMesonBuildStageCrossFile, gbp_meson_build_stage_cross_file, IDE_TYPE_BUILD_STAGE)
+G_DEFINE_TYPE (GbpMesonBuildStageCrossFile, gbp_meson_build_stage_cross_file, IDE_TYPE_PIPELINE_STAGE)
 
 static void
 add_lang_executable (const gchar *lang,
@@ -47,8 +47,8 @@ add_lang_executable (const gchar *lang,
 }
 
 static void
-gbp_meson_build_stage_cross_file_query (IdeBuildStage    *stage,
-                                        IdeBuildPipeline *pipeline,
+gbp_meson_build_stage_cross_file_query (IdePipelineStage    *stage,
+                                        IdePipeline *pipeline,
                                         GPtrArray        *targets,
                                         GCancellable     *cancellable)
 {
@@ -58,26 +58,26 @@ gbp_meson_build_stage_cross_file_query (IdeBuildStage    *stage,
   IDE_ENTRY;
 
   g_assert (GBP_IS_MESON_BUILD_STAGE_CROSS_FILE (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   crossbuild_file = gbp_meson_build_stage_cross_file_get_path (self, pipeline);
   if (!g_file_test (crossbuild_file, G_FILE_TEST_EXISTS))
     {
-      ide_build_stage_set_completed (stage, FALSE);
+      ide_pipeline_stage_set_completed (stage, FALSE);
       IDE_EXIT;
     }
 
-  ide_build_stage_set_completed (stage, TRUE);
+  ide_pipeline_stage_set_completed (stage, TRUE);
 
   IDE_EXIT;
 }
 
 static gboolean
-gbp_meson_build_stage_cross_file_execute (IdeBuildStage     *stage,
-                                          IdeBuildPipeline  *pipeline,
-                                          GCancellable      *cancellable,
-                                          GError           **error)
+gbp_meson_build_stage_cross_file_build (IdePipelineStage  *stage,
+                                        IdePipeline       *pipeline,
+                                        GCancellable      *cancellable,
+                                        GError           **error)
 {
   GbpMesonBuildStageCrossFile *self = (GbpMesonBuildStageCrossFile *)stage;
   g_autoptr(GKeyFile) crossbuild_keyfile = NULL;
@@ -94,7 +94,7 @@ gbp_meson_build_stage_cross_file_execute (IdeBuildStage     *stage,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_TOOLCHAIN (self->toolchain));
 
-  ide_build_stage_set_active (stage, TRUE);
+  ide_pipeline_stage_set_active (stage, TRUE);
 
   crossbuild_keyfile = g_key_file_new ();
   triplet = ide_toolchain_get_host_triplet (self->toolchain);
@@ -136,7 +136,7 @@ gbp_meson_build_stage_cross_file_execute (IdeBuildStage     *stage,
   gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "cpu", binary_path);
   gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "endian", "little");
 
-  env_launcher = ide_build_pipeline_create_launcher (pipeline, error);
+  env_launcher = ide_pipeline_create_launcher (pipeline, error);
   flags = ide_subprocess_launcher_getenv (env_launcher, "CFLAGS");
   if (flags != NULL)
     gbp_meson_key_file_set_string_array_quoted (crossbuild_keyfile, "properties", "c_args", flags);
@@ -149,13 +149,13 @@ gbp_meson_build_stage_cross_file_execute (IdeBuildStage     *stage,
   if (!g_key_file_save_to_file (crossbuild_keyfile, crossbuild_file, error))
     IDE_RETURN (FALSE);
 
-  ide_build_stage_set_active (stage, FALSE);
+  ide_pipeline_stage_set_active (stage, FALSE);
 
   IDE_RETURN (TRUE);
 }
 
 static void
-ide_build_stage_mkdirs_finalize (GObject *object)
+ide_pipeline_stage_mkdirs_finalize (GObject *object)
 {
   GbpMesonBuildStageCrossFile *self = (GbpMesonBuildStageCrossFile *)object;
 
@@ -168,11 +168,11 @@ static void
 gbp_meson_build_stage_cross_file_class_init (GbpMesonBuildStageCrossFileClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeBuildStageClass *stage_class = IDE_BUILD_STAGE_CLASS (klass);
+  IdePipelineStageClass *stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
-  object_class->finalize = ide_build_stage_mkdirs_finalize;
+  object_class->finalize = ide_pipeline_stage_mkdirs_finalize;
 
-  stage_class->execute = gbp_meson_build_stage_cross_file_execute;
+  stage_class->build = gbp_meson_build_stage_cross_file_build;
   stage_class->query = gbp_meson_build_stage_cross_file_query;
 }
 
@@ -194,10 +194,10 @@ gbp_meson_build_stage_cross_file_new (IdeContext    *context,
 
 gchar *
 gbp_meson_build_stage_cross_file_get_path (GbpMesonBuildStageCrossFile *stage,
-                                           IdeBuildPipeline            *pipeline)
+                                           IdePipeline            *pipeline)
 {
   g_return_val_if_fail (GBP_IS_MESON_BUILD_STAGE_CROSS_FILE (stage), NULL);
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (pipeline), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (pipeline), NULL);
 
-  return ide_build_pipeline_build_builddir_path (pipeline, "gnome-builder-meson.crossfile", NULL);
+  return ide_pipeline_build_builddir_path (pipeline, "gnome-builder-meson.crossfile", NULL);
 }

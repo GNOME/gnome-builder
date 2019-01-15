@@ -29,7 +29,6 @@
 #include <libide-vcs.h>
 
 #include "ide-build-manager.h"
-#include "ide-build-pipeline.h"
 #include "ide-build-private.h"
 #include "ide-config-manager.h"
 #include "ide-config.h"
@@ -37,6 +36,7 @@
 #include "ide-device-manager.h"
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
+#include "ide-pipeline.h"
 #include "ide-runtime-manager.h"
 #include "ide-runtime-private.h"
 #include "ide-runtime.h"
@@ -56,7 +56,7 @@
  * ide_build_manager_rebuild_async() to build, clean, and rebuild respectively
  * without needing to track the build pipeline.
  *
- * The #IdeBuildPipeline is used to specify how and when build operations
+ * The #IdePipeline is used to specify how and when build operations
  * should occur. Plugins attach build stages to the pipeline to perform
  * build actions.
  *
@@ -69,7 +69,7 @@ struct _IdeBuildManager
 
   GCancellable     *cancellable;
 
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   GDateTime        *last_build_time;
   DzlSignalGroup   *pipeline_signals;
 
@@ -203,7 +203,7 @@ ide_build_manager_stop_timer (IdeBuildManager *self)
 static void
 ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
                                      IdeDiagnostic    *diagnostic,
-                                     IdeBuildPipeline *pipeline)
+                                     IdePipeline *pipeline)
 {
   IdeDiagnosticSeverity severity;
 
@@ -211,7 +211,7 @@ ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (diagnostic != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   self->diagnostic_count++;
   if (self->diagnostic_count == 1)
@@ -244,7 +244,7 @@ ide_build_manager_update_action_enabled (IdeBuildManager *self)
 
   busy = ide_build_manager_get_busy (self);
   can_build = ide_build_manager_get_can_build (self);
-  can_export = self->pipeline ? ide_build_pipeline_get_can_export (self->pipeline) : FALSE;
+  can_export = self->pipeline ? ide_pipeline_get_can_export (self->pipeline) : FALSE;
 
   ide_build_manager_set_action_enabled (self, "build", !busy && can_build);
   ide_build_manager_set_action_enabled (self, "cancel", busy);
@@ -259,13 +259,13 @@ ide_build_manager_update_action_enabled (IdeBuildManager *self)
 static void
 ide_build_manager_notify_busy (IdeBuildManager  *self,
                                GParamSpec       *pspec,
-                               IdeBuildPipeline *pipeline)
+                               IdePipeline *pipeline)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (G_IS_PARAM_SPEC (pspec));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   ide_build_manager_update_action_enabled (self);
 
@@ -275,13 +275,13 @@ ide_build_manager_notify_busy (IdeBuildManager  *self,
 static void
 ide_build_manager_notify_message (IdeBuildManager  *self,
                                   GParamSpec       *pspec,
-                                  IdeBuildPipeline *pipeline)
+                                  IdePipeline *pipeline)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (G_IS_PARAM_SPEC (pspec));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   if (pipeline == self->pipeline)
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
@@ -291,13 +291,13 @@ ide_build_manager_notify_message (IdeBuildManager  *self,
 
 static void
 ide_build_manager_pipeline_started (IdeBuildManager  *self,
-                                    IdeBuildPhase     phase,
-                                    IdeBuildPipeline *pipeline)
+                                    IdePipelinePhase     phase,
+                                    IdePipeline *pipeline)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   self->building = TRUE;
 
@@ -309,12 +309,12 @@ ide_build_manager_pipeline_started (IdeBuildManager  *self,
 static void
 ide_build_manager_pipeline_finished (IdeBuildManager  *self,
                                      gboolean          failed,
-                                     IdeBuildPipeline *pipeline)
+                                     IdePipeline *pipeline)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   self->building = FALSE;
 
@@ -334,7 +334,7 @@ ide_build_manager_ensure_toolchain_cb (GObject      *object,
   IdeToolchainManager *toolchain_manager = (IdeToolchainManager *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *self;
   GCancellable *cancellable;
 
@@ -348,7 +348,7 @@ ide_build_manager_ensure_toolchain_cb (GObject      *object,
   pipeline = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   if (!_ide_toolchain_manager_prepare_finish (toolchain_manager, result, &error))
     {
@@ -405,7 +405,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   IdeRuntimeManager *runtime_manager = (IdeRuntimeManager *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *self;
   IdeToolchainManager *toolchain_manager;
   IdeContext *context;
@@ -420,7 +420,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   pipeline = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   if (!_ide_runtime_manager_prepare_finish (runtime_manager, result, &error))
     {
@@ -474,7 +474,7 @@ ide_build_manager_device_get_info_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
   IdeRuntimeManager *runtime_manager;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -484,7 +484,7 @@ ide_build_manager_device_get_info_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   pipeline = ide_task_get_task_data (task);
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   if (ide_task_return_error_if_cancelled (task))
     IDE_EXIT;
@@ -508,7 +508,7 @@ ide_build_manager_device_get_info_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  _ide_build_pipeline_check_toolchain (pipeline, info);
+  _ide_pipeline_check_toolchain (pipeline, info);
 
   _ide_runtime_manager_prepare_async (runtime_manager,
                                       pipeline,
@@ -583,7 +583,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    * runtime is available (possibly installing it).
    */
   ide_build_manager_set_can_build (self, FALSE);
-  self->pipeline = g_object_new (IDE_TYPE_BUILD_PIPELINE,
+  self->pipeline = g_object_new (IDE_TYPE_PIPELINE,
                                  "config", config,
                                  "device", device,
                                  NULL);
@@ -690,12 +690,12 @@ initable_init (GInitable     *initable,
 
 static void
 ide_build_manager_real_build_started (IdeBuildManager  *self,
-                                      IdeBuildPipeline *pipeline)
+                                      IdePipeline *pipeline)
 {
-  IdeBuildPhase phase;
+  IdePipelinePhase phase;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   ide_build_manager_start_timer (self);
 
@@ -705,11 +705,11 @@ ide_build_manager_real_build_started (IdeBuildManager  *self,
    * configure for the first time, or performing a real build.
    */
 
-  phase = ide_build_pipeline_get_requested_phase (pipeline);
-  g_assert ((phase & IDE_BUILD_PHASE_MASK) == phase);
+  phase = ide_pipeline_get_requested_phase (pipeline);
+  g_assert ((phase & IDE_PIPELINE_PHASE_MASK) == phase);
 
-  if (phase == IDE_BUILD_PHASE_BUILD ||
-      (phase == IDE_BUILD_PHASE_CONFIGURE && !self->has_configured))
+  if (phase == IDE_PIPELINE_PHASE_BUILD ||
+      (phase == IDE_PIPELINE_PHASE_CONFIGURE && !self->has_configured))
     {
       self->needs_rediagnose = TRUE;
       self->has_configured = TRUE;
@@ -718,17 +718,17 @@ ide_build_manager_real_build_started (IdeBuildManager  *self,
 
 static void
 ide_build_manager_real_build_failed (IdeBuildManager  *self,
-                                     IdeBuildPipeline *pipeline)
+                                     IdePipeline *pipeline)
 {
   g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   ide_build_manager_stop_timer (self);
 }
 
 static void
 ide_build_manager_real_build_finished (IdeBuildManager  *self,
-                                       IdeBuildPipeline *pipeline)
+                                       IdePipeline *pipeline)
 {
   IdeDiagnosticsManager *diagnostics;
   IdeBufferManager *bufmgr;
@@ -736,7 +736,7 @@ ide_build_manager_real_build_finished (IdeBuildManager  *self,
   guint n_items;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   ide_build_manager_stop_timer (self);
 
@@ -956,7 +956,7 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
     g_param_spec_object ("pipeline",
                          "Pipeline",
                          "The build pipeline",
-                         IDE_TYPE_BUILD_PIPELINE,
+                         IDE_TYPE_PIPELINE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
@@ -1002,7 +1002,7 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
   /**
    * IdeBuildManager::build-started:
    * @self: An #IdeBuildManager
-   * @pipeline: An #IdeBuildPipeline
+   * @pipeline: An #IdePipeline
    *
    * The "build-started" signal is emitted when a new build has started.
    * The build may be an incremental build. The @pipeline instance is
@@ -1017,12 +1017,12 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                                 G_CALLBACK (ide_build_manager_real_build_started),
                                 NULL, NULL,
                                 NULL,
-                                G_TYPE_NONE, 1, IDE_TYPE_BUILD_PIPELINE);
+                                G_TYPE_NONE, 1, IDE_TYPE_PIPELINE);
 
   /**
    * IdeBuildManager::build-failed:
    * @self: An #IdeBuildManager
-   * @pipeline: An #IdeBuildPipeline
+   * @pipeline: An #IdePipeline
    *
    * The "build-failed" signal is emitted when a build that was previously
    * notified via #IdeBuildManager::build-started has failed to complete
@@ -1040,12 +1040,12 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                                 G_CALLBACK (ide_build_manager_real_build_failed),
                                 NULL, NULL,
                                 NULL,
-                                G_TYPE_NONE, 1, IDE_TYPE_BUILD_PIPELINE);
+                                G_TYPE_NONE, 1, IDE_TYPE_PIPELINE);
 
   /**
    * IdeBuildManager::build-finished:
    * @self: An #IdeBuildManager
-   * @pipeline: An #IdeBuildPipeline
+   * @pipeline: An #IdePipeline
    *
    * The "build-finished" signal is emitted when a build completed
    * successfully.
@@ -1059,7 +1059,7 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                                 G_CALLBACK (ide_build_manager_real_build_finished),
                                 NULL, NULL,
                                 NULL,
-                                G_TYPE_NONE, 1, IDE_TYPE_BUILD_PIPELINE);
+                                G_TYPE_NONE, 1, IDE_TYPE_PIPELINE);
 }
 
 static void
@@ -1083,7 +1083,7 @@ ide_build_manager_action_build (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_execute_async (self, IDE_BUILD_PHASE_BUILD, NULL, NULL, NULL, NULL);
+  ide_build_manager_execute_async (self, IDE_PIPELINE_PHASE_BUILD, NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1096,7 +1096,7 @@ ide_build_manager_action_rebuild (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_rebuild_async (self, IDE_BUILD_PHASE_BUILD, NULL, NULL, NULL, NULL);
+  ide_build_manager_rebuild_async (self, IDE_PIPELINE_PHASE_BUILD, NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1109,7 +1109,7 @@ ide_build_manager_action_clean (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_clean_async (self, IDE_BUILD_PHASE_BUILD, NULL, NULL, NULL);
+  ide_build_manager_clean_async (self, IDE_PIPELINE_PHASE_BUILD, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1122,7 +1122,7 @@ ide_build_manager_action_install (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_execute_async (self, IDE_BUILD_PHASE_INSTALL, NULL, NULL, NULL, NULL);
+  ide_build_manager_execute_async (self, IDE_PIPELINE_PHASE_INSTALL, NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1135,7 +1135,7 @@ ide_build_manager_action_export (IdeBuildManager *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  ide_build_manager_execute_async (self, IDE_BUILD_PHASE_EXPORT, NULL, NULL, NULL, NULL);
+  ide_build_manager_execute_async (self, IDE_PIPELINE_PHASE_EXPORT, NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1150,7 +1150,7 @@ ide_build_manager_init (IdeBuildManager *self)
   self->cancellable = g_cancellable_new ();
   self->needs_rediagnose = TRUE;
 
-  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
+  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_PIPELINE);
 
   dzl_signal_group_connect_object (self->pipeline_signals,
                                    "diagnostic",
@@ -1202,7 +1202,7 @@ ide_build_manager_get_busy (IdeBuildManager *self)
   g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), FALSE);
 
   if G_LIKELY (self->pipeline != NULL)
-    return ide_build_pipeline_get_busy (self->pipeline);
+    return ide_pipeline_get_busy (self->pipeline);
 
   return FALSE;
 }
@@ -1225,7 +1225,7 @@ ide_build_manager_get_message (IdeBuildManager *self)
   g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), NULL);
 
   if G_LIKELY (self->pipeline != NULL)
-    return ide_build_pipeline_get_message (self->pipeline);
+    return ide_pipeline_get_message (self->pipeline);
 
   return NULL;
 }
@@ -1301,7 +1301,7 @@ ide_build_manager_cancel (IdeBuildManager *self)
     g_cancellable_cancel (cancellable);
 
   if (self->pipeline != NULL)
-    _ide_build_pipeline_cancel (self->pipeline);
+    _ide_pipeline_cancel (self->pipeline);
 
   IDE_EXIT;
 }
@@ -1313,11 +1313,11 @@ ide_build_manager_cancel (IdeBuildManager *self)
  * This function gets the current build pipeline. The pipeline will be
  * reloaded as build configurations change.
  *
- * Returns: (transfer none) (nullable): An #IdeBuildPipeline.
+ * Returns: (transfer none) (nullable): An #IdePipeline.
  *
  * Since: 3.32
  */
-IdeBuildPipeline *
+IdePipeline *
 ide_build_manager_get_pipeline (IdeBuildManager *self)
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
@@ -1332,14 +1332,14 @@ ide_build_manager_get_pipeline (IdeBuildManager *self)
  *
  * A thread-safe variant of ide_build_manager_get_pipeline().
  *
- * Returns: (transfer full) (nullable): an #IdeBuildPipeline or %NULL
+ * Returns: (transfer full) (nullable): an #IdePipeline or %NULL
  *
  * Since: 3.32
  */
-IdeBuildPipeline *
+IdePipeline *
 ide_build_manager_ref_pipeline (IdeBuildManager *self)
 {
-  IdeBuildPipeline *ret = NULL;
+  IdePipeline *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), NULL);
 
@@ -1351,21 +1351,21 @@ ide_build_manager_ref_pipeline (IdeBuildManager *self)
 }
 
 static void
-ide_build_manager_execute_cb (GObject      *object,
-                              GAsyncResult *result,
-                              gpointer      user_data)
+ide_build_manager_build_targets_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
 {
-  IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
+  IdePipeline *pipeline = (IdePipeline *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_build_pipeline_execute_finish (pipeline, result, &error))
+  if (!ide_pipeline_build_targets_finish (pipeline, result, &error))
     {
       ide_object_warning (pipeline, "%s", error->message);
       ide_task_return_error (task, g_steal_pointer (&error));
@@ -1389,7 +1389,7 @@ ide_build_manager_save_all_cb (GObject      *object,
   IdeBuildManager *self;
   GCancellable *cancellable;
   GPtrArray *targets;
-  IdeBuildPhase phase;
+  IdePipelinePhase phase;
 
   IDE_ENTRY;
 
@@ -1409,13 +1409,13 @@ ide_build_manager_save_all_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  phase = ide_build_pipeline_get_requested_phase (self->pipeline);
+  phase = ide_pipeline_get_requested_phase (self->pipeline);
 
-  ide_build_pipeline_build_targets_async (self->pipeline,
+  ide_pipeline_build_targets_async (self->pipeline,
                                           phase,
                                           targets,
                                           cancellable,
-                                          ide_build_manager_execute_cb,
+                                          ide_build_manager_build_targets_cb,
                                           g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
@@ -1428,7 +1428,7 @@ ide_build_manager_save_all_cb (GObject      *object,
 /**
  * ide_build_manager_execute_async:
  * @self: An #IdeBuildManager
- * @phase: An #IdeBuildPhase or 0
+ * @phase: An #IdePipelinePhase or 0
  * @targets: (nullable) (element-type IdeBuildTarget): an array of
  *   #IdeBuildTarget to build
  * @cancellable: (nullable): a #GCancellable or %NULL
@@ -1444,7 +1444,7 @@ ide_build_manager_save_all_cb (GObject      *object,
  */
 void
 ide_build_manager_execute_async (IdeBuildManager     *self,
-                                 IdeBuildPhase        phase,
+                                 IdePipelinePhase        phase,
                                  GPtrArray           *targets,
                                  GCancellable        *cancellable,
                                  GAsyncReadyCallback  callback,
@@ -1472,7 +1472,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
 
   if (self->pipeline == NULL ||
       self->can_build == FALSE ||
-      !ide_build_pipeline_is_ready (self->pipeline))
+      !ide_pipeline_is_ready (self->pipeline))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -1481,17 +1481,17 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  if (!ide_build_pipeline_request_phase (self->pipeline, phase))
+  if (!ide_pipeline_request_phase (self->pipeline, phase))
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
   /*
-   * Only update our "build time" if we are advancing to IDE_BUILD_PHASE_BUILD,
+   * Only update our "build time" if we are advancing to IDE_PIPELINE_PHASE_BUILD,
    * we don't really care about "builds" for configure stages and less.
    */
-  if ((phase & IDE_BUILD_PHASE_MASK) >= IDE_BUILD_PHASE_BUILD)
+  if ((phase & IDE_PIPELINE_PHASE_MASK) >= IDE_PIPELINE_PHASE_BUILD)
     {
       g_clear_pointer (&self->last_build_time, g_date_time_unref);
       self->last_build_time = g_date_time_new_now_local ();
@@ -1506,7 +1506,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
    * on every keypress (and execute_async() could be called on every keypress)
    * for ensuring build flags are up to date.
    */
-  if ((phase & IDE_BUILD_PHASE_MASK) >= IDE_BUILD_PHASE_BUILD)
+  if ((phase & IDE_PIPELINE_PHASE_MASK) >= IDE_PIPELINE_PHASE_BUILD)
     {
       context = ide_object_get_context (IDE_OBJECT (self));
       buffer_manager = ide_buffer_manager_from_context (context);
@@ -1517,12 +1517,12 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  ide_build_pipeline_build_targets_async (self->pipeline,
-                                          phase,
-                                          targets,
-                                          cancellable,
-                                          ide_build_manager_execute_cb,
-                                          g_steal_pointer (&task));
+  ide_pipeline_build_targets_async (self->pipeline,
+                                    phase,
+                                    targets,
+                                    cancellable,
+                                    ide_build_manager_build_targets_cb,
+                                    g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
@@ -1567,17 +1567,17 @@ ide_build_manager_clean_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
 {
-  IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
+  IdePipeline *pipeline = (IdePipeline *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_build_pipeline_clean_finish (pipeline, result, &error))
+  if (!ide_pipeline_clean_finish (pipeline, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -1593,13 +1593,13 @@ ide_build_manager_clean_cb (GObject      *object,
  *
  * Asynchronously requests that the build pipeline clean up to @phase.
  *
- * See ide_build_pipeline_clean_async() for more information.
+ * See ide_pipeline_clean_async() for more information.
  *
  * Since: 3.32
  */
 void
 ide_build_manager_clean_async (IdeBuildManager     *self,
-                               IdeBuildPhase        phase,
+                               IdePipelinePhase        phase,
                                GCancellable        *cancellable,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
@@ -1632,7 +1632,7 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
   self->error_count = 0;
   self->warning_count = 0;
 
-  ide_build_pipeline_clean_async (self->pipeline,
+  ide_pipeline_clean_async (self->pipeline,
                                   phase,
                                   cancellable,
                                   ide_build_manager_clean_cb,
@@ -1679,17 +1679,17 @@ ide_build_manager_rebuild_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
-  IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
+  IdePipeline *pipeline = (IdePipeline *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_build_pipeline_rebuild_finish (pipeline, result, &error))
+  if (!ide_pipeline_rebuild_finish (pipeline, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -1711,13 +1711,13 @@ ide_build_manager_rebuild_cb (GObject      *object,
  * to the given phase. This may involve discarding previous build artifacts
  * to allow for the rebuild process.
  *
- * See ide_build_pipeline_rebuild_async() for more information.
+ * See ide_pipeline_rebuild_async() for more information.
  *
  * Since: 3.32
  */
 void
 ide_build_manager_rebuild_async (IdeBuildManager     *self,
-                                 IdeBuildPhase        phase,
+                                 IdePipelinePhase        phase,
                                  GPtrArray           *targets,
                                  GCancellable        *cancellable,
                                  GAsyncReadyCallback  callback,
@@ -1747,7 +1747,7 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  ide_build_pipeline_rebuild_async (self->pipeline,
+  ide_pipeline_rebuild_async (self->pipeline,
                                     phase,
                                     targets,
                                     cancellable,

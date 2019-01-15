@@ -35,8 +35,8 @@ struct _GbpGitPipelineAddin
 };
 
 static void
-gbp_git_pipeline_addin_load (IdeBuildPipelineAddin *addin,
-                             IdeBuildPipeline      *pipeline)
+gbp_git_pipeline_addin_load (IdePipelineAddin *addin,
+                             IdePipeline      *pipeline)
 {
   g_autoptr(GbpGitSubmoduleStage) submodule = NULL;
   IdeContext *context;
@@ -44,7 +44,7 @@ gbp_git_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   guint stage_id;
 
   g_assert (GBP_IS_GIT_PIPELINE_ADDIN (addin));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (addin));
   vcs = ide_vcs_from_context (context);
@@ -54,22 +54,22 @@ gbp_git_pipeline_addin_load (IdeBuildPipelineAddin *addin,
     return;
 
   submodule = gbp_git_submodule_stage_new (context);
-  stage_id = ide_build_pipeline_attach (pipeline,
-                                        IDE_BUILD_PHASE_DOWNLOADS,
-                                        100,
-                                        IDE_BUILD_STAGE (submodule));
-  ide_build_pipeline_addin_track (addin, stage_id);
+  stage_id = ide_pipeline_attach (pipeline,
+                                  IDE_PIPELINE_PHASE_DOWNLOADS,
+                                  100,
+                                  IDE_PIPELINE_STAGE (submodule));
+  ide_pipeline_addin_track (addin, stage_id);
 }
 
 static void
-build_pipeline_addin_iface_init (IdeBuildPipelineAddinInterface *iface)
+pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 {
   iface->load = gbp_git_pipeline_addin_load;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpGitPipelineAddin, gbp_git_pipeline_addin, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN,
-                                                build_pipeline_addin_iface_init))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN,
+                                                pipeline_addin_iface_init))
 
 static void
 gbp_git_pipeline_addin_class_init (GbpGitPipelineAddinClass *klass)

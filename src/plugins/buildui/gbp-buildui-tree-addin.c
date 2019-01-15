@@ -210,7 +210,7 @@ gbp_buildui_tree_addin_action_build (GSimpleAction *action,
   targets = g_ptr_array_new_full (1, g_object_unref);
   g_ptr_array_add (targets, g_object_ref (target));
 
-  ide_build_manager_execute_async (build_manager, IDE_BUILD_PHASE_BUILD, targets, NULL, NULL, NULL);
+  ide_build_manager_execute_async (build_manager, IDE_PIPELINE_PHASE_BUILD, targets, NULL, NULL, NULL);
 }
 
 static void
@@ -239,7 +239,7 @@ gbp_buildui_tree_addin_action_rebuild (GSimpleAction *action,
   targets = g_ptr_array_new_full (1, g_object_unref);
   g_ptr_array_add (targets, g_object_ref (target));
 
-  ide_build_manager_rebuild_async (build_manager, IDE_BUILD_PHASE_BUILD, targets, NULL, NULL, NULL);
+  ide_build_manager_rebuild_async (build_manager, IDE_PIPELINE_PHASE_BUILD, targets, NULL, NULL, NULL);
 }
 
 static void

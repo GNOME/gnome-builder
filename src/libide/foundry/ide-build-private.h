@@ -26,21 +26,21 @@
 
 G_BEGIN_DECLS
 
-guint8 *_ide_build_utils_filter_color_codes (const guint8 *data,
-                                             gsize         len,
-                                             gsize        *out_len);
-void _ide_build_pipeline_cancel          (IdeBuildPipeline *self);
-void _ide_build_pipeline_set_runtime     (IdeBuildPipeline *self,
-                                          IdeRuntime       *runtime);
-void _ide_build_pipeline_set_toolchain   (IdeBuildPipeline *self,
-                                          IdeToolchain     *toolchain);
-void _ide_build_pipeline_set_message     (IdeBuildPipeline *self,
-                                          const gchar      *message);
-void _ide_build_pipeline_mark_broken     (IdeBuildPipeline *self);
-void _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
-                                          IdeDeviceInfo    *info);
-void _ide_build_pipeline_set_pty_size    (IdeBuildPipeline *self,
-                                          guint             rows,
-                                          guint             columns);
+guint8 *_ide_build_utils_filter_color_codes (const guint8     *data,
+                                             gsize             len,
+                                             gsize            *out_len);
+void    _ide_pipeline_cancel                (IdePipeline *self);
+void    _ide_pipeline_set_runtime           (IdePipeline *self,
+                                             IdeRuntime       *runtime);
+void    _ide_pipeline_set_toolchain         (IdePipeline *self,
+                                             IdeToolchain     *toolchain);
+void    _ide_pipeline_set_message           (IdePipeline *self,
+                                             const gchar      *message);
+void    _ide_pipeline_mark_broken           (IdePipeline *self);
+void    _ide_pipeline_check_toolchain       (IdePipeline *self,
+                                             IdeDeviceInfo    *info);
+void    _ide_pipeline_set_pty_size          (IdePipeline *self,
+                                             guint             rows,
+                                             guint             columns);
 
 G_END_DECLS

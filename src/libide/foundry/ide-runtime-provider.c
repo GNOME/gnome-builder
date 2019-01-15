@@ -24,7 +24,7 @@
 
 #include <libide-threading.h>
 
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-config.h"
 #include "ide-foundry-compat.h"
 #include "ide-runtime.h"
@@ -115,7 +115,7 @@ ide_runtime_provider_real_bootstrap_cb (GObject      *object,
 
 static void
 ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
-                                           IdeBuildPipeline    *pipeline,
+                                           IdePipeline    *pipeline,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
@@ -127,14 +127,14 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_runtime_provider_real_bootstrap_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  config = ide_build_pipeline_get_config (pipeline);
+  config = ide_pipeline_get_config (pipeline);
   runtime_id = ide_config_get_runtime_id (config);
   ide_task_set_task_data (task, g_strdup (runtime_id), g_free);
 
@@ -233,7 +233,7 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
 /**
  * ide_runtime_provider_bootstrap_async:
  * @self: a #IdeRuntimeProvider
- * @pipeline: an #IdeBuildPipeline
+ * @pipeline: an #IdePipeline
  * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a #GAsyncReadyCallback or %NULL
  * @user_data: closure data for @callback
@@ -253,13 +253,13 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
  */
 void
 ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
-                                      IdeBuildPipeline    *pipeline,
+                                      IdePipeline    *pipeline,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
                                       gpointer             user_data)
 {
   g_return_if_fail (IDE_IS_RUNTIME_PROVIDER (self));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_async (self, pipeline, cancellable, callback, user_data);

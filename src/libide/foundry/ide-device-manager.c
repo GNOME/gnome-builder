@@ -28,7 +28,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-build-manager.h"
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-deploy-strategy.h"
 #include "ide-device-manager.h"
 #include "ide-device-private.h"
@@ -78,7 +78,7 @@ struct _IdeDeviceManager
 typedef struct
 {
   IdeObjectArray   *strategies;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
 } DeployState;
 
 typedef struct
@@ -689,7 +689,7 @@ static void
 ide_device_manager_action_deploy (IdeDeviceManager *self,
                                   GVariant         *param)
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
@@ -699,7 +699,7 @@ ide_device_manager_action_deploy (IdeDeviceManager *self,
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  if (!ide_build_pipeline_is_ready (pipeline))
+  if (!ide_pipeline_is_ready (pipeline))
     ide_context_warning (context, _("Cannot deploy to device, build pipeline is not initialized"));
   else
     ide_device_manager_deploy_async (self, pipeline, NULL, log_deploy_error, NULL);
@@ -797,7 +797,7 @@ ide_device_manager_deploy_load_cb (GObject      *object,
   g_assert (IDE_IS_DEVICE_MANAGER (self));
   g_assert (state != NULL);
   g_assert (state->strategies != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE (state->pipeline));
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
 
   ide_deploy_strategy_deploy_async (strategy,
                                     state->pipeline,
@@ -825,7 +825,7 @@ ide_device_manager_deploy_tick (IdeTask *task)
 
   g_assert (state != NULL);
   g_assert (state->strategies != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE (state->pipeline));
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
 
   if (state->strategies->len == 0)
     {
@@ -867,7 +867,7 @@ ide_device_manager_deploy_completed (IdeDeviceManager *self,
 /**
  * ide_device_manager_deploy_async:
  * @self: a #IdeDeviceManager
- * @pipeline: an #IdeBuildPipeline
+ * @pipeline: an #IdePipeline
  * @cancellable: a #GCancellable, or %NULL
  * @callback: a #GAsyncReadyCallback
  * @user_data: closure data for @callback
@@ -880,7 +880,7 @@ ide_device_manager_deploy_completed (IdeDeviceManager *self,
  */
 void
 ide_device_manager_deploy_async (IdeDeviceManager    *self,
-                                 IdeBuildPipeline    *pipeline,
+                                 IdePipeline    *pipeline,
                                  GCancellable        *cancellable,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
@@ -893,7 +893,7 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   self->progress = 0.0;
@@ -910,7 +910,7 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  if (!(device = ide_build_pipeline_get_device (pipeline)))
+  if (!(device = ide_pipeline_get_device (pipeline)))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,

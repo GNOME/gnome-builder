@@ -1,4 +1,4 @@
-/* ide-build-pipeline.c
+/* ide-pipeline.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-build-pipeline"
+#define G_LOG_DOMAIN "ide-pipeline"
 
 #include "config.h"
 
@@ -38,12 +38,12 @@
 
 #include "ide-build-log-private.h"
 #include "ide-build-log.h"
-#include "ide-build-pipeline-addin.h"
-#include "ide-build-pipeline.h"
+#include "ide-pipeline-addin.h"
+#include "ide-pipeline.h"
 #include "ide-build-private.h"
-#include "ide-build-stage-launcher.h"
-#include "ide-build-stage-private.h"
-#include "ide-build-stage.h"
+#include "ide-pipeline-stage-launcher.h"
+#include "ide-pipeline-stage-private.h"
+#include "ide-pipeline-stage.h"
 #include "ide-build-system.h"
 #include "ide-device-info.h"
 #include "ide-device.h"
@@ -58,40 +58,40 @@ G_DEFINE_QUARK (ide_build_error, ide_build_error)
 
 /**
  * SECTION:idebuildpipeline
- * @title: IdeBuildPipeline
+ * @title: IdePipeline
  * @short_description: Pluggable build pipeline
  * @include: ide.h
  *
- * The #IdeBuildPipeline is responsible for managing the build process
- * for Builder. It consists of multiple build "phases" (see #IdeBuildPhase
- * for the individual phases). An #IdeBuildStage can be attached with
+ * The #IdePipeline is responsible for managing the build process
+ * for Builder. It consists of multiple build "phases" (see #IdePipelinePhase
+ * for the individual phases). An #IdePipelineStage can be attached with
  * a priority to each phase and is the primary mechanism that plugins
  * use to perform their operations in the proper ordering.
  *
  * For example, the flatpak plugin provides its download stage as part of the
- * %IDE_BUILD_PHASE_DOWNLOAD phase. The autotools plugin provides stages to
- * phases such as %IDE_BUILD_PHASE_AUTOGEN, %IDE_BUILD_PHASE_CONFIGURE,
- * %IDE_BUILD_PHASE_BUILD, and %IDE_BUILD_PHASE_INSTALL.
+ * %IDE_PIPELINE_PHASE_DOWNLOAD phase. The autotools plugin provides stages to
+ * phases such as %IDE_PIPELINE_PHASE_AUTOGEN, %IDE_PIPELINE_PHASE_CONFIGURE,
+ * %IDE_PIPELINE_PHASE_BUILD, and %IDE_PIPELINE_PHASE_INSTALL.
  *
  * If you want ensure a particular phase is performed as part of a build,
- * then fall ide_build_pipeline_request_phase() with the phase you are
+ * then fall ide_pipeline_request_phase() with the phase you are
  * interested in seeing complete successfully.
  *
  * If your plugin has discovered that something has changed that invalidates a
- * given phase, use ide_build_pipeline_invalidate_phase() to ensure that the
- * phase is re-executed the next time a requested phase of higher precidence
+ * given phase, use ide_pipeline_invalidate_phase() to ensure that the
+ * phase is re-buildd the next time a requested phase of higher precidence
  * is requested.
  *
  * It can be useful to perform operations before or after a given stage (but
- * still be executed as part of that stage) so the %IDE_BUILD_PHASE_BEFORE and
- * %IDE_BUILD_PHASE_AFTER flags may be xor'd with the requested phase.  If more
+ * still be buildd as part of that stage) so the %IDE_PIPELINE_PHASE_BEFORE and
+ * %IDE_PIPELINE_PHASE_AFTER flags may be xor'd with the requested phase.  If more
  * precise ordering is required, you may use the priority parameter to order
  * the operation with regards to other stages in that phase.
  *
  * Transient stages may be added to the pipeline and they will be removed after
- * the ide_build_pipeline_execute_async() operation has completed successfully
+ * the ide_pipeline_build_async() operation has completed successfully
  * or has failed. You can mark a stage as trandient with
- * ide_build_stage_set_transient(). This may be useful to perform operations
+ * ide_pipeline_stage_set_transient(). This may be useful to perform operations
  * such as an "export tarball" stage which should only run once as determined
  * by the user requesting a "make dist" style operation.
  *
@@ -101,14 +101,14 @@ G_DEFINE_QUARK (ide_build_error, ide_build_error)
 typedef struct
 {
   guint          id;
-  IdeBuildPhase  phase;
+  IdePipelinePhase  phase;
   gint           priority;
-  IdeBuildStage *stage;
+  IdePipelineStage *stage;
 } PipelineEntry;
 
 typedef struct
 {
-  IdeBuildPipeline *self;
+  IdePipeline *self;
   GPtrArray        *addins;
 } IdleLoadState;
 
@@ -118,13 +118,13 @@ typedef struct
   GRegex *regex;
 } ErrorFormat;
 
-struct _IdeBuildPipeline
+struct _IdePipeline
 {
   IdeObject parent_instance;
 
   /*
    * A cancellable we can use to chain to all incoming requests so that
-   * all tasks may be cancelled at once when _ide_build_pipeline_cancel()
+   * all tasks may be cancelled at once when _ide_pipeline_cancel()
    * is called.
    */
   GCancellable *cancellable;
@@ -235,7 +235,7 @@ struct _IdeBuildPipeline
    * No reference to the current stage. It is only available during
    * the asynchronous execution of the stage.
    */
-  IdeBuildStage *current_stage;
+  IdePipelineStage *current_stage;
 
   /*
    * The index of our current PipelineEntry. This should start at -1
@@ -245,10 +245,10 @@ struct _IdeBuildPipeline
 
   /*
    * This is the requested mask to be built. It should be reset after
-   * performing a build so that a followup execute_async() would be
+   * performing a build so that a followup build_async() would be
    * innocuous.
    */
-  IdeBuildPhase requested_mask;
+  IdePipelinePhase requested_mask;
 
   /*
    * We queue incoming tasks in case we need for a finish task to
@@ -333,7 +333,7 @@ typedef struct
   /*
    * The phase that should be met for the given pipeline operation.
    */
-  IdeBuildPhase phase;
+  IdePipelinePhase phase;
 
   union {
     struct {
@@ -348,17 +348,17 @@ typedef struct
   };
 } TaskData;
 
-static void ide_build_pipeline_queue_flush  (IdeBuildPipeline    *self);
-static void ide_build_pipeline_tick_execute (IdeBuildPipeline    *self,
-                                             IdeTask             *task);
-static void ide_build_pipeline_tick_clean   (IdeBuildPipeline    *self,
-                                             IdeTask             *task);
-static void ide_build_pipeline_tick_rebuild (IdeBuildPipeline    *self,
-                                             IdeTask             *task);
-static void initable_iface_init             (GInitableIface      *iface);
-static void list_model_iface_init           (GListModelInterface *iface);
+static void ide_pipeline_queue_flush  (IdePipeline         *self);
+static void ide_pipeline_tick_build   (IdePipeline         *self,
+                                       IdeTask             *task);
+static void ide_pipeline_tick_clean   (IdePipeline         *self,
+                                       IdeTask             *task);
+static void ide_pipeline_tick_rebuild (IdePipeline         *self,
+                                       IdeTask             *task);
+static void initable_iface_init       (GInitableIface      *iface);
+static void list_model_iface_init     (GListModelInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeBuildPipeline, ide_build_pipeline, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (IdePipeline, ide_pipeline, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 
@@ -454,14 +454,14 @@ clear_error_format (gpointer data)
 }
 
 static inline const gchar *
-build_phase_nick (IdeBuildPhase phase)
+build_phase_nick (IdePipelinePhase phase)
 {
-  GFlagsClass *klass = g_type_class_peek (IDE_TYPE_BUILD_PHASE);
+  GFlagsClass *klass = g_type_class_peek (IDE_TYPE_PIPELINE_PHASE);
   GFlagsValue *value;
 
   g_assert (klass != NULL);
 
-  phase &= IDE_BUILD_PHASE_MASK;
+  phase &= IDE_PIPELINE_PHASE_MASK;
   value = g_flags_get_first_value (klass, phase);
 
   if (value != NULL)
@@ -502,8 +502,8 @@ parse_severity (const gchar *str)
 }
 
 static IdeDiagnostic *
-create_diagnostic (IdeBuildPipeline *self,
-                   GMatchInfo       *match_info)
+create_diagnostic (IdePipeline *self,
+                   GMatchInfo  *match_info)
 {
   g_autofree gchar *filename = NULL;
   g_autofree gchar *line = NULL;
@@ -519,7 +519,7 @@ create_diagnostic (IdeBuildPipeline *self,
     IdeDiagnosticSeverity severity;
   } parsed = { 0 };
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (match_info != NULL);
 
   message = g_match_info_fetch_named (match_info, "message");
@@ -605,14 +605,14 @@ create_diagnostic (IdeBuildPipeline *self,
 }
 
 static gboolean
-extract_directory_change (IdeBuildPipeline *self,
-                          const guint8     *data,
-                          gsize             len)
+extract_directory_change (IdePipeline  *self,
+                          const guint8 *data,
+                          gsize         len)
 {
   g_autofree gchar *dir = NULL;
   const guint8 *begin;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   if (len == 0)
     return FALSE;
@@ -654,16 +654,16 @@ extract_directory_change (IdeBuildPipeline *self,
 }
 
 static void
-extract_diagnostics (IdeBuildPipeline *self,
-                     const guint8     *data,
-                     gsize             len)
+extract_diagnostics (IdePipeline  *self,
+                     const guint8 *data,
+                     gsize         len)
 {
   g_autofree guint8 *unescaped = NULL;
   IdeLineReader reader;
   gchar *line;
   gsize line_len;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (data != NULL);
 
   if (len == 0 || self->errfmts->len == 0)
@@ -700,7 +700,7 @@ extract_diagnostics (IdeBuildPipeline *self,
 
               if (diagnostic != NULL)
                 {
-                  ide_build_pipeline_emit_diagnostic (self, diagnostic);
+                  ide_pipeline_emit_diagnostic (self, diagnostic);
                   break;
                 }
             }
@@ -709,15 +709,15 @@ extract_diagnostics (IdeBuildPipeline *self,
 }
 
 static void
-ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
-                                 const gchar       *message,
-                                 gssize             message_len,
-                                 gpointer           user_data)
+ide_pipeline_log_observer (IdeBuildLogStream  stream,
+                           const gchar       *message,
+                           gssize             message_len,
+                           gpointer           user_data)
 {
-  IdeBuildPipeline *self = user_data;
+  IdePipeline *self = user_data;
 
   g_assert (stream == IDE_BUILD_LOG_STDOUT || stream == IDE_BUILD_LOG_STDERR);
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (message != NULL);
 
   if (message_len < 0)
@@ -730,38 +730,38 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
 }
 
 static void
-ide_build_pipeline_intercept_pty_master_cb (const IdePtyIntercept     *intercept,
-                                            const IdePtyInterceptSide *side,
-                                            const guint8              *data,
-                                            gsize                      len,
-                                            gpointer                   user_data)
+ide_pipeline_intercept_pty_master_cb (const IdePtyIntercept     *intercept,
+                                      const IdePtyInterceptSide *side,
+                                      const guint8              *data,
+                                      gsize                      len,
+                                      gpointer                   user_data)
 {
-  IdeBuildPipeline *self = user_data;
+  IdePipeline *self = user_data;
 
   g_assert (intercept != NULL);
   g_assert (side != NULL);
   g_assert (data != NULL);
   g_assert (len > 0);
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   extract_diagnostics (self, data, len);
 }
 
 static void
-ide_build_pipeline_release_transients (IdeBuildPipeline *self)
+ide_pipeline_release_transients (IdePipeline *self)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (self->pipeline != NULL);
 
   for (guint i = self->pipeline->len; i > 0; i--)
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i - 1);
 
-      g_assert (IDE_IS_BUILD_STAGE (entry->stage));
+      g_assert (IDE_IS_PIPELINE_STAGE (entry->stage));
 
-      if (ide_build_stage_get_transient (entry->stage))
+      if (ide_pipeline_stage_get_transient (entry->stage))
         {
           IDE_TRACE_MSG ("Releasing transient stage %s at index %u",
                          G_OBJECT_TYPE_NAME (entry->stage),
@@ -774,10 +774,10 @@ ide_build_pipeline_release_transients (IdeBuildPipeline *self)
 }
 
 static gboolean
-ide_build_pipeline_check_ready (IdeBuildPipeline *self,
-                                IdeTask          *task)
+ide_pipeline_check_ready (IdePipeline *self,
+                          IdeTask     *task)
 {
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_TASK (task));
 
   if (self->broken)
@@ -803,30 +803,30 @@ ide_build_pipeline_check_ready (IdeBuildPipeline *self,
 }
 
 /**
- * ide_build_pipeline_get_phase:
+ * ide_pipeline_get_phase:
  *
  * Gets the current phase that is executing. This is only useful during
  * execution of the pipeline.
  *
  * Since: 3.32
  */
-IdeBuildPhase
-ide_build_pipeline_get_phase (IdeBuildPipeline *self)
+IdePipelinePhase
+ide_pipeline_get_phase (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), 0);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
 
   if (self->position < 0)
-    return IDE_BUILD_PHASE_NONE;
+    return IDE_PIPELINE_PHASE_NONE;
   else if (self->failed)
-    return IDE_BUILD_PHASE_FAILED;
+    return IDE_PIPELINE_PHASE_FAILED;
   else if ((guint)self->position < self->pipeline->len)
-    return g_array_index (self->pipeline, PipelineEntry, self->position).phase & IDE_BUILD_PHASE_MASK;
+    return g_array_index (self->pipeline, PipelineEntry, self->position).phase & IDE_PIPELINE_PHASE_MASK;
   else
-    return IDE_BUILD_PHASE_FINISHED;
+    return IDE_PIPELINE_PHASE_FINISHED;
 }
 
 /**
- * ide_build_pipeline_get_config:
+ * ide_pipeline_get_config:
  *
  * Gets the #IdeConfig to use for the pipeline.
  *
@@ -835,9 +835,9 @@ ide_build_pipeline_get_phase (IdeBuildPipeline *self)
  * Since: 3.32
  */
 IdeConfig *
-ide_build_pipeline_get_config (IdeBuildPipeline *self)
+ide_pipeline_get_config (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->config;
 }
@@ -849,7 +849,7 @@ clear_pipeline_entry (gpointer data)
 
   if (entry->stage != NULL)
     {
-      ide_build_stage_set_log_observer (entry->stage, NULL, NULL, NULL);
+      ide_pipeline_stage_set_log_observer (entry->stage, NULL, NULL, NULL);
       g_clear_object (&entry->stage);
     }
 }
@@ -862,20 +862,20 @@ pipeline_entry_compare (gconstpointer a,
   const PipelineEntry *entry_b = b;
   gint ret;
 
-  ret = (gint)(entry_a->phase & IDE_BUILD_PHASE_MASK)
-      - (gint)(entry_b->phase & IDE_BUILD_PHASE_MASK);
+  ret = (gint)(entry_a->phase & IDE_PIPELINE_PHASE_MASK)
+      - (gint)(entry_b->phase & IDE_PIPELINE_PHASE_MASK);
 
   if (ret == 0)
     {
-      gint whence_a = (entry_a->phase & IDE_BUILD_PHASE_WHENCE_MASK);
-      gint whence_b = (entry_b->phase & IDE_BUILD_PHASE_WHENCE_MASK);
+      gint whence_a = (entry_a->phase & IDE_PIPELINE_PHASE_WHENCE_MASK);
+      gint whence_b = (entry_b->phase & IDE_PIPELINE_PHASE_WHENCE_MASK);
 
       if (whence_a != whence_b)
         {
-          if (whence_a == IDE_BUILD_PHASE_BEFORE)
+          if (whence_a == IDE_PIPELINE_PHASE_BEFORE)
             return -1;
 
-          if (whence_b == IDE_BUILD_PHASE_BEFORE)
+          if (whence_b == IDE_PIPELINE_PHASE_BEFORE)
             return 1;
 
           if (whence_a == 0)
@@ -895,11 +895,11 @@ pipeline_entry_compare (gconstpointer a,
 }
 
 static void
-ide_build_pipeline_real_started (IdeBuildPipeline *self)
+ide_pipeline_real_started (IdePipeline *self)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   self->errors_on_stdout = FALSE;
 
@@ -907,7 +907,7 @@ ide_build_pipeline_real_started (IdeBuildPipeline *self)
     {
       PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
 
-      if (ide_build_stage_get_check_stdout (entry->stage))
+      if (ide_pipeline_stage_get_check_stdout (entry->stage))
         {
           self->errors_on_stdout = TRUE;
           break;
@@ -918,93 +918,93 @@ ide_build_pipeline_real_started (IdeBuildPipeline *self)
 }
 
 static void
-ide_build_pipeline_real_finished (IdeBuildPipeline *self,
-                                  gboolean          failed)
+ide_pipeline_real_finished (IdePipeline *self,
+                            gboolean     failed)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   IDE_EXIT;
 }
 
 static void
-ide_build_pipeline_extension_added (IdeExtensionSetAdapter *set,
-                                    PeasPluginInfo         *plugin_info,
-                                    PeasExtension          *exten,
-                                    gpointer                user_data)
+ide_pipeline_extension_added (IdeExtensionSetAdapter *set,
+                              PeasPluginInfo         *plugin_info,
+                              PeasExtension          *exten,
+                              gpointer                user_data)
 {
-  IdeBuildPipeline *self = user_data;
-  IdeBuildPipelineAddin *addin = (IdeBuildPipelineAddin *)exten;
+  IdePipeline *self = user_data;
+  IdePipelineAddin *addin = (IdePipelineAddin *)exten;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE_ADDIN (addin));
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE_ADDIN (addin));
+  g_assert (IDE_IS_PIPELINE (self));
 
   /* Mark that we loaded this addin, so we don't unload it if it
    * was never loaded (during async loading).
    */
   g_object_set_data (G_OBJECT (addin), "HAS_LOADED", GINT_TO_POINTER (1));
 
-  ide_build_pipeline_addin_load (addin, self);
+  ide_pipeline_addin_load (addin, self);
 
   IDE_EXIT;
 }
 
 static void
-ide_build_pipeline_extension_removed (IdeExtensionSetAdapter *set,
-                                      PeasPluginInfo         *plugin_info,
-                                      PeasExtension          *exten,
-                                      gpointer                user_data)
+ide_pipeline_extension_removed (IdeExtensionSetAdapter *set,
+                                PeasPluginInfo         *plugin_info,
+                                PeasExtension          *exten,
+                                gpointer                user_data)
 {
-  IdeBuildPipeline *self = user_data;
-  IdeBuildPipelineAddin *addin = (IdeBuildPipelineAddin *)exten;
+  IdePipeline *self = user_data;
+  IdePipelineAddin *addin = (IdePipelineAddin *)exten;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE_ADDIN (addin));
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE_ADDIN (addin));
+  g_assert (IDE_IS_PIPELINE (self));
 
   if (g_object_get_data (G_OBJECT (addin), "HAS_LOADED"))
-    ide_build_pipeline_addin_unload (addin, self);
+    ide_pipeline_addin_unload (addin, self);
 
   IDE_EXIT;
 }
 
 static void
-build_command_query_cb (IdeBuildStage    *stage,
-                        IdeBuildPipeline *pipeline,
+build_command_query_cb (IdePipelineStage *stage,
+                        IdePipeline      *pipeline,
                         GPtrArray        *targets,
                         GCancellable     *cancellable,
                         gpointer          user_data)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (stage));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE_STAGE_LAUNCHER (stage));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (user_data == NULL);
 
-  ide_build_stage_set_completed (stage, FALSE);
+  ide_pipeline_stage_set_completed (stage, FALSE);
 
   IDE_EXIT;
 }
 
 static void
-register_build_commands_stage (IdeBuildPipeline *self,
-                               IdeContext       *context)
+register_build_commands_stage (IdePipeline *self,
+                               IdeContext  *context)
 {
   g_autoptr(GError) error = NULL;
   const gchar * const *build_commands;
   g_autofree gchar *rundir_path = NULL;
   GFile *rundir;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (IDE_IS_CONFIG (self->config));
 
@@ -1017,9 +1017,9 @@ register_build_commands_stage (IdeBuildPipeline *self,
   for (guint i = 0; build_commands[i]; i++)
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      g_autoptr(IdeBuildStage) stage = NULL;
+      g_autoptr(IdePipelineStage) stage = NULL;
 
-      if (NULL == (launcher = ide_build_pipeline_create_launcher (self, &error)))
+      if (NULL == (launcher = ide_pipeline_create_launcher (self, &error)))
         {
           g_warning ("%s", error->message);
           return;
@@ -1035,27 +1035,27 @@ register_build_commands_stage (IdeBuildPipeline *self,
       if (rundir_path != NULL)
         ide_subprocess_launcher_set_cwd (launcher, rundir_path);
 
-      stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+      stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                             "launcher", launcher,
                             NULL);
 
       g_signal_connect (stage, "query", G_CALLBACK (build_command_query_cb), NULL);
 
-      ide_build_pipeline_attach (self,
-                                  IDE_BUILD_PHASE_BUILD | IDE_BUILD_PHASE_AFTER,
+      ide_pipeline_attach (self,
+                                  IDE_PIPELINE_PHASE_BUILD | IDE_PIPELINE_PHASE_AFTER,
                                   i,
                                   stage);
     }
 }
 
 static void
-register_post_install_commands_stage (IdeBuildPipeline *self,
+register_post_install_commands_stage (IdePipeline *self,
                                       IdeContext       *context)
 {
   g_autoptr(GError) error = NULL;
   const gchar * const *post_install_commands;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (IDE_IS_CONFIG (self->config));
 
@@ -1065,9 +1065,9 @@ register_post_install_commands_stage (IdeBuildPipeline *self,
   for (guint i = 0; post_install_commands[i]; i++)
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      g_autoptr(IdeBuildStage) stage = NULL;
+      g_autoptr(IdePipelineStage) stage = NULL;
 
-      if (NULL == (launcher = ide_build_pipeline_create_launcher (self, &error)))
+      if (NULL == (launcher = ide_pipeline_create_launcher (self, &error)))
         {
           ide_object_warning (self, "%s", error->message);
           return;
@@ -1077,12 +1077,12 @@ register_post_install_commands_stage (IdeBuildPipeline *self,
       ide_subprocess_launcher_push_argv (launcher, "-c");
       ide_subprocess_launcher_push_argv (launcher, post_install_commands[i]);
 
-      stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+      stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                             "launcher", launcher,
                             NULL);
 
-      ide_build_pipeline_attach (self,
-                                  IDE_BUILD_PHASE_INSTALL | IDE_BUILD_PHASE_AFTER,
+      ide_pipeline_attach (self,
+                                  IDE_PIPELINE_PHASE_INSTALL | IDE_PIPELINE_PHASE_AFTER,
                                   i,
                                   stage);
     }
@@ -1098,17 +1098,17 @@ collect_pipeline_addins (IdeExtensionSetAdapter *set,
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE_ADDIN (exten));
+  g_assert (IDE_IS_PIPELINE_ADDIN (exten));
   g_assert (addins != NULL);
 
   g_ptr_array_add (addins, g_object_ref (exten));
 }
 
 static gboolean
-ide_build_pipeline_load_cb (IdleLoadState *state)
+ide_pipeline_load_cb (IdleLoadState *state)
 {
   g_assert (state != NULL);
-  g_assert (IDE_IS_BUILD_PIPELINE (state->self));
+  g_assert (IDE_IS_PIPELINE (state->self));
   g_assert (state->addins != NULL);
 
   /*
@@ -1119,11 +1119,11 @@ ide_build_pipeline_load_cb (IdleLoadState *state)
 
   if (state->addins->len > 0)
     {
-      IdeBuildPipelineAddin *addin = g_ptr_array_index (state->addins, state->addins->len - 1);
+      IdePipelineAddin *addin = g_ptr_array_index (state->addins, state->addins->len - 1);
       gint64 begin, end;
 
       begin = g_get_monotonic_time ();
-      ide_build_pipeline_addin_load (addin, state->self);
+      ide_pipeline_addin_load (addin, state->self);
       end = g_get_monotonic_time ();
 
       g_debug ("%s loaded in %lf seconds",
@@ -1143,7 +1143,7 @@ ide_build_pipeline_load_cb (IdleLoadState *state)
 }
 
 /**
- * ide_build_pipeline_load:
+ * ide_pipeline_load:
  *
  * This manages the loading of addins which will register their necessary build
  * stages.  We do this separately from ::constructed so that we can
@@ -1154,7 +1154,7 @@ ide_build_pipeline_load_cb (IdleLoadState *state)
  * Since: 3.32
  */
 static void
-ide_build_pipeline_load (IdeBuildPipeline *self)
+ide_pipeline_load (IdePipeline *self)
 {
   g_autoptr(GPtrArray) addins = NULL;
   IdleLoadState *state;
@@ -1162,7 +1162,7 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (self->addins == NULL);
 
   /* We might have already disposed if our pipeline got discarded */
@@ -1174,17 +1174,17 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
 
   self->addins = ide_extension_set_adapter_new (IDE_OBJECT (self),
                                                 peas_engine_get_default (),
-                                                IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                                IDE_TYPE_PIPELINE_ADDIN,
                                                 NULL, NULL);
 
   g_signal_connect (self->addins,
                     "extension-added",
-                    G_CALLBACK (ide_build_pipeline_extension_added),
+                    G_CALLBACK (ide_pipeline_extension_added),
                     self);
 
   g_signal_connect (self->addins,
                     "extension-removed",
-                    G_CALLBACK (ide_build_pipeline_extension_removed),
+                    G_CALLBACK (ide_pipeline_extension_removed),
                     self);
 
   /* Collect our addins so we can incrementally load them in an
@@ -1201,7 +1201,7 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
 
   self->idle_addins_load_source =
     g_idle_add_full (G_PRIORITY_LOW,
-                     (GSourceFunc) ide_build_pipeline_load_cb,
+                     (GSourceFunc) ide_pipeline_load_cb,
                      state,
                      idle_load_state_free);
 
@@ -1209,12 +1209,12 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
 }
 
 static void
-ide_build_pipeline_load_get_info_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+ide_pipeline_load_get_info_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
 {
   IdeDevice *device = (IdeDevice *)object;
-  g_autoptr(IdeBuildPipeline) self = user_data;
+  g_autoptr(IdePipeline) self = user_data;
   g_autoptr(IdeDeviceInfo) info = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -1222,7 +1222,7 @@ ide_build_pipeline_load_get_info_cb (GObject      *object,
 
   g_assert (IDE_IS_DEVICE (device));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   if (!(info = ide_device_get_info_finish (device, result, &error)))
     {
@@ -1233,17 +1233,17 @@ ide_build_pipeline_load_get_info_cb (GObject      *object,
   if (g_cancellable_is_cancelled (self->cancellable))
     IDE_EXIT;
 
-  _ide_build_pipeline_check_toolchain (self, info);
+  _ide_pipeline_check_toolchain (self, info);
 
-  ide_build_pipeline_load (self);
+  ide_pipeline_load (self);
 }
 
 static void
-ide_build_pipeline_begin_load (IdeBuildPipeline *self)
+ide_pipeline_begin_load (IdePipeline *self)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_DEVICE (self->device));
 
   /*
@@ -1259,17 +1259,17 @@ ide_build_pipeline_begin_load (IdeBuildPipeline *self)
 
   ide_device_get_info_async (self->device,
                              self->cancellable,
-                             ide_build_pipeline_load_get_info_cb,
+                             ide_pipeline_load_get_info_cb,
                              g_object_ref (self));
 
   IDE_EXIT;
 }
 
 /**
- * ide_build_pipeline_unload:
- * @self: an #IdeBuildPipeline
+ * ide_pipeline_unload:
+ * @self: an #IdePipeline
  *
- * This clears things up that were initialized in ide_build_pipeline_load().
+ * This clears things up that were initialized in ide_pipeline_load().
  * This function is safe to run even if load has not been called. We will not
  * clean things up if the pipeline is currently executing (we can wait until
  * its finished or dispose/finalize to cleanup up further.
@@ -1277,11 +1277,11 @@ ide_build_pipeline_begin_load (IdeBuildPipeline *self)
  * Since: 3.32
  */
 static void
-ide_build_pipeline_unload (IdeBuildPipeline *self)
+ide_pipeline_unload (IdePipeline *self)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   g_clear_object (&self->addins);
 
@@ -1289,13 +1289,13 @@ ide_build_pipeline_unload (IdeBuildPipeline *self)
 }
 
 static void
-ide_build_pipeline_notify_ready (IdeBuildPipeline *self,
-                                 GParamSpec       *pspec,
-                                 IdeConfig *configuration)
+ide_pipeline_notify_ready (IdePipeline *self,
+                           GParamSpec  *pspec,
+                           IdeConfig   *configuration)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_CONFIG (configuration));
 
   /*
@@ -1308,9 +1308,9 @@ ide_build_pipeline_notify_ready (IdeBuildPipeline *self,
   if (ide_config_get_ready (configuration))
     {
       g_signal_handlers_disconnect_by_func (configuration,
-                                            G_CALLBACK (ide_build_pipeline_notify_ready),
+                                            G_CALLBACK (ide_pipeline_notify_ready),
                                             self);
-      ide_build_pipeline_begin_load (self);
+      ide_pipeline_begin_load (self);
     }
   else
     g_debug ("Configuration not yet ready, delaying pipeline setup");
@@ -1319,9 +1319,9 @@ ide_build_pipeline_notify_ready (IdeBuildPipeline *self,
 }
 
 static void
-ide_build_pipeline_finalize (GObject *object)
+ide_pipeline_finalize (GObject *object)
 {
-  IdeBuildPipeline *self = (IdeBuildPipeline *)object;
+  IdePipeline *self = (IdePipeline *)object;
 
   IDE_ENTRY;
 
@@ -1343,7 +1343,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
   g_clear_pointer (&self->host_triplet, ide_triplet_unref);
 
-  G_OBJECT_CLASS (ide_build_pipeline_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_pipeline_parent_class)->finalize (object);
 
   DZL_COUNTER_DEC (Instances);
 
@@ -1351,18 +1351,18 @@ ide_build_pipeline_finalize (GObject *object)
 }
 
 static void
-ide_build_pipeline_destroy (IdeObject *object)
+ide_pipeline_destroy (IdeObject *object)
 {
-  IdeBuildPipeline *self = IDE_BUILD_PIPELINE (object);
+  IdePipeline *self = IDE_PIPELINE (object);
   g_auto(IdePtyFd) fd = IDE_PTY_FD_INVALID;
 
   IDE_ENTRY;
 
   g_clear_handle_id (&self->idle_addins_load_source, g_source_remove);
 
-  _ide_build_pipeline_cancel (self);
+  _ide_pipeline_cancel (self);
 
-  ide_build_pipeline_unload (self);
+  ide_pipeline_unload (self);
 
   g_clear_pointer (&self->message, g_free);
 
@@ -1372,22 +1372,22 @@ ide_build_pipeline_destroy (IdeObject *object)
   if (IDE_IS_PTY_INTERCEPT (&self->intercept))
     ide_pty_intercept_clear (&self->intercept);
 
-  IDE_OBJECT_CLASS (ide_build_pipeline_parent_class)->destroy (object);
+  IDE_OBJECT_CLASS (ide_pipeline_parent_class)->destroy (object);
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_build_pipeline_initable_init (GInitable     *initable,
-                                  GCancellable  *cancellable,
-                                  GError       **error)
+ide_pipeline_initable_init (GInitable     *initable,
+                            GCancellable  *cancellable,
+                            GError       **error)
 {
-  IdeBuildPipeline *self = (IdeBuildPipeline *)initable;
+  IdePipeline *self = (IdePipeline *)initable;
   IdePtyFd master_fd;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_CONFIG (self->config));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -1426,16 +1426,16 @@ ide_build_pipeline_initable_init (GInitable     *initable,
 
   ide_pty_intercept_set_callback (&self->intercept,
                               &self->intercept.master,
-                              ide_build_pipeline_intercept_pty_master_cb,
+                              ide_pipeline_intercept_pty_master_cb,
                               self);
 
   g_signal_connect_object (self->config,
                            "notify::ready",
-                           G_CALLBACK (ide_build_pipeline_notify_ready),
+                           G_CALLBACK (ide_pipeline_notify_ready),
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_build_pipeline_notify_ready (self, NULL, self->config);
+  ide_pipeline_notify_ready (self, NULL, self->config);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PTY]);
 
@@ -1445,21 +1445,21 @@ ide_build_pipeline_initable_init (GInitable     *initable,
 static void
 initable_iface_init (GInitableIface *iface)
 {
-  iface->init = ide_build_pipeline_initable_init;
+  iface->init = ide_pipeline_initable_init;
 }
 
 static void
-ide_build_pipeline_parent_set (IdeObject *object,
-                               IdeObject *parent)
+ide_pipeline_parent_set (IdeObject *object,
+                         IdeObject *parent)
 {
-  IdeBuildPipeline *self = IDE_BUILD_PIPELINE (object);
+  IdePipeline *self = IDE_PIPELINE (object);
   IdeToolchainManager *toolchain_manager;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) workdir = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (!parent || IDE_IS_OBJECT (parent));
   g_assert (IDE_IS_CONFIG (self->config));
 
@@ -1478,12 +1478,12 @@ ide_build_pipeline_parent_set (IdeObject *object,
 }
 
 static void
-ide_build_pipeline_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
+ide_pipeline_get_property (GObject    *object,
+                           guint       prop_id,
+                           GValue     *value,
+                           GParamSpec *pspec)
 {
-  IdeBuildPipeline *self = IDE_BUILD_PIPELINE (object);
+  IdePipeline *self = IDE_PIPELINE (object);
 
   switch (prop_id)
     {
@@ -1492,19 +1492,19 @@ ide_build_pipeline_get_property (GObject    *object,
       break;
 
     case PROP_CONFIG:
-      g_value_set_object (value, ide_build_pipeline_get_config (self));
+      g_value_set_object (value, ide_pipeline_get_config (self));
       break;
 
     case PROP_MESSAGE:
-      g_value_set_string (value, ide_build_pipeline_get_message (self));
+      g_value_set_string (value, ide_pipeline_get_message (self));
       break;
 
     case PROP_PHASE:
-      g_value_set_flags (value, ide_build_pipeline_get_phase (self));
+      g_value_set_flags (value, ide_pipeline_get_phase (self));
       break;
 
     case PROP_PTY:
-      g_value_set_object (value, ide_build_pipeline_get_pty (self));
+      g_value_set_object (value, ide_pipeline_get_pty (self));
       break;
 
     default:
@@ -1513,12 +1513,12 @@ ide_build_pipeline_get_property (GObject    *object,
 }
 
 static void
-ide_build_pipeline_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
+ide_pipeline_set_property (GObject      *object,
+                           guint         prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
 {
-  IdeBuildPipeline *self = IDE_BUILD_PIPELINE (object);
+  IdePipeline *self = IDE_PIPELINE (object);
 
   switch (prop_id)
     {
@@ -1536,20 +1536,20 @@ ide_build_pipeline_set_property (GObject      *object,
 }
 
 static void
-ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
+ide_pipeline_class_init (IdePipelineClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_build_pipeline_finalize;
-  object_class->get_property = ide_build_pipeline_get_property;
-  object_class->set_property = ide_build_pipeline_set_property;
+  object_class->finalize = ide_pipeline_finalize;
+  object_class->get_property = ide_pipeline_get_property;
+  object_class->set_property = ide_pipeline_set_property;
 
-  i_object_class->destroy = ide_build_pipeline_destroy;
-  i_object_class->parent_set = ide_build_pipeline_parent_set;
+  i_object_class->destroy = ide_pipeline_destroy;
+  i_object_class->parent_set = ide_pipeline_parent_set;
 
   /**
-   * IdeBuildPipeline:busy:
+   * IdePipeline:busy:
    *
    * Gets the "busy" property. If %TRUE, the pipeline is busy executing.
    *
@@ -1563,7 +1563,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * IdeBuildPipeline:configuration:
+   * IdePipeline:configuration:
    *
    * The configuration to use for the build pipeline.
    *
@@ -1577,7 +1577,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   /**
-   * IdeBuildPipeline:device:
+   * IdePipeline:device:
    *
    * The "device" property is the device we are compiling for.
    *
@@ -1591,7 +1591,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * IdeBuildPipeline:message:
+   * IdePipeline:message:
    *
    * The "message" property is descriptive text about what the the
    * pipeline is doing or it's readiness status.
@@ -1606,7 +1606,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * IdeBuildPipeline:phase:
+   * IdePipeline:phase:
    *
    * The current build phase during execution of the pipeline.
    *
@@ -1615,16 +1615,16 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
   properties [PROP_PHASE] =
     g_param_spec_flags ("phase",
                         "Phase",
-                        "The phase that is being executed",
-                        IDE_TYPE_BUILD_PHASE,
-                        IDE_BUILD_PHASE_NONE,
+                        "The phase that is being buildd",
+                        IDE_TYPE_PIPELINE_PHASE,
+                        IDE_PIPELINE_PHASE_NONE,
                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * IdeBuildPipeline:pty:
+   * IdePipeline:pty:
    *
    * The "pty" property is the #VtePty that is used by build stages that
-   * execute subprocesses with a pseudo terminal.
+   * build subprocesses with a pseudo terminal.
    *
    * Since: 3.32
    */
@@ -1638,8 +1638,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   /**
-   * IdeBuildPipeline::diagnostic:
-   * @self: An #IdeBuildPipeline
+   * IdePipeline::diagnostic:
+   * @self: An #IdePipeline
    * @diagnostic: The newly created diagnostic
    *
    * This signal is emitted when a plugin has detected a diagnostic while
@@ -1655,12 +1655,12 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                                 G_TYPE_NONE, 1, IDE_TYPE_DIAGNOSTIC);
 
   /**
-   * IdeBuildPipeline::started:
-   * @self: An #IdeBuildPipeline
-   * @phase: the #IdeBuildPhase for which we are advancing
+   * IdePipeline::started:
+   * @self: An #IdePipeline
+   * @phase: the #IdePipelinePhase for which we are advancing
    *
    * This signal is emitted when the pipeline has started executing in
-   * response to ide_build_pipeline_execute_async() being called.
+   * response to ide_pipeline_build_async() being called.
    *
    * Since: 3.32
    */
@@ -1668,13 +1668,13 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
     g_signal_new_class_handler ("started",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
-                                G_CALLBACK (ide_build_pipeline_real_started),
+                                G_CALLBACK (ide_pipeline_real_started),
                                 NULL, NULL, NULL,
-                                G_TYPE_NONE, 1, IDE_TYPE_BUILD_PHASE);
+                                G_TYPE_NONE, 1, IDE_TYPE_PIPELINE_PHASE);
 
   /**
-   * IdeBuildPipeline::finished:
-   * @self: An #IdeBuildPipeline
+   * IdePipeline::finished:
+   * @self: An #IdePipeline
    * @failed: If the build was a failure
    *
    * This signal is emitted when the build process has finished executing.
@@ -1687,13 +1687,13 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
     g_signal_new_class_handler ("finished",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
-                                G_CALLBACK (ide_build_pipeline_real_finished),
+                                G_CALLBACK (ide_pipeline_real_finished),
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 static void
-ide_build_pipeline_init (IdeBuildPipeline *self)
+ide_pipeline_init (IdePipeline *self)
 {
   DZL_COUNTER_INC (Instances);
 
@@ -1714,25 +1714,25 @@ ide_build_pipeline_init (IdeBuildPipeline *self)
 }
 
 static void
-ide_build_pipeline_stage_execute_cb (GObject      *object,
+ide_pipeline_stage_build_cb (GObject      *object,
                                      GAsyncResult *result,
                                      gpointer      user_data)
 {
-  IdeBuildStage *stage = (IdeBuildStage *)object;
-  IdeBuildPipeline *self;
+  IdePipelineStage *stage = (IdePipelineStage *)object;
+  IdePipeline *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
-  if (!_ide_build_stage_execute_with_query_finish (stage, result, &error))
+  if (!_ide_pipeline_stage_build_with_query_finish (stage, result, &error))
     {
       g_debug ("stage of type %s failed: %s",
                G_OBJECT_TYPE_NAME (stage),
@@ -1741,24 +1741,24 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
       ide_task_return_error (task, g_steal_pointer (&error));
     }
 
-  ide_build_stage_set_completed (stage, !self->failed);
+  ide_pipeline_stage_set_completed (stage, !self->failed);
 
   g_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
   self->chained_bindings = g_ptr_array_new_with_free_func (g_object_unref);
 
   if (self->failed == FALSE)
-    ide_build_pipeline_tick_execute (self, task);
+    ide_pipeline_tick_build (self, task);
 
   IDE_EXIT;
 }
 
 static void
-ide_build_pipeline_try_chain (IdeBuildPipeline *self,
-                              IdeBuildStage    *stage,
-                              guint             position)
+ide_pipeline_try_chain (IdePipeline      *self,
+                        IdePipelineStage *stage,
+                        guint             position)
 {
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
 
   for (; position < self->pipeline->len; position++)
     {
@@ -1770,14 +1770,14 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
        * Ignore all future stages if they were not requested by the current
        * pipeline execution.
        */
-      if (((entry->phase & IDE_BUILD_PHASE_MASK) & self->requested_mask) == 0)
+      if (((entry->phase & IDE_PIPELINE_PHASE_MASK) & self->requested_mask) == 0)
         return;
 
       /* Skip past the stage if it is disabled. */
-      if (ide_build_stage_get_disabled (entry->stage))
+      if (ide_pipeline_stage_get_disabled (entry->stage))
         continue;
 
-      chained = ide_build_stage_chain (stage, entry->stage);
+      chained = ide_pipeline_stage_chain (stage, entry->stage);
 
       IDE_TRACE_MSG ("Checking if %s chains to stage[%d] (%s) = %s",
                      G_OBJECT_TYPE_NAME (stage),
@@ -1796,12 +1796,12 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
 }
 
 static void
-complete_queued_before_phase (IdeBuildPipeline *self,
-                              IdeBuildPhase     phase)
+complete_queued_before_phase (IdePipeline      *self,
+                              IdePipelinePhase  phase)
 {
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
-  phase = phase & IDE_BUILD_PHASE_MASK;
+  phase = phase & IDE_PIPELINE_PHASE_MASK;
 
   for (GList *iter = self->task_queue.head; iter; iter = iter->next)
     {
@@ -1837,15 +1837,15 @@ complete_queued_before_phase (IdeBuildPipeline *self,
 }
 
 static void
-ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
-                                 IdeTask          *task)
+ide_pipeline_tick_build (IdePipeline *self,
+                         IdeTask     *task)
 {
   GCancellable *cancellable;
   TaskData *td;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_TASK (task));
 
   self->current_stage = NULL;
@@ -1856,11 +1856,11 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
   g_assert (td != NULL);
   g_assert (td->type == TASK_BUILD || td->type == TASK_REBUILD);
   g_assert (td->task == task);
-  g_assert (td->phase != IDE_BUILD_PHASE_NONE);
+  g_assert (td->phase != IDE_PIPELINE_PHASE_NONE);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Clear any message from the previous stage */
-  _ide_build_pipeline_set_message (self, NULL);
+  _ide_pipeline_set_message (self, NULL);
 
   /* Clear cached directory enter/leave tracking */
   g_clear_pointer (&self->errfmt_current_dir, g_free);
@@ -1871,7 +1871,7 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
     IDE_EXIT;
 
   /* If we can skip walking the pipeline, go ahead and do so now. */
-  if (!ide_build_pipeline_request_phase (self, td->phase))
+  if (!ide_pipeline_request_phase (self, td->phase))
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
@@ -1879,9 +1879,9 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
 
   /*
    * Walk forward to the next stage requiring execution and asynchronously
-   * execute it. The stage may also need to perform an async ::query signal
-   * delaying pipeline execution. _ide_build_stage_execute_with_query_async()
-   * will handle all of that for us, in cause they call ide_build_stage_pause()
+   * build it. The stage may also need to perform an async ::query signal
+   * delaying pipeline execution. _ide_pipeline_stage_build_with_query_async()
+   * will handle all of that for us, in cause they call ide_pipeline_stage_pause()
    * during the ::query callback.
    */
   for (self->position++; (guint)self->position < self->pipeline->len; self->position++)
@@ -1889,16 +1889,16 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, self->position);
 
       g_assert (entry->stage != NULL);
-      g_assert (IDE_IS_BUILD_STAGE (entry->stage));
+      g_assert (IDE_IS_PIPELINE_STAGE (entry->stage));
 
       /* Complete any tasks that are waiting for this to complete */
       complete_queued_before_phase (self, entry->phase);
 
       /* Ignore the stage if it is disabled */
-      if (ide_build_stage_get_disabled (entry->stage))
+      if (ide_pipeline_stage_get_disabled (entry->stage))
         continue;
 
-      if ((entry->phase & IDE_BUILD_PHASE_MASK) & self->requested_mask)
+      if ((entry->phase & IDE_PIPELINE_PHASE_MASK) & self->requested_mask)
         {
           GPtrArray *targets = NULL;
 
@@ -1914,13 +1914,13 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
            * duplicate work. This will also advance self->position based on
            * how many stages were chained.
            */
-          ide_build_pipeline_try_chain (self, entry->stage, self->position + 1);
+          ide_pipeline_try_chain (self, entry->stage, self->position + 1);
 
-          _ide_build_stage_execute_with_query_async (entry->stage,
+          _ide_pipeline_stage_build_with_query_async (entry->stage,
                                                      self,
                                                      targets,
                                                      cancellable,
-                                                     ide_build_pipeline_stage_execute_cb,
+                                                     ide_pipeline_stage_build_cb,
                                                      g_object_ref (task));
 
           g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
@@ -1936,13 +1936,13 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
 }
 
 static void
-ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
-                                          GParamSpec       *pspec,
-                                          IdeTask          *task)
+ide_pipeline_task_notify_completed (IdePipeline *self,
+                                    GParamSpec  *pspec,
+                                    IdeTask     *task)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_TASK (task));
 
   IDE_TRACE_MSG ("Clearing busy bit for pipeline");
@@ -1956,11 +1956,11 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
 
   /*
-   * XXX: How do we ensure transients are executed with the part of the
+   * XXX: How do we ensure transients are buildd with the part of the
    *      pipeline we care about? We might just need to ensure that :busy is
    *      FALSE before adding transients.
    */
-  ide_build_pipeline_release_transients (self);
+  ide_pipeline_release_transients (self);
 
   g_signal_emit (self, signals [FINISHED], 0, self->failed);
 
@@ -1973,64 +1973,64 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
    * go ahead and unload the pipeline.
    */
   if (!ide_config_get_ready (self->config))
-    ide_build_pipeline_unload (self);
+    ide_pipeline_unload (self);
   else
-    ide_build_pipeline_queue_flush (self);
+    ide_pipeline_queue_flush (self);
 
   IDE_EXIT;
 }
 
 /**
- * ide_build_pipeline_build_targets_async:
- * @self: A @IdeBuildPipeline
+ * ide_pipeline_build_targets_async:
+ * @self: A @IdePipeline
  * @phase: the requested build phase
  * @targets: (nullable) (element-type IdeBuildTarget): an optional array of
  *   #IdeBuildTarget for the pipeline to build.
  * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: a callback to execute upon completion
+ * @callback: a callback to build upon completion
  * @user_data: data for @callback
  *
  * Asynchronously starts the build pipeline.
  *
- * The @phase parameter should contain the #IdeBuildPhase that is
+ * The @phase parameter should contain the #IdePipelinePhase that is
  * necessary to complete. If you simply want to trigger a generic
- * build, you probably want %IDE_BUILD_PHASE_BUILD. If you only
+ * build, you probably want %IDE_PIPELINE_PHASE_BUILD. If you only
  * need to configure the project (and necessarily the dependencies
- * up to that phase) you might want %IDE_BUILD_PHASE_CONFIGURE.
+ * up to that phase) you might want %IDE_PIPELINE_PHASE_CONFIGURE.
  *
- * You may not specify %IDE_BUILD_PHASE_AFTER or
- * %IDE_BUILD_PHASE_BEFORE flags as those must always be processed
+ * You may not specify %IDE_PIPELINE_PHASE_AFTER or
+ * %IDE_PIPELINE_PHASE_BEFORE flags as those must always be processed
  * with the underlying phase they are attached to.
  *
- * Upon completion, @callback will be executed and should call
- * ide_build_pipeline_execute_finish() to get the status of the
+ * Upon completion, @callback will be buildd and should call
+ * ide_pipeline_build_finish() to get the status of the
  * operation.
  *
  * Since: 3.32
  */
 void
-ide_build_pipeline_build_targets_async (IdeBuildPipeline    *self,
-                                        IdeBuildPhase        phase,
-                                        GPtrArray           *targets,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
+ide_pipeline_build_targets_async (IdePipeline         *self,
+                                  IdePipelinePhase        phase,
+                                  GPtrArray           *targets,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   TaskData *task_data;
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_build_pipeline_build_async);
+  ide_task_set_source_tag (task, ide_pipeline_build_targets_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  if (!ide_build_pipeline_check_ready (self, task))
+  if (!ide_pipeline_check_ready (self, task))
     return;
 
   /*
@@ -2067,7 +2067,7 @@ ide_build_pipeline_build_targets_async (IdeBuildPipeline    *self,
 
   g_queue_push_tail (&self->task_queue, g_steal_pointer (&task));
 
-  ide_build_pipeline_queue_flush (self);
+  ide_pipeline_queue_flush (self);
 
   IDE_EXIT;
 
@@ -2077,30 +2077,30 @@ short_circuit:
 }
 
 /**
- * ide_build_pipeline_build_targets_finish:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_build_targets_finish:
+ * @self: An #IdePipeline
  * @result: a #GAsyncResult provided to callback
  * @error: A location for a #GError, or %NULL
  *
  * This function completes the asynchronous request to build
  * up to a particular phase and targets of the build pipeline.
  *
- * Returns: %TRUE if the build stages were executed successfully
+ * Returns: %TRUE if the build stages were buildd successfully
  *   up to the requested build phase provided to
- *   ide_build_pipeline_build_targets_async().
+ *   ide_pipeline_build_targets_async().
  *
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_build_targets_finish (IdeBuildPipeline  *self,
-                                         GAsyncResult      *result,
-                                         GError           **error)
+ide_pipeline_build_targets_finish (IdePipeline   *self,
+                                   GAsyncResult  *result,
+                                   GError       **error)
 {
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
@@ -2109,66 +2109,66 @@ ide_build_pipeline_build_targets_finish (IdeBuildPipeline  *self,
 }
 
 /**
- * ide_build_pipeline_build_async:
- * @self: A @IdeBuildPipeline
+ * ide_pipeline_build_async:
+ * @self: A @IdePipeline
  * @phase: the requested build phase
  * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: a callback to execute upon completion
+ * @callback: a callback to build upon completion
  * @user_data: data for @callback
  *
  * Asynchronously starts the build pipeline.
  *
- * The @phase parameter should contain the #IdeBuildPhase that is
+ * The @phase parameter should contain the #IdePipelinePhase that is
  * necessary to complete. If you simply want to trigger a generic
- * build, you probably want %IDE_BUILD_PHASE_BUILD. If you only
+ * build, you probably want %IDE_PIPELINE_PHASE_BUILD. If you only
  * need to configure the project (and necessarily the dependencies
- * up to that phase) you might want %IDE_BUILD_PHASE_CONFIGURE.
+ * up to that phase) you might want %IDE_PIPELINE_PHASE_CONFIGURE.
  *
- * You may not specify %IDE_BUILD_PHASE_AFTER or
- * %IDE_BUILD_PHASE_BEFORE flags as those must always be processed
+ * You may not specify %IDE_PIPELINE_PHASE_AFTER or
+ * %IDE_PIPELINE_PHASE_BEFORE flags as those must always be processed
  * with the underlying phase they are attached to.
  *
- * Upon completion, @callback will be executed and should call
- * ide_build_pipeline_execute_finish() to get the status of the
+ * Upon completion, @callback will be buildd and should call
+ * ide_pipeline_build_finish() to get the status of the
  * operation.
  *
  * Since: 3.32
  */
 void
-ide_build_pipeline_build_async (IdeBuildPipeline    *self,
-                                IdeBuildPhase        phase,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
+ide_pipeline_build_async (IdePipeline         *self,
+                          IdePipelinePhase        phase,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
 {
-  ide_build_pipeline_build_targets_async (self, phase, NULL, cancellable, callback, user_data);
+  ide_pipeline_build_targets_async (self, phase, NULL, cancellable, callback, user_data);
 }
 
 /**
- * ide_build_pipeline_build_finish:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_build_finish:
+ * @self: An #IdePipeline
  * @result: a #GAsyncResult provided to callback
  * @error: A location for a #GError, or %NULL
  *
  * This function completes the asynchronous request to build
  * up to a particular phase of the build pipeline.
  *
- * Returns: %TRUE if the build stages were executed successfully
+ * Returns: %TRUE if the build stages were buildd successfully
  *   up to the requested build phase provided to
- *   ide_build_pipeline_build_async().
+ *   ide_pipeline_build_async().
  *
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_build_finish (IdeBuildPipeline  *self,
-                                 GAsyncResult      *result,
-                                 GError           **error)
+ide_pipeline_build_finish (IdePipeline   *self,
+                           GAsyncResult  *result,
+                           GError       **error)
 {
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
@@ -2176,44 +2176,10 @@ ide_build_pipeline_build_finish (IdeBuildPipeline  *self,
   IDE_RETURN (ret);
 }
 
-/**
- * ide_build_pipeline_execute_async:
- * @self: A @IdeBuildPipeline
- * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: a callback to execute upon completion
- * @user_data: data for @callback
- *
- * Asynchronously starts the build pipeline.
- *
- * Any phase that has been invalidated up to the requested phase
- * will be executed until a stage has failed.
- *
- * Upon completion, @callback will be executed and should call
- * ide_build_pipeline_execute_finish() to get the status of the
- * operation.
- *
- * Since: 3.32
- */
-void
-ide_build_pipeline_execute_async (IdeBuildPipeline    *self,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
-{
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  ide_build_pipeline_build_async (self, self->requested_mask, cancellable, callback, user_data);
-
-  IDE_EXIT;
-}
-
 static gboolean
-ide_build_pipeline_do_flush (gpointer data)
+ide_pipeline_do_flush (gpointer data)
 {
-  IdeBuildPipeline *self = data;
+  IdePipeline *self = data;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) builddir = NULL;
   g_autoptr(GError) error = NULL;
@@ -2221,7 +2187,7 @@ ide_build_pipeline_do_flush (gpointer data)
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   /*
    * If the busy bit is set, there is nothing to do right now.
@@ -2269,7 +2235,7 @@ ide_build_pipeline_do_flush (gpointer data)
    */
   g_signal_connect_object (task,
                            "notify::completed",
-                           G_CALLBACK (ide_build_pipeline_task_notify_completed),
+                           G_CALLBACK (ide_pipeline_task_notify_completed),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -2288,7 +2254,7 @@ ide_build_pipeline_do_flush (gpointer data)
    */
   if (self->failed &&
       task_data->type == TASK_BUILD &&
-      task_data->phase <= IDE_BUILD_PHASE_CONFIGURE)
+      task_data->phase <= IDE_PIPELINE_PHASE_CONFIGURE)
     {
       ide_task_return_new_error (task,
                                  IDE_BUILD_ERROR,
@@ -2317,9 +2283,9 @@ ide_build_pipeline_do_flush (gpointer data)
   {
     g_autoptr(GString) str = g_string_new (NULL);
     GFlagsClass *klass;
-    IdeBuildPhase phase = self->requested_mask;
+    IdePipelinePhase phase = self->requested_mask;
 
-    klass = g_type_class_peek (IDE_TYPE_BUILD_PHASE);
+    klass = g_type_class_peek (IDE_TYPE_PIPELINE_PHASE);
 
     for (guint i = 0; i < klass->n_values; i++)
       {
@@ -2346,7 +2312,7 @@ ide_build_pipeline_do_flush (gpointer data)
                  i,
                  build_phase_nick (entry->phase),
                  G_OBJECT_TYPE_NAME (entry->stage),
-                 ide_build_stage_get_completed (entry->stage) ? "completed" : "pending");
+                 ide_pipeline_stage_get_completed (entry->stage) ? "completed" : "pending");
       }
   }
 
@@ -2356,15 +2322,15 @@ ide_build_pipeline_do_flush (gpointer data)
   switch (task_data->type)
     {
     case TASK_BUILD:
-      ide_build_pipeline_tick_execute (self, task);
+      ide_pipeline_tick_build (self, task);
       break;
 
     case TASK_CLEAN:
-      ide_build_pipeline_tick_clean (self, task);
+      ide_pipeline_tick_clean (self, task);
       break;
 
     case TASK_REBUILD:
-      ide_build_pipeline_tick_rebuild (self, task);
+      ide_pipeline_tick_rebuild (self, task);
       break;
 
     default:
@@ -2378,14 +2344,14 @@ ide_build_pipeline_do_flush (gpointer data)
 }
 
 static void
-ide_build_pipeline_queue_flush (IdeBuildPipeline *self)
+ide_pipeline_queue_flush (IdePipeline *self)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   gdk_threads_add_idle_full (G_PRIORITY_LOW,
-                             ide_build_pipeline_do_flush,
+                             ide_pipeline_do_flush,
                              g_object_ref (self),
                              g_object_unref);
 
@@ -2393,75 +2359,51 @@ ide_build_pipeline_queue_flush (IdeBuildPipeline *self)
 }
 
 /**
- * ide_build_pipeline_execute_finish:
- *
- * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
- */
-gboolean
-ide_build_pipeline_execute_finish (IdeBuildPipeline  *self,
-                                   GAsyncResult      *result,
-                                   GError           **error)
-{
-  gboolean ret;
-
-  IDE_ENTRY;
-
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
-
-  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
-
-  IDE_RETURN (ret);
-}
-
-/**
- * ide_build_pipeline_attach:
- * @self: an #IdeBuildPipeline
- * @phase: An #IdeBuildPhase
+ * ide_pipeline_attach:
+ * @self: an #IdePipeline
+ * @phase: An #IdePipelinePhase
  * @priority: an optional priority for sorting within the phase
- * @stage: An #IdeBuildStage
+ * @stage: An #IdePipelineStage
  *
  * Insert @stage into the pipeline as part of the phase denoted by @phase.
  *
  * If priority is non-zero, it will be used to sort the stage among other
  * stages that are part of the same phase.
  *
- * Returns: A stage_id that may be passed to ide_build_pipeline_detach().
+ * Returns: A stage_id that may be passed to ide_pipeline_detach().
  *
  * Since: 3.32
  */
 guint
-ide_build_pipeline_attach (IdeBuildPipeline *self,
-                            IdeBuildPhase     phase,
-                            gint              priority,
-                            IdeBuildStage    *stage)
+ide_pipeline_attach (IdePipeline      *self,
+                     IdePipelinePhase  phase,
+                     gint              priority,
+                     IdePipelineStage *stage)
 {
   GFlagsClass *klass, *unref_class = NULL;
   guint ret = 0;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), 0);
-  g_return_val_if_fail (IDE_IS_BUILD_STAGE (stage), 0);
-  g_return_val_if_fail ((phase & IDE_BUILD_PHASE_MASK) != IDE_BUILD_PHASE_NONE, 0);
-  g_return_val_if_fail ((phase & IDE_BUILD_PHASE_WHENCE_MASK) == 0 ||
-                        (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_BEFORE ||
-                        (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_AFTER, 0);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
+  g_return_val_if_fail (IDE_IS_PIPELINE_STAGE (stage), 0);
+  g_return_val_if_fail ((phase & IDE_PIPELINE_PHASE_MASK) != IDE_PIPELINE_PHASE_NONE, 0);
+  g_return_val_if_fail ((phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == 0 ||
+                        (phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == IDE_PIPELINE_PHASE_BEFORE ||
+                        (phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == IDE_PIPELINE_PHASE_AFTER, 0);
 
-  if (!(klass = g_type_class_peek (IDE_TYPE_BUILD_PHASE)))
-    klass = unref_class = g_type_class_ref (IDE_TYPE_BUILD_PHASE);
+  if (!(klass = g_type_class_peek (IDE_TYPE_PIPELINE_PHASE)))
+    klass = unref_class = g_type_class_ref (IDE_TYPE_PIPELINE_PHASE);
 
   for (guint i = 0; i < klass->n_values; i++)
     {
       const GFlagsValue *value = &klass->values[i];
 
-      if ((phase & IDE_BUILD_PHASE_MASK) == value->value)
+      if ((phase & IDE_PIPELINE_PHASE_MASK) == value->value)
         {
           PipelineEntry entry = { 0 };
 
-          _ide_build_stage_set_phase (stage, phase);
+          _ide_pipeline_stage_set_phase (stage, phase);
 
           IDE_TRACE_MSG ("Adding stage to pipeline with phase %s and priority %d",
                          value->value_nick, priority);
@@ -2476,8 +2418,8 @@ ide_build_pipeline_attach (IdeBuildPipeline *self,
 
           ret = entry.id;
 
-          ide_build_stage_set_log_observer (stage,
-                                            ide_build_pipeline_log_observer,
+          ide_pipeline_stage_set_log_observer (stage,
+                                            ide_pipeline_log_observer,
                                             self,
                                             NULL);
 
@@ -2514,9 +2456,9 @@ cleanup:
 }
 
 /**
- * ide_build_pipeline_attach_launcher:
- * @self: an #IdeBuildPipeline
- * @phase: An #IdeBuildPhase
+ * ide_pipeline_attach_launcher:
+ * @self: an #IdePipeline
+ * @phase: An #IdePipelinePhase
  * @priority: an optional priority for sorting within the phase
  * @launcher: An #IdeSubprocessLauncher
  *
@@ -2526,35 +2468,35 @@ cleanup:
  * It is a programmer error to modify @launcher after passing it to this
  * function.
  *
- * Returns: A stage_id that may be passed to ide_build_pipeline_remove().
+ * Returns: A stage_id that may be passed to ide_pipeline_remove().
  *
  * Since: 3.32
  */
 guint
-ide_build_pipeline_attach_launcher (IdeBuildPipeline      *self,
-                                     IdeBuildPhase          phase,
-                                     gint                   priority,
-                                     IdeSubprocessLauncher *launcher)
+ide_pipeline_attach_launcher (IdePipeline           *self,
+                              IdePipelinePhase       phase,
+                              gint                   priority,
+                              IdeSubprocessLauncher *launcher)
 {
-  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autoptr(IdePipelineStage) stage = NULL;
   IdeContext *context;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), 0);
-  g_return_val_if_fail ((phase & IDE_BUILD_PHASE_MASK) != IDE_BUILD_PHASE_NONE, 0);
-  g_return_val_if_fail ((phase & IDE_BUILD_PHASE_WHENCE_MASK) == 0 ||
-                        (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_BEFORE ||
-                        (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_AFTER, 0);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
+  g_return_val_if_fail ((phase & IDE_PIPELINE_PHASE_MASK) != IDE_PIPELINE_PHASE_NONE, 0);
+  g_return_val_if_fail ((phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == 0 ||
+                        (phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == IDE_PIPELINE_PHASE_BEFORE ||
+                        (phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == IDE_PIPELINE_PHASE_AFTER, 0);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  stage = ide_build_stage_launcher_new (context, launcher);
+  stage = ide_pipeline_stage_launcher_new (context, launcher);
 
-  return ide_build_pipeline_attach (self, phase, priority, stage);
+  return ide_pipeline_attach (self, phase, priority, stage);
 }
 
 /**
- * ide_build_pipeline_request_phase:
- * @self: An #IdeBuildPipeline
- * @phase: An #IdeBuildPhase
+ * ide_pipeline_request_phase:
+ * @self: An #IdePipeline
+ * @phase: An #IdePipelinePhase
  *
  * Requests that the next execution of the pipeline will build up to @phase
  * including all stages that were previously invalidated.
@@ -2564,25 +2506,25 @@ ide_build_pipeline_attach_launcher (IdeBuildPipeline      *self,
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_request_phase (IdeBuildPipeline *self,
-                                  IdeBuildPhase     phase)
+ide_pipeline_request_phase (IdePipeline      *self,
+                            IdePipelinePhase  phase)
 {
   GFlagsClass *klass, *unref_class = NULL;
   gboolean ret = FALSE;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
-  g_return_val_if_fail ((phase & IDE_BUILD_PHASE_MASK) != IDE_BUILD_PHASE_NONE, FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
+  g_return_val_if_fail ((phase & IDE_PIPELINE_PHASE_MASK) != IDE_PIPELINE_PHASE_NONE, FALSE);
 
   /*
    * You can only request basic phases. That does not include modifiers
    * like BEFORE, AFTER, FAILED, FINISHED.
    */
-  phase &= IDE_BUILD_PHASE_MASK;
+  phase &= IDE_PIPELINE_PHASE_MASK;
 
-  if (!(klass = g_type_class_peek (IDE_TYPE_BUILD_PHASE)))
-    klass = unref_class = g_type_class_ref (IDE_TYPE_BUILD_PHASE);
+  if (!(klass = g_type_class_peek (IDE_TYPE_PIPELINE_PHASE)))
+    klass = unref_class = g_type_class_ref (IDE_TYPE_PIPELINE_PHASE);
 
   for (guint i = 0; i < klass->n_values; i++)
     {
@@ -2606,9 +2548,9 @@ cleanup:
 
   /*
    * If we have a stage in one of the requested phases, then we can let the
-   * caller know that they need to run execute_async() to be up to date. This
+   * caller know that they need to run build_async() to be up to date. This
    * is useful for situations where you might want to avoid calling
-   * execute_async() altogether. Additionally, we want to know if there are
+   * build_async() altogether. Additionally, we want to know if there are
    * any connections to the "query" which could cause the completed state
    * to be invalidated.
    */
@@ -2619,8 +2561,8 @@ cleanup:
       if (!(entry->phase & self->requested_mask))
         continue;
 
-      if (!ide_build_stage_get_completed (entry->stage) ||
-          _ide_build_stage_has_query (entry->stage))
+      if (!ide_pipeline_stage_get_completed (entry->stage) ||
+          _ide_pipeline_stage_has_query (entry->stage))
         {
           ret = TRUE;
           break;
@@ -2634,8 +2576,8 @@ cleanup:
 }
 
 /**
- * ide_build_pipeline_get_builddir:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_get_builddir:
+ * @self: An #IdePipeline
  *
  * Gets the "builddir" to be used for the build process. This is generally
  * the location that build systems will use for out-of-tree builds.
@@ -2645,16 +2587,16 @@ cleanup:
  * Since: 3.32
  */
 const gchar *
-ide_build_pipeline_get_builddir (IdeBuildPipeline *self)
+ide_pipeline_get_builddir (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->builddir;
 }
 
 /**
- * ide_build_pipeline_get_srcdir:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_get_srcdir:
+ * @self: An #IdePipeline
  *
  * Gets the "srcdir" of the project. This is equivalent to the
  * IdeVcs:working-directory property as a string.
@@ -2664,17 +2606,17 @@ ide_build_pipeline_get_builddir (IdeBuildPipeline *self)
  * Since: 3.32
  */
 const gchar *
-ide_build_pipeline_get_srcdir (IdeBuildPipeline *self)
+ide_pipeline_get_srcdir (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->srcdir;
 }
 
 static gchar *
-ide_build_pipeline_build_path_va_list (const gchar *prefix,
-                                       const gchar *first_part,
-                                       va_list      args)
+ide_pipeline_build_path_va_list (const gchar *prefix,
+                                 const gchar *first_part,
+                                 va_list      args)
 {
   g_autoptr(GPtrArray) ar = NULL;
 
@@ -2692,7 +2634,7 @@ ide_build_pipeline_build_path_va_list (const gchar *prefix,
 }
 
 /**
- * ide_build_pipeline_build_srcdir_path:
+ * ide_pipeline_build_srcdir_path:
  *
  * This is a convenience function to create a new path that starts with
  * the source directory of the project.
@@ -2705,64 +2647,64 @@ ide_build_pipeline_build_path_va_list (const gchar *prefix,
  * Since: 3.32
  */
 gchar *
-ide_build_pipeline_build_srcdir_path (IdeBuildPipeline *self,
-                                      const gchar      *first_part,
-                                      ...)
+ide_pipeline_build_srcdir_path (IdePipeline *self,
+                                const gchar *first_part,
+                                ...)
 {
   gchar *ret;
   va_list args;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
   g_return_val_if_fail (self->srcdir != NULL, NULL);
   g_return_val_if_fail (first_part != NULL, NULL);
 
   va_start (args, first_part);
-  ret = ide_build_pipeline_build_path_va_list (self->srcdir, first_part, args);
+  ret = ide_pipeline_build_path_va_list (self->srcdir, first_part, args);
   va_end (args);
 
   return ret;
 }
 
 /**
- * ide_build_pipeline_build_builddir_path:
+ * ide_pipeline_build_builddir_path:
  *
  * This is a convenience function to create a new path that starts with
  * the build directory for this build configuration.
  *
  * This is functionally equivalent to calling g_build_filename() with the
- * result of ide_build_pipeline_get_builddir() as the first parameter.
+ * result of ide_pipeline_get_builddir() as the first parameter.
  *
  * Returns: (transfer full): A newly allocated string.
  *
  * Since: 3.32
  */
 gchar *
-ide_build_pipeline_build_builddir_path (IdeBuildPipeline *self,
-                                        const gchar      *first_part,
-                                        ...)
+ide_pipeline_build_builddir_path (IdePipeline *self,
+                                  const gchar *first_part,
+                                  ...)
 {
   gchar *ret;
   va_list args;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
   g_return_val_if_fail (self->builddir != NULL, NULL);
   g_return_val_if_fail (first_part != NULL, NULL);
 
   va_start (args, first_part);
-  ret = ide_build_pipeline_build_path_va_list (self->builddir, first_part, args);
+  ret = ide_pipeline_build_path_va_list (self->builddir, first_part, args);
   va_end (args);
 
   return ret;
 }
 
 /**
- * ide_build_pipeline_detach:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_detach:
+ * @self: An #IdePipeline
  * @stage_id: An identifier returned from adding a stage
  *
  * This removes the stage matching @stage_id. You are returned a @stage_id when
- * inserting a stage with functions such as ide_build_pipeline_attach()
- * or ide_build_pipeline_attach_launcher().
+ * inserting a stage with functions such as ide_pipeline_attach()
+ * or ide_pipeline_attach_launcher().
  *
  * Plugins should use this function to remove their stages when the plugin
  * is unloading.
@@ -2770,10 +2712,10 @@ ide_build_pipeline_build_builddir_path (IdeBuildPipeline *self,
  * Since: 3.32
  */
 void
-ide_build_pipeline_detach (IdeBuildPipeline *self,
-                               guint             stage_id)
+ide_pipeline_detach (IdePipeline *self,
+                     guint        stage_id)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (self->pipeline != NULL);
   g_return_if_fail (stage_id != 0);
 
@@ -2792,55 +2734,55 @@ ide_build_pipeline_detach (IdeBuildPipeline *self,
 }
 
 /**
- * ide_build_pipeline_invalidate_phase:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_invalidate_phase:
+ * @self: An #IdePipeline
  * @phases: The phases to invalidate
  *
  * Invalidates the phases matching @phases flags.
  *
  * If the requested phases include the phases invalidated here, the next
- * execution of the pipeline will execute thse phases.
+ * execution of the pipeline will build thse phases.
  *
- * This should be used by plugins to ensure a particular phase is re-executed
+ * This should be used by plugins to ensure a particular phase is re-buildd
  * upon discovering its state is no longer valid. Such an example might be
- * invalidating the %IDE_BUILD_PHASE_AUTOGEN phase when the an autotools
+ * invalidating the %IDE_PIPELINE_PHASE_AUTOGEN phase when the an autotools
  * projects autogen.sh file has been changed.
  *
  * Since: 3.32
  */
 void
-ide_build_pipeline_invalidate_phase (IdeBuildPipeline *self,
-                                     IdeBuildPhase     phases)
+ide_pipeline_invalidate_phase (IdePipeline *self,
+                                     IdePipelinePhase     phases)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
 
   for (guint i = 0; i < self->pipeline->len; i++)
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
 
-      if ((entry->phase & IDE_BUILD_PHASE_MASK) & phases)
-        ide_build_stage_set_completed (entry->stage, FALSE);
+      if ((entry->phase & IDE_PIPELINE_PHASE_MASK) & phases)
+        ide_pipeline_stage_set_completed (entry->stage, FALSE);
     }
 }
 
 /**
- * ide_build_pipeline_get_stage_by_id:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_get_stage_by_id:
+ * @self: An #IdePipeline
  * @stage_id: the identfier of the stage
  *
  * Gets the stage matching the identifier @stage_id as returned from
- * ide_build_pipeline_attach().
+ * ide_pipeline_attach().
  *
- * Returns: (transfer none) (nullable): An #IdeBuildStage or %NULL if the
+ * Returns: (transfer none) (nullable): An #IdePipelineStage or %NULL if the
  *   stage could not be found.
  *
  * Since: 3.32
  */
-IdeBuildStage *
-ide_build_pipeline_get_stage_by_id (IdeBuildPipeline *self,
-                                    guint             stage_id)
+IdePipelineStage *
+ide_pipeline_get_stage_by_id (IdePipeline *self,
+                              guint        stage_id)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   for (guint i = 0; i < self->pipeline->len; i++)
     {
@@ -2854,8 +2796,8 @@ ide_build_pipeline_get_stage_by_id (IdeBuildPipeline *self,
 }
 
 /**
- * ide_build_pipeline_get_runtime:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_get_runtime:
+ * @self: An #IdePipeline
  *
  * A convenience function to get the runtime for a build pipeline.
  *
@@ -2864,16 +2806,16 @@ ide_build_pipeline_get_stage_by_id (IdeBuildPipeline *self,
  * Since: 3.32
  */
 IdeRuntime *
-ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
+ide_pipeline_get_runtime (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->runtime;
 }
 
 /**
- * ide_build_pipeline_get_toolchain:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_get_toolchain:
+ * @self: An #IdePipeline
  *
  * A convenience function to get the toolchain for a build pipeline.
  *
@@ -2882,16 +2824,16 @@ ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
  * Since: 3.32
  */
 IdeToolchain *
-ide_build_pipeline_get_toolchain (IdeBuildPipeline *self)
+ide_pipeline_get_toolchain (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->toolchain;
 }
 
 /**
- * ide_build_pipeline_create_launcher:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_create_launcher:
+ * @self: An #IdePipeline
  *
  * This is a convenience function to create a new #IdeSubprocessLauncher
  * using the configuration and runtime associated with the pipeline.
@@ -2901,13 +2843,13 @@ ide_build_pipeline_get_toolchain (IdeBuildPipeline *self)
  * Since: 3.32
  */
 IdeSubprocessLauncher *
-ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
+ide_pipeline_create_launcher (IdePipeline  *self,
                                     GError           **error)
 {
   g_autoptr(IdeSubprocessLauncher) ret = NULL;
   IdeRuntime *runtime;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   runtime = ide_config_get_runtime (self->config);
 
@@ -2931,7 +2873,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
       ide_subprocess_launcher_overlay_environment (ret, env);
       /* Always ignore V=1 from configurations */
       ide_subprocess_launcher_setenv (ret, "V", "0", TRUE);
-      ide_subprocess_launcher_set_cwd (ret, ide_build_pipeline_get_builddir (self));
+      ide_subprocess_launcher_set_cwd (ret, ide_pipeline_get_builddir (self));
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE));
@@ -2942,8 +2884,8 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
 }
 
 /**
- * ide_build_pipeline_attach_pty:
- * @self: an #IdeBuildPipeline
+ * ide_pipeline_attach_pty:
+ * @self: an #IdePipeline
  * @launcher: an #IdeSubprocessLauncher
  *
  * Attaches a PTY to stdin/stdout/stderr of the #IdeSubprocessLauncher.
@@ -2953,12 +2895,12 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
  * Since: 3.32
  */
 void
-ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
+ide_pipeline_attach_pty (IdePipeline      *self,
                                IdeSubprocessLauncher *launcher)
 {
   GSubprocessFlags flags;
 
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
   if (self->pty_slave == -1)
@@ -2990,8 +2932,8 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
 }
 
 /**
- * ide_build_pipeline_get_pty:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_get_pty:
+ * @self: a #IdePipeline
  *
  * Gets the #VtePty for the pipeline, if set.
  *
@@ -3003,20 +2945,20 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
  * Since: 3.32
  */
 VtePty *
-ide_build_pipeline_get_pty (IdeBuildPipeline *self)
+ide_pipeline_get_pty (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->pty;
 }
 
 guint
-ide_build_pipeline_add_log_observer (IdeBuildPipeline    *self,
-                                     IdeBuildLogObserver  observer,
-                                     gpointer             observer_data,
-                                     GDestroyNotify       observer_data_destroy)
+ide_pipeline_add_log_observer (IdePipeline         *self,
+                               IdeBuildLogObserver  observer,
+                               gpointer             observer_data,
+                               GDestroyNotify       observer_data_destroy)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), 0);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
   g_return_val_if_fail (observer != NULL, 0);
 
   return ide_build_log_add_observer (self->log, observer, observer_data, observer_data_destroy);
@@ -3024,20 +2966,20 @@ ide_build_pipeline_add_log_observer (IdeBuildPipeline    *self,
 }
 
 gboolean
-ide_build_pipeline_remove_log_observer (IdeBuildPipeline *self,
-                                        guint             observer_id)
+ide_pipeline_remove_log_observer (IdePipeline *self,
+                                  guint        observer_id)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
   g_return_val_if_fail (observer_id > 0, FALSE);
 
   return ide_build_log_remove_observer (self->log, observer_id);
 }
 
 void
-ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,
-                                    IdeDiagnostic    *diagnostic)
+ide_pipeline_emit_diagnostic (IdePipeline   *self,
+                              IdeDiagnostic *diagnostic)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (diagnostic != NULL);
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
 
@@ -3045,8 +2987,8 @@ ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,
 }
 
 /**
- * ide_build_pipeline_add_error_format:
- * @self: an #IdeBuildPipeline
+ * ide_pipeline_add_error_format:
+ * @self: an #IdePipeline
  * @regex: A regex to be compiled
  *
  * This can be used to add a regex that will extract errors from
@@ -3073,25 +3015,25 @@ ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,
  *   "(?&lt;level&gt;[\\w\\s]+): "
  *   "(?&lt;message&gt;.*)"
  *
- * To remove the regex, use the ide_build_pipeline_remove_error_format()
+ * To remove the regex, use the ide_pipeline_remove_error_format()
  * function with the resulting format id returned from this function.
  *
  * The resulting format id will be &gt; 0 if successful.
  *
  * Returns: an error format id that may be passed to
- *   ide_build_pipeline_remove_error_format().
+ *   ide_pipeline_remove_error_format().
  *
  * Since: 3.32
  */
 guint
-ide_build_pipeline_add_error_format (IdeBuildPipeline   *self,
-                                     const gchar        *regex,
-                                     GRegexCompileFlags  flags)
+ide_pipeline_add_error_format (IdePipeline        *self,
+                               const gchar        *regex,
+                               GRegexCompileFlags  flags)
 {
   ErrorFormat errfmt = { 0 };
   g_autoptr(GError) error = NULL;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), 0);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
 
   errfmt.regex = g_regex_new (regex, G_REGEX_OPTIMIZE | flags, 0, &error);
 
@@ -3109,22 +3051,22 @@ ide_build_pipeline_add_error_format (IdeBuildPipeline   *self,
 }
 
 /**
- * ide_build_pipeline_remove_error_format:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_remove_error_format:
+ * @self: An #IdePipeline
  * @error_format_id: an identifier for the error format.
  *
  * Removes an error format that was registered with
- * ide_build_pipeline_add_error_format().
+ * ide_pipeline_add_error_format().
  *
  * Returns: %TRUE if the error format was removed.
  *
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_remove_error_format (IdeBuildPipeline *self,
-                                        guint             error_format_id)
+ide_pipeline_remove_error_format (IdePipeline *self,
+                                  guint        error_format_id)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
   g_return_val_if_fail (error_format_id > 0, FALSE);
 
   for (guint i = 0; i < self->errfmts->len; i++)
@@ -3142,16 +3084,16 @@ ide_build_pipeline_remove_error_format (IdeBuildPipeline *self,
 }
 
 gboolean
-ide_build_pipeline_get_busy (IdeBuildPipeline *self)
+ide_pipeline_get_busy (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
 
   return self->busy;
 }
 
 /**
- * ide_build_pipeline_get_message:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_get_message:
+ * @self: An #IdePipeline
  *
  * Gets the current message for the build pipeline. This can be
  * shown to users in UI elements to signify progress in the
@@ -3163,12 +3105,12 @@ ide_build_pipeline_get_busy (IdeBuildPipeline *self)
  * Since: 3.32
  */
 gchar *
-ide_build_pipeline_get_message (IdeBuildPipeline *self)
+ide_pipeline_get_message (IdePipeline *self)
 {
-  IdeBuildPhase phase;
+  IdePipelinePhase phase;
   const gchar *ret = NULL;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   /* Use any message the Pty has given us while building. */
   if (self->busy && self->message != NULL)
@@ -3185,70 +3127,70 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
 
   if (self->current_stage != NULL)
     {
-      const gchar *name = ide_build_stage_get_name (self->current_stage);
+      const gchar *name = ide_pipeline_stage_get_name (self->current_stage);
 
       if (!ide_str_empty0 (name))
         return g_strdup (name);
     }
 
-  phase = ide_build_pipeline_get_phase (self);
+  phase = ide_pipeline_get_phase (self);
 
   switch (phase)
     {
-    case IDE_BUILD_PHASE_DOWNLOADS:
+    case IDE_PIPELINE_PHASE_DOWNLOADS:
       ret = _("Downloading…");
       break;
 
-    case IDE_BUILD_PHASE_DEPENDENCIES:
+    case IDE_PIPELINE_PHASE_DEPENDENCIES:
       ret = _("Building dependencies…");
       break;
 
-    case IDE_BUILD_PHASE_AUTOGEN:
+    case IDE_PIPELINE_PHASE_AUTOGEN:
       ret = _("Bootstrapping…");
       break;
 
-    case IDE_BUILD_PHASE_CONFIGURE:
+    case IDE_PIPELINE_PHASE_CONFIGURE:
       ret = _("Configuring…");
       break;
 
-    case IDE_BUILD_PHASE_BUILD:
+    case IDE_PIPELINE_PHASE_BUILD:
       ret = _("Building…");
       break;
 
-    case IDE_BUILD_PHASE_INSTALL:
+    case IDE_PIPELINE_PHASE_INSTALL:
       ret = _("Installing…");
       break;
 
-    case IDE_BUILD_PHASE_COMMIT:
+    case IDE_PIPELINE_PHASE_COMMIT:
       ret = _("Committing…");
       break;
 
-    case IDE_BUILD_PHASE_EXPORT:
+    case IDE_PIPELINE_PHASE_EXPORT:
       ret = _("Exporting…");
       break;
 
-    case IDE_BUILD_PHASE_FINAL:
+    case IDE_PIPELINE_PHASE_FINAL:
       ret = _("Success");
       break;
 
-    case IDE_BUILD_PHASE_FINISHED:
+    case IDE_PIPELINE_PHASE_FINISHED:
       ret = _("Success");
       break;
 
-    case IDE_BUILD_PHASE_FAILED:
+    case IDE_PIPELINE_PHASE_FAILED:
       ret = _("Failed");
       break;
 
-    case IDE_BUILD_PHASE_PREPARE:
+    case IDE_PIPELINE_PHASE_PREPARE:
       ret = _("Preparing…");
       break;
 
-    case IDE_BUILD_PHASE_NONE:
+    case IDE_PIPELINE_PHASE_NONE:
       ret = _("Ready");
       break;
 
-    case IDE_BUILD_PHASE_AFTER:
-    case IDE_BUILD_PHASE_BEFORE:
+    case IDE_PIPELINE_PHASE_AFTER:
+    case IDE_PIPELINE_PHASE_BEFORE:
     default:
       g_assert_not_reached ();
     }
@@ -3257,22 +3199,22 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
 }
 
 /**
- * ide_build_pipeline_foreach_stage:
- * @self: An #IdeBuildPipeline
+ * ide_pipeline_foreach_stage:
+ * @self: An #IdePipeline
  * @stage_callback: (scope call): A callback for each #IdePipelineStage
  * @user_data: user data for @stage_callback
  *
- * This function will call @stage_callback for every #IdeBuildStage registered
+ * This function will call @stage_callback for every #IdePipelineStage registered
  * in the pipeline.
  *
  * Since: 3.32
  */
 void
-ide_build_pipeline_foreach_stage (IdeBuildPipeline *self,
-                                  GFunc             stage_callback,
-                                  gpointer          user_data)
+ide_pipeline_foreach_stage (IdePipeline *self,
+                            GFunc        stage_callback,
+                            gpointer     user_data)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (stage_callback != NULL);
 
   for (guint i = 0; i < self->pipeline->len; i++)
@@ -3284,26 +3226,26 @@ ide_build_pipeline_foreach_stage (IdeBuildPipeline *self,
 }
 
 static void
-ide_build_pipeline_clean_cb (GObject      *object,
-                             GAsyncResult *result,
-                             gpointer      user_data)
+ide_pipeline_clean_cb (GObject      *object,
+                       GAsyncResult *result,
+                       gpointer      user_data)
 {
-  IdeBuildStage *stage = (IdeBuildStage *)object;
+  IdePipelineStage *stage = (IdePipelineStage *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeBuildPipeline *self;
+  IdePipeline *self;
   GPtrArray *stages;
   TaskData *td;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
   td = ide_task_get_task_data (task);
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (td != NULL);
   g_assert (td->type == TASK_CLEAN);
   g_assert (td->task == task);
@@ -3315,7 +3257,7 @@ ide_build_pipeline_clean_cb (GObject      *object,
   g_assert (stages->len > 0);
   g_assert (g_ptr_array_index (stages, stages->len - 1) == stage);
 
-  if (!ide_build_stage_clean_finish (stage, result, &error))
+  if (!ide_pipeline_stage_clean_finish (stage, result, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -3323,14 +3265,14 @@ ide_build_pipeline_clean_cb (GObject      *object,
 
   g_ptr_array_remove_index (stages, stages->len - 1);
 
-  ide_build_pipeline_tick_clean (self, task);
+  ide_pipeline_tick_clean (self, task);
 
   IDE_EXIT;
 }
 
 static void
-ide_build_pipeline_tick_clean (IdeBuildPipeline *self,
-                               IdeTask          *task)
+ide_pipeline_tick_clean (IdePipeline *self,
+                         IdeTask     *task)
 {
   GCancellable *cancellable;
   GPtrArray *stages;
@@ -3338,7 +3280,7 @@ ide_build_pipeline_tick_clean (IdeBuildPipeline *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_TASK (task));
 
   td = ide_task_get_task_data (task);
@@ -3354,14 +3296,14 @@ ide_build_pipeline_tick_clean (IdeBuildPipeline *self,
 
   if (stages->len != 0)
     {
-      IdeBuildStage *stage = g_ptr_array_index (stages, stages->len - 1);
+      IdePipelineStage *stage = g_ptr_array_index (stages, stages->len - 1);
 
       self->current_stage = stage;
 
-      ide_build_stage_clean_async (stage,
+      ide_pipeline_stage_clean_async (stage,
                                    self,
                                    cancellable,
-                                   ide_build_pipeline_clean_cb,
+                                   ide_pipeline_clean_cb,
                                    g_object_ref (task));
 
       IDE_GOTO (notify);
@@ -3377,23 +3319,23 @@ notify:
 }
 
 void
-ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
-                                IdeBuildPhase        phase,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
+ide_pipeline_clean_async (IdePipeline         *self,
+                          IdePipelinePhase     phase,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GPtrArray) stages = NULL;
-  IdeBuildPhase min_phase = IDE_BUILD_PHASE_FINAL;
-  IdeBuildPhase phase_mask;
+  IdePipelinePhase min_phase = IDE_PIPELINE_PHASE_FINAL;
+  IdePipelinePhase phase_mask;
   GFlagsClass *phase_class;
   TaskData *td;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (cancellable == NULL)
@@ -3401,9 +3343,9 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_source_tag (task, ide_build_pipeline_clean_async);
+  ide_task_set_source_tag (task, ide_pipeline_clean_async);
 
-  if (!ide_build_pipeline_check_ready (self, task))
+  if (!ide_pipeline_check_ready (self, task))
     return;
 
   dzl_cancellable_chain (cancellable, self->cancellable);
@@ -3415,7 +3357,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
   /*
    * To clean the project, we go through each stage and call it's clean async
    * vfunc pairs if they have been set. Afterwards, we ensure their
-   * IdeBuildStage:completed bit is cleared so they will run as part of the
+   * IdePipelineStage:completed bit is cleared so they will run as part of the
    * next build operation.
    *
    * Also, when performing a clean we walk backwards from the last stage to the
@@ -3433,7 +3375,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
    * mask (so only our min and higher stages are cleaned).
    */
 
-  phase_class = g_type_class_peek (IDE_TYPE_BUILD_PHASE);
+  phase_class = g_type_class_peek (IDE_TYPE_PIPELINE_PHASE);
 
   for (guint i = 0; i < phase_class->n_values; i++)
     {
@@ -3454,7 +3396,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
 
-      if ((entry->phase & IDE_BUILD_PHASE_MASK) & phase_mask)
+      if ((entry->phase & IDE_PIPELINE_PHASE_MASK) & phase_mask)
         g_ptr_array_add (stages, g_object_ref (entry->stage));
     }
 
@@ -3471,21 +3413,21 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
 
   g_queue_push_tail (&self->task_queue, g_steal_pointer (&task));
 
-  ide_build_pipeline_queue_flush (self);
+  ide_pipeline_queue_flush (self);
 
   IDE_EXIT;
 }
 
 gboolean
-ide_build_pipeline_clean_finish (IdeBuildPipeline  *self,
-                                 GAsyncResult      *result,
-                                 GError           **error)
+ide_pipeline_clean_finish (IdePipeline   *self,
+                           GAsyncResult  *result,
+                           GError       **error)
 {
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
@@ -3494,14 +3436,14 @@ ide_build_pipeline_clean_finish (IdeBuildPipeline  *self,
 }
 
 static gboolean
-can_remove_builddir (IdeBuildPipeline *self)
+can_remove_builddir (IdePipeline *self)
 {
   g_autofree gchar *_build = NULL;
   g_autoptr(GFile) builddir = NULL;
   g_autoptr(GFile) cache = NULL;
   IdeContext *context;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   /*
    * Only remove builddir if it is in ~/.cache/ or our XDG data dirs
@@ -3533,12 +3475,12 @@ can_remove_builddir (IdeBuildPipeline *self)
 }
 
 static void
-ide_build_pipeline_reaper_cb (GObject      *object,
-                              GAsyncResult *result,
-                              gpointer      user_data)
+ide_pipeline_reaper_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
 {
   DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
-  IdeBuildPipeline *self;
+  IdePipeline *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   TaskData *td;
@@ -3556,7 +3498,7 @@ ide_build_pipeline_reaper_cb (GObject      *object,
   g_assert (td->type == TASK_REBUILD);
 
   self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   /* Make sure our reaper completed or else we bail */
   if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
@@ -3565,20 +3507,20 @@ ide_build_pipeline_reaper_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  if (td->phase == IDE_BUILD_PHASE_NONE)
+  if (td->phase == IDE_PIPELINE_PHASE_NONE)
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
   /* Perform a build using the same task and skipping the build queue. */
-  ide_build_pipeline_tick_execute (self, task);
+  ide_pipeline_tick_build (self, task);
 
   IDE_EXIT;
 }
 
 static void
-ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
+ide_pipeline_tick_rebuild (IdePipeline *self,
                                  IdeTask          *task)
 {
   g_autoptr(DzlDirectoryReaper) reaper = NULL;
@@ -3586,7 +3528,7 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_TASK (task));
 
 #ifndef G_DISABLE_ASSERT
@@ -3620,30 +3562,30 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
 
-      ide_build_stage_emit_reap (entry->stage, reaper);
-      ide_build_stage_set_completed (entry->stage, FALSE);
+      ide_pipeline_stage_emit_reap (entry->stage, reaper);
+      ide_pipeline_stage_set_completed (entry->stage, FALSE);
     }
 
   cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* Now execute the reaper to clean up the build files. */
+  /* Now build the reaper to clean up the build files. */
   dzl_directory_reaper_execute_async (reaper,
                                       cancellable,
-                                      ide_build_pipeline_reaper_cb,
+                                      ide_pipeline_reaper_cb,
                                       g_object_ref (task));
 
   IDE_EXIT;
 }
 
 /**
- * ide_build_pipeline_rebuild_async:
- * @self: A @IdeBuildPipeline
+ * ide_pipeline_rebuild_async:
+ * @self: A @IdePipeline
  * @phase: the requested build phase
  * @targets: (element-type IdeBuildTarget) (nullable): an array of
  *   #IdeBuildTarget or %NULL
  * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: a callback to execute upon completion
+ * @callback: a callback to build upon completion
  * @user_data: data for @callback
  *
  * Asynchronously starts the build pipeline after cleaning any
@@ -3652,8 +3594,8 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
  * Since: 3.32
  */
 void
-ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
-                                  IdeBuildPhase        phase,
+ide_pipeline_rebuild_async (IdePipeline    *self,
+                                  IdePipelinePhase        phase,
                                   GPtrArray           *targets,
                                   GCancellable        *cancellable,
                                   GAsyncReadyCallback  callback,
@@ -3664,17 +3606,17 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail ((phase & ~IDE_BUILD_PHASE_MASK) == 0);
+  g_return_if_fail ((phase & ~IDE_PIPELINE_PHASE_MASK) == 0);
 
   cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_source_tag (task, ide_build_pipeline_rebuild_async);
+  ide_task_set_source_tag (task, ide_pipeline_rebuild_async);
 
-  if (!ide_build_pipeline_check_ready (self, task))
+  if (!ide_pipeline_check_ready (self, task))
     return;
 
   td = task_data_new (task, TASK_REBUILD);
@@ -3684,13 +3626,13 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
 
   g_queue_push_tail (&self->task_queue, g_steal_pointer (&task));
 
-  ide_build_pipeline_queue_flush (self);
+  ide_pipeline_queue_flush (self);
 
   IDE_EXIT;
 }
 
 gboolean
-ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,
+ide_pipeline_rebuild_finish (IdePipeline  *self,
                                    GAsyncResult      *result,
                                    GError           **error)
 {
@@ -3698,7 +3640,7 @@ ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
@@ -3707,8 +3649,8 @@ ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,
 }
 
 /**
- * ide_build_pipeline_get_can_export:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_get_can_export:
+ * @self: a #IdePipeline
  *
  * This function is useful to discover if there are any pipeline addins
  * which implement the export phase. UI or GAction implementations may
@@ -3720,9 +3662,9 @@ ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_get_can_export (IdeBuildPipeline *self)
+ide_pipeline_get_can_export (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
 
   if (self->broken)
     return FALSE;
@@ -3731,7 +3673,7 @@ ide_build_pipeline_get_can_export (IdeBuildPipeline *self)
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
 
-      if ((entry->phase & IDE_BUILD_PHASE_EXPORT) != 0)
+      if ((entry->phase & IDE_PIPELINE_PHASE_EXPORT) != 0)
         return TRUE;
     }
 
@@ -3739,10 +3681,10 @@ ide_build_pipeline_get_can_export (IdeBuildPipeline *self)
 }
 
 void
-_ide_build_pipeline_set_message (IdeBuildPipeline *self,
+_ide_pipeline_set_message (IdePipeline *self,
                                  const gchar      *message)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
 
   if (message != NULL)
     {
@@ -3767,11 +3709,11 @@ _ide_build_pipeline_set_message (IdeBuildPipeline *self,
 }
 
 void
-_ide_build_pipeline_cancel (IdeBuildPipeline *self)
+_ide_pipeline_cancel (IdePipeline *self)
 {
   g_autoptr(GCancellable) cancellable = NULL;
 
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
 
   cancellable = g_steal_pointer (&self->cancellable);
   self->cancellable = g_cancellable_new ();
@@ -3779,20 +3721,20 @@ _ide_build_pipeline_cancel (IdeBuildPipeline *self)
 }
 
 /**
- * ide_build_pipeline_has_configured:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_has_configured:
+ * @self: a #IdePipeline
  *
  * Checks to see if the pipeline has advanced far enough to ensure that
  * the configure stage has been reached.
  *
- * Returns: %TRUE if %IDE_BUILD_PHASE_CONFIGURE has been reached.
+ * Returns: %TRUE if %IDE_PIPELINE_PHASE_CONFIGURE has been reached.
  *
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_has_configured (IdeBuildPipeline *self)
+ide_pipeline_has_configured (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
 
   if (self->broken)
     return FALSE;
@@ -3812,16 +3754,16 @@ ide_build_pipeline_has_configured (IdeBuildPipeline *self)
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
 
-      if ((entry->phase & IDE_BUILD_PHASE_MASK) < IDE_BUILD_PHASE_CONFIGURE)
+      if ((entry->phase & IDE_PIPELINE_PHASE_MASK) < IDE_PIPELINE_PHASE_CONFIGURE)
         continue;
 
-      if (entry->phase & IDE_BUILD_PHASE_CONFIGURE)
+      if (entry->phase & IDE_PIPELINE_PHASE_CONFIGURE)
         {
           /*
            * This is a configure phase, ensure that it has been
            * completed, or we have not really configured.
            */
-          if (!ide_build_stage_get_completed (entry->stage))
+          if (!ide_pipeline_stage_get_completed (entry->stage))
             return FALSE;
 
           /*
@@ -3850,37 +3792,37 @@ ide_build_pipeline_has_configured (IdeBuildPipeline *self)
 }
 
 void
-_ide_build_pipeline_mark_broken (IdeBuildPipeline *self)
+_ide_pipeline_mark_broken (IdePipeline *self)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
 
   self->broken = TRUE;
 }
 
 static GType
-ide_build_pipeline_get_item_type (GListModel *model)
+ide_pipeline_get_item_type (GListModel *model)
 {
-  return IDE_TYPE_BUILD_STAGE;
+  return IDE_TYPE_PIPELINE_STAGE;
 }
 
 static guint
-ide_build_pipeline_get_n_items (GListModel *model)
+ide_pipeline_get_n_items (GListModel *model)
 {
-  IdeBuildPipeline *self = (IdeBuildPipeline *)model;
+  IdePipeline *self = (IdePipeline *)model;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
 
   return self->pipeline != NULL ? self->pipeline->len : 0;
 }
 
 static gpointer
-ide_build_pipeline_get_item (GListModel *model,
+ide_pipeline_get_item (GListModel *model,
                              guint       position)
 {
-  IdeBuildPipeline *self = (IdeBuildPipeline *)model;
+  IdePipeline *self = (IdePipeline *)model;
   const PipelineEntry *entry;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_PIPELINE (self));
   g_assert (self->pipeline != NULL);
   g_assert (position < self->pipeline->len);
 
@@ -3892,46 +3834,46 @@ ide_build_pipeline_get_item (GListModel *model,
 static void
 list_model_iface_init (GListModelInterface *iface)
 {
-  iface->get_item = ide_build_pipeline_get_item;
-  iface->get_item_type = ide_build_pipeline_get_item_type;
-  iface->get_n_items = ide_build_pipeline_get_n_items;
+  iface->get_item = ide_pipeline_get_item;
+  iface->get_item_type = ide_pipeline_get_item_type;
+  iface->get_n_items = ide_pipeline_get_n_items;
 }
 
 /**
- * ide_build_pipeline_get_requested_phase:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_get_requested_phase:
+ * @self: a #IdePipeline
  *
  * Gets the phase that has been requested. This can be useful when you want to
  * get an idea of where the build pipeline will attempt to advance.
  *
- * Returns: an #IdeBuildPhase
+ * Returns: an #IdePipelinePhase
  *
  * Since: 3.32
  */
-IdeBuildPhase
-ide_build_pipeline_get_requested_phase (IdeBuildPipeline *self)
+IdePipelinePhase
+ide_pipeline_get_requested_phase (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), 0);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
 
-  return self->requested_mask & IDE_BUILD_PHASE_MASK;
+  return self->requested_mask & IDE_PIPELINE_PHASE_MASK;
 }
 
 void
-_ide_build_pipeline_set_pty_size (IdeBuildPipeline *self,
+_ide_pipeline_set_pty_size (IdePipeline *self,
                                   guint             rows,
                                   guint             columns)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
 
   if (self->pty_slave != IDE_PTY_FD_INVALID)
     ide_pty_intercept_set_size (&self->intercept, rows, columns);
 }
 
 void
-_ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
+_ide_pipeline_set_runtime (IdePipeline *self,
                                  IdeRuntime       *runtime)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
 
   if (g_set_object (&self->runtime, runtime))
@@ -3948,10 +3890,10 @@ _ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
 }
 
 void
-_ide_build_pipeline_set_toolchain (IdeBuildPipeline *self,
+_ide_pipeline_set_toolchain (IdePipeline *self,
                                    IdeToolchain     *toolchain)
 {
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!toolchain || IDE_IS_TOOLCHAIN (toolchain));
 
   ide_object_lock (IDE_OBJECT (self));
@@ -3961,21 +3903,21 @@ _ide_build_pipeline_set_toolchain (IdeBuildPipeline *self,
 }
 
 /**
- * ide_build_pipeline_ref_toolchain:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_ref_toolchain:
+ * @self: a #IdePipeline
  *
- * Thread-safe variant of ide_build_pipeline_get_toolchain().
+ * Thread-safe variant of ide_pipeline_get_toolchain().
  *
  * Returns: (transfer full) (nullable): an #IdeToolchain or %NULL
  *
  * Since: 3.32
  */
 IdeToolchain *
-ide_build_pipeline_ref_toolchain (IdeBuildPipeline *self)
+ide_pipeline_ref_toolchain (IdePipeline *self)
 {
   IdeToolchain *ret = NULL;
 
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   ide_object_lock (IDE_OBJECT (self));
   g_set_object (&ret, self->toolchain);
@@ -3985,7 +3927,7 @@ ide_build_pipeline_ref_toolchain (IdeBuildPipeline *self)
 }
 
 void
-_ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
+_ide_pipeline_check_toolchain (IdePipeline *self,
                                      IdeDeviceInfo     *info)
 {
   g_autoptr(IdeToolchain) toolchain = NULL;
@@ -3997,7 +3939,7 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (IDE_IS_DEVICE_INFO (info));
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -4031,15 +3973,15 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
       g_autoptr(IdeToolchain) default_toolchain = NULL;
 
       default_toolchain = ide_toolchain_manager_get_toolchain (manager, "default");
-      _ide_build_pipeline_set_toolchain (self, default_toolchain);
+      _ide_pipeline_set_toolchain (self, default_toolchain);
     }
 
   IDE_EXIT;
 }
 
 /**
- * ide_build_pipeline_get_device:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_get_device:
+ * @self: a #IdePipeline
  *
  * Gets the device that the pipeline is building for.
  *
@@ -4048,16 +3990,16 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
  * Since: 3.32
  */
 IdeDevice *
-ide_build_pipeline_get_device (IdeBuildPipeline *self)
+ide_pipeline_get_device (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->device;
 }
 
 /**
- * ide_build_pipeline_is_ready:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_is_ready:
+ * @self: a #IdePipeline
  *
  * Checks to see if the pipeline has been loaded. Loading may be delayed
  * due to various initialization routines that need to complete.
@@ -4067,16 +4009,16 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_is_ready (IdeBuildPipeline *self)
+ide_pipeline_is_ready (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
 
   return self->loaded;
 }
 
 /**
- * ide_build_pipeline_get_host_triplet:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_get_host_triplet:
+ * @self: a #IdePipeline
  *
  * Gets the "host" triplet which specifies where the build results will run.
  *
@@ -4088,16 +4030,16 @@ ide_build_pipeline_is_ready (IdeBuildPipeline *self)
  * Since: 3.32
  */
 IdeTriplet *
-ide_build_pipeline_get_host_triplet (IdeBuildPipeline *self)
+ide_pipeline_get_host_triplet (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->host_triplet;
 }
 
 /**
- * ide_build_pipeline_is_native:
- * @self: a #IdeBuildPipeline
+ * ide_pipeline_is_native:
+ * @self: a #IdePipeline
  *
  * This is a helper to check if the triplet that we are compiling
  * for matches the host system. That allows some plugins to do less
@@ -4108,9 +4050,9 @@ ide_build_pipeline_get_host_triplet (IdeBuildPipeline *self)
  * Since: 3.32
  */
 gboolean
-ide_build_pipeline_is_native (IdeBuildPipeline *self)
+ide_pipeline_is_native (IdePipeline *self)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
 
   if (self->host_triplet != NULL)
     return ide_triplet_is_system (self->host_triplet);

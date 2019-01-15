@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_AUTOTOOLS_AUTOGEN_STAGE (ide_autotools_autogen_stage_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeAutotoolsAutogenStage, ide_autotools_autogen_stage, IDE, AUTOTOOLS_AUTOGEN_STAGE, IdeBuildStage)
+G_DECLARE_FINAL_TYPE (IdeAutotoolsAutogenStage, ide_autotools_autogen_stage, IDE, AUTOTOOLS_AUTOGEN_STAGE, IdePipelineStage)
 
 G_END_DECLS

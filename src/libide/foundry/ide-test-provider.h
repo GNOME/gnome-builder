@@ -41,7 +41,7 @@ struct _IdeTestProviderClass
 
   void     (*run_async)  (IdeTestProvider      *self,
                           IdeTest              *test,
-                          IdeBuildPipeline     *pipeline,
+                          IdePipeline     *pipeline,
                           GCancellable         *cancellable,
                           GAsyncReadyCallback   callback,
                           gpointer              user_data);
@@ -70,7 +70,7 @@ void     ide_test_provider_remove      (IdeTestProvider      *self,
 IDE_AVAILABLE_IN_3_32
 void     ide_test_provider_run_async   (IdeTestProvider      *self,
                                         IdeTest              *test,
-                                        IdeBuildPipeline     *pipeline,
+                                        IdePipeline     *pipeline,
                                         GCancellable         *cancellable,
                                         GAsyncReadyCallback   callback,
                                         gpointer              user_data);

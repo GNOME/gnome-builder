@@ -30,6 +30,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpBuilduiPane, gbp_buildui_pane, GBP, BUILDUI_PANE, IdePane)
 
 void gbp_buildui_pane_set_pipeline (GbpBuilduiPane   *self,
-                                    IdeBuildPipeline *pipeline);
+                                    IdePipeline *pipeline);
 
 G_END_DECLS

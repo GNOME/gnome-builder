@@ -34,7 +34,7 @@ gbp_flatpak_get_repo_dir (IdeContext *context)
 }
 
 gchar *
-gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
+gbp_flatpak_get_staging_dir (IdePipeline *pipeline)
 {
   g_autofree gchar *branch = NULL;
   g_autofree gchar *name = NULL;
@@ -43,12 +43,12 @@ gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
   g_autoptr(IdeVcs) vcs = NULL;
   g_autoptr(IdeToolchain) toolchain = NULL;
 
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   context = ide_object_ref_context (IDE_OBJECT (pipeline));
   vcs = ide_vcs_ref_from_context (context);
   branch = ide_vcs_get_branch_name (vcs);
-  toolchain = ide_build_pipeline_ref_toolchain (pipeline);
+  toolchain = ide_pipeline_ref_toolchain (pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);
   name = g_strdup_printf ("%s-%s", ide_triplet_get_arch (triplet), branch);
 

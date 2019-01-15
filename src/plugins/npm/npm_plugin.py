@@ -54,7 +54,7 @@ class NPMBuildSystem(Ide.Object, Ide.BuildSystem):
         return 100
 
 
-class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+class NPMPipelineAddin(Ide.Object, Ide.PipelineAddin):
     """
     The NPMPipelineAddin is responsible for creating the necessary build
     stages and attaching them to phases of the build pipeline.
@@ -87,9 +87,9 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
             fetch_launcher.push_argv('--arch')
             fetch_launcher.push_argv(pipeline.get_host_triplet().get_arch())
         fetch_launcher.push_argv('install')
-        stage = Ide.BuildStageLauncher.new(context, fetch_launcher)
+        stage = Ide.PipelineStageLauncher.new(context, fetch_launcher)
         stage.set_name(_("Downloading npm dependencies"))
-        self.track(pipeline.attach(Ide.BuildPhase.DOWNLOADS, 0, stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.DOWNLOADS, 0, stage))
 
 
 # The scripts used by the npm build system during build

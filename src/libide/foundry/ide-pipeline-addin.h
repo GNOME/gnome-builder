@@ -1,4 +1,4 @@
-/* ide-build-stage-mkdirs.h
+/* ide-pipeline-addin.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -26,30 +26,33 @@
 
 #include <libide-core.h>
 
-#include "ide-build-stage.h"
+#include "ide-pipeline.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUILD_STAGE_MKDIRS (ide_build_stage_mkdirs_get_type())
+#define IDE_TYPE_PIPELINE_ADDIN (ide_pipeline_addin_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeBuildStageMkdirs, ide_build_stage_mkdirs, IDE, BUILD_STAGE_MKDIRS, IdeBuildStage)
+G_DECLARE_INTERFACE (IdePipelineAddin, ide_pipeline_addin, IDE, PIPELINE_ADDIN, IdeObject)
 
-struct _IdeBuildStageMkdirsClass
+struct _IdePipelineAddinInterface
 {
-  IdeBuildStageClass parent_class;
+  GTypeInterface type_interface;
 
-  /*< private >*/
-  gpointer _reserved[8];
+  void (*load)   (IdePipelineAddin *self,
+                  IdePipeline      *pipeline);
+  void (*unload) (IdePipelineAddin *self,
+                  IdePipeline      *pipeline);
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeBuildStage *ide_build_stage_mkdirs_new      (IdeContext          *context);
+void ide_pipeline_addin_load   (IdePipelineAddin *self,
+                                      IdePipeline      *pipeline);
 IDE_AVAILABLE_IN_3_32
-void           ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
-                                                const gchar         *path,
-                                                gboolean             with_parents,
-                                                gint                 mode,
-                                                gboolean             remove_on_rebuild);
+void ide_pipeline_addin_unload (IdePipelineAddin *self,
+                                      IdePipeline      *pipeline);
+IDE_AVAILABLE_IN_3_32
+void ide_pipeline_addin_track  (IdePipelineAddin *self,
+                                      guint                  stage_id);
 
 G_END_DECLS

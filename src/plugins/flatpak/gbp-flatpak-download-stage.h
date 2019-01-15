@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_DOWNLOAD_STAGE (gbp_flatpak_download_stage_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, GBP, FLATPAK_DOWNLOAD_STAGE, IdeBuildStageLauncher)
+G_DECLARE_FINAL_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, GBP, FLATPAK_DOWNLOAD_STAGE, IdePipelineStageLauncher)
 
 void gbp_flatpak_download_stage_force_update (GbpFlatpakDownloadStage *self);
 

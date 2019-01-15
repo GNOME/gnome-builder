@@ -35,7 +35,7 @@ static IdeSubprocessLauncher *
 create_launcher (IdeContext  *context,
                  GError     **error)
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
 
   g_assert (IDE_IS_CONTEXT (context));
@@ -53,7 +53,7 @@ create_launcher (IdeContext  *context,
       return NULL;
     }
 
-  return ide_build_pipeline_create_launcher (pipeline, error);
+  return ide_pipeline_create_launcher (pipeline, error);
 }
 
 static void
@@ -162,7 +162,7 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
   g_autoptr(IdeSubprocess) all_subprocess = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) ret = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
   GCancellable *cancellable;
   IdeContext *context;
@@ -304,7 +304,7 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");
   ide_subprocess_launcher_push_argv (launcher, "--installed");
-  ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
+  ide_subprocess_launcher_push_argv (launcher, ide_pipeline_get_builddir (pipeline));
 
   all_subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
@@ -332,7 +332,7 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
   IdeBuildSystem *build_system;
   IdeContext *context;
@@ -381,7 +381,7 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");
   ide_subprocess_launcher_push_argv (launcher, "--targets");
-  ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
+  ide_subprocess_launcher_push_argv (launcher, ide_pipeline_get_builddir (pipeline));
 
   subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 

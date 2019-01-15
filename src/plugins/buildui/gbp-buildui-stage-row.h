@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpBuilduiStageRow, gbp_buildui_stage_row, GBP, BUILDUI_STAGE_ROW, GtkListBoxRow)
 
-GtkWidget     *gbp_buildui_stage_row_new       (IdeBuildStage    *stage);
-IdeBuildStage *gbp_buildui_stage_row_get_stage (GbpBuilduiStageRow *self);
+GtkWidget     *gbp_buildui_stage_row_new       (IdePipelineStage    *stage);
+IdePipelineStage *gbp_buildui_stage_row_get_stage (GbpBuilduiStageRow *self);
 
 G_END_DECLS

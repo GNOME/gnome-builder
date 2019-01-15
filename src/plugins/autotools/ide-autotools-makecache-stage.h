@@ -28,9 +28,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_AUTOTOOLS_MAKECACHE_STAGE (ide_autotools_makecache_stage_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeAutotoolsMakecacheStage, ide_autotools_makecache_stage, IDE, AUTOTOOLS_MAKECACHE_STAGE, IdeBuildStageLauncher)
+G_DECLARE_FINAL_TYPE (IdeAutotoolsMakecacheStage, ide_autotools_makecache_stage, IDE, AUTOTOOLS_MAKECACHE_STAGE, IdePipelineStageLauncher)
 
-IdeBuildStage *ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline            *pipeline,
+IdePipelineStage *ide_autotools_makecache_stage_new_for_pipeline (IdePipeline            *pipeline,
                                                                GError                     **error);
 IdeMakecache  *ide_autotools_makecache_stage_get_makecache    (IdeAutotoolsMakecacheStage  *self);
 

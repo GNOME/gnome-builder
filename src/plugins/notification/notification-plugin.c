@@ -29,6 +29,6 @@ _IDE_EXTERN void
 _ide_notification_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                              IDE_TYPE_PIPELINE_ADDIN,
                                               IDE_TYPE_NOTIFICATION_ADDIN);
 }

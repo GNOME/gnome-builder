@@ -28,11 +28,11 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_MESON_BUILD_STAGE_CROSS_FILE (gbp_meson_build_stage_cross_file_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpMesonBuildStageCrossFile, gbp_meson_build_stage_cross_file, GBP, MESON_BUILD_STAGE_CROSS_FILE, IdeBuildStage)
+G_DECLARE_FINAL_TYPE (GbpMesonBuildStageCrossFile, gbp_meson_build_stage_cross_file, GBP, MESON_BUILD_STAGE_CROSS_FILE, IdePipelineStage)
 
 GbpMesonBuildStageCrossFile *gbp_meson_build_stage_cross_file_new      (IdeContext                  *context,
                                                                         IdeToolchain                *toolchain);
 gchar                       *gbp_meson_build_stage_cross_file_get_path (GbpMesonBuildStageCrossFile *stage,
-                                                                        IdeBuildPipeline            *pipeline);
+                                                                        IdePipeline            *pipeline);
 
 G_END_DECLS

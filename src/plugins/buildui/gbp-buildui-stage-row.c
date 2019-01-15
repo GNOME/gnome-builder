@@ -30,7 +30,7 @@ struct _GbpBuilduiStageRow
 {
   GtkListBoxRow    parent_instance;
 
-  IdeBuildStage   *stage;
+  IdePipelineStage   *stage;
 
   DzlBoldingLabel *label;
 };
@@ -48,12 +48,12 @@ static GParamSpec *properties [N_PROPS];
 static void
 gbp_buildui_stage_row_notify_completed (GbpBuilduiStageRow *row,
                                       GParamSpec       *pspec,
-                                      IdeBuildStage    *stage)
+                                      IdePipelineStage    *stage)
 {
   g_assert (GBP_IS_BUILDUI_STAGE_ROW (row));
-  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
 
-  if (ide_build_stage_get_completed (stage))
+  if (ide_pipeline_stage_get_completed (stage))
     dzl_gtk_widget_add_style_class (GTK_WIDGET (row->label), "dim-label");
   else
     dzl_gtk_widget_remove_style_class (GTK_WIDGET (row->label), "dim-label");
@@ -61,16 +61,16 @@ gbp_buildui_stage_row_notify_completed (GbpBuilduiStageRow *row,
 
 static void
 gbp_buildui_stage_row_set_stage (GbpBuilduiStageRow *self,
-                               IdeBuildStage    *stage)
+                               IdePipelineStage    *stage)
 {
   const gchar *name;
 
   g_return_if_fail (GBP_IS_BUILDUI_STAGE_ROW (self));
-  g_return_if_fail (IDE_IS_BUILD_STAGE (stage));
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE (stage));
 
   g_set_object (&self->stage, stage);
 
-  name = ide_build_stage_get_name (stage);
+  name = ide_pipeline_stage_get_name (stage);
 
   if (name == NULL)
     name = G_OBJECT_TYPE_NAME (stage);
@@ -152,7 +152,7 @@ gbp_buildui_stage_row_class_init (GbpBuilduiStageRowClass *klass)
     g_param_spec_object ("stage",
                          "Stage",
                          "The stage for the row",
-                         IDE_TYPE_BUILD_STAGE,
+                         IDE_TYPE_PIPELINE_STAGE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -169,9 +169,9 @@ gbp_buildui_stage_row_init (GbpBuilduiStageRow *self)
 }
 
 GtkWidget *
-gbp_buildui_stage_row_new (IdeBuildStage *stage)
+gbp_buildui_stage_row_new (IdePipelineStage *stage)
 {
-  g_return_val_if_fail (IDE_IS_BUILD_STAGE (stage), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE_STAGE (stage), NULL);
 
   return g_object_new (GBP_TYPE_BUILDUI_STAGE_ROW,
                        "stage", stage,
@@ -185,11 +185,11 @@ gbp_buildui_stage_row_new (IdeBuildStage *stage)
  *
  * Gets the stage for the row.
  *
- * Returns: (transfer none): an #IdeBuildStage
+ * Returns: (transfer none): an #IdePipelineStage
  *
  * Since: 3.32
  */
-IdeBuildStage *
+IdePipelineStage *
 gbp_buildui_stage_row_get_stage (GbpBuilduiStageRow *self)
 {
   g_return_val_if_fail (GBP_IS_BUILDUI_STAGE_ROW (self), NULL);

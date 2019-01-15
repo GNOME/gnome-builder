@@ -654,7 +654,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                            G_CONNECT_SWAPPED);
 
   ide_build_manager_execute_async (build_manager,
-                                   IDE_BUILD_PHASE_INSTALL,
+                                   IDE_PIPELINE_PHASE_INSTALL,
                                    NULL,
                                    ide_task_get_cancellable (task),
                                    ide_run_manager_install_cb,

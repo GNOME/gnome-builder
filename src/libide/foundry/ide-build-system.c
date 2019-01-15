@@ -29,7 +29,7 @@
 #include <string.h>
 
 #include "ide-build-manager.h"
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-build-system.h"
 #include "ide-config.h"
 #include "ide-device.h"
@@ -245,7 +245,7 @@ ide_build_system_default_init (IdeBuildSystemInterface *iface)
 
 static gchar *
 ide_build_system_translate (IdeBuildSystem   *self,
-                            IdeBuildPipeline *pipeline,
+                            IdePipeline *pipeline,
                             const gchar      *prefix,
                             const gchar      *path)
 {
@@ -256,16 +256,16 @@ ide_build_system_translate (IdeBuildSystem   *self,
   IdeRuntime *runtime;
 
   g_assert (IDE_IS_BUILD_SYSTEM (self));
-  g_assert (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
   g_assert (prefix != NULL);
   g_assert (path != NULL);
 
   if (NULL == pipeline ||
-      NULL == (runtime = ide_build_pipeline_get_runtime (pipeline)))
+      NULL == (runtime = ide_pipeline_get_runtime (pipeline)))
     return g_strdup_printf ("%s%s", prefix, path);
 
   if (!g_path_is_absolute (path))
-    path = freeme = ide_build_pipeline_build_builddir_path (pipeline, path, NULL);
+    path = freeme = ide_pipeline_build_builddir_path (pipeline, path, NULL);
 
   file = g_file_new_for_path (path);
   translated = ide_runtime_translate_file (runtime, file);
@@ -278,7 +278,7 @@ static void
 ide_build_system_post_process_build_flags (IdeBuildSystem  *self,
                                            gchar          **flags)
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
@@ -449,14 +449,14 @@ ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
 
 gchar *
 ide_build_system_get_builddir (IdeBuildSystem   *self,
-                               IdeBuildPipeline *pipeline)
+                               IdePipeline *pipeline)
 {
   gchar *ret = NULL;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (pipeline), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (pipeline), NULL);
 
   if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir)
     ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir (self, pipeline);
@@ -474,9 +474,9 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
 
       context = ide_object_get_context (IDE_OBJECT (self));
       vcs = ide_vcs_from_context (context);
-      config = ide_build_pipeline_get_config (pipeline);
+      config = ide_pipeline_get_config (pipeline);
       config_id = ide_config_get_id (config);
-      runtime = ide_build_pipeline_get_runtime (pipeline);
+      runtime = ide_pipeline_get_runtime (pipeline);
       runtime_id = ide_runtime_get_id (runtime);
       branch = ide_vcs_get_branch_name (vcs);
 

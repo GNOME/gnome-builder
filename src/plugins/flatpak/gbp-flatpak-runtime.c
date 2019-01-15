@@ -71,9 +71,9 @@ get_builddir (GbpFlatpakRuntime *self)
 {
   g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
   g_autoptr(IdeBuildManager) build_manager = ide_build_manager_ref_from_context (context);
-  g_autoptr(IdeBuildPipeline) pipeline = ide_build_manager_ref_pipeline (build_manager);
+  g_autoptr(IdePipeline) pipeline = ide_build_manager_ref_pipeline (build_manager);
 
-  return ide_build_pipeline_get_builddir (pipeline);
+  return ide_pipeline_get_builddir (pipeline);
 }
 
 static gchar *
@@ -81,7 +81,7 @@ get_staging_directory (GbpFlatpakRuntime *self)
 {
   g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
   g_autoptr(IdeBuildManager) build_manager = ide_build_manager_ref_from_context (context);
-  g_autoptr(IdeBuildPipeline) pipeline = ide_build_manager_ref_pipeline (build_manager);
+  g_autoptr(IdePipeline) pipeline = ide_build_manager_ref_pipeline (build_manager);
 
   return gbp_flatpak_get_staging_dir (pipeline);
 }

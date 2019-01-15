@@ -38,7 +38,7 @@ struct _IdeDeployStrategyClass
   IdeObjectClass parent;
 
   void     (*load_async)    (IdeDeployStrategy     *self,
-                             IdeBuildPipeline      *pipeline,
+                             IdePipeline      *pipeline,
                              GCancellable          *cancellable,
                              GAsyncReadyCallback    callback,
                              gpointer               user_data);
@@ -46,7 +46,7 @@ struct _IdeDeployStrategyClass
                              GAsyncResult          *result,
                              GError               **error);
   void     (*deploy_async)  (IdeDeployStrategy     *self,
-                             IdeBuildPipeline      *pipeline,
+                             IdePipeline      *pipeline,
                              GFileProgressCallback  progress,
                              gpointer               progress_data,
                              GDestroyNotify         progress_data_destroy,
@@ -62,7 +62,7 @@ struct _IdeDeployStrategyClass
 
 IDE_AVAILABLE_IN_3_32
 void     ide_deploy_strategy_load_async    (IdeDeployStrategy      *self,
-                                            IdeBuildPipeline       *pipeline,
+                                            IdePipeline       *pipeline,
                                             GCancellable           *cancellable,
                                             GAsyncReadyCallback     callback,
                                             gpointer                user_data);
@@ -72,7 +72,7 @@ gboolean ide_deploy_strategy_load_finish   (IdeDeployStrategy      *self,
                                             GError                **error);
 IDE_AVAILABLE_IN_3_32
 void     ide_deploy_strategy_deploy_async  (IdeDeployStrategy      *self,
-                                            IdeBuildPipeline       *pipeline,
+                                            IdePipeline       *pipeline,
                                             GFileProgressCallback   progress,
                                             gpointer                progress_data,
                                             GDestroyNotify          progress_data_destroy,

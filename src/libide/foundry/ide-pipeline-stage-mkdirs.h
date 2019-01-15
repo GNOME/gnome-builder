@@ -1,4 +1,4 @@
-/* ide-build-pipeline-addin.h
+/* ide-pipeline-stage-mkdirs.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -26,33 +26,30 @@
 
 #include <libide-core.h>
 
-#include "ide-build-pipeline.h"
+#include "ide-pipeline-stage.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUILD_PIPELINE_ADDIN (ide_build_pipeline_addin_get_type())
+#define IDE_TYPE_PIPELINE_STAGE_MKDIRS (ide_pipeline_stage_mkdirs_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeBuildPipelineAddin, ide_build_pipeline_addin, IDE, BUILD_PIPELINE_ADDIN, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdePipelineStageMkdirs, ide_pipeline_stage_mkdirs, IDE, PIPELINE_STAGE_MKDIRS, IdePipelineStage)
 
-struct _IdeBuildPipelineAddinInterface
+struct _IdePipelineStageMkdirsClass
 {
-  GTypeInterface type_interface;
+  IdePipelineStageClass parent_class;
 
-  void (*load)   (IdeBuildPipelineAddin *self,
-                  IdeBuildPipeline      *pipeline);
-  void (*unload) (IdeBuildPipelineAddin *self,
-                  IdeBuildPipeline      *pipeline);
+  /*< private >*/
+  gpointer _reserved[8];
 };
 
 IDE_AVAILABLE_IN_3_32
-void ide_build_pipeline_addin_load   (IdeBuildPipelineAddin *self,
-                                      IdeBuildPipeline      *pipeline);
+IdePipelineStage *ide_pipeline_stage_mkdirs_new      (IdeContext             *context);
 IDE_AVAILABLE_IN_3_32
-void ide_build_pipeline_addin_unload (IdeBuildPipelineAddin *self,
-                                      IdeBuildPipeline      *pipeline);
-IDE_AVAILABLE_IN_3_32
-void ide_build_pipeline_addin_track  (IdeBuildPipelineAddin *self,
-                                      guint                  stage_id);
+void              ide_pipeline_stage_mkdirs_add_path (IdePipelineStageMkdirs *self,
+                                                      const gchar            *path,
+                                                      gboolean                with_parents,
+                                                      gint                    mode,
+                                                      gboolean                remove_on_rebuild);
 
 G_END_DECLS

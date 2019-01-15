@@ -28,11 +28,11 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_CMAKE_BUILD_STAGE_CROSS_FILE (gbp_cmake_build_stage_cross_file_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCMakeBuildStageCrossFile, gbp_cmake_build_stage_cross_file, GBP, CMAKE_BUILD_STAGE_CROSS_FILE, IdeBuildStage)
+G_DECLARE_FINAL_TYPE (GbpCMakeBuildStageCrossFile, gbp_cmake_build_stage_cross_file, GBP, CMAKE_BUILD_STAGE_CROSS_FILE, IdePipelineStage)
 
 GbpCMakeBuildStageCrossFile *gbp_cmake_build_stage_cross_file_new      (IdeContext                  *context,
                                                                         IdeToolchain                *toolchain);
 gchar                       *gbp_cmake_build_stage_cross_file_get_path (GbpCMakeBuildStageCrossFile *stage,
-                                                                        IdeBuildPipeline            *pipeline);
+                                                                        IdePipeline            *pipeline);
 
 G_END_DECLS

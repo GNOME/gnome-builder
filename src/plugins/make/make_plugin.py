@@ -69,7 +69,7 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem):
     def get_make_dir(self):
         return self.make_dir
 
-class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+class MakePipelineAddin(Ide.Object, Ide.PipelineAddin):
     """
     The MakePipelineAddin registers stages to be executed when various
     phases of the build pipeline are requested.
@@ -93,7 +93,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         builddir = pipeline.get_builddir()
 
         # Register the build launcher which will perform the incremental
-        # build of the project when the Ide.BuildPhase.BUILD phase is
+        # build of the project when the Ide.PipelinePhase.BUILD phase is
         # requested of the pipeline.
         build_launcher = pipeline.create_launcher()
         build_launcher.set_cwd(build_system.get_make_dir().get_path())
@@ -106,23 +106,23 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher.push_argv(make)
         clean_launcher.push_argv('clean')
 
-        build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
         build_stage.set_name(_("Build project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.attach(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
         # Register the install launcher which will perform our
-        # "make install" when the Ide.BuildPhase.INSTALL phase
+        # "make install" when the Ide.PipelinePhase.INSTALL phase
         # is requested of the pipeline.
         install_launcher = pipeline.create_launcher()
         install_launcher.set_cwd(build_system.get_make_dir().get_path())
         install_launcher.push_argv(make)
         install_launcher.push_argv('install')
 
-        install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        install_stage = Ide.PipelineStageLauncher.new(context, install_launcher)
         install_stage.set_name(_("Install project"))
-        self.track(pipeline.attach(Ide.BuildPhase.INSTALL, 0, install_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.INSTALL, 0, install_stage))
 
         # Determine what it will take to "make run" for this pipeline
         # and stash it on the build_system for use by the build target.

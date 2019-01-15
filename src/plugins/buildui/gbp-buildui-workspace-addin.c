@@ -113,7 +113,7 @@ gbp_buildui_workspace_addin_notify_pipeline (GbpBuilduiWorkspaceAddin *self,
                                              GParamSpec               *pspec,
                                              IdeBuildManager          *build_manager)
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));

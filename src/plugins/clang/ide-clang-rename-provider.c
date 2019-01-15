@@ -136,7 +136,7 @@ ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
   g_autofree gchar *new_name_arg = NULL;
   g_autofree gchar *position_arg = NULL;
   g_autofree gchar *path = NULL;
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   IdeBuildManager *build_manager;
   const gchar *builddir = NULL;
   IdeContext *context;
@@ -163,7 +163,7 @@ ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
   if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
-    builddir = ide_build_pipeline_get_builddir (pipeline);
+    builddir = ide_pipeline_get_builddir (pipeline);
 
   file = ide_location_get_file (location);
   path = g_file_get_path (file);

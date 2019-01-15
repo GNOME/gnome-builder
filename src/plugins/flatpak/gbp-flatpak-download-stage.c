@@ -29,7 +29,7 @@
 
 struct _GbpFlatpakDownloadStage
 {
-  IdeBuildStageLauncher parent_instance;
+  IdePipelineStageLauncher parent_instance;
 
   gchar *state_dir;
 
@@ -37,7 +37,7 @@ struct _GbpFlatpakDownloadStage
   guint force_update : 1;
 };
 
-G_DEFINE_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, IDE_TYPE_BUILD_STAGE_LAUNCHER)
+G_DEFINE_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
 
 enum {
   PROP_0,
@@ -48,8 +48,8 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
-                                  IdeBuildPipeline *pipeline,
+gbp_flatpak_download_stage_query (IdePipelineStage    *stage,
+                                  IdePipeline *pipeline,
                                   GPtrArray        *targets,
                                   GCancellable     *cancellable)
 {
@@ -62,26 +62,26 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
   const gchar *primary_module;
 
   g_assert (GBP_IS_FLATPAK_DOWNLOAD_STAGE (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Ignore downloads if there is no connection */
   if (!ide_application_has_network (IDE_APPLICATION_DEFAULT))
     {
-      ide_build_stage_log (stage,
+      ide_pipeline_stage_log (stage,
                            IDE_BUILD_LOG_STDERR,
                            _("Network is not available, skipping downloads"),
                            -1);
-      ide_build_stage_set_completed (stage, TRUE);
+      ide_pipeline_stage_set_completed (stage, TRUE);
       return;
     }
 
-  config = ide_build_pipeline_get_config (pipeline);
+  config = ide_pipeline_get_config (pipeline);
   g_assert (!config || IDE_IS_CONFIG (config));
 
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     {
-      ide_build_stage_set_completed (stage, TRUE);
+      ide_pipeline_stage_set_completed (stage, TRUE);
       return;
     }
 
@@ -95,7 +95,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
       manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
       staging_dir = gbp_flatpak_get_staging_dir (pipeline);
-      src_dir = ide_build_pipeline_get_srcdir (pipeline);
+      src_dir = ide_pipeline_get_srcdir (pipeline);
 
       launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                               G_SUBPROCESS_FLAGS_STDERR_PIPE);
@@ -112,7 +112,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
           ide_subprocess_launcher_setenv (launcher, "XDG_RUNTIME_DIR", g_get_user_runtime_dir (), TRUE);
         }
 
-      runtime = ide_build_pipeline_get_runtime (pipeline);
+      runtime = ide_pipeline_get_runtime (pipeline);
       arch = ide_runtime_get_arch (runtime);
       arch_param = g_strdup_printf ("--arch=%s", arch);
 
@@ -138,8 +138,8 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       ide_subprocess_launcher_push_argv (launcher, staging_dir);
       ide_subprocess_launcher_push_argv (launcher, manifest_path);
 
-      ide_build_stage_launcher_set_launcher (IDE_BUILD_STAGE_LAUNCHER (self), launcher);
-      ide_build_stage_set_completed (stage, FALSE);
+      ide_pipeline_stage_launcher_set_launcher (IDE_PIPELINE_STAGE_LAUNCHER (self), launcher);
+      ide_pipeline_stage_set_completed (stage, FALSE);
 
       self->invalid = FALSE;
       self->force_update = FALSE;
@@ -181,7 +181,7 @@ static void
 gbp_flatpak_download_stage_class_init (GbpFlatpakDownloadStageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeBuildStageClass *stage_class = IDE_BUILD_STAGE_CLASS (klass);
+  IdePipelineStageClass *stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
   object_class->finalize = gbp_flatpak_download_stage_finalize;
   object_class->set_property = gbp_flatpak_download_stage_set_property;
@@ -212,7 +212,7 @@ gbp_flatpak_download_stage_init (GbpFlatpakDownloadStage *self)
   self->invalid = TRUE;
 
   /* Allow downloads to fail in case we can still make progress */
-  ide_build_stage_launcher_set_ignore_exit_status (IDE_BUILD_STAGE_LAUNCHER (self), TRUE);
+  ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (self), TRUE);
 }
 
 void

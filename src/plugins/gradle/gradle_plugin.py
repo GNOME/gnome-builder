@@ -55,7 +55,7 @@ class GradleBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_priority(self):
         return 2000
 
-class GradlePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+class GradlePipelineAddin(Ide.Object, Ide.PipelineAddin):
     """
     The GradlePipelineAddin is responsible for creating the necessary build
     stages and attaching them to phases of the build pipeline.
@@ -80,7 +80,7 @@ class GradlePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         wrapper_launcher.set_cwd(srcdir)
         wrapper_launcher.push_argv("gradle")
         wrapper_launcher.push_argv('wrapper')
-        self.track(pipeline.connect_launcher(Ide.BuildPhase.AUTOGEN, 0, wrapper_launcher))
+        self.track(pipeline.connect_launcher(Ide.PipelinePhase.AUTOGEN, 0, wrapper_launcher))
 
         build_launcher = pipeline.create_launcher()
         build_launcher.set_cwd(srcdir)
@@ -92,11 +92,11 @@ class GradlePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher.push_argv("./gradlew")
         clean_launcher.push_argv('clean')
 
-        build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.connect(Ide.PipelinePhase.BUILD, 0, build_stage))
 
     def _query(self, stage, pipeline, cancellable):
         stage.set_completed(False)

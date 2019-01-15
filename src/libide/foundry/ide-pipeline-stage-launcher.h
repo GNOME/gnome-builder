@@ -1,4 +1,4 @@
-/* ide-build-stage-launcher.h
+/* ide-pipeline-stage-launcher.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -27,45 +27,45 @@
 #include <libide-core.h>
 #include <libide-threading.h>
 
-#include "ide-build-stage.h"
+#include "ide-pipeline-stage.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUILD_STAGE_LAUNCHER (ide_build_stage_launcher_get_type())
+#define IDE_TYPE_PIPELINE_STAGE_LAUNCHER (ide_pipeline_stage_launcher_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeBuildStageLauncher, ide_build_stage_launcher, IDE, BUILD_STAGE_LAUNCHER, IdeBuildStage)
+G_DECLARE_DERIVABLE_TYPE (IdePipelineStageLauncher, ide_pipeline_stage_launcher, IDE, PIPELINE_STAGE_LAUNCHER, IdePipelineStage)
 
-struct _IdeBuildStageLauncherClass
+struct _IdePipelineStageLauncherClass
 {
-  IdeBuildStageClass parent_class;
+  IdePipelineStageClass parent_class;
 
   /*< private >*/
   gpointer _reserved[8];
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeBuildStage         *ide_build_stage_launcher_new                    (IdeContext            *context,
+IdePipelineStage         *ide_pipeline_stage_launcher_new                    (IdeContext            *context,
                                                                         IdeSubprocessLauncher *launcher);
 IDE_AVAILABLE_IN_3_32
-IdeSubprocessLauncher *ide_build_stage_launcher_get_launcher           (IdeBuildStageLauncher *self);
+IdeSubprocessLauncher *ide_pipeline_stage_launcher_get_launcher           (IdePipelineStageLauncher *self);
 IDE_AVAILABLE_IN_3_32
-void                   ide_build_stage_launcher_set_launcher           (IdeBuildStageLauncher *self,
+void                   ide_pipeline_stage_launcher_set_launcher           (IdePipelineStageLauncher *self,
                                                                         IdeSubprocessLauncher *launcher);
 IDE_AVAILABLE_IN_3_32
-IdeSubprocessLauncher *ide_build_stage_launcher_get_clean_launcher     (IdeBuildStageLauncher *self);
+IdeSubprocessLauncher *ide_pipeline_stage_launcher_get_clean_launcher     (IdePipelineStageLauncher *self);
 IDE_AVAILABLE_IN_3_32
-void                   ide_build_stage_launcher_set_clean_launcher     (IdeBuildStageLauncher *self,
+void                   ide_pipeline_stage_launcher_set_clean_launcher     (IdePipelineStageLauncher *self,
                                                                         IdeSubprocessLauncher *clean_launcher);
 IDE_AVAILABLE_IN_3_32
-gboolean               ide_build_stage_launcher_get_ignore_exit_status (IdeBuildStageLauncher *self);
+gboolean               ide_pipeline_stage_launcher_get_ignore_exit_status (IdePipelineStageLauncher *self);
 IDE_AVAILABLE_IN_3_32
-void                   ide_build_stage_launcher_set_ignore_exit_status (IdeBuildStageLauncher *self,
+void                   ide_pipeline_stage_launcher_set_ignore_exit_status (IdePipelineStageLauncher *self,
                                                                         gboolean               ignore_exit_status);
 IDE_AVAILABLE_IN_3_32
-gboolean               ide_build_stage_launcher_get_use_pty            (IdeBuildStageLauncher *self);
+gboolean               ide_pipeline_stage_launcher_get_use_pty            (IdePipelineStageLauncher *self);
 IDE_AVAILABLE_IN_3_32
-void                   ide_build_stage_launcher_set_use_pty            (IdeBuildStageLauncher *self,
+void                   ide_pipeline_stage_launcher_set_use_pty            (IdePipelineStageLauncher *self,
                                                                         gboolean               use_pty);
 
 G_END_DECLS

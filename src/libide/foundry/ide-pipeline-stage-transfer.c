@@ -1,4 +1,4 @@
-/* ide-build-stage-transfer.c
+/* ide-pipeline-stage-transfer.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,20 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-build-stage-transfer"
+#define G_LOG_DOMAIN "ide-pipeline-stage-transfer"
 
 #include "config.h"
 
 #include <libide-threading.h>
 #include <glib/gi18n.h>
 
-#include "ide-build-stage-transfer.h"
-#include "ide-build-pipeline.h"
+#include "ide-pipeline-stage-transfer.h"
+#include "ide-pipeline.h"
 #include "ide-transfer.h"
 
-struct _IdeBuildStageTransfer
+struct _IdePipelineStageTransfer
 {
-  IdeBuildStage  parent_instance;
+  IdePipelineStage  parent_instance;
   IdeTransfer   *transfer;
   guint          disable_when_metered : 1;
 };
@@ -43,14 +43,14 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeBuildStageTransfer, ide_build_stage_transfer, IDE_TYPE_BUILD_STAGE)
+G_DEFINE_TYPE (IdePipelineStageTransfer, ide_pipeline_stage_transfer, IDE_TYPE_PIPELINE_STAGE)
 
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_build_stage_transfer_execute_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+ide_pipeline_stage_transfer_execute_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
 {
   IdeTransferManager *transfer_manager = (IdeTransferManager *)object;
   g_autoptr(IdeTask) task = user_data;
@@ -73,24 +73,24 @@ ide_build_stage_transfer_execute_cb (GObject      *object,
 }
 
 static void
-ide_build_stage_transfer_notify_completed_cb (IdeTask               *task,
-                                              GParamSpec            *pspec,
-                                              IdeBuildStageTransfer *transfer)
+ide_pipeline_stage_transfer_notify_completed_cb (IdeTask                  *task,
+                                                 GParamSpec               *pspec,
+                                                 IdePipelineStageTransfer *transfer)
 {
   g_assert (IDE_IS_TASK (task));
-  g_assert (IDE_IS_BUILD_STAGE_TRANSFER (transfer));
+  g_assert (IDE_IS_PIPELINE_STAGE_TRANSFER (transfer));
 
-  ide_build_stage_set_active (IDE_BUILD_STAGE (transfer), FALSE);
+  ide_pipeline_stage_set_active (IDE_PIPELINE_STAGE (transfer), FALSE);
 }
 
 static void
-ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
-                                        IdeBuildPipeline    *pipeline,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
+ide_pipeline_stage_transfer_build_async (IdePipelineStage    *stage,
+                                         IdePipeline         *pipeline,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
 {
-  IdeBuildStageTransfer *self = (IdeBuildStageTransfer *)stage;
+  IdePipelineStageTransfer *self = (IdePipelineStageTransfer *)stage;
   g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(IdeNotifications) notifs = NULL;
   g_autoptr(IdeTask) task = NULL;
@@ -99,20 +99,20 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_STAGE_TRANSFER (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE_STAGE_TRANSFER (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_build_stage_transfer_execute_async);
+  ide_task_set_source_tag (task, ide_pipeline_stage_transfer_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   g_signal_connect (task,
                     "notify::completed",
-                    G_CALLBACK (ide_build_stage_transfer_notify_completed_cb),
+                    G_CALLBACK (ide_pipeline_stage_transfer_notify_completed_cb),
                     self);
 
-  ide_build_stage_set_active (stage, TRUE);
+  ide_pipeline_stage_set_active (stage, TRUE);
 
   if (ide_transfer_get_completed (self->transfer))
     {
@@ -133,7 +133,7 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
               ide_task_return_new_error (task,
                                          IDE_TRANSFER_ERROR,
                                          IDE_TRANSFER_ERROR_CONNECTION_IS_METERED,
-                                         _("Cannot execute transfer while on metered connection"));
+                                         _("Cannot build transfer while on metered connection"));
               IDE_EXIT;
             }
         }
@@ -160,40 +160,40 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
   ide_transfer_manager_execute_async (NULL,
                                       self->transfer,
                                       cancellable,
-                                      ide_build_stage_transfer_execute_cb,
+                                      ide_pipeline_stage_transfer_execute_cb,
                                       g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_build_stage_transfer_execute_finish (IdeBuildStage  *stage,
-                                         GAsyncResult   *result,
-                                         GError        **error)
+ide_pipeline_stage_transfer_build_finish (IdePipelineStage  *stage,
+                                          GAsyncResult      *result,
+                                          GError           **error)
 {
-  g_assert (IDE_IS_BUILD_STAGE_TRANSFER (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE_TRANSFER (stage));
   g_assert (IDE_IS_TASK (result));
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
-ide_build_stage_transfer_finalize (GObject *object)
+ide_pipeline_stage_transfer_finalize (GObject *object)
 {
-  IdeBuildStageTransfer *self = (IdeBuildStageTransfer *)object;
+  IdePipelineStageTransfer *self = (IdePipelineStageTransfer *)object;
 
   g_clear_object (&self->transfer);
 
-  G_OBJECT_CLASS (ide_build_stage_transfer_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_pipeline_stage_transfer_parent_class)->finalize (object);
 }
 
 static void
-ide_build_stage_transfer_get_property (GObject    *object,
-                                       guint       prop_id,
-                                       GValue     *value,
-                                       GParamSpec *pspec)
+ide_pipeline_stage_transfer_get_property (GObject    *object,
+                                          guint       prop_id,
+                                          GValue     *value,
+                                          GParamSpec *pspec)
 {
-  IdeBuildStageTransfer *self = (IdeBuildStageTransfer *)object;
+  IdePipelineStageTransfer *self = (IdePipelineStageTransfer *)object;
 
   switch (prop_id)
     {
@@ -211,12 +211,12 @@ ide_build_stage_transfer_get_property (GObject    *object,
 }
 
 static void
-ide_build_stage_transfer_set_property (GObject      *object,
-                                       guint         prop_id,
-                                       const GValue *value,
-                                       GParamSpec   *pspec)
+ide_pipeline_stage_transfer_set_property (GObject      *object,
+                                          guint         prop_id,
+                                          const GValue *value,
+                                          GParamSpec   *pspec)
 {
-  IdeBuildStageTransfer *self = (IdeBuildStageTransfer *)object;
+  IdePipelineStageTransfer *self = (IdePipelineStageTransfer *)object;
 
   switch (prop_id)
     {
@@ -234,17 +234,17 @@ ide_build_stage_transfer_set_property (GObject      *object,
 }
 
 static void
-ide_build_stage_transfer_class_init (IdeBuildStageTransferClass *klass)
+ide_pipeline_stage_transfer_class_init (IdePipelineStageTransferClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeBuildStageClass *build_stage_class = IDE_BUILD_STAGE_CLASS (klass);
+  IdePipelineStageClass *build_stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
-  object_class->finalize = ide_build_stage_transfer_finalize;
-  object_class->get_property = ide_build_stage_transfer_get_property;
-  object_class->set_property = ide_build_stage_transfer_set_property;
+  object_class->finalize = ide_pipeline_stage_transfer_finalize;
+  object_class->get_property = ide_pipeline_stage_transfer_get_property;
+  object_class->set_property = ide_pipeline_stage_transfer_set_property;
 
-  build_stage_class->execute_async = ide_build_stage_transfer_execute_async;
-  build_stage_class->execute_finish = ide_build_stage_transfer_execute_finish;
+  build_stage_class->build_async = ide_pipeline_stage_transfer_build_async;
+  build_stage_class->build_finish = ide_pipeline_stage_transfer_build_finish;
 
   properties [PROP_DISABLE_WHEN_METERED] =
     g_param_spec_boolean ("disable-when-metered",
@@ -264,7 +264,7 @@ ide_build_stage_transfer_class_init (IdeBuildStageTransferClass *klass)
 }
 
 static void
-ide_build_stage_transfer_init (IdeBuildStageTransfer *self)
+ide_pipeline_stage_transfer_init (IdePipelineStageTransfer *self)
 {
   self->disable_when_metered = TRUE;
 }

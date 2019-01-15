@@ -30,20 +30,14 @@ G_BEGIN_DECLS
 
 typedef struct _IdeBuildLog IdeBuildLog;
 typedef struct _IdeBuildManager IdeBuildManager;
-typedef struct _IdeBuildPipeline IdeBuildPipeline;
-typedef struct _IdeBuildPipelineAddin IdeBuildPipelineAddin;
-typedef struct _IdeBuildStage IdeBuildStage;
-typedef struct _IdeBuildStageLauncher IdeBuildStageLauncher;
-typedef struct _IdeBuildStageMkdirs IdeBuildStageMkdirs;
-typedef struct _IdeBuildStageTransfer IdeBuildStageTransfer;
 typedef struct _IdeBuildSystem IdeBuildSystem;
 typedef struct _IdeBuildSystemDiscovery IdeBuildSystemDiscovery;
 typedef struct _IdeBuildTarget IdeBuildTarget;
 typedef struct _IdeBuildTargetProvider IdeBuildTargetProvider;
 typedef struct _IdeCompileCommands IdeCompileCommands;
 typedef struct _IdeConfig IdeConfig;
-typedef struct _IdeConfigProvider IdeConfigProvider;
 typedef struct _IdeConfigManager IdeConfigManager;
+typedef struct _IdeConfigProvider IdeConfigProvider;
 typedef struct _IdeDependencyUpdater IdeDependencyUpdater;
 typedef struct _IdeDeployStrategy IdeDeployStrategy;
 typedef struct _IdeDevice IdeDevice;
@@ -51,6 +45,12 @@ typedef struct _IdeDeviceInfo IdeDeviceInfo;
 typedef struct _IdeDeviceManager IdeDeviceManager;
 typedef struct _IdeDeviceProvider IdeDeviceProvider;
 typedef struct _IdeLocalDevice IdeLocalDevice;
+typedef struct _IdePipeline IdePipeline;
+typedef struct _IdePipelineAddin IdePipelineAddin;
+typedef struct _IdePipelineStage IdePipelineStage;
+typedef struct _IdePipelineStageLauncher IdePipelineStageLauncher;
+typedef struct _IdePipelineStageMkdirs IdePipelineStageMkdirs;
+typedef struct _IdePipelineStageTransfer IdePipelineStageTransfer;
 typedef struct _IdeRunButton IdeRunButton;
 typedef struct _IdeRunManager IdeRunManager;
 typedef struct _IdeRunner IdeRunner;
@@ -60,12 +60,12 @@ typedef struct _IdeRuntimeManager IdeRuntimeManager;
 typedef struct _IdeRuntimeProvider IdeRuntimeProvider;
 typedef struct _IdeSimpleBuildTarget IdeSimpleBuildTarget;
 typedef struct _IdeSimpleToolchain IdeSimpleToolchain;
-typedef struct _IdeTriplet IdeTriplet;
 typedef struct _IdeTest IdeTest;
 typedef struct _IdeTestManager IdeTestManager;
 typedef struct _IdeTestProvider IdeTestProvider;
 typedef struct _IdeToolchain IdeToolchain;
 typedef struct _IdeToolchainManager IdeToolchainManager;
 typedef struct _IdeToolchainProvider IdeToolchainProvider;
+typedef struct _IdeTriplet IdeTriplet;
 
 G_END_DECLS

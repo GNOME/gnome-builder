@@ -73,7 +73,7 @@ _gbp_git_register_types (PeasObjectModule *module)
                                                   IDE_TYPE_BUFFER_ADDIN,
                                                   GBP_TYPE_GIT_BUFFER_ADDIN);
       peas_object_module_register_extension_type (module,
-                                                  IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                                  IDE_TYPE_PIPELINE_ADDIN,
                                                   GBP_TYPE_GIT_PIPELINE_ADDIN);
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_DEPENDENCY_UPDATER,

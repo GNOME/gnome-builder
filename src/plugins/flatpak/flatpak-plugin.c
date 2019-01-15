@@ -61,7 +61,7 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               GBP_TYPE_FLATPAK_APPLICATION_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                              IDE_TYPE_PIPELINE_ADDIN,
                                               GBP_TYPE_FLATPAK_PIPELINE_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,

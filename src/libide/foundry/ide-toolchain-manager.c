@@ -29,7 +29,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-build-private.h"
-#include "ide-build-pipeline.h"
+#include "ide-pipeline.h"
 #include "ide-config.h"
 #include "ide-device.h"
 #include "ide-simple-toolchain.h"
@@ -50,7 +50,7 @@ struct _IdeToolchainManager
 
 typedef struct
 {
-  IdeBuildPipeline *pipeline;
+  IdePipeline *pipeline;
   gchar            *toolchain_id;
 } PrepareState;
 
@@ -497,7 +497,7 @@ ide_toolchain_manager_is_loaded (IdeToolchainManager  *self)
 
 void
 _ide_toolchain_manager_prepare_async (IdeToolchainManager  *self,
-                                      IdeBuildPipeline     *pipeline,
+                                      IdePipeline     *pipeline,
                                       GCancellable         *cancellable,
                                       GAsyncReadyCallback   callback,
                                       gpointer              user_data)
@@ -511,10 +511,10 @@ _ide_toolchain_manager_prepare_async (IdeToolchainManager  *self,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (self));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  config = ide_build_pipeline_get_config (pipeline);
+  config = ide_pipeline_get_config (pipeline);
   toolchain_id = ide_config_get_toolchain_id (config);
 
   task = g_task_new (self, cancellable, callback, user_data);
@@ -584,7 +584,7 @@ _ide_toolchain_manager_prepare_finish (IdeToolchainManager  *self,
   g_return_val_if_fail (!ret || IDE_IS_TOOLCHAIN (ret), FALSE);
 
   if (IDE_IS_TOOLCHAIN (ret))
-    _ide_build_pipeline_set_toolchain (state->pipeline, ret);
+    _ide_pipeline_set_toolchain (state->pipeline, ret);
 
   IDE_RETURN (ret != NULL);
 }

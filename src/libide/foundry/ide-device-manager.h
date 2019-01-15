@@ -49,7 +49,7 @@ IdeDevice        *ide_device_manager_get_device_by_id (IdeDeviceManager     *sel
                                                        const gchar          *device_id);
 IDE_AVAILABLE_IN_3_32
 void              ide_device_manager_deploy_async     (IdeDeviceManager     *self,
-                                                       IdeBuildPipeline     *pipeline,
+                                                       IdePipeline     *pipeline,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);

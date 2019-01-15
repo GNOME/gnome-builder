@@ -33,7 +33,7 @@ struct _GbpBuilduiLogPane
 {
   IdePane            parent_instance;
 
-  IdeBuildPipeline  *pipeline;
+  IdePipeline  *pipeline;
 
   GtkScrollbar      *scrollbar;
   IdeTerminal       *terminal;
@@ -79,21 +79,21 @@ gbp_buildui_log_pane_log_observer (IdeBuildLogStream  stream,
 static void
 gbp_buildui_log_pane_notify_pty (GbpBuilduiLogPane *self,
                                  GParamSpec        *pspec,
-                                 IdeBuildPipeline  *pipeline)
+                                 IdePipeline  *pipeline)
 {
   g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
-                        ide_build_pipeline_get_pty (pipeline));
+                        ide_pipeline_get_pty (pipeline));
 }
 
 void
 gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
-                                   IdeBuildPipeline  *pipeline)
+                                   IdePipeline  *pipeline)
 {
   g_return_if_fail (GBP_IS_BUILDUI_LOG_PANE (self));
-  g_return_if_fail (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
+  g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
 
   if (pipeline != self->pipeline)
     {
@@ -102,7 +102,7 @@ gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
           g_signal_handlers_disconnect_by_func (self->pipeline,
                                                 G_CALLBACK (gbp_buildui_log_pane_notify_pty),
                                                 self);
-          ide_build_pipeline_remove_log_observer (self->pipeline, self->log_observer);
+          ide_pipeline_remove_log_observer (self->pipeline, self->log_observer);
           self->log_observer = 0;
           g_clear_object (&self->pipeline);
           vte_terminal_set_pty (VTE_TERMINAL (self->terminal), NULL);
@@ -112,13 +112,13 @@ gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
         {
           self->pipeline = g_object_ref (pipeline);
           self->log_observer =
-            ide_build_pipeline_add_log_observer (self->pipeline,
+            ide_pipeline_add_log_observer (self->pipeline,
                                                  gbp_buildui_log_pane_log_observer,
                                                  self,
                                                  NULL);
           vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
           vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
-                                ide_build_pipeline_get_pty (pipeline));
+                                ide_pipeline_get_pty (pipeline));
           g_signal_connect_object (pipeline,
                                    "notify::pty",
                                    G_CALLBACK (gbp_buildui_log_pane_notify_pty),
@@ -140,7 +140,7 @@ gbp_buildui_log_pane_window_title_changed (GbpBuilduiLogPane *self,
       const gchar *title;
 
       title = vte_terminal_get_window_title (VTE_TERMINAL (terminal));
-      _ide_build_pipeline_set_message (self->pipeline, title);
+      _ide_pipeline_set_message (self->pipeline, title);
     }
 }
 
@@ -235,7 +235,7 @@ gbp_buildui_log_pane_class_init (GbpBuilduiLogPaneClass *klass)
     g_param_spec_object ("pipeline",
                          "Result",
                          "Result",
-                         IDE_TYPE_BUILD_PIPELINE,
+                         IDE_TYPE_PIPELINE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -332,7 +332,7 @@ terminal_size_allocate (GbpBuilduiLogPane *self,
   if (self->pipeline != NULL && pty != NULL)
     {
       if (vte_pty_get_size (pty, &rows, &columns, NULL))
-        _ide_build_pipeline_set_pty_size (self->pipeline, rows, columns);
+        _ide_pipeline_set_pty_size (self->pipeline, rows, columns);
     }
 }
 

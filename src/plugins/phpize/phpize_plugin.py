@@ -77,7 +77,7 @@ class PHPizeBuildSystem(Ide.Object, Ide.BuildSystem):
         # print variables, and then extract the values based on the file type.
         # But before, we must advance the pipeline through CONFIGURE.
         build_manager = Ide.BuildManager.from_context(context)
-        build_manager.execute_async(Ide.BuildPhase.CONFIGURE, None, self._get_build_flags_build_cb, task)
+        build_manager.build_async(Ide.PipelinePhase.CONFIGURE, None, self._get_build_flags_build_cb, task)
 
     def do_get_build_flags_finish(self, result):
         return result.build_flags
@@ -88,7 +88,7 @@ class PHPizeBuildSystem(Ide.Object, Ide.BuildSystem):
         and then runs a make subprocess to extract build flags from Makefile.
         """
         try:
-            build_manager.execute_finish(result)
+            build_manager.build_finish(result)
 
             pipeline = build_manager.get_pipeline()
 
@@ -162,7 +162,7 @@ class PHPizeBuildSystemDiscovery(GObject.Object, Ide.BuildSystemDiscovery):
 
         return (None, 0)
 
-class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+class PHPizePipelineAddin(Ide.Object, Ide.PipelineAddin):
     """
     This class is responsible for attaching the various build operations
     to the pipeline at the appropriate phase.
@@ -187,10 +187,10 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         bootstrap_launcher = pipeline.create_launcher()
         bootstrap_launcher.push_argv('phpize')
         bootstrap_launcher.set_cwd(srcdir)
-        bootstrap_stage = Ide.BuildStageLauncher.new(context, bootstrap_launcher)
+        bootstrap_stage = Ide.PipelineStageLauncher.new(context, bootstrap_launcher)
         bootstrap_stage.set_name(_("Bootstrapping project"))
         bootstrap_stage.set_completed(os.path.exists(os.path.join(srcdir, 'configure')))
-        self.track(pipeline.attach(Ide.BuildPhase.AUTOGEN, 0, bootstrap_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.AUTOGEN, 0, bootstrap_stage))
 
         # Configure the project using autoconf. We run from builddir.
         config_launcher = pipeline.create_launcher()
@@ -203,9 +203,9 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         if config_opts:
             _, config_opts = GLib.shell_parse_argv(config_opts)
             config_launcher.push_args(config_opts)
-        config_stage = Ide.BuildStageLauncher.new(context, config_launcher)
+        config_stage = Ide.PipelineStageLauncher.new(context, config_launcher)
         config_stage.set_name(_("Configuring project"))
-        self.track(pipeline.attach(Ide.BuildPhase.CONFIGURE, 0, config_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.CONFIGURE, 0, config_stage))
 
         # Build the project using make.
         build_launcher = pipeline.create_launcher()
@@ -215,19 +215,19 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher = pipeline.create_launcher()
         clean_launcher.push_argv('make')
         clean_launcher.push_argv('clean')
-        build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.attach(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
         # Use "make install" to install the project.
         install_launcher = pipeline.create_launcher()
         install_launcher.push_argv('make')
         install_launcher.push_argv('install')
-        install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        install_stage = Ide.PipelineStageLauncher.new(context, install_launcher)
         install_stage.set_name(_("Installing project"))
-        self.track(pipeline.attach(Ide.BuildPhase.INSTALL, 0, install_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.INSTALL, 0, install_stage))
 
     def _query(self, stage, pipeline, targets, cancellable):
         # Always defer to make for completion status

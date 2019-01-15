@@ -31,13 +31,13 @@
 
 struct _GbpGitSubmoduleStage
 {
-  IdeBuildStageLauncher parent_instance;
+  IdePipelineStageLauncher parent_instance;
 
   guint has_run : 1;
   guint force_update : 1;
 };
 
-G_DEFINE_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, IDE_TYPE_BUILD_STAGE_LAUNCHER)
+G_DEFINE_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
 
 GbpGitSubmoduleStage *
 gbp_git_submodule_stage_new (IdeContext *context)
@@ -59,7 +59,7 @@ gbp_git_submodule_stage_new (IdeContext *context)
   ide_subprocess_launcher_push_argv (launcher, "-c");
   ide_subprocess_launcher_push_argv (launcher, "git submodule init && git submodule update");
 
-  ide_build_stage_launcher_set_launcher (IDE_BUILD_STAGE_LAUNCHER (self), launcher);
+  ide_pipeline_stage_launcher_set_launcher (IDE_PIPELINE_STAGE_LAUNCHER (self), launcher);
 
   return g_steal_pointer (&self);
 }
@@ -83,7 +83,7 @@ gbp_git_submodule_stage_query_cb (GObject      *object,
 
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, NULL, &error))
     {
-      ide_build_stage_log (IDE_BUILD_STAGE (self),
+      ide_pipeline_stage_log (IDE_PIPELINE_STAGE (self),
                            IDE_BUILD_LOG_STDERR,
                            error->message,
                            -1);
@@ -98,21 +98,21 @@ gbp_git_submodule_stage_query_cb (GObject      *object,
        */
       if (stdout_buf[0] == '-')
         {
-          ide_build_stage_set_completed (IDE_BUILD_STAGE (self), FALSE);
+          ide_pipeline_stage_set_completed (IDE_PIPELINE_STAGE (self), FALSE);
           goto unpause;
         }
     }
 
 failure:
-  ide_build_stage_set_completed (IDE_BUILD_STAGE (self), TRUE);
+  ide_pipeline_stage_set_completed (IDE_PIPELINE_STAGE (self), TRUE);
 
 unpause:
-  ide_build_stage_unpause (IDE_BUILD_STAGE (self));
+  ide_pipeline_stage_unpause (IDE_PIPELINE_STAGE (self));
 }
 
 static void
-gbp_git_submodule_stage_query (IdeBuildStage    *stage,
-                               IdeBuildPipeline *pipeline,
+gbp_git_submodule_stage_query (IdePipelineStage    *stage,
+                               IdePipeline *pipeline,
                                GPtrArray        *targets,
                                GCancellable     *cancellable)
 {
@@ -126,16 +126,16 @@ gbp_git_submodule_stage_query (IdeBuildStage    *stage,
   IDE_ENTRY;
 
   g_assert (GBP_IS_GIT_SUBMODULE_STAGE (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (!ide_application_has_network (IDE_APPLICATION_DEFAULT))
     {
-      ide_build_stage_log (stage,
+      ide_pipeline_stage_log (stage,
                            IDE_BUILD_LOG_STDERR,
                            _("Network is not available, skipping submodule update"),
                            -1);
-      ide_build_stage_set_completed (stage, TRUE);
+      ide_pipeline_stage_set_completed (stage, TRUE);
       IDE_EXIT;
     }
 
@@ -143,13 +143,13 @@ gbp_git_submodule_stage_query (IdeBuildStage    *stage,
     {
       self->force_update = FALSE;
       self->has_run = TRUE;
-      ide_build_stage_set_completed (stage, FALSE);
+      ide_pipeline_stage_set_completed (stage, FALSE);
       IDE_EXIT;
     }
 
   if (self->has_run)
     {
-      ide_build_stage_set_completed (stage, TRUE);
+      ide_pipeline_stage_set_completed (stage, TRUE);
       IDE_EXIT;
     }
 
@@ -175,15 +175,15 @@ gbp_git_submodule_stage_query (IdeBuildStage    *stage,
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
-      ide_build_stage_log (IDE_BUILD_STAGE (stage),
+      ide_pipeline_stage_log (IDE_PIPELINE_STAGE (stage),
                            IDE_BUILD_LOG_STDERR,
                            error->message,
                            -1);
-      ide_build_stage_set_completed (IDE_BUILD_STAGE (stage), TRUE);
+      ide_pipeline_stage_set_completed (IDE_PIPELINE_STAGE (stage), TRUE);
       IDE_EXIT;
     }
 
-  ide_build_stage_pause (IDE_BUILD_STAGE (stage));
+  ide_pipeline_stage_pause (IDE_PIPELINE_STAGE (stage));
 
   ide_subprocess_communicate_utf8_async (subprocess,
                                          NULL,
@@ -197,7 +197,7 @@ gbp_git_submodule_stage_query (IdeBuildStage    *stage,
 static void
 gbp_git_submodule_stage_class_init (GbpGitSubmoduleStageClass *klass)
 {
-  IdeBuildStageClass *stage_class = IDE_BUILD_STAGE_CLASS (klass);
+  IdePipelineStageClass *stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
   stage_class->query = gbp_git_submodule_stage_query;
 }
@@ -205,8 +205,8 @@ gbp_git_submodule_stage_class_init (GbpGitSubmoduleStageClass *klass)
 static void
 gbp_git_submodule_stage_init (GbpGitSubmoduleStage *self)
 {
-  ide_build_stage_set_name (IDE_BUILD_STAGE (self), _("Initialize git submodules"));
-  ide_build_stage_launcher_set_ignore_exit_status (IDE_BUILD_STAGE_LAUNCHER (self), TRUE);
+  ide_pipeline_stage_set_name (IDE_PIPELINE_STAGE (self), _("Initialize git submodules"));
+  ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (self), TRUE);
 }
 
 void
