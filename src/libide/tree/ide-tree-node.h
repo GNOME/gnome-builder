@@ -50,6 +50,22 @@ typedef enum
 typedef IdeTreeNodeVisit (*IdeTreeTraverseFunc) (IdeTreeNode *node,
                                                  gpointer     user_data);
 
+
+/**
+ * IdeTreeNodeCompare:
+ * @node: an #IdeTreeNode that iterate over children
+ * @child: an #IdeTreeNode to be inserted
+ *
+
+ * This callback function is a convenience wrapper around GCompareFunc
+ *
+ * Returns: int
+ *
+ * Since: 3.32
+ */
+typedef int (*IdeTreeNodeCompare) (IdeTreeNode *node,
+                                   IdeTreeNode *child);
+
 IDE_AVAILABLE_IN_3_32
 IdeTreeNode   *ide_tree_node_new                    (void);
 IDE_AVAILABLE_IN_3_32
@@ -119,6 +135,10 @@ void           ide_tree_node_prepend                (IdeTreeNode         *self,
 IDE_AVAILABLE_IN_3_32
 void           ide_tree_node_append                 (IdeTreeNode         *self,
                                                      IdeTreeNode         *child);
+IDE_AVAILABLE_IN_3_32
+void           ide_tree_node_insert_sorted          (IdeTreeNode         *self,
+                                                     IdeTreeNode         *child,
+                                                     IdeTreeNodeCompare   cmp);
 IDE_AVAILABLE_IN_3_32
 void           ide_tree_node_insert_before          (IdeTreeNode         *self,
                                                      IdeTreeNode         *child);

@@ -809,6 +809,37 @@ ide_tree_node_append (IdeTreeNode *self,
 }
 
 /**
+ * ide_tree_node_insert_sorted:
+ * @self: a #IdeTreeNode
+ * @child: a #IdeTreeNode
+ * @cmpfn: a #IdeTreeNodeCompare
+ *
+ * Insert @child as a child of @self at the sorted position determined by @cmpfn
+ *
+ * This operation is O(n).
+ *
+ * Since: 3.32
+ */
+void
+ide_tree_node_insert_sorted (IdeTreeNode        *self,
+                             IdeTreeNode        *child,
+                             IdeTreeNodeCompare  cmpfn)
+{
+  GList *link;
+
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
+  g_return_if_fail (IDE_IS_TREE_NODE (child));
+  g_return_if_fail (child->parent == NULL);
+
+  link = g_queue_find_custom (&self->children, child, (GCompareFunc)cmpfn);
+
+  if (link != NULL)
+    ide_tree_node_insert_before (IDE_TREE_NODE (link->data), child);
+  else
+    ide_tree_node_append (self, child);
+}
+
+/**
  * ide_tree_node_insert_before:
  * @self: a #IdeTreeNode
  * @child: a #IdeTreeNode
