@@ -2051,80 +2051,7 @@ gbp_gdb_debugger_list_params_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
-  GbpGdbDebugger *self = (GbpGdbDebugger *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GPtrArray) ar = NULL;
-  g_autoptr(GError) error = NULL;
-  struct gdbwire_mi_output *output;
-  struct gdbwire_mi_result *res;
-
-  g_assert (GBP_IS_GDB_DEBUGGER (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  output = gbp_gdb_debugger_exec_finish (self, result, &error);
-
-  if (output == NULL || gbp_gdb_debugger_unwrap (output, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      goto cleanup;
-    }
-
-  ar = g_ptr_array_new_with_free_func (g_object_unref);
-
-  res = output->variant.result_record->result;
-
-  if (res->kind == GDBWIRE_MI_LIST &&
-      g_strcmp0 (res->variable, "stack-args") == 0 &&
-      res->variant.result->kind == GDBWIRE_MI_TUPLE &&
-      g_strcmp0 (res->variant.result->variable, "frame") == 0)
-    {
-      const struct gdbwire_mi_result *titer;
-
-      for (titer = res->variant.result->variant.result; titer; titer = titer->next)
-        {
-          if (titer->kind == GDBWIRE_MI_LIST && g_strcmp0 (titer->variable, "args") == 0)
-            {
-              const struct gdbwire_mi_result *args;
-
-              for (args = titer->variant.result; args; args = args->next)
-                {
-                  if (args->kind == GDBWIRE_MI_TUPLE)
-                    {
-                      g_autoptr(IdeDebuggerVariable) var = NULL;
-                      const struct gdbwire_mi_result *arginfo;
-                      const gchar *name = NULL;
-                      const gchar *type = NULL;
-                      const gchar *value = NULL;
-
-                      for (arginfo = args->variant.result; arginfo; arginfo = arginfo->next)
-                        {
-                          if (arginfo->kind == GDBWIRE_MI_CSTRING)
-                            {
-                              if (g_strcmp0 (arginfo->variable, "name") == 0)
-                                name = arginfo->variant.cstring;
-                              else if (g_strcmp0 (arginfo->variable, "type") == 0)
-                                type = arginfo->variant.cstring;
-                              else if (g_strcmp0 (arginfo->variable, "value") == 0)
-                                value = arginfo->variant.cstring;
-                            }
-                        }
-
-                      var = ide_debugger_variable_new (name);
-                      ide_debugger_variable_set_type_name (var, type);
-                      ide_debugger_variable_set_value (var, value);
-
-                      g_ptr_array_add (ar, g_steal_pointer (&var));
-                    }
-                }
-            }
-        }
-    }
-
-  ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
-
-cleanup:
-  g_clear_pointer (&output, gdbwire_mi_output_free);
+  gbp_gdb_debugger_list_variables_cb (object, result, user_data, TRUE);
 }
 
 static void
@@ -2139,6 +2066,7 @@ gbp_gdb_debugger_list_params_async (IdeDebugger         *debugger,
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *command = NULL;
   guint depth;
+  const gchar *tid = NULL;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (IDE_IS_DEBUGGER_THREAD (thread));
@@ -2149,11 +2077,13 @@ gbp_gdb_debugger_list_params_async (IdeDebugger         *debugger,
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, gbp_gdb_debugger_list_params_async);
 
+  tid = ide_debugger_thread_get_id (thread);
   depth = ide_debugger_frame_get_depth (frame);
-  command = g_strdup_printf ("-stack-list-arguments --simple-values %u %u", depth, depth);
+  command = g_strdup_printf ("-stack-list-variables --thread %s --frame %u --simple-values",
+                             tid, depth);
 
   gbp_gdb_debugger_exec_async (self,
-                               thread,
+                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_list_params_cb,
