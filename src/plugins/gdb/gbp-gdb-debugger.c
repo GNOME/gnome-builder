@@ -1643,6 +1643,8 @@ gbp_gdb_debugger_list_frames_async (IdeDebugger         *debugger,
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
   g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *command = NULL;
+  const gchar *tid = NULL;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (IDE_DEBUGGER_THREAD (thread));
@@ -1656,9 +1658,12 @@ gbp_gdb_debugger_list_frames_async (IdeDebugger         *debugger,
    *       the appropriate thread is selected first.
    */
 
+  tid = ide_debugger_thread_get_id (thread);
+  command = g_strdup_printf ("-stack-list-frames --thread %s", tid);
+
   gbp_gdb_debugger_exec_async (self,
-                               thread,
-                               "-stack-list-frames",
+                               NULL,
+                               command,
                                cancellable,
                                gbp_gdb_debugger_list_frames_cb,
                                g_steal_pointer (&task));
