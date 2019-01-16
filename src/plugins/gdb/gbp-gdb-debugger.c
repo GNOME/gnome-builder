@@ -2020,7 +2020,7 @@ gbp_gdb_debugger_list_locals_async (IdeDebugger         *debugger,
 
   tid = ide_debugger_thread_get_id (thread);
   depth = ide_debugger_frame_get_depth (frame);
-  command = g_strdup_printf ("@@@@-stack-list-variables --thread %s --frame %u --simple-values\n",
+  command = g_strdup_printf ("-stack-list-variables --thread %s --frame %u --simple-values",
                              tid, depth);
 
   gbp_gdb_debugger_exec_async (self,
