@@ -1,6 +1,7 @@
 plugins_sources += files([
   'codeui-plugin.c',
   'gbp-codeui-buffer-addin.c',
+  'gbp-codeui-tree-addin.c',
 ])
 
 plugin_codeui_resources = gnome.compile_resources(

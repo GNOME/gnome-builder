@@ -23,8 +23,10 @@
 #include <libpeas/peas.h>
 #include <libide-code.h>
 #include <libide-foundry.h>
+#include <libide-tree.h>
 
 #include "gbp-codeui-buffer-addin.h"
+#include "gbp-codeui-tree-addin.h"
 
 _IDE_EXTERN void
 _gbp_codeui_register_types (PeasObjectModule *module)
@@ -32,4 +34,7 @@ _gbp_codeui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUFFER_ADDIN,
                                               GBP_TYPE_CODEUI_BUFFER_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TREE_ADDIN,
+                                              GBP_TYPE_CODEUI_TREE_ADDIN);
 }
