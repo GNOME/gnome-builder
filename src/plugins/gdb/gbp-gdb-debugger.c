@@ -1887,10 +1887,10 @@ gbp_gdb_debugger_modify_breakpoint_finish (IdeDebugger   *debugger,
 }
 
 static void
-gbp_gdb_debugger_list_variables_cb (GObject      *object,
-                                    GAsyncResult *result,
-                                    gpointer      user_data,
-                                    gboolean      arguments)
+gbp_gdb_debugger_handle_list_variables (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data,
+                                        gboolean      arguments)
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)object;
   g_autoptr(GError) error = NULL;
@@ -1975,7 +1975,7 @@ gbp_gdb_debugger_list_locals_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
-  gbp_gdb_debugger_list_variables_cb (object, result, user_data, FALSE);
+  gbp_gdb_debugger_handle_list_variables (object, result, user_data, FALSE);
 }
 
 static void
@@ -1989,8 +1989,8 @@ gbp_gdb_debugger_list_locals_async (IdeDebugger         *debugger,
   GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *command = NULL;
-  guint depth;
   const gchar *tid = NULL;
+  guint depth;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (IDE_IS_DEBUGGER_THREAD (thread));
@@ -2033,7 +2033,7 @@ gbp_gdb_debugger_list_params_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
-  gbp_gdb_debugger_list_variables_cb (object, result, user_data, TRUE);
+  gbp_gdb_debugger_handle_list_variables (object, result, user_data, TRUE);
 }
 
 static void
