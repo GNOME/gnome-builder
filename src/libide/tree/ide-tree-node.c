@@ -96,6 +96,9 @@ struct _IdeTreeNode
   /* If this is a synthesized empty node */
   guint is_empty : 1;
 
+  /* If there are errors associated with the node's item */
+  guint has_error : 1;
+
   /* If the node maybe has children */
   guint children_possible : 1;
 
@@ -122,6 +125,7 @@ enum {
   PROP_DISPLAY_NAME,
   PROP_EXPANDED_ICON,
   PROP_EXPANDED_ICON_NAME,
+  PROP_HAS_ERROR,
   PROP_ICON,
   PROP_ICON_NAME,
   PROP_IS_HEADER,
@@ -250,6 +254,10 @@ ide_tree_node_get_property (GObject    *object,
       g_value_set_string (value, ide_tree_node_get_display_name (self));
       break;
 
+    case PROP_HAS_ERROR:
+      g_value_set_boolean (value, ide_tree_node_get_has_error (self));
+      break;
+
     case PROP_ICON:
       g_value_set_object (value, ide_tree_node_get_icon (self));
       break;
@@ -303,6 +311,10 @@ ide_tree_node_set_property (GObject      *object,
 
     case PROP_EXPANDED_ICON_NAME:
       ide_tree_node_set_expanded_icon_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_HAS_ERROR:
+      ide_tree_node_set_has_error (self, g_value_get_boolean (value));
       break;
 
     case PROP_ICON:
@@ -419,6 +431,22 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
                          "The expanded icon-name for the GIcon",
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeTreeNode:has-error:
+   *
+   * The "has-error" property is true if the node should be rendered with
+   * an error styling. This is useful when errors are known by the diagnostics
+   * manager for a given file or folder.
+   *
+   * Since: 3.32
+   */
+  properties [PROP_HAS_ERROR] =
+    g_param_spec_boolean ("has-error",
+                          "Has Error",
+                          "If the node has an error associated with it's item",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeTreeNode:icon:
@@ -1891,4 +1919,27 @@ ide_tree_node_is_selected (IdeTreeNode *self)
     return gtk_tree_selection_path_is_selected (selection, path);
 
   return FALSE;
+}
+
+gboolean
+ide_tree_node_get_has_error (IdeTreeNode *self)
+{
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), FALSE);
+
+  return self->has_error;
+}
+
+void
+ide_tree_node_set_has_error (IdeTreeNode *self,
+                             gboolean     has_error)
+{
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
+
+  has_error = !!has_error;
+
+  if (has_error != self->has_error)
+    {
+      self->has_error = has_error;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_ERROR]);
+    }
 }

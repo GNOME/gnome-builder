@@ -161,6 +161,31 @@ text_cell_func (GtkCellLayout   *layout,
         }
     }
 
+  if (ide_tree_node_get_has_error (node))
+    {
+      PangoAttrList *attrs = NULL;
+      PangoAttrList *copy = NULL;
+
+      g_object_get (cell,
+                    "attributes", &attrs,
+                    NULL);
+
+      if (attrs != NULL)
+        copy = pango_attr_list_copy (attrs);
+      else
+        copy = pango_attr_list_new ();
+
+      pango_attr_list_insert (copy, pango_attr_underline_new (PANGO_UNDERLINE_ERROR));
+      pango_attr_list_insert (copy, pango_attr_underline_color_new (65535, 0, 0));
+
+      g_object_set (cell,
+                    "attributes", copy,
+                    NULL);
+
+      g_clear_pointer (&attrs, pango_attr_list_unref);
+      g_clear_pointer (&copy, pango_attr_list_unref);
+    }
+
   /* Only apply styling if the node isn't selected */
   if (!ide_tree_node_is_selected (node))
     {

@@ -69,6 +69,11 @@ typedef int (*IdeTreeNodeCompare) (IdeTreeNode *node,
 IDE_AVAILABLE_IN_3_32
 IdeTreeNode   *ide_tree_node_new                    (void);
 IDE_AVAILABLE_IN_3_32
+gboolean       ide_tree_node_get_has_error          (IdeTreeNode         *self);
+IDE_AVAILABLE_IN_3_32
+void           ide_tree_node_set_has_error          (IdeTreeNode         *self,
+                                                     gboolean             has_error);
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_tree_node_get_tag                (IdeTreeNode         *self);
 IDE_AVAILABLE_IN_3_32
 void           ide_tree_node_set_tag                (IdeTreeNode         *self,
