@@ -359,6 +359,18 @@ node_compare (IdeTreeNode *node,
   g_assert (IDE_IS_TREE_NODE (node));
   g_assert (IDE_IS_TREE_NODE (child));
 
+  /* Child is a directory and *must* be last in line at this point
+   * given that node is a regular file.
+   * Hence break comparation for subsequent ide_tree_node_insert_before() */
+  if (ide_tree_node_get_children_possible (child) &&
+      !ide_tree_node_get_children_possible (node))
+    return 0;
+
+  /* Skip directories if child is a regular file */
+  if (!ide_tree_node_get_children_possible (child) &&
+      ide_tree_node_get_children_possible (node))
+    return 1;
+
   child_name = ide_tree_node_get_display_name (child);
   node_name = ide_tree_node_get_display_name (node);
 
