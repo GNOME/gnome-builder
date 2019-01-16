@@ -207,10 +207,6 @@ gbp_gdb_debugger_find_task (GbpGdbDebugger           *self,
   g_assert (output != NULL);
   g_assert (output->line != NULL);
 
-  /* Ignore thread switches */
-  if (g_str_has_prefix (output->line, "9999^"))
-    return NULL;
-
   if (g_ascii_isdigit (output->line[0]))
     {
       g_autofree gchar *id = NULL;
@@ -286,8 +282,7 @@ gbp_gdb_debugger_handle_result (GbpGdbDebugger           *self,
       return;
     }
 
-  if (!g_str_has_prefix (output->line, "9999^"))
-    ide_object_warning (self, "gdb: No reply found for: %s", output->line);
+  ide_object_warning (self, "gdb: No reply found for: %s", output->line);
 
   gdbwire_mi_output_free (output);
 }
@@ -1128,7 +1123,6 @@ gbp_gdb_debugger_reload_breakpoints (GbpGdbDebugger *self)
   g_assert (GBP_IS_GDB_DEBUGGER (self));
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                "-break-list",
                                NULL,
                                gbp_gdb_debugger_reload_breakpoints_cb,
@@ -1152,7 +1146,6 @@ gbp_gdb_debugger_list_breakpoints_async (IdeDebugger         *debugger,
   ide_task_set_source_tag (task, gbp_gdb_debugger_list_breakpoints_async);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                "-break-info",
                                cancellable,
                                gbp_gdb_debugger_list_breakpoints_cb,
@@ -1303,7 +1296,6 @@ gbp_gdb_debugger_insert_breakpoint_async (IdeDebugger           *debugger,
     g_string_append_printf (command, " -c %s", spec);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command->str,
                                cancellable,
                                gbp_gdb_debugger_insert_breakpoint_cb,
@@ -1390,7 +1382,6 @@ gbp_gdb_debugger_remove_breakpoint_async (IdeDebugger           *debugger,
   command = g_strdup_printf ("-break-delete %s", id);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_remove_breakpoint_cb,
@@ -1504,7 +1495,6 @@ gbp_gdb_debugger_move_async (IdeDebugger         *debugger,
     }
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_move_cb,
@@ -1516,7 +1506,6 @@ gbp_gdb_debugger_move_async (IdeDebugger         *debugger,
    */
   if (self->register_names == NULL)
     gbp_gdb_debugger_exec_async (self,
-                                 NULL,
                                  "-data-list-register-names",
                                  NULL,
                                  gbp_gdb_debugger_list_register_names_cb,
@@ -1662,7 +1651,6 @@ gbp_gdb_debugger_list_frames_async (IdeDebugger         *debugger,
   command = g_strdup_printf ("-stack-list-frames --thread %s", tid);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_list_frames_cb,
@@ -1727,7 +1715,6 @@ gbp_gdb_debugger_interrupt_async (IdeDebugger            *debugger,
   ide_task_set_source_tag (task, gbp_gdb_debugger_interrupt_async);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                "-exec-interrupt --all",
                                cancellable,
                                gbp_gdb_debugger_interrupt_cb,
@@ -1795,7 +1782,6 @@ gbp_gdb_debugger_send_signal_async (IdeDebugger         *debugger,
   command = g_strdup_printf ("signal %d", signum);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_send_signal_cb,
@@ -1885,7 +1871,6 @@ gbp_gdb_debugger_modify_breakpoint_async (IdeDebugger                 *debugger,
     }
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_modify_breakpoint_cb,
@@ -2024,7 +2009,6 @@ gbp_gdb_debugger_list_locals_async (IdeDebugger         *debugger,
                              tid, depth);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_list_locals_cb,
@@ -2083,7 +2067,6 @@ gbp_gdb_debugger_list_params_async (IdeDebugger         *debugger,
                              tid, depth);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_list_params_cb,
@@ -2194,7 +2177,6 @@ gbp_gdb_debugger_list_registers_async (IdeDebugger         *debugger,
   ide_task_set_source_tag (task, gbp_gdb_debugger_list_registers_async);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                "-data-list-register-values x",
                                cancellable,
                                gbp_gdb_debugger_list_registers_cb,
@@ -2314,7 +2296,6 @@ gbp_gdb_debugger_disassemble_async (IdeDebugger                   *debugger,
                              range->from, range->to);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command,
                                cancellable,
                                gbp_gdb_debugger_disassemble_cb,
@@ -2417,7 +2398,7 @@ gbp_gdb_debugger_on_runner_spawned (GbpGdbDebugger *self,
 
   /* Ask gdb to use our mapped in FD for the TTY when spawning the child */
   tty_command = g_strdup_printf ("-gdb-set inferior-tty /proc/self/fd/%d", self->mapped_fd);
-  gbp_gdb_debugger_exec_async (self, NULL, tty_command, NULL, NULL, NULL);
+  gbp_gdb_debugger_exec_async (self, tty_command, NULL, NULL, NULL);
 
   ide_debugger_move_async (IDE_DEBUGGER (self),
                            IDE_DEBUGGER_MOVEMENT_START,
@@ -2641,7 +2622,7 @@ gbp_gdb_debugger_connect (GbpGdbDebugger *self,
                              gbp_gdb_debugger_read_cb,
                              g_object_ref (self));
 
-  gbp_gdb_debugger_exec_async (self, NULL, "-gdb-set mi-async on", NULL, NULL, NULL);
+  gbp_gdb_debugger_exec_async (self, "-gdb-set mi-async on", NULL, NULL, NULL);
   gbp_gdb_debugger_reload_breakpoints (self);
 }
 
@@ -2712,7 +2693,6 @@ gbp_gdb_debugger_write_cb (GObject      *object,
 /**
  * gbp_gdb_debugger_exec_async:
  * @self: An #GbpGdbDebugger
- * @thread: (nullable): An #IdeDebuggerThread or %NULL
  * @command: the command to be executed
  * @cancellable: (nullable): a #GCancellable or %NULL
  * @user_data: user data for @cancellable
@@ -2730,7 +2710,6 @@ gbp_gdb_debugger_write_cb (GObject      *object,
  */
 void
 gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
-                             IdeDebuggerThread   *thread,
                              const gchar         *command,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
@@ -2745,12 +2724,11 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
 
   g_return_if_fail (GBP_IS_GDB_DEBUGGER (self));
   g_return_if_fail (command != NULL);
-  g_return_if_fail (!thread || IDE_IS_DEBUGGER_THREAD (thread));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* Wrap at 10,000, but steal 9999 to use for thread switching */
+  /* Wrap at 10,000 */
   id = ++self->cmdseq;
-  if (id == 9999)
+  if (id == 10000)
     id = self->cmdseq = 1;
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -2770,15 +2748,6 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
   stream = g_io_stream_get_output_stream (self->io_stream);
 
   str = g_string_new (NULL);
-
-  /* We might need to switch threads before we execute the command. */
-  if (thread != NULL)
-    {
-      const gchar *tid = ide_debugger_thread_get_id (thread);
-
-      /* We ignore 9999 commands */
-      g_string_append_printf (str, "9999-thread-select %s\n", tid);
-    }
 
   if (command[0] == '-' || strstr (command, "@@@@") != NULL)
     {
