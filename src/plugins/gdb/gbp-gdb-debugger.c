@@ -924,7 +924,6 @@ gbp_gdb_debugger_output_callback (void                     *context,
   switch (output->kind)
     {
     case GDBWIRE_MI_OUTPUT_PARSE_ERROR:
-      DEBUG_LOG ("from-gdb (ERR)", output->line);
       ide_object_warning (self, "Failed to parse gdb communication: %s", output->line);
       gdbwire_mi_output_free (output);
       gbp_gdb_debugger_panic (self);
@@ -943,7 +942,6 @@ gbp_gdb_debugger_output_callback (void                     *context,
       break;
 
     case GDBWIRE_MI_OUTPUT_PROMPT:
-      DEBUG_LOG ("from-gdb (INP)", output->line);
       /* Ignore prompt for now */
       gdbwire_mi_output_free (output);
       break;
