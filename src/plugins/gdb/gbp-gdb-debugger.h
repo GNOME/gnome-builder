@@ -38,7 +38,6 @@ void                      gbp_gdb_debugger_connect            (GbpGdbDebugger   
                                                                GIOStream            *io_stream,
                                                                GCancellable         *cancellable);
 void                      gbp_gdb_debugger_exec_async         (GbpGdbDebugger       *self,
-                                                               IdeDebuggerThread    *thread,
                                                                const gchar          *command,
                                                                GCancellable         *cancellable,
                                                                GAsyncReadyCallback   callback,
