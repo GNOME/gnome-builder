@@ -57,13 +57,13 @@ src/libide/editor/ide-editor-surface.c
 src/libide/editor/ide-editor-surface.ui
 src/libide/editor/ide-editor-workspace.ui
 src/libide/foundry/ide-build-manager.c
-src/libide/foundry/ide-build-pipeline.c
-src/libide/foundry/ide-build-stage-transfer.c
 src/libide/foundry/ide-config-manager.c
 src/libide/foundry/ide-device-manager.c
 src/libide/foundry/ide-device.c
 src/libide/foundry/ide-fallback-build-system.c
 src/libide/foundry/ide-local-device.c
+src/libide/foundry/ide-pipeline.c
+src/libide/foundry/ide-pipeline-stage-transfer.c
 src/libide/foundry/ide-run-manager.c
 src/libide/foundry/ide-runner.c
 src/libide/foundry/ide-runtime-manager.c
