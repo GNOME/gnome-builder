@@ -1351,9 +1351,14 @@ ide_object_log (gpointer        instance,
   g_autoptr(IdeObject) root = NULL;
   va_list args;
 
-  g_assert (IDE_IS_OBJECT (instance));
+  g_assert (!instance || IDE_IS_OBJECT (instance));
 
-  root = ide_object_ref_root (instance);
+  if G_UNLIKELY (instance == NULL || !(root = ide_object_ref_root (instance)))
+    {
+      va_start (args, format);
+      g_logv (domain, level, format, args);
+      va_end (args);
+    }
 
   if (IDE_IS_CONTEXT (root))
     {
