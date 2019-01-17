@@ -295,8 +295,8 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorPageAddin):
                                    self.sphinx_builddir,
                                    visible=True)
 
-        column = view.get_ancestor(Ide.LayoutGridColumn)
-        grid = column.get_ancestor(Ide.LayoutGrid)
+        column = view.get_ancestor(Ide.GridColumn)
+        grid = column.get_ancestor(Ide.Grid)
         index = grid.child_get_property(column, 'index')
 
         # If we are past first stack, use the 0 column stack
@@ -373,7 +373,7 @@ class HtmlPreviewPage(Ide.Page):
         self.document = document
 
         self.webview = WebKit2.WebView()
-        self.webview.set_expand(True)
+        self.webview.props.expand = True
         self.add(self.webview)
         self.webview.show()
 
@@ -396,7 +396,7 @@ class HtmlPreviewPage(Ide.Page):
         self.on_title_changed(document)
 
     def on_title_changed(self, buffer):
-        self.set_title("%s %s" % (buffer.get_title(), _("(Preview)")))
+        self.set_title("%s %s" % (buffer.dup_title(), _("(Preview)")))
 
     def web_view_destroyed(self, web_view):
         self.document.disconnect(self.title_handler)
