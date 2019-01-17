@@ -410,6 +410,8 @@ class HtmlPreviewPage(Ide.Page):
 
             if uri != self.document.get_file().get_uri() \
             and 'gnome-builder-sphinx' not in uri:
+                toplevel = self.webview.get_toplevel()
+                Ide.gtk_show_uri_on_window(toplevel, uri, GLib.get_monotonic_time())
                 decision.ignore()
                 return True
 
