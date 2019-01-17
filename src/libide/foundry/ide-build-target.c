@@ -88,6 +88,25 @@ ide_build_target_get_install (IdeBuildTarget *self)
 }
 
 /**
+ * ide_build_target_get_display_name:
+ *
+ * Returns: (nullable) (transfer full): A display name for the build
+ *   target to be displayed in UI. May contain pango markup.
+ *
+ * Since: 3.32
+ */
+gchar *
+ide_build_target_get_display_name (IdeBuildTarget *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
+
+  if (IDE_BUILD_TARGET_GET_IFACE (self)->get_display_name)
+    return IDE_BUILD_TARGET_GET_IFACE (self)->get_display_name (self);
+  else
+    return ide_build_target_get_name (self);
+}
+
+/**
  * ide_build_target_get_name:
  *
  * Returns: (nullable) (transfer full): A filename or %NULL.

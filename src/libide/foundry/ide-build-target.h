@@ -50,6 +50,7 @@ struct _IdeBuildTargetInterface
 
   GFile            *(*get_install_directory) (IdeBuildTarget *self);
   gchar            *(*get_name)              (IdeBuildTarget *self);
+  gchar            *(*get_display_name)      (IdeBuildTarget *self);
   gint              (*get_priority)          (IdeBuildTarget *self);
   gchar           **(*get_argv)              (IdeBuildTarget *self);
   gchar            *(*get_cwd)               (IdeBuildTarget *self);
@@ -61,6 +62,8 @@ IDE_AVAILABLE_IN_3_32
 GFile            *ide_build_target_get_install_directory (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_3_32
 gchar            *ide_build_target_get_name              (IdeBuildTarget       *self);
+IDE_AVAILABLE_IN_3_32
+gchar            *ide_build_target_get_display_name      (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_3_32
 gint              ide_build_target_get_priority          (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_3_32
