@@ -36,11 +36,19 @@ enum {
 };
 
 static gchar *
-gbp_flatpak_build_target_get_name (IdeBuildTarget *build_target)
+gbp_flatpak_build_target_get_display_name (IdeBuildTarget *build_target)
 {
   GbpFlatpakBuildTarget *self = GBP_FLATPAK_BUILD_TARGET (build_target);
 
   return g_strdup_printf ("%s <span fgalpha='32767' size='smaller'>(Flatpak)</span>", self->command);
+}
+
+static gchar *
+gbp_flatpak_build_target_get_name (IdeBuildTarget *build_target)
+{
+  GbpFlatpakBuildTarget *self = GBP_FLATPAK_BUILD_TARGET (build_target);
+
+  return g_strdup (self->command);
 }
 
 static gchar **
@@ -74,6 +82,7 @@ gbp_flatpak_build_target_get_priority (IdeBuildTarget *build_target)
 static void
 build_target_iface_init (IdeBuildTargetInterface *iface)
 {
+  iface->get_display_name = gbp_flatpak_build_target_get_display_name;
   iface->get_name = gbp_flatpak_build_target_get_name;
   iface->get_argv = gbp_flatpak_build_target_get_argv;
   iface->get_install_directory = gbp_flatpak_build_target_get_install_directory;
