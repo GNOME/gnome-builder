@@ -111,9 +111,9 @@ sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
 }
 
 static void
-always_run_query_handler (IdePipelineStage    *stage,
+always_run_query_handler (IdePipelineStage *stage,
+                          IdePipeline      *pipeline,
                           GPtrArray        *targets,
-                          IdePipeline *pipeline,
                           GCancellable     *cancellable,
                           gpointer          user_data)
 {
