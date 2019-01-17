@@ -78,7 +78,7 @@ get_targets_cb (GObject      *object,
           g_autoptr(IdeTreeNode) node = NULL;
           g_autofree gchar *name = NULL;
 
-          name = ide_build_target_get_name (target);
+          name = ide_build_target_get_display_name (target);
           node = g_object_new (IDE_TYPE_TREE_NODE,
                                "destroy-item", TRUE,
                                "display-name", name,
