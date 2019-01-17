@@ -38,6 +38,15 @@ ensure_child_typed_borrowed (IdeContext *context,
 {
   gpointer ret;
 
+  if (!IDE_IS_MAIN_THREAD ())
+    {
+      IDE_BACKTRACE;
+
+      g_error ("A plugin has attempted to access child of type %s on a thread without referencing. "
+               "This is not allowed and the application will terminate.",
+               g_type_name (child_type));
+    }
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONTEXT (context));
 
