@@ -374,6 +374,7 @@ class HtmlPreviewPage(Ide.Page):
 
         self.webview = WebKit2.WebView()
         self.webview.props.expand = True
+        self.webview.connect('decide-policy', self.on_decide_policy_cb)
         self.add(self.webview)
         self.webview.show()
 
@@ -394,6 +395,25 @@ class HtmlPreviewPage(Ide.Page):
 
         self.on_changed(document)
         self.on_title_changed(document)
+
+    def on_decide_policy_cb(self, webview, decision, decision_type):
+        """Handle policy decisions from webview"""
+
+        if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
+            # Don't allow navigating away from the current page
+
+            action = decision.get_navigation_action()
+            request = action.get_request()
+            uri = request.get_uri()
+
+            # print(">>> URI = ", uri)
+
+            if uri != self.document.get_file().get_uri() \
+            and 'gnome-builder-sphinx' not in uri:
+                decision.ignore()
+                return True
+
+        return False
 
     def on_title_changed(self, buffer):
         self.set_title("%s %s" % (buffer.dup_title(), _("(Preview)")))
