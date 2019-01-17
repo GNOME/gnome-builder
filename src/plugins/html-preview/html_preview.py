@@ -366,17 +366,16 @@ class HtmlPreviewPage(Ide.Page):
     def __init__(self, document, sphinx_basedir, sphinx_builddir, *args, **kwargs):
         global old_open
 
-        print("Test");
-
-        Ide.Page.__init__(self, *args, **kwargs)
-        #super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.sphinx_basedir = sphinx_basedir
         self.sphinx_builddir = sphinx_builddir
         self.document = document
 
-        self.webview = WebKit2.WebView.new(expand=True, visible=True)
+        self.webview = WebKit2.WebView()
+        self.webview.set_expand(True)
         self.add(self.webview)
+        self.webview.show()
 
         settings = self.webview.get_settings()
         settings.enable_html5_local_storage = False
