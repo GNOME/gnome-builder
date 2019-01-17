@@ -366,6 +366,7 @@ _ide_application_load_plugins (IdeApplication *self)
       !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error) ||
       !g_irepository_require (NULL, "Jsonrpc", "1.0", 0, &error) ||
       !g_irepository_require (NULL, "Template", "1.0", 0, &error) ||
+      !g_irepository_require (NULL, "WebKit2", "4.0", 0, &error) ||
       !g_irepository_require (NULL, "Ide", PACKAGE_ABI_S, 0, &error))
     g_critical ("Cannot enable Python 3 plugins: %s", error->message);
   else
