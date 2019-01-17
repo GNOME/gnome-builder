@@ -198,9 +198,10 @@ text_cell_func (GtkCellLayout   *layout,
   display_name = ide_tree_node_get_display_name (node);
 
 set_props:
-  g_object_set (cell,
-                "text", display_name,
-                NULL);
+  if (ide_tree_node_get_use_markup (node))
+    g_object_set (cell, "markup", display_name, NULL);
+  else
+    g_object_set (cell, "text", display_name, NULL);
 }
 
 static void

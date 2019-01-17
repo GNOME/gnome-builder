@@ -108,6 +108,9 @@ struct _IdeTreeNode
   /* If true, we remove all children on collapse */
   guint reset_on_collapse : 1;
 
+  /* If pango markup should be used */
+  guint use_markup : 1;
+
   /* If true, we use ide_clear_and_destroy_object() */
   guint destroy_item : 1;
 
@@ -132,6 +135,7 @@ enum {
   PROP_ITEM,
   PROP_RESET_ON_COLLAPSE,
   PROP_TAG,
+  PROP_USE_MARKUP,
   N_PROPS
 };
 
@@ -278,6 +282,10 @@ ide_tree_node_get_property (GObject    *object,
       g_value_set_string (value, ide_tree_node_get_tag (self));
       break;
 
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, ide_tree_node_get_use_markup (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -339,6 +347,10 @@ ide_tree_node_set_property (GObject      *object,
 
     case PROP_TAG:
       ide_tree_node_set_tag (self, g_value_get_string (value));
+      break;
+
+    case PROP_USE_MARKUP:
+      ide_tree_node_set_use_markup (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -540,6 +552,21 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
                          "The tag for the node if any",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeTreeNode:use-markup:
+   *
+   * If #TRUE, the "use-markup" property denotes that #IdeTreeNode:display-name
+   * contains pango markup.
+   *
+   * Since: 3.32
+   */
+  properties [PROP_USE_MARKUP] =
+    g_param_spec_boolean ("use-markup",
+                          "Use Markup",
+                          "If pango markup should be used",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -1940,6 +1967,31 @@ ide_tree_node_set_has_error (IdeTreeNode *self,
   if (has_error != self->has_error)
     {
       self->has_error = has_error;
+      ide_tree_node_emit_changed (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_ERROR]);
+    }
+}
+
+gboolean
+ide_tree_node_get_use_markup (IdeTreeNode *self)
+{
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), FALSE);
+
+  return self->use_markup;
+}
+
+void
+ide_tree_node_set_use_markup (IdeTreeNode *self,
+                              gboolean     use_markup)
+{
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
+
+  use_markup = !!use_markup;
+
+  if (use_markup != self->use_markup)
+    {
+      self->use_markup = use_markup;
+      ide_tree_node_emit_changed (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_MARKUP]);
     }
 }

@@ -193,5 +193,10 @@ void           ide_tree_node_set_foreground_rgba    (IdeTreeNode         *self,
                                                      const GdkRGBA       *foreground_rgba);
 IDE_AVAILABLE_IN_3_32
 gboolean       ide_tree_node_is_selected            (IdeTreeNode         *self);
+IDE_AVAILABLE_IN_3_32
+gboolean       ide_tree_node_get_use_markup         (IdeTreeNode         *self);
+IDE_AVAILABLE_IN_3_32
+void           ide_tree_node_set_use_markup         (IdeTreeNode         *self,
+                                                     gboolean             use_markup);
 
 G_END_DECLS
