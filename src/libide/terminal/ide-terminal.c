@@ -156,7 +156,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       priv->url = vte_terminal_match_check_event (VTE_TERMINAL (self), event, NULL);
 
-      menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "ide-terminal-view-popup-menu");
+      menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "ide-terminal-page-popup-menu");
       priv->popup_menu = gtk_menu_new_from_model (G_MENU_MODEL (menu));
 
       group = DZL_WIDGET_ACTION_GROUP (gtk_widget_get_action_group (GTK_WIDGET (self), "terminal"));

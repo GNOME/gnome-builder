@@ -385,6 +385,7 @@ ide_application_init (IdeApplication *self)
   /* Ensure our core data is loaded early. */
   dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-sourceview/");
   dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-gui/");
+  dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-terminal/");
 
   /* Make sure our GAction are available */
   _ide_application_init_actions (self);
