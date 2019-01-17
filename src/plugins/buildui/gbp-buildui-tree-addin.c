@@ -84,6 +84,7 @@ get_targets_cb (GObject      *object,
                                "display-name", name,
                                "icon-name", "builder-build-symbolic",
                                "item", target,
+                               "use-markup", TRUE,
                                NULL);
           ide_tree_node_append (state->node, node);
         }
