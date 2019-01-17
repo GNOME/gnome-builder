@@ -43,6 +43,15 @@ gbp_flatpak_build_target_get_name (IdeBuildTarget *build_target)
   return g_strdup (self->command);
 }
 
+static gchar **
+gbp_flatpak_build_target_get_argv (IdeBuildTarget *build_target)
+{
+  GbpFlatpakBuildTarget *self = GBP_FLATPAK_BUILD_TARGET (build_target);
+  gchar *argv[] = { self->command, NULL };
+
+  return g_strdupv (argv);
+}
+
 static GFile *
 gbp_flatpak_build_target_get_install_directory (IdeBuildTarget *build_target)
 {
@@ -66,6 +75,7 @@ static void
 build_target_iface_init (IdeBuildTargetInterface *iface)
 {
   iface->get_name = gbp_flatpak_build_target_get_name;
+  iface->get_argv = gbp_flatpak_build_target_get_argv;
   iface->get_install_directory = gbp_flatpak_build_target_get_install_directory;
   iface->get_priority = gbp_flatpak_build_target_get_priority;
 }
@@ -135,7 +145,7 @@ gbp_flatpak_build_target_class_init (GbpFlatpakBuildTargetClass *klass)
   properties [PROP_COMMAND] =
     g_param_spec_string ("command", NULL, NULL, NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
