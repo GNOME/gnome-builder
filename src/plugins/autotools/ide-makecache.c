@@ -72,9 +72,31 @@ typedef struct
   gchar       *path;
 } FileTargetsLookup;
 
+typedef struct
+{
+  IdeContext            *context;
+  IdeConfigManager      *configmgr;
+  IdeConfig             *config;
+  GFile                 *build_dir;
+  IdeRuntime            *runtime;
+  IdeSubprocessLauncher *launcher;
+} GetBuildTargets;
+
 G_DEFINE_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
 
 DZL_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
+
+static void
+get_build_targets_free (GetBuildTargets *data)
+{
+  g_clear_object (&data->context);
+  g_clear_object (&data->configmgr);
+  g_clear_object (&data->config);
+  g_clear_object (&data->build_dir);
+  g_clear_object (&data->runtime);
+  g_clear_object (&data->launcher);
+  g_slice_free (GetBuildTargets, data);
+}
 
 static void
 file_flags_lookup_free (gpointer data)
@@ -369,8 +391,8 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
       part1 = dummy;
     }
 
-  g_assert (!dzl_str_empty0 (part1));
-  g_assert (!dzl_str_empty0 (part2));
+  g_assert (!ide_str_empty0 (part1));
+  g_assert (!ide_str_empty0 (part2));
 
   /*
    * If the path is relative, then we need to adjust it to be relative to the
@@ -1453,13 +1475,9 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(GPtrArray) makedirs = NULL;
   g_autoptr(GPtrArray) targets = NULL;
-  g_autofree gchar *stdout_buf = NULL;
-  IdeConfigManager *configmgr;
-  IdeConfig *config;
-  IdeContext *context;
-  IdeRuntime *runtime;
-  GFile *build_dir = task_data;
   g_autoptr(GError) error = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+  GetBuildTargets *data = task_data;
   gchar *line;
   gsize line_len;
   IdeLineReader reader;
@@ -1480,61 +1498,53 @@ ide_makecache_get_build_targets_worker (GTask        *task,
    * this function and want them to be available for future access.
    */
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  configmgr = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (configmgr);
-  runtime = ide_config_get_runtime (config);
-
-  if (runtime != NULL)
-    launcher = ide_runtime_create_launcher (runtime, NULL);
-
-  if (launcher == NULL)
+  if (data->launcher == NULL)
     {
       g_autofree gchar *path = NULL;
-      path = g_file_get_path (build_dir);
+      path = g_file_get_path (data->build_dir);
 
-      launcher = ide_subprocess_launcher_new (0);
-      ide_subprocess_launcher_set_cwd (launcher, path);
+      data->launcher = ide_subprocess_launcher_new (0);
+      ide_subprocess_launcher_set_cwd (data->launcher, path);
     }
 
-  ide_subprocess_launcher_set_flags (launcher,
+  ide_subprocess_launcher_set_flags (data->launcher,
                                      (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                       G_SUBPROCESS_FLAGS_STDOUT_PIPE));
 
-  ide_subprocess_launcher_push_argv (launcher, self->make_name);
+  ide_subprocess_launcher_push_argv (data->launcher, self->make_name);
 
-  ide_subprocess_launcher_push_argv (launcher, "-C");
-  ide_subprocess_launcher_push_argv (launcher, "FAKE_BUILD_DIR");
+  ide_subprocess_launcher_push_argv (data->launcher, "-C");
+  ide_subprocess_launcher_push_argv (data->launcher, "FAKE_BUILD_DIR");
 
-  ide_subprocess_launcher_push_argv (launcher, "-f");
-  ide_subprocess_launcher_push_argv (launcher, "-");
-  ide_subprocess_launcher_push_argv (launcher, "print-bindir");
-  ide_subprocess_launcher_push_argv (launcher, "print-bin_PROGRAMS");
-  ide_subprocess_launcher_push_argv (launcher, "print-bin_SCRIPTS");
-  ide_subprocess_launcher_push_argv (launcher, "print-nodist_bin_SCRIPTS");
+  ide_subprocess_launcher_push_argv (data->launcher, "-f");
+  ide_subprocess_launcher_push_argv (data->launcher, "-");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-bindir");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-bin_PROGRAMS");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-bin_SCRIPTS");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-nodist_bin_SCRIPTS");
 
   /*
    * app_SCRIPTS is a GNOME'ism used by some GJS templates. We support it here
    * mostly because figuring out the other crack (like $(LN_S) gapplication
    * launch rules borders on insanity.
    */
-  ide_subprocess_launcher_push_argv (launcher, "print-appdir");
-  ide_subprocess_launcher_push_argv (launcher, "print-app_SCRIPTS");
-  ide_subprocess_launcher_push_argv (launcher, "print-nodist_app_SCRIPTS");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-appdir");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-app_SCRIPTS");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-nodist_app_SCRIPTS");
 
   /*
    * Do these last so that other discoveries have higher priority.
    */
-  ide_subprocess_launcher_push_argv (launcher, "print-libexecdir");
-  ide_subprocess_launcher_push_argv (launcher, "print-libexec_PROGRAMS");
-  ide_subprocess_launcher_push_argv (launcher, "print-noinst_PROGRAMS");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-libexecdir");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-libexec_PROGRAMS");
+  ide_subprocess_launcher_push_argv (data->launcher, "print-noinst_PROGRAMS");
 
   /*
    * We need to extract the common automake targets from each of the
    * directories that we know there is a standalone Makefile within.
    */
 
-  makedirs = find_make_directories (self, build_dir, cancellable, &error);
+  makedirs = find_make_directories (self, data->build_dir, cancellable, &error);
 
   if (makedirs == NULL)
     {
@@ -1566,13 +1576,13 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        */
       makedir = g_ptr_array_index (makedirs, j);
       path = g_file_get_path (makedir);
-      argv = ide_subprocess_launcher_get_argv (launcher);
+      argv = ide_subprocess_launcher_get_argv (data->launcher);
 
       for (guint i = 0; argv[i]; i++)
         {
           if (g_str_equal (argv[i], "-C"))
             {
-              ide_subprocess_launcher_replace_argv (launcher, i + 1, path);
+              ide_subprocess_launcher_replace_argv (data->launcher, i + 1, path);
               break;
             }
         }
@@ -1581,7 +1591,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        * Spawn make, waiting for our stdin input which will add our debug
        * printf target.
        */
-      if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+      if (!(subprocess = ide_subprocess_launcher_spawn (data->launcher, NULL, &error)))
         {
           g_task_return_error (task, g_steal_pointer (&error));
           IDE_GOTO (failure);
@@ -1606,7 +1616,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        */
       ide_line_reader_init (&reader, stdout_buf, -1);
 
-      while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
+      while ((line = ide_line_reader_next (&reader, &line_len)))
         {
           const gchar *eq = memchr (line, '=', line_len);
           g_autofree gchar *key = NULL;
@@ -1656,7 +1666,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
           if (parts[1])
             g_strstrip (parts [1]);
 
-          if (dzl_str_empty0 (parts[0]) || dzl_str_empty0 (parts[1]))
+          if (ide_str_empty0 (parts[0]) || ide_str_empty0 (parts[1]))
             continue;
 
           key = parts [0];
@@ -1683,7 +1693,9 @@ ide_makecache_get_build_targets_worker (GTask        *task,
         }
     }
 
-  g_task_return_pointer (task, g_steal_pointer (&targets), (GDestroyNotify)g_ptr_array_unref);
+  g_task_return_pointer (task,
+                         g_steal_pointer (&targets),
+                         (GDestroyNotify)g_ptr_array_unref);
 
 failure:
   IDE_EXIT;
@@ -1697,6 +1709,8 @@ ide_makecache_get_build_targets_async (IdeMakecache        *self,
                                        gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  GetBuildTargets *data;
+  IdeRuntime *runtime;
   GPtrArray *ret;
   guint i;
 
@@ -1704,9 +1718,22 @@ ide_makecache_get_build_targets_async (IdeMakecache        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (build_dir), g_object_unref);
   g_task_set_source_tag (task, ide_makecache_get_build_targets_async);
   g_task_set_check_cancellable (task, FALSE);
+
+  data = g_slice_new0 (GetBuildTargets);
+  data->build_dir = g_file_dup (build_dir);
+  data->context = ide_object_ref_context (IDE_OBJECT (self));
+  data->configmgr = ide_config_manager_from_context (data->context);
+  data->config = ide_config_manager_get_current (data->configmgr);
+
+  if ((runtime = ide_config_get_runtime (data->config)))
+    {
+      data->runtime = g_object_ref (runtime);
+      data->launcher = ide_runtime_create_launcher (runtime, NULL);
+    }
+
+  g_task_set_task_data (task, data, (GDestroyNotify)get_build_targets_free);
 
   if (self->build_targets == NULL)
     {
