@@ -691,3 +691,60 @@ ide_application_get_worker_finish (IdeApplication  *self,
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
+
+/**
+ * ide_application_find_workbench_for_file:
+ * @self: a #IdeApplication
+ * @file: a #GFile
+ *
+ * Looks for the workbench that is the closest match to @file.
+ *
+ * If no workbench is the root of @file, then %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
+ *
+ * Since: 3.32
+ */
+IdeWorkbench *
+ide_application_find_workbench_for_file (IdeApplication *self,
+                                         GFile          *file)
+{
+  g_autofree gchar *suffix = NULL;
+  IdeWorkbench *match = NULL;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  for (guint i = 0; i < self->workbenches->len; i++)
+    {
+      IdeWorkbench *workbench = g_ptr_array_index (self->workbenches, 0);
+      IdeContext *context = ide_workbench_get_context (workbench);
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
+
+      if (!ide_workbench_has_project (workbench))
+        continue;
+
+      if (g_file_has_prefix (file, workdir))
+        {
+          g_autofree gchar *relative = g_file_get_relative_path (workdir, file);
+
+          if (!suffix || strlen (relative) < strlen (suffix))
+            {
+              match = workbench;
+              g_free (suffix);
+              suffix = g_steal_pointer (&relative);
+            }
+        }
+    }
+
+  /* TODO: If a file is installed, but was installed by a workspace that
+   *       we have open, we want to switch to that file instead of the
+   *       installed version. For example, something installed to
+   *       /app/include/libpeas-1.0/libpeas/peas-engine.h should really open
+   *       libpeas/peas-engine.h from the project. This will require querying
+   *       the pipeline/build-system for installed files to reverse-map the
+   *       filename.
+   */
+
+  return match;
+}

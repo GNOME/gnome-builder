@@ -79,5 +79,8 @@ IDE_AVAILABLE_IN_3_32
 GDBusProxy    *ide_application_get_worker_finish   (IdeApplication           *self,
                                                     GAsyncResult             *result,
                                                     GError                  **error);
+IDE_AVAILABLE_IN_3_32
+IdeWorkbench *ide_application_find_workbench_for_file (IdeApplication *self,
+                                                       GFile          *file);
 
 G_END_DECLS
