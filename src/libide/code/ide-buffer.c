@@ -1478,6 +1478,13 @@ ide_buffer_save_file_async (IdeBuffer            *self,
   ide_task_set_source_tag (task, ide_buffer_save_file_async);
   ide_task_set_task_data (task, state, save_state_free);
 
+  if (self->state == IDE_BUFFER_STATE_SAVING)
+    {
+      /* TODO: We could save in-flight tasks and chain to them */
+      ide_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
+
   if (self->state != IDE_BUFFER_STATE_READY)
     {
       ide_task_return_new_error (task,
