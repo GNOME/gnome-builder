@@ -43,6 +43,12 @@ typedef struct
   GdkEvent   *event;
 } PopupInfo;
 
+typedef struct
+{
+  gint line;
+  gint column;
+} Position;
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdeTerminal, ide_terminal, VTE_TYPE_TERMINAL)
 
 enum {
@@ -57,9 +63,11 @@ enum {
 /* From vteapp.c */
 #define DINGUS1 "(((gopher|news|telnet|nntp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?"
 #define DINGUS2 DINGUS1 "/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\) ,\\\"]"
+#define FILENAME_PLUS_LOCATION "(?<filename>[a-zA-Z0-9\\+\\-\\.\\/_]+):(?<line>\\d+):(?<column>\\d+)"
 
 static guint signals[N_SIGNALS];
-static const gchar *url_regexes[] = { DINGUS1, DINGUS2 };
+static const gchar *url_regexes[] = { DINGUS1, DINGUS2, FILENAME_PLUS_LOCATION };
+static GRegex *filename_regex;
 static const GdkRGBA solarized_palette[] = {
   /*
    * Solarized palette (1.0.0beta2):
@@ -215,6 +223,7 @@ ide_terminal_button_press_event (GtkWidget      *widget,
                                  GdkEventButton *button)
 {
   IdeTerminal *self = (IdeTerminal *)widget;
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
 
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (button != NULL);
@@ -237,18 +246,16 @@ ide_terminal_button_press_event (GtkWidget      *widget,
 
       if (pattern != NULL)
         {
-          GtkApplication *app;
-          GtkWindow *focused_window;
+          gboolean ret = FALSE;
 
-          if (NULL != (app = GTK_APPLICATION (g_application_get_default ())) &&
-              NULL != (focused_window = gtk_application_get_active_window (app)))
-            gtk_show_uri_on_window (focused_window,
-                                    pattern,
-                                    gtk_get_current_event_time (),
-                                    NULL);
+          g_free (priv->url);
+          priv->url = g_steal_pointer (&pattern);
+          g_signal_emit (self, signals [OPEN_LINK], 0, &ret);
 
-          return GDK_EVENT_STOP;
+          return ret;
         }
+
+      return GDK_EVENT_STOP;
     }
 
   return GTK_WIDGET_CLASS (ide_terminal_parent_class)->button_press_event (widget, button);
@@ -283,10 +290,36 @@ ide_terminal_copy_link_address (IdeTerminal *self)
   return TRUE;
 }
 
+static void
+ide_terminal_open_link_resolve_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeWorkbench *workbench = (IdeWorkbench *)object;
+  g_autoptr(GFile) file = NULL;
+  Position *pos = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if ((file = ide_workbench_resolve_file_finish (workbench, result, NULL)))
+    ide_workbench_open_at_async (workbench,
+                                 file,
+                                 "editor",
+                                 pos->line,
+                                 pos->column,
+                                 IDE_BUFFER_OPEN_FLAGS_NONE,
+                                 NULL, NULL, NULL);
+
+  g_slice_free (Position, pos);
+}
+
 static gboolean
 ide_terminal_open_link (IdeTerminal *self)
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  g_autoptr(GMatchInfo) match = NULL;
   GtkApplication *app;
   GtkWindow *focused_window;
 
@@ -295,6 +328,27 @@ ide_terminal_open_link (IdeTerminal *self)
 
   if (ide_str_empty0 (priv->url))
     return FALSE;
+
+  if (g_regex_match (filename_regex, priv->url, 0, &match))
+    {
+      g_autofree gchar *filename = g_match_info_fetch (match, 1);
+      g_autofree gchar *line = g_match_info_fetch (match, 2);
+      g_autofree gchar *column = g_match_info_fetch (match, 3);
+      gint64 lineno = g_ascii_strtoull (line, NULL, 10);
+      gint64 columnno = g_ascii_strtoull (column, NULL, 10);
+      IdeWorkbench *workbench;
+      Position pos = { lineno - 1, columnno - 1 };
+
+      workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+      ide_workbench_resolve_file_async (workbench,
+                                        filename,
+                                        NULL,
+                                        ide_terminal_open_link_resolve_cb,
+                                        g_slice_dup (Position, &pos));
+
+      return TRUE;
+    }
 
   if (NULL != (app = GTK_APPLICATION (g_application_get_default ())) &&
       NULL != (focused_window = gtk_application_get_active_window (app)))
@@ -403,6 +457,9 @@ ide_terminal_class_init (IdeTerminalClass *klass)
   klass->open_link = ide_terminal_open_link;
   klass->select_all = ide_terminal_real_select_all;
   klass->search_reveal = ide_terminal_real_search_reveal;
+
+  filename_regex = g_regex_new (FILENAME_PLUS_LOCATION, 0, 0, NULL);
+  g_assert (filename_regex != NULL);
 
   signals [COPY_LINK_ADDRESS] =
     g_signal_new ("copy-link-address",
