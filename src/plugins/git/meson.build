@@ -14,6 +14,7 @@ plugins_sources += files([
   'gbp-git-vcs-config.c',
   'gbp-git-vcs-initializer.c',
   'gbp-git-workbench-addin.c',
+  'line-cache.c',
 ])
 
 plugin_git_resources = gnome.compile_resources(
