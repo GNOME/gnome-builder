@@ -267,6 +267,7 @@ src/plugins/make/make_plugin.py
 src/plugins/maven/maven_plugin.py
 src/plugins/meson-templates/meson_templates.py
 src/plugins/meson/gbp-meson-build-system.c
+src/plugins/meson/gbp-meson-config-view-addin.c
 src/plugins/meson/gbp-meson-pipeline-addin.c
 src/plugins/meson/gbp-meson-tool-row.c
 src/plugins/meson/gbp-meson-tool-row.ui
