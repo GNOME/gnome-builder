@@ -1953,12 +1953,32 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) addins = NULL;
+  IdeWorkbench *other;
   Open *o;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (self->unloaded == FALSE);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* Possibly re-route opening the file to another workbench if we
+   * discover the file is a better fit over there.
+   */
+  other = ide_application_find_workbench_for_file (IDE_APPLICATION_DEFAULT, file);
+
+  if (other != NULL && other != self)
+    {
+      ide_workbench_open_at_async (other,
+                                   file,
+                                   hint,
+                                   at_line,
+                                   at_line_offset,
+                                   flags,
+                                   cancellable,
+                                   callback,
+                                   user_data);
+      return;
+    }
 
   /* Canonicalize parameters */
   if (at_line < 0)
