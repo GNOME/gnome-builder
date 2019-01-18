@@ -156,6 +156,9 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   ide_task_set_source_tag (task, ide_code_index_symbol_resolver_lookup_symbol_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
+  if (ide_task_return_error_if_cancelled (task))
+    return;
+
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
