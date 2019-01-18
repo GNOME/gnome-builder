@@ -515,6 +515,44 @@ ide_g_file_find_worker (IdeTask      *task,
 }
 
 /**
+ * ide_g_file_find_with_depth:
+ * @file: a #GFile
+ * @pattern: the glob pattern to search for using GPatternSpec
+ * @max_depth: maximum tree depth to search
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ *
+ *
+ * Returns: (transfer full) (element-type GFile): a #GPtrArray of #GFile.
+ *
+ * Since: 3.32
+ */
+GPtrArray *
+ide_g_file_find_with_depth (GFile        *file,
+                            const gchar  *pattern,
+                            guint         max_depth,
+                            GCancellable *cancellable)
+{
+  g_autoptr(GPatternSpec) spec = NULL;
+  GPtrArray *ret;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (pattern != NULL, NULL);
+
+  if (!(spec = g_pattern_spec_new (pattern)))
+    {
+      g_warning ("Failed to build pattern spec for \"%s\"", pattern);
+      return NULL;
+    }
+
+  if (max_depth == 0)
+    max_depth = G_MAXUINT;
+
+  ret = g_ptr_array_new ();
+  populate_descendants_matching (file, cancellable, ret, spec, max_depth);
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+}
+
+/**
  * ide_g_file_find_with_depth_async:
  * @file: a #IdeGlib
  * @pattern: the glob pattern to search for using GPatternSpec

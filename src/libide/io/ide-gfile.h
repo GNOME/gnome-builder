@@ -38,6 +38,11 @@ IDE_AVAILABLE_IN_3_32
 gchar     *ide_g_file_get_uncanonical_relative_path (GFile                *file,
                                                      GFile                *other);
 IDE_AVAILABLE_IN_3_32
+GPtrArray *ide_g_file_find_with_depth               (GFile                *file,
+                                                     const gchar          *pattern,
+                                                     guint                 max_depth,
+                                                     GCancellable         *cancellable);
+IDE_AVAILABLE_IN_3_32
 void       ide_g_file_find_with_depth_async         (GFile                *file,
                                                      const gchar          *pattern,
                                                      guint                 max_depth,
