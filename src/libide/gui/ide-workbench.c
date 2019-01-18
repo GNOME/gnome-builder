@@ -98,6 +98,12 @@ typedef struct
   gint64          present_time;
 } LoadProject;
 
+typedef struct
+{
+  GPtrArray *roots;
+  gchar     *path;
+} ResolveFile;
+
 enum {
   PROP_0,
   PROP_CONTEXT,
@@ -148,6 +154,14 @@ open_free (Open *o)
   g_clear_pointer (&o->hint, g_free);
   g_clear_pointer (&o->content_type, g_free);
   g_slice_free (Open, o);
+}
+
+static void
+resolve_file_free (ResolveFile *rf)
+{
+  g_clear_pointer (&rf->roots, g_ptr_array_unref);
+  g_clear_pointer (&rf->path, g_free);
+  g_slice_free (ResolveFile, rf);
 }
 
 static gboolean
@@ -2341,4 +2355,139 @@ ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
     ret = peas_extension_set_get_extension (workbench->addins, plugin_info);
 
   return IDE_WORKBENCH_ADDIN (ret);
+}
+
+static void
+ide_workbench_resolve_file_worker (IdeTask      *task,
+                                   gpointer      source_object,
+                                   gpointer      task_data,
+                                   GCancellable *cancellable)
+{
+  ResolveFile *rf = task_data;
+  g_autofree gchar *basename = NULL;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_WORKBENCH (source_object));
+  g_assert (rf != NULL);
+  g_assert (rf->roots != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  basename = g_path_get_basename (rf->path);
+
+  for (guint i = 0; i < rf->roots->len; i++)
+    {
+      GFile *root = g_ptr_array_index (rf->roots, i);
+      g_autoptr(GFile) child = g_file_get_child (root, rf->path);
+      g_autoptr(GPtrArray) found = NULL;
+
+      if (g_file_query_exists (child, cancellable))
+        {
+          ide_task_return_pointer (task, g_steal_pointer (&child), g_object_unref);
+          return;
+        }
+
+      found = ide_g_file_find_with_depth (root, basename, 0, cancellable);
+      IDE_PTR_ARRAY_SET_FREE_FUNC (found, g_object_unref);
+
+      if (found != NULL && found->len > 0)
+        {
+          GFile *match = g_ptr_array_index (found, 0);
+          ide_task_return_pointer (task, g_object_ref (match), g_object_unref);
+          return;
+        }
+    }
+
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate file %s",
+                             basename);
+}
+
+/**
+ * ide_workbench_resolve_file_async:
+ * @self: a #IdeWorkbench
+ * @filename: the filename to discover
+ *
+ * This function will try to locate a given file based on the filename,
+ * possibly resolving it from a build directory, or source directory.
+ *
+ * If no file was discovered, some attempt will be made to locate a file
+ * that matches appropriately.
+ *
+ * Since: 3.32
+ */
+void
+ide_workbench_resolve_file_async (IdeWorkbench        *self,
+                                  const gchar         *filename,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  g_autofree gchar *srcpath = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  ResolveFile *rf;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+  g_return_if_fail (filename != NULL);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_workbench_resolve_file_async);
+
+  rf = g_slice_new0 (ResolveFile);
+  rf->roots = g_ptr_array_new_with_free_func (g_object_unref);
+  rf->path = g_strdup (filename);
+
+  g_ptr_array_add (rf->roots, ide_context_ref_workdir (self->context));
+
+  if (ide_workbench_has_project (self))
+    {
+      IdeBuildManager *build_manager = ide_build_manager_from_context (self->context);
+      IdePipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+
+      if (pipeline != NULL)
+        {
+          const gchar *builddir = ide_pipeline_get_builddir (pipeline);
+
+          g_ptr_array_add (rf->roots, g_file_new_for_path (builddir));
+        }
+    }
+
+  ide_task_set_task_data (task, rf, resolve_file_free);
+  ide_task_run_in_thread (task, ide_workbench_resolve_file_worker);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_workbench_resolve_file_finish:
+ * @self: a #IdeWorkbench
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError
+ *
+ * Completes an asynchronous request to ide_workbench_resolve_file_async().
+ *
+ * Returns: (transfer full): a #GFile, or %NULL and @error is set
+ *
+ * Since: 3.32
+ */
+GFile *
+ide_workbench_resolve_file_finish (IdeWorkbench  *self,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  GFile *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_RETURN (g_steal_pointer (&ret));
 }

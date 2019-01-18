@@ -139,6 +139,16 @@ IdeBuildSystem  *ide_workbench_get_build_system      (IdeWorkbench         *self
 IDE_AVAILABLE_IN_3_32
 void             ide_workbench_set_build_system      (IdeWorkbench         *self,
                                                       IdeBuildSystem       *build_system);
+IDE_AVAILABLE_IN_3_32
+void             ide_workbench_resolve_file_async    (IdeWorkbench         *self,
+                                                      const gchar          *filename,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+IDE_AVAILABLE_IN_3_32
+GFile           *ide_workbench_resolve_file_finish   (IdeWorkbench         *self,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
 
 
 G_END_DECLS
