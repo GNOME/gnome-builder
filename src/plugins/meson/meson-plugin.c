@@ -25,6 +25,7 @@
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-build-system-discovery.h"
 #include "gbp-meson-build-target-provider.h"
+#include "gbp-meson-config-view-addin.h"
 #include "gbp-meson-pipeline-addin.h"
 #include "gbp-meson-test-provider.h"
 #include "gbp-meson-toolchain-provider.h"
@@ -36,6 +37,9 @@ _gbp_meson_register_types (PeasObjectModule *module)
   /* For in-tree builds of meson projects */
   ide_g_file_add_ignored_pattern ("_build");
 
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_CONFIG_VIEW_ADDIN,
+                                              GBP_TYPE_MESON_CONFIG_VIEW_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PIPELINE_ADDIN,
                                               GBP_TYPE_MESON_PIPELINE_ADDIN);

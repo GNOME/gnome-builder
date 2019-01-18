@@ -422,7 +422,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
 
   /* Add our pages */
   dzl_preferences_add_page (preferences, "general", _("General"), 0);
-  dzl_preferences_add_page (preferences, "environ", _("Environment"), 20);
+  dzl_preferences_add_page (preferences, "environ", _("Environment"), 10);
 
   /* Add groups to pages */
   dzl_preferences_add_list_group (preferences, "general", "general", _("Overview"), GTK_SELECTION_NONE, 0);
