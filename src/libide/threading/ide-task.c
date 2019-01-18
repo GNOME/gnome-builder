@@ -1354,6 +1354,10 @@ ide_task_return_new_error (IdeTask     *self,
  * Returns a new #GError if the cancellable associated with the task
  * has been cancelled. If so, %TRUE is returned, otherwise %FALSE.
  *
+ * If the source object related to the task is an #IdeObject and that
+ * object has had been requested to destroy, it too will be considered
+ * a cancellation state.
+ *
  * Returns: %TRUE if the task was cancelled and error returned.
  *
  * Since: 3.32
@@ -1367,7 +1371,9 @@ ide_task_return_error_if_cancelled (IdeTask *self)
   g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
 
   g_mutex_lock (&priv->mutex);
-  failed = g_cancellable_is_cancelled (priv->cancellable);
+  failed = g_cancellable_is_cancelled (priv->cancellable) ||
+    (IDE_IS_OBJECT (priv->source_object) &&
+     ide_object_in_destruction (IDE_OBJECT (priv->source_object)));
   g_mutex_unlock (&priv->mutex);
 
   if (failed)
