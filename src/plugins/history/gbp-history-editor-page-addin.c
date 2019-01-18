@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "gbp-history-editor-page-addin"
 
+#include <dazzle.h>
+
 #include "gbp-history-editor-page-addin.h"
 #include "gbp-history-item.h"
 #include "gbp-history-frame-addin.h"
@@ -233,6 +235,30 @@ gbp_history_editor_page_addin_buffer_loaded (GbpHistoryEditorPageAddin *self,
     }
 }
 
+static gboolean
+gbp_history_editor_page_addin_button_press_event (GbpHistoryEditorPageAddin *self,
+                                                  GdkEventButton            *button,
+                                                  IdeSourceView             *source_view)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
+  g_assert (button != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  if (button->button == 8)
+    {
+      dzl_gtk_widget_action (GTK_WIDGET (source_view), "history", "move-previous-edit", NULL);
+      return GDK_EVENT_STOP;
+    }
+  else if (button->button == 9)
+    {
+      dzl_gtk_widget_action (GTK_WIDGET (source_view), "history", "move-next-edit", NULL);
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 gbp_history_editor_page_addin_load (IdeEditorPageAddin *addin,
                                     IdeEditorPage      *view)
@@ -254,6 +280,11 @@ gbp_history_editor_page_addin_load (IdeEditorPageAddin *addin,
   g_signal_connect_swapped (source_view,
                             "jump",
                             G_CALLBACK (gbp_history_editor_page_addin_jump),
+                            addin);
+
+  g_signal_connect_swapped (source_view,
+                            "button-press-event",
+                            G_CALLBACK (gbp_history_editor_page_addin_button_press_event),
                             addin);
 
   g_signal_connect_swapped (buffer,
@@ -290,6 +321,10 @@ gbp_history_editor_page_addin_unload (IdeEditorPageAddin *addin,
 
   g_signal_handlers_disconnect_by_func (source_view,
                                         G_CALLBACK (gbp_history_editor_page_addin_jump),
+                                        self);
+
+  g_signal_handlers_disconnect_by_func (source_view,
+                                        G_CALLBACK (gbp_history_editor_page_addin_button_press_event),
                                         self);
 
   g_signal_handlers_disconnect_by_func (buffer,
