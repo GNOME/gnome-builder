@@ -377,6 +377,7 @@ enum {
   DIAGNOSTIC,
   STARTED,
   FINISHED,
+  LOADED,
   N_SIGNALS
 };
 
@@ -1139,6 +1140,8 @@ ide_pipeline_load_cb (IdleLoadState *state)
   state->self->loaded = TRUE;
   state->self->idle_addins_load_source = 0;
 
+  g_signal_emit (state->self, signals [LOADED], 0);
+
   return G_SOURCE_REMOVE;
 }
 
@@ -1690,6 +1693,21 @@ ide_pipeline_class_init (IdePipelineClass *klass)
                                 G_CALLBACK (ide_pipeline_real_finished),
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
+  /**
+   * IdePipeline::loaded:
+   *
+   * The "loaded" signal is emitted after the pipeline has finished
+   * loading addins.
+   *
+   * Since: 3.32
+   */
+  signals [LOADED] =
+    g_signal_new_class_handler ("loaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL, NULL, NULL, NULL,
+                                G_TYPE_NONE, 0);
 }
 
 static void
