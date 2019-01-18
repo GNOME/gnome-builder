@@ -108,6 +108,8 @@ gbp_buffer_monitor_buffer_addin_file_changed_cb (GbpBufferMonitorBufferAddin *se
 {
   GFile *expected;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_BUFFER_MONITOR_BUFFER_ADDIN (self));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
@@ -115,21 +117,31 @@ gbp_buffer_monitor_buffer_addin_file_changed_cb (GbpBufferMonitorBufferAddin *se
   g_assert (IDE_IS_BUFFER (self->buffer));
 
   if (g_file_monitor_is_cancelled (monitor))
-    return;
+    IDE_EXIT;
 
   expected = ide_buffer_get_file (self->buffer);
   if (!g_file_equal (expected, file))
-    return;
+    IDE_EXIT;
+
+  IDE_TRACE_MSG ("%s event=%d", g_file_peek_path (file), event);
 
   if (event == G_FILE_MONITOR_EVENT_CHANGED ||
-      event == G_FILE_MONITOR_EVENT_DELETED)
-    gbp_buffer_monitor_buffer_addin_check_for_change (self, file);
+      event == G_FILE_MONITOR_EVENT_DELETED ||
+      event == G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED)
+    {
+      gbp_buffer_monitor_buffer_addin_check_for_change (self, file);
+      IDE_EXIT;
+    }
+
+  IDE_EXIT;
 }
 
 static void
 gbp_buffer_monitor_buffer_addin_setup_monitor (GbpBufferMonitorBufferAddin *self,
                                                GFile                       *file)
 {
+  IDE_ENTRY;
+
   g_assert (GBP_IS_BUFFER_MONITOR_BUFFER_ADDIN (self));
   g_assert (!file || G_IS_FILE (file));
 
@@ -180,6 +192,8 @@ gbp_buffer_monitor_buffer_addin_setup_monitor (GbpBufferMonitorBufferAddin *self
                                    G_CONNECT_SWAPPED);
         }
     }
+
+  IDE_EXIT;
 }
 
 static void
