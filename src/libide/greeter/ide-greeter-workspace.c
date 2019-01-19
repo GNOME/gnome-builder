@@ -65,6 +65,7 @@ struct _IdeGreeterWorkspace
   GtkButton                *back_button;
   GtkButton                *select_button;
   GtkActionBar             *action_bar;
+  GtkLabel                 *title;
   IdeGreeterButtonsSection *buttons_section;
 
   guint                     selection_mode : 1;
@@ -183,7 +184,7 @@ stack_notify_visible_child_cb (IdeGreeterWorkspace *self,
   if (DZL_IS_DOCK_ITEM (visible_child))
     title = dzl_dock_item_get_title (DZL_DOCK_ITEM (visible_child));
 
-  gtk_header_bar_set_title (GTK_HEADER_BAR (self->header_bar), title);
+  gtk_label_set_label (self->title, title);
 
   sections = ide_str_equal0 ("sections", gtk_stack_get_visible_child_name (stack));
 
@@ -594,6 +595,7 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, select_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, surfaces);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, sections);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
 
   g_type_ensure (IDE_TYPE_CLONE_SURFACE);

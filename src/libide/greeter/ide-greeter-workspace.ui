@@ -8,6 +8,15 @@
         <property name="show-fullscreen-button">false</property>
         <property name="show-close-button">true</property>
         <property name="visible">true</property>
+        <child type="title">
+          <object class="GtkLabel" id="title">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
         <child type="left">
           <object class="GtkButton" id="back_button">
             <property name="action-name">win.surface</property>
