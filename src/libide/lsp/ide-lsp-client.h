@@ -24,7 +24,7 @@
 # error "Only <libide-lsp.h> can be included directly."
 #endif
 
-#include <libide-core.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
