@@ -37,14 +37,14 @@ struct _IdeLspClientClass
 {
   IdeObjectClass parent_class;
 
-  void     (*notification)          (IdeLspClient *self,
-                                     const gchar       *method,
-                                     GVariant          *params);
-  gboolean (*supports_language)     (IdeLspClient *self,
-                                     const gchar       *language_id);
-  void     (*published_diagnostics) (IdeLspClient *self,
-                                     GFile             *file,
-                                     IdeDiagnostics    *diagnostics);
+  void     (*notification)          (IdeLspClient   *self,
+                                     const gchar    *method,
+                                     GVariant       *params);
+  gboolean (*supports_language)     (IdeLspClient   *self,
+                                     const gchar    *language_id);
+  void     (*published_diagnostics) (IdeLspClient   *self,
+                                     GFile           *file,
+                                     IdeDiagnostics  *diagnostics);
 
   /*< private >*/
   gpointer _reserved[16];
