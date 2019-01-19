@@ -27,6 +27,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-clone-surface.h"
+#include "ide-greeter-buttons-section.h"
 #include "ide-greeter-private.h"
 #include "ide-greeter-workspace.h"
 
@@ -46,26 +47,27 @@
 
 struct _IdeGreeterWorkspace
 {
-  IdeWorkspace       parent_instance;
+  IdeWorkspace              parent_instance;
 
-  PeasExtensionSet  *addins;
-  DzlPatternSpec    *pattern_spec;
-  GSimpleAction     *delete_action;
-  GSimpleAction     *purge_action;
+  PeasExtensionSet         *addins;
+  DzlPatternSpec           *pattern_spec;
+  GSimpleAction            *delete_action;
+  GSimpleAction            *purge_action;
 
   /* Template Widgets */
-  IdeCloneSurface   *clone_surface;
-  IdeHeaderBar      *header_bar;
-  DzlPriorityBox    *sections;
-  DzlPriorityBox    *left_box;
-  GtkStack          *surfaces;
-  IdeSurface        *sections_surface;
-  GtkSearchEntry    *search_entry;
-  GtkButton         *back_button;
-  GtkButton         *select_button;
-  GtkActionBar      *action_bar;
+  IdeCloneSurface          *clone_surface;
+  IdeHeaderBar             *header_bar;
+  DzlPriorityBox           *sections;
+  DzlPriorityBox           *left_box;
+  GtkStack                 *surfaces;
+  IdeSurface               *sections_surface;
+  GtkSearchEntry           *search_entry;
+  GtkButton                *back_button;
+  GtkButton                *select_button;
+  GtkActionBar             *action_bar;
+  IdeGreeterButtonsSection *buttons_section;
 
-  guint              selection_mode : 1;
+  guint                     selection_mode : 1;
 };
 
 G_DEFINE_TYPE (IdeGreeterWorkspace, ide_greeter_workspace, IDE_TYPE_WORKSPACE)
@@ -628,6 +630,11 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
 
   _ide_greeter_workspace_init_actions (self);
   _ide_greeter_workspace_init_shortcuts (self);
+
+  self->buttons_section = g_object_new (IDE_TYPE_GREETER_BUTTONS_SECTION,
+                                        "visible", TRUE,
+                                        NULL);
+  ide_greeter_workspace_add_section (self, IDE_GREETER_SECTION (self->buttons_section));
 }
 
 IdeGreeterWorkspace *
@@ -698,9 +705,7 @@ ide_greeter_workspace_add_button (IdeGreeterWorkspace *self,
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
   g_return_if_fail (GTK_IS_WIDGET (button));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->left_box), button,
-                                     "priority", priority,
-                                     NULL);
+  ide_greeter_buttons_section_add_button (self->buttons_section, priority, button);
 }
 
 /**

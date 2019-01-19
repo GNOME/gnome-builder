@@ -33,6 +33,7 @@ libide_greeter_public_sources = [
 libide_greeter_private_sources = [
   'ide-greeter-workspace-actions.c',
   'ide-greeter-workspace-shortcuts.c',
+  'ide-greeter-buttons-section.c',
 ]
 
 #

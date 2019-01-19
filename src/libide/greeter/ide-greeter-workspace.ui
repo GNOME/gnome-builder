@@ -32,29 +32,6 @@
             <property name="hexpand">false</property>
             <property name="homogeneous">true</property>
             <property name="visible">true</property>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">win.open</property>
-                <property name="label" translatable="yes">_Open…</property>
-                <property name="use-underline">true</property>
-                <property name="visible">true</property>
-              </object>
-              <packing>
-                <property name="priority">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">win.surface</property>
-                <property name="action-target">'clone'</property>
-                <property name="label" translatable="yes">_Clone…</property>
-                <property name="use-underline">true</property>
-                <property name="visible">true</property>
-              </object>
-              <packing>
-                <property name="priority">10</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="pack-type">start</property>
@@ -112,6 +89,7 @@
                             <property name="visible">true</property>
                             <child>
                               <object class="GtkSearchEntry" id="search_entry">
+                                <property name="placeholder-text" translatable="yes">Search all Builder projects…</property>
                                 <property name="halign">center</property>
                                 <property name="visible">true</property>
                                 <property name="width-chars">45</property>
