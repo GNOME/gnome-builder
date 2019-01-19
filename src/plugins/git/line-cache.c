@@ -135,17 +135,45 @@ line_cache_get_mark (LineCache *self,
   return ret ? ret->mark : 0;
 }
 
-static LineEntry *
+static const LineEntry *
 line_cache_first_in_range (LineCache *self,
                            gint       start_line,
                            gint       end_line)
 {
-  for (guint i = 0; i < self->lines->len; i++)
-    {
-      LineEntry *entry = &g_array_index (self->lines, LineEntry, i);
+  gint L;
+  gint R;
 
-      if (entry->line >= start_line && entry->line <= end_line)
-        return entry;
+  if (self->lines->len == 0)
+    return NULL;
+
+  L = 0;
+  R = self->lines->len - 1;
+
+  while (L <= R)
+    {
+      gint m = (L + R) / 2;
+      const LineEntry *entry = &g_array_index (self->lines, LineEntry, m);
+
+      if (entry->line < start_line)
+        {
+          L = m + 1;
+          continue;
+        }
+      else if (entry->line > end_line)
+        {
+          R = m - 1;
+          continue;
+        }
+
+      for (gint p = m; p >= 0; p--)
+        {
+          const LineEntry *prev = &g_array_index (self->lines, LineEntry, p);
+
+          if (prev->line >= start_line)
+            entry = prev;
+        }
+
+      return entry;
     }
 
   return NULL;
