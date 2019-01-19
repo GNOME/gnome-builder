@@ -68,6 +68,7 @@ ide_greeter_workspace_dialog_notify_filter (IdeGreeterWorkspace  *self,
 {
   GtkFileFilter *filter;
   GtkFileChooserAction action;
+  const gchar *title;
 
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
   g_assert (pspec != NULL);
@@ -76,11 +77,18 @@ ide_greeter_workspace_dialog_notify_filter (IdeGreeterWorkspace  *self,
   filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog));
 
   if (filter && g_object_get_data (G_OBJECT (filter), "IS_DIRECTORY"))
-    action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+    {
+      action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+      title = _("Select Project Folder");
+    }
   else
-    action = GTK_FILE_CHOOSER_ACTION_OPEN;
+    {
+      action = GTK_FILE_CHOOSER_ACTION_OPEN;
+      title = _("Select Project File");
+    }
 
   gtk_file_chooser_set_action (GTK_FILE_CHOOSER (dialog), action);
+  gtk_window_set_title (GTK_WINDOW (dialog), title);
 }
 
 static void
@@ -104,7 +112,7 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
                          "action", GTK_FILE_CHOOSER_ACTION_OPEN,
                          "transient-for", self,
                          "modal", TRUE,
-                         "title", _("Open Project"),
+                         "title", _("Select Project Folder"),
                          "visible", TRUE,
                          NULL);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),

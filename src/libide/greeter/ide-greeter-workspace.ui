@@ -154,7 +154,7 @@
         </child>
         <child>
           <object class="IdeCloneSurface" id="clone_surface">
-            <property name="title" translatable="yes">Clone Project</property>
+            <property name="title" translatable="yes">Clone Repository</property>
             <property name="visible">true</property>
           </object>
           <packing>
