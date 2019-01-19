@@ -62,6 +62,9 @@ struct _IdeCloneSurface
   GtkButton           *clone_button;
   GtkButton           *cancel_button;
   GtkStack            *button_stack;
+
+  guint                dir_valid : 1;
+  guint                vcs_valid : 1;
 };
 
 G_DEFINE_TYPE (IdeCloneSurface, ide_clone_surface, IDE_TYPE_SURFACE)
@@ -225,6 +228,8 @@ ide_clone_surface_update (IdeCloneSurface *self)
   text = gtk_entry_get_text (self->uri_entry);
   uri = ide_vcs_uri_new (text);
 
+  self->vcs_valid = uri != NULL;
+
   if (uri != NULL)
     child = ide_vcs_uri_get_clone_name (uri);
 
@@ -245,15 +250,20 @@ ide_clone_surface_update (IdeCloneSurface *self)
       formatted = g_strdup_printf (_("The directory “%s” already exists. Please choose another directory."),
                                    collapsed);
       dzl_gtk_widget_add_style_class (GTK_WIDGET (entry), "error");
+      self->dir_valid = FALSE;
     }
   else
     {
       /* translators: %s is replaced with the path to the project */
       formatted = g_strdup_printf (_("Your project will be created at %s"), collapsed);
       dzl_gtk_widget_remove_style_class (GTK_WIDGET (entry), "error");
+      self->dir_valid = TRUE;
     }
 
   gtk_label_set_label (self->destination_label, formatted);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->clone_button),
+                            self->dir_valid && self->vcs_valid);
 }
 
 static void
