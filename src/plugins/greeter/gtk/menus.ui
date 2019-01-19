@@ -3,13 +3,8 @@
   <menu id="ide-greeter-workspace-menu">
     <section id="ide-greeter-workspace-menu-projects">
       <item>
-        <attribute name="id">ide-greeter-workspace-menu-open</attribute>
-        <attribute name="label" translatable="yes">_Open Project</attribute>
-        <attribute name="action">win.open</attribute>
-      </item>
-      <item>
         <attribute name="id">ide-greeter-workspace-menu-clone</attribute>
-        <attribute name="label" translatable="yes">_Clone Repository</attribute>
+        <attribute name="label" translatable="yes">_Clone Repository…</attribute>
         <attribute name="action">win.surface</attribute>
         <attribute name="target" type="s">'clone'</attribute>
       </item>
@@ -67,13 +62,8 @@
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section">
       <item>
-        <attribute name="id">ide-primary-workspace-menu-open</attribute>
-        <attribute name="label" translatable="yes">_Open Project</attribute>
-        <attribute name="action">app.open-project</attribute>
-      </item>
-      <item>
         <attribute name="id">ide-primary-workspace-menu-clone</attribute>
-        <attribute name="label" translatable="yes">_Clone Repository</attribute>
+        <attribute name="label" translatable="yes">_Clone Repository…</attribute>
         <attribute name="action">app.present-greeter-with-surface</attribute>
         <attribute name="target" type="s">'clone'</attribute>
       </item>
@@ -82,13 +72,8 @@
   <menu id="ide-editor-workspace-menu">
     <section id="ide-editor-workspace-menu-projects-section">
       <item>
-        <attribute name="id">ide-editor-workspace-menu-open</attribute>
-        <attribute name="label" translatable="yes">_Open Project</attribute>
-        <attribute name="action">app.open-project</attribute>
-      </item>
-      <item>
         <attribute name="id">ide-editor-workspace-menu-clone</attribute>
-        <attribute name="label" translatable="yes">_Clone Repository</attribute>
+        <attribute name="label" translatable="yes">_Clone Repository…</attribute>
         <attribute name="action">app.present-greeter-with-surface</attribute>
         <attribute name="target" type="s">'clone'</attribute>
       </item>

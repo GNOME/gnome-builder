@@ -55,7 +55,7 @@ present_greeter_with_surface (GSimpleAction *action,
   workspace = ide_greeter_workspace_new (self->application);
   ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
 
-  if (param != NULL && (name = g_variant_get_string (param, NULL)))
+  if (param != NULL && (name = g_variant_get_string (param, NULL)) && !ide_str_empty0 (name))
     ide_workspace_set_visible_surface_name (IDE_WORKSPACE (workspace), name);
 
   ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));

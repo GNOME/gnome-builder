@@ -89,7 +89,7 @@ ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
   ide_greeter_buttons_section_add_button (self,
                                           100,
                                           g_object_new (GTK_TYPE_BUTTON,
-                                                        "label", _("Clone…"),
+                                                        "label", _("Clone Repository…"),
                                                         "visible", TRUE,
                                                         "action-name", "win.surface",
                                                         "action-target", g_variant_new_string ("clone"),
