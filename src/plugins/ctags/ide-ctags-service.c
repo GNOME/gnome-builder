@@ -142,15 +142,17 @@ hide_notification (IdeCtagsService *self)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CTAGS_SERVICE (self));
-  g_assert (self->notif != NULL);
   g_assert (self->n_active > 0);
 
   self->n_active--;
 
   if (self->n_active == 0)
     {
-      ide_notification_withdraw_in_seconds (self->notif, 3);
-      g_clear_object (&self->notif);
+      if (self->notif != NULL)
+        {
+          ide_notification_withdraw_in_seconds (self->notif, 3);
+          g_clear_object (&self->notif);
+        }
     }
 }
 
@@ -924,6 +926,9 @@ ide_ctags_service_pause (IdeCtagsService *self)
 
   g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
 
+  if (ide_object_in_destruction (IDE_OBJECT (self)))
+    return;
+
   if (self->paused)
     return;
 
@@ -957,6 +962,9 @@ ide_ctags_service_unpause (IdeCtagsService *self)
   gpointer value;
 
   g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
+
+  if (ide_object_in_destruction (IDE_OBJECT (self)))
+    return;
 
   if (!self->paused)
     return;
