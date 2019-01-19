@@ -72,7 +72,7 @@
         <signal name="notify::visible-child" handler="stack_notify_visible_child_cb" object="IdeGreeterWorkspace" swapped="true"/>
         <child>
           <object class="IdeSurface" id="sections_surface">
-            <property name="title" translatable="yes">Select a Project</property>
+            <property name="title" translatable="yes">Select an Option</property>
             <property name="visible">true</property>
             <style>
               <class name="sectionssurface"/>
