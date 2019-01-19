@@ -18,6 +18,33 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+/* Some code from this file is loosely based around the git-diff
+ * plugin from Atom. Namely, API usage for iterating through hunks
+ * containing changes. It's license is provided below.
+ */
+
+/*
+ * Copyright (c) 2014 GitHub Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #define G_LOG_DOMAIN "gbp-git-buffer-change-monitor"
 
 #include <dazzle.h>
@@ -27,6 +54,8 @@
 
 #include "gbp-git-buffer-change-monitor.h"
 #include "gbp-git-vcs.h"
+
+#include "line-cache.h"
 
 #define DELAY_CHANGED_SEC 1
 
@@ -60,6 +89,7 @@ struct _GbpGitBufferChangeMonitor
   GArray                 *lines;
 
   GgitBlob               *cached_blob;
+  LineCache              *cache;
 
   guint                   changed_timeout;
 
@@ -73,7 +103,7 @@ struct _GbpGitBufferChangeMonitor
 typedef struct
 {
   GgitRepository *repository;
-  GArray         *lines;
+  LineCache      *cache;
   GFile          *file;
   GBytes         *content;
   GgitBlob       *blob;
@@ -83,27 +113,11 @@ typedef struct
 
 typedef struct
 {
-  gint                line;
-  IdeBufferLineChange change : 3;
-  guint               really_delete : 1;
-} DiffLine;
-
-typedef struct
-{
-  /*
-   * An array of DiffLine that contains information about the lines that
-   * have changed. This is sorted and used to bsearch() when the buffer
-   * requests the line flags.
-   */
-  GArray *lines;
-
-  /*
-   * We need to keep track of additions/removals as we process our way
-   * through the diff so that we can adjust lines for the deleted case.
-   */
-  gint hunk_add_count;
-  gint hunk_del_count;
-} DiffCallbackData;
+  gint old_start;
+  gint old_lines;
+  gint new_start;
+  gint new_lines;
+} Range;
 
 G_DEFINE_TYPE (GbpGitBufferChangeMonitor, gbp_git_buffer_change_monitor, IDE_TYPE_BUFFER_CHANGE_MONITOR)
 
@@ -130,20 +144,13 @@ diff_task_free (gpointer data)
       g_clear_object (&diff->blob);
       g_clear_object (&diff->repository);
       g_clear_object (&diff->lock_object);
-      g_clear_pointer (&diff->lines, g_array_unref);
+      g_clear_pointer (&diff->cache, line_cache_free);
       g_clear_pointer (&diff->content, g_bytes_unref);
       g_slice_free (DiffTask, diff);
     }
 }
 
-static gint
-diff_line_compare (const DiffLine *left,
-                   const DiffLine *right)
-{
-  return left->line - right->line;
-}
-
-static GArray *
+static LineCache *
 gbp_git_buffer_change_monitor_calculate_finish (GbpGitBufferChangeMonitor  *self,
                                                 GAsyncResult               *result,
                                                 GError                    **error)
@@ -221,7 +228,7 @@ gbp_git_buffer_change_monitor_calculate_async (GbpGitBufferChangeMonitor *self,
   diff = g_slice_new0 (DiffTask);
   diff->file = g_object_ref (file);
   diff->repository = g_object_ref (self->repository);
-  diff->lines = g_array_sized_new (FALSE, FALSE, sizeof (DiffLine), 32);
+  diff->cache = line_cache_new ();
   diff->content = ide_buffer_dup_content (buffer);
   diff->blob = self->cached_blob ? g_object_ref (self->cached_blob) : NULL;
   diff->lock_object = g_object_ref (IDE_OBJECT (vcs));
@@ -234,6 +241,27 @@ gbp_git_buffer_change_monitor_calculate_async (GbpGitBufferChangeMonitor *self,
 }
 
 static void
+foreach_cb (gpointer data,
+            gpointer user_data)
+{
+  const LineEntry *entry = data;
+  struct {
+    IdeBufferChangeMonitorForeachFunc func;
+    gpointer user_data;
+  } *state = user_data;
+  IdeBufferLineChange change = 0;
+
+  if (entry->mark & LINE_MARK_ADDED)
+    change = IDE_BUFFER_LINE_CHANGE_ADDED;
+  else if (entry->mark & LINE_MARK_REMOVED)
+    change = IDE_BUFFER_LINE_CHANGE_DELETED;
+  else if (entry->mark & LINE_MARK_CHANGED)
+    change = IDE_BUFFER_LINE_CHANGE_CHANGED;
+
+  state->func (entry->line, change, state->user_data);
+}
+
+static void
 gbp_git_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            *monitor,
                                               guint                              begin_line,
                                               guint                              end_line,
@@ -241,6 +269,10 @@ gbp_git_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            
                                               gpointer                           user_data)
 {
   GbpGitBufferChangeMonitor *self = (GbpGitBufferChangeMonitor *)monitor;
+  struct {
+    IdeBufferChangeMonitorForeachFunc func;
+    gpointer user_data;
+  } state = { callback, user_data };
 
   g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (callback != NULL);
@@ -248,7 +280,7 @@ gbp_git_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            
   if (end_line == G_MAXUINT)
     end_line--;
 
-  if (self->lines == NULL || self->lines->data == NULL)
+  if (self->cache == NULL)
     {
       /* If within working directory, synthesize line addition. */
       if (self->is_child_of_workdir)
@@ -256,25 +288,11 @@ gbp_git_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            
           for (guint i = begin_line; i < end_line; i++)
             callback (i, IDE_BUFFER_LINE_CHANGE_ADDED, user_data);
         }
+
       return;
     }
 
-  /* TODO: We could bsearch for the nearest start line */
-
-  for (guint i = 0; i < self->lines->len; i++)
-    {
-      DiffLine *line = &g_array_index (self->lines, DiffLine, i);
-      guint lineno = line->line - 1;
-
-      if (lineno < begin_line)
-        continue;
-
-      if (lineno > end_line)
-        break;
-
-      /* git is 1-based lines */
-      callback (lineno, line->change, user_data);
-    }
+  line_cache_foreach_in_range (self->cache, begin_line, end_line, foreach_cb, &state);
 }
 
 static IdeBufferLineChange
@@ -282,8 +300,7 @@ gbp_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
                                           guint                   line)
 {
   GbpGitBufferChangeMonitor *self = (GbpGitBufferChangeMonitor *)monitor;
-  DiffLine key = { line + 1, 0 }; /* Git is 1-based */
-  DiffLine *ret;
+  guint mark;
 
   /* Don't imply changes we don't know are real, in the case that
    * we failed to communicate with git properly about the blob diff.
@@ -291,7 +308,7 @@ gbp_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
   if (self->in_failed_state)
     return IDE_BUFFER_LINE_CHANGE_NONE;
 
-  if (self->lines == NULL || self->lines->data == NULL)
+  if (self->cache == NULL)
     {
       /* If within working directory, synthesize line addition. */
       if (self->is_child_of_workdir)
@@ -299,11 +316,16 @@ gbp_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
       return IDE_BUFFER_LINE_CHANGE_NONE;
     }
 
-  ret = bsearch (&key, (gconstpointer)self->lines->data,
-                 self->lines->len, sizeof (DiffLine),
-                 (GCompareFunc)diff_line_compare);
+  mark = line_cache_get_mark (self->cache, line + 1);
 
-  return ret != NULL ? ret->change : 0;
+  if (mark & LINE_MARK_ADDED)
+    return IDE_BUFFER_LINE_CHANGE_ADDED;
+  else if (mark & LINE_MARK_REMOVED)
+    return IDE_BUFFER_LINE_CHANGE_DELETED;
+  else if (mark & LINE_MARK_CHANGED)
+    return IDE_BUFFER_LINE_CHANGE_CHANGED;
+  else
+    return IDE_BUFFER_LINE_CHANGE_NONE;
 }
 
 void
@@ -332,7 +354,7 @@ gbp_git_buffer_change_monitor__calculate_cb (GObject      *object,
                                              gpointer      user_data_unused)
 {
   GbpGitBufferChangeMonitor *self = (GbpGitBufferChangeMonitor *)object;
-  g_autoptr(GArray) lines = NULL;
+  LineCache *cache;
   g_autoptr(GError) error = NULL;
 
   g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
@@ -340,9 +362,9 @@ gbp_git_buffer_change_monitor__calculate_cb (GObject      *object,
 
   self->in_calculation = FALSE;
 
-  lines = gbp_git_buffer_change_monitor_calculate_finish (self, result, &error);
+  cache = gbp_git_buffer_change_monitor_calculate_finish (self, result, &error);
 
-  if (lines == NULL)
+  if (cache == NULL)
     {
       if (!self->in_failed_state && !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
         {
@@ -355,8 +377,8 @@ gbp_git_buffer_change_monitor__calculate_cb (GObject      *object,
     }
   else
     {
-      g_clear_pointer (&self->lines, g_array_unref);
-      self->lines = g_steal_pointer (&lines);
+      g_clear_pointer (&self->cache, line_cache_free);
+      self->cache = g_steal_pointer (&cache);
       self->in_failed_state = FALSE;
     }
 
@@ -557,149 +579,24 @@ gbp_git_buffer_change_monitor_load (IdeBufferChangeMonitor *monitor,
   IDE_EXIT;
 }
 
-static DiffLine *
-find_or_add_line (GArray *array,
-                  gint    line)
-{
-  DiffLine key = { line, 0 };
-  DiffLine *ret;
-
-  g_assert (array != NULL);
-  g_assert (array->data != NULL);
-  g_assert (line >= 0);
-
-  ret = bsearch (&key, (gconstpointer)array->data,
-                 array->len, sizeof (DiffLine),
-                 (GCompareFunc)diff_line_compare);
-
-  if (ret == NULL)
-    {
-      DiffLine *prev;
-
-      g_array_append_val (array, key);
-
-      if (array->len == 1)
-        return &g_array_index (array, DiffLine, 0);
-
-      g_assert (array->len > 1);
-
-      prev = &g_array_index (array, DiffLine, array->len - 2);
-      if (prev->line < line)
-        return &g_array_index (array, DiffLine, array->len - 1);
-
-      g_array_sort (array, (GCompareFunc)diff_line_compare);
-
-      ret = bsearch (&key, (gconstpointer)array->data,
-                     array->len, sizeof (DiffLine),
-                     (GCompareFunc)diff_line_compare);
-    }
-
-  g_assert (ret != NULL);
-
-  return ret;
-}
-
 static gint
-diff_line_cb (GgitDiffDelta *delta,
+diff_hunk_cb (GgitDiffDelta *delta,
               GgitDiffHunk  *hunk,
-              GgitDiffLine  *line,
               gpointer       user_data)
 {
-  DiffCallbackData *info = user_data;
-  GgitDiffLineType type;
-  DiffLine *diff_line;
-  gint new_hunk_start;
-  gint old_hunk_start;
-  gint new_lineno;
-  gint old_lineno;
+  GArray *ranges = user_data;
+  Range range;
 
   g_assert (delta != NULL);
   g_assert (hunk != NULL);
-  g_assert (line != NULL);
-  g_assert (info != NULL);
-  g_assert (info->lines != NULL);
+  g_assert (ranges != NULL);
 
-  type = ggit_diff_line_get_origin (line);
+  range.old_start = ggit_diff_hunk_get_old_start (hunk);
+  range.old_lines = ggit_diff_hunk_get_old_lines (hunk);
+  range.new_start = ggit_diff_hunk_get_new_start (hunk);
+  range.new_lines = ggit_diff_hunk_get_new_lines (hunk);
 
-  new_lineno = ggit_diff_line_get_new_lineno (line);
-  old_lineno = ggit_diff_line_get_old_lineno (line);
-
-  /*
-   * The callbacks here are are somewhat cryptic and have been little
-   * tweak, one after another.
-   *
-   * What I glean, thus far, is that things happen like this (after
-   * we've accouned for the line number drift). If something looks off,
-   * it probably is!
-   *
-   * Scenario 1
-   * - Delete N
-   * - Delete N
-   * - Added  N
-   *   This means that N is both a change and the previous line(s)
-   *   where deleted.
-   *
-   * Scenario 2
-   * - Delete N
-   *   This means the line(s) previous to N were deleted.
-   *
-   * Scenario 3
-   * - Delete N
-   * - Added  N
-   *   This means N was changed.
-   *
-   * Scenario 4
-   *
-   * - Added N
-   *   This means N was added.
-   */
-
-  switch (type)
-    {
-    case GGIT_DIFF_LINE_ADDITION:
-      diff_line = find_or_add_line (info->lines, new_lineno);
-      if (diff_line->change == IDE_BUFFER_LINE_CHANGE_DELETED)
-        diff_line->change = IDE_BUFFER_LINE_CHANGE_CHANGED;
-      else
-        diff_line->change = IDE_BUFFER_LINE_CHANGE_ADDED;
-
-      if (diff_line->really_delete)
-        diff_line->change |= IDE_BUFFER_LINE_CHANGE_DELETED;
-
-      info->hunk_add_count++;
-
-      break;
-
-    case GGIT_DIFF_LINE_DELETION:
-      new_hunk_start = ggit_diff_hunk_get_new_start (hunk);
-      old_hunk_start = ggit_diff_hunk_get_old_start (hunk);
-
-      old_lineno += new_hunk_start - old_hunk_start;
-      old_lineno += info->hunk_add_count - info->hunk_del_count;
-
-      diff_line = find_or_add_line (info->lines, old_lineno);
-      if (diff_line->change & IDE_BUFFER_LINE_CHANGE_DELETED)
-        diff_line->really_delete = TRUE;
-      diff_line->change = IDE_BUFFER_LINE_CHANGE_DELETED;
-
-      info->hunk_del_count++;
-
-      break;
-
-    case GGIT_DIFF_LINE_DEL_EOFNL:
-      /* TODO: Handle trailing newline differences */
-      break;
-
-    case GGIT_DIFF_LINE_CONTEXT:
-    case GGIT_DIFF_LINE_CONTEXT_EOFNL:
-    case GGIT_DIFF_LINE_ADD_EOFNL:
-    case GGIT_DIFF_LINE_FILE_HDR:
-    case GGIT_DIFF_LINE_HUNK_HDR:
-    case GGIT_DIFF_LINE_BINARY:
-    default:
-      return 0;
-    }
-
+  g_array_append_val (ranges, range);
 
   return 0;
 }
@@ -710,15 +607,17 @@ gbp_git_buffer_change_monitor_calculate_threaded (GbpGitBufferChangeMonitor  *se
                                                   GError                    **error)
 {
   g_autofree gchar *relative_path = NULL;
+  g_autoptr(GgitDiffOptions) options = NULL;
   g_autoptr(GFile) workdir = NULL;
-  DiffCallbackData cb_data = {0};
+  g_autoptr(GArray) ranges = NULL;
+  LineCache *cache;
   const guint8 *data;
   gsize data_len = 0;
 
   g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (diff != NULL);
   g_assert (G_IS_FILE (diff->file));
-  g_assert (diff->lines != NULL);
+  g_assert (diff->cache != NULL);
   g_assert (GGIT_IS_REPOSITORY (diff->repository));
   g_assert (diff->content != NULL);
   g_assert (!diff->blob || GGIT_IS_BLOB (diff->blob));
@@ -815,13 +714,49 @@ gbp_git_buffer_change_monitor_calculate_threaded (GbpGitBufferChangeMonitor  *se
 
   data = g_bytes_get_data (diff->content, &data_len);
 
-  cb_data.lines = diff->lines;
-  cb_data.hunk_add_count = 0;
-  cb_data.hunk_del_count = 0;
+  ranges = g_array_new (FALSE, FALSE, sizeof (Range));
+  options = ggit_diff_options_new ();
 
-  ggit_diff_blob_to_buffer (diff->blob, relative_path, data, data_len, relative_path,
-                            NULL, NULL, NULL, NULL,
-                            diff_line_cb, &cb_data, error);
+  ggit_diff_options_set_flags (options, GIT_DIFF_IGNORE_WHITESPACE_EOL);
+  ggit_diff_options_set_n_context_lines (options, 0);
+
+  ggit_diff_blob_to_buffer (diff->blob,
+                            relative_path,
+                            data,
+                            data_len,
+                            relative_path,
+                            options,
+                            NULL,         /* File Callback */
+                            NULL,         /* Binary Callback */
+                            diff_hunk_cb, /* Hunk Callback */
+                            NULL,
+                            ranges,
+                            error);
+
+  cache = diff->cache;
+
+  for (guint i = 0; i < ranges->len; i++)
+    {
+      const Range *range = &g_array_index (ranges, Range, i);
+      gint start_line = range->new_start - 1;
+      gint end_line = range->new_start + range->new_lines - 1;
+
+      if (range->old_lines == 0 && range->new_lines > 0)
+        {
+          line_cache_mark_range (cache, start_line, end_line, LINE_MARK_ADDED);
+        }
+      else if (range->new_lines == 0 && range->old_lines > 0)
+        {
+          if (start_line < 0)
+            line_cache_mark_range (cache, 0, 0, LINE_MARK_PREVIOUS_REMOVED);
+          else
+            line_cache_mark_range (cache, start_line + 1, start_line + 1, LINE_MARK_REMOVED);
+        }
+      else
+        {
+          line_cache_mark_range (cache, start_line, end_line, LINE_MARK_CHANGED);
+        }
+    }
 
   return *error == NULL;
 }
@@ -842,7 +777,7 @@ gbp_git_buffer_change_monitor_worker (gpointer data)
    * share the same GgitRepository amongst themselves).
    */
 
-  while (NULL != (taskptr = g_async_queue_pop (queue)))
+  while ((taskptr = g_async_queue_pop (queue)))
     {
       GbpGitBufferChangeMonitor *self;
       g_autoptr(GError) error = NULL;
@@ -865,8 +800,8 @@ gbp_git_buffer_change_monitor_worker (gpointer data)
         ide_task_return_error (task, g_steal_pointer (&error));
       else
         ide_task_return_pointer (task,
-                                 g_steal_pointer (&diff->lines),
-                                 (GDestroyNotify)g_array_unref);
+                                 g_steal_pointer (&diff->cache),
+                                 (GDestroyNotify)line_cache_free);
     }
 
   return NULL;
@@ -887,6 +822,7 @@ gbp_git_buffer_change_monitor_destroy (IdeObject *object)
 
   g_clear_object (&self->cached_blob);
   g_clear_object (&self->repository);
+  g_clear_pointer (&self->cache, line_cache_free);
 
   IDE_OBJECT_CLASS (gbp_git_buffer_change_monitor_parent_class)->destroy (object);
 }
