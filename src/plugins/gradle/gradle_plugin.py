@@ -141,7 +141,7 @@ class GradleBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [GradleBuildTarget(context=self.get_context())]
+        task.targets = [context.ensure_child_typed(GradleBuildTarget)]
         task.return_boolean(True)
 
     def do_get_targets_finish(self, result):
