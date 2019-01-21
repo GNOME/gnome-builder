@@ -163,7 +163,7 @@ class GradleIdeTestProvider(Ide.TestProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [GradleBuildTarget(context=self.get_context())]
+        task.targets = [build_system.ensure_child_typed(GradleBuildTarget)]
 
         try:
             runtime = pipeline.get_runtime()
