@@ -249,6 +249,10 @@ finish_subprocess:
       g_assert (G_IS_FILE (child));
       g_assert (G_IS_FILE (dest_child));
 
+      if (ide_object_in_destruction (IDE_OBJECT (self)) ||
+          g_cancellable_is_cancelled (cancellable))
+        return FALSE;
+
       if (ide_vcs_is_ignored (vcs, child, NULL))
         continue;
 
