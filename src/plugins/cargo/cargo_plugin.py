@@ -179,7 +179,7 @@ class CargoBuildTarget(Ide.Object, Ide.BuildTarget):
 
         # Pass the Cargo.toml path so that we don't
         # need to run from the project directory.
-        cargo_toml = context.ref_workdir().get_child('Cargo.toml')
+        cargo_toml = context.ref_workdir().get_child('Cargo.toml').get_path()
 
         return [cargo, 'run', '--manifest-path', cargo_toml]
 
