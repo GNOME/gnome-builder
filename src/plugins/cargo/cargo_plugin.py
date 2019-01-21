@@ -89,7 +89,11 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
         if type(build_system) != CargoBuildSystem:
             return
 
-        cargo_toml = build_system.props.project_file.get_path()
+        project_file = build_system.props.project_file
+        if project_file.get_basename() != 'Cargo.toml':
+            project_file = project_file.get_child('Cargo.toml')
+
+        cargo_toml = project_file.get_path()
         config = pipeline.get_config()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
@@ -227,7 +231,10 @@ class CargoDependencyUpdater(Ide.Object, Ide.DependencyUpdater):
         config = config_manager.get_current()
         cargo = locate_cargo_from_config(config)
 
-        cargo_toml = build_system.props.project_file.get_path()
+        project_file = build_system.props.project_file
+        if project_file.get_basename() != 'Cargo.toml':
+            project_file = project_file.get_child('Cargo.toml')
+        cargo_toml = project_file.get_path()
 
         launcher = pipeline.create_launcher()
         launcher.setenv('CARGO_TARGET_DIR', pipeline.get_builddir(), True)
