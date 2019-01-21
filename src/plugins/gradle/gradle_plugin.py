@@ -103,6 +103,10 @@ class GradlePipelineAddin(Ide.Object, Ide.PipelineAddin):
 
 class GradleBuildTarget(Ide.Object, Ide.BuildTarget):
 
+    @classmethod
+    def from_context(klass, context):
+        return context.ensure_child_typed(GradleBuildTarget)
+
     def do_get_install_directory(self):
         return None
 
@@ -141,7 +145,7 @@ class GradleBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [GradleBuildTarget(context=self.get_context())]
+        task.targets = [GradleBuildTarget.from_context(context)]
         task.return_boolean(True)
 
     def do_get_targets_finish(self, result):
