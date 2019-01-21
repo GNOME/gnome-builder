@@ -75,6 +75,9 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_code_index_search_provider_search_async);
+
   if (!ide_context_has_project (context) ||
       !(addin = gbp_code_index_workbench_addin_from_context (context)))
     {
@@ -86,10 +89,6 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
     }
 
   index = gbp_code_index_workbench_addin_get_index (addin);
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_code_index_search_provider_search_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (index == NULL)
     ide_task_return_new_error (task,
