@@ -109,6 +109,9 @@ class NPMBuildTarget(Ide.Object, Ide.BuildTarget):
     def do_get_install_directory(self):
         return None
 
+    def do_get_display_name(self):
+        return 'npm run ' + self._script
+
     def do_get_name(self):
         return 'npm-run-' + self._script
 
