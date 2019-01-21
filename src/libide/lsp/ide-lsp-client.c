@@ -77,7 +77,7 @@ static guint signals [N_SIGNALS];
 
 static gboolean
 ide_lsp_client_supports_buffer (IdeLspClient *self,
-                                     IdeBuffer         *buffer)
+                                IdeBuffer    *buffer)
 {
   GtkSourceLanguage *language;
   const gchar *language_id = "text/plain";
@@ -212,9 +212,9 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
 
 static void
 ide_lsp_client_buffer_delete_range (IdeLspClient *self,
-                                         GtkTextIter       *begin_iter,
-                                         GtkTextIter       *end_iter,
-                                         IdeBuffer         *buffer)
+                                    GtkTextIter  *begin_iter,
+                                    GtkTextIter  *end_iter,
+                                    IdeBuffer    *buffer)
 {
 
   g_autoptr(GVariant) params = NULL;
@@ -280,9 +280,9 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
 }
 
 static void
-ide_lsp_client_buffer_loaded (IdeLspClient *self,
-                                   IdeBuffer         *buffer,
-                                   IdeBufferManager  *buffer_manager)
+ide_lsp_client_buffer_loaded (IdeLspClient     *self,
+                              IdeBuffer        *buffer,
+                              IdeBufferManager *buffer_manager)
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
@@ -343,9 +343,9 @@ ide_lsp_client_buffer_loaded (IdeLspClient *self,
 }
 
 static void
-ide_lsp_client_buffer_unloaded (IdeLspClient *self,
-                                     IdeBuffer         *buffer,
-                                     IdeBufferManager  *buffer_manager)
+ide_lsp_client_buffer_unloaded (IdeLspClient     *self,
+                                IdeBuffer        *buffer,
+                                IdeBufferManager *buffer_manager)
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
@@ -375,9 +375,9 @@ ide_lsp_client_buffer_unloaded (IdeLspClient *self,
 }
 
 static void
-ide_lsp_client_buffer_manager_bind (IdeLspClient *self,
-                                         IdeBufferManager  *buffer_manager,
-                                         DzlSignalGroup    *signal_group)
+ide_lsp_client_buffer_manager_bind (IdeLspClient     *self,
+                                    IdeBufferManager *buffer_manager,
+                                    DzlSignalGroup   *signal_group)
 {
   guint n_items;
 
@@ -411,8 +411,8 @@ ide_lsp_client_buffer_manager_unbind (IdeLspClient *self,
 
 static void
 ide_lsp_client_project_file_trashed (IdeLspClient *self,
-                                          GFile             *file,
-                                          IdeProject        *project)
+                                     GFile        *file,
+                                     IdeProject   *project)
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
