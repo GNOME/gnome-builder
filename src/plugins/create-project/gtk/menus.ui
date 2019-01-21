@@ -7,7 +7,7 @@
         <attribute name="label" translatable="yes">_Start New Project…</attribute>
         <attribute name="action">win.surface</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
-        <attribute name="before">ide-greeter-workspace-menu-open</attribute>
+        <attribute name="before">ide-greeter-workspace-menu-clone</attribute>
       </item>
     </section>
   </menu>
@@ -18,7 +18,7 @@
         <attribute name="label" translatable="yes">_Start New Project…</attribute>
         <attribute name="action">app.present-greeter-with-surface</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
-        <attribute name="before">ide-primary-workspace-menu-open</attribute>
+        <attribute name="after">ide-primary-workspace-menu-open</attribute>
       </item>
     </section>
   </menu>
@@ -29,7 +29,7 @@
         <attribute name="label" translatable="yes">_Start New Project…</attribute>
         <attribute name="action">app.present-greeter-with-surface</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
-        <attribute name="before">ide-editor-workspace-menu-open</attribute>
+        <attribute name="after">ide-editor-workspace-menu-open</attribute>
       </item>
     </section>
   </menu>
