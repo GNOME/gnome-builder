@@ -74,4 +74,11 @@ void               ide_snippet_get_chunk_range (IdeSnippet      *self,
 IDE_AVAILABLE_IN_3_32
 IdeSnippetContext *ide_snippet_get_context     (IdeSnippet      *self);
 
+IDE_AVAILABLE_IN_3_32
+const gchar       *ide_snippet_get_full_text   (IdeSnippet      *self);
+
+IDE_AVAILABLE_IN_3_32
+void               ide_snippet_replace_current_chunk_text       (IdeSnippet      *self,
+                                                                 const gchar     *new_text);
+
 G_END_DECLS

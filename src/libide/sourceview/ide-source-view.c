@@ -6878,13 +6878,21 @@ ide_source_view_pop_snippet (IdeSourceView *self)
 
   if ((snippet = g_queue_pop_head (priv->snippets)))
     {
+      g_autofree const gchar *new_text;
+
+      new_text = ide_snippet_get_full_text (snippet);
+
       ide_snippet_finish (snippet);
       g_signal_emit (self, signals [POP_SNIPPET], 0, snippet);
       g_object_unref (snippet);
-    }
 
-  if ((snippet = g_queue_peek_head (priv->snippets)))
-    ide_snippet_unpause (snippet);
+      if ((snippet = g_queue_peek_head (priv->snippets)))
+        {
+          ide_snippet_replace_current_chunk_text (snippet, new_text);
+          ide_snippet_unpause (snippet);
+          ide_snippet_move_next (snippet);
+        }
+    }
 
   ide_source_view_invalidate_window (self);
 }

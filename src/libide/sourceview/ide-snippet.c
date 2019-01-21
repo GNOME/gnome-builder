@@ -1307,6 +1307,33 @@ ide_snippet_init (IdeSnippet *self)
   self->runs = g_array_new (FALSE, FALSE, sizeof (gint));
 }
 
+const gchar *
+ide_snippet_get_full_text (IdeSnippet *self)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  gtk_text_buffer_get_iter_at_mark (self->buffer, &begin, self->mark_begin);
+  gtk_text_buffer_get_iter_at_mark (self->buffer, &end, self->mark_end);
+
+  return gtk_text_buffer_get_text (self->buffer, &begin, &end, TRUE);
+}
+
+void
+ide_snippet_replace_current_chunk_text (IdeSnippet *self, const gchar *new_text)
+{
+  IdeSnippetChunk *chunk;
+  gint utf8_len;
+
+  chunk = g_ptr_array_index (self->chunks, self->current_chunk);
+
+  ide_snippet_chunk_set_text (chunk, new_text);
+  ide_snippet_chunk_set_text_set (chunk, TRUE);
+
+  utf8_len = g_utf8_strlen (new_text, -1);
+  g_array_index (self->runs, gint, self->current_chunk) = utf8_len;
+}
+
 /**
  * ide_snippet_dump:
  * @self: a #IdeSnippet
