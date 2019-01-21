@@ -198,7 +198,7 @@ class CargoBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [CargoBuildTarget(context=self.get_context())]
+        task.targets = [build_system.ensure_child_typed(CargoBuildTarget)]
         task.return_boolean(True)
 
     def do_get_targets_finish(self, result):
