@@ -950,7 +950,8 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
         {
           IdeBuildTarget *target = g_ptr_array_index (ret, i);
 
-          ide_object_append (IDE_OBJECT (self), IDE_OBJECT (target));
+          if (ide_object_is_root (IDE_OBJECT (target)))
+            ide_object_append (IDE_OBJECT (self), IDE_OBJECT (target));
 
           g_ptr_array_add (state->results, g_object_ref (target));
         }
