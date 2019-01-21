@@ -238,7 +238,9 @@ ide_search_engine_search_cb (GObject      *object,
 
   if (error != NULL)
     {
-      g_warning ("%s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        g_warning ("%s", error->message);
       goto cleanup;
     }
 
