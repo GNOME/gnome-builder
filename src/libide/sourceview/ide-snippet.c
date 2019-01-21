@@ -1308,6 +1308,72 @@ ide_snippet_init (IdeSnippet *self)
 }
 
 /**
+ * ide_snippet_get_full_text:
+ * @self: a #IdeSnippet
+ *
+ * Gets the contents of the snippet as currently edited by the user.
+ *
+ * Returns: (transfer full): a newly allocated string containing the full
+ *   contents of all the snippet chunks.
+ *
+ * Since: 3.32
+ */
+gchar *
+ide_snippet_get_full_text (IdeSnippet *self)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_val_if_fail (IDE_IS_SNIPPET (self), NULL);
+
+  if (self->mark_begin == NULL || self->mark_end == NULL)
+    return NULL;
+
+  gtk_text_buffer_get_iter_at_mark (self->buffer, &begin, self->mark_begin);
+  gtk_text_buffer_get_iter_at_mark (self->buffer, &end, self->mark_end);
+
+  return gtk_text_iter_get_slice (&begin, &end);
+}
+
+/**
+ * ide_snippet_replace_current_chunk_text:
+ * @self: a #IdeSnippet
+ * @new_text: the text to use as the replacement
+ *
+ * This replaces the current chunk (if any) to contain the contents of
+ * @new_text.
+ *
+ * This function is primarily useful to the #IdeSourceView as it updates
+ * content as the user types.
+ *
+ * Since: 3.32
+ */
+void
+ide_snippet_replace_current_chunk_text (IdeSnippet  *self,
+                                        const gchar *new_text)
+{
+  IdeSnippetChunk *chunk;
+  gint utf8_len;
+
+  g_return_if_fail (IDE_IS_SNIPPET (self));
+  g_return_if_fail (self->chunks != NULL);
+
+  if (self->current_chunk < 0 || self->current_chunk >= self->chunks->len)
+    return;
+
+  chunk = g_ptr_array_index (self->chunks, self->current_chunk);
+
+  ide_snippet_chunk_set_text (chunk, new_text);
+  ide_snippet_chunk_set_text_set (chunk, TRUE);
+
+  g_assert (self->current_chunk >= 0);
+  g_assert (self->current_chunk < self->runs->len);
+
+  utf8_len = g_utf8_strlen (new_text, -1);
+  g_array_index (self->runs, gint, self->current_chunk) = utf8_len;
+}
+
+/**
  * ide_snippet_dump:
  * @self: a #IdeSnippet
  *
