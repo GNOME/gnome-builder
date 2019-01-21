@@ -208,7 +208,8 @@ gbp_meson_test_provider_do_reload (GbpMesonTestProvider *self,
   if (NULL == (launcher = ide_pipeline_create_launcher (pipeline, &error)))
     IDE_GOTO (failure);
 
-  ide_subprocess_launcher_set_flags (launcher, G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  ide_subprocess_launcher_set_flags (launcher,
+                                     G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
 
   builddir = ide_pipeline_get_builddir (pipeline);
   ide_subprocess_launcher_set_cwd (launcher, builddir);
