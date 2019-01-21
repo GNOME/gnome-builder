@@ -144,7 +144,7 @@ class MavenBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [MavenBuildTarget(context=self.get_context())]
+        task.targets = [build_system.ensure_child_typed(MavenBuildTarget)]
         task.return_boolean(True)
 
     def do_get_targets_finish(self, result):
@@ -166,7 +166,7 @@ class MavenIdeTestProvider(Ide.TestProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [MavenBuildTarget(context=self.get_context())]
+        task.targets = [build_system.ensure_child_typed(MavenBuildTarget)]
 
         try:
             runtime = pipeline.get_runtime()
