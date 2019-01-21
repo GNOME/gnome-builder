@@ -463,8 +463,8 @@ ide_ctags_service_miner (GTask        *task,
                          GCancellable *cancellable)
 {
   IdeCtagsService *self = source_object;
+  g_autoptr(IdeContext) context = NULL;
   g_autoptr(IdeVcs) vcs = NULL;
-  IdeContext *context;
   GArray *mine_info = task_data;
 
   IDE_ENTRY;
@@ -473,8 +473,8 @@ ide_ctags_service_miner (GTask        *task,
   g_assert (IDE_IS_CTAGS_SERVICE (self));
   g_assert (mine_info != NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_VCS);
+  if ((context = ide_object_ref_context (IDE_OBJECT (self))))
+    vcs = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_VCS);
 
   for (guint i = 0; i < mine_info->len; i++)
     {
@@ -501,10 +501,10 @@ static gboolean
 ide_ctags_service_do_mine (gpointer data)
 {
   IdeCtagsService *self = data;
+  g_autoptr(IdeContext) context = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GArray) mine_info = NULL;
   g_autoptr(GFile) workdir = NULL;
-  IdeContext *context;
   MineInfo info;
 
   IDE_ENTRY;
@@ -514,34 +514,37 @@ ide_ctags_service_do_mine (gpointer data)
   self->queued_miner_handler = 0;
   self->miner_active = TRUE;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  workdir = ide_context_ref_workdir (context);
+  if (!ide_object_in_destruction (IDE_OBJECT (self)) &&
+      (context = ide_object_ref_context (IDE_OBJECT (self))))
+    {
+      workdir = ide_context_ref_workdir (context);
 
-  mine_info = g_array_new (FALSE, FALSE, sizeof (MineInfo));
-  g_array_set_clear_func (mine_info, clear_mine_info);
+      mine_info = g_array_new (FALSE, FALSE, sizeof (MineInfo));
+      g_array_set_clear_func (mine_info, clear_mine_info);
 
-  /* mine: ~/.cache/gnome-builder/projects/$project_id/ctags/ */
-  info.path = ide_context_cache_filename (context, "ctags", NULL);
-  info.recursive = TRUE;
-  g_array_append_val (mine_info, info);
+      /* mine: ~/.cache/gnome-builder/projects/$project_id/ctags/ */
+      info.path = ide_context_cache_filename (context, "ctags", NULL);
+      info.recursive = TRUE;
+      g_array_append_val (mine_info, info);
 
 #if 0
-  /* mine: ~/.tags */
-  info.path = g_strdup (g_get_home_dir ());
-  info.recursive = FALSE;
-  g_array_append_val (mine_info, info);
+      /* mine: ~/.tags */
+      info.path = g_strdup (g_get_home_dir ());
+      info.recursive = FALSE;
+      g_array_append_val (mine_info, info);
 #endif
 
-  /* mine the project tree */
-  info.path = g_file_get_path (workdir);
-  info.recursive = TRUE;
-  g_array_append_val (mine_info, info);
+      /* mine the project tree */
+      info.path = g_file_get_path (workdir);
+      info.recursive = TRUE;
+      g_array_append_val (mine_info, info);
 
-  task = g_task_new (self, NULL, NULL, NULL);
-  g_task_set_source_tag (task, ide_ctags_service_do_mine);
-  g_task_set_priority (task, G_PRIORITY_LOW + 1000);
-  g_task_set_task_data (task, g_steal_pointer (&mine_info), (GDestroyNotify)g_array_unref);
-  ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_service_miner);
+      task = g_task_new (self, NULL, NULL, NULL);
+      g_task_set_source_tag (task, ide_ctags_service_do_mine);
+      g_task_set_priority (task, G_PRIORITY_LOW + 1000);
+      g_task_set_task_data (task, g_steal_pointer (&mine_info), (GDestroyNotify)g_array_unref);
+      ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_service_miner);
+    }
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -719,6 +722,8 @@ ide_ctags_service_destroy (IdeObject *object)
   IdeCtagsService *self = (IdeCtagsService *)object;
 
   g_assert (IDE_IS_CTAGS_SERVICE (self));
+
+  g_clear_handle_id (&self->queued_miner_handler, g_source_remove);
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
