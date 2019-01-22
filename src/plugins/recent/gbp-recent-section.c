@@ -89,7 +89,7 @@ gbp_recent_section_get_has_selection (GbpRecentSection *self)
 static gint
 gbp_recent_section_get_priority (IdeGreeterSection *section)
 {
-  return 0;
+  return -100;
 }
 
 static void
