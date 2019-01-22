@@ -9,6 +9,7 @@ libide_greeter_generated_headers = []
 
 libide_greeter_public_headers = [
   'ide-clone-surface.h',
+  'ide-greeter-row.h',
   'ide-greeter-section.h',
   'ide-greeter-workspace.h',
   'libide-greeter.h',
@@ -26,6 +27,7 @@ install_headers(libide_greeter_public_headers, subdir: libide_greeter_header_sub
 
 libide_greeter_public_sources = [
   'ide-clone-surface.c',
+  'ide-greeter-row.c',
   'ide-greeter-section.c',
   'ide-greeter-workspace.c',
 ]
