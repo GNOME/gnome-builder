@@ -111,6 +111,15 @@
                                 <property name="visible">true</property>
                               </object>
                             </child>
+                            <child>
+                              <object class="DzlEmptyState" id="empty_state">
+                                <property name="icon-name">edit-find-symbolic</property>
+                                <property name="pixel-size">64</property>
+                                <property name="title" translatable="yes">No Projects Found</property>
+                                <property name="vexpand">true</property>
+                                <property name="valign">center</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

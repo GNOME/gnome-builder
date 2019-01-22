@@ -68,6 +68,7 @@ struct _IdeGreeterWorkspace
   GtkActionBar             *projects_action_bar;
   GtkLabel                 *title;
   IdeGreeterButtonsSection *buttons_section;
+  DzlEmptyState            *empty_state;
 
   guint                     selection_mode : 1;
 };
@@ -81,6 +82,31 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_greeter_workspace_has_match_cb (GtkWidget *widget,
+                                    gpointer   user_data)
+{
+  gboolean *match = user_data;
+
+  if (IDE_IS_GREETER_SECTION (widget))
+    *match |= gtk_widget_get_visible (widget);
+}
+
+static gboolean
+ide_greeter_workspace_has_match (IdeGreeterWorkspace *self)
+{
+  gboolean match = FALSE;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+
+  gtk_container_foreach (GTK_CONTAINER (self->sections),
+                         ide_greeter_workspace_has_match_cb,
+                         &match);
+
+  return match;
+}
 
 static void
 ide_greeter_workspace_filter_sections (PeasExtensionSet *set,
@@ -120,6 +146,9 @@ ide_greeter_workspace_apply_filter_all (IdeGreeterWorkspace *self)
     peas_extension_set_foreach (self->addins,
                                 ide_greeter_workspace_filter_sections,
                                 self);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->empty_state),
+                          !ide_greeter_workspace_has_match (self));
 }
 
 static void
@@ -591,6 +620,7 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, buttons_section);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, clone_surface);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, empty_state);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, left_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, projects_action_bar);
@@ -676,6 +706,9 @@ ide_greeter_workspace_add_section (IdeGreeterWorkspace *self,
 
   gtk_widget_set_visible (GTK_WIDGET (section),
                           ide_greeter_section_filter (section, NULL));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->empty_state),
+                          !ide_greeter_workspace_has_match (self));
 }
 
 /**
