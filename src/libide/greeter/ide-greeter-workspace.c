@@ -65,6 +65,7 @@ struct _IdeGreeterWorkspace
   GtkButton                *back_button;
   GtkButton                *select_button;
   GtkActionBar             *action_bar;
+  GtkActionBar             *projects_action_bar;
   GtkLabel                 *title;
   IdeGreeterButtonsSection *buttons_section;
 
@@ -587,15 +588,16 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, action_bar);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, buttons_section);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, back_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, buttons_section);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, clone_surface);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, left_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, projects_action_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, sections);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, select_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, surfaces);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, sections);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
 
@@ -807,6 +809,7 @@ ide_greeter_workspace_set_selection_mode (IdeGreeterWorkspace *self,
                              ide_greeter_workspace_set_selection_mode_cb,
                              GINT_TO_POINTER (selection_mode));
       gtk_widget_set_visible (GTK_WIDGET (self->action_bar), selection_mode);
+      gtk_widget_set_visible (GTK_WIDGET (self->projects_action_bar), !selection_mode);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SELECTION_MODE]);
     }
 }
