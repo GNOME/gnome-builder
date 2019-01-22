@@ -57,6 +57,7 @@ struct _IdeProjectInfo
   gchar      *description;
   gchar     **languages;
   gchar      *vcs_uri;
+  GIcon      *icon;
 
   gint        priority;
 
@@ -73,6 +74,8 @@ enum {
   PROP_DIRECTORY,
   PROP_DOAP,
   PROP_FILE,
+  PROP_ICON,
+  PROP_ICON_NAME,
   PROP_ID,
   PROP_IS_RECENT,
   PROP_LANGUAGES,
@@ -374,6 +377,7 @@ ide_project_info_finalize (GObject *object)
   g_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
   g_clear_object (&self->file);
+  g_clear_object (&self->icon);
 
   G_OBJECT_CLASS (ide_project_info_parent_class)->finalize (object);
 }
@@ -410,6 +414,10 @@ ide_project_info_get_property (GObject    *object,
 
     case PROP_FILE:
       g_value_set_object (value, ide_project_info_get_file (self));
+      break;
+
+    case PROP_ICON:
+      g_value_set_object (value, ide_project_info_get_icon (self));
       break;
 
     case PROP_ID:
@@ -479,6 +487,14 @@ ide_project_info_set_property (GObject      *object,
       ide_project_info_set_file (self, g_value_get_object (value));
       break;
 
+    case PROP_ICON:
+      ide_project_info_set_icon (self, g_value_get_object (value));
+      break;
+
+    case PROP_ICON_NAME:
+      ide_project_info_set_icon_name (self, g_value_get_string (value));
+      break;
+
     case PROP_ID:
       ide_project_info_set_id (self, g_value_get_string (value));
       break;
@@ -541,6 +557,20 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          "The project description.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ICON] =
+    g_param_spec_object ("icon",
+                         "Icon",
+                         "The icon for the project",
+                         G_TYPE_ICON,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name",
+                         "Icon Name",
+                         "The icon-name for the project",
+                         NULL,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -797,4 +827,46 @@ ide_project_info_set_id (IdeProjectInfo *self,
       self->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
     }
+}
+
+/**
+ * ide_project_info_get_icon:
+ * @self: a #IdeProjectInfo
+ *
+ * Gets the #IdeProjectInfo:icon property.
+ *
+ * Returns: (transfer none) (nullable): a #GIcon or %NULL
+ *
+ * Since: 3.32
+ */
+GIcon *
+ide_project_info_get_icon (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->icon;
+}
+
+void
+ide_project_info_set_icon (IdeProjectInfo *self,
+                           GIcon          *icon)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+  g_return_if_fail (!icon || G_IS_ICON (icon));
+
+  if (g_set_object (&self->icon, icon))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON]);
+}
+
+void
+ide_project_info_set_icon_name (IdeProjectInfo *self,
+                                const gchar    *icon_name)
+{
+  g_autoptr(GIcon) icon = NULL;
+
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  if (icon_name != NULL)
+    icon = g_themed_icon_new (icon_name);
+  ide_project_info_set_icon (self, icon);
 }

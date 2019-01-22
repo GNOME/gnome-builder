@@ -57,6 +57,14 @@ IDE_AVAILABLE_IN_3_32
 void                 ide_project_info_set_doap              (IdeProjectInfo  *self,
                                                              IdeDoap         *doap);
 IDE_AVAILABLE_IN_3_32
+GIcon               *ide_project_info_get_icon              (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_icon              (IdeProjectInfo  *self,
+                                                             GIcon           *icon);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_icon_name         (IdeProjectInfo  *self,
+                                                             const gchar     *icon_name);
+IDE_AVAILABLE_IN_3_32
 const gchar         *ide_project_info_get_build_system_hint (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_3_32
 const gchar         *ide_project_info_get_build_system_name (IdeProjectInfo  *self);
