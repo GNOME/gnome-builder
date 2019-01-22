@@ -18,7 +18,7 @@
                  whole surface changing below it. -->
             <property name="transitions-enabled">false</property>
             <property name="has-tooltip">true</property>
-            <property name="tooltip-text" translatable="yes">Change workspace surface</property>
+            <property name="tooltip-text" translatable="yes">Switch surface</property>
           </object>
         </child>
         <child type="right">
