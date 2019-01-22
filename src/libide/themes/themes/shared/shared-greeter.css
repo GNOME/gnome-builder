@@ -6,10 +6,10 @@
  */
 .greeter list row {
   border-bottom: 1px solid alpha(@borders, 0.2);
+  transition-property: background, opacity;
 }
 .greeter list row:last-child {
   border-bottom: none;
-  transition-duration: 0;
 }
 .greeter frame border {
   border-color: alpha(@borders, 0.6);
