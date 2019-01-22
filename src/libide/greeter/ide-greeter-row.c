@@ -71,6 +71,15 @@ ide_greeter_row_new (void)
 }
 
 static void
+ide_greeter_row_get_preferred_width (GtkWidget *widget,
+                                     gint      *min_width,
+                                     gint      *nat_width)
+{
+  *min_width = 600;
+  *nat_width = 600;
+}
+
+static void
 ide_greeter_row_finalize (GObject *object)
 {
   IdeGreeterRow *self = (IdeGreeterRow *)object;
@@ -140,6 +149,8 @@ ide_greeter_row_class_init (IdeGreeterRowClass *klass)
   object_class->finalize = ide_greeter_row_finalize;
   object_class->get_property = ide_greeter_row_get_property;
   object_class->set_property = ide_greeter_row_set_property;
+
+  widget_class->get_preferred_width = ide_greeter_row_get_preferred_width;
 
   /**
    * IdeGreeterRow:project-info:
