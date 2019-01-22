@@ -293,7 +293,6 @@ src/plugins/project-tree/gbp-rename-file-popover.ui
 src/plugins/project-tree/gtk/menus.ui
 src/plugins/qemu/gbp-qemu-device-provider.c
 src/plugins/quick-highlight/gbp-quick-highlight-preferences.c
-src/plugins/recent/gbp-recent-project-row.c
 src/plugins/recent/gbp-recent-section.c
 src/plugins/recent/gbp-recent-section.ui
 src/plugins/retab/gbp-retab-editor-page-addin.c
