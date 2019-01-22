@@ -30,6 +30,7 @@ from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Ide
+from gi.repository import Jsonrpc
 
 DEV_MODE = False
 
@@ -38,6 +39,8 @@ class RlsService(Ide.Object):
     _has_started = False
     _supervisor = None
     _monitor = None
+    _notif = None
+    _nactive = {}
 
     @classmethod
     def from_context(klass, context):
@@ -51,6 +54,67 @@ class RlsService(Ide.Object):
     def client(self, value):
         self._client = value
         self.notify('client')
+
+    def parse_window_progress(self, params):
+        """
+        I hope this can be simplified, on the other hand, rls is sending us inconsistent fields
+        foreach 'params'.
+        the field 'done' is True when, obviously True. But the field is not send along when False.
+        """
+        done = False
+        title = None
+        percentage = None
+        id = None
+        message = None
+
+        done_variant = params.lookup_value('done', GLib.VariantType.new('b'))
+        id_variant = params.lookup_value('id', GLib.VariantType.new('s'))
+        title_variant = params.lookup_value('title', GLib.VariantType.new('s'))
+        message_variant = params.lookup_value('message', GLib.VariantType.new('s'))
+        percentage_variant = params.lookup_value('percentage', GLib.VariantType.new('d'))
+
+        if done_variant is not None:
+            done = done_variant.get_boolean()
+        if id_variant is not None:
+            id = id_variant.get_string()
+        if title_variant is not None:
+            title = title_variant.get_string()
+        if message_variant is not None:
+            message = message_variant.get_string()
+        if percentage_variant is not None:
+            percentage = percentage_variant.get_double()
+
+        return (id, title, message, percentage, done)
+
+    def on_window_progress(self, client, method, params):
+        if method == 'window/progress':
+            (id, title, message, percentage, done) = self.parse_window_progress(params)
+
+            # Lets avoid clashing with other notifications
+            id = '+'.join([str(self), id])
+
+            context = self.get_context()
+            notifs = context.peek_child_typed(Ide.Notifications)
+            notif = Ide.Notifications.find_by_id(notifs, id)
+
+            if notif is None:
+                notif = Ide.Notification()
+                notif.set_id(id)
+                notif.attach(self)
+
+            if done is False:
+                status = ''
+                if message is not None:
+                    status = ' '.join([title, message])
+                else:
+                    status = ' '.join([title, '...'])
+
+                if percentage is not None:
+                    notif.set_has_progress(True)
+                    notif.set_progress(percentage)
+                notif.set_title(status)
+            if done is True:
+                notif.withdraw_in_seconds(1)
 
     def do_parent_set(self, parent):
         """
@@ -168,6 +232,7 @@ class RlsService(Ide.Object):
         self._client = Ide.LspClient.new(io_stream)
         self.append(self._client)
         self._client.add_language('rust')
+        self._client.connect("notification", self.on_window_progress)
         self._client.start()
         self.notify('client')
 
