@@ -69,6 +69,7 @@ G_DEFINE_TYPE_WITH_CODE (IdeTruncateModel, ide_truncate_model, G_TYPE_OBJECT,
 
 enum {
   PROP_0,
+  PROP_CAN_EXPAND,
   PROP_CHILD_MODEL,
   PROP_EXPANDED,
   PROP_MAX_ITEMS,
@@ -127,6 +128,8 @@ ide_truncate_model_items_changed_cb (IdeTruncateModel *self,
     }
 
   self->prev_n_items = n_items;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_EXPAND]);
 }
 
 static void
@@ -149,6 +152,10 @@ ide_truncate_model_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CAN_EXPAND:
+      g_value_set_boolean (value, ide_truncate_model_get_can_expand (self));
+      break;
+
     case PROP_CHILD_MODEL:
       g_value_set_object (value, ide_truncate_model_get_child_model (self));
       break;
@@ -207,6 +214,13 @@ ide_truncate_model_class_init (IdeTruncateModelClass *klass)
   object_class->finalize = ide_truncate_model_finalize;
   object_class->get_property = ide_truncate_model_get_property;
   object_class->set_property = ide_truncate_model_set_property;
+
+  properties [PROP_CAN_EXPAND] =
+    g_param_spec_boolean ("can-expand",
+                          "Can Expand",
+                          "If the model can be expanded",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeTruncateModel:child-model:
@@ -277,6 +291,7 @@ ide_truncate_model_set_expanded (IdeTruncateModel *self,
                                     0, old_n_items, new_n_items);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXPANDED]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_EXPAND]);
     }
 }
 
@@ -314,6 +329,7 @@ ide_truncate_model_set_max_items (IdeTruncateModel *self,
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MAX_ITEMS]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_EXPAND]);
     }
 }
 
@@ -330,4 +346,13 @@ ide_truncate_model_get_child_model (IdeTruncateModel *self)
   g_return_val_if_fail (IDE_IS_TRUNCATE_MODEL (self), NULL);
 
   return self->child_model;
+}
+
+gboolean
+ide_truncate_model_get_can_expand (IdeTruncateModel *self)
+{
+  g_return_val_if_fail (IDE_IS_TRUNCATE_MODEL (self), FALSE);
+
+  return !self->expanded &&
+         g_list_model_get_n_items (self->child_model) > self->max_items;
 }

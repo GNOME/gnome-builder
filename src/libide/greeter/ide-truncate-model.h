@@ -33,6 +33,7 @@ GListModel       *ide_truncate_model_get_child_model (IdeTruncateModel *self);
 guint             ide_truncate_model_get_max_items   (IdeTruncateModel *self);
 void              ide_truncate_model_set_max_items   (IdeTruncateModel *self,
                                                       guint             max_items);
+gboolean          ide_truncate_model_get_can_expand  (IdeTruncateModel *self);
 gboolean          ide_truncate_model_get_expanded    (IdeTruncateModel *self);
 void              ide_truncate_model_set_expanded    (IdeTruncateModel *self,
                                                       gboolean          expanded);
