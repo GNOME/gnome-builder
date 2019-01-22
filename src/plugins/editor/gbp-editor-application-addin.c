@@ -36,6 +36,52 @@ struct _GbpEditorApplicationAddin
   GObject parent_instance;
 };
 
+static void
+find_workbench_for_dir_cb (IdeWorkbench *workbench,
+                           gpointer      user_data)
+{
+  g_autoptr(GFile) workdir = NULL;
+  IdeContext *context;
+  struct {
+    GFile        *workdir;
+    IdeWorkbench *workbench;
+  } *lookup = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (lookup != NULL);
+
+  if (lookup->workbench != NULL)
+    return;
+
+  context = ide_workbench_get_context (workbench);
+  workdir = ide_context_ref_workdir (context);
+
+  if (g_file_has_prefix (lookup->workdir, workdir) ||
+      g_file_equal (lookup->workdir, workdir))
+    lookup->workbench = workbench;
+}
+
+static IdeWorkbench *
+find_workbench_for_dir (IdeApplication *app,
+                        GFile          *workdir)
+{
+  struct {
+    GFile        *workdir;
+    IdeWorkbench *workbench;
+  } lookup = { workdir, NULL };
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (app));
+  g_assert (G_IS_FILE (workdir));
+
+  ide_application_foreach_workbench (app,
+                                     (GFunc)find_workbench_for_dir_cb,
+                                     &lookup);
+
+  return lookup.workbench ? g_object_ref (lookup.workbench) : NULL;
+}
+
 static GFile *
 get_common_ancestor (GPtrArray *files)
 {
@@ -123,13 +169,11 @@ gbp_editor_application_addin_handle_command_line (IdeApplicationAddin     *addin
                                                   GApplicationCommandLine *cmdline)
 {
   g_autoptr(IdeWorkbench) workbench = NULL;
-  IdeEditorWorkspace *workspace;
   IdeApplication *app = (IdeApplication *)application;
   g_autoptr(GPtrArray) files = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_auto(GStrv) argv = NULL;
   GVariantDict *options;
-  IdeContext *context;
   gint argc;
 
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
@@ -159,28 +203,37 @@ gbp_editor_application_addin_handle_command_line (IdeApplicationAddin     *addin
     g_ptr_array_add (files,
                      g_application_command_line_create_file_for_arg (cmdline, argv[i]));
 
-  workbench = ide_workbench_new ();
-  ide_application_add_workbench (app, workbench);
-
+  /* If we find an existing workbench that is an ancestor, or equal to the
+   * common ancestor, then we'll re-use it instead of creating a new one.
+   */
   workdir = get_common_ancestor (files);
-  context = ide_workbench_get_context (workbench);
+  if (!(workbench = find_workbench_for_dir (application, workdir)))
+    {
+      IdeEditorWorkspace *workspace;
+      IdeContext *context;
 
-  /* Setup the working directory to top-most common ancestor of the
-   * files. That way we can still get somewhat localized search results
-   * and other workspace features.
-   */
-  if (workdir != NULL)
-    ide_context_set_workdir (context, workdir);
+      workbench = ide_workbench_new ();
+      ide_application_add_workbench (app, workbench);
 
-  workspace = ide_editor_workspace_new (app);
-  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+      context = ide_workbench_get_context (workbench);
 
-  /* Since we are opening a toplevel window, we want to restore it using
-   * the same window sizing as the primary IDE window.
-   */
-  _ide_window_settings_register (GTK_WINDOW (workspace));
+      /* Setup the working directory to top-most common ancestor of the
+       * files. That way we can still get somewhat localized search results
+       * and other workspace features.
+       */
+      if (workdir != NULL)
+        ide_context_set_workdir (context, workdir);
 
-  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+      workspace = ide_editor_workspace_new (app);
+      ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+      /* Since we are opening a toplevel window, we want to restore it using
+       * the same window sizing as the primary IDE window.
+       */
+      _ide_window_settings_register (GTK_WINDOW (workspace));
+
+      ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+    }
 
   g_assert (files->len > 0);
 
@@ -201,32 +254,42 @@ gbp_editor_application_addin_open (IdeApplicationAddin  *addin,
                                    const gchar          *hint)
 {
   g_autoptr(IdeWorkbench) workbench = NULL;
-  IdeEditorWorkspace *workspace;
   g_autoptr(GFile) workdir = NULL;
-  IdeContext *context;
 
-  workbench = ide_workbench_new ();
-  ide_application_add_workbench (application, workbench);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (application));
+  g_assert (files != NULL);
+  g_assert (n_files > 0);
 
   workdir = get_common_ancestor_array (files, n_files);
-  context = ide_workbench_get_context (workbench);
 
-  /* Setup the working directory to top-most common ancestor of the
-   * files. That way we can still get somewhat localized search results
-   * and other workspace features.
-   */
-  if (workdir != NULL)
-    ide_context_set_workdir (context, workdir);
+  if (!(workbench = find_workbench_for_dir (application, workdir)))
+    {
+      IdeEditorWorkspace *workspace;
+      IdeContext *context;
 
-  workspace = ide_editor_workspace_new (application);
-  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+      workbench = ide_workbench_new ();
+      ide_application_add_workbench (application, workbench);
 
-  /* Since we are opening a toplevel window, we want to restore it using
-   * the same window sizing as the primary IDE window.
-   */
-  _ide_window_settings_register (GTK_WINDOW (workspace));
+      context = ide_workbench_get_context (workbench);
 
-  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+      /* Setup the working directory to top-most common ancestor of the
+       * files. That way we can still get somewhat localized search results
+       * and other workspace features.
+       */
+      if (workdir != NULL)
+        ide_context_set_workdir (context, workdir);
+
+      workspace = ide_editor_workspace_new (application);
+      ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+      /* Since we are opening a toplevel window, we want to restore it using
+       * the same window sizing as the primary IDE window.
+       */
+      _ide_window_settings_register (GTK_WINDOW (workspace));
+
+      ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+    }
 
   ide_workbench_open_all_async (workbench,
                                 files,
