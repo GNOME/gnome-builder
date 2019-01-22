@@ -459,7 +459,10 @@ ide_file_settings__init_cb (GObject      *object,
   g_assert (G_IS_ASYNC_INITABLE (initable));
 
   if (!g_async_initable_init_finish (initable, result, &error))
-    g_warning ("%s", error->message);
+    {
+      if (!ide_error_ignore (error))
+        g_warning ("%s", error->message);
+    }
 
   if (--priv->unsettled_count == 0)
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTLED]);
@@ -519,7 +522,10 @@ ide_file_settings_new (IdeObject   *parent,
           g_autoptr(GError) error = NULL;
 
           if (!g_initable_init (G_INITABLE (child), NULL, &error))
-            g_warning ("%s", error->message);
+            {
+              if (!ide_error_ignore (error))
+                g_warning ("%s", error->message);
+            }
         }
       else if (G_IS_ASYNC_INITABLE (child))
         {
