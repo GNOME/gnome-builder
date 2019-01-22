@@ -107,7 +107,7 @@ gbp_recent_section_filter_cb (GtkListBoxRow *row,
 
   if (filter->spec != NULL)
     {
-      const gchar *search_text;
+      g_autofree gchar *search_text = NULL;
 
       if ((search_text = ide_greeter_row_get_search_text (IDE_GREETER_ROW (row))))
         match = dzl_pattern_spec_match (filter->spec, search_text);
