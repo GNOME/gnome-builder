@@ -324,12 +324,16 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
           const gchar *build_system = ide_project_info_get_build_system_name (project_info);
           GFile *directory = ide_project_info_get_directory (project_info);
           const gchar *desc = ide_project_info_get_description (project_info);
+          GIcon *icon = ide_project_info_get_icon (project_info);
 
           if (!ide_str_empty0 (desc))
             gtk_widget_set_tooltip_text (GTK_WIDGET (self), desc);
 
-          if ((collapsed = ide_path_collapse (g_file_peek_path (directory))))
-            desc = collapsed;
+          if (directory != NULL)
+            {
+              if ((collapsed = ide_path_collapse (g_file_peek_path (directory))))
+                desc = collapsed;
+            }
 
           gtk_label_set_label (priv->title, name);
           gtk_label_set_label (priv->subtitle, desc);
@@ -341,8 +345,15 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
             {
               qsort (languages, g_strv_length (languages), sizeof (gchar*), compare_language);
               for (guint i = 0; languages[i] != NULL; i++)
-                ide_greeter_row_add_tag (self, languages[i], TAG_LANGUAGE);
+                ide_greeter_row_add_tag (self, g_strstrip (languages[i]), TAG_LANGUAGE);
             }
+
+          if (icon != NULL)
+            g_object_set (priv->image,
+                          "pixel-size", 32,
+                          "gicon", icon,
+                          "visible", icon != NULL,
+                          NULL);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_INFO]);
