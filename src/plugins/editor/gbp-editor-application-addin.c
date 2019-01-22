@@ -89,7 +89,7 @@ gbp_editor_application_addin_add_option_entries (IdeApplicationAddin *addin,
                                  'e',
                                  G_OPTION_FLAG_IN_MAIN,
                                  G_OPTION_ARG_NONE,
-                                 _("Use minial editor interface"),
+                                 _("Use minimal editor interface"),
                                  NULL);
 }
 
