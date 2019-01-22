@@ -23,7 +23,6 @@
 #include <glib/gi18n.h>
 #include <libide-greeter.h>
 
-#include "gbp-recent-project-row.h"
 #include "gbp-recent-section.h"
 
 struct _GbpRecentSection
@@ -103,15 +102,15 @@ gbp_recent_section_filter_cb (GtkListBoxRow *row,
   } *filter = user_data;
   gboolean match = TRUE;
 
-  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+  g_assert (IDE_IS_GREETER_ROW (row));
   g_assert (filter != NULL);
 
   if (filter->spec != NULL)
     {
       const gchar *search_text;
 
-      search_text = gbp_recent_project_row_get_search_text (GBP_RECENT_PROJECT_ROW (row));
-      match = dzl_pattern_spec_match (filter->spec, search_text);
+      if ((search_text = ide_greeter_row_get_search_text (IDE_GREETER_ROW (row))))
+        match = dzl_pattern_spec_match (filter->spec, search_text);
     }
 
   gtk_widget_set_visible (GTK_WIDGET (row), match);
@@ -153,13 +152,13 @@ gbp_recent_section_activate_first_cb (GtkWidget *widget,
     gboolean handled;
   } *activate = user_data;
 
-  g_assert (GBP_IS_RECENT_PROJECT_ROW (widget));
+  g_assert (IDE_IS_GREETER_ROW (widget));
   g_assert (activate != NULL);
 
   if (activate->handled || !gtk_widget_get_visible (widget))
     return;
 
-  project_info = gbp_recent_project_row_get_project_info (GBP_RECENT_PROJECT_ROW (widget));
+  project_info = ide_greeter_row_get_project_info (IDE_GREETER_ROW (widget));
   ide_greeter_section_emit_project_activated (IDE_GREETER_SECTION (activate->self), project_info);
 
   activate->handled = TRUE;
@@ -190,13 +189,13 @@ static void
 gbp_recent_section_set_selection_mode_cb (GtkWidget *widget,
                                           gpointer   user_data)
 {
-  GbpRecentProjectRow *row = (GbpRecentProjectRow *)widget;
+  IdeGreeterRow *row = (IdeGreeterRow *)widget;
   gboolean *selection_mode = user_data;
 
-  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+  g_assert (IDE_IS_GREETER_ROW (row));
   g_assert (selection_mode != NULL);
 
-  gbp_recent_project_row_set_selection_mode (row, *selection_mode);
+  ide_greeter_row_set_selection_mode (row, *selection_mode);
   g_object_set (row, "selected", FALSE, NULL);
 }
 
@@ -221,11 +220,11 @@ static void
 gbp_recent_section_collect_selected_cb (GtkWidget *widget,
                                         gpointer   user_data)
 {
-  GbpRecentProjectRow *row = (GbpRecentProjectRow *)widget;
+  IdeGreeterRow *row = (IdeGreeterRow *)widget;
   GList **list = user_data;
   gboolean selected = FALSE;
 
-  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+  g_assert (IDE_IS_GREETER_ROW (row));
   g_assert (list != NULL);
 
   g_object_get (row, "selected", &selected, NULL);
@@ -234,7 +233,7 @@ gbp_recent_section_collect_selected_cb (GtkWidget *widget,
     {
       IdeProjectInfo *project_info;
 
-      project_info = gbp_recent_project_row_get_project_info (row);
+      project_info = ide_greeter_row_get_project_info (row);
       *list = g_list_prepend (*list, g_object_ref (project_info));
       gtk_widget_destroy (GTK_WIDGET (row));
     }
@@ -521,23 +520,23 @@ G_DEFINE_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,
                                                 greeter_section_iface_init))
 
 static void
-gbp_recent_section_notify_row_selected (GbpRecentSection    *self,
-                                        GParamSpec          *pspec,
-                                        GbpRecentProjectRow *row)
+gbp_recent_section_notify_row_selected (GbpRecentSection *self,
+                                        GParamSpec       *pspec,
+                                        IdeGreeterRow    *row)
 {
   g_assert (GBP_IS_RECENT_SECTION (self));
-  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+  g_assert (IDE_IS_GREETER_ROW (row));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SELECTION]);
 }
 
 static void
-gbp_recent_section_row_activated (GbpRecentSection    *self,
-                                  GbpRecentProjectRow *row,
-                                  GtkListBox          *list_box)
+gbp_recent_section_row_activated (GbpRecentSection *self,
+                                  IdeGreeterRow    *row,
+                                  GtkListBox       *list_box)
 {
   g_assert (GBP_IS_RECENT_SECTION (self));
-  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+  g_assert (IDE_IS_GREETER_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
   if (self->selection_mode)
@@ -551,7 +550,7 @@ gbp_recent_section_row_activated (GbpRecentSection    *self,
     {
       IdeProjectInfo *project_info;
 
-      project_info = gbp_recent_project_row_get_project_info (row);
+      project_info = ide_greeter_row_get_project_info (row);
       ide_greeter_section_emit_project_activated (IDE_GREETER_SECTION (self), project_info);
     }
 }
@@ -561,13 +560,13 @@ create_widget_func (gpointer item,
                     gpointer user_data)
 {
   IdeProjectInfo *project_info = item;
-  GbpRecentProjectRow *row;
   GbpRecentSection *self = user_data;
+  IdeGreeterRow *row;
 
   g_assert (IDE_IS_PROJECT_INFO (project_info));
   g_assert (GBP_IS_RECENT_SECTION (self));
 
-  row = g_object_new (GBP_TYPE_RECENT_PROJECT_ROW,
+  row = g_object_new (IDE_TYPE_GREETER_ROW,
                       "project-info", project_info,
                       "visible", TRUE,
                       NULL);
@@ -635,8 +634,6 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/recent/gbp-recent-section.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpRecentSection, listbox);
   gtk_widget_class_bind_template_callback (widget_class, gbp_recent_section_row_activated);
-
-  g_type_ensure (GBP_TYPE_RECENT_PROJECT_ROW);
 }
 
 static gboolean

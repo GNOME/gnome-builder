@@ -1,6 +1,5 @@
 plugins_sources += files([
   'recent-plugin.c',
-  'gbp-recent-project-row.c',
   'gbp-recent-section.c',
   'gbp-recent-workbench-addin.c',
 ])
