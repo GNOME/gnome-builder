@@ -373,9 +373,16 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
 gchar *
 ide_greeter_row_get_search_text (IdeGreeterRow *self)
 {
+  IdeGreeterRowPrivate *priv = ide_greeter_row_get_instance_private (self);
+  GString *str;
+
   g_return_val_if_fail (IDE_IS_GREETER_ROW (self), NULL);
 
-  return NULL;
+  str = g_string_new (NULL);
+  g_string_append_printf (str, "%s ", gtk_label_get_text (priv->title) ?: "");
+  g_string_append_printf (str, "%s ", gtk_label_get_text (priv->subtitle) ?: "");
+
+  return g_string_free (g_steal_pointer (&str), FALSE);
 }
 
 gboolean
