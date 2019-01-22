@@ -109,15 +109,21 @@
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">32</property>
                                 <property name="visible">true</property>
-                                <child>
-                                  <object class="IdeGreeterButtonsSection" id="buttons_section">
-                                    <property name="visible">true</property>
-                                  </object>
-                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkActionBar" id="project_action_bar">
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="IdeGreeterButtonsSection" id="buttons_section">
+                        <property name="halign">center</property>
+                        <property name="visible">true</property>
                       </object>
                     </child>
                   </object>

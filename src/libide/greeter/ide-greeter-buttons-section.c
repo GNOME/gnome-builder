@@ -43,41 +43,18 @@ ide_greeter_buttons_section_class_init (IdeGreeterButtonsSectionClass *klass)
 static void
 ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
 {
-  PangoAttrList *attrs;
-  GtkBox *vbox;
-  GtkLabel *label;
-
-  g_object_set (self,
-                "width-request", 600,
-                "halign", GTK_ALIGN_CENTER,
-                NULL);
-
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-
-  vbox = g_object_new (GTK_TYPE_BOX,
-                       "orientation", GTK_ORIENTATION_VERTICAL,
-                       "spacing", 6,
-                       "visible", TRUE,
-                       NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (vbox));
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "attributes", attrs,
-                        "xalign", 0.0f,
-                        "label", _("Add a Project"),
-                        "visible", TRUE,
-                        NULL);
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "dim-label");
-  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
-
   self->box = g_object_new (DZL_TYPE_PRIORITY_BOX,
+                            "margin-bottom", 6,
+                            "margin-top", 6,
                             "orientation", GTK_ORIENTATION_HORIZONTAL,
                             "homogeneous", TRUE,
+                            "halign", GTK_ALIGN_CENTER,
+                            "hexpand", TRUE,
                             "spacing", 12,
+                            "width-request", 600,
                             "visible", TRUE,
                             NULL);
-  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (self->box));
+  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->box));
 
   ide_greeter_buttons_section_add_button (self,
                                           0,
@@ -94,8 +71,6 @@ ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
                                                         "action-name", "win.surface",
                                                         "action-target", g_variant_new_string ("clone"),
                                                         NULL));
-
-  g_clear_pointer (&attrs, pango_attr_list_unref);
 }
 
 void

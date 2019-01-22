@@ -27,6 +27,7 @@
             <property name="visible">true</property>
             <child>
               <object class="GtkLabel" id="title">
+                <property name="ellipsize">end</property>
                 <property name="visible">true</property>
                 <property name="xalign">0.0</property>
                 <attributes>
@@ -36,6 +37,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="subtitle">
+                <property name="ellipsize">end</property>
                 <property name="visible">true</property>
                 <property name="xalign">0.0</property>
                 <style>
