@@ -136,9 +136,12 @@ ide_project_info_set_languages (IdeProjectInfo  *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  g_strfreev (self->languages);
-  self->languages = g_strdupv (languages);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGES]);
+  if (languages != self->languages)
+    {
+      g_strfreev (self->languages);
+      self->languages = g_strdupv (languages);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGES]);
+    }
 }
 
 gint
