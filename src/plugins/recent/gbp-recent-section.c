@@ -23,15 +23,19 @@
 #include <glib/gi18n.h>
 #include <libide-greeter.h>
 
+#include "ide-truncate-model.h"
+
 #include "gbp-recent-section.h"
 
 struct _GbpRecentSection
 {
-  GtkBin      parent_instance;
+  GtkBin            parent_instance;
 
-  GtkListBox *listbox;
+  IdeTruncateModel *truncate;
 
-  guint       selection_mode : 1;
+  GtkListBox       *listbox;
+
+  guint             selection_mode : 1;
 };
 
 enum {
@@ -102,7 +106,9 @@ gbp_recent_section_filter_cb (GtkListBoxRow *row,
   } *filter = user_data;
   gboolean match = TRUE;
 
-  g_assert (IDE_IS_GREETER_ROW (row));
+  if (!IDE_IS_GREETER_ROW (row))
+    return;
+
   g_assert (filter != NULL);
 
   if (filter->spec != NULL)
@@ -130,6 +136,10 @@ gbp_recent_section_filter (IdeGreeterSection *section,
 
   g_assert (GBP_IS_RECENT_SECTION (self));
 
+  /* Expand the truncation model if necessary */
+  if (spec != NULL)
+    ide_truncate_model_set_expanded (self->truncate, TRUE);
+
   /* We don't use filter func here so that we know if any
    * rows matched. We have to hide our widget if there are
    * no visible matches.
@@ -152,10 +162,11 @@ gbp_recent_section_activate_first_cb (GtkWidget *widget,
     gboolean handled;
   } *activate = user_data;
 
-  g_assert (IDE_IS_GREETER_ROW (widget));
   g_assert (activate != NULL);
 
-  if (activate->handled || !gtk_widget_get_visible (widget))
+  if (!IDE_IS_GREETER_ROW (widget) ||
+      activate->handled ||
+      !gtk_widget_get_visible (widget))
     return;
 
   project_info = ide_greeter_row_get_project_info (IDE_GREETER_ROW (widget));
@@ -192,8 +203,10 @@ gbp_recent_section_set_selection_mode_cb (GtkWidget *widget,
   IdeGreeterRow *row = (IdeGreeterRow *)widget;
   gboolean *selection_mode = user_data;
 
-  g_assert (IDE_IS_GREETER_ROW (row));
   g_assert (selection_mode != NULL);
+
+  if (!IDE_IS_GREETER_ROW (row))
+    return;
 
   ide_greeter_row_set_selection_mode (row, *selection_mode);
   g_object_set (row, "selected", FALSE, NULL);
@@ -224,8 +237,10 @@ gbp_recent_section_collect_selected_cb (GtkWidget *widget,
   GList **list = user_data;
   gboolean selected = FALSE;
 
-  g_assert (IDE_IS_GREETER_ROW (row));
   g_assert (list != NULL);
+
+  if (!IDE_IS_GREETER_ROW (row))
+    return;
 
   g_object_get (row, "selected", &selected, NULL);
 
@@ -536,8 +551,13 @@ gbp_recent_section_row_activated (GbpRecentSection *self,
                                   GtkListBox       *list_box)
 {
   g_assert (GBP_IS_RECENT_SECTION (self));
-  g_assert (IDE_IS_GREETER_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
+
+  if (!IDE_IS_GREETER_ROW (row))
+    {
+      ide_truncate_model_set_expanded (self->truncate, TRUE);
+      return;
+    }
 
   if (self->selection_mode)
     {
@@ -577,7 +597,20 @@ create_widget_func (gpointer item,
                            self,
                            G_CONNECT_SWAPPED);
 
+  if (self->selection_mode)
+    ide_greeter_row_set_selection_mode (row, TRUE);
+
   return GTK_WIDGET (row);
+}
+
+static void
+gbp_recent_section_destroy (GtkWidget *widget)
+{
+  GbpRecentSection *self = (GbpRecentSection *)widget;
+
+  g_clear_object (&self->truncate);
+
+  GTK_WIDGET_CLASS (gbp_recent_section_parent_class)->destroy (widget);
 }
 
 static void
@@ -585,14 +618,32 @@ gbp_recent_section_constructed (GObject *object)
 {
   GbpRecentSection *self = (GbpRecentSection *)object;
   IdeRecentProjects *projects;
+  GtkListBoxRow *row;
+  GtkImage *image;
 
   G_OBJECT_CLASS (gbp_recent_section_parent_class)->constructed (object);
 
   projects = ide_recent_projects_get_default ();
 
+  self->truncate = ide_truncate_model_new (G_LIST_MODEL (projects));
+
   gtk_list_box_bind_model (self->listbox,
-                           G_LIST_MODEL (projects),
+                           G_LIST_MODEL (self->truncate),
                            create_widget_func, self, NULL);
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "visible", TRUE,
+                      NULL);
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "margin", 8,
+                        "icon-name", "view-more-symbolic",
+                        "visible", TRUE,
+                        NULL);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (image));
+  gtk_container_add (GTK_CONTAINER (self->listbox), GTK_WIDGET (row));
+
+  g_object_bind_property (self->truncate, "expanded", row, "visible",
+                          G_BINDING_INVERT_BOOLEAN);
 }
 
 static void
@@ -622,6 +673,8 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
 
   object_class->constructed = gbp_recent_section_constructed;
   object_class->get_property = gbp_recent_section_get_property;
+
+  widget_class->destroy = gbp_recent_section_destroy;
 
   properties [PROP_HAS_SELECTION] =
     g_param_spec_boolean ("has-selection", NULL, NULL,
