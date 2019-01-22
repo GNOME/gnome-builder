@@ -116,8 +116,8 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
                          "visible", TRUE,
                          NULL);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("Cancel"), GTK_RESPONSE_CANCEL,
-                          _("Open"), GTK_RESPONSE_OK,
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Open"), GTK_RESPONSE_OK,
                           NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
