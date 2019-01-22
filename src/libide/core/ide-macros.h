@@ -55,6 +55,13 @@ G_BEGIN_DECLS
   ({ IDE_PTR_ARRAY_CLEAR_FREE_FUNC (*(arptr)); \
      g_steal_pointer ((arptr)); })
 
+static inline gboolean
+ide_error_ignore (const GError *error)
+{
+  return g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
+         g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
+}
+
 static inline void
 _g_object_unref0 (gpointer instance)
 {
