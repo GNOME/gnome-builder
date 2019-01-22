@@ -642,8 +642,8 @@ gbp_recent_section_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (image));
   gtk_container_add (GTK_CONTAINER (self->listbox), GTK_WIDGET (row));
 
-  g_object_bind_property (self->truncate, "expanded", row, "visible",
-                          G_BINDING_INVERT_BOOLEAN);
+  g_object_bind_property (self->truncate, "can-expand", row, "visible",
+                          G_BINDING_SYNC_CREATE);
 }
 
 static void
