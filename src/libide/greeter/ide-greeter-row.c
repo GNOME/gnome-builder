@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <stdlib.h>
 
 #include "ide-greeter-row.h"
@@ -303,6 +304,17 @@ compare_language (gconstpointer a,
   return g_strcmp0 (*(gchar **)a, *(gchar **)b);
 }
 
+static gboolean
+ignore_build_system (const gchar *str)
+{
+  /* Handle translated and untranslated strings */
+  return ide_str_empty0 (str) ||
+         g_str_equal (str, "Directory") ||
+         g_str_equal (str, "Fallback") ||
+         g_str_equal (str, _("Directory")) ||
+         g_str_equal (str, _("Fallback"));
+}
+
 void
 ide_greeter_row_set_project_info (IdeGreeterRow  *self,
                                   IdeProjectInfo *project_info)
@@ -338,7 +350,7 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
           gtk_label_set_label (priv->title, name);
           gtk_label_set_label (priv->subtitle, desc);
 
-          if (build_system != NULL)
+          if (!ignore_build_system (build_system))
             ide_greeter_row_add_tag (self, build_system, TAG_BUILD_SYSTEM);
 
           if (languages != NULL)
