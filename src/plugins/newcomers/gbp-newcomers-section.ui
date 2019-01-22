@@ -44,6 +44,17 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
+                    <property name="name" translatable="yes">Builder</property>
+                    <property name="description" translatable="yes">An IDE for writing GNOME-based software</property>
+                    <property name="icon-name">org.gnome.Builder</property>
+                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-builder.git</property>
+                    <property name="visible">true</property>
+                    <property name="languages">C
+Python</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Calendar</property>
                     <property name="description" translatable="yes">Calendar application for GNOME</property>
                     <property name="icon-name">org.gnome.Calendar</property>
