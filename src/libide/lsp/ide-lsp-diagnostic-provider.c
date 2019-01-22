@@ -85,7 +85,6 @@ ide_lsp_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
 
   g_assert (IDE_IS_LSP_DIAGNOSTIC_PROVIDER (self));
   g_assert (G_IS_FILE (file));
-  g_assert (content != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
