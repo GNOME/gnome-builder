@@ -96,21 +96,17 @@ gbp_doap_workbench_addin_find_doap_cb (GObject      *object,
 }
 
 static void
-gbp_doap_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
-                                             IdeProjectInfo      *project_info,
-                                             GCancellable        *cancellable,
-                                             GAsyncReadyCallback  callback,
-                                             gpointer             user_data)
+gbp_doap_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
+                                         IdeProjectInfo    *project_info)
 {
   g_autoptr(IdeTask) task = NULL;
   GFile *directory;
 
   g_assert (GBP_IS_DOAP_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = ide_task_new (addin, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_doap_workbench_addin_load_project_async);
+  task = ide_task_new (addin, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, gbp_doap_workbench_addin_project_loaded);
   ide_task_set_task_data (task, g_object_ref (project_info), g_object_unref);
 
   if (!(directory = ide_project_info_get_directory (project_info)))
@@ -122,20 +118,9 @@ gbp_doap_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
   ide_g_file_find_with_depth_async (directory,
                                     "*.doap",
                                     1,
-                                    cancellable,
+                                    NULL,
                                     gbp_doap_workbench_addin_find_doap_cb,
                                     g_steal_pointer (&task));
-}
-
-static gboolean
-gbp_doap_workbench_addin_load_project_finish (IdeWorkbenchAddin  *addin,
-                                              GAsyncResult       *result,
-                                              GError            **error)
-{
-  g_assert (GBP_IS_DOAP_WORKBENCH_ADDIN (addin));
-  g_assert (IDE_IS_TASK (result));
-
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -155,8 +140,7 @@ gbp_doap_workbench_addin_unload (IdeWorkbenchAddin *addin,
 static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
-  iface->load_project_async = gbp_doap_workbench_addin_load_project_async;
-  iface->load_project_finish = gbp_doap_workbench_addin_load_project_finish;
+  iface->project_loaded = gbp_doap_workbench_addin_project_loaded;
   iface->load = gbp_doap_workbench_addin_load;
   iface->unload = gbp_doap_workbench_addin_unload;
 }
