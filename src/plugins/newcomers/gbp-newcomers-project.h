@@ -20,13 +20,13 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <libide-greeter.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_NEWCOMERS_PROJECT (gbp_newcomers_project_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpNewcomersProject, gbp_newcomers_project, GBP, NEWCOMERS_PROJECT, GtkFlowBoxChild)
+G_DECLARE_FINAL_TYPE (GbpNewcomersProject, gbp_newcomers_project, GBP, NEWCOMERS_PROJECT, IdeGreeterRow)
 
 const gchar *gbp_newcomers_project_get_name (GbpNewcomersProject *self);
 const gchar *gbp_newcomers_project_get_uri  (GbpNewcomersProject *self);

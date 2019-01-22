@@ -26,9 +26,9 @@
 
 struct _GbpNewcomersProject
 {
-  GtkFlowBoxChild  parent_instance;
+  IdeGreeterRow    parent_instance;
 
-  gchar           *uri;
+  IdeProjectInfo  *project_info;
 
   GtkLabel        *label;
   GtkImage        *icon;
@@ -37,6 +37,7 @@ struct _GbpNewcomersProject
 
 enum {
   PROP_0,
+  PROP_DESCRIPTION,
   PROP_ICON_NAME,
   PROP_LANGUAGES,
   PROP_NAME,
@@ -44,29 +45,18 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpNewcomersProject, gbp_newcomers_project, GTK_TYPE_FLOW_BOX_CHILD)
+G_DEFINE_TYPE (GbpNewcomersProject, gbp_newcomers_project, IDE_TYPE_GREETER_ROW)
 
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_newcomers_project_set_languages (GbpNewcomersProject *self,
-                                     const gchar * const *languages)
+gbp_newcomers_project_constructed (GObject *object)
 {
-  g_assert (GBP_IS_NEWCOMERS_PROJECT (self));
+  GbpNewcomersProject *self = (GbpNewcomersProject *)object;
 
-  if (languages == NULL)
-    return;
+  G_OBJECT_CLASS (gbp_newcomers_project_parent_class)->constructed (object);
 
-  for (guint i = 0; languages[i] != NULL; i++)
-    {
-      GtkWidget *tag;
-
-      tag = dzl_pill_box_new (languages[i]);
-      gtk_container_add_with_properties (GTK_CONTAINER (self->tags_box), tag,
-                                         "pack-type", GTK_PACK_END,
-                                         NULL);
-      gtk_widget_show (tag);
-    }
+  ide_greeter_row_set_project_info (IDE_GREETER_ROW (self), self->project_info);
 }
 
 static void
@@ -74,7 +64,7 @@ gbp_newcomers_project_destroy (GtkWidget *widget)
 {
   GbpNewcomersProject *self = GBP_NEWCOMERS_PROJECT (widget);
 
-  g_clear_pointer (&self->uri, g_free);
+  g_clear_object (&self->project_info);
 
   GTK_WIDGET_CLASS (gbp_newcomers_project_parent_class)->destroy (widget);
 }
@@ -97,6 +87,10 @@ gbp_newcomers_project_get_property (GObject    *object,
       g_value_set_string (value, gbp_newcomers_project_get_name (self));
       break;
 
+    case PROP_DESCRIPTION:
+      g_value_set_string (value, ide_project_info_get_description (self->project_info));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -113,19 +107,23 @@ gbp_newcomers_project_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_URI:
-      self->uri = g_value_dup_string (value);
+      ide_project_info_set_vcs_uri (self->project_info, g_value_get_string (value));
       break;
 
     case PROP_LANGUAGES:
-      gbp_newcomers_project_set_languages (self, g_value_get_boxed (value));
+      ide_project_info_set_languages (self->project_info, g_value_get_boxed (value));
+      break;
+
+    case PROP_DESCRIPTION:
+      ide_project_info_set_description (self->project_info, g_value_get_string (value));
       break;
 
     case PROP_NAME:
-      gtk_label_set_label (self->label, g_value_get_string (value));
+      ide_project_info_set_name (self->project_info, g_value_get_string (value));
       break;
 
     case PROP_ICON_NAME:
-      g_object_set (self->icon, "icon-name", g_value_get_string (value), NULL);
+      ide_project_info_set_icon_name (self->project_info, g_value_get_string (value));
       break;
 
     default:
@@ -139,6 +137,7 @@ gbp_newcomers_project_class_init (GbpNewcomersProjectClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gbp_newcomers_project_constructed;
   object_class->get_property = gbp_newcomers_project_get_property;
   object_class->set_property = gbp_newcomers_project_set_property;
 
@@ -158,6 +157,13 @@ gbp_newcomers_project_class_init (GbpNewcomersProjectClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_DESCRIPTION] =
+    g_param_spec_string ("description",
+                         "Description",
+                         "The description of the newcomer project",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_LANGUAGES] =
     g_param_spec_boxed ("languages",
                         "Languages",
@@ -174,16 +180,12 @@ gbp_newcomers_project_class_init (GbpNewcomersProjectClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/newcomers/gbp-newcomers-project.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, label);
-  gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, icon);
-  gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, tags_box);
 }
 
 static void
 gbp_newcomers_project_init (GbpNewcomersProject *self)
 {
-  gtk_widget_init_template (GTK_WIDGET (self));
+  self->project_info = ide_project_info_new ();
 }
 
 const gchar *
@@ -191,7 +193,7 @@ gbp_newcomers_project_get_name (GbpNewcomersProject *self)
 {
   g_return_val_if_fail (GBP_IS_NEWCOMERS_PROJECT (self), NULL);
 
-  return self->label ? gtk_label_get_label (self->label) : NULL;
+  return ide_project_info_get_name (self->project_info);
 }
 
 const gchar *
@@ -199,5 +201,5 @@ gbp_newcomers_project_get_uri (GbpNewcomersProject *self)
 {
   g_return_val_if_fail (GBP_IS_NEWCOMERS_PROJECT (self), NULL);
 
-  return self->uri;
+  return ide_project_info_get_vcs_uri (self->project_info);
 }

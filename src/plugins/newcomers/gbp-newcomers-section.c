@@ -29,7 +29,7 @@
 struct _GbpNewcomersSection
 {
   GtkBin      parent_instance;
-  GtkFlowBox *flowbox;
+  GtkListBox *list_box;
 };
 
 typedef struct
@@ -45,9 +45,9 @@ enum {
   N_PROPS
 };
 
-static void gbp_newcomers_section_child_activated (GbpNewcomersSection *self,
-                                                   GbpNewcomersProject *project,
-                                                   GtkFlowBox          *flowbox);
+static void gbp_newcomers_section_row_activated (GbpNewcomersSection *self,
+                                                 GbpNewcomersProject *project,
+                                                 GtkListBox          *list_box);
 
 static void
 delayed_activate_free (gpointer data)
@@ -103,7 +103,7 @@ gbp_newcomers_section_filter (IdeGreeterSection *section,
 
   g_assert (GBP_IS_NEWCOMERS_SECTION (self));
 
-  gtk_container_foreach (GTK_CONTAINER (self->flowbox),
+  gtk_container_foreach (GTK_CONTAINER (self->list_box),
                          gbp_newcomers_section_filter_child,
                          &filter);
 
@@ -127,9 +127,9 @@ gbp_newcomers_section_activate_cb (GtkWidget *widget,
   if (activate->handled || !gtk_widget_get_visible (widget))
     return;
 
-  gbp_newcomers_section_child_activated (activate->self,
+  gbp_newcomers_section_row_activated (activate->self,
                                          project,
-                                         activate->self->flowbox);
+                                         activate->self->list_box);
 
   activate->handled = TRUE;
 }
@@ -148,7 +148,7 @@ gbp_newcomers_section_activate_first (IdeGreeterSection *section)
   activate.self = self;
   activate.handled = FALSE;
 
-  gtk_container_foreach (GTK_CONTAINER (self->flowbox),
+  gtk_container_foreach (GTK_CONTAINER (self->list_box),
                          gbp_newcomers_section_activate_cb,
                          &activate);
 
@@ -182,9 +182,9 @@ clear_selection_from_timeout (gpointer data)
 
   g_assert (GBP_IS_NEWCOMERS_SECTION (self));
 
-  if (self->flowbox != NULL)
-    gtk_flow_box_selected_foreach (self->flowbox,
-                                   (GtkFlowBoxForeachFunc)gtk_flow_box_unselect_child,
+  if (self->list_box != NULL)
+    gtk_list_box_selected_foreach (self->list_box,
+                                   (GtkListBoxForeachFunc)gtk_list_box_unselect_row,
                                    NULL);
 
   return G_SOURCE_REMOVE;
@@ -224,15 +224,15 @@ do_selection_from_timeout (gpointer data)
 }
 
 static void
-gbp_newcomers_section_child_activated (GbpNewcomersSection *self,
-                                       GbpNewcomersProject *project,
-                                       GtkFlowBox          *flowbox)
+gbp_newcomers_section_row_activated (GbpNewcomersSection *self,
+                                     GbpNewcomersProject *project,
+                                     GtkListBox          *list_box)
 {
   DelayedActivate *state;
 
   g_assert (GBP_IS_NEWCOMERS_SECTION (self));
   g_assert (GBP_IS_NEWCOMERS_PROJECT (project));
-  g_assert (GTK_IS_FLOW_BOX (flowbox));
+  g_assert (GTK_IS_LIST_BOX (list_box));
 
   state = g_slice_new0 (DelayedActivate);
   state->self = g_object_ref (self);
@@ -281,7 +281,7 @@ gbp_newcomers_section_class_init (GbpNewcomersSectionClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "newcomers");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/newcomers/gbp-newcomers-section.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpNewcomersSection, flowbox);
+  gtk_widget_class_bind_template_child (widget_class, GbpNewcomersSection, list_box);
 
   g_type_ensure (GBP_TYPE_NEWCOMERS_PROJECT);
 }
@@ -291,9 +291,9 @@ gbp_newcomers_section_init (GbpNewcomersSection *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->flowbox,
-                           "child-activated",
-                           G_CALLBACK (gbp_newcomers_section_child_activated),
+  g_signal_connect_object (self->list_box,
+                           "row-activated",
+                           G_CALLBACK (gbp_newcomers_section_row_activated),
                            self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 }
