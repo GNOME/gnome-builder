@@ -56,7 +56,10 @@ create_launcher (IdeContext  *context,
     }
 
   if ((ret = ide_runtime_create_launcher (runtime, error)))
-    ide_subprocess_launcher_set_flags (ret, G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+    {
+      ide_subprocess_launcher_set_flags (ret, G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+      ide_subprocess_launcher_set_cwd (ret, ide_pipeline_get_builddir (pipeline));
+    }
 
   return g_steal_pointer (&ret);
 }
