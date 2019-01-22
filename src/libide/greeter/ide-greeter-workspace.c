@@ -673,6 +673,9 @@ ide_greeter_workspace_add_section (IdeGreeterWorkspace *self,
   gtk_container_add_with_properties (GTK_CONTAINER (self->sections), GTK_WIDGET (section),
                                      "priority", ide_greeter_section_get_priority (section),
                                      NULL);
+
+  gtk_widget_set_visible (GTK_WIDGET (section),
+                          ide_greeter_section_filter (section, NULL));
 }
 
 /**
