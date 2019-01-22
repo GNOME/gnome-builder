@@ -199,16 +199,20 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
       else
         directory = g_file_new_for_uri (diruri);
 
-      languages = g_ptr_array_new ();
+      languages = g_ptr_array_new_with_free_func (g_free);
       for (gsize i = 0; i < len; i++)
         {
           if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX))
-            g_ptr_array_add (languages, groups [i] + strlen (IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX));
+            g_ptr_array_add (languages, g_strdup (groups [i] + strlen (IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX)));
           else if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX))
             build_system_name = groups [i] + strlen (IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX);
           else if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_BUILD_SYSTEM_HINT_GROUP_PREFIX))
             build_system_hint = groups [i] + strlen (IDE_RECENT_PROJECTS_BUILD_SYSTEM_HINT_GROUP_PREFIX);
         }
+
+      /* Cleanup any extra space */
+      for (guint i = 0; i < languages->len; i++)
+        g_strstrip ((gchar *)g_ptr_array_index (languages, i));
       g_ptr_array_add (languages, NULL);
 
       project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
