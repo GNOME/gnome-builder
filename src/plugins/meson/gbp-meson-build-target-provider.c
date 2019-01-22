@@ -35,9 +35,10 @@ static IdeSubprocessLauncher *
 create_launcher (IdeContext  *context,
                  GError     **error)
 {
-  IdePipeline *pipeline;
-  IdeBuildManager *build_manager;
   IdeSubprocessLauncher *ret;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
+  IdeRuntime *runtime;
 
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (error == NULL || *error == NULL);
@@ -45,7 +46,7 @@ create_launcher (IdeContext  *context,
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  if (pipeline == NULL)
+  if (pipeline == NULL || !(runtime = ide_pipeline_get_runtime (pipeline)))
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -54,11 +55,8 @@ create_launcher (IdeContext  *context,
       return NULL;
     }
 
-  ret = ide_pipeline_create_launcher (pipeline, error);
-
-  if (ret != NULL)
-    ide_subprocess_launcher_set_flags (ret,
-                                       ide_subprocess_launcher_get_flags (ret) | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  if ((ret = ide_runtime_create_launcher (runtime, error)))
+    ide_subprocess_launcher_set_flags (ret, G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
 
   return g_steal_pointer (&ret);
 }
