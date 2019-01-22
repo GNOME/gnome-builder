@@ -17,6 +17,7 @@ libide_greeter_public_headers = [
 
 libide_greeter_private_headers = [
   'ide-greeter-private.h',
+  'ide-truncate-model.h',
 ]
 
 install_headers(libide_greeter_public_headers, subdir: libide_greeter_header_subdir)
@@ -36,6 +37,7 @@ libide_greeter_private_sources = [
   'ide-greeter-workspace-actions.c',
   'ide-greeter-workspace-shortcuts.c',
   'ide-greeter-buttons-section.c',
+  'ide-truncate-model.c',
 ]
 
 #
