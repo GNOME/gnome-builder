@@ -72,6 +72,7 @@ src/libide/foundry/ide-toolchain-manager.c
 src/libide/greeter/ide-clone-surface.c
 src/libide/greeter/ide-clone-surface.ui
 src/libide/greeter/ide-greeter-buttons-section.c
+src/libide/greeter/ide-greeter-row.c
 src/libide/greeter/ide-greeter-workspace-actions.c
 src/libide/greeter/ide-greeter-workspace-shortcuts.c
 src/libide/greeter/ide-greeter-workspace.c
