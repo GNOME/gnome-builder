@@ -588,6 +588,7 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, action_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, back_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, buttons_section);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, clone_surface);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, left_box);
@@ -599,6 +600,7 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
 
   g_type_ensure (IDE_TYPE_CLONE_SURFACE);
+  g_type_ensure (IDE_TYPE_GREETER_BUTTONS_SECTION);
 }
 
 static void
@@ -632,11 +634,6 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
 
   _ide_greeter_workspace_init_actions (self);
   _ide_greeter_workspace_init_shortcuts (self);
-
-  self->buttons_section = g_object_new (IDE_TYPE_GREETER_BUTTONS_SECTION,
-                                        "visible", TRUE,
-                                        NULL);
-  ide_greeter_workspace_add_section (self, IDE_GREETER_SECTION (self->buttons_section));
 }
 
 IdeGreeterWorkspace *

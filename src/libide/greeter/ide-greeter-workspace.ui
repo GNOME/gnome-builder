@@ -109,6 +109,11 @@
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">32</property>
                                 <property name="visible">true</property>
+                                <child>
+                                  <object class="IdeGreeterButtonsSection" id="buttons_section">
+                                    <property name="visible">true</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
