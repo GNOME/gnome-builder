@@ -239,80 +239,11 @@ ide_greeter_row_get_project_info (IdeGreeterRow *self)
   return priv->project_info;
 }
 
-static const gchar *
-get_language_icon_name (const gchar *language)
-{
-  g_autofree gchar *lower = NULL;
-
-  if (language == NULL)
-    return NULL;
-
-  lower = g_utf8_strdown (language, -1);
-
-  return g_hash_table_lookup (icon_name_map, lower);
-}
-
-static void
-ide_greeter_row_add_tag (IdeGreeterRow *self,
-                         const gchar   *name,
-                         gint           kind)
-{
-  IdeGreeterRowPrivate *priv = ide_greeter_row_get_instance_private (self);
-  const gchar *icon_name = NULL;
-  GtkBox *box;
-  GtkImage *image;
-  GtkLabel *label;
-  gboolean skip_label = FALSE;
-
-  g_assert (IDE_IS_GREETER_ROW (self));
-  g_assert (name != NULL);
-
-  box = g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_HORIZONTAL,
-                      "spacing", 3,
-                      "visible", TRUE,
-                      NULL);
-
-
-  if (kind == TAG_BUILD_SYSTEM)
-    icon_name = "builder-build-symbolic";
-
-  if (kind == TAG_LANGUAGE)
-    {
-      if ((icon_name = get_language_icon_name (name)))
-        skip_label = TRUE;
-    }
-
-  if (icon_name != NULL)
-    {
-      image = g_object_new (GTK_TYPE_IMAGE,
-                            "icon-name", icon_name,
-                            "valign", GTK_ALIGN_BASELINE,
-                            "visible", TRUE,
-                            NULL);
-      dzl_gtk_widget_add_style_class (GTK_WIDGET (image), "dim-label");
-      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
-    }
-
-  if (!skip_label)
-    {
-      label = g_object_new (GTK_TYPE_LABEL,
-                            "label", name,
-                            "valign", GTK_ALIGN_BASELINE,
-                            "visible", TRUE,
-                            NULL);
-      dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "dim-label");
-      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
-    }
-
-  gtk_container_add (GTK_CONTAINER (priv->tags), GTK_WIDGET (box));
-}
-
 static gint
 compare_language (gconstpointer a,
                   gconstpointer b)
 {
-  return g_strcmp0 (*(gchar **)a, *(gchar **)b);
+  return g_utf8_collate (*(gchar **)a, *(gchar **)b);
 }
 
 static gboolean
@@ -348,6 +279,7 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
           GFile *directory = ide_project_info_get_directory (project_info);
           const gchar *desc = ide_project_info_get_description (project_info);
           GIcon *icon = ide_project_info_get_icon (project_info);
+          g_autoptr(GPtrArray) parts = g_ptr_array_new ();
 
           if (!ide_str_empty0 (desc))
             gtk_widget_set_tooltip_text (GTK_WIDGET (self), desc);
@@ -361,14 +293,28 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
           gtk_label_set_label (priv->title, name);
           gtk_label_set_label (priv->subtitle, desc);
 
-          if (!ignore_build_system (build_system))
-            ide_greeter_row_add_tag (self, build_system, TAG_BUILD_SYSTEM);
-
           if (languages != NULL)
             {
-              qsort (languages, g_strv_length (languages), sizeof (gchar*), compare_language);
               for (guint i = 0; languages[i] != NULL; i++)
-                ide_greeter_row_add_tag (self, g_strstrip (languages[i]), TAG_LANGUAGE);
+                g_ptr_array_add (parts, g_strstrip (languages[i]));
+            }
+
+          /* Sort before build system is added */
+          g_ptr_array_sort (parts, compare_language);
+
+          if (!ignore_build_system (build_system))
+            g_ptr_array_insert (parts, 0, (gchar *)build_system);
+
+          for (guint i = 0; i < parts->len; i++)
+            {
+              const gchar *key = g_ptr_array_index (parts, i);
+              DzlPillBox *tag;
+
+              tag = g_object_new (DZL_TYPE_PILL_BOX,
+                                  "visible", TRUE,
+                                  "label", key,
+                                  NULL);
+              gtk_container_add (GTK_CONTAINER (priv->tags), GTK_WIDGET (tag));
             }
 
           if (icon != NULL)
