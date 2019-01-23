@@ -1,6 +1,6 @@
 <schemalist>
 
-  <flags id="org.gnome.builder.SpacesStyle">
+  <flags id="@APP_ID_LOWER@.SpacesStyle">
     <value nick="before-left-paren" value="1"/>
     <value nick="before-left-bracket" value="2"/>
     <value nick="before-left-brace" value="4"/>
@@ -10,7 +10,7 @@
     <value nick="before-semicolon" value="64"/>
   </flags>
 
-  <schema id="org.gnome.builder.editor.language" gettext-domain="gnome-builder">
+  <schema id="@APP_ID_LOWER@.editor.language" gettext-domain="@GETTEXT_DOMAIN@">
     <key name="auto-indent" type="b">
       <default>true</default>
     </key>
@@ -37,7 +37,7 @@
       <range min="32" max="500"/>
       <default>80</default>
     </key>
-    <key name="spaces-style" flags="org.gnome.builder.SpacesStyle">
+    <key name="spaces-style" flags="@APP_ID_LOWER@.SpacesStyle">
       <default>[]</default>
       <summary>Spaces Style</summary>
       <description>How to apply spaces when reformatting text.</description>

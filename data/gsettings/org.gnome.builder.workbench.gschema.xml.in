@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.builder.workbench" path="/org/gnome/builder/workbench/" gettext-domain="gnome-builder">
+  <schema id="@APP_ID_LOWER@.workbench" path="@APP_PATH_LOWER@/workbench/" gettext-domain="@GETTEXT_DOMAIN@">
     <key name="left-visible" type="b">
       <default>true</default>
       <summary>Show Left Panel</summary>

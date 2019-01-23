@@ -1,9 +1,12 @@
-# Appdata file.
+# Appdata file
 appdata_file = i18n.merge_file(
-  input: 'org.gnome.Builder.appdata.xml.in',
-  output: 'org.gnome.Builder.appdata.xml',
-  po_dir: '../../po',
-  install: true,
+        input: configure_file(
+                         input: 'org.gnome.Builder.appdata.xml.in.in',
+                        output: 'org.gnome.Builder.appdata.xml.in',
+                 configuration: config_h),
+       output: '@@0@@.appdata.xml'.format(app_id),
+       po_dir: '../../po',
+      install: true,
   install_dir: join_paths(get_option('datadir'), 'metainfo'),
 )
 

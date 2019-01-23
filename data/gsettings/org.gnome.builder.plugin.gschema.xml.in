@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.builder.plugin" gettext-domain="gnome-builder">
+  <schema id="@APP_ID_LOWER@.plugin" gettext-domain="@GETTEXT_DOMAIN@">
     <key name="enabled" type="b">
       <default>true</default>
       <summary>Plugin enabled</summary>

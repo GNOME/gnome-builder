@@ -17,26 +17,24 @@ endif
 
 schema_conf = configuration_data()
 schema_conf.set('ECTAGS', ctags_path)
-
-schema_files += [configure_file(
-          input: 'org.gnome.builder.code-insight.gschema.xml.in',
-         output: 'org.gnome.builder.code-insight.gschema.xml',
-  configuration: schema_conf,
-        install: true,
-    install_dir: schema_dir,
-)]
+schema_conf.set('APP_ID', app_id)
+schema_conf.set('APP_ID_LOWER', app_id_lower)
+schema_conf.set('APP_PATH', app_path)
+schema_conf.set('APP_PATH_LOWER', app_path_lower)
+schema_conf.set('GETTEXT_DOMAIN', 'gnome-builder')
 
 schemas = [
-  'org.gnome.builder.build.gschema.xml',
-  'org.gnome.builder.editor.gschema.xml',
-  'org.gnome.builder.editor.language.gschema.xml',
-  'org.gnome.builder.extension-type.gschema.xml',
-  'org.gnome.builder.gschema.xml',
-  'org.gnome.builder.plugin.gschema.xml',
-  'org.gnome.builder.project.gschema.xml',
-  'org.gnome.builder.project-tree.gschema.xml',
-  'org.gnome.builder.terminal.gschema.xml',
-  'org.gnome.builder.workbench.gschema.xml',
+  'org.gnome.builder.code-insight.gschema.xml.in',
+  'org.gnome.builder.build.gschema.xml.in',
+  'org.gnome.builder.editor.gschema.xml.in',
+  'org.gnome.builder.editor.language.gschema.xml.in',
+  'org.gnome.builder.extension-type.gschema.xml.in',
+  'org.gnome.builder.gschema.xml.in',
+  'org.gnome.builder.plugin.gschema.xml.in',
+  'org.gnome.builder.project.gschema.xml.in',
+  'org.gnome.builder.project-tree.gschema.xml.in',
+  'org.gnome.builder.terminal.gschema.xml.in',
+  'org.gnome.builder.workbench.gschema.xml.in',
 ]
 
 # HACK: We need access to all schemas when running tests, so we
@@ -46,8 +44,8 @@ schemas = [
 foreach schema : schemas
   schema_files += [configure_file(
           input: schema,
-         output: schema,
-           copy: true,
+         output: '@0@.xml'.format(schema.split('.xml.in')[0]),
+  configuration: schema_conf,
         install: true,
     install_dir: schema_dir,
   )]

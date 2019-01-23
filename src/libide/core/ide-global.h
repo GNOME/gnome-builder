@@ -47,8 +47,6 @@ IdeProcessKind  ide_get_process_kind     (void);
 IDE_AVAILABLE_IN_3_32
 const gchar    *ide_get_application_id   (void);
 IDE_AVAILABLE_IN_3_32
-void            ide_set_application_id   (const gchar *app_id);
-IDE_AVAILABLE_IN_3_32
 const gchar    *ide_get_program_name     (void);
 IDE_AVAILABLE_IN_3_32
 gchar          *ide_get_system_arch      (void);

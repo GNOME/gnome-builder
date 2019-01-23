@@ -9,6 +9,11 @@ project('gnome-builder', 'c',
                    ],
 )
 
+app_id = get_option('app_id')
+app_id_lower = app_id.to_lower()
+app_path = '/' + '/'.join(app_id.split('.'))
+app_path_lower = app_path.to_lower()
+
 version_split = meson.project_version().split('.')
 MAJOR_VERSION = version_split[0]
 MINOR_VERSION = version_split[1]
@@ -77,6 +82,10 @@ status += [
 ]
 
 config_h = configuration_data()
+config_h.set_quoted('PACKAGE_APP_ID', app_id)
+config_h.set_quoted('PACKAGE_APP_ID_LOWER', app_id_lower)
+config_h.set_quoted('PACKAGE_APP_PATH', app_path)
+config_h.set_quoted('PACKAGE_APP_PATH_LOWER', app_path_lower)
 config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
 config_h.set_quoted('PACKAGE_ABI_S', libide_api_version)
 config_h.set('PACKAGE_ABI', libide_api_version)
@@ -94,9 +103,6 @@ config_h.set('GETTEXT_PACKAGE', 'PACKAGE_NAME')
 config_h.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
 
 config_h.set10('ENABLE_NLS', true) # Always enabled
-
-# Development build setup
-config_h.set('DEVELOPMENT_BUILD', version_split[1].to_int().is_odd())
 
 # We should probably avoid using these
 config_h.set_quoted('SRCDIR', meson.source_root())

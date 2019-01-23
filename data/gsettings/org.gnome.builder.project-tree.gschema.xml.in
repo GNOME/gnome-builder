@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.builder.project-tree" path="/org/gnome/builder/project-tree/" gettext-domain="gnome-builder">
+  <schema id="@APP_ID_LOWER@.project-tree" path="@APP_PATH_LOWER@/project-tree/" gettext-domain="@GETTEXT_DOMAIN@">
     <key name="show-icons" type="b">
       <default>true</default>
       <summary>Show Icons</summary>

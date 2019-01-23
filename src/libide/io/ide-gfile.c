@@ -366,22 +366,6 @@ ide_g_file_get_children_async (GFile               *file,
   ide_task_set_priority (task, io_priority);
   ide_task_set_task_data (task, gc, get_children_free);
 
-#ifdef DEVELOPMENT_BUILD
-  /* Useful for testing slow interactions on project-tree and such */
-  if (g_getenv ("IDE_G_FILE_DELAY"))
-    {
-      gboolean
-      delayed_run (gpointer data)
-      {
-        g_autoptr(IdeTask) subtask = data;
-        ide_task_run_in_thread (subtask, ide_g_file_get_children_worker);
-        return G_SOURCE_REMOVE;
-      }
-      g_timeout_add_seconds (1, delayed_run, g_object_ref (task));
-      return;
-    }
-#endif
-
   ide_task_run_in_thread (task, ide_g_file_get_children_worker);
 }
 

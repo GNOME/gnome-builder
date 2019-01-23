@@ -2,6 +2,7 @@ option('tracing', type: 'boolean', value: false, description: 'Enable tracing of
 option('profiling', type: 'boolean', value: false, description: 'Enable profiling of the Builder codebase')
 option('fusermount_wrapper', type: 'boolean', value: false, description: 'Install fusermount-wrapper when distributing with flatpak')
 option('tcmalloc', type: 'boolean', value: false, description: 'Use tcmalloc for dynamic allocations')
+option('app_id', type: 'string', value: 'org.gnome.Builder', description: 'The application-id to use for the application')
 
 option('with_safe_path', type: 'string', value: '', description: 'PATH variable to run build commands (default: platform-specific)')
 

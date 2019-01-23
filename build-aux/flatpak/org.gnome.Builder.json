@@ -1,5 +1,5 @@
 {
-    "app-id" : "org.gnome.Builder",
+    "app-id" : "org.gnome.Builder-Devel",
     "runtime" : "org.gnome.Sdk",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
@@ -516,6 +516,7 @@
             "config-opts" : [
                 "--libdir=lib",
                 "--buildtype=debugoptimized",
+                "-Dapp_id=org.gnome.Builder-Devel",
                 "-Dctags_path=/app/bin/ctags",
                 "-Dfusermount_wrapper=true",
                 "-Dtcmalloc=true",

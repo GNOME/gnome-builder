@@ -36,7 +36,6 @@
 #include "ide-global.h"
 
 static GThread *main_thread;
-static const gchar *application_id = "org.gnome.Builder";
 static IdeProcessKind kind = IDE_PROCESS_KIND_HOST;
 
 #if defined (G_HAS_CONSTRUCTORS)
@@ -93,28 +92,7 @@ ide_get_process_kind (void)
 const gchar *
 ide_get_application_id (void)
 {
-  return application_id;
-}
-
-/**
- * ide_set_application_id:
- * @app_id: the application id
- *
- * Sets the application id that will be used.
- *
- * This must be set at application startup before any GApplication
- * has connected to the D-Bus.
- *
- * The default is "org.gnome.Builder".
- *
- * Since: 3.32
- */
-void
-ide_set_application_id (const gchar *app_id)
-{
-  g_return_if_fail (app_id != NULL);
-
-  application_id = g_intern_string (app_id);
+  return PACKAGE_APP_ID;
 }
 
 const gchar *

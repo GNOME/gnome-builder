@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.builder" path="/org/gnome/builder/" gettext-domain="gnome-builder">
+  <schema id="@APP_ID_LOWER@" path="@APP_PATH_LOWER@/" gettext-domain="@GETTEXT_DOMAIN@">
     <key name="window-size" type="(ii)">
       <default>(-1, -1)</default>
       <summary>Window size</summary>

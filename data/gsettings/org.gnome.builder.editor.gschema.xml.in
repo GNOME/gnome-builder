@@ -1,6 +1,6 @@
 <schemalist>
 
-  <flags id="org.gnome.builder.editor.DrawSpaces">
+  <flags id="@APP_ID_LOWER@.editor.DrawSpaces">
     <value nick="space" value="1"/>
     <value nick="tab" value="2"/>
     <value nick="newline" value="4"/>
@@ -10,7 +10,7 @@
     <value nick="trailing" value="64"/>
   </flags>
 
-  <schema id="org.gnome.builder.editor" path="/org/gnome/builder/editor/" gettext-domain="gnome-builder">
+  <schema id="@APP_ID_LOWER@.editor" path="@APP_PATH_LOWER@/editor/" gettext-domain="@GETTEXT_DOMAIN@">
     <key name="keybindings" type="s">
       <choices>
         <choice value="default"/>
@@ -85,7 +85,7 @@
       <summary>Automatically Hide Overview Map</summary>
       <description>If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a timeout occurs.</description>
     </key>
-    <key name="draw-spaces" flags="org.gnome.builder.editor.DrawSpaces">
+    <key name="draw-spaces" flags="@APP_ID_LOWER@.editor.DrawSpaces">
       <default>[]</default>
       <summary>Draw Spaces</summary>
       <description>The various types of space to draw in the editor.</description>

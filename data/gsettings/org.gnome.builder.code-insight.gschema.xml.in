@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.builder.code-insight" path="/org/gnome/builder/code-insight/" gettext-domain="gnome-builder">
+  <schema id="@APP_ID_LOWER@.code-insight" path="@APP_PATH_LOWER@/code-insight/" gettext-domain="@GETTEXT_DOMAIN@">
     <key name="ctags-autocompletion" type="b">
       <default>true</default>
       <summary>Ctags based autocompletion</summary>
