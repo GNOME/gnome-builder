@@ -182,19 +182,21 @@ gbp_meson_build_stage_cross_file_init (GbpMesonBuildStageCrossFile *self)
 }
 
 GbpMesonBuildStageCrossFile *
-gbp_meson_build_stage_cross_file_new (IdeContext    *context,
-                                      IdeToolchain  *toolchain)
+gbp_meson_build_stage_cross_file_new (IdeToolchain *toolchain)
 {
-  GbpMesonBuildStageCrossFile *build_stage = g_object_new (GBP_TYPE_MESON_BUILD_STAGE_CROSS_FILE,
-                                                           "context", context,
-                                                           NULL);
+  GbpMesonBuildStageCrossFile *build_stage;
+
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (toolchain), NULL);
+
+  build_stage = g_object_new (GBP_TYPE_MESON_BUILD_STAGE_CROSS_FILE, NULL);
   build_stage->toolchain = g_object_ref (toolchain);
-  return build_stage;
+
+  return g_steal_pointer (&build_stage);
 }
 
 gchar *
 gbp_meson_build_stage_cross_file_get_path (GbpMesonBuildStageCrossFile *stage,
-                                           IdePipeline            *pipeline)
+                                           IdePipeline                 *pipeline)
 {
   g_return_val_if_fail (GBP_IS_MESON_BUILD_STAGE_CROSS_FILE (stage), NULL);
   g_return_val_if_fail (IDE_IS_PIPELINE (pipeline), NULL);
