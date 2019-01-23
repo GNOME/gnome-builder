@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-ctags-builder"
 
+#include "config.h"
+
 #include <libide-vcs.h>
 
 #include "ide-ctags-builder.h"
@@ -333,7 +335,7 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
       IDE_EXIT;
     }
 
-  settings = g_settings_new ("org.gnome.builder.code-insight");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".code-insight");
 
   task_data = g_slice_new0 (BuildTaskData);
   task_data->ctags = g_settings_get_string (settings, "ctags-path");

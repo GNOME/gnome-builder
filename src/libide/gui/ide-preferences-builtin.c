@@ -80,7 +80,7 @@ ide_preferences_builtin_register_plugins (DzlPreferences *preferences)
       path = g_strdup_printf ("/org/gnome/builder/plugins/%s/",
                               peas_plugin_info_get_module_name (plugin_info));
 
-      dzl_preferences_add_switch (preferences, "plugins", "plugins", "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, keywords, i);
+      dzl_preferences_add_switch (preferences, "plugins", "plugins", PACKAGE_APP_ID_LOWER".plugin", "enabled", path, NULL, name, desc, keywords, i);
     }
 
   g_list_free (copy);
@@ -98,15 +98,15 @@ ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
   dzl_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), GTK_SELECTION_NONE, 0);
-  dark_mode = dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Mode"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
-  dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "follow-night-light", NULL, NULL, _("Night Light"), _("Automatically enable dark mode at night"), _("follow night light"), 5);
-  dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 10);
+  dark_mode = dzl_preferences_add_switch (preferences, "appearance", "basic", PACKAGE_APP_ID_LOWER, "night-mode", NULL, NULL, _("Dark Mode"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
+  dzl_preferences_add_switch (preferences, "appearance", "basic", PACKAGE_APP_ID_LOWER, "follow-night-light", NULL, NULL, _("Night Light"), _("Automatically enable dark mode at night"), _("follow night light"), 5);
+  dzl_preferences_add_switch (preferences, "appearance", "basic", PACKAGE_APP_ID_LOWER".editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 10);
 
   dzl_preferences_add_list_group (preferences, "appearance", "font", _("Font"), GTK_SELECTION_NONE, 10);
-  dzl_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
+  dzl_preferences_add_font_button (preferences, "appearance", "font", PACKAGE_APP_ID_LOWER".editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
   /* XXX: This belongs in terminal addin */
-  dzl_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 1);
-  dzl_preferences_add_switch (preferences, "appearance", "font", "org.gnome.builder.terminal", "allow-bold", NULL, NULL, _("Bold text in terminals"), _("If terminals are allowed to display bold text"), C_("Keywords", "terminal allow bold"), 2);
+  dzl_preferences_add_font_button (preferences, "appearance", "font", PACKAGE_APP_ID_LOWER".terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 1);
+  dzl_preferences_add_switch (preferences, "appearance", "font", PACKAGE_APP_ID_LOWER".terminal", "allow-bold", NULL, NULL, _("Bold text in terminals"), _("If terminals are allowed to display bold text"), C_("Keywords", "terminal allow bold"), 2);
 
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
@@ -123,7 +123,7 @@ ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
       scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_ids [i]);
       title = gtk_source_style_scheme_get_name (scheme);
 
-      dzl_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
+      dzl_preferences_add_radio (preferences, "appearance", "schemes", PACKAGE_APP_ID_LOWER".editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
     }
 
   if (g_getenv ("GTK_THEME") != NULL)
@@ -139,11 +139,11 @@ ide_preferences_builtin_register_keyboard (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "keyboard", _("Keyboard"), 400);
 
   dzl_preferences_add_list_group (preferences, "keyboard", "mode", _("Emulation"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_radio (preferences, "keyboard", "mode", "org.gnome.builder.editor", "keybindings", NULL, "\"default\"", _("Builder"), _("Default keybinding mode which mimics gedit"), NULL, 0);
+  dzl_preferences_add_radio (preferences, "keyboard", "mode", PACKAGE_APP_ID_LOWER".editor", "keybindings", NULL, "\"default\"", _("Builder"), _("Default keybinding mode which mimics gedit"), NULL, 0);
 
   dzl_preferences_add_list_group (preferences, "keyboard", "movements", _("Movement"), GTK_SELECTION_NONE, 100);
-  dzl_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-home-end", NULL, NULL, _("Smart Home and End"), _("Home moves to first non-whitespace character"), NULL, 0);
-  dzl_preferences_add_switch (preferences, "keyboard", "movements", "org.gnome.builder.editor", "smart-backspace", NULL, NULL, _("Smart Backspace"), _("Backspace will remove extra space to keep you aligned with your indentation"), NULL, 100);
+  dzl_preferences_add_switch (preferences, "keyboard", "movements", PACKAGE_APP_ID_LOWER".editor", "smart-home-end", NULL, NULL, _("Smart Home and End"), _("Home moves to first non-whitespace character"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "keyboard", "movements", PACKAGE_APP_ID_LOWER".editor", "smart-backspace", NULL, NULL, _("Smart Backspace"), _("Backspace will remove extra space to keep you aligned with your indentation"), NULL, 100);
 }
 
 static void
@@ -152,39 +152,39 @@ ide_preferences_builtin_register_editor (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "editor", _("Editor"), 100);
 
   dzl_preferences_add_list_group (preferences, "editor", "general", _("General"), GTK_SELECTION_NONE, -5);
-  dzl_preferences_add_switch (preferences, "editor", "general", "org.gnome.builder", "show-open-files", NULL, NULL, _("Display list of open files"), _("Display the list of all open files in the project sidebar"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "editor", "general", PACKAGE_APP_ID_LOWER, "show-open-files", NULL, NULL, _("Display list of open files"), _("Display the list of all open files in the project sidebar"), NULL, 0);
 
   dzl_preferences_add_list_group (preferences, "editor", "position", _("Cursor"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore cursor position when a file is reopened"), NULL, 0);
-  dzl_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "wrap-text", NULL, NULL, _("Enable text wrapping"), _("Wrap text that is too wide to display"), NULL, 5);
-  dzl_preferences_add_spin_button (preferences, "editor", "position", "org.gnome.builder.editor", "scroll-offset", NULL, _("Scroll Offset"), _("Minimum number of lines to keep above and below the cursor"), NULL, 10);
-  dzl_preferences_add_spin_button (preferences, "editor", "position", "org.gnome.builder.editor", "overscroll", NULL, _("Overscroll"), _("Allow the editor to scroll past the end of the buffer"), NULL, 20);
+  dzl_preferences_add_switch (preferences, "editor", "position", PACKAGE_APP_ID_LOWER".editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore cursor position when a file is reopened"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "editor", "position", PACKAGE_APP_ID_LOWER".editor", "wrap-text", NULL, NULL, _("Enable text wrapping"), _("Wrap text that is too wide to display"), NULL, 5);
+  dzl_preferences_add_spin_button (preferences, "editor", "position", PACKAGE_APP_ID_LOWER".editor", "scroll-offset", NULL, _("Scroll Offset"), _("Minimum number of lines to keep above and below the cursor"), NULL, 10);
+  dzl_preferences_add_spin_button (preferences, "editor", "position", PACKAGE_APP_ID_LOWER".editor", "overscroll", NULL, _("Overscroll"), _("Allow the editor to scroll past the end of the buffer"), NULL, 20);
 
   dzl_preferences_add_list_group (preferences, "editor", "line", _("Line Information"), GTK_SELECTION_NONE, 50);
-  dzl_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show line number at beginning of each line"), NULL, 0);
-  dzl_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, NULL, _("Line changes"), _("Show if a line was added or modified next to line number"), NULL, 1);
-  dzl_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-diagnostics", NULL, NULL, _("Line diagnostics"), _("Show an icon next to line numbers indicating type of diagnostic"), NULL, 2);
+  dzl_preferences_add_switch (preferences, "editor", "line", PACKAGE_APP_ID_LOWER".editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show line number at beginning of each line"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "editor", "line", PACKAGE_APP_ID_LOWER".editor", "show-line-changes", NULL, NULL, _("Line changes"), _("Show if a line was added or modified next to line number"), NULL, 1);
+  dzl_preferences_add_switch (preferences, "editor", "line", PACKAGE_APP_ID_LOWER".editor", "show-line-diagnostics", NULL, NULL, _("Line diagnostics"), _("Show an icon next to line numbers indicating type of diagnostic"), NULL, 2);
 
   dzl_preferences_add_list_group (preferences, "editor", "highlight", _("Highlight"), GTK_SELECTION_NONE, 100);
-  dzl_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-current-line", NULL, NULL, _("Current line"), _("Make current line stand out with highlights"), NULL, 0);
-  dzl_preferences_add_switch (preferences, "editor", "highlight", "org.gnome.builder.editor", "highlight-matching-brackets", NULL, NULL, _("Matching brackets"), _("Highlight matching brackets based on cursor position"), NULL, 1);
+  dzl_preferences_add_switch (preferences, "editor", "highlight", PACKAGE_APP_ID_LOWER".editor", "highlight-current-line", NULL, NULL, _("Current line"), _("Make current line stand out with highlights"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "editor", "highlight", PACKAGE_APP_ID_LOWER".editor", "highlight-matching-brackets", NULL, NULL, _("Matching brackets"), _("Highlight matching brackets based on cursor position"), NULL, 1);
 
   dzl_preferences_add_list_group (preferences, "editor", "overview", _("Code Overview"), GTK_SELECTION_NONE, 100);
-  dzl_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "show-map", NULL, NULL, _("Show overview map"), _("A zoomed out view to enhance navigating source code"), NULL, 0);
-  dzl_preferences_add_switch (preferences, "editor", "overview", "org.gnome.builder.editor", "auto-hide-map", NULL, NULL, _("Automatically hide overview map"), _("Automatically hide map when editor loses focus"), NULL, 1);
+  dzl_preferences_add_switch (preferences, "editor", "overview", PACKAGE_APP_ID_LOWER".editor", "show-map", NULL, NULL, _("Show overview map"), _("A zoomed out view to enhance navigating source code"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "editor", "overview", PACKAGE_APP_ID_LOWER".editor", "auto-hide-map", NULL, NULL, _("Automatically hide overview map"), _("Automatically hide map when editor loses focus"), NULL, 1);
 
   dzl_preferences_add_list_group (preferences, "editor", "draw-spaces", _("Visible Whitespace Characters"), GTK_SELECTION_NONE, 400);
-  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"space\"", _("Spaces"), NULL, NULL, 0);
-  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"tab\"", _("Tabs"), NULL, NULL, 1);
-  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"newline\"", _("New line and carriage return"), NULL, NULL, 2);
-  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"nbsp\"", _("Non-breaking spaces"), NULL, NULL, 3);
-  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"text\"", _("Spaces inside of text"), NULL, NULL, 4);
-  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"trailing\"", _("Trailing Only"), NULL, NULL, 5);
-  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"leading\"", _("Leading Only"), NULL, NULL, 6);
+  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", PACKAGE_APP_ID_LOWER".editor", "draw-spaces", NULL, "\"space\"", _("Spaces"), NULL, NULL, 0);
+  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", PACKAGE_APP_ID_LOWER".editor", "draw-spaces", NULL, "\"tab\"", _("Tabs"), NULL, NULL, 1);
+  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", PACKAGE_APP_ID_LOWER".editor", "draw-spaces", NULL, "\"newline\"", _("New line and carriage return"), NULL, NULL, 2);
+  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", PACKAGE_APP_ID_LOWER".editor", "draw-spaces", NULL, "\"nbsp\"", _("Non-breaking spaces"), NULL, NULL, 3);
+  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", PACKAGE_APP_ID_LOWER".editor", "draw-spaces", NULL, "\"text\"", _("Spaces inside of text"), NULL, NULL, 4);
+  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", PACKAGE_APP_ID_LOWER".editor", "draw-spaces", NULL, "\"trailing\"", _("Trailing Only"), NULL, NULL, 5);
+  dzl_preferences_add_radio (preferences, "editor", "draw-spaces", PACKAGE_APP_ID_LOWER".editor", "draw-spaces", NULL, "\"leading\"", _("Leading Only"), NULL, NULL, 6);
 
   dzl_preferences_add_list_group (preferences, "editor", "autosave", _("Autosave"), GTK_SELECTION_NONE, 450);
-  dzl_preferences_add_switch (preferences, "editor", "autosave", "org.gnome.builder.editor", "auto-save", NULL, NULL,_("Autosave Enabled"), _("Enable or disable autosave feature"), NULL, 1);
-  dzl_preferences_add_spin_button (preferences, "editor", "autosave", "org.gnome.builder.editor", "auto-save-timeout", NULL, _("Autosave Frequency"), _("The number of seconds after modification before auto saving"), NULL, 60);
+  dzl_preferences_add_switch (preferences, "editor", "autosave", PACKAGE_APP_ID_LOWER".editor", "auto-save", NULL, NULL,_("Autosave Enabled"), _("Enable or disable autosave feature"), NULL, 1);
+  dzl_preferences_add_spin_button (preferences, "editor", "autosave", PACKAGE_APP_ID_LOWER".editor", "auto-save-timeout", NULL, _("Autosave Frequency"), _("The number of seconds after modification before auto saving"), NULL, 60);
 }
 
 static void
@@ -193,7 +193,7 @@ ide_preferences_builtin_register_code_insight (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "code-insight", _("Code Insight"), 300);
 
   dzl_preferences_add_list_group (preferences, "code-insight", "highlighting", _("Highlighting"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_switch (preferences, "code-insight", "highlighting", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insight to highlight additional information discovered in source file"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "code-insight", "highlighting", PACKAGE_APP_ID_LOWER".code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insight to highlight additional information discovered in source file"), NULL, 0);
 
   dzl_preferences_add_list_group (preferences, "code-insight", "diagnostics", _("Diagnostics"), GTK_SELECTION_NONE, 200);
 }
@@ -204,8 +204,8 @@ ide_preferences_builtin_register_completion (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "completion", _("Completion"), 325);
 
   dzl_preferences_add_list_group (preferences, "completion", "general", _("General"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_spin_button (preferences, "completion", "general", "org.gnome.builder.editor", "completion-n-rows", NULL, _("Completions Display Size"), _("Number of completions to display"), NULL, -1);
-  dzl_preferences_add_switch (preferences, "completion", "general", "org.gnome.builder.editor", "interactive-completion", NULL, NULL, _("Interactive Completion"), _("Display code suggestions interactively as you type"), NULL, 0);
+  dzl_preferences_add_spin_button (preferences, "completion", "general", PACKAGE_APP_ID_LOWER".editor", "completion-n-rows", NULL, _("Completions Display Size"), _("Number of completions to display"), NULL, -1);
+  dzl_preferences_add_switch (preferences, "completion", "general", PACKAGE_APP_ID_LOWER".editor", "interactive-completion", NULL, NULL, _("Interactive Completion"), _("Display code suggestions interactively as you type"), NULL, 0);
 
   dzl_preferences_add_list_group (preferences, "completion", "providers", _("Completion Providers"), GTK_SELECTION_NONE, 100);
 }
@@ -322,28 +322,28 @@ ide_preferences_builtin_register_languages (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "languages.id", NULL, 0);
 
   dzl_preferences_add_list_group (preferences, "languages.id", "basic", _("General"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "trim-trailing-whitespace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Trim trailing whitespace"), _("Upon saving, trailing whitespace from modified lines will be trimmed."), NULL, 10);
-  dzl_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "overwrite-braces", "/org/gnome/builder/editor/language/{id}/", NULL, _("Overwrite Braces"), _("Overwrite closing braces"), NULL, 20);
-  dzl_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "insert-matching-brace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert Matching Brace"), _("Insert matching character for { [ ( or \""), NULL, 20);
-  dzl_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "insert-trailing-newline", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert Trailing Newline"), _("Ensure files end with a newline"), NULL, 30);
+  dzl_preferences_add_switch (preferences, "languages.id", "basic", PACKAGE_APP_ID_LOWER".editor.language", "trim-trailing-whitespace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Trim trailing whitespace"), _("Upon saving, trailing whitespace from modified lines will be trimmed."), NULL, 10);
+  dzl_preferences_add_switch (preferences, "languages.id", "basic", PACKAGE_APP_ID_LOWER".editor.language", "overwrite-braces", "/org/gnome/builder/editor/language/{id}/", NULL, _("Overwrite Braces"), _("Overwrite closing braces"), NULL, 20);
+  dzl_preferences_add_switch (preferences, "languages.id", "basic", PACKAGE_APP_ID_LOWER".editor.language", "insert-matching-brace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert Matching Brace"), _("Insert matching character for { [ ( or \""), NULL, 20);
+  dzl_preferences_add_switch (preferences, "languages.id", "basic", PACKAGE_APP_ID_LOWER".editor.language", "insert-trailing-newline", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert Trailing Newline"), _("Ensure files end with a newline"), NULL, 30);
 
   dzl_preferences_add_list_group (preferences, "languages.id", "margin", _("Margins"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_radio (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "show-right-margin", "/org/gnome/builder/editor/language/{id}/", NULL, _("Show right margin"), NULL, NULL, 0);
-  dzl_preferences_add_spin_button (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "right-margin-position", "/org/gnome/builder/editor/language/{id}/", _("Right margin position"), _("Position in spaces for the right margin"), NULL, 10);
+  dzl_preferences_add_radio (preferences, "languages.id", "margin", PACKAGE_APP_ID_LOWER".editor.language", "show-right-margin", "/org/gnome/builder/editor/language/{id}/", NULL, _("Show right margin"), NULL, NULL, 0);
+  dzl_preferences_add_spin_button (preferences, "languages.id", "margin", PACKAGE_APP_ID_LOWER".editor.language", "right-margin-position", "/org/gnome/builder/editor/language/{id}/", _("Right margin position"), _("Position in spaces for the right margin"), NULL, 10);
 
   dzl_preferences_add_list_group (preferences, "languages.id", "indentation", _("Indentation"), GTK_SELECTION_NONE, 100);
-  dzl_preferences_add_spin_button (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "tab-width", "/org/gnome/builder/editor/language/{id}/", _("Tab width"), _("Width of a tab character in spaces"), NULL, 10);
-  dzl_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "insert-spaces-instead-of-tabs", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert spaces instead of tabs"), _("Prefer spaces over use of tabs"), NULL, 20);
-  dzl_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "auto-indent", "/org/gnome/builder/editor/language/{id}/", NULL, _("Automatically indent"), _("Indent source code as you type"), NULL, 30);
+  dzl_preferences_add_spin_button (preferences, "languages.id", "indentation", PACKAGE_APP_ID_LOWER".editor.language", "tab-width", "/org/gnome/builder/editor/language/{id}/", _("Tab width"), _("Width of a tab character in spaces"), NULL, 10);
+  dzl_preferences_add_radio (preferences, "languages.id", "indentation", PACKAGE_APP_ID_LOWER".editor.language", "insert-spaces-instead-of-tabs", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert spaces instead of tabs"), _("Prefer spaces over use of tabs"), NULL, 20);
+  dzl_preferences_add_radio (preferences, "languages.id", "indentation", PACKAGE_APP_ID_LOWER".editor.language", "auto-indent", "/org/gnome/builder/editor/language/{id}/", NULL, _("Automatically indent"), _("Indent source code as you type"), NULL, 30);
 
   dzl_preferences_add_list_group (preferences, "languages.id", "spaces-style", _("Spacing"), GTK_SELECTION_NONE, 600);
-  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-paren\"", _("Space before opening parentheses"), NULL, NULL, 0);
-  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-bracket\"", _("Space before opening brackets"), NULL, NULL, 1);
-  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-brace\"", _("Space before opening braces"), NULL, NULL, 2);
-  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-angle\"", _("Space before opening angles"), NULL, NULL, 3);
-  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"colon\"", _("Prefer a space before colons"), NULL, NULL, 4);
-  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"comma\"", _("Prefer a space before commas"), NULL, NULL, 5);
-  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"semicolon\"", _("Prefer a space before semicolons"), NULL, NULL, 6);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", PACKAGE_APP_ID_LOWER".editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-paren\"", _("Space before opening parentheses"), NULL, NULL, 0);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", PACKAGE_APP_ID_LOWER".editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-bracket\"", _("Space before opening brackets"), NULL, NULL, 1);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", PACKAGE_APP_ID_LOWER".editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-brace\"", _("Space before opening braces"), NULL, NULL, 2);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", PACKAGE_APP_ID_LOWER".editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-angle\"", _("Space before opening angles"), NULL, NULL, 3);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", PACKAGE_APP_ID_LOWER".editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"colon\"", _("Prefer a space before colons"), NULL, NULL, 4);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", PACKAGE_APP_ID_LOWER".editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"comma\"", _("Prefer a space before commas"), NULL, NULL, 5);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", PACKAGE_APP_ID_LOWER".editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"semicolon\"", _("Prefer a space before semicolons"), NULL, NULL, 6);
 }
 
 static gboolean
@@ -394,7 +394,7 @@ ide_preferences_builtin_register_build (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "build", _("Build"), 500);
 
   dzl_preferences_add_list_group (preferences, "build", "basic", _("General"), GTK_SELECTION_NONE, 0);
-  id = dzl_preferences_add_spin_button (preferences, "build", "basic", "org.gnome.builder.build", "parallel", "/org/gnome/builder/build/", _("Build Workers"), _("Number of parallel build workers"), NULL, 0);
+  id = dzl_preferences_add_spin_button (preferences, "build", "basic", PACKAGE_APP_ID_LOWER".build", "parallel", "/org/gnome/builder/build/", _("Build Workers"), _("Number of parallel build workers"), NULL, 0);
 
   bin = dzl_preferences_get_widget (preferences, id);
   widget = dzl_preferences_spin_button_get_spin_button (DZL_PREFERENCES_SPIN_BUTTON (bin));
@@ -402,10 +402,10 @@ ide_preferences_builtin_register_build (DzlPreferences *preferences)
   g_signal_connect (widget, "input", G_CALLBACK (workers_input), NULL);
   g_signal_connect (widget, "output", G_CALLBACK (workers_output), NULL);
 
-  dzl_preferences_add_switch (preferences, "build", "basic", "org.gnome.builder", "clear-cache-at-startup", NULL, NULL, _("Clear build cache at startup"), _("Expired caches will be purged when Builder is started"), NULL, 10);
+  dzl_preferences_add_switch (preferences, "build", "basic", PACKAGE_APP_ID_LOWER, "clear-cache-at-startup", NULL, NULL, _("Clear build cache at startup"), _("Expired caches will be purged when Builder is started"), NULL, 10);
 
   dzl_preferences_add_list_group (preferences, "build", "network", _("Network"), GTK_SELECTION_NONE, 100);
-  dzl_preferences_add_switch (preferences, "build", "network", "org.gnome.builder.build", "allow-network-when-metered", NULL, NULL, _("Allow downloads over metered connections"), _("Allow the use of metered network connections when automatically downloading dependencies"), NULL, 10);
+  dzl_preferences_add_switch (preferences, "build", "network", PACKAGE_APP_ID_LOWER".build", "allow-network-when-metered", NULL, NULL, _("Allow downloads over metered connections"), _("Allow the use of metered network connections when automatically downloading dependencies"), NULL, 10);
 }
 
 static void
@@ -414,8 +414,8 @@ ide_preferences_builtin_register_projects (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "projects", _("Projects"), 450);
 
   dzl_preferences_add_list_group (preferences, "projects", "directory", _("Workspace"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_file_chooser (preferences, "projects", "directory", "org.gnome.builder", "projects-directory", NULL, _("Projects directory"), _("A place for all your projects"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL, 0);
-  dzl_preferences_add_switch (preferences, "projects", "directory", "org.gnome.builder", "restore-previous-files", NULL, NULL, _("Restore previously opened files"), _("Open previously opened files when loading a project"), NULL, 10);
+  dzl_preferences_add_file_chooser (preferences, "projects", "directory", PACKAGE_APP_ID_LOWER, "projects-directory", NULL, _("Projects directory"), _("A place for all your projects"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL, 0);
+  dzl_preferences_add_switch (preferences, "projects", "directory", PACKAGE_APP_ID_LOWER, "restore-previous-files", NULL, NULL, _("Restore previously opened files"), _("Open previously opened files when loading a project"), NULL, 10);
 }
 
 #if 0

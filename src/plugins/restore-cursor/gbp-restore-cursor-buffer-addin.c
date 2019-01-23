@@ -117,7 +117,7 @@ gbp_restore_cursor_buffer_addin_file_loaded (IdeBufferAddin *addin,
   g_assert (G_IS_FILE (file));
 
   /* Make sure our setting isn't disabled */
-  settings = g_settings_new ("org.gnome.builder.editor");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".editor");
   if (!g_settings_get_boolean (settings, "restore-insert-mark"))
     return;
 

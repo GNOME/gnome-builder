@@ -950,7 +950,7 @@ ide_highlight_engine_init (IdeHighlightEngine *self)
 {
   g_weak_ref_init (&self->buffer_wref, NULL);
 
-  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+  self->settings = g_settings_new (PACKAGE_APP_ID_LOWER".code-insight");
   self->enabled = g_settings_get_boolean (self->settings, "semantic-highlighting");
   self->signal_group = dzl_signal_group_new (IDE_TYPE_BUFFER);
 

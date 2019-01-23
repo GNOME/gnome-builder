@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-clang-completion"
 
+#include "config.h"
+
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 #include <libide-foundry.h>
@@ -269,7 +271,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
   g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
 
-  settings = g_settings_new ("org.gnome.builder.clang");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".clang");
 
   result = ide_clang_completion_item_get_result (self);
   snippet = ide_snippet_new (NULL, NULL);

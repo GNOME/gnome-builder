@@ -18,6 +18,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <libide-code.h>
 #include <libide-gui.h>
@@ -61,7 +63,7 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
   self->diagnose_id = dzl_preferences_add_switch (preferences,
                                                   "code-insight",
                                                   "diagnostics",
-                                                  "org.gnome.builder.extension-type",
+                                                  PACKAGE_APP_ID_LOWER".extension-type",
                                                   "enabled",
                                                   "/org/gnome/builder/extension-types/clang-plugin/IdeDiagnosticProvider/",
                                                   NULL,
@@ -74,7 +76,7 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
   self->completion_id = dzl_preferences_add_switch (preferences,
                                                     "completion",
                                                     "providers",
-                                                    "org.gnome.builder.extension-type",
+                                                    PACKAGE_APP_ID_LOWER".extension-type",
                                                     "enabled",
                                                     "/org/gnome/builder/extension-types/clang-plugin/IdeCompletionProvider/",
                                                     NULL,
@@ -88,7 +90,7 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
   self->parens_id = dzl_preferences_add_switch (preferences,
                                                 "completion",
                                                 "clang",
-                                                "org.gnome.builder.clang",
+                                                PACKAGE_APP_ID_LOWER".clang",
                                                 "complete-parens",
                                                 NULL,
                                                 NULL,
@@ -100,7 +102,7 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
   self->params_id = dzl_preferences_add_switch (preferences,
                                                 "completion",
                                                 "clang",
-                                                "org.gnome.builder.clang",
+                                                PACKAGE_APP_ID_LOWER".clang",
                                                 "complete-params",
                                                 NULL,
                                                 NULL,

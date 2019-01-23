@@ -449,7 +449,7 @@ gbp_editor_session_addin_restore_async (IdeSessionAddin     *addin,
                            editor,
                            0);
 
-  settings = g_settings_new ("org.gnome.builder");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER"");
 
   if (!g_settings_get_boolean (settings, "restore-previous-files"))
     {

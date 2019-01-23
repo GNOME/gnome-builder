@@ -550,7 +550,7 @@ ide_terminal_init (IdeTerminal *self)
       vte_terminal_match_set_cursor_name (VTE_TERMINAL (self), tag, "hand2");
     }
 
-  priv->settings = g_settings_new ("org.gnome.builder.terminal");
+  priv->settings = g_settings_new (PACKAGE_APP_ID_LOWER".terminal");
   g_settings_bind (priv->settings, "allow-bold", self, "allow-bold", G_SETTINGS_BIND_GET);
   g_signal_connect_object (priv->settings,
                            "changed::font-name",

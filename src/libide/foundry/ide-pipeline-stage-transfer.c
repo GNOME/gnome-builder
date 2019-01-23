@@ -126,7 +126,7 @@ ide_pipeline_stage_transfer_build_async (IdePipelineStage    *stage,
 
       if (g_network_monitor_get_network_metered (monitor))
         {
-          g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
+          g_autoptr(GSettings) settings = g_settings_new (PACKAGE_APP_ID_LOWER".build");
 
           if (!g_settings_get_boolean (settings, "allow-network-when-metered"))
             {

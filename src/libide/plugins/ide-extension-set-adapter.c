@@ -161,7 +161,7 @@ watch_extension (IdeExtensionSetAdapter *self,
   path = g_strdup_printf ("/org/gnome/builder/extension-types/%s/%s/",
                           peas_plugin_info_get_module_name (plugin_info),
                           g_type_name (interface_type));
-  settings = g_settings_new_with_path ("org.gnome.builder.extension-type", path);
+  settings = g_settings_new_with_path (PACKAGE_APP_ID_LOWER".extension-type", path);
 
   g_ptr_array_add (self->settings, g_object_ref (settings));
 

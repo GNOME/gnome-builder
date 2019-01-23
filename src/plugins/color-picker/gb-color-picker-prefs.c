@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "config.h"
+
 #include <libide-editor.h>
 
 #include "gb-color-picker-editor-addin.h"
@@ -741,6 +743,6 @@ gb_color_picker_prefs_init (GbColorPickerPrefs *self)
 
   g_object_unref (builder);
 
-  self->plugin_settings = g_settings_new ("org.gnome.builder.plugins.color_picker_plugin");
-  self->components_settings = g_settings_new ("org.gnome.builder.plugins.color_picker_plugin.components");
+  self->plugin_settings = g_settings_new (PACKAGE_APP_ID_LOWER".plugins.color_picker_plugin");
+  self->components_settings = g_settings_new (PACKAGE_APP_ID_LOWER".plugins.color_picker_plugin.components");
 }

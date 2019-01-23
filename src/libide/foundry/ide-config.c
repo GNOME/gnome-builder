@@ -974,7 +974,7 @@ ide_config_get_parallelism (IdeConfig *self)
 
   if (priv->parallelism == -1)
     {
-      g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
+      g_autoptr(GSettings) settings = g_settings_new (PACKAGE_APP_ID_LOWER".build");
 
       return g_settings_get_int (settings, "parallel");
     }

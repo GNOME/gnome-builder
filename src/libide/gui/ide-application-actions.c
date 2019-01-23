@@ -300,7 +300,7 @@ ide_application_actions_nighthack (GSimpleAction *action,
                 "gtk-application-prefer-dark-theme", TRUE,
                 NULL);
 
-  settings = g_settings_new ("org.gnome.builder.editor");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".editor");
   g_settings_set_string (settings, "style-scheme-name", "builder-dark");
 }
 
@@ -315,7 +315,7 @@ ide_application_actions_dayhack (GSimpleAction *action,
                 "gtk-application-prefer-dark-theme", FALSE,
                 NULL);
 
-  settings = g_settings_new ("org.gnome.builder.editor");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".editor");
   g_settings_set_string (settings, "style-scheme-name", "builder");
 }
 

@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-ctags-completion-provider"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <libide-code.h>
 
@@ -207,7 +209,7 @@ static void
 ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 {
   self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
-  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+  self->settings = g_settings_new (PACKAGE_APP_ID_LOWER".code-insight");
 
   g_signal_connect_object (self->settings,
                            "changed::ctags-autocompletion",

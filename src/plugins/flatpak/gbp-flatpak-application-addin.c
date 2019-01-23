@@ -410,7 +410,7 @@ gbp_flatpak_application_addin_load (IdeApplicationAddin *addin,
 
   instance = self;
 
-  settings = g_settings_new ("org.gnome.builder");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER"");
 
   if (g_settings_get_boolean (settings, "clear-cache-at-startup"))
     {

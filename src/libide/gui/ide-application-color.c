@@ -151,7 +151,7 @@ _ide_application_update_color (IdeApplication *self)
        * scheme to match.
        */
 
-      editor_settings = g_settings_new ("org.gnome.builder.editor");
+      editor_settings = g_settings_new (PACKAGE_APP_ID_LOWER".editor");
       old_name = g_settings_get_string (editor_settings, "style-scheme-name");
       new_name = find_similar_style_scheme (old_name, night_mode);
 

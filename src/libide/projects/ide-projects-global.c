@@ -68,7 +68,7 @@ ide_get_projects_dir (void)
 
   if G_UNLIKELY (g_settings == NULL)
     {
-      g_settings = g_settings_new ("org.gnome.builder");
+      g_settings = g_settings_new (PACKAGE_APP_ID_LOWER"");
       g_signal_connect (g_settings,
                         "changed::projects-directory",
                         G_CALLBACK (on_projects_directory_changed_cb),

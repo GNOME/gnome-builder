@@ -18,6 +18,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "ide-xml-parser"
+
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <glib-object.h>
@@ -797,7 +801,7 @@ ide_xml_parser_init (IdeXmlParser *self)
   self->color_tags = g_array_new (TRUE, TRUE, sizeof (ColorTag));
   g_array_set_clear_func (self->color_tags, (GDestroyNotify)color_tag_free);
 
-  self->settings = g_settings_new ("org.gnome.builder.editor");
+  self->settings = g_settings_new (PACKAGE_APP_ID_LOWER".editor");
   g_signal_connect_swapped (self->settings,
                             "changed",
                             G_CALLBACK (editor_settings_changed_cb),

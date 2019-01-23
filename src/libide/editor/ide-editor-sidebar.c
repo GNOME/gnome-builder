@@ -220,7 +220,7 @@ ide_editor_sidebar_init (IdeEditorSidebar *self)
                             G_CALLBACK (ide_editor_sidebar_stack_notify_visible_child),
                             self);
 
-  self->settings = g_settings_new ("org.gnome.builder");
+  self->settings = g_settings_new (PACKAGE_APP_ID_LOWER"");
 
   g_signal_connect_object (self->settings,
                            "changed::show-open-files",

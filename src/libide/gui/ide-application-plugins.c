@@ -47,7 +47,7 @@ _ide_application_plugin_get_settings (IdeApplication *self,
       g_autofree gchar *path = NULL;
 
       path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
-      settings = g_settings_new_with_path ("org.gnome.builder.plugin", path);
+      settings = g_settings_new_with_path (PACKAGE_APP_ID_LOWER".plugin", path);
       g_hash_table_insert (self->plugin_settings, g_strdup (module_name), settings);
     }
 

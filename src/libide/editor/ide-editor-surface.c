@@ -83,7 +83,7 @@ ide_editor_surface_restore_panel_state (IdeEditorSurface *self)
 
   /* TODO: This belongs in editor settings probably */
 
-  settings = g_settings_new ("org.gnome.builder.workbench");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".workbench");
 
   pane = dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self));
   reveal = g_settings_get_boolean (settings, "left-visible");
@@ -114,7 +114,7 @@ ide_editor_surface_save_panel_state (IdeEditorSurface *self)
   g_assert (IDE_IS_EDITOR_SURFACE (self));
 
   /* TODO: possibly belongs in editor settings */
-  settings = g_settings_new ("org.gnome.builder.workbench");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".workbench");
 
   pane = dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self));
   position = dzl_dock_revealer_get_position (DZL_DOCK_REVEALER (pane));

@@ -28,7 +28,7 @@
 
 #include "ide-language-defaults.h"
 
-#define SCHEMA_ID "org.gnome.builder.editor.language"
+#define SCHEMA_ID PACKAGE_APP_ID_LOWER".editor.language"
 #define PATH_BASE "/org/gnome/builder/editor/language/"
 
 static gboolean  initialized;

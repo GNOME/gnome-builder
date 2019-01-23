@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-gca-diagnostic-provider"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "gca-diagnostics.h"
@@ -314,7 +316,7 @@ static GVariant *
 get_parse_options (void)
 {
   if (G_UNLIKELY (gca_settings == NULL))
-    gca_settings = g_settings_new ("org.gnome.builder.gnome-code-assistance");
+    gca_settings = g_settings_new (PACKAGE_APP_ID_LOWER".gnome-code-assistance");
 
   if (g_settings_get_boolean (gca_settings, "enable-pylint"))
     {

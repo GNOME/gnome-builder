@@ -86,7 +86,7 @@ ide_extension_adapter_get_settings (IdeExtensionAdapter *self,
                           peas_plugin_info_get_module_name (plugin_info),
                           g_type_name (self->interface_type));
 
-  return g_settings_new_with_path ("org.gnome.builder.extension-type", path);
+  return g_settings_new_with_path (PACKAGE_APP_ID_LOWER".extension-type", path);
 }
 
 static void

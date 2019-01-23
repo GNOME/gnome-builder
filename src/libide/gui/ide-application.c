@@ -113,7 +113,7 @@ ide_application_register_keybindings (IdeApplication *self)
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  settings = g_settings_new ("org.gnome.builder.editor");
+  settings = g_settings_new (PACKAGE_APP_ID_LOWER".editor");
   name = g_settings_get_string (settings, "keybindings");
   self->keybindings = ide_keybindings_new (name);
   g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
@@ -374,7 +374,7 @@ ide_application_init (IdeApplication *self)
   self->started_at = g_date_time_new_now_local ();
   self->workspace_type = IDE_TYPE_PRIMARY_WORKSPACE;
   self->workbenches = g_ptr_array_new_with_free_func (g_object_unref);
-  self->settings = g_settings_new ("org.gnome.builder");
+  self->settings = g_settings_new (PACKAGE_APP_ID_LOWER"");
   self->plugin_gresources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                    (GDestroyNotify)g_resource_unref);
 
