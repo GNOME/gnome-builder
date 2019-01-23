@@ -320,6 +320,9 @@ ide_terminal_open_link (IdeTerminal *self)
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
   g_autoptr(GMatchInfo) match = NULL;
+  g_autofree gchar *filename = NULL;
+  g_autofree gchar *line = NULL;
+  g_autofree gchar *column = NULL;
   GtkApplication *app;
   GtkWindow *focused_window;
 
@@ -329,17 +332,18 @@ ide_terminal_open_link (IdeTerminal *self)
   if (ide_str_empty0 (priv->url))
     return FALSE;
 
-  if (g_regex_match (filename_regex, priv->url, 0, &match))
+  if (g_regex_match (filename_regex, priv->url, 0, &match) &&
+      (filename = g_match_info_fetch (match, 1)) &&
+      (line = g_match_info_fetch (match, 2)) &&
+      (column = g_match_info_fetch (match, 3)))
     {
-      g_autofree gchar *filename = g_match_info_fetch (match, 1);
-      g_autofree gchar *line = g_match_info_fetch (match, 2);
-      g_autofree gchar *column = g_match_info_fetch (match, 3);
+      IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
       gint64 lineno = g_ascii_strtoull (line, NULL, 10);
       gint64 columnno = g_ascii_strtoull (column, NULL, 10);
-      IdeWorkbench *workbench;
-      Position pos = { lineno - 1, columnno - 1 };
-
-      workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+      Position pos = {
+        MAX (lineno, 1) - 1,
+        MAX (columnno, 1) - 1,
+      };
 
       ide_workbench_resolve_file_async (workbench,
                                         filename,
