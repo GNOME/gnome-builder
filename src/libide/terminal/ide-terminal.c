@@ -350,12 +350,12 @@ ide_terminal_open_link (IdeTerminal *self)
       return TRUE;
     }
 
-  if (NULL != (app = GTK_APPLICATION (g_application_get_default ())) &&
-      NULL != (focused_window = gtk_application_get_active_window (app)))
-    return gtk_show_uri_on_window (focused_window,
-                                   priv->url,
-                                   gtk_get_current_event_time (),
-                                   NULL);
+  if ((app = GTK_APPLICATION (g_application_get_default ())) &&
+      (focused_window = gtk_application_get_active_window (app)))
+    return ide_gtk_show_uri_on_window (focused_window,
+                                       priv->url,
+                                       g_get_monotonic_time (),
+                                       NULL);
 
   return FALSE;
 }
