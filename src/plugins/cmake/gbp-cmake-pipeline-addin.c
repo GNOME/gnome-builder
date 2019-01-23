@@ -156,7 +156,7 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
   else if (g_strcmp0 (ide_toolchain_get_id (toolchain), "default") != 0)
     {
       GbpCMakeBuildStageCrossFile *cross_file_stage;
-      cross_file_stage = gbp_cmake_build_stage_cross_file_new (context, toolchain);
+      cross_file_stage = gbp_cmake_build_stage_cross_file_new (toolchain);
       crossbuild_file = gbp_cmake_build_stage_cross_file_get_path (cross_file_stage, pipeline);
 
       id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, IDE_PIPELINE_STAGE (cross_file_stage));

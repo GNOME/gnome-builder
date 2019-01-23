@@ -198,19 +198,21 @@ gbp_cmake_build_stage_cross_file_init (GbpCMakeBuildStageCrossFile *self)
 }
 
 GbpCMakeBuildStageCrossFile *
-gbp_cmake_build_stage_cross_file_new (IdeContext    *context,
-                                      IdeToolchain  *toolchain)
+gbp_cmake_build_stage_cross_file_new (IdeToolchain *toolchain)
 {
-  GbpCMakeBuildStageCrossFile *build_stage = g_object_new (GBP_TYPE_CMAKE_BUILD_STAGE_CROSS_FILE,
-                                                           "context", context,
-                                                           NULL);
+  GbpCMakeBuildStageCrossFile *build_stage;
+
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (toolchain), NULL);
+
+  build_stage = g_object_new (GBP_TYPE_CMAKE_BUILD_STAGE_CROSS_FILE, NULL);
   build_stage->toolchain = g_object_ref (toolchain);
-  return build_stage;
+
+  return g_steal_pointer (&build_stage);
 }
 
 gchar *
 gbp_cmake_build_stage_cross_file_get_path (GbpCMakeBuildStageCrossFile *stage,
-                                           IdePipeline            *pipeline)
+                                           IdePipeline                 *pipeline)
 {
   g_return_val_if_fail (GBP_IS_CMAKE_BUILD_STAGE_CROSS_FILE (stage), NULL);
   g_return_val_if_fail (IDE_IS_PIPELINE (pipeline), NULL);
