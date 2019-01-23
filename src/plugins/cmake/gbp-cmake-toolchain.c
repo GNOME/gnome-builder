@@ -22,6 +22,8 @@
 
 #define G_LOG_DOMAIN "gbp-cmake-toolchain"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
@@ -44,14 +46,15 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 GbpCMakeToolchain *
-gbp_cmake_toolchain_new (IdeContext   *context)
+gbp_cmake_toolchain_new (IdeContext *context)
 {
   g_autoptr(IdeTriplet) triplet = NULL;
   g_autoptr(GbpCMakeToolchain) toolchain = NULL;
 
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
   triplet = ide_triplet_new_from_system ();
   toolchain = g_object_new (GBP_TYPE_CMAKE_TOOLCHAIN,
-                            "context", context,
                             "host-triplet", triplet,
                             NULL);
 
@@ -264,6 +267,7 @@ gbp_cmake_toolchain_get_property (GObject    *object,
     case PROP_FILE_PATH:
       g_value_set_string (value, gbp_cmake_toolchain_get_file_path (self));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -290,5 +294,4 @@ gbp_cmake_toolchain_class_init (GbpCMakeToolchainClass *klass)
 static void
 gbp_cmake_toolchain_init (GbpCMakeToolchain *self)
 {
-  
 }

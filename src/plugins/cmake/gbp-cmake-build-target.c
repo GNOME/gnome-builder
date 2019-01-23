@@ -96,10 +96,7 @@ gbp_cmake_build_target_new (IdeContext *context,
   g_return_val_if_fail (G_IS_FILE (install_directory), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  self = g_object_new (GBP_TYPE_CMAKE_BUILD_TARGET,
-                       "context", context,
-                       NULL);
-
+  self = g_object_new (GBP_TYPE_CMAKE_BUILD_TARGET, NULL);
   g_set_object (&self->install_directory, install_directory);
   self->name = g_strdup (name);
 
