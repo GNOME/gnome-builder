@@ -80,8 +80,8 @@ gbp_cmake_toolchain_get_file_path (GbpCMakeToolchain  *self)
 }
 
 static gchar *
-_gbp_cmake_toolchain_deploy_temporary_cmake (GbpCMakeToolchain  *self,
-                                             GCancellable  *cancellable)
+_gbp_cmake_toolchain_deploy_temporary_cmake (GbpCMakeToolchain *self,
+                                             GCancellable      *cancellable)
 {
   IdeContext *context;
   g_autofree gchar *defined_path = NULL;
@@ -94,8 +94,8 @@ _gbp_cmake_toolchain_deploy_temporary_cmake (GbpCMakeToolchain  *self,
     {
       g_autoptr(GError) error = NULL;
       g_autoptr(GFile) tmp_file = g_file_new_for_path (defined_path);
-      g_autoptr(GFile) cmake_lists_res = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/cmake/CMakeLists.txt");
-      g_autoptr(GFile) cmake_ini_res = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/cmake/toolchain-info.ini.cmake");
+      g_autoptr(GFile) cmake_lists_res = g_file_new_for_uri ("resource:///plugins/cmake/CMakeLists.txt");
+      g_autoptr(GFile) cmake_ini_res = g_file_new_for_uri ("resource:///plugins/cmake/toolchain-info.ini.cmake");
       g_autoptr(GFile) cmake_lists = g_file_get_child (tmp_file, "CMakeLists.txt");
       g_autoptr(GFile) cmake_ini = g_file_get_child (tmp_file, "toolchain-info.ini.cmake");
 
