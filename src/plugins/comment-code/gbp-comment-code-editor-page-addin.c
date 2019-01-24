@@ -405,13 +405,13 @@ gbp_comment_code_editor_page_addin_load (IdeEditorPageAddin *addin,
 
   controller = dzl_shortcut_controller_find (GTK_WIDGET (view));
   dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.editor-view.comment-code",
+                                              "org.gnome.builder.editor-page.comment-code",
                                               I_("<primary>m"),
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               "view.comment-code::0");
 
   dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.editor-view.uncomment-code",
+                                              "org.gnome.builder.editor-page.uncomment-code",
                                               I_("<primary><shift>m"),
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               "view.comment-code::1");
