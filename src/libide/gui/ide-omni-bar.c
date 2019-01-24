@@ -50,6 +50,8 @@ struct _IdeOmniBar
   GtkProgressBar       *progress;
   GtkWidget            *placeholder;
   DzlPriorityBox       *sections_box;
+
+  guint                 in_button : 1;
 };
 
 static void ide_omni_bar_move_next     (IdeOmniBar        *self,
@@ -101,13 +103,63 @@ multipress_pressed_cb (IdeOmniBar           *self,
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
 
-  gtk_popover_popup (self->popover);
+  if (gtk_widget_get_focus_on_click (GTK_WIDGET (self)) &&
+      !gtk_widget_has_focus (GTK_WIDGET (self)))
+    gtk_widget_grab_focus (GTK_WIDGET (self));
+
+  self->in_button = TRUE;
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   state_flags = gtk_style_context_get_state (style_context);
   gtk_style_context_set_state (style_context, state_flags | GTK_STATE_FLAG_ACTIVE);
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+multipress_released_cb (IdeOmniBar           *self,
+                        guint                 n_press,
+                        gdouble               x,
+                        gdouble               y,
+                        GtkGestureMultiPress *gesture)
+{
+  GtkStyleContext *style_context;
+  GtkStateFlags state_flags;
+  gboolean show;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
+
+  show = self->in_button;
+  self->in_button = FALSE;
+
+  if (show)
+    {
+      gtk_popover_popup (self->popover);
+      return;
+    }
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  state_flags = gtk_style_context_get_state (style_context);
+  gtk_style_context_set_state (style_context, state_flags & ~GTK_STATE_FLAG_ACTIVE);
+}
+
+static void
+multipress_cancel_cb (IdeOmniBar           *self,
+                      GdkEventSequence     *sequence,
+                      GtkGestureMultiPress *gesture)
+{
+  GtkStyleContext *style_context;
+  GtkStateFlags state_flags;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
+
+  self->in_button = FALSE;
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  state_flags = gtk_style_context_get_state (style_context);
+  gtk_style_context_set_state (style_context, state_flags & ~GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
@@ -439,10 +491,20 @@ ide_omni_bar_init (IdeOmniBar *self)
                             self);
 
   self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
-
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->gesture), FALSE);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->gesture), TRUE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect_swapped (self->gesture,
                             "pressed",
                             G_CALLBACK (multipress_pressed_cb),
+                            self);
+  g_signal_connect_swapped (self->gesture,
+                            "released",
+                            G_CALLBACK (multipress_released_cb),
+                            self);
+  g_signal_connect_swapped (self->gesture,
+                            "cancel",
+                            G_CALLBACK (multipress_cancel_cb),
                             self);
 
   g_signal_connect_object (self->notification_stack,
