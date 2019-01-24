@@ -184,7 +184,7 @@ ide_application_actions_help_cb (GObject      *object,
   if (g_network_monitor_can_reach_finish (monitor, result, NULL))
     {
       g_debug ("Can reach documentation site, opening online");
-      if (gtk_show_uri_on_window (focused_window, DOCS_URI, gtk_get_current_event_time (), NULL))
+      if (ide_gtk_show_uri_on_window (focused_window, DOCS_URI, g_get_monotonic_time (), NULL))
         IDE_EXIT;
     }
 
@@ -209,7 +209,7 @@ ide_application_actions_help_cb (GObject      *object,
 
       g_debug ("Documentation URI: %s", uri);
 
-      if (!ide_gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
+      if (!ide_gtk_show_uri_on_window (focused_window, uri, g_get_monotonic_time (), &error))
         g_warning ("Failed to load documentation: %s", error->message);
 
       IDE_EXIT;
