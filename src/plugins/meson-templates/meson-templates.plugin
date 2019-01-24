@@ -1,6 +1,7 @@
 [Plugin]
 Authors=Patrick Griffis <tingping@tingping.se>
 Copyright=Copyright © 2016 Patrick Griffis
+Depends=create-project;
 Description=Provides templates for creating meson projects
 Hidden=true
 Loader=python3
