@@ -92,9 +92,12 @@ gbp_cmake_toolchain_provider_load_worker (IdeTask      *task,
             continue;
 
           toolchain = gbp_cmake_toolchain_new (context);
+          ide_object_append (IDE_OBJECT (self), IDE_OBJECT (toolchain));
+
           if (!gbp_cmake_toolchain_load (toolchain, file, cancellable, &load_error))
             {
               g_debug ("Error loading %s : %s", file_path, load_error->message);
+              ide_clear_and_destroy_object (&toolchain);
               continue;
             }
 
