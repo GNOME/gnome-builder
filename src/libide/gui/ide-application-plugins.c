@@ -213,11 +213,20 @@ ide_application_plugins_load_plugin_cb (IdeApplication *self,
                                         PeasEngine     *engine)
 {
   const gchar *data_dir;
+  const gchar *module_dir;
+  const gchar *module_name;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (plugin_info != NULL);
   g_assert (PEAS_IS_ENGINE (engine));
+
+  data_dir = peas_plugin_info_get_data_dir (plugin_info);
+  module_dir = peas_plugin_info_get_module_dir (plugin_info);
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+
+  g_debug ("Loaded plugin \"%s\" with module-dir \"%s\"",
+           module_name, module_dir);
 
   if (peas_plugin_info_get_external_data (plugin_info, "Has-Resources"))
     {
@@ -226,8 +235,6 @@ ide_application_plugins_load_plugin_cb (IdeApplication *self,
        */
       ide_application_load_plugin_resources (self, engine, plugin_info);
     }
-
-  data_dir = peas_plugin_info_get_data_dir (plugin_info);
 
   /*
    * Only register resources if the path is to an embedded resource
