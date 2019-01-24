@@ -365,13 +365,13 @@ gbp_comment_code_editor_page_addin_comment_action (GSimpleAction *action,
 }
 
 static const DzlShortcutEntry comment_code_shortcut_entries[] = {
-  { "org.gnome.builder.editor-view.comment-code",
+  { "org.gnome.builder.editor-page.comment-code",
     0, NULL,
     NC_("shortcut window", "Editor shortcuts"),
     NC_("shortcut window", "Editing"),
     NC_("shortcut window", "Comment the code") },
 
-  { "org.gnome.builder.editor-view.uncomment-code",
+  { "org.gnome.builder.editor-page.uncomment-code",
     0, NULL,
     NC_("shortcut window", "Editor shortcuts"),
     NC_("shortcut window", "Editing"),
