@@ -38,6 +38,8 @@ struct _GbpCreateProjectSurface
 {
   IdeSurface            parent;
 
+  PeasExtensionSet     *providers;
+
   GtkEntry             *app_id_entry;
   GtkEntry             *project_name_entry;
   DzlFileChooserEntry  *project_location_entry;
@@ -350,7 +352,7 @@ project_template_sort_func (GtkFlowBoxChild *child1,
 
 static void
 gbp_create_project_surface_add_template_buttons (GbpCreateProjectSurface *self,
-                                                GList                  *templates)
+                                                 GList                   *templates)
 {
   g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
@@ -376,15 +378,17 @@ gbp_create_project_surface_add_template_buttons (GbpCreateProjectSurface *self,
 }
 
 static void
-template_providers_foreach_cb (PeasExtensionSet *set,
-                               PeasPluginInfo   *plugin_info,
-                               PeasExtension    *exten,
-                               gpointer          user_data)
+gbp_create_project_surface_provider_added_cb (PeasExtensionSet *set,
+                                              PeasPluginInfo   *plugin_info,
+                                              PeasExtension    *exten,
+                                              gpointer          user_data)
 {
   GbpCreateProjectSurface *self = user_data;
   IdeTemplateProvider *provider = (IdeTemplateProvider *)exten;
-  GList *templates;
+  g_autolist(IdeProjectTemplate) templates = NULL;
+  GtkFlowBoxChild *child;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (IDE_IS_TEMPLATE_PROVIDER (provider));
@@ -397,7 +401,22 @@ template_providers_foreach_cb (PeasExtensionSet *set,
   gtk_flow_box_invalidate_sort (self->project_template_chooser);
   gbp_create_project_surface_refilter (self);
 
-  g_list_free_full (templates, g_object_unref);
+  /*
+   * We do the following after every add, because we might get some delayed
+   * additions for templates during startup.
+   */
+
+  /* Default to C, always. We might investigate setting this to the
+   * previously selected item in the future.
+   */
+  dzl_radio_box_set_active_id (self->project_language_chooser, "C");
+
+  /* Select the first template that is visible so we have a selection
+   * initially without the user having to select. We might also try to
+   * re-select a previous item in the future.
+   */
+  if ((child = gtk_flow_box_get_child_at_index (self->project_template_chooser, 0)))
+    gtk_flow_box_select_child (self->project_template_chooser, child);
 }
 
 static GFile *
@@ -422,38 +441,33 @@ static void
 gbp_create_project_surface_constructed (GObject *object)
 {
   GbpCreateProjectSurface *self = GBP_CREATE_PROJECT_SURFACE (object);
-  PeasExtensionSet *extensions;
-  GtkFlowBoxChild *child;
-  PeasEngine *engine;
 
   g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
-  engine = peas_engine_get_default ();
-
-  /* Load templates */
-  extensions = peas_extension_set_new (engine, IDE_TYPE_TEMPLATE_PROVIDER, NULL);
-  peas_extension_set_foreach (extensions, template_providers_foreach_cb, self);
-  g_clear_object (&extensions);
-
   G_OBJECT_CLASS (gbp_create_project_surface_parent_class)->constructed (object);
 
-  /* Default to C, always. We might investigate setting this to the
-   * previously selected item in the future.
-   */
-  dzl_radio_box_set_active_id (self->project_language_chooser, "C");
+  self->providers = peas_extension_set_new (peas_engine_get_default (),
+                                            IDE_TYPE_TEMPLATE_PROVIDER,
+                                            NULL);
 
-  /* Select the first template that is visible so we have a selection
-   * initially without the user having to select. We might also try to
-   * re-select a previous item in the future.
-   */
-  if ((child = gtk_flow_box_get_child_at_index (self->project_template_chooser, 0)))
-    gtk_flow_box_select_child (self->project_template_chooser, child);
+  g_signal_connect (self->providers,
+                    "extension-added",
+                    G_CALLBACK (gbp_create_project_surface_provider_added_cb),
+                    self);
+
+  peas_extension_set_foreach (self->providers,
+                              gbp_create_project_surface_provider_added_cb,
+                              self);
 }
 
 static void
-gbp_create_project_surface_finalize (GObject *object)
+gbp_create_project_surface_destroy (GtkWidget *widget)
 {
-  G_OBJECT_CLASS (gbp_create_project_surface_parent_class)->finalize (object);
+  GbpCreateProjectSurface *self = (GbpCreateProjectSurface *)widget;
+
+  g_clear_object (&self->providers);
+
+  GTK_WIDGET_CLASS (gbp_create_project_surface_parent_class)->destroy (widget);
 }
 
 static gboolean
@@ -525,9 +539,9 @@ gbp_create_project_surface_class_init (GbpCreateProjectSurfaceClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gbp_create_project_surface_constructed;
-  object_class->finalize = gbp_create_project_surface_finalize;
   object_class->get_property = gbp_create_project_surface_get_property;
 
+  widget_class->destroy = gbp_create_project_surface_destroy;
   widget_class->grab_focus = gbp_create_project_surface_grab_focus;
 
   properties [PROP_IS_READY] =
