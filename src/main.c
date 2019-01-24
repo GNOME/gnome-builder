@@ -72,7 +72,7 @@ early_params_check (gint       *argc,
   g_option_context_set_ignore_unknown_options (context, TRUE);
   g_option_context_set_help_enabled (context, FALSE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_add_group (context, gir_group);
+  g_option_context_add_group (context, g_steal_pointer (&gir_group));
   g_option_context_parse (context, argc, argv, NULL);
 }
 
