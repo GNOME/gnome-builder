@@ -379,6 +379,8 @@ _ide_application_load_plugins (IdeApplication *self)
   else
     peas_engine_enable_loader (engine, "python3");
 
+  peas_engine_rescan_plugins (engine);
+
   plugins = peas_engine_get_plugin_list (engine);
 
   for (const GList *iter = plugins; iter; iter = iter->next)
