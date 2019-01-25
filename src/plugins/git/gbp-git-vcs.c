@@ -534,7 +534,10 @@ gbp_git_vcs_reload_finish (GbpGitVcs     *self,
     }
 
   if (g_set_object (&self->repository, repository))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPOSITORY]);
+    {
+      ide_vcs_emit_changed (IDE_VCS (self));
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPOSITORY]);
+    }
 
 failure:
   ide_object_unlock (IDE_OBJECT (self));
