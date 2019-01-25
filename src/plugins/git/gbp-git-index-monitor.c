@@ -18,7 +18,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-git-index-monitor"
+#define G_LOG_DOMAIN       "gbp-git-index-monitor"
+#define CHANGED_DELAY_MSEC 250
 
 #include "config.h"
 
@@ -31,6 +32,7 @@ struct _GbpGitIndexMonitor
   GObject       parent_instance;
   GFile        *repository_dir;
   GFileMonitor *monitor;
+  guint         changed_source;
 };
 
 G_DEFINE_TYPE (GbpGitIndexMonitor, gbp_git_index_monitor, G_TYPE_OBJECT)
@@ -47,6 +49,7 @@ gbp_git_index_monitor_dispose (GObject *object)
 {
   GbpGitIndexMonitor *self = (GbpGitIndexMonitor *)object;
 
+  g_clear_handle_id (&self->changed_source, g_source_remove);
   g_clear_object (&self->repository_dir);
 
   if (self->monitor != NULL)
@@ -83,6 +86,35 @@ gbp_git_index_monitor_init (GbpGitIndexMonitor *self)
 {
 }
 
+static gboolean
+gbp_git_index_monitor_queue_changed_cb (gpointer data)
+{
+  GbpGitIndexMonitor *self = data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_INDEX_MONITOR (self));
+
+  self->changed_source = 0;
+
+  g_signal_emit (self, signals [CHANGED], 0);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gbp_git_index_monitor_queue_changed (GbpGitIndexMonitor *self)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_INDEX_MONITOR (self));
+
+  g_clear_handle_id (&self->changed_source, g_source_remove);
+  self->changed_source = g_timeout_add_full (G_PRIORITY_LOW,
+                                             CHANGED_DELAY_MSEC,
+                                             gbp_git_index_monitor_queue_changed_cb,
+                                             g_object_ref (self),
+                                             g_object_unref);
+}
+
 static void
 gbp_git_index_monitor_changed_cb (GbpGitIndexMonitor *self,
                                   GFile              *file,
@@ -99,13 +131,15 @@ gbp_git_index_monitor_changed_cb (GbpGitIndexMonitor *self,
   g_assert (!other_file || G_IS_FILE (other_file));
   g_assert (G_IS_FILE_MONITOR (monitor));
 
-  if (event != G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT)
-    IDE_EXIT;
-
   name = g_file_get_basename (file);
 
-  if (ide_str_equal0 (name, "index"))
-    g_signal_emit (self, signals [CHANGED], 0);
+  if (ide_str_equal0 (name, "index") ||
+      ide_str_equal0 (name, "HEAD") ||
+      ide_str_equal0 (name, "ORIG_HEAD") ||
+      ide_str_equal0 (name, "FETCH_HEAD") ||
+      ide_str_equal0 (name, "COMMIT_EDITMSG") ||
+      ide_str_equal0 (name, "config"))
+    gbp_git_index_monitor_queue_changed (self);
 
   IDE_EXIT;
 }
