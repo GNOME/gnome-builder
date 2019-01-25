@@ -114,6 +114,8 @@ ide_vcs_monitor_list_status_cb (GObject      *object,
   g_autoptr(IdeVcsMonitor) self = user_data;
   g_autoptr(GListModel) model = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_VCS (vcs));
   g_assert (IDE_IS_VCS_MONITOR (self));
@@ -157,12 +159,16 @@ ide_vcs_monitor_list_status_cb (GObject      *object,
     }
 
   ide_object_unlock (IDE_OBJECT (self));
+
+  IDE_EXIT;
 }
 
 static gboolean
 ide_vcs_monitor_cache_cb (gpointer data)
 {
   IdeVcsMonitor *self = data;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_VCS_MONITOR (self));
@@ -185,12 +191,14 @@ ide_vcs_monitor_cache_cb (gpointer data)
 
   ide_object_unlock (IDE_OBJECT (self));
 
-  return G_SOURCE_REMOVE;
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
 ide_vcs_monitor_queue_reload (IdeVcsMonitor *self)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_VCS_MONITOR (self));
 
@@ -201,6 +209,8 @@ ide_vcs_monitor_queue_reload (IdeVcsMonitor *self)
                                           g_object_ref (self),
                                           g_object_unref);
   ide_object_unlock (IDE_OBJECT (self));
+
+  IDE_EXIT;
 }
 
 static void
@@ -283,6 +293,8 @@ ide_vcs_monitor_start_cb (GObject      *object,
 static void
 ide_vcs_monitor_maybe_reload_locked (IdeVcsMonitor *self)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_VCS_MONITOR (self));
 
   g_clear_pointer (&self->status_by_file, g_hash_table_unref);
@@ -308,6 +320,8 @@ ide_vcs_monitor_maybe_reload_locked (IdeVcsMonitor *self)
                                               ide_vcs_monitor_start_cb,
                                               g_object_ref (self));
     }
+
+  IDE_EXIT;
 }
 
 static void
