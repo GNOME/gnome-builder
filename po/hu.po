@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-10-01 20:23+0000\n"
-"PO-Revision-Date: 2018-10-02 17:27+0200\n"
+"POT-Creation-Date: 2018-10-31 12:57+0000\n"
+"PO-Revision-Date: 2018-11-02 17:27+0100\n"
 "Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -911,20 +911,20 @@ msgstr "Gyorsbillentyű ablak megjelenítése"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Nem sikerült figyelőt létrehozni a háttérbeli változásokhoz: %s"
 
-#: src/libide/buffers/ide-buffer.c:2908
+#: src/libide/buffers/ide-buffer.c:2922
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó."
 
-#: src/libide/buffers/ide-buffer.c:3379
+#: src/libide/buffers/ide-buffer.c:3393
 #, c-format
 msgid "Buffer failed: %s"
 msgstr "Puffer sikertelen: %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:610
+#: src/libide/buffers/ide-buffer-manager.c:619
 msgid "File too large to be opened."
 msgstr "A fájl túl nagy a megnyitáshoz."
 
-#: src/libide/buffers/ide-buffer-manager.c:1825
+#: src/libide/buffers/ide-buffer-manager.c:1852
 #, c-format
 msgid "unsaved document %u"
 msgstr "mentetlen dokumentum %u"
@@ -933,8 +933,8 @@ msgstr "mentetlen dokumentum %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1864
-#: src/libide/buffers/ide-buffer-manager.c:1927
+#: src/libide/buffers/ide-buffer-manager.c:1891
+#: src/libide/buffers/ide-buffer-manager.c:1954
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -1381,7 +1381,7 @@ msgid "No file was provided."
 msgstr "Nincs fájl megadva."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:843
+#: src/libide/editor/ide-editor-perspective.c:847
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:155
 msgid "Editor"
@@ -1438,7 +1438,7 @@ msgstr "Mozgatás balra"
 msgid "Move Right"
 msgstr "Mozgatás jobbra"
 
-#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:119
+#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:121
 #: src/plugins/devhelp/gtk/menus.ui:11 src/plugins/terminal/gtk/menus.ui:25
 msgid "Close"
 msgstr "Bezárás"
@@ -1463,11 +1463,11 @@ msgstr "Nyomtatás…"
 msgid "Document Preferences"
 msgstr "Dokumentumbeállítások"
 
-#: src/libide/editor/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:113
 msgid "Save _As"
 msgstr "Me_ntés másként"
 
-#: src/libide/editor/gtk/menus.ui:127
+#: src/libide/editor/gtk/menus.ui:129
 msgid "New File"
 msgstr "Új fájl"
 
@@ -1597,6 +1597,14 @@ msgstr "Segédeszköz panel bekapcsolása"
 msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Összes fájl bezárása"
+
+#: src/libide/editor/ide-editor-perspective.ui:24
+msgid "Restoring previous session"
+msgstr "Előző munkamenet visszaállítása"
+
+#: src/libide/editor/ide-editor-perspective.ui:25
+msgid "Your previous session will be ready momentarily."
+msgstr "Az előző munkamenet pillanatok múlva vissza lesz állítva."
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -2380,7 +2388,7 @@ msgid "Find text within terminal"
 msgstr "Szöveg keresése terminálban"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:898
+#: src/libide/langserv/ide-langserv-client.c:897
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "A nyelvi kiszolgáló előkészítése meghiúsult: %s"
@@ -3235,7 +3243,7 @@ msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspektívák"
 
-#: src/main.c:120
+#: src/main.c:86
 msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
@@ -3252,7 +3260,7 @@ msgid "Bootstrapping build system"
 msgstr "Összeállítási rendszer előkészítése"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:291
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:168
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:171
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Projekt beállítása"
@@ -3262,7 +3270,7 @@ msgstr "Projekt beállítása"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:197
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:200
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Projekt összeállítása"
@@ -3540,7 +3548,7 @@ msgstr "Projekt beállítása"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:207
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:210
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
 msgstr "Projekt telepítése"
@@ -3992,7 +4000,7 @@ msgstr "Már létezik ilyen nevű könyvtár"
 msgid "Your project will be created within %s."
 msgstr "A projekt itt lesz létrehozva: %s."
 
-#: src/plugins/create-project/gbp-create-project-widget.c:612
+#: src/plugins/create-project/gbp-create-project-widget.c:630
 msgid "A failure occurred while initializing version control"
 msgstr "Hiba történt a verziókövetés előkészítésekor"
 
@@ -4293,7 +4301,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "A kért fájl nem létezik a git indexben."
 
 #: src/plugins/git/ide-git-clone-widget.c:159
-#: src/plugins/git/ide-git-clone-widget.c:500
+#: src/plugins/git/ide-git-clone-widget.c:518
 msgid "A valid Git URL is required"
 msgstr "Egy érvényes Git URL szükséges"
 
@@ -4303,11 +4311,11 @@ msgstr "Egy érvényes Git URL szükséges"
 msgid "Your project will be created at %s"
 msgstr "A projekt itt lesz létrehozva: %s"
 
-#: src/plugins/git/ide-git-clone-widget.c:216
+#: src/plugins/git/ide-git-clone-widget.c:228
 msgid "Apply"
 msgstr "Alkalmaz"
 
-#: src/plugins/git/ide-git-clone-widget.c:218
+#: src/plugins/git/ide-git-clone-widget.c:230
 msgid "Remote Branch to Clone"
 msgstr "Klónozandó távoli ág"
 
@@ -4430,11 +4438,11 @@ msgstr "Új üres projekt létrehozása egyszerű Makefile használatával"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:108
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:111
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr "A Meson-alapú projekt betöltésre került, de a Ninja nem található."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:128
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:131
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "A Meson-alapú projekt betöltésre került, de a meson nem található."
 
