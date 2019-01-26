@@ -240,6 +240,7 @@ gbp_editor_workspace_addin_load (IdeWorkspaceAddin *addin,
   /* Add the editor surface to the workspace */
   self->surface = g_object_new (IDE_TYPE_EDITOR_SURFACE,
                                 "name", "editor",
+                                "restore-panel", IDE_IS_PRIMARY_WORKSPACE (workspace),
                                 "visible", TRUE,
                                 NULL);
   g_signal_connect (self->surface,

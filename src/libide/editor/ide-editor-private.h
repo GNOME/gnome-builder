@@ -48,6 +48,8 @@ struct _IdeEditorSurface
   /* State before entering focus mode */
   guint                prefocus_had_left : 1;
   guint                prefocus_had_bottom : 1;
+
+  guint                restore_panel : 1;
 };
 
 struct _IdeEditorPage

@@ -38,9 +38,17 @@ typedef struct
   IdeLocation      *location;
 } FocusLocation;
 
+enum {
+  PROP_0,
+  PROP_RESTORE_PANEL,
+  N_PROPS
+};
+
 static void ide_editor_surface_focus_location_full (IdeEditorSurface *self,
                                                     IdeLocation      *location,
                                                     gboolean          open_if_not_found);
+
+static GParamSpec *properties [N_PROPS];
 
 G_DEFINE_TYPE (IdeEditorSurface, ide_editor_surface, IDE_TYPE_SURFACE)
 
@@ -86,7 +94,7 @@ ide_editor_surface_restore_panel_state (IdeEditorSurface *self)
   settings = g_settings_new ("org.gnome.builder.workbench");
 
   pane = dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self));
-  reveal = g_settings_get_boolean (settings, "left-visible");
+  reveal = self->restore_panel ? g_settings_get_boolean (settings, "left-visible") : FALSE;
   position = g_settings_get_int (settings, "left-position");
   dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
   set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), reveal);
@@ -97,7 +105,7 @@ ide_editor_surface_restore_panel_state (IdeEditorSurface *self)
   set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), FALSE);
 
   pane = dzl_dock_bin_get_bottom_edge (DZL_DOCK_BIN (self));
-  reveal = g_settings_get_boolean (settings, "bottom-visible");
+  reveal = self->restore_panel ? g_settings_get_boolean (settings, "bottom-visible") : FALSE;
   position = g_settings_get_int (settings, "bottom-position");
   dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
   set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), reveal);
@@ -112,6 +120,9 @@ ide_editor_surface_save_panel_state (IdeEditorSurface *self)
   guint position;
 
   g_assert (IDE_IS_EDITOR_SURFACE (self));
+
+  if (!self->restore_panel)
+    return;
 
   /* TODO: possibly belongs in editor settings */
   settings = g_settings_new ("org.gnome.builder.workbench");
@@ -459,12 +470,54 @@ ide_editor_surface_realize (GtkWidget *widget)
 }
 
 static void
+ide_editor_surface_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  IdeEditorSurface *self = IDE_EDITOR_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case PROP_RESTORE_PANEL:
+      g_value_set_boolean (value, self->restore_panel);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_editor_surface_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  IdeEditorSurface *self = IDE_EDITOR_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case PROP_RESTORE_PANEL:
+      self->restore_panel = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_editor_surface_class_init (IdeEditorSurfaceClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   DzlDockBinClass *dock_bin_class = DZL_DOCK_BIN_CLASS (klass);
   IdeSurfaceClass *surface_class = IDE_SURFACE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = ide_editor_surface_get_property;
+  object_class->set_property = ide_editor_surface_set_property;
 
   widget_class->destroy = ide_editor_surface_destroy;
   widget_class->hierarchy_changed = ide_editor_surface_hierarchy_changed;
@@ -484,6 +537,13 @@ ide_editor_surface_class_init (IdeEditorSurfaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSurface, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSurface, loading_stack);
 
+  properties [PROP_RESTORE_PANEL] =
+    g_param_spec_boolean ("restore-panel", NULL, NULL,
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
   g_type_ensure (IDE_TYPE_EDITOR_SIDEBAR);
   g_type_ensure (IDE_TYPE_GRID);
 }
@@ -492,6 +552,8 @@ static void
 ide_editor_surface_init (IdeEditorSurface *self)
 {
   IdeEditorSidebar *sidebar;
+
+  self->restore_panel = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
