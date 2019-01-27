@@ -252,11 +252,16 @@ foreach_cb (gpointer data,
   IdeBufferLineChange change = 0;
 
   if (entry->mark & LINE_MARK_ADDED)
-    change = IDE_BUFFER_LINE_CHANGE_ADDED;
-  else if (entry->mark & LINE_MARK_REMOVED)
-    change = IDE_BUFFER_LINE_CHANGE_DELETED;
-  else if (entry->mark & LINE_MARK_CHANGED)
-    change = IDE_BUFFER_LINE_CHANGE_CHANGED;
+    change |= IDE_BUFFER_LINE_CHANGE_ADDED;
+
+  if (entry->mark & LINE_MARK_REMOVED)
+    change |= IDE_BUFFER_LINE_CHANGE_DELETED;
+
+  if (entry->mark & LINE_MARK_PREVIOUS_REMOVED)
+    change |= IDE_BUFFER_LINE_CHANGE_PREVIOUS_DELETED;
+
+  if (entry->mark & LINE_MARK_CHANGED)
+    change |= IDE_BUFFER_LINE_CHANGE_CHANGED;
 
   state->func (entry->line, change, state->user_data);
 }
