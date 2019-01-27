@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_VCS_BRANCH (ide_vcs_branch_get_type ())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeVcsBranch, ide_vcs_branch, IDE, VCS_BRANCH, IdeObject)
+G_DECLARE_INTERFACE (IdeVcsBranch, ide_vcs_branch, IDE, VCS_BRANCH, GObject)
 
 struct _IdeVcsBranchInterface
 {

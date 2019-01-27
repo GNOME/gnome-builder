@@ -24,7 +24,7 @@
 
 #include "ide-vcs-branch.h"
 
-G_DEFINE_INTERFACE (IdeVcsBranch, ide_vcs_branch, IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeVcsBranch, ide_vcs_branch, G_TYPE_OBJECT)
 
 static void
 ide_vcs_branch_default_init (IdeVcsBranchInterface *iface)
