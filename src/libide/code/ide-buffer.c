@@ -2630,10 +2630,13 @@ ide_buffer_dup_content (IdeBuffer *self)
        */
       self->content = g_bytes_new_take (g_steal_pointer (&text), len);
 
-      file = ide_buffer_get_file (self);
-      context = ide_buffer_ref_context (IDE_BUFFER (self));
-      unsaved_files = ide_unsaved_files_from_context (context);
-      ide_unsaved_files_update (unsaved_files, file, self->content);
+      if (!ide_object_in_destruction (IDE_OBJECT (self)))
+        {
+          file = ide_buffer_get_file (self);
+          context = ide_buffer_ref_context (IDE_BUFFER (self));
+          unsaved_files = ide_unsaved_files_from_context (context);
+          ide_unsaved_files_update (unsaved_files, file, self->content);
+        }
     }
 
   return g_bytes_ref (self->content);
