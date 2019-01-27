@@ -187,12 +187,114 @@ gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
 }
 
 static void
+gbp_vcsui_tree_addin_list_branches_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeVcs *vcs = (IdeVcs *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GPtrArray) branches = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if ((branches = ide_vcs_list_branches_finish (vcs, result, &error)))
+    {
+      IdeTreeNode *parent = ide_task_get_task_data (task);
+
+      for (guint i = 0; i < branches->len; i++)
+        {
+          IdeVcsBranch *branch = g_ptr_array_index (branches, i);
+          g_autofree gchar *name = ide_vcs_branch_get_name (branch);
+          g_autoptr(IdeTreeNode) child = NULL;
+
+          child = g_object_new (IDE_TYPE_TREE_NODE,
+                                "display-name", name,
+                                "icon-name", "builder-vcs-git-symbolic",
+                                "item", branch,
+                                NULL);
+          ide_tree_node_append (parent, child);
+        }
+    }
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (branches, g_object_unref);
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+static void
+gbp_vcsui_tree_addin_build_children_async (IdeTreeAddin        *addin,
+                                           IdeTreeNode         *node,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_VCSUI_TREE_ADDIN (addin));
+  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (addin, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_vcsui_tree_addin_build_children_async);
+  ide_task_set_task_data (task, g_object_ref (node), g_object_unref);
+
+  if (ide_tree_node_holds (node, IDE_TYPE_CONTEXT))
+    {
+      IdeContext *context = ide_tree_node_get_item (node);
+      IdeVcs *vcs = ide_vcs_from_context (context);
+
+      if (!IDE_IS_DIRECTORY_VCS (vcs))
+        {
+          g_autoptr(IdeTreeNode) vcs_node = NULL;
+
+          vcs_node = g_object_new (IDE_TYPE_TREE_NODE,
+                                   "children-possible", TRUE,
+                                   "display-name", _("Branches"),
+                                   "icon-name", "builder-vcs-git-symbolic",
+                                   "item", vcs,
+                                   NULL);
+          ide_tree_node_prepend (node, vcs_node);
+        }
+    }
+  else if (ide_tree_node_holds (node, IDE_TYPE_VCS))
+    {
+      IdeVcs *vcs = ide_tree_node_get_item (node);
+
+      ide_vcs_list_branches_async (vcs,
+                                   cancellable,
+                                   gbp_vcsui_tree_addin_list_branches_cb,
+                                   g_steal_pointer (&task));
+      return;
+    }
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+static gboolean
+gbp_vcsui_tree_addin_build_children_finish (IdeTreeAddin  *addin,
+                                            GAsyncResult  *result,
+                                            GError       **error)
+{
+  g_assert (GBP_IS_VCSUI_TREE_ADDIN (addin));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
 tree_addin_iface_init (IdeTreeAddinInterface *iface)
 {
   iface->cell_data_func = gbp_vcsui_tree_addin_cell_data_func;
   iface->load = gbp_vcsui_tree_addin_load;
   iface->selection_changed = gbp_vcsui_tree_addin_selection_changed;
   iface->unload = gbp_vcsui_tree_addin_unload;
+  iface->build_children_async = gbp_vcsui_tree_addin_build_children_async;
+  iface->build_children_finish = gbp_vcsui_tree_addin_build_children_finish;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpVcsuiTreeAddin, gbp_vcsui_tree_addin, G_TYPE_OBJECT,
