@@ -507,12 +507,13 @@ populate_changes_cb (guint               line,
   info->is_add = !!(change & IDE_BUFFER_LINE_CHANGE_ADDED);
   info->is_change = !!(change & IDE_BUFFER_LINE_CHANGE_CHANGED);
   info->is_delete = !!(change & IDE_BUFFER_LINE_CHANGE_DELETED);
+  info->is_prev_delete = !!(change & IDE_BUFFER_LINE_CHANGE_PREVIOUS_DELETED);
 
   if (pos > 0)
     {
       LineInfo *last = &g_array_index (state->lines, LineInfo, pos - 1);
 
-      info->is_prev_delete = last->is_delete;
+      info->is_prev_delete |= last->is_delete;
       last->is_next_delete = info->is_delete;
     }
 }
@@ -985,6 +986,7 @@ draw_line_change (GbpOmniGutterRenderer        *self,
                   cairo_t                      *cr,
                   GdkRectangle                 *area,
                   LineInfo                     *info,
+                  guint                         line,
                   GtkSourceGutterRendererState  state)
 {
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
@@ -1009,6 +1011,24 @@ draw_line_change (GbpOmniGutterRenderer        *self,
       else
         gdk_cairo_set_source_rgba (cr, &self->changes.change);
 
+      cairo_fill (cr);
+    }
+
+  if (line == 0 && info->is_prev_delete)
+    {
+      cairo_move_to (cr,
+                     area->x + area->width,
+                     area->y);
+      cairo_line_to (cr,
+                     area->x + area->width - DELETE_WIDTH,
+                     area->y + DELETE_HEIGHT / 2);
+      cairo_line_to (cr,
+                     area->x + area->width - DELETE_WIDTH,
+                     area->y);
+      cairo_line_to (cr,
+                     area->x + area->width,
+                     area->y);
+      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
       cairo_fill (cr);
     }
 
@@ -1162,7 +1182,7 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
        * breakpoint arrows.
        */
       if (self->show_line_changes && IS_LINE_CHANGE (info))
-        draw_line_change (self, cr, cell_area, info, state);
+        draw_line_change (self, cr, cell_area, info, line, state);
 
       /* Draw breakpoint arrows if we have any breakpoints that could
        * potentially match.
