@@ -2,6 +2,7 @@ if get_option('plugin_git')
 
 plugins_sources += files([
   'git-plugin.c',
+  'gbp-git-branch.c',
   'gbp-git-buffer-addin.c',
   'gbp-git-buffer-change-monitor.c',
   'gbp-git-dependency-updater.c',

@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "gbp-git-branch.h"
 #include "gbp-git-vcs.h"
 #include "gbp-git-vcs-config.h"
 
@@ -446,6 +447,103 @@ gbp_git_vcs_list_status_finish (IdeVcs        *vcs,
 }
 
 static void
+gbp_git_vcs_list_branches_worker (IdeTask      *task,
+                                  gpointer      source_object,
+                                  gpointer      task_data,
+                                  GCancellable *cancellable)
+{
+  GbpGitVcs *self = source_object;
+  g_autoptr(GPtrArray) branches = NULL;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  branches = g_ptr_array_new_with_free_func (g_object_unref);
+
+  ide_object_lock (IDE_OBJECT (self));
+
+  if (self->repository != NULL)
+    {
+      g_autoptr(GgitBranchEnumerator) enumerator = NULL;
+      g_autoptr(GError) error = NULL;
+
+      if (!(enumerator = ggit_repository_enumerate_branches (self->repository,
+                                                             GGIT_BRANCH_LOCAL,
+                                                             &error)))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          goto unlock;
+        }
+
+      while (ggit_branch_enumerator_next (enumerator))
+        {
+          g_autoptr(GgitRef) ref = ggit_branch_enumerator_get (enumerator);
+          const gchar *name = ggit_ref_get_name (ref);
+
+          g_ptr_array_add (branches, gbp_git_branch_new (name));
+        }
+
+      ide_task_return_pointer (task,
+                               g_steal_pointer (&branches),
+                               (GDestroyNotify)g_ptr_array_unref);
+    }
+  else
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "No repository to access");
+    }
+
+unlock:
+  ide_object_unlock (IDE_OBJECT (self));
+}
+
+static void
+gbp_git_vcs_list_branches_async (IdeVcs              *vcs,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_list_status_async);
+  ide_task_set_return_on_cancel (task, TRUE);
+
+  ide_object_lock (IDE_OBJECT (self));
+  if (self->repository == NULL)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "No repository loaded");
+  else
+    ide_task_run_in_thread (task, gbp_git_vcs_list_branches_worker);
+  ide_object_unlock (IDE_OBJECT (self));
+
+  IDE_EXIT;
+}
+
+static GPtrArray *
+gbp_git_vcs_list_branches_finish (IdeVcs        *vcs,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_VCS (vcs), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+static void
 vcs_iface_init (IdeVcsInterface *iface)
 {
   iface->get_workdir = gbp_git_vcs_get_workdir;
@@ -454,6 +552,8 @@ vcs_iface_init (IdeVcsInterface *iface)
   iface->is_ignored = gbp_git_vcs_is_ignored;
   iface->list_status_async = gbp_git_vcs_list_status_async;
   iface->list_status_finish = gbp_git_vcs_list_status_finish;
+  iface->list_branches_async = gbp_git_vcs_list_branches_async;
+  iface->list_branches_finish = gbp_git_vcs_list_branches_finish;
 }
 
 static void
