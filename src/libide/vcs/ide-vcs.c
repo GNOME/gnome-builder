@@ -66,10 +66,36 @@ ide_vcs_real_list_status_finish (IdeVcs        *self,
 }
 
 static void
+ide_vcs_real_list_branches_async (IdeVcs              *self,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_vcs_real_list_branches_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Not supported by %s",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+static GPtrArray *
+ide_vcs_real_list_branches_finish (IdeVcs        *self,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
 ide_vcs_default_init (IdeVcsInterface *iface)
 {
   iface->list_status_async = ide_vcs_real_list_status_async;
   iface->list_status_finish = ide_vcs_real_list_status_finish;
+  iface->list_branches_async = ide_vcs_real_list_branches_async;
+  iface->list_branches_finish = ide_vcs_real_list_branches_finish;
 
   g_object_interface_install_property (iface,
                                        g_param_spec_string ("branch-name",
@@ -439,4 +465,39 @@ ide_vcs_ref_from_context (IdeContext *context)
   ide_object_unlock (IDE_OBJECT (context));
 
   return g_steal_pointer (&ret);
+}
+
+void
+ide_vcs_list_branches_async (IdeVcs              *self,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_VCS (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_VCS_GET_IFACE (self)->list_branches_async (self, cancellable, callback, user_data);
+}
+
+/**
+ * ide_vcs_list_branches_finish:
+ * @self: an #IdeVcs
+ * @result: a #GAsyncResult
+ * @error: location for a #GError
+ *
+ * Returns: (transfer full) (element-type IdeVcsBranch): an array of
+ *   #IdeVcsBranch.
+ *
+ * Since: 3.32
+ */
+GPtrArray *
+ide_vcs_list_branches_finish (IdeVcs        *self,
+                              GAsyncResult  *result,
+                              GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  return IDE_VCS_GET_IFACE (self)->list_branches_finish (self, result, error);
 }

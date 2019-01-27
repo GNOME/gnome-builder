@@ -8,6 +8,7 @@ libide_include_directories += include_directories('.')
 
 libide_vcs_public_headers = [
   'ide-directory-vcs.h',
+  'ide-vcs-branch.h',
   'ide-vcs-config.h',
   'ide-vcs-cloner.h',
   'ide-vcs-file-info.h',
@@ -31,6 +32,7 @@ install_headers(libide_vcs_public_headers, subdir: libide_vcs_header_subdir)
 
 libide_vcs_public_sources = [
   'ide-directory-vcs.c',
+  'ide-vcs-branch.c',
   'ide-vcs-config.c',
   'ide-vcs-cloner.c',
   'ide-vcs-file-info.c',
