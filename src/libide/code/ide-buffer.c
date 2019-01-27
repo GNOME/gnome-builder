@@ -2630,7 +2630,9 @@ ide_buffer_dup_content (IdeBuffer *self)
        */
       self->content = g_bytes_new_take (g_steal_pointer (&text), len);
 
-      if (!ide_object_in_destruction (IDE_OBJECT (self)))
+      /* Only persist if we have access to the object tree */
+      if (self->buffer_manager != NULL &&
+          !ide_object_in_destruction (IDE_OBJECT (self->buffer_manager)))
         {
           file = ide_buffer_get_file (self);
           context = ide_buffer_ref_context (IDE_BUFFER (self));
