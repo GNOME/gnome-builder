@@ -37,9 +37,11 @@ _gbp_meson_register_types (PeasObjectModule *module)
   /* For in-tree builds of meson projects */
   ide_g_file_add_ignored_pattern ("_build");
 
+#if 0
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIG_VIEW_ADDIN,
                                               GBP_TYPE_MESON_CONFIG_VIEW_ADDIN);
+#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PIPELINE_ADDIN,
                                               GBP_TYPE_MESON_PIPELINE_ADDIN);
