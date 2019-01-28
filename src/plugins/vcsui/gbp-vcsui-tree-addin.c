@@ -76,15 +76,72 @@ on_tree_style_changed_cb (GbpVcsuiTreeAddin *self,
 }
 
 static void
+gbp_vcsui_tree_addin_switch_branch_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeVcs *vcs = (IdeVcs *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_vcs_switch_branch_finish (vcs, result, &error))
+    g_warning ("%s", error->message);
+
+  /* TODO: Force reload of files node */
+}
+
+static void
+gbp_vcsui_tree_addin_switch_branch (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  GbpVcsuiTreeAddin *self = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeBuildManager *build_manager;
+  IdeVcsBranch *branch;
+  IdeTreeNode *node;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
+
+  if (self->vcs == NULL ||
+      !(node = ide_tree_get_selected_node (self->tree)) ||
+      !ide_tree_node_holds (node, IDE_TYPE_VCS_BRANCH))
+    return;
+
+  branch = ide_tree_node_get_item (node);
+
+  context = ide_object_ref_context (IDE_OBJECT (self->vcs));
+
+  /* Cancel any in-flight builds */
+  build_manager = ide_build_manager_from_context (context);
+  ide_build_manager_cancel (build_manager);
+
+  ide_vcs_switch_branch_async (self->vcs,
+                               branch,
+                               NULL,
+                               gbp_vcsui_tree_addin_switch_branch_cb,
+                               g_object_ref (self));
+
+}
+
+static void
 gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
                            IdeTree      *tree,
                            IdeTreeModel *model)
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
+  g_autoptr(GSimpleActionGroup) group = NULL;
   GtkStyleContext *style_context;
   IdeWorkbench *workbench;
   IdeVcsMonitor *monitor;
   IdeVcs *vcs;
+  static const GActionEntry actions[] = {
+    { "switch-branch", gbp_vcsui_tree_addin_switch_branch },
+  };
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
@@ -93,6 +150,15 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
 
   self->model = model;
   self->tree = tree;
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (tree),
+                                  "vcsui",
+                                  G_ACTION_GROUP (group));
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (tree));
   g_signal_connect_object (style_context,
@@ -129,6 +195,8 @@ gbp_vcsui_tree_addin_unload (IdeTreeAddin *addin,
   g_assert (IDE_IS_TREE (tree));
   g_assert (IDE_IS_TREE_MODEL (model));
 
+  gtk_widget_insert_action_group (GTK_WIDGET (tree), "vcsui", NULL);
+
   style_context = gtk_widget_get_style_context (GTK_WIDGET (tree));
   g_signal_handlers_disconnect_by_func (style_context,
                                         G_CALLBACK (on_tree_style_changed_cb),
@@ -145,11 +213,18 @@ gbp_vcsui_tree_addin_selection_changed (IdeTreeAddin *addin,
                                         IdeTreeNode  *node)
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
+  gboolean is_branch = FALSE;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
   g_assert (!node || IDE_IS_TREE_NODE (node));
 
+  if (node != NULL)
+    is_branch = ide_tree_node_holds (node, IDE_TYPE_VCS_BRANCH);
+
+  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "vcsui", "switch-branch",
+                             "enabled", is_branch,
+                             NULL);
 }
 
 static void
