@@ -290,12 +290,53 @@ gbp_vcsui_tree_addin_list_branches_cb (GObject      *object,
                                 "display-name", name,
                                 "icon-name", "builder-vcs-git-symbolic",
                                 "item", branch,
+                                "tag", "vcs-branch",
                                 NULL);
           ide_tree_node_append (parent, child);
         }
     }
 
   IDE_PTR_ARRAY_SET_FREE_FUNC (branches, g_object_unref);
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+static void
+gbp_vcsui_tree_addin_list_tags_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeVcs *vcs = (IdeVcs *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GPtrArray) tags = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if ((tags = ide_vcs_list_tags_finish (vcs, result, &error)))
+    {
+      IdeTreeNode *parent = ide_task_get_task_data (task);
+
+      for (guint i = 0; i < tags->len; i++)
+        {
+          IdeVcsTag *tag = g_ptr_array_index (tags, i);
+          g_autofree gchar *name = ide_vcs_tag_get_name (tag);
+          g_autoptr(IdeTreeNode) child = NULL;
+
+          child = g_object_new (IDE_TYPE_TREE_NODE,
+                                "display-name", name,
+                                "icon-name", "builder-vcs-git-symbolic",
+                                "item", tag,
+                                "tag", "vcs-tag",
+                                NULL);
+          ide_tree_node_append (parent, child);
+        }
+    }
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (tags, g_object_unref);
 
   ide_task_return_boolean (task, TRUE);
 }
@@ -329,14 +370,16 @@ gbp_vcsui_tree_addin_build_children_async (IdeTreeAddin        *addin,
 
           vcs_node = g_object_new (IDE_TYPE_TREE_NODE,
                                    "children-possible", TRUE,
-                                   "display-name", _("Branches"),
+                                   "display-name", _("Version Control"),
                                    "icon-name", "builder-vcs-git-symbolic",
                                    "item", vcs,
+                                   "tag", "vcs",
                                    NULL);
           ide_tree_node_prepend (node, vcs_node);
         }
     }
-  else if (ide_tree_node_holds (node, IDE_TYPE_VCS))
+  else if (ide_tree_node_holds (node, IDE_TYPE_VCS) &&
+           ide_tree_node_is_tag (node, "vcs-branches"))
     {
       IdeVcs *vcs = ide_tree_node_get_item (node);
 
@@ -345,6 +388,44 @@ gbp_vcsui_tree_addin_build_children_async (IdeTreeAddin        *addin,
                                    gbp_vcsui_tree_addin_list_branches_cb,
                                    g_steal_pointer (&task));
       return;
+    }
+  else if (ide_tree_node_holds (node, IDE_TYPE_VCS) &&
+           ide_tree_node_is_tag (node, "vcs-tags"))
+    {
+      IdeVcs *vcs = ide_tree_node_get_item (node);
+
+      ide_vcs_list_tags_async (vcs,
+                               cancellable,
+                               gbp_vcsui_tree_addin_list_tags_cb,
+                               g_steal_pointer (&task));
+      return;
+    }
+  else if (ide_tree_node_holds (node, IDE_TYPE_VCS) &&
+           ide_tree_node_is_tag (node, "vcs"))
+    {
+      IdeVcs *vcs = ide_tree_node_get_item (node);
+      g_autoptr(IdeTreeNode) branches = NULL;
+      g_autoptr(IdeTreeNode) tags = NULL;
+
+      branches = g_object_new (IDE_TYPE_TREE_NODE,
+                               "children-possible", TRUE,
+                               "display-name", _("Branches"),
+                               "icon-name", "folder-symbolic",
+                               "expanded-icon-name", "folder-open-symbolic",
+                               "item", vcs,
+                               "tag", "vcs-branches",
+                               NULL);
+      ide_tree_node_append (node, branches);
+
+      tags = g_object_new (IDE_TYPE_TREE_NODE,
+                           "children-possible", TRUE,
+                           "display-name", _("Tags"),
+                           "icon-name", "folder-symbolic",
+                           "expanded-icon-name", "folder-open-symbolic",
+                           "item", vcs,
+                           "tag", "vcs-tags",
+                           NULL);
+      ide_tree_node_append (node, tags);
     }
 
   ide_task_return_boolean (task, TRUE);
