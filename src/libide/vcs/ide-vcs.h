@@ -26,6 +26,7 @@
 
 #include <libide-core.h>
 
+#include "ide-vcs-branch.h"
 #include "ide-vcs-config.h"
 
 G_BEGIN_DECLS
@@ -62,6 +63,14 @@ struct _IdeVcsInterface
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);
   GPtrArray              *(*list_branches_finish)      (IdeVcs               *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
+  void                    (*switch_branch_async)       (IdeVcs               *self,
+                                                        IdeVcsBranch         *branch,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+  gboolean                (*switch_branch_finish)      (IdeVcs               *self,
                                                         GAsyncResult         *result,
                                                         GError              **error);
 };
@@ -107,6 +116,16 @@ void          ide_vcs_list_branches_async  (IdeVcs               *self,
                                             gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
 GPtrArray    *ide_vcs_list_branches_finish (IdeVcs               *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
+IDE_AVAILABLE_IN_3_32
+void          ide_vcs_switch_branch_async  (IdeVcs               *self,
+                                            IdeVcsBranch         *branch,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+IDE_AVAILABLE_IN_3_32
+gboolean      ide_vcs_switch_branch_finish (IdeVcs               *self,
                                             GAsyncResult         *result,
                                             GError              **error);
 
