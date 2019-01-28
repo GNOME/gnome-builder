@@ -544,6 +544,104 @@ gbp_git_vcs_list_branches_finish (IdeVcs        *vcs,
 }
 
 static void
+gbp_git_vcs_switch_branch_worker (IdeTask      *task,
+                                  gpointer      source_object,
+                                  gpointer      task_data,
+                                  GCancellable *cancellable)
+{
+  g_autoptr(GgitCheckoutOptions) checkout_options = NULL;
+  g_autoptr(GgitObject) obj = NULL;
+  g_autoptr(GgitRef) ref = NULL;
+  g_autoptr(GError) error = NULL;
+  GbpGitVcs *self = source_object;
+  const gchar *id = task_data;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (id != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_object_lock (IDE_OBJECT (self));
+
+  if (self->repository == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "No repository to switch");
+      goto unlock;
+    }
+
+  if (!(ref = ggit_repository_lookup_reference (self->repository, id, &error)) ||
+      !(obj = ggit_ref_lookup (ref, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      goto unlock;
+    }
+
+  checkout_options = ggit_checkout_options_new ();
+  ggit_checkout_options_set_strategy (checkout_options, GGIT_CHECKOUT_SAFE);
+
+  /* Update the tree contents */
+  if (!ggit_repository_checkout_tree (self->repository,
+                                      obj,
+                                      checkout_options,
+                                      &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      goto unlock;
+    }
+
+  /* Now update head to point at the branch */
+  if (!ggit_repository_set_head (self->repository, id, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      goto unlock;
+    }
+
+  ide_task_return_boolean (task, TRUE);
+
+unlock:
+  ide_object_unlock (IDE_OBJECT (self));
+}
+
+static void
+gbp_git_vcs_switch_branch_async (IdeVcs              *vcs,
+                                 IdeVcsBranch        *branch,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (vcs));
+  g_assert (GBP_IS_GIT_BRANCH (branch));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (vcs, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_switch_branch_async);
+  ide_task_set_task_data (task,
+                          g_strdup (ide_vcs_branch_get_name (branch)),
+                          g_free);
+  ide_task_run_in_thread (task, gbp_git_vcs_switch_branch_worker);
+}
+
+static gboolean
+gbp_git_vcs_switch_branch_finish (IdeVcs        *vcs,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (vcs));
+  g_assert (IDE_IS_TASK (result));
+
+  ide_vcs_emit_changed (vcs);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
 vcs_iface_init (IdeVcsInterface *iface)
 {
   iface->get_workdir = gbp_git_vcs_get_workdir;
@@ -554,6 +652,8 @@ vcs_iface_init (IdeVcsInterface *iface)
   iface->list_status_finish = gbp_git_vcs_list_status_finish;
   iface->list_branches_async = gbp_git_vcs_list_branches_async;
   iface->list_branches_finish = gbp_git_vcs_list_branches_finish;
+  iface->switch_branch_async = gbp_git_vcs_switch_branch_async;
+  iface->switch_branch_finish = gbp_git_vcs_switch_branch_finish;
 }
 
 static void
