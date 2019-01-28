@@ -10,6 +10,7 @@ plugins_sources += files([
   'gbp-git-pipeline-addin.c',
   'gbp-git-remote-callbacks.c',
   'gbp-git-submodule-stage.c',
+  'gbp-git-tag.c',
   'gbp-git-vcs.c',
   'gbp-git-vcs-cloner.c',
   'gbp-git-vcs-config.c',
