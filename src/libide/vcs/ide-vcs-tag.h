@@ -1,6 +1,6 @@
-/* ide-vcs.h
+/* ide-vcs-tag.h
  *
- * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,20 +21,22 @@
 #pragma once
 
 #include <libide-core.h>
-#include <libide-io.h>
 
-#define IDE_VCS_INSIDE
+G_BEGIN_DECLS
 
-#include "ide-directory-vcs.h"
-#include "ide-vcs-branch.h"
-#include "ide-vcs-cloner.h"
-#include "ide-vcs-config.h"
-#include "ide-vcs-enums.h"
-#include "ide-vcs-initializer.h"
-#include "ide-vcs-uri.h"
-#include "ide-vcs-file-info.h"
-#include "ide-vcs.h"
-#include "ide-vcs-monitor.h"
-#include "ide-vcs-tag.h"
+#define IDE_TYPE_VCS_TAG (ide_vcs_tag_get_type ())
 
-#undef IDE_VCS_INSIDE
+IDE_AVAILABLE_IN_3_32
+G_DECLARE_INTERFACE (IdeVcsTag, ide_vcs_tag, IDE, VCS_TAG, GObject)
+
+struct _IdeVcsTagInterface
+{
+  GTypeInterface parent;
+
+  gchar *(*get_name) (IdeVcsTag *self);
+};
+
+IDE_AVAILABLE_IN_3_32
+gchar *ide_vcs_tag_get_name (IdeVcsTag *self);
+
+G_END_DECLS

@@ -65,6 +65,13 @@ struct _IdeVcsInterface
   GPtrArray              *(*list_branches_finish)      (IdeVcs               *self,
                                                         GAsyncResult         *result,
                                                         GError              **error);
+  void                    (*list_tags_async)           (IdeVcs               *self,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+  GPtrArray              *(*list_tags_finish)          (IdeVcs               *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
   void                    (*switch_branch_async)       (IdeVcs               *self,
                                                         IdeVcsBranch         *branch,
                                                         GCancellable         *cancellable,
@@ -116,6 +123,15 @@ void          ide_vcs_list_branches_async  (IdeVcs               *self,
                                             gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
 GPtrArray    *ide_vcs_list_branches_finish (IdeVcs               *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
+IDE_AVAILABLE_IN_3_32
+void          ide_vcs_list_tags_async      (IdeVcs               *self,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+IDE_AVAILABLE_IN_3_32
+GPtrArray    *ide_vcs_list_tags_finish     (IdeVcs               *self,
                                             GAsyncResult         *result,
                                             GError              **error);
 IDE_AVAILABLE_IN_3_32

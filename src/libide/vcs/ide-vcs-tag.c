@@ -1,6 +1,6 @@
-/* ide-vcs.h
+/* ide-vcs-tag.c
  *
- * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,23 +18,37 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#define G_LOG_DOMAIN "ide-vcs-tag"
 
-#include <libide-core.h>
-#include <libide-io.h>
+#include "config.h"
 
-#define IDE_VCS_INSIDE
-
-#include "ide-directory-vcs.h"
-#include "ide-vcs-branch.h"
-#include "ide-vcs-cloner.h"
-#include "ide-vcs-config.h"
-#include "ide-vcs-enums.h"
-#include "ide-vcs-initializer.h"
-#include "ide-vcs-uri.h"
-#include "ide-vcs-file-info.h"
-#include "ide-vcs.h"
-#include "ide-vcs-monitor.h"
 #include "ide-vcs-tag.h"
 
-#undef IDE_VCS_INSIDE
+G_DEFINE_INTERFACE (IdeVcsTag, ide_vcs_tag, G_TYPE_OBJECT)
+
+static void
+ide_vcs_tag_default_init (IdeVcsTagInterface *iface)
+{
+}
+
+/**
+ * ide_vcs_tag_get_name:
+ * @self: an #IdeVcsTag
+ *
+ * Gets the name of the tag, which is used in various UI elements
+ * to display to the user.
+ *
+ * Returns: (transfer full): a string containing the tag name
+ *
+ * Since: 3.32
+ */
+gchar *
+ide_vcs_tag_get_name (IdeVcsTag *self)
+{
+  g_return_val_if_fail (IDE_IS_VCS_TAG (self), NULL);
+
+  if (IDE_VCS_TAG_GET_IFACE (self)->get_name)
+    return IDE_VCS_TAG_GET_IFACE (self)->get_name (self);
+
+  return NULL;
+}

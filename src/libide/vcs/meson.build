@@ -16,6 +16,7 @@ libide_vcs_public_headers = [
   'ide-vcs-monitor.h',
   'ide-vcs-uri.h',
   'ide-vcs.h',
+  'ide-vcs-tag.h',
   'libide-vcs.h',
 ]
 
@@ -38,6 +39,7 @@ libide_vcs_public_sources = [
   'ide-vcs-file-info.c',
   'ide-vcs-initializer.c',
   'ide-vcs-monitor.c',
+  'ide-vcs-tag.c',
   'ide-vcs-uri.c',
   'ide-vcs.c',
 ]
