@@ -377,6 +377,7 @@ ide_project_info_finalize (GObject *object)
   g_clear_pointer (&self->build_system_name, g_free);
   g_clear_pointer (&self->description, g_free);
   g_clear_pointer (&self->languages, g_strfreev);
+  g_clear_pointer (&self->vcs_uri, g_free);
   g_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
   g_clear_object (&self->file);
