@@ -2887,6 +2887,6 @@ window.workbench {
   -gtk-key-bindings: builder-vim-workbench;
 }
 
-window.workbench entry.global-search {
+window entry.global-search {
   -gtk-key-bindings: builder-vim-global-search;
 }
