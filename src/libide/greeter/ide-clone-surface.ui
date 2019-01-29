@@ -87,6 +87,7 @@
                         <property name="valign">center</property>
                         <property name="visible">true</property>
                         <signal name="changed" handler="ide_clone_surface_uri_entry_changed" swapped="true" object="IdeCloneSurface"/>
+                        <signal name="activate" handler="ide_clone_surface_clone" object="IdeCloneSurface" swapped="true"/>
                       </object>
                       <packing>
                         <property name="row">1</property>
