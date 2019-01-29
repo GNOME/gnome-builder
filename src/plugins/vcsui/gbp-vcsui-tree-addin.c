@@ -234,8 +234,6 @@ gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
   g_autoptr(IdeVcsFileInfo) info = NULL;
-  g_autoptr(GFile) file = NULL;
-  IdeProjectFile *project_file;
 
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE_NODE (node));
@@ -244,20 +242,41 @@ gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
   if (self->monitor == NULL)
     return;
 
-  if (!ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE))
-    return;
-
-  project_file = ide_tree_node_get_item (node);
-  file = ide_project_file_ref_file (project_file);
-
-  if ((info = ide_vcs_monitor_ref_info (self->monitor, file)))
+  if (ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE))
     {
-      IdeVcsFileStatus status = ide_vcs_file_info_get_status (info);
+      IdeProjectFile *project_file = ide_tree_node_get_item (node);
+      g_autoptr (GFile) file = ide_project_file_ref_file (project_file);
 
-      if (status == IDE_VCS_FILE_STATUS_ADDED)
-        g_object_set (cell, "foreground-rgba", &self->added_color, NULL);
-      else if (status == IDE_VCS_FILE_STATUS_CHANGED)
-        g_object_set (cell, "foreground-rgba", &self->changed_color, NULL);
+      if ((info = ide_vcs_monitor_ref_info (self->monitor, file)))
+        {
+          IdeVcsFileStatus status = ide_vcs_file_info_get_status (info);
+
+          if (status == IDE_VCS_FILE_STATUS_ADDED)
+            g_object_set (cell, "foreground-rgba", &self->added_color, NULL);
+          else if (status == IDE_VCS_FILE_STATUS_CHANGED)
+            g_object_set (cell, "foreground-rgba", &self->changed_color, NULL);
+          }
+
+      }
+
+  if (ide_tree_node_holds (node, IDE_TYPE_VCS_BRANCH))
+    {
+      IdeVcsBranch *branch = ide_tree_node_get_item (node);
+      g_autofree gchar *node_branch = ide_vcs_branch_get_name (branch);
+      g_autofree gchar *current_branch = ide_vcs_get_branch_name (self->vcs);
+
+      g_assert (IDE_IS_VCS_BRANCH (branch));
+
+      /* TODO: Figure out a better way to compare IDE_TYPE_VCS_BRANCH,
+       */
+      if (g_str_has_suffix (node_branch, current_branch))
+        {
+          g_autofree gchar *active_name = g_strdup_printf ("%s <span fgalpha='32767' size='smaller'>(%s)</span>",
+                                                           node_branch, _("Current"));
+          ide_tree_node_set_display_name (node, active_name);
+        }
+      else
+          ide_tree_node_set_display_name (node, node_branch);
     }
 }
 
@@ -291,6 +310,7 @@ gbp_vcsui_tree_addin_list_branches_cb (GObject      *object,
                                 "icon-name", "builder-vcs-git-symbolic",
                                 "item", branch,
                                 "tag", "vcs-branch",
+                                "use-markup", TRUE,
                                 NULL);
           ide_tree_node_append (parent, child);
         }
