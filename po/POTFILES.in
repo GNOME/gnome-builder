@@ -95,6 +95,7 @@ src/libide/gui/ide-panel.c
 src/libide/gui/ide-preferences-builtin.c
 src/libide/gui/ide-preferences-surface.c
 src/libide/gui/ide-preferences-window.ui
+src/libide/gui/ide-primary-workspace-actions.c
 src/libide/gui/ide-primary-workspace.ui
 src/libide/gui/ide-run-button.c
 src/libide/gui/ide-run-button.ui
