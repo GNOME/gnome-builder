@@ -748,3 +748,24 @@ ide_application_find_workbench_for_file (IdeApplication *self,
 
   return match;
 }
+
+void
+ide_application_set_command_line_handled (IdeApplication          *self,
+                                          GApplicationCommandLine *cmdline,
+                                          gboolean                 handled)
+{
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+  g_return_if_fail (G_IS_APPLICATION_COMMAND_LINE (cmdline));
+
+  return g_object_set_data (G_OBJECT (cmdline), "COMMAND_LINE_HANDLED", GINT_TO_POINTER (!!handled));
+}
+
+gboolean
+ide_application_get_command_line_handled (IdeApplication          *self,
+                                          GApplicationCommandLine *cmdline)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+  g_return_val_if_fail (G_IS_APPLICATION_COMMAND_LINE (cmdline), FALSE);
+
+  return !!g_object_get_data (G_OBJECT (cmdline), "COMMAND_LINE_HANDLED");
+}
