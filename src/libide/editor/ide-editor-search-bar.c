@@ -94,6 +94,7 @@ ide_editor_search_bar_set_replace_mode (IdeEditorSearchBar *self,
       gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), replace_mode);
       gtk_widget_set_visible (GTK_WIDGET (self->replace_button), replace_mode);
       gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), replace_mode);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPLACE_MODE]);
     }
 }
 
