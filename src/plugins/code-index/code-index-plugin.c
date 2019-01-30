@@ -26,13 +26,17 @@
 #include <libide-gui.h>
 #include <libide-search.h>
 
+#include "gbp-code-index-application-addin.h"
+#include "gbp-code-index-workbench-addin.h"
 #include "ide-code-index-search-provider.h"
 #include "ide-code-index-symbol-resolver.h"
-#include "gbp-code-index-workbench-addin.h"
 
 _IDE_EXTERN void
 _ide_code_index_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_APPLICATION_ADDIN,
+                                              GBP_TYPE_CODE_INDEX_APPLICATION_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SEARCH_PROVIDER,
                                               IDE_TYPE_CODE_INDEX_SEARCH_PROVIDER);
