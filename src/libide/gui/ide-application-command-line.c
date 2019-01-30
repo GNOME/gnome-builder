@@ -87,6 +87,10 @@ command_line_foreach_cb (PeasExtensionSet *set,
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
   g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
 
+  /* Stop if we've already handled things */
+  if (ide_application_get_command_line_handled (IDE_APPLICATION_DEFAULT, cmdline))
+    return;
+
   ide_application_addin_handle_command_line (addin, IDE_APPLICATION_DEFAULT, cmdline);
 }
 
@@ -165,6 +169,10 @@ _ide_application_command_line (IdeApplication          *self,
    * changed before loading a project.
    */
   peas_extension_set_foreach (self->addins, command_line_foreach_cb, cmdline);
+
+  /* Short-circuit if there is nothing more to do */
+  if (ide_application_get_command_line_handled (self, cmdline))
+    return;
 
   /*
    * Open the project if --project/-p was spefified by the invoking
