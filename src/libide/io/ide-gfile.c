@@ -727,3 +727,98 @@ ide_g_host_file_get_contents (const gchar  *path,
 
   return TRUE;
 }
+
+/**
+ * ide_g_file_walk:
+ * @directory: a #GFile that is a directory
+ * @attributes: attributes to include in #GFileInfo
+ * @cancellable: (nullable): an optional cancellable
+ * @callback: (scope call): a callback for each directory starting from @directory
+ * @callback_data: closure data for @callback
+ *
+ * Calls @callback for every directory starting from @directory.
+ *
+ * All of the fileinfo for the directory will be provided to the callback for
+ * each directory.
+ *
+ * Since: 3.32
+ */
+void
+ide_g_file_walk (GFile               *directory,
+                 const gchar         *attributes,
+                 GCancellable        *cancellable,
+                 IdeFileWalkCallback  callback,
+                 gpointer             callback_data)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GPtrArray) directories = NULL;
+  g_autoptr(GPtrArray) file_infos = NULL;
+  g_autoptr(GString) str = NULL;
+  g_autoptr(GError) error = NULL;
+  GFileType directory_type;
+  gpointer infoptr;
+  static const gchar *required[] = {
+    G_FILE_ATTRIBUTE_STANDARD_NAME,
+    G_FILE_ATTRIBUTE_STANDARD_TYPE,
+    NULL
+  };
+
+  g_return_if_fail (G_IS_FILE (directory));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (g_cancellable_is_cancelled (cancellable))
+    return;
+
+  directory_type = g_file_query_file_type (directory,
+                                           G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                           cancellable);
+
+  if (directory_type != G_FILE_TYPE_DIRECTORY)
+    return;
+
+  str = g_string_new (attributes);
+
+  for (guint i = 0; required[i]; i++)
+    {
+      if (!strstr (str->str, required[i]))
+        g_string_append_printf (str, ",%s", required[i]);
+    }
+
+  directories = g_ptr_array_new_with_free_func (g_object_unref);
+  file_infos = g_ptr_array_new_with_free_func (g_object_unref);
+
+  enumerator = g_file_enumerate_children (directory,
+                                          str->str,
+                                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                          cancellable,
+                                          NULL);
+
+  if (enumerator == NULL)
+    return;
+
+  while ((infoptr = g_file_enumerator_next_file (enumerator, cancellable, &error)))
+    {
+      g_autoptr(GFileInfo) info = infoptr;
+      g_autoptr(GFile) child = g_file_enumerator_get_child (enumerator, info);
+
+      if (ide_g_file_is_ignored (child))
+        continue;
+
+      if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+        g_ptr_array_add (directories, g_steal_pointer (&child));
+
+      g_ptr_array_add (file_infos, g_steal_pointer (&info));
+    }
+
+  callback (directory, file_infos, callback_data);
+
+  for (guint i = 0; i < directories->len; i++)
+    {
+      GFile *child = g_ptr_array_index (directories, i);
+
+      if (g_cancellable_is_cancelled (cancellable))
+        break;
+
+      ide_g_file_walk (child, attributes, cancellable, callback, callback_data);
+    }
+}
