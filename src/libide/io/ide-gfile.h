@@ -26,6 +26,18 @@
 
 #include <libide-core.h>
 
+/**
+ * IdeFileWalkCallback:
+ * @directory: a #GFile of the directory
+ * @file_infos: (element-type GFileInfo): array of #GFileInfo children
+ *   of @directory
+ * @user_data: user data for callback
+ *
+ */
+typedef void (*IdeFileWalkCallback) (GFile     *directory,
+                                     GPtrArray *file_infos,
+                                     gpointer   user_data);
+
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_3_32
@@ -76,5 +88,11 @@ gboolean   ide_g_host_file_get_contents             (const gchar          *path,
                                                      gchar               **contents,
                                                      gsize                *len,
                                                      GError              **error);
+IDE_AVAILABLE_IN_3_32
+void       ide_g_file_walk                          (GFile                *directory,
+                                                     const gchar          *attributes,
+                                                     GCancellable         *cancellable,
+                                                     IdeFileWalkCallback   callback,
+                                                     gpointer              callback_data);
 
 G_END_DECLS
