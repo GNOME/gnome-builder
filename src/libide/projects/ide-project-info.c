@@ -794,8 +794,13 @@ ide_project_info_get_id (IdeProjectInfo *self)
 
   if (!self->id && self->file)
     {
-      g_autoptr(GFile) parent = g_file_get_parent (self->file);
-      self->id = g_file_get_basename (parent);
+      if (g_file_query_file_type (self->file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+        self->id = g_file_get_basename (self->file);
+      else
+        {
+          g_autoptr(GFile) parent = g_file_get_parent (self->file);
+          self->id = g_file_get_basename (parent);
+        }
     }
 
   if (!self->id && self->doap)
