@@ -25,17 +25,22 @@ omnibar notification button {
   box-shadow: none;
   text-shadow: none;
   text-decoration: none;
+  color: alpha(@theme_fg_color, 0.8);
 }
 
 omnibar entry {
-  background-color: @theme_bg_color;
-  color: alpha(@theme_fg_color, 0.8);
+  background-color: mix(@theme_bg_color, @content_view_bg, 0.25);
+  color: @theme_fg_color;
 }
 
 omnibar:hover entry,
 omnibar:active entry {
-  background-color: mix(@theme_bg_color, @content_view_bg, 0.9);
+  background-color: @content_view_bg;
   color: @theme_fg_color;
+}
+
+omnibar:backdrop entry {
+  background-color: @theme_bg_color;
 }
 
 /* Remove animation from linked buttons because it messes up the
