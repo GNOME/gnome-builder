@@ -350,13 +350,13 @@ ide_code_index_index_query_cb (GObject      *object,
   else
     {
       g_autoptr(GPtrArray) results = g_ptr_array_new_with_free_func (g_object_unref);
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
 
       /*
        * Extract match from heap with max score, get next item from the list from which
        * the max score match came from and insert that into heap.
        */
-      while (data->max_results > 0 && data->fuzzy_matches->len > 0)
+      while (context != NULL && data->max_results > 0 && data->fuzzy_matches->len > 0)
         {
           IdeCodeIndexSearchResult *item;
           FuzzyMatch fuzzy_match;
@@ -581,7 +581,8 @@ ide_code_index_index_class_init (IdeCodeIndexIndexClass *klass)
 IdeCodeIndexIndex *
 ide_code_index_index_new (IdeObject *parent)
 {
-  g_return_val_if_fail (IDE_IS_OBJECT (parent), NULL);
+  /* Without parent, no queries are supported */
+  g_return_val_if_fail (!parent || IDE_IS_OBJECT (parent), NULL);
 
   return g_object_new (IDE_TYPE_CODE_INDEX_INDEX,
                        "parent", parent,
