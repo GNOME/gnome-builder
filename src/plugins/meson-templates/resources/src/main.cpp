@@ -9,7 +9,7 @@ void on_activate(Glib::RefPtr<Gtk::Application> app) {
     auto window = app->get_active_window();
     
     if (!window) {
-        window = {{prefix}}::create();
+        window = {{Prefix}}Window::create();
         app->add_window(*window);
     }
     window->present();
