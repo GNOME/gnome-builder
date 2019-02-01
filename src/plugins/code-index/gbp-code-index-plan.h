@@ -73,6 +73,14 @@ void              gbp_code_index_plan_cull_indexed_async  (GbpCodeIndexPlan     
 gboolean          gbp_code_index_plan_cull_indexed_finish (GbpCodeIndexPlan         *self,
                                                            GAsyncResult             *result,
                                                            GError                  **error);
+void              gbp_code_index_plan_load_flags_async    (GbpCodeIndexPlan         *self,
+                                                           IdeContext               *context,
+                                                           GCancellable             *cancellable,
+                                                           GAsyncReadyCallback       callback,
+                                                           gpointer                  user_data);
+gboolean          gbp_code_index_plan_load_flags_finish   (GbpCodeIndexPlan         *self,
+                                                           GAsyncResult             *result,
+                                                           GError                  **error);
 void              gbp_code_index_plan_foreach             (GbpCodeIndexPlan         *self,
                                                            GbpCodeIndexPlanForeach   foreach_func,
                                                            gpointer                  foreach_data);

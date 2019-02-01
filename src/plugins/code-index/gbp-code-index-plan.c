@@ -620,3 +620,154 @@ gbp_code_index_plan_populate_finish (GbpCodeIndexPlan  *self,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+static gboolean
+gbp_code_index_plan_collect_files (GFile              *directory,
+                                   GPtrArray          *plan_items,
+                                   GbpCodeIndexReason  reason,
+                                   gpointer            user_data)
+{
+  GPtrArray *files = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_FILE (directory));
+  g_assert (plan_items != NULL);
+  g_assert (files != NULL);
+
+  /* Skip if we don't care about these items */
+  if (reason == GBP_CODE_INDEX_REASON_REMOVE_INDEX)
+    return FALSE;
+
+  for (guint i = 0; i < plan_items->len; i++)
+    {
+      const GbpCodeIndexPlanItem *item = g_ptr_array_index (plan_items, i);
+      const gchar *name = g_file_info_get_name (item->file_info);
+
+      g_ptr_array_add (files, g_file_get_child (directory, name));
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gbp_code_index_plan_fill_build_flags_cb (GFile              *directory,
+                                         GPtrArray          *plan_items,
+                                         GbpCodeIndexReason  reason,
+                                         gpointer            user_data)
+{
+  GHashTable *build_flags = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_FILE (directory));
+  g_assert (plan_items != NULL);
+  g_assert (build_flags != NULL);
+
+  for (guint i = 0; i < plan_items->len; i++)
+    {
+      GbpCodeIndexPlanItem *item = g_ptr_array_index (plan_items, i);
+      const gchar *name = g_file_info_get_name (item->file_info);
+      g_autoptr(GFile) file = g_file_get_child (directory, name);
+      gchar **item_flags;
+
+      if ((item_flags = g_hash_table_lookup (build_flags, file)))
+        {
+          /* Implausible, but lets clear anyway */
+          g_clear_pointer (&item->build_flags, g_strfreev);
+          item->build_flags = g_strdupv (item_flags);
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gbp_code_index_plan_get_build_flags_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(GHashTable) build_flags = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GbpCodeIndexPlan *self;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!(build_flags = ide_build_system_get_build_flags_for_files_finish (build_system, result, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  self = ide_task_get_source_object (task);
+
+  gbp_code_index_plan_foreach (self,
+                               gbp_code_index_plan_fill_build_flags_cb,
+                               build_flags);
+
+  ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+void
+gbp_code_index_plan_load_flags_async (GbpCodeIndexPlan    *self,
+                                      IdeContext          *context,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GPtrArray) files = NULL;
+  IdeBuildSystem *build_system;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GBP_IS_CODE_INDEX_PLAN (self));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_code_index_plan_load_flags_async);
+
+  /* Get build system to query */
+  build_system = ide_build_system_from_context (context);
+
+  /* Create array of files for every file we know about */
+  files = g_ptr_array_new_with_free_func (g_object_unref);
+  gbp_code_index_plan_foreach (self,
+                               gbp_code_index_plan_collect_files,
+                               files);
+
+  ide_build_system_get_build_flags_for_files_async (build_system,
+                                                    files,
+                                                    cancellable,
+                                                    gbp_code_index_plan_get_build_flags_cb,
+                                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+gbp_code_index_plan_load_flags_finish (GbpCodeIndexPlan  *self,
+                                       GAsyncResult      *result,
+                                       GError           **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
+  g_return_val_if_fail (GBP_IS_CODE_INDEX_PLAN (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
