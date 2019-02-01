@@ -89,14 +89,49 @@ gbp_code_index_application_addin_foreach_cb (GFile              *directory,
     {
       const GbpCodeIndexPlanItem *item = g_ptr_array_index (plan_items, i);
       const gchar *name = g_file_info_get_name (item->file_info);
+      g_autofree gchar *flags = NULL;
+
+      if (item->build_flags)
+        flags = g_strjoinv ("' '", item->build_flags);
 
       g_application_command_line_print (cmdline,
-                                        "  %s [indexer=%s]\n",
+                                        "  %s [indexer=%s] -- '%s'\n",
                                         name,
-                                        item->indexer_module_name);
+                                        item->indexer_module_name,
+                                        flags ? flags : "");
     }
 
   return FALSE;
+}
+
+static void
+gbp_code_index_application_addin_load_flags_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  GbpCodeIndexPlan *plan = (GbpCodeIndexPlan *)object;
+  g_autoptr(GApplicationCommandLine) cmdline = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_PLAN (plan));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
+
+  if (!gbp_code_index_plan_load_flags_finish (plan, result, &error))
+    {
+      g_application_command_line_printerr (cmdline,
+                                           _("Failed to load flags for plan: %s"),
+                                           error->message);
+      g_application_command_line_set_exit_status (cmdline, EXIT_FAILURE);
+      return;
+    }
+
+  gbp_code_index_plan_foreach (plan,
+                               gbp_code_index_application_addin_foreach_cb,
+                               cmdline);
+
+  g_application_command_line_set_exit_status (cmdline, EXIT_SUCCESS);
 }
 
 static void
@@ -107,6 +142,8 @@ gbp_code_index_application_addin_cull_cb (GObject      *object,
   GbpCodeIndexPlan *plan = (GbpCodeIndexPlan *)object;
   g_autoptr(GApplicationCommandLine) cmdline = user_data;
   g_autoptr(GError) error = NULL;
+  IdeWorkbench *workbench;
+  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_PLAN (plan));
@@ -122,11 +159,14 @@ gbp_code_index_application_addin_cull_cb (GObject      *object,
       return;
     }
 
-  gbp_code_index_plan_foreach (plan,
-                               gbp_code_index_application_addin_foreach_cb,
-                               cmdline);
+  workbench = g_object_get_data (G_OBJECT (cmdline), "WORKBENCH");
+  context = ide_workbench_get_context (workbench);
 
-  g_application_command_line_set_exit_status (cmdline, EXIT_SUCCESS);
+  gbp_code_index_plan_load_flags_async (plan,
+                                        context,
+                                        NULL,
+                                        gbp_code_index_application_addin_load_flags_cb,
+                                        g_steal_pointer (&cmdline));
 }
 
 static void
