@@ -771,3 +771,30 @@ gbp_code_index_plan_load_flags_finish (GbpCodeIndexPlan  *self,
 
   IDE_RETURN (ret);
 }
+
+GbpCodeIndexPlanItem *
+gbp_code_index_plan_copy (const GbpCodeIndexPlanItem *item)
+{
+  GbpCodeIndexPlanItem *ret;
+
+  if (item == NULL)
+    return NULL;
+
+  ret = g_slice_new0 (GbpCodeIndexPlanItem);
+  ret->file_info = g_object_ref (item->file_info);
+  ret->build_flags = g_strdupv ((gchar **)item->build_flags);
+  ret->indexer_module_name = item->indexer_module_name;
+
+  return g_steal_pointer (&ret);
+}
+
+void
+gbp_code_index_plan_item_free (GbpCodeIndexPlanItem *item)
+{
+  if (item != NULL)
+    {
+      g_clear_object (&item->file_info);
+      g_clear_pointer (&item->build_flags, g_strfreev);
+      g_slice_free (GbpCodeIndexPlanItem, item);
+    }
+}
