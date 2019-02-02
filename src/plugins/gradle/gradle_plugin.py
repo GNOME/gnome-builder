@@ -80,7 +80,10 @@ class GradlePipelineAddin(Ide.Object, Ide.PipelineAddin):
         wrapper_launcher.set_cwd(srcdir)
         wrapper_launcher.push_argv("gradle")
         wrapper_launcher.push_argv('wrapper')
-        self.track(pipeline.connect_launcher(Ide.PipelinePhase.AUTOGEN, 0, wrapper_launcher))
+
+        wrapper_stage = Ide.PipelineStageLauncher.new(context, wrapper_launcher)
+        wrapper_stage.set_name(_('Gradle Wrapper'))
+        self.track(pipeline.attach(Ide.PipelinePhase.AUTOGEN, 0, wrapper_stage))
 
         build_launcher = pipeline.create_launcher()
         build_launcher.set_cwd(srcdir)
@@ -96,7 +99,7 @@ class GradlePipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.connect(Ide.PipelinePhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
     def _query(self, stage, pipeline, cancellable):
         stage.set_completed(False)
