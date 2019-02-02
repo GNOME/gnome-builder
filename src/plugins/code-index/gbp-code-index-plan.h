@@ -84,7 +84,7 @@ gboolean              gbp_code_index_plan_load_flags_finish   (GbpCodeIndexPlan 
 void                  gbp_code_index_plan_foreach             (GbpCodeIndexPlan            *self,
                                                                GbpCodeIndexPlanForeach      foreach_func,
                                                                gpointer                     foreach_data);
-GbpCodeIndexPlanItem *gbp_code_index_plan_copy                (const GbpCodeIndexPlanItem  *item);
+GbpCodeIndexPlanItem *gbp_code_index_plan_item_copy           (const GbpCodeIndexPlanItem  *item);
 void                  gbp_code_index_plan_item_free           (GbpCodeIndexPlanItem        *item);
 
 G_END_DECLS
