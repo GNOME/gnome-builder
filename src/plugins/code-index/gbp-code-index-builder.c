@@ -481,6 +481,8 @@ gbp_code_index_builder_persist_async (GbpCodeIndexBuilder *self,
 
   file = g_file_get_child (self->index_dir, "SymbolKeys");
 
+  g_file_make_directory_with_parents (self->index_dir, cancellable, NULL);
+
   ide_persistent_map_builder_write_async (self->map,
                                           file,
                                           G_PRIORITY_DEFAULT,
