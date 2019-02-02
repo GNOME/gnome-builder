@@ -291,7 +291,7 @@ ide_persistent_map_builder_write_async (IdePersistentMapBuilder *self,
   g_return_if_fail (G_IS_FILE (destination));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (self->state != NULL);
-  g_return_if_fail (self->state->destination != NULL);
+  g_return_if_fail (self->state->destination == NULL);
 
   self->state->destination = g_object_ref (destination);
 
