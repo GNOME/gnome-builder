@@ -119,7 +119,7 @@ gbp_code_index_application_addin_execute_cb (GObject      *object,
 
   if (!gbp_code_index_executor_execute_finish (executor, result, &error))
     {
-      g_application_command_line_printerr (cmdline, "Index failed: %s\n", error->message);
+      g_application_command_line_printerr (cmdline, "Indexing failed: %s\n", error->message);
       g_application_command_line_set_exit_status (cmdline, EXIT_FAILURE);
     }
   else
