@@ -262,7 +262,6 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_meson_build_system_load_commands_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   /*
    * If we've already load the compile commands database, use it and
