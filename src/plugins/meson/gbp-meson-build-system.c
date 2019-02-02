@@ -292,12 +292,12 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
    * here about whether or not it is setup fully. It may be delayed due
    * to device initialization.
    */
-  if (pipeline == NULL || !ide_pipeline_is_ready (pipeline))
+  if (pipeline == NULL)
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_INITIALIZED,
-                                 "The pipeline is not yet ready to handle requests");
+                                 "There is no pipeline to access");
       return;
     }
 
@@ -319,6 +319,20 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
 
       gbp_meson_build_system_monitor (self, file);
 
+      return;
+    }
+
+  /*
+   * Because we're accessing the pipeline directly, we need to be careful
+   * here about whether or not it is setup fully. It may be delayed due
+   * to device initialization.
+   */
+  if (!ide_pipeline_is_ready (pipeline))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_INITIALIZED,
+                                 "The pipeline is not yet ready to handle requests");
       return;
     }
 
