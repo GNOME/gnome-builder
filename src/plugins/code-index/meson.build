@@ -3,6 +3,8 @@ if get_option('plugin_code_index')
 plugins_sources += files([
   'code-index-plugin.c',
   'gbp-code-index-application-addin.c',
+  'gbp-code-index-builder.c',
+  'gbp-code-index-executor.c',
   'gbp-code-index-plan.c',
   'gbp-code-index-workbench-addin.c',
   'ide-code-index-builder.c',

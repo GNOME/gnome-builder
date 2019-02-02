@@ -773,7 +773,7 @@ gbp_code_index_plan_load_flags_finish (GbpCodeIndexPlan  *self,
 }
 
 GbpCodeIndexPlanItem *
-gbp_code_index_plan_copy (const GbpCodeIndexPlanItem *item)
+gbp_code_index_plan_item_copy (const GbpCodeIndexPlanItem *item)
 {
   GbpCodeIndexPlanItem *ret;
 
