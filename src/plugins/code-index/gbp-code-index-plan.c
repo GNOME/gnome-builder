@@ -521,6 +521,10 @@ gbp_code_index_plan_populate_cb (GFile     *directory,
       if (ide_vcs_is_ignored (state->vcs, file, NULL))
         continue;
 
+      /* Ignore .in files since those may bet miss-reported */
+      if (g_str_has_suffix (name, ".in"))
+        continue;
+
       reversed = g_utf8_strreverse (name, -1);
       mime_type = g_file_info_get_attribute_string (file_info, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
 
