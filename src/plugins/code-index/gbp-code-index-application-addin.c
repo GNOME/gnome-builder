@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "gbp-code-index-application-addin.h"
+#include "gbp-code-index-executor.h"
 #include "gbp-code-index-plan.h"
 
 struct _GbpCodeIndexApplicationAddin
@@ -105,13 +106,42 @@ gbp_code_index_application_addin_foreach_cb (GFile              *directory,
 }
 
 static void
+gbp_code_index_application_addin_execute_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  GbpCodeIndexExecutor *executor = (GbpCodeIndexExecutor *)object;
+  g_autoptr(GApplicationCommandLine) cmdline = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
+
+  if (!gbp_code_index_executor_execute_finish (executor, result, &error))
+    {
+      g_application_command_line_printerr (cmdline, "Index failed: %s\n", error->message);
+      g_application_command_line_set_exit_status (cmdline, EXIT_FAILURE);
+    }
+  else
+    {
+      g_application_command_line_print (cmdline, "Indexing complete.\n");
+      g_application_command_line_set_exit_status (cmdline, EXIT_SUCCESS);
+    }
+
+  ide_object_destroy (IDE_OBJECT (executor));
+}
+
+static void
 gbp_code_index_application_addin_load_flags_cb (GObject      *object,
                                                 GAsyncResult *result,
                                                 gpointer      user_data)
 {
   GbpCodeIndexPlan *plan = (GbpCodeIndexPlan *)object;
   g_autoptr(GApplicationCommandLine) cmdline = user_data;
+  g_autoptr(GbpCodeIndexExecutor) executor = NULL;
   g_autoptr(GError) error = NULL;
+  IdeWorkbench *workbench;
+  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_PLAN (plan));
@@ -127,11 +157,22 @@ gbp_code_index_application_addin_load_flags_cb (GObject      *object,
       return;
     }
 
+  if (FALSE)
   gbp_code_index_plan_foreach (plan,
                                gbp_code_index_application_addin_foreach_cb,
                                cmdline);
 
-  g_application_command_line_set_exit_status (cmdline, EXIT_SUCCESS);
+  workbench = g_object_get_data (G_OBJECT (cmdline), "WORKBENCH");
+  context = ide_workbench_get_context (workbench);
+
+  executor = gbp_code_index_executor_new (plan);
+  ide_object_append (IDE_OBJECT (context), IDE_OBJECT (executor));
+
+  gbp_code_index_executor_execute_async (executor,
+                                         NULL,
+                                         NULL,
+                                         gbp_code_index_application_addin_execute_cb,
+                                         g_steal_pointer (&cmdline));
 }
 
 static void
