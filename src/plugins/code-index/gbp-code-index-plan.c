@@ -179,6 +179,8 @@ gbp_code_index_plan_cull_indexed_worker (IdeTask      *task,
   GHashTableIter iter;
   gpointer key, value;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_CODE_INDEX_PLAN (self));
   g_assert (G_IS_FILE (cull->cachedir));
@@ -292,6 +294,8 @@ gbp_code_index_plan_cull_indexed_worker (IdeTask      *task,
   g_mutex_unlock (&self->mutex);
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -305,6 +309,8 @@ gbp_code_index_plan_cull_indexed_async (GbpCodeIndexPlan    *self,
   g_autoptr(GFile) basedir = NULL;
   CullIndexed *state;
 
+  IDE_ENTRY;
+
   g_return_if_fail (GBP_IS_CODE_INDEX_PLAN (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -316,6 +322,8 @@ gbp_code_index_plan_cull_indexed_async (GbpCodeIndexPlan    *self,
   ide_task_set_source_tag (task, gbp_code_index_plan_cull_indexed_async);
   ide_task_set_task_data (task, state, cull_indexed_free);
   ide_task_run_in_thread (task, gbp_code_index_plan_cull_indexed_worker);
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -323,11 +331,17 @@ gbp_code_index_plan_cull_indexed_finish (GbpCodeIndexPlan  *self,
                                          GAsyncResult      *result,
                                          GError           **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (GBP_IS_CODE_INDEX_PLAN (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 void
@@ -551,6 +565,8 @@ gbp_code_index_plan_populate_worker (IdeTask      *task,
   GbpCodeIndexPlan *self = source_object;
   PopulateData *state = task_data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_CODE_INDEX_PLAN (self));
   g_assert (state != NULL);
@@ -570,6 +586,8 @@ gbp_code_index_plan_populate_worker (IdeTask      *task,
                    task);
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -584,6 +602,8 @@ gbp_code_index_plan_populate_async (GbpCodeIndexPlan    *self,
   IdeBuildSystem *build_system = NULL;
   IdeVcs *vcs = NULL;
   PopulateData *state;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (GBP_IS_CODE_INDEX_PLAN (self));
@@ -607,6 +627,8 @@ gbp_code_index_plan_populate_async (GbpCodeIndexPlan    *self,
   ide_task_set_source_tag (task, gbp_code_index_plan_populate_async);
   ide_task_set_task_data (task, state, populate_data_free);
   ide_task_run_in_thread (task, gbp_code_index_plan_populate_worker);
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -614,11 +636,17 @@ gbp_code_index_plan_populate_finish (GbpCodeIndexPlan  *self,
                                      GAsyncResult      *result,
                                      GError           **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (GBP_IS_CODE_INDEX_PLAN (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static gboolean
