@@ -64,5 +64,14 @@ IDE_AVAILABLE_IN_3_32
 GPtrArray         *ide_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *self,
                                                                GAsyncResult         *result,
                                                                GError              **error);
+IDE_AVAILABLE_IN_3_32
+void               ide_code_index_entries_collect_async       (IdeCodeIndexEntries  *self,
+                                                               GCancellable         *cancellable,
+                                                               GAsyncReadyCallback   callback,
+                                                               gpointer              user_data);
+IDE_AVAILABLE_IN_3_32
+GPtrArray         *ide_code_index_entries_collect_finish      (IdeCodeIndexEntries  *self,
+                                                               GAsyncResult         *result,
+                                                               GError              **error);
 
 G_END_DECLS

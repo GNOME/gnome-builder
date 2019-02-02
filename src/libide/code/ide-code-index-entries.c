@@ -176,3 +176,93 @@ ide_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *self,
 
   return IDE_CODE_INDEX_ENTRIES_GET_IFACE (self)->next_entries_finish (self, result, error);
 }
+
+static void
+ide_code_index_entries_collect_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeCodeIndexEntries *self = (IdeCodeIndexEntries *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GPtrArray) ret = NULL;
+  g_autoptr(GError) error = NULL;
+  GPtrArray *task_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CODE_INDEX_ENTRIES (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!(task_data = ide_task_get_task_data (task)))
+    {
+      task_data = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_code_index_entry_free);
+      ide_task_set_task_data (task, task_data, g_ptr_array_unref);
+    }
+
+  if ((ret = ide_code_index_entries_next_entries_finish (self, result, &error)) && ret->len > 0)
+    {
+      IDE_PTR_ARRAY_SET_FREE_FUNC (ret, NULL);
+
+      for (guint i = 0; i < ret->len; i++)
+        g_ptr_array_add (task_data, g_ptr_array_index (ret, i));
+
+      g_ptr_array_remove_range (ret, 0, ret->len);
+
+      ide_code_index_entries_next_entries_async (self,
+                                                 ide_task_get_cancellable (task),
+                                                 ide_code_index_entries_collect_cb,
+                                                 g_object_ref (task));
+      return;
+    }
+
+  ide_task_return_pointer (task,
+                           g_ptr_array_ref (task_data),
+                           (GDestroyNotify)g_ptr_array_unref);
+}
+
+/**
+ * ide_code_index_entries_collect_async:
+ *
+ * Calls ide_code_index_entries_next_entries_async() repeatedly until all
+ * entries have been retrieved. After that, the async operation will complete.
+ *
+ * Since: 3.32
+ */
+void
+ide_code_index_entries_collect_async (IdeCodeIndexEntries *self,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_CODE_INDEX_ENTRIES (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_code_index_entries_collect_async);
+  ide_code_index_entries_next_entries_async (self,
+                                             cancellable,
+                                             ide_code_index_entries_collect_cb,
+                                             g_steal_pointer (&task));
+}
+
+/**
+ * ide_code_index_entries_collect_finish:
+ *
+ * Returns: (transfer full) (element-type IdeCodeIndexEntry): an array of #IdeCodeIndexEntry
+ *   or %NULL and @error is set
+ *
+ * Since: 3.32
+ */
+GPtrArray *
+ide_code_index_entries_collect_finish (IdeCodeIndexEntries  *self,
+                                       GAsyncResult         *result,
+                                       GError              **error)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRIES (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
