@@ -12,8 +12,8 @@
 {{Prefix}}Window *{{Prefix}}Window::create() {
     auto builder = Gtk::Builder::create_from_resource("{{appid_path}}/{{ui_file}}");
 
-    TrycppWindow *parent_instance;
-    builder->get_widget_derived("{{Prefix}}Window", parent_instance);
+    {{Prefix}}Window *parent_instance;
+    builder->get_widget_derived("{{PreFix}}Window", parent_instance);
     
     return parent_instance;
 }
