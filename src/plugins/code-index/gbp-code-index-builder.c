@@ -97,7 +97,6 @@ gbp_code_index_builder_submit (GbpCodeIndexBuilder *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_BUILDER (self));
   g_assert (G_IS_FILE (file));
-  g_assert (entries != NULL);
 
   file_id = self->next_file_id;
   self->next_file_id++;
@@ -113,6 +112,9 @@ gbp_code_index_builder_submit (GbpCodeIndexBuilder *self,
   filename = g_file_get_path (file);
   dzl_fuzzy_index_builder_set_metadata_uint32 (self->fuzzy, filename, file_id);
   dzl_fuzzy_index_builder_set_metadata_string (self->fuzzy, num, filename);
+
+  if (entries == NULL)
+    return;
 
   IDE_TRACE_MSG ("Adding %u entries for %s", entries->len, filename);
 
@@ -228,19 +230,31 @@ code_indexer_index_file_cb (GObject      *object,
   g_autoptr(IdeCodeIndexEntries) entries = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  GbpCodeIndexBuilder *self;
+  GFile *file;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEXER (indexer));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  self = ide_task_get_source_object (task);
+  file = ide_task_get_task_data (task);
+
+  g_assert (GBP_IS_CODE_INDEX_BUILDER (self));
+  g_assert (G_IS_FILE (file));
+
   if (!(entries = ide_code_indexer_index_file_finish (indexer, result, &error)))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_code_index_entries_collect_async (entries,
-                                          ide_task_get_cancellable (task),
-                                          code_index_entries_collect_cb,
-                                          g_object_ref (task));
+    {
+      gbp_code_index_builder_submit (self, file, NULL);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ide_code_index_entries_collect_async (entries,
+                                        ide_task_get_cancellable (task),
+                                        code_index_entries_collect_cb,
+                                        g_object_ref (task));
 }
 
 static void
