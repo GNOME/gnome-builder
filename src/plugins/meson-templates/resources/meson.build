@@ -7,7 +7,7 @@ project('{{name}}', {{if language == "c"}}'c',{{else if language == "c++"}}['cpp
 i18n = import('i18n')
 {{end}}
 
-{{if language == "c" || "cpp"}}
+{{if language == "c" || language ==  "cpp"}}
 config_h = configuration_data()
 config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
 {{if enable_i18n}}
