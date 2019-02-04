@@ -25,17 +25,25 @@
 #include <libide-code.h>
 #include <libide-foundry.h>
 
+#include "gbp-code-index-executor.h"
 #include "gbp-code-index-plan.h"
 #include "gbp-code-index-service.h"
 
+#define DELAY_FOR_INDEXING_MSEC 500
+
 struct _GbpCodeIndexService
 {
-  IdeObject parent_instance;
+  IdeObject         parent_instance;
 
-  GbpCodeIndexPlan *plan;
+  IdeNotification  *notif;
+  GCancellable     *cancellable;
 
-  guint started : 1;
-  guint paused : 1;
+  guint             queued_source;
+
+  guint             needs_indexing : 1;
+  guint             indexing : 1;
+  guint             started : 1;
+  guint             paused : 1;
 };
 
 enum {
@@ -45,6 +53,14 @@ enum {
 };
 
 G_DEFINE_TYPE (GbpCodeIndexService, gbp_code_index_service, IDE_TYPE_OBJECT)
+
+static void     gbp_code_index_service_index_async  (GbpCodeIndexService  *self,
+                                                     GCancellable         *cancellable,
+                                                     GAsyncReadyCallback   callback,
+                                                     gpointer              user_data);
+static gboolean gbp_code_index_service_index_finish (GbpCodeIndexService   *self,
+                                                     GAsyncResult          *result,
+                                                     GError              **error);
 
 static GParamSpec *properties [N_PROPS];
 
@@ -58,11 +74,13 @@ gbp_code_index_service_repr (IdeObject *object)
 }
 
 static void
-gbp_code_index_service_finalize (GObject *object)
+gbp_code_index_service_destroy (IdeObject *object)
 {
   GbpCodeIndexService *self = (GbpCodeIndexService *)object;
 
-  G_OBJECT_CLASS (gbp_code_index_service_parent_class)->finalize (object);
+  gbp_code_index_service_stop (self);
+
+  IDE_OBJECT_CLASS (gbp_code_index_service_parent_class)->destroy (object);
 }
 
 static void
@@ -109,10 +127,10 @@ gbp_code_index_service_class_init (GbpCodeIndexServiceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->finalize = gbp_code_index_service_finalize;
   object_class->get_property = gbp_code_index_service_get_property;
   object_class->set_property = gbp_code_index_service_set_property;
 
+  i_object_class->destroy = gbp_code_index_service_destroy;
   i_object_class->repr = gbp_code_index_service_repr;
 
   properties [PROP_PAUSED] =
@@ -131,12 +149,72 @@ gbp_code_index_service_init (GbpCodeIndexService *self)
 }
 
 static void
+gbp_code_index_service_index_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  GbpCodeIndexService *self = (GbpCodeIndexService *)object;
+  g_autoptr(GCancellable) cancellable = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!gbp_code_index_service_index_finish (self, result, &error))
+    g_warning ("Code indexing failed: %s", error->message);
+}
+
+static gboolean
+gbp_code_index_service_queue_index_cb (gpointer user_data)
+{
+  GbpCodeIndexService *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+
+  self->queued_source = 0;
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
+
+  gbp_code_index_service_index_async (self,
+                                      self->cancellable,
+                                      gbp_code_index_service_index_cb,
+                                      NULL);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+gbp_code_index_service_queue_index (GbpCodeIndexService *self)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+
+  self->needs_indexing = TRUE;
+
+  if (self->indexing)
+    return;
+
+  g_clear_handle_id (&self->queued_source, g_source_remove);
+  self->queued_source = g_timeout_add (DELAY_FOR_INDEXING_MSEC,
+                                       gbp_code_index_service_queue_index_cb,
+                                       self);
+}
+
+static void
 gbp_code_index_service_pause (GbpCodeIndexService *self)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
 
   self->paused = TRUE;
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAUSED]);
 }
 
@@ -147,7 +225,77 @@ gbp_code_index_service_unpause (GbpCodeIndexService *self)
   g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
 
   self->paused = FALSE;
+  gbp_code_index_service_queue_index (self);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAUSED]);
+}
+
+static void
+gbp_code_index_service_execute_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  GbpCodeIndexExecutor *executor = (GbpCodeIndexExecutor *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_EXECUTOR (executor));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_code_index_executor_execute_finish (executor, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_code_index_service_load_flags_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  GbpCodeIndexPlan *plan = (GbpCodeIndexPlan *)object;
+  g_autoptr(GbpCodeIndexExecutor) executor = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GbpCodeIndexService *self;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_PLAN (plan));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_code_index_plan_load_flags_finish (plan, result, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
+
+  self = ide_task_get_source_object (task);
+  context = ide_task_get_task_data (task);
+
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  executor = gbp_code_index_executor_new (plan);
+
+  gbp_code_index_executor_execute_async (executor,
+                                         self->notif,
+                                         ide_task_get_cancellable (task),
+                                         gbp_code_index_service_execute_cb,
+                                         g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -156,23 +304,36 @@ gbp_code_index_service_cull_index_cb (GObject      *object,
                                       gpointer      user_data)
 {
   GbpCodeIndexPlan *plan = (GbpCodeIndexPlan *)object;
-  g_autoptr(GbpCodeIndexService) self = user_data;
-  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_PLAN (plan));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_TASK (task));
 
   if (!gbp_code_index_plan_cull_indexed_finish (plan, result, &error))
     {
-      g_warning ("Failed to cull operations from plan: %s", error->message);
-      if (plan == self->plan)
-        g_clear_object (&self->plan);
-      return;
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
+
+  context = ide_task_get_task_data (task);
+  g_assert (IDE_IS_CONTEXT (context));
+
+  gbp_code_index_plan_load_flags_async (plan,
+                                        context,
+                                        ide_task_get_cancellable (task),
+                                        gbp_code_index_service_load_flags_cb,
+                                        g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -181,31 +342,92 @@ gbp_code_index_service_populate_cb (GObject      *object,
                                     gpointer      user_data)
 {
   GbpCodeIndexPlan *plan = (GbpCodeIndexPlan *)object;
-  g_autoptr(GbpCodeIndexService) self = user_data;
-  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_PLAN (plan));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_TASK (task));
 
   if (!gbp_code_index_plan_populate_finish (plan, result, &error))
     {
-      g_warning ("Failed to populate code-index: %s", error->message);
-      if (plan == self->plan)
-        g_clear_object (&self->plan);
-      return;
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
-  if (!(context = ide_object_ref_context (IDE_OBJECT (self))))
-    return;
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
+
+  context = ide_task_get_task_data (task);
+  g_assert (IDE_IS_CONTEXT (context));
 
   gbp_code_index_plan_cull_indexed_async (plan,
                                           context,
-                                          self->cancellable,
+                                          ide_task_get_cancellable (task),
                                           gbp_code_index_service_cull_index_cb,
-                                          g_object_ref (self));
+                                          g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_code_index_service_index_async (GbpCodeIndexService *self,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(GbpCodeIndexPlan) plan = NULL;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (cancellable == NULL)
+    g_warning ("Attempt to index without a valid cancellable. This will affect pausibility.");
+
+  self->indexing = TRUE;
+  self->needs_indexing = FALSE;
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_code_index_service_index_async);
+
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  plan = gbp_code_index_plan_new ();
+
+  gbp_code_index_plan_populate_async (plan,
+                                      context,
+                                      cancellable,
+                                      gbp_code_index_service_populate_cb,
+                                      g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_code_index_service_index_finish (GbpCodeIndexService  *self,
+                                     GAsyncResult         *result,
+                                     GError              **error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_TASK (result));
+
+  self->indexing = FALSE;
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 void
@@ -223,26 +445,31 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
   if (self->paused)
     return;
 
-  self->plan = gbp_code_index_plan_new ();
-
-  context = ide_object_ref_context (IDE_OBJECT (self));
-
-  gbp_code_index_plan_populate_async (self->plan,
-                                      context,
-                                      self->cancellable,
-                                      gbp_code_index_service_populate_cb,
-                                      g_object_ref (self));
+  gbp_code_index_service_queue_index (self);
 }
 
 void
 gbp_code_index_service_stop (GbpCodeIndexService *self)
 {
+  g_autoptr(GCancellable) cancellable = NULL;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (GBP_IS_CODE_INDEX_SERVICE (self));
-  g_return_if_fail (self->started == TRUE);
-  g_return_if_fail (!ide_object_in_destruction (IDE_OBJECT (self)));
+
+  if (!self->started)
+    return;
 
   self->started = FALSE;
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+  g_clear_handle_id (&self->queued_source, g_source_remove);
+
+  if (self->notif)
+    {
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+    }
 }
 
 GbpCodeIndexService *
