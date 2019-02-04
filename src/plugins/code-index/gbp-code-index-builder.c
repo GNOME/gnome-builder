@@ -469,6 +469,8 @@ gbp_code_index_builder_persist_write_map_cb (GObject      *object,
 
   dzl_fuzzy_index_builder_set_metadata_uint32 (self->fuzzy, "n_files", self->next_file_id);
 
+  IDE_TRACE_MSG ("Writing %s", g_file_peek_path (file));
+
   dzl_fuzzy_index_builder_write_async (self->fuzzy,
                                        file,
                                        G_PRIORITY_DEFAULT,
@@ -496,6 +498,8 @@ gbp_code_index_builder_persist_async (GbpCodeIndexBuilder *self,
   file = g_file_get_child (self->index_dir, "SymbolKeys");
 
   g_file_make_directory_with_parents (self->index_dir, cancellable, NULL);
+
+  IDE_TRACE_MSG ("Writing %s", g_file_peek_path (file));
 
   ide_persistent_map_builder_write_async (self->map,
                                           file,
