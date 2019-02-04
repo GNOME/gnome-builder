@@ -11,14 +11,14 @@ public:
   // may create constructors with difference additional parameter and delegate
   // the constructor to another.
   {{Prefix}}Window(BaseObjectType*, const Glib::RefPtr<Gtk::Builder>&);
-	static {{Prefix}}Window *create();
+  static {{Prefix}}Window *create();
 
 protected:
   // You may put widgets in public, protected, or private block. But it's
   // recommended to put them here.
   Gtk::Label *label;
-  
+
 private:
-  // You may put functions connected with widgets' signal in any block depending
+  // You may put functions bound with widgets' signal in any block depending
   // on your application needs. But it's recommended to put them here.
 };
