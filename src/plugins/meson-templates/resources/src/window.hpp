@@ -7,16 +7,18 @@
 
 class {{Prefix}}Window: public Gtk::ApplicationWindow {
 public:
-  // constructors
+  // Constructors, are the functions for initializing this class instance. You
+  // may create constructors with difference additional parameter and delegate
+  // the constructor to another.
   {{Prefix}}Window(BaseObjectType*, const Glib::RefPtr<Gtk::Builder>&);
 	static {{Prefix}}Window *create();
 
 protected:
-  // you can add some widgets here
+  // You may put widgets in public, protected, or private block. But it's
+  // recommended to put them here.
   Gtk::Label *label;
   
 private:
-  // put your functions here.
-  // you can connect widgets' signal by put the belowing in {{Prefix}}Window(...) constructor:
-  // my_widget->signal_something().connect(sigc::mem_fun(*this, &{{Prefix}}Window::on_my_widget_something));
+  // You may put functions connected with widgets' signal in any block depending
+  // on your application needs. But it's recommended to put them here.
 };
