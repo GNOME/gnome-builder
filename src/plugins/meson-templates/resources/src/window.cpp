@@ -12,7 +12,7 @@
     // You may bind widgets' signal to the functions in this class by typing,
     // for example:
     // my_widget->signal_something().connect(sigc::mem_fun(*this,
-    //                                                      &{{Prefix}}Window::on_my_widget_something));
+    //                              &{{Prefix}}Window::on_my_widget_something));
     //
     // You may also the signals to non-class member functions by typing, for
     // example:
