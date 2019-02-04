@@ -274,6 +274,7 @@ gbp_code_index_executor_execute_finish (GbpCodeIndexExecutor  *self,
                                         GAsyncResult          *result,
                                         GError               **error)
 {
+  Execute *state;
   gboolean ret;
 
   IDE_ENTRY;
@@ -282,7 +283,10 @@ gbp_code_index_executor_execute_finish (GbpCodeIndexExecutor  *self,
   g_return_val_if_fail (GBP_IS_CODE_INDEX_EXECUTOR (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+  state = ide_task_get_task_data (IDE_TASK (result));
+
+  if ((ret = ide_task_propagate_boolean (IDE_TASK (result), error)))
+    ide_notification_set_progress (state->notif, 1.0);
 
   IDE_RETURN (ret);
 }
