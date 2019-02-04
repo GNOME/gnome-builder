@@ -1,5 +1,10 @@
 {{include "license.cpp"}}
 
+// It's good to have basic knowledge about C++ and GTKMM. Belowing are
+// recommended references for you:
+// * https://upload.wikimedia.org/wikipedia/commons/e/e9/CPlusPlusProgramming.pdf
+// * https://developer.gnome.org/gtkmm-tutorial/3.24/gtkmm-tutorial.html
+
 #include <glibmm/i18n.h>
 
 #include "{{prefix}}-config.h"
