@@ -257,6 +257,8 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
   IdePipeline *pipeline;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -274,7 +276,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
       ide_task_return_pointer (task,
                                g_object_ref (self->compile_commands),
                                g_object_unref);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -298,7 +300,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_INITIALIZED,
                                  "There is no pipeline to access");
-      return;
+      IDE_EXIT;
     }
 
   path = ide_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
@@ -319,7 +321,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
 
       gbp_meson_build_system_monitor (self, file);
 
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -333,7 +335,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_INITIALIZED,
                                  "The pipeline is not yet ready to handle requests");
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -346,6 +348,8 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
                                               cancellable,
                                               gbp_meson_build_system_load_commands_config_cb,
                                               g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static IdeCompileCommands *
