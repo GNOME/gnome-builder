@@ -89,7 +89,7 @@ class MavenPipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.connect(Ide.PipelinePhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
         install_launcher = pipeline.create_launcher()
         install_launcher.set_cwd(srcdir)
@@ -98,9 +98,9 @@ class MavenPipelineAddin(Ide.Object, Ide.PipelineAddin):
         install_launcher.push_argv('-Dmaven.test.skip=true')
         install_stage = Ide.PipelineStageLauncher.new(context, install_launcher)
         install_stage.set_name(_("Installing project"))
-        self.track(pipeline.connect(Ide.PipelinePhase.INSTALL, 0, install_stage))
+        self.track(pipeline.attach(Ide.PipelinePhase.INSTALL, 0, install_stage))
 
-    def _query(self, stage, pipeline, cancellable):
+    def _query(self, stage, pipeline, targets, cancellable):
         stage.set_completed(False)
 
 class MavenBuildTarget(Ide.Object, Ide.BuildTarget):
@@ -116,8 +116,7 @@ class MavenBuildTarget(Ide.Object, Ide.BuildTarget):
 
     def do_get_cwd(self):
         context = self.get_context()
-        project_file = Ide.BuildSystem.from_context(context).project_file
-        return project_file.get_parent().get_path()
+        return Ide.BuildSystem.from_context(context).project_file.get_path()
 
     def do_get_argv(self):
         """
