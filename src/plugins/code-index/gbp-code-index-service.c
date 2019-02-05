@@ -69,13 +69,14 @@ enum {
 
 G_DEFINE_TYPE (GbpCodeIndexService, gbp_code_index_service, IDE_TYPE_OBJECT)
 
-static void     gbp_code_index_service_index_async  (GbpCodeIndexService  *self,
-                                                     GCancellable         *cancellable,
-                                                     GAsyncReadyCallback   callback,
-                                                     gpointer              user_data);
-static gboolean gbp_code_index_service_index_finish (GbpCodeIndexService   *self,
-                                                     GAsyncResult          *result,
-                                                     GError              **error);
+static void     gbp_code_index_service_index_async    (GbpCodeIndexService  *self,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+static gboolean gbp_code_index_service_index_finish   (GbpCodeIndexService   *self,
+                                                       GAsyncResult          *result,
+                                                       GError              **error);
+static void     gbp_code_index_service_reload_indexes (GbpCodeIndexService  *self);
 
 static GParamSpec *properties [N_PROPS];
 
@@ -514,6 +515,8 @@ gbp_code_index_service_index_finish (GbpCodeIndexService  *self,
 
   update_notification (self);
 
+  gbp_code_index_service_reload_indexes (self);
+
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
@@ -714,6 +717,30 @@ gbp_code_index_service_load_indexes (IdeTask      *task,
   ide_task_return_boolean (task, TRUE);
 }
 
+static void
+gbp_code_index_service_reload_indexes (GbpCodeIndexService *self)
+{
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  LoadIndexes *state;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+
+  if (!(context = ide_object_ref_context (IDE_OBJECT (self))))
+    return;
+
+  state = g_slice_new0 (LoadIndexes);
+  state->index = g_object_ref (self->index);
+  state->workdir = ide_context_ref_workdir (context);
+  state->indexdir = ide_context_cache_file (context, "code-index", NULL);
+
+  task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, gbp_code_index_service_reload_indexes);
+  ide_task_set_task_data (task, state, load_indexes_free);
+  ide_task_run_in_thread (task, gbp_code_index_service_load_indexes);
+}
+
 void
 gbp_code_index_service_start (GbpCodeIndexService *self)
 {
@@ -723,7 +750,6 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
   g_autoptr(IdeTask) task = NULL;
   IdeBufferManager *buffer_manager;
   IdeBuildManager *build_manager;
-  LoadIndexes *state;
   IdeProject *project;
   IdeVcs *vcs;
   gboolean has_index;
@@ -808,15 +834,7 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
         gbp_code_index_service_queue_index (self);
     }
 
-  state = g_slice_new0 (LoadIndexes);
-  state->index = g_object_ref (self->index);
-  state->workdir = ide_context_ref_workdir (context);
-  state->indexdir = g_object_ref (index_dir);
-
-  task = ide_task_new (self, NULL, NULL, NULL);
-  ide_task_set_source_tag (task, gbp_code_index_service_start);
-  ide_task_set_task_data (task, state, load_indexes_free);
-  ide_task_run_in_thread (task, gbp_code_index_service_load_indexes);
+  gbp_code_index_service_reload_indexes (self);
 
   IDE_EXIT;
 }
