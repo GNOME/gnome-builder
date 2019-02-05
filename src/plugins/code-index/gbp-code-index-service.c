@@ -54,6 +54,13 @@ struct _GbpCodeIndexService
   guint              paused : 1;
 };
 
+typedef struct
+{
+  IdeCodeIndexIndex *index;
+  GFile *workdir;
+  GFile *indexdir;
+} LoadIndexes;
+
 enum {
   PROP_0,
   PROP_PAUSED,
@@ -71,6 +78,15 @@ static gboolean gbp_code_index_service_index_finish (GbpCodeIndexService   *self
                                                      GError              **error);
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+load_indexes_free (LoadIndexes *state)
+{
+  g_clear_object (&state->index);
+  g_clear_object (&state->indexdir);
+  g_clear_object (&state->workdir);
+  g_slice_free (LoadIndexes, state);
+}
 
 static void
 update_notification (GbpCodeIndexService *self)
@@ -643,13 +659,71 @@ gbp_code_index_service_file_renamed_cb (GbpCodeIndexService *self,
   gbp_code_index_service_queue_index (self);
 }
 
+static void
+gbp_code_index_service_load_indexes_cb (GFile     *directory,
+                                        GPtrArray *file_infos,
+                                        gpointer   user_data)
+{
+  LoadIndexes *state = user_data;
+  g_autoptr(GFile) source_directory = NULL;
+
+  g_assert (G_IS_FILE (directory));
+  g_assert (state != NULL);
+
+  if (!g_file_equal (directory, state->indexdir))
+    {
+      g_autofree gchar *relative = NULL;
+
+      relative = g_file_get_relative_path (state->indexdir, directory);
+      source_directory = g_file_get_child (state->workdir, relative);
+    }
+  else
+    {
+      source_directory = g_object_ref (state->workdir);
+    }
+
+  ide_code_index_index_load (state->index,
+                             directory,
+                             source_directory,
+                             NULL,
+                             NULL);
+}
+
+static void
+gbp_code_index_service_load_indexes (IdeTask      *task,
+                                     gpointer      source_object,
+                                     gpointer      task_data,
+                                     GCancellable *cancellable)
+{
+  LoadIndexes *state = task_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (source_object));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_CODE_INDEX_INDEX (state->index));
+  g_assert (G_IS_FILE (state->workdir));
+  g_assert (G_IS_FILE (state->indexdir));
+
+  ide_g_file_walk (state->indexdir,
+                   NULL,
+                   cancellable,
+                   gbp_code_index_service_load_indexes_cb,
+                   state);
+
+  ide_task_return_boolean (task, TRUE);
+}
+
 void
 gbp_code_index_service_start (GbpCodeIndexService *self)
 {
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) index_dir = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeBufferManager *buffer_manager;
   IdeBuildManager *build_manager;
+  LoadIndexes *state;
   IdeProject *project;
   IdeVcs *vcs;
   gboolean has_index;
@@ -733,6 +807,16 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
       if (!has_index && !ide_build_manager_get_busy (build_manager))
         gbp_code_index_service_queue_index (self);
     }
+
+  state = g_slice_new0 (LoadIndexes);
+  state->index = g_object_ref (self->index);
+  state->workdir = ide_context_ref_workdir (context);
+  state->indexdir = g_object_ref (index_dir);
+
+  task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, gbp_code_index_service_start);
+  ide_task_set_task_data (task, state, load_indexes_free);
+  ide_task_run_in_thread (task, gbp_code_index_service_load_indexes);
 
   IDE_EXIT;
 }
