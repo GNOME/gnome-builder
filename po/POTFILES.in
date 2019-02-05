@@ -166,6 +166,8 @@ src/plugins/clang/org.gnome.builder.clang.gschema.xml
 src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/cmake/gbp-cmake-pipeline-addin.c
 src/plugins/cmake/gbp-cmake-toolchain.c
+src/plugins/code-index/gbp-code-index-application-addin.c
+src/plugins/code-index/gbp-code-index-service.c
 src/plugins/code-index/ide-code-index-index.c
 src/plugins/color-picker/data/basic.gstyle.xml
 src/plugins/color-picker/gb-color-picker-editor-addin.c
