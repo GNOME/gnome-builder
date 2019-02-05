@@ -32,11 +32,14 @@
 
 struct _GbpCodeIndexWorkbenchAddin
 {
-  GObject                 parent_instance;
-  IdeWorkbench           *workbench;
-  GbpCodeIndexService    *service;
-  IdeCodeIndexIndex      *index;
+  GObject            parent_instance;
+  IdeWorkbench      *workbench;
+  IdeCodeIndexIndex *index;
 };
+
+static void gbp_code_index_workbench_addin_notify_paused (GbpCodeIndexWorkbenchAddin *self,
+                                                          GParamSpec                 *pspec,
+                                                          GbpCodeIndexService        *service);
 
 static void
 gbp_code_index_workbench_addin_load (IdeWorkbenchAddin *addin,
@@ -49,7 +52,6 @@ gbp_code_index_workbench_addin_load (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   self->workbench = workbench;
-
 }
 
 static void
@@ -62,6 +64,16 @@ gbp_code_index_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
+  if (ide_workbench_has_project (workbench))
+    {
+      GbpCodeIndexService *service;
+      IdeContext *context;
+
+      context = ide_workbench_get_context (workbench);
+      service = gbp_code_index_service_from_context (context);
+      ide_object_destroy (IDE_OBJECT (service));
+    }
+
   ide_clear_and_destroy_object (&self->index);
 
   self->workbench = NULL;
@@ -72,6 +84,7 @@ gbp_code_index_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
                                                IdeProjectInfo    *project_info)
 {
   GbpCodeIndexWorkbenchAddin *self = (GbpCodeIndexWorkbenchAddin *)addin;
+  GbpCodeIndexService *service;
   IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -83,6 +96,14 @@ gbp_code_index_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
   context = ide_workbench_get_context (self->workbench);
 
   self->index = ide_code_index_index_new (IDE_OBJECT (context));
+
+  service = gbp_code_index_service_from_context (context);
+  g_signal_connect_object (service,
+                           "notify::paused",
+                           G_CALLBACK (gbp_code_index_workbench_addin_notify_paused),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gbp_code_index_workbench_addin_notify_paused (self, NULL, service);
 }
 
 static void
@@ -125,13 +146,18 @@ static void
 gbp_code_index_workbench_addin_paused (GbpCodeIndexWorkbenchAddin *self,
                                        GVariant                   *state)
 {
+  GbpCodeIndexService *service;
+  IdeContext *context;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
 
   if (state == NULL || !g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
     return;
 
-  gbp_code_index_service_set_paused (self->service, g_variant_get_boolean (state));
+  context = ide_workbench_get_context (self->workbench);
+  service = gbp_code_index_service_from_context (context);
+  gbp_code_index_service_set_paused (service, g_variant_get_boolean (state));
 }
 
 DZL_DEFINE_ACTION_GROUP (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, {
@@ -170,3 +196,21 @@ gbp_code_index_workbench_addin_get_index (GbpCodeIndexWorkbenchAddin *self)
 
   return self->index;
 }
+
+static void
+gbp_code_index_workbench_addin_notify_paused (GbpCodeIndexWorkbenchAddin *self,
+                                              GParamSpec                 *pspec,
+                                              GbpCodeIndexService        *service)
+{
+  gboolean paused;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (service));
+
+  paused = gbp_code_index_service_get_paused (service);
+  gbp_code_index_workbench_addin_set_action_state (self,
+                                                   "paused",
+                                                   g_variant_new_boolean (paused));
+}
+
