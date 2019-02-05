@@ -40,6 +40,7 @@
             </child>
             <child>
               <object class="IdeNotificationsButton" id="notifications_button">
+                <property name="show-theatric">false</property>
                 <property name="visible">true</property>
               </object>
               <packing>
