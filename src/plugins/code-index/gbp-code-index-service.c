@@ -307,6 +307,8 @@ gbp_code_index_service_execute_cb (GObject      *object,
   else
     ide_task_return_boolean (task, TRUE);
 
+  ide_object_destroy (IDE_OBJECT (executor));
+
   IDE_EXIT;
 }
 
@@ -345,6 +347,7 @@ gbp_code_index_service_load_flags_cb (GObject      *object,
   g_assert (IDE_IS_CONTEXT (context));
 
   executor = gbp_code_index_executor_new (plan);
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (executor));
 
   gbp_code_index_executor_execute_async (executor,
                                          self->notif,
@@ -462,6 +465,8 @@ gbp_code_index_service_index_async (GbpCodeIndexService *self,
   context = ide_object_ref_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
+  ide_task_set_task_data (task, g_object_ref (context), g_object_unref);
+
   plan = gbp_code_index_plan_new ();
 
   gbp_code_index_plan_populate_async (plan,
@@ -520,7 +525,7 @@ gbp_code_index_service_buffer_saved_cb (GbpCodeIndexService *self,
                                                                        "Code-Indexer-Languages");
 
           /* Not exact check, but good enough for now */
-          if (strstr (languages, lang_id) != NULL)
+          if (languages != NULL && strstr (languages, lang_id) != NULL)
             {
               gbp_code_index_service_queue_index (self);
               break;
