@@ -46,6 +46,7 @@ typedef struct
   GFile            *source_directory;
   DzlFuzzyIndex    *symbol_names;
   IdePersistentMap *symbol_keys;
+  guint64           mtime;
 } DirectoryIndex;
 
 typedef struct
@@ -74,6 +75,28 @@ static void directory_index_free (DirectoryIndex *data);
 
 DZL_DEFINE_COUNTER (code_indexes, "Code Indexes", "Instances", "Number of loaded code indexes")
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (DirectoryIndex, directory_index_free)
+
+static guint64
+newest_mtime (GFile        *a,
+              GFile        *b,
+              GCancellable *cancellable)
+{
+  g_autoptr(GFileInfo) ainfo = NULL;
+  g_autoptr(GFileInfo) binfo = NULL;
+  guint64 aval = 0;
+  guint64 bval = 0;
+
+  ainfo = g_file_query_info (a, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, cancellable, NULL);
+  binfo = g_file_query_info (b, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, cancellable, NULL);
+
+  if (ainfo)
+    aval = g_file_info_get_attribute_uint64 (ainfo, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  if (binfo)
+    bval = g_file_info_get_attribute_uint64 (binfo, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  return aval > bval ? aval : bval;
+}
 
 static void
 directory_index_free (DirectoryIndex *data)
@@ -153,10 +176,47 @@ directory_index_new (GFile         *directory,
   dir_index->symbol_names = g_steal_pointer (&symbol_names);
   dir_index->directory = g_file_dup (directory);
   dir_index->source_directory = g_file_dup (source_directory);
+  dir_index->mtime = newest_mtime (keys_file, names_file, cancellable);
 
   DZL_COUNTER_INC (code_indexes);
 
   return g_steal_pointer (&dir_index);
+}
+
+static gboolean
+can_ignore_reload (IdeCodeIndexIndex *self,
+                   GFile             *directory,
+                   GCancellable      *cancellable)
+{
+  g_autofree gchar *dir_name = NULL;
+  gboolean ret = FALSE;
+  gpointer value;
+
+  g_assert (IDE_IS_CODE_INDEX_INDEX (self));
+  g_assert (G_IS_FILE (directory));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  dir_name = g_file_get_path (directory);
+
+  g_mutex_lock (&self->mutex);
+
+  if (g_hash_table_lookup_extended (self->directories, dir_name, NULL, &value))
+    {
+      g_autoptr(GFile) keys_file = g_file_get_child (directory, "SymbolKeys");
+      g_autoptr(GFile) names_file = g_file_get_child (directory, "SymbolNames");
+      guint i = GPOINTER_TO_UINT (value);
+      DirectoryIndex *info = g_ptr_array_index (self->indexes, i);
+      guint64 mtime = newest_mtime (keys_file, names_file, cancellable);
+
+      g_assert (i < self->indexes->len);
+      g_assert (self->indexes->len > 0);
+
+      ret = mtime <= info->mtime;
+    }
+
+  g_mutex_unlock (&self->mutex);
+
+  return ret;
 }
 
 /**
@@ -183,7 +243,6 @@ ide_code_index_index_load (IdeCodeIndexIndex   *self,
                            GError             **error)
 {
   g_autoptr(DirectoryIndex) dir_index = NULL;
-  g_autoptr(GMutexLocker) locker = NULL;
   g_autofree gchar *dir_name = NULL;
   gpointer value;
 
@@ -191,13 +250,16 @@ ide_code_index_index_load (IdeCodeIndexIndex   *self,
   g_return_val_if_fail (G_IS_FILE (directory), FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
 
+  if (can_ignore_reload (self, directory, cancellable))
+    return TRUE;
+
   dir_name = g_file_get_path (directory);
   g_debug ("Loading code index from %s", dir_name);
 
   if (!(dir_index = directory_index_new (directory, source_directory, cancellable, error)))
     return FALSE;
 
-  locker = g_mutex_locker_new (&self->mutex);
+  g_mutex_lock (&self->mutex);
 
   if (g_hash_table_lookup_extended (self->directories, dir_name, NULL, &value))
     {
@@ -218,6 +280,8 @@ ide_code_index_index_load (IdeCodeIndexIndex   *self,
 
       g_ptr_array_add (self->indexes, g_steal_pointer (&dir_index));
     }
+
+  g_mutex_unlock (&self->mutex);
 
   return TRUE;
 }
