@@ -30,12 +30,12 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
                                           gpointer      user_data)
 {
   IdeCodeIndexer *code_indexer = (IdeCodeIndexer *)object;
-  GbpCodeIndexWorkbenchAddin *addin = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *key = NULL;
   IdeCodeIndexSymbolResolver *self;
+  GbpCodeIndexService *service;
   IdeCodeIndexIndex *index;
   IdeContext *context;
 
@@ -56,12 +56,8 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  addin = gbp_code_index_workbench_addin_from_context (context);
-  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (addin));
-
-  index = gbp_code_index_workbench_addin_get_index (addin);
-  g_assert (IDE_IS_CODE_INDEX_INDEX (index));
-
+  service = gbp_code_index_service_from_context (context);
+  index = gbp_code_index_service_get_index (service);
   symbol = ide_code_index_index_lookup_symbol (index, key);
 
   if (symbol != NULL)

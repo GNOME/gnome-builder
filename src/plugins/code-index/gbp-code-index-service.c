@@ -39,18 +39,19 @@
 
 struct _GbpCodeIndexService
 {
-  IdeObject         parent_instance;
+  IdeObject          parent_instance;
 
-  IdeNotification  *notif;
-  GCancellable     *cancellable;
+  IdeNotification   *notif;
+  IdeCodeIndexIndex *index;
+  GCancellable      *cancellable;
 
-  guint             queued_source;
+  guint              queued_source;
 
-  guint             build_inhibit : 1;
-  guint             needs_indexing : 1;
-  guint             indexing : 1;
-  guint             started : 1;
-  guint             paused : 1;
+  guint              build_inhibit : 1;
+  guint              needs_indexing : 1;
+  guint              indexing : 1;
+  guint              started : 1;
+  guint              paused : 1;
 };
 
 enum {
@@ -107,6 +108,8 @@ gbp_code_index_service_destroy (IdeObject *object)
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
   g_clear_handle_id (&self->queued_source, g_source_remove);
+
+  ide_clear_and_destroy_object (&self->index);
 
   if (self->notif)
     {
@@ -191,6 +194,8 @@ gbp_code_index_service_init (GbpCodeIndexService *self)
   ide_notification_set_has_progress (self->notif, TRUE);
   ide_notification_set_progress (self->notif, 0);
   ide_notification_add_button (self->notif, NULL, icon, "code-index.paused");
+
+  self->index = ide_code_index_index_new (IDE_OBJECT (self));
 }
 
 static void
@@ -875,4 +880,12 @@ gbp_code_index_service_from_context (IdeContext *context)
     }
 
   return ret;
+}
+
+IdeCodeIndexIndex *
+gbp_code_index_service_get_index (GbpCodeIndexService *self)
+{
+  g_return_val_if_fail (GBP_IS_CODE_INDEX_SERVICE (self), NULL);
+
+  return self->index;
 }

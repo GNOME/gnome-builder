@@ -25,7 +25,7 @@
 
 #include "ide-code-index-search-provider.h"
 #include "ide-code-index-index.h"
-#include "gbp-code-index-workbench-addin.h"
+#include "gbp-code-index-service.h"
 
 static void
 populate_cb (GObject      *object,
@@ -60,7 +60,7 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
                                              gpointer             user_data)
 {
   IdeCodeIndexSearchProvider *self = (IdeCodeIndexSearchProvider *)provider;
-  GbpCodeIndexWorkbenchAddin *addin = NULL;
+  GbpCodeIndexService *service = NULL;
   g_autoptr(IdeTask) task = NULL;
   IdeCodeIndexIndex *index;
   IdeContext *context;
@@ -79,7 +79,7 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
   ide_task_set_source_tag (task, ide_code_index_search_provider_search_async);
 
   if (!ide_context_has_project (context) ||
-      !(addin = gbp_code_index_workbench_addin_from_context (context)))
+      !(service = gbp_code_index_service_from_context (context)))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -88,7 +88,7 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
       IDE_EXIT;
     }
 
-  index = gbp_code_index_workbench_addin_get_index (addin);
+  index = gbp_code_index_service_get_index (service);
 
   if (index == NULL)
     ide_task_return_new_error (task,

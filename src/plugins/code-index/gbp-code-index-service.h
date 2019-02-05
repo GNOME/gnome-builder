@@ -23,6 +23,8 @@
 #include <libide-core.h>
 #include <libide-code.h>
 
+#include "ide-code-index-index.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_CODE_INDEX_SERVICE (gbp_code_index_service_get_type())
@@ -35,6 +37,7 @@ void                 gbp_code_index_service_stop         (GbpCodeIndexService *s
 gboolean             gbp_code_index_service_get_paused   (GbpCodeIndexService *self);
 void                 gbp_code_index_service_set_paused   (GbpCodeIndexService *self,
                                                           gboolean             paused);
+IdeCodeIndexIndex   *gbp_code_index_service_get_index    (GbpCodeIndexService *self);
 IdeCodeIndexer      *gbp_code_index_service_get_indexer  (GbpCodeIndexService *self,
                                                           const gchar         *lang_id,
                                                           const gchar         *path);

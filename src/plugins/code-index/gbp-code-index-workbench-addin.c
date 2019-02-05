@@ -32,9 +32,8 @@
 
 struct _GbpCodeIndexWorkbenchAddin
 {
-  GObject            parent_instance;
-  IdeWorkbench      *workbench;
-  IdeCodeIndexIndex *index;
+  GObject       parent_instance;
+  IdeWorkbench *workbench;
 };
 
 static void gbp_code_index_workbench_addin_notify_paused (GbpCodeIndexWorkbenchAddin *self,
@@ -74,8 +73,6 @@ gbp_code_index_workbench_addin_unload (IdeWorkbenchAddin *addin,
       ide_object_destroy (IDE_OBJECT (service));
     }
 
-  ide_clear_and_destroy_object (&self->index);
-
   self->workbench = NULL;
 }
 
@@ -91,12 +88,7 @@ gbp_code_index_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
 
-  /* TODO: We should clean this up a bit still */
-
   context = ide_workbench_get_context (self->workbench);
-
-  self->index = ide_code_index_index_new (IDE_OBJECT (context));
-
   service = gbp_code_index_service_from_context (context);
   g_signal_connect_object (service,
                            "notify::paused",
@@ -177,24 +169,6 @@ gbp_code_index_workbench_addin_class_init (GbpCodeIndexWorkbenchAddinClass *klas
 static void
 gbp_code_index_workbench_addin_init (GbpCodeIndexWorkbenchAddin *self)
 {
-}
-
-GbpCodeIndexWorkbenchAddin *
-gbp_code_index_workbench_addin_from_context (IdeContext *context)
-{
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return ide_context_peek_child_typed (context, GBP_TYPE_CODE_INDEX_WORKBENCH_ADDIN);
-}
-
-IdeCodeIndexIndex *
-gbp_code_index_workbench_addin_get_index (GbpCodeIndexWorkbenchAddin *self)
-{
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self), NULL);
-
-  return self->index;
 }
 
 static void
