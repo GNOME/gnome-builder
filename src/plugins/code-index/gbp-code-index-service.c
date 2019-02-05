@@ -22,8 +22,10 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <libide-code.h>
 #include <libide-foundry.h>
+#include <libpeas/peas.h>
 
 #include "gbp-code-index-executor.h"
 #include "gbp-code-index-plan.h"
@@ -40,6 +42,7 @@ struct _GbpCodeIndexService
 
   guint             queued_source;
 
+  guint             build_inhibit : 1;
   guint             needs_indexing : 1;
   guint             indexing : 1;
   guint             started : 1;
@@ -64,6 +67,22 @@ static gboolean gbp_code_index_service_index_finish (GbpCodeIndexService   *self
 
 static GParamSpec *properties [N_PROPS];
 
+static void
+update_notification (GbpCodeIndexService *self)
+{
+  gboolean visible;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+
+  visible = self->indexing || self->paused;
+
+  if (ide_object_is_root (IDE_OBJECT (self->notif)) && visible)
+    ide_notification_attach (self->notif, IDE_OBJECT (self));
+  else if (!ide_object_is_root (IDE_OBJECT (self->notif)) && !visible)
+    ide_notification_withdraw (self->notif);
+}
+
 static gchar *
 gbp_code_index_service_repr (IdeObject *object)
 {
@@ -78,7 +97,18 @@ gbp_code_index_service_destroy (IdeObject *object)
 {
   GbpCodeIndexService *self = (GbpCodeIndexService *)object;
 
-  gbp_code_index_service_stop (self);
+  if (self->started)
+    gbp_code_index_service_stop (self);
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+  g_clear_handle_id (&self->queued_source, g_source_remove);
+
+  if (self->notif)
+    {
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+    }
 
   IDE_OBJECT_CLASS (gbp_code_index_service_parent_class)->destroy (object);
 }
@@ -146,6 +176,17 @@ gbp_code_index_service_class_init (GbpCodeIndexServiceClass *klass)
 static void
 gbp_code_index_service_init (GbpCodeIndexService *self)
 {
+  g_autoptr(GIcon) icon = NULL;
+
+  icon = g_themed_icon_new ("media-playback-pause-symbolic");
+
+  self->notif = ide_notification_new ();
+  ide_notification_set_id (self->notif, "org.gnome.builder.code-index");
+  ide_notification_set_title (self->notif, _("Indexing Source Code"));
+  ide_notification_set_body (self->notif, _("Search, diagnostics, and autocompletion may be limited until complete."));
+  ide_notification_set_has_progress (self->notif, TRUE);
+  ide_notification_set_progress (self->notif, 0);
+  ide_notification_add_button (self->notif, NULL, icon, "code-index.paused");
 }
 
 static void
@@ -162,7 +203,10 @@ gbp_code_index_service_index_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!gbp_code_index_service_index_finish (self, result, &error))
-    g_warning ("Code indexing failed: %s", error->message);
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Code indexing failed: %s", error->message);
+    }
 }
 
 static gboolean
@@ -197,7 +241,7 @@ gbp_code_index_service_queue_index (GbpCodeIndexService *self)
 
   self->needs_indexing = TRUE;
 
-  if (self->indexing)
+  if (self->indexing || self->paused)
     return;
 
   g_clear_handle_id (&self->queued_source, g_source_remove);
@@ -213,8 +257,13 @@ gbp_code_index_service_pause (GbpCodeIndexService *self)
   g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
 
   self->paused = TRUE;
+
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
+  g_clear_handle_id (&self->queued_source, g_source_remove);
+
+  update_notification (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAUSED]);
 }
 
@@ -225,7 +274,11 @@ gbp_code_index_service_unpause (GbpCodeIndexService *self)
   g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
 
   self->paused = FALSE;
+
   gbp_code_index_service_queue_index (self);
+
+  update_notification (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAUSED]);
 }
 
@@ -413,6 +466,8 @@ gbp_code_index_service_index_async (GbpCodeIndexService *self,
                                       gbp_code_index_service_populate_cb,
                                       g_steal_pointer (&task));
 
+  update_notification (self);
+
   IDE_EXIT;
 }
 
@@ -427,13 +482,119 @@ gbp_code_index_service_index_finish (GbpCodeIndexService  *self,
 
   self->indexing = FALSE;
 
+  update_notification (self);
+
   return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
+gbp_code_index_service_buffer_saved_cb (GbpCodeIndexService *self,
+                                        IdeBuffer           *buffer,
+                                        IdeBufferManager    *buffer_manager)
+{
+  GtkSourceLanguage *lang;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  /*
+   * Only update the index if the file save will result in a change to the
+   * directory's index. We determine that by if an indexer is available.
+   */
+
+  if ((lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
+    {
+      const gchar *lang_id = gtk_source_language_get_id (lang);
+      const GList *list = peas_engine_get_plugin_list (peas_engine_get_default ());
+
+      for (const GList *iter = list; iter; iter = iter->next)
+        {
+          PeasPluginInfo *plugin_info = iter->data;
+          const gchar *languages = peas_plugin_info_get_external_data (plugin_info,
+                                                                       "Code-Indexer-Languages");
+
+          /* Not exact check, but good enough for now */
+          if (strstr (languages, lang_id) != NULL)
+            {
+              gbp_code_index_service_queue_index (self);
+              break;
+            }
+        }
+    }
+}
+
+static void
+gbp_code_index_service_build_started_cb (GbpCodeIndexService *self,
+                                         IdePipeline         *pipeline,
+                                         IdeBuildManager     *build_manager)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  /* If we are starting a new build that is going to ensure that we reach to
+   * the configure phase (or further), then delay any index building until
+   * after that operation completes. There is no need to compete for resources
+   * while building (especially if indexing might fail anyway).
+   */
+  if (ide_pipeline_get_requested_phase (pipeline) >= IDE_PIPELINE_PHASE_CONFIGURE)
+    {
+      self->build_inhibit = TRUE;
+      g_cancellable_cancel (self->cancellable);
+      g_clear_object (&self->cancellable);
+    }
+}
+
+static void
+gbp_code_index_service_build_failed_cb (GbpCodeIndexService *self,
+                                        IdePipeline         *pipeline,
+                                        IdeBuildManager     *build_manager)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  self->build_inhibit = FALSE;
+}
+
+static void
+gbp_code_index_service_build_finished_cb (GbpCodeIndexService *self,
+                                          IdePipeline         *pipeline,
+                                          IdeBuildManager     *build_manager)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  /*
+   * If we paused building due to inhibition while building, then we need to
+   * possibly restore the build process and queue a new indexing.
+   */
+
+  if (self->build_inhibit)
+    {
+      self->build_inhibit = FALSE;
+
+      if (ide_pipeline_has_configured (pipeline))
+        gbp_code_index_service_queue_index (self);
+    }
 }
 
 void
 gbp_code_index_service_start (GbpCodeIndexService *self)
 {
   g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GFile) index_dir = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeBuildManager *build_manager;
+  gboolean has_index;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (GBP_IS_CODE_INDEX_SERVICE (self));
@@ -442,10 +603,56 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
 
   self->started = TRUE;
 
-  if (self->paused)
-    return;
+  if (!(context = ide_object_ref_context (IDE_OBJECT (self))))
+    {
+      g_warning ("Attempt to start code-index service without access to context");
+      IDE_EXIT;
+    }
 
-  gbp_code_index_service_queue_index (self);
+  buffer_manager = ide_buffer_manager_from_context (context);
+
+  g_signal_connect_object (buffer_manager,
+                           "buffer-saved",
+                           G_CALLBACK (gbp_code_index_service_buffer_saved_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  build_manager = ide_build_manager_from_context (context);
+
+  g_signal_connect_object (build_manager,
+                           "build-failed",
+                           G_CALLBACK (gbp_code_index_service_build_failed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (build_manager,
+                           "build-finished",
+                           G_CALLBACK (gbp_code_index_service_build_finished_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (build_manager,
+                           "build-started",
+                           G_CALLBACK (gbp_code_index_service_build_started_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  index_dir = ide_context_cache_file (context, "code-index", NULL);
+  has_index = g_file_query_exists (index_dir, NULL);
+
+  if (!self->paused)
+    {
+      /*
+       * We only want to immediately start indexing at startup if the project
+       * does not yet have an index. Otherwise, we want to wait for a user
+       * action to cause the indexes to be rebuilt so that we don't risk
+       * annoying the user with build actions.
+       */
+      if (!has_index && !ide_build_manager_get_busy (build_manager))
+        gbp_code_index_service_queue_index (self);
+    }
+
+  IDE_EXIT;
 }
 
 void
