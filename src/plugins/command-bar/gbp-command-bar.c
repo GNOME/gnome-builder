@@ -34,6 +34,7 @@ struct _GbpCommandBar
   DzlBin              parent_instance;
   DzlSuggestionEntry *entry;
   GtkRevealer        *revealer;
+  guint               queued_dismiss;
 };
 
 G_DEFINE_TYPE (GbpCommandBar, gbp_command_bar, DZL_TYPE_BIN)
@@ -105,6 +106,35 @@ gbp_command_bar_changed_cb (GbpCommandBar      *self,
 }
 
 static gboolean
+gbp_command_bar_queue_dismiss_cb (gpointer data)
+{
+  GbpCommandBar *self = data;
+
+  g_assert (GBP_IS_COMMAND_BAR (self));
+
+  self->queued_dismiss = 0;
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (self->entry)))
+    {
+      GtkWidget *popover = dzl_suggestion_entry_get_popover (self->entry);
+
+      if (!gtk_widget_get_visible (popover))
+        gbp_command_bar_dismiss (self);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gbp_command_bar_queue_dismiss (GbpCommandBar *self)
+{
+  g_assert (GBP_IS_COMMAND_BAR (self));
+
+  g_clear_handle_id (&self->queued_dismiss, g_source_remove);
+  self->queued_dismiss = gdk_threads_add_idle (gbp_command_bar_queue_dismiss_cb, self);
+}
+
+static gboolean
 gbp_command_bar_focus_out_event_cb (GbpCommandBar      *self,
                                     GdkEventFocus      *focus,
                                     DzlSuggestionEntry *entry)
@@ -112,11 +142,7 @@ gbp_command_bar_focus_out_event_cb (GbpCommandBar      *self,
   g_assert (GBP_IS_COMMAND_BAR (self));
   g_assert (DZL_IS_SUGGESTION_ENTRY (entry));
 
-  if (gtk_revealer_get_reveal_child (self->revealer))
-    {
-      gtk_revealer_set_reveal_child (self->revealer, FALSE);
-      gtk_entry_set_text (GTK_ENTRY (entry), "");
-    }
+  gbp_command_bar_queue_dismiss (self);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -154,6 +180,8 @@ gbp_command_bar_activate_suggestion_cb (GbpCommandBar      *self,
 
       ide_command_run_async (command, NULL, NULL, NULL);
     }
+
+  gbp_command_bar_dismiss (self);
 }
 
 static void
@@ -190,9 +218,21 @@ position_popover_cb (DzlSuggestionEntry *entry,
 }
 
 static void
+gbp_command_bar_destroy (GtkWidget *widget)
+{
+  GbpCommandBar *self = (GbpCommandBar *)widget;
+
+  g_clear_handle_id (&self->queued_dismiss, g_source_remove);
+
+  GTK_WIDGET_CLASS (gbp_command_bar_parent_class)->destroy (widget);
+}
+
+static void
 gbp_command_bar_class_init (GbpCommandBarClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->destroy = gbp_command_bar_destroy;
 
   gtk_widget_class_set_css_name (widget_class, "commandbar");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/command-bar/gbp-command-bar.ui");
