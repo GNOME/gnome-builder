@@ -20,6 +20,7 @@
 
 #define G_LOG_DOMAIN "code-index-symbol-resolver"
 
+#include "gbp-code-index-service.h"
 #include "gbp-code-index-workbench-addin.h"
 #include "ide-code-index-symbol-resolver.h"
 
@@ -132,15 +133,15 @@ ide_code_index_symbol_resolver_lookup_flags_cb (GObject      *object,
 
 static void
 ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
-                                                    IdeLocation   *location,
+                                                    IdeLocation         *location,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data)
 {
   IdeCodeIndexSymbolResolver *self = (IdeCodeIndexSymbolResolver *)resolver;
-  GbpCodeIndexWorkbenchAddin *addin;
+  GbpCodeIndexService *service;
   g_autoptr(IdeTask) task = NULL;
-  IdeCodeIndexer *code_indexer;
+  g_autoptr(IdeCodeIndexer) code_indexer = NULL;
   IdeBuildSystem *build_system;
   const gchar *path;
   IdeContext *context;
@@ -162,14 +163,14 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  addin = gbp_code_index_workbench_addin_from_context (context);
-  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (addin));
+  service = gbp_code_index_service_from_context (context);
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (service));
 
   file = ide_location_get_file (location);
   path = g_file_peek_path (file);
   g_assert (path != NULL);
 
-  code_indexer = gbp_code_index_workbench_addin_get_code_indexer (addin, path);
+  code_indexer = gbp_code_index_service_get_indexer (service, NULL, path);
   g_assert (!code_indexer || IDE_IS_CODE_INDEXER (code_indexer));
 
   if (code_indexer == NULL)

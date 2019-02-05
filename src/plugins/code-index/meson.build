@@ -8,7 +8,6 @@ plugins_sources += files([
   'gbp-code-index-plan.c',
   'gbp-code-index-service.c',
   'gbp-code-index-workbench-addin.c',
-  'ide-code-index-builder.c',
   'ide-code-index-index.c',
   'ide-code-index-search-provider.c',
   'ide-code-index-search-result.c',
