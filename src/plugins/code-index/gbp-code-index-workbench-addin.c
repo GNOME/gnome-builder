@@ -32,7 +32,7 @@
 
 struct _GbpCodeIndexWorkbenchAddin
 {
-  IdeObject               parent_instance;
+  GObject                 parent_instance;
   IdeWorkbench           *workbench;
   GbpCodeIndexService    *service;
   IdeCodeIndexIndex      *index;
@@ -43,7 +43,6 @@ gbp_code_index_workbench_addin_load (IdeWorkbenchAddin *addin,
                                      IdeWorkbench      *workbench)
 {
   GbpCodeIndexWorkbenchAddin *self = (GbpCodeIndexWorkbenchAddin *)addin;
-  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
@@ -51,8 +50,6 @@ gbp_code_index_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   self->workbench = workbench;
 
-  context = ide_workbench_get_context (workbench);
-  ide_object_append (IDE_OBJECT (context), IDE_OBJECT (self));
 }
 
 static void
@@ -60,16 +57,12 @@ gbp_code_index_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                        IdeWorkbench      *workbench)
 {
   GbpCodeIndexWorkbenchAddin *self = (GbpCodeIndexWorkbenchAddin *)addin;
-  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   ide_clear_and_destroy_object (&self->index);
-
-  context = ide_workbench_get_context (workbench);
-  ide_object_remove (IDE_OBJECT (context), IDE_OBJECT (self));
 
   self->workbench = NULL;
 }
@@ -79,12 +72,17 @@ gbp_code_index_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
                                                IdeProjectInfo    *project_info)
 {
   GbpCodeIndexWorkbenchAddin *self = (GbpCodeIndexWorkbenchAddin *)addin;
+  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
 
-  self->index = ide_code_index_index_new (IDE_OBJECT (self));
+  /* TODO: We should clean this up a bit still */
+
+  context = ide_workbench_get_context (self->workbench);
+
+  self->index = ide_code_index_index_new (IDE_OBJECT (context));
 }
 
 static void
@@ -97,9 +95,7 @@ gbp_code_index_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "code-index",
-                                  G_ACTION_GROUP (self));
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "code-index", G_ACTION_GROUP (self));
 }
 
 static void
@@ -142,7 +138,7 @@ DZL_DEFINE_ACTION_GROUP (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_ad
   { "paused", NULL, NULL, "false", gbp_code_index_workbench_addin_paused },
 })
 
-G_DEFINE_TYPE_WITH_CODE (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
                                                 gbp_code_index_workbench_addin_init_action_group)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))

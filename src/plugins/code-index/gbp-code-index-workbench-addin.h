@@ -28,13 +28,11 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_CODE_INDEX_WORKBENCH_ADDIN (gbp_code_index_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, GBP, CODE_INDEX_WORKBENCH_ADDIN, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, GBP, CODE_INDEX_WORKBENCH_ADDIN, GObject)
 
-GbpCodeIndexWorkbenchAddin *gbp_code_index_workbench_addin_from_context     (IdeContext                 *context);
-void                        gbp_code_index_workbench_addin_pause            (GbpCodeIndexWorkbenchAddin *self);
-void                        gbp_code_index_workbench_addin_unpause          (GbpCodeIndexWorkbenchAddin *self);
-IdeCodeIndexer             *gbp_code_index_workbench_addin_get_code_indexer (GbpCodeIndexWorkbenchAddin *self,
-                                                                             const gchar                *file_name);
-IdeCodeIndexIndex          *gbp_code_index_workbench_addin_get_index        (GbpCodeIndexWorkbenchAddin *self);
+GbpCodeIndexWorkbenchAddin *gbp_code_index_workbench_addin_from_context (IdeContext                 *context);
+void                        gbp_code_index_workbench_addin_pause        (GbpCodeIndexWorkbenchAddin *self);
+void                        gbp_code_index_workbench_addin_unpause      (GbpCodeIndexWorkbenchAddin *self);
+IdeCodeIndexIndex          *gbp_code_index_workbench_addin_get_index    (GbpCodeIndexWorkbenchAddin *self);
 
 G_END_DECLS
