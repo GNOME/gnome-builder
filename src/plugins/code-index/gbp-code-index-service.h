@@ -21,6 +21,7 @@
 #pragma once
 
 #include <libide-core.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
@@ -28,11 +29,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpCodeIndexService, gbp_code_index_service, GBP, CODE_INDEX_SERVICE, IdeObject)
 
-GbpCodeIndexService *gbp_code_index_service_new        (IdeContext          *context);
-void                 gbp_code_index_service_start      (GbpCodeIndexService *self);
-void                 gbp_code_index_service_stop       (GbpCodeIndexService *self);
-gboolean             gbp_code_index_service_get_paused (GbpCodeIndexService *self);
-void                 gbp_code_index_service_set_paused (GbpCodeIndexService *self,
-                                                        gboolean             paused);
+GbpCodeIndexService *gbp_code_index_service_from_context (IdeContext          *context);
+void                 gbp_code_index_service_start        (GbpCodeIndexService *self);
+void                 gbp_code_index_service_stop         (GbpCodeIndexService *self);
+gboolean             gbp_code_index_service_get_paused   (GbpCodeIndexService *self);
+void                 gbp_code_index_service_set_paused   (GbpCodeIndexService *self,
+                                                          gboolean             paused);
+IdeCodeIndexer      *gbp_code_index_service_get_indexer  (GbpCodeIndexService *self,
+                                                          const gchar         *lang_id,
+                                                          const gchar         *path);
 
 G_END_DECLS

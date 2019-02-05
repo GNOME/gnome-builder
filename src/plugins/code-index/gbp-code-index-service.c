@@ -23,13 +23,17 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 #include <libide-code.h>
 #include <libide-foundry.h>
+#include <libide-projects.h>
+#include <libide-vcs.h>
 #include <libpeas/peas.h>
 
 #include "gbp-code-index-executor.h"
 #include "gbp-code-index-plan.h"
 #include "gbp-code-index-service.h"
+#include "indexer-info.h"
 
 #define DELAY_FOR_INDEXING_MSEC 500
 
@@ -585,6 +589,50 @@ gbp_code_index_service_build_finished_cb (GbpCodeIndexService *self,
     }
 }
 
+static void
+gbp_code_index_service_vcs_changed_cb (GbpCodeIndexService *self,
+                                       IdeVcs              *vcs)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_VCS (vcs));
+
+  /* Possibly switched branches, queue re-indexing */
+  gbp_code_index_service_queue_index (self);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_code_index_service_file_trashed_cb (GbpCodeIndexService *self,
+                                        GFile               *file,
+                                        IdeProject          *project)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (IDE_IS_PROJECT (project));
+
+  gbp_code_index_service_queue_index (self);
+}
+
+static void
+gbp_code_index_service_file_renamed_cb (GbpCodeIndexService *self,
+                                        GFile               *src_file,
+                                        GFile               *dst_file,
+                                        IdeProject          *project)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
+  g_assert (G_IS_FILE (src_file));
+  g_assert (G_IS_FILE (dst_file));
+  g_assert (IDE_IS_PROJECT (project));
+
+  gbp_code_index_service_queue_index (self);
+}
+
 void
 gbp_code_index_service_start (GbpCodeIndexService *self)
 {
@@ -592,6 +640,8 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
   g_autoptr(GFile) index_dir = NULL;
   IdeBufferManager *buffer_manager;
   IdeBuildManager *build_manager;
+  IdeProject *project;
+  IdeVcs *vcs;
   gboolean has_index;
 
   IDE_ENTRY;
@@ -637,6 +687,28 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
                            self,
                            G_CONNECT_SWAPPED);
 
+  vcs = ide_vcs_from_context (context);
+
+  g_signal_connect_object (vcs,
+                           "changed",
+                           G_CALLBACK (gbp_code_index_service_vcs_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  project = ide_project_from_context (context);
+
+  g_signal_connect_object (project,
+                           "file-trashed",
+                           G_CALLBACK (gbp_code_index_service_file_trashed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (project,
+                           "file-renamed",
+                           G_CALLBACK (gbp_code_index_service_file_renamed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   index_dir = ide_context_cache_file (context, "code-index", NULL);
   has_index = g_file_query_exists (index_dir, NULL);
 
@@ -679,16 +751,6 @@ gbp_code_index_service_stop (GbpCodeIndexService *self)
     }
 }
 
-GbpCodeIndexService *
-gbp_code_index_service_new (IdeContext *context)
-{
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return g_object_new (GBP_TYPE_CODE_INDEX_SERVICE,
-                       "parent", context,
-                       NULL);
-}
-
 gboolean
 gbp_code_index_service_get_paused (GbpCodeIndexService *self)
 {
@@ -714,4 +776,98 @@ gbp_code_index_service_set_paused (GbpCodeIndexService *self,
       else
         gbp_code_index_service_unpause (self);
     }
+}
+
+static IdeCodeIndexer *
+create_indexer (GbpCodeIndexService *self,
+                const gchar         *module_name)
+{
+  PeasEngine *engine = peas_engine_get_default ();
+  PeasPluginInfo *plugin_info;
+
+  g_return_val_if_fail (module_name != NULL, NULL);
+
+  if ((plugin_info = peas_engine_get_plugin_info (engine, module_name)) &&
+      peas_plugin_info_is_loaded (plugin_info))
+    {
+      PeasExtension *exten;
+
+      exten = peas_engine_create_extension (peas_engine_get_default (),
+                                            plugin_info,
+                                            IDE_TYPE_CODE_INDEXER,
+                                            NULL);
+
+      if (IDE_IS_OBJECT (exten))
+        ide_object_append (IDE_OBJECT (self), IDE_OBJECT (exten));
+
+      return IDE_CODE_INDEXER (exten);
+    }
+
+  return NULL;
+}
+
+IdeCodeIndexer *
+gbp_code_index_service_get_indexer (GbpCodeIndexService *self,
+                                    const gchar         *lang_id,
+                                    const gchar         *path)
+{
+  g_autoptr(GPtrArray) indexers = NULL;
+
+  g_return_val_if_fail (GBP_IS_CODE_INDEX_SERVICE (self), NULL);
+
+  indexers = collect_indexer_info ();
+
+  if (lang_id != NULL)
+    {
+      for (guint i = 0; i < indexers->len; i++)
+        {
+          const IndexerInfo *info = g_ptr_array_index (indexers, i);
+
+          if (info->lang_ids == NULL)
+            continue;
+
+          for (guint j = 0; info->lang_ids[j]; j++)
+            {
+              if (g_str_equal (lang_id, info->lang_ids[j]))
+                return create_indexer (self, info->module_name);
+            }
+        }
+    }
+
+  if (path != NULL)
+    {
+      g_autofree gchar *name = g_path_get_basename (path);
+      g_autofree gchar *reversed = g_utf8_strreverse (name, -1);
+
+      for (guint i = 0; i < indexers->len; i++)
+        {
+          const IndexerInfo *info = g_ptr_array_index (indexers, i);
+
+          if (indexer_info_matches (info, name, reversed, NULL))
+            return create_indexer (self, info->module_name);
+        }
+    }
+
+  return NULL;
+}
+
+GbpCodeIndexService *
+gbp_code_index_service_from_context (IdeContext *context)
+{
+  GbpCodeIndexService *ret;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  if (!(ret = ide_context_peek_child_typed (context, GBP_TYPE_CODE_INDEX_SERVICE)))
+    {
+      g_autoptr(GbpCodeIndexService) self = NULL;
+
+      self = g_object_new (GBP_TYPE_CODE_INDEX_SERVICE,
+                           "parent", context,
+                           NULL);
+      gbp_code_index_service_start (self);
+      ret = ide_context_peek_child_typed (context, GBP_TYPE_CODE_INDEX_SERVICE);
+    }
+
+  return ret;
 }
