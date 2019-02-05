@@ -48,6 +48,7 @@ struct _IdeCtagsService
   IdeNotification  *notif;
   gint              n_active;
 
+  guint             did_full_build : 1;
   guint             queued_miner_handler;
   guint             miner_active : 1;
   guint             paused : 1;
@@ -672,6 +673,13 @@ ide_ctags_service_buffer_saved (IdeCtagsService  *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
 
+  if (!self->did_full_build)
+    {
+      self->did_full_build = TRUE;
+      ide_ctags_service_queue_build_for_directory (self, workdir, TRUE);
+      return;
+    }
+
   file = ide_buffer_get_file (buffer);
   parent = g_file_get_parent (file);
 
@@ -707,11 +715,10 @@ ide_ctags_service_parent_set (IdeObject *object,
                            self,
                            G_CONNECT_SWAPPED);
 
-  /*
-   * Rebuild all ctags for the project at startup of the service.
-   * Then we do incrementals from there on out.
+  /* We don't do any rebuilds up-front because users find them annoying.
+   * Instead, we wait until a file has been saved and then re-index content
+   * for the whole project (if necessary).
    */
-  ide_ctags_service_queue_build_for_directory (self, workdir, TRUE);
 
   IDE_EXIT;
 }
