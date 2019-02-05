@@ -13,6 +13,7 @@ plugins_sources += files([
   'ide-code-index-search-provider.c',
   'ide-code-index-search-result.c',
   'ide-code-index-symbol-resolver.c',
+  'indexer-info.c',
 ])
 
 plugin_code_index_resources = gnome.compile_resources(
