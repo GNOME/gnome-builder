@@ -425,8 +425,16 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
 
       if ((parent = find_file_node (self->tree, item)))
         {
+          IdeTreeNode *child;
+
           if (!ide_tree_node_expanded (self->tree, parent))
             IDE_EXIT;
+
+          /* Remove empty children if necessary */
+          if (ide_tree_node_get_n_children (parent) == 1 &&
+              (child = ide_tree_node_get_nth_child (parent, 0)) &&
+              ide_tree_node_is_empty (child))
+            ide_tree_node_remove (parent, child);
 
           continue;
         }
@@ -446,6 +454,9 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
       node = create_file_node (project_file);
 
       ide_tree_node_insert_sorted (parent, node, node_compare);
+
+      if (!ide_tree_node_expanded (self->tree, parent))
+        ide_tree_expand_node (self->tree, parent);
     }
 
   IDE_EXIT;
