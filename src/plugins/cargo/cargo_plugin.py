@@ -172,7 +172,7 @@ class CargoBuildTarget(Ide.Object, Ide.BuildTarget):
         return 'rust'
 
     def do_get_argv(self):
-        context = self.get_context()
+        context = self.ref_context()
         config_manager = Ide.ConfigManager.from_context(context)
         config = config_manager.get_current()
         cargo = locate_cargo_from_config(config)
@@ -201,7 +201,7 @@ class CargoBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [build_system.ensure_child_typed(CargoBuildTarget)]
+        task.targets = [CargoBuildTarget()]
         task.return_boolean(True)
 
     def do_get_targets_finish(self, result):
