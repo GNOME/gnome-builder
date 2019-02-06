@@ -55,6 +55,24 @@ G_BEGIN_DECLS
   ({ IDE_PTR_ARRAY_CLEAR_FREE_FUNC (*(arptr)); \
      g_steal_pointer ((arptr)); })
 
+static inline gpointer
+ide_ptr_array_steal_index (GPtrArray      *array,
+                           guint           index,
+                           GDestroyNotify  free_func)
+{
+  gpointer ret;
+
+  if (index >= array->len)
+    return NULL;
+
+  g_ptr_array_set_free_func (array, NULL);
+  ret = g_ptr_array_index (array, index);
+  g_ptr_array_remove_index (array, index);
+  g_ptr_array_set_free_func (array, free_func);
+
+  return ret;
+}
+
 static inline gboolean
 ide_error_ignore (const GError *error)
 {
