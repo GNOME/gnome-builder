@@ -1382,7 +1382,13 @@ ide_editor_search_forward_cb (GObject      *object,
           else
             gtk_text_buffer_select_range (buffer, &begin, &begin);
 
-          gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self->view), insert, 0.0, TRUE, 1.0, 0.5);
+          ide_source_view_scroll_to_mark (IDE_SOURCE_VIEW (self->view),
+                                          insert,
+                                          0.25,
+                                          IDE_SOURCE_SCROLL_BOTH,
+                                          1.0,
+                                          0.5,
+                                          FALSE);
 
           if (self->repeat > 0)
             {
@@ -1435,7 +1441,13 @@ ide_editor_search_backward_cb (GObject      *object,
           else
             gtk_text_buffer_select_range (buffer, &begin, &begin);
 
-          gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self->view), insert, 0.0, TRUE, 1.0, 0.5);
+          ide_source_view_scroll_to_mark (IDE_SOURCE_VIEW (self->view),
+                                          insert,
+                                          0.25,
+                                          IDE_SOURCE_SCROLL_BOTH,
+                                          1.0,
+                                          0.5,
+                                          FALSE);
 
           if (self->repeat > 0)
             {
