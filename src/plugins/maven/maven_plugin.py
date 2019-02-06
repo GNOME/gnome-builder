@@ -116,7 +116,11 @@ class MavenBuildTarget(Ide.Object, Ide.BuildTarget):
 
     def do_get_cwd(self):
         context = self.get_context()
-        return Ide.BuildSystem.from_context(context).project_file.get_path()
+        project_file = Ide.BuildSystem.from_context(context).project_file
+        if project_file.query_file_type(0, None) == Gio.FileType.DIRECTORY:
+            return project_file.get_path()
+        else:
+            return project_file.get_parent().get_path()
 
     def do_get_argv(self):
         """
