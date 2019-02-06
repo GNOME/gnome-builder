@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-01-28 04:00+0000\n"
-"PO-Revision-Date: 2019-01-28 12:54+0100\n"
+"POT-Creation-Date: 2019-02-06 05:47+0000\n"
+"PO-Revision-Date: 2019-02-06 09:45+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 3.31.0\n"
+"X-Generator: Gtranslator 3.31.90\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -902,7 +902,7 @@ msgstr "Guardar"
 #: src/libide/editor/ide-editor-page-actions.c:240
 #: src/libide/editor/ide-editor-page-actions.c:340
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:315
+#: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:518
 #: src/libide/gui/ide-workbench.c:1338
 #: src/libide/terminal/ide-terminal-page-actions.c:276
@@ -1031,7 +1031,7 @@ msgstr ""
 "Builder ha descubierto que este archivo se ha modificado externamente. "
 "¿Quiere recargarlo?"
 
-#: src/libide/editor/ide-editor-search-bar.c:306
+#: src/libide/editor/ide-editor-search-bar.c:307
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
@@ -1220,12 +1220,11 @@ msgstr "Su sesión anterior estará lista en un momento."
 
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-primary-workspace.ui:21
-#| msgid "Switch Surface"
 msgid "Switch surface"
 msgstr "Cambiar superficie"
 
 #: src/libide/editor/ide-editor-workspace.ui:30
-#: src/libide/gui/ide-primary-workspace.ui:53
+#: src/libide/gui/ide-primary-workspace.ui:54
 msgid "Press Ctrl+. to search"
 msgstr "Pulse Ctrl+. para buscar"
 
@@ -1441,43 +1440,40 @@ msgstr ""
 msgid "user@host:repository.git"
 msgstr "usuario@equipo:repositorio.git"
 
-#: src/libide/greeter/ide-clone-surface.ui:102
+#: src/libide/greeter/ide-clone-surface.ui:103
 msgid "Select branch and other options."
 msgstr "Seleccionar rama y otras opciones."
 
-#: src/libide/greeter/ide-clone-surface.ui:139
-#| msgid "Repository URL"
+#: src/libide/greeter/ide-clone-surface.ui:140
 msgid "Repository Kind"
 msgstr "Tipo de repositorio"
 
-#: src/libide/greeter/ide-clone-surface.ui:164
+#: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
 msgid "Branch"
 msgstr "Rama"
 
-#: src/libide/greeter/ide-clone-surface.ui:190
+#: src/libide/greeter/ide-clone-surface.ui:191
 msgid "Author Name"
 msgstr "Nombre del autor"
 
-#: src/libide/greeter/ide-clone-surface.ui:215
+#: src/libide/greeter/ide-clone-surface.ui:216
 msgid "Author Email"
 msgstr "Dirección de correo-e del autor"
 
-#: src/libide/greeter/ide-clone-surface.ui:251
+#: src/libide/greeter/ide-clone-surface.ui:252
 msgid "Project Destination"
 msgstr "Destino del proyecto"
 
-#: src/libide/greeter/ide-clone-surface.ui:305
+#: src/libide/greeter/ide-clone-surface.ui:306
 msgid "Clone Project"
 msgstr "Clonar proyecto"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
-#| msgid "New Folder…"
 msgid "Select a Folder…"
 msgstr "Seleccionar carpeta…"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:69
-#| msgid "_Clone Repository"
 msgid "Clone Repository…"
 msgstr "Clonar repositorio…"
 
@@ -1487,12 +1483,10 @@ msgstr "Carpeta"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:82
 #: src/libide/greeter/ide-greeter-workspace-actions.c:115
-#| msgid "Select a Project"
 msgid "Select Project Folder"
 msgstr "Seleccionar carpeta de proyecto"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:87
-#| msgid "Select a Project"
 msgid "Select Project File"
 msgstr "Seleccionar archivo de proyecto"
 
@@ -1529,17 +1523,14 @@ msgid "Go back"
 msgstr "Atrás"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
-#| msgid "Open Project"
 msgid "Open a Project"
 msgstr "Abrir un proyecto"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:101
-#| msgid "Directory for all Builder projects."
 msgid "Search all Builder projects…"
 msgstr "Buscar todos los proyectos de Builder…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:118
-#| msgid "No projects found"
 msgid "No Projects Found"
 msgstr "No se han encontrado proyectos"
 
@@ -1552,7 +1543,6 @@ msgid "Remove Projects and Sources…"
 msgstr "Quitar proyectos y fuentes…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
-#| msgid "_Clone Repository"
 msgid "Clone Repository"
 msgstr "Clonar repositorio"
 
@@ -1637,7 +1627,7 @@ msgstr "Mostrar información de la versión y salir"
 msgid "Increase log verbosity"
 msgstr "Aumentar el detalle del registro"
 
-#: src/libide/gui/ide-application-command-line.c:112
+#: src/libide/gui/ide-application-command-line.c:116
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Falló al abrir el proyecto: %s"
@@ -2301,6 +2291,16 @@ msgstr "Control de versiones"
 msgid "SDKs"
 msgstr "SDK"
 
+#: src/libide/gui/ide-primary-workspace-actions.c:132
+#, fuzzy
+#| msgid "Building dependencies…"
+msgid "Updating Dependencies…"
+msgstr "Construyendo dependencias…"
+
+#: src/libide/gui/ide-primary-workspace-actions.c:133
+msgid "Builder is updating your projects configured dependencies."
+msgstr ""
+
 #: src/libide/gui/ide-run-button.ui:6
 msgid "The project cannot be run while the build pipeline is being set up"
 msgstr ""
@@ -2827,7 +2827,7 @@ msgstr "Configurando proyecto"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
 #: src/plugins/cargo/cargo_plugin.py:147
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
-#: src/plugins/gradle/gradle_plugin.py:96 src/plugins/maven/maven_plugin.py:89
+#: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
@@ -3097,7 +3097,6 @@ msgstr "Configurar opciones"
 
 #. Setup runtime selection
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
-#| msgid "Application Output"
 msgid "Application Runtime"
 msgstr "Rutina de la aplicación"
 
@@ -3144,7 +3143,6 @@ msgid "Runtime"
 msgstr "Tiempo de ejecución"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:195
-#| msgid "Devices"
 msgid "Device"
 msgstr "Dispositivo"
 
@@ -3321,10 +3319,60 @@ msgstr "Instalando proyecto"
 msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
+#: src/plugins/code-index/gbp-code-index-application-addin.c:53
+#, fuzzy
+#| msgid "Create a new command line project"
+msgid "Create or update code-index for project file"
+msgstr "Crear un proyecto de línea de comandos nuevo"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:54
+msgid "PROJECT_FILE"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:154
+#, fuzzy, c-format
+#| msgid "Failed to load file: %s"
+msgid "Failed to load flags for plan: %s"
+msgstr "Falló al cargar el archivo: %s:"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:197
+#, fuzzy, c-format
+#| msgid "Failed to load file: %s"
+msgid "Failed to cull index plan: %s"
+msgstr "Falló al cargar el archivo: %s:"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:232
+#, fuzzy, c-format
+#| msgid "Failed to spawn terminal: %s"
+msgid "Failed to populate index plan: %s"
+msgstr "Falló al lanzar la terminal: %s"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:267
+#, c-format
+#| msgid "Failed to open project: %s"
+msgid "Failed to load project: %s"
+msgstr "Falló al cargar el proyecto: %s"
+
+#. Now we can drop our paused state
+#: src/plugins/code-index/gbp-code-index-service.c:209
+#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:998
+msgid "Indexing Source Code"
+msgstr "Indexando el código fuente"
+
+#: src/plugins/code-index/gbp-code-index-service.c:210
+#, fuzzy
+#| msgid ""
+#| "Search, diagnostics and autocompletion may be limited until complete."
+msgid "Search, diagnostics, and autocompletion may be limited until complete."
+msgstr ""
+"La búsqueda, los diagnósticos y completado automático pueden estar limitados "
+"hasta que termine."
+
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:279
+#: src/plugins/code-index/ide-code-index-index.c:343
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
 msgid "Declaration"
 msgstr "Declaración"
@@ -3645,7 +3693,6 @@ msgid "Your project will be created within %s."
 msgstr "Su proyecto se creará con %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:577
-#| msgid "New Project"
 msgid "Start New Project"
 msgstr "Iniciar un nuevo proyecto"
 
@@ -3737,14 +3784,12 @@ msgid "Select a Template"
 msgstr "Seleccionar una plantilla"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:50
-#| msgid "_New Project"
 msgid "Start _New Project…"
 msgstr "Iniciar un _nuevo proyecto…"
 
 #: src/plugins/create-project/gtk/menus.ui:7
 #: src/plugins/create-project/gtk/menus.ui:18
 #: src/plugins/create-project/gtk/menus.ui:29
-#| msgid "_New Project"
 msgid "_Start New Project…"
 msgstr "_Iniciar un nuevo proyecto…"
 
@@ -3756,13 +3801,7 @@ msgstr "Sugerir completado usando Ctags"
 msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr "Usar Ctags para sugerir completado para una variedad de lenguajes"
 
-#. Now we can drop our paused state
-#: src/plugins/ctags/ide-ctags-service.c:130
-#: src/plugins/ctags/ide-ctags-service.c:991
-msgid "Indexing Source Code"
-msgstr "Indexando el código fuente"
-
-#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:132
 #, fuzzy
 #| msgid ""
 #| "Search, diagnostics and autocompletion may be limited until complete."
@@ -3773,7 +3812,7 @@ msgstr ""
 "La búsqueda, los diagnósticos y completado automático pueden estar limitados "
 "hasta que termine."
 
-#: src/plugins/ctags/ide-ctags-service.c:948
+#: src/plugins/ctags/ide-ctags-service.c:955
 msgid "Indexing Source Code (Paused)"
 msgstr "Indexando el código fuente (pausado)"
 
@@ -3957,7 +3996,6 @@ msgid "New Documentation Page"
 msgstr "Nueva página de documentación"
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
-#| msgid "Use terminal interface"
 msgid "Use minimal editor interface"
 msgstr "Usar interfaz de editor mínima"
 
@@ -4436,6 +4474,12 @@ msgstr ""
 "Activar el uso de pylint, para buscar diagnósticos adicionales en programas "
 "escritos en Python. Esto puede ejecutar código en su proyecto."
 
+#: src/plugins/gradle/gradle_plugin.py:85
+#, fuzzy
+#| msgid "Executable wrapper"
+msgid "Gradle Wrapper"
+msgstr "Envoltorio ejecutable"
+
 #: src/plugins/greeter/gbp-greeter-application-addin.c:121
 msgid "Display a new greeter window"
 msgstr "Mostrar una ventana de bienvenida nueva"
@@ -4448,7 +4492,6 @@ msgstr "Construyendo proyecto"
 
 #: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
 #: src/plugins/greeter/gtk/menus.ui:88
-#| msgid "_Clone Repository"
 msgid "_Clone Repository…"
 msgstr "_Clonar repositorio…"
 
@@ -4457,7 +4500,6 @@ msgid "Quit"
 msgstr "Salir"
 
 #: src/plugins/greeter/gtk/menus.ui:66 src/plugins/greeter/gtk/menus.ui:82
-#| msgid "Open Project"
 msgid "Open a _Project…"
 msgstr "Abrir un _proyecto…"
 
@@ -4605,13 +4647,12 @@ msgstr "Herramienta de línea de comandos"
 msgid "Create a new command line project"
 msgstr "Crear un proyecto de línea de comandos nuevo"
 
-#: src/plugins/meson/gbp-meson-build-system.c:451
+#: src/plugins/meson/gbp-meson-build-system.c:468
 #: src/plugins/meson/gbp-meson-config-view-addin.c:57
 msgid "Meson"
 msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-config-view-addin.c:58
-#| msgid "Run Options"
 msgid "Meson Options"
 msgstr "Opciones de Meson"
 
@@ -4748,7 +4789,6 @@ msgid "Messages"
 msgstr "Mensajes"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:18
-#| msgid "Select a Project"
 msgid "Suggested GNOME Projects"
 msgstr "Proyectos de GNOME sugeridos"
 
@@ -4821,7 +4861,6 @@ msgid "Polari"
 msgstr "Polari"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:121
-#| msgid "An IDE for GNOME"
 msgid "An IRC Client for GNOME"
 msgstr "Un cliente de IRC para GNOME"
 
@@ -5477,17 +5516,14 @@ msgid "Run with Valgrind"
 msgstr "Ejecutar con Valgrind"
 
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:412
-#| msgid "Branch"
 msgid "Branches"
 msgstr "Ramas"
 
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:422
-#| msgid "CTags"
 msgid "Tags"
 msgstr "Etiquetas"
 
 #: src/plugins/vcsui/gtk/menus.ui:8
-#| msgid "Switch Surface"
 msgid "Switch Branch"
 msgstr "Cambiar rama"
 
@@ -5550,12 +5586,10 @@ msgid "Build the project"
 msgstr "Construir el proyecto"
 
 #: src/plugins/vim/gb-vim.c:1218
-#| msgid "Enable semantic highlighting"
 msgid "Clear search highlighting"
 msgstr "Limpiar el resaltado de la búsqueda"
 
 #: src/plugins/vim/gb-vim.c:1219
-#| msgid "Open file"
 msgid "Open a file by path"
 msgstr "Abrir un archivo por su ruta"
 
@@ -5951,9 +5985,6 @@ msgstr ""
 
 #~ msgid "Cannot load a non-native file in terminal"
 #~ msgstr "No se puede cargar un archivo no nativo en la terminal"
-
-#~ msgid "Failed to spawn terminal: %s"
-#~ msgstr "Falló al lanzar la terminal: %s"
 
 #~ msgid "Failed to rename file: %s"
 #~ msgstr "Falló al renombrar el archivo: %s"
