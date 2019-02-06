@@ -408,13 +408,13 @@ gbp_comment_code_editor_page_addin_load (IdeEditorPageAddin *addin,
                                               "org.gnome.builder.editor-page.comment-code",
                                               I_("<primary>m"),
                                               DZL_SHORTCUT_PHASE_BUBBLE,
-                                              "view.comment-code::0");
+                                              "comment-code.comment-code::0");
 
   dzl_shortcut_controller_add_command_action (controller,
                                               "org.gnome.builder.editor-page.uncomment-code",
                                               I_("<primary><shift>m"),
                                               DZL_SHORTCUT_PHASE_BUBBLE,
-                                              "view.comment-code::1");
+                                              "comment-code.comment-code::1");
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              comment_code_shortcut_entries,
