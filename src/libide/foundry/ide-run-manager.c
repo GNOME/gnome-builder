@@ -922,6 +922,7 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)object;
+  g_autoptr(IdeBuildTarget) first = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) ret = NULL;
   g_autoptr(GError) error = NULL;
@@ -979,9 +980,13 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
 
   g_ptr_array_sort (state->results, compare_targets);
 
+  /* Steal the first item so that it is not destroyed */
+  first = ide_ptr_array_steal_index (state->results,
+                                     0,
+                                     (GDestroyNotify)ide_object_unref_and_destroy);
   ide_task_return_pointer (task,
-                           g_object_ref (g_ptr_array_index (state->results, 0)),
-                           g_object_unref);
+                           g_steal_pointer (&first),
+                           (GDestroyNotify)ide_object_unref_and_destroy);
 
   IDE_EXIT;
 }
