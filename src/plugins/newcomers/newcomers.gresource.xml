@@ -3,7 +3,6 @@
 
   <gresource prefix="/plugins/newcomers">
     <file>newcomers.plugin</file>
-    <file>gbp-newcomers-project.ui</file>
     <file>gbp-newcomers-section.ui</file>
   </gresource>
 
