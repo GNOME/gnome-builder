@@ -18,6 +18,9 @@
         </child>
         <child>
           <object class="GtkImage" id="image">
+            <style>
+              <class name="icon-dropshadow"/>
+            </style>
           </object>
         </child>
         <child>
