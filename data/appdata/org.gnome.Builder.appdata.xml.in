@@ -82,6 +82,14 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.31.90" date="2019-02-06">
+      <description>
+        <p>
+          This release contains a number of bug fixes and performance improvements.
+        </p>
+      </description>
+    </release>
+
     <release version="3.31.4" date="2019-01-09">
       <description>
         <p>

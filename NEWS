@@ -1,3 +1,31 @@
+===============
+Version 3.31.90
+===============
+
+Changes since last release:
+
+ • Appdata and icon updates.
+ • Many bugs found from refactoring fallout have been fixed.
+ • New plugin APIs have been added and some existing APIs tweaked
+   as we stabilize for release.
+ • Theme tweaks to match upcoming Adwaita changes.
+ • gdb improvements including use of fewer deprecated MI commands.
+ • The greeter has been redesigned and simplified.
+ • The git gutter now more accurately displays line information.
+ • Menus have been tweaked to more closely fit with GNOME 3.32 guidelines.
+ • The code indexer was redesigned to provide progress and improved pausibility.
+   We expect more changes before 3.32 to reduce overhead of larger projects.
+ • Code indexers and ctags will delay initial indexing until a user operation
+   has occurred like saving a file or a successful build.
+ • LSP conformance improvements.
+ • The project tree now provides some basic VCS information and allows
+   switching branches using the context menu. This exposed a bug in libgit2-glib
+   which has been fixed there too. We recommend packagers ensure that bug fix
+   has landed in their libgit2-glib.
+ • Updated translations.
+
+Thanks to the many contributors that provided patches during this cycle!
+
 ==============
 Version 3.31.4
 ==============
