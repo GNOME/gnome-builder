@@ -176,8 +176,6 @@ ide_editor_page_focus_in_event (IdeEditorPage *self,
   g_assert (IDE_IS_EDITOR_PAGE (self));
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
-  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
-
   ide_page_mark_used (IDE_PAGE (self));
 
   return GDK_EVENT_PROPAGATE;

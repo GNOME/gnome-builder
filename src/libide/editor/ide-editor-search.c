@@ -945,7 +945,13 @@ ide_editor_search_scan_forward_cb (GObject      *object,
   if (r == TRUE)
     {
       /* Scan forward to the location of the next match */
-      gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->view), &begin, 0.0, TRUE, 1.0, 0.5);
+      ide_source_view_scroll_to_iter (IDE_SOURCE_VIEW (self->view),
+                                      &begin,
+                                      0.0,
+                                      IDE_SOURCE_SCROLL_BOTH,
+                                      1.0,
+                                      0.5,
+                                      FALSE);
     }
   else if (self->interactive > 0)
     {

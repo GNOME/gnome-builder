@@ -24,12 +24,13 @@
 
 G_BEGIN_DECLS
 
-void         _ide_source_view_init_shortcuts  (IdeSourceView *self);
-const gchar *_ide_source_view_get_mode_name   (IdeSourceView *self);
-void         _ide_source_view_set_count       (IdeSourceView *self,
-                                               gint           count);
-void         _ide_source_view_set_modifier    (IdeSourceView *self,
-                                               gunichar       modifier);
-GtkTextMark *_ide_source_view_get_scroll_mark (IdeSourceView *self);
+void         _ide_source_view_init_shortcuts   (IdeSourceView *self);
+const gchar *_ide_source_view_get_mode_name    (IdeSourceView *self);
+void         _ide_source_view_set_count        (IdeSourceView *self,
+                                                gint           count);
+void         _ide_source_view_set_modifier     (IdeSourceView *self,
+                                                gunichar       modifier);
+GtkTextMark *_ide_source_view_get_scroll_mark  (IdeSourceView *self);
+void         _ide_source_view_clear_saved_mark (IdeSourceView *self);
 
 G_END_DECLS

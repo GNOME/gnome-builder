@@ -28,6 +28,7 @@
 #include "ide-editor-private.h"
 #include "ide-editor-search.h"
 #include "ide-editor-search-bar.h"
+#include "ide-source-view-private.h"
 
 struct _IdeEditorSearchBar
 {
@@ -232,9 +233,25 @@ search_entry_activate (IdeEditorSearchBar *self,
 
   if (self->search != NULL)
     {
-      ide_editor_search_set_extend_selection (self->search, IDE_EDITOR_SEARCH_SELECT_NONE);
-      ide_editor_search_set_repeat (self->search, 0);
-      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
+      GtkWidget *page;
+
+      /* If the user is already on a match occurrence, then we don't
+       * want to advance them to the next position (instead, we'll drop
+       * them back in the editor at the current position.
+       */
+      if (ide_editor_search_get_match_position (self->search) == 0)
+        {
+          ide_editor_search_set_extend_selection (self->search, IDE_EDITOR_SEARCH_SELECT_NONE);
+          ide_editor_search_set_repeat (self->search, 0);
+          ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
+        }
+
+      if ((page = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_EDITOR_PAGE)))
+        {
+          IdeSourceView *view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
+
+          _ide_source_view_clear_saved_mark (view);
+        }
     }
 
   g_signal_emit (self, signals [STOP_SEARCH], 0);

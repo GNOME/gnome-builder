@@ -3454,6 +3454,16 @@ ide_source_view_real_restore_insert_mark (IdeSourceView *self)
   ide_source_view_real_restore_insert_mark_full (self, TRUE);
 }
 
+void
+_ide_source_view_clear_saved_mark (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  priv->insert_mark_cleared = TRUE;
+}
+
 static void
 ide_source_view_real_save_insert_mark (IdeSourceView *self)
 {
