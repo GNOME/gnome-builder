@@ -37,7 +37,7 @@ struct _IdeConfigViewAddinInterface
 
   void (*load) (IdeConfigViewAddin *self,
                 DzlPreferences     *preferences,
-                IdeConfig   *configuration);
+                IdeConfig          *configuration);
 };
 
 IDE_AVAILABLE_IN_3_32
