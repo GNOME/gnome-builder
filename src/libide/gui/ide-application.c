@@ -139,8 +139,17 @@ ide_application_startup (GApplication *app)
 
   if (IS_UI_PROCESS (self))
     {
+      g_autofree gchar *style_path = NULL;
+      GtkSourceStyleSchemeManager *styles;
+
       /* Setup access to private icons dir */
       gtk_icon_theme_prepend_search_path (gtk_icon_theme_get_default (), PACKAGE_ICONDIR);
+
+      /* Add custom style locations for gtksourceview schemes */
+      styles = gtk_source_style_scheme_manager_get_default ();
+      style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-4", "styles", NULL);
+      gtk_source_style_scheme_manager_append_search_path (styles, style_path);
+      gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-4/styles/");
 
       /* Load color settings (Night Light, Dark Mode, etc) */
       _ide_application_init_color (self);
