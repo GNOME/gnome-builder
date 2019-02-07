@@ -1,16 +1,16 @@
 # Hungarian translation for gnome-builder.
-# Copyright (C) 2015, 2016, 2017, 2018. Free Software Foundation, Inc.
+# Copyright (C) 2015, 2016, 2017, 2018, 2019. Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Balázs Meskó <meskobalazs at gmail dot com>, 2015, 2016.
-# Balázs Úr <urbalazs at gmail dot com>, 2015, 2016, 2017, 2018.
+# Balázs Meskó <mesko.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019.
 # Gabor Kelemen <kelemeng at ubuntu dot com>, 2015, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-01-29 00:25+0000\n"
-"PO-Revision-Date: 2019-02-03 21:17+0100\n"
+"POT-Creation-Date: 2019-02-06 05:47+0000\n"
+"PO-Revision-Date: 2019-02-07 19:45+0100\n"
 "Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -902,7 +902,7 @@ msgstr "Mentés"
 #: src/libide/editor/ide-editor-page-actions.c:240
 #: src/libide/editor/ide-editor-page-actions.c:340
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:315
+#: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:518
 #: src/libide/gui/ide-workbench.c:1338
 #: src/libide/terminal/ide-terminal-page-actions.c:276
@@ -1031,7 +1031,7 @@ msgstr ""
 "Az Építő észlelte, hogy a fájlt egy külső programmal módosították. Szeretné "
 "újratölteni a fájlt?"
 
-#: src/libide/editor/ide-editor-search-bar.c:306
+#: src/libide/editor/ide-editor-search-bar.c:307
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
@@ -1225,7 +1225,7 @@ msgid "Switch surface"
 msgstr "Felület váltása"
 
 #: src/libide/editor/ide-editor-workspace.ui:30
-#: src/libide/gui/ide-primary-workspace.ui:53
+#: src/libide/gui/ide-primary-workspace.ui:54
 msgid "Press Ctrl+. to search"
 msgstr "Ctrl+. a kereséshez"
 
@@ -1437,32 +1437,32 @@ msgstr ""
 msgid "user@host:repository.git"
 msgstr "felhasználó@gép:tároló.git"
 
-#: src/libide/greeter/ide-clone-surface.ui:102
+#: src/libide/greeter/ide-clone-surface.ui:103
 msgid "Select branch and other options."
 msgstr "Válasszon ágat és más beállításokat."
 
-#: src/libide/greeter/ide-clone-surface.ui:139
+#: src/libide/greeter/ide-clone-surface.ui:140
 msgid "Repository Kind"
 msgstr "Tároló típusa"
 
-#: src/libide/greeter/ide-clone-surface.ui:164
+#: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
 msgid "Branch"
 msgstr "Ág"
 
-#: src/libide/greeter/ide-clone-surface.ui:190
+#: src/libide/greeter/ide-clone-surface.ui:191
 msgid "Author Name"
 msgstr "Szerző neve"
 
-#: src/libide/greeter/ide-clone-surface.ui:215
+#: src/libide/greeter/ide-clone-surface.ui:216
 msgid "Author Email"
 msgstr "Szerző e-mail címe"
 
-#: src/libide/greeter/ide-clone-surface.ui:251
+#: src/libide/greeter/ide-clone-surface.ui:252
 msgid "Project Destination"
 msgstr "Projekt cél"
 
-#: src/libide/greeter/ide-clone-surface.ui:305
+#: src/libide/greeter/ide-clone-surface.ui:306
 msgid "Clone Project"
 msgstr "Projekt klónozása"
 
@@ -1620,7 +1620,7 @@ msgstr "Verzióinformációk kiírása és kilépés"
 msgid "Increase log verbosity"
 msgstr "Naplózás részletességánek növelése"
 
-#: src/libide/gui/ide-application-command-line.c:112
+#: src/libide/gui/ide-application-command-line.c:116
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "A projekt megnyitása meghiúsult: %s"
@@ -2805,7 +2805,7 @@ msgstr "Projekt beállítása"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
 #: src/plugins/cargo/cargo_plugin.py:147
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
-#: src/plugins/gradle/gradle_plugin.py:96 src/plugins/maven/maven_plugin.py:89
+#: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
@@ -3292,10 +3292,51 @@ msgstr "Projekt telepítése"
 msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
+#: src/plugins/code-index/gbp-code-index-application-addin.c:53
+msgid "Create or update code-index for project file"
+msgstr "Kódindex létrehozása vagy frissítése a projektfájlhoz"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:54
+msgid "PROJECT_FILE"
+msgstr "PROJEKT_FÁJL"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:154
+#, c-format
+msgid "Failed to load flags for plan: %s"
+msgstr "A jelzők betöltése a tervhez meghiúsult: %s"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:197
+#, c-format
+msgid "Failed to cull index plan: %s"
+msgstr "Az indexelési terv levágása meghiúsult: %s"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:232
+#, c-format
+msgid "Failed to populate index plan: %s"
+msgstr "Az indexelési terv feltöltése meghiúsult: %s"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:267
+#, c-format
+msgid "Failed to load project: %s"
+msgstr "A projekt betöltése meghiúsult: %s"
+
+#. Now we can drop our paused state
+#: src/plugins/code-index/gbp-code-index-service.c:209
+#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:998
+msgid "Indexing Source Code"
+msgstr "Forráskód indexelése"
+
+#: src/plugins/code-index/gbp-code-index-service.c:210
+msgid "Search, diagnostics, and autocompletion may be limited until complete."
+msgstr ""
+"A keresés, a diagnosztika és az automatikus kiegészítés korlátozottak "
+"lehetnek, amíg be nem fejeződik."
+
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:279
+#: src/plugins/code-index/ide-code-index-index.c:343
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
 msgid "Declaration"
 msgstr "Deklaráció"
@@ -3728,13 +3769,7 @@ msgstr "Kiegészítési javaslatok Ctags alapján"
 msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr "Használja a Ctagset kiegészítésre számos nyelv esetén"
 
-#. Now we can drop our paused state
-#: src/plugins/ctags/ide-ctags-service.c:130
-#: src/plugins/ctags/ide-ctags-service.c:991
-msgid "Indexing Source Code"
-msgstr "Forráskód indexelése"
-
-#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
@@ -3742,7 +3777,7 @@ msgstr ""
 "A keresés, az automatikus kiegészítés és a szimbóluminformációk "
 "korlátozottak lehetnek, amíg a Ctags indexelés el nem készül."
 
-#: src/plugins/ctags/ide-ctags-service.c:948
+#: src/plugins/ctags/ide-ctags-service.c:955
 msgid "Indexing Source Code (Paused)"
 msgstr "Forráskód indexelése (szüneteltetve)"
 
@@ -4398,6 +4433,10 @@ msgstr ""
 "A pylint használatának engedélyezése, a Python programok további "
 "elemzéséhez. Ez további kódfuttatást jelenthet a projektjében."
 
+#: src/plugins/gradle/gradle_plugin.py:85
+msgid "Gradle Wrapper"
+msgstr "Gradle csomagoló"
+
 #: src/plugins/greeter/gbp-greeter-application-addin.c:121
 msgid "Display a new greeter window"
 msgstr "Új üdvözlő ablak megjelenítése"
@@ -4563,7 +4602,7 @@ msgstr "Parancssoros eszköz"
 msgid "Create a new command line project"
 msgstr "Új parancssoros projekt létrehozása"
 
-#: src/plugins/meson/gbp-meson-build-system.c:451
+#: src/plugins/meson/gbp-meson-build-system.c:468
 #: src/plugins/meson/gbp-meson-config-view-addin.c:57
 msgid "Meson"
 msgstr "Meson"
@@ -5542,506 +5581,3 @@ msgstr "Az XML fa létrehozása meghiúsult."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "A fájlnak helyben mentettnek kell lennie a feldolgozáshoz."
-
-#~ msgid "Commands:"
-#~ msgstr "Parancsok:"
-
-#~ msgid "List available subcommands"
-#~ msgstr "Elérhető alparancsok felsorolása"
-
-#~ msgid "Run Builder in standalone mode"
-#~ msgstr "Az Építő futtatása önálló módban"
-
-#~ msgid "Increase verbosity, may be specified multiple times"
-#~ msgstr "Részletesség növelése, többször is megadható"
-
-#~ msgid "Enter GApplication Service mode"
-#~ msgstr "Belépés GApplication szolgáltatásmódba"
-
-#~ msgid "Opens the project specified by PATH"
-#~ msgstr "Megnyitja az ÚTVONAL által megadott projektet"
-
-#~ msgid "PATH"
-#~ msgstr "ÚTVONAL"
-
-#~ msgid "Clones the project specified by MANIFEST"
-#~ msgstr "Klónozza a JEGYZÉKFÁJL által megadott projektet"
-
-#~ msgid "COMMAND"
-#~ msgstr "PARANCS"
-
-#~ msgid "No commands available"
-#~ msgstr "Nincsenek elérhető parancsok"
-
-#~ msgid "Please provide a command"
-#~ msgstr "Adjon meg egy parancsot"
-
-#~ msgid "No such tool"
-#~ msgstr "Nincs ilyen eszköz"
-
-#~ msgid "Please provide a worker plugin"
-#~ msgstr "Adja meg az építő bővítményt"
-
-#~ msgid "Please provide a D-Bus address"
-#~ msgstr "Adja meg a D-Bus címet"
-
-#~ msgid "No such worker"
-#~ msgstr "Nincs ilyen építő"
-
-#~ msgid "Failed to establish a monitor for background changes: %s"
-#~ msgstr "Nem sikerült figyelőt létrehozni a háttérbeli változásokhoz: %s"
-
-#~ msgid "Buffer failed: %s"
-#~ msgstr "Puffer sikertelen: %s"
-
-#~ msgid "File too large to be opened."
-#~ msgstr "A fájl túl nagy a megnyitáshoz."
-
-#~ msgid "unsaved document %u"
-#~ msgstr "mentetlen dokumentum %u"
-
-#~ msgid "Duplicate the configuration"
-#~ msgstr "Beállítások kettőzése"
-
-#~ msgid "Delete the configuration"
-#~ msgstr "Beállítások törlése"
-
-#~ msgid "The prefix to use when installing the project"
-#~ msgstr "A projekten telepítésekor használandó előtag"
-
-#~ msgid "Options to use when bootstrapping the project"
-#~ msgstr "A projekt előkészítéséhez használandó beállítások"
-
-#~ msgid "_Wrap Around"
-#~ msgstr "_Körkörös keresés"
-
-#~ msgid "Properties"
-#~ msgstr "Tulajdonságok"
-
-#~ msgid "Display"
-#~ msgstr "Megjelenítés"
-
-#~ msgid "Tabs and Indentation"
-#~ msgstr "Tabulátorok és behúzás"
-
-#~ msgid "Auto indent new lines"
-#~ msgstr "Új sorok automatikus behúzása"
-
-#~ msgid "Language Syntax"
-#~ msgstr "Nyelvi szintaxis"
-
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Navigációs panel bekapcsolása"
-
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Segédeszköz panel bekapcsolása"
-
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Miért nem <a href=\"action://app.new-project\">hoz létre egy új "
-#~ "projektet</a>?"
-
-#~ msgid "_Remove"
-#~ msgstr "_Eltávolítás"
-
-#~ msgid "Click an item to select"
-#~ msgstr "Kattintson a kiválasztandó elemre"
-
-#~ msgid "Open…"
-#~ msgstr "Megnyitás…"
-
-#~ msgid "Select projects for removal"
-#~ msgstr "Válassza ki az eltávolítandó projekteket"
-
-#~ msgid "Return to project selection"
-#~ msgstr "Vissza a projektválasztáshoz"
-
-#~ msgid "_Open Project"
-#~ msgstr "Projekt _megnyitása"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Beállítások"
-
-#~ msgid "Keyboard _Shortcuts"
-#~ msgstr "Gy_orsbillentyűk"
-
-#~ msgid "_Help"
-#~ msgstr "_Súgó"
-
-#~ msgid "_About"
-#~ msgstr "_Névjegy"
-
-#~ msgid "Save _All"
-#~ msgstr "Összes _mentése"
-
-#~ msgid "Close _All"
-#~ msgstr "Összes _bezárása"
-
-#~ msgid "You must call %s() before using libide."
-#~ msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
-
-#~ msgid "An unload request is already pending"
-#~ msgstr "Egy lecsatolási kérés már várakozik"
-
-#~ msgid "Context already unloading, cannot restore."
-#~ msgstr "A környezet már lecsatolódik, nem állítható vissza."
-
-#~ msgid "Context has already been restored."
-#~ msgstr "A környezet már vissza lett állítva."
-
-#~ msgid "No implementations of extension point “%s”."
-#~ msgstr "A kiegészítési pont nincs megvalósítva: „%s”."
-
-#~ msgid "Failed to locate %s plugin."
-#~ msgstr "A(z) %s bővítmény nem található."
-
-#~ msgid "No such extension point."
-#~ msgstr "Nincs ilyen kiegészítési pont."
-
-#~ msgid "No implementations of extension point."
-#~ msgstr "A kiegészítési pont nincs megvalósítva."
-
-#~ msgid "Run _all tests"
-#~ msgstr "Összes _teszt futtatása"
-
-#~ msgid "Reload tests"
-#~ msgstr "Tesztek újratöltése"
-
-#~ msgid "No tests available"
-#~ msgstr "Nem érhető el teszt"
-
-#~ msgid "Tests will be loaded after building."
-#~ msgstr "A tesztek az összeállítás után lesznek betöltve."
-
-#~ msgid "Clear _All"
-#~ msgstr "Összes _törlése"
-
-#~ msgid "Invalid %-encoding in URI"
-#~ msgstr "Érvénytelen %-kódolás az URI-ban"
-
-#~ msgid "Non-UTF-8 characters in URI"
-#~ msgstr "Nem UTF-8 karakterek az URI-ban"
-
-#~ msgid "Invalid IP literal “%s” in URI"
-#~ msgstr "Érvénytelen IP literál az URI-ban: „%s”"
-
-#~ msgid "Invalid encoded IP literal “%s” in URI"
-#~ msgstr "Érvénytelen kódolt IP literál az URI-ban: „%s”"
-
-#~ msgid "Invalid non-ASCII hostname “%s” in URI"
-#~ msgstr "Érvénytelen nem-ASCII gépnév az URI-ban: „%s”"
-
-#~ msgid "Non-ASCII hostname “%s” forbidden in this URI"
-#~ msgstr "A(z) „%s” nem-ASCII gépnév tiltott ebben az URI-ban"
-
-#~ msgid "Could not parse port “%s” in URI"
-#~ msgstr "A(z) „%s” port nem dolgozható fel az URI-ban"
-
-#~ msgid "Port “%s” in URI is out of range"
-#~ msgstr "A(z) „%s” port az URI-ban tartományon kívül esik"
-
-#~ msgid "Base URI is not absolute"
-#~ msgstr "A bázis URI nem abszolút"
-
-#~ msgid "URI is not absolute, and no base URI was provided"
-#~ msgstr "Az URI nem abszolút, és nem lett bázis URI megadva"
-
-#~ msgid "Could not parse “%s” as absolute URI"
-#~ msgstr "A(z) „%s” nem dolgozható fel abszolút URI-ként"
-
-#~ msgid "URI “%s” has no host component"
-#~ msgstr "A(z) „%s” URI-nak nincs gépnév része"
-
-#~ msgid "Building"
-#~ msgstr "Összeállítás"
-
-#~ msgid "true"
-#~ msgstr "igaz"
-
-#~ msgctxt "button"
-#~ msgid "Build"
-#~ msgstr "Összeállítás"
-
-#~ msgid "The project cannot be built while the build pipeline is being set up"
-#~ msgstr ""
-#~ "A projekt nem állítható össze, amíg az összeállítási folyamat beállítás "
-#~ "alatt van"
-
-#~ msgid "Builder Statistics"
-#~ msgstr "Építő statisztikák"
-
-#~ msgid "Transfers"
-#~ msgstr "Átvitelek"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Trigger a build"
-#~ msgstr "Összeállítás aktiválása"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all files"
-#~ msgstr "Minden fájl mentése"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Perspectives"
-#~ msgstr "Perspektívák"
-
-#~ msgid "Shared Library (Autotools)"
-#~ msgstr "Megosztott programkönyvtár (Autotools)"
-
-#~ msgid "Create a new autotools project with a shared library"
-#~ msgstr "Új autotools projekt létrehozása egy megosztott programkönyvtárral"
-
-#~ msgid "Empty Project (Autotools)"
-#~ msgstr "Üres projekt (Autotools)"
-
-#~ msgid "Create a new empty autotools project"
-#~ msgstr "Új üres autotools projekt létrehozása"
-
-#~ msgid "GNOME Application (Autotools)"
-#~ msgstr "GNOME alkalmazás (Autotools)"
-
-#~ msgid "Create a new flatpak-ready GNOME application"
-#~ msgstr "Új, flatpak használatára kész GNOME alkalmazás létrehozása"
-
-#~ msgid "Command not found: %s"
-#~ msgstr "A parancs nem található: %s"
-
-#~ msgid "Use the entry below to execute a command"
-#~ msgstr "Használja a lenti bemeneti mezőt a parancsok végrehajtásához"
-
-#~ msgid "New…"
-#~ msgstr "Új…"
-
-#~ msgid "Create"
-#~ msgstr "Létrehozás"
-
-#~ msgid "List available templates"
-#~ msgstr "Elérhető sablonok felsorolása"
-
-#~ msgid "Project template to generate"
-#~ msgstr "Készítendő projektsablon"
-
-#~ msgid "The target language (if supported)"
-#~ msgstr "A célnyelv (ha támogatott)"
-
-#~ msgid "The version control to use or “none” to disable"
-#~ msgstr "A használandó verziókövetés, vagy „nincs” a letiltáshoz"
-
-#~ msgid "git"
-#~ msgstr "git"
-
-#~ msgid "create-project [OPTION...] PROJECT_NAME"
-#~ msgstr "create-project [BEÁLLÍTÁS...] PROJEKTNÉV"
-
-#~ msgid "Filename must be ASCII and may not contain : or ="
-#~ msgstr ""
-#~ "A fájlnévnek ASCII kódolásúnak kell lennie, és nem tartalmazhat : vagy = "
-#~ "karaktert"
-
-#~ msgid "Please specify a project name.\n"
-#~ msgstr "Adjon meg egy projektnevet.\n"
-
-#~ msgid "Please specify a project template with --template=\n"
-#~ msgstr "Adjon meg egy projektsablont a --template= kapcsolóval\n"
-
-#~ msgid "Clone App"
-#~ msgstr "Alkalmazás klónozása"
-
-#~ msgid "Clone"
-#~ msgstr "Klónozás"
-
-#~ msgid "Your computer is missing flatpak-builder"
-#~ msgstr "A flatpak-builder hiányzik a számítógépéről"
-
-#~ msgid "Cannot provide diff, no backing file provided."
-#~ msgstr "Nem adható diff, nincs mögöttes fájl megadva."
-
-#~ msgid "Apply"
-#~ msgstr "Alkalmaz"
-
-#~ msgid "Remote Branch to Clone"
-#~ msgstr "Klónozandó távoli ág"
-
-#~ msgid "Use Git to create a local copy of a remotely hosted project."
-#~ msgstr ""
-#~ "A Git használata egy helyi másolat készítéséhez egy távoli projektről."
-
-#~ msgid "Enter the URL of your project’s source code repository"
-#~ msgstr "Írja be a projekt forráskód-tárolójának URL-címét"
-
-#~ msgid "Change default branch"
-#~ msgstr "Alapértelmezett ág módosítása"
-
-#~ msgid "Clone…"
-#~ msgstr "Klónozás…"
-
-#~ msgid "Failed to establish git file monitor: %s"
-#~ msgstr "A git fájlfigyelő létrehozása meghiúsult: %s"
-
-#~ msgid "Contribute to an existing project"
-#~ msgstr "Közreműködés egy meglévő projektben"
-
-#~ msgid "Cannot load a non-native file in terminal"
-#~ msgstr "A nem natív fájl nem tölthető be a terminálba"
-
-#~ msgid "Failed to spawn terminal: %s"
-#~ msgstr "A terminál létrehozása meghiúsult: %s"
-
-#~ msgid "Failed to rename file: %s"
-#~ msgstr "A fájl átnevezése meghiúsult: %s"
-
-#~ msgid "Failed to trash file: %s"
-#~ msgstr "A fájl kukába dobása meghiúsult: %s"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Project tree"
-#~ msgstr "Projektfa"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename a file"
-#~ msgstr "Fájl átnevezése"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move a file to the trash"
-#~ msgstr "Fájl mozgatása a kukába"
-
-#~ msgid "Re_veal in Project Tree"
-#~ msgstr "Meg_jelenítés a projektfában"
-
-#~ msgid "_New"
-#~ msgstr "Ú_j"
-
-#~ msgid "_Empty File"
-#~ msgstr "Üres _fájl"
-
-#~ msgid "_Build"
-#~ msgstr "Öss_zeállítás"
-
-#~ msgid "_Rebuild"
-#~ msgstr "Új_ra-összeállítás"
-
-#~ msgid "_Collapse All Nodes"
-#~ msgstr "Összes elem össze_csukása"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Frissítés"
-
-#~ msgid "Updated"
-#~ msgstr "Frissített"
-
-#~ msgid "Definition"
-#~ msgstr "Definíció"
-
-#~ msgid "Canonical"
-#~ msgstr "Kanonikus név"
-
-#~ msgid "System Monitor"
-#~ msgstr "Rendszerfigyelő"
-
-#~ msgid "Open Profile"
-#~ msgstr "Profil megnyitása"
-
-#~ msgid "Reset and Clear"
-#~ msgstr "Visszaállítás és törlés"
-
-#~ msgid "Buffer loaded but not in the buffer manager."
-#~ msgstr "Puffer betöltve, de nincs a pufferkezelőben."
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Lehetővé teszi töredékek beszúrását a dokumentumba."
-
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Clang-alapú kódkiegészítés (kísérleti)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Használja kódkiegészítésre a Clang-et C és C++ nyelvek esetén."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "A szavak automatikus kiegészítésének bekapcsolása a dokumentumban"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Ha be van kapcsolva, akkor a jelenlegi dokumentum szavai elérhetőek "
-#~ "lesznek a szókiegészítés számára."
-
-#~ msgid "Suggest words found in open files"
-#~ msgstr "Szókiegészítési javaslatok a megnyitott dokumentumokban"
-
-#~ msgid ""
-#~ "Suggests completions as you type based on words found in any open document"
-#~ msgstr ""
-#~ "Szókiegészítési javaslatok miközben szavakat ír be bármelyik dokumentumban"
-
-#~ msgid "Minimum word size"
-#~ msgstr "Minimális szóhossz"
-
-#~ msgid "Minimum word size for word completion"
-#~ msgstr "Minimális szóhossz a szókiegészítéshez"
-
-#~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
-#~ msgstr ""
-#~ "Létrehoz és kezel egy Ctags adatbázist az osztálynevek, függvények stb. "
-#~ "kiegészítésére"
-
-#~ msgid "Suggest completions using Clang (Experimental)"
-#~ msgstr "Kiegészítési javaslatok Clang alapján (kísérleti)"
-
-#~ msgid "Code snippets"
-#~ msgstr "Kódtöredékek"
-
-#~ msgid "Use code fragments to increase typing efficiency"
-#~ msgstr ""
-#~ "Kódtöredékek használata a gépelés hatékonyságának növelése érdekében"
-
-#~ msgid "Failed to load file: %s: %s"
-#~ msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
-
-#~ msgid "Click to toggle breakpoint"
-#~ msgstr "Kattintson a töréspont be- vagy kikapcsolásához"
-
-#~ msgid "Builder Word Completion"
-#~ msgstr "Építő szókiegészítés"
-
-#~ msgid "Unknown failure"
-#~ msgstr "Ismeretlen hiba"
-
-#~ msgid "Clang crashed"
-#~ msgstr "A Clang összeomlott"
-
-#~ msgid "Invalid arguments"
-#~ msgstr "Érvénytelen argumentumok"
-
-#~ msgid "AST read error"
-#~ msgstr "AST olvasási hiba"
-
-#~ msgid "Failed to create translation unit: %s"
-#~ msgstr "Nem sikerült létrehozni a(z) „%s” fordítási egységet"
-
-#~ msgid "clang_codeCompleteAt() only works on local files"
-#~ msgstr "A clang_codeCompleteAt() csak helyi fájlokon működik"
-
-#~ msgid "Format Strings"
-#~ msgstr "Formátum karakterláncok"
-
-#~ msgid "_Show more"
-#~ msgstr "_Több megjelenítése"
-
-#~ msgid "Suggest Python completions"
-#~ msgstr "Python kiegészítési javaslatok"
-
-#~ msgid "CPU"
-#~ msgstr "CPU"
-
-#~ msgid "Installing %s %s"
-#~ msgstr "Telepítés alatt: %s %s"
-
-#~ msgid "MinGW 64-bit"
-#~ msgstr "MinGW 64 bites"
-
-#~ msgid "MinGW 32-bit"
-#~ msgstr "MinGW 32 bites"
