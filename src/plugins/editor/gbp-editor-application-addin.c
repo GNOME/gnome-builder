@@ -180,12 +180,39 @@ gbp_editor_application_addin_handle_command_line (IdeApplicationAddin     *addin
   g_assert (IDE_IS_APPLICATION (app));
   g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
 
+  argv = g_application_command_line_get_arguments (cmdline, &argc);
+
   if ((options = g_application_command_line_get_options_dict (cmdline)) &&
       g_variant_dict_contains (options, "editor"))
-    ide_application_set_workspace_type (application, IDE_TYPE_EDITOR_WORKSPACE);
+    {
+      ide_application_set_workspace_type (application, IDE_TYPE_EDITOR_WORKSPACE);
 
-  /* Ignore if no parameters were passed */
-  argv = g_application_command_line_get_arguments (cmdline, &argc);
+      /* Just open the editor workspace if no files were specified */
+      if (argc < 2)
+        {
+          IdeEditorWorkspace *workspace;
+          IdeContext *context;
+
+          workdir = g_application_command_line_create_file_for_arg (cmdline, ".");
+          ide_application_set_command_line_handled (application, cmdline, TRUE);
+
+          workbench = ide_workbench_new ();
+          ide_application_add_workbench (app, workbench);
+
+          context = ide_workbench_get_context (workbench);
+          ide_context_set_workdir (context, workdir);
+
+          workspace = ide_editor_workspace_new (application);
+          ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+          _ide_window_settings_register (GTK_WINDOW (workspace));
+
+          ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+
+          return;
+        }
+    }
+
   if (argc < 2)
     return;
 
