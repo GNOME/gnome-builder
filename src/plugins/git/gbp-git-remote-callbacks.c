@@ -174,8 +174,11 @@ gbp_git_remote_callbacks_finalize (GObject *object)
 
   g_clear_object (&self->progress);
 
-  g_string_free (self->body, TRUE);
-  self->body = NULL;
+  if (self->body != NULL)
+    {
+      g_string_free (self->body, TRUE);
+      self->body = NULL;
+    }
 
   G_OBJECT_CLASS (gbp_git_remote_callbacks_parent_class)->finalize (object);
 }
