@@ -175,7 +175,8 @@ gbp_meson_test_provider_communicate_cb (GObject      *object,
   parser = json_parser_new ();
 
   if (!json_parser_load_from_data (parser, stdout_buf, -1, &error) ||
-      NULL == (root = json_parser_get_root (parser)))
+      !(root = json_parser_get_root (parser)) ||
+      ide_object_in_destruction (IDE_OBJECT (self)))
     IDE_GOTO (failure);
 
   gbp_meson_test_provider_load_json (self, root);
