@@ -832,9 +832,12 @@ gbp_git_vcs_reload_finish (GbpGitVcs     *self,
 
       if (name != NULL)
         {
-          g_free (self->branch);
-          self->branch = g_strdup (name);
-          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_NAME]);
+          if (!ide_str_equal0 (name, self->branch))
+            {
+              g_free (self->branch);
+              self->branch = g_strdup (name);
+              g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_NAME]);
+            }
         }
     }
 
