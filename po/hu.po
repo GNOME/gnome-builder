@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-06 05:47+0000\n"
-"PO-Revision-Date: 2019-02-07 19:45+0100\n"
+"POT-Creation-Date: 2019-02-10 13:09+0000\n"
+"PO-Revision-Date: 2019-02-12 22:52+0100\n"
 "Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -807,7 +807,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4897
+#: src/libide/sourceview/ide-source-view.c:4907
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:57
 msgid "Rename"
@@ -1031,7 +1031,7 @@ msgstr ""
 "Az Építő észlelte, hogy a fájlt egy külső programmal módosították. Szeretné "
 "újratölteni a fájlt?"
 
-#: src/libide/editor/ide-editor-search-bar.c:307
+#: src/libide/editor/ide-editor-search-bar.c:324
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
@@ -1357,18 +1357,18 @@ msgid "Failed to locate runtime"
 msgstr "A futtatókörnyezet nem található"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:508
+#: src/libide/foundry/ide-run-manager.c:509
 #, c-format
 msgid "Running %s…"
 msgstr "%s futtatása…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:582
+#: src/libide/foundry/ide-run-manager.c:583
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Az összeállítási cél összeállítása meghiúsult: %s"
 
-#: src/libide/foundry/ide-run-manager.c:816
+#: src/libide/foundry/ide-run-manager.c:817
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
@@ -1376,18 +1376,18 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Munkapad gyorsbillentyűi"
 
-#: src/libide/foundry/ide-run-manager.c:817
+#: src/libide/foundry/ide-run-manager.c:818
 #: src/libide/gui/ide-shortcuts-window.ui:412
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Összeállítás és futtatás"
 
-#: src/libide/foundry/ide-run-manager.c:975
-#: src/libide/foundry/ide-run-manager.c:1037
+#: src/libide/foundry/ide-run-manager.c:977
+#: src/libide/foundry/ide-run-manager.c:1043
 msgid "Failed to locate a build target"
 msgstr "Az összeállítandó cél nem található"
 
-#: src/libide/foundry/ide-run-manager.c:1173 src/libide/gui/gtk/menus.ui:79
+#: src/libide/foundry/ide-run-manager.c:1179 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/gtk/menus.ui:30
 msgid "Run"
 msgstr "Futtatás"
@@ -1428,7 +1428,7 @@ msgstr "Tároló URL"
 #: src/libide/greeter/ide-clone-surface.ui:63
 msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
-"look similar to \"https://gitlab.gnome.org/GNOME/gnome-builder.git\"."
+"look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 msgstr ""
 "Adja meg a klónozandó projekt tárolóját. Az URL ehhez hasonló kell legyen: "
 "„https://gitlab.gnome.org/GNOME/gnome-builder.git”."
@@ -2610,7 +2610,7 @@ msgstr[0] "%u csomag telepítése"
 msgstr[1] "%u csomag telepítése"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:893
+#: src/libide/lsp/ide-lsp-client.c:924
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "A nyelvi kiszolgáló előkészítése meghiúsult: %s"
@@ -2708,31 +2708,31 @@ msgstr "_Kicsinyítés"
 msgid "Reset"
 msgstr "Visszaállítás"
 
-#: src/libide/sourceview/ide-source-view.c:4348
+#: src/libide/sourceview/ide-source-view.c:4358
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: src/libide/sourceview/ide-source-view.c:4350
+#: src/libide/sourceview/ide-source-view.c:4360
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4468
+#: src/libide/sourceview/ide-source-view.c:4478
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: src/libide/sourceview/ide-source-view.c:4896
+#: src/libide/sourceview/ide-source-view.c:4906
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5131
+#: src/libide/sourceview/ide-source-view.c:5141
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u. sor, %u. oszlop</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5157
+#: src/libide/sourceview/ide-source-view.c:5167
 msgid "No references were found"
 msgstr "Nem találhatók hivatkozások"
 
@@ -4892,39 +4892,39 @@ msgstr "Egységtesztek"
 msgid "Files"
 msgstr "Fájlok"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:635
+#: src/plugins/project-tree/gbp-project-tree-addin.c:646
 #, c-format
 msgid "Copying 1 file"
 msgstr "1 fájl másolása"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:638
+#: src/plugins/project-tree/gbp-project-tree-addin.c:649
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "%s / %s fájl másolása"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:674
+#: src/plugins/project-tree/gbp-project-tree-addin.c:685
 msgid "Failed to copy files"
 msgstr "Fájlok másolása meghiúsult"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:684
+#: src/plugins/project-tree/gbp-project-tree-addin.c:695
 msgid "Files copied"
 msgstr "Fájlok másolva"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:688
+#: src/plugins/project-tree/gbp-project-tree-addin.c:699
 msgid "Copied 1 file"
 msgstr "1 fájl átmásolva"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:707
 #, c-format
 msgid "Copied %s files"
 msgstr "%s fájl átmásolva"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:836
+#: src/plugins/project-tree/gbp-project-tree-addin.c:847
 msgid "Copying files…"
 msgstr "Fájlok másolása…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:837
+#: src/plugins/project-tree/gbp-project-tree-addin.c:848
 msgid "Files will be copied in a moment"
 msgstr "A fájlok egy pillanat múlva át lesznek másolva"
 
