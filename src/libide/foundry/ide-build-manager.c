@@ -201,6 +201,25 @@ ide_build_manager_stop_timer (IdeBuildManager *self)
 }
 
 static void
+ide_build_manager_reset_info (IdeBuildManager *self)
+{
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  g_clear_pointer (&self->last_build_time, g_date_time_unref);
+  self->last_build_time = g_date_time_new_now_local ();
+
+  self->diagnostic_count = 0;
+  self->warning_count = 0;
+  self->error_count = 0;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
+}
+
+static void
 ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
                                      IdeDiagnostic    *diagnostic,
                                      IdePipeline *pipeline)
@@ -1500,6 +1519,8 @@ ide_build_manager_build_async (IdeBuildManager     *self,
       self->error_count = 0;
     }
 
+  ide_build_manager_reset_info (self);
+
   /*
    * If we are performing a real build (not just something like configure),
    * then we want to ensure we save all the buffers. We don't want to do this
@@ -1523,12 +1544,6 @@ ide_build_manager_build_async (IdeBuildManager     *self,
                                     cancellable,
                                     ide_build_manager_build_targets_cb,
                                     g_steal_pointer (&task));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
 
   IDE_EXIT;
 }
@@ -1628,19 +1643,13 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  self->diagnostic_count = 0;
-  self->error_count = 0;
-  self->warning_count = 0;
+  ide_build_manager_reset_info (self);
 
   ide_pipeline_clean_async (self->pipeline,
-                                  phase,
-                                  cancellable,
-                                  ide_build_manager_clean_cb,
-                                  g_steal_pointer (&task));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
+                            phase,
+                            cancellable,
+                            ide_build_manager_clean_cb,
+                            g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -1747,12 +1756,14 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
+  ide_build_manager_reset_info (self);
+
   ide_pipeline_rebuild_async (self->pipeline,
-                                    phase,
-                                    targets,
-                                    cancellable,
-                                    ide_build_manager_rebuild_cb,
-                                    g_steal_pointer (&task));
+                              phase,
+                              targets,
+                              cancellable,
+                              ide_build_manager_rebuild_cb,
+                              g_steal_pointer (&task));
 
   IDE_EXIT;
 }
