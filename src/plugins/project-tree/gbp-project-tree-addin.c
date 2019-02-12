@@ -29,6 +29,8 @@
 #include <libide-tree.h>
 #include <libide-vcs.h>
 
+#include "ide-tree-private.h"
+
 #include "gbp-project-tree-addin.h"
 
 struct _GbpProjectTreeAddin
@@ -482,7 +484,16 @@ gbp_project_tree_addin_remove_file (GbpProjectTreeAddin *self,
 #endif
 
   if ((selected = find_file_node (self->tree, file)))
-    ide_tree_node_remove (ide_tree_node_get_parent (selected), selected);
+    {
+      IdeTreeNode *parent = ide_tree_node_get_parent (selected);
+
+      ide_tree_node_remove (parent, selected);
+
+      /* Force the parent node to re-add the Empty child */
+      if (ide_tree_node_get_children_possible (parent) &&
+          ide_tree_node_get_n_children (parent) == 0)
+        _ide_tree_node_remove_all (parent);
+    }
 
   IDE_EXIT;
 }
