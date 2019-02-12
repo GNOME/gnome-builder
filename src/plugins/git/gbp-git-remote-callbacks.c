@@ -87,7 +87,28 @@ gbp_git_remote_callbacks_real_progress (GgitRemoteCallbacks *callbacks,
   else
     g_string_append (self->body, message);
 
-  ide_notification_set_body (self->progress, self->body->str);
+  if (self->body->len > 1)
+    {
+      const gchar *endptr;
+
+      endptr = &self->body->str[self->body->len - 1];
+
+      if (*endptr == '\n')
+        endptr--;
+
+      while (endptr >= self->body->str)
+        {
+          if (*endptr == '\n' || *endptr == '\r')
+            {
+              message = endptr + 1;
+              break;
+            }
+
+          endptr--;
+        }
+    }
+
+  ide_notification_set_body (self->progress, message);
 }
 
 static void
