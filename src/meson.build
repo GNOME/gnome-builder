@@ -57,7 +57,7 @@ if get_option('fusermount_wrapper')
               c_args: exe_c_args + release_args,
            link_args: exe_link_args,
        install_rpath: pkglibdir_abs,
-        dependencies: [libide_core_deps, libide_io_dep, libide_threading_dep],
+        dependencies: [libglib_dep],
   )
 
 endif

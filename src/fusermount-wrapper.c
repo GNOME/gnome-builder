@@ -18,22 +18,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #include <errno.h>
-#include <libide-threading.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-static gint exit_code;
+#include <glib.h>
+#include <sys/prctl.h>
+#include <signal.h>
 
 static gboolean
 parse_fd (const gchar *str,
           gint        *fd)
 {
-  gint64 v = g_ascii_strtoll (str, NULL, 10);
+  gint64 v;
 
   *fd = -1;
+
+  if (str == NULL)
+    return FALSE;
+
+  v = g_ascii_strtoll (str, NULL, 10);
 
   if (v < 0 || v > G_MAXINT)
     return FALSE;
@@ -47,82 +48,56 @@ parse_fd (const gchar *str,
 }
 
 static void
-wait_cb (IdeSubprocess *subprocess,
-         GAsyncResult  *result,
-         GMainLoop     *main_loop)
+child_setup_func (gpointer data)
 {
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (!ide_subprocess_wait_finish (subprocess, result, &error))
-    g_error ("Subprocess wait failed: %s", error->message);
-
-  if (ide_subprocess_get_if_signaled (subprocess))
-    kill (getpid (), ide_subprocess_get_term_sig (subprocess));
-  else
-    exit (ide_subprocess_get_exit_status (subprocess));
-
-  g_main_loop_quit (main_loop);
+  prctl (PR_SET_PDEATHSIG, SIGKILL);
 }
 
-static void
-log_func (const gchar    *log_domain,
-          GLogLevelFlags  log_level,
-          const gchar    *message,
-          gpointer        user_data)
+gint
+main (gint   argc,
+      gchar *argv[])
 {
-  if (log_level & G_LOG_FLAG_FATAL)
-    g_printerr ("%s\n", message);
-}
+  g_autoptr(GPtrArray) new_argv = NULL;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *env_param = NULL;
+  g_autofree gchar *fwd_param = NULL;
+  const gchar *fuse_commfd_env;
+  gint fuse_commfd = -1;
+  gint exit_status;
 
-int
-main (int   argc,
-      char *argv[])
-{
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GDBusConnection) bus = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GMainLoop) main_loop = NULL;
-  g_autoptr(GError) error = NULL;
-  const gchar *env;
-  gint fd = -1;
+  fuse_commfd_env = g_getenv ("_FUSE_COMMFD");
 
-  g_log_set_default_handler (log_func, NULL);
+  if (!parse_fd (fuse_commfd_env, &fuse_commfd))
+    return EXIT_FAILURE;
 
-  main_loop = g_main_loop_new (NULL, FALSE);
+  env_param = g_strdup_printf ("--env=_FUSE_COMMFD=%s", fuse_commfd_env);
+  fwd_param = g_strdup_printf ("--forward-fd=%d", fuse_commfd);
 
-  if (!(bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error)))
-    g_error ("Failed to connect to session bus: %s", error->message);
+  if (!(path = g_find_program_in_path ("flatpak-spawn")))
+    return EXIT_FAILURE;
 
-  launcher = ide_subprocess_launcher_new (0);
-
-  ide_subprocess_launcher_push_argv (launcher, "fusermount");
+  new_argv = g_ptr_array_new ();
+  g_ptr_array_add (new_argv, path);
+  g_ptr_array_add (new_argv, (gchar *)"--clear-env");
+  g_ptr_array_add (new_argv, (gchar *)"--watch-bus");
+  g_ptr_array_add (new_argv, (gchar *)"--host");
+  g_ptr_array_add (new_argv, env_param);
+  g_ptr_array_add (new_argv, fwd_param);
+  g_ptr_array_add (new_argv, (gchar *)"fusermount");
   for (guint i = 1; i < argc; i++)
-    ide_subprocess_launcher_push_argv (launcher, argv[i]);
+    g_ptr_array_add (new_argv, argv[i]);
+  g_ptr_array_add (new_argv, NULL);
 
-  ide_subprocess_launcher_set_cwd (launcher, g_get_current_dir ());
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-  ide_subprocess_launcher_take_stdin_fd (launcher, dup (STDIN_FILENO));
-  ide_subprocess_launcher_take_stdout_fd (launcher, dup (STDOUT_FILENO));
-  ide_subprocess_launcher_take_stderr_fd (launcher, dup (STDERR_FILENO));
+  g_spawn_sync (NULL,
+                (gchar **)new_argv->pdata,
+                NULL,
+                (G_SPAWN_LEAVE_DESCRIPTORS_OPEN | G_SPAWN_CHILD_INHERITS_STDIN),
+                child_setup_func,
+                NULL,
+                NULL,
+                NULL,
+                &exit_status,
+                NULL);
 
-  if ((env = g_getenv ("_FUSE_COMMFD")) && parse_fd (env, &fd) && fd > 2)
-    {
-      ide_subprocess_launcher_setenv (launcher, "_FUSE_COMMFD", env, TRUE);
-      ide_subprocess_launcher_take_fd (launcher, fd, fd);
-    }
-
-  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
-    g_error ("ERROR: %s", error->message);
-
-  ide_subprocess_wait_async (subprocess,
-                             NULL,
-                             (GAsyncReadyCallback)wait_cb,
-                             main_loop);
-
-  g_main_loop_run (main_loop);
-
-  return exit_code;
+  return exit_status;
 }
