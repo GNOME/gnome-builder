@@ -41,7 +41,7 @@ typedef struct
 {
   IdeHighlightEngine *engine;
 
-  IdeLspClient  *client;
+  IdeLspClient       *client;
   IdeHighlightIndex  *index;
   DzlSignalGroup     *buffer_signals;
 
@@ -51,8 +51,8 @@ typedef struct
   guint               dirty : 1;
 } IdeLspHighlighterPrivate;
 
-static void highlighter_iface_init                (IdeHighlighterInterface *iface);
-static void ide_lsp_highlighter_queue_update (IdeLspHighlighter  *self);
+static void highlighter_iface_init           (IdeHighlighterInterface *iface);
+static void ide_lsp_highlighter_queue_update (IdeLspHighlighter       *self);
 
 G_DEFINE_TYPE_WITH_CODE (IdeLspHighlighter, ide_lsp_highlighter, IDE_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeLspHighlighter)
@@ -68,7 +68,7 @@ static GParamSpec *properties [N_PROPS];
 
 static void
 ide_lsp_highlighter_set_index (IdeLspHighlighter *self,
-                                    IdeHighlightIndex      *index)
+                               IdeHighlightIndex *index)
 {
   IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
@@ -93,8 +93,8 @@ ide_lsp_highlighter_set_index (IdeLspHighlighter *self,
 
 static void
 ide_lsp_highlighter_document_symbol_cb (GObject      *object,
-                                             GAsyncResult *result,
-                                             gpointer      user_data)
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeLspHighlighter) self = user_data;
@@ -254,7 +254,7 @@ ide_lsp_highlighter_queue_update (IdeLspHighlighter *self)
 
 static void
 ide_lsp_highlighter_buffer_line_flags_changed (IdeLspHighlighter *self,
-                                                    IdeBuffer              *buffer)
+                                               IdeBuffer         *buffer)
 {
   g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -281,9 +281,9 @@ ide_lsp_highlighter_dispose (GObject *object)
 
 static void
 ide_lsp_highlighter_get_property (GObject    *object,
-                                       guint       prop_id,
-                                       GValue     *value,
-                                       GParamSpec *pspec)
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
 {
   IdeLspHighlighter *self = IDE_LSP_HIGHLIGHTER (object);
 
@@ -300,9 +300,9 @@ ide_lsp_highlighter_get_property (GObject    *object,
 
 static void
 ide_lsp_highlighter_set_property (GObject      *object,
-                                       guint         prop_id,
-                                       const GValue *value,
-                                       GParamSpec   *pspec)
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
   IdeLspHighlighter *self = IDE_LSP_HIGHLIGHTER (object);
 
@@ -375,7 +375,7 @@ ide_lsp_highlighter_get_client (IdeLspHighlighter *self)
 
 void
 ide_lsp_highlighter_set_client (IdeLspHighlighter *self,
-                                     IdeLspClient      *client)
+                                IdeLspClient      *client)
 {
   IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
@@ -420,10 +420,10 @@ select_next_word (GtkTextIter *begin,
 
 static void
 ide_lsp_highlighter_update (IdeHighlighter       *highlighter,
-                                 IdeHighlightCallback  callback,
-                                 const GtkTextIter    *range_begin,
-                                 const GtkTextIter    *range_end,
-                                 GtkTextIter          *location)
+                            IdeHighlightCallback  callback,
+                            const GtkTextIter    *range_begin,
+                            const GtkTextIter    *range_end,
+                            GtkTextIter          *location)
 {
   IdeLspHighlighter *self = (IdeLspHighlighter *)highlighter;
   IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
@@ -484,7 +484,7 @@ completed:
 
 static void
 ide_lsp_highlighter_set_engine (IdeHighlighter     *highlighter,
-                                     IdeHighlightEngine *engine)
+                                IdeHighlightEngine *engine)
 {
   IdeLspHighlighter *self = (IdeLspHighlighter *)highlighter;
   IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
