@@ -3945,12 +3945,12 @@ ide_pipeline_ref_toolchain (IdePipeline *self)
 }
 
 void
-_ide_pipeline_check_toolchain (IdePipeline *self,
-                                     IdeDeviceInfo     *info)
+_ide_pipeline_check_toolchain (IdePipeline   *self,
+                               IdeDeviceInfo *info)
 {
   g_autoptr(IdeToolchain) toolchain = NULL;
   g_autoptr(IdeTriplet) toolchain_triplet = NULL;
-  IdeContext *context;
+  g_autoptr(IdeContext) context = NULL;
   IdeRuntime *runtime;
   IdeTriplet *device_triplet;
   IdeToolchainManager *manager;
@@ -3960,7 +3960,10 @@ _ide_pipeline_check_toolchain (IdePipeline *self,
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (IDE_IS_DEVICE_INFO (info));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
+  if (ide_object_in_destruction (IDE_OBJECT (self)))
+    IDE_EXIT;
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
   manager = ide_toolchain_manager_from_context (context);
