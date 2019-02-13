@@ -440,14 +440,14 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
-                <property name="shortcut-type">gesture-two-finger-swipe-right</property>
+                <property name="shortcut-type">gesture-three-finger-swipe-right</property>
                 <property name="title" translatable="yes" context="shortcut window">Switch to the next document</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
-                <property name="shortcut-type">gesture-two-finger-swipe-left</property>
+                <property name="shortcut-type">gesture-three-finger-swipe-left</property>
                 <property name="title" translatable="yes" context="shortcut window">Switch to the previous document</property>
               </object>
             </child>
