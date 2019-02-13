@@ -10,6 +10,7 @@
     <file compressed="true">resources/src/hello-version.h.in</file>
     <file compressed="true">resources/src/meson-clib.build</file>
     <file compressed="true">resources/src/meson-js.build</file>
+    <file compressed="true">resources/src/hello.c</file>
     <file compressed="true">resources/src/hello.h</file>
     <file compressed="true">resources/src/__init__.py</file>
     <file compressed="true">resources/src/meson-c-vala.build</file>

@@ -324,6 +324,7 @@ class LibraryProjectTemplate(MesonTemplate):
     def prepare_files(self, files):
         if self.language == 'c':
             files['resources/src/meson-clib.build'] = 'src/meson.build'
+            files['resources/src/hello.c'] = 'src/%(name)s.c'
             files['resources/src/hello.h'] = 'src/%(name)s.h'
             files['resources/src/hello-version.h.in'] = 'src/%(prefix)s-version.h.in'
 

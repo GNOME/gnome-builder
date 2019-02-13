@@ -1,7 +1,7 @@
 api_version = '0.1'
 
 {{name_}}_sources = [
-
+  '{{name}}.c',
 ]
 
 {{name_}}_headers = [
