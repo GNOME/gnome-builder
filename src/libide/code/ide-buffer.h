@@ -172,7 +172,5 @@ void                    ide_buffer_set_highlight_diagnostics     (IdeBuffer     
 IDE_AVAILABLE_IN_3_32
 void                    ide_buffer_set_style_scheme_name         (IdeBuffer               *self,
                                                                   const gchar             *style_scheme_name);
-IDE_AVAILABLE_IN_3_32
-void                    ide_buffer_trim_trailing_whitespace      (IdeBuffer               *self);
 
 G_END_DECLS
