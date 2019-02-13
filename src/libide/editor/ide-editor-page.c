@@ -593,6 +593,7 @@ ide_editor_page_clear_search (IdeEditorPage *self,
 
   ide_editor_search_set_search_text (self->search, NULL);
   ide_editor_search_set_visible (self->search, FALSE);
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
 }
 
 static void
