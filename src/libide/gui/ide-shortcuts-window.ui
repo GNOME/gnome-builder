@@ -439,16 +439,22 @@
             <property name="title" translatable="yes" context="shortcut window">Touchpad gestures</property>
             <child>
               <object class="GtkShortcutsShortcut">
+                <!-- work around no access to three-finger-swipe -->
+                <property name="shortcut-type">gesture-two-finger-swipe-right</property>
                 <property name="visible">true</property>
-                <property name="shortcut-type">gesture-three-finger-swipe-right</property>
-                <property name="title" translatable="yes" context="shortcut window">Switch to the next document</property>
+                <property name="icon">swipe_right</property>
+                <property name="title" translatable="yes" context="shortcut window">Move page to the right</property>
+                <property name="subtitle" translatable="yes" context="shortcut window">Three finger swipe right</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <!-- work around no access to three-finger-swipe -->
+                <property name="shortcut-type">gesture-two-finger-swipe-left</property>
                 <property name="visible">true</property>
-                <property name="shortcut-type">gesture-three-finger-swipe-left</property>
-                <property name="title" translatable="yes" context="shortcut window">Switch to the previous document</property>
+                <property name="icon">swipe_left</property>
+                <property name="title" translatable="yes" context="shortcut window">Move page to the left</property>
+                <property name="subtitle" translatable="yes" context="shortcut window">Three finger swipe left</property>
               </object>
             </child>
           </object>
@@ -544,4 +550,10 @@
       </object>
     </child>
   </template>
+  <object class="GThemedIcon" id="swipe_right">
+    <property name="name">gesture-three-finger-swipe-right-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="swipe_left">
+    <property name="name">gesture-three-finger-swipe-left-symbolic</property>
+  </object>
 </interface>
