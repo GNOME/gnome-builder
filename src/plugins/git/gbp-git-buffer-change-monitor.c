@@ -722,7 +722,6 @@ gbp_git_buffer_change_monitor_calculate_threaded (GbpGitBufferChangeMonitor  *se
   ranges = g_array_new (FALSE, FALSE, sizeof (Range));
   options = ggit_diff_options_new ();
 
-  ggit_diff_options_set_flags (options, GIT_DIFF_IGNORE_WHITESPACE_EOL);
   ggit_diff_options_set_n_context_lines (options, 0);
 
   ggit_diff_blob_to_buffer (diff->blob,
