@@ -34,11 +34,75 @@ struct _GbpTrimSpacesBufferAddin
 };
 
 static void
+trim_trailing_whitespace (GtkTextBuffer *buffer,
+                          GtkTextIter   *iter)
+{
+  /*
+   * Preserve all whitespace that isn't space or tab.
+   * This could include line feed, form feed, etc.
+   */
+#define TEXT_ITER_IS_SPACE(ptr) \
+    ({  \
+      gunichar ch = gtk_text_iter_get_char (ptr); \
+      (ch == ' ' || ch == '\t'); \
+    })
+
+  /*
+   * Move to the first character at the end of the line (skipping the newline)
+   * and progress to trip if it is white space.
+   */
+  if (gtk_text_iter_forward_to_line_end (iter) &&
+      !gtk_text_iter_starts_line (iter) &&
+      gtk_text_iter_backward_char (iter) &&
+      TEXT_ITER_IS_SPACE (iter))
+    {
+      GtkTextIter begin = *iter;
+
+      gtk_text_iter_forward_to_line_end (iter);
+
+      while (TEXT_ITER_IS_SPACE (&begin))
+        {
+          if (gtk_text_iter_starts_line (&begin))
+            break;
+
+          if (!gtk_text_iter_backward_char (&begin))
+            break;
+        }
+
+      if (!TEXT_ITER_IS_SPACE (&begin) && !gtk_text_iter_ends_line (&begin))
+        gtk_text_iter_forward_char (&begin);
+
+      if (!gtk_text_iter_equal (&begin, iter))
+        gtk_text_buffer_delete (buffer, &begin, iter);
+    }
+}
+
+static void
+trim_trailing_whitespace_cb (guint               line,
+                             IdeBufferLineChange change,
+                             gpointer            user_data)
+{
+  GtkTextBuffer *buffer = user_data;
+  GtkTextIter iter;
+
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  if (!(change & (IDE_BUFFER_LINE_CHANGE_ADDED | IDE_BUFFER_LINE_CHANGE_CHANGED)))
+    return;
+
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+
+  trim_trailing_whitespace (buffer, &iter);
+}
+
+static void
 gbp_trim_spaces_buffer_addin_save_file (IdeBufferAddin *addin,
                                         IdeBuffer      *buffer,
                                         GFile          *file)
 {
   IdeFileSettings *file_settings;
+  IdeBufferChangeMonitor *changes;
+  GtkTextIter end;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_TRIM_SPACES_BUFFER_ADDIN (addin));
@@ -46,15 +110,19 @@ gbp_trim_spaces_buffer_addin_save_file (IdeBufferAddin *addin,
   g_assert (G_IS_FILE (file));
 
   if (!(file_settings = ide_buffer_get_file_settings (buffer)) ||
-      !ide_file_settings_get_trim_trailing_whitespace (file_settings))
+      !ide_file_settings_get_trim_trailing_whitespace (file_settings) ||
+      !(changes = ide_buffer_get_change_monitor (buffer)))
     return;
 
-  /*
-   * If file-settings dictate that we should trim trailing whitespace, trim it
-   * from the modified lines in the IdeBuffer. This is performed automatically
-   * based on line state within ide_buffer_trim_trailing_whitespace().
-   */
-  ide_buffer_trim_trailing_whitespace (buffer);
+  gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (buffer), &end);
+
+  /* TODO: Fallback when file is untracked */
+
+  ide_buffer_change_monitor_foreach_change (changes,
+                                            0,
+                                            gtk_text_iter_get_line (&end),
+                                            trim_trailing_whitespace_cb,
+                                            buffer);
 }
 
 static void
