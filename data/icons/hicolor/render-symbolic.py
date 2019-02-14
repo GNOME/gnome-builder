@@ -6,6 +6,10 @@ import sys
 
 _resources = {}
 _aliases = {}
+_ignore = (
+  'org.gnome.Builder.svg',
+  'org.gnome.Builder-symbolic.svg',
+)
 
 def addResource(directory, name):
     if directory not in _resources:
@@ -42,6 +46,8 @@ for dirname in ('actions', 'mimetypes'):
 # We need larger versions for apps
 for dirname in ('apps',):
     for name in sort(os.listdir(os.path.join('scalable', dirname))):
+        if name in _ignore:
+            continue
         for size in (16, 32, 48, 128, 256, 512):
             outdir = '%dx%d/%s' % (size, size, dirname)
             path = os.path.join('scalable', dirname, name)
