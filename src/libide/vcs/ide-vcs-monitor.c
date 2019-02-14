@@ -42,6 +42,8 @@ struct _IdeVcsMonitor
 
   guint                    cache_source;
 
+  guint64                  last_change_seq;
+
   guint                    busy : 1;
 };
 
@@ -123,6 +125,7 @@ ide_vcs_monitor_list_status_cb (GObject      *object,
   ide_object_lock (IDE_OBJECT (self));
 
   self->busy = FALSE;
+  self->last_change_seq++;
 
   if ((model = ide_vcs_list_status_finish (vcs, result, NULL)))
     {
@@ -227,6 +230,8 @@ ide_vcs_monitor_changed_cb (IdeVcsMonitor           *self,
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
   g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+
+  self->last_change_seq++;
 
   g_signal_emit (self, signals[CHANGED], 0, file, other_file, event);
 
@@ -493,6 +498,8 @@ ide_vcs_monitor_class_init (IdeVcsMonitorClass *klass)
 static void
 ide_vcs_monitor_init (IdeVcsMonitor *self)
 {
+  self->last_change_seq = 1;
+
   self->monitor_signals = dzl_signal_group_new (DZL_TYPE_RECURSIVE_FILE_MONITOR);
 
   dzl_signal_group_connect_object (self->monitor_signals,
@@ -628,4 +635,31 @@ ide_vcs_monitor_set_vcs (IdeVcsMonitor *self,
       ide_vcs_monitor_maybe_reload_locked (self);
     }
   ide_object_unlock (IDE_OBJECT (self));
+}
+
+guint64
+ide_vcs_monitor_get_sequence (IdeVcsMonitor *self)
+{
+  g_return_val_if_fail (IDE_IS_VCS_MONITOR (self), 0);
+
+  return self->last_change_seq;
+}
+
+/**
+ * ide_vcs_monitor_from_context:
+ * @context: an #IdeContext
+ *
+ * Gets the #IdeVcsMonitor for a context.
+ *
+ * Returns: (nullable) (transfer none): an #IdeVcsMonitor
+ *
+ * Since: 3.32
+ */
+IdeVcsMonitor *
+ide_vcs_monitor_from_context (IdeContext *context)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  return ide_context_peek_child_typed (context, IDE_TYPE_VCS_MONITOR);
 }
