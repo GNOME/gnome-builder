@@ -24,6 +24,7 @@
 
 #include <glib/gi18n.h>
 #include <libide-threading.h>
+#include <libide-vcs.h>
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
 
@@ -49,6 +50,12 @@ struct _IdeRunManager
 
   const IdeRunHandlerInfo *handler;
   GList                   *handlers;
+
+  /* Keep track of last change sequence from the file monitor
+   * so that we can maybe skip past install phase and make
+   * secondary execution time faster.
+   */
+  guint64                  last_change_seq;
 
   guint                    busy : 1;
 };
@@ -629,16 +636,20 @@ static void
 ide_run_manager_do_install_before_run (IdeRunManager *self,
                                        IdeTask       *task)
 {
+  g_autoptr(IdeContext) context = NULL;
   IdeBuildManager *build_manager;
-  IdeContext *context;
+  IdeVcsMonitor *monitor;
+  guint64 sequence = 0;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (IDE_IS_TASK (task));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
+  context = ide_object_ref_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
+  monitor = ide_vcs_monitor_from_context (context);
 
   /*
    * First we need to make sure the target is up to date and installed
@@ -654,12 +665,32 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  if (monitor != NULL)
+    sequence = ide_vcs_monitor_get_sequence (monitor);
+
+  /*
+   * If we detect that nothing has changed in the project directory since the
+   * last time we ran, we can avoid installing the project. This will not help
+   * in situations where external resources have changed outside of builders
+   * control, but users can simply force a Build in that case.
+   */
+  if (self->build_target != NULL && sequence == self->last_change_seq)
+    {
+      g_debug ("Skipping install phase as no files appear to have changed");
+      ide_run_manager_update_action_enabled (self);
+      ide_task_set_task_data (task, g_object_ref (self->build_target), g_object_unref);
+      do_run_async (self, task);
+      IDE_EXIT;
+    }
+
+  self->last_change_seq = sequence;
+
   ide_build_manager_build_async (build_manager,
-                                   IDE_PIPELINE_PHASE_INSTALL,
-                                   NULL,
-                                   ide_task_get_cancellable (task),
-                                   ide_run_manager_install_cb,
-                                   g_object_ref (task));
+                                 IDE_PIPELINE_PHASE_INSTALL,
+                                 NULL,
+                                 ide_task_get_cancellable (task),
+                                 ide_run_manager_install_cb,
+                                 g_object_ref (task));
 
   ide_run_manager_update_action_enabled (self);
 
@@ -679,6 +710,7 @@ ide_run_manager_run_async (IdeRunManager       *self,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
   g_return_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -692,6 +724,9 @@ ide_run_manager_run_async (IdeRunManager       *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_run_manager_run_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
 
   if (ide_run_manager_check_busy (self, &error))
     {
