@@ -3,7 +3,7 @@
     <key name="show-icons" type="b">
       <default>true</default>
       <summary>Show Icons</summary>
-      <description>If enabled, the project tree will display icons next to each item.</description>
+      <description>This setting is deprecated and no longer in use.</description>
     </key>
     <key name="show-ignored-files" type="b">
       <default>false</default>
