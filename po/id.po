@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-06 05:47+0000\n"
-"PO-Revision-Date: 2019-02-09 18:00+0700\n"
+"POT-Creation-Date: 2019-02-13 22:05+0000\n"
+"PO-Revision-Date: 2019-02-14 20:57+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -795,7 +795,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4897
+#: src/libide/sourceview/ide-source-view.c:4907
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:57
 msgid "Rename"
@@ -1019,7 +1019,7 @@ msgstr ""
 "Builder telah menemukan bahwa berkas ini telah dimodifikasi secara "
 "eksternal. Apakah Anda ingin memuat ulang berkas?"
 
-#: src/libide/editor/ide-editor-search-bar.c:307
+#: src/libide/editor/ide-editor-search-bar.c:324
 #, c-format
 msgid "%u of %u"
 msgstr "%u dari %u"
@@ -1216,12 +1216,12 @@ msgstr "Ganti permukaan"
 msgid "Press Ctrl+. to search"
 msgstr "Tekan Ctrl+. untuk mencari"
 
-#: src/libide/foundry/ide-build-manager.c:375
+#: src/libide/foundry/ide-build-manager.c:394
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Gagal menginisialisasi pipa bangun: %s"
 
-#: src/libide/foundry/ide-build-manager.c:505
+#: src/libide/foundry/ide-build-manager.c:524
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Gagal mendapatkan informasi perangkat: %s"
@@ -1340,18 +1340,18 @@ msgid "Failed to locate runtime"
 msgstr "Gagal menemukan runtime"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:508
+#: src/libide/foundry/ide-run-manager.c:509
 #, c-format
 msgid "Running %s…"
 msgstr "Menjalankan %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:582
+#: src/libide/foundry/ide-run-manager.c:583
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Target bangun gagal dibangun: %s"
 
-#: src/libide/foundry/ide-run-manager.c:816
+#: src/libide/foundry/ide-run-manager.c:817
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
@@ -1359,18 +1359,18 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Pintasan meja kerja"
 
-#: src/libide/foundry/ide-run-manager.c:817
+#: src/libide/foundry/ide-run-manager.c:818
 #: src/libide/gui/ide-shortcuts-window.ui:412
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Bangun dan Jalankan"
 
-#: src/libide/foundry/ide-run-manager.c:975
-#: src/libide/foundry/ide-run-manager.c:1037
+#: src/libide/foundry/ide-run-manager.c:977
+#: src/libide/foundry/ide-run-manager.c:1043
 msgid "Failed to locate a build target"
 msgstr "Gagal menemukan target bangun"
 
-#: src/libide/foundry/ide-run-manager.c:1173 src/libide/gui/gtk/menus.ui:79
+#: src/libide/foundry/ide-run-manager.c:1179 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/gtk/menus.ui:30
 msgid "Run"
 msgstr "Jalankan"
@@ -1411,7 +1411,7 @@ msgstr "URL repositori"
 #: src/libide/greeter/ide-clone-surface.ui:63
 msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
-"look similar to \"https://gitlab.gnome.org/GNOME/gnome-builder.git\"."
+"look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 msgstr ""
 "Masukkan repositori proyek yang ingin Anda klon. URL harus terlihat mirip "
 "dengan \"https://gitlab.gnome.org/GNOME/gnome-builder.git\"."
@@ -1621,7 +1621,7 @@ msgstr "Tampilkan jendela bantuan"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:477
+#: src/libide/gui/ide-shortcuts-window.ui:483
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferensi"
@@ -1680,14 +1680,12 @@ msgstr "Pindahkan dokumen ke kiri"
 
 #: src/libide/gui/ide-frame-shortcuts.c:51
 #: src/libide/gui/ide-shortcuts-window.ui:143
-#: src/libide/gui/ide-shortcuts-window.ui:451
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Bertukar ke dokumen sebelumnya"
 
 #: src/libide/gui/ide-frame-shortcuts.c:58
 #: src/libide/gui/ide-shortcuts-window.ui:136
-#: src/libide/gui/ide-shortcuts-window.ui:444
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Bertukar ke dokumen selanjutnya"
@@ -1744,7 +1742,7 @@ msgstr "Pintasan jendela"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:466
+#: src/libide/gui/ide-shortcuts-window.ui:472
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
@@ -2288,7 +2286,7 @@ msgid "Workspace shortcuts"
 msgstr "Pintasan ruang kerja"
 
 #: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:534
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Cari"
@@ -2304,34 +2302,34 @@ msgid "Editor Shortcuts"
 msgstr "Pintasan Penyunting"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:470
+#: src/libide/gui/ide-shortcuts-window.ui:476
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pencarian Global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:484
+#: src/libide/gui/ide-shortcuts-window.ui:490
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Bilah Perintah"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:491
+#: src/libide/gui/ide-shortcuts-window.ui:497
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:498
+#: src/libide/gui/ide-shortcuts-window.ui:504
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal pada Runtime Bangun"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:505
+#: src/libide/gui/ide-shortcuts-window.ui:511
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Tik"
@@ -2387,13 +2385,13 @@ msgid "Clear highlight"
 msgstr "Bersihkan sorotan"
 
 #: src/libide/gui/ide-shortcuts-window.ui:199
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:520
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Salin dan Tempel"
 
 #: src/libide/gui/ide-shortcuts-window.ui:204
-#: src/libide/gui/ide-shortcuts-window.ui:519
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Salin teks yang dipilih ke papan klip"
@@ -2404,7 +2402,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Potong teks yang dipilih ke papan klip"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:526
+#: src/libide/gui/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Tempel teks dari papan klip"
@@ -2573,12 +2571,32 @@ msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gestur touchpad"
 
-#: src/libide/gui/ide-shortcuts-window.ui:462
+#: src/libide/gui/ide-shortcuts-window.ui:446
+msgctxt "shortcut window"
+msgid "Move page to the right"
+msgstr "Pindahkan halaman ke kanan"
+
+#: src/libide/gui/ide-shortcuts-window.ui:447
+msgctxt "shortcut window"
+msgid "Three finger swipe right"
+msgstr "Usap tiga jari ke kanan"
+
+#: src/libide/gui/ide-shortcuts-window.ui:456
+msgctxt "shortcut window"
+msgid "Move page to the left"
+msgstr "Pindahkan halaman ke kiri"
+
+#: src/libide/gui/ide-shortcuts-window.ui:457
+msgctxt "shortcut window"
+msgid "Three finger swipe left"
+msgstr "Usap tiga jari ke kiri"
+
+#: src/libide/gui/ide-shortcuts-window.ui:468
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Pintasan Terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:539
+#: src/libide/gui/ide-shortcuts-window.ui:545
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Cari teks dalam terminal"
@@ -2596,7 +2614,7 @@ msgstr[0] "Memasang %u paket"
 msgstr[1] "Memasang %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:893
+#: src/libide/lsp/ide-lsp-client.c:924
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Gagal menginisialisasi server bahasa: %s"
@@ -2694,31 +2712,31 @@ msgstr "Per_kecil"
 msgid "Reset"
 msgstr "Reset"
 
-#: src/libide/sourceview/ide-source-view.c:4348
+#: src/libide/sourceview/ide-source-view.c:4358
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4350
+#: src/libide/sourceview/ide-source-view.c:4360
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4468
+#: src/libide/sourceview/ide-source-view.c:4478
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4896
+#: src/libide/sourceview/ide-source-view.c:4906
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5131
+#: src/libide/sourceview/ide-source-view.c:5141
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5157
+#: src/libide/sourceview/ide-source-view.c:5167
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
 
@@ -4217,7 +4235,7 @@ msgstr "Berkas tidak di bawah kendali dari direktori kerja git."
 msgid "The requested file does not exist within the git index."
 msgstr "Berkas yang diminta tak ada di dalam indeks git."
 
-#: src/plugins/git/gbp-git-remote-callbacks.c:165
+#: src/plugins/git/gbp-git-remote-callbacks.c:186
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
@@ -4574,19 +4592,19 @@ msgstr "Pustaka Bersama"
 msgid "Create a new project with a shared library"
 msgstr "Buat suatu proyek baru dengan pustaka bersama"
 
-#: src/plugins/meson-templates/meson_templates.py:335
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "Empty Project"
 msgstr "Proyek Kosong"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a new empty project"
 msgstr "Buat proyek kosong baru"
 
-#: src/plugins/meson-templates/meson_templates.py:350
+#: src/plugins/meson-templates/meson_templates.py:351
 msgid "Command Line Tool"
 msgstr "Alat Baris Perintah"
 
-#: src/plugins/meson-templates/meson_templates.py:352
+#: src/plugins/meson-templates/meson_templates.py:353
 msgid "Create a new command line project"
 msgstr "Buat proyek baris perintah baru"
 
@@ -4873,48 +4891,48 @@ msgstr "Nama Folder"
 msgid "_Create"
 msgstr "_Buat"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:201
+#: src/plugins/project-tree/gbp-project-tree-addin.c:203
 #: src/plugins/testui/gbp-test-tree-addin.c:153
 msgid "Unit Tests"
 msgstr "Pengujian Unit"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:216
+#: src/plugins/project-tree/gbp-project-tree-addin.c:218
 msgid "Files"
 msgstr "Berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:635
+#: src/plugins/project-tree/gbp-project-tree-addin.c:657
 #, c-format
 msgid "Copying 1 file"
 msgstr "Menyalin 1 berkas"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:638
+#: src/plugins/project-tree/gbp-project-tree-addin.c:660
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Menyalin %s dari %s berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:674
+#: src/plugins/project-tree/gbp-project-tree-addin.c:696
 msgid "Failed to copy files"
 msgstr "Gagal menyalin berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:684
+#: src/plugins/project-tree/gbp-project-tree-addin.c:706
 msgid "Files copied"
 msgstr "Berkas disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:688
+#: src/plugins/project-tree/gbp-project-tree-addin.c:710
 msgid "Copied 1 file"
 msgstr "1 berkas telah disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:718
 #, c-format
 msgid "Copied %s files"
 msgstr "%s berkas telah disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:836
+#: src/plugins/project-tree/gbp-project-tree-addin.c:858
 msgid "Copying files…"
 msgstr "Menyalin berkas…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:837
+#: src/plugins/project-tree/gbp-project-tree-addin.c:859
 msgid "Files will be copied in a moment"
 msgstr "Berkas akan disalin sebentar lagi"
 
