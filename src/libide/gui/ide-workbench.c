@@ -336,8 +336,9 @@ ide_workbench_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_workbench_parent_class)->constructed (object);
 
-  self->vcs_monitor = g_object_new (IDE_TYPE_VCS_MONITOR, NULL);
-  ide_object_append (IDE_OBJECT (self->context), IDE_OBJECT (self->vcs_monitor));
+  self->vcs_monitor = g_object_new (IDE_TYPE_VCS_MONITOR,
+                                    "parent", self->context,
+                                    NULL);
 
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_WORKBENCH_ADDIN,
