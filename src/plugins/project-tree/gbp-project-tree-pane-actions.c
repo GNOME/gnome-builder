@@ -568,14 +568,23 @@ void
 _gbp_project_tree_pane_init_actions (GbpProjectTreePane *self)
 {
   g_autoptr(GSimpleActionGroup) actions = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GAction) ignored_action = NULL;
+  g_autoptr(GAction) sort_action = NULL;
 
   g_assert (GBP_IS_PROJECT_TREE_PANE (self));
+
+  settings = g_settings_new ("org.gnome.builder.project-tree");
+  sort_action = g_settings_create_action (settings, "sort-directories-first");
+  ignored_action = g_settings_create_action (settings, "show-ignored-files");
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions),
                                    entries,
                                    G_N_ELEMENTS (entries),
                                    self);
+  g_action_map_add_action (G_ACTION_MAP (actions), ignored_action);
+  g_action_map_add_action (G_ACTION_MAP (actions), sort_action);
   gtk_widget_insert_action_group (GTK_WIDGET (self->tree),
                                   "project-tree",
                                   G_ACTION_GROUP (actions));
