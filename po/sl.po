@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-12 06:47+0000\n"
-"PO-Revision-Date: 2019-02-12 18:03+0100\n"
+"POT-Creation-Date: 2019-02-14 19:04+0000\n"
+"PO-Revision-Date: 2019-02-14 20:29+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -909,7 +909,7 @@ msgstr "Shrani"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:518
-#: src/libide/gui/ide-workbench.c:1338
+#: src/libide/gui/ide-workbench.c:1339
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1173,7 +1173,7 @@ msgid "Open File"
 msgstr "Odpri datoteko"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1337
+#: src/libide/gui/ide-workbench.c:1338
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:21
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1362,28 +1362,28 @@ msgstr "Poteka priprava ..."
 msgid "Cannot build transfer while on metered connection"
 msgstr "Prenosov ni mogoče izvajati pri povezavi z omejeno merjeno porabo."
 
-#: src/libide/foundry/ide-run-manager.c:376
+#: src/libide/foundry/ide-run-manager.c:383
 msgid "Cannot run target, another target is running"
 msgstr "Ni mogoče zagnati ciljne datoteke, ta je že zagnana"
 
-#: src/libide/foundry/ide-run-manager.c:455
+#: src/libide/foundry/ide-run-manager.c:462
 msgid "Failed to locate runtime"
 msgstr "Iskanje izvajalnega programa je spodletelo."
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:509
+#: src/libide/foundry/ide-run-manager.c:516
 #, fuzzy, c-format
 #| msgid "Running autogen…"
 msgid "Running %s…"
 msgstr "Napaka med zagonom %s"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:583
+#: src/libide/foundry/ide-run-manager.c:590
 #, fuzzy, c-format
 msgid "The build target failed to build: %s"
 msgstr "Začenjanje izgradnje cevovoda je spodletelo: %s"
 
-#: src/libide/foundry/ide-run-manager.c:817
+#: src/libide/foundry/ide-run-manager.c:852
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
@@ -1391,20 +1391,20 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Tipkovne bližnjice delovnega polja"
 
-#: src/libide/foundry/ide-run-manager.c:818
+#: src/libide/foundry/ide-run-manager.c:853
 #: src/libide/gui/ide-shortcuts-window.ui:412
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Izgradi in zaženi"
 
-#: src/libide/foundry/ide-run-manager.c:977
-#: src/libide/foundry/ide-run-manager.c:1043
+#: src/libide/foundry/ide-run-manager.c:1012
+#: src/libide/foundry/ide-run-manager.c:1078
 #, fuzzy
 #| msgid "Failed to locate runtime"
 msgid "Failed to locate a build target"
 msgstr "Določevanje mesta vstavka sistema izgradnje je spodletelo."
 
-#: src/libide/foundry/ide-run-manager.c:1179 src/libide/gui/gtk/menus.ui:79
+#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/gtk/menus.ui:30
 msgid "Run"
 msgstr "Zaženi"
@@ -1574,7 +1574,7 @@ msgid "Switch Surface"
 msgstr "Površinski"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1334
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1335
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Odpri datoteko …"
@@ -1670,7 +1670,7 @@ msgstr "Pokaži okno pomoči"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:477
+#: src/libide/gui/ide-shortcuts-window.ui:483
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Možnosti"
@@ -1729,14 +1729,12 @@ msgstr "Premakni dokument levo"
 
 #: src/libide/gui/ide-frame-shortcuts.c:51
 #: src/libide/gui/ide-shortcuts-window.ui:143
-#: src/libide/gui/ide-shortcuts-window.ui:451
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Preklopi na predhodni dokument"
 
 #: src/libide/gui/ide-frame-shortcuts.c:58
 #: src/libide/gui/ide-shortcuts-window.ui:136
-#: src/libide/gui/ide-shortcuts-window.ui:444
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Preklopi na naslednji dokument"
@@ -1792,7 +1790,7 @@ msgstr "Tipkovne bližnjice"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:466
+#: src/libide/gui/ide-shortcuts-window.ui:472
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
@@ -2307,10 +2305,8 @@ msgid "SDKs"
 msgstr "Zbirka SDK"
 
 #: src/libide/gui/ide-primary-workspace-actions.c:132
-#, fuzzy
-#| msgid "Building dependencies…"
 msgid "Updating Dependencies…"
-msgstr "Odvisnosti"
+msgstr "Poteka posodabljanje odvisnosti ..."
 
 #: src/libide/gui/ide-primary-workspace-actions.c:133
 msgid "Builder is updating your projects configured dependencies."
@@ -2338,7 +2334,7 @@ msgid "Workspace shortcuts"
 msgstr "Tipkovne bližnjice delovne površine"
 
 #: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:534
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Poišči"
@@ -2354,34 +2350,34 @@ msgid "Editor Shortcuts"
 msgstr "Uredi tipkovne bližnjice"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:470
+#: src/libide/gui/ide-shortcuts-window.ui:476
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Splošno iskanje"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:484
+#: src/libide/gui/ide-shortcuts-window.ui:490
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Ukazna vrstica"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:491
+#: src/libide/gui/ide-shortcuts-window.ui:497
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:498
+#: src/libide/gui/ide-shortcuts-window.ui:504
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminalsko okno izvajanja izgradnje"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:505
+#: src/libide/gui/ide-shortcuts-window.ui:511
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tipkovne bližnjice"
@@ -2437,13 +2433,13 @@ msgid "Clear highlight"
 msgstr "Počisti poudarjanje"
 
 #: src/libide/gui/ide-shortcuts-window.ui:199
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:520
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiraj in prilepi"
 
 #: src/libide/gui/ide-shortcuts-window.ui:204
-#: src/libide/gui/ide-shortcuts-window.ui:519
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiraj izbrano besedilo na odložišče"
@@ -2454,7 +2450,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Izreži izbrano besedilo v odložišče"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:526
+#: src/libide/gui/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Prilepi besedilo iz odložišča"
@@ -2623,17 +2619,47 @@ msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Poteze na sledilni ploščici"
 
-#: src/libide/gui/ide-shortcuts-window.ui:462
+#: src/libide/gui/ide-shortcuts-window.ui:446
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move document to the right"
+msgctxt "shortcut window"
+msgid "Move page to the right"
+msgstr "Premakni dokument desno"
+
+#: src/libide/gui/ide-shortcuts-window.ui:447
+#, fuzzy
+#| msgid "Two finger swipe right"
+msgctxt "shortcut window"
+msgid "Three finger swipe right"
+msgstr "Dvoprstni poteg v desno"
+
+#: src/libide/gui/ide-shortcuts-window.ui:456
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Move document to the left"
+msgctxt "shortcut window"
+msgid "Move page to the left"
+msgstr "Premakni dokument levo"
+
+#: src/libide/gui/ide-shortcuts-window.ui:457
+#, fuzzy
+#| msgid "Two finger swipe left"
+msgctxt "shortcut window"
+msgid "Three finger swipe left"
+msgstr "Dvoprstni poteg v levo"
+
+#: src/libide/gui/ide-shortcuts-window.ui:468
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Tipkovne bližnjice terminala"
 
-#: src/libide/gui/ide-shortcuts-window.ui:539
+#: src/libide/gui/ide-shortcuts-window.ui:545
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Najdi besedilo znotraj terminala"
 
-#: src/libide/gui/ide-workbench.c:294 src/libide/gui/ide-workbench.c:803
+#: src/libide/gui/ide-workbench.c:294 src/libide/gui/ide-workbench.c:804
 #, fuzzy, c-format
 msgid "Builder — %s"
 msgstr "Določila izgrajevalnika ni mogoče naložiti: %s"
@@ -3044,10 +3070,8 @@ msgid "Select a build configuration from the sidebar to modify."
 msgstr "Izbrana nastavitev za izgradnjo"
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:219
-#, fuzzy
-#| msgid "Default Configuration"
 msgid "Build Configurations"
-msgstr "Datum izgradnje"
+msgstr "Nastavitve izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
 #, fuzzy
@@ -4510,10 +4534,8 @@ msgid "Glade"
 msgstr "Glade"
 
 #: src/plugins/glade/gtk/menus.ui:15
-#, fuzzy
-#| msgid "Open Preview"
 msgid "Open _Preview"
-msgstr "Odpri predogled"
+msgstr "Odpri _predogled"
 
 #: src/plugins/glade/gtk/menus.ui:22
 msgid "Cut"
@@ -4625,10 +4647,8 @@ msgid "Find in Files"
 msgstr "Najdi v datotekah"
 
 #: src/plugins/grep/gbp-grep-panel.ui:51
-#, fuzzy
-#| msgid "Replace"
 msgid "Replace With"
-msgstr "&Zamenjaj"
+msgstr "Zamenjaj z"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
 #, fuzzy
@@ -4757,15 +4777,15 @@ msgstr "Souporabna knjižnica"
 msgid "Create a new project with a shared library"
 msgstr "Ustvari nov projekt s souporabno knjižnico"
 
-#: src/plugins/meson-templates/meson_templates.py:335
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "Empty Project"
 msgstr "Izprazni projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a new empty project"
 msgstr "Ustvari nov prazen projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:350
+#: src/plugins/meson-templates/meson_templates.py:351
 #, fuzzy
 #| msgid "Command failed: %s"
 msgid "Command Line Tool"
@@ -4776,7 +4796,7 @@ msgstr ""
 "- dejanja povleci in spusti v orodje nastavitev dejanj Nautilusa\n"
 "- ali preko orodja ukazne vrstice gconftool-2 --import-schema-file."
 
-#: src/plugins/meson-templates/meson_templates.py:352
+#: src/plugins/meson-templates/meson_templates.py:353
 msgid "Create a new command line project"
 msgstr "Ustvari nov projekt ukazne vrstice"
 
@@ -5100,56 +5120,56 @@ msgstr "Ime mape"
 msgid "_Create"
 msgstr "Ustvari"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:201
+#: src/plugins/project-tree/gbp-project-tree-addin.c:203
 #: src/plugins/testui/gbp-test-tree-addin.c:153
 msgid "Unit Tests"
 msgstr "Preizkusi enot"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:216
+#: src/plugins/project-tree/gbp-project-tree-addin.c:218
 msgid "Files"
 msgstr "Datoteke"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:646
+#: src/plugins/project-tree/gbp-project-tree-addin.c:657
 #, fuzzy, c-format
 #| msgid "Open file"
 msgid "Copying 1 file"
 msgstr "Kopiranje datoteke"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:649
+#: src/plugins/project-tree/gbp-project-tree-addin.c:660
 #, fuzzy, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopiranje datotek za dodajanje v \"%s\""
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:696
 #, fuzzy
 #| msgid "Failed to load file: %s"
 msgid "Failed to copy files"
 msgstr "Kopiranje je spodletelo"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:695
+#: src/plugins/project-tree/gbp-project-tree-addin.c:706
 #, fuzzy
 #| msgid "File chooser"
 msgid "Files copied"
 msgstr "Namestitev je končana: kopiranih je %d datotek"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:699
+#: src/plugins/project-tree/gbp-project-tree-addin.c:710
 #, fuzzy
 #| msgid "Open file"
 msgid "Copied 1 file"
 msgstr "%1 od %2 kopiranih"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:707
+#: src/plugins/project-tree/gbp-project-tree-addin.c:718
 #, fuzzy, c-format
 msgid "Copied %s files"
 msgstr "Namestitev je končana: kopiranih je %d datotek"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:847
+#: src/plugins/project-tree/gbp-project-tree-addin.c:858
 #, fuzzy
 msgid "Copying files…"
 msgstr "Kopiranje datotek"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:848
+#: src/plugins/project-tree/gbp-project-tree-addin.c:859
 #, fuzzy
 msgid "Files will be copied in a moment"
 msgstr "Namestitev je končana: kopiranih je %d datotek"
@@ -6888,12 +6908,6 @@ msgstr "Za razčlenjevanje mora biti datoteka shranjena krajevno."
 
 #~ msgid "New"
 #~ msgstr "Novo"
-
-#~ msgid "Two finger swipe right"
-#~ msgstr "Dvoprstni poteg v desno"
-
-#~ msgid "Two finger swipe left"
-#~ msgstr "Dvoprstni poteg v levo"
 
 #, fuzzy
 #~ msgid "Failed to create JavaScript context."
