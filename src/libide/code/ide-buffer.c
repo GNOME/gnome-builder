@@ -3497,11 +3497,13 @@ ide_buffer_guess_language (IdeBuffer *self)
   else
     path = g_file_peek_path (file);
 
+  manager = gtk_source_language_manager_get_default ();
+  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
+
   content_type = g_content_type_guess (path, (const guchar *)line, strlen (line), &uncertain);
-  if (uncertain)
+  if (uncertain && lang != NULL)
     return;
 
-  manager = gtk_source_language_manager_get_default ();
   if (!(lang = gtk_source_language_manager_guess_language (manager, path, content_type)))
     return;
 
