@@ -1340,6 +1340,10 @@ _ide_buffer_load_file_finish (IdeBuffer     *self,
   if (state->highlight_syntax)
     gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (self), TRUE);
 
+  /* Guess the syntax language now if necessary */
+  if (!gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self)))
+    ide_buffer_guess_language (self);
+
   /* Let consumers know they can access the buffer now */
   g_signal_emit (self, signals [LOADED], 0);
 
