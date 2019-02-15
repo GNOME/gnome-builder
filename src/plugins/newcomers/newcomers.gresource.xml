@@ -8,15 +8,15 @@
 
   <!-- Icons used by the greeter for newcomer projects -->
   <gresource prefix="/org/gnome/builder/icons">
-    <file alias="256x256/apps/org.gnome.Boxes.png">icons/org.gnome.Boxes.png</file>
-    <file alias="256x256/apps/org.gnome.Maps.png">icons/org.gnome.Maps.png</file>
-    <file alias="256x256/apps/org.gnome.Music.png">icons/org.gnome.Music.png</file>
-    <file alias="256x256/apps/org.gnome.Photos.png">icons/org.gnome.Photos.png</file>
-    <file alias="512x512/apps/org.gnome.Calendar.png">icons/org.gnome.Calendar.png</file>
-    <file alias="512x512/apps/org.gnome.Games.png">icons/org.gnome.Games.png</file>
-    <file alias="512x512/apps/org.gnome.Nautilus.png">icons/org.gnome.Nautilus.png</file>
-    <file alias="512x512/apps/org.gnome.Polari.png">icons/org.gnome.Polari.png</file>
-    <file alias="512x512/apps/org.gnome.Todo.png">icons/org.gnome.Todo.png</file>
+    <file alias="scalable/apps/org.gnome.Boxes.svg">icons/org.gnome.Boxes.svg</file>
+    <file alias="scalable/apps/org.gnome.Maps.svg">icons/org.gnome.Maps.svg</file>
+    <file alias="scalable/apps/org.gnome.Music.svg">icons/org.gnome.Music.svg</file>
+    <file alias="scalable/apps/org.gnome.Photos.svg">icons/org.gnome.Photos.svg</file>
+    <file alias="scalable/apps/org.gnome.Calendar.svg">icons/org.gnome.Calendar.svg</file>
+    <file alias="scalable/apps/org.gnome.Games.svg">icons/org.gnome.Games.svg</file>
+    <file alias="scalable/apps/org.gnome.Nautilus.svg">icons/org.gnome.Nautilus.svg</file>
+    <file alias="scalable/apps/org.gnome.Polari.svg">icons/org.gnome.Polari.svg</file>
+    <file alias="scalable/apps/org.gnome.Todo.svg">icons/org.gnome.Todo.svg</file>
   </gresource>
 
 </gresources>
