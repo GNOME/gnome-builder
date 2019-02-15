@@ -19,7 +19,7 @@
         <child>
           <object class="GtkImage" id="image">
             <style>
-              <class name="icon-dropshadow"/>
+              <class name="lowres-icon"/>
             </style>
           </object>
         </child>
