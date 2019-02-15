@@ -469,6 +469,9 @@ ide_diagnostics_group_diagnose (IdeDiagnosticsGroup   *group,
   group->needs_diagnose = FALSE;
   group->has_diagnostics = FALSE;
 
+  if (group->contents == NULL)
+    group->contents = g_bytes_new ("", 0);
+
   ide_extension_set_adapter_foreach (group->adapter,
                                      ide_diagnostics_group_diagnose_foreach,
                                      self);
