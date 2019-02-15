@@ -1838,7 +1838,7 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
 
   ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
 
-  if (recheck_language)
+  if G_UNLIKELY (recheck_language)
     ide_buffer_guess_language (IDE_BUFFER (buffer));
 
   IDE_EXIT;
