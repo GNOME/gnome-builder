@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-13 22:05+0000\n"
-"PO-Revision-Date: 2019-02-14 20:57+0700\n"
+"POT-Creation-Date: 2019-02-14 19:55+0000\n"
+"PO-Revision-Date: 2019-02-16 08:18+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -479,9 +479,8 @@ msgid "Show Icons"
 msgstr "Tampilkan Ikon"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "If enabled, the project tree will display icons next to each item."
-msgstr ""
-"Bila difungsikan, pohon proyek akan menampilkan ikon di sebelah setiap butir."
+msgid "This setting is deprecated and no longer in use."
+msgstr "Pengaturan ini sudah usang dan tidak digunakan lagi."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: src/plugins/project-tree/gtk/menus.ui:73
@@ -892,7 +891,7 @@ msgstr "Simpan"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:518
-#: src/libide/gui/ide-workbench.c:1338
+#: src/libide/gui/ide-workbench.c:1339
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1151,7 +1150,7 @@ msgid "Open File"
 msgstr "Buka Berkas"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1337
+#: src/libide/gui/ide-workbench.c:1338
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:21
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1331,27 +1330,27 @@ msgstr "Mempersiapkan…"
 msgid "Cannot build transfer while on metered connection"
 msgstr "Tidak dapat melakukan transfer bangun pada koneksi berkuota"
 
-#: src/libide/foundry/ide-run-manager.c:376
+#: src/libide/foundry/ide-run-manager.c:383
 msgid "Cannot run target, another target is running"
 msgstr "Tidak bisa menjalankan target, target lain sedang berjalan"
 
-#: src/libide/foundry/ide-run-manager.c:455
+#: src/libide/foundry/ide-run-manager.c:462
 msgid "Failed to locate runtime"
 msgstr "Gagal menemukan runtime"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:509
+#: src/libide/foundry/ide-run-manager.c:516
 #, c-format
 msgid "Running %s…"
 msgstr "Menjalankan %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:583
+#: src/libide/foundry/ide-run-manager.c:590
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Target bangun gagal dibangun: %s"
 
-#: src/libide/foundry/ide-run-manager.c:817
+#: src/libide/foundry/ide-run-manager.c:852
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
@@ -1359,18 +1358,18 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Pintasan meja kerja"
 
-#: src/libide/foundry/ide-run-manager.c:818
+#: src/libide/foundry/ide-run-manager.c:853
 #: src/libide/gui/ide-shortcuts-window.ui:412
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Bangun dan Jalankan"
 
-#: src/libide/foundry/ide-run-manager.c:977
-#: src/libide/foundry/ide-run-manager.c:1043
+#: src/libide/foundry/ide-run-manager.c:1012
+#: src/libide/foundry/ide-run-manager.c:1078
 msgid "Failed to locate a build target"
 msgstr "Gagal menemukan target bangun"
 
-#: src/libide/foundry/ide-run-manager.c:1179 src/libide/gui/gtk/menus.ui:79
+#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/gtk/menus.ui:30
 msgid "Run"
 msgstr "Jalankan"
@@ -1527,7 +1526,7 @@ msgid "Switch Surface"
 msgstr "Ganti Permukaan"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1334
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1335
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Buka Berkas…"
@@ -2601,7 +2600,7 @@ msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Cari teks dalam terminal"
 
-#: src/libide/gui/ide-workbench.c:294 src/libide/gui/ide-workbench.c:803
+#: src/libide/gui/ide-workbench.c:294 src/libide/gui/ide-workbench.c:804
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder— %s"
@@ -5585,6 +5584,11 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "If enabled, the project tree will display icons next to each item."
+#~ msgstr ""
+#~ "Bila difungsikan, pohon proyek akan menampilkan ikon di sebelah setiap "
+#~ "butir."
 
 #~ msgid "Commands:"
 #~ msgstr "Perintah:"
