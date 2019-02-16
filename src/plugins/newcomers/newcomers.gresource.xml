@@ -8,15 +8,25 @@
 
   <!-- Icons used by the greeter for newcomer projects -->
   <gresource prefix="/org/gnome/builder/icons">
-    <file alias="scalable/apps/org.gnome.Boxes.svg">icons/org.gnome.Boxes.svg</file>
-    <file alias="scalable/apps/org.gnome.Maps.svg">icons/org.gnome.Maps.svg</file>
-    <file alias="scalable/apps/org.gnome.Music.svg">icons/org.gnome.Music.svg</file>
-    <file alias="scalable/apps/org.gnome.Photos.svg">icons/org.gnome.Photos.svg</file>
-    <file alias="scalable/apps/org.gnome.Calendar.svg">icons/org.gnome.Calendar.svg</file>
-    <file alias="scalable/apps/org.gnome.Games.svg">icons/org.gnome.Games.svg</file>
-    <file alias="scalable/apps/org.gnome.Nautilus.svg">icons/org.gnome.Nautilus.svg</file>
-    <file alias="scalable/apps/org.gnome.Polari.svg">icons/org.gnome.Polari.svg</file>
-    <file alias="scalable/apps/org.gnome.Todo.svg">icons/org.gnome.Todo.svg</file>
+    <file alias="scalable/apps/org.gnome.Boxes.svg">icons/scalable/org.gnome.Boxes.svg</file>
+    <file alias="scalable/apps/org.gnome.Maps.svg">icons/scalable/org.gnome.Maps.svg</file>
+    <file alias="scalable/apps/org.gnome.Music.svg">icons/scalable/org.gnome.Music.svg</file>
+    <file alias="scalable/apps/org.gnome.Photos.svg">icons/scalable/org.gnome.Photos.svg</file>
+    <file alias="scalable/apps/org.gnome.Calendar.svg">icons/scalable/org.gnome.Calendar.svg</file>
+    <file alias="scalable/apps/org.gnome.Games.svg">icons/scalable/org.gnome.Games.svg</file>
+    <file alias="scalable/apps/org.gnome.Nautilus.svg">icons/scalable/org.gnome.Nautilus.svg</file>
+    <file alias="scalable/apps/org.gnome.Polari.svg">icons/scalable/org.gnome.Polari.svg</file>
+    <file alias="scalable/apps/org.gnome.Todo.svg">icons/scalable/org.gnome.Todo.svg</file>
+
+    <file alias="symbolic/apps/org.gnome.Boxes-symbolic.svg">icons/symbolic/org.gnome.Boxes-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Maps-symbolic.svg">icons/symbolic/org.gnome.Maps-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Music-symbolic.svg">icons/symbolic/org.gnome.Music-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Photos-symbolic.svg">icons/symbolic/org.gnome.Photos-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Calendar-symbolic.svg">icons/symbolic/org.gnome.Calendar-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Games-symbolic.svg">icons/symbolic/org.gnome.Games-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Nautilus-symbolic.svg">icons/symbolic/org.gnome.Nautilus-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Polari-symbolic.svg">icons/symbolic/org.gnome.Polari-symbolic.svg</file>
+    <file alias="symbolic/apps/org.gnome.Todo-symbolic.svg">icons/symbolic/org.gnome.Todo-symbolic.svg</file>
   </gresource>
 
 </gresources>
