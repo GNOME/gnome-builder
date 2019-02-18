@@ -39,58 +39,74 @@ struct _IdeBufferAddinInterface
 {
   GTypeInterface parent_iface;
 
-  void (*load)                 (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer);
-  void (*unload)               (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer);
-  void (*file_loaded)          (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer,
-                                GFile             *file);
-  void (*save_file)            (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer,
-                                GFile             *file);
-  void (*file_saved)           (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer,
-                                GFile             *file);
-  void (*language_set)         (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer,
-                                const gchar       *language_id);
-  void (*change_settled)       (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer);
-  void (*style_scheme_changed) (IdeBufferAddin    *self,
-                                IdeBuffer         *buffer);
+  void     (*load)                 (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer);
+  void     (*unload)               (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer);
+  void     (*file_loaded)          (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer,
+                                    GFile                *file);
+  void     (*save_file)            (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer,
+                                    GFile                *file);
+  void     (*file_saved)           (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer,
+                                    GFile                *file);
+  void     (*language_set)         (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer,
+                                    const gchar          *language_id);
+  void     (*change_settled)       (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer);
+  void     (*style_scheme_changed) (IdeBufferAddin       *self,
+                                    IdeBuffer            *buffer);
+  void     (*settle_async)         (IdeBufferAddin       *self,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data);
+  gboolean (*settle_finish)        (IdeBufferAddin       *self,
+                                    GAsyncResult         *result,
+                                    GError              **error);
 };
 
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_load                 (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer);
+void            ide_buffer_addin_load                 (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer);
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_unload               (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer);
+void            ide_buffer_addin_unload               (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer);
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_file_loaded          (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer,
-                                                       GFile          *file);
+void            ide_buffer_addin_file_loaded          (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer,
+                                                       GFile                *file);
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_save_file            (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer,
-                                                       GFile          *file);
+void            ide_buffer_addin_save_file            (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer,
+                                                       GFile                *file);
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_file_saved           (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer,
-                                                       GFile          *file);
+void            ide_buffer_addin_file_saved           (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer,
+                                                       GFile                *file);
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_language_set         (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer,
-                                                       const gchar    *language_id);
+void            ide_buffer_addin_language_set         (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer,
+                                                       const gchar          *language_id);
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_change_settled       (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer);
+void            ide_buffer_addin_change_settled       (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer);
 IDE_AVAILABLE_IN_3_32
-void            ide_buffer_addin_style_scheme_changed (IdeBufferAddin *self,
-                                                       IdeBuffer      *buffer);
+void            ide_buffer_addin_style_scheme_changed (IdeBufferAddin       *self,
+                                                       IdeBuffer            *buffer);
 IDE_AVAILABLE_IN_3_32
-IdeBufferAddin *ide_buffer_addin_find_by_module_name  (IdeBuffer      *buffer,
-                                                       const gchar    *module_name);
+void            ide_buffer_addin_settle_async         (IdeBufferAddin       *self,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+IDE_AVAILABLE_IN_3_32
+gboolean        ide_buffer_addin_settle_finish        (IdeBufferAddin       *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+IDE_AVAILABLE_IN_3_32
+IdeBufferAddin *ide_buffer_addin_find_by_module_name  (IdeBuffer            *buffer,
+                                                       const gchar          *module_name);
 
 G_END_DECLS

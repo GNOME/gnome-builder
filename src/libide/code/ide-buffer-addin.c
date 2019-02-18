@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <libide-threading.h>
 #include <libpeas/peas.h>
 
 #include "ide-buffer.h"
@@ -49,8 +50,32 @@
 G_DEFINE_INTERFACE (IdeBufferAddin, ide_buffer_addin, G_TYPE_OBJECT)
 
 static void
+ide_buffer_addin_real_settle_async (IdeBufferAddin      *self,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buffer_addin_real_settle_async);
+  ide_task_set_priority (task, G_PRIORITY_HIGH);
+  ide_task_return_boolean (task, TRUE);
+}
+
+static gboolean
+ide_buffer_addin_real_settle_finish (IdeBufferAddin  *self,
+                                     GAsyncResult    *result,
+                                     GError         **error)
+{
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
 ide_buffer_addin_default_init (IdeBufferAddinInterface *iface)
 {
+  iface->settle_async = ide_buffer_addin_real_settle_async;
+  iface->settle_finish = ide_buffer_addin_real_settle_finish;
 }
 
 /**
@@ -408,4 +433,29 @@ _ide_buffer_addin_style_scheme_changed_cb (IdeExtensionSetAdapter *set,
   g_return_if_fail (IDE_IS_BUFFER (user_data));
 
   ide_buffer_addin_style_scheme_changed (IDE_BUFFER_ADDIN (exten), IDE_BUFFER (user_data));
+}
+
+void
+ide_buffer_addin_settle_async (IdeBufferAddin      *self,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_BUFFER_ADDIN (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_BUFFER_ADDIN_GET_IFACE (self)->settle_async (self, cancellable, callback, user_data);
+}
+
+gboolean
+ide_buffer_addin_settle_finish (IdeBufferAddin  *self,
+                                GAsyncResult    *result,
+                                GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
+  g_return_val_if_fail (IDE_IS_BUFFER_ADDIN (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return IDE_BUFFER_ADDIN_GET_IFACE (self)->settle_finish (self, result, error);
 }
