@@ -106,6 +106,7 @@ typedef struct
 {
   GFile           *file;
   IdeNotification *notif;
+  GtkSourceFile   *source_file;
 } SaveState;
 
 typedef struct
@@ -221,6 +222,13 @@ static gboolean ide_buffer_can_do_newline_hack     (IdeBuffer              *self
                                                     guint                   len);
 static void     ide_buffer_guess_language          (IdeBuffer              *self);
 static void     ide_buffer_real_loaded             (IdeBuffer              *self);
+static void     settle_async                       (IdeBuffer              *self,
+                                                    GCancellable           *cancellable,
+                                                    GAsyncReadyCallback     callback,
+                                                    gpointer                user_data);
+static gboolean settle_finish                      (IdeBuffer              *self,
+                                                    GAsyncResult           *result,
+                                                    GError                **error);
 
 static void
 load_state_free (LoadState *state)
@@ -241,6 +249,7 @@ save_state_free (SaveState *state)
 
   g_clear_object (&state->notif);
   g_clear_object (&state->file);
+  g_clear_object (&state->source_file);
   g_slice_free (SaveState, state);
 }
 
@@ -1413,6 +1422,50 @@ ide_buffer_save_file_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static void
+ide_buffer_save_file_settle_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeBuffer *self = (IdeBuffer *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GtkSourceFileSaver) saver = NULL;
+  SaveState *state;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  settle_finish (self, result, NULL);
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->file));
+  g_assert (IDE_IS_NOTIFICATION (state->notif));
+  g_assert (GTK_SOURCE_IS_FILE (state->source_file));
+
+  if (self->addins != NULL)
+    {
+      IdeBufferFileSave closure = { self, state->file };
+      ide_extension_set_adapter_foreach (self->addins,
+                                         _ide_buffer_addin_save_file_cb,
+                                         &closure);
+    }
+
+  saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (self), state->source_file);
+  gtk_source_file_saver_save_async (saver,
+                                    G_PRIORITY_DEFAULT,
+                                    ide_task_get_cancellable (task),
+                                    ide_buffer_progress_cb,
+                                    g_object_ref (state->notif),
+                                    g_object_unref,
+                                    ide_buffer_save_file_cb,
+                                    g_object_ref (task));
+
+}
+
 /**
  * ide_buffer_save_file_async:
  * @self: an #IdeBuffer
@@ -1443,7 +1496,6 @@ ide_buffer_save_file_async (IdeBuffer            *self,
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GtkSourceFile) alternate = NULL;
-  g_autoptr(GtkSourceFileSaver) saver = NULL;
   g_autoptr(IdeNotification) local_notif = NULL;
   GtkSourceFile *source_file;
   SaveState *state;
@@ -1507,6 +1559,8 @@ ide_buffer_save_file_async (IdeBuffer            *self,
       source_file = alternate;
     }
 
+  state->source_file = g_object_ref (source_file);
+
   /* Possibly avoid any writing if we can detect a no-change state */
   if (file == NULL || g_file_equal (file, ide_buffer_get_file (self)))
     {
@@ -1519,24 +1573,12 @@ ide_buffer_save_file_async (IdeBuffer            *self,
         }
     }
 
-  if (self->addins != NULL)
-    {
-      IdeBufferFileSave closure = { self, file };
-      ide_extension_set_adapter_foreach (self->addins,
-                                         _ide_buffer_addin_save_file_cb,
-                                         &closure);
-    }
-
-  saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (self), source_file);
   ide_buffer_set_state (self, IDE_BUFFER_STATE_SAVING);
-  gtk_source_file_saver_save_async (saver,
-                                    G_PRIORITY_DEFAULT,
-                                    cancellable,
-                                    ide_buffer_progress_cb,
-                                    g_object_ref (local_notif),
-                                    g_object_unref,
-                                    ide_buffer_save_file_cb,
-                                    g_steal_pointer (&task));
+
+  settle_async (self,
+                cancellable,
+                ide_buffer_save_file_settle_cb,
+                g_steal_pointer (&task));
 
 set_out_param:
   if (notif != NULL)
@@ -3624,4 +3666,107 @@ ide_buffer_has_symbol_resolvers (IdeBuffer *self)
 
   return self->symbol_resolvers != NULL &&
          ide_extension_set_adapter_get_n_extensions (self->symbol_resolvers) > 0;
+}
+
+static void
+settle_cb (GObject      *object,
+           GAsyncResult *result,
+           gpointer      user_data)
+{
+  IdeBufferAddin *addin = (IdeBufferAddin *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  gint *n_active;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER_ADDIN (addin));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  n_active = ide_task_get_task_data (task);
+
+  if (!ide_buffer_addin_settle_finish (addin, result, &error))
+    g_warning ("Buffer addin \"%s\" failed to settle: %s",
+               G_OBJECT_TYPE_NAME (addin),
+               error->message);
+
+  (*n_active)--;
+
+  if (*n_active == 0)
+    ide_task_return_boolean (task, TRUE);
+}
+
+static void
+settle_foreach_cb (IdeExtensionSetAdapter *set,
+                   PeasPluginInfo         *plugin_info,
+                   PeasExtension          *exten,
+                   gpointer                user_data)
+{
+  IdeBufferAddin *addin = (IdeBufferAddin *)exten;
+  IdeTask *task = user_data;
+  gint *n_active;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_BUFFER_ADDIN (addin));
+  g_assert (IDE_IS_TASK (task));
+
+  n_active = ide_task_get_task_data (task);
+
+  (*n_active)++;
+
+  ide_buffer_addin_settle_async (addin,
+                                 ide_task_get_cancellable (task),
+                                 settle_cb,
+                                 g_object_ref (task));
+}
+
+static void
+settle_async (IdeBuffer           *self,
+              GCancellable        *cancellable,
+              GAsyncReadyCallback  callback,
+              gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  gint *n_active;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  n_active = g_new0 (gint, 1);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, settle_async);
+  ide_task_set_task_data (task, n_active, g_free);
+
+  if (self->addins != NULL)
+    ide_extension_set_adapter_foreach (self->addins,
+                                       settle_foreach_cb,
+                                       task);
+
+  if (*n_active == 0)
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static gboolean
+settle_finish (IdeBuffer     *self,
+               GAsyncResult  *result,
+               GError       **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
