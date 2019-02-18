@@ -91,6 +91,8 @@ struct _GbpGitBufferChangeMonitor
   GgitBlob               *cached_blob;
   LineCache              *cache;
 
+  GQueue                  wait_tasks;
+
   guint                   changed_timeout;
 
   guint                   state_dirty : 1;
@@ -150,6 +152,25 @@ diff_task_free (gpointer data)
     }
 }
 
+static void
+complete_wait_tasks (GbpGitBufferChangeMonitor *self,
+                     GParamSpec                *pspec,
+                     IdeTask                   *calculate_task)
+{
+  gpointer taskptr;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
+  g_assert (IDE_IS_TASK (calculate_task));
+
+  while ((taskptr = g_queue_pop_head (&self->wait_tasks)))
+    {
+      g_autoptr(IdeTask) task = taskptr;
+
+      ide_task_return_boolean (task, TRUE);
+    }
+}
+
 static LineCache *
 gbp_git_buffer_change_monitor_calculate_finish (GbpGitBufferChangeMonitor  *self,
                                                 GAsyncResult               *result,
@@ -206,6 +227,12 @@ gbp_git_buffer_change_monitor_calculate_async (GbpGitBufferChangeMonitor *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_buffer_change_monitor_calculate_async);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (complete_wait_tasks),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   buffer = ide_buffer_change_monitor_get_buffer (IDE_BUFFER_CHANGE_MONITOR (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -921,4 +948,43 @@ gbp_git_buffer_change_monitor_init (GbpGitBufferChangeMonitor *self)
                                    G_CALLBACK (gbp_git_buffer_change_monitor__buffer_changed_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+}
+
+void
+gbp_git_buffer_change_monitor_wait_async (GbpGitBufferChangeMonitor *self,
+                                          GCancellable              *cancellable,
+                                          GAsyncReadyCallback        callback,
+                                          gpointer                   user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_buffer_change_monitor_wait_async);
+
+  if (!self->state_dirty && !self->in_calculation)
+    {
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  g_queue_push_tail (&self->wait_tasks, g_steal_pointer (&task));
+
+  if (!self->in_calculation)
+    gbp_git_buffer_change_monitor_recalculate (self);
+}
+
+gboolean
+gbp_git_buffer_change_monitor_wait_finish (GbpGitBufferChangeMonitor  *self,
+                                           GAsyncResult               *result,
+                                           GError                    **error)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
+  g_return_val_if_fail (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

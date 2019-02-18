@@ -102,11 +102,63 @@ gbp_git_buffer_addin_unload (IdeBufferAddin *addin,
 }
 
 static void
+gbp_git_buffer_addin_settle_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  GbpGitBufferChangeMonitor *monitor = (GbpGitBufferChangeMonitor *)object;
+  g_autoptr(IdeTask) task = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (monitor));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  gbp_git_buffer_change_monitor_wait_finish (monitor, result, NULL);
+  ide_task_return_boolean (task, TRUE);
+}
+
+static void
+gbp_git_buffer_addin_settle_async (IdeBufferAddin      *addin,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  GbpGitBufferAddin *self = (GbpGitBufferAddin *)addin;
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER_ADDIN (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_buffer_addin_settle_async);
+
+  if (self->monitor == NULL)
+    ide_task_return_boolean (task, TRUE);
+  else
+    gbp_git_buffer_change_monitor_wait_async (self->monitor,
+                                              cancellable,
+                                              gbp_git_buffer_addin_settle_cb,
+                                              g_steal_pointer (&task));
+}
+
+static gboolean
+gbp_git_buffer_addin_settle_finish (IdeBufferAddin  *addin,
+                                    GAsyncResult    *result,
+                                    GError         **error)
+{
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
 buffer_addin_iface_init (IdeBufferAddinInterface *iface)
 {
   iface->file_loaded = gbp_git_buffer_addin_file_laoded;
   iface->file_saved = gbp_git_buffer_addin_file_saved;
   iface->unload = gbp_git_buffer_addin_unload;
+  iface->settle_async = gbp_git_buffer_addin_settle_async;
+  iface->settle_finish = gbp_git_buffer_addin_settle_finish;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpGitBufferAddin, gbp_git_buffer_addin, G_TYPE_OBJECT,
