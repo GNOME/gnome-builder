@@ -11,15 +11,15 @@
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
 # Çağrı Dolaz <dolazcagri@gmail.com>, 2018.
 # Muhammet Kara <muhammetk@gnome.org>, 2015, 2016, 2017, 2018.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2019.
 # Sabri Ünal <libreajans@gmail.com>, 2019.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-18 00:06+0000\n"
-"PO-Revision-Date: 2019-02-18 20:29+0300\n"
+"POT-Creation-Date: 2019-02-19 19:19+0000\n"
+"PO-Revision-Date: 2019-02-20 00:05+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -821,7 +821,7 @@ msgstr "_Yeniden Adlandır"
 msgid "unsaved file %u"
 msgstr "kaydedilmemiş dosya %u"
 
-#: src/libide/code/ide-buffer.c:3309
+#: src/libide/code/ide-buffer.c:3351
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -2568,27 +2568,21 @@ msgid "Touchpad gestures"
 msgstr "Dokunmatik yüzey jestleri"
 
 #: src/libide/gui/ide-shortcuts-window.ui:446
-#| msgctxt "shortcut window"
-#| msgid "Move document to the right"
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Sayfayı sağa taşı"
 
 #: src/libide/gui/ide-shortcuts-window.ui:447
-#| msgid "Two finger swipe right"
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Üç parmakla sağa kaydır"
 
 #: src/libide/gui/ide-shortcuts-window.ui:456
-#| msgctxt "shortcut window"
-#| msgid "Move document to the left"
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Sayfayı sola taşı"
 
 #: src/libide/gui/ide-shortcuts-window.ui:457
-#| msgid "Two finger swipe left"
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Üç parmakla sola kaydır"
@@ -2808,7 +2802,7 @@ msgid "Configuring project"
 msgstr "Proje yapılandırılıyor"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:146
+#: src/plugins/cargo/cargo_plugin.py:149
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
@@ -3199,7 +3193,7 @@ msgstr "İnşa Ayrıntıları"
 msgid "Build pipeline is empty"
 msgstr "İnşa boru hattı boş"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:148
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:150
 msgid "Build Targets"
 msgstr "İnşa Hedefleri"
 
@@ -3307,19 +3301,16 @@ msgstr "PROJE_DOSYASI"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:154
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to load flags for plan: %s"
 msgstr "Plan için bayraklar yüklenemedi: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:197
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to cull index plan: %s"
 msgstr "Dizin planı ayrılamadı: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:232
 #, c-format
-#| msgid "Failed to locate template \"%s\""
 msgid "Failed to populate index plan: %s"
 msgstr "Dizin planı yerleştirilemedi: %s"
 
@@ -4208,7 +4199,7 @@ msgid "GCC %s Cross-Compiler (System)"
 msgstr "GCC %s Çapraz Derleyici (Sistem)"
 
 #. translators: %s is replaced with the error string from git
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:378
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:405
 #, c-format
 msgid ""
 "There was a failure while calculating line changes from git. The exact error "
@@ -4217,17 +4208,17 @@ msgstr ""
 "Gitʼten satır değişiklikleri hesaplanırken başarısız olundu. Tam hata şudur: "
 "%s"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:639
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:666
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Depo, çalışma dizinine sahip değil."
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:650
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:677
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Dosya git çalışma dizininin denetimi altında değil."
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:716
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:743
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "İstenen dosya git dizininde bulunmuyor."
@@ -4438,7 +4429,6 @@ msgstr ""
 "etkinleştirin. Bu, projenizde kod çalıştırılmasına neden olabilir."
 
 #: src/plugins/gradle/gradle_plugin.py:85
-#| msgid "Executable wrapper"
 msgid "Gradle Wrapper"
 msgstr "Gradle Sarıcı"
 
@@ -4613,7 +4603,6 @@ msgid "Meson"
 msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-config-view-addin.c:58
-#| msgid "Run Options"
 msgid "Meson Options"
 msgstr "Meson Seçenekleri"
 
@@ -4853,7 +4842,6 @@ msgid "Build configured"
 msgstr "İnşa yapılandırıldı"
 
 #: src/plugins/notification/ide-notification-addin.c:190
-#| msgid "Build System"
 msgid "Build bootstrapped"
 msgstr "İnşa özyüklendi"
 
@@ -4864,6 +4852,11 @@ msgstr "npm bağımlılıkları indiriliyor"
 #: src/plugins/phpize/phpize_plugin.py:191
 msgid "Bootstrapping project"
 msgstr "Proje özyükleniyor"
+
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:99
+msgid "Containers/Podman"
+msgstr "Konteynerler/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
 #: src/plugins/project-tree/gbp-rename-file-popover.c:144
