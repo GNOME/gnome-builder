@@ -41,14 +41,16 @@ struct _GbpBuilduiTreeAddin
 
 typedef struct
 {
-  IdeTreeNode *node;
-  guint        n_active;
+  IdeExtensionSetAdapter *set;
+  IdeTreeNode            *node;
+  guint                   n_active;
 } BuildTargets;
 
 static void
 build_targets_free (BuildTargets *state)
 {
   g_clear_object (&state->node);
+  ide_clear_and_destroy_object (&state->set);
   g_slice_free (BuildTargets, state);
 }
 
@@ -153,19 +155,18 @@ gbp_buildui_tree_addin_build_children_async (IdeTreeAddin        *addin,
     }
   else if (ide_tree_node_is_tag (node, "BUILD_TARGETS"))
     {
-      g_autoptr(IdeExtensionSetAdapter) set = NULL;
       BuildTargets *state;
 
       state = g_slice_new0 (BuildTargets);
       state->node = g_object_ref (node);
       state->n_active = 0;
+      state->set = ide_extension_set_adapter_new (IDE_OBJECT (self->model),
+                                                  peas_engine_get_default (),
+                                                  IDE_TYPE_BUILD_TARGET_PROVIDER,
+                                                  NULL, NULL);
       ide_task_set_task_data (task, state, build_targets_free);
 
-      set = ide_extension_set_adapter_new (IDE_OBJECT (self->model),
-                                           peas_engine_get_default (),
-                                           IDE_TYPE_BUILD_TARGET_PROVIDER,
-                                           NULL, NULL);
-      ide_extension_set_adapter_foreach (set, build_targets_cb, task);
+      ide_extension_set_adapter_foreach (state->set, build_targets_cb, task);
 
       if (state->n_active > 0)
         return;
