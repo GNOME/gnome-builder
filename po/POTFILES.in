@@ -288,6 +288,7 @@ src/plugins/notification/ide-notification-addin.c
 src/plugins/npm/npm_plugin.py
 src/plugins/omni-gutter/gbp-omni-gutter-renderer.c
 src/plugins/phpize/phpize_plugin.py
+src/plugins/podman/gbp-podman-runtime.c
 src/plugins/project-tree/gbp-new-file-popover.c
 src/plugins/project-tree/gbp-new-file-popover.ui
 src/plugins/project-tree/gbp-project-tree-addin.c
