@@ -72,7 +72,10 @@ get_targets_cb (GObject      *object,
 
   state = ide_task_get_task_data (task);
 
-  if ((targets = ide_build_target_provider_get_targets_finish (provider, result, &error)))
+  targets = ide_build_target_provider_get_targets_finish (provider, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (targets, g_object_unref);
+
+  if (targets)
     {
       for (guint i = 0; i < targets->len; i++)
         {
