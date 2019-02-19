@@ -633,7 +633,7 @@ ide_workbench_foreach_workspace (IdeWorkbench *self,
     {
       IdeWorkspace *workspace = iter->data;
       g_assert (IDE_IS_WORKSPACE (workspace));
-      callback (iter->data, user_data);
+      callback (GTK_WIDGET (workspace), user_data);
     }
 
   g_list_free (copy);
