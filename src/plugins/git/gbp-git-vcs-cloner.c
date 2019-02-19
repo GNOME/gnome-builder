@@ -157,7 +157,6 @@ gbp_git_vcs_cloner_worker (IdeTask      *task,
                            gpointer      task_data,
                            GCancellable *cancellable)
 {
-  GbpGitVcsCloner *self = source_object;
   g_autoptr(GgitConfig) config = NULL;
   g_autoptr(GFile) config_file = NULL;
   g_autoptr(GError) error = NULL;
@@ -169,7 +168,7 @@ gbp_git_vcs_cloner_worker (IdeTask      *task,
   CloneRequest *req = task_data;
 
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS_CLONER (self));
+  g_assert (GBP_IS_GIT_VCS_CLONER (source_object));
   g_assert (req != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 

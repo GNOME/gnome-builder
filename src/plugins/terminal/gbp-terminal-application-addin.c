@@ -38,11 +38,10 @@ gbp_terminal_application_addin_handle_command_line (IdeApplicationAddin     *add
                                                     IdeApplication          *application,
                                                     GApplicationCommandLine *cmdline)
 {
-  IdeApplication *app = (IdeApplication *)application;
   GVariantDict *options;
 
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
-  g_assert (IDE_IS_APPLICATION (app));
+  g_assert (IDE_IS_APPLICATION (application));
   g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
 
   if ((options = g_application_command_line_get_options_dict (cmdline)) &&

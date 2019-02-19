@@ -163,10 +163,9 @@ gbp_command_bar_command_provider_query_finish (IdeCommandProvider  *provider,
                                                GAsyncResult        *result,
                                                GError             **error)
 {
-  GbpCommandBarCommandProvider *self = (GbpCommandBarCommandProvider *)provider;
   GPtrArray *ret;
 
-  g_assert (GBP_IS_COMMAND_BAR_COMMAND_PROVIDER (self));
+  g_assert (GBP_IS_COMMAND_BAR_COMMAND_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);

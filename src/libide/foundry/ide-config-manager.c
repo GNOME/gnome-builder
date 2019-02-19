@@ -783,7 +783,6 @@ ide_config_manager_init_load_cb (GObject      *object,
                                         gpointer      user_data)
 {
   IdeConfigProvider *provider = (IdeConfigProvider *)object;
-  IdeConfigManager *self;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
   GPtrArray *providers;
@@ -794,9 +793,6 @@ ide_config_manager_init_load_cb (GObject      *object,
   g_assert (IDE_IS_CONFIG_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_CONFIG_MANAGER (self));
 
   if (!ide_config_provider_load_finish (provider, result, &error))
     {

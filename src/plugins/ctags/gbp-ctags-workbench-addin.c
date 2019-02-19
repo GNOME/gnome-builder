@@ -148,9 +148,7 @@ static void
 gbp_ctags_workbench_addin_workspace_removed (IdeWorkbenchAddin *addin,
                                              IdeWorkspace      *workspace)
 {
-  GbpCtagsWorkbenchAddin *self = (GbpCtagsWorkbenchAddin *)addin;
-
-  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   for (guint i = 0; i < G_N_ELEMENTS (actions); i++)

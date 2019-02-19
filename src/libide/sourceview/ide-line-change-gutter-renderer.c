@@ -316,16 +316,6 @@ ide_line_change_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
 }
 
 static void
-ide_line_change_gutter_renderer_end (GtkSourceGutterRenderer *renderer)
-{
-  IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
-
-  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
-
-  //g_clear_pointer (&self->lines, g_array_unref);
-}
-
-static void
 draw_line_change (IdeLineChangeGutterRenderer  *self,
                   cairo_t                      *cr,
                   GdkRectangle                 *area,
@@ -429,7 +419,6 @@ ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *kl
 
   object_class->dispose = ide_line_change_gutter_renderer_dispose;
 
-  renderer_class->end = ide_line_change_gutter_renderer_end;
   renderer_class->begin = ide_line_change_gutter_renderer_begin;
   renderer_class->draw = ide_line_change_gutter_renderer_draw;
 }

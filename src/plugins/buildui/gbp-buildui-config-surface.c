@@ -152,14 +152,13 @@ static GtkWidget *
 gbp_buildui_config_surface_create_row_cb (gpointer item,
                                           gpointer user_data)
 {
-  GbpBuilduiConfigSurface *self = user_data;
   IdeConfig *config = item;
   const gchar *title;
   GtkWidget *row;
   GtkWidget *label;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_BUILDUI_CONFIG_SURFACE (self));
+  g_assert (GBP_IS_BUILDUI_CONFIG_SURFACE (user_data));
   g_assert (IDE_IS_CONFIG (config));
 
   title = ide_config_get_display_name (config);

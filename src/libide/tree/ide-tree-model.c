@@ -398,10 +398,9 @@ ide_tree_model_get_path (GtkTreeModel *tree_model,
                          GtkTreeIter  *iter)
 {
   g_autoptr(GArray) indexes = NULL;
-  IdeTreeModel *self = (IdeTreeModel *)tree_model;
   IdeTreeNode *node;
 
-  g_assert (IDE_IS_TREE_MODEL (self));
+  g_assert (IDE_IS_TREE_MODEL (tree_model));
   g_assert (iter != NULL);
   g_assert (IDE_IS_TREE_NODE (iter->user_data));
 
@@ -587,9 +586,7 @@ ide_tree_model_iter_parent (GtkTreeModel *model,
                             GtkTreeIter  *iter,
                             GtkTreeIter  *child)
 {
-  IdeTreeModel *self = (IdeTreeModel *)model;
-
-  g_assert (IDE_IS_TREE_MODEL (self));
+  g_assert (IDE_IS_TREE_MODEL (model));
   g_assert (iter != NULL);
   g_assert (child != NULL);
   g_assert (IDE_IS_TREE_NODE (child->user_data));
@@ -1400,10 +1397,8 @@ static gboolean
 ide_tree_model_drag_data_delete (GtkTreeDragSource *source,
                                  GtkTreePath       *path)
 {
-  IdeTreeModel *self = (IdeTreeModel *)source;
-
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TREE_MODEL (self));
+  g_assert (IDE_IS_TREE_MODEL (source));
   g_assert (path != NULL);
 
   return FALSE;

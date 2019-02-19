@@ -115,10 +115,8 @@ static void
 gbp_code_index_workbench_addin_workspace_removed (IdeWorkbenchAddin *addin,
                                                   IdeWorkspace      *workspace)
 {
-  GbpCodeIndexWorkbenchAddin *self = (GbpCodeIndexWorkbenchAddin *)addin;
-
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   gtk_widget_insert_action_group (GTK_WIDGET (workspace), "code-index", NULL);

@@ -113,7 +113,6 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
                                   const gchar            *msg,
                                   IdeDiagnosticSeverity   severity)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
   g_autoptr(IdeLocation) start_loc = NULL;
   g_autoptr(IdeLocation) end_loc = NULL;
   IdeDiagnostic *diagnostic;
@@ -123,7 +122,8 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
   gint end_line_offset;
   gsize size;
 
-  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_PARSER (state->self));
 
   ide_xml_sax_get_location (state->sax_parser,
                             &start_line, &start_line_offset,

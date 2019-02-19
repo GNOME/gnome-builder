@@ -566,16 +566,12 @@ ide_xml_tree_builder_parent_set (IdeObject *object,
                                  IdeObject *parent)
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)object;
-  IdeContext *context;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (self));
   g_assert (!parent || IDE_IS_OBJECT (parent));
 
   if (parent == NULL)
     return;
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
 
   self->parser = g_object_new (IDE_TYPE_XML_PARSER,
                                "parent", self,

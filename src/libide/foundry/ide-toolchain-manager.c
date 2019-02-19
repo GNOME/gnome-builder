@@ -228,7 +228,6 @@ ide_toolchain_manager_init_load_cb (GObject      *object,
                                     gpointer      user_data)
 {
   IdeToolchainProvider *provider = (IdeToolchainProvider *)object;
-  IdeToolchainManager *self;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
   GPtrArray *providers;
@@ -239,9 +238,6 @@ ide_toolchain_manager_init_load_cb (GObject      *object,
   g_assert (IDE_IS_TOOLCHAIN_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_TOOLCHAIN_MANAGER (self));
 
   if (!ide_toolchain_provider_load_finish (provider, result, &error))
     {
@@ -292,7 +288,6 @@ ide_toolchain_manager_init_async (GAsyncInitable      *initable,
   g_autoptr(IdeSimpleToolchain) default_toolchain = NULL;
   g_autoptr(GPtrArray) providers = NULL;
   g_autoptr(IdeTask) task = NULL;
-  IdeContext *context;
   guint idx;
 
   g_assert (G_IS_ASYNC_INITABLE (self));
@@ -308,9 +303,6 @@ ide_toolchain_manager_init_async (GAsyncInitable      *initable,
                             G_CALLBACK (notify_providers_loaded),
                             self);
 #endif
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
 
   self->extensions = peas_extension_set_new (peas_engine_get_default (),
                                              IDE_TYPE_TOOLCHAIN_PROVIDER,

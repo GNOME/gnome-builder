@@ -59,7 +59,7 @@ gbp_buildui_runtime_categories_get_n_items (GListModel *model)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_RUNTIME_CATEGORIES (self));
 
-  return GBP_BUILDUI_RUNTIME_CATEGORIES (model)->items->len;
+  return self->items->len;
 }
 
 static gpointer

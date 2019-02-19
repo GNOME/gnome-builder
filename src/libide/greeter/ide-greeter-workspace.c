@@ -253,12 +253,11 @@ ide_greeter_workspace_addin_removed_cb (PeasExtensionSet *set,
                                         gpointer          user_data)
 {
   IdeGreeterSection *section = (IdeGreeterSection *)exten;
-  IdeGreeterWorkspace *self = user_data;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_GREETER_SECTION (section));
-  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (IDE_IS_GREETER_WORKSPACE (user_data));
 
   gtk_widget_destroy (GTK_WIDGET (section));
 }

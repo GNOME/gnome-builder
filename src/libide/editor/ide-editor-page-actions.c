@@ -200,7 +200,6 @@ ide_editor_page_actions_save (GSimpleAction *action,
                               gpointer       user_data)
 {
   IdeEditorPage *self = user_data;
-  IdeBufferManager *bufmgr;
   g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) local_file = NULL;
@@ -220,10 +219,7 @@ ide_editor_page_actions_save (GSimpleAction *action,
   file = ide_buffer_get_file (buffer);
   g_return_if_fail (G_IS_FILE (file));
 
-  bufmgr = ide_buffer_manager_from_context (context);
   workdir = ide_context_ref_workdir (context);
-
-  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (G_IS_FILE (workdir));
 
   if (ide_buffer_get_is_temporary (buffer))

@@ -344,7 +344,6 @@ gbp_code_index_service_load_flags_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GbpCodeIndexService *self;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -363,10 +362,7 @@ gbp_code_index_service_load_flags_cb (GObject      *object,
     IDE_EXIT;
 
   self = ide_task_get_source_object (task);
-  context = ide_task_get_task_data (task);
-
   g_assert (GBP_IS_CODE_INDEX_SERVICE (self));
-  g_assert (IDE_IS_CONTEXT (context));
 
   executor = gbp_code_index_executor_new (plan);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (executor));

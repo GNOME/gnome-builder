@@ -726,7 +726,6 @@ gbp_grep_model_scan_cb (GObject      *object,
   g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *stdout_buf = NULL;
-  GbpGrepModel *self;
   gsize len;
 
   IDE_ENTRY;
@@ -734,10 +733,6 @@ gbp_grep_model_scan_cb (GObject      *object,
   g_assert (IDE_IS_SUBPROCESS (object));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-
-  g_assert (GBP_IS_GREP_MODEL (self));
 
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, NULL, &error))
     {

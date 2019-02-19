@@ -65,7 +65,6 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeBuffer *buffer = (IdeBuffer *)object;
-  GbpSymbolHoverProvider *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
@@ -93,10 +92,7 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
       return;
     }
 
-  self = ide_task_get_source_object (task);
   context = ide_task_get_task_data (task);
-
-  g_assert (GBP_IS_SYMBOL_HOVER_PROVIDER (self));
   g_assert (context != NULL);
   g_assert (IDE_IS_HOVER_CONTEXT (context));
 

@@ -445,13 +445,12 @@ gbp_code_index_plan_populate_worker (IdeTask      *task,
                                      gpointer      task_data,
                                      GCancellable *cancellable)
 {
-  GbpCodeIndexPlan *self = source_object;
   PopulateData *state = task_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_CODE_INDEX_PLAN (self));
+  g_assert (GBP_IS_CODE_INDEX_PLAN (source_object));
   g_assert (state != NULL);
   g_assert (IDE_IS_BUILD_SYSTEM (state->build_system));
   g_assert (IDE_IS_VCS (state->vcs));

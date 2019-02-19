@@ -150,7 +150,6 @@ ide_lsp_rename_provider_rename_cb (GObject      *object,
                                         gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
-  IdeLspRenameProvider *self;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
@@ -164,8 +163,6 @@ ide_lsp_rename_provider_rename_cb (GObject      *object,
   g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-  self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_LSP_RENAME_PROVIDER (self));
 
   if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
     {

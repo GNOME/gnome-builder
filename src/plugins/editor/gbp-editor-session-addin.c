@@ -184,14 +184,14 @@ gbp_editor_session_addin_save_async (IdeSessionAddin     *addin,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
 {
-  GbpEditorSessionAddin *self = (GbpEditorSessionAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GArray) items = NULL;
   GVariantBuilder builder;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_SESSION_ADDIN (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SESSION_ADDIN (addin));
   g_assert (IDE_IS_WORKBENCH (workbench));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 

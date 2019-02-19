@@ -129,13 +129,12 @@ ide_clone_surface_addin_removed_cb (PeasExtensionSet *set,
                                     PeasExtension    *exten,
                                     gpointer          user_data)
 {
-  IdeVcsCloner *cloner = (IdeVcsCloner *)exten;
   IdeCloneSurface *self = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_VCS_CLONER (cloner));
+  g_assert (IDE_IS_VCS_CLONER (exten));
   g_assert (IDE_IS_CLONE_SURFACE (self));
 
   self->n_addins--;

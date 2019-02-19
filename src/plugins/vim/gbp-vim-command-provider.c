@@ -89,11 +89,10 @@ gbp_vim_command_provider_query_finish (IdeCommandProvider  *provider,
                                        GAsyncResult        *result,
                                        GError             **error)
 {
-  GbpVimCommandProvider *self = (GbpVimCommandProvider *)provider;
   GPtrArray *ret;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_VIM_COMMAND_PROVIDER (self));
+  g_assert (GBP_IS_VIM_COMMAND_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);

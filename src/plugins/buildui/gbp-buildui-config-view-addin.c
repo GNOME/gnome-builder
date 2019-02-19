@@ -388,7 +388,6 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
                                     DzlPreferences     *preferences,
                                     IdeConfig   *config)
 {
-  GbpBuilduiConfigViewAddin *self = (GbpBuilduiConfigViewAddin *)addin;
   IdeToolchainManager *toolchain_manager;
   IdeRuntimeManager *runtime_manager;
   g_autoptr(GFile) workdir = NULL;
@@ -409,7 +408,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
   };
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_BUILDUI_CONFIG_VIEW_ADDIN (self));
+  g_assert (GBP_IS_BUILDUI_CONFIG_VIEW_ADDIN (addin));
   g_assert (DZL_IS_PREFERENCES (preferences));
   g_assert (IDE_IS_CONFIG (config));
 

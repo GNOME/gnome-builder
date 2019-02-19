@@ -46,7 +46,6 @@ gbp_git_workbench_addin_load_project_worker (IdeTask      *task,
                                              gpointer      task_data,
                                              GCancellable *cancellable)
 {
-  GbpGitWorkbenchAddin *self = source_object;
   g_autoptr(GgitRepository) repository = NULL;
   g_autoptr(GbpGitVcs) vcs = NULL;
   g_autoptr(GFile) location = NULL;
@@ -56,7 +55,7 @@ gbp_git_workbench_addin_load_project_worker (IdeTask      *task,
   GFile *directory = task_data;
 
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_GIT_WORKBENCH_ADDIN (source_object));
   g_assert (G_IS_FILE (directory));
 
   /* Short-circuit if we don't .git */

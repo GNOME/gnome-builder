@@ -112,13 +112,9 @@ ide_runtime_manager_initable_init (GInitable     *initable,
 {
   IdeRuntimeManager *self = (IdeRuntimeManager *)initable;
   g_autoptr(IdeRuntime) host = NULL;
-  IdeContext *context;
 
   g_assert (IDE_IS_RUNTIME_MANAGER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
 
   self->extensions = ide_extension_set_adapter_new (IDE_OBJECT (self),
                                                     peas_engine_get_default (),
