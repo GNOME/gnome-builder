@@ -250,6 +250,33 @@
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">true</property>
+            <property name="title" translatable="yes" context="shortcut window">Zoom</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;control&gt;plus</property>
+                <property name="title" translatable="yes" context="shortcut window">Zoom In</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;control&gt;minus</property>
+                <property name="title" translatable="yes" context="shortcut window">Zoom Out</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;control&gt;0</property>
+                <property name="title" translatable="yes" context="shortcut window">Reset Zoom</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">true</property>
             <property name="title" translatable="yes" context="shortcut window">Editing</property>
             <child>
               <object class="GtkShortcutsShortcut">
