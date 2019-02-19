@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-14 19:55+0000\n"
-"PO-Revision-Date: 2019-02-14 21:18+0100\n"
+"POT-Creation-Date: 2019-02-19 19:19+0000\n"
+"PO-Revision-Date: 2019-02-19 20:30+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -821,7 +821,7 @@ msgstr "Z_mień nazwę"
 msgid "unsaved file %u"
 msgstr "%u. niezapisany plik"
 
-#: src/libide/code/ide-buffer.c:3305
+#: src/libide/code/ide-buffer.c:3351
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie ma mechanizmu rozwiązywania symboli."
 
@@ -2809,7 +2809,7 @@ msgid "Configuring project"
 msgstr "Konfigurowanie projektu"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:147
+#: src/plugins/cargo/cargo_plugin.py:149
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
@@ -3206,7 +3206,7 @@ msgstr "Informacje o budowaniu"
 msgid "Build pipeline is empty"
 msgstr "Potok budowania jest pusty"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:148
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:150
 msgid "Build Targets"
 msgstr "Cele budowania"
 
@@ -4212,24 +4212,24 @@ msgid "GCC %s Cross-Compiler (System)"
 msgstr "Kompilator skrośny GCC %s (system)"
 
 #. translators: %s is replaced with the error string from git
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:378
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:405
 #, c-format
 msgid ""
 "There was a failure while calculating line changes from git. The exact error "
 "was: %s"
 msgstr "Wystąpił błąd podczas obliczania zmian wierszy z systemu git: %s"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:639
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:666
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Repozytorium nie ma katalogu roboczego."
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:650
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:677
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:716
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:743
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
@@ -4868,6 +4868,11 @@ msgstr "Pobieranie zależności npm"
 msgid "Bootstrapping project"
 msgstr "Zakładanie projektu"
 
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:99
+msgid "Containers/Podman"
+msgstr "Kontenery/Podman"
+
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
 #: src/plugins/project-tree/gbp-rename-file-popover.c:144
 msgid "A folder with that name already exists."
@@ -4901,41 +4906,41 @@ msgstr "Testy jednostkowe"
 msgid "Files"
 msgstr "Pliki"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:657
+#: src/plugins/project-tree/gbp-project-tree-addin.c:682
 #, c-format
 msgid "Copying 1 file"
 msgstr "Kopiowanie 1 pliku"
 
 # FIXME https://gitlab.gnome.org/GNOME/gnome-builder/issues/774
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:660
+#: src/plugins/project-tree/gbp-project-tree-addin.c:685
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopiowanie plików: %s z %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Failed to copy files"
 msgstr "Skopiowanie plików się nie powiodło"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:706
+#: src/plugins/project-tree/gbp-project-tree-addin.c:731
 msgid "Files copied"
 msgstr "Skopiowano pliki"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:710
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
 msgid "Copied 1 file"
 msgstr "Skopiowano 1 plik"
 
 # FIXME https://gitlab.gnome.org/GNOME/gnome-builder/issues/774
-#: src/plugins/project-tree/gbp-project-tree-addin.c:718
+#: src/plugins/project-tree/gbp-project-tree-addin.c:743
 #, c-format
 msgid "Copied %s files"
 msgstr "Skopiowano pliki: %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:858
+#: src/plugins/project-tree/gbp-project-tree-addin.c:883
 msgid "Copying files…"
 msgstr "Kopiowanie plików…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:859
+#: src/plugins/project-tree/gbp-project-tree-addin.c:884
 msgid "Files will be copied in a moment"
 msgstr "Pliki zostaną za chwilę skopiowanie"
 
