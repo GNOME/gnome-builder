@@ -7,7 +7,7 @@ option('with_safe_path', type: 'string', value: '', description: 'PATH variable 
 
 option('with_channel',
           type: 'combo',
-       choices: [ 'other', 'flatpak-stable', 'flatpak-nightly' ],
+       choices: [ 'other', 'flatpak-stable', 'flatpak-beta', 'flatpak-nightly' ],
    description: 'The distribution channel for Builder',
 )
 
