@@ -1,4 +1,34 @@
 ===============
+Version 3.31.91
+===============
+
+Changes since last release:
+
+ • Fix three-finger-swipe gesture in keyboard shortcuts.
+ • Respect sort-directories-first gsetting in project-tree.
+ • Icons for the newcomers initiative have updated.
+ • Loading of custom gtksourceview style schemes has been restored.
+ • gnome-builder -e will now open a new editor window.
+ • Plugins can now add delay in "settling" the buffer before saving.
+ • The git plugin will settle for updated line changes before the buffer
+   can be saved. This fixes an issue with trim-spaces plugin not trimming
+   all of the expected lines.
+ • Builder's flatpak-based fusermount wrapper was simplified. This could
+   use testing with regards to rofiles and flatpak-builder.
+ • Various search workflow improvements.
+ • The VCS file monitor now contains a sequence number that can be used to
+   optimize some additional work such as installing a project. Builder will
+   no longer install the project before each project Run unless a file within
+   the project tree has changed. Projects that rely on external files will
+   need to press "Build" before "Run" if only external files have changed.
+ • Improvements to guessing language syntax when a buffer is created.
+ • Add an experimental podman runtime provider. This is not enabled by
+   default and we do not recommend enabling it at this time.
+ • Updated translations.
+
+Thanks to the many contributors that provided patches during this cycle!
+
+===============
 Version 3.31.90
 ===============
 
