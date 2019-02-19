@@ -93,6 +93,7 @@ subdir('notification')
 subdir('npm')
 subdir('omni-gutter')
 subdir('phpize')
+subdir('podman')
 subdir('project-tree')
 subdir('python-gi-imports-completion')
 subdir('python-pack')
@@ -167,6 +168,7 @@ status += [
   'Notifications ......... : @0@'.format(get_option('plugin_notification')),
   'Npm ................... : @0@'.format(get_option('plugin_npm')),
   'PHPize ................ : @0@'.format(get_option('plugin_phpize')),
+  'Podman ................ : @0@'.format(get_option('plugin_podman')),
   'Python Pack ........... : @0@'.format(get_option('plugin_python_pack')),
   'Qemu .................. : @0@'.format(get_option('plugin_qemu')),
   'Quick Highlight ....... : @0@'.format(get_option('plugin_quick_highlight')),
