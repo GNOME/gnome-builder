@@ -131,5 +131,7 @@ void                   ide_subprocess_launcher_take_stdout_fd       (IdeSubproce
 IDE_AVAILABLE_IN_3_32
 void                   ide_subprocess_launcher_take_stderr_fd       (IdeSubprocessLauncher  *self,
                                                                      gint                    stderr_fd);
+IDE_AVAILABLE_IN_3_32
+gboolean               ide_subprocess_launcher_get_needs_tty        (IdeSubprocessLauncher  *self);
 
 G_END_DECLS

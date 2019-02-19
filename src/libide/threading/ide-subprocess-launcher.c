@@ -1071,3 +1071,39 @@ ide_subprocess_launcher_append_path (IdeSubprocessLauncher *self,
       ide_subprocess_launcher_setenv (self, "PATH", path, TRUE);
     }
 }
+
+gboolean
+ide_subprocess_launcher_get_needs_tty (IdeSubprocessLauncher *self)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), FALSE);
+
+  if ((priv->stdin_fd != -1 && isatty (priv->stdin_fd)) ||
+      (priv->stdout_fd != -1 && isatty (priv->stdout_fd)) ||
+      (priv->stderr_fd != -1 && isatty (priv->stderr_fd)))
+    return TRUE;
+
+  if (priv->fd_mapping != NULL)
+    {
+      for (guint i = 0; i < priv->fd_mapping->len; i++)
+        {
+          const FdMapping *fdmap = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+          switch (fdmap->dest_fd)
+            {
+            case STDIN_FILENO:
+            case STDOUT_FILENO:
+            case STDERR_FILENO:
+              if (isatty (fdmap->source_fd))
+                return TRUE;
+              break;
+
+            default:
+              break;
+            }
+        }
+    }
+
+  return FALSE;
+}
