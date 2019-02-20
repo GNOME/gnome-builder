@@ -127,6 +127,7 @@ gbp_test_tree_addin_build_children_async (IdeTreeAddin        *addin,
 {
   GbpTestTreeAddin *self = (GbpTestTreeAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
+  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_TEST_TREE_ADDIN (self));
@@ -137,14 +138,20 @@ gbp_test_tree_addin_build_children_async (IdeTreeAddin        *addin,
   ide_task_set_source_tag (task, gbp_test_tree_addin_build_children_async);
   ide_task_set_task_data (task, g_object_ref (node), g_object_unref);
 
+  context = ide_object_get_context (IDE_OBJECT (self->model));
+
+  if (!ide_context_has_project (context))
+    {
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
+
   if (ide_tree_node_holds (node, IDE_TYPE_CONTEXT))
     {
       g_autoptr(IdeTreeNode) child = NULL;
       g_autoptr(GbpTestPath) path = NULL;
       IdeTestManager *test_manager;
-      IdeContext *context;
 
-      context = ide_tree_node_get_item (node);
       test_manager = ide_test_manager_from_context (context);
       path = gbp_test_path_new (test_manager, NULL);
 
@@ -157,7 +164,6 @@ gbp_test_tree_addin_build_children_async (IdeTreeAddin        *addin,
     }
   else if (ide_tree_node_holds (node, GBP_TYPE_TEST_PATH))
     {
-      IdeContext *context = ide_widget_get_context (GTK_WIDGET (self->tree));
       IdeTestManager *test_manager = ide_test_manager_from_context (context);
 
       ide_test_manager_ensure_loaded_async (test_manager,
@@ -246,6 +252,10 @@ gbp_test_tree_addin_load (IdeTreeAddin *addin,
   self->model = model;
 
   context = ide_object_get_context (IDE_OBJECT (model));
+
+  if (!ide_context_has_project (context))
+    return;
+
   test_manager = ide_test_manager_from_context (context);
 
   g_signal_connect_object (test_manager,
@@ -269,14 +279,18 @@ gbp_test_tree_addin_unload (IdeTreeAddin *addin,
   g_assert (IDE_IS_TREE (tree));
   g_assert (IDE_IS_TREE_MODEL (model));
 
+  self->tree = NULL;
+  self->model = NULL;
+
   context = ide_object_get_context (IDE_OBJECT (model));
+
+  if (!ide_context_has_project (context))
+    return;
+
   test_manager = ide_test_manager_from_context (context);
   g_signal_handlers_disconnect_by_func (test_manager,
                                         G_CALLBACK (gbp_test_tree_addin_notify_loading),
                                         self);
-
-  self->tree = NULL;
-  self->model = NULL;
 }
 
 static void

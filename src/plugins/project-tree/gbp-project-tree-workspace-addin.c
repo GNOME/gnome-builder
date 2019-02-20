@@ -44,7 +44,8 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
   IdeSurface *surface;
 
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) ||
+            IDE_IS_EDITOR_WORKSPACE (workspace));
 
   surface = ide_workspace_get_surface_by_name (workspace, "editor");
   g_assert (IDE_IS_EDITOR_SURFACE (surface));
@@ -75,7 +76,8 @@ gbp_project_tree_workspace_addin_unload (IdeWorkspaceAddin *addin,
   GbpProjectTreeWorkspaceAddin *self = (GbpProjectTreeWorkspaceAddin *)addin;
 
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) ||
+            IDE_IS_EDITOR_WORKSPACE (workspace));
 
   if (self->pane != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->pane));

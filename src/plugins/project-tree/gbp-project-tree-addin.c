@@ -189,22 +189,12 @@ gbp_project_tree_addin_build_children_async (IdeTreeAddin        *addin,
       IdeContext *context = ide_tree_node_get_item (node);
       g_autoptr(IdeTreeNode) files = NULL;
       g_autoptr(IdeTreeNode) targets = NULL;
-      //g_autoptr(IdeTreeNode) tests = NULL;
       g_autoptr(IdeProjectFile) root_file = NULL;
       g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
       g_autoptr(GFile) parent = g_file_get_parent (workdir);
       g_autoptr(GFileInfo) info = NULL;
       g_autofree gchar *name = NULL;
 
-#if 0
-      tests = g_object_new (IDE_TYPE_TREE_NODE,
-                            "icon-name", "builder-unit-tests-symbolic",
-                            "item", NULL,
-                            "display-name", _("Unit Tests"),
-                            "children-possible", TRUE,
-                            NULL);
-      ide_tree_node_append (node, tests);
-#endif
 
       info = g_file_info_new ();
       name = g_file_get_basename (workdir);

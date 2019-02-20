@@ -134,6 +134,7 @@ gbp_buildui_tree_addin_build_children_async (IdeTreeAddin        *addin,
 {
   GbpBuilduiTreeAddin *self = (GbpBuilduiTreeAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
+  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE_ADDIN (self));
@@ -142,6 +143,14 @@ gbp_buildui_tree_addin_build_children_async (IdeTreeAddin        *addin,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_buildui_tree_addin_build_children_async);
+
+  context = ide_object_get_context (IDE_OBJECT (self->model));
+
+  if (!ide_context_has_project (context))
+    {
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
 
   if (ide_tree_node_holds (node, IDE_TYPE_CONTEXT))
     {
@@ -296,6 +305,7 @@ gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
 {
   GbpBuilduiTreeAddin *self = (GbpBuilduiTreeAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
+  IdeContext *context;
   static const GActionEntry actions[] = {
     { "build", gbp_buildui_tree_addin_action_build },
     { "rebuild", gbp_buildui_tree_addin_action_rebuild },
@@ -309,6 +319,11 @@ gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
 
   self->model = model;
   self->tree = tree;
+
+  context = ide_object_get_context (IDE_OBJECT (self->model));
+
+  if (!ide_context_has_project (context))
+    return;
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group),
@@ -342,10 +357,16 @@ gbp_buildui_tree_addin_selection_changed (IdeTreeAddin *addin,
 {
   GbpBuilduiTreeAddin *self = (GbpBuilduiTreeAddin *)addin;
   IdeBuildTarget *target;
+  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_TREE_ADDIN (self));
   g_assert (!node || IDE_IS_TREE_NODE (node));
+
+  context = ide_object_get_context (IDE_OBJECT (self->model));
+
+  if (!ide_context_has_project (context))
+    return;
 
   dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "buildui", "build",
                              "enabled", node && ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET),
