@@ -556,7 +556,7 @@
                 "-Dpython_libprefix=python3.7",
                 "-Denable_tracing=false",
                 "-Dwith_help=true",
-                "-Dwith_channel=flatpak-beta",
+                "-Dwith_channel=flatpak-nightly",
                 "-Dwith_deviced=true"
             ],
             "cleanup" : [
