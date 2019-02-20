@@ -7,23 +7,23 @@
     "sources": [
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/3c/ec/a94f8cf7274ea60b5413df054f82a8980523efd712ec55a59e7c3357cf7c/pyparsing-2.2.0.tar.gz",
-            "sha256": "0832bcf47acd283788593e7a0f542407bd9550a55a8a8435214a1960e04bcb04"
+            "url": "https://files.pythonhosted.org/packages/b9/b8/6b32b3e84014148dcd60dd05795e35c2e7f4b72f918616c61fdce83d27fc/pyparsing-2.3.1.tar.gz",
+            "sha256": "66c9268862641abcac4a96ba74506e594c884e3f57690a696d21ad8210ed667a"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/4d/9c/46e950a6f4d6b4be571ddcae21e7bc846fcbb88f1de3eff0f6dd0a6be55d/certifi-2018.4.16.tar.gz",
-            "sha256": "13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7"
+            "url": "https://files.pythonhosted.org/packages/55/54/3ce77783acba5979ce16674fc98b1920d00b01d337cfaaf5db22543505ed/certifi-2018.11.29.tar.gz",
+            "sha256": "47f9c83ef4c0c621eaef743f133f09fa8a74a9b75f037e8624f83bd1b6626cb7"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/3c/d2/dc5471622bd200db1cd9319e02e71bc655e9ea27b8e0ce65fc69de0dac15/urllib3-1.23.tar.gz",
-            "sha256": "a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf"
+            "url": "https://files.pythonhosted.org/packages/b1/53/37d82ab391393565f2f831b8eedbffd57db5a718216f82f1a8b4d381a1c1/urllib3-1.24.1.tar.gz",
+            "sha256": "de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/65/c4/80f97e9c9628f3cac9b98bfca0402ede54e0563b56482e3e6e45c43c4935/idna-2.7.tar.gz",
-            "sha256": "684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16"
+            "url": "https://files.pythonhosted.org/packages/ad/13/eb56951b6f7950cadb579ca166e448ba77f9d24efc03edd7e55fa57d04b7/idna-2.8.tar.gz",
+            "sha256": "c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407"
         },
         {
             "type": "file",
@@ -32,13 +32,13 @@
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/ca/a9/62f96decb1e309d6300ebe7eee9acfd7bccaeedd693794437005b9067b44/pytz-2018.5.tar.gz",
-            "sha256": "ffb9ef1de172603304d9d2819af6f5ece76f2e85ec10692a524dd876e72bf277"
+            "url": "https://files.pythonhosted.org/packages/af/be/6c59e30e208a5f28da85751b93ec7b97e4612268bb054d0dff396e758a90/pytz-2018.9.tar.gz",
+            "sha256": "d5f05e487007e29e03409f9398d074e158d920d36eb82eaf66fb1136b0c5374c"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz",
-            "sha256": "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"
+            "url": "https://files.pythonhosted.org/packages/ac/7e/1b4c2e05809a4414ebce0892fe1e32c14ace86ca7d50c70f00979ca9b3a3/MarkupSafe-1.1.0.tar.gz",
+            "sha256": "4e97332c9ce444b0c2c38dd22ddc61c743eb208d916e4265a2a3b575bdccb1d3"
         },
         {
             "type": "file",
@@ -47,23 +47,23 @@
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/77/32/439f47be99809c12ef2da8b60a2c47987786d2c6c9205549dd6ef95df8bd/packaging-17.1.tar.gz",
-            "sha256": "f019b770dd64e585a99714f1fd5e01c7a8f11b45635aa953fd41c689a657375b"
+            "url": "https://files.pythonhosted.org/packages/16/51/d72654dbbaa4a4ffbf7cb0ecd7d12222979e0a660bf3f42acc47550bf098/packaging-19.0.tar.gz",
+            "sha256": "0c98a5d0be38ed775798ece1b9727178c4469d9c3b4ada66e8e6b7849f8732af"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9/requests-2.19.1.tar.gz",
-            "sha256": "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"
+            "url": "https://files.pythonhosted.org/packages/52/2c/514e4ac25da2b08ca5a464c50463682126385c4272c18193876e91f4bc38/requests-2.21.0.tar.gz",
+            "sha256": "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/c6/3f/1db2da33804e8d7ef3a868b27b7bdc1aae6a4f693f0162d2aeeaf503864f/imagesize-1.0.0.tar.gz",
-            "sha256": "5b326e4678b6925158ccc66a9fa3122b6106d7c876ee32d7de6ce59385b96315"
+            "url": "https://files.pythonhosted.org/packages/41/f5/3cf63735d54aa9974e544aa25858d8f9670ac5b4da51020bbfc6aaade741/imagesize-1.1.0.tar.gz",
+            "sha256": "f3832918bc3c66617f92e35f5d70729187676313caa60c187eb0f28b8fe5e3b5"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/3f/46/9346ea429931d80244ab7f11c4fce83671df0b7ae5a60247a2b588592c46/alabaster-0.7.11.tar.gz",
-            "sha256": "b63b1f4dc77c074d386752ec4a8a7517600f6c0db8cd42980cae17ab7b3275d7"
+            "url": "https://files.pythonhosted.org/packages/cc/b4/ed8dcb0d67d5cfb7f83c4d5463a7614cb1d078ad7ae890c9143edebbf072/alabaster-0.7.12.tar.gz",
+            "sha256": "a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"
         },
         {
             "type": "file",
@@ -77,8 +77,8 @@
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/71/2a/2e4e77803a8bd6408a2903340ac498cb0a2181811af7c9ec92cb70b0308a/Pygments-2.2.0.tar.gz",
-            "sha256": "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"
+            "url": "https://files.pythonhosted.org/packages/64/69/413708eaf3a64a6abb8972644e0f20891a55e621c6759e2c3f3891e05d63/Pygments-2.3.1.tar.gz",
+            "sha256": "5ffada19f6203563680669ee7f53b64dabbeb100eb51b61996085e99c03b284a"
         },
         {
             "type": "file",
@@ -87,13 +87,13 @@
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz",
-            "sha256": "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+            "url": "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz",
+            "sha256": "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/46/31/60de7c9cbb97cac56b193a5b61a1fd4d21df84843a570b370ec34781316b/parso-0.3.1.tar.gz",
-            "sha256": "35704a43a3c113cce4de228ddb39aab374b8004f4f2407d070b6a2ca784ce8a2"
+            "url": "https://files.pythonhosted.org/packages/01/70/d9fa1a10aed70c192815aac7fd3eb38ef49aa5ab9cb36129ae22c8ecbf1f/parso-0.3.4.tar.gz",
+            "sha256": "68406ebd7eafe17f8e40e15a84b56848eccbf27d7c1feb89e93d8fca395706db"
         },
         {
             "type": "file",
@@ -102,23 +102,23 @@
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/ca/63/139b710671c1655aed3b20c1e6776118c62e9f9311152f4c6031e12a0554/lxml-4.2.4.tar.gz",
-            "sha256": "e2afbe403090f5893e254958d02875e0732975e73c4c0cdd33c1f009a61963ca"
+            "url": "https://files.pythonhosted.org/packages/0f/bd/bb1464d1f363dbd805862c8a1ea258b9a4f4d2049c376d1c4790b6545691/lxml-4.3.1.tar.gz",
+            "sha256": "da5e7e941d6e71c9c9a717c93725cda0708c2474f532e3680ac5e39ec57d224d"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/f2/b0/a1933d792b806118ddbca6699f2e2c844d9b1b16e84a89d7effd5cd2a800/sphinx_rtd_theme-0.4.1.tar.gz",
-            "sha256": "3b49758a64f8a1ebd8a33cb6cc9093c3935a908b716edfaa5772fd86aac27ef6"
+            "url": "https://files.pythonhosted.org/packages/ed/73/7e550d6e4cf9f78a0e0b60b9d93dba295389c3d271c034bf2ea3463a79f9/sphinx_rtd_theme-0.4.3.tar.gz",
+            "sha256": "728607e34d60456d736cc7991fd236afb828b21b82f956c5ea75f94c8414040a"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/eb/3c/702e89ad33529c0107d44ebc1a7eca97c4fd77ae2784060923a65864fcbd/Sphinx-1.7.6.tar.gz",
-            "sha256": "217ad9ece2156ed9f8af12b5d2c82a499ddf2c70a33c5f81864a08d8c67b9efc"
+            "url": "https://files.pythonhosted.org/packages/dd/f8/df628d41f42793d446285767164c6a8da71d82892f2c98c43e0523836d39/Sphinx-1.8.4.tar.gz",
+            "sha256": "c1c00fc4f6e8b101a0d037065043460dffc2d507257f2f11acaed71fd2b0c83c"
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/49/2f/cdfb8adc8cfc9fc2e5673e724d9b9098619dc1a2772cc6b8af34c6b7bef9/jedi-0.12.1.tar.gz",
-            "sha256": "b409ed0f6913a701ed474a614a3bb46e6953639033e31f769ca7581da5bd1ec1"
+            "url": "https://files.pythonhosted.org/packages/e4/83/4c05db437252694660c972b5374b35a68a8a0a8cd012dc95e5fd4d7e71b0/jedi-0.13.2.tar.gz",
+            "sha256": "571702b5bd167911fe9036e5039ba67f820d6502832285cde8c881ab2b2149fd"
         }
     ]
 }
