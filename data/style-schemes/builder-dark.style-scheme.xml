@@ -59,9 +59,8 @@
   <color name="pink1"                       value="#dd4a68"/>
   <color name="red1"                        value="#ff0000"/>
 
-  <color name="dark1"                        value="#201f21"/>
-  <color name="dark2"                        value="#232224"/>
-  <color name="dark3"                        value="#535255"/>
+  <color name="dark1"                        value="#1e1e1e"/>
+  <color name="dark2"                        value="#303030"/>
 
   <!-- Global Settings -->
   <style name="text"                        foreground="aluminium3" background="dark1"/>
@@ -69,9 +68,9 @@
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="dark2"/>
   <style name="current-line-number"         background="dark2"/>
-  <style name="line-numbers"                foreground="dark3" background="dark1"/>
-  <style name="draw-spaces"                 foreground="dark3"/>
-  <style name="background-pattern"          background="dark2"/>
+  <style name="line-numbers"                foreground="aluminium5" background="dark1"/>
+  <style name="draw-spaces"                 foreground="aluminium5"/>
+  <style name="background-pattern"          background="#202020"/>
   <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
 
   <!-- Diagnostics Underlining -->
