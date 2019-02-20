@@ -446,7 +446,28 @@ void
 ide_clone_surface_set_uri (IdeCloneSurface *self,
                            const gchar     *uri)
 {
+  static const struct {
+    const gchar *prefix;
+    const gchar *expanded;
+  } mappings[] = {
+    { "gnome:", "https://gitlab.gnome.org/" },
+    { "gitlab:", "https://gitlab.com/" },
+    { "github:", "https://github.com/" },
+  };
+  g_autofree gchar *expanded = NULL;
+
   g_return_if_fail (IDE_IS_CLONE_SURFACE (self));
+
+  if (uri != NULL)
+    {
+      for (guint i = 0; i < G_N_ELEMENTS (mappings); i++)
+        {
+          const gchar *prefix = mappings[i].prefix;
+
+          if (g_str_has_prefix (uri, prefix))
+            uri = expanded = g_strdup_printf ("%s%s", mappings[i].expanded, uri + strlen (prefix));
+        }
+    }
 
   gtk_entry_set_text (self->uri_entry, uri);
 }
