@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-14 19:55+0000\n"
-"PO-Revision-Date: 2019-02-16 12:10+0200\n"
+"POT-Creation-Date: 2019-02-19 22:52+0000\n"
+"PO-Revision-Date: 2019-02-20 01:27+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -820,7 +820,7 @@ msgstr "_Renomear"
 msgid "unsaved file %u"
 msgstr "ficheiro %u non gardado"
 
-#: src/libide/code/ide-buffer.c:3305
+#: src/libide/code/ide-buffer.c:3351
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 
@@ -1366,7 +1366,7 @@ msgid "Workbench shortcuts"
 msgstr "Atallos do banco de traballo"
 
 #: src/libide/foundry/ide-run-manager.c:853
-#: src/libide/gui/ide-shortcuts-window.ui:412
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construír e executar"
@@ -1415,10 +1415,6 @@ msgid "Repository URL"
 msgstr "URL do repositorio"
 
 #: src/libide/greeter/ide-clone-surface.ui:63
-#| msgid ""
-#| "Enter the repository of the project you would like to clone. The URL "
-#| "should look similar to \"https://gitlab.gnome.org/GNOME/gnome-builder.git"
-#| "\"."
 msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
@@ -1629,7 +1625,7 @@ msgstr "Mostrar a xanela de axuda"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:483
+#: src/libide/gui/ide-shortcuts-window.ui:510
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
@@ -1749,7 +1745,7 @@ msgstr "Atallos da xanela"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:472
+#: src/libide/gui/ide-shortcuts-window.ui:499
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
@@ -2302,7 +2298,7 @@ msgid "Workspace shortcuts"
 msgstr "Atallos do espazo de traballo"
 
 #: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:540
+#: src/libide/gui/ide-shortcuts-window.ui:567
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Buscar"
@@ -2318,34 +2314,34 @@ msgid "Editor Shortcuts"
 msgstr "Editor de atallos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:476
+#: src/libide/gui/ide-shortcuts-window.ui:503
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Busca global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:490
+#: src/libide/gui/ide-shortcuts-window.ui:517
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de ordes"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:497
+#: src/libide/gui/ide-shortcuts-window.ui:524
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:504
+#: src/libide/gui/ide-shortcuts-window.ui:531
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tempo de execución de construción"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:511
+#: src/libide/gui/ide-shortcuts-window.ui:538
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atallos de teclado"
@@ -2401,13 +2397,13 @@ msgid "Clear highlight"
 msgstr "Limpar realzado"
 
 #: src/libide/gui/ide-shortcuts-window.ui:199
-#: src/libide/gui/ide-shortcuts-window.ui:520
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar e pegar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:204
-#: src/libide/gui/ide-shortcuts-window.ui:525
+#: src/libide/gui/ide-shortcuts-window.ui:552
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar o texto seleccionado ao portapapeis"
@@ -2418,7 +2414,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Cortar o texto seleccionado ao portapapeis"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:532
+#: src/libide/gui/ide-shortcuts-window.ui:559
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto desde o portapapeis"
@@ -2444,6 +2440,30 @@ msgid "Redo previous command"
 msgstr "Refacer a anterior orde"
 
 #: src/libide/gui/ide-shortcuts-window.ui:253
+#| msgid "Zoom"
+msgctxt "shortcut window"
+msgid "Zoom"
+msgstr "Ampliación"
+
+#: src/libide/gui/ide-shortcuts-window.ui:258
+#| msgid "Zoom _In"
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "Ampliar"
+
+#: src/libide/gui/ide-shortcuts-window.ui:265
+#| msgid "Zoom _Out"
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "Reducir"
+
+#: src/libide/gui/ide-shortcuts-window.ui:272
+#| msgid "Reset"
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "Restabelecer ampliación"
+
+#: src/libide/gui/ide-shortcuts-window.ui:280
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
@@ -2452,173 +2472,167 @@ msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Editando"
 
-#: src/libide/gui/ide-shortcuts-window.ui:258
+#: src/libide/gui/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Incrementar o número no cursor"
 
-#: src/libide/gui/ide-shortcuts-window.ui:265
+#: src/libide/gui/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Decrementar o número no cursor"
 
-#: src/libide/gui/ide-shortcuts-window.ui:272
+#: src/libide/gui/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Unir liñas seleccionadas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:279
+#: src/libide/gui/ide-shortcuts-window.ui:306
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Mostrar a xanela de completado"
 
-#: src/libide/gui/ide-shortcuts-window.ui:286
+#: src/libide/gui/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Trocar a sobrescritura"
 
-#: src/libide/gui/ide-shortcuts-window.ui:293
+#: src/libide/gui/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Reindentar liña"
 
-#: src/libide/gui/ide-shortcuts-window.ui:300
+#: src/libide/gui/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Eliminar liña"
 
-#: src/libide/gui/ide-shortcuts-window.ui:307
+#: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:308
+#: src/libide/gui/ide-shortcuts-window.ui:335
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Require compatibilidade de idiomas semánticos"
 
-#: src/libide/gui/ide-shortcuts-window.ui:316
+#: src/libide/gui/ide-shortcuts-window.ui:343
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegación"
 
-#: src/libide/gui/ide-shortcuts-window.ui:321
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Moverse ao seguinte erro no ficheiro"
 
-#: src/libide/gui/ide-shortcuts-window.ui:328
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Moverse ao anterior erro no ficheiro"
 
-#: src/libide/gui/ide-shortcuts-window.ui:335
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Moverse á anterior localización de edición"
 
-#: src/libide/gui/ide-shortcuts-window.ui:342
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Moverse á seguinte localización de edición"
 
-#: src/libide/gui/ide-shortcuts-window.ui:349
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Saltar á definición do símbolo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:356
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mover o punto de vista cara arriba no ficheiro"
 
-#: src/libide/gui/ide-shortcuts-window.ui:363
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mover o punto de vista cara abaixo no ficheiro"
 
-#: src/libide/gui/ide-shortcuts-window.ui:370
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mover o punto de vista ao final do ficheiro"
 
-#: src/libide/gui/ide-shortcuts-window.ui:377
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mover o punto de vista ao inicio do ficheiro"
 
-#: src/libide/gui/ide-shortcuts-window.ui:384
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Moverse á chave coincidente"
 
-#: src/libide/gui/ide-shortcuts-window.ui:392
+#: src/libide/gui/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Seleccións"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:424
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:431
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:417
+#: src/libide/gui/ide-shortcuts-window.ui:444
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Construír"
 
-#: src/libide/gui/ide-shortcuts-window.ui:424
+#: src/libide/gui/ide-shortcuts-window.ui:451
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Executar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:431
+#: src/libide/gui/ide-shortcuts-window.ui:458
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfilador"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:466
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Xestos da área táctil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
-#| msgctxt "shortcut window"
-#| msgid "Move document to the right"
+#: src/libide/gui/ide-shortcuts-window.ui:473
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Mover páxina á dereita"
 
-#: src/libide/gui/ide-shortcuts-window.ui:447
-#| msgid "Two finger swipe right"
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Deslizamento de tres dedos á dereita"
 
-#: src/libide/gui/ide-shortcuts-window.ui:456
-#| msgctxt "shortcut window"
-#| msgid "Move document to the left"
+#: src/libide/gui/ide-shortcuts-window.ui:483
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Mover páxina á esquerda"
 
-#: src/libide/gui/ide-shortcuts-window.ui:457
-#| msgid "Two finger swipe left"
+#: src/libide/gui/ide-shortcuts-window.ui:484
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Deslizamento de tres dedos á esquerda"
 
-#: src/libide/gui/ide-shortcuts-window.ui:468
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atallos de terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:572
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Bucar texto na terminal"
@@ -2829,7 +2843,7 @@ msgid "Configuring project"
 msgstr "Configurando o proxecto"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:147
+#: src/plugins/cargo/cargo_plugin.py:149
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
@@ -3223,7 +3237,7 @@ msgstr "Detalles da construción"
 msgid "Build pipeline is empty"
 msgstr "A tubería de construción está baleira"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:148
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:153
 msgid "Build Targets"
 msgstr "Obxectivos da construción"
 
@@ -4232,7 +4246,7 @@ msgid "GCC %s Cross-Compiler (System)"
 msgstr "Compilación cruzada de GCC %s (Sistema)"
 
 #. translators: %s is replaced with the error string from git
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:378
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:405
 #, c-format
 msgid ""
 "There was a failure while calculating line changes from git. The exact error "
@@ -4241,17 +4255,17 @@ msgstr ""
 "Produciuse un fallo ao calcular os cambios de liña desde git. O erro exacto "
 "foi: %s"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:639
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:666
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "O repositorio non ten un cartafol de traballo."
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:650
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:677
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "O ficheiro non está baixo o control do cartafol de traballo de git."
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:716
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:743
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "O ficheiro solicitado non existe dentro do índice de git."
@@ -4887,6 +4901,11 @@ msgstr "Descargando as dependencias de npm"
 msgid "Bootstrapping project"
 msgstr "Inicializando o proxecto"
 
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:99
+msgid "Containers/Podman"
+msgstr "Contenedores/Podman"
+
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
 #: src/plugins/project-tree/gbp-rename-file-popover.c:144
 msgid "A folder with that name already exists."
@@ -4920,39 +4939,39 @@ msgstr "Probas unitarias"
 msgid "Files"
 msgstr "Ficheiros"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:657
+#: src/plugins/project-tree/gbp-project-tree-addin.c:682
 #, c-format
 msgid "Copying 1 file"
 msgstr "Copiar 1 ficheiro"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:660
+#: src/plugins/project-tree/gbp-project-tree-addin.c:685
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s ficheiros de %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Failed to copy files"
 msgstr "Produciuse un fallo ao copiar os ficheiros"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:706
+#: src/plugins/project-tree/gbp-project-tree-addin.c:731
 msgid "Files copied"
 msgstr "Ficheiros copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:710
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
 msgid "Copied 1 file"
 msgstr "1 ficheiro copiado"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:718
+#: src/plugins/project-tree/gbp-project-tree-addin.c:743
 #, c-format
 msgid "Copied %s files"
 msgstr "%s ficheiros copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:858
+#: src/plugins/project-tree/gbp-project-tree-addin.c:883
 msgid "Copying files…"
 msgstr "Copiando ficheiros…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:859
+#: src/plugins/project-tree/gbp-project-tree-addin.c:884
 msgid "Files will be copied in a moment"
 msgstr "Copiaranse os ficheiros nun momento"
 
