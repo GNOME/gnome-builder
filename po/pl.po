@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-19 22:52+0000\n"
-"PO-Revision-Date: 2019-02-20 21:10+0100\n"
+"POT-Creation-Date: 2019-02-21 01:19+0000\n"
+"PO-Revision-Date: 2019-02-21 12:51+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -805,7 +805,7 @@ msgid "Rename"
 msgstr "Zmień nazwę"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:408
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Usuń"
@@ -873,28 +873,28 @@ msgstr "Wydrukowanie się nie powiodło: %s"
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
 #: src/libide/editor/ide-editor-page-actions.c:189
-#: src/libide/editor/ide-editor-page-actions.c:301
+#: src/libide/editor/ide-editor-page-actions.c:297
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Zapisanie pliku się nie powiodło: %s"
 
-#: src/libide/editor/ide-editor-page-actions.c:237
+#: src/libide/editor/ide-editor-page-actions.c:233
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
 msgid "Save File"
 msgstr "Zapis pliku"
 
-#: src/libide/editor/ide-editor-page-actions.c:240
+#: src/libide/editor/ide-editor-page-actions.c:236
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 msgid "Save"
 msgstr "Zapisz"
 
-#: src/libide/editor/ide-editor-page-actions.c:240
-#: src/libide/editor/ide-editor-page-actions.c:340
+#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:336
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
-#: src/libide/greeter/ide-greeter-workspace.c:518
+#: src/libide/greeter/ide-greeter-workspace.c:517
 #: src/libide/gui/ide-workbench.c:1339
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -904,11 +904,11 @@ msgstr "Zapisz"
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: src/libide/editor/ide-editor-page-actions.c:336
+#: src/libide/editor/ide-editor-page-actions.c:332
 msgid "Save File As"
 msgstr "Zapisz plik jako"
 
-#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-page-actions.c:335
 msgid "Save As"
 msgstr "Zapisz jako"
 
@@ -1073,7 +1073,7 @@ msgstr "Tryb wyróżniania"
 #: src/libide/gui/ide-preferences-builtin.c:206
 #: src/libide/gui/ide-preferences-builtin.c:324
 #: src/libide/gui/ide-preferences-builtin.c:396
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 msgid "General"
 msgstr "Ogólne"
 
@@ -1383,7 +1383,7 @@ msgstr "Wykonaj"
 msgid "Process quit unexpectedly"
 msgstr "Proces nieoczekiwanie zakończył działanie"
 
-#: src/libide/foundry/ide-runtime-manager.c:142
+#: src/libide/foundry/ide-runtime-manager.c:138
 msgid "Use host operating system"
 msgstr "Użycie systemu operacyjnego gospodarza"
 
@@ -1392,18 +1392,18 @@ msgstr "Użycie systemu operacyjnego gospodarza"
 msgid "Host System"
 msgstr "System gospodarza"
 
-#: src/libide/foundry/ide-toolchain-manager.c:337
+#: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
 msgstr "Domyślne (system operacyjny gospodarza)"
 
 #. translators: %s is replaced with the path to the project
-#: src/libide/greeter/ide-clone-surface.c:250
+#: src/libide/greeter/ide-clone-surface.c:249
 #, c-format
 msgid "The directory “%s” already exists. Please choose another directory."
 msgstr "Katalog „%s” już istnieje. Proszę wybrać inny."
 
 #. translators: %s is replaced with the path to the project
-#: src/libide/greeter/ide-clone-surface.c:258
+#: src/libide/greeter/ide-clone-surface.c:257
 #, c-format
 msgid "Your project will be created at %s"
 msgstr "Projekt zostanie utworzony w %s"
@@ -1482,11 +1482,11 @@ msgstr "_Otwórz"
 msgid "All Project Types"
 msgstr "Wszystkie typy projektów"
 
-#: src/libide/greeter/ide-greeter-workspace.c:322
+#: src/libide/greeter/ide-greeter-workspace.c:321
 msgid "Failed to load the project"
 msgstr "Wczytanie projektu się nie powiodło"
 
-#: src/libide/greeter/ide-greeter-workspace.c:515
+#: src/libide/greeter/ide-greeter-workspace.c:514
 msgid ""
 "Removing project sources will delete them from your computer and cannot be "
 "undone."
@@ -1494,7 +1494,7 @@ msgstr ""
 "Usunięcie źródeł projektu spowoduje usunięcie ich z komputera i nie może "
 "zostać cofnięte."
 
-#: src/libide/greeter/ide-greeter-workspace.c:519
+#: src/libide/greeter/ide-greeter-workspace.c:518
 msgid "Delete Project Sources"
 msgstr "Usuń źródła projektu"
 
@@ -3031,7 +3031,7 @@ msgid "Select a build configuration from the sidebar to modify."
 msgstr ""
 "Proszę wybrać konfigurację budowania do zmodyfikowania z panelu bocznego."
 
-#: src/plugins/buildui/gbp-buildui-config-surface.c:219
+#: src/plugins/buildui/gbp-buildui-config-surface.c:218
 msgid "Build Configurations"
 msgstr "Konfiguracje budowania"
 
@@ -3039,19 +3039,19 @@ msgstr "Konfiguracje budowania"
 msgid "All Runtimes"
 msgstr "Wszystkie środowiska wykonawcze"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Make active"
 msgstr "Ustaw jako aktywne"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Select this configuration as the active configuration."
 msgstr "Wybiera tę konfigurację jako aktywną."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid "Duplicate"
 msgstr "Powiel"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
@@ -3059,54 +3059,54 @@ msgstr ""
 "Powiela konfigurację, umożliwiając wprowadzanie zmian bez modyfikowania tej "
 "konfiguracji."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:408
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "Removes the configuration and cannot be undone."
 msgstr "Usuwa konfigurację, czego nie można cofnąć."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:425
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
 msgid "Environment"
 msgstr "Środowisko"
 
 #. Add groups to pages
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:428
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
 msgid "Overview"
 msgstr "Przegląd"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:429
 msgid "Build Environment"
 msgstr "Środowisko budowania"
 
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
 msgid "Source Directory"
 msgstr "Katalog źródłowy"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 msgid "Build System"
 msgstr "System budowania"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:465
 msgid "Install Prefix"
 msgstr "Przedrostek instalacji"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:474
 msgid "Configure Options"
 msgstr "Opcje polecenia configure"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:479
 msgid "Application Runtime"
 msgstr "Środowisko wykonawcze programu"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:483
 msgid "Build Toolchain"
 msgstr "Zestaw narzędzi budowania"
 
@@ -3226,7 +3226,7 @@ msgstr "Informacje o budowaniu"
 msgid "Build pipeline is empty"
 msgstr "Potok budowania jest pusty"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:153
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:162
 msgid "Build Targets"
 msgstr "Cele budowania"
 
@@ -3368,7 +3368,7 @@ msgstr ""
 #. *              file (.h) rather than a source file (.c).
 #.
 #: src/plugins/code-index/ide-code-index-index.c:343
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
 msgid "Declaration"
 msgstr "Deklaracja"
 
@@ -3954,7 +3954,7 @@ msgstr "Parametry"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
 #: src/plugins/grep/gbp-grep-panel.c:482
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
 msgstr "Położenie"
@@ -4275,7 +4275,7 @@ msgstr "Inicjacja podmodułów git"
 msgid "The protocol “%s” is not supported."
 msgstr "Protokół „%s” nie jest obsługiwany."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:280
+#: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
 msgstr "Wymagany jest prawidłowy adres URL systemu git"
 
@@ -4917,54 +4917,49 @@ msgstr "Nazwa katalogu"
 msgid "_Create"
 msgstr "_Utwórz"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:203
-#: src/plugins/testui/gbp-test-tree-addin.c:153
-msgid "Unit Tests"
-msgstr "Testy jednostkowe"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:218
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
 msgid "Files"
 msgstr "Pliki"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:672
 #, c-format
 msgid "Copying 1 file"
 msgstr "Kopiowanie 1 pliku"
 
 # FIXME https://gitlab.gnome.org/GNOME/gnome-builder/issues/774
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:675
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopiowanie plików: %s z %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:711
 msgid "Failed to copy files"
 msgstr "Skopiowanie plików się nie powiodło"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Files copied"
 msgstr "Skopiowano pliki"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Copied 1 file"
 msgstr "Skopiowano 1 plik"
 
 # FIXME https://gitlab.gnome.org/GNOME/gnome-builder/issues/774
-#: src/plugins/project-tree/gbp-project-tree-addin.c:743
+#: src/plugins/project-tree/gbp-project-tree-addin.c:733
 #, c-format
 msgid "Copied %s files"
 msgstr "Skopiowano pliki: %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:883
+#: src/plugins/project-tree/gbp-project-tree-addin.c:873
 msgid "Copying files…"
 msgstr "Kopiowanie plików…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:884
+#: src/plugins/project-tree/gbp-project-tree-addin.c:874
 msgid "Files will be copied in a moment"
 msgstr "Pliki zostaną za chwilę skopiowanie"
 
-#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:64
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:65
 msgid "Project Tree"
 msgstr "Drzewo projektu"
 
@@ -5320,11 +5315,11 @@ msgctxt "shortcut window"
 msgid "Search symbols within document"
 msgstr "Wyszukiwanie symboli w dokumencie"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:119
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
 msgstr "Symbol bez nazwy"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:159
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:155
 msgid "Symbol"
 msgstr "Symbol"
 
@@ -5411,7 +5406,7 @@ msgstr ""
 msgid "%s (Sysroot SDK)"
 msgstr "%s (środowisko programistyczne sysroot)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:65
+#: src/plugins/terminal/gbp-terminal-application-addin.c:64
 msgid "Use terminal interface"
 msgstr "Używa interfejsu terminala"
 
@@ -5446,8 +5441,16 @@ msgstr "Nowy terminal _budowania"
 msgid "New _Runtime Terminal"
 msgstr "Nowy terminal ś_rodowiska wykonawczego"
 
+#: src/plugins/testui/gbp-test-output-panel.c:48
+msgid "Unit Test Output"
+msgstr "Wyjście testu jednostkowego"
+
+#: src/plugins/testui/gbp-test-tree-addin.c:197
+msgid "Unit Tests"
+msgstr "Testy jednostkowe"
+
 #. translators: %s is replaced with the name of the unit test
-#: src/plugins/testui/gbp-test-tree-addin.c:352
+#: src/plugins/testui/gbp-test-tree-addin.c:407
 #, c-format
 msgid "Running test “%s”…"
 msgstr "Wykonywanie testu „%s”…"
