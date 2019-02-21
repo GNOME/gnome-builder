@@ -177,8 +177,6 @@ class MavenIdeTestProvider(Ide.TestProvider):
             if not runner:
                task.return_error(Ide.NotSupportedError())
 
-            runner.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE)
-
             if pty is not None:
                 runner.set_pty(pty)
 

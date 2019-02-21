@@ -454,10 +454,6 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   g_assert (IDE_IS_TEST (run->test));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_runner_set_flags (runner,
-                        (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                         G_SUBPROCESS_FLAGS_STDERR_PIPE));
-
   if (run->pty)
     ide_runner_set_pty (runner, run->pty);
 
