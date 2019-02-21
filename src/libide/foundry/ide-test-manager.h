@@ -41,6 +41,8 @@ IdeTestManager  *ide_test_manager_from_context         (IdeContext           *co
 IDE_AVAILABLE_IN_3_32
 gboolean         ide_test_manager_get_loading          (IdeTestManager       *self);
 IDE_AVAILABLE_IN_3_32
+VtePty          *ide_test_manager_get_pty              (IdeTestManager       *self);
+IDE_AVAILABLE_IN_3_32
 void             ide_test_manager_run_async            (IdeTestManager       *self,
                                                         IdeTest              *test,
                                                         GCancellable         *cancellable,

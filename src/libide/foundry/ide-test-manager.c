@@ -57,6 +57,7 @@ struct _IdeTestManager
   PeasExtensionSet *providers;
   GPtrArray        *tests_by_provider;
   GtkTreeStore     *tests_store;
+  VtePty           *pty;
 };
 
 typedef struct
@@ -106,7 +107,7 @@ tests_by_provider_free (gpointer data)
 }
 
 static void
-ide_test_manager_dispose (GObject *object)
+ide_test_manager_destroy (IdeObject *object)
 {
   IdeTestManager *self = (IdeTestManager *)object;
 
@@ -119,7 +120,9 @@ ide_test_manager_dispose (GObject *object)
   g_clear_object (&self->providers);
   g_clear_pointer (&self->tests_by_provider, g_ptr_array_unref);
 
-  G_OBJECT_CLASS (ide_test_manager_parent_class)->dispose (object);
+  g_clear_object (&self->pty);
+
+  IDE_OBJECT_CLASS (ide_test_manager_parent_class)->destroy (object);
 }
 
 static void
@@ -145,9 +148,11 @@ static void
 ide_test_manager_class_init (IdeTestManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_test_manager_dispose;
   object_class->get_property = ide_test_manager_get_property;
+
+  i_object_class->destroy = ide_test_manager_destroy;
 
   /**
    * IdeTestManager:loading:
@@ -731,10 +736,21 @@ ide_test_manager_run_async (IdeTestManager      *self,
 
   provider = _ide_test_get_provider (test);
 
+  if (self->pty == NULL)
+    {
+      g_autoptr(GError) error = NULL;
+
+      if (!(self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, cancellable, &error)))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
+    }
+
   ide_test_provider_run_async (provider,
                                test,
                                pipeline,
-                               NULL, /* PTY */
+                               self->pty,
                                cancellable,
                                ide_test_manager_run_cb,
                                g_steal_pointer (&task));
