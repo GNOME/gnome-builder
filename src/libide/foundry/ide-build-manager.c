@@ -527,6 +527,10 @@ ide_build_manager_device_get_info_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  IDE_TRACE_MSG (" Device Kind = %d", ide_device_info_get_kind (info));
+  IDE_TRACE_MSG (" Device Triplet = %s",
+                 ide_triplet_get_full_name (ide_device_info_get_host_triplet (info)));
+
   _ide_pipeline_check_toolchain (pipeline, info);
 
   _ide_runtime_manager_prepare_async (runtime_manager,
