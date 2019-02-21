@@ -112,6 +112,17 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_stage.connect('query', self._query)
         self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
+        install_launcher = pipeline.create_launcher()
+        install_launcher.set_cwd(srcdir)
+        install_launcher.push_argv(python)
+        install_launcher.push_argv('waf')
+        install_launcher.push_argv('install')
+
+        install_stage = Ide.PipelineStageLauncher.new(context, install_launcher)
+        install_stage.set_name(_("Installing project…"))
+        install_stage.connect('query', self._query)
+        self.track(pipeline.attach(Ide.PipelinePhase.INSTALL, 0, install_stage))
+
     def do_unload(self, application):
         pass
 
