@@ -98,6 +98,7 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_launcher.set_cwd(srcdir)
         build_launcher.push_argv(python)
         build_launcher.push_argv('waf')
+        build_launcher.push_argv('build')
 
         clean_launcher = pipeline.create_launcher()
         clean_launcher.set_cwd(srcdir)
