@@ -684,8 +684,13 @@ ide_device_manager_action_device (IdeDeviceManager *self,
 
   IDE_TRACE_MSG ("Setting device to \"%s\"", device_id);
 
-  if ((device = ide_device_manager_get_device_by_id (self, device_id)))
-    ide_device_manager_set_device (self, device);
+  if (!(device = ide_device_manager_get_device_by_id (self, device_id)))
+    {
+      g_debug ("No such device \"%s\"", device_id);
+      IDE_EXIT;
+    }
+
+  ide_device_manager_set_device (self, device);
 }
 
 static void
