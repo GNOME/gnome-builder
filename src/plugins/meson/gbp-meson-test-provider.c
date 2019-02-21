@@ -334,10 +334,10 @@ gbp_meson_test_provider_reload (gpointer user_data)
    * be lazy about fetching unit tests until the panel is displayed.
    */
   ide_pipeline_build_async (pipeline,
-                                  IDE_PIPELINE_PHASE_CONFIGURE,
-                                  self->build_cancellable,
-                                  gbp_meson_test_provider_build_cb,
-                                  g_object_ref (self));
+                            IDE_PIPELINE_PHASE_CONFIGURE,
+                            self->build_cancellable,
+                            gbp_meson_test_provider_build_cb,
+                            g_object_ref (self));
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
