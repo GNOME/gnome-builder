@@ -118,6 +118,7 @@ subdir('trim-spaces')
 subdir('valgrind')
 subdir('vcsui')
 subdir('vim')
+subdir('waf')
 subdir('words')
 subdir('xml-pack')
 
@@ -181,6 +182,7 @@ status += [
   'Todo .................. : @0@'.format(get_option('plugin_todo')),
   'Vala Pack ............. : @0@'.format(get_option('plugin_vala')),
   'Valgrind .............. : @0@'.format(get_option('plugin_valgrind')),
+  'Waf ................... : @0@'.format(get_option('plugin_waf')),
   'Word Completion ....... : @0@'.format(get_option('plugin_words')),
   'XML Pack .............. : @0@'.format(get_option('plugin_xml_pack')),
   '',
