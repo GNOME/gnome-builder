@@ -71,6 +71,8 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         context = self.get_context()
         build_system = Ide.BuildSystem.from_context(context)
         srcdir = pipeline.get_srcdir()
+        config = pipeline.get_config()
+        config_opts = config.get_config_opts()
 
         # Ignore pipeline unless this is a waf project
         if type(build_system) != WafBuildSystem:
@@ -86,6 +88,9 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         config_launcher.push_argv(python)
         config_launcher.push_argv('waf')
         config_launcher.push_argv('configure')
+        config_launcher.push_argv('--prefix=%s' % config.get_prefix())
+        if config_opts:
+            config_launcher.push_args(config_opts)
         self.track(pipeline.attach_launcher(Ide.PipelinePhase.CONFIGURE, 0, config_launcher))
 
         # Now create our launcher to build the project
