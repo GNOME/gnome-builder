@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-editor.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
 #include <libide-tree.h>
@@ -31,13 +32,15 @@
 #include "ide-tree-private.h"
 
 #include "gbp-test-path.h"
+#include "gbp-test-output-panel.h"
 #include "gbp-test-tree-addin.h"
 
 struct _GbpTestTreeAddin
 {
-  GObject       parent_instance;
-  IdeTreeModel *model;
-  IdeTree      *tree;
+  GObject             parent_instance;
+  IdeTreeModel       *model;
+  IdeTree            *tree;
+  GbpTestOutputPanel *panel;
 };
 
 typedef struct
@@ -54,6 +57,40 @@ run_test_free (RunTest *state)
   g_clear_object (&state->test);
   g_clear_object (&state->notif);
   g_slice_free (RunTest, state);
+}
+
+static void
+show_test_panel (GbpTestTreeAddin *self)
+{
+  IdeTestManager *test_manager;
+  IdeContext *context;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TEST_TREE_ADDIN (self));
+
+  if (!(context = ide_object_get_context (IDE_OBJECT (self->model))) ||
+      !ide_context_has_project (context) ||
+      !(test_manager = ide_test_manager_from_context (context)))
+    return;
+
+  if (self->panel == NULL)
+    {
+      GtkWidget *surface;
+      GtkWidget *utils;
+      VtePty *pty;
+
+      pty = ide_test_manager_get_pty (test_manager);
+      self->panel = GBP_TEST_OUTPUT_PANEL (gbp_test_output_panel_new (pty));
+      g_signal_connect (self->panel,
+                        "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &self->panel);
+      surface = gtk_widget_get_ancestor (GTK_WIDGET (self->tree), IDE_TYPE_EDITOR_SURFACE);
+      utils = ide_editor_surface_get_utilities (IDE_EDITOR_SURFACE (surface));
+      gtk_container_add (GTK_CONTAINER (utils), GTK_WIDGET (self->panel));
+      gtk_widget_show (GTK_WIDGET (self->panel));
+      dzl_dock_item_present (DZL_DOCK_ITEM (self->panel));
+    }
 }
 
 static void
@@ -282,6 +319,9 @@ gbp_test_tree_addin_unload (IdeTreeAddin *addin,
   self->tree = NULL;
   self->model = NULL;
 
+  if (self->panel != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->panel));
+
   context = ide_object_get_context (IDE_OBJECT (model));
 
   if (!ide_context_has_project (context))
@@ -338,6 +378,7 @@ gbp_test_tree_addin_node_activated (IdeTreeAddin *addin,
                                     IdeTree      *tree,
                                     IdeTreeNode  *node)
 {
+  GbpTestTreeAddin *self = (GbpTestTreeAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *title = NULL;
   IdeTestManager *test_manager;
@@ -346,7 +387,7 @@ gbp_test_tree_addin_node_activated (IdeTreeAddin *addin,
   IdeTest *test;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_TEST_TREE_ADDIN (addin));
+  g_assert (GBP_IS_TEST_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE (tree));
   g_assert (IDE_IS_TREE_NODE (node));
 
@@ -374,6 +415,8 @@ gbp_test_tree_addin_node_activated (IdeTreeAddin *addin,
   ide_task_set_task_data (task, state, run_test_free);
 
   ide_tree_node_set_icon_name (node, "content-loading-symbolic");
+
+  show_test_panel (self);
 
   ide_test_manager_run_async (test_manager,
                               test,

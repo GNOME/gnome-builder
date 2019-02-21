@@ -332,6 +332,7 @@ src/plugins/sysroot/gbp-sysroot-toolchain-provider.c
 src/plugins/terminal/gbp-terminal-application-addin.c
 src/plugins/terminal/gbp-terminal-workspace-addin.c
 src/plugins/terminal/gtk/menus.ui
+src/plugins/testui/gbp-test-output-panel.c
 src/plugins/testui/gbp-test-tree-addin.c
 src/plugins/todo/gbp-todo-panel.c
 src/plugins/todo/gbp-todo-workspace-addin.c

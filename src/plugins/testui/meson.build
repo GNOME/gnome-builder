@@ -1,6 +1,7 @@
 plugins_sources += files([
   'testui-plugin.c',
   'gbp-test-path.c',
+  'gbp-test-output-panel.c',
   'gbp-test-tree-addin.c',
 ])
 
