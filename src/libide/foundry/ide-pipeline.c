@@ -52,6 +52,7 @@
 #include "ide-runtime.h"
 #include "ide-toolchain-manager.h"
 #include "ide-toolchain.h"
+#include "ide-triplet.h"
 
 DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
 G_DEFINE_QUARK (ide_build_error, ide_build_error)
@@ -150,6 +151,7 @@ struct _IdePipeline
    * strategy to get the compiled bits onto the device.
    */
   IdeDevice *device;
+  IdeDeviceInfo *device_info;
 
   /*
    * The cached triplet for the device we're compiling for. This allows
@@ -1334,6 +1336,7 @@ ide_pipeline_finalize (GObject *object)
   g_clear_object (&self->cancellable);
   g_clear_object (&self->log);
   g_clear_object (&self->device);
+  g_clear_object (&self->device_info);
   g_clear_object (&self->runtime);
   g_clear_object (&self->toolchain);
   g_clear_object (&self->config);
@@ -3963,6 +3966,8 @@ _ide_pipeline_check_toolchain (IdePipeline   *self,
   if (ide_object_in_destruction (IDE_OBJECT (self)))
     IDE_EXIT;
 
+  g_set_object (&self->device_info, info);
+
   context = ide_object_ref_context (IDE_OBJECT (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
@@ -4016,6 +4021,24 @@ ide_pipeline_get_device (IdePipeline *self)
   g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   return self->device;
+}
+
+/**
+ * ide_pipeline_get_device_info:
+ * @self: a #IdePipeline
+ *
+ * Gets the device info for the current device.
+ *
+ * Returns: (nullable) (transfer none): an #IdeDeviceInfo or %NULL
+ *
+ * Since: 3.32
+ */
+IdeDeviceInfo *
+ide_pipeline_get_device_info (IdePipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
+
+  return self->device_info;
 }
 
 /**
@@ -4079,4 +4102,25 @@ ide_pipeline_is_native (IdePipeline *self)
     return ide_triplet_is_system (self->host_triplet);
 
   return FALSE;
+}
+
+gchar *
+ide_pipeline_get_arch (IdePipeline *self)
+{
+  IdeRuntime *runtime;
+
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
+
+  if (self->device_info != NULL)
+    {
+      IdeTriplet *triplet;
+
+      if ((triplet = ide_device_info_get_host_triplet (self->device_info)))
+        return g_strdup (ide_triplet_get_arch (triplet));
+    }
+
+  if ((runtime = ide_pipeline_get_runtime (self)))
+    return ide_runtime_get_arch (runtime);
+
+  return NULL;
 }

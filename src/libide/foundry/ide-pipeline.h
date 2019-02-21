@@ -77,6 +77,8 @@ G_DECLARE_FINAL_TYPE (IdePipeline, ide_pipeline, IDE, PIPELINE, IdeObject)
 IDE_AVAILABLE_IN_3_32
 GQuark                 ide_build_error_quark             (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_3_32
+gchar                 *ide_pipeline_get_arch             (IdePipeline            *self);
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_pipeline_is_native            (IdePipeline            *self);
 IDE_AVAILABLE_IN_3_32
 gboolean               ide_pipeline_is_ready             (IdePipeline            *self);
@@ -86,6 +88,8 @@ IDE_AVAILABLE_IN_3_32
 IdeConfig             *ide_pipeline_get_config           (IdePipeline            *self);
 IDE_AVAILABLE_IN_3_32
 IdeDevice             *ide_pipeline_get_device           (IdePipeline            *self);
+IDE_AVAILABLE_IN_3_32
+IdeDeviceInfo         *ide_pipeline_get_device_info      (IdePipeline            *self);
 IDE_AVAILABLE_IN_3_32
 IdeTriplet            *ide_pipeline_get_host_triplet     (IdePipeline            *self);
 IDE_AVAILABLE_IN_3_32
