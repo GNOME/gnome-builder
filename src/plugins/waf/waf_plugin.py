@@ -107,7 +107,7 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         clean_launcher.push_argv('clean')
 
         build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
-        build_stage.set_name(_("Building project"))
+        build_stage.set_name(_("Building project…"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
         self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
