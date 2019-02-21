@@ -66,6 +66,7 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
     The WafPipelineAddin is responsible for creating the necessary build
     stages and attaching them to phases of the build pipeline.
     """
+    python = None
 
     def do_load(self, pipeline):
         context = self.get_context()
@@ -80,12 +81,15 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
 
         # Sniff the required python version
         waf = os.path.join(srcdir, 'waf')
-        python = sniff_python_version(waf)
+        self.python = sniff_python_version(waf)
+
+        # Avoid sniffing again later in targets provider
+        build_system.python = self.python
 
         # Launcher for project configuration
         config_launcher = pipeline.create_launcher()
         config_launcher.set_cwd(srcdir)
-        config_launcher.push_argv(python)
+        config_launcher.push_argv(self.python)
         config_launcher.push_argv('waf')
         config_launcher.push_argv('configure')
         config_launcher.push_argv('--prefix=%s' % config.get_prefix())
@@ -96,13 +100,13 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         # Now create our launcher to build the project
         build_launcher = pipeline.create_launcher()
         build_launcher.set_cwd(srcdir)
-        build_launcher.push_argv(python)
+        build_launcher.push_argv(self.python)
         build_launcher.push_argv('waf')
         build_launcher.push_argv('build')
 
         clean_launcher = pipeline.create_launcher()
         clean_launcher.set_cwd(srcdir)
-        clean_launcher.push_argv(python)
+        clean_launcher.push_argv(self.python)
         clean_launcher.push_argv('waf')
         clean_launcher.push_argv('clean')
 
@@ -114,7 +118,7 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
 
         install_launcher = pipeline.create_launcher()
         install_launcher.set_cwd(srcdir)
-        install_launcher.push_argv(python)
+        install_launcher.push_argv(self.python)
         install_launcher.push_argv('waf')
         install_launcher.push_argv('install')
 
@@ -130,3 +134,99 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         # Defer to waf to determine if building is necessary
         stage.set_completed(False)
 
+class WafBuildTarget(Ide.Object, Ide.BuildTarget):
+    name = None
+
+    def __init__(self, name, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.name = name
+
+    def do_get_install_directory(self):
+        # TODO: We pretend that everything is installed, how can we determine
+        #       if that is really the case? This allows us to choose a target
+        #       in the project-tree to run.
+        context = self.get_context()
+        config_manager = Ide.ConfigManager.from_context(context)
+        config = config_manager.get_current()
+        directory = config.get_prefix()
+        return Gio.File.new_for_path(os.path.join(directory, 'bin'))
+
+    def do_get_display_name(self):
+        return self.name
+
+    def do_get_name(self):
+        return self.name
+
+    def do_get_kind(self):
+        # TODO: How can we determine this? We fake executable so the user
+        # can right-click "Run" from the project-tree.
+        return Ide.ArtifactKind.EXECUTABLE
+
+    def do_get_language(self):
+        return None
+
+    def do_get_argv(self):
+        # TODO: Better way to discovery this, we just pretend the
+        #       target is installed to $prefix/bin because I don't
+        #       immediately see another way to do it.
+        context = self.get_context()
+        config_manager = Ide.ConfigManager.from_context(context)
+        config = config_manager.get_current()
+        directory = config.get_prefix()
+        return [os.path.join(directory, 'bin', self.name)]
+
+    def do_get_priority(self):
+        return 0
+
+class WafBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
+
+    def do_get_targets_async(self, cancellable, callback, data):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.set_priority(GLib.PRIORITY_LOW)
+        task.targets = []
+
+        context = self.get_context()
+        build_system = Ide.BuildSystem.from_context(context)
+        build_manager = Ide.BuildManager.from_context(context)
+        pipeline = build_manager.get_pipeline()
+
+        if pipeline is None or type(build_system) != WafBuildSystem:
+            task.return_error(GLib.Error('No access to waf build system',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
+            return
+
+        # For some reason, "waf list" outputs on stderr
+        launcher = pipeline.create_launcher()
+        launcher.set_flags(Gio.SubprocessFlags.STDOUT_SILENCE | Gio.SubprocessFlags.STDERR_PIPE)
+        launcher.set_cwd(pipeline.get_srcdir())
+        launcher.push_argv(build_system.python)
+        launcher.push_argv('waf')
+        launcher.push_argv('list')
+
+        try:
+            subprocess = launcher.spawn(cancellable)
+            subprocess.communicate_utf8_async(None, cancellable, self.communicate_cb, task)
+        except Exception as ex:
+            task.return_error(GLib.Error(repr(ex),
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.FAILED))
+
+    def do_get_targets_finish(self, result):
+        if result.propagate_boolean():
+            return result.targets
+
+    def communicate_cb(self, subprocess, result, task):
+        try:
+            ret, stdout, stderr = subprocess.communicate_utf8_finish(result)
+            lines = stderr.strip().split('\n')
+            if len(lines) > 0:
+                # Trim 'list' finished ... line
+                del lines[-1]
+            for line in lines:
+                task.targets.append(WafBuildTarget(line.strip()))
+            task.return_boolean(True)
+        except Exception as ex:
+            task.return_error(GLib.Error(repr(ex),
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.FAILED))
