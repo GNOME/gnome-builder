@@ -67,12 +67,10 @@ static gchar *
 get_arch_option (IdePipeline *pipeline)
 {
   g_autofree gchar *arch = NULL;
-  IdeRuntime *runtime;
 
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  runtime = ide_pipeline_get_runtime (pipeline);
-  arch = ide_runtime_get_arch (runtime);
+  arch = ide_pipeline_get_arch (pipeline);
 
   return g_strdup_printf ("--arch=%s", arch);
 }
