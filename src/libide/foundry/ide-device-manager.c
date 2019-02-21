@@ -638,9 +638,16 @@ ide_device_manager_set_device (IdeDeviceManager *self,
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (!device || IDE_IS_DEVICE (device));
 
+  IDE_ENTRY;
+
   if (g_set_object (&self->device, device))
     {
       const gchar *device_id = NULL;
+      IdeBuildManager *build_manager;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      build_manager = ide_build_manager_from_context (context);
 
       if (device != NULL)
         device_id = ide_device_get_id (device);
@@ -648,9 +655,15 @@ ide_device_manager_set_device (IdeDeviceManager *self,
       if (device_id == NULL)
         device_id = "local";
 
+      IDE_TRACE_MSG ("Device set to %s", device_id);
+
       ide_device_manager_set_action_state (self, "device", g_variant_new_string (device_id));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
+
+      ide_build_manager_invalidate (build_manager);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -660,12 +673,16 @@ ide_device_manager_action_device (IdeDeviceManager *self,
   const gchar *device_id;
   IdeDevice *device;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_DEVICE_MANAGER (self));
   g_assert (param != NULL);
   g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
   if (!(device_id = g_variant_get_string (param, NULL)))
     device_id = "local";
+
+  IDE_TRACE_MSG ("Setting device to \"%s\"", device_id);
 
   if ((device = ide_device_manager_get_device_by_id (self, device_id)))
     ide_device_manager_set_device (self, device);
