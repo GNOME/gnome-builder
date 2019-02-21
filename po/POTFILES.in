@@ -345,6 +345,7 @@ src/plugins/vcsui/gtk/menus.ui
 src/plugins/vim/gb-vim.c
 src/plugins/vim/gbp-vim-command-provider.c
 src/plugins/vim/gbp-vim-preferences-addin.c
+src/plugins/waf/waf_plugin.py
 src/plugins/xml-pack/ide-xml-highlighter.c
 src/plugins/xml-pack/ide-xml-parser.c
 src/plugins/xml-pack/ide-xml-sax.c
