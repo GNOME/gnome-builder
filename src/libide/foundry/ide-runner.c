@@ -1204,6 +1204,33 @@ ide_runner_set_tty (IdeRunner *self,
   IDE_EXIT;
 }
 
+/**
+ * ide_runner_set_pty:
+ * @self: a #IdeRunner
+ * @pty: (nullable): a #VtePty or %NULL
+ *
+ * Sets the #VtePty to use for the runner.
+ *
+ * This is equivalent to calling ide_runner_set_tty() with the
+ * result of vte_pty_get_fd().
+ *
+ * Since: 3.32
+ */
+void
+ide_runner_set_pty (IdeRunner *self,
+                    VtePty    *pty)
+{
+  int fd = -1;
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+  g_return_if_fail (!pty || VTE_IS_PTY (pty));
+
+  if (pty != NULL)
+    fd = vte_pty_get_fd (pty);
+
+  ide_runner_set_tty (self, fd);
+}
+
 static gint
 sort_fd_mapping (gconstpointer a,
                  gconstpointer b)

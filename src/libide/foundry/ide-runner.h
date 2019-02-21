@@ -26,6 +26,7 @@
 
 #include <libide-core.h>
 #include <libide-threading.h>
+#include <vte/vte.h>
 
 #include "ide-foundry-types.h"
 
@@ -128,6 +129,9 @@ gboolean           ide_runner_get_run_on_host  (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
 void               ide_runner_set_run_on_host  (IdeRunner            *self,
                                                 gboolean              run_on_host);
+IDE_AVAILABLE_IN_3_32
+void               ide_runner_set_pty          (IdeRunner            *self,
+                                                VtePty               *pty);
 IDE_AVAILABLE_IN_3_32
 void               ide_runner_set_tty          (IdeRunner            *self,
                                                 int                   tty_fd);

@@ -734,6 +734,7 @@ ide_test_manager_run_async (IdeTestManager      *self,
   ide_test_provider_run_async (provider,
                                test,
                                pipeline,
+                               NULL, /* PTY */
                                cancellable,
                                ide_test_manager_run_cb,
                                g_steal_pointer (&task));

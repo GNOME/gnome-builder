@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include <vte/vte.h>
 
 #include "ide-foundry-types.h"
 

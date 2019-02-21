@@ -156,7 +156,7 @@ class MavenBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
 
 class MavenIdeTestProvider(Ide.TestProvider):
 
-    def do_run_async(self, test, pipeline, cancellable, callback, data):
+    def do_run_async(self, test, pipeline, pty, cancellable, callback, data):
         task = Ide.Task.new(self, cancellable, callback)
         task.set_priority(GLib.PRIORITY_LOW)
 
@@ -178,6 +178,9 @@ class MavenIdeTestProvider(Ide.TestProvider):
                task.return_error(Ide.NotSupportedError())
 
             runner.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE)
+
+            if pty is not None:
+                runner.set_pty(pty)
 
             srcdir = pipeline.get_srcdir()
             runner.set_cwd(srcdir)
