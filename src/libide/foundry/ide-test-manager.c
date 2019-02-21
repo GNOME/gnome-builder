@@ -1036,3 +1036,24 @@ ide_test_manager_ensure_loaded_finish (IdeTestManager  *self,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+/**
+ * ide_test_manager_get_pty:
+ * @self: a #IdeTestManager
+ *
+ * Gets the #VtePty to use for running unit tests.
+ *
+ * Returns: (transfer none): a #VtePty
+ *
+ * Since: 3.32
+ */
+VtePty *
+ide_test_manager_get_pty (IdeTestManager *self)
+{
+  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
+
+  if (self->pty == NULL)
+    self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
+
+  return self->pty;
+}
