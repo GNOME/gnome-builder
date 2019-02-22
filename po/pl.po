@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-21 01:19+0000\n"
-"PO-Revision-Date: 2019-02-21 12:51+0100\n"
+"POT-Creation-Date: 2019-02-21 20:37+0000\n"
+"PO-Revision-Date: 2019-02-22 18:44+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -45,7 +45,7 @@ msgid ""
 msgstr ""
 "Builder to aktywnie rozwijane zintegrowane środowisko programistyczne dla "
 "projektu GNOME. Łączy ono zintegrowaną obsługę najważniejszych technologii "
-"GNOME, takich jak GTK+, GLib i API platformy GNOME z funkcjami, które doceni "
+"GNOME, takich jak GTK, GLib i API platformy GNOME z funkcjami, które doceni "
 "każdy programista, takimi jak wyróżnianie elementów składni i wstawki."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:18
@@ -5611,6 +5611,14 @@ msgstr "Vim"
 #: src/plugins/vim/gbp-vim-preferences-addin.c:53
 msgid "Emulates the Vim text editor"
 msgstr "Emulacja edytora tekstu Vim"
+
+#: src/plugins/waf/waf_plugin.py:110
+msgid "Building project…"
+msgstr "Budowanie projektu…"
+
+#: src/plugins/waf/waf_plugin.py:122
+msgid "Installing project…"
+msgstr "Instalowanie projektu…"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:584
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
