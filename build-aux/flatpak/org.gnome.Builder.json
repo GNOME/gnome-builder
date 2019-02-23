@@ -554,7 +554,7 @@
                 "-Dfusermount_wrapper=true",
                 "-Dwith_tcmalloc=true",
                 "-Dpython_libprefix=python3.7",
-                "-Denable_tracing=false",
+                "-Denable_tracing=true",
                 "-Dwith_help=true",
                 "-Dwith_channel=flatpak-nightly",
                 "-Dwith_deviced=true"
