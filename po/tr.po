@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-21 01:19+0000\n"
-"PO-Revision-Date: 2019-02-21 07:13+0300\n"
+"POT-Creation-Date: 2019-02-21 20:37+0000\n"
+"PO-Revision-Date: 2019-02-21 23:46+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -2424,25 +2424,21 @@ msgid "Redo previous command"
 msgstr "Önceki komutu yinele"
 
 #: src/libide/gui/ide-shortcuts-window.ui:253
-#| msgid "Zoom"
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Yakınlaştır"
 
 #: src/libide/gui/ide-shortcuts-window.ui:258
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "İçe Yakınlaştır"
 
 #: src/libide/gui/ide-shortcuts-window.ui:265
-#| msgid "Zoom _Out"
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
 #: src/libide/gui/ide-shortcuts-window.ui:272
-#| msgid "Reset"
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Yakınlaştırmayı Sıfırla"
@@ -5425,7 +5421,6 @@ msgid "New _Runtime Terminal"
 msgstr "Yeni _Çalışma Zamanı Uçbirimi"
 
 #: src/plugins/testui/gbp-test-output-panel.c:48
-#| msgid "Unit Tests"
 msgid "Unit Test Output"
 msgstr "Birim Sınama Çıktısı"
 
@@ -5595,6 +5590,16 @@ msgstr "Vim"
 #: src/plugins/vim/gbp-vim-preferences-addin.c:53
 msgid "Emulates the Vim text editor"
 msgstr "Vim metin düzenleyiciye öykünür"
+
+#: src/plugins/waf/waf_plugin.py:110
+#| msgid "Building project"
+msgid "Building project…"
+msgstr "Proje inşa ediliyor…"
+
+#: src/plugins/waf/waf_plugin.py:122
+#| msgid "Installing project"
+msgid "Installing project…"
+msgstr "Proje kuruluyor…"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:584
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
