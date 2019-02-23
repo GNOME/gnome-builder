@@ -912,7 +912,7 @@ ide_run_manager_set_build_target (IdeRunManager  *self,
                                   IdeBuildTarget *build_target)
 {
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
-  g_return_if_fail (IDE_IS_BUILD_TARGET (build_target));
+  g_return_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target));
 
   if (build_target == self->build_target)
     return;
