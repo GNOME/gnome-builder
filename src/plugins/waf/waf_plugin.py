@@ -94,7 +94,11 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         config_launcher.push_argv('configure')
         config_launcher.push_argv('--prefix=%s' % config.get_prefix())
         if config_opts:
-            config_launcher.push_args(config_opts)
+            try:
+                ret, argv = GLib.shell_parse_argv(config_opts)
+                config_launcher.push_args(argv)
+            except Exception as ex:
+                print(repr(ex))
         self.track(pipeline.attach_launcher(Ide.PipelinePhase.CONFIGURE, 0, config_launcher))
 
         # Now create our launcher to build the project
