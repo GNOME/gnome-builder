@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-21 01:19+0000\n"
-"PO-Revision-Date: 2019-02-21 22:51+0700\n"
+"POT-Creation-Date: 2019-02-21 20:37+0000\n"
+"PO-Revision-Date: 2019-02-23 22:07+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -5603,6 +5603,14 @@ msgstr "Vim"
 #: src/plugins/vim/gbp-vim-preferences-addin.c:53
 msgid "Emulates the Vim text editor"
 msgstr "Mengemulasi penyunting teks Vim"
+
+#: src/plugins/waf/waf_plugin.py:110
+msgid "Building project…"
+msgstr "Membangun proyek…"
+
+#: src/plugins/waf/waf_plugin.py:122
+msgid "Installing project…"
+msgstr "Memasang proyek…"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:584
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
