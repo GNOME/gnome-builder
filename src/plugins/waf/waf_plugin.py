@@ -45,7 +45,7 @@ def sniff_python_version(path):
 class WafBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.props.glob = 'waf'
+        self.props.glob = 'wscript'
         self.props.hint = 'waf_plugin'
         self.props.priority = 1000
 

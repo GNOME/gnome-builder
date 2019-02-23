@@ -7,5 +7,5 @@ Loader=python3
 Module=waf_plugin
 Name=Waf
 X-Project-File-Filter-Name=Waf (waf)
-X-Project-File-Filter-Pattern=waf
+X-Project-File-Filter-Pattern=wscript
 X-Builder-ABI=@PACKAGE_ABI@
