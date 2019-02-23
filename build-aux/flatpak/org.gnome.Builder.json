@@ -549,7 +549,7 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=lib",
-                "--buildtype=release",
+                "--buildtype=debugoptimized",
                 "-Dctags_path=/app/bin/ctags",
                 "-Dfusermount_wrapper=true",
                 "-Dwith_tcmalloc=true",
