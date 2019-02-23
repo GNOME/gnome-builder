@@ -37,6 +37,7 @@
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
 #include "ide-pipeline.h"
+#include "ide-run-manager.h"
 #include "ide-runtime-manager.h"
 #include "ide-runtime-private.h"
 #include "ide-runtime.h"
@@ -548,6 +549,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   g_autoptr(IdeTask) task = NULL;
   IdeConfigManager *config_manager;
   IdeDeviceManager *device_manager;
+  IdeRunManager *run_manager;
   IdeConfig *config;
   IdeContext *context;
   IdeDevice *device;
@@ -572,6 +574,12 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
       dzl_clear_source (&self->timer_source);
       g_signal_emit (self, signals [BUILD_FAILED], 0, self->pipeline);
     }
+
+  /*
+   * Clear any cached build targets from the run manager.
+   */
+  run_manager = ide_run_manager_from_context (context);
+  ide_run_manager_set_build_target (run_manager, NULL);
 
   /*
    * Cancel and clear our previous pipeline and associated components
