@@ -51,6 +51,8 @@ class WafBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
 
 class WafBuildSystem(Ide.Object, Ide.BuildSystem):
     project_file = GObject.Property(type=Gio.File)
+    python = None
+    waf_local = None
 
     def do_get_id(self):
         return 'waf'
@@ -67,6 +69,7 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
     stages and attaching them to phases of the build pipeline.
     """
     python = None
+    waf_local = None
 
     def do_load(self, pipeline):
         context = self.get_context()
@@ -87,6 +90,7 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
 
         # Avoid sniffing again later in targets provider
         build_system.python = self.python
+        build_system.waf_local = self.waf_local
 
         # Launcher for project configuration
         config_launcher = pipeline.create_launcher()
