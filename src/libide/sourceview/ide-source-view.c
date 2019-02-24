@@ -4576,6 +4576,8 @@ ide_source_view_do_size_allocate_hack_cb (gpointer data)
 
   GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (GTK_WIDGET (self), &alloc);
 
+  ide_source_view_set_overscroll_num_lines (self, priv->overscroll_num_lines);
+
   return G_SOURCE_REMOVE;
 }
 
@@ -4645,9 +4647,10 @@ ide_source_view_size_allocate (GtkWidget     *widget,
   g_assert (allocation != NULL);
 
   if (!ide_source_view_do_size_allocate_hack (self, allocation))
-    GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (GTK_WIDGET (self), allocation);
-
-  ide_source_view_set_overscroll_num_lines (self, priv->overscroll_num_lines);
+    {
+      GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (GTK_WIDGET (self), allocation);
+      ide_source_view_set_overscroll_num_lines (self, priv->overscroll_num_lines);
+    }
 }
 
 static gboolean
