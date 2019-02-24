@@ -4003,7 +4003,7 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
   /* Force size allocation immediately if we have something queued. */
   if (priv->delay_size_allocate_chainup)
     {
-      g_source_remove (priv->delay_size_allocate_chainup);
+      g_clear_handle_id (&priv->delay_size_allocate_chainup, g_source_remove);
       ide_source_view_do_size_allocate_hack_cb (self);
     }
 
@@ -4625,8 +4625,7 @@ ide_source_view_do_size_allocate_hack (IdeSourceView *self,
    * If we are animating at 60 FPS, we should get another size-allocate within
    * the frame cycle, typically 17 msec.
    */
-  if (priv->delay_size_allocate_chainup)
-    g_source_remove (priv->delay_size_allocate_chainup);
+  g_clear_handle_id (&priv->delay_size_allocate_chainup, g_source_remove);
   priv->delay_size_allocate_chainup = g_timeout_add (30,
                                                      ide_source_view_do_size_allocate_hack_cb,
                                                      self);
@@ -5311,11 +5310,7 @@ ide_source_view_dispose (GObject *object)
 
   ide_source_view_clear_snippets (self);
 
-  if (priv->delay_size_allocate_chainup)
-    {
-      g_source_remove (priv->delay_size_allocate_chainup);
-      priv->delay_size_allocate_chainup = 0;
-    }
+  g_clear_handle_id (&priv->delay_size_allocate_chainup, g_source_remove);
 
   g_clear_object (&priv->hover);
   g_clear_object (&priv->completion);
