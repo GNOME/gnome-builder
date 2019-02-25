@@ -5,6 +5,7 @@ plugins_sources += files([
   'gbp-git-branch.c',
   'gbp-git-buffer-addin.c',
   'gbp-git-buffer-change-monitor.c',
+  'gbp-git-client.c',
   'gbp-git-dependency-updater.c',
   'gbp-git-index-monitor.c',
   'gbp-git-pipeline-addin.c',
@@ -19,6 +20,11 @@ plugins_sources += files([
   'line-cache.c',
 ])
 
+gnome_builder_git_sources = [
+  'gnome-builder-git.c',
+  'gbp-git.c',
+]
+
 plugin_git_resources = gnome.compile_resources(
   'git-resources',
   'git.gresource.xml',
@@ -26,5 +32,21 @@ plugin_git_resources = gnome.compile_resources(
 )
 
 plugins_sources += plugin_git_resources[0]
+
+gnome_builder_git_deps = [
+  libgit_dep,
+  libjsonrpc_glib_dep,
+  libgiounix_dep,
+]
+
+executable('gnome-builder-git', gnome_builder_git_sources,
+      dependencies: gnome_builder_git_deps,
+           gui_app: false,
+           install: true,
+       install_dir: get_option('libexecdir'),
+            c_args: exe_c_args,
+         link_args: exe_link_args,
+     install_rpath: pkglibdir_abs,
+)
 
 endif
