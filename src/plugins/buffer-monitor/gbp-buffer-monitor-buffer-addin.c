@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-code.h>
+#include <libide-projects.h>
 #include <string.h>
 
 #include "ide-buffer-private.h"
@@ -197,10 +198,44 @@ gbp_buffer_monitor_buffer_addin_setup_monitor (GbpBufferMonitorBufferAddin *self
 }
 
 static void
+file_renamed_cb (GbpBufferMonitorBufferAddin *self,
+                 GFile                       *file,
+                 GFile                       *other,
+                 IdeProject                  *project)
+{
+  GFile *buffer_file;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_BUFFER_MONITOR_BUFFER_ADDIN (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_FILE (other));
+  g_assert (IDE_IS_PROJECT (project));
+
+  buffer_file = ide_buffer_get_file (self->buffer);
+
+  if (g_file_equal (buffer_file, file))
+    {
+      _ide_buffer_set_file (self->buffer, other);
+    }
+  else if (g_file_has_prefix (buffer_file, file))
+    {
+      g_autofree gchar *suffix = g_file_get_relative_path (file, buffer_file);
+      g_autoptr(GFile) new_file = g_file_get_child (other, suffix);
+
+      _ide_buffer_set_file (self->buffer, new_file);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 gbp_buffer_monitor_buffer_addin_load (IdeBufferAddin *addin,
                                       IdeBuffer      *buffer)
 {
   GbpBufferMonitorBufferAddin *self = (GbpBufferMonitorBufferAddin *)addin;
+  g_autoptr(IdeContext) context = NULL;
+  IdeProject *project;
   GFile *file;
 
   g_assert (GBP_IS_BUFFER_MONITOR_BUFFER_ADDIN (self));
@@ -210,6 +245,14 @@ gbp_buffer_monitor_buffer_addin_load (IdeBufferAddin *addin,
 
   file = ide_buffer_get_file (buffer);
   gbp_buffer_monitor_buffer_addin_setup_monitor (self, file);
+
+  context = ide_buffer_ref_context (buffer);
+  project = ide_project_from_context (context);
+  g_signal_connect_object (project,
+                           "file-renamed",
+                           G_CALLBACK (file_renamed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -217,11 +260,19 @@ gbp_buffer_monitor_buffer_addin_unload (IdeBufferAddin *addin,
                                         IdeBuffer      *buffer)
 {
   GbpBufferMonitorBufferAddin *self = (GbpBufferMonitorBufferAddin *)addin;
+  g_autoptr(IdeContext) context = NULL;
+  IdeProject *project;
 
   g_assert (GBP_IS_BUFFER_MONITOR_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   gbp_buffer_monitor_buffer_addin_setup_monitor (self, NULL);
+
+  context = ide_buffer_ref_context (buffer);
+  project = ide_project_from_context (context);
+  g_signal_handlers_disconnect_by_func (project,
+                                        G_CALLBACK (file_renamed_cb),
+                                        self);
 
   self->buffer = NULL;
 }
