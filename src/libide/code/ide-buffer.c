@@ -297,6 +297,7 @@ _ide_buffer_set_file (IdeBuffer *self,
       gtk_source_file_set_location (self->source_file, file);
       ide_buffer_reload_file_settings (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }
 }
 
@@ -2054,7 +2055,7 @@ ide_buffer_set_style_scheme_name (IdeBuffer   *self,
 }
 
 /**
- * ide_buffer_get_title:
+ * ide_buffer_dup_title:
  * @self: an #IdeBuffer
  *
  * Gets a string to represent the title of the buffer. An attempt is made to
