@@ -896,6 +896,9 @@ main (gint argc,
   g_autoptr(IdeClang) clang = NULL;
   g_autoptr(GError) error = NULL;
 
+  /* Always ignore SIGPIPE */
+  signal (SIGPIPE, SIG_IGN);
+
   /* redirect logging to stderr */
   g_log_set_handler (NULL, G_LOG_LEVEL_MASK, log_handler_cb, NULL);
 
