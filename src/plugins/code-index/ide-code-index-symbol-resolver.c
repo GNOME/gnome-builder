@@ -159,6 +159,15 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
+  if (!ide_context_has_project (context))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "No project loaded, cannot use code-index");
+      return;
+    }
+
   service = gbp_code_index_service_from_context (context);
   g_assert (GBP_IS_CODE_INDEX_SERVICE (service));
 
