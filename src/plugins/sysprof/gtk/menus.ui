@@ -20,7 +20,7 @@
         <attribute name="label" translatable="yes">Profiler</attribute>
         <attribute name="role">normal</attribute>
         <attribute name="target">profiler</attribute>
-        <attribute name="verb-icon-name">sysprof-symbolic</attribute>
+        <attribute name="verb-icon-name">org.gnome.Sysprof-symbolic</attribute>
       </item>
     </section>
   </menu>
@@ -32,7 +32,7 @@
         <attribute name="action">run-manager.run-with-handler</attribute>
         <attribute name="target">profiler</attribute>
         <attribute name="label" translatable="yes">Run with Profiler</attribute>
-        <attribute name="verb-icon-name">sysprof-symbolic</attribute>
+        <attribute name="verb-icon-name">org.gnome.Sysprof-symbolic</attribute>
         <attribute name="accel">&lt;Control&gt;F8</attribute>
       </item>
     </section>
