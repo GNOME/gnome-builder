@@ -1172,7 +1172,7 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
     }
   else
     {
-      if (g_file_query_file_type (file, G_FILE_COPY_NOFOLLOW_SYMLINKS, NULL) == G_FILE_TYPE_DIRECTORY)
+      if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) == G_FILE_TYPE_DIRECTORY)
         {
           ide_context_set_workdir (self->context, file);
           directory = file;
