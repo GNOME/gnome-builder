@@ -1099,7 +1099,6 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GPtrArray) addins = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) parent = NULL;
   g_autofree gchar *name = NULL;
@@ -2449,7 +2448,6 @@ ide_workbench_resolve_file_async (IdeWorkbench        *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autofree gchar *srcpath = NULL;
   g_autoptr(IdeTask) task = NULL;
   ResolveFile *rf;
 

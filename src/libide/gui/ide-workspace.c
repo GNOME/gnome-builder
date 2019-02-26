@@ -267,7 +267,6 @@ ide_workspace_delete_event (GtkWidget   *widget,
 {
   IdeWorkspace *self = (IdeWorkspace *)widget;
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  g_autoptr(IdeTask) task = NULL;
   IdeWorkbench *workbench;
 
   g_assert (IDE_IS_WORKSPACE (self));
