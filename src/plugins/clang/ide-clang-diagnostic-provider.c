@@ -49,7 +49,7 @@ ide_clang_diagnostic_provider_diagnose_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&diagnostics),
-                             (GDestroyNotify) g_ptr_array_unref);
+                             (GDestroyNotify) ide_diagnostics_unref);
 }
 
 static void
