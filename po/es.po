@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-19 22:52+0000\n"
-"PO-Revision-Date: 2019-02-20 15:26+0100\n"
+"POT-Creation-Date: 2019-02-21 20:37+0000\n"
+"PO-Revision-Date: 2019-02-26 09:03+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -811,7 +811,7 @@ msgid "Rename"
 msgstr "Renombrar"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:408
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Quitar"
@@ -881,28 +881,28 @@ msgstr "Fallo al imprimir: %s"
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
 #: src/libide/editor/ide-editor-page-actions.c:189
-#: src/libide/editor/ide-editor-page-actions.c:301
+#: src/libide/editor/ide-editor-page-actions.c:297
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Falló al cargar el archivo: %s:"
 
-#: src/libide/editor/ide-editor-page-actions.c:237
+#: src/libide/editor/ide-editor-page-actions.c:233
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
 msgid "Save File"
 msgstr "Guardar archivo"
 
-#: src/libide/editor/ide-editor-page-actions.c:240
+#: src/libide/editor/ide-editor-page-actions.c:236
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 msgid "Save"
 msgstr "Guardar"
 
-#: src/libide/editor/ide-editor-page-actions.c:240
-#: src/libide/editor/ide-editor-page-actions.c:340
+#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:336
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
-#: src/libide/greeter/ide-greeter-workspace.c:518
+#: src/libide/greeter/ide-greeter-workspace.c:517
 #: src/libide/gui/ide-workbench.c:1339
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -912,11 +912,11 @@ msgstr "Guardar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/libide/editor/ide-editor-page-actions.c:336
+#: src/libide/editor/ide-editor-page-actions.c:332
 msgid "Save File As"
 msgstr "Guardar archivo como"
 
-#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-page-actions.c:335
 msgid "Save As"
 msgstr "Guardar como"
 
@@ -1083,7 +1083,7 @@ msgstr "Modo resaltado"
 #: src/libide/gui/ide-preferences-builtin.c:206
 #: src/libide/gui/ide-preferences-builtin.c:324
 #: src/libide/gui/ide-preferences-builtin.c:396
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 msgid "General"
 msgstr "General"
 
@@ -1394,7 +1394,7 @@ msgstr "Ejecutar"
 msgid "Process quit unexpectedly"
 msgstr "El proceso ha terminado de manera inesperada"
 
-#: src/libide/foundry/ide-runtime-manager.c:142
+#: src/libide/foundry/ide-runtime-manager.c:138
 msgid "Use host operating system"
 msgstr "Usar el sistema operativo del equipo"
 
@@ -1403,18 +1403,18 @@ msgstr "Usar el sistema operativo del equipo"
 msgid "Host System"
 msgstr "Equipo anfitrión"
 
-#: src/libide/foundry/ide-toolchain-manager.c:337
+#: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
 msgstr "Predeterminado (sistema operativo del equipo)"
 
 #. translators: %s is replaced with the path to the project
-#: src/libide/greeter/ide-clone-surface.c:250
+#: src/libide/greeter/ide-clone-surface.c:249
 #, c-format
 msgid "The directory “%s” already exists. Please choose another directory."
 msgstr "Ya existe la carpeta «%s». Elija otra carpeta."
 
 #. translators: %s is replaced with the path to the project
-#: src/libide/greeter/ide-clone-surface.c:258
+#: src/libide/greeter/ide-clone-surface.c:257
 #, c-format
 msgid "Your project will be created at %s"
 msgstr "Su proyecto se creará en %s"
@@ -1493,11 +1493,11 @@ msgstr "_Abrir"
 msgid "All Project Types"
 msgstr "Todos los tipos de proyectos"
 
-#: src/libide/greeter/ide-greeter-workspace.c:322
+#: src/libide/greeter/ide-greeter-workspace.c:321
 msgid "Failed to load the project"
 msgstr "Falló al cargar el proyecto"
 
-#: src/libide/greeter/ide-greeter-workspace.c:515
+#: src/libide/greeter/ide-greeter-workspace.c:514
 msgid ""
 "Removing project sources will delete them from your computer and cannot be "
 "undone."
@@ -1505,7 +1505,7 @@ msgstr ""
 "Quitar archivos del proyecto los eliminará de su equipo y no podrá deshacer "
 "esta acción."
 
-#: src/libide/greeter/ide-greeter-workspace.c:519
+#: src/libide/greeter/ide-greeter-workspace.c:518
 msgid "Delete Project Sources"
 msgstr "Eliminar las fuentes del proyecto"
 
@@ -2454,25 +2454,21 @@ msgid "Redo previous command"
 msgstr "Rehacer el comando anterior"
 
 #: src/libide/gui/ide-shortcuts-window.ui:253
-#| msgid "Zoom"
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Ampliación"
 
 #: src/libide/gui/ide-shortcuts-window.ui:258
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Ampliar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:265
-#| msgid "Zoom _Out"
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Reducir"
 
 #: src/libide/gui/ide-shortcuts-window.ui:272
-#| msgid "Reset"
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Restaurar nivel de ampliación"
@@ -3058,7 +3054,7 @@ msgstr ""
 "Seleccione una configuración de construcción en la barra latera para "
 "modificarla."
 
-#: src/plugins/buildui/gbp-buildui-config-surface.c:219
+#: src/plugins/buildui/gbp-buildui-config-surface.c:218
 msgid "Build Configurations"
 msgstr "Configuración de construcción"
 
@@ -3066,19 +3062,19 @@ msgstr "Configuración de construcción"
 msgid "All Runtimes"
 msgstr "Todas las rutinas"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Make active"
 msgstr "Activar"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Select this configuration as the active configuration."
 msgstr "Seleccione esta configuración como la activa."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid "Duplicate"
 msgstr "Duplicar"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
@@ -3086,54 +3082,54 @@ msgstr ""
 "Duplicar la configuración permite hacer cambios sin modificar esta "
 "configuración."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:408
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "Removes the configuration and cannot be undone."
 msgstr "Quita la configuración y no se puede deshacer."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:425
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
 msgid "Environment"
 msgstr "Entorno"
 
 #. Add groups to pages
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:428
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
 msgid "Overview"
 msgstr "Vista general"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:429
 msgid "Build Environment"
 msgstr "Entorno de construcción"
 
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
 msgstr "Nombre"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
 msgid "Source Directory"
 msgstr "Carpeta de fuentes"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 msgid "Build System"
 msgstr "Sistema de construcción"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:465
 msgid "Install Prefix"
 msgstr "Prefijo de instalación"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:474
 msgid "Configure Options"
 msgstr "Configurar opciones"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:479
 msgid "Application Runtime"
 msgstr "Rutina de la aplicación"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:483
 msgid "Build Toolchain"
 msgstr "«Toolchain» de construcción"
 
@@ -3253,7 +3249,7 @@ msgstr "Construir detalles"
 msgid "Build pipeline is empty"
 msgstr "La tubería de construcción está vacía"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:153
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:162
 msgid "Build Targets"
 msgstr "Objetivos de la construcción"
 
@@ -3352,7 +3348,6 @@ msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:53
-#| msgid "Create a new command line project"
 msgid "Create or update code-index for project file"
 msgstr "Crear o actualizar el índice de código para un archivo de proyecto"
 
@@ -3362,19 +3357,16 @@ msgstr "PROJECT_FILE"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:154
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to load flags for plan: %s"
 msgstr "Falló al cargar las opciones para el plan: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:197
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to cull index plan: %s"
 msgstr "Falló al descartar el plan del índice: %s:"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:232
 #, c-format
-#| msgid "Failed to spawn terminal: %s"
 msgid "Failed to populate index plan: %s"
 msgstr "Falló al poblar el plan del índice: %s"
 
@@ -3400,7 +3392,7 @@ msgstr ""
 #. *              file (.h) rather than a source file (.c).
 #.
 #: src/plugins/code-index/ide-code-index-index.c:343
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
 msgid "Declaration"
 msgstr "Declaración"
 
@@ -3832,8 +3824,6 @@ msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr "Usar Ctags para sugerir completado para una variedad de lenguajes"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
-#| msgid ""
-#| "Search, diagnostics and autocompletion may be limited until complete."
 msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
@@ -3994,7 +3984,7 @@ msgstr "Argumentos"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
 #: src/plugins/grep/gbp-grep-panel.c:482
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
 msgstr "Ubicación"
@@ -4315,7 +4305,7 @@ msgstr "Inicializar submódulos git"
 msgid "The protocol “%s” is not supported."
 msgstr "El protocolo %s no está soportado."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:280
+#: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
 msgstr "Se necesita un URL de Git válido"
 
@@ -4498,7 +4488,6 @@ msgstr ""
 "escritos en Python. Esto puede ejecutar código en su proyecto."
 
 #: src/plugins/gradle/gradle_plugin.py:85
-#| msgid "Executable wrapper"
 msgid "Gradle Wrapper"
 msgstr "Envoltorio de Gradle"
 
@@ -4507,7 +4496,6 @@ msgid "Display a new greeter window"
 msgstr "Mostrar una ventana de bienvenida nueva"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:129
-#| msgid "Building project"
 msgid "Begin cloning project from URI"
 msgstr "Clonando proyecto desde URI"
 
@@ -4919,7 +4907,6 @@ msgid "Build configured"
 msgstr "Construcción configurada"
 
 #: src/plugins/notification/ide-notification-addin.c:190
-#| msgid "Build System"
 msgid "Build bootstrapped"
 msgstr "Construcción inicializada"
 
@@ -4960,52 +4947,47 @@ msgstr "Nombre de la carpeta"
 msgid "_Create"
 msgstr "_Crear"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:203
-#: src/plugins/testui/gbp-test-tree-addin.c:153
-msgid "Unit Tests"
-msgstr "Pruebas unitarias"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:218
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
 msgid "Files"
 msgstr "Archivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:672
 #, c-format
 msgid "Copying 1 file"
 msgstr "Copiando 1 archivo"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:675
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s de %s archivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:711
 msgid "Failed to copy files"
 msgstr "Falló al copiar los archivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Files copied"
 msgstr "Archivos copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Copied 1 file"
 msgstr "Copiado 1 archivo"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:743
+#: src/plugins/project-tree/gbp-project-tree-addin.c:733
 #, c-format
 msgid "Copied %s files"
 msgstr "Copiados %s archivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:883
+#: src/plugins/project-tree/gbp-project-tree-addin.c:873
 msgid "Copying files…"
 msgstr "Copiando archivos…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:884
+#: src/plugins/project-tree/gbp-project-tree-addin.c:874
 msgid "Files will be copied in a moment"
 msgstr "Los archivos se copiarán en un momento"
 
-#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:64
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:65
 msgid "Project Tree"
 msgstr "Árbol del proyecto."
 
@@ -5363,11 +5345,11 @@ msgctxt "shortcut window"
 msgid "Search symbols within document"
 msgstr "Buscar símbolos en el documento"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:119
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
 msgstr "Símbolo sin nombre"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:159
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:155
 msgid "Symbol"
 msgstr "Símbolo"
 
@@ -5455,7 +5437,7 @@ msgstr "Una ruta opcional separada por comas para especificar PKG_CONFIG_PATH."
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:65
+#: src/plugins/terminal/gbp-terminal-application-addin.c:64
 msgid "Use terminal interface"
 msgstr "Usar interfaz de terminal"
 
@@ -5490,8 +5472,17 @@ msgstr "Nueva terminal _construída"
 msgid "New _Runtime Terminal"
 msgstr "_Nueva terminal en tiempo de ejecución"
 
+#: src/plugins/testui/gbp-test-output-panel.c:48
+#| msgid "Unit Tests"
+msgid "Unit Test Output"
+msgstr "Prueba de salida unitaria"
+
+#: src/plugins/testui/gbp-test-tree-addin.c:197
+msgid "Unit Tests"
+msgstr "Pruebas unitarias"
+
 #. translators: %s is replaced with the name of the unit test
-#: src/plugins/testui/gbp-test-tree-addin.c:352
+#: src/plugins/testui/gbp-test-tree-addin.c:407
 #, c-format
 msgid "Running test “%s”…"
 msgstr "Ejecutando test «%s»…"
@@ -5652,6 +5643,16 @@ msgstr "Vim"
 #: src/plugins/vim/gbp-vim-preferences-addin.c:53
 msgid "Emulates the Vim text editor"
 msgstr "Emula el editor de texto Vim"
+
+#: src/plugins/waf/waf_plugin.py:110
+#| msgid "Building project"
+msgid "Building project…"
+msgstr "Construyendo proyecto…"
+
+#: src/plugins/waf/waf_plugin.py:122
+#| msgid "Installing project"
+msgid "Installing project…"
+msgstr "Instalando proyecto…"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:584
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
