@@ -203,6 +203,7 @@ stack_notify_visible_child_cb (IdeGreeterWorkspace *self,
                                GtkStack            *stack)
 {
   g_autofree gchar *title = NULL;
+  g_autofree gchar *full_title = NULL;
   GtkWidget *visible_child;
   gboolean sections;
 
@@ -212,9 +213,13 @@ stack_notify_visible_child_cb (IdeGreeterWorkspace *self,
   visible_child = gtk_stack_get_visible_child (stack);
 
   if (DZL_IS_DOCK_ITEM (visible_child))
-    title = dzl_dock_item_get_title (DZL_DOCK_ITEM (visible_child));
+    {
+      if ((title = dzl_dock_item_get_title (DZL_DOCK_ITEM (visible_child))))
+        full_title = g_strdup_printf (_("Builder — %s"), title);
+    }
 
   gtk_label_set_label (self->title, title);
+  gtk_window_set_title (GTK_WINDOW (self), full_title);
 
   sections = ide_str_equal0 ("sections", gtk_stack_get_visible_child_name (stack));
 
