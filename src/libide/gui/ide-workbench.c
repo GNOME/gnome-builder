@@ -739,8 +739,6 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                              IdeWorkspace *workspace)
 {
   g_autoptr(GPtrArray) addins = NULL;
-  g_autofree gchar *title = NULL;
-  g_autofree gchar *formatted = NULL;
   GList *mru_link;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -800,9 +798,15 @@ ide_workbench_add_workspace (IdeWorkbench *self,
         }
     }
 
-  title = ide_context_dup_title (self->context);
-  formatted = g_strdup_printf (_("Builder — %s"), title);
-  gtk_window_set_title (GTK_WINDOW (workspace), formatted);
+  if (!gtk_window_get_title (GTK_WINDOW (workspace)))
+    {
+      g_autofree gchar *title = NULL;
+      g_autofree gchar *formatted = NULL;
+
+      title = ide_context_dup_title (self->context);
+      formatted = g_strdup_printf (_("Builder — %s"), title);
+      gtk_window_set_title (GTK_WINDOW (workspace), formatted);
+    }
 }
 
 /**
