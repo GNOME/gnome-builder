@@ -127,7 +127,7 @@ ide_clang_code_index_entries_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&ret),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 static void
@@ -152,7 +152,7 @@ ide_clang_code_index_entries_next_entries_async (IdeCodeIndexEntries *entries,
   if (self->has_run)
     ide_task_return_pointer (task,
                              g_ptr_array_new_with_free_func ((GDestroyNotify)ide_code_index_entry_free),
-                             (GDestroyNotify)g_ptr_array_unref);
+                             g_ptr_array_unref);
   else
     ide_task_run_in_thread (task, ide_clang_code_index_entries_worker);
 

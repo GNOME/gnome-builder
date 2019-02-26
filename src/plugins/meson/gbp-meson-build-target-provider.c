@@ -144,7 +144,7 @@ gbp_meson_build_target_provider_communicate_cb2 (GObject      *object,
                                                        name,
                                                        NULL,
                                                        IDE_ARTIFACT_KIND_EXECUTABLE));
-          ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+          ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
 
           return;
         }
@@ -292,7 +292,7 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
 
   if (ret->len > 0 && found_bindir)
     {
-      ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+      ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
       return;
     }
 

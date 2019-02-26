@@ -172,7 +172,7 @@ gbp_gcc_toolchain_provider_load_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&toolchains),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 static void

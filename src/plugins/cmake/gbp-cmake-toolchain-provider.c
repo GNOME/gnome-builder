@@ -105,7 +105,7 @@ gbp_cmake_toolchain_provider_load_worker (IdeTask      *task,
         }
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&toolchains), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&toolchains), g_ptr_array_unref);
 }
 
 static void

@@ -832,7 +832,7 @@ gbp_git_buffer_change_monitor_worker (gpointer data)
       else
         ide_task_return_pointer (task,
                                  g_steal_pointer (&diff->cache),
-                                 (GDestroyNotify)line_cache_free);
+                                 line_cache_free);
     }
 
   return NULL;

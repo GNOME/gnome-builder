@@ -478,7 +478,7 @@ gbp_cmake_build_system_get_build_flags_cb (GObject      *object,
   if (build_flags == NULL)
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, g_steal_pointer (&build_flags), (GDestroyNotify)g_strfreev);
+    ide_task_return_pointer (task, g_steal_pointer (&build_flags), g_strfreev);
 }
 
 static void

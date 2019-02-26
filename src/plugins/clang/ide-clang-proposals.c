@@ -473,7 +473,7 @@ ide_clang_proposals_query_complete_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&variant),
-                             (GDestroyNotify)g_variant_unref);
+                             g_variant_unref);
 }
 
 static void

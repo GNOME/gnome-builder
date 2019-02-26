@@ -157,7 +157,7 @@ ide_build_system_get_build_flags_cb (GObject      *object,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&data->flags),
-                           (GDestroyNotify)g_hash_table_unref);
+                           g_hash_table_unref);
 }
 
 static GPtrArray *
@@ -536,7 +536,7 @@ ide_build_system_get_build_flags_for_dir_cb2 (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&ret),
-                             (GDestroyNotify)g_hash_table_unref);
+                             g_hash_table_unref);
 }
 
 static void

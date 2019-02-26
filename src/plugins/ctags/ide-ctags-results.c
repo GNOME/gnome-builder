@@ -203,7 +203,7 @@ ide_ctags_results_populate_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_array_ref (p->items),
-                           (GDestroyNotify)g_array_unref);
+                           g_array_unref);
 }
 
 #if 0

@@ -417,7 +417,7 @@ ide_xml_tree_builder_parse_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&state->analysis),
-                           (GDestroyNotify)ide_xml_analysis_unref);
+                           ide_xml_analysis_unref);
 }
 
 static void
@@ -479,7 +479,7 @@ ide_xml_tree_builder_build_tree_cb (GObject      *object,
     {
       ide_task_return_pointer (task,
                                g_steal_pointer (&analysis),
-                               (GDestroyNotify)ide_xml_analysis_unref);
+                               ide_xml_analysis_unref);
       return;
     }
 

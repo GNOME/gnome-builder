@@ -527,7 +527,7 @@ gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
       g_hash_table_insert (ret, g_object_ref (file), g_steal_pointer (&flags));
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_hash_table_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), g_hash_table_unref);
 }
 
 static void
@@ -579,7 +579,7 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
   if (ret == NULL)
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_strfreev);
+    ide_task_return_pointer (task, g_steal_pointer (&ret), g_strfreev);
 }
 
 static void

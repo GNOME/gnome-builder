@@ -104,7 +104,7 @@ ide_source_search_context_backward_async (GtkSourceSearchContext *search,
       g_object_ref (data->end);
     }
 
-  ide_task_return_pointer (task, data, (GDestroyNotify)search_data_free);
+  ide_task_return_pointer (task, data, search_data_free);
 }
 
 /**

@@ -226,7 +226,7 @@ ide_lsp_rename_provider_rename_cb (GObject      *object,
         }
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
 
   IDE_EXIT;
 }

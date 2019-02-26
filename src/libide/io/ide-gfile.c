@@ -311,7 +311,7 @@ ide_g_file_get_children_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&children),
-                           (GDestroyNotify) g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 static void
@@ -511,7 +511,7 @@ ide_g_file_find_worker (IdeTask      *task,
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
   populate_descendants_matching (file, cancellable, ret, f->spec, f->depth);
-  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
 }
 
 /**

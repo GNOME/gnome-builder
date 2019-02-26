@@ -54,7 +54,7 @@ ide_code_index_entries_real_next_entries_async (IdeCodeIndexEntries *self,
   while ((entry = ide_code_index_entries_get_next_entry (self)))
     g_ptr_array_add (ret, g_steal_pointer (&entry));
 
-  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
 }
 
 static GPtrArray *
@@ -217,7 +217,7 @@ ide_code_index_entries_collect_cb (GObject      *object,
 
   ide_task_return_pointer (task,
                            g_ptr_array_ref (task_data),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 /**

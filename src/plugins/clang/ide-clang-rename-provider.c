@@ -115,7 +115,7 @@ ide_clang_rename_provider_communicate_cb (GObject      *object,
   edits = g_ptr_array_new_full (1, g_object_unref);
   g_ptr_array_add (edits, g_steal_pointer (&edit));
 
-  ide_task_return_pointer (task, g_steal_pointer (&edits), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&edits), g_ptr_array_unref);
 
   IDE_EXIT;
 }

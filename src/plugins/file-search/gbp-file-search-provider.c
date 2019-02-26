@@ -70,7 +70,7 @@ gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
   else
     results = g_ptr_array_new_with_free_func (g_object_unref);
 
-  ide_task_return_pointer (task, g_steal_pointer (&results), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&results), g_ptr_array_unref);
 }
 
 static GPtrArray *

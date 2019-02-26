@@ -81,7 +81,7 @@ gbp_vim_command_provider_query_async (IdeCommandProvider  *provider,
 no_active_widget:
   ide_task_return_pointer (task,
                            g_steal_pointer (&results),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 static GPtrArray *

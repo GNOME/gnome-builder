@@ -489,7 +489,7 @@ gbp_git_vcs_list_branches_worker (IdeTask      *task,
 
       ide_task_return_pointer (task,
                                g_steal_pointer (&branches),
-                               (GDestroyNotify)g_ptr_array_unref);
+                               g_ptr_array_unref);
     }
   else
     {
@@ -589,7 +589,7 @@ gbp_git_vcs_list_tags_worker (IdeTask      *task,
 
       ide_task_return_pointer (task,
                                g_steal_pointer (&tags),
-                               (GDestroyNotify)g_ptr_array_unref);
+                               g_ptr_array_unref);
     }
   else
     {

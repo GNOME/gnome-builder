@@ -244,7 +244,7 @@ gbp_flatpak_preferences_addin_reload_worker (IdeTask      *task,
       g_ptr_array_sort (runtimes, compare_refs);
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&runtimes), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&runtimes), g_ptr_array_unref);
 
   IDE_EXIT;
 }

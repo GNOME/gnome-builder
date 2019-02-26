@@ -231,7 +231,7 @@ gbp_editor_session_addin_save_async (IdeSessionAddin     *addin,
 
   ide_task_return_pointer (task,
                            g_variant_take_ref (g_variant_builder_end (&builder)),
-                           (GDestroyNotify)g_variant_unref);
+                           g_variant_unref);
 
   IDE_EXIT;
 }

@@ -1107,7 +1107,7 @@ ide_lsp_client_call_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&reply),
-                             (GDestroyNotify)g_variant_unref);
+                             g_variant_unref);
 
   IDE_EXIT;
 }

@@ -319,10 +319,10 @@ gbp_sysprof_workspace_addin_open_worker (IdeTask      *task,
 
   path = g_file_get_path (file);
 
-  if (NULL == (reader = sp_capture_reader_new (path, &error)))
+  if (!(reader = sp_capture_reader_new (path, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, reader, (GDestroyNotify)sp_capture_reader_unref);
+    ide_task_return_pointer (task, reader, sp_capture_reader_unref);
 }
 
 static void

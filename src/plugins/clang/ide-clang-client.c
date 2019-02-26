@@ -475,7 +475,7 @@ ide_clang_client_call_cb (GObject      *object,
   if (!jsonrpc_client_call_finish (rpc_client, result, &reply, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, g_steal_pointer (&reply), (GDestroyNotify)g_variant_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&reply), g_variant_unref);
 }
 
 static void
@@ -630,7 +630,7 @@ ide_clang_client_index_file_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&reply),
-                             (GDestroyNotify)g_variant_unref);
+                             g_variant_unref);
 }
 
 void
@@ -1180,7 +1180,7 @@ ide_clang_client_get_highlight_index_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              ide_highlight_index_new_from_variant (reply),
-                             (GDestroyNotify)ide_highlight_index_unref);
+                             ide_highlight_index_unref);
 }
 
 void
@@ -1257,7 +1257,7 @@ ide_clang_client_complete_cb (GObject      *object,
   if (!ide_clang_client_call_finish (self, result, &reply, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, g_steal_pointer (&reply), (GDestroyNotify)g_variant_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&reply), g_variant_unref);
 }
 
 void

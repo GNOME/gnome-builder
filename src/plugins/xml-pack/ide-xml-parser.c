@@ -575,8 +575,7 @@ ide_xml_parser_get_analysis_worker (IdeTask      *task,
   if (self->post_processing_callback != NULL)
     (self->post_processing_callback)(self, state->root_node);
 
-  analysis = g_steal_pointer (&state->analysis);
-  if (analysis == NULL)
+  if (!(analysis = g_steal_pointer (&state->analysis)))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -606,7 +605,9 @@ ide_xml_parser_get_analysis_worker (IdeTask      *task,
     ide_xml_analysis_set_schemas (analysis, g_steal_pointer (&state->schemas));
 
   ide_xml_analysis_set_sequence (analysis, state->sequence);
-  ide_task_return_pointer (task, analysis, (GDestroyNotify)ide_xml_analysis_unref);
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&analysis),
+                           ide_xml_analysis_unref);
 }
 
 void

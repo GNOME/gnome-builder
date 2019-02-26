@@ -362,7 +362,7 @@ ide_autotools_build_system_get_file_flags_cb (GObject      *object,
   if (flags == NULL)
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, g_steal_pointer (&flags), (GDestroyNotify)g_strfreev);
+    ide_task_return_pointer (task, g_steal_pointer (&flags), g_strfreev);
 
   IDE_EXIT;
 }

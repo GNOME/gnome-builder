@@ -46,7 +46,7 @@ populate_cb (GObject      *object,
   if (results != NULL)
     ide_task_return_pointer (task,
                              g_steal_pointer (&results),
-                             (GDestroyNotify)g_ptr_array_unref);
+                             g_ptr_array_unref);
   else
     ide_task_return_error (task, g_steal_pointer (&error));
 }

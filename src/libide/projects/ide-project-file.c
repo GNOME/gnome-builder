@@ -435,7 +435,7 @@ ide_project_file_list_children_cb (GObject      *object,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&ret),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 /**

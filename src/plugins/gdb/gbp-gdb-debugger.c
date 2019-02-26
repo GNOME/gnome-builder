@@ -278,7 +278,7 @@ gbp_gdb_debugger_handle_result (GbpGdbDebugger           *self,
 
   if (task != NULL)
     {
-      ide_task_return_pointer (task, output, (GDestroyNotify)gdbwire_mi_output_free);
+      ide_task_return_pointer (task, output, gdbwire_mi_output_free);
       return;
     }
 
@@ -1049,7 +1049,7 @@ gbp_gdb_debugger_list_breakpoints_cb (GObject      *object,
         }
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ar), g_ptr_array_unref);
 
   gdbwire_mi_command_free (command);
   gdbwire_mi_output_free (output);
@@ -1615,7 +1615,7 @@ gbp_gdb_debugger_list_frames_cb (GObject      *object,
         }
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ar), g_ptr_array_unref);
 
 cleanup:
   g_clear_pointer (&output, gdbwire_mi_output_free);
@@ -1964,7 +1964,7 @@ gbp_gdb_debugger_handle_list_variables (GObject      *object,
         }
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ar), g_ptr_array_unref);
 
 cleanup:
   g_clear_pointer (&output, gdbwire_mi_output_free);
@@ -2152,7 +2152,7 @@ gbp_gdb_debugger_list_registers_cb (GObject      *object,
         }
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ar), g_ptr_array_unref);
 
 cleanup:
   g_clear_pointer (&output, gdbwire_mi_output_free);
@@ -2263,7 +2263,7 @@ gbp_gdb_debugger_disassemble_cb (GObject      *object,
         }
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ar), g_ptr_array_unref);
 
 cleanup:
   g_clear_pointer (&output, gdbwire_mi_output_free);
@@ -2775,7 +2775,7 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
        * synthesize a NULL response.
        */
       g_string_append_printf (str, "%s\n", command);
-      ide_task_return_pointer (task, NULL, NULL);
+      (ide_task_return_pointer) (task, NULL, NULL);
     }
 
   DEBUG_LOG ("to-gdb", str->str);

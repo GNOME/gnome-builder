@@ -1277,9 +1277,9 @@ ide_task_return_object (IdeTask  *self,
  * Since: 3.32
  */
 void
-ide_task_return_pointer (IdeTask        *self,
-                         gpointer        data,
-                         GDestroyNotify  destroy)
+(ide_task_return_pointer) (IdeTask        *self,
+                           gpointer        data,
+                           GDestroyNotify  destroy)
 {
   IdeTaskResult *ret;
 

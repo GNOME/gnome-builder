@@ -65,7 +65,7 @@ ide_autotools_build_target_provider_get_targets_cb (GObject      *object,
   if (ret == NULL)
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
 
   IDE_EXIT;
 }

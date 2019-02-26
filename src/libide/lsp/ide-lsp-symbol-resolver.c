@@ -567,7 +567,7 @@ ide_lsp_symbol_resolver_find_references_cb (GObject      *object,
       g_ptr_array_add (references, g_steal_pointer (&range));
     }
 
-  ide_task_return_pointer (task, g_steal_pointer (&references), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&references), g_ptr_array_unref);
 
   IDE_EXIT;
 }

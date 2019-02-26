@@ -102,7 +102,7 @@ discovery_worker (IdeTask      *task,
   ide_extension_set_adapter_foreach (state->set, discovery_foreach_cb, state);
 
   if (state->best_match != NULL)
-    ide_task_return_pointer (task, (gpointer)state->best_match, NULL);
+    (ide_task_return_pointer) (task, (gpointer)state->best_match, NULL);
   else
     ide_task_return_new_error (task,
                                G_IO_ERROR,

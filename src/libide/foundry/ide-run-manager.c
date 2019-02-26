@@ -1020,8 +1020,8 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
                                      0,
                                      (GDestroyNotify)ide_object_unref_and_destroy);
   ide_task_return_pointer (task,
-                           g_steal_pointer (&first),
-                           (GDestroyNotify)ide_object_unref_and_destroy);
+                           IDE_OBJECT (g_steal_pointer (&first)),
+                           ide_object_unref_and_destroy);
 
   IDE_EXIT;
 }

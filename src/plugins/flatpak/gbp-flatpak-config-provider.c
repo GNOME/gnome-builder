@@ -342,7 +342,7 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&manifests),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 static void

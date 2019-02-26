@@ -133,7 +133,7 @@ read_line_cb (GObject      *object,
           ide_task_return_error (task, g_steal_pointer (&error));
         }
       else
-        ide_task_return_pointer (task, state->hash_table, (GDestroyNotify)g_hash_table_unref);
+        ide_task_return_pointer (task, g_steal_pointer (&state->hash_table), g_hash_table_unref);
     }
   else
     {

@@ -732,7 +732,7 @@ ide_clang_index_file_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&state->entries),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 /**
@@ -1062,7 +1062,7 @@ ide_clang_diagnose_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&state->diagnostics),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 /**
@@ -1291,7 +1291,7 @@ ide_clang_complete_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_variant_ref_sink (g_variant_builder_end (&builder)),
-                           (GDestroyNotify)g_variant_unref);
+                           g_variant_unref);
 }
 
 void
@@ -1836,7 +1836,7 @@ ide_clang_get_symbol_tree_worker (IdeTask      *task,
   clang_visitChildren (cursor, traverse_cursors, state);
   ret = g_variant_ref_sink (g_variant_builder_end (&builder));
 
-  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_variant_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), g_variant_unref);
 }
 
 void
@@ -2027,7 +2027,7 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&highlight),
-                           (GDestroyNotify)ide_highlight_index_unref);
+                           ide_highlight_index_unref);
 }
 
 void

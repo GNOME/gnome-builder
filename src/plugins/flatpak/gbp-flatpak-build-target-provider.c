@@ -71,7 +71,7 @@ gbp_flatpak_build_target_provider_get_targets_async (IdeBuildTargetProvider *pro
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&targets),
-                           (GDestroyNotify)g_ptr_array_unref);
+                           g_ptr_array_unref);
 }
 
 static GPtrArray *
