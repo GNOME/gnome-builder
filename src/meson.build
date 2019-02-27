@@ -60,6 +60,11 @@ if get_option('fusermount_wrapper')
         dependencies: [libglib_dep],
   )
 
+  install_data(['rofiles-fuse'],
+         install_dir: get_option('bindir'),
+        install_mode: 'rwxr-xr-x',
+  )
+
 endif
 
 gnome_builder = executable('gnome-builder', 'main.c', 'bug-buddy.c',

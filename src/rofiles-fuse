@@ -1,0 +1,4 @@
+#!/bin/sh
+
+flatpak-spawn --host rofiles-fuse "$@"
+
