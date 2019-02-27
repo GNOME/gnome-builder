@@ -118,6 +118,12 @@
       <summary>Completion Row Count</summary>
       <description>The number of completion rows to display to the user.</description>
     </key>
+    <key name="line-spacing" type="i">
+      <default>0</default>
+      <range min="0" max="32"/>
+      <summary>Line Spacing</summary>
+      <description>The number of pixels to include above and below lines in the editor.</description>
+    </key>
     <key name="interactive-completion" type="b">
       <default>true</default>
       <summary>Interactive Completion</summary>

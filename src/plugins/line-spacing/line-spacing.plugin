@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2019 Christian Hergert
+Depends=editor;
+Description=Line spacing support for the editor
+Embedded=_gbp_line_spacing_register_types
+Hidden=true
+Module=line-spacing
+Name=Line Spacing

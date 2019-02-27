@@ -68,6 +68,9 @@ struct _GbpOmniGutterRenderer
 {
   GtkSourceGutterRenderer parent_instance;
 
+  GSettings *settings;
+  gint line_spacing;
+
   IdeDebuggerBreakpoints *breakpoints;
 
   GArray *lines;
@@ -722,6 +725,8 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   g_assert (begin != NULL);
   g_assert (end != NULL);
 
+  self->line_spacing = g_settings_get_int (self->settings, "line-spacing");
+
   /*
    * This is the start of our draw process. The first thing we want to
    * do is collect as much information as we'll need when doing the
@@ -1237,6 +1242,7 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
           if (state & GTK_SOURCE_GUTTER_RENDERER_STATE_CURSOR)
             bold |= self->current.bold;
 
+          cairo_move_to (cr, cell_area->x, cell_area->y + self->line_spacing);
           pango_layout_set_attributes (self->layout, bold ? self->bold_attrs : NULL);
           pango_cairo_show_layout (cr, self->layout);
         }
@@ -1495,6 +1501,8 @@ gbp_omni_gutter_renderer_constructed (GObject *object)
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   dzl_signal_group_set_target (self->view_signals, view);
+
+  self->settings = g_settings_new ("org.gnome.builder.editor");
 }
 
 static void
@@ -1504,6 +1512,7 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
 
   dzl_clear_source (&self->resize_source);
 
+  g_clear_object (&self->settings);
   g_clear_object (&self->breakpoints);
   g_clear_pointer (&self->lines, g_array_unref);
 
