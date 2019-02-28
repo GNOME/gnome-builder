@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-27 02:38+0000\n"
-"PO-Revision-Date: 2019-02-27 00:51-0300\n"
+"POT-Creation-Date: 2019-02-28 18:07+0000\n"
+"PO-Revision-Date: 2019-02-28 15:44-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese - Brazil <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -364,12 +364,10 @@ msgstr "O número de linhas de completamento para mostrar para o usuário."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #: src/libide/gui/ide-preferences-builtin.c:107
-#| msgid "Spacing"
 msgid "Line Spacing"
 msgstr "Espaçamento de linha"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "The number of pixels to include above and below lines in the editor."
 msgstr "O número de pixels para incluir acima e abaixo das linhas no editor."
 
@@ -1443,10 +1441,6 @@ msgid "Repository URL"
 msgstr "URL do repositório"
 
 #: src/libide/greeter/ide-clone-surface.ui:63
-#| msgid ""
-#| "Enter the repository of the project you would like to clone. The URL "
-#| "should look similar to \"https://gitlab.gnome.org/GNOME/gnome-builder.git"
-#| "\"."
 msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
@@ -1860,13 +1854,10 @@ msgid "editor font monospace"
 msgstr "editor fonte monoespaçada"
 
 #: src/libide/gui/ide-preferences-builtin.c:107
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "Number of pixels above and below editor lines"
 msgstr "Número de pixels acima ou abaixo das linhas do editor"
 
 #: src/libide/gui/ide-preferences-builtin.c:107
-#| msgctxt "Keywords"
-#| msgid "editor font monospace"
 msgctxt "Keywords"
 msgid "editor line spacing font monospace"
 msgstr "editor linha espaçamento fonte monoespaçada"
@@ -2490,25 +2481,21 @@ msgid "Redo previous command"
 msgstr "Refaz o comando anterior"
 
 #: src/libide/gui/ide-shortcuts-window.ui:253
-#| msgid "Zoom"
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Zoom"
 
 #: src/libide/gui/ide-shortcuts-window.ui:258
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Amplia"
 
 #: src/libide/gui/ide-shortcuts-window.ui:265
-#| msgid "Zoom _Out"
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Reduz"
 
 #: src/libide/gui/ide-shortcuts-window.ui:272
-#| msgid "Reset"
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Restaura"
@@ -2658,27 +2645,21 @@ msgid "Touchpad gestures"
 msgstr "Gestos no touchpad"
 
 #: src/libide/gui/ide-shortcuts-window.ui:473
-#| msgctxt "shortcut window"
-#| msgid "Move document to the right"
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Move a página para a direita"
 
 #: src/libide/gui/ide-shortcuts-window.ui:474
-#| msgid "Two finger swipe right"
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Três dedos deslizados para a direita"
 
 #: src/libide/gui/ide-shortcuts-window.ui:483
-#| msgctxt "shortcut window"
-#| msgid "Move document to the left"
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Move a página para a esquerda"
 
 #: src/libide/gui/ide-shortcuts-window.ui:484
-#| msgid "Two finger swipe left"
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Três dedos deslizados para a esquerda"
@@ -3388,7 +3369,6 @@ msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:53
-#| msgid "Create a new project"
 msgid "Create or update code-index for project file"
 msgstr "Criar ou atualizar code-index para arquivo do projeto"
 
@@ -3398,25 +3378,21 @@ msgstr "ARQUIVO_PROJETO"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:154
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to load flags for plan: %s"
 msgstr "Falha ao carregar opções para plano: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:197
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to cull index plan: %s"
 msgstr "Falha ao fazer cull de plano de índice: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:232
 #, c-format
-#| msgid "Failed to spawn terminal: %s"
 msgid "Failed to populate index plan: %s"
 msgstr "Falha ao popular plano de índice: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:267
 #, c-format
-#| msgid "Failed to open project: %s"
 msgid "Failed to load project: %s"
 msgstr "Falha ao carregar o projeto: %s"
 
@@ -3428,9 +3404,6 @@ msgid "Indexing Source Code"
 msgstr "Recuo de código-fonte"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
-#| msgid ""
-#| "Search, autocompletion, and symbol information may be limited until Ctags "
-#| "indexing is complete."
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
 msgstr ""
 "Pesquisa, diagnóstico e autocompletamento podem ser limitados até a "
@@ -4424,34 +4397,27 @@ msgid "Redo the next command"
 msgstr "Refaz o próximo comando"
 
 #: src/plugins/glade/gbp-glade-page.c:478
-#| msgid "Switch to source or header"
 msgid "Switch to selection mode"
 msgstr "Alterna para o modo de seleção"
 
 # drag-resize é um recurso que não parece ter tradução no Glade -- Rafael
 #: src/plugins/glade/gbp-glade-page.c:479
-#| msgid "Switch to source or header"
 msgid "Switch to drag-resize mode"
 msgstr "Alterna para o modo drag-resize"
 
 #: src/plugins/glade/gbp-glade-page.c:480
-#| msgid "Right margin position"
 msgid "Switch to margin editor"
 msgstr "Alterna para editor de margem"
 
 #: src/plugins/glade/gbp-glade-page.c:481
-#| msgctxt "shortcut window"
-#| msgid "Switch to the next document"
 msgid "Switch to alignment editor"
 msgstr "Alterna para o editor de alinhamento"
 
 #: src/plugins/glade/gbp-glade-page.c:486
-#| msgid "Failed to load the project"
 msgid "Unnamed Glade project"
 msgstr "Projeto Glade sem nome"
 
 #: src/plugins/glade/gbp-glade-properties.c:69
-#| msgid "Failed to load the project"
 msgid "Unnamed Glade Project"
 msgstr "Projeto Glade sem nome"
 
@@ -4460,7 +4426,6 @@ msgid "Widget specific properties"
 msgstr "Propriedades específicas do widget"
 
 #: src/plugins/glade/gbp-glade-properties.ui:46
-#| msgid "Configure build preferences"
 msgid "Container child properties"
 msgstr "Propriedades do filho do contêiner"
 
@@ -4477,22 +4442,18 @@ msgid "Glade"
 msgstr "Glade"
 
 #: src/plugins/glade/gtk/menus.ui:15
-#| msgid "Open Preview"
 msgid "Open _Preview"
 msgstr "Abrir _visualização"
 
 #: src/plugins/glade/gtk/menus.ui:22
-#| msgid "Cu_t"
 msgid "Cut"
 msgstr "Recortar"
 
 #: src/plugins/glade/gtk/menus.ui:27
-#| msgid "_Copy"
 msgid "Copy"
 msgstr "Copiar"
 
 #: src/plugins/glade/gtk/menus.ui:32
-#| msgid "_Paste"
 msgid "Paste"
 msgstr "Colar"
 
@@ -4503,12 +4464,10 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: src/plugins/glade/gtk/menus.ui:44
-#| msgid "_Undo"
 msgid "Undo"
 msgstr "Desfazer"
 
 #: src/plugins/glade/gtk/menus.ui:49
-#| msgid "_Redo"
 msgid "Redo"
 msgstr "Refazer"
 
@@ -4550,7 +4509,6 @@ msgstr ""
 "Python. Isso pode resultar na execução do código de seu projeto."
 
 #: src/plugins/gradle/gradle_plugin.py:85
-#| msgid "Executable wrapper"
 msgid "Gradle Wrapper"
 msgstr "Wrapper do Gradle"
 
@@ -4559,28 +4517,23 @@ msgid "Display a new greeter window"
 msgstr "Exibir uma nova janela de saudação"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:129
-#| msgid "Building project"
 msgid "Begin cloning project from URI"
 msgstr "Começar a clonagem do projeto a partir da URI"
 
 #: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
 #: src/plugins/greeter/gtk/menus.ui:88
-#| msgid "_Clone Repository"
 msgid "_Clone Repository…"
 msgstr "_Clonar repositório…"
 
 #: src/plugins/greeter/gtk/menus.ui:47
-#| msgid "_Quit"
 msgid "Quit"
 msgstr "Sair"
 
 #: src/plugins/greeter/gtk/menus.ui:66 src/plugins/greeter/gtk/menus.ui:82
-#| msgid "Open Project"
 msgid "Open a _Project…"
 msgstr "Abrir um _projeto…"
 
 #: src/plugins/grep/gbp-grep-panel.c:494
-#| msgid "_Match Case"
 msgid "Match"
 msgstr "Corresponder"
 
@@ -4590,23 +4543,18 @@ msgstr "Caminho"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
 #: src/plugins/grep/gtk/menus.ui:6
-#| msgid "Find other file"
 msgid "Find in Files"
 msgstr "Localizar em arquivos"
 
 #: src/plugins/grep/gbp-grep-panel.ui:51
-#| msgid "Replace"
 msgid "Replace With"
 msgstr "Substituir por"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
-#| msgid "Search"
 msgid "Search for…"
 msgstr "Pesquisar por…"
 
 #: src/plugins/grep/gbp-grep-popover.ui:37
-#| msgctxt "shortcut window"
-#| msgid "Find"
 msgid "Find"
 msgstr "Localizar"
 
@@ -4619,12 +4567,10 @@ msgid "Match _case when searching"
 msgstr "_Corresponder maiúsculo/minúsculo ao pesquisar"
 
 #: src/plugins/grep/gbp-grep-popover.ui:69
-#| msgid "Match whole word"
 msgid "Match _whole words"
 msgstr "Corresponder _palavras inteiras"
 
 #: src/plugins/grep/gbp-grep-popover.ui:76
-#| msgid "Regular expressions"
 msgid "Allow regular _expressions"
 msgstr "Permitir _expressões regulares"
 
@@ -4646,8 +4592,6 @@ msgstr ""
 
 #: src/plugins/html-preview/html_preview.py:345
 #: src/plugins/html-preview/html_preview.py:355
-#| msgid "Installing %u package"
-#| msgid_plural "Installing %u packages"
 msgid "Install Package"
 msgstr "Instalar pacote"
 
@@ -4669,13 +4613,11 @@ msgstr "Usa Jedi para fornecer completamentos para a linguagem Python"
 
 #: src/plugins/ls/gbp-ls-page.c:285
 #, c-format
-#| msgid "Failed to open directory: %s"
 msgid "Failed to load directory: %s"
 msgstr "Falha ao carregar o diretório: %s"
 
 #: src/plugins/ls/gbp-ls-page.c:345
 #, c-format
-#| msgid "Any Directory"
 msgid "%s — Directory"
 msgstr "%s — Diretório"
 
@@ -4728,12 +4670,10 @@ msgid "Create a new empty project"
 msgstr "Criar um novo projeto vazio"
 
 #: src/plugins/meson-templates/meson_templates.py:351
-#| msgid "Command failed: %s"
 msgid "Command Line Tool"
 msgstr "Ferramenta de linha de comando"
 
 #: src/plugins/meson-templates/meson_templates.py:353
-#| msgid "Create a new project"
 msgid "Create a new command line project"
 msgstr "Criar um novo projeto de linha de comando"
 
@@ -4743,7 +4683,6 @@ msgid "Meson"
 msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-config-view-addin.c:58
-#| msgid "Options"
 msgid "Meson Options"
 msgstr "Opções do Meson"
 
@@ -4880,7 +4819,6 @@ msgid "Messages"
 msgstr "Mensagens"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:18
-#| msgid "Select a Project"
 msgid "Suggested GNOME Projects"
 msgstr "Projetos GNOME sugeridos"
 
@@ -4918,7 +4856,6 @@ msgid "Maps"
 msgstr "Mapas"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:80
-#| msgid "GNOME Application"
 msgid "A simple GNOME 3 maps application"
 msgstr "Um aplicativo simples de mapas para o GNOME 3 "
 
@@ -4951,7 +4888,6 @@ msgid "Polari"
 msgstr "Polari"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:121
-#| msgid "An IDE for GNOME"
 msgid "An IRC Client for GNOME"
 msgstr "Um cliente IRC para o GNOME"
 
@@ -4983,17 +4919,14 @@ msgid "Project “%s” failed to build"
 msgstr "O projeto “%s” falhou na compilação"
 
 #: src/plugins/notification/ide-notification-addin.c:186
-#| msgid "Build cancelled"
 msgid "Build succeeded"
 msgstr "Compilação bem-sucedida"
 
 #: src/plugins/notification/ide-notification-addin.c:188
-#| msgid "Build failed"
 msgid "Build configured"
 msgstr "Compilação configurada"
 
 #: src/plugins/notification/ide-notification-addin.c:190
-#| msgid "Build System"
 msgid "Build bootstrapped"
 msgstr "Compilação inicializada"
 
@@ -5034,52 +4967,46 @@ msgstr "Nome da pasta"
 msgid "_Create"
 msgstr "_Criar"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
-#| msgctxt "shortcut window"
-#| msgid "Files"
+#: src/plugins/project-tree/gbp-project-tree-addin.c:207
 msgid "Files"
 msgstr "Arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:671
 #, c-format
-#| msgid "Open file"
 msgid "Copying 1 file"
 msgstr "Copiando 1 arquivo"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:674
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s de %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
-#| msgid "Failed to load file: %s"
+#: src/plugins/project-tree/gbp-project-tree-addin.c:710
 msgid "Failed to copy files"
 msgstr "Falha ao copiar arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
-#| msgid "File chooser"
+#: src/plugins/project-tree/gbp-project-tree-addin.c:720
 msgid "Files copied"
 msgstr "Arquivos copiados"
 
+#: src/plugins/project-tree/gbp-project-tree-addin.c:724
+#, c-format
+#| msgid "Copied %s files"
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "Copiado %s arquivo"
+msgstr[1] "Copiados %s arquivos"
+
 #: src/plugins/project-tree/gbp-project-tree-addin.c:725
-#| msgctxt "shortcut window"
-#| msgid "Close all files"
 msgid "Copied 1 file"
 msgstr "Copiado 1 arquivo"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:733
-#, c-format
-#| msgctxt "shortcut window"
-#| msgid "Close all files"
-msgid "Copied %s files"
-msgstr "Copiados %s arquivos"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:873
+#: src/plugins/project-tree/gbp-project-tree-addin.c:863
 msgid "Copying files…"
 msgstr "Copiando arquivos…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:874
+#: src/plugins/project-tree/gbp-project-tree-addin.c:864
 msgid "Files will be copied in a moment"
 msgstr "Os arquivo serão copiados em instantes"
 
@@ -5093,17 +5020,14 @@ msgid "Rename %s"
 msgstr "Renomear %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
-#| msgid "New File"
 msgid "New File…"
 msgstr "Novo arquivo…"
 
 #: src/plugins/project-tree/gtk/menus.ui:13
-#| msgid "_New Folder"
 msgid "New Folder…"
 msgstr "Nova pasta…"
 
 #: src/plugins/project-tree/gtk/menus.ui:25
-#| msgid "Open _With"
 msgid "Open With…"
 msgstr "Abrir com…"
 
@@ -5113,17 +5037,14 @@ msgstr "Editor de código-fonte"
 
 # Tradução literal "contenedora" não me pareceu uma boa, então mudei -- Rafael
 #: src/plugins/project-tree/gtk/menus.ui:43
-#| msgid "_Open Containing Folder"
 msgid "Open Containing Folder"
 msgstr "Abrir pasta raiz do projeto"
 
 #: src/plugins/project-tree/gtk/menus.ui:48
-#| msgid "_Open in Terminal"
 msgid "Open in Terminal"
 msgstr "Abrir no terminal"
 
 #: src/plugins/project-tree/gtk/menus.ui:62
-#| msgid "Mo_ve to Trash"
 msgid "Move to Trash"
 msgstr "Mover para lixeira"
 
@@ -5167,7 +5088,6 @@ msgid "Removing %s\n"
 msgstr "Removendo %s\n"
 
 #: src/plugins/recent/gbp-recent-section.c:467
-#| msgid "Remove Project Files…"
 msgid "Removing Files…"
 msgstr "Removendo arquivos…"
 
@@ -5502,7 +5422,6 @@ msgid "Run with Profiler"
 msgstr "Executar com perfilador"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
-#| msgid "Open Sysprof Capture…"
 msgctxt "menu label"
 msgid "Open Sysprof Capture…"
 msgstr "Abrir captura do Sysprof…"
@@ -5539,7 +5458,6 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (SDK de raiz de sistema)"
 
 #: src/plugins/terminal/gbp-terminal-application-addin.c:64
-#| msgid "New terminal in directory"
 msgid "Use terminal interface"
 msgstr "Usar interface de terminal"
 
@@ -5575,7 +5493,6 @@ msgid "New _Runtime Terminal"
 msgstr "Novo terminal de _execução"
 
 #: src/plugins/testui/gbp-test-output-panel.c:48
-#| msgid "Unit Tests"
 msgid "Unit Test Output"
 msgstr "Saída de teste de unidade"
 
@@ -5586,7 +5503,6 @@ msgstr "Testes de unidade"
 #. translators: %s is replaced with the name of the unit test
 #: src/plugins/testui/gbp-test-tree-addin.c:407
 #, c-format
-#| msgid "Running autogen…"
 msgid "Running test “%s”…"
 msgstr "Executando o teste “%s”…"
 
@@ -5629,17 +5545,14 @@ msgid "Run with Valgrind"
 msgstr "Executar com Valgrind"
 
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:412
-#| msgid "Branch"
 msgid "Branches"
 msgstr "Ramos"
 
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:422
-#| msgid "CTags"
 msgid "Tags"
 msgstr "Tags"
 
 #: src/plugins/vcsui/gtk/menus.ui:8
-#| msgid "Switch To"
 msgid "Switch Branch"
 msgstr "Alternar ramo"
 
@@ -5698,23 +5611,18 @@ msgid "Change the pages colorscheme"
 msgstr "Alterar o esquema de cores das páginas"
 
 #: src/plugins/vim/gb-vim.c:1217
-#| msgid "Build project"
 msgid "Build the project"
 msgstr "Compilar o projeto"
 
 #: src/plugins/vim/gb-vim.c:1218
-#| msgid "Enable semantic highlighting"
 msgid "Clear search highlighting"
 msgstr "Limpar o realce de pesquisa"
 
 #: src/plugins/vim/gb-vim.c:1219
-#| msgid "Open file"
 msgid "Open a file by path"
 msgstr "Abrir um arquivo por caminho"
 
 #: src/plugins/vim/gb-vim.c:1220
-#| msgctxt "shortcut window"
-#| msgid "Close the document"
 msgid "Close the page"
 msgstr "Fechar a página"
 
@@ -5723,8 +5631,6 @@ msgid "Set various buffer options"
 msgstr "Definir várias opções de buffer"
 
 #: src/plugins/vim/gb-vim.c:1222
-#| msgctxt "shortcut window"
-#| msgid "Join selected lines"
 msgid "Sort the selected lines"
 msgstr "Ordenar as linhas selecionadas"
 
@@ -5733,18 +5639,14 @@ msgid "Create a split page below the current page"
 msgstr "Criar uma página divida embaixo da página atual"
 
 #: src/plugins/vim/gb-vim.c:1224
-#| msgid "Syntax highlighting"
 msgid "Toggle syntax highlighting"
 msgstr "Ativar o realce de sintaxe"
 
 #: src/plugins/vim/gb-vim.c:1228
-#| msgid "Close the current document"
 msgid "Save and close the current page"
 msgstr "Salvar e fechar a página atual"
 
 #: src/plugins/vim/gb-vim.c:1229
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgid "Save the current page"
 msgstr "Salvar a página atual"
 
@@ -5762,12 +5664,10 @@ msgid "Emulates the Vim text editor"
 msgstr "Emula o editor de texto Vim"
 
 #: src/plugins/waf/waf_plugin.py:127
-#| msgid "Building project"
 msgid "Building project…"
 msgstr "Compilando projeto…"
 
 #: src/plugins/waf/waf_plugin.py:140
-#| msgid "Installing project"
 msgid "Installing project…"
 msgstr "Instalando projeto…"
 
