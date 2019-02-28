@@ -188,7 +188,6 @@ gbp_project_tree_addin_build_children_async (IdeTreeAddin        *addin,
     {
       IdeContext *context = ide_tree_node_get_item (node);
       g_autoptr(IdeTreeNode) files = NULL;
-      g_autoptr(IdeTreeNode) targets = NULL;
       g_autoptr(IdeProjectFile) root_file = NULL;
       g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
       g_autoptr(GFile) parent = g_file_get_parent (workdir);
