@@ -221,7 +221,6 @@ gbp_code_index_service_index_cb (GObject      *object,
                                  gpointer      user_data)
 {
   GbpCodeIndexService *self = (GbpCodeIndexService *)object;
-  g_autoptr(GCancellable) cancellable = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -288,7 +287,8 @@ gbp_code_index_service_pause (GbpCodeIndexService *self)
   g_clear_object (&self->cancellable);
   g_clear_handle_id (&self->queued_source, g_source_remove);
 
-  update_notification (self);
+  if (!ide_object_in_destruction (IDE_OBJECT (self)))
+    update_notification (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAUSED]);
 }
@@ -301,9 +301,11 @@ gbp_code_index_service_unpause (GbpCodeIndexService *self)
 
   self->paused = FALSE;
 
-  gbp_code_index_service_queue_index (self);
-
-  update_notification (self);
+  if (!ide_object_in_destruction (IDE_OBJECT (self)))
+    {
+      gbp_code_index_service_queue_index (self);
+      update_notification (self);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAUSED]);
 }
@@ -509,9 +511,11 @@ gbp_code_index_service_index_finish (GbpCodeIndexService  *self,
 
   self->indexing = FALSE;
 
-  update_notification (self);
-
-  gbp_code_index_service_reload_indexes (self);
+  if (!ide_object_in_destruction (IDE_OBJECT (self)))
+    {
+      update_notification (self);
+      gbp_code_index_service_reload_indexes (self);
+    }
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
@@ -695,7 +699,6 @@ gbp_code_index_service_load_indexes (IdeTask      *task,
                                      GCancellable *cancellable)
 {
   LoadIndexes *state = task_data;
-  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_CODE_INDEX_SERVICE (source_object));
@@ -742,8 +745,6 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
 {
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) index_dir = NULL;
-  g_autoptr(GFile) workdir = NULL;
-  g_autoptr(IdeTask) task = NULL;
   IdeBufferManager *buffer_manager;
   IdeBuildManager *build_manager;
   IdeProject *project;
@@ -838,8 +839,6 @@ gbp_code_index_service_start (GbpCodeIndexService *self)
 void
 gbp_code_index_service_stop (GbpCodeIndexService *self)
 {
-  g_autoptr(GCancellable) cancellable = NULL;
-
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (GBP_IS_CODE_INDEX_SERVICE (self));
 
