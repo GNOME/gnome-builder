@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <libide-gui.h>
 #include <dazzle.h>
 #include <vte/vte.h>
 
@@ -27,7 +28,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_TEST_OUTPUT_PANEL (gbp_test_output_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTestOutputPanel, gbp_test_output_panel, GBP, TEST_OUTPUT_PANEL, DzlDockWidget)
+G_DECLARE_FINAL_TYPE (GbpTestOutputPanel, gbp_test_output_panel, GBP, TEST_OUTPUT_PANEL, IdePane)
 
 GtkWidget *gbp_test_output_panel_new (VtePty *pty);
 

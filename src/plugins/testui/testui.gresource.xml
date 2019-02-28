@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/testui">
     <file>testui.plugin</file>
+    <file preprocess="xml-stripblanks">gbp-test-output-panel.ui</file>
   </gresource>
 </gresources>
