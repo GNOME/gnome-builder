@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-27 02:38+0000\n"
-"PO-Revision-Date: 2019-02-27 19:44+0100\n"
+"POT-Creation-Date: 2019-02-28 18:07+0000\n"
+"PO-Revision-Date: 2019-02-28 19:27+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -4937,45 +4937,47 @@ msgstr "Nazwa katalogu"
 msgid "_Create"
 msgstr "_Utwórz"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:207
 msgid "Files"
 msgstr "Pliki"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:671
 #, c-format
 msgid "Copying 1 file"
 msgstr "Kopiowanie 1 pliku"
 
 # FIXME https://gitlab.gnome.org/GNOME/gnome-builder/issues/774
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:674
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopiowanie plików: %s z %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
+#: src/plugins/project-tree/gbp-project-tree-addin.c:710
 msgid "Failed to copy files"
 msgstr "Skopiowanie plików się nie powiodło"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:720
 msgid "Files copied"
 msgstr "Skopiowano pliki"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:724
+#, c-format
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "Skopiowano %s plik"
+msgstr[1] "Skopiowano %s pliki"
+msgstr[2] "Skopiowano %s plików"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Copied 1 file"
 msgstr "Skopiowano 1 plik"
 
-# FIXME https://gitlab.gnome.org/GNOME/gnome-builder/issues/774
-#: src/plugins/project-tree/gbp-project-tree-addin.c:733
-#, c-format
-msgid "Copied %s files"
-msgstr "Skopiowano pliki: %s"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:873
+#: src/plugins/project-tree/gbp-project-tree-addin.c:863
 msgid "Copying files…"
 msgstr "Kopiowanie plików…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:874
+#: src/plugins/project-tree/gbp-project-tree-addin.c:864
 msgid "Files will be copied in a moment"
 msgstr "Pliki zostaną za chwilę skopiowanie"
 
