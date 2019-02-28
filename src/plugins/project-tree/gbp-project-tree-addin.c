@@ -713,25 +713,16 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
     }
   else
     {
+      g_autofree gchar *format = NULL;
       GPtrArray *sources;
-
-      dzl_file_transfer_stat (transfer, &stbuf);
+      gchar count[16];
 
       ide_notification_set_title (notif, _("Files copied"));
 
-      if (stbuf.n_files_total == 1)
-        {
-          ide_notification_set_body (notif, _("Copied 1 file"));
-        }
-      else
-        {
-          g_autofree gchar *format = NULL;
-          gchar count[16];
-
-          g_snprintf (count, sizeof count, "%"G_GINT64_FORMAT, stbuf.n_files_total);
-          format = g_strdup_printf (_("Copied %s files"), count);
-          ide_notification_set_body (notif, format);
-        }
+      dzl_file_transfer_stat (transfer, &stbuf);
+      g_snprintf (count, sizeof count, "%"G_GINT64_FORMAT, stbuf.n_files_total);
+      format = g_strdup_printf (ngettext ("Copied %s file", "Copied %s files", stbuf.n_files_total), count);
+      ide_notification_set_body (notif, _("Copied 1 file"));
 
       sources = g_object_get_data (G_OBJECT (task), "SOURCE_FILES");
 
