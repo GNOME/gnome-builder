@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-27 02:38+0000\n"
-"PO-Revision-Date: 2019-02-28 12:18+0700\n"
+"POT-Creation-Date: 2019-02-28 18:07+0000\n"
+"PO-Revision-Date: 2019-03-01 19:07+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -4935,43 +4935,45 @@ msgstr "Nama Folder"
 msgid "_Create"
 msgstr "_Buat"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:207
 msgid "Files"
 msgstr "Berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:671
 #, c-format
 msgid "Copying 1 file"
 msgstr "Menyalin 1 berkas"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:674
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Menyalin %s dari %s berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
+#: src/plugins/project-tree/gbp-project-tree-addin.c:710
 msgid "Failed to copy files"
 msgstr "Gagal menyalin berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:720
 msgid "Files copied"
 msgstr "Berkas disalin"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:724
+#, c-format
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "%s berkas telah disalin"
+msgstr[1] "%s berkas telah disalin"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Copied 1 file"
 msgstr "1 berkas telah disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:733
-#, c-format
-msgid "Copied %s files"
-msgstr "%s berkas telah disalin"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:873
+#: src/plugins/project-tree/gbp-project-tree-addin.c:863
 msgid "Copying files…"
 msgstr "Menyalin berkas…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:874
+#: src/plugins/project-tree/gbp-project-tree-addin.c:864
 msgid "Files will be copied in a moment"
 msgstr "Berkas akan disalin sebentar lagi"
 
