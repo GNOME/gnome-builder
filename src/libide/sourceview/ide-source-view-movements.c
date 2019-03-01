@@ -2224,6 +2224,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       mv.ignore_target_column = TRUE;
       mv.ignore_select = TRUE;
       mv.count = MIN (mv.count, end_line);
+      mv.scroll_align = IDE_SOURCE_SCROLL_X;
       /*
        * It would be nice to do this as one large movement, but
        * ide_source_view_movements_previous_line() needs to be
@@ -2238,6 +2239,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       mv.ignore_target_column = TRUE;
       mv.ignore_select = TRUE;
       mv.count = MIN (mv.count, end_line);
+      mv.scroll_align = IDE_SOURCE_SCROLL_X;
       /*
        * It would be nice to do this as one large movement, but
        * ide_source_view_movements_next_line() needs to be
