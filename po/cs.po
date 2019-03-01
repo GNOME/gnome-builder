@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-28 09:28+0000\n"
-"PO-Revision-Date: 2019-02-28 11:19+0100\n"
+"POT-Creation-Date: 2019-02-28 18:07+0000\n"
+"PO-Revision-Date: 2019-03-01 10:32+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -492,6 +492,10 @@ msgstr "Jestli má být zásuvný modul povolen"
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 msgid "Show Icons"
 msgstr "Zobrazovat ikony"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr "Toto nastavení je zavržené a nadále se nepoužívá."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: src/plugins/project-tree/gtk/menus.ui:73
@@ -4934,43 +4938,47 @@ msgstr "Název složky"
 msgid "_Create"
 msgstr "V_ytvořit"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:207
 msgid "Files"
 msgstr "Soubory"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:671
 #, c-format
 msgid "Copying 1 file"
 msgstr "Kopíruje se 1 soubor"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:674
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopíruje se %s. soubor z %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
+#: src/plugins/project-tree/gbp-project-tree-addin.c:710
 msgid "Failed to copy files"
 msgstr "Selhalo kopírování souborů"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:720
 msgid "Files copied"
 msgstr "Soubory byly zkopírovány"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:724
+#, c-format
+#| msgid "Copied 1 file"
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "Byl zkopírován %s soubor"
+msgstr[1] "Byly zkopírovány %s soubory"
+msgstr[2] "Bylo zkopírováno %s souborů"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Copied 1 file"
 msgstr "Byl zkopírován 1 soubor"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:733
-#, c-format
-msgid "Copied %s files"
-msgstr ""
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:873
+#: src/plugins/project-tree/gbp-project-tree-addin.c:863
 msgid "Copying files…"
 msgstr "Kopírují se soubory…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:874
+#: src/plugins/project-tree/gbp-project-tree-addin.c:864
 msgid "Files will be copied in a moment"
 msgstr "Soubory budou zkopírovány za okamžik"
 
