@@ -723,7 +723,7 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
       dzl_file_transfer_stat (transfer, &stbuf);
       g_snprintf (count, sizeof count, "%"G_GINT64_FORMAT, stbuf.n_files_total);
       format = g_strdup_printf (ngettext ("Copied %s file", "Copied %s files", stbuf.n_files_total), count);
-      ide_notification_set_body (notif, _("Copied 1 file"));
+      ide_notification_set_body (notif, format);
 
       sources = g_object_get_data (G_OBJECT (task), "SOURCE_FILES");
 
