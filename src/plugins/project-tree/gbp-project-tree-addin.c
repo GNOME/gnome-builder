@@ -29,6 +29,7 @@
 #include <libide-tree.h>
 #include <libide-vcs.h>
 
+#include "ide-buffer-private.h"
 #include "ide-tree-private.h"
 
 #include "gbp-project-tree-addin.h"
@@ -764,6 +765,40 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
 }
 
 static void
+gbp_project_tree_addin_rename_buffer_cb (IdeBuffer *buffer,
+                                         gpointer   user_data)
+{
+  struct {
+    GFile *src;
+    GFile *dst;
+  } *foreach = user_data;
+  GFile *file;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (foreach != NULL);
+  g_assert (G_IS_FILE (foreach->src));
+  g_assert (G_IS_FILE (foreach->dst));
+
+  file = ide_buffer_get_file (buffer);
+
+  if (ide_buffer_get_is_temporary (buffer))
+    return;
+
+  if (g_file_has_prefix (file, foreach->src) || g_file_equal (file, foreach->src))
+    {
+      g_autofree gchar *suffix = g_file_get_relative_path (foreach->src, file);
+      g_autoptr(GFile) new_dst = NULL;
+
+      if (suffix == NULL)
+        new_dst = g_file_dup (foreach->dst);
+      else
+        new_dst = g_file_get_child (foreach->dst, suffix);
+
+      _ide_buffer_set_file (buffer, new_dst);
+    }
+}
+
+static void
 gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
                                            IdeTreeNode         *drag_node,
                                            IdeTreeNode         *drop_node,
@@ -783,6 +818,8 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   g_auto(GStrv) uris = NULL;
   IdeProjectFile *drag_file;
   IdeProjectFile *drop_file;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -832,11 +869,18 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
                            notif,
                            0);
 
+  context = ide_object_get_context (IDE_OBJECT (self->model));
+  buffer_manager = ide_buffer_manager_from_context (context);
+
   for (guint i = 0; i < srcs->len; i++)
     {
       GFile *source = g_ptr_array_index (srcs, i);
       g_autofree gchar *name = NULL;
       g_autoptr(GFile) dst_file = NULL;
+      struct {
+        GFile *src;
+        GFile *dst;
+      } foreach;
 
       name = g_file_get_basename (source);
       g_assert (name != NULL);
@@ -851,6 +895,16 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
         }
 
       dzl_file_transfer_add (transfer, source, dst_file);
+
+      /* If there are any buffers that are open with this file as an
+       * ancester, then we need to rename there file to point at the
+       * new location.
+       */
+      foreach.src = source;
+      foreach.dst = dst_file;
+      ide_buffer_manager_foreach (buffer_manager,
+                                  gbp_project_tree_addin_rename_buffer_cb,
+                                  &foreach);
     }
 
   if (actions == GDK_ACTION_MOVE)
