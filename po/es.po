@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-27 02:38+0000\n"
-"PO-Revision-Date: 2019-02-27 11:07+0100\n"
+"POT-Creation-Date: 2019-02-28 18:07+0000\n"
+"PO-Revision-Date: 2019-03-01 12:11+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -364,12 +364,10 @@ msgstr "El número de filas de completado que mostrar al usuario."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #: src/libide/gui/ide-preferences-builtin.c:107
-#| msgid "Spacing"
 msgid "Line Spacing"
 msgstr "Espaciado de la línea"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "The number of pixels to include above and below lines in the editor."
 msgstr ""
 "El número de píxeles que incluir por encima y por debajo de las líneas en el "
@@ -1848,13 +1846,10 @@ msgid "editor font monospace"
 msgstr "tipografía monoespaciada del editor"
 
 #: src/libide/gui/ide-preferences-builtin.c:107
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "Number of pixels above and below editor lines"
 msgstr "Número de píxeles por encima y por debajo de las líneas en el editor"
 
 #: src/libide/gui/ide-preferences-builtin.c:107
-#| msgctxt "Keywords"
-#| msgid "editor font monospace"
 msgctxt "Keywords"
 msgid "editor line spacing font monospace"
 msgstr "espacio de líneas de la tipografía monoespaciada del editor"
@@ -4973,43 +4968,46 @@ msgstr "Nombre de la carpeta"
 msgid "_Create"
 msgstr "_Crear"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:207
 msgid "Files"
 msgstr "Archivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:671
 #, c-format
 msgid "Copying 1 file"
 msgstr "Copiando 1 archivo"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:674
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s de %s archivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
+#: src/plugins/project-tree/gbp-project-tree-addin.c:710
 msgid "Failed to copy files"
 msgstr "Falló al copiar los archivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:720
 msgid "Files copied"
 msgstr "Archivos copiados"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:724
+#, c-format
+#| msgid "Copied %s files"
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "Copiado %s archivo"
+msgstr[1] "Copiados %s archivos"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Copied 1 file"
 msgstr "Copiado 1 archivo"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:733
-#, c-format
-msgid "Copied %s files"
-msgstr "Copiados %s archivos"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:873
+#: src/plugins/project-tree/gbp-project-tree-addin.c:863
 msgid "Copying files…"
 msgstr "Copiando archivos…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:874
+#: src/plugins/project-tree/gbp-project-tree-addin.c:864
 msgid "Files will be copied in a moment"
 msgstr "Los archivos se copiarán en un momento"
 
