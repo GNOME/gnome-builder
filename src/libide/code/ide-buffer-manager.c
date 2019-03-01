@@ -1283,8 +1283,15 @@ ide_buffer_manager_foreach_cb (IdeObject *object,
 
   g_assert (IDE_IS_OBJECT (object));
 
-  if (IDE_IS_BUFFER (object))
-    state->func (IDE_BUFFER (object), state->user_data);
+  if (IDE_IS_OBJECT_BOX (object))
+    {
+      g_autoptr(IdeObject) wrapped = NULL;
+
+      wrapped = ide_object_box_ref_object (IDE_OBJECT_BOX (object));
+
+      if (IDE_IS_BUFFER (wrapped))
+        state->func (IDE_BUFFER (wrapped), state->user_data);
+    }
 }
 
 /**
