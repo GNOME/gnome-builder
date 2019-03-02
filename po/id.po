@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-28 18:07+0000\n"
-"PO-Revision-Date: 2019-03-01 19:07+0700\n"
+"POT-Creation-Date: 2019-03-01 18:52+0000\n"
+"PO-Revision-Date: 2019-03-02 19:10+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -886,6 +886,7 @@ msgstr "Gagal menyimpan berkas: %s"
 
 #: src/libide/editor/ide-editor-page-actions.c:233
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
+#: src/plugins/testui/gbp-test-output-panel.c:63
 msgid "Save File"
 msgstr "Simpan Berkas"
 
@@ -1017,6 +1018,7 @@ msgstr "_Muat Ulang"
 #: src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-greeter-workspace-actions.c:119
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
+#: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "_Batal"
 
@@ -3123,6 +3125,7 @@ msgstr "Toolchain Bangun"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/editor/gtk/menus.ui:159 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/testui/gbp-test-output-panel.c:66
 msgid "_Save"
 msgstr "_Simpan"
 
@@ -4935,45 +4938,41 @@ msgstr "Nama Folder"
 msgid "_Create"
 msgstr "_Buat"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:207
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
 msgid "Files"
 msgstr "Berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:671
+#: src/plugins/project-tree/gbp-project-tree-addin.c:672
 #, c-format
 msgid "Copying 1 file"
 msgstr "Menyalin 1 berkas"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:674
+#: src/plugins/project-tree/gbp-project-tree-addin.c:675
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Menyalin %s dari %s berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:710
+#: src/plugins/project-tree/gbp-project-tree-addin.c:711
 msgid "Failed to copy files"
 msgstr "Gagal menyalin berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:720
+#: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Files copied"
 msgstr "Berkas disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:724
+#: src/plugins/project-tree/gbp-project-tree-addin.c:725
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s berkas telah disalin"
 msgstr[1] "%s berkas telah disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
-msgid "Copied 1 file"
-msgstr "1 berkas telah disalin"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:863
+#: src/plugins/project-tree/gbp-project-tree-addin.c:917
 msgid "Copying files…"
 msgstr "Menyalin berkas…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:864
+#: src/plugins/project-tree/gbp-project-tree-addin.c:918
 msgid "Files will be copied in a moment"
 msgstr "Berkas akan disalin sebentar lagi"
 
@@ -5455,9 +5454,17 @@ msgstr "Terminal _Bangun Baru"
 msgid "New _Runtime Terminal"
 msgstr "Terminal _Runtime Baru"
 
-#: src/plugins/testui/gbp-test-output-panel.c:48
+#: src/plugins/testui/gbp-test-output-panel.c:132
 msgid "Unit Test Output"
 msgstr "Keluaran Pengujian Unit"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:33
+msgid "Clear test output"
+msgstr "Bersihkan keluaran pengujian"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:50
+msgid "Save test output"
+msgstr "Simpan keluaran pengujian"
 
 #: src/plugins/testui/gbp-test-tree-addin.c:197
 msgid "Unit Tests"
@@ -5642,6 +5649,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Copied 1 file"
+#~ msgstr "1 berkas telah disalin"
 
 #~ msgid "If enabled, the project tree will display icons next to each item."
 #~ msgstr ""
