@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2019-02-27 10:09+0000\n"
-"PO-Revision-Date: 2019-02-27 19:11+0100\n"
+"PO-Revision-Date: 2019-03-01 20:04+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1243,10 +1243,8 @@ msgstr "Predhodna seja bo kmalu na voljo."
 
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-primary-workspace.ui:21
-#, fuzzy
-#| msgid "Switch To"
 msgid "Switch surface"
-msgstr "Površinski"
+msgstr "Preklopi površino"
 
 #: src/libide/editor/ide-editor-workspace.ui:30
 #: src/libide/gui/ide-primary-workspace.ui:54
@@ -1469,10 +1467,8 @@ msgid "Select branch and other options."
 msgstr "Druge možnosti usklajevanja"
 
 #: src/libide/greeter/ide-clone-surface.ui:140
-#, fuzzy
-#| msgid "Repository URL"
 msgid "Repository Kind"
-msgstr "_Skladišče:"
+msgstr "Vrsta skladišča"
 
 #: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
@@ -1575,10 +1571,8 @@ msgid "_Remove Projects"
 msgstr "_Odstrani projekte"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:166
-#, fuzzy
-#| msgid "Remove Project Files…"
 msgid "Remove Projects and Sources…"
-msgstr "Viri"
+msgstr "Odstrani projekte in vire …"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
 msgid "Clone Repository"
@@ -3800,10 +3794,8 @@ msgid "Your project will be created within %s."
 msgstr "Projekt bo ustvarjen v %s"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:577
-#, fuzzy
-#| msgid "New Project"
 msgid "Start New Project"
-msgstr "Nova datoteka, projekt in enote projekta."
+msgstr "Začni nov projekt"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
@@ -3886,28 +3878,22 @@ msgid "Uses the Git version control system"
 msgstr "Uporablja sistem za nadzor različic Git"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:328
-#, fuzzy
-#| msgid "Clean the project"
 msgid "Create Project"
-msgstr "create-project [MOŽNOET ...] IME_PROJEKTA"
+msgstr "Ustvari projekt"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:357
 msgid "Select a Template"
 msgstr "Izbor predloge"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:50
-#, fuzzy
-#| msgid "_New Project"
 msgid "Start _New Project…"
-msgstr "Nova datoteka, projekt in enote projekta."
+msgstr "Začni _nov projekt …"
 
 #: src/plugins/create-project/gtk/menus.ui:7
 #: src/plugins/create-project/gtk/menus.ui:18
 #: src/plugins/create-project/gtk/menus.ui:29
-#, fuzzy
-#| msgid "_New Project"
 msgid "_Start New Project…"
-msgstr "Nova datoteka, projekt in enote projekta."
+msgstr "_Začni nov projekt …"
 
 #: src/plugins/ctags/ide-ctags-preferences-addin.c:53
 msgid "Suggest completions using Ctags"
@@ -4167,10 +4153,8 @@ msgid "Open in New Frame"
 msgstr "Odpri v novem oknu"
 
 #: src/plugins/editor/gtk/menus.ui:133
-#, fuzzy
-#| msgid "Open in New Frame"
 msgid "Open in New Workspace"
-msgstr "Odpre okno novega sporočila"
+msgstr "Odpri na novi delovni površini"
 
 #: src/plugins/editor/gtk/menus.ui:137
 msgid "Split"
@@ -4234,10 +4218,9 @@ msgstr "MANIFEST"
 
 #. translators: %s is replaced with the name of the flatpak manifest
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.c:141
-#, fuzzy, c-format
-#| msgid "Configuring project"
+#, c-format
 msgid "Cloning project %s"
-msgstr "Poteka kloniranje »%s« ..."
+msgstr "Poteka kloniranje projekta %s"
 
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:33
 msgid "Downloading application sources…"
@@ -4361,10 +4344,8 @@ msgid "Runtime has been installed"
 msgstr "Izvajalne datoteke so nameščene."
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:87
-#, fuzzy
-#| msgid "Building dependencies"
 msgid "Missing system dependencies"
-msgstr "prezri manjkajoče sistemske odvisnosti"
+msgstr "Manjkajoče sistemske odvisnosti"
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:88
 #, fuzzy
@@ -4439,15 +4420,12 @@ msgstr "Signali"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
 #: src/plugins/glade/gbp-glade-frame-addin.c:295
-#, fuzzy
-#| msgid "Select Symbol…"
 msgid "Select Widget…"
-msgstr "GRADNIK"
+msgstr "Izbor gradnika …"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:388
-#, fuzzy
 msgid "View Design"
-msgstr "Pogled zasnove"
+msgstr "Pogled oblikovanja"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:390
 #, fuzzy
@@ -4541,16 +4519,12 @@ msgid "Switch to alignment editor"
 msgstr "Preklopi"
 
 #: src/plugins/glade/gbp-glade-page.c:486
-#, fuzzy
-#| msgid "Failed to load the project"
 msgid "Unnamed Glade project"
-msgstr "Projekt glade kateremu pripada gradnik"
+msgstr "Neimenovan projekt Glade"
 
 #: src/plugins/glade/gbp-glade-properties.c:69
-#, fuzzy
-#| msgid "Failed to load the project"
 msgid "Unnamed Glade Project"
-msgstr "Projekt glade kateremu pripada gradnik"
+msgstr "Neimenovan projekt Glade"
 
 #: src/plugins/glade/gbp-glade-properties.ui:36
 #, fuzzy
@@ -4568,9 +4542,8 @@ msgid "Styling, alignment, and other common properties"
 msgstr ""
 
 #: src/plugins/glade/gbp-glade-properties.ui:66
-#, fuzzy
 msgid "Accessibility properties"
-msgstr "Dostopnost"
+msgstr "Lastnosti dostopnosti"
 
 #: src/plugins/glade/gtk/menus.ui:5
 msgid "Glade"
@@ -4670,10 +4643,8 @@ msgid "Quit"
 msgstr "Končaj"
 
 #: src/plugins/greeter/gtk/menus.ui:66 src/plugins/greeter/gtk/menus.ui:82
-#, fuzzy
-#| msgid "Open Project"
 msgid "Open a _Project…"
-msgstr "Odpri projekt"
+msgstr "Odpri _projekt …"
 
 #: src/plugins/grep/gbp-grep-panel.c:494
 msgid "Match"
@@ -4693,10 +4664,8 @@ msgid "Replace With"
 msgstr "Zamenjaj z"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
-#, fuzzy
-#| msgid "Search"
 msgid "Search for…"
-msgstr "Iskanje ..."
+msgstr "Poišči …"
 
 #: src/plugins/grep/gbp-grep-popover.ui:37
 msgid "Find"
@@ -4709,21 +4678,16 @@ msgid "Search _recursively through folders"
 msgstr "Išči po strukturi map:"
 
 #: src/plugins/grep/gbp-grep-popover.ui:61
-#, fuzzy
 msgid "Match _case when searching"
-msgstr "Upoštevaj velikost črk med iskanjem"
+msgstr "Upoštevaj _velikost črk med iskanjem"
 
 #: src/plugins/grep/gbp-grep-popover.ui:69
-#, fuzzy
-#| msgid "Match whole word"
 msgid "Match _whole words"
 msgstr "Išči _le cele besede"
 
 #: src/plugins/grep/gbp-grep-popover.ui:76
-#, fuzzy
-#| msgid "Regular expressions"
 msgid "Allow regular _expressions"
-msgstr "&Logični izraz"
+msgstr "Dovoli _logične izraze"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 msgid "Open Preview"
@@ -4946,10 +4910,8 @@ msgid "Package Config"
 msgstr "Nastavitev"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-#, fuzzy
-#| msgid "Language"
 msgid "Any language"
-msgstr "Brez vsakršnega diskriminatornega namigovanja"
+msgstr "Katerikoli jezik"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "C"
@@ -4988,20 +4950,18 @@ msgid "Delete Toolchain"
 msgstr "za dodajanje novega nabora."
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
-#, fuzzy, c-format
+#, c-format
 #| msgid "Meson"
 msgid "%s (Meson)"
-msgstr "Meson"
+msgstr "%s (Meson)"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Sporočila"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:18
-#, fuzzy
-#| msgid "Select a Project"
 msgid "Suggested GNOME Projects"
-msgstr "(ni predlaganih besed)"
+msgstr "Predlagani projekti GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:37
 msgid "Boxes"
@@ -5021,49 +4981,40 @@ msgid "Calendar"
 msgstr "Koledar"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
-#, fuzzy
 msgid "Calendar application for GNOME"
-msgstr "Koledar GNOME"
+msgstr "Koledar za GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Games"
 msgstr "Igre"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:69
-#, fuzzy
 msgid "Simple game launcher for GNOME"
-msgstr "Zaganjalnik seje Wayland za zaslon GNOME"
+msgstr "Enostaven zaganjalnik iger za GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
 msgid "Maps"
 msgstr "Zemljevidi"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:80
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "A simple GNOME 3 maps application"
-msgstr "Enostaven program za pregled zemljevidov"
+msgstr "Enostaven program za pregled zemljevidov za GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "Music"
 msgstr "Glasba"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:91
-#, fuzzy
 msgid "Music player and management application"
-msgstr "Program GNOME za upravljanje in predvajanje glasbe."
+msgstr "Predvajalnik in urejevalnik glasbene zbirke"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Nautilus"
 msgstr "Nautilus"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:101
-#, fuzzy
 msgid "Default file manager for GNOME"
-msgstr ""
-"Program Nautilus, znan tudi z imenom Datoteke, je privzeti upravljalnik "
-"datotek za namizje GNOME. Enostaven vmesnik in široka povezanost programnika "
-"omogoča brskanje in upravljanje datotek tudi znotraj različnih programov."
+msgstr "Privzeti upravljalnik datotek za GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Photos"
@@ -5078,10 +5029,8 @@ msgid "Polari"
 msgstr "Polari"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:121
-#, fuzzy
-#| msgid "An IDE for GNOME"
 msgid "An IRC Client for GNOME"
-msgstr "Osoredbhu origram-GNOME-IRC"
+msgstr "Odjemalec IRC za GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "Todo"
@@ -5170,22 +5119,19 @@ msgid "Files"
 msgstr "Datoteke"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:672
-#, fuzzy, c-format
-#| msgid "Open file"
+#, c-format
 msgid "Copying 1 file"
-msgstr "Kopiranje datoteke"
+msgstr "Poteka kopiranje 1 datoteke"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
 #: src/plugins/project-tree/gbp-project-tree-addin.c:675
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s of %s files"
-msgstr "Kopiranje datotek za dodajanje v \"%s\""
+msgstr "Poteka kopiranje %s od %s datotek"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:711
-#, fuzzy
-#| msgid "Failed to load file: %s"
 msgid "Failed to copy files"
-msgstr "Kopiranje je spodletelo"
+msgstr "Kopiranje datotek je spodletelo"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:721
 #, fuzzy
@@ -5194,20 +5140,17 @@ msgid "Files copied"
 msgstr "Namestitev je končana: kopiranih je %d datotek"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:725
-#, fuzzy
-#| msgid "Open file"
 msgid "Copied 1 file"
-msgstr "%1 od %2 kopiranih"
+msgstr "Kopirana je 1 datoteka"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:733
-#, fuzzy, c-format
+#, c-format
 msgid "Copied %s files"
-msgstr "Namestitev je končana: kopiranih je %d datotek"
+msgstr "Kopiranih je %s datotek"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:873
-#, fuzzy
 msgid "Copying files…"
-msgstr "Kopiranje datotek"
+msgstr "Poteka kopiranje datotek …"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:874
 #, fuzzy
@@ -5224,10 +5167,8 @@ msgid "Rename %s"
 msgstr "Preimenuj %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
-#, fuzzy
-#| msgid "New File"
 msgid "New File…"
-msgstr "Nova _datoteka"
+msgstr "Nova datoteka …"
 
 #: src/plugins/project-tree/gtk/menus.ui:13
 msgid "New Folder…"
@@ -5713,16 +5654,13 @@ msgstr "Preizkusi enot"
 
 #. translators: %s is replaced with the name of the unit test
 #: src/plugins/testui/gbp-test-tree-addin.c:407
-#, fuzzy, c-format
-#| msgid "Running autogen…"
+#, c-format
 msgid "Running test “%s”…"
-msgstr "Test normalnosti (%s)"
+msgstr "Poteka preizkus »%s« …"
 
 #: src/plugins/todo/gbp-todo-panel.c:301
-#, fuzzy
-#| msgid "Downloading…"
 msgid "Loading TODOs…"
-msgstr "(nalaganje ...)"
+msgstr "Poteka nalaganje datotek TODO …"
 
 #: src/plugins/todo/gbp-todo-panel.c:302
 #, fuzzy
@@ -5832,16 +5770,12 @@ msgid "Build the project"
 msgstr "Izgradi projekt"
 
 #: src/plugins/vim/gb-vim.c:1218
-#, fuzzy
-#| msgid "Enable semantic highlighting"
 msgid "Clear search highlighting"
-msgstr "Počisti iskanje"
+msgstr "Počisti poudarjalnik iskalnega niza"
 
 #: src/plugins/vim/gb-vim.c:1219
-#, fuzzy
-#| msgid "Open file"
 msgid "Open a file by path"
-msgstr "DATOTEKA [POT]"
+msgstr "Odpri datoteko na poti"
 
 #: src/plugins/vim/gb-vim.c:1220
 msgid "Close the page"
