@@ -26,6 +26,8 @@
 #include <libide-core.h>
 #include <stdlib.h>
 
+#include "ide-build-ident.h"
+
 #include "ide-application-addin.h"
 #include "ide-application-private.h"
 #include "ide-primary-workspace.h"
@@ -147,7 +149,13 @@ _ide_application_command_line (IdeApplication          *self,
   /* Short-circuit with version info if we can */
   if (g_variant_dict_contains (dict, "version"))
     {
+#ifdef DEVELOPMENT_BUILD
+      g_application_command_line_print (cmdline, "GNOME Builder %s (%s)\n",
+                                        PACKAGE_VERSION,
+                                        IDE_BUILD_IDENTIFIER);
+#else
       g_application_command_line_print (cmdline, "GNOME Builder "PACKAGE_VERSION"\n");
+#endif
       g_application_command_line_set_exit_status (cmdline, 0);
       return;
     }
