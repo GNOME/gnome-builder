@@ -626,7 +626,7 @@ ide_frame_pan_end (IdeFrame         *self,
       state->source = g_object_ref (self);
       state->dest = g_object_ref (dest);
       state->page = g_object_ref (priv->pan_page);
-      state->theatric = priv->pan_theatric;
+      state->theatric = g_object_ref (priv->pan_theatric);
 
       gtk_widget_translate_coordinates (GTK_WIDGET (dest_priv->top_stack), grid, 0, 0,
                                         &alloc.x, &alloc.y);
