@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="project-tree-menu">
-    <section id="project-tree-menu-placeholder0"/>
     <section id="project-tree-menu-new-section">
       <item>
         <attribute name="id">project-tree-menu-new-file</attribute>
@@ -14,7 +13,6 @@
         <attribute name="action">project-tree.new-folder</attribute>
       </item>
     </section>
-    <section id="project-tree-menu-placeholder1"/>
     <section id="project-tree-menu-open-section">
       <item>
         <attribute name="id">project-tree-menu-open</attribute>
@@ -49,8 +47,6 @@
         <attribute name="action">project-tree.open-in-terminal</attribute>
       </item>
     </section>
-    <section id="project-tree-menu-vcs"/>
-    <section id="project-tree-menu-placeholder2"/>
     <section id="project-tree-menu-destructive-section">
       <item>
         <attribute name="id">project-tree-menu-rename</attribute>
@@ -63,7 +59,6 @@
         <attribute name="action">project-tree.trash</attribute>
       </item>
     </section>
-    <section id="project-tree-menu-placeholder3"/>
     <section id="project-tree-menu-display-options-parent-section">
       <submenu id="project-tree-menu-display-options">
         <attribute name="label" translatable="yes">Display Options</attribute>
@@ -81,6 +76,5 @@
         </section>
       </submenu>
     </section>
-    <section id="project-tree-menu-placeholder4"/>
   </menu>
 </interface>
