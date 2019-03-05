@@ -187,46 +187,6 @@ gbp_file_search_provider_build_cb (GObject      *object,
   g_set_object (&self->index, index);
 }
 
-#if 0
-static void
-gbp_file_search_provider_activate (IdeSearchProvider *provider,
-                                  GtkWidget         *row,
-                                  IdeSearchResult   *result)
-{
-  GtkWidget *toplevel;
-
-  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
-  g_assert (GTK_IS_WIDGET (row));
-  g_assert (IDE_IS_SEARCH_RESULT (result));
-
-  toplevel = gtk_widget_get_toplevel (row);
-
-  if (IDE_IS_WORKBENCH (toplevel))
-    {
-      g_autofree gchar *path = NULL;
-      g_autoptr(GFile) file = NULL;
-      g_autoptr(GFile) workdir = NULL;
-      IdeContext *context;
-      IdeVcs *vcs;
-
-      context = ide_workbench_get_context (IDE_WORKBENCH (toplevel));
-      vcs = ide_vcs_from_context (context);
-      workdir = ide_context_ref_workdir (context);
-      g_object_get (result, "path", &path, NULL);
-      file = g_file_get_child (workdir, path);
-
-      ide_workbench_open_files_async (IDE_WORKBENCH (toplevel),
-                                      &file,
-                                      1,
-                                      NULL,
-                                      IDE_WORKBENCH_OPEN_FLAGS_NONE,
-                                      NULL,
-                                      NULL,
-                                      NULL);
-    }
-}
-#endif
-
 static void
 gbp_file_search_provider_vcs_changed_cb (GbpFileSearchProvider *self,
                                          IdeVcs                *vcs)
