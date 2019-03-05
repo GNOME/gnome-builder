@@ -1,4 +1,30 @@
 ===============
+Version 3.31.92
+===============
+
+Changes since last release:
+
+ • Destroy various IdeObject after they are no longer needed reducing
+   memory usage a bit
+ • Add missing shortcuts to shortcuts window
+ • Fix various compiler warnings for release builds
+ • Tweak builder-dark style-scheme for Adwaita changes
+ • Allow project-tree to be used from editor workspace
+ • Allow gnome: gitlab: and github: prefixes when using --clone
+ • Unit Tests now have a VTE-based output panel when running
+ • Initial support for waf build system
+ • Cached build targets are invalidated when build config changes
+   which should help ensure that "Run" does not execute stale
+   binaries
+ • Changing devices now properly invalidates the build manager
+ • A rofiles-fuse wrapper is provided when building for Flatpak
+ • Scrolling with j/k/up/down in Vim mode is less jarring at line
+   boundaries by avoiding additional scrolling
+ • New jump list desktop actions are provided for GNOME shell
+ • Avoid indexing large directories when not in project-mode
+ • Updated translations
+
+===============
 Version 3.31.91
 ===============
 
