@@ -16,7 +16,7 @@ X-Flatpak-RenamedFrom=gnome-builder
 Actions=new-window;create-project;clone-repo;
 
 [Desktop Action new-window]
-Name=New Window
+Name=Open Project
 Exec=gnome-builder --greeter
 
 [Desktop Action create-project]
