@@ -236,7 +236,7 @@ static const gchar *ide_application_credits_funders[] = {
   "Daiki Ueno",
   "Damián Nohales",
   "Dandauchy",
-  "Daniel Buch",
+  "Daniel Buch Hansen",
   "Daniel Dui",
   "Daniel Espinosa Ortiz",
   "Daniel Menchaca",
