@@ -60,7 +60,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Debug with the GNU debugger</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/06-debugger.png</image>
+      <image width="1600" height="900">https://gitlab.gnome.org/GNOME/gnome-builder/raw/master/data/appdata/06-debugger.png</image>
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">org.gnome.Builder.desktop</launchable>
