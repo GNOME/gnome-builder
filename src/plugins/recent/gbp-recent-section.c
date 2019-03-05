@@ -496,7 +496,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
                         G_CALLBACK (gtk_widget_destroy),
                         NULL);
 
-      gtk_window_present (GTK_WINDOW (dialog));
+      ide_gtk_window_present (GTK_WINDOW (dialog));
     }
 
   dzl_directory_reaper_execute_async (reaper,

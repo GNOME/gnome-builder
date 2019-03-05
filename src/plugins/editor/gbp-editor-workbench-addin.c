@@ -294,7 +294,7 @@ new_editor_workspace_cb (GSimpleAction *action,
                             "application", IDE_APPLICATION_DEFAULT,
                             NULL);
   ide_workbench_add_workspace (self->workbench, workspace);
-  gtk_window_present (GTK_WINDOW (workspace));
+  ide_gtk_window_present (GTK_WINDOW (workspace));
 }
 
 static GActionEntry actions[] = {

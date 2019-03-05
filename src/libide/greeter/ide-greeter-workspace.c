@@ -339,7 +339,7 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
                                 G_CALLBACK (gtk_widget_destroy),
                                 workbench);
 
-      gtk_window_present (GTK_WINDOW (dialog));
+      ide_gtk_window_present (GTK_WINDOW (dialog));
 
       ide_greeter_workspace_end (self);
     }
@@ -530,7 +530,7 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
                          g_object_ref (self),
                          (GClosureNotify)g_object_unref,
                          G_CONNECT_SWAPPED);
-  gtk_window_present (GTK_WINDOW (dialog));
+  ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void

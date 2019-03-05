@@ -95,7 +95,7 @@ generate_support_activate (GSimpleAction              *action,
                                    "%s", text);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-  gtk_window_present (GTK_WINDOW (dialog));
+  ide_gtk_window_present (GTK_WINDOW (dialog));
 
   dzl_file_manager_show (file, NULL);
 

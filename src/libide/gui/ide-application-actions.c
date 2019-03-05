@@ -59,7 +59,7 @@ ide_application_actions_preferences (GSimpleAction *action,
 
       if (IDE_IS_PREFERENCES_WINDOW (win))
         {
-          gtk_window_present (win);
+          ide_gtk_window_present (win);
           return;
         }
 
@@ -78,7 +78,7 @@ ide_application_actions_preferences (GSimpleAction *action,
                          "window-position", GTK_WIN_POS_CENTER_ON_PARENT,
                          NULL);
   gtk_application_add_window (GTK_APPLICATION (self), window);
-  gtk_window_present (window);
+  ide_gtk_window_present (window);
 
   IDE_EXIT;
 }
@@ -158,7 +158,7 @@ ide_application_actions_about (GSimpleAction *action,
                                        ide_application_credits_funders);
 
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-  gtk_window_present (GTK_WINDOW (dialog));
+  ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
@@ -269,7 +269,7 @@ ide_application_actions_shortcuts (GSimpleAction *action,
 
       if (IDE_IS_SHORTCUTS_WINDOW (window))
         {
-          gtk_window_present (window);
+          ide_gtk_window_present (window);
           return;
         }
 
@@ -286,7 +286,7 @@ ide_application_actions_shortcuts (GSimpleAction *action,
                          "transient-for", parent,
                          NULL);
 
-  gtk_window_present (GTK_WINDOW (window));
+  ide_gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -414,7 +414,7 @@ ide_application_actions_stats (GSimpleAction *action,
   if (!found)
     gtk_text_buffer_insert_at_cursor (buffer, "No stats were found, was GOBJECT_DEBUG=instance-count set?", -1);
 
-  gtk_window_present (window);
+  ide_gtk_window_present (window);
 }
 
 static const GActionEntry IdeApplicationActions[] = {

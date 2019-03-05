@@ -284,7 +284,7 @@ ide_terminal_page_actions_save_as (GSimpleAction *action,
 
   g_signal_connect (dialog, "response", G_CALLBACK (save_as_response), g_object_ref (view));
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void

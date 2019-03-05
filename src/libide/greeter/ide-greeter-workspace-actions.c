@@ -228,7 +228,7 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
                                        ide_get_projects_dir ());
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static const GActionEntry actions[] = {

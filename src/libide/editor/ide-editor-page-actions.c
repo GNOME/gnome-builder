@@ -510,7 +510,7 @@ ide_editor_page_actions_properties (GSimpleAction *action,
 
   dialog = ide_editor_settings_dialog_new (self);
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-  gtk_window_present (GTK_WINDOW (dialog));
+  ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
