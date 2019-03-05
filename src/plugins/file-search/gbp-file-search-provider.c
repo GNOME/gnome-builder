@@ -193,7 +193,9 @@ gbp_file_search_provider_vcs_changed_cb (GbpFileSearchProvider *self,
 {
   g_autoptr(GbpFileSearchIndex) index = NULL;
   g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GFile) projects_dir = NULL;
   IdeContext *context;
+  gint max_depth = 0;
 
   IDE_ENTRY;
 
@@ -202,9 +204,20 @@ gbp_file_search_provider_vcs_changed_cb (GbpFileSearchProvider *self,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
+  projects_dir = g_file_new_for_path (ide_get_projects_dir ());
+
+  /* If the projects_dir is not a parent of workdir, then we don't want to
+   * index things, as it could end up being something way bigger than we can
+   * handle. Also ignore if workdir==projects_dir like can happen for new
+   * editor workspaces.
+   */
+  if (!ide_context_has_project (context) &&
+      !g_file_has_prefix (workdir, projects_dir))
+    max_depth = 5;
 
   index = g_object_new (GBP_TYPE_FILE_SEARCH_INDEX,
                         "root-directory", workdir,
+                        "max-depth", max_depth,
                         NULL);
 
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (index));

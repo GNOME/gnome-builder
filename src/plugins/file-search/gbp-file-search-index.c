@@ -35,6 +35,8 @@ struct _GbpFileSearchIndex
 
   GFile                *root_directory;
   DzlFuzzyMutableIndex *fuzzy;
+
+  gint                  max_depth;
 };
 
 G_DEFINE_TYPE (GbpFileSearchIndex, gbp_file_search_index, IDE_TYPE_OBJECT)
@@ -42,6 +44,7 @@ G_DEFINE_TYPE (GbpFileSearchIndex, gbp_file_search_index, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_ROOT_DIRECTORY,
+  PROP_MAX_DEPTH,
   LAST_PROP
 };
 
@@ -87,6 +90,10 @@ gbp_file_search_index_get_property (GObject    *object,
       g_value_set_object (value, self->root_directory);
       break;
 
+    case PROP_MAX_DEPTH:
+      g_value_set_int (value, self->max_depth);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -104,6 +111,10 @@ gbp_file_search_index_set_property (GObject      *object,
     {
     case PROP_ROOT_DIRECTORY:
       gbp_file_search_index_set_root_directory (self, g_value_get_object (value));
+      break;
+
+    case PROP_MAX_DEPTH:
+      self->max_depth = g_value_get_int (value);
       break;
 
     default:
@@ -127,6 +138,10 @@ gbp_file_search_index_class_init (GbpFileSearchIndexClass *klass)
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_MAX_DEPTH] =
+    g_param_spec_int ("max-depth", NULL, NULL, 0, G_MAXINT, 0,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
@@ -140,6 +155,7 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
                    IdeVcs               *vcs,
                    const gchar          *relpath,
                    GFile                *directory,
+                   gint                  depth,
                    GCancellable         *cancellable)
 {
   GFileEnumerator *enumerator;
@@ -149,6 +165,9 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
   g_assert (fuzzy != NULL);
   g_assert (G_IS_FILE (directory));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (depth <= 0)
+    return;
 
   if (ide_vcs_is_ignored (vcs, directory, NULL))
     return;
@@ -222,7 +241,7 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
           if (relpath != NULL)
             path = g_build_filename (relpath, name, NULL);
 
-          populate_from_dir (fuzzy, vcs, path ? path : name, child, cancellable);
+          populate_from_dir (fuzzy, vcs, path ? path : name, child, depth - 1, cancellable);
         }
     }
 
@@ -242,6 +261,7 @@ gbp_file_search_index_builder (IdeTask      *task,
   GFile *directory = task_data;
   DzlFuzzyMutableIndex *fuzzy;
   gdouble elapsed;
+  gint max_depth;
 
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_FILE_SEARCH_INDEX (self));
@@ -253,9 +273,13 @@ gbp_file_search_index_builder (IdeTask      *task,
 
   timer = g_timer_new ();
 
+  max_depth = self->max_depth;
+  if (max_depth <= 0)
+    max_depth = G_MAXINT;
+
   fuzzy = dzl_fuzzy_mutable_index_new (FALSE);
   dzl_fuzzy_mutable_index_begin_bulk_insert (fuzzy);
-  populate_from_dir (fuzzy, vcs, NULL, directory, cancellable);
+  populate_from_dir (fuzzy, vcs, NULL, directory, max_depth, cancellable);
   dzl_fuzzy_mutable_index_end_bulk_insert (fuzzy);
 
   self->fuzzy = fuzzy;
