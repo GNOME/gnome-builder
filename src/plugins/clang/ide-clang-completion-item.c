@@ -471,7 +471,6 @@ ide_clang_completion_item_new (GVariant    *variant,
 
   g_assert (variant != NULL);
   g_assert (keyword != NULL);
-  g_assert (keyword[0] != 0);
 
   ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM, NULL);
   ret->results = g_variant_ref (variant);

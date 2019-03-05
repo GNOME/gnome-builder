@@ -767,7 +767,9 @@ ide_clang_proposals_get_item (GListModel *model,
   g_autoptr(GVariant) child = g_variant_get_child_value (self->results, item->index);
   const gchar *keyword = NULL;
 
-  g_variant_lookup (child, "keyword", "&s", &keyword);
+  /* Very unlikely, but I've seen it once from libclang, so protect against it */
+  if (!g_variant_lookup (child, "keyword", "&s", &keyword))
+    keyword = "";
 
   return ide_clang_completion_item_new (self->results, item->index, keyword);
 }
