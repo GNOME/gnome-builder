@@ -87,8 +87,63 @@ gbp_create_project_application_addin_handle_command_line (IdeApplicationAddin   
 }
 
 static void
+create_project_cb (GSimpleAction *action,
+                   GVariant      *param,
+                   gpointer       user_data)
+{
+  GbpCreateProjectApplicationAddin *self = user_data;
+  g_autoptr(IdeWorkbench) workbench = NULL;
+  IdeGreeterWorkspace *workspace;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION_ADDIN (self));
+
+  workbench = ide_workbench_new ();
+  ide_application_add_workbench (IDE_APPLICATION_DEFAULT, workbench);
+
+  workspace = ide_greeter_workspace_new (IDE_APPLICATION_DEFAULT);
+  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+  ide_workspace_set_visible_surface_name (IDE_WORKSPACE (workspace), "create-project");
+  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+}
+
+static const GActionEntry actions[] = {
+  { "create-project", create_project_cb },
+};
+
+static void
+gbp_create_project_application_load (IdeApplicationAddin *addin,
+                                     IdeApplication      *application)
+{
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION_ADDIN (addin));
+  g_assert (IDE_IS_APPLICATION (application));
+
+  g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   addin);
+}
+
+static void
+gbp_create_project_application_unload (IdeApplicationAddin *addin,
+                                       IdeApplication      *application)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION_ADDIN (addin));
+  g_assert (IDE_IS_APPLICATION (application));
+
+  for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
+    g_action_map_remove_action (G_ACTION_MAP (application), actions[i].name);
+}
+
+static void
 cmdline_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
+  iface->load = gbp_create_project_application_load;
+  iface->unload = gbp_create_project_application_unload;
   iface->add_option_entries = gbp_create_project_application_addin_add_option_entries;
   iface->handle_command_line = gbp_create_project_application_addin_handle_command_line;
 }
