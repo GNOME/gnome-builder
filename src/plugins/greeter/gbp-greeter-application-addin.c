@@ -76,6 +76,20 @@ new_window (GSimpleAction *action,
 }
 
 static void
+clone_repo_cb (GSimpleAction *action,
+               GVariant      *param,
+               gpointer       user_data)
+{
+  g_autoptr(GVariant) clone_param = NULL;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (user_data));
+
+  clone_param = g_variant_take_ref (g_variant_new_string ("clone"));
+  present_greeter_with_surface (NULL, clone_param, user_data);
+}
+
+static void
 open_project (GSimpleAction *action,
               GVariant      *param,
               gpointer       user_data)
@@ -103,6 +117,7 @@ open_project (GSimpleAction *action,
 static const GActionEntry actions[] = {
   { "present-greeter-with-surface", present_greeter_with_surface, "s" },
   { "open-project", open_project },
+  { "clone-repo", clone_repo_cb },
   { "new-window", new_window },
 };
 
