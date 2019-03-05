@@ -329,11 +329,71 @@ gbp_editor_application_addin_open (IdeApplicationAddin  *addin,
 }
 
 static void
+new_editor_cb (GSimpleAction *action,
+               GVariant      *param,
+               gpointer       user_data)
+{
+  g_autoptr(IdeWorkbench) workbench = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  IdeEditorWorkspace *workspace;
+  IdeContext *context;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_EDITOR_APPLICATION_ADDIN (user_data));
+
+  workbench = ide_workbench_new ();
+  ide_application_add_workbench (IDE_APPLICATION_DEFAULT, workbench);
+
+  context = ide_workbench_get_context (workbench);
+  workdir = g_file_new_for_path (ide_get_projects_dir ());
+  ide_context_set_workdir (context, workdir);
+
+  workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
+  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+  _ide_window_settings_register (GTK_WINDOW (workspace));
+
+  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+}
+
+static GActionEntry actions[] = {
+  { "new-editor", new_editor_cb },
+};
+
+static void
+gbp_editor_application_addin_load (IdeApplicationAddin *addin,
+                                   IdeApplication      *application)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION_ADDIN (addin));
+  g_assert (IDE_IS_APPLICATION (application));
+
+  g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   addin);
+}
+
+static void
+gbp_editor_application_addin_unload (IdeApplicationAddin *addin,
+                                     IdeApplication      *application)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION_ADDIN (addin));
+  g_assert (IDE_IS_APPLICATION (application));
+
+  for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
+    g_action_map_remove_action (G_ACTION_MAP (application), actions[i].name);
+}
+
+static void
 cmdline_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
   iface->add_option_entries = gbp_editor_application_addin_add_option_entries;
   iface->handle_command_line = gbp_editor_application_addin_handle_command_line;
   iface->open = gbp_editor_application_addin_open;
+  iface->load = gbp_editor_application_addin_load;
+  iface->unload = gbp_editor_application_addin_unload;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditorApplicationAddin, gbp_editor_application_addin, G_TYPE_OBJECT,
