@@ -63,7 +63,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Daiki Ueno",
   "Damien Lespiau",
   "Daniel Boles",
-  "Daniel Buch",
+  "Daniel Buch Hansen",
   "Daniel Korostil",
   "Daniel Mustieles",
   "David King",
