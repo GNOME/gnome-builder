@@ -1153,7 +1153,6 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
                                    IdeBuffer     *buffer)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkAdjustment *adj;
   GtkTextMark *insert;
   GtkTextIter iter;
 
@@ -1168,17 +1167,10 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
       priv->completion_blocked = FALSE;
     }
 
-  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
-
   /* Store the line column (visual offset) so movements are correct. */
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, insert);
-  priv->target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
-                                                                &iter);
-
-  /* Only scroll if the user hasn't started an intermediate scroll */
-  adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
-  if (gtk_adjustment_get_value (adj) == gtk_adjustment_get_lower (adj))
-    ide_source_view_scroll_to_mark (self, insert, 0.0, TRUE, 0.5, 0.5, TRUE);
+  priv->target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
 
   IDE_EXIT;
 }
