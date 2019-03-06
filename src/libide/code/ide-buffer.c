@@ -144,6 +144,7 @@ enum {
   CURSOR_MOVED,
   LINE_FLAGS_CHANGED,
   LOADED,
+  REQUEST_SCROLL_TO_INSERT,
   N_SIGNALS
 };
 
@@ -901,6 +902,27 @@ ide_buffer_class_init (IdeBufferClass *klass)
                                 g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals [LOADED],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
+
+  /**
+   * IdeBuffer::request-scroll-to-insert:
+   *
+   * Requests that attached views scroll to insert location.
+   *
+   * This is generally only used when loading a buffer.
+   *
+   * Since: 3.32
+   */
+  signals [REQUEST_SCROLL_TO_INSERT] =
+    g_signal_new_class_handler ("request-scroll-to-insert",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL,
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [REQUEST_SCROLL_TO_INSERT],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__VOIDv);
 }
@@ -3770,4 +3792,13 @@ settle_finish (IdeBuffer     *self,
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+void
+_ide_buffer_request_scroll_to_cursor (IdeBuffer *self)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  g_signal_emit (self, signals [REQUEST_SCROLL_TO_INSERT], 0);
 }

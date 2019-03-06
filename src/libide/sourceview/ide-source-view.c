@@ -837,6 +837,20 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view__buffer_request_scroll_to_insert_cb (IdeSourceView *self,
+                                                     IdeBuffer     *buffer)
+{
+  GtkTextMark *mark;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), mark);
+}
+
+static void
 ide_source_view__buffer_changed_cb (IdeSourceView *self,
                                     IdeBuffer     *buffer)
 {
@@ -6518,6 +6532,11 @@ ide_source_view_init (IdeSourceView *self)
   dzl_signal_group_connect_object (priv->buffer_signals,
                                    "changed",
                                    G_CALLBACK (ide_source_view__buffer_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  dzl_signal_group_connect_object (priv->buffer_signals,
+                                   "request-scroll-to-insert",
+                                   G_CALLBACK (ide_source_view__buffer_request_scroll_to_insert_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->buffer_signals,
