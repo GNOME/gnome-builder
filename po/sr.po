@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-01 18:52+0000\n"
-"PO-Revision-Date: 2019-03-03 11:21+0100\n"
+"POT-Creation-Date: 2019-03-05 22:20+0000\n"
+"PO-Revision-Date: 2019-03-06 18:07+0100\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -496,7 +496,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Ово подешавање је застарело и више се не користи."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Прикажи занемарене датотеке"
 
@@ -508,7 +508,7 @@ msgstr ""
 "верзија, у стаблу пројекта."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Поређај најпре по имену фасцикле"
 
@@ -596,8 +596,23 @@ msgstr ""
 "razvoj;develop;graditelj;bilder;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Нови прозор"
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgid "Open a Project"
+msgstr "Отвори пројекат"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgid "Start New Project"
+msgstr "Покрени нови пројекат"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgid "Clone Repository"
+msgstr "Клонирај ризницу"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Нови радни простор уређивача"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -812,7 +827,7 @@ msgstr "Учитај или створи палету користећи пос�
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:4909
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Преименуј"
 
@@ -1169,7 +1184,7 @@ msgstr "Отвори датотеку"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Отвори"
@@ -1521,10 +1536,6 @@ msgstr "Обриши изворни код пројекта"
 msgid "Go back"
 msgstr "Иди назад"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:75
-msgid "Open a Project"
-msgstr "Отвори пројекат"
-
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Претражи све пројекте Градитеља…"
@@ -1540,10 +1551,6 @@ msgstr "Уклони п_ројекте"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Уклони пројекте и изворни код…"
-
-#: src/libide/greeter/ide-greeter-workspace.ui:188
-msgid "Clone Repository"
-msgstr "Клонирај ризницу"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -1608,28 +1615,28 @@ msgstr "Сазнајте више о Гномовом градитељу"
 msgid "Funded By"
 msgstr "Новчано помогли"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Прикажи поставке програма"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Отвори пројекат у новој радионици"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "ДАТОТЕКА"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Прикажи податке о издању и изађи"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Повећај причљивост записника"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Не могу да отворим пројекат: %s"
@@ -3720,10 +3727,6 @@ msgstr "Директоријум са тим називом већ постој�
 msgid "Your project will be created within %s."
 msgstr "Ваш пројекат ће бити направљен унутар путање %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:577
-msgid "Start New Project"
-msgstr "Покрени нови пројекат"
-
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
 msgstr "Неуспех приликом покретања управљања верзијама"
@@ -4466,7 +4469,7 @@ msgstr "Опозови"
 msgid "Redo"
 msgstr "Понови"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Дизајнер сучеља"
 
@@ -4513,11 +4516,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Омотач Грејдла (Gradle)"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Прикажи прозор добродошлице"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Започни клонирање пројекта из УРИ-ја"
 
@@ -5012,35 +5015,35 @@ msgstr "Стабло пројекта"
 msgid "Rename %s"
 msgstr "Преименуј %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Нова датотека…"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Нова фасцикла…"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Отвори помоћу…"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Уређивач изворног кода"
 
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "Отвори садржану фасциклу"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Отвори у терминалу"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Премести у смеће"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Подешавања приказа"
 
@@ -5682,6 +5685,9 @@ msgstr "Нисам успео да направим ИксМЛ стабло."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Датотека мора бити сачувана локално да бих је обрадио."
+
+#~ msgid "New Window"
+#~ msgstr "Нови прозор"
 
 #~ msgid "Allow snippets to be inserted into the document."
 #~ msgstr "Дозволи убацивање исечака кода у документ."
