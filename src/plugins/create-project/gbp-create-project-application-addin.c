@@ -91,12 +91,11 @@ create_project_cb (GSimpleAction *action,
                    GVariant      *param,
                    gpointer       user_data)
 {
-  GbpCreateProjectApplicationAddin *self = user_data;
   g_autoptr(IdeWorkbench) workbench = NULL;
   IdeGreeterWorkspace *workspace;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_APPLICATION_ADDIN (self));
+  g_assert (IDE_IS_APPLICATION_ADDIN (user_data));
 
   workbench = ide_workbench_new ();
   ide_application_add_workbench (IDE_APPLICATION_DEFAULT, workbench);
