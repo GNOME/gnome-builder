@@ -72,7 +72,7 @@
         <signal name="notify::visible-child" handler="stack_notify_visible_child_cb" object="IdeGreeterWorkspace" swapped="true"/>
         <child>
           <object class="IdeSurface" id="sections_surface">
-            <property name="title" translatable="yes">Open a Project</property>
+            <property name="title" translatable="yes" context="title">Open a Project</property>
             <property name="visible">true</property>
             <style>
               <class name="sectionssurface"/>
@@ -185,7 +185,7 @@
         </child>
         <child>
           <object class="IdeCloneSurface" id="clone_surface">
-            <property name="title" translatable="yes">Clone Repository</property>
+            <property name="title" translatable="yes" context="title">Clone Repository</property>
             <property name="visible">true</property>
           </object>
           <packing>

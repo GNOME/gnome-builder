@@ -574,7 +574,7 @@ gbp_create_project_surface_init (GbpCreateProjectSurface *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_widget_set_name (GTK_WIDGET (self), "create-project");
-  ide_surface_set_title (IDE_SURFACE (self), _("Start New Project"));
+  ide_surface_set_title (IDE_SURFACE (self), C_("title", "Start New Project"));
 
   projects_dir = g_file_new_for_path (ide_get_projects_dir ());
   gbp_create_project_surface_set_directory (self, projects_dir);
