@@ -18,16 +18,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-01 18:52+0000\n"
-"PO-Revision-Date: 2019-03-02 09:42+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2019-03-05 22:20+0000\n"
+"PO-Revision-Date: 2019-03-06 02:02+0200\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 3.30.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -497,7 +497,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Bu ayar terk edilmiştir ve artık kullanımda değildir."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Yoksayılan Dosyaları Göster"
 
@@ -509,7 +509,7 @@ msgstr ""
 "gösterecek."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Önce Dizinleri Sırala"
 
@@ -594,8 +594,23 @@ msgid "Build;Develop;"
 msgstr "İnşa Et;Oluştur;Geliştir;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Yeni Pencere"
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgid "Open a Project"
+msgstr "Proje Aç"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgid "Start New Project"
+msgstr "Yeni Proje Başlat"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgid "Clone Repository"
+msgstr "Depoyu Klonla"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Yeni Düzenleyici Çalışma Alanı"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -810,7 +825,7 @@ msgstr "Tercihleri kullanarak palet yükle veya üret"
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:4909
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Yeniden Adlandır"
 
@@ -1167,7 +1182,7 @@ msgstr "Dosya Aç"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Aç"
@@ -1518,10 +1533,6 @@ msgstr "Proje Kaynaklarını Sil"
 msgid "Go back"
 msgstr "Geri git"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:75
-msgid "Open a Project"
-msgstr "Proje Aç"
-
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Tüm Builder projelerini ara…"
@@ -1537,10 +1548,6 @@ msgstr "Projele_ri Sil"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Proje ve Kaynaklarını Kaldır…"
-
-#: src/libide/greeter/ide-greeter-workspace.ui:188
-msgid "Clone Repository"
-msgstr "Depoyu Klonla"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -1602,28 +1609,28 @@ msgstr "GNOME Builder hakkında daha çoğunu öğrenin"
 msgid "Funded By"
 msgstr "Maddi Destekçiler"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Uygulamanın tercihlerini göster"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Projeyi yeni tezgahta aç"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "DOSYA"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Sürüm bilgisini yazdır ve çık"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Günlük ayrıntılarını artır"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Proje açma başarısız oldu: %s"
@@ -3695,10 +3702,6 @@ msgstr "Zaten bu adda dizin var"
 msgid "Your project will be created within %s."
 msgstr "Projeniz %s içinde oluşturulacak."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:577
-msgid "Start New Project"
-msgstr "Yeni Proje Başlat"
-
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
 msgstr "Sürüm denetimi ilklendirilirken hata oluştu"
@@ -4432,7 +4435,7 @@ msgstr "Geri Al"
 msgid "Redo"
 msgstr "Yinele"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Arayüz Tasarımcı"
 
@@ -4475,11 +4478,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Gradle Sarıcı"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Yeni bir karşılama perceresi görüntüle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Projeyi URIʼden kopyalamaya başla"
 
@@ -4971,35 +4974,35 @@ msgstr "Proje Ağacı"
 msgid "Rename %s"
 msgstr "%s’i Yeniden Adlandır"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Yeni Dosya…"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Yeni Klasör…"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Birlikte Aç…"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Kaynak Kod Düzenleyici"
 
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "İçeren Klasörü Aç"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Uçbirimde Aç"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Çöpe Taşı"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Görüntü Seçenekleri"
 
@@ -5445,13 +5448,10 @@ msgid "Unit Test Output"
 msgstr "Birim Sınama Çıktısı"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:33
-#| msgid "Unit Test Output"
 msgid "Clear test output"
 msgstr "Sınama çıktısını temizle"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:50
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgid "Save test output"
 msgstr "Sınama çıktısını kaydet"
 
@@ -5638,6 +5638,9 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "New Window"
+#~ msgstr "Yeni Pencere"
 
 #~ msgid "Copied 1 file"
 #~ msgstr "1 dosya kopyalandı"
