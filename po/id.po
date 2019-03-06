@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-01 18:52+0000\n"
-"PO-Revision-Date: 2019-03-02 19:10+0700\n"
+"POT-Creation-Date: 2019-03-05 22:20+0000\n"
+"PO-Revision-Date: 2019-03-06 23:32+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -493,7 +493,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Pengaturan ini sudah usang dan tidak digunakan lagi."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Tampilkan Berkas yang Diabaikan"
 
@@ -505,7 +505,7 @@ msgstr ""
 "VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Urutkan Direktori Di Awal"
 
@@ -590,8 +590,23 @@ msgid "Build;Develop;"
 msgstr "Bangun;Kembangkan;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Jendela Baru"
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgid "Open a Project"
+msgstr "Buka Proyek"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgid "Start New Project"
+msgstr "Mulai Proyek Baru"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgid "Clone Repository"
+msgstr "Klon Repositori"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Area Kerja Penyunting Baru"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -806,7 +821,7 @@ msgstr "Muat atau buat palet memakai preferensi"
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:4909
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Ubah nama"
 
@@ -1164,7 +1179,7 @@ msgstr "Buka Berkas"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Buka"
@@ -1429,7 +1444,7 @@ msgstr ""
 
 #: src/libide/greeter/ide-clone-surface.ui:84
 msgid "user@host:repository.git"
-msgstr "user@host:repository.git"
+msgstr "pengguna@host:repositori.git"
 
 #: src/libide/greeter/ide-clone-surface.ui:103
 msgid "Select branch and other options."
@@ -1442,7 +1457,7 @@ msgstr "Jenis Repositori"
 #: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
 msgid "Branch"
-msgstr "Branch"
+msgstr "Cabang"
 
 #: src/libide/greeter/ide-clone-surface.ui:191
 msgid "Author Name"
@@ -1515,10 +1530,6 @@ msgstr "Hapus Sumber Proyek"
 msgid "Go back"
 msgstr "Kembali"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:75
-msgid "Open a Project"
-msgstr "Buka Proyek"
-
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Cari semua proyek Builder…"
@@ -1534,10 +1545,6 @@ msgstr "Hapus P_royek"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Hapus Proyek dan Sumber…"
-
-#: src/libide/greeter/ide-greeter-workspace.ui:188
-msgid "Clone Repository"
-msgstr "Klon Repositori"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -1599,28 +1606,28 @@ msgstr "Pelajari lebih banyak tentang GNOME Builder"
 msgid "Funded By"
 msgstr "Didanai Oleh"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Tampilkan preferensi aplikasi"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Buka proyek di meja kerja baru"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "BERKAS"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Cetak informasi versi dan keluar"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Tingkatkan verbositas log"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Gagal membuka proyek: %s"
@@ -3700,10 +3707,6 @@ msgstr "Direktori sudah ada dengan nama tersebut"
 msgid "Your project will be created within %s."
 msgstr "Proyek Anda akan dibuat dalam %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:577
-msgid "Start New Project"
-msgstr "Mulai Proyek Baru"
-
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
 msgstr "Kegagalan terjadi saat inisialisasi versi kontrol"
@@ -4443,7 +4446,7 @@ msgstr "Tak Jadi"
 msgid "Redo"
 msgstr "Jadi Lagi"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Perancang UI"
 
@@ -4486,11 +4489,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Gradle Wrapper"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Tampilkan jendela greeter baru"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Memulai proyek kloning dari URI"
 
@@ -4985,35 +4988,35 @@ msgstr "Pohon Proyek"
 msgid "Rename %s"
 msgstr "Ubah nama %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Berkas Baru…"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Folder Baru…"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Buka Dengan…"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Penyunting Kode Sumber"
 
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "Buka Folder Pemuat"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Buka dalam Terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Buang ke Tong Sampah"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Opsi Tampilan"
 
@@ -5649,6 +5652,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "New Window"
+#~ msgstr "Jendela Baru"
 
 #~ msgid "Copied 1 file"
 #~ msgstr "1 berkas telah disalin"
