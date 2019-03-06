@@ -99,7 +99,7 @@ gbp_restore_cursor_buffer_addin_file_loaded_cb (GObject      *object,
                                                line_offset);
       gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
 
-      /* TODO: Notify view that we need to scroll? */
+      _ide_buffer_request_scroll_to_cursor (buffer);
     }
 }
 
