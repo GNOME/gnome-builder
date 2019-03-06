@@ -665,7 +665,7 @@ ide_source_view_scroll_to_insert (IdeSourceView *self)
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   _ide_buffer_cancel_cursor_restore (IDE_BUFFER (buffer));
   mark = gtk_text_buffer_get_insert (buffer);
-  ide_source_view_scroll_mark_onscreen (self, mark, TRUE, 0.5, 0.5);
+  ide_source_view_scroll_mark_onscreen (self, mark, TRUE, 0.5, 1.0);
 
   IDE_EXIT;
 }
