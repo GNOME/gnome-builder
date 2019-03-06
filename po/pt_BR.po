@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-02-28 18:07+0000\n"
-"PO-Revision-Date: 2019-02-28 15:44-0300\n"
+"POT-Creation-Date: 2019-03-05 22:20+0000\n"
+"PO-Revision-Date: 2019-03-06 09:11-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese - Brazil <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -498,7 +498,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Essa configuração está obsoleta e não é mais usada."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Mostrar arquivos ignorados"
 
@@ -510,7 +510,7 @@ msgstr ""
 "pelo VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Ordenar com diretórios primeiro"
 
@@ -596,8 +596,24 @@ msgid "Build;Develop;"
 msgstr "Construir;Compilar;Desenvolver;Construtor;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Nova janela"
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgid "Open a Project"
+msgstr "Abrir um projeto"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgid "Start New Project"
+msgstr "Iniciar novo projeto"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgid "Clone Repository"
+msgstr "Clonar repositório"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+#| msgid "New Workspace…"
+msgid "New Editor Workspace"
+msgstr "Novo espaço de trabalho de editor"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -825,7 +841,7 @@ msgstr "Carregar ou gerar uma paleta usando as preferências"
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:4909
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Renomear"
 
@@ -905,6 +921,7 @@ msgstr "Falha ao salvar arquivo: %s"
 
 #: src/libide/editor/ide-editor-page-actions.c:233
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
+#: src/plugins/testui/gbp-test-output-panel.c:63
 msgid "Save File"
 msgstr "Salvar arquivo"
 
@@ -1036,6 +1053,7 @@ msgstr "_Recarregar"
 #: src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-greeter-workspace-actions.c:119
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
+#: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1181,7 +1199,7 @@ msgstr "Abre arquivo"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Abrir"
@@ -1536,10 +1554,6 @@ msgstr "Excluir arquivos de projeto"
 msgid "Go back"
 msgstr "Voltar"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:75
-msgid "Open a Project"
-msgstr "Abrir um projeto"
-
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Pesquisar todos os projetos do Builder…"
@@ -1555,10 +1569,6 @@ msgstr "_Remover projetos"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Remover arquivos e projetos…"
-
-#: src/libide/greeter/ide-greeter-workspace.ui:188
-msgid "Clone Repository"
-msgstr "Clonar repositório"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -1622,28 +1632,28 @@ msgstr "Aprenda mais sobre o GNOME Builder"
 msgid "Funded By"
 msgstr "Financiado por"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Mostra as preferências do aplicativo"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Abre o projeto em um novo workbench"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "ARQUIVO"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Exibe informações da versão e sai"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Aumenta a verbosidade do log"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Falha ao abrir o projeto: %s"
@@ -3155,6 +3165,7 @@ msgstr "Cadeia de ferramentas de compilação"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/editor/gtk/menus.ui:159 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/testui/gbp-test-output-panel.c:66
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -3731,10 +3742,6 @@ msgstr "O diretório já existe com aquele nome"
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "Seu projeto será criado dentro de %s."
-
-#: src/plugins/create-project/gbp-create-project-surface.c:577
-msgid "Start New Project"
-msgstr "Iniciar novo projeto"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
@@ -4471,7 +4478,7 @@ msgstr "Desfazer"
 msgid "Redo"
 msgstr "Refazer"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Construtor de UI"
 
@@ -4512,11 +4519,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Wrapper do Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Exibir uma nova janela de saudação"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Começar a clonagem do projeto a partir da URI"
 
@@ -4967,46 +4974,41 @@ msgstr "Nome da pasta"
 msgid "_Create"
 msgstr "_Criar"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:207
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
 msgid "Files"
 msgstr "Arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:671
+#: src/plugins/project-tree/gbp-project-tree-addin.c:672
 #, c-format
 msgid "Copying 1 file"
 msgstr "Copiando 1 arquivo"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:674
+#: src/plugins/project-tree/gbp-project-tree-addin.c:675
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s de %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:710
+#: src/plugins/project-tree/gbp-project-tree-addin.c:711
 msgid "Failed to copy files"
 msgstr "Falha ao copiar arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:720
+#: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Files copied"
 msgstr "Arquivos copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:724
+#: src/plugins/project-tree/gbp-project-tree-addin.c:725
 #, c-format
-#| msgid "Copied %s files"
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "Copiado %s arquivo"
 msgstr[1] "Copiados %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
-msgid "Copied 1 file"
-msgstr "Copiado 1 arquivo"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:863
+#: src/plugins/project-tree/gbp-project-tree-addin.c:917
 msgid "Copying files…"
 msgstr "Copiando arquivos…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:864
+#: src/plugins/project-tree/gbp-project-tree-addin.c:918
 msgid "Files will be copied in a moment"
 msgstr "Os arquivo serão copiados em instantes"
 
@@ -5019,36 +5021,36 @@ msgstr "Árvore do projeto"
 msgid "Rename %s"
 msgstr "Renomear %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Novo arquivo…"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Nova pasta…"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Abrir com…"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Editor de código-fonte"
 
 # Tradução literal "contenedora" não me pareceu uma boa, então mudei -- Rafael
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "Abrir pasta raiz do projeto"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Abrir no terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Mover para lixeira"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Opções de exibição"
 
@@ -5492,9 +5494,20 @@ msgstr "Novo terminal de _compilação"
 msgid "New _Runtime Terminal"
 msgstr "Novo terminal de _execução"
 
-#: src/plugins/testui/gbp-test-output-panel.c:48
+#: src/plugins/testui/gbp-test-output-panel.c:132
 msgid "Unit Test Output"
 msgstr "Saída de teste de unidade"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:33
+#| msgid "Unit Test Output"
+msgid "Clear test output"
+msgstr "Limpar saída de teste"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:50
+#| msgctxt "shortcut window"
+#| msgid "Save the document"
+msgid "Save test output"
+msgstr "Salvar saída de teste"
 
 #: src/plugins/testui/gbp-test-tree-addin.c:197
 msgid "Unit Tests"
@@ -5679,6 +5692,12 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O arquivo deve estar salvo localmente para análise."
+
+#~ msgid "New Window"
+#~ msgstr "Nova janela"
+
+#~ msgid "Copied 1 file"
+#~ msgstr "Copiado 1 arquivo"
 
 #~ msgid "If enabled, the project tree will display icons next to each item."
 #~ msgstr ""
