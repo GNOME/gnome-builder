@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-05 22:20+0000\n"
-"PO-Revision-Date: 2019-03-06 18:51+0100\n"
+"POT-Creation-Date: 2019-03-07 06:31+0000\n"
+"PO-Revision-Date: 2019-03-07 11:15+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -591,21 +591,15 @@ msgstr ""
 "Budowanie;Buduj;Zbuduj;Programowanie;Programuj;Zaprogramuj;Zintegrowane;"
 "środowisko;programistyczne;IDE;"
 
-# FIXME https://gitlab.gnome.org/GNOME/gnome-builder/merge_requests/172
 #: data/org.gnome.Builder.desktop.in.in:20
-#: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Open a Project"
 msgstr "Otwórz projekt"
 
-# FIXME https://gitlab.gnome.org/GNOME/gnome-builder/merge_requests/172
 #: data/org.gnome.Builder.desktop.in.in:24
-#: src/plugins/create-project/gbp-create-project-surface.c:577
 msgid "Start New Project"
 msgstr "Rozpocznij nowy projekt"
 
-# FIXME https://gitlab.gnome.org/GNOME/gnome-builder/merge_requests/172
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/libide/greeter/ide-greeter-workspace.ui:188
 msgid "Clone Repository"
 msgstr "Sklonuj repozytorium"
 
@@ -825,7 +819,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Można wczytać lub utworzyć paletę za pomocą preferencji"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -848,7 +842,7 @@ msgstr "Z_mień nazwę"
 msgid "unsaved file %u"
 msgstr "%u. niezapisany plik"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie ma mechanizmu rozwiązywania symboli."
 
@@ -1537,6 +1531,11 @@ msgstr "Usuń źródła projektu"
 msgid "Go back"
 msgstr "Wstecz"
 
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
+msgid "Open a Project"
+msgstr "Otwarcie projektu"
+
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Wyszukiwanie wszystkich projektów programu Builder…"
@@ -1552,6 +1551,11 @@ msgstr "_Usuń projekty"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Usuń projekty i źródła…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
+msgid "Clone Repository"
+msgstr "Sklonowanie repozytorium"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -2766,31 +2770,31 @@ msgstr "Po_mniejsz"
 msgid "Reset"
 msgstr "Przywróć"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "Zmiana nazwy symbolu"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Wiersz %u, kolumna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "Brak odniesień"
 
@@ -3714,6 +3718,11 @@ msgstr "Katalog o tej nazwie już istnieje"
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "Projekt zostanie utworzony w %s."
+
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgctxt "title"
+msgid "Start New Project"
+msgstr "Rozpoczęcie nowego projektu"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
