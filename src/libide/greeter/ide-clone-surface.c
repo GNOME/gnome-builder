@@ -450,9 +450,10 @@ ide_clone_surface_set_uri (IdeCloneSurface *self,
     const gchar *prefix;
     const gchar *expanded;
   } mappings[] = {
-    { "gnome:", "https://gitlab.gnome.org/" },
-    { "gitlab:", "https://gitlab.com/" },
-    { "github:", "https://github.com/" },
+    { "gnome:",       "https://gitlab.gnome.org/" },
+    { "freedesktop:", "https://gitlab.freedesktop.org/" },
+    { "gitlab:",      "https://gitlab.com/" },
+    { "github:",      "https://github.com/" },
   };
   g_autofree gchar *expanded = NULL;
 
