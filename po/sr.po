@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-05 22:20+0000\n"
-"PO-Revision-Date: 2019-03-06 18:07+0100\n"
+"POT-Creation-Date: 2019-03-07 06:31+0000\n"
+"PO-Revision-Date: 2019-03-07 22:11+0100\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -596,17 +596,14 @@ msgstr ""
 "razvoj;develop;graditelj;bilder;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-#: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Open a Project"
 msgstr "Отвори пројекат"
 
 #: data/org.gnome.Builder.desktop.in.in:24
-#: src/plugins/create-project/gbp-create-project-surface.c:577
 msgid "Start New Project"
 msgstr "Покрени нови пројекат"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/libide/greeter/ide-greeter-workspace.ui:188
 msgid "Clone Repository"
 msgstr "Клонирај ризницу"
 
@@ -825,7 +822,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Учитај или створи палету користећи поставке"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -848,7 +845,7 @@ msgstr "П_реименуј"
 msgid "unsaved file %u"
 msgstr "несачувана датотека %u"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "За тренутни језик не постоји разрешавач симбола."
 
@@ -1536,6 +1533,11 @@ msgstr "Обриши изворни код пројекта"
 msgid "Go back"
 msgstr "Иди назад"
 
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
+msgid "Open a Project"
+msgstr "Отварање пројекта"
+
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Претражи све пројекте Градитеља…"
@@ -1551,6 +1553,11 @@ msgstr "Уклони п_ројекте"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Уклони пројекте и изворни код…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
+msgid "Clone Repository"
+msgstr "Клонирање ризнице"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -2775,31 +2782,31 @@ msgstr "У_мањи"
 msgid "Reset"
 msgstr "Поврати"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "Убаци „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замени „%s“ са „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "Примени исправку"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "Преименуј симбол"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u. линија, %u. колона</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "Нисам нашао ниједну упуту"
 
@@ -3726,6 +3733,11 @@ msgstr "Директоријум са тим називом већ постој�
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "Ваш пројекат ће бити направљен унутар путање %s."
+
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgctxt "title"
+msgid "Start New Project"
+msgstr "Покретање новог пројекта"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
