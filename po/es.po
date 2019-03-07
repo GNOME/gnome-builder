@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-03 17:06+0000\n"
-"PO-Revision-Date: 2019-03-04 12:06+0100\n"
+"POT-Creation-Date: 2019-03-07 06:31+0000\n"
+"PO-Revision-Date: 2019-03-07 11:34+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -501,7 +501,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Esta opción está obsoleta y ya no se usa."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Mostrar archivos ignorados"
 
@@ -512,7 +512,7 @@ msgstr ""
 "Si se activa, el árbol de proyectos mostrará archivos ignorados por el VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Mostrar las carpetas primero"
 
@@ -600,8 +600,21 @@ msgid "Build;Develop;"
 msgstr "Construir;Desarrollar;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Ventana nueva"
+msgid "Open a Project"
+msgstr "Abrir un proyecto"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Iniciar un nuevo proyecto"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+msgid "Clone Repository"
+msgstr "Clonar repositorio"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+#| msgid "New Workspace…"
+msgid "New Editor Workspace"
+msgstr "Área de trabajo nueva en el editor"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -815,9 +828,9 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Renombrar"
 
@@ -838,7 +851,7 @@ msgstr "_Renombrar"
 msgid "unsaved file %u"
 msgstr "%u archivos sin guardar"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "Al idioma actual le falta un resolutor de símbolos."
 
@@ -1177,7 +1190,7 @@ msgstr "Abrir archivo"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Abrir"
@@ -1533,6 +1546,8 @@ msgid "Go back"
 msgstr "Atrás"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
+#| msgid "Open a Project"
+msgctxt "title"
 msgid "Open a Project"
 msgstr "Abrir un proyecto"
 
@@ -1553,6 +1568,8 @@ msgid "Remove Projects and Sources…"
 msgstr "Quitar proyectos y fuentes…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
+#| msgid "Clone Repository"
+msgctxt "title"
 msgid "Clone Repository"
 msgstr "Clonar repositorio"
 
@@ -1616,28 +1633,28 @@ msgstr "Aprenda más sobre GNOME Builder"
 msgid "Funded By"
 msgstr "Financiado por"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Mostrar las preferencias de la aplicación"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Abrir proyecto en un banco de trabajo nuevo"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "ARCHIVO"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Mostrar información de la versión y salir"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Aumentar el detalle del registro"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Falló al abrir el proyecto: %s"
@@ -2781,31 +2798,31 @@ msgstr "_Reducir"
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -3736,6 +3753,8 @@ msgid "Your project will be created within %s."
 msgstr "Su proyecto se creará con %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:577
+#| msgid "Start New Project"
+msgctxt "title"
 msgid "Start New Project"
 msgstr "Iniciar un nuevo proyecto"
 
@@ -4474,7 +4493,7 @@ msgstr "Deshacer"
 msgid "Redo"
 msgstr "Rehacer"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Diseñador de interfaces"
 
@@ -4515,11 +4534,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Envoltorio de Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Mostrar una ventana de bienvenida nueva"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Clonando proyecto desde URI"
 
@@ -5018,35 +5037,35 @@ msgstr "Árbol del proyecto."
 msgid "Rename %s"
 msgstr "Renombrar %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Archivo nuevo…"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Carpeta nueva…"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Abrir con…"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Editor de código fuente"
 
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "Abrir la carpeta contenedora"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Abrir en una terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Opciones de visualización"
 
@@ -5499,13 +5518,10 @@ msgid "Unit Test Output"
 msgstr "Prueba de salida unitaria"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:33
-#| msgid "Unit Test Output"
 msgid "Clear test output"
 msgstr "Limpiar salida de prueba"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:50
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgid "Save test output"
 msgstr "Guardar salida de prueba"
 
@@ -5693,6 +5709,9 @@ msgstr "Falló al crear el árbol XML."
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
+#~ msgid "New Window"
+#~ msgstr "Ventana nueva"
 
 #~ msgid "Copied 1 file"
 #~ msgstr "Copiado 1 archivo"
