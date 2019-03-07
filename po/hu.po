@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-03 17:06+0000\n"
-"PO-Revision-Date: 2019-03-03 19:49+0100\n"
+"POT-Creation-Date: 2019-03-05 22:20+0000\n"
+"PO-Revision-Date: 2019-03-07 07:26+0100\n"
 "Last-Translator: Meskó Balázs <mesko.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -500,7 +500,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Ez a beállítás elavult, és már nincs használatban."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Figyelmen kívül hagyott fájlok megjelenítése"
 
@@ -512,7 +512,7 @@ msgstr ""
 "kívül hagyott fájlokat."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Mappák előre sorolása"
 
@@ -598,8 +598,23 @@ msgid "Build;Develop;"
 msgstr "Építés;Összeállítás;Fejlesztés;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Új ablak"
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgid "Open a Project"
+msgstr "Projekt megnyitása"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgid "Start New Project"
+msgstr "Új projekt indítása"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgid "Clone Repository"
+msgstr "Tároló klónozása"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Új szerkesztő munkaterület…"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -816,7 +831,7 @@ msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:4909
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Átnevezés"
 
@@ -1175,7 +1190,7 @@ msgstr "Fájl megnyitása"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Megnyitás"
@@ -1530,10 +1545,6 @@ msgstr "Projektforrások törlése"
 msgid "Go back"
 msgstr "Ugrás vissza"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:75
-msgid "Open a Project"
-msgstr "Projekt megnyitása"
-
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Összes Építő projekt keresése…"
@@ -1549,10 +1560,6 @@ msgstr "Projektek el_távolítása"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Projektek és források eltávolítása…"
-
-#: src/libide/greeter/ide-greeter-workspace.ui:188
-msgid "Clone Repository"
-msgstr "Tároló klónozása"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -1614,28 +1621,28 @@ msgstr "Tudjon meg többet a GNOME Építőről"
 msgid "Funded By"
 msgstr "Támogatta"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Alkalmazásbeállítások megjelenítése"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Projekt megnyitása új munkapadon"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "FÁJL"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Verzióinformációk kiírása és kilépés"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Naplózás részletességánek növelése"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "A projekt megnyitása meghiúsult: %s"
@@ -3716,10 +3723,6 @@ msgstr "Már létezik ilyen nevű könyvtár"
 msgid "Your project will be created within %s."
 msgstr "A projekt itt lesz létrehozva: %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:577
-msgid "Start New Project"
-msgstr "Új projekt indítása"
-
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
 msgstr "Hiba történt a verziókövetés előkészítésekor"
@@ -4453,7 +4456,7 @@ msgstr "Visszavonás"
 msgid "Redo"
 msgstr "Újra"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Felülettervező"
 
@@ -4495,11 +4498,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Gradle csomagoló"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Új üdvözlő ablak megjelenítése"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Projekt klónozásának elkezdése az URI-ról"
 
@@ -4993,35 +4996,35 @@ msgstr "Projektfa"
 msgid "Rename %s"
 msgstr "A(z) „%s” átnevezése"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Új fájl…"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Új mappa…"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Megnyitás ezzel…"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Forráskód-szerkesztő"
 
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "Tartalmazó mappa megnyitása"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Megnyitás terminálban"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Áthelyezés a Kukába"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Megjelenítési beállítások"
 
