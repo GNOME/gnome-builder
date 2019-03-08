@@ -2,14 +2,14 @@
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Matej Urbančič <mateju@svn.gnome.org>, 2015–2017.
+# Matej Urbančič <mateju@svn.gnome.org>, 2015–2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-10-19 22:43+0000\n"
-"PO-Revision-Date: 2018-10-23 19:51+0200\n"
+"POT-Creation-Date: 2019-02-26 02:48+0000\n"
+"PO-Revision-Date: 2019-03-07 20:43+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -238,24 +238,17 @@ msgstr ""
 "Čas po spreminjanju v sekundah, po katerem se izvede samodejno shranjevanje."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-#, fuzzy
-#| msgid "Completion"
 msgid "Completion Row Count"
-msgstr "Dopolnjevanje"
+msgstr "Števec vrstic dopolnjevanja"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:119
-#, fuzzy
-#| msgid "The number of lines to scroll beyond the end of the buffer."
 msgid "The number of completion rows to display to the user."
-msgstr ""
-"Število vrstic, ki naj jih drsnik pokaže po koncu vsebine medpomnilnika."
+msgstr "Število vrstic, ki naj jih drsnik pokaže."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/preferences/ide-preferences-builtin.c:211
-#, fuzzy
-#| msgid "Suggest Snippet Completion"
 msgid "Interactive Completion"
-msgstr "Predlagaj dopolnjevanje z izrezki"
+msgstr "Odzivno dopolnjevanje"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid ""
@@ -862,9 +855,9 @@ msgstr "Navesti je treba naslov vodila D-Bus"
 msgid "No such worker"
 msgstr "Ni takega opravila izgradnje"
 
-#: src/libide/application/ide-application-shortcuts.c:44
-#: src/libide/application/ide-application-shortcuts.c:55
-#: src/libide/application/ide-application-shortcuts.c:66
+#: src/libide/application/ide-application-shortcuts.c:43
+#: src/libide/application/ide-application-shortcuts.c:54
+#: src/libide/application/ide-application-shortcuts.c:65
 #: src/libide/runner/ide-run-manager.c:780
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
@@ -879,30 +872,30 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Tipkovne bližnjice delovnega polja"
 
-#: src/libide/application/ide-application-shortcuts.c:45
-#: src/libide/application/ide-application-shortcuts.c:67
+#: src/libide/application/ide-application-shortcuts.c:44
+#: src/libide/application/ide-application-shortcuts.c:66
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Pomoč"
 
-#: src/libide/application/ide-application-shortcuts.c:46
+#: src/libide/application/ide-application-shortcuts.c:45
 msgctxt "shortcut window"
 msgid "Show the help window"
 msgstr "Pokaži okno pomoči"
 
-#: src/libide/application/ide-application-shortcuts.c:56
+#: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/keybindings/ide-shortcuts-window.ui:25
 #: src/libide/keybindings/ide-shortcuts-window.ui:477
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Možnosti"
 
-#: src/libide/application/ide-application-shortcuts.c:57
+#: src/libide/application/ide-application-shortcuts.c:56
 msgctxt "shortcut window"
 msgid "Show the preferences window"
 msgstr "Pokaži okno lastnosti"
 
-#: src/libide/application/ide-application-shortcuts.c:68
+#: src/libide/application/ide-application-shortcuts.c:67
 msgctxt "shortcut window"
 msgid "Show the shortcuts window"
 msgstr "Pokaži okno tipkovnih bližnjice"
@@ -922,11 +915,11 @@ msgstr "Trenutno izbrani jezik ne podpira razreševalnikov simbolov."
 msgid "Buffer failed: %s"
 msgstr "Uporaba medpomnilnika je spodletela: %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:610
+#: src/libide/buffers/ide-buffer-manager.c:619
 msgid "File too large to be opened."
 msgstr "Datoteka je prevelika in je ni mogoče odpreti."
 
-#: src/libide/buffers/ide-buffer-manager.c:1843
+#: src/libide/buffers/ide-buffer-manager.c:1852
 #, c-format
 msgid "unsaved document %u"
 msgstr "neshranjen dokument %u"
@@ -935,8 +928,8 @@ msgstr "neshranjen dokument %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1882
-#: src/libide/buffers/ide-buffer-manager.c:1945
+#: src/libide/buffers/ide-buffer-manager.c:1891
+#: src/libide/buffers/ide-buffer-manager.c:1954
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -1080,7 +1073,7 @@ msgstr "Predpona za uporabo med nameščanjem projekta."
 
 #: src/libide/buildui/ide-build-configuration-view.ui:127
 msgid "Installation Prefix"
-msgstr "Predpona namestitve"
+msgstr "Predpone namestitve"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:148
 msgid "Options to use when bootstrapping the project"
@@ -1099,10 +1092,8 @@ msgstr "Izvajalni program"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:198
-#, fuzzy
-#| msgid "Rustup Toolchains"
 msgid "Toolchain"
-msgstr "Nabor orodij Rustup"
+msgstr "Nabor orodij"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:245
 msgid "Environment"
@@ -1190,7 +1181,7 @@ msgstr "Možnosti izgradnje"
 
 #: src/libide/buildui/ide-environment-editor.c:69
 msgid "New variable…"
-msgstr "Nova spremenljivka ..."
+msgstr "Nova spremenljivka …"
 
 #: src/libide/buildui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
@@ -1287,7 +1278,7 @@ msgstr "Dnevnik"
 
 #: src/libide/debugger/ide-debugger-editor-addin.c:400
 msgid "Failed to initialize the debugger"
-msgstr "Začenjanje programa razhroščevanja je spodletelo"
+msgstr "Začenjanje razhroščevalnika je spodletelo"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:16
 msgid "No break"
@@ -1412,7 +1403,7 @@ msgstr "_Prelomi vrstice"
 
 #: src/libide/editor/gtk/menus.ui:37
 msgid "Cu_t"
-msgstr "I_zreži↓"
+msgstr "Iz_reži"
 
 #: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:112
 #: src/libide/gtk/menus.ui:241
@@ -1460,11 +1451,11 @@ msgstr "Razdeli"
 
 #: src/libide/editor/gtk/menus.ui:93 src/plugins/devhelp/gtk/menus.ui:7
 msgid "Print…"
-msgstr "Natisni ..."
+msgstr "Natisni …"
 
 #: src/libide/editor/gtk/menus.ui:100
 msgid "Document Preferences"
-msgstr "Nastavitve dokumenta"
+msgstr "Lastnosti dokumenta"
 
 #: src/libide/editor/gtk/menus.ui:113
 msgid "Save _As"
@@ -1682,7 +1673,7 @@ msgstr "Skladnja jezika"
 #: src/libide/editor/ide-editor-properties.ui:321
 #: src/libide/preferences/ide-preferences-builtin.c:276
 msgid "Search languages…"
-msgstr "Poišči jezike ..."
+msgstr "Poišči jezike …"
 
 #: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
@@ -1834,7 +1825,7 @@ msgstr ""
 
 #: src/libide/greeter/ide-greeter-perspective.c:1191
 msgid "Delete Project Files"
-msgstr "Izbriši datoteke projekta"
+msgstr "Izberi datoteke projekta"
 
 #. the action:// link is used to jump to the new-project view
 #: src/libide/greeter/ide-greeter-perspective.ui:52
@@ -1852,11 +1843,11 @@ msgstr "_Odstrani"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:124
 msgid "Remove Project Files…"
-msgstr "Odstrani datoteke projekta ..."
+msgstr "Odstrani datoteke projekta …"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:169
 msgid "Select a Project"
-msgstr "Izberite projekt"
+msgstr "Izbor projekta"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:178
 msgid "Click an item to select"
@@ -1864,7 +1855,7 @@ msgstr "Kliknite za izbor predmeta"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:217
 msgid "Open…"
-msgstr "Odpri ..."
+msgstr "Odpri …"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:232
 msgid "Select projects for removal"
@@ -1936,7 +1927,7 @@ msgstr "Shrani _vse"
 
 #: src/libide/gtk/menus.ui:80
 msgid "Close _All"
-msgstr "_Zapri vse"
+msgstr "Zapri _vse"
 
 #: src/libide/gtk/menus.ui:91
 msgid "_Go to Definition"
@@ -2034,10 +2025,8 @@ msgid "An unload request is already pending"
 msgstr "Zahteva za odlaganje je že na čakanju"
 
 #: src/libide/ide-context.c:2293
-#, fuzzy
-#| msgid "Context has already been restored."
 msgid "Context already unloading, cannot restore."
-msgstr "Vsebina je že obnovljena."
+msgstr "Vsebina je že sproščena in je ni mogoče obnoviti."
 
 #: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
@@ -2545,12 +2534,12 @@ msgstr "Krepko besedilo v terminalu"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
 msgid "If terminals are allowed to display bold text"
-msgstr ""
+msgstr "Ali je v terminalu dovoljen prikaz krepkega besedila"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
 msgctxt "Keywords"
 msgid "terminal allow bold"
-msgstr ""
+msgstr "terminal dovoli krepko besedilo"
 
 #: src/libide/preferences/ide-preferences-builtin.c:114
 msgid "Color Scheme"
@@ -2769,15 +2758,15 @@ msgstr "Dopolnjevanje"
 
 #: src/libide/preferences/ide-preferences-builtin.c:210
 msgid "Completions Display Size"
-msgstr ""
+msgstr "Število možnosti dopolnjevanja"
 
 #: src/libide/preferences/ide-preferences-builtin.c:210
 msgid "Number of completions to display"
-msgstr ""
+msgstr "Število prikazanih možnosti dopolnjevanja"
 
 #: src/libide/preferences/ide-preferences-builtin.c:211
 msgid "Display code suggestions interactively as you type"
-msgstr ""
+msgstr "Med vpisovanjem prikaži predloge kode"
 
 #: src/libide/preferences/ide-preferences-builtin.c:213
 msgid "Completion Providers"
@@ -3256,14 +3245,14 @@ msgstr ""
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:194
 msgid "Building cache…"
-msgstr "Poteka izgradnja predpomnilnika ..."
+msgstr "Poteka izgradnja predpomnilnika …"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:52
 msgid "Bootstrapping build system"
 msgstr "Sistem izgradnje začetnega nalagalnika"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:291
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:168
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:171
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Poteka nastavljanje projekta"
@@ -3273,7 +3262,7 @@ msgstr "Poteka nastavljanje projekta"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:197
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:200
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Poteka izgradnja projekta"
@@ -3503,21 +3492,19 @@ msgstr "Možnosti Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:92
 msgid "Complete Parenthesis"
-msgstr ""
+msgstr "Dopolni oklepaje"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:93
 msgid "Include parenthesis when completing clang proposals"
-msgstr ""
+msgstr "Vključi oklepaje med dopolnjevanjem predlog clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:104
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete Parameters"
-msgstr "Parametri"
+msgstr "Dopolni parametre"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:105
 msgid "Include parameters and types when completing clang proposals"
-msgstr ""
+msgstr "Vključi parametre in vrste med dopolnjevanjem predlog clang"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:56
 msgid "anonymous"
@@ -3525,23 +3512,23 @@ msgstr "brezimno"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "Dopolni oklepaje"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
-msgstr ""
+msgstr "Ali naj bodo oklepaji upoštevani pri samodejnem dopolnjevanju."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete parameters"
-msgstr "Parametri"
+msgstr "Dopolni parametre"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr ""
+"Ali naj bodo parametri vključeni med dopolnjevanjem. Možnost zahteva "
+"omogočeno možnost dopolnjevanja oklepajev."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:420
 msgid "CMake"
@@ -3553,14 +3540,13 @@ msgstr "Nastavi projekt"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:207
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:210
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
 msgstr "Poteka nameščanje projekta"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:215
 #, c-format
-#| msgid "CMake"
 msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
@@ -3598,7 +3584,7 @@ msgstr "Zapri brez shranjevanja"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:96
 msgid "Save As…"
-msgstr "Shrani kot ..."
+msgstr "Shrani kot …"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:204
 msgid "Load palette"
@@ -3695,7 +3681,7 @@ msgstr "Barvne komponente"
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
 msgid "Visibility:"
-msgstr "Vidnost"
+msgstr "Vidnost:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
 msgid "Select the color spaces for which you want to see sliders in the panel."
@@ -4080,10 +4066,8 @@ msgid "Suggest completions using Ctags"
 msgstr "Predlagaj dopolnjevanje s Ctags"
 
 #: src/plugins/ctags/ide-ctags-preferences-addin.c:52
-#, fuzzy
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use Ctags to suggest completions for a variety of languages"
-msgstr "Uporabi samodejno dopolnjevanje Clang za programske jezike C in C++."
+msgstr "Uporabi samodejno dopolnjevanje Ctags za različne programske jezike"
 
 #: src/plugins/devhelp/gbp-devhelp-hover-provider.c:128
 msgid "Devhelp"
@@ -4091,7 +4075,7 @@ msgstr "Devhelp"
 
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
 msgid "Select Documentation…"
-msgstr "Izbor dokumentacije ..."
+msgstr "Izbor dokumentacije …"
 
 #: src/plugins/devhelp/gbp-devhelp-view.c:206
 #: src/plugins/devhelp/gtk/menus.ui:5
@@ -4272,12 +4256,14 @@ msgstr "V sistem ni nameščenega izgrajevalnika flatpak-builder"
 msgid ""
 "This program is necessary for building Flatpak applications. Would you like "
 "to install it?"
-msgstr "Program je nujen za izgradnjo programon s podporo Flatpak. Ali želite "
+msgstr ""
+"Program je nujen za izgradnjo programov s podporo Flatpak. Ali želite "
+"program namestiti?"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:87
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr ""
+msgstr "Kodni prevajalnik GCC %s (Sistem)"
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:202
 msgid "Cannot provide diff, no backing file provided."
@@ -4325,7 +4311,7 @@ msgstr "Uveljavi"
 
 #: src/plugins/git/ide-git-clone-widget.c:230
 msgid "Remote Branch to Clone"
-msgstr ""
+msgstr "Oddaljena veja za kloniranje"
 
 #: src/plugins/git/ide-git-clone-widget.ui:37
 msgid "Use Git to create a local copy of a remotely hosted project."
@@ -4342,10 +4328,8 @@ msgid "Enter the URL of your project’s source code repository"
 msgstr "Vpišite naslov URL skladišča izvorne kode projekta"
 
 #: src/plugins/git/ide-git-clone-widget.ui:70
-#, fuzzy
-#| msgid "Make default"
 msgid "Change default branch"
-msgstr "Nastavi kot privzeto"
+msgstr "Spremeni privzeto vejo"
 
 #: src/plugins/git/ide-git-clone-widget.ui:110
 msgid "Repository URL"
@@ -4426,10 +4410,8 @@ msgid "(Preview)"
 msgstr "(Predogled)"
 
 #: src/plugins/jedi/jedi_plugin.py:662
-#, fuzzy
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest completions from Python"
-msgstr "Predlagaj dopolnjevanje s Ctags"
+msgstr "Predlagaj dopolnjevanje kode za Python"
 
 #: src/plugins/jedi/jedi_plugin.py:663
 msgid "Use Jedi to provide completions for the Python language"
@@ -4453,31 +4435,28 @@ msgstr "Ustvari nov prazen projekt z uporabo Makefile"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:108
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:111
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr ""
 "Projekt, zasnovan v okolju Mason je naložen, okolja Ninja pa ni mogoče najti."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:128
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:131
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
 "Projekt, zasnovan v okolju Mason je naložen, okolja Mason pa ni mogoče najti."
 
 #: src/plugins/meson/gbp-meson-toolchain.c:66
-#, fuzzy, c-format
-#| msgid "Meson"
+#, c-format
 msgid "%s (Meson)"
-msgstr "Meson"
+msgstr "%s (Meson)"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:101
-#, fuzzy
-#| msgid "to add a new toolchain!"
 msgid "Add toolchain"
-msgstr "za dodajanje novega nabora."
+msgstr "Dodaj nabor orodij"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
-msgstr ""
+msgstr "Določi nov nabor orodij po meri za ciljno programsko okolje"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:406
 msgid "No Provided Tool"
@@ -4486,7 +4465,7 @@ msgstr "Ni podanega orodja"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
-msgstr ""
+msgstr "Ime za določevanje sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
@@ -4496,7 +4475,7 @@ msgstr "Okolje"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
-msgstr ""
+msgstr "Sistemsko okolje sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
 msgid "Add Tool:"
@@ -4504,14 +4483,11 @@ msgstr "Dodaj orodje:"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
 #: src/plugins/meson/gbp-meson-utils.c:96
-#, fuzzy
-#| msgid "Completion"
 msgid "Compiler"
-msgstr "Dopolnjevanje"
+msgstr "Kodni prevajalnik"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
 #: src/plugins/meson/gbp-meson-utils.c:98
-#, fuzzy
 msgid "Preprocessor"
 msgstr "Predprocesor"
 
@@ -4522,14 +4498,13 @@ msgstr "Arhivirnik"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
 #: src/plugins/meson/gbp-meson-utils.c:102
-#, fuzzy
 msgid "Linker"
 msgstr "Povezovalnik"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
 #: src/plugins/meson/gbp-meson-utils.c:104
 msgid "Strip"
-msgstr ""
+msgstr "Trak"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
 #: src/plugins/meson/gbp-meson-utils.c:106
@@ -4539,13 +4514,11 @@ msgstr "Izvedljivi ovijalnik"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
 #: src/plugins/meson/gbp-meson-utils.c:108
 msgid "Package Config"
-msgstr ""
+msgstr "Nastavitev paketa"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-#, fuzzy
-#| msgid "Language"
 msgid "Any language"
-msgstr "Jezik"
+msgstr "Katerikoli jezik"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "C"
@@ -4569,9 +4542,8 @@ msgid "Fortran"
 msgstr "Fortran"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
-#| msgid "ID"
 msgid "D"
-msgstr "D"
+msgstr "M"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:227
 msgid "Add Tool"
@@ -4583,11 +4555,8 @@ msgid "Delete"
 msgstr "Izbriši"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:248
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
 msgid "Delete Toolchain"
-msgstr "Izbriši vrstico"
+msgstr "Izbriši nabor orodij"
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
@@ -4618,10 +4587,8 @@ msgid "Create a new empty project"
 msgstr "Ustvari nov prazen projekt"
 
 #: src/plugins/meson-templates/meson_templates.py:353
-#, fuzzy
-#| msgid "Command failed: %s"
 msgid "Command Line Tool"
-msgstr "Ukaz je spodletel: %s"
+msgstr "Orodje ukazne vrstice"
 
 #: src/plugins/meson-templates/meson_templates.py:355
 msgid "Create a new command line project"
@@ -4668,7 +4635,6 @@ msgid "Calendar"
 msgstr "Koledar"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:107
-#, fuzzy
 msgid "Boxes"
 msgstr "Škatle"
 
@@ -4730,7 +4696,7 @@ msgstr "Ni mogoče naložiti ne-lastne datoteke v terminal"
 #: src/plugins/project-tree/gb-project-tree-actions.c:354
 #, c-format
 msgid "Failed to spawn terminal: %s"
-msgstr "Oživitev terminala je spodletela: %s"
+msgstr "Zagon terminala je spodletel: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:619
@@ -4795,7 +4761,7 @@ msgstr "_Odpri"
 
 #: src/plugins/project-tree/gtk/menus.ui:34
 msgid "Open _With"
-msgstr "Odpri _z"
+msgstr "Odpri s _programom"
 
 #: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
@@ -4803,11 +4769,11 @@ msgstr "Urejevalnik izvorne kode"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
 msgid "_Open Containing Folder"
-msgstr "_Odpri vsebujočo mapo"
+msgstr "Odpri _mapo z datoteko"
 
 #: src/plugins/project-tree/gtk/menus.ui:51
 msgid "_Open in Terminal"
-msgstr "Odpri _terminal"
+msgstr "Odpri v _terminalu"
 
 #: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Mo_ve to Trash"
@@ -4891,7 +4857,7 @@ msgstr "Poteka nameščanje Rust"
 
 #: src/plugins/rustup/rustup_plugin.py:285
 msgid "Checking system"
-msgstr "Preverjanje sistema ..."
+msgstr "Preverjanje sistema …"
 
 #: src/plugins/rustup/rustup_plugin.py:350
 msgid "Downloading rustup-init"
@@ -4903,11 +4869,11 @@ msgstr "Poteka usklajevanje posodobitev kanala"
 
 #: src/plugins/rustup/rustup_plugin.py:361
 msgid "Downloading "
-msgstr "Poteka prejemanje ..."
+msgstr "Poteka prejemanje …"
 
 #: src/plugins/rustup/rustup_plugin.py:368
 msgid "Installing "
-msgstr "Poteka nameščanje ..."
+msgstr "Poteka nameščanje …"
 
 #: src/plugins/rustup/rustup_plugin.py:374
 msgid "Checking for rustup updates"
@@ -4943,11 +4909,11 @@ msgstr "Nabor orodij Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:504
 msgid "Updating"
-msgstr "Poteka posodabljanje ..."
+msgstr "Poteka posodabljanje …"
 
 #: src/plugins/rustup/rustup_plugin.py:504
 msgid "Installing"
-msgstr "Poteka nameščanje ..."
+msgstr "Poteka nameščanje …"
 
 #. set default toolchain button
 #: src/plugins/rustup/rustup_plugin.py:597
@@ -4996,20 +4962,17 @@ msgid "to add a new toolchain!"
 msgstr "za dodajanje novega nabora."
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:112
-#, fuzzy, c-format
-#| msgid "Failed to parse integer from “%s”"
+#, c-format
 msgid "Failed to parse snippet “%s”"
-msgstr "Razčlenjevanje števila »%s« je spodletelo"
+msgstr "Razčlenitev dopolnitve »%s« je spodletela"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:51
-#, fuzzy
-#| msgid "Suggest Completions using Jedi"
 msgid "Suggest Completions from Snippets"
-msgstr "Predlagaj dopolnjevanje z Jedi"
+msgstr "Predlagaj dopolnjevanje s Snippets"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:52
 msgid "Use registered snippets to suggest completion proposals"
-msgstr ""
+msgstr "Uporabi vpisane izrezke kode za predloge dopolnjevanja"
 
 #: src/plugins/spellcheck/gbp-spell-editor-addin.c:51
 msgid "Spelling"
@@ -5203,7 +5166,7 @@ msgstr "Zaženi s programom Profiler"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgid "Open Sysprof Capture…"
-msgstr "Odpri Sysprof Capture"
+msgstr "Odpri Sysprof Capture …"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:80
 msgid "Add sysroot"
@@ -5211,7 +5174,7 @@ msgstr "Dodaj sysroot"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:87
 msgid "Define a new sysroot target to build against a different target"
-msgstr ""
+msgstr "Določi nov cilj sysroot za izgradnjo drugega cilja"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:135
 msgid "Sysroots"
@@ -5219,15 +5182,15 @@ msgstr "Sysroots"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
-msgstr ""
+msgstr "Absolutna sistemska datotečna pot do sysroot."
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
 msgid "Package Config Path"
-msgstr ""
+msgstr "Pot nastavitve paketa"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
 msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-msgstr ""
+msgstr "Izbirna, z vejico ločena pot, za določilo vrednosti PKG_CONFIG_PATH."
 
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:147
 #, c-format
@@ -5248,22 +5211,18 @@ msgstr "Odvod programa"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:238
-#, fuzzy, c-format
-#| msgid "Application exited\r\n"
+#, c-format
 msgid "Application started at %s\r\n"
-msgstr "Odvod programa\r\n"
+msgstr "Program je bil zagnan ob zagnan %s\n"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:258
 msgid "Application exited\r\n"
 msgstr "Odvod programa\r\n"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:278
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Terminal in Build Runtime"
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
-msgstr "Terminalsko okno izvajanja izgradnje"
+msgstr "Terminal v izvajalnem času"
 
 #: src/plugins/terminal/gtk/menus.ui:17
 msgid "Reset and Clear"
@@ -5283,26 +5242,21 @@ msgstr "_Novo izvajalno okno terminala"
 
 #: src/plugins/terminal/gtk/menus.ui:60
 msgid "New terminal in directory"
-msgstr "Nov terminal v mapi"
+msgstr "Novo okno terminala v mapi"
 
 #: src/plugins/todo/gbp-todo-panel.c:299
-#, fuzzy
-#| msgid "Downloading…"
 msgid "Loading TODOs…"
-msgstr "Poteka prejemanje …"
+msgstr "Poteka nalaganje datotek TODO …"
 
 #: src/plugins/todo/gbp-todo-panel.c:300
-#, fuzzy
-#| msgid "Integration with Git to clone your projects"
 msgid "Please wait while we scan your project"
-msgstr "Povezljivost z Git za kloniranje projektov"
+msgstr "Poteka preiskovanje projekta"
 
 #: src/plugins/todo/gbp-todo-workbench-addin.c:156
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXME"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:151
-#, fuzzy
 msgid "Abstract"
 msgstr "Izvleček"
 
@@ -5312,7 +5266,7 @@ msgstr "Stisni"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:155
 msgid "Immutable"
-msgstr ""
+msgstr "Nespremenljivo"
 
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
@@ -5341,6 +5295,778 @@ msgstr "Za razčlenjevanje mora biti datoteka shranjena krajevno."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Medpomnilnik je naložen, vendar ni znotraj upravljalnika medpomnilnika."
+
+#~ msgid "Christian Hergert, et al."
+#~ msgstr "Christian Hergert in drugi"
+
+#, fuzzy
+#~| msgid "Spacing"
+#~ msgid "Line Spacing"
+#~ msgstr "Razmik"
+
+#, fuzzy
+#~| msgid "Minimum number of lines to keep above and below the cursor"
+#~ msgid "The number of pixels to include above and below lines in the editor."
+#~ msgstr "Najmanjše število vrstic, ki naj bodo prikazane nad in pod kazalko"
+
+#, fuzzy
+#~ msgid "Clear build caches at startup"
+#~ msgstr "Počisti dnevnik izgradnje"
+
+#~ msgid "New Window"
+#~ msgstr "Novo okno"
+
+#~ msgid "Hue"
+#~ msgstr "Odtenek"
+
+#~ msgid "Saturation"
+#~ msgstr "Nasičenost"
+
+#~ msgid "Cielab l"
+#~ msgstr "Cielab l"
+
+#~ msgid "Cielab a"
+#~ msgstr "Cielab a"
+
+#~ msgid "Cielab b"
+#~ msgstr "Cielab b"
+
+#~ msgid "Red"
+#~ msgstr "Rdeča"
+
+#~ msgid "Green"
+#~ msgstr "Zelena"
+
+#~ msgid "Blue"
+#~ msgstr "Modra"
+
+#, fuzzy
+#~| msgid "Unsaved palette %u"
+#~ msgid "unsaved file %u"
+#~ msgstr "Neshranjena paleta %u"
+
+#~ msgid "Untitled"
+#~ msgstr "Neimenovano"
+
+#~ msgid "Highlight Mode"
+#~ msgstr "Način poudarjanja"
+
+#~ msgid "Display line numbers"
+#~ msgstr "Prikaži številke vrstic"
+
+#~ msgid "Display right margin"
+#~ msgstr "Pokaži desni rob"
+
+#, fuzzy
+#~| msgid "_Enable automatic indentation"
+#~ msgid "Automatic indentation"
+#~ msgstr "Samodejno zamikanje"
+
+#, fuzzy
+#~| msgid "Spaces Style"
+#~ msgid "Spaces per tab"
+#~ msgstr "Širina tabulatorja v presledkih"
+
+#~ msgid "Switch surface"
+#~ msgstr "Preklopi površino"
+
+#, fuzzy
+#~| msgid "Failed to locate device “%s”"
+#~ msgid "Discovered device “%s”"
+#~ msgstr "Zaznana je nova naprava"
+
+#~ msgid "Fallback"
+#~ msgstr "Nadomestne pisave"
+
+#, fuzzy
+#~| msgid "Running autogen…"
+#~ msgid "Running %s…"
+#~ msgstr "Napaka med zagonom %s"
+
+#, fuzzy
+#~ msgid "The build target failed to build: %s"
+#~ msgstr "Začenjanje izgradnje cevovoda je spodletelo: %s"
+
+#, fuzzy
+#~| msgid "Failed to locate runtime"
+#~ msgid "Failed to locate a build target"
+#~ msgstr "Določevanje mesta vstavka sistema izgradnje je spodletelo."
+
+#~ msgid "Host System"
+#~ msgstr "Gostiteljski sistem"
+
+#, fuzzy
+#~ msgid "Select branch and other options."
+#~ msgstr "Druge možnosti usklajevanja"
+
+#~ msgid "Repository Kind"
+#~ msgstr "Vrsta skladišča"
+
+#~ msgid "Author Name"
+#~ msgstr "Ime avtorja"
+
+#~ msgid "Author Email"
+#~ msgstr "Elektronski naslov avtorja"
+
+#~ msgid "Select a Folder…"
+#~ msgstr "Izbor mape ..."
+
+#~ msgid "Clone Repository…"
+#~ msgstr "Kloniraj skladišče ..."
+
+#~ msgid "Directory"
+#~ msgstr "Mapa"
+
+#, fuzzy
+#~| msgid "Delete Project Files"
+#~ msgid "Select Project Folder"
+#~ msgstr "Izberite projekt"
+
+#, fuzzy
+#~ msgid "Builder — %s"
+#~ msgstr "Določila izgrajevalnika ni mogoče naložiti: %s"
+
+#~ msgid "Delete Project Sources"
+#~ msgstr "Izbriši vire projekta"
+
+#~ msgid "Go back"
+#~ msgstr "Skoči na predhodni pogled"
+
+#~ msgid "Open a Project"
+#~ msgstr "Odpri projekt"
+
+#, fuzzy
+#~| msgid "Directory for all Builder projects."
+#~ msgid "Search all Builder projects…"
+#~ msgstr "Mapa vseh projektov programa GBuilder"
+
+#~ msgid "Remove Projects and Sources…"
+#~ msgstr "Odstrani projekte in vire …"
+
+#, fuzzy
+#~| msgid "Switch To"
+#~ msgid "Switch Surface"
+#~ msgstr "Površinski"
+
+#~ msgid "Close Project"
+#~ msgstr "Zapri projekt"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Tipkovne bližnjice"
+
+#~ msgid "Help"
+#~ msgstr "Pomoč"
+
+#~ msgid "About Builder"
+#~ msgstr "O programu"
+
+#~ msgid "Run Options"
+#~ msgstr "Možnosti zagona"
+
+#, fuzzy
+#~ msgid "Open project in new workbench"
+#~ msgstr "_Nov projekt"
+
+#~ msgid "FILE"
+#~ msgstr "DATOTEKA"
+
+#~ msgid "Print version information and exit"
+#~ msgstr "Izpiši podatke o različici in končaj"
+
+#, fuzzy
+#~ msgid "Increase log verbosity"
+#~ msgstr "Povečaj podrobnost diagnostike"
+
+#~ msgid "Failed to open project: %s"
+#~ msgstr "Odpiranje projekta je spodletelo: %s"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Window shortcuts"
+#~ msgstr "Tipkovne bližnjice"
+
+#, fuzzy
+#~| msgid "Minimum number of lines to keep above and below the cursor"
+#~ msgid "Number of pixels above and below editor lines"
+#~ msgstr "Najmanjše število vrstic, ki naj bodo prikazane nad in pod kazalko"
+
+#, fuzzy
+#~| msgctxt "Keywords"
+#~| msgid "editor font monospace"
+#~ msgctxt "Keywords"
+#~ msgid "editor line spacing font monospace"
+#~ msgstr "monospace, pisava, urejevalnik, enotna širina, besedilo"
+
+#, fuzzy
+#~ msgid "Clear build cache at startup"
+#~ msgstr "Počisti dnevnik izgradnje"
+
+#~ msgid "Updating Dependencies…"
+#~ msgstr "Poteka posodabljanje odvisnosti ..."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Workspace shortcuts"
+#~ msgstr "Tipkovne bližnjice delovne površine"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom"
+#~ msgstr "Približanje"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom In"
+#~ msgstr "Približaj"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom Out"
+#~ msgstr "Oddalji"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Reset Zoom"
+#~ msgstr "Ponastavi približanje"
+
+#, fuzzy
+#~| msgctxt "shortcut window"
+#~| msgid "Move document to the right"
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the right"
+#~ msgstr "Premakni dokument desno"
+
+#, fuzzy
+#~| msgid "Two finger swipe right"
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe right"
+#~ msgstr "Dvoprstni poteg v desno"
+
+#, fuzzy
+#~| msgctxt "shortcut window"
+#~| msgid "Move document to the left"
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the left"
+#~ msgstr "Premakni dokument levo"
+
+#, fuzzy
+#~| msgid "Two finger swipe left"
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe left"
+#~ msgstr "Dvoprstni poteg v levo"
+
+#~ msgid "Loading…"
+#~ msgstr "Poteka nalaganje …"
+
+#, fuzzy
+#~| msgid "Run with Profiler"
+#~ msgid "Run a new instance of Builder"
+#~ msgstr "Zaženi program v samostojnem načinu"
+
+#, fuzzy
+#~| msgid "Selected configuration for building"
+#~ msgid "Select a build configuration from the sidebar to modify."
+#~ msgstr "Izbrana nastavitev za izgradnjo"
+
+#~ msgid "Build Configurations"
+#~ msgstr "Nastavitve izgradnje"
+
+#, fuzzy
+#~| msgid "Runtime"
+#~ msgid "All Runtimes"
+#~ msgstr "Izvajalni programi Flatpak"
+
+#, fuzzy
+#~| msgid "Make default"
+#~ msgid "Make active"
+#~ msgstr "dejavno"
+
+#, fuzzy
+#~ msgid "Select this configuration as the active configuration."
+#~ msgstr "Določi trenutne nastavitve"
+
+#~ msgid "Duplicate"
+#~ msgstr "Podvoji"
+
+#, fuzzy
+#~| msgid "Selected configuration for building"
+#~ msgid "Removes the configuration and cannot be undone."
+#~ msgstr "Izbrisanega ključa ni mogoče povrniti."
+
+#~ msgid "Overview"
+#~ msgstr "Pregled"
+
+#, fuzzy
+#~| msgid "Environment"
+#~ msgid "Build Environment"
+#~ msgstr ""
+#~ "Napaka med nastavljanjem okolja izgradnje:\n"
+#~ "%s"
+
+#, fuzzy
+#~| msgid "Application Output"
+#~ msgid "Application Runtime"
+#~ msgstr "Čas izvajanja"
+
+#, fuzzy
+#~| msgid "Rustup Toolchains"
+#~ msgid "Build Toolchain"
+#~ msgstr "Izgradi"
+
+#~ msgid "Device"
+#~ msgstr "Naprava"
+
+#, fuzzy
+#~| msgid "Build status"
+#~ msgid "Build Targets"
+#~ msgstr "Izgradi cilj preko uporabniškega vmesnika"
+
+#~ msgid "Run With…"
+#~ msgstr "Zaženi z…"
+
+#, fuzzy
+#~ msgid "PROJECT_FILE"
+#~ msgstr "Napaka med odpiranjem datoteke projekta"
+
+#, fuzzy
+#~| msgid "Failed to load file: %s"
+#~ msgid "Failed to load flags for plan: %s"
+#~ msgstr "Nalaganje potrdila je spodletelo: %s"
+
+#, fuzzy
+#~| msgid "Failed to load file: %s"
+#~ msgid "Failed to cull index plan: %s"
+#~ msgstr "Prevzemanje kazala je spodletelo: %s"
+
+#, fuzzy
+#~| msgid "Failed to spawn terminal: %s"
+#~ msgid "Failed to populate index plan: %s"
+#~ msgstr "Prevzemanje kazala je spodletelo: %s"
+
+#, fuzzy
+#~| msgid "Failed to load the project"
+#~ msgid "Failed to load project: %s"
+#~ msgstr "Nalaganje projekta je spodletelo"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Workspace Shortcuts"
+#~ msgstr "Pokaže tipkovne bližnjice delovne površine"
+
+#, fuzzy
+#~ msgctxt "shortcut window"
+#~ msgid "Show the workspace command bar"
+#~ msgstr "Pokaži le _trenutno delovno površino"
+
+#, fuzzy
+#~ msgid "Display the project creation guide"
+#~ msgstr "Ustvarjanje novega projekta ni bila uspešna."
+
+#~ msgid "Application ID"
+#~ msgstr "ID programa"
+
+#~ msgid "Create Project"
+#~ msgstr "Ustvari projekt"
+
+#~ msgid "Start _New Project…"
+#~ msgstr "Začni _nov projekt …"
+
+#~ msgid "_Start New Project…"
+#~ msgstr "_Začni nov projekt …"
+
+#, fuzzy
+#~| msgid ""
+#~| "Search, diagnostics and autocompletion may be limited until complete."
+#~ msgid ""
+#~ "Search, autocompletion, and symbol information may be limited until Ctags "
+#~ "indexing is complete."
+#~ msgstr ""
+#~ "Možnosti iskanja, diagnostike in samodejnega dopolnjevanja so lahko "
+#~ "omejene do končanja."
+
+#, fuzzy
+#~| msgid "Indexing Source Code"
+#~ msgid "Indexing Source Code (Paused)"
+#~ msgstr "Indeksiranje izvorne kode"
+
+#, fuzzy
+#~ msgid "Use minimal editor interface"
+#~ msgstr "Poenostavljen vmesnik Mac OS X"
+
+#, fuzzy
+#~| msgid "Workspace"
+#~ msgid "New Workspace…"
+#~ msgstr "Delovna površina"
+
+#~ msgid "Open in New Workspace"
+#~ msgstr "Odpri na novi delovni površini"
+
+#, fuzzy
+#~| msgid "Failed to remove flatpak manifest: %s"
+#~ msgid "Clone a project using flatpak manifest"
+#~ msgstr "Odstranitev vnosa flatpak je spodletela: %s"
+
+#~ msgid "Cloning project %s"
+#~ msgstr "Poteka kloniranje projekta %s"
+
+#~ msgid "Missing system dependencies"
+#~ msgstr "Manjkajoče sistemske odvisnosti"
+
+#, fuzzy
+#~| msgid "Network is not available, skipping downloads"
+#~ msgid "Network is not available, skipping submodule update"
+#~ msgstr "Povezava z omrežjem ni na voljo, prejemanje bo ustavljeno"
+
+#, fuzzy
+#~ msgid "Initialize git submodules"
+#~ msgstr "_Nastavi začetne vrednosti"
+
+#, fuzzy
+#~| msgid "The script “%s” is not a PyGObject file."
+#~ msgid "The protocol “%s” is not supported."
+#~ msgstr "Protokol posredniškega strežnika »%s« ni podprt."
+
+#~ msgid "Signals"
+#~ msgstr "Signali"
+
+#~ msgid "Select Widget…"
+#~ msgstr "Izbor gradnika …"
+
+#~ msgid "View Design"
+#~ msgstr "Pogled oblikovanja"
+
+#, fuzzy
+#~ msgid "Switch to UI designer"
+#~ msgstr "Oblikovalec"
+
+#~ msgid "View Source"
+#~ msgstr "Poglej vir"
+
+#, fuzzy
+#~| msgid "Switch to source or header"
+#~ msgid "Switch to source code editor"
+#~ msgstr "Urejevalnik izvorne kode"
+
+#, fuzzy
+#~| msgid "Failed to save file: %s"
+#~ msgid "Failed to save glade document: %s"
+#~ msgstr "Napaka med shranjevanjem dokumenta “%s”"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Glade shortcuts"
+#~ msgstr "Tipkovne bližnjice Glade"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Designer"
+#~ msgstr "Oblikovalec"
+
+#, fuzzy
+#~ msgctxt "shortcut window"
+#~ msgid "Save the interface design"
+#~ msgstr "Oblikovanje:"
+
+#, fuzzy
+#~ msgctxt "shortcut window"
+#~ msgid "Preview the interface design"
+#~ msgstr "Oblikovanje:"
+
+#, fuzzy
+#~| msgctxt "shortcut window"
+#~| msgid "Undo previous command"
+#~ msgctxt "shortcut window"
+#~ msgid "Undo the last command"
+#~ msgstr "Razveljavi zadnjo spremembo stanja"
+
+#, fuzzy
+#~| msgctxt "shortcut window"
+#~| msgid "Redo previous command"
+#~ msgctxt "shortcut window"
+#~ msgid "Redo the next command"
+#~ msgstr "Ponovno uveljavi predhodni ukaz"
+
+#, fuzzy
+#~| msgid "Switch to source or header"
+#~ msgid "Switch to selection mode"
+#~ msgstr "preklopna tipka"
+
+#, fuzzy
+#~| msgid "Switch to source or header"
+#~ msgid "Switch to drag-resize mode"
+#~ msgstr "Način spreminjanja velikosti"
+
+#, fuzzy
+#~| msgid "Right margin position"
+#~ msgid "Switch to margin editor"
+#~ msgstr "_Marža:"
+
+#, fuzzy
+#~| msgctxt "shortcut window"
+#~| msgid "Switch to the next document"
+#~ msgid "Switch to alignment editor"
+#~ msgstr "Preklopi"
+
+#~ msgid "Unnamed Glade project"
+#~ msgstr "Neimenovan projekt Glade"
+
+#~ msgid "Unnamed Glade Project"
+#~ msgstr "Neimenovan projekt Glade"
+
+#, fuzzy
+#~ msgid "Widget specific properties"
+#~ msgstr "Počisti lastnosti gradnika"
+
+#, fuzzy
+#~| msgid "Configure build preferences"
+#~ msgid "Container child properties"
+#~ msgstr "Ali naj vsebnik pokaže podrejen predmet"
+
+#~ msgid "Accessibility properties"
+#~ msgstr "Lastnosti dostopnosti"
+
+#~ msgid "Glade"
+#~ msgstr "Glade"
+
+#~ msgid "Open _Preview"
+#~ msgstr "Odpri _predogled"
+
+#~ msgid "Cut"
+#~ msgstr "Izreže izbor"
+
+#~ msgid "Copy"
+#~ msgstr "Kopiraj"
+
+#~ msgid "Paste"
+#~ msgstr "Prilepi"
+
+#~ msgid "Undo"
+#~ msgstr "Razveljavi"
+
+#~ msgid "Redo"
+#~ msgstr "Ponovi"
+
+#~ msgid "UI Designer"
+#~ msgstr "Oblikovalec vmesnika"
+
+#, fuzzy
+#~ msgid "Gradle Wrapper"
+#~ msgstr "Izvedljivi ovijalnik"
+
+#, fuzzy
+#~ msgid "Display a new greeter window"
+#~ msgstr "Novo o_kno"
+
+#, fuzzy
+#~| msgid "Building project"
+#~ msgid "Begin cloning project from URI"
+#~ msgstr "Poteka izgradnja projekta"
+
+#~ msgid "_Clone Repository…"
+#~ msgstr "_Kloniraj skladišče ..."
+
+#~ msgid "Quit"
+#~ msgstr "Končaj"
+
+#~ msgid "Open a _Project…"
+#~ msgstr "Odpri _projekt …"
+
+#~ msgid "Match"
+#~ msgstr "Se sklada"
+
+#~ msgid "Path"
+#~ msgstr "Pot"
+
+#~ msgid "Find in Files"
+#~ msgstr "Najdi v datotekah"
+
+#~ msgid "Replace With"
+#~ msgstr "Zamenjaj z"
+
+#~ msgid "Search for…"
+#~ msgstr "Poišči …"
+
+#~ msgid "Find"
+#~ msgstr "Najdi"
+
+#, fuzzy
+#~| msgid "Search through preferences"
+#~ msgid "Search _recursively through folders"
+#~ msgstr "Išči po strukturi map:"
+
+#~ msgid "Match _case when searching"
+#~ msgstr "Upoštevaj _velikost črk med iskanjem"
+
+#~ msgid "Match _whole words"
+#~ msgstr "Išči _le cele besede"
+
+#~ msgid "Allow regular _expressions"
+#~ msgstr "Dovoli _logične izraze"
+
+#, fuzzy
+#~| msgid "Installing %u package"
+#~| msgid_plural "Installing %u packages"
+#~ msgid "Install Package"
+#~ msgstr "Namesti paket dodatkov"
+
+#, fuzzy
+#~| msgid "Failed to open directory: %s"
+#~ msgid "Failed to load directory: %s"
+#~ msgstr "Nalaganje potrdila je spodletelo: %s"
+
+#, fuzzy
+#~| msgid "Any Directory"
+#~ msgid "%s — Directory"
+#~ msgstr "make(\\[\\d+\\])?:\\s+Leaving\\s+directory\\s+`(.+)'"
+
+#~ msgid "Size"
+#~ msgstr "Velikost"
+
+#~ msgid "Modified"
+#~ msgstr "Spremenjeno"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "Meson Options"
+#~ msgstr "Meson"
+
+#~ msgid "Suggested GNOME Projects"
+#~ msgstr "Predlagani projekti GNOME"
+
+#~ msgid "A simple GNOME 3 application to access remote or virtual systems"
+#~ msgstr ""
+#~ "Enostaven program GNOME 3 za dostop do oddaljenih ali navideznih sistemov"
+
+#~ msgid "Calendar application for GNOME"
+#~ msgstr "Koledar za GNOME"
+
+#~ msgid "Simple game launcher for GNOME"
+#~ msgstr "Enostaven zaganjalnik iger za GNOME"
+
+#~ msgid "A simple GNOME 3 maps application"
+#~ msgstr "Enostaven program za pregled zemljevidov za GNOME"
+
+#~ msgid "Music player and management application"
+#~ msgstr "Predvajalnik in urejevalnik glasbene zbirke"
+
+#~ msgid "Default file manager for GNOME"
+#~ msgstr "Privzeti upravljalnik datotek za GNOME"
+
+#~ msgid "Access, organize and share your photos on GNOME"
+#~ msgstr "Urejanje in izmenjava fotografij za namizje GNOME"
+
+#~ msgid "An IRC Client for GNOME"
+#~ msgstr "Odjemalec IRC za GNOME"
+
+#~ msgid "Task manager for GNOME"
+#~ msgstr "Upravljalnik nalog za GNOME"
+
+#, fuzzy
+#~| msgid "Build cancelled"
+#~ msgid "Build succeeded"
+#~ msgstr "Datum izgradnje"
+
+#, fuzzy
+#~| msgid "Build failed"
+#~ msgid "Build configured"
+#~ msgstr "Izgradnja je spodletela"
+
+#, fuzzy
+#~| msgid "Build System"
+#~ msgid "Build bootstrapped"
+#~ msgstr "Datum izgradnje"
+
+#~ msgid "Files"
+#~ msgstr "Datoteke"
+
+#~ msgid "Copying 1 file"
+#~ msgstr "Poteka kopiranje 1 datoteke"
+
+#~ msgid "Copying %s of %s files"
+#~ msgstr "Poteka kopiranje %s od %s datotek"
+
+#~ msgid "Failed to copy files"
+#~ msgstr "Kopiranje datotek je spodletelo"
+
+#, fuzzy
+#~| msgid "File chooser"
+#~ msgid "Files copied"
+#~ msgstr "Namestitev je končana: kopiranih je %d datotek"
+
+#~ msgid "Copied 1 file"
+#~ msgstr "Kopirana je 1 datoteka"
+
+#~ msgid "Copied %s files"
+#~ msgstr "Kopiranih je %s datotek"
+
+#~ msgid "Copying files…"
+#~ msgstr "Poteka kopiranje datotek …"
+
+#, fuzzy
+#~ msgid "Files will be copied in a moment"
+#~ msgstr "Namestitev je končana: kopiranih je %d datotek"
+
+#~ msgid "New File…"
+#~ msgstr "Nova datoteka …"
+
+#~ msgid "Removing %s\n"
+#~ msgstr "Poteka odstranjevanje %s\n"
+
+#~ msgid "Removing Files…"
+#~ msgstr "Poteka odstranjevanje datotek ..."
+
+#~ msgctxt "menu label"
+#~ msgid "Open Sysprof Capture…"
+#~ msgstr "Odpri Sysprof Capture"
+
+#~ msgid "Use terminal interface"
+#~ msgstr "Uporabi terminalski vmesnik"
+
+#, fuzzy
+#~| msgid "Unit Tests"
+#~ msgid "Unit Test Output"
+#~ msgstr "Preizkusi enot"
+
+#~ msgid "Running test “%s”…"
+#~ msgstr "Poteka preizkus »%s« …"
+
+#~ msgid "Branches"
+#~ msgstr "Veje"
+
+#~ msgid "Tags"
+#~ msgstr "Oznake"
+
+#~ msgid "Switch Branch"
+#~ msgstr "Preklopi vejo"
+
+#, fuzzy
+#~ msgid "Change the pages colorscheme"
+#~ msgstr "Ni mogoče najti barvne sheme »%s«"
+
+#~ msgid "Build the project"
+#~ msgstr "Izgradi projekt"
+
+#~ msgid "Clear search highlighting"
+#~ msgstr "Počisti poudarjalnik iskalnega niza"
+
+#~ msgid "Open a file by path"
+#~ msgstr "Odpri datoteko na poti"
+
+#~ msgid "Close the page"
+#~ msgstr "Zapri stran"
+
+#, fuzzy
+#~ msgid "Set various buffer options"
+#~ msgstr "Interaktivno določanje možnosti"
+
+#~ msgid "Sort the selected lines"
+#~ msgstr "Razvrsti izbrane vrstice"
+
+#~ msgid "Toggle syntax highlighting"
+#~ msgstr "Preklopi poudarjanje skladnje"
+
+#~ msgid "Save and close the current page"
+#~ msgstr "Shrani in zapri trenutno stran"
+
+#~ msgid "Save the current page"
+#~ msgstr "Shrani trenutno stran"
+
+#~ msgid "Building project…"
+#~ msgstr "Poteka izgradnja projekta …"
+
+#~ msgid "Installing project…"
+#~ msgstr "Poteka nameščanje projekta …"
 
 #~ msgid "Allow snippets to be inserted into the document."
 #~ msgstr "Dovoli vstavljanje izrezkov kode v dokument."
@@ -5392,9 +6118,6 @@ msgstr ""
 #~ msgid "Use code fragments to increase typing efficiency"
 #~ msgstr "Uporabi izrezke kode za povečanje učinkovitosti tipkanja"
 
-#~ msgid "Failed to open directory: %s"
-#~ msgstr "Odpiranje mape je spodletelo: %s"
-
 #~ msgid "Failed to load file: %s: %s"
 #~ msgstr "Nalaganje datoteke je spodletelo: %s: %s"
 
@@ -5433,30 +6156,6 @@ msgstr ""
 
 #~ msgid "CPU"
 #~ msgstr "CPE"
-
-#~ msgid "Hue"
-#~ msgstr "Odtenek"
-
-#~ msgid "Saturation"
-#~ msgstr "Nasičenost"
-
-#~ msgid "Cielab l"
-#~ msgstr "Cielab l"
-
-#~ msgid "Cielab a"
-#~ msgstr "Cielab a"
-
-#~ msgid "Cielab b"
-#~ msgstr "Cielab b"
-
-#~ msgid "Red"
-#~ msgstr "Rdeča"
-
-#~ msgid "Green"
-#~ msgstr "Zelena"
-
-#~ msgid "Blue"
-#~ msgstr "Modra"
 
 #~ msgid "Mine projects"
 #~ msgstr "Moji projekti"
@@ -5510,14 +6209,8 @@ msgstr ""
 #~ msgid "   Build ran for: %"
 #~ msgstr "   Trajanje izgradnje: %"
 
-#~ msgid "Failed to locate device “%s”"
-#~ msgstr "Iskanje naprave »%s« je spodletelo."
-
 #~ msgid "Failed to locate runtime “%s”"
 #~ msgstr "Iskanje izvajalnega programa »%s« je spodletelo."
-
-#~ msgid "Clean the project"
-#~ msgstr "Počisti projekt"
 
 #~ msgid "The ID of the device to build for"
 #~ msgstr "ID naprave za izgradnjo"
@@ -5564,9 +6257,6 @@ msgstr ""
 
 #~ msgid "%s() may only be executed once"
 #~ msgstr "%s() je dovoljeno izvesti le enkrat"
-
-#~ msgid "Find other file"
-#~ msgstr "Najdi drugo datoteko"
 
 #~ msgid "Installing %s %s"
 #~ msgstr "Poteka nameščanje različice %s %s ..."
@@ -5715,17 +6405,11 @@ msgstr ""
 #~ msgstr ""
 #~ "Napaka črkovanja: ni nastavljenega jezika ali pa ni nameščenih slovarjev."
 
-#~ msgid "Options"
-#~ msgstr "Možnosti"
-
 #~ msgid "_Highlight"
 #~ msgstr "_Poudari"
 
 #~ msgid "Search highlight mode…"
 #~ msgstr "Način iskanja s poudarjanjem ..."
-
-#~ msgid "Display right margin"
-#~ msgstr "Pokaži desni rob"
 
 #~ msgid "Save Document"
 #~ msgstr "Shrani dokument"
@@ -5766,9 +6450,6 @@ msgstr ""
 #~ msgid "Jump to next location"
 #~ msgstr "Skoči na naslednje mesto"
 
-#~ msgid "Close the current document"
-#~ msgstr "Zapri trenutni dokument"
-
 #~ msgid "untitled document"
 #~ msgstr "neimenovan dokument"
 
@@ -5783,9 +6464,6 @@ msgstr ""
 
 #~ msgid "Enable color picker"
 #~ msgstr "Omogoči izbirnik barv"
-
-#~ msgid "Switch To"
-#~ msgstr "Preklopi na"
 
 #~ msgid "Send to Fpaste.org"
 #~ msgstr "Pošlji na Fpaste.org"
@@ -5831,17 +6509,11 @@ msgstr ""
 #~ msgid "The script must be on a local filesystem."
 #~ msgstr "Datoteka skripta mora biti krajevna datoteka."
 
-#~ msgid "The script “%s” is not a PyGObject file."
-#~ msgstr "Skript »%s« ni veljavna datoteka PyGObject."
-
 #~ msgid "%s has not implemented GAsyncInitable."
 #~ msgstr "Z %s ni zagotovljena podpora GAsyncInitable."
 
 #~ msgid "Target"
 #~ msgstr "Cilj"
-
-#~ msgid "Build cancelled"
-#~ msgstr "Izgradnja je preklicana"
 
 #~ msgid "Install failed"
 #~ msgstr "Namestitev je spodletela"
@@ -5872,9 +6544,6 @@ msgstr ""
 
 #~ msgid "autogen.sh is not executable."
 #~ msgstr "autogen.sh ni izvedljiva datoteka."
-
-#~ msgid "Running autogen…"
-#~ msgstr "Zaganjanje programa autogen ..."
 
 #~ msgid "autogen.sh failed to create configure (%s)"
 #~ msgstr "autogen.sh ni mogoče nastaviti (%s)"
@@ -5946,9 +6615,6 @@ msgstr ""
 #~ msgid "Running post-build…"
 #~ msgstr "Poteka izvajanje ukaza post-build ..."
 
-#~ msgid "_Match Case"
-#~ msgstr "_Upoštevaj velikost črk"
-
 #~ msgid "Enable / Disable left panel. Shortcut: F9"
 #~ msgstr "Omogoči / Onemogoči levo okno; bližnjica: F9"
 
@@ -5967,9 +6633,6 @@ msgstr ""
 #~ msgid "Add a new empty file to your project"
 #~ msgstr "Dodaj novo prazno datoteko k projektu"
 
-#~ msgid "Search through preferences"
-#~ msgstr "Poišči med nastavitvami"
-
 #~ msgid "Search for files. Shortcut: Ctrl + ."
 #~ msgstr "Iskanje datotek: tipkovna bližnjica: Ctrl + ."
 
@@ -5981,9 +6644,6 @@ msgstr ""
 
 #~ msgid "%s() is not supported on %s build system."
 #~ msgstr "%s () ni podprt na sistemu %s"
-
-#~ msgid "Default Configuration"
-#~ msgstr "Privzeta nastavitev"
 
 #~ msgid "Chunk does not belong to snippet."
 #~ msgstr "Del ne pripada nobenemu izrezku"
@@ -6033,17 +6693,11 @@ msgstr ""
 #~ msgid "Display right _margin at column:"
 #~ msgstr "Prikaži desni _rob na stolpcu:"
 
-#~ msgid "_Enable automatic indentation"
-#~ msgstr "Vključi s_amodejno zamikanje"
-
 #~ msgid "Snippets (read-only)"
 #~ msgstr "Izrezki (le za branje)"
 
 #~ msgid "Display Document Changes"
 #~ msgstr "Pokaži spremembe dokumenta"
-
-#~ msgid "Display Line Numbers"
-#~ msgstr "Pokaži številke vrstic"
 
 #~ msgid "Highlight Current Line"
 #~ msgstr "Poudari trenutno vrstico"
@@ -6092,15 +6746,6 @@ msgstr ""
 #~ msgid "New"
 #~ msgstr "Novo"
 
-#~ msgid "Two finger swipe right"
-#~ msgstr "Dvoprstni poteg v desno"
-
-#~ msgid "Two finger swipe left"
-#~ msgstr "Dvoprstni poteg v levo"
-
-#~ msgid "Switch to source or header"
-#~ msgstr "Preklopi na vir ali glavo"
-
 #, fuzzy
 #~ msgid "Failed to create JavaScript context."
 #~ msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
@@ -6127,9 +6772,6 @@ msgstr ""
 
 #~ msgid "Autotools Project (configure.ac)"
 #~ msgstr "Projekt Autotools (configure.ac)"
-
-#~ msgid "Any Directory"
-#~ msgstr "Katerakoli mapa"
 
 #~ msgid "(Click on items to select them)"
 #~ msgstr "(S klikom se predmeti izberejo)"
@@ -6280,10 +6922,6 @@ msgstr ""
 #~ msgstr "Zapisovanje ponudnika podatkov"
 
 #, fuzzy
-#~ msgid "The target workbench."
-#~ msgstr "Lastnosti cilja"
-
-#, fuzzy
 #~ msgid "Command Text"
 #~ msgstr "Barva besdila ukazov"
 
@@ -6330,10 +6968,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Progress"
 #~ msgstr "Napredek"
-
-#, fuzzy
-#~ msgid "GNOME Builder - %s"
-#~ msgstr "Izgrajevalnik peptidov"
 
 #, fuzzy
 #~ msgid "URI"
@@ -6455,9 +7089,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "If you don't save, all your changes will be permanently lost."
 #~ msgstr "V kolikor sprememb ne shranite, bodo trajno izgubljene."
-
-#~ msgid "Modified"
-#~ msgstr "Spremenjeno"
 
 #, fuzzy
 #~ msgid "Document Manager"
@@ -6826,14 +7457,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "<b>EMACS Modal Editing</b>"
 #~ msgstr "Območje urejanje vnosa"
-
-#, fuzzy
-#~ msgid "Author Name"
-#~ msgstr "Ime avtorja:"
-
-#, fuzzy
-#~ msgid "Author Email"
-#~ msgstr "Elektronski naslov avtorja:"
 
 #, fuzzy
 #~ msgid "<b>VIM Modal Editing</b>"
