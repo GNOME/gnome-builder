@@ -139,7 +139,9 @@
             "config-opts" : [
                 "--disable-polkitd",
                 "--disable-man-pages",
-                "--disable-introspection"
+                "--disable-introspection",
+                "--enable-libsystemd-login=no",
+                "--with-systemdsystemunitdir=no"
             ],
             "rm-configure" : true,
             "cleanup" : [
@@ -440,7 +442,8 @@
                 "--disable-seccomp",
                 "--disable-sandboxed-triggers",
                 "--disable-system-helper",
-                "--with-system-install-dir=/var/lib/flatpak"
+                "--with-system-install-dir=/var/lib/flatpak",
+                "--without-libsystemd"
             ],
             "cleanup" : [
                 "/bin/flatpak-bisect",
