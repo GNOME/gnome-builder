@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-03 22:25+0000\n"
-"PO-Revision-Date: 2019-03-04 20:04+0900\n"
+"POT-Creation-Date: 2019-03-07 06:31+0000\n"
+"PO-Revision-Date: 2019-03-08 14:34+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -576,8 +576,20 @@ msgid "Build;Develop;"
 msgstr "Build;빌드;컴파일;Develop;개발;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "창 새로 만들기"
+msgid "Open a Project"
+msgstr "프로젝트 열기"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "프로젝트 새로 시작"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+msgid "Clone Repository"
+msgstr "저장소 복제"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "편집기 작업 공간 새로 만들기…"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -794,7 +806,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "기본 설정을 사용해 팔레트를 읽어들이거나 생성합니다"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -817,7 +829,7 @@ msgstr "이름 바꾸기(_R)"
 msgid "unsaved file %u"
 msgstr "저장하지 않은 파일 %u개"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "현재 언어에 심볼 알아내기가 없습니다."
 
@@ -1503,6 +1515,7 @@ msgid "Go back"
 msgstr "뒤로 이동"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
 msgid "Open a Project"
 msgstr "프로젝트 열기"
 
@@ -1523,6 +1536,7 @@ msgid "Remove Projects and Sources…"
 msgstr "프로젝트 및 소스 제거…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
 msgid "Clone Repository"
 msgstr "저장소 복제"
 
@@ -2732,31 +2746,31 @@ msgstr "축소(_O)"
 msgid "Reset"
 msgstr "초기화"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "“%s” 입력"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "“%s”을(를) “%s”(으)로 바꾸기"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "바로잡기 적용"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "기호 이름 바꾸기"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u행, %u열</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "레퍼런스가 없습니다"
 
@@ -3668,6 +3682,7 @@ msgid "Your project will be created within %s."
 msgstr "%s 안에서 프로젝트를 만듭니다."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:577
+msgctxt "title"
 msgid "Start New Project"
 msgstr "프로젝트 새로 시작"
 
@@ -4444,11 +4459,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "글레이드 래퍼"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "새 환영 창 표시"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "URI에서 프로젝트 복제 시작"
 
