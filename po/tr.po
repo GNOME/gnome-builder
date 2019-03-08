@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-05 22:20+0000\n"
-"PO-Revision-Date: 2019-03-06 02:02+0200\n"
+"POT-Creation-Date: 2019-03-07 06:31+0000\n"
+"PO-Revision-Date: 2019-03-07 22:00+0200\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -594,17 +594,14 @@ msgid "Build;Develop;"
 msgstr "İnşa Et;Oluştur;Geliştir;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-#: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Open a Project"
 msgstr "Proje Aç"
 
 #: data/org.gnome.Builder.desktop.in.in:24
-#: src/plugins/create-project/gbp-create-project-surface.c:577
 msgid "Start New Project"
 msgstr "Yeni Proje Başlat"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/libide/greeter/ide-greeter-workspace.ui:188
 msgid "Clone Repository"
 msgstr "Depoyu Klonla"
 
@@ -823,7 +820,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Tercihleri kullanarak palet yükle veya üret"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -846,7 +843,7 @@ msgstr "_Yeniden Adlandır"
 msgid "unsaved file %u"
 msgstr "kaydedilmemiş dosya %u"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -1533,6 +1530,11 @@ msgstr "Proje Kaynaklarını Sil"
 msgid "Go back"
 msgstr "Geri git"
 
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
+msgid "Open a Project"
+msgstr "Proje Aç"
+
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Tüm Builder projelerini ara…"
@@ -1548,6 +1550,11 @@ msgstr "Projele_ri Sil"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Proje ve Kaynaklarını Kaldır…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
+msgid "Clone Repository"
+msgstr "Depoyu Klonla"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -2756,31 +2763,31 @@ msgstr "Uzakla_ştır"
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "“%s” Ekle"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "“%s” yerine “%s” Koy"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "Düzeltme Uygula"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "Simgeyi yeniden adlandır"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Satır %u, Sütun %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "Referans bulunamadı"
 
@@ -3701,6 +3708,11 @@ msgstr "Zaten bu adda dizin var"
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "Projeniz %s içinde oluşturulacak."
+
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+msgctxt "title"
+msgid "Start New Project"
+msgstr "Yeni Proje Başlat"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
