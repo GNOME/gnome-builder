@@ -139,7 +139,9 @@
             "config-opts" : [
                 "--disable-polkitd",
                 "--disable-man-pages",
-                "--disable-introspection"
+                "--disable-introspection",
+                "--enable-libsystemd-login=no",
+                "--with-systemdsystemunitdir=no"
             ],
             "rm-configure" : true,
             "cleanup" : [
@@ -416,7 +418,8 @@
         {
             "name" : "ostree",
             "config-opts" : [
-                "--disable-man"
+                "--disable-man",
+                "--without-libsystemd"
             ],
             "cleanup" : [
                 "/bin",
