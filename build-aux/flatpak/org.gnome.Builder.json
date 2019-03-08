@@ -138,6 +138,8 @@
             "name" : "polkit",
             "config-opts" : [
                 "--disable-polkitd",
+                "--disable-libsystemd-login",
+                "--without-systemdsystemunitdir",
                 "--disable-man-pages",
                 "--disable-introspection"
             ],
@@ -416,7 +418,9 @@
         {
             "name" : "ostree",
             "config-opts" : [
-                "--disable-man"
+                "--disable-man",
+                "--without-systemdsystemunitdir",
+                "--without-systemdsystemgeneratordir"
             ],
             "cleanup" : [
                 "/bin",
