@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-05 22:20+0000\n"
-"PO-Revision-Date: 2019-03-06 09:11-0300\n"
+"POT-Creation-Date: 2019-03-08 17:08+0000\n"
+"PO-Revision-Date: 2019-03-08 18:21-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese - Brazil <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -596,22 +596,18 @@ msgid "Build;Develop;"
 msgstr "Construir;Compilar;Desenvolver;Construtor;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-#: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Open a Project"
 msgstr "Abrir um projeto"
 
 #: data/org.gnome.Builder.desktop.in.in:24
-#: src/plugins/create-project/gbp-create-project-surface.c:577
 msgid "Start New Project"
 msgstr "Iniciar novo projeto"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/libide/greeter/ide-greeter-workspace.ui:188
 msgid "Clone Repository"
 msgstr "Clonar repositório"
 
 #: data/org.gnome.Builder.desktop.in.in:32
-#| msgid "New Workspace…"
 msgid "New Editor Workspace"
 msgstr "Novo espaço de trabalho de editor"
 
@@ -839,7 +835,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -862,7 +858,7 @@ msgstr "_Renomear"
 msgid "unsaved file %u"
 msgstr "arquivo não salvo %u"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
@@ -1554,6 +1550,12 @@ msgstr "Excluir arquivos de projeto"
 msgid "Go back"
 msgstr "Voltar"
 
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+#| msgid "Open a Project"
+msgctxt "title"
+msgid "Open a Project"
+msgstr "Abrir um projeto"
+
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
 msgstr "Pesquisar todos os projetos do Builder…"
@@ -1569,6 +1571,12 @@ msgstr "_Remover projetos"
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
 msgstr "Remover arquivos e projetos…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+#| msgid "Clone Repository"
+msgctxt "title"
+msgid "Clone Repository"
+msgstr "Clonar repositório"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
 msgid "Switch Surface"
@@ -2790,31 +2798,31 @@ msgstr "_Reduzir"
 msgid "Reset"
 msgstr "Restaurar"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua “%s” com “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
@@ -3742,6 +3750,12 @@ msgstr "O diretório já existe com aquele nome"
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "Seu projeto será criado dentro de %s."
+
+#: src/plugins/create-project/gbp-create-project-surface.c:577
+#| msgid "Start New Project"
+msgctxt "title"
+msgid "Start New Project"
+msgstr "Iniciar novo projeto"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
@@ -5499,13 +5513,10 @@ msgid "Unit Test Output"
 msgstr "Saída de teste de unidade"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:33
-#| msgid "Unit Test Output"
 msgid "Clear test output"
 msgstr "Limpar saída de teste"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:50
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgid "Save test output"
 msgstr "Salvar saída de teste"
 
