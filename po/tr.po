@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-05-01 21:58+0000\n"
-"PO-Revision-Date: 2018-05-03 10:07+0300\n"
+"POT-Creation-Date: 2019-03-03 10:29+0000\n"
+"PO-Revision-Date: 2019-03-09 19:04+0300\n"
 "Last-Translator: Muhammet Kara <muhammetk@gnome.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -454,15 +454,15 @@ msgstr "Dip panelin piksel cinsinden yüksekliği."
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/application/ide-application.c:689
+#: src/libide/application/ide-application.c:690
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
-#: src/libide/workbench/ide-workbench.c:646
+#: src/libide/workbench/ide-workbench.c:654
 msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/application/ide-application-actions.c:143
+#: src/libide/application/ide-application-actions.c:145
 msgid "An IDE for GNOME"
 msgstr "GNOME için bir IDE"
 
@@ -751,23 +751,23 @@ msgstr "Kaldır"
 msgid "_Rename"
 msgstr "_Yeniden Adlandır"
 
-#: src/libide/application/ide-application-actions.c:149
+#: src/libide/application/ide-application-actions.c:151
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: src/libide/application/ide-application-actions.c:151
+#: src/libide/application/ide-application-actions.c:153
 msgid "translator-credits"
 msgstr "Muhammet Kara <muhammetk@gmail.com>"
 
-#: src/libide/application/ide-application-actions.c:155
+#: src/libide/application/ide-application-actions.c:157
 msgid "Learn more about GNOME Builder"
 msgstr "GNOME Builder hakkında daha çoğunu öğrenin"
 
-#: src/libide/application/ide-application-actions.c:158
+#: src/libide/application/ide-application-actions.c:160
 msgid "Funded By"
 msgstr "Maddi Destekçiler"
 
-#: src/libide/application/ide-application.c:1080
+#: src/libide/application/ide-application.c:1081
 #: src/libide/preferences/ide-preferences-builtin.c:409
 msgid "Projects"
 msgstr "Projeler"
@@ -885,20 +885,20 @@ msgid "Show the shortcuts window"
 msgstr "Kısayol penceresini göster"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-buffer.c:923
+#: src/libide/buffers/ide-buffer.c:931
 #, c-format
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Arka plan değişiklikleri için bir izleyici saptanamadı: %s"
 
-#: src/libide/buffers/ide-buffer.c:2842
+#: src/libide/buffers/ide-buffer.c:2850
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
-#: src/libide/buffers/ide-buffer-manager.c:704
+#: src/libide/buffers/ide-buffer-manager.c:707
 msgid "File too large to be opened."
 msgstr "Dosya açılamayacak kadar büyük."
 
-#: src/libide/buffers/ide-buffer-manager.c:1990
+#: src/libide/buffers/ide-buffer-manager.c:1996
 #, c-format
 msgid "unsaved document %u"
 msgstr "kaydedilmemiş dosya %u"
@@ -907,8 +907,8 @@ msgstr "kaydedilmemiş dosya %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2029
-#: src/libide/buffers/ide-buffer-manager.c:2092
+#: src/libide/buffers/ide-buffer-manager.c:2035
+#: src/libide/buffers/ide-buffer-manager.c:2098
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
 #, c-format
@@ -922,7 +922,7 @@ msgid "Failed to save draft: %s"
 msgstr "Taslak kaydetme başarısız oldu: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:639
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:640
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Kopya)"
@@ -955,7 +955,7 @@ msgstr "Temizleniyor…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2928
 #: src/libide/buildsystem/ide-build-pipeline.c:2985
-#: src/libide/workbench/ide-omni-bar.c:557
+#: src/libide/workbench/ide-omni-bar.c:558
 msgid "Failed"
 msgstr "Başarısız Oldu"
 
@@ -998,7 +998,7 @@ msgstr "Dışa Aktarılıyor…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2977
 #: src/libide/buildsystem/ide-build-pipeline.c:2981
-#: src/libide/workbench/ide-omni-bar.c:584
+#: src/libide/workbench/ide-omni-bar.c:585
 msgid "Success"
 msgstr "Başarılı"
 
@@ -1156,7 +1156,7 @@ msgid "Remove environment variable"
 msgstr "Ortam değişkenini kaldır"
 
 #: src/libide/debugger/gtk/menus.ui:10
-#: src/libide/debugger/ide-debugger-editor-addin.c:427
+#: src/libide/debugger/ide-debugger-editor-addin.c:431
 msgid "Run with Debugger"
 msgstr "Hata ayıklayıcı ile çalıştır"
 
@@ -1219,31 +1219,31 @@ msgstr "Fonksiyon sonuna kadar çalıştır"
 msgid "Disassembly"
 msgstr "Disassembly"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:305
+#: src/libide/debugger/ide-debugger-editor-addin.c:309
 msgid "Debugger"
 msgstr "Hata Ayıklayıcı"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:321
+#: src/libide/debugger/ide-debugger-editor-addin.c:325
 msgid "Threads"
 msgstr "Kanallar"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:347
+#: src/libide/debugger/ide-debugger-editor-addin.c:351
 msgid "Breakpoints"
 msgstr "Kesme Noktaları"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:355
+#: src/libide/debugger/ide-debugger-editor-addin.c:359
 msgid "Libraries"
 msgstr "Kütüphaneler"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:363
+#: src/libide/debugger/ide-debugger-editor-addin.c:367
 msgid "Registers"
 msgstr "Yazmaçlar"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:371
+#: src/libide/debugger/ide-debugger-editor-addin.c:375
 msgid "Log"
 msgstr "Günlük"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:394
+#: src/libide/debugger/ide-debugger-editor-addin.c:398
 msgid "Failed to initialize the debugger"
 msgstr "Hata ayıklayıcı ilklendirme başarısız"
 
@@ -1329,7 +1329,7 @@ msgid "No file was provided."
 msgstr "Hiçbir dosya sağlanmadı."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:832
+#: src/libide/editor/ide-editor-perspective.c:839
 #: src/libide/preferences/ide-preferences-builtin.c:104
 #: src/libide/preferences/ide-preferences-builtin.c:151
 msgid "Editor"
@@ -1949,11 +1949,11 @@ msgstr "Bağlantı Adresini _Kopyala"
 msgid "You must call %s() before using libide."
 msgstr "libide kullanmadan önce %s()’i çağırmalısınız."
 
-#: src/libide/ide-context.c:2114
+#: src/libide/ide-context.c:2115
 msgid "An unload request is already pending"
 msgstr "Bir yüklemeyi kaldırma isteği zaten beklemede"
 
-#: src/libide/ide-context.c:2233
+#: src/libide/ide-context.c:2234
 msgid "Context has already been restored."
 msgstr "Bağlam zaten düzeltildi."
 
@@ -2884,11 +2884,15 @@ msgstr "Hedef dosya, proje ağacı içinde olmalıdır."
 msgid "File must be within the project tree."
 msgstr "Dosya, proje ağacı içinde olmalıdır."
 
-#: src/libide/runner/ide-run-button.ui:31
+#: src/libide/runner/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr ""
+
+#: src/libide/runner/ide-run-button.ui:35
 msgid "Stop running"
 msgstr "Çalıştırmayı durdur"
 
-#: src/libide/runner/ide-run-button.ui:51
+#: src/libide/runner/ide-run-button.ui:55
 msgid "Change run options"
 msgstr "Çalıştırma seçeneklerini değiştir"
 
@@ -3053,7 +3057,7 @@ msgstr "“%s” mutlak URI olarak ayrıştırılamadı"
 msgid "URI “%s” has no host component"
 msgstr "“%s” URI’sinin ana makine bileşeni yok"
 
-#: src/libide/workbench/ide-omni-bar.c:528
+#: src/libide/workbench/ide-omni-bar.c:529
 msgid "Building"
 msgstr "İnşa Ediliyor"
 
@@ -3119,11 +3123,15 @@ msgstr "Paketi Dışa Aktar"
 msgid "Build project"
 msgstr "Projeyi inşa et"
 
+#: src/libide/workbench/ide-omni-bar.ui:596
+msgid "The project cannot be built while the build pipeline is being set up"
+msgstr ""
+
 #: src/libide/workbench/ide-workbench-actions.c:218
 msgid "Builder Statistics"
 msgstr "Builder İstatistikleri"
 
-#: src/libide/workbench/ide-workbench.c:644
+#: src/libide/workbench/ide-workbench.c:652
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
@@ -3457,7 +3465,7 @@ msgstr "Proje kuruluyor"
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:277
+#: src/plugins/code-index/ide-code-index-index.c:278
 msgid "Declaration"
 msgstr "Tanım"
 
@@ -4014,7 +4022,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Uygulama kaynakları indiriliyor…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Flatpak manifest kaldırılamadı: %s"
@@ -4151,21 +4159,31 @@ msgstr ""
 "Bu program Flatpak uygulamalarını inşa etmek için gerekli. Kurmak ister "
 "misiniz?"
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:201
+#: src/plugins/git/ide-git-buffer-change-monitor.c:202
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Fark sağlanamıyor, destek dosyası sağlanmamış."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#. translators: %s is replaced with the error string from git
+#: src/plugins/git/ide-git-buffer-change-monitor.c:281
+#, c-format
+msgid ""
+"There was a failure while calculating line changes from git. The exact error "
+"was: %s"
+msgstr ""
+"Gitʼten satır değişiklikleri hesaplanırken başarısız olundu. Tam hata şudur: "
+"%s"
+
+#: src/plugins/git/ide-git-buffer-change-monitor.c:691
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Depo bir çalışma dizinine sahip değil."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#: src/plugins/git/ide-git-buffer-change-monitor.c:702
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Dosya git çalışma dizininin denetimi altında değil."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#: src/plugins/git/ide-git-buffer-change-monitor.c:768
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "İstenen dosya git dizininde bulunmuyor."
@@ -4300,12 +4318,10 @@ msgid "Meson"
 msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:103
-#| msgid "A suitable debugger could not be found."
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr "Meson temelli bir proje yüklendi fakat Ninja bulunamadı."
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:123
-#| msgid "A suitable debugger could not be found."
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "Meson temelli bir proje yüklendi fakat meson bulunamadı."
 
@@ -4391,7 +4407,7 @@ msgstr "İnşa başarısız oldu"
 msgid "Project “%s” failed to build"
 msgstr "“%s” projesi inşa edilemedi"
 
-#: src/plugins/npm/npm_plugin.py:102
+#: src/plugins/npm/npm_plugin.py:104
 msgid "Downloading npm dependencies"
 msgstr "npm bağımlılıkları indiriliyor"
 
@@ -4932,7 +4948,7 @@ msgstr "vala tanılama uyarılar hatalar"
 msgid "Run with Valgrind"
 msgstr "Valgrind’le çalıştır"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:585
+#: src/plugins/xml-pack/ide-xml-parser.c:587
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "XML ağacı oluşturulamadı."
