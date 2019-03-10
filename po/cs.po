@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-03 17:06+0000\n"
-"PO-Revision-Date: 2019-03-03 21:11+0100\n"
+"POT-Creation-Date: 2019-03-09 17:11+0000\n"
+"PO-Revision-Date: 2019-03-10 07:52+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -498,7 +498,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Toto nastavení je zavržené a nadále se nepoužívá."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Zobrazovat ignorované soubory"
 
@@ -510,7 +510,7 @@ msgstr ""
 "ignorovány systémem pro správu verzí."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Složky zobrazovat na začátku"
 
@@ -594,8 +594,20 @@ msgid "Build;Develop;"
 msgstr "sestavit;sestavení;vývoj;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Nové okno"
+msgid "Open a Project"
+msgstr "Otevření projektu"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Začít nový projekt"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+msgid "Clone Repository"
+msgstr "Klonování repozitáře"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Nová pracovní plocha editoru"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -808,9 +820,9 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Přejmenovat"
 
@@ -831,7 +843,7 @@ msgstr "_Přejmenovat"
 msgid "unsaved file %u"
 msgstr "neuložená paleta %u"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
@@ -1166,7 +1178,7 @@ msgstr "Otevření souboru"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Otevřít"
@@ -1519,6 +1531,7 @@ msgid "Go back"
 msgstr "Přejít zpět"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
 msgid "Open a Project"
 msgstr "Otevření projektu"
 
@@ -1539,6 +1552,7 @@ msgid "Remove Projects and Sources…"
 msgstr "Odstranit projekty a zdrojové kódy…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
 msgid "Clone Repository"
 msgstr "Klonování repozitáře"
 
@@ -1600,28 +1614,28 @@ msgstr "Zjistěte si více o aplikaci Builder GNOME"
 msgid "Funded By"
 msgstr "Financovali"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Zobrazit předvolby aplikace"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Otevřít projekt v novém pracovním prostředí"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "SOUBOR"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Vypsat informaci o verzi a skončit"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Zvýšit podrobnost záznamu"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Selhalo otevření projektu: %s"
@@ -2754,31 +2768,31 @@ msgstr "_Oddálit"
 msgid "Reset"
 msgstr "Výchozí"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
@@ -3708,8 +3722,9 @@ msgid "Your project will be created within %s."
 msgstr "Váš projekt bude vytvořen ve složce %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:577
+msgctxt "title"
 msgid "Start New Project"
-msgstr "Začít nový projekt"
+msgstr "Začátek nového projektu"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:734
 msgid "A failure occurred while initializing version control"
@@ -4445,7 +4460,7 @@ msgstr "Zpět"
 msgid "Redo"
 msgstr "Znovu"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Návrhář rozhraní"
 
@@ -4486,11 +4501,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Nadstavba nad Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Zobrazit nové uvítací okno"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Začít klonovat projekt z URI"
 
@@ -4989,35 +5004,35 @@ msgstr "Strom projektu"
 msgid "Rename %s"
 msgstr "Přejmenovat %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Nový soubor…"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Nová složka…"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Otevřít pomocí…"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Editor zdrojového kódu"
 
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "Otevřít rodičovskou složku"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Otevřít v terminálu"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Přesunout do koše"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Zobrazovat volby"
 
