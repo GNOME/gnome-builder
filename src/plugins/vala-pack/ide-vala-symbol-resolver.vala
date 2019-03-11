@@ -28,7 +28,7 @@ namespace Ide
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			unowned Ide.Context context = this.get_context ();
+			unowned Ide.Context? context = this.get_context ();
 			unowned Ide.BuildSystem? build_system = Ide.BuildSystem.from_context (context);
 
 			string[] flags = {};
@@ -46,7 +46,7 @@ namespace Ide
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			unowned Ide.Context context = this.get_context ();
+			unowned Ide.Context? context = this.get_context ();
 			unowned Ide.BuildSystem? build_system = Ide.BuildSystem.from_context (context);
 			var line = (int)location.line + 1;
 			var column = (int)location.line_offset + 1;
@@ -77,7 +77,7 @@ namespace Ide
 		                                                   GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			unowned Ide.Context context = this.get_context ();
+			unowned Ide.Context? context = this.get_context ();
 			unowned Ide.BuildSystem? build_system = Ide.BuildSystem.from_context (context);
 			var line = (int)location.line + 1;
 			var column = (int)location.line_offset + 1;

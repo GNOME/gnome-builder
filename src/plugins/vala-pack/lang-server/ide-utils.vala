@@ -2,6 +2,9 @@ namespace Ide {
 	public static Ide.Symbol? vala_to_ide_symbol (Vala.CodeNode node)
 	{
 		Vala.Symbol? symbol = vala_symbol_from_code_node (node);
+		if (symbol == null)
+			return null;
+
 		Ide.SymbolKind kind = vala_symbol_kind_from_code_node (node);
 		Ide.SymbolFlags flags = vala_symbol_flags_from_code_node (node);
 		string name = vala_symbol_name (symbol);
@@ -25,7 +28,7 @@ namespace Ide {
 			return Ide.SymbolKind.CLASS;
 		else if (node is Vala.Subroutine) {
 			Vala.Symbol? symbol = vala_symbol_from_code_node (node);
-			if (symbol.is_instance_member ())
+			if (symbol != null && symbol.is_instance_member ())
 				if (node is Vala.CreationMethod || node is Vala.Constructor) {
 					return Ide.SymbolKind.CONSTRUCTOR;
 				} else {
@@ -54,28 +57,21 @@ namespace Ide {
 			name = (symbol as Vala.CreationMethod).class_name;
 		}
 
-		if (name == null) {
-			critical ("HERE");
-			critical ("%s (%s)", symbol.type_name, symbol.get_full_name ());
-			critical (symbol.to_string ());
-			critical ("~~~~~~~~~~");
-		}
-
 		return name;
 	}
 
 	public static Ide.SymbolFlags vala_symbol_flags_from_code_node (Vala.CodeNode node)
 	{
 		Vala.Symbol? symbol = vala_symbol_from_code_node (node);
-		var flags = Ide.SymbolFlags.NONE;
-		if (symbol.is_instance_member ())
+		Ide.SymbolFlags flags = Ide.SymbolFlags.NONE;
+		if (symbol != null && symbol.is_instance_member ())
 			flags |= Ide.SymbolFlags.IS_MEMBER;
 
-		var binding = get_member_binding (node);
+		Vala.MemberBinding? binding = get_member_binding (node);
 		if (binding != null && binding == Vala.MemberBinding.STATIC)
 			flags |= Ide.SymbolFlags.IS_STATIC;
 
-		if (symbol.version.deprecated)
+		if (symbol != null && symbol.version.deprecated)
 			flags |= Ide.SymbolFlags.IS_DEPRECATED;
 
 		return flags;

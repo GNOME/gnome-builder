@@ -1,2 +1,4 @@
 *.ref unowned
 Task.new.callback type="GLib.TaskReadyCallback" scope="async"
+Object.parent_set.parent nullable=true
+Diagnostics.take.diagnostic owned=true
