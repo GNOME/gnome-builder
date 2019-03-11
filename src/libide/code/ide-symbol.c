@@ -508,6 +508,8 @@ ide_symbol_new_from_variant (GVariant *variant)
 
 /**
  * ide_symbol_new:
+ * @location: (nullable):
+ * @header_location: (nullable):
  *
  * Returns: (transfer full): an #IdeSymbol
  *
