@@ -40,7 +40,11 @@ namespace Ide
 			}
 
 			unowned Ide.ValaClient client = Ide.ValaClient.from_context (context);
-			return yield client.diagnose_async (file, flags, cancellable);
+			try {
+				return yield client.diagnose_async (file, flags, cancellable);
+			} catch (Error e) {
+				throw e;
+			}
 		}
 
 		public void load () {}

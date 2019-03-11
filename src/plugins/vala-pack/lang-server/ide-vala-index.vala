@@ -77,14 +77,6 @@ namespace Ide
 				minor = int.parse(tokens[1]);
 			}
 
-			for (var i = 2; i <= minor; i += 2) {
-				code_context.add_define ("VALA_0_%d".printf (i));
-			}
-
-			for (var i = 16; i < GLib.Version.minor; i+= 2) {
-				code_context.add_define ("GLIB_2_%d".printf (i));
-			}
-
 			code_context.vapi_directories = {};
 
 			/* $prefix/share/vala-0.32/vapi */
