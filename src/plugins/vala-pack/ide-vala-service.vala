@@ -41,7 +41,8 @@ namespace Ide
 					this._index = new Ide.ValaIndex (this.get_context ());
 
 					Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
-						var workdir = this.ref_context ().ref_workdir ();
+						unowned Ide.Context? context = this.get_context ();
+						var workdir = context.ref_workdir ();
 						var files = new ArrayList<GLib.File> ();
 
 						load_directory (workdir, null, files);

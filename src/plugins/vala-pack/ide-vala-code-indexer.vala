@@ -36,7 +36,7 @@ namespace Ide
 			if (!file.is_native ())
 				throw new GLib.IOError.NOT_SUPPORTED ("Only native files are supported");
 
-			unowned Ide.Context context = this.get_context ();
+			unowned Ide.Context? context = this.get_context ();
 			unowned Ide.ValaClient client = Ide.ValaClient.from_context (context);
 			try {
 				var entries = yield client.index_file_async (file, build_flags, cancellable);
