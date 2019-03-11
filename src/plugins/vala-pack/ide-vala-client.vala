@@ -56,9 +56,21 @@ namespace Ide
 		//GLib.HashTable<GLib.File, int64?> seq_by_file = null;
 		State state = State.INITIAL;
 
-		construct {
+		~ValaClient () {
+			state = State.SHUTDOWN;
+			if (supervisor != null) {
+				var _supervisor = supervisor;
+				supervisor = null;
+				_supervisor.stop ();
+			}
+		}
+
+		public override void parent_set (Ide.Object? parent) {
+			if (parent == null)
+				return;
+
 			get_client = new GLib.Queue<Ide.Task> ();
-			unowned Ide.Context context = get_context ();
+			unowned Ide.Context? context = get_context ();
 			root_uri = context.ref_workdir ();
 
 			var launcher = new Ide.SubprocessLauncher (GLib.SubprocessFlags.STDOUT_PIPE | GLib.SubprocessFlags.STDIN_PIPE);
@@ -74,15 +86,6 @@ namespace Ide
 
 			unowned Ide.BufferManager buffer_manager = Ide.BufferManager.from_context (context);
 			buffer_manager.buffer_saved.connect (buffer_saved);
-		}
-
-		~ValaClient () {
-			state = State.SHUTDOWN;
-			if (supervisor != null) {
-				var _supervisor = supervisor;
-				supervisor = null;
-				_supervisor.stop ();
-			}
 		}
 
 		public void subprocess_exited (Ide.Subprocess object) {
@@ -444,7 +447,6 @@ namespace Ide
 						ret.take (diag);
 					}
 				}
-
 
 				return ret;
 			} catch (Error e) {
