@@ -25,7 +25,7 @@ h2 {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 24pt;
   font-weight: 400;
-  color: #4a86cf;
+  color: #3584e4;
 }
 
 h3 {
@@ -79,9 +79,9 @@ span.std.std-ref {
 }
 
 div.admonition.note {
-  background-color: #4a86cf33; }
+  background-color: #3584e433; }
 div.admonition.note .first {
-  background-color: #4a86cf; }
+  background-color: #3584e4; }
 
 div.admonition.tip {
   background-color: #01808e33; }
@@ -102,10 +102,14 @@ a.icon-home, a.icon-home:hover {
   content: "";
 }
 
-.wy-side-nav-search {
-  background-color: #4a86cf;
+.wy-body-for-nav {
+  background-color: #f6f5f4;
 }
 
-a, a:visited { color: #4a86cf; }
+.wy-side-nav-search {
+  background-color: #3584e4;
+}
+
+a, a:visited { color: #3584e4; }
   .wy-menu a { color: #808080; }
   .wy-side-nav-search a { color: #fff; }

@@ -28,8 +28,6 @@ If Software_ does not automatically open, try opening the Stable_ flatpakref by 
 
 If you want to track Builder development, you might want the Nightly_ channel instead of Stable_.
 
-.. note:: To build flatpak-based applications, ensure that the ``flatpak-builder`` program is installed. On Fedora, this is the ``flatpak-builder`` package.
-
 Command Line
 ^^^^^^^^^^^^
 

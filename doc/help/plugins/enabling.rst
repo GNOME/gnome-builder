@@ -6,11 +6,11 @@ Builder is built to be extensible from the ground up.
 In fact, many features of Builder are created as extensions.
 To customize Builder for your workflow you may want to enable or disable some extensions.
 
-To enable or disable an extension, use the perspective selector and navigate to "Preferences".
+To enable or disable an extension, open the application "Preferences" from the workspace menu.
 You can also use the keyboard shortcut ``Control+,``.
 
-.. image:: ../figures/perspectives.png
-   :width: 295 px
+.. image:: ../figures/workspace_menu.png
+   :width: 300 px
    :align: center
 
 You'll be presented with the preferences perspective which looks like:
