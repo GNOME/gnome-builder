@@ -8,7 +8,7 @@ Currently, there is support for the GNU Debugger which supports C, C++, and to s
 To start the debugger, select "Run with Debugger" from the Run button.
 
 .. image:: ../figures/run-button.png
-   :width: 322 px
+   :width: 297 px
    :align: center
 
 .. warning:: If Builder fails to locate a debugger that is compatible with your project, an error message will be displayed.
@@ -16,7 +16,7 @@ To start the debugger, select "Run with Debugger" from the Run button.
 After Builder has started the debugger, you'll be greeted with a series of controls to step through your application.
 
 .. image:: ../figures/run-with-debugger.png
-   :width: 1142 px
+   :width: 1253 px
    :align: center
 
 .. note:: The debugger support in Builder is currently limited, and will be expanded in future releases.
