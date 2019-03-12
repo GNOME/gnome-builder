@@ -49,6 +49,10 @@ p {
   color: #333333;
 }
 
+.highlight  {
+  background: #4e9a0633;
+}
+
 .linenos .linenodiv pre,
 .highlight pre {
   font-family: "Source Code Pro", monospace;
