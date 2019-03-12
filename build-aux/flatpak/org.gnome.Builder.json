@@ -12,6 +12,7 @@
         "--require-version=1.0.0",
         "--allow=devel",
         "--talk-name=org.freedesktop.Flatpak",
+        "--device=dri",
         "--share=ipc",
         "--socket=x11",
         "--socket=wayland",
