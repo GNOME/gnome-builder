@@ -1,5 +1,5 @@
-Adding Widgets to the Header Bar
-================================
+Extend HeaderBar and OmniBar
+============================
 
 You might want to add a button to the workspace header bar.
 To do this, use an ``Ide.WorkspaceAddin`` and fetch the header bar using ``Ide.Workspace.get_headerbar()``.
@@ -15,8 +15,11 @@ We suggest using ``Gio.SimpleAction`` to attach an action to the workspace and t
    from gi.repository import GObject, Ide
 
    class MyWorkspaceAddin(GObject.Object, Ide.WorkspaceAddin):
+       """
+       Add a new button to the header bar.
+       """
 
-       def do_load(self, workspace):
+       def do_load(self, workspace: Ide.Workspace):
            headerbar = workspace.get_headerbar()
 
            # Add button to top-center-left
@@ -31,8 +34,20 @@ We suggest using ``Gio.SimpleAction`` to attach an action to the workspace and t
            self.button = Gtk.Button(label='Click', action_name='win.hello', visible=True)
            headerbar.add_secondary(self.button)
 
-       def do_unload(self, workspace):
+       def do_unload(self, workspace: Ide.Workspace):
            # remove the button we added
            self.button.destroy()
            self.button = None
 
+   class MyOmniBarAddin(GObject.Object, Ide.OmniBarAddin):
+       """
+       Extend the omnibar by adding a button inside the bar.
+       """
+
+       def do_load(self, omni_bar: Ide.OmniBar):
+           self.button = Gtk.Button(visible=True, label='Hi')
+           omni_bar.add_status_icon(self.button, 0)
+
+       def do_unload(self, omni_bar: Ide.OmniBar):
+           self.button.destroy()
+           self.button = None

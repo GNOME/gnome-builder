@@ -9,6 +9,6 @@ Extending the Workbench
    basics
    actions
    headerbar
-   perspectives
+   surfaces
    panels
 
