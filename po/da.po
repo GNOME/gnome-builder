@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-01 18:52+0000\n"
-"PO-Revision-Date: 2019-03-02 16:54+0100\n"
+"POT-Creation-Date: 2019-03-09 17:11+0000\n"
+"PO-Revision-Date: 2019-03-12 01:45+0100\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -504,7 +504,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Indstillingen er forældet og ikke længere i brug."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:68
 msgid "Show Ignored Files"
 msgstr "Vis ignorerede filer"
 
@@ -515,7 +515,7 @@ msgstr ""
 "Hvis slået til, vil projekttræet vise filer som ignoreres af versionsstyring."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:78
+#: src/plugins/project-tree/gtk/menus.ui:73
 msgid "Sort Directories First"
 msgstr "Sortér mapper først"
 
@@ -600,8 +600,20 @@ msgid "Build;Develop;"
 msgstr "Byg;Kompilér;Kompiler;Udvikl;Udvikle;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-msgid "New Window"
-msgstr "Nyt vindue"
+msgid "Open a Project"
+msgstr "Åbn et projekt"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Start nyt projekt"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+msgid "Clone Repository"
+msgstr "Klon arkiv"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Nyt redigeringsarbejdsområde"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -822,9 +834,9 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Indlæs eller generér en palet ifølge indstillingerne"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4909
+#: src/libide/sourceview/ide-source-view.c:4915
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Omdøb"
 
@@ -845,7 +857,7 @@ msgstr "_Omdøb"
 msgid "unsaved file %u"
 msgstr "Fil %u (ikke gemt)"
 
-#: src/libide/code/ide-buffer.c:3352
+#: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
 msgstr "Det nuværende sprog mangler en symbolgenkender."
 
@@ -1179,7 +1191,7 @@ msgstr "Åbn fil"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1341
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:21
+#: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Åbn"
@@ -1541,6 +1553,7 @@ msgid "Go back"
 msgstr "Gå tilbage"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
 msgid "Open a Project"
 msgstr "Åbn et projekt"
 
@@ -1561,6 +1574,7 @@ msgid "Remove Projects and Sources…"
 msgstr "Fjern projekter og kilder …"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
 msgid "Clone Repository"
 msgstr "Klon arkiv"
 
@@ -1629,28 +1643,28 @@ msgstr "Mere om GNOME Builder"
 msgid "Funded By"
 msgstr "Finansieret af"
 
-#: src/libide/gui/ide-application-command-line.c:62
+#: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
 msgstr "Vis programindstillingerne"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
 msgstr "Åbn projektet på et nyt arbejdsbord"
 
-#: src/libide/gui/ide-application-command-line.c:63
+#: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
 msgstr "FIL"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
 msgstr "Vis versionsoplysninger og afslut"
 
 #. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Increase log verbosity"
 msgstr "Tilføj flere detaljer i loggen"
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:118
 #, c-format
 msgid "Failed to open project: %s"
 msgstr "Kunne ikke åbne projekt: %s"
@@ -2782,31 +2796,31 @@ msgstr "Zoom _ud"
 msgid "Reset"
 msgstr "Nulstil"
 
-#: src/libide/sourceview/ide-source-view.c:4358
+#: src/libide/sourceview/ide-source-view.c:4364
 #, c-format
 msgid "Insert “%s”"
 msgstr "Indsæt “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4360
+#: src/libide/sourceview/ide-source-view.c:4366
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Erstat “%s” med “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4478
+#: src/libide/sourceview/ide-source-view.c:4484
 msgid "Apply Fix-It"
 msgstr "Anvend Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4908
+#: src/libide/sourceview/ide-source-view.c:4914
 msgid "Rename symbol"
 msgstr "Omdøb symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5143
+#: src/libide/sourceview/ide-source-view.c:5149
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linje %u, kolonne %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5169
+#: src/libide/sourceview/ide-source-view.c:5175
 msgid "No references were found"
 msgstr "Ingen referencer blev fundet"
 
@@ -3739,6 +3753,7 @@ msgid "Your project will be created within %s."
 msgstr "Dit projekt vil blive oprettet inden i %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:577
+msgctxt "title"
 msgid "Start New Project"
 msgstr "Start nyt projekt"
 
@@ -4480,7 +4495,7 @@ msgstr "Fortryd"
 msgid "Redo"
 msgstr "Omgør"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
 msgid "UI Designer"
 msgstr "Grænsefladedesigner"
 
@@ -4521,11 +4536,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Gradle-wrapper"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:121
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Vis et nyt velkomstvindue"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:129
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Begynd kloning af projekt fra URI"
 
@@ -5022,35 +5037,35 @@ msgstr "Projekttræ"
 msgid "Rename %s"
 msgstr "Omdøb %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:8
+#: src/plugins/project-tree/gtk/menus.ui:7
 msgid "New File…"
 msgstr "Ny fil …"
 
-#: src/plugins/project-tree/gtk/menus.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:12
 msgid "New Folder…"
 msgstr "Ny mappe …"
 
-#: src/plugins/project-tree/gtk/menus.ui:25
+#: src/plugins/project-tree/gtk/menus.ui:23
 msgid "Open With…"
 msgstr "Åbn med …"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:27
 msgid "Source Code Editor"
 msgstr "Kildekoderedigering"
 
-#: src/plugins/project-tree/gtk/menus.ui:43
+#: src/plugins/project-tree/gtk/menus.ui:41
 msgid "Open Containing Folder"
 msgstr "Åbn indeholdende mappe"
 
-#: src/plugins/project-tree/gtk/menus.ui:48
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open in Terminal"
 msgstr "Åbn i terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "Move to Trash"
 msgstr "Flyt til papirkurv"
 
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "Display Options"
 msgstr "Vis indstillinger"
 
@@ -5696,6 +5711,9 @@ msgstr "Kunne ikke oprette XML-træet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
+
+#~ msgid "New Window"
+#~ msgstr "Nyt vindue"
 
 #~ msgid "If enabled, the project tree will display icons next to each item."
 #~ msgstr ""
