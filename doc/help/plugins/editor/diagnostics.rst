@@ -12,16 +12,17 @@ The ``do_diagnose_async`` is an asynchronous method that will be called with a c
     # my_plugin.py
     
     import gi
-    gi.require_version('Ide', '1.0')
-    from gi.repository import (
-        Ide,
-        Gio,
-        GLib
-    )
-    
+
+    from gi.repository import GLib, Gio, Ide
     
     class MyDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
-        def do_diagnose_async(self, file: Ide.File, buffer: Ide.Buffer, cancellable, callback, user_data):
+        def do_diagnose_async(self,
+                              file: Ide.File,
+                              contents: bytes,
+                              lang_id: str,
+                              cancellable: Gio.Cancellable,
+                              callback: Gio.AsyncReadyCallback,
+                              user_data):
             task = Gio.Task.new(self, cancellable, callback)
             task.diagnostics_list = []
     
@@ -56,3 +57,4 @@ For example, a C diagnostic plugin will have a plugin file that look similar to 
     Copyright=Copyright © 2017 Author Name <authorname@mailprovider.com>
     X-Diagnostic-Provider-Languages=c
     X-Diagnostic-Provider-Languages-Priority=100
+    X-Builder-ABI=3.32
