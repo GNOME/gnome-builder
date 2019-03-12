@@ -14,8 +14,8 @@ Creating a new Project
 To create a new project, select "New" from the project greeter.
 The project creation guide will be displayed.
 
-.. image:: ../figures/newproject.png
-   :width: 885 px
+.. image:: ../figures/start-new-project.png
+   :width: 512 px
    :align: center
 
 Give your project a meaningful name, as this is not easily changeable later.
@@ -40,14 +40,13 @@ Cloning an Existing Project
 ===========================
 
 To clone an existing project, you will need the URL of your **git repository**.
-For example, to clone the Builder project, you could specify: ``git://git.gnome.org/gnome-builder.git``
+For example, to clone the Builder project, you could specify: ``https://gitlab.gnome.org/GNOME/gnome-builder.git``.
 
 .. image:: ../figures/clone.png
-   :width: 885 px
    :align: center
 
-After entering the URL, press the "Clone" button in the upper-right corner of
-the window and wait for the operation to complete. Once the project has been
-cloned, you will be shown the workbench window.
+After entering the URL, press the "Clone" button and wait for the operation to complete.
+You'll be provided progress updates during the operation.
+Once the project has been cloned, a new workspace window will be opened for the project.
 
 .. note:: If the remote repository requires authorization a dialog will be displayed for you to input your credentials.
