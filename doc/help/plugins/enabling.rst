@@ -25,5 +25,5 @@ Then use the switches on the right to enable or disable an extension.
 .. tip:: Use the search entry in the upper left to search for an extension
 
 .. image:: ../figures/extensions.png
-   :width: 1280 px
+   :width: 1101 px
    :align: center
