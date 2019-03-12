@@ -2,109 +2,58 @@
 Extending the Greeter
 #####################
 
-The greeter is the view the user is presented with when starting Builder. In
-the following image, you can see the various ways to create a new project in
-the top left along with existing projects in the main content area.
+When the user starts Builder, they are greeted by the ``Ide.GreeterWorkspace``.
+This is a window containing a series of ``Ide.Surface``'s to display various options for opening a project.
+
+In the following image, you can see the ``Ide.GreeterSurface`` showing personal projects as well as suggested new projects.
+Along the bottom of the window are buttons providing various ways to open an existing project.
 
 .. image:: ../figures/greeter.png
-   :width: 555 px
+   :width: 500 px
    :align: center
 
-Project Miners
-==============
 
-To add projects to the project list section of the greeter, you must implement
-a project miner. You might want one of these if you would like to show projects
-that are found through an external service such as gitlab or from mining the
-users home directory.
+Adding a Surface
+================
 
-To do this, we must implement an ``Ide.ProjectMiner`` which emits the
-``Ide.ProjectMiner::discovered()`` signal when a project has been discovered.
+The ``Ide.Workspace`` API provides a method to add an additional ``Ide.Surface`` for your extension.
+
 
 .. code-block:: python3
 
-   # my_plugin.py
+   class MyWorkspaceAddin(GObject.Object, Ide.WorkspaceAddin):
 
-   import gi
+       def do_load(self, workspace):
+           if type(workspace) != Ide.GreeterWorkspace:
+               return
 
-   from gi.repository import GObject
-   from gi.repository import Gio
-   from gi.repository import Ide
+           my_surface = MySurface()
+           workspace.add_surface(my_surface)
+           workspace.set_visible_surface(my_surface)
 
-   class MyProjectMiner(GObject.Object, Ide.ProjectMiner):
+Adding a Button
+===============
 
-       def do_mine_async(self, cancellable, callback, data):
-           task = Gio.Task.new(self, cancellable, callback)
-
-           # ... Now run your discovery code.
-
-           info = Ide.ProjectInfo()
-           info.set_name('Secret Project')
-           info.set_file(Gio.File.new_for_path('Projects/.secret_project'))
-           info.set_languages(['C', 'Python'])
-
-           # If you set the project as recent, it will show up in the upper
-           # section rather than "Other Projects"
-           info.set_is_recent(True)
-
-           # See libide/projects/ide-project-info.h for more options you
-           # can provide on the Ide.ProjectInfo.
-
-           # Now notify of the discovered info.
-           self.emit_discovered(info)
-
-           task.return_boolean(True)
-
-       def do_mine_finish(self, task):
-           return task.propagate_boolean()
-
-
-Project Creation Workflows
-==========================
-
-You can add a new button to the project creation bar using an ``Ide.GenesisAddin``.
-
-.. note:: Adding buttons to the project creation section does not scale well.
-          If you really think you need something here, talk to our designers so
-          that we can accomidate a new design for your use case.
-
-It is also possible to add a project creation workflow without adding a button
-to the headerbar. Some plugins such as flatpak use this to clone sources via a
-hidden ``gnome-builder`` command line switch.
+You can add a button that switches to a custom surface, or even opens a dialog.
 
 .. code-block:: python3
 
-   # my_plugin.py
+   # 'my-surface-name' should match the name of your widget (See Gtk.Widget.set_name())
+   button = Gtk.Button(label='click me', visible=True, detailed_action_name='win.surface::my-surface-name')
+   greeter_workspace.add_button(button, 100) # 100 is sort priority
 
-   import gi
 
-   from gi.repository import GObject
-   from gi.repository import Gio
-   from gi.repository import Gtk
-   from gi.repository import Ide
+Performing Long Running Actions
+===============================
 
-   class MyGenisisAddin(GObject.Object, Ide.GenesisAddin):
-       widget = None
+If you need to perform a long-running action, such as cloning a repository or expanding a template, then you should notify the workspace.
+Surround your long running operation with calls to ``greeter_workspace.begin()`` and ``greeter_workspace.end()``.
+This will cause the workspace to prevent certain changes by the user.
 
-       def do_get_title(self, application):
-           return "Magic Wand"
 
-       def do_get_label(self, application):
-           return "Magic Wand"
+Adding Project Sections
+=======================
 
-       def do_get_widget(self, application):
-           if not self.widget:
-               self.widget = Gtk.Label(label='My New Genesis Addin', visible=True)
-           return self.widget
+The list of projects in the greeter are broken into sections.
+You can add a section to the greeter using ``greeter_workspace.add_section()``.
 
-       def do_get_priority(self):
-           # for positioning within the buttons
-           return 100
-
-       def do_run_async(self, cancellable, callback, data):
-           task = Gio.Task.new(self, cancellable, callback)
-           # Do async project creation, and then open project.
-           task.return_boolean(True)
-
-       def do_run_finish(self, task):
-           return task.propagate_boolean()
