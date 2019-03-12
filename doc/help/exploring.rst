@@ -34,7 +34,7 @@ When you start Builder, you will be asked to select a project to be opened:
 The greeter window will display projects that you have previously opened.
 Additionally, it contains projects that you might be interested in contributing to.
 
-Using the buttons at the bottom of the window, you man create a new project, select an existing project on disk, or clone a source code repository.
+Using the buttons at the bottom of the window, you may create a new project, select an existing project on disk, or clone a source code repository.
 
 Selecting a project row opens the project.
 Pressing "Enter" from the search box will open the first project matching the requested search text.
