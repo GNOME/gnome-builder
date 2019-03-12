@@ -22,6 +22,23 @@ This conveniently allows you to track the state needed for your plugin for each 
        def do_unload(self, workbench: Ide.Workbench):
            pass
 
+       def do_workspace_added(self, workspace: Ide.Workspace):
+           pass
+
+       def do_workspace_removed(self, workspace: Ide.Workspace):
+           pass
+
+   class BasicWorkspaceAddin(GObject.Object, Ide.WorkspaceAddin):
+
+       def do_load(self, workspace: Ide.Workspace):
+           pass
+
+       def do_unload(self, workspace: Ide.Workspace):
+           pass
+
+       def do_surface_set(self, surface: Ide.Surface):
+           pass
+
 You will notice that at the top we import the packages we'll be using.
 Here we use the ``GObject`` and ``Ide`` packages from GObject Introspection.
 
@@ -36,4 +53,7 @@ This method is called when the workbench is setup or your plugin is loaded.
 When the ``unload`` virtual method is called the plugin should clean up after itself to leave Builder and the workbench in a consistent state.
 This method is called when the workbench is destroyed or your plugin is unloaded.
 
+To simplify tracking workspace surface changes, you can use ``Ide.WorkspaceAddin`` as the second class implements.
+This plugin instance will be created for each workspace window.
 
+.. note:: You can limit the types of workspaces that the ``Ide.WorkspaceAddin`` will be instantiated for using ``X-Workspace-Kind=primary;editor;greeter;`` in the ``.plugin`` file.
