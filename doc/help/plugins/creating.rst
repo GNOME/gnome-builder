@@ -14,7 +14,7 @@ The file should have the file-suffix of ".plugin" and it's format is familiar.
 It starts with a line containing "[Plugin]" indicating this is extension metadata.
 Then it is followed by a series of "Key=Value" key-pairs.
 
-.. note:: We often use the words "extension" and "plugin" interchangeably.
+We will often use the words "extension" and "plugin" interchangeably.
 
 .. code-block:: ini
 
@@ -24,6 +24,10 @@ Then it is followed by a series of "Key=Value" key-pairs.
    Loader=python3
    Module=my_plugin
    Author=Angela Avery
+   X-Builder-ABI=3.32
+   X-Has-Resources=true
+
+.. note:: ``X-Builder-ABI`` should be set to the version of Builder you are targeting (not including the micro release number). It will only be loaded if the Builder version matches.
 
 Now we can create a simple plugin that will print "hello" when Builder starts and "goodbye" when Builder exits.
 
@@ -88,7 +92,7 @@ placed alongside the ``$module_name.plugin`` file.
 
    <?xml version="1.0" encoding="UTF-8"?>
    <gresources>
-     <gresource prefix="/org/gnome/builder/plugins/my-plugin">
+     <gresource prefix="/plugins/my-plugin">
        <file preprocess="xml-stripblanks" compressed="true">gtk/menus.ui</file>
      </gresource>
    </gresources>

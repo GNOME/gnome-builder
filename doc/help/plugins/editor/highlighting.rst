@@ -26,7 +26,7 @@ Then append the directory path of your language-specs to the ``GtkSource.Languag
 
    manager = GtkSource.LanguageManager.get_default()
    paths = manager.get_search_path()
-   paths.append('resources:///org/gnome/builder/plugins/my-plugin/language-specs/')
+   paths.append('resources:///plugins/my-plugin/language-specs/')
    manager.set_search_path(paths)
 
 
