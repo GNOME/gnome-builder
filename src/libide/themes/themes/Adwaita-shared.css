@@ -77,6 +77,10 @@ popover.notificationsbutton row.notification .body {
   opacity: 0.8;
   font-size: 0.95em;
 }
+popover.notificationsbutton button.circular {
+  min-height: 24px;
+  min-width: 24px;
+}
 
 /* development styles */
 window.development-version  headerbar:last-child {
