@@ -41,8 +41,8 @@ struct _IdeVcsClonerInterface
                              const gchar          *uri,
                              const gchar          *destination,
                              GVariantDict         *options,
+                             IdeNotification      *progress,
                              GCancellable         *cancellable,
-                             IdeNotification     **progress,
                              GAsyncReadyCallback   callback,
                              gpointer              user_data);
   gboolean  (*clone_finish) (IdeVcsCloner         *self,
@@ -57,8 +57,8 @@ void      ide_vcs_cloner_clone_async  (IdeVcsCloner         *self,
                                        const gchar          *uri,
                                        const gchar          *destination,
                                        GVariantDict         *options,
+                                       IdeNotification      *progress,
                                        GCancellable         *cancellable,
-                                       IdeNotification     **progress,
                                        GAsyncReadyCallback   callback,
                                        gpointer              user_data);
 IDE_AVAILABLE_IN_3_32

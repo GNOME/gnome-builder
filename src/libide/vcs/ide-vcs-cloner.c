@@ -69,7 +69,7 @@ ide_vcs_cloner_validate_uri (IdeVcsCloner  *self,
  * @destination: a string containing the destination path
  * @options: a #GVariantDict containing any user supplied options
  * @cancellable: (nullable): a #GCancellable
- * @progress: (out) (optional): a location for an #IdeNotification, or %NULL
+ * @progress: (nullable): a location for an #IdeNotification, or %NULL
  * @callback: a #GAsyncReadyCallback to execute upon completion
  * @user_data: closure data for @callback
  *
@@ -80,25 +80,23 @@ ide_vcs_cloner_clone_async (IdeVcsCloner         *self,
                             const gchar          *uri,
                             const gchar          *destination,
                             GVariantDict         *options,
+                            IdeNotification      *progress,
                             GCancellable         *cancellable,
-                            IdeNotification     **progress,
                             GAsyncReadyCallback   callback,
                             gpointer              user_data)
 {
   g_return_if_fail (IDE_IS_VCS_CLONER (self));
   g_return_if_fail (uri != NULL);
   g_return_if_fail (destination != NULL);
+  g_return_if_fail (!progress || IDE_IS_NOTIFICATION (progress));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (progress != NULL)
-    *progress = NULL;
 
   IDE_VCS_CLONER_GET_IFACE (self)->clone_async (self,
                                                 uri,
                                                 destination,
                                                 options,
-                                                cancellable,
                                                 progress,
+                                                cancellable,
                                                 callback,
                                                 user_data);
 }

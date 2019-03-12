@@ -568,12 +568,14 @@ ide_clone_surface_clone (IdeCloneSurface *self)
                            cancellable,
                            G_CONNECT_SWAPPED);
 
+  notif = ide_notification_new ();
+
   ide_vcs_cloner_clone_async (addin,
                               uri,
                               path,
                               &dict,
+                              notif,
                               cancellable,
-                              &notif,
                               ide_clone_surface_clone_cb,
                               g_object_ref (self));
 
@@ -585,11 +587,8 @@ ide_clone_surface_clone (IdeCloneSurface *self)
   gtk_widget_set_sensitive (GTK_WIDGET (self->branch_entry), FALSE);
   gtk_stack_set_visible_child (self->button_stack, GTK_WIDGET (self->cancel_button));
 
-  if (notif != NULL)
-    {
-      g_object_bind_property (notif, "progress", self->uri_entry, "progress-fraction", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (notif, "body", self->status_message, "label", G_BINDING_SYNC_CREATE);
-    }
+  g_object_bind_property (notif, "progress", self->uri_entry, "progress-fraction", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (notif, "body", self->status_message, "label", G_BINDING_SYNC_CREATE);
 
   g_variant_dict_clear (&dict);
 }

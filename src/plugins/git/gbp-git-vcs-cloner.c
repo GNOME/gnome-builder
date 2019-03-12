@@ -227,8 +227,8 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
                                 const gchar         *uri,
                                 const gchar         *destination,
                                 GVariantDict        *options,
+                                IdeNotification     *notif,
                                 GCancellable        *cancellable,
-                                IdeNotification    **notif,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
@@ -244,14 +244,17 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
   g_assert (GBP_IS_GIT_VCS_CLONER (cloner));
   g_assert (uri != NULL);
   g_assert (destination != NULL);
+  g_assert (!notif || IDE_IS_NOTIFICATION (notif));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_vcs_cloner_clone_async);
 
-  notif_local = ide_notification_new ();
-  if (notif != NULL)
-    *notif = g_object_ref (notif_local);
+  if (notif == NULL)
+    {
+      notif_local = ide_notification_new ();
+      notif = notif_local;
+    }
 
   if (!g_variant_dict_lookup (options, "branch", "&s", &branch))
     branch = "master";
@@ -286,7 +289,9 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
         ide_vcs_uri_set_user (vcs_uri, g_get_user_name ());
     }
 
-  req = clone_request_new (vcs_uri, branch, location, notif_local);
+  g_assert (IDE_IS_NOTIFICATION (notif));
+
+  req = clone_request_new (vcs_uri, branch, location, notif);
 
   g_variant_dict_lookup (options, "author-name", "s", &req->author_name);
   g_variant_dict_lookup (options, "author-email", "s", &req->author_email);
