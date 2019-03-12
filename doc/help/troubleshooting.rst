@@ -25,22 +25,6 @@ Builder has support to generate a support log which can provide us with details.
 From the application menu, select “Generate Support Log”.
 It will place a log file in your home directory.
 
-Counters
---------
-
-Builder has internal counters which can be useful to debug problems.
-Use the command bar (activated by ``Control+Enter``) and type “counters” followed by ``Enter``.
-This will bring up a new window containing the current values of the counters.
-
-If Builder has locked up, you can access the counters from outside of Builder.
-The command line tool ``dazzle-list-counters``, can be used to access the counters.
-
-.. code-block:: sh
-
-   dazzle-list-counters `pidof gnome-builder`
-
-.. note:: When running Builder from Flatpak, we do not currently expose the counters to the host. Use ``flatpak enter $PID /bin/bash`` to enter the mount namespace and then run ``dazzle-list-counters``.
-
 Test Builder Nightly
 --------------------
 
