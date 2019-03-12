@@ -7,7 +7,7 @@ Builder integrates with the Sysprof profiler to provide a robust sampling profil
 Select "Run with Profiler" from the run button.
 
 .. image:: ../figures/run-button.png
-   :width: 322 px
+   :width: 297 px
    :align: center
 
 While the application is running, you'll see a screen like this indicating that Sysprof is recording CPU samples on your system.
