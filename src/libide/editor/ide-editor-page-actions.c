@@ -86,15 +86,18 @@ ide_editor_page_actions_reload (GSimpleAction *action,
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), 0.0);
   gtk_widget_show (GTK_WIDGET (self->progress_bar));
 
+  notif = ide_notification_new ();
+
   ide_buffer_manager_load_file_async (bufmgr,
                                       file,
                                       IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD,
+                                      notif,
                                       NULL,
-                                      &notif,
                                       ide_editor_page_actions_reload_cb,
                                       g_object_ref (self));
 
-  g_object_bind_property (notif, "progress", self->progress_bar, "fraction",
+  g_object_bind_property (notif, "progress",
+                          self->progress_bar, "fraction",
                           G_BINDING_SYNC_CREATE);
 }
 

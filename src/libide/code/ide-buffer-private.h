@@ -42,8 +42,8 @@ IdeBuffer              *_ide_buffer_new                      (IdeBufferManager  
 void                    _ide_buffer_attach                   (IdeBuffer            *self,
                                                               IdeObject            *parent);
 void                    _ide_buffer_load_file_async          (IdeBuffer            *self,
+                                                              IdeNotification      *notif,
                                                               GCancellable         *cancellable,
-                                                              IdeNotification     **notif,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
 gboolean                _ide_buffer_load_file_finish         (IdeBuffer            *self,

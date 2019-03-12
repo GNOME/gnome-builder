@@ -575,8 +575,8 @@ ide_buffer_manager_load_file_cb (GObject      *object,
  * @self: an #IdeBufferManager
  * @file: (nullable): a #GFile
  * @flags: optional flags for loading the buffer
+ * @notif: (nullable): a location for an #IdeNotification, or %NULL
  * @cancellable: (nullable): a #GCancellable or %NULL
- * @notif: (out) (optional): a location for an #IdeNotification, or %NULL
  * @callback: a callback to execute upon completion of the operation
  * @user_data: closure data for @callback
  *
@@ -595,9 +595,8 @@ ide_buffer_manager_load_file_cb (GObject      *object,
  * If a buffer is currently loading for @file, the operation will complete
  * using that existing buffer after it has completed loading.
  *
- * If @notif is non-NULL, it will be set to a new #IdeNotification which should
- * be freed with g_object_unref() when no longer in use. It will be kept up to
- * date with loading progress as the file is loaded.
+ * If @notif is non-NULL, it will be updated with status information while
+ * loading the document.
  *
  * Since: 3.32
  */
@@ -605,8 +604,8 @@ void
 ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                     GFile                *file,
                                     IdeBufferOpenFlags    flags,
+                                    IdeNotification      *notif,
                                     GCancellable         *cancellable,
-                                    IdeNotification     **notif,
                                     GAsyncReadyCallback   callback,
                                     gpointer              user_data)
 {
@@ -622,10 +621,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (!file || G_IS_FILE (file));
+  g_return_if_fail (!notif || IDE_IS_NOTIFICATION (notif));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (notif != NULL)
-    *notif = NULL;
 
   if (file == NULL)
     file = temp_file = ide_buffer_manager_next_temp_file (self);
@@ -684,8 +681,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
 
   /* Now we can load the buffer asynchronously */
   _ide_buffer_load_file_async (buffer,
-                               cancellable,
                                notif,
+                               cancellable,
                                ide_buffer_manager_load_file_cb,
                                g_steal_pointer (&task));
 
@@ -1173,8 +1170,8 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
       ide_buffer_manager_load_file_async (self,
                                           file,
                                           IDE_BUFFER_OPEN_FLAGS_NO_VIEW,
-                                          cancellable,
                                           NULL,
+                                          cancellable,
                                           ide_buffer_manager_apply_edits_buffer_loaded_cb,
                                           g_object_ref (task));
     }

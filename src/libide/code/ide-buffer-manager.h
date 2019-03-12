@@ -77,8 +77,8 @@ IDE_AVAILABLE_IN_3_32
 void              ide_buffer_manager_load_file_async    (IdeBufferManager      *self,
                                                          GFile                 *file,
                                                          IdeBufferOpenFlags     flags,
+                                                         IdeNotification       *notif,
                                                          GCancellable          *cancellable,
-                                                         IdeNotification      **notif,
                                                          GAsyncReadyCallback    callback,
                                                          gpointer               user_data);
 IDE_AVAILABLE_IN_3_32

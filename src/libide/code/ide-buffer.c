@@ -1271,8 +1271,8 @@ ide_buffer_load_file_cb (GObject      *object,
 
 void
 _ide_buffer_load_file_async (IdeBuffer            *self,
+                             IdeNotification      *notif,
                              GCancellable         *cancellable,
-                             IdeNotification     **notif,
                              GAsyncReadyCallback   callback,
                              gpointer              user_data)
 {
@@ -1286,7 +1286,6 @@ _ide_buffer_load_file_async (IdeBuffer            *self,
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (ide_buffer_get_file (self) != NULL);
-  ide_clear_param (notif, NULL);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, _ide_buffer_load_file_async);
@@ -1303,7 +1302,7 @@ _ide_buffer_load_file_async (IdeBuffer            *self,
 
   state = g_slice_new0 (LoadState);
   state->file = g_object_ref (ide_buffer_get_file (self));
-  state->notif = ide_notification_new ();
+  state->notif = notif ? g_object_ref (notif) : ide_notification_new ();
   state->highlight_syntax = gtk_source_buffer_get_highlight_syntax (GTK_SOURCE_BUFFER (self));
   ide_task_set_task_data (task, state, load_state_free);
 
@@ -1329,9 +1328,6 @@ _ide_buffer_load_file_async (IdeBuffer            *self,
    * and settle the file settings when we complete.
    */
   ide_buffer_reload_file_settings (self);
-
-  if (notif != NULL)
-    *notif = g_object_ref (state->notif);
 
   IDE_EXIT;
 }

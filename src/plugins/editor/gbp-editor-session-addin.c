@@ -372,8 +372,8 @@ restore_file (GObject      *source,
       ide_buffer_manager_load_file_async (bufmgr,
                                           file,
                                           IDE_BUFFER_OPEN_FLAGS_NO_VIEW,
-                                          ide_task_get_cancellable (task),
                                           NULL,
+                                          ide_task_get_cancellable (task),
                                           gbp_editor_session_addin_load_file_cb,
                                           g_object_ref (task));
     }

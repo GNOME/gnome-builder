@@ -250,8 +250,8 @@ gbp_editor_workbench_addin_open_at_async (IdeWorkbenchAddin   *addin,
   ide_buffer_manager_load_file_async (buffer_manager,
                                       file,
                                       state->flags,
-                                      cancellable,
                                       NULL,
+                                      cancellable,
                                       gbp_editor_workbench_addin_open_at_cb,
                                       g_steal_pointer (&task));
 }
