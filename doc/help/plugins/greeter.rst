@@ -56,4 +56,5 @@ Adding Project Sections
 
 The list of projects in the greeter are broken into sections.
 You can add a section to the greeter using ``greeter_workspace.add_section()``.
+The section should implement ``Ide.GreeterSection`` so that it can respond to user input and selections.
 
