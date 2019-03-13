@@ -6,20 +6,10 @@ from gi.repository import Ide
 
 _NEEDS_BUILD_RUNTIME = False
 
-class MyWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
-    handler = None
+class MyBufferAddin(GObject.Object, Ide.BufferAddin):
 
-    def do_load(self, workbench):
-        context = workbench.get_context()
-        bufmgr = context.get_buffer_manager()
-        self.handler = bufmgr.connect('save-buffer', self.on_save_buffer)
+    def do_save_file(self, buffer: Ide.Buffer, file: Gio.File):
 
-    def do_unload(self, workbench):
-        context = workbench.get_context()
-        bufmgr = context.get_buffer_manager()
-        bufmgr.disconnect(self.handler)
-
-    def on_save_buffer(self, bufmgr, buffer):
         # Ignore everything if this isn't C code.
         # The language identifier comes from gtksourceview *.lang files
         lang = buffer.get_language()
@@ -29,7 +19,7 @@ class MyWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # If you need to run the program in the build environment, you might
         # need to do something like:
         if _NEEDS_BUILD_RUNTIME:
-            context = buffer.get_context()
+            context = buffer.ref_context()
             runtime = context.get_build_manager().get_pipeline().get_runtime()
             launcher = runtime.create_launcher()
         else:
