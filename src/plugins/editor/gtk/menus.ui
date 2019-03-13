@@ -114,7 +114,7 @@
         <attribute name="action">frame.move-right</attribute>
       </item>
       <item>
-        <attribute name="action">grid.close-stack</attribute>
+        <attribute name="action">frame.close-stack</attribute>
         <attribute name="label" translatable="yes">Close</attribute>
       </item>
     </section>
