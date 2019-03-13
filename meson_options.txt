@@ -5,7 +5,7 @@ option('tcmalloc', type: 'boolean', value: false, description: 'Use tcmalloc for
 
 option('with_safe_path', type: 'string', value: '', description: 'PATH variable to run build commands (default: platform-specific)')
 
-option('with_channel',
+option('channel',
           type: 'combo',
        choices: [ 'other', 'flatpak-stable', 'flatpak-beta', 'flatpak-nightly' ],
    description: 'The distribution channel for Builder',

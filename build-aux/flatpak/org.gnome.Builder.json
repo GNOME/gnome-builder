@@ -560,8 +560,8 @@
                 "-Dpython_libprefix=python3.7",
                 "-Denable_tracing=true",
                 "-Dwith_help=true",
-                "-Dwith_channel=flatpak-nightly",
                 "-Dwith_deviced=true"
+                "-Dchannel=flatpak-nightly",
             ],
             "cleanup" : [
                 "/share/gnome-builder/gir-1.0",
