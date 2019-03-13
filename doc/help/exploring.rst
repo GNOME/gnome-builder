@@ -172,6 +172,16 @@ Along the bottom is the utilities panel. Here you will find things like the
 debugger, terminal, build, and application console.
 
 
+Overview Map
+^^^^^^^^^^^^
+
+You can enable the Overview Map from Preferences → Editor → Code Overview or using ``toggle-map`` command from the command bar.
+
+.. image:: figures/minimap.png
+   :width: 927 px
+   :align: center
+
+
 Autocompletion
 --------------
 
