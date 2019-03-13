@@ -16,6 +16,7 @@ libide_greeter_public_headers = [
 ]
 
 libide_greeter_private_headers = [
+  'ide-greeter-buttons-section.h',
   'ide-greeter-private.h',
   'ide-truncate-model.h',
 ]
@@ -88,6 +89,7 @@ libide_greeter_dep = declare_dependency(
 
 gnome_builder_public_sources += files(libide_greeter_public_sources)
 gnome_builder_public_headers += files(libide_greeter_public_headers)
+gnome_builder_private_headers += files(libide_greeter_private_headers)
 gnome_builder_generated_headers += libide_greeter_generated_headers
 gnome_builder_include_subdirs += libide_greeter_header_subdir
 gnome_builder_gir_extra_args += ['--c-include=libide-greeter.h', '-DIDE_GREETER_COMPILATION']

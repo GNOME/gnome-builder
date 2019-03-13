@@ -28,12 +28,12 @@
       <title>Extending Builder</title>
       <xi:include href="xml/ide-application-addin.xml"/>
       <xi:include href="xml/ide-buffer-addin.xml"/>
-      <xi:include href="xml/ide-build-pipeline-addin.xml"/>
+      <xi:include href="xml/ide-pipeline-addin.xml"/>
       <xi:include href="xml/ide-build-target-provider.xml"/>
       <xi:include href="xml/ide-command-provider.xml"/>
       <xi:include href="xml/ide-completion-provider.xml"/>
       <xi:include href="xml/ide-config-view-addin.xml"/>
-      <xi:include href="xml/ide-configuration-provider.xml"/>
+      <xi:include href="xml/ide-config-provider.xml"/>
       <xi:include href="xml/ide-context-addin.xml"/>
       <xi:include href="xml/ide-device-provider.xml"/>
       <xi:include href="xml/ide-diagnostic-provider.xml"/>
@@ -218,17 +218,17 @@
       <title>Foundry</title>
       <xi:include href="xml/ide-build-log.xml"/>
       <xi:include href="xml/ide-build-manager.xml"/>
-      <xi:include href="xml/ide-build-pipeline.xml"/>
-      <xi:include href="xml/ide-build-stage-launcher.xml"/>
-      <xi:include href="xml/ide-build-stage-mkdirs.xml"/>
-      <xi:include href="xml/ide-build-stage-transfer.xml"/>
-      <xi:include href="xml/ide-build-stage.xml"/>
+      <xi:include href="xml/ide-pipeline.xml"/>
+      <xi:include href="xml/ide-pipeline-stage-launcher.xml"/>
+      <xi:include href="xml/ide-pipeline-stage-mkdirs.xml"/>
+      <xi:include href="xml/ide-pipeline-stage-transfer.xml"/>
+      <xi:include href="xml/ide-pipeline-stage.xml"/>
       <xi:include href="xml/ide-build-system-discovery.xml"/>
       <xi:include href="xml/ide-build-system.xml"/>
       <xi:include href="xml/ide-build-target.xml"/>
       <xi:include href="xml/ide-compile-commands.xml"/>
-      <xi:include href="xml/ide-configuration-manager.xml"/>
-      <xi:include href="xml/ide-configuration.xml"/>
+      <xi:include href="xml/ide-config-manager.xml"/>
+      <xi:include href="xml/ide-config.xml"/>
       <xi:include href="xml/ide-dependency-updater.xml"/>
       <xi:include href="xml/ide-deploy-strategy.xml"/>
       <xi:include href="xml/ide-device-info.xml"/>
