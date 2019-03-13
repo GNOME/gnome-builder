@@ -46,7 +46,7 @@ loads we will register our stage in the appropriate phase.
    from gi.repository import GObject
    from gi.repository import Ide
 
-   class MyBuildStage(Ide.Object, Ide.BuildStage):
+   class MyPipelineStage(Ide.Object, Ide.PipelineStage):
 
        def do_execute(self, pipeline, cancellable):
            """
@@ -100,16 +100,14 @@ loads we will register our stage in the appropriate phase.
            """
            return False
 
-   class MyPipelineAddin(GObject.Object, Ide.BuildPipelineAddin):
+   class MyPipelineAddin(GObject.Object, Ide.PipelineAddin):
 
        def do_load(self, pipeline):
-           stage = MyBuildStage()
+           stage = MyPipelineStage()
            phase = Ide.PipelinePhase.BUILD | Ide.PipelinePhase.AFTER
-           stage_id = pipeline.connect(phase, 100, stage)
+           stage_id = pipeline.attach(phase, 100, stage)
 
            # track() can be used to auto-unregister the phase when
            # the pipeline is removed.
            self.track(stage_id)
 
-.. note:: connect() was an unfortunate API choice and will likely be changed in
-          a future release to avoid collisions with signals.

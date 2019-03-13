@@ -2,7 +2,7 @@
 Implementing a Build System
 ###########################
 
-Builder has support for many build systems such as autotools, meson, cmake, etc. The build system knows how to find build targets (binaries or scripts that are installed) for the runner, knows how to find build flags used by the clang service, and it can define where the build directory is. It also has an associated ``Ide.BuildPipelineAddin`` (see the next section) that specifies how to do operations like build, rebuild, clean, etc.
+Builder has support for many build systems such as autotools, meson, cmake, etc. The build system knows how to find build targets (binaries or scripts that are installed) for the runner, knows how to find build flags used by the clang service, and it can define where the build directory is. It also has an associated ``Ide.PipelineAddin`` (see the next section) that specifies how to do operations like build, rebuild, clean, etc.
 
 .. code-block:: python3
    :caption: An outline for a Buildsystem
