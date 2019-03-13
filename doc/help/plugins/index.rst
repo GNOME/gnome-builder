@@ -29,7 +29,6 @@ You may also chooser to implement extensions in C or Vala.
    session
    menus
    preferences
-   transfers
    workers
    vcs
 
