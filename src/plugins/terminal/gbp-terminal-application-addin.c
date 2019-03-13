@@ -56,6 +56,8 @@ gbp_terminal_application_addin_add_option_entries (IdeApplicationAddin *addin,
   g_assert (GBP_IS_TERMINAL_APPLICATION_ADDIN (addin));
   g_assert (G_IS_APPLICATION (app));
 
+#if 0
+  /* Disabled for now */
   g_application_add_main_option (G_APPLICATION (app),
                                  "terminal",
                                  't',
@@ -63,6 +65,7 @@ gbp_terminal_application_addin_add_option_entries (IdeApplicationAddin *addin,
                                  G_OPTION_ARG_NONE,
                                  _("Use terminal interface"),
                                  NULL);
+#endif
 }
 
 static void
