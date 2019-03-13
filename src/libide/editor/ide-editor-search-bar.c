@@ -171,10 +171,37 @@ search_entry_populate_popup (IdeEditorSearchBar *self,
 
   if (GTK_IS_MENU (widget))
     {
-      DzlApplication *app = DZL_APPLICATION (g_application_get_default ());
-      GMenu *menu = dzl_application_get_menu_by_id (app, "ide-editor-search-bar-entry-menu");
+      g_autoptr(DzlPropertiesGroup) group = NULL;
+      GtkWidget *item;
+      GtkWidget *sep;
+      guint pos = 0;
 
-      gtk_menu_shell_bind_model (GTK_MENU_SHELL (widget), G_MENU_MODEL (menu), NULL, TRUE);
+      item = gtk_check_menu_item_new_with_label (_("Regular expressions"));
+      gtk_actionable_set_action_name (GTK_ACTIONABLE (item), "search-settings.regex-enabled");
+      gtk_menu_shell_insert (GTK_MENU_SHELL (widget), item, pos++);
+      gtk_widget_show (item);
+
+      item = gtk_check_menu_item_new_with_label (_("Case sensitive"));
+      gtk_actionable_set_action_name (GTK_ACTIONABLE (item), "search-settings.case-sensitive");
+      gtk_menu_shell_insert (GTK_MENU_SHELL (widget), item, pos++);
+      gtk_widget_show (item);
+
+      item = gtk_check_menu_item_new_with_label (_("Match whole word only"));
+      gtk_actionable_set_action_name (GTK_ACTIONABLE (item), "search-settings.at-word-boundaries");
+      gtk_menu_shell_insert (GTK_MENU_SHELL (widget), item, pos++);
+      gtk_widget_show (item);
+
+      sep = gtk_separator_menu_item_new ();
+      gtk_menu_shell_insert (GTK_MENU_SHELL (widget), sep, pos++);
+      gtk_widget_show (sep);
+
+      if (self->search != NULL)
+        {
+          group = dzl_properties_group_new (G_OBJECT (self->search));
+          dzl_properties_group_add_all_properties (group);
+        }
+
+      gtk_widget_insert_action_group (widget, "search-settings", G_ACTION_GROUP (group));
     }
 }
 
