@@ -18,16 +18,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-07 06:31+0000\n"
-"PO-Revision-Date: 2019-03-07 22:00+0200\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2019-03-13 05:32+0000\n"
+"PO-Revision-Date: 2019-03-13 11:49+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Gtranslator 3.30.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -79,70 +79,93 @@ msgid "Side-by-side code editors"
 msgstr "Yan yana kod düzenleyiciler"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Git"
-msgstr "Git tümleştirmesi"
+msgid "Multi-monitor support"
+msgstr "Çoklu ekran desteği"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
-msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
-msgstr "Autotools, Cargo, CMake, Meson, Make ve PHPize ile entegrasyon"
+#| msgid "Show overview map"
+msgid "Code overview mini-map"
+msgstr "Kod gözden geçirme küçük haritası"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:28
+msgid "Integration with Git"
+msgstr "Git tümleşimi"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+#| msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgid ""
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
+msgstr ""
+"Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, ve Waf ile "
+"tümleşim"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Clang temelli kendiliğinden tamamlama, anlamsal vurgulama ve tanılama"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+#: data/appdata/org.gnome.Builder.appdata.xml.in:31
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Python temelli kendiliğinden tamamlama, anlamsal vurgulama ve tanılama"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:30
+#: data/appdata/org.gnome.Builder.appdata.xml.in:32
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Vala temelli kendiliğinden tamamlama ve tanılama"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:31
+#: data/appdata/org.gnome.Builder.appdata.xml.in:33
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "C, Python, Vala ve XML için kendiliğinden girintileme desteği"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:32
+#: data/appdata/org.gnome.Builder.appdata.xml.in:34
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "HTML, Markdown, ve reStructuredTest, ve Sphinx canlı ön izleme"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:33
-msgid "Optional Vim-style editing"
-msgstr "İsteğe bağlı Vim-tarzı düzenleme"
+#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+#| msgid "Optional Vim-style editing"
+msgid "Optional Vim, Emacs, and SublimeText style editing"
+msgstr "İsteğe bağlı Vim, Emacs, ve SublimeText tarzı düzenleme"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:34
+#: data/appdata/org.gnome.Builder.appdata.xml.in:36
 msgid "An integrated software profiler for native applications"
 msgstr "Yerli uygulamalar için tümleşik yazılım profilleyici"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+#: data/appdata/org.gnome.Builder.appdata.xml.in:37
 msgid "An integrated debugger for native applications"
 msgstr "Yerli uygulamalar için tümleşik hata ayıklayıcısı"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:36
+#: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Flatpak çalışma zamanları ve jhbuild ile inşa desteği"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:42
+#: data/appdata/org.gnome.Builder.appdata.xml.in:39
+msgid "Support for viewing Todo's found within your code-base"
+msgstr "Todo'nun bulduğunu kod temelinizle birlikte görüntüleme desteği"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:40
+msgid "Fast fuzzy text search across files and symbols"
+msgstr "Dosyalar ve simgeler arası hızlı bulanık metin arama"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:46
 msgid "Quickly access your projects"
 msgstr "Projelerinize hızlıca erişin"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:46
+#: data/appdata/org.gnome.Builder.appdata.xml.in:50
 msgid "Create new projects from a variety of templates"
 msgstr "Çeşitli şablonlardan yeni projeler oluşturun"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:50
+#: data/appdata/org.gnome.Builder.appdata.xml.in:54
 msgid "Integration with Git to clone your projects"
 msgstr "Projelerinizi klonlamak için Git tümleşmesi"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:54
+#: data/appdata/org.gnome.Builder.appdata.xml.in:58
 msgid "The source code editor"
 msgstr "Kaynak kod düzenleyici"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:58
+#: data/appdata/org.gnome.Builder.appdata.xml.in:62
 msgid "Fast global fuzzy search"
 msgstr "Hızlı genel bulanık arama"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:62
+#: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "GNU hata ayıklayıcıyla hata ayıklayın"
 
@@ -843,7 +866,7 @@ msgstr "_Yeniden Adlandır"
 msgid "unsaved file %u"
 msgstr "kaydedilmemiş dosya %u"
 
-#: src/libide/code/ide-buffer.c:3374
+#: src/libide/code/ide-buffer.c:3370
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -887,34 +910,34 @@ msgid "Failed to load file: %s"
 msgstr "Dosya yükleme başarısız oldu: %s"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:118
+#: src/libide/editor/ide-editor-page-actions.c:121
 #, c-format
 msgid "Print failed: %s"
 msgstr "Yazdırma başarısız oldu: %s"
 
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/editor/ide-editor-page-actions.c:189
-#: src/libide/editor/ide-editor-page-actions.c:297
+#: src/libide/editor/ide-editor-page-actions.c:192
+#: src/libide/editor/ide-editor-page-actions.c:300
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Dosya kaydetme başarısız oldu: %s"
 
-#: src/libide/editor/ide-editor-page-actions.c:233
+#: src/libide/editor/ide-editor-page-actions.c:236
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
 #: src/plugins/testui/gbp-test-output-panel.c:63
 msgid "Save File"
 msgstr "Dosyayı Kaydet"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
-#: src/libide/editor/ide-editor-page-actions.c:336
+#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:522
@@ -927,11 +950,11 @@ msgstr "Kaydet"
 msgid "Cancel"
 msgstr "Vazgeç"
 
-#: src/libide/editor/ide-editor-page-actions.c:332
+#: src/libide/editor/ide-editor-page-actions.c:335
 msgid "Save File As"
 msgstr "Dosyayı Farklı Kaydet"
 
-#: src/libide/editor/ide-editor-page-actions.c:335
+#: src/libide/editor/ide-editor-page-actions.c:338
 msgid "Save As"
 msgstr "Farklı Kaydet"
 
@@ -4302,7 +4325,7 @@ msgstr "Git altmodüllerini başlat"
 msgid "The protocol “%s” is not supported."
 msgstr "“%s” iletişim kuralı desteklenmiyor."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:279
+#: src/plugins/git/gbp-git-vcs-cloner.c:282
 msgid "A valid Git URL is required"
 msgstr "Geçerli Git URL adresi gerekir"
 
@@ -5420,7 +5443,7 @@ msgstr "PKG_CONFIG_PATH tanımlamak için isteğe bağlı virgülle ayrılmış 
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:64
+#: src/plugins/terminal/gbp-terminal-application-addin.c:66
 msgid "Use terminal interface"
 msgstr "Uçbirim arayüzünü kullan"
 
