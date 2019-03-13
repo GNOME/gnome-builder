@@ -1,0 +1,14 @@
+# BuildStream plugin
+
+[Plugin]
+Authors=Adam
+Builtin=true
+Description=Provides integration with the BuildStream build tool
+Depends=editor;buildui;
+Hidden=true
+Loader=python3
+Module=buildstream_plugin
+Name=BuildStream
+X-Builder-ABI=@PACKAGE_ABI@
+X-Project-File-Filter-Name=BuildStream (project.conf)
+X-Project-File-Filter-Pattern=project.conf
