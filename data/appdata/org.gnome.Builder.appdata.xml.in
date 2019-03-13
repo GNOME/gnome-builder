@@ -23,17 +23,21 @@
     <ul>
       <li>Built in syntax highlighting for many languages</li>
       <li>Side-by-side code editors</li>
+      <li>Multi-monitor support</li>
+      <li>Code overview mini-map</li>
       <li>Integration with Git</li>
-      <li>Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize</li>
+      <li>Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, and Waf</li>
       <li>Clang based auto-completion, semantic highlighting, and diagnostics</li>
       <li>Python based auto-completion, semantic highlighting, and diagnostics</li>
       <li>Vala based auto-completion and diagnostics</li>
       <li>Auto indentation support for C, Python, Vala, and XML</li>
       <li>HTML, Markdown, and reStructuredText, and Sphinx live preview</li>
-      <li>Optional Vim-style editing</li>
+      <li>Optional Vim, Emacs, and SublimeText style editing</li>
       <li>An integrated software profiler for native applications</li>
       <li>An integrated debugger for native applications</li>
       <li>Support for building with jhbuild and flatpak runtimes</li>
+      <li>Support for viewing Todo's found within your code-base</li>
+      <li>Fast fuzzy text search across files and symbols</li>
     </ul>
   </description>
 
@@ -82,64 +86,34 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
-    <release version="3.31.92" date="2019-03-05">
+    <release version="3.32.0" date="2019-03-12">
       <description>
         <p>
-          This release contains a number of bug fixes and performance improvements.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.31.91" date="2019-02-18">
-      <description>
-        <p>
-          This release contains a number of bug fixes and performance improvements.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.31.90" date="2019-02-06">
-      <description>
-        <p>
-          This release contains a number of bug fixes and performance improvements.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.31.4" date="2019-01-09">
-      <description>
-        <p>
-          This release contains a major refactor of much of Builder.
-          Many UI components have been refreshed and many APIs available to plugins have been simplified and improved.
-          We expect a number of bugs as fallout from the refactor, and are looking for users to help test and report issues back to us.
+          Builder 3.32 is here with many features and improvements from the ground up!
         </p>
         <ul>
-          <li>Initial multi-monitor support.</li>
-          <li>Initial support for non-project mode when opening files from the command line.</li>
+          <li>Multi-monitor support.</li>
+          <li>A newly designed greeter.</li>
+          <li>A newly designed omnibar with support for long running tasks with progress.</li>
+          <li>Support for non-project mode when opening files from the command-line or file-browser.</li>
           <li>A number of new command-line options have been added.</li>
+          <li>Builder will attempt to avoid re-installs when running if no files have changed.</li>
           <li>Many new and simplified plugin interfaces.</li>
           <li>Support for external plugins by requiring specific ABI checks.</li>
-        </ul>
-      </description>
-    </release>
-
-    <release version="3.31.1" date="2018-10-08">
-      <description>
-        <p>
-          Our first development release as we progress towards 3.32 is here.
-        </p>
-        <ul>
           <li>Add setting to disable clearing build caches at startup.</li>
-          <li>Swith to using window menus instead of app-menu for 3.32.</li>
-          <li>Ignore history jumps while buffer is loading.</li>
-          <li>Gdb plugin fixes when communicating with flatpak-based apps.</li>
-          <li>Install legacy gtksourceview-3.0 files.</li>
-          <li>New shortcuts for headerbar buttons.</li>
-          <li>Improved session saving to track previous searches.</li>
-          <li>Add support for updating git submodules along with dependencies.</li>
-          <li>SSL/PKI fixes when running under flatpak.</li>
-          <li>Vim improvements.</li>
-          <li>New meson project templates.</li>
+          <li>Move app-menu to application windows.</li>
+          <li>A number of plugins were redesigned to improve stability.</li>
+          <li>Editor search state is now preserved when saving session state.</li>
+          <li>Support for updating git submodules along with other dependencies.</li>
+          <li>Keybindings improvements.</li>
+          <li>Improved meson project templates.</li>
+          <li>New styling based on updates to Adwaita.</li>
+          <li>The project tree now includes version control information, build targets, and unit tests.</li>
+          <li>Additional snippets.</li>
+          <li>Improvements for Language Server Protocol.</li>
+          <li>Unit Tests now integrate a terminal panel for tracking success.</li>
+          <li>A number of new command-line options have been added such as --clone, --greeter, --editor, --create-project, --preferences, and more.</li>
+          <li>New desktop actions for the gnome-shell application context menu have been added.</li>
         </ul>
       </description>
     </release>

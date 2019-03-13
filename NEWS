@@ -1,3 +1,15 @@
+==============
+Version 3.32.0
+==============
+
+Changes since last release:
+
+ • Improve restoring cursor after loading buffer
+ • Various API changes to avoid out-params with async functions
+ • Styling tweaks for matching brackets
+ • Updated documentation
+ • Updated translations
+
 ===============
 Version 3.31.92
 ===============
