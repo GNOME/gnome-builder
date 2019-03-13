@@ -23,11 +23,11 @@ flatpak:
           --buildtype=debugoptimized
           -Dctags_path=/app/bin/ctags
           -Dfusermount_wrapper=true
-          -Dwith_tcmalloc=true
-          -Denable_tracing=true
-          -Dwith_help=true
-          -Dwith_channel=flatpak-nightly
-          -Dwith_deviced=true
+          -Dtcmalloc=true
+          -Dtracing=true
+          -Dhelp=true
+          -Dchannel=flatpak-nightly
+          -Dplugin_deviced=true
 
     script:
         - flatpak-builder --stop-at=${FLATPAK_MODULE} app ${MANIFEST_PATH}

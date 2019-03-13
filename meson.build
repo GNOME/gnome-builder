@@ -1,11 +1,11 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
           version: '3.31.92',
-    meson_version: '>= 0.49.0',
+    meson_version: '>= 0.49.2',
   default_options: [ 'c_std=gnu11',
                      'cpp_std=c++11',
                      'warning_level=2',
-                     'with_channel=other',
+                     'channel=other',
                    ],
 )
 
@@ -43,7 +43,7 @@ endif
 
 status = [
   '', '',
-  'gnome-builder @0@ (@1@)'.format(meson.project_version(), get_option('with_channel')),
+  'gnome-builder @0@ (@1@)'.format(meson.project_version(), get_option('channel')),
   '', '',
 ]
 
@@ -59,7 +59,7 @@ endif
 
 status += [
   'Version ............... : @0@'.format(meson.project_version()),
-  'Channel ............... : @0@'.format(get_option('with_channel')),
+  'Channel ............... : @0@'.format(get_option('channel')),
   'Build Type ............ : @0@'.format(get_option('buildtype')),
   '',
   'Prefix ................ : @0@'.format(get_option('prefix')),
