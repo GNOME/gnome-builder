@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-08 17:08+0000\n"
-"PO-Revision-Date: 2019-03-08 18:21-0300\n"
+"POT-Creation-Date: 2019-03-13 05:32+0000\n"
+"PO-Revision-Date: 2019-03-13 03:05-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese - Brazil <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -74,71 +74,95 @@ msgid "Side-by-side code editors"
 msgstr "Editores de código lado a lado"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:26
+msgid "Multi-monitor support"
+msgstr "Suporte a multimonitor"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:27
+#| msgid "Show overview map"
+msgid "Code overview mini-map"
+msgstr "Minimapa de visão de geral de código"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:28
 msgid "Integration with Git"
 msgstr "Integração com Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:27
-msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
-msgstr "Integração com Autotools, Cargo, CMake, Meson, Make e PHPize"
+#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+#| msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgid ""
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
+msgstr ""
+"Integração com Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize e "
+"Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:28
+#: data/appdata/org.gnome.Builder.appdata.xml.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Autocompletamento baseado em Clang, realce semântico e diagnósticos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+#: data/appdata/org.gnome.Builder.appdata.xml.in:31
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Autocompletamento baseado em Python, realce semântico e diagnósticos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:30
+#: data/appdata/org.gnome.Builder.appdata.xml.in:32
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Autocompletamento baseado em Vala, realce semântico e diagnósticos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:31
+#: data/appdata/org.gnome.Builder.appdata.xml.in:33
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Suporte a recuo automático para C, Python, Vala e XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:32
+#: data/appdata/org.gnome.Builder.appdata.xml.in:34
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr ""
 "HTML, Markdown e reStructuredText, e visualização em tempo real de Sphinx"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:33
-msgid "Optional Vim-style editing"
-msgstr "Edição opcional em estilo do Vim"
+#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+#| msgid "Optional Vim-style editing"
+msgid "Optional Vim, Emacs, and SublimeText style editing"
+msgstr "Edição de texto opcionalmente em estilo de Vim, Emacs e SublimeText"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:34
+#: data/appdata/org.gnome.Builder.appdata.xml.in:36
 msgid "An integrated software profiler for native applications"
 msgstr "Um perfilador de software integrado para aplicativos nativos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+#: data/appdata/org.gnome.Builder.appdata.xml.in:37
 msgid "An integrated debugger for native applications"
 msgstr "Um depurador integrado para aplicativos nativos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:36
+#: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Suporte a compilação com runtime do flatpak e do jhbuild"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:42
+#: data/appdata/org.gnome.Builder.appdata.xml.in:39
+msgid "Support for viewing Todo's found within your code-base"
+msgstr ""
+"Suporte para visualizar Tarefas encontrado dentro da base de seu código"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:40
+msgid "Fast fuzzy text search across files and symbols"
+msgstr "Pesquisa de texto rápida e flexível em arquivos e símbolos"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:46
 msgid "Quickly access your projects"
 msgstr "Acesso rápido aos seus projetos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:46
+#: data/appdata/org.gnome.Builder.appdata.xml.in:50
 msgid "Create new projects from a variety of templates"
 msgstr "Crie novos projetos de uma variedade de modelos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:50
+#: data/appdata/org.gnome.Builder.appdata.xml.in:54
 msgid "Integration with Git to clone your projects"
 msgstr "Integração com Git para clonar seus projetos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:54
+#: data/appdata/org.gnome.Builder.appdata.xml.in:58
 msgid "The source code editor"
 msgstr "O editor de código-fonte"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:58
+#: data/appdata/org.gnome.Builder.appdata.xml.in:62
 msgid "Fast global fuzzy search"
 msgstr "Pesquisa aproximada global rápida"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:62
+#: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Depuração com o depurador do GNU"
 
@@ -858,7 +882,7 @@ msgstr "_Renomear"
 msgid "unsaved file %u"
 msgstr "arquivo não salvo %u"
 
-#: src/libide/code/ide-buffer.c:3374
+#: src/libide/code/ide-buffer.c:3370
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
@@ -902,34 +926,34 @@ msgid "Failed to load file: %s"
 msgstr "Falha ao carregar arquivo: %s"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:118
+#: src/libide/editor/ide-editor-page-actions.c:121
 #, c-format
 msgid "Print failed: %s"
 msgstr "Impressão falhou: %s"
 
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/editor/ide-editor-page-actions.c:189
-#: src/libide/editor/ide-editor-page-actions.c:297
+#: src/libide/editor/ide-editor-page-actions.c:192
+#: src/libide/editor/ide-editor-page-actions.c:300
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Falha ao salvar arquivo: %s"
 
-#: src/libide/editor/ide-editor-page-actions.c:233
+#: src/libide/editor/ide-editor-page-actions.c:236
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
 #: src/plugins/testui/gbp-test-output-panel.c:63
 msgid "Save File"
 msgstr "Salvar arquivo"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 msgid "Save"
 msgstr "Salvar"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
-#: src/libide/editor/ide-editor-page-actions.c:336
+#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:522
@@ -942,11 +966,11 @@ msgstr "Salvar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/libide/editor/ide-editor-page-actions.c:332
+#: src/libide/editor/ide-editor-page-actions.c:335
 msgid "Save File As"
 msgstr "Salvar arquivo como"
 
-#: src/libide/editor/ide-editor-page-actions.c:335
+#: src/libide/editor/ide-editor-page-actions.c:338
 msgid "Save As"
 msgstr "Salvar como"
 
@@ -1551,7 +1575,6 @@ msgid "Go back"
 msgstr "Voltar"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
-#| msgid "Open a Project"
 msgctxt "title"
 msgid "Open a Project"
 msgstr "Abrir um projeto"
@@ -1573,7 +1596,6 @@ msgid "Remove Projects and Sources…"
 msgstr "Remover arquivos e projetos…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
-#| msgid "Clone Repository"
 msgctxt "title"
 msgid "Clone Repository"
 msgstr "Clonar repositório"
@@ -3752,7 +3774,6 @@ msgid "Your project will be created within %s."
 msgstr "Seu projeto será criado dentro de %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:577
-#| msgid "Start New Project"
 msgctxt "title"
 msgid "Start New Project"
 msgstr "Iniciar novo projeto"
@@ -4345,7 +4366,7 @@ msgstr "Inicializar submódulos git"
 msgid "The protocol “%s” is not supported."
 msgstr "Não há suporte ao protocolo “%s”."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:279
+#: src/plugins/git/gbp-git-vcs-cloner.c:282
 msgid "A valid Git URL is required"
 msgstr "É necessário uma URL do Git válida"
 
@@ -5473,7 +5494,7 @@ msgstr ""
 msgid "%s (Sysroot SDK)"
 msgstr "%s (SDK de raiz de sistema)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:64
+#: src/plugins/terminal/gbp-terminal-application-addin.c:66
 msgid "Use terminal interface"
 msgstr "Usar interface de terminal"
 
