@@ -95,9 +95,11 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
       display_name = ide_config_get_display_name (config);
 
       if (runtime != NULL)
-        runtime_name = ide_runtime_get_display_name (runtime);
-      if (runtime_name == NULL)
-        runtime_name = ide_runtime_get_id (runtime);
+        {
+          runtime_name = ide_runtime_get_display_name (runtime);
+          if (runtime_name == NULL)
+            runtime_name = ide_runtime_get_id (runtime);
+        }
 
       if (device != NULL)
         device_name = ide_device_get_display_name (device);
