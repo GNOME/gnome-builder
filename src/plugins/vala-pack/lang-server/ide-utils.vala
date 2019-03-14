@@ -1,22 +1,53 @@
 namespace Ide {
-	public static Ide.Symbol? vala_to_ide_symbol (Vala.CodeNode node)
+	public static Ide.Symbol? vala_to_ide_symbol (Vala.CodeNode node, bool simple_name = false)
 	{
-		Vala.Symbol? symbol = vala_symbol_from_code_node (node);
-		if (symbol == null)
+		if (node is Vala.Block) {
 			return null;
+		}
+
+		critical ("%s", node.type_name);
+		Vala.Symbol? symbol = vala_symbol_from_code_node (node);
 
 		Ide.SymbolKind kind = vala_symbol_kind_from_code_node (node);
 		Ide.SymbolFlags flags = vala_symbol_flags_from_code_node (node);
-		string name = vala_symbol_name (symbol);
+		string? name;
+		if (symbol != null) {
+			if (!simple_name) {
+				name = vala_symbol_name (symbol);
+			} else {
+				if (symbol is Vala.CreationMethod) {
+					name = (symbol as Vala.CreationMethod).class_name;
+				} else {
+					name = symbol.name;
+				}
+			}
+		} else {
+			name = node.to_string ();
+		}
 
-		var source_reference = node.source_reference;
+		unowned Vala.SourceReference? source_reference = null;
+		if (node is Vala.MethodCall) {
+			source_reference = ((Vala.MethodCall) node).call.symbol_reference.source_reference;
+		} else if (node is Vala.DataType) {
+			source_reference = ((Vala.DataType) node).data_type.source_reference;
+		} else if (node is Vala.MemberAccess) {
+			weak Vala.Symbol symbol_ref = ((Vala.MemberAccess) node).symbol_reference;
+			if (symbol_ref != null) {
+				source_reference = symbol_ref.source_reference;
+			} else {
+				source_reference = node.source_reference;
+			}
+		} else {
+			source_reference = node.source_reference;
+		}
+
 		if (source_reference != null) {
 			var file = GLib.File.new_for_path (source_reference.file.filename);
 			var loc = new Ide.Location (file,
 			                            source_reference.begin.line - 1,
 			                            source_reference.begin.column - 1);
 
-			return new Ide.Symbol (name, kind, flags, loc, loc);
+			return new Ide.Symbol (name, kind, flags, loc, null);
 		}
 
 		return new Ide.Symbol (name, kind, flags, null, null);
@@ -46,18 +77,26 @@ namespace Ide {
 		else if (node is Vala.Namespace) return Ide.SymbolKind.NAMESPACE;
 		else if (node is Vala.Delegate) return Ide.SymbolKind.TEMPLATE;
 		else if (node is Vala.Signal) return Ide.SymbolKind.UI_SIGNAL;
+		else if (node is Vala.MethodCall) return Ide.SymbolKind.METHOD;
 
 		return Ide.SymbolKind.NONE;
 	}
 
-	public static unowned string vala_symbol_name (Vala.Symbol symbol)
+	public static string? vala_symbol_name (Vala.Symbol symbol)
 	{
-		unowned string name = symbol.name;
-		if (symbol is Vala.CreationMethod) {
-			name = (symbol as Vala.CreationMethod).class_name;
+		if (symbol is Vala.Variable) {
+			unowned Vala.Variable variable = (Vala.Variable) symbol;
+			if (variable.variable_type != null) {
+				return variable.variable_type.to_prototype_string () + " " + symbol.name;
+			} else {
+				return "var " + symbol.name;
+			}
+		} else if (symbol is Vala.Method) {
+			var type = new Vala.MethodType ((Vala.Method) symbol);
+			return type.to_prototype_string ();
 		}
 
-		return name;
+		return symbol.to_string ();
 	}
 
 	public static Ide.SymbolFlags vala_symbol_flags_from_code_node (Vala.CodeNode node)
@@ -81,6 +120,10 @@ namespace Ide {
 	{
 		if (node is Vala.Expression)
 			return (node as Vala.Expression).symbol_reference;
+		else if (node is Vala.MethodCall)
+			return (node as Vala.MethodCall).call.symbol_reference;
+		else if (node is Vala.MemberAccess)
+			return (node as Vala.MemberAccess).symbol_reference;
 		else
 			return (node as Vala.Symbol);
 	}

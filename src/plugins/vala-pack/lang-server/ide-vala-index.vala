@@ -205,8 +205,9 @@ namespace Ide
 					if (source_file.filename == path) {
 						var locator = new Ide.ValaLocator ();
 						var vala_node = locator.locate (source_file, line, column);
-						if (vala_node != null && vala_node is Vala.Symbol) {
-							symbol = Ide.vala_to_ide_symbol (vala_node as Vala.Symbol);
+
+						if (vala_node != null) {
+							symbol = Ide.vala_to_ide_symbol (vala_node);
 						}
 
 						break;
@@ -346,11 +347,11 @@ namespace Ide
 			}
 		}
 
-		private Vala.Symbol? find_nearest_symbol (string path,
+		private Vala.CodeNode? find_nearest_symbol (string path,
 		                                          uint line,
 		                                          uint column)
 		{
-			Vala.Symbol? symbol = null;
+			Vala.CodeNode? symbol = null;
 			if (add_file (GLib.File.new_for_path (path)))
 				reparse ();
 
@@ -358,8 +359,8 @@ namespace Ide
 			foreach (var source_file in code_context.get_source_files ()) {
 				if (source_file.filename == path) {
 					var locator = new Ide.ValaLocator ();
-					var vala_node = locator.locate (source_file, line, column) as Vala.Symbol;
-					while (vala_node != null) {
+					symbol = locator.locate (source_file, line, column);
+					/*while (vala_node != null) {
 						if (vala_node is Vala.Class ||
 							vala_node is Vala.Subroutine ||
 							vala_node is Vala.Namespace ||
@@ -372,7 +373,7 @@ namespace Ide
 							vala_node = vala_node.parent_symbol;
 					}
 
-					symbol = vala_node;
+					symbol = vala_node;*/
 					break;
 				}
 			}
