@@ -14,6 +14,7 @@ plugins_sources += files([
   'gbp-flatpak-config-provider.c',
   'gbp-flatpak-dependency-updater.c',
   'gbp-flatpak-download-stage.c',
+  'gbp-flatpak-install-dialog.c',
   'gbp-flatpak-manifest.c',
   'gbp-flatpak-pipeline-addin.c',
   'gbp-flatpak-preferences-addin.c',
