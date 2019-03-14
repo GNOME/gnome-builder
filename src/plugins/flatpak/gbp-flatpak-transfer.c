@@ -390,15 +390,20 @@ gbp_flatpak_transfer_new (const gchar *id,
                           const gchar *branch,
                           gboolean     force_update)
 {
+  GbpFlatpakTransfer *ret;
+
   g_return_val_if_fail (id != NULL, NULL);
 
   if (arch == NULL)
     arch = flatpak_get_default_arch ();
 
-  return g_object_new (GBP_TYPE_FLATPAK_TRANSFER,
-                       "id", id,
-                       "arch", arch,
-                       "branch", branch,
-                       "force-update", force_update,
-                       NULL);
+  ret = g_object_new (GBP_TYPE_FLATPAK_TRANSFER,
+                      "id", id,
+                      "arch", arch,
+                      "branch", branch,
+                      "force-update", force_update,
+                      NULL);
+  gbp_flatpak_transfer_update_title (ret);
+
+  return ret;
 }
