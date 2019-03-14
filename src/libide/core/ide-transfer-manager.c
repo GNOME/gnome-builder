@@ -28,11 +28,13 @@
 
 #include "ide-transfer.h"
 #include "ide-transfer-manager.h"
+#include "ide-transfer-manager-private.h"
 
 struct _IdeTransferManager
 {
-  GObject    parent_instance;
-  GPtrArray *transfers;
+  GObject             parent_instance;
+  GPtrArray          *transfers;
+  GSimpleActionGroup *actions;
 };
 
 static void list_model_iface_init (GListModelInterface *iface);
@@ -88,6 +90,7 @@ ide_transfer_manager_finalize (GObject *object)
   IdeTransferManager *self = (IdeTransferManager *)object;
 
   g_clear_pointer (&self->transfers, g_ptr_array_unref);
+  g_clear_object (&self->actions);
 
   G_OBJECT_CLASS (ide_transfer_manager_parent_class)->finalize (object);
 }
@@ -209,6 +212,7 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
 static void
 ide_transfer_manager_init (IdeTransferManager *self)
 {
+  self->actions = g_simple_action_group_new ();
   self->transfers = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
@@ -227,6 +231,8 @@ static gboolean
 ide_transfer_manager_append (IdeTransferManager *self,
                              IdeTransfer        *transfer)
 {
+  g_autofree gchar *action_name = NULL;
+  g_autoptr(GSimpleAction) action = NULL;
   guint position;
 
   IDE_ENTRY;
@@ -249,6 +255,15 @@ ide_transfer_manager_append (IdeTransferManager *self,
   position = self->transfers->len;
   g_ptr_array_add (self->transfers, g_object_ref (transfer));
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+
+  action_name = g_strdup_printf ("cancel-%d", _ide_transfer_get_id (transfer));
+  action = g_simple_action_new (action_name, NULL);
+  g_signal_connect_object (action,
+                           "activate",
+                           G_CALLBACK (ide_transfer_cancel),
+                           transfer,
+                           G_CONNECT_SWAPPED);
+  g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
 
   IDE_RETURN (TRUE);
 }
@@ -290,6 +305,11 @@ ide_transfer_manager_clear (IdeTransferManager *self)
 
       if (!ide_transfer_get_active (transfer))
         {
+          g_autofree gchar *action_name = NULL;
+
+          action_name = g_strdup_printf ("cancel-%d", _ide_transfer_get_id (transfer));
+          g_action_map_remove_action (G_ACTION_MAP (self->actions), action_name);
+
           g_ptr_array_remove_index (self->transfers, i - 1);
           g_list_model_items_changed (G_LIST_MODEL (self), i - 1, 1, 0);
         }
@@ -490,4 +510,36 @@ ide_transfer_manager_get_default (void)
     g_once_init_leave (&instance, g_object_new (IDE_TYPE_TRANSFER_MANAGER, NULL));
 
   return instance;
+}
+
+void
+_ide_transfer_manager_cancel_by_id (IdeTransferManager *self,
+                                    gint                unique_id)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_TRANSFER_MANAGER (self));
+
+  g_print ("Cancelling transfer %i\n", unique_id);
+
+  for (guint i = 0; i < self->transfers->len; i++)
+    {
+      IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
+
+      if (_ide_transfer_get_id (transfer) == unique_id)
+        {
+          ide_transfer_cancel (transfer);
+          break;
+        }
+    }
+}
+
+GActionGroup *
+_ide_transfer_manager_get_actions (IdeTransferManager *self)
+{
+  if (self == NULL)
+    self = ide_transfer_manager_get_default ();
+
+  g_return_val_if_fail (IDE_IS_TRANSFER_MANAGER (self), NULL);
+
+  return G_ACTION_GROUP (self->actions);
 }

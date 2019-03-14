@@ -22,9 +22,12 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-debug.h"
 #include "ide-macros.h"
 #include "ide-transfer.h"
+#include "ide-transfer-manager-private.h"
 
 typedef struct
 {
@@ -33,6 +36,7 @@ typedef struct
   gchar *title;
   GCancellable *cancellable;
   gdouble progress;
+  gint unique_id;
   guint active : 1;
   guint completed : 1;
 } IdeTransferPrivate;
@@ -51,6 +55,7 @@ enum {
 G_DEFINE_TYPE_WITH_PRIVATE (IdeTransfer, ide_transfer, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+static gint last_unique_id;
 
 static void
 ide_transfer_real_execute_async (IdeTransfer         *self,
@@ -224,6 +229,9 @@ ide_transfer_class_init (IdeTransferClass *klass)
 static void
 ide_transfer_init (IdeTransfer *self)
 {
+  IdeTransferPrivate *priv = ide_transfer_get_instance_private (self);
+
+  priv->unique_id = ++last_unique_id;
 }
 
 static void
@@ -499,11 +507,15 @@ ide_transfer_create_notification (IdeTransfer *self)
 {
   IdeTransferPrivate *priv = ide_transfer_get_instance_private (self);
   g_autoptr(IdeNotification) notif = NULL;
+  g_autofree gchar *action_name = NULL;
+  g_autoptr(GIcon) icon = NULL;
 
   g_return_val_if_fail (IDE_IS_TRANSFER (self), NULL);
 
   if (priv->completed)
     return NULL;
+
+  icon = g_themed_icon_new ("media-playback-stop-symbolic");
 
   notif = ide_notification_new ();
   ide_notification_set_has_progress (notif, TRUE);
@@ -512,6 +524,12 @@ ide_transfer_create_notification (IdeTransfer *self)
   g_object_bind_property (self, "progress", notif, "progress", G_BINDING_SYNC_CREATE);
   g_object_bind_property (self, "icon-name", notif, "icon-name", G_BINDING_SYNC_CREATE);
 
+  /* We avoid using params beacuse it causes buttons to go into toggle-mode
+   * using action state.
+   */
+  action_name = g_strdup_printf ("transfer-manager.cancel-%d", priv->unique_id);
+  ide_notification_add_button (notif, _("Cancel"), icon, action_name);
+
   g_signal_connect_object (self,
                            "notify::completed",
                            G_CALLBACK (ide_transfer_notification_notify_completed),
@@ -519,4 +537,14 @@ ide_transfer_create_notification (IdeTransfer *self)
                            0);
 
   return g_steal_pointer (&notif);
+}
+
+gint
+_ide_transfer_get_id (IdeTransfer *self)
+{
+  IdeTransferPrivate *priv = ide_transfer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_TRANSFER (self), 0);
+
+  return priv->unique_id;
 }

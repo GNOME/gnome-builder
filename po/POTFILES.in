@@ -42,6 +42,7 @@ src/libide/code/ide-unsaved-files.c
 src/libide/core/ide-context.c
 src/libide/core/ide-global.c
 src/libide/core/ide-settings.c
+src/libide/core/ide-transfer.c
 src/libide/debugger/ide-debug-manager.c
 src/libide/editor/ide-editor-page-actions.c
 src/libide/editor/ide-editor-page-shortcuts.c

@@ -69,6 +69,10 @@ libide_core_public_headers = [
   'libide-core.h',
 ]
 
+libide_core_private_headers = [
+  'ide-transfer-manager-private.h',
+]
+
 install_headers(libide_core_public_headers, subdir: libide_core_header_subdir)
 
 #
@@ -111,7 +115,7 @@ libide_core = static_library('ide-core-' + libide_api_version, libide_core_sourc
 )
 
 libide_core_dep = declare_dependency(
-              sources: libide_core_generated_headers,
+              sources: libide_core_private_headers + libide_core_generated_headers,
          dependencies: libide_core_deps,
            link_whole: libide_core,
   include_directories: include_directories('.'),
@@ -119,6 +123,7 @@ libide_core_dep = declare_dependency(
 
 gnome_builder_public_sources += files(libide_core_public_sources)
 gnome_builder_public_headers += files(libide_core_public_headers)
+gnome_builder_private_headers += files(libide_core_private_headers)
 gnome_builder_generated_headers += libide_core_generated_headers
 gnome_builder_include_subdirs += libide_core_header_subdir
 gnome_builder_gir_extra_args += ['--c-include=libide-core.h', '-DIDE_CORE_COMPILATION']
