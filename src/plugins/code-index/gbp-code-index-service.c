@@ -238,6 +238,9 @@ static gboolean
 gbp_code_index_service_queue_index_cb (gpointer user_data)
 {
   GbpCodeIndexService *self = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
 
   IDE_ENTRY;
 
@@ -250,10 +253,16 @@ gbp_code_index_service_queue_index_cb (gpointer user_data)
   g_clear_object (&self->cancellable);
   self->cancellable = g_cancellable_new ();
 
-  gbp_code_index_service_index_async (self,
-                                      self->cancellable,
-                                      gbp_code_index_service_index_cb,
-                                      NULL);
+  if (!ide_object_in_destruction (IDE_OBJECT (self)) &&
+      (context = ide_object_ref_context (IDE_OBJECT (self))) &&
+      ide_context_has_project (context) &&
+      (build_manager = ide_build_manager_from_context (context)) &&
+      (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
+      ide_pipeline_has_configured (pipeline))
+    gbp_code_index_service_index_async (self,
+                                        self->cancellable,
+                                        gbp_code_index_service_index_cb,
+                                        NULL);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
