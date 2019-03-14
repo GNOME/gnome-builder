@@ -215,14 +215,16 @@ gbp_flatpak_preferences_addin_reload_worker (IdeTask      *task,
   GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)source_object;
   g_autoptr(GPtrArray) runtimes = NULL;
   GbpFlatpakApplicationAddin *app_addin;
+  GPtrArray *installations = task_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
+  g_assert (installations != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   runtimes = g_ptr_array_new_with_free_func (g_object_unref);
-
   app_addin = gbp_flatpak_application_addin_get_default ();
 
   /*
@@ -231,10 +233,6 @@ gbp_flatpak_preferences_addin_reload_worker (IdeTask      *task,
    */
   if (app_addin != NULL)
     {
-      g_autoptr(GPtrArray) installations = NULL;
-
-      installations = gbp_flatpak_application_addin_get_installations (app_addin);
-
       for (guint i = 0; i < installations->len; i++)
         {
           FlatpakInstallation *installation = g_ptr_array_index (installations, i);
@@ -338,11 +336,14 @@ gbp_flatpak_preferences_addin_reload_cb (GObject      *object,
 static void
 gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self)
 {
+  GbpFlatpakApplicationAddin *addin;
+  g_autoptr(GPtrArray) installations = NULL;
   g_autoptr(IdeTask) task = NULL;
   guint id;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
   g_assert (DZL_IS_PREFERENCES (self->preferences));
 
@@ -360,8 +361,12 @@ gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self)
       g_array_remove_range (self->ids, 0, self->ids->len);
     }
 
+  addin = gbp_flatpak_application_addin_get_default ();
+  installations = gbp_flatpak_application_addin_get_installations (addin);
+
   task = ide_task_new (self, self->cancellable, gbp_flatpak_preferences_addin_reload_cb, NULL);
   ide_task_set_source_tag (task, gbp_flatpak_preferences_addin_reload);
+  ide_task_set_task_data (task, g_steal_pointer (&installations), g_ptr_array_unref);
   ide_task_run_in_thread (task, gbp_flatpak_preferences_addin_reload_worker);
 
   IDE_EXIT;
