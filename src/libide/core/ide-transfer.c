@@ -532,7 +532,7 @@ ide_transfer_create_notification (IdeTransfer *self)
   if (priv->completed)
     return NULL;
 
-  icon = g_themed_icon_new ("media-playback-stop-symbolic");
+  icon = g_themed_icon_new ("process-stop-symbolic");
 
   notif = ide_notification_new ();
   ide_notification_set_has_progress (notif, TRUE);
