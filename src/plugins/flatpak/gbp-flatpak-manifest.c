@@ -1010,7 +1010,7 @@ gbp_flatpak_manifest_get_runtimes (GbpFlatpakManifest *self,
 
   ar = g_ptr_array_new ();
 
-  if (for_arch != NULL)
+  if (for_arch == NULL)
     for_arch = flatpak_get_default_arch ();
 
   if (self->runtime_version != NULL)
