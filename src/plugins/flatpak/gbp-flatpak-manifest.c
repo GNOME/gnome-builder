@@ -733,6 +733,14 @@ gbp_flatpak_manifest_get_finish_args (GbpFlatpakManifest *self)
   return (const gchar * const *)self->finish_args;
 }
 
+const gchar *
+gbp_flatpak_manifest_get_sdk (GbpFlatpakManifest *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
+
+  return self->sdk;
+}
+
 /**
  * gbp_flatpak_manifest_get_sdk_extensions:
  *
