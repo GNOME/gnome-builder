@@ -28,162 +28,233 @@ namespace Ide {
 				this.column = column;
 			}
 
-			public bool inside (Vala.SourceReference src) {
-				var begin = Location (src.begin.line, src.begin.column);
-				var end = Location (src.end.line, src.end.column);
-
-				return begin.before (this) && this.before(end);
-			}
-
-			public bool before (Location other) {
-				if (line > other.line)
+			public bool inside (Vala.CodeNode node) {
+				unowned Vala.SourceReference? src = node.source_reference;
+				if (src == null) {
 					return false;
-				else if (line == other.line && column > other.column)
+				}
+
+				unowned Vala.SourceLocation src_begin = src.begin;
+				unowned Vala.SourceLocation src_end = src.end;
+				critical ("[%s]: %s", node.type_name, node.to_string ());
+				if (line > src_begin.line && line < src_end.line) {
+					return true;
+				} else if (line == src_begin.line && line == src_end.line) {
+					return column >= src_begin.column && column <= src_end.column;
+				} else if (line == src_begin.line) {
+					return column >= src_begin.column;
+				} else if (line == src_end.line) {
+					return column <= src_end.column;
+				} else {
 					return false;
-				return true;
+				}
 			}
 		}
 
 		Location location;
 		Vala.CodeNode innermost;
-		Location innermost_begin;
-		Location innermost_end;
 
 		public Vala.CodeNode? locate (Vala.SourceFile file, uint line, uint column) {
+			critical ("~~ START ~~");
 			location = Location (line, column);
 			innermost = null;
 			file.accept_children(this);
 			return innermost;
 		}
 
-		bool update_location (Vala.CodeNode s) {
-			if (!location.inside (s.source_reference))
+		private bool is_closer_to_location (Vala.CodeNode node) {
+			if (innermost == null) {
+				return true;
+			}
+
+			if (innermost == node) {
 				return false;
+			}
 
-			var begin = Location (s.source_reference.begin.line, s.source_reference.begin.column);
-			var end = Location (s.source_reference.end.line, s.source_reference.end.column);
-
-			if (innermost == null || (innermost_begin.before(begin) && end.before(innermost_end))) {
-					innermost = s;
-					innermost_begin = begin;
-					innermost_end = end;
-					return true;
+			unowned Vala.SourceReference? node_src = node.source_reference;
+			unowned Vala.SourceReference? innermost_src = innermost.source_reference;
+			if (node_src.begin.line > innermost_src.begin.line || node_src.end.line < innermost_src.end.line) {
+				return true;
+			} else if (node_src.begin.line == innermost_src.begin.line && node_src.begin.column > innermost_src.begin.column) {
+				return true;
+			} else if (node_src.end.line == innermost_src.end.line && node_src.end.column < innermost_src.end.column) {
+				return true;
 			}
 
 			return false;
 		}
 
-		/*private bool covers_location (Vala.SourceReference source_ref) {
-			unowned source_ref.begin
-			if (source_ref.begin.line > location.line)
-				return false;
+		bool update_location (Vala.CodeNode node, bool assign = true) {
+			if (!location.inside (node)) {
+				if (node is Vala.Subroutine) {
+					unowned Vala.Block body = ((Vala.Subroutine)node).body;
+					if (location.inside (body)) {
+						visit_block (body);
+					}
+				}
 
-			if (source_ref.end.line < location.line)
 				return false;
+			}
+			critical ("[%s] [%u.%u:%u.%u] matches location [%u.%u]", node.type_name, node.source_reference.begin.line, node.source_reference.begin.column, node.source_reference.end.line, node.source_reference.end.column, location.line, location.column);
 
-			if (source_ref.begin.line == location.line && )
-				return false;
+			if (is_closer_to_location (node)) {
+				critical ("Replacing innermost");
+				if (assign) {
+					innermost = node;
+				}
 
-			if (source_ref.end.line < location.line)
-				return false;
-		}*/
+				return true;
+			}
+
+			return false;
+		}
+
+		public override void visit_assignment (Vala.Assignment a) {
+			if (update_location (a, false)) {
+				a.accept_children (this);
+			}
+		}
 
 		public override void visit_block (Vala.Block b) {
-			if (update_location (b))
-				b.accept_children(this);
+			if (update_location (b, false)) {
+				b.accept_children (this);
+			}
 		}
 
 		public override void visit_namespace (Vala.Namespace ns) {
+			// This is only the namespace declaration, source_reference is only one line long
 			update_location (ns);
-			ns.accept_children(this);
+			ns.accept_children (this);
 		}
+
 		public override void visit_class (Vala.Class cl) {
-			/* the location of a class contains only its declaration, not its content */
-			if (update_location (cl))
-				return;
-			cl.accept_children(this);
+			// This is only the class declaration, source_reference is only one line long
+			update_location (cl);
+			cl.accept_children (this);
 		}
+
+		public override void visit_data_type (Vala.DataType type) {
+			if (update_location (type)) {
+				type.accept_children (this);
+			}
+		}
+
 		public override void visit_struct (Vala.Struct st) {
-			if (update_location (st))
-				return;
-			st.accept_children(this);
+			if (update_location (st)) {
+				st.accept_children (this);
+			}
 		}
+
 		public override void visit_interface (Vala.Interface iface) {
-			if (update_location (iface))
-				return;
-			iface.accept_children(this);
+			if (update_location (iface)) {
+				iface.accept_children(this);
+			}
 		}
-		public override void visit_member_access (Vala.MemberAccess expr) {
-			if (update_location (expr))
-				return;
-			expr.accept_children(this);
-		}
+
 		public override void visit_method (Vala.Method m) {
-			if (update_location (m))
-				return;
-			m.accept_children(this);
+			if (update_location (m)) {
+				m.accept_children (this);
+			}
 		}
+
 		public override void visit_method_call (Vala.MethodCall expr) {
-			if (update_location (expr))
-				return;
-			expr.accept_children(this);
+			if (update_location (expr)) {
+				expr.accept_children (this);
+			}
 		}
+
+		public override void visit_member_access (Vala.MemberAccess expr) {
+			if (update_location (expr)) {
+				expr.accept_children (this);
+			}
+		}
+
 		public override void visit_creation_method (Vala.CreationMethod m) {
-			if (update_location (m))
-				return;
-			m.accept_children(this);
+			if (update_location (m)) {
+				m.accept_children (this);
+			}
 		}
+
+		public override void visit_object_creation_expression (Vala.ObjectCreationExpression expr) {
+			if (update_location (expr, false)) {
+				expr.accept_children (this);
+			}
+		}
+
 		public override void visit_property (Vala.Property prop) {
-			prop.accept_children(this);
+			prop.accept_children (this);
 		}
+
 		public override void visit_property_accessor (Vala.PropertyAccessor acc) {
-			acc.accept_children(this);
+			if (update_location (acc)) {
+				acc.accept_children (this);
+			}
 		}
+
 		public override void visit_constructor (Vala.Constructor c) {
-			c.accept_children(this);
+			if (update_location (c, false)) {
+				c.accept_children (this);
+			}
 		}
+
 		public override void visit_destructor (Vala.Destructor d) {
-			d.accept_children(this);
+			if (update_location (d, false)) {
+				d.accept_children (this);
+			}
 		}
+
 		public override void visit_if_statement (Vala.IfStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_switch_statement (Vala.SwitchStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_switch_section (Vala.SwitchSection section) {
 			visit_block (section);
 		}
+
 		public override void visit_while_statement (Vala.WhileStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_do_statement (Vala.DoStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_for_statement (Vala.ForStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_foreach_statement (Vala.ForeachStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_try_statement (Vala.TryStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_catch_clause (Vala.CatchClause clause) {
-			clause.accept_children(this);
+			clause.accept_children (this);
 		}
+
 		public override void visit_lock_statement (Vala.LockStatement stmt) {
-			stmt.accept_children(this);
+			stmt.accept_children (this);
 		}
+
 		public override void visit_expression_statement (Vala.ExpressionStatement stmt) {
 			stmt.accept_children (this);
 		}
+
 		public override void visit_declaration_statement (Vala.DeclarationStatement stmt) {
 			stmt.accept_children (this);
 		}
+
 		public override void visit_local_variable (Vala.LocalVariable variable) {
 			variable.accept_children (this);
 		}
+
 		public override void visit_end_full_expression (Vala.Expression expr) {
 			if (expr is Vala.LambdaExpression) {
 				if ((expr as Vala.LambdaExpression).method != null)
@@ -195,17 +266,18 @@ namespace Ide {
 				}
 			}
 		}
+
 		public override void visit_expression (Vala.Expression expr) {
 			if (expr is Vala.LambdaExpression) {
 				if ((expr as Vala.LambdaExpression).method != null)
 					visit_method ((expr as Vala.LambdaExpression).method);
 			}
-			if (expr is Vala.MethodCall) {
+			/*if (expr is Vala.MethodCall) {
 				update_location (expr);
 				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list())
 					visit_expression (e);
 
-			}
+			}*/
 			if (expr is Vala.Assignment) {
 				(expr as Vala.Assignment).accept_children (this);
 			}

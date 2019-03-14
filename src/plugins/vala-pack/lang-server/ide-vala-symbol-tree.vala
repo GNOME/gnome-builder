@@ -123,7 +123,7 @@ namespace Ide
 			GLib.Variant? root_variant = null;
 			var symbol = node as Vala.Symbol;
 			if (symbol != null) {
-				Ide.Symbol? ide_symbol = Ide.vala_to_ide_symbol (symbol);
+				Ide.Symbol? ide_symbol = Ide.vala_to_ide_symbol (symbol, true);
 				if (ide_symbol == null)
 					return null;
 
