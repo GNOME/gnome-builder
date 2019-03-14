@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-13 05:32+0000\n"
-"PO-Revision-Date: 2019-03-13 11:49+0300\n"
+"POT-Creation-Date: 2019-03-14 18:23+0000\n"
+"PO-Revision-Date: 2019-03-14 22:01+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -83,7 +83,6 @@ msgid "Multi-monitor support"
 msgstr "Çoklu ekran desteği"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
-#| msgid "Show overview map"
 msgid "Code overview mini-map"
 msgstr "Kod gözden geçirme küçük haritası"
 
@@ -92,7 +91,6 @@ msgid "Integration with Git"
 msgstr "Git tümleşimi"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:29
-#| msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
@@ -121,7 +119,6 @@ msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "HTML, Markdown, ve reStructuredTest, ve Sphinx canlı ön izleme"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:35
-#| msgid "Optional Vim-style editing"
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "İsteğe bağlı Vim, Emacs, ve SublimeText tarzı düzenleme"
 
@@ -941,7 +938,7 @@ msgstr "Kaydet"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1342
+#: src/libide/gui/ide-workbench.c:1366
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1057,6 +1054,7 @@ msgstr "Yeniden Y_ükle"
 #: src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-greeter-workspace-actions.c:119
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
 #: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "_Vazgeç"
@@ -1069,7 +1067,23 @@ msgstr ""
 "Builder, bu dosyanın başka program tarafından değiştirildiğini saptadı. "
 "Dosyayı yeniden yüklemek ister misiniz?"
 
-#: src/libide/editor/ide-editor-search-bar.c:324
+#: src/libide/editor/ide-editor-search-bar.c:179
+#: src/libide/editor/ide-editor-search-bar.ui:213
+msgid "Regular expressions"
+msgstr "Düzenli ifadeler"
+
+#: src/libide/editor/ide-editor-search-bar.c:184
+#: src/libide/editor/ide-editor-search-bar.ui:227
+#: src/libide/terminal/ide-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "Büyük/küçük harf duyarlı"
+
+#: src/libide/editor/ide-editor-search-bar.c:189
+#: src/libide/editor/ide-editor-search-bar.ui:240
+msgid "Match whole word only"
+msgstr "Sadece tüm sözcüğü eşleştir"
+
+#: src/libide/editor/ide-editor-search-bar.c:351
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
@@ -1092,19 +1106,6 @@ msgstr "Ara ve Ara-ve-Değiştir arasında geçiş yap"
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Büyük/küçük harf duyarlılığı gibi bulma seçeneklerini göster veya gizle"
-
-#: src/libide/editor/ide-editor-search-bar.ui:213
-msgid "Regular expressions"
-msgstr "Düzenli ifadeler"
-
-#: src/libide/editor/ide-editor-search-bar.ui:227
-#: src/libide/terminal/ide-terminal-search.ui:166
-msgid "Case sensitive"
-msgstr "Büyük/küçük harf duyarlı"
-
-#: src/libide/editor/ide-editor-search-bar.ui:240
-msgid "Match whole word only"
-msgstr "Sadece tüm sözcüğü eşleştir"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:151
@@ -1200,7 +1201,7 @@ msgid "Open File"
 msgstr "Dosya Aç"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1341
+#: src/libide/gui/ide-workbench.c:1365
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1324,7 +1325,7 @@ msgstr "Temizleniyor…"
 
 #: src/libide/foundry/ide-pipeline.c:3145
 #: src/libide/foundry/ide-pipeline.c:3202
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:212
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:219
 msgid "Failed"
 msgstr "Başarısız Oldu"
 
@@ -1350,7 +1351,7 @@ msgid "Configuring…"
 msgstr "Yapılandırılıyor…"
 
 #: src/libide/foundry/ide-pipeline.c:3178
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:194
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:201
 msgid "Building…"
 msgstr "İnşa Ediliyor…"
 
@@ -1368,7 +1369,7 @@ msgstr "Dışa Aktarılıyor…"
 
 #: src/libide/foundry/ide-pipeline.c:3194
 #: src/libide/foundry/ide-pipeline.c:3198
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:230
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:237
 msgid "Success"
 msgstr "Başarılı"
 
@@ -1479,6 +1480,7 @@ msgstr "Depo Türü"
 
 #: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:104
 msgid "Branch"
 msgstr "Dal"
 
@@ -1528,7 +1530,7 @@ msgid "All Project Types"
 msgstr "Tüm Proje Türleri"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:294 src/libide/gui/ide-workbench.c:807
+#: src/libide/gui/ide-workbench.c:315 src/libide/gui/ide-workbench.c:831
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1584,7 +1586,7 @@ msgid "Switch Surface"
 msgstr "Yüzeyler Arası Geçiş Yap"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1338
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1362
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Dosya Aç…"
@@ -3124,6 +3126,7 @@ msgstr "İnşa Ortamı"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
@@ -3177,6 +3180,12 @@ msgstr "İnşayı iptal et"
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:67
 msgid "Save build log"
 msgstr "İnşa günlüğünü kaydet"
+
+#. translators: use <b>translation</b> to wrap the text in bold font
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:116
+#| msgid "%s <b>%s</b>"
+msgid "<b>Missing</b>"
+msgstr "<b>Eksik</b>"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
 msgid "Update project dependencies"
@@ -4130,11 +4139,11 @@ msgstr ""
 "JavaScript dosyalarında ek tanılamalar bulmak için eslint kullanımını "
 "etkinleştirin. Bu, projenizde kod çalıştırılmasına neden olabilir."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:904
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
 msgstr "Flatpak manifest kullanarak bir projeyi kopyala"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:905
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
 msgstr "MANİFESTO"
 
@@ -4156,6 +4165,31 @@ msgstr "Flatpak manifest kaldırılamadı: %s"
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
 msgstr "Ağ kullanılabilir değil, indirmeler atlanıyor"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:144
+#| msgid "Installing "
+msgid "Install Missing SDK?"
+msgstr "Eksik SDKʼyı Kur?"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:149
+#| msgid "Install"
+msgid "_Install"
+msgstr "_Kur"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
+msgid ""
+"Builder needs to install the following software development kits to build "
+"your project. Click “Install” to have Builder install them for you."
+msgstr ""
+"Builder, projenizi inşa etmek için belirtilen yazılım geliştirme kitlerinin "
+"kurulmasına gereksiniyor. Builderʼın bunları sizin için kurmasını "
+"istiyorsanız “Kur”a tıklayın."
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr "Mimari"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
 msgid "Creating flatpak workspace"
@@ -4720,11 +4754,6 @@ msgstr "Sağlanan Araç Yok"
 msgid "A name to identify the sysroot."
 msgstr "Sysrootʼu tanımlayacak ad."
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
-msgid "Architecture"
-msgstr "Mimari"
-
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
@@ -4967,36 +4996,36 @@ msgstr "_Oluştur"
 msgid "Files"
 msgstr "Dosyalar"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:676
 #, c-format
 msgid "Copying 1 file"
 msgstr "1 dosya kopyalanıyor"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:679
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "%s/%s dosya kopyalanıyor"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
+#: src/plugins/project-tree/gbp-project-tree-addin.c:715
 msgid "Failed to copy files"
 msgstr "Dosya kopyalaması başarısız oldu"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Files copied"
 msgstr "Dosyalar kopyalandı"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
+#: src/plugins/project-tree/gbp-project-tree-addin.c:729
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s dosya kopyalandı"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:917
+#: src/plugins/project-tree/gbp-project-tree-addin.c:921
 msgid "Copying files…"
 msgstr "Dosyalar kopyalanıyor…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:918
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Files will be copied in a moment"
 msgstr "Dosyalar birazdan kopyalanmış olacak"
 
