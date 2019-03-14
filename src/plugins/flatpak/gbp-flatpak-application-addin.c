@@ -164,6 +164,7 @@ copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
 
   if (self->installations == NULL)
@@ -239,6 +240,7 @@ install_info_installation_changed (GFileMonitor      *monitor,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_FILE_MONITOR (monitor));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
@@ -254,6 +256,7 @@ install_info_installation_changed (GFileMonitor      *monitor,
 static void
 install_info_free (InstallInfo *info)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (info != NULL);
   g_assert (!info->installation || FLATPAK_IS_INSTALLATION (info->installation));
   g_assert (!info->monitor || G_IS_FILE_MONITOR (info->monitor));
@@ -278,6 +281,7 @@ install_info_new (GbpFlatpakApplicationAddin *self,
 {
   InstallInfo *info;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_assert (FLATPAK_IS_INSTALLATION (installation));
 
@@ -333,6 +337,7 @@ gbp_flatpak_application_addin_lazy_reload (GbpFlatpakApplicationAddin *self)
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
 
   self->has_loaded = TRUE;
@@ -405,6 +410,7 @@ gbp_flatpak_application_addin_load (IdeApplicationAddin *addin,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (application));
 
@@ -448,6 +454,7 @@ gbp_flatpak_application_addin_unload (IdeApplicationAddin *addin,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (application));
 
@@ -472,6 +479,7 @@ gbp_flatpak_application_addin_get_runtimes (GbpFlatpakApplicationAddin *self)
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
 
   if (!self->has_loaded)
@@ -517,6 +525,7 @@ gbp_flatpak_application_addin_get_installations (GbpFlatpakApplicationAddin *sel
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
 
   if (!self->has_loaded)
@@ -771,6 +780,7 @@ gbp_flatpak_application_addin_install_runtime_async (GbpFlatpakApplicationAddin 
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_assert (runtime_id != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -816,6 +826,7 @@ gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin
   InstallRequest *request;
   g_autoptr(GError) local_error = NULL;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
@@ -857,6 +868,7 @@ gbp_flatpak_application_addin_has_runtime (GbpFlatpakApplicationAddin *self,
 
   IDE_ENTRY;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
 
   if (id == NULL)
@@ -1252,6 +1264,7 @@ gbp_flatpak_application_addin_locate_sdk_async (GbpFlatpakApplicationAddin  *sel
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_assert (runtime_id != NULL);
   g_assert (arch != NULL);
@@ -1314,6 +1327,8 @@ gbp_flatpak_application_addin_find_ref (GbpFlatpakApplicationAddin *self,
                                         const gchar                *arch,
                                         const gchar                *branch)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   for (guint i = 0; i < self->installations->len; i++)
     {
       InstallInfo *info = g_ptr_array_index (self->installations, i);
@@ -1349,6 +1364,7 @@ gbp_flatpak_application_addin_get_deploy_dir (GbpFlatpakApplicationAddin *self,
 {
   g_autoptr(FlatpakInstalledRef) ref = NULL;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), NULL);
   g_return_val_if_fail (id, NULL);
   g_return_val_if_fail (arch, NULL);
@@ -1373,6 +1389,7 @@ gbp_flatpak_application_addin_check_sysdeps_cb (GObject      *object,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SUBPROCESS (subprocess));
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
   g_return_if_fail (IDE_IS_TASK (task));
@@ -1398,6 +1415,7 @@ gbp_flatpak_application_addin_check_sysdeps_async (GbpFlatpakApplicationAddin *s
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -1443,6 +1461,7 @@ gbp_flatpak_application_addin_check_sysdeps_finish (GbpFlatpakApplicationAddin  
 
   IDE_ENTRY;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
