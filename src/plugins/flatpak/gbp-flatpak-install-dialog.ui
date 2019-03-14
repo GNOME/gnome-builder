@@ -46,7 +46,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">6</property>
-                <property name="label" translatable="yes">Builder needs to install the following software development kits to build your project. Click “Install” for Builder install them for you.</property>
+                <property name="label" translatable="yes">Builder needs to install the following software development kits to build your project.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">50</property>
                 <property name="xalign">0</property>
