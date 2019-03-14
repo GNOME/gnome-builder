@@ -878,9 +878,9 @@ gbp_flatpak_application_addin_has_runtime (GbpFlatpakApplicationAddin *self,
           const gchar *ref_arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
           const gchar *ref_branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
 
-          if (g_strcmp0 (id, ref_id) == 0 &&
-              (branch == NULL || (g_strcmp0 (branch, ref_branch) == 0)) &&
-              g_strcmp0 (arch, ref_arch) == 0)
+          if (ide_str_equal0 (id, ref_id) &&
+              ide_str_equal0 (arch, ref_arch) &&
+              (ide_str_empty0 (branch) || ide_str_equal0 (branch, ref_branch)))
             IDE_RETURN (TRUE);
         }
     }
