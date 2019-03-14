@@ -30,6 +30,7 @@
 #include "ide-context-private.h"
 #include "ide-foundry-init.h"
 #include "ide-thread-private.h"
+#include "ide-transfer-manager-private.h"
 
 #include "ide-application.h"
 #include "ide-gui-global.h"
@@ -811,6 +812,11 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                            G_CALLBACK (ide_workbench_workspace_has_toplevel_focus_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  /* Give access to transfer-manager */
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "transfer-manager",
+                                  _ide_transfer_manager_get_actions (NULL));
 
   /* Notify all the addins about the new workspace. */
   if ((addins = ide_workbench_collect_addins (self)))
