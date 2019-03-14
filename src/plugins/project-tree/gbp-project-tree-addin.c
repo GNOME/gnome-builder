@@ -456,6 +456,10 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
       directory = g_file_get_parent (item);
       parent = find_file_node (self->tree, directory);
 
+      /* Nothing to do, no ancestor to attach child */
+      if (parent == NULL)
+        break;
+
       info = g_file_query_info (item,
                                 IDE_PROJECT_FILE_ATTRIBUTES,
                                 G_FILE_QUERY_INFO_NONE,
