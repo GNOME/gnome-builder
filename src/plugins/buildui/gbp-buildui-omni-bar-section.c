@@ -107,8 +107,13 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
 
   gtk_label_set_label (self->popover_config_label, display_name);
   gtk_label_set_label (self->popover_device_label, device_name);
-  gtk_label_set_label (self->popover_runtime_label, runtime_name);
   gtk_actionable_set_action_target (GTK_ACTIONABLE (self->configure_button), "s", config_id);
+
+  if (runtime_name != NULL)
+    gtk_label_set_label (self->popover_runtime_label, runtime_name);
+  else
+    /* translators: use <b>translation</b> to wrap the text in bold font */
+    gtk_label_set_markup (self->popover_runtime_label, _("<b>Missing</b>"));
 }
 
 static void
