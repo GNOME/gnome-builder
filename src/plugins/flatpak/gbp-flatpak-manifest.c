@@ -24,6 +24,7 @@
 #include <flatpak/flatpak.h>
 #include <json-glib/json-glib.h>
 
+#include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-util.h"
@@ -1024,8 +1025,11 @@ gbp_flatpak_manifest_get_runtimes (GbpFlatpakManifest *self,
   /* First discover the runtime needed for building */
   g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", sdk, for_arch, runtime_version));
 
+#if 0
+  /* XXX: Ignore docs for now, since they aren't reliable */
   /* Now add the documentation SDK so the user can get docs */
   g_ptr_array_add (ar, g_strdup_printf ("%s.Docs/%s/%s", sdk, for_arch, runtime_version));
+#endif
 
   /* Now discover the runtime needed for running */
   g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", self->runtime, for_arch, runtime_version));
