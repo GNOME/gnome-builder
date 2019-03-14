@@ -93,6 +93,7 @@ void      _ide_workspace_set_context            (IdeWorkspace        *workspace,
                                                  IdeContext          *context);
 gboolean  _ide_workbench_is_last_workspace      (IdeWorkbench        *self,
                                                  IdeWorkspace        *workspace);
+IdeWorkbench *_ide_workbench_from_context       (IdeContext           *context);
 void      _ide_header_bar_init_shortcuts        (IdeHeaderBar        *self);
 void      _ide_header_bar_show_menu             (IdeHeaderBar        *self);
 void      _ide_gtk_progress_bar_start_pulsing   (GtkProgressBar      *progress);

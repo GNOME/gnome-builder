@@ -171,6 +171,24 @@ ignore_error (GError *error)
          g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
 }
 
+/**
+ * ide_workbench_from_context:
+ * @context: an #IdeContext
+ *
+ * Helper to get the #IdeWorkbench for a given context.
+ *
+ * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
+ *
+ * Since: 3.34
+ */
+IdeWorkbench *
+_ide_workbench_from_context (IdeContext *context)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  return IDE_WORKBENCH (g_object_get_data (G_OBJECT (context), "WORKBENCH"));
+}
+
 static void
 ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
@@ -184,6 +202,9 @@ ide_workbench_set_context (IdeWorkbench *self,
 
   if (context == NULL)
     context = new_context = ide_context_new ();
+
+  /* backpointer for the workbench */
+  g_object_set_data (G_OBJECT (context), "WORKBENCH", self);
 
   g_set_object (&self->context, context);
 
@@ -365,6 +386,9 @@ ide_workbench_finalize (GObject *object)
   IdeWorkbench *self = (IdeWorkbench *)object;
 
   g_assert (IDE_IS_MAIN_THREAD ());
+
+  if (self->context != NULL)
+    g_object_set_data (G_OBJECT (self->context), "WORKBENCH", NULL);
 
   g_clear_object (&self->build_system);
   g_clear_object (&self->vcs);
