@@ -120,6 +120,7 @@
 {{end}}
         {
             "name": "{{name}}",
+            "builddir": true,
             "buildsystem": "meson",
             "sources": [
                 {
