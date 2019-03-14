@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-13 05:32+0000\n"
-"PO-Revision-Date: 2019-03-13 03:05-0300\n"
+"POT-Creation-Date: 2019-03-14 18:23+0000\n"
+"PO-Revision-Date: 2019-03-14 15:32-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese - Brazil <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -78,7 +78,6 @@ msgid "Multi-monitor support"
 msgstr "Suporte a multimonitor"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
-#| msgid "Show overview map"
 msgid "Code overview mini-map"
 msgstr "Minimapa de visão de geral de código"
 
@@ -87,7 +86,6 @@ msgid "Integration with Git"
 msgstr "Integração com Git"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:29
-#| msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
@@ -117,7 +115,6 @@ msgstr ""
 "HTML, Markdown e reStructuredText, e visualização em tempo real de Sphinx"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:35
-#| msgid "Optional Vim-style editing"
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "Edição de texto opcionalmente em estilo de Vim, Emacs e SublimeText"
 
@@ -957,7 +954,7 @@ msgstr "Salvar"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1342
+#: src/libide/gui/ide-workbench.c:1366
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1073,6 +1070,7 @@ msgstr "_Recarregar"
 #: src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-greeter-workspace-actions.c:119
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
 #: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "_Cancelar"
@@ -1085,7 +1083,23 @@ msgstr ""
 "O Builder descobriu que este arquivo foi modificado externamente. Você "
 "gostaria de recarregar o arquivo?"
 
-#: src/libide/editor/ide-editor-search-bar.c:324
+#: src/libide/editor/ide-editor-search-bar.c:179
+#: src/libide/editor/ide-editor-search-bar.ui:213
+msgid "Regular expressions"
+msgstr "Expressões regulares"
+
+#: src/libide/editor/ide-editor-search-bar.c:184
+#: src/libide/editor/ide-editor-search-bar.ui:227
+#: src/libide/terminal/ide-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "Diferenciar maiúsculas de minúsculas"
+
+#: src/libide/editor/ide-editor-search-bar.c:189
+#: src/libide/editor/ide-editor-search-bar.ui:240
+msgid "Match whole word only"
+msgstr "Corresponder apenas palavra inteira"
+
+#: src/libide/editor/ide-editor-search-bar.c:351
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
@@ -1109,19 +1123,6 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Mostrar ou ocultar opções de pesquisa como p.ex. diferenciação de maiúsculo/"
 "minúsculo"
-
-#: src/libide/editor/ide-editor-search-bar.ui:213
-msgid "Regular expressions"
-msgstr "Expressões regulares"
-
-#: src/libide/editor/ide-editor-search-bar.ui:227
-#: src/libide/terminal/ide-terminal-search.ui:166
-msgid "Case sensitive"
-msgstr "Diferenciar maiúsculas de minúsculas"
-
-#: src/libide/editor/ide-editor-search-bar.ui:240
-msgid "Match whole word only"
-msgstr "Corresponder apenas palavra inteira"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:151
@@ -1217,7 +1218,7 @@ msgid "Open File"
 msgstr "Abre arquivo"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1341
+#: src/libide/gui/ide-workbench.c:1365
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1344,7 +1345,7 @@ msgstr "Limpando…"
 
 #: src/libide/foundry/ide-pipeline.c:3145
 #: src/libide/foundry/ide-pipeline.c:3202
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:212
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:219
 msgid "Failed"
 msgstr "Falhou"
 
@@ -1370,7 +1371,7 @@ msgid "Configuring…"
 msgstr "Configurando…"
 
 #: src/libide/foundry/ide-pipeline.c:3178
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:194
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:201
 msgid "Building…"
 msgstr "Compilando…"
 
@@ -1389,7 +1390,7 @@ msgstr "Exportando…"
 # A resposta por ser Failed ou Successful -- Rafael
 #: src/libide/foundry/ide-pipeline.c:3194
 #: src/libide/foundry/ide-pipeline.c:3198
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:230
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:237
 msgid "Success"
 msgstr "Sucesso"
 
@@ -1500,6 +1501,7 @@ msgstr "Tipo de repositório"
 
 #: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:104
 msgid "Branch"
 msgstr "Ramo"
 
@@ -1549,7 +1551,7 @@ msgid "All Project Types"
 msgstr "Todos tipos de projetos"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:294 src/libide/gui/ide-workbench.c:807
+#: src/libide/gui/ide-workbench.c:315 src/libide/gui/ide-workbench.c:831
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1605,7 +1607,7 @@ msgid "Switch Surface"
 msgstr "Alternar superfície"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1338
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1362
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Abrir arquivo…"
@@ -3161,6 +3163,7 @@ msgstr "Ambiente de compilação"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
@@ -3214,6 +3217,12 @@ msgstr "Cancelar compilação"
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:67
 msgid "Save build log"
 msgstr "Salvar log de compilação"
+
+#. translators: use <b>translation</b> to wrap the text in bold font
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:116
+#| msgid "<b>VIM Modal Editing</b>"
+msgid "<b>Missing</b>"
+msgstr "<b>Faltando</b>"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
 msgid "Update project dependencies"
@@ -4172,11 +4181,11 @@ msgstr ""
 "Habilita o uso do ESLint para localizar diagnósticos adicionais em programa "
 "JavaScript. Isso pode resultar na execução do código de seu projeto."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:904
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
 msgstr "Clonar um projeto usando manifesto do flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:905
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
 msgstr "MANIFESTO"
 
@@ -4198,6 +4207,31 @@ msgstr "Falha ao renomear manifesto do flatpak: %s"
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
 msgstr "Rede não disponível, pulando os downloads"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:144
+#| msgid "Installing "
+msgid "Install Missing SDK?"
+msgstr "Instalar o SDK em falta?"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:149
+#| msgid "Install"
+msgid "_Install"
+msgstr "_Instalar"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
+msgid ""
+"Builder needs to install the following software development kits to build "
+"your project. Click “Install” to have Builder install them for you."
+msgstr ""
+"O Builder precisa instalar os seguintes kits de desenvolvimento de software "
+"para compilar o seu projeto. Clique em “Instalar” para que o Builder os "
+"instale para você."
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr "Arquitetura"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
 msgid "Creating flatpak workspace"
@@ -4765,11 +4799,6 @@ msgstr "Nenhuma ferramenta fornecida"
 msgid "A name to identify the sysroot."
 msgstr "Um nome para identificar a raiz de sistema."
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
-msgid "Architecture"
-msgstr "Arquitetura"
-
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
@@ -5013,37 +5042,37 @@ msgstr "_Criar"
 msgid "Files"
 msgstr "Arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:676
 #, c-format
 msgid "Copying 1 file"
 msgstr "Copiando 1 arquivo"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:679
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s de %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
+#: src/plugins/project-tree/gbp-project-tree-addin.c:715
 msgid "Failed to copy files"
 msgstr "Falha ao copiar arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Files copied"
 msgstr "Arquivos copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
+#: src/plugins/project-tree/gbp-project-tree-addin.c:729
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "Copiado %s arquivo"
 msgstr[1] "Copiados %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:917
+#: src/plugins/project-tree/gbp-project-tree-addin.c:921
 msgid "Copying files…"
 msgstr "Copiando arquivos…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:918
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Files will be copied in a moment"
 msgstr "Os arquivo serão copiados em instantes"
 
@@ -7489,9 +7518,6 @@ msgstr "O arquivo deve estar salvo localmente para análise."
 
 #~ msgid "Use EMACS style modal editing in the source code editor."
 #~ msgstr "Usa edição modal de estilo EMACS no editor de código fonte."
-
-#~ msgid "<b>VIM Modal Editing</b>"
-#~ msgstr "<b>Edição modal de VIM</b>"
 
 #~ msgid "Language Settings"
 #~ msgstr "Configurações de idioma"
