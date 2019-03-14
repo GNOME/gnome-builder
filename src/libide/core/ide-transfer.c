@@ -52,9 +52,15 @@ enum {
   N_PROPS
 };
 
+enum {
+  CANCELLED,
+  N_SIGNALS
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdeTransfer, ide_transfer, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 static gint last_unique_id;
 
 static void
@@ -224,6 +230,15 @@ ide_transfer_class_init (IdeTransferClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [CANCELLED] =
+    g_signal_new ("cancelled",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 }
 
 static void
@@ -448,6 +463,8 @@ ide_transfer_cancel (IdeTransfer *self)
 
   if (!g_cancellable_is_cancelled (priv->cancellable))
     g_cancellable_cancel (priv->cancellable);
+
+  g_signal_emit (self, signals [CANCELLED], 0);
 }
 
 gboolean
