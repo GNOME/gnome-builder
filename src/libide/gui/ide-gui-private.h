@@ -43,6 +43,8 @@
 
 G_BEGIN_DECLS
 
+gboolean  _ide_gtk_widget_action_is_stateful    (GtkWidget           *widget,
+                                                 const gchar         *action_name);
 void      _ide_frame_init_actions               (IdeFrame            *self);
 void      _ide_frame_init_shortcuts             (IdeFrame            *self);
 void      _ide_frame_update_actions             (IdeFrame            *self);
