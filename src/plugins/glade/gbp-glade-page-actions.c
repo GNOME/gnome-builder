@@ -60,16 +60,22 @@ gbp_glade_page_action_preview (GSimpleAction *action,
   /* Just preview the first toplevel. To preview others, they need to
    * right-click to get the context menu.
    */
-  if (toplevels != NULL)
+  for (const GList *iter = toplevels; iter != NULL; iter = iter->next)
     {
-      GtkWidget *widget = toplevels->data;
-      GladeWidget *glade;
+      if (GTK_IS_WIDGET (iter->data))
+        {
+          GtkWidget *widget = iter->data;
+          GladeWidget *glade;
 
-      g_assert (GTK_IS_WIDGET (widget));
-      glade = glade_widget_get_from_gobject (widget);
-      g_assert (GLADE_IS_WIDGET (glade));
+          g_assert (GTK_IS_WIDGET (widget));
 
-      glade_project_preview (project, glade);
+          glade = glade_widget_get_from_gobject (widget);
+          g_assert (GLADE_IS_WIDGET (glade));
+
+          glade_project_preview (project, glade);
+
+          break;
+        }
     }
 }
 
