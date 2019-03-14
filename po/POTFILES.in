@@ -230,6 +230,8 @@ src/plugins/flatpak/gbp-flatpak-clone-widget.c
 src/plugins/flatpak/gbp-flatpak-clone-widget.ui
 src/plugins/flatpak/gbp-flatpak-config-provider.c
 src/plugins/flatpak/gbp-flatpak-download-stage.c
+src/plugins/flatpak/gbp-flatpak-install-dialog.c
+src/plugins/flatpak/gbp-flatpak-install-dialog.ui
 src/plugins/flatpak/gbp-flatpak-pipeline-addin.c
 src/plugins/flatpak/gbp-flatpak-preferences-addin.c
 src/plugins/flatpak/gbp-flatpak-runner.c
