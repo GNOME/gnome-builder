@@ -553,6 +553,12 @@ ide_transfer_create_notification (IdeTransfer *self)
                            notif,
                            0);
 
+  g_signal_connect_object (self,
+                           "cancelled",
+                           G_CALLBACK (ide_notification_withdraw),
+                           notif,
+                           G_CONNECT_SWAPPED);
+
   return g_steal_pointer (&notif);
 }
 
