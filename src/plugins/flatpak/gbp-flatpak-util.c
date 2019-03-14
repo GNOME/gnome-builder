@@ -122,7 +122,7 @@ gbp_flatpak_split_id (const gchar  *str,
 
   if (parts[i] != NULL)
     {
-      if (branch != NULL)
+      if (branch != NULL && !ide_str_empty0 (parts[i]))
         *branch = g_strdup (parts[i]);
     }
 
