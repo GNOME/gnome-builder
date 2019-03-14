@@ -39,6 +39,8 @@ const gchar * const *gbp_flatpak_manifest_get_build_args     (GbpFlatpakManifest
 const gchar * const *gbp_flatpak_manifest_get_finish_args    (GbpFlatpakManifest   *self);
 const gchar * const *gbp_flatpak_manifest_get_sdk_extensions (GbpFlatpakManifest   *self);
 const gchar         *gbp_flatpak_manifest_get_sdk            (GbpFlatpakManifest   *self);
+gchar              **gbp_flatpak_manifest_get_runtimes       (GbpFlatpakManifest   *self,
+                                                              const gchar          *for_arch);
 void                 gbp_flatpak_manifest_save_async         (GbpFlatpakManifest   *self,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
