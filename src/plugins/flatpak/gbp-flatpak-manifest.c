@@ -1034,10 +1034,7 @@ gbp_flatpak_manifest_get_runtimes (GbpFlatpakManifest *self,
   if (self->sdk_extensions != NULL)
     {
       for (guint i = 0; self->sdk_extensions[i]; i++)
-        g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s",
-                                              self->sdk_extensions[i],
-                                              for_arch,
-                                              runtime_version));
+        g_ptr_array_add (ar, g_strdup_printf ("%s/%s/", self->sdk_extensions[i], for_arch));
     }
 
   g_ptr_array_add (ar, NULL);
