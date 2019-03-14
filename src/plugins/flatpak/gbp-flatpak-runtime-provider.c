@@ -24,7 +24,12 @@
 #include <ostree.h>
 #include <string.h>
 
+#include <libide-gui.h>
+
+#include "ide-gui-private.h"
+
 #include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-install-dialog.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-runtime-provider.h"
@@ -46,11 +51,11 @@ typedef struct
 typedef struct
 {
   IdeConfig *config;
-  gchar            *runtime_id;
-  gchar            *name;
-  gchar            *arch;
-  gchar            *branch;
-  guint             count;
+  gchar     *runtime_id;
+  gchar     *name;
+  gchar     *arch;
+  gchar     *branch;
+  gint       count;
 } BootstrapState;
 
 struct _GbpFlatpakRuntimeProvider
@@ -489,7 +494,6 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_runtime_provider_install_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (!g_str_has_prefix (runtime_id, "flatpak:"))
     IDE_GOTO (unknown_runtime_id);
@@ -542,20 +546,88 @@ gbp_flatpak_runtime_provider_install_finish (IdeRuntimeProvider  *provider,
 }
 
 static void
-gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
-                                           GAsyncResult *result,
-                                           gpointer      user_data)
+gbp_flatpak_runtime_provider_bootstrap_complete (IdeTask *task)
 {
-  GbpFlatpakRuntimeProvider *self;
+  IdeRuntimeManager *runtime_manager;
+  BootstrapState *state;
+  IdeContext *context;
+  IdeRuntime *runtime;
+  IdeObject *object;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->count == 0);
+
+  object = ide_task_get_source_object (task);
+  context = ide_object_get_context (object);
+  runtime_manager = ide_runtime_manager_from_context (context);
+  runtime = ide_runtime_manager_get_runtime (runtime_manager, state->runtime_id);
+
+  if (runtime != NULL)
+    ide_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
+  else
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to install runtime for build");
+}
+
+static void
+gbp_flatpak_runtime_provider_bootstrap_install_cb (GObject      *object,
+                                                   GAsyncResult *result,
+                                                   gpointer      user_data)
+{
+  IdeTransferManager *transfer_manager = (IdeTransferManager *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   BootstrapState *state;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (object) ||
-            IDE_IS_TRANSFER_MANAGER (object));
-  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_TRANSFER_MANAGER (transfer_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->count > 0);
+
+  state->count--;
+
+  if (ide_task_had_error (task))
+    return;
+
+  /* We might still be able to find the runtime if the transfer fails */
+  ide_transfer_manager_execute_finish (transfer_manager, result, &error);
+
+  if (error != NULL)
+    g_debug ("Transfer failed: %s", error->message);
+
+  if (state->count == 0)
+    gbp_flatpak_runtime_provider_bootstrap_complete (task);
+}
+
+static void
+gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  GbpFlatpakInstallDialog *dialog = (GbpFlatpakInstallDialog *)object;
+  GbpFlatpakRuntimeProvider *self;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) runtimes = NULL;
+  IdeTransferManager *transfer_manager;
+  BootstrapState *state;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
   if (ide_task_had_error (task))
     return;
@@ -565,63 +637,48 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (state != NULL);
-  g_assert (state->count > 0);
 
-  state->count--;
-
-  if (GBP_IS_FLATPAK_RUNTIME_PROVIDER (object))
+  if (!gbp_flatpak_install_dialog_run_finish (dialog, result, &error))
     {
-      if (!gbp_flatpak_runtime_provider_install_finish (IDE_RUNTIME_PROVIDER (object), result, &error))
+      gbp_flatpak_runtime_provider_bootstrap_complete (task);
+      return;
+    }
+
+  runtimes = gbp_flatpak_install_dialog_get_runtimes (dialog);
+  transfer_manager = ide_transfer_manager_get_default ();
+
+  for (guint i = 0; runtimes[i]; i++)
+    {
+      g_autofree gchar *name = NULL;
+      g_autofree gchar *arch = NULL;
+      g_autofree gchar *branch = NULL;
+
+      if (gbp_flatpak_split_id (runtimes[i], &name, &arch, &branch))
         {
-          g_warning ("Failed to install runtime: %s", error->message);
-          if (!ide_task_get_completed (task))
-            ide_task_return_error (task, g_steal_pointer (&error));
-          return;
+          g_autoptr(GbpFlatpakTransfer) transfer = NULL;
+          g_autoptr(IdeNotification) notif = NULL;
+
+          state->count++;
+
+          transfer = gbp_flatpak_transfer_new (name, arch, branch, FALSE);
+          notif = ide_transfer_create_notification (IDE_TRANSFER (transfer));
+          ide_notification_attach (notif, IDE_OBJECT (self));
+
+          ide_transfer_manager_execute_async (transfer_manager,
+                                              IDE_TRANSFER (transfer),
+                                              ide_task_get_cancellable (task),
+                                              gbp_flatpak_runtime_provider_bootstrap_install_cb,
+                                              g_object_ref (task));
         }
     }
-  else if (IDE_IS_TRANSFER_MANAGER (object))
-    {
-      if (!ide_transfer_manager_execute_finish (IDE_TRANSFER_MANAGER (object), result, &error))
-        {
-          g_warning ("Failed to install runtime: %s", error->message);
-          if (!ide_task_get_completed (task))
-            ide_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-    }
 
-  if (ide_task_return_error_if_cancelled (task))
-    return;
-
-  if (state->count == 0 && !ide_task_get_completed (task))
-    {
-      g_autofree gchar *runtime_id = NULL;
-      IdeRuntimeManager *runtime_manager;
-      IdeContext *context;
-      IdeRuntime *runtime;
-
-      runtime_id = g_strdup_printf ("flatpak:%s/%s/%s",
-                                    state->name,
-                                    state->arch,
-                                    state->branch);
-
-      context = ide_object_get_context (IDE_OBJECT (self->manager));
-      runtime_manager = ide_runtime_manager_from_context (context);
-      runtime = ide_runtime_manager_get_runtime (runtime_manager, runtime_id);
-
-      if (runtime == NULL)
-        ide_task_return_new_error (task,
-                                   G_IO_ERROR,
-                                   G_IO_ERROR_NOT_SUPPORTED,
-                                   "Falling back to default runtime lookup");
-      else
-        ide_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
-    }
+  if (state->count == 0)
+    gbp_flatpak_runtime_provider_bootstrap_complete (task);
 }
 
 static void
 gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
-                                              IdePipeline    *pipeline,
+                                              IdePipeline         *pipeline,
                                               GCancellable        *cancellable,
                                               GAsyncReadyCallback  callback,
                                               gpointer             user_data)
@@ -630,11 +687,17 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_autofree gchar *name = NULL;
   g_autofree gchar *arch = NULL;
   g_autofree gchar *branch = NULL;
+  g_autofree gchar *docs_id = NULL;
   g_autoptr(IdeTask) task = NULL;
-  IdeConfig *config;
+  g_auto(GStrv) runtimes = NULL;
+  GbpFlatpakApplicationAddin *addin;
+  GbpFlatpakInstallDialog *dialog;
   BootstrapState *state;
+  IdeWorkbench *workbench;
   const gchar *runtime_id;
   const gchar *build_arch;
+  IdeContext *context;
+  IdeConfig *config;
 
   IDE_ENTRY;
 
@@ -643,9 +706,10 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_release_on_propagate (task, FALSE);
   ide_task_set_source_tag (task, gbp_flatpak_runtime_provider_bootstrap_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
+  context = ide_object_get_context (IDE_OBJECT (self));
   build_arch = ide_pipeline_get_arch (pipeline);
   config = ide_pipeline_get_config (pipeline);
   runtime_id = ide_config_get_runtime_id (config);
@@ -661,6 +725,13 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       IDE_EXIT;
     }
 
+  /* Create dialog to potentially query user if we are allowed to install */
+  dialog = gbp_flatpak_install_dialog_new ();
+  workbench = _ide_workbench_from_context (context);
+  gtk_window_group_add_window (GTK_WINDOW_GROUP (workbench), GTK_WINDOW (dialog));
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+
+  /* Create state for async op */
   state = g_slice_new0 (BootstrapState);
   state->config = g_object_ref (config);
   state->runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", name, build_arch, branch);
@@ -669,52 +740,51 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   state->arch = g_strdup (build_arch);
   ide_task_set_task_data (task, state, bootstrap_state_free);
 
+  addin = gbp_flatpak_application_addin_get_default ();
+
+  /* Add all the runtimes the manifest needs */
   if (GBP_IS_FLATPAK_MANIFEST (state->config))
     {
-      IdeTransferManager *transfer_manager;
-      GbpFlatpakApplicationAddin *addin;
-      const gchar * const *sdk_exts;
+      g_auto(GStrv) all = NULL;
 
-      transfer_manager = ide_transfer_manager_get_default ();
-      addin = gbp_flatpak_application_addin_get_default ();
-      sdk_exts = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (state->config));
+      all = gbp_flatpak_manifest_get_runtimes (GBP_FLATPAK_MANIFEST (state->config),
+                                               state->arch);
 
-      if (sdk_exts != NULL)
+      if (all != NULL)
         {
-          for (guint i = 0; sdk_exts[i] != NULL; i++)
+          for (guint i = 0; all[i]; i++)
             {
-              g_autofree gchar *ext_id = NULL;
-              g_autofree gchar *ext_arch = NULL;
-              g_autofree gchar *ext_branch = NULL;
+              g_autofree gchar *item_name = NULL;
+              g_autofree gchar *item_arch = NULL;
+              g_autofree gchar *item_branch = NULL;
 
-              if (gbp_flatpak_split_id (sdk_exts[i], &ext_id, &ext_arch, &ext_branch))
+              if (gbp_flatpak_split_id (all[i], &item_name, &item_arch, &item_branch))
                 {
-                  /* Check for runtime with the arch of the device */
-                  if (!gbp_flatpak_application_addin_has_runtime (addin, ext_id, state->arch, ext_branch))
-                    {
-                      g_autoptr(GbpFlatpakTransfer) transfer = NULL;
-
-                      state->count++;
-
-                      transfer = gbp_flatpak_transfer_new (ext_id, arch, ext_branch, FALSE);
-                      ide_transfer_manager_execute_async (transfer_manager,
-                                                          IDE_TRANSFER (transfer),
-                                                          cancellable,
-                                                          gbp_flatpak_runtime_provider_bootstrap_cb,
-                                                          g_object_ref (task));
-                    }
+                  if (!gbp_flatpak_application_addin_has_runtime (addin, item_name, item_arch, item_branch))
+                    gbp_flatpak_install_dialog_add_runtime (dialog, all[i]);
                 }
             }
         }
     }
 
-  state->count++;
+  /* Add runtime specifically (in case no manifest is set) */
+  if (!gbp_flatpak_application_addin_has_runtime (addin, state->name, state->arch, state->branch))
+    gbp_flatpak_install_dialog_add_runtime_full (dialog, state->name, state->arch, state->branch);
 
-  gbp_flatpak_runtime_provider_install_async (IDE_RUNTIME_PROVIDER (self),
-                                              state->runtime_id,
-                                              cancellable,
-                                              gbp_flatpak_runtime_provider_bootstrap_cb,
-                                              g_object_ref (task));
+  runtimes = gbp_flatpak_install_dialog_get_runtimes (dialog);
+
+  if (runtimes == NULL || runtimes[0] == NULL)
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+      gbp_flatpak_runtime_provider_bootstrap_complete (task);
+    }
+  else
+    {
+      gbp_flatpak_install_dialog_run_async (dialog,
+                                            cancellable,
+                                            gbp_flatpak_runtime_provider_bootstrap_cb,
+                                            g_object_ref (task));
+    }
 
   IDE_EXIT;
 }
