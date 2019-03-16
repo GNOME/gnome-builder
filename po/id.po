@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-14 19:05+0000\n"
-"PO-Revision-Date: 2019-03-15 14:48+0700\n"
+"POT-Creation-Date: 2019-03-16 10:10+0000\n"
+"PO-Revision-Date: 2019-03-16 21:01+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural= n!=1;\n"
-"X-Generator: Gtranslator 3.30.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -127,8 +127,8 @@ msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Dukungan untuk membangun dengan jhbuild dan flatpak runtimes"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
-msgid "Support for viewing Todo's found within your code-base"
-msgstr "Dukungan untuk melihat Todo yang ditemukan dalam basis kode Anda"
+msgid "Support for viewing TODOs found within your code base"
+msgstr "Dukungan untuk melihat TODO yang ditemukan dalam basis kode Anda"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:40
 msgid "Fast fuzzy text search across files and symbols"
@@ -892,6 +892,21 @@ msgstr "Gagal menyimpan draf: %s"
 msgid "Untitled"
 msgstr "Tanpa Judul"
 
+#: src/libide/core/ide-transfer.c:548
+#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-surface-actions.c:76
+#: src/libide/greeter/ide-clone-surface.ui:316
+#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/gui/ide-workbench.c:1372
+#: src/libide/terminal/ide-terminal-page-actions.c:276
+#: src/plugins/color-picker/gb-color-picker-prefs.c:97
+#: src/plugins/color-picker/gb-color-picker-prefs.c:213
+#: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:374
+msgid "Cancel"
+msgstr "Batal"
+
 #: src/libide/debugger/ide-debug-manager.c:1000
 #, c-format
 msgid "A suitable debugger was not found."
@@ -929,20 +944,6 @@ msgstr "Simpan Berkas"
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 msgid "Save"
 msgstr "Simpan"
-
-#: src/libide/editor/ide-editor-page-actions.c:239
-#: src/libide/editor/ide-editor-page-actions.c:339
-#: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:316
-#: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1366
-#: src/libide/terminal/ide-terminal-page-actions.c:276
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:374
-msgid "Cancel"
-msgstr "Batal"
 
 #: src/libide/editor/ide-editor-page-actions.c:335
 msgid "Save File As"
@@ -1199,7 +1200,7 @@ msgid "Open File"
 msgstr "Buka Berkas"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1365
+#: src/libide/gui/ide-workbench.c:1371
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1323,7 +1324,7 @@ msgstr "Membersihkan…"
 
 #: src/libide/foundry/ide-pipeline.c:3145
 #: src/libide/foundry/ide-pipeline.c:3202
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:219
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Gagal"
 
@@ -1349,7 +1350,7 @@ msgid "Configuring…"
 msgstr "Mengkonfigurasi…"
 
 #: src/libide/foundry/ide-pipeline.c:3178
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:201
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Sedang membangun…"
 
@@ -1367,7 +1368,7 @@ msgstr "Mengekspor…"
 
 #: src/libide/foundry/ide-pipeline.c:3194
 #: src/libide/foundry/ide-pipeline.c:3198
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:237
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Berhasil"
 
@@ -1528,7 +1529,7 @@ msgid "All Project Types"
 msgstr "Semua Jenis Proyek"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:315 src/libide/gui/ide-workbench.c:831
+#: src/libide/gui/ide-workbench.c:316 src/libide/gui/ide-workbench.c:837
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder— %s"
@@ -1584,7 +1585,7 @@ msgid "Switch Surface"
 msgstr "Ganti Permukaan"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1362
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1368
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Buka Berkas…"
@@ -3186,11 +3187,9 @@ msgstr "Batalkan bangun"
 msgid "Save build log"
 msgstr "Simpan log bangun"
 
-#. translators: use <b>translation</b> to wrap the text in bold font
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:116
-#| msgid "%s <b>%s</b>"
-msgid "<b>Missing</b>"
-msgstr "<b>Hilang</b>"
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
+msgid "Missing"
+msgstr "Hilang"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
 msgid "Update project dependencies"
@@ -4178,12 +4177,10 @@ msgid "Network is not available, skipping downloads"
 msgstr "Jaringan tidak tersedia, lewati unduhan"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:144
-#| msgid "Installing "
 msgid "Install Missing SDK?"
 msgstr "Memasang SDK yang Hilang? "
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:149
-#| msgid "Install"
 msgid "_Install"
 msgstr "_Pasang"
 
@@ -4244,29 +4241,29 @@ msgid "Update"
 msgstr "Pemutakhiran"
 
 #. translators: keywords are used to match search keywords in preferences
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:299
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:297
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:314
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:312
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Tampilkan %u lebih banyak runtime"
 msgstr[1] "Tampilkan %u lebih banyak runtime"
 
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:396
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:401
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Runtimes"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:842
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:838
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:844
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
