@@ -247,7 +247,28 @@
             ]
         },
         {
+            "name" : "glade",
+            "config-opts": [
+               "--enable-gladeui"
+            ],
+            "cleanup" : [
+                "/share/applications",
+                "/share/help",
+                "/share/metainfo",
+                "/bin/glade"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/glade.git"
+                }
+            ]
+        },
+        {
             "name" : "gtksourceview",
+            "config-opts": [
+               "--enable-glade-catalog"
+            ],
             "sources" : [
                 {
                     "type" : "git",
@@ -512,21 +533,6 @@
                     "type" : "archive",
                     "url" : "https://github.com/lathiat/avahi/releases/download/v0.7/avahi-0.7.tar.gz",
                     "sha256" : "57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804"
-                }
-            ]
-        },
-        {
-            "name" : "glade",
-            "cleanup" : [
-                "/share/applications",
-                "/share/help",
-                "/share/metainfo",
-                "/bin/glade"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/glade.git"
                 }
             ]
         },
