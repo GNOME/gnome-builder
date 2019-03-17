@@ -75,12 +75,6 @@ namespace Ide
 			return null;
 		}
 
-		string? esc_angle_brackets (string? in) {
-			if (in == null)
-				return null;
-		    return in.replace ("<", "&lt;").replace (">", "&gt;");
-		}
-
 		public string get_markup (string? typed_text)
 		{
 			/*GLib.StringBuilder str = new GLib.StringBuilder ();

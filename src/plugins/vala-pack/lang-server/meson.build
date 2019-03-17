@@ -4,10 +4,10 @@ gnome_builder_vala_sources = files(
   'ide-utils.vala',
   'ide-vala-index.vala',
   'ide-vala-completion.vala',
+  'ide-vala-code-context.vala',
   'ide-vala-locator.vala',
   'ide-vala-diagnostics.vala',
   'ide-vala-symbol-tree.vala',
-  'ide-vala-source-file.vala'
 )
 
 gnome_builder_vala_deps = [

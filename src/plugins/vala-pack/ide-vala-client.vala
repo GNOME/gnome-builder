@@ -49,7 +49,7 @@ namespace Ide
 			SHUTDOWN
 		}
 
-		GLib.Queue<Ide.Task> get_client;
+		GLib.Queue<GetContextCB> get_client;
 		Ide.SubprocessSupervisor supervisor;
 		Jsonrpc.Client rpc_client;
 		GLib.File root_uri;
@@ -65,11 +65,16 @@ namespace Ide
 			}
 		}
 
+		[Compact]
+		public class GetContextCB {
+			public SourceFunc source_func;
+		}
+
 		public override void parent_set (Ide.Object? parent) {
 			if (parent == null)
 				return;
 
-			get_client = new GLib.Queue<Ide.Task> ();
+			get_client = new GLib.Queue<GetContextCB> ();
 			unowned Ide.Context? context = get_context ();
 			root_uri = context.ref_workdir ();
 
@@ -93,9 +98,6 @@ namespace Ide
 				state = State.SPAWNING;
 
 			rpc_client = null;
-			/*lock (seq_by_file) {
-				seq_by_file = null;
-			}*/
 		}
 
 		public void subprocess_spawned (Ide.Subprocess subprocess) {
@@ -116,9 +118,11 @@ namespace Ide
 			rpc_client = new Jsonrpc.Client (stream);
 			rpc_client.set_use_gvariant (true);
 
-			Ide.Task task = null;
-			while ((task = get_client.pop_head ()) != null) {
-				task.return_object (rpc_client);
+			GetContextCB cb = null;
+			lock (get_client) {
+				while ((cb = get_client.pop_head ()) != null) {
+					cb.source_func ();
+				}
 			}
 
 			var @params = Jsonrpc.Message.@new (
@@ -325,7 +329,9 @@ namespace Ide
 				var reply = yield call_async ("vala/complete",
 				                              params,
 				                              cancellable);
-				//return new Ide.Symbol.from_variant (reply);
+				if (reply != null) {
+					return new Ide.Symbol.from_variant (reply);
+				}
 				return null;
 			} catch (Error e) {
 				throw e;
@@ -336,20 +342,22 @@ namespace Ide
 			switch (state) {
 				default:
 					state = State.SPAWNING;
-					Idle.add (() => {
-						supervisor.start ();
-						var task = new Ide.Task (this, cancellable, (GLib.TaskReadyCallback)get_client_async.callback);
-						get_client.push_tail (task);
-						return false;
-					});
+					supervisor.start ();
+					var cb = new GetContextCB ();
+					cb.source_func = get_client_async.callback;
+					lock (get_client) {
+						get_client.push_tail ((owned) cb);
+					}
+
 					yield;
 					return rpc_client;
 				case State.SPAWNING:
-					Idle.add (() => {
-						var task = new Ide.Task (this, cancellable, (GLib.TaskReadyCallback)get_client_async.callback);
-						get_client.push_tail (task);
-						return false;
-					});
+					var cb = new GetContextCB ();
+					cb.source_func = get_client_async.callback;
+					lock (get_client) {
+						get_client.push_tail ((owned) cb);
+					}
+
 					yield;
 					return rpc_client;
 				case State.RUNNING:
@@ -381,17 +389,12 @@ namespace Ide
 				 */
 				unsaved_files.foreach ((unsaved_file) => {
 					unowned GLib.File file = unsaved_file.get_file ();
-					//int64? prev = seq_by_file[file];
-					int64 seq = unsaved_file.get_sequence ();
-					/*if (prev != null && seq <= prev)
-						return;*/
 
 					string? name = file.get_basename ();
 					if (name  == null || !(name.has_suffix (".vala") ||
 						                   name.has_suffix (".vapi")))
 						return;
 
-					//seq_by_file.insert (file, seq);
 					set_buffer_async.begin (file, unsaved_file.get_content ());
 				});
 			//}

@@ -21,11 +21,6 @@ using Ide;
 
 namespace Ide
 {
-	bool is_null_or_empty (string? s)
-	{
-		return s == null || s[0] == '\0';
-	}
-
 	public class ValaCodeIndexer : Ide.Object, Ide.CodeIndexer
 	{
 		public async Ide.CodeIndexEntries index_file_async (GLib.File file,

@@ -77,9 +77,10 @@ namespace Ide
 			var line_offset = iter.get_line_offset ();
 
 			var proposals = yield client.proposals_populate_async (file, line + 1, line_offset + 1, line_text, cancellable);
-
-			if (cancellable.is_cancelled () || results == null)
+			if (cancellable.is_cancelled ())
 				throw new GLib.IOError.CANCELLED ("operation was cancelled");
+
+			results = new Ide.ValaCompletionResults ();
 
 			return results;
 		}
