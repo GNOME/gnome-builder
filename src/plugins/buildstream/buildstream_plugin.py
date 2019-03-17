@@ -7,7 +7,7 @@ class BuildStreamBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
         super().__init__(*args, **kwargs)
         self.props.glob = 'project.conf'
         self.props.hint = 'buildstream_plugin'
-        self.props.priority = 4000
+        self.props.priority = 2000
 
 class BuildStreamBuildSystem(Ide.Object, Ide.BuildSystem):
     project_file = GObject.Property(type=Gio.File)
@@ -33,7 +33,6 @@ class BuildStreamPipelineAddin(Ide.Object, Ide.PipelineAddin):
             return
 
         config = pipeline.get_config()
-        builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
         srcdir = pipeline.get_srcdir()
 
@@ -50,5 +49,5 @@ class BuildStreamPipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_stage.connect('query', self._query)
         self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
-        def _query(self, stage, pipeline, targets, cancellable):
-            stage.set_completed(False)
+    def _query(self, stage, pipeline, targets, cancellable):
+        stage.set_completed(False)
