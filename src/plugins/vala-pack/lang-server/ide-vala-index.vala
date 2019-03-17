@@ -24,75 +24,17 @@ namespace Ide
 {
 	public class ValaIndex: GLib.Object
 	{
-		Vala.CodeContext code_context;
+		Ide.ValaCodeContext code_context;
 		Vala.Parser parser;
 		Ide.ValaDiagnostics report;
 		GLib.File workdir;
 
-		GLib.HashTable<string, GLib.Bytes> unsaved_files;
-
 		public ValaIndex (GLib.File workdir)
 		{
 			this.workdir = workdir;
-			code_context = new Vala.CodeContext ();
-			unsaved_files = new GLib.HashTable<string, GLib.Bytes> (str_hash, str_equal);
+			code_context = new Ide.ValaCodeContext ();
 
 			Vala.CodeContext.push (code_context);
-
-			/*
-			 * TODO: Some of the following options could be extracted by parsing
-			 *       the contents of *_VALAFLAGS or AM_VALAFLAGS in automake.
-			 *       We need to do this in a somewhat build system agnostic fashion
-			 *       since there seems to a cargo cult of cmake/vala.
-			 */
-
-			code_context.assert = true;
-			code_context.checking = false;
-			code_context.deprecated = false;
-			code_context.hide_internal = false;
-			code_context.experimental = false;
-			code_context.experimental_non_null = false;
-			code_context.gobject_tracing = false;
-			code_context.nostdpkg = false;
-			code_context.ccode_only = true;
-			code_context.compile_only = true;
-			code_context.use_header = false;
-			code_context.includedir = null;
-			code_context.basedir = workdir.get_path ();
-			code_context.directory = GLib.Environment.get_current_dir ();
-			code_context.debug = false;
-			code_context.mem_profiler = false;
-			code_context.save_temps = false;
-
-			code_context.profile = Vala.Profile.GOBJECT;
-			code_context.add_define ("GOBJECT");
-
-			code_context.entry_point_name = null;
-
-			code_context.run_output = false;
-
-			int minor = 36;
-			var tokens = ValaConfig.VALA_VERSION.split(".", 2);
-			if (tokens[1] != null) {
-				minor = int.parse(tokens[1]);
-			}
-
-			code_context.vapi_directories = {};
-
-			/* $prefix/share/vala-0.32/vapi */
-			string versioned_vapidir = get_versioned_vapidir ();
-			if (versioned_vapidir != null) {
-				add_vapidir_locked (versioned_vapidir);
-			}
-
-			/* $prefix/share/vala/vapi */
-			string unversioned_vapidir = get_unversioned_vapidir ();
-			if (unversioned_vapidir != null) {
-				add_vapidir_locked (unversioned_vapidir);
-			}
-
-			code_context.add_external_package ("glib-2.0");
-			code_context.add_external_package ("gobject-2.0");
 
 			report = new Ide.ValaDiagnostics ();
 			code_context.report = report;
@@ -100,20 +42,37 @@ namespace Ide
 			parser = new Vala.Parser ();
 			parser.parse (code_context);
 
-			code_context.check ();
-
 			load_directory (workdir);
 			Vala.CodeContext.pop ();
 		}
 
 		public void set_unsaved_file (string path,
-		                              GLib.Bytes? bytes)
+		                              string? content)
 		{
-			if (bytes == null) {
-				unsaved_files.remove (path);
-			} else {
-				unsaved_files[path] = bytes;
+			Vala.CodeContext.push (this.code_context);
+			Vala.SourceFile? source_file = code_context.get_source (path);
+			if (source_file != null) {
+				if (source_file.content != content) {
+					source_file.content = content;
+
+					unowned Vala.Method? entry_point = code_context.entry_point;
+					if (entry_point != null && entry_point.source_reference != null && entry_point.source_reference.file == source_file) {
+						code_context.entry_point = null;
+					}
+
+					// Copy the node list since we will be mutating while iterating
+					var copy = new Vala.ArrayList<Vala.CodeNode> ();
+					copy.add_all (source_file.get_nodes ());
+					foreach (var node in copy) {
+						source_file.remove_node (node);
+					}
+				}
+			} else if (content != null) {
+				source_file = new Vala.SourceFile (code_context, Vala.SourceFileType.SOURCE, path, content);
+				code_context.add_source_file (source_file);
 			}
+
+			Vala.CodeContext.pop ();
 		}
 
 		public Ide.Diagnostics get_file_diagnostics (string path,
@@ -121,12 +80,13 @@ namespace Ide
 		{
 			lock (this.code_context) {
 				Vala.CodeContext.push (this.code_context);
-				load_build_flags (flags);
-				add_file (GLib.File.new_for_path (path));
-				reparse ();
-				if (report.get_errors () == 0) {
-					code_context.check ();
-				}
+				code_context.parse_arguments (flags);
+				code_context.add_source (path);
+
+				critical ("Diagnostics %s", path);
+				report.clear ();
+				code_context.check ();
+				
 
 				Vala.CodeContext.pop ();
 			}
@@ -140,17 +100,14 @@ namespace Ide
 			GLib.Variant symbol_tree;
 			lock (this.code_context) {
 				Vala.CodeContext.push (this.code_context);
-				load_build_flags (flags);
-
-				if (add_file (GLib.File.new_for_path (path)))
-					reparse ();
+				code_context.parse_arguments (flags);
+				code_context.add_source (path);
+				reparse ();
 
 				var tree_builder = new Ide.ValaSymbolTreeVisitor ();
-				foreach (var source_file in code_context.get_source_files ()) {
-					if (source_file.filename == path) {
-						source_file.accept_children (tree_builder);
-						break;
-					}
+				Vala.SourceFile? source_file = code_context.get_source (path);
+				if (source_file != null) {
+					source_file.accept_children (tree_builder);
 				}
 
 				symbol_tree = tree_builder.build_tree ();
@@ -167,17 +124,14 @@ namespace Ide
 			GLib.Variant index_entries;
 			lock (this.code_context) {
 				Vala.CodeContext.push (this.code_context);
-				load_build_flags (flags);
-
-				if (add_file (GLib.File.new_for_path (path)))
-					reparse ();
+				code_context.parse_arguments (flags);
+				code_context.add_source (path);
+				reparse ();
 
 				var tree_builder = new Ide.ValaSymbolTreeVisitor ();
-				foreach (var source_file in code_context.get_source_files ()) {
-					if (source_file.filename == path) {
-						source_file.accept_children (tree_builder);
-						break;
-					}
+				Vala.SourceFile? source_file = code_context.get_source (path);
+				if (source_file != null) {
+					source_file.accept_children (tree_builder);
 				}
 
 				index_entries = tree_builder.build_index_entries ();
@@ -196,21 +150,16 @@ namespace Ide
 			Ide.Symbol? symbol = null;
 			lock (this.code_context) {
 				Vala.CodeContext.push (this.code_context);
-				load_build_flags (flags);
+				code_context.parse_arguments (flags);
+				code_context.add_source (path);
+				reparse ();
 
-				if (add_file (GLib.File.new_for_path (path)))
-					reparse ();
-
-				foreach (var source_file in code_context.get_source_files ()) {
-					if (source_file.filename == path) {
-						var locator = new Ide.ValaLocator ();
-						var vala_node = locator.locate (source_file, line, column);
-
-						if (vala_node != null) {
-							symbol = Ide.vala_to_ide_symbol (vala_node);
-						}
-
-						break;
+				Vala.SourceFile? source_file = code_context.get_source (path);
+				if (source_file != null) {
+					var locator = new Ide.ValaLocator ();
+					var vala_node = locator.locate (source_file, line, column);
+					if (vala_node != null) {
+						symbol = Ide.vala_to_ide_symbol (vala_node);
 					}
 				}
 
@@ -228,7 +177,7 @@ namespace Ide
 			Ide.Symbol? ide_symbol = null;
 			lock (this.code_context) {
 				Vala.CodeContext.push (this.code_context);
-				load_build_flags (flags);
+				code_context.parse_arguments (flags);
 				var symbol = find_nearest_symbol (path, line, column);
 				if (symbol != null) {
 					ide_symbol = Ide.vala_to_ide_symbol (symbol);
@@ -348,67 +297,20 @@ namespace Ide
 		}
 
 		private Vala.CodeNode? find_nearest_symbol (string path,
-		                                          uint line,
-		                                          uint column)
+		                                            uint line,
+		                                            uint column)
 		{
 			Vala.CodeNode? symbol = null;
-			if (add_file (GLib.File.new_for_path (path)))
-				reparse ();
+			code_context.add_source (path);
+			reparse ();
 
-			apply_unsaved_files ();
-			foreach (var source_file in code_context.get_source_files ()) {
-				if (source_file.filename == path) {
-					var locator = new Ide.ValaLocator ();
-					symbol = locator.locate (source_file, line, column);
-					/*while (vala_node != null) {
-						if (vala_node is Vala.Class ||
-							vala_node is Vala.Subroutine ||
-							vala_node is Vala.Namespace ||
-							vala_node is Vala.Struct)
-							break;
-
-						if (vala_node.owner != null)
-							vala_node = vala_node.owner.owner;
-						else
-							vala_node = vala_node.parent_symbol;
-					}
-
-					symbol = vala_node;*/
-					break;
-				}
+			Vala.SourceFile? source_file = code_context.get_source (path);
+			if (source_file != null) {
+				var locator = new Ide.ValaLocator ();
+				symbol = locator.locate (source_file, line, column);
 			}
 
 			return symbol;
-		}
-
-		private bool add_file (GLib.File file)
-		{
-			var path = file.get_path ();
-			if (path == null)
-				return false;
-
-			foreach (var source_file in code_context.get_source_files ()) {
-				if (source_file.filename == path)
-					return false;
-			}
-
-			var type = Vala.SourceFileType.SOURCE;
-			if (path.has_suffix ("vapi"))
-				type = Vala.SourceFileType.PACKAGE;
-
-			var source_file = new Ide.ValaSourceFile (code_context, type, path, null, false);
-			code_context.add_source_file (source_file);
-			return true;
-		}
-
-		private void apply_unsaved_files () {
-			foreach (var source_file in code_context.get_source_files ()) {
-				if (source_file is Ide.ValaSourceFile) {
-					GLib.Bytes? content = unsaved_files[source_file.filename];
-					(source_file as Ide.ValaSourceFile).sync (content);
-					unsaved_files.remove (source_file.filename);
-				}
-			}
 		}
 
 		private void load_directory (GLib.File directory,
@@ -427,8 +329,9 @@ namespace Ide
 					if (file_info.get_file_type () == GLib.FileType.DIRECTORY) {
 						var child = directory.get_child (file_info.get_name ());
 						load_directory (child, cancellable);
-					} else if (name.has_suffix (".vala") || name.has_suffix (".vapi")) {
-						add_file (directory.get_child (file_info.get_name ()));
+					} else if (name.has_suffix (".vala") || name.has_suffix (".vapi") || name.has_suffix (".gs") || name.has_suffix (".c")) {
+						var child = directory.get_child (file_info.get_name ());
+						code_context.add_source (child.get_path ());
 					}
 				}
 
@@ -436,126 +339,6 @@ namespace Ide
 			} catch (GLib.Error err) {
 				warning (err.message);
 			}
-		}
-
-		private void load_build_flags (string[] flags)
-		{
-			lock (code_context) {
-				Vala.CodeContext.push (code_context);
-
-				var packages = new Vala.ArrayList<string> ();
-
-				var len = flags.length;
-				for (var i = 0; i < len; i++) {
-					string next_param = null;
-					string param = flags[i];
-
-					if (param.contains ("=")) {
-						var offset = param.index_of("=") + 1;
-						next_param = param.offset(offset);
-					} else if (i + 1 < len) {
-						next_param = flags[i + 1];
-					}
-
-					if (next_param != null) {
-						if (param.has_prefix("--pkg")) {
-							packages.add (next_param);
-						} else if (param.has_prefix ("--vapidir")) {
-							add_vapidir_locked (next_param);
-						} else if (param.has_prefix ("--vapi")) {
-							packages.add (next_param);
-						} else if (param.has_prefix ("--girdir")) {
-							add_girdir_locked (next_param);
-						} else if (param.has_prefix ("--metadatadir")) {
-							add_metadatadir_locked (next_param);
-						} else if (param.has_prefix ("--target-glib")) {
-							/* TODO: Parse glib version ~= 2.44 */
-						}
-
-						continue;
-					}
-					else if (param.has_suffix (".vapi")) {
-						if (!GLib.Path.is_absolute (param)) {
-							var child = workdir.get_child (param);
-							add_file (child);
-						} else {
-							add_file (GLib.File.new_for_path (param));
-						}
-					}
-				}
-
-				/* Now add external packages after vapidir/girdir have been added */
-				foreach (var package in packages) {
-					code_context.add_external_package (package);
-				}
-
-				Vala.CodeContext.pop ();
-			}
-		}
-
-		/* Caller is expected to hold code_context lock */
-		private void add_vapidir_locked (string vapidir)
-		{
-			var dirs = code_context.vapi_directories;
-			if (vapidir in dirs)
-				return;
-
-			debug ("Adding vapidir %s", vapidir);
-			dirs += vapidir;
-			code_context.vapi_directories = dirs;
-		}
-
-		/* Caller is expected to hold code_context lock */
-		private void add_girdir_locked (string girdir)
-		{
-			var dirs = code_context.gir_directories;
-			if (girdir in dirs)
-				return;
-
-			dirs += girdir;
-			code_context.gir_directories = dirs;
-		}
-
-		/* Caller is expected to hold code_context lock */
-		private void add_metadatadir_locked (string metadata_dir)
-		{
-			var dirs = code_context.metadata_directories;
-			if (metadata_dir in dirs)
-				return;
-
-			dirs += metadata_dir;
-			code_context.metadata_directories = dirs;
-		}
-
-		static string? get_versioned_vapidir ()
-		{
-			try {
-				var pkgname = "libvala-%s".printf (ValaConfig.VALA_VERSION);
-				string outstr = null;
-				var subprocess = new GLib.Subprocess (GLib.SubprocessFlags.STDOUT_PIPE,
-					                                  "pkg-config",
-					                                  "--variable=vapidir",
-					                                  pkgname,
-					                                  null);
-				subprocess.communicate_utf8 (null, null, out outstr, null);
-				outstr = outstr.strip ();
-				return outstr;
-			} catch (GLib.Error er) {
-				warning ("%s", er.message);
-				return null;
-			}
-		}
-
-		static string? get_unversioned_vapidir ()
-		{
-			string versioned_vapidir = get_versioned_vapidir ();
-
-			if (versioned_vapidir != null) {
-				return GLib.Path.build_filename (versioned_vapidir,
-				                                 "..", "..", "vala", "vapi", null);
-			}
-
-			return null;
 		}
 	}
 }
