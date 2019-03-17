@@ -85,15 +85,19 @@ namespace Ide {
 	public static string? vala_symbol_name (Vala.Symbol symbol)
 	{
 		if (symbol is Vala.Variable) {
-			unowned Vala.Variable variable = (Vala.Variable) symbol;
+			var variable = (symbol as Vala.Variable);
 			if (variable.variable_type != null) {
 				return variable.variable_type.to_prototype_string () + " " + symbol.name;
 			} else {
 				return "var " + symbol.name;
 			}
+		} else if (symbol is Vala.Property) {
+			return symbol.name;
+		} else if (symbol is Vala.CreationMethod) {
+			return (symbol as Vala.CreationMethod).class_name;
 		} else if (symbol is Vala.Method) {
-			var type = new Vala.MethodType ((Vala.Method) symbol);
-			return type.to_prototype_string ();
+			var type = new Vala.MethodType (symbol as Vala.Method);
+			return type.to_prototype_string (null);
 		}
 
 		return symbol.to_string ();

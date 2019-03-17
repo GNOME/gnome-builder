@@ -65,12 +65,10 @@ namespace Ide
 		public void reset ()
 		{
 			/* Copy the node list since we will be mutating while iterating */
-			var copy = new ArrayList<Vala.CodeNode> ();
-			foreach (var node in this.get_nodes ()) {
-				copy.add (node);
-			}
+			var copy = new Vala.ArrayList<Vala.CodeNode> ();
+			copy.add_all (this.get_nodes ());
 
-			var entry_point = context.entry_point;
+			context.entry_point;
 
 			foreach (var node in copy) {
 				remove_node (node);

@@ -84,13 +84,15 @@ namespace Ide
 			Jsonrpc.Message.parse (params, "flags", Jsonrpc.Message.GetStrv.create (ref flags));
 			flags.length = (int) GLib.strv_length (flags);
 
-			var diagnostics = index.get_file_diagnostics (path, flags);
 			var builder = new VariantBuilder (new VariantType ("aa{sv}") );
-			var size = diagnostics.get_n_items ();
-			for (int i = 0; i < size; i++) {
-				Ide.Diagnostic diag = diagnostics.get_item (i) as Ide.Diagnostic;
-				if (diag != null) {
-					builder.add_value (diag.to_variant ());
+			lock (index) {
+				var diagnostics = index.get_file_diagnostics (path, flags);
+				var size = diagnostics.get_n_items ();
+				for (int i = 0; i < size; i++) {
+					Ide.Diagnostic diag = diagnostics.get_item (i) as Ide.Diagnostic;
+					if (diag != null) {
+						builder.add_value (diag.to_variant ());
+					}
 				}
 			}
 
@@ -109,11 +111,10 @@ namespace Ide
 
 			unowned string content = null;
 			params.lookup ("contents", "^&ay", ref content);
-			GLib.Bytes? bytes = null;
-			if (content != null)
-				bytes = new GLib.Bytes.take (content.data);
+			lock (index) {
+				index.set_unsaved_file (path, content);
+			}
 
-			index.set_unsaved_file (path, bytes);
 			reply_to_client.begin (client, id, new GLib.Variant.boolean (true));
 		}
 
@@ -131,7 +132,11 @@ namespace Ide
 			Jsonrpc.Message.parse (params, "flags", Jsonrpc.Message.GetStrv.create (ref flags));
 			flags.length = (int) GLib.strv_length (flags);
 
-			var symbol_tree = index.get_symbol_tree (path, flags);
+			GLib.Variant symbol_tree;
+			lock (index) {
+				symbol_tree = index.get_symbol_tree (path, flags);
+			}
+
 			reply_to_client.begin (client, id, symbol_tree);
 		}
 
@@ -151,10 +156,12 @@ namespace Ide
 				"column", Jsonrpc.Message.GetInt64.create (ref column)))
 			{
 				flags.length = (int) GLib.strv_length (flags);
-				var symbol = index.locate_symbol (path, flags, (uint)line, (uint)column);
-				Variant? symbol_variant =  null;
-				if (symbol != null)
-					symbol_variant = symbol.to_variant ();
+				Variant? symbol_variant = null;
+				lock (index) {
+					var symbol = index.locate_symbol (path, flags, (uint)line, (uint)column);
+					if (symbol != null)
+						symbol_variant = symbol.to_variant ();
+				}
 
 				reply_to_client.begin (client, id, symbol_variant);
 			} else {
@@ -178,10 +185,12 @@ namespace Ide
 				"column", Jsonrpc.Message.GetInt64.create (ref column)))
 			{
 				flags.length = (int) GLib.strv_length (flags);
-				var symbol = index.find_nearest_scope (path, flags, (uint)line, (uint)column);
-				Variant? symbol_variant =  null;
-				if (symbol != null)
-					symbol_variant = symbol.to_variant ();
+				Variant? symbol_variant = null;
+				lock (index) {
+					var symbol = index.find_nearest_scope (path, flags, (uint)line, (uint)column);
+					if (symbol != null)
+						symbol_variant = symbol.to_variant ();
+				}
 
 				reply_to_client.begin (client, id, symbol_variant);
 			} else {
@@ -204,7 +213,11 @@ namespace Ide
 				"column", Jsonrpc.Message.GetInt64.create (ref column),
 				"line_text", Jsonrpc.Message.GetString.create (ref line_text)))
 			{
-				var results = index.code_complete (path, (uint)line, (uint)column, line_text);
+				GLib.Variant results;
+				lock (index) {
+					results = index.code_complete (path, (uint)line, (uint)column, line_text);
+				}
+
 				reply_to_client.begin (client, id, results);
 			} else {
 				reply_error_to_client.begin (client, id);
@@ -225,7 +238,11 @@ namespace Ide
 			Jsonrpc.Message.parse (params, "flags", Jsonrpc.Message.GetStrv.create (ref flags));
 			flags.length = (int) GLib.strv_length (flags);
 
-			var index_entries = index.get_index_entries (path, flags);
+			GLib.Variant index_entries;
+			lock (index) {
+				index_entries = index.get_index_entries (path, flags);
+			}
+
 			reply_to_client.begin (client, id, index_entries);
 		}
 
