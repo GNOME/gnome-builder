@@ -16,6 +16,7 @@
         "--share=ipc",
         "--socket=x11",
         "--socket=wayland",
+        "--socket=ssh-auth",
         "--filesystem=home",
         "--filesystem=host",
         "--share=network",
