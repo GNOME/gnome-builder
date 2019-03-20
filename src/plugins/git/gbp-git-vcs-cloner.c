@@ -172,7 +172,7 @@ gbp_git_vcs_cloner_worker (IdeTask      *task,
   g_assert (req != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  callbacks = gbp_git_remote_callbacks_new (req->notif);
+  callbacks = gbp_git_remote_callbacks_new ();
 
   g_signal_connect_object (cancellable,
                            "cancelled",
