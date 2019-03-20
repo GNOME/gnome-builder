@@ -107,5 +107,15 @@ void       gbp_git_update_submodules_async  (GbpGit                      *self,
 gboolean   gbp_git_update_submodules_finish (GbpGit                      *self,
                                              GAsyncResult                *result,
                                              GError                     **error);
+void       gbp_git_update_config_async      (GbpGit                      *self,
+                                             gboolean                     global,
+                                             const gchar                 *key,
+                                             GVariant                    *value,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+gboolean   gbp_git_update_config_finish     (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
 
 G_END_DECLS
