@@ -3,14 +3,14 @@
 # Copyright (C) 2015 THE GNOME Builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the GNOME Builder package.
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016, 2017, 2018, 2019.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-01-07 21:23+0000\n"
-"PO-Revision-Date: 2019-01-09 09:10+0100\n"
+"POT-Creation-Date: 2019-03-08 17:08+0000\n"
+"PO-Revision-Date: 2019-03-20 15:00+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Gtranslator 3.31.90\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -236,7 +236,6 @@ msgstr ""
 "de una modificación."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-#| msgid "Completion"
 msgid "Completion Row Count"
 msgstr "Conteo de filas de completado"
 
@@ -913,7 +912,7 @@ msgstr "Falló al establecer un monitor para cambios en segundo plano: %s"
 
 #: src/libide/buffers/ide-buffer.c:2922
 msgid "The current language lacks a symbol resolver."
-msgstr "Al idioma actual le falta un resolutor de símbolos."
+msgstr "Al lenguaje actual le falta un resolutor de símbolos."
 
 #: src/libide/buffers/ide-buffer.c:3393
 #, c-format
@@ -1672,13 +1671,13 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-properties.ui:265
 msgid "Language Syntax"
-msgstr "Sintaxis del idioma"
+msgstr "Sintaxis del lenguaje"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
 #: src/libide/editor/ide-editor-properties.ui:321
 #: src/libide/preferences/ide-preferences-builtin.c:276
 msgid "Search languages…"
-msgstr "Buscar idiomas…"
+msgstr "Buscar lenguajes…"
 
 #: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
@@ -2391,7 +2390,7 @@ msgstr "Buscar texto en la terminal"
 #: src/libide/langserv/ide-langserv-client.c:897
 #, c-format
 msgid "Failed to initialize language server: %s"
-msgstr "Falló al inicializar el idioma del servidor: %s"
+msgstr "Falló al inicializar el lenguaje del servidor: %s"
 
 #: src/libide/layout/ide-layout-stack.c:174
 #: src/libide/layout/ide-layout-stack.ui:8
@@ -2581,12 +2580,10 @@ msgid "Emulates the Vim text editor"
 msgstr "Emula el editor de texto Vim"
 
 #: src/libide/preferences/ide-preferences-builtin.c:145
-#| msgid "Plain Text"
 msgid "Sublime Text"
 msgstr "Texto Sublime"
 
 #: src/libide/preferences/ide-preferences-builtin.c:145
-#| msgid "Emulates the Vim text editor"
 msgid "Emulates the Sublime Text editor"
 msgstr "Emula el editor de texto Sublime"
 
@@ -3883,7 +3880,7 @@ msgstr "%s no es válido para %s"
 #: src/plugins/command-bar/gb-vim.c:154
 #, c-format
 msgid "Cannot find language “%s”"
-msgstr "No se puede encontrar el idioma «%s»"
+msgstr "No se puede encontrar el lenguaje «%s»"
 
 #: src/plugins/command-bar/gb-vim.c:311
 #, c-format
@@ -4042,7 +4039,7 @@ msgstr "Seleccionar la carpeta de proyectos"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:123
 msgid "Language"
-msgstr "Idioma"
+msgstr "Lenguaje"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:146
 msgid "License"
@@ -4539,7 +4536,7 @@ msgstr "Configuración del paquete"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
 msgid "Any language"
-msgstr "Cualquier idioma"
+msgstr "Cualquier lenguaje"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "C"
@@ -5020,11 +5017,11 @@ msgstr "Falló al inicializar la revisión ortográfica, desactivando."
 
 #: src/plugins/spellcheck/gbp-spell-language-popover.c:231
 msgid "No language selected"
-msgstr "No se ha seleccionado ningún idioma"
+msgstr "No se ha seleccionado ningún lenguaje"
 
 #: src/plugins/spellcheck/gbp-spell-navigator.c:480
 msgid "No language set. Check your dictionary installation."
-msgstr "Sin idioma establecido. Compruebe su instalación del diccionario."
+msgstr "Sin lenguaje establecido. Compruebe su instalación del diccionario."
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:119
 msgid "No suggestions"
@@ -5089,7 +5086,7 @@ msgstr "Diccionario"
 
 #: src/plugins/spellcheck/gbp-spell-widget.ui:304
 msgid "_Language"
-msgstr "_Idioma"
+msgstr "_Lenguaje"
 
 #: src/plugins/spellcheck/gtk/menus.ui:6
 msgid "Check _Spelling"
