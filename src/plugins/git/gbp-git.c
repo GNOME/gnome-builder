@@ -460,3 +460,146 @@ gbp_git_update_submodules_finish (GbpGit        *self,
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
+
+typedef struct
+{
+  GFile    *workdir;
+  gchar    *key;
+  GVariant *value;
+  guint     global : 1;
+} UpdateConfig;
+
+static void
+update_config_free (UpdateConfig *state)
+{
+  g_clear_object (&state->workdir);
+  g_clear_pointer (&state->key, g_free);
+  g_clear_pointer (&state->value, g_variant_unref);
+  g_slice_free (UpdateConfig, state);
+}
+
+static void
+gbp_git_update_config_worker (GTask        *task,
+                              gpointer      source_object,
+                              gpointer      task_data,
+                              GCancellable *cancellable)
+{
+  UpdateConfig *state = task_data;
+  g_autoptr(GgitRepository) repository = NULL;
+  g_autoptr(GgitConfig) config = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_GIT (source_object));
+  g_assert (state != NULL);
+  g_assert (state->key != NULL);
+  g_assert (G_IS_FILE (state->workdir) || state->global);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (!state->global)
+    {
+      if (!(repository = ggit_repository_open (state->workdir, &error)) ||
+          !(config = ggit_repository_get_config (repository, &error)))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+  else
+    {
+      if (!(config = ggit_config_new_default (&error)))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+
+  g_assert (config != NULL);
+  g_assert (GGIT_IS_CONFIG (config));
+
+  if (state->value == NULL)
+    {
+      if (!ggit_config_delete_entry (config, state->key, &error))
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        g_task_return_boolean (task, TRUE);
+    }
+  else
+    {
+      if (g_variant_is_of_type (state->value, G_VARIANT_TYPE_STRING))
+        ggit_config_set_string (config,
+                                state->key,
+                                g_variant_get_string (state->value, NULL),
+                                &error);
+      else if (g_variant_is_of_type (state->value, G_VARIANT_TYPE_BOOLEAN))
+        ggit_config_set_bool (config,
+                              state->key,
+                              g_variant_get_boolean (state->value),
+                              &error);
+      else if (g_variant_is_of_type (state->value, G_VARIANT_TYPE_INT32))
+        ggit_config_set_int32 (config,
+                               state->key,
+                               g_variant_get_int32 (state->value),
+                               &error);
+      else if (g_variant_is_of_type (state->value, G_VARIANT_TYPE_INT64))
+        ggit_config_set_int64 (config,
+                               state->key,
+                               g_variant_get_int64 (state->value),
+                               &error);
+      else
+        error = g_error_new (G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Unsupported data type: %s",
+                             g_variant_get_type_string (state->value));
+
+      if (error != NULL)
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        g_task_return_boolean (task, TRUE);
+    }
+}
+
+void
+gbp_git_update_config_async (GbpGit              *self,
+                             gboolean             global,
+                             const gchar         *key,
+                             GVariant            *value,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  UpdateConfig *state;
+
+  g_assert (GBP_IS_GIT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (UpdateConfig);
+  state->workdir = self->workdir ? g_file_dup (self->workdir) : NULL;
+  state->key = g_strdup (key);
+  state->value = value ? g_variant_ref (value) : NULL;
+  state->global = !!global;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_git_update_config_async);
+  g_task_set_task_data (task, state, (GDestroyNotify)update_config_free);
+
+  if (!global && self->workdir == NULL)
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_INITIALIZED,
+                             "Repository not initialized");
+  else
+    g_task_run_in_thread (task, gbp_git_update_config_worker);
+}
+
+gboolean
+gbp_git_update_config_finish (GbpGit        *self,
+                              GAsyncResult  *result,
+                              GError       **error)
+{
+  g_assert (GBP_IS_GIT (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
