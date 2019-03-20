@@ -342,3 +342,121 @@ gbp_git_clone_url_finish (GbpGit        *self,
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
+
+typedef struct
+{
+  GFile                      *workdir;
+  GgitSubmoduleUpdateOptions *options;
+  GError                     *error;
+} UpdateSubmodules;
+
+static void
+update_submodules_free (UpdateSubmodules *state)
+{
+  g_clear_object (&state->workdir);
+  g_clear_object (&state->options);
+  g_clear_error (&state->error);
+  g_slice_free (UpdateSubmodules, state);
+}
+
+static gint
+gbp_git_update_submodules_foreach_submodule_cb (GgitSubmodule *submodule,
+                                                const gchar   *name,
+                                                gpointer       user_data)
+{
+  UpdateSubmodules *state = user_data;
+
+  g_assert (submodule != NULL);
+  g_assert (name != NULL);
+  g_assert (state != NULL);
+
+  if (state->error != NULL)
+    ggit_submodule_update (submodule,
+                           FALSE,
+                           state->options,
+                           &state->error);
+
+  return GIT_OK;
+}
+
+static void
+gbp_git_update_submodules_worker (GTask        *task,
+                                  gpointer      source_object,
+                                  gpointer      task_data,
+                                  GCancellable *cancellable)
+{
+  UpdateSubmodules *state = task_data;
+  g_autoptr(GgitRepository) repository = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_GIT (source_object));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->workdir));
+  g_assert (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (state->options));
+
+  if (!(repository = ggit_repository_open (state->workdir, &error)))
+    goto handle_error;
+
+  if (!ggit_repository_submodule_foreach (repository,
+                                          gbp_git_update_submodules_foreach_submodule_cb,
+                                          state,
+                                          &error))
+    goto handle_error;
+
+  error = g_steal_pointer (&state->error);
+
+handle_error:
+
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+gbp_git_update_submodules_async (GbpGit                     *self,
+                                 GgitSubmoduleUpdateOptions *options,
+                                 GCancellable               *cancellable,
+                                 GAsyncReadyCallback         callback,
+                                 gpointer                    user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  UpdateSubmodules *state;
+
+  g_assert (GBP_IS_GIT (self));
+  g_assert (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_git_clone_url_async);
+
+  if (self->workdir == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_INITIALIZED,
+                               "No workdir has been set for the project");
+      return;
+    }
+
+  state = g_slice_new0 (UpdateSubmodules);
+  state->options = g_object_ref (options);
+  state->workdir = g_object_ref (self->workdir);
+
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_task_data (task, state, (GDestroyNotify)update_submodules_free);
+  g_task_set_return_on_cancel (task, TRUE);
+  g_task_run_in_thread (task, gbp_git_update_submodules_worker);
+}
+
+gboolean
+gbp_git_update_submodules_finish (GbpGit        *self,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_assert (GBP_IS_GIT (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
