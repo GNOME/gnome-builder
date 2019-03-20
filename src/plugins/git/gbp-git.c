@@ -258,3 +258,86 @@ gbp_git_list_status_finish (GbpGit        *self,
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
+
+typedef struct
+{
+  gchar            *url;
+  GFile            *destination;
+  GgitCloneOptions *options;
+} Clone;
+
+static void
+clone_free (Clone *c)
+{
+  g_clear_pointer (&c->url, g_free);
+  g_clear_object (&c->destination);
+  g_clear_object (&c->options);
+  g_slice_free (Clone, c);
+}
+
+static void
+gbp_git_clone_url_worker (GTask        *task,
+                          gpointer      source_object,
+                          gpointer      task_data,
+                          GCancellable *cancellable)
+{
+  Clone *state = task_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_GIT (source_object));
+  g_assert (state != NULL);
+  g_assert (state->url != NULL);
+  g_assert (state->destination != NULL);
+
+  ggit_repository_clone (state->url,
+                         state->destination,
+                         state->options,
+                         &error);
+
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+gbp_git_clone_url_async (GbpGit                *self,
+                         const gchar           *url,
+                         GFile                 *destination,
+                         GgitCloneOptions      *options,
+                         GCancellable          *cancellable,
+                         GAsyncReadyCallback    callback,
+                         gpointer               user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  Clone *c;
+
+  g_assert (GBP_IS_GIT (self));
+  g_assert (url != NULL);
+  g_assert (G_IS_FILE (destination));
+  g_assert (!options || GGIT_IS_CLONE_OPTIONS (options));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  c = g_slice_new0 (Clone);
+  c->url = g_strdup (url);
+  c->destination = g_object_ref (destination);
+  c->options = options ? g_object_ref (options) : NULL;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_git_clone_url_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_task_data (task, c, (GDestroyNotify)clone_free);
+  g_task_run_in_thread (task, gbp_git_clone_url_worker);
+}
+
+gboolean
+gbp_git_clone_url_finish (GbpGit        *self,
+                          GAsyncResult  *result,
+                          GError       **error)
+{
+  g_assert (GBP_IS_GIT (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
