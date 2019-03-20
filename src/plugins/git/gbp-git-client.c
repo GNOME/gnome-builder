@@ -704,7 +704,7 @@ gbp_git_client_clone_url_async (GbpGitClient        *self,
   if (notif != NULL)
     {
       token = gbp_git_client_track_progress (self, notif);
-      ide_notification_set_title (notif, _("Cloning Repository"));
+      ide_notification_set_title (notif, _("Cloning Repository…"));
       ide_notification_set_icon_name (notif, "builder-vcs-git-symbolic");
       ide_notification_set_progress (notif, 0.0);
     }
@@ -789,7 +789,7 @@ gbp_git_client_update_submodules_async (GbpGitClient        *self,
   if (notif != NULL)
     {
       token = gbp_git_client_track_progress (self, notif);
-      ide_notification_set_title (notif, _("Updating Git Submodules"));
+      ide_notification_set_title (notif, _("Updating Git Submodules…"));
       ide_notification_set_icon_name (notif, "builder-vcs-git-symbolic");
       ide_notification_set_progress (notif, 0.0);
       ide_task_set_task_data (task, g_strdup (token), g_free);
