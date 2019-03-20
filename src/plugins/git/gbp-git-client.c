@@ -742,3 +742,78 @@ gbp_git_client_clone_url_finish (GbpGitClient  *self,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+static void
+gbp_git_client_update_submodules_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  GbpGitClient *self = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *token = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_git_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  if ((token = ide_task_get_task_data (task)) && self->notif_by_token)
+    g_hash_table_remove (self->notif_by_token, token);
+}
+
+void
+gbp_git_client_update_submodules_async (GbpGitClient        *self,
+                                        IdeNotification     *notif,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) command = NULL;
+  g_autofree gchar *token = NULL;
+
+  g_return_if_fail (GBP_IS_GIT_CLIENT (self));
+  g_return_if_fail (!notif || IDE_IS_NOTIFICATION (notif));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_client_update_submodules_async);
+
+  if (notif != NULL)
+    {
+      token = gbp_git_client_track_progress (self, notif);
+      ide_notification_set_title (notif, _("Updating Git Submodules"));
+      ide_notification_set_icon_name (notif, "builder-vcs-git-symbolic");
+      ide_notification_set_progress (notif, 0.0);
+      ide_task_set_task_data (task, g_strdup (token), g_free);
+    }
+
+  command = JSONRPC_MESSAGE_NEW (
+    "token", JSONRPC_MESSAGE_PUT_STRING (token)
+  );
+
+  gbp_git_client_call_async (self,
+                             "git/updateSubmodules",
+                             command,
+                             cancellable,
+                             gbp_git_client_update_submodules_cb,
+                             g_steal_pointer (&task));
+}
+
+gboolean
+gbp_git_client_update_submodules_finish (GbpGitClient  *self,
+                                         GAsyncResult  *result,
+                                         GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}

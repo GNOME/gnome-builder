@@ -53,51 +53,59 @@ typedef void (*GbpGitProgress) (const gchar *message,
 G_DECLARE_FINAL_TYPE (GbpGit, gbp_git, GBP, GIT, GObject)
 
 GbpGit    *gbp_git_new                      (void);
-void       gbp_git_set_workdir              (GbpGit                 *self,
-                                             GFile                  *workdir);
-void       gbp_git_is_ignored_async         (GbpGit                 *self,
-                                             const gchar            *path,
-                                             GCancellable           *cancellable,
-                                             GAsyncReadyCallback     callback,
-                                             gpointer                user_data);
-gboolean   gbp_git_is_ignored_finish        (GbpGit                 *self,
-                                             GAsyncResult           *result,
-                                             GError                **error);
-void       gbp_git_list_status_async        (GbpGit                 *self,
-                                             const gchar            *directory_or_file,
-                                             gboolean                include_descendants,
-                                             GCancellable           *cancellable,
-                                             GAsyncReadyCallback     callback,
-                                             gpointer                user_data);
-GPtrArray *gbp_git_list_status_finish       (GbpGit                 *self,
-                                             GAsyncResult           *result,
-                                             GError                **error);
-void       gbp_git_list_refs_by_kind_async  (GbpGit                 *self,
-                                             GbpGitRefKind           kind,
-                                             GCancellable           *cancellable,
-                                             GAsyncReadyCallback     callback,
-                                             gpointer                user_data);
-GPtrArray *gbp_git_list_refs_by_kind_finish (GbpGit                 *self,
-                                             GAsyncResult           *result,
-                                             GError                **error);
-void       gbp_git_switch_branch_async      (GbpGit                 *self,
-                                             const gchar            *branch_name,
-                                             GCancellable           *cancellable,
-                                             GAsyncReadyCallback     callback,
-                                             gpointer                user_data);
-gboolean   gbp_git_switch_branch_finish     (GbpGit                 *self,
-                                             GAsyncResult           *result,
-                                             gchar                 **switch_to_directory,
-                                             GError                **error);
-void       gbp_git_clone_url_async          (GbpGit                 *self,
-                                             const gchar            *url,
-                                             GFile                  *destination,
-                                             GgitCloneOptions       *options,
-                                             GCancellable           *cancellable,
-                                             GAsyncReadyCallback     callback,
-                                             gpointer                user_data);
-gboolean   gbp_git_clone_url_finish         (GbpGit                 *self,
-                                             GAsyncResult           *result,
-                                             GError                **error);
+void       gbp_git_set_workdir              (GbpGit                      *self,
+                                             GFile                       *workdir);
+void       gbp_git_is_ignored_async         (GbpGit                      *self,
+                                             const gchar                 *path,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+gboolean   gbp_git_is_ignored_finish        (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
+void       gbp_git_list_status_async        (GbpGit                      *self,
+                                             const gchar                 *directory_or_file,
+                                             gboolean                     include_descendants,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+GPtrArray *gbp_git_list_status_finish       (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
+void       gbp_git_list_refs_by_kind_async  (GbpGit                      *self,
+                                             GbpGitRefKind                kind,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+GPtrArray *gbp_git_list_refs_by_kind_finish (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
+void       gbp_git_switch_branch_async      (GbpGit                      *self,
+                                             const gchar                 *branch_name,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+gboolean   gbp_git_switch_branch_finish     (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             gchar                      **switch_to_directory,
+                                             GError                     **error);
+void       gbp_git_clone_url_async          (GbpGit                      *self,
+                                             const gchar                 *url,
+                                             GFile                       *destination,
+                                             GgitCloneOptions            *options,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+gboolean   gbp_git_clone_url_finish         (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
+void       gbp_git_update_submodules_async  (GbpGit                      *self,
+                                             GgitSubmoduleUpdateOptions  *options,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+gboolean   gbp_git_update_submodules_finish (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
 
 G_END_DECLS
