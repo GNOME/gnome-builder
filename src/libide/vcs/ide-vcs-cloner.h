@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_VCS_CLONER (ide_vcs_cloner_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeVcsCloner, ide_vcs_cloner, IDE, VCS_CLONER, GObject)
+G_DECLARE_INTERFACE (IdeVcsCloner, ide_vcs_cloner, IDE, VCS_CLONER, IdeObject)
 
 struct _IdeVcsClonerInterface
 {
