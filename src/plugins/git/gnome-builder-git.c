@@ -135,6 +135,96 @@ client_op_new (JsonrpcClient *client,
 }
 
 static void
+client_op_notify (ClientOp    *op,
+                  const gchar *method,
+                  GVariant    *reply)
+{
+  g_assert (op != NULL);
+  g_assert (op->client != NULL);
+
+  jsonrpc_client_send_notification (op->client,
+                                    method,
+                                    reply,
+                                    op->cancellable,
+                                    NULL);
+}
+
+
+static void
+transfer_cb (GbpGitRemoteCallbacks *callbacks,
+             const gchar           *message,
+             ClientOp              *op)
+{
+  g_autoptr(GVariant) reply = NULL;
+
+  g_assert (GBP_GIT_REMOTE_CALLBACKS (callbacks));
+  g_assert (op != NULL);
+
+  reply = JSONRPC_MESSAGE_NEW (
+    "token", JSONRPC_MESSAGE_PUT_STRING (op->token),
+    "message", JSONRPC_MESSAGE_PUT_STRING (message)
+  );
+
+  client_op_notify (op, "$/progress", reply);
+}
+
+static void
+transfer_progress_cb (GbpGitRemoteCallbacks *callbacks,
+                      GgitTransferProgress  *stats,
+                      ClientOp              *op)
+{
+  g_autoptr(GVariant) reply = NULL;
+  gdouble total;
+  gdouble received;
+  gdouble progress = 0.0;
+
+  g_assert (GBP_GIT_REMOTE_CALLBACKS (callbacks));
+  g_assert (op != NULL);
+
+  total = ggit_transfer_progress_get_total_objects (stats);
+  received = ggit_transfer_progress_get_received_objects (stats);
+
+  if (total != 0.0)
+    progress = received / total;
+
+  reply = JSONRPC_MESSAGE_NEW (
+    "token", JSONRPC_MESSAGE_PUT_STRING (op->token),
+    "progress", JSONRPC_MESSAGE_PUT_DOUBLE (progress)
+  );
+
+  client_op_notify (op, "$/progress", reply);
+}
+
+static GgitRemoteCallbacks *
+create_callbacks_for_op (ClientOp *op)
+{
+  GgitRemoteCallbacks *ret;
+
+  g_assert (op != NULL);
+
+  ret = gbp_git_remote_callbacks_new ();
+
+  if (op->token != NULL)
+    {
+      g_signal_connect_data (ret,
+                             "progress",
+                             G_CALLBACK (transfer_cb),
+                             client_op_ref (op),
+                             (GClosureNotify)client_op_unref,
+                             0);
+
+      g_signal_connect_data (ret,
+                             "transfer-progress",
+                             G_CALLBACK (transfer_progress_cb),
+                             client_op_ref (op),
+                             (GClosureNotify)client_op_unref,
+                             0);
+    }
+
+  return g_steal_pointer (&ret);
+}
+
+static void
 handle_reply_cb (JsonrpcClient *client,
                  GAsyncResult  *result,
                  gpointer       user_data)
@@ -155,21 +245,6 @@ handle_reply_cb (JsonrpcClient *client,
 }
 
 static void
-client_op_notify (ClientOp    *op,
-                  const gchar *method,
-                  GVariant    *reply)
-{
-  g_assert (op != NULL);
-  g_assert (op->client != NULL);
-
-  jsonrpc_client_send_notification (op->client,
-                                    method,
-                                    reply,
-                                    op->cancellable,
-                                    NULL);
-}
-
-static void
 client_op_reply (ClientOp *op,
                  GVariant *reply)
 {
@@ -182,29 +257,6 @@ client_op_reply (ClientOp *op,
                               op->cancellable,
                               (GAsyncReadyCallback)handle_reply_cb,
                               client_op_ref (op));
-}
-
-static void
-progress_cb (goffset  current_num_bytes,
-             goffset  total_num_bytes,
-             gpointer user_data)
-{
-  ClientOp *op = user_data;
-  g_autoptr(GVariant) reply = NULL;
-  gdouble progress = 0.0;
-
-  g_assert (op != NULL);
-  g_assert (op->client != NULL);
-
-  if (total_num_bytes > 0)
-    progress = (gdouble)current_num_bytes / (gdouble)total_num_bytes;
-
-  reply = JSONRPC_MESSAGE_NEW (
-    "token", JSONRPC_MESSAGE_PUT_STRING (op->token),
-    "progress", JSONRPC_MESSAGE_PUT_DOUBLE (progress)
-  );
-
-  client_op_notify (op, "$/progress", reply);
 }
 
 /* Initialize {{{1 */
@@ -549,51 +601,6 @@ handle_clone_url_cb (GbpGit       *git,
 }
 
 static void
-handle_clone_url_transfer_cb (GbpGitRemoteCallbacks *callbacks,
-                              const gchar           *message,
-                              ClientOp              *op)
-{
-  g_autoptr(GVariant) reply = NULL;
-
-  g_assert (GBP_GIT_REMOTE_CALLBACKS (callbacks));
-  g_assert (op != NULL);
-
-  reply = JSONRPC_MESSAGE_NEW (
-    "token", JSONRPC_MESSAGE_PUT_STRING (op->token),
-    "message", JSONRPC_MESSAGE_PUT_STRING (message)
-  );
-
-  client_op_notify (op, "$/progress", reply);
-}
-
-static void
-handle_clone_url_transfer_progress_cb (GbpGitRemoteCallbacks *callbacks,
-                                       GgitTransferProgress  *stats,
-                                       ClientOp              *op)
-{
-  g_autoptr(GVariant) reply = NULL;
-  gdouble total;
-  gdouble received;
-  gdouble progress = 0.0;
-
-  g_assert (GBP_GIT_REMOTE_CALLBACKS (callbacks));
-  g_assert (op != NULL);
-
-  total = ggit_transfer_progress_get_total_objects (stats);
-  received = ggit_transfer_progress_get_received_objects (stats);
-
-  if (total != 0.0)
-    progress = received / total;
-
-  reply = JSONRPC_MESSAGE_NEW (
-    "token", JSONRPC_MESSAGE_PUT_STRING (op->token),
-    "progress", JSONRPC_MESSAGE_PUT_DOUBLE (progress)
-  );
-
-  client_op_notify (op, "$/progress", reply);
-}
-
-static void
 handle_clone_url (JsonrpcServer *server,
                   JsonrpcClient *client,
                   const gchar   *method,
@@ -637,24 +644,10 @@ handle_clone_url (JsonrpcServer *server,
 
   op->token = g_strdup (token);
 
-  callbacks = gbp_git_remote_callbacks_new ();
-
-  g_signal_connect_data (callbacks,
-                         "progress",
-                         G_CALLBACK (handle_clone_url_transfer_cb),
-                         client_op_ref (op),
-                         (GClosureNotify)client_op_unref,
-                         0);
-
-  g_signal_connect_data (callbacks,
-                         "transfer-progress",
-                         G_CALLBACK (handle_clone_url_transfer_progress_cb),
-                         client_op_ref (op),
-                         (GClosureNotify)client_op_unref,
-                         0);
+  callbacks = create_callbacks_for_op (op);
 
   fetch_options = ggit_fetch_options_new ();
-  ggit_fetch_options_set_remote_callbacks (fetch_options, GGIT_REMOTE_CALLBACKS (callbacks));
+  ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
 
   options = ggit_clone_options_new ();
   ggit_clone_options_set_is_bare (options, FALSE);
@@ -668,6 +661,68 @@ handle_clone_url (JsonrpcServer *server,
                            op->cancellable,
                            (GAsyncReadyCallback)handle_clone_url_cb,
                            client_op_ref (op));
+
+  g_clear_pointer (&fetch_options, ggit_fetch_options_free);
+}
+
+/* Handle Submodule Updating {{{1 */
+
+static void
+handle_update_submodules_cb (GbpGit       *git,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_GIT (git));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!gbp_git_update_submodules_finish (git, result, &error))
+    client_op_error (op, error);
+  else
+    client_op_reply (op, g_variant_new_boolean (TRUE));
+}
+
+static void
+handle_update_submodules (JsonrpcServer *server,
+                          JsonrpcClient *client,
+                          const gchar   *method,
+                          GVariant      *id,
+                          GVariant      *params,
+                          GbpGit        *git)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GgitRemoteCallbacks) callbacks = NULL;
+  g_autoptr(GgitSubmoduleUpdateOptions) update_options = NULL;
+  GgitFetchOptions *fetch_options = NULL;
+  const gchar *token = NULL;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "git/updateSubmodules"));
+  g_assert (id != NULL);
+  g_assert (GBP_IS_GIT (git));
+
+  op = client_op_new (client, id);
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "token", JSONRPC_MESSAGE_GET_STRING (&token)))
+    token = NULL;
+
+  callbacks = create_callbacks_for_op (op);
+
+  fetch_options = ggit_fetch_options_new ();
+  ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
+
+  update_options = ggit_submodule_update_options_new ();
+  ggit_submodule_update_options_set_fetch_options (update_options, fetch_options);
+
+  gbp_git_update_submodules_async (git,
+                                   update_options,
+                                   op->cancellable,
+                                   (GAsyncReadyCallback)handle_update_submodules_cb,
+                                   client_op_ref (op));
 
   g_clear_pointer (&fetch_options, ggit_fetch_options_free);
 }
@@ -717,6 +772,7 @@ main (gint argc,
   ADD_HANDLER ("git/isIgnored", handle_is_ignored);
   ADD_HANDLER ("git/listRefsByKind", handle_list_refs_by_kind);
   ADD_HANDLER ("git/switchBranch", handle_switch_branch);
+  ADD_HANDLER ("git/updateSubmodules", handle_update_submodules);
   ADD_HANDLER ("$/cancelRequest", handle_cancel_request);
 
 #undef ADD_HANDLER

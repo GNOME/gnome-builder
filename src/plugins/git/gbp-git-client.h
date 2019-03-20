@@ -91,5 +91,13 @@ void          gbp_git_client_clone_url_async          (GbpGitClient           *s
 gboolean      gbp_git_client_clone_url_finish         (GbpGitClient           *self,
                                                        GAsyncResult           *result,
                                                        GError                **error);
+void          gbp_git_client_update_submodules_async  (GbpGitClient           *self,
+                                                       IdeNotification        *notif,
+                                                       GCancellable           *cancellable,
+                                                       GAsyncReadyCallback     callback,
+                                                       gpointer                user_data);
+gboolean      gbp_git_client_update_submodules_finish (GbpGitClient           *self,
+                                                       GAsyncResult           *result,
+                                                       GError                **error);
 
 G_END_DECLS
