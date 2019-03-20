@@ -21,8 +21,9 @@ plugins_sources += files([
 ])
 
 gnome_builder_git_sources = [
-  'gnome-builder-git.c',
   'gbp-git.c',
+  'gbp-git-remote-callbacks.c',
+  'gnome-builder-git.c',
 ]
 
 plugin_git_resources = gnome.compile_resources(

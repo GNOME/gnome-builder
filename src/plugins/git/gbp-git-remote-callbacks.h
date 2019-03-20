@@ -21,7 +21,6 @@
 #pragma once
 
 #include <libgit2-glib/ggit.h>
-#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -29,9 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpGitRemoteCallbacks, gbp_git_remote_callbacks, GBP, GIT_REMOTE_CALLBACKS, GgitRemoteCallbacks)
 
-GgitRemoteCallbacks *gbp_git_remote_callbacks_new          (void);
-gdouble              gbp_git_remote_callbacks_get_fraction (GbpGitRemoteCallbacks *self);
-IdeNotification     *gbp_git_remote_callbacks_get_progress (GbpGitRemoteCallbacks *self);
-void                 gbp_git_remote_callbacks_cancel       (GbpGitRemoteCallbacks *self);
+GgitRemoteCallbacks *gbp_git_remote_callbacks_new    (void);
+void                 gbp_git_remote_callbacks_cancel (GbpGitRemoteCallbacks *self);
 
 G_END_DECLS
