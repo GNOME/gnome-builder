@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "gbp-git-client.h"
 #include "gbp-git-dependency-updater.h"
 #include "gbp-git-submodule-stage.h"
 
@@ -31,20 +32,6 @@ struct _GbpGitDependencyUpdater
 };
 
 static void
-find_submodule_stage_cb (gpointer data,
-                         gpointer user_data)
-{
-  GbpGitSubmoduleStage **stage = user_data;
-
-  g_assert (IDE_IS_PIPELINE_STAGE (data));
-  g_assert (stage != NULL);
-  g_assert (*stage == NULL || IDE_IS_PIPELINE_STAGE (*stage));
-
-  if (GBP_IS_GIT_SUBMODULE_STAGE (data))
-    *stage = GBP_GIT_SUBMODULE_STAGE (data);
-}
-
-static void
 gbp_git_dependency_updater_update_cb (GObject      *object,
                                       GAsyncResult *result,
                                       gpointer      user_data)
@@ -52,6 +39,7 @@ gbp_git_dependency_updater_update_cb (GObject      *object,
   IdeBuildManager *manager = (IdeBuildManager *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeNotification *notif;
 
   IDE_ENTRY;
 
@@ -59,10 +47,21 @@ gbp_git_dependency_updater_update_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  notif = ide_task_get_task_data (task);
+
+  g_assert (notif != NULL);
+  g_assert (IDE_IS_NOTIFICATION (notif));
+
   if (!ide_build_manager_rebuild_finish (manager, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      ide_notification_withdraw_in_seconds (notif, -1);
+    }
   else
-    ide_task_return_boolean (task, TRUE);
+    {
+      ide_task_return_boolean (task, TRUE);
+      ide_notification_withdraw (notif);
+    }
 
   IDE_EXIT;
 }
@@ -74,9 +73,8 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
                                          gpointer              user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  GbpGitSubmoduleStage *stage = NULL;
-  IdePipeline *pipeline;
-  IdeBuildManager *manager;
+  g_autoptr(IdeNotification) notif = NULL;
+  GbpGitClient *client;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -84,52 +82,21 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
   g_assert (GBP_IS_GIT_DEPENDENCY_UPDATER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  client = gbp_git_client_from_context (context);
+  notif = ide_notification_new ();
+
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_dependency_updater_update_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_task_data (task, g_object_ref (notif), g_object_unref);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_build_manager_from_context (context);
-  pipeline = ide_build_manager_get_pipeline (manager);
+  gbp_git_client_update_submodules_async (client,
+                                          notif,
+                                          cancellable,
+                                          gbp_git_dependency_updater_update_cb,
+                                          g_steal_pointer (&task));
 
-  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
-
-  if (pipeline == NULL)
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 "Cannot update git submodules until build pipeline is initialized");
-      IDE_EXIT;
-    }
-
-  /* Find the submodule stage and tell it to download updates one time */
-  ide_pipeline_foreach_stage (pipeline, find_submodule_stage_cb, &stage);
-
-  if (stage == NULL)
-    {
-      /* Synthesize success if there is no submodule stage */
-      ide_task_return_boolean (task, TRUE);
-      IDE_EXIT;
-    }
-
-  gbp_git_submodule_stage_force_update (stage);
-
-  /* Ensure downloads and everything past it is invalidated */
-  ide_pipeline_invalidate_phase (pipeline, IDE_PIPELINE_PHASE_DOWNLOADS);
-
-  /* Start building all the way up to the project configure so that
-   * the user knows if the updates broke their configuration or anything.
-   *
-   * TODO: This should probably be done by the calling API so that we don't
-   *       race with other updaters.
-   */
-  ide_build_manager_rebuild_async (manager,
-                                   IDE_PIPELINE_PHASE_CONFIGURE,
-                                   NULL,
-                                   NULL,
-                                   gbp_git_dependency_updater_update_cb,
-                                   g_steal_pointer (&task));
+  ide_notification_attach (notif, IDE_OBJECT (context));
 
   IDE_EXIT;
 }
