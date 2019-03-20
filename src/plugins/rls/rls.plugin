@@ -4,7 +4,6 @@ Builtin=true
 Copyright=Copyright © 2016-2018 Christian Hergert
 Description=Provides auto-completion, diagnostics, and other IDE features
 Loader=python3
-Hidden=true
 Module=rls_plugin
 Name=Rust Language Server Integration
 X-Completion-Provider-Languages=rust
