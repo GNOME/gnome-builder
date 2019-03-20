@@ -147,6 +147,8 @@ ide_clone_surface_addin_removed_cb (PeasExtensionSet *set,
       gtk_widget_hide (GTK_WIDGET (self->kind_label));
       gtk_widget_hide (GTK_WIDGET (self->kind_radio));
     }
+
+  ide_object_destroy (IDE_OBJECT (exten));
 }
 
 static void
@@ -311,6 +313,7 @@ ide_clone_surface_constructed (GObject *object)
 {
   IdeCloneSurface *self = (IdeCloneSurface *)object;
   g_autoptr(GFile) file = NULL;
+  IdeContext *context;
 
   G_OBJECT_CLASS (ide_clone_surface_parent_class)->constructed (object);
 
@@ -319,8 +322,11 @@ ide_clone_surface_constructed (GObject *object)
   file = g_file_new_for_path (ide_get_projects_dir ());
   dzl_file_chooser_entry_set_file (self->destination_chooser, file);
 
+  context = ide_widget_get_context (GTK_WIDGET (self));
+
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_VCS_CLONER,
+                                         "parent", context,
                                          NULL);
 
   g_signal_connect (self->addins,
