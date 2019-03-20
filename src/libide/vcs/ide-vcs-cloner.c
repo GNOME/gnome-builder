@@ -26,7 +26,7 @@
 
 #include "ide-vcs-cloner.h"
 
-G_DEFINE_INTERFACE (IdeVcsCloner, ide_vcs_cloner, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeVcsCloner, ide_vcs_cloner, IDE_TYPE_OBJECT)
 
 static void
 ide_vcs_cloner_default_init (IdeVcsClonerInterface *iface)
