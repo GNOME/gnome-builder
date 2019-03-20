@@ -626,9 +626,8 @@ handle_clone_url (JsonrpcServer *server,
     "token", JSONRPC_MESSAGE_GET_STRING (&token)
   );
 
-  JSONRPC_MESSAGE_PARSE (params,
-    "branch", JSONRPC_MESSAGE_GET_STRING (&branch)
-  );
+  if (!JSONRPC_MESSAGE_PARSE (params, "branch", JSONRPC_MESSAGE_GET_STRING (&branch)))
+    branch = "master";
 
   if (!r || !(destination = g_file_new_for_uri (dest_uri)))
     {
@@ -659,7 +658,7 @@ handle_clone_url (JsonrpcServer *server,
 
   options = ggit_clone_options_new ();
   ggit_clone_options_set_is_bare (options, FALSE);
-  ggit_clone_options_set_checkout_branch (options, branch ? branch : "master");
+  ggit_clone_options_set_checkout_branch (options, branch);
   ggit_clone_options_set_fetch_options (options, fetch_options);
 
   gbp_git_clone_url_async (git,

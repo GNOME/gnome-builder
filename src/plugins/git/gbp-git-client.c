@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 #include <glib-unix.h>
@@ -38,6 +40,7 @@ struct _GbpGitClient
   JsonrpcClient            *rpc_client;
   GFile                    *root_uri;
   gint                      state;
+  GHashTable               *notif_by_token;
 };
 
 enum {
@@ -75,6 +78,62 @@ call_free (gpointer data)
   g_clear_object (&c->cancellable);
   g_clear_object (&c->self);
   g_slice_free (Call, c);
+}
+
+static void
+gbp_git_client_notification_cb (GbpGitClient  *self,
+                                const gchar   *command,
+                                GVariant      *reply,
+                                JsonrpcClient *client)
+{
+  const gchar *token = NULL;
+  IdeNotification *notif;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_CLIENT (client));
+  g_assert (command != NULL);
+  g_assert (JSONRPC_IS_CLIENT (client));
+
+  if (reply == NULL)
+    return;
+
+  if (g_str_equal (command, "$/progress") &&
+      JSONRPC_MESSAGE_PARSE (reply, "token", JSONRPC_MESSAGE_GET_STRING (&token)) &&
+      (notif = g_hash_table_lookup (self->notif_by_token, token)))
+    {
+      gdouble progress;
+      const gchar *message;
+
+      if (!JSONRPC_MESSAGE_PARSE (reply, "progress", JSONRPC_MESSAGE_GET_DOUBLE (&progress)))
+        progress = 0.0;
+
+      if (!JSONRPC_MESSAGE_PARSE (reply, "message", JSONRPC_MESSAGE_GET_STRING (&message)))
+        message = NULL;
+
+      if (message != NULL)
+        ide_notification_set_body (notif, message);
+
+      if (progress > 0.0)
+        ide_notification_set_progress (notif, CLAMP (progress, 0.0, 1.0));
+    }
+}
+
+static gchar *
+gbp_git_client_track_progress (GbpGitClient    *self,
+                               IdeNotification *notif)
+{
+  g_autofree gchar *token = NULL;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (IDE_IS_NOTIFICATION (notif));
+
+  if (self->notif_by_token == NULL)
+    self->notif_by_token = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+
+  token = g_uuid_string_random ();
+  g_hash_table_insert (self->notif_by_token, g_strdup (token), g_object_ref (notif));
+
+  return g_steal_pointer (&token);
 }
 
 static void
@@ -136,6 +195,12 @@ gbp_git_client_subprocess_spawned (GbpGitClient            *self,
   self->rpc_client = jsonrpc_client_new (stream);
   jsonrpc_client_set_use_gvariant (self->rpc_client, TRUE);
 
+  g_signal_connect_object (self->rpc_client,
+                           "notification",
+                           G_CALLBACK (gbp_git_client_notification_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   queued = g_steal_pointer (&self->get_client.head);
 
   self->get_client.head = NULL;
@@ -160,10 +225,7 @@ gbp_git_client_subprocess_spawned (GbpGitClient            *self,
     "capabilities", "{", "}"
   );
 
-  jsonrpc_client_call_async (self->rpc_client,
-                             "initialize",
-                             params,
-                             NULL, NULL, NULL);
+  jsonrpc_client_call_async (self->rpc_client, "initialize", params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -319,6 +381,7 @@ gbp_git_client_finalize (GObject *object)
   g_clear_object (&self->rpc_client);
   g_clear_object (&self->root_uri);
   g_clear_object (&self->supervisor);
+  g_clear_pointer (&self->notif_by_token, g_hash_table_unref);
 
   g_assert (self->get_client.head == NULL);
   g_assert (self->get_client.tail == NULL);
@@ -587,4 +650,95 @@ gbp_git_client_is_ignored_finish (GbpGitClient  *self,
                "Expected boolean reply");
 
   return FALSE;
+}
+
+static void
+gbp_git_client_clone_url_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  GbpGitClient *self = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *token = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_git_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  if ((token = ide_task_get_task_data (task)) && self->notif_by_token)
+    g_hash_table_remove (self->notif_by_token, token);
+}
+
+void
+gbp_git_client_clone_url_async (GbpGitClient        *self,
+                                const gchar         *url,
+                                GFile               *destination,
+                                const gchar         *branch,
+                                IdeNotification     *notif,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) command = NULL;
+  g_autofree gchar *token = NULL;
+  g_autofree gchar *dest_uri = NULL;
+
+  g_return_if_fail (GBP_IS_GIT_CLIENT (self));
+  g_return_if_fail (url != NULL);
+  g_return_if_fail (G_IS_FILE (destination));
+  g_return_if_fail (!notif || IDE_IS_NOTIFICATION (notif));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_client_clone_url_async);
+
+  if (notif != NULL)
+    {
+      token = gbp_git_client_track_progress (self, notif);
+      ide_notification_set_title (notif, _("Cloning Repository"));
+      ide_notification_set_icon_name (notif, "builder-vcs-git-symbolic");
+      ide_notification_set_progress (notif, 0.0);
+    }
+
+  if (branch == NULL)
+    branch = "master";
+
+  dest_uri = g_file_get_uri (destination);
+
+  command = JSONRPC_MESSAGE_NEW (
+    "token", JSONRPC_MESSAGE_PUT_STRING (token),
+    "url", JSONRPC_MESSAGE_PUT_STRING (url),
+    "destination", JSONRPC_MESSAGE_PUT_STRING (dest_uri),
+    "branch", JSONRPC_MESSAGE_PUT_STRING (branch)
+  );
+
+  if (token != NULL)
+    ide_task_set_task_data (task, g_strdup (token), g_free);
+
+  gbp_git_client_call_async (self,
+                             "git/cloneUrl",
+                             command,
+                             cancellable,
+                             gbp_git_client_clone_url_cb,
+                             g_steal_pointer (&task));
+}
+
+gboolean
+gbp_git_client_clone_url_finish (GbpGitClient  *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

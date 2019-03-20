@@ -82,10 +82,9 @@ gboolean      gbp_git_client_switch_branch_finish     (GbpGitClient           *s
                                                        GError                **error);
 void          gbp_git_client_clone_url_async          (GbpGitClient           *self,
                                                        const gchar            *url,
-                                                       GFile                   *destination,
-                                                       GFileProgressCallback   progress,
-                                                       gpointer                progress_data,
-                                                       GDestroyNotify          progress_notify,
+                                                       GFile                  *destination,
+                                                       const gchar            *branch,
+                                                       IdeNotification        *notif,
                                                        GCancellable           *cancellable,
                                                        GAsyncReadyCallback     callback,
                                                        gpointer                user_data);
