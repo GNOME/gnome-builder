@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-16 10:10+0000\n"
-"PO-Revision-Date: 2019-03-18 15:51+0100\n"
+"POT-Creation-Date: 2019-03-18 14:54+0000\n"
+"PO-Revision-Date: 2019-03-20 15:02+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -129,7 +129,6 @@ msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Soporte para construir con jhbuild y rutinas de Flatpak"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
-#| msgid "Support for viewing Todo's found within your code-base"
 msgid "Support for viewing TODOs found within your code base"
 msgstr "Soporte para ver los «TODO» encontrados en su código fuente"
 
@@ -873,7 +872,7 @@ msgstr "%u archivos sin guardar"
 
 #: src/libide/code/ide-buffer.c:3370
 msgid "The current language lacks a symbol resolver."
-msgstr "Al idioma actual le falta un resolutor de símbolos."
+msgstr "Al lenguaje actual le falta un resolutor de símbolos."
 
 #: src/libide/code/ide-language-defaults.c:219
 #, c-format
@@ -2160,7 +2159,7 @@ msgstr "Lenguajes de programación"
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
 #: src/libide/gui/ide-preferences-builtin.c:271
 msgid "Search languages…"
-msgstr "Buscar idiomas…"
+msgstr "Buscar lenguajes…"
 
 #: src/libide/gui/ide-preferences-builtin.c:326
 msgid "Trim trailing whitespace"
@@ -2727,7 +2726,7 @@ msgstr[1] "Instalando %u paquetes"
 #: src/libide/lsp/ide-lsp-client.c:924
 #, c-format
 msgid "Failed to initialize language server: %s"
-msgstr "Falló al inicializar el idioma del servidor: %s"
+msgstr "Falló al inicializar el lenguaje del servidor: %s"
 
 #: src/libide/projects/ide-project.c:181
 msgid "Destination file must be within the project tree."
@@ -3221,7 +3220,6 @@ msgid "Save build log"
 msgstr "Guardar el registro de construcción"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
-#| msgid "missing"
 msgid "Missing"
 msgstr "Falta"
 
@@ -3827,7 +3825,7 @@ msgstr "Seleccionar la carpeta de proyectos"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:165
 msgid "Language"
-msgstr "Idioma"
+msgstr "Lenguaje"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:188
 msgid "License"
@@ -4209,12 +4207,10 @@ msgid "Network is not available, skipping downloads"
 msgstr "La red no está disponible, omitiendo las descargas"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:144
-#| msgid "Installing "
 msgid "Install Missing SDK?"
 msgstr "¿Instalar el SDK que falta?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:149
-#| msgid "Install"
 msgid "_Install"
 msgstr "_Instalar"
 
@@ -4844,7 +4840,7 @@ msgstr "Configuración del paquete"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
 msgid "Any language"
-msgstr "Cualquier idioma"
+msgstr "Cualquier lenguaje"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "C"
@@ -5324,11 +5320,11 @@ msgstr "Falló al inicializar la revisión ortográfica, desactivando."
 
 #: src/plugins/spellcheck/gbp-spell-language-popover.c:235
 msgid "No language selected"
-msgstr "No se ha seleccionado ningún idioma"
+msgstr "No se ha seleccionado ningún lenguaje"
 
 #: src/plugins/spellcheck/gbp-spell-navigator.c:482
 msgid "No language set. Check your dictionary installation."
-msgstr "Sin idioma establecido. Compruebe su instalación del diccionario."
+msgstr "Sin lenguaje establecido. Compruebe su instalación del diccionario."
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:121
 msgid "No suggestions"
@@ -5393,7 +5389,7 @@ msgstr "Diccionario"
 
 #: src/plugins/spellcheck/gbp-spell-widget.ui:304
 msgid "_Language"
-msgstr "_Idioma"
+msgstr "_Lenguaje"
 
 #: src/plugins/spellcheck/gtk/menus.ui:6
 msgid "Check _Spelling"
@@ -5646,7 +5642,7 @@ msgstr "%s no es válido para %s"
 #: src/plugins/vim/gb-vim.c:173
 #, c-format
 msgid "Cannot find language “%s”"
-msgstr "No se puede encontrar el idioma «%s»"
+msgstr "No se puede encontrar el lenguaje «%s»"
 
 #: src/plugins/vim/gb-vim.c:330
 #, c-format
