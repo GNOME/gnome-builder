@@ -328,6 +328,7 @@ gbp_git_clone_url_async (GbpGit                *self,
   g_task_set_source_tag (task, gbp_git_clone_url_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, c, (GDestroyNotify)clone_free);
+  g_task_set_return_on_cancel (task, TRUE);
   g_task_run_in_thread (task, gbp_git_clone_url_worker);
 }
 
