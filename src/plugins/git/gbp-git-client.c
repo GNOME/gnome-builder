@@ -817,3 +817,67 @@ gbp_git_client_update_submodules_finish (GbpGitClient  *self,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+static void
+gbp_git_client_update_config_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  GbpGitClient *self = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_git_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+}
+
+void
+gbp_git_client_update_config_async (GbpGitClient        *self,
+                                    gboolean             global,
+                                    const gchar         *key,
+                                    GVariant            *value,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  GVariantDict dict;
+
+  g_return_if_fail (GBP_IS_GIT_CLIENT (self));
+  g_return_if_fail (key != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_client_update_config_async);
+
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "global", "b", global);
+  g_variant_dict_insert (&dict, "key", "s", key);
+  g_variant_dict_insert_value (&dict, "value", value);
+
+  gbp_git_client_call_async (self,
+                             "git/updateConfig",
+                             g_variant_dict_end (&dict),
+                             cancellable,
+                             gbp_git_client_update_config_cb,
+                             g_steal_pointer (&task));
+}
+
+gboolean
+gbp_git_client_update_config_finish (GbpGitClient  *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}

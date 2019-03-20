@@ -727,6 +727,69 @@ handle_update_submodules (JsonrpcServer *server,
   g_clear_pointer (&fetch_options, ggit_fetch_options_free);
 }
 
+static void
+handle_update_config_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  GbpGit *git = (GbpGit *)object;
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_GIT (git));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!gbp_git_update_config_finish (git, result, &error))
+    client_op_error (op, error);
+  else
+    client_op_reply (op, g_variant_new_boolean (TRUE));
+}
+
+static void
+handle_update_config (JsonrpcServer *server,
+                      JsonrpcClient *client,
+                      const gchar   *method,
+                      GVariant      *id,
+                      GVariant      *params,
+                      GbpGit        *git)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GVariant) value = NULL;
+  const gchar *key;
+  gboolean global;
+  gboolean r;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "git/updateConfig"));
+  g_assert (id != NULL);
+  g_assert (GBP_IS_GIT (git));
+
+  op = client_op_new (client, id);
+
+  r = JSONRPC_MESSAGE_PARSE (params,
+    "global", JSONRPC_MESSAGE_GET_BOOLEAN (&global),
+    "key", JSONRPC_MESSAGE_GET_STRING (&key)
+  );
+
+  if (!r)
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  value = g_variant_lookup_value (params, "value", NULL);
+
+  gbp_git_update_config_async (git,
+                               global,
+                               key,
+                               value,
+                               op->cancellable,
+                               (GAsyncReadyCallback)handle_update_config_cb,
+                               client_op_ref (op));
+}
+
 /* Main Loop and Setup {{{1 */
 
 gint
@@ -772,6 +835,7 @@ main (gint argc,
   ADD_HANDLER ("git/isIgnored", handle_is_ignored);
   ADD_HANDLER ("git/listRefsByKind", handle_list_refs_by_kind);
   ADD_HANDLER ("git/switchBranch", handle_switch_branch);
+  ADD_HANDLER ("git/updateConfig", handle_update_config);
   ADD_HANDLER ("git/updateSubmodules", handle_update_submodules);
   ADD_HANDLER ("$/cancelRequest", handle_cancel_request);
 
