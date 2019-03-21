@@ -135,6 +135,7 @@ gbp_git_index_monitor_changed_cb (GbpGitIndexMonitor *self,
 
   if (ide_str_equal0 (name, "index") ||
       ide_str_equal0 (name, "HEAD") ||
+      ide_str_equal0 (name, "HEAD.lock") ||
       ide_str_equal0 (name, "ORIG_HEAD") ||
       ide_str_equal0 (name, "FETCH_HEAD") ||
       ide_str_equal0 (name, "COMMIT_EDITMSG") ||
