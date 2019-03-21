@@ -956,3 +956,69 @@ gbp_git_client_read_config (GbpGitClient  *self,
 
   return g_steal_pointer (&reply);
 }
+
+static void
+gbp_git_client_create_repo_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  GbpGitClient *self = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_git_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+}
+
+void
+gbp_git_client_create_repo_async (GbpGitClient        *self,
+                                  GFile               *in_directory,
+                                  gboolean             bare,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) command = NULL;
+  g_autofree gchar *uri = NULL;
+
+  g_return_if_fail (GBP_IS_GIT_CLIENT (self));
+  g_return_if_fail (G_IS_FILE (in_directory));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_client_create_repo_async);
+
+  uri = g_file_get_uri (in_directory);
+
+  command = JSONRPC_MESSAGE_NEW (
+    "location", JSONRPC_MESSAGE_PUT_STRING (uri),
+    "bare", JSONRPC_MESSAGE_PUT_BOOLEAN (bare)
+  );
+
+  gbp_git_client_call_async (self,
+                             "git/createRepo",
+                             command,
+                             cancellable,
+                             gbp_git_client_create_repo_cb,
+                             g_steal_pointer (&task));
+}
+
+gboolean
+gbp_git_client_create_repo_finish (GbpGitClient  *self,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}

@@ -704,3 +704,73 @@ gbp_git_read_config_finish (GbpGit        *self,
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
+
+typedef struct
+{
+  GFile *in_directory;
+  guint  bare : 1;
+} CreateRepo;
+
+static void
+create_repo_free (CreateRepo *state)
+{
+  g_clear_object (&state->in_directory);
+  g_slice_free (CreateRepo, state);
+}
+
+static void
+gbp_git_create_repo_worker (GTask        *task,
+                            gpointer      source_object,
+                            gpointer      task_data,
+                            GCancellable *cancellable)
+{
+  CreateRepo *state = task_data;
+  g_autoptr(GgitRepository) repository = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_GIT (source_object));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->in_directory));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (!(repository = ggit_repository_init_repository (state->in_directory, state->bare, &error)))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+gbp_git_create_repo_async (GbpGit              *self,
+                           GFile               *in_directory,
+                           gboolean             bare,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  CreateRepo *state;
+
+  g_assert (GBP_IS_GIT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (CreateRepo);
+  state->in_directory = g_file_dup (in_directory);
+  state->bare = !!bare;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_git_create_repo_async);
+  g_task_set_task_data (task, state, (GDestroyNotify)create_repo_free);
+  g_task_run_in_thread (task, gbp_git_create_repo_worker);
+}
+
+gboolean
+gbp_git_create_repo_finish (GbpGit        *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_assert (GBP_IS_GIT (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
