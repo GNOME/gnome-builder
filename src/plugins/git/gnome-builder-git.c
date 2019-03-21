@@ -917,24 +917,28 @@ handle_discover_cb (GObject      *object,
   g_autoptr(ClientOp) op = user_data;
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) dot_git = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_autofree gchar *branch = NULL;
   g_autofree gchar *uri = NULL;
+  g_autofree gchar *gituri = NULL;
   gboolean is_worktree = FALSE;
 
   g_assert (GBP_IS_GIT (git));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (op != NULL);
 
-  if (!gbp_git_discover_finish (git, result, &workdir, &branch, &is_worktree, &error))
+  if (!gbp_git_discover_finish (git, result, &workdir, &dot_git, &branch, &is_worktree, &error))
     {
       client_op_error (op, error);
       return;
     }
 
+  gituri = g_file_get_uri (dot_git);
   uri = g_file_get_uri (workdir);
 
   reply = JSONRPC_MESSAGE_NEW (
+    "gitdir", JSONRPC_MESSAGE_PUT_STRING (gituri),
     "workdir", JSONRPC_MESSAGE_PUT_STRING (uri),
     "branch", JSONRPC_MESSAGE_PUT_STRING (branch),
     "is-worktree", JSONRPC_MESSAGE_PUT_BOOLEAN (is_worktree)

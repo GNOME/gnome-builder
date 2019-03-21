@@ -136,6 +136,7 @@ void          gbp_git_client_discover_async           (GbpGitClient         *sel
 gboolean      gbp_git_client_discover_finish          (GbpGitClient         *self,
                                                        GAsyncResult         *result,
                                                        GFile               **workdir,
+                                                       GFile               **dot_git,
                                                        gchar               **branch,
                                                        gboolean             *is_worktree,
                                                        GError              **error);

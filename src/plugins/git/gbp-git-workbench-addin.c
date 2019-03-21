@@ -28,6 +28,7 @@
 #include <libide-threading.h>
 
 #include "gbp-git-buffer-change-monitor.h"
+#include "gbp-git-client.h"
 #include "gbp-git-index-monitor.h"
 #include "gbp-git-vcs.h"
 #include "gbp-git-workbench-addin.h"
@@ -41,110 +42,40 @@ struct _GbpGitWorkbenchAddin
 };
 
 static void
-gbp_git_workbench_addin_load_project_worker (IdeTask      *task,
-                                             gpointer      source_object,
-                                             gpointer      task_data,
-                                             GCancellable *cancellable)
+gbp_git_workbench_addin_discover_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
 {
-  g_autoptr(GgitRepository) repository = NULL;
-  g_autoptr(GbpGitVcs) vcs = NULL;
-  g_autoptr(GFile) location = NULL;
-  g_autoptr(GFile) workdir = NULL;
+  GbpGitClient *client = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *worktree_branch = NULL;
-  GFile *directory = task_data;
+  g_autoptr(IdeVcs) vcs = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GFile) dot_git = NULL;
+  g_autofree gchar *branch = NULL;
+  gboolean is_worktree = FALSE;
 
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_WORKBENCH_ADDIN (source_object));
-  g_assert (G_IS_FILE (directory));
 
-  /* Short-circuit if we don't .git */
-  if (!(location = ggit_repository_discover_full (directory, TRUE, NULL, &error)))
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_NOT_SUPPORTED,
-                                 "Failed to locate git repository location");
-      return;
-    }
-
-  g_debug ("Located .git at %s", g_file_peek_path (location));
-
-  /* If @location is a regular file, we might have a git-worktree link */
-  if (g_file_query_file_type (location, 0, NULL) == G_FILE_TYPE_REGULAR)
-    {
-      g_autofree gchar *contents = NULL;
-      gsize len;
-
-      if (g_file_load_contents (location, NULL, &contents, &len, NULL, NULL))
-        {
-          IdeLineReader reader;
-          gchar *line;
-          gsize line_len;
-
-          ide_line_reader_init (&reader, contents, len);
-
-          while ((line = ide_line_reader_next (&reader, &line_len)))
-            {
-              line[line_len] = 0;
-
-              if (g_str_has_prefix (line, "gitdir: "))
-                {
-                  g_autoptr(GFile) location_parent = g_file_get_parent (location);
-                  const gchar *path = line + strlen ("gitdir: ");
-                  const gchar *branch;
-
-                  g_clear_object (&location);
-
-                  if (g_path_is_absolute (path))
-                    location = g_file_new_for_path (path);
-                  else
-                    location = g_file_resolve_relative_path (location_parent, path);
-
-                  /*
-                   * Worktrees only have a single branch, and it is the name
-                   * of the suffix of .git/worktrees/<name>
-                   */
-                  if ((branch = strrchr (line, G_DIR_SEPARATOR)))
-                    worktree_branch = g_strdup (branch + 1);
-
-                  break;
-                }
-            }
-        }
-    }
-
-  if (!(repository = ggit_repository_open (location, &error)))
+  if (!gbp_git_client_discover_finish (client, result, &workdir, &dot_git, &branch, &is_worktree, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  workdir = ggit_repository_get_workdir (repository);
-
-  g_assert (G_IS_FILE (location));
-  g_assert (G_IS_FILE (workdir));
-  g_assert (GGIT_IS_REPOSITORY (repository));
-
-  if (worktree_branch == NULL)
-    {
-      g_autoptr(GgitRef) ref = NULL;
-
-      if ((ref = ggit_repository_get_head (repository, NULL)))
-        worktree_branch = g_strdup (ggit_ref_get_shorthand (ref));
-
-      if (worktree_branch == NULL)
-        worktree_branch = g_strdup ("master");
-    }
-
   vcs = g_object_new (GBP_TYPE_GIT_VCS,
-                      "branch-name", worktree_branch,
-                      "location", location,
-                      "repository", repository,
+                      "branch-name", branch,
                       "workdir", workdir,
+                      "location", dot_git,
                       NULL);
 
   ide_task_return_pointer (task, g_steal_pointer (&vcs), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -156,6 +87,8 @@ gbp_git_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
 {
   GbpGitWorkbenchAddin *self = (GbpGitWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
+  GbpGitClient *client;
+  IdeContext *context;
   GFile *directory;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -177,11 +110,14 @@ gbp_git_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
       return;
     }
 
-  /* Try to discover the git repository from a worker thread. If we find
-   * it, we'll set the VCS on the workbench for various components to use.
-   */
-  ide_task_set_task_data (task, g_object_ref (directory), g_object_unref);
-  ide_task_run_in_thread (task, gbp_git_workbench_addin_load_project_worker);
+  context = ide_workbench_get_context (self->workbench);
+  client = gbp_git_client_from_context (context);
+
+  gbp_git_client_discover_async (client,
+                                 directory,
+                                 cancellable,
+                                 gbp_git_workbench_addin_discover_cb,
+                                 g_steal_pointer (&task));
 }
 
 static void

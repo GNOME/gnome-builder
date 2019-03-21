@@ -142,6 +142,7 @@ void       gbp_git_discover_async           (GbpGit                      *self,
 gboolean   gbp_git_discover_finish          (GbpGit                      *self,
                                              GAsyncResult                *result,
                                              GFile                      **workdir,
+                                             GFile                      **dot_git,
                                              gchar                      **branch,
                                              gboolean                    *is_worktree,
                                              GError                     **error);

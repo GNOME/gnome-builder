@@ -1026,6 +1026,7 @@ gbp_git_client_create_repo_finish (GbpGitClient  *self,
 typedef struct
 {
   GFile *workdir;
+  GFile *dot_git;
   gchar *branch;
   guint  is_worktree : 1;
 } Discover;
@@ -1034,6 +1035,7 @@ static void
 discover_free (Discover *state)
 {
   g_clear_object (&state->workdir);
+  g_clear_object (&state->dot_git);
   g_clear_pointer (&state->branch, g_free);
   g_slice_free (Discover, state);
 }
@@ -1047,6 +1049,7 @@ gbp_git_client_discover_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GError) error = NULL;
+  const gchar *gitdir = NULL;
   const gchar *workdir = NULL;
   const gchar *branch = NULL;
   Discover *state;
@@ -1067,6 +1070,7 @@ gbp_git_client_discover_cb (GObject      *object,
 
   r = JSONRPC_MESSAGE_PARSE (reply,
     "workdir", JSONRPC_MESSAGE_GET_STRING (&workdir),
+    "gitdir", JSONRPC_MESSAGE_GET_STRING (&gitdir),
     "branch", JSONRPC_MESSAGE_GET_STRING (&branch),
     "is-worktree", JSONRPC_MESSAGE_GET_BOOLEAN (&is_worktree)
   );
@@ -1080,6 +1084,7 @@ gbp_git_client_discover_cb (GObject      *object,
       return;
     }
 
+  state->dot_git = g_file_new_for_uri (gitdir);
   state->workdir = g_file_new_for_uri (workdir);
   state->branch = g_strdup (branch);
   state->is_worktree = !!is_worktree;
@@ -1127,6 +1132,7 @@ gboolean
 gbp_git_client_discover_finish (GbpGitClient  *self,
                                 GAsyncResult  *result,
                                 GFile        **workdir,
+                                GFile        **dot_git,
                                 gchar        **branch,
                                 gboolean      *is_worktree,
                                 GError       **error)
@@ -1135,6 +1141,7 @@ gbp_git_client_discover_finish (GbpGitClient  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   ide_clear_param (workdir, NULL);
+  ide_clear_param (dot_git, NULL);
   ide_clear_param (branch, NULL);
   ide_clear_param (is_worktree, FALSE);
 
@@ -1146,6 +1153,9 @@ gbp_git_client_discover_finish (GbpGitClient  *self,
 
       if (workdir != NULL)
         *workdir = g_steal_pointer (&state->workdir);
+
+      if (dot_git != NULL)
+        *dot_git = g_steal_pointer (&state->dot_git);
 
       if (branch != NULL)
         *branch = g_steal_pointer (&state->branch);
