@@ -665,6 +665,7 @@ extract_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   GbpCreateProjectSurface *self;
   PeasPluginInfo *plugin_info;
+  IdeContext *context;
   PeasEngine *engine;
   GFile *project_file;
 
@@ -713,8 +714,10 @@ extract_cb (GObject      *object,
   if (plugin_info == NULL)
     IDE_GOTO (failure);
 
+  context = ide_widget_get_context (GTK_WIDGET (self));
   vcs = (IdeVcsInitializer *)peas_engine_create_extension (engine, plugin_info,
                                                            IDE_TYPE_VCS_INITIALIZER,
+                                                           "parent", context,
                                                            NULL);
   if (vcs == NULL)
     IDE_GOTO (failure);
