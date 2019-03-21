@@ -518,6 +518,30 @@ gbp_git_client_call_cancelled (GCancellable *cancellable,
                              NULL, NULL, NULL);
 }
 
+static gboolean
+gbp_git_client_call (GbpGitClient  *self,
+                     const gchar   *method,
+                     GVariant      *params,
+                     GCancellable  *cancellable,
+                     GVariant     **reply,
+                     GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (method != NULL, FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  if (self->rpc_client == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_CONNECTED,
+                   "Cannot call synchronously without connection");
+      return FALSE;
+    }
+
+  return jsonrpc_client_call (self->rpc_client, method, params, cancellable, reply, error);
+}
+
 void
 gbp_git_client_call_async (GbpGitClient        *self,
                            const gchar         *method,
@@ -837,6 +861,34 @@ gbp_git_client_update_config_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+}
+
+gboolean
+gbp_git_client_update_config (GbpGitClient  *self,
+                              gboolean       global,
+                              const gchar   *key,
+                              GVariant      *value,
+                              GCancellable  *cancellable,
+                              GError       **error)
+{
+  g_autoptr(GVariant) reply = NULL;
+  GVariantDict dict;
+
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (key != NULL, FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "global", "b", global);
+  g_variant_dict_insert (&dict, "key", "s", key);
+  g_variant_dict_insert_value (&dict, "value", value);
+
+  return gbp_git_client_call (self,
+                              "git/updateConfig",
+                              g_variant_dict_end (&dict),
+                              cancellable,
+                              &reply,
+                              error);
 }
 
 void
