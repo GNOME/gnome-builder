@@ -41,7 +41,6 @@ gbp_git_buffer_addin_file_laoded (IdeBufferAddin *addin,
                                   GFile          *file)
 {
   GbpGitBufferAddin *self = (GbpGitBufferAddin *)addin;
-  g_autoptr(GbpGitBufferChangeMonitor) monitor = NULL;
   g_autoptr(IdeContext) context = NULL;
   GgitRepository *repository;
   IdeObjectBox *box;

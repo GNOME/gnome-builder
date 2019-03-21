@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <libgit2-glib/ggit.h>
 #include <libide-editor.h>
 #include <libide-io.h>
 #include <libide-threading.h>
