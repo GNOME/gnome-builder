@@ -790,6 +790,60 @@ handle_update_config (JsonrpcServer *server,
                                client_op_ref (op));
 }
 
+/* Handle Read Config {{{1 */
+
+static void
+handle_read_config_cb (GObject      *object,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  GbpGit *git = (GbpGit *)object;
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GVariant) value = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_GIT (git));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!(value = gbp_git_read_config_finish (git, result, &error)))
+    client_op_error (op, error);
+  else
+    client_op_reply (op, value);
+}
+
+static void
+handle_read_config (JsonrpcServer *server,
+                    JsonrpcClient *client,
+                    const gchar   *method,
+                    GVariant      *id,
+                    GVariant      *params,
+                    GbpGit        *git)
+{
+  g_autoptr(ClientOp) op = NULL;
+  const gchar *key;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "git/readConfig"));
+  g_assert (id != NULL);
+  g_assert (GBP_IS_GIT (git));
+
+  op = client_op_new (client, id);
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "key", JSONRPC_MESSAGE_GET_STRING (&key)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  gbp_git_read_config_async (git,
+                             key,
+                             op->cancellable,
+                             (GAsyncReadyCallback)handle_read_config_cb,
+                             client_op_ref (op));
+}
+
 /* Main Loop and Setup {{{1 */
 
 gint
@@ -832,6 +886,7 @@ main (gint argc,
 
   ADD_HANDLER ("initialize", handle_initialize);
   ADD_HANDLER ("git/cloneUrl", handle_clone_url);
+  ADD_HANDLER ("git/readConfig", handle_read_config);
   ADD_HANDLER ("git/isIgnored", handle_is_ignored);
   ADD_HANDLER ("git/listRefsByKind", handle_list_refs_by_kind);
   ADD_HANDLER ("git/switchBranch", handle_switch_branch);
