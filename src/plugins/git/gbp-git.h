@@ -134,5 +134,16 @@ void       gbp_git_update_config_async      (GbpGit                      *self,
 gboolean   gbp_git_update_config_finish     (GbpGit                      *self,
                                              GAsyncResult                *result,
                                              GError                     **error);
+void       gbp_git_discover_async           (GbpGit                      *self,
+                                             GFile                       *directory,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+gboolean   gbp_git_discover_finish          (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GFile                      **workdir,
+                                             gchar                      **branch,
+                                             gboolean                    *is_worktree,
+                                             GError                     **error);
 
 G_END_DECLS

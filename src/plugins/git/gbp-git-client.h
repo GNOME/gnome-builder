@@ -35,98 +35,109 @@ typedef enum
 
 G_DECLARE_FINAL_TYPE (GbpGitClient, gbp_git_client, GBP, GIT_CLIENT, IdeObject)
 
-GbpGitClient *gbp_git_client_from_context             (IdeContext             *context);
-void          gbp_git_client_call_async               (GbpGitClient           *self,
-                                                       const gchar            *method,
-                                                       GVariant               *params,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-gboolean      gbp_git_client_call_finish              (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GVariant              **reply,
-                                                       GError                **error);
-void          gbp_git_client_is_ignored_async         (GbpGitClient           *self,
-                                                       const gchar            *path,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-gboolean      gbp_git_client_is_ignored_finish        (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GError                **error);
-void          gbp_git_client_list_status_async        (GbpGitClient           *self,
-                                                       const gchar            *directory_or_file,
-                                                       gboolean                include_descendants,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-GPtrArray    *gbp_git_client_list_status_finish       (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GError                **error);
-void          gbp_git_client_list_refs_by_kind_async  (GbpGitClient           *self,
-                                                       GbpGitRefKind           kind,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-GPtrArray    *gbp_git_client_list_refs_by_kind_finish (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GError                **error);
-void          gbp_git_client_switch_branch_async      (GbpGitClient           *self,
-                                                       const gchar            *branch_name,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-gboolean      gbp_git_client_switch_branch_finish     (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       gchar                 **switch_to_directory,
-                                                       GError                **error);
-void          gbp_git_client_create_repo_async        (GbpGitClient           *self,
-                                                       GFile                  *in_directory,
-                                                       gboolean                bare,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-gboolean      gbp_git_client_create_repo_finish       (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GError                **error);
-void          gbp_git_client_clone_url_async          (GbpGitClient           *self,
-                                                       const gchar            *url,
-                                                       GFile                  *destination,
-                                                       const gchar            *branch,
-                                                       IdeNotification        *notif,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-gboolean      gbp_git_client_clone_url_finish         (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GError                **error);
-void          gbp_git_client_update_submodules_async  (GbpGitClient           *self,
-                                                       IdeNotification        *notif,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-gboolean      gbp_git_client_update_submodules_finish (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GError                **error);
-GVariant     *gbp_git_client_read_config              (GbpGitClient           *self,
-                                                       const gchar            *key,
-                                                       GCancellable           *cancellable,
-                                                       GError                **error);
-gboolean      gbp_git_client_update_config            (GbpGitClient           *self,
-                                                       gboolean                global,
-                                                       const gchar            *key,
-                                                       GVariant               *value,
-                                                       GCancellable           *cancellable,
-                                                       GError                **error);
-void          gbp_git_client_update_config_async      (GbpGitClient           *self,
-                                                       gboolean                global,
-                                                       const gchar            *key,
-                                                       GVariant               *value,
-                                                       GCancellable           *cancellable,
-                                                       GAsyncReadyCallback     callback,
-                                                       gpointer                user_data);
-gboolean      gbp_git_client_update_config_finish     (GbpGitClient           *self,
-                                                       GAsyncResult           *result,
-                                                       GError                **error);
+GbpGitClient *gbp_git_client_from_context             (IdeContext           *context);
+void          gbp_git_client_call_async               (GbpGitClient         *self,
+                                                       const gchar          *method,
+                                                       GVariant             *params,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_call_finish              (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GVariant            **reply,
+                                                       GError              **error);
+void          gbp_git_client_is_ignored_async         (GbpGitClient         *self,
+                                                       const gchar          *path,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_is_ignored_finish        (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+void          gbp_git_client_list_status_async        (GbpGitClient         *self,
+                                                       const gchar          *directory_or_file,
+                                                       gboolean              include_descendants,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+GPtrArray    *gbp_git_client_list_status_finish       (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+void          gbp_git_client_list_refs_by_kind_async  (GbpGitClient         *self,
+                                                       GbpGitRefKind         kind,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+GPtrArray    *gbp_git_client_list_refs_by_kind_finish (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+void          gbp_git_client_switch_branch_async      (GbpGitClient         *self,
+                                                       const gchar          *branch_name,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_switch_branch_finish     (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       gchar               **switch_to_directory,
+                                                       GError              **error);
+void          gbp_git_client_create_repo_async        (GbpGitClient         *self,
+                                                       GFile                *in_directory,
+                                                       gboolean              bare,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_create_repo_finish       (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+void          gbp_git_client_clone_url_async          (GbpGitClient         *self,
+                                                       const gchar          *url,
+                                                       GFile                *destination,
+                                                       const gchar          *branch,
+                                                       IdeNotification      *notif,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_clone_url_finish         (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+void          gbp_git_client_update_submodules_async  (GbpGitClient         *self,
+                                                       IdeNotification      *notif,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_update_submodules_finish (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+GVariant     *gbp_git_client_read_config              (GbpGitClient         *self,
+                                                       const gchar          *key,
+                                                       GCancellable         *cancellable,
+                                                       GError              **error);
+gboolean      gbp_git_client_update_config            (GbpGitClient         *self,
+                                                       gboolean              global,
+                                                       const gchar          *key,
+                                                       GVariant             *value,
+                                                       GCancellable         *cancellable,
+                                                       GError              **error);
+void          gbp_git_client_update_config_async      (GbpGitClient         *self,
+                                                       gboolean              global,
+                                                       const gchar          *key,
+                                                       GVariant             *value,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_update_config_finish     (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+void          gbp_git_client_discover_async           (GbpGitClient         *self,
+                                                       GFile                *directory,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean      gbp_git_client_discover_finish          (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
+                                                       GFile               **workdir,
+                                                       gchar               **branch,
+                                                       gboolean             *is_worktree,
+                                                       GError              **error);
 
 G_END_DECLS

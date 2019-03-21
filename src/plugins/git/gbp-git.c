@@ -774,3 +774,174 @@ gbp_git_create_repo_finish (GbpGit        *self,
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
+
+typedef struct
+{
+  GFile *directory;
+  GFile *workdir;
+  gchar *branch;
+  guint  is_worktree : 1;
+} Discover;
+
+static void
+discover_free (Discover *state)
+{
+  g_clear_object (&state->directory);
+  g_clear_object (&state->workdir);
+  g_clear_pointer (&state->branch, g_free);
+  g_slice_free (Discover, state);
+}
+
+static void
+gbp_git_discover_worker (GTask        *task,
+                         gpointer      source_object,
+                         gpointer      task_data,
+                         GCancellable *cancellable)
+{
+  Discover *state = task_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) location = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GgitRepository) repository = NULL;
+  g_autofree gchar *worktree_branch = NULL;
+  gboolean is_worktree = FALSE;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_GIT (source_object));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->directory));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* Short-circuit if we don't .git */
+  if (!(location = ggit_repository_discover_full (state->directory, TRUE, NULL, &error)))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to locate git repository location");
+      return;
+    }
+
+  /* If @location is a regular file, we might have a git-worktree link */
+  if (g_file_query_file_type (location, 0, NULL) == G_FILE_TYPE_REGULAR)
+    {
+      g_autofree gchar *contents = NULL;
+      gsize len;
+
+      if (g_file_load_contents (location, NULL, &contents, &len, NULL, NULL))
+        {
+          /* g_file_load_contents() provides a suffix \0 */
+          g_auto(GStrv) lines = g_strsplit (contents, "\n", 0);
+
+          for (guint i = 0; lines[i] != NULL; i++)
+            {
+              gchar *line = lines[i];
+
+              if (g_str_has_prefix (line, "gitdir: "))
+                {
+                  g_autoptr(GFile) location_parent = g_file_get_parent (location);
+                  const gchar *path = line + strlen ("gitdir: ");
+                  const gchar *branch;
+
+                  is_worktree = TRUE;
+
+                  g_clear_object (&location);
+
+                  if (g_path_is_absolute (path))
+                    location = g_file_new_for_path (path);
+                  else
+                    location = g_file_resolve_relative_path (location_parent, path);
+
+                  /*
+                   * Worktrees only have a single branch, and it is the name
+                   * of the suffix of .git/worktrees/<name>
+                   */
+                  if ((branch = strrchr (line, G_DIR_SEPARATOR)))
+                    worktree_branch = g_strdup (branch + 1);
+
+                  break;
+                }
+            }
+        }
+    }
+
+  if (!(repository = ggit_repository_open (location, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  workdir = ggit_repository_get_workdir (repository);
+
+  g_assert (G_IS_FILE (location));
+  g_assert (G_IS_FILE (workdir));
+  g_assert (GGIT_IS_REPOSITORY (repository));
+
+  if (worktree_branch == NULL)
+    {
+      g_autoptr(GgitRef) ref = NULL;
+
+      if ((ref = ggit_repository_get_head (repository, NULL)))
+        worktree_branch = g_strdup (ggit_ref_get_shorthand (ref));
+
+      if (worktree_branch == NULL)
+        worktree_branch = g_strdup ("master");
+    }
+
+  state->workdir = g_file_dup (workdir);
+  state->branch = g_steal_pointer (&worktree_branch);
+  state->is_worktree = !!is_worktree;
+
+  g_task_return_boolean (task, TRUE);
+}
+
+void
+gbp_git_discover_async (GbpGit                      *self,
+                        GFile                       *directory,
+                        GCancellable                *cancellable,
+                        GAsyncReadyCallback          callback,
+                        gpointer                     user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  Discover *state;
+
+  g_return_if_fail (GBP_IS_GIT (self));
+  g_return_if_fail (G_IS_FILE (directory));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (Discover);
+  state->directory = g_file_dup (directory);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_git_discover_async);
+  g_task_set_task_data (task, state, (GDestroyNotify)discover_free);
+  g_task_run_in_thread (task, gbp_git_discover_worker);
+}
+
+gboolean
+gbp_git_discover_finish (GbpGit        *self,
+                         GAsyncResult  *result,
+                         GFile        **workdir,
+                         gchar        **branch,
+                         gboolean      *is_worktree,
+                         GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (workdir != NULL, FALSE);
+  g_return_val_if_fail (branch != NULL, FALSE);
+  g_return_val_if_fail (is_worktree != NULL, FALSE);
+
+  if (g_task_propagate_boolean (G_TASK (result), error))
+    {
+      Discover *state = g_task_get_task_data (G_TASK (result));
+
+      *workdir = g_steal_pointer (&state->workdir);
+      *branch = g_steal_pointer (&state->branch);
+      *is_worktree = state->is_worktree;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
