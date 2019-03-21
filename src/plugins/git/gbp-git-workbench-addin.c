@@ -294,6 +294,9 @@ gbp_git_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
           task = ide_task_new (self, NULL, load_git_for_editor_cb, NULL);
           ide_task_set_source_tag (task, gbp_git_workbench_addin_workspace_added);
 
+          /* Reuse our discovery process, which is normally used when loading
+           * a project (with known directory, etc).
+           */
           gbp_git_client_discover_async (client,
                                          workdir,
                                          NULL,
