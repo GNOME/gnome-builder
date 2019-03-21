@@ -80,6 +80,15 @@ gboolean      gbp_git_client_switch_branch_finish     (GbpGitClient           *s
                                                        GAsyncResult           *result,
                                                        gchar                 **switch_to_directory,
                                                        GError                **error);
+void          gbp_git_client_create_repo_async        (GbpGitClient           *self,
+                                                       GFile                  *in_directory,
+                                                       gboolean                bare,
+                                                       GCancellable           *cancellable,
+                                                       GAsyncReadyCallback     callback,
+                                                       gpointer                user_data);
+gboolean      gbp_git_client_create_repo_finish       (GbpGitClient           *self,
+                                                       GAsyncResult           *result,
+                                                       GError                **error);
 void          gbp_git_client_clone_url_async          (GbpGitClient           *self,
                                                        const gchar            *url,
                                                        GFile                  *destination,

@@ -844,6 +844,68 @@ handle_read_config (JsonrpcServer *server,
                              client_op_ref (op));
 }
 
+/* Handle Create Repository {{{1 */
+
+static void
+handle_create_repo_cb (GObject      *object,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  GbpGit *git = (GbpGit *)object;
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GVariant) value = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_GIT (git));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!gbp_git_create_repo_finish (git, result, &error))
+    client_op_error (op, error);
+  else
+    client_op_reply (op, g_variant_new_boolean (TRUE));
+}
+
+static void
+handle_create_repo (JsonrpcServer *server,
+                    JsonrpcClient *client,
+                    const gchar   *method,
+                    GVariant      *id,
+                    GVariant      *params,
+                    GbpGit        *git)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GFile) location = NULL;
+  const gchar *uri;
+  gboolean bare;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "git/createRepo"));
+  g_assert (id != NULL);
+  g_assert (GBP_IS_GIT (git));
+
+  op = client_op_new (client, id);
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "location", JSONRPC_MESSAGE_GET_STRING (&uri)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "bare", JSONRPC_MESSAGE_GET_BOOLEAN (&bare)))
+    bare = FALSE;
+
+  location = g_file_new_for_uri (uri);
+
+  gbp_git_create_repo_async (git,
+                             location,
+                             bare,
+                             op->cancellable,
+                             (GAsyncReadyCallback)handle_create_repo_cb,
+                             client_op_ref (op));
+}
+
 /* Main Loop and Setup {{{1 */
 
 gint
@@ -886,6 +948,7 @@ main (gint argc,
 
   ADD_HANDLER ("initialize", handle_initialize);
   ADD_HANDLER ("git/cloneUrl", handle_clone_url);
+  ADD_HANDLER ("git/createRepo", handle_create_repo);
   ADD_HANDLER ("git/readConfig", handle_read_config);
   ADD_HANDLER ("git/isIgnored", handle_is_ignored);
   ADD_HANDLER ("git/listRefsByKind", handle_list_refs_by_kind);

@@ -99,6 +99,15 @@ void       gbp_git_clone_url_async          (GbpGit                      *self,
 gboolean   gbp_git_clone_url_finish         (GbpGit                      *self,
                                              GAsyncResult                *result,
                                              GError                     **error);
+void       gbp_git_create_repo_async        (GbpGit                      *self,
+                                             GFile                       *in_directory,
+                                             gboolean                     bare,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+gboolean   gbp_git_create_repo_finish       (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
 void       gbp_git_update_submodules_async  (GbpGit                      *self,
                                              GgitSubmoduleUpdateOptions  *options,
                                              GCancellable                *cancellable,
