@@ -161,6 +161,8 @@ gbp_git_index_monitor_new (GFile *repository_dir)
                                             NULL,
                                             &error);
 
+  /* TODO: We need to watch the refs/heads/$branch too */
+
   if (error != NULL)
     g_critical ("Failed to monitor git repository, no changes will be detected: %s",
                 error->message);
