@@ -31,6 +31,7 @@
 struct _IdeClangHighlighter
 {
   IdeObject           parent_instance;
+  IdeHighlightIndex  *index;
   IdeHighlightEngine *engine;
   gint64              change_seq;
   gint64              building_seq;
@@ -100,10 +101,8 @@ get_highlight_index_cb (GObject      *object,
       return;
     }
 
-  g_object_set_data_full (G_OBJECT (self),
-                          "IDE_HIGHLIGHT_INDEX",
-                          g_steal_pointer (&index),
-                          (GDestroyNotify) ide_highlight_index_unref);
+  g_clear_pointer (&self->index, ide_highlight_index_unref);
+  self->index = g_steal_pointer (&index);
 
   if (self->engine != NULL)
     ide_highlight_engine_advance (self->engine);
@@ -159,8 +158,7 @@ ide_clang_highlighter_get_index (IdeClangHighlighter *self,
    * fast incremental highlighting of the currently line while we wait for
    * and updated index to arrive.
    */
-  if ((index = g_object_get_data (G_OBJECT (self), "IDE_HIGHLIGHT_INDEX")))
-    ide_highlight_index_ref (index);
+  index = self->index ? ide_highlight_index_ref (self->index) : NULL;
 
   /* If the change sequence isn't up to date, we'll try to do some updating
    * for the current line using the previous index, but not update our
@@ -281,21 +279,22 @@ ide_clang_highlighter_real_set_engine (IdeHighlighter     *highlighter,
 }
 
 static void
-ide_clang_highlighter_finalize (GObject *object)
+ide_clang_highlighter_destroy (IdeObject *object)
 {
   IdeClangHighlighter *self = (IdeClangHighlighter *)object;
 
+  g_clear_pointer (&self->index, ide_highlight_index_unref);
   g_clear_weak_pointer (&self->engine);
 
-  G_OBJECT_CLASS (ide_clang_highlighter_parent_class)->finalize (object);
+  IDE_OBJECT_CLASS (ide_clang_highlighter_parent_class)->destroy (object);
 }
 
 static void
 ide_clang_highlighter_class_init (IdeClangHighlighterClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_clang_highlighter_finalize;
+  i_object_class->destroy = ide_clang_highlighter_destroy;
 }
 
 static void
