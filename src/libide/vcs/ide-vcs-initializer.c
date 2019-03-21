@@ -24,13 +24,29 @@
 
 #include "ide-vcs-initializer.h"
 
-G_DEFINE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, IDE_TYPE_OBJECT)
 
 static void
 ide_vcs_initializer_default_init (IdeVcsInitializerInterface *iface)
 {
 }
 
+/**
+ * ide_vcs_initializer_initialize_async:
+ * @self: an #IdeVcsInitializer
+ * @file: the directory to initialize the repository within
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a callback for the operation
+ * @user_data: closure data for @callback
+ *
+ * Asynchronously requests the initializer to create a new source code
+ * repository.
+ *
+ * Call ide_vcs_initializer_initialize_finish() to get the result of
+ * the asynchronous operation.
+ *
+ * Since: 3.32
+ */
 void
 ide_vcs_initializer_initialize_async  (IdeVcsInitializer   *self,
                                        GFile               *file,
@@ -45,6 +61,15 @@ ide_vcs_initializer_initialize_async  (IdeVcsInitializer   *self,
   IDE_VCS_INITIALIZER_GET_IFACE (self)->initialize_async (self, file, cancellable, callback, user_data);
 }
 
+/**
+ * ide_vcs_initializer_initialize_finish:
+ *
+ * Completes an asynchronous request to initialize a new repository.
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.32
+ */
 gboolean
 ide_vcs_initializer_initialize_finish (IdeVcsInitializer  *self,
                                        GAsyncResult       *result,
@@ -56,6 +81,18 @@ ide_vcs_initializer_initialize_finish (IdeVcsInitializer  *self,
   return IDE_VCS_INITIALIZER_GET_IFACE (self)->initialize_finish (self, result, error);
 }
 
+/**
+ * ide_vcs_initializer_get_title:
+ *
+ * Gets the title of the initializer to be displayed to users.
+ *
+ * This may be shown if the user has a options to select the kind of
+ * verstioning system to initialize.
+ *
+ * Returns: (transfer full): a string containing the title
+ *
+ * Since: 3.32
+ */
 gchar *
 ide_vcs_initializer_get_title (IdeVcsInitializer *self)
 {
@@ -63,6 +100,6 @@ ide_vcs_initializer_get_title (IdeVcsInitializer *self)
 
   if (IDE_VCS_INITIALIZER_GET_IFACE (self)->get_title)
     return IDE_VCS_INITIALIZER_GET_IFACE (self)->get_title (self);
-
-  return g_strdup (G_OBJECT_TYPE_NAME (self));
+  else
+    return g_strdup (G_OBJECT_TYPE_NAME (self));
 }
