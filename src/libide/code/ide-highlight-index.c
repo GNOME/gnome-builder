@@ -168,6 +168,7 @@ ide_highlight_index_finalize (IdeHighlightIndex *self)
 
   g_clear_pointer (&self->strings, g_string_chunk_free);
   g_clear_pointer (&self->index, g_hash_table_unref);
+  g_clear_pointer (&self->variant, g_variant_unref);
 
   IDE_EXIT;
 }
