@@ -779,6 +779,7 @@ typedef struct
 {
   GFile *directory;
   GFile *workdir;
+  GFile *dot_git;
   gchar *branch;
   guint  is_worktree : 1;
 } Discover;
@@ -788,6 +789,7 @@ discover_free (Discover *state)
 {
   g_clear_object (&state->directory);
   g_clear_object (&state->workdir);
+  g_clear_object (&state->dot_git);
   g_clear_pointer (&state->branch, g_free);
   g_slice_free (Discover, state);
 }
@@ -889,6 +891,7 @@ gbp_git_discover_worker (GTask        *task,
     }
 
   state->workdir = g_file_dup (workdir);
+  state->dot_git = g_file_dup (location);
   state->branch = g_steal_pointer (&worktree_branch);
   state->is_worktree = !!is_worktree;
 
@@ -922,6 +925,7 @@ gboolean
 gbp_git_discover_finish (GbpGit        *self,
                          GAsyncResult  *result,
                          GFile        **workdir,
+                         GFile        **dot_git,
                          gchar        **branch,
                          gboolean      *is_worktree,
                          GError       **error)
@@ -929,6 +933,7 @@ gbp_git_discover_finish (GbpGit        *self,
   g_return_val_if_fail (GBP_IS_GIT (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
   g_return_val_if_fail (workdir != NULL, FALSE);
+  g_return_val_if_fail (dot_git != NULL, FALSE);
   g_return_val_if_fail (branch != NULL, FALSE);
   g_return_val_if_fail (is_worktree != NULL, FALSE);
 
@@ -937,6 +942,7 @@ gbp_git_discover_finish (GbpGit        *self,
       Discover *state = g_task_get_task_data (G_TASK (result));
 
       *workdir = g_steal_pointer (&state->workdir);
+      *dot_git = g_steal_pointer (&state->dot_git);
       *branch = g_steal_pointer (&state->branch);
       *is_worktree = state->is_worktree;
 
