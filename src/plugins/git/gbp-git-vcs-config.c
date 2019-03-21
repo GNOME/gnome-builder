@@ -22,22 +22,20 @@
 
 #include "config.h"
 
-#include <libgit2-glib/ggit.h>
 #include <libide-vcs.h>
 
+#include "gbp-git-client.h"
 #include "gbp-git-vcs-config.h"
 
 struct _GbpGitVcsConfig
 {
-  GObject     parent_instance;
-
-  GgitConfig *config;
+  IdeObject parent_instance;
 };
 
 static void vcs_config_init (IdeVcsConfigInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbpGitVcsConfig, gbp_git_vcs_config, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CONFIG, vcs_config_init))
+G_DEFINE_TYPE_WITH_CODE (GbpGitVcsConfig, gbp_git_vcs_config, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CONFIG, vcs_config_init))
 
 GbpGitVcsConfig *
 gbp_git_vcs_config_new (void)
@@ -46,36 +44,44 @@ gbp_git_vcs_config_new (void)
 }
 
 static void
-gbp_git_vcs_config_get_string (GgitConfig  *config,
-                               const gchar *key,
-                               GValue      *value,
-                               GError     **error)
+gbp_git_vcs_config_get_string (GbpGitClient  *client,
+                               const gchar   *key,
+                               GValue        *value,
+                               GError       **error)
 {
-  const gchar *str;
+  g_autoptr(GVariant) v = NULL;
 
-  g_assert (GGIT_IS_CONFIG (config));
+  g_assert (GBP_IS_GIT_CLIENT (client));
   g_assert (key != NULL);
 
-  str = ggit_config_get_string (config, key, error);
+  /*
+   * Not ideal to communicate accross processes synchronously here,
+   * but it's fine for now until we have async APIs for this (or implement
+   * configuration reading in process with caching.
+   */
 
-  g_value_set_string (value, str);
+  if ((v = gbp_git_client_read_config (client, key, NULL, error)))
+    {
+      g_value_init (value, G_TYPE_STRING);
+      g_value_set_string (value, g_variant_get_string (v, NULL));
+    }
 }
 
 static void
-gbp_git_vcs_config_set_string (GgitConfig   *config,
-                               const gchar  *key,
-                               const GValue *value,
-                               GError      **error)
+gbp_git_vcs_config_set_string (GbpGitClient  *client,
+                               const gchar   *key,
+                               const GValue  *value,
+                               GError       **error)
 {
-  const gchar *str;
+  g_autoptr(GVariant) v = NULL;
 
-  g_assert (GGIT_IS_CONFIG (config));
+  g_assert (GBP_IS_GIT_CLIENT (client));
   g_assert (key != NULL);
 
-  str = g_value_get_string (value);
+  if (G_VALUE_HOLDS_STRING (value))
+    v = g_variant_take_ref (g_variant_new_string (g_value_get_string (value)));
 
-  if (str != NULL)
-    ggit_config_set_string (config, key, str, error);
+  gbp_git_client_update_config (client, TRUE, key, v, NULL, error);
 }
 
 static void
@@ -83,25 +89,22 @@ gbp_git_vcs_config_get_config (IdeVcsConfig    *self,
                                IdeVcsConfigType type,
                                GValue          *value)
 {
-  g_autoptr(GgitConfig) config = NULL;
-  GgitConfig *orig_config;
+  GbpGitClient *client;
+  IdeContext *context;
 
   g_return_if_fail (GBP_IS_GIT_VCS_CONFIG (self));
 
-  orig_config = GBP_GIT_VCS_CONFIG (self)->config;
-  config = ggit_config_snapshot (orig_config, NULL);
-
-  if(config == NULL)
-    return;
+  context = ide_object_get_context (IDE_OBJECT (self));
+  client = gbp_git_client_from_context (context);
 
   switch (type)
     {
     case IDE_VCS_CONFIG_FULL_NAME:
-      gbp_git_vcs_config_get_string (config, "user.name", value, NULL);
+      gbp_git_vcs_config_get_string (client, "user.name", value, NULL);
       break;
 
     case IDE_VCS_CONFIG_EMAIL:
-      gbp_git_vcs_config_get_string (config, "user.email", value, NULL);
+      gbp_git_vcs_config_get_string (client, "user.email", value, NULL);
       break;
 
     default:
@@ -114,55 +117,27 @@ gbp_git_vcs_config_set_config (IdeVcsConfig    *self,
                                IdeVcsConfigType type,
                                const GValue    *value)
 {
-  GgitConfig *config;
+  GbpGitClient *client;
+  IdeContext *context;
 
   g_return_if_fail (GBP_IS_GIT_VCS_CONFIG (self));
 
-  config = GBP_GIT_VCS_CONFIG (self)->config;
+  context = ide_object_get_context (IDE_OBJECT (self));
+  client = gbp_git_client_from_context (context);
 
   switch (type)
     {
     case IDE_VCS_CONFIG_FULL_NAME:
-      gbp_git_vcs_config_set_string (config, "user.name", value, NULL);
+      gbp_git_vcs_config_set_string (client, "user.name", value, NULL);
       break;
 
     case IDE_VCS_CONFIG_EMAIL:
-      gbp_git_vcs_config_set_string (config, "user.email", value, NULL);
+      gbp_git_vcs_config_set_string (client, "user.email", value, NULL);
       break;
 
     default:
       break;
     }
-}
-
-static void
-gbp_git_vcs_config_constructed (GObject *object)
-{
-  GbpGitVcsConfig *self = GBP_GIT_VCS_CONFIG (object);
-
-  g_autoptr(GFile) global_file = NULL;
-
-  if (!(global_file = ggit_config_find_global ()))
-    {
-      g_autofree gchar *path = NULL;
-
-      path = g_build_filename (g_get_home_dir (), ".gitconfig", NULL);
-      global_file = g_file_new_for_path (path);
-    }
-
-  self->config = ggit_config_new_from_file (global_file, NULL);
-
-  G_OBJECT_CLASS (gbp_git_vcs_config_parent_class)->constructed (object);
-}
-
-static void
-gbp_git_vcs_config_finalize (GObject *object)
-{
-  GbpGitVcsConfig *self = GBP_GIT_VCS_CONFIG (object);
-
-  g_object_unref (self->config);
-
-  G_OBJECT_CLASS (gbp_git_vcs_config_parent_class)->finalize (object);
 }
 
 static void
@@ -175,10 +150,6 @@ vcs_config_init (IdeVcsConfigInterface *iface)
 static void
 gbp_git_vcs_config_class_init (GbpGitVcsConfigClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->constructed = gbp_git_vcs_config_constructed;
-  object_class->finalize = gbp_git_vcs_config_finalize;
 }
 
 static void

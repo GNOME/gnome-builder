@@ -603,3 +603,104 @@ gbp_git_update_config_finish (GbpGit        *self,
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
+
+typedef struct
+{
+  GFile *workdir;
+  gchar *key;
+} ReadConfig;
+
+static void
+read_config_free (ReadConfig *state)
+{
+  g_clear_object (&state->workdir);
+  g_clear_pointer (&state->key, g_free);
+  g_slice_free (ReadConfig, state);
+}
+
+static void
+gbp_git_read_config_worker (GTask        *task,
+                            gpointer      source_object,
+                            gpointer      task_data,
+                            GCancellable *cancellable)
+{
+  ReadConfig *state = task_data;
+  g_autoptr(GgitRepository) repository = NULL;
+  g_autoptr(GgitConfig) config = NULL;
+  g_autoptr(GgitConfig) snapshot = NULL;
+  g_autoptr(GgitConfigEntry) entry = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *str;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_GIT (source_object));
+  g_assert (state != NULL);
+  g_assert (state->key != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (state->workdir != NULL)
+    {
+      if (!(repository = ggit_repository_open (state->workdir, &error)) ||
+          !(config = ggit_repository_get_config (repository, &error)))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+  else
+    {
+      if (!(config = ggit_config_new_default (&error)))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+
+  if (!(snapshot = ggit_config_snapshot (config, &error)) ||
+      !(entry = ggit_config_get_entry (snapshot, state->key, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (!(str = ggit_config_entry_get_value (entry)))
+    str = "";
+
+  g_task_return_pointer (task,
+                         g_variant_take_ref (g_variant_new_string (str)),
+                         (GDestroyNotify)g_variant_unref);
+}
+
+void
+gbp_git_read_config_async (GbpGit              *self,
+                           const gchar         *key,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  ReadConfig *state;
+
+  g_assert (GBP_IS_GIT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (ReadConfig);
+  state->workdir = self->workdir ? g_file_dup (self->workdir) : NULL;
+  state->key = g_strdup (key);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_git_read_config_async);
+  g_task_set_task_data (task, state, (GDestroyNotify)read_config_free);
+  g_task_run_in_thread (task, gbp_git_read_config_worker);
+}
+
+GVariant *
+gbp_git_read_config_finish (GbpGit        *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_assert (GBP_IS_GIT (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
