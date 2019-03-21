@@ -99,6 +99,12 @@ void          gbp_git_client_update_submodules_async  (GbpGitClient           *s
 gboolean      gbp_git_client_update_submodules_finish (GbpGitClient           *self,
                                                        GAsyncResult           *result,
                                                        GError                **error);
+gboolean      gbp_git_client_update_config            (GbpGitClient           *self,
+                                                       gboolean                global,
+                                                       const gchar            *key,
+                                                       GVariant               *value,
+                                                       GCancellable           *cancellable,
+                                                       GError                **error);
 void          gbp_git_client_update_config_async      (GbpGitClient           *self,
                                                        gboolean                global,
                                                        const gchar            *key,
