@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GIT_VCS_INITIALIZER (gbp_git_vcs_initializer_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitVcsInitializer, gbp_git_vcs_initializer, GBP, GIT_VCS_INITIALIZER, GObject)
+G_DECLARE_FINAL_TYPE (GbpGitVcsInitializer, gbp_git_vcs_initializer, GBP, GIT_VCS_INITIALIZER, IdeObject)
 
 G_END_DECLS
