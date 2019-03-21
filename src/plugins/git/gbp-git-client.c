@@ -933,3 +933,26 @@ gbp_git_client_update_config_finish (GbpGitClient  *self,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+GVariant *
+gbp_git_client_read_config (GbpGitClient  *self,
+                            const gchar   *key,
+                            GCancellable  *cancellable,
+                            GError       **error)
+{
+  g_autoptr(GVariant) reply = NULL;
+
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (key != NULL, FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  if (!gbp_git_client_call (self,
+                            "git/readConfig",
+                            g_variant_new_string (key),
+                            cancellable,
+                            &reply,
+                            error))
+    return NULL;
+
+  return g_steal_pointer (&reply);
+}
