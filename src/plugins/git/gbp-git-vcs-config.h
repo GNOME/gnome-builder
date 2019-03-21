@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GIT_VCS_CONFIG (gbp_git_vcs_config_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitVcsConfig, gbp_git_vcs_config, GBP, GIT_VCS_CONFIG, GObject)
+G_DECLARE_FINAL_TYPE (GbpGitVcsConfig, gbp_git_vcs_config, GBP, GIT_VCS_CONFIG, IdeObject)
 
 GbpGitVcsConfig *gbp_git_vcs_config_new (void);
 
