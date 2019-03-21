@@ -285,13 +285,20 @@ gbp_git_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
           IdeContext *context = ide_workbench_get_context (self->workbench);
           g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
           g_autoptr(IdeTask) task = NULL;
+          GbpGitClient *client;
 
           self->has_loaded = TRUE;
 
+          client = gbp_git_client_from_context (context);
+
           task = ide_task_new (self, NULL, load_git_for_editor_cb, NULL);
           ide_task_set_source_tag (task, gbp_git_workbench_addin_workspace_added);
-          ide_task_set_task_data (task, g_object_ref (workdir), g_object_unref);
-          ide_task_run_in_thread (task, gbp_git_workbench_addin_load_project_worker);
+
+          gbp_git_client_discover_async (client,
+                                         workdir,
+                                         NULL,
+                                         gbp_git_workbench_addin_discover_cb,
+                                         g_steal_pointer (&task));
         }
     }
 }
