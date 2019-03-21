@@ -25,17 +25,18 @@
 #include <libgit2-glib/ggit.h>
 #include <libide-threading.h>
 
+#include "gbp-git-client.h"
 #include "gbp-git-vcs-initializer.h"
 
 struct _GbpGitVcsInitializer
 {
-  GObject parent_instance;
+  IdeObject parent_instance;
 };
 
 static void vcs_initializer_init (IdeVcsInitializerInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbpGitVcsInitializer, gbp_git_vcs_initializer, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_INITIALIZER, vcs_initializer_init))
+G_DEFINE_TYPE_WITH_CODE (GbpGitVcsInitializer, gbp_git_vcs_initializer, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_INITIALIZER, vcs_initializer_init))
 
 static void
 gbp_git_vcs_initializer_class_init (GbpGitVcsInitializerClass *klass)
@@ -48,25 +49,26 @@ gbp_git_vcs_initializer_init (GbpGitVcsInitializer *self)
 }
 
 static void
-gbp_git_vcs_initializer_initialize_worker (IdeTask      *task,
-                                           gpointer      source_object,
-                                           gpointer      task_data,
-                                           GCancellable *cancellable)
+gbp_git_vcs_initializer_initialize_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
 {
-  g_autoptr(GgitRepository) repository = NULL;
+  GbpGitClient *client = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  GFile *file = task_data;
 
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS_INITIALIZER (source_object));
-  g_assert (G_IS_FILE (file));
 
-  repository = ggit_repository_init_repository (file, FALSE, &error);
-
-  if (repository == NULL)
+  if (!gbp_git_client_create_repo_finish (client, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -77,15 +79,30 @@ gbp_git_vcs_initializer_initialize_async (IdeVcsInitializer   *initializer,
                                           gpointer             user_data)
 {
   GbpGitVcsInitializer *self = (GbpGitVcsInitializer *)initializer;
+  g_autoptr(IdeContext) context = NULL;
   g_autoptr(IdeTask) task = NULL;
+  GbpGitClient *client;
+
+  IDE_ENTRY;
 
   g_return_if_fail (GBP_IS_GIT_VCS_INITIALIZER (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  ide_task_run_in_thread (task, gbp_git_vcs_initializer_initialize_worker);
+  ide_task_set_source_tag (task, gbp_git_vcs_initializer_initialize_async);
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  client = gbp_git_client_from_context (context);
+
+  gbp_git_client_create_repo_async (client,
+                                    file,
+                                    FALSE,
+                                    cancellable,
+                                    gbp_git_vcs_initializer_initialize_cb,
+                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -93,10 +110,16 @@ gbp_git_vcs_initializer_initialize_finish (IdeVcsInitializer  *initializer,
                                            GAsyncResult       *result,
                                            GError            **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (GBP_IS_GIT_VCS_INITIALIZER (initializer), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static gchar *
