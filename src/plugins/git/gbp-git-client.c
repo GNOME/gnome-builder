@@ -1022,3 +1022,139 @@ gbp_git_client_create_repo_finish (GbpGitClient  *self,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+typedef struct
+{
+  GFile *workdir;
+  gchar *branch;
+  guint  is_worktree : 1;
+} Discover;
+
+static void
+discover_free (Discover *state)
+{
+  g_clear_object (&state->workdir);
+  g_clear_pointer (&state->branch, g_free);
+  g_slice_free (Discover, state);
+}
+
+static void
+gbp_git_client_discover_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
+{
+  GbpGitClient *self = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *workdir = NULL;
+  const gchar *branch = NULL;
+  Discover *state;
+  gboolean is_worktree = FALSE;
+  gboolean r;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_git_client_call_finish (self, result, &reply, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  state = ide_task_get_task_data (task);
+
+  r = JSONRPC_MESSAGE_PARSE (reply,
+    "workdir", JSONRPC_MESSAGE_GET_STRING (&workdir),
+    "branch", JSONRPC_MESSAGE_GET_STRING (&branch),
+    "is-worktree", JSONRPC_MESSAGE_GET_BOOLEAN (&is_worktree)
+  );
+
+  if (!r)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "Invalid reply from peer");
+      return;
+    }
+
+  state->workdir = g_file_new_for_uri (workdir);
+  state->branch = g_strdup (branch);
+  state->is_worktree = !!is_worktree;
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+void
+gbp_git_client_discover_async (GbpGitClient        *self,
+                               GFile               *directory,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) command = NULL;
+  g_autofree gchar *uri = NULL;
+  Discover *state;
+
+  g_return_if_fail (GBP_IS_GIT_CLIENT (self));
+  g_return_if_fail (G_IS_FILE (directory));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (Discover);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_client_discover_async);
+  ide_task_set_task_data (task, state, discover_free);
+
+  uri = g_file_get_uri (directory);
+
+  command = JSONRPC_MESSAGE_NEW (
+    "location", JSONRPC_MESSAGE_PUT_STRING (uri)
+  );
+
+  gbp_git_client_call_async (self,
+                             "git/discover",
+                             command,
+                             cancellable,
+                             gbp_git_client_discover_cb,
+                             g_steal_pointer (&task));
+}
+
+gboolean
+gbp_git_client_discover_finish (GbpGitClient  *self,
+                                GAsyncResult  *result,
+                                GFile        **workdir,
+                                gchar        **branch,
+                                gboolean      *is_worktree,
+                                GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  ide_clear_param (workdir, NULL);
+  ide_clear_param (branch, NULL);
+  ide_clear_param (is_worktree, FALSE);
+
+  if (ide_task_propagate_boolean (IDE_TASK (result), error))
+    {
+      Discover *state = ide_task_get_task_data (IDE_TASK (result));
+
+      g_assert (state != NULL);
+
+      if (workdir != NULL)
+        *workdir = g_steal_pointer (&state->workdir);
+
+      if (branch != NULL)
+        *branch = g_steal_pointer (&state->branch);
+
+      if (is_worktree != NULL)
+        *is_worktree = state->is_worktree;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}

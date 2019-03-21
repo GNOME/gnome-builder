@@ -906,6 +906,78 @@ handle_create_repo (JsonrpcServer *server,
                              client_op_ref (op));
 }
 
+/* Handle Discover {{{1 */
+
+static void
+handle_discover_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  GbpGit *git = (GbpGit *)object;
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autofree gchar *branch = NULL;
+  g_autofree gchar *uri = NULL;
+  gboolean is_worktree = FALSE;
+
+  g_assert (GBP_IS_GIT (git));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!gbp_git_discover_finish (git, result, &workdir, &branch, &is_worktree, &error))
+    {
+      client_op_error (op, error);
+      return;
+    }
+
+  uri = g_file_get_uri (workdir);
+
+  reply = JSONRPC_MESSAGE_NEW (
+    "workdir", JSONRPC_MESSAGE_PUT_STRING (uri),
+    "branch", JSONRPC_MESSAGE_PUT_STRING (branch),
+    "is-worktree", JSONRPC_MESSAGE_PUT_BOOLEAN (is_worktree)
+  );
+
+  client_op_reply (op, reply);
+}
+
+static void
+handle_discover (JsonrpcServer *server,
+                 JsonrpcClient *client,
+                 const gchar   *method,
+                 GVariant      *id,
+                 GVariant      *params,
+                 GbpGit        *git)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GFile) location = NULL;
+  const gchar *uri;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "git/discover"));
+  g_assert (id != NULL);
+  g_assert (GBP_IS_GIT (git));
+
+  op = client_op_new (client, id);
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "location", JSONRPC_MESSAGE_GET_STRING (&uri)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  location = g_file_new_for_uri (uri);
+
+  gbp_git_discover_async (git,
+                          location,
+                          op->cancellable,
+                          (GAsyncReadyCallback)handle_discover_cb,
+                          client_op_ref (op));
+}
+
 /* Main Loop and Setup {{{1 */
 
 gint
@@ -946,16 +1018,17 @@ main (gint argc,
 #define ADD_HANDLER(method, func) \
   jsonrpc_server_add_handler (server, method, (JsonrpcServerHandler)func, g_object_ref (git), g_object_unref)
 
-  ADD_HANDLER ("initialize", handle_initialize);
+  ADD_HANDLER ("$/cancelRequest", handle_cancel_request);
   ADD_HANDLER ("git/cloneUrl", handle_clone_url);
   ADD_HANDLER ("git/createRepo", handle_create_repo);
-  ADD_HANDLER ("git/readConfig", handle_read_config);
+  ADD_HANDLER ("git/discover", handle_discover);
   ADD_HANDLER ("git/isIgnored", handle_is_ignored);
   ADD_HANDLER ("git/listRefsByKind", handle_list_refs_by_kind);
+  ADD_HANDLER ("git/readConfig", handle_read_config);
   ADD_HANDLER ("git/switchBranch", handle_switch_branch);
   ADD_HANDLER ("git/updateConfig", handle_update_config);
   ADD_HANDLER ("git/updateSubmodules", handle_update_submodules);
-  ADD_HANDLER ("$/cancelRequest", handle_cancel_request);
+  ADD_HANDLER ("initialize", handle_initialize);
 
 #undef ADD_HANDLER
 
