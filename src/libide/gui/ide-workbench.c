@@ -27,6 +27,7 @@
 #include <libide-threading.h>
 #include <libpeas/peas.h>
 
+#include "ide-build-private.h"
 #include "ide-context-private.h"
 #include "ide-foundry-init.h"
 #include "ide-thread-private.h"
@@ -968,6 +969,7 @@ static void
 ide_workbench_load_project_completed (IdeWorkbench *self,
                                       IdeTask      *task)
 {
+  IdeBuildManager *build_manager;
   LoadProject *lp;
 
   g_assert (IDE_IS_WORKBENCH (self));
@@ -1008,6 +1010,12 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
                              ide_task_get_cancellable (task),
                              ide_workbench_session_restore_cb,
                              NULL);
+
+  /* Now that we have a workspace window for the project, we can allow
+   * the build manager to start.
+   */
+  build_manager = ide_build_manager_from_context (self->context);
+  _ide_build_manager_start (build_manager);
 
   ide_task_return_boolean (task, TRUE);
 }

@@ -84,6 +84,7 @@ struct _IdeBuildManager
 
   guint             timer_source;
 
+  guint             started : 1;
   guint             can_build : 1;
   guint             can_export : 1;
   guint             building : 1;
@@ -595,8 +596,10 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   self->error_count = 0;
   self->warning_count = 0;
 
-  /* Don't setup anything new if we're in shutdown */
-  if (ide_object_in_destruction (IDE_OBJECT (context)))
+  /* Don't setup anything new if we're in shutdown or we haven't
+   * been told we are allowed to start.
+   */
+  if (ide_object_in_destruction (IDE_OBJECT (context)) || !self->started)
     IDE_EXIT;
 
   config_manager = ide_config_manager_from_context (context);
@@ -1875,4 +1878,15 @@ ide_build_manager_get_warning_count (IdeBuildManager *self)
   g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), 0);
 
   return self->warning_count;
+}
+
+void
+_ide_build_manager_start (IdeBuildManager *self)
+{
+  g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
+  g_return_if_fail (self->started == FALSE);
+
+  self->started = TRUE;
+
+  ide_build_manager_invalidate (self);
 }

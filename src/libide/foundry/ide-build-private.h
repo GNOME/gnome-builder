@@ -42,5 +42,6 @@ void    _ide_pipeline_check_toolchain       (IdePipeline *self,
 void    _ide_pipeline_set_pty_size          (IdePipeline *self,
                                              guint             rows,
                                              guint             columns);
+void    _ide_build_manager_start            (IdeBuildManager *self);
 
 G_END_DECLS
