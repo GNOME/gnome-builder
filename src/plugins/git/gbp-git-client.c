@@ -1168,3 +1168,79 @@ gbp_git_client_discover_finish (GbpGitClient  *self,
 
   return FALSE;
 }
+
+static void
+gbp_git_client_get_changes_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  GbpGitClient *self = (GbpGitClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+  LineCache *cache;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!gbp_git_client_call_finish (self, result, &reply, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (!(cache = line_cache_new_from_variant (reply)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "Invalid line-cache data from peer");
+      return;
+    }
+
+  ide_task_return_pointer (task, g_steal_pointer (&cache), line_cache_free);
+}
+
+void
+gbp_git_client_get_changes_async (GbpGitClient        *self,
+                                  const gchar         *path,
+                                  const gchar         *contents,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) command = NULL;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (path != NULL);
+  g_assert (contents != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_client_get_changes_async);
+
+  command = JSONRPC_MESSAGE_NEW (
+    "path", JSONRPC_MESSAGE_PUT_STRING (path),
+    "contents", JSONRPC_MESSAGE_PUT_STRING (contents)
+  );
+
+  gbp_git_client_call_async (self,
+                             "git/getChanges",
+                             command,
+                             cancellable,
+                             gbp_git_client_get_changes_cb,
+                             g_steal_pointer (&task));
+}
+
+LineCache *
+gbp_git_client_get_changes_finish (GbpGitClient  *self,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  g_return_val_if_fail (GBP_IS_GIT_CLIENT (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
