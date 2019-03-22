@@ -146,5 +146,14 @@ gboolean   gbp_git_discover_finish          (GbpGit                      *self,
                                              gchar                      **branch,
                                              gboolean                    *is_worktree,
                                              GError                     **error);
+void       gbp_git_get_changes_async        (GbpGit                      *self,
+                                             const gchar                 *path,
+                                             GBytes                      *bytes,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data);
+GVariant  *gbp_git_get_changes_finish       (GbpGit                      *self,
+                                             GAsyncResult                *result,
+                                             GError                     **error);
 
 G_END_DECLS

@@ -982,6 +982,78 @@ handle_discover (JsonrpcServer *server,
                           client_op_ref (op));
 }
 
+/* Handle Get Changes to Buffer {{{1 */
+
+static void
+handle_get_changes_cb (GObject      *object,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  GbpGit *git = (GbpGit *)object;
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) lines = NULL;
+
+  g_assert (GBP_IS_GIT (git));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!(lines = gbp_git_get_changes_finish (git, result, &error)))
+    client_op_error (op, error);
+  else
+    client_op_reply (op, lines);
+}
+
+static void
+handle_get_changes (JsonrpcServer *server,
+                    JsonrpcClient *client,
+                    const gchar   *method,
+                    GVariant      *id,
+                    GVariant      *params,
+                    GbpGit        *git)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  const gchar *path = NULL;
+  const gchar *contents = NULL;
+  gboolean r;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "git/getChanges"));
+  g_assert (id != NULL);
+  g_assert (GBP_IS_GIT (git));
+
+  op = client_op_new (client, id);
+
+  r = JSONRPC_MESSAGE_PARSE (params,
+    "path", JSONRPC_MESSAGE_GET_STRING (&path),
+    "contents", JSONRPC_MESSAGE_GET_STRING (&contents)
+  );
+
+  if (!r)
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  /* Create a byte buffer that will reference the original variant so that
+   * we can avoid copying the buffer contents when diff'ing from the
+   * worker-thread.
+   */
+  bytes = g_bytes_new_with_free_func (contents,
+                                      strlen (contents ?: ""),
+                                      (GDestroyNotify)g_variant_unref,
+                                      g_variant_ref (params));
+
+  gbp_git_get_changes_async (git,
+                             path,
+                             bytes,
+                             op->cancellable,
+                             (GAsyncReadyCallback)handle_get_changes_cb,
+                             client_op_ref (op));
+}
+
 /* Main Loop and Setup {{{1 */
 
 gint
@@ -1026,6 +1098,7 @@ main (gint argc,
   ADD_HANDLER ("git/cloneUrl", handle_clone_url);
   ADD_HANDLER ("git/createRepo", handle_create_repo);
   ADD_HANDLER ("git/discover", handle_discover);
+  ADD_HANDLER ("git/getChanges", handle_get_changes);
   ADD_HANDLER ("git/isIgnored", handle_is_ignored);
   ADD_HANDLER ("git/listRefsByKind", handle_list_refs_by_kind);
   ADD_HANDLER ("git/readConfig", handle_read_config);

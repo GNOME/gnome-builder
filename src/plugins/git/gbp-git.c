@@ -25,10 +25,12 @@
 #include <libgit2-glib/ggit.h>
 
 #include "gbp-git.h"
+#include "line-cache.h"
 
 struct _GbpGit
 {
   GObject         parent_instance;
+  GMutex          mutex;
   GFile          *workdir;
   GgitRepository *repository;
 };
@@ -42,6 +44,7 @@ gbp_git_finalize (GObject *object)
 
   g_clear_object (&self->workdir);
   g_clear_object (&self->repository);
+  g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS (gbp_git_parent_class)->finalize (object);
 }
@@ -57,6 +60,7 @@ gbp_git_class_init (GbpGitClass *klass)
 static void
 gbp_git_init (GbpGit *self)
 {
+  g_mutex_init (&self->mutex);
 }
 
 GbpGit *
@@ -950,4 +954,213 @@ gbp_git_discover_finish (GbpGit        *self,
     }
 
   return FALSE;
+}
+
+typedef struct
+{
+  gchar  *path;
+  GBytes *bytes;
+} GetChanges;
+
+typedef struct
+{
+  gint old_start;
+  gint old_lines;
+  gint new_start;
+  gint new_lines;
+} Range;
+
+static void
+get_changes_free (GetChanges *state)
+{
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->bytes, g_bytes_unref);
+  g_slice_free (GetChanges, state);
+}
+
+static gint
+diff_hunk_cb (GgitDiffDelta *delta,
+              GgitDiffHunk  *hunk,
+              gpointer       user_data)
+{
+  GArray *ranges = user_data;
+  Range range;
+
+  g_assert (delta != NULL);
+  g_assert (hunk != NULL);
+  g_assert (ranges != NULL);
+
+  range.old_start = ggit_diff_hunk_get_old_start (hunk);
+  range.old_lines = ggit_diff_hunk_get_old_lines (hunk);
+  range.new_start = ggit_diff_hunk_get_new_start (hunk);
+  range.new_lines = ggit_diff_hunk_get_new_lines (hunk);
+
+  g_array_append_val (ranges, range);
+
+  return 0;
+}
+
+static void
+gbp_git_get_changes_worker (GTask        *task,
+                            gpointer      source_object,
+                            gpointer      task_data,
+                            GCancellable *cancellable)
+{
+  GbpGit *self = source_object;
+  GetChanges *state = task_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GMutexLocker) locker = NULL;
+  g_autoptr(GgitDiffOptions) options = NULL;
+  g_autoptr(GVariant) ret = NULL;
+  g_autoptr(GArray) ranges = NULL;
+  GgitTreeEntry *entry = NULL;
+  const gchar *contents;
+  GgitObject *commit = NULL;
+  GgitObject *blob = NULL;
+  LineCache *cache = NULL;
+  GgitTree *tree = NULL;
+  GgitOId *entry_oid = NULL;
+  GgitOId *oid = NULL;
+  GgitRef *head = NULL;
+  gsize len;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_GIT (self));
+  g_assert (state != NULL);
+  g_assert (state->path != NULL);
+  g_assert (state->bytes != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  locker = g_mutex_locker_new (&self->mutex);
+
+  if (self->repository == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_INITIALIZED,
+                               "No repository has been loaded");
+      return;
+    }
+
+  if (!(head = ggit_repository_get_head (self->repository, &error)) ||
+      !(oid = ggit_ref_get_target (head)) ||
+      !(commit = ggit_repository_lookup (self->repository, oid, GGIT_TYPE_COMMIT, &error)) ||
+      !(tree = ggit_commit_get_tree (GGIT_COMMIT (commit))) ||
+      !(entry = ggit_tree_get_by_path (tree, state->path, &error)) ||
+      !(entry_oid = ggit_tree_entry_get_id (entry)) ||
+      !(blob = ggit_repository_lookup (self->repository, entry_oid, GGIT_TYPE_BLOB, &error)))
+    goto cleanup;
+
+  contents = g_bytes_get_data (state->bytes, &len);
+
+  g_assert (GGIT_IS_BLOB (blob));
+  g_assert (contents != NULL);
+
+  ranges = g_array_new (FALSE, FALSE, sizeof (Range));
+  options = ggit_diff_options_new ();
+  ggit_diff_options_set_n_context_lines (options, 0);
+  ggit_diff_blob_to_buffer (GGIT_BLOB (blob),
+                            state->path,
+                            (const guint8 *)contents,
+                            len,
+                            state->path,
+                            options,
+                            NULL,         /* File Callback */
+                            NULL,         /* Binary Callback */
+                            diff_hunk_cb, /* Hunk Callback */
+                            NULL,
+                            ranges,
+                            &error);
+
+  if (error != NULL)
+    goto cleanup;
+
+  cache = line_cache_new ();
+
+  for (guint i = 0; i < ranges->len; i++)
+    {
+      const Range *range = &g_array_index (ranges, Range, i);
+      gint start_line = range->new_start - 1;
+      gint end_line = range->new_start + range->new_lines - 1;
+
+      if (range->old_lines == 0 && range->new_lines > 0)
+        line_cache_mark_range (cache, start_line, end_line, LINE_MARK_ADDED);
+      else if (range->new_lines == 0 && range->old_lines > 0)
+        {
+          if (start_line < 0)
+            line_cache_mark_range (cache, 0, 0, LINE_MARK_PREVIOUS_REMOVED);
+          else
+            line_cache_mark_range (cache, start_line + 1, start_line + 1, LINE_MARK_REMOVED);
+        }
+      else
+        line_cache_mark_range (cache, start_line, end_line, LINE_MARK_CHANGED);
+    }
+
+  ret = line_cache_to_variant (cache);
+
+cleanup:
+  g_clear_object (&blob);
+  g_clear_pointer (&entry_oid, ggit_oid_free);
+  g_clear_pointer (&entry, ggit_tree_entry_unref);
+  g_clear_object (&tree);
+  g_clear_object (&commit);
+  g_clear_pointer (&oid, ggit_oid_free);
+  g_clear_object (&head);
+  g_clear_pointer (&cache, line_cache_free);
+
+  g_assert (ret != NULL || error != NULL);
+
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task,
+                           g_steal_pointer (&ret),
+                           (GDestroyNotify)g_variant_unref);
+}
+
+void
+gbp_git_get_changes_async (GbpGit              *self,
+                           const gchar         *path,
+                           GBytes              *bytes,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  GetChanges *state;
+
+  g_assert (GBP_IS_GIT (self));
+  g_assert (path != NULL);
+  g_assert (bytes != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (GetChanges);
+  state->path = g_strdup (path);
+  state->bytes = g_bytes_ref (bytes);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_git_get_changes_async);
+  g_task_set_task_data (task, state, (GDestroyNotify)get_changes_free);
+
+  if (self->repository == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_INITIALIZED,
+                               "No repository loaded");
+      return;
+    }
+
+  g_task_run_in_thread (task, gbp_git_get_changes_worker);
+}
+
+GVariant *
+gbp_git_get_changes_finish (GbpGit        *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_assert (GBP_IS_GIT (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
