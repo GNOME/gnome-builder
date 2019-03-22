@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <libgit2-glib/ggit.h>
 #include <libide-vcs.h>
 
 G_BEGIN_DECLS
@@ -30,7 +29,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpGitVcs, gbp_git_vcs, GBP, GIT_VCS, IdeObject)
 
 GFile          *gbp_git_vcs_get_location   (GbpGitVcs            *self);
-GgitRepository *gbp_git_vcs_get_repository (GbpGitVcs            *self);
 void            gbp_git_vcs_reload_async   (GbpGitVcs            *self,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,

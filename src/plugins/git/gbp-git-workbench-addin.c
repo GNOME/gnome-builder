@@ -46,7 +46,7 @@ gbp_git_workbench_addin_discover_cb (GObject      *object,
                                      gpointer      user_data)
 {
   GbpGitClient *client = (GbpGitClient *)object;
-  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeVcs) vcs = NULL;
   g_autoptr(GFile) workdir = NULL;
@@ -123,18 +123,15 @@ static void
 gbp_git_workbench_addin_foreach_buffer_cb (IdeBuffer *buffer,
                                            gpointer   user_data)
 {
-  GgitRepository *repository = user_data;
   IdeBufferChangeMonitor *monitor;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (GGIT_IS_REPOSITORY (repository));
 
   monitor = ide_buffer_get_change_monitor (buffer);
 
   if (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (monitor))
-    gbp_git_buffer_change_monitor_set_repository (GBP_GIT_BUFFER_CHANGE_MONITOR (monitor),
-                                                  repository);
+    ide_buffer_change_monitor_reload (monitor);
 }
 
 static void
@@ -146,7 +143,6 @@ gbp_git_workbench_addin_reload_cb (GObject      *object,
   g_autoptr(GbpGitWorkbenchAddin) self = user_data;
   g_autoptr(GError) error = NULL;
   IdeBufferManager *buffer_manager;
-  GgitRepository *repository;
   IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -160,13 +156,12 @@ gbp_git_workbench_addin_reload_cb (GObject      *object,
   if (self->workbench == NULL)
     return;
 
-  repository = gbp_git_vcs_get_repository (vcs);
   context = ide_workbench_get_context (self->workbench);
   buffer_manager = ide_buffer_manager_from_context (context);
 
   ide_buffer_manager_foreach (buffer_manager,
                               gbp_git_workbench_addin_foreach_buffer_cb,
-                              repository);
+                              NULL);
 }
 
 static void
