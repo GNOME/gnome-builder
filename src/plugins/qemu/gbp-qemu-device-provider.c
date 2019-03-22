@@ -152,7 +152,7 @@ gbp_qemu_device_provider_load_worker (IdeTask      *task,
           g_autoptr(IdeTriplet) triplet = NULL;
           g_autofree gchar *display_name = NULL;
 
-          IDE_TRACE_MSG ("Discovered QEMU device \"%s\"\n", machines[i].arch);
+          g_debug ("Discovered QEMU device \"%s\"", machines[i].arch);
 
           /* translators: first %s is replaced with hostname, second %s with the CPU architecture */
           display_name = g_strdup_printf (_("My Computer (%s) %s"),
