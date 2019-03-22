@@ -30,9 +30,19 @@
 struct _GbpGit
 {
   GObject         parent_instance;
+
+  /* Mutex for field access */
   GMutex          mutex;
+
+  /* Working directory as set by peer */
   GFile          *workdir;
+
+  /* Repository we've opened from initialize call */
   GgitRepository *repository;
+
+  /* Cached blob so that we can avoid re-looking up file data */
+  gchar          *last_blob_path;
+  GgitBlob       *last_blob;
 };
 
 G_DEFINE_TYPE (GbpGit, gbp_git, G_TYPE_OBJECT)
@@ -44,6 +54,8 @@ gbp_git_finalize (GObject *object)
 
   g_clear_object (&self->workdir);
   g_clear_object (&self->repository);
+  g_clear_object (&self->last_blob);
+  g_clear_pointer (&self->last_blob_path, g_free);
   g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS (gbp_git_parent_class)->finalize (object);
@@ -1042,6 +1054,13 @@ gbp_git_get_changes_worker (GTask        *task,
       return;
     }
 
+  if (self->last_blob != NULL &&
+      g_strcmp0 (self->last_blob_path, state->path) == 0)
+    {
+      blob = g_object_ref (GGIT_OBJECT (self->last_blob));
+      goto reuse_blob;
+    }
+
   if (!(head = ggit_repository_get_head (self->repository, &error)) ||
       !(oid = ggit_ref_get_target (head)) ||
       !(commit = ggit_repository_lookup (self->repository, oid, GGIT_TYPE_COMMIT, &error)) ||
@@ -1050,6 +1069,8 @@ gbp_git_get_changes_worker (GTask        *task,
       !(entry_oid = ggit_tree_entry_get_id (entry)) ||
       !(blob = ggit_repository_lookup (self->repository, entry_oid, GGIT_TYPE_BLOB, &error)))
     goto cleanup;
+
+reuse_blob:
 
   contents = g_bytes_get_data (state->bytes, &len);
 
@@ -1071,6 +1092,12 @@ gbp_git_get_changes_worker (GTask        *task,
                             NULL,
                             ranges,
                             &error);
+
+  if (g_set_object (&self->last_blob, GGIT_BLOB (blob)))
+    {
+      g_clear_pointer (&self->last_blob_path, g_free);
+      self->last_blob_path = g_strdup (state->path);
+    }
 
   if (error != NULL)
     goto cleanup;
