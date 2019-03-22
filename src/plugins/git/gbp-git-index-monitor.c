@@ -2,28 +2,26 @@
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #define G_LOG_DOMAIN       "gbp-git-index-monitor"
 #define CHANGED_DELAY_MSEC 250
 
 #include "config.h"
-
-#include <libide-core.h>
 
 #include "gbp-git-index-monitor.h"
 
@@ -91,7 +89,6 @@ gbp_git_index_monitor_queue_changed_cb (gpointer data)
 {
   GbpGitIndexMonitor *self = data;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GIT_INDEX_MONITOR (self));
 
   self->changed_source = 0;
@@ -104,7 +101,6 @@ gbp_git_index_monitor_queue_changed_cb (gpointer data)
 static void
 gbp_git_index_monitor_queue_changed (GbpGitIndexMonitor *self)
 {
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GIT_INDEX_MONITOR (self));
 
   g_clear_handle_id (&self->changed_source, g_source_remove);
@@ -124,8 +120,6 @@ gbp_git_index_monitor_changed_cb (GbpGitIndexMonitor *self,
 {
   g_autofree gchar *name = NULL;
 
-  IDE_ENTRY;
-
   g_assert (GBP_IS_GIT_INDEX_MONITOR (self));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
@@ -133,16 +127,14 @@ gbp_git_index_monitor_changed_cb (GbpGitIndexMonitor *self,
 
   name = g_file_get_basename (file);
 
-  if (ide_str_equal0 (name, "index") ||
-      ide_str_equal0 (name, "HEAD") ||
-      ide_str_equal0 (name, "HEAD.lock") ||
-      ide_str_equal0 (name, "ORIG_HEAD") ||
-      ide_str_equal0 (name, "FETCH_HEAD") ||
-      ide_str_equal0 (name, "COMMIT_EDITMSG") ||
-      ide_str_equal0 (name, "config"))
+  if (g_strcmp0 (name, "index") == 0 ||
+      g_strcmp0 (name, "HEAD") == 0 ||
+      g_strcmp0 (name, "HEAD.lock") == 0 ||
+      g_strcmp0 (name, "ORIG_HEAD") == 0 ||
+      g_strcmp0 (name, "FETCH_HEAD") == 0 ||
+      g_strcmp0 (name, "COMMIT_EDITMSG") == 0 ||
+      g_strcmp0 (name, "config") == 0)
     gbp_git_index_monitor_queue_changed (self);
-
-  IDE_EXIT;
 }
 
 GbpGitIndexMonitor *
@@ -151,7 +143,6 @@ gbp_git_index_monitor_new (GFile *repository_dir)
   GbpGitIndexMonitor *self;
   g_autoptr(GError) error = NULL;
 
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (G_IS_FILE (repository_dir), NULL);
 
   self = g_object_new (GBP_TYPE_GIT_INDEX_MONITOR, NULL);
