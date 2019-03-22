@@ -22,6 +22,8 @@
 
 #include <libide-core.h>
 
+#include "line-cache.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_GIT_CLIENT (gbp_git_client_get_type())
@@ -139,6 +141,15 @@ gboolean      gbp_git_client_discover_finish          (GbpGitClient         *sel
                                                        GFile               **dot_git,
                                                        gchar               **branch,
                                                        gboolean             *is_worktree,
+                                                       GError              **error);
+void          gbp_git_client_get_changes_async        (GbpGitClient         *self,
+                                                       const gchar          *path,
+                                                       const gchar          *contents,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+LineCache    *gbp_git_client_get_changes_finish       (GbpGitClient         *self,
+                                                       GAsyncResult         *result,
                                                        GError              **error);
 
 G_END_DECLS
