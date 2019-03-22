@@ -2,20 +2,20 @@
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #define G_LOG_DOMAIN "line-cache"
@@ -25,11 +25,6 @@
 #include <stdlib.h>
 
 #include "line-cache.h"
-
-struct _LineCache
-{
-  GArray *lines;
-};
 
 LineCache *
 line_cache_new (void)
@@ -201,4 +196,36 @@ line_cache_foreach_in_range (LineCache *self,
       for (; entry < end && entry->line <= end_line; entry++)
         callback ((gpointer)entry, user_data);
     }
+}
+
+GVariant *
+line_cache_to_variant (LineCache *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+
+  return g_variant_new_fixed_array (G_VARIANT_TYPE ("u"),
+                                    (gconstpointer)self->lines->data,
+                                    self->lines->len,
+                                    sizeof (LineEntry));
+}
+
+LineCache *
+line_cache_new_from_variant (GVariant *variant)
+{
+  LineCache *self;
+
+  self = line_cache_new ();
+
+  if (variant != NULL)
+    {
+      gconstpointer base;
+      gsize n_elements = 0;
+
+      base = g_variant_get_fixed_array (variant, &n_elements, sizeof (LineEntry));
+
+      if (n_elements > 0 && n_elements < G_MAXINT)
+        g_array_append_vals (self->lines, base, n_elements);
+    }
+
+  return g_steal_pointer (&self);
 }
