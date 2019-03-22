@@ -783,10 +783,10 @@ ide_workbench_add_workspace (IdeWorkbench *self,
   /* Now place the workspace into our MRU tracking */
   mru_link = _ide_workspace_get_mru_link (workspace);
 
-  if (gtk_window_has_toplevel_focus (GTK_WINDOW (workspace)))
-    g_queue_push_head_link (&self->mru_queue, mru_link);
-  else
-    g_queue_push_tail_link (&self->mru_queue, mru_link);
+  /* New workspaces are expected to be displayed right away, so we can
+   * just push the window onto the head.
+   */
+  g_queue_push_head_link (&self->mru_queue, mru_link);
 
   /* Update the context for the workspace, even if we're not loaded,
    * this IdeContext will be updated later.
