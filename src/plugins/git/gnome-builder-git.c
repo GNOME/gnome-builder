@@ -1054,6 +1054,34 @@ handle_get_changes (JsonrpcServer *server,
                              client_op_ref (op));
 }
 
+/* Git Monitor Change Notification */
+
+static void
+on_git_changed_cb (GbpGit        *git,
+                   JsonrpcClient *client)
+{
+  g_assert (GBP_IS_GIT (git));
+  g_assert (JSONRPC_IS_CLIENT (client));
+
+  jsonrpc_client_send_notification (client, "git/changed", NULL, NULL, NULL);
+}
+
+static void
+on_client_accepted_cb (JsonrpcServer *server,
+                       JsonrpcClient *client,
+                       GbpGit        *git)
+{
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (GBP_IS_GIT (git));
+
+  g_signal_connect_object (git,
+                           "changed",
+                           G_CALLBACK (on_git_changed_cb),
+                           client,
+                           0);
+}
+
 /* Main Loop and Setup {{{1 */
 
 gint
@@ -1078,6 +1106,12 @@ main (gint argc,
   main_loop = g_main_loop_new (NULL, FALSE);
   git = gbp_git_new ();
   server = jsonrpc_server_new ();
+
+  g_signal_connect_object (server,
+                           "client-accepted",
+                           G_CALLBACK (on_client_accepted_cb),
+                           git,
+                           0);
 
   if (!g_unix_set_fd_nonblocking (STDIN_FILENO, TRUE, &error) ||
       !g_unix_set_fd_nonblocking (STDOUT_FILENO, TRUE, &error))
