@@ -694,6 +694,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   GbpFlatpakInstallDialog *dialog;
   BootstrapState *state;
   IdeWorkbench *workbench;
+  IdeWorkspace *workspace;
   const gchar *runtime_id;
   const gchar *build_arch;
   IdeContext *context;
@@ -726,10 +727,10 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
     }
 
   /* Create dialog to potentially query user if we are allowed to install */
-  dialog = gbp_flatpak_install_dialog_new ();
   workbench = _ide_workbench_from_context (context);
+  workspace = ide_workbench_get_current_workspace (workbench);
+  dialog = gbp_flatpak_install_dialog_new (GTK_WINDOW (workspace));
   gtk_window_group_add_window (GTK_WINDOW_GROUP (workbench), GTK_WINDOW (dialog));
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
   /* Create state for async op */
   state = g_slice_new0 (BootstrapState);

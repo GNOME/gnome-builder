@@ -43,10 +43,14 @@ struct _GbpFlatpakInstallDialog
 G_DEFINE_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, GTK_TYPE_DIALOG)
 
 GbpFlatpakInstallDialog *
-gbp_flatpak_install_dialog_new (void)
+gbp_flatpak_install_dialog_new (GtkWindow *transient_for)
 {
+  g_return_val_if_fail (GTK_IS_WINDOW (transient_for), NULL);
+
   return g_object_new (GBP_TYPE_FLATPAK_INSTALL_DIALOG,
                        "use-header-bar", TRUE,
+                       "transient-for", transient_for,
+                       "modal", TRUE,
                        NULL);
 }
 
