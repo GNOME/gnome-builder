@@ -48,6 +48,9 @@ gboolean      gbp_git_client_call_finish              (GbpGitClient         *sel
                                                        GAsyncResult         *result,
                                                        GVariant            **reply,
                                                        GError              **error);
+gboolean      gbp_git_client_is_ignored               (GbpGitClient         *self,
+                                                       const gchar          *path,
+                                                       GError              **error);
 void          gbp_git_client_is_ignored_async         (GbpGitClient         *self,
                                                        const gchar          *path,
                                                        GCancellable         *cancellable,

@@ -90,7 +90,7 @@ gbp_git_client_notification_cb (GbpGitClient  *self,
   IdeNotification *notif;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_GIT_CLIENT (client));
+  g_assert (GBP_IS_GIT_CLIENT (self));
   g_assert (command != NULL);
   g_assert (JSONRPC_IS_CLIENT (client));
 

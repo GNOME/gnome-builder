@@ -25,6 +25,7 @@
 #include <stdlib.h>
 
 #include "gbp-git-branch.h"
+#include "gbp-git-client.h"
 #include "gbp-git-tag.h"
 #include "gbp-git-vcs.h"
 #include "gbp-git-vcs-config.h"
@@ -32,7 +33,7 @@
 struct _GbpGitVcs
 {
   IdeObject       parent_instance;
-  GgitRepository *repository;
+  GbpGitClient   *client;
   GFile          *location;
   GFile          *workdir;
   gchar          *branch;
@@ -55,11 +56,28 @@ G_DEFINE_TYPE_WITH_CODE (GbpGitVcs, gbp_git_vcs, IDE_TYPE_OBJECT,
 static GParamSpec *properties [N_PROPS];
 
 static void
+gbp_git_vcs_parent_set (IdeObject *object,
+                        IdeObject *parent)
+{
+  GbpGitVcs *self = (GbpGitVcs *)object;
+  g_autoptr(IdeContext) context = NULL;
+
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (!object || IDE_IS_OBJECT (parent));
+
+  if (object == NULL)
+    return;
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  self->client = g_object_ref (gbp_git_client_from_context (context));
+}
+
+static void
 gbp_git_vcs_finalize (GObject *object)
 {
   GbpGitVcs *self = (GbpGitVcs *)object;
 
-  g_clear_object (&self->repository);
+  g_clear_object (&self->client);
   g_clear_object (&self->location);
   g_clear_object (&self->workdir);
   g_clear_pointer (&self->branch, g_free);
@@ -83,10 +101,6 @@ gbp_git_vcs_get_property (GObject    *object,
 
     case PROP_LOCATION:
       g_value_set_object (value, self->location);
-      break;
-
-    case PROP_REPOSITORY:
-      g_value_set_object (value, self->repository);
       break;
 
     case PROP_WORKDIR:
@@ -116,10 +130,6 @@ gbp_git_vcs_set_property (GObject      *object,
       self->location = g_value_dup_object (value);
       break;
 
-    case PROP_REPOSITORY:
-      self->repository = g_value_dup_object (value);
-      break;
-
     case PROP_WORKDIR:
       self->workdir = g_value_dup_object (value);
       break;
@@ -133,10 +143,13 @@ static void
 gbp_git_vcs_class_init (GbpGitVcsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_git_vcs_finalize;
   object_class->get_property = gbp_git_vcs_get_property;
   object_class->set_property = gbp_git_vcs_set_property;
+
+  i_object_class->parent_set = gbp_git_vcs_parent_set;
 
   properties [PROP_BRANCH_NAME] =
     g_param_spec_string ("branch-name",
@@ -150,13 +163,6 @@ gbp_git_vcs_class_init (GbpGitVcsClass *klass)
                          "Location",
                          "The location for the repository",
                          G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_REPOSITORY] =
-    g_param_spec_object ("repository",
-                         "Repository",
-                         "The underlying repository object",
-                         GGIT_TYPE_REPOSITORY,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_WORKDIR] =
@@ -179,13 +185,6 @@ gbp_git_vcs_get_location (GbpGitVcs *self)
 {
   g_return_val_if_fail (GBP_IS_GIT_VCS (self), NULL);
   return self->location;
-}
-
-GgitRepository *
-gbp_git_vcs_get_repository (GbpGitVcs *self)
-{
-  g_return_val_if_fail (GBP_IS_GIT_VCS (self), NULL);
-  return self->repository;
 }
 
 static GFile *
@@ -233,23 +232,15 @@ gbp_git_vcs_is_ignored (IdeVcs  *vcs,
   /* self->workdir is not changed after creation, so safe
    * to access it from a thread.
    */
-  name = g_file_get_relative_path (self->workdir, file);
-  if (g_strcmp0 (name, ".git") == 0)
-    return TRUE;
-
-  /*
-   * If we have a valid name to work with, we want to query the
-   * repository. But this could be called from a thread, so ensure
-   * we are the only thread accessing self->repository right now.
-   */
-  if (name != NULL)
+  if ((name = g_file_get_relative_path (self->workdir, file)))
     {
-      ide_object_lock (IDE_OBJECT (self));
-      ret = ggit_repository_path_is_ignored (self->repository, name, error);
-      ide_object_unlock (IDE_OBJECT (self));
+      if (g_strcmp0 (name, ".git") == 0 ||
+          g_str_has_prefix (name, ".git/") ||
+          gbp_git_client_is_ignored (self->client, file, error))
+        return TRUE;
     }
 
-  return ret;
+  return FALSE;
 }
 
 typedef struct

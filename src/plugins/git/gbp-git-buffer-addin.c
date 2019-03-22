@@ -36,7 +36,7 @@ struct _GbpGitBufferAddin
 };
 
 static void
-gbp_git_buffer_addin_file_laoded (IdeBufferAddin *addin,
+gbp_git_buffer_addin_file_loaded (IdeBufferAddin *addin,
                                   IdeBuffer      *buffer,
                                   GFile          *file)
 {
@@ -153,7 +153,7 @@ gbp_git_buffer_addin_settle_finish (IdeBufferAddin  *addin,
 static void
 buffer_addin_iface_init (IdeBufferAddinInterface *iface)
 {
-  iface->file_loaded = gbp_git_buffer_addin_file_laoded;
+  iface->file_loaded = gbp_git_buffer_addin_file_loaded;
   iface->file_saved = gbp_git_buffer_addin_file_saved;
   iface->unload = gbp_git_buffer_addin_unload;
   iface->settle_async = gbp_git_buffer_addin_settle_async;
