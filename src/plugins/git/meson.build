@@ -24,6 +24,7 @@ gnome_builder_git_sources = [
   'gbp-git.c',
   'gbp-git-remote-callbacks.c',
   'gnome-builder-git.c',
+  'line-cache.c',
 ]
 
 plugin_git_resources = gnome.compile_resources(
