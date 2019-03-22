@@ -22,6 +22,7 @@ plugins_sources += files([
 
 gnome_builder_git_sources = [
   'gbp-git.c',
+  'gbp-git-index-monitor.c',
   'gbp-git-remote-callbacks.c',
   'gnome-builder-git.c',
   'line-cache.c',

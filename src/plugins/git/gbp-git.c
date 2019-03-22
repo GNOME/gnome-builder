@@ -25,27 +25,38 @@
 #include <libgit2-glib/ggit.h>
 
 #include "gbp-git.h"
+#include "gbp-git-index-monitor.h"
 #include "line-cache.h"
 
 struct _GbpGit
 {
-  GObject         parent_instance;
+  GObject             parent_instance;
 
   /* Mutex for field access */
-  GMutex          mutex;
+  GMutex              mutex;
 
   /* Working directory as set by peer */
-  GFile          *workdir;
+  GFile              *workdir;
 
   /* Repository we've opened from initialize call */
-  GgitRepository *repository;
+  GgitRepository     *repository;
+
+  /* A monitor that we can use to inform the peer of changes */
+  GbpGitIndexMonitor *monitor;
 
   /* Cached blob so that we can avoid re-looking up file data */
-  gchar          *last_blob_path;
-  GgitBlob       *last_blob;
+  gchar              *last_blob_path;
+  GgitBlob           *last_blob;
 };
 
 G_DEFINE_TYPE (GbpGit, gbp_git, G_TYPE_OBJECT)
+
+enum {
+  CHANGED,
+  N_SIGNALS
+};
+
+static guint signals [N_SIGNALS];
 
 static void
 gbp_git_finalize (GObject *object)
@@ -67,6 +78,18 @@ gbp_git_class_init (GbpGitClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_git_finalize;
+
+  signals [CHANGED] =
+    g_signal_new ("changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 }
 
 static void
@@ -81,16 +104,48 @@ gbp_git_new (void)
   return g_object_new (GBP_TYPE_GIT, NULL);
 }
 
+static void
+gbp_git_monitor_changed_cb (GbpGit             *self,
+                            GbpGitIndexMonitor *monitor)
+{
+  g_assert (GBP_IS_GIT (self));
+  g_assert (GBP_IS_GIT_INDEX_MONITOR (monitor));
+
+  g_signal_emit (self, signals [CHANGED], 0);
+}
+
 void
 gbp_git_set_workdir (GbpGit *self,
                      GFile  *workdir)
 {
+  g_autoptr(GMutexLocker) locker = NULL;
+
   g_return_if_fail (GBP_IS_GIT (self));
   g_return_if_fail (G_IS_FILE (workdir));
+
+  locker = g_mutex_locker_new (&self->mutex);
 
   if (g_set_object (&self->workdir, workdir))
     {
       g_clear_object (&self->repository);
+      g_clear_object (&self->monitor);
+
+      if (workdir != NULL)
+        {
+          if ((self->repository = ggit_repository_open (workdir, NULL)))
+            {
+              g_autoptr(GFile) location = NULL;
+
+              location = ggit_repository_get_location (self->repository);
+              self->monitor = gbp_git_index_monitor_new (location);
+
+              g_signal_connect_object (self->monitor,
+                                       "changed",
+                                       G_CALLBACK (gbp_git_monitor_changed_cb),
+                                       self,
+                                       G_CONNECT_SWAPPED);
+            }
+        }
     }
 }
 
