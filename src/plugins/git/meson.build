@@ -50,4 +50,13 @@ executable('gnome-builder-git', gnome_builder_git_sources,
      install_rpath: pkglibdir_abs,
 )
 
+test_line_cache = executable('test-line-cache', ['test-line-cache.c', 'line-cache.c'],
+      dependencies: [libgio_dep],
+           gui_app: false,
+           install: false,
+            c_args: exe_c_args,
+         link_args: exe_link_args,
+)
+test('test-line-cache', test_line_cache)
+
 endif
