@@ -61,4 +61,13 @@ test_line_cache = executable('test-line-cache', ['test-line-cache.c', 'line-cach
 )
 test('test-line-cache', test_line_cache)
 
+test_git_client = executable('test-git-client',
+    ['test-git-client.c', 'gbp-git-client.c', 'line-cache.c'],
+      dependencies: [libgio_dep, libide_vcs_dep, libjsonrpc_glib_dep],
+           gui_app: false,
+           install: false,
+            c_args: exe_c_args,
+         link_args: exe_link_args,
+)
+
 endif

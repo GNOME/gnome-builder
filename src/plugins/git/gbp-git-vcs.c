@@ -243,28 +243,7 @@ gbp_git_vcs_is_ignored (IdeVcs  *vcs,
   return FALSE;
 }
 
-typedef struct
-{
-  GFile      *repository_location;
-  GFile      *directory_or_file;
-  GFile      *workdir;
-  GListStore *store;
-  guint       recursive : 1;
-} ListStatus;
-
 static void
-list_status_free (gpointer data)
-{
-  ListStatus *ls = data;
-
-  g_clear_object (&ls->repository_location);
-  g_clear_object (&ls->directory_or_file);
-  g_clear_object (&ls->workdir);
-  g_clear_object (&ls->store);
-  g_slice_free (ListStatus, ls);
-}
-
-static gint
 gbp_git_vcs_list_status_cb (const gchar     *path,
                             GgitStatusFlags  flags,
                             gpointer         user_data)
@@ -396,35 +375,46 @@ gbp_git_vcs_list_status_async (IdeVcs              *vcs,
                                gpointer             user_data)
 {
   GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autoptr(IdeContext) context = NULL;
   g_autoptr(IdeTask) task = NULL;
-  ListStatus *state;
+  g_autoptr(GFile) workdir = NULL;
+  g_autofree gchar *path = NULL;
+  GbpGitClient *client;
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (GBP_IS_GIT_VCS (self));
   g_return_if_fail (!directory_or_file || G_IS_FILE (directory_or_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_object_lock (IDE_OBJECT (self));
-  state = g_slice_new0 (ListStatus);
-  state->directory_or_file = g_object_ref (directory_or_file);
-  state->repository_location = ggit_repository_get_location (self->repository);
-  state->recursive = !!include_descendants;
-  ide_object_unlock (IDE_OBJECT (self));
-
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_vcs_list_status_async);
   ide_task_set_priority (task, io_priority);
-  ide_task_set_return_on_cancel (task, TRUE);
-  ide_task_set_task_data (task, state, list_status_free);
 
-  if (state->repository_location == NULL)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "No repository loaded");
-  else
-    ide_task_run_in_thread (task, gbp_git_vcs_list_status_worker);
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  client = gbp_git_client_from_context (context);
+  workdir = ide_context_ref_workdir (context);
+
+  if (!g_file_equal (directory_or_file, workdir) &&
+      !g_file_has_prefix (directory_or_file, workdir))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Status is not supported on this file");
+      IDE_EXIT;
+    }
+
+  if (!(path = g_file_get_relative_path (workdir, directory_or_file)))
+    path = g_strdup (".");
+
+  gbp_git_client_list_status_async (client,
+                                    path,
+                                    include_descendants,
+                                    cancellable,
+                                    gbp_git_vcs_list_status_cb,
+                                    g_steal_pointer (&task));
 
   IDE_EXIT;
 }

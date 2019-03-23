@@ -1103,6 +1103,8 @@ main (gint argc,
   /* redirect logging to stderr */
   g_log_set_handler (NULL, G_LOG_LEVEL_MASK, log_handler_cb, NULL);
 
+  ggit_init ();
+
   main_loop = g_main_loop_new (NULL, FALSE);
   git = gbp_git_new ();
   server = jsonrpc_server_new ();
