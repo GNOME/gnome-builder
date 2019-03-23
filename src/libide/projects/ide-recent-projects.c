@@ -195,7 +195,16 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
         }
 
       if (diruri == NULL)
-        directory = g_file_get_parent (project_file);
+        {
+          /* If the old project was a plain-ol'-directory, then we don't want
+           * it's parent (which might be ~/Projects), instead reuse the project
+           * file as the directory too.
+           */
+          if (g_file_query_file_type (project_file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+            directory = g_file_dup (project_file);
+          else
+            directory = g_file_get_parent (project_file);
+        }
       else
         directory = g_file_new_for_uri (diruri);
 
