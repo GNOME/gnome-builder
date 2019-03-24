@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2019-03-07 13:32+0000\n"
-"PO-Revision-Date: 2019-03-07 22:03+0100\n"
+"PO-Revision-Date: 2019-03-23 21:00+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1442,7 +1442,7 @@ msgstr "Privzeto (gostiteljski operacijski sistem)"
 #: src/libide/greeter/ide-clone-surface.c:249
 #, c-format
 msgid "The directory “%s” already exists. Please choose another directory."
-msgstr ""
+msgstr "Mapa »%s« že obstaja. Izbrati je treba drugo mapo."
 
 #. translators: %s is replaced with the path to the project
 #: src/libide/greeter/ide-clone-surface.c:257
@@ -1459,6 +1459,8 @@ msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 msgstr ""
+"Vpišite ime skladišča projekta, ki ga želite klonirati. Naslov URL mora biti "
+"podoben »https://gitlab.gnome.org/GNOME/gnome-builder.git«."
 
 #: src/libide/greeter/ide-clone-surface.ui:84
 msgid "user@host:repository.git"
@@ -1559,10 +1561,8 @@ msgid "Open a Project"
 msgstr "Odpiranje projekta"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:101
-#, fuzzy
-#| msgid "Directory for all Builder projects."
 msgid "Search all Builder projects…"
-msgstr "Mapa vseh projektov programa GBuilder"
+msgstr "Poišči vse projekte Builder ..."
 
 #: src/libide/greeter/ide-greeter-workspace.ui:118
 msgid "No Projects Found"
@@ -2274,7 +2274,7 @@ msgstr "Počisti dnevnik izgradnje"
 
 #: src/libide/gui/ide-preferences-builtin.c:406
 msgid "Expired caches will be purged when Builder is started"
-msgstr ""
+msgstr "Ko bo program Builder zagnan, bo predpomnilnik počiščen"
 
 #: src/libide/gui/ide-preferences-builtin.c:408
 msgid "Network"
@@ -2873,10 +2873,8 @@ msgid "unversioned"
 msgstr "brez določene različice"
 
 #: src/main.c:61
-#, fuzzy
-#| msgid "Run with Profiler"
 msgid "Run a new instance of Builder"
-msgstr "Zaženi program v samostojnem načinu"
+msgstr "Zaženi nov primerek programa Builder"
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:198
 msgid "Building cache…"
@@ -3082,10 +3080,8 @@ msgid "%s (Copy)"
 msgstr "%s (kopija)"
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:115
-#, fuzzy
-#| msgid "Build Configurations"
 msgid "No build configuration"
-msgstr "Nastavitve izgradnje"
+msgstr "Ni nastavitev izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:116
 #, fuzzy
@@ -3098,10 +3094,8 @@ msgid "Build Configurations"
 msgstr "Nastavitve izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
-#, fuzzy
-#| msgid "Runtime"
 msgid "All Runtimes"
-msgstr "Izvajalni programi Flatpak"
+msgstr "Vsi izvajalni programi"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 #, fuzzy
@@ -3404,9 +3398,8 @@ msgid "Create or update code-index for project file"
 msgstr "Ustvari nov projekt ukazne vrstice"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:54
-#, fuzzy
 msgid "PROJECT_FILE"
-msgstr "Napaka med odpiranjem datoteke projekta"
+msgstr "DATOTEKA_PROJEKTA"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:154
 #, fuzzy, c-format
@@ -3799,6 +3792,8 @@ msgid ""
 "The Application ID is a reverse domain-name identifier used to uniquely "
 "identify your application such as “org.gnome.Builder”."
 msgstr ""
+"ID programa je obrnjeno določilo imena domene, uporabljeno za določilo "
+"programa, kot je na primer »org.gnome.Builder«."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:118
 msgid "Project Location"
@@ -4373,10 +4368,9 @@ msgid "Initialize git submodules"
 msgstr "_Nastavi začetne vrednosti"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:148
-#, fuzzy, c-format
-#| msgid "The script “%s” is not a PyGObject file."
+#, c-format
 msgid "The protocol “%s” is not supported."
-msgstr "Protokol posredniškega strežnika »%s« ni podprt."
+msgstr "Protokol »%s« ni podprt."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
@@ -4396,26 +4390,22 @@ msgid "View Design"
 msgstr "Pogled oblikovanja"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:390
-#, fuzzy
 msgid "Switch to UI designer"
-msgstr "Oblikovalec"
+msgstr "Preklopi na oblikovalnik uporabniškega vmesnika"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:396
 msgid "View Source"
 msgstr "Poglej vir"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:398
-#, fuzzy
-#| msgid "Switch to source or header"
 msgid "Switch to source code editor"
-msgstr "Urejevalnik izvorne kode"
+msgstr "Preklopi na urejevalnik izvorne kode"
 
 #. translators: %s is replaced with the specific error message
 #: src/plugins/glade/gbp-glade-page-actions.c:42
-#, fuzzy, c-format
-#| msgid "Failed to save file: %s"
+#, c-format
 msgid "Failed to save glade document: %s"
-msgstr "Napaka med shranjevanjem dokumenta “%s”"
+msgstr "Shranjevanje dokumenta glade je spodletelo: »%s«"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:36
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:42
@@ -4454,29 +4444,20 @@ msgid "Redo the next command"
 msgstr "Ponovno uveljavi naslednji ukaz"
 
 #: src/plugins/glade/gbp-glade-page.c:478
-#, fuzzy
-#| msgid "Switch to source or header"
 msgid "Switch to selection mode"
-msgstr "preklopna tipka"
+msgstr "Preklopi na izbirni način"
 
 #: src/plugins/glade/gbp-glade-page.c:479
-#, fuzzy
-#| msgid "Switch to source or header"
 msgid "Switch to drag-resize mode"
-msgstr "Način spreminjanja velikosti"
+msgstr "Preklopi na način prilagajanja velikosti z miško"
 
 #: src/plugins/glade/gbp-glade-page.c:480
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Switch to margin editor"
-msgstr "_Marža:"
+msgstr "Preklopi na urejevalnik robov"
 
 #: src/plugins/glade/gbp-glade-page.c:481
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Switch to the next document"
 msgid "Switch to alignment editor"
-msgstr "Preklopi"
+msgstr "Preklopi na urejevalnik poravnave"
 
 #: src/plugins/glade/gbp-glade-page.c:486
 msgid "Unnamed Glade project"
@@ -4487,9 +4468,8 @@ msgid "Unnamed Glade Project"
 msgstr "Neimenovan projekt Glade"
 
 #: src/plugins/glade/gbp-glade-properties.ui:36
-#, fuzzy
 msgid "Widget specific properties"
-msgstr "Počisti lastnosti gradnika"
+msgstr "Posebne lastnosti gradnika"
 
 #: src/plugins/glade/gbp-glade-properties.ui:46
 #, fuzzy
@@ -4499,7 +4479,7 @@ msgstr "Ali naj vsebnik pokaže podrejen predmet"
 
 #: src/plugins/glade/gbp-glade-properties.ui:56
 msgid "Styling, alignment, and other common properties"
-msgstr ""
+msgstr "Slogovno oblikovanje, poravnave in druge splošne lastnosti"
 
 #: src/plugins/glade/gbp-glade-properties.ui:66
 msgid "Accessibility properties"
@@ -4583,9 +4563,8 @@ msgid "Gradle Wrapper"
 msgstr "Izvedljivi ovijalnik"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:136
-#, fuzzy
 msgid "Display a new greeter window"
-msgstr "Novo o_kno"
+msgstr "Pokaži novo pozdravno okno"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:144
 #, fuzzy
