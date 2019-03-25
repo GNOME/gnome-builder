@@ -380,6 +380,7 @@ enum {
   STARTED,
   FINISHED,
   LOADED,
+  LAUNCHER_CREATED,
   N_SIGNALS
 };
 
@@ -1711,6 +1712,29 @@ ide_pipeline_class_init (IdePipelineClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 NULL, NULL, NULL, NULL,
                                 G_TYPE_NONE, 0);
+
+  /**
+   * IdePipeline::launcher-created:
+   * @self: an #IdePipeline
+   * @launcher: an #IdeSubprocessLauncher
+   *
+   * The "launcher-created" signal is emitted when a new
+   * #IdeSubprocessLauncher is created by the pipeline. This may be useful
+   * to plugins that wan to modify the launcher in a consistent way for all
+   * pipeline consumers.
+   *
+   * Since: 3.34
+   */
+  signals [LAUNCHER_CREATED] =
+    g_signal_new_class_handler ("launcher-created",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL, NULL, NULL,
+                                g_cclosure_marshal_VOID__OBJECT,
+                                G_TYPE_NONE, 1, IDE_TYPE_SUBPROCESS_LAUNCHER);
+  g_signal_set_va_marshaller (signals [LAUNCHER_CREATED],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__OBJECTv);
 }
 
 static void
@@ -2865,11 +2889,12 @@ ide_pipeline_get_toolchain (IdePipeline *self)
  */
 IdeSubprocessLauncher *
 ide_pipeline_create_launcher (IdePipeline  *self,
-                                    GError           **error)
+                              GError      **error)
 {
   g_autoptr(IdeSubprocessLauncher) ret = NULL;
   IdeRuntime *runtime;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   runtime = ide_config_get_runtime (self->config);
@@ -2899,6 +2924,8 @@ ide_pipeline_create_launcher (IdePipeline  *self,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE));
       ide_config_apply_path (self->config, ret);
+
+      g_signal_emit (self, signals [LAUNCHER_CREATED], 0, ret);
     }
 
   return g_steal_pointer (&ret);
