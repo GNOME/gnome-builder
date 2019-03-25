@@ -99,6 +99,35 @@ on_install_stage_query (IdePipelineStage    *stage,
   ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
+static IdeSubprocessLauncher *
+create_launcher (IdePipeline  *pipeline,
+                 GError      **error)
+{
+  IdeSubprocessLauncher *ret;
+
+  if ((ret = ide_pipeline_create_launcher (pipeline, error)))
+    {
+      /* 3.32 specific workaround for --error-format=short  so that
+       * meson+rust projects can have working diagnostics.
+       */
+      if (ide_subprocess_launcher_getenv (ret, "RUSTFLAGS") == NULL)
+        {
+          g_autofree gchar *eq_srcdir = NULL;
+          g_autofree gchar *escaped = NULL;
+          g_autofree gchar *formatted = NULL;
+
+          eq_srcdir = g_strdup_printf ("=%s", ide_pipeline_get_srcdir (pipeline));
+          escaped = g_shell_quote (eq_srcdir);
+          formatted = g_strdup_printf ("--error-format=short --remap-path-prefix %s",
+                                       escaped);
+
+          ide_subprocess_launcher_setenv (ret, "RUSTFLAGS", formatted, TRUE);
+        }
+    }
+
+  return g_steal_pointer (&ret);
+}
+
 static void
 gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
@@ -167,10 +196,10 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
     }
 
   /* Create all our launchers up front */
-  if (NULL == (config_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (build_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (clean_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (install_launcher = ide_pipeline_create_launcher (pipeline, &error)))
+  if (NULL == (config_launcher = create_launcher (pipeline, &error)) ||
+      NULL == (build_launcher = create_launcher (pipeline, &error)) ||
+      NULL == (clean_launcher = create_launcher (pipeline, &error)) ||
+      NULL == (install_launcher = create_launcher (pipeline, &error)))
     IDE_GOTO (failure);
 
   prefix = ide_config_get_prefix (config);
