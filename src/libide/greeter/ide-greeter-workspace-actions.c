@@ -53,6 +53,13 @@ ide_greeter_workspace_dialog_response (IdeGreeterWorkspace  *self,
 
           if (module_name != NULL)
             ide_project_info_set_build_system_hint (project_info, module_name);
+
+          /* If this is a directory selection, then make sure we set the
+           * directory on the project-info too. That way we don't rely on
+           * it being set elsewhere (which could be a translated symlink path).
+           */
+          if (g_object_get_data (G_OBJECT (filter), "IS_DIRECTORY"))
+            ide_project_info_set_directory (project_info, project_file);
         }
 
       ide_greeter_workspace_open_project (self, project_info);
