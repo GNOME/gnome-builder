@@ -9,4 +9,4 @@ plugin_trim_spaces_resources = gnome.compile_resources(
   c_name: 'gbp_trim_spaces',
 )
 
-plugins_sources += plugin_trim_spaces_resources[0]
+plugins_sources += plugin_trim_spaces_resources

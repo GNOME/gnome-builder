@@ -14,7 +14,7 @@ plugin_editorconfig_resources = gnome.compile_resources(
   c_name: 'gbp_editorconfig',
 )
 
-plugins_sources += plugin_editorconfig_resources[0]
+plugins_sources += plugin_editorconfig_resources
 plugins_deps += libeditorconfig_dep
 
 endif

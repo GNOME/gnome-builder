@@ -10,4 +10,4 @@ plugin_messages_resources = gnome.compile_resources(
   c_name: 'gbp_messages',
 )
 
-plugins_sources += plugin_messages_resources[0]
+plugins_sources += plugin_messages_resources

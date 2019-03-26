@@ -51,7 +51,7 @@ libide_greeter_resources = gnome.compile_resources(
   c_name: 'ide_greeter',
 )
 libide_greeter_generated_headers += [libide_greeter_resources[1]]
-libide_greeter_private_sources += libide_greeter_resources[0]
+libide_greeter_private_sources += libide_greeter_resources
 
 
 #

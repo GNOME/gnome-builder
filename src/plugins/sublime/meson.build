@@ -9,4 +9,4 @@ plugin_sublime_resources = gnome.compile_resources(
   c_name: 'gbp_sublime',
 )
 
-plugins_sources += plugin_sublime_resources[0]
+plugins_sources += plugin_sublime_resources

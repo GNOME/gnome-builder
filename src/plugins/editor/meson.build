@@ -15,4 +15,4 @@ plugin_editor_resources = gnome.compile_resources(
   c_name: 'gbp_editor',
 )
 
-plugins_sources += plugin_editor_resources[0]
+plugins_sources += plugin_editor_resources

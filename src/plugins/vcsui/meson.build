@@ -11,4 +11,4 @@ plugin_vcsui_resources = gnome.compile_resources(
   c_name: 'gbp_vcsui',
 )
 
-plugins_sources += plugin_vcsui_resources[0]
+plugins_sources += plugin_vcsui_resources

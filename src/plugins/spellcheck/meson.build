@@ -24,6 +24,6 @@ plugins_deps += [
   dependency('enchant-2'),
 ]
 
-plugins_sources += plugin_spellcheck_resources[0]
+plugins_sources += plugin_spellcheck_resources
 
 endif

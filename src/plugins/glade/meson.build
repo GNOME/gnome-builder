@@ -21,6 +21,6 @@ plugins_deps += [
   dependency('gladeui-2.0', version: '>=3.22.0'),
 ]
 
-plugins_sources += plugin_glade_resources[0]
+plugins_sources += plugin_glade_resources
 
 endif

@@ -22,6 +22,6 @@ plugin_color_picker_resources = gnome.compile_resources(
   c_name: 'gbp_color_picker',
 )
 
-plugins_sources += plugin_color_picker_resources[0]
+plugins_sources += plugin_color_picker_resources
 
 endif

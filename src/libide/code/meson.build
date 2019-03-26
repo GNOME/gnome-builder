@@ -138,7 +138,7 @@ libide_code_resources = gnome.compile_resources(
   c_name: 'ide_code',
 )
 libide_code_generated_headers += [libide_code_resources[1]]
-libide_code_generated_sources += libide_code_resources[0]
+libide_code_generated_sources += libide_code_resources
 
 
 #

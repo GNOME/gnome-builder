@@ -13,6 +13,6 @@ plugin_html_completion_resources = gnome.compile_resources(
   c_name: 'gbp_html_completion',
 )
 
-plugins_sources += plugin_html_completion_resources[0]
+plugins_sources += plugin_html_completion_resources
 
 endif

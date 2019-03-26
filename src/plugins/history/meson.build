@@ -11,4 +11,4 @@ plugin_history_resources = gnome.compile_resources(
   c_name: 'gbp_history',
 )
 
-plugins_sources += plugin_history_resources[0]
+plugins_sources += plugin_history_resources

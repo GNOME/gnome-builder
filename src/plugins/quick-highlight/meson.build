@@ -12,6 +12,6 @@ plugin_quick_highlight_resources = gnome.compile_resources(
   c_name: 'gbp_quick_highlight',
 )
 
-plugins_sources += plugin_quick_highlight_resources[0]
+plugins_sources += plugin_quick_highlight_resources
 
 endif

@@ -14,6 +14,6 @@ plugin_beautifier_resources = gnome.compile_resources(
   c_name: 'gbp_beautifier',
 )
 
-plugins_sources += plugin_beautifier_resources[0]
+plugins_sources += plugin_beautifier_resources
 
 endif

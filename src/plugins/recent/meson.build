@@ -10,4 +10,4 @@ plugin_recent_resources = gnome.compile_resources(
   c_name: 'gbp_recent',
 )
 
-plugins_sources += plugin_recent_resources[0]
+plugins_sources += plugin_recent_resources

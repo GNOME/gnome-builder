@@ -10,4 +10,4 @@ plugin_codeui_resources = gnome.compile_resources(
   c_name: 'gbp_codeui',
 )
 
-plugins_sources += plugin_codeui_resources[0]
+plugins_sources += plugin_codeui_resources

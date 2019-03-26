@@ -12,4 +12,4 @@ plugin_gcc_resources = gnome.compile_resources(
   c_name: 'gbp_gcc',
 )
 
-plugins_sources += plugin_gcc_resources[0]
+plugins_sources += plugin_gcc_resources

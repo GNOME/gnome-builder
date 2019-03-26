@@ -11,4 +11,4 @@ plugin_buildconfig_resources = gnome.compile_resources(
   c_name: 'gbp_buildconfig',
 )
 
-plugins_sources += plugin_buildconfig_resources[0]
+plugins_sources += plugin_buildconfig_resources

@@ -13,6 +13,6 @@ plugin_file_search_resources = gnome.compile_resources(
   c_name: 'gbp_file_search',
 )
 
-plugins_sources += plugin_file_search_resources[0]
+plugins_sources += plugin_file_search_resources
 
 endif

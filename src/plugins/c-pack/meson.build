@@ -17,7 +17,7 @@ plugin_c_pack_resources = gnome.compile_resources(
   c_name: 'ide_c',
 )
 
-plugins_sources += plugin_c_pack_resources[0]
+plugins_sources += plugin_c_pack_resources
 
 test_cpack = executable('test-cpack',
   'test-cpack.c', 'c-parse-helper.c',

@@ -10,4 +10,4 @@ plugin_support_resources = gnome.compile_resources(
   c_name: 'gbp_support',
 )
 
-plugins_sources += plugin_support_resources[0]
+plugins_sources += plugin_support_resources

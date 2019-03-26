@@ -40,6 +40,6 @@ plugin_xml_pack_resources = gnome.compile_resources(
   c_name: 'gbp_xml_pack',
 )
 
-plugins_sources += plugin_xml_pack_resources[0]
+plugins_sources += plugin_xml_pack_resources
 
 endif

@@ -20,6 +20,6 @@ plugin_autotools_resources = gnome.compile_resources(
   c_name: 'gbp_autotools',
 )
 
-plugins_sources += plugin_autotools_resources[0]
+plugins_sources += plugin_autotools_resources
 
 endif

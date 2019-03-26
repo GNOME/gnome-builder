@@ -24,7 +24,7 @@ plugin_ctags_resources = gnome.compile_resources(
   c_name: 'gbp_ctags',
 )
 
-plugins_sources += plugin_ctags_resources[0]
+plugins_sources += plugin_ctags_resources
 
 test_ctags = executable('test-ctags',
   'test-ctags.c', 'ide-ctags-index.c',

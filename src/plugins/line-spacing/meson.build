@@ -9,4 +9,4 @@ plugin_line_spacing_resources = gnome.compile_resources(
   c_name: 'gbp_line_spacing',
 )
 
-plugins_sources += plugin_line_spacing_resources[0]
+plugins_sources += plugin_line_spacing_resources

@@ -9,4 +9,4 @@ plugin_restore_cursor_resources = gnome.compile_resources(
   c_name: 'gbp_restore_cursor',
 )
 
-plugins_sources += plugin_restore_cursor_resources[0]
+plugins_sources += plugin_restore_cursor_resources

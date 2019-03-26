@@ -19,4 +19,4 @@ plugin_buildui_resources = gnome.compile_resources(
   c_name: 'gbp_buildui',
 )
 
-plugins_sources += plugin_buildui_resources[0]
+plugins_sources += plugin_buildui_resources
