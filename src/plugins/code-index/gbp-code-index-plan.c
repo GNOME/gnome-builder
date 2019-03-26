@@ -456,16 +456,17 @@ gbp_code_index_plan_populate_worker (IdeTask      *task,
   g_assert (IDE_IS_VCS (state->vcs));
   g_assert (G_IS_FILE (state->workdir));
 
-  ide_g_file_walk (state->workdir,
-                   G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE","
-                   G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
-                   G_FILE_ATTRIBUTE_STANDARD_NAME","
-                   G_FILE_ATTRIBUTE_STANDARD_SIZE","
-                   G_FILE_ATTRIBUTE_STANDARD_TYPE","
-                   G_FILE_ATTRIBUTE_TIME_MODIFIED,
-                   cancellable,
-                   gbp_code_index_plan_populate_cb,
-                   task);
+  ide_g_file_walk_with_ignore (state->workdir,
+                               G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE","
+                               G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
+                               G_FILE_ATTRIBUTE_STANDARD_NAME","
+                               G_FILE_ATTRIBUTE_STANDARD_SIZE","
+                               G_FILE_ATTRIBUTE_STANDARD_TYPE","
+                               G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                               ".noindex",
+                               cancellable,
+                               gbp_code_index_plan_populate_cb,
+                               task);
 
   ide_task_return_boolean (task, TRUE);
 
