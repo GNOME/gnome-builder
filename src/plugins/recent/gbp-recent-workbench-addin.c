@@ -25,6 +25,8 @@
 #include <libide-projects.h>
 #include <libide-gui.h>
 
+#include "ide-project-info-private.h"
+
 #include "gbp-recent-workbench-addin.h"
 
 struct _GbpRecentWorkbenchAddin
@@ -102,7 +104,7 @@ gbp_recent_workbench_addin_add_recent (GbpRecentWorkbenchAddin *self,
 
   IDE_ENTRY;
 
-  if (!(file = ide_project_info_get_file (project_info)) ||
+  if (!(file = _ide_project_info_get_real_file (project_info)) ||
       directory_is_ignored (file))
     IDE_EXIT;
 
@@ -173,7 +175,7 @@ gbp_recent_workbench_addin_add_recent (GbpRecentWorkbenchAddin *self,
       g_bookmark_file_add_group (projects_file, uri, build_system_group);
     }
 
-  if ((directory = ide_project_info_get_directory (project_info)))
+  if ((directory = _ide_project_info_get_real_directory (project_info)))
     {
       g_autofree gchar *dir_group = NULL;
       g_autofree gchar *diruri = g_file_get_uri (directory);
