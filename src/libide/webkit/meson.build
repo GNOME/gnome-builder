@@ -17,7 +17,7 @@ libide_webkit_resources = gnome.compile_resources(
   c_name: 'ide_webkit',
 )
 libide_webkit_generated_headers = [libide_webkit_resources[1]]
-libide_webkit_sources += libide_webkit_resources[0]
+libide_webkit_sources += libide_webkit_resources
 
 #
 # Dependencies

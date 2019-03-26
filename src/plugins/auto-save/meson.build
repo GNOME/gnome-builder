@@ -9,4 +9,4 @@ plugin_auto_save_resources = gnome.compile_resources(
   c_name: 'gbp_auto_save',
 )
 
-plugins_sources += plugin_auto_save_resources[0]
+plugins_sources += plugin_auto_save_resources

@@ -11,7 +11,7 @@ plugin_gdb_resources = gnome.compile_resources(
   c_name: 'gbp_gdb',
 )
 
-plugins_sources += plugin_gdb_resources[0]
+plugins_sources += plugin_gdb_resources
 
 gdbwire = static_library('gdbwire', ['gdbwire.c'],
   c_args: [ '-Wno-redundant-decls',

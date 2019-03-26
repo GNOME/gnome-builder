@@ -11,4 +11,4 @@ omni_gutter_resources = gnome.compile_resources(
   c_name: 'gbp_omni_gutter',
 )
 
-plugins_sources += omni_gutter_resources[0]
+plugins_sources += omni_gutter_resources

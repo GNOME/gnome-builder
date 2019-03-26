@@ -9,4 +9,4 @@ plugin_buffer_monitor_resources = gnome.compile_resources(
   c_name: 'gbp_buffer_monitor',
 )
 
-plugins_sources += plugin_buffer_monitor_resources[0]
+plugins_sources += plugin_buffer_monitor_resources

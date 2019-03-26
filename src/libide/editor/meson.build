@@ -71,7 +71,7 @@ libide_editor_resources = gnome.compile_resources(
   c_name: 'ide_editor',
 )
 libide_editor_generated_headers += [libide_editor_resources[1]]
-libide_editor_sources += libide_editor_resources[0]
+libide_editor_sources += libide_editor_resources
 
 #
 # Dependencies

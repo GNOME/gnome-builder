@@ -12,6 +12,6 @@ plugin_newcomers_resources = gnome.compile_resources(
   c_name: 'gbp_newcomers',
 )
 
-plugins_sources += plugin_newcomers_resources[0]
+plugins_sources += plugin_newcomers_resources
 
 endif

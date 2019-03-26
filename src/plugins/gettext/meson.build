@@ -11,6 +11,6 @@ plugin_gettext_resources = gnome.compile_resources(
   c_name: 'gbp_gettext',
 )
 
-plugins_sources += plugin_gettext_resources[0]
+plugins_sources += plugin_gettext_resources
 
 endif

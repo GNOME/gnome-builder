@@ -11,6 +11,6 @@ plugin_qemu_resources = gnome.compile_resources(
   c_name: 'gbp_qemu',
 )
 
-plugins_sources += plugin_qemu_resources[0]
+plugins_sources += plugin_qemu_resources
 
 endif

@@ -9,4 +9,4 @@ plugin_emacs_resources = gnome.compile_resources(
   c_name: 'gbp_emacs',
 )
 
-plugins_sources += plugin_emacs_resources[0]
+plugins_sources += plugin_emacs_resources

@@ -14,6 +14,6 @@ plugin_grep_resources = gnome.compile_resources(
   c_name: 'gbp_grep',
 )
 
-plugins_sources += plugin_grep_resources[0]
+plugins_sources += plugin_grep_resources
 
 endif

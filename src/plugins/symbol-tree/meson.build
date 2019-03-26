@@ -12,4 +12,4 @@ plugin_symbol_tree_resources = gnome.compile_resources(
   c_name: 'gbp_symbol_tree',
 )
 
-plugins_sources += plugin_symbol_tree_resources[0]
+plugins_sources += plugin_symbol_tree_resources

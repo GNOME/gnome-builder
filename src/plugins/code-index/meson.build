@@ -21,6 +21,6 @@ plugin_code_index_resources = gnome.compile_resources(
   c_name: 'gbp_code_index',
 )
 
-plugins_sources += plugin_code_index_resources[0]
+plugins_sources += plugin_code_index_resources
 
 endif

@@ -76,7 +76,7 @@ libide_terminal_deps = [
 #
 
 libide_terminal = static_library('ide-terminal-' + libide_api_version,
-   libide_terminal_public_sources + libide_terminal_private_sources + [libide_terminal_resources[0]],
+   libide_terminal_public_sources + libide_terminal_private_sources + libide_terminal_resources,
    dependencies: libide_terminal_deps,
          c_args: libide_args + release_args + ['-DIDE_TERMINAL_COMPILATION'],
 )

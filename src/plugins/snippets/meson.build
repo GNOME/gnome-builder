@@ -12,4 +12,4 @@ snippets_resources = gnome.compile_resources(
   c_name: 'gbp_snippets',
 )
 
-plugins_sources += snippets_resources[0]
+plugins_sources += snippets_resources

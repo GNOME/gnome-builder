@@ -41,7 +41,7 @@ plugin_clang_resources = gnome.compile_resources(
   c_name: 'gbp_clang',
 )
 
-plugins_sources += plugin_clang_resources[0]
+plugins_sources += plugin_clang_resources
 
 add_languages('cpp') # Needed for llvm dep
 llvm_dep = dependency('llvm', version: '>= 3.5')

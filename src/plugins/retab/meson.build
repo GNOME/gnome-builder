@@ -11,6 +11,6 @@ plugin_retab_resources = gnome.compile_resources(
   c_name: 'gbp_retab',
 )
 
-plugins_sources += plugin_retab_resources[0]
+plugins_sources += plugin_retab_resources
 
 endif

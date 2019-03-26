@@ -17,6 +17,6 @@ plugin_sysroot_resources = gnome.compile_resources(
   c_name: 'gbp_sysroot',
 )
 
-plugins_sources += plugin_sysroot_resources[0]
+plugins_sources += plugin_sysroot_resources
 
 endif

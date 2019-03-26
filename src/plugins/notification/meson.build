@@ -11,6 +11,6 @@ plugin_notification_resources = gnome.compile_resources(
   c_name: 'gbp_notification',
 )
 
-plugins_sources += plugin_notification_resources[0]
+plugins_sources += plugin_notification_resources
 
 endif

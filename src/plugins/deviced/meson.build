@@ -21,6 +21,6 @@ plugins_deps += [
   dependency('libdeviced', version: '>=3.27.4'),
 ]
 
-plugins_sources += plugin_deviced_resources[0]
+plugins_sources += plugin_deviced_resources
 
 endif

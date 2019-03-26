@@ -20,6 +20,6 @@ plugin_devhelp_resources = gnome.compile_resources(
   c_name: 'gbp_devhelp',
 )
 
-plugins_sources += plugin_devhelp_resources[0]
+plugins_sources += plugin_devhelp_resources
 
 endif

@@ -18,4 +18,4 @@ plugin_debuggerui_resources = gnome.compile_resources(
   c_name: 'gbp_debuggerui',
 )
 
-plugins_sources += plugin_debuggerui_resources[0]
+plugins_sources += plugin_debuggerui_resources

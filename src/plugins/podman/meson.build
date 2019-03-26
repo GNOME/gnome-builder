@@ -13,6 +13,6 @@ plugin_podman_resources = gnome.compile_resources(
   c_name: 'gbp_podman'
 )
 
-plugins_sources += plugin_podman_resources[0]
+plugins_sources += plugin_podman_resources
 
 endif

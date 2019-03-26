@@ -13,6 +13,6 @@ plugin_words_resources = gnome.compile_resources(
   c_name: 'gbp_words',
 )
 
-plugins_sources += plugin_words_resources[0]
+plugins_sources += plugin_words_resources
 
 endif

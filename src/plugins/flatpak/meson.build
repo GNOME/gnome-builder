@@ -40,6 +40,6 @@ plugins_deps += [
   dependency('libsoup-2.4', version: '>= 2.52.0'),
 ]
 
-plugins_sources += plugin_flatpak_resources[0]
+plugins_sources += plugin_flatpak_resources
 
 endif

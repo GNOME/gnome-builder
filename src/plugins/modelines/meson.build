@@ -12,6 +12,6 @@ plugin_modelines_resources = gnome.compile_resources(
   c_name: 'gbp_modelines',
 )
 
-plugins_sources += plugin_modelines_resources[0]
+plugins_sources += plugin_modelines_resources
 
 endif

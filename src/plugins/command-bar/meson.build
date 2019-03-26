@@ -15,4 +15,4 @@ plugin_command_bar_resources = gnome.compile_resources(
   c_name: 'gbp_command_bar',
 )
 
-plugins_sources += plugin_command_bar_resources[0]
+plugins_sources += plugin_command_bar_resources

@@ -9,4 +9,4 @@ plugin_comment_code_resources = gnome.compile_resources(
   c_name: 'gbp_comment_code',
 )
 
-plugins_sources += plugin_comment_code_resources[0]
+plugins_sources += plugin_comment_code_resources

@@ -9,4 +9,4 @@ plugin_deviceui_resources = gnome.compile_resources(
   c_name: 'gbp_deviceui',
 )
 
-plugins_sources += plugin_deviceui_resources[0]
+plugins_sources += plugin_deviceui_resources

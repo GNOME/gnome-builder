@@ -9,4 +9,4 @@ plugin_greeter_resources = gnome.compile_resources(
   c_name: 'gbp_greeter',
 )
 
-plugins_sources += plugin_greeter_resources[0]
+plugins_sources += plugin_greeter_resources

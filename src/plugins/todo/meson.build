@@ -14,6 +14,6 @@ plugin_todo_resources = gnome.compile_resources(
   c_name: 'gbp_todo',
 )
 
-plugins_sources += plugin_todo_resources[0]
+plugins_sources += plugin_todo_resources
 
 endif

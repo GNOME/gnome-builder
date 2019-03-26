@@ -10,4 +10,4 @@ plugin_terminal_resources = gnome.compile_resources(
   c_name: 'gbp_terminal',
 )
 
-plugins_sources += plugin_terminal_resources[0]
+plugins_sources += plugin_terminal_resources

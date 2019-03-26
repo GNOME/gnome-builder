@@ -25,6 +25,6 @@ plugin_git_resources = gnome.compile_resources(
   c_name: 'gbp_git',
 )
 
-plugins_sources += plugin_git_resources[0]
+plugins_sources += plugin_git_resources
 
 endif

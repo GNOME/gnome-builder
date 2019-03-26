@@ -19,6 +19,6 @@ plugin_sysprof_resources = gnome.compile_resources(
   c_name: 'gbp_sysprof',
 )
 
-plugins_sources += plugin_sysprof_resources[0]
+plugins_sources += plugin_sysprof_resources
 
 endif

@@ -65,8 +65,7 @@ libgstyle_sources = [
   'gstyle-slidein.c',
   'gstyle-utils.c',
   'gstyle-xyz.c',
-  libgstyle_resources[0],
-  libgstyle_resources[1],
+  libgstyle_resources,
 ]
 
 libgstyle_deps = [

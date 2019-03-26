@@ -17,6 +17,6 @@ plugin_cmake_resources = gnome.compile_resources(
   c_name: 'gbp_cmake',
 )
 
-plugins_sources += plugin_cmake_resources[0]
+plugins_sources += plugin_cmake_resources
 
 endif

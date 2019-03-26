@@ -18,6 +18,6 @@ plugin_gnome_code_assistance_resources = gnome.compile_resources(
   c_name: 'gbp_gnome_code_assistance',
 )
 
-plugins_sources += plugin_gnome_code_assistance_resources[0]
+plugins_sources += plugin_gnome_code_assistance_resources
 
 endif

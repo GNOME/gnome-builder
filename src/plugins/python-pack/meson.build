@@ -11,6 +11,6 @@ plugin_python_pack_resources = gnome.compile_resources(
   c_name: 'gbp_python_pack',
 )
 
-plugins_sources += plugin_python_pack_resources[0]
+plugins_sources += plugin_python_pack_resources
 
 endif

@@ -163,7 +163,7 @@ libide_gui_resources = gnome.compile_resources(
   c_name: 'ide_gui',
 )
 libide_gui_generated_headers += [libide_gui_resources[1]]
-libide_gui_sources += libide_gui_resources[0]
+libide_gui_sources += libide_gui_resources
 
 
 #

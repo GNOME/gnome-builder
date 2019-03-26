@@ -106,7 +106,7 @@ libide_sourceview_resources = gnome.compile_resources(
   c_name: 'ide_sourceview',
 )
 libide_sourceview_generated_headers += [libide_sourceview_resources[1]]
-libide_sourceview_generated_sources += libide_sourceview_resources[0]
+libide_sourceview_generated_sources += libide_sourceview_resources
 
 #
 # Enum generation

@@ -11,4 +11,4 @@ plugin_testui_resources = gnome.compile_resources(
   c_name: 'gbp_testui',
 )
 
-plugins_sources += plugin_testui_resources[0]
+plugins_sources += plugin_testui_resources

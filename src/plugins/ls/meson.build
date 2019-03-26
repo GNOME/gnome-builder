@@ -11,4 +11,4 @@ plugin_ls_resources = gnome.compile_resources(
   c_name: 'gbp_ls',
 )
 
-plugins_sources += plugin_ls_resources[0]
+plugins_sources += plugin_ls_resources

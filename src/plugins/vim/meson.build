@@ -12,4 +12,4 @@ plugin_vim_resources = gnome.compile_resources(
   c_name: 'gbp_vim',
 )
 
-plugins_sources += plugin_vim_resources[0]
+plugins_sources += plugin_vim_resources
