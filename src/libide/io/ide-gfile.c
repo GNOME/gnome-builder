@@ -25,6 +25,7 @@
 #include <libide-threading.h>
 
 #include "ide-gfile.h"
+#include "ide-gfile-private.h"
 
 static GPtrArray *g_ignored;
 G_LOCK_DEFINE_STATIC (ignored);
@@ -821,4 +822,77 @@ ide_g_file_walk (GFile               *directory,
 
       ide_g_file_walk (child, attributes, cancellable, callback, callback_data);
     }
+}
+
+static gboolean
+iter_parents (GFile **fileptr)
+{
+  g_autoptr(GFile) item = *fileptr;
+  *fileptr = g_file_get_parent (item);
+  return *fileptr != NULL;
+}
+
+static gboolean
+is_symlink (GFile  *file,
+            gchar **target)
+{
+  g_autoptr(GFileInfo) info = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (target != NULL);
+
+  *target = NULL;
+
+  if (!g_file_is_native (file))
+    return FALSE;
+
+  info = g_file_query_info (file,
+                            G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
+                            G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
+                            G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                            NULL, NULL);
+
+  if (info == NULL)
+    return FALSE;
+
+  if (g_file_info_get_is_symlink (info))
+    {
+      *target = g_strdup (g_file_info_get_symlink_target (info));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+GFile *
+_ide_g_file_readlink (GFile *file)
+{
+  g_autoptr(GFile) iter = NULL;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  if (!g_file_is_native (file))
+    return g_object_ref (file);
+
+  iter = g_file_dup (file);
+
+  do
+    {
+      g_autofree gchar *target = NULL;
+
+      if (is_symlink (iter, &target))
+        {
+          g_autoptr(GFile) parent = g_file_get_parent (iter);
+          g_autoptr(GFile) base = g_file_get_child (parent, target);
+          g_autofree gchar *relative = g_file_get_relative_path (iter, file);
+
+          if (relative == NULL)
+            return g_steal_pointer (&base);
+          else
+            return g_file_get_child (base, relative);
+        }
+    }
+  while (iter_parents (&iter));
+
+  return g_object_ref (file);
 }

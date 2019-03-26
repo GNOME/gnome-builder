@@ -18,6 +18,10 @@ libide_io_public_headers = [
   'libide-io.h',
 ]
 
+libide_io_private_headers = [
+  'ide-gfile-private.h',
+]
+
 install_headers(libide_io_public_headers, subdir: libide_io_header_subdir)
 
 #
@@ -65,5 +69,6 @@ libide_io_dep = declare_dependency(
 
 gnome_builder_public_sources += files(libide_io_public_sources)
 gnome_builder_public_headers += files(libide_io_public_headers)
+gnome_builder_private_headers += files(libide_io_private_headers)
 gnome_builder_include_subdirs += libide_io_header_subdir
 gnome_builder_gir_extra_args += ['--c-include=libide-io.h', '-DIDE_IO_COMPILATION']
