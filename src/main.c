@@ -114,6 +114,19 @@ main (gint   argc,
   /* Extract options like -vvvv */
   early_params_check (&argc, &argv, &standalone, &type, &plugin, &dbus_address);
 
+  /* Make sure $HOME is not a symlink, as that can cause issues with
+   * various subsystems. Just warn super loud so that users find it
+   * when trying to debug issues.
+   *
+   * Silverblue did this, but has since stopped (and some users will
+   * lag behind until their systems are fixed).
+   *
+   * https://gitlab.gnome.org/GNOME/gnome-builder/issues/859
+   */
+  if (g_file_test (g_get_home_dir (), G_FILE_TEST_IS_SYMLINK))
+    g_critical ("User home directory uses a symlink. "
+                "This is not supported and may result in unforseen issues.");
+
   /* Log what desktop is being used to simplify tracking down
    * quirks in the future.
    */
