@@ -559,6 +559,14 @@ create_diagnostic (IdePipeline *self,
 
   parsed.severity = parse_severity (level);
 
+  /* Expand local user only, if we get a home-relative path */
+  if (filename != NULL && strncmp (filename, "~/", 2) == 0)
+    {
+      gchar *expanded = ide_path_expand (filename);
+      g_free (filename);
+      filename = expanded;
+    }
+
   if (!g_path_is_absolute (filename))
     {
       gchar *path;
