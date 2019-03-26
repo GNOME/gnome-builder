@@ -3801,18 +3801,31 @@ ide_source_view_set_overscroll_num_lines (IdeSourceView *self,
                                           gint           num_lines)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  gint height = gtk_widget_get_allocated_height (GTK_WIDGET (self));
+  gint height;
   gint new_margin;
 
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
   priv->overscroll_num_lines = num_lines;
+
+  /* Do nothing if there is no height yet */
+  if (!(height = gtk_widget_get_allocated_height (GTK_WIDGET (self))))
+    return;
+
   new_margin = priv->overscroll_num_lines * priv->cached_char_height;
 
   if (new_margin < 0)
-    new_margin = height + new_margin;
+    {
+      new_margin = height + new_margin;
+      if (new_margin < 0)
+        new_margin = height - priv->cached_char_height;
+    }
 
   new_margin = CLAMP (new_margin, 0, height - priv->cached_char_height);
 
-  g_object_set (self, "bottom-margin", new_margin, NULL);
+  g_object_set (self,
+                "bottom-margin", new_margin,
+                NULL);
 }
 
 static void
