@@ -94,5 +94,12 @@ void       ide_g_file_walk                          (GFile                *direc
                                                      GCancellable         *cancellable,
                                                      IdeFileWalkCallback   callback,
                                                      gpointer              callback_data);
+IDE_AVAILABLE_IN_3_34
+void       ide_g_file_walk_with_ignore              (GFile                *directory,
+                                                     const gchar          *attributes,
+                                                     const gchar          *ignore_file,
+                                                     GCancellable         *cancellable,
+                                                     IdeFileWalkCallback   callback,
+                                                     gpointer              callback_data);
 
 G_END_DECLS

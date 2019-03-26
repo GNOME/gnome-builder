@@ -729,11 +729,14 @@ ide_g_host_file_get_contents (const gchar  *path,
 }
 
 /**
- * ide_g_file_walk:
+ * ide_g_file_walk_with_ignore:
  * @directory: a #GFile that is a directory
  * @attributes: attributes to include in #GFileInfo
+ * @ignore_file: (nullable): the filename within @directory to indicate that
+ *   the directory should be ignored
  * @cancellable: (nullable): an optional cancellable
- * @callback: (scope call): a callback for each directory starting from @directory
+ * @callback: (scope call): a callback for each directory starting from
+ *   the @directory
  * @callback_data: closure data for @callback
  *
  * Calls @callback for every directory starting from @directory.
@@ -741,14 +744,18 @@ ide_g_host_file_get_contents (const gchar  *path,
  * All of the fileinfo for the directory will be provided to the callback for
  * each directory.
  *
- * Since: 3.32
+ * If @ignore_file is set, this function will check to see if that file exists
+ * within @directory and skip it (and all descendants) if discovered.
+ *
+ * Since: 3.34
  */
 void
-ide_g_file_walk (GFile               *directory,
-                 const gchar         *attributes,
-                 GCancellable        *cancellable,
-                 IdeFileWalkCallback  callback,
-                 gpointer             callback_data)
+ide_g_file_walk_with_ignore (GFile               *directory,
+                             const gchar         *attributes,
+                             const gchar         *ignore_file,
+                             GCancellable        *cancellable,
+                             IdeFileWalkCallback  callback,
+                             gpointer             callback_data)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GPtrArray) directories = NULL;
@@ -775,6 +782,14 @@ ide_g_file_walk (GFile               *directory,
 
   if (directory_type != G_FILE_TYPE_DIRECTORY)
     return;
+
+  if (ignore_file != NULL)
+    {
+      g_autoptr(GFile) ignore = g_file_get_child (directory, ignore_file);
+
+      if (g_file_query_exists (ignore, cancellable))
+        return;
+    }
 
   str = g_string_new (attributes);
 
@@ -819,6 +834,36 @@ ide_g_file_walk (GFile               *directory,
       if (g_cancellable_is_cancelled (cancellable))
         break;
 
-      ide_g_file_walk (child, attributes, cancellable, callback, callback_data);
+      ide_g_file_walk_with_ignore (child,
+                                   attributes,
+                                   ignore_file,
+                                   cancellable,
+                                   callback,
+                                   callback_data);
     }
+}
+
+/**
+ * ide_g_file_walk:
+ * @directory: a #GFile that is a directory
+ * @attributes: attributes to include in #GFileInfo
+ * @cancellable: (nullable): an optional cancellable
+ * @callback: (scope call): a callback for each directory starting from @directory
+ * @callback_data: closure data for @callback
+ *
+ * Calls @callback for every directory starting from @directory.
+ *
+ * All of the fileinfo for the directory will be provided to the callback for
+ * each directory.
+ *
+ * Since: 3.32
+ */
+void
+ide_g_file_walk (GFile               *directory,
+                 const gchar         *attributes,
+                 GCancellable        *cancellable,
+                 IdeFileWalkCallback  callback,
+                 gpointer             callback_data)
+{
+  ide_g_file_walk_with_ignore (directory, attributes, NULL, cancellable, callback, callback_data);
 }
