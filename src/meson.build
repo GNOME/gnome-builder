@@ -13,8 +13,8 @@ gnome_builder_gir_extra_args = ['--pkg-export=gnome-builder-1.0']
 # inside the final executable, we delay compiling them until the
 # final binary (otherwise they are silenty dropped when linking).
 
-exe_link_args = [ '-pie', '-export-dynamic' ]
-exe_c_args = [ '-fPIE' ]
+exe_link_args = [ '-export-dynamic' ]
+exe_c_args = []
 
 subdir('gstyle')
 subdir('libide')
@@ -55,7 +55,7 @@ if get_option('fusermount_wrapper')
              install: true,
          install_dir: get_option('bindir'),
               c_args: exe_c_args + release_args,
-           link_args: exe_link_args,
+                 pie: true,
        install_rpath: pkglibdir_abs,
         dependencies: [libglib_dep],
   )
@@ -72,6 +72,7 @@ gnome_builder = executable('gnome-builder', 'main.c', 'bug-buddy.c',
            install: true,
             c_args: libide_args + exe_c_args + release_args,
          link_args: exe_link_args,
+               pie: true,
         link_whole: plugins,
      install_rpath: pkglibdir_abs,
       dependencies: gnome_builder_deps,

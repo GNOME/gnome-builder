@@ -76,7 +76,7 @@ executable('gnome-builder-clang', gnome_builder_clang_sources,
            install: true,
        install_dir: get_option('libexecdir'),
             c_args: exe_c_args,
-         link_args: exe_link_args,
+               pie: true,
      install_rpath: pkglibdir_abs,
 )
 
@@ -85,7 +85,7 @@ executable('test-daemon', ['test-daemon.c'],
            gui_app: false,
            install: false,
             c_args: exe_c_args,
-         link_args: exe_link_args,
+               pie: true,
 )
 
 install_data(['org.gnome.builder.clang.gschema.xml'], install_dir: schema_dir)
