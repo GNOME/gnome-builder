@@ -29,7 +29,10 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "ide-gfile-private.h"
+
 #include "ide-project-info.h"
+#include "ide-project-info-private.h"
 
 /**
  * SECTION:ideprojectinfo:
@@ -50,7 +53,9 @@ struct _IdeProjectInfo
   IdeDoap    *doap;
   GDateTime  *last_modified_at;
   GFile      *directory;
+  GFile      *directory_translated;
   GFile      *file;
+  GFile      *file_translated;
   gchar      *build_system_name;
   gchar      *build_system_hint;
   gchar      *name;
@@ -181,7 +186,7 @@ ide_project_info_get_directory (IdeProjectInfo *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
 
-  return self->directory;
+  return self->directory_translated;
 }
 
 /**
@@ -200,7 +205,7 @@ ide_project_info_get_file (IdeProjectInfo *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
 
-  return self->file;
+  return self->file_translated;
 }
 
 /**
@@ -315,7 +320,11 @@ ide_project_info_set_directory (IdeProjectInfo *self,
   g_return_if_fail (!directory || G_IS_FILE (directory));
 
   if (g_set_object (&self->directory, directory))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
+    {
+      g_clear_object (&self->directory_translated);
+      self->directory_translated = _ide_g_file_readlink (directory);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
+    }
 }
 
 void
@@ -326,7 +335,11 @@ ide_project_info_set_file (IdeProjectInfo *self,
   g_return_if_fail (!file || G_IS_FILE (file));
 
   if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
+    {
+      g_clear_object (&self->file_translated);
+      self->file_translated = _ide_g_file_readlink (file);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
+    }
 }
 
 void
@@ -380,7 +393,9 @@ ide_project_info_finalize (GObject *object)
   g_clear_pointer (&self->vcs_uri, g_free);
   g_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
+  g_clear_object (&self->directory_translated);
   g_clear_object (&self->file);
+  g_clear_object (&self->file_translated);
   g_clear_object (&self->icon);
 
   G_OBJECT_CLASS (ide_project_info_parent_class)->finalize (object);
@@ -878,4 +893,18 @@ ide_project_info_set_icon_name (IdeProjectInfo *self,
   if (icon_name != NULL)
     icon = g_themed_icon_new (icon_name);
   ide_project_info_set_icon (self, icon);
+}
+
+GFile *
+_ide_project_info_get_real_file (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+  return self->file;
+}
+
+GFile *
+_ide_project_info_get_real_directory (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+  return self->directory;
 }

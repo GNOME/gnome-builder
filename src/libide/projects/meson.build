@@ -26,7 +26,11 @@ install_headers(libide_projects_public_headers, subdir: libide_projects_header_s
 # Sources
 #
 
-libide_projects_private_headers = [ 'xml-reader-private.h', ]
+libide_projects_private_headers = [
+  'ide-project-info-private.h',
+  'xml-reader-private.h',
+]
+
 libide_projects_private_sources = [ 'xml-reader.c', ]
 
 libide_projects_public_sources = [

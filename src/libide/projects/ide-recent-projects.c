@@ -26,6 +26,8 @@
 #include <gtk/gtk.h>
 #include <libide-core.h>
 
+#include "ide-project-info.h"
+#include "ide-project-info-private.h"
 #include "ide-recent-projects.h"
 
 struct _IdeRecentProjects
@@ -85,7 +87,7 @@ ide_recent_projects_added (IdeRecentProjects *self,
   g_assert (IDE_IS_RECENT_PROJECTS (self));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
 
-  file = ide_project_info_get_file (project_info);
+  file = _ide_project_info_get_real_file (project_info);
   uri = g_file_get_uri (file);
 
   if (!g_hash_table_contains (self->recent_uris, uri))
@@ -374,7 +376,7 @@ ide_recent_projects_remove (IdeRecentProjects *self,
           continue;
         }
 
-      file = ide_project_info_get_file (project_info);
+      file = _ide_project_info_get_real_file (project_info);
       file_uri = g_file_get_uri (file);
 
       if (!g_bookmark_file_remove_item (projects_file, file_uri, &error))
