@@ -23,7 +23,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-projects.h>
 #include <stdlib.h>
+
+#include "ide-project-info-private.h"
 
 #include "ide-greeter-row.h"
 
@@ -276,7 +279,7 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
           g_auto(GStrv) languages = g_strdupv ((gchar **)ide_project_info_get_languages (project_info));
           const gchar *name = ide_project_info_get_name (project_info);
           const gchar *build_system = ide_project_info_get_build_system_name (project_info);
-          GFile *directory = ide_project_info_get_directory (project_info);
+          GFile *directory = _ide_project_info_get_real_directory (project_info);
           const gchar *desc = ide_project_info_get_description (project_info);
           GIcon *icon = ide_project_info_get_icon (project_info);
           g_autoptr(GPtrArray) parts = g_ptr_array_new ();
