@@ -23,7 +23,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-io.h>
 #include <libide-code.h>
+
+#include "ide-buffer-private.h"
+#include "ide-gfile-private.h"
 
 #include "ide-editor-addin.h"
 #include "ide-editor-surface.h"
@@ -608,7 +612,6 @@ ide_editor_surface_find_source_location (GtkWidget *widget,
     IdeEditorPage *page;
   } *lookup = user_data;
   IdeBuffer *buffer;
-  GFile *file;
 
   g_return_if_fail (IDE_IS_PAGE (widget));
 
@@ -619,9 +622,8 @@ ide_editor_surface_find_source_location (GtkWidget *widget,
     return;
 
   buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (widget));
-  file = ide_buffer_get_file (buffer);
 
-  if (g_file_equal (file, lookup->file))
+  if (_ide_buffer_is_file (buffer, lookup->file))
     lookup->page = IDE_EDITOR_PAGE (widget);
 }
 
@@ -662,10 +664,11 @@ cleanup:
 }
 
 static void
-ide_editor_surface_focus_location_full (IdeEditorSurface  *self,
-                                        IdeLocation *location,
-                                        gboolean           open_if_not_found)
+ide_editor_surface_focus_location_full (IdeEditorSurface *self,
+                                        IdeLocation      *location,
+                                        gboolean          open_if_not_found)
 {
+  g_autoptr(GFile) translated = NULL;
   struct {
     GFile *file;
     IdeEditorPage *page;
@@ -679,7 +682,10 @@ ide_editor_surface_focus_location_full (IdeEditorSurface  *self,
   g_assert (IDE_IS_EDITOR_SURFACE (self));
   g_assert (location != NULL);
 
-  lookup.file = ide_location_get_file (location);
+  /* Remove symlinks to increase chance we find a match */
+  translated = _ide_g_file_readlink (ide_location_get_file (location));
+
+  lookup.file = translated;
   lookup.page = NULL;
 
   if (lookup.file == NULL)
