@@ -23,10 +23,13 @@
 #include "config.h"
 
 #include <libide-code.h>
+#include <libide-io.h>
 #include <libide-projects.h>
 #include <libide-threading.h>
 #include <libide-vcs.h>
 #include <string.h>
+
+#include "ide-gfile-private.h"
 
 #include "ide-build-manager.h"
 #include "ide-pipeline.h"
@@ -465,6 +468,8 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
     {
       g_autofree gchar *name = NULL;
       g_autofree gchar *branch = NULL;
+      g_autoptr(GFile) base = NULL;
+      g_autoptr(GFile) nosymlink = NULL;
       IdeConfig *config;
       const gchar *config_id;
       const gchar *runtime_id;
@@ -487,7 +492,13 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
 
       g_strdelimit (name, "@:/ ", '-');
 
-      ret = ide_context_cache_filename (context, "builds", name, NULL);
+      /* Avoid symlink's when we can, so that paths with symlinks have at least
+       * a chance of working.
+       */
+      base = ide_context_cache_file (context, "builds", name, NULL);
+      nosymlink = _ide_g_file_readlink (base);
+
+      ret = g_file_get_path (nosymlink);
     }
 
   IDE_RETURN (ret);
