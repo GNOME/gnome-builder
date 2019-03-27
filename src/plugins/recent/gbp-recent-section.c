@@ -22,6 +22,9 @@
 
 #include <glib/gi18n.h>
 #include <libide-greeter.h>
+#include <libide-projects.h>
+
+#include "ide-project-info-private.h"
 
 #include "ide-truncate-model.h"
 
@@ -387,7 +390,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
     {
       g_autoptr(IdeProjectInfo) info = iter->data;
       const gchar *name = ide_project_info_get_name (info);
-      GFile *directory = ide_project_info_get_directory (info);
+      GFile *directory = _ide_project_info_get_real_directory (info);
       GFile *file = ide_project_info_get_file (info);
       g_autoptr(GFile) parent = NULL;
       g_autofree gchar *id = NULL;
