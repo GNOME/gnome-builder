@@ -123,7 +123,7 @@ main (gint   argc,
    *
    * https://gitlab.gnome.org/GNOME/gnome-builder/issues/859
    */
-  if (g_file_test (g_get_home_dir (), G_FILE_TEST_IS_SYMLINK))
+  if (g_file_test ("/home", G_FILE_TEST_IS_SYMLINK))
     g_critical ("User home directory uses a symlink. "
                 "This is not supported and may result in unforseen issues.");
 
