@@ -679,6 +679,8 @@ ide_context_build_file (IdeContext  *self,
   else
     ret = g_file_get_child (self->workdir, path);
 
+  g_debug ("Creating file \"%s\" from \"%s\"", g_file_peek_path (ret), path);
+
   return g_steal_pointer (&ret);
 }
 
