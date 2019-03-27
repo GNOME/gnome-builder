@@ -3821,7 +3821,7 @@ ide_source_view_set_overscroll_num_lines (IdeSourceView *self,
         new_margin = height - priv->cached_char_height;
     }
 
-  new_margin = CLAMP (new_margin, 0, height - priv->cached_char_height);
+  new_margin = CLAMP (new_margin, 0, MAX (height - priv->cached_char_height, 0));
 
   g_object_set (self,
                 "bottom-margin", new_margin,
