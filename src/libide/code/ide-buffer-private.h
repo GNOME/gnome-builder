@@ -41,6 +41,8 @@ IdeBuffer              *_ide_buffer_new                      (IdeBufferManager  
                                                               gboolean              is_temporary);
 void                    _ide_buffer_attach                   (IdeBuffer            *self,
                                                               IdeObject            *parent);
+gboolean                _ide_buffer_is_file                  (IdeBuffer            *self,
+                                                              GFile                *nolink_file);
 void                    _ide_buffer_load_file_async          (IdeBuffer            *self,
                                                               IdeNotification      *notif,
                                                               GCancellable         *cancellable,

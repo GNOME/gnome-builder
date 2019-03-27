@@ -24,6 +24,7 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libide-io.h>
 #include <libide-plugins.h>
 #include <libide-threading.h>
 
@@ -38,8 +39,9 @@
 #include "ide-file-settings.h"
 #include "ide-formatter.h"
 #include "ide-formatter-options.h"
-#include "ide-location.h"
+#include "ide-gfile-private.h"
 #include "ide-highlight-engine.h"
+#include "ide-location.h"
 #include "ide-range.h"
 #include "ide-source-iter.h"
 #include "ide-source-style-scheme.h"
@@ -80,6 +82,7 @@ struct _IdeBuffer
   IdeFileSettings        *file_settings;
   IdeHighlightEngine     *highlight_engine;
   GtkSourceFile          *source_file;
+  GFile                  *readlink_file;
 
   /* Scalars */
   guint                   change_count;
@@ -296,6 +299,8 @@ _ide_buffer_set_file (IdeBuffer *self,
   if (location == NULL || !g_file_equal (file, location))
     {
       gtk_source_file_set_location (self->source_file, file);
+      g_clear_object (&self->readlink_file);
+      self->readlink_file = _ide_g_file_readlink (file);
       ide_buffer_reload_file_settings (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
@@ -413,6 +418,7 @@ ide_buffer_finalize (GObject *object)
   IdeBuffer *self = (IdeBuffer *)object;
 
   g_clear_object (&self->source_file);
+  g_clear_object (&self->readlink_file);
   g_clear_pointer (&self->failure, g_error_free);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);
@@ -3797,4 +3803,15 @@ _ide_buffer_request_scroll_to_cursor (IdeBuffer *self)
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   g_signal_emit (self, signals [REQUEST_SCROLL_TO_INSERT], 0);
+}
+
+gboolean
+_ide_buffer_is_file (IdeBuffer *self,
+                     GFile     *nolink_file)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+  g_return_val_if_fail (G_IS_FILE (nolink_file), FALSE);
+
+  return g_file_equal (nolink_file, ide_buffer_get_file (self)) ||
+         g_file_equal (nolink_file, self->readlink_file);
 }
