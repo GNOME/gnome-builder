@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2019-03-07 13:32+0000\n"
-"PO-Revision-Date: 2019-03-28 21:30+0100\n"
+"PO-Revision-Date: 2019-03-28 21:51+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -370,10 +370,9 @@ msgid "Line Spacing"
 msgstr "Razmik med vrsticami"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
-#, fuzzy
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "The number of pixels to include above and below lines in the editor."
-msgstr "Najmanjše število vrstic, ki naj bodo prikazane nad in pod kazalko"
+msgstr ""
+"Najmanjše število slikovnih točk, ki naj bodo prikazane nad in pod kazalko."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/libide/gui/ide-preferences-builtin.c:209
@@ -481,9 +480,9 @@ msgid "Clear build caches at startup"
 msgstr "Ob zagonu počisti predpomnilnike izgradnje"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:49
-#, fuzzy
 msgid "If enabled, Builder will clear build caches upon startup."
-msgstr "Počisti dnevnik izgradnje"
+msgstr ""
+"Izbrana možnost določa, da bo program med zagonom izbrisal predpomnilnike."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -1169,8 +1168,6 @@ msgid "Tabs"
 msgstr "Zavihki"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:264
-#, fuzzy
-#| msgid "Spaces Style"
 msgid "Spaces per tab"
 msgstr "Širina tabulatorja v presledkih"
 
@@ -1237,8 +1234,6 @@ msgid "Restoring previous session"
 msgstr "Poteka obnavljanje predhodne seje"
 
 #: src/libide/editor/ide-editor-surface.ui:15
-#, fuzzy
-#| msgid "Your previous session will be ready momentarily."
 msgid "Your previous session will be ready in a moment."
 msgstr "Predhodna seja bo kmalu na voljo."
 
@@ -1332,7 +1327,7 @@ msgstr "Poteka izgrajevanje odvisnosti …"
 
 #: src/libide/foundry/ide-pipeline.c:3170
 msgid "Bootstrapping…"
-msgstr "Zaganjanje začetnega nalagalnega sistema ..."
+msgstr "Zaganjanje začetnega nalagalnega sistema …"
 
 #: src/libide/foundry/ide-pipeline.c:3174
 msgid "Configuring…"
@@ -1353,7 +1348,7 @@ msgstr "Poteka uveljavljanje …"
 
 #: src/libide/foundry/ide-pipeline.c:3190
 msgid "Exporting…"
-msgstr "Poteka izvažanje ..."
+msgstr "Poteka izvažanje …"
 
 #: src/libide/foundry/ide-pipeline.c:3194
 #: src/libide/foundry/ide-pipeline.c:3198
@@ -1363,13 +1358,11 @@ msgstr "Uspešno zaključeno"
 
 #: src/libide/foundry/ide-pipeline.c:3206
 msgid "Preparing…"
-msgstr "Poteka priprava ..."
+msgstr "Poteka priprava …"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
-#, fuzzy
-#| msgid "Cannot execute transfer while on metered connection"
 msgid "Cannot build transfer while on metered connection"
-msgstr "Prenosov ni mogoče izvajati pri povezavi z omejeno merjeno porabo."
+msgstr "Ni mogoče izgraditi prenosa pri povezavi z omejeno merjeno porabo."
 
 #: src/libide/foundry/ide-run-manager.c:383
 msgid "Cannot run target, another target is running"
@@ -1381,16 +1374,15 @@ msgstr "Iskanje izvajalnega programa je spodletelo."
 
 #. translators: %s is replaced with the name of the users executable
 #: src/libide/foundry/ide-run-manager.c:516
-#, fuzzy, c-format
-#| msgid "Running autogen…"
+#, c-format
 msgid "Running %s…"
-msgstr "Napaka med zagonom %s"
+msgstr "Poteka zaganjanje %s …"
 
 #. translators: %s is replaced with the specific error reason
 #: src/libide/foundry/ide-run-manager.c:590
-#, fuzzy, c-format
+#, c-format
 msgid "The build target failed to build: %s"
-msgstr "Začenjanje izgradnje cevovoda je spodletelo: %s"
+msgstr "Izgradnja je spodletela: %s"
 
 #: src/libide/foundry/ide-run-manager.c:852
 #: src/libide/gui/ide-application-shortcuts.c:45
@@ -1408,10 +1400,8 @@ msgstr "Izgradi in zaženi"
 
 #: src/libide/foundry/ide-run-manager.c:1012
 #: src/libide/foundry/ide-run-manager.c:1078
-#, fuzzy
-#| msgid "Failed to locate runtime"
 msgid "Failed to locate a build target"
-msgstr "Določevanje mesta vstavka sistema izgradnje je spodletelo."
+msgstr "Določevanje mesta cilja izgradnje je spodletelo."
 
 #: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/gtk/menus.ui:30
@@ -1464,9 +1454,8 @@ msgid "user@host:repository.git"
 msgstr "uporabnik@gostitelj:skladišče.git"
 
 #: src/libide/greeter/ide-clone-surface.ui:103
-#, fuzzy
 msgid "Select branch and other options."
-msgstr "Druge možnosti usklajevanja"
+msgstr "Izbor veje in druge možnosti."
 
 #: src/libide/greeter/ide-clone-surface.ui:140
 msgid "Repository Kind"
@@ -1495,11 +1484,11 @@ msgstr "Kloniraj projekt"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
 msgid "Select a Folder…"
-msgstr "Izbor mape ..."
+msgstr "Izbor mape …"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:69
 msgid "Clone Repository…"
-msgstr "Kloniraj skladišče ..."
+msgstr "Kloniraj skladišče …"
 
 #: src/libide/greeter/ide-greeter-row.c:256
 msgid "Directory"
@@ -1533,16 +1522,12 @@ msgid "Failed to load the project"
 msgstr "Nalaganje projekta je spodletelo"
 
 #: src/libide/greeter/ide-greeter-workspace.c:519
-#, fuzzy
-#| msgid ""
-#| "Removing project files will delete them from your computer and cannot be "
-#| "undone."
 msgid ""
 "Removing project sources will delete them from your computer and cannot be "
 "undone."
 msgstr ""
-"Odstranitev datotek projekta pomeni izbris z računalnika. Tega opravila ni "
-"mogoče razveljaviti."
+"Odstranitev virov projekta pomeni izbris datotek z računalnika. Tega "
+"opravila ni mogoče razveljaviti."
 
 #: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Delete Project Sources"
@@ -1559,7 +1544,7 @@ msgstr "Odpiranje projekta"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
-msgstr "Poišči vse projekte Builder ..."
+msgstr "Poišči vse projekte Builder …"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:118
 msgid "No Projects Found"
@@ -1641,9 +1626,8 @@ msgid "Show the application preferences"
 msgstr "Pokaži lastnosti programa"
 
 #: src/libide/gui/ide-application-command-line.c:65
-#, fuzzy
 msgid "Open project in new workbench"
-msgstr "_Nov projekt"
+msgstr "Odpri projekt v novem delovnem polju"
 
 #: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
@@ -1781,7 +1765,7 @@ msgstr "Novo okno terminala"
 
 #: src/libide/gui/ide-frame.ui:124
 msgid "Uh oh, something went wrong"
-msgstr "Ops, prišlo je do napake ..."
+msgstr "Ops, prišlo je do napake …"
 
 #: src/libide/gui/ide-frame.ui:125
 msgid "There was a failure while trying to perform the operation."
@@ -1869,10 +1853,9 @@ msgid "editor font monospace"
 msgstr "monospace, pisava, urejevalnik, enotna širina, besedilo"
 
 #: src/libide/gui/ide-preferences-builtin.c:107
-#, fuzzy
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "Number of pixels above and below editor lines"
-msgstr "Najmanjše število vrstic, ki naj bodo prikazane nad in pod kazalko"
+msgstr ""
+"Najmanjše število vrstic, ki naj bodo prikazane nad in pod urejevalnikom"
 
 #: src/libide/gui/ide-preferences-builtin.c:107
 msgctxt "Keywords"
@@ -2262,9 +2245,8 @@ msgid "Number of parallel build workers"
 msgstr "Številno vzporednih opravil izgradnje"
 
 #: src/libide/gui/ide-preferences-builtin.c:406
-#, fuzzy
 msgid "Clear build cache at startup"
-msgstr "Počisti dnevnik izgradnje"
+msgstr "Ob zagonu počisti predpomnilnik izgradnje"
 
 #: src/libide/gui/ide-preferences-builtin.c:406
 msgid "Expired caches will be purged when Builder is started"
@@ -2319,7 +2301,7 @@ msgstr "Zbirka SDK"
 
 #: src/libide/gui/ide-primary-workspace-actions.c:132
 msgid "Updating Dependencies…"
-msgstr "Poteka posodabljanje odvisnosti ..."
+msgstr "Poteka posodabljanje odvisnosti …"
 
 #: src/libide/gui/ide-primary-workspace-actions.c:133
 msgid "Builder is updating your projects configured dependencies."
@@ -3078,10 +3060,8 @@ msgid "No build configuration"
 msgstr "Ni nastavitev izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:116
-#, fuzzy
-#| msgid "Selected configuration for building"
 msgid "Select a build configuration from the sidebar to modify."
-msgstr "Izbrana nastavitev za izgradnjo"
+msgstr "Izbor nastavitev izgradnje iz bočnega okna za prilagajanje."
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:218
 msgid "Build Configurations"
@@ -3378,10 +3358,8 @@ msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:53
-#, fuzzy
-#| msgid "Create a new command line project"
 msgid "Create or update code-index for project file"
-msgstr "Ustvari nov projekt ukazne vrstice"
+msgstr "Ustvari oziroma posodobi kazalo kode za datoteko projekta"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:54
 msgid "PROJECT_FILE"
@@ -3393,16 +3371,14 @@ msgid "Failed to load flags for plan: %s"
 msgstr "Nalaganje zastavic je spodletelo: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:197
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s"
+#, c-format
 msgid "Failed to cull index plan: %s"
-msgstr "Prevzemanje kazala je spodletelo: %s"
+msgstr "Prebiranje kazala je spodletelo: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:232
-#, fuzzy, c-format
-#| msgid "Failed to spawn terminal: %s"
+#, c-format
 msgid "Failed to populate index plan: %s"
-msgstr "Prevzemanje kazala je spodletelo: %s"
+msgstr "Izgradnja kazala je spodletela: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:267
 #, c-format
@@ -3417,9 +3393,6 @@ msgid "Indexing Source Code"
 msgstr "Indeksiranje izvorne kode"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
-#, fuzzy
-#| msgid ""
-#| "Search, diagnostics and autocompletion may be limited until complete."
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
 msgstr ""
 "Možnosti iskanja, diagnostike in samodejnega dopolnjevanja so lahko omejene "
@@ -4149,10 +4122,8 @@ msgstr ""
 "projekta."
 
 #: src/plugins/flatpak/gbp-flatpak-application-addin.c:904
-#, fuzzy
-#| msgid "Failed to remove flatpak manifest: %s"
 msgid "Clone a project using flatpak manifest"
-msgstr "Odstranitev vnosa flatpak je spodletela: %s"
+msgstr "Kloniraj projekt z uporabo manifesta flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-application-addin.c:905
 msgid "MANIFEST"
@@ -4166,7 +4137,7 @@ msgstr "Poteka kloniranje projekta %s"
 
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:33
 msgid "Downloading application sources…"
-msgstr "Poteka prejemanje virov programa ..."
+msgstr "Poteka prejemanje virov programa …"
 
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:667
 #, c-format
@@ -4199,7 +4170,7 @@ msgstr "Zaključevanje izgradnje flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
 msgid "Exporting staging directory"
-msgstr "Poteka izvažanje mape s spremembami ..."
+msgstr "Poteka izvažanje mape s spremembami …"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:646
 msgid "Creating flatpak bundle"
@@ -4546,7 +4517,7 @@ msgstr "Začni s kloniranjem projekta z naslova URI"
 #: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
 #: src/plugins/greeter/gtk/menus.ui:88
 msgid "_Clone Repository…"
-msgstr "_Kloniraj skladišče ..."
+msgstr "_Kloniraj skladišče …"
 
 #: src/plugins/greeter/gtk/menus.ui:47
 msgid "Quit"
@@ -4856,7 +4827,7 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:48
 msgid "An IDE for writing GNOME-based software"
-msgstr ""
+msgstr "IDE za izgradnjo programske opreme GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Calendar"
@@ -5108,7 +5079,7 @@ msgstr "Poteka odstranjevanje %s\n"
 
 #: src/plugins/recent/gbp-recent-section.c:467
 msgid "Removing Files…"
-msgstr "Poteka odstranjevanje datotek ..."
+msgstr "Poteka odstranjevanje datotek …"
 
 #: src/plugins/recent/gbp-recent-section.ui:28
 msgid "Recent Projects"
@@ -5393,7 +5364,7 @@ msgstr "Simbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.c:314
 msgid "Select Symbol…"
-msgstr "Izbor simbol ..."
+msgstr "Izbor simbol …"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:77
@@ -5628,7 +5599,7 @@ msgstr "Neveljavna skladnja: %s"
 #: src/plugins/vim/gb-vim.c:1203
 #, c-format
 msgid "Invalid search and replace request"
-msgstr "Neveljavna zahteva ukaza Poišči in zamenjaj ..."
+msgstr "Neveljavna zahteva ukaza Poišči in zamenjaj …"
 
 #: src/plugins/vim/gb-vim.c:1213
 msgid "Change the pages colorscheme"
