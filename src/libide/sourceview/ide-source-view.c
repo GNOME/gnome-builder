@@ -2172,13 +2172,14 @@ ide_source_view_key_release_event (GtkWidget   *widget,
 {
   IdeSourceView *self = (IdeSourceView *) widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkWidgetClass *klass = GTK_WIDGET_CLASS (ide_source_view_parent_class);
-  gboolean ret = klass->key_release_event (widget, event);
+  gboolean ret;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_release_event (widget, event);
 
   if (priv->definition_src_location)
-    {
-      ide_source_view_reset_definition_highlight (self);
-    }
+    ide_source_view_reset_definition_highlight (self);
 
   return ret;
 }
