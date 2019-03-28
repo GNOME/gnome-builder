@@ -171,8 +171,13 @@ ide_config_real_get_runtime (IdeConfig *self)
 
   if (priv->runtime_id != NULL)
     {
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-      IdeRuntimeManager *runtime_manager = ide_runtime_manager_from_context (context);
+      g_autoptr(IdeContext) context = NULL;
+      g_autoptr(IdeRuntimeManager) runtime_manager = NULL;
+
+      /* We might be in a thread, ref objects */
+      context = ide_object_ref_context (IDE_OBJECT (self));
+      runtime_manager = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_RUNTIME_MANAGER);
+
       return ide_runtime_manager_get_runtime (runtime_manager, priv->runtime_id);;
     }
 
