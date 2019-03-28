@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2019-03-07 13:32+0000\n"
-"PO-Revision-Date: 2019-03-23 21:00+0100\n"
+"PO-Revision-Date: 2019-03-28 21:30+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -477,9 +477,8 @@ msgid "Display the open files list in the project sidebar."
 msgstr "Pokaže seznam odprtih datotek v bočnem oknu projekta."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:48
-#, fuzzy
 msgid "Clear build caches at startup"
-msgstr "Počisti dnevnik izgradnje"
+msgstr "Ob zagonu počisti predpomnilnike izgradnje"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:49
 #, fuzzy
@@ -844,10 +843,9 @@ msgstr "P_reimenuj"
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:391
-#, fuzzy, c-format
-#| msgid "Unsaved palette %u"
+#, c-format
 msgid "unsaved file %u"
-msgstr "Neshranjena paleta %u"
+msgstr "neshranjena datoteka %u"
 
 #: src/libide/code/ide-buffer.c:3374
 msgid "The current language lacks a symbol resolver."
@@ -882,10 +880,9 @@ msgid "Untitled"
 msgstr "Neimenovano"
 
 #: src/libide/debugger/ide-debug-manager.c:1000
-#, fuzzy, c-format
-#| msgid "A suitable debugger could not be found."
+#, c-format
 msgid "A suitable debugger was not found."
-msgstr "Ni mogoče najti ustreznega razhroščevalnika."
+msgstr "Ustreznega razhroščevalnika ni mogoče najti."
 
 #. translators: %s is the error message
 #: src/libide/editor/ide-editor-page-actions.c:56
@@ -1640,10 +1637,8 @@ msgid "Funded By"
 msgstr "Sredstva zagotavlja"
 
 #: src/libide/gui/ide-application-command-line.c:64
-#, fuzzy
-#| msgid "Show the application’s version"
 msgid "Show the application preferences"
-msgstr "Pokaži različico programa"
+msgstr "Pokaži lastnosti programa"
 
 #: src/libide/gui/ide-application-command-line.c:65
 #, fuzzy
@@ -1660,9 +1655,8 @@ msgstr "Izpiši podatke o različici in končaj"
 
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:68
-#, fuzzy
 msgid "Increase log verbosity"
-msgstr "Povečaj podrobnost diagnostike"
+msgstr "Povečaj podrobnost dnevniškega zapisa"
 
 #: src/libide/gui/ide-application-command-line.c:118
 #, c-format
@@ -2329,7 +2323,7 @@ msgstr "Poteka posodabljanje odvisnosti ..."
 
 #: src/libide/gui/ide-primary-workspace-actions.c:133
 msgid "Builder is updating your projects configured dependencies."
-msgstr ""
+msgstr "Program posodablja nastavljene odvisnosti projekta."
 
 #: src/libide/gui/ide-run-button.ui:6
 msgid "The project cannot be run while the build pipeline is being set up"
@@ -3098,32 +3092,28 @@ msgid "All Runtimes"
 msgstr "Vsi izvajalni programi"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#, fuzzy
-#| msgid "Make default"
 msgid "Make active"
-msgstr "dejavno"
+msgstr "Nastavi kot dejavno"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#, fuzzy
 msgid "Select this configuration as the active configuration."
-msgstr "Določi trenutne nastavitve"
+msgstr "Izbor nastavitev kot trenutne nastavitve."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid "Duplicate"
 msgstr "Podvoji"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#, fuzzy
 msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
-msgstr "Določi trenutne nastavitve"
+msgstr ""
+"Podvojevanje nastavitev omogoča pripravo sprememb brez spreminjanja trenutne "
+"nastavitve."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#, fuzzy
-#| msgid "Selected configuration for building"
 msgid "Removes the configuration and cannot be undone."
-msgstr "Izbrisanega ključa ni mogoče povrniti."
+msgstr "Odstrani nastavitve in opravila ni mogoče povrniti."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
 msgid "Environment"
@@ -3135,12 +3125,8 @@ msgid "Overview"
 msgstr "Pregled"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:429
-#, fuzzy
-#| msgid "Environment"
 msgid "Build Environment"
-msgstr ""
-"Napaka med nastavljanjem okolja izgradnje:\n"
-"%s"
+msgstr "Okolje izgradnje"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
@@ -3402,10 +3388,9 @@ msgid "PROJECT_FILE"
 msgstr "DATOTEKA_PROJEKTA"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:154
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s"
+#, c-format
 msgid "Failed to load flags for plan: %s"
-msgstr "Nalaganje potrdila je spodletelo: %s"
+msgstr "Nalaganje zastavic je spodletelo: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:197
 #, fuzzy, c-format
@@ -3734,9 +3719,8 @@ msgid "Uncomment code"
 msgstr "Odstrani opombe h kodi"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:48
-#, fuzzy
 msgid "Display the project creation guide"
-msgstr "Ustvarjanje novega projekta ni bila uspešna."
+msgstr "Pokaži vodnik ustvarjanja projekta"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:219
 msgid ""
@@ -3874,15 +3858,12 @@ msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr "Uporabi samodejno dopolnjevanje Ctags za različne programske jezike"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
-#, fuzzy
-#| msgid ""
-#| "Search, diagnostics and autocompletion may be limited until complete."
 msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
 msgstr ""
-"Možnosti iskanja, diagnostike in samodejnega dopolnjevanja so lahko omejene "
-"do končanja."
+"Možnosti iskanja, samodejnega dopolnjevanja in podrobnosti simbolov so lahko "
+"omejene do končanja opravil Ctags."
 
 #: src/plugins/ctags/ide-ctags-service.c:955
 msgid "Indexing Source Code (Paused)"
@@ -4309,16 +4290,12 @@ msgid "Missing system dependencies"
 msgstr "Manjkajoče sistemske odvisnosti"
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:88
-#, fuzzy
-#| msgid ""
-#| "This program is necessary for building Flatpak applications. Would you "
-#| "like to install it?"
 msgid ""
 "The “flatpak-builder” program is necessary for building Flatpak-based "
 "applications. Builder can install it for you."
 msgstr ""
-"Program je nujen za izgradnjo programov s podporo Flatpak. Ali želite "
-"program namestiti?"
+"Program »flatpak-builder« je nujen za izgradnjo programov s podporo Flatpak. "
+"Ali želite program namestiti?"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4363,9 +4340,8 @@ msgstr ""
 "ustavljeno"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:208
-#, fuzzy
 msgid "Initialize git submodules"
-msgstr "_Nastavi začetne vrednosti"
+msgstr "Začni podmodule git"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:148
 #, c-format
@@ -4472,10 +4448,8 @@ msgid "Widget specific properties"
 msgstr "Posebne lastnosti gradnika"
 
 #: src/plugins/glade/gbp-glade-properties.ui:46
-#, fuzzy
-#| msgid "Configure build preferences"
 msgid "Container child properties"
-msgstr "Ali naj vsebnik pokaže podrejen predmet"
+msgstr "Lastnosti podrejenega vsebnika"
 
 #: src/plugins/glade/gbp-glade-properties.ui:56
 msgid "Styling, alignment, and other common properties"
@@ -4558,19 +4532,16 @@ msgstr ""
 "programih Python. S tem bo omogočeno tudi izvajanje kode v programu projekta."
 
 #: src/plugins/gradle/gradle_plugin.py:85
-#, fuzzy
 msgid "Gradle Wrapper"
-msgstr "Izvedljivi ovijalnik"
+msgstr "Ovijalnik Gradle"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
 msgstr "Pokaži novo pozdravno okno"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:144
-#, fuzzy
-#| msgid "Building project"
 msgid "Begin cloning project from URI"
-msgstr "Poteka izgradnja projekta"
+msgstr "Začni s kloniranjem projekta z naslova URI"
 
 #: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
 #: src/plugins/greeter/gtk/menus.ui:88
@@ -4639,6 +4610,8 @@ msgstr "V sistemu ni nameščenega paketa python3-docutils!"
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
+"Paket mora biti nameščen za predogled dokumentov, zapisanih s skladnjo "
+"Markup."
 
 #: src/plugins/html-preview/html_preview.py:345
 #: src/plugins/html-preview/html_preview.py:355
