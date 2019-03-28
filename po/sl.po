@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-07 13:32+0000\n"
-"PO-Revision-Date: 2019-03-28 21:51+0100\n"
+"POT-Creation-Date: 2019-03-28 20:52+0000\n"
+"PO-Revision-Date: 2019-03-28 22:02+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -70,74 +70,92 @@ msgid "Side-by-side code editors"
 msgstr "Dvostrani urejevalniki kode"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:26
+msgid "Multi-monitor support"
+msgstr "Podpora več monitorjem"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:27
+msgid "Code overview mini-map"
+msgstr "Pokaži predogledni zemljevid kode"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:28
 msgid "Integration with Git"
 msgstr "Povezljivost z Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:27
-msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
-msgstr "Podpora za Autotools, Cargo, CMake, Meson, Make in PHPize"
+#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+msgid ""
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
+msgstr "Podpora za Autotools, Cargo, CMake, Meson, Maven, Make, PHPize in Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:28
+#: data/appdata/org.gnome.Builder.appdata.xml.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Podpora za samodejno dopolnjevanje, poudarjanje skladnje in diagnostiko za "
 "jezik Clang"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+#: data/appdata/org.gnome.Builder.appdata.xml.in:31
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Podpora za samodejno dopolnjevanje, poudarjanje skladnje in diagnostiko za "
 "jezik Python"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:30
+#: data/appdata/org.gnome.Builder.appdata.xml.in:32
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Podpora za samodejno dopolnjevanje in diagnostiko za jezik Vala"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:31
+#: data/appdata/org.gnome.Builder.appdata.xml.in:33
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Samodejno zamikanje kode za jezike C, Python, Vala in XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:32
+#: data/appdata/org.gnome.Builder.appdata.xml.in:34
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "Predogled kode v HTML, Markdown, reStructuredText in Sphinx v živo"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:33
-msgid "Optional Vim-style editing"
-msgstr "Izbirno urejanje v slogu Vim"
+#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+msgid "Optional Vim, Emacs, and SublimeText style editing"
+msgstr "Izbirno urejanje v slogu Vim, Emacs in SublimeText"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:34
+#: data/appdata/org.gnome.Builder.appdata.xml.in:36
 msgid "An integrated software profiler for native applications"
 msgstr "Programski profilirnik za izvorne programe"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+#: data/appdata/org.gnome.Builder.appdata.xml.in:37
 msgid "An integrated debugger for native applications"
 msgstr "Programski razhroščevalnik za izvorne programe"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:36
+#: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Podpora za izgradnjo z izvajalnimi programi jhbuil in flatpak"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:42
+#: data/appdata/org.gnome.Builder.appdata.xml.in:39
+msgid "Support for viewing TODOs found within your code base"
+msgstr "Podpora za pregled nalog je najdena v kodi"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:40
+msgid "Fast fuzzy text search across files and symbols"
+msgstr "Hitro iskanje besedila po datotekah in simbolih"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:46
 msgid "Quickly access your projects"
 msgstr "Hiter dostop do datotek projektov"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:46
+#: data/appdata/org.gnome.Builder.appdata.xml.in:50
 msgid "Create new projects from a variety of templates"
 msgstr "Ustvari nov projekt s pomočjo različnih predlog"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:50
+#: data/appdata/org.gnome.Builder.appdata.xml.in:54
 msgid "Integration with Git to clone your projects"
 msgstr "Povezljivost z Git za kloniranje projektov"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:54
+#: data/appdata/org.gnome.Builder.appdata.xml.in:58
 msgid "The source code editor"
 msgstr "Urejevalnik izvorne kode"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:58
+#: data/appdata/org.gnome.Builder.appdata.xml.in:62
 msgid "Fast global fuzzy search"
 msgstr "Hitro ohlapno splošno iskanje"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in:62
+#: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Izvedi razhroščevanje z razhroščevalnikom GNU"
 
@@ -586,11 +604,6 @@ msgstr "Višina v točkah za spodnje okno."
 msgid "Build software for GNOME"
 msgstr "Orodje za izgradnjo programov za GNOME"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.Builder.desktop.in.in:7
-msgid "org.gnome.Builder"
-msgstr "org.gnome.Builder"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
@@ -823,7 +836,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Naloži ali ustvari paleto z uporabo nastavitev"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4915
+#: src/libide/sourceview/ide-source-view.c:4928
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -846,7 +859,7 @@ msgstr "P_reimenuj"
 msgid "unsaved file %u"
 msgstr "neshranjena datoteka %u"
 
-#: src/libide/code/ide-buffer.c:3374
+#: src/libide/code/ide-buffer.c:3376
 msgid "The current language lacks a symbol resolver."
 msgstr "Trenutno izbrani jezik ne podpira razreševalnikov simbolov."
 
@@ -874,9 +887,24 @@ msgstr "Začenjanje postopka s privzetimi vrednostmi je spodletelo"
 msgid "Failed to save draft: %s"
 msgstr "Shranjevanje osnutka je spodletelo: %s"
 
-#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:800
+#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:802
 msgid "Untitled"
 msgstr "Neimenovano"
+
+#: src/libide/core/ide-transfer.c:548
+#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-surface-actions.c:76
+#: src/libide/greeter/ide-clone-surface.ui:316
+#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/gui/ide-workbench.c:1380
+#: src/libide/terminal/ide-terminal-page-actions.c:276
+#: src/plugins/color-picker/gb-color-picker-prefs.c:97
+#: src/plugins/color-picker/gb-color-picker-prefs.c:213
+#: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:374
+msgid "Cancel"
+msgstr "Prekliči"
 
 #: src/libide/debugger/ide-debug-manager.c:1000
 #, c-format
@@ -890,51 +918,37 @@ msgid "Failed to load file: %s"
 msgstr "Nalaganje datoteke je spodletelo: %s"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:118
+#: src/libide/editor/ide-editor-page-actions.c:121
 #, c-format
 msgid "Print failed: %s"
 msgstr "Tiskanje je spodletelo: %s"
 
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/editor/ide-editor-page-actions.c:189
-#: src/libide/editor/ide-editor-page-actions.c:297
+#: src/libide/editor/ide-editor-page-actions.c:192
+#: src/libide/editor/ide-editor-page-actions.c:300
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Shranjevanje datoteke je spodletelo: %s"
 
-#: src/libide/editor/ide-editor-page-actions.c:233
+#: src/libide/editor/ide-editor-page-actions.c:236
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
 #: src/plugins/testui/gbp-test-output-panel.c:63
 msgid "Save File"
 msgstr "Shrani datoteko"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 msgid "Save"
 msgstr "Shrani"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
-#: src/libide/editor/ide-editor-page-actions.c:336
-#: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:316
-#: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1342
-#: src/libide/terminal/ide-terminal-page-actions.c:276
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:374
-msgid "Cancel"
-msgstr "Prekliči"
-
-#: src/libide/editor/ide-editor-page-actions.c:332
+#: src/libide/editor/ide-editor-page-actions.c:335
 msgid "Save File As"
 msgstr "Shrani datoteko kot"
 
-#: src/libide/editor/ide-editor-page-actions.c:335
+#: src/libide/editor/ide-editor-page-actions.c:338
 msgid "Save As"
 msgstr "Shrani kot"
 
@@ -1035,8 +1049,9 @@ msgid "_Reload"
 msgstr "Ponovno _naloži"
 
 #: src/libide/editor/ide-editor-page.ui:51
-#: src/libide/greeter/ide-greeter-workspace-actions.c:119
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
 #: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "_Prekliči"
@@ -1049,7 +1064,23 @@ msgstr ""
 "Datoteka je bila spremenjena izven programa GNOME Builder. Ali želite "
 "datoteko ponovno naložiti?"
 
-#: src/libide/editor/ide-editor-search-bar.c:324
+#: src/libide/editor/ide-editor-search-bar.c:179
+#: src/libide/editor/ide-editor-search-bar.ui:213
+msgid "Regular expressions"
+msgstr "Logični izrazi"
+
+#: src/libide/editor/ide-editor-search-bar.c:184
+#: src/libide/editor/ide-editor-search-bar.ui:227
+#: src/libide/terminal/ide-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "Razlikovanje velikosti črk"
+
+#: src/libide/editor/ide-editor-search-bar.c:189
+#: src/libide/editor/ide-editor-search-bar.ui:240
+msgid "Match whole word only"
+msgstr "Poišči le cele besede"
+
+#: src/libide/editor/ide-editor-search-bar.c:351
 #, c-format
 msgid "%u of %u"
 msgstr "%u od %u"
@@ -1073,19 +1104,6 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Pokaži oziroma skrij možnosti iskanja, kot je na primer iskanje glede na "
 "velikost črk"
-
-#: src/libide/editor/ide-editor-search-bar.ui:213
-msgid "Regular expressions"
-msgstr "Logični izrazi"
-
-#: src/libide/editor/ide-editor-search-bar.ui:227
-#: src/libide/terminal/ide-terminal-search.ui:166
-msgid "Case sensitive"
-msgstr "Razlikovanje velikosti črk"
-
-#: src/libide/editor/ide-editor-search-bar.ui:240
-msgid "Match whole word only"
-msgstr "Poišči le cele besede"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:151
@@ -1182,7 +1200,7 @@ msgid "Open File"
 msgstr "Odpri datoteko"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1341
+#: src/libide/gui/ide-workbench.c:1379
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1222,7 +1240,7 @@ msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Zapri vse datoteke"
 
-#: src/libide/editor/ide-editor-surface.c:561
+#: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
 #: src/plugins/editor/gtk/menus.ui:67 src/plugins/editor/gtk/menus.ui:81
@@ -1247,12 +1265,12 @@ msgstr "Preklopi površino"
 msgid "Press Ctrl+. to search"
 msgstr "Pritisnite tipki CTRL + . za iskanje"
 
-#: src/libide/foundry/ide-build-manager.c:395
+#: src/libide/foundry/ide-build-manager.c:396
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Začenjanje izgradnje cevovoda je spodletelo: %s"
 
-#: src/libide/foundry/ide-build-manager.c:525
+#: src/libide/foundry/ide-build-manager.c:526
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Pridobivanje podrobnosti naprave je spodletelo: %s"
@@ -1272,7 +1290,7 @@ msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Ni mogoče prerazporediti na napravo. Cevovod izgradnje ni začet."
 
 #: src/libide/foundry/ide-fallback-build-system.c:145
-#: src/libide/greeter/ide-greeter-row.c:257
+#: src/libide/greeter/ide-greeter-row.c:260
 msgid "Fallback"
 msgstr "Nadomestne pisave"
 
@@ -1308,7 +1326,7 @@ msgstr "Poteka čiščenje …"
 
 #: src/libide/foundry/ide-pipeline.c:3145
 #: src/libide/foundry/ide-pipeline.c:3202
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:212
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Napaka"
 
@@ -1334,7 +1352,7 @@ msgid "Configuring…"
 msgstr "Poteka nastavljanje …"
 
 #: src/libide/foundry/ide-pipeline.c:3178
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:194
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Poteka izgradnja …"
 
@@ -1352,7 +1370,7 @@ msgstr "Poteka izvažanje …"
 
 #: src/libide/foundry/ide-pipeline.c:3194
 #: src/libide/foundry/ide-pipeline.c:3198
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:230
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Uspešno zaključeno"
 
@@ -1463,6 +1481,7 @@ msgstr "Vrsta skladišča"
 
 #: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:104
 msgid "Branch"
 msgstr "Veja"
 
@@ -1490,29 +1509,29 @@ msgstr "Izbor mape …"
 msgid "Clone Repository…"
 msgstr "Kloniraj skladišče …"
 
-#: src/libide/greeter/ide-greeter-row.c:256
+#: src/libide/greeter/ide-greeter-row.c:259
 msgid "Directory"
 msgstr "Mapa"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:82
-#: src/libide/greeter/ide-greeter-workspace-actions.c:115
+#: src/libide/greeter/ide-greeter-workspace-actions.c:89
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
 msgid "Select Project Folder"
 msgstr "Izbor mape projekta"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:87
+#: src/libide/greeter/ide-greeter-workspace-actions.c:94
 msgid "Select Project File"
 msgstr "Izbor datoteke projekta"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:120
+#: src/libide/greeter/ide-greeter-workspace-actions.c:127
 msgid "_Open"
 msgstr "_Odpri"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:131
+#: src/libide/greeter/ide-greeter-workspace-actions.c:138
 msgid "All Project Types"
 msgstr "Vse vrste projekta"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:294 src/libide/gui/ide-workbench.c:807
+#: src/libide/gui/ide-workbench.c:317 src/libide/gui/ide-workbench.c:838
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder – %s"
@@ -1568,7 +1587,7 @@ msgid "Switch Surface"
 msgstr "Preklopi površino"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1338
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1376
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Odpri datoteko …"
@@ -2772,38 +2791,38 @@ msgstr "_Oddalji"
 msgid "Reset"
 msgstr "Ponastavi"
 
-#: src/libide/sourceview/ide-source-view.c:4364
+#: src/libide/sourceview/ide-source-view.c:4377
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vstavi »%s«"
 
-#: src/libide/sourceview/ide-source-view.c:4366
+#: src/libide/sourceview/ide-source-view.c:4379
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zamenjaj »%s« z »%s«"
 
-#: src/libide/sourceview/ide-source-view.c:4484
+#: src/libide/sourceview/ide-source-view.c:4497
 msgid "Apply Fix-It"
 msgstr "Uveljavi Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4914
+#: src/libide/sourceview/ide-source-view.c:4927
 msgid "Rename symbol"
 msgstr "Preimenuj simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5149
+#: src/libide/sourceview/ide-source-view.c:5162
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Vrstica %u, Stolpec %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5175
+#: src/libide/sourceview/ide-source-view.c:5188
 msgid "No references were found"
 msgstr "Ni najdenih sklicev"
 
 #: src/libide/terminal/gtk/menus.ui:7 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:118 src/plugins/editor/gtk/menus.ui:172
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
-#: src/plugins/recent/gbp-recent-section.c:469
+#: src/plugins/recent/gbp-recent-section.c:472
 msgid "Close"
 msgstr "Zapri"
 
@@ -2861,7 +2880,7 @@ msgid "Bootstrapping build system"
 msgstr "Sistem izgradnje začetnega nalagalnika"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Poteka nastavljanje projekta"
@@ -2870,7 +2889,7 @@ msgstr "Poteka nastavljanje projekta"
 #: src/plugins/cargo/cargo_plugin.py:149
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:283
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Poteka izgradnja projekta"
@@ -3110,6 +3129,7 @@ msgstr "Okolje izgradnje"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
@@ -3163,6 +3183,10 @@ msgstr "Prekliči izgradnjo"
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:67
 msgid "Save build log"
 msgstr "Shrani dnevnik izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
+msgid "Missing"
+msgstr "Manjkajoče"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
 msgid "Update project dependencies"
@@ -3347,7 +3371,7 @@ msgstr "Nastavi projekt"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Poteka nameščanje projekta"
@@ -4121,11 +4145,11 @@ msgstr ""
 "programih JavaScript. S tem bo omogočeno tudi izvajanje kode v programu "
 "projekta."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:904
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
 msgstr "Kloniraj projekt z uporabo manifesta flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:905
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
 msgstr "MANIFEST"
 
@@ -4147,6 +4171,28 @@ msgstr "Odstranitev vnosa flatpak je spodletela: %s"
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
 msgstr "Povezava z omrežjem ni na voljo, prejemanje bo ustavljeno"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
+msgid "Install Missing SDK?"
+msgstr "Ali želite namestiti manjkajoče knjižnice SDK?"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
+msgid "_Install"
+msgstr "_Namesti"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
+msgid ""
+"Builder needs to install the following software development kits to build "
+"your project."
+msgstr ""
+"Program zahteva namestitev razvojnega programskega orodja za izgradnjo "
+"projekta."
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr "Okolje"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
 msgid "Creating flatpak workspace"
@@ -4191,13 +4237,13 @@ msgid "Update"
 msgstr "Posodobi"
 
 #. translators: keywords are used to match search keywords in preferences
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:299
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:297
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:314
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:312
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
@@ -4206,16 +4252,16 @@ msgstr[1] "Pokaži %u dodaten izvajalni program"
 msgstr[2] "Pokaži %u dodatna izvajalna programa"
 msgstr[3] "Pokaži %u dodatne izvajalne programe"
 
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:396
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:401
 msgid "Flatpak Runtimes"
 msgstr "Izvajalni programi Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:842
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:838
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:844
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4319,7 +4365,7 @@ msgstr "Začni podmodule git"
 msgid "The protocol “%s” is not supported."
 msgstr "Protokol »%s« ni podprt."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:279
+#: src/plugins/git/gbp-git-vcs-cloner.c:282
 msgid "A valid Git URL is required"
 msgstr "Zahtevan je veljaven naslov URL Git."
 
@@ -4682,12 +4728,12 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Možnosti Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:194
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr ""
 "Projekt, zasnovan v okolju Mason je naložen, okolja Ninja pa ni mogoče najti."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:214
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
 "Projekt, zasnovan v okolju Mason je naložen, okolja Mason pa ni mogoče najti."
@@ -4716,11 +4762,6 @@ msgstr "Ni podanega orodja"
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
 msgstr "Ime za določevanje sysroot."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
-msgid "Architecture"
-msgstr "Okolje"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
@@ -4965,26 +5006,26 @@ msgstr "Ustvari"
 msgid "Files"
 msgstr "Datoteke"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:672
+#: src/plugins/project-tree/gbp-project-tree-addin.c:676
 #, c-format
 msgid "Copying 1 file"
 msgstr "Poteka kopiranje 1 datoteke"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:675
+#: src/plugins/project-tree/gbp-project-tree-addin.c:679
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Poteka kopiranje %s od %s datotek"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:711
+#: src/plugins/project-tree/gbp-project-tree-addin.c:715
 msgid "Failed to copy files"
 msgstr "Kopiranje datotek je spodletelo"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:725
 msgid "Files copied"
 msgstr "Datoteke so kopirane."
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
+#: src/plugins/project-tree/gbp-project-tree-addin.c:729
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
@@ -4993,11 +5034,11 @@ msgstr[1] "Kopirana je %s datoteka"
 msgstr[2] "Kopirani sta %s datoteki"
 msgstr[3] "Kopirane so %s datoteke"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:917
+#: src/plugins/project-tree/gbp-project-tree-addin.c:921
 msgid "Copying files…"
 msgstr "Poteka kopiranje datotek …"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:918
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Files will be copied in a moment"
 msgstr "Datoteke bodo v kratkem kopirane"
 
@@ -5071,13 +5112,13 @@ msgid "quick highlight words matching current selection"
 msgstr "hitro poudarjanje besede skladnja izbor trenutno"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:347
-#: src/plugins/recent/gbp-recent-section.c:354
+#: src/plugins/recent/gbp-recent-section.c:350
+#: src/plugins/recent/gbp-recent-section.c:357
 #, c-format
 msgid "Removing %s\n"
 msgstr "Poteka odstranjevanje %s\n"
 
-#: src/plugins/recent/gbp-recent-section.c:467
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "Removing Files…"
 msgstr "Poteka odstranjevanje datotek …"
 
@@ -5444,7 +5485,7 @@ msgstr "Izbirna, z vejico ločena pot, za določilo vrednosti PKG_CONFIG_PATH."
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:64
+#: src/plugins/terminal/gbp-terminal-application-addin.c:66
 msgid "Use terminal interface"
 msgstr "Uporabi terminalski vmesnik"
 
@@ -5674,6 +5715,9 @@ msgstr "Ustvarjanje drevesne strukture XML je spodletelo."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Za razčlenjevanje mora biti datoteka shranjena krajevno."
+
+#~ msgid "org.gnome.Builder"
+#~ msgstr "org.gnome.Builder"
 
 #~ msgid "If enabled, the project tree will display icons next to each item."
 #~ msgstr ""
@@ -6511,9 +6555,6 @@ msgstr "Za razčlenjevanje mora biti datoteka shranjena krajevno."
 
 #~ msgid "untitled document"
 #~ msgstr "neimenovan dokument"
-
-#~ msgid "missing"
-#~ msgstr "manjkajoče"
 
 #~ msgid "Project"
 #~ msgstr "Projekt"
