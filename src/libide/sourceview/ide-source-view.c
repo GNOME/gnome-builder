@@ -2029,6 +2029,24 @@ ide_source_view_key_press_event (GtkWidget   *widget,
     }
 
   /*
+   * If we got Control alone, with no key, and the completion window is
+   * visible, then request that it make itself less visible.
+   */
+  if (event->keyval == GDK_KEY_Control_L &&
+      event->state == 0 &&
+      ide_completion_is_visible (priv->completion))
+    {
+      IdeCompletionDisplay *display = ide_completion_get_display (priv->completion);
+
+      if (gtk_widget_get_opacity (GTK_WIDGET (display)) == 1.0)
+        gtk_widget_set_opacity (GTK_WIDGET (display), 0.33);
+      else
+        gtk_widget_set_opacity (GTK_WIDGET (display), 1.0);
+
+      return TRUE;
+    }
+
+  /*
    * Are we currently recording a macro? If so lets stash the event for later.
    */
   if (priv->recording_macro)

@@ -136,6 +136,7 @@ ide_completion_window_real_show (GtkWidget *widget)
   g_assert (IDE_IS_COMPLETION_WINDOW (self));
 
   ide_completion_window_reposition (self);
+  gtk_widget_set_opacity (widget, 1.0);
 
   GTK_WIDGET_CLASS (ide_completion_window_parent_class)->show (widget);
 }

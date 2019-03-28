@@ -50,6 +50,14 @@ G_DEFINE_TYPE_WITH_CODE (IdeCompletionOverlay, ide_completion_overlay, GTK_TYPE_
 static GParamSpec *properties [N_PROPS];
 
 static void
+ide_completion_overlay_show (GtkWidget *widget)
+{
+  gtk_widget_set_opacity (widget, 1.0);
+
+  GTK_WIDGET_CLASS (ide_completion_overlay_parent_class)->show (widget);
+}
+
+static void
 ide_completion_overlay_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
@@ -95,6 +103,8 @@ ide_completion_overlay_class_init (IdeCompletionOverlayClass *klass)
 
   object_class->get_property = ide_completion_overlay_get_property;
   object_class->set_property = ide_completion_overlay_set_property;
+
+  widget_class->show = ide_completion_overlay_show;
 
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
