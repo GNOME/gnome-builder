@@ -2039,7 +2039,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       IdeCompletionDisplay *display = ide_completion_get_display (priv->completion);
 
       if (gtk_widget_get_opacity (GTK_WIDGET (display)) == 1.0)
-        gtk_widget_set_opacity (GTK_WIDGET (display), 0.33);
+        gtk_widget_set_opacity (GTK_WIDGET (display), 0.1);
       else
         gtk_widget_set_opacity (GTK_WIDGET (display), 1.0);
 
