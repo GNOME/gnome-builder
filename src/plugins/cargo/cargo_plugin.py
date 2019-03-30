@@ -74,16 +74,27 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
     The CargoPipelineAddin is responsible for creating the necessary build
     stages and attaching them to phases of the build pipeline.
     """
+    error_format_id = None
+    launcher_handler = None
+
+    def _on_launcher_created_cb(self, pipeline, launcher):
+        # Set RUSTFLAGS so that we can parse error formats
+        if launcher.getenv('RUSTFLAGS') is None:
+            eq_srcdir = '=' + pipeline.get_srcdir()
+            escaped = GLib.shell_quote(eq_srcdir)
+            flags = '--error-format=short --remap-path-prefix ' + escaped
+            launcher.setenv('RUSTFLAGS', flags, False)
+
+    def do_prepare(self, pipeline):
+        self.error_format_id = pipeline.add_error_format(_ERROR_FORMAT_REGEX,
+                                                         GLib.RegexCompileFlags.OPTIMIZE |
+                                                         GLib.RegexCompileFlags.CASELESS);
+        self.launcher_handler = pipeline.connect('launcher-created',
+                                                 self._on_launcher_created_cb)
 
     def do_load(self, pipeline):
         context = self.get_context()
         build_system = Ide.BuildSystem.from_context(context)
-
-        # Always register the error regex
-        self.error_format_id = pipeline.add_error_format(_ERROR_FORMAT_REGEX,
-                                                         GLib.RegexCompileFlags.OPTIMIZE |
-                                                         GLib.RegexCompileFlags.CASELESS);
-
 
         # Ignore pipeline unless this is a cargo project
         if type(build_system) != CargoBuildSystem:
@@ -152,8 +163,13 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
         self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
     def do_unload(self, pipeline):
-        if self.error_format_id:
+        if self.error_format_id is not None:
             pipeline.remove_error_format(self.error_format_id)
+            self.error_format_id = None
+
+        if self.launcher_handler is not None:
+            pipeline.disconnect(self.launcher_handler)
+            self.launcher_handler = None
 
     def _query(self, stage, pipeline, targets, cancellable):
         # Always defer to cargo to check if build is needed
