@@ -33,6 +33,10 @@ namespace Ide
 
 		uint error_format = 0;
 
+		public void prepare (Ide.Pipeline pipeline)
+		{
+		}
+
 		public void load (Ide.Pipeline pipeline)
 		{
 			this.error_format = pipeline.add_error_format (ERROR_FORMAT_REGEX,
