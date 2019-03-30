@@ -32,9 +32,34 @@ ide_pipeline_addin_default_init (IdePipelineAddinInterface *iface)
 {
 }
 
+/**
+ * ide_pipeline_addin_prepare:
+ * @self: a #IdePipelineAddin
+ * @pipeline: an #IdePipeline
+ *
+ * This function is called before prepare so that plugins may setup
+ * signals on the pipeline that may allow them to affect how other
+ * plugins interact.
+ *
+ * For example, if you need to connect to pipeline::launcher-created,
+ * you might want to do that here.
+ *
+ * Since: 3.34
+ */
+void
+ide_pipeline_addin_prepare (IdePipelineAddin *self,
+                            IdePipeline      *pipeline)
+{
+  g_return_if_fail (IDE_IS_PIPELINE_ADDIN (self));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+
+  if (IDE_PIPELINE_ADDIN_GET_IFACE (self)->prepare)
+    IDE_PIPELINE_ADDIN_GET_IFACE (self)->prepare (self, pipeline);
+}
+
 void
 ide_pipeline_addin_load (IdePipelineAddin *self,
-                               IdePipeline      *pipeline)
+                         IdePipeline      *pipeline)
 {
   g_return_if_fail (IDE_IS_PIPELINE_ADDIN (self));
   g_return_if_fail (IDE_IS_PIPELINE (pipeline));
@@ -45,7 +70,7 @@ ide_pipeline_addin_load (IdePipelineAddin *self,
 
 void
 ide_pipeline_addin_unload (IdePipelineAddin *self,
-                                 IdePipeline      *pipeline)
+                           IdePipeline      *pipeline)
 {
   GArray *ar;
 

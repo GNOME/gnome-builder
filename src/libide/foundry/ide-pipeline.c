@@ -941,6 +941,27 @@ ide_pipeline_real_finished (IdePipeline *self,
 }
 
 static void
+ide_pipeline_extension_prepare (IdeExtensionSetAdapter *set,
+                                PeasPluginInfo         *plugin_info,
+                                PeasExtension          *exten,
+                                gpointer                user_data)
+{
+  IdePipeline *self = user_data;
+  IdePipelineAddin *addin = (IdePipelineAddin *)exten;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PIPELINE_ADDIN (addin));
+  g_assert (IDE_IS_PIPELINE (self));
+
+  ide_pipeline_addin_prepare (addin, self);
+
+  IDE_EXIT;
+}
+
+static void
 ide_pipeline_extension_added (IdeExtensionSetAdapter *set,
                               PeasPluginInfo         *plugin_info,
                               PeasExtension          *exten,
@@ -1193,8 +1214,17 @@ ide_pipeline_load (IdePipeline *self)
 
   g_signal_connect (self->addins,
                     "extension-added",
-                    G_CALLBACK (ide_pipeline_extension_added),
+                    G_CALLBACK (ide_pipeline_extension_prepare),
                     self);
+
+  ide_extension_set_adapter_foreach (self->addins,
+                                     ide_pipeline_extension_prepare,
+                                     self);
+
+  g_signal_connect_after (self->addins,
+                          "extension-added",
+                          G_CALLBACK (ide_pipeline_extension_added),
+                          self);
 
   g_signal_connect (self->addins,
                     "extension-removed",
