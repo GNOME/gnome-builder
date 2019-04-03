@@ -576,6 +576,16 @@ ide_frame_header_set_property (GObject      *object,
 }
 
 static void
+ide_frame_header_title_clicked (IdeFrameHeader *self, GtkButton *menu_button)
+{
+  g_return_if_fail (self);
+  g_return_if_fail (menu_button);
+
+  if (!gtk_list_box_get_row_at_index (self->title_list_box, 0))
+    _ide_frame_header_hide (self);
+}
+
+static void
 ide_frame_header_class_init (IdeFrameHeaderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -657,6 +667,7 @@ ide_frame_header_class_init (IdeFrameHeaderClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeFrameHeader, title_modified);
   gtk_widget_class_bind_template_child (widget_class, IdeFrameHeader, title_popover);
   gtk_widget_class_bind_template_child (widget_class, IdeFrameHeader, title_views_box);
+  gtk_widget_class_bind_template_callback (widget_class, ide_frame_header_title_clicked);
 }
 
 static void
