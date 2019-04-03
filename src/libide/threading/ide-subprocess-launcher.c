@@ -1107,3 +1107,36 @@ ide_subprocess_launcher_get_needs_tty (IdeSubprocessLauncher *self)
 
   return FALSE;
 }
+
+/**
+ * _ide_subprocess_launcher_get_max_fd:
+ * @self: a #IdeSubprocessLauncher
+ *
+ * Gets the hightest number of FD that has been mapped into the
+ * subprocess launcher.
+ *
+ * This will always return a value >= 2 (to indicate stdin/stdout/stderr).
+ *
+ * Returns: an integer for the max-fd
+ */
+gint
+_ide_subprocess_launcher_get_max_fd (IdeSubprocessLauncher *self)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  gint max_fd = 2;
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), 2);
+
+  if (priv->fd_mapping != NULL)
+    {
+      for (guint i = 0; i < priv->fd_mapping->len; i++)
+        {
+          const FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+          if (map->dest_fd > max_fd)
+            max_fd = map->dest_fd;
+        }
+    }
+
+  return max_fd;
+}

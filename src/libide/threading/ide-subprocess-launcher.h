@@ -133,5 +133,7 @@ void                   ide_subprocess_launcher_take_stderr_fd       (IdeSubproce
                                                                      gint                    stderr_fd);
 IDE_AVAILABLE_IN_3_32
 gboolean               ide_subprocess_launcher_get_needs_tty        (IdeSubprocessLauncher  *self);
+G_GNUC_INTERNAL
+gint                   _ide_subprocess_launcher_get_max_fd          (IdeSubprocessLauncher  *self);
 
 G_END_DECLS
