@@ -276,6 +276,23 @@ create_document_row (gpointer item,
   return GTK_WIDGET (row);
 }
 
+static void
+ide_frame_header_model_changed (IdeFrameHeader *self,
+                                guint           position,
+                                guint           removed,
+                                guint           added,
+                                GListModel     *model)
+{
+  guint size;
+
+  g_assert (IDE_IS_FRAME_HEADER (self));
+  g_assert (G_IS_LIST_MODEL (model));
+
+  size = g_list_model_get_n_items (model);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->title_button), size > 0 ? TRUE : FALSE);
+}
+
 void
 _ide_frame_header_set_pages (IdeFrameHeader *self,
                                     GListModel           *model)
@@ -287,6 +304,13 @@ _ide_frame_header_set_pages (IdeFrameHeader *self,
                            model,
                            create_document_row,
                            self, NULL);
+
+  /* We need to watch our model for any new document added or removed */
+  g_signal_connect_object (model,
+                           "items-changed",
+                           G_CALLBACK (ide_frame_header_model_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -703,6 +727,8 @@ ide_frame_header_init (IdeFrameHeader *self)
                            "row-activated",
                            G_CALLBACK (ide_frame_header_view_row_activated),
                            self, 0);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->title_button), FALSE);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_container_set_reallocate_redraws (GTK_CONTAINER (self), TRUE);
