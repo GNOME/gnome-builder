@@ -25,6 +25,7 @@
 #include <libide-foundry.h>
 #include <libide-threading.h>
 #include <json-glib/json-glib.h>
+#include <string.h>
 
 #include "gbp-podman-runtime.h"
 #include "gbp-podman-runtime-provider.h"
@@ -124,6 +125,72 @@ gbp_podman_runtime_provider_load_communicate_cb (GObject      *object,
     ide_task_return_boolean (task, TRUE);
 }
 
+static gboolean
+gbp_podman_runtime_provider_has_preserve_fds (GbpPodmanRuntimeProvider  *self,
+                                              const gchar               *stdout_buf,
+                                              GError                   **error)
+{
+  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
+  g_assert (stdout_buf != NULL);
+
+  if (strstr (stdout_buf, "--preserve-fds") == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_SUPPORTED,
+                   "Podman is not supported because it lacks support for --preserve-fds");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+gbp_podman_runtime_provider_load_sniff_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  GbpPodmanRuntimeProvider *self;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GCancellable *cancellable;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  cancellable = ide_task_get_cancellable (task);
+
+  if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, NULL, &error) ||
+      !gbp_podman_runtime_provider_has_preserve_fds (self, stdout_buf, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_push_argv (launcher, "podman");
+  ide_subprocess_launcher_push_argv (launcher, "ps");
+  ide_subprocess_launcher_push_argv (launcher, "--all");
+  ide_subprocess_launcher_push_argv (launcher, "--format=json");
+
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_subprocess_communicate_utf8_async (subprocess,
+                                           NULL,
+                                           cancellable,
+                                           gbp_podman_runtime_provider_load_communicate_cb,
+                                           g_steal_pointer (&task));
+}
+
 static void
 gbp_podman_runtime_provider_load_async (GbpPodmanRuntimeProvider *self,
                                         GCancellable             *cancellable,
@@ -142,13 +209,14 @@ gbp_podman_runtime_provider_load_async (GbpPodmanRuntimeProvider *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_podman_runtime_provider_load_async);
 
+  /* First make sure that "podman exec --preserve-fds" is supported */
+
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_push_argv (launcher, "podman");
-  ide_subprocess_launcher_push_argv (launcher, "ps");
-  ide_subprocess_launcher_push_argv (launcher, "--all");
-  ide_subprocess_launcher_push_argv (launcher, "--format=json");
+  ide_subprocess_launcher_push_argv (launcher, "exec");
+  ide_subprocess_launcher_push_argv (launcher, "--help");
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
@@ -156,7 +224,7 @@ gbp_podman_runtime_provider_load_async (GbpPodmanRuntimeProvider *self,
     ide_subprocess_communicate_utf8_async (subprocess,
                                            NULL,
                                            cancellable,
-                                           gbp_podman_runtime_provider_load_communicate_cb,
+                                           gbp_podman_runtime_provider_load_sniff_cb,
                                            g_steal_pointer (&task));
 }
 
