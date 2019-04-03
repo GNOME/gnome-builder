@@ -66,6 +66,9 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (self->id != NULL);
 
+  /* Override any plugin setting, we need to prefix "podman" from host */
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+
   argv = ide_subprocess_launcher_get_argv (launcher);
 
   if (!ide_str_equal0 (argv[0], "podman"))
