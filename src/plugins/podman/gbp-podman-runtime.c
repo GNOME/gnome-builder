@@ -31,9 +31,40 @@ struct _GbpPodmanRuntime
 {
   IdeRuntime  parent_instance;
   JsonObject *object;
+  guint       has_started : 1;
 };
 
 G_DEFINE_TYPE (GbpPodmanRuntime, gbp_podman_runtime, IDE_TYPE_RUNTIME)
+
+static void
+maybe_start (GbpPodmanRuntime *self)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  const gchar *id;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_PODMAN_RUNTIME (self));
+
+  if (self->has_started)
+    return;
+
+  if (!(id = json_object_get_string_member (self->object, "ID")))
+    return;
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE |
+                                          G_SUBPROCESS_FLAGS_STDOUT_SILENCE);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_push_argv (launcher, "podman");
+  ide_subprocess_launcher_push_argv (launcher, "start");
+  ide_subprocess_launcher_push_argv (launcher, id);
+
+  if ((subprocess = ide_subprocess_launcher_spawn (launcher, NULL, NULL)))
+    {
+      ide_subprocess_wait_async (subprocess, NULL, NULL, NULL);
+      self->has_started = TRUE;
+    }
+}
 
 static IdeSubprocessLauncher *
 gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
@@ -43,6 +74,8 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME (self));
+
+  maybe_start (self);
 
   return g_object_new (GBP_TYPE_PODMAN_SUBPROCESS_LAUNCHER,
                        "id", json_object_get_string_member (self->object, "ID"),
