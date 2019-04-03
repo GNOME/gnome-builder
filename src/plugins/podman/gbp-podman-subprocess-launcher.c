@@ -73,6 +73,7 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
       const gchar * const *environ;
       const gchar *cwd;
       guint i = 0;
+      gint max_fd;
 
       ide_subprocess_launcher_insert_argv (launcher, i++, "podman");
       ide_subprocess_launcher_insert_argv (launcher, i++, "exec");
@@ -85,6 +86,21 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
         {
           ide_subprocess_launcher_insert_argv (launcher, i++, "--workdir");
           ide_subprocess_launcher_insert_argv (launcher, i++, cwd);
+        }
+
+      /* Determine how many FDs we need to preserve.
+       *
+       * From man podman-exec:
+       *
+       * Pass down to the process N additional file descriptors (in addition to
+       * 0, 1, 2).  The total FDs will be 3+N.
+       */
+      if ((max_fd = ide_subprocess_launcher_get_max_fd (launcher)) > 2)
+        {
+          g_autofree gchar *max_fd_param = NULL;
+
+          max_fd_param = g_strdup_printf ("--preserve-fds=%d", max_fd - 2);
+          ide_subprocess_launcher_insert_argv (launcher, i++, max_fd_param);
         }
 
       if (!ide_subprocess_launcher_get_clear_env (launcher))
