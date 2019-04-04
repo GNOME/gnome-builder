@@ -554,6 +554,7 @@ ide_tree_init (IdeTree *self)
   gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (self), TRUE);
 
   column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
   cell = g_object_new (GTK_TYPE_CELL_RENDERER_PIXBUF,
                        "xpad", 6,
                        NULL);
