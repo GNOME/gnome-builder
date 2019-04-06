@@ -1,0 +1,169 @@
+<!DOCTYPE node PUBLIC
+        "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+        "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd" >
+<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <!--
+    Copyright 2019 Christian Hergert <chergert@redhat.com>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+  -->
+  <interface name="org.gnome.Builder.Git.Repository">
+    <!--
+      Changed:
+
+      This signal is emitted when the repository is updated.
+      Clients may want to refresh their cached information.
+    -->
+    <signal name="Changed"/>>
+    <!--
+      Closed:
+
+      This signal is emitted right before the repository is removed form the connection.
+    -->
+    <signal name="Closed"/>
+    <!--
+      Branch:
+
+      The current branch of the repository. Updated if SwitchBranch is called.
+    -->
+    <property name="Branch" type="s" access="read"/>
+    <!--
+      Location:
+
+      The location of the .git directory for the repository.
+    -->
+    <property name="Location" type="ay" access="read"/>
+    <!--
+      Close:
+
+      Closes the repository, which will emit the "Closed" signal.
+      The repository will be removed from the connection after calling this method.
+    -->
+    <method name="Close"/>
+    <!--
+      PathIsIgnored:
+      @path: the path within the repository
+
+      Checks if @path is is ignored within the repository.
+    -->
+    <method name="PathIsIgnored">
+      <arg name="path" direction="in" type="ay"/>
+      <arg name="ignored" direction="out" type="b"/>
+    </method>
+    <!--
+      ListRefsByKind:
+      @kind: The kind of ref to list (branch or tag)
+
+      Lists refs based on their kind. 0 for branches, 1 for tags.
+    -->
+    <method name="ListRefsByKind">
+      <arg name="kind" direction="in" type="u"/>
+      <arg name="refs" direction="out" type="as"/>
+    </method>
+    <!--
+      ListStatus:
+      @path: the path within the repository to list
+      @recursive: if all descendants should be checked too
+
+      Lists the status of files within the repository, starting from @path
+    -->
+    <method name="ListStatus">
+      <arg name="path" direction="in" type="ay"/>
+      <arg name="files" direction="out" type="a(su)"/>
+    </method>
+    <!--
+      SwitchBranch:
+      @branch: the name of the branch, such as "refs/heads/master"
+
+      Switches the repository to the branch named @branch.
+    -->
+    <method name="SwitchBranch">
+      <arg name="name" direction="in" type="s"/>
+    </method>
+    <!--
+      CreateChangeMonitor:
+      @path: the path within the repository
+
+      Create a new org.gnome.Builder.Git.ChangeMonitor to quickly diff file contents for line changes.
+    -->
+    <method name="CreateChangeMonitor">
+      <arg name="path" direction="in" type="s"/>
+      <arg name="obj_path" direction="out" type="o"/>
+    </method>
+    <!--
+      StageFile:
+      @path: the file to be staged
+
+      Stages the file at @path.
+    -->
+    <method name="StageFile">
+      <arg name="path" direction="in" type="ay"/>
+    </method>
+    <!--
+      Commit:
+      @details: various author details
+      @flags: the GbpGitCommitFlags flags such as amend or signoff
+
+      Commits to the repository.
+
+      Details can be set with the following keys with string values.
+
+       - AUTHOR_NAME
+       - AUTHOR_EMAIL
+       - COMMITTER_NAME
+       - COMMITTER_EMAIL
+       - COMMIT_MSG
+
+    -->
+    <method name="Commit">
+      <arg name="details" direction="in" type="a{sv}"/>
+      <arg name="flags" direction="in" type="u"/>
+    </method>
+    <!--
+      Push:
+      @remote: the name or URL of the remote
+      @ref_names: a list of ref specs to push, such as "refs/heads/master" or "refs/heads/master:refs/heads/master"
+      @flags: the GbpGitPushFlags such as atomic
+      @progress_path: an object path to an org.gnome.Builder.Git.Progress
+
+      Pushes the repository to a remote URL (can be full URL or shortname like origin).
+    -->
+    <method name="Push">
+      <arg name="remote" direction="in" type="s"/>
+      <arg name="ref_specs" direction="in" type="as"/>
+      <arg name="flags" direction="in" type="u"/>
+      <arg name="progress_path" direction="in" type="o"/>
+    </method>
+    <!--
+      LoadConfig:
+
+      Loads a new org.gnome.Git.Config object and returns the path to it.
+    -->
+    <method name="LoadConfig">
+      <arg name="config_path" direction="out" type="o"/>
+    </method>
+    <!--
+      UpdateSubmodules:
+      @progress_path: object path to a org.gnome.Git.Progress to notify.
+
+      Updates the various submodules in a repository.
+    -->
+    <method name="UpdateSubmodules">
+      <arg name="init" direction="in" type="b"/>
+      <arg name="progress_path" direction="in" type="o"/>
+    </method>
+  </interface>
+</node>
