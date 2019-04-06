@@ -7,6 +7,7 @@ plugins_sources += files([
   'gbp-git-branch.c',
   'gbp-git-buffer-addin.c',
   'gbp-git-buffer-change-monitor.c',
+  'gbp-git-client.c',
   'gbp-git-dependency-updater.c',
   'gbp-git-index-monitor.c',
   'gbp-git-pipeline-addin.c',
@@ -20,6 +21,14 @@ plugins_sources += files([
   'gbp-git-workbench-addin.c',
   'line-cache.c',
 ])
+
+plugins_sources += [
+  ipc_git_change_monitor_src,
+  ipc_git_config_src,
+  ipc_git_progress_src,
+  ipc_git_repository_src,
+  ipc_git_service_src,
+]
 
 plugin_git_resources = gnome.compile_resources(
   'git-resources',
