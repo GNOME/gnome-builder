@@ -1541,6 +1541,10 @@ ide_buffer_save_file_async (IdeBuffer            *self,
     {
       _ide_buffer_set_file (self, file);
       self->is_temporary = FALSE;
+
+      /* The buffer might be empty, so mark it as modified so we really save */
+      gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (self), TRUE);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_TEMPORARY]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }
