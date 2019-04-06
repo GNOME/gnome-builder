@@ -1,5 +1,7 @@
 if get_option('plugin_git')
 
+subdir('daemon')
+
 plugins_sources += files([
   'git-plugin.c',
   'gbp-git-branch.c',

@@ -1,0 +1,73 @@
+<!DOCTYPE node PUBLIC
+        "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+        "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd" >
+<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <!--
+    Copyright 2019 Christian Hergert <chergert@redhat.com>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+  -->
+  <interface name="org.gnome.Builder.Git.Service">
+    <method name="Discover">
+      <arg name="location" direction="in" type="ay">
+        <doc:doc><doc:summary>The location at which to begin discovery of a repository.</doc:summary></doc:doc>
+      </arg>
+      <arg name="git_location" direction="out" type="ay">
+        <doc:doc><doc:summary>Location of the git repository.</doc:summary></doc:doc>
+      </arg>
+    </method>
+    <method name="Open">
+      <arg name="location" direction="in" type="ay">
+        <doc:doc><doc:summary>The location of the repository.</doc:summary></doc:doc>
+      </arg>
+      <arg name="repository" direction="out" type="o">
+        <doc:doc><doc:summary>A repository object.</doc:summary></doc:doc>
+      </arg>
+    </method>
+    <method name="Create">
+      <doc:doc><doc:summary>Creates a new repository.</doc:summary></doc:doc>
+      <arg name="location" direction="in" type="ay">
+        <doc:doc><doc:summary>The location for the repository.</doc:summary></doc:doc>
+      </arg>
+      <arg name="is_bare" direction="in" type="b">
+        <doc:doc><doc:summary>If a bare repository should be created.</doc:summary></doc:doc>
+      </arg>
+      <arg name="git_location" direction="out" type="ay">
+        <doc:doc><doc:summary>The location of the .git directory.</doc:summary></doc:doc>
+      </arg>
+    </method>
+    <method name="Clone">
+      <arg name="url" direction="in" type="s">
+        <doc:doc><doc:summary>The URL to the repository.</doc:summary></doc:doc>
+      </arg>
+      <arg name="location" direction="in" type="ay">
+        <doc:doc><doc:summary>The location to place the repository.</doc:summary></doc:doc>
+      </arg>
+      <arg name="branch" direction="in" type="s">
+        <doc:doc><doc:summary>The branch to clone.</doc:summary></doc:doc>
+      </arg>
+      <arg name="progress" direction="in" type="o">
+        <doc:doc><doc:summary>The path to an org.gnome.Builder.Git.Progress object on the callers connection.</doc:summary></doc:doc>
+      </arg>
+      <arg name="git_location" direction="out" type="ay">
+        <doc:doc><doc:summary>A repository object.</doc:summary></doc:doc>
+      </arg>
+    </method>
+    <method name="LoadConfig">
+      <arg name="config_path" direction="out" type="o"/>
+    </method>
+  </interface>
+</node>
