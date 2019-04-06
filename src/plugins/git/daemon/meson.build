@@ -3,31 +3,31 @@ gnome_builder_git_deps = [
   libgit_dep,
 ]
 
-change_monitor_src = gnome.gdbus_codegen('ipc-git-change-monitor',
+ipc_git_change_monitor_src = gnome.gdbus_codegen('ipc-git-change-monitor',
            sources: 'org.gnome.Builder.Git.ChangeMonitor.xml',
   interface_prefix: 'org.gnome.Builder.',
          namespace: 'Ipc',
 )
 
-config_src = gnome.gdbus_codegen('ipc-git-config',
+ipc_git_config_src = gnome.gdbus_codegen('ipc-git-config',
            sources: 'org.gnome.Builder.Git.Config.xml',
   interface_prefix: 'org.gnome.Builder.',
          namespace: 'Ipc',
 )
 
-progress_src = gnome.gdbus_codegen('ipc-git-progress',
+ipc_git_progress_src = gnome.gdbus_codegen('ipc-git-progress',
            sources: 'org.gnome.Builder.Git.Progress.xml',
   interface_prefix: 'org.gnome.Builder.',
          namespace: 'Ipc',
 )
 
-repository_src = gnome.gdbus_codegen('ipc-git-repository',
+ipc_git_repository_src = gnome.gdbus_codegen('ipc-git-repository',
            sources: 'org.gnome.Builder.Git.Repository.xml',
   interface_prefix: 'org.gnome.Builder.',
          namespace: 'Ipc',
 )
 
-service_src = gnome.gdbus_codegen('ipc-git-service',
+ipc_git_service_src = gnome.gdbus_codegen('ipc-git-service',
            sources: 'org.gnome.Builder.Git.Service.xml',
   interface_prefix: 'org.gnome.Builder.',
          namespace: 'Ipc',
@@ -42,11 +42,11 @@ gnome_builder_git_sources = [
   'ipc-git-repository-impl.c',
   'ipc-git-service-impl.c',
   'line-cache.c',
-  change_monitor_src,
-  config_src,
-  progress_src,
-  repository_src,
-  service_src,
+  ipc_git_change_monitor_src,
+  ipc_git_config_src,
+  ipc_git_progress_src,
+  ipc_git_repository_src,
+  ipc_git_service_src,
 ]
 
 gnome_builder_git = executable('gnome-builder-git', gnome_builder_git_sources,
@@ -57,11 +57,11 @@ gnome_builder_git = executable('gnome-builder-git', gnome_builder_git_sources,
 
 test_git_sources = [
   'test-git.c',
-  change_monitor_src,
-  config_src,
-  progress_src,
-  repository_src,
-  service_src,
+  ipc_git_change_monitor_src,
+  ipc_git_config_src,
+  ipc_git_progress_src,
+  ipc_git_repository_src,
+  ipc_git_service_src,
 ]
 
 test_git = executable('test-git', 'test-git.c', test_git_sources,
