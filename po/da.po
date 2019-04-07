@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2019-03-26 17:46+0000\n"
-"PO-Revision-Date: 2019-03-12 01:45+0100\n"
+"PO-Revision-Date: 2019-04-08 00:01+0200\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -59,9 +59,9 @@ msgid ""
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
 "Builder er et integreret udviklingsmiljø til GNOME som udvikles aktivt. "
-"Builder kombinerer integreret understøttelse af essentielle "
-"GNOME-teknologier såsom GTK+, Glib og GNOME-API'er med funktioner som "
-"udviklere vil have brug for såsom syntaksfremhævning og tekststumper."
+"Builder kombinerer integreret understøttelse af essentielle GNOME-"
+"teknologier såsom GTK+, Glib og GNOME-API'er med funktioner som udviklere "
+"vil have brug for såsom syntaksfremhævning og tekststumper."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:18
 msgid ""
@@ -86,25 +86,21 @@ msgstr "Koderedigering side om side"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:26
 msgid "Multi-monitor support"
-msgstr ""
+msgstr "Understøttelse af flere skærme"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
-#, fuzzy
-#| msgid "Show overview map"
 msgid "Code overview mini-map"
-msgstr "Vis oversigtskort"
+msgstr "Minikort med kodeoversigt"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:28
 msgid "Integration with Git"
 msgstr "Integration med Git"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:29
-#, fuzzy
-#| msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
-msgstr "Integration med Autotools, Cargo, CMake, Meson, Make og PHPize"
+msgstr "Integration med Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize og Waf"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -127,10 +123,8 @@ msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "HTML, Markdown og reStructuredText, samt Sphinx live-forhåndsvisning"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:35
-#, fuzzy
-#| msgid "Optional Vim-style editing"
 msgid "Optional Vim, Emacs, and SublimeText style editing"
-msgstr "Valgfri Vim-redigeringstilstand"
+msgstr "Mulighed for redigering i Vim-, Emacs- og SublimeText-tilstand"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:36
 msgid "An integrated software profiler for native applications"
@@ -146,11 +140,11 @@ msgstr "Understøttelse for kompilering med jhbuild og flatpak-runtime"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
 msgid "Support for viewing TODOs found within your code base"
-msgstr ""
+msgstr "Understøttelse af visning af TODO-lister som findes i din kodebase"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:40
 msgid "Fast fuzzy text search across files and symbols"
-msgstr ""
+msgstr "Hurtig uskarp (fuzzy) tekstsøgning over filer og symboler"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:46
 msgid "Quickly access your projects"
@@ -1484,8 +1478,8 @@ msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 msgstr ""
-"Indtast arkivet for projektet, du gerne vil klone. URL'en bør ligne "
-"“https://gitlab.gnome.org/GNOME/gnome-builder.git”."
+"Indtast arkivet for projektet, du gerne vil klone. URL'en bør ligne “https://"
+"gitlab.gnome.org/GNOME/gnome-builder.git”."
 
 #: src/libide/greeter/ide-clone-surface.ui:84
 msgid "user@host:repository.git"
@@ -2032,8 +2026,7 @@ msgstr "Linjediagnostik"
 
 #: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Show an icon next to line numbers indicating type of diagnostic"
-msgstr ""
-"Vis et ikon ved siden af linjenumrene, som angiver typen af diagnostik"
+msgstr "Vis et ikon ved siden af linjenumrene, som angiver typen af diagnostik"
 
 #: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Highlight"
@@ -2933,11 +2926,10 @@ msgstr "Gemmer kompileringskommandoer"
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:157
 #, c-format
-msgid ""
-"Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
-"Udvidelsesmodulet Beautifier: fejl ved kopiering af "
-"gresource-konfigurationsfil for “%s”: %s"
+"Udvidelsesmodulet Beautifier: fejl ved kopiering af gresource-"
+"konfigurationsfil for “%s”: %s"
 
 #. translators: %s is replaced with the source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:165
@@ -2976,8 +2968,7 @@ msgstr ""
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
 #, c-format
-msgid ""
-"Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 msgstr ""
 "Udvidelsesmodulet Beautifier: konfigurationsstien “%s” findes ikke; posten "
 "“%s” deaktiveret"
@@ -3225,10 +3216,8 @@ msgid "Save build log"
 msgstr "Gem kompileringslog"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
-#, fuzzy
-#| msgid "missing"
 msgid "Missing"
-msgstr "mangler"
+msgstr "Mangler"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
 msgid "Update project dependencies"
@@ -3400,8 +3389,8 @@ msgstr "Fuldfør parametre"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
-"If parameters should be included when completing. Requires "
-"complete-parentheses."
+"If parameters should be included when completing. Requires complete-"
+"parentheses."
 msgstr ""
 "Om parametre skal inkluderes ved fuldførelse. Kræver complete-parentheses."
 
@@ -3592,8 +3581,7 @@ msgid "Visibility:"
 msgstr "Synlighed:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid ""
-"Select the color spaces for which you want to see sliders in the panel."
+msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr "Vælg de farverum, der skal have skydere i panelet."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
@@ -4219,22 +4207,18 @@ msgid "Network is not available, skipping downloads"
 msgstr "Netværket er ikke tilgængeligt; henter ikke"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
-#, fuzzy
-#| msgid "Installing "
 msgid "Install Missing SDK?"
-msgstr "Installerer "
+msgstr "Installér manglende SDK?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
-#, fuzzy
-#| msgid "Install"
 msgid "_Install"
-msgstr "Installér"
+msgstr "_Installér"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
-msgstr ""
+msgstr "Builder har brug for at installere følgende værktøjskasser til softwareudvikling for at kunne bygge dit projekt."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
@@ -4358,8 +4342,8 @@ msgid ""
 "The “flatpak-builder” program is necessary for building Flatpak-based "
 "applications. Builder can install it for you."
 msgstr ""
-"Programmet “flatpak-builder” er nødvendigt for at kunne kompilere "
-"Flatpak-baserede programmer. Builder kan installere det for dig."
+"Programmet “flatpak-builder” er nødvendigt for at kunne kompilere Flatpak-"
+"baserede programmer. Builder kan installere det for dig."
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4395,8 +4379,7 @@ msgstr "Den forespurgte fil findes ikke i git-indekset."
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
-msgstr ""
-"Builder kunne ikke afgive passende akkreditiver ved kloning fra arkiv."
+msgstr "Builder kunne ikke afgive passende akkreditiver ved kloning fra arkiv."
 
 #: src/plugins/git/gbp-git-submodule-stage.c:136
 msgid "Network is not available, skipping submodule update"
@@ -5872,9 +5855,11 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid "Toggle utilities panel"
 #~ msgstr "Værktøjspanel til/fra"
 
-#~ msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+#~ msgid ""
+#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 #~ msgstr ""
-#~ "Hvorfor ikke <a href=\"action://app.new-project\">oprette et nyt projekt</a>?"
+#~ "Hvorfor ikke <a href=\"action://app.new-project\">oprette et nyt projekt</"
+#~ "a>?"
 
 #~ msgid "_Remove"
 #~ msgstr "_Fjern"
@@ -5990,7 +5975,7 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid "Building"
 #~ msgstr "Kompilerer"
 
-#~ # Ikke sikker på størrelsen af knapperne
+# Ikke sikker på størrelsen af knapperne
 #~ msgid "true"
 #~ msgstr "false"
 
@@ -6083,7 +6068,7 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid "Please specify a project template with --template=\n"
 #~ msgstr "Angiv venligst en projekt-skabelon med --template=\n"
 
-#~ # ??
+# ??
 #~ msgid "Clone App"
 #~ msgstr "Klon program"
 
@@ -6104,7 +6089,8 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 
 #~ msgid "Use Git to create a local copy of a remotely hosted project."
 #~ msgstr ""
-#~ "Brug Git til at oprette en lokal kopi af et projekt som udbydes andetsteds."
+#~ "Brug Git til at oprette en lokal kopi af et projekt som udbydes "
+#~ "andetsteds."
 
 #~ msgid "Enter the URL of your project’s source code repository"
 #~ msgstr "Indtast URL'en for projektets kildekodearkiv"
@@ -6175,7 +6161,7 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid "System Monitor"
 #~ msgstr "Systemovervågning"
 
-#~ # I dette tilfælde er det et profileringsmodul, så det er ikke en "profil" med brugerindstillinger osv.
+# I dette tilfælde er det et profileringsmodul, så det er ikke en "profil" med brugerindstillinger osv.
 #~ msgid "Open Profile"
 #~ msgstr "Åbn profilering"
 
@@ -6198,8 +6184,8 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgstr "Slå autofuldførelse til for ord i dokumentet"
 
 #~ msgid ""
-#~ "If enabled, words within the current document will be available for "
-#~ "auto-completion."
+#~ "If enabled, words within the current document will be available for auto-"
+#~ "completion."
 #~ msgstr ""
 #~ "Hvis slået til, vil ord i det nuværende dokument kunne vælges til "
 #~ "autofuldførelse."
@@ -6210,7 +6196,8 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid ""
 #~ "Suggests completions as you type based on words found in any open document"
 #~ msgstr ""
-#~ "Foreslå fuldførelse mens du skriver, ud fra ord fundet i alle åbne dokumenter"
+#~ "Foreslå fuldførelse mens du skriver, ud fra ord fundet i alle åbne "
+#~ "dokumenter"
 
 #~ msgid "Minimum word size"
 #~ msgstr "Mindste ordstørrelse"
@@ -6219,11 +6206,11 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgstr "Mindste ordstørrelse for fuldførelse"
 
 #~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, functions, "
-#~ "and more"
+#~ "Create and manages a Ctags database for completing class names, "
+#~ "functions, and more"
 #~ msgstr ""
-#~ "Opret og håndtér en Ctags-database til at afslutte klassenavne, funktioner "
-#~ "osv."
+#~ "Opret og håndtér en Ctags-database til at afslutte klassenavne, "
+#~ "funktioner osv."
 
 #~ msgid "Suggest completions using Clang (Experimental)"
 #~ msgstr "Foreslå fuldførelse ved brug af Clang (Eksperimentel)"
@@ -6309,7 +6296,7 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid "            Environment: %s\n"
 #~ msgstr "            Miljø: %s\n"
 
-#~ # ?
+# ?
 #~ msgid "===============\n"
 #~ msgstr "===============\n"
 
@@ -6319,7 +6306,7 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid " Build ran for: %"
 #~ msgstr " Kompilering kørte i: %"
 
-#~ # ??
+# ??
 #~ msgid "=================\n"
 #~ msgstr "=================\n"
 
@@ -6509,7 +6496,7 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid "Line %u, Column %u"
 #~ msgstr "Linje %u, kolonne %u"
 
-#~ # ?
+# ?
 #~ msgid "OVR"
 #~ msgstr "OVR"
 
@@ -6520,11 +6507,11 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgstr "Prøv at åbne en fil ved at skrive i søgeboksen i toppen"
 
 #~ msgid ""
-#~ "Spell checker error: no language set. It’s maybe because no dictionaries are "
-#~ "installed."
+#~ "Spell checker error: no language set. It’s maybe because no dictionaries "
+#~ "are installed."
 #~ msgstr ""
-#~ "Fejl ved stavekontrol: Intet sprog angivet. Det skyldes måske, at der ikke "
-#~ "er installeret nogen ordbøger."
+#~ "Fejl ved stavekontrol: Intet sprog angivet. Det skyldes måske, at der "
+#~ "ikke er installeret nogen ordbøger."
 
 #~ msgid "_Highlight"
 #~ msgstr "_Fremhæv"
@@ -6919,7 +6906,7 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid "source style scheme source tango solarized builder syntax"
 #~ msgstr "kilde stil skema kilde tango solariseret builder syntaks"
 
-#~ # %s er et tal jf. omkringliggende kildekode
+# %s er et tal jf. omkringliggende kildekode
 #~ msgid "%s more"
 #~ msgstr "%s mere"
 
@@ -7001,10 +6988,11 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgstr "Bufferen "
 
 #~ msgid ""
-#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
+#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s"
+#~ "\" (%s)"
 #~ msgstr ""
-#~ "Kunne ikke indlæse DBus-forbindelse. Kodeassistancen vil blive deaktiveret. "
-#~ "“%s” (%s)"
+#~ "Kunne ikke indlæse DBus-forbindelse. Kodeassistancen vil blive "
+#~ "deaktiveret. “%s” (%s)"
 
 #~ msgid "The code assistant to render."
 #~ msgstr "Kodeassistancen, som skal renderes."
@@ -7076,7 +7064,8 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgstr "Dokument for devhelp-visningen."
 
 #~ msgid ""
-#~ "If you don't save, changes from the last %ld second will be permanently lost."
+#~ "If you don't save, changes from the last %ld second will be permanently "
+#~ "lost."
 #~ msgid_plural ""
 #~ "If you don't save, changes from the last %ld seconds will be permanently "
 #~ "lost."
@@ -7099,11 +7088,12 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ "Hvis du ikke gemmer, vil ændringer fra det seneste minut og %ld sekund gå "
 #~ "tabt."
 #~ msgstr[1] ""
-#~ "Hvis du ikke gemmer, vil ændringer fra det seneste minut og %ld sekunder gå "
-#~ "tabt."
+#~ "Hvis du ikke gemmer, vil ændringer fra det seneste minut og %ld sekunder "
+#~ "gå tabt."
 
 #~ msgid ""
-#~ "If you don't save, changes from the last %ld minute will be permanently lost."
+#~ "If you don't save, changes from the last %ld minute will be permanently "
+#~ "lost."
 #~ msgid_plural ""
 #~ "If you don't save, changes from the last %ld minutes will be permanently "
 #~ "lost."
@@ -7123,7 +7113,8 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ "If you don't save, changes from the last hour and %d minutes will be "
 #~ "permanently lost."
 #~ msgstr[0] ""
-#~ "Hvis du ikke gemmer, vil ændringer fra den seneste time og %d minut gå tabt."
+#~ "Hvis du ikke gemmer, vil ændringer fra den seneste time og %d minut gå "
+#~ "tabt."
 #~ msgstr[1] ""
 #~ "Hvis du ikke gemmer, vil ændringer fra den seneste time og %d minutter gå "
 #~ "tabt."
@@ -7131,7 +7122,8 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 #~ msgid ""
 #~ "If you don't save, changes from the last %d hour will be permanently lost."
 #~ msgid_plural ""
-#~ "If you don't save, changes from the last %d hours will be permanently lost."
+#~ "If you don't save, changes from the last %d hours will be permanently "
+#~ "lost."
 #~ msgstr[0] ""
 #~ "Hvis du ikke gemmer, vil ændringer fra den seneste %d time gå tabt."
 #~ msgstr[1] ""
@@ -7706,4 +7698,3 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 
 #~ msgid "The command manager for the workspace."
 #~ msgstr "Kommandohåndteringen for arbejdsområdet."
-
