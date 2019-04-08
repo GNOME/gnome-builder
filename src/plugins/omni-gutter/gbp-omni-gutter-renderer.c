@@ -725,6 +725,11 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   g_assert (begin != NULL);
   g_assert (end != NULL);
 
+  /* Draw the full background color up front */
+  gdk_cairo_rectangle (cr, cell_area);
+  gdk_cairo_set_source_rgba (cr, &self->text.bg);
+  cairo_fill (cr);
+
   self->line_spacing = g_settings_get_int (self->settings, "line-spacing");
 
   /*
