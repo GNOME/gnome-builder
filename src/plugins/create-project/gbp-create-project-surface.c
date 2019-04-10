@@ -636,7 +636,7 @@ init_vcs_cb (GObject      *object,
   if (!ide_vcs_initializer_initialize_finish (vcs, result, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
-      return;
+      goto cleanup;
     }
 
   self = ide_task_get_source_object (task);
@@ -652,6 +652,9 @@ init_vcs_cb (GObject      *object,
   ide_greeter_workspace_open_project (IDE_GREETER_WORKSPACE (workspace), project_info);
 
   ide_task_return_boolean (task, TRUE);
+
+cleanup:
+  ide_object_destroy (IDE_OBJECT (vcs));
 }
 
 static void
@@ -666,6 +669,7 @@ extract_cb (GObject      *object,
   GbpCreateProjectSurface *self;
   PeasPluginInfo *plugin_info;
   PeasEngine *engine;
+  IdeContext *context;
   GFile *project_file;
 
   /* To keep the UI simple, we only support git from
@@ -713,8 +717,10 @@ extract_cb (GObject      *object,
   if (plugin_info == NULL)
     IDE_GOTO (failure);
 
+  context = ide_widget_get_context (GTK_WIDGET (self));
   vcs = (IdeVcsInitializer *)peas_engine_create_extension (engine, plugin_info,
                                                            IDE_TYPE_VCS_INITIALIZER,
+                                                           "parent", context,
                                                            NULL);
   if (vcs == NULL)
     IDE_GOTO (failure);
@@ -834,8 +840,12 @@ gbp_create_project_surface_create_async (GbpCreateProjectSurface *self,
 
       if (plugin_info != NULL)
         {
+          IdeContext *context;
+
+          context = ide_widget_get_context (GTK_WIDGET (self));
           vcs_conf = (IdeVcsConfig *)peas_engine_create_extension (engine, plugin_info,
                                                                    IDE_TYPE_VCS_CONFIG,
+                                                                   "parent", context,
                                                                    NULL);
 
           if (vcs_conf != NULL)

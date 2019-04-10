@@ -24,7 +24,7 @@
 
 #include "ide-vcs-initializer.h"
 
-G_DEFINE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, IDE_TYPE_OBJECT)
 
 static void
 ide_vcs_initializer_default_init (IdeVcsInitializerInterface *iface)

@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_VCS_INITIALIZER (ide_vcs_initializer_get_type ())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, IDE, VCS_INITIALIZER, GObject)
+G_DECLARE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, IDE, VCS_INITIALIZER, IdeObject)
 
 struct _IdeVcsInitializerInterface
 {
