@@ -302,6 +302,15 @@ _ide_buffer_set_file (IdeBuffer *self,
       g_clear_object (&self->readlink_file);
       self->readlink_file = _ide_g_file_readlink (file);
       ide_buffer_reload_file_settings (self);
+
+      if (self->addins != NULL)
+        {
+          IdeBufferFileLoad closure = { self, file };
+          ide_extension_set_adapter_foreach (self->addins,
+                                             _ide_buffer_addin_file_loaded_cb,
+                                             &closure);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }

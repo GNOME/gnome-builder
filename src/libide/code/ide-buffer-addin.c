@@ -314,12 +314,26 @@ _ide_buffer_addin_load_cb (IdeExtensionSetAdapter *set,
                            PeasExtension          *exten,
                            gpointer                user_data)
 {
+  IdeBuffer *buffer = user_data;
+
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_return_if_fail (plugin_info != NULL);
   g_return_if_fail (IDE_IS_BUFFER_ADDIN (exten));
   g_return_if_fail (IDE_IS_BUFFER (user_data));
 
-  ide_buffer_addin_load (IDE_BUFFER_ADDIN (exten), IDE_BUFFER (user_data));
+  ide_buffer_addin_load (IDE_BUFFER_ADDIN (exten), buffer);
+
+  if (ide_buffer_get_state (buffer) == IDE_BUFFER_STATE_READY &&
+      !ide_buffer_get_is_temporary (buffer))
+    {
+      IdeBufferFileLoad closure = {
+        .buffer = buffer,
+        .file = ide_buffer_get_file (buffer),
+      };
+
+      _ide_buffer_addin_file_loaded_cb (set, plugin_info, exten, &closure);
+    }
+
 }
 
 void
