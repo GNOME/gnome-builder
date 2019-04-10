@@ -27,7 +27,8 @@
       <arg name="contents" direction="in" type="ay"/>
     </method>
     <method name="ListChanges">
-      <arg name="changes" direction="out" type="a(uu)"/>
+      <!-- au is array of encoded changes -->
+      <arg name="changes" direction="out" type="au"/>
     </method>
     <method name="Close"/>
   </interface>

@@ -210,18 +210,31 @@ line_cache_foreach_in_range (const LineCache *self,
 GVariant *
 line_cache_to_variant (const LineCache *self)
 {
-  GVariantBuilder builder;
+  g_return_val_if_fail (self != NULL, NULL);
 
-  g_assert (self != NULL);
-  g_assert (self->lines != NULL);
+  return g_variant_take_ref (g_variant_new_fixed_array (G_VARIANT_TYPE ("u"),
+                                                        (gconstpointer)self->lines->data,
+                                                        self->lines->len,
+                                                        sizeof (LineEntry)));
+}
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(uu)"));
+LineCache *
+line_cache_new_from_variant (GVariant *variant)
+{
+  LineCache *self;
 
-  for (guint i = 0; i < self->lines->len; i++)
+  self = line_cache_new ();
+
+  if (variant != NULL)
     {
-      const LineEntry *entry = &g_array_index (self->lines, LineEntry, i);
-      g_variant_builder_add (&builder, "(uu)", entry->line, entry->mark);
+      gconstpointer base;
+      gsize n_elements = 0;
+
+      base = g_variant_get_fixed_array (variant, &n_elements, sizeof (LineEntry));
+
+      if (n_elements > 0 && n_elements < G_MAXINT)
+        g_array_append_vals (self->lines, base, n_elements);
     }
 
-  return g_variant_take_ref (g_variant_builder_end (&builder));
+  return g_steal_pointer (&self);
 }

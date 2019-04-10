@@ -239,7 +239,7 @@ ipc_git_change_monitor_impl_handle_list_changes (IpcGitChangeMonitor   *monitor,
   ret = line_cache_to_variant (cache);
 
   g_assert (ret != NULL);
-  g_assert (g_variant_is_of_type (ret, G_VARIANT_TYPE ("a(uu)")));
+  g_assert (g_variant_is_of_type (ret, G_VARIANT_TYPE ("au")));
 
 gerror:
   g_assert (ret != NULL || error != NULL);
@@ -247,7 +247,7 @@ gerror:
   if (g_error_matches (error, GGIT_ERROR, GIT_ENOTFOUND))
     {
       g_clear_error (&error);
-      ret = g_variant_take_ref (g_variant_new_array (G_VARIANT_TYPE ("(uu)"), NULL, 0));
+      ret = g_variant_take_ref (g_variant_new_array (G_VARIANT_TYPE ("u"), NULL, 0));
     }
 
   if (error != NULL && error->domain != G_IO_ERROR)

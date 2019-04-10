@@ -41,6 +41,7 @@ typedef struct
 } LineEntry;
 
 LineCache *line_cache_new              (void);
+LineCache *line_cache_new_from_variant (GVariant        *changes);
 void       line_cache_free             (LineCache       *self);
 void       line_cache_mark_range       (LineCache       *self,
                                         gint             start_line,
