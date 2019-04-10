@@ -3,23 +3,22 @@ if get_option('plugin_git')
 subdir('daemon')
 
 plugins_sources += files([
-  'git-plugin.c',
+  'daemon/line-cache.c',
   'gbp-git-branch.c',
   'gbp-git-buffer-addin.c',
   'gbp-git-buffer-change-monitor.c',
   'gbp-git-client.c',
   'gbp-git-dependency-updater.c',
-  'gbp-git-index-monitor.c',
   'gbp-git-pipeline-addin.c',
-  'gbp-git-remote-callbacks.c',
+  'gbp-git-progress.c',
   'gbp-git-submodule-stage.c',
   'gbp-git-tag.c',
-  'gbp-git-vcs.c',
   'gbp-git-vcs-cloner.c',
   'gbp-git-vcs-config.c',
   'gbp-git-vcs-initializer.c',
+  'gbp-git-vcs.c',
   'gbp-git-workbench-addin.c',
-  'line-cache.c',
+  'git-plugin.c',
 ])
 
 plugins_sources += [

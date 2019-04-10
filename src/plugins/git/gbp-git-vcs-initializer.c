@@ -20,53 +20,70 @@
 
 #define G_LOG_DOMAIN "gbp-git-vcs-initializer"
 
-#include "config.h"
-
-#include <libgit2-glib/ggit.h>
-#include <libide-threading.h>
-
+#include "gbp-git-client.h"
 #include "gbp-git-vcs-initializer.h"
 
 struct _GbpGitVcsInitializer
 {
-  GObject parent_instance;
+  IdeObject parent_instance;
 };
 
-static void vcs_initializer_init (IdeVcsInitializerInterface *iface);
-
-G_DEFINE_TYPE_EXTENDED (GbpGitVcsInitializer, gbp_git_vcs_initializer, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_INITIALIZER, vcs_initializer_init))
-
-static void
-gbp_git_vcs_initializer_class_init (GbpGitVcsInitializerClass *klass)
+static gchar *
+gbp_git_vcs_initializer_get_title (IdeVcsInitializer *self)
 {
+  return g_strdup ("Git");
 }
 
 static void
-gbp_git_vcs_initializer_init (GbpGitVcsInitializer *self)
+create_cb (GObject      *object,
+           GAsyncResult *result,
+           gpointer      user_data)
 {
-}
-
-static void
-gbp_git_vcs_initializer_initialize_worker (IdeTask      *task,
-                                           gpointer      source_object,
-                                           gpointer      task_data,
-                                           GCancellable *cancellable)
-{
-  g_autoptr(GgitRepository) repository = NULL;
+  IpcGitService *service = (IpcGitService *)object;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  GFile *file = task_data;
+  g_autofree gchar *git_location = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IPC_IS_GIT_SERVICE (service));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS_INITIALIZER (source_object));
-  g_assert (G_IS_FILE (file));
 
-  repository = ggit_repository_init_repository (file, FALSE, &error);
-
-  if (repository == NULL)
+  if (!ipc_git_service_call_create_finish (service, &git_location, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+}
+
+static void
+get_service_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  GbpGitClient *client = (GbpGitClient *)object;
+  g_autoptr(IpcGitService) service = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GCancellable *cancellable;
+  GFile *file;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  cancellable = ide_task_get_cancellable (task);
+  file = ide_task_get_task_data (task);
+
+  if (!(service = gbp_git_client_get_service_finish (client, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ipc_git_service_call_create (service,
+                                 g_file_peek_path (file),
+                                 FALSE,
+                                 cancellable,
+                                 create_cb,
+                                 g_steal_pointer (&task));
 }
 
 static void
@@ -76,16 +93,26 @@ gbp_git_vcs_initializer_initialize_async (IdeVcsInitializer   *initializer,
                                           GAsyncReadyCallback  callback,
                                           gpointer             user_data)
 {
-  GbpGitVcsInitializer *self = (GbpGitVcsInitializer *)initializer;
   g_autoptr(IdeTask) task = NULL;
+  GbpGitClient *client;
+  IdeContext *context;
 
-  g_return_if_fail (GBP_IS_GIT_VCS_INITIALIZER (self));
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS_INITIALIZER (initializer));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  ide_task_run_in_thread (task, gbp_git_vcs_initializer_initialize_worker);
+  task = ide_task_new (initializer, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_initializer_initialize_async);
+  ide_task_set_task_data (task, g_file_dup (file), g_object_unref);
+
+  context = ide_object_get_context (IDE_OBJECT (initializer));
+  client = gbp_git_client_from_context (context);
+
+  gbp_git_client_get_service_async (client,
+                                    cancellable,
+                                    get_service_cb,
+                                    g_steal_pointer (&task));
 }
 
 static gboolean
@@ -93,22 +120,30 @@ gbp_git_vcs_initializer_initialize_finish (IdeVcsInitializer  *initializer,
                                            GAsyncResult       *result,
                                            GError            **error)
 {
-  g_return_val_if_fail (GBP_IS_GIT_VCS_INITIALIZER (initializer), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS_INITIALIZER (initializer));
+  g_assert (IDE_IS_TASK (result));
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
-static gchar *
-gbp_git_vcs_initializer_get_title (IdeVcsInitializer *initilizer)
-{
-  return g_strdup ("Git");
-}
-
 static void
-vcs_initializer_init (IdeVcsInitializerInterface *iface)
+vcs_initializer_iface_init (IdeVcsInitializerInterface *iface)
 {
   iface->get_title = gbp_git_vcs_initializer_get_title;
   iface->initialize_async = gbp_git_vcs_initializer_initialize_async;
   iface->initialize_finish = gbp_git_vcs_initializer_initialize_finish;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GbpGitVcsInitializer, gbp_git_vcs_initializer, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_INITIALIZER, vcs_initializer_iface_init))
+
+static void
+gbp_git_vcs_initializer_class_init (GbpGitVcsInitializerClass *klass)
+{
+}
+
+static void
+gbp_git_vcs_initializer_init (GbpGitVcsInitializer *self)
+{
 }

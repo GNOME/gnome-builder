@@ -22,8 +22,13 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
+#include "daemon/ipc-git-repository.h"
+
 #include "gbp-git-dependency-updater.h"
-#include "gbp-git-submodule-stage.h"
+#include "gbp-git-progress.h"
+#include "gbp-git-vcs.h"
 
 struct _GbpGitDependencyUpdater
 {
@@ -31,35 +36,21 @@ struct _GbpGitDependencyUpdater
 };
 
 static void
-find_submodule_stage_cb (gpointer data,
-                         gpointer user_data)
-{
-  GbpGitSubmoduleStage **stage = user_data;
-
-  g_assert (IDE_IS_PIPELINE_STAGE (data));
-  g_assert (stage != NULL);
-  g_assert (*stage == NULL || IDE_IS_PIPELINE_STAGE (*stage));
-
-  if (GBP_IS_GIT_SUBMODULE_STAGE (data))
-    *stage = GBP_GIT_SUBMODULE_STAGE (data);
-}
-
-static void
 gbp_git_dependency_updater_update_cb (GObject      *object,
                                       GAsyncResult *result,
                                       gpointer      user_data)
 {
-  IdeBuildManager *manager = (IdeBuildManager *)object;
+  IpcGitRepository *repository = (IpcGitRepository *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_MANAGER (manager));
+  g_assert (IPC_IS_GIT_REPOSITORY (repository));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_build_manager_rebuild_finish (manager, result, &error))
+  if (!ipc_git_repository_call_update_submodules_finish (repository, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -73,10 +64,13 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
                                          GAsyncReadyCallback   callback,
                                          gpointer              user_data)
 {
+  g_autoptr(IpcGitProgress) progress = NULL;
   g_autoptr(IdeTask) task = NULL;
-  GbpGitSubmoduleStage *stage = NULL;
-  IdePipeline *pipeline;
-  IdeBuildManager *manager;
+  g_autoptr(IdeVcs) vcs = NULL;
+  g_autoptr(IdeNotification) notif = NULL;
+  g_autoptr(GError) error = NULL;
+  IpcGitRepository *repository;
+  GDBusConnection *connection;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -86,50 +80,42 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_dependency_updater_update_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_build_manager_from_context (context);
-  pipeline = ide_build_manager_get_pipeline (manager);
+  vcs = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_VCS);
 
-  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
-
-  if (pipeline == NULL)
+  if (!GBP_IS_GIT_VCS (vcs))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_FAILED,
-                                 "Cannot update git submodules until build pipeline is initialized");
+                                 "Git version control is not in use");
       IDE_EXIT;
     }
 
-  /* Find the submodule stage and tell it to download updates one time */
-  ide_pipeline_foreach_stage (pipeline, find_submodule_stage_cb, &stage);
+  repository = gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs));
+  connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (repository));
 
-  if (stage == NULL)
+  notif = g_object_new (IDE_TYPE_NOTIFICATION,
+                        "title", _("Updating Git Submodules"),
+                        NULL);
+
+  if (!(progress = gbp_git_progress_new (connection, notif, cancellable, &error)))
     {
-      /* Synthesize success if there is no submodule stage */
-      ide_task_return_boolean (task, TRUE);
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  gbp_git_submodule_stage_force_update (stage);
+  ide_task_set_task_data (task, g_object_ref (progress), g_object_unref);
+  gbp_git_progress_set_withdraw (GBP_GIT_PROGRESS (progress), TRUE);
+  ide_notification_attach (notif, IDE_OBJECT (context));
 
-  /* Ensure downloads and everything past it is invalidated */
-  ide_pipeline_invalidate_phase (pipeline, IDE_PIPELINE_PHASE_DOWNLOADS);
-
-  /* Start building all the way up to the project configure so that
-   * the user knows if the updates broke their configuration or anything.
-   *
-   * TODO: This should probably be done by the calling API so that we don't
-   *       race with other updaters.
-   */
-  ide_build_manager_rebuild_async (manager,
-                                   IDE_PIPELINE_PHASE_CONFIGURE,
-                                   NULL,
-                                   NULL,
-                                   gbp_git_dependency_updater_update_cb,
-                                   g_steal_pointer (&task));
+  ipc_git_repository_call_update_submodules (repository,
+                                             TRUE,
+                                             g_dbus_interface_skeleton_get_object_path (G_DBUS_INTERFACE_SKELETON (progress)),
+                                             cancellable,
+                                             gbp_git_dependency_updater_update_cb,
+                                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }

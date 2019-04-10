@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GIT_VCS_CLONER (gbp_git_vcs_cloner_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitVcsCloner, gbp_git_vcs_cloner, GBP, GIT_VCS_CLONER, GObject)
+G_DECLARE_FINAL_TYPE (GbpGitVcsCloner, gbp_git_vcs_cloner, GBP, GIT_VCS_CLONER, IdeObject)
 
 G_END_DECLS

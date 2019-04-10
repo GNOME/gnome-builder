@@ -1,6 +1,7 @@
 /* gbp-git-vcs-config.h
  *
  * Copyright 2016 Akshaya Kakkilaya <akshaya.kakkilaya@gmail.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +27,9 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GIT_VCS_CONFIG (gbp_git_vcs_config_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitVcsConfig, gbp_git_vcs_config, GBP, GIT_VCS_CONFIG, GObject)
+G_DECLARE_FINAL_TYPE (GbpGitVcsConfig, gbp_git_vcs_config, GBP, GIT_VCS_CONFIG, IdeObject)
 
-GbpGitVcsConfig *gbp_git_vcs_config_new (void);
+void gbp_git_vcs_config_set_global (GbpGitVcsConfig *self,
+                                    gboolean         is_global);
 
 G_END_DECLS

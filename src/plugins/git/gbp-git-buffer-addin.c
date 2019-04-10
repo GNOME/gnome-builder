@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <libgit2-glib/ggit.h>
 #include <libide-vcs.h>
 
 #include "gbp-git-buffer-addin.h"
@@ -31,8 +30,8 @@
 
 struct _GbpGitBufferAddin
 {
-  GObject                    parent_instance;
-  GbpGitBufferChangeMonitor *monitor;
+  GObject                 parent_instance;
+  IdeBufferChangeMonitor *monitor;
 };
 
 static void
@@ -41,9 +40,9 @@ gbp_git_buffer_addin_file_laoded (IdeBufferAddin *addin,
                                   GFile          *file)
 {
   GbpGitBufferAddin *self = (GbpGitBufferAddin *)addin;
-  g_autoptr(GbpGitBufferChangeMonitor) monitor = NULL;
+  g_autoptr(IdeBufferChangeMonitor) monitor = NULL;
   g_autoptr(IdeContext) context = NULL;
-  GgitRepository *repository;
+  IpcGitRepository *repository;
   IdeObjectBox *box;
   IdeVcs *vcs;
 
@@ -51,38 +50,19 @@ gbp_git_buffer_addin_file_laoded (IdeBufferAddin *addin,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (G_IS_FILE (file));
 
-  context = ide_buffer_ref_context (buffer);
-  vcs = ide_context_peek_child_typed (context, IDE_TYPE_VCS);
-  if (!GBP_IS_GIT_VCS (vcs))
+  if (!(context = ide_buffer_ref_context (buffer)) ||
+      !(vcs = ide_context_peek_child_typed (context, IDE_TYPE_VCS)) ||
+      !GBP_IS_GIT_VCS (vcs) ||
+      !(repository = gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs))) ||
+      !(monitor = gbp_git_buffer_change_monitor_new (buffer, repository, file, NULL, NULL)))
     return;
 
-  if (!(repository = gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs))))
-    return;
-
-  self->monitor = g_object_new (GBP_TYPE_GIT_BUFFER_CHANGE_MONITOR,
-                                "buffer", buffer,
-                                "repository", repository,
-                                NULL);
+  ide_clear_and_destroy_object (&self->monitor);
+  self->monitor = g_steal_pointer (&monitor);
 
   box = ide_object_box_from_object (G_OBJECT (buffer));
   ide_object_append (IDE_OBJECT (box), IDE_OBJECT (self->monitor));
-
-  ide_buffer_set_change_monitor (buffer, IDE_BUFFER_CHANGE_MONITOR (self->monitor));
-}
-
-static void
-gbp_git_buffer_addin_file_saved (IdeBufferAddin *addin,
-                                 IdeBuffer      *buffer,
-                                 GFile          *file)
-{
-  GbpGitBufferAddin *self = (GbpGitBufferAddin *)addin;
-
-  g_assert (GBP_IS_GIT_BUFFER_ADDIN (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (G_IS_FILE (file));
-
-  if (self->monitor != NULL)
-    ide_buffer_change_monitor_reload (IDE_BUFFER_CHANGE_MONITOR (self->monitor));
+  ide_buffer_set_change_monitor (buffer, self->monitor);
 }
 
 static void
@@ -137,7 +117,7 @@ gbp_git_buffer_addin_settle_async (IdeBufferAddin      *addin,
   if (self->monitor == NULL)
     ide_task_return_boolean (task, TRUE);
   else
-    gbp_git_buffer_change_monitor_wait_async (self->monitor,
+    gbp_git_buffer_change_monitor_wait_async (GBP_GIT_BUFFER_CHANGE_MONITOR (self->monitor),
                                               cancellable,
                                               gbp_git_buffer_addin_settle_cb,
                                               g_steal_pointer (&task));
@@ -155,7 +135,6 @@ static void
 buffer_addin_iface_init (IdeBufferAddinInterface *iface)
 {
   iface->file_loaded = gbp_git_buffer_addin_file_laoded;
-  iface->file_saved = gbp_git_buffer_addin_file_saved;
   iface->unload = gbp_git_buffer_addin_unload;
   iface->settle_async = gbp_git_buffer_addin_settle_async;
   iface->settle_finish = gbp_git_buffer_addin_settle_finish;

@@ -22,34 +22,34 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libide-threading.h>
 
-#include "gbp-git-remote-callbacks.h"
+#include "daemon/ipc-git-service.h"
+
+#include "gbp-git-client.h"
+#include "gbp-git-progress.h"
 #include "gbp-git-vcs-cloner.h"
 
 struct _GbpGitVcsCloner
 {
-  GObject parent_instance;
+  IdeObject parent_instance;
 };
 
 typedef struct
 {
+  IpcGitProgress  *progress;
   IdeNotification *notif;
   IdeVcsUri       *uri;
   gchar           *branch;
   GFile           *location;
   GFile           *project_file;
-  gchar           *author_name;
-  gchar           *author_email;
 } CloneRequest;
 
 static void vcs_cloner_iface_init (IdeVcsClonerInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitVcsCloner, gbp_git_vcs_cloner, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CLONER,
-                                                vcs_cloner_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpGitVcsCloner, gbp_git_vcs_cloner, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CLONER, vcs_cloner_iface_init))
 
 static void
 clone_request_free (gpointer data)
@@ -63,6 +63,7 @@ clone_request_free (gpointer data)
       g_clear_object (&req->notif);
       g_clear_object (&req->location);
       g_clear_object (&req->project_file);
+      g_clear_object (&req->progress);
       g_slice_free (CloneRequest, req);
     }
 }
@@ -152,81 +153,30 @@ gbp_git_vcs_cloner_validate_uri (IdeVcsCloner  *cloner,
 }
 
 static void
-gbp_git_vcs_cloner_worker (IdeTask      *task,
-                           gpointer      source_object,
-                           gpointer      task_data,
-                           GCancellable *cancellable)
+gbp_git_vcs_cloner_clone_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
 {
-  g_autoptr(GgitConfig) config = NULL;
-  g_autoptr(GFile) config_file = NULL;
+  IpcGitService *service = (IpcGitService *)object;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *uristr = NULL;
-  GgitRepository *repository;
-  GgitCloneOptions *clone_options;
-  GgitFetchOptions *fetch_options;
-  GgitRemoteCallbacks *callbacks;
-  CloneRequest *req = task_data;
+  g_autofree gchar *git_location = NULL;
 
+  g_assert (IPC_IS_GIT_SERVICE (service));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS_CLONER (source_object));
-  g_assert (req != NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  callbacks = gbp_git_remote_callbacks_new (req->notif);
-
-  g_signal_connect_object (cancellable,
-                           "cancelled",
-                           G_CALLBACK (gbp_git_remote_callbacks_cancel),
-                           callbacks,
-                           G_CONNECT_SWAPPED);
-
-  fetch_options = ggit_fetch_options_new ();
-  ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
-
-  clone_options = ggit_clone_options_new ();
-  ggit_clone_options_set_is_bare (clone_options, FALSE);
-  ggit_clone_options_set_checkout_branch (clone_options, req->branch);
-  ggit_clone_options_set_fetch_options (clone_options, fetch_options);
-  g_clear_pointer (&fetch_options, ggit_fetch_options_free);
-
-  uristr = ide_vcs_uri_to_string (req->uri);
-
-  repository = ggit_repository_clone (uristr, req->location, clone_options, &error);
-
-  g_clear_object (&callbacks);
-  g_clear_object (&clone_options);
-
-  if (repository == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  if (ide_task_return_error_if_cancelled (task))
-    return;
-
-  config_file = g_file_get_child (req->location, ".git/config");
-
-  if ((config = ggit_config_new_from_file (config_file, &error)))
-    {
-      if (req->author_name)
-        ggit_config_set_string (config, "user.name", req->author_name, &error);
-      if (req->author_email)
-        ggit_config_set_string (config, "user.email", req->author_email, &error);
-    }
-
-  req->project_file = ggit_repository_get_workdir (repository);
-
-  ide_task_return_boolean (task, TRUE);
-
-  g_clear_object (&repository);
+  if (!ipc_git_service_call_clone_finish (service, &git_location, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
 gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
                                 const gchar         *uri,
                                 const gchar         *destination,
-                                GVariantDict        *options,
+                                GVariant            *options,
                                 IdeNotification     *notif,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
@@ -235,11 +185,17 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
   GbpGitVcsCloner *self = (GbpGitVcsCloner *)cloner;
   g_autoptr(IdeNotification) notif_local = NULL;
   g_autoptr(IdeVcsUri) vcs_uri = NULL;
+  g_autoptr(IpcGitService) service = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) location = NULL;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *uristr = NULL;
+  GDBusConnection *connection;
+  GbpGitClient *client = NULL;
   CloneRequest *req;
+  GVariantDict dict;
   const gchar *branch;
+  IdeContext *context;
 
   g_assert (GBP_IS_GIT_VCS_CLONER (cloner));
   g_assert (uri != NULL);
@@ -247,34 +203,32 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
   g_assert (!notif || IDE_IS_NOTIFICATION (notif));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  /* Get our client to communicate with the daemon */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  client = gbp_git_client_from_context (context);
+
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_vcs_cloner_clone_async);
 
+  /* Ensure we always have a notification to work with */
   if (notif == NULL)
     {
       notif_local = ide_notification_new ();
       notif = notif_local;
     }
 
-  if (!g_variant_dict_lookup (options, "branch", "&s", &branch))
+  ide_notification_set_title (notif, _("Cloning repository"));
+
+  /* Extract branch, leave other options to pass-through */
+  g_variant_dict_init (&dict, options);
+  if (!g_variant_dict_lookup (&dict, "branch", "&s", &branch))
     branch = "master";
+  g_variant_dict_remove (&dict, "branch");
 
-  /*
-   * ggit_repository_clone() will block and we don't have a good way to
-   * cancel it. So we need to return immediately (even though the clone
-   * will continue in the background for now).
-   *
-   * FIXME: Find Ggit API to cancel clone. We might need access to the
-   *    GgitRemote so we can ggit_remote_disconnect().
-   */
-  ide_task_set_return_on_cancel (task, TRUE);
-
+  /* Make sure we have a real URI to connect to */
   uristr = g_strstrip (g_strdup (uri));
   location = g_file_new_for_path (destination);
-
-  vcs_uri = ide_vcs_uri_new (uristr);
-
-  if (vcs_uri == NULL)
+  if (!(vcs_uri = ide_vcs_uri_new (uristr)))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -283,21 +237,39 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
       return;
     }
 
+  /* Always set a username if the transport is SSH */
   if (g_strcmp0 ("ssh", ide_vcs_uri_get_scheme (vcs_uri)) == 0)
     {
       if (ide_vcs_uri_get_user (vcs_uri) == NULL)
-        ide_vcs_uri_set_user (vcs_uri, g_get_user_name ());
+        {
+          ide_vcs_uri_set_user (vcs_uri, g_get_user_name ());
+          g_free (uristr);
+          uristr = ide_vcs_uri_to_string (vcs_uri);
+        }
     }
 
-  g_assert (IDE_IS_NOTIFICATION (notif));
-
+  /* Create state for the task */
   req = clone_request_new (vcs_uri, branch, location, notif);
-
-  g_variant_dict_lookup (options, "author-name", "s", &req->author_name);
-  g_variant_dict_lookup (options, "author-email", "s", &req->author_email);
-
   ide_task_set_task_data (task, req, clone_request_free);
-  ide_task_run_in_thread (task, gbp_git_vcs_cloner_worker);
+
+  if (!(service = gbp_git_client_get_service (client, cancellable, &error)) ||
+      !(connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (service))) ||
+      !(req->progress = gbp_git_progress_new (connection, notif, cancellable, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      g_variant_dict_clear (&dict);
+      return;
+    }
+
+  ipc_git_service_call_clone (service,
+                              uristr,
+                              g_file_peek_path (req->location),
+                              req->branch ?: "master",
+                              g_variant_dict_end (&dict),
+                              g_dbus_interface_skeleton_get_object_path (G_DBUS_INTERFACE_SKELETON (req->progress)),
+                              cancellable,
+                              gbp_git_vcs_cloner_clone_cb,
+                              g_steal_pointer (&task));
 }
 
 static gboolean

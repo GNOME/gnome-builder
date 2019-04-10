@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include <libgit2-glib/ggit.h>
 #include <libide-code.h>
+
+#include "daemon/ipc-git-repository.h"
 
 G_BEGIN_DECLS
 
@@ -29,14 +30,17 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpGitBufferChangeMonitor, gbp_git_buffer_change_monitor, GBP, GIT_BUFFER_CHANGE_MONITOR, IdeBufferChangeMonitor)
 
-void     gbp_git_buffer_change_monitor_set_repository (GbpGitBufferChangeMonitor  *self,
-                                                       GgitRepository             *repository);
-void     gbp_git_buffer_change_monitor_wait_async     (GbpGitBufferChangeMonitor  *self,
-                                                       GCancellable               *cancellable,
-                                                       GAsyncReadyCallback         callback,
-                                                       gpointer                    user_data);
-gboolean gbp_git_buffer_change_monitor_wait_finish    (GbpGitBufferChangeMonitor  *self,
-                                                       GAsyncResult               *result,
-                                                       GError                    **error);
+IdeBufferChangeMonitor *gbp_git_buffer_change_monitor_new         (IdeBuffer                  *buffer,
+                                                                   IpcGitRepository           *repository,
+                                                                   GFile                      *file,
+                                                                   GCancellable               *cancellable,
+                                                                   GError                    **error);
+void                    gbp_git_buffer_change_monitor_wait_async  (GbpGitBufferChangeMonitor  *self,
+                                                                   GCancellable               *cancellable,
+                                                                   GAsyncReadyCallback         callback,
+                                                                   gpointer                    user_data);
+gboolean                gbp_git_buffer_change_monitor_wait_finish (GbpGitBufferChangeMonitor  *self,
+                                                                   GAsyncResult               *result,
+                                                                   GError                    **error);
 
 G_END_DECLS

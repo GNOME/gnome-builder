@@ -1,6 +1,6 @@
 /* gbp-git-vcs.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <stdlib.h>
+#include "daemon/ipc-git-types.h"
 
 #include "gbp-git-branch.h"
 #include "gbp-git-tag.h"
@@ -31,23 +31,417 @@
 
 struct _GbpGitVcs
 {
-  IdeObject       parent_instance;
-  GgitRepository *repository;
-  GFile          *location;
-  GFile          *workdir;
-  gchar          *branch;
+  IdeObject         parent;
+
+  /* read-only, thread-safe access */
+  IpcGitRepository *repository;
+  GFile            *workdir;
 };
 
 enum {
   PROP_0,
   PROP_BRANCH_NAME,
-  PROP_LOCATION,
-  PROP_REPOSITORY,
   PROP_WORKDIR,
   N_PROPS
 };
 
-static void vcs_iface_init (IdeVcsInterface *iface);
+static GFile *
+gbp_git_vcs_get_workdir (IdeVcs *vcs)
+{
+  return GBP_GIT_VCS (vcs)->workdir;
+}
+
+static gboolean
+gbp_git_vcs_is_ignored (IdeVcs  *vcs,
+                        GFile   *file,
+                        GError **error)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autofree gchar *relative_path = NULL;
+  gboolean is_ignored = FALSE;
+
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (G_IS_FILE (file));
+
+  if (g_file_equal (self->workdir, file))
+    return FALSE;
+
+  /*
+   * This may be called from threads.
+   *
+   * However, we do not change our GbpGitVcs.repository field after the
+   * creation of the GbpGitVcs. Also, the GDBusProxy (IpcGitRepository)
+   * is thread-safe in terms of calling operations on the remote object
+   * from multiple threads.
+   *
+   * Also, GbpGitVcs.workdir is not changed after creation, so we can
+   * use that to for determining the relative path.
+   */
+
+  if (!g_file_has_prefix (file, self->workdir))
+    return TRUE;
+
+  relative_path = g_file_get_relative_path (self->workdir, file);
+
+  if (!ipc_git_repository_call_path_is_ignored_sync (self->repository,
+                                                     relative_path,
+                                                     &is_ignored,
+                                                     NULL,
+                                                     error))
+    return FALSE;
+
+  return is_ignored;
+}
+
+static IdeVcsConfig *
+gbp_git_vcs_get_config (IdeVcs *vcs)
+{
+  IdeVcsConfig *config;
+
+  g_assert (GBP_IS_GIT_VCS (vcs));
+
+  config = g_object_new (GBP_TYPE_GIT_VCS_CONFIG,
+                         "parent", vcs,
+                         NULL);
+  gbp_git_vcs_config_set_global (GBP_GIT_VCS_CONFIG (config), FALSE);
+
+  return g_steal_pointer (&config);
+}
+
+static gchar *
+gbp_git_vcs_get_branch_name (IdeVcs *vcs)
+{
+  return ipc_git_repository_dup_branch (GBP_GIT_VCS (vcs)->repository);
+}
+
+static void
+gbp_git_vcs_switch_branch_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IpcGitRepository *repository = (IpcGitRepository *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IPC_IS_GIT_REPOSITORY (repository));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ipc_git_repository_call_switch_branch_finish (repository, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+}
+
+static void
+gbp_git_vcs_switch_branch_async (IdeVcs              *vcs,
+                                 IdeVcsBranch        *branch,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *branch_name = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (GBP_IS_GIT_BRANCH (branch));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_switch_branch_async);
+
+  branch_name = ide_vcs_branch_get_name (branch);
+
+  ipc_git_repository_call_switch_branch (self->repository,
+                                         branch_name,
+                                         cancellable,
+                                         gbp_git_vcs_switch_branch_cb,
+                                         g_steal_pointer (&task));
+}
+
+static gboolean
+gbp_git_vcs_switch_branch_finish (IdeVcs        *vcs,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (vcs));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static GPtrArray *
+create_branches (gchar **refs)
+{
+  GPtrArray *ret = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (refs != NULL)
+    {
+      for (guint i = 0; refs[i]; i++)
+        g_ptr_array_add (ret, gbp_git_branch_new (refs[i]));
+    }
+
+  return g_steal_pointer (&ret);
+}
+
+static void
+gbp_git_vcs_list_branches_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IpcGitRepository *repository = (IpcGitRepository *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) refs = NULL;
+
+  g_assert (IPC_IS_GIT_REPOSITORY (repository));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ipc_git_repository_call_list_refs_by_kind_finish (repository, &refs, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, create_branches (refs), g_ptr_array_unref);
+}
+
+static void
+gbp_git_vcs_list_branches_async (IdeVcs              *vcs,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_list_branches_async);
+
+  ipc_git_repository_call_list_refs_by_kind (self->repository,
+                                             IPC_GIT_REF_BRANCH,
+                                             cancellable,
+                                             gbp_git_vcs_list_branches_cb,
+                                             g_steal_pointer (&task));
+}
+
+static GPtrArray *
+gbp_git_vcs_list_branches_finish (IdeVcs        *vcs,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  GPtrArray *ret;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (vcs));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+}
+
+static GPtrArray *
+create_tags (gchar **refs)
+{
+  GPtrArray *ret = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (refs != NULL)
+    {
+      for (guint i = 0; refs[i]; i++)
+        g_ptr_array_add (ret, gbp_git_tag_new (refs[i]));
+    }
+
+  return g_steal_pointer (&ret);
+}
+
+static void
+gbp_git_vcs_list_tags_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IpcGitRepository *repository = (IpcGitRepository *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) refs = NULL;
+
+  g_assert (IPC_IS_GIT_REPOSITORY (repository));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ipc_git_repository_call_list_refs_by_kind_finish (repository, &refs, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, create_tags (refs), g_ptr_array_unref);
+}
+
+static void
+gbp_git_vcs_list_tags_async (IdeVcs              *vcs,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_list_tags_async);
+
+  ipc_git_repository_call_list_refs_by_kind (self->repository,
+                                             IPC_GIT_REF_TAG,
+                                             cancellable,
+                                             gbp_git_vcs_list_tags_cb,
+                                             g_steal_pointer (&task));
+}
+
+static GPtrArray *
+gbp_git_vcs_list_tags_finish (IdeVcs        *vcs,
+                              GAsyncResult  *result,
+                              GError       **error)
+{
+  GPtrArray *ret;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (vcs));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+}
+
+static GListModel *
+create_status_model (GbpGitVcs *self,
+                     GVariant  *files)
+{
+  g_autoptr(GListStore) store = NULL;
+  GVariantIter iter;
+  const gchar *path = NULL;
+  guint flags = 0;
+
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (files != NULL);
+
+  store = g_list_store_new (IDE_TYPE_VCS_FILE_INFO);
+
+  g_variant_iter_init (&iter, files);
+
+  while (g_variant_iter_next (&iter, "(&su)", &path, &flags))
+    {
+      g_autoptr(GFile) file = g_file_get_child (self->workdir, path);
+
+      g_list_store_append (store,
+                           g_object_new (IDE_TYPE_VCS_FILE_INFO,
+                                         "file", file,
+                                         "status", flags,
+                                         NULL));
+    }
+
+  return G_LIST_MODEL (g_steal_pointer (&store));
+}
+
+static void
+gbp_git_vcs_list_status_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
+{
+  IpcGitRepository *repository = (IpcGitRepository *)object;
+  g_autoptr(GVariant) files = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  GbpGitVcs *self;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IPC_IS_GIT_REPOSITORY (repository));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+
+  if (!ipc_git_repository_call_list_status_finish (repository, &files, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_object (task, create_status_model (self, files));
+}
+
+static void
+gbp_git_vcs_list_status_async (IdeVcs              *vcs,
+                               GFile               *directory_or_file,
+                               gboolean             include_descendants,
+                               gint                 io_priority,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *relative_path = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (G_IS_FILE (directory_or_file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_list_status_async);
+
+  if (!g_file_has_prefix (directory_or_file, self->workdir) &&
+      !g_file_equal (directory_or_file, self->workdir))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Directory is not within repository");
+      return;
+    }
+
+  relative_path = g_file_get_relative_path (self->workdir, directory_or_file);
+
+  ipc_git_repository_call_list_status (self->repository,
+                                       relative_path ?: "",
+                                       cancellable,
+                                       gbp_git_vcs_list_status_cb,
+                                       g_steal_pointer (&task));
+}
+
+static GListModel *
+gbp_git_vcs_list_status_finish (IdeVcs        *vcs,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (vcs));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_object (IDE_TASK (result), error);
+}
+
+static void
+vcs_iface_init (IdeVcsInterface *iface)
+{
+  iface->get_workdir = gbp_git_vcs_get_workdir;
+  iface->is_ignored = gbp_git_vcs_is_ignored;
+  iface->get_config = gbp_git_vcs_get_config;
+  iface->get_branch_name = gbp_git_vcs_get_branch_name;
+  iface->switch_branch_async = gbp_git_vcs_switch_branch_async;
+  iface->switch_branch_finish = gbp_git_vcs_switch_branch_finish;
+  iface->list_branches_async = gbp_git_vcs_list_branches_async;
+  iface->list_branches_finish = gbp_git_vcs_list_branches_finish;
+  iface->list_tags_async = gbp_git_vcs_list_tags_async;
+  iface->list_tags_finish = gbp_git_vcs_list_tags_finish;
+  iface->list_status_async = gbp_git_vcs_list_status_async;
+  iface->list_status_finish = gbp_git_vcs_list_status_finish;
+}
 
 G_DEFINE_TYPE_WITH_CODE (GbpGitVcs, gbp_git_vcs, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, vcs_iface_init))
@@ -60,9 +454,6 @@ gbp_git_vcs_finalize (GObject *object)
   GbpGitVcs *self = (GbpGitVcs *)object;
 
   g_clear_object (&self->repository);
-  g_clear_object (&self->location);
-  g_clear_object (&self->workdir);
-  g_clear_pointer (&self->branch, g_free);
 
   G_OBJECT_CLASS (gbp_git_vcs_parent_class)->finalize (object);
 }
@@ -78,50 +469,11 @@ gbp_git_vcs_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_BRANCH_NAME:
-      g_value_set_string (value, self->branch);
-      break;
-
-    case PROP_LOCATION:
-      g_value_set_object (value, self->location);
-      break;
-
-    case PROP_REPOSITORY:
-      g_value_set_object (value, self->repository);
+      g_value_take_string (value, gbp_git_vcs_get_branch_name (IDE_VCS (self)));
       break;
 
     case PROP_WORKDIR:
-      g_value_set_object (value, self->workdir);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gbp_git_vcs_set_property (GObject      *object,
-                          guint         prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
-{
-  GbpGitVcs *self = GBP_GIT_VCS (object);
-
-  switch (prop_id)
-    {
-    case PROP_BRANCH_NAME:
-      self->branch = g_value_dup_string (value);
-      break;
-
-    case PROP_LOCATION:
-      self->location = g_value_dup_object (value);
-      break;
-
-    case PROP_REPOSITORY:
-      self->repository = g_value_dup_object (value);
-      break;
-
-    case PROP_WORKDIR:
-      self->workdir = g_value_dup_object (value);
+      g_value_take_object (value, g_file_dup (self->workdir));
       break;
 
     default:
@@ -136,35 +488,20 @@ gbp_git_vcs_class_init (GbpGitVcsClass *klass)
 
   object_class->finalize = gbp_git_vcs_finalize;
   object_class->get_property = gbp_git_vcs_get_property;
-  object_class->set_property = gbp_git_vcs_set_property;
 
   properties [PROP_BRANCH_NAME] =
     g_param_spec_string ("branch-name",
                          "Branch Name",
-                         "The name of the branch",
+                         "The name of the current branch",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_LOCATION] =
-    g_param_spec_object ("location",
-                         "Location",
-                         "The location for the repository",
-                         G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_REPOSITORY] =
-    g_param_spec_object ("repository",
-                         "Repository",
-                         "The underlying repository object",
-                         GGIT_TYPE_REPOSITORY,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_WORKDIR] =
     g_param_spec_object ("workdir",
                          "Workdir",
-                         "Working directory of the repository",
+                         "The workdir of the vcs",
                          G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -174,681 +511,54 @@ gbp_git_vcs_init (GbpGitVcs *self)
 {
 }
 
-GFile *
-gbp_git_vcs_get_location (GbpGitVcs *self)
+static void
+gbp_git_vcs_notify_branch_cb (GbpGitVcs        *self,
+                              GParamSpec       *pspec,
+                              IpcGitRepository *repository)
 {
-  g_return_val_if_fail (GBP_IS_GIT_VCS (self), NULL);
-  return self->location;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_NAME]);
 }
 
-GgitRepository *
-gbp_git_vcs_get_repository (GbpGitVcs *self)
+static void
+gbp_git_vcs_changed_cb (GbpGitVcs        *self,
+                        IpcGitRepository *repository)
 {
-  g_return_val_if_fail (GBP_IS_GIT_VCS (self), NULL);
-  return self->repository;
+  ide_vcs_emit_changed (IDE_VCS (self));
 }
 
-static GFile *
-gbp_git_vcs_get_workdir (IdeVcs *vcs)
+GbpGitVcs *
+gbp_git_vcs_new (IpcGitRepository *repository)
 {
-  return GBP_GIT_VCS (vcs)->workdir;
-}
+  const gchar *workdir;
+  GbpGitVcs *ret;
 
-static gchar *
-gbp_git_vcs_get_branch_name (IdeVcs *vcs)
-{
-  gchar *ret;
+  g_return_val_if_fail (IPC_IS_GIT_REPOSITORY (repository), NULL);
 
-  g_return_val_if_fail (GBP_IS_GIT_VCS (vcs), NULL);
+  workdir = ipc_git_repository_get_workdir (repository);
 
-  ide_object_lock (IDE_OBJECT (vcs));
-  ret = g_strdup (GBP_GIT_VCS (vcs)->branch);
-  ide_object_unlock (IDE_OBJECT (vcs));
+  ret = g_object_new (GBP_TYPE_GIT_VCS, NULL);
+  ret->repository = g_object_ref (repository);
+  ret->workdir = g_file_new_for_path (workdir);
+
+  g_signal_connect_object (repository,
+                           "notify::branch",
+                           G_CALLBACK (gbp_git_vcs_notify_branch_cb),
+                           ret,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (repository,
+                           "changed",
+                           G_CALLBACK (gbp_git_vcs_changed_cb),
+                           ret,
+                           G_CONNECT_SWAPPED);
 
   return g_steal_pointer (&ret);
 }
 
-static IdeVcsConfig *
-gbp_git_vcs_get_config (IdeVcs *vcs)
+IpcGitRepository *
+gbp_git_vcs_get_repository (GbpGitVcs *self)
 {
-  return g_object_new (GBP_TYPE_GIT_VCS_CONFIG, NULL);
-}
-static gboolean
-gbp_git_vcs_is_ignored (IdeVcs  *vcs,
-                        GFile   *file,
-                        GError **error)
-{
-  g_autofree gchar *name = NULL;
-  GbpGitVcs *self = (GbpGitVcs *)vcs;
-  gboolean ret = FALSE;
+  g_return_val_if_fail (GBP_IS_GIT_VCS (self), NULL);
 
-  g_assert (GBP_IS_GIT_VCS (self));
-  g_assert (G_IS_FILE (file));
-
-  /* Note: this function is required to be thread-safe so that workers
-   *       can check if files are ignored from a thread without
-   *       round-tripping to the main thread.
-   */
-
-  /* self->workdir is not changed after creation, so safe
-   * to access it from a thread.
-   */
-  name = g_file_get_relative_path (self->workdir, file);
-  if (g_strcmp0 (name, ".git") == 0)
-    return TRUE;
-
-  /*
-   * If we have a valid name to work with, we want to query the
-   * repository. But this could be called from a thread, so ensure
-   * we are the only thread accessing self->repository right now.
-   */
-  if (name != NULL)
-    {
-      ide_object_lock (IDE_OBJECT (self));
-      ret = ggit_repository_path_is_ignored (self->repository, name, error);
-      ide_object_unlock (IDE_OBJECT (self));
-    }
-
-  return ret;
-}
-
-typedef struct
-{
-  GFile      *repository_location;
-  GFile      *directory_or_file;
-  GFile      *workdir;
-  GListStore *store;
-  guint       recursive : 1;
-} ListStatus;
-
-static void
-list_status_free (gpointer data)
-{
-  ListStatus *ls = data;
-
-  g_clear_object (&ls->repository_location);
-  g_clear_object (&ls->directory_or_file);
-  g_clear_object (&ls->workdir);
-  g_clear_object (&ls->store);
-  g_slice_free (ListStatus, ls);
-}
-
-static gint
-gbp_git_vcs_list_status_cb (const gchar     *path,
-                            GgitStatusFlags  flags,
-                            gpointer         user_data)
-{
-  ListStatus *state = user_data;
-  g_autoptr(GFile) file = NULL;
-  g_autoptr(IdeVcsFileInfo) info = NULL;
-  IdeVcsFileStatus status = 0;
-
-  g_assert (path != NULL);
-  g_assert (state != NULL);
-  g_assert (G_IS_LIST_STORE (state->store));
-  g_assert (G_IS_FILE (state->workdir));
-
-  file = g_file_get_child (state->workdir, path);
-
-  switch (flags)
-    {
-    case GGIT_STATUS_INDEX_DELETED:
-    case GGIT_STATUS_WORKING_TREE_DELETED:
-      status = IDE_VCS_FILE_STATUS_DELETED;
-      break;
-
-    case GGIT_STATUS_INDEX_RENAMED:
-      status = IDE_VCS_FILE_STATUS_RENAMED;
-      break;
-
-    case GGIT_STATUS_INDEX_NEW:
-    case GGIT_STATUS_WORKING_TREE_NEW:
-      status = IDE_VCS_FILE_STATUS_ADDED;
-      break;
-
-    case GGIT_STATUS_INDEX_MODIFIED:
-    case GGIT_STATUS_INDEX_TYPECHANGE:
-    case GGIT_STATUS_WORKING_TREE_MODIFIED:
-    case GGIT_STATUS_WORKING_TREE_TYPECHANGE:
-      status = IDE_VCS_FILE_STATUS_CHANGED;
-      break;
-
-    case GGIT_STATUS_IGNORED:
-      status = IDE_VCS_FILE_STATUS_IGNORED;
-      break;
-
-    case GGIT_STATUS_CURRENT:
-      status = IDE_VCS_FILE_STATUS_UNCHANGED;
-      break;
-
-    default:
-      status = IDE_VCS_FILE_STATUS_UNTRACKED;
-      break;
-    }
-
-  info = g_object_new (IDE_TYPE_VCS_FILE_INFO,
-                       "file", file,
-                       "status", status,
-                       NULL);
-
-  g_list_store_append (state->store, info);
-
-  return 0;
-}
-
-static void
-gbp_git_vcs_list_status_worker (IdeTask      *task,
-                                gpointer      source_object,
-                                gpointer      task_data,
-                                GCancellable *cancellable)
-{
-  ListStatus *state = task_data;
-  g_autoptr(GListStore) store = NULL;
-  g_autoptr(GFile) workdir = NULL;
-  g_autoptr(GgitRepository) repository = NULL;
-  g_autoptr(GgitStatusOptions) options = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autofree gchar *relative = NULL;
-  gchar *strv[] = { NULL, NULL };
-
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS (source_object));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (state != NULL);
-  g_assert (G_IS_FILE (state->repository_location));
-
-  if (!(repository = ggit_repository_open (state->repository_location, &error)))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  if (!(workdir = ggit_repository_get_workdir (repository)))
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 "Failed to locate working directory");
-      return;
-    }
-
-  g_set_object (&state->workdir, workdir);
-
-  if (state->directory_or_file != NULL)
-    relative = g_file_get_relative_path (workdir, state->directory_or_file);
-
-  strv[0] = relative;
-  options = ggit_status_options_new (GGIT_STATUS_OPTION_DEFAULT,
-                                     GGIT_STATUS_SHOW_INDEX_AND_WORKDIR,
-                                     (const gchar **)strv);
-
-  store = g_list_store_new (IDE_TYPE_VCS_FILE_INFO);
-  g_set_object (&state->store, store);
-
-  if (!ggit_repository_file_status_foreach (repository,
-                                            options,
-                                            gbp_git_vcs_list_status_cb,
-                                            state,
-                                            &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
-}
-
-static void
-gbp_git_vcs_list_status_async (IdeVcs              *vcs,
-                               GFile               *directory_or_file,
-                               gboolean             include_descendants,
-                               gint                 io_priority,
-                               GCancellable        *cancellable,
-                               GAsyncReadyCallback  callback,
-                               gpointer             user_data)
-{
-  GbpGitVcs *self = (GbpGitVcs *)vcs;
-  g_autoptr(IdeTask) task = NULL;
-  ListStatus *state;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (GBP_IS_GIT_VCS (self));
-  g_return_if_fail (!directory_or_file || G_IS_FILE (directory_or_file));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  ide_object_lock (IDE_OBJECT (self));
-  state = g_slice_new0 (ListStatus);
-  state->directory_or_file = g_object_ref (directory_or_file);
-  state->repository_location = ggit_repository_get_location (self->repository);
-  state->recursive = !!include_descendants;
-  ide_object_unlock (IDE_OBJECT (self));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_git_vcs_list_status_async);
-  ide_task_set_priority (task, io_priority);
-  ide_task_set_return_on_cancel (task, TRUE);
-  ide_task_set_task_data (task, state, list_status_free);
-
-  if (state->repository_location == NULL)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "No repository loaded");
-  else
-    ide_task_run_in_thread (task, gbp_git_vcs_list_status_worker);
-
-  IDE_EXIT;
-}
-
-static GListModel *
-gbp_git_vcs_list_status_finish (IdeVcs        *vcs,
-                                GAsyncResult  *result,
-                                GError       **error)
-{
-  g_return_val_if_fail (GBP_IS_GIT_VCS (vcs), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
-}
-
-static void
-gbp_git_vcs_list_branches_worker (IdeTask      *task,
-                                  gpointer      source_object,
-                                  gpointer      task_data,
-                                  GCancellable *cancellable)
-{
-  GbpGitVcs *self = source_object;
-  g_autoptr(GPtrArray) branches = NULL;
-
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  branches = g_ptr_array_new_with_free_func (g_object_unref);
-
-  ide_object_lock (IDE_OBJECT (self));
-
-  if (self->repository != NULL)
-    {
-      g_autoptr(GgitBranchEnumerator) enumerator = NULL;
-      g_autoptr(GError) error = NULL;
-
-      if (!(enumerator = ggit_repository_enumerate_branches (self->repository,
-                                                             GGIT_BRANCH_LOCAL,
-                                                             &error)))
-        {
-          ide_task_return_error (task, g_steal_pointer (&error));
-          goto unlock;
-        }
-
-      while (ggit_branch_enumerator_next (enumerator))
-        {
-          g_autoptr(GgitRef) ref = ggit_branch_enumerator_get (enumerator);
-          const gchar *name = ggit_ref_get_name (ref);
-
-          g_ptr_array_add (branches, gbp_git_branch_new (name));
-        }
-
-      ide_task_return_pointer (task,
-                               g_steal_pointer (&branches),
-                               g_ptr_array_unref);
-    }
-  else
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 "No repository to access");
-    }
-
-unlock:
-  ide_object_unlock (IDE_OBJECT (self));
-}
-
-static void
-gbp_git_vcs_list_branches_async (IdeVcs              *vcs,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
-{
-  GbpGitVcs *self = (GbpGitVcs *)vcs;
-  g_autoptr(IdeTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_GIT_VCS (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_git_vcs_list_status_async);
-  ide_task_set_return_on_cancel (task, TRUE);
-
-  ide_object_lock (IDE_OBJECT (self));
-  if (self->repository == NULL)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "No repository loaded");
-  else
-    ide_task_run_in_thread (task, gbp_git_vcs_list_branches_worker);
-  ide_object_unlock (IDE_OBJECT (self));
-
-  IDE_EXIT;
-}
-
-static GPtrArray *
-gbp_git_vcs_list_branches_finish (IdeVcs        *vcs,
-                                  GAsyncResult  *result,
-                                  GError       **error)
-{
-  g_return_val_if_fail (GBP_IS_GIT_VCS (vcs), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
-}
-
-static gint
-compare_tags (gconstpointer a,
-              gconstpointer b)
-{
-  return g_utf8_collate (*(const gchar **)a, *(const gchar **)b);
-}
-
-static void
-gbp_git_vcs_list_tags_worker (IdeTask      *task,
-                              gpointer      source_object,
-                              gpointer      task_data,
-                              GCancellable *cancellable)
-{
-  GbpGitVcs *self = source_object;
-  g_autoptr(GPtrArray) tags = NULL;
-
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  tags = g_ptr_array_new_with_free_func (g_object_unref);
-
-  ide_object_lock (IDE_OBJECT (self));
-
-  if (self->repository != NULL)
-    {
-      g_autoptr(GgitBranchEnumerator) enumerator = NULL;
-      g_auto(GStrv) names = NULL;
-      g_autoptr(GError) error = NULL;
-
-      if (!(names = ggit_repository_list_tags (self->repository, &error)))
-        {
-          ide_task_return_error (task, g_steal_pointer (&error));
-          goto unlock;
-        }
-
-      qsort (names, g_strv_length (names), sizeof (gchar *), compare_tags);
-
-      for (guint i = 0; names[i] != NULL; i++)
-        g_ptr_array_add (tags, gbp_git_tag_new (names[i]));
-
-      ide_task_return_pointer (task,
-                               g_steal_pointer (&tags),
-                               g_ptr_array_unref);
-    }
-  else
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 "No repository to access");
-    }
-
-unlock:
-  ide_object_unlock (IDE_OBJECT (self));
-}
-
-static void
-gbp_git_vcs_list_tags_async (IdeVcs              *vcs,
-                             GCancellable        *cancellable,
-                             GAsyncReadyCallback  callback,
-                             gpointer             user_data)
-{
-  GbpGitVcs *self = (GbpGitVcs *)vcs;
-  g_autoptr(IdeTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_GIT_VCS (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_git_vcs_list_status_async);
-  ide_task_set_return_on_cancel (task, TRUE);
-
-  ide_object_lock (IDE_OBJECT (self));
-  if (self->repository == NULL)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "No repository loaded");
-  else
-    ide_task_run_in_thread (task, gbp_git_vcs_list_tags_worker);
-  ide_object_unlock (IDE_OBJECT (self));
-
-  IDE_EXIT;
-}
-
-static GPtrArray *
-gbp_git_vcs_list_tags_finish (IdeVcs        *vcs,
-                              GAsyncResult  *result,
-                              GError       **error)
-{
-  g_return_val_if_fail (GBP_IS_GIT_VCS (vcs), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
-}
-
-static void
-gbp_git_vcs_switch_branch_worker (IdeTask      *task,
-                                  gpointer      source_object,
-                                  gpointer      task_data,
-                                  GCancellable *cancellable)
-{
-  g_autoptr(GgitCheckoutOptions) checkout_options = NULL;
-  g_autoptr(GgitObject) obj = NULL;
-  g_autoptr(GgitRef) ref = NULL;
-  g_autoptr(GError) error = NULL;
-  GbpGitVcs *self = source_object;
-  const gchar *id = task_data;
-
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS (self));
-  g_assert (id != NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  ide_object_lock (IDE_OBJECT (self));
-
-  if (self->repository == NULL)
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 "No repository to switch");
-      goto unlock;
-    }
-
-  if (!(ref = ggit_repository_lookup_reference (self->repository, id, &error)) ||
-      !(obj = ggit_ref_lookup (ref, &error)))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      goto unlock;
-    }
-
-  checkout_options = ggit_checkout_options_new ();
-  ggit_checkout_options_set_strategy (checkout_options, GGIT_CHECKOUT_SAFE);
-
-  /* Update the tree contents */
-  if (!ggit_repository_checkout_tree (self->repository,
-                                      obj,
-                                      checkout_options,
-                                      &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      goto unlock;
-    }
-
-  /* Now update head to point at the branch */
-  if (!ggit_repository_set_head (self->repository, id, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      goto unlock;
-    }
-
-  ide_task_return_boolean (task, TRUE);
-
-unlock:
-  ide_object_unlock (IDE_OBJECT (self));
-}
-
-static void
-gbp_git_vcs_switch_branch_async (IdeVcs              *vcs,
-                                 IdeVcsBranch        *branch,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_GIT_VCS (vcs));
-  g_assert (GBP_IS_GIT_BRANCH (branch));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (vcs, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_git_vcs_switch_branch_async);
-  ide_task_set_task_data (task,
-                          g_strdup (ide_vcs_branch_get_name (branch)),
-                          g_free);
-  ide_task_run_in_thread (task, gbp_git_vcs_switch_branch_worker);
-}
-
-static gboolean
-gbp_git_vcs_switch_branch_finish (IdeVcs        *vcs,
-                                  GAsyncResult  *result,
-                                  GError       **error)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_GIT_VCS (vcs));
-  g_assert (IDE_IS_TASK (result));
-
-  ide_vcs_emit_changed (vcs);
-
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
-}
-
-static void
-vcs_iface_init (IdeVcsInterface *iface)
-{
-  iface->get_workdir = gbp_git_vcs_get_workdir;
-  iface->get_branch_name = gbp_git_vcs_get_branch_name;
-  iface->get_config = gbp_git_vcs_get_config;
-  iface->is_ignored = gbp_git_vcs_is_ignored;
-  iface->list_status_async = gbp_git_vcs_list_status_async;
-  iface->list_status_finish = gbp_git_vcs_list_status_finish;
-  iface->list_branches_async = gbp_git_vcs_list_branches_async;
-  iface->list_branches_finish = gbp_git_vcs_list_branches_finish;
-  iface->list_tags_async = gbp_git_vcs_list_tags_async;
-  iface->list_tags_finish = gbp_git_vcs_list_tags_finish;
-  iface->switch_branch_async = gbp_git_vcs_switch_branch_async;
-  iface->switch_branch_finish = gbp_git_vcs_switch_branch_finish;
-}
-
-static void
-gbp_git_vcs_reload_worker (IdeTask      *task,
-                           gpointer      source_object,
-                           gpointer      task_data,
-                           GCancellable *cancellable)
-{
-  g_autoptr(GgitRepository) repository = NULL;
-  g_autoptr(GError) error = NULL;
-  GFile *location = task_data;
-
-  IDE_ENTRY;
-
-  g_assert (!IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_GIT_VCS (source_object));
-  g_assert (G_IS_FILE (location));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (!(repository = ggit_repository_open (location, &error)))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_steal_pointer (&repository), g_object_unref);
-
-  IDE_EXIT;
-}
-
-void
-gbp_git_vcs_reload_async (GbpGitVcs           *self,
-                          GCancellable        *cancellable,
-                          GAsyncReadyCallback  callback,
-                          gpointer             user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_GIT_VCS (self));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_source_tag (task, gbp_git_vcs_reload_async);
-  ide_task_set_task_data (task, g_object_ref (self->location), g_object_unref);
-  ide_task_run_in_thread (task, gbp_git_vcs_reload_worker);
-
-  IDE_EXIT;
-}
-
-gboolean
-gbp_git_vcs_reload_finish (GbpGitVcs     *self,
-                           GAsyncResult  *result,
-                           GError       **error)
-{
-  g_autoptr(GgitRepository) repository = NULL;
-  g_autoptr(GgitRef) ref = NULL;
-
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
-  g_return_val_if_fail (GBP_IS_GIT_VCS (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
-
-  ide_object_lock (IDE_OBJECT (self));
-
-  if (!(repository = ide_task_propagate_pointer (IDE_TASK (result), error)))
-    goto failure;
-
-  if ((ref = ggit_repository_get_head (repository, NULL)))
-    {
-      const gchar *name = ggit_ref_get_shorthand (ref);
-
-      if (name != NULL)
-        {
-          if (!ide_str_equal0 (name, self->branch))
-            {
-              g_free (self->branch);
-              self->branch = g_strdup (name);
-              g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_NAME]);
-            }
-        }
-    }
-
-  if (g_set_object (&self->repository, repository))
-    {
-      ide_vcs_emit_changed (IDE_VCS (self));
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPOSITORY]);
-    }
-
-failure:
-  ide_object_unlock (IDE_OBJECT (self));
-
-  return repository != NULL;
+  return self->repository;
 }

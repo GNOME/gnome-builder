@@ -1,6 +1,6 @@
 /* gbp-git-vcs.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include <libgit2-glib/ggit.h>
 #include <libide-vcs.h>
+
+#include "daemon/ipc-git-repository.h"
 
 G_BEGIN_DECLS
 
@@ -29,14 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpGitVcs, gbp_git_vcs, GBP, GIT_VCS, IdeObject)
 
-GFile          *gbp_git_vcs_get_location   (GbpGitVcs            *self);
-GgitRepository *gbp_git_vcs_get_repository (GbpGitVcs            *self);
-void            gbp_git_vcs_reload_async   (GbpGitVcs            *self,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
-gboolean        gbp_git_vcs_reload_finish  (GbpGitVcs            *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
+GbpGitVcs        *gbp_git_vcs_new            (IpcGitRepository *repository);
+IpcGitRepository *gbp_git_vcs_get_repository (GbpGitVcs        *self);
 
 G_END_DECLS
