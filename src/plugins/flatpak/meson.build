@@ -4,6 +4,8 @@ if not get_option('plugin_git')
   error('-Dplugin_git=true is required for flatpak')
 endif
 
+subdir('daemon')
+
 plugins_sources += files([
   'flatpak-plugin.c',
   'gbp-flatpak-application-addin.c',
