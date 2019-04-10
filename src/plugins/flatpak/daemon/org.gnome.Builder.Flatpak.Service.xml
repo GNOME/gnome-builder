@@ -46,5 +46,16 @@
     <method name="ListRuntimes">
       <arg name="runtimes" direction="out" type="a(sssssb)"/>
     </method>
+    <!--
+      RuntimeIsKnown:
+      @name: a runtime name to lookup in form name/arch/branch
+
+      Checks to see if any installation knows about the runtime.
+    -->
+    <method name="RuntimeIsKnown">
+      <arg name="name" direction="in" type="s"/>
+      <arg name="is_known" direction="out" type="b"/>
+      <arg name="download_size" direction="out" type="x"/>
+    </method>
   </interface>
 </node>
