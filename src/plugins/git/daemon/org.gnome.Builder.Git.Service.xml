@@ -59,6 +59,7 @@
       <arg name="branch" direction="in" type="s">
         <doc:doc><doc:summary>The branch to clone.</doc:summary></doc:doc>
       </arg>
+      <arg name="config_options" direction="in" type="a{sv}"/>
       <arg name="progress" direction="in" type="o">
         <doc:doc><doc:summary>The path to an org.gnome.Builder.Git.Progress object on the callers connection.</doc:summary></doc:doc>
       </arg>

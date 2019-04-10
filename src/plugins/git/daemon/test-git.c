@@ -173,11 +173,16 @@ test_clone (IpcGitService *service)
   g_auto(GStrv) branches = NULL;
   g_autoptr(GVariant) changes = NULL;
   g_autofree gchar *monitor_path = NULL;
+  GVariantDict opts;
   GDBusConnection *conn;
   GVariantIter iter;
   gboolean ret;
 
   g_assert (IPC_IS_GIT_SERVICE (service));
+
+  g_variant_dict_init (&opts, NULL);
+  g_variant_dict_insert (&opts, "user.name", "s", "Test User");
+  g_variant_dict_insert (&opts, "user.email", "s", "Test Email");
 
   g_message ("Creating local progress object");
   conn = g_dbus_proxy_get_connection (G_DBUS_PROXY (service));
@@ -195,6 +200,7 @@ test_clone (IpcGitService *service)
                                          "https://gitlab.gnome.org/chergert/hello",
                                          tmpdir,
                                          "master",
+                                         g_variant_dict_end (&opts),
                                          PROGRESS_PATH,
                                          &location,
                                          NULL,

@@ -148,6 +148,7 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
                                    const gchar           *url,
                                    const gchar           *location,
                                    const gchar           *branch,
+                                   GVariant              *config_options,
                                    const gchar           *progress_path)
 {
   g_autoptr(GgitRepository) repository = NULL;
@@ -158,6 +159,7 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GFile) clone_location = NULL;
+  GVariantIter iter;
 
   g_assert (IPC_IS_GIT_SERVICE_IMPL (service));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
@@ -190,6 +192,23 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
 
   if (!(repository = ggit_repository_clone (url, file, options, &error)))
     goto gerror;
+
+  if (g_variant_iter_init (&iter, config_options))
+    {
+      g_autoptr(GgitConfig) config = NULL;
+      GVariant *value;
+      gchar *key;
+
+      if ((config = ggit_repository_get_config (repository, NULL)))
+        {
+          while (g_variant_iter_loop (&iter, "{sv}", &key, &value))
+            {
+              g_printerr ("%s\n", g_variant_get_type_string (value));
+              if (g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+                ggit_config_set_string (config, key, g_variant_get_string (value, NULL), NULL);
+            }
+        }
+    }
 
   clone_location = ggit_repository_get_location (repository);
   ipc_git_service_complete_clone (service,
