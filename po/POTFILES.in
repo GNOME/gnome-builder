@@ -241,9 +241,10 @@ src/plugins/flatpak/gbp-flatpak-transfer.c
 src/plugins/flatpak/gbp-flatpak-workbench-addin.c
 src/plugins/gcc/gbp-gcc-toolchain-provider.c
 src/plugins/gettext/ide-gettext-diagnostic-provider.c
+src/plugins/git/daemon/ipc-git-remote-callbacks.c
 src/plugins/git/gbp-git-buffer-change-monitor.c
+src/plugins/git/gbp-git-dependency-updater.c
 src/plugins/git/gbp-git-pipeline-addin.c
-src/plugins/git/gbp-git-remote-callbacks.c
 src/plugins/git/gbp-git-submodule-stage.c
 src/plugins/git/gbp-git-vcs-cloner.c
 src/plugins/glade/gbp-glade-editor-addin.c
