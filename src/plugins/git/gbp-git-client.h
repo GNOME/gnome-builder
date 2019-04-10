@@ -31,6 +31,9 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpGitClient, gbp_git_client, GBP, GIT_CLIENT, IdeObject)
 
 GbpGitClient  *gbp_git_client_from_context       (IdeContext           *context);
+IpcGitService *gbp_git_client_get_service        (GbpGitClient         *self,
+                                                  GCancellable         *cancellable,
+                                                  GError              **error);
 void           gbp_git_client_get_service_async  (GbpGitClient         *self,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,

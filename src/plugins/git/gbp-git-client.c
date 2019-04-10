@@ -90,9 +90,10 @@ gbp_git_client_subprocess_spawned (GbpGitClient            *self,
                                                  G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
                                                  NULL, NULL, NULL);
   g_dbus_connection_set_exit_on_close (self->connection, FALSE);
+  g_dbus_connection_start_message_processing (self->connection);
 
   self->service = ipc_git_service_proxy_new_sync (self->connection,
-                                                  G_DBUS_PROXY_FLAGS_NONE,
+                                                  G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
                                                   NULL,
                                                   "/org/gnome/Builder/Git",
                                                   NULL,
@@ -227,6 +228,62 @@ gbp_git_client_from_context (IdeContext *context)
     }
 
   return ret;
+}
+
+static void
+gbp_git_client_get_service_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  GbpGitClient *self = (GbpGitClient *)object;
+  g_autoptr(IpcGitService) service = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!(service = gbp_git_client_get_service_finish (self, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_object (task, g_steal_pointer (&service));
+}
+
+IpcGitService *
+gbp_git_client_get_service (GbpGitClient  *self,
+                            GCancellable  *cancellable,
+                            GError       **error)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GMainContext) gcontext = NULL;
+  IpcGitService *ret = NULL;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_object_lock (IDE_OBJECT (self));
+  if (self->service != NULL)
+    ret = g_object_ref (self->service);
+  ide_object_unlock (IDE_OBJECT (self));
+
+  if (ret != NULL)
+    return g_steal_pointer (&ret);
+
+  task = ide_task_new (self, cancellable, NULL, NULL);
+  ide_task_set_source_tag (task, gbp_git_client_get_service);
+
+  gcontext = g_main_context_ref_thread_default ();
+
+  gbp_git_client_get_service_async (self,
+                                    cancellable,
+                                    gbp_git_client_get_service_cb,
+                                    g_object_ref (task));
+
+  while (!ide_task_get_completed (task))
+    g_main_context_iteration (gcontext, TRUE);
+
+  return ide_task_propagate_object (task, error);
 }
 
 void
