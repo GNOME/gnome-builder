@@ -39,6 +39,17 @@ G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (git_buf, git_buf_dispose)
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (git_buf, git_buf_free)
 #endif
 
+typedef enum
+{
+  FILE_STATUS_IGNORED = 1,
+  FILE_STATUS_UNCHANGED,
+  FILE_STATUS_UNTRACKED,
+  FILE_STATUS_ADDED,
+  FILE_STATUS_RENAMED,
+  FILE_STATUS_DELETED,
+  FILE_STATUS_CHANGED,
+} FileStatus;
+
 struct _IpcGitRepositoryImpl
 {
   IpcGitRepositorySkeleton  parent;
@@ -77,6 +88,39 @@ get_signing_key (IpcGitRepositoryImpl *self)
   return g_strdup (ret);
 }
 
+static guint
+translate_status (GgitStatusFlags flags)
+{
+  switch (flags)
+    {
+    case GGIT_STATUS_INDEX_DELETED:
+    case GGIT_STATUS_WORKING_TREE_DELETED:
+      return FILE_STATUS_DELETED;
+
+    case GGIT_STATUS_INDEX_RENAMED:
+      return FILE_STATUS_RENAMED;
+
+    case GGIT_STATUS_INDEX_NEW:
+    case GGIT_STATUS_WORKING_TREE_NEW:
+      return FILE_STATUS_ADDED;
+
+    case GGIT_STATUS_INDEX_MODIFIED:
+    case GGIT_STATUS_INDEX_TYPECHANGE:
+    case GGIT_STATUS_WORKING_TREE_MODIFIED:
+    case GGIT_STATUS_WORKING_TREE_TYPECHANGE:
+      return FILE_STATUS_CHANGED;
+
+    case GGIT_STATUS_IGNORED:
+      return FILE_STATUS_IGNORED;
+
+    case GGIT_STATUS_CURRENT:
+      return FILE_STATUS_UNCHANGED;
+
+    default:
+      return FILE_STATUS_UNTRACKED;
+    }
+}
+
 static gint
 ipc_git_repository_impl_handle_list_status_cb (const gchar     *path,
                                                GgitStatusFlags  flags,
@@ -87,7 +131,7 @@ ipc_git_repository_impl_handle_list_status_cb (const gchar     *path,
   g_assert (path != NULL);
   g_assert (builder != NULL);
 
-  g_variant_builder_add (builder, "(su)", path, flags);
+  g_variant_builder_add (builder, "(su)", path, translate_status (flags));
 
   return GIT_OK;
 }
@@ -98,14 +142,23 @@ ipc_git_repository_impl_handle_list_status (IpcGitRepository      *repository,
                                             const gchar           *path)
 {
   IpcGitRepositoryImpl *self = (IpcGitRepositoryImpl *)repository;
+  g_autoptr(GgitRepository) repo  = NULL;
   g_autoptr(GgitStatusOptions) options = NULL;
+  g_autoptr(GFile) location = NULL;
   g_autoptr(GError) error = NULL;
-  const gchar *paths[] = { path, NULL };
+  const gchar *paths[] = { NULL, NULL };
   GVariantBuilder builder;
 
   g_assert (IPC_IS_GIT_REPOSITORY_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
   g_assert (path != NULL);
+
+  paths[0] = path[0] ? path : NULL;
+
+  location = ggit_repository_get_location (self->repository);
+
+  if (!(repo = ggit_repository_open (location, &error)))
+    return complete_wrapped_error (invocation, error);
 
   options = ggit_status_options_new (GGIT_STATUS_OPTION_DEFAULT,
                                      GGIT_STATUS_SHOW_INDEX_AND_WORKDIR,
@@ -113,7 +166,7 @@ ipc_git_repository_impl_handle_list_status (IpcGitRepository      *repository,
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(su)"));
 
-  if (!ggit_repository_file_status_foreach (self->repository,
+  if (!ggit_repository_file_status_foreach (repo,
                                             options,
                                             ipc_git_repository_impl_handle_list_status_cb,
                                             &builder,
@@ -895,8 +948,6 @@ ipc_git_repository_impl_submodule_foreach_cb (GgitSubmodule *submodule,
 
   g_assert (submodule != NULL);
   g_assert (name != NULL);
-
-  g_printerr ("Callback \n");
 
   if (state->error == NULL)
     ggit_submodule_update (submodule, state->init, state->options, &state->error);
