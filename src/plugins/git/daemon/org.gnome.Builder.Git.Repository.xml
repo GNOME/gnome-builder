@@ -47,6 +47,12 @@
     -->
     <property name="Location" type="ay" access="read"/>
     <!--
+      Workdir:
+
+      The path to the working directory of the repository.
+    -->
+    <property name="Workdir" type="ay" access="read"/>
+    <!--
       Close:
 
       Closes the repository, which will emit the "Closed" signal.

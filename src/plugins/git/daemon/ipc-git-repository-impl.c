@@ -137,6 +137,7 @@ ipc_git_repository_impl_handle_switch_branch (IpcGitRepository      *repository,
   g_autoptr(GgitObject) obj = NULL;
   g_autoptr(GgitRef) ref = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) workdir = NULL;
   const gchar *shortname;
 
   g_assert (IPC_IS_GIT_REPOSITORY_IMPL (self));
@@ -155,7 +156,10 @@ ipc_git_repository_impl_handle_switch_branch (IpcGitRepository      *repository,
   if (!(shortname = ggit_ref_get_shorthand (ref)))
     shortname = "master";
 
+  workdir = ggit_repository_get_workdir (self->repository);
+
   ipc_git_repository_set_branch (repository, shortname);
+  ipc_git_repository_set_workdir (repository, g_file_peek_path (workdir));
   ipc_git_repository_complete_switch_branch (repository, invocation);
 
   ipc_git_repository_emit_changed (repository);
@@ -1058,6 +1062,7 @@ ipc_git_repository_impl_open (GFile   *location,
                               GError **error)
 {
   g_autoptr(GgitRepository) repository = NULL;
+  g_autoptr(GFile) workdir = NULL;
   g_autoptr(GFile) gitdir = NULL;
   g_autofree gchar *branch = NULL;
   IpcGitRepositoryImpl *ret;
@@ -1118,9 +1123,12 @@ ipc_git_repository_impl_open (GFile   *location,
         branch = g_strdup ("master");
     }
 
+  workdir = ggit_repository_get_workdir (repository);
+
   ret = g_object_new (IPC_TYPE_GIT_REPOSITORY_IMPL,
                       "branch", branch,
                       "location", g_file_peek_path (location),
+                      "workdir", g_file_peek_path (workdir),
                       NULL);
   ret->repository = g_steal_pointer (&repository);
   ret->monitor = ipc_git_index_monitor_new (location);
