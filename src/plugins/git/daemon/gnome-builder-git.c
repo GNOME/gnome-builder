@@ -52,6 +52,15 @@ create_connection (GIOStream  *stream,
   return ret;
 }
 
+static void
+log_func (const gchar    *log_domain,
+          GLogLevelFlags  flags,
+          const gchar    *message,
+          gpointer        user_data)
+{
+  g_printerr ("gnome-builder-git: %s\n", message);
+}
+
 gint
 main (gint argc,
       gchar *argv[])
@@ -72,6 +81,8 @@ main (gint argc,
   signal (SIGPIPE, SIG_IGN);
 
   ggit_init ();
+
+  g_log_set_handler (NULL, G_LOG_LEVEL_MASK, log_func, NULL);
 
   if (!g_unix_set_fd_nonblocking (STDIN_FILENO, TRUE, &error) ||
       !g_unix_set_fd_nonblocking (STDOUT_FILENO, TRUE, &error))
