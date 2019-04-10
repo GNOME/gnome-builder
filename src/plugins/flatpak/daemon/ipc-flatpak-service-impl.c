@@ -44,6 +44,13 @@ typedef struct
   GFileMonitor *monitor;
 } Install;
 
+typedef struct
+{
+  GDBusMethodInvocation *invocation;
+  GPtrArray             *installs;
+  FlatpakRef            *target;
+} IsKnown;
+
 struct _IpcFlatpakServiceImpl
 {
   IpcFlatpakServiceSkeleton parent;
@@ -72,6 +79,25 @@ static GVariant *runtime_to_variant                          (const Runtime     
 static void      runtime_free                                (Runtime                *runtime);
 static gboolean  runtime_equal                               (const Runtime          *a,
                                                               const Runtime          *b);
+static void      is_known_free                               (IsKnown                *state);
+static FlatpakInstallation *installation_copy                (FlatpakInstallation    *installation);
+
+static FlatpakInstallation *
+installation_copy (FlatpakInstallation *installation)
+{
+  return flatpak_installation_new_for_path (flatpak_installation_get_path (installation),
+                                            flatpak_installation_get_is_user (installation),
+                                            NULL, NULL);
+}
+
+static void
+is_known_free (IsKnown *state)
+{
+  g_clear_pointer (&state->installs, g_ptr_array_unref);
+  g_clear_object (&state->invocation);
+  g_clear_object (&state->target);
+  g_slice_free (IsKnown, state);
+}
 
 static void
 add_runtime (IpcFlatpakServiceImpl *self,
@@ -294,6 +320,144 @@ ipc_flatpak_service_impl_list_runtimes (IpcFlatpakService     *service,
 }
 
 static void
+is_known_worker (GTask        *task,
+                 gpointer      source_object,
+                 gpointer      task_data,
+                 GCancellable *cancellable)
+{
+  g_autoptr(GPtrArray) remotes = NULL;
+  g_autoptr(GError) error = NULL;
+  IsKnown *state = task_data;
+  const gchar *ref_name;
+  const gchar *ref_arch;
+  const gchar *ref_branch;
+  gint64 download_size = 0;
+  gboolean found = FALSE;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (source_object));
+  g_assert (state != NULL);
+  g_assert (state->installs != NULL);
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (state->invocation));
+  g_assert (FLATPAK_IS_REF (state->target));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ref_name = flatpak_ref_get_name (state->target);
+  ref_arch = flatpak_ref_get_arch (state->target);
+  ref_branch = flatpak_ref_get_branch (state->target);
+
+  for (guint z = 0; z < state->installs->len; z++)
+    {
+      FlatpakInstallation *install = g_ptr_array_index (state->installs, z);
+
+      if (!(remotes = flatpak_installation_list_remotes (install, NULL, &error)))
+        goto finish;
+
+      for (guint i = 0; i < remotes->len; i++)
+        {
+          FlatpakRemote *remote = g_ptr_array_index (remotes, i);
+          const gchar *remote_name = flatpak_remote_get_name (remote);
+          g_autoptr(GPtrArray) refs = NULL;
+
+          if (!(refs = flatpak_installation_list_remote_refs_sync (install, remote_name, NULL, NULL)))
+            continue;
+
+          for (guint j = 0; j < refs->len; j++)
+            {
+              FlatpakRemoteRef *remote_ref = g_ptr_array_index (refs, j);
+
+              if (g_str_equal (ref_name, flatpak_ref_get_name (FLATPAK_REF (remote_ref))) &&
+                  g_str_equal (ref_arch, flatpak_ref_get_arch (FLATPAK_REF (remote_ref))) &&
+                  g_str_equal (ref_branch, flatpak_ref_get_branch (FLATPAK_REF (remote_ref))))
+                {
+                  found = TRUE;
+                  download_size = flatpak_remote_ref_get_download_size (remote_ref);
+                  goto finish;
+                }
+            }
+        }
+    }
+
+finish:
+  ipc_flatpak_service_complete_runtime_is_known (g_task_get_source_object (task),
+                                                 g_steal_pointer (&state->invocation),
+                                                 found,
+                                                 download_size);
+
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static gboolean
+ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
+                                           GDBusMethodInvocation *invocation,
+                                           const gchar           *name)
+{
+  IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
+  g_autofree gchar *full_name = NULL;
+  g_autoptr(FlatpakRef) ref = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = NULL;
+  const gchar *ref_name;
+  const gchar *ref_arch;
+  const gchar *ref_branch;
+  GHashTableIter iter;
+  Install *install;
+  IsKnown *state;
+
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (name != NULL);
+
+  /* Homogenize names into runtime/name/arch/branch */
+  if (g_str_has_prefix (name, "runtime/"))
+    name += strlen ("runtime/");
+  full_name = g_strdup_printf ("runtime/%s", name);
+
+  /* Parse the ref, so we can try to locate it */
+  if (!(ref = flatpak_ref_parse (full_name, &error)))
+    return complete_wrapped_error (invocation, error);
+
+  ref_name = flatpak_ref_get_name (ref);
+  ref_arch = flatpak_ref_get_arch (ref);
+  ref_branch = flatpak_ref_get_branch (ref);
+
+  /* First check if we know about the runtime from those installed */
+  for (guint i = 0; i < self->runtimes->len; i++)
+    {
+      const Runtime *runtime = g_ptr_array_index (self->runtimes, i);
+
+      if (g_str_equal (ref_name, runtime->name) &&
+          g_str_equal (ref_arch, runtime->arch) &&
+          g_str_equal (ref_branch, runtime->branch))
+        {
+          ipc_flatpak_service_complete_runtime_is_known (service, invocation, TRUE, 0);
+          return TRUE;
+        }
+    }
+
+  state = g_slice_new0 (IsKnown);
+  state->installs = g_ptr_array_new_with_free_func (g_object_unref);
+  state->target = g_object_ref (ref);
+  state->invocation = g_steal_pointer (&invocation);
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_source_tag (task, ipc_flatpak_service_impl_runtime_is_known);
+  g_task_set_task_data (task, state, (GDestroyNotify) is_known_free);
+
+  /* Now check remote refs */
+  g_hash_table_iter_init (&iter, self->installs);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&install))
+    g_ptr_array_add (state->installs, installation_copy (install->installation));
+
+  g_task_run_in_thread (task, is_known_worker);
+
+  return TRUE;
+}
+
+static void
 ipc_flatpak_service_impl_install_changed_cb (IpcFlatpakServiceImpl *self,
                                              GFile                 *file,
                                              GFile                 *other_file,
@@ -325,6 +489,7 @@ service_iface_init (IpcFlatpakServiceIface *iface)
 {
   iface->handle_add_installation = ipc_flatpak_service_impl_add_installation;
   iface->handle_list_runtimes = ipc_flatpak_service_impl_list_runtimes;
+  iface->handle_runtime_is_known = ipc_flatpak_service_impl_runtime_is_known;
 }
 
 G_DEFINE_TYPE_WITH_CODE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC_TYPE_FLATPAK_SERVICE_SKELETON,
@@ -336,6 +501,7 @@ ipc_flatpak_service_impl_finalize (GObject *object)
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)object;
 
   g_clear_pointer (&self->installs, g_hash_table_unref);
+  g_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->finalize (object);
 }

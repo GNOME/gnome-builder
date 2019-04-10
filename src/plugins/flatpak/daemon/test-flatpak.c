@@ -59,11 +59,14 @@ add_install_cb (GObject      *object,
                 gpointer      user_data)
 {
   IpcFlatpakService *service = (IpcFlatpakService *)object;
+  g_autofree gchar *sizestr = NULL;
   g_autoptr(GMainLoop) main_loop = user_data;
   g_autoptr(GVariant) runtimes = NULL;
   g_autoptr(GError) error = NULL;
   GVariantIter iter;
+  gboolean is_known = TRUE;
   gboolean ret;
+  gint64 download_size = 0;
 
   ret = ipc_flatpak_service_call_add_installation_finish (service, result, &error);
   g_assert_no_error (error);
@@ -84,12 +87,25 @@ add_install_cb (GObject      *object,
       const gchar *sdk_branch;
       gboolean sdk_extension;
 
-      while (g_variant_iter_next (&iter, "(&s&s&s&s&sb)",
-                                  &name, &arch, &branch, &sdk_name, &sdk_branch, &sdk_extension))
+      while (g_variant_iter_next (&iter, "(&s&s&s&s&sb)", &name, &arch, &branch, &sdk_name, &sdk_branch, &sdk_extension))
         g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d)",
                    name, arch, branch, sdk_name, sdk_branch, sdk_extension);
     }
 
+  g_message ("Checking for a missing runtime");
+  ret = ipc_flatpak_service_call_runtime_is_known_sync (service, "me.hergert.FooBar/x86_64/master", &is_known, &download_size, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_true (ret);
+  g_assert_false (is_known);
+  g_message ("  Not found");
+
+  g_message ("Checking if org.gnome.Sdk/x86_64/3.24 is known");
+  ret = ipc_flatpak_service_call_runtime_is_known_sync (service, "org.gnome.Sdk/x86_64/3.24", &is_known, &download_size, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_true (ret);
+  g_assert_true (is_known);
+  sizestr = g_format_size (download_size);
+  g_message ("  Found, Download Size: <=%s", sizestr);
 
   g_main_loop_quit (main_loop);
 }
