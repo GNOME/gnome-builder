@@ -307,20 +307,26 @@ ide_clone_surface_destroy (GtkWidget *widget)
 }
 
 static void
-ide_clone_surface_constructed (GObject *object)
+ide_clone_surface_context_set (GtkWidget  *widget,
+                               IdeContext *context)
 {
-  IdeCloneSurface *self = (IdeCloneSurface *)object;
+  IdeCloneSurface *self = (IdeCloneSurface *)widget;
   g_autoptr(GFile) file = NULL;
 
-  G_OBJECT_CLASS (ide_clone_surface_parent_class)->constructed (object);
+  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
   gtk_entry_set_text (self->author_entry, g_get_real_name ());
 
   file = g_file_new_for_path (ide_get_projects_dir ());
   dzl_file_chooser_entry_set_file (self->destination_chooser, file);
 
+  if (context == NULL)
+    return;
+
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_VCS_CLONER,
+                                         "parent", context,
                                          NULL);
 
   g_signal_connect (self->addins,
@@ -384,7 +390,6 @@ ide_clone_surface_class_init (IdeCloneSurfaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = ide_clone_surface_constructed;
   object_class->get_property = ide_clone_surface_get_property;
   object_class->set_property = ide_clone_surface_set_property;
 
@@ -432,6 +437,8 @@ static void
 ide_clone_surface_init (IdeCloneSurface *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  ide_widget_set_context_handler (self, ide_clone_surface_context_set);
 }
 
 const gchar *
