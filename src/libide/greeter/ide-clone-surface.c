@@ -550,10 +550,10 @@ ide_clone_surface_clone (IdeCloneSurface *self)
   path = g_file_peek_path (self->destination);
 
   if (!ide_str_empty0 (author) && !g_str_equal (g_get_real_name (), author))
-    g_variant_dict_insert (&dict, "author-name", "s", author);
+    g_variant_dict_insert (&dict, "user.name", "s", author);
 
   if (!ide_str_empty0 (email))
-    g_variant_dict_insert (&dict, "author-email", "s", email);
+    g_variant_dict_insert (&dict, "user.email", "s", email);
 
   g_debug ("Cloning repository using addin: %s", module_name);
 
@@ -573,7 +573,7 @@ ide_clone_surface_clone (IdeCloneSurface *self)
   ide_vcs_cloner_clone_async (addin,
                               uri,
                               path,
-                              &dict,
+                              g_variant_dict_end (&dict),
                               notif,
                               cancellable,
                               ide_clone_surface_clone_cb,
@@ -589,6 +589,4 @@ ide_clone_surface_clone (IdeCloneSurface *self)
 
   g_object_bind_property (notif, "progress", self->uri_entry, "progress-fraction", G_BINDING_SYNC_CREATE);
   g_object_bind_property (notif, "body", self->status_message, "label", G_BINDING_SYNC_CREATE);
-
-  g_variant_dict_clear (&dict);
 }
