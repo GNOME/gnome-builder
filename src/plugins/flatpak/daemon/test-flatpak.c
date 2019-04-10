@@ -126,7 +126,11 @@ main (gint argc,
   GMainLoop *main_loop;
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-  subprocess = g_subprocess_launcher_spawn (launcher, &error, "./gnome-builder-flatpak", NULL);
+  subprocess = g_subprocess_launcher_spawn (launcher, &error,
+#if 0
+                                            "valgrind", "--quiet",
+#endif
+                                            "./gnome-builder-flatpak", NULL);
 
   if (subprocess == NULL)
     g_error ("%s", error->message);
