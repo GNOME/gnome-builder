@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpDspySurface" parent="IdeSurface">
+    <child>
+      <object class="DzlMultiPaned" id="multi_paned">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkScrolledWindow" id="connections_scroller">
+            <property name="hscrollbar-policy">never</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="connections_list_box">
+                <property name="selection-mode">browse</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="names_scroller">
+            <property name="hscrollbar-policy">never</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="names_list_box">
+                <property name="selection-mode">browse</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeView">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
