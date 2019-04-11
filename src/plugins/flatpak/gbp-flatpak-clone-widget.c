@@ -23,7 +23,6 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
-#include <libgit2-glib/ggit.h>
 #include <libide-greeter.h>
 #include <libide-gui.h>
 #include <libide-threading.h>
@@ -38,7 +37,11 @@ struct _GbpFlatpakCloneWidget
 {
   IdeSurface      parent_instance;
 
+  /* Unowned */
+  IdeContext     *context;
   GtkProgressBar *clone_progress;
+
+  IdeNotification *notif;
 
   guint           is_ready : 1;
 
@@ -250,6 +253,7 @@ static void
 gbp_flatpak_clone_widget_init (GbpFlatpakCloneWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+  self->notif = ide_notification_new ();
   self->strip_components = 1;
 }
 
@@ -385,87 +389,26 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
 
   if (req->src->type == TYPE_GIT)
     {
-      GgitFetchOptions *fetch_options;
-      g_autoptr(GgitCheckoutOptions) checkout_options = NULL;
-      g_autoptr(GgitCloneOptions) clone_options = NULL;
-      g_autoptr(GgitObject) parsed_rev = NULL;
-      g_autoptr(GgitRemoteCallbacks) callbacks = NULL;
-      g_autoptr(GgitRepository) repository = NULL;
-      GType git_callbacks_type;
+      g_autoptr(IdeNotification) notif = ide_notification_new ();
 
-      /* First, try to open an existing repository at this path */
-      repository = ggit_repository_open (req->destination, &local_error);
+      uristr = ide_vcs_uri_to_string (req->src->uri);
 
-      if (repository == NULL &&
-          !g_error_matches (local_error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
-        {
-          g_propagate_error (error, g_steal_pointer (&local_error));
-          return FALSE;
-        }
+      /* Only safe because notifications come from main-thread */
+      g_object_bind_property (notif, "progress", self->clone_progress, "fraction", 0);
 
-      g_clear_error (&local_error);
+      if (!ide_vcs_cloner_clone_simple (self->context,
+                                        "git",
+                                        uristr,
+                                        req->src->branch,
+                                        g_file_peek_path (req->destination),
+                                        notif,
+                                        cancellable,
+                                        error))
+        return FALSE;
 
-      if (repository == NULL)
-        {
-          g_autoptr(IdeNotification) progress = ide_notification_new ();
+      *out_did_download = TRUE;
 
-          /* HACK: we don't want libide to depend on libgit2 just yet, so for
-           * now, we just lookup the GType of the object we need from the git
-           * plugin by name.
-           */
-          git_callbacks_type = g_type_from_name ("GbpGitRemoteCallbacks");
-          g_assert (git_callbacks_type != 0);
-
-          callbacks = g_object_new (git_callbacks_type,
-                                    "progress", progress,
-                                    NULL);
-          g_object_bind_property (progress, "progress", self->clone_progress, "fraction", 0);
-
-          fetch_options = ggit_fetch_options_new ();
-          ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
-
-          clone_options = ggit_clone_options_new ();
-          ggit_clone_options_set_is_bare (clone_options, FALSE);
-          ggit_clone_options_set_fetch_options (clone_options, fetch_options);
-          g_clear_pointer (&fetch_options, ggit_fetch_options_free);
-
-          uristr = ide_vcs_uri_to_string (req->src->uri);
-          repository = ggit_repository_clone (uristr, req->destination, clone_options, &local_error);
-          if (repository == NULL)
-            {
-              g_propagate_error (error, g_steal_pointer (&local_error));
-              return FALSE;
-            }
-
-          /* Now check out the revision, when specified */
-          if (req->src->branch != NULL)
-            {
-              parsed_rev = ggit_repository_revparse (repository, req->src->branch, &local_error);
-              if (parsed_rev == NULL)
-                {
-                  g_propagate_error (error, g_steal_pointer (&local_error));
-                  return FALSE;
-                }
-
-              checkout_options = ggit_checkout_options_new ();
-              ggit_repository_reset (repository, parsed_rev, GGIT_RESET_HARD,
-                                     checkout_options, &local_error);
-
-              if (local_error != NULL)
-                {
-                  g_propagate_error (error, g_steal_pointer (&local_error));
-                  return FALSE;
-                }
-            }
-
-          *out_did_download = TRUE;
-        }
-      else
-        {
-          *out_did_download = FALSE;
-        }
-
-      req->project_file = ggit_repository_get_workdir (repository);
+      req->project_file = g_file_dup (req->destination);
     }
   else if (req->src->type == TYPE_ARCHIVE)
     {
@@ -737,6 +680,8 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_clone_widget_clone_async);
   ide_task_set_release_on_propagate (task, FALSE);
+
+  self->context = ide_widget_get_context (GTK_WIDGET (self));
 
   src = get_source (self, &error);
   if (src == NULL)
