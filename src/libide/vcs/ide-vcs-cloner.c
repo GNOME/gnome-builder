@@ -22,7 +22,10 @@
 
 #include "config.h"
 
+#include <gdk/gdk.h>
+
 #include <libide-threading.h>
+#include <libpeas/peas.h>
 
 #include "ide-vcs-cloner.h"
 
@@ -146,3 +149,166 @@ ide_vcs_cloner_get_title (IdeVcsCloner *self)
 
   return NULL;
 }
+
+typedef struct
+{
+  GMutex           mutex;
+  GCond            cond;
+  IdeContext      *context;
+  const gchar     *module_name;
+  const gchar     *url;
+  const gchar     *branch;
+  const gchar     *destination;
+  IdeNotification *notif;
+  GCancellable    *cancellable;
+  GError          *error;
+} CloneSimple;
+
+static void
+ide_vcs_cloner_clone_simple_clone_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  IdeVcsCloner *cloner = (IdeVcsCloner *)object;
+  g_autoptr(GError) error = NULL;
+  CloneSimple *state = user_data;
+
+  g_assert (IDE_IS_VCS_CLONER (cloner));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (state->module_name != NULL);
+  g_assert (state->url != NULL);
+  g_assert (state->destination != NULL);
+  g_assert (!state->notif || IDE_IS_NOTIFICATION (state->notif));
+  g_assert (!state->cancellable || IDE_IS_NOTIFICATION (state->cancellable));
+  g_assert (state->error == NULL);
+
+  ide_vcs_cloner_clone_finish (cloner, result, &state->error);
+
+  g_mutex_lock (&state->mutex);
+  g_cond_signal (&state->cond);
+  g_mutex_unlock (&state->mutex);
+}
+
+static gboolean
+ide_vcs_cloner_clone_simple_idle_cb (CloneSimple *state)
+{
+  g_autoptr(PeasExtension) exten = NULL;
+  g_autoptr(GVariant) options = NULL;
+  PeasPluginInfo *plugin_info;
+  PeasEngine *engine;
+  GVariantDict dict;
+
+  g_assert (state != NULL);
+  g_assert (IDE_IS_CONTEXT (state->context));
+  g_assert (state->module_name != NULL);
+  g_assert (state->url != NULL);
+  g_assert (state->destination != NULL);
+  g_assert (!state->notif || IDE_IS_NOTIFICATION (state->notif));
+  g_assert (!state->cancellable || IDE_IS_NOTIFICATION (state->cancellable));
+  g_assert (state->error == NULL);
+
+  engine = peas_engine_get_default ();
+
+  if (!(plugin_info = peas_engine_get_plugin_info (engine, state->module_name)))
+    {
+      g_set_error (&state->error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   "No such module %s",
+                   state->module_name);
+      goto notify;
+    }
+
+  exten = peas_engine_create_extension (engine,
+                                        plugin_info,
+                                        IDE_TYPE_VCS_CLONER,
+                                        "parent", state->context,
+                                        NULL);
+
+  if (exten == NULL)
+    {
+      g_set_error (&state->error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   "Failed to create IdeVcsCloner from module %s",
+                   state->module_name);
+      goto notify;
+    }
+
+  g_variant_dict_init (&dict, NULL);
+  if (state->branch != NULL)
+    g_variant_dict_insert (&dict, "branch", "s", state->branch);
+  options = g_variant_take_ref (g_variant_dict_end (&dict));
+
+  ide_vcs_cloner_clone_async (IDE_VCS_CLONER (exten),
+                              state->url,
+                              state->destination,
+                              options,
+                              state->notif,
+                              state->cancellable,
+                              ide_vcs_cloner_clone_simple_clone_cb,
+                              state);
+
+  return G_SOURCE_REMOVE;
+
+notify:
+
+  g_mutex_lock (&state->mutex);
+  g_cond_signal (&state->cond);
+  g_mutex_unlock (&state->mutex);
+
+  return G_SOURCE_REMOVE;
+}
+
+gboolean
+ide_vcs_cloner_clone_simple (IdeContext       *context,
+                             const gchar      *module_name,
+                             const gchar      *url,
+                             const gchar      *branch,
+                             const gchar      *destination,
+                             IdeNotification  *notif,
+                             GCancellable     *cancellable,
+                             GError          **error)
+{
+  CloneSimple state = {0};
+
+  g_return_val_if_fail (!IDE_IS_MAIN_THREAD (), FALSE);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), FALSE);
+  g_return_val_if_fail (module_name != NULL, FALSE);
+  g_return_val_if_fail (url != NULL, FALSE);
+  g_return_val_if_fail (destination != NULL, FALSE);
+  g_return_val_if_fail (!notif || IDE_IS_NOTIFICATION (notif), FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  state.context = context;
+  state.module_name = module_name;
+  state.url = url;
+  state.branch = branch;
+  state.destination = destination;
+  state.notif = notif;
+  state.cancellable = cancellable;
+  state.error = NULL;
+
+  g_mutex_init (&state.mutex);
+  g_cond_init (&state.cond);
+
+  g_mutex_lock (&state.mutex);
+
+  gdk_threads_add_idle_full (G_PRIORITY_HIGH,
+                             (GSourceFunc) ide_vcs_cloner_clone_simple_idle_cb,
+                             &state, NULL);
+
+  g_cond_wait (&state.cond, &state.mutex);
+  g_mutex_unlock (&state.mutex);
+  g_cond_clear (&state.cond);
+  g_mutex_clear (&state.mutex);
+
+  if (state.error != NULL)
+    {
+      g_propagate_error (error, g_steal_pointer (&state.error));
+      return FALSE;
+    }
+
+  return TRUE;
+}
+

@@ -69,5 +69,14 @@ IDE_AVAILABLE_IN_3_32
 gboolean  ide_vcs_cloner_validate_uri (IdeVcsCloner         *self,
                                        const gchar          *uri,
                                        gchar               **errmsg);
+IDE_AVAILABLE_IN_3_34
+gboolean  ide_vcs_cloner_clone_simple (IdeContext           *context,
+                                       const gchar          *module_name,
+                                       const gchar          *url,
+                                       const gchar          *branch,
+                                       const gchar          *destination,
+                                       IdeNotification      *notif,
+                                       GCancellable         *cancellable,
+                                       GError              **error);
 
 G_END_DECLS
