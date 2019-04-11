@@ -86,6 +86,30 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.32.1" date="2019-04-10">
+      <description>
+        <p>
+          Builder 3.32.1 is here with many bug fixes!
+        </p>
+        <ul>
+          <li>Appdata updates</li>
+          <li>The project-tree now auto-resizes the column</li>
+          <li>Stability improvements to the flatpak plugin</li>
+          <li>The flatpak plugin now asks the user before installing dependencies</li>
+          <li>The code-index can be disabled by placing a ".noindex" file in a directory</li>
+          <li>Transfer notifications have their cancel buttons restored</li>
+          <li>Waf build system improvements</li>
+          <li>RLS support can now be disabled by disabling the plugin</li>
+          <li>A leak was fixed for semantic highlight indexes</li>
+          <li>Scroll improvements for the source code editor</li>
+          <li>Improved support for symlinks above the project directory</li>
+          <li>Support for podman's --preserve-fds option</li>
+          <li>Source code line number background drawing is improved</li>
+          <li>Updated documentation</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.32.0" date="2019-03-12">
       <description>
         <p>

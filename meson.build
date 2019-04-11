@@ -1,6 +1,6 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
-          version: '3.32.0',
+          version: '3.32.1',
     meson_version: '>= 0.49.2',
   default_options: [ 'c_std=gnu11',
                      'cpp_std=gnu++2a',

@@ -1,4 +1,27 @@
 ==============
+Version 3.32.1
+==============
+
+Changes since last release:
+
+ • Appdata updates
+ • The project-tree now auto-resizes the column
+ • Stability improvements to the flatpak plugin
+ • The flatpak plugin now queries before installing dependencies
+ • The code-index can be avoided by placing a ".noindex" file in a directory
+ • Transfer notifications have cancel buttons restored
+ • Waf improvements
+ • Flatpak uses fallback-x11 now instead of x11 by default
+ • RLS support can now be disabled by disabling the plugin
+ • A leak was fixed for semantic highlight indexes
+ • Scroll improvements for the source code editor
+ • Improved support for symlinks above the project directory
+ • Support for podman's --preserve-fds option
+ • Sourceview line number background drawing is improved
+ • Updated documentation
+ • Updated translations
+
+==============
 Version 3.32.0
 ==============
 
