@@ -1,0 +1,16 @@
+dspyview dzlmultipaned > :first-child {
+  border-right: 1px solid @borders;
+}
+dspyview box.linked.horizontal > scrolledwindow:first-child {
+  border-right: none;
+}
+dspyview .sidebar button.popup.toggle {
+  border: none;
+  border-radius: 0px;
+  background: none;
+  box-shadow: none;
+  padding: 0px 6px;
+}
+dspyview .sidebar button:not(:hover) image {
+  color: alpha(currentColor, 0.6);
+}

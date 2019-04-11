@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpDspyWorkspace" parent="IdeWorkspace">
+    <property name="default-width">1000</property>
+    <property name="default-height">700</property>
+    <child type="titlebar">
+      <object class="IdeHeaderBar" id="header_bar">
+        <property name="show-close-button">true</property>
+        <property name="show-fullscreen-button">true</property>
+        <property name="visible">true</property>
+        <child type="title">
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">DBus Inspector</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="surfaces">
+      <object class="GtkStack" id="surfaces">
+        <property name="visible">true</property>
+        <child>
+          <object class="GbpDspySurface" id="surface">
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="name">dspy</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
