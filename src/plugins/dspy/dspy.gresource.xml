@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/dspy">
+    <file>dspy.plugin</file>
+    <file>gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">dspy-connection-row.ui</file>
+    <file preprocess="xml-stripblanks">dspy-name-row.ui</file>
+    <file preprocess="xml-stripblanks">dspy-name-view.ui</file>
+    <file preprocess="xml-stripblanks">gbp-dspy-surface.ui</file>
+  </gresource>
+</gresources>

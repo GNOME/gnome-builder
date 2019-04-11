@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="DspyNameView" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="DzlThreeGrid">
+            <property name="column-spacing">12</property>
+            <property name="row-spacing">0</property>
+            <property name="halign">center</property>
+            <property name="margin-top">18</property>
+            <property name="margin-start">18</property>
+            <property name="margin-end">18</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">1.0</property>
+                <property name="label" translatable="yes">Bus Address</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="column">left</property>
+                <property name="row">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">1.0</property>
+                <property name="label" translatable="yes">Name</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="column">left</property>
+                <property name="row">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">1.0</property>
+                <property name="label" translatable="yes">Unique Name</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="column">left</property>
+                <property name="row">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="address_label">
+                <property name="hexpand">true</property>
+                <property name="xalign">0.0</property>
+                <property name="visible">true</property>
+                <property name="width-chars">50</property>
+                <property name="tooltip-text" translatable="yes">See http://dbus.freedesktop.org/doc/dbus-specification.html#addresses</property>
+              </object>
+              <packing>
+                <property name="column">center</property>
+                <property name="row">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="name_label">
+                <property name="hexpand">true</property>
+                <property name="xalign">0.0</property>
+                <property name="visible">true</property>
+                <property name="width-chars">50</property>
+              </object>
+              <packing>
+                <property name="column">center</property>
+                <property name="row">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="unique_label">
+                <property name="hexpand">true</property>
+                <property name="xalign">0.0</property>
+                <property name="visible">true</property>
+                <property name="width-chars">50</property>
+              </object>
+              <packing>
+                <property name="column">center</property>
+                <property name="row">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="refresh_button">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Reload</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="text-button"/>
+                </style>
+              </object>
+              <packing>
+                <property name="column">right</property>
+                <property name="row">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeView" id="tree_view">
+                <property name="headers-visible">true</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="expand">true</property>
+                    <property name="title" translatable="yes">Object Path</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="text_cell">
+                        <property name="xalign">0.0</property>
+                        <property name="ypad">3</property>
+                        <property name="xpad">3</property>
+                      </object>
+                      <attributes>
+                        <attribute name="markup">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="name_label"/>
+      <widget name="unique_label"/>
+      <widget name="address_label"/>
+      <widget name="refresh_button"/>
+    </widgets>
+  </object>
+</interface>
