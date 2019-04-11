@@ -114,6 +114,10 @@ main (gint   argc,
   /* Extract options like -vvvv */
   early_params_check (&argc, &argv, &standalone, &type, &plugin, &dbus_address);
 
+  /* Log some info so it shows up in logs */
+  g_message ("GNOME Builder %s starting with ABI %s",
+             PACKAGE_VERSION, PACKAGE_ABI_S);
+
   /* Make sure $HOME is not a symlink, as that can cause issues with
    * various subsystems. Just warn super loud so that users find it
    * when trying to debug issues.
