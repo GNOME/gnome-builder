@@ -413,6 +413,7 @@ suffix_is_c_like (const gchar *suffix)
 
   return !!strstr (suffix, ".c") || !!strstr (suffix, ".h") ||
          !!strstr (suffix, ".cc") || !!strstr (suffix, ".hh") ||
+         !!strstr (suffix, ".c++") || !!strstr (suffix, ".h++") ||
          !!strstr (suffix, ".cxx") || !!strstr (suffix, ".hxx") ||
          !!strstr (suffix, ".cpp") || !!strstr (suffix, ".hpp");
 }
@@ -613,6 +614,7 @@ find_with_alternates (IdeCompileCommands *self,
 
   {
     g_autofree gchar *path = g_file_get_path (file);
+    gchar *dot = strrchr (path, '.');
     gsize len = strlen (path);
 
     if (g_str_has_suffix (path, "-private.h"))
@@ -628,17 +630,18 @@ find_with_alternates (IdeCompileCommands *self,
         if (NULL != (info = g_hash_table_lookup (self->info_by_file, other)))
           return info;
       }
-    else if (g_str_has_suffix (path, ".h"))
+    else if (suffix_is_c_like (dot))
       {
-        static const gchar *tries[] = { "c", "cc", "cpp" };
-        path[--len] = 0;
+        static const gchar *tries[] = { ".c", ".cc", ".cpp", ".cxx", ".c++" };
+
+        *dot = 0;
 
         for (guint i = 0; i < G_N_ELEMENTS (tries); i++)
           {
             g_autofree gchar *other_path = g_strconcat (path, tries[i], NULL);
             g_autoptr(GFile) other = g_file_new_for_path (other_path);
 
-            if (NULL != (info = g_hash_table_lookup (self->info_by_file, other)))
+            if ((info = g_hash_table_lookup (self->info_by_file, other)))
               return info;
           }
       }
