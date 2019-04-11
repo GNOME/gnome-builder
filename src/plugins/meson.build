@@ -10,7 +10,6 @@ plugins_deps = [
   libdazzle_dep,
   libgtk_dep,
   libgtksource_dep,
-  libgit_dep,
   libjsonrpc_glib_dep,
 
   libide_code_dep,
