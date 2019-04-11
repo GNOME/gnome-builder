@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="dspy-connections-menu">
+    <item>
+      <attribute name="label" translatable="yes">Connect to Other Bus</attribute>
+      <attribute name="action">dspy.connect-to-bus</attribute>
+    </item>
+  </menu>
+</interface>

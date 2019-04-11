@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/dspy">
+    <file preprocess="xml-stripblanks">dspy-method-view.ui</file>
+    <file preprocess="xml-stripblanks">dspy-name-marquee.ui</file>
+    <file preprocess="xml-stripblanks">dspy-name-row.ui</file>
+    <file preprocess="xml-stripblanks">dspy-view.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">icons/symbolic/apps/org.gnome.dfeet-symbolic.svg</file>
+    <file>themes/shared.css</file>
+  </gresource>
+</gresources>
