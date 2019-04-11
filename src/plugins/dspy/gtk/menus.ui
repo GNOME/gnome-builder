@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-primary-workspace-surfaces-menu">
+    <section id="ide-primary-workspace-surfaces-menu-section">
+      <item>
+        <attribute name="id">surface-menu-dspy</attribute>
+        <attribute name="label" translatable="yes">DBus Inspector</attribute>
+        <attribute name="role">normal</attribute>
+        <attribute name="action">win.surface</attribute>
+        <attribute name="target">dspy</attribute>
+        <attribute name="verb-icon-name">edit-find-symbolic</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
