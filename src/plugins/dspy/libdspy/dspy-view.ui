@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <template class="DspyView" parent="GtkBin">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="DzlMultiPaned">
+        <property name="orientation">horizontal</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="sidebar"/>
+              <class name="view"/>
+            </style>
+            <child>
+              <object class="GtkBox" id="radio_buttons">
+                <property name="margin">6</property>
+                <property name="homogeneous">true</property>
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="DspyConnectionButton" id="session_button">
+                    <property name="bus-type">session</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="DspyConnectionButton" id="system_button">
+                    <property name="bus-type">system</property>
+                    <property name="group">session_button</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="placeholder-text" translatable="yes">Search Bus Names</property>
+                <property name="margin-top">6</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="margin-bottom">12</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Bus Names</property>
+                    <property name="hexpand">true</property>
+                    <property name="visible">true</property>
+                    <property name="xalign">0.0</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-bottom">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                      <attribute name="scale" value=".833333"/>
+                    </attributes>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="menu_button">
+                    <property name="focus-on-click">false</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">pan-down-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="names_scroller">
+                <property name="propagate-natural-width">True</property>
+                <property name="max-content-width">300</property>
+                <property name="vexpand">True</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkListBox" id="names_list_box">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">300</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="transition-duration">300</property>
+            <property name="transition-type">crossfade</property>
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="DzlEmptyState">
+                <property name="icon-name">org.gnome.dfeet-symbolic</property>
+                <property name="title" translatable="yes">Select a Bus Name</property>
+                <property name="subtitle" translatable="yes">Select a bus name to introspect the peer.</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">empty-state</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="margin">12</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="DspyNameMarquee" id="name_marquee">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="shadow-type">in</property>
+                        <property name="vexpand">True</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <child>
+                          <object class="DspyTreeView" id="introspection_tree_view">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection"/>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="DzlBin">
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="inline-toolbar"/>
+                        </style>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">horizontal</property>
+                            <property name="visible">true</property>
+                            <child>
+                              <object class="GtkButton" id="refresh_button">
+                                <property name="visible">true</property>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon-name">view-refresh-symbolic</property>
+                                    <property name="visible">true</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkRevealer" id="method_revealer">
+                    <property name="reveal-child">false</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="DspyMethodView" id="method_view">
+                        <property name="margin-start">12</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">introspect</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

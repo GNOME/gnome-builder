@@ -30,3 +30,7 @@ Exec=gnome-builder --clone
 [Desktop Action new-editor]
 Name=New Editor Workspace
 Exec=gnome-builder --editor
+
+[Desktop Action dspy]
+Name=DBus Inspector
+Exec=gnome-builder --dspy
