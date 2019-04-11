@@ -99,6 +99,9 @@ gbp_git_client_subprocess_spawned (GbpGitClient            *self,
                                                   NULL,
                                                   NULL);
 
+  /* We can have long running operations, so set no timeout */
+  g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (self->service), G_MAXINT);
+
   queued = g_steal_pointer (&self->get_service.head);
 
   self->get_service.head = NULL;
