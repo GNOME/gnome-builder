@@ -56,6 +56,7 @@ subdir('devhelp')
 subdir('deviceui')
 subdir('deviced')
 subdir('doap')
+subdir('dspy')
 subdir('editor')
 subdir('editorconfig')
 subdir('emacs')
@@ -143,6 +144,7 @@ status += [
   'CTags ................. : @0@'.format(get_option('plugin_ctags')),
   'Devhelp ............... : @0@'.format(get_option('plugin_devhelp')),
   'Deviced ............... : @0@'.format(get_option('plugin_deviced')),
+  'DBus Spy .............. : @0@'.format(get_option('plugin_dspy')),
   'Editorconfig .......... : @0@'.format(get_option('plugin_editorconfig')),
   'ESLint ................ : @0@'.format(get_option('plugin_eslint')),
   'File Search ........... : @0@'.format(get_option('plugin_file_search')),
