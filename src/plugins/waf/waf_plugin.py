@@ -71,6 +71,13 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
     python = None
     waf_local = None
 
+    def _create_launcher(self, pipeline):
+        launcher = pipeline.create_launcher()
+        if self.waf_local:
+            launcher.push_argv(self.python)
+        launcher.push_argv('waf')
+        return launcher
+
     def do_load(self, pipeline):
         context = self.get_context()
         build_system = Ide.BuildSystem.from_context(context)
@@ -93,11 +100,8 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_system.waf_local = self.waf_local
 
         # Launcher for project configuration
-        config_launcher = pipeline.create_launcher()
+        config_launcher = self._create_launcher(pipeline)
         config_launcher.set_cwd(srcdir)
-        if self.waf_local:
-            config_launcher.push_argv(self.python)
-        config_launcher.push_argv('waf')
         config_launcher.push_argv('configure')
         config_launcher.push_argv('--prefix=%s' % config.get_prefix())
         if config_opts:
@@ -109,18 +113,12 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         self.track(pipeline.attach_launcher(Ide.PipelinePhase.CONFIGURE, 0, config_launcher))
 
         # Now create our launcher to build the project
-        build_launcher = pipeline.create_launcher()
+        build_launcher = self._create_launcher(pipeline)
         build_launcher.set_cwd(srcdir)
-        if self.waf_local:
-            build_launcher.push_argv(self.python)
-        build_launcher.push_argv('waf')
         build_launcher.push_argv('build')
 
-        clean_launcher = pipeline.create_launcher()
+        clean_launcher = self._create_launcher(pipeline)
         clean_launcher.set_cwd(srcdir)
-        if self.waf_local:
-            clean_launcher.push_argv(self.python)
-        clean_launcher.push_argv('waf')
         clean_launcher.push_argv('clean')
 
         build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
@@ -129,11 +127,8 @@ class WafPipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_stage.connect('query', self._query)
         self.track(pipeline.attach(Ide.PipelinePhase.BUILD, 0, build_stage))
 
-        install_launcher = pipeline.create_launcher()
+        install_launcher = self._create_launcher(pipeline)
         install_launcher.set_cwd(srcdir)
-        if self.waf_local:
-            install_launcher.push_argv(self.python)
-        install_launcher.push_argv('waf')
         install_launcher.push_argv('install')
 
         install_stage = Ide.PipelineStageLauncher.new(context, install_launcher)
@@ -211,12 +206,9 @@ class WafBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
             return
 
         # For some reason, "waf list" outputs on stderr
-        launcher = pipeline.create_launcher()
+        launcher = build_system._create_launcher(pipeline)
         launcher.set_flags(Gio.SubprocessFlags.STDOUT_SILENCE | Gio.SubprocessFlags.STDERR_PIPE)
         launcher.set_cwd(pipeline.get_srcdir())
-        if build_system.waf_local:
-            launcher.push_argv(build_system.python)
-        launcher.push_argv('waf')
         launcher.push_argv('list')
 
         try:
