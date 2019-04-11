@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2019 Christian Hergert
+Description=Explore DBus session and system connections
+Embedded=_gbp_dspy_register_types
+Module=dspy
+Name=DBus Connection Explorer
+X-Workspace-Kind=primary;editor;
