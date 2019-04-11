@@ -80,15 +80,6 @@ static void      runtime_free                                (Runtime           
 static gboolean  runtime_equal                               (const Runtime          *a,
                                                               const Runtime          *b);
 static void      is_known_free                               (IsKnown                *state);
-static FlatpakInstallation *installation_copy                (FlatpakInstallation    *installation);
-
-static FlatpakInstallation *
-installation_copy (FlatpakInstallation *installation)
-{
-  return flatpak_installation_new_for_path (flatpak_installation_get_path (installation),
-                                            flatpak_installation_get_is_user (installation),
-                                            NULL, NULL);
-}
 
 static void
 is_known_free (IsKnown *state)
@@ -450,7 +441,7 @@ ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
   /* Now check remote refs */
   g_hash_table_iter_init (&iter, self->installs);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&install))
-    g_ptr_array_add (state->installs, installation_copy (install->installation));
+    g_ptr_array_add (state->installs, g_object_ref (install->installation));
 
   g_task_run_in_thread (task, is_known_worker);
 
