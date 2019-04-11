@@ -475,12 +475,33 @@ ipc_flatpak_service_impl_install_changed_cb (IpcFlatpakServiceImpl *self,
     }
 }
 
+static gboolean
+ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
+                                  GDBusMethodInvocation *invocation,
+                                  const gchar           *full_ref_name)
+{
+  g_autoptr(FlatpakRef) ref = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (service));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (full_ref_name != NULL);
+
+  if (!(ref = flatpak_ref_parse (full_ref_name, &error)))
+    return complete_wrapped_error (invocation, error);
+
+  ipc_flatpak_service_complete_install (service, invocation, "");
+
+  return TRUE;
+}
+
 static void
 service_iface_init (IpcFlatpakServiceIface *iface)
 {
   iface->handle_add_installation = ipc_flatpak_service_impl_add_installation;
   iface->handle_list_runtimes = ipc_flatpak_service_impl_list_runtimes;
   iface->handle_runtime_is_known = ipc_flatpak_service_impl_runtime_is_known;
+  iface->handle_install = ipc_flatpak_service_impl_install;
 }
 
 G_DEFINE_TYPE_WITH_CODE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC_TYPE_FLATPAK_SERVICE_SKELETON,

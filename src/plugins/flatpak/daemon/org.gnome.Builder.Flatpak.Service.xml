@@ -57,5 +57,15 @@
       <arg name="is_known" direction="out" type="b"/>
       <arg name="download_size" direction="out" type="x"/>
     </method>
+    <!--
+      Install:
+      @full_ref_name: the full name of the target to install such as "runtime/org.gnome.Sdk/x86_64/master"
+
+      Installs a ref from a configured remote.
+    -->
+    <method name="Install">
+      <arg name="full_ref_name" direction="in" type="s"/>
+      <arg name="transfer" direction="out" type="o"/>
+    </method>
   </interface>
 </node>
