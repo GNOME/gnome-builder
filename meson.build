@@ -267,38 +267,6 @@ libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
 libvte_dep = dependency('vte-2.91', version: '>= 0.40.2')
 libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.22')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
-libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
-
-# Make sure libgit2/libgit2-glib were compiled with proper flags
-libgit_thread_safe_check = '''
-#include <libgit2-glib/ggit.h>
-int main(int argc, const char *argv[])
-{
-ggit_init ();
-return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
-}
-'''
-res = cc.run(libgit_thread_safe_check,
-dependencies: libgit_dep,
-)
-if res.returncode() != 0
-error('libgit2 was not compiled with -DTHREADSAFE:BOOL=ON')
-endif
-
-libgit_ssh_check = '''
-#include <libgit2-glib/ggit.h>
-int main(int argc, const char *argv[])
-{
-ggit_init ();
-return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
-}
-'''
-res = cc.run(libgit_ssh_check,
-dependencies: libgit_dep,
-)
-if res.returncode() != 0
-error('libgit2 was not compiled with SSH support')
-endif
 
 check_functions = [
   # pty
