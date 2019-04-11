@@ -237,6 +237,11 @@ on_toggle_source_clicked_cb (GbpGladeFrameAddin *self,
     }
   else
     {
+      GtkWidget *stack = gtk_widget_get_parent (GTK_WIDGET (other));
+
+      if (GTK_IS_STACK (stack))
+        gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (other));
+
       gtk_widget_grab_focus (GTK_WIDGET (other));
     }
 }
