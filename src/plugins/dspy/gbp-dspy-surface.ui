@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpDspySurface" parent="IdeSurface">
+    <child>
+      <object class="GtkPaned" id="paned">
+        <property name="orientation">horizontal</property>
+        <property name="position">300</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkPaned" id="left_paned">
+            <property name="orientation">vertical</property>
+            <property name="position">75</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkScrolledWindow" id="connections_scroller">
+                <property name="propagate-natural-height">true</property>
+                <property name="propagate-natural-width">true</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkListBox" id="connections_list_box">
+                    <property name="selection-mode">browse</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="shrink">false</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="names_scroller">
+                <property name="propagate-natural-height">true</property>
+                <property name="propagate-natural-width">true</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkListBox" id="names_list_box">
+                    <property name="selection-mode">browse</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="shrink">false</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="shrink">false</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeView">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="shrink">false</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
