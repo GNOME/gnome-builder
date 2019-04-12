@@ -26,7 +26,6 @@
 #include <glib/gi18n.h>
 
 #include "dspy-connection-model.h"
-#include "dspy-connection-row.h"
 #include "dspy-name.h"
 #include "dspy-name-row.h"
 #include "dspy-name-view.h"
@@ -37,18 +36,34 @@ struct _GbpDspySurface
 {
   IdeSurface           parent_instance;
 
-  GtkListBox          *connections_list_box;
-  GtkScrolledWindow   *connections_scroller;
-  GtkPaned            *paned;
   GtkScrolledWindow   *names_scroller;
   GtkListBox          *names_list_box;
   GtkStack            *view_stack;
   DspyNameView        *name_view;
+  GtkBox              *bus_box;
 
   DspyConnectionModel *model;
 };
 
+typedef struct
+{
+  gchar *addr;
+  GBusType bus_type;
+} ConnectionInfo;
+
 G_DEFINE_TYPE (GbpDspySurface, gbp_dspy_surface, IDE_TYPE_SURFACE)
+
+static void
+connection_info_free (gpointer data)
+{
+  ConnectionInfo *info = data;
+
+  if (info)
+    {
+      g_clear_pointer (&info->addr, g_free);
+      g_slice_free (ConnectionInfo, info);
+    }
+}
 
 static GtkWidget *
 create_names_row (gpointer item,
@@ -83,24 +98,23 @@ name_row_activated_cb (GbpDspySurface *self,
 }
 
 static void
-connection_row_activated_cb (GbpDspySurface *self,
-                             GtkListBoxRow  *row,
-                             GtkListBox     *list_box)
+on_connection_clicked_cb (GtkButton      *button,
+                          ConnectionInfo *info)
 {
+  GbpDspySurface *self;
   g_autoptr(GDBusConnection) bus = NULL;
   g_autoptr(DspyConnectionModel) model = NULL;
   g_autoptr(GError) error = NULL;
-  const gchar *addr = NULL;
-  GBusType bus_type;
 
-  g_assert (GBP_IS_DSPY_SURFACE (self));
-  g_assert (DSPY_IS_CONNECTION_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (info != NULL);
 
-  if ((bus_type = dspy_connection_row_get_bus_type (DSPY_CONNECTION_ROW (row))))
-    bus = g_bus_get_sync (bus_type, NULL, &error);
-  else if ((addr = dspy_connection_row_get_address (DSPY_CONNECTION_ROW (row))))
-    bus = g_dbus_connection_new_for_address_sync (addr,
+  self = GBP_DSPY_SURFACE (gtk_widget_get_ancestor (GTK_WIDGET (button), GBP_TYPE_DSPY_SURFACE));
+
+  if (info->bus_type)
+    bus = g_bus_get_sync (info->bus_type, NULL, &error);
+  else if (info->addr)
+    bus = g_dbus_connection_new_for_address_sync (info->addr,
                                                   (G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION |
                                                    G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT),
                                                   NULL, NULL, &error);
@@ -115,8 +129,8 @@ connection_row_activated_cb (GbpDspySurface *self,
 
   model = dspy_connection_model_new ();
   dspy_connection_model_set_connection (model, bus);
-  dspy_connection_model_set_bus_type (model, bus_type);
-  dspy_connection_model_set_address (model, addr);
+  dspy_connection_model_set_bus_type (model, info->bus_type);
+  dspy_connection_model_set_address (model, info->addr);
   gtk_list_box_bind_model (self->names_list_box, G_LIST_MODEL (model), create_names_row, NULL, NULL);
   g_set_object (&self->model, model);
 }
@@ -127,23 +141,32 @@ add_connection (GbpDspySurface *self,
                 GBusType        bus_type,
                 const gchar    *addr)
 {
-  DspyConnectionRow *row;
+  ConnectionInfo *info;
+  GtkRadioButton *button;
+  GList *children = NULL;
 
   g_assert (GBP_IS_DSPY_SURFACE (self));
 
-  row = dspy_connection_row_new ();
-  dspy_connection_row_set_title (row, name);
+  children = gtk_container_get_children (GTK_CONTAINER (self->bus_box));
+  button = g_object_new (GTK_TYPE_RADIO_BUTTON,
+                         "label", name,
+                         "visible", TRUE,
+                         "draw-indicator", FALSE,
+                         "group", children ? children->data : NULL,
+                         NULL);
+  gtk_container_add (GTK_CONTAINER (self->bus_box), GTK_WIDGET (button));
+  g_list_free (children);
 
-  if (bus_type != G_BUS_TYPE_NONE)
-    dspy_connection_row_set_bus_type (row, bus_type);
-  else if (addr)
-    dspy_connection_row_set_address (row, addr);
-  else
-    g_return_if_reached ();
+  info = g_slice_new0 (ConnectionInfo);
+  info->addr = g_strdup (addr);
+  info->bus_type = bus_type;
 
-  gtk_container_add (GTK_CONTAINER (self->connections_list_box), GTK_WIDGET (row));
-
-  gtk_widget_show (GTK_WIDGET (row));
+  g_signal_connect_data (button,
+                         "clicked",
+                         G_CALLBACK (on_connection_clicked_cb),
+                         g_steal_pointer (&info),
+                         (GClosureNotify) connection_info_free,
+                         0);
 }
 
 static void
@@ -165,9 +188,7 @@ gbp_dspy_surface_class_init (GbpDspySurfaceClass *klass)
   object_class->finalize = gbp_dspy_surface_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/dspy/gbp-dspy-surface.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, connections_list_box);
-  gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, connections_scroller);
-  gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, paned);
+  gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, bus_box);
   gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, names_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, names_scroller);
   gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, name_view);
@@ -184,12 +205,6 @@ gbp_dspy_surface_init (GbpDspySurface *self)
   gtk_widget_set_name (GTK_WIDGET (self), "dspy");
   ide_surface_set_icon_name (IDE_SURFACE (self), "edit-find-symbolic");
   ide_surface_set_title (IDE_SURFACE (self), _("DBus Inspector"));
-
-  g_signal_connect_object (self->connections_list_box,
-                           "row-activated",
-                           G_CALLBACK (connection_row_activated_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->names_list_box,
                            "row-activated",
