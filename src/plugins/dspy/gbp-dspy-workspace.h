@@ -1,4 +1,4 @@
-/* dspy-plugin.c
+/* gbp-dspy-workspace.h
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,22 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
+#pragma once
 
 #include <libide-gui.h>
-#include <libide-editor.h>
-#include <libpeas/peas.h>
 
-#include "gbp-dspy-application-addin.h"
-#include "gbp-dspy-workspace-addin.h"
+G_BEGIN_DECLS
 
-_IDE_EXTERN void
-_gbp_dspy_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_ADDIN,
-                                              GBP_TYPE_DSPY_APPLICATION_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKSPACE_ADDIN,
-                                              GBP_TYPE_DSPY_WORKSPACE_ADDIN);
-}
+#define GBP_TYPE_DSPY_WORKSPACE (gbp_dspy_workspace_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpDspyWorkspace, gbp_dspy_workspace, GBP, DSPY_WORKSPACE, IdeWorkspace)
+
+GbpDspyWorkspace *gbp_dspy_workspace_new (IdeApplication *application);
+
+G_END_DECLS

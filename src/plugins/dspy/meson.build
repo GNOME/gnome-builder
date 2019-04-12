@@ -7,7 +7,9 @@ plugins_sources += files([
   'dspy-name-row.c',
   'dspy-name-view.c',
   'dspy-path-model.c',
+  'gbp-dspy-application-addin.c',
   'gbp-dspy-surface.c',
+  'gbp-dspy-workspace.c',
   'gbp-dspy-workspace-addin.c',
 ])
 
