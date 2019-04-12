@@ -3,7 +3,6 @@ if get_option('plugin_dspy')
 plugins_sources += files([
   'dspy-plugin.c',
   'dspy-connection-model.c',
-  'dspy-connection-row.c',
   'dspy-name.c',
   'dspy-name-row.c',
   'dspy-name-view.c',

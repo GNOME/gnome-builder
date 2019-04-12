@@ -7,31 +7,30 @@
         <property name="position">300</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkPaned" id="left_paned">
+          <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="position">75</property>
             <property name="visible">true</property>
+            <style>
+              <class name="view"/>
+            </style>
             <child>
-              <object class="GtkScrolledWindow" id="connections_scroller">
-                <property name="propagate-natural-height">true</property>
-                <property name="propagate-natural-width">true</property>
+              <object class="GtkBox" id="bus_box">
+                <property name="orientation">horizontal</property>
+                <property name="homogeneous">true</property>
+                <property name="halign">fill</property>
+                <property name="margin">6</property>
                 <property name="visible">true</property>
-                <child>
-                  <object class="GtkListBox" id="connections_list_box">
-                    <property name="selection-mode">browse</property>
-                    <property name="visible">true</property>
-                  </object>
-                </child>
+                <style>
+                  <class name="linked"/>
+                </style>
               </object>
-              <packing>
-                <property name="shrink">false</property>
-              </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow" id="names_scroller">
                 <property name="propagate-natural-height">true</property>
                 <property name="propagate-natural-width">true</property>
                 <property name="visible">true</property>
+                <property name="vexpand">true</property>
                 <child>
                   <object class="GtkListBox" id="names_list_box">
                     <property name="selection-mode">browse</property>
@@ -39,9 +38,6 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="shrink">false</property>
-              </packing>
             </child>
           </object>
           <packing>
