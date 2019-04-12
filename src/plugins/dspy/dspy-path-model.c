@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
@@ -41,6 +42,25 @@ static GHashTable *simple_types;
 
 static void dspy_path_model_introspect (DspyPathModel *self,
                                         const gchar   *path);
+
+static gboolean
+arg_name_is_generated (const gchar *str)
+{
+  if (g_str_has_prefix (str, "arg_"))
+    {
+      gchar *endptr = NULL;
+      gint64 val;
+
+      str += strlen ("arg_");
+      errno = 0;
+      val = g_ascii_strtoll (str, &endptr, 10);
+
+      if (val >= 0 && errno == 0 && *endptr == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
 
 static gint
 compare_iface (gconstpointer a,
@@ -155,8 +175,12 @@ method_to_string (GDBusMethodInfo *method)
         g_string_append (str, ", ");
 
       add_signature (str, arg->signature);
-      g_string_append_c (str, ' ');
-      add_arg_name (str, arg->name);
+
+      if (!arg_name_is_generated (arg->name))
+        {
+          g_string_append_c (str, ' ');
+          add_arg_name (str, arg->name);
+        }
     }
 
   g_string_append (str, ") ↦ (");
@@ -169,8 +193,12 @@ method_to_string (GDBusMethodInfo *method)
         g_string_append (str, ", ");
 
       add_signature (str, arg->signature);
-      g_string_append_c (str, ' ');
-      add_arg_name (str, arg->name);
+
+      if (!arg_name_is_generated (arg->name))
+        {
+          g_string_append_c (str, ' ');
+          add_arg_name (str, arg->name);
+        }
     }
 
   g_string_append_c (str, ')');
@@ -194,8 +222,12 @@ signal_to_string (GDBusSignalInfo *sig)
         g_string_append (str, ", ");
 
       add_signature (str, arg->signature);
-      g_string_append_c (str, ' ');
-      add_arg_name (str, arg->name);
+
+      if (!arg_name_is_generated (arg->name))
+        {
+          g_string_append_c (str, ' ');
+          add_arg_name (str, arg->name);
+        }
     }
 
   g_string_append_c (str, ')');
