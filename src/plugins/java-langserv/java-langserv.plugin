@@ -1,0 +1,15 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2019 Alberto Fanjul
+Description=Provides LSP integration for java
+Loader=python3
+Module=java_langserver_plugin
+Name=Java Language Server Plugin
+X-Builder-ABI=@PACKAGE_ABI@
+X-Symbol-Resolver-Languages=java
+X-Completion-Provider-Languages=java
+X-Diagnostic-Provider-Languages=java
+X-Formatter-Languages=java
+X-Highlighter-Languages=java
+X-Hover-Provider-Languages=java
+X-Rename-Provider-Languages=java
