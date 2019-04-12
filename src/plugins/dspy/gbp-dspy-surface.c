@@ -133,6 +133,10 @@ on_connection_clicked_cb (GtkButton      *button,
   dspy_connection_model_set_address (model, info->addr);
   gtk_list_box_bind_model (self->names_list_box, G_LIST_MODEL (model), create_names_row, NULL, NULL);
   g_set_object (&self->model, model);
+
+  g_object_set (gtk_scrolled_window_get_vadjustment (self->names_scroller),
+                "value", 0.0,
+                NULL);
 }
 
 static void
