@@ -335,6 +335,22 @@ dspy_connection_model_name_owner_changed_cb (GDBusConnection *connection,
           g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
         }
     }
+  else
+    {
+      DspyName *item = g_sequence_get (seq);
+
+      if (vnew_name[0] == ':')
+        dspy_name_set_owner (name, vnew_name);
+
+      g_dbus_proxy_call (self->bus_proxy,
+                         "GetConnectionUnixProcessID",
+                         g_variant_new ("(s)", vname),
+                         G_DBUS_CALL_FLAGS_NONE,
+                         -1,
+                         self->cancellable,
+                         dspy_connection_model_get_process_id_cb,
+                         g_object_ref (item));
+    }
 
 #if 0
   g_print ("%s %s %s %s %s\n",
