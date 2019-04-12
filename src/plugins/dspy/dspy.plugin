@@ -7,3 +7,4 @@ Embedded=_gbp_dspy_register_types
 Module=dspy
 Name=DBus Connection Explorer
 X-Workspace-Kind=primary;editor;
+X-At-Startup=true

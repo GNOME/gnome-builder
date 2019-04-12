@@ -6,5 +6,6 @@
     <file preprocess="xml-stripblanks">dspy-name-row.ui</file>
     <file preprocess="xml-stripblanks">dspy-name-view.ui</file>
     <file preprocess="xml-stripblanks">gbp-dspy-surface.ui</file>
+    <file preprocess="xml-stripblanks">gbp-dspy-workspace.ui</file>
   </gresource>
 </gresources>

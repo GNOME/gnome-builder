@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpDspyWorkspace" parent="IdeWorkspace">
+    <property name="default-width">750</property>
+    <property name="default-height">450</property>
+    <child type="titlebar">
+      <object class="IdeHeaderBar" id="header_bar">
+        <property name="show-close-button">true</property>
+        <property name="show-fullscreen-button">false</property>
+        <property name="menu-id">dspy-workspace-menu</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+    <child internal-child="surfaces">
+      <object class="GtkStack" id="surfaces">
+        <property name="visible">true</property>
+        <child>
+          <object class="GbpDspySurface">
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="name">dspy</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
