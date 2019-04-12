@@ -122,6 +122,7 @@
                 <child>
                   <object class="GtkTreeViewColumn">
                     <property name="expand">true</property>
+                    <property name="sizing">autosize</property>
                     <property name="title" translatable="yes">Object Path</property>
                     <child>
                       <object class="GtkCellRendererText" id="text_cell">
