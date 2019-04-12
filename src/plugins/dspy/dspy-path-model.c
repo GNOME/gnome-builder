@@ -62,6 +62,13 @@ arg_name_is_generated (const gchar *str)
   return FALSE;
 }
 
+static void
+add_paren (GString *str,
+           gchar    paren)
+{
+  g_string_append_printf (str, "<span fgalpha='49000'>%c</span>", paren);
+}
+
 static gint
 compare_iface (gconstpointer a,
                gconstpointer b)
@@ -125,7 +132,7 @@ add_signature (GString     *str,
   if ((tmp = g_hash_table_lookup (simple_types, signature)))
     signature = tmp;
 
-  g_string_append_printf (str, "<span weight='bold' fgalpha='32767'>%s</span>", signature);
+  g_string_append_printf (str, "<span weight='bold' fgalpha='40000'>%s</span>", signature);
 }
 
 static gchar *
@@ -165,7 +172,8 @@ method_to_string (GDBusMethodInfo *method)
 
   g_string_append (str, method->name);
 
-  g_string_append (str, " (");
+  g_string_append_c (str, ' ');
+  add_paren (str, '(');
 
   for (guint i = 0; method->in_args[i] != NULL; i++)
     {
@@ -183,7 +191,9 @@ method_to_string (GDBusMethodInfo *method)
         }
     }
 
-  g_string_append (str, ") ↦ (");
+  add_paren (str, ')');
+  g_string_append (str, " ↦ ");
+  add_paren (str, '(');
 
   for (guint i = 0; method->out_args[i] != NULL; i++)
     {
@@ -201,7 +211,7 @@ method_to_string (GDBusMethodInfo *method)
         }
     }
 
-  g_string_append_c (str, ')');
+  add_paren (str, ')');
 
   return g_string_free (str, FALSE);
 }
