@@ -311,16 +311,29 @@ dspy_connection_model_name_owner_changed_cb (GDBusConnection *connection,
                            (GCompareDataFunc) dspy_name_compare,
                            NULL);
 
-  if (seq == NULL && vnew_name[0])
+  if (seq == NULL)
     {
-      const gchar *names[] = { vname, NULL };
-      dspy_connection_model_add_names (self, names, FALSE);
+      if (vnew_name[0])
+        {
+          const gchar *names[] = { vname, NULL };
+          dspy_connection_model_add_names (self, names, FALSE);
+        }
     }
   else if (!vnew_name[0])
     {
-      guint position = g_sequence_iter_get_position (seq);
-      g_sequence_remove (seq);
-      g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+      DspyName *item = g_sequence_get (seq);
+
+      if (dspy_name_get_activatable (item) &&
+          dspy_name_get_name (item)[0] != ':')
+        {
+          dspy_name_set_pid (item, 0);
+        }
+      else
+        {
+          guint position = g_sequence_iter_get_position (seq);
+          g_sequence_remove (seq);
+          g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+        }
     }
 
 #if 0
