@@ -22,12 +22,16 @@
 
 #include "config.h"
 
+#include "gbp-dspy-surface.h"
+#include "gbp-dspy-private.h"
 #include "gbp-dspy-workspace.h"
 
 struct _GbpDspyWorkspace
 {
-  IdeWorkspace  parent_instance;
-  IdeHeaderBar *header_bar;
+  IdeWorkspace    parent_instance;
+  IdeHeaderBar   *header_bar;
+  GtkSizeGroup   *left_size_group;
+  GbpDspySurface *surface;
 };
 
 G_DEFINE_TYPE (GbpDspyWorkspace, gbp_dspy_workspace, IDE_TYPE_WORKSPACE)
@@ -42,12 +46,16 @@ gbp_dspy_workspace_class_init (GbpDspyWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/dspy/gbp-dspy-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpDspyWorkspace, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, GbpDspyWorkspace, left_size_group);
+  gtk_widget_class_bind_template_child (widget_class, GbpDspyWorkspace, surface);
 }
 
 static void
 gbp_dspy_workspace_init (GbpDspyWorkspace *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  _gbp_dspy_surface_set_size_group (self->surface, self->left_size_group);
 }
 
 GbpDspyWorkspace *

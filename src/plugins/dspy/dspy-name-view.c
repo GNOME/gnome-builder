@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 
 #include "dspy-name-view.h"
 #include "dspy-path-model.h"
@@ -45,12 +46,12 @@ G_DEFINE_TYPE (DspyNameView, dspy_name_view, GTK_TYPE_BIN)
 
 static void
 on_refresh_button_clicked_cb (DspyNameView *self,
-                              GtkButton    *button)
+                              GtkWidget    *button)
 {
   g_autoptr(DspyPathModel) path_model = NULL;
 
   g_assert (DSPY_IS_NAME_VIEW (self));
-  g_assert (GTK_IS_BUTTON (button));
+  g_assert (GTK_IS_BUTTON (button) || GTK_IS_TREE_VIEW_COLUMN (button));
 
   if (self->name == NULL)
     return;
@@ -151,6 +152,41 @@ dspy_name_view_init (DspyNameView *self)
                            G_CALLBACK (on_tree_view_row_activated_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  {
+    GtkWidget *box;
+    GtkWidget *button;
+    GtkWidget *label;
+
+    box = g_object_new (GTK_TYPE_BOX,
+                        "orientation", GTK_ORIENTATION_HORIZONTAL,
+                        "visible", TRUE,
+                        NULL);
+    label = g_object_new (GTK_TYPE_LABEL,
+                          "label", _("Object Path"),
+                          "hexpand", TRUE,
+                          "visible", TRUE,
+                          NULL);
+    button = g_object_new (GTK_TYPE_BUTTON,
+                           "visible", TRUE,
+                           "child", g_object_new (GTK_TYPE_IMAGE,
+                                                  "icon-name", "view-refresh-symbolic",
+                                                  "pixel-size", 16,
+                                                  "visible", TRUE,
+                                                  NULL),
+                           NULL);
+    g_signal_connect_object (gtk_tree_view_get_column (self->tree_view, 0),
+                             "clicked",
+                             G_CALLBACK (on_refresh_button_clicked_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
+
+    gtk_container_add (GTK_CONTAINER (box), label);
+    gtk_container_add (GTK_CONTAINER (box), button);
+
+    gtk_tree_view_column_set_widget (gtk_tree_view_get_column (self->tree_view, 0), box);
+    gtk_tree_view_set_headers_clickable (self->tree_view, TRUE);
+  }
 }
 
 DspyNameView *

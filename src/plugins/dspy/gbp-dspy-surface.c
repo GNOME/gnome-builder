@@ -30,6 +30,7 @@
 #include "dspy-name-row.h"
 #include "dspy-name-view.h"
 
+#include "gbp-dspy-private.h"
 #include "gbp-dspy-surface.h"
 
 struct _GbpDspySurface
@@ -41,6 +42,7 @@ struct _GbpDspySurface
   GtkStack            *view_stack;
   DspyNameView        *name_view;
   GtkBox              *bus_box;
+  GtkBox              *left_box;
 
   DspyConnectionModel *model;
 };
@@ -196,6 +198,7 @@ gbp_dspy_surface_class_init (GbpDspySurfaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, names_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, names_scroller);
   gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, name_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, left_box);
   gtk_widget_class_bind_template_child (widget_class, GbpDspySurface, view_stack);
 
   g_type_ensure (DSPY_TYPE_NAME_VIEW);
@@ -224,4 +227,14 @@ GbpDspySurface *
 gbp_dspy_surface_new (void)
 {
   return g_object_new (GBP_TYPE_DSPY_SURFACE, NULL);
+}
+
+void
+_gbp_dspy_surface_set_size_group (GbpDspySurface *self,
+                                  GtkSizeGroup   *group)
+{
+  g_return_if_fail (GBP_IS_DSPY_SURFACE (self));
+  g_return_if_fail (GTK_IS_SIZE_GROUP (group));
+
+  gtk_size_group_add_widget (group, GTK_WIDGET (self->left_box));
 }

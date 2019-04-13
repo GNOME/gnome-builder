@@ -9,13 +9,55 @@
         <property name="show-fullscreen-button">false</property>
         <property name="menu-id">dspy-workspace-menu</property>
         <property name="visible">true</property>
+        <child type="left">
+          <object class="GtkBox" id="header_left_box">
+            <property name="halign">start</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkMenuButton">
+                <property name="hexpand">true</property>
+                <property name="halign">center</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">6</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">System</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">pan-down-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child internal-child="surfaces">
       <object class="GtkStack" id="surfaces">
         <property name="visible">true</property>
         <child>
-          <object class="GbpDspySurface">
+          <object class="GbpDspySurface" id="surface">
             <property name="visible">true</property>
           </object>
           <packing>
@@ -25,4 +67,10 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="left_size_group">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="header_left_box"/>
+    </widgets>
+  </object>
 </interface>

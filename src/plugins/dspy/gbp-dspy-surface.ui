@@ -2,9 +2,8 @@
 <interface>
   <template class="GbpDspySurface" parent="IdeSurface">
     <child>
-      <object class="GtkPaned" id="paned">
+      <object class="DzlMultiPaned" id="paned">
         <property name="orientation">horizontal</property>
-        <property name="position">300</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkBox">
@@ -26,14 +25,33 @@
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="names_scroller">
-                <property name="propagate-natural-height">true</property>
-                <property name="propagate-natural-width">true</property>
+              <object class="GtkBox" id="left_box">
+                <property name="orientation">vertical</property>
                 <property name="visible">true</property>
-                <property name="vexpand">true</property>
                 <child>
-                  <object class="GtkListBox" id="names_list_box">
-                    <property name="selection-mode">browse</property>
+                  <object class="GtkScrolledWindow" id="names_scroller">
+                    <property name="propagate-natural-height">true</property>
+                    <property name="propagate-natural-width">true</property>
+                    <property name="visible">true</property>
+                    <property name="vexpand">true</property>
+                    <child>
+                      <object class="GtkListBox" id="names_list_box">
+                        <property name="selection-mode">browse</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSearchEntry" id="search_entry">
+                    <property name="placeholder-text" translatable="yes">Search Bus Names</property>
+                    <property name="has-frame">false</property>
                     <property name="visible">true</property>
                   </object>
                 </child>

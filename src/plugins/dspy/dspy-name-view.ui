@@ -110,6 +110,18 @@
               </packing>
             </child>
           </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">horizontal</property>
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
@@ -139,6 +151,9 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
         </child>
       </object>
     </child>
