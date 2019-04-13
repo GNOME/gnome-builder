@@ -235,9 +235,7 @@ gbp_flatpak_install_dialog_contains (GbpFlatpakInstallDialog *self,
   GtkTreeIter iter;
 
   g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (self));
-  g_assert (name);
-  g_assert (arch);
-  g_assert (branch);
+  g_assert (name != NULL);
 
   if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self->liststore1), &iter))
     {
@@ -253,9 +251,9 @@ gbp_flatpak_install_dialog_contains (GbpFlatpakInstallDialog *self,
                               2, &item_branch,
                               -1);
 
-          if (g_str_equal (item_name, name) &&
-              g_str_equal (item_arch, arch) &&
-              g_str_equal (item_branch, branch))
+          if (ide_str_equal0 (item_name, name) &&
+              (!arch || ide_str_equal0 (item_arch, arch)) &&
+              (!branch || ide_str_equal0 (item_branch, branch)))
             return TRUE;
         }
       while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->liststore1), &iter));
