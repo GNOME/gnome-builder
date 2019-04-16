@@ -24,6 +24,7 @@
 
 #include <girepository.h>
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 #include <libide-core.h>
 #include <libide-code.h>
 #include <libide-editor.h>
@@ -161,6 +162,10 @@ main (gint   argc,
 
   /* Flush any outstanding logs */
   ide_log_shutdown ();
+
+  /* Cleanup GtkSourceView singletons to improve valgrind output */
+  g_object_unref (gtk_source_style_scheme_manager_get_default ());
+  g_object_unref (gtk_source_language_manager_get_default ());
 
   return ret;
 }
