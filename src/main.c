@@ -77,6 +77,26 @@ early_params_check (gint       *argc,
   g_option_context_parse (context, argc, argv, NULL);
 }
 
+static gboolean
+_home_contains_symlink (const gchar *path)
+{
+  g_autofree gchar *parent = NULL;
+
+  if (g_file_test (path, G_FILE_TEST_IS_SYMLINK))
+    return TRUE;
+
+  if ((parent = g_path_get_dirname (path)) && !g_str_equal (parent, "/"))
+    return _home_contains_symlink (parent);
+
+  return FALSE;
+}
+
+static gboolean
+home_contains_symlink (void)
+{
+  return _home_contains_symlink (g_get_home_dir ());
+}
+
 gint
 main (gint   argc,
       gchar *argv[])
@@ -128,7 +148,7 @@ main (gint   argc,
    *
    * https://gitlab.gnome.org/GNOME/gnome-builder/issues/859
    */
-  if (g_file_test ("/home", G_FILE_TEST_IS_SYMLINK))
+  if (home_contains_symlink ())
     g_critical ("User home directory uses a symlink. "
                 "This is not supported and may result in unforseen issues.");
 
