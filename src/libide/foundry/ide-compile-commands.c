@@ -512,6 +512,7 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
 
         default:
           if (g_str_has_prefix (param, "-std=") ||
+              g_str_has_prefix (param, "--std=") ||
               ide_str_equal0 (param, "-pthread") ||
               g_str_has_prefix (param, "-isystem"))
             {
