@@ -29,8 +29,12 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_3_32
-gchar *ide_path_collapse (const gchar *path);
+gchar    *ide_path_collapse    (const gchar *path);
 IDE_AVAILABLE_IN_3_32
-gchar *ide_path_expand   (const gchar *path);
+gchar    *ide_path_expand      (const gchar *path);
+
+/* Not available as public ABI Until 3.34 */
+gboolean  ide_path_is_c_like   (const gchar *path);
+gboolean  ide_path_is_cpp_like (const gchar *path);
 
 G_END_DECLS
