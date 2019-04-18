@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <json-glib/json-glib.h>
+#include <libide-io.h>
 #include <libide-threading.h>
 #include <string.h>
 
@@ -406,19 +407,6 @@ ide_compile_commands_load_finish (IdeCompileCommands  *self,
 }
 
 static gboolean
-suffix_is_c_like (const gchar *suffix)
-{
-  if (suffix == NULL)
-    return FALSE;
-
-  return !!strstr (suffix, ".c") || !!strstr (suffix, ".h") ||
-         !!strstr (suffix, ".cc") || !!strstr (suffix, ".hh") ||
-         !!strstr (suffix, ".c++") || !!strstr (suffix, ".h++") ||
-         !!strstr (suffix, ".cxx") || !!strstr (suffix, ".hxx") ||
-         !!strstr (suffix, ".cpp") || !!strstr (suffix, ".hpp");
-}
-
-static gboolean
 suffix_is_vala (const gchar *suffix)
 {
   if (suffix == NULL)
@@ -631,7 +619,7 @@ find_with_alternates (IdeCompileCommands *self,
         if (NULL != (info = g_hash_table_lookup (self->info_by_file, other)))
           return info;
       }
-    else if (suffix_is_c_like (dot))
+    else if (ide_path_is_c_like (dot) || ide_path_is_cpp_like (dot))
       {
         static const gchar *tries[] = { ".c", ".cc", ".cpp", ".cxx", ".c++" };
 
@@ -694,7 +682,7 @@ ide_compile_commands_lookup (IdeCompileCommands   *self,
       if (!g_shell_parse_argv (info->command, &argc, &argv, error))
         return NULL;
 
-      if (suffix_is_c_like (dot))
+      if (ide_path_is_c_like (dot) || ide_path_is_cpp_like (dot))
         ide_compile_commands_filter_c (self, info, system_includes, &argv);
       else if (suffix_is_vala (dot))
         ide_compile_commands_filter_vala (self, info, &argv);
