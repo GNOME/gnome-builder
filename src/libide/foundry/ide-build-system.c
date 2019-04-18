@@ -86,13 +86,76 @@ ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,
                                              GAsyncReadyCallback  callback,
                                              gpointer             user_data)
 {
-  ide_task_report_new_error (self,
-                             callback,
-                             user_data,
-                             ide_build_system_real_get_build_flags_async,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Fetching build flags is not supported");
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) parsed_flags = NULL;
+  IdeBuildManager *build_manager;
+  IdeEnvironment *env;
+  const gchar *flags = NULL;
+  const gchar *path;
+  IdePipeline *pipeline;
+  IdeConfig *config;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_system_real_get_build_flags_async);
+
+  /* Avoid work immediately if we can */
+  if (ide_task_return_error_if_cancelled (task))
+    return;
+
+  if (!g_file_is_native (file) || !(path = g_file_peek_path (file)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Cannot get build flags for non-native file");
+      return;
+    }
+
+  if (!(context = ide_object_ref_context (IDE_OBJECT (self))) ||
+      !(build_manager = ide_build_manager_from_context (context)) ||
+      !(pipeline = ide_build_manager_get_pipeline (build_manager)) ||
+      !(config = ide_pipeline_get_config (pipeline)) ||
+      !(env = ide_config_get_environment (config)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_INITIALIZED,
+                                 "Cannot access build flags without build config");
+      return;
+    }
+
+  if (ide_path_is_cpp_like (path))
+    {
+      flags = ide_environment_getenv (env, "CXXFLAGS");
+    }
+  else if (ide_path_is_c_like (path))
+    {
+      if (!(flags = ide_environment_getenv (env, "CFLAGS")))
+        flags = ide_environment_getenv (env, "CXXFLAGS");
+    }
+  else
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Cannot extract build flags for unknown file type: \"%s\"",
+                                 path);
+    }
+
+  if (flags == NULL)
+    flags = "";
+
+  if (!g_shell_parse_argv (flags, NULL, &parsed_flags, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, g_steal_pointer (&parsed_flags), g_strfreev);
 }
 
 static gchar **
