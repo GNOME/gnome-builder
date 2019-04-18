@@ -95,3 +95,41 @@ ide_path_collapse (const gchar *path)
 
   return g_steal_pointer (&expanded);
 }
+
+gboolean
+ide_path_is_c_like (const gchar *path)
+{
+  const gchar *dot;
+
+  if (path == NULL)
+    return FALSE;
+
+  if ((dot = strrchr (path, '.')))
+    return ide_str_equal (dot, ".c") || ide_str_equal (dot, ".h");
+
+  return FALSE;
+}
+
+gboolean
+ide_path_is_cpp_like (const gchar *path)
+{
+  static const gchar *cpplike[] = {
+    ".cc", ".cpp", ".c++", ".cxx",
+    ".hh", ".hpp", ".h++", ".hxx",
+  };
+  const gchar *dot;
+
+  if (path == NULL)
+    return FALSE;
+
+  if ((dot = strrchr (path, '.')))
+    {
+      for (guint i = 0; i < G_N_ELEMENTS (cpplike); i++)
+        {
+          if (ide_str_equal (dot, cpplike[i]))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
