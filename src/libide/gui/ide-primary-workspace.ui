@@ -29,6 +29,7 @@
             <property name="visible">true</property>
             <child type="placeholder">
               <object class="GtkLabel" id="project_title">
+                <property name="ellipsize">end</property>
                 <property name="visible">true</property>
                 <property name="xalign">0.0</property>
               </object>
