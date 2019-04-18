@@ -86,13 +86,70 @@ ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,
                                              GAsyncReadyCallback  callback,
                                              gpointer             user_data)
 {
-  ide_task_report_new_error (self,
-                             callback,
-                             user_data,
-                             ide_build_system_real_get_build_flags_async,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Fetching build flags is not supported");
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+  IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+  IdePipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+  IdeConfig *config = ide_pipeline_get_config (pipeline);
+  IdeEnvironment *env = ide_config_get_environment (config);
+  const char *file_path = g_file_get_path (file);
+  const char *flags = NULL;
+  gboolean known_suffix = FALSE;
+  IdeTask *task = NULL;
+  GError *error = NULL;
+  gchar **parsed_flags = NULL;
+
+  if (g_str_has_suffix (file_path, ".cc") ||
+      g_str_has_suffix (file_path, ".cpp") ||
+      g_str_has_suffix (file_path, ".c++") ||
+      g_str_has_suffix (file_path, ".cxx") ||
+      g_str_has_suffix (file_path, ".hh") ||
+      g_str_has_suffix (file_path, ".h++") ||
+      g_str_has_suffix (file_path, ".hxx"))
+    {
+      known_suffix = TRUE;
+      flags = ide_environment_getenv (env, "CXXFLAGS");
+    }
+  else if (g_str_has_suffix (file_path, ".c"))
+    {
+      known_suffix = TRUE;
+      flags = ide_environment_getenv (env, "CFLAGS");
+    }
+  else if (g_str_has_suffix (file_path, ".h"))
+    {
+      known_suffix = TRUE;
+      flags = ide_environment_getenv (env, "CFLAGS");
+      if (flags == NULL)
+        {
+          flags = ide_environment_getenv (env, "CXXFLAGS");
+        }
+    }
+
+  if (!known_suffix)
+    {
+      ide_task_report_new_error (self,
+                                 callback,
+                                 user_data,
+                                 ide_build_system_real_get_build_flags_async,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Fetching build flags is not supported");
+      return;
+    }
+
+  if (flags == NULL)
+      flags = "";
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_system_real_get_build_flags_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (!g_shell_parse_argv (flags, NULL, &parsed_flags, &error))
+    {
+      ide_task_return_error (task, error);
+      return;
+    }
+
+  ide_task_return_pointer (task, parsed_flags, (GDestroyNotify) g_strfreev);
 }
 
 static gchar **
