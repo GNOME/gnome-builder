@@ -29,6 +29,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#ifdef __linux__
+# include <sys/prctl.h>
+#endif
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -91,6 +94,16 @@ child_setup_func (gpointer data)
 
   setsid ();
   setpgid (0, 0);
+
+#ifdef __linux__
+  /*
+   * If we were spawned from the main thread, then we can setup the
+   * PR_SET_PDEATHSIG and know that when this thread exits that the
+   * child will get a kill sig.
+   */
+  if (data != NULL)
+    prctl (PR_SET_PDEATHSIG, SIGKILL);
+#endif
 
   if (isatty (STDIN_FILENO))
     {
@@ -266,10 +279,14 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_autoptr(GSubprocess) real = NULL;
   g_autoptr(IdeSubprocess) wrapped = NULL;
   g_autoptr(GError) error = NULL;
+  gpointer child_data = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (IDE_IS_MAIN_THREAD ())
+    child_data = GUINT_TO_POINTER (TRUE);
 
   {
     g_autofree gchar *str = NULL;
@@ -283,7 +300,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   }
 
   launcher = g_subprocess_launcher_new (priv->flags);
-  g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
+  g_subprocess_launcher_set_child_setup (launcher, child_setup_func, child_data, NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
 
   if (priv->stdout_file_path != NULL)
