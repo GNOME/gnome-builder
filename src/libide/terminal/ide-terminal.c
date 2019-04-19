@@ -541,6 +541,8 @@ ide_terminal_init (IdeTerminal *self)
 
   dzl_widget_action_group_attach (self, "terminal");
 
+  vte_terminal_set_allow_hyperlink (VTE_TERMINAL (self), TRUE);
+
   for (guint i = 0; i < G_N_ELEMENTS (url_regexes); i++)
     {
       g_autoptr(VteRegex) regex = NULL;
