@@ -147,6 +147,7 @@ ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,
                                  G_IO_ERROR_NOT_SUPPORTED,
                                  "Cannot extract build flags for unknown file type: \"%s\"",
                                  path);
+      return;
     }
 
   if (flags == NULL)
