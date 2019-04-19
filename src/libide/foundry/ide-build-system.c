@@ -151,7 +151,13 @@ ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,
     }
 
   if (flags == NULL)
-    flags = "";
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "No CFLAGS or CXXFLAGS environment variables were specified");
+      return;
+    }
 
   if (!g_shell_parse_argv (flags, NULL, &parsed_flags, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
