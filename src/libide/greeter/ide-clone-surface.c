@@ -147,6 +147,8 @@ ide_clone_surface_addin_removed_cb (PeasExtensionSet *set,
       gtk_widget_hide (GTK_WIDGET (self->kind_label));
       gtk_widget_hide (GTK_WIDGET (self->kind_radio));
     }
+
+  ide_object_destroy (IDE_OBJECT (exten));
 }
 
 static void
