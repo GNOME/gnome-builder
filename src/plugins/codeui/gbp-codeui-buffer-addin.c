@@ -130,6 +130,29 @@ gbp_codeui_buffer_addin_changed_cb (GbpCodeuiBufferAddin  *self,
 }
 
 static void
+gbp_codeui_buffer_addin_language_set (IdeBufferAddin *addin,
+                                      IdeBuffer      *buffer,
+                                      const gchar    *language_id)
+{
+  g_autoptr(IdeContext) context = NULL;
+  IdeDiagnosticsManager *diagnostics_manager;
+  GFile *file;
+
+  g_assert (GBP_IS_CODEUI_BUFFER_ADDIN (addin));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  context = ide_buffer_ref_context (buffer);
+  file = ide_buffer_get_file (buffer);
+
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (file != NULL);
+  g_assert (G_IS_FILE (file));
+
+  diagnostics_manager = ide_diagnostics_manager_from_context (context);
+  _ide_diagnostics_manager_language_changed (diagnostics_manager, file, language_id);
+}
+
+static void
 gbp_codeui_buffer_addin_load (IdeBufferAddin *addin,
                               IdeBuffer      *buffer)
 {
@@ -185,6 +208,7 @@ buffer_addin_iface_init (IdeBufferAddinInterface *iface)
   iface->change_settled = gbp_codeui_buffer_addin_change_settled;
   iface->file_saved = gbp_codeui_buffer_addin_file_saved;
   iface->file_loaded = gbp_codeui_buffer_addin_file_loaded;
+  iface->language_set = gbp_codeui_buffer_addin_language_set;
   iface->load = gbp_codeui_buffer_addin_load;
   iface->unload = gbp_codeui_buffer_addin_unload;
 }
