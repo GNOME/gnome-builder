@@ -164,9 +164,9 @@ ignore_exit_failures:
 }
 
 static void
-ide_pipeline_stage_launcher_notify_completed_cb (IdeTask               *task,
-                                              GParamSpec            *pspec,
-                                              IdePipelineStageLauncher *launcher)
+ide_pipeline_stage_launcher_notify_completed_cb (IdeTask                  *task,
+                                                 GParamSpec               *pspec,
+                                                 IdePipelineStageLauncher *launcher)
 {
   g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_PIPELINE_STAGE_LAUNCHER (launcher));
@@ -175,12 +175,12 @@ ide_pipeline_stage_launcher_notify_completed_cb (IdeTask               *task,
 }
 
 static void
-ide_pipeline_stage_launcher_run (IdePipelineStage         *stage,
-                              IdeSubprocessLauncher *launcher,
-                              IdePipeline      *pipeline,
-                              GCancellable          *cancellable,
-                              GAsyncReadyCallback    callback,
-                              gpointer               user_data)
+ide_pipeline_stage_launcher_run (IdePipelineStage      *stage,
+                                 IdeSubprocessLauncher *launcher,
+                                 IdePipeline           *pipeline,
+                                 GCancellable          *cancellable,
+                                 GAsyncReadyCallback    callback,
+                                 gpointer               user_data)
 {
   IdePipelineStageLauncher *self = (IdePipelineStageLauncher *)stage;
   G_GNUC_UNUSED IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
@@ -274,11 +274,11 @@ ide_pipeline_stage_launcher_run (IdePipelineStage         *stage,
 }
 
 static void
-ide_pipeline_stage_launcher_build_async (IdePipelineStage       *stage,
-                                        IdePipeline    *pipeline,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
+ide_pipeline_stage_launcher_build_async (IdePipelineStage    *stage,
+                                         IdePipeline         *pipeline,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
 {
   IdePipelineStageLauncher *self = (IdePipelineStageLauncher *)stage;
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
@@ -290,8 +290,8 @@ ide_pipeline_stage_launcher_build_async (IdePipelineStage       *stage,
 
 static gboolean
 ide_pipeline_stage_launcher_build_finish (IdePipelineStage  *stage,
-                                         GAsyncResult   *result,
-                                         GError        **error)
+                                          GAsyncResult      *result,
+                                          GError           **error)
 {
   gboolean ret;
 
@@ -306,11 +306,11 @@ ide_pipeline_stage_launcher_build_finish (IdePipelineStage  *stage,
 }
 
 static void
-ide_pipeline_stage_launcher_clean_async (IdePipelineStage       *stage,
-                                      IdePipeline    *pipeline,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      gpointer             user_data)
+ide_pipeline_stage_launcher_clean_async (IdePipelineStage    *stage,
+                                         IdePipeline         *pipeline,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
 {
   IdePipelineStageLauncher *self = (IdePipelineStageLauncher *)stage;
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
@@ -322,8 +322,8 @@ ide_pipeline_stage_launcher_clean_async (IdePipelineStage       *stage,
 
 static gboolean
 ide_pipeline_stage_launcher_clean_finish (IdePipelineStage  *stage,
-                                       GAsyncResult   *result,
-                                       GError        **error)
+                                          GAsyncResult      *result,
+                                          GError           **error)
 {
   gboolean ret;
 
@@ -351,9 +351,9 @@ ide_pipeline_stage_launcher_finalize (GObject *object)
 
 static void
 ide_pipeline_stage_launcher_get_property (GObject    *object,
-                                       guint       prop_id,
-                                       GValue     *value,
-                                       GParamSpec *pspec)
+                                          guint       prop_id,
+                                          GValue     *value,
+                                          GParamSpec *pspec)
 {
   IdePipelineStageLauncher *self = (IdePipelineStageLauncher *)object;
 
@@ -382,9 +382,9 @@ ide_pipeline_stage_launcher_get_property (GObject    *object,
 
 static void
 ide_pipeline_stage_launcher_set_property (GObject      *object,
-                                       guint         prop_id,
-                                       const GValue *value,
-                                       GParamSpec   *pspec)
+                                          guint         prop_id,
+                                          const GValue *value,
+                                          GParamSpec   *pspec)
 {
   IdePipelineStageLauncher *self = (IdePipelineStageLauncher *)object;
 
@@ -484,7 +484,7 @@ ide_pipeline_stage_launcher_get_launcher (IdePipelineStageLauncher *self)
 
 void
 ide_pipeline_stage_launcher_set_launcher (IdePipelineStageLauncher *self,
-                                       IdeSubprocessLauncher *launcher)
+                                          IdeSubprocessLauncher    *launcher)
 {
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
 
@@ -509,7 +509,7 @@ ide_pipeline_stage_launcher_set_launcher (IdePipelineStageLauncher *self,
  */
 IdePipelineStage *
 ide_pipeline_stage_launcher_new (IdeContext            *context,
-                              IdeSubprocessLauncher *launcher)
+                                 IdeSubprocessLauncher *launcher)
 {
   return g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                        "launcher", launcher,
@@ -548,7 +548,7 @@ ide_pipeline_stage_launcher_get_ignore_exit_status (IdePipelineStageLauncher *se
  */
 void
 ide_pipeline_stage_launcher_set_ignore_exit_status (IdePipelineStageLauncher *self,
-                                                 gboolean               ignore_exit_status)
+                                                    gboolean                  ignore_exit_status)
 {
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
 
@@ -570,7 +570,7 @@ ide_pipeline_stage_launcher_set_ignore_exit_status (IdePipelineStageLauncher *se
 
 void
 ide_pipeline_stage_launcher_set_clean_launcher (IdePipelineStageLauncher *self,
-                                             IdeSubprocessLauncher *clean_launcher)
+                                                IdeSubprocessLauncher    *clean_launcher)
 {
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
 
@@ -619,7 +619,7 @@ ide_pipeline_stage_launcher_get_use_pty (IdePipelineStageLauncher *self)
  */
 void
 ide_pipeline_stage_launcher_set_use_pty (IdePipelineStageLauncher *self,
-                                      gboolean               use_pty)
+                                         gboolean                  use_pty)
 {
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
 
