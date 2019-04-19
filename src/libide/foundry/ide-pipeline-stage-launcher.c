@@ -337,6 +337,25 @@ ide_pipeline_stage_launcher_clean_finish (IdePipelineStage  *stage,
   IDE_RETURN (ret);
 }
 
+static gchar *
+ide_pipeline_stage_launcher_repr (IdeObject *object)
+{
+  IdePipelineStageLauncher *self = (IdePipelineStageLauncher *)object;
+  IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
+  const gchar * const *argv = NULL;
+
+  g_assert (IDE_IS_PIPELINE_STAGE_LAUNCHER (self));
+
+  if (priv->launcher)
+    argv = ide_subprocess_launcher_get_argv (priv->launcher);
+
+  return g_strdup_printf ("%s [%s ...] use_pty=%d ignore_exit_status=%d",
+                          G_OBJECT_TYPE_NAME (self),
+                          argv && argv[0] ? argv[0] : "(unspecified)",
+                          priv->use_pty,
+                          priv->ignore_exit_status);
+}
+
 static void
 ide_pipeline_stage_launcher_finalize (GObject *object)
 {
@@ -415,11 +434,14 @@ static void
 ide_pipeline_stage_launcher_class_init (IdePipelineStageLauncherClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
   IdePipelineStageClass *build_stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
   object_class->finalize = ide_pipeline_stage_launcher_finalize;
   object_class->get_property = ide_pipeline_stage_launcher_get_property;
   object_class->set_property = ide_pipeline_stage_launcher_set_property;
+
+  i_object_class->repr = ide_pipeline_stage_launcher_repr;
 
   build_stage_class->build_async = ide_pipeline_stage_launcher_build_async;
   build_stage_class->build_finish = ide_pipeline_stage_launcher_build_finish;
