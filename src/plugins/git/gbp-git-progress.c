@@ -77,7 +77,7 @@ gbp_git_progress_finalize (GObject *object)
   if (self->notif)
     {
       if (self->withdraw)
-        ide_notification_withdraw_in_seconds (self->notif, -1);
+        ide_notification_withdraw (self->notif);
       g_clear_object (&self->notif);
     }
 
