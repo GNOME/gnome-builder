@@ -53,6 +53,11 @@ class NPMBuildSystem(Ide.Object, Ide.BuildSystem):
     def do_get_priority(self):
         return 100
 
+    def get_package_json(self):
+        if self.props.project_file.get_basename() != 'package.json':
+            return self.props.project_file.get_child('package.json')
+        else:
+            return self.props.project_file
 
 class NPMPipelineAddin(Ide.Object, Ide.PipelineAddin):
     """
@@ -68,7 +73,7 @@ class NPMPipelineAddin(Ide.Object, Ide.PipelineAddin):
         if type(build_system) != NPMBuildSystem:
             return
 
-        package_json = build_system.props.project_file
+        package_json = build_system.get_package_json()
         config = pipeline.get_config()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
@@ -193,7 +198,7 @@ class NPMBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        project_file = build_system.project_file
+        project_file = build_system.get_package_json()
         project_file.load_contents_async(cancellable, self._on_package_json_loaded, task)
 
     def do_get_targets_finish(self, result):
