@@ -33,7 +33,6 @@
 
 #include "ide-debugger-private.h"
 
-#include "fast-str.h"
 #include "gbp-omni-gutter-renderer.h"
 
 /**
@@ -236,6 +235,58 @@ G_DEFINE_TYPE_WITH_CODE (GbpOmniGutterRenderer,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_GUTTER, gutter_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+
+static gint
+int_to_string (guint         value,
+               const gchar **outstr)
+{
+	static struct{
+		guint value;
+		guint len;
+		gchar str[12];
+	} fi;
+
+  *outstr = fi.str;
+
+  if (value == fi.value)
+    return fi.len;
+
+  if G_LIKELY (value == fi.value + 1)
+    {
+      guint carry = 1;
+
+      for (gint i = fi.len - 1; i >= 0; i--)
+        {
+          fi.str[i] += carry;
+          carry = fi.str[i] == ':';
+
+          if (carry)
+            fi.str[i] = '0';
+          else
+            break;
+        }
+
+      if G_UNLIKELY (carry)
+        {
+          for (guint i = fi.len; i > 0; i--)
+            fi.str[i] = fi.str[i-1];
+
+          fi.len++;
+          fi.str[0] = '1';
+          fi.str[fi.len] = 0;
+        }
+
+      fi.value++;
+
+      return fi.len;
+    }
+
+  fi.len = snprintf (fi.str, sizeof fi.str - 1, "%u", value);
+  fi.str[fi.len] = 0;
+  fi.value = value;
+
+  return fi.len;
+}
 
 /*
  * style_get_is_bold:
@@ -1219,10 +1270,9 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
       if (self->show_line_numbers)
         {
           const gchar *linestr = NULL;
-          gchar buf[12];
           gint len;
 
-          len = _fast_str (line + 1, &linestr, buf);
+          len = int_to_string (line + 1, &linestr);
           pango_layout_set_text (self->layout, linestr, len);
 
           cairo_move_to (cr, cell_area->x, cell_area->y);
