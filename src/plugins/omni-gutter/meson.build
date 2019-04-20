@@ -2,7 +2,6 @@ plugins_sources += files([
   'omni-gutter-plugin.c',
   'gbp-omni-gutter-renderer.c',
   'gbp-omni-gutter-editor-page-addin.c',
-  'fast-str.c',
 ])
 
 omni_gutter_resources = gnome.compile_resources(
