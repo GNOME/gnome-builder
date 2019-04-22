@@ -286,7 +286,7 @@ gbp_git_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            
   if (self->cache == NULL)
     {
       for (guint i = begin_line; i < end_line; i++)
-        callback (i, IDE_BUFFER_LINE_CHANGE_ADDED, user_data);
+        callback (i, IDE_BUFFER_LINE_CHANGE_NONE, user_data);
       return;
     }
 
