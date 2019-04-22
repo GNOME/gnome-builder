@@ -28,7 +28,6 @@
 #include "ide-omni-bar.h"
 #include "ide-primary-workspace.h"
 #include "ide-run-button.h"
-#include "ide-search-entry.h"
 #include "ide-surface.h"
 #include "ide-window-settings-private.h"
 
@@ -125,10 +124,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, search_tooltip);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, surface_menu_button);
 
-  g_type_ensure (IDE_TYPE_HEADER_BAR);
-  g_type_ensure (IDE_TYPE_OMNI_BAR);
   g_type_ensure (IDE_TYPE_RUN_BUTTON);
-  g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
 }
 
 static void
