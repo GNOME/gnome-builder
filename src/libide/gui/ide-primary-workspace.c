@@ -51,13 +51,14 @@
 
 struct _IdePrimaryWorkspace
 {
-  IdeWorkspace   parent_instance;
+  IdeWorkspace       parent_instance;
 
   /* Template widgets */
-  IdeHeaderBar   *header_bar;
-  DzlMenuButton  *surface_menu_button;
-  IdeRunButton   *run_button;
-  GtkLabel       *project_title;
+  IdeHeaderBar       *header_bar;
+  DzlMenuButton      *surface_menu_button;
+  IdeRunButton       *run_button;
+  GtkLabel           *project_title;
+  DzlShortcutTooltip *search_tooltip;
 };
 
 G_DEFINE_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -121,6 +122,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, search_tooltip);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, surface_menu_button);
 
   g_type_ensure (IDE_TYPE_HEADER_BAR);

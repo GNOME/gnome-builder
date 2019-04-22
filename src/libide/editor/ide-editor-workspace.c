@@ -41,8 +41,9 @@
 
 struct _IdeEditorWorkspace
 {
-  IdeWorkspace   parent_instance;
-  DzlMenuButton *surface_menu_button;
+  IdeWorkspace        parent_instance;
+  DzlMenuButton      *surface_menu_button;
+  DzlShortcutTooltip *search_tooltip;
 };
 
 G_DEFINE_TYPE (IdeEditorWorkspace, ide_editor_workspace, IDE_TYPE_WORKSPACE)
@@ -81,6 +82,7 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ui/ide-editor-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, surface_menu_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, search_tooltip);
 }
 
 static void

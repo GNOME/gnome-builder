@@ -26,7 +26,6 @@
             <property name="visible">true</property>
             <child>
               <object class="IdeSearchButton" id="search_button">
-                <property name="tooltip-text" translatable="yes">Press Ctrl+. to search</property>
                 <property name="visible">true</property>
                 <child internal-child="entry">
                   <object class="DzlSuggestionEntry">
@@ -54,4 +53,9 @@
       </object>
     </child>
   </template>
+  <object class="DzlShortcutTooltip" id="search_tooltip">
+    <property name="title" translatable="yes">Search your project</property>
+    <property name="command-id">org.gnome.builder.workspace.global-search</property>
+    <property name="widget">search_button</property>
+  </object>
 </interface>
