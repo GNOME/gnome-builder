@@ -246,8 +246,10 @@ gerror:
 
   if (g_error_matches (error, GGIT_ERROR, GIT_ENOTFOUND))
     {
-      g_clear_error (&error);
-      ret = g_variant_take_ref (g_variant_new_array (G_VARIANT_TYPE ("u"), NULL, 0));
+      g_dbus_method_invocation_return_dbus_error (invocation,
+                                                  "org.freedesktop.DBus.Error.FileNotFound",
+                                                  "No such file");
+      return TRUE;
     }
 
   if (error != NULL && error->domain != G_IO_ERROR)
