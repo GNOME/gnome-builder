@@ -42,19 +42,19 @@
           </object>
         </child>
         <child type="right">
-          <object class="IdeNotificationsButton" id="notifications_button">
-            <property name="show-theatric">false</property>
+          <object class="IdeSearchButton" id="search_button">
+            <property name="tooltip-text" translatable="yes">Press Ctrl+. to search</property>
             <property name="visible">true</property>
+            <child internal-child="entry">
+              <object class="DzlSuggestionEntry">
+                <property name="max-width-chars">20</property>
+              </object>
+            </child>
           </object>
         </child>
         <child type="right">
-          <object class="IdeSearchEntry" id="search_entry">
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="primary-icon-name">edit-find-symbolic</property>
-            <property name="placeholder-text" translatable="yes">Press Ctrl+. to search</property>
-            <property name="width-chars">5</property>
-            <property name="max-width-chars">24</property>
+          <object class="IdeNotificationsButton" id="notifications_button">
+            <property name="show-theatric">false</property>
             <property name="visible">true</property>
           </object>
         </child>

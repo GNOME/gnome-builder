@@ -25,17 +25,18 @@
           <object class="DzlPriorityBox">
             <property name="visible">true</property>
             <child>
-              <object class="IdeSearchEntry" id="search_entry">
-                <property name="primary-icon-name">edit-find-symbolic</property>
-                <property name="placeholder-text" translatable="yes">Press Ctrl+. to search</property>
-                <property name="width-chars">5</property>
-                <property name="max-width-chars">24</property>
+              <object class="IdeSearchButton" id="search_button">
+                <property name="tooltip-text" translatable="yes">Press Ctrl+. to search</property>
                 <property name="visible">true</property>
+                <child internal-child="entry">
+                  <object class="DzlSuggestionEntry">
+                    <property name="max-width-chars">20</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="pack-type">end</property>
-                <property name="padding">6</property>
-                <property name="priority">-100</property>
+                <property name="priority">-200</property>
               </packing>
             </child>
             <child>
@@ -45,7 +46,7 @@
               </object>
               <packing>
                 <property name="pack-type">end</property>
-                <property name="priority">-200</property>
+                <property name="priority">-300</property>
               </packing>
             </child>
           </object>

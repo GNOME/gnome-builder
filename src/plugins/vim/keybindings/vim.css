@@ -2557,7 +2557,7 @@ bind "KP_Multiply" { "save-insert-mark" ()
 
 @binding-set builder-vim-global-search
 {
-  bind "Escape" { "unfocus" () };
+  bind "Escape" { "action" ("search", "unfocus", "") };
   bind "Return" { "activate-suggestion" () };
 
   bind "Up" { "move-suggestion" (-1) };
