@@ -678,7 +678,7 @@ msgstr "Nom del color"
 
 #: src/gstyle/gstyle-color-widget-actions.c:70
 msgid "Enter a new name for the color"
-msgstr "Entreu un nom nou per al color"
+msgstr "Introduïu un nom nou per al color"
 
 #: src/gstyle/gstyle-palette-widget.c:981
 #, c-format
@@ -1380,7 +1380,7 @@ msgstr "S'està descarregant…"
 
 #: src/libide/foundry/ide-pipeline.c:3166
 msgid "Building dependencies…"
-msgstr "S'estan construint les dependencies…"
+msgstr "S'estan construint les dependències…"
 
 #: src/libide/foundry/ide-pipeline.c:3170
 msgid "Bootstrapping…"
@@ -2937,7 +2937,7 @@ msgstr "<b>%s</b> — <small>Línia %u, Columna %u</small>"
 
 #: src/libide/sourceview/ide-source-view.c:5188
 msgid "No references were found"
-msgstr "No s'han trobat referencies"
+msgstr "No s'han trobat referències"
 
 #: src/libide/terminal/gtk/menus.ui:7 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:118 src/plugins/editor/gtk/menus.ui:172
@@ -3451,7 +3451,7 @@ msgstr "Mostra els errors i avisos proporcionats per Clang"
 #. translators: keywords used when searching for preferences
 #: src/plugins/clang/ide-clang-preferences-addin.c:71
 msgid "clang diagnostics warnings errors"
-msgstr "Errors i avisos de diagnostic de clang"
+msgstr "Errors i avisos de diagnòstic de clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:81
 msgid "Suggest completions using Clang"
@@ -3593,7 +3593,7 @@ msgstr "Nom de la paleta"
 
 #: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
 msgid "Enter a new name for the palette"
-msgstr "Entra un nom nou per la paleta"
+msgstr "Introduïu un nom nou per la paleta"
 
 #. translators: %s is replaced with the name of the color palette.
 #: src/plugins/color-picker/gb-color-picker-prefs.c:88
@@ -5284,7 +5284,7 @@ msgstr[1] "Tanca tots els fitxers"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:921
 msgid "Copying files…"
-msgstr "Copiant fitxers"
+msgstr "S'estant copiant fitxers..."
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Files will be copied in a moment"
@@ -5304,10 +5304,8 @@ msgid "New File…"
 msgstr "Fitxer nou..."
 
 #: src/plugins/project-tree/gtk/menus.ui:12
-#, fuzzy
-#| msgid "_New Folder"
 msgid "New Folder…"
-msgstr "Carpeta _nova"
+msgstr "Carpeta nova…"
 
 #: src/plugins/project-tree/gtk/menus.ui:23
 #, fuzzy
@@ -5483,7 +5481,7 @@ msgstr "Instal·la la cadena rust"
 #. translators: channel is stable, beta, nightly, with optional architecture and date
 #: src/plugins/rustup/rustup_plugin.py:609
 msgid "Enter name of rust channel"
-msgstr "Entreu el nom de la cadena rust"
+msgstr "Introduïu el nom de la cadena rust"
 
 #: src/plugins/rustup/rustup_plugin.py:610
 msgid ""
@@ -5556,7 +5554,7 @@ msgstr ""
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:121
 msgid "No suggestions"
-msgstr "Sense suggerències"
+msgstr "Sense suggeriments"
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:214
 msgid "Completed spell checking"
