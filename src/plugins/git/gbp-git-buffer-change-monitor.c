@@ -39,6 +39,7 @@ struct _GbpGitBufferChangeMonitor
   guint                   last_change_count;
   guint                   queued_source;
   guint                   delete_range_requires_recalculation : 1;
+  guint                   not_found : 1;
 };
 
 enum { SLOW, FAST };
@@ -285,8 +286,16 @@ gbp_git_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            
 
   if (self->cache == NULL)
     {
+      guint change;
+
+      if (self->not_found)
+        change = IDE_BUFFER_LINE_CHANGE_ADDED;
+      else
+        change = IDE_BUFFER_LINE_CHANGE_NONE;
+
       for (guint i = begin_line; i < end_line; i++)
-        callback (i, IDE_BUFFER_LINE_CHANGE_NONE, user_data);
+        callback (i, change, user_data);
+
       return;
     }
 
@@ -433,23 +442,26 @@ gbp_git_buffer_change_monitor_wait_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ipc_git_change_monitor_call_list_changes_finish (proxy, &changes, result, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
   self = ide_task_get_source_object (task);
 
-  if (changes != NULL)
+  if (!ipc_git_change_monitor_call_list_changes_finish (proxy, &changes, result, &error))
     {
       g_clear_pointer (&self->cache, line_cache_free);
-      self->cache = line_cache_new_from_variant (changes);
+      self->not_found = TRUE;
+
+      if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_FILE_NOT_FOUND))
+        ide_task_return_boolean (task, TRUE);
+      else
+        ide_task_return_error (task, g_steal_pointer (&error));
     }
-
-  ide_buffer_change_monitor_emit_changed (IDE_BUFFER_CHANGE_MONITOR (self));
-
-  ide_task_return_boolean (task, TRUE);
+  else
+    {
+      g_clear_pointer (&self->cache, line_cache_free);
+      self->not_found = FALSE;
+      self->cache = line_cache_new_from_variant (changes);
+      ide_buffer_change_monitor_emit_changed (IDE_BUFFER_CHANGE_MONITOR (self));
+      ide_task_return_boolean (task, TRUE);
+    }
 }
 
 void
