@@ -56,7 +56,6 @@
 #include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
 #include "ide-search-button.h"
-#include "ide-search-entry.h"
 #include "ide-session-addin.h"
 #include "ide-surface.h"
 #include "ide-surfaces-button.h"
