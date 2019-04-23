@@ -85,6 +85,7 @@
         <attribute name="verb-icon-name">builder-editor-symbolic</attribute>
       </item>
     </section>
+    <section id="ide-editor-workspace-surfaces-menu-section"/>
   </menu>
   <menu id="new-document-menu">
     <section id="new-document-section">
