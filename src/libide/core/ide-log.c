@@ -207,6 +207,10 @@ ide_log_handler (const gchar    *log_domain,
   gchar *buffer;
   gboolean is_debug_level;
 
+  /* Ignore GdkPixbuf chatty-ness */
+  if (g_strcmp0 ("GdkPixbuf", log_domain) == 0)
+    return;
+
   if (G_LIKELY (channels->len))
     {
       is_debug_level = (log_level == G_LOG_LEVEL_DEBUG || log_level == IDE_LOG_LEVEL_TRACE);
