@@ -764,10 +764,10 @@ push_worker (GTask        *task,
       return;
     }
 
-  ggit_remote_upload (push->remote,
-                      (const gchar * const *)push->ref_names,
-                      push->push_options,
-                      &error);
+  ggit_remote_push (push->remote,
+                    (const gchar * const *)push->ref_names,
+                    push->push_options,
+                    &error);
 
   ggit_remote_disconnect (push->remote);
 
