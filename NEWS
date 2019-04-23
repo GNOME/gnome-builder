@@ -1,4 +1,66 @@
 ==============
+Version 3.33.1
+==============
+
+Changes since last release:
+
+ • Builder now requires meson 0.50 to build
+ • The appdata name was restored to it's previous name for compatibility
+ • Global search now uses a button which auto-expands into a search entry
+   when focused.
+ • The git plugin has been rewritten to use an out-of-process git daemon
+   which communicates over stdin/stdout using DBus serialization.
+ • The vala plugin has been moved out-of-process. Some features are disabled
+   but will come back in a future release.
+ • Improvements to editor menus
+ • Waf support handles foreign python better
+ • Allow ignoring code-index directories with a .noindex file
+ • Fixes to editor overscroll
+ • Improvements when home directory is detected to be within a symlink
+ • Improvements to projects that are found within a symlink
+ • Control key now toggles opacity of completion window
+ • Bump C++ build requirement for more modern preprocessor features
+ • Initial podman support when --preserve-fds is available
+ • Style fixes for sourceview line gutter background rendering
+ • The flatpak-plugin has been ported away from libgit2-glib
+ • The Builder UI process no longer links against libgit2-glib
+ • C++ alternate-file matching for compile_commands.json has improved
+ • C/C++ flags --std= option is now supported in addition to -std=
+ • PR_SET_PDEATHSIG is used for child processes spawned from the main-thread
+ • A new fast-int conversion implementation has been added that saves about
+   256kb of rodata
+ • A new DBus inspector tool has been added
+ • Git line change detection improvements
+ • "New item" buttons were removed from the frame header popover
+ • Updated translations
+
+Currently, this release requires libgit2-glib from master as there is
+not currently a 3.33.1 equivalent release.
+
+==============
+Version 3.32.1
+==============
+
+Changes since last release:
+
+ • Appdata updates
+ • The project-tree now auto-resizes the column
+ • Stability improvements to the flatpak plugin
+ • The flatpak plugin now queries before installing dependencies
+ • The code-index can be avoided by placing a ".noindex" file in a directory
+ • Transfer notifications have cancel buttons restored
+ • Waf improvements
+ • Flatpak uses fallback-x11 now instead of x11 by default
+ • RLS support can now be disabled by disabling the plugin
+ • A leak was fixed for semantic highlight indexes
+ • Scroll improvements for the source code editor
+ • Improved support for symlinks above the project directory
+ • Support for podman's --preserve-fds option
+ • Sourceview line number background drawing is improved
+ • Updated documentation
+ • Updated translations
+
+==============
 Version 3.32.0
 ==============
 
@@ -9,153 +71,3 @@ Changes since last release:
  • Styling tweaks for matching brackets
  • Updated documentation
  • Updated translations
-
-===============
-Version 3.31.92
-===============
-
-Changes since last release:
-
- • Destroy various IdeObject after they are no longer needed reducing
-   memory usage a bit
- • Add missing shortcuts to shortcuts window
- • Fix various compiler warnings for release builds
- • Tweak builder-dark style-scheme for Adwaita changes
- • Allow project-tree to be used from editor workspace
- • Allow gnome: gitlab: and github: prefixes when using --clone
- • Unit Tests now have a VTE-based output panel when running
- • Initial support for waf build system
- • Cached build targets are invalidated when build config changes
-   which should help ensure that "Run" does not execute stale
-   binaries
- • Changing devices now properly invalidates the build manager
- • A rofiles-fuse wrapper is provided when building for Flatpak
- • Scrolling with j/k/up/down in Vim mode is less jarring at line
-   boundaries by avoiding additional scrolling
- • New jump list desktop actions are provided for GNOME shell
- • Avoid indexing large directories when not in project-mode
- • Updated translations
-
-===============
-Version 3.31.91
-===============
-
-Changes since last release:
-
- • Fix three-finger-swipe gesture in keyboard shortcuts.
- • Respect sort-directories-first gsetting in project-tree.
- • Icons for the newcomers initiative have updated.
- • Loading of custom gtksourceview style schemes has been restored.
- • gnome-builder -e will now open a new editor window.
- • Plugins can now add delay in "settling" the buffer before saving.
- • The git plugin will settle for updated line changes before the buffer
-   can be saved. This fixes an issue with trim-spaces plugin not trimming
-   all of the expected lines.
- • Builder's flatpak-based fusermount wrapper was simplified. This could
-   use testing with regards to rofiles and flatpak-builder.
- • Various search workflow improvements.
- • The VCS file monitor now contains a sequence number that can be used to
-   optimize some additional work such as installing a project. Builder will
-   no longer install the project before each project Run unless a file within
-   the project tree has changed. Projects that rely on external files will
-   need to press "Build" before "Run" if only external files have changed.
- • Improvements to guessing language syntax when a buffer is created.
- • Add an experimental podman runtime provider. This is not enabled by
-   default and we do not recommend enabling it at this time.
- • Updated translations.
-
-Thanks to the many contributors that provided patches during this cycle!
-
-===============
-Version 3.31.90
-===============
-
-Changes since last release:
-
- • Appdata and icon updates.
- • Many bugs found from refactoring fallout have been fixed.
- • New plugin APIs have been added and some existing APIs tweaked
-   as we stabilize for release.
- • Theme tweaks to match upcoming Adwaita changes.
- • gdb improvements including use of fewer deprecated MI commands.
- • The greeter has been redesigned and simplified.
- • The git gutter now more accurately displays line information.
- • Menus have been tweaked to more closely fit with GNOME 3.32 guidelines.
- • The code indexer was redesigned to provide progress and improved pausibility.
-   We expect more changes before 3.32 to reduce overhead of larger projects.
- • Code indexers and ctags will delay initial indexing until a user operation
-   has occurred like saving a file or a successful build.
- • LSP conformance improvements.
- • The project tree now provides some basic VCS information and allows
-   switching branches using the context menu. This exposed a bug in libgit2-glib
-   which has been fixed there too. We recommend packagers ensure that bug fix
-   has landed in their libgit2-glib.
- • Updated translations.
-
-Thanks to the many contributors that provided patches during this cycle!
-
-==============
-Version 3.31.4
-==============
-
-Changes since last release:
-
- • A large number of changes as part of refactoring the core of Builder.
- • Basic support for multiple workspace windows for a project. Such is useful
-   in multi-monitor setups.
- • Add --clone, --greeter, --manifest, --editor command line options.
- • Opening files via .desktop mimetypes should no longer open a project,
-   only the source file.
- • Various build system information has been coalesced into the project tree.
- • Many meson_options.txt changes including a number of plugin options
-   were simplified.
- • Configuration view has been abstracted to allow plugins to extend build
-   preferences.
-
-We expect there to be a number of bugs found during the following releases
-due to the magnitude of refactoring this cycle. We appreciate those taking
-time to file good bug reports for us.
-
-We also anticipate a lot of translation updates so translation teams may want
-to get a head start sooner rather than later.
-
-==============
-Version 3.31.1
-==============
-
-Changes since last release:
-
- • Updated translations.
- • Add setting to disable clearing build caches at startup.
- • Build system improvements for release/nodebug builds.
- • Swith to using window menus instead of app-menu for 3.32.
- • Ignore history jumps while buffer is loading.
- • Build fixes for unit tests when building without installing.
- • Gdb plugin fixes when communicating with flatpak-based apps.
- • Add X-Flatpak-RenamedFrom to desktop file.
- • Install legacy gtksourceview-3.0 files.
- • New shortcuts for headerbar buttons.
- • Improved session saving to track previous searches.
- • Add support for updating git submodules along with dependencies.
- • SSL/PKI fixes when running under flatpak.
- • Port various structs to GArcBox.
- • Gstyle compilation fixes and improvements.
- • Vim improvements.
- • New meson project templates.
-
-==============
-Version 3.30.0
-==============
-
-Changes since last (beta) release:
-
- • Allow disabling interactive completion
- • Additional gobject snippets
- • Theme fixes for non-Adwaita themes
- • Build Config fixes when duplicating environments
-
-Updated Translations:
-
-  Swedish, Danish, Hungarian, Korean, Romanian, Turkish, Galician, Indonesian,
-  Czech, German, Italian, Polish, Brazilian Portuguese
-
