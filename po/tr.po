@@ -13,21 +13,22 @@
 # Muhammet Kara <muhammetk@gnome.org>, 2015, 2016, 2017, 2018.
 # Sabri Ünal <libreajans@gmail.com>, 2019.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017-2019.
+# Serdar Sağlam <teknomobil@yandex.com>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-14 18:23+0000\n"
-"PO-Revision-Date: 2019-03-14 22:01+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2019-03-14 19:05+0000\n"
+"PO-Revision-Date: 2019-03-14 23:24+0300\n"
+"Last-Translator: Serdar Sağlam <teknomobil@yandex.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 3.30.1\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 3.32.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -3183,7 +3184,6 @@ msgstr "İnşa günlüğünü kaydet"
 
 #. translators: use <b>translation</b> to wrap the text in bold font
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:116
-#| msgid "%s <b>%s</b>"
 msgid "<b>Missing</b>"
 msgstr "<b>Eksik</b>"
 
@@ -4167,23 +4167,23 @@ msgid "Network is not available, skipping downloads"
 msgstr "Ağ kullanılabilir değil, indirmeler atlanıyor"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:144
-#| msgid "Installing "
 msgid "Install Missing SDK?"
 msgstr "Eksik SDKʼyı Kur?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:149
-#| msgid "Install"
 msgid "_Install"
 msgstr "_Kur"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
+#| msgid ""
+#| "Builder needs to install the following software development kits to build "
+#| "your project. Click “Install” to have Builder install them for you."
 msgid ""
 "Builder needs to install the following software development kits to build "
-"your project. Click “Install” to have Builder install them for you."
+"your project."
 msgstr ""
 "Builder, projenizi inşa etmek için belirtilen yazılım geliştirme kitlerinin "
-"kurulmasına gereksiniyor. Builderʼın bunları sizin için kurmasını "
-"istiyorsanız “Kur”a tıklayın."
+"kurulmasına gereksiniyor."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
