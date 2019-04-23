@@ -100,7 +100,7 @@ src/libide/gui/ide-primary-workspace-actions.c
 src/libide/gui/ide-primary-workspace.ui
 src/libide/gui/ide-run-button.c
 src/libide/gui/ide-run-button.ui
-src/libide/gui/ide-search-entry.c
+src/libide/gui/ide-search-button.c
 src/libide/gui/ide-shortcuts-window.c
 src/libide/gui/ide-shortcuts-window.ui
 src/libide/gui/ide-transfer-button.c
