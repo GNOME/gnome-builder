@@ -119,6 +119,7 @@ ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,
     }
 
   if (!(context = ide_object_ref_context (IDE_OBJECT (self))) ||
+      !ide_context_has_project (context) ||
       !(build_manager = ide_build_manager_from_context (context)) ||
       !(pipeline = ide_build_manager_get_pipeline (build_manager)) ||
       !(config = ide_pipeline_get_config (pipeline)) ||
