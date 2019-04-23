@@ -330,7 +330,7 @@ test_clone (IpcGitService *service)
   g_assert_no_error (error);
   g_assert_true (ret);
   g_assert_nonnull (changes);
-  g_assert_true (g_variant_is_of_type (changes, G_VARIANT_TYPE ("a(uu)")));
+  g_assert_true (g_variant_is_of_type (changes, G_VARIANT_TYPE ("au")));
 
   {
     g_autofree gchar *str = g_variant_print (changes, TRUE);
@@ -469,7 +469,7 @@ main (gint argc,
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(IpcGitService) service = NULL;
 
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
   subprocess = g_subprocess_launcher_spawn (launcher, &error, "./gnome-builder-git", NULL);
 
   if (subprocess == NULL)
