@@ -4,6 +4,7 @@
     <section id="ide-primary-workspace-surfaces-menu-section">
       <attribute name="label" translatable="yes">Switch Surface</attribute>
     </section>
+    <section id="ide-primary-workspace-surfaces-menu-utils-section"/>
   </menu>
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section"/>
