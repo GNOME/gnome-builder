@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-04-22 22:10+0000\n"
-"PO-Revision-Date: 2019-04-23 10:11+0200\n"
+"POT-Creation-Date: 2019-04-23 23:23+0000\n"
+"PO-Revision-Date: 2019-04-24 09:38+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -630,6 +630,12 @@ msgstr "Clonar repositorio"
 msgid "New Editor Workspace"
 msgstr "Área de trabajo nueva en el editor"
 
+#: data/org.gnome.Builder.desktop.in.in:36
+#: src/plugins/dspy/gbp-dspy-workspace.ui:13 src/plugins/dspy/gtk/menus.ui:7
+#: src/plugins/dspy/gtk/menus.ui:18
+msgid "DBus Inspector"
+msgstr "Inspector de DBus"
+
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
 msgstr "Builder oscuro"
@@ -910,6 +916,7 @@ msgstr "Sin título"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:374
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1114,7 +1121,7 @@ msgstr ""
 "mayúsculas y minúsculas"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
-#: src/plugins/editor/gtk/menus.ui:151
+#: src/plugins/editor/gtk/menus.ui:152
 msgid "Document Properties"
 msgstr "Propiedades del documento"
 
@@ -1269,7 +1276,6 @@ msgstr "Cambiar superficie"
 
 #: src/libide/editor/ide-editor-workspace.ui:57
 #: src/libide/gui/ide-primary-workspace.ui:64
-#| msgid "Search for projects"
 msgid "Search your project"
 msgstr "Buscar su proyecto"
 
@@ -1431,7 +1437,7 @@ msgstr "Construir y ejecutar"
 msgid "Failed to locate a build target"
 msgstr "Falló al buscar el objetivo de construcción"
 
-#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
+#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:80
 #: src/plugins/buildui/gtk/menus.ui:30
 msgid "Run"
 msgstr "Ejecutar"
@@ -1596,41 +1602,41 @@ msgstr "Clonar repositorio"
 msgid "Switch Surface"
 msgstr "Cambiar superficie"
 
-#: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
+#: src/libide/gui/gtk/menus.ui:15 src/libide/gui/gtk/menus.ui:68
 #: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1376
-#: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
+#: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:101
 msgid "Open File…"
 msgstr "Abrir archivo…"
 
-#: src/libide/gui/gtk/menus.ui:23
+#: src/libide/gui/gtk/menus.ui:24
 msgid "Close Project"
 msgstr "Cerrar proyecto"
 
-#: src/libide/gui/gtk/menus.ui:31 src/libide/gui/ide-preferences-window.ui:6
+#: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-window.ui:6
 #: src/plugins/editor/gtk/menus.ui:32 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/libide/gui/gtk/menus.ui:37 src/plugins/editor/gtk/menus.ui:38
+#: src/libide/gui/gtk/menus.ui:38 src/plugins/editor/gtk/menus.ui:38
 #: src/plugins/greeter/gtk/menus.ui:28
 msgid "Keyboard Shortcuts"
 msgstr "Atajo del teclado"
 
-#: src/libide/gui/gtk/menus.ui:43 src/plugins/editor/gtk/menus.ui:44
+#: src/libide/gui/gtk/menus.ui:44 src/plugins/editor/gtk/menus.ui:44
 #: src/plugins/greeter/gtk/menus.ui:34
 msgid "Help"
 msgstr "Ayuda"
 
-#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:50
+#: src/libide/gui/gtk/menus.ui:50 src/plugins/editor/gtk/menus.ui:50
 #: src/plugins/greeter/gtk/menus.ui:40
 msgid "About Builder"
 msgstr "Acerca de Builder"
 
-#: src/libide/gui/gtk/menus.ui:56 src/plugins/editor/gtk/menus.ui:57
+#: src/libide/gui/gtk/menus.ui:57 src/plugins/editor/gtk/menus.ui:57
 msgid "_Quit"
 msgstr "_Salir"
 
-#: src/libide/gui/gtk/menus.ui:74
+#: src/libide/gui/gtk/menus.ui:75
 msgid "Run Options"
 msgstr "Opciones de ejecución"
 
@@ -2355,7 +2361,7 @@ msgstr "Detener ejecución"
 msgid "Change run options"
 msgstr "Cambiar las opciones de ejecución"
 
-#: src/libide/gui/ide-search-entry.c:209
+#: src/libide/gui/ide-search-button.c:43
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:272
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:278
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:284
@@ -2363,13 +2369,13 @@ msgctxt "shortcut window"
 msgid "Workspace shortcuts"
 msgstr "Atajos del área de trabajo"
 
-#: src/libide/gui/ide-search-entry.c:210
+#: src/libide/gui/ide-search-button.c:44
 #: src/libide/gui/ide-shortcuts-window.ui:574
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Buscar"
 
-#: src/libide/gui/ide-search-entry.c:211
+#: src/libide/gui/ide-search-button.c:45
 msgctxt "shortcut window"
 msgid "Focus to the global search entry"
 msgstr "Dar el foco a la entrada de búsqueda global"
@@ -2555,8 +2561,6 @@ msgid "Show completion window"
 msgstr "Mostrar la ventana de completado"
 
 #: src/libide/gui/ide-shortcuts-window.ui:313
-#| msgctxt "shortcut window"
-#| msgid "Show completion window"
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Conmutar la opacidad de la ventana de completado"
@@ -2737,7 +2741,6 @@ msgid "_Go to Definition"
 msgstr "_Ir a la definición"
 
 #: src/libide/sourceview/gtk/menus.ui:10
-#| msgid "Build Preferences"
 msgid "_Find references"
 msgstr "_Buscar referencias"
 
@@ -2846,7 +2849,7 @@ msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
 #: src/libide/terminal/gtk/menus.ui:7 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:118 src/plugins/editor/gtk/menus.ui:172
+#: src/plugins/editor/gtk/menus.ui:119 src/plugins/editor/gtk/menus.ui:173
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
 #: src/plugins/recent/gbp-recent-section.c:472
 msgid "Close"
@@ -3160,6 +3163,7 @@ msgstr "Entorno de construcción"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
@@ -3194,7 +3198,7 @@ msgid "Build Toolchain"
 msgstr "«Toolchain» de construcción"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
-#: src/plugins/editor/gtk/menus.ui:159 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/editor/gtk/menus.ui:160 src/plugins/glade/gtk/menus.ui:8
 #: src/plugins/testui/gbp-test-output-panel.c:66
 msgid "_Save"
 msgstr "_Guardar"
@@ -4020,6 +4024,7 @@ msgid "Locals"
 msgstr "Locales"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:369
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:90
 msgid "Parameters"
 msgstr "Parámetros"
 
@@ -4040,7 +4045,7 @@ msgid "Thread"
 msgstr "Hilo"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
-#: src/plugins/editor/gtk/menus.ui:107
+#: src/plugins/editor/gtk/menus.ui:108
 msgid "Frame"
 msgstr "Marco"
 
@@ -4072,13 +4077,202 @@ msgstr "Seleccionar documentación"
 msgid "Documentation"
 msgstr "Documentación"
 
-#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:143
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:144
 msgid "Print…"
 msgstr "Imprimir…"
 
 #: src/plugins/devhelp/gtk/menus.ui:21
 msgid "New Documentation Page"
 msgstr "Nueva página de documentación"
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:47
+msgid "Display DBus inspector"
+msgstr "Mostrar el inspector de DBus"
+
+#. translators: %s is replaced with the address of the DBus
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:81
+#, c-format
+#| msgid "Insert “%s”"
+msgid "Connected to “%s”"
+msgstr "Conectado a «%s»"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:253
+#| msgid "Host System"
+msgid "System"
+msgstr "Sistema"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:255
+#| msgid "Expression"
+msgid "Session"
+msgstr "Sesión"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:257
+msgid "Other"
+msgstr "Otra"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.c:192
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:130
+msgid "Execute"
+msgstr "Ejecutar"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:12
+#: src/plugins/dspy/libdspy/dspy-tree-view.c:298
+msgid "Object Path"
+msgstr "Ruta del objeto"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:38
+#| msgid "Interface Type"
+msgid "Interface"
+msgstr "Interfaz"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:64
+msgid "Method"
+msgstr "Método"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:145
+msgid "Result"
+msgstr "Resultado"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:186
+#: src/plugins/glade/gtk/menus.ui:27
+msgid "Copy"
+msgstr "Copiar"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:198
+msgid "Elapsed Time"
+msgstr "Tiempo transcurrido"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:14
+#| msgid "Address"
+msgid "Bus Address"
+msgstr "Dirección del bus"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:64
+msgid "Owner"
+msgstr "Propietario"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:89
+#| msgid "Preprocessor"
+msgid "Process ID"
+msgstr "ID del proceso"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+#, c-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "Activatable"
+msgstr "Activable"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+msgid "Yes"
+msgstr "Sí"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+#| msgid "N"
+msgid "No"
+msgstr "No"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+#, c-format
+msgid "%s: %u"
+msgstr "%s: %u"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+msgid "Pid"
+msgstr "PID"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:409
+msgid "read/write"
+msgstr "lectura/escritura"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:411
+msgid "write-only"
+msgstr "sólo-escritura"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:413
+#| msgid "Snippets (read-only)"
+msgid "read-only"
+msgstr "sólo lectura"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:528
+#| msgid "Interface Type"
+msgid "Interfaces"
+msgstr "Interfaces"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:531
+msgid "Methods"
+msgstr "Métodos"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:537
+msgid "Properties"
+msgstr "Propiedades"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:553
+#: src/plugins/glade/gbp-glade-editor-addin.c:79
+msgid "Signals"
+msgstr "Señales"
+
+#. translators: %s is replaced with the simple DBus type string
+#: src/plugins/dspy/libdspy/dspy-signature.c:79
+#, c-format
+msgid "Array of [%s]"
+msgstr "Vector de [%s]"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:149
+msgid "Access Denied by Peer"
+msgstr "Acceso denegado por el par"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:151
+msgid "Authentication Failed"
+msgstr "Falló en la autenticación"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:153
+msgid "Operation Timed Out"
+msgstr "La operación ha caducado"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:155
+msgid "Lost Connection to Bus"
+msgstr "Se ha perdido la conexión con el bus"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:157
+msgid "DBus Connection Failed"
+msgstr "Falló la conexión a DBus"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:455
+msgid "Connect"
+msgstr "Conectar"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:456
+msgid "Provide the address of the message bus"
+msgstr "Proporcione la dirección del bus de mensajes"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:458
+#: src/plugins/dspy/libdspy/gtk/menus.ui:5
+msgid "Connect to Other Bus"
+msgstr "Conectar a otro bus"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:45
+#| msgid "Show Search Bubbles"
+msgid "Search Bus Names"
+msgstr "Buscar nombres de buses"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:59
+#| msgid "Name"
+msgid "Bus Names"
+msgstr "Nombres de los buses"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:123
+#| msgid "Select a Template"
+msgid "Select a Bus Name"
+msgstr "Seleccionar un nombre de bus"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:124
+msgid "Select a bus name to introspect the peer."
+msgstr "Seleccione el nombre del bus para introspeccionar el par"
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
@@ -4106,35 +4300,35 @@ msgstr "Ir"
 msgid "New Workspace…"
 msgstr "Área de trabajo nueva…"
 
-#: src/plugins/editor/gtk/menus.ui:93
+#: src/plugins/editor/gtk/menus.ui:94
 msgid "New File"
 msgstr "Archivo nuevo"
 
-#: src/plugins/editor/gtk/menus.ui:109
+#: src/plugins/editor/gtk/menus.ui:110
 msgid "Move Left"
 msgstr "Mover a la izquierda"
 
-#: src/plugins/editor/gtk/menus.ui:113
+#: src/plugins/editor/gtk/menus.ui:114
 msgid "Move Right"
 msgstr "Mover a la derecha"
 
-#: src/plugins/editor/gtk/menus.ui:124
+#: src/plugins/editor/gtk/menus.ui:125
 msgid "Document"
 msgstr "Documento"
 
-#: src/plugins/editor/gtk/menus.ui:127
+#: src/plugins/editor/gtk/menus.ui:128
 msgid "Open in New Frame"
 msgstr "Abrir en un marco nuevo"
 
-#: src/plugins/editor/gtk/menus.ui:133
+#: src/plugins/editor/gtk/menus.ui:134
 msgid "Open in New Workspace"
 msgstr "Abrir en un área de trabajo nueva"
 
-#: src/plugins/editor/gtk/menus.ui:137
+#: src/plugins/editor/gtk/menus.ui:138
 msgid "Split"
 msgstr "Dividir"
 
-#: src/plugins/editor/gtk/menus.ui:164
+#: src/plugins/editor/gtk/menus.ui:165
 msgid "Save _As"
 msgstr "Guardar _como"
 
@@ -4349,8 +4543,6 @@ msgstr "GCC %s compilador cruzado (sistema)"
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
 #, c-format
-#| msgid ""
-#| "Builder failed to provide appropriate credentials when cloning repository."
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
@@ -4359,7 +4551,6 @@ msgstr ""
 "repositorio."
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
-#| msgid "Initialize git submodules"
 msgid "Updating Git Submodules"
 msgstr "Actualizando submódulos git"
 
@@ -4377,17 +4568,12 @@ msgid "The protocol “%s” is not supported."
 msgstr "El protocolo %s no está soportado."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:220
-#| msgid "Clone Repository"
 msgid "Cloning repository"
 msgstr "Clonando repositorio"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:236
 msgid "A valid Git URL is required"
 msgstr "Se necesita un URL de Git válido"
-
-#: src/plugins/glade/gbp-glade-editor-addin.c:79
-msgid "Signals"
-msgstr "Señales"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
 #: src/plugins/glade/gbp-glade-frame-addin.c:300
@@ -4503,10 +4689,6 @@ msgstr "Abrir vista _previa"
 #: src/plugins/glade/gtk/menus.ui:22
 msgid "Cut"
 msgstr "Cortar"
-
-#: src/plugins/glade/gtk/menus.ui:27
-msgid "Copy"
-msgstr "Copiar"
 
 #: src/plugins/glade/gtk/menus.ui:32
 msgid "Paste"
@@ -5876,9 +6058,6 @@ msgstr ""
 #~ msgid "Cu_t"
 #~ msgstr "C_ortar"
 
-#~ msgid "Properties"
-#~ msgstr "Propiedades"
-
 #~ msgid "Display"
 #~ msgstr "Mostrar"
 
@@ -6367,9 +6546,6 @@ msgstr ""
 
 #~ msgid "Number of workers to use when building"
 #~ msgstr "Número de trabajadores que usar al construir"
-
-#~ msgid "N"
-#~ msgstr "N"
 
 #~ msgid "CONFIG_ID"
 #~ msgstr "CONFIG_ID"
@@ -6996,9 +7172,6 @@ msgstr ""
 #~ msgid "Insert matching brace, bracket, quotation, and parenthesis"
 #~ msgstr "Insertar parejas de llaves, corchetes, comillas y paréntesis"
 
-#~ msgid "Snippets (read-only)"
-#~ msgstr "Fragmentos (sólo lectura)"
-
 #~ msgid "Display Document Changes"
 #~ msgstr "Mostrar los cambios en el documento"
 
@@ -7434,9 +7607,6 @@ msgstr ""
 #~ msgid "The extension object."
 #~ msgstr "El objeto de la extensión."
 
-#~ msgid "Interface Type"
-#~ msgstr "Tipo de interfaz"
-
 #~ msgid "Key"
 #~ msgstr "Clave"
 
@@ -7723,9 +7893,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Si se deben mostrar las líneas de diagnóstico en el lateral izquierdo."
 
-#~ msgid "Show Search Bubbles"
-#~ msgstr "Mostrar burbujas de búsqueda"
-
 #~ msgid "If search bubbles should be rendered."
 #~ msgstr "Si se deben renderizar las burbujas de búsqueda."
 
@@ -7989,9 +8156,6 @@ msgstr ""
 
 #~ msgid "The size group for the label."
 #~ msgstr "El tamaño del grupo para la etiqueta."
-
-#~ msgid "Result"
-#~ msgstr "Resultado"
 
 #~ msgid "Tree"
 #~ msgstr "Árbol"
