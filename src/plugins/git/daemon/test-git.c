@@ -44,7 +44,8 @@ cleanup_dir (void)
   g_autofree gchar *command = NULL;
   command = g_strdup_printf ("rm -rf '%s' '%s'", tmpdir, tmpdir_push);
   g_message ("%s", command);
-  system (command);
+  if (system (command) != 0)
+    g_warning ("Failed to execute command: %s", command);
 }
 
 static void
