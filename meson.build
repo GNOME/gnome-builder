@@ -252,7 +252,7 @@ ld_supports_version_script = cc.links('''
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.31.90')
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.33.1')
 libglib_dep = dependency('glib-2.0', version: '>= 2.59.0')
 libgio_dep = dependency('gio-2.0', version: '>= 2.59.0')
 libgiounix_dep = dependency('gio-unix-2.0')
