@@ -50,7 +50,7 @@ struct _IdeApplication
    */
   PeasExtensionSet *addins;
 
-  /* DBus Proxy used to track color settings (Night Light) */
+  /* D-Bus Proxy used to track color settings (Night Light) */
   GDBusProxy *color_proxy;
 
   /* org.gnome.Builder GSettings object to avoid creating a bunch

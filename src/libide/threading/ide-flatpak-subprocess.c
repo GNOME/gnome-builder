@@ -1111,7 +1111,7 @@ host_command_exited_cb (GDBusConnection *connection,
                  (guint)self->client_pid,
                  (guint)exit_status);
 
-  /* We can release our dbus signal handler now */
+  /* We can release our D-Bus signal handler now */
   if (self->exited_subscription != 0)
     {
       IDE_TRACE_MSG ("Unsubscribing from D-Bus subscription %d", self->exited_subscription);
