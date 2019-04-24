@@ -85,7 +85,23 @@ dspy_tree_view_selection_changed (DspyTreeView     *self,
           dspy_method_invocation_set_method (invocation, node->method.name);
 
           if (node->method.in_args.length == 0)
-            dspy_method_invocation_set_parameters (invocation, g_variant_new ("()"));
+            {
+              dspy_method_invocation_set_parameters (invocation, g_variant_new ("()"));
+            }
+          else
+            {
+              g_autoptr(GString) str = g_string_new ("(");
+
+              for (const GList *list = node->method.in_args.head; list; list = list->next)
+                {
+                  DspyArgInfo *info = list->data;
+                  g_string_append (str, info->signature);
+                }
+
+              g_string_append_c (str, ')');
+
+              dspy_method_invocation_set_signature (invocation, str->str);
+            }
         }
       else if (node->any.kind == DSPY_NODE_KIND_PROPERTY)
         {
