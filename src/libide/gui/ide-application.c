@@ -129,7 +129,7 @@ ide_application_startup (GApplication *app)
 
   /*
    * We require a desktop session that provides a properly working
-   * DBus environment. Bail if for some reason that is not the case.
+   * D-Bus environment. Bail if for some reason that is not the case.
    */
   if (g_getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)
     g_error ("%s",

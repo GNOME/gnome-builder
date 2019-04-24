@@ -107,7 +107,7 @@ ide_worker_manager_constructed (GObject *object)
 
       if (tmpdir == NULL)
         {
-          g_error ("Failed to determine temporary directory for DBus.");
+          g_error ("Failed to determine temporary directory for D-Bus.");
           exit (EXIT_FAILURE);
         }
 

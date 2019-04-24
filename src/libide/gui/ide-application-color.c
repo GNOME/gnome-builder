@@ -115,7 +115,7 @@ _ide_application_update_color (IdeApplication *self)
 
   /*
    * If we are using the Follow Night Light feature, then we want to update
-   * the application color based on the DBus NightLightActive property from
+   * the application color based on the D-Bus NightLightActive property from
    * GNOME Shell.
    */
 
