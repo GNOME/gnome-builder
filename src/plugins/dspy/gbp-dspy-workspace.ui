@@ -10,7 +10,7 @@
         <property name="visible">true</property>
         <child type="title">
           <object class="GtkLabel">
-            <property name="label" translatable="yes">DBus Inspector</property>
+            <property name="label" translatable="yes">D-Bus Inspector</property>
             <property name="visible">true</property>
             <style>
               <class name="title"/>

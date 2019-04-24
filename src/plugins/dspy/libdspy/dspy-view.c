@@ -154,7 +154,7 @@ connection_got_error_cb (DspyView       *self,
   else if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_DISCONNECTED))
     title = _("Lost Connection to Bus");
   else
-    title = _("DBus Connection Failed");
+    title = _("D-Bus Connection Failed");
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self))),
                                    GTK_DIALOG_MODAL | GTK_DIALOG_USE_HEADER_BAR,

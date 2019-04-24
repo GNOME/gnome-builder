@@ -77,7 +77,7 @@ dspy_connection_button_query_tooltip (GtkWidget  *widget,
 
       if (bus != NULL && address != NULL)
         {
-          /* translators: %s is replaced with the address of the DBus */
+          /* translators: %s is replaced with the address of the D-Bus bus */
           g_autofree gchar *text = g_strdup_printf (_("Connected to “%s”"), address);
           gtk_tooltip_set_text (tooltip, text);
           return TRUE;

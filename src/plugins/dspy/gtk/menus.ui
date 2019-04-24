@@ -4,7 +4,7 @@
     <section id="ide-primary-workspace-surfaces-menu-utils-section">
       <item>
         <attribute name="id">surface-menu-dspy</attribute>
-        <attribute name="label" translatable="yes">DBus Inspector</attribute>
+        <attribute name="label" translatable="yes">D-Bus Inspector</attribute>
         <attribute name="role">normal</attribute>
         <attribute name="action">app.dspy</attribute>
         <attribute name="verb-icon-name">org.gnome.dfeet-symbolic</attribute>
@@ -15,7 +15,7 @@
     <section id="ide-editor-workspace-surfaces-menu-utils-section">
       <item>
         <attribute name="id">surface-menu-dspy</attribute>
-        <attribute name="label" translatable="yes">DBus Inspector</attribute>
+        <attribute name="label" translatable="yes">D-Bus Inspector</attribute>
         <attribute name="role">normal</attribute>
         <attribute name="action">app.dspy</attribute>
         <attribute name="verb-icon-name">org.gnome.dfeet-symbolic</attribute>
