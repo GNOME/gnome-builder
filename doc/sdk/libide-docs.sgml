@@ -115,7 +115,7 @@
       <xi:include href="xml/ide-preferences-surface.xml"/>
       <xi:include href="xml/ide-preferences-window.xml"/>
       <xi:include href="xml/ide-primary-workspace.xml"/>
-      <xi:include href="xml/ide-search-entry.xml"/>
+      <xi:include href="xml/ide-search-button.xml"/>
       <xi:include href="xml/ide-surface.xml"/>
       <xi:include href="xml/ide-surfaces-button.xml"/>
       <xi:include href="xml/ide-tagged-entry.xml"/>
