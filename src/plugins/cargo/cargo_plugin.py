@@ -142,7 +142,7 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
         if not config.props.debug:
             build_launcher.push_argv('--release')
 
-        # Configure Options get passed to "cargo rustc" because where is no
+        # Configure Options get passed to "cargo rustc" because there is no
         # equivalent "configure stage" for cargo.
         if config_opts:
             try:
