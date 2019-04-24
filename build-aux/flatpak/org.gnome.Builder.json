@@ -467,8 +467,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak/releases/download/1.2.3/flatpak-1.2.3.tar.xz",
-                    "sha256" : "bb4720307fc10465660e37bb9489c1d9a349c19143e24f65ddb49032f8b00d44"
+                    "url" : "https://github.com/flatpak/flatpak/releases/download/1.2.4/flatpak-1.2.4.tar.xz",
+                    "sha256" : "1b6539d94d31e571661a2545cfcece7ec9267b4e2552e3cc0f617f4790f6c3e1"
                 }
             ]
         },
@@ -477,8 +477,12 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.0.5/flatpak-builder-1.0.5.tar.xz",
-                    "sha256" : "ab9a2d6395def37d60983a232c4105d6ed8dd8ba4f798e76ba75b8c366bfb0d0"
+                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.0.6/flatpak-builder-1.0.6.tar.xz",
+                    "sha256" : "3b572ad7b7cce9ca6a8632ca69a49a47b20e99066fe064b7b56e7896dca789bb"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "flatpak-builder-watch-bus.patch"
                 }
             ]
         },
