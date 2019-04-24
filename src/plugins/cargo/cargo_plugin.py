@@ -108,6 +108,7 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
         config = pipeline.get_config()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
+        config_opts = config.get_config_opts()
 
         # We might need to use cargo from ~/.cargo/bin
         cargo = locate_cargo_from_config(config)
@@ -140,6 +141,15 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
 
         if not config.props.debug:
             build_launcher.push_argv('--release')
+
+        # Configure Options get passed to "cargo rustc" because where is no
+        # equivalent "configure stage" for cargo.
+        if config_opts:
+            try:
+                ret, argv = GLib.shell_parse_argv(config_opts)
+                build_launcher.push_args(argv)
+            except Exception as ex:
+                print(repr(ex))
 
         clean_launcher = pipeline.create_launcher()
         clean_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
