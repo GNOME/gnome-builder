@@ -107,7 +107,7 @@ ide_worker_manager_constructed (GObject *object)
 
       if (tmpdir == NULL)
         {
-          g_error ("Failed to determine temporary directory for DBus.");
+          g_error ("Failed to determine temporary directory for D-Bus.");
           exit (EXIT_FAILURE);
         }
 
@@ -135,7 +135,7 @@ ide_worker_manager_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  IDE_TRACE_MSG ("GDBusServer listening at %s", address);
+  IDE_TRACE_MSG ("D-Bus Server listening at %s", address);
 
   g_dbus_server_start (self->dbus_server);
 

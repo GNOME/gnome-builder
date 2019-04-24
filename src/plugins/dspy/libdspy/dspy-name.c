@@ -159,7 +159,7 @@ dspy_name_class_init (DspyNameClass *klass)
   properties [PROP_OWNER] =
     g_param_spec_string ("owner",
                          "Owner",
-                         "The owner of the DBus name",
+                         "The owner of the D-Bus name",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

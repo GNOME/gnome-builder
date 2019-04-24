@@ -1114,7 +1114,7 @@ host_command_exited_cb (GDBusConnection *connection,
   /* We can release our dbus signal handler now */
   if (self->exited_subscription != 0)
     {
-      IDE_TRACE_MSG ("Unsubscribing from DBus subscription %d", self->exited_subscription);
+      IDE_TRACE_MSG ("Unsubscribing from D-Bus subscription %d", self->exited_subscription);
       g_dbus_connection_signal_unsubscribe (self->connection, self->exited_subscription);
       self->exited_subscription = 0;
     }
@@ -1424,7 +1424,7 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
 
   /*
    * Make sure we've closed or stolen all of the FDs that are in play
-   * before calling the DBus service.
+   * before calling the D-Bus service.
    */
   g_assert_cmpint (-1, ==, stdin_pair[0]);
   g_assert_cmpint (-1, ==, stdin_pair[1]);
@@ -1558,7 +1558,7 @@ ide_flatpak_subprocess_dispose (GObject *object)
     {
       if (self->connection != NULL && !g_dbus_connection_is_closed (self->connection))
         {
-          IDE_TRACE_MSG ("Unsubscribing from DBus subscription %d", self->exited_subscription);
+          IDE_TRACE_MSG ("Unsubscribing from D-Bus subscription %d", self->exited_subscription);
           g_dbus_connection_signal_unsubscribe (self->connection, self->exited_subscription);
         }
 
