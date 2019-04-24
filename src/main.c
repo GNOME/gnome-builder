@@ -165,6 +165,8 @@ main (gint   argc,
              gtk_get_minor_version (),
              gtk_get_micro_version ());
 
+  gtk_source_init ();
+
   /* Initialize thread pools */
   _ide_thread_pool_init (FALSE);
 
@@ -184,8 +186,7 @@ main (gint   argc,
   ide_log_shutdown ();
 
   /* Cleanup GtkSourceView singletons to improve valgrind output */
-  g_object_unref (gtk_source_style_scheme_manager_get_default ());
-  g_object_unref (gtk_source_language_manager_get_default ());
+  gtk_source_finalize ();
 
   return ret;
 }
