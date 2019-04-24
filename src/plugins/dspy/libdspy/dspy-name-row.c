@@ -84,7 +84,7 @@ dspy_name_row_update (DspyNameRow *self)
   if (pid > -1)
     {
       g_string_append (str, ", ");
-      g_string_append_printf (str, _("%s: %u"), _("Pid"), pid);
+      g_string_append_printf (str, _("%s: %u"), _("PID"), pid);
     }
 
   gtk_label_set_label (self->subtitle, str->str);

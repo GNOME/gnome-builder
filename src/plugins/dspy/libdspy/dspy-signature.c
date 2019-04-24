@@ -75,7 +75,7 @@ _dspy_signature_humanize (const gchar *signature)
 
   /* If this is a simple array of something else ... */
   if ((found = g_hash_table_lookup (common, signature + 1)))
-    /* translators: %s is replaced with the simple DBus type string */
+    /* translators: %s is replaced with the simple D-Bus type string */
     return g_strdup_printf (_("Array of [%s]"), found);
 
   return g_strdup (signature);

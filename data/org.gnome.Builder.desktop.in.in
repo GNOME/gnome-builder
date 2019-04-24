@@ -32,5 +32,5 @@ Name=New Editor Workspace
 Exec=gnome-builder --editor
 
 [Desktop Action dspy]
-Name=DBus Inspector
+Name=D-Bus Inspector
 Exec=gnome-builder --dspy
