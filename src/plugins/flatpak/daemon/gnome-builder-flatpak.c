@@ -87,11 +87,11 @@ main (gint argc,
     goto error;
 
   g_dbus_connection_start_message_processing (connection);
+
   g_main_loop_run (main_loop);
 
   g_dbus_interface_skeleton_unexport (G_DBUS_INTERFACE_SKELETON (service));
-  if (!g_dbus_connection_close_sync (connection, NULL, &error))
-    goto error;
+  g_dbus_connection_close_sync (connection, NULL, NULL);
 
   return EXIT_SUCCESS;
 
