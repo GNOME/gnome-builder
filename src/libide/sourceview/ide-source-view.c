@@ -142,6 +142,7 @@ typedef struct
 
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
+  guint                        did_ctrl_opacity : 1;
   guint                        highlight_current_line : 1;
   guint                        in_replay_macro : 1;
   guint                        insert_mark_cleared : 1;
@@ -2036,15 +2037,11 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       event->state == 0 &&
       ide_completion_is_visible (priv->completion))
     {
-      IdeCompletionDisplay *display = ide_completion_get_display (priv->completion);
-
-      if (gtk_widget_get_opacity (GTK_WIDGET (display)) == 1.0)
-        gtk_widget_set_opacity (GTK_WIDGET (display), 0.1);
-      else
-        gtk_widget_set_opacity (GTK_WIDGET (display), 1.0);
-
-      return TRUE;
+      priv->did_ctrl_opacity = TRUE;
+      return GDK_EVENT_STOP;
     }
+
+  priv->did_ctrl_opacity = FALSE;
 
   /*
    * Are we currently recording a macro? If so lets stash the event for later.
@@ -2195,6 +2192,23 @@ ide_source_view_key_release_event (GtkWidget   *widget,
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_release_event (widget, event);
+
+  if (priv->did_ctrl_opacity)
+    {
+      IdeCompletionDisplay *display = ide_completion_get_display (priv->completion);
+
+      if (event->keyval == GDK_KEY_Control_L &&
+          event->state == GDK_CONTROL_MASK &&
+          ide_completion_is_visible (priv->completion))
+        {
+          if (gtk_widget_get_opacity (GTK_WIDGET (display)) == 1.0)
+            gtk_widget_set_opacity (GTK_WIDGET (display), 0.1);
+          else
+            gtk_widget_set_opacity (GTK_WIDGET (display), 1.0);
+        }
+
+      priv->did_ctrl_opacity = FALSE;
+    }
 
   if (priv->definition_src_location)
     ide_source_view_reset_definition_highlight (self);
