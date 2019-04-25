@@ -319,7 +319,7 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
     {
       GtkWidget *dialog;
 
-      dialog = gtk_message_dialog_new (GTK_WINDOW (workbench),
+      dialog = gtk_message_dialog_new (GTK_WINDOW (self),
                                        GTK_DIALOG_USE_HEADER_BAR,
                                        GTK_MESSAGE_ERROR,
                                        GTK_BUTTONS_CLOSE,
