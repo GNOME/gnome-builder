@@ -30,28 +30,6 @@
 #include "ipc-flatpak-service.h"
 #include "ipc-flatpak-service-impl.h"
 
-static GDBusConnection *
-create_connection (GIOStream  *stream,
-                   GMainLoop  *main_loop,
-                   GError    **error)
-{
-  GDBusConnection *ret;
-
-  g_assert (G_IS_IO_STREAM (stream));
-  g_assert (main_loop != NULL);
-  g_assert (error != NULL);
-
-  if ((ret = g_dbus_connection_new_sync (stream, NULL,
-                                          G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
-                                          NULL, NULL, error)))
-    {
-      g_dbus_connection_set_exit_on_close (ret, FALSE);
-      g_signal_connect_swapped (ret, "closed", G_CALLBACK (g_main_loop_quit), main_loop);
-    }
-
-  return ret;
-}
-
 static void
 log_func (const gchar    *log_domain,
           GLogLevelFlags  flags,
@@ -91,8 +69,14 @@ main (gint argc,
   stdout_stream = g_unix_output_stream_new (STDOUT_FILENO, FALSE);
   stream = g_simple_io_stream_new (stdin_stream, stdout_stream);
 
-  if (!(connection = create_connection (stream, main_loop, &error)))
+  connection = g_dbus_connection_new_sync (stream, NULL,
+                                           G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
+                                           NULL, NULL, &error);
+  if (connection == NULL)
     goto error;
+
+  g_dbus_connection_set_exit_on_close (connection, FALSE);
+  g_signal_connect_swapped (connection, "closed", G_CALLBACK (g_main_loop_quit), main_loop);
 
   service = ipc_flatpak_service_impl_new ();
 
@@ -104,6 +88,10 @@ main (gint argc,
 
   g_dbus_connection_start_message_processing (connection);
   g_main_loop_run (main_loop);
+
+  g_dbus_interface_skeleton_unexport (G_DBUS_INTERFACE_SKELETON (service));
+  if (!g_dbus_connection_close_sync (connection, NULL, &error))
+    goto error;
 
   return EXIT_SUCCESS;
 
