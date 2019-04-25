@@ -16,41 +16,44 @@ board, tablet, or phone. To do this, use an ``Ide.DeviceProvider``.
 
 .. code-block:: python3
 
-   # my_plugin.py
+   from gi.repository import Ide, Gio
 
-   import gi
+   class FooDeviceProvider(Ide.DeviceProvider):
 
-   from gi.repository import GObject
-   from gi.repository import Ide
+       def do_load_async(self, cancellable, callback, data):
+           task = Gio.Task.new(self, cancellable, callback)
+           task.devices = []
 
-   class MyDevice(Ide.Device):
-       def do_get_system_type(self):
-           return 'x86_64-linux-gnu'
+           # Do some device discovery, preferrably asynchronously if you have blocking I/O
+           device = FooDevice(id='foo', display_name='My Headphones', icon_name='audio-headphones-symbolic')
+           task.devices.append(device)
 
-   class MyDeviceProvider(Ide.Object, Ide.DeviceProvider):
-       settled = GObject.Property(type=bool)
+           task.return_boolean(True)
 
-       def __init__(self, *args, **kwargs):
-           super().__init__(*args, **kwargs)
+       def do_load_finish(self, task):
+           if task.propagate_boolean():
+               for device in task.devices:
+                   self.emit_device_added(device)
+               return True
 
-           self.devices = []
+   class FooDevice(Ide.Device):
 
-           # Start loading the devices, and then emit device-added
-           # when it is added.
-           device = MyDevice(id='my-device', display_name='My Device')
-           self.devices.add(device)
+       def do_prepare_configuration(self, config):
+           # If you need to alter the Ide.Config in some way, this is where
+           # you would do that.
+           pass
 
-           # Since we are in __init__ here, this isn't really necesssary
-           # because it's impossible to connect and receive the signal.
-           # However, if you do some background work, you'll need to
-           # do this to notify the device manager of the new device.
-           self.emit_device_added(device)
+       def do_get_info_async(self, cancellable, callback, data):
+           # If you need to probe the device to get information about it
+           # such as the host triplet, etc, this is where you would do
+           # that. And again, preferrably asynchronously if blocking I/O
+           # is required.
+           task = Gio.Task.new(self, cancellable, callback)
+           task.info = Ide.DeviceInfo.new()
+           task.info.set_kind(Ide.DeviceKind.PHONE)
+           task.info.set_host_triplet(Ide.Triplet.new('x86_64-linux-gnu'))
+           task.return_boolean(True)
 
-           # Mark us as "settled" which lets the device manager know
-           # that we've completed our initial scan of devices.
-           self.settled = True
-           self.notify('settled')
-
-       def do_get_devices(self):
-           return self.devices
-
+       def do_get_info_finish(self, task):
+           if task.propagate_boolean():
+               return task.info
