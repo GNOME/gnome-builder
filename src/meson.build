@@ -118,8 +118,6 @@ configure_file(
           input: 'Ide.metadata.in',
          output: 'Ide-@0@.@1@.metadata'.format(MAJOR_VERSION, MINOR_VERSION),
            copy: true,
-        install: true,
-    install_dir: plugindir,
 )
 
 libide_vapi = gnome.generate_vapi('libide-' + libide_api_version,
