@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-04-23 23:23+0000\n"
-"PO-Revision-Date: 2019-04-24 09:38+0200\n"
+"POT-Creation-Date: 2019-04-25 02:38+0000\n"
+"PO-Revision-Date: 2019-04-25 10:35+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -633,8 +633,9 @@ msgstr "Área de trabajo nueva en el editor"
 #: data/org.gnome.Builder.desktop.in.in:36
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13 src/plugins/dspy/gtk/menus.ui:7
 #: src/plugins/dspy/gtk/menus.ui:18
-msgid "DBus Inspector"
-msgstr "Inspector de DBus"
+#| msgid "DBus Inspector"
+msgid "D-Bus Inspector"
+msgstr "Inspector de D-Bus"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -848,7 +849,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4947
+#: src/libide/sourceview/ide-source-view.c:4961
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -2820,31 +2821,31 @@ msgstr "_Reducir"
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: src/libide/sourceview/ide-source-view.c:4396
+#: src/libide/sourceview/ide-source-view.c:4410
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4398
+#: src/libide/sourceview/ide-source-view.c:4412
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4516
+#: src/libide/sourceview/ide-source-view.c:4530
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:4946
+#: src/libide/sourceview/ide-source-view.c:4960
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5181
+#: src/libide/sourceview/ide-source-view.c:5195
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5207
+#: src/libide/sourceview/ide-source-view.c:5221
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -2915,7 +2916,7 @@ msgid "Configuring project"
 msgstr "Configurando proyecto"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:152
+#: src/plugins/cargo/cargo_plugin.py:162
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
@@ -4086,23 +4087,21 @@ msgid "New Documentation Page"
 msgstr "Nueva página de documentación"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
-msgid "Display DBus inspector"
-msgstr "Mostrar el inspector de DBus"
+#| msgid "Display DBus inspector"
+msgid "Display D-Bus inspector"
+msgstr "Mostrar el inspector de D-Bus"
 
-#. translators: %s is replaced with the address of the DBus
+#. translators: %s is replaced with the address of the D-Bus
 #: src/plugins/dspy/libdspy/dspy-connection-button.c:81
 #, c-format
-#| msgid "Insert “%s”"
 msgid "Connected to “%s”"
 msgstr "Conectado a «%s»"
 
 #: src/plugins/dspy/libdspy/dspy-connection-button.c:253
-#| msgid "Host System"
 msgid "System"
 msgstr "Sistema"
 
 #: src/plugins/dspy/libdspy/dspy-connection-button.c:255
-#| msgid "Expression"
 msgid "Session"
 msgstr "Sesión"
 
@@ -4116,12 +4115,11 @@ msgid "Execute"
 msgstr "Ejecutar"
 
 #: src/plugins/dspy/libdspy/dspy-method-view.ui:12
-#: src/plugins/dspy/libdspy/dspy-tree-view.c:298
+#: src/plugins/dspy/libdspy/dspy-tree-view.c:314
 msgid "Object Path"
 msgstr "Ruta del objeto"
 
 #: src/plugins/dspy/libdspy/dspy-method-view.ui:38
-#| msgid "Interface Type"
 msgid "Interface"
 msgstr "Interfaz"
 
@@ -4143,7 +4141,6 @@ msgid "Elapsed Time"
 msgstr "Tiempo transcurrido"
 
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:14
-#| msgid "Address"
 msgid "Bus Address"
 msgstr "Dirección del bus"
 
@@ -4152,7 +4149,6 @@ msgid "Owner"
 msgstr "Propietario"
 
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:89
-#| msgid "Preprocessor"
 msgid "Process ID"
 msgstr "ID del proceso"
 
@@ -4172,7 +4168,6 @@ msgid "Yes"
 msgstr "Sí"
 
 #: src/plugins/dspy/libdspy/dspy-name-row.c:82
-#| msgid "N"
 msgid "No"
 msgstr "No"
 
@@ -4182,7 +4177,8 @@ msgid "%s: %u"
 msgstr "%s: %u"
 
 #: src/plugins/dspy/libdspy/dspy-name-row.c:87
-msgid "Pid"
+#| msgid "ID"
+msgid "PID"
 msgstr "PID"
 
 #: src/plugins/dspy/libdspy/dspy-node.c:409
@@ -4194,12 +4190,10 @@ msgid "write-only"
 msgstr "sólo-escritura"
 
 #: src/plugins/dspy/libdspy/dspy-node.c:413
-#| msgid "Snippets (read-only)"
 msgid "read-only"
 msgstr "sólo lectura"
 
 #: src/plugins/dspy/libdspy/dspy-node.c:528
-#| msgid "Interface Type"
 msgid "Interfaces"
 msgstr "Interfaces"
 
@@ -4216,7 +4210,7 @@ msgstr "Propiedades"
 msgid "Signals"
 msgstr "Señales"
 
-#. translators: %s is replaced with the simple DBus type string
+#. translators: %s is replaced with the simple D-Bus type string
 #: src/plugins/dspy/libdspy/dspy-signature.c:79
 #, c-format
 msgid "Array of [%s]"
@@ -4239,8 +4233,9 @@ msgid "Lost Connection to Bus"
 msgstr "Se ha perdido la conexión con el bus"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:157
-msgid "DBus Connection Failed"
-msgstr "Falló la conexión a DBus"
+#| msgid "DBus Connection Failed"
+msgid "D-Bus Connection Failed"
+msgstr "Falló la conexión a D-Bus"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:455
 msgid "Connect"
@@ -4256,17 +4251,14 @@ msgid "Connect to Other Bus"
 msgstr "Conectar a otro bus"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:45
-#| msgid "Show Search Bubbles"
 msgid "Search Bus Names"
 msgstr "Buscar nombres de buses"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:59
-#| msgid "Name"
 msgid "Bus Names"
 msgstr "Nombres de los buses"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:123
-#| msgid "Select a Template"
 msgid "Select a Bus Name"
 msgstr "Seleccionar un nombre de bus"
 
@@ -5907,6 +5899,9 @@ msgstr "Falló al crear el árbol XML."
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
+#~ msgid "Pid"
+#~ msgstr "PID"
 
 #~ msgid "org.gnome.Builder"
 #~ msgstr "org.gnome.Builder"
