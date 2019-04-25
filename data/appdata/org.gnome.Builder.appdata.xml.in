@@ -86,6 +86,15 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.33.1" date="2019-04-23">
+      <description>
+        <p>
+          Builder 3.33.1 is our first release as we progress towards 3.34.
+          A number of new features are in this release such as a new search button, D-Bus inspector, podman support, git improvements, and more.
+        </p>
+      </description>
+    </release>
+
     <release version="3.32.0" date="2019-03-12">
       <description>
         <p>
