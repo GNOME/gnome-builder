@@ -25,6 +25,7 @@
 #include <dazzle.h>
 #include <errno.h>
 #include <glib/gi18n.h>
+#include <libide-io.h>
 #include <libide-threading.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
@@ -1220,15 +1221,23 @@ void
 ide_runner_set_pty (IdeRunner *self,
                     VtePty    *pty)
 {
-  int fd = -1;
+  int child_fd = -1;
 
   g_return_if_fail (IDE_IS_RUNNER (self));
   g_return_if_fail (!pty || VTE_IS_PTY (pty));
 
   if (pty != NULL)
-    fd = vte_pty_get_fd (pty);
+    {
+      int parent_fd = vte_pty_get_fd (pty);
 
-  ide_runner_set_tty (self, fd);
+      if (parent_fd != -1)
+        child_fd = ide_pty_intercept_create_slave (parent_fd, TRUE);
+    }
+
+  ide_runner_set_tty (self, child_fd);
+
+  if (child_fd != -1)
+    close (child_fd);
 }
 
 static gint
