@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-primary-workspace-surfaces-menu">
-    <section id="ide-primary-workspace-surfaces-menu-utils-section">
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-placeholder2">
       <item>
-        <attribute name="id">surface-menu-dspy</attribute>
-        <attribute name="label" translatable="yes">D-Bus Inspector</attribute>
-        <attribute name="role">normal</attribute>
+        <attribute name="label" translatable="yes">D-Bus Inspector…</attribute>
         <attribute name="action">app.dspy</attribute>
-        <attribute name="verb-icon-name">org.gnome.dfeet-symbolic</attribute>
       </item>
     </section>
   </menu>
-  <menu id="ide-editor-workspace-surfaces-menu">
-    <section id="ide-editor-workspace-surfaces-menu-utils-section">
+  <menu id="ide-editor-workspace-menu">
+    <section id="ide-editor-workspace-menu-placeholder2">
       <item>
-        <attribute name="id">surface-menu-dspy</attribute>
-        <attribute name="label" translatable="yes">D-Bus Inspector</attribute>
-        <attribute name="role">normal</attribute>
+        <attribute name="label" translatable="yes">D-Bus Inspector…</attribute>
         <attribute name="action">app.dspy</attribute>
-        <attribute name="verb-icon-name">org.gnome.dfeet-symbolic</attribute>
       </item>
     </section>
   </menu>

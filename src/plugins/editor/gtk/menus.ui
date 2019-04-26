@@ -18,6 +18,7 @@
         <attribute name="action">win.new-editor-workspace</attribute>
       </item>
     </section>
+    <section id="ide-editor-workspace-menu-placeholder2"/>
     <section id="ide-editor-workspace-menu-open-section">
       <item>
         <attribute name="id">ide-editor-workspace-menu-open</attribute>
