@@ -632,7 +632,7 @@ _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
                              "enabled", is_file && !is_dir,
                              NULL);
   dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-with-hint",
-                             "enabled", is_file && !is_dir,
+                             "enabled", is_file,
                              NULL);
   dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-containing-folder",
                              "enabled", is_file,
