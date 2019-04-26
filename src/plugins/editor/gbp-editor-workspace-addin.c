@@ -144,7 +144,7 @@ add_buttons (GbpEditorWorkspaceAddin *self,
                                    "focus-on-click", FALSE,
                                    "show-arrow", TRUE,
                                    "show-icons", FALSE,
-                                   "show-accels", FALSE,
+                                   "show-accels", TRUE,
                                    "menu-id", "new-document-menu",
                                    "visible", TRUE,
                                    NULL);
