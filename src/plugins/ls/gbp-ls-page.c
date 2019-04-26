@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-io.h>
 
 #include "gbp-ls-model.h"
 #include "gbp-ls-page.h"
@@ -333,16 +334,22 @@ gbp_ls_page_set_directory (GbpLsPage *self,
 {
   g_autofree gchar *title = NULL;
   g_autofree gchar *name = NULL;
-  g_autoptr(GFile) local_directory = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GFile) home = NULL;
+  IdeContext *context;
   GFile *old_directory;
 
   g_return_if_fail (GBP_IS_LS_PAGE (self));
   g_return_if_fail (!directory || G_IS_FILE (directory));
 
+  if ((context = ide_widget_get_context (GTK_WIDGET (self))))
+    workdir = ide_context_ref_workdir (context);
+
   if (directory == NULL)
     {
-      IdeContext *context = ide_widget_get_context (GTK_WIDGET (self));
-      directory = local_directory = ide_context_ref_workdir (context);
+      if (workdir == NULL)
+        return;
+      directory = workdir;
     }
 
   g_assert (G_IS_FILE (directory));
@@ -368,7 +375,13 @@ gbp_ls_page_set_directory (GbpLsPage *self,
                                gbp_ls_page_init_model_cb,
                                g_object_ref (self));
 
-  name = g_file_get_basename (directory);
+  home = g_file_new_for_path (g_get_home_dir ());
+
+  if (workdir != NULL && g_file_has_prefix (directory, workdir))
+    name = g_file_get_relative_path (workdir, directory);
+  else
+    name = ide_path_collapse (g_file_peek_path (directory));
+
   title = g_strdup_printf (_("%s — Directory"), name);
   ide_page_set_title (IDE_PAGE (self), title);
 

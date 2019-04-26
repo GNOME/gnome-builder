@@ -116,10 +116,10 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
 
   view = g_object_new (GBP_TYPE_LS_PAGE,
                        "close-on-activate", TRUE,
-                       "directory", file,
                        "visible", TRUE,
                        NULL);
   gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (view));
+  gbp_ls_page_set_directory (view, file);
 
   ide_task_return_boolean (task, TRUE);
 }
