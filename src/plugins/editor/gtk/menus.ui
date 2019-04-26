@@ -4,7 +4,7 @@
     <section id="ide-primary-workspace-menu-placeholder1">
       <item>
         <attribute name="id">ide-primary-workspace-menu-new-editor-workspace</attribute>
-        <attribute name="label" translatable="yes">New Workspace…</attribute>
+        <attribute name="label" translatable="yes">New Editor Workspace…</attribute>
         <attribute name="action">win.new-editor-workspace</attribute>
       </item>
     </section>
@@ -14,7 +14,7 @@
     <section id="ide-editor-workspace-menu-placeholder1">
       <item>
         <attribute name="id">ide-editor-workspace-menu-new-editor-workspace</attribute>
-        <attribute name="label" translatable="yes">New Workspace…</attribute>
+        <attribute name="label" translatable="yes">New Editor Workspace…</attribute>
         <attribute name="action">win.new-editor-workspace</attribute>
       </item>
     </section>
