@@ -342,12 +342,12 @@ namespace Ide
 			switch (state) {
 				default:
 					state = State.SPAWNING;
-					supervisor.start ();
 					var cb = new GetContextCB ();
 					cb.source_func = get_client_async.callback;
 					lock (get_client) {
 						get_client.push_tail ((owned) cb);
 					}
+					supervisor.start ();
 
 					yield;
 					return rpc_client;
