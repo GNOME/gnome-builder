@@ -66,5 +66,19 @@
       </submenu>
     </section>
   </menu>
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-open-section">
+      <submenu id="project-tree-menu-open-with-menu">
+        <section id="project-tree-menu-open-with-section">
+          <item>
+            <attribute name="id">project-tree-menu-open-editor</attribute>
+            <attribute name="label" translatable="yes">UI Designer</attribute>
+            <attribute name="action">project-tree.open-with-hint</attribute>
+            <attribute name="target" type="s">'glade'</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
 </interface>
 
