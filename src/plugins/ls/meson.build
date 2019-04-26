@@ -1,6 +1,7 @@
 plugins_sources += files([
   'gbp-ls-model.c',
   'gbp-ls-page.c',
+  'gbp-ls-editor-page-addin.c',
   'gbp-ls-workbench-addin.c',
   'ls-plugin.c',
 ])

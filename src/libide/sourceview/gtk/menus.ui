@@ -3,14 +3,17 @@
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-jump-section">
       <item>
+        <attribute name="id">source-view-goto-def</attribute>
         <attribute name="label" translatable="yes">_Go to Definition</attribute>
         <attribute name="action">sourceview.goto-definition</attribute>
       </item>
       <item>
+        <attribute name="id">source-view-find-references</attribute>
         <attribute name="label" translatable="yes">_Find references</attribute>
         <attribute name="action">sourceview.find-references</attribute>
       </item>
     </section>
+    <section id="ide-source-view-popup-menu-files-section"/>
     <section id="ide-source-view-popup-menu-undo-section">
       <item>
         <attribute name="label" translatable="yes">_Undo</attribute>
