@@ -147,14 +147,16 @@ namespace Ide
 		};
 
 		public void parse_arguments (string[] args) {
-			critical ("args: %s", string.joinv (" ", args));
-			try {
-				var opt_context = new OptionContext ();
-				opt_context.add_main_entries (options, null);
-				opt_context.set_ignore_unknown_options (true);
-				opt_context.parse (ref args);
-			} catch (OptionError e) {
-				GLib.debug ("%s", e.message);
+			if (args != null) {
+				stderr.printf ("gnome-builder-vala: %s\n", string.joinv (" ", args));
+				try {
+					var opt_context = new OptionContext ();
+					opt_context.add_main_entries (options, null);
+					opt_context.set_ignore_unknown_options (true);
+					opt_context.parse (ref args);
+				} catch (OptionError e) {
+					GLib.debug ("%s", e.message);
+				}
 			}
 
 			this.assert = !disable_assert;
