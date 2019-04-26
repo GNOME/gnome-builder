@@ -131,6 +131,31 @@ size_cell_data_func (GtkCellLayout   *cell_layout,
 }
 
 static void
+gbp_ls_page_style_updated (GtkWidget *widget)
+{
+  GbpLsPage *self = (GbpLsPage *)widget;
+  GtkStyleContext *style_context;
+  GtkStateFlags state;
+  GdkRGBA bg, fg;
+
+  g_assert (GBP_IS_LS_PAGE (self));
+
+  if (GTK_WIDGET_CLASS (gbp_ls_page_parent_class)->style_updated)
+    GTK_WIDGET_CLASS (gbp_ls_page_parent_class)->style_updated (widget);
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self->tree_view));
+  state = gtk_style_context_get_state (style_context);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_style_context_get_color (style_context, state, &fg);
+  gtk_style_context_get_background_color (style_context, state, &bg);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  ide_page_set_primary_color_bg (IDE_PAGE (self), &bg);
+  ide_page_set_primary_color_fg (IDE_PAGE (self), &fg);
+}
+
+static void
 gbp_ls_page_finalize (GObject *object)
 {
   GbpLsPage *self = (GbpLsPage *)object;
@@ -196,6 +221,8 @@ gbp_ls_page_class_init (GbpLsPageClass *klass)
   object_class->finalize = gbp_ls_page_finalize;
   object_class->get_property = gbp_ls_page_get_property;
   object_class->set_property = gbp_ls_page_set_property;
+
+  widget_class->style_updated = gbp_ls_page_style_updated;
 
   properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
