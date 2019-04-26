@@ -36,8 +36,8 @@ struct _GbpMesonPipelineAddin
 static const gchar *ninja_names[] = { "ninja", "ninja-build" };
 
 static void
-on_build_stage_query (IdePipelineStage    *stage,
-                      IdePipeline *pipeline,
+on_build_stage_query (IdePipelineStage *stage,
+                      IdePipeline      *pipeline,
                       GPtrArray        *targets,
                       GCancellable     *cancellable)
 {
@@ -86,8 +86,8 @@ on_build_stage_query (IdePipelineStage    *stage,
 }
 
 static void
-on_install_stage_query (IdePipelineStage    *stage,
-                        IdePipeline *pipeline,
+on_install_stage_query (IdePipelineStage *stage,
+                        IdePipeline      *pipeline,
                         GPtrArray        *targets,
                         GCancellable     *cancellable)
 {

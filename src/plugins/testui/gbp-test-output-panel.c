@@ -115,7 +115,7 @@ gbp_testui_output_panel_clear_activate (GSimpleAction *action,
   g_assert (GBP_IS_TEST_OUTPUT_PANEL (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
 
-  vte_terminal_reset(VTE_TERMINAL (self->terminal), TRUE, TRUE);
+  vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
 }
 
 static void

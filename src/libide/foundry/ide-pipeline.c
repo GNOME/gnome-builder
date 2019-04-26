@@ -2093,7 +2093,7 @@ ide_pipeline_task_notify_completed (IdePipeline *self,
  */
 void
 ide_pipeline_build_targets_async (IdePipeline         *self,
-                                  IdePipelinePhase        phase,
+                                  IdePipelinePhase     phase,
                                   GPtrArray           *targets,
                                   GCancellable        *cancellable,
                                   GAsyncReadyCallback  callback,
