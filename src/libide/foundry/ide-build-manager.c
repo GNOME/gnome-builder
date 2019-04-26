@@ -70,7 +70,7 @@ struct _IdeBuildManager
 
   GCancellable     *cancellable;
 
-  IdePipeline *pipeline;
+  IdePipeline      *pipeline;
   GDateTime        *last_build_time;
   DzlSignalGroup   *pipeline_signals;
 
@@ -222,9 +222,9 @@ ide_build_manager_reset_info (IdeBuildManager *self)
 }
 
 static void
-ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
-                                     IdeDiagnostic    *diagnostic,
-                                     IdePipeline *pipeline)
+ide_build_manager_handle_diagnostic (IdeBuildManager *self,
+                                     IdeDiagnostic   *diagnostic,
+                                     IdePipeline     *pipeline)
 {
   IdeDiagnosticSeverity severity;
 
@@ -278,9 +278,9 @@ ide_build_manager_update_action_enabled (IdeBuildManager *self)
 }
 
 static void
-ide_build_manager_notify_busy (IdeBuildManager  *self,
-                               GParamSpec       *pspec,
-                               IdePipeline *pipeline)
+ide_build_manager_notify_busy (IdeBuildManager *self,
+                               GParamSpec      *pspec,
+                               IdePipeline     *pipeline)
 {
   IDE_ENTRY;
 
@@ -294,9 +294,9 @@ ide_build_manager_notify_busy (IdeBuildManager  *self,
 }
 
 static void
-ide_build_manager_notify_message (IdeBuildManager  *self,
-                                  GParamSpec       *pspec,
-                                  IdePipeline *pipeline)
+ide_build_manager_notify_message (IdeBuildManager *self,
+                                  GParamSpec      *pspec,
+                                  IdePipeline     *pipeline)
 {
   IDE_ENTRY;
 
@@ -312,8 +312,8 @@ ide_build_manager_notify_message (IdeBuildManager  *self,
 
 static void
 ide_build_manager_pipeline_started (IdeBuildManager  *self,
-                                    IdePipelinePhase     phase,
-                                    IdePipeline *pipeline)
+                                    IdePipelinePhase  phase,
+                                    IdePipeline      *pipeline)
 {
   IDE_ENTRY;
 
@@ -328,9 +328,9 @@ ide_build_manager_pipeline_started (IdeBuildManager  *self,
 }
 
 static void
-ide_build_manager_pipeline_finished (IdeBuildManager  *self,
-                                     gboolean          failed,
-                                     IdePipeline *pipeline)
+ide_build_manager_pipeline_finished (IdeBuildManager *self,
+                                     gboolean         failed,
+                                     IdePipeline     *pipeline)
 {
   IDE_ENTRY;
 
@@ -723,8 +723,8 @@ initable_init (GInitable     *initable,
 }
 
 static void
-ide_build_manager_real_build_started (IdeBuildManager  *self,
-                                      IdePipeline *pipeline)
+ide_build_manager_real_build_started (IdeBuildManager *self,
+                                      IdePipeline     *pipeline)
 {
   IdePipelinePhase phase;
 
@@ -751,8 +751,8 @@ ide_build_manager_real_build_started (IdeBuildManager  *self,
 }
 
 static void
-ide_build_manager_real_build_failed (IdeBuildManager  *self,
-                                     IdePipeline *pipeline)
+ide_build_manager_real_build_failed (IdeBuildManager *self,
+                                     IdePipeline     *pipeline)
 {
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
@@ -761,8 +761,8 @@ ide_build_manager_real_build_failed (IdeBuildManager  *self,
 }
 
 static void
-ide_build_manager_real_build_finished (IdeBuildManager  *self,
-                                       IdePipeline *pipeline)
+ide_build_manager_real_build_finished (IdeBuildManager *self,
+                                       IdePipeline     *pipeline)
 {
   IdeDiagnosticsManager *diagnostics;
   IdeBufferManager *bufmgr;
@@ -1446,11 +1446,11 @@ ide_build_manager_save_all_cb (GObject      *object,
   phase = ide_pipeline_get_requested_phase (self->pipeline);
 
   ide_pipeline_build_targets_async (self->pipeline,
-                                          phase,
-                                          targets,
-                                          cancellable,
-                                          ide_build_manager_build_targets_cb,
-                                          g_steal_pointer (&task));
+                                    phase,
+                                    targets,
+                                    cancellable,
+                                    ide_build_manager_build_targets_cb,
+                                    g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
@@ -1629,7 +1629,7 @@ ide_build_manager_clean_cb (GObject      *object,
  */
 void
 ide_build_manager_clean_async (IdeBuildManager     *self,
-                               IdePipelinePhase        phase,
+                               IdePipelinePhase     phase,
                                GCancellable        *cancellable,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
