@@ -236,7 +236,11 @@ namespace Ide
 
 			string[] flags = {};
 			Jsonrpc.Message.parse (params, "flags", Jsonrpc.Message.GetStrv.create (ref flags));
-			flags.length = (int) GLib.strv_length (flags);
+
+			if (flags != null)
+				flags.length = (int) GLib.strv_length (flags);
+			else
+				flags.length = 0;
 
 			GLib.Variant index_entries;
 			lock (index) {
