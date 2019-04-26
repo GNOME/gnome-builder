@@ -1199,36 +1199,8 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /*
-   * FIXME:
-   *
-   * Because we are seeing a rather difficult to track down bug where we lose
-   * the connection upon submission of the HostCommand() after a timeout period
-   * (the dbus-daemon is closing our connection) we are using a private
-   * GDBusConnection for the command.
-   *
-   * This means we need to ensure we close the connection as soon as we can
-   * so that we don't hold things open for too long. Additionally, if we do
-   * get disconnected from the daemon, we don't want to crash but instead will
-   * synthesize the completion of the command. However, this should be much
-   * more unlikely since we haven't seen this failure case.
-   *
-   * One thing we could look into for recovery is to send a SIGKILL to a new
-   * connection (of our client pid) during recovery to ensure that it dies and
-   * force our operation to fail. Callers could handle this during wait_async()
-   * wait_finish() pairs. Again, not ideal.
-   */
-  self->connection =
-    g_dbus_connection_new_for_address_sync (g_getenv ("DBUS_SESSION_BUS_ADDRESS"),
-                                            G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT | G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION,
-                                            NULL,
-                                            cancellable,
-                                            error);
-
-  if (self->connection == NULL)
+  if (!(self->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, cancellable, error)))
     IDE_RETURN (FALSE);
-
-  g_dbus_connection_set_exit_on_close (self->connection, FALSE);
 
   if (self->clear_env)
     flags |= FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV;
