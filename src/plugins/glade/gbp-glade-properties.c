@@ -67,7 +67,7 @@ gbp_glade_properties_init (GbpGladeProperties *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   dzl_dock_widget_set_title (DZL_DOCK_WIDGET (self), _("Unnamed Glade Project"));
-  dzl_dock_widget_set_icon_name (DZL_DOCK_WIDGET (self), "glade-symbolic");
+  dzl_dock_widget_set_icon_name (DZL_DOCK_WIDGET (self), "org.gnome.Glade-symbolic");
 
   gtk_container_foreach (GTK_CONTAINER (self->stack_switcher), adjust_radio_hexpand, NULL);
 }

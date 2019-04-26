@@ -484,7 +484,7 @@ gbp_glade_page_init (GbpGladePage *self)
   ide_page_set_can_split (IDE_PAGE (self), FALSE);
   ide_page_set_menu_id (IDE_PAGE (self), "gbp-glade-page-menu");
   ide_page_set_title (IDE_PAGE (self), _("Unnamed Glade project"));
-  ide_page_set_icon_name (IDE_PAGE (self), "glade-symbolic");
+  ide_page_set_icon_name (IDE_PAGE (self), "org.gnome.Glade-symbolic");
   ide_page_set_menu_id (IDE_PAGE (self), "gbp-glade-page-document-menu");
 
   self->project_signals = dzl_signal_group_new (GLADE_TYPE_PROJECT);

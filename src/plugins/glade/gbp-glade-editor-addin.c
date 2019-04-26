@@ -77,7 +77,7 @@ gbp_glade_editor_addin_ensure_properties (GbpGladeEditorAddin *self)
 
   self->signals_dock = g_object_new (DZL_TYPE_DOCK_WIDGET,
                                      "title", _("Signals"),
-                                     "icon-name", "glade-symbolic",
+                                     "icon-name", "org.gnome.Glade-symbolic",
                                      "visible", TRUE,
                                      NULL);
   gtk_container_add (GTK_CONTAINER (utils), GTK_WIDGET (self->signals_dock));
