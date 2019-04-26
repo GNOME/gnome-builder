@@ -118,13 +118,6 @@ namespace Ide
 			rpc_client = new Jsonrpc.Client (stream);
 			rpc_client.set_use_gvariant (true);
 
-			GetContextCB cb = null;
-			lock (get_client) {
-				while ((cb = get_client.pop_head ()) != null) {
-					cb.source_func ();
-				}
-			}
-
 			var @params = Jsonrpc.Message.@new (
 				"rootUri", Jsonrpc.Message.PutString.create (root_uri.get_uri ()),
 				"rootPath", Jsonrpc.Message.PutString.create (root_uri.get_path ()),
@@ -133,6 +126,13 @@ namespace Ide
 			);
 
 			rpc_client.call_async.begin ("initialize", params, null);
+
+			GetContextCB cb = null;
+			lock (get_client) {
+				while ((cb = get_client.pop_head ()) != null) {
+					cb.source_func ();
+				}
+			}
 		}
 
 		public void buffer_saved (Ide.Buffer buffer) {
