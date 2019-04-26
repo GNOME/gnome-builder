@@ -172,11 +172,17 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
   if (ide_vcs_is_ignored (vcs, directory, NULL))
     return;
 
+  if (relpath != NULL)
+    {
+      g_autofree gchar *with_slash = g_strdup_printf ("%s%s", relpath, G_DIR_SEPARATOR_S);
+      dzl_fuzzy_mutable_index_insert (fuzzy, with_slash, NULL);
+    }
+
   enumerator = g_file_enumerate_children (directory,
                                           G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
-                                          G_FILE_QUERY_INFO_NONE,
+                                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
                                           cancellable,
                                           NULL);
 
