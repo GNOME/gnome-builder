@@ -277,6 +277,13 @@ gbp_code_index_builder_index_file_async (GbpCodeIndexBuilder *self,
   ide_task_set_source_tag (task, gbp_code_index_builder_index_file_async);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
+#ifdef IDE_ENABLE_TRACE
+  {
+    g_autofree gchar *joined = build_flags ? g_strjoinv (" ", (gchar **)build_flags) : NULL;
+    IDE_TRACE_MSG ("Indexing %s with flags: %s", g_file_peek_path (file), joined ?: "");
+  }
+#endif
+
   ide_code_indexer_index_file_async (indexer,
                                      file,
                                      build_flags,
@@ -587,6 +594,8 @@ gbp_code_index_builder_run_async (GbpCodeIndexBuilder *self,
                                           cancellable,
                                           gbp_code_index_builder_aggregate_cb,
                                           g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -594,9 +603,15 @@ gbp_code_index_builder_run_finish (GbpCodeIndexBuilder  *self,
                                    GAsyncResult         *result,
                                    GError              **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (GBP_IS_CODE_INDEX_BUILDER (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
