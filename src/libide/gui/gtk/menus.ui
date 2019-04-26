@@ -9,14 +9,6 @@
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section"/>
     <section id="ide-primary-workspace-menu-placeholder1"/>
-    <section id="ide-primary-workspace-menu-open-section">
-      <item>
-        <attribute name="id">ide-primary-workspace-menu-open</attribute>
-        <attribute name="label" translatable="yes">Open File…</attribute>
-        <attribute name="action">workbench.open</attribute>
-        <attribute name="accel">&lt;primary&gt;o</attribute>
-      </item>
-    </section>
     <section id="ide-primary-workspace-menu-placeholder2"/>
     <section id="ide-primary-workspace-menu-close-section">
       <item>
