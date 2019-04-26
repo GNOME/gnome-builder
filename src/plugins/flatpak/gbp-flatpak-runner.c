@@ -73,6 +73,21 @@ gbp_flatpak_runner_create_launcher (IdeRunner *runner)
                        NULL);
 }
 
+static gboolean
+contains_argv (IdeSubprocessLauncher *launcher,
+               const gchar           *arg)
+{
+  const gchar * const *args;
+
+  if (arg == NULL)
+    return TRUE;
+
+  if (!(args = ide_subprocess_launcher_get_argv (launcher)))
+    return FALSE;
+
+  return g_strv_contains (args, arg);
+}
+
 static void
 gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
                                    IdeSubprocessLauncher *launcher)
@@ -161,7 +176,9 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
       for (guint j = 0; environ_[j]; j++)
         {
           g_autofree gchar *arg = g_strdup_printf ("--env=%s", environ_[j]);
-          ide_subprocess_launcher_insert_argv (launcher, i++, arg);
+
+          if (!contains_argv (launcher, arg))
+            ide_subprocess_launcher_insert_argv (launcher, i++, arg);
         }
     }
 
