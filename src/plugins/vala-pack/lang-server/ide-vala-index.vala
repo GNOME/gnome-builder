@@ -313,32 +313,28 @@ namespace Ide
 			return symbol;
 		}
 
+		private void load_directory_walk_cb (GLib.File directory,
+		                                     GLib.GenericArray<GLib.FileInfo> file_infos)
+		{
+			for (var i = 0; i < file_infos.length; i++)
+			{
+				var name = file_infos[i].get_name ();
+
+				if (name != null && name.has_suffix (".vala")) {
+					var child = directory.get_child (name);
+					code_context.add_source (child.peek_path ());
+				}
+			}
+		}
+
 		private void load_directory (GLib.File directory,
 		                             GLib.Cancellable? cancellable = null)
 		{
-			try {
-				var enumerator = directory.enumerate_children (FileAttribute.STANDARD_NAME+","+FileAttribute.STANDARD_TYPE, 0, cancellable);
-
-				FileInfo file_info;
-				while ((file_info = enumerator.next_file ()) != null) {
-					var name = file_info.get_name ();
-
-					if (name == ".flatpak-builder" || name == ".git")
-						continue;
-
-					if (file_info.get_file_type () == GLib.FileType.DIRECTORY) {
-						var child = directory.get_child (file_info.get_name ());
-						load_directory (child, cancellable);
-					} else if (name.has_suffix (".vala") || name.has_suffix (".vapi") || name.has_suffix (".gs") || name.has_suffix (".c")) {
-						var child = directory.get_child (file_info.get_name ());
-						code_context.add_source (child.get_path ());
-					}
-				}
-
-				enumerator.close ();
-			} catch (GLib.Error err) {
-				warning (err.message);
-			}
+			Ide.g_file_walk_with_ignore (directory,
+			                             FileAttribute.STANDARD_NAME,
+			                             ".noindex",
+			                             cancellable,
+			                             load_directory_walk_cb);
 		}
 	}
 }
