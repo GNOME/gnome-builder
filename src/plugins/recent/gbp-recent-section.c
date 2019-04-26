@@ -469,7 +469,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
       dialog = GTK_DIALOG (gtk_dialog_new ());
       gtk_window_set_title (GTK_WINDOW (dialog), _("Removing Files…"));
       gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (workspace));
-      gtk_dialog_add_button (dialog, _("Close"), GTK_RESPONSE_CLOSE);
+      gtk_dialog_add_button (dialog, _("_Close"), GTK_RESPONSE_CLOSE);
       gtk_window_set_default_size (GTK_WINDOW (dialog), 700, 500);
       content_area = gtk_dialog_get_content_area (dialog);
       gtk_container_set_border_width (GTK_CONTAINER (content_area), 12);
