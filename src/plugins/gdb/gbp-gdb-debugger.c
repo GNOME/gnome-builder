@@ -2345,7 +2345,7 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
 {
   static const gchar *prepend_argv[] = { "gdb", "--interpreter=mi2", "--args" };
   GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
-  int tty_fd;
+  VtePty *pty;
 
   IDE_ENTRY;
 
@@ -2360,12 +2360,21 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
   dzl_signal_group_set_target (self->runner_signals, runner);
 
   /*
-   * We steal and remap the PTY fd into the process so that gdb does not get
-   * the controlling terminal, but instead allow us to ask gdb to setup the
-   * inferior with that same PTY.
+   * If there is a PTY device to display the contents of the inferior, then
+   * we will create a new FD for that from the PTY and save it to map into
+   * the inferior.
    */
-  if (-1 != (tty_fd = ide_runner_steal_tty (runner)))
-    self->mapped_fd = ide_runner_take_fd (runner, tty_fd, -1);
+  if ((pty = ide_runner_get_pty (runner)))
+    {
+      int master_fd = vte_pty_get_fd (pty);
+      int tty_fd = ide_pty_intercept_create_slave (master_fd, TRUE);
+
+      if (tty_fd != -1)
+        {
+          self->mapped_fd = ide_runner_take_fd (runner, tty_fd, -1);
+          ide_runner_set_disable_pty (runner, TRUE);
+        }
+    }
 
   /* We need access to stdin/stdout for communicating with gdb */
   ide_runner_set_flags (runner, G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
@@ -2512,6 +2521,7 @@ gbp_gdb_debugger_init (GbpGdbDebugger *self)
   self->parser = gdbwire_mi_parser_create (callbacks);
   self->read_cancellable = g_cancellable_new ();
   self->read_buffer = g_malloc (READ_BUFFER_LEN);
+  self->mapped_fd = -1;
 
   g_queue_init (&self->cmdqueue);
 

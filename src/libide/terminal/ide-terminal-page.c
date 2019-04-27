@@ -230,9 +230,6 @@ gbp_terminal_respawn (IdeTerminalPage *self,
 
   vte_terminal_set_pty (terminal, pty);
 
-  if (-1 == (tty_fd = ide_vte_pty_create_slave (pty)))
-    IDE_GOTO (cleanup);
-
   if (self->runtime != NULL &&
       !ide_runtime_contains_program_in_path (self->runtime, shell, NULL))
     {
@@ -260,8 +257,7 @@ gbp_terminal_respawn (IdeTerminalPage *self,
         {
           IdeEnvironment *env = ide_runner_get_environment (runner);
 
-          /* set_tty() will dup() the fd */
-          ide_runner_set_tty (runner, tty_fd);
+          ide_runner_set_pty (runner, pty);
 
           ide_environment_setenv (env, "TERM", "xterm-256color");
           ide_environment_setenv (env, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
@@ -280,6 +276,10 @@ gbp_terminal_respawn (IdeTerminalPage *self,
           IDE_GOTO (cleanup);
         }
     }
+
+  if (-1 == (tty_fd = ide_vte_pty_create_slave (pty)))
+    IDE_GOTO (cleanup);
+
 
   /* dup() is safe as it will inherit O_CLOEXEC */
   if (-1 == (stdout_fd = dup (tty_fd)) || -1 == (stderr_fd = dup (tty_fd)))

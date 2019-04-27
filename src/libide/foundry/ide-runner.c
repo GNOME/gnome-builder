@@ -55,11 +55,12 @@ typedef struct
 
   GSubprocessFlags flags;
 
-  int tty_fd;
+  VtePty *pty;
 
   guint clear_env : 1;
   guint failed : 1;
   guint run_on_host : 1;
+  guint disable_pty : 1;
 } IdeRunnerPrivate;
 
 typedef struct
@@ -77,12 +78,13 @@ typedef struct
 enum {
   PROP_0,
   PROP_ARGV,
+  PROP_BUILD_TARGET,
   PROP_CLEAR_ENV,
   PROP_CWD,
+  PROP_DISABLE_PTY,
   PROP_ENV,
   PROP_FAILED,
   PROP_RUN_ON_HOST,
-  PROP_BUILD_TARGET,
   N_PROPS
 };
 
@@ -251,12 +253,26 @@ ide_runner_real_run_async (IdeRunner           *self,
    * If we have a tty_fd set, then we want to override our stdin,
    * stdout, and stderr fds with our TTY.
    */
-  if (priv->tty_fd != -1)
+  if (priv->pty != NULL && !priv->disable_pty)
     {
-      IDE_TRACE_MSG ("Setting TTY fd to %d", priv->tty_fd);
-      ide_subprocess_launcher_take_stdin_fd (launcher, dup (priv->tty_fd));
-      ide_subprocess_launcher_take_stdout_fd (launcher, dup (priv->tty_fd));
-      ide_subprocess_launcher_take_stderr_fd (launcher, dup (priv->tty_fd));
+      gint master_fd;
+      gint tty_fd;
+
+      master_fd = vte_pty_get_fd (priv->pty);
+      tty_fd = ide_pty_intercept_create_slave (master_fd, TRUE);
+
+      IDE_TRACE_MSG ("Setting TTY fd to %d", tty_fd);
+
+      if (!(priv->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE))
+        ide_subprocess_launcher_take_stdin_fd (launcher, dup (tty_fd));
+
+      if (!(priv->flags & (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDOUT_SILENCE)))
+        ide_subprocess_launcher_take_stdout_fd (launcher, dup (tty_fd));
+
+      if (!(priv->flags & (G_SUBPROCESS_FLAGS_STDERR_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE)))
+        ide_subprocess_launcher_take_stderr_fd (launcher, dup (tty_fd));
+
+      close (tty_fd);
     }
 
   /*
@@ -368,46 +384,6 @@ ide_runner_real_get_stderr (IdeRunner *self)
   return NULL;
 }
 
-gint
-ide_runner_steal_tty (IdeRunner *self)
-{
-  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-  gint fd;
-
-  g_return_val_if_fail (IDE_IS_RUNNER (self), -1);
-
-  fd = priv->tty_fd;
-  priv->tty_fd = -1;
-
-  return fd;
-}
-
-static void
-ide_runner_real_set_tty (IdeRunner *self,
-                         int        tty_fd)
-{
-  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-
-  g_assert (IDE_IS_RUNNER (self));
-  g_assert (tty_fd >= -1);
-
-  if (tty_fd != priv->tty_fd)
-    {
-      if (priv->tty_fd != -1)
-        {
-          close (priv->tty_fd);
-          priv->tty_fd = -1;
-        }
-
-      if (tty_fd != -1)
-        {
-          priv->tty_fd = dup (tty_fd);
-          if (priv->tty_fd == -1)
-            g_warning ("Failed to dup() tty_fd: %s", g_strerror (errno));
-        }
-    }
-}
-
 static void
 ide_runner_real_force_quit (IdeRunner *self)
 {
@@ -511,12 +487,7 @@ ide_runner_finalize (GObject *object)
     }
 
   g_clear_pointer (&priv->fd_mapping, g_array_unref);
-
-  if (priv->tty_fd != -1)
-    {
-      close (priv->tty_fd);
-      priv->tty_fd = -1;
-    }
+  g_clear_object (&priv->pty);
 
   G_OBJECT_CLASS (ide_runner_parent_class)->finalize (object);
 }
@@ -541,6 +512,10 @@ ide_runner_get_property (GObject    *object,
 
     case PROP_CWD:
       g_value_set_string (value, ide_runner_get_cwd (self));
+      break;
+
+    case PROP_DISABLE_PTY:
+      g_value_set_boolean (value, ide_runner_get_disable_pty (self));
       break;
 
     case PROP_ENV:
@@ -586,6 +561,10 @@ ide_runner_set_property (GObject      *object,
       ide_runner_set_cwd (self, g_value_get_string (value));
       break;
 
+    case PROP_DISABLE_PTY:
+      ide_runner_set_disable_pty (self, g_value_get_boolean (value));
+      break;
+
     case PROP_FAILED:
       ide_runner_set_failed (self, g_value_get_boolean (value));
       break;
@@ -615,7 +594,6 @@ ide_runner_class_init (IdeRunnerClass *klass)
 
   klass->run_async = ide_runner_real_run_async;
   klass->run_finish = ide_runner_real_run_finish;
-  klass->set_tty = ide_runner_real_set_tty;
   klass->create_launcher = ide_runner_real_create_launcher;
   klass->get_stdin = ide_runner_real_get_stdin;
   klass->get_stdout = ide_runner_real_get_stdout;
@@ -642,6 +620,13 @@ ide_runner_class_init (IdeRunnerClass *klass)
                          "The directory to use as the working directory for the process",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DISABLE_PTY] =
+    g_param_spec_boolean ("disable-pty",
+                          "Disable PTY",
+                          "If the pty should be disabled from use",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ENV] =
     g_param_spec_object ("environment",
@@ -733,7 +718,6 @@ ide_runner_init (IdeRunner *self)
   priv->env = ide_environment_new ();
 
   priv->flags = 0;
-  priv->tty_fd = -1;
 }
 
 /**
@@ -1184,27 +1168,6 @@ ide_runner_set_clear_env (IdeRunner *self,
     }
 }
 
-void
-ide_runner_set_tty (IdeRunner *self,
-                    int        tty_fd)
-{
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_RUNNER (self));
-  g_return_if_fail (tty_fd >= -1);
-
-  if (IDE_RUNNER_GET_CLASS (self)->set_tty)
-    {
-      IDE_RUNNER_GET_CLASS (self)->set_tty (self, tty_fd);
-      return;
-    }
-
-  g_warning ("%s does not support setting a TTY fd",
-             G_OBJECT_TYPE_NAME (self));
-
-  IDE_EXIT;
-}
-
 /**
  * ide_runner_set_pty:
  * @self: a #IdeRunner
@@ -1221,23 +1184,32 @@ void
 ide_runner_set_pty (IdeRunner *self,
                     VtePty    *pty)
 {
-  int child_fd = -1;
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_RUNNER (self));
   g_return_if_fail (!pty || VTE_IS_PTY (pty));
 
-  if (pty != NULL)
-    {
-      int parent_fd = vte_pty_get_fd (pty);
+  g_set_object (&priv->pty, pty);
+}
 
-      if (parent_fd != -1)
-        child_fd = ide_pty_intercept_create_slave (parent_fd, TRUE);
-    }
+/**
+ * ide_runner_get_pty:
+ * @self: a #IdeRunner
+ *
+ * Gets the #VtePty that was assigned.
+ *
+ * Returns: (nullable) (transfer none): a #VtePty or %NULL
+ *
+ * Since: 3.34
+ */
+VtePty *
+ide_runner_get_pty (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
 
-  ide_runner_set_tty (self, child_fd);
+  g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
 
-  if (child_fd != -1)
-    close (child_fd);
+  return priv->pty;
 }
 
 static gint
@@ -1475,4 +1447,31 @@ ide_runner_set_build_target (IdeRunner      *self,
 
   if (g_set_object (&priv->build_target, build_target))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_TARGET]);
+}
+
+gboolean
+ide_runner_get_disable_pty (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), FALSE);
+
+  return priv->disable_pty;
+}
+
+void
+ide_runner_set_disable_pty (IdeRunner *self,
+                            gboolean   disable_pty)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+
+  disable_pty = !!disable_pty;
+
+  if (disable_pty != priv->disable_pty)
+    {
+      priv->disable_pty = disable_pty;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISABLE_PTY]);
+    }
 }

@@ -52,8 +52,6 @@ struct _IdeRunnerClass
   gboolean               (*run_finish)      (IdeRunner             *self,
                                              GAsyncResult          *result,
                                              GError               **error);
-  void                   (*set_tty)         (IdeRunner             *self,
-                                             int                    tty_fd);
   IdeSubprocessLauncher *(*create_launcher) (IdeRunner             *self);
   void                   (*fixup_launcher)  (IdeRunner             *self,
                                              IdeSubprocessLauncher *launcher);
@@ -132,11 +130,13 @@ void               ide_runner_set_run_on_host  (IdeRunner            *self,
 IDE_AVAILABLE_IN_3_32
 void               ide_runner_set_pty          (IdeRunner            *self,
                                                 VtePty               *pty);
-IDE_AVAILABLE_IN_3_32
-void               ide_runner_set_tty          (IdeRunner            *self,
-                                                int                   tty_fd);
-IDE_AVAILABLE_IN_3_32
-gint               ide_runner_steal_tty        (IdeRunner            *self);
+IDE_AVAILABLE_IN_3_34
+VtePty            *ide_runner_get_pty          (IdeRunner            *self);
+IDE_AVAILABLE_IN_3_34
+gboolean           ide_runner_get_disable_pty  (IdeRunner            *self);
+IDE_AVAILABLE_IN_3_34
+void               ide_runner_set_disable_pty  (IdeRunner            *self,
+                                                gboolean              disable_pty);
 IDE_AVAILABLE_IN_3_32
 IdeBuildTarget    *ide_runner_get_build_target (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32

@@ -175,7 +175,6 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
 {
   IdeEnvironment *env;
   VtePty *pty = NULL;
-  int tty_fd;
   g_autoptr(GDateTime) now = NULL;
   g_autofree gchar *formatted = NULL;
   g_autofree gchar *tmp = NULL;
@@ -239,11 +238,7 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
       ide_terminal_page_set_pty (self->run_terminal, pty);
     }
 
-  if (-1 != (tty_fd = ide_vte_pty_create_slave (pty)))
-    {
-      ide_runner_set_tty (runner, tty_fd);
-      close (tty_fd);
-    }
+  ide_runner_set_pty (runner, pty);
 
   env = ide_runner_get_environment (runner);
   ide_environment_setenv (env, "TERM", "xterm-256color");
