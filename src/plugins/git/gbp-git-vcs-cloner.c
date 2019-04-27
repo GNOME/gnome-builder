@@ -167,9 +167,12 @@ gbp_git_vcs_cloner_clone_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   if (!ipc_git_service_call_clone_finish (service, &git_location, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_boolean (task, TRUE);
+    {
+      g_dbus_error_strip_remote_error (error);
+      ide_task_return_error (task, g_steal_pointer (&error));
+    }
+
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
