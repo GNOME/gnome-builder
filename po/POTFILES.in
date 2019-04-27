@@ -288,6 +288,7 @@ src/plugins/jedi/jedi_plugin.py
 src/plugins/jhbuild/jhbuild_plugin.py
 src/plugins/ls/gbp-ls-page.c
 src/plugins/ls/gbp-ls-page.ui
+src/plugins/ls/gtk/menus.ui
 src/plugins/make/make_plugin.py
 src/plugins/maven/maven_plugin.py
 src/plugins/meson-templates/meson_templates.py
