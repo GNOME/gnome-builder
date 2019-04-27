@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-io.h>
 #include <libide-threading.h>
 #include <libpeas/peas.h>
 
@@ -58,6 +59,7 @@ struct _IdeTestManager
   GPtrArray        *tests_by_provider;
   GtkTreeStore     *tests_store;
   VtePty           *pty;
+  gint              child_pty;
 };
 
 typedef struct
@@ -110,6 +112,12 @@ static void
 ide_test_manager_destroy (IdeObject *object)
 {
   IdeTestManager *self = (IdeTestManager *)object;
+
+  if (self->child_pty != -1)
+    {
+      close (self->child_pty);
+      self->child_pty = -1;
+    }
 
   if (self->tests_store != NULL)
     {
@@ -175,6 +183,7 @@ ide_test_manager_class_init (IdeTestManagerClass *klass)
 static void
 ide_test_manager_init (IdeTestManager *self)
 {
+  self->child_pty = -1;
   self->tests_by_provider = g_ptr_array_new_with_free_func (tests_by_provider_free);
   self->tests_store = gtk_tree_store_new (2, G_TYPE_STRING, IDE_TYPE_TEST);
 }
@@ -1056,4 +1065,28 @@ ide_test_manager_get_pty (IdeTestManager *self)
     self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
 
   return self->pty;
+}
+
+/**
+ * ide_test_manager_open_pty:
+ * @self: a #IdeTestManager
+ *
+ * Gets a FD that maps to the child side of the PTY device.
+ *
+ * Returns: a new FD or -1 on failure
+ *
+ * Since: 3.34
+ */
+gint
+ide_test_manager_open_pty (IdeTestManager *self)
+{
+  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), -1);
+
+  if (self->child_pty == -1)
+    {
+      VtePty *pty = ide_test_manager_get_pty (self);
+      self->child_pty = ide_pty_intercept_create_slave (vte_pty_get_fd (pty), TRUE);
+    }
+
+  return dup (self->child_pty);
 }
