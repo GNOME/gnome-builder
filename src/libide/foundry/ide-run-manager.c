@@ -676,7 +676,8 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
    */
   if (self->build_target != NULL && sequence == self->last_change_seq)
     {
-      g_debug ("Skipping install phase as no files appear to have changed");
+      g_debug ("Skipping install phase as no files appear to have changed "
+               "(sequence %"G_GUINT64_FORMAT")", sequence);
       ide_run_manager_update_action_enabled (self);
       ide_task_set_task_data (task, g_object_ref (self->build_target), g_object_unref);
       do_run_async (self, task);
