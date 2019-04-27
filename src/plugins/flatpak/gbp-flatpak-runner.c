@@ -40,28 +40,6 @@ struct _GbpFlatpakRunner
 
 G_DEFINE_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, IDE_TYPE_RUNNER)
 
-static const gchar *
-get_user_install_path (void)
-{
-  static gchar *path;
-
-  if (g_once_init_enter (&path))
-    {
-      g_autoptr(GFile) file = NULL;
-      g_autoptr(FlatpakInstallation) installation = NULL;
-      gchar *real_path;
-
-      if ((installation = flatpak_installation_new_user (NULL, NULL)))
-        real_path = g_file_get_path (flatpak_installation_get_path (installation));
-      else
-        real_path = g_build_filename (g_get_user_data_dir (), "flatpak", NULL);
-
-      g_once_init_leave (&path, g_steal_pointer (&real_path));
-    }
-
-  return path;
-}
-
 static IdeSubprocessLauncher *
 gbp_flatpak_runner_create_launcher (IdeRunner *runner)
 {
@@ -161,13 +139,6 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
     }
 
   ide_subprocess_launcher_insert_argv (launcher, i++, "--talk-name=org.freedesktop.portal.*");
-
-  /* Override FLAPTAK_USER_DIR to keep flatpak from complaining */
-  if (!ide_subprocess_launcher_getenv (launcher, "FLATPAK_USER_DIR"))
-    ide_subprocess_launcher_setenv (launcher,
-                                    "FLATPAK_USER_DIR",
-                                    get_user_install_path (),
-                                    TRUE);
 
   /* Proxy environment stuff to the launcher */
   if ((env = ide_runner_get_environment (runner)) &&
