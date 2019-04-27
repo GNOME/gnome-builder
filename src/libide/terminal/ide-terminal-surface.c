@@ -49,6 +49,24 @@ ide_terminal_surface_new (void)
   return g_object_new (IDE_TYPE_TERMINAL_SURFACE, NULL);
 }
 
+static IdeFrame *
+ide_terminal_surface_create_frame_cb (IdeTerminalSurface *self,
+                                      IdeGrid            *grid)
+{
+  IdeFrame *frame;
+
+  g_assert (IDE_IS_TERMINAL_SURFACE (self));
+  g_assert (IDE_IS_GRID (grid));
+
+  frame = g_object_new (IDE_TYPE_FRAME,
+                        "expand", TRUE,
+                        "visible", TRUE,
+                        NULL);
+  ide_frame_set_placeholder (frame, gtk_label_new (NULL));
+
+  return frame;
+}
+
 static void
 ide_terminal_surface_add (GtkContainer *container,
                           GtkWidget    *child)
@@ -81,4 +99,10 @@ ide_terminal_surface_init (IdeTerminalSurface *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_widget_set_name (GTK_WIDGET (self), "terminal");
+
+  g_signal_connect_object (self->grid,
+                           "create-frame",
+                           G_CALLBACK (ide_terminal_surface_create_frame_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
