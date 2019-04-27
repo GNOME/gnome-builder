@@ -62,7 +62,7 @@ class GoService(Ide.Object):
             launcher.push_argv("/bin/bash")
             launcher.push_argv("--login")
             launcher.push_argv("-c")
-            launcher.push_argv('exec %s %s' % (
+            launcher.push_argv('exec %s %s -gocodecompletion' % (
                 self._which_go_lanserver(),
                 "-trace" if DEV_MODE else ""))
 
@@ -105,22 +105,16 @@ class GoService(Ide.Object):
         self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
-# This is the only up-to-date looking list of supported things lsp things:
-# https://github.com/sourcegraph/go-langserver/blob/master/langserver/handler.go#L226
-
 class GoSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
     def do_load(self):
         GoService.bind_client(self)
 
-## This is supported as of a few weeks ago, but at least for me, it seems
-## awfully crashy, so I'm going to leave it disabled by default so as to
-## not give a bad impression
-#class GoCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
-#    def do_load(self, context):
-#        GoService.bind_client(self)
+class GoHoverProvider(Ide.LspHoverProvider):
+    def do_prepare(self):
+        self.props.category = 'Go'
+        self.props.priority = 100
+        GoService.bind_client(self)
 
-## Could not validate that this works, though `go-langserver` says it does.
-## Calling out to `gofmt` is probably the more canonical route
-#class GoFormatter(Ide.LspFormatter, Ide.Formatter):
-#    def do_load(self):
-#        GoService.bind_client(self)
+class GoCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
+    def do_load(self, context):
+        GoService.bind_client(self)
