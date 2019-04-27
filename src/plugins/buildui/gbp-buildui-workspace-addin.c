@@ -203,6 +203,20 @@ static const GActionEntry actions[] = {
 };
 
 static void
+gbp_buildui_workspace_addin_build_started (GbpBuilduiWorkspaceAddin *self,
+                                           IdePipeline              *pipeline,
+                                           IdeBuildManager          *build_manager)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  if (ide_pipeline_get_requested_phase (pipeline) > IDE_PIPELINE_PHASE_CONFIGURE)
+    dzl_dock_item_present (DZL_DOCK_ITEM (self->log_pane));
+}
+
+static void
 gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
@@ -375,6 +389,11 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   dzl_signal_group_connect_object (self->build_manager_signals,
                                    "notify::busy",
                                    G_CALLBACK (gbp_buildui_workspace_addin_notify_busy),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  dzl_signal_group_connect_object (self->build_manager_signals,
+                                   "build-started",
+                                   G_CALLBACK (gbp_buildui_workspace_addin_build_started),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_set_target (self->build_manager_signals, build_manager);
