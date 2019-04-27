@@ -862,7 +862,7 @@ ide_grid_class_init (IdeGridClass *klass)
    *
    * Returns: (transfer full): A newly created #IdeFrame
    *
-   * Since: 3.32
+   * Since: 3.34
    */
   signals [CREATE_FRAME] =
     g_signal_new (g_intern_static_string ("create-frame"),
