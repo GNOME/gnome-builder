@@ -103,7 +103,7 @@ enum {
 };
 
 enum {
-  CREATE_STACK,
+  CREATE_FRAME,
   CREATE_VIEW,
   N_SIGNALS
 };
@@ -228,7 +228,7 @@ ide_grid_create_frame (IdeGrid *self)
 
   g_assert (IDE_IS_GRID (self));
 
-  g_signal_emit (self, signals [CREATE_STACK], 0, &ret);
+  g_signal_emit (self, signals [CREATE_FRAME], 0, &ret);
   g_return_val_if_fail (IDE_IS_FRAME (ret), NULL);
   return GTK_WIDGET (ret);
 }
@@ -326,8 +326,8 @@ ide_grid_hierarchy_changed (GtkWidget *widget,
 
   /*
    * If we've been added to a widget and still do not have a stack added, then
-   * we'll emit our ::create-stack signal to create that now. We do this here
-   * to allow the consumer to connect to ::create-stack before adding the
+   * we'll emit our ::create-frame signal to create that now. We do this here
+   * to allow the consumer to connect to ::create-frame before adding the
    * widget to the hierarchy.
    */
 
@@ -855,7 +855,7 @@ ide_grid_class_init (IdeGridClass *klass)
   gtk_widget_class_set_css_name (widget_class, "idegrid");
 
   /**
-   * IdeGrid::create-stack:
+   * IdeGrid::create-frame:
    * @self: an #IdeGrid
    *
    * Creates a new stack to be added to the grid.
@@ -864,8 +864,8 @@ ide_grid_class_init (IdeGridClass *klass)
    *
    * Since: 3.32
    */
-  signals [CREATE_STACK] =
-    g_signal_new (g_intern_static_string ("create-stack"),
+  signals [CREATE_FRAME] =
+    g_signal_new (g_intern_static_string ("create-frame"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeGridClass, create_frame),
