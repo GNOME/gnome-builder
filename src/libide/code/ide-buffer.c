@@ -1448,8 +1448,10 @@ ide_buffer_save_file_cb (GObject      *object,
                                          &closure);
     }
 
-  if (self->buffer_manager)
+  if (self->buffer_manager != NULL)
     _ide_buffer_manager_buffer_saved (self->buffer_manager, self);
+  else
+    g_critical ("Attempt to save buffer without access to buffer-manager");
 
   ide_task_return_boolean (task, TRUE);
 
