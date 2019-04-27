@@ -454,8 +454,10 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   g_assert (IDE_IS_TEST (run->test));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (run->pty)
+  if (run->pty != NULL)
     ide_runner_set_pty (runner, run->pty);
+  else
+    g_critical ("Attempt to run unit test without a PTY");
 
   /* Default to running from builddir */
   builddir = ide_pipeline_get_builddir (pipeline);
