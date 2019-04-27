@@ -981,6 +981,17 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   g_assert (lp->addins != NULL);
   g_assert (lp->addins->len == 0);
 
+  /* If we did not get a VCS as part of the loading process, set the
+   * fallback VCS implementation.
+   */
+  if (self->vcs == NULL)
+    {
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (self->context);
+      g_autoptr(IdeDirectoryVcs) vcs = ide_directory_vcs_new (workdir);
+
+      ide_workbench_set_vcs (self, IDE_VCS (vcs));
+    }
+
   if (lp->workspace_type != G_TYPE_INVALID)
     {
       IdeWorkspace *workspace;
