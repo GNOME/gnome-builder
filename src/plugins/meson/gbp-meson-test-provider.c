@@ -413,10 +413,13 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   GCancellable *cancellable;
   const gchar * const *command;
   const gchar * const *environ_;
+  IdeTestManager *test_manager;
   const gchar *builddir;
+  IdeContext *context;
   IdeRuntime *runtime;
   GFile *workdir;
   Run *run;
+  gint tty_fd;
 
   IDE_ENTRY;
 
@@ -454,10 +457,10 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   g_assert (IDE_IS_TEST (run->test));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (run->pty != NULL)
-    ide_runner_set_pty (runner, run->pty);
-  else
-    g_critical ("Attempt to run unit test without a PTY");
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  test_manager = ide_test_manager_from_context (context);
+  tty_fd = ide_test_manager_open_pty (test_manager);
+  ide_runner_take_tty_fd (runner, tty_fd);
 
   /* Default to running from builddir */
   builddir = ide_pipeline_get_builddir (pipeline);
