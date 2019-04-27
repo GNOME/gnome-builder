@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-placeholder1">
+      <item>
+        <attribute name="after">ide-primary-workspace-menu-new-editor-workspace</attribute>
+        <attribute name="id">ide-primary-workspace-menu-new-terminal-workspace</attribute>
+        <attribute name="label" translatable="yes">New Terminal Workspace…</attribute>
+        <attribute name="action">win.new-terminal-workspace</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="ide-terminal-workspace-menu">
     <section id="ide-terminal-workspace-menu-close">
       <item>

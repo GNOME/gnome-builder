@@ -43,6 +43,27 @@ struct _GbpTerminalWorkspaceAddin
   IdeTerminalPage *run_terminal;
 };
 
+static void
+new_terminal_workspace (GSimpleAction *action,
+                        GVariant      *param,
+                        gpointer       user_data)
+{
+  GbpTerminalWorkspaceAddin *self = user_data;
+  IdeTerminalWorkspace *workspace;
+  IdeWorkbench *workbench;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self->workspace));
+  workspace = g_object_new (IDE_TYPE_TERMINAL_WORKSPACE,
+                            "application", IDE_APPLICATION_DEFAULT,
+                            NULL);
+  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+}
+
 static IdeRuntime *
 find_runtime (IdeWorkspace *workspace)
 {
@@ -257,6 +278,7 @@ on_run_manager_stopped (GbpTerminalWorkspaceAddin *self,
 }
 
 static const GActionEntry terminal_actions[] = {
+  { "new-terminal-workspace", new_terminal_workspace },
   { "new-terminal", new_terminal_activate },
   { "new-terminal-in-runner", new_terminal_activate },
   { "new-terminal-in-runtime", new_terminal_activate },
