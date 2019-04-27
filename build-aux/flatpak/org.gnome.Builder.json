@@ -1,22 +1,17 @@
 {
     "app-id" : "org.gnome.Builder",
     "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "master",
+    "runtime-version" : "3.32",
     "sdk" : "org.gnome.Sdk",
     "command" : "gnome-builder",
-    "tags" : [
-        "nightly"
-    ],
-    "desktop-file-name-prefix" : "(Nightly) ",
     "finish-args" : [
         "--require-version=1.0.0",
         "--allow=devel",
         "--talk-name=org.freedesktop.Flatpak",
         "--device=dri",
         "--share=ipc",
-        "--socket=fallback-x11",
+        "--socket=x11",
         "--socket=wayland",
-        "--socket=ssh-auth",
         "--filesystem=home",
         "--filesystem=host",
         "--share=network",
@@ -38,10 +33,6 @@
         "--filesystem=xdg-data/meson",
         "--filesystem=/var/lib/flatpak",
         "--env=G_SLICE=always-malloc"
-    ],
-    "x-run-args" : [
-        "--standalone",
-        "-vvvv"
     ],
     "build-options" : {
         "env" : {
@@ -222,14 +213,15 @@
             "name" : "libgit2-glib",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=release"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libgit2-glib.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/libgit2-glib.git",
+                    "branch" : "v0.27.8"
                 }
             ]
         },
@@ -243,7 +235,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libpeas.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/libpeas.git",
+                    "branch" : "libpeas-1.22.0"
                 }
             ]
         },
@@ -252,7 +245,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git",
+                    "branch" : "gtksourceview-4-2"
                 }
             ]
         },
@@ -263,7 +257,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/amtk.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/amtk.git",
+                    "branch" : "5.0.0"
                 }
             ]
         },
@@ -273,7 +268,7 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=release"
             ],
             "cleanup" : [
                 "/bin/*",
@@ -287,7 +282,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/devhelp.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/devhelp.git",
+                    "branch" : "3.32.0"
                 }
             ]
         },
@@ -300,12 +296,13 @@
             ],
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=release"
             ],
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/json-glib.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/json-glib.git",
+                    "branch" : "1.4.4"
                 }
             ]
         },
@@ -348,7 +345,7 @@
             "name" : "sysprof",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized",
+                "--buildtype=release",
                 "-Denable_gtk=true",
                 "-Dwith_sysprofd=host"
             ],
@@ -365,7 +362,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git",
+                    "branch" : "sysprof-3.32.0"
                 }
             ]
         },
@@ -373,14 +371,15 @@
             "name" : "template-glib",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=release"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/template-glib.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/template-glib.git",
+                    "branch" : "3.32.0"
                 }
             ]
         },
@@ -388,14 +387,15 @@
             "name" : "jsonrpc-glib",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=release"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git",
+                    "branch" : "3.32.0"
                 }
             ]
         },
@@ -403,7 +403,7 @@
             "name" : "libdazzle",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=release"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
@@ -413,7 +413,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git",
+                    "branch" : "libdazzle-3-32"
                 }
             ]
         },
@@ -466,8 +467,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak/releases/download/1.2.3/flatpak-1.2.3.tar.xz",
-                    "sha256" : "bb4720307fc10465660e37bb9489c1d9a349c19143e24f65ddb49032f8b00d44"
+                    "url" : "https://github.com/flatpak/flatpak/releases/download/1.2.4/flatpak-1.2.4.tar.xz",
+                    "sha256" : "1b6539d94d31e571661a2545cfcece7ec9267b4e2552e3cc0f617f4790f6c3e1"
                 }
             ]
         },
@@ -476,8 +477,12 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.0.5/flatpak-builder-1.0.5.tar.xz",
-                    "sha256" : "ab9a2d6395def37d60983a232c4105d6ed8dd8ba4f798e76ba75b8c366bfb0d0"
+                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.0.6/flatpak-builder-1.0.6.tar.xz",
+                    "sha256" : "3b572ad7b7cce9ca6a8632ca69a49a47b20e99066fe064b7b56e7896dca789bb"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "flatpak-builder-watch-bus.patch"
                 }
             ]
         },
@@ -527,7 +532,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/glade.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/glade.git",
+		    "branch" : "glade-3-22"
                 }
             ]
         },
@@ -535,7 +541,7 @@
             "name" : "deviced",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized",
+                "--buildtype=release",
                 "-Ddaemon=false",
                 "-Dtools=false"
             ],
@@ -544,7 +550,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/chergert/deviced.git"
+                    "url" : "https://gitlab.gnome.org/chergert/deviced.git",
+                    "branch" : "0805fe4c94e4ed9049ed2aaf55c4624328e860d3"
                 }
             ]
         },
@@ -554,14 +561,15 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=lib",
-                "--buildtype=debugoptimized",
+                "--buildtype=release",
                 "-Dctags_path=/app/bin/ctags",
                 "-Dfusermount_wrapper=true",
                 "-Dtcmalloc=true",
                 "-Dpython_libprefix=python3.7",
-                "-Dtracing=true",
+                "-Dtracing=false",
                 "-Dhelp=true",
-                "-Dchannel=flatpak-nightly",
+                "-Dchannel=flatpak-stable",
+                "-Dplugin_podman=true",
                 "-Dplugin_deviced=true"
             ],
             "cleanup" : [
@@ -573,7 +581,8 @@
                 {
                     "disable-shallow-clone" : true,
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git",
+                    "branch" : "gnome-builder-3-32"
                 }
             ]
         }
