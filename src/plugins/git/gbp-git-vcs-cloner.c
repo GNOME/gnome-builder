@@ -170,6 +170,7 @@ gbp_git_vcs_cloner_clone_cb (GObject      *object,
     {
       g_dbus_error_strip_remote_error (error);
       ide_task_return_error (task, g_steal_pointer (&error));
+      return;
     }
 
   ide_task_return_boolean (task, TRUE);
