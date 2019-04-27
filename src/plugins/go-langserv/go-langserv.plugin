@@ -7,4 +7,6 @@ Loader=python3
 Module=go_langserver_plugin
 Name=Go Language Server Plugin
 X-Builder-ABI=@PACKAGE_ABI@
+X-Completion-Provider-Languages=go
+X-Hover-Provider-Languages=go
 X-Symbol-Resolver-Languages=go
