@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeFrameEmptyState" parent="GtkBin">
+    <child>
+      <object class="DzlBox">
+        <property name="expand">false</property>
+        <property name="halign">center</property>
+        <property name="orientation">vertical</property>
+        <property name="valign">center</property>
+        <property name="max-width-request">275</property>
+        <property name="margin">32</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Open a File or Terminal</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+              <attribute name="scale" value="1.2"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Use the page switcher above or use one of the following:</property>
+            <property name="justify">center</property>
+            <property name="margin-bottom">18</property>
+            <property name="visible">true</property>
+            <property name="wrap">true</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <attributes>
+              <attribute name="scale" value=".909"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="IdeShortcutLabel">
+            <property name="title" translatable="yes">Search</property>
+            <property name="action">win.global-search</property>
+            <property name="visible">true</property>
+              <!-- Remove after auto accel tracking -->
+            <property name="accel">Ctrl+.</property>
+          </object>
+        </child>
+        <child>
+          <object class="IdeShortcutLabel">
+            <property name="title" translatable="yes">Project sidebar</property>
+            <property name="action">editor.sidebar</property>
+            <property name="visible">true</property>
+              <!-- Remove after auto accel tracking -->
+            <property name="accel">F9</property>
+          </object>
+        </child>
+        <child>
+          <object class="IdeShortcutLabel">
+            <property name="title" translatable="yes">File chooser</property>
+            <property name="action">editor.open-file</property>
+            <property name="visible">true</property>
+              <!-- Remove after auto accel tracking -->
+            <property name="accel">Ctrl+O</property>
+          </object>
+        </child>
+        <child>
+          <object class="IdeShortcutLabel">
+            <property name="title" translatable="yes">New terminal</property>
+            <property name="action">win.new-terminal</property>
+            <property name="visible">true</property>
+              <!-- Remove after auto accel tracking -->
+            <property name="accel">Ctrl+Shift+T</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="homogeneous">true</property>
+            <property name="margin-top">18</property>
+            <property name="spacing">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">editor.open-file</property>
+                <property name="label" translatable="yes">Open File…</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">win.new-terminal</property>
+                <property name="label" translatable="yes">New Terminal</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

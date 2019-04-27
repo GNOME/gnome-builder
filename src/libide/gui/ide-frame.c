@@ -79,7 +79,7 @@ typedef struct
   IdePage              *pan_page;
 
   /* Template references */
-  DzlBox               *empty_state;
+  GtkBox               *empty_placeholder;
   DzlEmptyState        *failed_state;
   IdeFrameHeader       *header;
   GtkStack             *stack;
@@ -107,11 +107,13 @@ enum {
   N_SIGNALS
 };
 
+static void buildable_iface_init     (GtkBuildableIface   *iface);
 static void list_model_iface_init    (GListModelInterface *iface);
 static void animation_state_complete (gpointer             data);
 
 G_DEFINE_TYPE_WITH_CODE (IdeFrame, ide_frame, GTK_TYPE_BOX,
                          G_ADD_PRIVATE (IdeFrame)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static GParamSpec *properties [N_PROPS];
@@ -238,7 +240,7 @@ ide_frame_notify_visible_child (IdeFrame   *self,
   else if (visible_child != NULL)
     gtk_stack_set_visible_child (priv->top_stack, GTK_WIDGET (priv->stack));
   else
-    gtk_stack_set_visible_child (priv->top_stack, GTK_WIDGET (priv->empty_state));
+    gtk_stack_set_visible_child (priv->top_stack, GTK_WIDGET (priv->empty_placeholder));
 
   /* Allow the header to update settings */
   _ide_frame_header_update (priv->header, IDE_PAGE (visible_child));
@@ -873,7 +875,7 @@ ide_frame_class_init (IdeFrameClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "ideframe");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-frame.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, IdeFrame, empty_state);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeFrame, empty_placeholder);
   gtk_widget_class_bind_template_child_private (widget_class, IdeFrame, failed_state);
   gtk_widget_class_bind_template_child_private (widget_class, IdeFrame, header);
   gtk_widget_class_bind_template_child_private (widget_class, IdeFrame, stack);
@@ -1410,4 +1412,33 @@ ide_frame_add_with_depth (IdeFrame  *self,
   gtk_container_add_with_properties (GTK_CONTAINER (priv->stack), widget,
                                      "position", position,
                                      NULL);
+}
+
+static void
+ide_frame_add_child (GtkBuildable *buildable,
+                     GtkBuilder   *builder,
+                     GObject      *object,
+                     const gchar  *type)
+{
+  IdeFrame *self = (IdeFrame *)buildable;
+  IdeFramePrivate *priv = ide_frame_get_instance_private (self);
+  GtkBuildableIface *parent = g_type_interface_peek_parent (GTK_BUILDABLE_GET_IFACE (buildable));
+
+  if (g_strcmp0 (type, "placeholder") == 0 && GTK_IS_WIDGET (object))
+    {
+      gtk_container_foreach (GTK_CONTAINER (priv->empty_placeholder),
+                             (GtkCallback) gtk_widget_destroy,
+                             NULL);
+      gtk_container_add (GTK_CONTAINER (priv->empty_placeholder), GTK_WIDGET (object));
+    }
+  else
+    {
+      parent->add_child (buildable, builder, object, type);
+    }
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->add_child = ide_frame_add_child;
 }
