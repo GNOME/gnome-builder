@@ -127,6 +127,9 @@ gboolean           ide_runner_get_run_on_host  (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
 void               ide_runner_set_run_on_host  (IdeRunner            *self,
                                                 gboolean              run_on_host);
+IDE_AVAILABLE_IN_3_34
+void               ide_runner_take_tty_fd      (IdeRunner            *self,
+                                                gint                  tty_fd);
 IDE_AVAILABLE_IN_3_32
 void               ide_runner_set_pty          (IdeRunner            *self,
                                                 VtePty               *pty);

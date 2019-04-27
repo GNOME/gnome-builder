@@ -56,6 +56,7 @@ typedef struct
   GSubprocessFlags flags;
 
   VtePty *pty;
+  gint child_fd;
 
   guint clear_env : 1;
   guint failed : 1;
@@ -253,26 +254,34 @@ ide_runner_real_run_async (IdeRunner           *self,
    * If we have a tty_fd set, then we want to override our stdin,
    * stdout, and stderr fds with our TTY.
    */
-  if (priv->pty != NULL && !priv->disable_pty)
+  if (!priv->disable_pty && (priv->child_fd != -1 || priv->pty != NULL))
     {
-      gint master_fd;
-      gint tty_fd;
+      if (priv->child_fd == -1)
+        {
+          gint master_fd;
+          gint tty_fd;
 
-      master_fd = vte_pty_get_fd (priv->pty);
-      tty_fd = ide_pty_intercept_create_slave (master_fd, TRUE);
+          g_assert (priv->pty != NULL);
 
-      IDE_TRACE_MSG ("Setting TTY fd to %d", tty_fd);
+          master_fd = vte_pty_get_fd (priv->pty);
+
+          errno = 0;
+          if (-1 == (tty_fd = ide_pty_intercept_create_slave (master_fd, TRUE)))
+            g_critical ("Failed to create TTY device: %s", g_strerror (errno));
+
+          g_assert (tty_fd == -1 || isatty (tty_fd));
+
+          ide_runner_take_tty_fd (self, tty_fd);
+        }
 
       if (!(priv->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE))
-        ide_subprocess_launcher_take_stdin_fd (launcher, dup (tty_fd));
+        ide_subprocess_launcher_take_stdin_fd (launcher, dup (priv->child_fd));
 
       if (!(priv->flags & (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDOUT_SILENCE)))
-        ide_subprocess_launcher_take_stdout_fd (launcher, dup (tty_fd));
+        ide_subprocess_launcher_take_stdout_fd (launcher, dup (priv->child_fd));
 
       if (!(priv->flags & (G_SUBPROCESS_FLAGS_STDERR_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE)))
-        ide_subprocess_launcher_take_stderr_fd (launcher, dup (tty_fd));
-
-      close (tty_fd);
+        ide_subprocess_launcher_take_stderr_fd (launcher, dup (priv->child_fd));
     }
 
   /*
@@ -471,6 +480,12 @@ ide_runner_finalize (GObject *object)
   g_clear_object (&priv->env);
   g_clear_object (&priv->subprocess);
   g_clear_object (&priv->build_target);
+
+  if (priv->child_fd != -1)
+    {
+      close (priv->child_fd);
+      priv->child_fd = -1;
+    }
 
   if (priv->fd_mapping != NULL)
     {
@@ -716,7 +731,7 @@ ide_runner_init (IdeRunner *self)
   g_queue_init (&priv->argv);
 
   priv->env = ide_environment_new ();
-
+  priv->child_fd = -1;
   priv->flags = 0;
 }
 
@@ -1474,4 +1489,18 @@ ide_runner_set_disable_pty (IdeRunner *self,
       priv->disable_pty = disable_pty;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISABLE_PTY]);
     }
+}
+
+void
+ide_runner_take_tty_fd (IdeRunner *self,
+                        gint       tty_fd)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+  g_return_if_fail (tty_fd > -1);
+
+  if (priv->child_fd != -1)
+    close (priv->child_fd);
+  priv->child_fd = tty_fd;
 }
