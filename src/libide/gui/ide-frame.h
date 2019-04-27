@@ -80,5 +80,8 @@ IDE_AVAILABLE_IN_3_32
 void       ide_frame_add_with_depth        (IdeFrame             *self,
                                             GtkWidget            *widget,
                                             guint                 position);
+IDE_AVAILABLE_IN_3_34
+void       ide_frame_set_placeholder       (IdeFrame             *self,
+                                            GtkWidget            *placeholder);
 
 G_END_DECLS

@@ -18,8 +18,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
-
 #define G_LOG_DOMAIN "ide-frame"
 
 #include "config.h"
@@ -1421,24 +1419,33 @@ ide_frame_add_child (GtkBuildable *buildable,
                      const gchar  *type)
 {
   IdeFrame *self = (IdeFrame *)buildable;
-  IdeFramePrivate *priv = ide_frame_get_instance_private (self);
   GtkBuildableIface *parent = g_type_interface_peek_parent (GTK_BUILDABLE_GET_IFACE (buildable));
 
   if (g_strcmp0 (type, "placeholder") == 0 && GTK_IS_WIDGET (object))
-    {
-      gtk_container_foreach (GTK_CONTAINER (priv->empty_placeholder),
-                             (GtkCallback) gtk_widget_destroy,
-                             NULL);
-      gtk_container_add (GTK_CONTAINER (priv->empty_placeholder), GTK_WIDGET (object));
-    }
+    ide_frame_set_placeholder (self, GTK_WIDGET (object));
   else
-    {
-      parent->add_child (buildable, builder, object, type);
-    }
+    parent->add_child (buildable, builder, object, type);
 }
 
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->add_child = ide_frame_add_child;
+}
+
+void
+ide_frame_set_placeholder (IdeFrame  *self,
+                           GtkWidget *placeholder)
+{
+  IdeFramePrivate *priv = ide_frame_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_FRAME (self));
+  g_return_if_fail (!placeholder || GTK_IS_WIDGET (placeholder));
+
+  gtk_container_foreach (GTK_CONTAINER (priv->empty_placeholder),
+                         (GtkCallback) gtk_widget_destroy,
+                         NULL);
+
+  if (placeholder != NULL)
+    gtk_container_add (GTK_CONTAINER (priv->empty_placeholder), placeholder);
 }
