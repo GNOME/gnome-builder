@@ -57,7 +57,7 @@ gbp_git_submodule_stage_new (IdeContext *context)
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_push_argv (launcher, "sh");
   ide_subprocess_launcher_push_argv (launcher, "-c");
-  ide_subprocess_launcher_push_argv (launcher, "git submodule init && git submodule update");
+  ide_subprocess_launcher_push_argv (launcher, "git submodule init && git submodule update --recursive");
 
   ide_pipeline_stage_launcher_set_launcher (IDE_PIPELINE_STAGE_LAUNCHER (self), launcher);
 
