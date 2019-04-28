@@ -555,7 +555,7 @@ ide_context_set_workdir (IdeContext *self,
 /**
  * ide_context_cache_file:
  * @self: a #IdeContext
- * @first_part: The first part of the path
+ * @first_part: (nullable): The first part of the path
  *
  * Like ide_context_cache_filename() but returns a #GFile.
  *
@@ -575,7 +575,6 @@ ide_context_cache_file (IdeContext  *self,
   va_list args;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
-  g_return_val_if_fail (first_part != NULL, NULL);
 
   project_id = ide_context_dup_project_id (self);
 
@@ -585,14 +584,17 @@ ide_context_cache_file (IdeContext  *self,
   g_ptr_array_add (ar, (gchar *)"projects");
   g_ptr_array_add (ar, (gchar *)project_id);
 
-  va_start (args, first_part);
-  do
+  if (part != NULL)
     {
-      g_ptr_array_add (ar, (gchar *)part);
-      part = va_arg (args, const gchar *);
+      va_start (args, first_part);
+      do
+        {
+          g_ptr_array_add (ar, (gchar *)part);
+          part = va_arg (args, const gchar *);
+        }
+      while (part != NULL);
+      va_end (args);
     }
-  while (part != NULL);
-  va_end (args);
 
   g_ptr_array_add (ar, NULL);
 
@@ -629,7 +631,6 @@ ide_context_cache_filename (IdeContext  *self,
   gchar *ret;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
-  g_return_val_if_fail (first_part != NULL, NULL);
 
   project_id = ide_context_dup_project_id (self);
 
@@ -642,9 +643,16 @@ ide_context_cache_filename (IdeContext  *self,
                            first_part,
                            NULL);
 
-  va_start (args, first_part);
-  ret = g_build_filename_valist (base, &args);
-  va_end (args);
+  if (first_part != NULL)
+    {
+      va_start (args, first_part);
+      ret = g_build_filename_valist (base, &args);
+      va_end (args);
+    }
+  else
+    {
+      ret = g_steal_pointer (&base);
+    }
 
   return g_steal_pointer (&ret);
 }
