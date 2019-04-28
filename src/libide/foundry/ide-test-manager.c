@@ -58,8 +58,10 @@ struct _IdeTestManager
   PeasExtensionSet *providers;
   GPtrArray        *tests_by_provider;
   GtkTreeStore     *tests_store;
+  GCancellable     *cancellable;
   VtePty           *pty;
   gint              child_pty;
+  gint              n_active;
 };
 
 typedef struct
@@ -85,8 +87,11 @@ static void ide_test_manager_actions_run_all (IdeTestManager *self,
                                               GVariant       *param);
 static void ide_test_manager_actions_reload  (IdeTestManager *self,
                                               GVariant       *param);
+static void ide_test_manager_actions_cancel  (IdeTestManager *self,
+                                              GVariant       *param);
 
 DZL_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
+  { "cancel", ide_test_manager_actions_cancel },
   { "run-all", ide_test_manager_actions_run_all },
   { "reload-tests", ide_test_manager_actions_reload },
 })
@@ -124,6 +129,9 @@ ide_test_manager_destroy (IdeObject *object)
       gtk_tree_store_clear (self->tests_store);
       g_clear_object (&self->tests_store);
     }
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
 
   g_clear_object (&self->providers);
   g_clear_pointer (&self->tests_by_provider, g_ptr_array_unref);
@@ -184,8 +192,11 @@ static void
 ide_test_manager_init (IdeTestManager *self)
 {
   self->child_pty = -1;
+  self->cancellable = g_cancellable_new ();
   self->tests_by_provider = g_ptr_array_new_with_free_func (tests_by_provider_free);
   self->tests_store = gtk_tree_store_new (2, G_TYPE_STRING, IDE_TYPE_TEST);
+
+  ide_test_manager_set_action_enabled (self, "cancel", FALSE);
 }
 
 static void
@@ -670,6 +681,20 @@ ide_test_manager_run_all_finish (IdeTestManager  *self,
 }
 
 static void
+run_task_completed_cb (IdeTestManager *self,
+                       GParamSpec     *pspec,
+                       IdeTask        *task)
+{
+  g_assert (IDE_IS_TEST_MANAGER (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (self->n_active > 0);
+
+  self->n_active--;
+
+  ide_test_manager_set_action_enabled (self, "cancel", self->n_active > 0);
+}
+
+static void
 ide_test_manager_run_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
@@ -729,6 +754,14 @@ ide_test_manager_run_async (IdeTestManager      *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_test_manager_run_async);
+
+  self->n_active++;
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (run_task_completed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  ide_test_manager_set_action_enabled (self, "cancel", TRUE);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
@@ -1089,4 +1122,34 @@ ide_test_manager_open_pty (IdeTestManager *self)
     }
 
   return dup (self->child_pty);
+}
+
+/**
+ * ide_test_manager_get_cancellable:
+ * @self: a #IdeTestManager
+ *
+ * Gets the cancellable for the test manager which will be cancelled
+ * when the cancel action is called.
+ *
+ * Returns: (transfer none): a #GCancellable
+ *
+ * Since: 3.34
+ */
+GCancellable *
+ide_test_manager_get_cancellable (IdeTestManager *self)
+{
+  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
+
+  return self->cancellable;
+}
+
+static void
+ide_test_manager_actions_cancel (IdeTestManager *self,
+                                 GVariant       *param)
+{
+  g_assert (IDE_IS_TEST_MANAGER (self));
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
 }

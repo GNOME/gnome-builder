@@ -420,7 +420,7 @@ gbp_test_tree_addin_node_activated (IdeTreeAddin *addin,
 
   ide_test_manager_run_async (test_manager,
                               test,
-                              NULL,
+                              ide_test_manager_get_cancellable (test_manager),
                               gbp_test_tree_addin_run_cb,
                               g_steal_pointer (&task));
 

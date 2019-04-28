@@ -69,6 +69,8 @@ GPtrArray       *ide_test_manager_get_tests            (IdeTestManager       *se
 IDE_AVAILABLE_IN_3_32
 gchar          **ide_test_manager_get_folders          (IdeTestManager       *self,
                                                         const gchar          *path);
+IDE_AVAILABLE_IN_3_34
+GCancellable    *ide_test_manager_get_cancellable      (IdeTestManager       *self);
 IDE_AVAILABLE_IN_3_32
 void             ide_test_manager_ensure_loaded_async  (IdeTestManager       *self,
                                                         GCancellable         *cancellable,
