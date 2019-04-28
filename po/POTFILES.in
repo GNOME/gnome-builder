@@ -85,6 +85,7 @@ src/libide/gui/ide-application-shortcuts.c
 src/libide/gui/ide-application.c
 src/libide/gui/ide-environment-editor-row.ui
 src/libide/gui/ide-environment-editor.c
+src/libide/gui/ide-frame-empty-state.ui
 src/libide/gui/ide-frame-header.c
 src/libide/gui/ide-frame-header.ui
 src/libide/gui/ide-frame-shortcuts.c
