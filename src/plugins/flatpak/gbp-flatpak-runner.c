@@ -66,12 +66,25 @@ contains_argv (IdeSubprocessLauncher *launcher,
   return g_strv_contains (args, arg);
 }
 
+static gchar *
+get_project_build_dir (GbpFlatpakRunner *self)
+{
+  IdeContext *context;
+
+  g_assert (GBP_IS_FLATPAK_RUNNER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  return ide_context_cache_filename (context, NULL, NULL);
+}
+
 static void
 gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
                                    IdeSubprocessLauncher *launcher)
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
   g_autofree gchar *doc_portal = NULL;
+  g_autofree gchar *project_build_dir = NULL;
+  g_autofree gchar *project_build_dir_param = NULL;
   IdeConfigManager *config_manager;
   IdeConfig *config;
   IdeEnvironment *env;
@@ -139,6 +152,11 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
     }
 
   ide_subprocess_launcher_insert_argv (launcher, i++, "--talk-name=org.freedesktop.portal.*");
+
+  /* Make sure we have access to the build directory */
+  project_build_dir = get_project_build_dir (self);
+  project_build_dir_param = g_strdup_printf ("--filesystem=%s", project_build_dir);
+  ide_subprocess_launcher_insert_argv (launcher, i++, project_build_dir_param);
 
   /* Proxy environment stuff to the launcher */
   if ((env = ide_runner_get_environment (runner)) &&
