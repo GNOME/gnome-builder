@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-16 10:10+0000\n"
-"PO-Revision-Date: 2019-03-16 21:01+0700\n"
+"POT-Creation-Date: 2019-04-28 00:50+0000\n"
+"PO-Revision-Date: 2019-04-28 16:42+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:99
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:119
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -600,11 +600,6 @@ msgstr "Tinggi panel bawah dalam piksel."
 msgid "Build software for GNOME"
 msgstr "Kembangkan perangkat lunak bagi GNOME"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.Builder.desktop.in.in:7
-msgid "org.gnome.Builder"
-msgstr "org.gnome.Builder"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
@@ -837,7 +832,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4915
+#: src/libide/sourceview/ide-source-view.c:4928
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -860,7 +855,7 @@ msgstr "_Ubah Nama"
 msgid "unsaved file %u"
 msgstr "berkas %u belum disimpan"
 
-#: src/libide/code/ide-buffer.c:3370
+#: src/libide/code/ide-buffer.c:3380
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -888,7 +883,7 @@ msgstr "Gagal menginisialisasi baku."
 msgid "Failed to save draft: %s"
 msgstr "Gagal menyimpan draf: %s"
 
-#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:800
+#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:802
 msgid "Untitled"
 msgstr "Tanpa Judul"
 
@@ -898,7 +893,7 @@ msgstr "Tanpa Judul"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1372
+#: src/libide/gui/ide-workbench.c:1391
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -934,7 +929,7 @@ msgstr "Gagal menyimpan berkas: %s"
 
 #: src/libide/editor/ide-editor-page-actions.c:236
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
-#: src/plugins/testui/gbp-test-output-panel.c:63
+#: src/plugins/testui/gbp-test-output-panel.c:65
 msgid "Save File"
 msgstr "Simpan Berkas"
 
@@ -1050,10 +1045,10 @@ msgid "_Reload"
 msgstr "_Muat Ulang"
 
 #: src/libide/editor/ide-editor-page.ui:51
-#: src/libide/greeter/ide-greeter-workspace-actions.c:119
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
-#: src/plugins/testui/gbp-test-output-panel.c:67
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
+#: src/plugins/testui/gbp-test-output-panel.c:69
 msgid "_Cancel"
 msgstr "_Batal"
 
@@ -1200,7 +1195,7 @@ msgid "Open File"
 msgstr "Buka Berkas"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1371
+#: src/libide/gui/ide-workbench.c:1390
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1240,7 +1235,7 @@ msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Tutup semua berkas"
 
-#: src/libide/editor/ide-editor-surface.c:561
+#: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
 #: src/plugins/editor/gtk/menus.ui:67 src/plugins/editor/gtk/menus.ui:81
@@ -1261,16 +1256,16 @@ msgid "Switch surface"
 msgstr "Ganti permukaan"
 
 #: src/libide/editor/ide-editor-workspace.ui:30
-#: src/libide/gui/ide-primary-workspace.ui:54
+#: src/libide/gui/ide-primary-workspace.ui:55
 msgid "Press Ctrl+. to search"
 msgstr "Tekan Ctrl+. untuk mencari"
 
-#: src/libide/foundry/ide-build-manager.c:395
+#: src/libide/foundry/ide-build-manager.c:396
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Gagal menginisialisasi pipa bangun: %s"
 
-#: src/libide/foundry/ide-build-manager.c:525
+#: src/libide/foundry/ide-build-manager.c:526
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Gagal mendapatkan informasi perangkat: %s"
@@ -1290,7 +1285,7 @@ msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Tidak dapat deploy ke perangkat, pipa bangun tidak diinisialisasi"
 
 #: src/libide/foundry/ide-fallback-build-system.c:145
-#: src/libide/greeter/ide-greeter-row.c:257
+#: src/libide/greeter/ide-greeter-row.c:260
 msgid "Fallback"
 msgstr "Cadangan"
 
@@ -1424,7 +1419,7 @@ msgstr "Gagal menemukan target bangun"
 msgid "Run"
 msgstr "Jalankan"
 
-#: src/libide/foundry/ide-runner.c:181
+#: src/libide/foundry/ide-runner.c:182
 msgid "Process quit unexpectedly"
 msgstr "Proses keluar tak disangka"
 
@@ -1507,29 +1502,29 @@ msgstr "Pilih Folder…"
 msgid "Clone Repository…"
 msgstr "Klon Repositori…"
 
-#: src/libide/greeter/ide-greeter-row.c:256
+#: src/libide/greeter/ide-greeter-row.c:259
 msgid "Directory"
 msgstr "Direktori"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:82
-#: src/libide/greeter/ide-greeter-workspace-actions.c:115
+#: src/libide/greeter/ide-greeter-workspace-actions.c:89
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
 msgid "Select Project Folder"
 msgstr "Pilih Folder Proyek"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:87
+#: src/libide/greeter/ide-greeter-workspace-actions.c:94
 msgid "Select Project File"
 msgstr "Pilih Berkas Proyek"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:120
+#: src/libide/greeter/ide-greeter-workspace-actions.c:127
 msgid "_Open"
 msgstr "B_uka"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:131
+#: src/libide/greeter/ide-greeter-workspace-actions.c:138
 msgid "All Project Types"
 msgstr "Semua Jenis Proyek"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:316 src/libide/gui/ide-workbench.c:837
+#: src/libide/gui/ide-workbench.c:317 src/libide/gui/ide-workbench.c:838
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder— %s"
@@ -1585,7 +1580,7 @@ msgid "Switch Surface"
 msgstr "Ganti Permukaan"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1368
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1387
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Buka Berkas…"
@@ -2794,38 +2789,38 @@ msgstr "Per_kecil"
 msgid "Reset"
 msgstr "Reset"
 
-#: src/libide/sourceview/ide-source-view.c:4364
+#: src/libide/sourceview/ide-source-view.c:4377
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4366
+#: src/libide/sourceview/ide-source-view.c:4379
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4484
+#: src/libide/sourceview/ide-source-view.c:4497
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4914
+#: src/libide/sourceview/ide-source-view.c:4927
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5149
+#: src/libide/sourceview/ide-source-view.c:5162
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5175
+#: src/libide/sourceview/ide-source-view.c:5188
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
 
 #: src/libide/terminal/gtk/menus.ui:7 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:118 src/plugins/editor/gtk/menus.ui:172
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
-#: src/plugins/recent/gbp-recent-section.c:469
+#: src/plugins/recent/gbp-recent-section.c:472
 msgid "Close"
 msgstr "Tutup"
 
@@ -2883,7 +2878,7 @@ msgid "Bootstrapping build system"
 msgstr "Mem-bootstrap sistem bangun"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Mengkonfigurasi proyek"
@@ -2892,7 +2887,7 @@ msgstr "Mengkonfigurasi proyek"
 #: src/plugins/cargo/cargo_plugin.py:149
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:283
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Membangun proyek"
@@ -3167,7 +3162,7 @@ msgstr "Toolchain Bangun"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/editor/gtk/menus.ui:159 src/plugins/glade/gtk/menus.ui:8
-#: src/plugins/testui/gbp-test-output-panel.c:66
+#: src/plugins/testui/gbp-test-output-panel.c:68
 msgid "_Save"
 msgstr "_Simpan"
 
@@ -3261,7 +3256,7 @@ msgid "Export Bundle"
 msgstr "Ekspor Bundel"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:335
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:349
 msgid "Build Issues"
 msgstr "Masalah Bangun"
 
@@ -3290,7 +3285,7 @@ msgstr "Pipa bangun kosong"
 msgid "Build Targets"
 msgstr "Target Bangun"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:344
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:358
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Preferensi Bangun"
@@ -3374,7 +3369,7 @@ msgstr "Konfigurasikan proyek"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Memasang proyek"
@@ -4149,11 +4144,11 @@ msgstr ""
 "berkas JavaScript. Hal ini dapat mengakibatkan eksekusi kode dalam proyek "
 "Anda."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:915
 msgid "Clone a project using flatpak manifest"
 msgstr "Mengkloning proyek menggunakan manifes flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "MANIFEST"
 msgstr "MANIFEST"
 
@@ -4176,11 +4171,11 @@ msgstr "Gagal menghapus manifest flatpak: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Jaringan tidak tersedia, lewati unduhan"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:144
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
 msgid "Install Missing SDK?"
 msgstr "Memasang SDK yang Hilang? "
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:149
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
 msgid "_Install"
 msgstr "_Pasang"
 
@@ -4376,23 +4371,23 @@ msgid "Signals"
 msgstr "Sinyal"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
-#: src/plugins/glade/gbp-glade-frame-addin.c:295
+#: src/plugins/glade/gbp-glade-frame-addin.c:300
 msgid "Select Widget…"
 msgstr "Pilih Widget…"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:388
+#: src/plugins/glade/gbp-glade-frame-addin.c:393
 msgid "View Design"
 msgstr "Lihat Desain"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:390
+#: src/plugins/glade/gbp-glade-frame-addin.c:395
 msgid "Switch to UI designer"
 msgstr "Bertukar ke perancang UI"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:396
+#: src/plugins/glade/gbp-glade-frame-addin.c:401
 msgid "View Source"
 msgstr "Lihat Sumber"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:398
+#: src/plugins/glade/gbp-glade-frame-addin.c:403
 msgid "Switch to source code editor"
 msgstr "Bertukar ke penyunting kode sumber"
 
@@ -4728,12 +4723,12 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Opsi Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:194
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr ""
 "Sebuah proyek berbasis Meson dimuat tetapi Ninja tidak dapat ditemukan."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:214
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
 "Sebuah proyek berbasis Meson dimuat tetapi meson tidak dapat ditemukan."
@@ -4965,7 +4960,7 @@ msgstr "Bangun dikonfigurasikan"
 msgid "Build bootstrapped"
 msgstr "Bangun di-bootstrap"
 
-#: src/plugins/npm/npm_plugin.py:91
+#: src/plugins/npm/npm_plugin.py:96
 msgid "Downloading npm dependencies"
 msgstr "Mengunduh dependensi npm"
 
@@ -4974,7 +4969,7 @@ msgid "Bootstrapping project"
 msgstr "Mem-bootstrap proyek"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:99
+#: src/plugins/podman/gbp-podman-runtime.c:132
 msgid "Containers/Podman"
 msgstr "Kontainer/Podman"
 
@@ -5110,13 +5105,13 @@ msgid "quick highlight words matching current selection"
 msgstr "kata sorot cepat yang cocok dengan pilihan saat ini"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:347
-#: src/plugins/recent/gbp-recent-section.c:354
+#: src/plugins/recent/gbp-recent-section.c:350
+#: src/plugins/recent/gbp-recent-section.c:357
 #, c-format
 msgid "Removing %s\n"
 msgstr "Menghapus %s\n"
 
-#: src/plugins/recent/gbp-recent-section.c:467
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "Removing Files…"
 msgstr "Menghapus Berkas…"
 
@@ -5518,15 +5513,19 @@ msgstr "Terminal _Bangun Baru"
 msgid "New _Runtime Terminal"
 msgstr "Terminal _Runtime Baru"
 
-#: src/plugins/testui/gbp-test-output-panel.c:132
+#: src/plugins/testui/gbp-test-output-panel.c:135
 msgid "Unit Test Output"
 msgstr "Keluaran Pengujian Unit"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:33
+#: src/plugins/testui/gbp-test-output-panel.ui:34
 msgid "Clear test output"
 msgstr "Bersihkan keluaran pengujian"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:50
+#: src/plugins/testui/gbp-test-output-panel.ui:51
+msgid "Cancel tests"
+msgstr "Batalkan uji"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:68
 msgid "Save test output"
 msgstr "Simpan keluaran pengujian"
 
@@ -5713,6 +5712,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "org.gnome.Builder"
+#~ msgstr "org.gnome.Builder"
 
 #~ msgid "New Window"
 #~ msgstr "Jendela Baru"
