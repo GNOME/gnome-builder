@@ -75,7 +75,7 @@ ide_terminal_surface_add (GtkContainer *container,
 
   g_assert (IDE_IS_TERMINAL_SURFACE (self));
 
-  if (IDE_IS_TERMINAL_PAGE (child))
+  if (IDE_IS_PAGE (child))
     gtk_container_add (GTK_CONTAINER (self->grid), child);
   else
     GTK_CONTAINER_CLASS (ide_terminal_surface_parent_class)->add (container, child);

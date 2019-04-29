@@ -34,6 +34,28 @@ struct _IdeTerminalWorkspace
 G_DEFINE_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE_TYPE_WORKSPACE)
 
 static void
+ide_terminal_workspace_context_set_cb (GtkWidget  *widget,
+                                       IdeContext *context)
+{
+  IdeTerminalWorkspace *self = (IdeTerminalWorkspace *)widget;
+
+  g_assert (IDE_IS_TERMINAL_WORKSPACE (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  if (context == NULL)
+    return;
+
+  if (ide_context_has_project (context))
+    {
+      GtkWidget *bar;
+
+      bar = ide_omni_bar_new ();
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (self->header_bar), GTK_WIDGET (bar));
+      gtk_widget_show (bar);
+    }
+}
+
+static void
 ide_terminal_workspace_class_init (IdeTerminalWorkspaceClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -49,4 +71,6 @@ static void
 ide_terminal_workspace_init (IdeTerminalWorkspace *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  ide_widget_set_context_handler (self, ide_terminal_workspace_context_set_cb);
 }
