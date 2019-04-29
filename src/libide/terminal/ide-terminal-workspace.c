@@ -47,11 +47,20 @@ ide_terminal_workspace_context_set_cb (GtkWidget  *widget,
 
   if (ide_context_has_project (context))
     {
-      GtkWidget *bar;
+      GtkWidget *bar = ide_omni_bar_new ();
+      GtkWidget *label = gtk_label_new (NULL);
 
-      bar = ide_omni_bar_new ();
+      bar = g_object_new (IDE_TYPE_OMNI_BAR,
+                          "visible", TRUE,
+                          NULL);
       gtk_header_bar_set_custom_title (GTK_HEADER_BAR (self->header_bar), GTK_WIDGET (bar));
-      gtk_widget_show (bar);
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "visible", TRUE,
+                            "xalign", 0.0f,
+                            NULL);
+      g_object_bind_property (context, "title", label, "label", G_BINDING_SYNC_CREATE);
+      ide_omni_bar_set_placeholder (IDE_OMNI_BAR (bar), label);
     }
 }
 
