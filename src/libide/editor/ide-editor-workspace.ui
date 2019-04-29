@@ -7,7 +7,7 @@
         <property name="show-fullscreen-button">true</property>
         <property name="menu-id">ide-editor-workspace-menu</property>
         <property name="visible">true</property>
-        <child type="left">
+        <child type="primary">
           <object class="IdeSurfacesButton" id="surface_menu_button">
             <property name="focus-on-click">false</property>
             <property name="menu-id">ide-editor-workspace-surfaces-menu</property>
@@ -21,7 +21,7 @@
             <property name="tooltip-text" translatable="yes">Switch surface</property>
           </object>
         </child>
-        <child type="right">
+        <child type="secondary">
           <object class="DzlPriorityBox">
             <property name="visible">true</property>
             <child>
