@@ -175,13 +175,13 @@ class NPMBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
         for name in package_json['scripts']:
             if is_ignored_script(name, package_json['scripts']):
                 continue
-            task.targets.append(self.ensure_child_typed(NPMBuildTarget(name)))
+            task.targets.append(NPMBuildTarget(name))
 
         # if no start script is specified, but server.js exists,
         # we can still run "npm start"
         if 'start' not in package_json['scripts'] and \
             project_file.get_parent().get_child('server.js').query_exists(None):
-                task.targets.append(self.ensure_child_typed(NPMBuildTarget('start')))
+                task.targets.append(NPMBuildTarget('start'))
 
         task.return_boolean(True)
 
