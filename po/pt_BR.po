@@ -11,22 +11,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-16 10:10+0000\n"
-"PO-Revision-Date: 2019-03-16 07:53-0300\n"
+"POT-Creation-Date: 2019-04-28 00:50+0000\n"
+"PO-Revision-Date: 2019-04-29 13:58-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
-"Language-Team: Portuguese - Brazil <gnome-pt_br-list@gnome.org>\n"
+"Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.31.90\n"
+"X-Generator: Gtranslator 3.32.0\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:99
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:119
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -131,7 +131,6 @@ msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Suporte a compilação com runtime do flatpak e do jhbuild"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
-#| msgid "Support for viewing Todo's found within your code-base"
 msgid "Support for viewing TODOs found within your code base"
 msgstr ""
 "Suporte para visualizar Tarefas encontradas dentro da sua base de código"
@@ -607,11 +606,6 @@ msgstr "A altura em unidades de pixel do painel inferior."
 msgid "Build software for GNOME"
 msgstr "Desenvolva programas para o GNOME"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.Builder.desktop.in.in:7
-msgid "org.gnome.Builder"
-msgstr "org.gnome.Builder"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
@@ -857,7 +851,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4915
+#: src/libide/sourceview/ide-source-view.c:4928
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -880,7 +874,7 @@ msgstr "_Renomear"
 msgid "unsaved file %u"
 msgstr "arquivo não salvo %u"
 
-#: src/libide/code/ide-buffer.c:3370
+#: src/libide/code/ide-buffer.c:3380
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
@@ -908,7 +902,7 @@ msgstr "Falha ao inicializar padrões."
 msgid "Failed to save draft: %s"
 msgstr "Falha ao salvar rascunho: %s"
 
-#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:800
+#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:802
 msgid "Untitled"
 msgstr "Sem título"
 
@@ -918,7 +912,7 @@ msgstr "Sem título"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:316
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1372
+#: src/libide/gui/ide-workbench.c:1391
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -954,7 +948,7 @@ msgstr "Falha ao salvar arquivo: %s"
 
 #: src/libide/editor/ide-editor-page-actions.c:236
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
-#: src/plugins/testui/gbp-test-output-panel.c:63
+#: src/plugins/testui/gbp-test-output-panel.c:65
 msgid "Save File"
 msgstr "Salvar arquivo"
 
@@ -1070,10 +1064,10 @@ msgid "_Reload"
 msgstr "_Recarregar"
 
 #: src/libide/editor/ide-editor-page.ui:51
-#: src/libide/greeter/ide-greeter-workspace-actions.c:119
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
-#: src/plugins/testui/gbp-test-output-panel.c:67
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
+#: src/plugins/testui/gbp-test-output-panel.c:69
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1220,7 +1214,7 @@ msgid "Open File"
 msgstr "Abre arquivo"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1371
+#: src/libide/gui/ide-workbench.c:1390
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:19
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
@@ -1260,7 +1254,7 @@ msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Fecha todos os arquivos"
 
-#: src/libide/editor/ide-editor-surface.c:561
+#: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
 #: src/plugins/editor/gtk/menus.ui:67 src/plugins/editor/gtk/menus.ui:81
@@ -1281,16 +1275,16 @@ msgid "Switch surface"
 msgstr "Alternar superfície"
 
 #: src/libide/editor/ide-editor-workspace.ui:30
-#: src/libide/gui/ide-primary-workspace.ui:54
+#: src/libide/gui/ide-primary-workspace.ui:55
 msgid "Press Ctrl+. to search"
 msgstr "Pressione Ctrl+. para pesquisar"
 
-#: src/libide/foundry/ide-build-manager.c:395
+#: src/libide/foundry/ide-build-manager.c:396
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Falha ao inicializar o encadeamento de compilação: %s"
 
-#: src/libide/foundry/ide-build-manager.c:525
+#: src/libide/foundry/ide-build-manager.c:526
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Falha ao obter informações do dispositivo: %s"
@@ -1312,7 +1306,7 @@ msgstr ""
 "inicializado"
 
 #: src/libide/foundry/ide-fallback-build-system.c:145
-#: src/libide/greeter/ide-greeter-row.c:257
+#: src/libide/greeter/ide-greeter-row.c:260
 msgid "Fallback"
 msgstr "Reserva"
 
@@ -1448,7 +1442,7 @@ msgstr "Falha ao localizar o alvo da compilação"
 msgid "Run"
 msgstr "Executar"
 
-#: src/libide/foundry/ide-runner.c:181
+#: src/libide/foundry/ide-runner.c:182
 msgid "Process quit unexpectedly"
 msgstr "O processo saiu inesperadamente"
 
@@ -1531,29 +1525,29 @@ msgstr "Selecionar uma pasta…"
 msgid "Clone Repository…"
 msgstr "Clonar repositório…"
 
-#: src/libide/greeter/ide-greeter-row.c:256
+#: src/libide/greeter/ide-greeter-row.c:259
 msgid "Directory"
 msgstr "Diretório"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:82
-#: src/libide/greeter/ide-greeter-workspace-actions.c:115
+#: src/libide/greeter/ide-greeter-workspace-actions.c:89
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
 msgid "Select Project Folder"
 msgstr "Selecionar pasta de projeto"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:87
+#: src/libide/greeter/ide-greeter-workspace-actions.c:94
 msgid "Select Project File"
 msgstr "Selecionar arquivo de projeto"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:120
+#: src/libide/greeter/ide-greeter-workspace-actions.c:127
 msgid "_Open"
 msgstr "_Abrir"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:131
+#: src/libide/greeter/ide-greeter-workspace-actions.c:138
 msgid "All Project Types"
 msgstr "Todos tipos de projetos"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:316 src/libide/gui/ide-workbench.c:837
+#: src/libide/gui/ide-workbench.c:317 src/libide/gui/ide-workbench.c:838
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1609,7 +1603,7 @@ msgid "Switch Surface"
 msgstr "Alternar superfície"
 
 #: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1368
+#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1387
 #: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
 msgid "Open File…"
 msgstr "Abrir arquivo…"
@@ -2824,38 +2818,38 @@ msgstr "_Reduzir"
 msgid "Reset"
 msgstr "Restaurar"
 
-#: src/libide/sourceview/ide-source-view.c:4364
+#: src/libide/sourceview/ide-source-view.c:4377
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4366
+#: src/libide/sourceview/ide-source-view.c:4379
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua “%s” com “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4484
+#: src/libide/sourceview/ide-source-view.c:4497
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: src/libide/sourceview/ide-source-view.c:4914
+#: src/libide/sourceview/ide-source-view.c:4927
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5149
+#: src/libide/sourceview/ide-source-view.c:5162
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5175
+#: src/libide/sourceview/ide-source-view.c:5188
 msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
 #: src/libide/terminal/gtk/menus.ui:7 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:118 src/plugins/editor/gtk/menus.ui:172
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
-#: src/plugins/recent/gbp-recent-section.c:469
+#: src/plugins/recent/gbp-recent-section.c:472
 msgid "Close"
 msgstr "Fechar"
 
@@ -2913,7 +2907,7 @@ msgid "Bootstrapping build system"
 msgstr "Inicializando sistema de compilação"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Configurando projeto"
@@ -2922,7 +2916,7 @@ msgstr "Configurando projeto"
 #: src/plugins/cargo/cargo_plugin.py:149
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:283
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Compilando projeto"
@@ -3200,7 +3194,7 @@ msgstr "Cadeia de ferramentas de compilação"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/editor/gtk/menus.ui:159 src/plugins/glade/gtk/menus.ui:8
-#: src/plugins/testui/gbp-test-output-panel.c:66
+#: src/plugins/testui/gbp-test-output-panel.c:68
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -3221,7 +3215,6 @@ msgid "Save build log"
 msgstr "Salvar log de compilação"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
-#| msgid "missing"
 msgid "Missing"
 msgstr "Faltando"
 
@@ -3296,7 +3289,7 @@ msgid "Export Bundle"
 msgstr "Exportar pacote"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:335
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:349
 msgid "Build Issues"
 msgstr "Problemas de compilação"
 
@@ -3325,7 +3318,7 @@ msgstr "O encadeamento de compilação está vazio"
 msgid "Build Targets"
 msgstr "Alvos de compilação"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:344
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:358
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Preferências de compilação"
@@ -3409,7 +3402,7 @@ msgstr "Configurar projeto"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Instalando projeto"
@@ -4182,11 +4175,11 @@ msgstr ""
 "Habilita o uso do ESLint para localizar diagnósticos adicionais em programa "
 "JavaScript. Isso pode resultar na execução do código de seu projeto."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:915
 msgid "Clone a project using flatpak manifest"
 msgstr "Clonar um projeto usando manifesto do flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "MANIFEST"
 msgstr "MANIFESTO"
 
@@ -4209,11 +4202,11 @@ msgstr "Falha ao renomear manifesto do flatpak: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Rede não disponível, pulando os downloads"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:144
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
 msgid "Install Missing SDK?"
 msgstr "Instalar o SDK em falta?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:149
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
 msgid "_Install"
 msgstr "_Instalar"
 
@@ -4407,24 +4400,24 @@ msgid "Signals"
 msgstr "Sinais"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
-#: src/plugins/glade/gbp-glade-frame-addin.c:295
+#: src/plugins/glade/gbp-glade-frame-addin.c:300
 msgid "Select Widget…"
 msgstr "Selecionar widget…"
 
 # Adotada a tradução análoga de "designer" do Glade -- Rafael
-#: src/plugins/glade/gbp-glade-frame-addin.c:388
+#: src/plugins/glade/gbp-glade-frame-addin.c:393
 msgid "View Design"
 msgstr "Ver construção"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:390
+#: src/plugins/glade/gbp-glade-frame-addin.c:395
 msgid "Switch to UI designer"
 msgstr "Alternar para construtor de UI"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:396
+#: src/plugins/glade/gbp-glade-frame-addin.c:401
 msgid "View Source"
 msgstr "Ver fonte"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:398
+#: src/plugins/glade/gbp-glade-frame-addin.c:403
 msgid "Switch to source code editor"
 msgstr "Alternar para editor de código-fonte"
 
@@ -4760,13 +4753,13 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Opções do Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:194
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr ""
 "Um projeto baseado no Meson está carregado, mas Ninja não pode ser "
 "localizado."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:214
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
 "Um projeto baseado no Meson está carregado, mas meson não pode ser "
@@ -4999,7 +4992,7 @@ msgstr "Compilação configurada"
 msgid "Build bootstrapped"
 msgstr "Compilação inicializada"
 
-#: src/plugins/npm/npm_plugin.py:91
+#: src/plugins/npm/npm_plugin.py:96
 msgid "Downloading npm dependencies"
 msgstr "Baixando dependências de npm"
 
@@ -5008,7 +5001,7 @@ msgid "Bootstrapping project"
 msgstr "Inicializando projeto"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:99
+#: src/plugins/podman/gbp-podman-runtime.c:132
 msgid "Containers/Podman"
 msgstr "Contêineres/Podman"
 
@@ -5145,13 +5138,13 @@ msgid "quick highlight words matching current selection"
 msgstr "rápido realçar realce palavras correspondência atual seleção"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:347
-#: src/plugins/recent/gbp-recent-section.c:354
+#: src/plugins/recent/gbp-recent-section.c:350
+#: src/plugins/recent/gbp-recent-section.c:357
 #, c-format
 msgid "Removing %s\n"
 msgstr "Removendo %s\n"
 
-#: src/plugins/recent/gbp-recent-section.c:467
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "Removing Files…"
 msgstr "Removendo arquivos…"
 
@@ -5556,15 +5549,20 @@ msgstr "Novo terminal de _compilação"
 msgid "New _Runtime Terminal"
 msgstr "Novo terminal de _execução"
 
-#: src/plugins/testui/gbp-test-output-panel.c:132
+#: src/plugins/testui/gbp-test-output-panel.c:135
 msgid "Unit Test Output"
 msgstr "Saída de teste de unidade"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:33
+#: src/plugins/testui/gbp-test-output-panel.ui:34
 msgid "Clear test output"
 msgstr "Limpar saída de teste"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:50
+#: src/plugins/testui/gbp-test-output-panel.ui:51
+#| msgid "Cancel"
+msgid "Cancel tests"
+msgstr "Cancelar testes"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:68
 msgid "Save test output"
 msgstr "Salvar saída de teste"
 
@@ -5751,6 +5749,9 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O arquivo deve estar salvo localmente para análise."
+
+#~ msgid "org.gnome.Builder"
+#~ msgstr "org.gnome.Builder"
 
 #~ msgid "<b>Missing</b>"
 #~ msgstr "<b>Faltando</b>"
