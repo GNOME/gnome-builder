@@ -105,6 +105,90 @@ ide_clang_get_llvm_flags (void)
   return llvm_flags;
 }
 
+static gboolean
+is_cplusplus_param (const gchar *param)
+{
+  /* Skip past -, -- */
+  if (*param == '-')
+    {
+      param++;
+      if (*param == '-')
+        param++;
+    }
+
+  if (g_str_has_prefix (param, "std="))
+    {
+      param += 4;
+
+      /* Assume + means C++ of some sort */
+      if (strchr (param, '+') != NULL)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gchar **
+load_stdcpp_includes (void)
+{
+  GPtrArray *ar = g_ptr_array_new ();
+  g_autofree gchar *stdout_buf = NULL;
+  g_autoptr(GSubprocessLauncher) launcher = NULL;
+  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) lines = NULL;
+  gboolean in_search_includes = FALSE;
+
+  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                        G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                        G_SUBPROCESS_FLAGS_STDERR_MERGE);
+  g_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
+  subprocess = g_subprocess_launcher_spawn (launcher,
+                                            &error,
+                                            "clang++", "-v", "-x", "c++", "-E", "-",
+                                            NULL);
+  if (subprocess == NULL)
+    goto skip_failure;
+
+  if (!g_subprocess_communicate_utf8 (subprocess, "", NULL, &stdout_buf, NULL, &error))
+    goto skip_failure;
+
+  lines = g_strsplit (stdout_buf, "\n", 0);
+
+  for (guint i = 0; lines[i] != NULL; i++)
+    {
+      if (g_str_equal (lines[i], "#include <...> search starts here:"))
+        {
+          in_search_includes = TRUE;
+          continue;
+        }
+
+      if (!g_ascii_isspace (lines[i][0]))
+        {
+          in_search_includes = FALSE;
+          continue;
+        }
+
+      if (in_search_includes)
+        g_ptr_array_add (ar, g_strdup_printf ("-I%s", g_strstrip (lines[i])));
+    }
+
+skip_failure:
+  g_ptr_array_add (ar, NULL);
+  return (gchar **)g_ptr_array_free (ar, FALSE);
+}
+
+static const gchar * const *
+get_stdcpp_includes (void)
+{
+  static gchar **stdcpp_includes;
+
+  if (g_once_init_enter (&stdcpp_includes))
+    g_once_init_leave (&stdcpp_includes, load_stdcpp_includes ());
+
+  return (const gchar * const *)stdcpp_includes;
+}
+
 static gchar **
 ide_clang_cook_flags (const gchar         *path,
                       const gchar * const *flags)
@@ -112,6 +196,7 @@ ide_clang_cook_flags (const gchar         *path,
   GPtrArray *cooked = g_ptr_array_new ();
   const gchar *llvm_flags = ide_clang_get_llvm_flags ();
   g_autofree gchar *include = NULL;
+  gboolean is_cplusplus = FALSE;
   guint pos;
 
   if (llvm_flags != NULL)
@@ -131,6 +216,8 @@ ide_clang_cook_flags (const gchar         *path,
         {
           g_ptr_array_add (cooked, g_strdup (flags[i]));
 
+          is_cplusplus |= is_cplusplus_param (flags[i]);
+
           if (g_strcmp0 (include, flags[i]) == 0)
             g_clear_pointer (&include, g_free);
         }
@@ -142,7 +229,16 @@ ide_clang_cook_flags (const gchar         *path,
    * somewhere else.
    */
   if (include != NULL)
-    g_ptr_array_insert (cooked, pos, g_steal_pointer (&include));
+    g_ptr_array_insert (cooked, pos++, g_steal_pointer (&include));
+
+  /* See if we need to add the C++ standard library */
+  if (is_cplusplus || ide_path_is_cpp_like (path))
+    {
+      const gchar * const *stdcpp_includes = get_stdcpp_includes ();
+
+      for (guint i = 0; stdcpp_includes[i] != NULL; i++)
+        g_ptr_array_insert (cooked, pos++, g_strdup (stdcpp_includes[i]));
+    }
 
   g_ptr_array_add (cooked, NULL);
 
