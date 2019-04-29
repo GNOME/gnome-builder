@@ -55,7 +55,7 @@ gbp_git_pipeline_addin_load (IdePipelineAddin *addin,
 
   submodule = gbp_git_submodule_stage_new (context);
   stage_id = ide_pipeline_attach (pipeline,
-                                  IDE_PIPELINE_PHASE_DOWNLOADS,
+                                  IDE_PIPELINE_PHASE_PREPARE | IDE_PIPELINE_PHASE_AFTER,
                                   100,
                                   IDE_PIPELINE_STAGE (submodule));
   ide_pipeline_addin_track (addin, stage_id);
