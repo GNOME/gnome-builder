@@ -9,6 +9,7 @@ libide_terminal_generated_headers = []
 
 libide_terminal_public_headers = [
   'ide-terminal-page.h',
+  'ide-terminal-launcher.h',
   'ide-terminal-search.h',
   'ide-terminal-surface.h',
   'ide-terminal-util.h',
@@ -32,6 +33,7 @@ libide_terminal_private_headers = [
 
 libide_terminal_public_sources = [
   'ide-terminal-page.c',
+  'ide-terminal-launcher.c',
   'ide-terminal-search.c',
   'ide-terminal-surface.c',
   'ide-terminal-util.c',

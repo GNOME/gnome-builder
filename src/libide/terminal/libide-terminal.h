@@ -29,6 +29,7 @@
 #define IDE_TERMINAL_INSIDE
 
 #include "ide-terminal.h"
+#include "ide-terminal-launcher.h"
 #include "ide-terminal-page.h"
 #include "ide-terminal-search.h"
 #include "ide-terminal-surface.h"
