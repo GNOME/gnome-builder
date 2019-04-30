@@ -110,10 +110,19 @@ new_terminal_activate (GSimpleAction *action,
   IdeSurface *surface;
   IdeRuntime *runtime = NULL;
   const gchar *name;
+  IdePage *current_page;
+  const gchar *uri = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+
+  /* If we are creating a new terminal while we already have a terminal
+   * focused, then try to copy some details from that terminal.
+   */
+  if ((current_page = ide_workspace_get_most_recent_page (self->workspace)) &&
+      IDE_IS_TERMINAL_PAGE (current_page))
+    uri = ide_terminal_page_get_current_directory_uri (IDE_TERMINAL_PAGE (current_page));
 
   name = g_action_get_name (G_ACTION (action));
 
@@ -163,7 +172,16 @@ new_terminal_activate (GSimpleAction *action,
     }
 
   if (cwd != NULL)
-    ide_terminal_launcher_set_cwd (launcher, cwd);
+    {
+      ide_terminal_launcher_set_cwd (launcher, cwd);
+    }
+  else if (uri != NULL)
+    {
+      g_autoptr(GFile) file = g_file_new_for_uri (uri);
+
+      if (g_file_is_native (file))
+        ide_terminal_launcher_set_cwd (launcher, g_file_peek_path (file));
+    }
 
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
                        "launcher", launcher,
