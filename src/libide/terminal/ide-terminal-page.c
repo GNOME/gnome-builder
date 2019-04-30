@@ -559,3 +559,11 @@ ide_terminal_page_set_launcher (IdeTerminalPage     *self,
         }
     }
 }
+
+const gchar *
+ide_terminal_page_get_current_directory_uri (IdeTerminalPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), NULL);
+
+  return vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal_top));
+}
