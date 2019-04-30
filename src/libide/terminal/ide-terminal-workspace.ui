@@ -25,6 +25,7 @@
             <property name="visible">true</property>
             <child>
               <object class="IdeTerminalPage">
+                <property name="respawn-on-exit">false</property>
                 <property name="visible">true</property>
               </object>
             </child>
