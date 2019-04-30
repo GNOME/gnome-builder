@@ -131,6 +131,11 @@ gbp_terminal_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (ide_terminal_page_parent_class)->realize (widget);
 
+  if (self->did_defered_setup_in_realize)
+    return;
+
+  self->did_defered_setup_in_realize = TRUE;
+
   self->last_respawn = g_get_monotonic_time ();
 
   if (self->pty == NULL)
