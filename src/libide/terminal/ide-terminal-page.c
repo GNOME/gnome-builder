@@ -38,16 +38,16 @@
 #include "ide-terminal-page-private.h"
 #include "ide-terminal-page-actions.h"
 
+#define FLAPPING_DURATION_USEC (G_USEC_PER_SEC / 20)
+
 G_DEFINE_TYPE (IdeTerminalPage, ide_terminal_page, IDE_TYPE_PAGE)
 
 enum {
   PROP_0,
-  PROP_CWD,
+  PROP_LAUNCHER,
   PROP_MANAGE_SPAWN,
+  PROP_RESPAWN_ON_EXIT,
   PROP_PTY,
-  PROP_RUNTIME,
-  PROP_RUN_ON_HOST,
-  PROP_USE_RUNNER,
   N_PROPS
 };
 
@@ -55,110 +55,6 @@ static GParamSpec *properties [N_PROPS];
 
 static void ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                                 VteTerminal     *terminal);
-static void gbp_terminal_respawn               (IdeTerminalPage *self,
-                                                VteTerminal     *terminal);
-
-static gboolean
-shell_supports_login (const gchar *shell)
-{
-  g_autofree gchar *name = NULL;
-
-  /* Shells that support --login */
-  static const gchar *supported[] = {
-    "bash",
-  };
-
-  if (shell == NULL)
-    return FALSE;
-
-  if (!(name = g_path_get_basename (shell)))
-    return FALSE;
-
-  for (guint i = 0; i < G_N_ELEMENTS (supported); i++)
-    {
-      if (g_str_equal (name, supported[i]))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-ide_terminal_page_wait_cb (GObject      *object,
-                           GAsyncResult *result,
-                           gpointer      user_data)
-{
-  IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  VteTerminal *terminal = user_data;
-  IdeTerminalPage *self;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (VTE_IS_TERMINAL (terminal));
-
-  if (!ide_subprocess_wait_finish (subprocess, result, &error))
-    {
-      g_warning ("%s", error->message);
-      IDE_GOTO (failure);
-    }
-
-  self = (IdeTerminalPage *)gtk_widget_get_ancestor (GTK_WIDGET (terminal), IDE_TYPE_TERMINAL_PAGE);
-  if (self == NULL)
-    IDE_GOTO (failure);
-
-  if (!dzl_gtk_widget_action (GTK_WIDGET (self), "frame", "close-page", NULL))
-    {
-      if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
-        gbp_terminal_respawn (self, terminal);
-    }
-
-failure:
-  g_clear_object (&terminal);
-
-  IDE_EXIT;
-}
-
-static void
-ide_terminal_page_run_cb (GObject      *object,
-                          GAsyncResult *result,
-                          gpointer      user_data)
-{
-  IdeRunner *runner = (IdeRunner *)object;
-  VteTerminal *terminal = user_data;
-  IdeTerminalPage *self;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUNNER (runner));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (VTE_IS_TERMINAL (terminal));
-
-  if (!ide_runner_run_finish (runner, result, &error))
-    {
-      g_warning ("%s", error->message);
-      IDE_GOTO (failure);
-    }
-
-  self = (IdeTerminalPage *)gtk_widget_get_ancestor (GTK_WIDGET (terminal), IDE_TYPE_TERMINAL_PAGE);
-  if (self == NULL)
-    IDE_GOTO (failure);
-
-  if (!dzl_gtk_widget_action (GTK_WIDGET (self), "frame", "close-page", NULL))
-    {
-      if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
-        gbp_terminal_respawn (self, terminal);
-    }
-
-failure:
-  ide_object_destroy (IDE_OBJECT (runner));
-  g_clear_object (&terminal);
-
-  IDE_EXIT;
-}
 
 static gboolean
 terminal_has_notification_signal (void)
@@ -174,175 +70,56 @@ terminal_has_notification_signal (void)
 }
 
 static void
-gbp_terminal_respawn (IdeTerminalPage *self,
-                      VteTerminal     *terminal)
+ide_terminal_page_spawn_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
 {
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GFile) workdir = NULL;
+  IdeTerminalLauncher *launcher = (IdeTerminalLauncher *)object;
+  g_autoptr(IdeTerminalPage) self = user_data;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *workpath = NULL;
-  g_autofree gchar *shell = NULL;
-  IdePipeline *pipeline = NULL;
-  IdeWorkbench *workbench;
-  IdeContext *context;
-  VtePty *pty = NULL;
   gint64 now;
-  int tty_fd = -1;
-  gint stdout_fd = -1;
-  gint stderr_fd = -1;
 
-  IDE_ENTRY;
-
+  g_assert (IDE_IS_TERMINAL_LAUNCHER (launcher));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
-  vte_terminal_reset (terminal, TRUE, TRUE);
+  if (!ide_terminal_launcher_spawn_finish (launcher, result, &error))
+    {
+      g_autofree gchar *format = NULL;
 
-  if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (self))))
-    IDE_EXIT;
+      format = g_strdup_printf ("%s: %s", _("Subprocess launcher failed"), error->message);
+      ide_terminal_page_feed (self, format);
+    }
 
-  /* Prevent flapping */
+  if (gtk_widget_in_destruction (GTK_WIDGET (self)))
+    return;
+
   now = g_get_monotonic_time ();
-  if ((now - self->last_respawn) < (G_USEC_PER_SEC / 10))
-    IDE_EXIT;
+
+  if (ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC)
+    {
+      ide_terminal_page_feed (self, _("Subprocess launcher failed to quickly, will not respawn."));
+      return;
+    }
+
+  if (!self->respawn_on_exit)
+    {
+      gtk_widget_destroy (GTK_WIDGET (self));
+      return;
+    }
+
+  g_clear_object (&self->pty);
+  vte_terminal_reset (VTE_TERMINAL (self->terminal_top), TRUE, TRUE);
+  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
+  vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
+
+  /* Spawn our terminal and wait for it to exit */
   self->last_respawn = now;
-
-  context = ide_widget_get_context (GTK_WIDGET (self));
-  workdir = ide_context_ref_workdir (context);
-  workpath = g_file_get_path (workdir);
-
-  if (ide_workbench_has_project (workbench))
-    {
-      IdeBuildManager *build_manager;
-
-      build_manager = ide_build_manager_from_context (context);
-      pipeline = ide_build_manager_get_pipeline (build_manager);
-    }
-
-  shell = g_strdup (ide_get_user_shell ());
-
-  pty = vte_terminal_pty_new_sync (terminal,
-                                   VTE_PTY_DEFAULT | VTE_PTY_NO_LASTLOG | VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP,
-                                   NULL,
-                                   &error);
-  if (pty == NULL)
-    IDE_GOTO (cleanup);
-
-  vte_terminal_set_pty (terminal, pty);
-
-  if (self->runtime != NULL &&
-      !ide_runtime_contains_program_in_path (self->runtime, shell, NULL))
-    {
-      g_free (shell);
-      shell = g_strdup ("/bin/bash");
-    }
-
-  /* they want to use the runner API, which means we spawn in the
-   * program mount namespace, etc.
-   */
-  if (self->runtime != NULL && self->use_runner)
-    {
-      g_autoptr(IdeSimpleBuildTarget) target = NULL;
-      g_autoptr(IdeRunner) runner = NULL;
-      const gchar *argv[] = { shell, NULL };
-
-
-      target = ide_simple_build_target_new (context);
-      ide_simple_build_target_set_argv (target, argv);
-      ide_simple_build_target_set_cwd (target, self->cwd ?: workpath);
-
-      runner = ide_runtime_create_runner (self->runtime, IDE_BUILD_TARGET (target));
-
-      if (runner != NULL)
-        {
-          IdeEnvironment *env = ide_runner_get_environment (runner);
-
-          ide_runner_set_pty (runner, pty);
-
-          ide_environment_setenv (env, "TERM", "xterm-256color");
-          ide_environment_setenv (env, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
-          ide_environment_setenv (env, "SHELL", shell);
-
-          if (pipeline != NULL)
-            {
-              ide_environment_setenv (env, "BUILDDIR", ide_pipeline_get_builddir (pipeline));
-              ide_environment_setenv (env, "SRCDIR", ide_pipeline_get_srcdir (pipeline));
-            }
-
-          ide_runner_run_async (runner,
-                                NULL,
-                                ide_terminal_page_run_cb,
-                                g_object_ref (terminal));
-          IDE_GOTO (cleanup);
-        }
-    }
-
-  if (-1 == (tty_fd = ide_vte_pty_create_slave (pty)))
-    IDE_GOTO (cleanup);
-
-
-  /* dup() is safe as it will inherit O_CLOEXEC */
-  if (-1 == (stdout_fd = dup (tty_fd)) || -1 == (stderr_fd = dup (tty_fd)))
-    IDE_GOTO (cleanup);
-
-  if (self->runtime != NULL)
-    launcher = ide_runtime_create_launcher (self->runtime, NULL);
-
-  if (launcher == NULL)
-    launcher = ide_subprocess_launcher_new (0);
-
-  ide_subprocess_launcher_set_flags (launcher, 0);
-  ide_subprocess_launcher_set_run_on_host (launcher, self->run_on_host);
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-  ide_subprocess_launcher_push_argv (launcher, shell);
-  if (shell_supports_login (shell))
-    ide_subprocess_launcher_push_argv (launcher, "--login");
-  ide_subprocess_launcher_take_stdin_fd (launcher, tty_fd);
-  ide_subprocess_launcher_take_stdout_fd (launcher, stdout_fd);
-  ide_subprocess_launcher_take_stderr_fd (launcher, stderr_fd);
-  ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
-  ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
-  ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
-
-  if (self->cwd != NULL)
-    ide_subprocess_launcher_set_cwd (launcher, self->cwd);
-  else
-    ide_subprocess_launcher_set_cwd (launcher, workpath);
-
-  if (pipeline != NULL)
-    {
-      ide_subprocess_launcher_setenv (launcher, "BUILDDIR", ide_pipeline_get_builddir (pipeline), TRUE);
-      ide_subprocess_launcher_setenv (launcher, "SRCDIR", ide_pipeline_get_srcdir (pipeline), TRUE);
-    }
-
-  tty_fd = -1;
-  stdout_fd = -1;
-  stderr_fd = -1;
-
-  if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
-    IDE_GOTO (cleanup);
-
-  ide_subprocess_wait_async (subprocess,
-                             NULL,
-                             ide_terminal_page_wait_cb,
-                             g_object_ref (terminal));
-
-cleanup:
-  if (tty_fd != -1)
-    close (tty_fd);
-
-  if (stdout_fd != -1)
-    close (stdout_fd);
-
-  if (stderr_fd != -1)
-    close (stderr_fd);
-
-  g_clear_object (&pty);
-
-  if (error != NULL)
-    g_warning ("%s", error->message);
-
-  IDE_EXIT;
+  ide_terminal_launcher_spawn_async (self->launcher,
+                                     self->pty,
+                                     NULL,
+                                     ide_terminal_page_spawn_cb,
+                                     g_object_ref (self));
 }
 
 static void
@@ -354,14 +131,30 @@ gbp_terminal_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (ide_terminal_page_parent_class)->realize (widget);
 
-  if (self->manage_spawn && !self->top_has_spawned)
+  self->last_respawn = g_get_monotonic_time ();
+
+  if (self->pty == NULL)
     {
-      self->top_has_spawned = TRUE;
-      gbp_terminal_respawn (self, VTE_TERMINAL (self->terminal_top));
+      g_autoptr(GError) error = NULL;
+
+      if (!(self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, &error)))
+        {
+          g_critical ("Failed to create PTY for terminal: %s", error->message);
+          return;
+        }
     }
 
-  if (!self->manage_spawn && self->pty != NULL)
-    vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
+  vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
+
+  if (!self->manage_spawn)
+    return;
+
+  /* Spawn our terminal and wait for it to exit */
+  ide_terminal_launcher_spawn_async (self->launcher,
+                                     self->pty,
+                                     NULL,
+                                     ide_terminal_page_spawn_cb,
+                                     g_object_ref (self));
 }
 
 static void
@@ -409,7 +202,7 @@ gbp_terminal_set_needs_attention (IdeTerminalPage *self,
       !gtk_widget_in_destruction (parent))
     {
       if (!gtk_widget_in_destruction (GTK_WIDGET (self->terminal_top)))
-        self->top_has_needs_attention = !!needs_attention;
+        self->needs_attention = !!needs_attention;
 
       gtk_container_child_set (GTK_CONTAINER (parent), GTK_WIDGET (self),
                                "needs-attention", needs_attention,
@@ -438,7 +231,7 @@ focus_in_event_cb (VteTerminal     *terminal,
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
-  self->top_has_needs_attention = FALSE;
+  self->needs_attention = FALSE;
   gbp_terminal_set_needs_attention (self, FALSE);
   gtk_revealer_set_reveal_child (self->search_revealer_top, FALSE);
 
@@ -456,7 +249,7 @@ window_title_changed_cb (VteTerminal     *terminal,
 
   title = vte_terminal_get_window_title (VTE_TERMINAL (self->terminal_top));
 
-  if (title == NULL)
+  if (title == NULL || title[0] == '\0')
     title = _("Untitled terminal");
 
   ide_page_set_title (IDE_PAGE (self), title);
@@ -544,11 +337,10 @@ ide_terminal_page_finalize (GObject *object)
 {
   IdeTerminalPage *self = IDE_TERMINAL_PAGE (object);
 
+  g_clear_object (&self->launcher);
   g_clear_object (&self->save_as_file_top);
-  g_clear_pointer (&self->cwd, g_free);
   g_clear_pointer (&self->selection_buffer, g_free);
   g_clear_object (&self->pty);
-  g_clear_object (&self->runtime);
 
   G_OBJECT_CLASS (ide_terminal_page_parent_class)->finalize (object);
 }
@@ -563,6 +355,10 @@ ide_terminal_page_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_LAUNCHER:
+      g_value_set_object (value, self->launcher);
+      break;
+
     case PROP_MANAGE_SPAWN:
       g_value_set_boolean (value, self->manage_spawn);
       break;
@@ -571,16 +367,8 @@ ide_terminal_page_get_property (GObject    *object,
       g_value_set_object (value, self->pty);
       break;
 
-    case PROP_RUNTIME:
-      g_value_set_object (value, self->runtime);
-      break;
-
-    case PROP_RUN_ON_HOST:
-      g_value_set_boolean (value, self->run_on_host);
-      break;
-
-    case PROP_USE_RUNNER:
-      g_value_set_boolean (value, self->use_runner);
+    case PROP_RESPAWN_ON_EXIT:
+      g_value_set_boolean (value, self->respawn_on_exit);
       break;
 
     default:
@@ -598,10 +386,6 @@ ide_terminal_page_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CWD:
-      self->cwd = g_value_dup_string (value);
-      break;
-
     case PROP_MANAGE_SPAWN:
       self->manage_spawn = g_value_get_boolean (value);
       break;
@@ -610,16 +394,12 @@ ide_terminal_page_set_property (GObject      *object,
       self->pty = g_value_dup_object (value);
       break;
 
-    case PROP_RUNTIME:
-      self->runtime = g_value_dup_object (value);
+    case PROP_RESPAWN_ON_EXIT:
+      self->respawn_on_exit = g_value_get_boolean (value);
       break;
 
-    case PROP_RUN_ON_HOST:
-      self->run_on_host = g_value_get_boolean (value);
-      break;
-
-    case PROP_USE_RUNNER:
-      self->use_runner = g_value_get_boolean (value);
+    case PROP_LAUNCHER:
+      ide_terminal_page_set_launcher (self, g_value_get_object (value));
       break;
 
     default:
@@ -650,17 +430,17 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, top_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_overlay_top);
 
-  properties [PROP_CWD] =
-    g_param_spec_string ("cwd",
-                         "CWD",
-                         "The directory to spawn the terminal in",
-                         NULL,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
   properties [PROP_MANAGE_SPAWN] =
     g_param_spec_boolean ("manage-spawn",
                           "Manage Spawn",
                           "Manage Spawn",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_RESPAWN_ON_EXIT] =
+    g_param_spec_boolean ("respawn-on-exit",
+                          "Respawn on Exit",
+                          "Respawn on Exit",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
@@ -671,26 +451,12 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
                          VTE_TYPE_PTY,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_RUNTIME] =
-    g_param_spec_object ("runtime",
-                         "Runtime",
-                         "The runtime to use for spawning",
-                         IDE_TYPE_RUNTIME,
+  properties [PROP_LAUNCHER] =
+    g_param_spec_object ("launcher",
+                         "Launcher",
+                         "The launcher to use for spawning",
+                         IDE_TYPE_TERMINAL_LAUNCHER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_RUN_ON_HOST] =
-    g_param_spec_boolean ("run-on-host",
-                          "Run on Host",
-                          "If the process should be spawned on the host",
-                          TRUE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_USE_RUNNER] =
-    g_param_spec_boolean ("use-runner",
-                          "Use Runner",
-                          "If we should use the runner interface and build target",
-                          FALSE,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -700,7 +466,8 @@ ide_terminal_page_init (IdeTerminalPage *self)
 {
   GtkStyleContext *style_context;
 
-  self->run_on_host = TRUE;
+  self->launcher = ide_terminal_launcher_new ();
+  self->respawn_on_exit = TRUE;
   self->manage_spawn = TRUE;
 
   self->tsearch = g_object_new (IDE_TYPE_TERMINAL_SEARCH,
@@ -741,13 +508,7 @@ ide_terminal_page_set_pty (IdeTerminalPage *self,
   g_return_if_fail (IDE_IS_TERMINAL_PAGE (self));
   g_return_if_fail (VTE_IS_PTY (pty));
 
-  if (self->manage_spawn)
-    {
-      g_warning ("Cannot set pty when IdeTerminalPage manages tty");
-      return;
-    }
-
-  if (self->terminal_top)
+  if (g_set_object (&self->pty, pty))
     {
       vte_terminal_reset (VTE_TERMINAL (self->terminal_top), TRUE, TRUE);
       vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), pty);
@@ -762,4 +523,25 @@ ide_terminal_page_feed (IdeTerminalPage *self,
 
   if (self->terminal_top != NULL)
     vte_terminal_feed (VTE_TERMINAL (self->terminal_top), message, -1);
+}
+
+void
+ide_terminal_page_set_launcher (IdeTerminalPage     *self,
+                                IdeTerminalLauncher *launcher)
+{
+  g_return_if_fail (IDE_IS_TERMINAL_PAGE (self));
+  g_return_if_fail (!launcher || IDE_IS_TERMINAL_LAUNCHER (launcher));
+
+  if (g_set_object (&self->launcher, launcher))
+    {
+      if (launcher != NULL)
+        {
+          const gchar *title = ide_terminal_launcher_get_title (launcher);
+          ide_page_set_title (IDE_PAGE (self), title);
+        }
+      else
+        {
+          self->manage_spawn = FALSE;
+        }
+    }
 }

@@ -28,6 +28,8 @@
 #include <libide-gui.h>
 #include <vte/vte.h>
 
+#include "ide-terminal-launcher.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_PAGE (ide_terminal_page_get_type())
@@ -35,11 +37,14 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeTerminalPage, ide_terminal_page, IDE, TERMINAL_PAGE, IdePage)
 
+IDE_AVAILABLE_IN_3_34
+void ide_terminal_page_set_launcher (IdeTerminalPage     *self,
+                                     IdeTerminalLauncher *launcher);
 IDE_AVAILABLE_IN_3_32
-void ide_terminal_page_set_pty (IdeTerminalPage *self,
-                                VtePty          *pty);
+void ide_terminal_page_set_pty      (IdeTerminalPage     *self,
+                                     VtePty              *pty);
 IDE_AVAILABLE_IN_3_32
-void ide_terminal_page_feed    (IdeTerminalPage *self,
-                                const gchar     *message);
+void ide_terminal_page_feed         (IdeTerminalPage     *self,
+                                     const gchar         *message);
 
 G_END_DECLS

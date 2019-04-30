@@ -30,37 +30,23 @@ struct _IdeTerminalPage
 {
   IdePage              parent_instance;
 
-  /*
-   * If we are spawning a process in a runtime instead of the
-   * host, then we will have a runtime pointer here.
-   */
-  IdeRuntime          *runtime;
-
-  GtkOverlay          *terminal_overlay_top;
-
-  GtkRevealer         *search_revealer_top;
-
-  IdeTerminal         *terminal_top;
-
-  GtkScrollbar        *top_scrollbar;
-
-  IdeTerminalSearch   *tsearch;
-
+  IdeTerminalLauncher *launcher;
   GFile               *save_as_file_top;
-
   gchar               *selection_buffer;
-
-  gchar               *cwd;
-
   VtePty              *pty;
+
+  /* Template widgets */
+  GtkOverlay          *terminal_overlay_top;
+  GtkRevealer         *search_revealer_top;
+  IdeTerminal         *terminal_top;
+  GtkScrollbar        *top_scrollbar;
+  IdeTerminalSearch   *tsearch;
 
   gint64               last_respawn;
 
   guint                manage_spawn : 1;
-  guint                top_has_spawned : 1;
-  guint                top_has_needs_attention : 1;
-  guint                run_on_host : 1;
-  guint                use_runner : 1;
+  guint                respawn_on_exit : 1;
+  guint                needs_attention : 1;
 };
 
 G_END_DECLS

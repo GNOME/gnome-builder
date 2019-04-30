@@ -104,13 +104,12 @@ new_terminal_activate (GSimpleAction *action,
                        gpointer       user_data)
 {
   GbpTerminalWorkspaceAddin *self = user_data;
+  g_autoptr(IdeTerminalLauncher) launcher = NULL;
   g_autofree gchar *cwd = NULL;
   IdeTerminalPage *page;
   IdeSurface *surface;
   IdeRuntime *runtime = NULL;
   const gchar *name;
-  gboolean run_on_host = TRUE;
-  gboolean use_runner = FALSE;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_SIMPLE_ACTION (action));
@@ -122,14 +121,20 @@ new_terminal_activate (GSimpleAction *action,
     {
       runtime = find_runtime (self->workspace);
       cwd = find_builddir (self->workspace);
+      launcher = ide_terminal_launcher_new_for_runtime (runtime);
     }
   else if (ide_str_equal0 (name, "debug-terminal"))
-    run_on_host = FALSE;
-
-  if (ide_str_equal0 (name, "new-terminal-in-runner"))
+    {
+      launcher = ide_terminal_launcher_new_for_debug ();
+    }
+  else if (ide_str_equal0 (name, "new-terminal-in-runner"))
     {
       runtime = find_runtime (self->workspace);
-      use_runner = TRUE;
+      launcher = ide_terminal_launcher_new_for_runner (runtime);
+    }
+  else
+    {
+      launcher = ide_terminal_launcher_new ();
     }
 
   if (!(surface = ide_workspace_get_surface_by_name (self->workspace, "editor")) &&
@@ -156,11 +161,12 @@ new_terminal_activate (GSimpleAction *action,
         }
     }
 
+  if (cwd != NULL)
+    ide_terminal_launcher_set_cwd (launcher, cwd);
+
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                       "cwd", cwd,
-                       "run-on-host", run_on_host,
-                       "runtime", runtime,
-                       "use-runner", use_runner,
+                       "launcher", launcher,
+                       "respawn-on-exit", FALSE,
                        "visible", TRUE,
                        NULL);
   gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (page));
@@ -170,8 +176,8 @@ new_terminal_activate (GSimpleAction *action,
 
 static void
 on_run_manager_run (GbpTerminalWorkspaceAddin *self,
-                    IdeRunner                *runner,
-                    IdeRunManager            *run_manager)
+                    IdeRunner                 *runner,
+                    IdeRunManager             *run_manager)
 {
   IdeEnvironment *env;
   VtePty *pty = NULL;
@@ -379,6 +385,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
       gtk_container_add (GTK_CONTAINER (utilities), GTK_WIDGET (self->bottom_dock));
 
       self->bottom = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                                   "respawn-on-exit", TRUE,
                                    "visible", TRUE,
                                    NULL);
       g_signal_connect (self->bottom,
