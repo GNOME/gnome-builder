@@ -111,6 +111,26 @@ ide_notifications_button_bind_model (IdeNotificationsButton *self,
 }
 
 static void
+ide_notifications_button_notify_has_progress_cb (IdeNotificationsButton *self,
+                                                 GParamSpec             *pspec,
+                                                 IdeNotifications       *notifications)
+{
+  g_assert (IDE_IS_NOTIFICATIONS_BUTTON (self));
+  g_assert (IDE_IS_NOTIFICATIONS (notifications));
+
+  if (ide_notifications_get_has_progress (notifications))
+    {
+      if (!gtk_widget_get_visible (GTK_WIDGET (self)))
+        dzl_gtk_widget_show_with_fade (GTK_WIDGET (self));
+    }
+  else
+    {
+      if (gtk_widget_get_visible (GTK_WIDGET (self)))
+        dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self));
+    }
+}
+
+static void
 ide_notifications_button_context_set_cb (GtkWidget  *widget,
                                          IdeContext *context)
 {
@@ -125,10 +145,15 @@ ide_notifications_button_context_set_cb (GtkWidget  *widget,
 
   g_object_bind_property (notifications, "progress", self, "progress",
                           G_BINDING_SYNC_CREATE);
-  g_object_bind_property (notifications, "has-progress", self, "visible",
-                          G_BINDING_SYNC_CREATE);
+  g_signal_connect_object (notifications,
+                           "notify::has-progress",
+                           G_CALLBACK (ide_notifications_button_notify_has_progress_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_object_bind_property (notifications, "progress-is-imprecise", self, "show-progress",
                           G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
+
+  ide_notifications_button_notify_has_progress_cb (self, NULL, notifications);
 }
 
 static void
