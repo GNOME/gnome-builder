@@ -627,12 +627,18 @@ ide_terminal_launcher_set_title (IdeTerminalLauncher *self,
  * Returns: (transfer full): a newly created #IdeTerminalLauncher
  */
 IdeTerminalLauncher *
-ide_terminal_launcher_new (void)
+ide_terminal_launcher_new (IdeContext *context)
 {
   IdeTerminalLauncher *self;
+  g_autoptr(GFile) workdir = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  workdir = ide_context_ref_workdir (context);
 
   self = g_object_new (IDE_TYPE_TERMINAL_LAUNCHER, NULL);
   self->kind = LAUNCHER_KIND_HOST;
+  self->cwd = g_file_get_path (workdir);
 
   return g_steal_pointer (&self);
 }

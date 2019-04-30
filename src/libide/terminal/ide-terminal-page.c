@@ -333,6 +333,19 @@ ide_terminal_page_connect_terminal (IdeTerminalPage *self,
 }
 
 static void
+ide_terminal_page_context_set (GtkWidget  *widget,
+                               IdeContext *context)
+{
+  IdeTerminalPage *self = (IdeTerminalPage *)widget;
+
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  if (self->launcher == NULL && context != NULL)
+    self->launcher = ide_terminal_launcher_new (context);
+}
+
+static void
 ide_terminal_page_finalize (GObject *object)
 {
   IdeTerminalPage *self = IDE_TERMINAL_PAGE (object);
@@ -466,7 +479,6 @@ ide_terminal_page_init (IdeTerminalPage *self)
 {
   GtkStyleContext *style_context;
 
-  self->launcher = ide_terminal_launcher_new ();
   self->respawn_on_exit = TRUE;
   self->manage_spawn = TRUE;
 
@@ -499,6 +511,8 @@ ide_terminal_page_init (IdeTerminalPage *self)
   style_context_changed (style_context, self);
 
   gtk_widget_set_can_focus (GTK_WIDGET (self->terminal_top), TRUE);
+
+  ide_widget_set_context_handler (self, ide_terminal_page_context_set);
 }
 
 void

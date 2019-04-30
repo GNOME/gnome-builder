@@ -134,7 +134,8 @@ new_terminal_activate (GSimpleAction *action,
     }
   else
     {
-      launcher = ide_terminal_launcher_new ();
+      IdeContext *context = ide_widget_get_context (GTK_WIDGET (self->workspace));
+      launcher = ide_terminal_launcher_new (context);
     }
 
   if (!(surface = ide_workspace_get_surface_by_name (self->workspace, "editor")) &&

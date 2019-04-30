@@ -30,7 +30,7 @@ IDE_AVAILABLE_IN_3_34
 G_DECLARE_FINAL_TYPE (IdeTerminalLauncher, ide_terminal_launcher, IDE, TERMINAL_LAUNCHER, GObject)
 
 IDE_AVAILABLE_IN_3_34
-IdeTerminalLauncher *ide_terminal_launcher_new             (void);
+IdeTerminalLauncher *ide_terminal_launcher_new             (IdeContext           *context);
 IDE_AVAILABLE_IN_3_34
 IdeTerminalLauncher *ide_terminal_launcher_new_for_debug   (void);
 IDE_AVAILABLE_IN_3_34
