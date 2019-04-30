@@ -110,7 +110,11 @@ class FindOtherFile(GObject.Object, Ide.WorkspaceAddin):
 
     def present_results(self, results, name):
         headerbar = self.workspace.get_header_bar()
-        search = Dazzle.gtk_widget_find_child_typed(headerbar, Ide.SearchEntry)
+
+        button = Dazzle.gtk_widget_find_child_typed(headerbar, Ide.SearchButton)
+        button.grab_focus()
+
+        search = button.get_entry()
         search.set_text('')
         search.set_model(results)
         search.grab_focus()
