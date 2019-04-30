@@ -73,7 +73,10 @@ ide_simple_build_target_init (IdeSimpleBuildTarget *self)
 IdeSimpleBuildTarget *
 ide_simple_build_target_new (IdeContext *context)
 {
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+
   return g_object_new (IDE_TYPE_SIMPLE_BUILD_TARGET,
+                       "parent", context,
                        NULL);
 }
 
