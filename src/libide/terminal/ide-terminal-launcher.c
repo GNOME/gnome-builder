@@ -45,6 +45,7 @@ struct _IdeTerminalLauncher
   gchar        *shell;
   gchar        *title;
   IdeRuntime   *runtime;
+  IdeContext   *context;
   LauncherKind  kind;
 };
 
@@ -226,6 +227,16 @@ spawn_host_launcher (IdeTerminalLauncher *self,
                                     FALSE);
 
   ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
+
+  if (self->context != NULL)
+    {
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (self->context);
+
+      ide_subprocess_launcher_setenv (launcher,
+                                      "SRCDIR",
+                                      g_file_peek_path (workdir),
+                                      FALSE);
+    }
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
@@ -639,6 +650,7 @@ ide_terminal_launcher_new (IdeContext *context)
   self = g_object_new (IDE_TYPE_TERMINAL_LAUNCHER, NULL);
   self->kind = LAUNCHER_KIND_HOST;
   self->cwd = g_file_get_path (workdir);
+  self->context = g_object_ref (context);
 
   return g_steal_pointer (&self);
 }
