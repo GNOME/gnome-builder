@@ -26,9 +26,11 @@
 
 struct _IdeTerminalWorkspace
 {
-  IdeWorkspace  parent_instance;
+  IdeWorkspace        parent_instance;
 
-  IdeHeaderBar *header_bar;
+  IdeHeaderBar       *header_bar;
+  DzlShortcutTooltip *new_shortcut;
+  DzlShortcutTooltip *search_shortcut;
 };
 
 G_DEFINE_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE_TYPE_WORKSPACE)
@@ -74,6 +76,8 @@ ide_terminal_workspace_class_init (IdeTerminalWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalWorkspace, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalWorkspace, new_shortcut);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalWorkspace, search_shortcut);
 }
 
 static void
