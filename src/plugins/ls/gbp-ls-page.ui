@@ -6,7 +6,7 @@
         <property name="vexpand">true</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkTreeView" id="tree_view">
+          <object class="GbpLsTreeView" id="tree_view">
             <property name="vexpand">true</property>
             <property name="headers-visible">true</property>
             <property name="visible">true</property>

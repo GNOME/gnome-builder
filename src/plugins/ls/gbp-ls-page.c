@@ -27,6 +27,7 @@
 
 #include "gbp-ls-model.h"
 #include "gbp-ls-page.h"
+#include "gbp-ls-tree-view.h"
 
 struct _GbpLsPage
 {
@@ -246,6 +247,8 @@ gbp_ls_page_class_init (GbpLsPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpLsPage, size_column);
   gtk_widget_class_bind_template_child (widget_class, GbpLsPage, scroller);
   gtk_widget_class_bind_template_child (widget_class, GbpLsPage, tree_view);
+
+  g_type_ensure (GBP_TYPE_LS_TREE_VIEW);
 }
 
 static void
