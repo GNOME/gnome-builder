@@ -127,10 +127,12 @@ src/libide/sourceview/ide-source-view-capture.c
 src/libide/sourceview/ide-source-view-mode.c
 src/libide/sourceview/ide-source-view.c
 src/libide/terminal/gtk/menus.ui
+src/libide/terminal/ide-terminal-launcher.c
 src/libide/terminal/ide-terminal-page-actions.c
 src/libide/terminal/ide-terminal-page.c
 src/libide/terminal/ide-terminal-search.c
 src/libide/terminal/ide-terminal-search.ui
+src/libide/terminal/ide-terminal-workspace.ui
 src/libide/terminal/ide-terminal.c
 src/libide/tree/ide-tree-model.c
 src/libide/tree/ide-tree-node.c
