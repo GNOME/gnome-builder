@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTerminalPopover" parent="GtkPopover">
+    <child>
+      <object class="GtkBox">
+        <property name="margin">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="placeholder-text" translatable="yes">Search runtimes</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-width">true</property>
+            <property name="propagate-natural-height">true</property>
+            <property name="max-content-height">350</property>
+            <property name="max-content-width">400</property>
+            <property name="min-content-width">400</property>
+            <property name="shadow-type">in</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="list_box">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

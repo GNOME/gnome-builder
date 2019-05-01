@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTerminalPopoverRow" parent="GtkListBoxRow">
+    <child>
+      <object class="GtkBox">
+        <property name="margin">6</property>
+        <property name="spacing">6</property>
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="ellipsize">end</property>
+            <property name="visible">true</property>
+            <property name="use-markup">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage" id="check">
+            <property name="visible">true</property>
+            <property name="pixel-size">16</property>
+            <property name="height-request">16</property>
+            <property name="width-request">16</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

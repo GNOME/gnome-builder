@@ -27,6 +27,8 @@ install_headers(libide_terminal_public_headers, subdir: libide_terminal_header_s
 libide_terminal_private_headers = [
   'ide-terminal-page-actions.h',
   'ide-terminal-page-private.h',
+  'ide-terminal-popover.h',
+  'ide-terminal-popover-row.h',
   'ide-terminal-private.h',
   'ide-terminal-search-private.h',
 ]
@@ -43,6 +45,8 @@ libide_terminal_public_sources = [
 
 libide_terminal_private_sources = [
   'ide-terminal-page-actions.c',
+  'ide-terminal-popover.c',
+  'ide-terminal-popover-row.c',
 ]
 
 #
