@@ -130,6 +130,7 @@ src/libide/terminal/gtk/menus.ui
 src/libide/terminal/ide-terminal-launcher.c
 src/libide/terminal/ide-terminal-page-actions.c
 src/libide/terminal/ide-terminal-page.c
+src/libide/terminal/ide-terminal-popover.ui
 src/libide/terminal/ide-terminal-search.c
 src/libide/terminal/ide-terminal-search.ui
 src/libide/terminal/ide-terminal-workspace.ui
