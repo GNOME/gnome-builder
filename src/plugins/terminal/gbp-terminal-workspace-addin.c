@@ -32,15 +32,17 @@
 
 struct _GbpTerminalWorkspaceAddin
 {
-  GObject          parent_instance;
+  GObject             parent_instance;
 
-  IdeWorkspace    *workspace;
+  IdeWorkspace       *workspace;
 
-  DzlDockWidget   *bottom_dock;
-  IdeTerminalPage *bottom;
+  DzlDockWidget      *bottom_dock;
+  IdeTerminalPage    *bottom;
 
-  DzlDockWidget   *run_panel;
-  IdeTerminalPage *run_terminal;
+  DzlDockWidget      *run_panel;
+  IdeTerminalPage    *run_terminal;
+
+  IdeTerminalPopover *popover;
 };
 
 static void
@@ -143,8 +145,16 @@ new_terminal_activate (GSimpleAction *action,
     }
   else
     {
-      IdeContext *context = ide_widget_get_context (GTK_WIDGET (self->workspace));
-      launcher = ide_terminal_launcher_new (context);
+      if (self->popover != NULL)
+        {
+          runtime = ide_terminal_popover_get_runtime (self->popover);
+          launcher = ide_terminal_launcher_new_for_runtime (runtime);
+        }
+      else
+        {
+          IdeContext *context = ide_widget_get_context (GTK_WIDGET (self->workspace));
+          launcher = ide_terminal_launcher_new (context);
+        }
     }
 
   if (!(surface = ide_workspace_get_surface_by_name (self->workspace, "editor")) &&
@@ -432,6 +442,55 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    G_CONNECT_SWAPPED);
         }
     }
+
+  /* Add terminal popover button */
+  if (IDE_IS_TERMINAL_WORKSPACE (workspace))
+    {
+      DzlMenuButton *menu_button;
+      IdeHeaderBar *header_bar;
+      GtkButton *button;
+      GtkBox *box;
+
+      box = g_object_new (GTK_TYPE_BOX,
+                          "orientation", GTK_ORIENTATION_HORIZONTAL,
+                          "hexpand", FALSE,
+                          "visible", TRUE,
+                          NULL);
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (box), "linked");
+
+      button = g_object_new (GTK_TYPE_BUTTON,
+                             "focus-on-click", FALSE,
+                             "action-name", "win.new-terminal",
+                             "child", g_object_new (GTK_TYPE_IMAGE,
+                                                    "icon-name", "tab-new-symbolic",
+                                                    "visible", TRUE,
+                                                    NULL),
+                             "visible", TRUE,
+                             NULL);
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "image-button");
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
+
+      header_bar = ide_workspace_get_header_bar (workspace);
+      ide_header_bar_add_primary (header_bar, GTK_WIDGET (box));
+
+      self->popover = g_object_new (IDE_TYPE_TERMINAL_POPOVER,
+                                    NULL);
+      g_signal_connect (self->popover,
+                        "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &self->popover);
+
+      menu_button = g_object_new (DZL_TYPE_MENU_BUTTON,
+                                  "focus-on-click", FALSE,
+                                  "icon-name", "pan-down-symbolic",
+                                  "popover", self->popover,
+                                  "show-arrow", FALSE,
+                                  "visible", TRUE,
+                                  NULL);
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (menu_button), "image-button");
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (menu_button), "run-arrow-button");
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (menu_button));
+    }
 }
 
 static void
@@ -463,6 +522,9 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                             G_CALLBACK (on_run_manager_stopped),
                                             self);
     }
+
+  if (self->popover != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->popover));
 
   for (guint i = 0; i < G_N_ELEMENTS (terminal_actions); i++)
     g_action_map_remove_action (G_ACTION_MAP (workspace), terminal_actions[i].name);
