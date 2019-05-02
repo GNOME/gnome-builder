@@ -306,7 +306,11 @@ gbp_terminal_page_create_split (IdePage *page)
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
   return g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "close-on-exit", self->close_on_exit,
                        "launcher", self->launcher,
+                       "manage-spawn", self->manage_spawn,
+                       "pty", self->manage_spawn ? NULL : self->pty,
+                       "respawn-on-exit", self->respawn_on_exit,
                        "visible", TRUE,
                        NULL);
 }
