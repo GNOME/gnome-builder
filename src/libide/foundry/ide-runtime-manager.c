@@ -135,7 +135,7 @@ ide_runtime_manager_initable_init (GInitable     *initable,
                                      ide_runtime_manager_extension_added,
                                      self);
 
-  host = ide_runtime_new ("host", _("Use host operating system"));
+  host = ide_runtime_new ("host", _("Host Operating System"));
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (host));
 
   ide_runtime_manager_add (self, host);
