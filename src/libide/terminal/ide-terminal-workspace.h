@@ -34,4 +34,7 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE, TERMINAL_WORKSPACE, IdeWorkspace)
 
+IDE_AVAILABLE_IN_3_34
+IdeTerminalWorkspace *ide_terminal_workspace_new (IdeApplication *application);
+
 G_END_DECLS

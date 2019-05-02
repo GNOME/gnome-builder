@@ -92,3 +92,13 @@ ide_terminal_workspace_init (IdeTerminalWorkspace *self)
 
   ide_widget_set_context_handler (self, ide_terminal_workspace_context_set_cb);
 }
+
+IdeTerminalWorkspace *
+ide_terminal_workspace_new (IdeApplication *application)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (application), NULL);
+
+  return g_object_new (IDE_TYPE_TERMINAL_WORKSPACE,
+                       "application", application,
+                       NULL);
+}
