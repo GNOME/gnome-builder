@@ -99,9 +99,7 @@ copy_envvars (gpointer instance)
   static const gchar *copy_env[] = {
     "COLORTERM",
     "DESKTOP_SESSION",
-    "DISPLAY",
     "LANG",
-    "SSH_AUTH_SOCK",
     "WAYLAND_DISPLAY",
     "XDG_CURRENT_DESKTOP",
     "XDG_SEAT",
