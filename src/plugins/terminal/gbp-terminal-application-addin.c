@@ -38,15 +38,47 @@ gbp_terminal_application_addin_handle_command_line (IdeApplicationAddin     *add
                                                     IdeApplication          *application,
                                                     GApplicationCommandLine *cmdline)
 {
+  g_autoptr(IdeWorkbench) workbench = NULL;
+  IdeApplication *app = (IdeApplication *)application;
+  g_autoptr(GFile) workdir = NULL;
+  g_auto(GStrv) argv = NULL;
   GVariantDict *options;
+  gint argc;
 
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
   g_assert (IDE_IS_APPLICATION (application));
   g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
 
+  argv = g_application_command_line_get_arguments (cmdline, &argc);
+
   if ((options = g_application_command_line_get_options_dict (cmdline)) &&
       g_variant_dict_contains (options, "terminal"))
-    ide_application_set_workspace_type (application, IDE_TYPE_TERMINAL_WORKSPACE);
+    {
+      ide_application_set_workspace_type (application, IDE_TYPE_TERMINAL_WORKSPACE);
+
+      /* Just open the editor workspace if no files were specified */
+      if (argc < 2)
+        {
+          IdeTerminalWorkspace *workspace;
+          IdeContext *context;
+
+          workdir = g_application_command_line_create_file_for_arg (cmdline, ".");
+          ide_application_set_command_line_handled (application, cmdline, TRUE);
+
+          workbench = ide_workbench_new ();
+          ide_application_add_workbench (app, workbench);
+
+          context = ide_workbench_get_context (workbench);
+          ide_context_set_workdir (context, workdir);
+
+          workspace = ide_terminal_workspace_new (application);
+          ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+          ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+
+          return;
+        }
+    }
 }
 
 static void
@@ -56,8 +88,6 @@ gbp_terminal_application_addin_add_option_entries (IdeApplicationAddin *addin,
   g_assert (GBP_IS_TERMINAL_APPLICATION_ADDIN (addin));
   g_assert (G_IS_APPLICATION (app));
 
-#if 0
-  /* Disabled for now */
   g_application_add_main_option (G_APPLICATION (app),
                                  "terminal",
                                  't',
@@ -65,7 +95,6 @@ gbp_terminal_application_addin_add_option_entries (IdeApplicationAddin *addin,
                                  G_OPTION_ARG_NONE,
                                  _("Use terminal interface"),
                                  NULL);
-#endif
 }
 
 static void
