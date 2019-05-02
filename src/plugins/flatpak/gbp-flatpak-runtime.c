@@ -800,6 +800,7 @@ gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
   g_autofree gchar *id = NULL;
   g_autofree gchar *display_name = NULL;
   g_autofree gchar *triplet = NULL;
+  g_autofree gchar *runtime_name = NULL;
   g_autoptr(IdeTriplet) triplet_object = NULL;
   g_autoptr(GString) category = NULL;
   const gchar *name;
@@ -856,6 +857,8 @@ gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
   else
     display_name = g_strdup_printf (_("%s <b>%s</b> <span fgalpha='36044'>%s</span>"), name, branch, arch);
 
+  runtime_name = g_strdup_printf ("%s %s", _("Flatpak"), triplet);
+
   /*
    * If we have an SDK that is different from this runtime, we need to locate
    * the SDK deploy-dir instead (for things like includes, pkg-config, etc).
@@ -868,7 +871,7 @@ gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
                        "triplet", triplet_object,
                        "branch", branch,
                        "category", category->str,
-                       "name", triplet,
+                       "name", runtime_name,
                        "deploy-dir", deploy_dir,
                        "display-name", display_name,
                        "platform", name,
