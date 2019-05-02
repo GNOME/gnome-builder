@@ -100,6 +100,9 @@ void                   ide_subprocess_launcher_overlay_environment  (IdeSubproce
                                                                      IdeEnvironment         *environment);
 IDE_AVAILABLE_IN_3_32
 const gchar * const   *ide_subprocess_launcher_get_argv             (IdeSubprocessLauncher  *self);
+IDE_AVAILABLE_IN_3_34
+const gchar           *ide_subprocess_launcher_get_arg              (IdeSubprocessLauncher  *self,
+                                                                     guint                   pos);
 IDE_AVAILABLE_IN_3_32
 void                   ide_subprocess_launcher_push_args            (IdeSubprocessLauncher  *self,
                                                                      const gchar * const    *args);

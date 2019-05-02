@@ -1159,3 +1159,17 @@ ide_subprocess_launcher_get_max_fd (IdeSubprocessLauncher *self)
 
   return max_fd;
 }
+
+const gchar *
+ide_subprocess_launcher_get_arg (IdeSubprocessLauncher *self,
+                                 guint                  pos)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
+
+  if (pos < priv->argv->len)
+    return g_ptr_array_index (priv->argv, pos);
+
+  return NULL;
+}
