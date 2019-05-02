@@ -71,7 +71,7 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 
   argv = ide_subprocess_launcher_get_argv (launcher);
 
-  if (!ide_str_equal0 (argv[0], "podman"))
+  if (!g_strv_contains (argv, "podman"))
     {
       const gchar * const *environ;
       const gchar *cwd;
