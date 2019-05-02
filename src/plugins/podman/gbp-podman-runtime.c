@@ -113,6 +113,7 @@ GbpPodmanRuntime *
 gbp_podman_runtime_new (JsonObject *object)
 {
   g_autofree gchar *full_id = NULL;
+  g_autofree gchar *name = NULL;
   GbpPodmanRuntime *self;
   const gchar *id;
   const gchar *names;
@@ -122,6 +123,7 @@ gbp_podman_runtime_new (JsonObject *object)
   id = json_object_get_string_member (object, "ID");
   names = json_object_get_string_member (object, "Names");
   full_id = g_strdup_printf ("podman:%s", id);
+  name = g_strdup_printf ("%s %s", _("Podman"), names);
 
   g_return_val_if_fail (id != NULL, NULL);
   g_return_val_if_fail (names != NULL, NULL);
