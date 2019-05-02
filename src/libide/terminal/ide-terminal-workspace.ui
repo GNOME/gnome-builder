@@ -9,42 +9,6 @@
         <property name="show-fullscreen-button">true</property>
         <property name="menu-id">ide-terminal-workspace-menu</property>
         <property name="visible">true</property>
-        <child type="primary">
-          <object class="GtkBox">
-            <property name="hexpand">false</property>
-            <property name="visible">true</property>
-            <style>
-              <class name="linked"/>
-            </style>
-            <child>
-              <object class="GtkButton" id="new_button">
-                <property name="action-name">win.new-terminal</property>
-                <property name="visible">true</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="margin-end">3</property>
-                    <property name="margin-start">3</property>
-                    <property name="icon-name">tab-new-symbolic</property>
-                    <property name="visible">true</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="DzlMenuButton">
-                <property name="focus-on-click">false</property>
-                <property name="show-arrow">false</property>
-                <property name="icon-name">pan-down-symbolic</property>
-                <property name="popover">terminal_popover</property>
-                <property name="visible">true</property>
-                <style>
-                  <class name="image-button"/>
-                  <class name="run-arrow-button"/>
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
         <child type="secondary">
           <object class="IdeSearchButton" id="search_button">
             <property name="hexpand">false</property>
@@ -73,17 +37,9 @@
       </object>
     </child>
   </template>
-  <object class="DzlShortcutTooltip" id="new_shortcut">
-    <property name="title" translatable="yes">Open new terminal</property>
-    <property name="command-id">org.gnome.builder.workspace.new-terminal</property>
-    <property name="widget">new_button</property>
-  </object>
   <object class="DzlShortcutTooltip" id="search_shortcut">
     <property name="title" translatable="yes">Search your project</property>
     <property name="command-id">org.gnome.builder.workspace.global-search</property>
     <property name="widget">search_button</property>
-  </object>
-  <object class="IdeTerminalPopover" id="terminal_popover">
-    <property name="visible">true</property>
   </object>
 </interface>

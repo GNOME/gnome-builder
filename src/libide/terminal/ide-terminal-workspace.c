@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include "ide-terminal-popover.h"
 #include "ide-terminal-workspace.h"
 
 struct _IdeTerminalWorkspace
@@ -30,9 +29,7 @@ struct _IdeTerminalWorkspace
   IdeWorkspace        parent_instance;
 
   IdeHeaderBar       *header_bar;
-  DzlShortcutTooltip *new_shortcut;
   DzlShortcutTooltip *search_shortcut;
-  IdeTerminalPopover *terminal_popover;
 };
 
 G_DEFINE_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE_TYPE_WORKSPACE)
@@ -78,11 +75,7 @@ ide_terminal_workspace_class_init (IdeTerminalWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalWorkspace, header_bar);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalWorkspace, new_shortcut);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalWorkspace, search_shortcut);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalWorkspace, terminal_popover);
-
-  g_type_ensure (IDE_TYPE_TERMINAL_POPOVER);
 }
 
 static void
