@@ -146,8 +146,6 @@ ide_terminal_popover_context_set_cb (GtkWidget  *widget,
 {
   IdeTerminalPopover *self = (IdeTerminalPopover *)widget;
   IdeRuntimeManager *runtime_manager;
-  IdeConfigManager *config_manager;
-  IdeConfig *config;
 
   g_assert (IDE_IS_TERMINAL_POPOVER (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
@@ -155,14 +153,21 @@ ide_terminal_popover_context_set_cb (GtkWidget  *widget,
   if (context == NULL)
     return;
 
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
   runtime_manager = ide_runtime_manager_from_context (context);
 
-  if (config != NULL)
+  if (ide_context_has_project (context))
     {
-      g_free (self->selected);
-      self->selected = g_strdup (ide_config_get_runtime_id (config));
+      IdeConfigManager *config_manager;
+      IdeConfig *config;
+
+      config_manager = ide_config_manager_from_context (context);
+      config = ide_config_manager_get_current (config_manager);
+
+      if (config != NULL)
+        {
+          g_free (self->selected);
+          self->selected = g_strdup (ide_config_get_runtime_id (config));
+        }
     }
 
   g_clear_object (&self->filter);
