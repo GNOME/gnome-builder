@@ -161,12 +161,27 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 {
   IdeSubprocessLauncher *ret;
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
+  g_autoptr(IdeContext) context = NULL;
+  const gchar *runtime_id;
 
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
 
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  runtime_id = ide_runtime_get_id (runtime);
+  g_return_val_if_fail (g_str_has_prefix (runtime_id, "flatpak:"), NULL);
+
   ret = gbp_flatpak_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
-  if (ret != NULL)
+  if (ret != NULL && !ide_context_has_project (context))
+    {
+      ide_subprocess_launcher_set_cwd (ret, g_get_home_dir ());
+      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
+      gbp_flatpak_subprocess_launcher_use_run (GBP_FLATPAK_SUBPROCESS_LAUNCHER (ret),
+                                               runtime_id + strlen ("flatpak:"));
+    }
+  else if (ret != NULL)
     {
       g_autofree gchar *build_path = NULL;
       g_autofree gchar *ccache_dir = NULL;
@@ -175,11 +190,9 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       const gchar *project_path = NULL;
       const gchar * const *build_args = NULL;
       g_autoptr(IdeConfigManager) config_manager = NULL;
-      g_autoptr(IdeContext) context = NULL;
       IdeConfig *configuration;
       IdeVcs *vcs;
 
-      context = ide_object_ref_context (IDE_OBJECT (self));
       config_manager = ide_config_manager_ref_from_context (context);
       configuration = ide_config_manager_ref_current (config_manager);
 

@@ -28,6 +28,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakSubprocessLauncher, gbp_flatpak_subprocess_launcher, GBP, FLATPAK_SUBPROCESS_LAUNCHER, IdeSubprocessLauncher)
 
-IdeSubprocessLauncher *gbp_flatpak_subprocess_launcher_new (GSubprocessFlags flags);
+IdeSubprocessLauncher *gbp_flatpak_subprocess_launcher_new     (GSubprocessFlags              flags);
+void                   gbp_flatpak_subprocess_launcher_use_run (GbpFlatpakSubprocessLauncher *self,
+                                                                const gchar                  *ref);
 
 G_END_DECLS
