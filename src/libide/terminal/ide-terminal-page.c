@@ -114,7 +114,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
   if (!self->respawn_on_exit)
     {
       if (self->close_on_exit)
-        gdk_threads_add_idle_full (G_PRIORITY_DEFAULT,
+        gdk_threads_add_idle_full (G_PRIORITY_LOW + 1000,
                                    (GSourceFunc) destroy_widget_in_idle,
                                    g_object_ref (self),
                                    g_object_unref);
