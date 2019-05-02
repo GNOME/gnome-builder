@@ -20,14 +20,25 @@
 
 #pragma once
 
+#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
+# error "Only <libide-terminal.h> can be included directly."
+#endif
+
 #include <gtk/gtk.h>
+
+#include <libide-core.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_POPOVER (ide_terminal_popover_get_type())
 
+IDE_AVAILABLE_IN_3_34
 G_DECLARE_FINAL_TYPE (IdeTerminalPopover, ide_terminal_popover, IDE, TERMINAL_POPOVER, GtkPopover)
 
-GtkWidget *ide_terminal_popover_new (void);
+IDE_AVAILABLE_IN_3_34
+GtkWidget  *ide_terminal_popover_new         (void);
+IDE_AVAILABLE_IN_3_34
+IdeRuntime *ide_terminal_popover_get_runtime (IdeTerminalPopover *self);
 
 G_END_DECLS

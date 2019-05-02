@@ -211,3 +211,29 @@ ide_terminal_popover_new (void)
 {
   return g_object_new (IDE_TYPE_TERMINAL_POPOVER, NULL);
 }
+
+/**
+ * ide_terminal_popover_get_runtime:
+ * @self: a #IdeTerminalPopover
+ *
+ *
+ *
+ * Returns: (transfer none): an #IdeRuntime or %NULL
+ *
+ * Since: 3.32
+ */
+IdeRuntime *
+ide_terminal_popover_get_runtime (IdeTerminalPopover *self)
+{
+  IdeRuntimeManager *runtime_manager;
+  IdeContext *context;
+
+  g_return_val_if_fail (IDE_IS_TERMINAL_POPOVER (self), NULL);
+
+  if (self->selected != NULL &&
+      (context = ide_widget_get_context (GTK_WIDGET (self))) &&
+      (runtime_manager = ide_runtime_manager_from_context (context)))
+    return ide_runtime_manager_get_runtime (runtime_manager, self->selected);
+
+  return NULL;
+}
