@@ -38,6 +38,7 @@ typedef struct
 {
   gchar *id;
   gchar *category;
+  gchar *name;
   gchar *display_name;
 } IdeRuntimePrivate;
 
@@ -48,6 +49,7 @@ enum {
   PROP_ID,
   PROP_CATEGORY,
   PROP_DISPLAY_NAME,
+  PROP_NAME,
   N_PROPS
 };
 
@@ -292,6 +294,7 @@ ide_runtime_finalize (GObject *object)
 
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->display_name, g_free);
+  g_clear_pointer (&priv->name, g_free);
 
   G_OBJECT_CLASS (ide_runtime_parent_class)->finalize (object);
 }
@@ -316,6 +319,10 @@ ide_runtime_get_property (GObject    *object,
 
     case PROP_DISPLAY_NAME:
       g_value_set_string (value, ide_runtime_get_display_name (self));
+      break;
+
+    case PROP_NAME:
+      g_value_set_string (value, ide_runtime_get_name (self));
       break;
 
     default:
@@ -343,6 +350,10 @@ ide_runtime_set_property (GObject      *object,
 
     case PROP_DISPLAY_NAME:
       ide_runtime_set_display_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_NAME:
+      ide_runtime_set_name (self, g_value_get_string (value));
       break;
 
     default:
@@ -386,6 +397,13 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
     g_param_spec_string ("display-name",
                          "Display Name",
                          "Display Name",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_NAME] =
+    g_param_spec_string ("name",
+                         "Name",
+                         "Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
@@ -455,13 +473,39 @@ ide_runtime_set_category (IdeRuntime  *self,
 }
 
 const gchar *
+ide_runtime_get_name (IdeRuntime *self)
+{
+  IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+
+  return priv->name ? priv->name : priv->display_name;
+}
+
+void
+ide_runtime_set_name (IdeRuntime  *self,
+                      const gchar *name)
+{
+  IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNTIME (self));
+
+  if (g_strcmp0 (name, priv->name) != 0)
+    {
+      g_free (priv->name);
+      priv->name = g_strdup (name);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
+    }
+}
+
+const gchar *
 ide_runtime_get_display_name (IdeRuntime *self)
 {
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
 
-  return priv->display_name;
+  return priv->display_name ? priv->display_name : priv->name;
 }
 
 void

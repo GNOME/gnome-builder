@@ -103,6 +103,11 @@ IDE_AVAILABLE_IN_3_32
 void                    ide_runtime_set_display_name         (IdeRuntime      *self,
                                                               const gchar     *display_name);
 IDE_AVAILABLE_IN_3_32
+const gchar            *ide_runtime_get_name                 (IdeRuntime      *self);
+IDE_AVAILABLE_IN_3_32
+void                    ide_runtime_set_name                 (IdeRuntime      *self,
+                                                              const gchar     *name);
+IDE_AVAILABLE_IN_3_32
 GFile                  *ide_runtime_translate_file           (IdeRuntime      *self,
                                                               GFile           *file);
 IDE_AVAILABLE_IN_3_32
