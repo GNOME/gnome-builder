@@ -70,6 +70,14 @@ terminal_has_notification_signal (void)
                               FALSE);
 }
 
+static gboolean
+destroy_widget_in_idle (GtkWidget *widget)
+{
+  g_assert (GTK_IS_WIDGET (widget));
+  gtk_widget_destroy (widget);
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_terminal_page_spawn_cb (GObject      *object,
                             GAsyncResult *result,
@@ -106,7 +114,10 @@ ide_terminal_page_spawn_cb (GObject      *object,
   if (!self->respawn_on_exit)
     {
       if (self->close_on_exit)
-        gtk_widget_destroy (GTK_WIDGET (self));
+        gdk_threads_add_idle_full (G_PRIORITY_DEFAULT,
+                                   (GSourceFunc) destroy_widget_in_idle,
+                                   g_object_ref (self),
+                                   g_object_unref);
       return;
     }
 
