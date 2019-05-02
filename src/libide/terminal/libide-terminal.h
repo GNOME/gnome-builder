@@ -31,6 +31,7 @@
 #include "ide-terminal.h"
 #include "ide-terminal-launcher.h"
 #include "ide-terminal-page.h"
+#include "ide-terminal-popover.h"
 #include "ide-terminal-search.h"
 #include "ide-terminal-surface.h"
 #include "ide-terminal-util.h"
