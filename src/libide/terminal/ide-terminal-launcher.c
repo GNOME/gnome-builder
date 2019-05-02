@@ -218,6 +218,8 @@ spawn_host_launcher (IdeTerminalLauncher *self,
   ide_subprocess_launcher_take_stdout_fd (launcher, dup (pty_fd));
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (pty_fd));
 
+  g_assert (ide_subprocess_launcher_get_needs_tty (launcher));
+
   for (guint i = 0; i < G_N_ELEMENTS (default_environment); i++)
     ide_subprocess_launcher_setenv (launcher,
                                     default_environment[i].key,
@@ -288,6 +290,8 @@ spawn_runtime_launcher (IdeTerminalLauncher *self,
   ide_subprocess_launcher_take_stdin_fd (launcher, dup (pty_fd));
   ide_subprocess_launcher_take_stdout_fd (launcher, dup (pty_fd));
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (pty_fd));
+
+  g_assert (ide_subprocess_launcher_get_needs_tty (launcher));
 
   for (guint i = 0; i < G_N_ELEMENTS (default_environment); i++)
     ide_subprocess_launcher_setenv (launcher,
