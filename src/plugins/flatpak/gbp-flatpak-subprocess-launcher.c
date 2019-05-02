@@ -141,8 +141,6 @@ apply_env:
       ide_subprocess_launcher_setenv (launcher, "PATH", NULL, TRUE);
     }
 
-  g_print ("%s\n", g_strjoinv (" ", (gchar **)ide_subprocess_launcher_get_argv (launcher)));
-
   ret = IDE_SUBPROCESS_LAUNCHER_CLASS (gbp_flatpak_subprocess_launcher_parent_class)->spawn (launcher, cancellable, error);
 
   IDE_RETURN (ret);
