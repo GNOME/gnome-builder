@@ -112,6 +112,7 @@ new_terminal_activate (GSimpleAction *action,
   IdeSurface *surface;
   IdeRuntime *runtime = NULL;
   const gchar *name;
+  GtkWidget *current_frame = NULL;
   IdePage *current_page;
   const gchar *uri = NULL;
 
@@ -122,9 +123,12 @@ new_terminal_activate (GSimpleAction *action,
   /* If we are creating a new terminal while we already have a terminal
    * focused, then try to copy some details from that terminal.
    */
-  if ((current_page = ide_workspace_get_most_recent_page (self->workspace)) &&
-      IDE_IS_TERMINAL_PAGE (current_page))
-    uri = ide_terminal_page_get_current_directory_uri (IDE_TERMINAL_PAGE (current_page));
+  if ((current_page = ide_workspace_get_most_recent_page (self->workspace)))
+    {
+      if (IDE_IS_TERMINAL_PAGE (current_page))
+        uri = ide_terminal_page_get_current_directory_uri (IDE_TERMINAL_PAGE (current_page));
+      current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
+    }
 
   name = g_action_get_name (G_ACTION (action));
 
@@ -198,7 +202,11 @@ new_terminal_activate (GSimpleAction *action,
                        "respawn-on-exit", FALSE,
                        "visible", TRUE,
                        NULL);
-  gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (page));
+
+  if (current_frame != NULL)
+    gtk_container_add (GTK_CONTAINER (current_frame), GTK_WIDGET (page));
+  else
+    gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (page));
 
   ide_widget_reveal_and_grab (GTK_WIDGET (page));
 }
