@@ -44,6 +44,7 @@ G_DEFINE_TYPE (IdeTerminalPage, ide_terminal_page, IDE_TYPE_PAGE)
 
 enum {
   PROP_0,
+  PROP_CLOSE_ON_EXIT,
   PROP_LAUNCHER,
   PROP_MANAGE_SPAWN,
   PROP_RESPAWN_ON_EXIT,
@@ -104,7 +105,8 @@ ide_terminal_page_spawn_cb (GObject      *object,
 
   if (!self->respawn_on_exit)
     {
-      gtk_widget_destroy (GTK_WIDGET (self));
+      if (self->close_on_exit)
+        gtk_widget_destroy (GTK_WIDGET (self));
       return;
     }
 
@@ -288,9 +290,12 @@ style_context_changed (GtkStyleContext *style_context,
 static IdePage *
 gbp_terminal_page_create_split (IdePage *page)
 {
-  g_assert (IDE_IS_TERMINAL_PAGE (page));
+  IdeTerminalPage *self = (IdeTerminalPage *)page;
+
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
 
   return g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "launcher", self->launcher,
                        "visible", TRUE,
                        NULL);
 }
@@ -373,6 +378,10 @@ ide_terminal_page_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CLOSE_ON_EXIT:
+      g_value_set_boolean (value, self->close_on_exit);
+      break;
+
     case PROP_LAUNCHER:
       g_value_set_object (value, self->launcher);
       break;
@@ -404,6 +413,10 @@ ide_terminal_page_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CLOSE_ON_EXIT:
+      self->close_on_exit = g_value_get_boolean (value);
+      break;
+
     case PROP_MANAGE_SPAWN:
       self->manage_spawn = g_value_get_boolean (value);
       break;
@@ -448,6 +461,13 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, top_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_overlay_top);
 
+  properties [PROP_CLOSE_ON_EXIT] =
+    g_param_spec_boolean ("close-on-exit",
+                          "Close on Exit",
+                          "Close on Exit",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_MANAGE_SPAWN] =
     g_param_spec_boolean ("manage-spawn",
                           "Manage Spawn",
@@ -484,6 +504,7 @@ ide_terminal_page_init (IdeTerminalPage *self)
 {
   GtkStyleContext *style_context;
 
+  self->close_on_exit = TRUE;
   self->respawn_on_exit = TRUE;
   self->manage_spawn = TRUE;
 

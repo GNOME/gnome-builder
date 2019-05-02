@@ -47,6 +47,7 @@ struct _IdeTerminalPage
   guint                did_defered_setup_in_realize : 1;
   guint                manage_spawn : 1;
   guint                respawn_on_exit : 1;
+  guint                close_on_exit : 1;
   guint                needs_attention : 1;
 };
 
