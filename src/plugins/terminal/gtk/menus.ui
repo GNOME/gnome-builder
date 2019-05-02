@@ -26,4 +26,21 @@
       </item>
     </section>
   </menu>
+  <menu id="ide-terminal-page-document-menu">
+    <section id="terminal-section">
+      <attribute name="label" translatable="yes">Terminal</attribute>
+      <item>
+        <attribute name="id">terminal-open-in-new-frame</attribute>
+        <attribute name="label" translatable="yes">Open in New Frame</attribute>
+        <attribute name="action">frame.open-in-new-frame</attribute>
+        <attribute name="target" type="s">""</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Split</attribute>
+        <attribute name="action">frame.split-page</attribute>
+        <attribute name="target" type="s">""</attribute>
+        <attribute name="verb-icon-name">builder-split-tab-symbolic</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
