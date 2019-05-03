@@ -138,5 +138,8 @@ IDE_AVAILABLE_IN_3_32
 gboolean               ide_subprocess_launcher_get_needs_tty        (IdeSubprocessLauncher  *self);
 IDE_AVAILABLE_IN_3_34
 gint                   ide_subprocess_launcher_get_max_fd           (IdeSubprocessLauncher  *self);
+IDE_AVAILABLE_IN_3_34
+void                   ide_subprocess_launcher_join_args_for_sh_c   (IdeSubprocessLauncher  *self,
+                                                                     guint                   start_pos);
 
 G_END_DECLS

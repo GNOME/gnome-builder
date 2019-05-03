@@ -1173,3 +1173,31 @@ ide_subprocess_launcher_get_arg (IdeSubprocessLauncher *self,
 
   return NULL;
 }
+
+void
+ide_subprocess_launcher_join_args_for_sh_c (IdeSubprocessLauncher *self,
+                                            guint                  start_pos)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  const gchar * const *argv;
+  GString *str;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+  g_return_if_fail (start_pos < priv->argv->len - 1);
+
+  str = g_string_new (NULL);
+  argv = ide_subprocess_launcher_get_argv (self);
+
+  for (guint i = start_pos; argv[i] != NULL; i++)
+    {
+      g_autofree gchar *quoted_string = g_shell_quote (argv[i]);
+
+      if (i > 0)
+        g_string_append_c (str, ' ');
+      g_string_append (str, quoted_string);
+    }
+
+  g_ptr_array_remove_range (priv->argv, start_pos, priv->argv->len - start_pos);
+  g_ptr_array_add (priv->argv, g_string_free (g_steal_pointer (&str), FALSE));
+  g_ptr_array_add (priv->argv, NULL);
+}
