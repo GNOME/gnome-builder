@@ -5,6 +5,5 @@ Copyright=Copyright © 2019 Christian Hergert
 Depends=buildui;
 Description=Provides support for podman containers
 Embedded=_gbp_podman_register_types
-Hidden=true
 Module=podman
 Name=Podman
