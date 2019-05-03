@@ -101,5 +101,14 @@ void       ide_g_file_walk_with_ignore              (GFile                *direc
                                                      GCancellable         *cancellable,
                                                      IdeFileWalkCallback   callback,
                                                      gpointer              callback_data);
+IDE_AVAILABLE_IN_3_34
+void       ide_g_file_find_in_ancestors_async       (GFile                *directory,
+                                                     const gchar          *name,
+                                                     GCancellable         *cancellable,
+                                                     GAsyncReadyCallback   callback,
+                                                     gpointer              user_data);
+IDE_AVAILABLE_IN_3_34
+GFile     *ide_g_file_find_in_ancestors_finish      (GAsyncResult         *result,
+                                                     GError              **error);
 
 G_END_DECLS

@@ -941,3 +941,81 @@ _ide_g_file_readlink (GFile *file)
 
   return g_object_ref (file);
 }
+
+static void
+find_in_ancestors_worker (IdeTask      *task,
+                          gpointer      source_object,
+                          gpointer      task_data,
+                          GCancellable *cancellable)
+{
+  const gchar *name = task_data;
+  GFile *directory = (GFile *)source_object;
+  GFile *current = NULL;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (G_IS_FILE (directory));
+  g_assert (name != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  current = g_object_ref (directory);
+
+  while (current != NULL)
+    {
+      g_autoptr(GFile) target = g_file_get_child (current, name);
+      g_autoptr(GFile) tmp = NULL;
+
+      if (g_file_query_exists (target, cancellable))
+        {
+          ide_task_return_pointer (task, g_steal_pointer (&target), g_object_unref);
+          goto cleanup;
+        }
+
+      tmp = g_steal_pointer (&current);
+      current = g_file_get_parent (tmp);
+    }
+
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate file \"%s\" in ancestry",
+                             name);
+
+cleanup:
+  g_clear_object (&current);
+}
+
+void
+ide_g_file_find_in_ancestors_async (GFile               *directory,
+                                    const gchar         *name,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  g_return_if_fail (G_IS_FILE (directory));
+  g_return_if_fail (name != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (directory, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_g_file_find_in_ancestors_async);
+  ide_task_set_task_data (task, g_strdup (name), g_free);
+  ide_task_run_in_thread (task, find_in_ancestors_worker);
+}
+
+/**
+ * ide_g_file_find_in_ancestors_finish:
+ *
+ * Returns: (transfer full): a #GFile if successful; otherwise %NULL
+ *   and @error is et.
+ *
+ * Since: 3.34
+ */
+GFile *
+ide_g_file_find_in_ancestors_finish (GAsyncResult  *result,
+                                     GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
