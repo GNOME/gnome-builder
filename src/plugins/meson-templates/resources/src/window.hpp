@@ -5,15 +5,19 @@
 #include <gtkmm/builder.h>
 #include <gtkmm/headerbar.h>
 #include <gtkmm/label.h>
-#include <gtkmm/window.h>
+#include <gtkmm/applicationwindow.h>
 
-class {{Prefix}}Window : public Gtk::Window
+class {{Prefix}}Window : public Gtk::ApplicationWindow
 {
 public:
-	{{Prefix}}Window();
+  // Due to convention of using Gtk::Builder::get_widget_derived()
+  // constructor of the class should look like this. You can read
+  // more about it in the reference.
+	{{Prefix}}Window(BaseObjectType* cobject,
+      const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
+  static {{Prefix}}Window* create();
 private:
-	Gtk::HeaderBar *headerbar;
-	Gtk::Label *label;
-	Glib::RefPtr<Gtk::Builder> builder;
+	Glib::RefPtr<Gtk::Builder> m_refBuilder;
+	Gtk::Label* m_pLabel;
 };

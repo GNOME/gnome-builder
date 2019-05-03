@@ -9,10 +9,8 @@ on_activate (Glib::RefPtr<Gtk::Application> app)
 	Gtk::Window *window = app->get_active_window();
 
 	if (!window) {
-		window = new {{Prefix}}Window();
+		window = {{Prefix}}Window::create();
 		window->property_application() = app;
-		window->property_default_width() = 600;
-		window->property_default_height() = 300;
 		app->add_window(*window);
 	}
 
