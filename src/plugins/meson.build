@@ -116,6 +116,7 @@ subdir('terminal')
 subdir('testui')
 subdir('todo')
 subdir('trim-spaces')
+subdir('vagrant')
 subdir('valgrind')
 subdir('vcsui')
 subdir('vim')
@@ -183,6 +184,7 @@ status += [
   'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
   'Todo .................. : @0@'.format(get_option('plugin_todo')),
   'Vala Pack ............. : @0@'.format(get_option('plugin_vala')),
+  'Vagrant ............... : @0@'.format(get_option('plugin_vagrant')),
   'Valgrind .............. : @0@'.format(get_option('plugin_valgrind')),
   'Waf ................... : @0@'.format(get_option('plugin_waf')),
   'Word Completion ....... : @0@'.format(get_option('plugin_words')),

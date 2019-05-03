@@ -362,6 +362,7 @@ src/plugins/testui/gbp-test-output-panel.ui
 src/plugins/testui/gbp-test-tree-addin.c
 src/plugins/todo/gbp-todo-panel.c
 src/plugins/todo/gbp-todo-workspace-addin.c
+src/plugins/vagrant/gbp-vagrant-runtime-provider.c
 src/plugins/vala-pack/ide-vala-completion-item.vala
 src/plugins/vala-pack/ide-vala-preferences-addin.vala
 src/plugins/valgrind/gtk/menus.ui

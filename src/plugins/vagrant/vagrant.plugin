@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2019 Christian Hergert
+Depends=buildui;
+Description=Provides integration with vagrant
+Embedded=_gbp_vagrant_register_types
+Module=vagrant
+Name=Vagrant
