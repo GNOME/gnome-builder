@@ -89,7 +89,9 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   g_autoptr(IdeTask) task = NULL;
   IdeWorkspace *workspace;
   IdeSurface *surface;
+  GtkWidget *current_frame;
   GbpLsPage *view;
+  IdePage *current_page;
   LocateView locate = { 0 };
 
   g_assert (GBP_IS_LS_WORKBENCH_ADDIN (self));
@@ -114,11 +116,18 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
       return;
     }
 
+  current_page = ide_workspace_get_most_recent_page (workspace);
+  current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
+
   view = g_object_new (GBP_TYPE_LS_PAGE,
                        "close-on-activate", TRUE,
                        "visible", TRUE,
                        NULL);
-  gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (view));
+  if (current_frame != NULL)
+    gtk_container_add (GTK_CONTAINER (current_frame), GTK_WIDGET (view));
+  else
+    gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (view));
+  ide_widget_reveal_and_grab (GTK_WIDGET (view));
   gbp_ls_page_set_directory (view, file);
 
   ide_task_return_boolean (task, TRUE);
