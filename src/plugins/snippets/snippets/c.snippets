@@ -93,6 +93,10 @@ snippet Include
 snippet Classname
 - scope c, chdr
 	${$filename|stripsuffix|functify|camelize} $0
+snippet _Classname
+- scope c, chdr
+- desc Like Classname, but with _ prefix
+	_${$filename|stripsuffix|functify|camelize}
 snippet CLASS_NAME
 - scope c, chdr
 	${$filename|stripsuffix|functify|upper} (${1})$0
