@@ -10,10 +10,8 @@ on_activate (Glib::RefPtr<Gtk::Application> app)
 	static std::unique_ptr<Gtk::Window> window;
 
 	if (!window) {
-		window = std::make_unique<{{Prefix}}Window>();
+		window = {{Prefix}}Window::create();
 		window->property_application() = app;
-		window->property_default_width() = 600;
-		window->property_default_height() = 300;
 		app->add_window(*window);
 	}
 
