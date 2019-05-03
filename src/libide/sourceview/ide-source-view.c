@@ -2202,9 +2202,9 @@ ide_source_view_key_release_event (GtkWidget   *widget,
           ide_completion_is_visible (priv->completion))
         {
           if (gtk_widget_get_opacity (GTK_WIDGET (display)) == 1.0)
-            gtk_widget_set_opacity (GTK_WIDGET (display), 0.1);
+            dzl_object_animate (display, DZL_ANIMATION_LINEAR, 250, NULL, "opacity", 0.1, NULL);
           else
-            gtk_widget_set_opacity (GTK_WIDGET (display), 1.0);
+            dzl_object_animate (display, DZL_ANIMATION_LINEAR, 250, NULL, "opacity", 1.0, NULL);
         }
 
       priv->did_ctrl_opacity = FALSE;
