@@ -502,10 +502,17 @@ const gchar *
 ide_runtime_get_display_name (IdeRuntime *self)
 {
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
+  gchar *ret;
 
   g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
 
-  return priv->display_name ? priv->display_name : priv->name;
+  if (!(ret = priv->display_name))
+    {
+      if (!(ret = priv->name))
+        ret = priv->id;
+    }
+
+  return ret;
 }
 
 void
@@ -515,7 +522,6 @@ ide_runtime_set_display_name (IdeRuntime  *self,
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_RUNTIME (self));
-  g_return_if_fail (display_name != NULL);
 
   if (g_strcmp0 (display_name, priv->display_name) != 0)
     {
