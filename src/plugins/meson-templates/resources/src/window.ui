@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+	<requires lib="gtk+" version="3.20"/>
 {{if language == "c++"}}
-  <object class="GtkApplicationWindow" id="appwindow">
+	<object class="GtkApplicationWindow" id="appwindow">
 {{else}}
-  <template class="{{PreFix}}Window" parent="GtkApplicationWindow">
+	<template class="{{PreFix}}Window" parent="GtkApplicationWindow">
 {{end}}
-    <property name="default-width">600</property>
-    <property name="default-height">300</property>
-    <child type="titlebar">
-    {{if language == "javascript"}}
-  <object class="GtkHeaderBar" id="headerBar">
-    {{else}}
-  <object class="GtkHeaderBar" id="header_bar">
-    {{end}}
-    <property name="visible">True</property>
-        <property name="show-close-button">True</property>
-        <property name="title">Hello, World!</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label">
-        <property name="label">Hello, World!</property>
-        <property name="visible">True</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-          <attribute name="scale" value="2"/>
-        </attributes>
-      </object>
-    </child>
+		<property name="default-width">600</property>
+		<property name="default-height">300</property>
+		<child type="titlebar">
+		{{if language == "javascript"}}
+	<object class="GtkHeaderBar" id="headerBar">
+		{{else}}
+	<object class="GtkHeaderBar" id="header_bar">
+		{{end}}
+		<property name="visible">True</property>
+				<property name="show-close-button">True</property>
+				<property name="title">Hello, World!</property>
+			</object>
+		</child>
+		<child>
+			<object class="GtkLabel" id="label">
+				<property name="label">Hello, World!</property>
+				<property name="visible">True</property>
+				<attributes>
+					<attribute name="weight" value="bold"/>
+					<attribute name="scale" value="2"/>
+				</attributes>
+			</object>
+		</child>
 {{if language == "c++"}}
-  </object>
+	</object>
 {{else}}
-  </template>
+	</template>
 {{end}}
 </interface>
