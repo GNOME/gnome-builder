@@ -23,25 +23,38 @@
 #include "config.h"
 
 #include <libide-vcs.h>
+#include <string.h>
 
 #include "gbp-git-branch.h"
 
 struct _GbpGitBranch
 {
   GObject parent_instance;
-  gchar *name;
+  gchar *id;
 };
+
+static gchar *
+gbp_git_branch_get_id (IdeVcsBranch *branch)
+{
+  return g_strdup (GBP_GIT_BRANCH (branch)->id);
+}
 
 static gchar *
 gbp_git_branch_get_name (IdeVcsBranch *branch)
 {
-  return g_strdup (GBP_GIT_BRANCH (branch)->name);
+  const gchar *id = GBP_GIT_BRANCH (branch)->id;
+
+  if (id && g_str_has_prefix (id, "refs/heads/"))
+    id += strlen ("refs/heads/");
+
+  return g_strdup (id);
 }
 
 static void
 vcs_branch_iface_init (IdeVcsBranchInterface *iface)
 {
   iface->get_name = gbp_git_branch_get_name;
+  iface->get_id = gbp_git_branch_get_id;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpGitBranch, gbp_git_branch, G_TYPE_OBJECT,
@@ -52,7 +65,7 @@ gbp_git_branch_finalize (GObject *object)
 {
   GbpGitBranch *self = (GbpGitBranch *)object;
 
-  g_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->id, g_free);
 
   G_OBJECT_CLASS (gbp_git_branch_parent_class)->finalize (object);
 }
@@ -71,12 +84,12 @@ gbp_git_branch_init (GbpGitBranch *self)
 }
 
 GbpGitBranch *
-gbp_git_branch_new (const gchar *name)
+gbp_git_branch_new (const gchar *id)
 {
   GbpGitBranch *self;
 
   self = g_object_new (GBP_TYPE_GIT_BRANCH, NULL);
-  self->name = g_strdup (name);
+  self->id = g_strdup (id);
 
   return g_steal_pointer (&self);
 }

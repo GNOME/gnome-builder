@@ -143,7 +143,7 @@ gbp_git_vcs_switch_branch_async (IdeVcs              *vcs,
 {
   GbpGitVcs *self = (GbpGitVcs *)vcs;
   g_autoptr(IdeTask) task = NULL;
-  g_autofree gchar *branch_name = NULL;
+  g_autofree gchar *branch_id = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GIT_VCS (self));
@@ -153,10 +153,10 @@ gbp_git_vcs_switch_branch_async (IdeVcs              *vcs,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_vcs_switch_branch_async);
 
-  branch_name = ide_vcs_branch_get_name (branch);
+  branch_id = ide_vcs_branch_get_id (branch);
 
   ipc_git_repository_call_switch_branch (self->repository,
-                                         branch_name,
+                                         branch_id,
                                          cancellable,
                                          gbp_git_vcs_switch_branch_cb,
                                          g_steal_pointer (&task));
