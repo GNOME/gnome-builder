@@ -138,12 +138,16 @@ connection_got_error_cb (DspyView       *self,
                          const GError   *error,
                          DspyConnection *connection)
 {
+  static GtkWidget *dialog;
   const gchar *title;
-  GtkWidget *dialog;
 
   g_assert (DSPY_IS_VIEW (self));
   g_assert (error != NULL);
   g_assert (DSPY_IS_CONNECTION (connection));
+
+  /* Only show one dialog at a time */
+  if (dialog != NULL)
+    return;
 
   if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_ACCESS_DENIED))
     title = _("Access Denied by Peer");
@@ -163,6 +167,7 @@ connection_got_error_cb (DspyView       *self,
                                    "%s", title);
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", error->message);
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (dialog, "destroy", G_CALLBACK (gtk_widget_destroyed), &dialog);
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
