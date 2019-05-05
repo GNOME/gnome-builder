@@ -244,7 +244,7 @@ ipc_git_repository_impl_handle_path_is_ignored (IpcGitRepository      *repositor
 }
 
 static gint
-compare_tags (gconstpointer a,
+compare_refs (gconstpointer a,
               gconstpointer b)
 {
   return g_utf8_collate (*(const gchar **)a, *(const gchar **)b);
@@ -293,14 +293,13 @@ ipc_git_repository_impl_handle_list_refs_by_kind (IpcGitRepository      *reposit
       if (!(names = ggit_repository_list_tags (self->repository, &error)))
         return complete_wrapped_error (invocation, error);
 
-      qsort (names, g_strv_length (names), sizeof (gchar *), compare_tags);
-
       for (guint i = 0; names[i] != NULL; i++)
         g_ptr_array_add (ret, g_steal_pointer (&names[i]));
     }
   else
     g_assert_not_reached ();
 
+  qsort (ret->pdata, ret->len, sizeof (gchar *), compare_refs);
   g_ptr_array_add (ret, NULL);
 
   ipc_git_repository_complete_list_refs_by_kind (repository,
