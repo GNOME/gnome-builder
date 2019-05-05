@@ -34,9 +34,12 @@ struct _IdeVcsBranchInterface
   GTypeInterface parent;
 
   gchar *(*get_name) (IdeVcsBranch *self);
+  gchar *(*get_id)   (IdeVcsBranch *self);
 };
 
 IDE_AVAILABLE_IN_3_32
 gchar *ide_vcs_branch_get_name (IdeVcsBranch *self);
+IDE_AVAILABLE_IN_3_34
+gchar *ide_vcs_branch_get_id   (IdeVcsBranch *self);
 
 G_END_DECLS

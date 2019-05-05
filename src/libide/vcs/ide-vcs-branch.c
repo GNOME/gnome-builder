@@ -52,3 +52,24 @@ ide_vcs_branch_get_name (IdeVcsBranch *self)
 
   return NULL;
 }
+
+/**
+ * ide_vcs_branch_get_id:
+ * @self: an #IdeVcsBranch
+ *
+ * Gets the identifier of the branch.
+ *
+ * Returns: (transfer full): a string containing the branch identifier
+ *
+ * Since: 3.34
+ */
+gchar *
+ide_vcs_branch_get_id (IdeVcsBranch *self)
+{
+  g_return_val_if_fail (IDE_IS_VCS_BRANCH (self), NULL);
+
+  if (IDE_VCS_BRANCH_GET_IFACE (self)->get_id)
+    return IDE_VCS_BRANCH_GET_IFACE (self)->get_id (self);
+
+  return NULL;
+}
