@@ -107,7 +107,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
 
   if (ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC)
     {
-      ide_terminal_page_feed (self, _("Subprocess launcher failed to quickly, will not respawn."));
+      ide_terminal_page_feed (self, _("Subprocess launcher failed too quickly, will not respawn."));
       return;
     }
 
