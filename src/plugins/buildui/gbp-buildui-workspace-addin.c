@@ -80,6 +80,9 @@ gbp_buildui_workspace_addin_notify_error_count (GbpBuilduiWorkspaceAddin *self,
   gtk_label_set_label (self->error_label, str);
   gtk_widget_set_visible (GTK_WIDGET (self->error_label), TRUE);
   gtk_widget_set_visible (GTK_WIDGET (self->error_image), TRUE);
+
+  if (count > 0)
+    dzl_dock_item_needs_attention (DZL_DOCK_ITEM (self->pane));
 }
 
 static void
@@ -106,6 +109,9 @@ gbp_buildui_workspace_addin_notify_warning_count (GbpBuilduiWorkspaceAddin *self
   gtk_label_set_label (self->warning_label, str);
   gtk_widget_set_visible (GTK_WIDGET (self->warning_label), TRUE);
   gtk_widget_set_visible (GTK_WIDGET (self->warning_image), TRUE);
+
+  if (count > 0)
+    dzl_dock_item_needs_attention (DZL_DOCK_ITEM (self->pane));
 }
 
 static void
