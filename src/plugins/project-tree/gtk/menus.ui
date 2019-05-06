@@ -4,11 +4,13 @@
     <section id="project-tree-menu-new-section">
       <item>
         <attribute name="id">project-tree-menu-new-file</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">New File…</attribute>
         <attribute name="action">project-tree.new-file</attribute>
       </item>
       <item>
         <attribute name="id">project-tree-menu-new-folder</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">New Folder…</attribute>
         <attribute name="action">project-tree.new-folder</attribute>
       </item>
@@ -16,6 +18,7 @@
     <section id="project-tree-menu-open-section">
       <item>
         <attribute name="id">project-tree-menu-open</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">Open</attribute>
         <attribute name="action">project-tree.open</attribute>
       </item>
@@ -32,11 +35,13 @@
       </submenu>
       <item>
         <attribute name="id">project-tree-menu-open-folder</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">Open Containing Folder</attribute>
         <attribute name="action">project-tree.open-containing-folder</attribute>
       </item>
       <item>
         <attribute name="id">project-tree-menu-open-terminal</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">Open in Terminal</attribute>
         <attribute name="action">project-tree.open-in-terminal</attribute>
       </item>
@@ -44,11 +49,13 @@
     <section id="project-tree-menu-destructive-section">
       <item>
         <attribute name="id">project-tree-menu-rename</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">Rename</attribute>
         <attribute name="action">project-tree.rename</attribute>
       </item>
       <item>
         <attribute name="id">project-tree-menu-trash</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">Move to Trash</attribute>
         <attribute name="action">project-tree.trash</attribute>
       </item>
