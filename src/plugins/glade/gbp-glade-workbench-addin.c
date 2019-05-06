@@ -89,6 +89,10 @@ gbp_glade_workbench_addin_can_open (IdeWorkbenchAddin *addin,
 
   path = g_file_peek_path (file);
 
+  /* Ignore menus.ui, because they don't really work in the designer */
+  if (path && g_str_has_suffix (path, "/menus.ui"))
+    return FALSE;
+
   if (g_strcmp0 (content_type, "application/x-gtk-builder") == 0 ||
       g_strcmp0 (content_type, "application/x-designer") == 0 ||
       (path && g_str_has_suffix (path, ".ui")))
