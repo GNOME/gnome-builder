@@ -1,4 +1,36 @@
 ==============
+Version 3.32.2
+==============
+
+Changes since last release:
+
+ • Glade design view improvements.
+ • Improve CFLAGS and CXXFLAGS discovery with compile_commands.json when
+   a direct match is not found (such as with headers).
+ • Improve symlink detection warning.
+ • Fix block selection in terminals.
+ • Enable VTE hyperlinks feature.
+ • NPM build system bug fixes and improvements.
+ • The diagnostic manager now properly tracks changes to a buffers configured
+   source language. This will improve diagnostic detection in some situations.
+ • rofiles-fuse and flatpak-builder will attempt to retire their corresponding
+   host processes when flatpak is in use.
+ • Unit tests will now properly run when uninstalled.
+ • The unit tests panel now properly scrolls when a large amount of content
+   is provided to the PTY.
+ • The unit tests panel now allows for cancelling an ongoing unit test.
+ • The file monitor now properly detects file changes when no version control
+   is in use.
+ • The clang plugin now discovers the location of the C++ standard includes.
+ • Project template improvements.
+ • Folder selection is fixed when cloning a repository.
+ • menus.ui no longer is opened with the Glade design view by default.
+ • "Open in Terminal" will now properly open a terminal from the host system
+   instead of expecting flatpak bundling.
+ • Updated documentation.
+ • Updated translations.
+
+==============
 Version 3.32.1
 ==============
 

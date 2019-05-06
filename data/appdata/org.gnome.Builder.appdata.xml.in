@@ -86,6 +86,35 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.32.2" date="2019-05-06">
+      <description>
+        <p>
+          Builder 3.32.2 is here with many bug fixes!
+        </p>
+        <ul>
+          <li>Glade design view improvements.</li>
+          <li>Improve CFLAGS and CXXFLAGS discovery with compile_commands.json when a direct match is not found (such as with headers).</li>
+          <li>Improve symlink detection warning.</li>
+          <li>Fix block selection in terminals.</li>
+          <li>Enable VTE hyperlinks feature.</li>
+          <li>NPM build system bug fixes and improvements.</li>
+          <li>The diagnostic manager now properly tracks changes to a buffers configured source language. This will improve diagnostic detection in some situations.</li>
+          <li>rofiles-fuse and flatpak-builder will attempt to retire their corresponding host processes when flatpak is in use.</li>
+          <li>Unit tests will now properly run when uninstalled.</li>
+          <li>The unit tests panel now properly scrolls when a large amount of content is provided to the PTY.</li>
+          <li>The unit tests panel now allows for cancelling an ongoing unit test.</li>
+          <li>The file monitor now properly detects file changes when no version control is in use.</li>
+          <li>The clang plugin now discovers the location of the C++ standard includes.</li>
+          <li>Project template improvements.</li>
+          <li>Folder selection is fixed when cloning a repository.</li>
+          <li>menus.ui no longer is opened with the Glade design view by default.</li>
+          <li>"Open in Terminal" will now properly open a terminal from the host system instead of expecting flatpak bundling.</li>
+          <li>Updated documentation.</li>
+          <li>Updated translations.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.32.1" date="2019-04-10">
       <description>
         <p>
