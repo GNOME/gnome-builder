@@ -750,25 +750,10 @@ push_worker (GTask        *task,
   g_assert (GGIT_IS_REMOTE (push->remote));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ggit_remote_connect (push->remote,
-                       GGIT_DIRECTION_PUSH,
-                       push->callbacks,
-                       push->proxy_options,
-                       NULL,
-                       &error);
-
-  if (error != NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
   ggit_remote_push (push->remote,
                     (const gchar * const *)push->ref_names,
                     push->push_options,
                     &error);
-
-  ggit_remote_disconnect (push->remote);
 
   if (error != NULL)
     g_task_return_error (task, g_steal_pointer (&error));
