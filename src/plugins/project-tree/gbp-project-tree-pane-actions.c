@@ -458,12 +458,42 @@ DEFINE_ACTION_HANDLER (open_with_hint, {
                             NULL, NULL, NULL);
 });
 
+static gchar *
+find_program_in_path (const gchar *program)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+
+  if (program == NULL)
+    return NULL;
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_push_argv (launcher, "which");
+  ide_subprocess_launcher_push_argv (launcher, program);
+
+  if ((subprocess = ide_subprocess_launcher_spawn (launcher, NULL, NULL)))
+    {
+      g_autofree gchar *path = NULL;
+
+      if (ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &path, NULL, NULL))
+        {
+          g_strstrip (path);
+
+          if (!ide_str_empty0 (path))
+            return g_steal_pointer (&path);
+        }
+    }
+
+  return NULL;
+}
+
 /* Based on gdesktopappinfo.c in GIO */
 static gchar *
 find_terminal_executable (void)
 {
-  gsize i;
-  gchar *path = NULL;
+  g_autofree gchar *path = NULL;
   g_autoptr(GSettings) terminal_settings = NULL;
   g_autofree gchar *gsettings_terminal = NULL;
   const gchar *terminals[] = {
@@ -483,17 +513,17 @@ find_terminal_executable (void)
   /* This is generally one of the fallback terminals */
   terminals[3] = g_getenv ("TERM");
 
-  for (i = 0; i < G_N_ELEMENTS (terminals) && path == NULL; ++i)
+  for (guint i = 0; i < G_N_ELEMENTS (terminals) && path == NULL; ++i)
     {
       if (terminals[i] != NULL)
         {
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          path = g_find_program_in_path (terminals[i]);
+          path = find_program_in_path (terminals[i]);
           G_GNUC_END_IGNORE_DEPRECATIONS
         }
     }
 
-  return path;
+  return g_steal_pointer (&path);
 }
 
 static void
@@ -503,10 +533,11 @@ gbp_project_tree_pane_actions_open_in_terminal (GSimpleAction *action,
 {
   GbpProjectTreePane *self = user_data;
   IdeProjectFile *project_file;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GFile) file = NULL;
   IdeTreeNode *selected;
   g_autofree gchar *terminal_executable = NULL;
-  const gchar *argv[] = { NULL, NULL };
   g_auto(GStrv) env = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GError) error = NULL;
@@ -523,34 +554,25 @@ gbp_project_tree_pane_actions_open_in_terminal (GSimpleAction *action,
 
   if (!g_file_is_native (workdir))
     {
-      g_warning ("Not a native directory, cannot open terminal");
+      g_autofree gchar *uri = g_file_get_uri (workdir);
+      g_warning ("Not a native file, cannot open terminal here: %s", uri);
       return;
     }
 
   terminal_executable = find_terminal_executable ();
-  argv[0] = terminal_executable;
   g_return_if_fail (terminal_executable != NULL);
 
-  env = g_get_environ ();
+  /* Launch the terminal, on the host */
+  launcher = ide_subprocess_launcher_new (0);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_set_cwd (launcher, g_file_peek_path (workdir));
+  ide_subprocess_launcher_push_argv (launcher, terminal_executable);
 
-  {
-    /*
-     * Overwrite SHELL to the users default shell.
-     * Failure to do so typically results in /bin/sh being used.
-     */
-    g_autofree gchar *shell = vte_get_user_shell ();
-    env = g_environ_setenv (env, "SHELL", shell, TRUE);
-  }
-
-  /* Can't use GdkAppLaunchContext as
-   * we cannot set the working directory.
-   */
-  if (!g_spawn_async (g_file_peek_path (workdir),
-                      (gchar **)argv, env,
-                      G_SPAWN_STDERR_TO_DEV_NULL,
-                      NULL, NULL, NULL, &error))
-    /* translators: %s is replaced with the error message */
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     g_warning ("Failed to spawn terminal: %s", error->message);
+  else
+    ide_subprocess_wait_async (subprocess, NULL, NULL, NULL);
 }
 
 static const GActionEntry entries[] = {
