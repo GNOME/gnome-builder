@@ -52,7 +52,9 @@ gbp_ls_workbench_addin_can_open (IdeWorkbenchAddin *addin,
       return TRUE;
     }
 
-  return FALSE;
+  /* We can open, but super low priority */
+  *priority = G_MAXINT;
+  return TRUE;
 }
 
 static void
@@ -87,6 +89,7 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
 {
   GbpLsWorkbenchAddin *self = (GbpLsWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GFile) parent = NULL;
   IdeWorkspace *workspace;
   IdeSurface *surface;
   GtkWidget *current_frame;
@@ -105,6 +108,10 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   workspace = ide_workbench_get_current_workspace (self->workbench);
   if (!(surface = ide_workspace_get_surface_by_name (workspace, "editor")))
     surface = ide_workspace_get_surface_by_name (workspace, "terminal");
+
+  /* If this isn't a directory, get the parent */
+  if (!g_str_equal (content_type, "inode/directory"))
+    file = parent = g_file_get_parent (file);
 
   /* First try to find an existing view for the file */
   locate.file = file;
