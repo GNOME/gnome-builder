@@ -108,16 +108,28 @@ ide_grid_column_remove (GtkContainer *container,
 {
   IdeGridColumn *self = (IdeGridColumn *)container;
   GtkWidget *grid;
+  gboolean notify;
 
   g_assert (IDE_IS_GRID_COLUMN (self));
   g_assert (IDE_IS_FRAME (widget));
 
+  notify = g_queue_peek_head (&self->focus_stack) == (gpointer)widget;
+  g_queue_remove (&self->focus_stack, widget);
+
   if (IDE_IS_GRID (grid = gtk_widget_get_parent (GTK_WIDGET (self))))
     _ide_grid_stack_removed (IDE_GRID (grid), IDE_FRAME (widget));
 
-  g_queue_remove (&self->focus_stack, widget);
-
   GTK_CONTAINER_CLASS (ide_grid_column_parent_class)->remove (container, widget);
+
+  if (notify)
+    {
+      GtkWidget *head = g_queue_peek_head (&self->focus_stack);
+
+      if (head != NULL)
+        gtk_widget_grab_focus (head);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_STACK]);
+    }
 }
 
 static void
