@@ -46,6 +46,30 @@ struct _GbpTerminalWorkspaceAddin
 };
 
 static void
+terminal_text_inserted_cb (IdeTerminalPage *page,
+                           DzlDockItem     *item)
+{
+  g_assert (IDE_IS_TERMINAL_PAGE (page));
+  g_assert (DZL_IS_DOCK_ITEM (item));
+
+  dzl_dock_item_needs_attention (item);
+}
+
+static void
+bind_needs_attention (DzlDockItem     *item,
+                      IdeTerminalPage *page)
+{
+  g_assert (DZL_IS_DOCK_ITEM (item));
+  g_assert (IDE_IS_TERMINAL_PAGE (page));
+
+  g_signal_connect_object (page,
+                           "text-inserted",
+                           G_CALLBACK (terminal_text_inserted_cb),
+                           item,
+                           0);
+}
+
+static void
 new_terminal_workspace (GSimpleAction *action,
                         GVariant      *param,
                         gpointer       user_data)
@@ -265,6 +289,7 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
                                       "title", _("Application Output"),
                                       "visible", TRUE,
                                       NULL);
+      bind_needs_attention (DZL_DOCK_ITEM (self->run_panel), self->run_terminal);
       g_signal_connect (self->run_panel,
                         "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
@@ -425,6 +450,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    "respawn-on-exit", TRUE,
                                    "visible", TRUE,
                                    NULL);
+      bind_needs_attention (DZL_DOCK_ITEM (self->bottom_dock), self->bottom);
       g_signal_connect (self->bottom,
                         "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
