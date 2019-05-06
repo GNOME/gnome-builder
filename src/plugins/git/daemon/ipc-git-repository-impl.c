@@ -843,6 +843,7 @@ ipc_git_repository_impl_handle_push (IpcGitRepository      *repository,
   ggit_push_options_set_remote_callbacks (push_options, callbacks);
 
   push = g_slice_new0 (Push);
+  push->ref_names = g_strdupv ((gchar **)ref_names);
   push->remote = g_steal_pointer (&remote);
   push->progress = g_steal_pointer (&progress);
   push->callbacks = g_steal_pointer (&callbacks);
