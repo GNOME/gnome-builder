@@ -10,7 +10,7 @@
             <attribute name="action">vcsui.switch-branch</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">Push Branch</attribute>
+            <attribute name="label" translatable="yes">Push to origin</attribute>
             <attribute name="action">vcsui.push-branch</attribute>
           </item>
         </section>
