@@ -80,6 +80,14 @@ struct _IdeVcsInterface
   gboolean                (*switch_branch_finish)      (IdeVcs               *self,
                                                         GAsyncResult         *result,
                                                         GError              **error);
+  void                    (*push_branch_async)         (IdeVcs               *self,
+                                                        IdeVcsBranch         *branch,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+  gboolean                (*push_branch_finish)        (IdeVcs               *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
 };
 
 IDE_AVAILABLE_IN_3_32
@@ -142,6 +150,16 @@ void          ide_vcs_switch_branch_async  (IdeVcs               *self,
                                             gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
 gboolean      ide_vcs_switch_branch_finish (IdeVcs               *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
+IDE_AVAILABLE_IN_3_34
+void          ide_vcs_push_branch_async    (IdeVcs               *self,
+                                            IdeVcsBranch         *branch,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+IDE_AVAILABLE_IN_3_34
+gboolean      ide_vcs_push_branch_finish   (IdeVcs               *self,
                                             GAsyncResult         *result,
                                             GError              **error);
 

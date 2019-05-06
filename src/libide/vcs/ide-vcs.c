@@ -139,6 +139,31 @@ ide_vcs_real_switch_branch_finish (IdeVcs        *self,
 }
 
 static void
+ide_vcs_real_push_branch_async (IdeVcs              *self,
+                                IdeVcsBranch        *branch,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_vcs_real_push_branch_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Not supported by %s",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+static gboolean
+ide_vcs_real_push_branch_finish (IdeVcs        *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
 ide_vcs_default_init (IdeVcsInterface *iface)
 {
   iface->list_status_async = ide_vcs_real_list_status_async;
@@ -149,6 +174,8 @@ ide_vcs_default_init (IdeVcsInterface *iface)
   iface->list_tags_finish = ide_vcs_real_list_tags_finish;
   iface->switch_branch_async = ide_vcs_real_switch_branch_async;
   iface->switch_branch_finish = ide_vcs_real_switch_branch_finish;
+  iface->push_branch_async = ide_vcs_real_push_branch_async;
+  iface->push_branch_finish = ide_vcs_real_push_branch_finish;
 
   g_object_interface_install_property (iface,
                                        g_param_spec_string ("branch-name",
@@ -614,4 +641,30 @@ ide_vcs_switch_branch_finish (IdeVcs        *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return IDE_VCS_GET_IFACE (self)->switch_branch_finish (self, result, error);
+}
+
+void
+ide_vcs_push_branch_async (IdeVcs              *self,
+                           IdeVcsBranch        *branch,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_VCS (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_VCS_GET_IFACE (self)->push_branch_async (self, branch, cancellable, callback, user_data);
+}
+
+gboolean
+ide_vcs_push_branch_finish (IdeVcs        *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
+  g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return IDE_VCS_GET_IFACE (self)->push_branch_finish (self, result, error);
 }
