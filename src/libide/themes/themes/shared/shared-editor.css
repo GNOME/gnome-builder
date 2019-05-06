@@ -97,7 +97,12 @@ ideeditorsidebar .flat-menu-button:hover {
 
 /* utilities panel buttons */
 ideeditorutilities dzltab {
-  background: @theme_bg_color;
+  background: none;
+  background-color: @theme_bg_color;
+  background-image: none;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  background-position: 3px 3px;
   padding: 6px 8px;
   margin: 0;
   border-style: solid;
@@ -117,6 +122,14 @@ ideeditorutilities dzltab:first-child {
 ideeditorutilities dzltab:last-child {
   border-radius: 0 0 3px 3px;
   border-bottom-width: 1px;
+}
+
+ideeditorutilities dzltab.needs-attention {
+  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(@theme_selected_bg_color), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(rgba(255, 255, 255, 0.769231)), to(transparent));
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  background-position: 3px 3px;
 }
 ideeditorutilities dzltabstrip {
   margin: 5px;
