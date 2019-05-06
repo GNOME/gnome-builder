@@ -125,7 +125,50 @@ gbp_vcsui_tree_addin_switch_branch (GSimpleAction *action,
                                NULL,
                                gbp_vcsui_tree_addin_switch_branch_cb,
                                g_object_ref (self));
+}
 
+static void
+gbp_vcsui_tree_addin_push_branch_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeVcs *vcs = (IdeVcs *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_vcs_push_branch_finish (vcs, result, &error))
+    ide_object_warning (vcs, "%s", error->message);
+}
+
+static void
+gbp_vcsui_tree_addin_push_branch (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  GbpVcsuiTreeAddin *self = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeVcsBranch *branch;
+  IdeTreeNode *node;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
+
+  if (self->vcs == NULL ||
+      !(node = ide_tree_get_selected_node (self->tree)) ||
+      !ide_tree_node_holds (node, IDE_TYPE_VCS_BRANCH))
+    return;
+
+  branch = ide_tree_node_get_item (node);
+  context = ide_object_ref_context (IDE_OBJECT (self->vcs));
+
+  ide_vcs_push_branch_async (self->vcs,
+                             branch,
+                             NULL,
+                             gbp_vcsui_tree_addin_push_branch_cb,
+                             g_object_ref (self));
 }
 
 static void
@@ -141,6 +184,7 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
   IdeVcs *vcs;
   static const GActionEntry actions[] = {
     { "switch-branch", gbp_vcsui_tree_addin_switch_branch },
+    { "push-branch", gbp_vcsui_tree_addin_push_branch },
   };
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -223,6 +267,9 @@ gbp_vcsui_tree_addin_selection_changed (IdeTreeAddin *addin,
     is_branch = ide_tree_node_holds (node, IDE_TYPE_VCS_BRANCH);
 
   dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "vcsui", "switch-branch",
+                             "enabled", is_branch,
+                             NULL);
+  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "vcsui", "push-branch",
                              "enabled", is_branch,
                              NULL);
 }

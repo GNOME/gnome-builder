@@ -4,10 +4,17 @@
     <section id="project-tree-menu-vcs">
       <submenu id="project-tree-menu-version-control">
         <attribute name="label" translatable="yes">Version Control</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Switch Branch</attribute>
-          <attribute name="action">vcsui.switch-branch</attribute>
-        </item>
+        <section id="project-tree-vcsui-branches">
+          <item>
+            <attribute name="label" translatable="yes">Switch Branch</attribute>
+            <attribute name="action">vcsui.switch-branch</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Push Branch</attribute>
+            <attribute name="action">vcsui.push-branch</attribute>
+          </item>
+        </section>
+      </submenu>
         <!--
         <item>
           <attribute name="label" translatable="yes">Restore File</attribute>
@@ -18,7 +25,6 @@
           <attribute name="action">vcsui.browse-history</attribute>
         </item>
         -->
-      </submenu>
     </section>
   </menu>
 </interface>
