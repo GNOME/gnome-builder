@@ -46,7 +46,13 @@ gbp_git_progress_new (GDBusConnection  *connection,
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
 
   ret = g_object_new (GBP_TYPE_GIT_PROGRESS, NULL);
-  ret->notif = notif ? g_object_ref (notif) : NULL;
+
+  if (notif != NULL)
+    {
+      ret->notif = g_object_ref (notif);
+      ide_notification_set_has_progress (notif, TRUE);
+      ide_notification_set_icon_name (notif, "builder-vcs-git-symbolic");
+    }
 
   guid = g_dbus_generate_guid ();
   path = g_strdup_printf ("/org/gnome/Builder/Git/Progress/%s", guid);
@@ -58,7 +64,6 @@ gbp_git_progress_new (GDBusConnection  *connection,
     {
       if (notif != NULL)
         {
-          ide_notification_set_icon_name (notif, "builder-vcs-git-symbolic");
           g_object_bind_property (ret, "fraction", notif, "progress", 0);
           g_object_bind_property (ret, "message", notif, "body", 0);
         }
