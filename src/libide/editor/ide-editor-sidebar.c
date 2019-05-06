@@ -110,7 +110,12 @@ ide_editor_sidebar_stack_notify_visible_child (IdeEditorSidebar *self,
   ide_editor_sidebar_update_title (self);
 
   if ((visible_child = gtk_stack_get_visible_child (stack)) && DZL_IS_DOCK_ITEM (visible_child))
-    dzl_dock_item_emit_presented (DZL_DOCK_ITEM (visible_child));
+    {
+      gtk_container_child_set (GTK_CONTAINER (stack), visible_child,
+                               "needs-attention", FALSE,
+                               NULL);
+      dzl_dock_item_emit_presented (DZL_DOCK_ITEM (visible_child));
+    }
 }
 
 static void
@@ -285,6 +290,18 @@ find_position (IdeEditorSidebar *self,
   return position;
 }
 
+static void
+propagate_needs_attention_cb (DzlDockItem *item,
+                              GtkStack    *stack)
+{
+  g_assert (DZL_IS_DOCK_ITEM (item));
+  g_assert (GTK_IS_STACK (stack));
+
+  gtk_container_child_set (GTK_CONTAINER (stack), GTK_WIDGET (item),
+                           "needs-attention", TRUE,
+                           NULL);
+}
+
 /**
  * ide_editor_sidebar_add_section:
  * @self: a #IdeEditorSidebar
@@ -343,6 +360,13 @@ ide_editor_sidebar_add_section (IdeEditorSidebar *self,
                                      "position", position,
                                      "title", title,
                                      NULL);
+
+  if (DZL_IS_DOCK_ITEM (section))
+    g_signal_connect_object (section,
+                             "needs-attention",
+                             G_CALLBACK (propagate_needs_attention_cb),
+                             self->stack,
+                             0);
 
   gtk_container_foreach (GTK_CONTAINER (self->stack_switcher),
                          fixup_stack_switcher_button,
