@@ -266,6 +266,7 @@ src/plugins/git/gbp-git-buffer-change-monitor.c
 src/plugins/git/gbp-git-dependency-updater.c
 src/plugins/git/gbp-git-pipeline-addin.c
 src/plugins/git/gbp-git-submodule-stage.c
+src/plugins/git/gbp-git-vcs.c
 src/plugins/git/gbp-git-vcs-cloner.c
 src/plugins/glade/gbp-glade-editor-addin.c
 src/plugins/glade/gbp-glade-frame-addin.c

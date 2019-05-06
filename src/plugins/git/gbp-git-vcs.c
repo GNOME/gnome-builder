@@ -22,9 +22,12 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "daemon/ipc-git-types.h"
 
 #include "gbp-git-branch.h"
+#include "gbp-git-progress.h"
 #include "gbp-git-tag.h"
 #include "gbp-git-vcs.h"
 #include "gbp-git-vcs-config.h"
@@ -129,9 +132,13 @@ gbp_git_vcs_switch_branch_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   if (!ipc_git_repository_call_switch_branch_finish (repository, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_boolean (task, TRUE);
+    {
+      g_dbus_error_strip_remote_error (error);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -166,6 +173,103 @@ static gboolean
 gbp_git_vcs_switch_branch_finish (IdeVcs        *vcs,
                                   GAsyncResult  *result,
                                   GError       **error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (vcs));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
+gbp_git_vcs_push_branch_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
+{
+  IpcGitRepository *repository = (IpcGitRepository *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IPC_IS_GIT_REPOSITORY (repository));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ipc_git_repository_call_push_finish (repository, result, &error))
+    {
+      g_print ("error: %p\n", error);
+      g_dbus_error_strip_remote_error (error);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ide_object_message (ide_task_get_source_object (task), "%s", _("Pushed."));
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+static void
+gbp_git_vcs_push_branch_async (IdeVcs              *vcs,
+                               IdeVcsBranch        *branch,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autofree gchar *branch_id = NULL;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *title = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeNotification) notif = NULL;
+  g_autoptr(IpcGitProgress) progress = NULL;
+  g_autoptr(GPtrArray) ref_specs = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (GBP_IS_GIT_BRANCH (branch));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_push_branch_async);
+
+  branch_id = ide_vcs_branch_get_id (branch);
+  name = ide_vcs_branch_get_name (branch);
+
+  ref_specs = g_ptr_array_new_with_free_func (g_free);
+  g_ptr_array_add (ref_specs, g_strdup_printf ("%s:%s", branch_id, branch_id));
+  g_ptr_array_add (ref_specs, NULL);
+
+  notif = ide_notification_new ();
+  title = g_strdup_printf (_("Pushing ref “%s”"), name);
+  ide_notification_set_title (notif, title);
+  ide_notification_set_has_progress (notif, TRUE);
+  ide_notification_attach (notif, IDE_OBJECT (vcs));
+
+  progress = gbp_git_progress_new (g_dbus_proxy_get_connection (G_DBUS_PROXY (self->repository)),
+                                   notif,
+                                   cancellable,
+                                   &error);
+  gbp_git_progress_set_withdraw (GBP_GIT_PROGRESS (progress), TRUE);
+  ide_task_set_task_data (task, g_object_ref (progress), g_object_unref);
+
+  if (error != NULL)
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ipc_git_repository_call_push (self->repository,
+                                  "origin",
+                                  (const gchar * const *)ref_specs->pdata,
+                                  IPC_GIT_PUSH_FLAGS_NONE,
+                                  g_dbus_interface_skeleton_get_object_path (G_DBUS_INTERFACE_SKELETON (progress)),
+                                  cancellable,
+                                  gbp_git_vcs_push_branch_cb,
+                                  g_steal_pointer (&task));
+}
+
+static gboolean
+gbp_git_vcs_push_branch_finish (IdeVcs        *vcs,
+                                GAsyncResult  *result,
+                                GError       **error)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GIT_VCS (vcs));
@@ -435,6 +539,8 @@ vcs_iface_init (IdeVcsInterface *iface)
   iface->get_branch_name = gbp_git_vcs_get_branch_name;
   iface->switch_branch_async = gbp_git_vcs_switch_branch_async;
   iface->switch_branch_finish = gbp_git_vcs_switch_branch_finish;
+  iface->push_branch_async = gbp_git_vcs_push_branch_async;
+  iface->push_branch_finish = gbp_git_vcs_push_branch_finish;
   iface->list_branches_async = gbp_git_vcs_list_branches_async;
   iface->list_branches_finish = gbp_git_vcs_list_branches_finish;
   iface->list_tags_async = gbp_git_vcs_list_tags_async;
