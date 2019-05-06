@@ -2,29 +2,21 @@
 <interface>
   <menu id="project-tree-menu">
     <section id="project-tree-menu-vcs">
-      <submenu id="project-tree-menu-version-control">
-        <attribute name="label" translatable="yes">Version Control</attribute>
-        <section id="project-tree-vcsui-branches">
-          <item>
-            <attribute name="label" translatable="yes">Switch Branch</attribute>
-            <attribute name="action">vcsui.switch-branch</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">Push to origin</attribute>
-            <attribute name="action">vcsui.push-branch</attribute>
-          </item>
-        </section>
-      </submenu>
-        <!--
-        <item>
-          <attribute name="label" translatable="yes">Restore File</attribute>
-          <attribute name="action">vcsui.restore-file</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Browse History</attribute>
-          <attribute name="action">vcsui.browse-history</attribute>
-        </item>
-        -->
+      <item>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="label" translatable="yes">Switch to branch</attribute>
+        <attribute name="action">vcsui.switch-branch</attribute>
+      </item>
+      <item>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="label" translatable="yes">Push to origin</attribute>
+        <attribute name="action">vcsui.push-branch</attribute>
+      </item>
+      <!-- item>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="label" translatable="yes">Fetch from origin</attribute>
+        <attribute name="action">vcsui.fetch-branch</attribute>
+      </item -->
     </section>
   </menu>
 </interface>
