@@ -137,6 +137,14 @@ ipc_git_remote_callbacks_transfer_progress (GgitRemoteCallbacks  *callbacks,
 }
 
 static void
+ipc_git_remote_callbacks_update_tips (GgitRemoteCallbacks *callbacks,
+                                      const gchar         *refname,
+                                      const GgitOId       *a,
+                                      const GgitOId       *b)
+{
+}
+
+static void
 ipc_git_remote_callbacks_finalize (GObject *object)
 {
   IpcGitRemoteCallbacks *self = (IpcGitRemoteCallbacks *)object;
@@ -157,6 +165,7 @@ ipc_git_remote_callbacks_class_init (IpcGitRemoteCallbacksClass *klass)
   callbacks_class->credentials = ipc_git_remote_callbacks_real_credentials;
   callbacks_class->progress = ipc_git_remote_callbacks_progress;
   callbacks_class->transfer_progress = ipc_git_remote_callbacks_transfer_progress;
+  callbacks_class->update_tips = ipc_git_remote_callbacks_update_tips;
 }
 
 static void
