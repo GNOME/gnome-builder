@@ -1267,6 +1267,9 @@ ide_buffer_load_file_cb (GObject      *object,
   gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (self), &iter);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self), &iter, &iter);
 
+  /* Assume we are at newest state at end of file-load operation */
+  _ide_buffer_set_changed_on_volume (self, FALSE);
+
   ide_highlight_engine_unpause (self->highlight_engine);
   ide_buffer_set_state (self, IDE_BUFFER_STATE_READY);
   ide_notification_set_progress (state->notif, 1.0);
