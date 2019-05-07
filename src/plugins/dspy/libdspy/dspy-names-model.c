@@ -198,6 +198,7 @@ dspy_names_model_name_owner_changed_cb (GDBusConnection *connection,
           dspy_name_get_name (item)[0] != ':')
         {
           _dspy_name_clear_pid (item);
+          _dspy_name_set_owner (item, NULL);
         }
       else
         {
