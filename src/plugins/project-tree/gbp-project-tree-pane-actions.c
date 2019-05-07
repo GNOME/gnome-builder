@@ -458,37 +458,6 @@ DEFINE_ACTION_HANDLER (open_with_hint, {
                             NULL, NULL, NULL);
 });
 
-static gchar *
-find_program_in_path (const gchar *program)
-{
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-
-  if (program == NULL)
-    return NULL;
-
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-  ide_subprocess_launcher_push_argv (launcher, "which");
-  ide_subprocess_launcher_push_argv (launcher, program);
-
-  if ((subprocess = ide_subprocess_launcher_spawn (launcher, NULL, NULL)))
-    {
-      g_autofree gchar *path = NULL;
-
-      if (ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &path, NULL, NULL))
-        {
-          g_strstrip (path);
-
-          if (!ide_str_empty0 (path))
-            return g_steal_pointer (&path);
-        }
-    }
-
-  return NULL;
-}
-
 /* Based on gdesktopappinfo.c in GIO */
 static gchar *
 find_terminal_executable (void)
@@ -518,7 +487,7 @@ find_terminal_executable (void)
       if (terminals[i] != NULL)
         {
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          path = find_program_in_path (terminals[i]);
+          path = ide_find_program_in_host_path (terminals[i]);
           G_GNUC_END_IGNORE_DEPRECATIONS
         }
     }
