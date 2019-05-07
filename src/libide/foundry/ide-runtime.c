@@ -29,6 +29,7 @@
 
 #include "ide-build-target.h"
 #include "ide-config.h"
+#include "ide-config-manager.h"
 #include "ide-runtime.h"
 #include "ide-runner.h"
 #include "ide-toolchain.h"
@@ -172,11 +173,15 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
                                 IdeBuildTarget *build_target)
 {
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
+  IdeEnvironment *env;
   g_autoptr(GFile) installdir = NULL;
   g_auto(GStrv) argv = NULL;
   g_autofree gchar *cwd = NULL;
+  IdeConfigManager *config_manager;
+  const gchar *prefix;
   IdeContext *context;
   IdeRunner *runner;
+  IdeConfig *config;
 
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (!build_target || IDE_IS_BUILD_TARGET (build_target));
@@ -184,10 +189,16 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+  prefix = ide_config_get_prefix (config);
+
   runner = ide_runner_new (context);
   g_assert (IDE_IS_RUNNER (runner));
 
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runner));
+
+  env = ide_runner_get_environment (runner);
 
   if (ide_str_equal0 (priv->id, "host"))
     ide_runner_set_run_on_host (runner, TRUE);
@@ -225,13 +236,34 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
       g_autofree gchar *parentpath = NULL;
 
       /* GSettings requires an env var for non-standard dirs */
-      if (NULL != (parentdir = g_file_get_parent (installdir)))
+      if ((parentdir = g_file_get_parent (installdir)))
         {
-          IdeEnvironment *env = ide_runner_get_environment (runner);
-
           parentpath = g_file_get_path (parentdir);
           schemadir = g_build_filename (parentpath, "share", "glib-2.0", "schemas", NULL);
           ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
+        }
+    }
+
+  if (prefix != NULL)
+    {
+      static const gchar *tries[] = { "lib64", "lib", "lib32", };
+      const gchar *old_path = ide_environment_getenv (env, "LD_LIBRARY_PATH");
+
+      for (guint i = 0; i < G_N_ELEMENTS (tries); i++)
+        {
+          g_autofree gchar *ld_library_path = g_build_filename (prefix, tries[i], NULL);
+
+          if (g_file_test (ld_library_path, G_FILE_TEST_IS_DIR))
+            {
+              if (old_path != NULL)
+                {
+                  g_autofree gchar *freeme = g_steal_pointer (&ld_library_path);
+                  ld_library_path = g_strdup_printf ("%s:%s", ld_library_path, freeme);
+                }
+
+              ide_environment_setenv (env, "LD_LIBRARY_PATH", ld_library_path);
+              break;
+            }
         }
     }
 
