@@ -111,13 +111,17 @@ gbp_git_workbench_addin_load_project_discover_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   if (!ipc_git_service_call_discover_finish (service, &git_location, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ipc_git_service_call_open (service,
-                               git_location,
-                               ide_task_get_cancellable (task),
-                               gbp_git_workbench_addin_load_project_open_cb,
-                               g_object_ref (task));
+    {
+      g_dbus_error_strip_remote_error (error);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ipc_git_service_call_open (service,
+                             git_location,
+                             ide_task_get_cancellable (task),
+                             gbp_git_workbench_addin_load_project_open_cb,
+                             g_object_ref (task));
 }
 
 static void
