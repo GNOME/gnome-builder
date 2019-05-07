@@ -155,6 +155,12 @@ ide_find_program_in_host_path (const gchar *program)
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
       g_autoptr(IdeSubprocess) subprocess = NULL;
 
+      /* It is possible to do this by looking in /var/run/host since we have
+       * access to --filesystem=home. However, that would not include things
+       * that could be in an altered path in the users session (which we would
+       * otherwise want to find.
+       */
+
       if (program == NULL)
         return NULL;
 
