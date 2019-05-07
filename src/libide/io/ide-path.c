@@ -26,6 +26,8 @@
 #include <unistd.h>
 #include <wordexp.h>
 
+#include <libide-threading.h>
+
 #include "ide-path.h"
 
 /**
@@ -132,4 +134,53 @@ ide_path_is_cpp_like (const gchar *path)
     }
 
   return FALSE;
+}
+
+/**
+ * ide_find_program_in_host_path:
+ * @program: the name of the executable
+ *
+ * Like g_find_program_in_path() but checks the host system which may not be
+ * the same as the container we're running within.
+ *
+ * Returns: (transfer full) (nullable): a path or %NULL
+ *
+ * Since: 3.34
+ */
+gchar *
+ide_find_program_in_host_path (const gchar *program)
+{
+  if (ide_is_flatpak ())
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
+
+      if (program == NULL)
+        return NULL;
+
+      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                              G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_subprocess_launcher_push_argv (launcher, "which");
+      ide_subprocess_launcher_push_argv (launcher, program);
+
+      if ((subprocess = ide_subprocess_launcher_spawn (launcher, NULL, NULL)))
+        {
+          g_autofree gchar *path = NULL;
+
+          if (ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &path, NULL, NULL))
+            {
+              g_strstrip (path);
+
+              if (!ide_str_empty0 (path))
+                return g_steal_pointer (&path);
+            }
+        }
+
+      return NULL;
+    }
+  else
+    {
+      return g_find_program_in_path (program);
+    }
 }

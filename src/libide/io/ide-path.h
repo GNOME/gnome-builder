@@ -36,5 +36,7 @@ IDE_AVAILABLE_IN_3_34
 gboolean  ide_path_is_c_like   (const gchar *path);
 IDE_AVAILABLE_IN_3_34
 gboolean  ide_path_is_cpp_like (const gchar *path);
+IDE_AVAILABLE_IN_3_34
+gchar    *ide_find_program_in_host_path (const gchar *program);
 
 G_END_DECLS
