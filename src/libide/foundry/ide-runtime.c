@@ -256,7 +256,7 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
               if (old_path != NULL)
                 {
                   g_autofree gchar *freeme = g_steal_pointer (&ld_library_path);
-                  ld_library_path = g_strdup_printf ("%s:%s", ld_library_path, freeme);
+                  ld_library_path = g_strdup_printf ("%s:%s", freeme, old_path);
                 }
 
               ide_environment_setenv (env, "LD_LIBRARY_PATH", ld_library_path);
