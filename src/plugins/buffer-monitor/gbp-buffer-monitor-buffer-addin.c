@@ -236,15 +236,11 @@ gbp_buffer_monitor_buffer_addin_load (IdeBufferAddin *addin,
   GbpBufferMonitorBufferAddin *self = (GbpBufferMonitorBufferAddin *)addin;
   g_autoptr(IdeContext) context = NULL;
   IdeProject *project;
-  GFile *file;
 
   g_assert (GBP_IS_BUFFER_MONITOR_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   self->buffer = buffer;
-
-  file = ide_buffer_get_file (buffer);
-  gbp_buffer_monitor_buffer_addin_setup_monitor (self, file);
 
   context = ide_buffer_ref_context (buffer);
   project = ide_project_from_context (context);
@@ -320,12 +316,27 @@ gbp_buffer_monitor_buffer_addin_file_saved (IdeBufferAddin *addin,
 }
 
 static void
+gbp_buffer_monitor_buffer_addin_file_loaded (IdeBufferAddin *addin,
+                                             IdeBuffer      *buffer,
+                                             GFile          *file)
+{
+  GbpBufferMonitorBufferAddin *self = (GbpBufferMonitorBufferAddin *)addin;
+
+  g_assert (IDE_IS_BUFFER_ADDIN (addin));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_FILE (file));
+
+  gbp_buffer_monitor_buffer_addin_setup_monitor (self, file);
+}
+
+static void
 buffer_addin_iface_init (IdeBufferAddinInterface *iface)
 {
   iface->load = gbp_buffer_monitor_buffer_addin_load;
   iface->unload = gbp_buffer_monitor_buffer_addin_unload;
   iface->save_file = gbp_buffer_monitor_buffer_addin_save_file;
   iface->file_saved = gbp_buffer_monitor_buffer_addin_file_saved;
+  iface->file_loaded = gbp_buffer_monitor_buffer_addin_file_loaded;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpBufferMonitorBufferAddin, gbp_buffer_monitor_buffer_addin, G_TYPE_OBJECT,
