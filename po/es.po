@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-05-03 04:02+0000\n"
-"PO-Revision-Date: 2019-05-03 14:22+0200\n"
+"POT-Creation-Date: 2019-05-07 03:55+0000\n"
+"PO-Revision-Date: 2019-05-07 14:42+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -521,7 +521,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Esta opción está obsoleta y ya no se usa."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:62
+#: src/plugins/project-tree/gtk/menus.ui:69
 msgid "Show Ignored Files"
 msgstr "Mostrar archivos ignorados"
 
@@ -532,7 +532,7 @@ msgstr ""
 "Si se activa, el árbol de proyectos mostrará archivos ignorados por el VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:67
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "Sort Directories First"
 msgstr "Mostrar las carpetas primero"
 
@@ -849,7 +849,7 @@ msgstr "Cargar o generar una paleta usando las preferencias"
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:4961
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:47
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Renombrar"
 
@@ -908,7 +908,7 @@ msgstr "Sin título"
 #: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:316
+#: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
 #: src/libide/gui/ide-workbench.c:1391
 #: src/libide/terminal/ide-terminal-page-actions.c:276
@@ -1215,7 +1215,7 @@ msgstr "Abrir archivo"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/libide/gui/ide-workbench.c:1390
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:19
+#: src/plugins/project-tree/gtk/menus.ui:22
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
 msgid "Open"
 msgstr "Abrir"
@@ -1438,7 +1438,7 @@ msgid "Failed to locate a build target"
 msgstr "Falló al buscar el objetivo de construcción"
 
 #: src/libide/foundry/ide-run-manager.c:1215 src/libide/gui/gtk/menus.ui:73
-#: src/plugins/buildui/gtk/menus.ui:30
+#: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Ejecutar"
 
@@ -1447,7 +1447,6 @@ msgid "Process quit unexpectedly"
 msgstr "El proceso ha terminado de manera inesperada"
 
 #: src/libide/foundry/ide-runtime-manager.c:138
-#| msgid "Use host operating system"
 msgid "Host Operating System"
 msgstr "Sistema operativo del equipo anfitrión"
 
@@ -1514,7 +1513,7 @@ msgstr "Dirección de correo-e del autor"
 msgid "Project Destination"
 msgstr "Destino del proyecto"
 
-#: src/libide/greeter/ide-clone-surface.ui:306
+#: src/libide/greeter/ide-clone-surface.ui:308
 msgid "Clone Project"
 msgstr "Clonar proyecto"
 
@@ -1807,9 +1806,9 @@ msgstr "Atajos de la ventana"
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
 #: src/libide/gui/ide-shortcuts-window.ui:506
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:333
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:339
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:345
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
 msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
@@ -1889,7 +1888,7 @@ msgstr "espacio de líneas de la tipografía monoespaciada del editor"
 
 #. XXX: This belongs in terminal addin
 #: src/libide/gui/ide-preferences-builtin.c:109
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:414
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
 #: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
 msgstr "Terminal"
@@ -2271,7 +2270,7 @@ msgstr "Número de CPU"
 
 #: src/libide/gui/ide-preferences-builtin.c:395
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
-#: src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Construir"
 
@@ -2330,8 +2329,7 @@ msgstr "Abrir archivos abiertos anteriormente al cargar un proyecto"
 
 #: src/libide/gui/ide-preferences-builtin.c:541
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:373
-#: src/plugins/vcsui/gtk/menus.ui:6
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:420
 msgid "Version Control"
 msgstr "Control de versiones"
 
@@ -2364,9 +2362,9 @@ msgid "Change run options"
 msgstr "Cambiar las opciones de ejecución"
 
 #: src/libide/gui/ide-search-button.c:43
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:332
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:338
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:344
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
 msgctxt "shortcut window"
 msgid "Workspace shortcuts"
 msgstr "Atajos del área de trabajo"
@@ -2402,14 +2400,14 @@ msgstr "Barra de comandos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
 #: src/libide/gui/ide-shortcuts-window.ui:531
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:334
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
 #: src/libide/gui/ide-shortcuts-window.ui:538
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tiempo de ejecución de construcción"
@@ -2851,10 +2849,9 @@ msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
 #: src/libide/terminal/gtk/menus.ui:8
-#, fuzzy
 #| msgid "New Workspace…"
 msgid "New Terminal Workspace…"
-msgstr "Área de trabajo nueva…"
+msgstr "Área de trabajo de la termina nueva…"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
@@ -2872,12 +2869,10 @@ msgstr "C_opiar la dirección del enlace"
 
 #: src/libide/terminal/ide-terminal-launcher.c:274
 #, c-format
-#| msgid "Failed to locate runtime “%s”"
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Falló al crear la terminal con la rutina «%s»"
 
 #: src/libide/terminal/ide-terminal-launcher.c:566
-#| msgid "Untitled terminal"
 msgid "Untitled Terminal"
 msgstr "Terminal sin título"
 
@@ -2885,23 +2880,23 @@ msgstr "Terminal sin título"
 msgid "Save Terminal Content As"
 msgstr "Guardar contenido de la terminal como"
 
-#: src/libide/terminal/ide-terminal-page.c:99
+#: src/libide/terminal/ide-terminal-page.c:105
 msgid "Subprocess launcher failed"
 msgstr "Falló al lanzar el subproceso"
 
-#: src/libide/terminal/ide-terminal-page.c:110
-msgid "Subprocess launcher failed to quickly, will not respawn."
-msgstr ""
+#: src/libide/terminal/ide-terminal-page.c:116
+#| msgid "Subprocess launcher failed"
+msgid "Subprocess launcher failed too quickly, will not respawn."
+msgstr "El lanzar del subproceso ha fallado demasiado pronto, no reaparecerá."
 
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:277
 msgid "Untitled terminal"
 msgstr "Terminal sin título"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
-#, fuzzy
 #| msgid "Search Bus Names"
 msgid "Search runtimes"
-msgstr "Buscar nombres de buses"
+msgstr "Buscar rutinas"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -3312,7 +3307,7 @@ msgid "Warnings"
 msgstr "Advertencias"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
-#: src/plugins/buildui/gtk/menus.ui:25
+#: src/plugins/buildui/gtk/menus.ui:27
 msgid "Rebuild"
 msgstr "Volver a construir"
 
@@ -3325,7 +3320,7 @@ msgid "Export Bundle"
 msgstr "Exportar como paquete"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:349
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:355
 msgid "Build Issues"
 msgstr "Errores de construcción"
 
@@ -3354,12 +3349,12 @@ msgstr "La tubería de construcción está vacía"
 msgid "Build Targets"
 msgstr "Objetivos de la construcción"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:358
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:364
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Preferencias de construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:35
+#: src/plugins/buildui/gtk/menus.ui:38
 msgid "Run With…"
 msgstr "Ejecutar con…"
 
@@ -4122,7 +4117,6 @@ msgid "Display D-Bus inspector"
 msgstr "Mostrar el inspector de D-Bus"
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
-#| msgid "D-Bus Inspector"
 msgid "D-Bus Inspector…"
 msgstr "Inspector de D-Bus…"
 
@@ -4250,35 +4244,35 @@ msgstr "Señales"
 msgid "Array of [%s]"
 msgstr "Vector de [%s]"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:149
+#: src/plugins/dspy/libdspy/dspy-view.c:153
 msgid "Access Denied by Peer"
 msgstr "Acceso denegado por el par"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:151
+#: src/plugins/dspy/libdspy/dspy-view.c:155
 msgid "Authentication Failed"
 msgstr "Falló en la autenticación"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:153
+#: src/plugins/dspy/libdspy/dspy-view.c:157
 msgid "Operation Timed Out"
 msgstr "La operación ha caducado"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:155
+#: src/plugins/dspy/libdspy/dspy-view.c:159
 msgid "Lost Connection to Bus"
 msgstr "Se ha perdido la conexión con el bus"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:157
+#: src/plugins/dspy/libdspy/dspy-view.c:161
 msgid "D-Bus Connection Failed"
 msgstr "Falló la conexión a D-Bus"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:455
+#: src/plugins/dspy/libdspy/dspy-view.c:460
 msgid "Connect"
 msgstr "Conectar"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:456
+#: src/plugins/dspy/libdspy/dspy-view.c:461
 msgid "Provide the address of the message bus"
 msgstr "Proporcione la dirección del bus de mensajes"
 
-#: src/plugins/dspy/libdspy/dspy-view.c:458
+#: src/plugins/dspy/libdspy/dspy-view.c:463
 #: src/plugins/dspy/libdspy/gtk/menus.ui:5
 msgid "Connect to Other Bus"
 msgstr "Conectar a otro bus"
@@ -4322,7 +4316,6 @@ msgid "Go"
 msgstr "Ir"
 
 #: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
-#| msgid "New Editor Workspace"
 msgid "New Editor Workspace…"
 msgstr "Área de trabajo nueva en el editor…"
 
@@ -4591,6 +4584,16 @@ msgstr "La red no está disponible, omitiendo la actualización del submódulo"
 #: src/plugins/git/gbp-git-submodule-stage.c:208
 msgid "Initialize git submodules"
 msgstr "Inicializar submódulos git"
+
+#: src/plugins/git/gbp-git-vcs.c:206
+msgid "Pushed."
+msgstr "Subido."
+
+#: src/plugins/git/gbp-git-vcs.c:244
+#, c-format
+#| msgid "Running test “%s”…"
+msgid "Pushing ref “%s”"
+msgstr "Subiendo referencia «%s»"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
@@ -4897,16 +4900,14 @@ msgid "Modified"
 msgstr "Modificado"
 
 #: src/plugins/ls/gtk/menus.ui:9
-#| msgid "Directory"
 msgid "Directory Browser"
 msgstr "Examinador de carpetas"
 
 #: src/plugins/ls/gtk/menus.ui:21
-#| msgid "Switch to UI designer"
 msgid "Switch to Folder"
 msgstr "Cambiar a la carpeta"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:35
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
 msgid "Open Containing Folder"
 msgstr "Abrir la carpeta contenedora"
 
@@ -5295,31 +5296,31 @@ msgstr "Árbol del proyecto."
 msgid "Rename %s"
 msgstr "Renombrar %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:7
+#: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New File…"
 msgstr "Archivo nuevo…"
 
-#: src/plugins/project-tree/gtk/menus.ui:12
+#: src/plugins/project-tree/gtk/menus.ui:14
 msgid "New Folder…"
 msgstr "Carpeta nueva…"
 
-#: src/plugins/project-tree/gtk/menus.ui:23
+#: src/plugins/project-tree/gtk/menus.ui:26
 msgid "Open With…"
 msgstr "Abrir con…"
 
-#: src/plugins/project-tree/gtk/menus.ui:27
+#: src/plugins/project-tree/gtk/menus.ui:30
 msgid "Source Code Editor"
 msgstr "Editor de código fuente"
 
-#: src/plugins/project-tree/gtk/menus.ui:40
+#: src/plugins/project-tree/gtk/menus.ui:45
 msgid "Open in Terminal"
 msgstr "Abrir en una terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:52
+#: src/plugins/project-tree/gtk/menus.ui:59
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:65
 msgid "Display Options"
 msgstr "Opciones de visualización"
 
@@ -5737,21 +5738,21 @@ msgstr "%s (Sysroot SDK)"
 msgid "Use terminal interface"
 msgstr "Usar interfaz de terminal"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:265
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
 msgid "Application Output"
 msgstr "Salida de la aplicación"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:294
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Aplicación iniciada a las %s\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:315
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
 msgid "Application exited\r\n"
 msgstr "Aplicación terminada\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:346
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
 msgstr "Terminal en tiempo de ejecución"
@@ -5777,7 +5778,6 @@ msgid "Clear test output"
 msgstr "Limpiar salida de prueba"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:51
-#| msgid "Cancel"
 msgid "Cancel tests"
 msgstr "Cancelar pruebas"
 
@@ -5826,17 +5826,22 @@ msgstr "diagnósticos de alertas y errores de Vala"
 msgid "Run with Valgrind"
 msgstr "Ejecutar con Valgrind"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:412
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:459
 msgid "Branches"
 msgstr "Ramas"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:422
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:469
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: src/plugins/vcsui/gtk/menus.ui:8
-msgid "Switch Branch"
-msgstr "Cambiar rama"
+#: src/plugins/vcsui/gtk/menus.ui:7
+#| msgid "Switch Branch"
+msgid "Switch to branch"
+msgstr "Cambiar a la rama"
+
+#: src/plugins/vcsui/gtk/menus.ui:12
+msgid "Push to origin"
+msgstr "Subido al origen"
 
 #: src/plugins/vim/gb-vim.c:105
 #, c-format
