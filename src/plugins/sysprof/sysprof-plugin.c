@@ -31,7 +31,7 @@
 _IDE_EXTERN void
 _gbp_sysprof_register_types (PeasObjectModule *module)
 {
-  sp_clock_init ();
+  sysprof_clock_init ();
 
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
