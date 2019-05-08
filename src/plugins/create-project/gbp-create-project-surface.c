@@ -251,6 +251,35 @@ gbp_create_project_surface_name_changed (GbpCreateProjectSurface *self,
 }
 
 static void
+gbp_create_project_surface_app_id_changed (GbpCreateProjectSurface *self,
+                                          GtkEntry               *entry)
+{
+  const gchar *app_id;
+
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  app_id = gtk_entry_get_text (entry);
+
+  if (!(ide_str_empty0 (app_id) || g_application_id_is_valid (app_id)))
+    {
+      g_object_set (self->app_id_entry,
+                    "secondary-icon-name", "dialog-warning-symbolic",
+                    "tooltip-text", _("Application ID is not valid."),
+                    NULL);
+    }
+  else
+    {
+      g_object_set (self->app_id_entry,
+                    "secondary-icon-name", NULL,
+                    "tooltip-text", NULL,
+                    NULL);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
+}
+
+static void
 gbp_create_project_surface_location_changed (GbpCreateProjectSurface *self,
                                             GParamSpec             *pspec,
                                             DzlFileChooserEntry    *chooser)
@@ -475,6 +504,7 @@ gbp_create_project_surface_is_ready (GbpCreateProjectSurface *self)
 {
   const gchar *text;
   g_autofree gchar *project_name = NULL;
+  const gchar *app_id;
   const gchar *language = NULL;
   GList *selected_template = NULL;
   gboolean ret = FALSE;
@@ -488,6 +518,11 @@ gbp_create_project_surface_is_ready (GbpCreateProjectSurface *self)
   project_name = g_strstrip (g_strdup (text));
 
   if (ide_str_empty0 (project_name) || !validate_name (project_name))
+    return FALSE;
+
+  app_id = gtk_entry_get_text (self->app_id_entry);
+
+  if (!(ide_str_empty0 (app_id) || g_application_id_is_valid (app_id)))
     return FALSE;
 
   language = dzl_radio_box_get_active_id (self->project_language_chooser);
@@ -582,6 +617,12 @@ gbp_create_project_surface_init (GbpCreateProjectSurface *self)
   g_signal_connect_object (self->project_name_entry,
                            "changed",
                            G_CALLBACK (gbp_create_project_surface_name_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->app_id_entry,
+                           "changed",
+                           G_CALLBACK (gbp_create_project_surface_app_id_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
