@@ -36,6 +36,7 @@ struct _IdeNotificationAddin
   IdePipelinePhase  requested_phase;
   gint64            last_time;
   guint             supress : 1;
+  guint             did_first_build : 1;
 };
 
 static void addin_iface_init (IdePipelineAddinInterface *iface);
@@ -119,39 +120,12 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 }
 
 static void
-ide_notification_addin_notify_pipeline (IdeNotificationAddin *self,
-                                        GParamSpec           *pspec,
-                                        IdeBuildManager      *build_manager)
+ide_notification_addin_pipeline_started (IdeNotificationAddin *self,
+                                         IdePipelinePhase      requested_phase,
+                                         IdePipeline          *pipeline)
 {
-  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
-  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-
-  if (self->notif != NULL)
-    {
-      g_autoptr(IdeContext) context = NULL;
-      g_autofree gchar *id = NULL;
-
-      /* Remove notification, it is now invalid */
-      ide_notification_withdraw (self->notif);
-      g_clear_object (&self->notif);
-
-      /* Also withdraw from the shell */
-      context = ide_object_ref_context (IDE_OBJECT (build_manager));
-      id = ide_context_dup_project_id (context);
-      g_application_withdraw_notification (g_application_get_default (), id);
-    }
-}
-
-static void
-ide_notification_addin_build_started (IdeNotificationAddin *self,
-                                      IdePipeline          *pipeline,
-                                      IdeBuildManager      *build_manager)
-{
-  IdePipelinePhase phase;
-
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   if (self->notif != NULL)
     {
@@ -159,80 +133,68 @@ ide_notification_addin_build_started (IdeNotificationAddin *self,
       g_clear_object (&self->notif);
     }
 
-  /* We don't care about any build that is advancing to a phase
-   * before the BUILD phase. We advanced to CONFIGURE a lot when
-   * extracting build flags.
+  /* Be certain we don't get before/after flags */
+  g_assert ((requested_phase & IDE_PIPELINE_PHASE_MASK) == requested_phase);
+
+  /*
+   * We don't care about any build that is advancing to a phase before the
+   * BUILD phase. We advanced to CONFIGURE a lot when extracting build flags.
+   * However, we do want to show that at least once when the pipeline is
+   * setting up so that the user knows something is happening (such as building
+   * deps).
    */
-
-  phase = ide_pipeline_get_requested_phase (pipeline);
-  g_assert ((phase & IDE_PIPELINE_PHASE_MASK) == phase);
-
-  self->requested_phase = phase;
-  self->supress = phase < IDE_PIPELINE_PHASE_BUILD;
+  self->requested_phase = requested_phase;
+  self->supress = requested_phase < IDE_PIPELINE_PHASE_BUILD && self->did_first_build;
+  self->did_first_build = TRUE;
 
   g_assert (self->notif == NULL);
-
-  if (self->requested_phase)
-    {
-      self->notif = ide_notification_new ();
-      g_object_bind_property (pipeline, "message", self->notif, "title", G_BINDING_SYNC_CREATE);
-      ide_notification_attach (self->notif, IDE_OBJECT (self));
-    }
 
   if (!self->supress)
     {
       g_autoptr(IdeContext) context = NULL;
       g_autofree gchar *id = NULL;
 
-      /* Withdraw previous notification as it is now invalid because we will be
-       * notifying about this build soon.
-       */
-      context = ide_object_ref_context (IDE_OBJECT (build_manager));
+      /* Setup new in-app notification */
+      self->notif = ide_notification_new ();
+      g_object_bind_property (pipeline, "message", self->notif, "title", G_BINDING_SYNC_CREATE);
+      ide_notification_attach (self->notif, IDE_OBJECT (pipeline));
+
+      /* Withdraw previous shell notification (it's now invalid) */
+      context = ide_object_ref_context (IDE_OBJECT (pipeline));
       id = ide_context_dup_project_id (context);
       g_application_withdraw_notification (g_application_get_default (), id);
     }
 }
 
 static void
-ide_notification_addin_build_failed (IdeNotificationAddin *self,
-                                     IdePipeline          *pipeline,
-                                     IdeBuildManager      *build_manager)
+ide_notification_addin_pipeline_finished (IdeNotificationAddin *self,
+                                          gboolean              failed,
+                                          IdePipeline          *pipeline)
 {
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   if (self->notif)
     {
-      ide_notification_set_icon_name (self->notif, "dialog-error-symbolic");
-      ide_notification_set_title (self->notif, _("Build failed"));
+      if (!failed)
+        {
+          ide_notification_set_icon_name (self->notif, "emblem-ok-symbolic");
+
+          if (self->requested_phase & IDE_PIPELINE_PHASE_BUILD)
+            ide_notification_set_title (self->notif, _("Build succeeded"));
+          else if (self->requested_phase & IDE_PIPELINE_PHASE_CONFIGURE)
+            ide_notification_set_title (self->notif, _("Build configured"));
+          else if (self->requested_phase & IDE_PIPELINE_PHASE_AUTOGEN)
+            ide_notification_set_title (self->notif, _("Build bootstrapped"));
+        }
+      else
+        {
+          ide_notification_set_icon_name (self->notif, "dialog-error-symbolic");
+          ide_notification_set_title (self->notif, _("Build failed"));
+        }
+
+      ide_notification_addin_notify (self, !failed);
     }
-
-  ide_notification_addin_notify (self, FALSE);
-}
-
-static void
-ide_notification_addin_build_finished (IdeNotificationAddin *self,
-                                       IdePipeline          *pipeline,
-                                       IdeBuildManager      *build_manager)
-{
-  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-
-  if (self->notif)
-    {
-      ide_notification_set_icon_name (self->notif, "emblem-ok-symbolic");
-
-      if (self->requested_phase & IDE_PIPELINE_PHASE_BUILD)
-        ide_notification_set_title (self->notif, _("Build succeeded"));
-      else if (self->requested_phase & IDE_PIPELINE_PHASE_CONFIGURE)
-        ide_notification_set_title (self->notif, _("Build configured"));
-      else if (self->requested_phase & IDE_PIPELINE_PHASE_AUTOGEN)
-        ide_notification_set_title (self->notif, _("Build bootstrapped"));
-    }
-
-  ide_notification_addin_notify (self, TRUE);
 }
 
 static void
@@ -240,39 +202,18 @@ ide_notification_addin_load (IdePipelineAddin *addin,
                              IdePipeline      *pipeline)
 {
   IdeNotificationAddin *self = (IdeNotificationAddin *)addin;
-  IdeBuildManager *build_manager;
-  IdeContext *context;
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  context = ide_object_get_context (IDE_OBJECT (addin));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  build_manager = ide_build_manager_from_context (context);
-  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-
-  g_signal_connect_object (build_manager,
-                           "notify::pipeline",
-                           G_CALLBACK (ide_notification_addin_notify_pipeline),
+  g_signal_connect_object (pipeline,
+                           "started",
+                           G_CALLBACK (ide_notification_addin_pipeline_started),
                            self,
                            G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (build_manager,
-                           "build-started",
-                           G_CALLBACK (ide_notification_addin_build_started),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (build_manager,
-                           "build-finished",
-                           G_CALLBACK (ide_notification_addin_build_finished),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (build_manager,
-                           "build-failed",
-                           G_CALLBACK (ide_notification_addin_build_failed),
+  g_signal_connect_object (pipeline,
+                           "finished",
+                           G_CALLBACK (ide_notification_addin_pipeline_finished),
                            self,
                            G_CONNECT_SWAPPED);
 }
@@ -282,15 +223,30 @@ ide_notification_addin_unload (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   IdeNotificationAddin *self = (IdeNotificationAddin *)addin;
+  g_autoptr(IdeContext) context = NULL;
+  g_autofree gchar *id = NULL;
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
+  g_signal_handlers_disconnect_by_func (pipeline,
+                                        G_CALLBACK (ide_notification_addin_pipeline_started),
+                                        self);
+  g_signal_handlers_disconnect_by_func (pipeline,
+                                        G_CALLBACK (ide_notification_addin_pipeline_finished),
+                                        self);
+
+  /* Release in-app notification */
   if (self->notif != NULL)
     {
       ide_notification_withdraw (self->notif);
       g_clear_object (&self->notif);
     }
+
+  /* Release desktop notification */
+  context = ide_object_ref_context (IDE_OBJECT (pipeline));
+  id = ide_context_dup_project_id (context);
+  g_application_withdraw_notification (g_application_get_default (), id);
 
   g_clear_pointer (&self->last_msg_body, g_free);
 }
