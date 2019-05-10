@@ -164,7 +164,10 @@ ide_notification_addin_build_failed (IdeNotificationAddin *self,
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   if (self->notif)
-    ide_notification_set_title (self->notif, _("Build failed"));
+    {
+      ide_notification_set_icon_name (self->notif, "dialog-error-symbolic");
+      ide_notification_set_title (self->notif, _("Build failed"));
+    }
 
   ide_notification_addin_notify (self, FALSE);
 }
