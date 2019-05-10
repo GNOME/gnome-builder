@@ -521,6 +521,9 @@ ide_omni_bar_init (IdeOmniBar *self)
 
   gtk_widget_insert_action_group (GTK_WIDGET (self), "omnibar", G_ACTION_GROUP (self));
 
+  ide_omni_bar_set_action_enabled (self, "move-previous", FALSE);
+  ide_omni_bar_set_action_enabled (self, "move-next", FALSE);
+
   ide_widget_set_context_handler (GTK_WIDGET (self), ide_omni_bar_context_set_cb);
 }
 
