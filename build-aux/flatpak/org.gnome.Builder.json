@@ -17,6 +17,8 @@
         "--socket=fallback-x11",
         "--socket=wayland",
         "--socket=ssh-auth",
+        "--socket=session-bus",
+        "--socket=system-bus",
         "--filesystem=home",
         "--filesystem=host",
         "--share=network",
