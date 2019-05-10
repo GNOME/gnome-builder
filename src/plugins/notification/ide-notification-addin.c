@@ -71,11 +71,11 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 {
   g_autofree gchar *msg_body = NULL;
   g_autofree gchar *project_name = NULL;
+  g_autofree gchar *id = NULL;
   g_autoptr(GNotification) notification = NULL;
   g_autoptr(GIcon) icon = NULL;
   GtkApplication *app;
   const gchar *msg_title;
-  const gchar *id;
   IdeContext *context;
   GtkWindow *window;
 
