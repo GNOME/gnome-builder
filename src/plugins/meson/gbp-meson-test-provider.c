@@ -20,6 +20,7 @@
 
 #define G_LOG_DOMAIN "gbp-meson-test-provider"
 
+#include <dazzle.h>
 #include <json-glib/json-glib.h>
 #include <libide-threading.h>
 
@@ -30,8 +31,10 @@
 struct _GbpMesonTestProvider
 {
   IdeTestProvider  parent_instance;
-  GCancellable    *build_cancellable;
+  DzlSignalGroup  *monitor_signals;
+  GFileMonitor    *build_ninja_monitor;
   guint            reload_source;
+  guint            did_initial_load : 1;
 };
 
 typedef struct
@@ -254,33 +257,6 @@ failure:
   IDE_EXIT;
 }
 
-static void
-gbp_meson_test_provider_build_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
-{
-  IdePipeline *pipeline = (IdePipeline *)object;
-  g_autoptr(GbpMesonTestProvider) self = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
-
-  if (!ide_pipeline_build_finish (pipeline, result, &error))
-    {
-      g_message ("%s", error->message);
-      ide_test_provider_set_loading (IDE_TEST_PROVIDER (self), FALSE);
-      IDE_EXIT;
-    }
-
-  gbp_meson_test_provider_do_reload (self, pipeline);
-
-  IDE_EXIT;
-}
-
 static gboolean
 gbp_meson_test_provider_reload (gpointer user_data)
 {
@@ -294,11 +270,7 @@ gbp_meson_test_provider_reload (gpointer user_data)
 
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
 
-  self->reload_source = 0;
-
-  /* Cancel any other builds in-flight */
-  g_cancellable_cancel (self->build_cancellable);
-  g_clear_object (&self->build_cancellable);
+  dzl_clear_source (&self->reload_source);
 
   /*
    * Check that we're working with a meson build system.
@@ -318,26 +290,7 @@ gbp_meson_test_provider_reload (gpointer user_data)
     IDE_RETURN (G_SOURCE_REMOVE);
 
   ide_test_provider_set_loading (IDE_TEST_PROVIDER (self), TRUE);
-
-  /*
-   * Make sure that the build pipeline has advanced enough for
-   * us to continue processing the tests.
-   */
-  self->build_cancellable = g_cancellable_new ();
-  /*
-   * TODO: We want to try to avoid the pipeline build like this in
-   * the future because it advances the pipeline when the project
-   * is opened. Instead, we might want a CONFIGURE stage that auto
-   * generates the info, and then watch that GFile.
-   *
-   * But to do that well, we need to coordinate with the panel to
-   * be lazy about fetching unit tests until the panel is displayed.
-   */
-  ide_pipeline_build_async (pipeline,
-                            IDE_PIPELINE_PHASE_CONFIGURE,
-                            self->build_cancellable,
-                            gbp_meson_test_provider_build_cb,
-                            g_object_ref (self));
+  gbp_meson_test_provider_do_reload (self, pipeline);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -358,14 +311,59 @@ gbp_meson_test_provider_queue_reload (IdeTestProvider *provider)
 }
 
 static void
+pipeline_build_finished_cb (GbpMesonTestProvider *self,
+                            gboolean              failed,
+                            IdePipeline          *pipeline)
+{
+  g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  if (failed || self->did_initial_load)
+    return;
+
+  self->did_initial_load = TRUE;
+
+  /* We need to do our first load of state, so do that now */
+  gbp_meson_test_provider_reload (self);
+}
+
+static void
 gbp_meson_test_provider_notify_pipeline (GbpMesonTestProvider *self,
                                          GParamSpec           *pspec,
                                          IdeBuildManager      *build_manager)
 {
+  IdePipeline *pipeline;
+
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  gbp_meson_test_provider_queue_reload (IDE_TEST_PROVIDER (self));
+  if (self->build_ninja_monitor != NULL)
+    {
+      g_file_monitor_cancel (self->build_ninja_monitor);
+      g_clear_object (&self->build_ninja_monitor);
+      dzl_signal_group_set_target (self->monitor_signals, NULL);
+    }
+
+  g_assert (self->build_ninja_monitor == NULL);
+
+  if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
+    {
+      g_autofree gchar *build_ninja = NULL;
+      g_autoptr(GFile) file = NULL;
+
+      build_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
+      file = g_file_new_for_path (build_ninja);
+      self->build_ninja_monitor = g_file_monitor (file, 0, NULL, NULL);
+      dzl_signal_group_set_target (self->monitor_signals, self->build_ninja_monitor);
+
+      self->did_initial_load = FALSE;
+
+      g_signal_connect_object (pipeline,
+                               "finished",
+                               G_CALLBACK (pipeline_build_finished_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
 }
 
 static void
@@ -580,15 +578,44 @@ gbp_meson_test_provider_parent_set (IdeObject *object,
 }
 
 static void
+build_ninja_changed_cb (GbpMesonTestProvider *self,
+                        GFile                *file,
+                        GFile                *other_file,
+                        GFileMonitorEvent     event,
+                        GFileMonitor         *monitor)
+{
+  g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
+  g_assert (G_IS_FILE_MONITOR (monitor));
+
+  if (event == G_FILE_MONITOR_EVENT_CHANGED || event == G_FILE_MONITOR_EVENT_CREATED)
+    gbp_meson_test_provider_queue_reload (IDE_TEST_PROVIDER (self));
+}
+
+static void
 gbp_meson_test_provider_dispose (GObject *object)
 {
   GbpMesonTestProvider *self = (GbpMesonTestProvider *)object;
 
   dzl_clear_source (&self->reload_source);
-  g_cancellable_cancel (self->build_cancellable);
-  g_clear_object (&self->build_cancellable);
+  dzl_signal_group_set_target (self->monitor_signals, NULL);
+
+  if (self->build_ninja_monitor)
+    {
+      g_file_monitor_cancel (self->build_ninja_monitor);
+      g_clear_object (&self->build_ninja_monitor);
+    }
 
   G_OBJECT_CLASS (gbp_meson_test_provider_parent_class)->dispose (object);
+}
+
+static void
+gbp_meson_test_provider_finalize (GObject *object)
+{
+  GbpMesonTestProvider *self = (GbpMesonTestProvider *)object;
+
+  g_clear_object (&self->monitor_signals);
+
+  G_OBJECT_CLASS (gbp_meson_test_provider_parent_class)->finalize (object);
 }
 
 static void
@@ -599,6 +626,7 @@ gbp_meson_test_provider_class_init (GbpMesonTestProviderClass *klass)
   IdeTestProviderClass *provider_class = IDE_TEST_PROVIDER_CLASS (klass);
 
   object_class->dispose = gbp_meson_test_provider_dispose;
+  object_class->finalize = gbp_meson_test_provider_finalize;
 
   i_object_class->parent_set = gbp_meson_test_provider_parent_set;
 
@@ -610,4 +638,11 @@ gbp_meson_test_provider_class_init (GbpMesonTestProviderClass *klass)
 static void
 gbp_meson_test_provider_init (GbpMesonTestProvider *self)
 {
+  self->monitor_signals = dzl_signal_group_new (G_TYPE_FILE_MONITOR);
+
+  dzl_signal_group_connect_object (self->monitor_signals,
+                                   "changed",
+                                   G_CALLBACK (build_ninja_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
