@@ -40,6 +40,12 @@ static DzlShortcutEntry editor_view_shortcuts[] = {
     NC_("shortcut window", "Files"),
     NC_("shortcut window", "Save the document with a new name") },
 
+  { "org.gnome.builder.editor-page.print",
+    0, NULL,
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Files"),
+    NC_("shortcut window", "Print the document") },
+
   { "org.gnome.builder.editor-page.find",
     0, NULL,
     NC_("shortcut window", "Editor shortcuts"),
@@ -133,6 +139,12 @@ _ide_editor_page_init_shortcuts (IdeEditorPage *self)
                                               "<Primary><Shift>s",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-page.save-as"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-page.print"),
+                                              "<Primary>p",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("editor-page.print"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              editor_view_shortcuts,
