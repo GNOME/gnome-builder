@@ -120,7 +120,7 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 
 static void
 ide_notification_addin_build_started (IdeNotificationAddin *self,
-                                      IdePipeline     *pipeline,
+                                      IdePipeline          *pipeline,
                                       IdeBuildManager      *build_manager)
 {
   IdePipelinePhase phase;
@@ -156,7 +156,7 @@ ide_notification_addin_build_started (IdeNotificationAddin *self,
 
 static void
 ide_notification_addin_build_failed (IdeNotificationAddin *self,
-                                     IdePipeline     *pipeline,
+                                     IdePipeline          *pipeline,
                                      IdeBuildManager      *build_manager)
 {
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
@@ -171,7 +171,7 @@ ide_notification_addin_build_failed (IdeNotificationAddin *self,
 
 static void
 ide_notification_addin_build_finished (IdeNotificationAddin *self,
-                                       IdePipeline     *pipeline,
+                                       IdePipeline          *pipeline,
                                        IdeBuildManager      *build_manager)
 {
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
