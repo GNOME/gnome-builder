@@ -45,7 +45,7 @@
             <property name="homogeneous">false</property>
             <property name="visible">true</property>
             <child>
-              <object class="SysprofEmptyStateView">
+              <object class="SpEmptyStateView">
                 <property name="subtitle" translatable="yes" comments="the action:// link is used to run the project">Select &lt;a href="action://run-manager.run-with-handler::profiler"&gt;Run with profiler&lt;/a&gt; from the run menu to begin</property>
                 <property name="visible">true</property>
               </object>
@@ -54,7 +54,7 @@
               </packing>
             </child>
             <child>
-              <object class="SysprofRecordingStateView" id="recording_view">
+              <object class="SpRecordingStateView" id="recording_view">
                 <property name="visible">true</property>
               </object>
               <packing>
@@ -62,7 +62,7 @@
               </packing>
             </child>
             <child>
-              <object class="SysprofFailedStateView" id="failed_view">
+              <object class="SpFailedStateView" id="failed_view">
                 <property name="visible">true</property>
               </object>
               <packing>
@@ -73,13 +73,13 @@
               <object class="DzlMultiPaned">
                 <property name="visible">true</property>
                 <child>
-                  <object class="SysprofVisualizerView" id="visualizers">
+                  <object class="SpVisualizerView" id="visualizers">
                     <property name="visible">true</property>
                     <property name="zoom-manager">zoom_manager</property>
                   </object>
                 </child>
                 <child>
-                  <object class="SysprofCallgraphView" id="callgraph_view">
+                  <object class="SpCallgraphView" id="callgraph_view">
                     <property name="vexpand">true</property>
                     <property name="visible">true</property>
                   </object>
@@ -94,6 +94,6 @@
       </object>
     </child>
   </template>
-  <object class="SysprofZoomManager" id="zoom_manager">
+  <object class="SpZoomManager" id="zoom_manager">
   </object>
 </interface>

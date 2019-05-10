@@ -29,7 +29,7 @@ struct _GbpSysprofWorkspaceAddin
   GObject                parent_instance;
 
   GSimpleActionGroup    *actions;
-  SysprofProfiler            *profiler;
+  SpProfiler            *profiler;
 
   GbpSysprofSurface     *surface;
   IdeWorkspace          *workspace;
@@ -64,17 +64,17 @@ gbp_sysprof_workspace_addin_update_controls (GbpSysprofWorkspaceAddin *self)
 
 static void
 profiler_stopped (GbpSysprofWorkspaceAddin *self,
-                  SysprofProfiler               *profiler)
+                  SpProfiler               *profiler)
 {
-  g_autoptr(SysprofCaptureReader) reader = NULL;
+  g_autoptr(SpCaptureReader) reader = NULL;
   g_autoptr(GError) error = NULL;
-  SysprofCaptureWriter *writer;
+  SpCaptureWriter *writer;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-  g_assert (SYSPROF_IS_PROFILER (profiler));
+  g_assert (SP_IS_PROFILER (profiler));
 
   if (self->profiler != profiler)
     IDE_EXIT;
@@ -82,8 +82,8 @@ profiler_stopped (GbpSysprofWorkspaceAddin *self,
   if (self->workspace == NULL)
     IDE_EXIT;
 
-  writer = sysprof_profiler_get_writer (profiler);
-  reader = sysprof_capture_writer_create_reader (writer, &error);
+  writer = sp_profiler_get_writer (profiler);
+  reader = sp_capture_writer_create_reader (writer, &error);
 
   if (reader == NULL)
     {
@@ -113,7 +113,7 @@ profiler_child_spawned (GbpSysprofWorkspaceAddin *self,
   g_assert (identifier != NULL);
   g_assert (IDE_IS_RUNNER (runner));
 
-  if (!SYSPROF_IS_PROFILER (self->profiler))
+  if (!SP_IS_PROFILER (self->profiler))
     return;
 
 #ifdef G_OS_UNIX
@@ -128,8 +128,8 @@ profiler_child_spawned (GbpSysprofWorkspaceAddin *self,
 
   IDE_TRACE_MSG ("Adding pid %s to profiler", identifier);
 
-  sysprof_profiler_add_pid (self->profiler, pid);
-  sysprof_profiler_start (self->profiler);
+  sp_profiler_add_pid (self->profiler, pid);
+  sp_profiler_start (self->profiler);
 }
 
 static gchar *
@@ -165,10 +165,10 @@ profiler_run_handler (IdeRunManager *run_manager,
                       gpointer       user_data)
 {
   GbpSysprofWorkspaceAddin *self = user_data;
-  g_autoptr(SysprofSource) proc_source = NULL;
-  g_autoptr(SysprofSource) perf_source = NULL;
-  g_autoptr(SysprofSource) hostinfo_source = NULL;
-  g_autoptr(SysprofSource) memory_source = NULL;
+  g_autoptr(SpSource) proc_source = NULL;
+  g_autoptr(SpSource) perf_source = NULL;
+  g_autoptr(SpSource) hostinfo_source = NULL;
+  g_autoptr(SpSource) memory_source = NULL;
   IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -176,10 +176,10 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
-  if (SYSPROF_IS_PROFILER (self->profiler))
+  if (SP_IS_PROFILER (self->profiler))
     {
-      if (sysprof_profiler_get_is_running (self->profiler))
-        sysprof_profiler_stop (self->profiler);
+      if (sp_profiler_get_is_running (self->profiler))
+        sp_profiler_stop (self->profiler);
       g_clear_object (&self->profiler);
     }
 
@@ -211,11 +211,11 @@ profiler_run_handler (IdeRunManager *run_manager,
         g_autofree gchar *path = get_runtime_sysroot (context, dirs[i]);
 
         if (path != NULL)
-          sysprof_symbol_dirs_add (path);
+          sp_symbol_dirs_add (path);
       }
   }
 
-  self->profiler = sysprof_local_profiler_new ();
+  self->profiler = sp_local_profiler_new ();
 
   g_signal_connect_object (self->profiler,
                            "stopped",
@@ -231,19 +231,19 @@ profiler_run_handler (IdeRunManager *run_manager,
    * Longer term we either need a way to follow-children and/or limit to a
    * cgroup/process-group.
    */
-  sysprof_profiler_set_whole_system (SYSPROF_PROFILER (self->profiler), TRUE);
+  sp_profiler_set_whole_system (SP_PROFILER (self->profiler), TRUE);
 
-  proc_source = sysprof_proc_source_new ();
-  sysprof_profiler_add_source (self->profiler, proc_source);
+  proc_source = sp_proc_source_new ();
+  sp_profiler_add_source (self->profiler, proc_source);
 
-  perf_source = sysprof_perf_source_new ();
-  sysprof_profiler_add_source (self->profiler, perf_source);
+  perf_source = sp_perf_source_new ();
+  sp_profiler_add_source (self->profiler, perf_source);
 
-  hostinfo_source = sysprof_hostinfo_source_new ();
-  sysprof_profiler_add_source (self->profiler, hostinfo_source);
+  hostinfo_source = sp_hostinfo_source_new ();
+  sp_profiler_add_source (self->profiler, hostinfo_source);
 
-  memory_source = sysprof_memory_source_new ();
-  sysprof_profiler_add_source (self->profiler, memory_source);
+  memory_source = sp_memory_source_new ();
+  sp_profiler_add_source (self->profiler, memory_source);
 
   /*
    * TODO:
@@ -279,7 +279,7 @@ gbp_sysprof_workspace_addin_open_cb (GObject      *object,
                                      gpointer      user_data)
 {
   GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)object;
-  g_autoptr(SysprofCaptureReader) reader = NULL;
+  g_autoptr(SpCaptureReader) reader = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
@@ -309,7 +309,7 @@ gbp_sysprof_workspace_addin_open_worker (IdeTask      *task,
 {
   g_autofree gchar *path = NULL;
   g_autoptr(GError) error = NULL;
-  SysprofCaptureReader *reader;
+  SpCaptureReader *reader;
   GFile *file = task_data;
 
   g_assert (IDE_IS_TASK (task));
@@ -319,10 +319,10 @@ gbp_sysprof_workspace_addin_open_worker (IdeTask      *task,
 
   path = g_file_get_path (file);
 
-  if (!(reader = sysprof_capture_reader_new (path, &error)))
+  if (!(reader = sp_capture_reader_new (path, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, reader, sysprof_capture_reader_unref);
+    ide_task_return_pointer (task, reader, sp_capture_reader_unref);
 }
 
 static void
@@ -449,8 +449,8 @@ run_manager_stopped (GbpSysprofWorkspaceAddin *self,
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
-  if (self->profiler != NULL && sysprof_profiler_get_is_running (self->profiler))
-    sysprof_profiler_stop (self->profiler);
+  if (self->profiler != NULL && sp_profiler_get_is_running (self->profiler))
+    sp_profiler_stop (self->profiler);
 }
 
 static gboolean
@@ -469,7 +469,7 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
-  SysprofZoomManager *zoom_manager;
+  SpZoomManager *zoom_manager;
   IdeRunManager *run_manager;
   IdeHeaderBar *header;
   IdeContext *context;

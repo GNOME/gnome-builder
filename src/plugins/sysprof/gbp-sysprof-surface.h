@@ -29,11 +29,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysprofSurface, gbp_sysprof_surface, GBP, SYSPROF_SURFACE, IdeSurface)
 
-SysprofZoomManager   *gbp_sysprof_surface_get_zoom_manager (GbpSysprofSurface *self);
+SpZoomManager   *gbp_sysprof_surface_get_zoom_manager (GbpSysprofSurface *self);
 void             gbp_sysprof_surface_set_profiler     (GbpSysprofSurface *self,
-                                                       SysprofProfiler        *profiler);
-SysprofCaptureReader *gbp_sysprof_surface_get_reader       (GbpSysprofSurface *self);
+                                                       SpProfiler        *profiler);
+SpCaptureReader *gbp_sysprof_surface_get_reader       (GbpSysprofSurface *self);
 void             gbp_sysprof_surface_set_reader       (GbpSysprofSurface *self,
-                                                       SysprofCaptureReader   *reader);
+                                                       SpCaptureReader   *reader);
 
 G_END_DECLS
