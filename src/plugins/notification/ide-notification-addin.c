@@ -180,7 +180,7 @@ ide_notification_addin_build_finished (IdeNotificationAddin *self,
 
   if (self->notif)
     {
-      g_autoptr(GIcon) icon = g_themed_icon_new ("emblem-ok-symbolic");
+      ide_notification_set_icon_name (self->notif, "emblem-ok-symbolic");
 
       if (self->requested_phase & IDE_PIPELINE_PHASE_BUILD)
         ide_notification_set_title (self->notif, _("Build succeeded"));
@@ -188,8 +188,6 @@ ide_notification_addin_build_finished (IdeNotificationAddin *self,
         ide_notification_set_title (self->notif, _("Build configured"));
       else if (self->requested_phase & IDE_PIPELINE_PHASE_AUTOGEN)
         ide_notification_set_title (self->notif, _("Build bootstrapped"));
-
-      ide_notification_set_icon (self->notif, icon);
     }
 
   ide_notification_addin_notify (self, TRUE);
