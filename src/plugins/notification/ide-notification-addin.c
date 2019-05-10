@@ -119,6 +119,30 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 }
 
 static void
+ide_notification_addin_notify_pipeline (IdeNotificationAddin *self,
+                                        GParamSpec           *pspec,
+                                        IdeBuildManager      *build_manager)
+{
+  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  if (self->notif != NULL)
+    {
+      g_autoptr(IdeContext) context = NULL;
+      g_autofree gchar *id = NULL;
+
+      /* Remove notification, it is now invalid */
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+
+      /* Also withdraw from the shell */
+      context = ide_object_ref_context (IDE_OBJECT (build_manager));
+      id = ide_context_dup_project_id (context);
+      g_application_withdraw_notification (g_application_get_default (), id);
+    }
+}
+
+static void
 ide_notification_addin_build_started (IdeNotificationAddin *self,
                                       IdePipeline     *pipeline,
                                       IdeBuildManager      *build_manager)
@@ -212,6 +236,12 @@ ide_notification_addin_load (IdePipelineAddin *addin,
 
   build_manager = ide_build_manager_from_context (context);
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  g_signal_connect_object (build_manager,
+                           "notify::pipeline",
+                           G_CALLBACK (ide_notification_addin_notify_pipeline),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (build_manager,
                            "build-started",
