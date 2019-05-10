@@ -170,11 +170,26 @@ ide_notification_addin_build_started (IdeNotificationAddin *self,
   self->requested_phase = phase;
   self->supress = phase < IDE_PIPELINE_PHASE_BUILD;
 
+  g_assert (self->notif == NULL);
+
   if (self->requested_phase)
     {
       self->notif = ide_notification_new ();
       g_object_bind_property (pipeline, "message", self->notif, "title", G_BINDING_SYNC_CREATE);
       ide_notification_attach (self->notif, IDE_OBJECT (self));
+    }
+
+  if (!self->supress)
+    {
+      g_autoptr(IdeContext) context = NULL;
+      g_autofree gchar *id = NULL;
+
+      /* Withdraw previous notification as it is now invalid because we will be
+       * notifying about this build soon.
+       */
+      context = ide_object_ref_context (IDE_OBJECT (build_manager));
+      id = ide_context_dup_project_id (context);
+      g_application_withdraw_notification (g_application_get_default (), id);
     }
 }
 
