@@ -30,12 +30,12 @@
 
 struct _IdeNotificationAddin
 {
-  IdeObject        parent_instance;
-  IdeNotification *notif;
-  gchar           *last_msg_body;
-  IdePipelinePhase    requested_phase;
-  gint64           last_time;
-  guint            supress : 1;
+  IdeObject         parent_instance;
+  IdeNotification  *notif;
+  gchar            *last_msg_body;
+  IdePipelinePhase  requested_phase;
+  gint64            last_time;
+  guint             supress : 1;
 };
 
 static void addin_iface_init (IdePipelineAddinInterface *iface);
