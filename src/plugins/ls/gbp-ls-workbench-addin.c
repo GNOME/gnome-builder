@@ -53,7 +53,7 @@ gbp_ls_workbench_addin_can_open (IdeWorkbenchAddin *addin,
     }
 
   /* We can open, but super low priority */
-  *priority = G_MAXINT;
+  *priority = 10000;
   return TRUE;
 }
 
