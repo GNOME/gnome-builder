@@ -33,3 +33,15 @@ On the right you will now see a list of preferences that may be tweaked for that
 Change the indentation level to your desired preference.
 
 .. _editorconfig: http://editorconfig.org/
+
+Disabling an Indenter
+---------------------
+
+If an indenter is being problematic, you can disable it using ``gsettings``.
+The GNU-style C indenter is provided as part of the ``c-pack`` plugin and can be disabled as such:
+
+.. code-block:: sh
+
+   $ flatpak run --command=bash org.gnome.Builder
+   [org.gnome.Builder]$ gsettings set "org.gnome.builder.extension-type:/org/gnome/builder/extension-types/c-pack/IdeIndenter/" enabled false
+
