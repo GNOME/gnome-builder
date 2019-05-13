@@ -678,7 +678,12 @@ sort_by_priority (gconstpointer a,
 
   /* Greater values are higher priority */
 
-  return sb->priority - sa->priority;
+  if (sa->priority < sb->priority)
+    return -1;
+  else if (sa->priority > sb->priority)
+    return 1;
+  else
+    return 0;
 }
 
 /**

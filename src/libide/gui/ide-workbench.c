@@ -1872,7 +1872,12 @@ sort_by_priority (gconstpointer a,
   if (!ide_workbench_addin_can_open (addin_b, o->file, o->content_type, &prio_b))
     return -1;
 
-  return prio_a - prio_b;
+  if (prio_a < prio_b)
+    return -1;
+  else if (prio_a > prio_b)
+    return 1;
+  else
+    return 0;
 }
 
 static void
