@@ -1442,6 +1442,11 @@ ide_buffer_save_file_cb (GObject      *object,
   ide_notification_set_progress (state->notif, 1.0);
   ide_buffer_set_state (self, IDE_BUFFER_STATE_READY);
 
+  /* Treat our save as freshest. It's possible we race, as we'd need an etag to
+   * detect that, probably fine in all but the most slowest of races.
+   */
+  _ide_buffer_set_changed_on_volume (self, FALSE);
+
   /* Notify addins that a save has completed */
   if (self->addins != NULL)
     {
