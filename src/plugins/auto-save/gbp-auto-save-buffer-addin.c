@@ -45,7 +45,11 @@ gbp_auto_save_buffer_addin_source_cb (gpointer user_data)
 
   self->source_id = 0;
 
-  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self->buffer)))
+  /* Only auto-save if there are no active changes and the file has not been
+   * changed out from under us on the storage volume.
+   */
+  if (!ide_buffer_get_changed_on_volume (self->buffer) &&
+      gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self->buffer)))
     ide_buffer_save_file_async (self->buffer, NULL, NULL, NULL, NULL, NULL);
 
   return G_SOURCE_REMOVE;
