@@ -1488,6 +1488,12 @@ ide_buffer_save_file_settle_cb (GObject      *object,
     }
 
   saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (self), state->source_file);
+  /* At this point, we've notified the user of changes to the underlying file using
+   * the infobar, so just save the file knowing that we are overwriting things.
+   */
+  gtk_source_file_saver_set_flags (saver,
+                                   (GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_INVALID_CHARS |
+                                    GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_MODIFICATION_TIME));
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
                                     ide_task_get_cancellable (task),
