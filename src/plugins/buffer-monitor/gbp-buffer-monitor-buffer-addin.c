@@ -127,6 +127,7 @@ gbp_buffer_monitor_buffer_addin_file_changed_cb (GbpBufferMonitorBufferAddin *se
   IDE_TRACE_MSG ("%s event=%d", g_file_peek_path (file), event);
 
   if (event == G_FILE_MONITOR_EVENT_CHANGED ||
+      event == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT ||
       event == G_FILE_MONITOR_EVENT_DELETED ||
       event == G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED)
     {
