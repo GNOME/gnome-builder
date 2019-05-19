@@ -114,6 +114,12 @@ main (gint   argc,
   /* Always ignore SIGPIPE */
   signal (SIGPIPE, SIG_IGN);
 
+  /* Set up gettext translations */
+  setlocale (LC_ALL, "");
+  bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
+
   /* Setup various application name/id defaults. */
   g_set_prgname (ide_get_program_name ());
   g_set_application_name (_("Builder"));
