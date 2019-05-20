@@ -3,7 +3,6 @@ Authors=Giovanni Campagna <gcampagn@cs.stanford.edu>
 Builtin=true
 Copyright=Copyright © 2016-2018 Christian Hergert, 2017 Giovanni Campagna
 Description=Provides integration with the NPM package system
-Hidden=true
 Loader=python3
 Module=npm_plugin
 Name=NPM/nodejs
