@@ -31,12 +31,62 @@
 #include <libide-greeter.h>
 #include <libide-gui.h>
 #include <libide-threading.h>
+#ifdef ENABLE_TRACING_SYSCAP
+# include <sysprof-capture.h>
+#endif
+#include <sched.h>
+#include <unistd.h>
 
 #include "ide-application-private.h"
+#include "ide-debug.h"
 #include "ide-thread-private.h"
 #include "ide-terminal-private.h"
+#include "ide-private.h"
 
 #include "bug-buddy.h"
+
+#ifdef ENABLE_TRACING_SYSCAP
+static SysprofCaptureWriter *trace_writer;
+
+static void
+trace_load (void)
+{
+  sysprof_clock_init ();
+  trace_writer = sysprof_capture_writer_new_from_env (0);
+}
+
+static void
+trace_unload (void)
+{
+  if (trace_writer)
+    {
+      sysprof_capture_writer_flush (trace_writer);
+      g_clear_pointer (&trace_writer, sysprof_capture_writer_unref);
+    }
+}
+
+static void
+trace_function (const gchar    *func,
+                gint64          begin_time_usec,
+                gint64          end_time_usec)
+{
+  if (trace_writer != NULL)
+    sysprof_capture_writer_add_mark (trace_writer,
+                                     begin_time_usec * 1000L,
+                                     sched_getcpu (),
+                                     getpid (),
+                                     (end_time_usec - begin_time_usec) * 1000L,
+                                     "tracing",
+                                     "function",
+                                     func);
+}
+
+static IdeTraceVTable trace_vtable = {
+  trace_load,
+  trace_unload,
+  trace_function,
+};
+#endif
 
 static gboolean
 verbose_cb (const gchar  *option_name,
@@ -165,6 +215,10 @@ main (gint   argc,
   if (desktop == NULL)
     desktop = "unknown";
 
+#ifdef ENABLE_TRACING_SYSCAP
+  _ide_trace_init (&trace_vtable);
+#endif
+
   g_message ("Initializing with %s desktop and GTK+ %d.%d.%d.",
              desktop,
              gtk_get_major_version (),
@@ -193,6 +247,10 @@ main (gint   argc,
 
   /* Cleanup GtkSourceView singletons to improve valgrind output */
   gtk_source_finalize ();
+
+#ifdef ENABLE_TRACING_SYSCAP
+  _ide_trace_shutdown ();
+#endif
 
   return ret;
 }

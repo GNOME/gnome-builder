@@ -48,6 +48,10 @@ gnome_builder_deps = [
   libide_tree_dep,
 ]
 
+if libsysprof_capture.found()
+  gnome_builder_deps += libsysprof_capture
+endif
+
 if get_option('fusermount_wrapper')
 
   executable('fusermount', ['fusermount-wrapper.c'],
