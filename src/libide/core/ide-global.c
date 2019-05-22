@@ -32,8 +32,10 @@
 
 #include "../../gconstructor.h"
 
-#include "ide-macros.h"
+#include "ide-debug.h"
 #include "ide-global.h"
+#include "ide-macros.h"
+#include "ide-private.h"
 
 static GThread *main_thread;
 static const gchar *application_id = "org.gnome.Builder";
@@ -231,4 +233,35 @@ ide_gettext (const gchar *message)
   if (message != NULL)
     return g_dgettext (GETTEXT_PACKAGE, message);
   return NULL;
+}
+
+static IdeTraceVTable trace_vtable;
+
+void
+_ide_trace_init (IdeTraceVTable *vtable)
+{
+  trace_vtable = *vtable;
+  if (trace_vtable.load)
+    trace_vtable.load ();
+}
+
+void
+_ide_trace_shutdown (void)
+{
+  if (trace_vtable.unload)
+    trace_vtable.unload ();
+  memset (&trace_vtable, 0, sizeof trace_vtable);
+}
+
+void
+ide_trace_function (const gchar *strfunc,
+                    gint64       begin_time_usec,
+                    gint64       end_time_usec)
+{
+  /* In case our clock is not reliable */
+  if (end_time_usec < begin_time_usec)
+    end_time_usec = begin_time_usec;
+
+  if (trace_vtable.function)
+    trace_vtable.function (strfunc, begin_time_usec, end_time_usec);
 }

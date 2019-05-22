@@ -22,6 +22,8 @@
 #include <execinfo.h>
 #include <glib.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -116,6 +118,10 @@ G_BEGIN_DECLS
 #endif
 
 #ifdef IDE_ENABLE_TRACE
+_IDE_EXTERN
+void ide_trace_function (const gchar *strfunc,
+                         gint64       begin_time_usec,
+                         gint64       end_time_usec);
 # define IDE_TRACE_MSG(fmt, ...)                                         \
    g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "  MSG: %s():%d: " fmt,      \
          G_STRFUNC, __LINE__, ##__VA_ARGS__)
@@ -126,10 +132,14 @@ G_BEGIN_DECLS
    g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, " TODO: %s():%d: %s",        \
          G_STRFUNC, __LINE__, _msg)
 # define IDE_ENTRY                                                       \
+   gint64 __trace_begin_time = g_get_monotonic_time ();                  \
    g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "ENTRY: %s():%d",            \
-         G_STRFUNC, __LINE__)
+           G_STRFUNC, __LINE__)
 # define IDE_EXIT                                                        \
    G_STMT_START {                                                        \
+      ide_trace_function (G_STRFUNC,                                     \
+                          __trace_begin_time,                            \
+                          g_get_monotonic_time ());                      \
       g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, " EXIT: %s():%d",         \
             G_STRFUNC, __LINE__);                                        \
       return;                                                            \
@@ -142,6 +152,9 @@ G_BEGIN_DECLS
    } G_STMT_END
 # define IDE_RETURN(_r)                                                  \
    G_STMT_START {                                                        \
+      ide_trace_function (G_STRFUNC,                                     \
+                          __trace_begin_time,                            \
+                          g_get_monotonic_time ());                      \
       g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, " EXIT: %s():%d ",        \
             G_STRFUNC, __LINE__);                                        \
       return _r;                                                         \

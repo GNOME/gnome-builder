@@ -280,6 +280,15 @@ foreach func: check_functions
   config_h.set(func[0], cc.has_function(func[1]))
 endforeach
 
+#
+# If we have sysprof-capture-3, we can export tracing information
+# to the SYSPROF_TRACE_FD.
+#
+libsysprof_capture = dependency('sysprof-capture-3', version: '3.33.1', static: true, required: false)
+if libsysprof_capture.found()
+  config_h.set10('ENABLE_TRACING_SYSCAP', true)
+endif
+
 configure_file(output: 'config.h', configuration: config_h)
 
 gnome = import('gnome')
