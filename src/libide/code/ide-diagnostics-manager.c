@@ -453,6 +453,8 @@ ide_diagnostics_group_diagnose_foreach (IdeExtensionSetAdapter *adapter,
                                           NULL,
                                           ide_diagnostics_group_diagnose_cb,
                                           g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void

@@ -387,6 +387,8 @@ restore_file (GObject      *source,
           ide_task_return_boolean (task, TRUE);
         }
     }
+
+  IDE_EXIT;
 }
 
 static void

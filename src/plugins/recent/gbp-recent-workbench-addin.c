@@ -98,11 +98,11 @@ gbp_recent_workbench_addin_add_recent (GbpRecentWorkbenchAddin *self,
   GFile *file;
   GFile *directory;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_RECENT_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
-
-  IDE_ENTRY;
 
   if (!(file = _ide_project_info_get_real_file (project_info)) ||
       directory_is_ignored (file))

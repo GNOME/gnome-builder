@@ -426,6 +426,8 @@ ide_lsp_hover_provider_real_load (IdeHoverProvider *provider,
 
   if (IDE_LSP_HOVER_PROVIDER_GET_CLASS (self)->prepare)
     IDE_LSP_HOVER_PROVIDER_GET_CLASS (self)->prepare (self);
+
+  IDE_EXIT;
 }
 
 static void

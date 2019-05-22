@@ -7269,7 +7269,7 @@ ide_source_view_move_mark_onscreen (IdeSourceView *self,
   gtk_text_view_get_iter_location (text_view, &iter, &iter_rect);
 
   if (_GDK_RECTANGLE_CONTAINS (&visible_rect, &iter_rect))
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   if (_GDK_RECTANGLE_Y2 (&iter_rect) > _GDK_RECTANGLE_Y2 (&visible_rect))
     gtk_text_view_get_iter_at_location (text_view, &iter,
@@ -7282,7 +7282,7 @@ ide_source_view_move_mark_onscreen (IdeSourceView *self,
 
   gtk_text_buffer_move_mark (buffer, mark, &iter);
 
-  return TRUE;
+  IDE_RETURN (TRUE);
 }
 
 static gboolean

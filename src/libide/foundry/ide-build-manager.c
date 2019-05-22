@@ -1611,6 +1611,8 @@ ide_build_manager_clean_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 /**

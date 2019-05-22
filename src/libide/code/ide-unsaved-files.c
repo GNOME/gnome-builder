@@ -366,13 +366,13 @@ ide_unsaved_files_restore_worker (IdeTask      *task,
   if (!g_file_test (manifest_path, G_FILE_TEST_IS_REGULAR))
     {
       ide_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   if (!g_file_get_contents (manifest_path, &manifest_contents, &len, &read_error))
     {
       ide_task_return_error (task, g_steal_pointer (&read_error));
-      return;
+      IDE_EXIT;
     }
 
   if (len > G_MAXSSIZE)
@@ -381,7 +381,7 @@ ide_unsaved_files_restore_worker (IdeTask      *task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NO_SPACE,
                                  "File is too large to load");
-      return;
+      IDE_EXIT;
     }
 
   ide_line_reader_init (&reader, manifest_contents, len);
@@ -427,6 +427,8 @@ ide_unsaved_files_restore_worker (IdeTask      *task,
     }
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
