@@ -265,3 +265,12 @@ ide_trace_function (const gchar *strfunc,
   if (trace_vtable.function)
     trace_vtable.function (strfunc, begin_time_usec, end_time_usec);
 }
+
+void
+_ide_trace_log (const gchar *domain,
+                const gchar *level_str,
+                const gchar *message)
+{
+  if (trace_vtable.log)
+    trace_vtable.log (domain, level_str, message);
+}

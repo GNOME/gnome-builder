@@ -39,6 +39,7 @@
 #include "ide-debug.h"
 #include "ide-log.h"
 #include "ide-macros.h"
+#include "ide-private.h"
 
 /**
  * SECTION:ide-log
@@ -210,6 +211,10 @@ ide_log_handler (const gchar    *log_domain,
   /* Ignore GdkPixbuf chatty-ness */
   if (g_strcmp0 ("GdkPixbuf", log_domain) == 0)
     return;
+
+  /* Let tracer know about log message */
+  if (log_level < IDE_LOG_LEVEL_TRACE)
+    _ide_trace_log (log_domain, ide_log_level_str (log_level), message);
 
   if (G_LIKELY (channels->len))
     {

@@ -47,6 +47,7 @@
 
 #ifdef ENABLE_TRACING_SYSCAP
 static SysprofCaptureWriter *trace_writer;
+static G_LOCK_DEFINE (tracer);
 
 static void
 trace_load (void)
@@ -71,20 +72,47 @@ trace_function (const gchar    *func,
                 gint64          end_time_usec)
 {
   if (trace_writer != NULL)
-    sysprof_capture_writer_add_mark (trace_writer,
-                                     begin_time_usec * 1000L,
-                                     sched_getcpu (),
-                                     getpid (),
-                                     (end_time_usec - begin_time_usec) * 1000L,
-                                     "tracing",
-                                     "function",
-                                     func);
+    {
+      G_LOCK (tracer);
+      sysprof_capture_writer_add_mark (trace_writer,
+                                       begin_time_usec * 1000L,
+                                       sched_getcpu (),
+                                       getpid (),
+                                       (end_time_usec - begin_time_usec) * 1000L,
+                                       "tracing",
+                                       "function",
+                                       func);
+      G_UNLOCK (tracer);
+    }
+}
+
+static void
+trace_log (const gchar *domain,
+           const gchar *level_str,
+           const gchar *message)
+{
+  if (trace_writer != NULL)
+    {
+      g_autofree gchar *tail = g_strdup_printf ("%s: %s", domain, message);
+
+      G_LOCK (tracer);
+      sysprof_capture_writer_add_mark (trace_writer,
+                                       SYSPROF_CAPTURE_CURRENT_TIME,
+                                       sched_getcpu (),
+                                       getpid (),
+                                       0,
+                                       "log",
+                                       level_str,
+                                       tail);
+      G_UNLOCK (tracer);
+    }
 }
 
 static IdeTraceVTable trace_vtable = {
   trace_load,
   trace_unload,
   trace_function,
+  trace_log,
 };
 #endif
 
