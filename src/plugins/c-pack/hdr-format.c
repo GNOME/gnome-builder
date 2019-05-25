@@ -161,7 +161,7 @@ read_return_type (const gchar  *str,
       if (!(word = getword (str, &tmp)))
         return NULL;
 
-      if (g_str_equal (word, "static") || g_str_equal (word, "const") || *word == '*')
+      if (g_str_equal (word, "static") || g_str_equal (word, "const") || g_str_equal (word, "struct") || *word == '*')
         {
           if (gstr->len)
             g_string_append_c (gstr, ' ');
