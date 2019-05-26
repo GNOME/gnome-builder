@@ -1547,6 +1547,8 @@
              "clear-count" ()
              "end-macro" () };
 
+  bind "i" { "set-mode" ("vim-normal-y-i", transient) };
+
   bind "dollar" { "begin-macro" ()
                   "save-insert-mark" ()
                   "movement" (line-end, 1, 1, 1)
@@ -1556,6 +1558,152 @@
                   "clear-count" ()
                   "end-macro" () };
 }
+
+@binding-set builder-vim-source-view-normal-y-i
+{
+  bind "p" { "begin-macro" ()
+             "movement" (paragraph-start, 1, 1, 1)
+             "movement" (first-char, 1, 1, 0)
+             "swap-selection-bounds" ()
+             "movement" (paragraph-end, 1, 1, 1)
+             "movement" (last-char, 1, 1, 0)
+             "copy-clipboard-extended" ()
+             "selection-theatric" (expand)
+             "clear-selection" ()
+             "end-macro" () };
+
+  /* yiw */
+  bind "w" { "begin-macro" ()
+             "set-mode" ("vim-normal", permanent)
+             "movement" (previous-word-end, 0, 1, 1)
+             "movement" (next-word-start, 0, 1, 0)
+             "movement" (next-word-end, 1, 0, 1)
+             "copy-clipboard-extended" ()
+             "selection-theatric" (expand)
+             "clear-selection" ()
+             "end-macro" () };
+
+  /* yiW */
+  bind "<shift>w" { "begin-macro" ()
+                    "set-mode" ("vim-normal", permanent)
+                    "movement" (previous-full-word-end, 0, 1, 1)
+                    "movement" (next-full-word-start, 0, 1, 0)
+                    "movement" (next-full-word-end, 1, 0, 1)
+                    "copy-clipboard-extended" ()
+                    "selection-theatric" (expand)
+                    "clear-selection" ()
+                    "end-macro" () };
+
+  /* yi( , yi) , yib */
+  bind "parenleft" { "begin-macro" ()
+                     "select-inner" ("(", ")", 1, 0)
+                     "set-mode" ("vim-normal", permanent)
+                     "copy-clipboard-extended" ()
+                     "selection-theatric" (expand)
+                     "clear-selection" ()
+                     "end-macro" () };
+
+  bind "parenright" { "begin-macro" ()
+                      "select-inner" ("(", ")", 1, 0)
+                      "set-mode" ("vim-normal", permanent)
+                      "copy-clipboard-extended" ()
+                      "selection-theatric" (expand)
+                      "clear-selection" ()
+                      "end-macro" () };
+
+  bind "b" { "begin-macro" ()
+             "select-inner" ("(", ")", 1, 0)
+             "set-mode" ("vim-normal", permanent)
+             "copy-clipboard-extended" ()
+             "selection-theatric" (expand)
+             "clear-selection" ()
+             "end-macro" () };
+
+  /* yi[ and yi] */
+  bind "bracketleft" { "begin-macro" ()
+                       "select-inner" ("[", "]", 1, 0)
+                       "set-mode" ("vim-normal", permanent)
+                       "copy-clipboard-extended" ()
+                       "selection-theatric" (expand)
+                       "clear-selection" ()
+                       "end-macro" () };
+
+  bind "bracketright" { "begin-macro" ()
+                        "select-inner" ("[", "]", 1, 0)
+                        "set-mode" ("vim-normal", permanent)
+                        "copy-clipboard-extended" ()
+                        "selection-theatric" (expand)
+                        "clear-selection" ()
+                        "end-macro" () };
+
+  /* yi{ , yi} , yiB */
+  bind "braceleft" { "begin-macro" ()
+                     "select-inner" ("{", "}", 1, 0)
+                     "set-mode" ("vim-normal", permanent)
+                     "copy-clipboard-extended" ()
+                     "selection-theatric" (expand)
+                     "end-macro" () };
+
+  bind "braceright" { "begin-macro" ()
+                      "select-inner" ("{", "}", 1, 0)
+                      "set-mode" ("vim-normal", permanent)
+                      "copy-clipboard-extended" ()
+                      "selection-theatric" (expand)
+                      "end-macro" () };
+
+  bind "<shift>b" { "begin-macro" ()
+                    "select-inner" ("{", "}", 1, 0)
+                    "set-mode" ("vim-normal", permanent)
+                    "copy-clipboard-extended" ()
+                    "selection-theatric" (expand)
+                    "end-macro" () };
+
+  /* yi< and yi> */
+    bind "less" { "begin-macro" ()
+                  "select-inner" ("<", ">", 1, 0)
+                  "set-mode" ("vim-normal", permanent)
+                  "copy-clipboard-extended" ()
+                  "selection-theatric" (expand)
+                  "end-macro" () };
+
+    bind "greater" { "begin-macro" ()
+                     "select-inner" ("<", ">", 1, 0)
+                     "set-mode" ("vim-normal", permanent)
+                     "copy-clipboard-extended" ()
+                     "selection-theatric" (expand)
+                     "end-macro" () };
+
+  /* yi" yi' yi` */
+    bind "quotedbl" { "begin-macro" ()
+                      "select-inner" ("\"", "\"", 1, 1)
+                      "set-mode" ("vim-normal", permanent)
+                      "copy-clipboard-extended" ()
+                      "selection-theatric" (expand)
+                      "end-macro" () };
+
+    bind "apostrophe" { "begin-macro" ()
+                        "select-inner" ("'", "'", 1, 1)
+                        "set-mode" ("vim-normal", permanent)
+                        "copy-clipboard-extended" ()
+                        "selection-theatric" (expand)
+                        "end-macro" () };
+
+    bind "grave" { "begin-macro" ()
+                   "select-inner" ("`", "`", 1, 1)
+                   "set-mode" ("vim-normal", permanent)
+                   "copy-clipboard-extended" ()
+                   "selection-theatric" (expand)
+                   "end-macro" () };
+
+  /* yit */
+    bind "t" { "begin-macro" ()
+               "select-tag" (1)
+               "set-mode" ("vim-normal", permanent)
+               "copy-clipboard-extended" ()
+               "selection-theatric" (expand) }
+               "end-macro" () };
+}
+
 
 @binding-set builder-vim-source-view-normal-g
 {
@@ -2731,6 +2879,14 @@ idesourceviewmode.vim-normal-y {
 
   -gtk-key-bindings: builder-vim-source-view,
                      builder-vim-source-view-normal-y;
+}
+
+idesourceviewmode.vim-normal-y-i {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-block-cursor: true;
+
+  -gtk-key-bindings: builder-vim-source-view,
+                     builder-vim-source-view-normal-y-i;
 }
 
 idesourceviewmode.vim-normal-z {
