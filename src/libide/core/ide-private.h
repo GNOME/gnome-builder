@@ -31,14 +31,14 @@ typedef struct
   void (*function) (const gchar    *func,
                     gint64          begin_time_usec,
                     gint64          end_time_usec);
-  void (*log)      (const gchar    *domain,
-                    const gchar    *level_str,
+  void (*log)      (GLogLevelFlags  log_level,
+                    const gchar    *domain,
                     const gchar    *message);
 } IdeTraceVTable;
 
 void _ide_trace_init     (IdeTraceVTable *vtable);
-void _ide_trace_log      (const gchar    *domain,
-                          const gchar    *level_str,
+void _ide_trace_log      (GLogLevelFlags  log_level,
+                          const gchar    *domain,
                           const gchar    *message);
 void _ide_trace_shutdown (void);
 
