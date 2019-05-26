@@ -214,7 +214,7 @@ ide_log_handler (const gchar    *log_domain,
 
   /* Let tracer know about log message */
   if (log_level < IDE_LOG_LEVEL_TRACE)
-    _ide_trace_log (log_domain, ide_log_level_str (log_level), message);
+    _ide_trace_log (log_level, log_domain, message);
 
   if (G_LIKELY (channels->len))
     {

@@ -87,23 +87,20 @@ trace_function (const gchar    *func,
 }
 
 static void
-trace_log (const gchar *domain,
-           const gchar *level_str,
-           const gchar *message)
+trace_log (GLogLevelFlags  log_level,
+           const gchar    *domain,
+           const gchar    *message)
 {
   if (trace_writer != NULL)
     {
-      g_autofree gchar *tail = g_strdup_printf ("%s: %s", domain, message);
-
       G_LOCK (tracer);
-      sysprof_capture_writer_add_mark (trace_writer,
-                                       SYSPROF_CAPTURE_CURRENT_TIME,
-                                       sched_getcpu (),
-                                       getpid (),
-                                       0,
-                                       "log",
-                                       level_str,
-                                       tail);
+      sysprof_capture_writer_add_log (trace_writer,
+                                      SYSPROF_CAPTURE_CURRENT_TIME,
+                                      sched_getcpu (),
+                                      getpid (),
+                                      log_level,
+                                      domain,
+                                      message);
       G_UNLOCK (tracer);
     }
 }

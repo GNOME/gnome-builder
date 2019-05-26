@@ -267,10 +267,10 @@ ide_trace_function (const gchar *strfunc,
 }
 
 void
-_ide_trace_log (const gchar *domain,
-                const gchar *level_str,
-                const gchar *message)
+_ide_trace_log (GLogLevelFlags  log_level,
+                const gchar    *domain,
+                const gchar    *message)
 {
   if (trace_vtable.log)
-    trace_vtable.log (domain, level_str, message);
+    trace_vtable.log (log_level, domain, message);
 }
