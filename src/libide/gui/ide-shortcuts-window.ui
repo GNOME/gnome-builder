@@ -166,6 +166,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;i</property>
+                <property name="title" translatable="yes" context="shortcut window">Goto Line</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
                 <property name="accelerator">&lt;ctrl&gt;f</property>
                 <property name="title" translatable="yes" context="shortcut window">Find</property>
               </object>
