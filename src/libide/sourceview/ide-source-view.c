@@ -1542,6 +1542,9 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (event);
 
+  if (priv->cursor != NULL && ide_cursor_is_enabled (priv->cursor))
+    return FALSE;
+
   /*
    * If we are disabled, then do nothing.
    */
@@ -2114,7 +2117,9 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    * chain up to the parent class to insert the character, and then let the
    * auto-indenter fix things up.
    */
-  if (priv->buffer != NULL && priv->auto_indent)
+  if (priv->buffer != NULL &&
+      priv->auto_indent &&
+      (priv->cursor == NULL || !ide_cursor_is_enabled (priv->cursor)))
     {
       IdeIndenter *indenter = ide_source_view_get_indenter (self);
 
@@ -7866,4 +7871,14 @@ ide_source_view_set_gutter (IdeSourceView *self,
   g_object_notify (G_OBJECT (self), "show-line-changes");
   g_object_notify (G_OBJECT (self), "show-line-diagnostics");
   g_object_notify (G_OBJECT (self), "show-line-numbers");
+}
+
+gboolean
+_ide_source_view_has_cursors (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->cursor != NULL && ide_cursor_is_enabled (priv->cursor);
 }
