@@ -145,6 +145,7 @@
                 "--disable-polkitd",
                 "--disable-man-pages",
                 "--disable-introspection",
+                "--enable-libelogind=no",
                 "--enable-libsystemd-login=no",
                 "--with-systemdsystemunitdir=no"
             ],
@@ -160,8 +161,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "http://www.freedesktop.org/software/polkit/releases/polkit-0.113.tar.gz",
-                    "sha256" : "e1c095093c654951f78f8618d427faf91cf62abdefed98de40ff65eca6413c81"
+                    "url" : "https://www.freedesktop.org/software/polkit/releases/polkit-0.116.tar.gz",
+                    "sha256" : "88170c9e711e8db305a12fdb8234fac5706c61969b94e084d0f117d8ec5d34b1"
                 },
                 {
                     "type" : "patch",
