@@ -62,6 +62,7 @@ typedef struct
   guint           dirty : 1;
   guint           debug : 1;
   guint           has_attached : 1;
+  guint           prefix_set : 1;
 
   /*
    * This is used to determine if we can make progress building
@@ -91,6 +92,7 @@ enum {
   PROP_PARALLELISM,
   PROP_POST_INSTALL_COMMANDS,
   PROP_PREFIX,
+  PROP_PREFIX_SET,
   PROP_READY,
   PROP_RUNTIME,
   PROP_RUNTIME_ID,
@@ -587,6 +589,13 @@ ide_config_class_init (IdeConfigClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_PREFIX_SET] =
+    g_param_spec_boolean ("prefix-set",
+                          "Prefix Set",
+                          "If Prefix is Set or not (meaning default)",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_READY] =
     g_param_spec_boolean ("ready",
                           "Ready",
@@ -965,7 +974,9 @@ ide_config_set_prefix (IdeConfig   *self,
     {
       g_free (priv->prefix);
       priv->prefix = g_strdup (prefix);
+      priv->prefix_set = TRUE;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREFIX]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREFIX_SET]);
       ide_config_set_dirty (self, TRUE);
     }
 }
@@ -1726,4 +1737,31 @@ _ide_config_attach (IdeConfig *self)
   ide_config_block_changed (self);
   ide_config_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
   ide_config_unblock_changed (self);
+}
+
+gboolean
+ide_config_get_prefix_set (IdeConfig *self)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIG (self), FALSE);
+
+  return priv->prefix_set;
+}
+
+void
+ide_config_set_prefix_set (IdeConfig *self,
+                           gboolean   prefix_set)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIG (self));
+
+  prefix_set = !!prefix_set;
+
+  if (prefix_set != priv->prefix_set)
+    {
+      priv->prefix_set = prefix_set;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREFIX_SET]);
+    }
 }

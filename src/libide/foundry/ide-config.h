@@ -120,6 +120,11 @@ const gchar          *ide_config_get_prefix                (IdeConfig           
 IDE_AVAILABLE_IN_3_32
 void                  ide_config_set_prefix                (IdeConfig             *self,
                                                             const gchar           *prefix);
+IDE_AVAILABLE_IN_3_34
+gboolean              ide_config_get_prefix_set            (IdeConfig             *self);
+IDE_AVAILABLE_IN_3_34
+void                  ide_config_set_prefix_set            (IdeConfig             *self,
+                                                            gboolean               prefix_set);
 IDE_AVAILABLE_IN_3_32
 const gchar          *ide_config_get_config_opts           (IdeConfig             *self);
 IDE_AVAILABLE_IN_3_32
