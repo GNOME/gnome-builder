@@ -24,11 +24,17 @@
 
 G_BEGIN_DECLS
 
-void     _ide_foundry_init_async  (IdeContext           *context,
-                                   GCancellable         *cancellable,
-                                   GAsyncReadyCallback   callback,
-                                   gpointer              user_data);
-gboolean _ide_foundry_init_finish (GAsyncResult         *result,
-                                   GError              **error);
+void     _ide_foundry_init_async    (IdeContext           *context,
+                                     GCancellable         *cancellable,
+                                     GAsyncReadyCallback   callback,
+                                     gpointer              user_data);
+gboolean _ide_foundry_init_finish   (GAsyncResult         *result,
+                                     GError              **error);
+void     _ide_foundry_unload_async  (IdeContext           *context,
+                                     GCancellable         *cancellable,
+                                     GAsyncReadyCallback   callback,
+                                     gpointer              user_data);
+gboolean _ide_foundry_unload_finish (GAsyncResult         *result,
+                                     GError              **error);
 
 G_END_DECLS

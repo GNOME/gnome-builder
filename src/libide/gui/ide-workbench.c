@@ -1455,6 +1455,32 @@ ide_workbench_get_project_info (IdeWorkbench *self)
 }
 
 static void
+ide_workbench_unload_foundry_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeWorkbench *self;
+
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+
+  if (!_ide_foundry_unload_finish (result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  if (self->context != NULL)
+    {
+      ide_object_destroy (IDE_OBJECT (self->context));
+      g_clear_object (&self->context);
+    }
+}
+
+static void
 ide_workbench_unload_project_completed (IdeWorkbench *self,
                                         IdeTask      *task)
 {
@@ -1464,13 +1490,10 @@ ide_workbench_unload_project_completed (IdeWorkbench *self,
   g_clear_object (&self->addins);
   ide_workbench_foreach_workspace (self, (GtkCallback)gtk_widget_destroy, NULL);
 
-  if (self->context != NULL)
-    {
-      ide_object_destroy (IDE_OBJECT (self->context));
-      g_clear_object (&self->context);
-    }
-
-  ide_task_return_boolean (task, TRUE);
+  _ide_foundry_unload_async (self->context,
+                             ide_task_get_cancellable (task),
+                             ide_workbench_unload_foundry_cb,
+                             g_object_ref (task));
 }
 
 static void
@@ -1628,7 +1651,6 @@ ide_workbench_unload_async (IdeWorkbench        *self,
                           cancellable,
                           ide_workbench_session_save_cb,
                           g_steal_pointer (&task));
-
 }
 
 /**

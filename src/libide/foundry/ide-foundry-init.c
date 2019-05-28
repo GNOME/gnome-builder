@@ -159,3 +159,62 @@ _ide_foundry_init_finish (GAsyncResult  *result,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+static void
+ide_foundry_init_unload_config_manager_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  IdeConfigManager *config_manager = (IdeConfigManager *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONFIG_MANAGER (config_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_config_manager_save_finish (config_manager, result, &error))
+    g_warning ("Failed to save build configs: %s", error->message);
+
+  ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+void
+_ide_foundry_unload_async (IdeContext          *context,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  IdeConfigManager *config_manager;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (context, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, _ide_foundry_unload_async);
+
+  config_manager = ide_config_manager_from_context (context);
+
+  ide_config_manager_save_async (config_manager,
+                                 cancellable,
+                                 ide_foundry_init_unload_config_manager_cb,
+                                 g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+_ide_foundry_unload_finish (GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
