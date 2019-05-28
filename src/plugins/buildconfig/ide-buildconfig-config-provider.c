@@ -333,10 +333,10 @@ ide_buildconfig_config_provider_save_cb (GObject      *object,
 }
 
 static void
-ide_buildconfig_config_provider_save_async (IdeConfigProvider *provider,
-                                                   GCancellable             *cancellable,
-                                                   GAsyncReadyCallback       callback,
-                                                   gpointer                  user_data)
+ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
+                                            GCancellable        *cancellable,
+                                            GAsyncReadyCallback  callback,
+                                            gpointer             user_data)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(GHashTable) group_names = NULL;
@@ -525,8 +525,8 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider *provider,
 
 static gboolean
 ide_buildconfig_config_provider_save_finish (IdeConfigProvider  *provider,
-                                                    GAsyncResult              *result,
-                                                    GError                   **error)
+                                             GAsyncResult       *result,
+                                             GError            **error)
 {
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
@@ -537,7 +537,7 @@ ide_buildconfig_config_provider_save_finish (IdeConfigProvider  *provider,
 
 static void
 ide_buildconfig_config_provider_delete (IdeConfigProvider *provider,
-                                               IdeConfig         *config)
+                                        IdeConfig         *config)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(IdeConfig) hold = NULL;
@@ -602,7 +602,7 @@ ide_buildconfig_config_provider_delete (IdeConfigProvider *provider,
 
 static void
 ide_buildconfig_config_provider_duplicate (IdeConfigProvider *provider,
-                                                  IdeConfig         *config)
+                                           IdeConfig         *config)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(IdeConfig) new_config = NULL;
@@ -695,7 +695,7 @@ ide_buildconfig_config_provider_unload (IdeConfigProvider *provider)
 
 static void
 ide_buildconfig_config_provider_added (IdeConfigProvider *provider,
-                                              IdeConfig         *config)
+                                       IdeConfig         *config)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
 
@@ -708,7 +708,7 @@ ide_buildconfig_config_provider_added (IdeConfigProvider *provider,
 
 static void
 ide_buildconfig_config_provider_removed (IdeConfigProvider *provider,
-                                                IdeConfig         *config)
+                                         IdeConfig         *config)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
 

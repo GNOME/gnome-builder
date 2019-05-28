@@ -40,7 +40,7 @@ struct _IdeConfigManager
 
   GCancellable     *cancellable;
   GArray           *configs;
-  IdeConfig *current;
+  IdeConfig        *current;
   PeasExtensionSet *providers;
   GSettings        *project_settings;
 
@@ -55,15 +55,15 @@ typedef struct
   IdeConfig         *config;
 } ConfigInfo;
 
-static void async_initable_iface_init                   (GAsyncInitableIface     *iface);
-static void list_model_iface_init                       (GListModelInterface     *iface);
-static void ide_config_manager_save_tick         (IdeTask                 *task);
-static void ide_config_manager_actions_current   (IdeConfigManager *self,
-                                                         GVariant                *param);
-static void ide_config_manager_actions_delete    (IdeConfigManager *self,
-                                                         GVariant                *param);
-static void ide_config_manager_actions_duplicate (IdeConfigManager *self,
-                                                         GVariant                *param);
+static void async_initable_iface_init            (GAsyncInitableIface *iface);
+static void list_model_iface_init                (GListModelInterface *iface);
+static void ide_config_manager_save_tick         (IdeTask             *task);
+static void ide_config_manager_actions_current   (IdeConfigManager    *self,
+                                                  GVariant            *param);
+static void ide_config_manager_actions_delete    (IdeConfigManager    *self,
+                                                  GVariant            *param);
+static void ide_config_manager_actions_duplicate (IdeConfigManager    *self,
+                                                  GVariant            *param);
 
 DZL_DEFINE_ACTION_GROUP (IdeConfigManager, ide_config_manager, {
   { "current", ide_config_manager_actions_current, "s" },
@@ -74,8 +74,7 @@ DZL_DEFINE_ACTION_GROUP (IdeConfigManager, ide_config_manager, {
 G_DEFINE_TYPE_EXTENDED (IdeConfigManager, ide_config_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
-                                               ide_config_manager_init_action_group))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_config_manager_init_action_group))
 
 enum {
   PROP_0,
@@ -104,7 +103,7 @@ config_info_clear (gpointer data)
 
 static void
 ide_config_manager_actions_current (IdeConfigManager *self,
-                                           GVariant                *param)
+                                    GVariant         *param)
 {
   IdeConfig *config;
   const gchar *id;
@@ -121,7 +120,7 @@ ide_config_manager_actions_current (IdeConfigManager *self,
 
 static void
 ide_config_manager_actions_duplicate (IdeConfigManager *self,
-                                             GVariant                *param)
+                                      GVariant         *param)
 {
   IdeConfig *config;
   const gchar *id;
@@ -138,7 +137,7 @@ ide_config_manager_actions_duplicate (IdeConfigManager *self,
 
 static void
 ide_config_manager_actions_delete (IdeConfigManager *self,
-                                          GVariant                *param)
+                                   GVariant         *param)
 {
   IdeConfig *config;
   const gchar *id;
@@ -155,9 +154,9 @@ ide_config_manager_actions_delete (IdeConfigManager *self,
 
 static void
 ide_config_manager_collect_providers (PeasExtensionSet *set,
-                                             PeasPluginInfo   *plugin_info,
-                                             PeasExtension    *exten,
-                                             gpointer          user_data)
+                                      PeasPluginInfo   *plugin_info,
+                                      PeasExtension    *exten,
+                                      gpointer          user_data)
 {
   IdeConfigProvider *provider = (IdeConfigProvider *)exten;
   GPtrArray *providers = user_data;
@@ -172,8 +171,8 @@ ide_config_manager_collect_providers (PeasExtensionSet *set,
 
 static void
 ide_config_manager_save_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
+                            GAsyncResult *result,
+                            gpointer      user_data)
 {
   IdeConfigProvider *provider = (IdeConfigProvider *)object;
   g_autoptr(IdeTask) task = user_data;
@@ -217,9 +216,9 @@ ide_config_manager_save_tick (IdeTask *task)
   g_assert (IDE_IS_CONFIG_PROVIDER (provider));
 
   ide_config_provider_save_async (provider,
-                                         cancellable,
-                                         ide_config_manager_save_cb,
-                                         g_object_ref (task));
+                                  cancellable,
+                                  ide_config_manager_save_cb,
+                                  g_object_ref (task));
 
   g_ptr_array_remove_index (providers, providers->len - 1);
 
@@ -227,10 +226,10 @@ ide_config_manager_save_tick (IdeTask *task)
 }
 
 void
-ide_config_manager_save_async (IdeConfigManager *self,
-                                      GCancellable            *cancellable,
-                                      GAsyncReadyCallback      callback,
-                                      gpointer                 user_data)
+ide_config_manager_save_async (IdeConfigManager    *self,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
 {
   g_autoptr(GPtrArray) providers = NULL;
   g_autoptr(IdeTask) task = NULL;
@@ -260,8 +259,8 @@ ide_config_manager_save_async (IdeConfigManager *self,
 
 gboolean
 ide_config_manager_save_finish (IdeConfigManager  *self,
-                                       GAsyncResult             *result,
-                                       GError                  **error)
+                                GAsyncResult      *result,
+                                GError           **error)
 {
   g_return_val_if_fail (IDE_IS_CONFIG_MANAGER (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
@@ -283,7 +282,7 @@ ide_config_manager_save_finish (IdeConfigManager  *self,
  */
 IdeConfig *
 ide_config_manager_get_config (IdeConfigManager *self,
-                                             const gchar             *id)
+                               const gchar      *id)
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CONFIG_MANAGER (self), NULL);
@@ -315,8 +314,8 @@ ide_config_manager_get_display_name (IdeConfigManager *self)
 
 static void
 ide_config_manager_notify_display_name (IdeConfigManager *self,
-                                               GParamSpec              *pspec,
-                                               IdeConfig        *configuration)
+                                        GParamSpec       *pspec,
+                                        IdeConfig        *configuration)
 {
   g_assert (IDE_IS_CONFIG_MANAGER (self));
   g_assert (IDE_IS_CONFIG (configuration));
@@ -326,8 +325,8 @@ ide_config_manager_notify_display_name (IdeConfigManager *self,
 
 static void
 ide_config_manager_notify_ready (IdeConfigManager *self,
-                                        GParamSpec              *pspec,
-                                        IdeConfig        *configuration)
+                                 GParamSpec       *pspec,
+                                 IdeConfig        *configuration)
 {
   g_assert (IDE_IS_CONFIG_MANAGER (self));
   g_assert (IDE_IS_CONFIG (configuration));
@@ -370,9 +369,9 @@ ide_config_manager_finalize (GObject *object)
 
 static void
 ide_config_manager_get_property (GObject    *object,
-                                        guint       prop_id,
-                                        GValue     *value,
-                                        GParamSpec *pspec)
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
 {
   IdeConfigManager *self = IDE_CONFIG_MANAGER (object);
 
@@ -397,9 +396,9 @@ ide_config_manager_get_property (GObject    *object,
 
 static void
 ide_config_manager_set_property (GObject      *object,
-                                        guint         prop_id,
-                                        const GValue *value,
-                                        GParamSpec   *pspec)
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
 {
   IdeConfigManager *self = IDE_CONFIG_MANAGER (object);
 
@@ -492,7 +491,7 @@ ide_config_manager_get_n_items (GListModel *model)
 
 static gpointer
 ide_config_manager_get_item (GListModel *model,
-                                    guint       position)
+                             guint       position)
 {
   IdeConfigManager *self = (IdeConfigManager *)model;
   const ConfigInfo *info;
@@ -533,7 +532,7 @@ ide_config_manager_do_save (gpointer data)
 
 static void
 ide_config_manager_changed (IdeConfigManager *self,
-                                   IdeConfig        *config)
+                            IdeConfig        *config)
 {
   g_assert (IDE_IS_CONFIG_MANAGER (self));
   g_assert (IDE_IS_CONFIG (config));
@@ -549,8 +548,8 @@ ide_config_manager_changed (IdeConfigManager *self,
 
 static void
 ide_config_manager_config_added (IdeConfigManager  *self,
-                                        IdeConfig         *config,
-                                        IdeConfigProvider *provider)
+                                 IdeConfig         *config,
+                                 IdeConfigProvider *provider)
 {
   ConfigInfo info = {0};
 
@@ -582,8 +581,8 @@ ide_config_manager_config_added (IdeConfigManager  *self,
 
 static void
 ide_config_manager_config_removed (IdeConfigManager  *self,
-                                          IdeConfig         *config,
-                                          IdeConfigProvider *provider)
+                                   IdeConfig         *config,
+                                   IdeConfigProvider *provider)
 {
   IDE_ENTRY;
 
@@ -671,9 +670,9 @@ provider_disconnect (IdeConfigManager  *self,
 
 static void
 ide_config_manager_provider_added (PeasExtensionSet *set,
-                                          PeasPluginInfo   *plugin_info,
-                                          PeasExtension    *exten,
-                                          gpointer          user_data)
+                                   PeasPluginInfo   *plugin_info,
+                                   PeasExtension    *exten,
+                                   gpointer          user_data)
 {
   IdeConfigManager *self = user_data;
   IdeConfigProvider *provider = (IdeConfigProvider *)exten;
@@ -695,9 +694,9 @@ ide_config_manager_provider_added (PeasExtensionSet *set,
 
 static void
 ide_config_manager_provider_removed (PeasExtensionSet *set,
-                                            PeasPluginInfo   *plugin_info,
-                                            PeasExtension    *exten,
-                                            gpointer          user_data)
+                                     PeasPluginInfo   *plugin_info,
+                                     PeasExtension    *exten,
+                                     gpointer          user_data)
 {
   IdeConfigManager *self = user_data;
   IdeConfigProvider *provider = (IdeConfigProvider *)exten;
@@ -732,8 +731,8 @@ ide_config_manager_provider_removed (PeasExtensionSet *set,
 
 static void
 notify_providers_loaded (IdeConfigManager *self,
-                         GParamSpec              *pspec,
-                         IdeTask                 *task)
+                         GParamSpec       *pspec,
+                         IdeTask          *task)
 {
   g_autoptr(GVariant) user_value = NULL;
 
@@ -779,8 +778,8 @@ notify_providers_loaded (IdeConfigManager *self,
 
 static void
 ide_config_manager_init_load_cb (GObject      *object,
-                                        GAsyncResult *result,
-                                        gpointer      user_data)
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   IdeConfigProvider *provider = (IdeConfigProvider *)object;
   g_autoptr(GError) error = NULL;
@@ -816,10 +815,10 @@ ide_config_manager_init_load_cb (GObject      *object,
 
 static void
 ide_config_manager_init_async (GAsyncInitable      *initable,
-                                      gint                 priority,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      gpointer             user_data)
+                               gint                 priority,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
 {
   IdeConfigManager *self = (IdeConfigManager *)initable;
   g_autoptr(GPtrArray) providers = NULL;
@@ -890,8 +889,8 @@ ide_config_manager_init_async (GAsyncInitable      *initable,
 
 static gboolean
 ide_config_manager_init_finish (GAsyncInitable  *initable,
-                                       GAsyncResult    *result,
-                                       GError         **error)
+                                GAsyncResult    *result,
+                                GError         **error)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONFIG_MANAGER (initable));
@@ -909,7 +908,7 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 
 void
 ide_config_manager_set_current (IdeConfigManager *self,
-                                       IdeConfig        *current)
+                                IdeConfig        *current)
 {
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONFIG_MANAGER (self));
@@ -1042,7 +1041,7 @@ ide_config_manager_get_current (IdeConfigManager *self)
 
 void
 ide_config_manager_duplicate (IdeConfigManager *self,
-                                     IdeConfig        *config)
+                              IdeConfig        *config)
 {
   g_return_if_fail (IDE_IS_CONFIG_MANAGER (self));
   g_return_if_fail (IDE_IS_CONFIG (config));
@@ -1068,7 +1067,7 @@ ide_config_manager_duplicate (IdeConfigManager *self,
 
 void
 ide_config_manager_delete (IdeConfigManager *self,
-                                  IdeConfig        *config)
+                           IdeConfig        *config)
 {
   g_autoptr(IdeConfig) hold = NULL;
 
@@ -1140,6 +1139,5 @@ ide_config_manager_ref_from_context (IdeContext *context)
 {
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  return ide_object_ensure_child_typed (IDE_OBJECT (context),
-                                        IDE_TYPE_CONFIG_MANAGER);
+  return ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CONFIG_MANAGER);
 }
