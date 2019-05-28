@@ -185,8 +185,8 @@ ide_config_real_get_runtime (IdeConfig *self)
 }
 
 static void
-ide_config_set_id (IdeConfig *self,
-                          const gchar      *id)
+ide_config_set_id (IdeConfig   *self,
+                   const gchar *id)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -202,11 +202,11 @@ ide_config_set_id (IdeConfig *self,
 }
 
 static void
-ide_config_runtime_manager_items_changed (IdeConfig  *self,
-                                                 guint              position,
-                                                 guint              added,
-                                                 guint              removed,
-                                                 IdeRuntimeManager *runtime_manager)
+ide_config_runtime_manager_items_changed (IdeConfig         *self,
+                                          guint              position,
+                                          guint              added,
+                                          guint              removed,
+                                          IdeRuntimeManager *runtime_manager)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   IdeRuntime *runtime;
@@ -233,8 +233,8 @@ ide_config_runtime_manager_items_changed (IdeConfig  *self,
 }
 
 static void
-ide_config_environment_changed (IdeConfig *self,
-                                       IdeEnvironment   *environment)
+ide_config_environment_changed (IdeConfig      *self,
+                                IdeEnvironment *environment)
 {
   IDE_ENTRY;
 
@@ -251,8 +251,8 @@ ide_config_environment_changed (IdeConfig *self,
 }
 
 static void
-ide_config_real_set_runtime (IdeConfig *self,
-                                    IdeRuntime       *runtime)
+ide_config_real_set_runtime (IdeConfig  *self,
+                             IdeRuntime *runtime)
 {
   const gchar *runtime_id = "host";
 
@@ -306,9 +306,9 @@ ide_config_finalize (GObject *object)
 
 static void
 ide_config_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+                         guint       prop_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
 {
   IdeConfig *self = IDE_CONFIG (object);
 
@@ -401,9 +401,9 @@ ide_config_get_property (GObject    *object,
 
 static void
 ide_config_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
 {
   IdeConfig *self = IDE_CONFIG (object);
 
@@ -690,8 +690,8 @@ ide_config_get_app_id (IdeConfig *self)
 }
 
 void
-ide_config_set_app_id (IdeConfig *self,
-                              const gchar      *app_id)
+ide_config_set_app_id (IdeConfig   *self,
+                       const gchar *app_id)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -716,8 +716,8 @@ ide_config_get_runtime_id (IdeConfig *self)
 }
 
 void
-ide_config_set_runtime_id (IdeConfig *self,
-                                  const gchar      *runtime_id)
+ide_config_set_runtime_id (IdeConfig   *self,
+                           const gchar *runtime_id)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -783,8 +783,8 @@ ide_config_get_toolchain_id (IdeConfig *self)
  * Since: 3.32
  */
 void
-ide_config_set_toolchain_id (IdeConfig *self,
-                                    const gchar      *toolchain_id)
+ide_config_set_toolchain_id (IdeConfig   *self,
+                             const gchar *toolchain_id)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -825,8 +825,8 @@ ide_config_get_runtime (IdeConfig *self)
 }
 
 void
-ide_config_set_runtime (IdeConfig *self,
-                               IdeRuntime       *runtime)
+ide_config_set_runtime (IdeConfig  *self,
+                        IdeRuntime *runtime)
 {
   g_return_if_fail (IDE_IS_CONFIG (self));
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
@@ -874,8 +874,8 @@ ide_config_get_toolchain (IdeConfig *self)
  * Since: 3.32
  */
 void
-ide_config_set_toolchain (IdeConfig *self,
-                                 IdeToolchain     *toolchain)
+ide_config_set_toolchain (IdeConfig    *self,
+                          IdeToolchain *toolchain)
 {
   const gchar *toolchain_id = "default";
 
@@ -909,8 +909,8 @@ ide_config_get_environ (IdeConfig *self)
 }
 
 const gchar *
-ide_config_getenv (IdeConfig *self,
-                          const gchar      *key)
+ide_config_getenv (IdeConfig   *self,
+                   const gchar *key)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -921,9 +921,9 @@ ide_config_getenv (IdeConfig *self,
 }
 
 void
-ide_config_setenv (IdeConfig *self,
-                          const gchar      *key,
-                          const gchar      *value)
+ide_config_setenv (IdeConfig   *self,
+                   const gchar *key,
+                   const gchar *value)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -954,8 +954,8 @@ ide_config_get_prefix (IdeConfig *self)
 }
 
 void
-ide_config_set_prefix (IdeConfig *self,
-                              const gchar      *prefix)
+ide_config_set_prefix (IdeConfig   *self,
+                       const gchar *prefix)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -989,7 +989,7 @@ ide_config_get_parallelism (IdeConfig *self)
 
 void
 ide_config_set_parallelism (IdeConfig *self,
-                                   gint              parallelism)
+                            gint       parallelism)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1015,7 +1015,7 @@ ide_config_get_debug (IdeConfig *self)
 
 void
 ide_config_set_debug (IdeConfig *self,
-                             gboolean          debug)
+                      gboolean   debug)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1042,8 +1042,8 @@ ide_config_get_display_name (IdeConfig *self)
 }
 
 void
-ide_config_set_display_name (IdeConfig *self,
-                                    const gchar      *display_name)
+ide_config_set_display_name (IdeConfig   *self,
+                             const gchar *display_name)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1070,7 +1070,7 @@ ide_config_get_dirty (IdeConfig *self)
 
 void
 ide_config_set_dirty (IdeConfig *self,
-                             gboolean          dirty)
+                      gboolean   dirty)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1122,8 +1122,8 @@ ide_config_get_environment (IdeConfig *self)
 }
 
 void
-ide_config_set_environment (IdeConfig *self,
-                                   IdeEnvironment   *environment)
+ide_config_set_environment (IdeConfig      *self,
+                            IdeEnvironment *environment)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1165,8 +1165,8 @@ ide_config_get_config_opts (IdeConfig *self)
 }
 
 void
-ide_config_set_config_opts (IdeConfig *self,
-                                   const gchar      *config_opts)
+ide_config_set_config_opts (IdeConfig   *self,
+                            const gchar *config_opts)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1192,8 +1192,8 @@ ide_config_get_build_commands (IdeConfig *self)
 }
 
 void
-ide_config_set_build_commands (IdeConfig *self,
-                                      const gchar * const     *build_commands)
+ide_config_set_build_commands (IdeConfig           *self,
+                               const gchar * const *build_commands)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1218,8 +1218,8 @@ ide_config_get_post_install_commands (IdeConfig *self)
 }
 
 void
-ide_config_set_post_install_commands (IdeConfig    *self,
-                                             const gchar * const *post_install_commands)
+ide_config_set_post_install_commands (IdeConfig           *self,
+                                      const gchar * const *post_install_commands)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1260,9 +1260,9 @@ ide_config_get_sequence (IdeConfig *self)
 }
 
 static GValue *
-ide_config_reset_internal_value (IdeConfig *self,
-                                        const gchar      *key,
-                                        GType             type)
+ide_config_reset_internal_value (IdeConfig   *self,
+                                 const gchar *key,
+                                 GType        type)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   GValue *v;
@@ -1288,8 +1288,8 @@ ide_config_reset_internal_value (IdeConfig *self,
 }
 
 const gchar *
-ide_config_get_internal_string (IdeConfig *self,
-                                       const gchar      *key)
+ide_config_get_internal_string (IdeConfig   *self,
+                                const gchar *key)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   const GValue *v;
@@ -1306,9 +1306,9 @@ ide_config_get_internal_string (IdeConfig *self,
 }
 
 void
-ide_config_set_internal_string (IdeConfig *self,
-                                       const gchar      *key,
-                                       const gchar      *value)
+ide_config_set_internal_string (IdeConfig   *self,
+                                const gchar *key,
+                                const gchar *value)
 {
   GValue *v;
 
@@ -1320,8 +1320,8 @@ ide_config_set_internal_string (IdeConfig *self,
 }
 
 const gchar * const *
-ide_config_get_internal_strv (IdeConfig *self,
-                                     const gchar      *key)
+ide_config_get_internal_strv (IdeConfig   *self,
+                              const gchar *key)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   const GValue *v;
@@ -1338,9 +1338,9 @@ ide_config_get_internal_strv (IdeConfig *self,
 }
 
 void
-ide_config_set_internal_strv (IdeConfig    *self,
-                                     const gchar         *key,
-                                     const gchar * const *value)
+ide_config_set_internal_strv (IdeConfig           *self,
+                              const gchar         *key,
+                              const gchar * const *value)
 {
   GValue *v;
 
@@ -1352,8 +1352,8 @@ ide_config_set_internal_strv (IdeConfig    *self,
 }
 
 gboolean
-ide_config_get_internal_boolean (IdeConfig *self,
-                                        const gchar      *key)
+ide_config_get_internal_boolean (IdeConfig   *self,
+                                 const gchar *key)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   const GValue *v;
@@ -1370,9 +1370,9 @@ ide_config_get_internal_boolean (IdeConfig *self,
 }
 
 void
-ide_config_set_internal_boolean (IdeConfig  *self,
-                                        const gchar       *key,
-                                        gboolean           value)
+ide_config_set_internal_boolean (IdeConfig   *self,
+                                 const gchar *key,
+                                 gboolean     value)
 {
   GValue *v;
 
@@ -1384,8 +1384,8 @@ ide_config_set_internal_boolean (IdeConfig  *self,
 }
 
 gint
-ide_config_get_internal_int (IdeConfig *self,
-                                    const gchar      *key)
+ide_config_get_internal_int (IdeConfig   *self,
+                             const gchar *key)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   const GValue *v;
@@ -1402,9 +1402,9 @@ ide_config_get_internal_int (IdeConfig *self,
 }
 
 void
-ide_config_set_internal_int (IdeConfig *self,
-                                    const gchar      *key,
-                                    gint              value)
+ide_config_set_internal_int (IdeConfig   *self,
+                             const gchar *key,
+                             gint         value)
 {
   GValue *v;
 
@@ -1434,9 +1434,9 @@ ide_config_get_internal_int64 (IdeConfig *self,
 }
 
 void
-ide_config_set_internal_int64 (IdeConfig *self,
-                                      const gchar      *key,
-                                      gint64            value)
+ide_config_set_internal_int64 (IdeConfig   *self,
+                               const gchar *key,
+                               gint64       value)
 {
   GValue *v;
 
@@ -1459,8 +1459,8 @@ ide_config_set_internal_int64 (IdeConfig *self,
  * Since: 3.32
  */
 gpointer
-ide_config_get_internal_object (IdeConfig *self,
-                                       const gchar      *key)
+ide_config_get_internal_object (IdeConfig   *self,
+                                const gchar *key)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   const GValue *v;
@@ -1487,9 +1487,9 @@ ide_config_get_internal_object (IdeConfig *self,
  * Since: 3.32
  */
 void
-ide_config_set_internal_object (IdeConfig *self,
-                                       const gchar      *key,
-                                       gpointer          instance)
+ide_config_set_internal_object (IdeConfig   *self,
+                                const gchar *key,
+                                gpointer     instance)
 {
   GValue *v;
   GType type;
@@ -1527,8 +1527,8 @@ ide_config_get_ready (IdeConfig *self)
 }
 
 gboolean
-ide_config_supports_runtime (IdeConfig *self,
-                                    IdeRuntime       *runtime)
+ide_config_supports_runtime (IdeConfig  *self,
+                             IdeRuntime *runtime)
 {
   gboolean ret = TRUE;
 
@@ -1577,8 +1577,8 @@ ide_config_get_run_opts (IdeConfig *self)
  * Since: 3.32
  */
 void
-ide_config_set_run_opts (IdeConfig *self,
-                                const gchar      *run_opts)
+ide_config_set_run_opts (IdeConfig   *self,
+                         const gchar *run_opts)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1603,8 +1603,8 @@ ide_config_get_append_path (IdeConfig *self)
 }
 
 void
-ide_config_set_append_path (IdeConfig *self,
-                                   const gchar      *append_path)
+ide_config_set_append_path (IdeConfig   *self,
+                            const gchar *append_path)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1619,8 +1619,8 @@ ide_config_set_append_path (IdeConfig *self,
 }
 
 void
-ide_config_apply_path (IdeConfig      *self,
-                              IdeSubprocessLauncher *launcher)
+ide_config_apply_path (IdeConfig             *self,
+                       IdeSubprocessLauncher *launcher)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1642,8 +1642,8 @@ ide_config_get_locality (IdeConfig *self)
 }
 
 void
-ide_config_set_locality (IdeConfig *self,
-                                IdeBuildLocality  locality)
+ide_config_set_locality (IdeConfig        *self,
+                         IdeBuildLocality  locality)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
@@ -1678,7 +1678,7 @@ ide_config_get_build_commands_dir (IdeConfig *self)
 
 void
 ide_config_set_build_commands_dir (IdeConfig *self,
-                                          GFile            *build_commands_dir)
+                                   GFile     *build_commands_dir)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
 
