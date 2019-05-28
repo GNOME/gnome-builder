@@ -351,13 +351,14 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
 }
 
 static void
-gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
-                                           IdeConfig *configuration)
+gbp_flatpak_runtime_prepare_configuration (IdeRuntime *runtime,
+                                           IdeConfig  *config)
 {
   g_assert (GBP_IS_FLATPAK_RUNTIME (runtime));
-  g_assert (IDE_IS_CONFIG (configuration));
+  g_assert (IDE_IS_CONFIG (config));
 
-  ide_config_set_prefix (configuration, "/app");
+  ide_config_set_prefix (config, "/app");
+  ide_config_set_prefix_set (config, FALSE);
 }
 
 static void

@@ -140,15 +140,15 @@ ide_runtime_contains_program_in_path (IdeRuntime   *self,
 }
 
 static void
-ide_runtime_real_prepare_configuration (IdeRuntime       *self,
-                                        IdeConfig *configuration)
+ide_runtime_real_prepare_configuration (IdeRuntime *self,
+                                        IdeConfig  *config)
 {
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
   g_assert (IDE_IS_RUNTIME (self));
-  g_assert (IDE_IS_CONFIG (configuration));
+  g_assert (IDE_IS_CONFIG (config));
 
-  if (NULL == ide_config_get_prefix (configuration))
+  if (!ide_config_get_prefix_set (config))
     {
       g_autofree gchar *install_path = NULL;
       g_autofree gchar *project_id = NULL;
@@ -164,7 +164,8 @@ ide_runtime_real_prepare_configuration (IdeRuntime       *self,
                                        priv->id,
                                        NULL);
 
-      ide_config_set_prefix (configuration, install_path);
+      ide_config_set_prefix (config, install_path);
+      ide_config_set_prefix_set (config, FALSE);
     }
 }
 

@@ -55,7 +55,7 @@ class JhbuildRuntime(Ide.Runtime):
 
         return launcher
 
-    def do_prepare_configuration(self, configuration):
+    def do_prepare_configuration(self, config):
         launcher = self.create_launcher()
         launcher.push_argv('sh')
         launcher.push_argv('-c')
@@ -75,7 +75,8 @@ class JhbuildRuntime(Ide.Runtime):
         if not prefix:
             prefix = os.path.join(GLib.get_home_dir(), 'jhbuild', 'install')
 
-        configuration.set_prefix(prefix)
+        config.set_prefix(prefix)
+        config.set_prefix_set(False)
 
     def do_contains_program_in_path(self, program, cancellable):
         launcher = self.create_launcher()
