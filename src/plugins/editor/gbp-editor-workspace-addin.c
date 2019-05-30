@@ -293,9 +293,8 @@ gbp_editor_workspace_addin_surface_set (IdeWorkspaceAddin *addin,
   if (self->panels_box)
     gtk_widget_set_visible (GTK_WIDGET (self->panels_box),
                             IDE_IS_EDITOR_SURFACE (surface));
-  if (self->new_button)
-    gtk_widget_set_visible (GTK_WIDGET (self->new_button),
-                            IDE_IS_EDITOR_SURFACE (surface));
+
+  gtk_widget_show (GTK_WIDGET (self->new_button));
 }
 
 static void
