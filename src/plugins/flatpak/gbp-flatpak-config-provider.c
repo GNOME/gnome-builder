@@ -406,15 +406,19 @@ contains_file (GbpFlatpakConfigProvider *self,
 
 static void
 gbp_flatpak_config_provider_monitor_changed (GbpFlatpakConfigProvider *self,
-                                                    GFile                           *file,
-                                                    GFile                           *other_file,
-                                                    GFileMonitorEvent                event,
-                                                    IdeVcsMonitor                   *monitor)
+                                             GFile                    *file,
+                                             GFile                    *other_file,
+                                             GFileMonitorEvent         event,
+                                             IdeVcsMonitor            *monitor)
 {
   g_assert (GBP_IS_FLATPAK_CONFIG_PROVIDER (self));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
   g_assert (IDE_IS_VCS_MONITOR (monitor));
+
+  if (ide_object_in_destruction (IDE_OBJECT (self)) ||
+      ide_object_in_destruction (IDE_OBJECT (monitor)))
+    return;
 
   if (event == G_FILE_MONITOR_EVENT_CREATED)
     {
@@ -607,7 +611,7 @@ gbp_flatpak_config_provider_unload (IdeConfigProvider *provider)
 
 static void
 gbp_flatpak_config_provider_duplicate (IdeConfigProvider *provider,
-                                              IdeConfig         *configuration)
+                                       IdeConfig         *configuration)
 {
   GbpFlatpakManifest *manifest = (GbpFlatpakManifest *)configuration;
   g_autofree gchar *path = NULL;
