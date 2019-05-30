@@ -200,7 +200,11 @@ _ide_foundry_unload_async (IdeContext          *context,
   task = ide_task_new (context, cancellable, callback, user_data);
   ide_task_set_source_tag (task, _ide_foundry_unload_async);
 
-  config_manager = ide_config_manager_from_context (context);
+  if (!(config_manager = ide_context_peek_child_typed (context, IDE_TYPE_CONFIG_MANAGER)))
+    {
+      ide_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
 
   ide_config_manager_save_async (config_manager,
                                  cancellable,
