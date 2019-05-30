@@ -29,108 +29,15 @@ struct _GbpSysprofWorkspaceAddin
   GObject                parent_instance;
 
   GSimpleActionGroup    *actions;
-  SysprofProfiler            *profiler;
 
   GbpSysprofSurface     *surface;
   IdeWorkspace          *workspace;
-
-  GtkBox                *zoom_controls;
 };
 
 static void workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GbpSysprofWorkspaceAddin, gbp_sysprof_workspace_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
-
-static void
-gbp_sysprof_workspace_addin_update_controls (GbpSysprofWorkspaceAddin *self)
-{
-  IdeSurface *surface;
-  gboolean visible;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-
-  if (self->workspace == NULL)
-    return;
-
-  surface = ide_workspace_get_visible_surface (self->workspace);
-  visible = GBP_IS_SYSPROF_SURFACE (surface) &&
-            !!gbp_sysprof_surface_get_reader (GBP_SYSPROF_SURFACE (surface));
-
-  if (self->zoom_controls)
-    gtk_widget_set_visible (GTK_WIDGET (self->zoom_controls), visible);
-}
-
-static void
-profiler_stopped (GbpSysprofWorkspaceAddin *self,
-                  SysprofProfiler               *profiler)
-{
-  g_autoptr(SysprofCaptureReader) reader = NULL;
-  g_autoptr(GError) error = NULL;
-  SysprofCaptureWriter *writer;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-  g_assert (SYSPROF_IS_PROFILER (profiler));
-
-  if (self->profiler != profiler)
-    IDE_EXIT;
-
-  if (self->workspace == NULL)
-    IDE_EXIT;
-
-  writer = sysprof_profiler_get_writer (profiler);
-  reader = sysprof_capture_writer_create_reader (writer, &error);
-
-  if (reader == NULL)
-    {
-      /* TODO: Propagate error to an infobar or similar */
-      g_warning ("%s", error->message);
-      IDE_EXIT;
-    }
-
-  gbp_sysprof_surface_set_reader (self->surface, reader);
-
-  ide_workspace_set_visible_surface_name (self->workspace, "profiler");
-
-  gbp_sysprof_workspace_addin_update_controls (self);
-
-  IDE_EXIT;
-}
-
-static void
-profiler_child_spawned (GbpSysprofWorkspaceAddin *self,
-                        const gchar              *identifier,
-                        IdeRunner                *runner)
-{
-  GPid pid = 0;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-  g_assert (identifier != NULL);
-  g_assert (IDE_IS_RUNNER (runner));
-
-  if (!SYSPROF_IS_PROFILER (self->profiler))
-    return;
-
-#ifdef G_OS_UNIX
-  pid = g_ascii_strtoll (identifier, NULL, 10);
-#endif
-
-  if G_UNLIKELY (pid == 0)
-    {
-      g_warning ("Failed to parse integer value from %s", identifier);
-      return;
-    }
-
-  IDE_TRACE_MSG ("Adding pid %s to profiler", identifier);
-
-  sysprof_profiler_add_pid (self->profiler, pid);
-  sysprof_profiler_start (self->profiler);
-}
 
 static gchar *
 get_runtime_sysroot (IdeContext  *context,
@@ -160,28 +67,65 @@ get_runtime_sysroot (IdeContext  *context,
 }
 
 static void
+profiler_child_spawned (IdeRunner       *runner,
+                        const gchar     *identifier,
+                        SysprofProfiler *profiler)
+{
+#ifdef G_OS_UNIX
+  GPid pid = 0;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (SYSPROF_IS_PROFILER (profiler));
+  g_assert (identifier != NULL);
+  g_assert (IDE_IS_RUNNER (runner));
+
+  pid = g_ascii_strtoll (identifier, NULL, 10);
+
+  if (pid == 0)
+    {
+      g_warning ("Failed to parse integer value from %s", identifier);
+      return;
+    }
+
+  IDE_TRACE_MSG ("Adding pid %s to profiler", identifier);
+
+  sysprof_profiler_add_pid (profiler, pid);
+  sysprof_profiler_start (profiler);
+#endif
+}
+
+static void
+runner_exited_cb (IdeRunner       *runner,
+                  SysprofProfiler *profiler)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (SYSPROF_IS_PROFILER (profiler));
+
+  if (sysprof_profiler_get_is_running (profiler))
+    sysprof_profiler_stop (profiler);
+}
+
+static void
 profiler_run_handler (IdeRunManager *run_manager,
                       IdeRunner     *runner,
                       gpointer       user_data)
 {
   GbpSysprofWorkspaceAddin *self = user_data;
+  g_autoptr(SysprofProfiler) profiler = NULL;
   g_autoptr(SysprofSource) proc_source = NULL;
   g_autoptr(SysprofSource) perf_source = NULL;
   g_autoptr(SysprofSource) hostinfo_source = NULL;
   g_autoptr(SysprofSource) memory_source = NULL;
+  g_autoptr(SysprofSource) app_source = NULL;
+  g_autoptr(SysprofSource) gjs_source = NULL;
+  g_autoptr(SysprofSource) symbols_source = NULL;
   IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
-
-  if (SYSPROF_IS_PROFILER (self->profiler))
-    {
-      if (sysprof_profiler_get_is_running (self->profiler))
-        sysprof_profiler_stop (self->profiler);
-      g_clear_object (&self->profiler);
-    }
 
   /*
    * First get a copy of the active runtime and find the root of it's
@@ -206,6 +150,11 @@ profiler_run_handler (IdeRunManager *run_manager,
 
     context = ide_object_get_context (IDE_OBJECT (run_manager));
 
+    /*
+     * TODO: We should really be adding symbol directories to the
+     *       ELF symbol resolver rather than here.
+     */
+
     for (guint i = 0; dirs[i]; i++)
       {
         g_autofree gchar *path = get_runtime_sysroot (context, dirs[i]);
@@ -215,15 +164,7 @@ profiler_run_handler (IdeRunManager *run_manager,
       }
   }
 
-  self->profiler = sysprof_local_profiler_new ();
-
-  g_signal_connect_object (self->profiler,
-                           "stopped",
-                           G_CALLBACK (gbp_sysprof_workspace_addin_update_controls),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_widget_hide (GTK_WIDGET (self->zoom_controls));
+  profiler = sysprof_local_profiler_new ();
 
   /*
    * Currently we require whole-system because otherwise we can get a situation
@@ -231,19 +172,33 @@ profiler_run_handler (IdeRunManager *run_manager,
    * Longer term we either need a way to follow-children and/or limit to a
    * cgroup/process-group.
    */
-  sysprof_profiler_set_whole_system (SYSPROF_PROFILER (self->profiler), TRUE);
+  sysprof_profiler_set_whole_system (profiler, TRUE);
 
   proc_source = sysprof_proc_source_new ();
-  sysprof_profiler_add_source (self->profiler, proc_source);
+  sysprof_profiler_add_source (profiler, proc_source);
 
+  /* TODO: Make this source non-fatal since we have other data collectors */
   perf_source = sysprof_perf_source_new ();
-  sysprof_profiler_add_source (self->profiler, perf_source);
+  sysprof_profiler_add_source (profiler, perf_source);
 
   hostinfo_source = sysprof_hostinfo_source_new ();
-  sysprof_profiler_add_source (self->profiler, hostinfo_source);
+  sysprof_profiler_add_source (profiler, hostinfo_source);
 
   memory_source = sysprof_memory_source_new ();
-  sysprof_profiler_add_source (self->profiler, memory_source);
+  sysprof_profiler_add_source (profiler, memory_source);
+
+  /* TODO: Only add this when a GJS-based app is run */
+  gjs_source = sysprof_tracefd_source_new ();
+  sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (gjs_source), "GJS_TRACE_FD");
+  sysprof_profiler_add_source (profiler, gjs_source);
+
+  /* Allow the app to submit us data if it supports "SYSPROF_TRACE_FD" */
+  app_source = sysprof_tracefd_source_new ();
+  sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (app_source), "SYSPROF_TRACE_FD");
+  sysprof_profiler_add_source (profiler, app_source);
+
+  symbols_source = sysprof_symbols_source_new ();
+  sysprof_profiler_add_source (profiler, symbols_source);
 
   /*
    * TODO:
@@ -259,90 +214,31 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_signal_connect_object (runner,
                            "spawned",
                            G_CALLBACK (profiler_child_spawned),
-                           self,
-                           G_CONNECT_SWAPPED);
+                           profiler,
+                           0);
 
-  g_signal_connect_object (self->profiler,
-                           "stopped",
-                           G_CALLBACK (profiler_stopped),
-                           self,
-                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (runner,
+                           "exited",
+                           G_CALLBACK (runner_exited_cb),
+                           profiler,
+                           0);
 
-  gbp_sysprof_surface_set_profiler (self->surface, self->profiler);
+  gbp_sysprof_surface_add_profiler (self->surface, profiler);
 
   ide_workspace_set_visible_surface (self->workspace, IDE_SURFACE (self->surface));
-}
-
-static void
-gbp_sysprof_workspace_addin_open_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
-{
-  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)object;
-  g_autoptr(SysprofCaptureReader) reader = NULL;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_TASK (result));
-
-  reader = ide_task_propagate_pointer (IDE_TASK (result), &error);
-
-  g_assert (reader || error != NULL);
-
-  if (reader == NULL)
-    {
-      g_message ("%s", error->message);
-      return;
-    }
-
-  gbp_sysprof_surface_set_profiler (self->surface, NULL);
-  gbp_sysprof_surface_set_reader (self->surface, reader);
-
-  gbp_sysprof_workspace_addin_update_controls (self);
-}
-
-static void
-gbp_sysprof_workspace_addin_open_worker (IdeTask      *task,
-                                         gpointer      source_object,
-                                         gpointer      task_data,
-                                         GCancellable *cancellable)
-{
-  g_autofree gchar *path = NULL;
-  g_autoptr(GError) error = NULL;
-  SysprofCaptureReader *reader;
-  GFile *file = task_data;
-
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (source_object));
-  g_assert (G_IS_FILE (file));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  path = g_file_get_path (file);
-
-  if (!(reader = sysprof_capture_reader_new (path, &error)))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, reader, sysprof_capture_reader_unref);
 }
 
 static void
 gbp_sysprof_workspace_addin_open (GbpSysprofWorkspaceAddin *self,
                                   GFile                    *file)
 {
-  g_autoptr(IdeTask) task = NULL;
-
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (G_IS_FILE (file));
 
   if (!g_file_is_native (file))
-    {
-      g_warning ("Can only open local sysprof capture files.");
-      return;
-    }
-
-  task = ide_task_new (self, NULL, gbp_sysprof_workspace_addin_open_cb, NULL);
-  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  ide_task_run_in_thread (task, gbp_sysprof_workspace_addin_open_worker);
+    g_warning ("Can only open local sysprof capture files.");
+  else
+    gbp_sysprof_surface_open (self->surface, file);
 }
 
 static void
@@ -442,38 +338,12 @@ gbp_sysprof_workspace_addin_init (GbpSysprofWorkspaceAddin *self)
 }
 
 static void
-run_manager_stopped (GbpSysprofWorkspaceAddin *self,
-                     IdeRunManager            *run_manager)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-
-  if (self->profiler != NULL && sysprof_profiler_get_is_running (self->profiler))
-    sysprof_profiler_stop (self->profiler);
-}
-
-static gboolean
-zoom_level_to_string (GBinding     *binding,
-                      const GValue *from_value,
-                      GValue       *to_value,
-                      gpointer      user_data)
-{
-  gdouble level = g_value_get_double (from_value);
-  g_value_take_string (to_value, g_strdup_printf ("%d%%", (gint)(level * 100.0)));
-  return TRUE;
-}
-
-static void
 gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
-  SysprofZoomManager *zoom_manager;
   IdeRunManager *run_manager;
-  IdeHeaderBar *header;
   IdeContext *context;
-  GtkLabel *label;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
@@ -481,11 +351,13 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
 
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "profiler",
+                                  G_ACTION_GROUP (self->actions));
+
   context = ide_workspace_get_context (workspace);
 
-  /*
-   * Register our custom run handler to activate the profiler.
-   */
+  /* Register our custom run handler to activate the profiler. */
   run_manager = ide_run_manager_from_context (context);
   ide_run_manager_add_handler (run_manager,
                                "profiler",
@@ -495,11 +367,6 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                                profiler_run_handler,
                                self,
                                NULL);
-  g_signal_connect_object (run_manager,
-                           "stopped",
-                           G_CALLBACK (run_manager_stopped),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   /* Add the surface to the workspace. */
   self->surface = g_object_new (GBP_TYPE_SYSPROF_SURFACE,
@@ -510,60 +377,6 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->surface);
   ide_workspace_add_surface (workspace, IDE_SURFACE (self->surface));
-
-  zoom_manager = gbp_sysprof_surface_get_zoom_manager (self->surface);
-
-  /*
-   * Add our actions to the workspace so they can be activated via the
-   * headerbar or the surface.
-   */
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler", G_ACTION_GROUP (self->actions));
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler-zoom", G_ACTION_GROUP (zoom_manager));
-
-  /* Add our buttons to the header. */
-  header = ide_workspace_get_header_bar (workspace);
-  self->zoom_controls = g_object_new (GTK_TYPE_BOX,
-                                      "orientation", GTK_ORIENTATION_HORIZONTAL,
-                                      NULL);
-  g_signal_connect (self->zoom_controls,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->zoom_controls);
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->zoom_controls), "linked");
-  gtk_container_add (GTK_CONTAINER (self->zoom_controls),
-                     g_object_new (GTK_TYPE_BUTTON,
-                                   "action-name", "profiler-zoom.zoom-out",
-                                   "can-focus", FALSE,
-                                   "child", g_object_new (GTK_TYPE_IMAGE,
-                                                          "icon-name", "zoom-out-symbolic",
-                                                          "visible", TRUE,
-                                                          NULL),
-                                   "visible", TRUE,
-                                   NULL));
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "width-chars", 5,
-                        "visible", TRUE,
-                        NULL);
-  g_object_bind_property_full (zoom_manager, "zoom", label, "label", G_BINDING_SYNC_CREATE,
-                               zoom_level_to_string, NULL, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (self->zoom_controls),
-                     g_object_new (GTK_TYPE_BUTTON,
-                                   "action-name", "profiler-zoom.zoom-one",
-                                   "can-focus", FALSE,
-                                   "child", label,
-                                   "visible", TRUE,
-                                   NULL));
-  gtk_container_add (GTK_CONTAINER (self->zoom_controls),
-                     g_object_new (GTK_TYPE_BUTTON,
-                                   "action-name", "profiler-zoom.zoom-in",
-                                   "can-focus", FALSE,
-                                   "child", g_object_new (GTK_TYPE_IMAGE,
-                                                          "icon-name", "zoom-in-symbolic",
-                                                          "visible", TRUE,
-                                                          NULL),
-                                   "visible", TRUE,
-                                   NULL));
-  ide_header_bar_add_primary (header, GTK_WIDGET (self->zoom_controls));
 }
 
 static void
@@ -580,32 +393,15 @@ gbp_sysprof_workspace_addin_unload (IdeWorkspaceAddin *addin,
   context = ide_workspace_get_context (workspace);
 
   gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler", NULL);
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler-zoom", NULL);
 
   run_manager = ide_run_manager_from_context (context);
   ide_run_manager_remove_handler (run_manager, "profiler");
 
-  if (self->surface)
+  if (self->surface != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->surface));
 
-  if (self->zoom_controls)
-    gtk_widget_destroy (GTK_WIDGET (self->zoom_controls));
-
-  self->zoom_controls = NULL;
   self->surface = NULL;
   self->workspace = NULL;
-}
-
-static void
-gbp_sysprof_workspace_addin_surface_set (IdeWorkspaceAddin *addin,
-                                         IdeSurface        *surface)
-{
-  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
-
-  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
-  g_assert (!surface || IDE_IS_SURFACE (surface));
-
-  gbp_sysprof_workspace_addin_update_controls (self);
 }
 
 static void
@@ -613,5 +409,4 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_sysprof_workspace_addin_load;
   iface->unload = gbp_sysprof_workspace_addin_unload;
-  iface->surface_set = gbp_sysprof_workspace_addin_surface_set;
 }

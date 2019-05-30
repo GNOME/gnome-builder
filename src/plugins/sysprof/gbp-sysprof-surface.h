@@ -21,7 +21,7 @@
 #pragma once
 
 #include <libide-gui.h>
-#include <sysprof-ui.h>
+#include <sysprof.h>
 
 G_BEGIN_DECLS
 
@@ -29,11 +29,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysprofSurface, gbp_sysprof_surface, GBP, SYSPROF_SURFACE, IdeSurface)
 
-SysprofZoomManager   *gbp_sysprof_surface_get_zoom_manager (GbpSysprofSurface *self);
-void             gbp_sysprof_surface_set_profiler     (GbpSysprofSurface *self,
-                                                       SysprofProfiler        *profiler);
-SysprofCaptureReader *gbp_sysprof_surface_get_reader       (GbpSysprofSurface *self);
-void             gbp_sysprof_surface_set_reader       (GbpSysprofSurface *self,
-                                                       SysprofCaptureReader   *reader);
+void gbp_sysprof_surface_add_profiler (GbpSysprofSurface *self,
+                                       SysprofProfiler   *profiler);
+void gbp_sysprof_surface_open         (GbpSysprofSurface *self,
+                                       GFile             *file);
 
 G_END_DECLS
