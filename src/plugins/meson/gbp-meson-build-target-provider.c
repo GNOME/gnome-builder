@@ -64,6 +64,26 @@ create_launcher (IdeContext  *context,
   return g_steal_pointer (&ret);
 }
 
+static const gchar *
+get_first_string (JsonNode *member)
+{
+  if (JSON_NODE_HOLDS_VALUE (member))
+    return json_node_get_string (member);
+
+  if (JSON_NODE_HOLDS_ARRAY (member))
+    {
+      JsonArray *ar = json_node_get_array (member);
+
+      if (json_array_get_length (ar) > 0)
+        {
+          JsonNode *ele = json_array_get_element (ar, 0);
+          return get_first_string (ele);
+        }
+    }
+
+  return NULL;
+}
+
 static void
 gbp_meson_build_target_provider_communicate_cb2 (GObject      *object,
                                                  GAsyncResult *result,
@@ -236,11 +256,9 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
           JSON_NODE_HOLDS_VALUE (member) &&
           NULL != (name = json_node_get_string (member)) &&
           NULL != (member = json_object_get_member (obj, "install_filename")) &&
-          JSON_NODE_HOLDS_VALUE (member) &&
-          NULL != (install_filename = json_node_get_string (member)) &&
+          NULL != (install_filename = get_first_string (member)) &&
           NULL != (member = json_object_get_member (obj, "filename")) &&
-          JSON_NODE_HOLDS_VALUE (member) &&
-          NULL != (filename = json_node_get_string (member)) &&
+          NULL != (filename = get_first_string (member)) &&
           NULL != (member = json_object_get_member (obj, "type")) &&
           JSON_NODE_HOLDS_VALUE (member) &&
           NULL != (type = json_node_get_string (member)) &&
