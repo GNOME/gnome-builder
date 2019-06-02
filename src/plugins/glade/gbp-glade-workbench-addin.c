@@ -97,7 +97,10 @@ gbp_glade_workbench_addin_can_open (IdeWorkbenchAddin *addin,
       g_strcmp0 (content_type, "application/x-designer") == 0 ||
       (path && g_str_has_suffix (path, ".ui")))
     {
-      *priority = -100;
+      /* Be lower priority than editor, because glade does not currently
+       * handle templates well enough currently.
+       */
+      *priority = 100;
       return TRUE;
     }
 
