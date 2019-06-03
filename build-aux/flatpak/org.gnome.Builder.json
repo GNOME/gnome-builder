@@ -350,31 +350,6 @@
             ]
         },
         {
-            "name" : "sysprof",
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized",
-                "-Denable_gtk=true",
-                "-Dwith_sysprofd=host"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "cleanup" : [
-                "/bin/*",
-                "/libexec/sysprof",
-                "/share/appdata",
-                "/share/applications",
-                "/share/metainfo",
-                "/share/mime/packages"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
-                }
-            ]
-        },
-        {
             "name" : "template-glib",
             "config-opts" : [
                 "--libdir=/app/lib",
@@ -419,6 +394,31 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                }
+            ]
+        },
+        {
+            "name" : "sysprof",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized",
+                "-Denable_gtk=true",
+                "-Dwith_sysprofd=host"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "cleanup" : [
+                "/bin/*",
+                "/libexec/sysprof",
+                "/share/appdata",
+                "/share/applications",
+                "/share/metainfo",
+                "/share/mime/packages"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
                 }
             ]
         },
