@@ -188,8 +188,7 @@ profiler_run_handler (IdeRunManager *run_manager,
   sysprof_profiler_add_source (profiler, memory_source);
 
   /* TODO: Only add this when a GJS-based app is run */
-  gjs_source = sysprof_tracefd_source_new ();
-  sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (gjs_source), "GJS_TRACE_FD");
+  gjs_source = sysprof_gjs_source_new ();
   sysprof_profiler_add_source (profiler, gjs_source);
 
   /* Allow the app to submit us data if it supports "SYSPROF_TRACE_FD" */
