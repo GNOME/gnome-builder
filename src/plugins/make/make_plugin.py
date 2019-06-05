@@ -30,7 +30,7 @@ _ = Ide.gettext
 class MakeBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.props.glob = 'Makefile'
+        self.props.glob = '+(GNUmakefile|makefile|Makefile)'
         self.props.hint = 'make_plugin'
         self.props.priority = 1000
 
