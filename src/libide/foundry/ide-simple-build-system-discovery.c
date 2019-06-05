@@ -228,7 +228,7 @@ ide_simple_build_system_discovery_set_glob (IdeSimpleBuildSystemDiscovery *self,
       g_free (priv->glob);
       priv->glob = g_strdup (glob);
       priv->is_exact = TRUE;
-      for (; !priv->is_exact && *glob; glob = g_utf8_next_char (glob))
+      for (; priv->is_exact && *glob; glob = g_utf8_next_char (glob))
         {
           gunichar ch = g_utf8_get_char (glob);
 
