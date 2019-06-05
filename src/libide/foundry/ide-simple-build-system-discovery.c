@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
 #include <fnmatch.h>
 
 #include "ide-simple-build-system-discovery.h"
@@ -286,7 +289,7 @@ ide_simple_build_system_discovery_match (IdeSimpleBuildSystemDiscovery *self,
   g_assert (IDE_IS_SIMPLE_BUILD_SYSTEM_DISCOVERY (self));
   g_assert (name != NULL);
 
-  return fnmatch (priv->glob, name, 0) == 0;
+  return fnmatch (priv->glob, name, FNM_EXTMATCH) == 0;
 }
 
 static gboolean
