@@ -11,4 +11,5 @@ Name=Make
 X-Has-Resources=true
 X-Project-File-Filter-Name=Makefile Project
 X-Project-File-Filter-Pattern=Makefile
+X-Project-File-Filter-Content-Type=text/x-makefile
 X-Builder-ABI=@PACKAGE_ABI@
