@@ -319,7 +319,7 @@ ide_simple_build_system_discovery_check_dir (IdeSimpleBuildSystemDiscovery *self
       g_autoptr(GFileInfo) info = infoptr;
       const gchar *name = g_file_info_get_name (info);
 
-      if (fnmatch (priv->glob, name, 0) == 0)
+      if (ide_simple_build_system_discovery_match (self, name))
         return TRUE;
     }
 
