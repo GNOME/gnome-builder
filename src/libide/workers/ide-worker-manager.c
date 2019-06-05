@@ -36,15 +36,49 @@
 
 struct _IdeWorkerManager
 {
-  GObject      parent_instance;
+  GObject            parent_instance;
 
-  GDBusServer *dbus_server;
-  GHashTable  *plugin_name_to_worker;
+  GDBusAuthObserver *auth_observer;
+  GDBusServer       *dbus_server;
+  GHashTable        *plugin_name_to_worker;
 };
 
 G_DEFINE_TYPE (IdeWorkerManager, ide_worker_manager, G_TYPE_OBJECT)
 
 DZL_DEFINE_COUNTER (instances, "IdeWorkerManager", "Instances", "Number of IdeWorkerManager instances")
+
+static gboolean
+ide_worker_manager_allow_mechanism_cb (IdeWorkerManager  *self,
+                                       const gchar       *mechanism,
+                                       GDBusAuthObserver *auth_observer)
+{
+  g_assert (IDE_IS_WORKER_MANAGER (self));
+  g_assert (G_IS_DBUS_AUTH_OBSERVER (auth_observer));
+
+  return ide_str_equal0 ("EXTERNAL", mechanism);
+}
+
+static gboolean
+ide_worker_manager_authorize_authenticated_peer_cb (IdeWorkerManager  *self,
+                                                    GIOStream         *stream,
+                                                    GCredentials      *credentials,
+                                                    GDBusAuthObserver *auth_observer)
+{
+  gboolean authorized = FALSE;
+
+  g_assert (IDE_IS_WORKER_MANAGER (self));
+  g_assert (G_IS_IO_STREAM (stream));
+  g_assert (G_IS_CREDENTIALS (credentials));
+  g_assert (G_IS_DBUS_AUTH_OBSERVER (auth_observer));
+
+  if (credentials != NULL)
+    {
+      g_autoptr(GCredentials) own_credentials = g_credentials_new ();
+      authorized = g_credentials_is_same_user (credentials, own_credentials, NULL);
+    }
+
+  return authorized;
+}
 
 static gboolean
 ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
@@ -116,10 +150,24 @@ ide_worker_manager_constructed (GObject *object)
 
   guid = g_dbus_generate_guid ();
 
+  self->auth_observer = g_dbus_auth_observer_new ();
+
+  g_signal_connect_object (self->auth_observer,
+                           "allow-mechanism",
+                           G_CALLBACK (ide_worker_manager_allow_mechanism_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->auth_observer,
+                           "authorize-authenticated-peer",
+                           G_CALLBACK (ide_worker_manager_authorize_authenticated_peer_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   self->dbus_server = g_dbus_server_new_sync (address,
                                               G_DBUS_SERVER_FLAGS_NONE,
                                               guid,
-                                              NULL,
+                                              self->auth_observer,
                                               NULL,
                                               &error);
 
@@ -162,6 +210,7 @@ ide_worker_manager_finalize (GObject *object)
     g_dbus_server_stop (self->dbus_server);
 
   g_clear_pointer (&self->plugin_name_to_worker, g_hash_table_unref);
+  g_clear_object (&self->auth_observer);
   g_clear_object (&self->dbus_server);
 
   G_OBJECT_CLASS (ide_worker_manager_parent_class)->finalize (object);
