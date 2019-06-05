@@ -48,6 +48,17 @@ G_DEFINE_TYPE (IdeWorkerManager, ide_worker_manager, G_TYPE_OBJECT)
 DZL_DEFINE_COUNTER (instances, "IdeWorkerManager", "Instances", "Number of IdeWorkerManager instances")
 
 static gboolean
+ide_worker_manager_allow_mechanism_cb (IdeWorkerManager  *self,
+                                       const gchar       *mechanism,
+                                       GDBusAuthObserver *auth_observer)
+{
+  g_assert (IDE_IS_WORKER_MANAGER (self));
+  g_assert (G_IS_DBUS_AUTH_OBSERVER (auth_observer));
+
+  return ide_str_equal0 ("EXTERNAL", mechanism);
+}
+
+static gboolean
 ide_worker_manager_authorize_authenticated_peer_cb (IdeWorkerManager  *self,
                                                     GIOStream         *stream,
                                                     GCredentials      *credentials,
@@ -140,6 +151,12 @@ ide_worker_manager_constructed (GObject *object)
   guid = g_dbus_generate_guid ();
 
   self->auth_observer = g_dbus_auth_observer_new ();
+
+  g_signal_connect_object (self->auth_observer,
+                           "allow-mechanism",
+                           G_CALLBACK (ide_worker_manager_allow_mechanism_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->auth_observer,
                            "authorize-authenticated-peer",
