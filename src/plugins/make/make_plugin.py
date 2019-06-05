@@ -40,10 +40,10 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem):
     run_args = None
 
     def do_parent_set(self, parent):
-        if self.project_file.get_basename() == 'Makefile':
-            self.make_dir = project_file.get_parent()
-        elif self.project_file.query_file_type(0, None) == Gio.FileType.DIRECTORY:
+        if self.project_file.query_file_type(0, None) == Gio.FileType.DIRECTORY:
             self.make_dir = self.project_file
+        else:
+            self.make_dir = self.project_file.get_parent()
 
     def do_get_id(self):
         return 'make'
