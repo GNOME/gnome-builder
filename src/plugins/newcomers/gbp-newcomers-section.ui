@@ -126,16 +126,6 @@ Python</property>
     JavaScript</property>
                   </object>
                 </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Todo</property>
-                    <property name="description" translatable="yes">Task manager for GNOME</property>
-                    <property name="icon-name">org.gnome.Todo</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-todo.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C</property>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
