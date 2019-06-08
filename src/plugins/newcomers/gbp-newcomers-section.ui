@@ -126,6 +126,16 @@ Python</property>
     JavaScript</property>
                   </object>
                 </child>
+                <child>
+                  <object class="GbpNewcomersProject">
+                    <property name="name" translatable="yes">Sound Recorder</property>
+                    <property name="description" translatable="yes">A simple and modern sound recorder</property>
+                    <property name="icon-name">org.gnome.SoundRecorder</property>
+                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-sound-recorder.git</property>
+                    <property name="visible">true</property>
+                    <property name="languages">JavaScript</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
