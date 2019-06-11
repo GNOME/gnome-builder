@@ -119,6 +119,7 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_autoptr(SysprofSource) memory_source = NULL;
   g_autoptr(SysprofSource) app_source = NULL;
   g_autoptr(SysprofSource) gjs_source = NULL;
+  g_autoptr(SysprofSource) gtk_source = NULL;
   g_autoptr(SysprofSource) symbols_source = NULL;
   IdeContext *context;
 
@@ -187,9 +188,12 @@ profiler_run_handler (IdeRunManager *run_manager,
   memory_source = sysprof_memory_source_new ();
   sysprof_profiler_add_source (profiler, memory_source);
 
-  /* TODO: Only add this when a GJS-based app is run */
   gjs_source = sysprof_gjs_source_new ();
   sysprof_profiler_add_source (profiler, gjs_source);
+
+  gtk_source = sysprof_tracefd_source_new ();
+  sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (gtk_source), "GTK_TRACE_FD");
+  sysprof_profiler_add_source (profiler, gtk_source);
 
   /* Allow the app to submit us data if it supports "SYSPROF_TRACE_FD" */
   app_source = sysprof_tracefd_source_new ();
