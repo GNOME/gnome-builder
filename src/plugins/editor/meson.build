@@ -1,5 +1,6 @@
 plugins_sources += files([
   'editor-plugin.c',
+  'gbp-confirm-save-dialog.c',
   'gbp-editor-application-addin.c',
   'gbp-editor-frame-addin.c',
   'gbp-editor-frame-controls.c',
