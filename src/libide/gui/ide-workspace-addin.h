@@ -33,22 +33,25 @@ struct _IdeWorkspaceAddinInterface
 {
   GTypeInterface parent_iface;
 
-  void (*load)        (IdeWorkspaceAddin *self,
-                       IdeWorkspace      *workspace);
-  void (*unload)      (IdeWorkspaceAddin *self,
-                       IdeWorkspace      *workspace);
-  void (*surface_set) (IdeWorkspaceAddin *self,
-                       IdeSurface        *surface);
+  void     (*load)        (IdeWorkspaceAddin *self,
+                           IdeWorkspace      *workspace);
+  void     (*unload)      (IdeWorkspaceAddin *self,
+                           IdeWorkspace      *workspace);
+  void     (*surface_set) (IdeWorkspaceAddin *self,
+                           IdeSurface        *surface);
+  gboolean (*can_close)   (IdeWorkspaceAddin *self);
 };
 
 IDE_AVAILABLE_IN_3_32
-void ide_workspace_addin_load        (IdeWorkspaceAddin *self,
-                                      IdeWorkspace      *workspace);
+void ide_workspace_addin_load          (IdeWorkspaceAddin *self,
+                                        IdeWorkspace      *workspace);
 IDE_AVAILABLE_IN_3_32
-void ide_workspace_addin_unload      (IdeWorkspaceAddin *self,
-                                      IdeWorkspace      *workspace);
+void ide_workspace_addin_unload        (IdeWorkspaceAddin *self,
+                                        IdeWorkspace      *workspace);
 IDE_AVAILABLE_IN_3_32
-void ide_workspace_addin_surface_set (IdeWorkspaceAddin *self,
-                                      IdeSurface        *surface);
+void ide_workspace_addin_surface_set   (IdeWorkspaceAddin *self,
+                                        IdeSurface        *surface);
+IDE_AVAILABLE_IN_3_34
+gboolean ide_workspace_addin_can_close (IdeWorkspaceAddin *self);
 
 G_END_DECLS

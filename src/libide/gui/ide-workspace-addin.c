@@ -116,3 +116,25 @@ ide_workspace_addin_surface_set (IdeWorkspaceAddin *self,
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->surface_set)
     IDE_WORKSPACE_ADDIN_GET_IFACE (self)->surface_set (self, surface);
 }
+
+/**
+ * ide_workspace_addin_can_close:
+ * @self: an #IdeWorkspaceAddin
+ *
+ * This method is called to determine if the workspace can close. If the addin
+ * needs to prevent the workspace closing, then return %FALSE; otherwise %TRUE.
+ *
+ * Returns: %TRUE if the workspace can close; otherwise %FALSE.
+ *
+ * Since: 3.34
+ */
+gboolean
+ide_workspace_addin_can_close (IdeWorkspaceAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE_ADDIN (self), TRUE);
+
+  if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->can_close)
+    return IDE_WORKSPACE_ADDIN_GET_IFACE (self)->can_close (self);
+
+  return TRUE;
+}

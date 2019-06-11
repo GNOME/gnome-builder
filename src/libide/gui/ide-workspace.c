@@ -246,17 +246,37 @@ ide_workspace_agree_to_shutdown_cb (GtkWidget *widget,
   *blocked |= !ide_surface_agree_to_shutdown (IDE_SURFACE (widget));
 }
 
+static void
+ide_workspace_addin_can_close_cb (IdeExtensionSetAdapter *adapter,
+                                  PeasPluginInfo         *plugin_info,
+                                  PeasExtension          *exten,
+                                  gpointer                user_data)
+{
+  IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
+  gboolean *blocked = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
+  g_assert (blocked != NULL);
+
+  *blocked |= !ide_workspace_addin_can_close (addin);
+}
+
 static gboolean
 ide_workspace_agree_to_shutdown (IdeWorkspace *self)
 {
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
   gboolean blocked = FALSE;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WORKSPACE (self));
 
-  ide_workspace_foreach_surface (self,
-                                 ide_workspace_agree_to_shutdown_cb,
-                                 &blocked);
+  ide_workspace_foreach_surface (self, ide_workspace_agree_to_shutdown_cb, &blocked);
+
+  if (!blocked)
+    ide_extension_set_adapter_foreach (priv->addins,
+                                       ide_workspace_addin_can_close_cb,
+                                       &blocked);
 
   return !blocked;
 }
