@@ -25,6 +25,9 @@
 #include <libide-editor.h>
 #include <libide-gui.h>
 
+#include "ide-gui-private.h"
+
+#include "gbp-confirm-save-dialog.h"
 #include "gbp-editor-workspace-addin.h"
 
 struct _GbpEditorWorkspaceAddin
@@ -39,6 +42,9 @@ struct _GbpEditorWorkspaceAddin
   IdeEditorSurface     *surface;
   GtkBox               *panels_box;
   DzlMenuButton        *new_button;
+
+  guint                 confirmed_close : 1;
+  guint                 has_confirm_dialog : 1;
 };
 
 static void
@@ -298,11 +304,106 @@ gbp_editor_workspace_addin_surface_set (IdeWorkspaceAddin *addin,
 }
 
 static void
+collect_unsaved_buffers_cb (IdeBuffer *buffer,
+                            gpointer   user_data)
+{
+  GPtrArray *unsaved = user_data;
+
+  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+    g_ptr_array_add (unsaved, g_object_ref (buffer));
+}
+
+static void
+gbp_editor_workspace_addin_confirm_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  GbpConfirmSaveDialog *dialog = (GbpConfirmSaveDialog *)object;
+  g_autoptr(GbpEditorWorkspaceAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_CONFIRM_SAVE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_EDITOR_WORKSPACE_ADDIN (self));
+
+  self->has_confirm_dialog = FALSE;
+
+  if (!gbp_confirm_save_dialog_run_finish (dialog, result, &error))
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        goto destroy;
+      g_warning ("Failed to confirm: %s", error->message);
+    }
+
+  self->confirmed_close = TRUE;
+
+  if (self->workspace != NULL)
+    gtk_window_close (GTK_WINDOW (self->workspace));
+
+destroy:
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static gboolean
+gbp_editor_workspace_addin_can_close (IdeWorkspaceAddin *addin)
+{
+  GbpEditorWorkspaceAddin *self = (GbpEditorWorkspaceAddin *)addin;
+  IdeWorkbench *workbench;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_EDITOR_WORKSPACE_ADDIN (self));
+
+  if (self->confirmed_close)
+    return TRUE;
+
+  if (self->has_confirm_dialog)
+    return FALSE;
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self->workspace));
+
+  if (_ide_workbench_is_last_workspace (workbench, self->workspace))
+    {
+      g_autoptr(GPtrArray) unsaved = g_ptr_array_new_with_free_func (g_object_unref);
+      GbpConfirmSaveDialog *dialog;
+      IdeBufferManager *buffer_manager;
+      IdeContext *context;
+
+      context = ide_workbench_get_context (workbench);
+      buffer_manager = ide_buffer_manager_from_context (context);
+      ide_buffer_manager_foreach (buffer_manager, collect_unsaved_buffers_cb, unsaved);
+
+      if (unsaved->len == 0)
+        return TRUE;
+
+      self->confirmed_close = FALSE;
+      self->has_confirm_dialog = TRUE;
+
+      dialog = gbp_confirm_save_dialog_new (GTK_WINDOW (self->workspace));
+
+      for (guint i = 0; i < unsaved->len; i++)
+        {
+          IdeBuffer *buffer = g_ptr_array_index (unsaved, i);
+          gbp_confirm_save_dialog_add_buffer (dialog, buffer);
+        }
+
+      gbp_confirm_save_dialog_run_async (dialog,
+                                         NULL,
+                                         gbp_editor_workspace_addin_confirm_cb,
+                                         g_object_ref (self));
+
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_editor_workspace_addin_load;
   iface->unload = gbp_editor_workspace_addin_unload;
   iface->surface_set = gbp_editor_workspace_addin_surface_set;
+  iface->can_close = gbp_editor_workspace_addin_can_close;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditorWorkspaceAddin, gbp_editor_workspace_addin, G_TYPE_OBJECT,
