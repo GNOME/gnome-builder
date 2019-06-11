@@ -16,9 +16,12 @@
     <file compressed="true" alias="scalable/apps/org.gnome.Games.svg">icons/scalable/org.gnome.Games.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.Nautilus.svg">icons/scalable/org.gnome.Nautilus.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.Polari.svg">icons/scalable/org.gnome.Polari.svg</file>
+<<<<<<< HEAD
     <file compressed="true" alias="scalable/apps/org.gnome.Todo.svg">icons/scalable/org.gnome.Todo.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.SoundRecorder.svg">icons/scalable/org.gnome.SoundRecorder.svg</file>
 
+=======
+>>>>>>> dc8c5a405cf6cd556d14cda155001e427a90305a
 
     <file compressed="true" alias="symbolic/apps/org.gnome.Boxes-symbolic.svg">icons/symbolic/org.gnome.Boxes-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Maps-symbolic.svg">icons/symbolic/org.gnome.Maps-symbolic.svg</file>
@@ -28,8 +31,11 @@
     <file compressed="true" alias="symbolic/apps/org.gnome.Games-symbolic.svg">icons/symbolic/org.gnome.Games-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Nautilus-symbolic.svg">icons/symbolic/org.gnome.Nautilus-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Polari-symbolic.svg">icons/symbolic/org.gnome.Polari-symbolic.svg</file>
+<<<<<<< HEAD
     <file compressed="true" alias="symbolic/apps/org.gnome.Todo-symbolic.svg">icons/symbolic/org.gnome.Todo-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.SoundRecorder-symbolic.svg">icons/symbolic/org.gnome.SoundRecorder-symbolic.svg</file>
+=======
+>>>>>>> dc8c5a405cf6cd556d14cda155001e427a90305a
   </gresource>
 
 </gresources>
