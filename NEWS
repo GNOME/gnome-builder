@@ -1,4 +1,32 @@
 ==============
+Version 3.32.3
+==============
+
+Changes since last release:
+
+ • Fixes for struct/enum when auto-formatting C headers.
+ • The application-id is now validated from the template assistant.
+ • The buffer monitor has had a number of fixes for situations involving
+   external file modifications.
+ • LD_LIBRARY_PATH is now set under various conditions when running
+   applications from non-default prefixes.
+ • FreeDesktop notifications are now removed when the build pipeline has been
+   invalidated.
+ • Meson unit tests are reloaded when build.ninja changes.
+ • Auto-save will only activate if the file on disk has not been modified.
+ • i18n/l10n improvements.
+ • The NPM plugin can now be disabled.
+ • Some missing shortcuts were added to they shortcuts dialog.
+ • The foundry is now unloaded when shutting down a project, this fixed
+   situations where build configurations were not saved.
+ • Glade priorities were lowered to ensure that the editor has preference
+   when opening .ui files.
+ • The meson plugin handles changes to introspection format more gracefully.
+ • The makefile plugin now handles Makefile/makefile/GNUmakefile.
+ • Hardening of GDBusServer usage.
+ • Updated translations.
+
+==============
 Version 3.32.2
 ==============
 

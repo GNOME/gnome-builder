@@ -86,6 +86,32 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.32.3" date="2019-06-11">
+      <description>
+        <p>
+          Builder 3.32.3 is here with another round of bug fixes!
+        </p>
+        <ul>
+          <li>Fixes for struct/enum when auto-formatting C headers</li>
+          <li>The application-id is now validated from the template assistant</li>
+          <li>The buffer monitor has had a number of fixes for situations involving external file modifications</li>
+          <li>LD_LIBRARY_PATH is now set under various conditions when running applications from non-default prefixes</li>
+          <li>FreeDesktop notifications are now removed when the build pipeline has been invalidated</li>
+          <li>Meson unit tests are reloaded when build.ninja changes</li>
+          <li>Auto-save will only activate if the file on disk has not been modified</li>
+          <li>i18n/l10n improvements</li>
+          <li>The NPM plugin can now be disabled</li>
+          <li>Some missing shortcuts were added to they shortcuts dialog</li>
+          <li>The foundry is now unloaded when shutting down a project, this fixed situations where build configurations were not saved</li>
+          <li>Glade priorities were lowered to ensure that the editor has preference when opening .ui files</li>
+          <li>The meson plugin handles changes to introspection format more gracefully</li>
+          <li>The makefile plugin now handles Makefile/makefile/GNUmakefile</li>
+          <li>Hardening of GDBusServer usage</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.32.2" date="2019-05-06">
       <description>
         <p>
