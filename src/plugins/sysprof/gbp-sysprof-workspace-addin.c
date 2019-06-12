@@ -107,6 +107,20 @@ runner_exited_cb (IdeRunner       *runner,
 }
 
 static void
+foreach_fd (gint     dest_fd,
+            gint     fd,
+            gpointer user_data)
+{
+  IdeRunner *runner = user_data;
+
+  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (dest_fd >= 0);
+  g_assert (fd >= 0);
+
+  ide_runner_take_fd (runner, dup (fd), dest_fd);
+}
+
+static void
 profiler_run_handler (IdeRunManager *run_manager,
                       IdeRunner     *runner,
                       gpointer       user_data)
@@ -121,12 +135,19 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_autoptr(SysprofSource) gjs_source = NULL;
   g_autoptr(SysprofSource) gtk_source = NULL;
   g_autoptr(SysprofSource) symbols_source = NULL;
+  g_autoptr(SysprofSpawnable) spawnable = NULL;
+  g_autoptr(GPtrArray) sources = NULL;
+  g_auto(GStrv) argv = NULL;
+  const gchar * const *env;
+  IdeEnvironment *ienv;
   IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
+
+  sources = g_ptr_array_new ();
 
   /*
    * First get a copy of the active runtime and find the root of it's
@@ -176,32 +197,32 @@ profiler_run_handler (IdeRunManager *run_manager,
   sysprof_profiler_set_whole_system (profiler, TRUE);
 
   proc_source = sysprof_proc_source_new ();
-  sysprof_profiler_add_source (profiler, proc_source);
+  g_ptr_array_add (sources, proc_source);
 
   /* TODO: Make this source non-fatal since we have other data collectors */
   perf_source = sysprof_perf_source_new ();
-  sysprof_profiler_add_source (profiler, perf_source);
+  g_ptr_array_add (sources, perf_source);
 
   hostinfo_source = sysprof_hostinfo_source_new ();
-  sysprof_profiler_add_source (profiler, hostinfo_source);
+  g_ptr_array_add (sources, hostinfo_source);
 
   memory_source = sysprof_memory_source_new ();
-  sysprof_profiler_add_source (profiler, memory_source);
+  g_ptr_array_add (sources, memory_source);
 
   gjs_source = sysprof_gjs_source_new ();
-  sysprof_profiler_add_source (profiler, gjs_source);
+  g_ptr_array_add (sources, gjs_source);
 
   gtk_source = sysprof_tracefd_source_new ();
   sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (gtk_source), "GTK_TRACE_FD");
-  sysprof_profiler_add_source (profiler, gtk_source);
+  g_ptr_array_add (sources, gtk_source);
 
   /* Allow the app to submit us data if it supports "SYSPROF_TRACE_FD" */
   app_source = sysprof_tracefd_source_new ();
   sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (app_source), "SYSPROF_TRACE_FD");
-  sysprof_profiler_add_source (profiler, app_source);
+  g_ptr_array_add (sources, app_source);
 
   symbols_source = sysprof_symbols_source_new ();
-  sysprof_profiler_add_source (profiler, symbols_source);
+  g_ptr_array_add (sources, symbols_source);
 
   /*
    * TODO:
@@ -225,6 +246,45 @@ profiler_run_handler (IdeRunManager *run_manager,
                            G_CALLBACK (runner_exited_cb),
                            profiler,
                            0);
+
+  /*
+   * We need to allow the sources to modify the execution environment, so copy
+   * the environment into the spawnable, modify it, and the propagate back.
+   */
+  argv = ide_runner_get_argv (runner);
+  ienv = ide_runner_get_environment (runner);
+
+  spawnable = sysprof_spawnable_new ();
+  sysprof_spawnable_append_args (spawnable, (const gchar * const *)argv);
+  sysprof_spawnable_set_starting_fd (spawnable, ide_runner_get_max_fd (runner) + 1);
+
+  for (guint i = 0; i < sources->len; i++)
+    {
+      SysprofSource *source = g_ptr_array_index (sources, i);
+
+      sysprof_profiler_add_source (profiler, source);
+      sysprof_source_modify_spawn (source, spawnable);
+    }
+
+  /* TODO: Propagate argv back to runner.
+   *
+   * Currently this is a non-issue because none of our sources modify argv.
+   * So doing it now is just brittle for no benefit.
+   */
+
+  if ((env = sysprof_spawnable_get_environ (spawnable)))
+    {
+      for (guint i = 0; env[i] != NULL; i++)
+        {
+          g_autofree gchar *key = NULL;
+          g_autofree gchar *value = NULL;
+
+          if (ide_environ_parse (env[i], &key, &value))
+            ide_environment_setenv (ienv, key, value);
+        }
+    }
+
+  sysprof_spawnable_foreach_fd (spawnable, foreach_fd, runner);
 
   gbp_sysprof_surface_add_profiler (self->surface, profiler);
 
