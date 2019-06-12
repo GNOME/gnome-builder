@@ -295,8 +295,6 @@ ide_runner_real_run_async (IdeRunner           *self,
         {
           FdMapping *map = &g_array_index (ar, FdMapping, i);
 
-          g_printerr ("DO_MAP[%d] <= %d\n", map->dest_fd, map->source_fd);
-
           ide_subprocess_launcher_take_fd (launcher, map->source_fd, map->dest_fd);
         }
     }
