@@ -257,8 +257,8 @@ gbp_confirm_save_dialog_run_async (GbpConfirmSaveDialog *self,
   count = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (self->model), NULL);
 
   format = g_dngettext (GETTEXT_PACKAGE,
-                        "There is a document with unsaved changes. Save changes before closing?",
-                        "There are documents with unsaved changes. Save changes before closing?",
+                        "There is a file with unsaved changes. Save changes before closing?",
+                        "There are files with unsaved changes. Save changes before closing?",
                         count);
 
   title = g_strdup_printf ("<span size='larger' weight='bold'>%s</span>", format);
