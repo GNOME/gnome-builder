@@ -234,6 +234,8 @@ src/plugins/dspy/libdspy/dspy-tree-view.c
 src/plugins/dspy/libdspy/dspy-view.c
 src/plugins/dspy/libdspy/dspy-view.ui
 src/plugins/dspy/libdspy/gtk/menus.ui
+src/plugins/editor/gbp-confirm-save-dialog.c
+src/plugins/editor/gbp-confirm-save-dialog.ui
 src/plugins/editor/gbp-editor-application-addin.c
 src/plugins/editor/gbp-editor-frame-controls.c
 src/plugins/editor/gbp-editor-frame-controls.ui
