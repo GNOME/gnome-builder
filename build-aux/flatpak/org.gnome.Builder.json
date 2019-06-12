@@ -24,7 +24,7 @@
         "--share=network",
         "--talk-name=org.gtk.vfs.*",
         "--system-talk-name=org.freedesktop.PolicyKit1",
-        "--system-talk-name=org.gnome.Sysprof2",
+        "--system-talk-name=org.gnome.Sysprof3",
         "--talk-name=org.gnome.CodeAssist.v1.*",
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
