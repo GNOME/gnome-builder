@@ -295,6 +295,8 @@ ide_runner_real_run_async (IdeRunner           *self,
         {
           FdMapping *map = &g_array_index (ar, FdMapping, i);
 
+          g_printerr ("DO_MAP[%d] <= %d\n", map->dest_fd, map->source_fd);
+
           ide_subprocess_launcher_take_fd (launcher, map->source_fd, map->dest_fd);
         }
     }
@@ -1503,4 +1505,26 @@ ide_runner_take_tty_fd (IdeRunner *self,
   if (priv->child_fd != -1)
     close (priv->child_fd);
   priv->child_fd = tty_fd;
+}
+
+gint
+ide_runner_get_max_fd (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+  gint max_fd = 2;
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), 2);
+
+  if (priv->fd_mapping != NULL)
+    {
+      for (guint i = 0; i < priv->fd_mapping->len; i++)
+        {
+          const FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+          if (map->dest_fd > max_fd)
+            max_fd = map->dest_fd;
+        }
+    }
+
+  return max_fd;
 }

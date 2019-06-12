@@ -145,5 +145,7 @@ IdeBuildTarget    *ide_runner_get_build_target (IdeRunner            *self);
 IDE_AVAILABLE_IN_3_32
 void               ide_runner_set_build_target (IdeRunner            *self,
                                                 IdeBuildTarget       *build_target);
+IDE_AVAILABLE_IN_3_34
+gint               ide_runner_get_max_fd       (IdeRunner            *self);
 
 G_END_DECLS
