@@ -140,6 +140,7 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_autoptr(SysprofSource) gjs_source = NULL;
   g_autoptr(SysprofSource) gtk_source = NULL;
   g_autoptr(SysprofSource) symbols_source = NULL;
+  g_autoptr(SysprofSource) battery_source = NULL;
   g_autoptr(SysprofSpawnable) spawnable = NULL;
   g_autoptr(GPtrArray) sources = NULL;
   g_auto(GStrv) argv = NULL;
@@ -228,6 +229,9 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   symbols_source = sysprof_symbols_source_new ();
   g_ptr_array_add (sources, symbols_source);
+
+  battery_source = sysprof_battery_source_new ();
+  g_ptr_array_add (sources, battery_source);
 
   /*
    * TODO:
