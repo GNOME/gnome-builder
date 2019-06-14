@@ -84,8 +84,6 @@ struct _IdeFlatpakSubprocess
 
   GMainContext *main_context;
 
-  guint sigint_id;
-  guint sigterm_id;
   guint exited_subscription;
 
   /* GList of GTasks for wait_async() */
@@ -923,54 +921,6 @@ subprocess_iface_init (IdeSubprocessInterface *iface)
   iface->communicate_utf8_finish = ide_flatpak_subprocess_communicate_utf8_finish;
 }
 
-static gboolean
-sigterm_handler (gpointer user_data)
-{
-  IdeFlatpakSubprocess *self = user_data;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
-
-  g_dbus_connection_call_sync (self->connection,
-                               "org.freedesktop.Flatpak",
-                               "/org/freedesktop/Flatpak/Development",
-                               "org.freedesktop.Flatpak.Development",
-                               "HostCommandSignal",
-                               g_variant_new ("(uub)", self->client_pid, SIGTERM, TRUE),
-                               NULL,
-                               G_DBUS_CALL_FLAGS_NONE, -1,
-                               NULL, NULL);
-
-  kill (getpid (), SIGTERM);
-
-  IDE_RETURN (G_SOURCE_CONTINUE);
-}
-
-static gboolean
-sigint_handler (gpointer user_data)
-{
-  IdeFlatpakSubprocess *self = user_data;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
-
-  g_dbus_connection_call_sync (self->connection,
-                               "org.freedesktop.Flatpak",
-                               "/org/freedesktop/Flatpak/Development",
-                               "org.freedesktop.Flatpak.Development",
-                               "HostCommandSignal",
-                               g_variant_new ("(uub)", self->client_pid, SIGINT, TRUE),
-                               NULL,
-                               G_DBUS_CALL_FLAGS_NONE, -1,
-                               NULL, NULL);
-
-  kill (getpid (), SIGINT);
-
-  IDE_RETURN (G_SOURCE_CONTINUE);
-}
-
 static void
 maybe_create_input_stream (GInputStream **ret,
                            gint          *fdptr,
@@ -1045,10 +995,6 @@ ide_flatpak_subprocess_complete_command_locked (IdeFlatpakSubprocess *self,
    */
   self->client_pid = 0;
   g_clear_pointer (&self->identifier, g_free);
-
-  /* Remove our sources used for signal propagation */
-  g_clear_handle_id (&self->sigint_id, g_source_remove);
-  g_clear_handle_id (&self->sigterm_id, g_source_remove);
 
   /* Complete async workers */
   waiting = g_steal_pointer (&self->waiting);
@@ -1386,15 +1332,6 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
 
 
   /*
-   * Register signal handlers for SIGTERM/SIGINT so that we can terminate
-   * the host process with us (which won't be guaranteed since its outside
-   * our cgroup, nor can we use a process group leader).
-   */
-  self->sigterm_id = g_unix_signal_add (SIGTERM, sigterm_handler, self);
-  self->sigint_id = g_unix_signal_add (SIGINT, sigint_handler, self);
-
-
-  /*
    * Make sure we've closed or stolen all of the FDs that are in play
    * before calling the D-Bus service.
    */
@@ -1540,9 +1477,6 @@ ide_flatpak_subprocess_dispose (GObject *object)
   if (self->waiting != NULL)
     g_warning ("improper disposal while async operations are active!");
 
-  g_clear_handle_id (&self->sigint_id, g_source_remove);
-  g_clear_handle_id (&self->sigterm_id, g_source_remove);
-
   G_OBJECT_CLASS (ide_flatpak_subprocess_parent_class)->dispose (object);
 }
 
@@ -1554,8 +1488,6 @@ ide_flatpak_subprocess_finalize (GObject *object)
   IDE_ENTRY;
 
   g_assert (self->waiting == NULL);
-  g_assert_cmpint (self->sigint_id, ==, 0);
-  g_assert_cmpint (self->sigterm_id, ==, 0);
   g_assert_cmpint (self->exited_subscription, ==, 0);
 
   g_clear_pointer (&self->identifier, g_free);
