@@ -18,8 +18,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gbp-sysprof-workspace-addin"
+
+#include "config.h"
+
+#include <dazzle.h>
 #include <glib/gi18n.h>
-#include <sysprof.h>
+#include <sysprof-ui.h>
 
 #include "gbp-sysprof-surface.h"
 #include "gbp-sysprof-workspace-addin.h"
@@ -364,6 +369,35 @@ open_profile_action (GSimpleAction *action,
 }
 
 static void
+run_cb (GSimpleAction *action,
+        GVariant      *param,
+        gpointer       user_data)
+{
+  GbpSysprofWorkspaceAddin *self = user_data;
+
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+
+  if (self->workspace != NULL)
+    dzl_gtk_widget_action (GTK_WIDGET (self->workspace),
+                           "run-manager",
+                           "run-with-handler",
+                           g_variant_new_string ("profiler"));
+}
+
+static void
+show_cb (GSimpleAction *action,
+         GVariant      *param,
+         gpointer       user_data)
+{
+  GbpSysprofWorkspaceAddin *self = user_data;
+
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+
+  if (self->workspace != NULL)
+    ide_workspace_set_visible_surface (self->workspace, IDE_SURFACE (self->surface));
+}
+
+static void
 gbp_sysprof_workspace_addin_finalize (GObject *object)
 {
   GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)object;
@@ -388,6 +422,8 @@ gbp_sysprof_workspace_addin_init (GbpSysprofWorkspaceAddin *self)
 {
   static const GActionEntry entries[] = {
     { "open-profile", open_profile_action },
+    { "run", run_cb },
+    { "show", show_cb },
   };
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -401,26 +437,35 @@ gbp_sysprof_workspace_addin_init (GbpSysprofWorkspaceAddin *self)
 }
 
 static void
-gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
-                                  IdeWorkspace      *workspace)
+gbp_sysprof_workspace_addin_check_supported_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
 {
-  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
+  g_autoptr(GbpSysprofWorkspaceAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
   IdeRunManager *run_manager;
   IdeContext *context;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
+  g_assert (G_IS_ASYNC_RESULT (result));
 
-  self->workspace = workspace;
+  /* Check if we're unloaded */
+  if (self->workspace == NULL)
+    return;
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+  if (!sysprof_check_supported_finish (result, &error))
+    {
+      g_warning ("Sysprof-3 is not supported, will not enable profiler: %s",
+                 error->message);
+      return;
+    }
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self->workspace),
                                   "profiler",
                                   G_ACTION_GROUP (self->actions));
 
-  context = ide_workspace_get_context (workspace);
-
   /* Register our custom run handler to activate the profiler. */
+  context = ide_workspace_get_context (self->workspace);
   run_manager = ide_run_manager_from_context (context);
   ide_run_manager_add_handler (run_manager,
                                "profiler",
@@ -439,7 +484,24 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->surface);
-  ide_workspace_add_surface (workspace, IDE_SURFACE (self->surface));
+  ide_workspace_add_surface (self->workspace, IDE_SURFACE (self->surface));
+}
+
+static void
+gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
+                                  IdeWorkspace      *workspace)
+{
+  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
+
+  self->workspace = workspace;
+
+  sysprof_check_supported_async (NULL,
+                                 gbp_sysprof_workspace_addin_check_supported_cb,
+                                 g_object_ref (self));
 }
 
 static void
