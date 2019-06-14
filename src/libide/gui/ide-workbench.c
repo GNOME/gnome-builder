@@ -2268,7 +2268,7 @@ ide_workbench_set_vcs (IdeWorkbench *self,
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (!vcs || IDE_IS_VCS (vcs));
 
-  if (vcs == self->vcs)
+  if (self->vcs != NULL && vcs == self->vcs)
     return;
 
   if (vcs == NULL)
