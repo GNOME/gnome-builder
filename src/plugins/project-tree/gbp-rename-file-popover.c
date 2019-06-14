@@ -22,6 +22,7 @@
 
 #include <glib/gi18n.h>
 #include <libide-gui.h>
+#include <string.h>
 
 #include "gbp-rename-file-popover.h"
 
@@ -200,21 +201,37 @@ gbp_rename_file_popover__entry_activate (GbpRenameFilePopover *self,
     gtk_widget_activate (GTK_WIDGET (self->button));
 }
 
-static void
-gbp_rename_file_popover__entry_focus_in_event (GbpRenameFilePopover *self,
-                                              GdkEvent            *event,
-                                              GtkEntry            *entry)
+static gboolean
+select_range_in_idle_cb (GtkEntry *entry)
 {
   const gchar *name;
-  const gchar *tmp;
+  const gchar *dot;
 
-  g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   name = gtk_entry_get_text (entry);
 
-  if (NULL != (tmp = strrchr (name, '.')))
-    gtk_editable_select_region (GTK_EDITABLE (entry), 0, tmp - name);
+  if ((dot = strrchr (name, '.')))
+    {
+      gsize len = g_utf8_strlen (name, dot - name);
+      gtk_editable_select_region (GTK_EDITABLE (entry), 0, len);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gbp_rename_file_popover__entry_focus_in_event (GbpRenameFilePopover *self,
+                                               GdkEvent             *event,
+                                               GtkEntry             *entry)
+{
+  g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  gdk_threads_add_idle_full (G_PRIORITY_DEFAULT,
+                             (GSourceFunc) select_range_in_idle_cb,
+                             g_object_ref (entry),
+                             g_object_unref);
 }
 
 static void
