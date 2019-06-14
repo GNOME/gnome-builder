@@ -1239,6 +1239,20 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
   name = g_file_get_basename (directory);
   ide_context_set_title (self->context, name);
 
+  {
+    GFile *pdir = ide_project_info_get_directory (project_info);
+    GFile *pfile = ide_project_info_get_file (project_info);
+    const gchar *pident = ide_project_info_get_id (project_info);
+    const gchar *pname = ide_project_info_get_name (project_info);
+
+    /* Log some information to help track down project loading issues. */
+    g_debug ("Loading project");
+    g_debug ("    id = %s", pname);
+    g_debug ("  name = %s", pident);
+    g_debug ("   dir = %s", g_file_peek_path (pdir));
+    g_debug ("  file = %s", g_file_peek_path (pfile));
+  }
+
   /* If there has not been a project name set, make the default matching
    * the directory name. A plugin may update the name with more information
    * based on .doap files, etc.
