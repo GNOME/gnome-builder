@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-06-02 23:21+0000\n"
-"PO-Revision-Date: 2019-06-03 12:12+0200\n"
+"POT-Creation-Date: 2019-06-15 10:35+0000\n"
+"PO-Revision-Date: 2019-06-19 09:35+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -910,13 +910,14 @@ msgstr "Sin título"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1391
+#: src/libide/gui/ide-workbench.c:1405
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:270
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:342
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -955,6 +956,7 @@ msgstr "Guardar archivo"
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/editor/gbp-confirm-save-dialog.c:199
 msgid "Save"
 msgstr "Guardar"
 
@@ -1221,10 +1223,10 @@ msgid "Open File"
 msgstr "Abrir archivo"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1390
+#: src/libide/gui/ide-workbench.c:1404
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:269
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:341
 msgid "Open"
 msgstr "Abrir"
 
@@ -1639,7 +1641,7 @@ msgid "_Quit"
 msgstr "_Salir"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1387 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1401 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Abrir archivo…"
@@ -2462,7 +2464,6 @@ msgid "Show list of open documents"
 msgstr "Mostrar la lista de documentos abiertos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:170
-#| msgid "Go to Line"
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Ir a la línea"
@@ -3522,6 +3523,7 @@ msgid "Save changes to palette “%s” before closing?"
 msgstr "¿Guardar los cambios de la paleta «%s» antes de cerrar?"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:96
+#: src/plugins/editor/gbp-confirm-save-dialog.c:197
 msgid "Close without Saving"
 msgstr "Cerrar sin guardar"
 
@@ -4307,6 +4309,31 @@ msgstr "Seleccionar un nombre de bus"
 #: src/plugins/dspy/libdspy/dspy-view.ui:124
 msgid "Select a bus name to introspect the peer."
 msgstr "Seleccione el nombre del bus para introspeccionar el par"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.c:260
+#| msgid ""
+#| "There is %d document with unsaved changes. Save changes before closing?"
+#| msgid_plural ""
+#| "There are %d documents with unsaved changes. Save changes before closing?"
+msgid "There is a file with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are files with unsaved changes. Save changes before closing?"
+msgstr[0] ""
+"Hay un archivo con cambios sin guardar. ¿Guardar los cambios antes de cerrar?"
+msgstr[1] ""
+"Hay varios archivos con cambios sin guardar. ¿Guardar los cambios antes de "
+"cerrar?s"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:27
+#| msgid "Select a palette file"
+msgid "Select the files to save:"
+msgstr "Seleccionar los archivos que guardar:"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:80
+#| msgid ""
+#| "If you don't save, changes from the last minute will be permanently lost."
+msgid "If you close without saving, all your changes will be permanently lost."
+msgstr "Si cierra sin guardar, todos los cambios se perderán para siempre."
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
@@ -5184,12 +5211,12 @@ msgid "An IRC Client for GNOME"
 msgstr "Un cliente de IRC para GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:131
-msgid "Todo"
-msgstr "Por hacer"
+msgid "Sound Recorder"
+msgstr "Grabadora de sonidos"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:132
-msgid "Task manager for GNOME"
-msgstr "Gestor de tareas para GNOME"
+msgid "A simple and modern sound recorder"
+msgstr "Una grabadora de sonidos sencilla y moderna"
 
 #: src/plugins/notification/ide-notification-addin.c:102
 msgid "Build successful"
@@ -5240,12 +5267,12 @@ msgid "Containers/Podman"
 msgstr "Contenedores/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
-#: src/plugins/project-tree/gbp-rename-file-popover.c:144
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Ya existe una carpeta con ese nombre."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
-#: src/plugins/project-tree/gbp-rename-file-popover.c:147
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Ya existe un archivo con ese nombre."
 
@@ -5305,7 +5332,7 @@ msgstr "Los archivos se copiarán en un momento"
 msgid "Project Tree"
 msgstr "Árbol del proyecto."
 
-#: src/plugins/project-tree/gbp-rename-file-popover.c:84
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
 msgstr "Renombrar %s"
@@ -5677,24 +5704,24 @@ msgid "Document Outline"
 msgstr "Esquema del documento"
 
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
-#: src/plugins/sysprof/gtk/menus.ui:20
+#: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Profiler"
 msgstr "Perfilador"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:266
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:338
 msgid "Open Sysprof Capture…"
 msgstr "Abrir captura de Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:275
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:347
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Capturar de sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:281
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:353
 msgid "All Files"
 msgstr "Todos los archivos"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:364
-#: src/plugins/sysprof/gtk/menus.ui:34 src/plugins/sysprof/gtk/menus.ui:44
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:476
+#: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Ejecutar con el perfilador"
 
@@ -5966,6 +5993,12 @@ msgstr "Falló al crear el árbol XML."
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
+#~ msgid "Todo"
+#~ msgstr "Por hacer"
+
+#~ msgid "Task manager for GNOME"
+#~ msgstr "Gestor de tareas para GNOME"
 
 #~ msgid "Failure"
 #~ msgstr "Fallo"
@@ -8359,11 +8392,6 @@ msgstr ""
 #~ "siempre."
 
 #~ msgid ""
-#~ "If you don't save, changes from the last minute will be permanently lost."
-#~ msgstr ""
-#~ "Si no guarda, los cambios desde el último minuto se perderán para siempre."
-
-#~ msgid ""
 #~ "If you don't save, changes from the last minute and %ld second will be "
 #~ "permanently lost."
 #~ msgid_plural ""
@@ -8427,17 +8455,6 @@ msgstr ""
 #~ msgid_plural "Changes to %d documents will be permanently lost."
 #~ msgstr[0] "Los cambios realizados a %d documento se perderán para siempre."
 #~ msgstr[1] "Los cambios realizados a %d documentos se perderán para siempre."
-
-#~ msgid ""
-#~ "There is %d document with unsaved changes. Save changes before closing?"
-#~ msgid_plural ""
-#~ "There are %d documents with unsaved changes. Save changes before closing?"
-#~ msgstr[0] ""
-#~ "Hay %d documento con cambios sin guardar. ¿Guardar los cambios antes de "
-#~ "cerrar?"
-#~ msgstr[1] ""
-#~ "Hay %d documentos con cambios sin guardar. ¿Guardar los cambios antes de "
-#~ "cerrar?s"
 
 #~ msgid "Docum_ents with unsaved changes:"
 #~ msgstr "Docum_entos con cambios sin guardar:"
