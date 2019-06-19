@@ -363,7 +363,9 @@ ide_frame_header_update_css (IdeFrameHeader *self)
       g_string_append        (str, "  background: none;\n");
       g_string_append_printf (str, "  background-color: %s;\n", bgstr);
       g_string_append        (str, "  transition: background-color 400ms;\n");
-      g_string_append        (str, "  transition-timing-function: ease; }\n");
+      g_string_append        (str, "  transition-timing-function: ease;\n");
+      g_string_append_printf (str, "  border-bottom: 1px solid shade(%s,0.9);\n", bgstr);
+      g_string_append        (str, "  }\n");
       g_string_append        (str, "button { background: transparent; }\n");
       g_string_append        (str, "button:hover, button:checked {\n");
       g_string_append_printf (str, "  background: none; background-color: shade(%s,.85); }\n", bgstr);
