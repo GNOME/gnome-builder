@@ -123,8 +123,10 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
 static void
 clear_param (gpointer data)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   GParameter *p = data;
   g_value_unset (&p->value);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static GType
@@ -198,6 +200,8 @@ collect_parameters (GType        type,
   const gchar *property = first_property;
   g_autoptr(GArray) params = NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   params = g_array_new (FALSE, FALSE, sizeof (GParameter));
   g_array_set_clear_func (params, clear_param);
 
@@ -228,6 +232,8 @@ collect_parameters (GType        type,
 
   if (property != NULL)
     return NULL;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return g_steal_pointer (&params);
 }
@@ -284,9 +290,13 @@ ide_extension_new (PeasEngine     *engine,
   if (params == NULL)
     return NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   return peas_engine_create_extensionv (engine,
                                         plugin_info,
                                         type,
                                         params->len,
                                         (GParameter *)(gpointer)params->data);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
