@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-03-08 17:08+0000\n"
-"PO-Revision-Date: 2019-03-20 15:00+0100\n"
+"POT-Creation-Date: 2019-06-11 04:35+0000\n"
+"PO-Revision-Date: 2019-06-20 09:25+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 3.31.90\n"
+"X-Generator: Gtranslator 3.32.0\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -569,11 +569,6 @@ msgstr "Depurar con el depurador de GNU"
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
 msgstr "Construir software para GNOME"
-
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.Builder.desktop.in.in:7
-msgid "org.gnome.Builder"
-msgstr "org.gnome.Builder"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
@@ -4522,7 +4517,7 @@ msgstr "Enlazador"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
 #: src/plugins/meson/gbp-meson-utils.c:104
 msgid "Strip"
-msgstr ""
+msgstr "Desmontar"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
 #: src/plugins/meson/gbp-meson-utils.c:106
@@ -5320,6 +5315,9 @@ msgstr ""
 #: src/plugins/xml-pack/ide-xml-service.c:337
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero no en el gestor de búferes."
+
+#~ msgid "org.gnome.Builder"
+#~ msgstr "org.gnome.Builder"
 
 #~ msgid "Allow snippets to be inserted into the document."
 #~ msgstr "Permitir insertar fragmentos en el documento."
