@@ -53,6 +53,9 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
       return;
     }
 
+  if (ide_task_return_error_if_cancelled (task))
+    return;
+
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
