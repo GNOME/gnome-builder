@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-05-30 01:11+0000\n"
-"PO-Revision-Date: 2019-05-31 10:37+0700\n"
+"POT-Creation-Date: 2019-06-19 20:17+0000\n"
+"PO-Revision-Date: 2019-06-21 15:36+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural= n!=1;\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -898,13 +898,14 @@ msgstr "Tanpa Judul"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1391
+#: src/libide/gui/ide-workbench.c:1405
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:270
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:342
 msgid "Cancel"
 msgstr "Batal"
 
@@ -943,6 +944,7 @@ msgstr "Simpan Berkas"
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/editor/gbp-confirm-save-dialog.c:199
 msgid "Save"
 msgstr "Simpan"
 
@@ -1209,10 +1211,10 @@ msgid "Open File"
 msgstr "Buka Berkas"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1390
+#: src/libide/gui/ide-workbench.c:1404
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:269
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:341
 msgid "Open"
 msgstr "Buka"
 
@@ -1623,7 +1625,7 @@ msgid "_Quit"
 msgstr "_Keluar"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1387 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1401 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Buka Berkas…"
@@ -3489,6 +3491,7 @@ msgid "Save changes to palette “%s” before closing?"
 msgstr "Simpan perubahan pada palet \"%s\" sebelum ditutup?"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:96
+#: src/plugins/editor/gbp-confirm-save-dialog.c:197
 msgid "Close without Saving"
 msgstr "Tutup tanpa Menyimpan"
 
@@ -4274,6 +4277,27 @@ msgstr "Pilih Nama Bus"
 msgid "Select a bus name to introspect the peer."
 msgstr "Pilih nama bus untuk mengintrospeksi peer."
 
+#: src/plugins/editor/gbp-confirm-save-dialog.c:260
+msgid "There is a file with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are files with unsaved changes. Save changes before closing?"
+msgstr[0] ""
+"Ada berkas dengan perubahan yang belum disimpan. Simpan perubahan sebelum "
+"ditutup?"
+msgstr[1] ""
+"Ada berkas dengan perubahan yang belum disimpan. Simpan perubahan sebelum "
+"ditutup?"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:27
+msgid "Select the files to save:"
+msgstr "Pilih berkas yang akan disimpan:"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:80
+msgid "If you close without saving, all your changes will be permanently lost."
+msgstr ""
+"Jika Anda menutup tanpa menyimpan, semua perubahan Anda akan hilang secara "
+"permanen."
+
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
 msgstr "Gunakan antarmuka penyunting minimal"
@@ -4390,7 +4414,7 @@ msgstr "Mengkloning proyek %s"
 msgid "Downloading application sources…"
 msgstr "Mengunduh sumber aplikasi…"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:667
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Gagal menghapus manifest flatpak: %s"
@@ -5151,12 +5175,12 @@ msgid "An IRC Client for GNOME"
 msgstr "Klien IRC untuk GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:131
-msgid "Todo"
-msgstr "Todo"
+msgid "Sound Recorder"
+msgstr "Perekam Suara"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:132
-msgid "Task manager for GNOME"
-msgstr "Manajer tugas untuk GNOME"
+msgid "A simple and modern sound recorder"
+msgstr "Suatu perekam suara modern yang sederhana"
 
 #: src/plugins/notification/ide-notification-addin.c:102
 msgid "Build successful"
@@ -5207,12 +5231,12 @@ msgid "Containers/Podman"
 msgstr "Kontainer/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
-#: src/plugins/project-tree/gbp-rename-file-popover.c:144
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Folder dengan nama itu sudah ada."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
-#: src/plugins/project-tree/gbp-rename-file-popover.c:147
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Berkas dengan nama itu sudah ada."
 
@@ -5272,7 +5296,7 @@ msgstr "Berkas akan disalin sebentar lagi"
 msgid "Project Tree"
 msgstr "Pohon Proyek"
 
-#: src/plugins/project-tree/gbp-rename-file-popover.c:84
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
 msgstr "Ubah nama %s"
@@ -5639,24 +5663,24 @@ msgid "Document Outline"
 msgstr "Garis Besar Dokumentasi"
 
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
-#: src/plugins/sysprof/gtk/menus.ui:20
+#: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Profiler"
 msgstr "Profiler"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:266
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:338
 msgid "Open Sysprof Capture…"
 msgstr "Buka Tangkapan Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:275
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:347
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof Capture (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:281
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:353
 msgid "All Files"
 msgstr "Semua Berkas"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:364
-#: src/plugins/sysprof/gtk/menus.ui:34 src/plugins/sysprof/gtk/menus.ui:44
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:476
+#: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Jalankan dengan Profiler"
 
@@ -5925,6 +5949,12 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Todo"
+#~ msgstr "Todo"
+
+#~ msgid "Task manager for GNOME"
+#~ msgstr "Manajer tugas untuk GNOME"
 
 #~ msgid "Failure"
 #~ msgstr "Kegagalan"
