@@ -1,4 +1,32 @@
 ==============
+Version 3.33.3
+==============
+
+Changes since last release:
+
+ • The sysprof dependency has been bumped to 3.33.3. Note that sysprof
+   3.33.3 introduces a new org.gnome.Sysprof3 service we rely on, but also
+   provides org.gnome.Sysprof2 for compat with older systems
+ • Validate application IDs when creating projects
+ • Improvements to the golang language server integration
+ • Improved formatting with `format-decls` comand-bar action
+ • Updates for newcomer workflow
+ • Improvements to Vim emulation
+ • Cargo build system integration improvements
+ • Improved gtkmm templates
+ • Use --watch-bus when emulating rofiles-fuse to host
+ • Improvements to completion-window opacity on Ctrl key-press/release
+ • Window stacking fixes
+ • Directory names are now indexed and can be used to open a file-browser
+ • Foundry improvements including unit testing and PTY usage
+ • Avoid displaying notifications in some situations
+ • Terminal spawning has been redesigned to make it easier to re-use
+ • We now load .ui files in the editor by default, you can open them
+   from the designer using "View Design"
+ • GNUmakefile fixes
+ • Translation updates
+
+==============
 Version 3.33.1
 ==============
 
