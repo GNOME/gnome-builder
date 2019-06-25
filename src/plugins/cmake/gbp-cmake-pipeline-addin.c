@@ -114,7 +114,7 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
   toolchain = ide_pipeline_get_toolchain (pipeline);
 
   if (g_strcmp0 (project_file_name, "CMakeLists.txt") == 0)
-    srcdir = g_dirname (g_file_peek_path (project_file));
+    srcdir = g_path_get_dirname (g_file_peek_path (project_file));
   else
     srcdir = g_strdup (ide_pipeline_get_srcdir (pipeline));
 
