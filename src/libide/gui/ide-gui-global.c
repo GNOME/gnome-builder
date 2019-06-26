@@ -276,6 +276,21 @@ _ide_gtk_progress_bar_start_pulsing (GtkProgressBar *progress)
   ide_gtk_progress_bar_tick_cb (progress);
 }
 
+static void
+ide_gtk_show_uri_on_window_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_subprocess_wait_finish (subprocess, result, &error))
+    g_warning ("Subprocess failed: %s", error->message);
+}
+
 gboolean
 ide_gtk_show_uri_on_window (GtkWindow    *window,
                             const gchar  *uri,
@@ -304,6 +319,11 @@ ide_gtk_show_uri_on_window (GtkWindow    *window,
 
       if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, error)))
         return FALSE;
+
+      ide_subprocess_wait_async (subprocess,
+                                 NULL,
+                                 ide_gtk_show_uri_on_window_cb,
+                                 NULL);
     }
   else
     {
