@@ -183,9 +183,13 @@ ide_application_actions_help_cb (GObject      *object,
    */
   if (g_network_monitor_can_reach_finish (monitor, result, NULL))
     {
+      g_autoptr(GError) error = NULL;
+
       g_debug ("Can reach documentation site, opening online");
-      if (ide_gtk_show_uri_on_window (focused_window, DOCS_URI, g_get_monotonic_time (), NULL))
-        IDE_EXIT;
+      if (!ide_gtk_show_uri_on_window (focused_window, DOCS_URI, g_get_monotonic_time (), &error))
+        g_warning ("Failed to display documentation: %s", error->message);
+
+      IDE_EXIT;
     }
 
   g_debug ("Cannot reach online documentation, trying locally");
