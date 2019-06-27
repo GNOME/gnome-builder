@@ -768,6 +768,8 @@ ide_greeter_workspace_begin (IdeGreeterWorkspace *self)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
 
+  gtk_widget_set_sensitive (GTK_WIDGET (self->sections), FALSE);
+
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "open",
                              "enabled", FALSE,
                              NULL);
@@ -795,6 +797,8 @@ ide_greeter_workspace_end (IdeGreeterWorkspace *self)
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "surface",
                              "enabled", TRUE,
                              NULL);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->sections), TRUE);
 }
 
 /**
