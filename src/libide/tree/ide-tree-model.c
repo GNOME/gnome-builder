@@ -338,7 +338,7 @@ ide_tree_model_class_init (IdeTreeModelClass *klass)
    * tree contents.
    *
    * For example, to extend the project-tree, plugins should set
-   * "X-Tree-Kind=project" in their .plugin manifest.
+   * "X-Tree-Kind=project-tree" in their .plugin manifest.
    *
    * Since: 3.32
    */
