@@ -300,11 +300,17 @@ gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
   if ((info = ide_vcs_monitor_ref_info (self->monitor, file)))
     {
       IdeVcsFileStatus status = ide_vcs_file_info_get_status (info);
+      IdeTreeNodeFlags flags = 0;
 
       if (status == IDE_VCS_FILE_STATUS_ADDED)
-        g_object_set (cell, "foreground-rgba", &self->added_color, NULL);
+        flags = IDE_TREE_NODE_FLAGS_ADDED;
       else if (status == IDE_VCS_FILE_STATUS_CHANGED)
-        g_object_set (cell, "foreground-rgba", &self->changed_color, NULL);
+        flags = IDE_TREE_NODE_FLAGS_CHANGED;
+
+      if (flags && ide_tree_node_has_child (node))
+        flags |= IDE_TREE_NODE_FLAGS_DESCENDANT;
+
+      ide_tree_node_set_flags (node, flags);
     }
 }
 
