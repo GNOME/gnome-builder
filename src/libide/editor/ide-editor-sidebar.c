@@ -434,6 +434,25 @@ ide_editor_sidebar_close_view (GtkButton     *button,
     _ide_frame_request_close (IDE_FRAME (stack), view);
 }
 
+static gboolean
+modified_to_attrs (GBinding     *binding,
+                   const GValue *src_value,
+                   GValue       *dst_value,
+                   gpointer      user_data)
+{
+  PangoAttrList *attrs = NULL;
+
+  if (g_value_get_boolean (src_value))
+    {
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_style_new (PANGO_STYLE_ITALIC));
+    }
+
+  g_value_take_boxed (dst_value, attrs);
+
+  return TRUE;
+}
+
 static GtkWidget *
 create_open_page_row (gpointer item,
                       gpointer user_data)
@@ -467,14 +486,16 @@ create_open_page_row (gpointer item,
   g_object_bind_property (view, "icon", image, "gicon", G_BINDING_SYNC_CREATE);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
 
-  label = g_object_new (DZL_TYPE_BOLDING_LABEL,
+  label = g_object_new (GTK_TYPE_LABEL,
                         "ellipsize", PANGO_ELLIPSIZE_START,
                         "visible", TRUE,
                         "hexpand", TRUE,
                         "xalign", 0.0f,
                         NULL);
   g_object_bind_property (view, "title", label, "label", G_BINDING_SYNC_CREATE);
-  g_object_bind_property (view, "modified", label, "bold", G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (view, "modified", label, "attributes",
+                               G_BINDING_SYNC_CREATE,
+                               modified_to_attrs, NULL, NULL, NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   button = g_object_new (GTK_TYPE_BUTTON,
