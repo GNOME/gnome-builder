@@ -233,7 +233,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libgit2-glib.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/libgit2-glib.git",
+                    "branch": "wip/albfan/python3"
                 }
             ]
         },
