@@ -511,6 +511,45 @@ ide_tree_drag_motion (GtkWidget      *widget,
   return ret;
 }
 
+static gboolean
+ide_tree_query_tooltip (GtkWidget  *widget,
+                        gint        x,
+                        gint        y,
+                        gboolean    keyboard_mode,
+                        GtkTooltip *tooltip)
+{
+  GtkTreeView *tree_view = (GtkTreeView *)widget;
+  g_autoptr(GtkTreePath) path = NULL;
+  GtkTreeViewColumn *column;
+  gint cell_x = 0;
+  gint cell_y = 0;
+
+  g_assert (IDE_IS_TREE (tree_view));
+  g_assert (GTK_IS_TOOLTIP (tooltip));
+
+  if (gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, &column, &cell_x, &cell_y))
+    {
+      GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+      GtkTreeIter iter;
+
+      if (gtk_tree_model_get_iter (model, &iter, path))
+        {
+          IdeTreeNode *node;
+
+          node = ide_tree_model_get_node (IDE_TREE_MODEL (model), &iter);
+
+          if (node != NULL)
+            {
+              gtk_tooltip_set_text (tooltip,
+                                    ide_tree_node_get_display_name (node));
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 ide_tree_destroy (GtkWidget *widget)
 {
@@ -549,6 +588,7 @@ ide_tree_class_init (IdeTreeClass *klass)
   widget_class->destroy = ide_tree_destroy;
   widget_class->button_press_event = ide_tree_button_press_event;
   widget_class->drag_motion = ide_tree_drag_motion;
+  widget_class->query_tooltip = ide_tree_query_tooltip;
 
   tree_view_class->row_activated = ide_tree_row_activated;
   tree_view_class->row_expanded = ide_tree_row_expanded;
@@ -563,6 +603,8 @@ ide_tree_init (IdeTree *self)
   GtkTreeViewColumn *column;
 
   priv->cancellable = g_cancellable_new ();
+
+  gtk_widget_set_has_tooltip (GTK_WIDGET (self), TRUE);
 
   g_signal_connect_object (gtk_tree_view_get_selection (GTK_TREE_VIEW (self)),
                            "changed",
