@@ -158,6 +158,7 @@ gbp_buildui_tree_addin_build_children_async (IdeTreeAddin        *addin,
 
       targets = g_object_new (IDE_TYPE_TREE_NODE,
                               "icon-name", "builder-build-symbolic",
+                              "is-header", TRUE,
                               "item", NULL,
                               "display-name", _("Build Targets"),
                               "children-possible", TRUE,

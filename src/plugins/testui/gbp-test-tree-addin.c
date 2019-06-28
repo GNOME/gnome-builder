@@ -196,6 +196,7 @@ gbp_test_tree_addin_build_children_async (IdeTreeAddin        *addin,
       ide_tree_node_set_children_possible (child, TRUE);
       ide_tree_node_set_display_name (child, _("Unit Tests"));
       ide_tree_node_set_icon_name (child, "builder-unit-tests-symbolic");
+      ide_tree_node_set_is_header (child, TRUE);
       ide_tree_node_set_item (child, path);
       ide_tree_node_prepend (node, child);
     }

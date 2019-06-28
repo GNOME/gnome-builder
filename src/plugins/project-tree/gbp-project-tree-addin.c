@@ -208,6 +208,7 @@ gbp_project_tree_addin_build_children_async (IdeTreeAddin        *addin,
       ide_tree_node_set_display_name (files, _("Files"));
       ide_tree_node_set_icon_name (files, "view-list-symbolic");
       ide_tree_node_set_expanded_icon_name (files, "view-list-symbolic");
+      ide_tree_node_set_is_header (files, TRUE);
       ide_tree_node_append (node, files);
     }
   else if (ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE))

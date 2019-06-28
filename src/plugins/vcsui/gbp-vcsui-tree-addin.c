@@ -425,6 +425,7 @@ gbp_vcsui_tree_addin_build_children_async (IdeTreeAddin        *addin,
                                    "children-possible", TRUE,
                                    "display-name", _("Version Control"),
                                    "icon-name", "builder-vcs-git-symbolic",
+                                   "is-header", TRUE,
                                    "item", vcs,
                                    "tag", "vcs",
                                    NULL);
