@@ -623,7 +623,9 @@ ide_tree_init (IdeTree *self)
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, pixbuf_cell_func, self, NULL);
 
-  cell = gtk_cell_renderer_text_new ();
+  cell = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
+                       "ellipsize", PANGO_ELLIPSIZE_END,
+                       NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, text_cell_func, self, NULL);
 
