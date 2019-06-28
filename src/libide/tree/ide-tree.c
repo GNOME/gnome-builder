@@ -209,7 +209,8 @@ text_cell_func (GtkCellLayout   *layout,
   /* Only apply styling if the node isn't selected */
   if (!ide_tree_node_is_selected (node))
     {
-      if (ide_tree_node_get_is_header (node))
+      if (ide_tree_node_get_is_header (node) ||
+          (ide_tree_node_get_flags (node) & IDE_TREE_NODE_FLAGS_ADDED))
         g_object_set (cell, "attributes", priv->header_attributes, NULL);
       else if (ide_tree_node_is_empty (node))
         g_object_set (cell, "attributes", priv->dim_label_attributes, NULL);
