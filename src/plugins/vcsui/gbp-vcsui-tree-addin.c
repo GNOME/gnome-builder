@@ -283,6 +283,7 @@ gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
   g_autoptr(IdeVcsFileInfo) info = NULL;
   g_autoptr(GFile) file = NULL;
   IdeProjectFile *project_file;
+  IdeTreeNodeFlags flags = 0;
 
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE_NODE (node));
@@ -300,7 +301,6 @@ gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
   if ((info = ide_vcs_monitor_ref_info (self->monitor, file)))
     {
       IdeVcsFileStatus status = ide_vcs_file_info_get_status (info);
-      IdeTreeNodeFlags flags = 0;
 
       if (status == IDE_VCS_FILE_STATUS_ADDED)
         flags = IDE_TREE_NODE_FLAGS_ADDED;
@@ -309,9 +309,9 @@ gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
 
       if (flags && ide_tree_node_has_child (node))
         flags |= IDE_TREE_NODE_FLAGS_DESCENDANT;
-
-      ide_tree_node_set_flags (node, flags);
     }
+
+  ide_tree_node_set_flags (node, flags);
 }
 
 static void
