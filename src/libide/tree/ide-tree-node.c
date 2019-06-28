@@ -81,6 +81,9 @@ struct _IdeTreeNode
   GdkRGBA      background;
   GdkRGBA      foreground;
 
+  /* Flags for state cell renderer */
+  IdeTreeNodeFlags flags;
+
   /* When did we start loading? This is used to avoid drawing "Loading..."
    * when the tree loads really quickly. Otherwise, we risk looking janky
    * when the loads are quite fast.
@@ -1993,5 +1996,26 @@ ide_tree_node_set_use_markup (IdeTreeNode *self,
       self->use_markup = use_markup;
       ide_tree_node_emit_changed (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_MARKUP]);
+    }
+}
+
+IdeTreeNodeFlags
+ide_tree_node_get_flags (IdeTreeNode *self)
+{
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), 0);
+
+  return self->flags;
+}
+
+void
+ide_tree_node_set_flags (IdeTreeNode      *self,
+                         IdeTreeNodeFlags  flags)
+{
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
+
+  if (self->flags != flags)
+    {
+      self->flags = flags;
+      ide_tree_node_emit_changed (self);
     }
 }

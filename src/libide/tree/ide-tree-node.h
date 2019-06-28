@@ -36,6 +36,15 @@ typedef enum
   IDE_TREE_NODE_VISIT_CHILDREN = 0x3,
 } IdeTreeNodeVisit;
 
+typedef enum
+{
+  IDE_TREE_NODE_FLAGS_NONE       = 0,
+  IDE_TREE_NODE_FLAGS_DESCENDANT = 1 << 0,
+  IDE_TREE_NODE_FLAGS_ADDED      = 1 << 1,
+  IDE_TREE_NODE_FLAGS_CHANGED    = 1 << 2,
+  IDE_TREE_NODE_FLAGS_REMOVED    = 1 << 3,
+} IdeTreeNodeFlags;
+
 /**
  * IdeTreeTraverseFunc:
  * @node: an #IdeTreeNode
@@ -198,5 +207,10 @@ gboolean       ide_tree_node_get_use_markup         (IdeTreeNode         *self);
 IDE_AVAILABLE_IN_3_32
 void           ide_tree_node_set_use_markup         (IdeTreeNode         *self,
                                                      gboolean             use_markup);
+IDE_AVAILABLE_IN_3_34
+void           ide_tree_node_set_flags              (IdeTreeNode         *self,
+                                                     IdeTreeNodeFlags     flags);
+IDE_AVAILABLE_IN_3_34
+IdeTreeNodeFlags ide_tree_node_get_flags (IdeTreeNode *self);
 
 G_END_DECLS

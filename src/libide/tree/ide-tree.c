@@ -26,6 +26,7 @@
 #include <libide-core.h>
 #include <libide-threading.h>
 
+#include "ide-cell-renderer-status.h"
 #include "ide-tree.h"
 #include "ide-tree-model.h"
 #include "ide-tree-node.h"
@@ -116,6 +117,25 @@ ide_tree_select (IdeTree     *self,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
   path = ide_tree_node_get_path (node);
   gtk_tree_selection_select_path (selection, path);
+}
+
+static void
+state_cell_func (GtkCellLayout   *layout,
+                 GtkCellRenderer *cell,
+                 GtkTreeModel    *model,
+                 GtkTreeIter     *iter,
+                 gpointer         user_data)
+{
+  IdeTreeNodeFlags flags = 0;
+  IdeTreeNode *node;
+
+  g_assert (IDE_IS_TREE (user_data));
+  g_assert (IDE_IS_TREE_MODEL (model));
+
+  if ((node = ide_tree_model_get_node (IDE_TREE_MODEL (model), iter)))
+    flags = ide_tree_node_get_flags (node);
+
+  ide_cell_renderer_status_set_flags (IDE_CELL_RENDERER_STATUS (cell), flags);
 }
 
 static void
@@ -564,6 +584,12 @@ ide_tree_init (IdeTree *self)
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, text_cell_func, self, NULL);
+
+  cell = g_object_new (IDE_TYPE_CELL_RENDERER_STATUS,
+                       "xpad", 3,
+                       NULL);
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, state_cell_func, self, NULL);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
 

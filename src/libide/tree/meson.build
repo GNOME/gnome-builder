@@ -26,7 +26,11 @@ libide_tree_public_sources = [
   'ide-tree-node.c',
 ]
 
-libide_tree_sources = libide_tree_public_sources
+libide_tree_private_sources = [
+  'ide-cell-renderer-status.c',
+]
+
+libide_tree_sources = libide_tree_public_sources + libide_tree_private_sources
 
 #
 # Dependencies
