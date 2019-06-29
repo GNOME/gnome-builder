@@ -115,9 +115,24 @@ ide_notifications_button_notify_has_progress_cb (IdeNotificationsButton *self,
                                                  GParamSpec             *pspec,
                                                  IdeNotifications       *notifications)
 {
+  GtkWidget *parent;
+
   g_assert (IDE_IS_NOTIFICATIONS_BUTTON (self));
   g_assert (IDE_IS_NOTIFICATIONS (notifications));
 
+  parent = gtk_widget_get_parent (GTK_WIDGET (self));
+
+  /* If we are in a revealer, just toggle the revealer
+   * instead of falling back to using fading widgetry.
+   */
+  if (GTK_IS_REVEALER (parent))
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (parent),
+                                     ide_notifications_get_has_progress (notifications));
+      return;
+    }
+
+  /* Fallback to using widget opacity to hide/show from/to view. */
   if (ide_notifications_get_has_progress (notifications))
     {
       if (!gtk_widget_get_visible (GTK_WIDGET (self)))

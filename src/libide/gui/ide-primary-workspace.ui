@@ -52,9 +52,16 @@
           </object>
         </child>
         <child type="right">
-          <object class="IdeNotificationsButton" id="notifications_button">
-            <property name="show-theatric">false</property>
+          <object class="GtkRevealer">
+            <property name="reveal-child">false</property>
+            <property name="transition-type">slide-left</property>
             <property name="visible">true</property>
+            <child>
+              <object class="IdeNotificationsButton" id="notifications_button">
+                <property name="show-theatric">false</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
