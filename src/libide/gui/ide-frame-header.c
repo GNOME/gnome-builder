@@ -126,7 +126,7 @@ _ide_frame_header_popdown (IdeFrameHeader *self)
 
 void
 _ide_frame_header_update (IdeFrameHeader *self,
-                                 IdePage        *view)
+                          IdePage        *view)
 {
   const gchar *action = "frame.close-page";
 
@@ -196,7 +196,7 @@ _ide_frame_header_update (IdeFrameHeader *self,
 }
 
 static void
-close_view_cb (GtkButton            *button,
+close_view_cb (GtkButton      *button,
                IdeFrameHeader *self)
 {
   GtkWidget *stack;
@@ -295,7 +295,7 @@ ide_frame_header_model_changed (IdeFrameHeader *self,
 
 void
 _ide_frame_header_set_pages (IdeFrameHeader *self,
-                                    GListModel           *model)
+                             GListModel     *model)
 {
   g_assert (IDE_IS_FRAME_HEADER (self));
   g_assert (!model || G_IS_LIST_MODEL (model));
@@ -314,9 +314,9 @@ _ide_frame_header_set_pages (IdeFrameHeader *self,
 }
 
 static void
-ide_frame_header_view_row_activated (GtkListBox           *list_box,
-                                            GtkListBoxRow        *row,
-                                            IdeFrameHeader *self)
+ide_frame_header_view_row_activated (GtkListBox     *list_box,
+                                     GtkListBoxRow  *row,
+                                     IdeFrameHeader *self)
 {
   GtkWidget *stack;
   GtkWidget *page;
@@ -414,7 +414,7 @@ ide_frame_header_queue_update_css (IdeFrameHeader *self)
 
 void
 _ide_frame_header_set_background_rgba (IdeFrameHeader *self,
-                                              const GdkRGBA        *background_rgba)
+                                       const GdkRGBA  *background_rgba)
 {
   GdkRGBA old;
   gboolean old_set;
@@ -435,7 +435,7 @@ _ide_frame_header_set_background_rgba (IdeFrameHeader *self,
 
 void
 _ide_frame_header_set_foreground_rgba (IdeFrameHeader *self,
-                                              const GdkRGBA        *foreground_rgba)
+                                       const GdkRGBA  *foreground_rgba)
 {
   GdkRGBA old;
   gboolean old_set;
@@ -455,7 +455,7 @@ _ide_frame_header_set_foreground_rgba (IdeFrameHeader *self,
 }
 
 static void
-update_widget_providers (GtkWidget            *widget,
+update_widget_providers (GtkWidget      *widget,
                          IdeFrameHeader *self)
 {
   g_assert (IDE_IS_FRAME_HEADER (self));
@@ -490,7 +490,7 @@ update_widget_providers (GtkWidget            *widget,
 
 static void
 ide_frame_header_add (GtkContainer *container,
-                             GtkWidget    *widget)
+                      GtkWidget    *widget)
 {
   IdeFrameHeader *self = (IdeFrameHeader *)container;
 
@@ -504,8 +504,8 @@ ide_frame_header_add (GtkContainer *container,
 
 static void
 ide_frame_header_get_preferred_width (GtkWidget *widget,
-                                             gint      *min_width,
-                                             gint      *nat_width)
+                                      gint      *min_width,
+                                      gint      *nat_width)
 {
   g_assert (IDE_IS_FRAME_HEADER (widget));
   g_assert (min_width != NULL);
@@ -541,9 +541,9 @@ ide_frame_header_destroy (GtkWidget *widget)
 
 static void
 ide_frame_header_get_property (GObject    *object,
-                                      guint       prop_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
 {
   IdeFrameHeader *self = IDE_FRAME_HEADER (object);
 
@@ -568,9 +568,9 @@ ide_frame_header_get_property (GObject    *object,
 
 static void
 ide_frame_header_set_property (GObject      *object,
-                                      guint         prop_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec)
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
 {
   IdeFrameHeader *self = IDE_FRAME_HEADER (object);
 
@@ -761,8 +761,8 @@ ide_frame_header_new (void)
  */
 void
 ide_frame_header_add_custom_title (IdeFrameHeader *self,
-                                          GtkWidget            *widget,
-                                          gint                  priority)
+                                   GtkWidget      *widget,
+                                   gint            priority)
 {
   g_return_if_fail (IDE_IS_FRAME_HEADER (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -776,7 +776,7 @@ ide_frame_header_add_custom_title (IdeFrameHeader *self,
 
 void
 _ide_frame_header_set_title (IdeFrameHeader *self,
-                                    const gchar          *title)
+                             const gchar    *title)
 {
   g_return_if_fail (IDE_IS_FRAME_HEADER (self));
 
@@ -786,7 +786,7 @@ _ide_frame_header_set_title (IdeFrameHeader *self,
 
 void
 _ide_frame_header_set_modified (IdeFrameHeader *self,
-                                       gboolean              modified)
+                                gboolean        modified)
 {
   g_return_if_fail (IDE_IS_FRAME_HEADER (self));
 
