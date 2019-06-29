@@ -221,6 +221,25 @@ close_view_cb (GtkButton      *button,
   _ide_frame_request_close (IDE_FRAME (stack), IDE_PAGE (view));
 }
 
+static gboolean
+modified_to_attrs (GBinding     *binding,
+                   const GValue *src_value,
+                   GValue       *dst_value,
+                   gpointer      user_data)
+{
+  PangoAttrList *attrs = NULL;
+
+  if (g_value_get_boolean (src_value))
+    {
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_style_new (PANGO_STYLE_ITALIC));
+    }
+
+  g_value_take_boxed (dst_value, attrs);
+
+  return TRUE;
+}
+
 static GtkWidget *
 create_document_row (gpointer item,
                      gpointer user_data)
@@ -264,7 +283,8 @@ create_document_row (gpointer item,
   dzl_gtk_widget_add_style_class (GTK_WIDGET (close_button), "image-button");
 
   g_object_bind_property (item, "icon-name", image, "icon-name", G_BINDING_SYNC_CREATE);
-  g_object_bind_property (item, "modified", label, "bold", G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (item, "modified", label, "attributes", G_BINDING_SYNC_CREATE,
+                               modified_to_attrs, NULL, NULL, NULL);
   g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
   g_object_set_data (G_OBJECT (row), "IDE_PAGE", item);
 
@@ -788,8 +808,19 @@ void
 _ide_frame_header_set_modified (IdeFrameHeader *self,
                                 gboolean        modified)
 {
+  PangoAttrList *attrs = NULL;
+
   g_return_if_fail (IDE_IS_FRAME_HEADER (self));
 
+  if (modified)
+    {
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_style_new (PANGO_STYLE_ITALIC));
+    }
+
+  gtk_label_set_attributes (self->title_label, attrs);
   gtk_widget_set_visible (GTK_WIDGET (self->title_modified), modified);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODIFIED]);
+
+  g_clear_pointer (&attrs, pango_attr_list_unref);
 }
