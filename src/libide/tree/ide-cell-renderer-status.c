@@ -28,6 +28,8 @@
 
 #define CELL_HEIGHT 16
 #define CELL_WIDTH  16
+#define RPAD        8
+#define LPAD        3
 
 struct _IdeCellRendererStatus
 {
@@ -67,18 +69,14 @@ ide_cell_renderer_status_get_preferred_width (GtkCellRenderer *cell,
                                               gint            *min_size,
                                               gint            *nat_size)
 {
-  gint xpad;
-
   g_assert (IDE_IS_CELL_RENDERER_STATUS (cell));
   g_assert (GTK_IS_WIDGET (widget));
 
-  g_object_get (cell, "xpad", &xpad, NULL);
-
   if (min_size)
-    *min_size = CELL_WIDTH + xpad;
+    *min_size = LPAD + CELL_WIDTH + RPAD;
 
   if (nat_size)
-    *nat_size = CELL_WIDTH + xpad;
+    *nat_size = LPAD + CELL_WIDTH + RPAD;
 }
 
 static void
@@ -92,7 +90,6 @@ ide_cell_renderer_status_render (GtkCellRenderer      *cell,
   IdeCellRendererStatus *self = (IdeCellRendererStatus *)cell;
   GtkStyleContext *style_context;
   GdkRGBA color;
-  gint xpad;
 
   g_assert (IDE_IS_CELL_RENDERER_STATUS (self));
   g_assert (cr != NULL);
@@ -114,10 +111,8 @@ ide_cell_renderer_status_render (GtkCellRenderer      *cell,
                                &color);
   gdk_cairo_set_source_rgba (cr, &color);
 
-  g_object_get (cell, "xpad", &xpad, NULL);
-
   cairo_arc (cr,
-             cell_area->x + cell_area->width - (CELL_WIDTH/2) - xpad,
+             cell_area->x + cell_area->width - RPAD - (CELL_WIDTH/2),
              cell_area->y + (cell_area->height / 2),
              3,
              0,

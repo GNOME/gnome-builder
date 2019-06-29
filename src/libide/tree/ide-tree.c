@@ -626,9 +626,7 @@ ide_tree_init (IdeTree *self)
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, text_cell_func, self, NULL);
 
-  cell = g_object_new (IDE_TYPE_CELL_RENDERER_STATUS,
-                       "xpad", 3,
-                       NULL);
+  cell = g_object_new (IDE_TYPE_CELL_RENDERER_STATUS, NULL);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, state_cell_func, self, NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
 
