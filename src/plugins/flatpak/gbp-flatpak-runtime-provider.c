@@ -781,8 +781,11 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
     }
   else
     {
+      /* Do not propagate cancellable to this operation or we risk cancelling
+       * in-flight operations that the user is expecting to complete.
+       */
       gbp_flatpak_install_dialog_run_async (dialog,
-                                            cancellable,
+                                            NULL,
                                             gbp_flatpak_runtime_provider_bootstrap_cb,
                                             g_object_ref (task));
     }
