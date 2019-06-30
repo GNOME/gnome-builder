@@ -91,68 +91,40 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                               const gchar  *program,
                                               GCancellable *cancellable)
 {
+  static const gchar *known_path_dirs[] = { "/bin" };
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autofree gchar *arch = NULL;
-  g_autofree gchar *branch = NULL;
+  gboolean ret = FALSE;
+  gpointer val = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (g_hash_table_contains (self->program_paths_cache, program))
-    return TRUE;
+  if (g_hash_table_lookup_extended (self->program_paths_cache, program, NULL, &val))
+    return GPOINTER_TO_UINT (val);
 
-  arch = g_strdup_printf ("--arch=%s", ide_triplet_get_arch (self->triplet));
-
-  if (self->branch != NULL)
-    branch = g_strdup_printf ("--branch=%s", self->branch);
-
-  /*
-   * To check if a program is available, we don't want to use the normal
-   * launcher because it will only be available if the build directory
-   * has been created and setup. Instead, we will use flatpak to run the
-   * runtime which was added in Flatpak 0.6.13.
-   */
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
-
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "run");
-  ide_subprocess_launcher_push_argv (launcher, arch);
-  if (branch != NULL)
-    ide_subprocess_launcher_push_argv (launcher, branch);
-  ide_subprocess_launcher_push_argv (launcher, "--command=which");
-  ide_subprocess_launcher_push_argv (launcher, self->sdk);
-  ide_subprocess_launcher_push_argv (launcher, program);
-
-  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL);
-
-  if (subprocess != NULL)
+  for (guint i = 0; i < G_N_ELEMENTS (known_path_dirs); i++)
     {
-      g_autofree gchar *stdout_buf = NULL;
+      g_autofree gchar *path = NULL;
 
-      if (ide_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdout_buf, NULL, NULL))
+      path = g_build_filename (self->deploy_dir,
+                               "files",
+                               known_path_dirs[i],
+                               program,
+                               NULL);
+
+      if (g_file_test (path, G_FILE_TEST_IS_EXECUTABLE))
         {
-          if (stdout_buf)
-            {
-              g_strstrip (stdout_buf);
-
-              if (g_str_has_prefix (stdout_buf, "/usr/"))
-                g_hash_table_insert (self->program_paths_cache,
-                                     (gchar *)g_intern_string (program),
-                                     NULL);
-            }
-
-          return !ide_str_empty0 (stdout_buf);
+          ret = TRUE;
+          break;
         }
     }
 
-  return FALSE;
+  g_hash_table_insert (self->program_paths_cache,
+                       (gchar *)g_intern_string (program),
+                       GUINT_TO_POINTER (ret));
+
+  return ret;
 }
 
 static IdeSubprocessLauncher *
