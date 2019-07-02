@@ -121,6 +121,7 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
                                    "visible", TRUE,
                                    "xalign", 0.0f,
                                    "margin-bottom", 3,
+                                   "selectable", TRUE,
                                    "use-markup", TRUE,
                                    "label", tt,
                                    NULL));
