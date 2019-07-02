@@ -68,6 +68,7 @@ ide_marked_view_new (IdeMarkedContent *content)
     case IDE_MARKED_KIND_PANGO:
       child = g_object_new (GTK_TYPE_LABEL,
                             "max-width-chars", 80,
+                            "selectable", TRUE,
                             "wrap", TRUE,
                             "xalign", 0.0f,
                             "visible", TRUE,
@@ -95,6 +96,7 @@ ide_marked_view_new (IdeMarkedContent *content)
         if ((parsed = gs_markdown_parse (md, markup)))
           child = g_object_new (GTK_TYPE_LABEL,
                                 "max-width-chars", 80,
+                                "selectable", TRUE,
                                 "wrap", TRUE,
                                 "xalign", 0.0f,
                                 "visible", TRUE,
