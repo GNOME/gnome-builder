@@ -1,6 +1,6 @@
 project('{{name}}', {{if language == "c"}}'c',{{else if language == "c++"}}['cpp', 'c'],{{else if language == "vala"}}['c', 'vala'],{{else if language == "c♯"}}'cs',{{end}} 
           version: '{{project_version}}',
-    meson_version: '>= 0.49.0',
+    meson_version: '>= 0.50.0',
   default_options: [ 'warning_level=2',
 {{if language == "c"}}
                      'c_std=gnu11',
