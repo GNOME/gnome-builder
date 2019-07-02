@@ -210,6 +210,13 @@ ide_clang_cook_flags (const gchar         *path,
       include = g_strdup_printf ("-I%s", current);
     }
 
+  /* Work around Clang/GCC inconsistency on -Wunused-function with regards
+   * to static inline usage.
+   *
+   * See https://gitlab.gnome.org/GNOME/gnome-builder/issues/961
+   */
+  g_ptr_array_add (cooked, g_strdup ("-Dinline=inline __attribute__((unused))"));
+
   if (flags != NULL)
     {
       for (guint i = 0; flags[i]; i++)
