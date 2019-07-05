@@ -110,6 +110,7 @@
   bind "<ctrl><shift>d" { "add-cursor" (match) };
 
   bind "F4" { "action" ("win", "find-other-file", "") };
+  bind "<ctrl>asciicircum" { "action" ("win", "find-other-file", "") };
 }
 
 @binding-set builder-vim-source-view-normal-with-count
