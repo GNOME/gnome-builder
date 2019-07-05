@@ -6,6 +6,8 @@ plugins_deps += [
 
 plugins_sources += files([
   'devhelp-plugin.c',
+  'devhelp2-parser.c',
+  'gbp-devhelp-docs-provider.c',
   'gbp-devhelp-editor-addin.c',
   'gbp-devhelp-frame-addin.c',
   'gbp-devhelp-hover-provider.c',

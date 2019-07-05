@@ -14,6 +14,7 @@ plugins_deps = [
 
   libide_code_dep,
   libide_core_dep,
+  libide_docs_dep,
   libide_debugger_dep,
   libide_editor_dep,
   libide_foundry_dep,
@@ -56,6 +57,7 @@ subdir('devhelp')
 subdir('deviceui')
 subdir('deviced')
 subdir('doap')
+subdir('docsui')
 subdir('dspy')
 subdir('editor')
 subdir('editorconfig')
