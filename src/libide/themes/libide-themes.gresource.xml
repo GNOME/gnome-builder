@@ -19,6 +19,7 @@
     <file compressed="true">themes/shared/shared-buildui.css</file>
     <file compressed="true">themes/shared/shared-completion.css</file>
     <file compressed="true">themes/shared/shared-debugger.css</file>
+    <file compressed="true">themes/shared/shared-docs.css</file>
     <file compressed="true">themes/shared/shared-editor.css</file>
     <file compressed="true">themes/shared/shared-greeter.css</file>
     <file compressed="true">themes/shared/shared-hoverer.css</file>
