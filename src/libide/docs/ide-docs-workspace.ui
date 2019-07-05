@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDocsWorkspace" parent="IdeWorkspace">
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="headerbar">
+        <property name="show-close-button">true</property>
+        <property name="visible">true</property>
+        <child type="title">
+          <object class="GtkEntry" id="entry">
+            <property name="visible">true</property>
+            <property name="max-width-chars">40</property>
+            <property name="placeholder-text" translatable="yes">Search Documentation (Ctrl+K)</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="surfaces">
+      <object class="GtkStack">
+        <child>
+          <object class="IdeSurface" id="docs_surface">
+            <property name="visible">true</property>
+            <child type="left">
+              <object class="GtkBox">
+                <property name="width-request">200</property>
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStack" id="stack">
+                <property name="visible">true</property>
+                <property name="expand">true</property>
+                <child>
+                  <object class="IdeDocsSearchView" id="search_view">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeDocsView" id="view">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
