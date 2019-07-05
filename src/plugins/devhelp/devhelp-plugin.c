@@ -23,6 +23,7 @@
 #include <libide-editor.h>
 #include <libpeas/peas.h>
 
+#include "gbp-devhelp-docs-provider.h"
 #include "gbp-devhelp-editor-addin.h"
 #include "gbp-devhelp-hover-provider.h"
 #include "gbp-devhelp-frame-addin.h"
@@ -30,6 +31,9 @@
 _IDE_EXTERN void
 _gbp_devhelp_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DOCS_PROVIDER,
+                                              GBP_TYPE_DEVHELP_DOCS_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,
                                               GBP_TYPE_DEVHELP_EDITOR_ADDIN);

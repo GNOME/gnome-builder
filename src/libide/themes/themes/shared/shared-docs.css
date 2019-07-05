@@ -1,0 +1,34 @@
+IdeDocsSearchView label.section-title {
+  margin-top: 3px;
+  }
+IdeDocsSearchSection list {
+  background-color: transparent;
+  }
+IdeDocsSearchSection list row.header:not(:first-child) {
+  margin-top: 16px;
+  }
+IdeDocsSearchSection list row.header box {
+  padding: 7px;
+  }
+IdeDocsSearchSection list row.header box label {
+  font-size: 0.8333em;
+  font-weight: bold;
+  color: @theme_selected_bg_color;
+  }
+IdeDocsSearchSection list row:selected.header box label {
+  color: @theme_selected_fg_color;
+  }
+IdeDocsSearchView box.titles label {
+  font-size: 1.3em;
+  font-weight: 500;
+  color: alpha(currentColor, 0.5);
+  }
+IdeDocsSearchSection list row {
+  border-bottom: 1px solid alpha(@borders, 0.5);
+  }
+IdeDocsSearchSection list row > box {
+  padding: 7px;
+  }
+IdeDocsSearchSection list row > box image:last-child {
+  min-width: 16px;
+  }
