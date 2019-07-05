@@ -1,0 +1,28 @@
+IdeDocsSearchGroup list {
+  background-color: transparent;
+  }
+IdeDocsSearchGroup box.header {
+  padding: 7px;
+  }
+IdeDocsSearchGroup box.header label {
+  font-size: 0.8333em;
+  font-weight: bold;
+  color: @theme_selected_bg_color;
+  }
+IdeDocsSearchView box.titles label {
+  font-size: 1.3em;
+  font-weight: 500;
+  color: alpha(currentColor, 0.5);
+  }
+IdeDocsSearchGroup row:first-child {
+  border-top: 1px solid alpha(@borders, 0.5);
+  }
+IdeDocsSearchGroup row {
+  border-bottom: 1px solid alpha(@borders, 0.5);
+  }
+IdeDocsSearchGroup row > box {
+  padding: 7px;
+  }
+IdeDocsSearchGroup row > box image:last-child {
+  min-width: 16px;
+  }
