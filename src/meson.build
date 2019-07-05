@@ -29,6 +29,7 @@ gnome_builder_deps = [
 
   libide_code_dep,
   libide_core_dep,
+  libide_docs_dep,
   libide_debugger_dep,
   libide_editor_dep,
   libide_foundry_dep,
