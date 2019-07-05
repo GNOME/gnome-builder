@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Depends=editor;webkit;
+Description=Documentation UI integration
+Embedded=_gbp_docsui_register_types
+Hidden=true
+Module=docsui
+Name=Docs UI
+X-At-Startup=true
