@@ -108,8 +108,9 @@ main (gint   argc,
   gboolean standalone = FALSE;
   int ret;
 
-  /* Setup our gdb fork()/exec() helper */
-  bug_buddy_init ();
+  /* Setup our gdb fork()/exec() helper if we're in a terminal */
+  if (isatty (STDOUT_FILENO))
+    bug_buddy_init ();
 
   /* Always ignore SIGPIPE */
   signal (SIGPIPE, SIG_IGN);
