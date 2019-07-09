@@ -587,6 +587,23 @@ snippet vtfinish
 	gboolean (*${1:do_someting}_finish) (${2:$filename|stripsuffix|camelize} *self,
 	           ${$1|space}          GAsyncResult         *result,
 	           ${$1|space}          GError              **error);
+snippet readycallback
+- scope c
+- desc Create a GAsyncReadyCallback function
+	static void
+	${$filename|stripsuffix|functify}_${1:do_something_cb} (GObject      *object,
+	${$filename|stripsuffix|functify|space} ${$1|space}  GAsyncResult *result,
+	${$filename|stripsuffix|functify|space} ${$1|space}  gpointer      user_data)
+	{
+		g_autoptr(GTask) task = user_data;
+		g_autoptr(GError) error = NULL;
+
+		g_assert (G_IS_OBJECT (object));
+		g_assert (G_IS_ASYNC_RESULT (result));
+		g_assert (G_IS_TASK (task));
+
+		g_task_return_boolean (task, TRUE);
+	}
 snippet Private
 - desc Define a local for the GObject's private data.
 - scope c, chdr
