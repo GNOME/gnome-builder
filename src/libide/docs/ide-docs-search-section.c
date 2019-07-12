@@ -24,7 +24,6 @@
 
 #include <dazzle.h>
 
-#include "ide-docs-search-group.h"
 #include "ide-docs-search-model.h"
 #include "ide-docs-search-row.h"
 #include "ide-docs-search-section.h"
@@ -52,27 +51,6 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
-
-static void
-ide_docs_search_section_add (GtkContainer *container,
-                             GtkWidget    *child)
-{
-  IdeDocsSearchSection *self = (IdeDocsSearchSection *)container;
-
-  g_assert (IDE_IS_DOCS_SEARCH_SECTION (self));
-  g_assert (GTK_IS_WIDGET (child));
-
-  if (IDE_IS_DOCS_SEARCH_GROUP (child))
-    {
-      gint priority = ide_docs_search_group_get_priority (IDE_DOCS_SEARCH_GROUP (child));
-      gtk_container_add_with_properties (GTK_CONTAINER (self->groups), child,
-                                         "priority", priority,
-                                         NULL);
-      return;
-    }
-
-  GTK_CONTAINER_CLASS (ide_docs_search_section_parent_class)->add (container, child);
-}
 
 static void
 ide_docs_search_section_finalize (GObject *object)
@@ -135,13 +113,10 @@ ide_docs_search_section_class_init (IdeDocsSearchSectionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = ide_docs_search_section_finalize;
   object_class->get_property = ide_docs_search_section_get_property;
   object_class->set_property = ide_docs_search_section_set_property;
-
-  container_class->add = ide_docs_search_section_add;
 
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
