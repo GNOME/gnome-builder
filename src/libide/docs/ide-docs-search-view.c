@@ -33,13 +33,30 @@
 
 struct _IdeDocsSearchView
 {
-  GtkBin          parent_instance;
+  GtkBin             parent_instance;
 
-  DzlPriorityBox *sections;
-  DzlPriorityBox *titles;
+  /* The most recent full result set, so that we can go back after
+   * viewing a specific set and going backwards.
+   */
+  IdeDocsItem       *full_set;
+
+  GtkScrolledWindow *scroller;
+  DzlPriorityBox    *sections;
+  DzlPriorityBox    *titles;
 };
 
 G_DEFINE_TYPE (IdeDocsSearchView, ide_docs_search_view, GTK_TYPE_BIN)
+
+static void
+on_go_previous_clicked_cb (IdeDocsSearchView *self,
+                           GtkButton         *button)
+{
+  g_assert (IDE_IS_DOCS_SEARCH_VIEW (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  if (self->full_set != NULL)
+    ide_docs_search_view_add_sections (self, self->full_set);
+}
 
 static void
 ide_docs_search_view_add (GtkContainer *container,
@@ -56,22 +73,71 @@ ide_docs_search_view_add (GtkContainer *container,
       gint priority = ide_docs_search_section_get_priority (IDE_DOCS_SEARCH_SECTION (child));
       GtkSizeGroup *group;
       GtkLabel *label;
+      GtkBox *box;
+      GtkBox *vbox;
 
-      label = g_object_new (GTK_TYPE_LABEL,
-                            "label", title,
-                            "xalign", 1.0f,
-                            "yalign", 0.0f,
-                            "visible", TRUE,
-                            NULL);
-      dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "section-title");
-      gtk_container_add (GTK_CONTAINER (self->titles), GTK_WIDGET (label));
       gtk_container_add_with_properties (GTK_CONTAINER (self->sections), child,
                                          "priority", priority,
                                          NULL);
+
+      vbox = g_object_new (GTK_TYPE_BOX,
+                           "orientation", GTK_ORIENTATION_VERTICAL,
+                           "visible", TRUE,
+                           NULL);
+      gtk_container_add (GTK_CONTAINER (self->titles), GTK_WIDGET (vbox));
+
+      box = g_object_new (GTK_TYPE_BOX,
+                          "orientation", GTK_ORIENTATION_HORIZONTAL,
+                          "spacing", 6,
+                          "visible", TRUE,
+                          NULL);
+
+      if (ide_docs_search_section_get_show_all_results (IDE_DOCS_SEARCH_SECTION (child)))
+        {
+          GtkImage *image;
+          GtkButton *button;
+
+          button = g_object_new (GTK_TYPE_BUTTON,
+                                 "focus-on-click", FALSE,
+                                 "halign", GTK_ALIGN_END,
+                                 "valign", GTK_ALIGN_START,
+                                 "visible", TRUE,
+                                 NULL);
+          g_signal_connect_object (button,
+                                   "clicked",
+                                   G_CALLBACK (on_go_previous_clicked_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "image-button");
+          dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "flat");
+          gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button));
+          gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (box));
+
+          image = g_object_new (GTK_TYPE_IMAGE,
+                                "icon-name", "go-previous-symbolic",
+                                "pixel-size", 16,
+                                "visible", TRUE,
+                                NULL);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
+        }
+      else
+        {
+          gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (box));
+        }
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "label", title,
+                            "visible", TRUE,
+                            NULL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+
       group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-      gtk_size_group_add_widget (group, GTK_WIDGET (label));
+      gtk_size_group_add_widget (group, GTK_WIDGET (vbox));
       gtk_size_group_add_widget (group, GTK_WIDGET (child));
       g_object_unref (group);
+
+      gtk_adjustment_set_value (gtk_scrolled_window_get_vadjustment (self->scroller), 0);
+
       return;
     }
 
@@ -79,15 +145,31 @@ ide_docs_search_view_add (GtkContainer *container,
 }
 
 static void
+ide_docs_search_view_finalize (GObject *object)
+{
+  IdeDocsSearchView *self = (IdeDocsSearchView *)object;
+
+  g_assert (IDE_IS_DOCS_SEARCH_VIEW (self));
+
+  g_clear_object (&self->full_set);
+
+  G_OBJECT_CLASS (ide_docs_search_view_parent_class)->finalize (object);
+}
+
+static void
 ide_docs_search_view_class_init (IdeDocsSearchViewClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+
+  object_class->finalize = ide_docs_search_view_finalize;
 
   container_class->add = ide_docs_search_view_add;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-docs/ui/ide-docs-search-view.ui");
   gtk_widget_class_set_css_name (widget_class, "IdeDocsSearchView");
+  gtk_widget_class_bind_template_child (widget_class, IdeDocsSearchView, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdeDocsSearchView, sections);
   gtk_widget_class_bind_template_child (widget_class, IdeDocsSearchView, titles);
 }
@@ -120,16 +202,11 @@ on_item_activated_cb (IdeDocsSearchView    *self,
   g_assert (IDE_IS_DOCS_ITEM (item));
   g_assert (IDE_IS_DOCS_SEARCH_SECTION (old_section));
 
-  g_print ("Activate item: %s\n", ide_docs_item_get_title (item));
-
   if (ide_docs_item_has_child (item))
     {
       IdeDocsSearchSection *section;
 
       ide_docs_search_view_clear (self);
-
-      g_print ("Adding %d children\n",
-               ide_docs_item_get_n_children (item));
 
       section = g_object_new (IDE_TYPE_DOCS_SEARCH_SECTION,
                               "show-all-results", TRUE,
@@ -146,8 +223,7 @@ on_item_activated_cb (IdeDocsSearchView    *self,
     }
   else
     {
-      g_print ("  Jump to documentation: %s\n",
-               ide_docs_item_get_url (item));
+      g_print ("Display docs for %s\n", ide_docs_item_get_title (item));
     }
 }
 
@@ -159,6 +235,8 @@ ide_docs_search_view_add_sections (IdeDocsSearchView *self,
   g_assert (!item || IDE_IS_DOCS_ITEM (item));
 
   ide_docs_search_view_clear (self);
+
+  g_set_object (&self->full_set, item);
 
   if (item == NULL)
     return;
@@ -203,6 +281,8 @@ ide_docs_search_view_add_sections (IdeDocsSearchView *self,
       gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (section));
       gtk_widget_show (GTK_WIDGET (section));
     }
+
+  gtk_adjustment_set_value (gtk_scrolled_window_get_vadjustment (self->scroller), 0);
 }
 
 GtkWidget *

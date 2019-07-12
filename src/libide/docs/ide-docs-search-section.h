@@ -28,12 +28,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDocsSearchSection, ide_docs_search_section, IDE, DOCS_SEARCH_SECTION, GtkBin)
 
-GtkWidget   *ide_docs_search_section_new          (const gchar          *title);
-const gchar *ide_docs_search_section_get_title    (IdeDocsSearchSection *self);
-gint         ide_docs_search_section_get_priority (IdeDocsSearchSection *self);
-void         ide_docs_search_section_set_priority (IdeDocsSearchSection *self,
-                                                   gint                  priority);
-void         ide_docs_search_section_add_groups   (IdeDocsSearchSection *self,
-                                                   IdeDocsItem          *parent);
+GtkWidget   *ide_docs_search_section_new                  (const gchar          *title);
+const gchar *ide_docs_search_section_get_title            (IdeDocsSearchSection *self);
+gint         ide_docs_search_section_get_priority         (IdeDocsSearchSection *self);
+void         ide_docs_search_section_set_priority         (IdeDocsSearchSection *self,
+                                                           gint                  priority);
+gboolean     ide_docs_search_section_get_show_all_results (IdeDocsSearchSection *self);
+void         ide_docs_search_section_add_groups           (IdeDocsSearchSection *self,
+                                                           IdeDocsItem          *parent);
 
 G_END_DECLS
