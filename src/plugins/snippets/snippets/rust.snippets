@@ -46,13 +46,29 @@ snippet repr
 - desc #[repr(…)]
 	#[repr(${1:C})]
 	$0
+snippet export_name
+- desc #[export_name]
+	#[export_name = "${1:symbol}"]
+	$0
 snippet link
 - desc #[link(…)]
 	#[link(name = "${1:library}")]
 	$0
+snippet macro_export
+- desc #[macro_export]
+	#[macro_export]
+	$0
 snippet no_mangle
 - desc #[no_mangle]
 	#[no_mangle]
+	$0
+snippet no_std
+- desc #![no_std]
+	#![no_std]
+	$0
+snippet no_main
+- desc #![no_main]
+	#![no_main]
 	$0
 snippet inline
 - desc #[inline]
@@ -104,28 +120,37 @@ snippet drop
 	        $0
 	    }
 	}
-snippet new
-- desc Create a constructor
-	#[inline]
-	pub fn ${1:new}(${2}) -> Self {
-	    Self {}$0
+snippet macro
+- desc Define declarative macro
+	macro_rules! ${1:macro_name} {
+		(${2}) => {
+			$0
+		};
 	}
-snippet builder
-- desc Create a builder
-	struct ${1:Struct}Builder {
-	    $0
+snippet proc_macro
+- desc Implement procedural macro
+	#[proc_macro]
+	pub fn ${1:macro_name}(item: TokenStream) -> TokenStream {
+		unimplemented!()$0
 	}
-
-	impl $1Builder {
-	    #[inline]
-	    pub fn new() -> Self {
-	        Self {}
-	    }
-
-	    pub fn build(&self) -> $1 {
-	        unimplemented!()
-	    }
+snippet proc_macro_attribute
+- desc Implement attribute macro
+	#[proc_macro_attribute]
+	pub fn ${1:attribute_name}(attr: TokenStream, item: TokenStream) -> TokenStream {
+		unimplemented!()$0
 	}
+	$0
+snippet proc_macro_derive
+- desc Implement derive macro
+	#[proc_macro_derive(${1:Name})]
+	pub fn derive_${$1|functify}(item: TokenStream) -> TokenStream {
+		unimplemented!()$0
+	}
+snippet spawn
+- desc thread::spawn(…)
+	thread::spawn(move || {
+		$0
+	});
 snippet fn
 	fn ${1:function_name}(${2:&mut self}) {
 	    unimplemented!()$0
@@ -141,19 +166,9 @@ snippet fns
 snippet fnrs
 - desc Create function signature with return
 	fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self};$0
-snippet closure
-- desc Create closure
-	|${1}| {
-	    $0
-	}
-snippet move
-- desc Create move closure
-	move |${1}| {
-	    $0
-	}
 snippet match
 	match ${1:expression} {
-	    $0
+		_ => unimplemented!(),$0
 	}
 snippet option
 - desc Pattern matching for Option
@@ -195,7 +210,7 @@ snippet whilelet
 	    $0
 	}
 snippet for
-	for ${1:item} in ${2:collection.iter()} {
+	for ${1:item} in ${2:collection} {
 	    $0
 	}
 snippet loop
@@ -218,6 +233,11 @@ snippet let
 	let ${1:variable} = ${2:expression};$0
 snippet type
 	type ${1:Alias} = ${2:Type};$0
+snippet thread_local
+- desc thread_local! {…}
+	thread_local! {
+		$0
+	}
 snippet vec
 - desc vec![…]
 	vec![${1:expression}; ${2:size}]$0
@@ -245,6 +265,9 @@ snippet eprint
 snippet eprintln
 - desc eprintln!(…)
 	eprintln!("${1:{}}", ${2:expression})$0
+snippet dbg
+- desc dbg!(…)
+	dbg!(${1:expression})$0
 snippet panic
 - desc panic!(…)
 	panic!("${1:{}}", ${2:expression})$0
@@ -252,7 +275,7 @@ snippet unreachable
 - desc unreachable!(…)
 	unreachable!("${1:reason}")$0
 snippet unimplemented
-- desc unimplemented!(…)
+- desc unimplemented!()
 	unimplemented!()$0
 snippet assert
 - desc assert!(…)
