@@ -2,7 +2,7 @@ IdeDocsSearchSection list {
   background-color: transparent;
   }
 IdeDocsSearchSection list row.header:not(:first-child) {
-  margin-top: 24px;
+  margin-top: 16px;
   }
 IdeDocsSearchSection list row.header box {
   padding: 7px;

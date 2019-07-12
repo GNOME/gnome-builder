@@ -126,14 +126,14 @@ ide_docs_search_row_set_item (IdeDocsSearchRow *self,
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
-  if (kind == IDE_DOCS_ITEM_KIND_BOOK && ide_docs_item_has_child (item))
+  if (kind == IDE_DOCS_ITEM_KIND_BOOK || ide_docs_item_has_child (item))
     {
       guint n_children = ide_docs_item_get_n_children (item);
 
       gtk_style_context_add_class (style_context, "header");
 
       if (n_children > DEFAULT_MAX_CHILDREN)
-        title = with_size = g_strdup_printf ("%s  +%u", title, n_children - DEFAULT_MAX_CHILDREN);
+        title = with_size = g_strdup_printf ("%s     +%u", title, n_children - DEFAULT_MAX_CHILDREN);
     }
   else
     {
