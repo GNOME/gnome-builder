@@ -684,3 +684,25 @@ ide_docs_item_truncate (IdeDocsItem *self,
   while (priv->children.length > max_items)
     ide_docs_item_remove (self, priv->children.tail->data);
 }
+
+/**
+ * ide_docs_item_get_nth_child:
+ * @self: a #IdeDocsItem
+ * @nth: the index (starting from zero) of the child
+ *
+ * Gets the @nth item from the children.
+ *
+ * Returns: (transfer none) (nullable): an #IdeDocsItem or %NULL
+ *
+ * Since: 3.34
+ */
+IdeDocsItem *
+ide_docs_item_get_nth_child (IdeDocsItem *self,
+                             guint        nth)
+{
+  IdeDocsItemPrivate *priv = ide_docs_item_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_DOCS_ITEM (self), NULL);
+
+  return g_list_nth_data (priv->children.head, nth);
+}

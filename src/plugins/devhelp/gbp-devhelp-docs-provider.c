@@ -120,6 +120,7 @@ gbp_devhelp_docs_provider_search_async (IdeDocsProvider     *provider,
 
           group = ide_docs_item_new ();
           ide_docs_item_set_title (group, parser->book.title);
+          ide_docs_item_set_kind (group, IDE_DOCS_ITEM_KIND_BOOK);
 
           for (guint j = 0; j < parser->keywords->len; j++)
             {
