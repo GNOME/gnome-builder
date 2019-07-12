@@ -303,3 +303,11 @@ ide_docs_search_section_add_groups (IdeDocsSearchSection *self,
 
   gtk_widget_show (GTK_WIDGET (self->groups));
 }
+
+gboolean
+ide_docs_search_section_get_show_all_results (IdeDocsSearchSection *self)
+{
+  g_return_val_if_fail (IDE_IS_DOCS_SEARCH_SECTION (self), FALSE);
+
+  return self->show_all_results;
+}
