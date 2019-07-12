@@ -27,7 +27,6 @@
 #include <libide-threading.h>
 
 #include "ide-docs-library.h"
-#include "ide-docs-search-group.h"
 #include "ide-docs-search-section.h"
 #include "ide-docs-search-view.h"
 

@@ -27,7 +27,6 @@ libide_docs_public_sources = [
   'ide-docs-library.c',
   'ide-docs-provider.c',
   'ide-docs-query.c',
-  'ide-docs-search-group.c',
   'ide-docs-search-model.c',
   'ide-docs-search-row.c',
   'ide-docs-search-section.c',
