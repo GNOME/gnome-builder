@@ -76,7 +76,7 @@ snippet inline
 	$0
 snippet struct
 	struct ${1:StructName} {
-	    $0
+		$0
 	}
 snippet tuple
 - desc Create tuple struct
@@ -87,38 +87,38 @@ snippet unit
 snippet union
 	#[repr(C)]
 	union ${1:UnionName} {
-	    $0
+		$0
 	}
 snippet enum
 	enum ${1:EnumName} {
-	    $0
+		$0
 	}
 snippet trait
 	trait ${1:TraitName} {
-	    $0
+		$0
 	}
 snippet impl
 	impl ${1:Type} {
-	    $0
+		$0
 	}
 snippet implfor
 - desc impl … for
 	impl ${1:Trait} for ${2:Type} {
-	    $0
+		$0
 	}
 snippet default
 - desc Implement Default trait
 	impl Default for ${1:Type} {
-	    fn default() -> Self {
-	        $0
-	    }
+		fn default() -> Self {
+			$0
+		}
 	}
 snippet drop
 - desc Implement Drop trait
 	impl Drop for ${1:Type} {
-	    fn drop(&mut self) {
-	        $0
-	    }
+		fn drop(&mut self) {
+			$0
+		}
 	}
 snippet macro
 - desc Define declarative macro
@@ -153,12 +153,12 @@ snippet spawn
 	});
 snippet fn
 	fn ${1:function_name}(${2:&mut self}) {
-	    unimplemented!()$0
+		unimplemented!()$0
 	}
 snippet fnr
 - desc Create function with return
 	fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self} {
-	    unimplemented!()$0
+		unimplemented!()$0
 	}
 snippet fns
 - desc Create function signature
@@ -173,57 +173,57 @@ snippet match
 snippet option
 - desc Pattern matching for Option
 	match ${1:expression} {
-	    None => ${2},
-	    Some(${3:val}) => ${4},
+		None => ${2},
+		Some(${3:val}) => ${4},
 	}$0
 snippet result
 - desc Pattern matching for Result
 	match ${1:expression} {
-	    Ok(${2:val}) => ${3},
-	    Err(${4:err}) => ${5},
+		Ok(${2:val}) => ${3},
+		Err(${4:err}) => ${5},
 	}$0
 snippet if
 	if ${1:condition} {
-	    $0
+		$0
 	}
 snippet else
 	else {
-	    $0
+		$0
 	}
 snippet elseif
 - desc else if
 	else if ${1:condition} {
-	    $0
+		$0
 	}
 snippet iflet
 - desc if let
 	if let ${1:Some(val)} = ${2:expression} {
-	    $0
+		$0
 	}
 snippet while
 	while ${1:condition} {
-	    $0
+		$0
 	}
 snippet whilelet
 - desc while let
 	while let ${1:Some(val)} = ${2:expression} {
-	    $0
+		$0
 	}
 snippet for
 	for ${1:item} in ${2:collection} {
-	    $0
+		$0
 	}
 snippet loop
 	loop {
-	    $0
+		$0
 	}
 snippet unsafe
 	unsafe {
-	    $0
+		$0
 	}
 snippet extern
 	extern {
-	    $0
+		$0
 	}
 snippet const
 	const ${1:CONST_NAME}: ${2:type} = ${3:expression};$0
@@ -290,16 +290,16 @@ snippet testsmod
 - desc Create tests module
 	#[cfg(test)]
 	mod tests {
-	    use super::*;
+		use super::*;
 
-	    #[test]
-	    fn ${1:function_name}() {
-	        unimplemented!()$0
-	    }
+		#[test]
+		fn ${1:function_name}() {
+			unimplemented!()$0
+		}
 	}
 snippet test
 - desc Create test
 	#[test]
 	fn ${1:function_name}() {
-	    unimplemented!()$0
+		unimplemented!()$0
 	}
