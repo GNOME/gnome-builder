@@ -1,28 +1,31 @@
-IdeDocsSearchGroup list {
+IdeDocsSearchSection list {
   background-color: transparent;
   }
-IdeDocsSearchGroup box.header {
+IdeDocsSearchSection list row.header:not(:first-child) {
+  margin-top: 24px;
+  }
+IdeDocsSearchSection list row.header box {
   padding: 7px;
   }
-IdeDocsSearchGroup box.header label {
+IdeDocsSearchSection list row.header box label {
   font-size: 0.8333em;
   font-weight: bold;
   color: @theme_selected_bg_color;
+  }
+IdeDocsSearchSection list row:selected.header box label {
+  color: @theme_selected_fg_color;
   }
 IdeDocsSearchView box.titles label {
   font-size: 1.3em;
   font-weight: 500;
   color: alpha(currentColor, 0.5);
   }
-IdeDocsSearchGroup row:first-child {
-  border-top: 1px solid alpha(@borders, 0.5);
-  }
-IdeDocsSearchGroup row {
+IdeDocsSearchSection list row {
   border-bottom: 1px solid alpha(@borders, 0.5);
   }
-IdeDocsSearchGroup row > box {
+IdeDocsSearchSection list row > box {
   padding: 7px;
   }
-IdeDocsSearchGroup row > box image:last-child {
+IdeDocsSearchSection list row > box image:last-child {
   min-width: 16px;
   }

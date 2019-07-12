@@ -24,6 +24,8 @@
 
 #include "ide-docs-search-row.h"
 
+#define DEFAULT_MAX_CHILDREN 3
+
 struct _IdeDocsSearchRow
 {
   DzlListBoxRow parent_instance;
@@ -49,8 +51,11 @@ static void
 ide_docs_search_row_set_item (IdeDocsSearchRow *self,
                               IdeDocsItem      *item)
 {
+  g_autofree gchar *with_size = NULL;
+  GtkStyleContext *style_context;
   const gchar *icon_name;
   const gchar *title;
+  IdeDocsItemKind kind;
   gboolean use_markup;
 
   g_return_if_fail (IDE_IS_DOCS_SEARCH_ROW (self));
@@ -61,14 +66,9 @@ ide_docs_search_row_set_item (IdeDocsSearchRow *self,
   if (item == NULL)
     return;
 
-  gtk_label_set_use_markup (self->label, FALSE);
+  kind = ide_docs_item_get_kind (self->item);
 
-  if ((title = ide_docs_item_get_display_name (self->item)))
-    use_markup = TRUE;
-  else
-    title = ide_docs_item_get_title (self->item);
-
-  switch (ide_docs_item_get_kind (self->item))
+  switch (kind)
     {
     case IDE_DOCS_ITEM_KIND_FUNCTION:
       icon_name = "lang-function-symbolic";
@@ -115,6 +115,29 @@ ide_docs_search_row_set_item (IdeDocsSearchRow *self,
     default:
       icon_name = NULL;
       break;
+    }
+
+  gtk_label_set_use_markup (self->label, FALSE);
+
+  if ((title = ide_docs_item_get_display_name (self->item)))
+    use_markup = TRUE;
+  else
+    title = ide_docs_item_get_title (self->item);
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  if (kind == IDE_DOCS_ITEM_KIND_BOOK && ide_docs_item_has_child (item))
+    {
+      guint n_children = ide_docs_item_get_n_children (item);
+
+      gtk_style_context_add_class (style_context, "header");
+
+      if (n_children > DEFAULT_MAX_CHILDREN)
+        title = with_size = g_strdup_printf ("%s  +%u", title, n_children - DEFAULT_MAX_CHILDREN);
+    }
+  else
+    {
+      gtk_style_context_remove_class (style_context, "header");
     }
 
   g_object_set (self->image, "icon-name", icon_name, NULL);

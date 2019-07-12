@@ -113,6 +113,9 @@ void             ide_docs_item_remove           (IdeDocsItem     *self,
 IDE_AVAILABLE_IN_3_34
 gboolean         ide_docs_item_has_child        (IdeDocsItem     *self);
 IDE_AVAILABLE_IN_3_34
+IdeDocsItem     *ide_docs_item_get_nth_child    (IdeDocsItem     *self,
+                                                 guint            nth);
+IDE_AVAILABLE_IN_3_34
 guint            ide_docs_item_get_n_children   (IdeDocsItem     *self);
 IDE_AVAILABLE_IN_3_34
 const GList     *ide_docs_item_get_children     (IdeDocsItem     *self);

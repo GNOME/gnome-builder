@@ -25,19 +25,21 @@
 #include <dazzle.h>
 
 #include "ide-docs-search-group.h"
+#include "ide-docs-search-model.h"
+#include "ide-docs-search-row.h"
 #include "ide-docs-search-section.h"
 
 #define MAX_ALLOWED_BY_GROUP 1000
 
 struct _IdeDocsSearchSection
 {
-  GtkBin          parent_instance;
+  GtkBin              parent_instance;
 
-  DzlPriorityBox *groups;
+  DzlListBox         *groups;
 
-  gchar          *title;
+  gchar              *title;
 
-  gint            priority;
+  gint                priority;
 };
 
 G_DEFINE_TYPE (IdeDocsSearchSection, ide_docs_search_section, GTK_TYPE_BIN)
@@ -163,11 +165,13 @@ ide_docs_search_section_class_init (IdeDocsSearchSectionClass *klass)
 static void
 ide_docs_search_section_init (IdeDocsSearchSection *self)
 {
-  self->groups = g_object_new (DZL_TYPE_PRIORITY_BOX,
-                               "orientation", GTK_ORIENTATION_VERTICAL,
-                               "spacing", 14,
+  self->groups = g_object_new (DZL_TYPE_LIST_BOX,
+                               "row-type", IDE_TYPE_DOCS_SEARCH_ROW,
+                               "property-name", "item",
+                               "selection-mode", GTK_SELECTION_NONE,
                                "visible", TRUE,
                                NULL);
+  dzl_list_box_set_recycle_max (self->groups, 100);
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->groups));
 }
 
@@ -212,43 +216,32 @@ void
 ide_docs_search_section_add_groups (IdeDocsSearchSection *self,
                                     IdeDocsItem          *parent)
 {
-  gboolean show_more_items = FALSE;
+  g_autoptr(IdeDocsSearchModel) model = NULL;
 
   g_return_if_fail (IDE_IS_DOCS_SEARCH_SECTION (self));
   g_return_if_fail (IDE_IS_DOCS_ITEM (parent));
 
-  /* If there is a single group within the section, we want to show more
-   * items than we otherwise would.
-   */
-  if (ide_docs_item_get_n_children (parent) == 1)
-    show_more_items = TRUE;
+  dzl_list_box_set_model (self->groups, NULL);
+
+  model = ide_docs_search_model_new ();
+
+  gtk_widget_hide (GTK_WIDGET (self->groups));
 
   for (const GList *iter = ide_docs_item_get_children (parent);
        iter != NULL;
        iter = iter->next)
     {
       IdeDocsItem *child = iter->data;
-      IdeDocsSearchGroup *group;
-      const gchar *title;
-      gint priority;
 
       g_assert (IDE_IS_DOCS_ITEM (child));
-
-      title = ide_docs_item_get_title (child);
-      priority = ide_docs_item_get_priority (child);
-      group = g_object_new (IDE_TYPE_DOCS_SEARCH_GROUP,
-                            "title", title,
-                            "priority", priority,
-                            "visible", TRUE,
-                            NULL);
-
-      if (show_more_items)
-        ide_docs_search_group_set_max_items (group, 25);
 
       /* Truncate to a reasonable number to avoid very large lists */
       ide_docs_item_truncate (child, MAX_ALLOWED_BY_GROUP);
 
-      ide_docs_search_group_add_items (group, child);
-      gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (group));
+      ide_docs_search_model_add_group (model, child);
+
+      dzl_list_box_set_model (self->groups, G_LIST_MODEL (model));
     }
+
+  gtk_widget_show (GTK_WIDGET (self->groups));
 }
