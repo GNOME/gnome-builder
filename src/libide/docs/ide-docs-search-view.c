@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 #include <libide-gui.h>
 #include <libide-threading.h>
 
@@ -109,6 +110,46 @@ ide_docs_search_view_clear (IdeDocsSearchView *self)
                          NULL);
 }
 
+static void
+on_item_activated_cb (IdeDocsSearchView    *self,
+                      IdeDocsItem          *item,
+                      IdeDocsSearchSection *old_section)
+{
+  g_assert (IDE_IS_DOCS_SEARCH_VIEW (self));
+  g_assert (IDE_IS_DOCS_ITEM (item));
+  g_assert (IDE_IS_DOCS_SEARCH_SECTION (old_section));
+
+  g_print ("Activate item: %s\n", ide_docs_item_get_title (item));
+
+  if (ide_docs_item_has_child (item))
+    {
+      IdeDocsSearchSection *section;
+
+      ide_docs_search_view_clear (self);
+
+      g_print ("Adding %d children\n",
+               ide_docs_item_get_n_children (item));
+
+      section = g_object_new (IDE_TYPE_DOCS_SEARCH_SECTION,
+                              "show-all-results", TRUE,
+                              "title", _("All Search Results"),
+                              NULL);
+      ide_docs_search_section_add_groups (section, item);
+      g_signal_connect_object (section,
+                               "item-activated",
+                               G_CALLBACK (on_item_activated_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (section));
+      gtk_widget_show (GTK_WIDGET (section));
+    }
+  else
+    {
+      g_print ("  Jump to documentation: %s\n",
+               ide_docs_item_get_url (item));
+    }
+}
+
 void
 ide_docs_search_view_add_sections (IdeDocsSearchView *self,
                                    IdeDocsItem       *item)
@@ -153,6 +194,11 @@ ide_docs_search_view_add_sections (IdeDocsSearchView *self,
                               "priority", priority,
                               NULL);
       ide_docs_search_section_add_groups (section, child);
+      g_signal_connect_object (section,
+                               "item-activated",
+                               G_CALLBACK (on_item_activated_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
       gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (section));
       gtk_widget_show (GTK_WIDGET (section));
     }
