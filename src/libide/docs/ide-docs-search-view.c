@@ -63,6 +63,7 @@ ide_docs_search_view_add (GtkContainer *container,
                             "yalign", 0.0f,
                             "visible", TRUE,
                             NULL);
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "section-title");
       gtk_container_add (GTK_CONTAINER (self->titles), GTK_WIDGET (label));
       gtk_container_add_with_properties (GTK_CONTAINER (self->sections), child,
                                          "priority", priority,
