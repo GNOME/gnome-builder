@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-04-22 22:10+0000\n"
-"PO-Revision-Date: 2019-05-05 17:00+0100\n"
+"POT-Creation-Date: 2019-06-27 03:15+0000\n"
+"PO-Revision-Date: 2019-07-12 17:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -19,7 +19,7 @@ msgstr "Project-Id-Version: gnome-builder master\n"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:120
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:201
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -261,7 +261,7 @@ msgstr "Hasiera eta amaiera adimetsua"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:61
 msgid "Whether or not Home moves to first non-space character."
-msgstr ""
+msgstr "Hasiera zuriunerik gabeko lehen karakterera mugituko den ala ez"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 msgid "Show grid lines"
@@ -290,7 +290,7 @@ msgstr "Ezkutatu automatikoki ikuspegi orokorraren mapa"
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
-msgstr ""
+msgstr "Gaituta badago, Builder-ek automatikoki ezkutatuko du ikuspegi orokorra saguaren fokuak editorea uzten duenean edo denbora-muga bat gertatzen denean."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:90
 msgid "Draw Spaces"
@@ -478,7 +478,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Ezarpen hau zaharkituta dago eta ez da jadanik erabiltzen."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:68
+#: src/plugins/project-tree/gtk/menus.ui:69
 msgid "Show Ignored Files"
 msgstr "Erakutsi ez ikusitako fitxategiak"
 
@@ -488,7 +488,7 @@ msgid ""
 msgstr "Gaituta badago, proiektuaren zuhaitzak VCSak ez ikusi dituen fitxategiak bistaratuko ditu."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "Sort Directories First"
 msgstr "Ordenatu direktorioak lehenengo"
 
@@ -579,6 +579,11 @@ msgstr "Klonatu biltegia"
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
 msgstr "Editorearen laneko area berria"
+
+#: data/org.gnome.Builder.desktop.in.in:36
+#: src/plugins/dspy/gbp-dspy-workspace.ui:13
+msgid "D-Bus Inspector"
+msgstr "D-Bus ikuskatzailea"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -791,7 +796,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Kargatu edo sortu paleta bat hobespenak erabilita"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4947
+#: src/libide/sourceview/ide-source-view.c:4966
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -814,7 +819,7 @@ msgstr "_Aldatu izena"
 msgid "unsaved file %u"
 msgstr "gorde gabeko %u fitxategia"
 
-#: src/libide/code/ide-buffer.c:3389
+#: src/libide/code/ide-buffer.c:3405
 msgid "The current language lacks a symbol resolver."
 msgstr "Uneko lengoaiak ez du ikur-ebazlerik."
 
@@ -830,7 +835,7 @@ msgstr "Ezin izan da “%s” kateko zenbaki osoa analizatu"
 
 #: src/libide/code/ide-language-defaults.c:309
 msgid "language defaults missing version in [global] group."
-msgstr ""
+msgstr "lengaoia lehenespenak bertsioa falta da [global] taldean."
 
 #: src/libide/code/ide-language-defaults.c:403
 msgid "Failed to initialize defaults."
@@ -842,7 +847,7 @@ msgstr "Ezin izan dira lehenespenak hasieratu."
 msgid "Failed to save draft: %s"
 msgstr "Huts egin du zirriborroa gordetzeak: %s"
 
-#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:802
+#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:810
 msgid "Untitled"
 msgstr "Izengabea"
 
@@ -850,14 +855,16 @@ msgstr "Izengabea"
 #: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:316
+#: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1380
+#: src/libide/gui/ide-workbench.c:1405
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:374
+#: src/plugins/dspy/libdspy/dspy-method-view.c:274
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:346
 msgid "Cancel"
 msgstr "Utzi"
 
@@ -888,7 +895,7 @@ msgstr "Ezin izan da fitxategia gorde: %s"
 
 #: src/libide/editor/ide-editor-page-actions.c:236
 #: src/plugins/buildui/gbp-buildui-log-pane.c:273
-#: src/plugins/testui/gbp-test-output-panel.c:63
+#: src/plugins/testui/gbp-test-output-panel.c:65
 msgid "Save File"
 msgstr "Gorde fitxategia"
 
@@ -896,6 +903,7 @@ msgstr "Gorde fitxategia"
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/editor/gbp-confirm-save-dialog.c:199
 msgid "Save"
 msgstr "Gorde"
 
@@ -915,6 +923,7 @@ msgstr "Gorde honela"
 #: src/libide/editor/ide-editor-page-shortcuts.c:63
 #: src/libide/editor/ide-editor-page-shortcuts.c:69
 #: src/libide/editor/ide-editor-page-shortcuts.c:75
+#: src/libide/editor/ide-editor-page-shortcuts.c:81
 #: src/libide/editor/ide-editor-surface-shortcuts.c:35
 #: src/libide/editor/ide-editor-surface-shortcuts.c:41
 #: src/libide/editor/ide-editor-surface-shortcuts.c:47
@@ -936,6 +945,7 @@ msgstr "Editorearen lasterbideak"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:34
 #: src/libide/editor/ide-editor-page-shortcuts.c:40
+#: src/libide/editor/ide-editor-page-shortcuts.c:46
 #: src/libide/editor/ide-editor-surface-shortcuts.c:36
 #: src/libide/editor/ide-editor-surface-shortcuts.c:42
 #: src/libide/editor/ide-editor-surface-shortcuts.c:60
@@ -960,54 +970,60 @@ msgctxt "shortcut window"
 msgid "Save the document with a new name"
 msgstr "Gorde dokumentua beste izen batekin"
 
-#: src/libide/editor/ide-editor-page-shortcuts.c:46
+#: src/libide/editor/ide-editor-page-shortcuts.c:47
+#: src/libide/gui/ide-shortcuts-window.ui:122
+msgctxt "shortcut window"
+msgid "Print the document"
+msgstr "Inprimatu dokumentua"
+
 #: src/libide/editor/ide-editor-page-shortcuts.c:52
-#: src/libide/editor/ide-editor-page-shortcuts.c:53
 #: src/libide/editor/ide-editor-page-shortcuts.c:58
+#: src/libide/editor/ide-editor-page-shortcuts.c:59
 #: src/libide/editor/ide-editor-page-shortcuts.c:64
 #: src/libide/editor/ide-editor-page-shortcuts.c:70
 #: src/libide/editor/ide-editor-page-shortcuts.c:76
-#: src/libide/gui/ide-shortcuts-window.ui:158
-#: src/libide/gui/ide-shortcuts-window.ui:170
+#: src/libide/editor/ide-editor-page-shortcuts.c:82
+#: src/libide/gui/ide-shortcuts-window.ui:165
+#: src/libide/gui/ide-shortcuts-window.ui:184
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Bilatu eta ordeztu"
 
-#: src/libide/editor/ide-editor-page-shortcuts.c:47
-#: src/libide/gui/ide-shortcuts-window.ui:163
+#: src/libide/editor/ide-editor-page-shortcuts.c:53
+#: src/libide/gui/ide-shortcuts-window.ui:177
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Bilatu"
 
-#: src/libide/editor/ide-editor-page-shortcuts.c:59
+#: src/libide/editor/ide-editor-page-shortcuts.c:65
 msgctxt "shortcut window"
 msgid "Move to the next match"
 msgstr "Joan hurrengo parekatzera"
 
-#: src/libide/editor/ide-editor-page-shortcuts.c:65
+#: src/libide/editor/ide-editor-page-shortcuts.c:71
 msgctxt "shortcut window"
 msgid "Move to the previous match"
 msgstr "Joan aurreko parekatzera"
 
-#: src/libide/editor/ide-editor-page-shortcuts.c:71
+#: src/libide/editor/ide-editor-page-shortcuts.c:77
 msgctxt "shortcut window"
 msgid "Move to the next error"
 msgstr "Joan hurrengo errorera"
 
-#: src/libide/editor/ide-editor-page-shortcuts.c:77
+#: src/libide/editor/ide-editor-page-shortcuts.c:83
 msgctxt "shortcut window"
 msgid "Move to the previous error"
 msgstr "Joan aurreko errorera"
 
 #: src/libide/editor/ide-editor-page.ui:43
 msgid "_Reload"
-msgstr "_Berritu"
+msgstr "Bir_kargatu"
 
 #: src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/plugins/buildui/gbp-buildui-log-pane.c:277
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
-#: src/plugins/testui/gbp-test-output-panel.c:67
+#: src/plugins/testui/gbp-test-output-panel.c:69
 msgid "_Cancel"
 msgstr "_Utzi"
 
@@ -1057,7 +1073,7 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr "Erakutsi edo ezkutatu bilaketa-aukerak, adibidez maiuskulen/minuskulen bereizketa"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
-#: src/plugins/editor/gtk/menus.ui:151
+#: src/plugins/editor/gtk/menus.ui:155
 msgid "Document Properties"
 msgstr "Dokumentuaren propietateak"
 
@@ -1149,10 +1165,10 @@ msgid "Open File"
 msgstr "Ireki fitxategia"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1379
+#: src/libide/gui/ide-workbench.c:1404
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:19
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
+#: src/plugins/project-tree/gtk/menus.ui:22
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:345
 msgid "Open"
 msgstr "Ireki"
 
@@ -1192,7 +1208,7 @@ msgstr "Itxi fitxategi guztiak"
 #: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
-#: src/plugins/editor/gtk/menus.ui:67 src/plugins/editor/gtk/menus.ui:81
+#: src/plugins/editor/gtk/menus.ui:68 src/plugins/editor/gtk/menus.ui:82
 msgid "Editor"
 msgstr "Editorea"
 
@@ -1211,6 +1227,7 @@ msgstr "Txandakatu gainazala"
 
 #: src/libide/editor/ide-editor-workspace.ui:57
 #: src/libide/gui/ide-primary-workspace.ui:64
+#: src/libide/terminal/ide-terminal-workspace.ui:41
 msgid "Search your project"
 msgstr "Bilatu zure proiektuan"
 
@@ -1265,7 +1282,7 @@ msgstr "Eraikuntza-konfigurazioak erroreak ditu"
 
 #: src/libide/foundry/ide-pipeline.c:3000
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
-msgstr ""
+msgstr "Sasiterminalaren sorrerak huts egin du. Terminalaren eginbideak mugatuak izango dira."
 
 #: src/libide/foundry/ide-pipeline.c:3206
 msgid "Cleaning…"
@@ -1349,7 +1366,7 @@ msgstr "%s exekutatzen..."
 msgid "The build target failed to build: %s"
 msgstr "Eraikuntza-helburuaren eraikuntzak huts egin du: %s"
 
-#: src/libide/foundry/ide-run-manager.c:852
+#: src/libide/foundry/ide-run-manager.c:853
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
@@ -1357,32 +1374,32 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Laneko mahaiaren lasterbideak"
 
-#: src/libide/foundry/ide-run-manager.c:853
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/foundry/ide-run-manager.c:854
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Eraiki eta exekutatu"
 
-#: src/libide/foundry/ide-run-manager.c:1012
-#: src/libide/foundry/ide-run-manager.c:1078
+#: src/libide/foundry/ide-run-manager.c:1013
+#: src/libide/foundry/ide-run-manager.c:1079
 msgid "Failed to locate a build target"
 msgstr "Huts egin du eraikuntza-helburu bat aurkitzeak"
 
-#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
-#: src/plugins/buildui/gtk/menus.ui:30
+#: src/libide/foundry/ide-run-manager.c:1215 src/libide/gui/gtk/menus.ui:73
+#: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Exekutatu"
 
-#: src/libide/foundry/ide-runner.c:181
+#: src/libide/foundry/ide-runner.c:185
 msgid "Process quit unexpectedly"
 msgstr "Prozesua ustekabean amaitu da"
 
 #: src/libide/foundry/ide-runtime-manager.c:138
-msgid "Use host operating system"
-msgstr "Erabili ostalari-sistema eragilea"
+msgid "Host Operating System"
+msgstr "Ostalari-sistema eragilea"
 
-#: src/libide/foundry/ide-runtime.c:447
-#: src/plugins/jhbuild/jhbuild_plugin.py:122
+#: src/libide/foundry/ide-runtime.c:498
+#: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Ostalari-sistema"
 
@@ -1410,7 +1427,7 @@ msgstr "Biltegiaren URLa"
 msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
-msgstr ""
+msgstr "Sartu klonatu nahi duzun proiektuaren biltegia. URLak honen antzekoa izan behar du: “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 
 #: src/libide/greeter/ide-clone-surface.ui:84
 msgid "user@host:repository.git"
@@ -1442,7 +1459,7 @@ msgstr "Egilearen posta-helbidea"
 msgid "Project Destination"
 msgstr "Proiektuaren helburua"
 
-#: src/libide/greeter/ide-clone-surface.ui:306
+#: src/libide/greeter/ide-clone-surface.ui:308
 msgid "Clone Project"
 msgstr "Klonatu proiektua"
 
@@ -1525,45 +1542,45 @@ msgctxt "title"
 msgid "Clone Repository"
 msgstr "Klonatu biltegia"
 
-#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
+#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
 msgid "Switch Surface"
 msgstr "Txandakatu gainazala"
 
-#: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1376
-#: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
-msgid "Open File…"
-msgstr "Ireki fitxategia..."
-
-#: src/libide/gui/gtk/menus.ui:23
+#: src/libide/gui/gtk/menus.ui:16
 msgid "Close Project"
 msgstr "Itxi proiektua"
 
-#: src/libide/gui/gtk/menus.ui:31 src/libide/gui/ide-preferences-window.ui:6
-#: src/plugins/editor/gtk/menus.ui:32 src/plugins/greeter/gtk/menus.ui:22
+#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.ui:6
+#: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "Hobespenak"
 
-#: src/libide/gui/gtk/menus.ui:37 src/plugins/editor/gtk/menus.ui:38
+#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:39
 #: src/plugins/greeter/gtk/menus.ui:28
 msgid "Keyboard Shortcuts"
 msgstr "Laster-teklak"
 
-#: src/libide/gui/gtk/menus.ui:43 src/plugins/editor/gtk/menus.ui:44
+#: src/libide/gui/gtk/menus.ui:36 src/plugins/editor/gtk/menus.ui:45
 #: src/plugins/greeter/gtk/menus.ui:34
 msgid "Help"
 msgstr "Laguntza"
 
-#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:50
+#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:51
 #: src/plugins/greeter/gtk/menus.ui:40
 msgid "About Builder"
 msgstr "Builder aplikazioari buruz"
 
-#: src/libide/gui/gtk/menus.ui:56 src/plugins/editor/gtk/menus.ui:57
+#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:58
 msgid "_Quit"
 msgstr "I_rten"
 
-#: src/libide/gui/gtk/menus.ui:74
+#: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
+#: src/libide/gui/ide-workbench.c:1401 src/plugins/editor/gtk/menus.ui:25
+#: src/plugins/editor/gtk/menus.ui:103
+msgid "Open File…"
+msgstr "Ireki fitxategia..."
+
+#: src/libide/gui/gtk/menus.ui:68
 msgid "Run Options"
 msgstr "Exekuzio-aukerak"
 
@@ -1622,7 +1639,7 @@ msgstr "Erakutsi laguntzaren leihoa"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:517
+#: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Hobespenak"
@@ -1651,6 +1668,34 @@ msgstr "Kendu inguruneko aldagaia"
 msgid "New variable…"
 msgstr "Aldagai berria..."
 
+#: src/libide/gui/ide-frame-empty-state.ui:16
+msgid "Open a File or Terminal"
+msgstr "Ireki fitxategi edo terminal bat"
+
+#: src/libide/gui/ide-frame-empty-state.ui:30
+msgid "Use the page switcher above or use one of the following:"
+msgstr "Erabili goian dagoen orri-txandakatzailea edo erabili hauetako bat:"
+
+#: src/libide/gui/ide-frame-empty-state.ui:45
+msgid "Search"
+msgstr "Bilatu"
+
+#: src/libide/gui/ide-frame-empty-state.ui:54
+msgid "Project sidebar"
+msgstr "Proiektuaren alboko barra"
+
+#: src/libide/gui/ide-frame-empty-state.ui:63
+msgid "File chooser"
+msgstr "Fitxategi-aukeratzailea"
+
+#: src/libide/gui/ide-frame-empty-state.ui:72
+msgid "New terminal"
+msgstr "Terminal berria"
+
+#: src/libide/gui/ide-frame-empty-state.ui:95
+msgid "New Terminal"
+msgstr "Terminal berria"
+
 #: src/libide/gui/ide-frame-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Move document to the right"
@@ -1662,19 +1707,19 @@ msgid "Move document to the left"
 msgstr "Mugitu dokumentua ezkerrera"
 
 #: src/libide/gui/ide-frame-shortcuts.c:51
-#: src/libide/gui/ide-shortcuts-window.ui:143
+#: src/libide/gui/ide-shortcuts-window.ui:150
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Aldatu aurreko dokumentura"
 
 #: src/libide/gui/ide-frame-shortcuts.c:58
-#: src/libide/gui/ide-shortcuts-window.ui:136
+#: src/libide/gui/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Aldatu hurrengo dokumentura"
 
 #: src/libide/gui/ide-frame-shortcuts.c:65
-#: src/libide/gui/ide-shortcuts-window.ui:122
+#: src/libide/gui/ide-shortcuts-window.ui:129
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Itxi dokumentua"
@@ -1683,39 +1728,11 @@ msgstr "Itxi dokumentua"
 msgid "No Open Pages"
 msgstr "Ez dago orri irekirik"
 
-#: src/libide/gui/ide-frame.ui:33
-msgid "Open a File or Terminal"
-msgstr "Ireki fitxategi edo terminal bat"
-
-#: src/libide/gui/ide-frame.ui:47
-msgid "Use the page switcher above or use one of the following:"
-msgstr "Erabili goian dagoen orri-txandakatzailea edo erabili hauetako bat:"
-
-#: src/libide/gui/ide-frame.ui:62
-msgid "Search"
-msgstr "Bilatu"
-
-#: src/libide/gui/ide-frame.ui:71
-msgid "Project sidebar"
-msgstr "Proiektuaren alboko barra"
-
-#: src/libide/gui/ide-frame.ui:80
-msgid "File chooser"
-msgstr "Fitxategi-aukeratzailea"
-
-#: src/libide/gui/ide-frame.ui:89
-msgid "New terminal"
-msgstr "Terminal berria"
-
-#: src/libide/gui/ide-frame.ui:112
-msgid "New Terminal"
-msgstr "Terminal berria"
-
-#: src/libide/gui/ide-frame.ui:124
+#: src/libide/gui/ide-frame.ui:37
 msgid "Uh oh, something went wrong"
 msgstr "Zerbait gaizki irten da"
 
-#: src/libide/gui/ide-frame.ui:125
+#: src/libide/gui/ide-frame.ui:38
 msgid "There was a failure while trying to perform the operation."
 msgstr "Hutsegitea izan da eragiketa gauzatzean."
 
@@ -1728,10 +1745,10 @@ msgstr "Leihoen lasterbideak"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:506
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
+#: src/libide/gui/ide-shortcuts-window.ui:520
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Orokorra"
@@ -1798,7 +1815,7 @@ msgstr "Letra-tipoa"
 #: src/libide/gui/ide-preferences-builtin.c:106
 msgctxt "Keywords"
 msgid "editor font monospace"
-msgstr ""
+msgstr "editorearen tarte bakarreko letra-tipoa"
 
 #: src/libide/gui/ide-preferences-builtin.c:107
 msgid "Number of pixels above and below editor lines"
@@ -1807,18 +1824,19 @@ msgstr "Pixel kopurua editore-lerroen gainean eta azpian"
 #: src/libide/gui/ide-preferences-builtin.c:107
 msgctxt "Keywords"
 msgid "editor line spacing font monospace"
-msgstr ""
+msgstr "editorearen tarte bakarra letra-tipoa lerroen tartean"
 
 #. XXX: This belongs in terminal addin
 #: src/libide/gui/ide-preferences-builtin.c:109
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:354
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
 msgstr "Terminala"
 
 #: src/libide/gui/ide-preferences-builtin.c:109
 msgctxt "Keywords"
 msgid "terminal font monospace"
-msgstr ""
+msgstr "terminalaren tarte bakarreko letra-tipoa"
 
 #: src/libide/gui/ide-preferences-builtin.c:110
 msgid "Bold text in terminals"
@@ -1831,7 +1849,7 @@ msgstr "Terminaletan testu lodia erakutsi ahal izango den ala ez"
 #: src/libide/gui/ide-preferences-builtin.c:110
 msgctxt "Keywords"
 msgid "terminal allow bold"
-msgstr ""
+msgstr "terminalak lodia onartzen du"
 
 #: src/libide/gui/ide-preferences-builtin.c:115
 msgid "Color Scheme"
@@ -1847,7 +1865,7 @@ msgstr "Emulazioa"
 
 #: src/libide/gui/ide-preferences-builtin.c:143
 msgid "Default keybinding mode which mimics gedit"
-msgstr ""
+msgstr "Gedit imitatzen duen laster-teklen modu lehenetsia"
 
 #: src/libide/gui/ide-preferences-builtin.c:145
 msgid "Movement"
@@ -1855,12 +1873,12 @@ msgstr "Mugimendua"
 
 #: src/libide/gui/ide-preferences-builtin.c:146
 msgid "Home moves to first non-whitespace character"
-msgstr ""
+msgstr "Hasiera zuriunerik gabeko lehen karakterera mugitzen da"
 
 #: src/libide/gui/ide-preferences-builtin.c:147
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
-msgstr ""
+msgstr "Atzera-teklak espazio gehigarria kenduko du, kodea koskaren tamainarekin lerrokatuta mantentzeko."
 
 #: src/libide/gui/ide-preferences-builtin.c:156
 msgid "Display list of open files"
@@ -1972,7 +1990,7 @@ msgstr "Zuriune-karakte ikusgaiak"
 
 #: src/libide/gui/ide-preferences-builtin.c:180
 msgid "New line and carriage return"
-msgstr ""
+msgstr "Lerro berria eta orga-itzulera"
 
 #: src/libide/gui/ide-preferences-builtin.c:181
 msgid "Non-breaking spaces"
@@ -2004,10 +2022,10 @@ msgstr "Aldaketaren ondoren igaroko den segundo kopurua automatikoki gorde baino
 
 #: src/libide/gui/ide-preferences-builtin.c:194
 msgid "Code Insight"
-msgstr ""
+msgstr "Kode-ezagutza"
 
 #: src/libide/gui/ide-preferences-builtin.c:196
-#: src/libide/sourceview/gtk/menus.ui:47 src/plugins/spellcheck/gtk/menus.ui:12
+#: src/libide/sourceview/gtk/menus.ui:50 src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Nabarmentzea"
 
@@ -2019,7 +2037,7 @@ msgstr "Nabarmentze semantikoa"
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
-msgstr ""
+msgstr "Erabili kode-ezagutza iturburu-fitxategian aurkitutako informazio gehigarria nabarmentzeko"
 
 #: src/libide/gui/ide-preferences-builtin.c:199
 #: src/plugins/editor/gbp-editor-hover-provider.c:78
@@ -2081,7 +2099,7 @@ msgstr "Txertatu bat datorren giltza"
 
 #: src/libide/gui/ide-preferences-builtin.c:328
 msgid "Insert matching character for { [ ( or \""
-msgstr ""
+msgstr "Txertatu bat datorren karakterea { [ ( edo \" karaktereetarako"
 
 #: src/libide/gui/ide-preferences-builtin.c:329
 msgid "Insert Trailing Newline"
@@ -2141,11 +2159,11 @@ msgstr "Irekierako parentesien aurreko zuriunea"
 
 #: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Space before opening brackets"
-msgstr ""
+msgstr "Irekierako kortxeteen aurreko zuriunea"
 
 #: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Space before opening braces"
-msgstr ""
+msgstr "Irekierako giltzen aurreko zuriunea"
 
 #: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Space before opening angles"
@@ -2175,7 +2193,7 @@ msgstr "PUZ kopurua"
 
 #: src/libide/gui/ide-preferences-builtin.c:395
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
-#: src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Eraiki"
 
@@ -2232,8 +2250,7 @@ msgstr "Ireki aurretik irekitako fitxategiak proiektua kargatzen denean"
 
 #: src/libide/gui/ide-preferences-builtin.c:541
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:373
-#: src/plugins/vcsui/gtk/menus.ui:6
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:420
 msgid "Version Control"
 msgstr "Bertsio-kontrola"
 
@@ -2262,24 +2279,24 @@ msgstr "Gelditu exekuzioa"
 msgid "Change run options"
 msgstr "Aldatu exekuzio-aukerak"
 
-#: src/libide/gui/ide-search-entry.c:209
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:272
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:278
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:284
+#: src/libide/gui/ide-search-button.c:43
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
 msgctxt "shortcut window"
 msgid "Workspace shortcuts"
 msgstr "Laneko areen lasterbideak"
 
-#: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:574
+#: src/libide/gui/ide-search-button.c:44
+#: src/libide/gui/ide-shortcuts-window.ui:588
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Bilatu"
 
-#: src/libide/gui/ide-search-entry.c:211
+#: src/libide/gui/ide-search-button.c:45
 msgctxt "shortcut window"
 msgid "Focus to the global search entry"
-msgstr ""
+msgstr "Fokua bilaketa globalaren sarreran"
 
 #: src/libide/gui/ide-shortcuts-window.ui:10
 msgctxt "shortcut window"
@@ -2287,34 +2304,34 @@ msgid "Editor Shortcuts"
 msgstr "Editorearen lasterbideak"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:510
+#: src/libide/gui/ide-shortcuts-window.ui:524
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Bilaketa globala"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:524
+#: src/libide/gui/ide-shortcuts-window.ui:538
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Komandoen barra"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:531
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminala"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:538
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
+#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
-msgstr ""
+msgstr "Terminala eraikuntzako exekuzio-garaian"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:559
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Laster-teklak"
@@ -2344,95 +2361,100 @@ msgctxt "shortcut window"
 msgid "Save all documents"
 msgstr "Gorde dokumentu guztiak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:129
+#: src/libide/gui/ide-shortcuts-window.ui:136
 msgctxt "shortcut window"
 msgid "Close all documents"
 msgstr "Itxi dokumentu guztiak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:150
+#: src/libide/gui/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Erakutsi dokumentu irekien zerrenda"
 
-#: src/libide/gui/ide-shortcuts-window.ui:177
+#: src/libide/gui/ide-shortcuts-window.ui:170
+msgctxt "shortcut window"
+msgid "Goto Line"
+msgstr "Joan lerrora"
+
+#: src/libide/gui/ide-shortcuts-window.ui:191
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Bilatu hurrengo parekatzea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:184
+#: src/libide/gui/ide-shortcuts-window.ui:198
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Bilatu aurreko parekatzea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:191
+#: src/libide/gui/ide-shortcuts-window.ui:205
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Garbitu nabarmentzea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:199
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:213
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiatu eta itsatsi"
 
-#: src/libide/gui/ide-shortcuts-window.ui:204
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:218
+#: src/libide/gui/ide-shortcuts-window.ui:573
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiatu hautatutako testua arbelean"
 
-#: src/libide/gui/ide-shortcuts-window.ui:211
+#: src/libide/gui/ide-shortcuts-window.ui:225
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Ebaki hautatutako testua arbelera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:232
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Itsatsi testua arbeletik"
 
-#: src/libide/gui/ide-shortcuts-window.ui:225
+#: src/libide/gui/ide-shortcuts-window.ui:239
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Bikoiztu uneko lerroa edo hautapena"
 
-#: src/libide/gui/ide-shortcuts-window.ui:233
+#: src/libide/gui/ide-shortcuts-window.ui:247
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Desegin eta berregin"
 
-#: src/libide/gui/ide-shortcuts-window.ui:238
+#: src/libide/gui/ide-shortcuts-window.ui:252
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Desegin aurreko komandoa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:245
+#: src/libide/gui/ide-shortcuts-window.ui:259
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Berregin aurreko komandoa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:253
+#: src/libide/gui/ide-shortcuts-window.ui:267
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Zooma"
 
-#: src/libide/gui/ide-shortcuts-window.ui:258
+#: src/libide/gui/ide-shortcuts-window.ui:272
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Handiagotu"
 
-#: src/libide/gui/ide-shortcuts-window.ui:265
+#: src/libide/gui/ide-shortcuts-window.ui:279
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Txikiagotu"
 
-#: src/libide/gui/ide-shortcuts-window.ui:272
+#: src/libide/gui/ide-shortcuts-window.ui:286
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Berrezarri zooma"
 
-#: src/libide/gui/ide-shortcuts-window.ui:280
+#: src/libide/gui/ide-shortcuts-window.ui:294
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
@@ -2441,172 +2463,172 @@ msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edizioa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:285
+#: src/libide/gui/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Handiagotu zenbakia kurtsorean"
 
-#: src/libide/gui/ide-shortcuts-window.ui:292
+#: src/libide/gui/ide-shortcuts-window.ui:306
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Txikiagotu zenbakia kurtsorean"
 
-#: src/libide/gui/ide-shortcuts-window.ui:299
+#: src/libide/gui/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Elkartu hautatutako lerroak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:306
+#: src/libide/gui/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Erakutsi osaketaren leihoa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:313
+#: src/libide/gui/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Txandakatu osatze-leihoaren opakutasuna"
 
-#: src/libide/gui/ide-shortcuts-window.ui:320
+#: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Txandakatu gainidaztea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:327
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Reindent line"
-msgstr ""
+msgstr "Birkoskatu lerroa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:334
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Ezabatu lerroa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Aldatu ikurraren izena"
 
-#: src/libide/gui/ide-shortcuts-window.ui:342
+#: src/libide/gui/ide-shortcuts-window.ui:356
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Lengoaia semantikoaren euskarri behar du"
 
-#: src/libide/gui/ide-shortcuts-window.ui:350
+#: src/libide/gui/ide-shortcuts-window.ui:364
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Nabigazioa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Joan fitxategiko hurrengo errorera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Joan fitxategiko aurreko errorera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Joan aurreko edizioaren kokalekura"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Joan hurrengo edizioaren kokalekura"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Joan ikurraren definiziora"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mugitu leihatila gora fitxategiaren baitan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mugitu leihatila behera fitxategiaren baitan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mugitu leihatila fitxategiaren amaierara"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mugitu leihatila fitxategiaren hasierara"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
-msgstr ""
+msgstr "Mugitu bat datorren kortxetera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:426
+#: src/libide/gui/ide-shortcuts-window.ui:440
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Hautapenak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:431
+#: src/libide/gui/ide-shortcuts-window.ui:445
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Hautatu dena"
 
-#: src/libide/gui/ide-shortcuts-window.ui:438
+#: src/libide/gui/ide-shortcuts-window.ui:452
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Desautatu dena"
 
-#: src/libide/gui/ide-shortcuts-window.ui:451
+#: src/libide/gui/ide-shortcuts-window.ui:465
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Eraiki"
 
-#: src/libide/gui/ide-shortcuts-window.ui:458
+#: src/libide/gui/ide-shortcuts-window.ui:472
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Exekutatu"
 
-#: src/libide/gui/ide-shortcuts-window.ui:465
+#: src/libide/gui/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profila"
 
-#: src/libide/gui/ide-shortcuts-window.ui:473
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
-msgstr "Touchpad-aren keinuak"
+msgstr "Ukipen-teklatuaren keinuak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Eraman orrialdea eskuinera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:481
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Hiru hatzeko eskuinera igarotzea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:490
+#: src/libide/gui/ide-shortcuts-window.ui:504
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Eraman orrialdea ezkerrera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:491
+#: src/libide/gui/ide-shortcuts-window.ui:505
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Hiru hatzeko ezkerrera igarotzea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:502
+#: src/libide/gui/ide-shortcuts-window.ui:516
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminalaren lasterbideak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:579
+#: src/libide/gui/ide-shortcuts-window.ui:593
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Bilatu testua terminalean"
@@ -2637,140 +2659,164 @@ msgstr "Fitxategiak proiektuaren zuhaitzean egon behar du."
 msgid "Could not parse XML from stream"
 msgstr "Ezin izan da korronteko XMLa analizatu"
 
-#: src/libide/sourceview/gtk/menus.ui:6
+#: src/libide/sourceview/gtk/menus.ui:7
 msgid "_Go to Definition"
 msgstr "_Joan definiziora"
 
-#: src/libide/sourceview/gtk/menus.ui:10
+#: src/libide/sourceview/gtk/menus.ui:12
 msgid "_Find references"
 msgstr "_Bilatu erreferentziak"
 
-#: src/libide/sourceview/gtk/menus.ui:16
+#: src/libide/sourceview/gtk/menus.ui:19
 msgid "_Undo"
 msgstr "_Desegin"
 
-#: src/libide/sourceview/gtk/menus.ui:20
+#: src/libide/sourceview/gtk/menus.ui:23
 msgid "_Redo"
 msgstr "_Berregin"
 
-#: src/libide/sourceview/gtk/menus.ui:26
+#: src/libide/sourceview/gtk/menus.ui:29
 msgid "C_ut"
 msgstr "E_baki"
 
-#: src/libide/sourceview/gtk/menus.ui:31 src/libide/terminal/gtk/menus.ui:28
+#: src/libide/sourceview/gtk/menus.ui:34 src/libide/terminal/gtk/menus.ui:38
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: src/libide/sourceview/gtk/menus.ui:35 src/libide/terminal/gtk/menus.ui:32
+#: src/libide/sourceview/gtk/menus.ui:38 src/libide/terminal/gtk/menus.ui:42
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: src/libide/sourceview/gtk/menus.ui:39
+#: src/libide/sourceview/gtk/menus.ui:42
 msgid "_Delete"
 msgstr "Ez_abatu"
 
-#: src/libide/sourceview/gtk/menus.ui:52 src/libide/terminal/gtk/menus.ui:38
+#: src/libide/sourceview/gtk/menus.ui:55 src/libide/terminal/gtk/menus.ui:48
 msgid "Selection"
 msgstr "Hautapena"
 
-#: src/libide/sourceview/gtk/menus.ui:54 src/libide/terminal/gtk/menus.ui:40
+#: src/libide/sourceview/gtk/menus.ui:57 src/libide/terminal/gtk/menus.ui:50
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: src/libide/sourceview/gtk/menus.ui:59 src/libide/terminal/gtk/menus.ui:45
+#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:55
 msgid "Select _None"
 msgstr "Ez hautatu e_zer"
 
-#: src/libide/sourceview/gtk/menus.ui:65
+#: src/libide/sourceview/gtk/menus.ui:68
 msgid "All _Upper Case"
 msgstr "Guztiak m_aiuskuletan"
 
-#: src/libide/sourceview/gtk/menus.ui:70
+#: src/libide/sourceview/gtk/menus.ui:73
 msgid "All _Lower Case"
 msgstr "Guztiak m_inuskuletan"
 
-#: src/libide/sourceview/gtk/menus.ui:75
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Invert Case"
 msgstr "_Alderantzikatu maiuskulak eta minuskulak"
 
-#: src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:83
 msgid "_Title Case"
 msgstr "_Izenburua maiuskuletan"
 
-#: src/libide/sourceview/gtk/menus.ui:87
+#: src/libide/sourceview/gtk/menus.ui:90
 msgid "Join Lines"
 msgstr "Elkartu lerroak"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:94
 msgid "Sort Lines"
 msgstr "Ordenatu lerroak"
 
-#: src/libide/sourceview/gtk/menus.ui:100
+#: src/libide/sourceview/gtk/menus.ui:103
 msgid "Zoom"
 msgstr "Zooma"
 
-#: src/libide/sourceview/gtk/menus.ui:102
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "Zoom _In"
 msgstr "_Zooma handiagotu"
 
-#: src/libide/sourceview/gtk/menus.ui:107
+#: src/libide/sourceview/gtk/menus.ui:110
 msgid "Zoom _Out"
 msgstr "Zooma _txikiagotu"
 
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/sourceview/gtk/menus.ui:116
 msgid "Reset"
 msgstr "Berrezarri"
 
-#: src/libide/sourceview/ide-source-view.c:4396
+#: src/libide/sourceview/ide-source-view.c:4415
 #, c-format
 msgid "Insert “%s”"
 msgstr "Txeratu “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4398
+#: src/libide/sourceview/ide-source-view.c:4417
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ordeztu “%s” “%s” erabilita"
 
-#: src/libide/sourceview/ide-source-view.c:4516
+#: src/libide/sourceview/ide-source-view.c:4535
 msgid "Apply Fix-It"
 msgstr "Aplikatu Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4946
+#: src/libide/sourceview/ide-source-view.c:4965
 msgid "Rename symbol"
 msgstr "Aldatu ikurraren izena"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5181
+#: src/libide/sourceview/ide-source-view.c:5200
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
-msgstr ""
+msgstr "<b>%s</b> — <small>%u lerroa, %u zutabea</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5207
+#: src/libide/sourceview/ide-source-view.c:5226
 msgid "No references were found"
 msgstr "Ez da erreferentziarik aurkitu"
 
-#: src/libide/terminal/gtk/menus.ui:7 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:118 src/plugins/editor/gtk/menus.ui:172
+#: src/libide/terminal/gtk/menus.ui:8
+msgid "New Terminal Workspace…"
+msgstr "Terminalaren laneko area berria..."
+
+#: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
+#: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
-#: src/plugins/recent/gbp-recent-section.c:472
 msgid "Close"
 msgstr "Itxi"
 
-#: src/libide/terminal/gtk/menus.ui:15
+#: src/libide/terminal/gtk/menus.ui:25
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
-#: src/libide/terminal/gtk/menus.ui:20
+#: src/libide/terminal/gtk/menus.ui:30
 msgid "_Copy Link Address"
 msgstr "_Kopiatu estekaren helbidea"
+
+#: src/libide/terminal/ide-terminal-launcher.c:274
+#, c-format
+msgid "Failed to create shell within runtime “%s”"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-launcher.c:566
+msgid "Untitled Terminal"
+msgstr "Izenik gabeko terminala"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:268
 msgid "Save Terminal Content As"
 msgstr "Gorde terminalaren edukiak honela"
 
-#: src/libide/terminal/ide-terminal-page.c:460
+#: src/libide/terminal/ide-terminal-page.c:105
+msgid "Subprocess launcher failed"
+msgstr "Azpiprozesuen abiarazleak huts egin du"
+
+#: src/libide/terminal/ide-terminal-page.c:116
+msgid "Subprocess launcher failed too quickly, will not respawn."
+msgstr "Azpiprozesuen abiarazleak azkarregi huts egin du, ez da berrabiaraziko."
+
+#: src/libide/terminal/ide-terminal-page.c:277
 msgid "Untitled terminal"
 msgstr "Izenik gabeko terminala"
+
+#: src/libide/terminal/ide-terminal-popover.ui:12
+msgid "Search runtimes"
+msgstr "Bilaketen exekuzio-denborak"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -2797,7 +2843,7 @@ msgstr "Kargatzen..."
 msgid "unversioned"
 msgstr "bertsiorik gabea"
 
-#: src/main.c:62
+#: src/main.c:137
 msgid "Run a new instance of Builder"
 msgstr "Exekutatu Builder-en instantzia berria"
 
@@ -2816,7 +2862,7 @@ msgid "Configuring project"
 msgstr "Proiektua konfiguratzen"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:152
+#: src/plugins/cargo/cargo_plugin.py:162
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
@@ -2949,7 +2995,7 @@ msgstr "Aktibatu sarrera lehenetsia"
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:375
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
-msgstr ""
+msgstr "Beautifier plugina: ez dago baliozko sarrerarik, desgaitzen: %s"
 
 #. translators: %s and %s are replaced with the temporary dir and the file path
 #: src/plugins/beautifier/gb-beautifier-helper.c:63
@@ -2970,11 +3016,11 @@ msgstr ""
 
 #: src/plugins/beautifier/gb-beautifier-process.c:274
 msgid "Beautifier plugin: the command output is empty"
-msgstr ""
+msgstr "Beautifier plugina: komando-irteera hutxik dago"
 
 #: src/plugins/beautifier/gb-beautifier-process.c:301
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
-msgstr ""
+msgstr "Beautify plugina: irteera ez da baliozko UTF-8 testua"
 
 #: src/plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
@@ -3018,7 +3064,7 @@ msgstr "Bikoiztu"
 msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
-msgstr ""
+msgstr "Konfigurazioa bikoizten bada, aldaketak konfigurazio hau aldatu gabe egin daitezke."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "Removes the configuration and cannot be undone."
@@ -3039,6 +3085,7 @@ msgstr "Eraikuntza-ingurunea"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
@@ -3073,8 +3120,8 @@ msgid "Build Toolchain"
 msgstr "Eraikuntzaren tresna-katea"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
-#: src/plugins/editor/gtk/menus.ui:159 src/plugins/glade/gtk/menus.ui:8
-#: src/plugins/testui/gbp-test-output-panel.c:66
+#: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/testui/gbp-test-output-panel.c:68
 msgid "_Save"
 msgstr "_Gorde"
 
@@ -3128,7 +3175,7 @@ msgstr "Eraikuntzaren egoera"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:308
 msgid "View build console contents"
-msgstr ""
+msgstr "Ikusi eraikuntza-kontsolaren edukiak"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:347
 msgid "Last build"
@@ -3155,7 +3202,7 @@ msgid "Warnings"
 msgstr "Abisuak"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
-#: src/plugins/buildui/gtk/menus.ui:25
+#: src/plugins/buildui/gtk/menus.ui:27
 msgid "Rebuild"
 msgstr "Berreraiki"
 
@@ -3168,7 +3215,7 @@ msgid "Export Bundle"
 msgstr "Esportatu paketea"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:335
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:355
 msgid "Build Issues"
 msgstr "Eraikuntzaren arazoak"
 
@@ -3178,7 +3225,7 @@ msgstr "Eraikuntzaren egoera:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:34
 msgid "Time completed:"
-msgstr ""
+msgstr "Osatze-denbora:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:51
 #: src/plugins/buildui/gbp-buildui-pane.ui:66
@@ -3197,12 +3244,12 @@ msgstr "Eraikuntza-kanalizazioa hutsik dago"
 msgid "Build Targets"
 msgstr "Eraiki helburuak"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:344
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:364
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Eraikuntzaren hobespenak"
 
-#: src/plugins/buildui/gtk/menus.ui:35
+#: src/plugins/buildui/gtk/menus.ui:38
 msgid "Run With…"
 msgstr "Exekutatu honekin..."
 
@@ -3217,7 +3264,7 @@ msgstr "Erakutsi Clang paketeak hornitutako erroreak eta abisuak"
 #. translators: keywords used when searching for preferences
 #: src/plugins/clang/ide-clang-preferences-addin.c:71
 msgid "clang diagnostics warnings errors"
-msgstr ""
+msgstr "clang diagnostikoak abisuak erroreak"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:81
 msgid "Suggest completions using Clang"
@@ -3237,7 +3284,7 @@ msgstr "Osatu parentesiak"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:96
 msgid "Include parenthesis when completing clang proposals"
-msgstr ""
+msgstr "Sartu parentesiak clang proposamenak osatzean"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:107
 msgid "Complete Parameters"
@@ -3245,7 +3292,7 @@ msgstr "Osatu parametroak"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:108
 msgid "Include parameters and types when completing clang proposals"
-msgstr ""
+msgstr "Sartu parametroak eta motak clang proposamenak osatzean"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -3257,7 +3304,7 @@ msgstr "Osatu parentesiak"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
-msgstr ""
+msgstr "Parentesiak sartuko diren ala ez osatzean."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
@@ -3267,7 +3314,7 @@ msgstr "Osatu parametroak"
 msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
-msgstr ""
+msgstr "Parametroak sartuko diren ala ez osatzean. Parentesiak osatzea behar du."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3315,7 +3362,7 @@ msgstr ""
 #: src/plugins/code-index/gbp-code-index-application-addin.c:267
 #, c-format
 msgid "Failed to load project: %s"
-msgstr ""
+msgstr "Ezin izan da proiektua kargatu: %s"
 
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
@@ -3326,7 +3373,7 @@ msgstr "Iturburu-kodea indexatzen"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr ""
+msgstr "Bilaketak, diagnostikoak eta osatze automatikoa mugatuta egon daiteke osatu arte."
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3355,6 +3402,7 @@ msgid "Save changes to palette “%s” before closing?"
 msgstr "Gorde “%s” paletaren aldaketak hura itxi baino lehen?"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:96
+#: src/plugins/editor/gbp-confirm-save-dialog.c:197
 msgid "Close without Saving"
 msgstr "Itxi gorde gabe"
 
@@ -3453,7 +3501,7 @@ msgstr "Ikusgaitasuna:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
 msgid "Select the color spaces for which you want to see sliders in the panel."
-msgstr ""
+msgstr "Hautatu zein kolore-espazioetarako ikusi nahi dituzun korritze-barrak panelean."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
 msgid "HSV"
@@ -3495,7 +3543,7 @@ msgstr "Iragazkiak:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
-msgstr ""
+msgstr "Hautatu koloreetan eragina izango duen iragazki bat edo “Bat ere ez“."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
@@ -3503,35 +3551,35 @@ msgstr "Bat ere ez"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
 msgid "Achromatopsia (monochromacy)"
-msgstr ""
+msgstr "Akromatopsia (monokromia)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
 msgid "Achromatomaly (blue cone monochromacy)"
-msgstr ""
+msgstr "Akromatomalia (kono urdinen monokromia)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
 msgid "Deuteranopia (green-blind)"
-msgstr ""
+msgstr "Deuteranopia (berdea ez da ikusten)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
 msgid "Deuteranomaly (green-weak)"
-msgstr ""
+msgstr "Deuteranomalia (berdea gaizki ikusten da)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
 msgid "Protanopia (red-blind)"
-msgstr ""
+msgstr "Protanopia (gorria ez da ikusten)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
 msgid "Protanomaly (red-weak)"
-msgstr ""
+msgstr "Protanomalia (gorria gaizki ikusten da)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
 msgid "Tritanopia (blue-blind)"
-msgstr ""
+msgstr "Tritanopia (urdina ez da ikusten)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
 msgid "Tritanomaly (blue-weak)"
-msgstr ""
+msgstr "Tritanomalia (urdina gaizki ikusten da)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
 msgid "Websafe"
@@ -3555,7 +3603,7 @@ msgstr "Zerrenda"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
 msgid "Swatches"
-msgstr ""
+msgstr "Laginak"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
 msgid "Palette management"
@@ -3628,7 +3676,7 @@ msgstr "Bistaratu proiektua sortzeko gida"
 #: src/plugins/create-project/gbp-create-project-surface.c:219
 msgid ""
 "Characters were used which might cause technical issues as a project name"
-msgstr ""
+msgstr "Proiektu-izenean arazo teknikoak eragin ditzaketen karaktereak erabili dira"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:222
 #: src/plugins/create-project/gbp-create-project-surface.ui:146
@@ -3645,12 +3693,16 @@ msgstr "Badago izen hori duen direktorioa"
 msgid "Your project will be created within %s."
 msgstr "Zure proiektua %s barruan sortuko da."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:577
+#: src/plugins/create-project/gbp-create-project-surface.c:268
+msgid "Application ID is not valid."
+msgstr "Aplikazioaren IDa ez da baliozkoa."
+
+#: src/plugins/create-project/gbp-create-project-surface.c:612
 msgctxt "title"
 msgid "Start New Project"
 msgstr "Hasi proiektu berria"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:740
+#: src/plugins/create-project/gbp-create-project-surface.c:781
 msgid "A failure occurred while initializing version control"
 msgstr "Hutsegitea gertatu da bertsioen kontrola hasieratzean"
 
@@ -3757,7 +3809,7 @@ msgstr "Erabili Ctags lengoaia anitzetarako osatzeak iradokitzeko"
 msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
-msgstr ""
+msgstr "Bilaketak, osatze automatikoa eta ikurren informazioa mugatuta egon daiteke Ctags indizeak osatu arte."
 
 #: src/plugins/ctags/ide-ctags-service.c:955
 msgid "Indexing Source Code (Paused)"
@@ -3798,7 +3850,7 @@ msgstr "Mota"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:91
 msgid "Hits"
-msgstr ""
+msgstr "Bisitak"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
@@ -3814,11 +3866,11 @@ msgstr "Jarraitu programa exekutatzen"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:71
 msgid "Execute the current line, stepping into any function calls"
-msgstr ""
+msgstr "Exekutatu uneko lerroa eta sartu edozein funtzio-deitan"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:84
 msgid "Execute the current line, stepping over any function calls"
-msgstr ""
+msgstr "Exekutatu uneko lerroa eta saltatu edozein funtzio-dei"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:97
 msgid "Run until the end of the function"
@@ -3826,7 +3878,7 @@ msgstr "Exekutatu funtzioaren amaierara arte"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
-msgstr ""
+msgstr "Desmihiztatu"
 
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:190
 msgid "Failed to start the debugger"
@@ -3851,7 +3903,7 @@ msgstr "Liburutegiak"
 
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:398
 msgid "Registers"
-msgstr ""
+msgstr "Erregistroak"
 
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:406
 msgid "Log"
@@ -3867,7 +3919,7 @@ msgstr "Jauzi-puntua"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
 msgid "Countpoint"
-msgstr ""
+msgstr "Konta-puntua"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -3882,6 +3934,7 @@ msgid "Locals"
 msgstr "Lokalak"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:369
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:90
 msgid "Parameters"
 msgstr "Parametroak"
 
@@ -3902,7 +3955,7 @@ msgid "Thread"
 msgstr "Haria"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
-#: src/plugins/editor/gtk/menus.ui:107
+#: src/plugins/editor/gtk/menus.ui:111
 msgid "Frame"
 msgstr "Markoa"
 
@@ -3934,13 +3987,209 @@ msgstr "Hautatu dokumentazioa..."
 msgid "Documentation"
 msgstr "Dokumentazioa"
 
-#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:143
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:147
 msgid "Print…"
 msgstr "Inprimatu..."
 
 #: src/plugins/devhelp/gtk/menus.ui:21
 msgid "New Documentation Page"
 msgstr "Dokumentazio-orri berria"
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:47
+msgid "Display D-Bus inspector"
+msgstr "Bistaratu D-Bus ikuskatzailea"
+
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+msgid "D-Bus Inspector…"
+msgstr "D-Bus ikuskatzailea..."
+
+#. translators: %s is replaced with the address of the D-Bus bus
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:81
+#, c-format
+msgid "Connected to “%s”"
+msgstr "“%s”(e)ra konektatuta"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:253
+msgid "System"
+msgstr "Sistema"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:255
+msgid "Session"
+msgstr "Saioa"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:257
+msgid "Other"
+msgstr "Bestelakoa"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.c:192
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:130
+msgid "Execute"
+msgstr "Exekutatu"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:12
+#: src/plugins/dspy/libdspy/dspy-tree-view.c:314
+msgid "Object Path"
+msgstr "Objektuaren bidea"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:38
+msgid "Interface"
+msgstr "Interfazea"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:64
+msgid "Method"
+msgstr "Metodoa"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:145
+msgid "Result"
+msgstr "Emaitza"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:186
+#: src/plugins/glade/gtk/menus.ui:27
+msgid "Copy"
+msgstr "Kopiatu"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:198
+msgid "Elapsed Time"
+msgstr "Igarotako denbora"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:14
+msgid "Bus Address"
+msgstr "Bus-helbidea"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:64
+msgid "Owner"
+msgstr "Jabea"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:89
+msgid "Process ID"
+msgstr "Prozesuaren IDa"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+#, c-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "Activatable"
+msgstr "Aktibagarria"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+msgid "Yes"
+msgstr "Bai"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "No"
+msgstr "Ez"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+#, c-format
+msgid "%s: %u"
+msgstr "%s: %u"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+msgid "PID"
+msgstr "PIDa"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:409
+msgid "read/write"
+msgstr "irakurri/idatzi"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:411
+msgid "write-only"
+msgstr "idazteko soilik"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:413
+msgid "read-only"
+msgstr "irakurtzeko soilik"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:528
+msgid "Interfaces"
+msgstr "interfazeak"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:531
+msgid "Methods"
+msgstr "Metodoak"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:537
+msgid "Properties"
+msgstr "Propietateak"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:553
+#: src/plugins/glade/gbp-glade-editor-addin.c:79
+msgid "Signals"
+msgstr "Seinaleak"
+
+#. translators: %s is replaced with the simple D-Bus type string
+#: src/plugins/dspy/libdspy/dspy-signature.c:79
+#, c-format
+msgid "Array of [%s]"
+msgstr "[%s] matrizea"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:153
+msgid "Access Denied by Peer"
+msgstr "Parekoak ukatutako sarbidea"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:155
+msgid "Authentication Failed"
+msgstr "Huts egin du autentifikatzean"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:157
+msgid "Operation Timed Out"
+msgstr "Eragiketak denbora agortu du"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:159
+msgid "Lost Connection to Bus"
+msgstr "Konexioa galdu da bus-arekin"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:161
+msgid "D-Bus Connection Failed"
+msgstr "D-Bus konexioak huts egin du"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:460
+msgid "Connect"
+msgstr "Konektatu"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:461
+msgid "Provide the address of the message bus"
+msgstr "Eman mezu-busaren helbidea"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:463
+#: src/plugins/dspy/libdspy/gtk/menus.ui:5
+msgid "Connect to Other Bus"
+msgstr "Konektatu beste bus batekin"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:45
+msgid "Search Bus Names"
+msgstr "Bilatu bus-izenak"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:59
+msgid "Bus Names"
+msgstr "Bus-izenak"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:123
+msgid "Select a Bus Name"
+msgstr "Hautatu bus-izen ba"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:124
+msgid "Select a bus name to introspect the peer."
+msgstr "Hautatu bus-izen bat parea ikuskatzeko"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.c:260
+msgid "There is a file with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are files with unsaved changes. Save changes before closing?"
+msgstr[0] "Fitxategi batek gorde gabeko aldaketak ditu. Aldaketak gorde nahi dituzu itxi aurretik?"
+msgstr[1] "Fitxategi batzuk gorde gabeko aldaketak dituzte. Aldaketak gorde nahi dituzu itxi aurretik?"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:27
+msgid "Select the files to save:"
+msgstr "Hautatu gordeko diren fitxategiak:"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:80
+msgid "If you close without saving, all your changes will be permanently lost."
+msgstr "Gorde gabe ixten baduzu, aldaketa guztiak betiko galduko dira."
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
@@ -3950,7 +4199,7 @@ msgstr "Erabili editorearen interfaze minimoa"
 #: src/plugins/editor/gbp-editor-frame-controls.c:182
 #, c-format
 msgid "Provide a number between 1 and %u"
-msgstr ""
+msgstr "Eman 1 eta %u arteko zenbaki bat"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:23
 msgid "Go to line number"
@@ -3965,38 +4214,38 @@ msgid "Go"
 msgstr "Joan"
 
 #: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
-msgid "New Workspace…"
-msgstr "Laneko area berria..."
+msgid "New Editor Workspace…"
+msgstr "Editorearen laneko area berria..."
 
-#: src/plugins/editor/gtk/menus.ui:93
+#: src/plugins/editor/gtk/menus.ui:95
 msgid "New File"
 msgstr "Fitxategi berria"
 
-#: src/plugins/editor/gtk/menus.ui:109
+#: src/plugins/editor/gtk/menus.ui:113
 msgid "Move Left"
 msgstr "Mugitu ezkerrera"
 
-#: src/plugins/editor/gtk/menus.ui:113
+#: src/plugins/editor/gtk/menus.ui:117
 msgid "Move Right"
 msgstr "Mugitu eskuinera"
 
-#: src/plugins/editor/gtk/menus.ui:124
+#: src/plugins/editor/gtk/menus.ui:128
 msgid "Document"
 msgstr "Dokumentua"
 
-#: src/plugins/editor/gtk/menus.ui:127
+#: src/plugins/editor/gtk/menus.ui:131 src/plugins/terminal/gtk/menus.ui:34
 msgid "Open in New Frame"
 msgstr "Ireki marko berrian"
 
-#: src/plugins/editor/gtk/menus.ui:133
+#: src/plugins/editor/gtk/menus.ui:137
 msgid "Open in New Workspace"
 msgstr "Ireki laneko area berrian"
 
-#: src/plugins/editor/gtk/menus.ui:137
+#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:39
 msgid "Split"
 msgstr "Banandu"
 
-#: src/plugins/editor/gtk/menus.ui:164
+#: src/plugins/editor/gtk/menus.ui:168
 msgid "Save _As"
 msgstr "Gorde _honela"
 
@@ -4018,12 +4267,12 @@ msgstr "ESlint"
 
 #: src/plugins/eslint/eslint_plugin.py:154
 msgid "Enable the use of ESLint, which may execute code in your project"
-msgstr ""
+msgstr "Gaitu ESLint-en erabilera, zure proiektuan kodea exekutatu dezan"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/eslint/eslint_plugin.py:156
 msgid "eslint javascript lint code execute execution"
-msgstr ""
+msgstr "eslint javascript lint kodea exekutatu exekuzioa"
 
 #: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
 msgid "Enable ESLint"
@@ -4053,7 +4302,7 @@ msgstr "%s proiektua klonatzen"
 msgid "Downloading application sources…"
 msgstr "Aplikazio-iturburuak deskargatzen..."
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:667
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Hutse egin du flatpak manifestua kentzeak: %s"
@@ -4142,15 +4391,19 @@ msgstr[1] "Erakutsi %u exekuzio-denbora gehiago"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak exekuzio-denborak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:842
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:857
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:844
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:859
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:861
+msgid "Flatpak"
+msgstr "Flatpak"
 
 #. Translators: %s is replaced with the runtime identifier
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:80
@@ -4201,14 +4454,14 @@ msgstr "“flatpak-builder” programa beharrezkoa da Flatpak sisteman oinarritu
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr ""
+msgstr "GCC %s Cross-Compiler (sistema)"
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
-msgstr ""
+msgstr "Builder aplikazioak huts egin du biltegia klonatzeko beharrezkoak ziren kredentzialak hornitzean."
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -4222,22 +4475,27 @@ msgstr "Sarea ez dago erabilgarri, azpimoduluaren eguneratzea saltatzen"
 msgid "Initialize git submodules"
 msgstr "Hasieratu git azpimoduluak"
 
+#: src/plugins/git/gbp-git-vcs.c:206
+msgid "Pushed."
+msgstr "Bultzatua."
+
+#: src/plugins/git/gbp-git-vcs.c:244
+#, c-format
+msgid "Pushing ref “%s”"
+msgstr ""
+
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "“%s” protokoloa ez da onartzen."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:220
+#: src/plugins/git/gbp-git-vcs-cloner.c:224
 msgid "Cloning repository"
 msgstr "Biltegia klonatzen"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:236
+#: src/plugins/git/gbp-git-vcs-cloner.c:240
 msgid "A valid Git URL is required"
 msgstr "Baliozko Git URLa behar da"
-
-#: src/plugins/glade/gbp-glade-editor-addin.c:79
-msgid "Signals"
-msgstr "Seinaleak"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
 #: src/plugins/glade/gbp-glade-frame-addin.c:300
@@ -4308,7 +4566,7 @@ msgstr "Aldatu hautapen-modura"
 
 #: src/plugins/glade/gbp-glade-page.c:479
 msgid "Switch to drag-resize mode"
-msgstr ""
+msgstr "Aldatu arrastatu eta tamaina aldatzeko modura"
 
 #: src/plugins/glade/gbp-glade-page.c:480
 msgid "Switch to margin editor"
@@ -4354,10 +4612,6 @@ msgstr "Ireki _aurrebista"
 msgid "Cut"
 msgstr "Ebaki"
 
-#: src/plugins/glade/gtk/menus.ui:27
-msgid "Copy"
-msgstr "Kopiatu"
-
 #: src/plugins/glade/gtk/menus.ui:32
 msgid "Paste"
 msgstr "Itsatsi"
@@ -4376,7 +4630,7 @@ msgstr "Desegin"
 msgid "Redo"
 msgstr "Berregin"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/glade/gtk/menus.ui:75
 msgid "UI Designer"
 msgstr "Interfazearen diseinatzailea"
 
@@ -4390,12 +4644,12 @@ msgstr "Pylint"
 
 #: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
 msgid "Enable the use of pylint, which may execute code in your project"
-msgstr ""
+msgstr "Gaitu pylint-en erabilera, zure proiektuan kodea exekutatu dezan"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:67
 msgid "pylint python lint code execute execution"
-msgstr ""
+msgstr "pylint python lint kodea exekutatu exekuzioa"
 
 #: src/plugins/gnome-code-assistance/ide-gca-service.c:183
 msgid "No language specified"
@@ -4512,12 +4766,12 @@ msgstr "Iradoki osatzeak Python-etik"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Erabili Jedi Python lengoaiarako osatzeak eskaintzeko"
 
-#: src/plugins/ls/gbp-ls-page.c:285
+#: src/plugins/ls/gbp-ls-page.c:316
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Ezin izan da direktorioa kargatu: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:345
+#: src/plugins/ls/gbp-ls-page.c:388
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Direktorioa"
@@ -4529,6 +4783,18 @@ msgstr "Tamaina"
 #: src/plugins/ls/gbp-ls-page.ui:58
 msgid "Modified"
 msgstr "Aldatze-data"
+
+#: src/plugins/ls/gtk/menus.ui:9
+msgid "Directory Browser"
+msgstr "Direktorio-arakatzailea"
+
+#: src/plugins/ls/gtk/menus.ui:21
+msgid "Switch to Folder"
+msgstr "Joan karpetara"
+
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+msgid "Open Containing Folder"
+msgstr "Ireki karpeta edukitzailea"
 
 #: src/plugins/make/make_plugin.py:110
 msgid "Build project"
@@ -4613,17 +4879,17 @@ msgstr "Tresna-katea"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:410
 msgid "No Provided Tool"
-msgstr ""
+msgstr "Ez da tresnarik hornitu"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
-msgstr ""
+msgstr "Sysroot-a identifikatzeko izena."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
-msgstr ""
+msgstr "Sysroot-aren sistema-arkitektura."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
 msgid "Add Tool:"
@@ -4662,7 +4928,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
 #: src/plugins/meson/gbp-meson-utils.c:110
 msgid "Package Config"
-msgstr ""
+msgstr "Paketeen konfigurazioa"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
 msgid "Any language"
@@ -4783,41 +5049,41 @@ msgid "An IRC Client for GNOME"
 msgstr "GNOMEren IRC bezeroa"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:131
-msgid "Todo"
-msgstr "Egitekoak"
+msgid "Sound Recorder"
+msgstr "Soinu grabatzailea"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:132
-msgid "Task manager for GNOME"
-msgstr "GNOMEren egitekoen kudeatzailea"
+msgid "A simple and modern sound recorder"
+msgstr "Soinu-grabatzaile xume eta modernoa"
 
-#: src/plugins/notification/ide-notification-addin.c:101
+#: src/plugins/notification/ide-notification-addin.c:102
 msgid "Build successful"
 msgstr "Eraikuntza ongi gauzatu da"
 
-#: src/plugins/notification/ide-notification-addin.c:102
+#: src/plugins/notification/ide-notification-addin.c:103
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "“%s” proiektuaren eraikuntza osatu da"
 
-#: src/plugins/notification/ide-notification-addin.c:106
-#: src/plugins/notification/ide-notification-addin.c:167
+#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:193
 msgid "Build failed"
 msgstr "Eraikuntzak huts egin du"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:108
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "“%s” proiektuaren eraikuntzak huts egin du"
 
-#: src/plugins/notification/ide-notification-addin.c:186
+#: src/plugins/notification/ide-notification-addin.c:184
 msgid "Build succeeded"
 msgstr "Eraikuntza ongi egin da"
 
-#: src/plugins/notification/ide-notification-addin.c:188
+#: src/plugins/notification/ide-notification-addin.c:186
 msgid "Build configured"
 msgstr "Eraikuntza konfiguratu da"
 
-#: src/plugins/notification/ide-notification-addin.c:190
+#: src/plugins/notification/ide-notification-addin.c:188
 msgid "Build bootstrapped"
 msgstr "Eraikuntza kargatu da"
 
@@ -4829,18 +5095,22 @@ msgstr "npm mendekotasunak deskargatzen"
 msgid "Bootstrapping project"
 msgstr "Proiektua kargatzen"
 
+#: src/plugins/podman/gbp-podman-runtime.c:126
+msgid "Podman"
+msgstr ""
+
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:132
+#: src/plugins/podman/gbp-podman-runtime.c:134
 msgid "Containers/Podman"
 msgstr ""
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
-#: src/plugins/project-tree/gbp-rename-file-popover.c:144
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Direktorio hori badago lehendik ere."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
-#: src/plugins/project-tree/gbp-rename-file-popover.c:147
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Izen hori duen fitxategia badago lehendik ere."
 
@@ -4900,40 +5170,36 @@ msgstr "Fitxategiak berehalako batean kopiatuko dira"
 msgid "Project Tree"
 msgstr "Proiektuaren zuhaitza"
 
-#: src/plugins/project-tree/gbp-rename-file-popover.c:84
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
 msgstr "Aldatu %s izena"
 
-#: src/plugins/project-tree/gtk/menus.ui:7
+#: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New File…"
 msgstr "Fitxategi berria..."
 
-#: src/plugins/project-tree/gtk/menus.ui:12
+#: src/plugins/project-tree/gtk/menus.ui:14
 msgid "New Folder…"
 msgstr "Karpeta berria..."
 
-#: src/plugins/project-tree/gtk/menus.ui:23
+#: src/plugins/project-tree/gtk/menus.ui:26
 msgid "Open With…"
 msgstr "Ireki honekin..."
 
-#: src/plugins/project-tree/gtk/menus.ui:27
+#: src/plugins/project-tree/gtk/menus.ui:30
 msgid "Source Code Editor"
 msgstr "Iturburu-kodearen editorea"
 
-#: src/plugins/project-tree/gtk/menus.ui:41
-msgid "Open Containing Folder"
-msgstr "Ireki karpeta edukitzailea"
-
-#: src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/project-tree/gtk/menus.ui:45
 msgid "Open in Terminal"
 msgstr "Ireki terminalean"
 
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:59
 msgid "Move to Trash"
 msgstr "Bota zakarrontzira"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:65
 msgid "Display Options"
 msgstr "Bistaratze-aukerak"
 
@@ -4975,6 +5241,10 @@ msgstr "%s kentzen\n"
 #: src/plugins/recent/gbp-recent-section.c:470
 msgid "Removing Files…"
 msgstr "Fitxategiak kentzen..."
+
+#: src/plugins/recent/gbp-recent-section.c:472
+msgid "_Close"
+msgstr "It_xi"
 
 #: src/plugins/recent/gbp-recent-section.ui:28
 msgid "Recent Projects"
@@ -5042,7 +5312,7 @@ msgstr "Bertan behera utzita"
 
 #: src/plugins/rustup/rustup_plugin.py:423
 msgid "Finished"
-msgstr "Amaituta"
+msgstr "Amaitua"
 
 #: src/plugins/rustup/rustup_plugin.py:439
 msgid "Rustup"
@@ -5258,40 +5528,25 @@ msgstr "Hautatu ikurra..."
 msgid "Document Outline"
 msgstr "Dokumentuaren eskema"
 
-#: src/plugins/sysprof/gbp-sysprof-surface.c:114
-#: src/plugins/sysprof/gtk/menus.ui:20
+#: src/plugins/sysprof/gbp-sysprof-surface.c:56
+#: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Profiler"
 msgstr "Profilatzailea"
 
-#: src/plugins/sysprof/gbp-sysprof-surface.ui:20
-msgid "Failure"
-msgstr "Hutsegitea"
-
-#: src/plugins/sysprof/gbp-sysprof-surface.ui:28
-msgid "_Close"
-msgstr "_Itxi"
-
-#. the action:// link is used to run the project
-#: src/plugins/sysprof/gbp-sysprof-surface.ui:49
-msgid ""
-"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
-"profiler</a> from the run menu to begin"
-msgstr ""
-
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:370
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:342
 msgid "Open Sysprof Capture…"
 msgstr "Ireki Sysprof Capture…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:379
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:351
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof Capture (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:385
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:357
 msgid "All Files"
 msgstr "Fitxategi guztiak"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:492
-#: src/plugins/sysprof/gtk/menus.ui:34 src/plugins/sysprof/gtk/menus.ui:44
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:480
+#: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Exekutatu profilatzailearekin"
 
@@ -5302,15 +5557,15 @@ msgstr "Ireki Sysprof Capture…"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
 msgid "Add sysroot"
-msgstr ""
+msgstr "Gehitu sysroot-a"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:90
 msgid "Define a new sysroot target to build against a different target"
-msgstr ""
+msgstr "Definitu sysroot helburu berria beste helburu baten arabera eraikitzeko"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:138
 msgid "Sysroots"
-msgstr ""
+msgstr "Sysroot-ak"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
@@ -5327,27 +5582,27 @@ msgstr ""
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
 #, c-format
 msgid "%s (Sysroot SDK)"
-msgstr ""
+msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:66
+#: src/plugins/terminal/gbp-terminal-application-addin.c:96
 msgid "Use terminal interface"
 msgstr "Erabili terminalaren interfazea"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:202
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
 msgid "Application Output"
 msgstr "Aplikazioaren irteera"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:235
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
 #, c-format
 msgid "Application started at %s\r\n"
-msgstr ""
+msgstr "Aplikazioaren hasiera: %s\\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:256
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
 msgid "Application exited\r\n"
-msgstr ""
+msgstr "Aplikazioa amaitu da\\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:286
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
 msgstr "Terminala exekuzio-garaian"
@@ -5364,27 +5619,31 @@ msgstr ""
 msgid "New _Runtime Terminal"
 msgstr ""
 
-#: src/plugins/testui/gbp-test-output-panel.c:132
+#: src/plugins/testui/gbp-test-output-panel.c:135
 msgid "Unit Test Output"
-msgstr ""
+msgstr "Proba-unitatearen irteera"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:33
+#: src/plugins/testui/gbp-test-output-panel.ui:34
 msgid "Clear test output"
-msgstr ""
+msgstr "Garbitu probaren irteera"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:50
+#: src/plugins/testui/gbp-test-output-panel.ui:51
+msgid "Cancel tests"
+msgstr "Utzi probak"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:68
 msgid "Save test output"
-msgstr ""
+msgstr "Gorde probaren irteera"
 
 #: src/plugins/testui/gbp-test-tree-addin.c:197
 msgid "Unit Tests"
-msgstr ""
+msgstr "Proba-unitateak"
 
 #. translators: %s is replaced with the name of the unit test
 #: src/plugins/testui/gbp-test-tree-addin.c:407
 #, c-format
 msgid "Running test “%s”…"
-msgstr ""
+msgstr "“%s” proba exekutatzen…"
 
 #: src/plugins/todo/gbp-todo-panel.c:301
 msgid "Loading TODOs…"
@@ -5398,31 +5657,40 @@ msgstr "Itxaron zure proiektua eskaneatzen den bitartean"
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXMEak"
 
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
+msgid "Vagrant"
+msgstr "Vagrant"
+
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
-msgstr ""
+msgstr "Erakutsi Vala paketeak hornitutako erroreak eta abisuak"
 
 #. translators: keywords used when searching for preferences
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
-msgstr ""
+msgstr "vala diagnostikoak abisuak erroreak"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
 #: src/plugins/valgrind/valgrind_plugin.py:53
 msgid "Run with Valgrind"
 msgstr "Exekutatu Valgrind erabilita"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:412
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:459
 msgid "Branches"
 msgstr "Adarrak"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:422
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:469
 msgid "Tags"
 msgstr "Etiketak"
 
-#: src/plugins/vcsui/gtk/menus.ui:8
-msgid "Switch Branch"
-msgstr "Aldatu adarra"
+#: src/plugins/vcsui/gtk/menus.ui:7
+msgid "Switch to branch"
+msgstr "Aldatu adarrera"
+
+#: src/plugins/vcsui/gtk/menus.ui:12
+msgid "Push to origin"
+msgstr "Bultzatu jatorrira"
 
 #: src/plugins/vim/gb-vim.c:105
 #, c-format
@@ -5442,12 +5710,12 @@ msgstr "Ez da “%s” lengoaia aurkitu"
 #: src/plugins/vim/gb-vim.c:330
 #, c-format
 msgid "This command requires a GtkSourceView to be focused"
-msgstr ""
+msgstr "Komando honek behar du GtkSourceView fokatuta egotea"
 
 #: src/plugins/vim/gb-vim.c:341
 #, c-format
 msgid "This command requires a view to be focused"
-msgstr ""
+msgstr "Komando honek behar du bista bat fokatuta egotea"
 
 #: src/plugins/vim/gb-vim.c:398
 #, c-format
@@ -5457,7 +5725,7 @@ msgstr "Aukera ezezaguna: %s"
 #: src/plugins/vim/gb-vim.c:441
 #, c-format
 msgid "Cannot find colorscheme “%s”"
-msgstr ""
+msgstr "Ezin da “%s” kolore-eskema aurkitu"
 
 #: src/plugins/vim/gb-vim.c:477 src/plugins/vim/gb-vim.c:600
 #, c-format
@@ -5467,12 +5735,12 @@ msgstr "Ezin izan da laneko direktorioa aurkitu"
 #: src/plugins/vim/gb-vim.c:766
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
-msgstr ""
+msgstr "Baliogabeko :sintaxia azpikomandoa: %s"
 
 #: src/plugins/vim/gb-vim.c:1203
 #, c-format
 msgid "Invalid search and replace request"
-msgstr ""
+msgstr "Bilatzeko eta ordezteko kontsulta baliogabea"
 
 #: src/plugins/vim/gb-vim.c:1213
 msgid "Change the pages colorscheme"
@@ -5488,7 +5756,7 @@ msgstr "Garbitu bilaketaren nabarmentzea"
 
 #: src/plugins/vim/gb-vim.c:1219
 msgid "Open a file by path"
-msgstr ""
+msgstr "Ireki fitxategi bat bide-izenaren arabera"
 
 #: src/plugins/vim/gb-vim.c:1220
 msgid "Close the page"
@@ -5504,7 +5772,7 @@ msgstr "Ordenatu hautatutako lerroak"
 
 #: src/plugins/vim/gb-vim.c:1223
 msgid "Create a split page below the current page"
-msgstr ""
+msgstr "Sortu zatitze-orri bat uneko orriaren azpian"
 
 #: src/plugins/vim/gb-vim.c:1224
 msgid "Toggle syntax highlighting"
