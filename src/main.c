@@ -175,6 +175,15 @@ home_contains_symlink (void)
 static gboolean
 is_running_in_shell (void)
 {
+  const gchar *shlvl = g_getenv ("SHLVL");
+
+  /* GNOME Shell, among other desktop shells may set SHLVL=0 to indicate
+   * that we are not running within a shell. Use that before checking any
+   * file-descriptors since it is more reliable.
+   */
+  if (ide_str_equal0 (shlvl, "0"))
+    return FALSE;
+
   /* If stdin is not a TTY, then assume we have no access to communicate
    * with the user via console. We use stdin instead of stdout as a logging
    * system may have a PTY for stdout to get colorized output.
