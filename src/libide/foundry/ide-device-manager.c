@@ -640,6 +640,14 @@ ide_device_manager_set_device (IdeDeviceManager *self,
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (!device || IDE_IS_DEVICE (device));
 
+  /* Short-circuit if we're setting to local and the current
+   * device is already local (null).
+   */
+  if (self->device == NULL &&
+      device != NULL &&
+      ide_str_equal0 ("local", ide_device_get_id (device)))
+    return;
+
   if (g_set_object (&self->device, device))
     {
       const gchar *device_id = NULL;
