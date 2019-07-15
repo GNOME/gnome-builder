@@ -208,7 +208,7 @@ ide_application_activate_worker (IdeApplication *self)
   g_assert (self->plugin != NULL);
 
 #ifdef __linux__
-  prctl (PR_SET_PDEATHSIG, SIGHUP);
+  prctl (PR_SET_PDEATHSIG, SIGKILL);
 #endif
 
   IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);
