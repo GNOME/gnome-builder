@@ -635,10 +635,10 @@ void
 ide_device_manager_set_device (IdeDeviceManager *self,
                                IdeDevice        *device)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (!device || IDE_IS_DEVICE (device));
-
-  IDE_ENTRY;
 
   if (g_set_object (&self->device, device))
     {
