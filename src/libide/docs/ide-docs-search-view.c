@@ -47,6 +47,13 @@ struct _IdeDocsSearchView
 
 G_DEFINE_TYPE (IdeDocsSearchView, ide_docs_search_view, GTK_TYPE_BIN)
 
+enum {
+  ITEM_ACTIVATED,
+  N_SIGNALS
+};
+
+static guint signals [N_SIGNALS];
+
 static void
 on_go_previous_clicked_cb (IdeDocsSearchView *self,
                            GtkButton         *button)
@@ -172,6 +179,25 @@ ide_docs_search_view_class_init (IdeDocsSearchViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeDocsSearchView, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdeDocsSearchView, sections);
   gtk_widget_class_bind_template_child (widget_class, IdeDocsSearchView, titles);
+
+  /**
+   * IdeDocsSearchView::item-activated:
+   * @self: an #IdeDocsSearchView
+   * @item: an #IdeDocsItem
+   *
+   * The "item-activated" signal is emitted when a documentation item
+   * has been activated and should be displayed to the user.
+   *
+   * Since: 3.34
+   */
+  signals [ITEM_ACTIVATED] =
+    g_signal_new ("item-activated",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_DOCS_ITEM);
 }
 
 static void
@@ -223,7 +249,7 @@ on_item_activated_cb (IdeDocsSearchView    *self,
     }
   else
     {
-      g_print ("Display docs for %s\n", ide_docs_item_get_title (item));
+      g_signal_emit (self, signals [ITEM_ACTIVATED], 0, item);
     }
 }
 

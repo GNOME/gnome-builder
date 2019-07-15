@@ -135,6 +135,7 @@ gbp_devhelp_docs_provider_search_async (IdeDocsProvider     *provider,
                   ide_docs_item_set_title (child, kw->name);
                   ide_docs_item_set_display_name (child, highlight);
                   ide_docs_item_set_kind (child, kw->kind);
+                  ide_docs_item_set_url (group, kw->link);
                   ide_docs_item_set_priority (group, prio);
                   ide_docs_item_append (group, child);
 
