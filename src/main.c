@@ -172,6 +172,19 @@ home_contains_symlink (void)
   return _home_contains_symlink (g_get_home_dir ());
 }
 
+static gboolean
+is_running_in_shell (void)
+{
+  /* If stdin is not a TTY, then assume we have no access to communicate
+   * with the user via console. We use stdin instead of stdout as a logging
+   * system may have a PTY for stdout to get colorized output.
+   */
+  if (!isatty (STDIN_FILENO))
+    return FALSE;
+
+  return TRUE;
+}
+
 gint
 main (gint   argc,
       gchar *argv[])
@@ -185,7 +198,7 @@ main (gint   argc,
   int ret;
 
   /* Setup our gdb fork()/exec() helper if we're in a terminal */
-  if (isatty (STDOUT_FILENO))
+  if (is_running_in_shell ())
     bug_buddy_init ();
 
   /* Always ignore SIGPIPE */
