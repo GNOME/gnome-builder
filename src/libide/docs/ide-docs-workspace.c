@@ -87,6 +87,20 @@ on_search_entry_changed_cb (IdeDocsWorkspace *self,
 }
 
 static void
+on_search_view_item_activated_cb (IdeDocsWorkspace  *self,
+                                  IdeDocsItem       *item,
+                                  IdeDocsSearchView *view)
+{
+  g_assert (IDE_IS_DOCS_WORKSPACE (self));
+  g_assert (IDE_IS_DOCS_ITEM (item));
+  g_assert (IDE_IS_DOCS_SEARCH_VIEW (view));
+
+  g_print ("Activate view for %s at %s\n",
+           ide_docs_item_get_title (item),
+           ide_docs_item_get_url (item));
+}
+
+static void
 ide_docs_workspace_class_init (IdeDocsWorkspaceClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -105,6 +119,12 @@ static void
 ide_docs_workspace_init (IdeDocsWorkspace *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->search_view,
+                           "item-activated",
+                           G_CALLBACK (on_search_view_item_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->entry,
                            "changed",
