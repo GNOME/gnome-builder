@@ -1,4 +1,18 @@
 ==============
+Version 3.32.4
+==============
+
+Changes since last release:
+
+ • Be more graceful when used without version control
+ • Fix initial selection in project-tree popovers
+ • Prevent interactivity when opening a project from the greeter
+ • Make about dialog transient/modal
+ • Disable gdb self-inspection when launched outside of a terminal
+ • Fixes when run outside of a terminal (related to O_NOCTTY).
+ • Updated translations
+
+==============
 Version 3.32.3
 ==============
 

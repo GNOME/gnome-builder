@@ -86,6 +86,23 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.32.4" date="2019-07-15">
+      <description>
+        <p>
+          Builder 3.32.4 is here with another round of bug fixes!
+        </p>
+        <ul>
+          <li>Be more graceful when used without version control</li>
+          <li>Fix initial selection in project-tree popovers</li>
+          <li>Prevent interactivity when opening a project from the greeter</li>
+          <li>Make about dialog transient/modal</li>
+          <li>Disable gdb self-inspection when launched outside of a terminal</li>
+          <li>Fixes when run outside of a terminal</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.32.3" date="2019-06-11">
       <description>
         <p>
