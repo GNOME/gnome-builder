@@ -119,7 +119,7 @@ ide_application_actions_about (GSimpleAction *action,
 
   for (iter = windows; iter; iter = iter->next)
     {
-      if (IDE_IS_WORKBENCH (iter->data))
+      if (IDE_IS_WORKSPACE (iter->data))
         {
           parent = iter->data;
           break;
