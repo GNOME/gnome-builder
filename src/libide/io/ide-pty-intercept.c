@@ -127,15 +127,15 @@ ide_pty_intercept_create_slave (IdePtyFd master_fd,
     return IDE_PTY_FD_INVALID;
 #endif
 
-  ret = open (name, O_RDWR | O_CLOEXEC | extra);
+  ret = open (name, O_NOCTTY | O_RDWR | O_CLOEXEC | extra);
 
   if (ret == IDE_PTY_FD_INVALID && errno == EINVAL)
     {
       gint flags;
 
-      ret = open (name, O_RDWR | O_CLOEXEC);
+      ret = open (name, O_NOCTTY | O_RDWR | O_CLOEXEC);
       if (ret == IDE_PTY_FD_INVALID && errno == EINVAL)
-        ret = open (name, O_RDWR);
+        ret = open (name, O_NOCTTY | O_RDWR);
 
       if (ret == IDE_PTY_FD_INVALID)
         return IDE_PTY_FD_INVALID;
