@@ -485,11 +485,7 @@ find_terminal_executable (void)
   for (guint i = 0; i < G_N_ELEMENTS (terminals) && path == NULL; ++i)
     {
       if (terminals[i] != NULL)
-        {
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          path = ide_find_program_in_host_path (terminals[i]);
-          G_GNUC_END_IGNORE_DEPRECATIONS
-        }
+        path = ide_find_program_in_host_path (terminals[i]);
     }
 
   return g_steal_pointer (&path);
