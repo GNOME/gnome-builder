@@ -36,7 +36,7 @@
 #include <unistd.h>
 
 #include "ide-flatpak-subprocess-private.h"
-#include "ide-gtask-private.h"
+#include "ide-task.h"
 
 #define FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV (1 << 0)
 #define FLATPAK_HOST_COMMAND_FLAGS_WATCH_BUS (1 << 1)
@@ -86,7 +86,7 @@ struct _IdeFlatpakSubprocess
 
   guint exited_subscription;
 
-  /* GList of GTasks for wait_async() */
+  /* GList of IdeTasks for wait_async() */
   GList *waiting;
 
   /* Mutex/Cond pair guards client_has_exited */
@@ -126,13 +126,13 @@ struct _IdeFlatpakSubprocess
  *
  * We keep our own private GCancellable.  In the event that any of the
  * above suffers from an error condition (including the user cancelling
- * their cancellable) we immediately dispatch the GTask with the error
+ * their cancellable) we immediately dispatch the IdeTask with the error
  * result and fire our cancellable to cleanup any pending operations.
  * In the case that the error is that the user's cancellable was fired,
- * it's vaguely wasteful to report an error because GTask will handle
+ * it's vaguely wasteful to report an error because IdeTask will handle
  * this automatically, so we just return FALSE.
  *
- * We let each pending sub-operation take a ref on the GTask of the
+ * We let each pending sub-operation take a ref on the IdeTask of the
  * communicate operation.  We have to be careful that we don't report
  * the task completion more than once, though, so we keep a flag for
  * that.
@@ -294,21 +294,21 @@ ide_flatpak_subprocess_wait_async (IdeSubprocess       *subprocess,
                                     gpointer             user_data)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GMutexLocker) locker = NULL;
 
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_flatpak_subprocess_wait_async);
-  g_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_flatpak_subprocess_wait_async);
+  ide_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
 
   locker = g_mutex_locker_new (&self->waiter_mutex);
 
   if (self->client_has_exited)
     {
-      ide_g_task_return_boolean_from_main (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -323,7 +323,7 @@ ide_flatpak_subprocess_wait_finish (IdeSubprocess  *subprocess,
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -403,13 +403,13 @@ ide_flatpak_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_FLATPAK_SUBPROCESS (subprocess), FALSE);
-  g_return_val_if_fail (g_task_is_valid (result, subprocess), FALSE);
+  g_return_val_if_fail (ide_task_is_valid (result, subprocess), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   g_object_ref (result);
 
-  state = g_task_get_task_data ((GTask*)result);
-  if (!g_task_propagate_boolean ((GTask*)result, error))
+  state = ide_task_get_task_data ((IdeTask*)result);
+  if (!ide_task_propagate_boolean ((IdeTask*)result, error))
     IDE_GOTO (out);
 
   if (!communicate_result_validate_utf8 ("stdout", stdout_buf, state->stdout_buf, error))
@@ -651,9 +651,10 @@ ide_subprocess_communicate_cancelled (gpointer user_data)
   IDE_ENTRY;
 
   g_assert (state != NULL);
-  g_assert (G_IS_CANCELLABLE (state->cancellable));
+  g_assert (!state->cancellable || G_IS_CANCELLABLE (state->cancellable));
 
-  g_cancellable_cancel (state->cancellable);
+  if (state->cancellable != NULL)
+    g_cancellable_cancel (state->cancellable);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -666,15 +667,15 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
   CommunicateState *state;
   IdeFlatpakSubprocess *subprocess;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   gpointer source;
 
   IDE_ENTRY;
 
   g_assert (source_object != NULL);
 
-  subprocess = g_task_get_source_object (task);
-  state = g_task_get_task_data (task);
+  subprocess = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
   source = source_object;
 
   state->outstanding_ops--;
@@ -703,7 +704,7 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
     }
   else if (source == subprocess)
     {
-      (void) ide_subprocess_wait_finish (IDE_SUBPROCESS (subprocess), result, &error);
+      ide_subprocess_wait_finish (IDE_SUBPROCESS (subprocess), result, &error);
     }
   else
     g_assert_not_reached ();
@@ -720,12 +721,12 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
         {
           state->reported_error = TRUE;
           g_cancellable_cancel (state->cancellable);
-          ide_g_task_return_error_from_main (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
         }
     }
   else if (state->outstanding_ops == 0)
     {
-      ide_g_task_return_boolean_from_main (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
     }
 
   IDE_EXIT;
@@ -740,19 +741,19 @@ ide_flatpak_subprocess_communicate_internal (IdeFlatpakSubprocess *subprocess,
                                               gpointer               user_data)
 {
   CommunicateState *state;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (subprocess, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_flatpak_subprocess_communicate_internal);
-  g_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
+  task = ide_task_new (subprocess, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_flatpak_subprocess_communicate_internal);
+  ide_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
 
   state = g_slice_new0 (CommunicateState);
-  g_task_set_task_data (task, state, ide_subprocess_communicate_state_free);
+  ide_task_set_task_data (task, state, ide_subprocess_communicate_state_free);
 
   state->cancellable = g_cancellable_new ();
   state->add_nul = add_nul;
@@ -831,7 +832,7 @@ ide_flatpak_subprocess_communicate_finish (IdeSubprocess  *subprocess,
                                             GError        **error)
 {
   CommunicateState *state;
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   gboolean success;
 
   IDE_ENTRY;
@@ -841,11 +842,11 @@ ide_flatpak_subprocess_communicate_finish (IdeSubprocess  *subprocess,
 
   g_object_ref (task);
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
 
   g_assert (state != NULL);
 
-  success = g_task_propagate_boolean (task, error);
+  success = ide_task_propagate_boolean (task, error);
 
   if (success)
     {
@@ -1001,9 +1002,9 @@ ide_flatpak_subprocess_complete_command_locked (IdeFlatpakSubprocess *self,
 
   for (const GList *iter = waiting; iter != NULL; iter = iter->next)
     {
-      g_autoptr(GTask) task = iter->data;
+      g_autoptr(IdeTask) task = iter->data;
 
-      ide_g_task_return_boolean_from_main (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
     }
 
   g_list_free (waiting);
