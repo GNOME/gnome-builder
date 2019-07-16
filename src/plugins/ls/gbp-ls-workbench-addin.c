@@ -110,7 +110,7 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
     surface = ide_workspace_get_surface_by_name (workspace, "terminal");
 
   /* If this isn't a directory, get the parent */
-  if (!g_str_equal (content_type, "inode/directory"))
+  if (!ide_str_equal0 (content_type, "inode/directory"))
     file = parent = g_file_get_parent (file);
 
   /* First try to find an existing view for the file */
