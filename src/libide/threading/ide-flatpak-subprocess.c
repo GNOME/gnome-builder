@@ -321,7 +321,7 @@ ide_flatpak_subprocess_wait_finish (IdeSubprocess  *subprocess,
                                      GError        **error)
 {
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
@@ -838,7 +838,7 @@ ide_flatpak_subprocess_communicate_finish (IdeSubprocess  *subprocess,
   IDE_ENTRY;
 
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (subprocess));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   g_object_ref (task);
 
