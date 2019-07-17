@@ -132,6 +132,18 @@ on_search_view_item_activated_cb (IdeDocsWorkspace  *self,
 }
 
 static void
+ide_docs_workspace_focus_search_cb (GtkWidget *widget,
+                                    gpointer   user_data)
+{
+  IdeDocsWorkspace *self = user_data;
+
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (IDE_IS_DOCS_WORKSPACE (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+}
+
+static void
 ide_docs_workspace_destroy (GtkWidget *widget)
 {
   IdeDocsWorkspace *self = (IdeDocsWorkspace *)widget;
@@ -166,6 +178,8 @@ ide_docs_workspace_class_init (IdeDocsWorkspaceClass *klass)
 static void
 ide_docs_workspace_init (IdeDocsWorkspace *self)
 {
+  DzlShortcutController *controller;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect_object (self->search_view,
@@ -179,4 +193,14 @@ ide_docs_workspace_init (IdeDocsWorkspace *self)
                            G_CALLBACK (on_search_entry_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+
+  dzl_shortcut_controller_add_command_callback (controller,
+                                                "org.gnome.builder.docs.focus-search",
+                                                "<Control>K",
+                                                DZL_SHORTCUT_PHASE_BUBBLE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                                ide_docs_workspace_focus_search_cb,
+                                                self,
+                                                NULL);
 }
