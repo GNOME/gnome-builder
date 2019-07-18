@@ -751,6 +751,7 @@ ide_flatpak_subprocess_communicate_internal (IdeFlatpakSubprocess *subprocess,
   task = ide_task_new (subprocess, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_flatpak_subprocess_communicate_internal);
   ide_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
+  ide_task_set_release_on_propagate (task, FALSE);
 
   state = g_slice_new0 (CommunicateState);
   ide_task_set_task_data (task, state, ide_subprocess_communicate_state_free);
