@@ -428,11 +428,11 @@ ide_flatpak_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
 
 static gboolean
 ide_flatpak_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
-                                          const char     *stdin_buf,
-                                          GCancellable   *cancellable,
-                                          char          **stdout_buf,
-                                          char          **stderr_buf,
-                                          GError        **error)
+                                         const char     *stdin_buf,
+                                         GCancellable   *cancellable,
+                                         char          **stdout_buf,
+                                         char          **stderr_buf,
+                                         GError        **error)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
   g_autoptr(GAsyncResult) result = NULL;
@@ -452,11 +452,11 @@ ide_flatpak_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
   stdin_bytes = g_bytes_new (stdin_buf, stdin_buf_len);
 
   ide_flatpak_subprocess_communicate_internal (self,
-                                                TRUE,
-                                                stdin_bytes,
-                                                cancellable,
-                                                ide_flatpak_subprocess_sync_done,
-                                                &result);
+                                               TRUE,
+                                               stdin_bytes,
+                                               cancellable,
+                                               ide_flatpak_subprocess_sync_done,
+                                               &result);
   ide_flatpak_subprocess_sync_complete (self, &result);
   success = ide_subprocess_communicate_utf8_finish (subprocess, result, stdout_buf, stderr_buf, error);
 
@@ -734,11 +734,11 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
 
 static CommunicateState *
 ide_flatpak_subprocess_communicate_internal (IdeFlatpakSubprocess *subprocess,
-                                              gboolean               add_nul,
-                                              GBytes                *stdin_buf,
-                                              GCancellable          *cancellable,
-                                              GAsyncReadyCallback    callback,
-                                              gpointer               user_data)
+                                             gboolean              add_nul,
+                                             GBytes               *stdin_buf,
+                                             GCancellable         *cancellable,
+                                             GAsyncReadyCallback   callback,
+                                             gpointer              user_data)
 {
   CommunicateState *state;
   g_autoptr(IdeTask) task = NULL;
@@ -868,11 +868,11 @@ ide_flatpak_subprocess_communicate_finish (IdeSubprocess  *subprocess,
 
 static gboolean
 ide_flatpak_subprocess_communicate (IdeSubprocess  *subprocess,
-                                     GBytes         *stdin_buf,
-                                     GCancellable   *cancellable,
-                                     GBytes        **stdout_buf,
-                                     GBytes        **stderr_buf,
-                                     GError        **error)
+                                    GBytes         *stdin_buf,
+                                    GCancellable   *cancellable,
+                                    GBytes        **stdout_buf,
+                                    GBytes        **stderr_buf,
+                                    GError        **error)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
   g_autoptr(GAsyncResult) result = NULL;
@@ -884,11 +884,11 @@ ide_flatpak_subprocess_communicate (IdeSubprocess  *subprocess,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ide_flatpak_subprocess_communicate_internal (self,
-                                                FALSE,
-                                                stdin_buf,
-                                                cancellable,
-                                                ide_flatpak_subprocess_sync_done,
-                                                &result);
+                                               FALSE,
+                                               stdin_buf,
+                                               cancellable,
+                                               ide_flatpak_subprocess_sync_done,
+                                               &result);
   ide_flatpak_subprocess_sync_complete (self, &result);
 
   ret = ide_flatpak_subprocess_communicate_finish (subprocess, result, stdout_buf, stderr_buf, error);
