@@ -270,7 +270,16 @@ ide_vcs_cloner_clone_simple (IdeContext       *context,
                              GCancellable     *cancellable,
                              GError          **error)
 {
-  CloneSimple state = {0};
+  CloneSimple state = {
+    .context = context,
+    .module_name = module_name,
+    .url = url,
+    .branch = branch,
+    .destination = destination,
+    .notif = notif,
+    .cancellable = cancellable,
+    .error = NULL,
+  };
 
   g_return_val_if_fail (!IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_CONTEXT (context), FALSE);
@@ -279,15 +288,6 @@ ide_vcs_cloner_clone_simple (IdeContext       *context,
   g_return_val_if_fail (destination != NULL, FALSE);
   g_return_val_if_fail (!notif || IDE_IS_NOTIFICATION (notif), FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
-
-  state.context = context;
-  state.module_name = module_name;
-  state.url = url;
-  state.branch = branch;
-  state.destination = destination;
-  state.notif = notif;
-  state.cancellable = cancellable;
-  state.error = NULL;
 
   g_mutex_init (&state.mutex);
   g_cond_init (&state.cond);
