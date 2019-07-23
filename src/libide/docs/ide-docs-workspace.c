@@ -46,6 +46,7 @@ struct _IdeDocsWorkspace
   IdeDocsSearchView      *search_view;
   IdeDocsView            *view;
   GtkEntry               *entry;
+  IdeDocsPane            *pane;
 };
 
 G_DEFINE_TYPE (IdeDocsWorkspace, ide_docs_workspace, IDE_TYPE_WORKSPACE)
@@ -124,7 +125,7 @@ on_search_view_item_activated_cb (IdeDocsWorkspace  *self,
   g_assert (IDE_IS_DOCS_ITEM (item));
   g_assert (IDE_IS_DOCS_SEARCH_VIEW (view));
 
-  g_print ("Activate view for %s at %s\n",
+  g_debug ("Activate view for %s at %s",
            ide_docs_item_get_title (item),
            ide_docs_item_get_url (item));
 
@@ -142,6 +143,26 @@ ide_docs_workspace_focus_search_cb (GtkWidget *widget,
   g_assert (IDE_IS_DOCS_WORKSPACE (self));
 
   gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+}
+
+static void
+ide_docs_workspace_context_set (IdeWorkspace *workspace,
+                                IdeContext   *context)
+{
+  IdeDocsWorkspace *self = (IdeDocsWorkspace *)workspace;
+
+  g_assert (IDE_IS_DOCS_WORKSPACE (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  IDE_WORKSPACE_CLASS (ide_docs_workspace_parent_class)->context_set (workspace, context);
+
+  if (context != NULL)
+    {
+      IdeDocsLibrary *library;
+
+      library = ide_docs_library_from_context (context);
+      ide_docs_pane_set_library (self->pane, library);
+    }
 }
 
 static void
@@ -164,8 +185,11 @@ ide_docs_workspace_class_init (IdeDocsWorkspaceClass *klass)
 
   widget_class->destroy = ide_docs_workspace_destroy;
 
+  workspace_class->context_set = ide_docs_workspace_context_set;
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-docs/ui/ide-docs-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDocsWorkspace, entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeDocsWorkspace, pane);
   gtk_widget_class_bind_template_child (widget_class, IdeDocsWorkspace, search_view);
   gtk_widget_class_bind_template_child (widget_class, IdeDocsWorkspace, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeDocsWorkspace, view);

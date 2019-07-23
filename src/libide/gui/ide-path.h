@@ -1,4 +1,4 @@
-/* ide-docs-pane.h
+/* ide-path.h
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,18 +20,30 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <libide-core.h>
 
-#include "ide-docs-library.h"
+#include "ide-path-element.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DOCS_PANE (ide_docs_pane_get_type())
+#define IDE_TYPE_PATH (ide_path_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDocsPane, ide_docs_pane, IDE, DOCS_PANE, IdePane)
+IDE_AVAILABLE_IN_3_34
+G_DECLARE_FINAL_TYPE (IdePath, ide_path, IDE, PATH, GObject)
 
-IdeDocsLibrary *ide_docs_pane_get_library (IdeDocsPane    *self);
-void            ide_docs_pane_set_library (IdeDocsPane    *self,
-                                           IdeDocsLibrary *library);
+IDE_AVAILABLE_IN_3_34
+IdePath        *ide_path_new            (GPtrArray *elements);
+IDE_AVAILABLE_IN_3_34
+IdePath        *ide_path_get_parent     (IdePath   *self);
+IDE_AVAILABLE_IN_3_34
+guint           ide_path_get_n_elements (IdePath   *self);
+IDE_AVAILABLE_IN_3_34
+IdePathElement *ide_path_get_element    (IdePath   *self,
+                                         guint      position);
+IDE_AVAILABLE_IN_3_34
+gboolean        ide_path_has_prefix     (IdePath   *self,
+                                         IdePath   *prefix);
+IDE_AVAILABLE_IN_3_34
+gboolean        ide_path_is_root        (IdePath   *self);
 
 G_END_DECLS

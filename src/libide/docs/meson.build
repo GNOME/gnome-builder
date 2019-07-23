@@ -25,18 +25,22 @@ libide_docs_public_sources = [
   'libide-docs.c',
   'ide-docs-item.c',
   'ide-docs-library.c',
-  'ide-docs-pane.c',
   'ide-docs-provider.c',
   'ide-docs-query.c',
+  'ide-docs-workspace.c',
+]
+
+libide_docs_private_sources = [
+  'ide-docs-pane.c',
+  'ide-docs-pane-row.c',
   'ide-docs-search-model.c',
   'ide-docs-search-row.c',
   'ide-docs-search-section.c',
   'ide-docs-search-view.c',
   'ide-docs-view.c',
-  'ide-docs-workspace.c',
 ]
 
-libide_docs_sources = libide_docs_public_sources
+libide_docs_sources = libide_docs_public_sources + libide_docs_private_sources
 
 #
 # Enum generation

@@ -43,7 +43,20 @@ typedef struct
   guint         n_active;
 } Search;
 
+typedef struct
+{
+  IdeDocsItem *item;
+  guint        n_active;
+} Populate;
+
 G_DEFINE_TYPE (IdeDocsLibrary, ide_docs_library, IDE_TYPE_OBJECT)
+
+static void
+populate_free (Populate *populate)
+{
+  g_clear_object (&populate->item);
+  g_slice_free (Populate, populate);
+}
 
 static void
 search_free (Search *search)
@@ -172,7 +185,6 @@ ide_docs_library_search_cb (GObject      *object,
                             gpointer      user_data)
 {
   IdeDocsProvider *provider = (IdeDocsProvider *)object;
-  g_autoptr(GListModel) model = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   Search *search;
@@ -311,6 +323,101 @@ gboolean
 ide_docs_library_search_finish (IdeDocsLibrary  *self,
                                 GAsyncResult    *result,
                                 GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_DOCS_LIBRARY (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
+ide_docs_library_populate_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeDocsProvider *provider = (IdeDocsProvider *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  Populate *populate;
+
+  g_assert (G_IS_OBJECT (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  populate = ide_task_get_task_data (task);
+
+  if (!ide_docs_provider_populate_finish (provider, result, &error))
+    {
+      if (!ide_error_ignore (error))
+        g_warning ("%s failed to populate docs: %s",
+                   G_OBJECT_TYPE_NAME (provider),
+                   error->message);
+    }
+
+  populate->n_active--;
+
+  if (populate->n_active == 0)
+    ide_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_docs_library_populate_foreach_cb (IdeExtensionSetAdapter *adapter,
+                                      PeasPluginInfo         *plugin,
+                                      PeasExtension          *exten,
+                                      gpointer                user_data)
+{
+  IdeDocsProvider *provider = (IdeDocsProvider *)exten;
+  IdeTask *task = user_data;
+  Populate *populate;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin != NULL);
+  g_assert (IDE_IS_DOCS_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (task));
+
+  populate = ide_task_get_task_data (task);
+  populate->n_active++;
+
+  ide_docs_provider_populate_async (provider,
+                                    populate->item,
+                                    ide_task_get_cancellable (task),
+                                    ide_docs_library_populate_cb,
+                                    g_object_ref (task));
+}
+
+void
+ide_docs_library_populate_async (IdeDocsLibrary       *self,
+                                 IdeDocsItem          *item,
+                                 GCancellable         *cancellable,
+                                 GAsyncReadyCallback   callback,
+                                 gpointer              user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  Populate *state;
+
+  g_return_if_fail (IDE_IS_DOCS_LIBRARY (self));
+  g_return_if_fail (IDE_IS_DOCS_ITEM (item));
+
+  state = g_slice_new0 (Populate);
+  state->item = g_object_ref (item);
+  state->n_active = 0;
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_docs_library_populate_async);
+  ide_task_set_task_data (task, state, populate_free);
+
+  ide_extension_set_adapter_foreach (self->providers,
+                                     ide_docs_library_populate_foreach_cb,
+                                     task);
+
+  if (state->n_active == 0)
+    ide_task_return_boolean (task, TRUE);
+}
+
+gboolean
+ide_docs_library_populate_finish (IdeDocsLibrary  *self,
+                                  GAsyncResult    *result,
+                                  GError         **error)
 {
   g_return_val_if_fail (IDE_IS_DOCS_LIBRARY (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);

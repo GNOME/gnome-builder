@@ -20,7 +20,7 @@
           <object class="IdeSurface" id="docs_surface">
             <property name="visible">true</property>
             <child type="left">
-              <object class="IdeDocsPane">
+              <object class="IdeDocsPane" id="pane">
                 <property name="width-request">200</property>
                 <property name="visible">true</property>
               </object>

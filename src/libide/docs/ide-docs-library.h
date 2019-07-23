@@ -33,17 +33,27 @@ IDE_AVAILABLE_IN_3_34
 G_DECLARE_FINAL_TYPE (IdeDocsLibrary, ide_docs_library, IDE, DOCS_LIBRARY, IdeObject)
 
 IDE_AVAILABLE_IN_3_34
-IdeDocsLibrary *ide_docs_library_from_context  (IdeContext           *context);
+IdeDocsLibrary *ide_docs_library_from_context    (IdeContext           *context);
 IDE_AVAILABLE_IN_3_34
-void            ide_docs_library_search_async  (IdeDocsLibrary       *self,
-                                                IdeDocsQuery         *query,
-                                                IdeDocsItem          *results,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
+void            ide_docs_library_search_async    (IdeDocsLibrary       *self,
+                                                  IdeDocsQuery         *query,
+                                                  IdeDocsItem          *results,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
 IDE_AVAILABLE_IN_3_34
-gboolean        ide_docs_library_search_finish (IdeDocsLibrary       *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
+gboolean        ide_docs_library_search_finish   (IdeDocsLibrary       *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
+IDE_AVAILABLE_IN_3_34
+void            ide_docs_library_populate_async  (IdeDocsLibrary       *self,
+                                                  IdeDocsItem          *item,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_3_34
+gboolean        ide_docs_library_populate_finish (IdeDocsLibrary       *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
 
 G_END_DECLS

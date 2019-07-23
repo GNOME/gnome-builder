@@ -77,6 +77,18 @@ gbp_devhelp_docs_provider_populate_async (IdeDocsProvider     *provider,
       g_autoptr(IdeDocsItem) child = NULL;
 
       child = ide_docs_item_new ();
+      ide_docs_item_set_id (child, "devhelp:sdk");
+      ide_docs_item_set_title (child, "SDKs");
+      ide_docs_item_set_kind (child, IDE_DOCS_ITEM_KIND_COLLECTION);
+
+      ide_docs_item_append (item, child);
+    }
+  else if (ide_str_equal0 (ide_docs_item_get_id (item), "devhelp:sdks"))
+    {
+      g_autoptr(IdeDocsItem) child = NULL;
+
+      child = ide_docs_item_new ();
+      ide_docs_item_set_id (child, "devhelp:books");
       ide_docs_item_set_title (child, "Books");
       ide_docs_item_set_kind (child, IDE_DOCS_ITEM_KIND_COLLECTION);
 

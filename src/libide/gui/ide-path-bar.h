@@ -1,4 +1,4 @@
-/* ide-docs-pane.h
+/* ide-path-bar.h
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,18 +20,34 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <gtk/gtk.h>
+#include <libide-core.h>
 
-#include "ide-docs-library.h"
+#include "ide-path.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DOCS_PANE (ide_docs_pane_get_type())
+#define IDE_TYPE_PATH_BAR (ide_path_bar_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDocsPane, ide_docs_pane, IDE, DOCS_PANE, IdePane)
+IDE_AVAILABLE_IN_3_34
+G_DECLARE_DERIVABLE_TYPE (IdePathBar, ide_path_bar, IDE, PATH_BAR, GtkContainer)
 
-IdeDocsLibrary *ide_docs_pane_get_library (IdeDocsPane    *self);
-void            ide_docs_pane_set_library (IdeDocsPane    *self,
-                                           IdeDocsLibrary *library);
+struct _IdePathBarClass
+{
+  GtkContainerClass parent_instance;
+
+  /*< private >*/
+  gpointer _reserved[8];
+};
+
+IDE_AVAILABLE_IN_3_34
+GtkWidget *ide_path_bar_new           (void);
+IDE_AVAILABLE_IN_3_34
+IdePath   *ide_path_bar_get_path      (IdePathBar *self);
+IDE_AVAILABLE_IN_3_34
+void       ide_path_bar_set_path      (IdePathBar *path_bar,
+                                       IdePath    *path);
+IDE_AVAILABLE_IN_3_34
+IdePath   *ide_path_bar_get_selection (IdePathBar *self);
 
 G_END_DECLS

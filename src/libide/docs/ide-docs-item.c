@@ -41,7 +41,11 @@ typedef struct
   guint            deprecated : 1;
 } IdeDocsItemPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeDocsItem, ide_docs_item, G_TYPE_OBJECT)
+static void list_model_iface_init (GListModelInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdeDocsItem, ide_docs_item, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (IdeDocsItem)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   PROP_0,
@@ -738,4 +742,40 @@ ide_docs_item_get_nth_child (IdeDocsItem *self,
   g_return_val_if_fail (IDE_IS_DOCS_ITEM (self), NULL);
 
   return g_list_nth_data (priv->children.head, nth);
+}
+
+static guint
+ide_docs_item_get_n_items (GListModel *model)
+{
+  IdeDocsItem *self = IDE_DOCS_ITEM (model);
+  IdeDocsItemPrivate *priv = ide_docs_item_get_instance_private (self);
+
+  return priv->children.length;
+}
+
+static GType
+ide_docs_item_get_item_type (GListModel *model)
+{
+  return IDE_TYPE_DOCS_ITEM;
+}
+
+static gpointer
+ide_docs_item_get_item (GListModel *model,
+                        guint       position)
+{
+  IdeDocsItem *self = (IdeDocsItem *)model;
+  IdeDocsItemPrivate *priv = ide_docs_item_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_DOCS_ITEM (self), NULL);
+  g_return_val_if_fail (position < priv->children.length, NULL);
+
+  return g_object_ref (g_queue_peek_nth (&priv->children, position));
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_n_items = ide_docs_item_get_n_items;
+  iface->get_item_type = ide_docs_item_get_item_type;
+  iface->get_item = ide_docs_item_get_item;
 }

@@ -1,4 +1,4 @@
-/* ide-docs-pane.h
+/* ide-docs-pane-row.h
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,18 +20,17 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <gtk/gtk.h>
 
-#include "ide-docs-library.h"
+#include "ide-docs-item.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DOCS_PANE (ide_docs_pane_get_type())
+#define IDE_TYPE_DOCS_PANE_ROW (ide_docs_pane_row_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDocsPane, ide_docs_pane, IDE, DOCS_PANE, IdePane)
+G_DECLARE_FINAL_TYPE (IdeDocsPaneRow, ide_docs_pane_row, IDE, DOCS_PANE_ROW, GtkListBoxRow)
 
-IdeDocsLibrary *ide_docs_pane_get_library (IdeDocsPane    *self);
-void            ide_docs_pane_set_library (IdeDocsPane    *self,
-                                           IdeDocsLibrary *library);
+GtkWidget   *ide_docs_pane_row_new      (IdeDocsItem    *item);
+IdeDocsItem *ide_docs_pane_row_get_item (IdeDocsPaneRow *self);
 
 G_END_DECLS
