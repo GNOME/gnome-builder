@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-05-10 20:32+0000\n"
-"PO-Revision-Date: 2019-05-16 19:47+0200\n"
+"POT-Creation-Date: 2019-06-27 03:06+0000\n"
+"PO-Revision-Date: 2019-07-23 23:53+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:119
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:125
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -855,7 +855,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4928
+#: src/libide/sourceview/ide-source-view.c:4933
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -878,7 +878,7 @@ msgstr "_Umbenennen"
 msgid "unsaved file %u"
 msgstr "Ungesicherte Datei %u"
 
-#: src/libide/code/ide-buffer.c:3383
+#: src/libide/code/ide-buffer.c:3394
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -1040,13 +1040,13 @@ msgstr "Das Dokument drucken"
 #: src/libide/editor/ide-editor-page-shortcuts.c:76
 #: src/libide/editor/ide-editor-page-shortcuts.c:82
 #: src/libide/gui/ide-shortcuts-window.ui:165
-#: src/libide/gui/ide-shortcuts-window.ui:177
+#: src/libide/gui/ide-shortcuts-window.ui:184
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Suchen und Ersetzen"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:53
-#: src/libide/gui/ide-shortcuts-window.ui:170
+#: src/libide/gui/ide-shortcuts-window.ui:177
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Suchen"
@@ -1441,7 +1441,7 @@ msgid "Workbench shortcuts"
 msgstr "Werkbank-Tastenkombinationen"
 
 #: src/libide/foundry/ide-run-manager.c:853
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Erstellen und ausführen"
@@ -1716,7 +1716,7 @@ msgstr "Das Hilfefenster anzeigen"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:517
+#: src/libide/gui/ide-shortcuts-window.ui:524
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Einstellungen"
@@ -1836,7 +1836,7 @@ msgstr "Fenster-Tastenkombinationen"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:506
+#: src/libide/gui/ide-shortcuts-window.ui:513
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
@@ -2400,7 +2400,7 @@ msgid "Workspace shortcuts"
 msgstr "Arbeitsbereich-Tastenkombinationen"
 
 #: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:574
+#: src/libide/gui/ide-shortcuts-window.ui:581
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Suchen"
@@ -2416,34 +2416,34 @@ msgid "Editor Shortcuts"
 msgstr "Editor-Tastenkombinationen"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:510
+#: src/libide/gui/ide-shortcuts-window.ui:517
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Globale Suche"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:524
+#: src/libide/gui/ide-shortcuts-window.ui:531
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Befehlsleiste"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:531
+#: src/libide/gui/ide-shortcuts-window.ui:538
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/libide/gui/ide-shortcuts-window.ui:545
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal in Erstellungs-Laufzeit"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:552
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkombinationen"
@@ -2483,85 +2483,90 @@ msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Liste der geöffneten Dokumente anzeigen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:184
+#: src/libide/gui/ide-shortcuts-window.ui:170
+msgctxt "shortcut window"
+msgid "Goto Line"
+msgstr "Zu einer bestimmten Zeile springen"
+
+#: src/libide/gui/ide-shortcuts-window.ui:191
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Weitersuchen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:191
+#: src/libide/gui/ide-shortcuts-window.ui:198
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Rückwärts weitersuchen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:198
+#: src/libide/gui/ide-shortcuts-window.ui:205
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Hervorhebung löschen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:206
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:213
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopieren und Einfügen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:211
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:218
+#: src/libide/gui/ide-shortcuts-window.ui:566
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Ausgewählten Text in die Zwischenablage kopieren"
 
-#: src/libide/gui/ide-shortcuts-window.ui:218
+#: src/libide/gui/ide-shortcuts-window.ui:225
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Ausgewählten Text in die Zwischenablage ausschneiden"
 
-#: src/libide/gui/ide-shortcuts-window.ui:225
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:232
+#: src/libide/gui/ide-shortcuts-window.ui:573
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Text aus der Zwischenablage einfügen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:232
+#: src/libide/gui/ide-shortcuts-window.ui:239
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Aktuelle Zeile oder Auswahl duplizieren"
 
-#: src/libide/gui/ide-shortcuts-window.ui:240
+#: src/libide/gui/ide-shortcuts-window.ui:247
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Rückgängig und Wiederholen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:245
+#: src/libide/gui/ide-shortcuts-window.ui:252
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Letzten Befehl rückgängig machen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:252
+#: src/libide/gui/ide-shortcuts-window.ui:259
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Letzten Befehl wiederholen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:260
+#: src/libide/gui/ide-shortcuts-window.ui:267
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Vergrößerung"
 
-#: src/libide/gui/ide-shortcuts-window.ui:265
+#: src/libide/gui/ide-shortcuts-window.ui:272
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Vergrößern"
 
-#: src/libide/gui/ide-shortcuts-window.ui:272
+#: src/libide/gui/ide-shortcuts-window.ui:279
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Verkleinern"
 
-#: src/libide/gui/ide-shortcuts-window.ui:279
+#: src/libide/gui/ide-shortcuts-window.ui:286
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Vergrößerungsstufe zurücksetzen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:287
+#: src/libide/gui/ide-shortcuts-window.ui:294
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
@@ -2570,167 +2575,167 @@ msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Bearbeiten"
 
-#: src/libide/gui/ide-shortcuts-window.ui:292
+#: src/libide/gui/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Zahl unter dem Zeiger erhöhen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:299
+#: src/libide/gui/ide-shortcuts-window.ui:306
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Zahl unter dem Zeiger verringern"
 
-#: src/libide/gui/ide-shortcuts-window.ui:306
+#: src/libide/gui/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Ausgewählte Zeilen vereinen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:313
+#: src/libide/gui/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Vervollständigungsfenster anzeigen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:320
+#: src/libide/gui/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Überschreiben aktivieren"
 
-#: src/libide/gui/ide-shortcuts-window.ui:327
+#: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Zeile wieder einrücken"
 
-#: src/libide/gui/ide-shortcuts-window.ui:334
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Zeile löschen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:342
+#: src/libide/gui/ide-shortcuts-window.ui:349
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Benötigt semantische Sprachunterstützung"
 
-#: src/libide/gui/ide-shortcuts-window.ui:350
+#: src/libide/gui/ide-shortcuts-window.ui:357
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigation"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Zum nächsten Fehler in der Datei wechseln"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Zum vorherigen Fehler in der Datei wechseln"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Zur zuletzt bearbeiteten Stelle wechseln"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Zur nächsten zu bearbeitenden Stelle wechseln"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Zur Definition des Symbols wechseln"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Ansichtsfeld innerhalb der Datei aufwärts schieben"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Ansichtsfeld innerhalb der Datei abwärts schieben"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Ansichtsfeld zum Ende der Datei schieben"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Ansichtsfeld zum Anfang der Datei schieben"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Zur übereinstimmenden Klammer wechseln"
 
-#: src/libide/gui/ide-shortcuts-window.ui:426
+#: src/libide/gui/ide-shortcuts-window.ui:433
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Auswahl"
 
-#: src/libide/gui/ide-shortcuts-window.ui:431
+#: src/libide/gui/ide-shortcuts-window.ui:438
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Alle auswählen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:438
+#: src/libide/gui/ide-shortcuts-window.ui:445
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Alles abwählen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:451
+#: src/libide/gui/ide-shortcuts-window.ui:458
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Erstellen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:458
+#: src/libide/gui/ide-shortcuts-window.ui:465
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Ausführen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:465
+#: src/libide/gui/ide-shortcuts-window.ui:472
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:473
+#: src/libide/gui/ide-shortcuts-window.ui:480
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Tastfeldgesten"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Seite nach rechts verschieben"
 
-#: src/libide/gui/ide-shortcuts-window.ui:481
+#: src/libide/gui/ide-shortcuts-window.ui:488
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Drei Finger nach rechts wischen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:490
+#: src/libide/gui/ide-shortcuts-window.ui:497
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Seite nach links verschieben"
 
-#: src/libide/gui/ide-shortcuts-window.ui:491
+#: src/libide/gui/ide-shortcuts-window.ui:498
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Drei Finger nach links wischen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:502
+#: src/libide/gui/ide-shortcuts-window.ui:509
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminaltastenkombinationen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:579
+#: src/libide/gui/ide-shortcuts-window.ui:586
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Text im Terminal suchen"
@@ -2841,31 +2846,31 @@ msgstr "Ver_kleinern"
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: src/libide/sourceview/ide-source-view.c:4377
+#: src/libide/sourceview/ide-source-view.c:4382
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: src/libide/sourceview/ide-source-view.c:4379
+#: src/libide/sourceview/ide-source-view.c:4384
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: src/libide/sourceview/ide-source-view.c:4497
+#: src/libide/sourceview/ide-source-view.c:4502
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: src/libide/sourceview/ide-source-view.c:4927
+#: src/libide/sourceview/ide-source-view.c:4932
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5162
+#: src/libide/sourceview/ide-source-view.c:5167
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Zeile %u, Spalte %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5188
+#: src/libide/sourceview/ide-source-view.c:5193
 msgid "No references were found"
 msgstr "Keine Referenzen gefunden"
 
@@ -5012,14 +5017,6 @@ msgstr "Polari"
 msgid "An IRC Client for GNOME"
 msgstr "Ein IRC-Client für GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
-msgid "Todo"
-msgstr "Aufgaben"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
-msgid "Task manager for GNOME"
-msgstr "Aufgabenverwaltung für GNOME"
-
 #: src/plugins/notification/ide-notification-addin.c:102
 msgid "Build successful"
 msgstr "Erstellung erfolgreich"
@@ -5065,12 +5062,12 @@ msgid "Containers/Podman"
 msgstr "Container/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
-#: src/plugins/project-tree/gbp-rename-file-popover.c:144
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Ein Ordner mit diesem Namen existiert bereits."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
-#: src/plugins/project-tree/gbp-rename-file-popover.c:147
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Eine Datei mit diesem Namen existiert bereits."
 
@@ -5130,7 +5127,7 @@ msgstr "Dateien werden gleich kopiert"
 msgid "Project Tree"
 msgstr "Projektbaum"
 
-#: src/plugins/project-tree/gbp-rename-file-popover.c:84
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
 msgstr "%s umbenennen"
@@ -5808,6 +5805,12 @@ msgstr "Der XML-Baum konnte nicht angelegt werden."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Die Datei muss zum Einlesen lokal gespeichert sein."
+
+#~ msgid "Todo"
+#~ msgstr "Aufgaben"
+
+#~ msgid "Task manager for GNOME"
+#~ msgstr "Aufgabenverwaltung für GNOME"
 
 #~ msgid "org.gnome.Builder"
 #~ msgstr "org.gnome.Builder"
