@@ -2938,7 +2938,9 @@ ide_source_view_real_duplicate_entire_line (IdeSourceView *self)
       end = begin;
 
       gtk_text_iter_set_line_offset (&begin, 0);
-      gtk_text_iter_forward_to_line_end (&end);
+
+      if (!gtk_text_iter_ends_line (&end))
+        gtk_text_iter_forward_to_line_end (&end);
 
       if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&end))
         {
