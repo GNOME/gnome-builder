@@ -324,6 +324,16 @@ get_children_free (gpointer data)
   g_slice_free (GetChildren, gc);
 }
 
+#ifdef DEVELOPMENT_BUILD
+static gboolean
+delayed_run (gpointer data)
+{
+  g_autoptr(IdeTask) subtask = data;
+  ide_task_run_in_thread (subtask, ide_g_file_get_children_worker);
+  return G_SOURCE_REMOVE;
+}
+#endif
+
 /**
  * ide_g_file_get_children_async:
  * @file: a #IdeGlib
@@ -371,13 +381,6 @@ ide_g_file_get_children_async (GFile               *file,
   /* Useful for testing slow interactions on project-tree and such */
   if (g_getenv ("IDE_G_FILE_DELAY"))
     {
-      gboolean
-      delayed_run (gpointer data)
-      {
-        g_autoptr(IdeTask) subtask = data;
-        ide_task_run_in_thread (subtask, ide_g_file_get_children_worker);
-        return G_SOURCE_REMOVE;
-      }
       g_timeout_add_seconds (1, delayed_run, g_object_ref (task));
       return;
     }
