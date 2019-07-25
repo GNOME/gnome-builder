@@ -204,6 +204,10 @@ spawn_host_launcher (IdeTerminalLauncher *self,
 
   if (!(shell = ide_terminal_launcher_get_shell (self)))
     shell = ide_get_user_shell ();
+
+  /* We only have sh/bash in our flatpak */
+  if (self->kind == LAUNCHER_KIND_DEBUG && ide_is_flatpak ())
+    shell = "/bin/bash";
  
   launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_set_run_on_host (launcher, run_on_host);
