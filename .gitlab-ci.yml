@@ -14,7 +14,7 @@ flatpak:
 
         # Replace with your manifest path
         MANIFEST_PATH: "build-aux/flatpak/org.gnome.Builder.json"
-        RUNTIME_REPO: "https://sdk.gnome.org/gnome-nightly.flatpakrepo"
+        RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
         # Replace with your application name, as written in the manifest
         FLATPAK_MODULE: "gnome-builder"
         APP_ID: "org.gnome.Builder"
@@ -37,3 +37,6 @@ review:
 
 stop_review:
     extends: .stop_review
+
+nightly:
+  extends: '.publish_nightly'
