@@ -966,11 +966,11 @@ msgstr "Desa"
 
 #: src/libide/editor/ide-editor-page-actions.c:335
 msgid "Save File As"
-msgstr "Desa el fitxer com a"
+msgstr "Anomena i desa el fitxer"
 
 #: src/libide/editor/ide-editor-page-actions.c:338
 msgid "Save As"
-msgstr "Desa com a"
+msgstr "Anomena i desa"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:33
 #: src/libide/editor/ide-editor-page-shortcuts.c:39
@@ -3607,7 +3607,7 @@ msgstr "Tanca sense desar els canvis"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:98
 msgid "Save As…"
-msgstr "Desa com a..."
+msgstr "Anomena i desa…"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:206
 msgid "Load palette"
