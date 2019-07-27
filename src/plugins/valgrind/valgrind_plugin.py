@@ -21,6 +21,7 @@ import gi
 import os
 
 from gi.repository import Ide
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 
