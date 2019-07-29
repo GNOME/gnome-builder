@@ -24,8 +24,15 @@
 #include <libgit2-glib/ggit.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <sys/prctl.h>
 #include <unistd.h>
+
+#ifdef __linux__
+#include <sys/prctl.h>
+#endif
+
+#ifdef __FreeBSD__
+#include <sys/procctl.h>
+#endif
 
 #include "ipc-git-service.h"
 #include "ipc-git-service-impl.h"
@@ -76,7 +83,13 @@ main (gint argc,
   g_set_prgname ("gnome-builder-git");
   g_set_application_name ("gnome-builder-git");
 
+#ifdef __linux__
   prctl (PR_SET_PDEATHSIG, SIGTERM);
+#elif defined(__FreeBSD__)
+  procctl (P_PID, 0, PROC_PDEATHSIG_CTL, &(int){ SIGTERM });
+#else
+#error "Please submit a patch to support parent-death signal on your OS"
+#endif
 
   signal (SIGPIPE, SIG_IGN);
 

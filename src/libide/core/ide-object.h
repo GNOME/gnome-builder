@@ -150,7 +150,12 @@ void          ide_object_log                    (gpointer            instance,
                                                  const gchar        *format,
                                                  ...) G_GNUC_PRINTF (4, 5);
 
+#ifdef __cplusplus
 #define ide_object_message(instance, format, ...) ide_object_log(instance, G_LOG_LEVEL_MESSAGE, G_LOG_DOMAIN, format __VA_OPT__(,) __VA_ARGS__)
 #define ide_object_warning(instance, format, ...) ide_object_log(instance, G_LOG_LEVEL_WARNING, G_LOG_DOMAIN, format __VA_OPT__(,) __VA_ARGS__)
+#else
+#define ide_object_message(instance, format, ...) ide_object_log(instance, G_LOG_LEVEL_MESSAGE, G_LOG_DOMAIN, format, ##__VA_ARGS__)
+#define ide_object_warning(instance, format, ...) ide_object_log(instance, G_LOG_LEVEL_WARNING, G_LOG_DOMAIN, format, ##__VA_ARGS__)
+#endif
 
 G_END_DECLS
