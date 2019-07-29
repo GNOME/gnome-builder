@@ -27,11 +27,19 @@
 
 G_BEGIN_DECLS
 
+#ifdef __cplusplus
 #define ide_widget_warning(instance, format, ...)                                                   \
   G_STMT_START {                                                                                    \
     IdeContext *context = ide_widget_get_context (GTK_WIDGET (instance));                           \
     ide_context_log (context, G_LOG_LEVEL_WARNING, G_LOG_DOMAIN, format __VA_OPT__(,) __VA_ARGS__); \
   } G_STMT_END
+#else
+#define ide_widget_warning(instance, format, ...)                                                   \
+  G_STMT_START {                                                                                    \
+    IdeContext *context = ide_widget_get_context (GTK_WIDGET (instance));                           \
+    ide_context_log (context, G_LOG_LEVEL_WARNING, G_LOG_DOMAIN, format, ##__VA_ARGS__);            \
+  } G_STMT_END
+#endif
 
 typedef void (*IdeWidgetContextHandler) (GtkWidget  *widget,
                                          IdeContext *context);
