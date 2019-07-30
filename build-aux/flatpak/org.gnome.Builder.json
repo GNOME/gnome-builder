@@ -76,6 +76,7 @@
         "*.a"
     ],
     "modules" : [
+        "shared-modules/intltool/intltool-0.51.json",
         "python-deps.json",
         {
             "name" : "gperftools",
