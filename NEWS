@@ -1,4 +1,24 @@
 ==============
+Version 3.33.4
+==============
+
+Changes since last release:
+
+ • The greeter will disable input while opening a project
+ • The sysprof plugin includes many new data sources
+ • Git status in the project tree no longer uses color, instead
+   opting for an open circle for changes, and closed circle for
+   new files (along with bold)
+ • The UI tries to be more consistent in using italics for changes
+   as bold is used for new files in the project tree
+ • Various project tree styling changes
+ • Discovery of programs within Flatpak runtimes no longer requires
+   using `which'. The files are located directly using known PATH
+ • Various FreeBSD compilation fixes with Clang
+ • Many other bug fixes and improvements
+ • Translation updates
+
+==============
 Version 3.33.3
 ==============
 
