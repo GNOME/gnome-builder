@@ -152,9 +152,13 @@
                 "--disable-polkitd",
                 "--disable-man-pages",
                 "--disable-introspection",
-                "--enable-libelogind=no",
-                "--enable-libsystemd-login=no",
-                "--with-systemdsystemunitdir=no"
+                "--disable-examples",
+                "--disable-gtk-doc",
+                "--disable-libelogind",
+                "--disable-libsystemd-login",
+                "--with-systemdsystemunitdir=no",
+                "--with-authdb=dummy",
+                "--with-authfw=none"
             ],
             "rm-configure" : true,
             "cleanup" : [
