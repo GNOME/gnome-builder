@@ -1765,3 +1765,32 @@ ide_config_set_prefix_set (IdeConfig *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREFIX_SET]);
     }
 }
+
+/**
+ * ide_config_get_extensions:
+ * @self: a #IdeConfig
+ *
+ * Gets the known SDK extensions that will be used when building the project.
+ * Implementing this in your configuration backend allows plugins to know if
+ * additional binaries will be available to the build system.
+ *
+ * Returns: (not nullable) (transfer full) (element-type Ide.Runtime): an array
+ *   of #IdeRuntime for the runtime extensions for the configuration.
+ *
+ * Since: 3.34
+ */
+GPtrArray *
+ide_config_get_extensions (IdeConfig *self)
+{
+  GPtrArray *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONFIG (self), NULL);
+
+  if (IDE_CONFIG_GET_CLASS (self)->get_extensions)
+   ret = IDE_CONFIG_GET_CLASS (self)->get_extensions (self);
+
+  if (ret == NULL)
+    ret = g_ptr_array_new ();
+
+  return g_steal_pointer (&ret);
+}

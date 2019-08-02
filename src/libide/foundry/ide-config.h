@@ -47,14 +47,15 @@ struct _IdeConfigClass
 {
   IdeObjectClass parent;
 
-  IdeRuntime *(*get_runtime)      (IdeConfig *self);
-  void        (*set_runtime)      (IdeConfig *self,
-                                   IdeRuntime       *runtime);
-  gboolean    (*supports_runtime) (IdeConfig *self,
-                                   IdeRuntime       *runtime);
+  IdeRuntime *(*get_runtime)      (IdeConfig  *self);
+  void        (*set_runtime)      (IdeConfig  *self,
+                                   IdeRuntime *runtime);
+  gboolean    (*supports_runtime) (IdeConfig  *self,
+                                   IdeRuntime *runtime);
+  GPtrArray  *(*get_extensions)   (IdeConfig  *self);
 
   /*< private >*/
-  gpointer _reserved[16];
+  gpointer _reserved[15];
 };
 
 IDE_AVAILABLE_IN_3_32
@@ -215,5 +216,7 @@ IDE_AVAILABLE_IN_3_32
 void                  ide_config_set_internal_object       (IdeConfig             *self,
                                                             const gchar           *key,
                                                             gpointer               instance);
+IDE_AVAILABLE_IN_3_34
+GPtrArray            *ide_config_get_extensions            (IdeConfig             *self);
 
 G_END_DECLS
