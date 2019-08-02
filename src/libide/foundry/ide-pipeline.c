@@ -4189,3 +4189,54 @@ ide_pipeline_get_arch (IdePipeline *self)
 
   return NULL;
 }
+
+/**
+ * ide_pipeline_contains_program_in_path:
+ * @self: a #IdePipeline
+ * @name: the name of a binary
+ *
+ * Looks through the runtime and SDK extensions for binaries matching
+ * @name that may be executed.
+ *
+ * Returns: %TRUE if @name was found; otherwise %FALSE
+ *
+ * Since: 3.34
+ */
+gboolean
+ide_pipeline_contains_program_in_path (IdePipeline  *self,
+                                       const gchar  *name,
+                                       GCancellable *cancellable)
+{
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  if (self->runtime != NULL)
+    {
+      if (ide_runtime_contains_program_in_path (self->runtime, name, cancellable))
+        return TRUE;
+    }
+
+  if (self->config != NULL)
+    {
+      g_autoptr(GPtrArray) ar = NULL;
+
+      if (g_cancellable_is_cancelled (cancellable))
+        return FALSE;
+
+      ar = ide_config_get_extensions (self->config);
+      IDE_PTR_ARRAY_SET_FREE_FUNC (ar, g_object_unref);
+
+      for (guint i = 0; i < ar->len; i++)
+        {
+          IdeRuntime *runtime = g_ptr_array_index (ar, i);
+
+          g_assert (IDE_IS_RUNTIME (runtime));
+
+          if (ide_runtime_contains_program_in_path (self->runtime, name, cancellable))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}

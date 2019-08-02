@@ -214,5 +214,9 @@ IDE_AVAILABLE_IN_3_32
 gboolean               ide_pipeline_has_configured       (IdePipeline            *self);
 IDE_AVAILABLE_IN_3_32
 IdePipelinePhase       ide_pipeline_get_requested_phase  (IdePipeline            *self);
+IDE_AVAILABLE_IN_3_34
+gboolean               ide_pipeline_contains_program_in_path (IdePipeline            *self,
+                                                              const gchar            *name,
+                                                              GCancellable           *cancellable);
 
 G_END_DECLS
