@@ -763,6 +763,7 @@ locate_deploy_dir (const gchar *sdk_id)
 
 GbpFlatpakRuntime *
 gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
+                         gboolean              is_extension,
                          GCancellable         *cancellable,
                          GError              **error)
 {
@@ -814,7 +815,7 @@ gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
   if (!g_key_file_load_from_bytes (keyfile, metadata, 0, error))
     return NULL;
 
-  if (g_key_file_has_group (keyfile, "ExtensionOf"))
+  if (g_key_file_has_group (keyfile, "ExtensionOf") && !is_extension)
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -836,8 +837,11 @@ gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
    * If we have an SDK that is different from this runtime, we need to locate
    * the SDK deploy-dir instead (for things like includes, pkg-config, etc).
    */
-  if (sdk != NULL && !g_str_equal (sdk, triplet) && NULL != (sdk_deploy_dir = locate_deploy_dir (sdk)))
-    deploy_dir = sdk_deploy_dir;
+  if (!is_extension)
+    {
+      if (sdk != NULL && !g_str_equal (sdk, triplet) && NULL != (sdk_deploy_dir = locate_deploy_dir (sdk)))
+        deploy_dir = sdk_deploy_dir;
+    }
 
   return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                        "id", id,

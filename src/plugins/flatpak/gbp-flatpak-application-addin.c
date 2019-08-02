@@ -28,6 +28,7 @@
 #include <libide-gui.h>
 #include <errno.h>
 #include <flatpak.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "gbp-flatpak-application-addin.h"
@@ -1344,10 +1345,16 @@ gbp_flatpak_application_addin_find_ref (GbpFlatpakApplicationAddin *self,
             {
               FlatpakRef *ref = g_ptr_array_index (ar, j);
 
-              if (g_strcmp0 (id, flatpak_ref_get_name (ref)) == 0 &&
-                  g_strcmp0 (arch, flatpak_ref_get_arch (ref)) == 0 &&
-                  g_strcmp0 (branch, flatpak_ref_get_branch (ref)) == 0)
-                return g_object_ref (FLATPAK_INSTALLED_REF (ref));
+              if (g_strcmp0 (id, flatpak_ref_get_name (ref)) != 0)
+                continue;
+
+              if (arch && g_strcmp0 (arch, flatpak_ref_get_arch (ref)) != 0)
+                continue;
+
+              if (branch && g_strcmp0 (branch, flatpak_ref_get_branch (ref)) != 0)
+                continue;
+
+              return g_object_ref (FLATPAK_INSTALLED_REF (ref));
             }
         }
     }
@@ -1467,4 +1474,24 @@ gbp_flatpak_application_addin_check_sysdeps_finish (GbpFlatpakApplicationAddin  
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+FlatpakInstalledRef *
+gbp_flatpak_application_addin_find_extension (GbpFlatpakApplicationAddin *self,
+                                              const gchar                *name)
+{
+  g_autofree gchar *pname = NULL;
+  g_autofree gchar *parch = NULL;
+  g_autofree gchar *pversion = NULL;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  if (strchr (name, '/') != NULL)
+    {
+      if (gbp_flatpak_split_id (name, &pname, &parch, &pversion))
+        return gbp_flatpak_application_addin_find_ref (self, pname, parch, pversion);
+    }
+
+  return gbp_flatpak_application_addin_find_ref (self, name, NULL, NULL);
 }

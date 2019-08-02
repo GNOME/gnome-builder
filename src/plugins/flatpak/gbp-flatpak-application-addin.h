@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpFlatpakApplicationAddin, gbp_flatpak_application_addin, GBP, FLATPAK_APPLICATION_ADDIN, GObject)
 
 GbpFlatpakApplicationAddin *gbp_flatpak_application_addin_get_default            (void);
+FlatpakInstalledRef        *gbp_flatpak_application_addin_find_extension         (GbpFlatpakApplicationAddin  *self,
+                                                                                  const gchar                 *name);
 GPtrArray                  *gbp_flatpak_application_addin_get_runtimes           (GbpFlatpakApplicationAddin  *self);
 GPtrArray                  *gbp_flatpak_application_addin_get_installations      (GbpFlatpakApplicationAddin  *self);
 gboolean                    gbp_flatpak_application_addin_has_runtime            (GbpFlatpakApplicationAddin  *self,

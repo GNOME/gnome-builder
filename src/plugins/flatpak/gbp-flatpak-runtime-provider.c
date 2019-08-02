@@ -169,7 +169,7 @@ runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
    * We didn't already have this runtime, so go ahead and just
    * add it now (and keep a copy so we can find it later).
    */
-  new_runtime = gbp_flatpak_runtime_new (ref, NULL, &error);
+  new_runtime = gbp_flatpak_runtime_new (ref, FALSE, NULL, &error);
 
   if (new_runtime == NULL)
     {

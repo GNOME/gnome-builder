@@ -551,6 +551,54 @@ gbp_flatpak_manifest_set_file (GbpFlatpakManifest *self,
                            G_CONNECT_SWAPPED);
 }
 
+static IdeRuntime *
+find_extension (GbpFlatpakManifest *self,
+                const gchar        *name)
+{
+  g_autoptr(FlatpakInstalledRef) ref = NULL;
+  GbpFlatpakApplicationAddin *addin;
+  GbpFlatpakRuntime *ret = NULL;
+
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (name != NULL);
+
+  /* TODO: This doesn't allow pinning to the right version
+   * of extension because we need to know the right parent
+   * version of the extension.
+   */
+  addin = gbp_flatpak_application_addin_get_default ();
+  ref = gbp_flatpak_application_addin_find_extension (addin, name);
+
+  if (ref != NULL)
+    ret = gbp_flatpak_runtime_new (ref, TRUE, NULL, NULL);
+
+  return IDE_RUNTIME (g_steal_pointer (&ret));
+}
+
+static GPtrArray *
+gbp_flatpak_manifest_get_extensions (IdeConfig *config)
+{
+  GbpFlatpakManifest *self = (GbpFlatpakManifest *)config;
+  GPtrArray *ret;
+
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+
+  ret = g_ptr_array_new ();
+
+  if (self->sdk_extensions != NULL)
+    {
+      for (guint i = 0; self->sdk_extensions[i]; i++)
+        {
+          IdeRuntime *found = find_extension (self, self->sdk_extensions[i]);
+
+          if (found)
+            g_ptr_array_add (ret, g_steal_pointer (&found));
+        }
+    }
+
+  return g_steal_pointer (&ret);
+}
+
 static void
 gbp_flatpak_manifest_finalize (GObject *object)
 {
@@ -624,6 +672,7 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
   object_class->get_property = gbp_flatpak_manifest_get_property;
   object_class->set_property = gbp_flatpak_manifest_set_property;
 
+  config_class->get_extensions = gbp_flatpak_manifest_get_extensions;
   config_class->supports_runtime = gbp_flatpak_manifest_supports_runtime;
 
   properties [PROP_FILE] =

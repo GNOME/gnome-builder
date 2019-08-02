@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
 GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (FlatpakInstalledRef  *ref,
+                                                       gboolean              is_extension,
                                                        GCancellable         *cancellable,
                                                        GError              **error);
 IdeTriplet          *gbp_flatpak_runtime_get_triplet  (GbpFlatpakRuntime    *self);
