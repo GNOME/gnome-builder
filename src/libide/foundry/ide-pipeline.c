@@ -4233,7 +4233,7 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
 
           g_assert (IDE_IS_RUNTIME (runtime));
 
-          if (ide_runtime_contains_program_in_path (self->runtime, name, cancellable))
+          if (ide_runtime_contains_program_in_path (runtime, name, cancellable))
             return TRUE;
         }
     }
