@@ -44,33 +44,6 @@ static void workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (GbpSysprofWorkspaceAddin, gbp_sysprof_workspace_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
-static gchar *
-get_runtime_sysroot (IdeContext  *context,
-                     const gchar *path)
-{
-  IdeConfigManager *config_manager;
-  IdeConfig *config;
-  IdeRuntime *runtime;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CONTEXT (context));
-
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
-  runtime = ide_config_get_runtime (config);
-
-  if (runtime != NULL)
-    {
-      g_autoptr(GFile) base = g_file_new_for_path (path);
-      g_autoptr(GFile) translated = ide_runtime_translate_file (runtime, base);
-
-      if (translated != NULL)
-        return g_file_get_path (translated);
-    }
-
-  return NULL;
-}
-
 static void
 profiler_child_spawned (IdeRunner       *runner,
                         const gchar     *identifier,
@@ -147,7 +120,6 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_auto(GStrv) argv = NULL;
   const gchar * const *env;
   IdeEnvironment *ienv;
-  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
@@ -155,43 +127,6 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
   sources = g_ptr_array_new ();
-
-  /*
-   * First get a copy of the active runtime and find the root of it's
-   * translation path. That way we can adjust for the sysroot when
-   * resolving symbols.
-   *
-   * TODO: Hardcoding /usr and /app here sucks, we need a way to have
-   *       this in the flatpak plugin instead (and associated plumbing
-   *       to abstract it). We probably should just have a "get_debug_paths"
-   *       type helper from the runtime.
-   */
-  {
-    /* Put debug directories first so the resolve higher */
-    static const gchar *dirs[] = {
-      "/app/lib/debug",
-      "/usr/lib/debug",
-      "/app/bin",
-      "/app/lib",
-      "/usr/lib",
-      NULL
-    };
-
-    context = ide_object_get_context (IDE_OBJECT (run_manager));
-
-    /*
-     * TODO: We should really be adding symbol directories to the
-     *       ELF symbol resolver rather than here.
-     */
-
-    for (guint i = 0; dirs[i]; i++)
-      {
-        g_autofree gchar *path = get_runtime_sysroot (context, dirs[i]);
-
-        if (path != NULL)
-          sysprof_symbol_dirs_add (path);
-      }
-  }
 
   profiler = sysprof_local_profiler_new ();
 
