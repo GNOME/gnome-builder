@@ -4095,6 +4095,7 @@ ide_source_view_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
   IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   gboolean ret;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -4116,6 +4117,9 @@ ide_source_view_focus_out_event (GtkWidget     *widget,
    * disable it until we get re-focused.
    */
   gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), FALSE);
+
+  if (priv->cursor != NULL)
+    ide_cursor_remove_cursors (priv->cursor);
 
   return ret;
 }
