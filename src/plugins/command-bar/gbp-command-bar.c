@@ -165,6 +165,24 @@ gbp_command_bar_child_revealed_cb (GbpCommandBar *self,
 }
 
 static void
+gbp_command_bar_run_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
+{
+  IdeCommand *command = (IdeCommand *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_COMMAND (command));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (user_data == NULL);
+
+  if (!ide_command_run_finish (command, result, &error))
+    ide_object_warning (command, "%s", error->message);
+
+  ide_object_destroy (IDE_OBJECT (command));
+}
+
+static void
 gbp_command_bar_activate_suggestion_cb (GbpCommandBar      *self,
                                         DzlSuggestionEntry *entry)
 {
@@ -177,8 +195,12 @@ gbp_command_bar_activate_suggestion_cb (GbpCommandBar      *self,
     {
       GbpCommandBarSuggestion *cbs = GBP_COMMAND_BAR_SUGGESTION (suggestion);
       IdeCommand *command = gbp_command_bar_suggestion_get_command (cbs);
+      IdeContext *context = ide_widget_get_context (GTK_WIDGET (entry));
 
-      ide_command_run_async (command, NULL, NULL, NULL);
+      if (ide_object_is_root (IDE_OBJECT (command)))
+        ide_object_append (IDE_OBJECT (context), IDE_OBJECT (command));
+
+      ide_command_run_async (command, NULL, gbp_command_bar_run_cb, NULL);
     }
 
   gbp_command_bar_dismiss (self);
