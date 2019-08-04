@@ -2236,6 +2236,8 @@ ide_source_view_process_press_on_definition (IdeSourceView  *self,
           g_signal_emit (self, signals [FOCUS_LOCATION], 0, src_location);
         }
 
+      ide_source_view_reset_definition_highlight (self);
+
       return TRUE;
     }
 
