@@ -122,3 +122,11 @@ ideeditorutilities dzltabstrip {
   margin: 5px;
   border-style: none;
 }
+
+/* hide extra textview cursors for non-visible views:
+ * https://gitlab.gnome.org/GNOME/gnome-builder/issues/999
+ */
+textview:not(:focus) text {
+  caret-color: transparent;
+  -gtk-secondary-caret-color: transparent;
+}
