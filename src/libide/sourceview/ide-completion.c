@@ -188,7 +188,7 @@ ide_completion_is_blocked (IdeCompletion *self)
          !gtk_widget_has_focus (GTK_WIDGET (self->view)) ||
          !(buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view))) ||
          gtk_text_buffer_get_has_selection (buffer) ||
-         !GTK_SOURCE_IS_VIEW (self->view) ||
+         !IDE_IS_SOURCE_VIEW (self->view) ||
          _ide_source_view_has_cursors (IDE_SOURCE_VIEW (self->view)) ||
          !ide_source_view_is_processing_key (IDE_SOURCE_VIEW (self->view));
 }
