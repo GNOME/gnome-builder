@@ -1001,18 +1001,21 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
       ide_source_view_maybe_overwrite (self, iter, text, len);
     }
 
-  gtk_text_buffer_get_iter_at_mark (buffer, &insert, gtk_text_buffer_get_insert(buffer));
-  if (gtk_text_iter_equal (iter, &insert))
+  /* Ignore multiple cursors unless we have focus */
+  if (gtk_widget_has_focus (GTK_WIDGET (self)))
     {
-      ide_source_view_block_handlers (self);
-      ide_cursor_insert_text (priv->cursor, text, len);
-      ide_source_view_unblock_handlers (self);
-      gtk_text_buffer_get_iter_at_mark (buffer, iter, gtk_text_buffer_get_insert (buffer));
+      gtk_text_buffer_get_iter_at_mark (buffer, &insert, gtk_text_buffer_get_insert(buffer));
+
+      if (gtk_text_iter_equal (iter, &insert))
+        {
+          ide_source_view_block_handlers (self);
+          ide_cursor_insert_text (priv->cursor, text, len);
+          ide_source_view_unblock_handlers (self);
+          gtk_text_buffer_get_iter_at_mark (buffer, iter, gtk_text_buffer_get_insert (buffer));
+        }
     }
 
   gtk_text_buffer_end_user_action (buffer);
-
-  return;
 }
 
 static void
