@@ -620,15 +620,21 @@ ide_terminal_page_set_launcher (IdeTerminalPage     *self,
 
   if (g_set_object (&self->launcher, launcher))
     {
+      gboolean can_split;
+
       if (launcher != NULL)
         {
           const gchar *title = ide_terminal_launcher_get_title (launcher);
           ide_page_set_title (IDE_PAGE (self), title);
+          can_split = ide_terminal_launcher_can_respawn (launcher);
         }
       else
         {
           self->manage_spawn = FALSE;
+          can_split = FALSE;
         }
+
+      ide_page_set_can_split (IDE_PAGE (self), can_split);
     }
 }
 
