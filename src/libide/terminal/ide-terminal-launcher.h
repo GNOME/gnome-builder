@@ -21,6 +21,7 @@
 #pragma once
 
 #include <libide-gui.h>
+#include <libide-threading.h>
 
 G_BEGIN_DECLS
 
@@ -30,37 +31,41 @@ IDE_AVAILABLE_IN_3_34
 G_DECLARE_FINAL_TYPE (IdeTerminalLauncher, ide_terminal_launcher, IDE, TERMINAL_LAUNCHER, GObject)
 
 IDE_AVAILABLE_IN_3_34
-IdeTerminalLauncher *ide_terminal_launcher_new             (IdeContext           *context);
+IdeTerminalLauncher *ide_terminal_launcher_new              (IdeContext             *context);
 IDE_AVAILABLE_IN_3_34
-IdeTerminalLauncher *ide_terminal_launcher_new_for_debug   (void);
+IdeTerminalLauncher *ide_terminal_launcher_new_for_launcher (IdeSubprocessLauncher  *launcher);
 IDE_AVAILABLE_IN_3_34
-IdeTerminalLauncher *ide_terminal_launcher_new_for_runtime (IdeRuntime           *runtime);
+IdeTerminalLauncher *ide_terminal_launcher_new_for_debug    (void);
 IDE_AVAILABLE_IN_3_34
-IdeTerminalLauncher *ide_terminal_launcher_new_for_runner  (IdeRuntime           *runtime);
+IdeTerminalLauncher *ide_terminal_launcher_new_for_runtime  (IdeRuntime             *runtime);
 IDE_AVAILABLE_IN_3_34
-const gchar         *ide_terminal_launcher_get_cwd         (IdeTerminalLauncher  *self);
+IdeTerminalLauncher *ide_terminal_launcher_new_for_runner   (IdeRuntime             *runtime);
 IDE_AVAILABLE_IN_3_34
-void                 ide_terminal_launcher_set_cwd         (IdeTerminalLauncher  *self,
-                                                            const gchar          *cwd);
+gboolean             ide_terminal_launcher_can_respawn      (IdeTerminalLauncher    *self);
 IDE_AVAILABLE_IN_3_34
-const gchar         *ide_terminal_launcher_get_shell       (IdeTerminalLauncher  *self);
+const gchar         *ide_terminal_launcher_get_cwd          (IdeTerminalLauncher    *self);
 IDE_AVAILABLE_IN_3_34
-void                 ide_terminal_launcher_set_shell       (IdeTerminalLauncher  *self,
-                                                            const gchar          *shell);
+void                 ide_terminal_launcher_set_cwd          (IdeTerminalLauncher    *self,
+                                                             const gchar            *cwd);
 IDE_AVAILABLE_IN_3_34
-const gchar         *ide_terminal_launcher_get_title       (IdeTerminalLauncher  *self);
+const gchar         *ide_terminal_launcher_get_shell        (IdeTerminalLauncher    *self);
 IDE_AVAILABLE_IN_3_34
-void                 ide_terminal_launcher_set_title       (IdeTerminalLauncher  *self,
-                                                            const gchar          *title);
+void                 ide_terminal_launcher_set_shell        (IdeTerminalLauncher    *self,
+                                                             const gchar            *shell);
 IDE_AVAILABLE_IN_3_34
-void                 ide_terminal_launcher_spawn_async     (IdeTerminalLauncher  *self,
-                                                            VtePty               *pty,
-                                                            GCancellable         *cancellable,
-                                                            GAsyncReadyCallback   callback,
-                                                            gpointer              user_data);
+const gchar         *ide_terminal_launcher_get_title        (IdeTerminalLauncher    *self);
 IDE_AVAILABLE_IN_3_34
-gboolean             ide_terminal_launcher_spawn_finish    (IdeTerminalLauncher  *self,
-                                                            GAsyncResult         *result,
-                                                            GError              **error);
+void                 ide_terminal_launcher_set_title        (IdeTerminalLauncher    *self,
+                                                             const gchar            *title);
+IDE_AVAILABLE_IN_3_34
+void                 ide_terminal_launcher_spawn_async      (IdeTerminalLauncher    *self,
+                                                             VtePty                 *pty,
+                                                             GCancellable           *cancellable,
+                                                             GAsyncReadyCallback     callback,
+                                                             gpointer                user_data);
+IDE_AVAILABLE_IN_3_34
+gboolean             ide_terminal_launcher_spawn_finish     (IdeTerminalLauncher    *self,
+                                                             GAsyncResult           *result,
+                                                             GError                **error);
 
 G_END_DECLS

@@ -36,17 +36,19 @@ typedef enum
   LAUNCHER_KIND_DEBUG,
   LAUNCHER_KIND_RUNTIME,
   LAUNCHER_KIND_RUNNER,
+  LAUNCHER_KIND_LAUNCHER,
 } LauncherKind;
 
 struct _IdeTerminalLauncher
 {
-  GObject       parent_instance;
-  gchar        *cwd;
-  gchar        *shell;
-  gchar        *title;
-  IdeRuntime   *runtime;
-  IdeContext   *context;
-  LauncherKind  kind;
+  GObject                parent_instance;
+  gchar                 *cwd;
+  gchar                 *shell;
+  gchar                 *title;
+  IdeRuntime            *runtime;
+  IdeContext            *context;
+  IdeSubprocessLauncher *launcher;
+  LauncherKind           kind;
 };
 
 G_DEFINE_TYPE (IdeTerminalLauncher, ide_terminal_launcher, G_TYPE_OBJECT)
@@ -252,6 +254,44 @@ spawn_host_launcher (IdeTerminalLauncher *self,
 }
 
 static void
+spawn_launcher (IdeTerminalLauncher   *self,
+                IdeTask               *task,
+                IdeSubprocessLauncher *launcher,
+                gint                   pty_fd)
+{
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_TERMINAL_LAUNCHER (self));
+  g_assert (IDE_IS_TASK (task));
+  g_assert (!launcher || IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (pty_fd >= 0);
+
+  if (launcher == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "process may only be spawned once");
+      return;
+    }
+
+  ide_subprocess_launcher_set_flags (launcher, 0);
+
+  ide_subprocess_launcher_take_stdin_fd (launcher, dup (pty_fd));
+  ide_subprocess_launcher_take_stdout_fd (launcher, dup (pty_fd));
+  ide_subprocess_launcher_take_stderr_fd (launcher, dup (pty_fd));
+
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_subprocess_wait_check_async (subprocess,
+                                     ide_task_get_cancellable (task),
+                                     ide_terminal_launcher_wait_check_cb,
+                                     g_object_ref (task));
+}
+
+static void
 spawn_runtime_launcher (IdeTerminalLauncher *self,
                         IdeTask             *task,
                         IdeRuntime          *runtime,
@@ -429,6 +469,11 @@ ide_terminal_launcher_spawn_async (IdeTerminalLauncher *self,
       spawn_runner_launcher (self, task, self->runtime, pty_fd);
       break;
 
+    case LAUNCHER_KIND_LAUNCHER:
+      spawn_launcher (self, task, self->launcher, pty_fd);
+      g_clear_object (&self->launcher);
+      break;
+
     case LAUNCHER_KIND_DEBUG:
     case LAUNCHER_KIND_HOST:
     default:
@@ -470,6 +515,7 @@ ide_terminal_launcher_finalize (GObject *object)
   g_clear_pointer (&self->cwd, g_free);
   g_clear_pointer (&self->shell, g_free);
   g_clear_pointer (&self->title, g_free);
+  g_clear_object (&self->launcher);
   g_clear_object (&self->runtime);
 
   G_OBJECT_CLASS (ide_terminal_launcher_parent_class)->finalize (object);
@@ -662,6 +708,31 @@ ide_terminal_launcher_new (IdeContext *context)
 }
 
 /**
+ * ide_terminal_launcher_new_for_launcher:
+ * @launcher: an #IdeSubprocessLauncher
+ *
+ * Creates a new #IdeTerminalLauncher that can be used to launch a process
+ * using the provided #IdeSubprocessLauncher.
+ *
+ * Returns: (transfer full): an #IdeTerminalLauncher
+ *
+ * Since: 3.34
+ */
+IdeTerminalLauncher *
+ide_terminal_launcher_new_for_launcher (IdeSubprocessLauncher *launcher)
+{
+  IdeTerminalLauncher *self;
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher), NULL);
+
+  self = g_object_new (IDE_TYPE_TERMINAL_LAUNCHER, NULL);
+  self->kind = LAUNCHER_KIND_LAUNCHER;
+  self->launcher = g_object_ref (launcher);
+
+  return g_steal_pointer (&self);
+}
+
+/**
  * ide_terminal_launcher_new_for_debug
  *
  * Create a new #IdeTerminalLauncher that will spawn a terminal on the host.
@@ -724,4 +795,12 @@ ide_terminal_launcher_new_for_runner (IdeRuntime *runtime)
   self->kind = LAUNCHER_KIND_RUNNER;
 
   return g_steal_pointer (&self);
+}
+
+gboolean
+ide_terminal_launcher_can_respawn (IdeTerminalLauncher *self)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_LAUNCHER (self), FALSE);
+
+  return self->kind != LAUNCHER_KIND_LAUNCHER;
 }
