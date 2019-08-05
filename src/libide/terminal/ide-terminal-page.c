@@ -109,14 +109,6 @@ ide_terminal_page_spawn_cb (GObject      *object,
   if (gtk_widget_in_destruction (GTK_WIDGET (self)))
     return;
 
-  now = g_get_monotonic_time ();
-
-  if (ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC)
-    {
-      ide_terminal_page_feed (self, _("Subprocess launcher failed too quickly, will not respawn."));
-      return;
-    }
-
   if (!self->respawn_on_exit)
     {
       if (self->close_on_exit)
@@ -124,6 +116,14 @@ ide_terminal_page_spawn_cb (GObject      *object,
                                    (GSourceFunc) destroy_widget_in_idle,
                                    g_object_ref (self),
                                    g_object_unref);
+      return;
+    }
+
+  now = g_get_monotonic_time ();
+
+  if (ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC)
+    {
+      ide_terminal_page_feed (self, _("Subprocess launcher failed too quickly, will not respawn."));
       return;
     }
 
