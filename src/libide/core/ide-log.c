@@ -33,6 +33,7 @@
 
 #include <glib.h>
 #include <string.h>
+#include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -200,7 +201,7 @@ ide_log_handler (const gchar    *log_domain,
                  const gchar    *message,
                  gpointer        user_data)
 {
-  GTimeVal tv;
+  struct timeval tv;
   struct tm tt;
   time_t t;
   const gchar *level;
@@ -251,7 +252,7 @@ ide_log_handler (const gchar    *log_domain,
         }
 
       level = log_level_str_func (log_level);
-      g_get_current_time (&tv);
+      gettimeofday (&tv, NULL);
       t = (time_t) tv.tv_sec;
       tt = *localtime (&t);
       strftime (ftime, sizeof (ftime), "%H:%M:%S", &tt);
