@@ -45,6 +45,7 @@ struct _IdeTerminalLauncher
   gchar                 *cwd;
   gchar                 *shell;
   gchar                 *title;
+  gchar                **args;
   IdeRuntime            *runtime;
   IdeContext            *context;
   IdeSubprocessLauncher *launcher;
@@ -55,6 +56,7 @@ G_DEFINE_TYPE (IdeTerminalLauncher, ide_terminal_launcher, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_ARGS,
   PROP_CWD,
   PROP_SHELL,
   PROP_TITLE,
@@ -387,9 +389,9 @@ spawn_runner_launcher (IdeTerminalLauncher *self,
   g_autoptr(IdeSimpleBuildTarget) build_target = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeRunner) runner = NULL;
+  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(GError) error = NULL;
   IdeEnvironment *env;
-  const gchar *argv[] = { NULL, NULL, NULL };
   const gchar *shell;
 
   g_assert (IDE_IS_TERMINAL_LAUNCHER (self));
@@ -403,12 +405,24 @@ spawn_runner_launcher (IdeTerminalLauncher *self,
   if (!ide_runtime_contains_program_in_path (runtime, shell, NULL))
     shell = "/bin/sh";
 
-  argv[0] = shell;
-  if (shell_supports_login (shell))
-    argv[1] = "--login";
+  argv = g_ptr_array_new ();
+  g_ptr_array_add (argv, (gchar *)shell);
+
+  if (self->args == NULL)
+    {
+      if (shell_supports_login (shell))
+        g_ptr_array_add (argv, (gchar *)"--login");
+    }
+  else
+    {
+      for (guint i = 0; self->args[i]; i++)
+        g_ptr_array_add (argv, self->args[i]);
+    }
+
+  g_ptr_array_add (argv, NULL);
 
   build_target = ide_simple_build_target_new (NULL);
-  ide_simple_build_target_set_argv (build_target, argv);
+  ide_simple_build_target_set_argv (build_target, (const gchar * const *)argv->pdata);
   ide_simple_build_target_set_cwd (build_target, self->cwd ? self->cwd : g_get_home_dir ());
  
   /* Creating runner should always succeed, but run_async() may fail */
@@ -512,6 +526,7 @@ ide_terminal_launcher_finalize (GObject *object)
 {
   IdeTerminalLauncher *self = (IdeTerminalLauncher *)object;
   
+  g_clear_pointer (&self->args, g_strfreev);
   g_clear_pointer (&self->cwd, g_free);
   g_clear_pointer (&self->shell, g_free);
   g_clear_pointer (&self->title, g_free);
@@ -531,6 +546,10 @@ ide_terminal_launcher_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ARGS:
+      g_value_set_boxed (value, ide_terminal_launcher_get_args (self));
+      break;
+
     case PROP_CWD:
       g_value_set_string (value, ide_terminal_launcher_get_cwd (self));
       break;
@@ -558,6 +577,10 @@ ide_terminal_launcher_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ARGS:
+      ide_terminal_launcher_set_args (self, g_value_get_boxed (value));
+      break;
+
     case PROP_CWD:
       ide_terminal_launcher_set_cwd (self, g_value_get_string (value));
       break;
@@ -583,6 +606,13 @@ ide_terminal_launcher_class_init (IdeTerminalLauncherClass *klass)
   object_class->finalize = ide_terminal_launcher_finalize;
   object_class->get_property = ide_terminal_launcher_get_property;
   object_class->set_property = ide_terminal_launcher_set_property;
+
+  properties [PROP_ARGS] =
+    g_param_spec_boxed ("args",
+                         "Args",
+                         "Arguments to shell",
+                         G_TYPE_STRV,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   
   properties [PROP_CWD] =
     g_param_spec_string ("cwd",
@@ -794,6 +824,8 @@ ide_terminal_launcher_new_for_runner (IdeRuntime *runtime)
   self->runtime = g_object_ref (runtime);
   self->kind = LAUNCHER_KIND_RUNNER;
 
+  g_print ("New for runner\n");
+
   return g_steal_pointer (&self);
 }
 
@@ -803,4 +835,26 @@ ide_terminal_launcher_can_respawn (IdeTerminalLauncher *self)
   g_return_val_if_fail (IDE_IS_TERMINAL_LAUNCHER (self), FALSE);
 
   return self->kind != LAUNCHER_KIND_LAUNCHER;
+}
+
+const gchar * const *
+ide_terminal_launcher_get_args (IdeTerminalLauncher *self)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_LAUNCHER (self), NULL);
+
+  return (const gchar * const *)self->args;
+}
+
+void
+ide_terminal_launcher_set_args (IdeTerminalLauncher *self,
+                                const gchar * const *args)
+{
+  g_return_if_fail (IDE_IS_TERMINAL_LAUNCHER (self));
+
+  if ((gchar **)args != self->args)
+    {
+      g_auto(GStrv) freeme = g_steal_pointer (&self->args);
+      self->args = g_strdupv ((gchar **)args);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARGS]);
+    }
 }

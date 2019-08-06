@@ -43,6 +43,11 @@ IdeTerminalLauncher *ide_terminal_launcher_new_for_runner   (IdeRuntime         
 IDE_AVAILABLE_IN_3_34
 gboolean             ide_terminal_launcher_can_respawn      (IdeTerminalLauncher    *self);
 IDE_AVAILABLE_IN_3_34
+const gchar * const *ide_terminal_launcher_get_args         (IdeTerminalLauncher    *self);
+IDE_AVAILABLE_IN_3_34
+void                 ide_terminal_launcher_set_args         (IdeTerminalLauncher    *self,
+                                                             const gchar * const    *args);
+IDE_AVAILABLE_IN_3_34
 const gchar         *ide_terminal_launcher_get_cwd          (IdeTerminalLauncher    *self);
 IDE_AVAILABLE_IN_3_34
 void                 ide_terminal_launcher_set_cwd          (IdeTerminalLauncher    *self,
