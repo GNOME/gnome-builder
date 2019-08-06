@@ -111,7 +111,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
     {
       g_autofree gchar *format = NULL;
 
-      format = g_strdup_printf ("%s: %s", _("Subprocess launcher failed"), error->message);
+      format = g_strdup_printf ("%s: %s\n", _("Subprocess launcher failed"), error->message);
       ide_terminal_page_feed (self, format);
     }
 
@@ -133,6 +133,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
   if (ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC)
     {
       ide_terminal_page_feed (self, _("Subprocess launcher failed too quickly, will not respawn."));
+      ide_terminal_page_feed (self, "\n");
       return;
     }
 
