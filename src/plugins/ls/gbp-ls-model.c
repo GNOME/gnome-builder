@@ -236,15 +236,9 @@ gbp_ls_model_get_value (GtkTreeModel *model,
       break;
 
     case GBP_LS_MODEL_COLUMN_MODIFIED:
-      {
-        GTimeVal tv;
-
-        g_file_info_get_modification_time (info, &tv);
-        g_value_init (value, G_TYPE_DATE_TIME);
-        g_value_take_boxed (value, g_date_time_new_from_timeval_local (&tv));
-
-        break;
-      }
+      g_value_init (value, G_TYPE_DATE_TIME);
+      g_value_take_boxed (value, g_file_info_get_modification_date_time (info));
+      break;
 
     case GBP_LS_MODEL_COLUMN_FILE:
       {
