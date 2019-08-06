@@ -405,6 +405,7 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
                                       gpointer      user_data)
 {
   IdePipeline *pipeline = (IdePipeline *)object;
+  g_autoptr(IdeSimpleBuildTarget) build_target = NULL;
   g_autoptr(IdeRunner) runner = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
@@ -437,9 +438,14 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  /* Set our command as specified by meson */
+  build_target = ide_simple_build_target_new (NULL);
+  command = gbp_meson_test_get_command (GBP_MESON_TEST (run->test));
+  ide_simple_build_target_set_argv (build_target, command);
+
   /* Create a runner to execute the test within */
   runtime = ide_pipeline_get_runtime (pipeline);
-  runner = ide_runtime_create_runner (runtime, NULL);
+  runner = ide_runtime_create_runner (runtime, IDE_BUILD_TARGET (build_target));
 
   if (runner == NULL)
     {
@@ -471,10 +477,6 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
       g_autofree gchar *path = g_file_get_path (workdir);
       ide_runner_set_cwd (runner, path);
     }
-
-  /* Set our command as specified by meson */
-  command = gbp_meson_test_get_command (GBP_MESON_TEST (run->test));
-  ide_runner_push_args (runner, command);
 
   /* Make sure the environment is respected */
   if ((environ_ = gbp_meson_test_get_environ (GBP_MESON_TEST (run->test))))
