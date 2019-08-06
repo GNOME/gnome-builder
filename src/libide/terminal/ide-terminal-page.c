@@ -505,7 +505,7 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
                           "Close on Exit",
                           "Close on Exit",
                           TRUE,
-                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_MANAGE_SPAWN] =
     g_param_spec_boolean ("manage-spawn",
@@ -519,7 +519,7 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
                           "Respawn on Exit",
                           "Respawn on Exit",
                           TRUE,
-                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PTY] =
     g_param_spec_object ("pty",
