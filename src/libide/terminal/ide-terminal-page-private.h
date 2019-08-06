@@ -49,6 +49,7 @@ struct _IdeTerminalPage
   guint                respawn_on_exit : 1;
   guint                close_on_exit : 1;
   guint                needs_attention : 1;
+  guint                exited : 1;
 };
 
 G_END_DECLS

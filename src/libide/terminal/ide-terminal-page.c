@@ -92,11 +92,20 @@ ide_terminal_page_spawn_cb (GObject      *object,
   IdeTerminalLauncher *launcher = (IdeTerminalLauncher *)object;
   g_autoptr(IdeTerminalPage) self = user_data;
   g_autoptr(GError) error = NULL;
+  g_autofree gchar *title = NULL;
   gint64 now;
 
   g_assert (IDE_IS_TERMINAL_LAUNCHER (launcher));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TERMINAL_PAGE (self));
+
+  self->exited = TRUE;
+
+  title = g_strdup_printf ("%s (%s)",
+                           ide_page_get_title (IDE_PAGE (self)) ?: _("Untitled terminal"),
+                           /* translators: exited describes that the terminal shell process has exited */
+                           _("Exited"));
+  ide_page_set_title (IDE_PAGE (self), title);
 
   if (!ide_terminal_launcher_spawn_finish (launcher, result, &error))
     {
@@ -134,6 +143,8 @@ ide_terminal_page_spawn_cb (GObject      *object,
 
   /* Spawn our terminal and wait for it to exit */
   self->last_respawn = now;
+  self->exited = FALSE;
+  ide_page_set_title (IDE_PAGE (self), _("Untitled terminal"));
   ide_terminal_launcher_spawn_async (self->launcher,
                                      self->pty,
                                      NULL,
