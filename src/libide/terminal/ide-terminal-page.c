@@ -125,6 +125,8 @@ ide_terminal_page_spawn_cb (GObject      *object,
                                    (GSourceFunc) destroy_widget_in_idle,
                                    g_object_ref (self),
                                    g_object_unref);
+      else
+        vte_terminal_set_input_enabled (VTE_TERMINAL (self->terminal_top), FALSE);
       return;
     }
 
