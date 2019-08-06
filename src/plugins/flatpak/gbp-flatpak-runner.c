@@ -189,6 +189,7 @@ gbp_flatpak_runner_new (IdeContext     *context,
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target), NULL);
+  g_return_val_if_fail (build_target || manifest_command, NULL);
 
   self = g_object_new (GBP_TYPE_FLATPAK_RUNNER, NULL);
   self->build_path = g_strdup (build_path);
