@@ -249,17 +249,8 @@
             ]
         },
         {
-            "name" : "gnome-common",
-            "cleanup" : [ "*" ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gnome-common.git"
-                }
-            ]
-        },
-        {
             "name" : "libpeas",
+            "buildsystem" : "meson",
             "cleanup" : [
                 "/bin/*",
                 "/lib/peas-demo",
