@@ -32,13 +32,13 @@
  * so that we don't allow ourself to flap the worker process in case it is
  * buggy and crashing/exiting too frequently.
  */
-#define RATE_LIMIT_THRESHOLD_SECONDS 5
+#define RATE_LIMIT_THRESHOLD_SECONDS G_GINT64_CONSTANT(5)
 
 typedef struct
 {
   IdeSubprocessLauncher *launcher;
   IdeSubprocess *subprocess;
-  GTimeVal last_spawn_time;
+  gint64 last_spawn_time;
   guint supervising : 1;
 } IdeSubprocessSupervisorPrivate;
 
@@ -318,19 +318,12 @@ ide_subprocess_supervisor_needs_rate_limit (IdeSubprocessSupervisor *self,
                                             gint64                  *required_sleep)
 {
   IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
-  GTimeVal now;
-  gint64 now_usec;
-  gint64 last_usec;
-  gint64 span;
+  GTimeSpan span;
 
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
   g_assert (required_sleep != NULL);
 
-  g_get_current_time (&now);
-
-  now_usec = (now.tv_sec * G_USEC_PER_SEC) + now.tv_usec;
-  last_usec = (priv->last_spawn_time.tv_sec * G_USEC_PER_SEC) + priv->last_spawn_time.tv_usec;
-  span = now_usec - last_usec;
+  span = g_get_monotonic_time () - priv->last_spawn_time;
 
   if (span < (RATE_LIMIT_THRESHOLD_SECONDS * G_USEC_PER_SEC))
     {
@@ -407,7 +400,7 @@ ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
     {
       if (subprocess != NULL)
         {
-          g_get_current_time (&priv->last_spawn_time);
+          priv->last_spawn_time = g_get_monotonic_time ();
           ide_subprocess_wait_async (priv->subprocess,
                                      NULL,
                                      ide_subprocess_supervisor_wait_cb,
