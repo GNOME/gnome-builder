@@ -242,23 +242,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
   return ret;
 }
 
-static gboolean
-is_a_shell (const gchar *str)
-{
-  static const gchar *suffixes[] = { "/bash", "/sh", "/dash", "/zsh" };
-
-  if (str)
-    {
-      for (guint i = 0; i < G_N_ELEMENTS (suffixes); i++)
-        {
-          if (g_str_has_suffix (str, suffixes[i]))
-            return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 static gchar *
 get_binary_name (GbpFlatpakRuntime *self,
                  IdeBuildTarget    *build_target)
@@ -267,15 +250,6 @@ get_binary_name (GbpFlatpakRuntime *self,
   IdeConfigManager *config_manager = ide_config_manager_from_context (context);
   IdeConfig *config = ide_config_manager_get_current (config_manager);
   g_autofree gchar *build_target_name = ide_build_target_get_name (build_target);
-  g_auto(GStrv) argv = ide_build_target_get_argv (build_target);
-
-  /* XXX: temporary workaround while we come up with how to
-   *      spawn shells in the mount namespace appropriately.
-   */
-  if (is_a_shell (build_target_name))
-    return g_steal_pointer (&build_target_name);
-  else if (argv && is_a_shell (argv[0]))
-    return g_strdup (argv[0]);
 
   if (GBP_IS_FLATPAK_MANIFEST (config))
     {
@@ -313,11 +287,8 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   if (build_target != NULL)
     binary_name = get_binary_name (self, build_target);
 
-  if ((runner = IDE_RUNNER (gbp_flatpak_runner_new (context, build_path, binary_name))))
+  if ((runner = IDE_RUNNER (gbp_flatpak_runner_new (context, build_path, build_target, binary_name))))
     ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runner));
-
-  if (build_target != NULL)
-    ide_runner_set_build_target (runner, build_target);
 
   return runner;
 }

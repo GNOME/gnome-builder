@@ -35,7 +35,7 @@ struct _GbpFlatpakRunner
   IdeRunner parent_instance;
 
   gchar *build_path;
-  gchar *binary_path;
+  gchar *manifest_command;
 };
 
 G_DEFINE_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, IDE_TYPE_RUNNER)
@@ -180,23 +180,38 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 }
 
 GbpFlatpakRunner *
-gbp_flatpak_runner_new (IdeContext  *context,
-                        const gchar *build_path,
-                        const gchar *binary_path)
+gbp_flatpak_runner_new (IdeContext     *context,
+                        const gchar    *build_path,
+                        IdeBuildTarget *build_target,
+                        const gchar    *manifest_command)
 {
   GbpFlatpakRunner *self;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target), NULL);
 
   self = g_object_new (GBP_TYPE_FLATPAK_RUNNER, NULL);
-
-  if (binary_path != NULL)
-    ide_runner_append_argv (IDE_RUNNER (self), binary_path);
-
   self->build_path = g_strdup (build_path);
-  self->binary_path = g_strdup (binary_path);
+  self->manifest_command = g_strdup (manifest_command);
 
-  return self;
+  if (build_target == NULL)
+    {
+      ide_runner_append_argv (IDE_RUNNER (self), manifest_command);
+    }
+  else
+    {
+      g_auto(GStrv) argv = ide_build_target_get_argv (build_target);
+
+      if (argv != NULL)
+        {
+          for (guint i = 0; argv[i]; i++)
+            ide_runner_append_argv (IDE_RUNNER (self), argv[i]);
+        }
+
+      ide_runner_set_build_target (IDE_RUNNER (self), build_target);
+    }
+
+  return g_steal_pointer (&self);
 }
 
 static void
@@ -205,7 +220,7 @@ gbp_flatpak_runner_finalize (GObject *object)
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)object;
 
   g_clear_pointer (&self->build_path, g_free);
-  g_clear_pointer (&self->binary_path, g_free);
+  g_clear_pointer (&self->manifest_command, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_runner_parent_class)->finalize (object);
 }

@@ -28,8 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, GBP, FLATPAK_RUNNER, IdeRunner)
 
-GbpFlatpakRunner *gbp_flatpak_runner_new (IdeContext  *context,
-                                          const gchar *build_path,
-                                          const gchar *binary_name);
+GbpFlatpakRunner *gbp_flatpak_runner_new (IdeContext     *context,
+                                          const gchar    *build_path,
+                                          IdeBuildTarget *build_target,
+                                          const gchar    *manifest_command);
 
 G_END_DECLS
