@@ -37,7 +37,7 @@ struct _GbpBufferMonitorBufferAddin
   IdeBuffer    *buffer;
   GFileMonitor *monitor;
 
-  GTimeVal      mtime;
+  GDateTime    *mtime;
   guint         mtime_set : 1;
 };
 
@@ -77,11 +77,9 @@ gbp_buffer_monitor_buffer_addin_check_for_change (GbpBufferMonitorBufferAddin *s
 
   if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
     {
-      GTimeVal mtime;
+      g_autoptr(GDateTime) mtime = g_file_info_get_modification_date_time (info);
 
-      g_file_info_get_modification_time (info, &mtime);
-
-      if (memcmp (&mtime, &self->mtime, sizeof mtime) != 0)
+      if (self->mtime != NULL && mtime != NULL && !g_date_time_equal (self->mtime, mtime))
         {
           self->mtime_set = FALSE;
 
@@ -174,7 +172,8 @@ gbp_buffer_monitor_buffer_addin_setup_monitor (GbpBufferMonitorBufferAddin *self
 
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
             {
-              g_file_info_get_modification_time (info, &self->mtime);
+              g_clear_pointer (&self->mtime, g_date_time_unref);
+              self->mtime = g_file_info_get_modification_date_time (info);
               self->mtime_set = TRUE;
             }
         }
@@ -271,6 +270,7 @@ gbp_buffer_monitor_buffer_addin_unload (IdeBufferAddin *addin,
                                         G_CALLBACK (file_renamed_cb),
                                         self);
 
+  g_clear_pointer (&self->mtime, g_date_time_unref);
   self->buffer = NULL;
 }
 
