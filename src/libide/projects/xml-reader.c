@@ -337,7 +337,7 @@ xml_reader_load_from_stream (XmlReader     *reader,
    return TRUE;
 }
 
-G_CONST_RETURN gchar *
+const gchar *
 xml_reader_get_value (XmlReader *reader)
 {
   g_return_val_if_fail (XML_IS_READER (reader), NULL);
@@ -347,7 +347,7 @@ xml_reader_get_value (XmlReader *reader)
   return XML_TO_CHAR (xmlTextReaderConstValue (reader->xml));
 }
 
-G_CONST_RETURN gchar *
+const gchar *
 xml_reader_get_name (XmlReader *reader)
 {
   g_return_val_if_fail (XML_IS_READER (reader), NULL);
@@ -529,7 +529,7 @@ xml_reader_is_namespace (XmlReader   *reader,
    return (g_strcmp0 (XML_TO_CHAR(xmlTextReaderConstNamespaceUri (reader->xml)), ns) == 0);
 }
 
-G_CONST_RETURN gchar *
+const gchar *
 xml_reader_get_local_name (XmlReader *reader)
 {
    g_return_val_if_fail(XML_IS_READER (reader), NULL);
