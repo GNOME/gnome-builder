@@ -46,8 +46,11 @@ struct _IdeCommandInterface
   gboolean  (*run_finish)   (IdeCommand           *self,
                              GAsyncResult         *result,
                              GError              **error);
+  gint      (*get_priority) (IdeCommand           *self);
 };
 
+IDE_AVAILABLE_IN_3_34
+gint      ide_command_get_priority (IdeCommand           *self);
 IDE_AVAILABLE_IN_3_32
 gchar    *ide_command_get_title    (IdeCommand           *self);
 IDE_AVAILABLE_IN_3_32

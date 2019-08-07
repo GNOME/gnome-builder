@@ -151,3 +151,32 @@ ide_command_get_subtitle (IdeCommand *self)
 
   return NULL;
 }
+
+/**
+ * ide_command_get_priority:
+ * @self: a #IdeCommand
+ *
+ * Gets the priority for the command.
+ *
+ * This is generally just useful when using the command bar so that the items
+ * may be sorted in a useful manner.
+ *
+ * Command providers may want to use the typed_text for the query operation
+ * to calculate a score with fuzzy matching.
+ *
+ * The lower the value, the higher priority.
+ *
+ * Returns: an integer with the sort priority
+ *
+ * Since: 3.34
+ */
+gint
+ide_command_get_priority (IdeCommand *self)
+{
+  g_return_val_if_fail (IDE_IS_COMMAND (self), G_MAXINT);
+
+  if (IDE_COMMAND_GET_IFACE (self)->get_priority)
+    return IDE_COMMAND_GET_IFACE (self)->get_priority (self);
+
+  return G_MAXINT;
+}
