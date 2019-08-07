@@ -201,7 +201,7 @@ ide_log_handler (const gchar    *log_domain,
                  const gchar    *message,
                  gpointer        user_data)
 {
-  struct timeval tv;
+  gint64 now;
   struct tm tt;
   time_t t;
   const gchar *level;
@@ -252,13 +252,13 @@ ide_log_handler (const gchar    *log_domain,
         }
 
       level = log_level_str_func (log_level);
-      gettimeofday (&tv, NULL);
-      t = (time_t) tv.tv_sec;
+      now = g_get_real_time ();
+      t = now / G_USEC_PER_SEC;
       tt = *localtime (&t);
       strftime (ftime, sizeof (ftime), "%H:%M:%S", &tt);
-      buffer = g_strdup_printf ("%s.%04ld  %40s[% 5d]: %s: %s\n",
+      buffer = g_strdup_printf ("%s.%04d  %40s[% 5d]: %s: %s\n",
                                 ftime,
-                                tv.tv_usec / 1000,
+                                (gint)((now % G_USEC_PER_SEC) / 100L),
                                 log_domain,
                                 ide_log_get_thread (),
                                 level,
