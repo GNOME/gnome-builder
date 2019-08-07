@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-gui-global.h"
 #include "ide-gui-private.h"
 
 static void
@@ -74,10 +75,33 @@ ide_workspace_actions_surface (GSimpleAction *action,
   ide_workspace_set_visible_surface_name (self, surface);
 }
 
+static void
+ide_workspace_actions_command (GSimpleAction *action,
+                               GVariant      *param,
+                               gpointer       user_data)
+{
+  IdeCommandManager *command_manager;
+  IdeWorkspace *self = user_data;
+  const gchar *command;
+  IdeContext *context;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  command = g_variant_get_string (param, NULL);
+  context = ide_widget_get_context (GTK_WIDGET (self));
+  command_manager = ide_command_manager_from_context (context);
+
+  _ide_command_manager_execute (command_manager, self, command);
+}
+
 static const GActionEntry actions[] = {
   { "show-menu", ide_workspace_actions_show_menu },
   { "surface", ide_workspace_actions_surface, "s" },
   { "close", ide_workspace_actions_close },
+  { "command", ide_workspace_actions_command, "s" },
 };
 
 void
