@@ -665,9 +665,24 @@ gbp_shellcmd_command_run_finish (IdeCommand    *command,
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
+static GIcon *
+gbp_shellcmd_command_get_icon (IdeCommand *command)
+{
+  static GIcon *icon;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHELLCMD_COMMAND (command));
+
+  if (icon == NULL)
+    icon = g_themed_icon_new ("utilities-terminal-symbolic");
+
+  return g_object_ref (icon);
+}
+
 static void
 command_iface_init (IdeCommandInterface *iface)
 {
+  iface->get_icon = gbp_shellcmd_command_get_icon;
   iface->get_title = gbp_shellcmd_command_get_title;
   iface->get_subtitle = gbp_shellcmd_command_get_subtitle;
   iface->run_async = gbp_shellcmd_command_run_async;
