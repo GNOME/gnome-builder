@@ -371,3 +371,53 @@ ide_command_manager_get_command_by_id (IdeCommandManager *self,
 
   return g_steal_pointer (&state.command);
 }
+
+static void
+ide_command_manager_execute_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeCommand *command = (IdeCommand *)object;
+  g_autoptr(IdeCommandManager) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_COMMAND (command));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_COMMAND_MANAGER (self));
+
+  if (!ide_command_run_finish (command, result, &error))
+    ide_object_warning (self, "%s: %s", _("Command failed"), error->message);
+
+  ide_object_destroy (IDE_OBJECT (command));
+}
+
+void
+_ide_command_manager_execute (IdeCommandManager *self,
+                              IdeWorkspace      *workspace,
+                              const gchar       *command_id)
+{
+  g_autoptr(IdeCommand) command = NULL;
+
+  g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+
+  command = ide_command_manager_get_command_by_id (self, workspace, command_id);
+
+  if (command == NULL)
+    {
+      IdeContext *context = ide_workspace_get_context (workspace);
+
+      ide_context_warning (context,
+                           _("Failed to locate command “%s”"),
+                           command_id);
+      return;
+    }
+
+  if (ide_object_is_root (IDE_OBJECT (command)))
+    ide_object_append (IDE_OBJECT (self), IDE_OBJECT (command));
+
+  ide_command_run_async (command,
+                         NULL,
+                         ide_command_manager_execute_cb,
+                         g_object_ref (self));
+}

@@ -44,6 +44,9 @@
 
 G_BEGIN_DECLS
 
+void      _ide_command_manager_execute          (IdeCommandManager   *self,
+                                                 IdeWorkspace        *workspace,
+                                                 const gchar         *command);
 gboolean  _ide_gtk_widget_action_is_stateful    (GtkWidget           *widget,
                                                  const gchar         *action_name);
 void      _ide_frame_init_actions               (IdeFrame            *self);
