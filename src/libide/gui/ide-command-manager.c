@@ -68,6 +68,18 @@ query_free (Query *q)
 }
 
 static void
+ide_command_manager_load_shortcuts_cb (GtkWidget *workspace,
+                                       gpointer   user_data)
+{
+  IdeCommandProvider *provider = user_data;
+
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (IDE_IS_COMMAND_PROVIDER (provider));
+
+  ide_command_provider_load_shortcuts (provider, IDE_WORKSPACE (workspace));
+}
+
+static void
 ide_command_manager_provider_added_cb (IdeExtensionSetAdapter *set,
                                        PeasPluginInfo         *plugin_info,
                                        PeasExtension          *exten,
@@ -75,6 +87,8 @@ ide_command_manager_provider_added_cb (IdeExtensionSetAdapter *set,
 {
   IdeCommandProvider *provider = (IdeCommandProvider *)exten;
   IdeCommandManager *self = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeWorkbench *workbench;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
@@ -84,6 +98,24 @@ ide_command_manager_provider_added_cb (IdeExtensionSetAdapter *set,
 
   g_debug ("Adding command provider %s", G_OBJECT_TYPE_NAME (exten));
 
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  workbench = _ide_workbench_from_context (context);
+
+  ide_workbench_foreach_workspace (workbench,
+                                   ide_command_manager_load_shortcuts_cb,
+                                   provider);
+}
+
+static void
+ide_command_manager_unload_shortcuts_cb (GtkWidget *workspace,
+                                         gpointer   user_data)
+{
+  IdeCommandProvider *provider = user_data;
+
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (IDE_IS_COMMAND_PROVIDER (provider));
+
+  ide_command_provider_unload_shortcuts (provider, IDE_WORKSPACE (workspace));
 }
 
 static void
@@ -94,6 +126,8 @@ ide_command_manager_provider_removed_cb (IdeExtensionSetAdapter *set,
 {
   IdeCommandProvider *provider = (IdeCommandProvider *)exten;
   IdeCommandManager *self = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeWorkbench *workbench;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
@@ -103,6 +137,12 @@ ide_command_manager_provider_removed_cb (IdeExtensionSetAdapter *set,
 
   g_debug ("Removing command provider %s", G_OBJECT_TYPE_NAME (exten));
 
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  workbench = _ide_workbench_from_context (context);
+
+  ide_workbench_foreach_workspace (workbench,
+                                   ide_command_manager_unload_shortcuts_cb,
+                                   provider);
 }
 
 static void
@@ -315,6 +355,68 @@ ide_command_manager_query_finish (IdeCommandManager  *self,
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
   return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+}
+
+static void
+ide_command_manager_init_shortcuts_cb (IdeExtensionSetAdapter *set,
+                                       PeasPluginInfo         *plugin_info,
+                                       PeasExtension          *exten,
+                                       gpointer                user_data)
+{
+  IdeCommandProvider *provider = (IdeCommandProvider *)exten;
+  IdeWorkspace *workspace = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_COMMAND_PROVIDER (provider));
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  ide_command_provider_load_shortcuts (provider, workspace);
+}
+
+void
+_ide_command_manager_init_shortcuts (IdeCommandManager *self,
+                                     IdeWorkspace      *workspace)
+{
+  g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (self->adapter != NULL);
+
+  ide_extension_set_adapter_foreach (self->adapter,
+                                     ide_command_manager_init_shortcuts_cb,
+                                     workspace);
+}
+
+static void
+ide_command_manager_unload_shortcuts_foreach_cb (IdeExtensionSetAdapter *set,
+                                                 PeasPluginInfo         *plugin_info,
+                                                 PeasExtension          *exten,
+                                                 gpointer                user_data)
+{
+  IdeCommandProvider *provider = (IdeCommandProvider *)exten;
+  IdeWorkspace *workspace = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_COMMAND_PROVIDER (provider));
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  ide_command_provider_unload_shortcuts (provider, workspace);
+}
+
+void
+_ide_command_manager_unload_shortcuts (IdeCommandManager *self,
+                                       IdeWorkspace      *workspace)
+{
+  g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (self->adapter != NULL);
+
+  ide_extension_set_adapter_foreach (self->adapter,
+                                     ide_command_manager_unload_shortcuts_foreach_cb,
+                                     workspace);
 }
 
 static void

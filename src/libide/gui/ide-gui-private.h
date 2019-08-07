@@ -44,6 +44,10 @@
 
 G_BEGIN_DECLS
 
+void      _ide_command_manager_init_shortcuts   (IdeCommandManager   *self,
+                                                 IdeWorkspace        *workspace);
+void      _ide_command_manager_unload_shortcuts (IdeCommandManager   *self,
+                                                 IdeWorkspace        *workspace);
 void      _ide_command_manager_execute          (IdeCommandManager   *self,
                                                  IdeWorkspace        *workspace,
                                                  const gchar         *command);

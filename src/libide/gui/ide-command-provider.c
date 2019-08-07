@@ -102,6 +102,28 @@ ide_command_provider_query_finish (IdeCommandProvider  *self,
   return IDE_COMMAND_PROVIDER_GET_IFACE (self)->query_finish (self, result, error);
 }
 
+void
+ide_command_provider_load_shortcuts (IdeCommandProvider *self,
+                                     IdeWorkspace       *workspace)
+{
+  g_return_if_fail (IDE_IS_COMMAND_PROVIDER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+
+  if (IDE_COMMAND_PROVIDER_GET_IFACE (self)->load_shortcuts)
+    IDE_COMMAND_PROVIDER_GET_IFACE (self)->load_shortcuts (self, workspace);
+}
+
+void
+ide_command_provider_unload_shortcuts (IdeCommandProvider *self,
+                                       IdeWorkspace       *workspace)
+{
+  g_return_if_fail (IDE_IS_COMMAND_PROVIDER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+
+  if (IDE_COMMAND_PROVIDER_GET_IFACE (self)->unload_shortcuts)
+    IDE_COMMAND_PROVIDER_GET_IFACE (self)->unload_shortcuts (self, workspace);
+}
+
 /**
  * ide_command_provider_get_command_by_id:
  * @self: a #IdeCommandProvider

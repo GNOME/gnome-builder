@@ -68,5 +68,4 @@ gboolean  ide_command_run_finish   (IdeCommand           *self,
                                     GAsyncResult         *result,
                                     GError              **error);
 
-
 G_END_DECLS

@@ -52,8 +52,18 @@ struct _IdeCommandProviderInterface
   IdeCommand *(*get_command_by_id) (IdeCommandProvider   *self,
                                     IdeWorkspace         *workspace,
                                     const gchar          *command_id);
+  void        (*load_shortcuts)    (IdeCommandProvider   *self,
+                                    IdeWorkspace         *workspace);
+  void        (*unload_shortcuts)  (IdeCommandProvider   *self,
+                                    IdeWorkspace         *workspace);
 };
 
+IDE_AVAILABLE_IN_3_34
+void        ide_command_provider_load_shortcuts    (IdeCommandProvider   *self,
+                                                    IdeWorkspace         *workspace);
+IDE_AVAILABLE_IN_3_34
+void        ide_command_provider_unload_shortcuts  (IdeCommandProvider   *self,
+                                                    IdeWorkspace         *workspace);
 IDE_AVAILABLE_IN_3_32
 void        ide_command_provider_query_async       (IdeCommandProvider   *self,
                                                     IdeWorkspace         *workspace,

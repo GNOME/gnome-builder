@@ -769,6 +769,7 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                              IdeWorkspace *workspace)
 {
   g_autoptr(GPtrArray) addins = NULL;
+  IdeCommandManager *command_manager;
   GList *mru_link;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -842,6 +843,10 @@ ide_workbench_add_workspace (IdeWorkbench *self,
       formatted = g_strdup_printf (_("Builder — %s"), title);
       gtk_window_set_title (GTK_WINDOW (workspace), formatted);
     }
+
+  /* Load shortcuts for commands */
+  command_manager = ide_command_manager_from_context (self->context);
+  _ide_command_manager_init_shortcuts (command_manager, workspace);
 }
 
 /**
@@ -858,6 +863,7 @@ ide_workbench_remove_workspace (IdeWorkbench *self,
                                 IdeWorkspace *workspace)
 {
   g_autoptr(GPtrArray) addins = NULL;
+  IdeCommandManager *command_manager;
   GList *list;
   GList *mru_link;
   guint count = 0;
@@ -872,6 +878,10 @@ ide_workbench_remove_workspace (IdeWorkbench *self,
   g_signal_handlers_disconnect_by_func (workspace,
                                         G_CALLBACK (ide_workbench_workspace_has_toplevel_focus_cb),
                                         self);
+
+  /* Remove any shortcuts that were registered by command providers */
+  command_manager = ide_command_manager_from_context (self->context);
+  _ide_command_manager_unload_shortcuts (command_manager, workspace);
 
   /* Notify all the addins about losing the workspace. */
   if ((addins = ide_workbench_collect_addins (self)))
