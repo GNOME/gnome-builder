@@ -34,6 +34,7 @@
 #include "ide-transfer-manager-private.h"
 
 #include "ide-application.h"
+#include "ide-command-manager.h"
 #include "ide-gui-global.h"
 #include "ide-gui-private.h"
 #include "ide-primary-workspace.h"
@@ -380,6 +381,9 @@ ide_workbench_constructed (GObject *object)
   peas_extension_set_foreach (self->addins,
                               ide_workbench_addin_added_cb,
                               self);
+
+  /* Load command providers (which may register shortcuts) */
+  (void)ide_command_manager_from_context (self->context);
 }
 
 static void
