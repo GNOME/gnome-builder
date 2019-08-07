@@ -57,6 +57,20 @@ gbp_command_bar_suggestion_set_command (GbpCommandBarSuggestion *self,
     }
 }
 
+static GIcon *
+gbp_command_bar_suggestion_get_icon (DzlSuggestion *suggestion)
+{
+  GbpCommandBarSuggestion *self = (GbpCommandBarSuggestion *)suggestion;
+  IdeCommand *command;
+
+  g_assert (GBP_IS_COMMAND_BAR_SUGGESTION (self));
+
+  if ((command = gbp_command_bar_suggestion_get_command (self)))
+    return ide_command_get_icon (command);
+
+  return NULL;
+}
+
 static void
 gbp_command_bar_suggestion_dispose (GObject *object)
 {
@@ -109,10 +123,13 @@ static void
 gbp_command_bar_suggestion_class_init (GbpCommandBarSuggestionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  DzlSuggestionClass *suggestion_class = DZL_SUGGESTION_CLASS (klass);
 
   object_class->dispose = gbp_command_bar_suggestion_dispose;
   object_class->get_property = gbp_command_bar_suggestion_get_property;
   object_class->set_property = gbp_command_bar_suggestion_set_property;
+
+  suggestion_class->get_icon = gbp_command_bar_suggestion_get_icon;
 
   properties [PROP_COMMAND] =
     g_param_spec_object ("command",

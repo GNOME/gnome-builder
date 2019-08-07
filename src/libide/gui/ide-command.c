@@ -180,3 +180,24 @@ ide_command_get_priority (IdeCommand *self)
 
   return G_MAXINT;
 }
+
+/**
+ * ide_command_get_icon:
+ * @self: a #IdeCommand
+ *
+ * Gets the icon for the command to be displayed in UI if necessary.
+ *
+ * Returns: (transfer full) (nullable): a #GIcon or %NULL
+ *
+ * Since: 3.34
+ */
+GIcon *
+ide_command_get_icon (IdeCommand *self)
+{
+  g_return_val_if_fail (IDE_IS_COMMAND (self), NULL);
+
+  if (IDE_COMMAND_GET_IFACE (self)->get_icon)
+    return IDE_COMMAND_GET_IFACE (self)->get_icon (self);
+
+  return NULL;
+}

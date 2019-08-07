@@ -37,18 +37,21 @@ struct _IdeCommandInterface
 {
   GTypeInterface parent_iface;
 
-  gchar    *(*get_title)    (IdeCommand           *self);
-  gchar    *(*get_subtitle) (IdeCommand           *self);
-  void      (*run_async)    (IdeCommand           *self,
-                             GCancellable         *cancellable,
-                             GAsyncReadyCallback   callback,
-                             gpointer              user_data);
-  gboolean  (*run_finish)   (IdeCommand           *self,
-                             GAsyncResult         *result,
-                             GError              **error);
-  gint      (*get_priority) (IdeCommand           *self);
+  gchar    *(*get_title)     (IdeCommand           *self);
+  gchar    *(*get_subtitle)  (IdeCommand           *self);
+  void      (*run_async)     (IdeCommand           *self,
+                              GCancellable         *cancellable,
+                              GAsyncReadyCallback   callback,
+                              gpointer              user_data);
+  gboolean  (*run_finish)    (IdeCommand           *self,
+                              GAsyncResult         *result,
+                              GError              **error);
+  gint      (*get_priority)  (IdeCommand           *self);
+  GIcon    *(*get_icon)      (IdeCommand           *self);
 };
 
+IDE_AVAILABLE_IN_3_34
+GIcon    *ide_command_get_icon     (IdeCommand           *self);
 IDE_AVAILABLE_IN_3_34
 gint      ide_command_get_priority (IdeCommand           *self);
 IDE_AVAILABLE_IN_3_32
