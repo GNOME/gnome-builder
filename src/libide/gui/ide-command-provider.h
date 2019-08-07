@@ -40,27 +40,34 @@ struct _IdeCommandProviderInterface
 {
   GTypeInterface parent_iface;
 
-  void       (*query_async)  (IdeCommandProvider   *self,
-                              IdeWorkspace         *workspace,
-                              const gchar          *typed_text,
-                              GCancellable         *cancellable,
-                              GAsyncReadyCallback   callback,
-                              gpointer              user_data);
-  GPtrArray *(*query_finish) (IdeCommandProvider   *self,
-                              GAsyncResult         *result,
-                              GError              **error);
+  void        (*query_async)       (IdeCommandProvider   *self,
+                                    IdeWorkspace         *workspace,
+                                    const gchar          *typed_text,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data);
+  GPtrArray  *(*query_finish)      (IdeCommandProvider   *self,
+                                    GAsyncResult         *result,
+                                    GError              **error);
+  IdeCommand *(*get_command_by_id) (IdeCommandProvider   *self,
+                                    IdeWorkspace         *workspace,
+                                    const gchar          *command_id);
 };
 
 IDE_AVAILABLE_IN_3_32
-void       ide_command_provider_query_async  (IdeCommandProvider   *self,
-                                              IdeWorkspace         *workspace,
-                                              const gchar          *typed_text,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data);
+void        ide_command_provider_query_async       (IdeCommandProvider   *self,
+                                                    IdeWorkspace         *workspace,
+                                                    const gchar          *typed_text,
+                                                    GCancellable         *cancellable,
+                                                    GAsyncReadyCallback   callback,
+                                                    gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-GPtrArray *ide_command_provider_query_finish (IdeCommandProvider   *self,
-                                              GAsyncResult         *result,
-                                              GError              **error);
+GPtrArray  *ide_command_provider_query_finish      (IdeCommandProvider   *self,
+                                                    GAsyncResult         *result,
+                                                    GError              **error);
+IDE_AVAILABLE_IN_3_34
+IdeCommand *ide_command_provider_get_command_by_id (IdeCommandProvider   *self,
+                                                    IdeWorkspace         *workspace,
+                                                    const gchar          *command_id);
 
 G_END_DECLS

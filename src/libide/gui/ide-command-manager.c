@@ -22,9 +22,12 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <libpeas/peas.h>
 #include <libide-plugins.h>
 #include <libide-threading.h>
+
+#include "ide-gui-private.h"
 
 #include "ide-command.h"
 #include "ide-command-manager.h"
@@ -35,6 +38,13 @@ struct _IdeCommandManager
   IdeObject               parent_instance;
   IdeExtensionSetAdapter *adapter;
 };
+
+typedef struct
+{
+  IdeWorkspace *workspace;
+  const gchar  *command_id;
+  IdeCommand   *command;
+} FindById;
 
 typedef struct
 {
@@ -305,4 +315,59 @@ ide_command_manager_query_finish (IdeCommandManager  *self,
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
   return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+}
+
+static void
+ide_command_manager_get_command_by_id_cb (IdeExtensionSetAdapter *set,
+                                          PeasPluginInfo         *plugin_info,
+                                          PeasExtension          *exten,
+                                          gpointer                user_data)
+{
+  IdeCommandProvider *provider = (IdeCommandProvider *)exten;
+  FindById *state = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_COMMAND_PROVIDER (provider));
+  g_assert (state != NULL);
+  g_assert (state->command_id != NULL);
+  g_assert (IDE_IS_WORKSPACE (state->workspace));
+  g_assert (!state->command || IDE_IS_COMMAND (state->command));
+
+  if (state->command == NULL)
+    state->command = ide_command_provider_get_command_by_id (provider,
+                                                             state->workspace,
+                                                             state->command_id);
+}
+
+/**
+ * ide_command_manager_get_command_by_id:
+ * @self: a #IdeCommandManager
+ * @workspace: an #IdeWorkspace
+ * @command_id: the identifier of the command
+ *
+ * Gets a command from one of the loaded command providers if any.
+ *
+ * Returns: (transfer full) (nullable): an #IdeCommand or %NULL
+ *
+ * Since: 3.34
+ */
+IdeCommand *
+ide_command_manager_get_command_by_id (IdeCommandManager *self,
+                                       IdeWorkspace      *workspace,
+                                       const gchar       *command_id)
+{
+  FindById state = { workspace, command_id, NULL };
+
+  g_return_val_if_fail (IDE_IS_COMMAND_MANAGER (self), NULL);
+  g_return_val_if_fail (self->adapter != NULL, NULL);
+  g_return_val_if_fail (IDE_IS_WORKSPACE (workspace), NULL);
+  g_return_val_if_fail (command_id != NULL, NULL);
+
+  ide_extension_set_adapter_foreach (self->adapter,
+                                     ide_command_manager_get_command_by_id_cb,
+                                     &state);
+
+  return g_steal_pointer (&state.command);
 }

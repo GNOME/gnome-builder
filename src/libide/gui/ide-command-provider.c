@@ -101,3 +101,30 @@ ide_command_provider_query_finish (IdeCommandProvider  *self,
 
   return IDE_COMMAND_PROVIDER_GET_IFACE (self)->query_finish (self, result, error);
 }
+
+/**
+ * ide_command_provider_get_command_by_id:
+ * @self: a #IdeCommandProvider
+ * @workspace: an #IdeWorkspace
+ * @command_id: the identifier of the command
+ *
+ * Looks for a command by @command_id and returns it if found.
+ *
+ * Returns: (transfer full) (nullable): an #IdeCommand or %NULL
+ *
+ * Since: 3.34
+ */
+IdeCommand *
+ide_command_provider_get_command_by_id (IdeCommandProvider *self,
+                                        IdeWorkspace       *workspace,
+                                        const gchar        *command_id)
+{
+  g_return_val_if_fail (IDE_IS_COMMAND_PROVIDER (self), NULL);
+  g_return_val_if_fail (IDE_IS_WORKSPACE (workspace), NULL);
+  g_return_val_if_fail (command_id != NULL, NULL);
+
+  if (IDE_COMMAND_PROVIDER_GET_IFACE (self)->get_command_by_id)
+   return IDE_COMMAND_PROVIDER_GET_IFACE (self)->get_command_by_id (self, workspace, command_id);
+
+  return NULL;
+}

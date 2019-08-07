@@ -27,6 +27,7 @@
 #include <libide-core.h>
 #include <libide-projects.h>
 
+#include "ide-command-manager.h"
 #include "ide-frame.h"
 #include "ide-frame-header.h"
 #include "ide-grid.h"

@@ -22,6 +22,7 @@
 
 #include <libide-core.h>
 
+#include "ide-command.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS
@@ -32,17 +33,21 @@ IDE_AVAILABLE_IN_3_34
 G_DECLARE_FINAL_TYPE (IdeCommandManager, ide_command_manager, IDE, COMMAND_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_34
-IdeCommandManager *ide_command_manager_from_context (IdeContext           *context);
+IdeCommandManager *ide_command_manager_from_context      (IdeContext           *context);
 IDE_AVAILABLE_IN_3_34
-void               ide_command_manager_query_async  (IdeCommandManager    *self,
-                                                     IdeWorkspace         *workspace,
-                                                     const gchar          *typed_text,
-                                                     GCancellable         *cancellable,
-                                                     GAsyncReadyCallback   callback,
-                                                     gpointer              user_data);
+IdeCommand        *ide_command_manager_get_command_by_id (IdeCommandManager    *self,
+                                                          IdeWorkspace         *workspace,
+                                                          const gchar          *command_id);
 IDE_AVAILABLE_IN_3_34
-GPtrArray         *ide_command_manager_query_finish (IdeCommandManager    *self,
-                                                     GAsyncResult         *result,
-                                                     GError              **error);
+void               ide_command_manager_query_async       (IdeCommandManager    *self,
+                                                          IdeWorkspace         *workspace,
+                                                          const gchar          *typed_text,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+IDE_AVAILABLE_IN_3_34
+GPtrArray         *ide_command_manager_query_finish      (IdeCommandManager    *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 
 G_END_DECLS
