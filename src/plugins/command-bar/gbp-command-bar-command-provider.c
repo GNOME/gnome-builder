@@ -32,16 +32,6 @@ struct _GbpCommandBarCommandProvider
   GObject parent_instance;
 };
 
-static gint
-sort_actions_by_priority (gconstpointer a,
-                          gconstpointer b)
-{
-  GbpGactionCommand *cmd_a = *(GbpGactionCommand **)a;
-  GbpGactionCommand *cmd_b = *(GbpGactionCommand **)b;
-
-  return gbp_gaction_command_compare (cmd_a, cmd_b);
-}
-
 static void
 add_from_group (const gchar  *needle,
                 GPtrArray    *results,
@@ -84,7 +74,7 @@ add_from_group (const gchar  *needle,
         continue;
 
       title = ide_completion_fuzzy_highlight (actions[j], needle);
-      command = gbp_gaction_command_new (widget, prefix, actions[j], NULL, title, priority);
+      command = gbp_gaction_command_new (widget, prefix, actions[j], NULL, title, (gint)priority);
       g_ptr_array_add (results, g_steal_pointer (&command));
     }
 }
@@ -150,8 +140,6 @@ gbp_command_bar_command_provider_query_async (IdeCommandProvider  *provider,
     populate_gactions_at_widget (needle, results, GTK_WIDGET (page), seen);
   else
     populate_gactions_at_widget (needle, results, GTK_WIDGET (surface), seen);
-
-  g_ptr_array_sort (results, sort_actions_by_priority);
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&results),

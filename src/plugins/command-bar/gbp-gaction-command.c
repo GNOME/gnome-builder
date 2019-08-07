@@ -32,7 +32,7 @@ struct _GbpGactionCommand
   gchar     *name;
   GVariant  *param;
   gchar     *title;
-  guint      priority;
+  gint       priority;
 };
 
 static void
@@ -77,12 +77,19 @@ gbp_gaction_command_get_title (IdeCommand *command)
   return g_strdup (self->title);
 }
 
+static gint
+gbp_gaction_command_get_priority (IdeCommand *command)
+{
+  return GBP_GACTION_COMMAND (command)->priority;
+}
+
 static void
 command_iface_init (IdeCommandInterface *iface)
 {
   iface->run_async = gbp_gaction_command_run_async;
   iface->run_finish = gbp_gaction_command_run_finish;
   iface->get_title = gbp_gaction_command_get_title;
+  iface->get_priority = gbp_gaction_command_get_priority;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpGactionCommand, gbp_gaction_command, IDE_TYPE_OBJECT,
@@ -128,7 +135,7 @@ gbp_gaction_command_new (GtkWidget   *widget,
                          const gchar *name,
                          GVariant    *param,
                          const gchar *title,
-                         guint        priority)
+                         gint         priority)
 {
   GbpGactionCommand *self;
 
@@ -150,11 +157,4 @@ gbp_gaction_command_new (GtkWidget   *widget,
                     &self->widget);
 
   return g_steal_pointer (&self);
-}
-
-gint
-gbp_gaction_command_compare (GbpGactionCommand *a,
-                             GbpGactionCommand *b)
-{
-  return (gint)a->priority - (gint)b->priority;
 }

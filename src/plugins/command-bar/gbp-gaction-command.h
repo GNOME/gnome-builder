@@ -28,13 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpGactionCommand, gbp_gaction_command, GBP, GACTION_COMMAND, IdeObject)
 
-gint               gbp_gaction_command_compare (GbpGactionCommand *a,
-                                                GbpGactionCommand *b);
-GbpGactionCommand *gbp_gaction_command_new     (GtkWidget         *widget,
-                                                const gchar       *group,
-                                                const gchar       *name,
-                                                GVariant          *param,
-                                                const gchar       *title,
-                                                guint              priority);
+GbpGactionCommand *gbp_gaction_command_new (GtkWidget   *widget,
+                                            const gchar *group,
+                                            const gchar *name,
+                                            GVariant    *param,
+                                            const gchar *title,
+                                            gint         priority);
 
 G_END_DECLS
