@@ -32,6 +32,7 @@
 #include "ide-application-addin.h"
 #include "ide-cell-renderer-fancy.h"
 #include "ide-command.h"
+#include "ide-command-manager.h"
 #include "ide-command-provider.h"
 #include "ide-config-view-addin.h"
 #include "ide-environment-editor.h"

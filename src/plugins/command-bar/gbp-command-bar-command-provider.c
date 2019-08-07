@@ -29,7 +29,7 @@
 
 struct _GbpCommandBarCommandProvider
 {
-  GObject parent_instance;
+  IdeObject parent_instance;
 };
 
 static void
@@ -170,7 +170,7 @@ command_provider_iface_init (IdeCommandProviderInterface *iface)
 
 G_DEFINE_TYPE_WITH_CODE (GbpCommandBarCommandProvider,
                          gbp_command_bar_command_provider,
-                         G_TYPE_OBJECT,
+                         IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMMAND_PROVIDER,
                                                 command_provider_iface_init))
 

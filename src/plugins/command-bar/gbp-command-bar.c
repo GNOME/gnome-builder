@@ -25,7 +25,6 @@
 #include <libide-gui.h>
 
 #include "gbp-command-bar.h"
-#include "gbp-command-bar-model.h"
 #include "gbp-command-bar-private.h"
 #include "gbp-command-bar-suggestion.h"
 
@@ -40,18 +39,28 @@ struct _GbpCommandBar
 G_DEFINE_TYPE (GbpCommandBar, gbp_command_bar, DZL_TYPE_BIN)
 
 static void
-replace_model (GbpCommandBar      *self,
-               GbpCommandBarModel *model)
+replace_model (GbpCommandBar *self,
+               GListModel    *model)
 {
-  GListModel *old_model;
-
   g_assert (GBP_IS_COMMAND_BAR (self));
-  g_assert (!model || GBP_IS_COMMAND_BAR_MODEL (model));
+  g_assert (!model || G_IS_LIST_MODEL (model));
 
-  old_model = dzl_suggestion_entry_get_model (self->entry);
-  dzl_suggestion_entry_set_model (self->entry, G_LIST_MODEL (model));
-  if (old_model != NULL)
-    ide_object_destroy (IDE_OBJECT (old_model));
+  dzl_suggestion_entry_set_model (self->entry, model);
+}
+
+static gint
+compare_commands (gconstpointer a,
+                  gconstpointer b)
+{
+  gint a_prio = ide_command_get_priority (*(IdeCommand **)a);
+  gint b_prio = ide_command_get_priority (*(IdeCommand **)b);
+
+  if (a_prio < b_prio)
+    return -1;
+  if (a_prio > b_prio)
+    return 1;
+  else
+    return 0;
 }
 
 static void
@@ -59,23 +68,40 @@ gbp_command_bar_complete_cb (GObject      *object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
-  GbpCommandBarModel *model = (GbpCommandBarModel *)object;
+  IdeCommandManager *command_manager = (IdeCommandManager *)object;
   g_autoptr(GbpCommandBar) self = user_data;
+  g_autoptr(GPtrArray) res = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GListStore) store = NULL;
 
-  g_assert (GBP_IS_COMMAND_BAR_MODEL (model));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_COMMAND_MANAGER (command_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_COMMAND_BAR (self));
 
-  if (gbp_command_bar_model_complete_finish (model, result, &error))
-    replace_model (self, model);
+  if ((res = ide_command_manager_query_finish (command_manager, result, &error)))
+    {
+      g_ptr_array_sort (res, compare_commands);
+
+      store = g_list_store_new (GBP_TYPE_COMMAND_BAR_SUGGESTION);
+
+      for (guint i = 0; i < res->len; i++)
+        {
+          IdeCommand *command = g_ptr_array_index (res, i);
+          g_autoptr(GbpCommandBarSuggestion) suggestion = gbp_command_bar_suggestion_new (command);
+
+          g_list_store_append (store, suggestion);
+        }
+    }
+
+  replace_model (self, G_LIST_MODEL (store));
 }
 
 static void
 gbp_command_bar_changed_cb (GbpCommandBar      *self,
                             DzlSuggestionEntry *entry)
 {
-  g_autoptr(GbpCommandBarModel) model = NULL;
+  IdeCommandManager *command_manager;
   IdeWorkspace *workspace;
   const gchar *text;
   IdeContext *context;
@@ -94,15 +120,15 @@ gbp_command_bar_changed_cb (GbpCommandBar      *self,
   g_debug ("Command Bar: %s", text);
 
   context = ide_widget_get_context (GTK_WIDGET (self));
-  model = gbp_command_bar_model_new (context);
+  command_manager = ide_command_manager_from_context (context);
   workspace = ide_widget_get_workspace (GTK_WIDGET (self));
 
-  gbp_command_bar_model_complete_async (model,
-                                        workspace,
-                                        text,
-                                        NULL,
-                                        gbp_command_bar_complete_cb,
-                                        g_object_ref (self));
+  ide_command_manager_query_async (command_manager,
+                                   workspace,
+                                   text,
+                                   NULL,
+                                   gbp_command_bar_complete_cb,
+                                   g_object_ref (self));
 }
 
 static gboolean
@@ -196,11 +222,15 @@ gbp_command_bar_activate_suggestion_cb (GbpCommandBar      *self,
       GbpCommandBarSuggestion *cbs = GBP_COMMAND_BAR_SUGGESTION (suggestion);
       IdeCommand *command = gbp_command_bar_suggestion_get_command (cbs);
       IdeContext *context = ide_widget_get_context (GTK_WIDGET (entry));
+      IdeCommandManager *command_manager = ide_command_manager_from_context (context);
 
       if (ide_object_is_root (IDE_OBJECT (command)))
-        ide_object_append (IDE_OBJECT (context), IDE_OBJECT (command));
+        ide_object_append (IDE_OBJECT (command_manager), IDE_OBJECT (command));
 
-      ide_command_run_async (command, NULL, gbp_command_bar_run_cb, NULL);
+      ide_command_run_async (command,
+                             NULL,
+                             gbp_command_bar_run_cb,
+                             NULL);
     }
 
   gbp_command_bar_dismiss (self);

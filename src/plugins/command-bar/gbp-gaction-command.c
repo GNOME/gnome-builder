@@ -116,12 +116,26 @@ gbp_gaction_command_finalize (GObject *object)
   G_OBJECT_CLASS (gbp_gaction_command_parent_class)->finalize (object);
 }
 
+static gchar *
+gbp_gaction_command_repr (IdeObject *object)
+{
+  GbpGactionCommand *self = (GbpGactionCommand *)object;
+
+  return g_strdup_printf ("%s action=%s.%s",
+                          G_OBJECT_TYPE_NAME (self),
+                          self->group,
+                          self->name);
+}
+
 static void
 gbp_gaction_command_class_init (GbpGactionCommandClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_gaction_command_finalize;
+
+  i_object_class->repr = gbp_gaction_command_repr;
 }
 
 static void

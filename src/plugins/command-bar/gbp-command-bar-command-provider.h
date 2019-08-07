@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_COMMAND_BAR_COMMAND_PROVIDER (gbp_command_bar_command_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCommandBarCommandProvider, gbp_command_bar_command_provider, GBP, COMMAND_BAR_COMMAND_PROVIDER, GObject)
+G_DECLARE_FINAL_TYPE (GbpCommandBarCommandProvider, gbp_command_bar_command_provider, GBP, COMMAND_BAR_COMMAND_PROVIDER, IdeObject)
 
 G_END_DECLS

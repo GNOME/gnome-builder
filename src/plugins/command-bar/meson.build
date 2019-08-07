@@ -2,7 +2,6 @@ plugins_sources += files([
   'command-bar-plugin.c',
   'gbp-command-bar.c',
   'gbp-command-bar-command-provider.c',
-  'gbp-command-bar-model.c',
   'gbp-command-bar-shortcuts.c',
   'gbp-command-bar-suggestion.c',
   'gbp-command-bar-workspace-addin.c',
