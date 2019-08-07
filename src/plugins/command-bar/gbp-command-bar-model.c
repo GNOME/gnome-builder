@@ -116,6 +116,24 @@ gbp_command_bar_model_new (IdeContext *context)
   return g_steal_pointer (&self);
 }
 
+static gint
+compare_commands (gconstpointer a,
+                  gconstpointer b)
+{
+  IdeCommand *a_cmd = gbp_command_bar_suggestion_get_command (*(GbpCommandBarSuggestion **)a);
+  IdeCommand *b_cmd = gbp_command_bar_suggestion_get_command (*(GbpCommandBarSuggestion **)b);
+  gint a_prio = ide_command_get_priority (a_cmd);
+  gint b_prio = ide_command_get_priority (b_cmd);
+
+  if (a_prio < b_prio)
+    return -1;
+  if (a_prio > b_prio)
+    return 1;
+  else
+    return 0;
+}
+
+
 static void
 gbp_command_bar_model_query_cb (GObject      *object,
                                 GAsyncResult *result,
@@ -127,7 +145,6 @@ gbp_command_bar_model_query_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   GbpCommandBarModel *self;
   GPtrArray *providers;
-  guint position;
 
   g_assert (IDE_IS_COMMAND_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -139,10 +156,10 @@ gbp_command_bar_model_query_cb (GObject      *object,
   g_assert (GBP_IS_COMMAND_BAR_MODEL (self));
   g_assert (providers != NULL);
 
-  position = self->items->len;
-
   if ((items = ide_command_provider_query_finish (provider, result, &error)))
     {
+      guint removed = self->items->len;
+
       for (guint i = 0; i < items->len; i++)
         {
           IdeCommand *command = g_ptr_array_index (items, i);
@@ -150,7 +167,11 @@ gbp_command_bar_model_query_cb (GObject      *object,
           g_ptr_array_add (self->items, gbp_command_bar_suggestion_new (command));
         }
 
-      g_list_model_items_changed (G_LIST_MODEL (self), position, 0, items->len);
+      if (items->len > 0)
+        {
+          g_ptr_array_sort (self->items, compare_commands);
+          g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, self->items->len);
+        }
     }
 
   IDE_PTR_ARRAY_SET_FREE_FUNC (items, g_object_unref);
