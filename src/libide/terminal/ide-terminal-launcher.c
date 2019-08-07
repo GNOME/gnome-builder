@@ -824,8 +824,6 @@ ide_terminal_launcher_new_for_runner (IdeRuntime *runtime)
   self->runtime = g_object_ref (runtime);
   self->kind = LAUNCHER_KIND_RUNNER;
 
-  g_print ("New for runner\n");
-
   return g_steal_pointer (&self);
 }
 
