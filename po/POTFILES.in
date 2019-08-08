@@ -83,6 +83,7 @@ src/libide/gui/ide-application-actions.c
 src/libide/gui/ide-application-command-line.c
 src/libide/gui/ide-application-shortcuts.c
 src/libide/gui/ide-application.c
+src/libide/gui/ide-command-manager.c
 src/libide/gui/ide-environment-editor-row.ui
 src/libide/gui/ide-environment-editor.c
 src/libide/gui/ide-frame-empty-state.ui
