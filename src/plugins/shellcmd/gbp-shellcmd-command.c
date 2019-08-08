@@ -51,6 +51,7 @@ enum {
   PROP_ID,
   PROP_COMMAND,
   PROP_CWD,
+  PROP_ENV,
   PROP_ENVIRONMENT,
   PROP_LOCALITY,
   PROP_SHORTCUT,
@@ -65,6 +66,23 @@ G_DEFINE_TYPE_WITH_CODE (GbpShellcmdCommand, gbp_shellcmd_command, IDE_TYPE_OBJE
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMMAND, command_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+gbp_shellcmd_command_set_env (GbpShellcmdCommand  *self,
+                              const gchar * const *env)
+{
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (self));
+
+  if (self->environment == NULL)
+    {
+      if (env == NULL || env[0] == NULL)
+        return;
+
+      self->environment = ide_environment_new ();
+    }
+
+  ide_environment_set_environ (self->environment, env);
+}
 
 static void
 gbp_shellcmd_command_finalize (GObject *object)
@@ -150,6 +168,10 @@ gbp_shellcmd_command_set_property (GObject      *object,
       gbp_shellcmd_command_set_cwd (self, g_value_get_string (value));
       break;
 
+    case PROP_ENV:
+      gbp_shellcmd_command_set_env (self, g_value_get_boxed (value));
+      break;
+
     case PROP_LOCALITY:
       gbp_shellcmd_command_set_locality (self, g_value_get_enum (value));
       break;
@@ -200,6 +222,11 @@ gbp_shellcmd_command_class_init (GbpShellcmdCommandClass *klass)
                          "The working directory for the command",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ENV] =
+    g_param_spec_boxed ("env", NULL, NULL,
+                        G_TYPE_STRV,
+                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ENVIRONMENT] =
     g_param_spec_object ("environment",
