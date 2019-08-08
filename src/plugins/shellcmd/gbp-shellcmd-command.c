@@ -37,6 +37,7 @@ struct _GbpShellcmdCommand
 {
   IdeObject                   parent_instance;
   GbpShellcmdCommandLocality  locality;
+  gchar                      *id;
   gchar                      *shortcut;
   gchar                      *subtitle;
   gchar                      *title;
@@ -47,6 +48,7 @@ struct _GbpShellcmdCommand
 
 enum {
   PROP_0,
+  PROP_ID,
   PROP_COMMAND,
   PROP_CWD,
   PROP_ENVIRONMENT,
@@ -73,6 +75,7 @@ gbp_shellcmd_command_finalize (GObject *object)
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->command, g_free);
   g_clear_pointer (&self->cwd, g_free);
+  g_clear_pointer (&self->id, g_free);
   g_clear_object (&self->environment);
 
   G_OBJECT_CLASS (gbp_shellcmd_command_parent_class)->finalize (object);
@@ -88,6 +91,10 @@ gbp_shellcmd_command_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ID:
+      g_value_set_string (value, gbp_shellcmd_command_get_id (self));
+      break;
+
     case PROP_COMMAND:
       g_value_set_string (value, gbp_shellcmd_command_get_command (self));
       break;
@@ -131,6 +138,10 @@ gbp_shellcmd_command_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ID:
+      self->id = g_value_dup_string (value);
+      break;
+
     case PROP_COMMAND:
       gbp_shellcmd_command_set_command (self, g_value_get_string (value));
       break;
@@ -168,6 +179,13 @@ gbp_shellcmd_command_class_init (GbpShellcmdCommandClass *klass)
   object_class->finalize = gbp_shellcmd_command_finalize;
   object_class->get_property = gbp_shellcmd_command_get_property;
   object_class->set_property = gbp_shellcmd_command_set_property;
+
+  properties [PROP_ID] =
+    g_param_spec_string ("id",
+                         "Id",
+                         "The command identifier, if any",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_COMMAND] =
     g_param_spec_string ("command",
@@ -793,3 +811,11 @@ gbp_shellcmd_command_set_subtitle (GbpShellcmdCommand *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
     }
 }
+const gchar *
+gbp_shellcmd_command_get_id (GbpShellcmdCommand *self)
+{
+  g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND (self), NULL);
+
+  return self->id;
+}
+
