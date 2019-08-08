@@ -37,6 +37,12 @@ typedef enum
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdCommand, gbp_shellcmd_command, GBP, SHELLCMD_COMMAND, IdeObject)
 
+GbpShellcmdCommand         *gbp_shellcmd_command_from_key_file   (GKeyFile                   *key_file,
+                                                                  const gchar                *group,
+                                                                  GError                    **error);
+gboolean                    gbp_shellcmd_command_to_key_file     (GbpShellcmdCommand         *self,
+                                                                  GKeyFile                   *key_file,
+                                                                  GError                    **error);
 GbpShellcmdCommand         *gbp_shellcmd_command_copy            (GbpShellcmdCommand         *self);
 const gchar                *gbp_shellcmd_command_get_id          (GbpShellcmdCommand         *self);
 GbpShellcmdCommandLocality  gbp_shellcmd_command_get_locality    (GbpShellcmdCommand         *self);

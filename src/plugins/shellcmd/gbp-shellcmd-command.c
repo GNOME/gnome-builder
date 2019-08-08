@@ -89,11 +89,11 @@ gbp_shellcmd_command_finalize (GObject *object)
 {
   GbpShellcmdCommand *self = (GbpShellcmdCommand *)object;
 
-  g_clear_pointer (&self->shortcut, g_free);
-  g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->command, g_free);
   g_clear_pointer (&self->cwd, g_free);
   g_clear_pointer (&self->id, g_free);
+  g_clear_pointer (&self->shortcut, g_free);
+  g_clear_pointer (&self->title, g_free);
   g_clear_object (&self->environment);
 
   G_OBJECT_CLASS (gbp_shellcmd_command_parent_class)->finalize (object);
@@ -838,6 +838,99 @@ gbp_shellcmd_command_set_subtitle (GbpShellcmdCommand *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
     }
 }
+
+GbpShellcmdCommand *
+gbp_shellcmd_command_from_key_file (GKeyFile     *keyfile,
+                                    const gchar  *group,
+                                    GError      **error)
+{
+  g_autoptr(GbpShellcmdCommand) self = NULL;
+  g_autofree gchar *id = NULL;
+  struct {
+    const gchar *key_name;
+    const gchar *prop_name;
+    GType        type;
+    gboolean     required;
+    gboolean     found;
+  } keys[] = {
+    { "Locality", "locality", GBP_TYPE_SHELLCMD_COMMAND_LOCALITY, FALSE },
+    { "Shortcut", "shortcut", G_TYPE_STRING, TRUE },
+    { "Title", "title", G_TYPE_STRING, FALSE },
+    { "Command", "command", G_TYPE_STRING, TRUE },
+    { "Directory", "cwd", G_TYPE_STRING, FALSE },
+    { "Environment", "env", G_TYPE_STRV, FALSE },
+  };
+
+  g_return_val_if_fail (keyfile != NULL, NULL);
+  g_return_val_if_fail (group != NULL, NULL);
+
+  id = g_strdelimit (g_strdup (group), "'\" ", '-');
+  self = g_object_new (GBP_TYPE_SHELLCMD_COMMAND,
+                       "id", id,
+                       NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (keys); i++)
+    {
+      if (g_type_is_a (keys[i].type, G_TYPE_STRING))
+        {
+          g_autofree gchar *val = NULL;
+
+          if (!(val = g_key_file_get_string (keyfile, group, keys[i].key_name, NULL)))
+            continue;
+
+          keys[i].found = TRUE;
+
+          g_object_set (self, keys[i].prop_name, val, NULL);
+        }
+      else if (g_type_is_a (keys[i].type, G_TYPE_STRV))
+        {
+          g_auto(GStrv) val = NULL;
+
+          if (!(val = g_key_file_get_string_list (keyfile, group, keys[i].key_name, NULL, NULL)))
+            continue;
+
+          keys[i].found = TRUE;
+
+          g_object_set (self, keys[i].prop_name, val, NULL);
+        }
+      else if (g_type_is_a (keys[i].type, G_TYPE_ENUM))
+        {
+          g_autoptr(GEnumClass) eclass = g_type_class_ref (keys[i].type);
+          g_autofree gchar *val = NULL;
+          GEnumValue *eval;
+
+          if (!(val = g_key_file_get_string (keyfile, group, keys[i].key_name, NULL)))
+            continue;
+
+          if (!(eval = g_enum_get_value_by_nick (eclass, val)))
+            continue;
+
+          keys[i].found = TRUE;
+
+          g_object_set (self, keys[i].prop_name, eval->value, NULL);
+        }
+      else
+        {
+          g_assert_not_reached ();
+        }
+    }
+
+  for (guint i = 0; i < G_N_ELEMENTS (keys); i++)
+    {
+      if (keys[i].required && !keys[i].found)
+        {
+          g_set_error (error,
+                       G_IO_ERROR,
+                       G_IO_ERROR_INVALID_DATA,
+                       "Missing key %s from command %s",
+                       keys[i].key_name, group);
+          return NULL;
+        }
+    }
+
+  return g_steal_pointer (&self);
+}
+
 const gchar *
 gbp_shellcmd_command_get_id (GbpShellcmdCommand *self)
 {
