@@ -778,3 +778,41 @@ ide_application_get_command_line_handled (IdeApplication          *self,
 
   return !!g_object_get_data (G_OBJECT (cmdline), "COMMAND_LINE_HANDLED");
 }
+
+/**
+ * ide_application_find_addin_by_module_name:
+ * @self: a #IdeApplication
+ * @module_name: the name of the plugin module
+ *
+ * Finds a loaded #IdeApplicationAddin within @self that was part of
+ * the plugin matching @module_name.
+ *
+ * Returns: (transfer none) (type IdeApplicationAddin) (nullable): an
+ *   #IdeApplicationAddin or %NULL.
+ *
+ * Since: 3.34
+ */
+gpointer
+ide_application_find_addin_by_module_name (IdeApplication *self,
+                                           const gchar    *module_name)
+{
+  PeasEngine *engine;
+  PeasPluginInfo *plugin_info;
+
+  if (self == NULL)
+    self = IDE_APPLICATION_DEFAULT;
+
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (module_name != NULL, NULL);
+
+  if (self->addins == NULL)
+    return NULL;
+
+  engine = peas_engine_get_default ();
+  plugin_info = peas_engine_get_plugin_info (engine, module_name);
+
+  if (plugin_info == NULL)
+    return NULL;
+
+  return peas_extension_set_get_extension (self->addins, plugin_info);
+}

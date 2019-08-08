@@ -89,5 +89,8 @@ GDBusProxy    *ide_application_get_worker_finish        (IdeApplication         
 IDE_AVAILABLE_IN_3_32
 IdeWorkbench  *ide_application_find_workbench_for_file  (IdeApplication           *self,
                                                          GFile                    *file);
+IDE_AVAILABLE_IN_3_34
+gpointer       ide_application_find_addin_by_module_name (IdeApplication           *self,
+                                                          const gchar              *module_name);
 
 G_END_DECLS
