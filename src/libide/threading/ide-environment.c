@@ -247,6 +247,35 @@ ide_environment_get_environ (IdeEnvironment *self)
   return (gchar **)g_ptr_array_free (ar, FALSE);
 }
 
+void
+ide_environment_set_environ (IdeEnvironment      *self,
+                             const gchar * const *env)
+{
+  guint len;
+
+  g_return_if_fail (IDE_IS_ENVIRONMENT (self));
+
+  len = self->variables->len;
+
+  if (len > 0)
+    {
+      g_ptr_array_remove_range (self->variables, 0, len);
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, len, 0);
+    }
+
+  if (env != NULL)
+    {
+      for (guint i = 0; env[i]; i++)
+        {
+          g_autofree gchar *key = NULL;
+          g_autofree gchar *val = NULL;
+
+          if (ide_environ_parse (env[i], &key, &val))
+            ide_environment_setenv (self, key, val);
+        }
+    }
+}
+
 IdeEnvironment *
 ide_environment_new (void)
 {

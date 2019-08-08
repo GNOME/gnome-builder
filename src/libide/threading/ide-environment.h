@@ -63,5 +63,8 @@ IDE_AVAILABLE_IN_3_32
 void             ide_environment_copy_into   (IdeEnvironment          *self,
                                               IdeEnvironment          *dest,
                                               gboolean                 replace);
+IDE_AVAILABLE_IN_3_34
+void             ide_environment_set_environ (IdeEnvironment          *self,
+                                              const gchar * const     *env);
 
 G_END_DECLS
