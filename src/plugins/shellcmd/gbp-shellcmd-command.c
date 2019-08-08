@@ -321,25 +321,6 @@ gbp_shellcmd_command_get_subtitle (IdeCommand *command)
 }
 
 static void
-gbp_shellcmd_command_wait_check_cb (GObject      *object,
-                                    GAsyncResult *result,
-                                    gpointer      user_data)
-{
-  IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_boolean (task, TRUE);
-}
-
-static void
 gbp_shellcmd_command_apply (GbpShellcmdCommand    *self,
                             IdeSubprocessLauncher *launcher,
                             GFile                 *relative_to)
@@ -580,23 +561,23 @@ gbp_shellcmd_command_run_build (GbpShellcmdCommand  *self,
                                 IdeTask             *task)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeTerminalLauncher) tlauncher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) builddir = NULL;
   IdeBuildManager *build_manager;
-  GCancellable *cancellable;
-  IdeWorkbench *workbench;
   IdeWorkspace *workspace;
+  IdeWorkbench *workbench;
   IdePipeline *pipeline;
+  IdeSurface *surface;
+  IdePage *page;
 
   g_assert (GBP_IS_SHELLCMD_COMMAND (self));
   g_assert (argv != NULL);
   g_assert (IDE_IS_TASK (task));
 
   context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = _ide_workbench_from_context (context);
-  workspace = ide_workbench_get_current_workspace (workbench);
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
@@ -609,6 +590,21 @@ gbp_shellcmd_command_run_build (GbpShellcmdCommand  *self,
       return;
     }
 
+  if (!(workbench = _ide_workbench_from_context (context)) ||
+      (!(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_PRIMARY_WORKSPACE)) &&
+       !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_EDITOR_WORKSPACE)) &&
+       !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_TERMINAL_WORKSPACE))) ||
+      (!(surface = ide_workspace_get_surface_by_name (workspace, "editor")) &&
+       !(surface = ide_workspace_get_surface_by_name (workspace, "terminal"))))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "Failed to locate a workspace for the terminal page");
+      return;
+    }
+
+
   builddir = g_file_new_for_path (ide_pipeline_get_builddir (pipeline));
   launcher = ide_pipeline_create_launcher (pipeline, &error);
 
@@ -618,25 +614,20 @@ gbp_shellcmd_command_run_build (GbpShellcmdCommand  *self,
       return;
     }
 
-  ide_pipeline_attach_pty (pipeline, launcher);
   ide_subprocess_launcher_push_args (launcher, (const gchar * const *)argv);
-
-  if (G_IS_ACTION_GROUP (workspace) &&
-      g_action_group_has_action (G_ACTION_GROUP (workspace), "view-output"))
-    dzl_gtk_widget_action (GTK_WIDGET (workspace), "win", "view-output", NULL);
-
   gbp_shellcmd_command_apply (self, launcher, builddir);
 
-  cancellable = ide_task_get_cancellable (task);
-  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+  tlauncher = ide_terminal_launcher_new_for_launcher (launcher);
+  page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "close-on-exit", FALSE,
+                       "launcher", tlauncher,
+                       "manage-spawn", TRUE,
+                       "respawn-on-exit", FALSE,
+                       "visible", TRUE,
+                       NULL);
+  gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (page));
 
-  if (subprocess == NULL)
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_subprocess_wait_check_async (subprocess,
-                                     cancellable,
-                                     gbp_shellcmd_command_wait_check_cb,
-                                     g_object_ref (task));
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
