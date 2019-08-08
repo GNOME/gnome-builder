@@ -1,4 +1,4 @@
-/* shellcmd-plugin.c
+/* gbp-shellcmd-application-addin.h
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,21 +18,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
+#pragma once
 
 #include <libide-gui.h>
-#include <libpeas/peas.h>
 
-#include "gbp-shellcmd-application-addin.h"
-#include "gbp-shellcmd-command-provider.h"
+#include "gbp-shellcmd-command-model.h"
 
-_IDE_EXTERN void
-_gbp_shellcmd_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_ADDIN,
-                                              GBP_TYPE_SHELLCMD_APPLICATION_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMMAND_PROVIDER,
-                                              GBP_TYPE_SHELLCMD_COMMAND_PROVIDER);
-}
+G_BEGIN_DECLS
+
+#define GBP_TYPE_SHELLCMD_APPLICATION_ADDIN (gbp_shellcmd_application_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpShellcmdApplicationAddin, gbp_shellcmd_application_addin, GBP, SHELLCMD_APPLICATION_ADDIN, GObject)
+
+GbpShellcmdCommandModel *gbp_shellcmd_application_addin_get_model (GbpShellcmdApplicationAddin *self);
+
+G_END_DECLS
