@@ -37,6 +37,7 @@ struct _GbpShellcmdCommand
 {
   IdeObject                   parent_instance;
   GbpShellcmdCommandLocality  locality;
+  gint                        priority;
   gchar                      *id;
   gchar                      *shortcut;
   gchar                      *subtitle;
@@ -270,6 +271,7 @@ gbp_shellcmd_command_class_init (GbpShellcmdCommandClass *klass)
 static void
 gbp_shellcmd_command_init (GbpShellcmdCommand *self)
 {
+  self->priority = G_MAXINT;
 }
 
 const gchar *
@@ -715,6 +717,12 @@ gbp_shellcmd_command_get_icon (IdeCommand *command)
   return g_object_ref (icon);
 }
 
+static gint
+gbp_shellcmd_command_get_priority (IdeCommand *command)
+{
+  return GBP_SHELLCMD_COMMAND (command)->priority;
+}
+
 static void
 command_iface_init (IdeCommandInterface *iface)
 {
@@ -723,6 +731,7 @@ command_iface_init (IdeCommandInterface *iface)
   iface->get_subtitle = gbp_shellcmd_command_get_subtitle;
   iface->run_async = gbp_shellcmd_command_run_async;
   iface->run_finish = gbp_shellcmd_command_run_finish;
+  iface->get_priority = gbp_shellcmd_command_get_priority;
 }
 
 GbpShellcmdCommandLocality
@@ -954,4 +963,13 @@ gbp_shellcmd_command_copy (GbpShellcmdCommand *self)
     }
 
   return g_steal_pointer (&ret);
+}
+
+void
+gbp_shellcmd_command_set_priority (GbpShellcmdCommand *self,
+                                   gint                priority)
+{
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (self));
+
+  self->priority = priority;
 }

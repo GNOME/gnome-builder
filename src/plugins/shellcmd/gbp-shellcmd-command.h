@@ -55,6 +55,8 @@ const gchar                *gbp_shellcmd_command_get_cwd         (GbpShellcmdCom
 void                        gbp_shellcmd_command_set_cwd         (GbpShellcmdCommand         *self,
                                                                   const gchar                *cwd);
 IdeEnvironment             *gbp_shellcmd_command_get_environment (GbpShellcmdCommand         *self);
+void                        gbp_shellcmd_command_set_priority    (GbpShellcmdCommand         *self,
+                                                                  gint                        priority);
 const gchar                *gbp_shellcmd_command_get_shortcut    (GbpShellcmdCommand         *self);
 void                        gbp_shellcmd_command_set_shortcut    (GbpShellcmdCommand         *self,
                                                                   const gchar                *shortcut);

@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-core.h>
+#include <libide-sourceview.h>
 #include <libide-threading.h>
 
 #include "gbp-shellcmd-command.h"
@@ -216,4 +217,35 @@ gbp_shellcmd_command_model_get_command (GbpShellcmdCommandModel *self,
     }
 
   return NULL;
+}
+
+void
+gbp_shellcmd_command_model_query (GbpShellcmdCommandModel *self,
+                                  GPtrArray               *items,
+                                  const gchar             *typed_text)
+{
+  g_autofree gchar *q = NULL;
+
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+  g_return_if_fail (items != NULL);
+  g_return_if_fail (typed_text != NULL);
+
+  q = g_utf8_casefold (typed_text, -1);
+
+  for (guint i = 0; i < self->items->len; i++)
+    {
+      GbpShellcmdCommand *command = g_ptr_array_index (self->items, i);
+      g_autofree gchar *title = ide_command_get_title (IDE_COMMAND (command));
+      const gchar *cmdstr = gbp_shellcmd_command_get_command (command);
+      guint prio1 = G_MAXINT;
+      guint prio2 = G_MAXINT;
+
+      if (ide_completion_fuzzy_match (title, q, &prio1) ||
+          ide_completion_fuzzy_match (cmdstr, q, &prio2))
+        {
+          GbpShellcmdCommand *copy = gbp_shellcmd_command_copy (command);
+          gbp_shellcmd_command_set_priority (copy, MIN (prio1, prio2));
+          g_ptr_array_add (items, g_steal_pointer (&copy));
+        }
+    }
 }

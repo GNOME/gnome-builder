@@ -79,6 +79,8 @@ gbp_shellcmd_command_provider_query_async (IdeCommandProvider  *provider,
 
   ret = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_object_unref_and_destroy);
 
+  gbp_shellcmd_command_model_query (get_model (), ret, typed_text);
+
   if (!g_shell_parse_argv (typed_text, NULL, NULL, NULL))
     goto skip_commands;
 
