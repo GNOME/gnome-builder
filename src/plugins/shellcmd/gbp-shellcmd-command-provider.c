@@ -22,16 +22,37 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libide-gui.h>
+#include <libide-editor.h>
+#include <libide-terminal.h>
 #include <libide-threading.h>
 
+#include "gbp-shellcmd-application-addin.h"
 #include "gbp-shellcmd-command.h"
+#include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-command-provider.h"
 
 struct _GbpShellcmdCommandProvider
 {
   GObject parent_instance;
 };
+
+static GbpShellcmdCommandModel *
+get_model (void)
+{
+  GbpShellcmdApplicationAddin *app_addin;
+  GbpShellcmdCommandModel *model;
+
+  app_addin = ide_application_find_addin_by_module_name (NULL, "shellcmd");
+  g_assert (GBP_IS_SHELLCMD_APPLICATION_ADDIN (app_addin));
+
+  model = gbp_shellcmd_application_addin_get_model (app_addin);
+  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (model));
+
+  return model;
+}
 
 static void
 gbp_shellcmd_command_provider_query_async (IdeCommandProvider  *provider,
@@ -112,10 +133,81 @@ gbp_shellcmd_command_provider_query_finish (IdeCommandProvider  *provider,
 }
 
 static void
+gbp_shellcmd_command_provider_load_shortcuts (IdeCommandProvider *provider,
+                                              IdeWorkspace       *workspace)
+{
+  GbpShellcmdCommandProvider *self = (GbpShellcmdCommandProvider *)provider;
+  GbpShellcmdCommandModel *model;
+  DzlShortcutController *controller;
+  guint n_items;
+
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_PROVIDER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+
+  /* Limit ourselves to some known workspaces */
+  if (!IDE_IS_PRIMARY_WORKSPACE (workspace) &&
+      !IDE_IS_EDITOR_WORKSPACE (workspace) &&
+      !IDE_IS_TERMINAL_WORKSPACE (workspace))
+    return;
+
+  model = get_model ();
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (workspace));
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GbpShellcmdCommand) command = NULL;
+      g_autofree gchar *dzlcmdid = NULL;
+      g_autofree gchar *dzlcmdaction = NULL;
+      g_autofree gchar *delimit = NULL;
+      const gchar *shortcut;
+      const gchar *id;
+
+      command = g_list_model_get_item (G_LIST_MODEL (model), i);
+      id = gbp_shellcmd_command_get_id (command);
+      shortcut = gbp_shellcmd_command_get_shortcut (command);
+
+      if (id == NULL || shortcut == NULL)
+        continue;
+
+      g_debug ("Mapping shortcut \"%s\" to external command \"%s\"", shortcut, id);
+
+      dzlcmdid = g_strdup_printf ("org.gnome.builder.plugins.shellcmd.%s", id);
+      dzlcmdaction = g_strdup_printf ("win.command('%s')", id);
+
+      dzl_shortcut_controller_add_command_action (controller,
+                                                  dzlcmdid,
+                                                  shortcut,
+                                                  DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                                  dzlcmdaction);
+    }
+}
+
+static IdeCommand *
+gbp_shellcmd_command_provider_get_command_by_id (IdeCommandProvider *provider,
+                                                 IdeWorkspace       *workspace,
+                                                 const gchar        *command_id)
+{
+  GbpShellcmdCommand *command;
+
+  g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND_PROVIDER (provider), NULL);
+  g_return_val_if_fail (IDE_IS_WORKSPACE (workspace), NULL);
+  g_return_val_if_fail (command_id != NULL, NULL);
+
+  if ((command = gbp_shellcmd_command_model_get_command (get_model (), command_id)))
+    return IDE_COMMAND (gbp_shellcmd_command_copy (command));
+
+  return NULL;
+}
+
+static void
 command_provider_iface_init (IdeCommandProviderInterface *iface)
 {
   iface->query_async = gbp_shellcmd_command_provider_query_async;
   iface->query_finish = gbp_shellcmd_command_provider_query_finish;
+  iface->load_shortcuts = gbp_shellcmd_command_provider_load_shortcuts;
+  iface->get_command_by_id = gbp_shellcmd_command_provider_get_command_by_id;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpShellcmdCommandProvider, gbp_shellcmd_command_provider, G_TYPE_OBJECT,
