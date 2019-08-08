@@ -819,3 +819,28 @@ gbp_shellcmd_command_get_id (GbpShellcmdCommand *self)
   return self->id;
 }
 
+GbpShellcmdCommand *
+gbp_shellcmd_command_copy (GbpShellcmdCommand *self)
+{
+  GbpShellcmdCommand *ret;
+
+  g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND (self), NULL);
+
+  ret = g_object_new (GBP_TYPE_SHELLCMD_COMMAND, NULL);
+  ret->locality = self->locality;
+  ret->id = g_strdup (self->id);
+  ret->shortcut = g_strdup (self->shortcut);
+  ret->title = g_strdup (self->title);
+  ret->subtitle = g_strdup (self->subtitle);
+  ret->command = g_strdup (self->command);
+  ret->cwd = g_strdup (self->cwd);
+
+  if (self->environment != NULL)
+    {
+      g_auto(GStrv) env = ide_environment_get_environ (self->environment);
+      ret->environment = ide_environment_new ();
+      ide_environment_set_environ (ret->environment, (const gchar * const *)env);
+    }
+
+  return g_steal_pointer (&ret);
+}
