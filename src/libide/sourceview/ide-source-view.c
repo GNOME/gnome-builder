@@ -5524,7 +5524,8 @@ ide_source_view_set_property (GObject      *object,
       break;
 
     case PROP_COMPLETION_N_ROWS:
-      ide_completion_set_n_rows (priv->completion, g_value_get_uint (value));
+      if (priv->completion != NULL)
+        ide_completion_set_n_rows (priv->completion, g_value_get_uint (value));
       break;
 
     case PROP_COUNT:
