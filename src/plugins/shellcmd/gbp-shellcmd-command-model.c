@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <glib/gstdio.h>
 #include <libide-core.h>
 #include <libide-sourceview.h>
 #include <libide-threading.h>
@@ -32,8 +33,11 @@
 struct _GbpShellcmdCommandModel
 {
   GObject    parent_instance;
+
   GPtrArray *items;
   GKeyFile  *keyfile;
+
+  guint      queue_save;
 };
 
 static void list_model_iface_init (GListModelInterface *iface);
@@ -41,12 +45,59 @@ static void list_model_iface_init (GListModelInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (GbpShellcmdCommandModel, gbp_shellcmd_command_model, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
+static gboolean
+gbp_shellcmd_command_model_queue_save_cb (gpointer data)
+{
+  GbpShellcmdCommandModel *self = data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+
+  self->queue_save = 0;
+
+  if (!gbp_shellcmd_command_model_save (self, NULL, &error))
+    g_warning ("Failed to save external-commands: %s", error->message);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gbp_shellcmd_command_model_queue_save (GbpShellcmdCommandModel *self)
+{
+  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+
+  g_object_ref (self);
+
+  if (self->queue_save != 0)
+    g_source_remove (self->queue_save);
+
+  self->queue_save =
+    g_timeout_add_seconds_full (G_PRIORITY_HIGH,
+                                1,
+                                gbp_shellcmd_command_model_queue_save_cb,
+                                g_object_ref (self),
+                                g_object_unref);
+
+  g_object_unref (self);
+}
+
+static void
+on_command_changed_cb (GbpShellcmdCommandModel *self,
+                       GbpShellcmdCommand      *command)
+{
+  g_assert (GBP_SHELLCMD_COMMAND_MODEL (self));
+  g_assert (GBP_SHELLCMD_COMMAND (command));
+
+  gbp_shellcmd_command_model_queue_save (self);
+}
+
 static void
 gbp_shellcmd_command_model_finalize (GObject *object)
 {
   GbpShellcmdCommandModel *self = (GbpShellcmdCommandModel *)object;
 
   g_clear_pointer (&self->items, g_ptr_array_unref);
+  g_clear_pointer (&self->keyfile, g_key_file_free);
 
   G_OBJECT_CLASS (gbp_shellcmd_command_model_parent_class)->finalize (object);
 }
@@ -63,6 +114,7 @@ static void
 gbp_shellcmd_command_model_init (GbpShellcmdCommandModel *self)
 {
   self->items = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_object_unref_and_destroy);
+  self->keyfile = g_key_file_new ();
 }
 
 GbpShellcmdCommandModel *
@@ -128,6 +180,17 @@ set_items (GbpShellcmdCommandModel *self,
   old_items = g_steal_pointer (&self->items);
   self->items = g_ptr_array_ref (items);
 
+  for (guint i = 0; i < items->len; i++)
+    {
+      GbpShellcmdCommand *command = g_ptr_array_index (items, i);
+
+      g_signal_connect_object (command,
+                               "changed",
+                               G_CALLBACK (on_command_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+
   if (old_items->len || self->items->len)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, old_items->len, self->items->len);
 }
@@ -190,10 +253,31 @@ gbp_shellcmd_command_model_save (GbpShellcmdCommandModel  *self,
                                  GCancellable             *cancellable,
                                  GError                  **error)
 {
+  g_autofree gchar *path = NULL;
+  g_auto(GStrv) groups = NULL;
+  gsize n_groups = 0;
+
   g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self), FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (self->keyfile != NULL, FALSE);
 
-  return TRUE;
+  path = get_filename ();
+
+  for (guint i = 0; i < self->items->len; i++)
+    {
+      GbpShellcmdCommand *command = g_ptr_array_index (self->items, i);
+      gbp_shellcmd_command_to_key_file (command, self->keyfile);
+    }
+
+  groups = g_key_file_get_groups (self->keyfile, &n_groups);
+
+  if (n_groups == 0)
+    {
+      g_unlink (path);
+      return TRUE;
+    }
+
+  return g_key_file_save_to_file (self->keyfile, path, error);
 }
 
 /**
@@ -246,6 +330,59 @@ gbp_shellcmd_command_model_query (GbpShellcmdCommandModel *self,
           GbpShellcmdCommand *copy = gbp_shellcmd_command_copy (command);
           gbp_shellcmd_command_set_priority (copy, MIN (prio1, prio2));
           g_ptr_array_add (items, g_steal_pointer (&copy));
+        }
+    }
+}
+
+void
+gbp_shellcmd_command_model_add (GbpShellcmdCommandModel *self,
+                                GbpShellcmdCommand      *command)
+{
+  guint position;
+
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (command));
+
+  g_signal_connect_object (command,
+                           "changed",
+                           G_CALLBACK (on_command_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  position = self->items->len;
+  g_ptr_array_add (self->items, g_object_ref (command));
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+
+  gbp_shellcmd_command_model_queue_save (self);
+}
+
+void
+gbp_shellcmd_command_model_remove (GbpShellcmdCommandModel *self,
+                                   GbpShellcmdCommand      *command)
+{
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (command));
+
+  for (guint i = 0; i < self->items->len; i++)
+    {
+      GbpShellcmdCommand *ele = g_ptr_array_index (self->items, i);
+
+      if (ele == command)
+        {
+          const gchar *id = gbp_shellcmd_command_get_id (ele);
+
+          if (id != NULL)
+            g_key_file_remove_group (self->keyfile, id, NULL);
+
+          g_signal_handlers_disconnect_by_func (command,
+                                                G_CALLBACK (on_command_changed_cb),
+                                                self);
+
+          g_ptr_array_remove_index (self->items, i);
+          g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+          gbp_shellcmd_command_model_queue_save (self);
+
+          break;
         }
     }
 }

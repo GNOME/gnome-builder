@@ -33,6 +33,10 @@ G_DECLARE_FINAL_TYPE (GbpShellcmdCommandModel, gbp_shellcmd_command_model, GBP, 
 GbpShellcmdCommandModel *gbp_shellcmd_command_model_new         (void);
 GbpShellcmdCommand      *gbp_shellcmd_command_model_get_command (GbpShellcmdCommandModel  *self,
                                                                  const gchar              *command_id);
+void                     gbp_shellcmd_command_model_add         (GbpShellcmdCommandModel  *self,
+                                                                 GbpShellcmdCommand       *command);
+void                     gbp_shellcmd_command_model_remove      (GbpShellcmdCommandModel  *self,
+                                                                 GbpShellcmdCommand       *command);
 void                     gbp_shellcmd_command_model_query       (GbpShellcmdCommandModel  *self,
                                                                  GPtrArray                *items,
                                                                  const gchar              *typed_text);

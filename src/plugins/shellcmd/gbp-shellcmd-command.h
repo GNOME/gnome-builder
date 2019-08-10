@@ -40,9 +40,8 @@ G_DECLARE_FINAL_TYPE (GbpShellcmdCommand, gbp_shellcmd_command, GBP, SHELLCMD_CO
 GbpShellcmdCommand         *gbp_shellcmd_command_from_key_file   (GKeyFile                   *key_file,
                                                                   const gchar                *group,
                                                                   GError                    **error);
-gboolean                    gbp_shellcmd_command_to_key_file     (GbpShellcmdCommand         *self,
-                                                                  GKeyFile                   *key_file,
-                                                                  GError                    **error);
+void                        gbp_shellcmd_command_to_key_file     (GbpShellcmdCommand         *self,
+                                                                  GKeyFile                   *key_file);
 GbpShellcmdCommand         *gbp_shellcmd_command_copy            (GbpShellcmdCommand         *self);
 const gchar                *gbp_shellcmd_command_get_id          (GbpShellcmdCommand         *self);
 GbpShellcmdCommandLocality  gbp_shellcmd_command_get_locality    (GbpShellcmdCommand         *self);
