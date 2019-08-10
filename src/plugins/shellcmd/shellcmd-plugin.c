@@ -25,6 +25,7 @@
 
 #include "gbp-shellcmd-application-addin.h"
 #include "gbp-shellcmd-command-provider.h"
+#include "gbp-shellcmd-preferences-addin.h"
 
 _IDE_EXTERN void
 _gbp_shellcmd_register_types (PeasObjectModule *module)
@@ -35,4 +36,7 @@ _gbp_shellcmd_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_COMMAND_PROVIDER,
                                               GBP_TYPE_SHELLCMD_COMMAND_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_SHELLCMD_PREFERENCES_ADDIN);
 }
