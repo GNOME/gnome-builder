@@ -249,3 +249,17 @@ gbp_shellcmd_command_model_query (GbpShellcmdCommandModel *self,
         }
     }
 }
+
+void
+gbp_shellcmd_command_model_add (GbpShellcmdCommandModel *self,
+                                GbpShellcmdCommand      *command)
+{
+  guint position;
+
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (command));
+
+  position = self->items->len;
+  g_ptr_array_add (self->items, g_object_ref (command));
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+}
