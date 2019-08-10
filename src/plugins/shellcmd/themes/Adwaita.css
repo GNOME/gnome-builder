@@ -1,0 +1,6 @@
+dzlpreferencesview frame > box > list:nth-child(2) row:first-child:last-child {
+  border-top: 1px solid alpha(@borders, 0.3);
+  }
+dzlpreferencesview frame > box > list label.placeholder {
+  margin: 12px;
+  }
