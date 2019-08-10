@@ -167,7 +167,7 @@ gbp_shellcmd_command_provider_load_shortcuts (IdeCommandProvider *provider,
       id = gbp_shellcmd_command_get_id (command);
       shortcut = gbp_shellcmd_command_get_shortcut (command);
 
-      if (id == NULL || shortcut == NULL)
+      if (id == NULL || shortcut == NULL || shortcut[0] == 0)
         continue;
 
       g_debug ("Mapping shortcut \"%s\" to external command \"%s\"", shortcut, id);
