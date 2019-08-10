@@ -4,8 +4,12 @@ plugins_sources += files([
   'shellcmd-plugin.c',
   'gbp-shellcmd-application-addin.c',
   'gbp-shellcmd-command.c',
+  'gbp-shellcmd-command-editor.c',
   'gbp-shellcmd-command-model.c',
   'gbp-shellcmd-command-provider.c',
+  'gbp-shellcmd-command-row.c',
+  'gbp-shellcmd-list.c',
+  'gbp-shellcmd-preferences-addin.c',
 ])
 
 plugin_shellcmd_enum_headers = [
