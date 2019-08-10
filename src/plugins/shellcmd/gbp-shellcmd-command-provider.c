@@ -36,7 +36,9 @@
 
 struct _GbpShellcmdCommandProvider
 {
-  GObject parent_instance;
+  GObject    parent_instance;
+  GPtrArray *accels;
+  GPtrArray *controllers;
 };
 
 static GbpShellcmdCommandModel *
@@ -132,25 +134,40 @@ gbp_shellcmd_command_provider_query_finish (IdeCommandProvider  *provider,
 }
 
 static void
-gbp_shellcmd_command_provider_load_shortcuts (IdeCommandProvider *provider,
-                                              IdeWorkspace       *workspace)
+remove_shortcuts (GbpShellcmdCommandProvider *self,
+                  DzlShortcutController      *controller)
 {
-  GbpShellcmdCommandProvider *self = (GbpShellcmdCommandProvider *)provider;
-  GbpShellcmdCommandModel *model;
-  DzlShortcutController *controller;
+  g_assert (GBP_IS_SHELLCMD_COMMAND_PROVIDER (self));
+  g_assert (DZL_IS_SHORTCUT_CONTROLLER (controller));
+
+  for (guint i = 0; i < self->accels->len; i++)
+    {
+      const gchar *accel = g_ptr_array_index (self->accels, i);
+
+      dzl_shortcut_controller_remove_accel (controller,
+                                            accel,
+                                            DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL);
+    }
+}
+
+static void
+on_model_keybindings_changed_cb (GbpShellcmdCommandProvider *self,
+                                 GbpShellcmdCommandModel    *model)
+{
   guint n_items;
 
-  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_PROVIDER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_assert (GBP_IS_SHELLCMD_COMMAND_PROVIDER (self));
+  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (model));
 
-  /* Limit ourselves to some known workspaces */
-  if (!IDE_IS_PRIMARY_WORKSPACE (workspace) &&
-      !IDE_IS_EDITOR_WORKSPACE (workspace) &&
-      !IDE_IS_TERMINAL_WORKSPACE (workspace))
-    return;
+  for (guint j = 0; j < self->controllers->len; j++)
+    {
+      DzlShortcutController *controller = g_ptr_array_index (self->controllers, j);
 
-  model = get_model ();
-  controller = dzl_shortcut_controller_find (GTK_WIDGET (workspace));
+      remove_shortcuts (self, controller);
+    }
+
+  if (self->accels->len > 0)
+    g_ptr_array_remove_range (self->accels, 0, self->accels->len);
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
 
@@ -167,20 +184,67 @@ gbp_shellcmd_command_provider_load_shortcuts (IdeCommandProvider *provider,
       id = gbp_shellcmd_command_get_id (command);
       shortcut = gbp_shellcmd_command_get_shortcut (command);
 
-      if (id == NULL || shortcut == NULL)
+      if (id == NULL || shortcut == NULL || shortcut[0] == 0)
         continue;
-
-      g_debug ("Mapping shortcut \"%s\" to external command \"%s\"", shortcut, id);
 
       dzlcmdid = g_strdup_printf ("org.gnome.builder.plugins.shellcmd.%s", id);
       dzlcmdaction = g_strdup_printf ("win.command('%s')", id);
 
-      dzl_shortcut_controller_add_command_action (controller,
-                                                  dzlcmdid,
-                                                  shortcut,
-                                                  DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
-                                                  dzlcmdaction);
+      for (guint j = 0; j < self->controllers->len; j++)
+        {
+          DzlShortcutController *controller = g_ptr_array_index (self->controllers, j);
+
+          dzl_shortcut_controller_add_command_action (controller,
+                                                      dzlcmdid,
+                                                      shortcut,
+                                                      DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                                      dzlcmdaction);
+        }
+
+      g_ptr_array_add (self->accels, g_strdup (shortcut));
     }
+}
+
+static void
+gbp_shellcmd_command_provider_unload_shortcuts (IdeCommandProvider *provider,
+                                                IdeWorkspace       *workspace)
+{
+  GbpShellcmdCommandProvider *self = (GbpShellcmdCommandProvider *)provider;
+  DzlShortcutController *controller;
+
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_PROVIDER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+
+  if ((controller = dzl_shortcut_controller_try_find (GTK_WIDGET (workspace))))
+    {
+      remove_shortcuts (self, controller);
+      g_ptr_array_remove (self->controllers, controller);
+    }
+}
+
+static void
+gbp_shellcmd_command_provider_load_shortcuts (IdeCommandProvider *provider,
+                                              IdeWorkspace       *workspace)
+{
+  GbpShellcmdCommandProvider *self = (GbpShellcmdCommandProvider *)provider;
+  DzlShortcutController *controller;
+
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_PROVIDER (self));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+
+  /* Limit ourselves to some known workspaces */
+  if (!IDE_IS_PRIMARY_WORKSPACE (workspace) &&
+      !IDE_IS_EDITOR_WORKSPACE (workspace) &&
+      !IDE_IS_TERMINAL_WORKSPACE (workspace))
+    return;
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (workspace));
+
+  g_assert (dzl_shortcut_controller_get_widget (controller) == GTK_WIDGET (workspace));
+
+  g_ptr_array_add (self->controllers, g_object_ref (controller));
+
+  on_model_keybindings_changed_cb (self, get_model ());
 }
 
 static IdeCommand *
@@ -206,6 +270,7 @@ command_provider_iface_init (IdeCommandProviderInterface *iface)
   iface->query_async = gbp_shellcmd_command_provider_query_async;
   iface->query_finish = gbp_shellcmd_command_provider_query_finish;
   iface->load_shortcuts = gbp_shellcmd_command_provider_load_shortcuts;
+  iface->unload_shortcuts = gbp_shellcmd_command_provider_unload_shortcuts;
   iface->get_command_by_id = gbp_shellcmd_command_provider_get_command_by_id;
 }
 
@@ -216,6 +281,11 @@ G_DEFINE_TYPE_WITH_CODE (GbpShellcmdCommandProvider, gbp_shellcmd_command_provid
 static void
 gbp_shellcmd_command_provider_finalize (GObject *object)
 {
+  GbpShellcmdCommandProvider *self = (GbpShellcmdCommandProvider *)object;
+
+  g_clear_pointer (&self->accels, g_ptr_array_unref);
+  g_clear_pointer (&self->controllers, g_ptr_array_unref);
+
   G_OBJECT_CLASS (gbp_shellcmd_command_provider_parent_class)->finalize (object);
 }
 
@@ -230,4 +300,12 @@ gbp_shellcmd_command_provider_class_init (GbpShellcmdCommandProviderClass *klass
 static void
 gbp_shellcmd_command_provider_init (GbpShellcmdCommandProvider *self)
 {
+  self->accels = g_ptr_array_new_with_free_func (g_free);
+  self->controllers = g_ptr_array_new_with_free_func (g_object_unref);
+
+  g_signal_connect_object (get_model (),
+                           "keybindings-changed",
+                           G_CALLBACK (on_model_keybindings_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
