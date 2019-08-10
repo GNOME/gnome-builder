@@ -36,8 +36,10 @@
 struct _GbpShellcmdCommand
 {
   IdeObject                   parent_instance;
+
   GbpShellcmdCommandLocality  locality;
   gint                        priority;
+
   gchar                      *id;
   gchar                      *shortcut;
   gchar                      *subtitle;
@@ -639,9 +641,11 @@ gbp_shellcmd_command_run_async (IdeCommand          *command,
                                 gpointer             user_data)
 {
   GbpShellcmdCommand *self = (GbpShellcmdCommand *)command;
+  g_autoptr(GPtrArray) with_sh = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) argv = NULL;
+  gchar **real_argv;
   gint argc = 0;
 
   g_assert (GBP_IS_SHELLCMD_COMMAND (self));
@@ -665,22 +669,30 @@ gbp_shellcmd_command_run_async (IdeCommand          *command,
       return;
     }
 
+  with_sh = g_ptr_array_new ();
+  g_ptr_array_add (with_sh, (gchar *)"/bin/sh");
+  g_ptr_array_add (with_sh, (gchar *)"-c");
+  g_ptr_array_add (with_sh, (gchar *)self->command);
+  g_ptr_array_add (with_sh, NULL);
+
+  real_argv = (gchar **)(gpointer)with_sh->pdata;
+
   switch (self->locality)
     {
     case GBP_SHELLCMD_COMMAND_LOCALITY_HOST:
-      gbp_shellcmd_command_run_host (self, argv, task);
+      gbp_shellcmd_command_run_host (self, real_argv, task);
       break;
 
     case GBP_SHELLCMD_COMMAND_LOCALITY_APP:
-      gbp_shellcmd_command_run_app (self, argv, task);
+      gbp_shellcmd_command_run_app (self, real_argv, task);
       break;
 
     case GBP_SHELLCMD_COMMAND_LOCALITY_BUILD:
-      gbp_shellcmd_command_run_build (self, argv, task);
+      gbp_shellcmd_command_run_build (self, real_argv, task);
       break;
 
     case GBP_SHELLCMD_COMMAND_LOCALITY_RUN:
-      gbp_shellcmd_command_run_runner (self, argv, task);
+      gbp_shellcmd_command_run_runner (self, real_argv, task);
       break;
 
     default:

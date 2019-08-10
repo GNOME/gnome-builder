@@ -65,7 +65,6 @@ gbp_shellcmd_command_provider_query_async (IdeCommandProvider  *provider,
   GbpShellcmdCommandProvider *self = (GbpShellcmdCommandProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) ret = NULL;
-  g_autofree gchar *bash_c = NULL;
   g_autofree gchar *quoted = NULL;
   IdeContext *context;
 
@@ -85,14 +84,12 @@ gbp_shellcmd_command_provider_query_async (IdeCommandProvider  *provider,
     goto skip_commands;
 
   context = ide_workspace_get_context (workspace);
-  quoted = g_shell_quote (typed_text);
-  bash_c = g_strdup_printf ("/bin/sh -c %s", quoted);
 
   g_ptr_array_add (ret,
                    g_object_new (GBP_TYPE_SHELLCMD_COMMAND,
                                  "title", _("Run in host environment"),
                                  "subtitle", typed_text,
-                                 "command", bash_c,
+                                 "command", typed_text,
                                  "locality", GBP_SHELLCMD_COMMAND_LOCALITY_HOST,
                                  NULL));
 
@@ -102,14 +99,14 @@ gbp_shellcmd_command_provider_query_async (IdeCommandProvider  *provider,
                        g_object_new (GBP_TYPE_SHELLCMD_COMMAND,
                                      "title", _("Run in build environment"),
                                      "subtitle", typed_text,
-                                     "command", bash_c,
+                                     "command", typed_text,
                                      "locality", GBP_SHELLCMD_COMMAND_LOCALITY_BUILD,
                                      NULL));
       g_ptr_array_add (ret,
                        g_object_new (GBP_TYPE_SHELLCMD_COMMAND,
                                      "title", _("Run in runtime environment"),
                                      "subtitle", typed_text,
-                                     "command", bash_c,
+                                     "command", typed_text,
                                      "locality", GBP_SHELLCMD_COMMAND_LOCALITY_RUN,
                                      NULL));
     }
