@@ -75,6 +75,7 @@ ide_application_actions_preferences (GSimpleAction *action,
                          "transient-for", toplevel,
                          "default-width", 1300,
                          "default-height", 800,
+                         "title", _("Builder — Preferences"),
                          "window-position", GTK_WIN_POS_CENTER_ON_PARENT,
                          NULL);
   gtk_application_add_window (GTK_APPLICATION (self), window);
