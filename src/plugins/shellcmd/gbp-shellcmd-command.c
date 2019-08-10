@@ -63,12 +63,26 @@ enum {
   N_PROPS
 };
 
+enum {
+  CHANGED,
+  N_SIGNALS
+};
+
 static void command_iface_init (IdeCommandInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GbpShellcmdCommand, gbp_shellcmd_command, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMMAND, command_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
+
+static void
+gbp_shellcmd_command_changed (GbpShellcmdCommand *self)
+{
+  g_assert (GBP_IS_SHELLCMD_COMMAND (self));
+
+  g_signal_emit (self, signals [CHANGED], 0);
+}
 
 static void
 gbp_shellcmd_command_set_env (GbpShellcmdCommand  *self,
@@ -85,6 +99,8 @@ gbp_shellcmd_command_set_env (GbpShellcmdCommand  *self,
     }
 
   ide_environment_set_environ (self->environment, env);
+
+  gbp_shellcmd_command_changed (self);
 }
 
 static void
@@ -268,6 +284,12 @@ gbp_shellcmd_command_class_init (GbpShellcmdCommandClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
   
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [CHANGED] =
+    g_signal_new ("changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 static void
@@ -295,6 +317,7 @@ gbp_shellcmd_command_set_cwd (GbpShellcmdCommand *self,
       g_free (self->cwd);
       self->cwd = g_strdup (cwd);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CWD]);
+      gbp_shellcmd_command_changed (self);
     }
 }
 
@@ -764,6 +787,7 @@ gbp_shellcmd_command_set_locality (GbpShellcmdCommand         *self,
     {
       self->locality = locality;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOCALITY]);
+      gbp_shellcmd_command_changed (self);
     }
 
 }
@@ -787,6 +811,7 @@ gbp_shellcmd_command_set_command (GbpShellcmdCommand *self,
       g_free (self->command);
       self->command = g_strdup (command);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COMMAND]);
+      gbp_shellcmd_command_changed (self);
     }
 }
 
@@ -820,6 +845,7 @@ gbp_shellcmd_command_set_shortcut (GbpShellcmdCommand *self,
       g_free (self->shortcut);
       self->shortcut = g_strdup (shortcut);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORTCUT]);
+      gbp_shellcmd_command_changed (self);
     }
 }
 
@@ -834,6 +860,7 @@ gbp_shellcmd_command_set_title (GbpShellcmdCommand *self,
       g_free (self->title);
       self->title = g_strdup (title);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+      gbp_shellcmd_command_changed (self);
     }
 }
 
@@ -848,6 +875,7 @@ gbp_shellcmd_command_set_subtitle (GbpShellcmdCommand *self,
       g_free (self->subtitle);
       self->subtitle = g_strdup (subtitle);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
+      gbp_shellcmd_command_changed (self);
     }
 }
 
