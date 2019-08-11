@@ -333,7 +333,11 @@ src/plugins/retab/gbp-retab-editor-page-addin.c
 src/plugins/retab/gtk/menus.ui
 src/plugins/rustup/rustup_plugin.py
 src/plugins/shellcmd/gbp-shellcmd-command.c
+src/plugins/shellcmd/gbp-shellcmd-command-editor.c
+src/plugins/shellcmd/gbp-shellcmd-command-editor.ui
 src/plugins/shellcmd/gbp-shellcmd-command-provider.c
+src/plugins/shellcmd/gbp-shellcmd-list.c
+src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c
 src/plugins/snippets/ide-snippet-completion-item.c
 src/plugins/snippets/ide-snippet-preferences-addin.c
 src/plugins/spellcheck/gbp-spell-editor-addin.c
