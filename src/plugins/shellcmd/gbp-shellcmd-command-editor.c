@@ -46,6 +46,7 @@ struct _GbpShellcmdCommandEditor
   GtkRadioButton       *host;
   GtkRadioButton       *build;
   GtkRadioButton       *run;
+  GtkSwitch            *close_on_exit;
 };
 
 G_DEFINE_TYPE (GbpShellcmdCommandEditor, gbp_shellcmd_command_editor, GTK_TYPE_BIN)
@@ -188,6 +189,7 @@ gbp_shellcmd_command_editor_class_init (GbpShellcmdCommandEditorClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shellcmd/gbp-shellcmd-command-editor.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandEditor, build);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandEditor, change);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandEditor, close_on_exit);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandEditor, command);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandEditor, delete);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandEditor, directory);
@@ -208,6 +210,7 @@ gbp_shellcmd_command_editor_init (GbpShellcmdCommandEditor *self)
   self->bindings = dzl_binding_group_new ();
 
   dzl_binding_group_bind (self->bindings, "title", self->title, "text", G_BINDING_BIDIRECTIONAL);
+  dzl_binding_group_bind (self->bindings, "close-on-exit", self->close_on_exit, "active", G_BINDING_BIDIRECTIONAL);
   dzl_binding_group_bind (self->bindings, "command", self->command, "text", G_BINDING_BIDIRECTIONAL);
   dzl_binding_group_bind (self->bindings, "shortcut", self->shortcut, "accelerator", G_BINDING_BIDIRECTIONAL);
   dzl_binding_group_bind (self->bindings, "cwd", self->directory, "text", G_BINDING_BIDIRECTIONAL);

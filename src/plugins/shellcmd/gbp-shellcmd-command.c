@@ -47,15 +47,18 @@ struct _GbpShellcmdCommand
   gchar                      *command;
   gchar                      *cwd;
   IdeEnvironment             *environment;
+
+  guint                       close_on_exit : 1;
 };
 
 enum {
   PROP_0,
-  PROP_ID,
+  PROP_CLOSE_ON_EXIT,
   PROP_COMMAND,
   PROP_CWD,
   PROP_ENV,
   PROP_ENVIRONMENT,
+  PROP_ID,
   PROP_LOCALITY,
   PROP_SHORTCUT,
   PROP_SUBTITLE,
@@ -126,6 +129,10 @@ gbp_shellcmd_command_get_property (GObject    *object,
       g_value_set_string (value, gbp_shellcmd_command_get_id (self));
       break;
 
+    case PROP_CLOSE_ON_EXIT:
+      g_value_set_boolean (value, gbp_shellcmd_command_get_close_on_exit (self));
+      break;
+
     case PROP_COMMAND:
       g_value_set_string (value, gbp_shellcmd_command_get_command (self));
       break;
@@ -171,6 +178,10 @@ gbp_shellcmd_command_set_property (GObject      *object,
     {
     case PROP_ID:
       self->id = g_value_dup_string (value);
+      break;
+
+    case PROP_CLOSE_ON_EXIT:
+      gbp_shellcmd_command_set_close_on_exit (self, g_value_get_boolean (value));
       break;
 
     case PROP_COMMAND:
@@ -221,6 +232,13 @@ gbp_shellcmd_command_class_init (GbpShellcmdCommandClass *klass)
                          "The command identifier, if any",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CLOSE_ON_EXIT] =
+    g_param_spec_boolean ("close-on-exit",
+                          "Close on Exit",
+                          "If the terminal should automatically close after running",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_COMMAND] =
     g_param_spec_string ("command",
@@ -452,7 +470,7 @@ gbp_shellcmd_command_run_host (GbpShellcmdCommand  *self,
 
   tlauncher = ide_terminal_launcher_new_for_launcher (launcher);
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                       "close-on-exit", FALSE,
+                       "close-on-exit", self->close_on_exit,
                        "launcher", tlauncher,
                        "manage-spawn", TRUE,
                        "respawn-on-exit", FALSE,
@@ -509,7 +527,7 @@ gbp_shellcmd_command_run_app (GbpShellcmdCommand  *self,
 
   tlauncher = ide_terminal_launcher_new_for_launcher (launcher);
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                       "close-on-exit", FALSE,
+                       "close-on-exit", self->close_on_exit,
                        "launcher", tlauncher,
                        "manage-spawn", TRUE,
                        "respawn-on-exit", FALSE,
@@ -585,7 +603,7 @@ gbp_shellcmd_command_run_runner (GbpShellcmdCommand  *self,
                                    ide_pipeline_get_builddir (pipeline));
 
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                       "close-on-exit", FALSE,
+                       "close-on-exit", self->close_on_exit,
                        "launcher", launcher,
                        "manage-spawn", TRUE,
                        "respawn-on-exit", FALSE,
@@ -660,7 +678,7 @@ gbp_shellcmd_command_run_build (GbpShellcmdCommand  *self,
 
   tlauncher = ide_terminal_launcher_new_for_launcher (launcher);
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                       "close-on-exit", FALSE,
+                       "close-on-exit", self->close_on_exit,
                        "launcher", tlauncher,
                        "manage-spawn", TRUE,
                        "respawn-on-exit", FALSE,
@@ -1043,12 +1061,14 @@ gbp_shellcmd_command_copy (GbpShellcmdCommand *self)
 
   ret = g_object_new (GBP_TYPE_SHELLCMD_COMMAND, NULL);
   ret->locality = self->locality;
+  ret->priority = self->priority;
   ret->id = g_strdup (self->id);
   ret->shortcut = g_strdup (self->shortcut);
   ret->title = g_strdup (self->title);
   ret->subtitle = g_strdup (self->subtitle);
   ret->command = g_strdup (self->command);
   ret->cwd = g_strdup (self->cwd);
+  ret->close_on_exit = self->close_on_exit;
 
   if (self->environment != NULL)
     {
@@ -1067,4 +1087,28 @@ gbp_shellcmd_command_set_priority (GbpShellcmdCommand *self,
   g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (self));
 
   self->priority = priority;
+}
+
+gboolean
+gbp_shellcmd_command_get_close_on_exit (GbpShellcmdCommand *self)
+{
+  g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND (self), FALSE);
+
+  return self->close_on_exit;
+}
+
+void
+gbp_shellcmd_command_set_close_on_exit (GbpShellcmdCommand *self,
+                                        gboolean            close_on_exit)
+{
+  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (self));
+
+  close_on_exit = !!close_on_exit;
+
+  if (close_on_exit != self->close_on_exit)
+    {
+      self->close_on_exit = close_on_exit;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLOSE_ON_EXIT]);
+      gbp_shellcmd_command_changed (self);
+    }
 }

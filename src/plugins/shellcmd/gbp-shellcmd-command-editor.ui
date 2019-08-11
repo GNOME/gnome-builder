@@ -118,6 +118,36 @@
         </child>
         <child>
           <object class="GtkLabel">
+            <property name="label" translatable="yes">Close on Exit</property>
+            <property name="margin-top">10</property>
+            <property name="visible">true</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="close_on_exit">
+            <property name="halign">start</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">If enabled, the terminal page will close after the command executes.</property>
+            <property name="visible">true</property>
+            <property name="wrap">true</property>
+            <property name="width-chars">10</property>
+            <property name="max-width-chars">10</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="scale" value="0.8333"/>
+            </attributes>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
             <property name="label" translatable="yes">Keyboard Shortcut</property>
             <property name="margin-top">10</property>
             <property name="visible">true</property>

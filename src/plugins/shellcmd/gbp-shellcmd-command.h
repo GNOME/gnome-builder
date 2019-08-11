@@ -37,31 +37,34 @@ typedef enum
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdCommand, gbp_shellcmd_command, GBP, SHELLCMD_COMMAND, IdeObject)
 
-GbpShellcmdCommand         *gbp_shellcmd_command_from_key_file   (GKeyFile                   *key_file,
-                                                                  const gchar                *group,
-                                                                  GError                    **error);
-void                        gbp_shellcmd_command_to_key_file     (GbpShellcmdCommand         *self,
-                                                                  GKeyFile                   *key_file);
-GbpShellcmdCommand         *gbp_shellcmd_command_copy            (GbpShellcmdCommand         *self);
-const gchar                *gbp_shellcmd_command_get_id          (GbpShellcmdCommand         *self);
-GbpShellcmdCommandLocality  gbp_shellcmd_command_get_locality    (GbpShellcmdCommand         *self);
-void                        gbp_shellcmd_command_set_locality    (GbpShellcmdCommand         *self,
-                                                                  GbpShellcmdCommandLocality  locality);
-const gchar                *gbp_shellcmd_command_get_command     (GbpShellcmdCommand         *self);
-void                        gbp_shellcmd_command_set_command     (GbpShellcmdCommand         *self,
-                                                                  const gchar                *command);
-const gchar                *gbp_shellcmd_command_get_cwd         (GbpShellcmdCommand         *self);
-void                        gbp_shellcmd_command_set_cwd         (GbpShellcmdCommand         *self,
-                                                                  const gchar                *cwd);
-IdeEnvironment             *gbp_shellcmd_command_get_environment (GbpShellcmdCommand         *self);
-void                        gbp_shellcmd_command_set_priority    (GbpShellcmdCommand         *self,
-                                                                  gint                        priority);
-const gchar                *gbp_shellcmd_command_get_shortcut    (GbpShellcmdCommand         *self);
-void                        gbp_shellcmd_command_set_shortcut    (GbpShellcmdCommand         *self,
-                                                                  const gchar                *shortcut);
-void                        gbp_shellcmd_command_set_subtitle    (GbpShellcmdCommand         *self,
-                                                                  const gchar                *subtitle);
-void                        gbp_shellcmd_command_set_title       (GbpShellcmdCommand         *self,
-                                                                  const gchar                *title);
+GbpShellcmdCommand         *gbp_shellcmd_command_from_key_file     (GKeyFile                    *key_file,
+                                                                    const gchar                 *group,
+                                                                    GError                     **error);
+void                        gbp_shellcmd_command_to_key_file       (GbpShellcmdCommand          *self,
+                                                                    GKeyFile                    *key_file);
+GbpShellcmdCommand         *gbp_shellcmd_command_copy              (GbpShellcmdCommand          *self);
+const gchar                *gbp_shellcmd_command_get_id            (GbpShellcmdCommand          *self);
+GbpShellcmdCommandLocality  gbp_shellcmd_command_get_locality      (GbpShellcmdCommand          *self);
+void                        gbp_shellcmd_command_set_locality      (GbpShellcmdCommand          *self,
+                                                                    GbpShellcmdCommandLocality   locality);
+const gchar                *gbp_shellcmd_command_get_command       (GbpShellcmdCommand          *self);
+void                        gbp_shellcmd_command_set_command       (GbpShellcmdCommand          *self,
+                                                                    const gchar                 *command);
+const gchar                *gbp_shellcmd_command_get_cwd           (GbpShellcmdCommand          *self);
+void                        gbp_shellcmd_command_set_cwd           (GbpShellcmdCommand          *self,
+                                                                    const gchar                 *cwd);
+IdeEnvironment             *gbp_shellcmd_command_get_environment   (GbpShellcmdCommand          *self);
+void                        gbp_shellcmd_command_set_priority      (GbpShellcmdCommand          *self,
+                                                                    gint                         priority);
+const gchar                *gbp_shellcmd_command_get_shortcut      (GbpShellcmdCommand          *self);
+void                        gbp_shellcmd_command_set_shortcut      (GbpShellcmdCommand          *self,
+                                                                    const gchar                 *shortcut);
+void                        gbp_shellcmd_command_set_subtitle      (GbpShellcmdCommand          *self,
+                                                                    const gchar                 *subtitle);
+void                        gbp_shellcmd_command_set_title         (GbpShellcmdCommand          *self,
+                                                                    const gchar                 *title);
+gboolean                    gbp_shellcmd_command_get_close_on_exit (GbpShellcmdCommand          *self);
+void                        gbp_shellcmd_command_set_close_on_exit (GbpShellcmdCommand          *self,
+                                                                    gboolean                     close_on_exit);
 
 G_END_DECLS
