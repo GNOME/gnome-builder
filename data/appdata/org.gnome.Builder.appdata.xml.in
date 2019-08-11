@@ -86,6 +86,16 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.33.90" date="2019-08-10">
+      <description>
+        <p>
+          Builder 3.33.90 is here as we march along towards 3.34.
+          This release includes a number of bug fixes and improvements to foundational libraries.
+          A new shellcmd plugin has been added to allow executing external commands in a number of environments.
+        </p>
+      </description>
+    </release>
+
     <release version="3.33.4" date="2019-08-01">
       <description>
         <p>

@@ -1,3 +1,20 @@
+===============
+Version 3.33.90
+===============
+
+Changes since last release:
+
+ • Fix deprecations from recent GLib changes
+ • Update for recent Sysprof API changes
+ • Multiple cursors improvements in editor
+ • Fix meson tests use of IdeRunner
+ • Sort commands in command-bar by priority
+ • A new shellcmd plugin to execute shell commands from host, build,
+   or runtime environments including support for keyboard shortcuts.
+ • Fix a number of "execve()" errors in build system usage
+ • Project template improvements
+ • Translation updates
+
 ==============
 Version 3.33.4
 ==============
