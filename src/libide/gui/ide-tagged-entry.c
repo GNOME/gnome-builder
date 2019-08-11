@@ -875,7 +875,7 @@ ide_tagged_entry_button_press_event (GtkWidget *widget,
 static void
 ide_tagged_entry_init (IdeTaggedEntry *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, IDE_TYPE_TAGGED_ENTRY, IdeTaggedEntryPrivate);
+  self->priv = ide_tagged_entry_get_instance_private (self);
   self->priv->button_visible = TRUE;
 }
 
@@ -967,12 +967,8 @@ ide_tagged_entry_class_init (IdeTaggedEntryClass *klass)
 static void
 ide_tagged_entry_tag_init (IdeTaggedEntryTag *self)
 {
-  IdeTaggedEntryTagPrivate *priv;
-
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, IDE_TYPE_TAGGED_ENTRY_TAG, IdeTaggedEntryTagPrivate);
-  priv = self->priv;
-
-  priv->last_button_state = GTK_STATE_FLAG_NORMAL;
+  self->priv = ide_tagged_entry_tag_get_instance_private (self);
+  self->priv->last_button_state = GTK_STATE_FLAG_NORMAL;
 }
 
 static void
