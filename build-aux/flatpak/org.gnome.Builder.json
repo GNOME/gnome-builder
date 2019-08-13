@@ -570,20 +570,6 @@
             ]
         },
         {
-            "name" : "meson",
-            "buildsystem" : "simple",
-            "build-commands": [
-                "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=/app -I meson"
-            ],
-            "sources" : [
-                {
-                    "type" : "file",
-                    "url" : "https://files.pythonhosted.org/packages/3f/03/8785cb9fe3c499e5b3fedbb51dae0a608ea3dd0a8fc81cd0ae2237ab054a/meson-0.50.0.tar.gz",
-                    "sha256" : "13e034b8e74fd39cb4a833915343bcb291b0337374d0537b76922605dad28648"
-                }
-            ]
-        },
-        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,
