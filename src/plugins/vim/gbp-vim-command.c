@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-gui.h>
+#include <libide-sourceview.h>
 
 #include "gbp-vim-command.h"
 #include "gb-vim.h"
@@ -34,7 +35,14 @@ struct _GbpVimCommand
   gchar     *typed_text;
   gchar     *command;
   gchar     *description;
+  gint       priority;
 };
+
+static gint
+gbp_vim_command_get_priority (IdeCommand *command)
+{
+  return GBP_VIM_COMMAND (command)->priority;
+}
 
 static gchar *
 gbp_vim_command_get_title (IdeCommand *command)
@@ -92,6 +100,7 @@ command_iface_init (IdeCommandInterface *iface)
   iface->get_subtitle = gbp_vim_command_get_subtitle;
   iface->run_async = gbp_vim_command_run_async;
   iface->run_finish = gbp_vim_command_run_finish;
+  iface->get_priority = gbp_vim_command_get_priority;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpVimCommand, gbp_vim_command, IDE_TYPE_OBJECT,
@@ -130,12 +139,16 @@ gbp_vim_command_new (GtkWidget   *active_widget,
                      const gchar *description)
 {
   g_autoptr(GbpVimCommand) ret = NULL;
+  guint priority = G_MAXINT;
 
   ret = g_object_new (GBP_TYPE_VIM_COMMAND, NULL);
   ret->active_widget = g_object_ref (active_widget);
   ret->typed_text = g_strdup (typed_text);
   ret->command = g_strdup (command);
   ret->description = g_strdup (description);
+
+  ide_completion_fuzzy_match (command, typed_text, &priority);
+  ret->priority = priority;
 
   return g_steal_pointer (&ret);
 }
