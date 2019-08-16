@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-06-19 20:17+0000\n"
-"PO-Revision-Date: 2019-06-21 15:36+0700\n"
+"POT-Creation-Date: 2019-08-11 12:19+0000\n"
+"PO-Revision-Date: 2019-08-16 16:41+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -22,13 +22,13 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:201
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/gui/ide-application-actions.c:142
+#: src/libide/gui/ide-application-actions.c:143
 msgid "An IDE for GNOME"
 msgstr "IDE untuk GNOME"
 
@@ -837,7 +837,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4966
+#: src/libide/sourceview/ide-source-view.c:4977
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -898,14 +898,14 @@ msgstr "Tanpa Judul"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1405
+#: src/libide/gui/ide-workbench.c:1419
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:342
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
 msgid "Cancel"
 msgstr "Batal"
 
@@ -1211,10 +1211,10 @@ msgid "Open File"
 msgstr "Buka Berkas"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1404
+#: src/libide/gui/ide-workbench.c:1418
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:341
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
 msgid "Open"
 msgstr "Buka"
 
@@ -1271,8 +1271,8 @@ msgstr "Sesi Anda sebelumnya akan siap sebentar lagi."
 msgid "Switch surface"
 msgstr "Ganti permukaan"
 
-#: src/libide/editor/ide-editor-workspace.ui:57
-#: src/libide/gui/ide-primary-workspace.ui:64
+#: src/libide/editor/ide-editor-workspace.ui:64
+#: src/libide/gui/ide-primary-workspace.ui:71
 #: src/libide/terminal/ide-terminal-workspace.ui:41
 msgid "Search your project"
 msgstr "Cari proyek Anda"
@@ -1297,7 +1297,7 @@ msgstr "Perangkat yang ditemukan “%s”"
 msgid "Devices"
 msgstr "Peranti"
 
-#: src/libide/foundry/ide-device-manager.c:725
+#: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Tidak dapat deploy ke perangkat, pipa bangun tidak diinisialisasi"
 
@@ -1520,6 +1520,7 @@ msgid "Clone Repository…"
 msgstr "Klon Repositori…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
 msgid "Directory"
 msgstr "Direktori"
 
@@ -1541,7 +1542,7 @@ msgid "All Project Types"
 msgstr "Semua Jenis Proyek"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:317 src/libide/gui/ide-workbench.c:838
+#: src/libide/gui/ide-workbench.c:318 src/libide/gui/ide-workbench.c:843
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder— %s"
@@ -1625,7 +1626,7 @@ msgid "_Quit"
 msgstr "_Keluar"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1401 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Buka Berkas…"
@@ -1634,21 +1635,25 @@ msgstr "Buka Berkas…"
 msgid "Run Options"
 msgstr "Jalankan Opsi"
 
-#: src/libide/gui/ide-application-actions.c:148
+#: src/libide/gui/ide-application-actions.c:78
+msgid "Builder — Preferences"
+msgstr "Builder — Preferensi"
+
+#: src/libide/gui/ide-application-actions.c:149
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:150
+#: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
 msgstr ""
 "Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
 "Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2018, 2019."
 
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
 msgstr "Pelajari lebih banyak tentang GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:157
+#: src/libide/gui/ide-application-actions.c:158
 msgid "Funded By"
 msgstr "Didanai Oleh"
 
@@ -1713,6 +1718,15 @@ msgid ""
 msgstr ""
 "GNOME Builder membutuhkan sesi desktop dengan D-Bus. Harap set "
 "DBUS_SESSION_BUS_ADDRESS."
+
+#: src/libide/gui/ide-command-manager.c:491
+msgid "Command failed"
+msgstr "Perintah gagal"
+
+#: src/libide/gui/ide-command-manager.c:513
+#, c-format
+msgid "Failed to locate command “%s”"
+msgstr "Gagal menemukan perintah \"%s\""
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
@@ -2314,7 +2328,7 @@ msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah proyek"
 
 #: src/libide/gui/ide-preferences-builtin.c:541
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:420
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Kendali Versi"
 
@@ -2808,31 +2822,31 @@ msgstr "Per_kecil"
 msgid "Reset"
 msgstr "Reset"
 
-#: src/libide/sourceview/ide-source-view.c:4415
+#: src/libide/sourceview/ide-source-view.c:4426
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4417
+#: src/libide/sourceview/ide-source-view.c:4428
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4535
+#: src/libide/sourceview/ide-source-view.c:4546
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4965
+#: src/libide/sourceview/ide-source-view.c:4976
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5200
+#: src/libide/sourceview/ide-source-view.c:5211
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5226
+#: src/libide/sourceview/ide-source-view.c:5237
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
 
@@ -2854,12 +2868,12 @@ msgstr "B_uka Tautan"
 msgid "_Copy Link Address"
 msgstr "_Salin Alamat Taut"
 
-#: src/libide/terminal/ide-terminal-launcher.c:274
+#: src/libide/terminal/ide-terminal-launcher.c:320
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Gagal membuat shell dalam runtime: \"%s\""
 
-#: src/libide/terminal/ide-terminal-launcher.c:566
+#: src/libide/terminal/ide-terminal-launcher.c:646
 msgid "Untitled Terminal"
 msgstr "Terminal Tanpa Judul"
 
@@ -2868,16 +2882,23 @@ msgid "Save Terminal Content As"
 msgstr "Simpan Isi Terminal Sebagai"
 
 #: src/libide/terminal/ide-terminal-page.c:105
+#: src/libide/terminal/ide-terminal-page.c:150
+#: src/libide/terminal/ide-terminal-page.c:291
+msgid "Untitled terminal"
+msgstr "Terminal tanpa judul"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:107
+msgid "Exited"
+msgstr "Keluar"
+
+#: src/libide/terminal/ide-terminal-page.c:114
 msgid "Subprocess launcher failed"
 msgstr "Peluncur subproses gagal"
 
-#: src/libide/terminal/ide-terminal-page.c:116
+#: src/libide/terminal/ide-terminal-page.c:137
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "Peluncur subproses gagal terlalu cepat, tidak akan muncul kembali."
-
-#: src/libide/terminal/ide-terminal-page.c:277
-msgid "Untitled terminal"
-msgstr "Terminal tanpa judul"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2895,12 +2916,12 @@ msgstr "Cocokkan seluruh kata"
 msgid "Wrap around"
 msgstr "Melipat"
 
-#: src/libide/tree/ide-tree-node.c:1177 src/libide/tree/ide-tree-node.c:1562
-#: src/libide/tree/ide-tree-node.c:1591
+#: src/libide/tree/ide-tree-node.c:1180 src/libide/tree/ide-tree-node.c:1565
+#: src/libide/tree/ide-tree-node.c:1594
 msgid "(Empty)"
 msgstr "(Kosong)"
 
-#: src/libide/tree/ide-tree-node.c:1560
+#: src/libide/tree/ide-tree-node.c:1563
 msgid "Loading…"
 msgstr "Memuat…"
 
@@ -3156,6 +3177,7 @@ msgid "Removes the configuration and cannot be undone."
 msgstr "Menghapus konfigurasi dan tidak dapat diurungkan."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:178
 msgid "Environment"
 msgstr "Lingkungan"
 
@@ -3325,7 +3347,7 @@ msgstr "Detail Bangun"
 msgid "Build pipeline is empty"
 msgstr "Pipa bangun kosong"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:162
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:163
 msgid "Build Targets"
 msgstr "Target Bangun"
 
@@ -4396,11 +4418,11 @@ msgstr ""
 "berkas JavaScript. Hal ini dapat mengakibatkan eksekusi kode dalam proyek "
 "Anda."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:915
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
 msgstr "Mengkloning proyek menggunakan manifes flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
 msgstr "MANIFEST"
 
@@ -4505,17 +4527,17 @@ msgstr[1] "Tampilkan %u lebih banyak runtime"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Runtimes"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:857
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:859
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:861
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -5258,37 +5280,37 @@ msgstr "_Buat"
 msgid "Files"
 msgstr "Berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:676
+#: src/plugins/project-tree/gbp-project-tree-addin.c:677
 #, c-format
 msgid "Copying 1 file"
 msgstr "Menyalin 1 berkas"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:679
+#: src/plugins/project-tree/gbp-project-tree-addin.c:680
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Menyalin %s dari %s berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:715
+#: src/plugins/project-tree/gbp-project-tree-addin.c:716
 msgid "Failed to copy files"
 msgstr "Gagal menyalin berkas"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
+#: src/plugins/project-tree/gbp-project-tree-addin.c:726
 msgid "Files copied"
 msgstr "Berkas disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:729
+#: src/plugins/project-tree/gbp-project-tree-addin.c:730
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s berkas telah disalin"
 msgstr[1] "%s berkas telah disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:921
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Copying files…"
 msgstr "Menyalin berkas…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:922
+#: src/plugins/project-tree/gbp-project-tree-addin.c:923
 msgid "Files will be copied in a moment"
 msgstr "Berkas akan disalin sebentar lagi"
 
@@ -5502,6 +5524,118 @@ msgstr "Tidak ada toolchain yang terpasang. Klik"
 msgid "to add a new toolchain!"
 msgstr "untuk menambahkan toolchain baru!"
 
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:344
+msgid "Shell command"
+msgstr "perintah shell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+msgid ""
+"Cannot spawn terminal in runtime environment because build pipeline is not "
+"initialized"
+msgstr ""
+"Tidak dapat menelurkan terminaldi lingkungan runtime karena pipa bangun "
+"tidak diinisialisasi"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+msgid "Cannot spawn process because build pipeline is not yet available"
+msgstr "Tidak dapat menelurkan proses karena pipa bangun belum tersedia"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
+msgid "Change Shortcut"
+msgstr "Ubah Pintasan"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
+msgid "Title"
+msgstr "Judul"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
+msgid "Shell Command"
+msgstr "Perintah Shell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:36
+msgid ""
+"The command will be executed using a shell like “/bin/sh -c\". You may use "
+"variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
+"automatically set for the command."
+msgstr ""
+"Perintah akan dieksekusi menggunakan shell seperti “/bin/sh -c\". Anda dapat "
+"menggunakan ekspansi variabel seperti “$SHELL”. Baik \"$SRCDIR\" dan "
+"\"$BUILDDIR\" secara otomatis ditetapkan untuk perintah."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
+msgid "Command Locality"
+msgstr "Perintah Lokalitas"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
+msgid "On Host"
+msgstr "Di Host"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
+msgid "In Build Environment"
+msgstr "Dalam Lingkungan Bangun"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
+msgid "In Runtime Environment"
+msgstr "Dalam Lingkungan Runtime"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
+msgid ""
+"If the directory is not an absolute-path, it will be relative to the source "
+"or build directory depending on the command locality."
+msgstr ""
+"Jika direktori bukan path absolut, itu akan relatif ke sumber atau direktori "
+"bangun tergantung pada perintah lokalitas."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
+msgid "Close on Exit"
+msgstr "Tutup saat Keluar"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
+msgid "If enabled, the terminal page will close after the command executes."
+msgstr ""
+"Jika diaktifkan, halaman terminal akan ditutup setelah perintah dijalankan."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
+msgid "Keyboard Shortcut"
+msgstr "Pintasan Papan Tik"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
+msgid "Change"
+msgstr "Ubah"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
+msgid "Delete Command"
+msgstr "Hapus Perintah"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+msgid "Run in host environment"
+msgstr "Jalankan di lingkungan host"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+msgid "Run in build environment"
+msgstr "Jalankan di lingkungan bangun"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+msgid "Run in runtime environment"
+msgstr "Jalankan di lingkungan runtime"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:113
+msgid "New command"
+msgstr "Perintah baru"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:134
+msgid "Click + to add an external command"
+msgstr "Klik + untuk menambahkan perintah eksternal"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
+msgid "External Commands"
+msgstr "Perintah Eksternal"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
+msgid "Command"
+msgstr "Perintah"
+
 #: src/plugins/snippets/ide-snippet-completion-item.c:114
 #, c-format
 msgid "Failed to parse snippet “%s”"
@@ -5649,7 +5783,7 @@ msgstr "Cari simbol dalam dokumen"
 msgid "Unnamed Symbol"
 msgstr "Simbol tanpa nama"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:155
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
 msgid "Symbol"
 msgstr "Simbol"
 
@@ -5667,19 +5801,19 @@ msgstr "Garis Besar Dokumentasi"
 msgid "Profiler"
 msgstr "Profiler"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:338
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
 msgid "Open Sysprof Capture…"
 msgstr "Buka Tangkapan Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:347
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof Capture (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:353
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
 msgid "All Files"
 msgstr "Semua Berkas"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:476
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Jalankan dengan Profiler"
@@ -5774,7 +5908,7 @@ msgid "Unit Tests"
 msgstr "Pengujian Unit"
 
 #. translators: %s is replaced with the name of the unit test
-#: src/plugins/testui/gbp-test-tree-addin.c:407
+#: src/plugins/testui/gbp-test-tree-addin.c:408
 #, c-format
 msgid "Running test “%s”…"
 msgstr "Menjalankan tes \"%s\"…"
@@ -5806,15 +5940,15 @@ msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik peringatan kesalahan"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:53
+#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Jalankan dengan Valgrind"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:459
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
 msgid "Branches"
 msgstr "Cabang"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:469
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:476
 msgid "Tags"
 msgstr "Tanda"
 
@@ -6016,9 +6150,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgstr ""
 #~ "Bila difungsikan, pohon proyek akan menampilkan ikon di sebelah setiap "
 #~ "butir."
-
-#~ msgid "Commands:"
-#~ msgstr "Perintah:"
 
 #~ msgid "List available subcommands"
 #~ msgstr "Daftar sub perintah yang tersedia"
