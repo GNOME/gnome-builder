@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-06-21 08:39+0000\n"
-"PO-Revision-Date: 2019-08-04 16:48+0300\n"
+"POT-Creation-Date: 2019-08-11 12:19+0000\n"
+"PO-Revision-Date: 2019-08-18 14:52+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28 [at] gmail [dot] "
 "com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
@@ -24,13 +24,13 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:201
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/gui/ide-application-actions.c:142
+#: src/libide/gui/ide-application-actions.c:143
 msgid "An IDE for GNOME"
 msgstr "Un IDE pentru GNOME"
 
@@ -846,7 +846,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Încărcați sau generați o paletă utilizând preferințele"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4966
+#: src/libide/sourceview/ide-source-view.c:4977
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -908,14 +908,14 @@ msgstr "Fără titlu"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1405
+#: src/libide/gui/ide-workbench.c:1419
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:342
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
 msgid "Cancel"
 msgstr "Anulează"
 
@@ -1220,10 +1220,10 @@ msgid "Open File"
 msgstr "Deschide un fișier"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1404
+#: src/libide/gui/ide-workbench.c:1418
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:341
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
 msgid "Open"
 msgstr "Deschide"
 
@@ -1280,8 +1280,8 @@ msgstr "Sesiunea anterioară va fi gata într-un moment."
 msgid "Switch surface"
 msgstr "Comută suprafața"
 
-#: src/libide/editor/ide-editor-workspace.ui:57
-#: src/libide/gui/ide-primary-workspace.ui:64
+#: src/libide/editor/ide-editor-workspace.ui:64
+#: src/libide/gui/ide-primary-workspace.ui:71
 #: src/libide/terminal/ide-terminal-workspace.ui:41
 msgid "Search your project"
 msgstr "Caută în proiect"
@@ -1306,7 +1306,7 @@ msgstr "S-a descoperit dispozitivul „%s”"
 msgid "Devices"
 msgstr "Dispozitive"
 
-#: src/libide/foundry/ide-device-manager.c:725
+#: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Nu se poate lansa dispozitivul, linia de generare nu este inițializată"
 
@@ -1532,6 +1532,7 @@ msgid "Clone Repository…"
 msgstr "Clonează un depozit…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
 msgid "Directory"
 msgstr "Director"
 
@@ -1553,7 +1554,7 @@ msgid "All Project Types"
 msgstr "Toate tipurile de proiect"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:317 src/libide/gui/ide-workbench.c:838
+#: src/libide/gui/ide-workbench.c:318 src/libide/gui/ide-workbench.c:843
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1637,7 +1638,7 @@ msgid "_Quit"
 msgstr "_Ieșire"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1401 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Deschide un fișier…"
@@ -1646,20 +1647,24 @@ msgstr "Deschide un fișier…"
 msgid "Run Options"
 msgstr "Opțiuni de rulare"
 
-#: src/libide/gui/ide-application-actions.c:148
+#: src/libide/gui/ide-application-actions.c:78
+msgid "Builder — Preferences"
+msgstr "Builder — Preferințe"
+
+#: src/libide/gui/ide-application-actions.c:149
 msgid "GNOME Builder"
 msgstr "Builder GNOME"
 
-#: src/libide/gui/ide-application-actions.c:150
+#: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
 msgstr ""
 "Florentina Mușat <florentina.musat.28 [at] gmail [dot] com>, 2018, 2019"
 
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
 msgstr "Aflați mai multe despre Builder GNOME"
 
-#: src/libide/gui/ide-application-actions.c:157
+#: src/libide/gui/ide-application-actions.c:158
 msgid "Funded By"
 msgstr "Fondat de"
 
@@ -1724,6 +1729,15 @@ msgid ""
 msgstr ""
 "Builder GNOME necesită o sesiune desktop cu D-Bus. Stabiliți "
 "DBUS_SESSION_BUS_ADDRESS."
+
+#: src/libide/gui/ide-command-manager.c:491
+msgid "Command failed"
+msgstr "Comanda a eșuat"
+
+#: src/libide/gui/ide-command-manager.c:513
+#, c-format
+msgid "Failed to locate command “%s”"
+msgstr "Nu s-a putut localiza comanda „%s”"
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
@@ -2324,7 +2338,7 @@ msgstr "Deschide fișierele deschise anterior la încărcarea unui proiect"
 
 #: src/libide/gui/ide-preferences-builtin.c:541
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:420
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Control de versiune"
 
@@ -2820,31 +2834,31 @@ msgstr "Micș_orare"
 msgid "Reset"
 msgstr "Restabilește"
 
-#: src/libide/sourceview/ide-source-view.c:4415
+#: src/libide/sourceview/ide-source-view.c:4426
 #, c-format
 msgid "Insert “%s”"
 msgstr "Introduce „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4417
+#: src/libide/sourceview/ide-source-view.c:4428
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Înlocuiește „%s” cu „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4535
+#: src/libide/sourceview/ide-source-view.c:4546
 msgid "Apply Fix-It"
 msgstr "Aplică repararea"
 
-#: src/libide/sourceview/ide-source-view.c:4965
+#: src/libide/sourceview/ide-source-view.c:4976
 msgid "Rename symbol"
 msgstr "Redenumește simbolul"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5200
+#: src/libide/sourceview/ide-source-view.c:5211
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5226
+#: src/libide/sourceview/ide-source-view.c:5237
 msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
@@ -2866,12 +2880,12 @@ msgstr "_Deschide o legătură"
 msgid "_Copy Link Address"
 msgstr "_Copiază adresa legăturii"
 
-#: src/libide/terminal/ide-terminal-launcher.c:274
+#: src/libide/terminal/ide-terminal-launcher.c:320
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Nu s-a putut crea shell-ul în timpul executării„%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:566
+#: src/libide/terminal/ide-terminal-launcher.c:646
 msgid "Untitled Terminal"
 msgstr "Terminal fără titlu"
 
@@ -2880,16 +2894,23 @@ msgid "Save Terminal Content As"
 msgstr "Salvează conținutul terminalului ca"
 
 #: src/libide/terminal/ide-terminal-page.c:105
+#: src/libide/terminal/ide-terminal-page.c:150
+#: src/libide/terminal/ide-terminal-page.c:291
+msgid "Untitled terminal"
+msgstr "Terminal neintitulat"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:107
+msgid "Exited"
+msgstr "S-a ieșit"
+
+#: src/libide/terminal/ide-terminal-page.c:114
 msgid "Subprocess launcher failed"
 msgstr "Lansatorul de subproces a eșuat"
 
-#: src/libide/terminal/ide-terminal-page.c:116
+#: src/libide/terminal/ide-terminal-page.c:137
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "Lansatorul de subproces a eșuat prea rapid, nu va fi recreat."
-
-#: src/libide/terminal/ide-terminal-page.c:277
-msgid "Untitled terminal"
-msgstr "Terminal neintitulat"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2907,12 +2928,12 @@ msgstr "Potrivește un cuvânt întreg"
 msgid "Wrap around"
 msgstr "Încadrează în jurul"
 
-#: src/libide/tree/ide-tree-node.c:1177 src/libide/tree/ide-tree-node.c:1562
-#: src/libide/tree/ide-tree-node.c:1591
+#: src/libide/tree/ide-tree-node.c:1180 src/libide/tree/ide-tree-node.c:1565
+#: src/libide/tree/ide-tree-node.c:1594
 msgid "(Empty)"
 msgstr "(Gol)"
 
-#: src/libide/tree/ide-tree-node.c:1560
+#: src/libide/tree/ide-tree-node.c:1563
 msgid "Loading…"
 msgstr "Se încarcă…"
 
@@ -3170,6 +3191,7 @@ msgid "Removes the configuration and cannot be undone."
 msgstr "Aceasta elimină configurația și nu se poate reface."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:178
 msgid "Environment"
 msgstr "Mediu"
 
@@ -3339,7 +3361,7 @@ msgstr "Detalii generare"
 msgid "Build pipeline is empty"
 msgstr "Linia de asamblare a generării este goală"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:162
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:163
 msgid "Build Targets"
 msgstr "Destinații de generare"
 
@@ -4411,11 +4433,11 @@ msgstr ""
 "Activează utilizarea de eslint pentru a găsi diagnosticări adiționale în "
 "fișiere JavaScript. Aceasta poate să rezulte în execuția de cod în proiect."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:915
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
 msgstr "Clonează un proiect utilizând manifestul flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
 msgstr "MANIFEST"
 
@@ -4521,17 +4543,17 @@ msgstr[2] "arată încă %u de executări"
 msgid "Flatpak Runtimes"
 msgstr "Executări flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:857
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:859
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:861
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -5274,26 +5296,26 @@ msgstr "_Creează"
 msgid "Files"
 msgstr "Fișiere"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:676
+#: src/plugins/project-tree/gbp-project-tree-addin.c:677
 #, c-format
 msgid "Copying 1 file"
 msgstr "Se copiază un fișier"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:679
+#: src/plugins/project-tree/gbp-project-tree-addin.c:680
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Se copiază %s din %s fișiere"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:715
+#: src/plugins/project-tree/gbp-project-tree-addin.c:716
 msgid "Failed to copy files"
 msgstr "Nu s-au putut copia fișierele"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
+#: src/plugins/project-tree/gbp-project-tree-addin.c:726
 msgid "Files copied"
 msgstr "Fișiere copiate"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:729
+#: src/plugins/project-tree/gbp-project-tree-addin.c:730
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
@@ -5301,11 +5323,11 @@ msgstr[0] "S-a copiat %s fișier"
 msgstr[1] "S-au copiat %s fișiere"
 msgstr[2] "S-au copiat %s de fișiere"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:921
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Copying files…"
 msgstr "Se copiază fișierele…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:922
+#: src/plugins/project-tree/gbp-project-tree-addin.c:923
 msgid "Files will be copied in a moment"
 msgstr "Fișierele vor fi copiate într-un moment"
 
@@ -5523,6 +5545,121 @@ msgstr "Niciun ansamblu de unelte instalat. Apăsați clic"
 msgid "to add a new toolchain!"
 msgstr "pentru a adăuga un nou ansamblu de unelte!"
 
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:344
+msgid "Shell command"
+msgstr "Comandă shell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+msgid ""
+"Cannot spawn terminal in runtime environment because build pipeline is not "
+"initialized"
+msgstr ""
+"Nu se poate crea terminalul în mediul de executare pentru că linia de "
+"generare nu este inițializată"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+msgid "Cannot spawn process because build pipeline is not yet available"
+msgstr ""
+"Nu se poate crea procesul pentru că linia de generare nu este încă "
+"disponibilă"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
+msgid "Change Shortcut"
+msgstr "Modifică scurtătura"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
+msgid "Title"
+msgstr "Titlu"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
+msgid "Shell Command"
+msgstr "Comandă shell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:36
+msgid ""
+"The command will be executed using a shell like “/bin/sh -c\". You may use "
+"variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
+"automatically set for the command."
+msgstr ""
+"Comanda va fi executată utilizând un shell ca „/bin/sh -c”. Puteți utiliza "
+"expansiunea variabilelor precum „$SHELL”. Ambele „$SRCDIR” și „$BUILDDIR” "
+"sunt stabilite automat pentru comandă."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
+msgid "Command Locality"
+msgstr "Localizarea comenzii"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
+msgid "On Host"
+msgstr "La gazdă"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
+msgid "In Build Environment"
+msgstr "În mediul de generare"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
+msgid "In Runtime Environment"
+msgstr "În mediul de executare"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
+msgid ""
+"If the directory is not an absolute-path, it will be relative to the source "
+"or build directory depending on the command locality."
+msgstr ""
+"Dacă directorul nu este o cale absolută, va fi relativă la directorul sursă "
+"sau de generare în funcție de localizarea comenzii."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
+msgid "Close on Exit"
+msgstr "Închide la ieșire"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
+msgid "If enabled, the terminal page will close after the command executes."
+msgstr ""
+"Dacă este activat, pagina terminalului se va închide după executarea "
+"comenzii."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
+msgid "Keyboard Shortcut"
+msgstr "Scurtătură de tastatură"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
+msgid "Change"
+msgstr "Modifică"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
+msgid "Delete Command"
+msgstr "Șterge comanda"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+msgid "Run in host environment"
+msgstr "Rulează în mediul gazdă"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+msgid "Run in build environment"
+msgstr "Rulează în mediul de generare"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+msgid "Run in runtime environment"
+msgstr "Rulează în mediul de executare"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:113
+msgid "New command"
+msgstr "Comandă nouă"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:134
+msgid "Click + to add an external command"
+msgstr "Dați clic pe + pentru a adăuga o comandă externă"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
+msgid "External Commands"
+msgstr "Comenzi externe"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
+msgid "Command"
+msgstr "Comandă"
+
 #: src/plugins/snippets/ide-snippet-completion-item.c:114
 #, c-format
 msgid "Failed to parse snippet “%s”"
@@ -5672,7 +5809,7 @@ msgstr "Caută simboluri în document"
 msgid "Unnamed Symbol"
 msgstr "Simbol nedenumit"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:155
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
 msgid "Symbol"
 msgstr "Simbol"
 
@@ -5690,19 +5827,19 @@ msgstr "Schiță document"
 msgid "Profiler"
 msgstr "Profiler"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:338
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
 msgid "Open Sysprof Capture…"
 msgstr "Deschide o captură Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:347
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Captură Sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:353
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
 msgid "All Files"
 msgstr "Toate fișierele"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:476
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Rulează cu profiler"
@@ -5800,7 +5937,7 @@ msgid "Unit Tests"
 msgstr "Teste unitate"
 
 #. translators: %s is replaced with the name of the unit test
-#: src/plugins/testui/gbp-test-tree-addin.c:407
+#: src/plugins/testui/gbp-test-tree-addin.c:408
 #, c-format
 msgid "Running test “%s”…"
 msgstr "Se rulează testul „%s”…"
@@ -5832,15 +5969,15 @@ msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostics warnings errors diagnosticare avertismente erori"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:53
+#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Rulează cu Valgrind"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:459
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
 msgid "Branches"
 msgstr "Ramuri"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:469
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:476
 msgid "Tags"
 msgstr "Etichete"
 
@@ -6036,9 +6173,6 @@ msgstr "Fișierul trebuie salvat local pentru a fi parsat."
 #~ msgstr ""
 #~ "Dacă este activat, arborele proiectului va afișa iconițe lângă fiecare "
 #~ "element."
-
-#~ msgid "Commands:"
-#~ msgstr "Comenzi:"
 
 #~ msgid "List available subcommands"
 #~ msgstr "Listează comenzile disponibile"
