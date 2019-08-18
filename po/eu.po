@@ -7,7 +7,7 @@ msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2019-08-11 12:19+0000\n"
-"PO-Revision-Date: 2019-08-17 10:00+0100\n"
+"PO-Revision-Date: 2019-08-18 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -2919,7 +2919,7 @@ msgstr "Beautifier plugina: Ezin da .ini fitxategia irakurri: %s"
 msgid ""
 "Beautifier plugin: neither command nor command-pattern keys found: entry "
 "“%s” disabled"
-msgstr ""
+msgstr "Beautifier plugina: ez da aurkitu ez komandoen ez komando-ereduen gakorik, “%s” sarrera desgaitu da"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:267
@@ -2927,20 +2927,20 @@ msgstr ""
 msgid ""
 "Beautifier plugin: both command and command-pattern keys found: entry “%s” "
 "disabled"
-msgstr ""
+msgstr "Beautifier plugina: komandoen eta komando-ereduen gakoak aurkitu dira, “%s” sarrera desgaitu da"
 
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
 #, c-format
 msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-msgstr ""
+msgstr "Beautifier plugina: “%s” ez da existitzen, “%s” sarrera desgaitu da"
 
 #. translators: %s is replaced with the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:308
 #, c-format
 msgid ""
 "Beautifier plugin: command key out of possible values: entry “%s” disabled"
-msgstr ""
+msgstr "Beautifier plugina: komando-gakoa balio posibleetatik kanpo dago, “%s” sarrera desgaitu da"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:333
@@ -2948,14 +2948,14 @@ msgstr ""
 msgid ""
 "Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
 "entry “%s” disabled"
-msgstr ""
+msgstr "Beautifier plugina: @c@ dago “%s” komando-ereduaren gakoan baina ez da konfigurazio-fitxategirik ezarri, “%s” sarrera desgaitu da"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:365
 #, c-format
 msgid ""
 "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
-msgstr ""
+msgstr "Beautifier plugina: ezin da aldi baterako fitxategia sortu “%s”(e)rako, “%s” sarrera desgaitu da"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:407
@@ -2974,28 +2974,28 @@ msgstr "Beautifier plugina: %s"
 #: src/plugins/beautifier/gb-beautifier-config.c:547
 #, c-format
 msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-msgstr ""
+msgstr "Beautifier plugina: Ezin da baliabideen honako fitxategia irakurri: “%s”"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:88
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
-msgstr ""
+msgstr "Beautifier plugina: bista ez da GtkSourceView bat"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:95
 msgid "Beautifier Plugin: no default beautifier found"
-msgstr ""
+msgstr "Beautifier plugina: ez da edertzaile lehenetsirik aurkitu"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:101
 msgid "Beautifier Plugin: the buffer is not writable"
-msgstr ""
+msgstr "Beautifier plugina: buferra ez da idazgarria"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:109
 msgid "Beautifier Plugin: Nothing selected"
-msgstr ""
+msgstr "Beautifier plugina: ez da ezer hautatu"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
 #, c-format
 msgid "No beautifier available for “%s”"
-msgstr ""
+msgstr "Ez dago edertzailerik “%s”(e)rako"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
 #, c-format
@@ -3027,17 +3027,17 @@ msgstr "Beautifier plugina: ez dago baliozko sarrerarik, desgaitzen: %s"
 msgid ""
 "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
 "temporary directory: “%s”"
-msgstr ""
+msgstr "Beautifier plugina: fitxategi bat aldi baterako “%s” direktoriotik kentzeko saialdia blokeatu da: “%s”"
 
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:264
 #, c-format
 msgid "Beautifier plugin: command error output: %s"
-msgstr ""
+msgstr "Beautifier plugina: komandoaren errorea irteeran: %s"
 
 #: src/plugins/beautifier/gb-beautifier-process.c:274
 msgid "Beautifier plugin: the command output is empty"
-msgstr "Beautifier plugina: komando-irteera hutxik dago"
+msgstr "Beautifier plugina: komando-irteera hutsik dago"
 
 #: src/plugins/beautifier/gb-beautifier-process.c:301
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
@@ -4689,7 +4689,7 @@ msgstr "Gaitu pylint-en erabilera Python fitxategietan diagnostiko gehigarriak a
 
 #: src/plugins/gradle/gradle_plugin.py:85
 msgid "Gradle Wrapper"
-msgstr ""
+msgstr "Gradle bilgailua"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
@@ -4925,7 +4925,7 @@ msgstr "Konpilatzailea"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
 #: src/plugins/meson/gbp-meson-utils.c:100
 msgid "Preprocessor"
-msgstr "Aurreprozesatxailea"
+msgstr "Aurreprozesatzailea"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
 #: src/plugins/meson/gbp-meson-utils.c:102
@@ -4940,7 +4940,7 @@ msgstr "Estekatzailea"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
 #: src/plugins/meson/gbp-meson-utils.c:106
 msgid "Strip"
-msgstr ""
+msgstr "Strip"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
 #: src/plugins/meson/gbp-meson-utils.c:108
@@ -5378,7 +5378,12 @@ msgid ""
 "                        <channel>    = stable|beta|nightly|<version>\n"
 "                        <date>          = YYYY-MM-DD\n"
 "                        <host>          = <target-triple>"
-msgstr ""
+msgstr "Argitaratze-kanal estandarraren tresna-kateko izenek honako forma dute:\n"
+"                        <kanala>[-<data>][-<ostalaria>]\n"
+"\n"
+"                        <kanala>    = stable|beta|nightly|<bertsioa>\n"
+"                        <data>          = UUUU-HH-EE\n"
+"                        <ostalaria>          = <target-triple>"
 
 #: src/plugins/rustup/rustup_plugin.py:635
 msgid "Install Rustup to manage toolchains here!"
@@ -5423,7 +5428,7 @@ msgid ""
 "The command will be executed using a shell like “/bin/sh -c\". You may use "
 "variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
 "automatically set for the command."
-msgstr ""
+msgstr "Komandoa exekutatzeko, “/bin/sh -c\" antzeko shell bat erabiliko da. Aldagaien hedatzea erabili dezakezu, adibidez “$SHELL”. “$SRCDIR” eta “$BUILDDIR” automatikoki ezartzen dira komandorako."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
 msgid "Command Locality"
@@ -5625,7 +5630,7 @@ msgstr "Sortu euskarri-egunkaria"
 msgid ""
 "The support log file has been written to “%s”. Please provide this file as "
 "an attachment on your bug report or support request."
-msgstr ""
+msgstr "Euskarri-egunkariaren fitxategia “%s” kokalekuan idatzi da. Eman fitxategi hori eranskin gisa zure akats-jakinarazpenean edo laguntza-eskaeran."
 
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
 msgctxt "shortcut window"
@@ -5695,7 +5700,7 @@ msgstr "Sysroot-ak"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
-msgstr ""
+msgstr "Fitxategi-sistemaren bide absolutu bat sysroot-erako."
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
 msgid "Package Config Path"
