@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-06-21 08:39+0000\n"
-"PO-Revision-Date: 2019-06-25 13:00-0300\n"
+"POT-Creation-Date: 2019-08-11 12:19+0000\n"
+"PO-Revision-Date: 2019-08-19 06:37-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -26,13 +26,13 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:201
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/gui/ide-application-actions.c:142
+#: src/libide/gui/ide-application-actions.c:143
 msgid "An IDE for GNOME"
 msgstr "Uma IDE para o GNOME"
 
@@ -856,7 +856,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4966
+#: src/libide/sourceview/ide-source-view.c:4977
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -917,14 +917,14 @@ msgstr "Sem título"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1405
+#: src/libide/gui/ide-workbench.c:1419
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:342
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1230,10 +1230,10 @@ msgid "Open File"
 msgstr "Abre arquivo"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1404
+#: src/libide/gui/ide-workbench.c:1418
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:341
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
 msgid "Open"
 msgstr "Abrir"
 
@@ -1290,8 +1290,8 @@ msgstr "Sua sessão anterior estará pronta em um momento."
 msgid "Switch surface"
 msgstr "Alternar superfície"
 
-#: src/libide/editor/ide-editor-workspace.ui:57
-#: src/libide/gui/ide-primary-workspace.ui:64
+#: src/libide/editor/ide-editor-workspace.ui:64
+#: src/libide/gui/ide-primary-workspace.ui:71
 #: src/libide/terminal/ide-terminal-workspace.ui:41
 msgid "Search your project"
 msgstr "Pesquisar no seu projeto"
@@ -1316,7 +1316,7 @@ msgstr "Descoberto o dispositivo “%s”"
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: src/libide/foundry/ide-device-manager.c:725
+#: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Não é possível implantar no dispositivo, encadeamento de compilação não "
@@ -1543,6 +1543,7 @@ msgid "Clone Repository…"
 msgstr "Clonar repositório…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
 msgid "Directory"
 msgstr "Diretório"
 
@@ -1564,7 +1565,7 @@ msgid "All Project Types"
 msgstr "Todos tipos de projetos"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:317 src/libide/gui/ide-workbench.c:838
+#: src/libide/gui/ide-workbench.c:318 src/libide/gui/ide-workbench.c:843
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1648,7 +1649,7 @@ msgid "_Quit"
 msgstr "_Sair"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1401 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Abrir arquivo…"
@@ -1657,11 +1658,16 @@ msgstr "Abrir arquivo…"
 msgid "Run Options"
 msgstr "Executar opções"
 
-#: src/libide/gui/ide-application-actions.c:148
+#: src/libide/gui/ide-application-actions.c:78
+#| msgid "Build Preferences"
+msgid "Builder — Preferences"
+msgstr "Builder — Preferências"
+
+#: src/libide/gui/ide-application-actions.c:149
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:150
+#: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
 msgstr ""
 "Enrico Nicoletto\n"
@@ -1669,11 +1675,11 @@ msgstr ""
 "Rafael Fontenelle\n"
 "Ricardo Silva Veloso"
 
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
 msgstr "Aprenda mais sobre o GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:157
+#: src/libide/gui/ide-application-actions.c:158
 msgid "Funded By"
 msgstr "Financiado por"
 
@@ -1738,6 +1744,18 @@ msgid ""
 msgstr ""
 "O GNOME Builder requer uma sessão com D-Bus. Por favor, definida "
 "DBUS_SESSION_BUS_ADDRESS."
+
+#: src/libide/gui/ide-command-manager.c:491
+#| msgctxt "shortcut window"
+#| msgid "Command Bar"
+msgid "Command failed"
+msgstr "O comando falhou"
+
+#: src/libide/gui/ide-command-manager.c:513
+#, c-format
+#| msgid "Failed to locate template “%s”"
+msgid "Failed to locate command “%s”"
+msgstr "Falha ao localizar o comando “%s”"
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
@@ -2341,7 +2359,7 @@ msgstr "Abre arquivos abertos anteriormente ao carregar um projeto"
 
 #: src/libide/gui/ide-preferences-builtin.c:541
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:420
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Controle de versão"
 
@@ -2466,7 +2484,6 @@ msgid "Show list of open documents"
 msgstr "Mostra a lista de documentos abertos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:170
-#| msgid "Go to Line"
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Ir para linha"
@@ -2838,31 +2855,31 @@ msgstr "_Reduzir"
 msgid "Reset"
 msgstr "Restaurar"
 
-#: src/libide/sourceview/ide-source-view.c:4415
+#: src/libide/sourceview/ide-source-view.c:4426
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4417
+#: src/libide/sourceview/ide-source-view.c:4428
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua “%s” com “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4535
+#: src/libide/sourceview/ide-source-view.c:4546
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: src/libide/sourceview/ide-source-view.c:4965
+#: src/libide/sourceview/ide-source-view.c:4976
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5200
+#: src/libide/sourceview/ide-source-view.c:5211
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5226
+#: src/libide/sourceview/ide-source-view.c:5237
 msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
@@ -2884,12 +2901,12 @@ msgstr "_Abrir link"
 msgid "_Copy Link Address"
 msgstr "_Copiar endereço do link"
 
-#: src/libide/terminal/ide-terminal-launcher.c:274
+#: src/libide/terminal/ide-terminal-launcher.c:320
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Falha ao criar shell dentro do runtime “%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:566
+#: src/libide/terminal/ide-terminal-launcher.c:646
 msgid "Untitled Terminal"
 msgstr "Terminal sem título"
 
@@ -2898,16 +2915,23 @@ msgid "Save Terminal Content As"
 msgstr "Salvar conteúdo do terminal como"
 
 #: src/libide/terminal/ide-terminal-page.c:105
+#: src/libide/terminal/ide-terminal-page.c:150
+#: src/libide/terminal/ide-terminal-page.c:291
+msgid "Untitled terminal"
+msgstr "Terminal sem título"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:107
+msgid "Exited"
+msgstr "Saiu"
+
+#: src/libide/terminal/ide-terminal-page.c:114
 msgid "Subprocess launcher failed"
 msgstr "Iniciador de subprocesso falhou"
 
-#: src/libide/terminal/ide-terminal-page.c:116
+#: src/libide/terminal/ide-terminal-page.c:137
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "Iniciador de subprocesso falhou rápido demais, não será reiniciado."
-
-#: src/libide/terminal/ide-terminal-page.c:277
-msgid "Untitled terminal"
-msgstr "Terminal sem título"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2925,12 +2949,12 @@ msgstr "Corresponder apenas palavra inteira"
 msgid "Wrap around"
 msgstr "Quebra de linha"
 
-#: src/libide/tree/ide-tree-node.c:1177 src/libide/tree/ide-tree-node.c:1562
-#: src/libide/tree/ide-tree-node.c:1591
+#: src/libide/tree/ide-tree-node.c:1180 src/libide/tree/ide-tree-node.c:1565
+#: src/libide/tree/ide-tree-node.c:1594
 msgid "(Empty)"
 msgstr "(Vazio)"
 
-#: src/libide/tree/ide-tree-node.c:1560
+#: src/libide/tree/ide-tree-node.c:1563
 msgid "Loading…"
 msgstr "Carregando…"
 
@@ -3189,6 +3213,7 @@ msgid "Removes the configuration and cannot be undone."
 msgstr "Remove a configuração e não pode ser desfeito."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:178
 msgid "Environment"
 msgstr "Ambiente"
 
@@ -3359,7 +3384,7 @@ msgstr "Detalhes da compilação"
 msgid "Build pipeline is empty"
 msgstr "O encadeamento de compilação está vazio"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:162
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:163
 msgid "Build Targets"
 msgstr "Alvos de compilação"
 
@@ -4313,10 +4338,6 @@ msgid "Select a bus name to introspect the peer."
 msgstr "Selecione um nome de barramento para introspectar o par."
 
 #: src/plugins/editor/gbp-confirm-save-dialog.c:260
-#| msgid ""
-#| "There is %d document with unsaved changes. Save changes before closing?"
-#| msgid_plural ""
-#| "There are %d documents with unsaved changes. Save changes before closing?"
 msgid "There is a file with unsaved changes. Save changes before closing?"
 msgid_plural ""
 "There are files with unsaved changes. Save changes before closing?"
@@ -4328,12 +4349,10 @@ msgstr[1] ""
 "de fechar?"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:27
-#| msgid "Select a palette file"
 msgid "Select the files to save:"
 msgstr "Selecione os arquivos para salvar:"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:80
-#| msgid "If you don't save, all your changes will be permanently lost."
 msgid "If you close without saving, all your changes will be permanently lost."
 msgstr ""
 "Se você fechar sem salvar, todas as suas alterações serão permanentemente "
@@ -4434,11 +4453,11 @@ msgstr ""
 "Habilita o uso do ESLint para localizar diagnósticos adicionais em programa "
 "JavaScript. Isso pode resultar na execução do código de seu projeto."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:915
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
 msgstr "Clonar um projeto usando manifesto do flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
 msgstr "MANIFESTO"
 
@@ -4543,17 +4562,17 @@ msgstr[1] "mostrar mais %u runtimes"
 msgid "Flatpak Runtimes"
 msgstr "Runtimes do Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:857
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:859
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:861
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -5299,37 +5318,37 @@ msgstr "_Criar"
 msgid "Files"
 msgstr "Arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:676
+#: src/plugins/project-tree/gbp-project-tree-addin.c:677
 #, c-format
 msgid "Copying 1 file"
 msgstr "Copiando 1 arquivo"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:679
+#: src/plugins/project-tree/gbp-project-tree-addin.c:680
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s de %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:715
+#: src/plugins/project-tree/gbp-project-tree-addin.c:716
 msgid "Failed to copy files"
 msgstr "Falha ao copiar arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
+#: src/plugins/project-tree/gbp-project-tree-addin.c:726
 msgid "Files copied"
 msgstr "Arquivos copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:729
+#: src/plugins/project-tree/gbp-project-tree-addin.c:730
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "Copiado %s arquivo"
 msgstr[1] "Copiados %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:921
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Copying files…"
 msgstr "Copiando arquivos…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:922
+#: src/plugins/project-tree/gbp-project-tree-addin.c:923
 msgid "Files will be copied in a moment"
 msgstr "Os arquivo serão copiados em instantes"
 
@@ -5544,6 +5563,141 @@ msgstr "Nenhuma cadeia de ferramentas instalada. Clique"
 msgid "to add a new toolchain!"
 msgstr "para adicionar uma nova cadeia de ferramentas!"
 
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:344
+#| msgctxt "shortcut window"
+#| msgid "Undo the last command"
+msgid "Shell command"
+msgstr "Comando de shell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+#| msgid "Cannot deploy to device, build pipeline is not initialized"
+msgid ""
+"Cannot spawn terminal in runtime environment because build pipeline is not "
+"initialized"
+msgstr ""
+"Não é possível iniciar no ambiente de runtime porque o encadeamento de "
+"compilação não foi inicializado"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+#| msgid "Cannot deploy to device, build pipeline is not initialized"
+msgid "Cannot spawn process because build pipeline is not yet available"
+msgstr ""
+"Não é possível iniciar o processo porque o encadeamento de compilação ainda "
+"não está disponível"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
+#| msgctxt "shortcut window"
+#| msgid "Glade shortcuts"
+msgid "Change Shortcut"
+msgstr "Alterar atalho"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
+#| msgid "_Title Case"
+msgid "Title"
+msgstr "Título"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
+#| msgid "Commands:"
+msgid "Shell Command"
+msgstr "Comando de shell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:36
+msgid ""
+"The command will be executed using a shell like “/bin/sh -c\". You may use "
+"variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
+"automatically set for the command."
+msgstr ""
+"O comando será executado usando um shell como “/bin/sh -c\". Você pode usar "
+"expansão de variável como “$SHELL”. Tanto “$SRCDIR” quanto “$BUILDDIR” são "
+"definidos automaticamente para o comando."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
+#| msgid "Command Line Tool"
+msgid "Command Locality"
+msgstr "Localidade do comando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
+msgid "On Host"
+msgstr "No host"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
+#| msgid "Build Environment"
+msgid "In Build Environment"
+msgstr "No ambiente de compilação"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
+#| msgid "Build Environment"
+msgid "In Runtime Environment"
+msgstr "No ambiente de runtime"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
+msgid ""
+"If the directory is not an absolute-path, it will be relative to the source "
+"or build directory depending on the command locality."
+msgstr ""
+"Se o diretório não for um caminho absoluto, ele será relativo ao diretório "
+"fonte e de compilação dependendo da localidade do comando."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
+#| msgid "Close Project"
+msgid "Close on Exit"
+msgstr "Fechar ao sair"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
+msgid "If enabled, the terminal page will close after the command executes."
+msgstr ""
+"Se habilitado, a página do terminal vai fechar após o comando ser executado."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
+#| msgid "Keyboard Shortcuts"
+msgid "Keyboard Shortcut"
+msgstr "Atalho de teclado"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
+#| msgid "Change _to"
+msgid "Change"
+msgstr "Alterar"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
+#| msgid "Delete Toolchain"
+msgid "Delete Command"
+msgstr "Excluir comando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+#| msgid "Build Environment"
+msgid "Run in host environment"
+msgstr "Executar no ambiente do host"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+#| msgid "Build Environment"
+msgid "Run in build environment"
+msgstr "Executar no ambiente de compilação"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+#| msgid "Build Environment"
+msgid "Run in runtime environment"
+msgstr "Executar no ambiente de runtime"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:113
+#| msgid "Not a command: %s"
+msgid "New command"
+msgstr "Novo comando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:134
+msgid "Click + to add an external command"
+msgstr "Clique em + para adicionar um comando externo"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
+#| msgid "Commands:"
+msgid "External Commands"
+msgstr "Comandos externos"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
+#| msgid "Commands:"
+msgid "Command"
+msgstr "Comando"
+
 #: src/plugins/snippets/ide-snippet-completion-item.c:114
 #, c-format
 msgid "Failed to parse snippet “%s”"
@@ -5691,7 +5845,7 @@ msgstr "Pesquisa por símbolos dentro do documento"
 msgid "Unnamed Symbol"
 msgstr "Símbolo sem nome"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:155
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
 msgid "Symbol"
 msgstr "Símbolo"
 
@@ -5709,19 +5863,19 @@ msgstr "Hierarquia do documento"
 msgid "Profiler"
 msgstr "Perfilador"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:338
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
 msgid "Open Sysprof Capture…"
 msgstr "Abrir captura do Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:347
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Captura do Sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:353
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
 msgid "All Files"
 msgstr "Todos os arquivos"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:476
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Executar com perfilador"
@@ -5818,7 +5972,7 @@ msgid "Unit Tests"
 msgstr "Testes de unidade"
 
 #. translators: %s is replaced with the name of the unit test
-#: src/plugins/testui/gbp-test-tree-addin.c:407
+#: src/plugins/testui/gbp-test-tree-addin.c:408
 #, c-format
 msgid "Running test “%s”…"
 msgstr "Executando o teste “%s”…"
@@ -5850,15 +6004,15 @@ msgid "vala diagnostics warnings errors"
 msgstr "vala diagnósticos avisos erros"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:53
+#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Executar com Valgrind"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:459
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
 msgid "Branches"
 msgstr "Ramos"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:469
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:476
 msgid "Tags"
 msgstr "Tags"
 
@@ -6063,9 +6217,6 @@ msgstr "O arquivo deve estar salvo localmente para análise."
 #~ msgstr ""
 #~ "Caso habilitado, a árvore de projetos irá exibir ícones próximos a cada "
 #~ "item."
-
-#~ msgid "Commands:"
-#~ msgstr "Comandos:"
 
 #~ msgid "List available subcommands"
 #~ msgstr "Lista de todos os subcomandos disponíveis"
@@ -6730,9 +6881,6 @@ msgstr "O arquivo deve estar salvo localmente para análise."
 
 #~ msgid "Must parse template before expanding"
 #~ msgstr "Deve analisar o modelo antes de expandir"
-
-#~ msgid "Failed to locate template “%s”"
-#~ msgstr "Falha ao localizar modelo “%s”"
 
 #~ msgid "If enabled, the sidebar will be visible in the editor workspace."
 #~ msgstr ""
