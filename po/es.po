@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-08-11 12:19+0000\n"
-"PO-Revision-Date: 2019-08-19 10:17+0200\n"
+"POT-Creation-Date: 2019-08-19 12:53+0000\n"
+"PO-Revision-Date: 2019-08-20 09:54+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -1652,7 +1652,6 @@ msgid "Run Options"
 msgstr "Opciones de ejecución"
 
 #: src/libide/gui/ide-application-actions.c:78
-#| msgid "Build Preferences"
 msgid "Builder — Preferences"
 msgstr "Builder — Preferencias"
 
@@ -1737,13 +1736,11 @@ msgstr ""
 "DBUS_SESSION_BUS_ADDRESS."
 
 #: src/libide/gui/ide-command-manager.c:491
-#| msgid "Command failed: %s"
 msgid "Command failed"
 msgstr "Falló el comando"
 
 #: src/libide/gui/ide-command-manager.c:513
 #, c-format
-#| msgid "Failed to locate template “%s”"
 msgid "Failed to locate command “%s”"
 msgstr "Falló al buscar el comando «%s»"
 
@@ -5562,13 +5559,10 @@ msgid "to add a new toolchain!"
 msgstr "para añadir una «toolchain» nueva."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
-#| msgctxt "shortcut window"
-#| msgid "Undo the last command"
 msgid "Shell command"
 msgstr "Comando de shell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:569
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5577,25 +5571,20 @@ msgstr ""
 "la tubería de construcción no se ha inicializado"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:648
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
 "No se puede lanzar el proceso porque la tubería de construcción no está "
 "disponible todavía"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
-#| msgctxt "shortcut window"
-#| msgid "Glade shortcuts"
 msgid "Change Shortcut"
 msgstr "Cambiar atajo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
-#| msgid "_Title Case"
 msgid "Title"
 msgstr "Título"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
-#| msgid "Commands:"
 msgid "Shell Command"
 msgstr "Comando de shell"
 
@@ -5605,24 +5594,24 @@ msgid ""
 "variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
 "automatically set for the command."
 msgstr ""
+"El comando se ejecutará usando una shell como «/bin/sh -c». Puede usar "
+"variables como «$SHELL». Tanto «$SRCDIR» como «$BUILDDIR» se establecen "
+"automáticamente para el comando."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
-#, fuzzy
 #| msgid "Command Line Tool"
 msgid "Command Locality"
-msgstr "Herramienta de línea de comandos"
+msgstr "Ubicación del comando"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
 msgid "On Host"
 msgstr "En equipo anfitrión"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
-#| msgid "Build Environment"
 msgid "In Build Environment"
 msgstr "En entorno de construcción"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
-#| msgid "Build Environment"
 msgid "In Runtime Environment"
 msgstr "En entorno de ejecución"
 
@@ -5631,48 +5620,44 @@ msgid ""
 "If the directory is not an absolute-path, it will be relative to the source "
 "or build directory depending on the command locality."
 msgstr ""
+"Si la carpeta no es una ruta absoluta será relativa a la carpeta de la "
+"fuente o de construcción, dependiendo de la ubicación del comando."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
-#| msgid "Close Project"
 msgid "Close on Exit"
 msgstr "Cerrar al salir"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
 msgid "If enabled, the terminal page will close after the command executes."
 msgstr ""
+"Si está activada la página de la terminal se cerrará después de ejecutar el "
+"comando."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
-#| msgid "Keyboard Shortcuts"
 msgid "Keyboard Shortcut"
 msgstr "Atajo del teclado"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
-#| msgid "Change _to"
 msgid "Change"
 msgstr "Cambiar"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
-#| msgid "Delete Toolchain"
 msgid "Delete Command"
 msgstr "Eliminar comando"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
-#| msgid "Build Environment"
 msgid "Run in host environment"
 msgstr "Ejecutar en entorno de equipo anfitrión"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
-#| msgid "Build Environment"
 msgid "Run in build environment"
 msgstr "Ejecutar en entorno de construcción"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
-#| msgid "Build Environment"
 msgid "Run in runtime environment"
 msgstr "Ejecutar en entorno de tiempo de ejecución"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:113
-#| msgid "Not a command: %s"
 msgid "New command"
 msgstr "Comando nuevo"
 
@@ -5682,12 +5667,10 @@ msgstr "Pulse + para añadir un comando externo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
-#| msgid "Commands:"
 msgid "External Commands"
 msgstr "Comandos externos"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
-#| msgid "Commands:"
 msgid "Command"
 msgstr "Comando"
 
