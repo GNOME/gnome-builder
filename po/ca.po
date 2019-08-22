@@ -474,7 +474,7 @@ msgstr "Usa el paràmetre llum nocturna de GNOME per activar el mode-nocturn."
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:32
 msgid "\"Projects\""
-msgstr "«Projectes»"
+msgstr "\"Projectes\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 #: src/libide/gui/ide-preferences-builtin.c:418
