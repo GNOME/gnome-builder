@@ -402,7 +402,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
     const gchar *tooltip;
     const gchar *style_class;
   } actions[] = {
-    { N_("Make active"), "config-manager.current", N_("Select this configuration as the active configuration.") },
+    { N_("Make Active"), "config-manager.current", N_("Select this configuration as the active configuration.") },
     { N_("Duplicate"), "config-manager.duplicate", N_("Duplicating the configuration allows making changes without modifying this configuration.") },
     { N_("Remove"), "config-manager.delete", N_("Removes the configuration and cannot be undone."), "destructive-action" },
   };
