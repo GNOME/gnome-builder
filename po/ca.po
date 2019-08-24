@@ -4,12 +4,17 @@
 #
 # Jordi Serratosa <jordis@softcatala.cat>, 2017.
 # Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018.
+# Jordi Mas i Hernàndez <jmas@softcatala.org>, 2019
+#
+#
+#  «Runtime» ho traduïm per «temps d'execució» o  «entorn d'execució» segons el context
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2019-08-11 12:19+0000\n"
-"PO-Revision-Date: 2019-08-22 05:40+0200\n"
+"PO-Revision-Date: 2019-08-24 05:35+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -34,7 +39,7 @@ msgstr "Un IDE per al GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:9
 msgid "Christian Hergert, et al."
-msgstr ""
+msgstr "Christian Hergert, et al."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:12
 msgid ""
@@ -43,9 +48,9 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"Constructor és un entorn de desenvolupament integrat actiu desenvolupat per "
+"El constructor és un entorn de desenvolupament integrat activament desenvolupat per "
 "GNOME. Combina el suport integrat per a tecnologies GNOME essencials, com "
-"ara GTK +, GLib i l'API de GNOME APIs amb característiques que qualsevol "
+"ara GTK+, GLib i les API del GNOME amb característiques que qualsevol "
 "desenvolupador apreciarà, com el ressaltat de sintaxi i els fragments."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:18
@@ -53,8 +58,8 @@ msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
-"Podeu confiar en versions previsibles de Constructor amb cada nova versió de "
-"GNOME cada sis mesos."
+"Podeu esperar versions regulars del Constructor cada sis mesos amb cada nova versió del "
+"GNOME."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:22
 msgid "Features:"
@@ -66,29 +71,25 @@ msgstr "Construït amb ressaltat de sintaxi per molts llenguatges"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:25
 msgid "Side-by-side code editors"
-msgstr "Editors de codi en paral·lel"
+msgstr "Editors de codi costat a costat"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:26
 msgid "Multi-monitor support"
-msgstr ""
+msgstr "Compatibilitat amb múltiples monitors"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
-#, fuzzy
-#| msgid "Show overview map"
 msgid "Code overview mini-map"
-msgstr "Mostra resum del mapa"
+msgstr "Mapa petit de resum del codi"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:28
 msgid "Integration with Git"
 msgstr "Integració amb Git"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:29
-#, fuzzy
-#| msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
-msgstr "Integració amb Autotools, Cargo, CMake, Meson, Make, i PHPize"
+msgstr "Integració amb Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize i Waf"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -104,7 +105,7 @@ msgstr "Autocompleció usant Vala i diagnòstics"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:33
 msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr "Suport a l'auto-sagnat per a C, Python, Vala, i XML "
+msgstr "Suport a l'autosagnat per a C, Python, Vala, i XML"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:34
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
@@ -112,10 +113,8 @@ msgstr ""
 "HTML, Markdown,  reStructuredText, i previsualització en directe de Sphinx"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:35
-#, fuzzy
-#| msgid "Optional Vim-style editing"
 msgid "Optional Vim, Emacs, and SublimeText style editing"
-msgstr "Edició opcional amb l'estil de Vim"
+msgstr "Edició opcional amb l'estil de Vim, Emacs i SublimeText"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:36
 msgid "An integrated software profiler for native applications"
@@ -872,7 +871,7 @@ msgstr "_Reanomena"
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:391
-#,  c-format
+#, c-format
 msgid "unsaved file %u"
 msgstr "fitxer no desat %u"
 
@@ -1456,10 +1455,8 @@ msgstr "Construeix i executa"
 
 #: src/libide/foundry/ide-run-manager.c:1013
 #: src/libide/foundry/ide-run-manager.c:1079
-#, fuzzy
-#| msgid "Failed to locate runtime"
 msgid "Failed to locate a build target"
-msgstr "Ha fallat ubicar el temps d'execució"
+msgstr "Ha fallat ubicar una construcció de destí"
 
 #: src/libide/foundry/ide-run-manager.c:1215 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
@@ -1573,25 +1570,20 @@ msgstr "Tots els tipus de projectes"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
 #: src/libide/gui/ide-workbench.c:318 src/libide/gui/ide-workbench.c:843
-#, fuzzy, c-format
-#| msgid "Builder"
+#, c-format
 msgid "Builder — %s"
-msgstr "Constructor"
+msgstr "Constructor — %s"
 
 #: src/libide/greeter/ide-greeter-workspace.c:326
 msgid "Failed to load the project"
 msgstr "Ha fallat carregar el projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.c:519
-#, fuzzy
-#| msgid ""
-#| "Removing project files will delete them from your computer and cannot be "
-#| "undone."
 msgid ""
 "Removing project sources will delete them from your computer and cannot be "
 "undone."
 msgstr ""
-"L'eliminació dels fitxers del projecte els suprimirà de l'ordinador i no es "
+"L'eliminació de les fonts del projecte els suprimirà de l'ordinador i no es "
 "pot desfer."
 
 #: src/libide/greeter/ide-greeter-workspace.c:523
@@ -1608,10 +1600,8 @@ msgid "Open a Project"
 msgstr "Obre un projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:101
-#, fuzzy
-#| msgid "Directory for all Builder projects."
 msgid "Search all Builder projects…"
-msgstr "El directori per tots els projectes del constructor."
+msgstr "Cerca en tots els projectes del constructor…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:118
 msgid "No Projects Found"
@@ -1622,10 +1612,8 @@ msgid "_Remove Projects"
 msgstr "_Suprimeix projectes"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:166
-#, fuzzy
-#| msgid "Remove Project Files…"
 msgid "Remove Projects and Sources…"
-msgstr "Suprimeix fitxers de projectes…"
+msgstr "Suprimeix projectes i fonts…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
 msgctxt "title"
@@ -1633,16 +1621,12 @@ msgid "Clone Repository"
 msgstr "Clona el dipòsit"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
-#, fuzzy
-#| msgid "Switch To"
 msgid "Switch Surface"
-msgstr "Canvia a"
+msgstr "Commuta superfície"
 
 #: src/libide/gui/gtk/menus.ui:16
-#, fuzzy
-#| msgid "Clone Project"
 msgid "Close Project"
-msgstr "Clona el projecte"
+msgstr "Tanca el projecte"
 
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.ui:6
 #: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
@@ -1672,13 +1656,11 @@ msgstr "_Surt"
 #: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
-msgstr "Obre un fitxer..."
+msgstr "Obre un fitxer…"
 
 #: src/libide/gui/gtk/menus.ui:68
-#, fuzzy
-#| msgid "Clang Options"
 msgid "Run Options"
-msgstr "Opcions de Clang"
+msgstr "Opcions d'execució"
 
 #: src/libide/gui/ide-application-actions.c:78
 msgid "Builder — Preferences"
@@ -1690,8 +1672,9 @@ msgstr "Constructor del GNOME"
 
 #: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
-msgstr "Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018\n"
-"Jordi Mas i Hernàndez <jmas@softcatala.org>"
+msgstr ""
+"Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018\n"
+"Jordi Mas i Hernàndez <jmas@softcatala.org>, 2019"
 
 #: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
@@ -2001,7 +1984,7 @@ msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "El retrocés suprimirà els espais extres per mantenir-vos alineats amb "
-"l'amplada del sagnat."
+"l'amplada del sagnat"
 
 #: src/libide/gui/ide-preferences-builtin.c:156
 msgid "Display list of open files"
@@ -2467,7 +2450,7 @@ msgstr "Terminal"
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
-msgstr "Terminal en temps d'execució del constructor"
+msgstr "Terminal en temps d'execució de la construcció"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
 #: src/libide/gui/ide-shortcuts-window.ui:559
@@ -2511,8 +2494,6 @@ msgid "Show list of open documents"
 msgstr "Mostra la llista de documents oberts"
 
 #: src/libide/gui/ide-shortcuts-window.ui:170
-#, fuzzy
-#| msgid "Go to Line"
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Vés a la línia"
@@ -2581,11 +2562,9 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: src/libide/gui/ide-shortcuts-window.ui:272
-#, fuzzy
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom In"
-msgstr "Redue_ix"
+msgstr "Redueix"
 
 #: src/libide/gui/ide-shortcuts-window.ui:279
 msgctxt "shortcut window"
@@ -2593,8 +2572,6 @@ msgid "Zoom Out"
 msgstr "Allunya"
 
 #: src/libide/gui/ide-shortcuts-window.ui:286
-#, fuzzy
-#| msgid "Reset"
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Treu el zoom"
@@ -2818,10 +2795,8 @@ msgid "_Go to Definition"
 msgstr "_Vés a la definició"
 
 #: src/libide/sourceview/gtk/menus.ui:12
-#, fuzzy
-#| msgid "Build Preferences"
 msgid "_Find references"
-msgstr "Preferències de la construcció"
+msgstr "_Troba les refèrencies"
 
 #: src/libide/sourceview/gtk/menus.ui:19
 msgid "_Undo"
@@ -2954,8 +2929,6 @@ msgid "Failed to create shell within runtime “%s”"
 msgstr "Ha fallat ubicar configure.ac"
 
 #: src/libide/terminal/ide-terminal-launcher.c:646
-#, fuzzy
-#| msgid "Untitled terminal"
 msgid "Untitled Terminal"
 msgstr "Terminal sense títol"
 
@@ -2971,7 +2944,6 @@ msgstr "Terminal sense títol"
 
 #. translators: exited describes that the terminal shell process has exited
 #: src/libide/terminal/ide-terminal-page.c:107
-#, fuzzy
 msgid "Exited"
 msgstr "Ha sortit"
 
@@ -2984,10 +2956,8 @@ msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
-#, fuzzy
-#| msgid "Search Context"
 msgid "Search runtimes"
-msgstr "Cerca el context"
+msgstr "Cerca entorns d'execució"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -3012,17 +2982,15 @@ msgstr "S'està carregant…"
 
 #: src/libide/vcs/ide-directory-vcs.c:57
 msgid "unversioned"
-msgstr "Sense versió"
+msgstr "sense versió"
 
 #: src/main.c:137
-#, fuzzy
-#| msgid "Run with Profiler"
 msgid "Run a new instance of Builder"
-msgstr "Executa amb el gestor de perfils"
+msgstr "Executa una instància nova del Constructor"
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:198
 msgid "Building cache…"
-msgstr "Construint la memòria cau..."
+msgstr "Construint la memòria cau…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
@@ -3223,7 +3191,7 @@ msgstr "Embelleix"
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:637
 #, c-format
 msgid "%s (Copy)"
-msgstr "%s (Copia)"
+msgstr "%s (copia)"
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:115
 #, fuzzy
@@ -3238,10 +3206,8 @@ msgid "Select a build configuration from the sidebar to modify."
 msgstr "Selecciona la configuració per la construcció"
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:218
-#, fuzzy
-#| msgid "Configure Options"
 msgid "Build Configurations"
-msgstr "Opcions de configuració"
+msgstr "Configuracions de la construcció"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
 #, fuzzy
@@ -3250,10 +3216,8 @@ msgid "All Runtimes"
 msgstr "Temps d'execució"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#, fuzzy
-#| msgid "Make default"
 msgid "Make active"
-msgstr "Fes-ho predeterminat"
+msgstr "Fes-ho actiu"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Select this configuration as the active configuration."
@@ -3321,17 +3285,13 @@ msgstr "Opcions de configuració"
 
 #. Setup runtime selection
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:479
-#, fuzzy
-#| msgid "Application Output"
 msgid "Application Runtime"
-msgstr "Sortida de l'aplicació"
+msgstr "Entorn d'execució de l'aplicació"
 
 #. Setup toolchain selection
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:483
-#, fuzzy
-#| msgid "Toolchain"
 msgid "Build Toolchain"
-msgstr "Cadenes d'eines"
+msgstr "Cadena d'eines de la construcció"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
@@ -3583,10 +3543,9 @@ msgid "Failed to populate index plan: %s"
 msgstr "Ha fallat generar el terminal: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:267
-#, fuzzy, c-format
-#| msgid "Failed to load the project"
+#, c-format
 msgid "Failed to load project: %s"
-msgstr "Ha fallat carregar el projecte"
+msgstr "Ha fallat carregar el projecte: %s"
 
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
@@ -3904,7 +3863,7 @@ msgstr "Descomenta codi"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:48
 msgid "Display the project creation guide"
-msgstr ""
+msgstr "Mostra la guia de creació de projectes"
 
 #: src/plugins/create-project/gbp-create-project-surface.c:219
 msgid ""
@@ -4055,10 +4014,8 @@ msgstr ""
 "estiguin complets."
 
 #: src/plugins/ctags/ide-ctags-service.c:955
-#, fuzzy
-#| msgid "Indexing Source Code"
 msgid "Indexing Source Code (Paused)"
-msgstr "S'està indexant el codi font"
+msgstr "S'està indexant el codi font (en pausa)"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 #: src/plugins/debuggerui/gtk/menus.ui:20
@@ -4301,13 +4258,11 @@ msgstr "Copia"
 
 #: src/plugins/dspy/libdspy/dspy-method-view.ui:198
 msgid "Elapsed Time"
-msgstr ""
+msgstr "Temps transcorregut"
 
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:14
-#, fuzzy
-#| msgid "Address"
 msgid "Bus Address"
-msgstr "Adreça"
+msgstr "Adreça del bus"
 
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:64
 msgid "Owner"
@@ -4378,20 +4333,19 @@ msgstr "Senyals"
 #: src/plugins/dspy/libdspy/dspy-signature.c:79
 #, c-format
 msgid "Array of [%s]"
-msgstr ""
+msgstr "Matriu de [%s]"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:153
 msgid "Access Denied by Peer"
 msgstr ""
 
 #: src/plugins/dspy/libdspy/dspy-view.c:155
-#, fuzzy
 msgid "Authentication Failed"
-msgstr "No s'ha pogut autenticar"
+msgstr "Ha fallat l'autentificació"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:157
 msgid "Operation Timed Out"
-msgstr ""
+msgstr "L'operació ha excedit el temps"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:159
 msgid "Lost Connection to Bus"
@@ -4444,7 +4398,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:27
-msgid "Select the files to save:"
+msgid "Select the files to save"
 msgstr "Seleccioneu els fitxers a desar"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:80
@@ -4474,11 +4428,8 @@ msgid "Go"
 msgstr "Vés"
 
 #: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
-#, fuzzy
-#| msgctxt "Keywords"
-#| msgid "editor font monospace"
 msgid "New Editor Workspace…"
-msgstr "Editor tipus de lletra monoespai"
+msgstr "Nou espai de treball de l'editor…"
 
 #: src/plugins/editor/gtk/menus.ui:95
 msgid "New File"
@@ -4501,10 +4452,8 @@ msgid "Open in New Frame"
 msgstr "Obre en un marc nou"
 
 #: src/plugins/editor/gtk/menus.ui:137
-#, fuzzy
-#| msgid "Open in New Frame"
 msgid "Open in New Workspace"
-msgstr "Obre en un marc nou"
+msgstr "Obre en un espai de treball nou"
 
 #: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:39
 msgid "Split"
@@ -4563,10 +4512,9 @@ msgstr "MANIFEST"
 
 #. translators: %s is replaced with the name of the flatpak manifest
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.c:144
-#, fuzzy, c-format
-#| msgid "Configuring project"
+#, c-format
 msgid "Cloning project %s"
-msgstr "S'està configurant el projecte"
+msgstr "S'està clonant el projecte %s"
 
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:33
 msgid "Downloading application sources…"
@@ -4582,10 +4530,8 @@ msgid "Network is not available, skipping downloads"
 msgstr "La xarxa no és disponible, s'estan ometent les descàrregues"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
-#, fuzzy
-#| msgid "Installing "
 msgid "Install Missing SDK?"
-msgstr "S'està instal·lant"
+msgstr "Voleu instal·lar el SDK que falta?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
 msgid "_Install"
@@ -4707,15 +4653,15 @@ msgstr "Ha fallat la instal·lació del temps d'execució"
 
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been updated"
-msgstr "El temps d'execució ha estat actualitzat"
+msgstr "El entorn d'execució ha estat actualitzat"
 
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:122
 msgid "Runtime has been installed"
-msgstr "El temps d'execució ha estat instal·lat"
+msgstr "S'ha instal·lat l'entorn d'execució"
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:87
 msgid "Missing system dependencies"
-msgstr "Falten dependències del sitema"
+msgstr "Falten dependències del sistema"
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:88
 #, fuzzy
@@ -4727,7 +4673,7 @@ msgid ""
 "applications. Builder can install it for you."
 msgstr ""
 "Aquest programa és necessari per construir aplicacions Flatpak. Voleu "
-"instal·lar-lo ?"
+"instal·lar-lo?"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4747,17 +4693,15 @@ msgstr ""
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
-msgstr ""
+msgstr "S'estan actualitzant els submòduls del Git"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:136
-#, fuzzy
-#| msgid "Network is not available, skipping downloads"
 msgid "Network is not available, skipping submodule update"
-msgstr "La xarxa no és disponible, s'estan ometent les descàrregues"
+msgstr "La xarxa no és disponible, s'està ometent l'actualització del submòdul"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:208
 msgid "Initialize git submodules"
-msgstr ""
+msgstr "Inicialitza els submòduls del git"
 
 #: src/plugins/git/gbp-git-vcs.c:206
 msgid "Pushed."
@@ -4784,10 +4728,8 @@ msgstr "Cal un URL Git vàlid"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
 #: src/plugins/glade/gbp-glade-frame-addin.c:300
-#, fuzzy
-#| msgid "Select Symbol…"
 msgid "Select Widget…"
-msgstr "Selecciona símbol..."
+msgstr "Selecciona un giny…"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:393
 msgid "View Design"
@@ -4795,35 +4737,29 @@ msgstr "Vista de disseny"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:395
 msgid "Switch to UI designer"
-msgstr ""
+msgstr "Commuta al dissenyador UI"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:401
 msgid "View Source"
 msgstr "Mostra el codi font"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:403
-#, fuzzy
-#| msgid "The source code editor"
 msgid "Switch to source code editor"
-msgstr "L'editor de codi font"
+msgstr "Commuta a l'editor de codi font"
 
 #. translators: %s is replaced with the specific error message
 #: src/plugins/glade/gbp-glade-page-actions.c:42
-#, fuzzy, c-format
-#| msgid "Failed to save file: %s"
+#, c-format
 msgid "Failed to save glade document: %s"
-msgstr "Ha fallat desar el fitxer: %s"
+msgstr "Ha fallat desar el el document Glade: %s"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:36
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:42
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:48
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:54
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editor shortcuts"
 msgctxt "shortcut window"
 msgid "Glade shortcuts"
-msgstr "Dreceres de l'editor"
+msgstr "Dreceres del Glade"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:37
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:43
@@ -4852,28 +4788,21 @@ msgid "Undo the last command"
 msgstr "Desfés l'ordre prèvia"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:56
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Redo previous command"
 msgctxt "shortcut window"
 msgid "Redo the next command"
-msgstr "Refés l'ordre prèvia"
+msgstr "Refés l'ordre següent"
 
 #: src/plugins/glade/gbp-glade-page.c:478
-#, fuzzy
-#| msgid "Selection Mode"
 msgid "Switch to selection mode"
-msgstr "Mode de selecció"
+msgstr "Commuta al mode de selecció"
 
 #: src/plugins/glade/gbp-glade-page.c:479
 msgid "Switch to drag-resize mode"
 msgstr ""
 
 #: src/plugins/glade/gbp-glade-page.c:480
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Switch to margin editor"
-msgstr "Posició del marge dret"
+msgstr "Commuta a l'editor de marges"
 
 #: src/plugins/glade/gbp-glade-page.c:481
 #, fuzzy
@@ -4883,26 +4812,20 @@ msgid "Switch to alignment editor"
 msgstr "Commuta al document següent"
 
 #: src/plugins/glade/gbp-glade-page.c:486
-#, fuzzy
-#| msgid "Failed to load the project"
 msgid "Unnamed Glade project"
-msgstr "Ha fallat carregar el projecte"
+msgstr "Projecte del Glade sense nom"
 
 #: src/plugins/glade/gbp-glade-properties.c:69
-#, fuzzy
-#| msgid "Failed to load the project"
 msgid "Unnamed Glade Project"
-msgstr "Ha fallat carregar el projecte"
+msgstr "Projecte del Glade sense nom"
 
 #: src/plugins/glade/gbp-glade-properties.ui:36
 msgid "Widget specific properties"
-msgstr ""
+msgstr "Propietats específiques del giny"
 
 #: src/plugins/glade/gbp-glade-properties.ui:46
-#, fuzzy
-#| msgid "Configure build preferences"
 msgid "Container child properties"
-msgstr "Configura les preferències del constructor"
+msgstr "Propietats del contenidor fill"
 
 #: src/plugins/glade/gbp-glade-properties.ui:56
 msgid "Styling, alignment, and other common properties"
@@ -4910,7 +4833,7 @@ msgstr ""
 
 #: src/plugins/glade/gbp-glade-properties.ui:66
 msgid "Accessibility properties"
-msgstr ""
+msgstr "Propietats d'accessibilitat"
 
 #: src/plugins/glade/gtk/menus.ui:5
 msgid "Glade"
@@ -5026,10 +4949,8 @@ msgid "Replace With"
 msgstr "Reemplaça amb"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
-#, fuzzy
-#| msgid "Search"
 msgid "Search for…"
-msgstr "Cerca"
+msgstr "Cerca…"
 
 #: src/plugins/grep/gbp-grep-popover.ui:37
 msgid "Find"
@@ -5037,11 +4958,11 @@ msgstr "Cerca"
 
 #: src/plugins/grep/gbp-grep-popover.ui:54
 msgid "Search _recursively through folders"
-msgstr ""
+msgstr "_Cerca recursiva a les carpetes"
 
 #: src/plugins/grep/gbp-grep-popover.ui:61
 msgid "Match _case when searching"
-msgstr ""
+msgstr "_Coincidència de majúscules i minúscules en cercar"
 
 #: src/plugins/grep/gbp-grep-popover.ui:69
 msgid "Match _whole words"
@@ -5498,7 +5419,7 @@ msgstr[1] "Tanca tots els fitxers"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Copying files…"
-msgstr "S'estant copiant els fitxers…"
+msgstr "S'estan copiant els fitxers…"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:923
 msgid "Files will be copied in a moment"
@@ -5746,11 +5667,8 @@ msgstr ""
 "inicialitzada"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editor shortcuts"
 msgid "Change Shortcut"
-msgstr "Dreceres de l'editor"
+msgstr "Canvia la drecera"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
 msgid "Title"
@@ -5786,10 +5704,8 @@ msgid "In Build Environment"
 msgstr "Entorn"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
-#, fuzzy
-#| msgid "Environment"
 msgid "In Runtime Environment"
-msgstr "Entorn"
+msgstr "En l'entorn d'execució"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
 msgid ""
@@ -5827,19 +5743,15 @@ msgstr "Entorn"
 #, fuzzy
 #| msgid "Environment"
 msgid "Run in build environment"
-msgstr "Entorn"
+msgstr "Executa en l'entorn de construcció"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
-#, fuzzy
-#| msgid "Environment"
 msgid "Run in runtime environment"
-msgstr "Entorn"
+msgstr "Executa en l'entorn d'execució"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:113
-#, fuzzy
-#| msgid "Not a command: %s"
 msgid "New command"
-msgstr "No és una ordre: %s"
+msgstr "Ordre nova"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:134
 msgid "Click + to add an external command"
@@ -5852,7 +5764,7 @@ msgstr "Ordres externes"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
 msgid "Command"
-msgstr "Ordres:"
+msgstr "Ordres"
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:114
 #, c-format
@@ -6111,14 +6023,12 @@ msgid "New _Runtime Terminal"
 msgstr "Terminal _en temps d'execució nou"
 
 #: src/plugins/testui/gbp-test-output-panel.c:135
-#, fuzzy
-#| msgid "Unit Tests"
 msgid "Unit Test Output"
-msgstr "Proves unitàries"
+msgstr "Sortida de les proves unitàries"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:34
 msgid "Clear test output"
-msgstr ""
+msgstr "Neteja la sortida de les proves"
 
 #: src/plugins/testui/gbp-test-output-panel.ui:51
 msgid "Cancel tests"
@@ -6310,4 +6220,3 @@ msgstr "Ha fallat crear l'arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per analitzar-lo."
-
