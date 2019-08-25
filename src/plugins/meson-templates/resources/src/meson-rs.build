@@ -1,0 +1,57 @@
+pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
+gnome = import('gnome')
+
+gnome.compile_resources('{{name}}',
+  '{{name}}.gresource.xml',
+  gresource_bundle: true,
+  install: true,
+  install_dir: pkgdatadir,
+)
+
+conf = configuration_data()
+conf.set_quoted('VERSION', meson.project_version())
+conf.set_quoted('localedir', join_paths(get_option('prefix'), get_option('localedir')))
+conf.set_quoted('pkgdatadir', pkgdatadir)
+
+configure_file(
+    input: 'config.rs.in',
+    output: 'config.rs',
+    configuration: conf
+)
+# Copy the config.rs output to the source directory.
+run_command(
+  'cp',
+  join_paths(meson.build_root(), 'src', 'config.rs'),
+  join_paths(meson.source_root(), 'src', 'config.rs'),
+  check: true
+)
+
+sources = files(
+  'config.rs',
+  'main.rs',
+  'window.rs',
+)
+
+
+custom_target(
+  'cargo-build',
+  build_by_default: true,
+  input: sources,
+  output: meson.project_name(),
+  console: true,
+  install: true,
+  install_dir: get_option('bindir'),
+  command: [
+    'cargo',
+    'build',
+    '--manifest-path',
+    join_paths(meson.source_root(), 'Cargo.toml'),
+    '--target-dir',
+    join_paths(meson.build_root(), 'target'),
+    '--verbose',
+    '&&',
+    'cp',
+    join_paths(meson.build_root(), 'target/debug', meson.project_name()),
+    '@OUTPUT@'
+  ]
+)

@@ -102,7 +102,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         else:
             self.language = 'c'
 
-        if self.language not in ('c', 'c♯', 'c++', 'javascript', 'python', 'vala'):
+        if self.language not in ('c', 'c♯', 'c++', 'javascript', 'python', 'vala', 'rust'):
             task.return_error(GLib.Error('Language %s not supported' % self.language))
             return
 
@@ -249,7 +249,7 @@ class GnomeProjectTemplate(MesonTemplate):
             _('GNOME Application'),
             'pattern-gnome',
             _('Create a new GNOME application'),
-            ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala'],
+            ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala', 'Rust'],
             0
          )
 
@@ -301,6 +301,12 @@ class GnomeProjectTemplate(MesonTemplate):
             files['resources/src/window.py'] = 'src/window.py'
             files['resources/src/main.py'] = 'src/main.py'
             meson_file = 'resources/src/meson-py.build'
+        elif self.language == 'rust':
+            files['resources/src/config.rs.in'] = 'src/config.rs.in'
+            files['resources/src/main.rs'] = 'src/main.rs'
+            files['resources/src/window.rs'] = 'src/window.rs'
+            files['resources/src/Cargo.toml'] = 'Cargo.toml'
+            meson_file = 'resources/src/meson-rs.build'
 
         if resource_name:
             files['resources/src/hello.gresource.xml'] = resource_name
@@ -336,7 +342,7 @@ class EmptyProjectTemplate(MesonTemplate):
             _('Empty Project'),
             'pattern-cli',
             _('Create a new empty project'),
-            ['C', 'C++', 'C♯', 'JavaScript', 'Python', 'Vala'],
+            ['C', 'C++', 'C♯', 'JavaScript', 'Python', 'Vala', 'Rust'],
             200
          )
 

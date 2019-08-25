@@ -10,6 +10,7 @@
     <file compressed="true">resources/src/hello-version.h.in</file>
     <file compressed="true">resources/src/meson-clib.build</file>
     <file compressed="true">resources/src/meson-js.build</file>
+    <file compressed="true">resources/src/meson-rs.build</file>
     <file compressed="true">resources/src/hello.c</file>
     <file compressed="true">resources/src/hello.h</file>
     <file compressed="true">resources/src/__init__.py</file>
@@ -25,12 +26,16 @@
     <file compressed="true">resources/src/window.hpp</file>
     <file compressed="true">resources/src/window.py</file>
     <file compressed="true">resources/src/window.vala</file>
+    <file compressed="true">resources/src/config.rs.in</file>
+    <file compressed="true">resources/src/window.rs</file>
     <file compressed="true">resources/src/main.vala</file>
     <file compressed="true">resources/src/main-cli.vala</file>
     <file compressed="true">resources/src/hello.py.in</file>
     <file compressed="true">resources/src/main.py</file>
+    <file compressed="true">resources/src/main.rs</file>
     <file compressed="true">resources/src/application.in</file>
     <file compressed="true">resources/src/main.cs</file>
+    <file compressed="true">resources/src/Cargo.toml</file>
     <file compressed="true">resources/src/meson-cs.build</file>
     <file compressed="true">resources/build-aux/meson/postinstall.py</file>
     <file compressed="true">resources/meson.build</file>
