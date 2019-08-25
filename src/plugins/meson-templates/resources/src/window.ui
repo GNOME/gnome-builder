@@ -16,7 +16,11 @@
     </attributes>
   </object>
 {{else}}
+  {{if language == "rust"}}
+  <object class="GtkApplicationWindow" id="window">
+  {{else}}
   <template class="{{PreFix}}Window" parent="GtkApplicationWindow">
+  {{end}}
     <property name="default-width">600</property>
     <property name="default-height">300</property>
     <child type="titlebar">
@@ -40,6 +44,10 @@
         </attributes>
       </object>
     </child>
+  {{if language == "rust"}}
+  </object>
+  {{else}}
   </template>
+  {{end}}
 {{end}}
 </interface>
