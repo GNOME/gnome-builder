@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-05-27 19:18+0000\n"
-"PO-Revision-Date: 2019-06-02 21:29+0200\n"
+"POT-Creation-Date: 2019-08-11 12:19+0000\n"
+"PO-Revision-Date: 2019-08-26 20:42+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -18,18 +18,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:125
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/gui/ide-application-actions.c:142
+#: src/libide/gui/ide-application-actions.c:143
 msgid "An IDE for GNOME"
 msgstr "En utvecklingsmiljö för GNOME"
 
@@ -518,7 +518,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Denna inställning är föråldrad och används inte längre."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:68
+#: src/plugins/project-tree/gtk/menus.ui:69
 msgid "Show Ignored Files"
 msgstr "Visa ignorerade filer"
 
@@ -530,7 +530,7 @@ msgstr ""
 "versionshanteringssystemet."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:73
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "Sort Directories First"
 msgstr "Sortera kataloger först"
 
@@ -624,6 +624,11 @@ msgstr "Klona arkiv"
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
 msgstr "Ny redigerararbetsyta"
+
+#: data/org.gnome.Builder.desktop.in.in:36
+#: src/plugins/dspy/gbp-dspy-workspace.ui:13
+msgid "D-Bus Inspector"
+msgstr "D-Bus-inspektör"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -836,7 +841,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Läs in eller generera en palett med inställningarna"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4933
+#: src/libide/sourceview/ide-source-view.c:4977
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -859,7 +864,7 @@ msgstr "_Byt namn"
 msgid "unsaved file %u"
 msgstr "osparad fil %u"
 
-#: src/libide/code/ide-buffer.c:3394
+#: src/libide/code/ide-buffer.c:3405
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
@@ -897,12 +902,14 @@ msgstr "Namnlös"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1391
+#: src/libide/gui/ide-workbench.c:1419
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:374
+#: src/plugins/dspy/libdspy/dspy-method-view.c:274
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -941,6 +948,7 @@ msgstr "Spara fil"
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/editor/gbp-confirm-save-dialog.c:199
 msgid "Save"
 msgstr "Spara"
 
@@ -1111,7 +1119,7 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr "Visa eller dölj alternativ så som skiftlägeskänslighet"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
-#: src/plugins/editor/gtk/menus.ui:151
+#: src/plugins/editor/gtk/menus.ui:155
 msgid "Document Properties"
 msgstr "Dokumentegenskaper"
 
@@ -1204,10 +1212,10 @@ msgid "Open File"
 msgstr "Öppna fil"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1390
+#: src/libide/gui/ide-workbench.c:1418
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:19
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:373
+#: src/plugins/project-tree/gtk/menus.ui:22
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
 msgid "Open"
 msgstr "Öppna"
 
@@ -1247,7 +1255,7 @@ msgstr "Stäng alla filer"
 #: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
-#: src/plugins/editor/gtk/menus.ui:67 src/plugins/editor/gtk/menus.ui:81
+#: src/plugins/editor/gtk/menus.ui:68 src/plugins/editor/gtk/menus.ui:82
 msgid "Editor"
 msgstr "Redigerare"
 
@@ -1264,10 +1272,11 @@ msgstr "Din föregående session kommer vara redo om ett ögonblick."
 msgid "Switch surface"
 msgstr "Växla yta"
 
-#: src/libide/editor/ide-editor-workspace.ui:30
-#: src/libide/gui/ide-primary-workspace.ui:55
-msgid "Press Ctrl+. to search"
-msgstr "Tryck Ctrl+. för att söka"
+#: src/libide/editor/ide-editor-workspace.ui:64
+#: src/libide/gui/ide-primary-workspace.ui:71
+#: src/libide/terminal/ide-terminal-workspace.ui:41
+msgid "Search your project"
+msgstr "Sök ditt projekt"
 
 #: src/libide/foundry/ide-build-manager.c:396
 #, c-format
@@ -1289,7 +1298,7 @@ msgstr "Upptäckte enheten ”%s”"
 msgid "Devices"
 msgstr "Enheter"
 
-#: src/libide/foundry/ide-device-manager.c:725
+#: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Det går inte att distribuera till enhet, rörledning för bygge är inte "
@@ -1312,76 +1321,76 @@ msgstr "Min dator (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Min dator (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:791
+#: src/libide/foundry/ide-pipeline.c:800
 msgid "The build pipeline is in a failed state"
 msgstr "Rörledningen för bygget är i ett misslyckat tillstånd"
 
-#: src/libide/foundry/ide-pipeline.c:801
+#: src/libide/foundry/ide-pipeline.c:810
 msgid "The build configuration has errors"
 msgstr "Byggkonfigurationen innehåller fel"
 
-#: src/libide/foundry/ide-pipeline.c:2935
+#: src/libide/foundry/ide-pipeline.c:3000
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Skapande av pseudoterminal misslyckades. Terminalfunktioner kommer att vara "
 "begränsade."
 
-#: src/libide/foundry/ide-pipeline.c:3141
+#: src/libide/foundry/ide-pipeline.c:3206
 msgid "Cleaning…"
 msgstr "Rensar…"
 
-#: src/libide/foundry/ide-pipeline.c:3145
-#: src/libide/foundry/ide-pipeline.c:3202
+#: src/libide/foundry/ide-pipeline.c:3210
+#: src/libide/foundry/ide-pipeline.c:3267
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Misslyckades"
 
-#: src/libide/foundry/ide-pipeline.c:3147
-#: src/libide/foundry/ide-pipeline.c:3210
+#: src/libide/foundry/ide-pipeline.c:3212
+#: src/libide/foundry/ide-pipeline.c:3275
 msgid "Ready"
 msgstr "Redo"
 
-#: src/libide/foundry/ide-pipeline.c:3162
+#: src/libide/foundry/ide-pipeline.c:3227
 msgid "Downloading…"
 msgstr "Hämtar…"
 
-#: src/libide/foundry/ide-pipeline.c:3166
+#: src/libide/foundry/ide-pipeline.c:3231
 msgid "Building dependencies…"
 msgstr "Bygger beroenden…"
 
 # "Startar upp" kändes för allmänt, så utgår från stegets namn IDE_BUILD_PHASE_AUTOGEN
-#: src/libide/foundry/ide-pipeline.c:3170
+#: src/libide/foundry/ide-pipeline.c:3235
 msgid "Bootstrapping…"
 msgstr "Automatisk generering…"
 
-#: src/libide/foundry/ide-pipeline.c:3174
+#: src/libide/foundry/ide-pipeline.c:3239
 msgid "Configuring…"
 msgstr "Konfigurerar…"
 
-#: src/libide/foundry/ide-pipeline.c:3178
+#: src/libide/foundry/ide-pipeline.c:3243
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Bygger…"
 
-#: src/libide/foundry/ide-pipeline.c:3182
+#: src/libide/foundry/ide-pipeline.c:3247
 msgid "Installing…"
 msgstr "Installerar…"
 
-#: src/libide/foundry/ide-pipeline.c:3186
+#: src/libide/foundry/ide-pipeline.c:3251
 msgid "Committing…"
 msgstr "Verkställer…"
 
-#: src/libide/foundry/ide-pipeline.c:3190
+#: src/libide/foundry/ide-pipeline.c:3255
 msgid "Exporting…"
 msgstr "Exporterar…"
 
-#: src/libide/foundry/ide-pipeline.c:3194
-#: src/libide/foundry/ide-pipeline.c:3198
+#: src/libide/foundry/ide-pipeline.c:3259
+#: src/libide/foundry/ide-pipeline.c:3263
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Lyckades"
 
-#: src/libide/foundry/ide-pipeline.c:3206
+#: src/libide/foundry/ide-pipeline.c:3271
 msgid "Preparing…"
 msgstr "Förbereder…"
 
@@ -1410,7 +1419,7 @@ msgstr "Kör %s…"
 msgid "The build target failed to build: %s"
 msgstr "Misslyckades med att bygga byggmålet: %s"
 
-#: src/libide/foundry/ide-run-manager.c:852
+#: src/libide/foundry/ide-run-manager.c:853
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
@@ -1418,32 +1427,32 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Kortkommandon för arbetsbänk"
 
-#: src/libide/foundry/ide-run-manager.c:853
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/foundry/ide-run-manager.c:854
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Bygg och kör"
 
-#: src/libide/foundry/ide-run-manager.c:1012
-#: src/libide/foundry/ide-run-manager.c:1078
+#: src/libide/foundry/ide-run-manager.c:1013
+#: src/libide/foundry/ide-run-manager.c:1079
 msgid "Failed to locate a build target"
 msgstr "Misslyckades med att hitta ett byggmål"
 
-#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
-#: src/plugins/buildui/gtk/menus.ui:30
+#: src/libide/foundry/ide-run-manager.c:1215 src/libide/gui/gtk/menus.ui:73
+#: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Kör"
 
-#: src/libide/foundry/ide-runner.c:182
+#: src/libide/foundry/ide-runner.c:185
 msgid "Process quit unexpectedly"
 msgstr "Processen har oväntat avslutats"
 
 #: src/libide/foundry/ide-runtime-manager.c:138
-msgid "Use host operating system"
-msgstr "Använd värdoperativsystem"
+msgid "Host Operating System"
+msgstr "Värdoperativsystem"
 
-#: src/libide/foundry/ide-runtime.c:479
-#: src/plugins/jhbuild/jhbuild_plugin.py:122
+#: src/libide/foundry/ide-runtime.c:498
+#: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Värdsystem"
 
@@ -1452,13 +1461,13 @@ msgid "Default (Host operating system)"
 msgstr "Standard (Värdoperativsystem)"
 
 #. translators: %s is replaced with the path to the project
-#: src/libide/greeter/ide-clone-surface.c:249
+#: src/libide/greeter/ide-clone-surface.c:251
 #, c-format
 msgid "The directory “%s” already exists. Please choose another directory."
 msgstr "Katalogen ”%s” finns redan. Välj en annan katalog."
 
 #. translators: %s is replaced with the path to the project
-#: src/libide/greeter/ide-clone-surface.c:257
+#: src/libide/greeter/ide-clone-surface.c:259
 #, c-format
 msgid "Your project will be created at %s"
 msgstr "Ditt projekt kommer att skapas i %s"
@@ -1518,6 +1527,7 @@ msgid "Clone Repository…"
 msgstr "Klona arkiv…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
 msgid "Directory"
 msgstr "Katalog"
 
@@ -1539,7 +1549,7 @@ msgid "All Project Types"
 msgstr "Alla projekttyper"
 
 #: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:317 src/libide/gui/ide-workbench.c:838
+#: src/libide/gui/ide-workbench.c:318 src/libide/gui/ide-workbench.c:843
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1590,53 +1600,57 @@ msgctxt "title"
 msgid "Clone Repository"
 msgstr "Klona arkiv"
 
-#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:77
+#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
 msgid "Switch Surface"
 msgstr "Växla yta"
 
-#: src/libide/gui/gtk/menus.ui:14 src/libide/gui/gtk/menus.ui:67
-#: src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1387
-#: src/plugins/editor/gtk/menus.ui:24 src/plugins/editor/gtk/menus.ui:100
-msgid "Open File…"
-msgstr "Öppna fil…"
-
-#: src/libide/gui/gtk/menus.ui:23
+#: src/libide/gui/gtk/menus.ui:16
 msgid "Close Project"
 msgstr "Stäng projekt"
 
-#: src/libide/gui/gtk/menus.ui:31 src/libide/gui/ide-preferences-window.ui:6
-#: src/plugins/editor/gtk/menus.ui:32 src/plugins/greeter/gtk/menus.ui:22
+#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.ui:6
+#: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: src/libide/gui/gtk/menus.ui:37 src/plugins/editor/gtk/menus.ui:38
+#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:39
 #: src/plugins/greeter/gtk/menus.ui:28
 msgid "Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
 
-#: src/libide/gui/gtk/menus.ui:43 src/plugins/editor/gtk/menus.ui:44
+#: src/libide/gui/gtk/menus.ui:36 src/plugins/editor/gtk/menus.ui:45
 #: src/plugins/greeter/gtk/menus.ui:34
 msgid "Help"
 msgstr "Hjälp"
 
-#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:50
+#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:51
 #: src/plugins/greeter/gtk/menus.ui:40
 msgid "About Builder"
 msgstr "Om Builder"
 
-#: src/libide/gui/gtk/menus.ui:56 src/plugins/editor/gtk/menus.ui:57
+#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:58
 msgid "_Quit"
 msgstr "A_vsluta"
 
-#: src/libide/gui/gtk/menus.ui:74
+#: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
+#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/plugins/editor/gtk/menus.ui:103
+msgid "Open File…"
+msgstr "Öppna fil…"
+
+#: src/libide/gui/gtk/menus.ui:68
 msgid "Run Options"
 msgstr "Körningsalternativ"
 
-#: src/libide/gui/ide-application-actions.c:148
+#: src/libide/gui/ide-application-actions.c:78
+msgid "Builder — Preferences"
+msgstr "Builder — Inställningar"
+
+#: src/libide/gui/ide-application-actions.c:149
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:150
+#: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
@@ -1645,11 +1659,11 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
 msgstr "Lär dig mer om GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:157
+#: src/libide/gui/ide-application-actions.c:158
 msgid "Funded By"
 msgstr "Finansierat av"
 
@@ -1692,7 +1706,7 @@ msgstr "Visa hjälpfönstret"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:524
+#: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Inställningar"
@@ -1715,6 +1729,15 @@ msgstr ""
 "GNOME Builder kräver en skrivbordssession med D-Bus. Ställ in "
 "DBUS_SESSION_BUS_ADDRESS."
 
+#: src/libide/gui/ide-command-manager.c:491
+msgid "Command failed"
+msgstr "Kommando misslyckades"
+
+#: src/libide/gui/ide-command-manager.c:513
+#, c-format
+msgid "Failed to locate command “%s”"
+msgstr "Misslyckades med hitta kommandot ”%s”"
+
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
 msgstr "Ta bort miljövariabel"
@@ -1723,21 +1746,33 @@ msgstr "Ta bort miljövariabel"
 msgid "New variable…"
 msgstr "Ny variabel…"
 
-#: src/libide/gui/ide-frame-header.ui:48
-msgid "Open file"
-msgstr "Öppna fil"
+#: src/libide/gui/ide-frame-empty-state.ui:16
+msgid "Open a File or Terminal"
+msgstr "Öppna en fil eller terminal"
 
-#: src/libide/gui/ide-frame-header.ui:65
-msgid "New file"
-msgstr "Ny fil"
+#: src/libide/gui/ide-frame-empty-state.ui:30
+msgid "Use the page switcher above or use one of the following:"
+msgstr "Använd sidväxlaren ovan eller använd endera av följande:"
 
-#: src/libide/gui/ide-frame-header.ui:80 src/libide/gui/ide-frame.ui:89
+#: src/libide/gui/ide-frame-empty-state.ui:45
+msgid "Search"
+msgstr "Sök"
+
+#: src/libide/gui/ide-frame-empty-state.ui:54
+msgid "Project sidebar"
+msgstr "Sidopanel för projekt"
+
+#: src/libide/gui/ide-frame-empty-state.ui:63
+msgid "File chooser"
+msgstr "Filväljare"
+
+#: src/libide/gui/ide-frame-empty-state.ui:72
 msgid "New terminal"
 msgstr "Ny terminal"
 
-#: src/libide/gui/ide-frame-header.ui:96
-msgid "New documentation"
-msgstr "Ny dokumentation"
+#: src/libide/gui/ide-frame-empty-state.ui:95
+msgid "New Terminal"
+msgstr "Ny terminal"
 
 #: src/libide/gui/ide-frame-shortcuts.c:37
 msgctxt "shortcut window"
@@ -1771,35 +1806,11 @@ msgstr "Stäng dokumentet"
 msgid "No Open Pages"
 msgstr "Inga öppna sidor"
 
-#: src/libide/gui/ide-frame.ui:33
-msgid "Open a File or Terminal"
-msgstr "Öppna en fil eller terminal"
-
-#: src/libide/gui/ide-frame.ui:47
-msgid "Use the page switcher above or use one of the following:"
-msgstr "Använd sidväxlaren ovan eller använd endera av följande:"
-
-#: src/libide/gui/ide-frame.ui:62
-msgid "Search"
-msgstr "Sök"
-
-#: src/libide/gui/ide-frame.ui:71
-msgid "Project sidebar"
-msgstr "Sidopanel för projekt"
-
-#: src/libide/gui/ide-frame.ui:80
-msgid "File chooser"
-msgstr "Filväljare"
-
-#: src/libide/gui/ide-frame.ui:112
-msgid "New Terminal"
-msgstr "Ny terminal"
-
-#: src/libide/gui/ide-frame.ui:124
+#: src/libide/gui/ide-frame.ui:37
 msgid "Uh oh, something went wrong"
 msgstr "Åh nej, någonting har gått fel"
 
-#: src/libide/gui/ide-frame.ui:125
+#: src/libide/gui/ide-frame.ui:38
 msgid "There was a failure while trying to perform the operation."
 msgstr "Ett fel uppstod under försöket att utföra operationen."
 
@@ -1812,10 +1823,10 @@ msgstr "Kortkommandon för fönster"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:513
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
+#: src/libide/gui/ide-shortcuts-window.ui:520
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Allmänt"
@@ -1895,7 +1906,8 @@ msgstr "redigerare radavstånd typsnitt fast breddsteg monospace"
 
 #. XXX: This belongs in terminal addin
 #: src/libide/gui/ide-preferences-builtin.c:109
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:354
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -2093,7 +2105,7 @@ msgid "Code Insight"
 msgstr "Kodinsikt"
 
 #: src/libide/gui/ide-preferences-builtin.c:196
-#: src/libide/sourceview/gtk/menus.ui:43 src/plugins/spellcheck/gtk/menus.ui:12
+#: src/libide/sourceview/gtk/menus.ui:50 src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Färgmarkering"
 
@@ -2263,7 +2275,7 @@ msgstr "Antal processorer"
 
 #: src/libide/gui/ide-preferences-builtin.c:395
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
-#: src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Bygg"
 
@@ -2322,8 +2334,7 @@ msgstr "Öppna tidigare öppnade filer då ett projekt läses in"
 
 #: src/libide/gui/ide-preferences-builtin.c:541
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:373
-#: src/plugins/vcsui/gtk/menus.ui:6
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Versionshantering"
 
@@ -2354,21 +2365,21 @@ msgstr "Sluta köra"
 msgid "Change run options"
 msgstr "Ändra körningsalternativ"
 
-#: src/libide/gui/ide-search-entry.c:209
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:272
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:278
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:284
+#: src/libide/gui/ide-search-button.c:43
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
 msgctxt "shortcut window"
 msgid "Workspace shortcuts"
 msgstr "Kortkommandon för arbetsyta"
 
-#: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:581
+#: src/libide/gui/ide-search-button.c:44
+#: src/libide/gui/ide-shortcuts-window.ui:588
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Sök"
 
-#: src/libide/gui/ide-search-entry.c:211
+#: src/libide/gui/ide-search-button.c:45
 msgctxt "shortcut window"
 msgid "Focus to the global search entry"
 msgstr "Fokusera på den globala sökinmatningen"
@@ -2379,34 +2390,34 @@ msgid "Editor Shortcuts"
 msgstr "Kortkommandon för redigerare"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:517
+#: src/libide/gui/ide-shortcuts-window.ui:524
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Global sökning"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:531
+#: src/libide/gui/ide-shortcuts-window.ui:538
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Kommandorad"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:538
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:545
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
+#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal i exekveringsmiljö för bygge"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/libide/gui/ide-shortcuts-window.ui:559
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
@@ -2467,13 +2478,13 @@ msgid "Clear highlight"
 msgstr "Rensa färgmarkering"
 
 #: src/libide/gui/ide-shortcuts-window.ui:213
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiera och klistra in"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:573
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiera markerad text till urklipp"
@@ -2484,7 +2495,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Klipp ut markerad text till urklipp"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Klistra in text från urklipp"
@@ -2560,145 +2571,150 @@ msgstr "Visa kompletteringsfönster"
 
 #: src/libide/gui/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
+msgid "Toggle opacity of completion window"
+msgstr "Växla opacitet för kompletteringsfönster"
+
+#: src/libide/gui/ide-shortcuts-window.ui:334
+msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Aktivera/inaktivera överskrivning"
 
-#: src/libide/gui/ide-shortcuts-window.ui:334
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Indentera om rad"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Ta bort rad"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Byt namn på symbol"
 
-#: src/libide/gui/ide-shortcuts-window.ui:349
+#: src/libide/gui/ide-shortcuts-window.ui:356
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Kräver semantiskt språkstöd"
 
-#: src/libide/gui/ide-shortcuts-window.ui:357
+#: src/libide/gui/ide-shortcuts-window.ui:364
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigering"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Gå till nästa fel i fil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Gå till föregående fel i fil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Gå till föregående redigeringsplats"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Gå till nästa redigeringsplats"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Hoppa till symboldefinition"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Flytta visningsområde uppåt i filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Flytta visningsområde nedåt i filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Flytta visningsområde till slutet på filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Flytta visningsområde till början på filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Gå till matchande parentes"
 
-#: src/libide/gui/ide-shortcuts-window.ui:433
+#: src/libide/gui/ide-shortcuts-window.ui:440
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Markeringar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:438
+#: src/libide/gui/ide-shortcuts-window.ui:445
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Markera allt"
 
-#: src/libide/gui/ide-shortcuts-window.ui:445
+#: src/libide/gui/ide-shortcuts-window.ui:452
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Avmarkera allt"
 
-#: src/libide/gui/ide-shortcuts-window.ui:458
+#: src/libide/gui/ide-shortcuts-window.ui:465
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Bygg"
 
-#: src/libide/gui/ide-shortcuts-window.ui:465
+#: src/libide/gui/ide-shortcuts-window.ui:472
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Kör"
 
-#: src/libide/gui/ide-shortcuts-window.ui:472
+#: src/libide/gui/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gester för styrplatta"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Flytta sida till höger"
 
-#: src/libide/gui/ide-shortcuts-window.ui:488
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Trefingersvep åt höger"
 
-#: src/libide/gui/ide-shortcuts-window.ui:497
+#: src/libide/gui/ide-shortcuts-window.ui:504
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Flytta sida till vänster"
 
-#: src/libide/gui/ide-shortcuts-window.ui:498
+#: src/libide/gui/ide-shortcuts-window.ui:505
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Trefingersvep åt vänster"
 
-#: src/libide/gui/ide-shortcuts-window.ui:509
+#: src/libide/gui/ide-shortcuts-window.ui:516
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Kortkommandon för terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:586
+#: src/libide/gui/ide-shortcuts-window.ui:593
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Hitta text i terminal"
@@ -2729,137 +2745,174 @@ msgstr "Fil måste vara i projektträdet."
 msgid "Could not parse XML from stream"
 msgstr "Kunde inte tolka XML från ström"
 
-#: src/libide/sourceview/gtk/menus.ui:6
+#: src/libide/sourceview/gtk/menus.ui:7
 msgid "_Go to Definition"
 msgstr "_Gå till definition"
 
 #: src/libide/sourceview/gtk/menus.ui:12
+msgid "_Find references"
+msgstr "_Hitta referenser"
+
+#: src/libide/sourceview/gtk/menus.ui:19
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: src/libide/sourceview/gtk/menus.ui:16
+#: src/libide/sourceview/gtk/menus.ui:23
 msgid "_Redo"
 msgstr "_Gör om"
 
-#: src/libide/sourceview/gtk/menus.ui:22
+#: src/libide/sourceview/gtk/menus.ui:29
 msgid "C_ut"
 msgstr "Klipp _ut"
 
-#: src/libide/sourceview/gtk/menus.ui:27 src/libide/terminal/gtk/menus.ui:28
+#: src/libide/sourceview/gtk/menus.ui:34 src/libide/terminal/gtk/menus.ui:38
 msgid "_Copy"
 msgstr "K_opiera"
 
-#: src/libide/sourceview/gtk/menus.ui:31 src/libide/terminal/gtk/menus.ui:32
+#: src/libide/sourceview/gtk/menus.ui:38 src/libide/terminal/gtk/menus.ui:42
 msgid "_Paste"
 msgstr "_Klistra in"
 
-#: src/libide/sourceview/gtk/menus.ui:35
+#: src/libide/sourceview/gtk/menus.ui:42
 msgid "_Delete"
 msgstr "_Ta bort"
 
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/terminal/gtk/menus.ui:38
+#: src/libide/sourceview/gtk/menus.ui:55 src/libide/terminal/gtk/menus.ui:48
 msgid "Selection"
 msgstr "Markering"
 
-#: src/libide/sourceview/gtk/menus.ui:50 src/libide/terminal/gtk/menus.ui:40
+#: src/libide/sourceview/gtk/menus.ui:57 src/libide/terminal/gtk/menus.ui:50
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: src/libide/sourceview/gtk/menus.ui:55 src/libide/terminal/gtk/menus.ui:45
+#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:55
 msgid "Select _None"
 msgstr "A_vmarkera allt"
 
-#: src/libide/sourceview/gtk/menus.ui:61
+#: src/libide/sourceview/gtk/menus.ui:68
 msgid "All _Upper Case"
 msgstr "Alla _versaler"
 
-#: src/libide/sourceview/gtk/menus.ui:66
+#: src/libide/sourceview/gtk/menus.ui:73
 msgid "All _Lower Case"
 msgstr "Alla _gemener"
 
-#: src/libide/sourceview/gtk/menus.ui:71
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Invert Case"
 msgstr "_Invertera skiftläge"
 
-#: src/libide/sourceview/gtk/menus.ui:76
+#: src/libide/sourceview/gtk/menus.ui:83
 msgid "_Title Case"
 msgstr "_Inledande versal"
 
-#: src/libide/sourceview/gtk/menus.ui:83
+#: src/libide/sourceview/gtk/menus.ui:90
 msgid "Join Lines"
 msgstr "Slå samman rader"
 
-#: src/libide/sourceview/gtk/menus.ui:87
+#: src/libide/sourceview/gtk/menus.ui:94
 msgid "Sort Lines"
 msgstr "Sortera rader"
 
-#: src/libide/sourceview/gtk/menus.ui:96
+#: src/libide/sourceview/gtk/menus.ui:103
 msgid "Zoom"
 msgstr "Zooma"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "Zoom _In"
 msgstr "Zooma _in"
 
-#: src/libide/sourceview/gtk/menus.ui:103
+#: src/libide/sourceview/gtk/menus.ui:110
 msgid "Zoom _Out"
 msgstr "Zooma _ut"
 
-#: src/libide/sourceview/gtk/menus.ui:109
+#: src/libide/sourceview/gtk/menus.ui:116
 msgid "Reset"
 msgstr "Återställ"
 
-#: src/libide/sourceview/ide-source-view.c:4382
+#: src/libide/sourceview/ide-source-view.c:4426
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4384
+#: src/libide/sourceview/ide-source-view.c:4428
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: src/libide/sourceview/ide-source-view.c:4502
+#: src/libide/sourceview/ide-source-view.c:4546
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
-#: src/libide/sourceview/ide-source-view.c:4932
+#: src/libide/sourceview/ide-source-view.c:4976
 msgid "Rename symbol"
 msgstr "Byt namn på symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5167
+#: src/libide/sourceview/ide-source-view.c:5211
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rad %u, Kolumn %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5193
+#: src/libide/sourceview/ide-source-view.c:5237
 msgid "No references were found"
 msgstr "Inga referenser hittades"
 
-#: src/libide/terminal/gtk/menus.ui:7 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:118 src/plugins/editor/gtk/menus.ui:172
+#: src/libide/terminal/gtk/menus.ui:8
+msgid "New Terminal Workspace…"
+msgstr "Ny terminalarbetsyta…"
+
+#: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
+#: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
-#: src/plugins/recent/gbp-recent-section.c:472
 msgid "Close"
 msgstr "Stäng"
 
-#: src/libide/terminal/gtk/menus.ui:15
+#: src/libide/terminal/gtk/menus.ui:25
 msgid "_Open Link"
 msgstr "Ö_ppna länk"
 
-#: src/libide/terminal/gtk/menus.ui:20
+#: src/libide/terminal/gtk/menus.ui:30
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
+
+#: src/libide/terminal/ide-terminal-launcher.c:320
+#, c-format
+msgid "Failed to create shell within runtime “%s”"
+msgstr "Misslyckades med att skapa skal i exekveringsmiljön ”%s”"
+
+#: src/libide/terminal/ide-terminal-launcher.c:646
+msgid "Untitled Terminal"
+msgstr "Namnlös terminal"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:268
 msgid "Save Terminal Content As"
 msgstr "Spara terminalinnehåll som"
 
-#: src/libide/terminal/ide-terminal-page.c:460
+#: src/libide/terminal/ide-terminal-page.c:105
+#: src/libide/terminal/ide-terminal-page.c:150
+#: src/libide/terminal/ide-terminal-page.c:291
 msgid "Untitled terminal"
 msgstr "Namnlös terminal"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:107
+msgid "Exited"
+msgstr "Avslutades"
+
+#: src/libide/terminal/ide-terminal-page.c:114
+msgid "Subprocess launcher failed"
+msgstr "Startare av underprocess misslyckades"
+
+#: src/libide/terminal/ide-terminal-page.c:137
+msgid "Subprocess launcher failed too quickly, will not respawn."
+msgstr ""
+"Startare av underprocess misslyckades för snabbt, kommer inte att startas på "
+"nytt."
+
+#: src/libide/terminal/ide-terminal-popover.ui:12
+msgid "Search runtimes"
+msgstr "Sök exekveringsmiljöer"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -2873,12 +2926,12 @@ msgstr "Matcha hela ord"
 msgid "Wrap around"
 msgstr "Börja om från början"
 
-#: src/libide/tree/ide-tree-node.c:1177 src/libide/tree/ide-tree-node.c:1562
-#: src/libide/tree/ide-tree-node.c:1591
+#: src/libide/tree/ide-tree-node.c:1180 src/libide/tree/ide-tree-node.c:1565
+#: src/libide/tree/ide-tree-node.c:1594
 msgid "(Empty)"
 msgstr "(Tom)"
 
-#: src/libide/tree/ide-tree-node.c:1560
+#: src/libide/tree/ide-tree-node.c:1563
 msgid "Loading…"
 msgstr "Läser in…"
 
@@ -2886,7 +2939,7 @@ msgstr "Läser in…"
 msgid "unversioned"
 msgstr "oversionerad"
 
-#: src/main.c:61
+#: src/main.c:137
 msgid "Run a new instance of Builder"
 msgstr "Kör en ny instans av Builder"
 
@@ -2899,16 +2952,16 @@ msgid "Bootstrapping build system"
 msgstr "Drar igång byggsystem"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Konfigurerar projekt"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:149
+#: src/plugins/cargo/cargo_plugin.py:162
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:283
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Bygger projekt"
@@ -3135,6 +3188,7 @@ msgid "Removes the configuration and cannot be undone."
 msgstr "Tar bort konfigurationen och kan inte ångras."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:178
 msgid "Environment"
 msgstr "Miljö"
 
@@ -3149,6 +3203,7 @@ msgstr "Byggmiljö"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
@@ -3183,7 +3238,7 @@ msgid "Build Toolchain"
 msgstr "Verktygskedja för bygge"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
-#: src/plugins/editor/gtk/menus.ui:159 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
 #: src/plugins/testui/gbp-test-output-panel.c:68
 msgid "_Save"
 msgstr "_Spara"
@@ -3265,7 +3320,7 @@ msgid "Warnings"
 msgstr "Varningar"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
-#: src/plugins/buildui/gtk/menus.ui:25
+#: src/plugins/buildui/gtk/menus.ui:27
 msgid "Rebuild"
 msgstr "Bygg om"
 
@@ -3278,7 +3333,7 @@ msgid "Export Bundle"
 msgstr "Exportera paket"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:349
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:355
 msgid "Build Issues"
 msgstr "Byggfel"
 
@@ -3303,16 +3358,16 @@ msgstr "Byggdetaljer"
 msgid "Build pipeline is empty"
 msgstr "Rörledning för bygge är tom"
 
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:162
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:163
 msgid "Build Targets"
 msgstr "Byggmål"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:358
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:364
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Bygginställningar"
 
-#: src/plugins/buildui/gtk/menus.ui:35
+#: src/plugins/buildui/gtk/menus.ui:38
 msgid "Run With…"
 msgstr "Kör med…"
 
@@ -3390,7 +3445,7 @@ msgstr "Konfigurera projekt"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Installerar projekt"
@@ -3468,6 +3523,7 @@ msgid "Save changes to palette “%s” before closing?"
 msgstr "Spara ändringar till paletten ”%s” innan stängning?"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:96
+#: src/plugins/editor/gbp-confirm-save-dialog.c:197
 msgid "Close without Saving"
 msgstr "Stäng utan att spara"
 
@@ -3769,7 +3825,7 @@ msgctxt "title"
 msgid "Start New Project"
 msgstr "Starta nytt projekt"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:775
+#: src/plugins/create-project/gbp-create-project-surface.c:781
 msgid "A failure occurred while initializing version control"
 msgstr "Ett fel uppstod under initiering av versionshantering"
 
@@ -4007,6 +4063,7 @@ msgid "Locals"
 msgstr "Lokala variabler"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:369
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:90
 msgid "Parameters"
 msgstr "Parametrar"
 
@@ -4027,7 +4084,7 @@ msgid "Thread"
 msgstr "Tråd"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
-#: src/plugins/editor/gtk/menus.ui:107
+#: src/plugins/editor/gtk/menus.ui:111
 msgid "Frame"
 msgstr "Ram"
 
@@ -4059,13 +4116,218 @@ msgstr "Välj dokumentation…"
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:143
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:147
 msgid "Print…"
 msgstr "Skriv ut…"
 
 #: src/plugins/devhelp/gtk/menus.ui:21
 msgid "New Documentation Page"
 msgstr "Ny dokumentationssida"
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:47
+msgid "Display D-Bus inspector"
+msgstr "Visa D-Bus-inspektör"
+
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+msgid "D-Bus Inspector…"
+msgstr "D-Bus-inspektör…"
+
+#. translators: %s is replaced with the address of the D-Bus bus
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:81
+#, c-format
+msgid "Connected to “%s”"
+msgstr "Ansluten till ”%s”"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:253
+#| msgid "Host System"
+msgid "System"
+msgstr "System"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:255
+#| msgid "Expression"
+msgid "Session"
+msgstr "Session"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:257
+msgid "Other"
+msgstr "Annan"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.c:192
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:130
+msgid "Execute"
+msgstr "Kör"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:12
+#: src/plugins/dspy/libdspy/dspy-tree-view.c:314
+msgid "Object Path"
+msgstr "Objektsökväg"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:38
+msgid "Interface"
+msgstr "Gränssnitt"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:64
+msgid "Method"
+msgstr "Metod"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:145
+#| msgid "%s result\n"
+#| msgid_plural "%s results\n"
+msgid "Result"
+msgstr "Resultat"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:186
+#: src/plugins/glade/gtk/menus.ui:27
+msgid "Copy"
+msgstr "Kopiera"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:198
+msgid "Elapsed Time"
+msgstr "Åtgången tid"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:14
+msgid "Bus Address"
+msgstr "Bussadress"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:64
+msgid "Owner"
+msgstr "Ägare"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:89
+msgid "Process ID"
+msgstr "Process-ID"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+#, c-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "Activatable"
+msgstr "Aktiverbar"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+msgid "Yes"
+msgstr "Ja"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "No"
+msgstr "Nej"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+#, c-format
+msgid "%s: %u"
+msgstr "%s: %u"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+#| msgid "ID"
+msgid "PID"
+msgstr "PID"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:409
+msgid "read/write"
+msgstr "läs/skriv"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:411
+msgid "write-only"
+msgstr "endast skrivning"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:413
+msgid "read-only"
+msgstr "endast läsning"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:528
+msgid "Interfaces"
+msgstr "Gränssnitt"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:531
+msgid "Methods"
+msgstr "Metoder"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:537
+msgid "Properties"
+msgstr "Egenskaper"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:553
+#: src/plugins/glade/gbp-glade-editor-addin.c:79
+msgid "Signals"
+msgstr "Signaler"
+
+#. translators: %s is replaced with the simple D-Bus type string
+#: src/plugins/dspy/libdspy/dspy-signature.c:79
+#, c-format
+msgid "Array of [%s]"
+msgstr "Vektor av [%s]"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:153
+msgid "Access Denied by Peer"
+msgstr "Åtkomst nekades av motpart"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:155
+msgid "Authentication Failed"
+msgstr "Autentisering misslyckades"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:157
+msgid "Operation Timed Out"
+msgstr "Operationens tidsgräns överskreds"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:159
+msgid "Lost Connection to Bus"
+msgstr "Förlorade anslutning till buss"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:161
+msgid "D-Bus Connection Failed"
+msgstr "D-Bus-anslutning misslyckades"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:460
+msgid "Connect"
+msgstr "Anslut"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:461
+msgid "Provide the address of the message bus"
+msgstr "Tillhandahåll adressen för meddelandebussen"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:463
+#: src/plugins/dspy/libdspy/gtk/menus.ui:5
+msgid "Connect to Other Bus"
+msgstr "Anslut till annan buss"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:45
+msgid "Search Bus Names"
+msgstr "Sök bussnamn"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:59
+msgid "Bus Names"
+msgstr "Bussnamn"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:123
+msgid "Select a Bus Name"
+msgstr "Välj ett bussnamn"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:124
+msgid "Select a bus name to introspect the peer."
+msgstr "Välj ett bussnamn för att introspektera motparten."
+
+#: src/plugins/editor/gbp-confirm-save-dialog.c:260
+msgid "There is a file with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are files with unsaved changes. Save changes before closing?"
+msgstr[0] ""
+"Det finns en fil med osparade ändringar. Spara ändringar innan stängning?"
+msgstr[1] ""
+"Det finns filer med osparade ändringar. Spara ändringar innan stängning?"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:27
+msgid "Select the files to save:"
+msgstr "Välj filerna att spara:"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:80
+msgid "If you close without saving, all your changes will be permanently lost."
+msgstr ""
+"Om du stänger utan att spara kommer alla dina ändringar att gå permanent "
+"förlorade."
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
@@ -4090,38 +4352,38 @@ msgid "Go"
 msgstr "Gå"
 
 #: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
-msgid "New Workspace…"
-msgstr "Ny arbetsyta…"
+msgid "New Editor Workspace…"
+msgstr "Ny redigerararbetsyta…"
 
-#: src/plugins/editor/gtk/menus.ui:93
+#: src/plugins/editor/gtk/menus.ui:95
 msgid "New File"
 msgstr "Ny fil"
 
-#: src/plugins/editor/gtk/menus.ui:109
+#: src/plugins/editor/gtk/menus.ui:113
 msgid "Move Left"
 msgstr "Flytta vänster"
 
-#: src/plugins/editor/gtk/menus.ui:113
+#: src/plugins/editor/gtk/menus.ui:117
 msgid "Move Right"
 msgstr "Flytta höger"
 
-#: src/plugins/editor/gtk/menus.ui:124
+#: src/plugins/editor/gtk/menus.ui:128
 msgid "Document"
 msgstr "Dokument"
 
-#: src/plugins/editor/gtk/menus.ui:127
+#: src/plugins/editor/gtk/menus.ui:131 src/plugins/terminal/gtk/menus.ui:34
 msgid "Open in New Frame"
 msgstr "Öppna i ny ram"
 
-#: src/plugins/editor/gtk/menus.ui:133
+#: src/plugins/editor/gtk/menus.ui:137
 msgid "Open in New Workspace"
 msgstr "Öppna i ny arbetsyta"
 
-#: src/plugins/editor/gtk/menus.ui:137
+#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:39
 msgid "Split"
 msgstr "Dela"
 
-#: src/plugins/editor/gtk/menus.ui:164
+#: src/plugins/editor/gtk/menus.ui:168
 msgid "Save _As"
 msgstr "S_para som"
 
@@ -4162,16 +4424,16 @@ msgstr ""
 "Aktivera användningen av eslint för att hitta ytterligare diagnostik i "
 "JavaScript-filer. Detta kan leda till exekvering av kod i ditt projekt."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:915
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
 msgstr "Klona ett projekt med hjälp av flatpak-manifest"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
 msgstr "MANIFEST"
 
 #. translators: %s is replaced with the name of the flatpak manifest
-#: src/plugins/flatpak/gbp-flatpak-clone-widget.c:141
+#: src/plugins/flatpak/gbp-flatpak-clone-widget.c:144
 #, c-format
 msgid "Cloning project %s"
 msgstr "Klonar projektet %s"
@@ -4180,7 +4442,7 @@ msgstr "Klonar projektet %s"
 msgid "Downloading application sources…"
 msgstr "Hämtar programkällor…"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:667
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Misslyckades med att ta bort flatpak-manifest: %s"
@@ -4271,15 +4533,19 @@ msgstr[1] "visa %u till exekveringsmiljöer"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-exekveringsmlijöer"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:842
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:844
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
+msgid "Flatpak"
+msgstr "Flatpak"
 
 #. Translators: %s is replaced with the runtime identifier
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:80
@@ -4334,38 +4600,18 @@ msgstr ""
 msgid "GCC %s Cross-Compiler (System)"
 msgstr "GCC %s korskompilator (System)"
 
-#. translators: %s is replaced with the error string from git
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:405
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
 #, c-format
 msgid ""
-"There was a failure while calculating line changes from git. The exact error "
-"was: %s"
-msgstr ""
-"Ett fel uppstod under beräkning av radändringar från git. Det exakta felet "
-"var: %s"
-
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:666
-#, c-format
-msgid "Repository does not have a working directory."
-msgstr "Arkivet har ingen arbetskatalog."
-
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:677
-#, c-format
-msgid "File is not under control of git working directory."
-msgstr "Fil kontrolleras inte av git-arbetskatalog."
-
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:743
-#, c-format
-msgid "The requested file does not exist within the git index."
-msgstr "Den begärda filen existerar inte i git-indexet."
-
-#: src/plugins/git/gbp-git-remote-callbacks.c:186
-#, c-format
-msgid ""
-"Builder failed to provide appropriate credentials when cloning repository."
+"Builder failed to provide appropriate credentials when cloning the "
+"repository."
 msgstr ""
 "Builder misslyckades med att tillhandahålla lämpliga inloggningsuppgifter "
-"vid kloning av arkiv."
+"vid kloning av arkivet."
+
+#: src/plugins/git/gbp-git-dependency-updater.c:100
+msgid "Updating Git Submodules"
+msgstr "Uppdaterar Git-undermoduler"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:136
 msgid "Network is not available, skipping submodule update"
@@ -4375,18 +4621,27 @@ msgstr "Nätverket ej tillgängligt, hoppar över uppdatering av undermoduler"
 msgid "Initialize git submodules"
 msgstr "Initiera git-undermoduler"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:148
+#: src/plugins/git/gbp-git-vcs.c:206
+msgid "Pushed."
+msgstr "Sändes."
+
+#: src/plugins/git/gbp-git-vcs.c:244
+#, c-format
+msgid "Pushing ref “%s”"
+msgstr "Sänder referensen ”%s”"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "Protokollet ”%s” stöds inte."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:282
+#: src/plugins/git/gbp-git-vcs-cloner.c:224
+msgid "Cloning repository"
+msgstr "Klonar arkiv"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:240
 msgid "A valid Git URL is required"
 msgstr "En giltig Git-URL krävs"
-
-#: src/plugins/glade/gbp-glade-editor-addin.c:79
-msgid "Signals"
-msgstr "Signaler"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
 #: src/plugins/glade/gbp-glade-frame-addin.c:300
@@ -4503,10 +4758,6 @@ msgstr "Öppna förhands_granskning"
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: src/plugins/glade/gtk/menus.ui:27
-msgid "Copy"
-msgstr "Kopiera"
-
 #: src/plugins/glade/gtk/menus.ui:32
 msgid "Paste"
 msgstr "Klistra in"
@@ -4525,7 +4776,7 @@ msgstr "Ångra"
 msgid "Redo"
 msgstr "Gör om"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/project-tree/gtk/menus.ui:33
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/glade/gtk/menus.ui:75
 msgid "UI Designer"
 msgstr "Användargränssnittsdesigner"
 
@@ -4665,12 +4916,12 @@ msgstr "Föreslå kompletteringar från Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Använd Jedi för att tillhandahålla kompletteringar i språket Python"
 
-#: src/plugins/ls/gbp-ls-page.c:285
+#: src/plugins/ls/gbp-ls-page.c:316
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Misslyckades med att läsa in katalog: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:345
+#: src/plugins/ls/gbp-ls-page.c:388
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Katalog"
@@ -4682,6 +4933,18 @@ msgstr "Storlek"
 #: src/plugins/ls/gbp-ls-page.ui:58
 msgid "Modified"
 msgstr "Ändrad"
+
+#: src/plugins/ls/gtk/menus.ui:9
+msgid "Directory Browser"
+msgstr "Katalogbläddrare"
+
+#: src/plugins/ls/gtk/menus.ui:21
+msgid "Switch to Folder"
+msgstr "Växla till mapp"
+
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+msgid "Open Containing Folder"
+msgstr "Öppna innehållande mapp"
 
 #: src/plugins/make/make_plugin.py:110
 msgid "Build project"
@@ -4740,11 +5003,11 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Meson-alternativ"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:194
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr "Ett Meson-baserat projekt är inläst men Ninja kunde inte hittas."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:214
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "Ett Meson-baserat projekt är inläst men meson kunde inte hittas."
 
@@ -4941,12 +5204,12 @@ msgid "An IRC Client for GNOME"
 msgstr "En IRC-klient för GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:131
-msgid "Todo"
-msgstr "Att göra"
+msgid "Sound Recorder"
+msgstr "Ljudinspelare"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:132
-msgid "Task manager for GNOME"
-msgstr "Uppgiftshanterare för GNOME"
+msgid "A simple and modern sound recorder"
+msgstr "En enkel och modern ljudinspelare"
 
 #: src/plugins/notification/ide-notification-addin.c:102
 msgid "Build successful"
@@ -4987,18 +5250,22 @@ msgstr "Hämtar npm-beroenden"
 msgid "Bootstrapping project"
 msgstr "Drar igång projekt"
 
+#: src/plugins/podman/gbp-podman-runtime.c:126
+msgid "Podman"
+msgstr "Podman"
+
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:132
+#: src/plugins/podman/gbp-podman-runtime.c:134
 msgid "Containers/Podman"
 msgstr "Behållare/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
-#: src/plugins/project-tree/gbp-rename-file-popover.c:144
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Det finns redan en mapp med det namnet."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
-#: src/plugins/project-tree/gbp-rename-file-popover.c:147
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Det finns redan en fil med det namnet."
 
@@ -5020,37 +5287,37 @@ msgstr "S_kapa"
 msgid "Files"
 msgstr "Filer"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:676
+#: src/plugins/project-tree/gbp-project-tree-addin.c:677
 #, c-format
 msgid "Copying 1 file"
 msgstr "Kopierar 1 fil"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:679
+#: src/plugins/project-tree/gbp-project-tree-addin.c:680
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopierar %s av %s filer"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:715
+#: src/plugins/project-tree/gbp-project-tree-addin.c:716
 msgid "Failed to copy files"
 msgstr "Misslyckades med att kopiera filer"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:725
+#: src/plugins/project-tree/gbp-project-tree-addin.c:726
 msgid "Files copied"
 msgstr "Filer kopierade"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:729
+#: src/plugins/project-tree/gbp-project-tree-addin.c:730
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "Kopierade %s fil"
 msgstr[1] "Kopierade %s filer"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:921
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
 msgid "Copying files…"
 msgstr "Kopierar filer…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:922
+#: src/plugins/project-tree/gbp-project-tree-addin.c:923
 msgid "Files will be copied in a moment"
 msgstr "Filer kommer att kopieras om ett ögonblick"
 
@@ -5058,40 +5325,36 @@ msgstr "Filer kommer att kopieras om ett ögonblick"
 msgid "Project Tree"
 msgstr "Projektträd"
 
-#: src/plugins/project-tree/gbp-rename-file-popover.c:84
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
 msgstr "Byt namn på %s"
 
-#: src/plugins/project-tree/gtk/menus.ui:7
+#: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New File…"
 msgstr "Ny fil…"
 
-#: src/plugins/project-tree/gtk/menus.ui:12
+#: src/plugins/project-tree/gtk/menus.ui:14
 msgid "New Folder…"
 msgstr "Ny mapp…"
 
-#: src/plugins/project-tree/gtk/menus.ui:23
+#: src/plugins/project-tree/gtk/menus.ui:26
 msgid "Open With…"
 msgstr "Öppna med…"
 
-#: src/plugins/project-tree/gtk/menus.ui:27
+#: src/plugins/project-tree/gtk/menus.ui:30
 msgid "Source Code Editor"
 msgstr "Källkodsredigerare"
 
-#: src/plugins/project-tree/gtk/menus.ui:41
-msgid "Open Containing Folder"
-msgstr "Öppna innehållande mapp"
-
-#: src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/project-tree/gtk/menus.ui:45
 msgid "Open in Terminal"
 msgstr "Öppna i terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:59
 msgid "Move to Trash"
 msgstr "Flytta till papperskorgen"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:65
 msgid "Display Options"
 msgstr "Visningsalternativ"
 
@@ -5134,6 +5397,10 @@ msgstr "Tar bort %s\n"
 #: src/plugins/recent/gbp-recent-section.c:470
 msgid "Removing Files…"
 msgstr "Tar bort filer…"
+
+#: src/plugins/recent/gbp-recent-section.c:472
+msgid "_Close"
+msgstr "S_täng"
 
 #: src/plugins/recent/gbp-recent-section.ui:28
 msgid "Recent Projects"
@@ -5264,6 +5531,120 @@ msgstr "Ingen verktygskedja installerad. Klicka"
 #: src/plugins/rustup/rustup_plugin.py:643
 msgid "to add a new toolchain!"
 msgstr "för att lägga till en ny verktygskedja!"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:344
+msgid "Shell command"
+msgstr "Skalkommando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+msgid ""
+"Cannot spawn terminal in runtime environment because build pipeline is not "
+"initialized"
+msgstr ""
+"Det går inte att starta terminal i exekveringsmiljön eftersom rörledning för "
+"bygge inte är initierad"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+msgid "Cannot spawn process because build pipeline is not yet available"
+msgstr ""
+"Det går inte att starta processen eftersom rörledning för bygge inte är "
+"tillgänglig ännu"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
+msgid "Change Shortcut"
+msgstr "Ändra kortkommando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
+msgid "Title"
+msgstr "Titel"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
+msgid "Shell Command"
+msgstr "Skalkommando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:36
+msgid ""
+"The command will be executed using a shell like “/bin/sh -c\". You may use "
+"variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
+"automatically set for the command."
+msgstr ""
+"Kommandot kommer att köras med ett skal som ”/bin/sh -c\". Du kan använda "
+"variabelexpansion så som ”$SHELL”. Både ”$SRCDIR” och ”$BUILDDIR” ställs "
+"automatiskt in för kommandot."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
+msgid "Command Locality"
+msgstr "Plats för kommando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
+msgid "On Host"
+msgstr "På värd"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
+msgid "In Build Environment"
+msgstr "I byggmiljö"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
+msgid "In Runtime Environment"
+msgstr "I exekveringsmiljö"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
+msgid ""
+"If the directory is not an absolute-path, it will be relative to the source "
+"or build directory depending on the command locality."
+msgstr ""
+"Om katalogen inte är en absolut sökväg kommer den att vara relativ till "
+"källan eller byggkatalogen beroende på kommandots plats."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
+msgid "Close on Exit"
+msgstr "Stäng vid avslut"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
+msgid "If enabled, the terminal page will close after the command executes."
+msgstr ""
+"Om aktiverad kommer terminalsidan att stängas efter att kommandot har körts."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
+msgid "Keyboard Shortcut"
+msgstr "Tangentbordsgenväg"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
+msgid "Change"
+msgstr "Ändra"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
+msgid "Delete Command"
+msgstr "Ta bort kommando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+msgid "Run in host environment"
+msgstr "Kör i värdmiljö"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+msgid "Run in build environment"
+msgstr "Kör i byggmiljö"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+msgid "Run in runtime environment"
+msgstr "Kör i exekveringsmiljö"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:113
+msgid "New command"
+msgstr "Nytt kommando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:134
+msgid "Click + to add an external command"
+msgstr "Klicka på + för att lägga till ett externt kommando"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
+msgid "External Commands"
+msgstr "Externa kommandon"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
+msgid "Command"
+msgstr "Kommando"
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:114
 #, c-format
@@ -5413,7 +5794,7 @@ msgstr "Sök symboler i dokument"
 msgid "Unnamed Symbol"
 msgstr "Namnlös symbol"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:155
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
 msgid "Symbol"
 msgstr "Symbol"
 
@@ -5426,42 +5807,25 @@ msgstr "Välj symbol…"
 msgid "Document Outline"
 msgstr "Dokumentöversikt"
 
-#: src/plugins/sysprof/gbp-sysprof-surface.c:114
-#: src/plugins/sysprof/gtk/menus.ui:20
+#: src/plugins/sysprof/gbp-sysprof-surface.c:56
+#: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Profiler"
 msgstr "Profilerare"
 
-#: src/plugins/sysprof/gbp-sysprof-surface.ui:20
-msgid "Failure"
-msgstr "Misslyckande"
-
-#: src/plugins/sysprof/gbp-sysprof-surface.ui:28
-msgid "_Close"
-msgstr "S_täng"
-
-#. the action:// link is used to run the project
-#: src/plugins/sysprof/gbp-sysprof-surface.ui:49
-msgid ""
-"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
-"profiler</a> from the run menu to begin"
-msgstr ""
-"Välj <a href=\"action://run-manager.run-with-handler::profiler\">Kör med "
-"profilerare</a> från körmenyn för att börja"
-
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:370
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
 msgid "Open Sysprof Capture…"
 msgstr "Öppna Sysprof-fångst…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:379
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof-fångst (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:385
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
 msgid "All Files"
 msgstr "Alla filer"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:492
-#: src/plugins/sysprof/gtk/menus.ui:34 src/plugins/sysprof/gtk/menus.ui:44
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
+#: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Kör med profilerare"
 
@@ -5499,25 +5863,25 @@ msgstr "En valfri kommaseparerad sökväg för att ange PKG_CONFIG_PATH."
 msgid "%s (Sysroot SDK)"
 msgstr "%s (systemrots-SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:66
+#: src/plugins/terminal/gbp-terminal-application-addin.c:96
 msgid "Use terminal interface"
 msgstr "Använd terminalgränssnitt"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:202
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
 msgid "Application Output"
 msgstr "Programutmatning"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:235
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Programmet startades %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:256
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
 msgid "Application exited\r\n"
 msgstr "Program avslutades\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:286
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
 msgstr "Terminal i exekveringsmiljö"
@@ -5555,7 +5919,7 @@ msgid "Unit Tests"
 msgstr "Enhetstester"
 
 #. translators: %s is replaced with the name of the unit test
-#: src/plugins/testui/gbp-test-tree-addin.c:407
+#: src/plugins/testui/gbp-test-tree-addin.c:408
 #, c-format
 msgid "Running test “%s”…"
 msgstr "Kör testet ”%s”…"
@@ -5572,17 +5936,10 @@ msgstr "Vänta medan vi söker igenom ditt projekt"
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXME"
 
-#: src/plugins/vala-pack/ide-vala-completion-item.vala:151
-msgid "Abstract"
-msgstr "Abstrakt"
-
-#: src/plugins/vala-pack/ide-vala-completion-item.vala:153
-msgid "Compact"
-msgstr "Kompakt"
-
-#: src/plugins/vala-pack/ide-vala-completion-item.vala:155
-msgid "Immutable"
-msgstr "Oföränderlig"
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
+msgid "Vagrant"
+msgstr "Vagrant"
 
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
@@ -5594,21 +5951,25 @@ msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik varningar fel"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:53
+#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Kör med Valgrind"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:412
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
 msgid "Branches"
 msgstr "Grenar"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:422
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:476
 msgid "Tags"
 msgstr "Taggar"
 
-#: src/plugins/vcsui/gtk/menus.ui:8
-msgid "Switch Branch"
-msgstr "Växla gren"
+#: src/plugins/vcsui/gtk/menus.ui:7
+msgid "Switch to branch"
+msgstr "Växla till gren"
+
+#: src/plugins/vcsui/gtk/menus.ui:12
+msgid "Push to origin"
+msgstr "Sänd till origin"
 
 #: src/plugins/vim/gb-vim.c:105
 #, c-format
@@ -5717,11 +6078,11 @@ msgstr "Vim"
 msgid "Emulates the Vim text editor"
 msgstr "Emulerar textredigeraren Vim"
 
-#: src/plugins/waf/waf_plugin.py:127
+#: src/plugins/waf/waf_plugin.py:125
 msgid "Building project…"
 msgstr "Bygger projekt…"
 
-#: src/plugins/waf/waf_plugin.py:140
+#: src/plugins/waf/waf_plugin.py:135
 msgid "Installing project…"
 msgstr "Installerar projekt…"
 
@@ -5733,6 +6094,59 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
+
+#~ msgid "Press Ctrl+. to search"
+#~ msgstr "Tryck Ctrl+. för att söka"
+
+#~ msgid "Open file"
+#~ msgstr "Öppna fil"
+
+#~ msgid "New file"
+#~ msgstr "Ny fil"
+
+#~ msgid "New documentation"
+#~ msgstr "Ny dokumentation"
+
+#~ msgid ""
+#~ "There was a failure while calculating line changes from git. The exact "
+#~ "error was: %s"
+#~ msgstr ""
+#~ "Ett fel uppstod under beräkning av radändringar från git. Det exakta "
+#~ "felet var: %s"
+
+#~ msgid "Repository does not have a working directory."
+#~ msgstr "Arkivet har ingen arbetskatalog."
+
+#~ msgid "File is not under control of git working directory."
+#~ msgstr "Fil kontrolleras inte av git-arbetskatalog."
+
+#~ msgid "The requested file does not exist within the git index."
+#~ msgstr "Den begärda filen existerar inte i git-indexet."
+
+#~ msgid "Todo"
+#~ msgstr "Att göra"
+
+#~ msgid "Task manager for GNOME"
+#~ msgstr "Uppgiftshanterare för GNOME"
+
+#~ msgid "Failure"
+#~ msgstr "Misslyckande"
+
+#~ msgid ""
+#~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
+#~ "with profiler</a> from the run menu to begin"
+#~ msgstr ""
+#~ "Välj <a href=\"action://run-manager.run-with-handler::profiler\">Kör med "
+#~ "profilerare</a> från körmenyn för att börja"
+
+#~ msgid "Abstract"
+#~ msgstr "Abstrakt"
+
+#~ msgid "Compact"
+#~ msgstr "Kompakt"
+
+#~ msgid "Immutable"
+#~ msgstr "Oföränderlig"
 
 #~ msgid "org.gnome.Builder"
 #~ msgstr "org.gnome.Builder"
@@ -5746,9 +6160,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgid "If enabled, the project tree will display icons next to each item."
 #~ msgstr ""
 #~ "Om aktiverad kommer projektträdet att visa ikoner intill varje objekt."
-
-#~ msgid "Commands:"
-#~ msgstr "Kommandon:"
 
 #~ msgid "List available subcommands"
 #~ msgstr "Lista tillgängliga underkommandon"
@@ -5822,9 +6233,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "Cu_t"
 #~ msgstr "Klipp u_t"
-
-#~ msgid "Properties"
-#~ msgstr "Egenskaper"
 
 #~ msgid "Display"
 #~ msgstr "Visning"
@@ -5999,9 +6407,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "Use the entry below to execute a command"
 #~ msgstr "Använd raden nedan för att köra ett kommando"
-
-#~ msgid "Command failed: %s"
-#~ msgstr "Kommando misslyckades: %s"
 
 #~ msgid "New…"
 #~ msgstr "Ny…"
@@ -6321,9 +6726,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgid "   Build ran for: %"
 #~ msgstr "   Bygge kördes under: %"
 
-#~ msgid "Failed to locate runtime “%s”"
-#~ msgstr "Misslyckades med att hitta exekveringsmiljö ”%s”"
-
 #~ msgid "The ID of the device to build for"
 #~ msgstr "ID:t för enheten som det byggs för"
 
@@ -6338,9 +6740,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "Number of workers to use when building"
 #~ msgstr "Antal arbetare som används vid bygge"
-
-#~ msgid "N"
-#~ msgstr "N"
 
 #~ msgid "CONFIG_ID"
 #~ msgstr "KONFIGURATIONS-ID"
@@ -6367,9 +6766,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "%s() may only be executed once"
 #~ msgstr "%s() kan bara köras en gång"
-
-#~ msgid "Flatpak"
-#~ msgstr "Flatpak"
 
 #~ msgid "Send to Fpaste.org"
 #~ msgstr "Skicka till Fpaste.org"
@@ -6428,9 +6824,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "Must parse template before expanding"
 #~ msgstr "Måste tolka mall innan expansion"
-
-#~ msgid "Failed to locate template “%s”"
-#~ msgstr "Misslyckades med hitta mall ”%s”"
 
 #~ msgid "If enabled, the sidebar will be visible in the editor workspace."
 #~ msgstr ""
@@ -6740,9 +7133,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgid "Co_ntinue"
 #~ msgstr "_Fortsätt"
 
-#~ msgid "Search for projects"
-#~ msgstr "Sök efter projekt"
-
 #~ msgid "Add a new empty file to your project"
 #~ msgstr "Lägg till en ny tom fil till ditt projekt"
 
@@ -6802,9 +7192,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgstr ""
 #~ "Skriv över avslutande hakparentes, klammerparentes, citattecken och "
 #~ "parentes."
-
-#~ msgid "Snippets (read-only)"
-#~ msgstr "Textsnuttar (skrivskyddade)"
 
 #~ msgid "From remote source code repository"
 #~ msgstr "Från fjärrarkiv för källkod"
@@ -6974,9 +7361,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgstr[0] "%s till"
 #~ msgstr[1] "%s till"
 
-#~ msgid "Search Results"
-#~ msgstr "Sökresultat"
-
 #~ msgid "Open Document"
 #~ msgstr "Öppna dokument"
 
@@ -7012,12 +7396,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "No files provided to load settings for.\n"
 #~ msgstr "Inga filer tillhandahållna att läsa in inställningar för.\n"
-
-# %s är en siffra
-#~ msgid "%s result\n"
-#~ msgid_plural "%s results\n"
-#~ msgstr[0] "%s resultat\n"
-#~ msgstr[1] "%s resultat\n"
 
 #~ msgid "PROJECT_FILE [SEARCH TERMS...]"
 #~ msgstr "PROJEKTFIL [SÖKVILLKOR...]"
