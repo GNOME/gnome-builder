@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.20"/>
-{{if language == "c++"}}
-  <object class="GtkHeaderBar" id="headerbar">
-    <property name="can_focus">False</property>
-    <property name="title">Hello, World!</property>
-    <property name="show_close_button">True</property>
-  </object>
-  <object class="GtkLabel" id="label">
-    <property name="can_focus">False</property>
-    <property name="label">Hello, World!</property>
-    <attributes>
-      <attribute name="weight" value="bold"/>
-      <attribute name="scale" value="2"/>
-    </attributes>
-  </object>
-{{else}}
+  {{if language == "c++"}}
+  <object class="GtkApplicationWindow" id="{{PreFix}}Window">
+  {{else}}
   <template class="{{PreFix}}Window" parent="GtkApplicationWindow">
+  {{end}}
     <property name="default-width">600</property>
     <property name="default-height">300</property>
     <child type="titlebar">
@@ -40,6 +29,9 @@
         </attributes>
       </object>
     </child>
+  {{if language == "c++"}}
+  </object>
+  {{else}}
   </template>
-{{end}}
+  {{end}}
 </interface>

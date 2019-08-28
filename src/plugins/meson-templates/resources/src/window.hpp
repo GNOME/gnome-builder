@@ -2,18 +2,23 @@
 
 #pragma once
 
-#include <gtkmm/builder.h>
-#include <gtkmm/headerbar.h>
-#include <gtkmm/label.h>
-#include <gtkmm/window.h>
+#include <gtkmm.h>
+#include <glibmm/i18n.h>
 
-class {{Prefix}}Window : public Gtk::Window
-{
+class {{Prefix}}Window: public Gtk::ApplicationWindow {
 public:
-	{{Prefix}}Window();
+  // Constructors, are the functions for initializing this class instance. You
+  // may create constructors with difference additional parameter and delegate
+  // the constructor to another.
+  {{Prefix}}Window(BaseObjectType*, const Glib::RefPtr<Gtk::Builder>&);
+  static {{Prefix}}Window *create();
+
+protected:
+  // You may put widgets in public, protected, or private block. But it's
+  // recommended to put them here.
+  Gtk::Label *label;
 
 private:
-	Gtk::HeaderBar *headerbar;
-	Gtk::Label *label;
-	Glib::RefPtr<Gtk::Builder> builder;
+  // You may put functions bound with widgets' signal in any block depending
+  // on your application needs. But it's recommended to put them here.
 };
