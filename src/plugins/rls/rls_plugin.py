@@ -118,20 +118,27 @@ class RlsService(Ide.Object):
             launcher = self._create_launcher()
             launcher.set_clear_env(False)
             sysroot = self._discover_sysroot()
+            print("Sysroot: " + str(sysroot))
             if sysroot:
                 launcher.setenv("SYS_ROOT", sysroot, True)
                 launcher.setenv("LD_LIBRARY_PATH", os.path.join(sysroot, "lib"), True)
             if DEV_MODE:
                 launcher.setenv('RUST_LOG', 'debug', True)
 
-            # Locate the directory of the project and run rls from there.
             workdir = self.get_context().ref_workdir()
+            print("workdir: " + str(workdir.get_path()))
             launcher.set_cwd(workdir.get_path())
 
+            # Locate the directory of the project and run rls from there.
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
             path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
-            if os.path.exists(path_to_rls):
+
+            build_manager = Ide.BuildManager.from_context(self.get_context())
+            pipeline = build_manager.props.pipeline
+            if pipeline.contains_program_in_path('rls', None):
+                path_to_rls = "rls"
+            elif os.path.exists(path_to_rls):
                 old_path = os.getenv('PATH')
                 new_path = os.path.expanduser('~/.cargo/bin')
                 if old_path is not None:
@@ -139,7 +146,6 @@ class RlsService(Ide.Object):
                 launcher.setenv('PATH', new_path, True)
             else:
                 path_to_rls = "rls"
-
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
             # so it does not require any command line options.
             launcher.push_argv(path_to_rls)
@@ -157,6 +163,9 @@ class RlsService(Ide.Object):
         We can use the stdin/stdout to create a channel for our
         LspClient.
         """
+        print(subprocess)
+        print(dir(subprocess))
+
         stdin = subprocess.get_stdin_pipe()
         stdout = subprocess.get_stdout_pipe()
         io_stream = Gio.SimpleIOStream.new(stdout, stdin)
@@ -182,12 +191,21 @@ class RlsService(Ide.Object):
         prebuilt our dependencies.
         """
         flags = Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
-        if not DEV_MODE:
-            flags |= Gio.SubprocessFlags.STDERR_SILENCE
-        launcher = Ide.SubprocessLauncher()
+        #if not DEV_MODE:
+        #    flags |= Gio.SubprocessFlags.STDERR_SILENCE
+
+        context = self.get_context()
+        build_manager = Ide.BuildManager.from_context(context)
+        pipeline = build_manager.props.pipeline
+
+        if pipeline.contains_program_in_path('rls', None):
+            launcher = pipeline.get_runtime().create_launcher()
+            launcher.set_run_on_host(False)
+            print("running rls from flatpak runtime!")
+        else:
+            launcher = Ide.SubprocessLauncher()
+            launcher.set_run_on_host(True)
         launcher.set_flags(flags)
-        launcher.set_cwd(GLib.get_home_dir())
-        launcher.set_run_on_host(True)
         return launcher
 
     def _discover_sysroot(self):
