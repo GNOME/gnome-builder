@@ -120,10 +120,10 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('template').assign_string(self.id)
 
         name = params['name'].get_string().lower()
-        name_ = name.lower().replace('-', '_')
+        name_ = ''.join([c if c.isalnum() else '_' for c in name])
         scope.get('name').assign_string(name)
         scope.get('name_').assign_string(name_)
-        scope.get('NAME').assign_string(name.upper().replace('-','_'))
+        scope.get('NAME').assign_string(name_.upper())
 
         if 'app-id' in params:
             appid = params['app-id'].get_string()
@@ -133,10 +133,10 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('appid').assign_string(appid)
         scope.get('appid_path').assign_string(appid_path)
 
-        prefix = name if not name.endswith('-glib') else name[:-5]
-        PREFIX = prefix.upper().replace('-','_')
-        prefix_ = prefix.lower().replace('-','_')
-        PreFix = ''.join([word.capitalize() for word in prefix.lower().split('-')])
+        prefix = name_ if not name_.endswith('_glib') else name_[:-5]
+        PREFIX = prefix.upper()
+        prefix_ = prefix.lower()
+        PreFix = ''.join([word.capitalize() for word in prefix.lower().split('_')])
 
         scope.get('prefix').assign_string(prefix)
         scope.get('Prefix').assign_string(prefix.capitalize())
