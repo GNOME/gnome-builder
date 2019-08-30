@@ -978,7 +978,12 @@ void
 ide_editor_search_set_search_text (IdeEditorSearch *self,
                                    const gchar     *search_text)
 {
+  g_autofree gchar *unescaped = NULL;
+
   g_return_if_fail (IDE_IS_EDITOR_SEARCH (self));
+
+  if (!ide_editor_search_get_regex_enabled (self))
+    search_text = unescaped = gtk_source_utils_unescape_search_text (search_text);
 
   gtk_source_search_settings_set_search_text (self->settings, search_text);
 
