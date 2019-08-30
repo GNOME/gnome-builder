@@ -502,7 +502,8 @@ ide_transfer_notification_notify_completed (IdeTransfer     *self,
   g_assert (IDE_IS_TRANSFER (self));
   g_assert (IDE_IS_NOTIFICATION (notif));
 
-  ide_notification_withdraw_in_seconds (notif, 10);
+  if (ide_transfer_get_completed (self))
+    ide_notification_withdraw_in_seconds (notif, -1);
 }
 
 /**
