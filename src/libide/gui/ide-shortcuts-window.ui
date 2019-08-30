@@ -461,6 +461,13 @@
               <child>
                 <object class="GtkShortcutsShortcut">
                   <property name="visible">true</property>
+                  <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;F7</property>
+                   <property name="title" translatable="yes" context="shortcut window">Rebuild</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkShortcutsShortcut">
+                  <property name="visible">true</property>
                   <property name="accelerator">&lt;ctrl&gt;F5</property>
                   <property name="title" translatable="yes" context="shortcut window">Run</property>
                 </object>
