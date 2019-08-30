@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="gbp-glade-view-document-menu">
+  <menu id="gbp-glade-page-document-menu">
     <section id="glade-document-section">
       <attribute name="label" translatable="yes">Glade</attribute>
       <item>
