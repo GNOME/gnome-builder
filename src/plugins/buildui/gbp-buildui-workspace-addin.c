@@ -229,6 +229,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   GbpBuilduiWorkspaceAddin *self = (GbpBuilduiWorkspaceAddin *)addin;
   IdeConfigManager *config_manager;
   PangoAttrList *small_attrs = NULL;
+  DzlShortcutController *shortcuts;
   IdeEditorSidebar *sidebar;
   IdeBuildManager *build_manager;
   IdeWorkbench *workbench;
@@ -247,6 +248,18 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
+
+  shortcuts = dzl_shortcut_controller_find (GTK_WIDGET (workspace));
+  dzl_shortcut_controller_add_command_action (shortcuts,
+                                              "org.gnome.builder.buildui.build",
+                                              "<Control>F7",
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              "build-manager.build");
+  dzl_shortcut_controller_add_command_action (shortcuts,
+                                              "org.gnome.builder.buildui.rebuild",
+                                              "<Control><Shift>F7",
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              "build-manager.rebuild");
 
   headerbar = ide_workspace_get_header_bar (workspace);
   omnibar = IDE_OMNI_BAR (gtk_header_bar_get_custom_title (GTK_HEADER_BAR (headerbar)));
