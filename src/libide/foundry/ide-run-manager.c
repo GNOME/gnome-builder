@@ -854,7 +854,10 @@ ide_run_manager_add_handler (IdeRunManager  *self,
                                    NC_("shortcut window", title),
                                    NULL);
 
-  dzl_shortcut_theme_set_accel_for_action (theme, action_name, accel, DZL_SHORTCUT_PHASE_DISPATCH);
+  dzl_shortcut_theme_set_accel_for_action (theme,
+                                           action_name,
+                                           accel,
+                                           DZL_SHORTCUT_PHASE_GLOBAL | DZL_SHORTCUT_PHASE_CAPTURE);
 
   if (self->handler == NULL)
     self->handler = info;
