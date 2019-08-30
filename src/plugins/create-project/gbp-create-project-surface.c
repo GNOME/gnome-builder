@@ -250,6 +250,16 @@ gbp_create_project_surface_name_changed (GbpCreateProjectSurface *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
 
+static guint
+count_chars (const gchar *str,
+             gunichar     ch)
+{
+  guint count = 0;
+  for (; *str; str = g_utf8_next_char (str))
+    count += *str == ch;
+  return count;
+}
+
 static void
 gbp_create_project_surface_app_id_changed (GbpCreateProjectSurface *self,
                                           GtkEntry               *entry)
@@ -261,7 +271,8 @@ gbp_create_project_surface_app_id_changed (GbpCreateProjectSurface *self,
 
   app_id = gtk_entry_get_text (entry);
 
-  if (!(ide_str_empty0 (app_id) || g_application_id_is_valid (app_id)))
+  if (!(ide_str_empty0 (app_id) ||
+        (g_application_id_is_valid (app_id) && count_chars (app_id, '.') >= 2)))
     {
       g_object_set (self->app_id_entry,
                     "secondary-icon-name", "dialog-warning-symbolic",
