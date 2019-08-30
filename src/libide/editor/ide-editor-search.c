@@ -1559,17 +1559,21 @@ ide_editor_search_move (IdeEditorSearch          *self,
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
+  GtkTextIter begin, end;
+  gboolean selected;
 
   g_return_if_fail (IDE_IS_EDITOR_SEARCH (self));
   g_return_if_fail (self->view != NULL);
   g_return_if_fail (direction >= 0);
-  g_return_if_fail (direction <= IDE_EDITOR_SEARCH_BACKWARD);
+  g_return_if_fail (direction <= IDE_EDITOR_SEARCH_AFTER_REPLACE);
 
   context = ide_editor_search_acquire_context (self);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view));
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  selected = gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  gtk_text_iter_order (&begin, &end);
 
   if (self->reverse)
     {
@@ -1585,7 +1589,10 @@ ide_editor_search_move (IdeEditorSearch          *self,
   switch (direction)
     {
     case IDE_EDITOR_SEARCH_FORWARD:
-      gtk_text_iter_forward_char (&iter);
+      if (!selected)
+        gtk_text_iter_forward_char (&iter);
+      else
+        iter = end;
       gtk_source_search_settings_set_wrap_around (self->settings, FALSE);
       maybe_flip_selection_bounds (self, buffer, FALSE);
       gtk_source_search_context_forward_async (context,
@@ -1596,7 +1603,12 @@ ide_editor_search_move (IdeEditorSearch          *self,
       break;
 
     case IDE_EDITOR_SEARCH_NEXT:
-      gtk_text_iter_forward_char (&iter);
+      if (!selected)
+        gtk_text_iter_forward_char (&iter);
+      else
+        iter = end;
+      G_GNUC_FALLTHROUGH;
+    case IDE_EDITOR_SEARCH_AFTER_REPLACE:
       gtk_source_search_settings_set_wrap_around (self->settings, TRUE);
       gtk_source_search_context_forward_async (context,
                                                &iter,
@@ -1606,7 +1618,10 @@ ide_editor_search_move (IdeEditorSearch          *self,
       break;
 
     case IDE_EDITOR_SEARCH_BACKWARD:
-      gtk_text_iter_backward_char (&iter);
+      if (!self)
+        gtk_text_iter_backward_char (&iter);
+      else
+        iter = begin;
       gtk_source_search_settings_set_wrap_around (self->settings, FALSE);
       maybe_flip_selection_bounds (self, buffer, TRUE);
       gtk_source_search_context_backward_async (context,
@@ -1617,7 +1632,10 @@ ide_editor_search_move (IdeEditorSearch          *self,
       break;
 
     case IDE_EDITOR_SEARCH_PREVIOUS:
-      gtk_text_iter_backward_char (&iter);
+      if (!selected)
+        gtk_text_iter_backward_char (&iter);
+      else
+        iter = begin;
       gtk_source_search_settings_set_wrap_around (self->settings, TRUE);
       gtk_source_search_context_backward_async (context,
                                                 &iter,
@@ -1671,7 +1689,7 @@ ide_editor_search_replace (IdeEditorSearch *self)
   gtk_source_search_context_replace (context, &begin, &end, unescaped, -1, NULL);
 
   /* Now scan to the next search result */
-  ide_editor_search_move (self, IDE_EDITOR_SEARCH_NEXT);
+  ide_editor_search_move (self, IDE_EDITOR_SEARCH_AFTER_REPLACE);
 
   ide_editor_search_release_context (self);
 }
