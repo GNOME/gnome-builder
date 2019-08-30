@@ -1642,6 +1642,7 @@ ide_editor_search_move (IdeEditorSearch          *self,
 void
 ide_editor_search_replace (IdeEditorSearch *self)
 {
+  g_autofree gchar *unescaped = NULL;
   GtkSourceSearchContext *context;
   const gchar *replacement;
   GtkTextBuffer *buffer;
@@ -1658,10 +1659,11 @@ ide_editor_search_replace (IdeEditorSearch *self)
   gtk_text_iter_order (&begin, &end);
 
   replacement = self->replacement_text ? self->replacement_text : "";
+  unescaped = gtk_source_utils_unescape_search_text (replacement);
   context = ide_editor_search_acquire_context (self);
 
   /* Replace the current word */
-  gtk_source_search_context_replace (context, &begin, &end, replacement, -1, NULL);
+  gtk_source_search_context_replace (context, &begin, &end, unescaped, -1, NULL);
 
   /* Now scan to the next search result */
   ide_editor_search_move (self, IDE_EDITOR_SEARCH_NEXT);
@@ -1683,14 +1685,16 @@ ide_editor_search_replace_all (IdeEditorSearch *self)
 {
   GtkSourceSearchContext *context;
   const gchar *replacement;
+  g_autofree gchar *unescaped = NULL;
 
   g_return_if_fail (IDE_IS_EDITOR_SEARCH (self));
 
   /* TODO: We should set the busy bit and do this incrementally */
 
   replacement = self->replacement_text ? self->replacement_text : "";
+  unescaped = gtk_source_utils_unescape_search_text (replacement);
   context = ide_editor_search_acquire_context (self);
-  gtk_source_search_context_replace_all (context, replacement, -1, NULL);
+  gtk_source_search_context_replace_all (context, unescaped, -1, NULL);
   ide_editor_search_release_context (self);
 }
 
