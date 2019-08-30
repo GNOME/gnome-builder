@@ -127,8 +127,20 @@ ide_notifications_button_notify_has_progress_cb (IdeNotificationsButton *self,
    */
   if (GTK_IS_REVEALER (parent))
     {
-      gtk_revealer_set_reveal_child (GTK_REVEALER (parent),
-                                     ide_notifications_get_has_progress (notifications));
+      if (ide_notifications_get_has_progress (notifications))
+        {
+          gtk_revealer_set_reveal_child (GTK_REVEALER (parent), TRUE);
+        }
+      else
+        {
+          GtkPopover *popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (self));
+
+          if (gtk_widget_get_visible (GTK_WIDGET (popover)))
+            gtk_widget_hide (GTK_WIDGET (popover));
+
+          gtk_revealer_set_reveal_child (GTK_REVEALER (parent), FALSE);
+        }
+
       return;
     }
 
