@@ -47,12 +47,16 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="wrap">True</property>
-            <property name="width_chars">50</property>
-            <property name="max_width_chars">50</property>
+            <property name="ellipsize">end</property>
+            <property name="width_chars">55</property>
+            <property name="max_width_chars">55</property>
             <property name="xalign">0</property>
             <style>
               <class name="body"/>
             </style>
+            <attributes>
+              <attribute name="font-features" value="tnum"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">0</property>
