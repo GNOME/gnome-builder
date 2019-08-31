@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-05-27 19:18+0000\n"
-"PO-Revision-Date: 2019-06-02 21:29+0200\n"
+"POT-Creation-Date: 2019-08-30 23:40+0000\n"
+"PO-Revision-Date: 2019-08-31 12:58+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:125
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:148
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -836,7 +836,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Läs in eller generera en palett med inställningarna"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4933
+#: src/libide/sourceview/ide-source-view.c:4944
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -891,7 +891,7 @@ msgstr "Misslyckades med att spara utkast: %s"
 msgid "Untitled"
 msgstr "Namnlös"
 
-#: src/libide/core/ide-transfer.c:548
+#: src/libide/core/ide-transfer.c:549
 #: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
@@ -1289,7 +1289,7 @@ msgstr "Upptäckte enheten ”%s”"
 msgid "Devices"
 msgstr "Enheter"
 
-#: src/libide/foundry/ide-device-manager.c:725
+#: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Det går inte att distribuera till enhet, rörledning för bygge är inte "
@@ -1424,12 +1424,12 @@ msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Bygg och kör"
 
-#: src/libide/foundry/ide-run-manager.c:1012
-#: src/libide/foundry/ide-run-manager.c:1078
+#: src/libide/foundry/ide-run-manager.c:1015
+#: src/libide/foundry/ide-run-manager.c:1081
 msgid "Failed to locate a build target"
 msgstr "Misslyckades med att hitta ett byggmål"
 
-#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
+#: src/libide/foundry/ide-run-manager.c:1217 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/gtk/menus.ui:30
 msgid "Run"
 msgstr "Kör"
@@ -1692,7 +1692,7 @@ msgstr "Visa hjälpfönstret"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:524
+#: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Inställningar"
@@ -1812,7 +1812,7 @@ msgstr "Kortkommandon för fönster"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:513
+#: src/libide/gui/ide-shortcuts-window.ui:520
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
@@ -2363,7 +2363,7 @@ msgid "Workspace shortcuts"
 msgstr "Kortkommandon för arbetsyta"
 
 #: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:581
+#: src/libide/gui/ide-shortcuts-window.ui:588
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Sök"
@@ -2379,34 +2379,34 @@ msgid "Editor Shortcuts"
 msgstr "Kortkommandon för redigerare"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:517
+#: src/libide/gui/ide-shortcuts-window.ui:524
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Global sökning"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:531
+#: src/libide/gui/ide-shortcuts-window.ui:538
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Kommandorad"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/libide/gui/ide-shortcuts-window.ui:545
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:552
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal i exekveringsmiljö för bygge"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/libide/gui/ide-shortcuts-window.ui:559
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
@@ -2467,13 +2467,13 @@ msgid "Clear highlight"
 msgstr "Rensa färgmarkering"
 
 #: src/libide/gui/ide-shortcuts-window.ui:213
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiera och klistra in"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:573
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiera markerad text till urklipp"
@@ -2484,7 +2484,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Klipp ut markerad text till urklipp"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Klistra in text från urklipp"
@@ -2660,45 +2660,50 @@ msgstr "Bygg"
 
 #: src/libide/gui/ide-shortcuts-window.ui:465
 msgctxt "shortcut window"
+msgid "Rebuild"
+msgstr "Bygg om"
+
+#: src/libide/gui/ide-shortcuts-window.ui:472
+msgctxt "shortcut window"
 msgid "Run"
 msgstr "Kör"
 
-#: src/libide/gui/ide-shortcuts-window.ui:472
+#: src/libide/gui/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gester för styrplatta"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Flytta sida till höger"
 
-#: src/libide/gui/ide-shortcuts-window.ui:488
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Trefingersvep åt höger"
 
-#: src/libide/gui/ide-shortcuts-window.ui:497
+#: src/libide/gui/ide-shortcuts-window.ui:504
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Flytta sida till vänster"
 
-#: src/libide/gui/ide-shortcuts-window.ui:498
+#: src/libide/gui/ide-shortcuts-window.ui:505
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Trefingersvep åt vänster"
 
-#: src/libide/gui/ide-shortcuts-window.ui:509
+#: src/libide/gui/ide-shortcuts-window.ui:516
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Kortkommandon för terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:586
+#: src/libide/gui/ide-shortcuts-window.ui:593
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Hitta text i terminal"
@@ -2809,32 +2814,32 @@ msgstr "Zooma _ut"
 msgid "Reset"
 msgstr "Återställ"
 
-#: src/libide/sourceview/ide-source-view.c:4382
+#: src/libide/sourceview/ide-source-view.c:4393
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4384
+#: src/libide/sourceview/ide-source-view.c:4395
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: src/libide/sourceview/ide-source-view.c:4502
+#: src/libide/sourceview/ide-source-view.c:4513
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
-#: src/libide/sourceview/ide-source-view.c:4932
+#: src/libide/sourceview/ide-source-view.c:4943
 msgid "Rename symbol"
 msgstr "Byt namn på symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5167
+#: src/libide/sourceview/ide-source-view.c:5178
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rad %u, Kolumn %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5193
+#: src/libide/sourceview/ide-source-view.c:5204
 msgid "No references were found"
 msgstr "Inga referenser hittades"
 
@@ -3278,7 +3283,7 @@ msgid "Export Bundle"
 msgstr "Exportera paket"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:349
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:362
 msgid "Build Issues"
 msgstr "Byggfel"
 
@@ -3307,7 +3312,7 @@ msgstr "Rörledning för bygge är tom"
 msgid "Build Targets"
 msgstr "Byggmål"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:358
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:371
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Bygginställningar"
@@ -3760,16 +3765,16 @@ msgstr "En mapp med det namnet finns redan"
 msgid "Your project will be created within %s."
 msgstr "Ditt projekt kommer att skapas i %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:268
+#: src/plugins/create-project/gbp-create-project-surface.c:279
 msgid "Application ID is not valid."
 msgstr "Program-ID är inte giltigt."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:612
+#: src/plugins/create-project/gbp-create-project-surface.c:623
 msgctxt "title"
 msgid "Start New Project"
 msgstr "Starta nytt projekt"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:775
+#: src/plugins/create-project/gbp-create-project-surface.c:786
 msgid "A failure occurred while initializing version control"
 msgstr "Ett fel uppstod under initiering av versionshantering"
 
@@ -4940,14 +4945,6 @@ msgstr "Polari"
 msgid "An IRC Client for GNOME"
 msgstr "En IRC-klient för GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
-msgid "Todo"
-msgstr "Att göra"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
-msgid "Task manager for GNOME"
-msgstr "Uppgiftshanterare för GNOME"
-
 #: src/plugins/notification/ide-notification-addin.c:102
 msgid "Build successful"
 msgstr "Bygge lyckades"
@@ -4993,12 +4990,12 @@ msgid "Containers/Podman"
 msgstr "Behållare/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
-#: src/plugins/project-tree/gbp-rename-file-popover.c:144
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Det finns redan en mapp med det namnet."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
-#: src/plugins/project-tree/gbp-rename-file-popover.c:147
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Det finns redan en fil med det namnet."
 
@@ -5058,7 +5055,7 @@ msgstr "Filer kommer att kopieras om ett ögonblick"
 msgid "Project Tree"
 msgstr "Projektträd"
 
-#: src/plugins/project-tree/gbp-rename-file-popover.c:84
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
 msgstr "Byt namn på %s"
@@ -5594,7 +5591,7 @@ msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik varningar fel"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:53
+#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Kör med Valgrind"
 
@@ -5733,6 +5730,12 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
+
+#~ msgid "Todo"
+#~ msgstr "Att göra"
+
+#~ msgid "Task manager for GNOME"
+#~ msgstr "Uppgiftshanterare för GNOME"
 
 #~ msgid "org.gnome.Builder"
 #~ msgstr "org.gnome.Builder"
