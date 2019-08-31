@@ -357,11 +357,11 @@ ide_notification_list_box_row_set_compact (IdeNotificationListBoxRow *self,
 
       g_object_unref (self->buttons);
 
-      gtk_label_set_width_chars (self->title, self->compact ? 35 : 50);
-      gtk_label_set_max_width_chars (self->title, self->compact ? 35 : 50);
+      gtk_label_set_width_chars (self->title, self->compact ? 40 : 55);
+      gtk_label_set_max_width_chars (self->title, self->compact ? 40 : 55);
 
-      gtk_label_set_width_chars (self->body, self->compact ? 35 : 50);
-      gtk_label_set_max_width_chars (self->body, self->compact ? 35 : 50);
+      gtk_label_set_width_chars (self->body, self->compact ? 40 : 55);
+      gtk_label_set_max_width_chars (self->body, self->compact ? 40 : 55);
 
       if (self->notification != NULL)
         {
