@@ -244,8 +244,13 @@ gbp_glade_page_agree_to_close_async (IdePage       *view,
     {
       if (!_gbp_glade_page_save (self, &error))
         {
-          ide_task_return_error (task, g_steal_pointer (&error));
-          return;
+          if (error != NULL)
+            {
+              ide_task_return_error (task, g_steal_pointer (&error));
+              return;
+            }
+
+          /* No was clicked on an internal glade save dialog, fallthrough */
         }
     }
 
