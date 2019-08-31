@@ -54,6 +54,9 @@
             <style>
               <class name="body"/>
             </style>
+            <attributes>
+              <attribute name="font-features" value="tnum"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">0</property>
