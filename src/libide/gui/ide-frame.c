@@ -1061,7 +1061,9 @@ ide_frame_close_page_cb (GObject      *object,
 
   if (!ide_page_agree_to_close_finish (page, result, &error))
     {
-      g_message ("%s", error->message);
+      g_message ("%s does not agree to close: %s",
+                 G_OBJECT_TYPE_NAME (page),
+                 error ? error->message : "No reason");
       return;
     }
 
