@@ -67,7 +67,7 @@ static gboolean
 is_preferred (const gchar *name)
 {
   return 0 == strcasecmp (name, "c") ||
-         0 == strcasecmp (name, "vala") ||
+         0 == strcasecmp (name, "rust") ||
          0 == strcasecmp (name, "javascript") ||
          0 == strcasecmp (name, "python");
 }
