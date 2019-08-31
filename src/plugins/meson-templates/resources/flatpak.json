@@ -3,6 +3,11 @@
     "runtime": "org.gnome.Platform",
     "runtime-version": "3.32",
     "sdk": "org.gnome.Sdk",
+{{if language == "rust"}}
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.rust-stable"
+    ],
+{{end}}
     "command": "{{exec_name}}",
     "finish-args": [
         "--share=network",
@@ -14,13 +19,20 @@
         "--talk-name=ca.desrt.dconf",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
     ],
+{{if language == "rust"}}
     "build-options": {
-        "cflags": "-O2 -g",
-        "cxxflags": "-O2 -g",
-        "env": {
-            "V": "1"
+        "append-path" : "/usr/lib/sdk/rust-stable/bin",
+        "build-args" : [
+            "--share=network"
+        ],
+        "env" : {
+            "RUSTFLAGS" : "--remap-path-prefix =../ --error-format=human",
+            "CARGO_HOME" : "/run/build/{{name}}/cargo",
+            "RUST_BACKTRACE" : "1",
+            "RUST_LOG" : "{{name}}=debug"
         }
     },
+{{end}}
     "cleanup": [
         "/include",
         "/lib/pkgconfig",
