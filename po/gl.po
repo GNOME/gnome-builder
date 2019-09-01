@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-08-11 12:19+0000\n"
-"PO-Revision-Date: 2019-08-26 12:53+0200\n"
+"POT-Creation-Date: 2019-08-31 22:03+0000\n"
+"PO-Revision-Date: 2019-09-01 23:09+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -895,7 +895,7 @@ msgstr "Produciuse un fallo ao gardar o borrador: %s"
 msgid "Untitled"
 msgstr "Sen título"
 
-#: src/libide/core/ide-transfer.c:548
+#: src/libide/core/ide-transfer.c:549
 #: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
@@ -1432,12 +1432,12 @@ msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construír e executar"
 
-#: src/libide/foundry/ide-run-manager.c:1013
-#: src/libide/foundry/ide-run-manager.c:1079
+#: src/libide/foundry/ide-run-manager.c:1016
+#: src/libide/foundry/ide-run-manager.c:1082
 msgid "Failed to locate a build target"
 msgstr "Produciuse un fallo ao localizar o obxectivo de construción"
 
-#: src/libide/foundry/ide-run-manager.c:1215 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1218 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Executar"
@@ -1700,7 +1700,7 @@ msgstr "Mostrar a xanela de axuda"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:531
+#: src/libide/gui/ide-shortcuts-window.ui:538
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
@@ -1817,7 +1817,7 @@ msgstr "Atallos da xanela"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:520
+#: src/libide/gui/ide-shortcuts-window.ui:527
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
@@ -2379,7 +2379,7 @@ msgid "Workspace shortcuts"
 msgstr "Atallos do espazo de traballo"
 
 #: src/libide/gui/ide-search-button.c:44
-#: src/libide/gui/ide-shortcuts-window.ui:588
+#: src/libide/gui/ide-shortcuts-window.ui:595
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Buscar"
@@ -2395,34 +2395,34 @@ msgid "Editor Shortcuts"
 msgstr "Editor de atallos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:524
+#: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Busca global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/libide/gui/ide-shortcuts-window.ui:545
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de ordes"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:552
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/libide/gui/ide-shortcuts-window.ui:559
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tempo de execución de construción"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:566
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atallos de teclado"
@@ -2483,13 +2483,13 @@ msgid "Clear highlight"
 msgstr "Limpar realzado"
 
 #: src/libide/gui/ide-shortcuts-window.ui:213
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar e pegar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar o texto seleccionado ao portapapeis"
@@ -2500,7 +2500,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Cortar o texto seleccionado ao portapapeis"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:587
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto desde o portapapeis"
@@ -2681,45 +2681,50 @@ msgstr "Construír"
 
 #: src/libide/gui/ide-shortcuts-window.ui:472
 msgctxt "shortcut window"
+msgid "Rebuild"
+msgstr "Reconstruír"
+
+#: src/libide/gui/ide-shortcuts-window.ui:479
+msgctxt "shortcut window"
 msgid "Run"
 msgstr "Executar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:479
+#: src/libide/gui/ide-shortcuts-window.ui:486
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfilador"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Xestos da área táctil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:494
+#: src/libide/gui/ide-shortcuts-window.ui:501
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Mover páxina á dereita"
 
-#: src/libide/gui/ide-shortcuts-window.ui:495
+#: src/libide/gui/ide-shortcuts-window.ui:502
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Deslizamento de tres dedos á dereita"
 
-#: src/libide/gui/ide-shortcuts-window.ui:504
+#: src/libide/gui/ide-shortcuts-window.ui:511
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Mover páxina á esquerda"
 
-#: src/libide/gui/ide-shortcuts-window.ui:505
+#: src/libide/gui/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Deslizamento de tres dedos á esquerda"
 
-#: src/libide/gui/ide-shortcuts-window.ui:516
+#: src/libide/gui/ide-shortcuts-window.ui:523
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atallos de terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:593
+#: src/libide/gui/ide-shortcuts-window.ui:600
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Bucar texto na terminal"
@@ -3337,7 +3342,7 @@ msgid "Export Bundle"
 msgstr "Exportar paquete"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:355
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:368
 msgid "Build Issues"
 msgstr "Problemas na construción"
 
@@ -3366,7 +3371,7 @@ msgstr "A tubería de construción está baleira"
 msgid "Build Targets"
 msgstr "Obxectivos da construción"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:364
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:377
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Preferencias de construción"
@@ -3822,16 +3827,16 @@ msgstr "Xa existe un cartafol con ese nome"
 msgid "Your project will be created within %s."
 msgstr "O seu proxecto crearase en %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:268
+#: src/plugins/create-project/gbp-create-project-surface.c:279
 msgid "Application ID is not valid."
 msgstr "O ID de aplicativo non é valido."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:612
+#: src/plugins/create-project/gbp-create-project-surface.c:623
 msgctxt "title"
 msgid "Start New Project"
 msgstr "Comezar novo proxecto"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:781
+#: src/plugins/create-project/gbp-create-project-surface.c:792
 msgid "A failure occurred while initializing version control"
 msgstr "Produciuse un fallo ao inicializar o control de versións"
 
@@ -4709,23 +4714,23 @@ msgctxt "shortcut window"
 msgid "Redo the next command"
 msgstr "Refacer a seguinte orde"
 
-#: src/plugins/glade/gbp-glade-page.c:478
+#: src/plugins/glade/gbp-glade-page.c:483
 msgid "Switch to selection mode"
 msgstr "Trocar ao modo selección"
 
-#: src/plugins/glade/gbp-glade-page.c:479
+#: src/plugins/glade/gbp-glade-page.c:484
 msgid "Switch to drag-resize mode"
 msgstr "Trocar ao modo arrastrar-redimensionar"
 
-#: src/plugins/glade/gbp-glade-page.c:480
+#: src/plugins/glade/gbp-glade-page.c:485
 msgid "Switch to margin editor"
 msgstr "Trocar ao editor de marxe"
 
-#: src/plugins/glade/gbp-glade-page.c:481
+#: src/plugins/glade/gbp-glade-page.c:486
 msgid "Switch to alignment editor"
 msgstr "Trocar ao editor de aliñamento"
 
-#: src/plugins/glade/gbp-glade-page.c:486
+#: src/plugins/glade/gbp-glade-page.c:491
 msgid "Unnamed Glade project"
 msgstr "Proxecto de Glade sen nome"
 
@@ -4973,27 +4978,27 @@ msgstr "Aplicativo de GNOME"
 msgid "Create a new GNOME application"
 msgstr "Crear un novo aplicativo de GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:317
+#: src/plugins/meson-templates/meson_templates.py:324
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:326
 msgid "Create a new project with a shared library"
 msgstr "Crea un novo proxecto con unha biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:336
+#: src/plugins/meson-templates/meson_templates.py:343
 msgid "Empty Project"
 msgstr "Proxecto baleiro"
 
-#: src/plugins/meson-templates/meson_templates.py:338
+#: src/plugins/meson-templates/meson_templates.py:345
 msgid "Create a new empty project"
 msgstr "Crear un novo proxecto baleiro"
 
-#: src/plugins/meson-templates/meson_templates.py:351
+#: src/plugins/meson-templates/meson_templates.py:358
 msgid "Command Line Tool"
 msgstr "Ferramenta de liña de ordes"
 
-#: src/plugins/meson-templates/meson_templates.py:353
+#: src/plugins/meson-templates/meson_templates.py:360
 msgid "Create a new command line project"
 msgstr "Crear un novo proxecto de liña de ordes"
 
