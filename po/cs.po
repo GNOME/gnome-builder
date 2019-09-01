@@ -2623,22 +2623,22 @@ msgstr "Přesunout se na definici symbolu"
 #: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
-msgstr "Posunout se výše pohledem na soubor"
+msgstr "Posunout se výřezem po souboru výš"
 
 #: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
-msgstr "Posunout se níže pohledem na soubor"
+msgstr "Posunout se výřezem po souboru níž"
 
 #: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
-msgstr "Posunout se na konec pohledem na soubor"
+msgstr "Posunout se výřezem po souboru na konec"
 
 #: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
-msgstr "Posunout se na začátek pohledem na soubor"
+msgstr "Posunout se výřezem po souboru na začátek"
 
 #: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
