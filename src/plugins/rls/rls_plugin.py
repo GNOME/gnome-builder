@@ -130,21 +130,17 @@ class RlsService(Ide.Object):
             # Locate the directory of the project and run rls from there.
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
-            path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
-
             build_manager = Ide.BuildManager.from_context(self.get_context())
             pipeline = build_manager.props.pipeline
             if pipeline.contains_program_in_path('rls', None):
                 path_to_rls = "rls"
-                launcher.setenv('PATH', '/usr/lib/sdk/rust-stable/bin', True)
-            elif os.path.exists(path_to_rls):
+            elif os.path.exists(os.path.expanduser("~/.cargo/bin/rls")):
                 old_path = os.getenv('PATH')
                 new_path = os.path.expanduser('~/.cargo/bin')
                 if old_path is not None:
                     new_path += os.path.pathsep + old_path
                 launcher.setenv('PATH', new_path, True)
-            else:
-                path_to_rls = "rls"
+
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
             # so it does not require any command line options.
             launcher.push_argv(path_to_rls)
@@ -161,7 +157,6 @@ class RlsService(Ide.Object):
         We can use the stdin/stdout to create a channel for our
         LspClient.
         """
-
         stdin = subprocess.get_stdin_pipe()
         stdout = subprocess.get_stdout_pipe()
         io_stream = Gio.SimpleIOStream.new(stdout, stdin)
@@ -196,6 +191,16 @@ class RlsService(Ide.Object):
 
         if pipeline.contains_program_in_path('rls', None):
             launcher = pipeline.get_runtime().create_launcher()
+            old_path = os.getenv('PATH')
+            new_path = '/usr/lib/sdk/rust-stable/bin'
+            if old_path is not None:
+                new_path += os.path.pathsep + old_path
+            launcher.setenv('PATH', new_path, True)
+            # Reset RUSTFLAGS as we need to set --remap-path-prefix =../
+            # In Rust Flatpak manifests in order to make it build.
+            # The short error format should be enough.
+            launcher.setenv('RUSTFLAGS', '', True)
+            launcher.setenv('RUSTFLAGS', '--error-format=short', True)
         else:
             launcher = Ide.SubprocessLauncher()
             launcher.set_run_on_host(True)
