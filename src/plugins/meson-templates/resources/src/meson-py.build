@@ -3,7 +3,7 @@ moduledir = join_paths(pkgdatadir, '{{name_}}')
 gnome = import('gnome')
 
 gnome.compile_resources('{{name}}',
-  '{{name}}.gresource.xml',
+  '{{prefix}}.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
