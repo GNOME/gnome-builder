@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-08-11 12:19+0000\n"
-"PO-Revision-Date: 2019-08-19 06:37-0300\n"
+"POT-Creation-Date: 2019-09-02 08:44+0000\n"
+"PO-Revision-Date: 2019-09-03 14:43-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -911,7 +911,7 @@ msgstr "Falha ao salvar rascunho: %s"
 msgid "Untitled"
 msgstr "Sem título"
 
-#: src/libide/core/ide-transfer.c:548
+#: src/libide/core/ide-transfer.c:549
 #: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
@@ -1449,12 +1449,12 @@ msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Compilar e executar"
 
-#: src/libide/foundry/ide-run-manager.c:1013
-#: src/libide/foundry/ide-run-manager.c:1079
+#: src/libide/foundry/ide-run-manager.c:1016
+#: src/libide/foundry/ide-run-manager.c:1082
 msgid "Failed to locate a build target"
 msgstr "Falha ao localizar o alvo da compilação"
 
-#: src/libide/foundry/ide-run-manager.c:1215 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1218 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Executar"
@@ -1659,7 +1659,6 @@ msgid "Run Options"
 msgstr "Executar opções"
 
 #: src/libide/gui/ide-application-actions.c:78
-#| msgid "Build Preferences"
 msgid "Builder — Preferences"
 msgstr "Builder — Preferências"
 
@@ -1722,7 +1721,7 @@ msgstr "Mostra a janela de ajuda"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:531
+#: src/libide/gui/ide-shortcuts-window.ui:538
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferências"
@@ -1746,14 +1745,11 @@ msgstr ""
 "DBUS_SESSION_BUS_ADDRESS."
 
 #: src/libide/gui/ide-command-manager.c:491
-#| msgctxt "shortcut window"
-#| msgid "Command Bar"
 msgid "Command failed"
 msgstr "O comando falhou"
 
 #: src/libide/gui/ide-command-manager.c:513
 #, c-format
-#| msgid "Failed to locate template “%s”"
 msgid "Failed to locate command “%s”"
 msgstr "Falha ao localizar o comando “%s”"
 
@@ -1842,7 +1838,7 @@ msgstr "Atalhos da janela"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:520
+#: src/libide/gui/ide-shortcuts-window.ui:527
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
@@ -2400,7 +2396,7 @@ msgid "Workspace shortcuts"
 msgstr "Atalhos de espaço de trabalho"
 
 #: src/libide/gui/ide-search-button.c:44
-#: src/libide/gui/ide-shortcuts-window.ui:588
+#: src/libide/gui/ide-shortcuts-window.ui:595
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Pesquisa"
@@ -2416,34 +2412,34 @@ msgid "Editor Shortcuts"
 msgstr "Atalhos do editor"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:524
+#: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pesquisa global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/libide/gui/ide-shortcuts-window.ui:545
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:552
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/libide/gui/ide-shortcuts-window.ui:559
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal em runtime de compilação"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:566
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
@@ -2504,13 +2500,13 @@ msgid "Clear highlight"
 msgstr "Limpa o realce"
 
 #: src/libide/gui/ide-shortcuts-window.ui:213
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar e colar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copia o texto selecionado para a área de transferência"
@@ -2521,7 +2517,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Recorta o texto selecionado para a área de transferência"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:587
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Cola o texto da área de transferência"
@@ -2701,46 +2697,52 @@ msgid "Build"
 msgstr "Compila"
 
 #: src/libide/gui/ide-shortcuts-window.ui:472
+#| msgid "Rebuild"
+msgctxt "shortcut window"
+msgid "Rebuild"
+msgstr "Recompila"
+
+#: src/libide/gui/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Executa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:479
+#: src/libide/gui/ide-shortcuts-window.ui:486
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gestos no touchpad"
 
-#: src/libide/gui/ide-shortcuts-window.ui:494
+#: src/libide/gui/ide-shortcuts-window.ui:501
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Move a página para a direita"
 
-#: src/libide/gui/ide-shortcuts-window.ui:495
+#: src/libide/gui/ide-shortcuts-window.ui:502
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Três dedos deslizados para a direita"
 
-#: src/libide/gui/ide-shortcuts-window.ui:504
+#: src/libide/gui/ide-shortcuts-window.ui:511
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Move a página para a esquerda"
 
-#: src/libide/gui/ide-shortcuts-window.ui:505
+#: src/libide/gui/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Três dedos deslizados para a esquerda"
 
-#: src/libide/gui/ide-shortcuts-window.ui:516
+#: src/libide/gui/ide-shortcuts-window.ui:523
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atalhos do terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:593
+#: src/libide/gui/ide-shortcuts-window.ui:600
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Terminal sem título"
@@ -3359,7 +3361,7 @@ msgid "Export Bundle"
 msgstr "Exportar pacote"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:355
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:368
 msgid "Build Issues"
 msgstr "Problemas de compilação"
 
@@ -3388,7 +3390,7 @@ msgstr "O encadeamento de compilação está vazio"
 msgid "Build Targets"
 msgstr "Alvos de compilação"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:364
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:377
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Preferências de compilação"
@@ -3847,16 +3849,16 @@ msgstr "O diretório já existe com aquele nome"
 msgid "Your project will be created within %s."
 msgstr "Seu projeto será criado dentro de %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:268
+#: src/plugins/create-project/gbp-create-project-surface.c:279
 msgid "Application ID is not valid."
 msgstr "O ID do aplicativo não é válido."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:612
+#: src/plugins/create-project/gbp-create-project-surface.c:623
 msgctxt "title"
 msgid "Start New Project"
 msgstr "Iniciar novo projeto"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:781
+#: src/plugins/create-project/gbp-create-project-surface.c:792
 msgid "A failure occurred while initializing version control"
 msgstr "Ocorreu uma falha ao inicializar o controle de versão"
 
@@ -4735,24 +4737,24 @@ msgctxt "shortcut window"
 msgid "Redo the next command"
 msgstr "Refaz o próximo comando"
 
-#: src/plugins/glade/gbp-glade-page.c:478
+#: src/plugins/glade/gbp-glade-page.c:483
 msgid "Switch to selection mode"
 msgstr "Alterna para o modo de seleção"
 
 # drag-resize é um recurso que não parece ter tradução no Glade -- Rafael
-#: src/plugins/glade/gbp-glade-page.c:479
+#: src/plugins/glade/gbp-glade-page.c:484
 msgid "Switch to drag-resize mode"
 msgstr "Alterna para o modo drag-resize"
 
-#: src/plugins/glade/gbp-glade-page.c:480
+#: src/plugins/glade/gbp-glade-page.c:485
 msgid "Switch to margin editor"
 msgstr "Alterna para editor de margem"
 
-#: src/plugins/glade/gbp-glade-page.c:481
+#: src/plugins/glade/gbp-glade-page.c:486
 msgid "Switch to alignment editor"
 msgstr "Alterna para o editor de alinhamento"
 
-#: src/plugins/glade/gbp-glade-page.c:486
+#: src/plugins/glade/gbp-glade-page.c:491
 msgid "Unnamed Glade project"
 msgstr "Projeto Glade sem nome"
 
@@ -5001,27 +5003,27 @@ msgstr "Aplicativo do GNOME"
 msgid "Create a new GNOME application"
 msgstr "Criar um novo aplicativo do GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:317
+#: src/plugins/meson-templates/meson_templates.py:324
 msgid "Shared Library"
 msgstr "Biblioteca compartilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:326
 msgid "Create a new project with a shared library"
 msgstr "Criar um novo projeto com uma biblioteca compartilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:336
+#: src/plugins/meson-templates/meson_templates.py:343
 msgid "Empty Project"
 msgstr "Projeto vazio"
 
-#: src/plugins/meson-templates/meson_templates.py:338
+#: src/plugins/meson-templates/meson_templates.py:345
 msgid "Create a new empty project"
 msgstr "Criar um novo projeto vazio"
 
-#: src/plugins/meson-templates/meson_templates.py:351
+#: src/plugins/meson-templates/meson_templates.py:358
 msgid "Command Line Tool"
 msgstr "Ferramenta de linha de comando"
 
-#: src/plugins/meson-templates/meson_templates.py:353
+#: src/plugins/meson-templates/meson_templates.py:360
 msgid "Create a new command line project"
 msgstr "Criar um novo projeto de linha de comando"
 
@@ -5564,13 +5566,10 @@ msgid "to add a new toolchain!"
 msgstr "para adicionar uma nova cadeia de ferramentas!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
-#| msgctxt "shortcut window"
-#| msgid "Undo the last command"
 msgid "Shell command"
 msgstr "Comando de shell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:569
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5579,25 +5578,20 @@ msgstr ""
 "compilação não foi inicializado"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:648
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
 "Não é possível iniciar o processo porque o encadeamento de compilação ainda "
 "não está disponível"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
-#| msgctxt "shortcut window"
-#| msgid "Glade shortcuts"
 msgid "Change Shortcut"
 msgstr "Alterar atalho"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
-#| msgid "_Title Case"
 msgid "Title"
 msgstr "Título"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
-#| msgid "Commands:"
 msgid "Shell Command"
 msgstr "Comando de shell"
 
@@ -5612,7 +5606,6 @@ msgstr ""
 "definidos automaticamente para o comando."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
-#| msgid "Command Line Tool"
 msgid "Command Locality"
 msgstr "Localidade do comando"
 
@@ -5621,12 +5614,10 @@ msgid "On Host"
 msgstr "No host"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
-#| msgid "Build Environment"
 msgid "In Build Environment"
 msgstr "No ambiente de compilação"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
-#| msgid "Build Environment"
 msgid "In Runtime Environment"
 msgstr "No ambiente de runtime"
 
@@ -5639,7 +5630,6 @@ msgstr ""
 "fonte e de compilação dependendo da localidade do comando."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
-#| msgid "Close Project"
 msgid "Close on Exit"
 msgstr "Fechar ao sair"
 
@@ -5649,37 +5639,30 @@ msgstr ""
 "Se habilitado, a página do terminal vai fechar após o comando ser executado."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
-#| msgid "Keyboard Shortcuts"
 msgid "Keyboard Shortcut"
 msgstr "Atalho de teclado"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
-#| msgid "Change _to"
 msgid "Change"
 msgstr "Alterar"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
-#| msgid "Delete Toolchain"
 msgid "Delete Command"
 msgstr "Excluir comando"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
-#| msgid "Build Environment"
 msgid "Run in host environment"
 msgstr "Executar no ambiente do host"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
-#| msgid "Build Environment"
 msgid "Run in build environment"
 msgstr "Executar no ambiente de compilação"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
-#| msgid "Build Environment"
 msgid "Run in runtime environment"
 msgstr "Executar no ambiente de runtime"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:113
-#| msgid "Not a command: %s"
 msgid "New command"
 msgstr "Novo comando"
 
@@ -5689,12 +5672,10 @@ msgstr "Clique em + para adicionar um comando externo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
-#| msgid "Commands:"
 msgid "External Commands"
 msgstr "Comandos externos"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
-#| msgid "Commands:"
 msgid "Command"
 msgstr "Comando"
 
