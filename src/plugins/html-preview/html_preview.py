@@ -482,28 +482,31 @@ class HtmlPreviewPage(Ide.Page):
     def get_sphinx_rst_worker(self, task, text, path, basedir, builddir):
         add_override_file(path, text)
 
+        if GLib.find_program_in_path('sphinx-build-3'):
+            program = 'sphinx-build-3'
+        else:
+            program = 'sphinx-build'
+
         rel_path = os.path.relpath(path, start=basedir)
-        command = ['sphinx-build', '-Q', '-b', 'html', basedir, builddir, path]
+        command = [program, '-Q', '-b', 'html', basedir, builddir, path]
 
         rel_path_html = os.path.splitext(rel_path)[0] + '.html'
         builddir_path = os.path.join(builddir, rel_path_html)
 
         try:
-            import sphinx.cmd.build
-            build_main = sphinx.cmd.build.main
-        except:
-            build_main = sphinx.build_main
+            launcher = Ide.SubprocessLauncher.new(0) # Gio.SubprocessFlags.STDOUT_SILENCE |
+                                                     # Gio.SubprocessFlags.STDERR_SILENCE)
+            launcher.push_args(command)
+            subprocess = launcher.spawn()
+            subprocess.wait_check()
 
-        result = not build_main(command)
-        remove_override_file(path)
+            task.builddir_path = builddir_path
+            task.return_boolean(True)
+        except Exception as ex:
+            task.return_error(GLib.Error(ex))
+        finally:
+            remove_override_file(path)
 
-        if not result:
-            task.builddir_path = None
-            task.return_error(GLib.Error('\'sphinx-build\' command error for {}'.format(path)))
-            return
-
-        task.builddir_path = builddir_path
-        task.return_boolean(True)
 
     def get_sphinx_rst_finish(self, result):
         succes = result.propagate_boolean()
