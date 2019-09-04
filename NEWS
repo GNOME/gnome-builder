@@ -1,4 +1,23 @@
 ===============
+Version 3.33.92
+===============
+
+Changes since last release:
+
+ • A new Rust GNOME project template has been added in addition to general
+   improvements in the project creation assistant
+ • Improvements to Vim emulation
+ • Menu items within the glade designer pages have been fixed
+ • Search improvements when regex and escape characters are used
+ • Fixes for various keyboard shortcuts
+ • Fix disappearance of Flatpak SDK installation popover
+ • Fix saving of Glade documents when there are errors
+ • Bug fixes to directory view and html-preview plugins
+ • Buffer monitor tracking fixes
+ • Improve drawing of transfer information in popovers
+ • Translation updates
+
+===============
 Version 3.33.90
 ===============
 
