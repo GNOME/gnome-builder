@@ -86,6 +86,15 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.33.92" date="2019-09-04">
+      <description>
+        <p>
+          Builder 3.33.92 is here as our release candidate before 3.34.
+          Please test things out and file any bugs to help us have a great 3.34 release!
+        </p>
+      </description>
+    </release>
+
     <release version="3.33.90" date="2019-08-10">
       <description>
         <p>
