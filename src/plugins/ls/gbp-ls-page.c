@@ -111,7 +111,10 @@ modified_cell_data_func (GtkCellLayout   *cell_layout,
   gtk_tree_model_get (tree_model, iter,
                       GBP_LS_MODEL_COLUMN_MODIFIED, &when,
                       -1);
-  format = dzl_g_date_time_format_for_display (when);
+
+  if (when != NULL)
+    format = dzl_g_date_time_format_for_display (when);
+
   g_object_set (cell, "text", format, NULL);
 }
 
