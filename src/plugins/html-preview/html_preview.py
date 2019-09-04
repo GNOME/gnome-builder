@@ -488,7 +488,13 @@ class HtmlPreviewPage(Ide.Page):
         rel_path_html = os.path.splitext(rel_path)[0] + '.html'
         builddir_path = os.path.join(builddir, rel_path_html)
 
-        result = not sphinx.build_main(command)
+        try:
+            import sphinx.cmd.build
+            build_main = sphinx.cmd.build.main
+        except:
+            build_main = sphinx.build_main
+
+        result = not build_main(command)
         remove_override_file(path)
 
         if not result:
