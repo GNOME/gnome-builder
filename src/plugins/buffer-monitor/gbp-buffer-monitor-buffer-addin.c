@@ -52,7 +52,8 @@ gbp_buffer_monitor_buffer_addin_check_for_change (GbpBufferMonitorBufferAddin *s
   g_assert (G_IS_FILE (file));
 
   info = g_file_query_info (file,
-                            G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                            G_FILE_ATTRIBUTE_TIME_MODIFIED","
+                            G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC,
                             G_FILE_QUERY_INFO_NONE,
                             NULL,
                             NULL);
@@ -157,6 +158,7 @@ gbp_buffer_monitor_buffer_addin_setup_monitor (GbpBufferMonitorBufferAddin *self
 
       info = g_file_query_info (file,
                                 G_FILE_ATTRIBUTE_TIME_MODIFIED","
+                                G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC","
                                 G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
                                 G_FILE_QUERY_INFO_NONE,
                                 NULL,
