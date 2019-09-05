@@ -94,8 +94,6 @@ goto_line_activate (GbpEditorFrameControls *self,
                     const gchar            *text,
                     DzlSimplePopover       *popover)
 {
-  gint64 value;
-
   g_assert (GBP_IS_EDITOR_FRAME_CONTROLS (self));
   g_assert (DZL_IS_SIMPLE_POPOVER (popover));
 
@@ -104,21 +102,34 @@ goto_line_activate (GbpEditorFrameControls *self,
 
   if (!dzl_str_empty0 (text))
     {
+      GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->page->buffer);
+      IdeSourceView *source_view = self->page->source_view;
+      GtkTextIter iter;
+      gint64 value;
+      gint line;
+
+      gtk_text_buffer_get_end_iter (buffer, &iter);
+      line = gtk_text_iter_get_line (&iter) + 1;
       value = g_ascii_strtoll (text, NULL, 10);
 
-      if ((value > 0) && (value < G_MAXINT))
+      if (value == 0)
         {
-          IdeSourceView *source_view;
-          GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->page->buffer);
-          GtkTextIter iter;
-
-          source_view = ide_editor_page_get_view (self->page);
-
-          gtk_widget_grab_focus (GTK_WIDGET (self->page));
-          gtk_text_buffer_get_iter_at_line (buffer, &iter, value - 1);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
-          ide_source_view_scroll_to_iter (source_view, &iter, 0.25, TRUE, 1.0, 0.5, TRUE);
+          return;
         }
+      else if (value > 0)
+        {
+          line = MIN (line, value);
+        }
+      else if (value < 0)
+        {
+          value++;
+          line = MAX (line + value, 1);
+        }
+
+      gtk_widget_grab_focus (GTK_WIDGET (self->page));
+      gtk_text_buffer_get_iter_at_line (buffer, &iter, line - 1);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+      ide_source_view_scroll_to_iter (source_view, &iter, 0.25, TRUE, 1.0, 0.5, TRUE);
     }
 }
 
@@ -135,7 +146,9 @@ goto_line_insert_text (GbpEditorFrameControls *self,
 
   for (; *chars; chars = g_utf8_next_char (chars))
     {
-      if (!g_unichar_isdigit (g_utf8_get_char (chars)))
+      gunichar ch = g_utf8_get_char (chars);
+
+      if (!g_unichar_isdigit (ch) && ch != '-')
         return GDK_EVENT_STOP;
     }
 
@@ -146,7 +159,7 @@ static void
 goto_line_changed (GbpEditorFrameControls *self,
                    DzlSimplePopover       *popover)
 {
-  gchar *message;
+  g_autofree gchar *message = NULL;
   const gchar *text;
   GtkTextIter begin;
   GtkTextIter end;
@@ -163,18 +176,13 @@ goto_line_changed (GbpEditorFrameControls *self,
 
   if (!dzl_str_empty0 (text))
     {
-      gint64 value;
+      gint64 value = g_ascii_strtoll (text, NULL, 10);
 
-      value = g_ascii_strtoll (text, NULL, 10);
-
-      if (value > 0)
+      if (value != 0)
         {
-          if (value <= gtk_text_iter_get_line (&end) + 1)
-            {
-              dzl_simple_popover_set_message (popover, NULL);
-              dzl_simple_popover_set_ready (popover, TRUE);
-              return;
-            }
+          dzl_simple_popover_set_message (popover, NULL);
+          dzl_simple_popover_set_ready (popover, TRUE);
+          return;
         }
     }
 
@@ -183,8 +191,6 @@ goto_line_changed (GbpEditorFrameControls *self,
                              gtk_text_iter_get_line (&end) + 1);
   dzl_simple_popover_set_message (popover, message);
   dzl_simple_popover_set_ready (popover, FALSE);
-
-  g_free (message);
 }
 
 static void
