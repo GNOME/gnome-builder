@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-primary-workspace-menu">
+  <!-- menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-placeholder1">
       <item>
         <attribute name="after">ide-primary-workspace-menu-new-editor-workspace</attribute>
@@ -9,7 +9,7 @@
         <attribute name="action">win.new-terminal-workspace</attribute>
       </item>
     </section>
-  </menu>
+  </menu -->
   <menu id="ide-terminal-workspace-menu">
     <section id="ide-terminal-workspace-menu-close">
       <item>
