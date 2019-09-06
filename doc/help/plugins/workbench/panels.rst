@@ -39,8 +39,8 @@ You'll be provided access to the editor surface with the ``editor`` variable.
 
            # To add a utility section
            self.bottom = Dazzle.DockWidget(title='My Bottom Panel', icon_name='gtk-missing', visible=True)
-           self.bottom.add(Gtk.Label(lable='Hello, Bottom Panel', visible=True))
-           editor.get_utilties().add(self.bottom)
+           self.bottom.add(Gtk.Label(label='Hello, Bottom Panel', visible=True))
+           editor.get_utilities().add(self.bottom)
 
        def do_unload(self, editor: Ide.EditorSurface):
 
