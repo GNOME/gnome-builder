@@ -314,6 +314,11 @@ ide_preferences_builtin_register_languages (DzlPreferences *preferences)
                            group,
                            0);
 
+  g_signal_connect (search,
+                    "stop-search",
+                    G_CALLBACK (gtk_entry_set_text),
+                    (gpointer) "");
+
   flow = gtk_widget_get_ancestor (group, DZL_TYPE_COLUMN_LAYOUT);
 
   g_assert (flow != NULL);

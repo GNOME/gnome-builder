@@ -666,6 +666,11 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect (self->search_entry,
+                    "stop-search",
+                    G_CALLBACK (gtk_entry_set_text),
+                    (gpointer) "");
+
   stack_notify_visible_child_cb (self, NULL, self->surfaces);
 
   _ide_greeter_workspace_init_actions (self);
