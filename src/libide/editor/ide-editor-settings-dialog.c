@@ -191,6 +191,11 @@ ide_editor_settings_dialog_set_page (IdeEditorSettingsDialog *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect (self->entry,
+                    "stop-search",
+                    G_CALLBACK (gtk_entry_set_text),
+                    (gpointer) "");
+
   dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self),
                                     GTK_WIDGET (page),
                                     "IDE_EDITOR_PAGE_ACTIONS");
