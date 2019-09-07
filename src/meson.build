@@ -13,7 +13,7 @@ gnome_builder_gir_extra_args = ['--pkg-export=gnome-builder-1.0']
 # inside the final executable, we delay compiling them until the
 # final binary (otherwise they are silenty dropped when linking).
 
-exe_link_args = [ '-export-dynamic' ]
+exe_link_args = [ '-Wl,--export-dynamic' ]
 exe_c_args = []
 
 subdir('gstyle')
