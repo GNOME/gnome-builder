@@ -9,21 +9,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-06-01 10:35+0000\n"
-"PO-Revision-Date: 2019-05-23 21:25+0200\n"
-"Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
+"POT-Creation-Date: 2019-09-07 10:32+0000\n"
+"PO-Revision-Date: 2019-09-07 20:15+0200\n"
+"Last-Translator: Balázs Meskó <mesko.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Lokalize 18.12.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:125
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:148
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Építő"
@@ -840,7 +840,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4933
+#: src/libide/sourceview/ide-source-view.c:4944
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -895,7 +895,7 @@ msgstr "Nem sikerült a piszkozatot menteni: %s"
 msgid "Untitled"
 msgstr "Névtelen"
 
-#: src/libide/core/ide-transfer.c:548
+#: src/libide/core/ide-transfer.c:549
 #: src/libide/editor/ide-editor-page-actions.c:239
 #: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
@@ -1297,7 +1297,7 @@ msgstr "„%s” eszköz felfedezve"
 msgid "Devices"
 msgstr "Eszközök"
 
-#: src/libide/foundry/ide-device-manager.c:725
+#: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Nem lehet az eszközre telepíteni, az összeállítási műveletsor nincs "
@@ -1430,12 +1430,12 @@ msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Összeállítás és futtatás"
 
-#: src/libide/foundry/ide-run-manager.c:1012
-#: src/libide/foundry/ide-run-manager.c:1078
+#: src/libide/foundry/ide-run-manager.c:1015
+#: src/libide/foundry/ide-run-manager.c:1081
 msgid "Failed to locate a build target"
 msgstr "Az összeállítandó cél nem található"
 
-#: src/libide/foundry/ide-run-manager.c:1214 src/libide/gui/gtk/menus.ui:79
+#: src/libide/foundry/ide-run-manager.c:1217 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/gtk/menus.ui:30
 msgid "Run"
 msgstr "Futtatás"
@@ -1695,7 +1695,7 @@ msgstr "Súgóablak megjelenítése"
 
 #: src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:524
+#: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Beállítások"
@@ -1815,7 +1815,7 @@ msgstr "Ablak gyorsbillentyűi"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:513
+#: src/libide/gui/ide-shortcuts-window.ui:520
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:273
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:279
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:285
@@ -2366,7 +2366,7 @@ msgid "Workspace shortcuts"
 msgstr "Munkaterület gyorsbillentyűi"
 
 #: src/libide/gui/ide-search-entry.c:210
-#: src/libide/gui/ide-shortcuts-window.ui:581
+#: src/libide/gui/ide-shortcuts-window.ui:588
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Keresés"
@@ -2382,34 +2382,34 @@ msgid "Editor Shortcuts"
 msgstr "Szerkesztő gyorsbillentyűi"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#: src/libide/gui/ide-shortcuts-window.ui:517
+#: src/libide/gui/ide-shortcuts-window.ui:524
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Általános keresés"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:531
+#: src/libide/gui/ide-shortcuts-window.ui:538
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Parancssáv"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/libide/gui/ide-shortcuts-window.ui:545
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminál"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:552
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:280
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminál az összeállítás során"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/libide/gui/ide-shortcuts-window.ui:559
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
@@ -2470,13 +2470,13 @@ msgid "Clear highlight"
 msgstr "Kiemelés törlése"
 
 #: src/libide/gui/ide-shortcuts-window.ui:213
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Másolás és beillesztés"
 
 #: src/libide/gui/ide-shortcuts-window.ui:218
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:573
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kijelölt szöveg másolása a vágólapra"
@@ -2487,7 +2487,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Kijelölt szöveg kivágása a vágólapra"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Szöveg beillesztése a vágólapról"
@@ -2662,46 +2662,52 @@ msgid "Build"
 msgstr "Összeállítás"
 
 #: src/libide/gui/ide-shortcuts-window.ui:465
+#| msgid "Rebuild"
+msgctxt "shortcut window"
+msgid "Rebuild"
+msgstr "Újra-összeállítás"
+
+#: src/libide/gui/ide-shortcuts-window.ui:472
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Futtatás"
 
-#: src/libide/gui/ide-shortcuts-window.ui:472
+#: src/libide/gui/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profilozás"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Érintőtábla-mozdulatok"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Lap mozgatása jobbra"
 
-#: src/libide/gui/ide-shortcuts-window.ui:488
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Háromujjas húzás jobbra"
 
-#: src/libide/gui/ide-shortcuts-window.ui:497
+#: src/libide/gui/ide-shortcuts-window.ui:504
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Lap mozgatása balra"
 
-#: src/libide/gui/ide-shortcuts-window.ui:498
+#: src/libide/gui/ide-shortcuts-window.ui:505
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Háromujjas húzás balra"
 
-#: src/libide/gui/ide-shortcuts-window.ui:509
+#: src/libide/gui/ide-shortcuts-window.ui:516
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminál gyorsbillentyűi"
 
-#: src/libide/gui/ide-shortcuts-window.ui:586
+#: src/libide/gui/ide-shortcuts-window.ui:593
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Szöveg keresése terminálban"
@@ -2812,31 +2818,31 @@ msgstr "_Kicsinyítés"
 msgid "Reset"
 msgstr "Visszaállítás"
 
-#: src/libide/sourceview/ide-source-view.c:4382
+#: src/libide/sourceview/ide-source-view.c:4393
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: src/libide/sourceview/ide-source-view.c:4384
+#: src/libide/sourceview/ide-source-view.c:4395
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4502
+#: src/libide/sourceview/ide-source-view.c:4513
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: src/libide/sourceview/ide-source-view.c:4932
+#: src/libide/sourceview/ide-source-view.c:4943
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5167
+#: src/libide/sourceview/ide-source-view.c:5178
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u. sor, %u. oszlop</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5193
+#: src/libide/sourceview/ide-source-view.c:5204
 msgid "No references were found"
 msgstr "Nem találhatók hivatkozások"
 
@@ -3279,7 +3285,7 @@ msgid "Export Bundle"
 msgstr "Csomag exportálása"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:656
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:349
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:362
 msgid "Build Issues"
 msgstr "Összeállítási problémák"
 
@@ -3308,7 +3314,7 @@ msgstr "Az összeállítási folyamat üres"
 msgid "Build Targets"
 msgstr "Összeállítási célok"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:358
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:371
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Összeállítási beállítások"
@@ -3768,16 +3774,16 @@ msgstr "Már létezik ilyen nevű könyvtár"
 msgid "Your project will be created within %s."
 msgstr "A projekt itt lesz létrehozva: %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:268
+#: src/plugins/create-project/gbp-create-project-surface.c:279
 msgid "Application ID is not valid."
 msgstr "Az alkalmazásazonosító érvénytelen."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:612
+#: src/plugins/create-project/gbp-create-project-surface.c:623
 msgctxt "title"
 msgid "Start New Project"
 msgstr "Új projekt indítása"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:775
+#: src/plugins/create-project/gbp-create-project-surface.c:786
 msgid "A failure occurred while initializing version control"
 msgstr "Hiba történt a verziókövetés előkészítésekor"
 
@@ -4944,14 +4950,6 @@ msgstr "Polari"
 msgid "An IRC Client for GNOME"
 msgstr "Egy IRC kliens a GNOME-hoz"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
-msgid "Todo"
-msgstr "Tennivalók"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
-msgid "Task manager for GNOME"
-msgstr "Tennivaló-kezelő a GNOME-hoz"
-
 #: src/plugins/notification/ide-notification-addin.c:102
 msgid "Build successful"
 msgstr "Összeállítás sikeres"
@@ -4997,12 +4995,12 @@ msgid "Containers/Podman"
 msgstr "Konténerek/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:124
-#: src/plugins/project-tree/gbp-rename-file-popover.c:144
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Már létezik ilyen nevű mappa."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
-#: src/plugins/project-tree/gbp-rename-file-popover.c:147
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Már létezik ilyen nevű fájl."
 
@@ -5062,7 +5060,7 @@ msgstr "A fájlok egy pillanat múlva át lesznek másolva"
 msgid "Project Tree"
 msgstr "Projektfa"
 
-#: src/plugins/project-tree/gbp-rename-file-popover.c:84
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
 msgstr "A(z) „%s” átnevezése"
@@ -5600,7 +5598,7 @@ msgid "vala diagnostics warnings errors"
 msgstr "vala diagnosztika figyelmeztetések hibák"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:53
+#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Futtatás Valgrinddal"
 
