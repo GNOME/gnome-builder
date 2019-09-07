@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-09-01 23:05+0000\n"
+"POT-Creation-Date: 2019-09-05 00:41+0000\n"
 "PO-Revision-Date: 2019-09-02 01:03+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
@@ -2854,10 +2854,6 @@ msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
-#: src/libide/terminal/gtk/menus.ui:8
-msgid "New Terminal Workspace…"
-msgstr "Nová terminálová pracovní plocha…"
-
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
@@ -3821,7 +3817,7 @@ msgstr "Váš projekt bude vytvořen ve složce %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:279
 msgid "Application ID is not valid."
-msgstr "ID aplikace není platné"
+msgstr "ID aplikace není platné."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:623
 msgctxt "title"
@@ -4330,7 +4326,7 @@ msgid "Use minimal editor interface"
 msgstr "Používat minimální rozhraní editoru"
 
 #. translators: the user selected a number outside the value range for the document.
-#: src/plugins/editor/gbp-editor-frame-controls.c:182
+#: src/plugins/editor/gbp-editor-frame-controls.c:190
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Zadejte číslo mezi 1 a %u"
@@ -4911,12 +4907,12 @@ msgstr "Navrhovat dokončení slov z jazyka Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
-#: src/plugins/ls/gbp-ls-page.c:316
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Selhalo načtení složky: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:388
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "%s – Složka"
@@ -5860,7 +5856,7 @@ msgstr "Volitelné čárkou oddělené cesty určující PKG_CONFIG_PATH."
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:96
+#: src/plugins/terminal/gbp-terminal-application-addin.c:97
 msgid "Use terminal interface"
 msgstr "Používat terminálové rozhraní"
 
