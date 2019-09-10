@@ -157,12 +157,14 @@ on_file_trashed (GbpFileSearchProvider *self,
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (G_IS_FILE (file));
   g_assert (IDE_IS_PROJECT (project));
-  g_assert (GBP_IS_FILE_SEARCH_INDEX (self->index));
+
+  if (self->index == NULL)
+    return;
 
   context = ide_object_get_context (IDE_OBJECT (project));
   workdir = ide_context_ref_workdir (context);
 
-  if (NULL != (path = g_file_get_relative_path (workdir, file)))
+  if ((path = g_file_get_relative_path (workdir, file)))
     gbp_file_search_index_remove (self->index, path);
 }
 
@@ -179,12 +181,9 @@ gbp_file_search_provider_build_cb (GObject      *object,
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
 
   if (!gbp_file_search_index_build_finish (index, result, &error))
-    {
-      g_warning ("%s", error->message);
-      return;
-    }
-
-  g_set_object (&self->index, index);
+    g_warning ("%s", error->message);
+  else
+    g_set_object (&self->index, index);
 }
 
 static void
