@@ -177,6 +177,25 @@ suggestion_activated (DzlSuggestionEntry *entry,
   ide_search_result_activate (IDE_SEARCH_RESULT (suggestion), focus);
 }
 
+static gboolean
+search_entry_focus_in (GtkEntry      *entry,
+                       GdkEventFocus *focus,
+                       gpointer       user_data)
+{
+  IdeWorkbench *workbench;
+  IdeSearchEngine *engine;
+
+  g_assert (GTK_IS_ENTRY (entry));
+  g_assert (focus != NULL);
+
+  /* Load search engine if it is not already */
+  workbench = ide_widget_get_workbench (GTK_WIDGET (entry));
+  engine = ide_workbench_get_search_engine (workbench);
+  (void)engine;
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 ide_search_button_class_init (IdeSearchButtonClass *klass)
 {
@@ -203,6 +222,7 @@ ide_search_button_init (IdeSearchButton *self)
 
   dzl_gtk_widget_add_style_class (GTK_WIDGET (entry), "global-search");
   g_signal_connect (entry, "changed", G_CALLBACK (search_entry_changed), NULL);
+  g_signal_connect (entry, "focus-in-event", G_CALLBACK (search_entry_focus_in), NULL);
   g_signal_connect (entry, "suggestion-activated", G_CALLBACK (suggestion_activated), NULL);
   dzl_suggestion_entry_set_position_func (entry, search_popover_position_func, NULL, NULL);
 
