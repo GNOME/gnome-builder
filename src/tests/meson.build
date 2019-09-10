@@ -19,6 +19,7 @@ test_env = [
   'GSETTINGS_SCHEMA_DIR=@0@/data/gsettings'.format(meson.build_root()),
   'PYTHONDONTWRITEBYTECODE=yes',
   'MALLOC_CHECK_=2',
+  'NO_AT_BRIDGE=1',
 ]
 
 test_cflags = [
