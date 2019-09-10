@@ -1006,6 +1006,11 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
       ide_workbench_set_vcs (self, IDE_VCS (vcs));
     }
 
+  /* Create the search engine up-front */
+  if (self->search_engine == NULL)
+    self->search_engine = ide_object_ensure_child_typed (IDE_OBJECT (self->context),
+                                                         IDE_TYPE_SEARCH_ENGINE);
+
   if (lp->workspace_type != G_TYPE_INVALID)
     {
       IdeWorkspace *workspace;
@@ -1457,8 +1462,8 @@ ide_workbench_get_search_engine (IdeWorkbench *self)
   g_return_val_if_fail (self->context != NULL, NULL);
 
   if (self->search_engine == NULL)
-      self->search_engine = ide_object_ensure_child_typed (IDE_OBJECT (self->context),
-                                                           IDE_TYPE_SEARCH_ENGINE);
+    self->search_engine = ide_object_ensure_child_typed (IDE_OBJECT (self->context),
+                                                         IDE_TYPE_SEARCH_ENGINE);
 
   return self->search_engine;
 }
