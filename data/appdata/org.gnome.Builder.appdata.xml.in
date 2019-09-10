@@ -86,6 +86,14 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.34.0" date="2019-09-09">
+      <description>
+        <p>
+          Builder 3.34.0 culminates six months of feature development, bugfixes, and performance improvements.
+        </p>
+      </description>
+    </release>
+
     <release version="3.33.92" date="2019-09-04">
       <description>
         <p>

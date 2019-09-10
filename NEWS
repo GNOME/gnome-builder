@@ -1,3 +1,14 @@
+==============
+Version 3.34.0
+==============
+
+ • Support for negative line numbers in "Go To Line" popover
+ • Terminal workspaces are disabled for 3.34
+ • Documentation fixes
+ • Fix Escape usage in various search entries
+ • Build system fixes
+ • Translation updates
+
 ===============
 Version 3.33.92
 ===============
