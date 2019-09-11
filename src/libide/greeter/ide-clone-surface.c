@@ -534,6 +534,7 @@ ide_clone_surface_clone (IdeCloneSurface *self)
   PeasPluginInfo *plugin_info;
   IdeVcsCloner *addin;
   GVariantDict dict;
+  const gchar *branch;
   const gchar *uri;
   const gchar *path;
   const gchar *module_name;
@@ -557,6 +558,10 @@ ide_clone_surface_clone (IdeCloneSurface *self)
   author = gtk_entry_get_text (self->author_entry);
   email = gtk_entry_get_text (self->email_entry);
   path = g_file_peek_path (self->destination);
+  branch = gtk_entry_get_text (self->branch_entry);
+
+  if (!ide_str_empty0 (branch))
+    g_variant_dict_insert (&dict, "branch", "s", branch);
 
   if (!ide_str_empty0 (author) && !g_str_equal (g_get_real_name (), author))
     g_variant_dict_insert (&dict, "user.name", "s", author);
