@@ -74,7 +74,7 @@ msgstr "Podpora více monitorů"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
 msgid "Code overview mini-map"
-msgstr "Přehledovou mini mapa kódu"
+msgstr "Přehledová mini mapa kódu"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:28
 msgid "Integration with Git"
@@ -133,7 +133,7 @@ msgstr "Podpora zobrazení úkolů (TODO) nalezených v rámci zdrojových kód�
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:40
 msgid "Fast fuzzy text search across files and symbols"
-msgstr "Rychle vyhledávání s odhady napříč soubory a symboly"
+msgstr "Rychlé vyhledávání s odhady napříč soubory a symboly"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:46
 msgid "Quickly access your projects"
