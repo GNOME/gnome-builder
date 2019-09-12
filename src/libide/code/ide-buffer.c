@@ -3588,8 +3588,10 @@ ide_buffer_guess_language (IdeBuffer *self)
   line = ide_buffer_get_line_text (self, 0);
   file = ide_buffer_get_file (self);
 
+  basename = g_file_get_basename (file);
+
   if (!g_file_is_native (file))
-    path = basename = g_file_get_basename (file);
+    path = basename;
   else
     path = g_file_peek_path (file);
 
@@ -3600,7 +3602,9 @@ ide_buffer_guess_language (IdeBuffer *self)
   if (uncertain && lang != NULL)
     return;
 
-  if (!(lang = gtk_source_language_manager_guess_language (manager, path, content_type)))
+  /* First try with full path, then with shortname */
+  if (!(lang = gtk_source_language_manager_guess_language (manager, path, content_type)) &&
+      !(lang = gtk_source_language_manager_guess_language (manager, basename, content_type)))
     return;
 
   if (!ide_str_equal0 (gtk_source_language_get_id (lang), ide_buffer_get_language_id (self)))
