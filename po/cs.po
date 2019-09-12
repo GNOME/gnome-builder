@@ -609,7 +609,7 @@ msgstr "sestavit;sestavení;vývoj;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
 msgid "Open a Project"
-msgstr "Otevření projektu"
+msgstr "Otevřít projekt"
 
 #: data/org.gnome.Builder.desktop.in.in:24
 msgid "Start New Project"
@@ -617,7 +617,7 @@ msgstr "Začít nový projekt"
 
 #: data/org.gnome.Builder.desktop.in.in:28
 msgid "Clone Repository"
-msgstr "Klonování repozitáře"
+msgstr "Klonovat repozitář"
 
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
@@ -1510,7 +1510,7 @@ msgstr "Cíl projektu"
 
 #: src/libide/greeter/ide-clone-surface.ui:308
 msgid "Clone Project"
-msgstr "Klonování projektu"
+msgstr "Klonovat projekt"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
 msgid "Select a Folder…"
@@ -1745,7 +1745,7 @@ msgstr "Použijte přepínač stránek výše, nebo něco z následujícího:"
 
 #: src/libide/gui/ide-frame-empty-state.ui:45
 msgid "Search"
-msgstr "hledat"
+msgstr "Hledat"
 
 #: src/libide/gui/ide-frame-empty-state.ui:54
 msgid "Project sidebar"
