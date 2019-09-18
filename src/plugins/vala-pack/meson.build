@@ -28,7 +28,8 @@ vala_deps = [
   libvte_dep,
   libdazzle_dep,
   libtemplate_glib_dep,
-  libjsonrpc_glib_dep
+  libjsonrpc_glib_dep,
+  libgiounix_dep,
 ]
 
 shared_module('plugin-vala-pack', vala_sources,
