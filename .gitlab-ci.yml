@@ -1,22 +1,23 @@
+include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
+
 stages:
     - test
-    - review
+    - deploy
 
 variables:
     BUNDLE: "gnome-builder-git.flatpak"
 
 flatpak:
-    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
-    stage: test
+    extends: .flatpak
     variables:
         GIT_SUBMODULE_STRATEGY: normal
 
         # Replace with your manifest path
         MANIFEST_PATH: "build-aux/flatpak/org.gnome.Builder.json"
-        RUNTIME_REPO: "https://sdk.gnome.org/gnome-nightly.flatpakrepo"
+        RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
         # Replace with your application name, as written in the manifest
         FLATPAK_MODULE: "gnome-builder"
-        DBUS_ID: "org.gnome.Builder"
+        APP_ID: "org.gnome.Builder"
         # Make sure to keep this in sync with the Flatpak manifest, all arguments
         # are passed except the config-args because we build it ourselves
         MESON_ARGS: |
@@ -29,66 +30,13 @@ flatpak:
           -Dchannel=flatpak-nightly
           -Dplugin_deviced=true
 
-    script:
-        - flatpak-builder --stop-at=${FLATPAK_MODULE} app ${MANIFEST_PATH}
-        # Make sure to keep this in sync with the Flatpak manifest, all arguments
-        # are passed except the config-args because we build it ourselves
-        - flatpak build app meson --prefix=/app ${MESON_ARGS} _build
-        - flatpak build app ninja -C _build install
-        - flatpak-builder --finish-only --repo=repo app ${MANIFEST_PATH}
-        # Run automatic tests inside the Flatpak env
-        # Setting LANG to avoid Tracker complaining and falling back to the same value,
-        # and setting NO_AT_BRIDGE, so that atk-bridge isn’t initialized, preventing
-        # annoying warnings that don’t affect the kinds of tests that we run.
-        - |
-          xvfb-run -a -s "-screen 0 1024x768x24" \
-              flatpak build \
-                  --env=LANG=C.UTF-8 \
-                  --env=NO_AT_BRIDGE=1 \
-                  app \
-                  dbus-run-session \
-                  meson test -C _build
-        # Generate a Flatpak bundle
-        - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${RUNTIME_REPO} ${DBUS_ID}
-
-    artifacts:
-        paths:
-            - ${BUNDLE}
-            - _build/meson-logs/meson-log.txt
-            - _build/meson-logs/testlog.txt
-        expire_in: 30 days
-
-    cache:
-        paths:
-            - .flatpak-builder/downloads/
-            - .flatpak-builder/git/
-
 review:
-    stage: review
+    extends: .review
     dependencies:
         - flatpak
-    script:
-        - echo "Generating flatpak deployment"
-    artifacts:
-        paths:
-            - ${BUNDLE}
-        expire_in: 30 days
-    environment:
-        name: review/$CI_COMMIT_REF_NAME
-        url: https://gitlab.gnome.org/$CI_PROJECT_PATH/-/jobs/$CI_JOB_ID/artifacts/raw/${BUNDLE}
-        on_stop: stop_review
-    except:
-        - master@GNOME/gnome-builder
-        - tags
 
 stop_review:
-    stage: review
-    script:
-        - echo "Stopping flatpak deployment"
-    when: manual
-    environment:
-        name: review/$CI_COMMIT_REF_NAME
-        action: stop
-    except:
-        - master@GNOME/gnome-builder
-        - tags
+    extends: .stop_review
+
+nightly:
+  extends: '.publish_nightly'
