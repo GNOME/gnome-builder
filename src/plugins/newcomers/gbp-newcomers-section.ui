@@ -77,7 +77,7 @@ Python</property>
                 <child>
                   <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Gitg</property>
-                    <property name="description" translatable="yes">Gitg is graphical Git client</property>
+                    <property name="description" translatable="yes">Gitg is a graphical Git client</property>
                     <property name="icon-name">org.gnome.gitg</property>
                     <property name="uri">https://gitlab.gnome.org/GNOME/gitg.git</property>
                     <property name="visible">true</property>
