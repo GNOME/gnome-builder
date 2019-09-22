@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-08-31 11:00+0000\n"
-"PO-Revision-Date: 2019-08-31 15:15+0200\n"
+"POT-Creation-Date: 2019-09-20 17:14+0000\n"
+"PO-Revision-Date: 2019-09-22 14:02+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -463,7 +463,7 @@ msgid "\"Projects\""
 msgstr "\"Projekty\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Katalog projektów"
 
@@ -900,7 +900,7 @@ msgstr "Bez tytułu"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1419
+#: src/libide/gui/ide-workbench.c:1424
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1130,8 +1130,8 @@ msgstr "Tryb wyróżniania"
 #: src/libide/editor/ide-editor-settings-dialog.ui:80
 #: src/libide/gui/ide-preferences-builtin.c:155
 #: src/libide/gui/ide-preferences-builtin.c:207
-#: src/libide/gui/ide-preferences-builtin.c:325
-#: src/libide/gui/ide-preferences-builtin.c:397
+#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:402
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 msgid "General"
 msgstr "Ogólne"
@@ -1167,7 +1167,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "Zastępowanie nawiasów i cudzysłowów zamykających"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:152
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Indentation"
 msgstr "Wcięcia"
 
@@ -1212,7 +1212,7 @@ msgid "Open File"
 msgstr "Otwarcie pliku"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1418
+#: src/libide/gui/ide-workbench.c:1423
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
@@ -1629,7 +1629,7 @@ msgid "_Quit"
 msgstr "Za_kończ"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1420 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Otwórz plik…"
@@ -2152,154 +2152,154 @@ msgstr "Języki programowania"
 msgid "Search languages…"
 msgstr "Języki…"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Trim trailing whitespace"
 msgstr "Usuwanie końcowych spacji"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Usuwanie końcowych spacji ze zmodyfikowanych wierszy podczas zapisywania."
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite Braces"
 msgstr "Zastępowanie nawiasów"
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite closing braces"
 msgstr "Zastępowanie nawiasów zamykających"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert Matching Brace"
 msgstr "Wstawianie pasującego nawiasu"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert matching character for { [ ( or \""
 msgstr "Wstawianie pasującego znaku dla { [ ( lub \""
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert Trailing Newline"
 msgstr "Wstawianie końcowego nowego wiersza"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Ensure files end with a newline"
 msgstr "Kończenie plików nowym wierszem"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Margins"
 msgstr "Marginesy"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Show right margin"
 msgstr "Prawy margines"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Right margin position"
 msgstr "Pozycja prawego marginesu"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Position in spaces for the right margin"
 msgstr "Pozycja prawego marginesu w spacjach"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Tab width"
 msgstr "Szerokość tabulacji"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Width of a tab character in spaces"
 msgstr "Szerokość znaku tabulacji w spacjach"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Insert spaces instead of tabs"
 msgstr "Spacje zamiast tabulacji"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Prefer spaces over use of tabs"
 msgstr "Spacje zamiast tabulacji"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Automatically indent"
 msgstr "Automatyczne wcięcia"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Indent source code as you type"
 msgstr "Tworzenie wcięć kodu źródłowego podczas pisania"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Spacing"
 msgstr "Spacje"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Space before opening parentheses"
 msgstr "Spacja przed nawiasem otwierającym"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening brackets"
 msgstr "Spacja przed otwierającym nawiasem kwadratowym"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening braces"
 msgstr "Spacja przed otwierającym nawiasem klamrowym"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Space before opening angles"
 msgstr "Spacja przed otwierającym nawiasem ostrym"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
 msgstr "Spacja przed dwukropkiem"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
 msgstr "Spacja przed przecinkiem"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
 msgstr "Spacja przed średnikiem"
 
-#: src/libide/gui/ide-preferences-builtin.c:357
-#: src/libide/gui/ide-preferences-builtin.c:375
+#: src/libide/gui/ide-preferences-builtin.c:362
+#: src/libide/gui/ide-preferences-builtin.c:380
 msgid "Default"
 msgstr "Domyślne"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/libide/gui/ide-preferences-builtin.c:380
+#: src/libide/gui/ide-preferences-builtin.c:367
+#: src/libide/gui/ide-preferences-builtin.c:385
 msgid "Number of CPU"
 msgstr "Liczba procesorów"
 
-#: src/libide/gui/ide-preferences-builtin.c:395
+#: src/libide/gui/ide-preferences-builtin.c:400
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Budowanie"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Build Workers"
 msgstr "Wątki robocze budowania"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Number of parallel build workers"
 msgstr "Liczba równoległych wątków roboczych budowania"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Clear build cache at startup"
 msgstr "Czyszczenie pamięci podręcznej budowania podczas uruchamiania"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Expired caches will be purged when Builder is started"
 msgstr ""
 "Nieaktualne pamięci podręczne będą usuwane podczas uruchamiania programu "
 "Builder"
 
-#: src/libide/gui/ide-preferences-builtin.c:408
+#: src/libide/gui/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Sieć"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Pobieranie na mierzonych połączeniach"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2307,35 +2307,35 @@ msgstr ""
 "Używanie mierzonych połączeń sieciowych podczas automatycznego pobierania "
 "zależności"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:420
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Projekty"
 
-#: src/libide/gui/ide-preferences-builtin.c:417
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Obszar roboczy"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Miejsce na wszystkie projekty"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Przywracanie poprzednio otwartych plików"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Otwieranie poprzednio otwartych plików podczas wczytywania projektu"
 
-#: src/libide/gui/ide-preferences-builtin.c:541
+#: src/libide/gui/ide-preferences-builtin.c:546
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "System kontroli wersji"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:554
+#: src/libide/gui/ide-preferences-builtin.c:559
 msgid "SDKs"
 msgstr "Środowiska programistyczne"
 
@@ -2856,10 +2856,6 @@ msgstr "<b>%s</b> — <small>Wiersz %u, kolumna %u</small>"
 #: src/libide/sourceview/ide-source-view.c:5237
 msgid "No references were found"
 msgstr "Brak odniesień"
-
-#: src/libide/terminal/gtk/menus.ui:8
-msgid "New Terminal Workspace…"
-msgstr "Nowy obszar roboczy terminala…"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
@@ -4329,7 +4325,7 @@ msgid "Use minimal editor interface"
 msgstr "Używa minimalnego interfejsu edytora"
 
 #. translators: the user selected a number outside the value range for the document.
-#: src/plugins/editor/gbp-editor-frame-controls.c:182
+#: src/plugins/editor/gbp-editor-frame-controls.c:190
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Należy podać numer między 1 a %u"
@@ -4703,23 +4699,23 @@ msgctxt "shortcut window"
 msgid "Redo the next command"
 msgstr "Ponowienie następnego polecenia"
 
-#: src/plugins/glade/gbp-glade-page.c:478
+#: src/plugins/glade/gbp-glade-page.c:483
 msgid "Switch to selection mode"
 msgstr "Przełączenie na tryb zaznaczania"
 
-#: src/plugins/glade/gbp-glade-page.c:479
+#: src/plugins/glade/gbp-glade-page.c:484
 msgid "Switch to drag-resize mode"
 msgstr "Przełączenie na tryb przeciągania i zmieniania rozmiaru"
 
-#: src/plugins/glade/gbp-glade-page.c:480
+#: src/plugins/glade/gbp-glade-page.c:485
 msgid "Switch to margin editor"
 msgstr "Przełączenie na edytor marginesów"
 
-#: src/plugins/glade/gbp-glade-page.c:481
+#: src/plugins/glade/gbp-glade-page.c:486
 msgid "Switch to alignment editor"
 msgstr "Przełączenie na edytor wyrównania"
 
-#: src/plugins/glade/gbp-glade-page.c:486
+#: src/plugins/glade/gbp-glade-page.c:491
 msgid "Unnamed Glade project"
 msgstr "Projekt Glade bez nazwy"
 
@@ -4912,12 +4908,12 @@ msgstr "Sugerowanie uzupełnień z języka Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Użycie biblioteki Jedi do uzupełniania w języku Python"
 
-#: src/plugins/ls/gbp-ls-page.c:316
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Wczytanie katalogu się nie powiodło: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:388
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — katalog"
@@ -4966,27 +4962,27 @@ msgstr "Program GNOME"
 msgid "Create a new GNOME application"
 msgstr "Utworzenie nowego programu GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:317
+#: src/plugins/meson-templates/meson_templates.py:324
 msgid "Shared Library"
 msgstr "Biblioteka współdzielona"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:326
 msgid "Create a new project with a shared library"
 msgstr "Utworzenie nowego projektu z biblioteką współdzieloną"
 
-#: src/plugins/meson-templates/meson_templates.py:336
+#: src/plugins/meson-templates/meson_templates.py:343
 msgid "Empty Project"
 msgstr "Pusty projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:338
+#: src/plugins/meson-templates/meson_templates.py:345
 msgid "Create a new empty project"
 msgstr "Utworzenie nowego pustego projektu"
 
-#: src/plugins/meson-templates/meson_templates.py:351
+#: src/plugins/meson-templates/meson_templates.py:358
 msgid "Command Line Tool"
 msgstr "Narzędzie wiersza poleceń"
 
-#: src/plugins/meson-templates/meson_templates.py:353
+#: src/plugins/meson-templates/meson_templates.py:360
 msgid "Create a new command line project"
 msgstr "Utworzenie nowego projektu wiersza poleceń"
 
@@ -5162,50 +5158,58 @@ msgid "Simple game launcher for GNOME"
 msgstr "Prosta przeglądarka gier dla środowiska GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg"
+msgstr "gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Gitg is a graphical Git client"
+msgstr "gitg to graficzny klient systemu git"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Maps"
 msgstr "Mapy"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "A simple GNOME 3 maps application"
 msgstr "Prosta mapa dla środowiska GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music"
 msgstr "Muzyka"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
 msgid "Music player and management application"
 msgstr "Odtwarzacz muzyki i zarządzanie kolekcją"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Default file manager for GNOME"
 msgstr "Domyślny menedżer plików w środowisku GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Photos"
 msgstr "Zdjęcia"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Wyświetlanie, organizowanie i udostępnianie zdjęć w środowisku GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "An IRC Client for GNOME"
 msgstr "Klient sieci IRC dla GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "Sound Recorder"
 msgstr "Nagrywanie dźwięku"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+#: src/plugins/newcomers/gbp-newcomers-section.ui:142
 msgid "A simple and modern sound recorder"
 msgstr "Proste i nowoczesne narzędzie do zapisywania dźwięku"
 
@@ -5863,7 +5867,7 @@ msgstr ""
 msgid "%s (Sysroot SDK)"
 msgstr "%s (środowisko programistyczne sysroot)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:96
+#: src/plugins/terminal/gbp-terminal-application-addin.c:97
 msgid "Use terminal interface"
 msgstr "Używa interfejsu terminala"
 
