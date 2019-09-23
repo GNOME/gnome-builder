@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-09-12 09:16+0000\n"
-"PO-Revision-Date: 2019-09-16 08:45+0200\n"
+"POT-Creation-Date: 2019-09-22 17:27+0000\n"
+"PO-Revision-Date: 2019-09-23 10:30+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -5177,50 +5177,58 @@ msgid "Simple game launcher for GNOME"
 msgstr "Un'applicazione per lanciare giochi per GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Gitg is a graphical Git client"
+msgstr "Gitg è un client git grafico"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Maps"
 msgstr "Mappe"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "A simple GNOME 3 maps application"
 msgstr "Una semplice applicazione per le mappe"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music"
 msgstr "Musica"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
 msgid "Music player and management application"
 msgstr "Una applicazione per riprodurre e gestire la propria musica"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Default file manager for GNOME"
 msgstr "Il gestore file predefinito di GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Photos"
 msgstr "Foto"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Accedere, organizzare e condividere le proprie foto"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "An IRC Client for GNOME"
 msgstr "Un client IRC per GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "Sound Recorder"
 msgstr "Registratore audio"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+#: src/plugins/newcomers/gbp-newcomers-section.ui:142
 msgid "A simple and modern sound recorder"
 msgstr "Un registratore audio semplice e moderno"
 
