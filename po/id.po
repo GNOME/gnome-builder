@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-08-31 22:03+0000\n"
-"PO-Revision-Date: 2019-09-02 15:43+0700\n"
+"POT-Creation-Date: 2019-09-20 17:14+0000\n"
+"PO-Revision-Date: 2019-09-21 18:50+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -464,7 +464,7 @@ msgid "\"Projects\""
 msgstr "\"Proyek\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Direktori proyek"
 
@@ -898,7 +898,7 @@ msgstr "Tanpa Judul"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1419
+#: src/libide/gui/ide-workbench.c:1424
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1130,8 +1130,8 @@ msgstr "Mode Penyorotan"
 #: src/libide/editor/ide-editor-settings-dialog.ui:80
 #: src/libide/gui/ide-preferences-builtin.c:155
 #: src/libide/gui/ide-preferences-builtin.c:207
-#: src/libide/gui/ide-preferences-builtin.c:325
-#: src/libide/gui/ide-preferences-builtin.c:397
+#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:402
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 msgid "General"
 msgstr "Umum"
@@ -1166,7 +1166,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "Timpa kurung kurawal dan kutipan"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:152
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Indentation"
 msgstr "Indentasi"
 
@@ -1211,7 +1211,7 @@ msgid "Open File"
 msgstr "Buka Berkas"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1418
+#: src/libide/gui/ide-workbench.c:1423
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
@@ -1626,7 +1626,7 @@ msgid "_Quit"
 msgstr "_Keluar"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1420 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Buka Berkas…"
@@ -2152,152 +2152,152 @@ msgstr "Bahasa Pemrograman"
 msgid "Search languages…"
 msgstr "Cari bahasa…"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Trim trailing whitespace"
 msgstr "Pangkas trailing whitespace"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Setelah menyimpan, trailing spasi dari baris yang diubah akan dipangkas."
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite Braces"
 msgstr "Timpa Tanda Kurung"
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite closing braces"
 msgstr "Timpa tanda kurung penutup"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert Matching Brace"
 msgstr "Sisipkan kurung pasangan"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert matching character for { [ ( or \""
 msgstr "Sisipkan karakter yang sesuai untuk { [ ( atau \""
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert Trailing Newline"
 msgstr "Sisipkan Baris Baru di Ekor"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Ensure files end with a newline"
 msgstr "Pastikan berkas diakhiri dengan baris baru"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Margins"
 msgstr "Margin"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Show right margin"
 msgstr "Tampilkan marjin kanan"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Right margin position"
 msgstr "Posisi marjin kanan"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Position in spaces for the right margin"
 msgstr "Posisi di ruang untuk margin kanan"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Tab width"
 msgstr "Lebar tab"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Width of a tab character in spaces"
 msgstr "Lebar dari sebuah karakter tab dalam spasi"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Insert spaces instead of tabs"
 msgstr "Gunakan spasi, jangan tab"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Prefer spaces over use of tabs"
 msgstr "Lebih suka spasi daripada tab"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Automatically indent"
 msgstr "Indentasi otomatis"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Indent source code as you type"
 msgstr "Indentasikan kode sumber sembari Anda mengetik"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Spacing"
 msgstr "Spasi"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Space before opening parentheses"
 msgstr "Spasi sebelum membuka tanda kurung lengkung"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening brackets"
 msgstr "Spasi sebelum membuka tanda kurung siku/tegak"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening braces"
 msgstr "Spasi sebelum membuka tanda kurung kurawal"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Space before opening angles"
 msgstr "Spasi sebelum membuka tanda kurung sudut"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
 msgstr "Lebih suka spasi sebelum tanda titik dua"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
 msgstr "Lebih suka spasi sebelum tanda koma"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
 msgstr "Lebih suka spasi sebelum tanda titik koma"
 
-#: src/libide/gui/ide-preferences-builtin.c:357
-#: src/libide/gui/ide-preferences-builtin.c:375
+#: src/libide/gui/ide-preferences-builtin.c:362
+#: src/libide/gui/ide-preferences-builtin.c:380
 msgid "Default"
 msgstr "Baku"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/libide/gui/ide-preferences-builtin.c:380
+#: src/libide/gui/ide-preferences-builtin.c:367
+#: src/libide/gui/ide-preferences-builtin.c:385
 msgid "Number of CPU"
 msgstr "Banyaknya CPU"
 
-#: src/libide/gui/ide-preferences-builtin.c:395
+#: src/libide/gui/ide-preferences-builtin.c:400
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Bangun"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Build Workers"
 msgstr "Pekerja Bangun"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Number of parallel build workers"
 msgstr "Banyaknya pekerja bangun paralel"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Clear build cache at startup"
 msgstr "Hapus tembolok bangun saat awal mula"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Expired caches will be purged when Builder is started"
 msgstr "Tembolok yang kedaluwarsa akan dihapus saat Builder dimulai"
 
-#: src/libide/gui/ide-preferences-builtin.c:408
+#: src/libide/gui/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Jaringan"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Izinkan mengunduh melalui koneksi berkuota"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2305,35 +2305,35 @@ msgstr ""
 "Izinkan penggunaan koneksi jaringan berkuota ketika secara otomatis "
 "mengunduh dependensi"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:420
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Proyek"
 
-#: src/libide/gui/ide-preferences-builtin.c:417
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Area kerja"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Suatu tempat untuk semua proyek Anda"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Pulihkan berkas yang sebelumnya terbuka"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah proyek"
 
-#: src/libide/gui/ide-preferences-builtin.c:541
+#: src/libide/gui/ide-preferences-builtin.c:546
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Kendali Versi"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:554
+#: src/libide/gui/ide-preferences-builtin.c:559
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2854,10 +2854,6 @@ msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 #: src/libide/sourceview/ide-source-view.c:5237
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
-
-#: src/libide/terminal/gtk/menus.ui:8
-msgid "New Terminal Workspace…"
-msgstr "Area Kerja Terminal Baru…"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
@@ -4330,7 +4326,7 @@ msgid "Use minimal editor interface"
 msgstr "Gunakan antarmuka penyunting minimal"
 
 #. translators: the user selected a number outside the value range for the document.
-#: src/plugins/editor/gbp-editor-frame-controls.c:182
+#: src/plugins/editor/gbp-editor-frame-controls.c:190
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Sediakan angka antara 0 dan %u"
@@ -4916,12 +4912,12 @@ msgstr "Sarankan pelengkapan dari Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Gunakan Jedi untuk pelengkapan dalam bahasa Python"
 
-#: src/plugins/ls/gbp-ls-page.c:316
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Gagal memuat direktori: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:388
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Direktori"
@@ -5162,50 +5158,58 @@ msgid "Simple game launcher for GNOME"
 msgstr "Peluncur permainan sederhana untuk GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Gitg is a graphical Git client"
+msgstr "Gitg adalah klien Git grafis"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Maps"
 msgstr "Peta"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "A simple GNOME 3 maps application"
 msgstr "Aplikasi peta sederhana GNOME 3"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music"
 msgstr "Musik"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
 msgid "Music player and management application"
 msgstr "Pemutar musik dan aplikasi manajemen"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Default file manager for GNOME"
 msgstr "Manajer berkas bawaan untuk GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Photos"
 msgstr "Foto"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Akses, atur, dan bagikan foto Anda di GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "An IRC Client for GNOME"
 msgstr "Klien IRC untuk GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "Sound Recorder"
 msgstr "Perekam Suara"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+#: src/plugins/newcomers/gbp-newcomers-section.ui:142
 msgid "A simple and modern sound recorder"
 msgstr "Suatu perekam suara modern yang sederhana"
 
@@ -5857,7 +5861,7 @@ msgstr "Path opsional yang dipisahkan koma untuk menentukan PKG_CONFIG_PATH."
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:96
+#: src/plugins/terminal/gbp-terminal-application-addin.c:97
 msgid "Use terminal interface"
 msgstr "Gunakan antarmuka terminal"
 
@@ -6088,6 +6092,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "New Terminal Workspace…"
+#~ msgstr "Area Kerja Terminal Baru…"
 
 #~ msgid "Todo"
 #~ msgstr "Todo"
