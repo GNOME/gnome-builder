@@ -428,10 +428,14 @@ ide_workspace_real_set_fullscreen (DzlApplicationWindow *window,
 {
   IdeWorkspace *self = (IdeWorkspace *)window;
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GtkWidget *titlebar;
 
   g_assert (IDE_IS_WORKSPACE (self));
 
   DZL_APPLICATION_WINDOW_CLASS (ide_workspace_parent_class)->set_fullscreen (window, fullscreen);
+
+  titlebar = dzl_application_window_get_titlebar (window);
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (titlebar), !fullscreen);
 
   gtk_container_foreach (GTK_CONTAINER (priv->surfaces),
                          ide_workspace_set_surface_fullscreen_cb,
