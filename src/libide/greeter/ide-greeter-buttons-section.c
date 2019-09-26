@@ -59,17 +59,19 @@ ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
   ide_greeter_buttons_section_add_button (self,
                                           0,
                                           g_object_new (GTK_TYPE_BUTTON,
-                                                        "label", _("Select a Folder…"),
+                                                        "label", _("Select a _Folder…"),
                                                         "visible", TRUE,
                                                         "action-name", "win.open",
+                                                        "use-underline", TRUE,
                                                         NULL));
   ide_greeter_buttons_section_add_button (self,
                                           100,
                                           g_object_new (GTK_TYPE_BUTTON,
-                                                        "label", _("Clone Repository…"),
+                                                        "label", _("_Clone Repository…"),
                                                         "visible", TRUE,
                                                         "action-name", "win.surface",
                                                         "action-target", g_variant_new_string ("clone"),
+                                                        "use-underline", TRUE,
                                                         NULL));
 }
 
