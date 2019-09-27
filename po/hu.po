@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-09-07 10:32+0000\n"
-"PO-Revision-Date: 2019-09-07 20:13+0200\n"
-"Last-Translator: Balázs Meskó <mesko.balazs at fsf dot hu>\n"
+"POT-Creation-Date: 2019-09-26 22:03+0000\n"
+"PO-Revision-Date: 2019-09-27 21:35+0200\n"
+"Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -906,7 +906,7 @@ msgstr "Névtelen"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1419
+#: src/libide/gui/ide-workbench.c:1424
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1220,7 +1220,7 @@ msgid "Open File"
 msgstr "Fájl megnyitása"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1418
+#: src/libide/gui/ide-workbench.c:1423
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
@@ -1639,7 +1639,7 @@ msgid "_Quit"
 msgstr "_Kilépés"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1420 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Fájl megnyitása…"
@@ -1649,7 +1649,6 @@ msgid "Run Options"
 msgstr "Futtatási beállítások"
 
 #: src/libide/gui/ide-application-actions.c:78
-#| msgid "Build Preferences"
 msgid "Builder — Preferences"
 msgstr "Építő – Beállítások"
 
@@ -1734,14 +1733,11 @@ msgstr ""
 "DBUS_SESSION_BUS_ADDRESS paramétert."
 
 #: src/libide/gui/ide-command-manager.c:491
-#| msgctxt "shortcut window"
-#| msgid "Command Bar"
 msgid "Command failed"
 msgstr "Parancs sikertelen"
 
 #: src/libide/gui/ide-command-manager.c:513
 #, c-format
-#| msgid "Failed to parse integer from “%s”"
 msgid "Failed to locate command “%s”"
 msgstr "A(z) „%s” parancs nem található"
 
@@ -2682,7 +2678,6 @@ msgid "Build"
 msgstr "Összeállítás"
 
 #: src/libide/gui/ide-shortcuts-window.ui:472
-#| msgid "Rebuild"
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Újra-összeállítás"
@@ -4327,7 +4322,6 @@ msgstr[1] ""
 "Mentetlen változások vannak a fájlokban. Bezárás előtt menti a változásokat?"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:27
-#| msgid "Select a palette file"
 msgid "Select the files to save:"
 msgstr "Válassza ki a mentendő fájlokat:"
 
@@ -5167,50 +5161,58 @@ msgid "Simple game launcher for GNOME"
 msgstr "Egyszerű játékindító a GNOME-hoz"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Gitg is a graphical Git client"
+msgstr "A Gitg egy grafikus Git kliens"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Maps"
 msgstr "Térképek"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "A simple GNOME 3 maps application"
 msgstr "Egy egyszerű GNOME 3 térképalkalmazás"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music"
 msgstr "Zene"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
 msgid "Music player and management application"
 msgstr "Zenelejátszó és -kezelő alkalmazás"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Default file manager for GNOME"
 msgstr "Alapértelmezett fájlrendszer a GNOME-hoz"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Photos"
 msgstr "Fényképek"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Fényképek elérése, rendszerezése és megosztása a GNOME-ban"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "An IRC Client for GNOME"
 msgstr "Egy IRC kliens a GNOME-hoz"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "Sound Recorder"
 msgstr "Hangrögzítő"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+#: src/plugins/newcomers/gbp-newcomers-section.ui:142
 msgid "A simple and modern sound recorder"
 msgstr "Egyszerű és modern hangrögzítő"
 
@@ -5535,13 +5537,10 @@ msgid "to add a new toolchain!"
 msgstr "egy új eszközlánc telepítéséhez!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
-#| msgctxt "shortcut window"
-#| msgid "Undo the last command"
 msgid "Shell command"
 msgstr "Parancs"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:569
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5550,20 +5549,16 @@ msgstr ""
 "műveletsor nincs előkészítve"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:648
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
 "Nem lehet elindítani a folyamatot, mert az összeállítási műveletsor még nem "
 "érhető el"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
-#| msgctxt "shortcut window"
-#| msgid "Glade shortcuts"
 msgid "Change Shortcut"
 msgstr "Gyorsbillentyű módosítása"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
-#| msgid "_Title Case"
 msgid "Title"
 msgstr "Cím"
 
@@ -5582,7 +5577,6 @@ msgstr ""
 "„$BUILDDIR” automatikusan beállításra kerül a parancshoz."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
-#| msgid "Command Line Tool"
 msgid "Command Locality"
 msgstr "Parancs futtatási helye"
 
@@ -5591,12 +5585,10 @@ msgid "On Host"
 msgstr "Gazdagépen"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
-#| msgid "Build Environment"
 msgid "In Build Environment"
 msgstr "Összeállítási környezetben"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
-#| msgid "Build Environment"
 msgid "In Runtime Environment"
 msgstr "Futtatási környezetben"
 
@@ -5610,7 +5602,6 @@ msgstr ""
 "helyétől függően."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
-#| msgid "Close Project"
 msgid "Close on Exit"
 msgstr "Bezárás kilépéskor"
 
@@ -5621,37 +5612,30 @@ msgstr ""
 "után."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
-#| msgid "Keyboard Shortcuts"
 msgid "Keyboard Shortcut"
 msgstr "Gyorsbillentyű"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
-#| msgid "Change _to"
 msgid "Change"
 msgstr "Módosítás"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
-#| msgid "Delete Toolchain"
 msgid "Delete Command"
 msgstr "Parancs törlése"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
-#| msgid "Build Environment"
 msgid "Run in host environment"
 msgstr "Futtatás a gazda környezetben"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
-#| msgid "Build Environment"
 msgid "Run in build environment"
 msgstr "Futtatás az összeállítási környezetben"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
-#| msgid "Build Environment"
 msgid "Run in runtime environment"
 msgstr "Futtatás a futtatási környezetben"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:113
-#| msgid "Not a command: %s"
 msgid "New command"
 msgstr "Új parancs"
 
@@ -5665,8 +5649,6 @@ msgid "External Commands"
 msgstr "Külső parancsok"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
-#| msgctxt "shortcut window"
-#| msgid "Command Bar"
 msgid "Command"
 msgstr "Parancs"
 
