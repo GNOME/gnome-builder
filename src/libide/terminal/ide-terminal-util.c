@@ -103,7 +103,7 @@ _ide_guess_shell (void)
   g_autofree gchar *command = NULL;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) argv = NULL;
-  const gchar *shell;
+  g_autofree gchar *shell = NULL;
 
   /*
    * First ask VTE to guess, so we can use that while we discover
