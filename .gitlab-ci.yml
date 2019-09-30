@@ -40,3 +40,5 @@ stop_review:
 
 nightly:
   extends: '.publish_nightly'
+  dependencies:
+        - 'flatpak'
