@@ -34,7 +34,7 @@ namespace Ide
 		public uint get_n_children (Ide.SymbolNode? node)
 		{
 			if (node != null)
-				return (node as ValaSymbolNode).n_children;
+				return ((ValaSymbolNode) node).n_children;
 
 			return (uint)tree.n_children ();
 		}
@@ -42,7 +42,7 @@ namespace Ide
 		public Ide.SymbolNode? get_nth_child (Ide.SymbolNode? node, uint nth)
 		{
 			if (node != null)
-				return (node as ValaSymbolNode).get_nth_child (nth);
+				return ((ValaSymbolNode) node).get_nth_child (nth);
 
 			var child_val = tree.get_child_value (nth);
 			return new ValaSymbolNode (child_val);
