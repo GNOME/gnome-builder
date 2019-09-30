@@ -257,11 +257,12 @@ namespace Ide {
 
 		public override void visit_end_full_expression (Vala.Expression expr) {
 			if (expr is Vala.LambdaExpression) {
-				if ((expr as Vala.LambdaExpression).method != null)
-					visit_method ((expr as Vala.LambdaExpression).method);
+				unowned Vala.LambdaExpression lambda_expr = (Vala.LambdaExpression) expr;
+				if (lambda_expr.method != null)
+					visit_method (lambda_expr.method);
 			}
 			if (expr is Vala.MethodCall) {
-				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list()) {
+				foreach (Vala.Expression e in ((Vala.MethodCall) expr).get_argument_list()) {
 					visit_expression (e);
 				}
 			}
@@ -269,8 +270,9 @@ namespace Ide {
 
 		public override void visit_expression (Vala.Expression expr) {
 			if (expr is Vala.LambdaExpression) {
-				if ((expr as Vala.LambdaExpression).method != null)
-					visit_method ((expr as Vala.LambdaExpression).method);
+				unowned Vala.LambdaExpression lambda_expr = (Vala.LambdaExpression) expr;
+				if (lambda_expr.method != null)
+					visit_method (lambda_expr.method);
 			}
 			/*if (expr is Vala.MethodCall) {
 				update_location (expr);
@@ -279,7 +281,7 @@ namespace Ide {
 
 			}*/
 			if (expr is Vala.Assignment) {
-				(expr as Vala.Assignment).accept_children (this);
+				((Vala.Assignment) expr).accept_children (this);
 			}
 		}
 	}
