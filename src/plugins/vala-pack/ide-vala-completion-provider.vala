@@ -47,7 +47,7 @@ namespace Ide
 		public bool refilter (Ide.CompletionContext context,
 		                      GLib.ListModel proposals)
 		{
-			(proposals as ValaCompletionResults).refilter (context.get_word ());
+			((ValaCompletionResults) proposals).refilter (context.get_word ());
 			return true;
 		}
 
