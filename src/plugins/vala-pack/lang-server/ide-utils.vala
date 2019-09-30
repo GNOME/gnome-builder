@@ -29,7 +29,11 @@ namespace Ide {
 		if (node is Vala.MethodCall) {
 			source_reference = ((Vala.MethodCall) node).call.symbol_reference.source_reference;
 		} else if (node is Vala.DataType) {
+#if VALA_0_48
+			source_reference = ((Vala.DataType) node).symbol.source_reference;
+#else
 			source_reference = ((Vala.DataType) node).data_type.source_reference;
+#endif
 		} else if (node is Vala.MemberAccess) {
 			weak Vala.Symbol symbol_ref = ((Vala.MemberAccess) node).symbol_reference;
 			if (symbol_ref != null) {

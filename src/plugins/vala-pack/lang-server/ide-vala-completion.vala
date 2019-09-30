@@ -110,6 +110,14 @@ namespace Ide
 			return matching_symbols;
 		}
 
+		inline Vala.ArrayList<Vala.Symbol> symbol_lookup_inherited_for_type (Vala.DataType data_type) {
+#if VALA_0_48
+			return symbol_lookup_inherited (data_type.symbol);
+#else
+			return symbol_lookup_inherited (data_type.data_type);
+#endif
+		}
+
 		Vala.ArrayList<Vala.Symbol> symbol_lookup_inherited (Vala.Symbol? sym,
 		                                                bool invocation = false)
 		{
@@ -127,32 +135,32 @@ namespace Ide
 
 			if (invocation && sym is Vala.Method) {
 				var func = (Vala.Method) sym;
-				result.add_all (symbol_lookup_inherited (func.return_type.data_type));
+				result.add_all (symbol_lookup_inherited_for_type (func.return_type));
 			} else if (sym is Vala.Class) {
 				var cl = (Vala.Class) sym;
 				foreach (var base_type in cl.get_base_types ()) {
-					result.add_all (symbol_lookup_inherited (base_type.data_type));
+					result.add_all (symbol_lookup_inherited_for_type (base_type));
 				}
 			} else if (sym is Vala.Struct) {
 				var st = (Vala.Struct) sym;
-				result.add_all (symbol_lookup_inherited (st.base_type.data_type));
+				result.add_all (symbol_lookup_inherited_for_type (st.base_type));
 			} else if (sym is Vala.Interface) {
 				var iface = (Vala.Interface) sym;
 				foreach (var prerequisite in iface.get_prerequisites ()) {
-					result.add_all (symbol_lookup_inherited (prerequisite.data_type));
+					result.add_all (symbol_lookup_inherited_for_type (prerequisite));
 				}
 			} else if (sym is Vala.LocalVariable) {
 				var variable = (Vala.LocalVariable) sym;
-				result.add_all (symbol_lookup_inherited (variable.variable_type.data_type));
+				result.add_all (symbol_lookup_inherited_for_type (variable.variable_type));
 			} else if (sym is Vala.Field) {
 				var field = (Vala.Field) sym;
-				result.add_all (symbol_lookup_inherited (field.variable_type.data_type));
+				result.add_all (symbol_lookup_inherited_for_type (field.variable_type));
 			} else if (sym is Vala.Property) {
 				var prop = (Vala.Property) sym;
-				result.add_all (symbol_lookup_inherited (prop.property_type.data_type));
+				result.add_all (symbol_lookup_inherited_for_type (prop.property_type));
 			} else if (sym is Vala.Parameter) {
 				var fp = (Vala.Parameter) sym;
-				result.add_all (symbol_lookup_inherited (fp.variable_type.data_type));
+				result.add_all (symbol_lookup_inherited_for_type (fp.variable_type));
 			}
 
 			return result;
