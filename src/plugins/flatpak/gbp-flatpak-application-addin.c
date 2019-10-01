@@ -101,7 +101,7 @@ static GbpFlatpakApplicationAddin *instance;
 static guint signals [N_SIGNALS];
 static BuiltinFlatpakRepo builtin_flatpak_repos[] = {
   { "flathub",       "https://flathub.org/repo/flathub.flatpakrepo" },
-  { "gnome-nightly", "https://sdk.gnome.org/gnome-nightly.flatpakrepo" },
+  { "gnome-nightly", "https://nightly.gnome.org/gnome-nightly.flatpakrepo" },
 };
 
 static void gbp_flatpak_application_addin_lazy_reload (GbpFlatpakApplicationAddin *self);
