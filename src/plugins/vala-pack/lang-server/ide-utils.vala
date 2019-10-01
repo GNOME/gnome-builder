@@ -16,7 +16,7 @@ namespace Ide {
 				name = vala_symbol_name (symbol);
 			} else {
 				if (symbol is Vala.CreationMethod) {
-					name = (symbol as Vala.CreationMethod).class_name;
+					name = ((Vala.CreationMethod) symbol).class_name;
 				} else {
 					name = symbol.name;
 				}
@@ -29,7 +29,11 @@ namespace Ide {
 		if (node is Vala.MethodCall) {
 			source_reference = ((Vala.MethodCall) node).call.symbol_reference.source_reference;
 		} else if (node is Vala.DataType) {
+#if VALA_0_48
+			source_reference = ((Vala.DataType) node).type_symbol.source_reference;
+#else
 			source_reference = ((Vala.DataType) node).data_type.source_reference;
+#endif
 		} else if (node is Vala.MemberAccess) {
 			weak Vala.Symbol symbol_ref = ((Vala.MemberAccess) node).symbol_reference;
 			if (symbol_ref != null) {
@@ -94,9 +98,9 @@ namespace Ide {
 		} else if (symbol is Vala.Property) {
 			return symbol.name;
 		} else if (symbol is Vala.CreationMethod) {
-			return (symbol as Vala.CreationMethod).class_name;
+			return ((Vala.CreationMethod) symbol).class_name;
 		} else if (symbol is Vala.Method) {
-			var type = new Vala.MethodType (symbol as Vala.Method);
+			var type = new Vala.MethodType ((Vala.Method) symbol);
 			return type.to_prototype_string (null);
 		}
 
@@ -123,11 +127,11 @@ namespace Ide {
 	public static Vala.Symbol? vala_symbol_from_code_node (Vala.CodeNode node)
 	{
 		if (node is Vala.Expression)
-			return (node as Vala.Expression).symbol_reference;
+			return ((Vala.Expression) node).symbol_reference;
 		else if (node is Vala.MethodCall)
-			return (node as Vala.MethodCall).call.symbol_reference;
+			return ((Vala.MethodCall) node).call.symbol_reference;
 		else if (node is Vala.MemberAccess)
-			return (node as Vala.MemberAccess).symbol_reference;
+			return ((Vala.MemberAccess) node).symbol_reference;
 		else
 			return (node as Vala.Symbol);
 	}
