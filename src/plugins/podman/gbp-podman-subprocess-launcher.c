@@ -87,8 +87,10 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 
       if ((cwd = ide_subprocess_launcher_get_cwd (launcher)))
         {
+          g_autofree gchar *cwd_absolute = g_canonicalize_filename (cwd, NULL);
+
           ide_subprocess_launcher_insert_argv (launcher, i++, "--workdir");
-          ide_subprocess_launcher_insert_argv (launcher, i++, cwd);
+          ide_subprocess_launcher_insert_argv (launcher, i++, cwd_absolute);
         }
 
       /* Determine how many FDs we need to preserve.
