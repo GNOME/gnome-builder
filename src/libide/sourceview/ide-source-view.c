@@ -3868,6 +3868,12 @@ ide_source_view_set_overscroll_num_lines (IdeSourceView *self,
 
   new_margin = CLAMP (new_margin, 0, MAX (height - priv->cached_char_height, 0));
 
+  /* ensure enough space for the overlay scrollbars and their interactive
+   * trough when scrolled to the end.
+   */
+  if (new_margin < 16)
+    new_margin = 16;
+
   g_object_set (self,
                 "bottom-margin", new_margin,
                 NULL);
