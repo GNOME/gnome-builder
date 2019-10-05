@@ -1,4 +1,20 @@
 ==============
+Version 3.34.1
+==============
+
+Changes since last release:
+
+ • Added gitg to newcomers projects
+ • Fix user disabling of quick-highlight plugin
+ • Tweak bottom margin of editors for overlay scrollbars
+ • Improve guessing of source code languages from basename
+ • Fix branch selection from clone dialog
+ • Fix podman invocations to use absolute directory path
+ • Load search engine when loading a project
+ • Build system fixes
+ • Translation updates
+
+==============
 Version 3.34.0
 ==============
 
