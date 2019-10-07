@@ -79,7 +79,7 @@
   <style name="current-line-number"         background="#rgba(214,209,205,.35)" bold="true"/>
   <style name="draw-spaces"                 foreground="aluminium3"/>
   <style name="line-numbers"                foreground="line1" background="bg1"/>
-  <style name="background-pattern"          background="#rgba(.125,.125,.125,.025)"/>
+  <style name="background-pattern"          background="#e7e5e4"/>
 
   <!-- Diagnostics Underlining -->
   <style name="diagnostician::deprecated"   underline="error" underline-color="aluminium3"/>
