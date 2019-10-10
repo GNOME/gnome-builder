@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-09-02 08:44+0000\n"
-"PO-Revision-Date: 2019-09-03 11:16+0200\n"
+"POT-Creation-Date: 2019-10-05 00:57+0000\n"
+"PO-Revision-Date: 2019-10-10 11:57+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 3.32.1\n"
+"X-Generator: Gtranslator 3.34.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -470,7 +470,7 @@ msgid "\"Projects\""
 msgstr "\"Proyectos\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Carpeta de proyectos"
 
@@ -847,14 +847,13 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4977
+#: src/libide/sourceview/ide-source-view.c:4983
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Renombrar"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Quitar"
@@ -910,7 +909,7 @@ msgstr "Sin título"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1419
+#: src/libide/gui/ide-workbench.c:1424
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1142,8 +1141,8 @@ msgstr "Modo resaltado"
 #: src/libide/editor/ide-editor-settings-dialog.ui:80
 #: src/libide/gui/ide-preferences-builtin.c:155
 #: src/libide/gui/ide-preferences-builtin.c:207
-#: src/libide/gui/ide-preferences-builtin.c:325
-#: src/libide/gui/ide-preferences-builtin.c:397
+#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:402
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 msgid "General"
 msgstr "General"
@@ -1178,7 +1177,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "Sobrescribir parejas de llaves y comillas"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:152
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Indentation"
 msgstr "Sangrado"
 
@@ -1223,7 +1222,7 @@ msgid "Open File"
 msgstr "Abrir archivo"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1418
+#: src/libide/gui/ide-workbench.c:1423
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
@@ -1528,12 +1527,15 @@ msgid "Clone Project"
 msgstr "Clonar proyecto"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
-msgid "Select a Folder…"
-msgstr "Seleccionar carpeta…"
+#| msgid "Select a Folder…"
+msgid "Select a _Folder…"
+msgstr "Seleccione una _carpeta…"
 
-#: src/libide/greeter/ide-greeter-buttons-section.c:69
-msgid "Clone Repository…"
-msgstr "Clonar repositorio…"
+#: src/libide/greeter/ide-greeter-buttons-section.c:70
+#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
+#: src/plugins/greeter/gtk/menus.ui:88
+msgid "_Clone Repository…"
+msgstr "_Clonar repositorio…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
@@ -1642,7 +1644,7 @@ msgid "_Quit"
 msgstr "_Salir"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1420 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Abrir archivo…"
@@ -2176,153 +2178,153 @@ msgstr "Lenguajes de programación"
 msgid "Search languages…"
 msgstr "Buscar lenguajes…"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Trim trailing whitespace"
 msgstr "Eliminar espacios en blanco al final"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Al guardar, se eliminarán los espacios en blanco del final de las líneas "
 "modificadas."
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite Braces"
 msgstr "Sobrescribir llaves"
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite closing braces"
 msgstr "Sobrescribir cierres de llaves"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert Matching Brace"
 msgstr "Insertar llave coincidente"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert matching character for { [ ( or \""
 msgstr "Insertar llave coincidente para { [ ( o \""
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert Trailing Newline"
 msgstr "Insertar nueva línea al final"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Ensure files end with a newline"
 msgstr "Asegurar el final de los archivos con una línea nueva"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Margins"
 msgstr "Márgenes"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Show right margin"
 msgstr "Mostrar margen derecho"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Right margin position"
 msgstr "Posición del margen derecho"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Position in spaces for the right margin"
 msgstr "Posición en espacios para el margen derecho"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Tab width"
 msgstr "Anchura del tabulador"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Width of a tab character in spaces"
 msgstr "Anchura en espacios del tabulador"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Insert spaces instead of tabs"
 msgstr "Insertar espacios en lugar de tabuladores"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Prefer spaces over use of tabs"
 msgstr "Insertar espacios en lugar de tabuladores"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Automatically indent"
 msgstr "Sangrar automáticamente"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Indent source code as you type"
 msgstr "Sangrar el código fuente a medida que escribe"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Spacing"
 msgstr "Espaciado"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Space before opening parentheses"
 msgstr "Espacio antes de abrir paréntesis"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening brackets"
 msgstr "Espacio antes de abrir corchetes"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening braces"
 msgstr "Espacio antes de abrir llaves"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Space before opening angles"
 msgstr "Espacio antes de abrir comillas angulares"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
 msgstr "Insertar espacios en lugar de dos puntos"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
 msgstr "Insertar espacios en lugar de comas"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
 msgstr "Insertar espacios en lugar de punto y coma"
 
-#: src/libide/gui/ide-preferences-builtin.c:357
-#: src/libide/gui/ide-preferences-builtin.c:375
+#: src/libide/gui/ide-preferences-builtin.c:362
+#: src/libide/gui/ide-preferences-builtin.c:380
 msgid "Default"
 msgstr "Predeterminado"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/libide/gui/ide-preferences-builtin.c:380
+#: src/libide/gui/ide-preferences-builtin.c:367
+#: src/libide/gui/ide-preferences-builtin.c:385
 msgid "Number of CPU"
 msgstr "Número de CPU"
 
-#: src/libide/gui/ide-preferences-builtin.c:395
+#: src/libide/gui/ide-preferences-builtin.c:400
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Construir"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Build Workers"
 msgstr "Construir trabajadores"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Number of parallel build workers"
 msgstr "Número de constructores en paralelo"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Clear build cache at startup"
 msgstr "Limpiar la caché de construcción al iniciar"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Expired caches will be purged when Builder is started"
 msgstr "Las cachés caducadas se limpiarán al iniciar Builder"
 
-#: src/libide/gui/ide-preferences-builtin.c:408
+#: src/libide/gui/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Red"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Permitir descargas el redes medidas"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2330,35 +2332,35 @@ msgstr ""
 "Permitir el uso de conexiones de red medidas cuando se descarguen "
 "dependencias automáticamente"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:420
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Proyectos"
 
-#: src/libide/gui/ide-preferences-builtin.c:417
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Área de trabajo"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Un lugar para todos sus proyectos"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Restaurar archivos abiertos anteriormente"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Abrir archivos abiertos anteriormente al cargar un proyecto"
 
-#: src/libide/gui/ide-preferences-builtin.c:541
+#: src/libide/gui/ide-preferences-builtin.c:546
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Control de versiones"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:554
+#: src/libide/gui/ide-preferences-builtin.c:559
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2695,7 +2697,6 @@ msgid "Build"
 msgstr "Construir"
 
 #: src/libide/gui/ide-shortcuts-window.ui:472
-#| msgid "Rebuild"
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Volver a construir"
@@ -2855,37 +2856,33 @@ msgstr "_Reducir"
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: src/libide/sourceview/ide-source-view.c:4426
+#: src/libide/sourceview/ide-source-view.c:4432
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4428
+#: src/libide/sourceview/ide-source-view.c:4434
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4546
+#: src/libide/sourceview/ide-source-view.c:4552
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:4976
+#: src/libide/sourceview/ide-source-view.c:4982
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5211
+#: src/libide/sourceview/ide-source-view.c:5217
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5237
+#: src/libide/sourceview/ide-source-view.c:5243
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
-
-#: src/libide/terminal/gtk/menus.ui:8
-msgid "New Terminal Workspace…"
-msgstr "Área de trabajo de la termina nueva…"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
@@ -3191,16 +3188,18 @@ msgid "All Runtimes"
 msgstr "Todas las rutinas"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-msgid "Make active"
-msgstr "Activar"
+#| msgid "Make active"
+msgid "Make _Active"
+msgstr "_Activar"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Select this configuration as the active configuration."
 msgstr "Seleccione esta configuración como la activa."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-msgid "Duplicate"
-msgstr "Duplicar"
+#| msgid "Duplicate"
+msgid "_Duplicate"
+msgstr "_Duplicar"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid ""
@@ -3209,6 +3208,10 @@ msgid ""
 msgstr ""
 "Duplicar la configuración permite hacer cambios sin modificar esta "
 "configuración."
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+msgid "_Remove"
+msgstr "_Eliminar"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "Removes the configuration and cannot be undone."
@@ -3229,7 +3232,7 @@ msgid "Build Environment"
 msgstr "Entorno de construcción"
 
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
@@ -3238,29 +3241,29 @@ msgstr "Entorno de construcción"
 msgid "Name"
 msgstr "Nombre"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 msgid "Source Directory"
 msgstr "Carpeta de fuentes"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 msgid "Build System"
 msgstr "Sistema de construcción"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:465
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
 msgid "Install Prefix"
 msgstr "Prefijo de instalación"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:474
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
 msgid "Configure Options"
 msgstr "Configurar opciones"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:479
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
 msgid "Application Runtime"
 msgstr "Rutina de la aplicación"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:483
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
 msgid "Build Toolchain"
 msgstr "«Toolchain» de construcción"
 
@@ -4361,7 +4364,7 @@ msgid "Use minimal editor interface"
 msgstr "Usar interfaz de editor mínima"
 
 #. translators: the user selected a number outside the value range for the document.
-#: src/plugins/editor/gbp-editor-frame-controls.c:182
+#: src/plugins/editor/gbp-editor-frame-controls.c:190
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Indique un número entre 1 y %u"
@@ -4852,11 +4855,6 @@ msgstr "Mostrar una ventana de bienvenida nueva"
 msgid "Begin cloning project from URI"
 msgstr "Clonando proyecto desde URI"
 
-#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
-#: src/plugins/greeter/gtk/menus.ui:88
-msgid "_Clone Repository…"
-msgstr "_Clonar repositorio…"
-
 #: src/plugins/greeter/gtk/menus.ui:47
 msgid "Quit"
 msgstr "Salir"
@@ -4943,12 +4941,12 @@ msgstr "Sugerir completado usando Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
-#: src/plugins/ls/gbp-ls-page.c:316
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Falló al cargar la carpeta: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:388
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Carpeta"
@@ -5192,50 +5190,58 @@ msgid "Simple game launcher for GNOME"
 msgstr "Un sencillo lanzador de juegos para GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Gitg is a graphical Git client"
+msgstr "Gitg es un cliente gráfico de Git"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Maps"
 msgstr "Mapas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "A simple GNOME 3 maps application"
 msgstr "Una sencilla aplicación de mapas para GNOME 3"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music"
 msgstr "Música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
 msgid "Music player and management application"
 msgstr "Aplicación para gestionar y reproducir música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Default file manager for GNOME"
 msgstr "Gestor de archivos predeterminado para GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Photos"
 msgstr "Fotos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Acceda, organice y comparta sus fotos en GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "An IRC Client for GNOME"
 msgstr "Un cliente de IRC para GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "Sound Recorder"
 msgstr "Grabadora de sonidos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+#: src/plugins/newcomers/gbp-newcomers-section.ui:142
 msgid "A simple and modern sound recorder"
 msgstr "Una grabadora de sonidos sencilla y moderna"
 
@@ -5897,7 +5903,7 @@ msgstr "Una ruta opcional separada por comas para especificar PKG_CONFIG_PATH."
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:96
+#: src/plugins/terminal/gbp-terminal-application-addin.c:97
 msgid "Use terminal interface"
 msgstr "Usar interfaz de terminal"
 
@@ -6130,6 +6136,12 @@ msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
 
+#~ msgid "Clone Repository…"
+#~ msgstr "Clonar repositorio…"
+
+#~ msgid "New Terminal Workspace…"
+#~ msgstr "Área de trabajo de la termina nueva…"
+
 #~ msgid "Todo"
 #~ msgstr "Por hacer"
 
@@ -6313,9 +6325,6 @@ msgstr ""
 #~ msgstr ""
 #~ "¿Por qué no <a href=\"action://app.new-project\">crea un proyecto nuevo</"
 #~ "a>?"
-
-#~ msgid "_Remove"
-#~ msgstr "_Eliminar"
 
 #~ msgid "Click an item to select"
 #~ msgstr "Pulse en un elemento para seleccionarlo"
