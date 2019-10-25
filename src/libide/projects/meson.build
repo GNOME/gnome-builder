@@ -79,7 +79,7 @@ libide_projects = static_library('ide-projects-' + libide_api_version, libide_pr
 libide_projects_dep = declare_dependency(
               sources: libide_projects_private_headers,
          dependencies: libide_projects_deps,
-           link_whole: libide_projects,
+            link_with: libide_projects,
   include_directories: include_directories('.'),
 )
 

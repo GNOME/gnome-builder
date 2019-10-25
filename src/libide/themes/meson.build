@@ -46,7 +46,7 @@ libide_themes = static_library('ide-themes-' + libide_api_version,
 libide_themes_dep = declare_dependency(
               sources: libide_themes_resources[1],
          dependencies: libide_themes_deps,
-           link_whole: libide_themes,
+            link_with: libide_themes,
   include_directories: include_directories('.'),
 )
 

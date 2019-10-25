@@ -61,7 +61,7 @@ libide_tree = static_library('ide-tree-' + libide_api_version, libide_tree_sourc
 libide_tree_dep = declare_dependency(
               sources: libide_tree_private_headers,
          dependencies: libide_tree_deps,
-           link_whole: libide_tree,
+            link_with: libide_tree,
   include_directories: include_directories('.'),
 )
 

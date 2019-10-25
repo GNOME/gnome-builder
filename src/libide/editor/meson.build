@@ -107,7 +107,7 @@ libide_editor = static_library('ide-editor-' + libide_api_version, libide_editor
 
 libide_editor_dep = declare_dependency(
          dependencies: libide_editor_deps,
-           link_whole: libide_editor,
+            link_with: libide_editor,
   include_directories: include_directories('.'),
               sources: libide_editor_generated_headers,
 )

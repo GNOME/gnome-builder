@@ -84,7 +84,7 @@ libide_lsp = static_library('ide-lsp-' + libide_api_version, libide_lsp_sources,
 libide_lsp_dep = declare_dependency(
               sources: libide_lsp_private_headers,
          dependencies: libide_lsp_deps,
-           link_whole: libide_lsp,
+            link_with: libide_lsp,
   include_directories: include_directories('.'),
 )
 

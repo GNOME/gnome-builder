@@ -84,7 +84,7 @@ libide_vcs = static_library('ide-vcs-' + libide_api_version,
 
 libide_vcs_dep = declare_dependency(
          dependencies: libide_vcs_deps,
-           link_whole: libide_vcs,
+            link_with: libide_vcs,
   include_directories: include_directories('.'),
               sources: libide_vcs_generated_headers,
 )

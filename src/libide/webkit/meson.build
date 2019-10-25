@@ -39,7 +39,7 @@ libide_webkit = static_library('ide-webkit-' + libide_api_version, libide_webkit
 
 libide_webkit_dep = declare_dependency(
          dependencies: libide_webkit_deps,
-           link_whole: libide_webkit,
+            link_with: libide_webkit,
   include_directories: include_directories('.'),
               sources: libide_webkit_generated_headers,
 )

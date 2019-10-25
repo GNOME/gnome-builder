@@ -158,7 +158,7 @@ libide_sourceview = static_library('ide-sourceview-' + libide_api_version,
 libide_sourceview_dep = declare_dependency(
               sources: libide_sourceview_private_headers + libide_sourceview_generated_headers,
          dependencies: libide_sourceview_deps,
-           link_whole: libide_sourceview,
+            link_with: libide_sourceview,
   include_directories: include_directories('.'),
 )
 
