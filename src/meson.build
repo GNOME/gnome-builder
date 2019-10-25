@@ -48,6 +48,30 @@ gnome_builder_deps = [
   libide_tree_dep,
 ]
 
+gnome_builder_static = [
+  libide_code,
+  libide_core,
+  libide_debugger,
+  libide_editor,
+  libide_foundry,
+  libide_greeter,
+  libide_gui,
+  libide_io,
+  libide_lsp,
+  libide_plugins,
+  libide_projects,
+  libide_search,
+  libide_sourceview,
+  libide_terminal,
+  libide_themes,
+  libide_threading,
+  libide_tree,
+  libide_vcs,
+  libide_webkit,
+
+  plugins,
+]
+
 if libsysprof_capture.found()
   gnome_builder_deps += libsysprof_capture
 endif
@@ -77,7 +101,7 @@ gnome_builder = executable('gnome-builder', 'main.c', 'bug-buddy.c',
             c_args: libide_args + exe_c_args + release_args,
          link_args: exe_link_args,
                pie: true,
-        link_whole: plugins,
+        link_whole: gnome_builder_static,
      install_rpath: pkglibdir_abs,
       dependencies: gnome_builder_deps,
 )

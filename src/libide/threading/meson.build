@@ -66,7 +66,7 @@ libide_threading = static_library('ide-threading-' + libide_api_version, libide_
 libide_threading_dep = declare_dependency(
               sources: libide_threading_private_headers,
          dependencies: libide_threading_deps,
-           link_whole: libide_threading,
+            link_with: libide_threading,
   include_directories: include_directories('.'),
 )
 

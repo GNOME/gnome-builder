@@ -204,7 +204,7 @@ libide_gui = static_library('ide-gui-' + libide_api_version, libide_gui_sources,
 libide_gui_dep = declare_dependency(
               sources: libide_gui_private_headers + libide_gui_generated_headers,
          dependencies: libide_gui_deps,
-           link_whole: libide_gui,
+            link_with: libide_gui,
   include_directories: include_directories('.'),
 )
 

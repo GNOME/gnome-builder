@@ -93,7 +93,7 @@ libide_terminal = static_library('ide-terminal-' + libide_api_version,
 libide_terminal_dep = declare_dependency(
               sources: libide_terminal_generated_headers,
          dependencies: libide_terminal_deps,
-           link_whole: libide_terminal,
+            link_with: libide_terminal,
   include_directories: include_directories('.'),
 )
 

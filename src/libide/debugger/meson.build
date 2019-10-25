@@ -84,7 +84,7 @@ libide_debugger = static_library('ide-debugger-' + libide_api_version,
 libide_debugger_dep = declare_dependency(
               sources: libide_debugger_private_headers + libide_debugger_generated_headers,
          dependencies: libide_debugger_deps,
-           link_whole: libide_debugger,
+            link_with: libide_debugger,
   include_directories: include_directories('.'),
 )
 

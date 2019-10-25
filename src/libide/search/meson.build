@@ -51,7 +51,7 @@ libide_search = static_library('ide-search-' + libide_api_version, libide_search
 
 libide_search_dep = declare_dependency(
          dependencies: libide_search_deps,
-           link_whole: libide_search,
+            link_with: libide_search,
   include_directories: include_directories('.'),
 )
 

@@ -63,7 +63,7 @@ libide_io = static_library('ide-io-' + libide_api_version, libide_io_sources,
 
 libide_io_dep = declare_dependency(
          dependencies: [ libgio_dep, libide_core_dep, libide_threading_dep ],
-           link_whole: libide_io,
+            link_with: libide_io,
   include_directories: include_directories('.'),
 )
 

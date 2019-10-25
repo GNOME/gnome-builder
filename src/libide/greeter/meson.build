@@ -83,7 +83,7 @@ libide_greeter = static_library('ide-greeter-' + libide_api_version,
 libide_greeter_dep = declare_dependency(
               sources: libide_greeter_private_headers + libide_greeter_generated_headers,
          dependencies: libide_greeter_deps,
-           link_whole: libide_greeter,
+            link_with: libide_greeter,
   include_directories: include_directories('.'),
 )
 

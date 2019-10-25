@@ -51,7 +51,7 @@ libide_plugins = static_library('ide-plugins-' + libide_api_version,
 libide_plugins_dep = declare_dependency(
               sources: libide_plugins_private_headers,
          dependencies: libide_plugins_deps,
-           link_whole: libide_plugins,
+            link_with: libide_plugins,
   include_directories: include_directories('.'),
 )
 

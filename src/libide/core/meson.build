@@ -117,7 +117,7 @@ libide_core = static_library('ide-core-' + libide_api_version, libide_core_sourc
 libide_core_dep = declare_dependency(
               sources: libide_core_private_headers + libide_core_generated_headers,
          dependencies: libide_core_deps,
-           link_whole: libide_core,
+            link_with: libide_core,
   include_directories: include_directories('.'),
 )
 

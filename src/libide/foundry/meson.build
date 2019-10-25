@@ -178,7 +178,7 @@ libide_foundry = static_library('ide-foundry-' + libide_api_version,
 
 libide_foundry_dep = declare_dependency(
          dependencies: libide_foundry_deps,
-           link_whole: libide_foundry,
+            link_with: libide_foundry,
   include_directories: include_directories('.'),
               sources: libide_foundry_generated_headers,
 )

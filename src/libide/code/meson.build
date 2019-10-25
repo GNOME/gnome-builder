@@ -175,7 +175,7 @@ libide_code = static_library('ide-code-' + libide_api_version,
 libide_code_dep = declare_dependency(
               sources: libide_code_private_headers + libide_code_generated_headers,
          dependencies: libide_code_deps,
-           link_whole: libide_code,
+            link_with: libide_code,
   include_directories: include_directories('.'),
 )
 
