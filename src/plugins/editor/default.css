@@ -35,10 +35,10 @@
   bind "<ctrl>0" { "reset-font-size" () };
 
   /* cycle "tabs" */
-  bind "<ctrl><alt>Page_Up" { "action" ("frame", "previous-page", "") };
-  bind "<ctrl><alt>KP_Page_Up" { "action" ("frame", "previous-page", "") };
-  bind "<ctrl><alt>Page_Down" { "action" ("frame", "next-page", "") };
-  bind "<ctrl><alt>KP_Page_Down" { "action" ("frame", "next-page", "") };
+  bind "<ctrl><shift>Tab" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl><shift>KP_Tab" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl>Tab" { "action" ("frame", "next-page", "") };
+  bind "<ctrl>KP_Tab" { "action" ("frame", "next-page", "") };
 
   bind "F2" { "clear-selection" ()
               "movement" (previous-word-end, 0, 1, 1)
