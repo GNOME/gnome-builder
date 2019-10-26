@@ -235,3 +235,4 @@ static void
 gbp_flatpak_build_system_discovery_init (GbpFlatpakBuildSystemDiscovery *self)
 {
 }
+
