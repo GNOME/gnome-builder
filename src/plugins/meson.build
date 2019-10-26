@@ -78,6 +78,7 @@ subdir('grep')
 subdir('history')
 subdir('html-completion')
 subdir('html-preview')
+subdir('java-langserv')
 subdir('jedi')
 subdir('jhbuild')
 subdir('line-spacing')
@@ -162,6 +163,7 @@ status += [
   'Grep .................. : @0@'.format(get_option('plugin_grep')),
   'HTML Completion ....... : @0@'.format(get_option('plugin_html_completion')),
   'HTML Preview .......... : @0@'.format(get_option('plugin_html_preview')),
+  'Java Language Server... : @0@'.format(get_option('plugin_java_langserv')),
   'Jedi .................. : @0@'.format(get_option('plugin_jedi')),
   'JHBuild ............... : @0@'.format(get_option('plugin_jhbuild')),
   'Make .................. : @0@'.format(get_option('plugin_make')),
