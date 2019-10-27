@@ -30,7 +30,7 @@ docpath = join_paths(get_option('datadir'), 'gtk-doc', 'html')
 
 libide_gtk_doc = shared_library('ide-gtk-doc',
             c_args: libide_args + release_args,
-      dependencies: gnome_builder_deps,
+        link_whole: gnome_builder_static,
 )
 
 libide_gtk_doc_dep = declare_dependency(
