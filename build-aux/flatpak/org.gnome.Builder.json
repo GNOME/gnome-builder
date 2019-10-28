@@ -484,7 +484,11 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak.git",
-                    "branch" : "1.5.0"
+                    "commit" : "23e1928a19c3e93296b83c10eeb19be288ccddee"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "flatpak-Add-missing-check-for-USE_SYSTEM_HELPER.patch"
                 }
             ]
         },
