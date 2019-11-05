@@ -177,16 +177,29 @@ ide_get_system_type (void)
 gchar *
 ide_get_system_arch (void)
 {
-  struct utsname u;
+  static GHashTable *remap;
   const char *machine;
+  struct utsname u;
 
   if (uname (&u) < 0)
     return g_strdup ("unknown");
 
-  /* config.sub doesn't accept amd64-OS */
-  machine = strcmp (u.machine, "amd64") ? u.machine : "x86_64";
+  if (g_once_init_enter (&remap))
+    {
+      GHashTable *mapping;
 
-  return g_strdup (machine);
+      mapping = g_hash_table_new (g_str_hash, g_str_equal);
+      g_hash_table_insert (mapping, (gchar *)"amd64", (gchar *)"x86_64");
+      g_hash_table_insert (mapping, (gchar *)"armv7l", (gchar *)"aarch64");
+      g_hash_table_insert (mapping, (gchar *)"i686", (gchar *)"i386");
+
+      g_once_init_leave (&remap, mapping);
+    }
+
+  if (g_hash_table_lookup_extended (remap, u.machine, NULL, (gpointer *)&machine))
+    return g_strdup (machine);
+  else
+    return g_strdup (u.machine);
 }
 
 gsize
