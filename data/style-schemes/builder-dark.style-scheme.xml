@@ -170,11 +170,12 @@
   <style name="gutter:changed-line"         foreground="butter3"/>
   <style name="gutter:removed-line"         foreground="scarletred3"/>
 
-  <style name="js:object"                   foreground="chameleon3" bold="true"/>
-  <style name="js:constructors"             foreground="pink1"/>
+  <style name="js:built-in-constructor"     foreground="pink1"/>
   <style name="js:keyword"                  foreground="#2b85aa"/>
   <style name="js:string"                   foreground="#669900"/>
-  <style name="js:function"                 foreground="pink1"/>
+  <style name="js:template-literal"         foreground="#669900"/>
+  <style name="js:built-in-function"        foreground="pink1"/>
+  <style name="js:built-in-method"          foreground="pink1"/>
 
   <style name="latex:command"               foreground="chameleon1" bold="true"/>
   <style name="latex:include"               use-style="def:preprocessor"/>

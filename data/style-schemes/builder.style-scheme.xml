@@ -171,11 +171,12 @@
   <style name="xml:namespace"               bold="true"/>
   <style name="xml:tag-match"               background="#rgba(153,0,85,.07)"/>
 
-  <style name="js:object"                   foreground="chameleon3" bold="true"/>
-  <style name="js:constructors"             foreground="pink1"/>
+  <style name="js:built-in-constructor"     foreground="pink1"/>
   <style name="js:keyword"                  foreground="#0077aa"/>
   <style name="js:string"                   foreground="#669900"/>
-  <style name="js:function"                 foreground="pink1"/>
+  <style name="js:template-literal"         foreground="#669900"/>
+  <style name="js:built-in-function"        foreground="pink1"/>
+  <style name="js:built-in-method"          foreground="pink1"/>
 
   <style name="latex:display-math"          foreground="plum3"/>
   <style name="latex:command"               foreground="chameleon3" bold="true"/>
