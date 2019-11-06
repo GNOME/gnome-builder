@@ -134,7 +134,7 @@
   <style name="def:error"                   foreground="aluminium1" background="scarletred2" bold="true"/>
   <style name="def:warning"                 foreground="aluminium1" background="plum1"/>
   <style name="def:note"                    background="butter1" foreground="aluminium4" bold="true"/>
-  <style name="def:underlined"              italic="true" underline="true"/>
+  <style name="def:net-address"             italic="true" underline="true"/>
 
   <!-- Heading styles, uncomment to enable -->
   <!--
