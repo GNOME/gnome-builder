@@ -40,12 +40,14 @@ G_DEFINE_TYPE (IdeFrameWrapper, ide_frame_wrapper, GTK_TYPE_STACK)
 
 static void
 ide_frame_wrapper_add (GtkContainer *container,
-                              GtkWidget    *widget)
+                       GtkWidget    *widget)
 {
   IdeFrameWrapper *self = (IdeFrameWrapper *)container;
 
   g_assert (IDE_IS_FRAME_WRAPPER (container));
   g_assert (GTK_IS_WIDGET (widget));
+
+  g_object_freeze_notify (G_OBJECT (self));
 
   if (gtk_widget_get_visible (widget))
     g_queue_push_head (&self->history, widget);
@@ -53,11 +55,13 @@ ide_frame_wrapper_add (GtkContainer *container,
     g_queue_push_tail (&self->history, widget);
 
   GTK_CONTAINER_CLASS (ide_frame_wrapper_parent_class)->add (container, widget);
+
+  g_object_thaw_notify (G_OBJECT (self));
 }
 
 static void
 ide_frame_wrapper_remove (GtkContainer *container,
-                                 GtkWidget    *widget)
+                          GtkWidget    *widget)
 {
   IdeFrameWrapper *self = (IdeFrameWrapper *)container;
 
@@ -68,6 +72,8 @@ ide_frame_wrapper_remove (GtkContainer *container,
    * first change the visible child before removing. If we don't we risk,
    * focusing the wrong "next" widget as part of the removal.
    */
+
+  g_object_freeze_notify (G_OBJECT (self));
 
   g_queue_remove (&self->history, widget);
 
@@ -80,11 +86,13 @@ ide_frame_wrapper_remove (GtkContainer *container,
     }
 
   GTK_CONTAINER_CLASS (ide_frame_wrapper_parent_class)->remove (container, widget);
+
+  g_object_thaw_notify (G_OBJECT (self));
 }
 
 static void
 ide_frame_wrapper_notify_visible_child (IdeFrameWrapper *self,
-                                               GParamSpec            *pspec)
+                                        GParamSpec      *pspec)
 {
   GtkWidget *visible_child;
 
