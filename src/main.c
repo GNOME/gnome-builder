@@ -31,6 +31,7 @@
 #include <libide-greeter.h>
 #include <libide-gui.h>
 #include <libide-threading.h>
+#include <locale.h>
 #ifdef ENABLE_TRACING_SYSCAP
 # include <sysprof-capture.h>
 #endif
