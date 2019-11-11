@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-09-07 18:15+0000\n"
-"PO-Revision-Date: 2019-09-08 21:06+0200\n"
+"POT-Creation-Date: 2019-09-27 19:37+0000\n"
+"PO-Revision-Date: 2019-11-02 18:32+0100\n"
 "Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -39,7 +39,7 @@ msgstr "Eine integrierte Entwicklungsumgebung für GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:9
 msgid "Christian Hergert, et al."
-msgstr "Christian Hergert, und weitere"
+msgstr "Christian Hergert, und weitere."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:12
 msgid ""
@@ -634,7 +634,7 @@ msgstr "Neues Projekt beginnen"
 
 #: data/org.gnome.Builder.desktop.in.in:28
 msgid "Clone Repository"
-msgstr "Softwaredepot klonen"
+msgstr "Repository klonen"
 
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
@@ -921,7 +921,7 @@ msgstr "Unbenannt"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1419
+#: src/libide/gui/ide-workbench.c:1424
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1235,7 +1235,7 @@ msgid "Open File"
 msgstr "Datei öffnen"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1418
+#: src/libide/gui/ide-workbench.c:1423
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
@@ -1400,7 +1400,7 @@ msgstr "Installieren …"
 
 #: src/libide/foundry/ide-pipeline.c:3251
 msgid "Committing…"
-msgstr "Wird eingespielt …"
+msgstr "Wird commitet …"
 
 #: src/libide/foundry/ide-pipeline.c:3255
 msgid "Exporting…"
@@ -1497,20 +1497,20 @@ msgstr "Ihr Projekt wird auf %s erstellt"
 
 #: src/libide/greeter/ide-clone-surface.ui:48
 msgid "Repository URL"
-msgstr "Adresse des Depots"
+msgstr "Repository-Adresse"
 
 #: src/libide/greeter/ide-clone-surface.ui:63
 msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 msgstr ""
-"Geben Sie das Depot des Projekts an, das Sie klonen möchten. Die Adresse "
-"sollte in etwa so aussehen: »https://gitlab.gnome.org/GNOME/gnome-builder."
-"git«."
+"Geben Sie das Repository des Projekts an, das Sie klonen möchten. Die "
+"Adresse sollte in etwa so aussehen: »https://gitlab.gnome.org/GNOME/gnome-"
+"builder.git«."
 
 #: src/libide/greeter/ide-clone-surface.ui:84
 msgid "user@host:repository.git"
-msgstr "Benutzer@Rechner:Depot.git"
+msgstr "Benutzer@Rechner:Repository.git"
 
 #: src/libide/greeter/ide-clone-surface.ui:103
 msgid "Select branch and other options."
@@ -1518,7 +1518,7 @@ msgstr "Zweig auswählen, und weitere Einstellungen."
 
 #: src/libide/greeter/ide-clone-surface.ui:140
 msgid "Repository Kind"
-msgstr "Art des Depots"
+msgstr "Art des Repositorys"
 
 #: src/libide/greeter/ide-clone-surface.ui:165
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
@@ -1548,7 +1548,7 @@ msgstr "Ordner auswählen …"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:69
 msgid "Clone Repository…"
-msgstr "Softwaredepot klonen …"
+msgstr "Repository klonen …"
 
 #: src/libide/greeter/ide-greeter-row.c:259
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
@@ -1622,7 +1622,7 @@ msgstr "Projekte und Quellen entfernen …"
 #: src/libide/greeter/ide-greeter-workspace.ui:188
 msgctxt "title"
 msgid "Clone Repository"
-msgstr "Softwaredepot klonen"
+msgstr "Repository klonen"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
 msgid "Switch Surface"
@@ -1657,7 +1657,7 @@ msgid "_Quit"
 msgstr "_Beenden"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1420 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Datei öffnen …"
@@ -4325,7 +4325,7 @@ msgstr "Feld von [%s]"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:153
 msgid "Access Denied by Peer"
-msgstr ""
+msgstr "Zugriff vom Peer verweigert"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:155
 msgid "Authentication Failed"
@@ -4370,7 +4370,7 @@ msgstr "Wählen Sie einen Bus-Namen"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:124
 msgid "Select a bus name to introspect the peer."
-msgstr ""
+msgstr "Wählen Sie einen Bus-Namen, um den Peer zu prüfen."
 
 #: src/plugins/editor/gbp-confirm-save-dialog.c:260
 msgid "There is a file with unsaved changes. Save changes before closing?"
@@ -4673,8 +4673,8 @@ msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr ""
-"Builder konnte keine angemessene Legitimierung beim Klonen des "
-"Softwaredepots liefern."
+"Builder konnte keine angemessene Legitimierung beim Klonen des Repositorys "
+"liefern."
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -4705,7 +4705,7 @@ msgstr "Das Protokoll »%s« wird nicht unterstützt."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:224
 msgid "Cloning repository"
-msgstr "Softwaredepot klonen"
+msgstr "Repository wird geklont"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:240
 msgid "A valid Git URL is required"
@@ -4898,7 +4898,7 @@ msgstr "Klonen des Projekts von der Adresse beginnen"
 #: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
 #: src/plugins/greeter/gtk/menus.ui:88
 msgid "_Clone Repository…"
-msgstr "Softwaredepot _klonen …"
+msgstr "Repository _klonen …"
 
 #: src/plugins/greeter/gtk/menus.ui:47
 msgid "Quit"
@@ -5005,10 +5005,8 @@ msgid "Modified"
 msgstr "Geändert"
 
 #: src/plugins/ls/gtk/menus.ui:9
-#, fuzzy
-#| msgid "Directory"
 msgid "Directory Browser"
-msgstr "Ordner"
+msgstr "Ordner-Betrachter"
 
 #: src/plugins/ls/gtk/menus.ui:21
 msgid "Switch to Folder"
@@ -5240,50 +5238,58 @@ msgid "Simple game launcher for GNOME"
 msgstr "Einfacher Spielestarter für GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Gitg is a graphical Git client"
+msgstr "Gitg ist ein grafischer Git-Client"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Maps"
 msgstr "Karten"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "A simple GNOME 3 maps application"
 msgstr "Eine einfache Karten-Anwendung für GNOME 3"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music"
 msgstr "Musik"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
 msgid "Music player and management application"
 msgstr "Anwendung zur Musikwiedergabe und -verwaltung"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Nautilus"
 msgstr "Dateiverwaltung"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Default file manager for GNOME"
 msgstr "Standard-Dateiverwaltung für GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Photos"
 msgstr "Fotos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Verwalten, Organisieren und Teilen Sie Ihre Fotos in GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "An IRC Client for GNOME"
 msgstr "Ein IRC-Client für GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "Sound Recorder"
 msgstr "Tonaufzeichner"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+#: src/plugins/newcomers/gbp-newcomers-section.ui:142
 msgid "A simple and modern sound recorder"
 msgstr "Ein einfacher, moderner Tonaufzeichner"
 
@@ -5649,10 +5655,8 @@ msgstr ""
 "»$SRCDIR« als auch »$BUILDDIR« werden automatisch für den Befehl belegt."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
-#, fuzzy
-#| msgid "Command Line Tool"
 msgid "Command Locality"
-msgstr "Befehlszeilenwerkzeug"
+msgstr "Ort der Befehlsausführung"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
 msgid "On Host"
@@ -5664,13 +5668,15 @@ msgstr "In der Erstellungsumgebung"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
 msgid "In Runtime Environment"
-msgstr "in der Laufzeitumgebung"
+msgstr "In der Laufzeitumgebung"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
 msgid ""
 "If the directory is not an absolute-path, it will be relative to the source "
 "or build directory depending on the command locality."
 msgstr ""
+"Ist der Ordner nicht als absoluter Pfad angegeben, steht er in relativer "
+"Beziehung zum Quell- oder Build-Ordner (je nach Ort der Befehlsausführung)."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
 msgid "Close on Exit"
