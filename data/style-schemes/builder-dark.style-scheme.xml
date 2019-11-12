@@ -129,6 +129,20 @@
   <!-- Types -->
   <style name="def:type"                    foreground="chameleon1" bold="true"/>
 
+  <!-- Markup -->
+  <style name="def:emphasis"                italic="true"/>
+  <style name="def:strong-emphasis"         foreground="white" bold="true"/>
+  <style name="def:inline-code"             foreground="skyblue1"/>
+  <style name="def:insertion"               underline="single"/>
+  <style name="def:deletion"                strikethrough="true"/>
+  <style name="def:link-text"               foreground="aluminium4"/>
+  <style name="def:link-symbol"             foreground="aluminium4" bold="true"/>
+  <style name="def:link-destination"        italic="true" underline="true"/>
+  <style name="def:heading"                 foreground="chameleon1" bold="true"/>
+  <style name="def:thematic-break"          foreground="chameleon1" bold="true"/>
+  <style name="def:preformatted-section"    foreground="skyblue1"/>
+  <style name="def:list-marker"             foreground="white" bold="true"/>
+
   <!-- Others -->
   <style name="def:preprocessor"            foreground="#dd4a68"/>
   <style name="def:error"                   foreground="aluminium1" background="scarletred2" bold="true"/>

@@ -130,23 +130,35 @@
 
   <style name="def:comment"                 foreground="blue1"/>
   <style name="def:constant"                foreground="pink1"/>
+  <style name="def:deletion"                strikethrough="true"/>
   <style name="def:doc-comment-element"     italic="true"/>
+  <style name="def:emphasis"                italic="true"/>
   <style name="def:error"                   line-background="#rgba(235,202,210,.4)" />
   <style name="def:floating-point"          foreground="blue2"/>
   <style name="def:function"                foreground="#4186A8"/>
   <style name="def:decimal"                 foreground="purple1"/>
   <style name="def:base-n-integer"          foreground="blue2"/>
   <style name="def:boolean"                 foreground="pink1"/>
+  <style name="def:heading"                 foreground="gr1" bold="true"/>
   <style name="def:identifier"              foreground="purple1"/>
+  <style name="def:inline-code"             foreground="purple1"/>
+  <style name="def:insertion"               underline="single"/>
   <style name="def:keyword"                 foreground="gr1" bold="true"/>
+  <style name="def:link-destination"        italic="true" underline="true"/>
+  <style name="def:link-symbol"             foreground="blue1" bold="true"/>
+  <style name="def:link-text"               foreground="blue1"/>
+  <style name="def:list-marker"             foreground="green1" bold="true"/>
   <style name="def:net-address"             italic="true" underline="true"/>
   <style name="def:note"                    background="orange1" bold="true"/>
   <style name="def:operator"                foreground="#a67f59"/>
+  <style name="def:preformatting-section"   foreground="purple1"/>
   <style name="def:preprocessor"            foreground="pink1"/>
   <style name="def:shebang"                 foreground="blue1" bold="true"/>
   <style name="def:special-char"            foreground="pink1"/>
   <style name="def:statement"               foreground="green1" bold="true"/>
   <style name="def:string"                  foreground="blue2"/>
+  <style name="def:strong-emphasis"         foreground="green1" bold="true"/>
+  <style name="def:thematic-break"          foreground="gr1" bold="true"/>
   <style name="def:type"                    foreground="gr1" bold="true"/>
   <style name="def:warning"                 background="yellow1"/>
   <style name="def:special-constant"        foreground="purple1"/>
