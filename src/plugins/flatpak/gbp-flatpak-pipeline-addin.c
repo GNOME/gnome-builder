@@ -63,6 +63,27 @@ enum {
   EXPORT_BUILD_BUNDLE,
 };
 
+static void
+ensure_documents_portal (void)
+{
+  g_autoptr(GDBusConnection) bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  g_autoptr(GVariant) reply = NULL;
+
+  g_assert (G_IS_DBUS_CONNECTION (bus));
+
+  reply = g_dbus_connection_call_sync (bus,
+                                       "org.freedesktop.portal.Documents",
+                                       "/org/freedesktop/portal/documents",
+                                       "org.freedesktop.portal.Documents",
+                                       "GetMountPoint",
+                                       g_variant_new ("()"),
+                                       NULL,
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       3000,
+                                       NULL,
+                                       NULL);
+}
+
 static gchar *
 get_arch_option (IdePipeline *pipeline)
 {
@@ -209,6 +230,11 @@ check_for_build_init_files (IdePipelineStage    *stage,
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (staging_dir != NULL);
+
+  /* First make sure that we have access to the Portals service
+   * so that any of our build operations succeed.
+   */
+  ensure_documents_portal ();
 
   metadata = g_build_filename (staging_dir, "metadata", NULL);
   files = g_build_filename (staging_dir, "files", NULL);
