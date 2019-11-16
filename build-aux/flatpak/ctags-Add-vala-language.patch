@@ -1,0 +1,861 @@
+From 0a3c0e5f8ad8b3b577d43d2cd9934b89582910f6 Mon Sep 17 00:00:00 2001
+From: Alberto Fanjul <albertofanjul@gmail.com>
+Date: Fri, 15 Nov 2019 08:42:01 +0100
+Subject: [PATCH] Add vala language
+
+Based on Vala.Parser from libvala
+---
+ Makefile.am                                   |  25 ++
+ .../parser-vala.r/comments.vala.b/args.ctags  |   2 +
+ .../comments.vala.b/expected.tags             |   6 +
+ .../parser-vala.r/comments.vala.b/input.vala  |  11 +
+ Units/parser-vala.r/simple.vala.b/args.ctags  |   2 +
+ .../parser-vala.r/simple.vala.b/expected.tags |   1 +
+ Units/parser-vala.r/simple.vala.b/input.vala  |   6 +
+ configure.ac                                  |  43 ++
+ main/parse.c                                  |   4 +
+ main/parse_p.h                                |   3 +
+ main/parsers_p.h                              |   8 +
+ misc/units.py                                 |   1 +
+ parsers/Makefile                              |   8 -
+ parsers/ctags-visitor.vala                    | 414 ++++++++++++++++++
+ parsers/vala.c                                | 107 +++++
+ source.mak                                    |   8 +
+ 16 files changed, 641 insertions(+), 8 deletions(-)
+ create mode 100644 Units/parser-vala.r/comments.vala.b/args.ctags
+ create mode 100644 Units/parser-vala.r/comments.vala.b/expected.tags
+ create mode 100644 Units/parser-vala.r/comments.vala.b/input.vala
+ create mode 100644 Units/parser-vala.r/simple.vala.b/args.ctags
+ create mode 100644 Units/parser-vala.r/simple.vala.b/expected.tags
+ create mode 100644 Units/parser-vala.r/simple.vala.b/input.vala
+ delete mode 100644 parsers/Makefile
+ create mode 100644 parsers/ctags-visitor.vala
+ create mode 100644 parsers/vala.c
+
+diff --git a/Makefile.am b/Makefile.am
+index e9ea8d54..6f4381fd 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -91,6 +91,11 @@ PARSER_SRCS += $(YAML_SRCS)
+ PARSER_HEADS += $(YAML_HEADS)
+ endif
+ 
++if ENABLE_VALA
++PARSER_SRCS += $(VALA_SRCS)
++PARSER_HEADS += $(VALA_HEADS)
++endif
++
+ PARSER_HEADS += $(PEG_EXTRA_HEADS)
+ 
+ libctags_a_CPPFLAGS = -I. -I$(srcdir) -I$(srcdir)/main -I$(srcdir)/peg -DHAVE_PACKCC
+@@ -112,11 +117,19 @@ libctags_a_CFLAGS  += $(CGCC_CFLAGS)
+ libctags_a_CFLAGS  += $(LIBXML_CFLAGS)
+ libctags_a_CFLAGS  += $(JANSSON_CFLAGS)
+ libctags_a_CFLAGS  += $(LIBYAML_CFLAGS)
++libctags_a_CFLAGS  += $(VALA_CFLAGS)
+ libctags_a_CFLAGS  += $(SECCOMP_CFLAGS)
+ 
++libctags_a_LIBS  = $(VALA_LIBS)
++
+ nodist_libctags_a_SOURCES = $(REPOINFO_HEADS) $(PEG_SRCS) $(PEG_HEADS)
+ BUILT_SOURCES = $(REPOINFO_HEADS)
+ CLEANFILES = $(REPOINFO_HEADS) $(PEG_SRCS) $(PEG_HEADS)
++if ENABLE_VALA
++nodist_libctags_a_SOURCES += parsers/ctags-visitor.c
++CLEANFILES += parsers/ctags-visitor.c parsers/ctags-vala.h
++endif
++
+ $(REPOINFO_OBJS): $(REPOINFO_SRCS) $(REPOINFO_HEADS)
+ repoinfo_verbose = $(repoinfo_verbose_@AM_V@)
+ repoinfo_verbose_ = $(repoinfo_verbose_@AM_DEFAULT_V@)
+@@ -156,6 +169,9 @@ SUFFIXES += .peg
+ # You cannot use $(PACKCC) as a target name here.
+ $(PEG_SRCS) $(PEG_HEADS): packcc$(EXEEXT) Makefile
+ dist_libctags_a_SOURCES = $(ALL_LIB_HEADS) $(ALL_LIB_SRCS)
++if ENABLE_VALA
++dist_libctags_a_SOURCES += parsers/ctags-visitor.vala
++endif
+ 
+ ctags_CPPFLAGS = $(libctags_a_CPPFLAGS)
+ ctags_CFLAGS = $(libctags_a_CFLAGS)
+@@ -163,6 +179,7 @@ ctags_LDADD  =libctags.a
+ ctags_LDADD += $(LIBXML_LIBS)
+ ctags_LDADD += $(JANSSON_LIBS)
+ ctags_LDADD += $(LIBYAML_LIBS)
++ctags_LDADD += $(VALA_LIBS)
+ ctags_LDADD += $(SECCOMP_LIBS)
+ ctags_LDADD += $(ICONV_LIBS)
+ dist_ctags_SOURCES = $(CMDLINE_HEADS) $(CMDLINE_SRCS)
+@@ -173,6 +190,7 @@ mini_geany_LDADD  = libctags.a
+ mini_geany_LDADD += $(LIBXML_LIBS)
+ mini_geany_LDADD += $(JANSSON_LIBS)
+ mini_geany_LDADD += $(LIBYAML_LIBS)
++mini_geany_LDADD += $(VALA_LIBS)
+ mini_geany_LDADD += $(SECCOMP_LIBS)
+ mini_geany_LDADD += $(ICONV_LIBS)
+ mini_geany_SOURCES = $(MINI_GEANY_HEADS) $(MINI_GEANY_SRCS)
+@@ -195,6 +213,12 @@ dist-hook:
+ 		-name 'Makefile.in' -o -name 'Makefile' -o \
+ 		-name 'BUNDLES' \) -exec rm -f {} +
+ 
++parsers/ctags-vala.h: parsers/ctags-visitor.vala
++	$(VALAC) -g -h parsers/ctags-vala.h -C --pkg $(LIBVALA) $^
++
++parsers/ctags-visitor.c: parsers/ctags-visitor.vala
++	$(VALAC) -g -h parsers/ctags-vala.h -C --pkg $(LIBVALA) $^
++
+ include $(top_srcdir)/makefiles/testing.mak
+ 
+ include $(top_srcdir)/makefiles/help.mak
+@@ -222,3 +246,4 @@ RST2MAN_OPTIONS=--syntax-highlight=none
+ .7.rst.7:
+ 	$(rst2man_verbose)$(RST2MAN) $(RST2MAN_OPTIONS) $< $@
+ endif
++
+diff --git a/Units/parser-vala.r/comments.vala.b/args.ctags b/Units/parser-vala.r/comments.vala.b/args.ctags
+new file mode 100644
+index 00000000..3bba6778
+--- /dev/null
++++ b/Units/parser-vala.r/comments.vala.b/args.ctags
+@@ -0,0 +1,2 @@
++--sort=no
++--fields=+neKl
+diff --git a/Units/parser-vala.r/comments.vala.b/expected.tags b/Units/parser-vala.r/comments.vala.b/expected.tags
+new file mode 100644
+index 00000000..e189ecfa
+--- /dev/null
++++ b/Units/parser-vala.r/comments.vala.b/expected.tags
+@@ -0,0 +1,6 @@
++f1	input.vala	1;"	method	line:1	language:Vala
++f2	input.vala	7;"	method	line:7	language:Vala
++f3	input.vala	8;"	method	line:8	language:Vala
++g4	input.vala	8;"	method	line:8	language:Vala
++f4	input.vala	9;"	method	line:9	language:Vala
++g7	input.vala	11;"	method	line:11	language:Vala
+diff --git a/Units/parser-vala.r/comments.vala.b/input.vala b/Units/parser-vala.r/comments.vala.b/input.vala
+new file mode 100644
+index 00000000..ed4cfe90
+--- /dev/null
++++ b/Units/parser-vala.r/comments.vala.b/input.vala
+@@ -0,0 +1,11 @@
++void f1 () {
++    print ("hello");
++}
++// void g0 () {    print ("hello");}
++    // void g1 () {    print ("hello");}
++
++void f2 () {print ("hello");} // void g3 () {    print ("hello");}
++void f3 () {print ("hello");} void g4 () {    print ("hello");}
++void f4 () {print ("hello"); // void g5 () {    print ("hello");}
++// void g6 () {    print ("hello");}
++} void g7 () {    print ("hello");} // void g8 () {} ; void f5 () { print ("hello");} # void g9 () {}
+diff --git a/Units/parser-vala.r/simple.vala.b/args.ctags b/Units/parser-vala.r/simple.vala.b/args.ctags
+new file mode 100644
+index 00000000..3bba6778
+--- /dev/null
++++ b/Units/parser-vala.r/simple.vala.b/args.ctags
+@@ -0,0 +1,2 @@
++--sort=no
++--fields=+neKl
+diff --git a/Units/parser-vala.r/simple.vala.b/expected.tags b/Units/parser-vala.r/simple.vala.b/expected.tags
+new file mode 100644
+index 00000000..766ca65d
+--- /dev/null
++++ b/Units/parser-vala.r/simple.vala.b/expected.tags
+@@ -0,0 +1 @@
++main	input.vala	4;"	method	line:4	language:Vala
+diff --git a/Units/parser-vala.r/simple.vala.b/input.vala b/Units/parser-vala.r/simple.vala.b/input.vala
+new file mode 100644
+index 00000000..0f4c8159
+--- /dev/null
++++ b/Units/parser-vala.r/simple.vala.b/input.vala
+@@ -0,0 +1,6 @@
++/*
++ * vala HelloWorld
++ */
++void main(string[] args) {
++    print("Hello, World\n");
++}
+diff --git a/configure.ac b/configure.ac
+index 1c1b7ab4..21815100 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -95,6 +95,49 @@ AH_TEMPLATE([ENABLE_GCOV],
+ 	[Define to 1 if gcov is instrumented.])
+ 
+ 
++dnl Check for vala
++dnl -------------------------------------------------------------
++
++AC_ARG_ENABLE(vala,
++	AS_HELP_STRING([--disable-vala],[Disable vala support]),
++	[ if test "$enableval" = "no"; then
++		user_disabled_vala=1
++	  fi ],
++	[ user_disabled_vala=0 ])
++
++AH_TEMPLATE([ENABLE_VALA],
++	[Define this value if vala is available.])
++AC_MSG_CHECKING(if vala support is disabled)
++if test "$user_disabled_vala" = 1; then
++        AC_MSG_RESULT(yes)
++	enable_vala="no"
++else
++        AC_MSG_RESULT(no)
++	AC_MSG_CHECKING(if libvala is available)
++	m4_foreach_w([VERSION], [0.46 0.44 0.42 0.40 0.38 0.36 0.34 0.32],
++		[PKG_CHECK_EXISTS([ libvala-VERSION ],
++			 [ valaver="-VERSION" ])
++			 ])
++	if test "x$valaver" != "x"; then
++		AC_MSG_RESULT(yes)
++		enable_vala="yes"
++		LIBVALA="libvala${valaver}"
++		PKG_CHECK_MODULES([VALA], ${LIBVALA},[AC_DEFINE(ENABLE_VALA)])
++	else
++		AC_MSG_RESULT(no)
++		enable_vala="no"
++		VALA_REQUIRED=0.32.0
++	fi
++	AC_SUBST(LIBVALA)
++fi
++
++if test x$enable_vala = xyes; then
++	AC_PATH_PROGS(VALAC, [valac${valaver} valac], valac)
++	AC_SUBST(VALAC)
++fi
++
++AM_CONDITIONAL(ENABLE_VALA, [test x$enable_vala = xyes])
++
+ # Define convenience macros
+ # -------------------------
+ # CHECK_HEADER_DEFINE(LABEL, HEADER [,ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND ] ])
+diff --git a/main/parse.c b/main/parse.c
+index 103eca0a..98b7ea2a 100644
+--- a/main/parse.c
++++ b/main/parse.c
+@@ -140,6 +140,10 @@ static parserDefinitionFunc* BuiltInParsers[] = {
+        PEG_PARSER_LIST
+ #ifdef HAVE_PACKCC
+        ,
++#endif
++	VALA_PARSER_LIST
++#ifdef ENABLE_VALA
++	,
+ #endif
+ #endif	/* EXTERNAL_PARSER_LIST */
+ };
+diff --git a/main/parse_p.h b/main/parse_p.h
+index 20583589..3cc26b5f 100644
+--- a/main/parse_p.h
++++ b/main/parse_p.h
+@@ -54,6 +54,9 @@ extern parserDefinitionFunc XML_PARSER_LIST;
+ #ifdef HAVE_LIBYAML
+ extern parserDefinitionFunc YAML_PARSER_LIST;
+ #endif
++#ifdef ENABLE_VALA
++extern parserDefinitionFunc VALA_PARSER_LIST;
++#endif
+ #ifdef HAVE_PACKCC
+ extern parserDefinitionFunc PEG_PARSER_LIST;
+ #endif
+diff --git a/main/parsers_p.h b/main/parsers_p.h
+index c7799eda..bebdea32 100644
+--- a/main/parsers_p.h
++++ b/main/parsers_p.h
+@@ -34,6 +34,14 @@
+ #define YAML_PARSER_LIST
+ #endif
+ 
++#ifdef ENABLE_VALA
++#define VALA_PARSER_LIST						\
++	CTagsValaParser,							\
++	GenieParser
++#else
++#define VALA_PARSER_LIST
++#endif
++
+ #ifdef HAVE_PACKCC
+ #define PEG_PARSER_LIST						\
+ 	VarlinkParser
+diff --git a/misc/units.py b/misc/units.py
+index 50b1b00b..74ff214c 100755
+--- a/misc/units.py
++++ b/misc/units.py
+@@ -547,6 +547,7 @@ def run_tcase(finput, t, name, tclass, category, build_t, extra_inputs):
+     try:
+         with open(orawout, 'wb') as fo, \
+                 open(ostderr, 'wb') as fe:
++            print(' '.join(cmdline))
+             ret = subprocess.run(cmdline, stdout=fo, stderr=fe,
+                     timeout=timeout_value)
+         run_record_cmdline(cmdline, ffilter, ocmdline, output_type)
+diff --git a/parsers/Makefile b/parsers/Makefile
+deleted file mode 100644
+index d7c4e2fc..00000000
+--- a/parsers/Makefile
++++ /dev/null
+@@ -1,8 +0,0 @@
+-all:
+-.SUFFIXES:
+-.SUFFIXES: .c .o
+-
+-.c.o:
+-	$(MAKE) -C .. parsers/$@
+-%:
+-	$(MAKE) -C .. $@
+diff --git a/parsers/ctags-visitor.vala b/parsers/ctags-visitor.vala
+new file mode 100644
+index 00000000..3ee4ed4b
+--- /dev/null
++++ b/parsers/ctags-visitor.vala
+@@ -0,0 +1,414 @@
++/*
++ * ctags-visitor.vala
++ *
++ * Copyright 2008, 2010 Abderrahim Kitouni <a.kitouni@gmail.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
++ * MA 02110-1301, USA.
++ */
++
++using Vala;
++
++enum ValaKind {
++	K_CLASS,
++	K_STRUCT,
++	K_INTERFACE,
++	K_ENUM,
++	K_ENUMVALUE,
++	K_ERRORDOMAIN,
++	K_ERRORCODE,
++	K_DELEGATE,
++	K_SIGNAL,
++	K_FIELD,
++	K_PROPERTY,
++	K_METHOD,
++	K_LOCAL,
++	COUNT_KIND
++}
++
++public struct CTagsEntry {
++	public int line_number;
++	public string name;
++	public int kind;
++	public size_t filePosition;
++	public string access;
++	public string implementation;
++	public string inheritance;
++	public string scope[2];
++	public string signature;
++	public string typeref;
++	public string returntype;
++}
++
++class DummyReport : Report {
++	public override void warn (SourceReference? source, string message) {}
++	public override void err (SourceReference? source, string message) {}
++}
++
++[CCode (has_target=false)]
++public delegate void CTagsEntryMaker (CTagsEntry entry);
++
++public class CTagsVisitor : CodeVisitor {
++	Parser vala_parser;
++	Genie.Parser genie_parser;
++	GLib.List<CTagsEntry?> taglist;
++	public CTagsVisitor () {
++		vala_parser = new Parser();
++		genie_parser = new Genie.Parser();
++	}
++	/* helper functions */
++	static string get_access (Symbol sym) {
++		switch (sym.access) {
++		case SymbolAccessibility.PRIVATE : return "private";
++		case SymbolAccessibility.INTERNAL : return "internal";
++		case SymbolAccessibility.PROTECTED : return "protected";
++		case SymbolAccessibility.PUBLIC : return "public";
++		}
++		assert_not_reached ();
++	}
++	static string to_string (Iterable<DataType> seq, string sep = ",") {
++		var str = new StringBuilder();
++		var first = true;
++		foreach (var type in seq) {
++			if(first) {
++				first = false;
++			} else {
++				str.append(sep);
++			}
++			str.append(type.to_qualified_string());
++		}
++		return str.str;
++	}
++	static string? implementation (Symbol sym) {
++		var list = new GLib.List<string>();
++
++		if (sym is Vala.Signal) {
++			var sig = (Vala.Signal)sym;
++			if (sig.is_virtual)
++				list.append("virtual");
++		} else if (sym is Class) {
++			var cls = (Class)sym;
++			if (cls.is_abstract)
++				list.append("abstract");
++		} else if (sym is Method) {
++			var meth = (Method)sym;
++			if (meth.is_abstract)
++				list.append("abstract");
++			else if (meth.is_virtual)
++				list.append("virtual");
++		} else if (sym is Property) {
++			var prop = (Property)sym;
++			if (prop.is_abstract)
++				list.append("abstract");
++			else if (prop.is_virtual)
++				list.append("virtual");
++		} else
++			return_val_if_reached(null);
++
++		var ret = new StringBuilder();
++		var first = true;
++		foreach (var str in list) {
++			if(first) {
++				first = false;
++			} else {
++				ret.append(",");
++			}
++			ret.append(str);
++		}
++		return ret.str;
++	}
++	static string signature (Vala.List<Vala.Parameter> parameter) {
++		var ret = new StringBuilder("(");
++		var first = true;
++		foreach (var p in parameter) {
++			if(first) {
++				first = false;
++			} else {
++				ret.append(",");
++			}
++			if (p.ellipsis) {
++				ret.append("...");
++			} else {
++				ret.append (p.variable_type.to_qualified_string());
++				ret.append (" ");
++				ret.append (p.name);
++			}
++		}
++		ret.append (")");
++		return ret.str;
++	}
++	static string[] scope (Symbol s) {
++		string scope[2];
++		var par = s.parent_symbol;
++		if (par != null && par.name != null) {
++			if (par is Class)
++				scope[0] = "class";
++			else if (par is Struct)
++				scope[0] = "struct";
++			else if (par is Interface)
++				scope[0] = "interface";
++			else
++				return scope;
++			scope[1] = par.name;
++		}
++		return scope;
++	}
++
++	public override void visit_source_file (SourceFile source_file) {
++		source_file.accept_children (this);
++	}
++
++	public override void visit_class (Class cl) {
++		var entry = CTagsEntry();
++
++		entry.line_number = cl.source_reference.begin.line;
++		entry.name = cl.name;
++		entry.kind = ValaKind.K_CLASS;
++		entry.filePosition = cl.source_reference.begin.pos
++				   - cl.source_reference.file.get_mapped_contents();
++		entry.access = get_access (cl);
++		entry.implementation = implementation(cl);
++		entry.inheritance = to_string(cl.get_base_types(), ",");
++		entry.scope = scope (cl);
++
++		taglist.append(entry);
++		cl.accept_children(this);
++	}
++	public override void visit_struct (Struct st) {
++		var entry = CTagsEntry();
++		entry.line_number = st.source_reference.begin.line;
++		entry.name = st.name;
++		entry.kind = ValaKind.K_STRUCT;
++		entry.filePosition = st.source_reference.begin.pos
++				   - st.source_reference.file.get_mapped_contents();
++		entry.access = get_access (st);
++		entry.scope = scope (st);
++
++		taglist.append(entry);
++		st.accept_children(this);
++	}
++	public override void visit_interface (Interface iface) {
++		var entry = CTagsEntry();
++
++		entry.line_number = iface.source_reference.begin.line;
++		entry.name = iface.name;
++		entry.kind = ValaKind.K_INTERFACE;
++		entry.filePosition = iface.source_reference.begin.pos
++				   - iface.source_reference.file.get_mapped_contents();
++		entry.access = get_access (iface);
++		entry.inheritance = to_string(iface.get_prerequisites());
++		entry.scope = scope (iface);
++
++		taglist.append(entry);
++		iface.accept_children(this);
++	}
++
++	public override void visit_enum (Vala.Enum en) {
++		var entry = CTagsEntry();
++
++		entry.line_number = en.source_reference.begin.line;
++		entry.name = en.name;
++		entry.kind = ValaKind.K_ENUMVALUE;
++		entry.filePosition = en.source_reference.begin.pos
++				   - en.source_reference.file.get_mapped_contents();
++		entry.access = get_access (en);
++		entry.scope = scope (en);
++
++		taglist.append(entry);
++		en.accept_children(this);
++	}
++	public override void visit_error_domain (ErrorDomain edomain) {
++		var entry = CTagsEntry();
++
++		entry.line_number = edomain.source_reference.begin.line;
++		entry.name = edomain.name;
++		entry.kind = ValaKind.K_ERRORDOMAIN;
++		entry.filePosition = edomain.source_reference.begin.pos
++				   - edomain.source_reference.file.get_mapped_contents();
++		entry.access = get_access (edomain);
++		entry.scope = scope (edomain);
++
++		taglist.append(entry);
++		edomain.accept_children(this);
++	}
++
++	public override void visit_enum_value (Vala.EnumValue ev) {
++		var entry = CTagsEntry();
++
++		entry.line_number = ev.source_reference.begin.line;
++		entry.name = ev.name;
++		entry.kind = ValaKind.K_ENUMVALUE;
++		entry.filePosition = ev.source_reference.begin.pos
++				   - ev.source_reference.file.get_mapped_contents();
++		entry.access = get_access (ev);
++		entry.scope = scope (ev);
++
++		taglist.append(entry);
++	}
++	public override void visit_error_code (ErrorCode ecode) {
++		var entry = CTagsEntry();
++
++		//entry.line_number = ecode.source_reference.begin.line;
++		entry.name = ecode.name;
++		entry.kind = ValaKind.K_ERRORCODE;
++		entry.filePosition = ecode.source_reference.begin.pos
++				   - ecode.source_reference.file.get_mapped_contents();
++		entry.access = get_access (ecode);
++		entry.scope = scope (ecode);
++
++		taglist.append(entry);
++	}
++
++	public override void visit_delegate (Delegate d) {
++		var entry = CTagsEntry();
++
++		entry.line_number = d.source_reference.begin.line;
++		entry.name = d.name;
++		entry.kind = ValaKind.K_DELEGATE;
++		entry.filePosition = d.source_reference.begin.pos
++				   - d.source_reference.file.get_mapped_contents();
++		entry.access = get_access (d);
++		entry.scope = scope (d);
++		entry.returntype = d.return_type.to_qualified_string();
++		entry.signature = signature(d.get_parameters());
++
++		taglist.append(entry);
++	}
++	public override void visit_signal (Vala.Signal sig) {
++		var entry = CTagsEntry();
++
++		entry.line_number = sig.source_reference.begin.line;
++		entry.name = sig.name;
++		entry.kind = ValaKind.K_SIGNAL;
++		entry.filePosition = sig.source_reference.begin.pos
++				   - sig.source_reference.file.get_mapped_contents();
++		entry.access = get_access (sig);
++		entry.implementation = implementation(sig);
++		entry.scope = scope (sig);
++		entry.returntype = sig.return_type.to_qualified_string();
++		entry.signature = signature(sig.get_parameters());
++
++		taglist.append(entry);
++	}
++	public override void visit_field (Field f) {
++		var entry = CTagsEntry();
++
++		entry.line_number = f.source_reference.begin.line;
++		entry.name = f.name;
++		entry.kind = ValaKind.K_FIELD;
++		entry.filePosition = f.source_reference.begin.pos
++				   - f.source_reference.file.get_mapped_contents();
++		entry.access = get_access (f);
++		entry.scope = scope (f);
++		entry.typeref = f.variable_type.to_qualified_string();
++
++		taglist.append(entry);
++	}
++	public override void visit_constant (Constant c) {
++		var entry = CTagsEntry();
++
++		entry.line_number = c.source_reference.begin.line;
++		entry.name = c.name;
++		entry.kind = ValaKind.K_FIELD;
++		entry.filePosition = c.source_reference.begin.pos
++				   - c.source_reference.file.get_mapped_contents();
++		entry.access = get_access (c);
++		entry.scope = scope (c);
++		entry.typeref = c.type_reference.to_qualified_string();
++  
++		taglist.append(entry);
++	}
++	public override void visit_property (Property prop) {
++		var entry = CTagsEntry();
++
++		entry.line_number = prop.source_reference.begin.line;
++		entry.name = prop.name;
++		entry.kind = ValaKind.K_PROPERTY;
++		entry.filePosition = prop.source_reference.begin.pos
++				   - prop.source_reference.file.get_mapped_contents();
++		entry.access = get_access (prop);
++		entry.implementation = implementation(prop);
++		entry.scope = scope (prop);
++		entry.typeref = prop.property_type.to_qualified_string();
++
++		taglist.append(entry);
++	}
++
++	public override void visit_method (Method m) {
++		var entry = CTagsEntry();
++
++		entry.line_number = m.source_reference.begin.line;
++		entry.name = m.name;
++		entry.kind = ValaKind.K_METHOD;
++		entry.filePosition = m.source_reference.begin.pos
++				   - m.source_reference.file.get_mapped_contents();
++		entry.access = get_access (m);
++		entry.implementation = implementation(m);
++		entry.scope = scope (m);
++		entry.returntype = m.return_type.to_qualified_string();
++		entry.signature = signature(m.get_parameters());
++
++		taglist.append(entry);
++	}
++
++	public override void visit_local_variable (LocalVariable local) {
++		var entry = CTagsEntry();
++
++		entry.line_number = local.source_reference.begin.line;
++		entry.name = local.name;
++		entry.kind = ValaKind.K_LOCAL;
++		entry.filePosition = local.source_reference.begin.pos
++				   - local.source_reference.file.get_mapped_contents();
++		entry.access = get_access (local);
++
++		taglist.append(entry);
++	}
++
++	public void parse_vala (string filename, CTagsEntryMaker maker ) {
++		taglist = new GLib.List<CTagsEntry?>();
++		/* We create a context for every source file so that Parser.parse(context)
++		 * don't parse a file multiple times causing errors. Parser.parse_file(source_file)
++		 * assumes that Parser.context is the same as source_file.context anyway */
++		var context = new CodeContext();
++		context.report = new DummyReport();
++		var source_file = new SourceFile(context, filename.has_suffix("vapi") ? SourceFileType.PACKAGE : SourceFileType.SOURCE, filename);
++
++		CodeContext.push(context);
++		context.add_source_file(source_file);
++		vala_parser.parse(context);
++		context.accept(this);
++		foreach (var tagentry in taglist) {
++			maker(tagentry);
++		}
++		taglist = null;
++		CodeContext.pop();
++	}
++	public void parse_genie (string filename, CTagsEntryMaker maker ) {
++		taglist = new GLib.List<CTagsEntry?>();
++		var context = new CodeContext();
++		context.report = new DummyReport();
++		var source_file = new SourceFile(context, SourceFileType.SOURCE, filename);
++		context.add_source_file(source_file);
++
++		CodeContext.push(context);
++		genie_parser.parse(context);
++		context.accept(this);
++		foreach (var tagentry in taglist) {
++			maker(tagentry);
++		}
++		taglist = null;
++		CodeContext.pop();
++	}
++}
+diff --git a/parsers/vala.c b/parsers/vala.c
+new file mode 100644
+index 00000000..071448d3
+--- /dev/null
++++ b/parsers/vala.c
+@@ -0,0 +1,107 @@
++/*
++ * vala.c
++ *
++ * Copyright 2008 Abderrahim Kitouni <a.kitouni@gmail.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
++ * MA 02110-1301, USA.
++ */
++
++/*
++ *   INCLUDE FILES
++ */
++#include "general.h"  /* must always come first */
++#include "parse.h"
++#include "read.h"
++
++#include "entry.h"
++#include "ctags-vala.h"
++
++
++CTagsVisitor *visitor;
++/* using different data structure because fpos_t isn't available in Vala*/
++static void make_ctags_entry (CTagsEntry* entry) {
++	tagEntryInfo tag;
++	initTagEntry(&tag, entry->name, 0); //TODO: ValaKinds
++
++	tag.lineNumberEntry = TRUE;
++	tag.lineNumber = entry->line_number;
++	tag.kindIndex = entry->kind;
++	//tag.filePosition = entry->filePosition;
++	tag.extensionFields.access = entry->access;
++	tag.extensionFields.implementation = entry->implementation;
++	tag.extensionFields.inheritance = entry->inheritance;
++	//tag.extensionFields.scope[0] = entry->scope[0];
++	//tag.extensionFields.scope[1] = entry->scope[1];
++	tag.extensionFields.typeRef[0] = entry->typeref;
++	//tag.extensionFields.returnType = entry->returntype;
++	tag.extensionFields.signature = entry->signature;
++	makeTagEntry(&tag);
++}
++
++static kindDefinition ValaKinds [] = {
++	{ true,	 'c', "class",       "Classes" },
++	{ true,  's', "struct",      "Structures" },
++	{ true,  'i', "interface",   "Interfaces" },
++	{ true,  'e', "enum",        "Enumerations" },
++	{ true,  'v', "enumvalue",   "Enumeration Values" },
++	{ true,  'E', "errordomain", "Error domains" },
++	{ true,  'r', "errorcode",   "Error codes" },
++	{ true,  'd', "delegate",    "Delegates" },
++	{ true,  'S', "signal",      "Signals" },
++	{ true,	 'f', "field",       "Fields" },
++	{ true,	 'p', "property",    "Properties" },
++	{ true,  'm', "method",      "Methods" },
++	{ false, 'l', "local",       "Local variables" },
++};
++
++static void findValaTags (void) {
++	if (visitor == NULL) {
++		visitor = ctags_visitor_new();
++	}
++	ctags_visitor_parse_vala (visitor, getInputFileName(), (CTagsEntryMaker) make_ctags_entry);
++}
++
++extern parserDefinition* CTagsValaParser(void) {
++	g_type_init();
++	static const char *const extensions [] = { "vala", "vapi", NULL };
++	parserDefinition* def = parserNew ("Vala");
++	def->kindTable  = ValaKinds;
++	def->kindCount  = ARRAY_SIZE (ValaKinds);
++	def->extensions = extensions;
++	def->parser     = findValaTags;
++	//def->initialize = initializeJavaParser;
++	//def->useCork    = true;
++	return def;
++}
++
++static void findGenieTags (void) {
++	if (visitor == NULL) {
++		visitor = ctags_visitor_new();
++	}
++	ctags_visitor_parse_genie (visitor, getInputFileName(), (CTagsEntryMaker) make_ctags_entry);
++}
++
++extern parserDefinition *GenieParser(void) {
++	static const char *const extensions [] = { "gs", NULL };
++	parserDefinition* def = parserNew ("Genie");
++	def->kindTable  = ValaKinds;
++	def->kindCount  = ARRAY_SIZE (ValaKinds);
++	def->extensions = extensions;
++	def->parser     = findGenieTags;
++	//def->initialize = initializeJavaParser;
++	//def->useCork    = true;
++	return def;
++}
+diff --git a/source.mak b/source.mak
+index de748268..ea6004b0 100644
+--- a/source.mak
++++ b/source.mak
+@@ -307,6 +307,14 @@ YAML_SRCS = \
+ 	\
+ 	$(NULL)
+ 
++VALA_HEADS = parsers/ctags-vala.h
++VALA_SRCS = \
++	parsers/ctags-visitor.c		\
++	\
++	parsers/vala.c		\
++	\
++	$(NULL)
++
+ DEBUG_HEADS = main/debug.h
+ DEBUG_SRCS = main/debug.c
+ 
+-- 
+2.24.0
+

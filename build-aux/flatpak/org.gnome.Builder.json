@@ -195,6 +195,11 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/universal-ctags/ctags.git"
+                },
+                {
+                    "type": "patch",
+                    "path": "ctags-Add-vala-language.patch",
+                    "sha256": "ce0132b9c939702ce0dd20ec29277eaa35413a53d791ed334b36b4cb30fd4f0a"
                 }
             ]
         },
