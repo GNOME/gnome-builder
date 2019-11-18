@@ -187,6 +187,7 @@ status += [
   'Sysprof ............... : @0@'.format(get_option('plugin_sysprof')),
   'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
   'Todo .................. : @0@'.format(get_option('plugin_todo')),
+  'Vala Language Server... : @0@'.format(get_option('plugin_gvls')),
   'Vala Pack ............. : @0@'.format(get_option('plugin_vala')),
   'Vagrant ............... : @0@'.format(get_option('plugin_vagrant')),
   'Valgrind .............. : @0@'.format(get_option('plugin_valgrind')),
