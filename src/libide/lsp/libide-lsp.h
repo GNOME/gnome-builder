@@ -31,6 +31,7 @@
 #include "ide-lsp-completion-provider.h"
 #include "ide-lsp-completion-results.h"
 #include "ide-lsp-diagnostic-provider.h"
+#include "ide-lsp-enums.h"
 #include "ide-lsp-formatter.h"
 #include "ide-lsp-highlighter.h"
 #include "ide-lsp-hover-provider.h"

@@ -33,6 +33,13 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLspClient, ide_lsp_client, IDE, LSP_CLIENT, IdeObject)
 
+typedef enum
+{
+  IDE_LSP_TRACE_OFF,
+  IDE_LSP_TRACE_MESSAGES,
+  IDE_LSP_TRACE_VERBOSE,
+} IdeLspTrace;
+
 struct _IdeLspClientClass
 {
   IdeObjectClass parent_class;
@@ -52,6 +59,11 @@ struct _IdeLspClientClass
 
 IDE_AVAILABLE_IN_3_32
 IdeLspClient *ide_lsp_client_new                      (GIOStream            *io_stream);
+IDE_AVAILABLE_IN_3_36
+IdeLspTrace   ide_lsp_client_get_trace                (IdeLspClient         *self);
+IDE_AVAILABLE_IN_3_36
+void          ide_lsp_client_set_trace                (IdeLspClient         *self,
+                                                       IdeLspTrace           trace);
 IDE_AVAILABLE_IN_3_32
 void          ide_lsp_client_add_language             (IdeLspClient         *self,
                                                        const gchar          *language_id);

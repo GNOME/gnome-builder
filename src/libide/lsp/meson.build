@@ -1,3 +1,4 @@
+libide_lsp_header_dir = join_paths(libide_header_dir, 'lsp')
 libide_lsp_header_subdir = join_paths(libide_header_subdir, 'lsp')
 libide_include_directories += include_directories('.')
 
@@ -53,7 +54,22 @@ libide_lsp_private_sources = [
   'ide-lsp-util.c',
 ]
 
-libide_lsp_sources = libide_lsp_public_sources + libide_lsp_private_sources
+libide_lsp_enum_headers = [
+  'ide-lsp-client.h',
+]
+
+libide_lsp_enums = gnome.mkenums_simple('ide-lsp-enums',
+     body_prefix: '#include "config.h"',
+   header_prefix: '#include <libide-core.h>',
+       decorator: '_IDE_EXTERN',
+         sources: libide_lsp_enum_headers,
+  install_header: true,
+     install_dir: libide_lsp_header_dir,
+)
+libide_lsp_generated_sources = [libide_lsp_enums[0]]
+libide_lsp_generated_headers = [libide_lsp_enums[1]]
+
+libide_lsp_sources = libide_lsp_public_sources + libide_lsp_private_sources + libide_lsp_generated_sources
 
 #
 # Dependencies

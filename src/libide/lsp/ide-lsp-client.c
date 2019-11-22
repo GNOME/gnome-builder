@@ -33,6 +33,7 @@
 #include <unistd.h>
 
 #include "ide-lsp-client.h"
+#include "ide-lsp-enums.h"
 
 typedef struct
 {
@@ -42,6 +43,7 @@ typedef struct
   GIOStream      *io_stream;
   GHashTable     *diagnostics_by_file;
   GPtrArray      *languages;
+  IdeLspTrace     trace;
 } IdeLspClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
@@ -62,6 +64,7 @@ enum {
 enum {
   PROP_0,
   PROP_IO_STREAM,
+  PROP_TRACE,
   N_PROPS
 };
 
@@ -728,6 +731,10 @@ ide_lsp_client_get_property (GObject    *object,
       g_value_set_object (value, priv->io_stream);
       break;
 
+    case PROP_TRACE:
+      g_value_set_enum (value, ide_lsp_client_get_trace (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -746,6 +753,10 @@ ide_lsp_client_set_property (GObject      *object,
     {
     case PROP_IO_STREAM:
       priv->io_stream = g_value_dup_object (value);
+      break;
+
+    case PROP_TRACE:
+      ide_lsp_client_set_trace (self, g_value_get_enum (value));
       break;
 
     default:
@@ -771,6 +782,14 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                          "The GIOStream to communicate over",
                          G_TYPE_IO_STREAM,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TRACE] =
+    g_param_spec_enum ("trace",
+                       "Trace",
+                       "If tracing should be enabled on the peer.",
+                       IDE_TYPE_LSP_TRACE,
+                       IDE_LSP_TRACE_OFF,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -816,6 +835,7 @@ ide_lsp_client_init (IdeLspClient *self)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
+  priv->trace = IDE_LSP_TRACE_OFF;
   priv->languages = g_ptr_array_new_with_free_func (g_free);
 
   priv->diagnostics_by_file = g_hash_table_new_full ((GHashFunc)g_file_hash,
@@ -957,6 +977,7 @@ ide_lsp_client_start (IdeLspClient *self)
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *root_path = NULL;
   g_autofree gchar *root_uri = NULL;
+  const gchar *trace_string;
   IdeContext *context;
   GFile *workdir;
 
@@ -981,6 +1002,22 @@ ide_lsp_client_start (IdeLspClient *self)
   root_path = g_file_get_path (workdir);
   root_uri = g_file_get_uri (workdir);
 
+  switch (priv->trace)
+    {
+    case IDE_LSP_TRACE_VERBOSE:
+      trace_string = "verbose";
+      break;
+
+    case IDE_LSP_TRACE_MESSAGES:
+      trace_string = "messages";
+      break;
+
+    case IDE_LSP_TRACE_OFF:
+    default:
+      trace_string = "off";
+      break;
+    }
+
   /*
    * The first thing we need to do is initialize the client with information
    * about our project. So that we will perform asynchronously here. It will
@@ -991,6 +1028,7 @@ ide_lsp_client_start (IdeLspClient *self)
     "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
     "rootUri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
+    "trace", JSONRPC_MESSAGE_PUT_STRING (trace_string),
     "capabilities", "{", "}"
   );
 
@@ -1359,4 +1397,32 @@ ide_lsp_client_add_language (IdeLspClient *self,
   g_return_if_fail (language_id != NULL);
 
   g_ptr_array_add (priv->languages, g_strdup (language_id));
+}
+
+IdeLspTrace
+ide_lsp_client_get_trace (IdeLspClient *self)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), IDE_LSP_TRACE_OFF);
+
+  return priv->trace;
+}
+
+void
+ide_lsp_client_set_trace (IdeLspClient *self,
+                          IdeLspTrace   trace)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
+  g_return_if_fail (trace == IDE_LSP_TRACE_OFF ||
+                    trace == IDE_LSP_TRACE_MESSAGES ||
+                    trace == IDE_LSP_TRACE_VERBOSE);
+
+  if (trace != priv->trace)
+    {
+      priv->trace = trace;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRACE]);
+    }
 }
