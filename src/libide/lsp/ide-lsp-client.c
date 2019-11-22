@@ -283,7 +283,7 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
           "}",
         "}",
         "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (length),
-        "text", "",
+        "text", JSONRPC_MESSAGE_PUT_STRING (""),
       "}",
     "]");
 
