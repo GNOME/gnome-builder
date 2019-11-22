@@ -216,8 +216,10 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
       "}",
     "]");
 
-  ide_lsp_client_send_notification_async (self, "textDocument/didChange",
-                                               params, NULL, NULL, NULL);
+  ide_lsp_client_send_notification_async (self,
+                                          "textDocument/didChange",
+                                          params,
+                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -285,8 +287,10 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
       "}",
     "]");
 
-  ide_lsp_client_send_notification_async (self, "textDocument/didChange",
-                                               params, NULL, NULL, NULL);
+  ide_lsp_client_send_notification_async (self,
+                                          "textDocument/didChange",
+                                          params,
+                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
