@@ -127,7 +127,9 @@ ide_lsp_client_buffer_saved (IdeLspClient     *self,
                              IdeBufferManager *buffer_manager)
 {
   g_autoptr(GVariant) params = NULL;
+  g_autoptr(GBytes) content = NULL;
   g_autofree gchar *uri = NULL;
+  const gchar *text;
 
   IDE_ENTRY;
 
@@ -140,14 +142,20 @@ ide_lsp_client_buffer_saved (IdeLspClient     *self,
     IDE_EXIT;
 
   uri = ide_buffer_dup_uri (buffer);
+  content = ide_buffer_dup_content (buffer);
+  text = (const gchar *)g_bytes_get_data (content, NULL);
 
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
       "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+      "text", JSONRPC_MESSAGE_PUT_STRING (text),
     "}"
   );
 
-  ide_lsp_client_send_notification_async (self, "textDocument/didSave", params, NULL, NULL, NULL);
+  ide_lsp_client_send_notification_async (self,
+                                          "textDocument/didSave",
+                                          params,
+                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
