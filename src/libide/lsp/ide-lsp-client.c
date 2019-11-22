@@ -926,21 +926,6 @@ ide_lsp_client_initialize_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  /*
-   * Now that we are connected and have initialized the peer, setup our
-   * buffer_manager and project signals so that we can notify the peer
-   * of open documents and such.
-   *
-   * We connect this before sending initialized because we don't want
-   * to lose any possible messages in-between the async calls.
-   */
-
-  g_signal_connect_object (rpc_client,
-                           "notification",
-                           G_CALLBACK (ide_lsp_client_send_notification),
-                           self,
-                           G_CONNECT_SWAPPED);
-
   /* TODO: Check for server capabilities */
 
   initialized_param = JSONRPC_MESSAGE_NEW ("initializedParams", "{", "}");
@@ -1008,6 +993,16 @@ ide_lsp_client_start (IdeLspClient *self)
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
     "capabilities", "{", "}"
   );
+
+  /*
+   * We connect this before sending initialized because we don't want
+   * to lose any possible messages in-between the async calls.
+   */
+  g_signal_connect_object (priv->rpc_client,
+                           "notification",
+                           G_CALLBACK (ide_lsp_client_send_notification),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   jsonrpc_client_call_async (priv->rpc_client,
                              "initialize",
