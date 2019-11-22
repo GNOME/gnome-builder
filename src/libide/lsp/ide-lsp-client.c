@@ -43,7 +43,7 @@ typedef struct
   GIOStream      *io_stream;
   GHashTable     *diagnostics_by_file;
   GPtrArray      *languages;
-  GVariant       *capabilities;
+  GVariant       *server_capabilities;
   IdeLspTrace     trace;
 } IdeLspClientPrivate;
 
@@ -65,6 +65,7 @@ enum {
 enum {
   PROP_0,
   PROP_IO_STREAM,
+  PROP_SERVER_CAPABILITIES,
   PROP_TRACE,
   N_PROPS
 };
@@ -704,7 +705,7 @@ ide_lsp_client_finalize (GObject *object)
   g_assert (IDE_IS_MAIN_THREAD ());
 
   g_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
-  g_clear_pointer (&priv->capabilities, g_variant_unref);
+  g_clear_pointer (&priv->server_capabilities, g_variant_unref);
   g_clear_pointer (&priv->languages, g_ptr_array_unref);
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
@@ -745,6 +746,10 @@ ide_lsp_client_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_SERVER_CAPABILITIES:
+      g_value_set_variant (value, priv->server_capabilities);
+      break;
+
     case PROP_IO_STREAM:
       g_value_set_object (value, priv->io_stream);
       break;
@@ -793,6 +798,14 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
 
   klass->notification = ide_lsp_client_real_notification;
   klass->supports_language = ide_lsp_client_real_supports_language;
+
+  properties [PROP_SERVER_CAPABILITIES] =
+    g_param_spec_variant ("server-capabilities",
+                         "Server Capabilities",
+                         "The server capabilities as provided by the server",
+                         G_VARIANT_TYPE_VARDICT,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_IO_STREAM] =
     g_param_spec_object ("io-stream",
@@ -966,9 +979,10 @@ ide_lsp_client_initialize_cb (GObject      *object,
     }
 
   /* Extract capabilities for future use */
-  g_clear_pointer (&priv->capabilities, g_variant_unref);
+  g_clear_pointer (&priv->server_capabilities, g_variant_unref);
   if (g_variant_is_of_type (reply, G_VARIANT_TYPE_VARDICT))
-    priv->capabilities = g_variant_lookup_value (reply, "capabilities", G_VARIANT_TYPE_VARDICT);
+    priv->server_capabilities = g_variant_lookup_value (reply, "capabilities", G_VARIANT_TYPE_VARDICT);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SERVER_CAPABILITIES]);
 
   initialized_param = JSONRPC_MESSAGE_NEW ("initializedParams", "{", "}");
 
@@ -1447,4 +1461,28 @@ ide_lsp_client_set_trace (IdeLspClient *self,
       priv->trace = trace;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRACE]);
     }
+}
+
+/**
+ * ide_lsp_client_get_server_capabilities:
+ * @self: a #IdeLspClient
+ *
+ * Gets the capabilities provided to us by the server after initializing.
+ *
+ * This value is not available until after connecting and initializing
+ * the connection.
+ *
+ * Returns: (transfer none) (nullable): a #GVariant that is a
+ *   %G_VARIANT_TYPE_VARDICT or %NULL.
+ *
+ * Since: 3.36
+ */
+GVariant *
+ide_lsp_client_get_server_capabilities (IdeLspClient *self)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), NULL);
+
+  return priv->server_capabilities;
 }

@@ -64,6 +64,8 @@ IdeLspTrace   ide_lsp_client_get_trace                (IdeLspClient         *sel
 IDE_AVAILABLE_IN_3_36
 void          ide_lsp_client_set_trace                (IdeLspClient         *self,
                                                        IdeLspTrace           trace);
+IDE_AVAILABLE_IN_3_36
+GVariant     *ide_lsp_client_get_server_capabilities  (IdeLspClient         *self);
 IDE_AVAILABLE_IN_3_32
 void          ide_lsp_client_add_language             (IdeLspClient         *self,
                                                        const gchar          *language_id);
