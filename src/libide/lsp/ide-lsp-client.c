@@ -189,7 +189,9 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
   copy = g_strndup (new_text, len);
 
   uri = ide_buffer_dup_uri (buffer);
-  version = (gint64)ide_buffer_get_change_count (buffer);
+
+  /* We get called before this change is registered */
+  version = (gint64)ide_buffer_get_change_count (buffer) + 1;
 
   line = gtk_text_iter_get_line (location);
   column = gtk_text_iter_get_line_offset (location);
@@ -251,7 +253,9 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
   g_assert (IDE_IS_BUFFER (buffer));
 
   uri = ide_buffer_dup_uri (buffer);
-  version = (gint)ide_buffer_get_change_count (buffer);
+
+  /* We get called before this change is registered */
+  version = (gint)ide_buffer_get_change_count (buffer) + 1;
 
   copy_begin = *begin_iter;
   copy_end = *end_iter;
