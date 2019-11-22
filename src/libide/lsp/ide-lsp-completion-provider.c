@@ -34,8 +34,9 @@
 
 typedef struct
 {
-  IdeLspClient *client;
-  gchar *word;
+  IdeLspClient  *client;
+  gchar         *word;
+  gchar        **trigger_chars;
 } IdeLspCompletionProviderPrivate;
 
 static void provider_iface_init (IdeCompletionProviderInterface *iface);
@@ -60,6 +61,7 @@ ide_lsp_completion_provider_finalize (GObject *object)
 
   g_clear_object (&priv->client);
   g_clear_pointer (&priv->word, g_free);
+  g_clear_pointer (&priv->trigger_chars, g_free);
 
   G_OBJECT_CLASS (ide_lsp_completion_provider_parent_class)->finalize (object);
 }
@@ -144,6 +146,42 @@ ide_lsp_completion_provider_get_client (IdeLspCompletionProvider *self)
   return priv->client;
 }
 
+static void
+on_notify_server_capabilities_cb (IdeLspCompletionProvider *self,
+                                  GParamSpec *pspec,
+                                  IdeLspClient *client)
+{
+  IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
+  GVariant *capabilities;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_LSP_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_LSP_CLIENT (client));
+
+  capabilities = ide_lsp_client_get_server_capabilities (client);
+
+  if (capabilities != NULL)
+    {
+      g_auto(GStrv) trigger_chars = NULL;
+      gboolean r;
+
+      r = JSONRPC_MESSAGE_PARSE (capabilities,
+        "completionProvider", "{",
+          "triggerCharacters", JSONRPC_MESSAGE_GET_STRV (&trigger_chars),
+        "}"
+      );
+
+      if (r)
+        {
+          g_clear_pointer (&priv->trigger_chars, g_strfreev);
+          priv->trigger_chars = g_steal_pointer (&trigger_chars);
+        }
+    }
+
+  IDE_EXIT;
+}
+
 void
 ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
                                         IdeLspClient             *client)
@@ -154,7 +192,15 @@ ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
   g_return_if_fail (!client || IDE_IS_LSP_CLIENT (client));
 
   if (g_set_object (&priv->client, client))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
+    {
+      g_signal_connect_object (client,
+                               "notify::server-capabilities",
+                               G_CALLBACK (on_notify_server_capabilities_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      on_notify_server_capabilities_cb (self, NULL, client);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
+    }
 }
 
 static gint
@@ -372,6 +418,35 @@ ide_lsp_completion_provider_get_comment (IdeCompletionProvider *provider,
   return g_strdup (ide_lsp_completion_item_get_detail (IDE_LSP_COMPLETION_ITEM (proposal)));
 }
 
+static gboolean
+ide_lsp_completion_provider_is_trigger (IdeCompletionProvider *provider,
+                                        const GtkTextIter     *iter,
+                                        gunichar               ch)
+{
+  IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
+  IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
+
+  g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (self));
+  g_assert (iter != NULL);
+
+  if (priv->trigger_chars != NULL)
+    {
+      for (guint i = 0; priv->trigger_chars[i]; i++)
+        {
+          const gchar *trigger = priv->trigger_chars[i];
+
+          /* Technically, since these are strings they can be more than
+           * one character long. But I haven't seen anything actually
+           * do that in the wild yet.
+           */
+          if (ch == g_utf8_get_char (trigger))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 provider_iface_init (IdeCompletionProviderInterface *iface)
 {
@@ -382,4 +457,5 @@ provider_iface_init (IdeCompletionProviderInterface *iface)
   iface->display_proposal = ide_lsp_completion_provider_display_proposal;
   iface->activate_proposal = ide_lsp_completion_provider_activate_proposal;
   iface->get_comment = ide_lsp_completion_provider_get_comment;
+  iface->is_trigger = ide_lsp_completion_provider_is_trigger;
 }
