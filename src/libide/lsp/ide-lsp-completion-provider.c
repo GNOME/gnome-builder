@@ -209,11 +209,13 @@ ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
 {
   IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
+  IdeCompletionActivation activation;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   GtkTextIter iter, end;
   GtkTextBuffer *buffer;
+  gint trigger_kind;
   gint line;
   gint column;
 
@@ -236,6 +238,13 @@ ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
 
   ide_completion_context_get_bounds (context, &iter, &end);
 
+  activation = ide_completion_context_get_activation (context);
+
+  if (activation == IDE_COMPLETION_TRIGGERED)
+    trigger_kind = 2;
+  else
+    trigger_kind = 1;
+
   g_clear_pointer (&priv->word, g_free);
   priv->word = ide_completion_context_get_word (context);
 
@@ -252,6 +261,9 @@ ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
     "position", "{",
       "line", JSONRPC_MESSAGE_PUT_INT32 (line),
       "character", JSONRPC_MESSAGE_PUT_INT32 (column),
+    "}",
+    "context", "{",
+      "triggerKind", JSONRPC_MESSAGE_PUT_INT32 (trigger_kind),
     "}"
   );
 
