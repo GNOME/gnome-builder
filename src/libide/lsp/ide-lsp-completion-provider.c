@@ -66,9 +66,9 @@ ide_lsp_completion_provider_finalize (GObject *object)
 
 static void
 ide_lsp_completion_provider_get_property (GObject    *object,
-                                               guint       prop_id,
-                                               GValue     *value,
-                                               GParamSpec *pspec)
+                                          guint       prop_id,
+                                          GValue     *value,
+                                          GParamSpec *pspec)
 {
   IdeLspCompletionProvider *self = IDE_LSP_COMPLETION_PROVIDER (object);
 
@@ -85,9 +85,9 @@ ide_lsp_completion_provider_get_property (GObject    *object,
 
 static void
 ide_lsp_completion_provider_set_property (GObject      *object,
-                                               guint         prop_id,
-                                               const GValue *value,
-                                               GParamSpec   *pspec)
+                                          guint         prop_id,
+                                          const GValue *value,
+                                          GParamSpec   *pspec)
 {
   IdeLspCompletionProvider *self = IDE_LSP_COMPLETION_PROVIDER (object);
 
@@ -146,7 +146,7 @@ ide_lsp_completion_provider_get_client (IdeLspCompletionProvider *self)
 
 void
 ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
-                                             IdeLspClient             *client)
+                                        IdeLspClient             *client)
 {
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
 
@@ -159,15 +159,15 @@ ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
 
 static gint
 ide_lsp_completion_provider_get_priority (IdeCompletionProvider *provider,
-                                               IdeCompletionContext  *context)
+                                          IdeCompletionContext  *context)
 {
   return IDE_LSP_COMPLETION_PROVIDER_PRIORITY;
 }
 
 static void
 ide_lsp_completion_provider_complete_cb (GObject      *object,
-                                              GAsyncResult *result,
-                                              gpointer      user_data)
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
 {
   IdeLspCompletionProviderPrivate *priv;
   IdeLspCompletionProvider *self;
@@ -201,11 +201,11 @@ ide_lsp_completion_provider_complete_cb (GObject      *object,
 }
 
 static void
-ide_lsp_completion_provider_populate_async (IdeCompletionProvider  *provider,
-                                                 IdeCompletionContext   *context,
-                                                 GCancellable           *cancellable,
-                                                 GAsyncReadyCallback     callback,
-                                                 gpointer                user_data)
+ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
+                                            IdeCompletionContext  *context,
+                                            GCancellable          *cancellable,
+                                            GAsyncReadyCallback    callback,
+                                            gpointer               user_data)
 {
   IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
@@ -256,19 +256,19 @@ ide_lsp_completion_provider_populate_async (IdeCompletionProvider  *provider,
   );
 
   ide_lsp_client_call_async (priv->client,
-                                  "textDocument/completion",
-                                  params,
-                                  cancellable,
-                                  ide_lsp_completion_provider_complete_cb,
-                                  g_steal_pointer (&task));
+                             "textDocument/completion",
+                             params,
+                             cancellable,
+                             ide_lsp_completion_provider_complete_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static GListModel *
 ide_lsp_completion_provider_populate_finish (IdeCompletionProvider  *provider,
-                                                  GAsyncResult           *result,
-                                                  GError                **error)
+                                             GAsyncResult           *result,
+                                             GError                **error)
 {
   GListModel *ret;
 
@@ -284,8 +284,8 @@ ide_lsp_completion_provider_populate_finish (IdeCompletionProvider  *provider,
 
 static gboolean
 ide_lsp_completion_provider_refilter (IdeCompletionProvider *provider,
-                                           IdeCompletionContext  *context,
-                                           GListModel            *model)
+                                      IdeCompletionContext  *context,
+                                      GListModel            *model)
 {
   IdeLspCompletionResults *results = (IdeLspCompletionResults *)model;
   g_autofree gchar *word = NULL;
@@ -302,10 +302,10 @@ ide_lsp_completion_provider_refilter (IdeCompletionProvider *provider,
 
 static void
 ide_lsp_completion_provider_display_proposal (IdeCompletionProvider   *provider,
-                                                   IdeCompletionListBoxRow *row,
-                                                   IdeCompletionContext    *context,
-                                                   const gchar             *typed_text,
-                                                   IdeCompletionProposal   *proposal)
+                                              IdeCompletionListBoxRow *row,
+                                              IdeCompletionContext    *context,
+                                              const gchar             *typed_text,
+                                              IdeCompletionProposal   *proposal)
 {
   IdeLspCompletionItem *item = (IdeLspCompletionItem *)proposal;
   g_autofree gchar *markup = NULL;
@@ -325,9 +325,9 @@ ide_lsp_completion_provider_display_proposal (IdeCompletionProvider   *provider,
 
 static void
 ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                                    IdeCompletionContext  *context,
-                                                    IdeCompletionProposal *proposal,
-                                                    const GdkEventKey     *key)
+                                               IdeCompletionContext  *context,
+                                               IdeCompletionProposal *proposal,
+                                               const GdkEventKey     *key)
 {
   g_autoptr(IdeSnippet) snippet = NULL;
   GtkTextBuffer *buffer;
@@ -352,7 +352,7 @@ ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
 
 static gchar *
 ide_lsp_completion_provider_get_comment (IdeCompletionProvider *provider,
-                                              IdeCompletionProposal *proposal)
+                                         IdeCompletionProposal *proposal)
 {
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
