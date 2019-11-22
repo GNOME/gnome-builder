@@ -398,8 +398,8 @@ ide_lsp_client_buffer_manager_bind (IdeLspClient     *self,
 }
 
 static void
-ide_lsp_client_buffer_manager_unbind (IdeLspClient *self,
-                                           DzlSignalGroup    *signal_group)
+ide_lsp_client_buffer_manager_unbind (IdeLspClient   *self,
+                                      DzlSignalGroup *signal_group)
 {
   g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
