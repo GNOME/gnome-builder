@@ -43,6 +43,7 @@ typedef struct
   GIOStream      *io_stream;
   GHashTable     *diagnostics_by_file;
   GPtrArray      *languages;
+  GVariant       *capabilities;
   IdeLspTrace     trace;
 } IdeLspClientPrivate;
 
@@ -687,6 +688,7 @@ ide_lsp_client_finalize (GObject *object)
   g_assert (IDE_IS_MAIN_THREAD ());
 
   g_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
+  g_clear_pointer (&priv->capabilities, g_variant_unref);
   g_clear_pointer (&priv->languages, g_ptr_array_unref);
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
@@ -927,6 +929,7 @@ ide_lsp_client_initialize_cb (GObject      *object,
 {
   JsonrpcClient *rpc_client = (JsonrpcClient *)object;
   g_autoptr(IdeLspClient) self = user_data;
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GVariant) initialized_param = NULL;
   g_autoptr(GError) error = NULL;
@@ -946,7 +949,10 @@ ide_lsp_client_initialize_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  /* TODO: Check for server capabilities */
+  /* Extract capabilities for future use */
+  g_clear_pointer (&priv->capabilities, g_variant_unref);
+  if (g_variant_is_of_type (reply, G_VARIANT_TYPE_VARDICT))
+    priv->capabilities = g_variant_lookup_value (reply, "capabilities", G_VARIANT_TYPE_VARDICT);
 
   initialized_param = JSONRPC_MESSAGE_NEW ("initializedParams", "{", "}");
 
