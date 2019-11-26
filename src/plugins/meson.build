@@ -108,6 +108,7 @@ subdir('rustup')
 subdir('shellcmd')
 subdir('snippets')
 subdir('spellcheck')
+subdir('stylelint')
 subdir('sublime')
 subdir('support')
 subdir('symbol-tree')
@@ -181,6 +182,7 @@ status += [
   'RLS ................... : @0@'.format(get_option('plugin_rls')),
   'Rustup ................ : @0@'.format(get_option('plugin_rustup')),
   'Spellcheck ............ : @0@'.format(get_option('plugin_spellcheck')),
+  'Stylelint ............. : @0@'.format(get_option('plugin_stylelint')),
   'Sysprof ............... : @0@'.format(get_option('plugin_sysprof')),
   'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
   'Todo .................. : @0@'.format(get_option('plugin_todo')),

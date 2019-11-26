@@ -1,0 +1,9 @@
+<schemalist>
+  <schema id="org.gnome.builder.plugins.stylelint" path="/org/gnome/builder/plugins/stylelint/" gettext-domain="gnome-builder">
+    <key name="enable-stylelint" type="b">
+      <default>false</default>
+      <summary>Enable Stylelint</summary>
+      <description>Enable the use of stylelint to find additional diagnostics in stylesheet files. This may result in the execution of code in your project.</description>
+    </key>
+  </schema>
+</schemalist>

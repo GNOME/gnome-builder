@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Georg Vienna <georg.vienna@himbarsoft.com>, Tobias Schönberg <tobias47n9e@gmail.com>
+Copyright=Copyright © 2017 Georg Vienna <georg.vienna@himbarsoft.com>, Tobias Schönberg <tobias47n9e@gmail.com>
+Description=Provides stylesheet linting
+Loader=python3
+Hidden=true
+Module=stylelint_plugin
+Name=stylelint
+X-Diagnostic-Provider-Languages=css,scss,sass,less
+X-Diagnostic-Provider-Languages-Priority=100
+X-Builder-ABI=@PACKAGE_ABI@
