@@ -939,6 +939,7 @@ gbp_shellcmd_command_from_key_file (GKeyFile     *keyfile,
     { "Command", "command", G_TYPE_STRING, TRUE },
     { "Directory", "cwd", G_TYPE_STRING, FALSE },
     { "Environment", "env", G_TYPE_STRV, FALSE },
+    { "CloseOnExit", "close-on-exit", G_TYPE_BOOLEAN, FALSE },
   };
 
   g_return_val_if_fail (keyfile != NULL, NULL);
@@ -972,6 +973,14 @@ gbp_shellcmd_command_from_key_file (GKeyFile     *keyfile,
           keys[i].found = TRUE;
 
           g_object_set (self, keys[i].prop_name, val, NULL);
+        }
+      else if (g_type_is_a (keys[i].type, G_TYPE_BOOLEAN))
+        {
+          gboolean ret = g_key_file_get_boolean (keyfile, group, keys[i].key_name, NULL);
+
+          keys[i].found = TRUE;
+
+          g_object_set (self, keys[i].prop_name, ret, NULL);
         }
       else if (g_type_is_a (keys[i].type, G_TYPE_ENUM))
         {
@@ -1041,6 +1050,7 @@ gbp_shellcmd_command_to_key_file (GbpShellcmdCommand  *self,
   g_key_file_set_string (keyfile, group, "Title", self->title ?: "");
   g_key_file_set_string (keyfile, group, "Command", self->command ?: "");
   g_key_file_set_string (keyfile, group, "Directory", self->cwd ?: "");
+  g_key_file_set_boolean (keyfile, group, "CloseOnExit", self->close_on_exit);
   g_key_file_set_string_list (keyfile, group, "Environment", (const gchar * const *)env, g_strv_length (env));
 }
 
