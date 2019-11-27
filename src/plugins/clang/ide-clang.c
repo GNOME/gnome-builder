@@ -2122,6 +2122,9 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
   ide_highlight_index_insert (highlight, "TRUE", (gpointer)"c:boolean");
   ide_highlight_index_insert (highlight, "FALSE", (gpointer)"c:boolean");
   ide_highlight_index_insert (highlight, "g_autoptr", (gpointer)"c:storage-class");
+  ide_highlight_index_insert (highlight, "g_autolist", (gpointer)"c:storage-class");
+  ide_highlight_index_insert (highlight, "g_autoslist", (gpointer)"c:storage-class");
+  ide_highlight_index_insert (highlight, "g_autoqueue", (gpointer)"c:storage-class");
   ide_highlight_index_insert (highlight, "g_auto", (gpointer)"c:storage-class");
   ide_highlight_index_insert (highlight, "g_autofree", (gpointer)"c:storage-class");
 
