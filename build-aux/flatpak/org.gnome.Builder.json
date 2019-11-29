@@ -249,6 +249,21 @@
             ]
         },
         {
+            "name" : "vte",
+            "buildsystem" : "meson",
+            "build-options" : {
+                "env" : {
+                    "CXXFLAGS" : "-fno-exceptions"
+                }
+            },
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/vte.git"
+                }
+            ]
+        },
+        {
             "name" : "libpeas",
             "buildsystem" : "meson",
             "cleanup" : [
