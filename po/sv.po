@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-09-20 17:14+0000\n"
-"PO-Revision-Date: 2019-09-22 20:54+0200\n"
+"POT-Creation-Date: 2019-11-28 14:36+0000\n"
+"PO-Revision-Date: 2019-11-29 14:29+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:225
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -841,14 +841,13 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Läs in eller generera en palett med inställningarna"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4977
+#: src/libide/sourceview/ide-source-view.c:4983
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Byt namn"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Ta bort"
@@ -1519,12 +1518,14 @@ msgid "Clone Project"
 msgstr "Klona projekt"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
-msgid "Select a Folder…"
-msgstr "Välj en mapp…"
+msgid "Select a _Folder…"
+msgstr "Välj en _mapp…"
 
-#: src/libide/greeter/ide-greeter-buttons-section.c:69
-msgid "Clone Repository…"
-msgstr "Klona arkiv…"
+#: src/libide/greeter/ide-greeter-buttons-section.c:70
+#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
+#: src/plugins/greeter/gtk/menus.ui:88
+msgid "_Clone Repository…"
+msgstr "_Klona arkiv…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
@@ -2732,7 +2733,7 @@ msgstr[0] "Installerar %u paket"
 msgstr[1] "Installerar %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:924
+#: src/libide/lsp/ide-lsp-client.c:976
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Misslyckades med att initiera språkserver: %s"
@@ -2834,32 +2835,32 @@ msgstr "Zooma _ut"
 msgid "Reset"
 msgstr "Återställ"
 
-#: src/libide/sourceview/ide-source-view.c:4426
+#: src/libide/sourceview/ide-source-view.c:4432
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4428
+#: src/libide/sourceview/ide-source-view.c:4434
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: src/libide/sourceview/ide-source-view.c:4546
+#: src/libide/sourceview/ide-source-view.c:4552
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
-#: src/libide/sourceview/ide-source-view.c:4976
+#: src/libide/sourceview/ide-source-view.c:4982
 msgid "Rename symbol"
 msgstr "Byt namn på symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5211
+#: src/libide/sourceview/ide-source-view.c:5217
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rad %u, Kolumn %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5237
+#: src/libide/sourceview/ide-source-view.c:5243
 msgid "No references were found"
 msgstr "Inga referenser hittades"
 
@@ -2940,7 +2941,7 @@ msgstr "Läser in…"
 msgid "unversioned"
 msgstr "oversionerad"
 
-#: src/main.c:137
+#: src/main.c:138
 msgid "Run a new instance of Builder"
 msgstr "Kör en ny instans av Builder"
 
@@ -3165,16 +3166,16 @@ msgid "All Runtimes"
 msgstr "Alla exekveringsmiljöer"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-msgid "Make active"
-msgstr "Gör aktiv"
+msgid "Make _Active"
+msgstr "Gör _aktiv"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Select this configuration as the active configuration."
 msgstr "Välj denna konfiguration som den aktiva konfigurationen."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-msgid "Duplicate"
-msgstr "Duplicera"
+msgid "_Duplicate"
+msgstr "_Duplicera"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid ""
@@ -3183,6 +3184,10 @@ msgid ""
 msgstr ""
 "Att duplicera konfigurationen tillåter att göra ändringar utan att ändra "
 "denna konfiguration."
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+msgid "_Remove"
+msgstr "_Ta bort"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "Removes the configuration and cannot be undone."
@@ -3203,7 +3208,7 @@ msgid "Build Environment"
 msgstr "Byggmiljö"
 
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
@@ -3212,29 +3217,29 @@ msgstr "Byggmiljö"
 msgid "Name"
 msgstr "Namn"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 msgid "Source Directory"
 msgstr "Källkatalog"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 msgid "Build System"
 msgstr "Byggsystem"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:465
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
 msgid "Install Prefix"
 msgstr "Installationsprefix"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:474
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
 msgid "Configure Options"
 msgstr "Alternativ för configure"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:479
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
 msgid "Application Runtime"
 msgstr "Exekveringsmiljö för program"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:483
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
 msgid "Build Toolchain"
 msgstr "Verktygskedja för bygge"
 
@@ -4469,31 +4474,31 @@ msgstr ""
 msgid "Architecture"
 msgstr "Arkitektur"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Skapar flatpak-arbetsyta"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:336
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
 msgid "Preparing build directory"
 msgstr "Förbereder byggkatalog"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:386
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:412
 msgid "Downloading dependencies"
 msgstr "Hämtar beroenden"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:465
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:491
 msgid "Building dependencies"
 msgstr "Bygger beroenden"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:516
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
 msgid "Finalizing flatpak build"
 msgstr "Slutför flatpak-bygge"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
 msgid "Exporting staging directory"
 msgstr "Exporterar staging-katalog"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:646
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
 msgid "Creating flatpak bundle"
 msgstr "Skapar flatpak-bunt"
 
@@ -4820,11 +4825,6 @@ msgstr "Visa ett nytt välkomstfönster"
 #: src/plugins/greeter/gbp-greeter-application-addin.c:144
 msgid "Begin cloning project from URI"
 msgstr "Börja klona projekt från URI"
-
-#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
-#: src/plugins/greeter/gtk/menus.ui:88
-msgid "_Clone Repository…"
-msgstr "_Klona arkiv…"
 
 #: src/plugins/greeter/gtk/menus.ui:47
 msgid "Quit"
@@ -5763,6 +5763,33 @@ msgstr "Kontrollera s_tavning"
 msgid "Underline misspelled words"
 msgstr "Stryk under felstavade ord"
 
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
+msgid "Enable Stylelint"
+msgstr "Aktivera Stylelint"
+
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
+msgid ""
+"Enable the use of stylelint to find additional diagnostics in stylesheet "
+"files. This may result in the execution of code in your project."
+msgstr ""
+"Aktivera användningen av stylelint för att hitta ytterligare diagnostik i "
+"stilmallar. Detta kan leda till exekvering av kod i ditt projekt."
+
+#: src/plugins/stylelint/stylelint_plugin.py:135
+#| msgid "ESlint"
+msgid "Stylelint"
+msgstr "Stylelint"
+
+#: src/plugins/stylelint/stylelint_plugin.py:136
+msgid "Enable the use of Stylelint, which may execute code in your project"
+msgstr ""
+"Aktivera användningen av Stylelint vilket kan exekvera kod i ditt projekt"
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/stylelint/stylelint_plugin.py:138
+msgid "stylelint stylesheet lint code execute execution"
+msgstr "stylelint stilmall lint kod exekvera exekvering"
+
 #: src/plugins/sublime/gbp-sublime-preferences-addin.c:52
 msgid "Sublime Text"
 msgstr "Sublime Text"
@@ -6099,6 +6126,9 @@ msgstr "Misslyckades med att skapa XML-trädet."
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
 
+#~ msgid "Clone Repository…"
+#~ msgstr "Klona arkiv…"
+
 #~ msgid "New Terminal Workspace…"
 #~ msgstr "Ny terminalarbetsyta…"
 
@@ -6258,9 +6288,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgstr ""
 #~ "Varför inte <a href=\"action://app.new-project\">skapa ett nytt projekt</"
 #~ "a>?"
-
-#~ msgid "_Remove"
-#~ msgstr "_Ta bort"
 
 #~ msgid "Click an item to select"
 #~ msgstr "Klicka på ett objekt för att välja"
