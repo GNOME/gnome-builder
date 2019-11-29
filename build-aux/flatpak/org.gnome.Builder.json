@@ -229,7 +229,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/libgit2/libgit2.git",
-                    "branch" : "maint/v0.27"
+                    "branch" : "maint/v0.28"
                 }
             ]
         },
