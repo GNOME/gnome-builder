@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-10-05 00:57+0000\n"
-"PO-Revision-Date: 2019-10-10 11:57+0200\n"
+"POT-Creation-Date: 2019-11-28 14:36+0000\n"
+"PO-Revision-Date: 2019-11-29 12:40+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:225
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -1527,7 +1527,6 @@ msgid "Clone Project"
 msgstr "Clonar proyecto"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
-#| msgid "Select a Folder…"
 msgid "Select a _Folder…"
 msgstr "Seleccione una _carpeta…"
 
@@ -2754,7 +2753,7 @@ msgstr[0] "Instalando %u paquete"
 msgstr[1] "Instalando %u paquetes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:924
+#: src/libide/lsp/ide-lsp-client.c:976
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falló al inicializar el lenguaje del servidor: %s"
@@ -2959,7 +2958,7 @@ msgstr "Cargando…"
 msgid "unversioned"
 msgstr "sin versionar"
 
-#: src/main.c:137
+#: src/main.c:138
 msgid "Run a new instance of Builder"
 msgstr "Ejecutar una instancia de Builder nueva"
 
@@ -3188,7 +3187,6 @@ msgid "All Runtimes"
 msgstr "Todas las rutinas"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#| msgid "Make active"
 msgid "Make _Active"
 msgstr "_Activar"
 
@@ -3197,7 +3195,6 @@ msgid "Select this configuration as the active configuration."
 msgstr "Seleccione esta configuración como la activa."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#| msgid "Duplicate"
 msgid "_Duplicate"
 msgstr "_Duplicar"
 
@@ -4503,31 +4500,31 @@ msgstr ""
 msgid "Architecture"
 msgstr "Arquitectura"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Creando área de trabajo flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:336
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
 msgid "Preparing build directory"
 msgstr "Preparando carpeta de construcción"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:386
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:412
 msgid "Downloading dependencies"
 msgstr "Descargando dependencias"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:465
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:491
 msgid "Building dependencies"
 msgstr "Construyendo dependencias"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:516
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
 msgid "Finalizing flatpak build"
 msgstr "Terminando construcción de flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
 msgid "Exporting staging directory"
 msgstr "Exportando carpeta de trabajo"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:646
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
 msgid "Creating flatpak bundle"
 msgstr "Creando paquete flatpak"
 
@@ -5796,6 +5793,38 @@ msgstr "Comprobar _ortografía"
 #: src/plugins/spellcheck/gtk/menus.ui:14
 msgid "Underline misspelled words"
 msgstr "Resaltar las palabras mal escritas"
+
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
+#| msgid "Enable Pylint"
+msgid "Enable Stylelint"
+msgstr "Activar Stylelint"
+
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
+#| msgid ""
+#| "Enable the use of eslint to find additional diagnostics in JavaScript "
+#| "files. This may result in the execution of code in your project."
+msgid ""
+"Enable the use of stylelint to find additional diagnostics in stylesheet "
+"files. This may result in the execution of code in your project."
+msgstr ""
+"Activar el uso de stylelint, para buscar diagnósticos adicionales en "
+"archivos de hojas de estilos. Esto puede ejecutar código en su proyecto."
+
+#: src/plugins/stylelint/stylelint_plugin.py:135
+#| msgid "Style"
+msgid "Stylelint"
+msgstr "Stylelint"
+
+#: src/plugins/stylelint/stylelint_plugin.py:136
+#| msgid "Enable the use of pylint, which may execute code in your project"
+msgid "Enable the use of Stylelint, which may execute code in your project"
+msgstr "Activar el uso de Stylelint, que puede ejecutar código en su proyecto"
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/stylelint/stylelint_plugin.py:138
+#| msgid "pylint python lint code execute execution"
+msgid "stylelint stylesheet lint code execute execution"
+msgstr "stylelint hoja de estilos lint código ejecutar ejecución"
 
 #: src/plugins/sublime/gbp-sublime-preferences-addin.c:52
 msgid "Sublime Text"
@@ -7626,9 +7655,6 @@ msgstr ""
 
 #~ msgid "Whether the tag has a close button."
 #~ msgstr "Indica si la etiqueta tiene un botón de cerrar."
-
-#~ msgid "Style"
-#~ msgstr "Estilo"
 
 #~ msgid "Style of the tag."
 #~ msgstr "Estilo de la etiqueta."
