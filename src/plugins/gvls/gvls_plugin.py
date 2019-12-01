@@ -177,4 +177,7 @@ class GVlsCompletionProvider(Ide.LspCompletionProvider):
         # want the results. So use high priority (negative is better).
         return -1000
 
+class GVlsHighlighter(Ide.LspHighlighter):
+    def do_load(self):
+        GVlsService.bind_client(self)
 
