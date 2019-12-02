@@ -79,13 +79,17 @@ gbp_buildui_log_pane_log_observer (IdeBuildLogStream  stream,
 static void
 gbp_buildui_log_pane_notify_pty (GbpBuilduiLogPane *self,
                                  GParamSpec        *pspec,
-                                 IdePipeline  *pipeline)
+                                 IdePipeline       *pipeline)
 {
+  VtePty *pty;
+
   g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
-                        ide_pipeline_get_pty (pipeline));
+  pty = ide_pipeline_get_pty (pipeline);
+
+  if (pty != NULL)
+    vte_terminal_set_pty (VTE_TERMINAL (self->terminal), pty);
 }
 
 void
