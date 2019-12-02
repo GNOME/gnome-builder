@@ -279,16 +279,6 @@
             ]
         },
         {
-            "name" : "gtksourceview",
-            "buildsystem" : "meson",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git"
-                }
-            ]
-        },
-        {
             "name" : "amtk",
             "buildsystem" : "autotools",
             "builddir" : true,
