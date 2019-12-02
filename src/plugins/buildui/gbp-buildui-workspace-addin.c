@@ -213,13 +213,23 @@ gbp_buildui_workspace_addin_build_started (GbpBuilduiWorkspaceAddin *self,
                                            IdePipeline              *pipeline,
                                            IdeBuildManager          *build_manager)
 {
+  IdePipelinePhase phase;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  if (ide_pipeline_get_requested_phase (pipeline) > IDE_PIPELINE_PHASE_CONFIGURE)
+  phase = ide_pipeline_get_requested_phase (pipeline);
+
+  IDE_TRACE_MSG ("Pipeline phase 0x%x requested", phase);
+
+  if (phase > IDE_PIPELINE_PHASE_CONFIGURE)
     dzl_dock_item_present (DZL_DOCK_ITEM (self->log_pane));
+
+  IDE_EXIT;
 }
 
 static void
