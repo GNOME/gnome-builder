@@ -3939,9 +3939,25 @@ list_model_iface_init (GListModelInterface *iface)
 IdePipelinePhase
 ide_pipeline_get_requested_phase (IdePipeline *self)
 {
+  IdePipelinePhase requested;
+  gint msb;
+
   g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
 
-  return self->requested_mask & IDE_PIPELINE_PHASE_MASK;
+  requested = self->requested_mask & IDE_PIPELINE_PHASE_MASK;
+
+  /* We want to return a value that is not a mask of all phases
+   * that will be run, but just the most signficant phase. This
+   * is represented by the most-signficant-bit after our phase
+   * mask has been applied.
+   */
+
+  msb = g_bit_nth_msf (requested, -1);
+
+  if (msb == -1)
+    return IDE_PIPELINE_PHASE_NONE;
+
+  return (IdePipelinePhase)(1 << msb);
 }
 
 void
