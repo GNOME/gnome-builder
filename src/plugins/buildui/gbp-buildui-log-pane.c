@@ -109,7 +109,6 @@ gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
           ide_pipeline_remove_log_observer (self->pipeline, self->log_observer);
           self->log_observer = 0;
           g_clear_object (&self->pipeline);
-          vte_terminal_set_pty (VTE_TERMINAL (self->terminal), NULL);
         }
 
       if (pipeline != NULL)
