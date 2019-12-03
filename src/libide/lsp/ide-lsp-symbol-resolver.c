@@ -157,8 +157,8 @@ ide_lsp_symbol_resolver_set_client (IdeLspSymbolResolver *self,
 
 static void
 ide_lsp_symbol_resolver_definition_cb (GObject      *object,
-                                            GAsyncResult *result,
-                                            gpointer      user_data)
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
