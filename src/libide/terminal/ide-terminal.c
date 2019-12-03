@@ -228,31 +228,34 @@ ide_terminal_button_press_event (GtkWidget      *widget,
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (button != NULL);
 
-  if ((button->type == GDK_BUTTON_PRESS) && (button->button == GDK_BUTTON_SECONDARY))
+  if (button->type == GDK_BUTTON_PRESS)
     {
-      if (!gtk_widget_has_focus (GTK_WIDGET (self)))
-        gtk_widget_grab_focus (GTK_WIDGET (self));
-
-      ide_terminal_do_popup (self, (GdkEvent *)button);
-
-      return GDK_EVENT_STOP;
-    }
-  else if ((button->type == GDK_BUTTON_PRESS) && (button->button == GDK_BUTTON_PRIMARY)
-            && ((button->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK))
-    {
-      g_autofree gchar *pattern = NULL;
-
-      pattern = vte_terminal_match_check_event (VTE_TERMINAL (self), (GdkEvent *)button, NULL);
-
-      if (pattern != NULL)
+      if (button->button == GDK_BUTTON_PRIMARY)
         {
-          gboolean ret = FALSE;
+          g_autofree gchar *pattern = NULL;
 
-          g_free (priv->url);
-          priv->url = g_steal_pointer (&pattern);
-          g_signal_emit (self, signals [OPEN_LINK], 0, &ret);
+          pattern = vte_terminal_match_check_event (VTE_TERMINAL (self), (GdkEvent *)button, NULL);
 
-          return ret;
+          if (pattern != NULL)
+            {
+              gboolean ret = GDK_EVENT_PROPAGATE;
+
+              g_free (priv->url);
+              priv->url = g_steal_pointer (&pattern);
+
+              g_signal_emit (self, signals [OPEN_LINK], 0, &ret);
+
+              return ret;
+            }
+        }
+      else if (button->button == GDK_BUTTON_SECONDARY)
+        {
+          if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+            gtk_widget_grab_focus (GTK_WIDGET (self));
+
+          ide_terminal_do_popup (self, (GdkEvent *)button);
+
+          return GDK_EVENT_STOP;
         }
     }
 
