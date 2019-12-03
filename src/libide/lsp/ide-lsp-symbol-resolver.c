@@ -195,27 +195,40 @@ ide_lsp_symbol_resolver_definition_cb (GObject      *object,
   }
 #endif
 
-  g_variant_iter_init (&iter, return_value);
-
-  if (g_variant_iter_next (&iter, "v", &variant))
+  /* We only take the first result here */
+  if (g_variant_is_of_type (return_value, G_VARIANT_TYPE ("av")))
     {
-      success = JSONRPC_MESSAGE_PARSE (variant,
-        "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
-        "range", "{",
-          "start", "{",
-            "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
-            "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
-          "}",
-          "end", "{",
-            "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
-            "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
-          "}",
-        "}"
-      );
+      g_variant_iter_init (&iter, return_value);
+      if (g_variant_iter_next (&iter, "v", &variant))
+        goto parse;
     }
+
+  if (g_variant_is_of_type (return_value, G_VARIANT_TYPE ("a{sv}")))
+    {
+      variant = g_variant_ref (return_value);
+      goto parse;
+    }
+
+  IDE_GOTO (failure);
+
+parse:
+  success = JSONRPC_MESSAGE_PARSE (variant,
+    "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+    "range", "{",
+      "start", "{",
+        "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+        "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
+      "}",
+      "end", "{",
+        "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+        "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
+      "}",
+    "}"
+  );
 
   if (!success)
     {
+    failure:
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_INVALID_DATA,
