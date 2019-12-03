@@ -181,3 +181,7 @@ class GVlsHighlighter(Ide.LspHighlighter):
     def do_load(self):
         GVlsService.bind_client(self)
 
+class GVlsSymbolResolver(Ide.LspSymbolResolver):
+    def do_load(self):
+        GVlsService.bind_client(self)
+
