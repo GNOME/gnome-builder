@@ -1420,8 +1420,8 @@ ide_workbench_action_open (IdeWorkbench *self,
   chooser = gtk_file_chooser_native_new (_("Open File…"),
                                          GTK_WINDOW (workspace),
                                          GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         _("Open"),
-                                         _("Cancel"));
+                                         _("_Open"),
+                                         _("_Cancel"));
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), FALSE);
   gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), FALSE);
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), TRUE);
