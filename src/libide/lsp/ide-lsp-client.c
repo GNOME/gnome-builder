@@ -719,6 +719,9 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
 
       if (config != NULL)
         {
+          /* Ensure we didn't get anything floating */
+          g_variant_take_ref (config);
+
           jsonrpc_client_reply_async (client, id, config, NULL, NULL, NULL);
           IDE_RETURN (TRUE);
         }
