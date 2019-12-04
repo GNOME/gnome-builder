@@ -44,17 +44,18 @@ struct _IdeLspClientClass
 {
   IdeObjectClass parent_class;
 
-  void     (*notification)          (IdeLspClient   *self,
-                                     const gchar    *method,
-                                     GVariant       *params);
-  gboolean (*supports_language)     (IdeLspClient   *self,
-                                     const gchar    *language_id);
-  void     (*published_diagnostics) (IdeLspClient   *self,
-                                     GFile           *file,
-                                     IdeDiagnostics  *diagnostics);
+  void      (*notification)          (IdeLspClient   *self,
+                                      const gchar    *method,
+                                      GVariant       *params);
+  gboolean  (*supports_language)     (IdeLspClient   *self,
+                                      const gchar    *language_id);
+  void      (*published_diagnostics) (IdeLspClient   *self,
+                                      GFile          *file,
+                                      IdeDiagnostics *diagnostics);
+  GVariant *(*load_configuration)    (IdeLspClient   *self);
 
   /*< private >*/
-  gpointer _reserved[16];
+  gpointer _reserved[15];
 };
 
 IDE_AVAILABLE_IN_3_32

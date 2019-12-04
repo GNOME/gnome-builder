@@ -71,8 +71,9 @@ enum {
 };
 
 enum {
-  PUBLISHED_DIAGNOSTICS,
+  LOAD_CONFIGURATION,
   NOTIFICATION,
+  PUBLISHED_DIAGNOSTICS,
   SUPPORTS_LANGUAGE,
   N_SIGNALS
 };
@@ -696,6 +697,36 @@ ide_lsp_client_send_notification (IdeLspClient  *self,
   IDE_EXIT;
 }
 
+static gboolean
+ide_lsp_client_handle_call (IdeLspClient  *self,
+                            const gchar   *method,
+                            GVariant      *id,
+                            GVariant      *params,
+                            JsonrpcClient *client)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_CLIENT (self));
+  g_assert (method != NULL);
+  g_assert (id != NULL);
+  g_assert (JSONRPC_IS_CLIENT (client));
+
+  if (strcmp (method, "workspace/configuration") == 0)
+    {
+      g_autoptr(GVariant) config = NULL;
+
+      g_signal_emit (self, signals [LOAD_CONFIGURATION], 0, &config);
+
+      if (config != NULL)
+        {
+          jsonrpc_client_reply_async (client, id, config, NULL, NULL, NULL);
+          IDE_RETURN (TRUE);
+        }
+    }
+
+  IDE_RETURN (FALSE);
+}
+
 static void
 ide_lsp_client_finalize (GObject *object)
 {
@@ -823,6 +854,27 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdeLspClient::load-configuration:
+   * @self: a #IdeLspClient
+   *
+   * Loads the configuration object to reply to a workspace/configuration
+   * request from the peer.
+   *
+   * Returns: (transfer full): a #GVariant containing the result or %NULL
+   *   to proceed to the next signal handler.
+   *
+   * Since: 3.36
+   */
+  signals [LOAD_CONFIGURATION] =
+    g_signal_new ("load-configuration",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeLspClientClass, load_configuration),
+                  g_signal_accumulator_first_wins, NULL,
+                  NULL,
+                  G_TYPE_VARIANT, 0);
 
   signals [NOTIFICATION] =
     g_signal_new ("notification",
@@ -1075,6 +1127,12 @@ ide_lsp_client_start (IdeLspClient *self)
   g_signal_connect_object (priv->rpc_client,
                            "notification",
                            G_CALLBACK (ide_lsp_client_send_notification),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (priv->rpc_client,
+                           "handle-call",
+                           G_CALLBACK (ide_lsp_client_handle_call),
                            self,
                            G_CONNECT_SWAPPED);
 
