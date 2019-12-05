@@ -43,6 +43,14 @@ ide_lsp_decode_symbol_kind (guint kind)
     case 16:  kind = IDE_SYMBOL_KIND_NUMBER;       break;
     case 17:  kind = IDE_SYMBOL_KIND_BOOLEAN;      break;
     case 18:  kind = IDE_SYMBOL_KIND_ARRAY;        break;
+    case 19:  kind = IDE_SYMBOL_KIND_OBJECT;       break;
+    case 20:  kind = IDE_SYMBOL_KIND_VARIABLE;     break; /* Key */
+    case 21:  kind = IDE_SYMBOL_KIND_CONSTANT;     break; /* Null */
+    case 22:  kind = IDE_SYMBOL_KIND_ENUM_VALUE;   break;
+    case 23:  kind = IDE_SYMBOL_KIND_STRUCT;       break;
+    case 24:  kind = IDE_SYMBOL_KIND_EVENT;        break;
+    case 25:  kind = IDE_SYMBOL_KIND_OPERATOR;     break;
+    case 26:  kind = IDE_SYMBOL_KIND_TYPE_PARAM;   break;
     default:  kind = IDE_SYMBOL_KIND_NONE;         break;
     }
 
