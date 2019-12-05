@@ -65,9 +65,9 @@ ide_lsp_symbol_resolver_finalize (GObject *object)
 
 static void
 ide_lsp_symbol_resolver_get_property (GObject    *object,
-                                           guint       prop_id,
-                                           GValue     *value,
-                                           GParamSpec *pspec)
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
 {
   IdeLspSymbolResolver *self = IDE_LSP_SYMBOL_RESOLVER (object);
 
@@ -84,9 +84,9 @@ ide_lsp_symbol_resolver_get_property (GObject    *object,
 
 static void
 ide_lsp_symbol_resolver_set_property (GObject      *object,
-                                           guint         prop_id,
-                                           const GValue *value,
-                                           GParamSpec   *pspec)
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
 {
   IdeLspSymbolResolver *self = IDE_LSP_SYMBOL_RESOLVER (object);
 
@@ -144,7 +144,7 @@ ide_lsp_symbol_resolver_get_client (IdeLspSymbolResolver *self)
 
 void
 ide_lsp_symbol_resolver_set_client (IdeLspSymbolResolver *self,
-                                         IdeLspClient         *client)
+                                    IdeLspClient         *client)
 {
   IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
 
@@ -250,10 +250,10 @@ parse:
 
 static void
 ide_lsp_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
-                                                  IdeLocation   *location,
-                                                  GCancellable        *cancellable,
-                                                  GAsyncReadyCallback  callback,
-                                                  gpointer             user_data)
+                                             IdeLocation         *location,
+                                             GCancellable        *cancellable,
+                                             GAsyncReadyCallback  callback,
+                                             gpointer             user_data)
 {
   IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)resolver;
   IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
@@ -307,19 +307,19 @@ ide_lsp_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   );
 
   ide_lsp_client_call_async (priv->client,
-                                  "textDocument/definition",
-                                  params,
-                                  cancellable,
-                                  ide_lsp_symbol_resolver_definition_cb,
-                                  g_steal_pointer (&task));
+                             "textDocument/definition",
+                             params,
+                             cancellable,
+                             ide_lsp_symbol_resolver_definition_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static IdeSymbol *
 ide_lsp_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
-                                                   GAsyncResult       *result,
-                                                   GError            **error)
+                                              GAsyncResult       *result,
+                                              GError            **error)
 {
   IdeSymbol *ret;
 
@@ -335,8 +335,8 @@ ide_lsp_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
 
 static void
 ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
-                                                 GAsyncResult *result,
-                                                 gpointer      user_data)
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
@@ -431,11 +431,11 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
 
 static void
 ide_lsp_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
-                                                    GFile               *file,
-                                                    GBytes              *bytes,
-                                                    GCancellable        *cancellable,
-                                                    GAsyncReadyCallback  callback,
-                                                    gpointer             user_data)
+                                               GFile               *file,
+                                               GBytes              *bytes,
+                                               GCancellable        *cancellable,
+                                               GAsyncReadyCallback  callback,
+                                               gpointer             user_data)
 {
   IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)resolver;
   IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
@@ -470,19 +470,19 @@ ide_lsp_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   );
 
   ide_lsp_client_call_async (priv->client,
-                                  "textDocument/documentSymbol",
-                                  params,
-                                  cancellable,
-                                  ide_lsp_symbol_resolver_document_symbol_cb,
-                                  g_steal_pointer (&task));
+                             "textDocument/documentSymbol",
+                             params,
+                             cancellable,
+                             ide_lsp_symbol_resolver_document_symbol_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static IdeSymbolTree *
 ide_lsp_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
-                                                     GAsyncResult       *result,
-                                                     GError            **error)
+                                                GAsyncResult       *result,
+                                                GError            **error)
 {
   IdeSymbolTree *ret;
 
@@ -498,8 +498,8 @@ ide_lsp_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
 
 static void
 ide_lsp_symbol_resolver_find_references_cb (GObject      *object,
-                                                 GAsyncResult *result,
-                                                 gpointer      user_data)
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
@@ -587,11 +587,11 @@ ide_lsp_symbol_resolver_find_references_cb (GObject      *object,
 
 static void
 ide_lsp_symbol_resolver_find_references_async (IdeSymbolResolver   *resolver,
-                                                    IdeLocation         *location,
-                                                    const gchar         *language_id,
-                                                    GCancellable        *cancellable,
-                                                    GAsyncReadyCallback  callback,
-                                                    gpointer             user_data)
+                                               IdeLocation         *location,
+                                               const gchar         *language_id,
+                                               GCancellable        *cancellable,
+                                               GAsyncReadyCallback  callback,
+                                               gpointer             user_data)
 {
   IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)resolver;
   IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
@@ -635,19 +635,19 @@ ide_lsp_symbol_resolver_find_references_async (IdeSymbolResolver   *resolver,
   );
 
   ide_lsp_client_call_async (priv->client,
-                                  "textDocument/references",
-                                  params,
-                                  cancellable,
-                                  ide_lsp_symbol_resolver_find_references_cb,
-                                  g_steal_pointer (&task));
+                             "textDocument/references",
+                             params,
+                             cancellable,
+                             ide_lsp_symbol_resolver_find_references_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static GPtrArray *
 ide_lsp_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
-                                                     GAsyncResult       *result,
-                                                     GError            **error)
+                                                GAsyncResult       *result,
+                                                GError            **error)
 {
   GPtrArray *ret;
 
