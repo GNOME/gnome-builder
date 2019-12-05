@@ -48,5 +48,9 @@ IdeLspClient *ide_lsp_highlighter_get_client (IdeLspHighlighter *self);
 IDE_AVAILABLE_IN_3_32
 void          ide_lsp_highlighter_set_client (IdeLspHighlighter *self,
                                               IdeLspClient      *client);
+IDE_AVAILABLE_IN_3_36
+void          ide_lsp_highlighter_set_kind_style (IdeLspHighlighter *self,
+                                                  IdeSymbolKind      kind,
+                                                  const gchar       *style);
 
 G_END_DECLS

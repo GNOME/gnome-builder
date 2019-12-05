@@ -27,6 +27,7 @@
 #include <jsonrpc-glib.h>
 
 #include "ide-lsp-highlighter.h"
+#include "ide-lsp-util.h"
 
 #define DELAY_TIMEOUT_MSEC 333
 
@@ -44,6 +45,8 @@ typedef struct
   IdeLspClient       *client;
   IdeHighlightIndex  *index;
   DzlSignalGroup     *buffer_signals;
+
+  const gchar        *style_map[IDE_SYMBOL_KIND_LAST];
 
   guint               queued_update;
 
@@ -128,8 +131,9 @@ ide_lsp_highlighter_document_symbol_cb (GObject      *object,
       while (g_variant_iter_loop (&iter, "v", &member))
         {
           const gchar *name = NULL;
-          const gchar *tag;
+          const gchar *tag = NULL;
           gboolean success;
+          IdeSymbolKind symkind;
           gint64 kind = 0;
 
           success = JSONRPC_MESSAGE_PARSE (member,
@@ -140,6 +144,14 @@ ide_lsp_highlighter_document_symbol_cb (GObject      *object,
           if (!success)
             {
               IDE_TRACE_MSG ("Failed to unwrap name and kind from symbol");
+              continue;
+            }
+
+          symkind = ide_lsp_decode_symbol_kind (kind);
+
+          if ((tag = priv->style_map[symkind]))
+            {
+              ide_highlight_index_insert (index, name, (gpointer)tag);
               continue;
             }
 
@@ -515,4 +527,17 @@ highlighter_iface_init (IdeHighlighterInterface *iface)
 {
   iface->update = ide_lsp_highlighter_update;
   iface->set_engine = ide_lsp_highlighter_set_engine;
+}
+
+void
+ide_lsp_highlighter_set_kind_style (IdeLspHighlighter *self,
+                                    IdeSymbolKind      kind,
+                                    const gchar       *style)
+{
+  IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LSP_HIGHLIGHTER (self));
+  g_return_if_fail (kind < IDE_SYMBOL_KIND_LAST);
+
+  priv->style_map[kind] = g_intern_string (style);
 }
