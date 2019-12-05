@@ -733,6 +733,142 @@ ide_lsp_client_send_notification (IdeLspClient  *self,
   IDE_EXIT;
 }
 
+static void
+ide_lsp_client_apply_edit_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(AsyncCall) call = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) reply = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (call != NULL);
+  g_assert (JSONRPC_IS_CLIENT (call->client));
+  g_assert (call->id != NULL);
+
+  if (ide_buffer_manager_apply_edits_finish (bufmgr, result, &error))
+    reply = JSONRPC_MESSAGE_NEW ("applied", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE));
+  else
+    reply = JSONRPC_MESSAGE_NEW ("applied", JSONRPC_MESSAGE_PUT_BOOLEAN (FALSE),
+                                 "failureReason", JSONRPC_MESSAGE_PUT_STRING (error->message));
+
+  jsonrpc_client_reply_async (call->client,
+                              call->id,
+                              reply,
+                              NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static gboolean
+ide_lsp_client_handle_apply_edit (IdeLspClient  *self,
+                                  JsonrpcClient *client,
+                                  GVariant      *id,
+                                  GVariant      *params)
+{
+  g_autoptr(GVariant) parent = NULL;
+  g_autoptr(GVariant) changes = NULL;
+  g_autoptr(GPtrArray) edits = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_CLIENT (self));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (id != NULL);
+  g_assert (params != NULL);
+
+  if (!(parent = g_variant_lookup_value (params, "edit", G_VARIANT_TYPE_VARDICT)))
+    IDE_GOTO (invalid_params);
+
+  edits = g_ptr_array_new_with_free_func (g_object_unref);
+
+#if 0
+  /* We'd prefer to support this, but do not currently */
+  if (JSONRPC_MESSAGE_PARSE (edit, "documentChanges", JSONRPC_MESSAGE_GET_VARIANT (&changes)))
+    {
+    }
+#endif
+
+  if (JSONRPC_MESSAGE_PARSE (parent, "changes", JSONRPC_MESSAGE_GET_VARIANT (&changes)))
+    {
+      if (g_variant_is_of_type (changes, G_VARIANT_TYPE_VARDICT))
+        {
+          GVariantIter iter;
+          GVariant *value;
+          gchar *uri;
+
+          g_variant_iter_init (&iter, changes);
+          while (g_variant_iter_loop (&iter, "{sv}", &uri, &value))
+            {
+              GVariantIter edit_iter;
+              GVariant *item;
+              struct {
+                gint64 line;
+                gint64 column;
+              } begin, end;
+
+              g_variant_iter_init (&edit_iter, value);
+              while (g_variant_iter_loop (&edit_iter, "v", &item))
+                {
+                  const gchar *new_text = NULL;
+                  gboolean r;
+
+                  r = JSONRPC_MESSAGE_PARSE (item,
+                    "range", "{",
+                      "start", "{",
+                        "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+                        "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
+                      "}",
+                      "end", "{",
+                        "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+                        "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
+                      "}",
+                    "}",
+                    "newText", JSONRPC_MESSAGE_GET_STRING (&new_text)
+                  );
+
+                  if (r)
+                    {
+                      g_autoptr(IdeLocation) begin_loc = NULL;
+                      g_autoptr(IdeLocation) end_loc = NULL;
+                      g_autoptr(IdeRange) range = NULL;
+                      g_autoptr(GFile) file = NULL;
+
+                      file = g_file_new_for_uri (uri);
+                      begin_loc = ide_location_new (file, begin.line, begin.column);
+                      end_loc = ide_location_new (file, end.line, end.column);
+                      range = ide_range_new (begin_loc, end_loc);
+
+                      g_ptr_array_add (edits, ide_text_edit_new (range, new_text));
+                    }
+                }
+            }
+        }
+    }
+
+  if (edits->len > 0)
+    {
+      g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
+      IdeBufferManager *bufmgr = ide_buffer_manager_from_context (context);
+
+      ide_buffer_manager_apply_edits_async (bufmgr,
+                                            IDE_PTR_ARRAY_STEAL_FULL (&edits),
+                                            NULL,
+                                            ide_lsp_client_apply_edit_cb,
+                                            async_call_new (client, id));
+
+      IDE_RETURN (TRUE);
+    }
+
+invalid_params:
+  IDE_RETURN (FALSE);
+}
+
 static gboolean
 ide_lsp_client_handle_call (IdeLspClient  *self,
                             const gchar   *method,
@@ -761,6 +897,15 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
           jsonrpc_client_reply_async (client, id, config, NULL, NULL, NULL);
           IDE_RETURN (TRUE);
         }
+    }
+  else if (strcmp (method, "workspace/applyEdit") == 0)
+    {
+      gboolean ret = FALSE;
+
+      if (params != NULL)
+        ret = ide_lsp_client_handle_apply_edit (self, client, id, params);
+
+      IDE_RETURN (ret);
     }
 
   IDE_RETURN (FALSE);
@@ -1158,6 +1303,7 @@ ide_lsp_client_start (IdeLspClient *self)
     "trace", JSONRPC_MESSAGE_PUT_STRING (trace_string),
     "capabilities", "{",
       "workspace", "{",
+        "applyEdit", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
         "configuration", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
         "symbol", "{",
           "SymbolKind", "[",
