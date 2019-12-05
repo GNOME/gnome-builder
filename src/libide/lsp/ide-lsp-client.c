@@ -358,8 +358,10 @@ ide_lsp_client_buffer_loaded (IdeLspClient     *self,
     "}"
   );
 
-  ide_lsp_client_send_notification_async (self, "textDocument/didOpen",
-                                               params, NULL, NULL, NULL);
+  ide_lsp_client_send_notification_async (self,
+                                          "textDocument/didOpen",
+                                          params,
+                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -390,8 +392,10 @@ ide_lsp_client_buffer_unloaded (IdeLspClient     *self,
     "}"
   );
 
-  ide_lsp_client_send_notification_async (self, "textDocument/didClose",
-                                               params, NULL, NULL, NULL);
+  ide_lsp_client_send_notification_async (self,
+                                          "textDocument/didClose",
+                                          params,
+                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
