@@ -1120,7 +1120,11 @@ ide_lsp_client_start (IdeLspClient *self)
     "rootUri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
     "trace", JSONRPC_MESSAGE_PUT_STRING (trace_string),
-    "capabilities", "{", "}"
+    "capabilities", "{",
+      "workspace", "{",
+        "configuration", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
+      "}",
+    "}"
   );
 
   /*
