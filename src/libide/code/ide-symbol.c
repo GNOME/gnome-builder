@@ -317,6 +317,10 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
       icon_name = "lang-union-symbolic";
       break;
 
+    case IDE_SYMBOL_KIND_OBJECT:
+    case IDE_SYMBOL_KIND_EVENT:
+    case IDE_SYMBOL_KIND_OPERATOR:
+    case IDE_SYMBOL_KIND_TYPE_PARAM:
     case IDE_SYMBOL_KIND_ARRAY:
     case IDE_SYMBOL_KIND_BOOLEAN:
     case IDE_SYMBOL_KIND_CONSTANT:
