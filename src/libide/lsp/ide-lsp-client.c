@@ -37,6 +37,12 @@
 
 typedef struct
 {
+  JsonrpcClient *client;
+  GVariant      *id;
+} AsyncCall;
+
+typedef struct
+{
   DzlSignalGroup *buffer_manager_signals;
   DzlSignalGroup *project_signals;
   JsonrpcClient  *rpc_client;
@@ -80,6 +86,32 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static AsyncCall *
+async_call_new (JsonrpcClient *client,
+                GVariant      *id)
+{
+  AsyncCall *ac = g_atomic_rc_box_new0 (AsyncCall);
+  ac->client = g_object_ref (client);
+  ac->id = g_variant_ref (id);
+  return ac;
+}
+
+static void
+async_call_finalize (gpointer data)
+{
+  AsyncCall *ac = data;
+  g_clear_object (&ac->client);
+  g_clear_pointer (&ac->id, g_variant_unref);
+}
+
+static void
+async_call_unref (gpointer data)
+{
+  g_atomic_rc_box_release_full (data, async_call_finalize);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (AsyncCall, async_call_unref);
 
 static gboolean
 ide_lsp_client_supports_buffer (IdeLspClient *self,
