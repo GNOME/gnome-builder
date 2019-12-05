@@ -346,6 +346,7 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
   g_autoptr(GPtrArray) symbols = NULL;
   GVariantIter iter;
   GVariant *node;
+  GFile *file;
 
   IDE_ENTRY;
 
@@ -369,15 +370,16 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
 
   symbols = g_ptr_array_new_with_free_func (g_object_unref);
 
+  file = ide_task_get_task_data (task);
+  g_assert (G_IS_FILE (file));
+
   g_variant_iter_init (&iter, return_value);
 
   while (g_variant_iter_loop (&iter, "v", &node))
     {
       g_autoptr(IdeLspSymbolNode) symbol = NULL;
-      g_autoptr(GFile) file = NULL;
       const gchar *name = NULL;
       const gchar *container_name = NULL;
-      const gchar *uri = NULL;
       gboolean success;
       gint64 kind = -1;
       struct {
@@ -410,11 +412,9 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
       /* Optional fields */
       JSONRPC_MESSAGE_PARSE (node, "containerName", JSONRPC_MESSAGE_GET_STRING (&container_name));
 
-      file = g_file_new_for_uri (uri);
-
       symbol = ide_lsp_symbol_node_new (file, name, container_name, kind,
-                                             begin.line, begin.column,
-                                             end.line, end.column);
+                                        begin.line, begin.column,
+                                        end.line, end.column);
 
       g_ptr_array_add (symbols, g_steal_pointer (&symbol));
     }
@@ -448,6 +448,7 @@ ide_lsp_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_lsp_symbol_resolver_get_symbol_tree_async);
+  ide_task_set_task_data (task, g_file_dup (file), g_object_unref);
 
   if (priv->client == NULL)
     {
