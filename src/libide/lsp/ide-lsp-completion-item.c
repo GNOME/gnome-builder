@@ -89,7 +89,7 @@ ide_lsp_completion_item_new (GVariant *variant)
 
 gchar *
 ide_lsp_completion_item_get_markup (IdeLspCompletionItem *self,
-                                         const gchar               *typed_text)
+                                    const gchar          *typed_text)
 {
   g_return_val_if_fail (IDE_IS_LSP_COMPLETION_ITEM (self), NULL);
 
