@@ -331,6 +331,7 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
     case IDE_SYMBOL_KIND_STRING:
     case IDE_SYMBOL_KIND_TEMPLATE:
     case IDE_SYMBOL_KIND_KEYWORD:
+    case IDE_SYMBOL_KIND_LAST:
       icon_name = NULL;
       break;
 
