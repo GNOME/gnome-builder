@@ -1127,6 +1127,36 @@ ide_lsp_client_start (IdeLspClient *self)
     "capabilities", "{",
       "workspace", "{",
         "configuration", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
+        "symbol", "{",
+          "SymbolKind", "[",
+            JSONRPC_MESSAGE_PUT_INT64 (1), /* File */
+            JSONRPC_MESSAGE_PUT_INT64 (2), /* Module */
+            JSONRPC_MESSAGE_PUT_INT64 (3), /* Namespace */
+            JSONRPC_MESSAGE_PUT_INT64 (4), /* Package */
+            JSONRPC_MESSAGE_PUT_INT64 (5), /* Class */
+            JSONRPC_MESSAGE_PUT_INT64 (6), /* Method */
+            JSONRPC_MESSAGE_PUT_INT64 (7), /* Property */
+            JSONRPC_MESSAGE_PUT_INT64 (8), /* Field */
+            JSONRPC_MESSAGE_PUT_INT64 (9), /* Constructor */
+            JSONRPC_MESSAGE_PUT_INT64 (10), /* Enum */
+            JSONRPC_MESSAGE_PUT_INT64 (11), /* Interface */
+            JSONRPC_MESSAGE_PUT_INT64 (12), /* Function */
+            JSONRPC_MESSAGE_PUT_INT64 (13), /* Variable */
+            JSONRPC_MESSAGE_PUT_INT64 (14), /* Constant */
+            JSONRPC_MESSAGE_PUT_INT64 (15), /* String */
+            JSONRPC_MESSAGE_PUT_INT64 (16), /* Number */
+            JSONRPC_MESSAGE_PUT_INT64 (17), /* Boolean */
+            JSONRPC_MESSAGE_PUT_INT64 (18), /* Array */
+            JSONRPC_MESSAGE_PUT_INT64 (19), /* Object */
+            JSONRPC_MESSAGE_PUT_INT64 (20), /* Key */
+            JSONRPC_MESSAGE_PUT_INT64 (21), /* Null */
+            JSONRPC_MESSAGE_PUT_INT64 (22), /* EnumMember */
+            JSONRPC_MESSAGE_PUT_INT64 (23), /* Struct */
+            JSONRPC_MESSAGE_PUT_INT64 (24), /* Event */
+            JSONRPC_MESSAGE_PUT_INT64 (25), /* Operator */
+            JSONRPC_MESSAGE_PUT_INT64 (26), /* TypeParameter */
+          "]",
+        "}",
       "}",
     "}"
   );
