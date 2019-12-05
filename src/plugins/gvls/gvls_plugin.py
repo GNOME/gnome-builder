@@ -216,3 +216,7 @@ class GVlsSymbolResolver(Ide.LspSymbolResolver):
     def do_load(self):
         GVlsService.bind_client(self)
 
+
+class GVlsDiagnosticProvider(Ide.LspDiagnosticProvider):
+    def do_load(self):
+        GVlsService.bind_client(self)
