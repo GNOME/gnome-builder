@@ -95,6 +95,10 @@ class GVlsService(Ide.Object):
             self._has_started = True
             print ('Starting GVls server')
 
+
+            ## Construct GVls Configuration response at `initialize`
+            self._client.connect('load-configuration', self._on_load_configuration)
+
             # Setup a launcher to spawn the rust language server
             launcher = self._create_launcher()
             launcher.set_clear_env(False)
@@ -115,9 +119,6 @@ class GVlsService(Ide.Object):
             self._supervisor.connect('spawned', self._gvls_spawned)
             self._supervisor.set_launcher(launcher)
             self._supervisor.start()
-
-            ## Construct GVls Configuration response at `initialize`
-            self._client.connect('load-configuration', _on_load_configuration)
 
     def _on_load_configuration(self):
         conf = GLib.VariantBuilder (GLib.Variant ('a{sv}'))
