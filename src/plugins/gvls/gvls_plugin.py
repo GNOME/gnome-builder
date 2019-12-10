@@ -118,6 +118,9 @@ class GVlsService(Ide.Object):
             self._supervisor.start()
 
     def _on_load_configuration(self):
+        if DEV_MODE
+            print ("Creating Vala Language Server Configuration response")
+
         conf = GLib.VariantBuilder (GLib.Variant ('a{sv}'))
         conf.add ('{sv}', 'initialized', GLib.Variant.boolean (True))
         conf.add ('{sv}', 'initialized', GLib.Variant.boolean (True))
@@ -143,6 +146,8 @@ class GVlsService(Ide.Object):
         conf.add ('{sv}', 'options', opts)
 
         conf.end ()
+        if DEV_MODE
+            print ("Configuration response: "+conf.print(True))
         return conf
 
     def _gvls_spawned(self, supervisor, subprocess):
