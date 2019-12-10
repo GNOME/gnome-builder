@@ -118,36 +118,37 @@ class GVlsService(Ide.Object):
             self._supervisor.start()
 
     def _on_load_configuration(self):
-        if DEV_MODE
+        if DEV_MODE:
             print ("Creating Vala Language Server Configuration response")
 
-        conf = GLib.VariantBuilder (GLib.Variant ('a{sv}'))
-        conf.add ('{sv}', 'initialized', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'initialized', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'defaultNamespaces', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'defaultVapiDirs', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'scanWorkspace', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'addUsingNamespaces', GLib.Variant.boolean (True))
+        conf = GLib.Variant('a{sv}', {
+            'initialized': GLib.Variant.new_boolean(True),
+            'defaultNamespaces': GLib.Variant.new_boolean(True),
+            'defaultVapiDirs': GLib.Variant.new_boolean(True),
+            'scanWorkspace': GLib.Variant.new_boolean(True),
+            'addUsingNamespaces': GLib.Variant.new_boolean(True),
+        })
 
-        pkgs = GLib.VariantBuilder (GLib.Variant ('av'))
+
+        # pkgs = GLib.VariantBuilder (GLib.Variant ('av'))
         # Get from build environment
         # pkgs.add ('v', GLib.Variant.string ())
 
-        vargs = GLib.VariantBuilder (GLib.Variant ('av'))
+        # vargs = GLib.VariantBuilder (GLib.Variant ('av'))
         # Get from build environment
         # vargs.add ('v', GLib.Variant.string ())
 
-        opts = GLib.VariantBuilder (GLib.Variant ('av'))
+        # opts = GLib.VariantBuilder (GLib.Variant ('av'))
         # Get from build environment
         # vargs.add ('v', GLib.Variant.string ())
 
-        conf.add ('{sv}', 'packages', pkgs)
-        conf.add ('{sv}', 'valaArgs', vargs)
-        conf.add ('{sv}', 'options', opts)
+        # conf.add ('{sv}', 'packages', pkgs)
+        # conf.add ('{sv}', 'valaArgs', vargs)
+        # conf.add ('{sv}', 'options', opts)
 
-        conf.end ()
-        if DEV_MODE
+        if DEV_MODE:
             print ("Configuration response: "+conf.print(True))
+
         return conf
 
     def _gvls_spawned(self, supervisor, subprocess):
