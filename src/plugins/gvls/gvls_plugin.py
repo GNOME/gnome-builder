@@ -31,6 +31,8 @@ from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Ide
+from gi.repository import Gdk
+from gi.repository import Gtk
 
 DEV_MODE = True
 
@@ -224,3 +226,94 @@ class GVlsSymbolResolver(Ide.LspSymbolResolver):
 class GVlsDiagnosticProvider(Ide.LspDiagnosticProvider):
     def do_load(self):
         GVlsService.bind_client(self)
+
+#
+# Stolen from src/plugins/vala-pack/ide-vala-identer.vala
+# Copyright 2015 Christian Hergert <christian@hergert.me>
+#
+class GVlsIdenter (Ide.Identer):
+    def is_trigger (self, evkey):
+        val = evkey.get_keyval ()
+        if val == Gdk.KEY_Return or val == Gdk.KEY_KP_Enter:
+            return True
+        if val == Gdk.KDEY_slash:
+            return True
+        return False
+    def format (self, textView, begin, end, evkey):
+        source_view = text_view
+        was_newline = self.is_newline_keyval (evkey.keyval)
+        copy = end
+        cursor_offset = 0
+        # Move us back to the just inserted character
+        copy.backward_char ()
+        # If we are in a comment, continue the indentation
+        if (in_comment (text_view, copy)):
+            # maybe close a multiline comment
+            if (copy.get_char () == '/'):
+                close = copy
+            if (close.backward_char () and close.get_char () == ' ' and close.backward_char () and close.get_char () == '*'):
+                begin.backward_char ();
+                begin.backward_char ();
+                return ("/", cursor_offset);
+        if (was_newline):
+            return indent_comment (text_view, copy);
+        if (is_newline_in_braces (copy)):
+            prefix = copy_indent (text_view, copy);
+            if (source_view.insert_spaces_instead_of_tabs):
+                indent = "    "
+            else:
+                indent = "\t"
+            cursor_offset = -prefix.length - 1
+            return (prefix + indent + "\n" + prefix, cursor_offset)
+        if (was_newline):
+            return (copy_indent (text_view, copy), cursor_offset)
+        return null
+    def copy_indent (self, text_view, iter):
+        begin = iter
+        begin.set_line_offset (0)
+        end = begin
+        while (not end.ends_line () and end.get_char ().isspace () and end.forward_char ()):
+            # Do nothing
+            pass
+        return begin.get_slice (end)
+    def get_line_text (self, iter):
+        begin = iter
+        end = iter
+        begin.set_line_offset (0)
+        if (not end.ends_line ()):
+            end.forward_to_line_end ()
+        return begin.get_slice (end)
+    def indent_comment (self, text_view, iter):
+        line = get_line_text (iter).strip ();
+        # continue with another single line comment
+        if line.has_prefix ("//"):
+            return copy_indent (text_view, iter) + "// "
+        # comment is closed, copy indent, possibly trimming extra space
+        if (line.has_suffix ("*/")):
+            if (line.has_prefix ("*")):
+                s = GLib.String.new (copy_indent (text_view, iter))
+                if (str(s).endswith (" ")):
+                    s.truncate (len (s) - 1)
+                return str(s);
+        if (line.endswith ("/*") and not line.endswith ("*/")):
+            return copy_indent (text_view, iter) + " * "
+        elif (line.has_prefix ("*")):
+            return copy_indent (text_view, iter) + "* "
+        return copy_indent (text_view, iter)
+    def in_comment (self, text_view, iter):
+        buffer = text_view.buffer
+        copy = iter
+        copy.backward_char ()
+        return buffer.iter_has_context_class (copy, "comment")
+    def is_newline_keyval (self, keyval):
+        if keyval == Gdk.KEY_Return or keyval == Gdk.KEY_KP_Enter:
+            return true
+        return false
+    def is_newline_in_braces (self, iter):
+        prev = iter
+        next = iter
+        prev.backward_char ()
+        next.forward_char ()
+        ret = (prev.get_char () == '{') and (iter.get_char () == '\n')
+        return ret and (next.get_char () == '}')
+
