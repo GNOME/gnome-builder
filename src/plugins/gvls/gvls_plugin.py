@@ -231,7 +231,7 @@ class GVlsDiagnosticProvider(Ide.LspDiagnosticProvider):
 # Stolen from src/plugins/vala-pack/ide-vala-identer.vala
 # Copyright 2015 Christian Hergert <christian@hergert.me>
 #
-class GVlsIdenter (Ide.Identer):
+class GVlsIdenter (Ide.Object, Ide.Indenter):
     def is_trigger (self, evkey):
         val = evkey.get_keyval ()
         if val == Gdk.KEY_Return or val == Gdk.KEY_KP_Enter:
