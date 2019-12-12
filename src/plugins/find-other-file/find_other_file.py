@@ -33,6 +33,22 @@ _ATTRIBUTES = ",".join([
     Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON,
 ])
 
+_MESONLIKE = (
+    'meson.build',
+    'meson_options.txt',
+)
+
+_MAKELIKE = (
+    'Makefile.am',
+    'Makefile.in',
+    'Makefile',
+    'makefile',
+    'GNUmakefile',
+    'configure.ac',
+    'configure.in',
+    'autogen.sh',
+)
+
 class FindOtherFile(GObject.Object, Ide.WorkspaceAddin):
     context = None
     workspace = None
@@ -81,16 +97,38 @@ class FindOtherFile(GObject.Object, Ide.WorkspaceAddin):
             else:
                 prefix = basename
 
+            maybe = [prefix]
+
+            # Some alternates (foo-private.h fooprivate.h)
+            if prefix.endswith('-private.'):
+                maybe.append(prefix[:-9])
+            elif prefix.endswith('private.'):
+                maybe.append(prefix[:-8])
+            else:
+                maybe.append(prefix[:-1]+'-private.')
+                maybe.append(prefix[:-1]+'private.')
+
+            # Convenience to swap between make stuff
+            if basename in _MAKELIKE:
+                maybe.extend(_MAKELIKE)
+
+            # Convenience to swap between meson stuff
+            if basename in _MESONLIKE:
+                maybe.extend(_MESONLIKE)
+
             while info is not None:
                 name = info.get_name()
-                if name != basename and name.startswith(prefix):
-                    content_type = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE)
-                    display_name = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
-                    icon = info.get_attribute_object(Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON)
-                    icon_name = icon.to_string() if icon else None
-                    file = parent.get_child(name)
-                    result = OtherFileSearchResult(file=file, icon_name=icon_name, title=display_name)
-                    files.append(result)
+                if name != basename:
+                    for m in maybe:
+                        if name.startswith(m):
+                            content_type = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE)
+                            display_name = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+                            icon = info.get_attribute_object(Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON)
+                            icon_name = icon.to_string() if icon else None
+                            file = parent.get_child(name)
+                            result = OtherFileSearchResult(file=file, icon_name=icon_name, title=display_name)
+                            files.append(result)
+                            break
 
                 info = enumerator.next_file(None)
 
