@@ -3,3 +3,15 @@ commandbar entry {
   border-width: 3px;
   box-shadow: 0 0 5px @wm_shadow;
 }
+commandbar button.circular {
+  background: @theme_selected_bg_color;
+  color: @theme_selected_fg_color;
+  box-shadow: 0 5px 5px @wm_shadow;
+  padding: 0px;
+  margin: 0px;
+  min-width: 26px;
+  min-height: 26px;
+}
+commandbar button.circular:hover {
+  background: mix(@theme_selected_bg_color, @theme_selected_fg_color, 0.1);
+}

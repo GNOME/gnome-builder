@@ -7,9 +7,33 @@
         <property name="transition-type">crossfade</property>
         <property name="visible">true</property>
         <child>
-          <object class="DzlSuggestionEntry" id="entry">
-            <property name="width-chars">45</property>
+          <object class="GtkOverlay">
             <property name="visible">true</property>
+            <child>
+              <object class="DzlSuggestionEntry" id="entry">
+                <property name="margin">8</property>
+                <property name="width-chars">45</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="overlay">
+              <object class="GtkButton">
+                <property name="margin">8</property>
+                <property name="visible">true</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <style>
+                  <class name="circular"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">window-close-symbolic</property>
+                    <property name="pixel-size">20</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
