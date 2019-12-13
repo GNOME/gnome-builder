@@ -6,7 +6,7 @@ commandbar entry {
 commandbar button.circular {
   background: @theme_selected_bg_color;
   color: @theme_selected_fg_color;
-  box-shadow: 0 5px 5px @wm_shadow;
+  box-shadow: 0 3px 5px mix(@wm_shadow, @theme_selected_bg_color, 0.2);
   padding: 0px;
   margin: 0px;
   min-width: 26px;
