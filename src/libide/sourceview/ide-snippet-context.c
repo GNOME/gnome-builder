@@ -267,6 +267,9 @@ filter_camelize (const gchar *input)
       g_string_append_unichar (str, c);
     }
 
+  if (g_str_has_suffix (str->str, "Private"))
+    g_string_truncate (str, str->len - strlen ("Private"));
+
   return g_string_free (str, FALSE);
 }
 
@@ -299,6 +302,10 @@ filter_functify (const gchar *input)
 
       last = c;
     }
+
+  if (g_str_has_suffix (str->str, "_private") ||
+      g_str_has_suffix (str->str, "_PRIVATE"))
+    g_string_truncate (str, str->len - strlen ("_private"));
 
   return g_string_free (str, FALSE);
 }
