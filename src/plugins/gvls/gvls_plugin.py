@@ -51,8 +51,6 @@ class GVlsService(Ide.Object):
     @client.setter
     def client(self, value):
         self._client = value
-        ## Construct GVls Configuration response at `initialize`
-        self._client.connect('load-configuration', self._on_load_configuration)
         self.notify('client')
 
     def do_parent_set(self, parent):
@@ -95,6 +93,11 @@ class GVlsService(Ide.Object):
         # to its :client property.
         if not self._has_started:
             self._has_started = True
+            print ('Starting GVls server')
+
+
+            ## Construct GVls Configuration response at `initialize`
+            self._client.connect('load-configuration', self._on_load_configuration)
 
             # Setup a launcher to spawn the rust language server
             launcher = self._create_launcher()
