@@ -10,6 +10,6 @@ configure_file(
     install_dir: plugindir,
 )
 
-gvls_stdio_server = find_program('org.gnome.gvsl.stdio.Server', false)
+gvls_stdio_server = find_program('org.gnome.gvsl.stdio.Server')
 
 endif
