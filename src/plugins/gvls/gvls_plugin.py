@@ -62,7 +62,26 @@ class GVlsService(Ide.Object):
 
         context = self.get_context()
         workdir = context.ref_workdir()
+        cargo_toml = workdir.get_child('Cargo.toml')
 
+        if cargo_toml.query_exists():
+            try:
+                self._monitor = cargo_toml.monitor(0, None)
+                self._monitor.set_rate_limit(5 * 1000) # 5 Seconds
+                self._monitor.connect('changed', self._monitor_changed_cb)
+            except Exception as ex:
+                Ide.debug('Failed to monitor Cargo.toml for changes:', repr(ex))
+
+    def _monitor_changed_cb(self, monitor, file, other_file, event_type):
+        """
+        This method is called when Cargo.toml has changed. We need to
+        cancel any supervised process and force the language server to
+        restart. Otherwise, we risk it not picking up necessary changes.
+        """
+        if self._supervisor is not None:
+            subprocess = self._supervisor.get_subprocess()
+            if subprocess is not None:
+                subprocess.force_exit()
 
     def do_stop(self):
         """
@@ -71,8 +90,11 @@ class GVlsService(Ide.Object):
         """
         if self._client is not None:
             print ("Shutting down server")
-            _client.stop()
-            _client.destroy()
+            _client.stop ()
+        if self._monitor is not None:
+            monitor, self._monitor = self._monitor, None
+            if monitor is not None:
+                monitor.cancel()
 
         if self._supervisor is not None:
             supervisor, self._supervisor = self._supervisor, None
@@ -93,21 +115,22 @@ class GVlsService(Ide.Object):
         # to its :client property.
         if not self._has_started:
             self._has_started = True
-            print ('Starting GVls server')
 
             # Setup a launcher to spawn the rust language server
             launcher = self._create_launcher()
             launcher.set_clear_env(False)
+            if DEV_MODE:
+                launcher.setenv('RUST_LOG', 'debug', True)
             # Locate the directory of the project and run gvls from there.
             workdir = self.get_context().ref_workdir()
             launcher.set_cwd(workdir.get_path())
 
             # If org.gnome.gvls.stdio.Server is installed by GVls
-            path = 'org.gnome.gvls.stdio.Server'
+            path_to_rls = 'org.gnome.gvls.stdio.Server'
 
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
             # so it does not require any command line options.
-            launcher.push_argv(path)
+            launcher.push_argv(path_to_rls)
 
             # Spawn our peer process and monitor it for
             # crashes. We may need to restart it occasionally.
