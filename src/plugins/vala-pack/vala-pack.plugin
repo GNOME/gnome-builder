@@ -9,7 +9,6 @@ X-Builder-ABI=@PACKAGE_ABI@
 X-Code-Indexer-Languages-Priority=100
 X-Code-Indexer-Languages=vala
 X-Completion-Provider-Languages=vala
-X-Completion-Provider-Languages-Priority=100
 X-Diagnostic-Provider-Languages=vala
 X-Indenter-Languages-Priority=0
 X-Indenter-Languages=vala

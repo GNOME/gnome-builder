@@ -26,6 +26,7 @@ by bridging them to our supervised Vala Language Server.
 
 import gi
 import os
+import gvls_server
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -85,12 +86,9 @@ class GVlsService(Ide.Object):
 
     def do_stop(self):
         """
-        Stops the Vala Language Server upon request to shutdown the
+        Stops the Rust Language Server upon request to shutdown the
         GVlsService.
         """
-        if self._client is not None:
-            print ("Shutting down server")
-            _client.stop ()
         if self._monitor is not None:
             monitor, self._monitor = self._monitor, None
             if monitor is not None:
@@ -126,7 +124,7 @@ class GVlsService(Ide.Object):
             launcher.set_cwd(workdir.get_path())
 
             # If org.gnome.gvls.stdio.Server is installed by GVls
-            path_to_rls = 'org.gnome.gvls.stdio.Server'
+            path_to_rls = gvls_server.gvls_stdio_server
 
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
             # so it does not require any command line options.
@@ -187,9 +185,9 @@ class GVlsService(Ide.Object):
         self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
-#class GVlsDiagnosticProvider(Ide.LspDiagnosticProvider):
-#    def do_load(self):
-#        GVlsService.bind_client(self)
+class GVlsDiagnosticProvider(Ide.LspDiagnosticProvider):
+    def do_load(self):
+        GVlsService.bind_client(self)
 
 class GVlsCompletionProvider(Ide.LspCompletionProvider):
     def do_load(self, context):
