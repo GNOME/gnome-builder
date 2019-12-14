@@ -13,3 +13,4 @@ X-Completion-Provider-Languages-Priority=0
 X-Highlighter-Languages=vala
 X-Symbol-Resolver-Languages=vala
 X-Diagnostic-Provider-Languages=vala
+X-Indenter-Languages=vala
