@@ -143,13 +143,6 @@ dzlstacklist .stack-header {
   opacity: 0.55;
 }
 
-
-/* Make suggestion (search) button look like an entry */
-.suggestionbutton button {
-  background-color: @content_view_bg;
-  background-image: none;
-}
-
 row:selected label.keycap {
   color: @theme_fg_color;
 }
