@@ -125,7 +125,6 @@ subdir('vim')
 subdir('waf')
 subdir('words')
 subdir('xml-pack')
-subdir('gvls')
 
 plugins = static_library('plugins', plugins_sources,
          dependencies: plugins_deps,

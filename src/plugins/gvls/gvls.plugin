@@ -1,9 +1,0 @@
-# gvls.plugin
-[Plugin]
-Name=GNOME Vala Language Server for GNOME Builder plugin
-Module=gvls-plugin
-Author=Daniel Espinosa
-Description=GNOME Builder plugin for GVLS, without any LPS protocol support
-Copyright=Copyright © 2019 Daniel Espinosa
-X-Completion-Provider-Languages=vala
-
