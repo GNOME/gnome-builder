@@ -33,7 +33,6 @@ from gi.repository import GObject
 from gi.repository import Ide
 from gi.repository import Gdk
 from gi.repository import Gtk
-from gi.repository import GtkSource
 
 DEV_MODE = True
 
@@ -231,17 +230,16 @@ class GVlsDiagnosticProvider(Ide.LspDiagnosticProvider):
 #
 # Stolen from src/plugins/vala-pack/ide-vala-identer.vala
 # Copyright 2015 Christian Hergert <christian@hergert.me>
-# Copyright 2019 Daniel Espinosa <esodan@gnome.org>
 #
 class GVlsIdenter (Ide.Object, Ide.Indenter):
     def is_trigger (self, evkey):
-        val = evkey.keyval
+        val = evkey.get_keyval ()
         if val == Gdk.KEY_Return or val == Gdk.KEY_KP_Enter:
             return True
         if val == Gdk.KDEY_slash:
             return True
         return False
-    def format (self, text_view, begin, end, evkey):
+    def format (self, textView, begin, end, evkey):
         source_view = text_view
         was_newline = self.is_newline_keyval (evkey.keyval)
         copy = end
@@ -249,18 +247,18 @@ class GVlsIdenter (Ide.Object, Ide.Indenter):
         # Move us back to the just inserted character
         copy.backward_char ()
         # If we are in a comment, continue the indentation
-        if (self.in_comment (text_view, copy)):
+        if (in_comment (text_view, copy)):
             # maybe close a multiline comment
             if (copy.get_char () == '/'):
                 close = copy
             if (close.backward_char () and close.get_char () == ' ' and close.backward_char () and close.get_char () == '*'):
-                begin.backward_char ()
-                begin.backward_char ()
-                return ("/", cursor_offset)
+                begin.backward_char ();
+                begin.backward_char ();
+                return ("/", cursor_offset);
         if (was_newline):
-            return indent_comment (text_view, copy)
-        if (self.is_newline_in_braces (copy)):
-            prefix = self.copy_indent (text_view, copy)
+            return indent_comment (text_view, copy);
+        if (is_newline_in_braces (copy)):
+            prefix = copy_indent (text_view, copy);
             if (source_view.insert_spaces_instead_of_tabs):
                 indent = "    "
             else:
@@ -268,7 +266,7 @@ class GVlsIdenter (Ide.Object, Ide.Indenter):
             cursor_offset = -prefix.length - 1
             return (prefix + indent + "\n" + prefix, cursor_offset)
         if (was_newline):
-            return (self.copy_indent (text_view, copy), cursor_offset)
+            return (copy_indent (text_view, copy), cursor_offset)
         return null
     def copy_indent (self, text_view, iter):
         begin = iter
@@ -286,32 +284,31 @@ class GVlsIdenter (Ide.Object, Ide.Indenter):
             end.forward_to_line_end ()
         return begin.get_slice (end)
     def indent_comment (self, text_view, iter):
-        line = self.get_line_text (iter).strip ();
+        line = get_line_text (iter).strip ();
         # continue with another single line comment
         if line.has_prefix ("//"):
             return copy_indent (text_view, iter) + "// "
         # comment is closed, copy indent, possibly trimming extra space
         if (line.has_suffix ("*/")):
             if (line.has_prefix ("*")):
-                s = GLib.String ()
-                s.append (self.copy_indent (text_view, iter))
-                if (s.str.endswith (" ")):
+                s = GLib.String.new (copy_indent (text_view, iter))
+                if (str(s).endswith (" ")):
                     s.truncate (len (s) - 1)
-                return s.str
+                return str(s);
         if (line.endswith ("/*") and not line.endswith ("*/")):
-            return self.copy_indent (text_view, iter) + " * "
+            return copy_indent (text_view, iter) + " * "
         elif (line.has_prefix ("*")):
-            return self.copy_indent (text_view, iter) + "* "
-        return self.copy_indent (text_view, iter)
+            return copy_indent (text_view, iter) + "* "
+        return copy_indent (text_view, iter)
     def in_comment (self, text_view, iter):
-        buffer = text_view.get_buffer ()
+        buffer = text_view.buffer
         copy = iter
         copy.backward_char ()
         return buffer.iter_has_context_class (copy, "comment")
     def is_newline_keyval (self, keyval):
         if keyval == Gdk.KEY_Return or keyval == Gdk.KEY_KP_Enter:
-            return True
-        return False
+            return true
+        return false
     def is_newline_in_braces (self, iter):
         prev = iter
         next = iter
