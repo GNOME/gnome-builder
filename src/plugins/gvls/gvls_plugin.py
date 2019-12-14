@@ -116,37 +116,6 @@ class GVlsService(Ide.Object):
             self._supervisor.set_launcher(launcher)
             self._supervisor.start()
 
-            ## Construct GVls Configuration response at `initialize`
-            self._client.connect('load-configuration', _on_load_configuration)
-
-    def _on_load_configuration(self):
-        conf = GLib.VariantBuilder (GLib.Variant ('a{sv}'))
-        conf.add ('{sv}', 'initialized', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'initialized', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'defaultNamespaces', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'defaultVapiDirs', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'scanWorkspace', GLib.Variant.boolean (True))
-        conf.add ('{sv}', 'addUsingNamespaces', GLib.Variant.boolean (True))
-
-        pkgs = GLib.VariantBuilder (GLib.Variant ('av'))
-        # Get from build environment
-        # pkgs.add ('v', GLib.Variant.string ())
-
-        vargs = GLib.VariantBuilder (GLib.Variant ('av'))
-        # Get from build environment
-        # vargs.add ('v', GLib.Variant.string ())
-
-        opts = GLib.VariantBuilder (GLib.Variant ('av'))
-        # Get from build environment
-        # vargs.add ('v', GLib.Variant.string ())
-
-        conf.add ('{sv}', 'packages', pkgs)
-        conf.add ('{sv}', 'valaArgs', vargs)
-        conf.add ('{sv}', 'options', opts)
-
-        conf.end ()
-        return conf
-
     def _gvls_spawned(self, supervisor, subprocess):
         """
         This callback is executed when the `org.gnome.gvls.stdio.Server` process is spawned.
