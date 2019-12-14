@@ -26,14 +26,13 @@ by bridging them to our supervised Vala Language Server.
 
 import gi
 import os
-import gvls_server
 
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Ide
 
-DEV_MODE = True
+DEV_MODE = False
 
 class GVlsService(Ide.Object):
     _client = None
@@ -117,6 +116,7 @@ class GVlsService(Ide.Object):
             # Setup a launcher to spawn the rust language server
             launcher = self._create_launcher()
             launcher.set_clear_env(False)
+            sysroot = self._discover_sysroot()
             if DEV_MODE:
                 launcher.setenv('RUST_LOG', 'debug', True)
             # Locate the directory of the project and run gvls from there.
@@ -124,7 +124,7 @@ class GVlsService(Ide.Object):
             launcher.set_cwd(workdir.get_path())
 
             # If org.gnome.gvls.stdio.Server is installed by GVls
-            path_to_rls = gvls_server.gvls_stdio_server
+            path_to_rls = "org.gnome.gvls.stdio.Server"
 
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
             # so it does not require any command line options.
@@ -198,4 +198,24 @@ class GVlsCompletionProvider(Ide.LspCompletionProvider):
         # want the results. So use high priority (negative is better).
         return -1000
 
+class GVlsRenameProvider(Ide.LspRenameProvider):
+    def do_load(self):
+        GVlsService.bind_client(self)
 
+class GVlsSymbolResolver(Ide.LspSymbolResolver):
+    def do_load(self):
+        GVlsService.bind_client(self)
+
+class GVlsHighlighter(Ide.LspHighlighter):
+    def do_load(self):
+        GVlsService.bind_client(self)
+
+class GVlsFormatter(Ide.LspFormatter):
+    def do_load(self):
+        GVlsService.bind_client(self)
+
+class GVlsHoverProvider(Ide.LspHoverProvider):
+    def do_prepare(self):
+        self.props.category = 'Vala'
+        self.props.priority = 200
+        GVlsService.bind_client(self)
