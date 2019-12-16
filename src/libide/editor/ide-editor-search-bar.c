@@ -49,6 +49,7 @@ struct _IdeEditorSearchBar
   GtkCheckButton          *use_regex;
   GtkCheckButton          *whole_word;
   GtkLabel                *search_text_error;
+  GtkButton               *close_button;
 
   guint                    match_source;
 
@@ -400,6 +401,20 @@ ide_editor_search_bar_notify_match (IdeEditorSearchBar *self,
 }
 
 static void
+on_close_button_clicked (IdeEditorSearchBar *self,
+                         GtkButton          *button)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  g_signal_emit (self, signals [STOP_SEARCH], 0);
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_search_bar_destroy (GtkWidget *widget)
 {
   IdeEditorSearchBar *self = (IdeEditorSearchBar *)widget;
@@ -493,6 +508,7 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ui/ide-editor-search-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, case_sensitive);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, close_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_all_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_entry);
@@ -566,6 +582,10 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                             "stop-search",
                             G_CALLBACK (search_entry_stop_search),
                             self);
+  g_signal_connect_swapped (self->replace_entry,
+                            "stop-search",
+                            G_CALLBACK (search_entry_stop_search),
+                            self);
 
   g_signal_connect_swapped (self->search_entry,
                             "previous-match",
@@ -575,6 +595,11 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
   g_signal_connect_swapped (self->search_entry,
                             "next-match",
                             G_CALLBACK (search_entry_next_match),
+                            self);
+
+  g_signal_connect_swapped (self->close_button,
+                            "clicked",
+                            G_CALLBACK (on_close_button_clicked),
                             self);
 
   _ide_editor_search_bar_init_shortcuts (self);

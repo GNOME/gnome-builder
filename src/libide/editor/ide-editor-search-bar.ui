@@ -1,261 +1,303 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.0 -->
 <interface>
+  <requires lib="gtk+" version="3.22"/>
   <template class="IdeEditorSearchBar" parent="DzlBin">
-    <style>
-      <class name="search-frame"/>
-    </style>
+    <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">true</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">7</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">6</property>
         <child>
-          <object class="GtkGrid">
-            <property name="visible">true</property>
-            <property name="can-focus">false</property>
-            <property name="row_spacing">8</property>
-            <property name="column_spacing">8</property>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">7</property>
             <child>
-              <object class="IdeTaggedEntry" id="search_entry">
-                <property name="visible">true</property>
-                <property name="tag-close-visible">false</property>
-                <property name="can-focus">true</property>
-                <property name="hexpand">true</property>
-                <property name="primary_icon_name">edit-find-symbolic</property>
-                <property name="primary_icon_activatable">false</property>
-                <property name="primary_icon_sensitive">false</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="search_text_error">
-                <property name="visible">false</property>
-                <property name="xalign">0.0</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-                <attributes>
-                  <attribute name="scale" value="0.8333"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="width">3</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSearchEntry" id="replace_entry">
-                <property name="visible">false</property>
-                <property name="can-focus">true</property>
-                <property name="width-chars">20</property>
-                <property name="max-width-chars">30</property>
-                <property name="primary_icon_name">edit-find-replace-symbolic</property>
-                <property name="primary_icon_activatable">false</property>
-                <property name="primary_icon_sensitive">false</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="homogeneous">true</property>
-                <property name="visible">true</property>
-                <property name="can-focus">false</property>
-                <property name="valign">center</property>
-                <style>
-                  <class name="linked"/>
-                </style>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">8</property>
+                <property name="column_spacing">8</property>
                 <child>
-                  <object class="GtkButton">
-                    <property name="action-name">editor-search.move-previous</property>
-                    <property name="visible">true</property>
-                    <property name="can-focus">false</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">true</property>
-                        <property name="can-focus">false</property>
-                        <property name="icon_name">go-up-symbolic</property>
-                        <property name="icon_size">1</property>
-                      </object>
-                    </child>
+                  <object class="IdeTaggedEntry" id="search_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="primary_icon_name">edit-find-symbolic</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">False</property>
                   </object>
                   <packing>
-                    <property name="expand">false</property>
-                    <property name="fill">true</property>
-                    <property name="position">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton">
-                    <property name="action-name">editor-search.move-next</property>
-                    <property name="visible">true</property>
-                    <property name="can-focus">false</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">true</property>
-                        <property name="can-focus">false</property>
-                        <property name="icon_name">go-down-symbolic</property>
-                        <property name="icon_size">1</property>
-                      </object>
-                    </child>
+                  <object class="GtkLabel" id="search_text_error">
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.83330000000000004"/>
+                    </attributes>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
-                    <property name="expand">false</property>
-                    <property name="fill">true</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="replace_button">
-                <property name="label" translatable="yes">Replace</property>
-                <property name="action-name">editor-search.replace</property>
-                <property name="visible">false</property>
-                <property name="can-focus">true</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="replace_all_button">
-                <property name="label" translatable="yes">Replace All</property>
-                <property name="action-name">editor-search.replace-all</property>
-                <property name="visible">false</property>
-                <property name="can-focus">true</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="homogeneous">true</property>
-                <property name="visible">true</property>
-                <property name="can-focus">false</property>
-                <property name="valign">center</property>
-                <property name="spacing">8</property>
-                <child>
-                  <object class="GtkToggleButton">
-                    <property name="active" bind-source="IdeEditorSearchBar" bind-property="replace-mode" bind-flags="sync-create|bidirectional"/>
-                    <property name="tooltip-text" translatable="yes">Switch between Search and Search-and-Replace</property>
-                    <property name="visible">true</property>
-                    <property name="can-focus">true</property>
-                    <property name="image_position">right</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">true</property>
-                        <property name="can-focus">false</property>
-                        <property name="icon_name">edit-find-replace-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">false</property>
-                    <property name="fill">true</property>
-                    <property name="position">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">3</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleButton" id="show_options">
-                    <property name="tooltip-text" translatable="yes">Show or hide search options such as case sensitivity</property>
-                    <property name="focus-on-click">false</property>
-                    <property name="visible">true</property>
-                    <property name="can-focus">true</property>
-                    <property name="active" bind-source="IdeEditorSearchBar" bind-property="show-options" bind-flags="sync-create|bidirectional"/>
+                  <object class="GtkSearchEntry" id="replace_entry">
+                    <property name="can_focus">True</property>
+                    <property name="width_chars">20</property>
+                    <property name="max_width_chars">30</property>
+                    <property name="primary_icon_name">edit-find-replace-symbolic</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkImage">
-                        <property name="visible">true</property>
-                        <property name="can-focus">false</property>
-                        <property name="icon_name">emblem-system-symbolic</property>
+                      <object class="GtkButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="action_name">editor-search.move-previous</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">go-up-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="action_name">editor-search.move-next</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">go-down-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="replace_button">
+                    <property name="label" translatable="yes">Replace</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="action_name">editor-search.replace</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="replace_all_button">
+                    <property name="label" translatable="yes">Replace All</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="action_name">editor-search.replace-all</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="spacing">8</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkToggleButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Switch between Search and Search-and-Replace</property>
+                        <property name="image_position">right</property>
+                        <property name="active" bind-source="IdeEditorSearchBar" bind-property="replace-mode" bind-flags="bidirectional|sync-create">False</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">edit-find-replace-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="show_options">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Show or hide search options such as case sensitivity</property>
+                        <property name="active" bind-source="IdeEditorSearchBar" bind-property="show-options" bind-flags="bidirectional|sync-create">False</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">emblem-system-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">false</property>
-                    <property name="fill">true</property>
-                    <property name="position">1</property>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="search_options">
+                <property name="can_focus">False</property>
+                <property name="column_spacing">8</property>
+                <child>
+                  <object class="GtkCheckButton" id="use_regex">
+                    <property name="label" translatable="yes">Regular expressions</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="case_sensitive">
+                    <property name="label" translatable="yes">Case sensitive</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="whole_word">
+                    <property name="label" translatable="yes">Match whole word only</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">false</property>
-            <property name="fill">true</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="search_options">
-            <property name="visible">false</property>
-            <property name="can-focus">false</property>
-            <property name="column_spacing">8</property>
+          <object class="GtkButton" id="close_button">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
             <child>
-              <object class="GtkCheckButton" id="use_regex">
-                <property name="label" translatable="yes">Regular expressions</property>
-                <property name="visible">true</property>
-                <property name="can-focus">false</property>
-                <property name="focus-on-click">false</property>
-                <property name="xalign">0</property>
-                <property name="draw-indicator">true</property>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">window-close-symbolic</property>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
             </child>
-            <child>
-              <object class="GtkCheckButton" id="case_sensitive">
-                <property name="label" translatable="yes">Case sensitive</property>
-                <property name="visible">true</property>
-                <property name="can-focus">false</property>
-                <property name="xalign">0</property>
-                <property name="draw-indicator">true</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="whole_word">
-                <property name="label" translatable="yes">Match whole word only</property>
-                <property name="visible">true</property>
-                <property name="can-focus">false</property>
-                <property name="xalign">0</property>
-                <property name="draw-indicator">true</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
+            <style>
+              <class name="flat"/>
+              <class name="image-button"/>
+              <class name="small-button"/>
+            </style>
           </object>
-          <packing>
-            <property name="expand">false</property>
-            <property name="fill">true</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>
+    <style>
+      <class name="search-frame"/>
+    </style>
   </template>
 </interface>
