@@ -125,6 +125,7 @@ subdir('vim')
 subdir('waf')
 subdir('words')
 subdir('xml-pack')
+subdir('gvls')
 
 plugins = static_library('plugins', plugins_sources,
          dependencies: plugins_deps,
@@ -186,6 +187,7 @@ status += [
   'Sysprof ............... : @0@'.format(get_option('plugin_sysprof')),
   'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
   'Todo .................. : @0@'.format(get_option('plugin_todo')),
+  'Vala Language Server... : @0@'.format(get_option('plugin_gvls')),
   'Vala Pack ............. : @0@'.format(get_option('plugin_vala')),
   'Vagrant ............... : @0@'.format(get_option('plugin_vagrant')),
   'Valgrind .............. : @0@'.format(get_option('plugin_valgrind')),

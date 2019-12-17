@@ -1,0 +1,14 @@
+# gvls.plugin
+[Plugin]
+Author=Daniel Espinosa
+Name=GNOME Vala Language Server
+Description=GNOME Builder plugin for GVLS using LSP
+Copyright=Copyright © 2019 Daniel Espinosa
+Builtin=true
+Loader=python3
+Module=gvls_plugin
+X-Builder-ABI=@PACKAGE_ABI@
+X-Completion-Provider-Languages=vala
+X-Highlighter-Languages=vala
+X-Symbol-Resolver-Languages=vala
+X-Diagnostic-Provider-Languages=vala
