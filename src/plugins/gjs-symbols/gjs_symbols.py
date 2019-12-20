@@ -319,7 +319,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
     def do_load(self):
         pass
 
-    def do_find_references_async(self, location, cancellable, callback, user_data=None):
+    def do_find_references_async(self, location, language_id, cancellable, callback, user_data=None):
         task = Gio.Task.new(self, cancellable, callback)
         task.return_error(GLib.Error('Not implemented'))
 
