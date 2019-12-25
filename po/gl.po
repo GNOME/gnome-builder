@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-08-31 22:03+0000\n"
-"PO-Revision-Date: 2019-09-01 23:09+0200\n"
+"POT-Creation-Date: 2019-11-28 14:36+0000\n"
+"PO-Revision-Date: 2019-12-25 13:49+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.4\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:225
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Construtor"
@@ -115,11 +115,11 @@ msgstr "Editado opcional de estilo Vim, Emacs e Sublime Text"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:36
 msgid "An integrated software profiler for native applications"
-msgstr "Un perfilador de software integrado para aplicativos nativos"
+msgstr "Un perfilador de software integrado para aplicacións nativas"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:37
 msgid "An integrated debugger for native applications"
-msgstr "Un perfilador integrado para aplicativos nativos"
+msgstr "Un perfilador integrado para aplicacións nativas"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
@@ -447,7 +447,7 @@ msgstr "Modo noite"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid "Prefer dark application chrome."
-msgstr "Preferir marco do aplicativo escuro."
+msgstr "Preferir marco da aplicación escuro."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:25
 msgid "Follow system night light"
@@ -465,7 +465,7 @@ msgid "\"Projects\""
 msgstr "«Proxectos»"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Cartafol de proxectos"
 
@@ -839,14 +839,13 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar ou xerar unha paleta usando as preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4977
+#: src/libide/sourceview/ide-source-view.c:4983
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Renomear"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Eliminar"
@@ -901,7 +900,7 @@ msgstr "Sen título"
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#: src/libide/gui/ide-workbench.c:1419
+#: src/libide/gui/ide-workbench.c:1424
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -1132,8 +1131,8 @@ msgstr "Modo de realce"
 #: src/libide/editor/ide-editor-settings-dialog.ui:80
 #: src/libide/gui/ide-preferences-builtin.c:155
 #: src/libide/gui/ide-preferences-builtin.c:207
-#: src/libide/gui/ide-preferences-builtin.c:325
-#: src/libide/gui/ide-preferences-builtin.c:397
+#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:402
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 msgid "General"
 msgstr "Xeral"
@@ -1168,7 +1167,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "Sobrescribir peches de chaves e comillas"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:152
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Indentation"
 msgstr "Sangrado"
 
@@ -1213,7 +1212,7 @@ msgid "Open File"
 msgstr "Abrir ficheiro"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
-#: src/libide/gui/ide-workbench.c:1418
+#: src/libide/gui/ide-workbench.c:1423
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
@@ -1518,12 +1517,14 @@ msgid "Clone Project"
 msgstr "Clonar proxecto"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
-msgid "Select a Folder…"
-msgstr "Seleccionar un cartafol…"
+msgid "Select a _Folder…"
+msgstr "Seleccionar un _cartafol…"
 
-#: src/libide/greeter/ide-greeter-buttons-section.c:69
-msgid "Clone Repository…"
-msgstr "Clonar repositorio…"
+#: src/libide/greeter/ide-greeter-buttons-section.c:70
+#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
+#: src/plugins/greeter/gtk/menus.ui:88
+msgid "_Clone Repository…"
+msgstr "_Clonar repositorio…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
@@ -1632,7 +1633,7 @@ msgid "_Quit"
 msgstr "_Saír"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1420 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Abrir ficheiro…"
@@ -1651,7 +1652,7 @@ msgstr "GNOME Builder"
 
 #: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
-msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2019"
+msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2020"
 
 #: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
@@ -1663,7 +1664,7 @@ msgstr "Fundado por"
 
 #: src/libide/gui/ide-application-command-line.c:64
 msgid "Show the application preferences"
-msgstr "Mostrar as preferencias do aplicativo"
+msgstr "Mostrar as preferencias da aplicación"
 
 #: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
@@ -2161,153 +2162,153 @@ msgstr "Linguaxes de programación"
 msgid "Search languages…"
 msgstr "Buscar idiomas…"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Trim trailing whitespace"
 msgstr "Eliminar espazos en branco ao final de liña"
 
-#: src/libide/gui/ide-preferences-builtin.c:326
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Despois de gardar, os espazos en branco ao final de liña das liñas "
 "modificadas eliminaranse."
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite Braces"
 msgstr "Sobrescribir chaves"
 
-#: src/libide/gui/ide-preferences-builtin.c:327
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Overwrite closing braces"
 msgstr "Sobrescribir peches de chaves"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert Matching Brace"
 msgstr "Inserir chaves coincidentes"
 
-#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert matching character for { [ ( or \""
 msgstr "Inserir os caracteres coincidentes para { [ ( ou \""
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert Trailing Newline"
 msgstr "Inserir a nova liña final"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Ensure files end with a newline"
 msgstr "Asegura que os ficheiros rematan con unha nova liña"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Margins"
 msgstr "Marxes"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Show right margin"
 msgstr "Mostrar marxe da dereita"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Right margin position"
 msgstr "Posición da marxe da dereita"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Position in spaces for the right margin"
 msgstr "Posición en espacios para o marxe da dereita"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Tab width"
 msgstr "Ancho do tabulador"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Width of a tab character in spaces"
 msgstr "Ancho do caracter do tabulador en espacios"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Insert spaces instead of tabs"
 msgstr "Inserir espazos no lugar de tabulacións"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Prefer spaces over use of tabs"
 msgstr "Preferir o uso de espazos sobre tabulacións"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Automatically indent"
 msgstr "Autosangrado"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Indent source code as you type"
 msgstr "Indentar o código fonte mentres se escribir"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Spacing"
 msgstr "Espaciado"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Space before opening parentheses"
 msgstr "Espaczo antes de abrir parenteses"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening brackets"
 msgstr "Espazo antes de abrir chaves"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening braces"
 msgstr "Espazo antes de abrir corchetes"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Space before opening angles"
 msgstr "Espazo antes de abrir angulos"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
 msgstr "Preferir o uso de espazos antes dos dous puntos"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
 msgstr "Preferir o uso de espazos antes das comas"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
 msgstr "Preferir o uso de espazos antes do punto e coma"
 
-#: src/libide/gui/ide-preferences-builtin.c:357
-#: src/libide/gui/ide-preferences-builtin.c:375
+#: src/libide/gui/ide-preferences-builtin.c:362
+#: src/libide/gui/ide-preferences-builtin.c:380
 msgid "Default"
 msgstr "Predeterminado"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/libide/gui/ide-preferences-builtin.c:380
+#: src/libide/gui/ide-preferences-builtin.c:367
+#: src/libide/gui/ide-preferences-builtin.c:385
 msgid "Number of CPU"
 msgstr "Número de CPU"
 
-#: src/libide/gui/ide-preferences-builtin.c:395
+#: src/libide/gui/ide-preferences-builtin.c:400
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Construír"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Build Workers"
 msgstr "Traballadores de construción"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:403
 msgid "Number of parallel build workers"
 msgstr "Número de traballadores de construción en paralelo"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Clear build cache at startup"
 msgstr "Limpar as cachés de compilación ao iniciar"
 
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Expired caches will be purged when Builder is started"
 msgstr "As cachés expiradas eliminaranse ao iniciar Construtor"
 
-#: src/libide/gui/ide-preferences-builtin.c:408
+#: src/libide/gui/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Rede"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Permitir descargas en conexións medidas"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2315,35 +2316,35 @@ msgstr ""
 "Permitir o uso de conexións de rede medidas ao descargar dependencias "
 "automaticamente"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:420
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Proxectos"
 
-#: src/libide/gui/ide-preferences-builtin.c:417
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Espazo de traballo"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Un lugar para todos os seus proxectos"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Restaurar os ficheiros abertos anteriormente"
 
-#: src/libide/gui/ide-preferences-builtin.c:419
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Abrir os ficheiros abertos anteriormente ao cargar un proxecto"
 
-#: src/libide/gui/ide-preferences-builtin.c:541
+#: src/libide/gui/ide-preferences-builtin.c:546
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Control de versión"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:554
+#: src/libide/gui/ide-preferences-builtin.c:559
 msgid "SDKs"
 msgstr "SDKs"
 
@@ -2737,7 +2738,7 @@ msgstr[0] "Instalando %u paquete"
 msgstr[1] "Instalando %u paquetes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:924
+#: src/libide/lsp/ide-lsp-client.c:976
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Produciuse un fallo ao iniciar o servidor de linguaxe: %s"
@@ -2839,37 +2840,33 @@ msgstr "_Reducir"
 msgid "Reset"
 msgstr "Restabelecer"
 
-#: src/libide/sourceview/ide-source-view.c:4426
+#: src/libide/sourceview/ide-source-view.c:4432
 #, c-format
 msgid "Insert “%s”"
 msgstr "Inserir «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4428
+#: src/libide/sourceview/ide-source-view.c:4434
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substituír «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4546
+#: src/libide/sourceview/ide-source-view.c:4552
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:4976
+#: src/libide/sourceview/ide-source-view.c:4982
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5211
+#: src/libide/sourceview/ide-source-view.c:5217
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Liña %u, Columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5237
+#: src/libide/sourceview/ide-source-view.c:5243
 msgid "No references were found"
 msgstr "Non se atopou ningunha referencia"
-
-#: src/libide/terminal/gtk/menus.ui:8
-msgid "New Terminal Workspace…"
-msgstr "Novo espazo de traballo de terminal…"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
@@ -2946,7 +2943,7 @@ msgstr "Cargando…"
 msgid "unversioned"
 msgstr "sen versión"
 
-#: src/main.c:137
+#: src/main.c:138
 msgid "Run a new instance of Builder"
 msgstr "Executar unha nova instancia de Builder"
 
@@ -3173,16 +3170,16 @@ msgid "All Runtimes"
 msgstr "Todos os runtimes"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-msgid "Make active"
-msgstr "Facer activo"
+msgid "Make _Active"
+msgstr "Facer _activo"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Select this configuration as the active configuration."
 msgstr "Seleccione esta configuración como a configuración activa."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-msgid "Duplicate"
-msgstr "Duplicar"
+msgid "_Duplicate"
+msgstr "_Duplicar"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid ""
@@ -3191,6 +3188,10 @@ msgid ""
 msgstr ""
 "Duplicar a configuración permite facer cambios sen modificar esta "
 "configuración."
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+msgid "_Remove"
+msgstr "_Renomear"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "Removes the configuration and cannot be undone."
@@ -3211,7 +3212,7 @@ msgid "Build Environment"
 msgstr "Ambiente de construción"
 
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
@@ -3220,29 +3221,29 @@ msgstr "Ambiente de construción"
 msgid "Name"
 msgstr "Nome"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 msgid "Source Directory"
 msgstr "Cartafol raíz"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 msgid "Build System"
 msgstr "Sistema de construción"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:465
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
 msgid "Install Prefix"
 msgstr "Prefixo de instalación"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:474
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
 msgid "Configure Options"
 msgstr "Configurar opcións"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:479
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
 msgid "Application Runtime"
-msgstr "Runtime do aplicativo"
+msgstr "Runtime da aplicación"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:483
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
 msgid "Build Toolchain"
 msgstr "Conxunto de ferramentas de construción"
 
@@ -3829,7 +3830,7 @@ msgstr "O seu proxecto crearase en %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:279
 msgid "Application ID is not valid."
-msgstr "O ID de aplicativo non é valido."
+msgstr "O ID de aplicación non é valida."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:623
 msgctxt "title"
@@ -3856,15 +3857,15 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:73
 msgid "Application ID"
-msgstr "ID de aplicativo"
+msgstr "ID de aplicación"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:100
 msgid ""
 "The Application ID is a reverse domain-name identifier used to uniquely "
 "identify your application such as “org.gnome.Builder”."
 msgstr ""
-"O ID de aplicativo é o identificador de nome de dominio ao revés para "
-"identificar univocamente o seu aplicativo como «org.gnome.Builder»."
+"O ID de aplicación é o identificador de nome de dominio ao revés para "
+"identificar univocamente a súa aplicación como «org.gnome.Builder»."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:118
 msgid "Project Location"
@@ -4342,7 +4343,7 @@ msgid "Use minimal editor interface"
 msgstr "Usar interface mínima no editor"
 
 #. translators: the user selected a number outside the value range for the document.
-#: src/plugins/editor/gbp-editor-frame-controls.c:182
+#: src/plugins/editor/gbp-editor-frame-controls.c:190
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Forneza un número entre 1 e %u"
@@ -4448,7 +4449,7 @@ msgstr "Clonando proxecto %s"
 
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:33
 msgid "Downloading application sources…"
-msgstr "Desgargando as fontes do aplicativo…"
+msgstr "Descargando as fontes da aplicación…"
 
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
 #, c-format
@@ -4481,31 +4482,31 @@ msgstr ""
 msgid "Architecture"
 msgstr "Arquitectura"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Creando o espazo de traballo de flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:336
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
 msgid "Preparing build directory"
 msgstr "Preparando o cartafol de construción"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:386
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:412
 msgid "Downloading dependencies"
 msgstr "Descargando as dependencias"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:465
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:491
 msgid "Building dependencies"
 msgstr "Construindo as dependencias"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:516
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
 msgid "Finalizing flatpak build"
 msgstr "Finalizando a construción de flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
 msgid "Exporting staging directory"
 msgstr "Exportando o cartafol de staging"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:646
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
 msgid "Creating flatpak bundle"
 msgstr "Creando o paquete de flatpak"
 
@@ -4600,7 +4601,7 @@ msgid ""
 "The “flatpak-builder” program is necessary for building Flatpak-based "
 "applications. Builder can install it for you."
 msgstr ""
-"O programa «flatpak-builder» é necesario para construír aplicativos Flatpak. "
+"O programa «flatpak-builder» é necesario para construír aplicacións Flatpak. "
 "Construtor pode instalalo por vostede."
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
@@ -4833,11 +4834,6 @@ msgstr "Mostra unha xanela de benvida"
 msgid "Begin cloning project from URI"
 msgstr "Comezar o clonado do proxecto desde unha URI"
 
-#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
-#: src/plugins/greeter/gtk/menus.ui:88
-msgid "_Clone Repository…"
-msgstr "_Clonar repositorio…"
-
 #: src/plugins/greeter/gtk/menus.ui:47
 msgid "Quit"
 msgstr "Saír"
@@ -4924,12 +4920,12 @@ msgstr "Suxerir completados desde Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para fornecer o completado do linguaxe Python"
 
-#: src/plugins/ls/gbp-ls-page.c:316
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Produciuse un fallo ao cargar o cartafol: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:388
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Cartafol"
@@ -4972,11 +4968,11 @@ msgstr "Crear un novo proxecto baleiro usando un Makefile simple"
 
 #: src/plugins/meson-templates/meson_templates.py:249
 msgid "GNOME Application"
-msgstr "Aplicativo de GNOME"
+msgstr "Aplicación de GNOME"
 
 #: src/plugins/meson-templates/meson_templates.py:251
 msgid "Create a new GNOME application"
-msgstr "Crear un novo aplicativo de GNOME"
+msgstr "Crear unha nova aplicación de GNOME"
 
 #: src/plugins/meson-templates/meson_templates.py:324
 msgid "Shared Library"
@@ -5147,7 +5143,7 @@ msgstr "Caixas"
 #: src/plugins/newcomers/gbp-newcomers-section.ui:38
 msgid "A simple GNOME 3 application to access remote or virtual systems"
 msgstr ""
-"Un aplicativo sinxelo de GNOME 3 para acceder a sistemas remotos ou virtuais"
+"Unha aplicación doada de GNOME 3 para acceder a sistemas remotos ou virtuais"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:48
 msgid "An IDE for writing GNOME-based software"
@@ -5159,7 +5155,7 @@ msgstr "Calendario"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
 msgid "Calendar application for GNOME"
-msgstr "Aplicativo de calendario para GNOME"
+msgstr "Aplicación de calendario para GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Games"
@@ -5170,50 +5166,58 @@ msgid "Simple game launcher for GNOME"
 msgstr "Iniciador de xogos doado para GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Gitg is a graphical Git client"
+msgstr "Gitg é un cliente gráfico de Git"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Maps"
 msgstr "Mapas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
-msgid "A simple GNOME 3 maps application"
-msgstr "Un aplicativos de mapas sinxelo para GNOME 3"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:90
+msgid "A simple GNOME 3 maps application"
+msgstr "Unha aplicacións de mapas sinxelo para GNOME 3"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music"
 msgstr "Música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
 msgid "Music player and management application"
-msgstr "Aplicativo de xestión e reprodución de música"
+msgstr "Aplicación de xestión e reprodución de música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Default file manager for GNOME"
 msgstr "O xestor de ficheiros por omisión de GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Photos"
 msgstr "Fotos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Acceda, organice e comparta as súas fotos en GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "An IRC Client for GNOME"
 msgstr "Un cliente de IRC para GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "Sound Recorder"
 msgstr "Gravadora de son"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+#: src/plugins/newcomers/gbp-newcomers-section.ui:142
 msgid "A simple and modern sound recorder"
 msgstr "Unha gravadora de son simple e moderna"
 
@@ -5766,6 +5770,32 @@ msgstr "Verificar _ortografía"
 msgid "Underline misspelled words"
 msgstr "Subliñar palabras mal escritas"
 
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
+msgid "Enable Stylelint"
+msgstr "Activar Stylelint"
+
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
+msgid ""
+"Enable the use of stylelint to find additional diagnostics in stylesheet "
+"files. This may result in the execution of code in your project."
+msgstr ""
+"Activar o uso de stylelint para buscar diagnósticos adicionais en ficheiros "
+"de follas de estilo. Isto pode resultar na execución de código no seu "
+"proxecto."
+
+#: src/plugins/stylelint/stylelint_plugin.py:135
+msgid "Stylelint"
+msgstr "Stylelint"
+
+#: src/plugins/stylelint/stylelint_plugin.py:136
+msgid "Enable the use of Stylelint, which may execute code in your project"
+msgstr "Activar o uso de stylelint, que pode executar código no seu proxecto"
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/stylelint/stylelint_plugin.py:138
+msgid "stylelint stylesheet lint code execute execution"
+msgstr ""
+
 #: src/plugins/sublime/gbp-sublime-preferences-addin.c:52
 msgid "Sublime Text"
 msgstr "Sublime Text"
@@ -5873,23 +5903,23 @@ msgstr ""
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-application-addin.c:96
+#: src/plugins/terminal/gbp-terminal-application-addin.c:97
 msgid "Use terminal interface"
 msgstr "Usar a interface de terminal"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
 msgid "Application Output"
-msgstr "Saída do aplicativo"
+msgstr "Saída da aplicación"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
 #, c-format
 msgid "Application started at %s\r\n"
-msgstr "O aplicativo iniciou ás %s\n"
+msgstr "A aplicación iniciou ás %s\n"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
 msgid "Application exited\r\n"
-msgstr "O aplicativo saíu\n"
+msgstr "A aplicación saíu\n"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
 msgctxt "shortcut window"
@@ -6104,2200 +6134,3 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
-
-#~ msgid ""
-#~ "There was a failure while calculating line changes from git. The exact "
-#~ "error was: %s"
-#~ msgstr ""
-#~ "Produciuse un fallo ao calcular os cambios de liña desde git. O erro "
-#~ "exacto foi: %s"
-
-#~ msgid "Repository does not have a working directory."
-#~ msgstr "O repositorio non ten un cartafol de traballo."
-
-#~ msgid "File is not under control of git working directory."
-#~ msgstr "O ficheiro non está baixo o control do cartafol de traballo de git."
-
-#~ msgid "The requested file does not exist within the git index."
-#~ msgstr "O ficheiro solicitado non existe dentro do índice de git."
-
-#~ msgid "Abstract"
-#~ msgstr "Abstracto"
-
-#~ msgid "Compact"
-#~ msgstr "Compacto"
-
-#~ msgid "Immutable"
-#~ msgstr "Inmutábel"
-
-#~ msgid "org.gnome.Builder"
-#~ msgstr "org.gnome.Builder"
-
-#~ msgid "Press Ctrl+. to search"
-#~ msgstr "Prema Ctrl+. para buscar"
-
-#~ msgid "Open file"
-#~ msgstr "Abrir ficheiro"
-
-#~ msgid "New file"
-#~ msgstr "Novo ficheiro"
-
-#~ msgid "New documentation"
-#~ msgstr "Nova documentación"
-
-#~ msgid "Todo"
-#~ msgstr "Todo"
-
-#~ msgid "Task manager for GNOME"
-#~ msgstr "Xestor de tarefas de GNOME"
-
-#~ msgid "Failure"
-#~ msgstr "Fallo"
-
-#~ msgid ""
-#~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
-#~ "with profiler</a> from the run menu to begin"
-#~ msgstr ""
-#~ "Seleccione <a href=\"action://run-manager.run-with-handler::profiler"
-#~ "\">Executar co perfilador</a> desde o menú Executar para comezar"
-
-#~ msgid "New Window"
-#~ msgstr "Nova xanela"
-
-#~ msgid "Copied 1 file"
-#~ msgstr "1 ficheiro copiado"
-
-#~ msgid "If enabled, the project tree will display icons next to each item."
-#~ msgstr ""
-#~ "Se está activo, o árbore do proxecto mostrará as iconas ao carón de cada "
-#~ "elemento."
-
-#~ msgid "List available subcommands"
-#~ msgstr "Lista de subordes dispoñíbeis"
-
-#~ msgid "Run Builder in standalone mode"
-#~ msgstr "Executar Buider en modo individual"
-
-#~ msgid "Increase verbosity, may be specified multiple times"
-#~ msgstr "Incrementar o nivel de detall, podería especicarse varias veces."
-
-#~ msgid "Enter GApplication Service mode"
-#~ msgstr "Entrar no modo de servicio de GApplication"
-
-#~ msgid "Opens the project specified by PATH"
-#~ msgstr "Abre un proxecto especificado polo PATH"
-
-#~ msgid "PATH"
-#~ msgstr "RUTA"
-
-#~ msgid "Clones the project specified by MANIFEST"
-#~ msgstr "Abre un proxecto especificado polo MANIFESTO"
-
-#~ msgid "COMMAND"
-#~ msgstr "ORDE"
-
-#~ msgid "No commands available"
-#~ msgstr "Non hai ordes dispoñíbeis"
-
-#~ msgid "Please provide a command"
-#~ msgstr "Forneza unha orde"
-
-#~ msgid "No such tool"
-#~ msgstr "A ferramenta non está presente"
-
-#~ msgid "Please provide a worker plugin"
-#~ msgstr "Forneza un engadido de traballador"
-
-#~ msgid "Please provide a D-Bus address"
-#~ msgstr "Forneza o enderezo de D-Bus"
-
-#~ msgid "No such worker"
-#~ msgstr "Non existe o traballador"
-
-#~ msgid "Failed to establish a monitor for background changes: %s"
-#~ msgstr ""
-#~ "Produciuse un fallo ao estabelecer un monitor para os cambios en segundo "
-#~ "plano: %s"
-
-#~ msgid "Buffer failed: %s"
-#~ msgstr "Fallou a construción: %s"
-
-#~ msgid "File too large to be opened."
-#~ msgstr "O ficheiro é demasiado grande para poder abrilo."
-
-#~ msgid "unsaved document %u"
-#~ msgstr "Documento %u sen gardar"
-
-#~ msgid "Duplicate the configuration"
-#~ msgstr "Duplicar configuración"
-
-#~ msgid "Delete the configuration"
-#~ msgstr "Eliminar configuración"
-
-#~ msgid "The prefix to use when installing the project"
-#~ msgstr "O prefixo a usar ao instalar o proxecto"
-
-#~ msgid "Options to use when bootstrapping the project"
-#~ msgstr "Opcións a usar ao inicializar o proxecto"
-
-#~ msgid "_Wrap Around"
-#~ msgstr "_Volver ao inicio"
-
-#~ msgid "Display"
-#~ msgstr "Pantalla"
-
-#~ msgid "Tabs and Indentation"
-#~ msgstr "Sangrado e indentado"
-
-#~ msgid "Auto indent new lines"
-#~ msgstr "Autosangrar novas liñas"
-
-#~ msgid "Language Syntax"
-#~ msgstr "Sintaxe do linguaxe"
-
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Trocar panel de navegación"
-
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Trocar panel de utilidades"
-
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Porqué non <a href=\"action://app.new-project\">creare un proxecto novo</"
-#~ "a>?"
-
-#~ msgid "_Remove"
-#~ msgstr "_Renomear"
-
-#~ msgid "Click an item to select"
-#~ msgstr "Prema nun elemento para seleccionalo"
-
-#~ msgid "Open…"
-#~ msgstr "Abrir…"
-
-#~ msgid "Select projects for removal"
-#~ msgstr "Seleccione os proxectos a eliminar"
-
-#~ msgid "Return to project selection"
-#~ msgstr "Volver á selección de proxectos"
-
-#~ msgid "_Open Project"
-#~ msgstr "_Abrir proxecto"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Preferencias"
-
-#~ msgid "Keyboard _Shortcuts"
-#~ msgstr "Atallos de _teclado"
-
-#~ msgid "_Help"
-#~ msgstr "A_xuda"
-
-#~ msgid "_About"
-#~ msgstr "_Sobre"
-
-#~ msgid "Save _All"
-#~ msgstr "Gardar _todo"
-
-#~ msgid "Close _All"
-#~ msgstr "_Pechar todo"
-
-#~ msgid "You must call %s() before using libide."
-#~ msgstr "Debe chamar a %s() antes de usar libide."
-
-#~ msgid "An unload request is already pending"
-#~ msgstr "Xa hai unha solicitude de descarga pendente."
-
-#~ msgid "Context already unloading, cannot restore."
-#~ msgstr "Xa se descargou o contexto, non se pode restaurar."
-
-#~ msgid "Context has already been restored."
-#~ msgstr "Xa se restaurou o contexto."
-
-#~ msgid "No implementations of extension point “%s”."
-#~ msgstr "Non hai implementacións para o punto de extensión «%s»."
-
-#~ msgid "Failed to locate %s plugin."
-#~ msgstr "Produciuse un fallo ao buscar o engadido %s."
-
-#~ msgid "No such extension point."
-#~ msgstr "Non existe o punto de extensión."
-
-#~ msgid "No implementations of extension point."
-#~ msgstr "Non hai implementacións para o punto de extensión."
-
-#~ msgid "Run _all tests"
-#~ msgstr "Executar _todas as probas"
-
-#~ msgid "Reload tests"
-#~ msgstr "_Recargar probas"
-
-#~ msgid "No tests available"
-#~ msgstr "Non hai probas dispoñíbeis"
-
-#~ msgid "Tests will be loaded after building."
-#~ msgstr "As probas poden cargarse despois de construír."
-
-#~ msgid "Clear _All"
-#~ msgstr "Limpar _todo"
-
-#~ msgid "Invalid %-encoding in URI"
-#~ msgstr "Codificación %-e non válida no URI"
-
-#~ msgid "Non-UTF-8 characters in URI"
-#~ msgstr "Caracteres non UTF-8 no URI"
-
-#~ msgid "Invalid IP literal “%s” in URI"
-#~ msgstr "Literal de IP non válido «%s» no URI"
-
-#~ msgid "Invalid encoded IP literal “%s” in URI"
-#~ msgstr "Literal de IP codificado non válido «%s» no URI"
-
-#~ msgid "Invalid non-ASCII hostname “%s” in URI"
-#~ msgstr "Nome de equipo non ASCII non válido «%s» no URI"
-
-#~ msgid "Non-ASCII hostname “%s” forbidden in this URI"
-#~ msgstr "Nome de equipo «%s» non ASCII prohibido neste URI"
-
-#~ msgid "Could not parse port “%s” in URI"
-#~ msgstr "Non foi posíbel analizar o porto «%s» no URI"
-
-#~ msgid "Port “%s” in URI is out of range"
-#~ msgstr "O porto «%s» no URI está fóra do rango"
-
-#~ msgid "Base URI is not absolute"
-#~ msgstr "O URI base non é absoluto"
-
-#~ msgid "URI is not absolute, and no base URI was provided"
-#~ msgstr "O URI non é absoluto, e non se forneceu un URI fornecido"
-
-#~ msgid "Could not parse “%s” as absolute URI"
-#~ msgstr "Non foi posíbel analizar o «%s» como URI absoluto"
-
-#~ msgid "URI “%s” has no host component"
-#~ msgstr "O URI «%s» non ten un compoñente de equipo"
-
-#~ msgid "Building"
-#~ msgstr "Construíndo"
-
-#~ msgid "true"
-#~ msgstr "true"
-
-#~ msgctxt "button"
-#~ msgid "Build"
-#~ msgstr "Construír"
-
-#~ msgid "The project cannot be built while the build pipeline is being set up"
-#~ msgstr ""
-#~ "O proxecto non pode construírse mentres unha liña de construción está "
-#~ "sendo configurada"
-
-#~ msgid "Builder Statistics"
-#~ msgstr "Estatísticas do Construtor"
-
-#~ msgid "%s — Builder"
-#~ msgstr "%s — Builder"
-
-#~ msgid "Transfers"
-#~ msgstr "Transferencias"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Trigger a build"
-#~ msgstr "Dispara unha construción"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all files"
-#~ msgstr "Gardar todos os ficheiros"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Perspectives"
-#~ msgstr "Perspectivas"
-
-#~ msgid "Shared Library (Autotools)"
-#~ msgstr "Biblioteca compartida (Autotools)"
-
-#~ msgid "Create a new autotools project with a shared library"
-#~ msgstr "Crea un novo proxecto autotools con unha biblioteca compartida"
-
-#~ msgid "Empty Project (Autotools)"
-#~ msgstr "Proxecto baleiro (Autotools)"
-
-#~ msgid "Create a new empty autotools project"
-#~ msgstr "Crear un novo proxecto de autotools baleiro"
-
-#~ msgid "GNOME Application (Autotools)"
-#~ msgstr "Aplicativo de GNOME (Autotools)"
-
-#~ msgid "Create a new flatpak-ready GNOME application"
-#~ msgstr "Crear un novo aplicativo de GNOME listo para flatpak"
-
-#~ msgid "Command not found: %s"
-#~ msgstr "Orde non atopada: %s"
-
-#~ msgid "Use the entry below to execute a command"
-#~ msgstr "Usar a entrada embaixo para executar unha ore"
-
-#~ msgid "New…"
-#~ msgstr "Novo…"
-
-#~ msgid "Create"
-#~ msgstr "Crear"
-
-#~ msgid "List available templates"
-#~ msgstr "Lista de modelos dispoñíbeis"
-
-#~ msgid "Project template to generate"
-#~ msgstr "Modelo de proxecto a xerar"
-
-#~ msgid "The target language (if supported)"
-#~ msgstr "O idioma obxectivo (se está admitido)"
-
-#~ msgid "The version control to use or “none” to disable"
-#~ msgstr "O control de versión a usar ou «ningún» para desactivalo"
-
-#~ msgid "git"
-#~ msgstr "git"
-
-#~ msgid "create-project [OPTION...] PROJECT_NAME"
-#~ msgstr "create-project [OPCIÓNS...] NOME_DE_PROXECTO"
-
-#~ msgid "Filename must be ASCII and may not contain : or ="
-#~ msgstr "O nome de ficheiro debe ser ASCII e non debe onter : ou ="
-
-#~ msgid "Please specify a project name.\n"
-#~ msgstr "Especifique o nome do proxecto.\n"
-
-#~ msgid "Please specify a project template with --template=\n"
-#~ msgstr "Especifique un modelo de proxecto con --template=\n"
-
-#~ msgid "Clone App"
-#~ msgstr "Clonar aplicativo"
-
-#~ msgid "Clone"
-#~ msgstr "Clonar"
-
-#~ msgid "Your computer is missing flatpak-builder"
-#~ msgstr "O seu computador non ten instalado flatpak-builder"
-
-#~ msgid "Cannot provide diff, no backing file provided."
-#~ msgstr ""
-#~ "Imposíbel fornecer diferenzas, non se forneceu ningún ficheiro de "
-#~ "respaldo."
-
-#~ msgid "Apply"
-#~ msgstr "Aplicar"
-
-#~ msgid "Remote Branch to Clone"
-#~ msgstr "Rama remota a clonar"
-
-#~ msgid "Use Git to create a local copy of a remotely hosted project."
-#~ msgstr ""
-#~ "Usar Git para crear unha copia local dun proxecto almacenado remotamente."
-
-#~ msgid "Enter the URL of your project’s source code repository"
-#~ msgstr "Escriba o URL do repositior de código fonte de proxecto"
-
-#~ msgid "Change default branch"
-#~ msgstr "Cambiar a rama por omisión"
-
-#~ msgid "Clone…"
-#~ msgstr "Clonar…"
-
-#~ msgid "Failed to establish git file monitor: %s"
-#~ msgstr ""
-#~ "Produciuse un fallo ao estabelecer a monitorización dun ficheiro git: %s"
-
-#~ msgid "Contribute to an existing project"
-#~ msgstr "Contribuir a un proxecto existente"
-
-#~ msgid "Cannot load a non-native file in terminal"
-#~ msgstr "Non foi posíbel ler o ficheiro non nativo na terminal"
-
-#~ msgid "Failed to rename file: %s"
-#~ msgstr "Produciuse un fallo ao renomear o ficheiro: %s"
-
-#~ msgid "Failed to trash file: %s"
-#~ msgstr "Produciuse un fallo ao enviar ao lixo o ficheiro: %s"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Project tree"
-#~ msgstr "Árbore do proxecto"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename a file"
-#~ msgstr "Renomear un ficheiro"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move a file to the trash"
-#~ msgstr "Mover un ficheiro ao lixo"
-
-#~ msgid "Re_veal in Project Tree"
-#~ msgstr "_Mostrar no árbore de proxectos"
-
-#~ msgid "_New"
-#~ msgstr "_Novo"
-
-#~ msgid "_Empty File"
-#~ msgstr "_Baleirar ficheiro"
-
-#~ msgid "_Build"
-#~ msgstr "_Construír"
-
-#~ msgid "_Rebuild"
-#~ msgstr "_Reconstruír"
-
-#~ msgid "_Collapse All Nodes"
-#~ msgstr "_Recoller todos os nodos"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Recargar"
-
-#~ msgid "Updated"
-#~ msgstr "Actualizado"
-
-#~ msgid "Definition"
-#~ msgstr "Definición"
-
-#~ msgid "Canonical"
-#~ msgstr "Canónico"
-
-#~ msgid "System Monitor"
-#~ msgstr "Monitor do sistema"
-
-#~ msgid "Open Profile"
-#~ msgstr "Abrir o perfíl"
-
-#~ msgid "Reset and Clear"
-#~ msgstr "Restabelecer e limpar"
-
-#~ msgid "Buffer loaded but not in the buffer manager."
-#~ msgstr "Búfer cargado pero non no xestor de búfer."
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Permitir aos fragmentos ser insertados no documento."
-
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Autocompletado usando Clang (Experimental)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Usar Clang para o autocompletado nos linguaxes C e C++."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Activar o autocompletado das palabras no documento"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Se está activado, as palabras dentro do documento actual estarán "
-#~ "dispoñíbeis para o autocompletado."
-
-#~ msgid "Suggest words found in open files"
-#~ msgstr ""
-#~ "Suxerir completado de palabras atopadas en todos os ficheiros abertos."
-
-#~ msgid ""
-#~ "Suggests completions as you type based on words found in any open document"
-#~ msgstr ""
-#~ "Suxerir completado mentres se escribe baseándose nas palabras atopadas en "
-#~ "calquera documento aberto."
-
-#~ msgid "Minimum word size"
-#~ msgstr "Tamaño de palabra mínimo"
-
-#~ msgid "Minimum word size for word completion"
-#~ msgstr "Tamaño de palabra mínimo para o completado de palabras"
-
-#~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
-#~ msgstr ""
-#~ "Crea e xestiona unha base de datos Ctags para completar nomes de clase, "
-#~ "funcións e máis"
-
-#~ msgid "Suggest completions using Clang (Experimental)"
-#~ msgstr "Suxerir completados usando Clang (Experimental)"
-
-#~ msgid "Code snippets"
-#~ msgstr "Fragmentos de código"
-
-#~ msgid "Use code fragments to increase typing efficiency"
-#~ msgstr "Usar fragmentos de código para incrementar eficiencia ao escribir"
-
-#~ msgid "Failed to load file: %s: %s"
-#~ msgstr "Produciuse un fallo ao cargar o ficheiro: %s: %s"
-
-#~ msgid "Click to toggle breakpoint"
-#~ msgstr "Prema para trocar o punto de corte"
-
-#~ msgid "Builder Word Completion"
-#~ msgstr "Completado de palabras de Construtor"
-
-#~ msgid "Unknown failure"
-#~ msgstr "Característica descoñecida"
-
-#~ msgid "Clang crashed"
-#~ msgstr "Clang fallou"
-
-#~ msgid "Invalid arguments"
-#~ msgstr "Argumentos non válidos"
-
-#~ msgid "AST read error"
-#~ msgstr "Erro de lectura do AST"
-
-#~ msgid "Failed to create translation unit: %s"
-#~ msgstr "Produciuse un fallo ao crear a unidade de tradución: %s"
-
-#~ msgid "clang_codeCompleteAt() only works on local files"
-#~ msgstr "clang_codeCompleteAt() só funciona en ficheiros locais"
-
-#~ msgid "Format Strings"
-#~ msgstr "Cadeas de formato"
-
-#~ msgid "_Show more"
-#~ msgstr "_Mostrar máis"
-
-#~ msgid "Suggest Python completions"
-#~ msgstr "Suxerir completado de Python"
-
-#~ msgid "CPU"
-#~ msgstr "CPU"
-
-#~ msgid "Installing %s %s"
-#~ msgstr "Instalando %s %s"
-
-#~ msgid "MinGW 64-bit"
-#~ msgstr "MinGW 64-bit"
-
-#~ msgid "MinGW 32-bit"
-#~ msgstr "MinGW 32-bit"
-
-#~ msgid "The device “%s” could not be found."
-#~ msgstr "Non foi posíbel atopar o dispositivo «%s»."
-
-#~ msgid "Mine projects"
-#~ msgstr "Proxectos de minería"
-
-#~ msgid "Search directories for projects."
-#~ msgstr "Buscar cartafoles para os proxectos."
-
-#~ msgid "_Fullscreen"
-#~ msgstr "_Pantalla completa"
-
-#~ msgid "Failed to save buffer, ignoring reclamation."
-#~ msgstr "Produciuse un fallo ao gardar o búfer, ignorando reclamación."
-
-#~ msgid "========================\n"
-#~ msgstr "========================\n"
-
-#~ msgid "           Project Name: %s\n"
-#~ msgstr "           Nome do proxecto: %s\n"
-
-#~ msgid " Version Control System: %s\n"
-#~ msgstr " Sistema de control de versións: %s\n"
-
-#~ msgid "           Build System: %s\n"
-#~ msgstr "           Sistema de construción: %s\n"
-
-#~ msgid "    Build Date and Time: %s\n"
-#~ msgstr "    Data e hora da construción: %s\n"
-
-#~ msgid "    Building for Device: %s (%s)\n"
-#~ msgstr "    Construción para o dispositivo: %s (%s)\n"
-
-#~ msgid "            Environment: %s\n"
-#~ msgstr "            Ambiente: %s\n"
-
-#~ msgid "===============\n"
-#~ msgstr "===============\n"
-
-#~ msgid " Build Failure: %s\n"
-#~ msgstr " Fallo de construción %s\n"
-
-#~ msgid " Build ran for: %"
-#~ msgstr " A construción executouse durante: %"
-
-#~ msgid "=================\n"
-#~ msgstr "=================\n"
-
-#~ msgid " Build Successful\n"
-#~ msgstr " Construción exitosa\n"
-
-#~ msgid "   Build ran for: %"
-#~ msgstr "   A construción executouse durante: %"
-
-#~ msgid "The ID of the device to build for"
-#~ msgstr "O ID do dispositivo para o que construír"
-
-#~ msgid "local"
-#~ msgstr "local"
-
-#~ msgid "The runtime to use for building"
-#~ msgstr "O tempo de execución a usar para construír"
-
-#~ msgid "host"
-#~ msgstr "equipo"
-
-#~ msgid "Number of workers to use when building"
-#~ msgstr "Número de traballadores a usar o construír"
-
-#~ msgid "CONFIG_ID"
-#~ msgstr "CONFIG_ID"
-
-#~ msgid "Path to project file, defaults to current directory"
-#~ msgstr "Ruta ao ficheiro de proxecto, por omisión está ao cartafol actual"
-
-#~ msgid "Other Projects"
-#~ msgstr "Outros proxectos"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle right panel"
-#~ msgstr "Trocar panel dereito"
-
-#~ msgid "Project Discovery"
-#~ msgstr "Descubrimento de proxectos"
-
-#~ msgid "Discover projects on my computer"
-#~ msgstr "Descubrir proxectos no meu computador"
-
-#~ msgid "Scan your computer for existing projects"
-#~ msgstr "Buscar no seu computador proxectos existentes"
-
-#~ msgid "%s() may only be executed once"
-#~ msgstr "%s() só se debe executar unha vez"
-
-#~ msgid "Send to Fpaste.org"
-#~ msgstr "Enviar a Fpaste.org"
-
-#~ msgid "The following URL has been copied to the clipboard"
-#~ msgstr "Copiouse o seguinte URL foi copiado ao portapapeis"
-
-#~ msgid "Integrated project tree"
-#~ msgstr "Árbore de proxecto integrado"
-
-#~ msgid "HTML/Markdown live preview"
-#~ msgstr "Vista previa en vivo para HTML/Markdown"
-
-#~ msgid "Support for building with jhbuild"
-#~ msgstr "Compatibilidade para a construción con jhbuild"
-
-#~| msgid "Restore cursor position"
-#~ msgid "Execute from the current cursor position"
-#~ msgstr "Executar desde a posición actual do cursor"
-
-#~ msgid "Execute until reaching the current cursor position"
-#~ msgstr "Executar até acadar a posición actual do cursor"
-
-#~| msgid "Workbench"
-#~ msgctxt "shortcut winndow"
-#~ msgid "Workbench shortcuts"
-#~ msgstr "Atallso do banco de traballo"
-
-#~| msgctxt "shortcut window"
-#~| msgid "Build and Run"
-#~ msgctxt "shortcut winndow"
-#~ msgid "Build and Run"
-#~ msgstr "Construír e executar"
-
-#~| msgctxt "shortcut window"
-#~| msgid "Open a document"
-#~ msgid "Open a document"
-#~ msgstr "Abrir un documento"
-
-#~| msgctxt "shortcut window"
-#~| msgid "Panels"
-#~ msgid "Panels"
-#~ msgstr "Paneles"
-
-#~| msgctxt "shortcut window"
-#~| msgid "Find and replace"
-#~ msgid "Find and replace"
-#~ msgstr "Buscar e substituír"
-
-#~| msgctxt "shortcut window"
-#~| msgid "Find the next match"
-#~ msgid "Find the next match"
-#~ msgstr "Buscar a seguinte coincidencia"
-
-#~| msgctxt "shortcut window"
-#~| msgid "Switch to the previous document"
-#~ msgid "Switch to the previous document"
-#~ msgstr "Cambiar ao anterior documento"
-
-#~ msgid "Cannot locate property %s in class %s"
-#~ msgstr "Non foi posíbel atopar a propiedade %s na clase %s"
-
-#~ msgid "Failed to find property %s in %s"
-#~ msgstr "Produciuse un fallo ao atopar a propiedade %s en %s"
-
-#~ msgid "Failed to find property %s in %s or parent %s"
-#~ msgstr "Produciuse un fallo ao atopar a propiedade %s en %s ou no pai %s"
-
-#~ msgid "Failed to retrieve va_list value: %s"
-#~ msgstr "Produciuse un fallo ao obter o valor de va_list: %s"
-
-#~ msgid "Just now"
-#~ msgstr "Agora mesmo"
-
-#~ msgid "An hour ago"
-#~ msgstr "Hai unha hora"
-
-#~ msgid "Yesterday"
-#~ msgstr "Onte"
-
-#~ msgid "About a year ago"
-#~ msgstr "Hai un ano"
-
-#~ msgid "About %u year ago"
-#~ msgid_plural "About %u years ago"
-#~ msgstr[0] "Hai %u ano"
-#~ msgstr[1] "Hai %u anos"
-
-#~ msgid "Select"
-#~ msgstr "Seleccionar"
-
-#~ msgid "Browse…"
-#~ msgstr "Explorar…"
-
-#~ msgid "Traversal order %u is not supported on Trie."
-#~ msgstr "A orde %u non está admitida en Trie."
-
-#~ msgid "%s() may only be called once"
-#~ msgstr "%s() só se debe chamar unha vez"
-
-#~ msgid "Parser does not contain an input stream"
-#~ msgstr "O nalizador non contén un fluxo de entrada"
-
-#~ msgid "Must parse template before expanding"
-#~ msgstr "Debe analizar a plantilla antes da expansión"
-
-#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
-#~ msgstr ""
-#~ "Se está activo, a barra lateral será visíbel no espazo de traballo do "
-#~ "editor."
-
-#~ msgid "Show bottom panel"
-#~ msgstr "Mostrar panel inferior"
-
-#~ msgid "Show right panel"
-#~ msgstr "Mostrar panel da dereita"
-
-#~ msgid "Split Left"
-#~ msgstr "Dividir á esquerda"
-
-#~ msgid "Split Right"
-#~ msgstr "Dividir á dereita"
-
-#~ msgid "Split Down"
-#~ msgstr "Dividir abaixo"
-
-#~ msgid "Move"
-#~ msgstr "Mover"
-
-#~ msgid "_Print"
-#~ msgstr "_Imprimir"
-
-#~ msgid "%d warning"
-#~ msgid_plural "%d warnings"
-#~ msgstr[0] "%d aviso"
-#~ msgstr[1] "%d avisos"
-
-#~ msgid "%d error"
-#~ msgid_plural "%d errors"
-#~ msgstr[0] "%d erro"
-#~ msgstr[1] "%d erros"
-
-#~ msgid "Status:"
-#~ msgstr "Estado:"
-
-#~ msgid "Running Time:"
-#~ msgstr "Hora de execución:"
-
-#~ msgid "Warnings:"
-#~ msgstr "Avisos:"
-
-#~ msgid "No Diagnostics"
-#~ msgstr "Non hai diagnósticos"
-
-#~ msgid ""
-#~ "<a href=\"action://build-manager.build\">Build your project</a> to show "
-#~ "diagnostics here"
-#~ msgstr ""
-#~ "<a href=\"action://build-manager.build\">Constrúa o seu proxecto</a> para "
-#~ "mostrar aquí o diagnóstico"
-
-#~ msgid "Line %u, Column %u"
-#~ msgstr "Liña %u, Columna %u"
-
-#~ msgid "OVR"
-#~ msgstr "OVR"
-
-#~ msgid "Change editor settings and language"
-#~ msgstr "Cambiar as preferencias e linguaxe do editor"
-
-#~ msgid "Try opening a file by typing in the search box at the top"
-#~ msgstr ""
-#~ "Tente abrindo un ficheiro escribindo na caixa de busca na parte superior"
-
-#~ msgid ""
-#~ "Spell checker error: no language set. It’s maybe because no dictionaries "
-#~ "are installed."
-#~ msgstr ""
-#~ "Erro na comprobación ortográfica: non se especificou un idioma. Isto pode "
-#~ "ser porque non hai dicionarios instalados."
-
-#~ msgid "_Highlight"
-#~ msgstr "_Realzado"
-
-#~ msgid "Search highlight mode…"
-#~ msgstr "Modo de realce de busca…"
-
-#~ msgid "Save Document"
-#~ msgstr "Gardar documento"
-
-#~ msgid "Save Document As"
-#~ msgstr "Gardar documento como"
-
-#~ msgid "_Select"
-#~ msgstr "_Seleccionar"
-
-#~ msgid "Search Preferences"
-#~ msgstr "Buscar nas preferencias"
-
-#~ msgid "Cannot add provider more than once."
-#~ msgstr "Non é posíbel engadir un fornecedor varias veces."
-
-#~ msgid "File path is NULL"
-#~ msgstr "A ruta do ficheiro é NULL"
-
-#~ msgid "Error converting UTF-8 filename to wide char"
-#~ msgstr ""
-#~ "Produciuse un erro ao converter o nome de ficheiro UTF-8 a un caracter "
-#~ "ancho"
-
-#~ msgid "ILCreateFromPath() failed"
-#~ msgstr "ILCreateFromPath() fallou"
-
-#~ msgid "Cannot convert “%s” into a valid NSURL."
-#~ msgstr "Non foi posíbel converter «%s» nun NSURL válido."
-
-#~ msgid "Connecting to org.freedesktop.FileManager1 failed: "
-#~ msgstr "Produciuse un fallo ao conectarse a org.freedesktop.FileManager1:"
-
-#~ msgid "Calling ShowItems failed: "
-#~ msgstr "Fallou a chamada a ShowItems:"
-
-#~ msgid "Jump to previous location"
-#~ msgstr "Saltar á localización anterior"
-
-#~ msgid "Jump to next location"
-#~ msgstr "Saltar á localización seguinte"
-
-#~ msgid "untitled document"
-#~ msgstr "documeno sen título"
-
-#~ msgid "Project"
-#~ msgstr "Proxecto"
-
-#~ msgid "View Output"
-#~ msgstr "Ver saída"
-
-#~ msgid "Enable color picker"
-#~ msgstr "Activar o selector de cor"
-
-#~ msgid "Preview as HTML"
-#~ msgstr "Pre_visualizar como HTML"
-
-#~ msgid "Current language does not support symbol resolvers"
-#~ msgstr "O linguaxe actual non admite resolutores de símbolos"
-
-#~ msgid "No symbols"
-#~ msgstr "Non hai símbolos"
-
-#~ msgid "Open a file to see symbols within the file"
-#~ msgstr "Abrir un ficheiro para ver os símbolos que contén"
-
-#~ msgid "Run Output"
-#~ msgstr "Saída da execución"
-
-#~ msgid "%s does not support building"
-#~ msgstr "%s non admite o compilado"
-
-#~ msgid "A build is already in progress"
-#~ msgstr "Xa hai unha construción en progreso."
-
-#~ msgid "Failed to open stderr stream."
-#~ msgstr "Produciuse un fallo ao abrir o fluxo de erro estándar."
-
-#~ msgid "Failed to open stdout stream."
-#~ msgstr "Produciuse un fallo ao abrir o fluxo de saída."
-
-#~ msgid "%s() is not supported on %s build system."
-#~ msgstr "%s() non está admitido no sistema de construción %s."
-
-#~ msgid "Attempt to load a PyGObject script with no filename."
-#~ msgstr "Tentando cargar un script PyGObject sen nome de ficheiro."
-
-#~ msgid "The filename for the script was not provided."
-#~ msgstr "O nome de ficheiro do script non se forneceu."
-
-#~ msgid "The script must be on a local filesystem."
-#~ msgstr "O script debe atoparse no sistema de ficheiros local."
-
-#~ msgid "The script \"%s\" is not a PyGObject file."
-#~ msgstr "O script «%s» non é un ficheiro PyGObject."
-
-#~ msgid "%s has not implemented GAsyncInitable."
-#~ msgstr "%s non implementa GAsyncInitable."
-
-#~ msgid "Chunk does not belong to snippet."
-#~ msgstr "O anaco non pertence ao fragmento."
-
-#~ msgid "Target"
-#~ msgstr "Obxectivo"
-
-#~ msgid "Failed to locate configure.ac"
-#~ msgstr "Produciuse un fallo ao buscar o configure.ac"
-
-#~ msgid "Directory must be on a locally mounted filesystem."
-#~ msgstr "O cartafol debe estar nun sistema de ficheiros montado localmente."
-
-#~ msgid "Failed to locate device"
-#~ msgstr "Produciuse un fallo ao atopar o dispositivo"
-
-#~ msgid "Cannot execute build task more than once"
-#~ msgstr "Non é posíbel executar a tarefa de construción máis dunha vez"
-
-#~ msgid "'%s' is not a directory."
-#~ msgstr "«%s» non é un cartafol."
-
-#~ msgid "autogen.sh is missing from project directory (%s)."
-#~ msgstr "Falta autogen.sh do cartafol do proxecto (%s)."
-
-#~ msgid "autogen.sh is not executable."
-#~ msgstr "augogen.sh non é un executábel."
-
-#~ msgid "autogen.sh failed to create configure (%s)"
-#~ msgstr "autogen.sh fallou ao crear o configure (%s)"
-
-#~ msgid "Running configure…"
-#~ msgstr "Executando configure…"
-
-#~ msgid "Invalid makefile provided, ignoring."
-#~ msgstr "O ficheiro makefile fornecido non é válido, ignorándoo."
-
-#~ msgid "Notes"
-#~ msgstr "Notas"
-
-#~ msgid "Unknown file"
-#~ msgstr "Ficheiro non descoñecido"
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  %(prgname) %(command) OPTIONS\n"
-#~ msgstr ""
-#~ "Uso:\n"
-#~ "  %(prgname) %(command) OPCIÓNS\n"
-
-#~ msgid "Missing project name"
-#~ msgstr "Falta o nome de proxecto"
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  ide contribute PROJECT_NAME\n"
-#~ "\n"
-#~ "  This command will bootstrap your system to begin contributing to the "
-#~ "project\n"
-#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-#~ "that\n"
-#~ "  you have the required dependencies to build, and bootstraps the first "
-#~ "build\n"
-#~ "  of the project.\n"
-#~ "\n"
-#~ "Examples:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Uso:\n"
-#~ "  ide contribute NOME_DE_PROXECTO\n"
-#~ "\n"
-#~ "  Esta orde inicializará o seu sistema para poder contribuir ao proxecto\n"
-#~ "  co nome NOME_DE_PROXECTO. Isto inclúe obter as fontes, asegurarse\n"
-#~ "  que ten as dependencias para construír, e inicializa a primeira "
-#~ "construción\n"
-#~ "  do proxecto.\n"
-#~ "\n"
-#~ "Exemplo:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-
-#~ msgid "Username"
-#~ msgstr "Nome de usuario"
-
-#~ msgid "Wow! You've spent with Builder %d second!\n"
-#~ msgid_plural "Wow! You've spent with Builder %d seconds!\n"
-#~ msgstr[0] "Recoiro! Estivo empregando Builder durante %d segundo!\n"
-#~ msgstr[1] "Recoiro! Estivo empregando Builder durante %d segundos!\n"
-
-#~ msgid "Installed Extensions"
-#~ msgstr "Extensións instaladas"
-
-#~ msgid "Bundled Extensions"
-#~ msgstr "Extensión empaquetadas"
-
-#~ msgid "Enable / Disable left panel. Shortcut: F9"
-#~ msgstr "Activar / Desactivar o panel da esquerda. Atallo: F9"
-
-#~ msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
-#~ msgstr "Activar / Desactivar o panel inferior. Atallo: Ctrl + F9"
-
-#~ msgid "Enable / Disable right panel. Shortcut: Shift + F9"
-#~ msgstr "Activar / Desactivar o panel Superiro. Atallo: Maiús + F9"
-
-#~ msgid "Co_ntinue"
-#~ msgstr "Continuar"
-
-#~ msgid "Add a new empty file to your project"
-#~ msgstr "Engadir un novo ficheiro bairo ao seu proxecto"
-
-#~ msgid "Search for files. Shortcut: Ctrl + ."
-#~ msgstr "Buscar ficheiros. Atallo: Ctrl + ."
-
-#~ msgid "Drops down a list of file operations"
-#~ msgstr "Lista despregábel de operacións de ficheiros"
-
-#~ msgid "From an existing project on this computer"
-#~ msgstr "Desde un proxecto existente neste computador"
-
-#~ msgid "Deploy"
-#~ msgstr "Desplegar"
-
-#~ msgid "From an existing project in a Git repository"
-#~ msgstr "Desde un proxecto existente nun repositorio Git"
-
-#~ msgid "Attribution"
-#~ msgstr "Atribución"
-
-#~ msgid "File name must not contain subdirectories."
-#~ msgstr "O nome de ficheiro non debe conter subcartafoles."
-
-#~ msgid "Invalid snippet at line %d: %s"
-#~ msgstr "Fragmento non válido na liña %d: %s"
-
-#~ msgid "_New Document"
-#~ msgstr "_Novo documento"
-
-#~ msgid "Display right _margin at column:"
-#~ msgstr "Mostrar a _marxe dereita na columna:"
-
-#~ msgid "Insert matching brace, bracket, quotation, and parenthesis."
-#~ msgstr "Insertar parellas de chaves, corchetes, comiñas e parénteses."
-
-#~ msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
-#~ msgstr "Sobrescribir chaves, corchetes, comiñas e parénteses de peche."
-
-#~ msgid "From remote source code repository"
-#~ msgstr "Desde un repositorio de código fonte remoto"
-
-#~ msgid "GNOME Version"
-#~ msgstr "Versión de GNOME"
-
-#~ msgid "Pattern"
-#~ msgstr "Patrón"
-
-#~ msgid "Display Document Changes"
-#~ msgstr "Mostrar cambios no documento"
-
-#~ msgid "Display the line numbers next to each line of the document."
-#~ msgstr "Mostrar os números de liña xunto a cada liña do documento."
-
-#~ msgid "Highlight Current Line"
-#~ msgstr "Realzar liña actual"
-
-#~ msgid "Whether or not matching brackets should be highlighted."
-#~ msgstr "Indica se as parellas de chaves se deben realzar ou non."
-
-#~ msgid "Display Overview Map"
-#~ msgstr "Mapa de vista xeral"
-
-#~ msgid "Automatically hide the overview map during periods of inactivity."
-#~ msgstr ""
-#~ "Ocultar automaticamente o mapa de vista xeral durante períodos de "
-#~ "inactividade."
-
-#~ msgid "Cursor Placement"
-#~ msgstr "Localización do cursor"
-
-#~ msgid "Draw a circle over space characters."
-#~ msgstr "Debuxar un circulo sobre os caracterse de espazo."
-
-#~ msgid "Draw an arrow over tab characters."
-#~ msgstr "Debuxar unha frecha sobre os caracteres de tabulación."
-
-#~ msgid "Draw a carriage return over newline characters."
-#~ msgstr "Debuxar un retorno de carro sobre os caracteres de nova liña."
-
-#~ msgid "Draw leading space only."
-#~ msgstr "Debuxar só o espazo ao inicio."
-
-#~ msgid "Draw trailing space only."
-#~ msgstr "Debuxar só os espazos ao final."
-
-#~ msgid "Email"
-#~ msgstr "Correo electrónico"
-
-#~ msgid ""
-#~ "Highlight additional syntax based upon information found in the document."
-#~ msgstr ""
-#~ "Realzar a sintaxe adicional baseada na información atopada no documento."
-
-#~ msgid "Key Binding Emulation"
-#~ msgstr "Emulación de combinación de teclas"
-
-#~ msgid "The default keybindings for Builder."
-#~ msgstr "As combinacións de teclas predeterminadas para Builder."
-
-#~ msgid "Keyboard Movement"
-#~ msgstr "Movemento do teclado"
-
-#~ msgid "Plugins"
-#~ msgstr "Engadidos"
-
-#~ msgid "New"
-#~ msgstr "Novo"
-
-#~ msgid "Attempt to load a GJS script with no filename."
-#~ msgstr "Tentando cargar un script GJS sen nome de ficheiro."
-
-#~ msgid "Failed to create JavaScript context."
-#~ msgstr "Produciuse un fallo ao crear o contexto JavaScript."
-
-#~ msgid "Failed to set IdeContext in JavaScript runtime."
-#~ msgstr ""
-#~ "Produciuse un erro ao estabelecer o IdeContext no tempo de execución "
-#~ "JavaScript"
-
-#~ msgid "The script \"%s\" is not a JavaScript file."
-#~ msgstr "O script «%s» non é un ficheiro JavaScript."
-
-#~ msgid "File contained invalid UTF-8"
-#~ msgstr "O ficheiro contén UTF-8 non é válido"
-
-#~ msgid "%s does not implement build_async()"
-#~ msgstr "%s non implementa build_async()"
-
-#~ msgid "No implementation of build_async()"
-#~ msgstr "Non hai ningunha implementación de build_async()"
-
-#~ msgid "Builder requires libgit2-glib with threading support."
-#~ msgstr "Builder precisa libgit2-glib con compatibilidade de fíos."
-
-#~ msgid "Builder requires libgit2-glib with SSH support."
-#~ msgstr "Builder precisa libgit2-glib con compatibilidade de SSH."
-
-#~ msgid "Documentation (%s)"
-#~ msgstr "Documentación (%s)"
-
-#~ msgid "Device Manager"
-#~ msgstr "Xestor de dispositivos"
-
-#~ msgid "Symbol Tree"
-#~ msgstr "Árbore de símbolos"
-
-#~ msgid "Terminal (%s)"
-#~ msgstr "Terminal (%s)"
-
-#~ msgid "Autotools Project (configure.ac)"
-#~ msgstr "Proxecto de Autotools (configure.ac)"
-
-#~ msgid "Any Directory"
-#~ msgstr "Calquera cartafol"
-
-#~ msgid "Directory|Projects"
-#~ msgstr "Directorio|Proxectos"
-
-#~ msgid "(Click on items to select them)"
-#~ msgstr "(Prema nun elemento para seleccionalo)"
-
-#~ msgid "restore insert cursor mark"
-#~ msgstr "restaurar inesrtar punteiro de marca"
-
-#~ msgid "diff renderer gutter changes git vcs"
-#~ msgstr "diff diferencia renderizador barra lateral cambis git vcs"
-
-#~ msgid "line lines highlight current"
-#~ msgstr "liña liñas realzar actual"
-
-#~ msgid "bracket brackets highlight matching"
-#~ msgstr "chave chaves realzar coincidente"
-
-#~ msgid "lines margin scrolloff scroll off"
-#~ msgstr "liñas marxes desprazamento"
-
-#~ msgid "minimap mini map overview over view"
-#~ msgstr "minimapa mini mapa vista previa"
-
-#~ msgid ""
-#~ "draw spaces space tab newline nbsp non-breaking whitespace trailing "
-#~ "leading"
-#~ msgstr ""
-#~ "debuxar espazos espacio tabulación nova liña nbsp non-rompedor espazo-en-"
-#~ "branco inicio fin"
-
-#~ msgid "git author name surname attribution source code"
-#~ msgstr "git autor nome apelido atribución código fonte"
-
-#~ msgid "git author email mail address attribute source code"
-#~ msgstr "git autor email correo enderezo atribución código fonte"
-
-#~ msgid "experimental clang autocompletion auto complete"
-#~ msgstr "experimental clang autocompletado auto completado"
-
-#~ msgid "jedi python autocompletion auto complete"
-#~ msgstr "experimental jedi autocompletado auto completado"
-
-#~ msgid "snippets autocompletion auto complete"
-#~ msgstr "experimental fragmentos autocompletado auto completado"
-
-#~ msgid "semantic highlighting color goto declaration definition"
-#~ msgstr "semántico realzado color goto declaración ir definición"
-
-#~ msgid "default builder keybindings"
-#~ msgstr "predeterminado construtor combinacións"
-
-#~ msgid "emacs keybindings modal"
-#~ msgstr "emacs combinacións modal"
-
-#~ msgid "vim keybindings modal"
-#~ msgstr "modal combinacións vim"
-
-#~ msgid "smart home end"
-#~ msgstr "intelixente inicio fin"
-
-#~ msgid "smart back backspace indent align"
-#~ msgstr "intelixente atrás retroceso sangrado aliñado"
-
-#~ msgid "source style scheme source tango solarized builder syntax"
-#~ msgstr "fonte estilo esquema orixe tango solarizado construtor sintaxe"
-
-#~ msgid "%s more"
-#~ msgid_plural "%s more"
-#~ msgstr[0] "%s máis"
-#~ msgstr[1] "%s máis"
-
-#~ msgid "Open Document"
-#~ msgstr "Abrir documento"
-
-#~ msgid "Timed out while waiting for devices to settle.\n"
-#~ msgstr ""
-#~ "Acabouse o tempo máximo de espera agardando polos dispositivos a "
-#~ "asentar.\n"
-
-#~ msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
-#~ msgstr ""
-#~ "Agardando ate 60 segundos para que os dispositivos se asenten. Ctrl+C "
-#~ "para saír.\n"
-
-#~ msgid "The target device we are building for."
-#~ msgstr "O dispositivo obxectivo para o que construír."
-
-#~ msgid "DEVICE_ID"
-#~ msgstr "ID_DISPOSITIVO"
-
-#~ msgid "Increase parallelism in the build."
-#~ msgstr "Incrementar paralelismo na construción."
-
-#~ msgid "- Get build flags for a project file"
-#~ msgstr "- Obter as bandeiras de construción par aun ficheiro de proxecto"
-
-#~ msgid "- List devices found on the system."
-#~ msgstr "- Listar dispositivos atopados no sistema."
-
-#~ msgid "No such file in project: %s\n"
-#~ msgstr "Non existe o ficheiro no proxecto: %s\n"
-
-#~ msgid "- List diagnostics for a file."
-#~ msgstr "- Mostra todos os diagnósticos para un ficheiro."
-
-#~ msgid "- List files found in project."
-#~ msgstr "- Mostra os ficheiros atopados no proxecto."
-
-#~ msgid "No files provided to load settings for.\n"
-#~ msgstr ""
-#~ "Non se forneceu ningún ficheiro desde onde cargar as preferencias.\n"
-
-#~ msgid "%s result\n"
-#~ msgid_plural "%s results\n"
-#~ msgstr[0] "%s resultado\n"
-#~ msgstr[1] "%s resultados\n"
-
-#~ msgid "PROJECT_FILE [SEARCH TERMS...]"
-#~ msgstr "FICHEIRO_DE_PROXECTO [TERMOS DE BUSCA...]"
-
-#~ msgid "HTML Preview"
-#~ msgstr "Previsualización HTML"
-
-#~ msgid "State Machine"
-#~ msgstr "Máquina de estados"
-
-#~ msgid "Whether the close button should be shown in tags."
-#~ msgstr "Indica se o botón de pechar debería mostrarse nas etiquetas."
-
-#~ msgid "Label"
-#~ msgstr "Etiqueta"
-
-#~ msgid "Text to show on the tag."
-#~ msgstr "Texto a mostrar na etiqueta."
-
-#~ msgid "Tag has a close button"
-#~ msgstr "A etiqueta ten un botón de pechar"
-
-#~ msgid "Whether the tag has a close button."
-#~ msgstr "Indica se a etiqueta ten un botón de pechar."
-
-#~ msgid "Style"
-#~ msgstr "Estilo"
-
-#~ msgid "Style of the tag."
-#~ msgstr "Estilo da etiqueta."
-
-#~ msgid "The name of the column"
-#~ msgstr "O nome da columna"
-
-#~ msgid "Value Type"
-#~ msgstr "Tipo do valor"
-
-#~ msgid "Timespan"
-#~ msgstr "Espazo de tempo"
-
-#~ msgid "Max Samples"
-#~ msgstr "Máximo de mostras"
-
-#~ msgid "The data table for the graph."
-#~ msgstr "A táboa de datos para o grafo."
-
-#~ msgid "Column"
-#~ msgstr "Columna"
-
-#~ msgid "Line Width"
-#~ msgstr "Ancho da liña"
-
-#~ msgid "Stroke Color"
-#~ msgstr "Cor do riscado"
-
-#~ msgid "Stroke Color RGBA"
-#~ msgstr "Cor RGBA do riscado"
-
-#~ msgid "Timespan to visualize, in microseconds."
-#~ msgstr "Espazo de tempo que mostrar, en microsegundos."
-
-#~ msgid "Value Max"
-#~ msgstr "Valor máximo"
-
-#~ msgid "Value Min"
-#~ msgstr "Valor mínimo"
-
-#~ msgid "Encoding"
-#~ msgstr "Codificación"
-
-#~ msgid "URI"
-#~ msgstr "URI"
-
-#~ msgid "Bug Database"
-#~ msgstr "Base de datos de erros"
-
-#~ msgid "Category"
-#~ msgstr "Categoría"
-
-#~ msgid "Homepage"
-#~ msgstr "Páxina web"
-
-#~ msgid "Languages"
-#~ msgstr "Idiomas"
-
-#~ msgid "Shortdesc"
-#~ msgstr "Descrición curta"
-
-#~ msgid "The email of the person."
-#~ msgstr "O correo da persona."
-
-#~ msgid "The name of the person."
-#~ msgstr "O nome da persona."
-
-#~ msgid "The repository to use for calculating diffs."
-#~ msgstr "O repositorio usado para calcular diferenzas."
-
-#~ msgid "A fraction containing the operation progress."
-#~ msgstr "Unha francción que contén o progreso da operación."
-
-#~ msgid "The git repository for the project."
-#~ msgstr "O repositorio git para o proxecto."
-
-#~ msgid "The location of the navigation item."
-#~ msgstr "A localización do elemento de navegación."
-
-#~ msgid "Can Go Backward"
-#~ msgstr "Pode ir cara atrás"
-
-#~ msgid "If there are more backward navigation items."
-#~ msgstr "Se hai máis elementos de navegación cara atrás."
-
-#~ msgid "Can Go Forward"
-#~ msgstr "Pode ir cara adiante"
-
-#~ msgid "If there are more forward navigation items."
-#~ msgstr "Se hai máis elementos de navegación cara adiante."
-
-#~ msgid "The current navigation item."
-#~ msgstr "O elemento de navegación actual."
-
-#~ msgid "Busy"
-#~ msgstr "Ocupado"
-
-#~ msgid "If the buffer is performing background work."
-#~ msgstr "Indica se o búfer se atopa realizando traballos en segundo plano."
-
-#~ msgid "Changed on Volume"
-#~ msgstr "Cambiado no volume"
-
-#~ msgid "If the file has changed on disk and the buffer is not in sync."
-#~ msgstr ""
-#~ "Indica se o ficheiro cambiou no disco e o búfer non está sincronizado."
-
-#~ msgid "Context"
-#~ msgstr "Contexto"
-
-#~ msgid "The IdeContext for the buffer."
-#~ msgstr "O IdeContext para o búfer."
-
-#~ msgid "The file represented by the buffer."
-#~ msgstr "O ficheiro representado por o búfer."
-
-#~ msgid "If the underlying file is read only."
-#~ msgstr "Indica se o ficheiro subxacente é de só lectura."
-
-#~ msgid "Style Scheme Name"
-#~ msgstr "Nome do esquema do estilo"
-
-#~ msgid "The title of the buffer."
-#~ msgstr "O título do búfer."
-
-#~ msgid "Buffer"
-#~ msgstr "Buffer"
-
-#~ msgid "The IdeBuffer to be monitored."
-#~ msgstr "O IdeBuffer a monitorizar."
-
-#~ msgid "If the documents should auto save after a configured timeout."
-#~ msgstr ""
-#~ "Indica se os documentos deben gardarse automaticamente despois dun "
-#~ "determinado tempo."
-
-#~ msgid "Auto Save Timeout"
-#~ msgstr "Intervalo de gardado automático"
-
-#~ msgid "Focused Buffer"
-#~ msgstr "Búfer enfocado"
-
-#~ msgid "The currently focused buffer."
-#~ msgstr "O búfer que actualmente ten o foco."
-
-#~ msgid "The project file."
-#~ msgstr "O ficheiro do proxecto."
-
-#~ msgid "Back Forward List"
-#~ msgstr "Lista adiante e atrás"
-
-#~ msgid "Back/forward navigation history for the context."
-#~ msgstr "Histórico de navegación adiante e atrás para o contexto."
-
-#~ msgid "Buffer Manager"
-#~ msgstr "Xestor do búfer"
-
-#~ msgid "The buffer manager for the context."
-#~ msgstr "O xestor de búferes para o contexto."
-
-#~ msgid "The build system used by the context."
-#~ msgstr "O sistema de construción usado polo contexto."
-
-#~ msgid "The device manager for the context."
-#~ msgstr "O xestor de dispositivos para o contexto."
-
-#~ msgid "The project for the context."
-#~ msgstr "O proxecto para o contexto"
-
-#~ msgid "The project file for the context."
-#~ msgstr "O ficheiro de proxecto para o contexto."
-
-#~ msgid "Script Manager"
-#~ msgstr "Xestor de scripts"
-
-#~ msgid "The script manager for the context."
-#~ msgstr "O xestor de scripts para o contexto."
-
-#~ msgid "The search engine for the context."
-#~ msgstr "O motor de busca para o contexto."
-
-#~ msgid "The snippets manager for the context."
-#~ msgstr "O xestor de fragmentos para o contexto."
-
-#~ msgid "The unsaved files in the context."
-#~ msgstr "Os ficheiros non gardados no contexto."
-
-#~ msgid "VCS"
-#~ msgstr "VCS"
-
-#~ msgid "The VCS for the context."
-#~ msgstr "O VCS para o contexto."
-
-#~ msgid "The display name of the device."
-#~ msgstr "O nome en pantalla do dispositivo."
-
-#~ msgid "The device identifier."
-#~ msgstr "O identificador do dispositivo."
-
-#~ msgid "System Type"
-#~ msgstr "Tipo de sistema"
-
-#~ msgid "The system type for which to compile."
-#~ msgstr "O tipo de sistema para o que compilar."
-
-#~ msgid "If the device providers have settled."
-#~ msgstr "Se os fornecedores de dispositivo foron asentados."
-
-#~ msgid "Engine"
-#~ msgstr "Motor"
-
-#~ msgid "The extension object."
-#~ msgstr "O obxecto da extensión."
-
-#~ msgid "Key"
-#~ msgstr "Chave"
-
-#~ msgid "The external data key to match from plugin info."
-#~ msgstr "A chave de datos externos non coincide coa información do engadido."
-
-#~ msgid "The external data value to match from plugin info."
-#~ msgstr ""
-#~ "O valor dos datos externos que comparar coa información do engadido."
-
-#~ msgid "The path to the underlying file."
-#~ msgstr "A ruta do ficheiro subxacente."
-
-#~ msgid "Is Temporary"
-#~ msgstr "É temporal"
-
-#~ msgid "If the file represents a temporary file."
-#~ msgstr "Se o ficheiro representa un ficheiro temporal."
-
-#~ msgid "The file language."
-#~ msgstr "O linguaxe do ficheiro"
-
-#~ msgid "Temporary ID"
-#~ msgstr "ID temporal"
-
-#~ msgid "A unique identifier for temporary files."
-#~ msgstr "Un identificador único para ficheiros temporais."
-
-#~ msgid "The IdeFile the settings represent."
-#~ msgstr "O IdleFile ao que representa a configuración."
-
-#~ msgid "If the file settings implementations have settled."
-#~ msgstr "Se as implementacións das preferencias de ficheiro foron asentadas."
-
-#~ msgid "The buffer to highlight."
-#~ msgstr "O búfer a realzar."
-
-#~ msgid "The highlighter to use for type information."
-#~ msgstr "O realzador a usar para o tipo de información."
-
-#~ msgid "The context that owns the object."
-#~ msgstr "O contexto ao que pertence o obxecto."
-
-#~ msgid "If the progress has completed."
-#~ msgstr "Se o progreso se completou."
-
-#~ msgid "The fraction of the progress."
-#~ msgstr "A fracción do progreso."
-
-#~ msgid "A short message for the progress."
-#~ msgstr "Unha mensaxe curta do progreso."
-
-#~ msgid "The unique project identifier."
-#~ msgstr "O identificador de proxecto único."
-
-#~ msgid "Root"
-#~ msgstr "Raíz"
-
-#~ msgid "The root object for the project."
-#~ msgstr "O obxecto raíz para o proxecto."
-
-#~ msgid "A GFile to the underlying file."
-#~ msgstr "Un GFile ao ficheiro subxacente."
-
-#~ msgid "File Info"
-#~ msgstr "Información do ficheiro"
-
-#~ msgid "The file information for the project file."
-#~ msgstr "A información do ficheiro para o ficheiro do proxecto"
-
-#~ msgid "The short name of the file."
-#~ msgstr "O nome curto do ficheiro."
-
-#~ msgid "The project directory."
-#~ msgstr "O cartafol do proxecto."
-
-#~ msgid "DOAP"
-#~ msgstr "DOAP"
-
-#~ msgid "A DOAP describing the project."
-#~ msgstr "O DOAP describindo o proxecto."
-
-#~ msgid "The toplevel project file."
-#~ msgstr "O ficheiro de nivel superior do proxecto."
-
-#~ msgid "Last Modified At"
-#~ msgstr "Última modificación ás"
-
-#~ msgid "Priority"
-#~ msgstr "Prioridade"
-
-#~ msgid "The priority of the project information type."
-#~ msgstr "A prioridade do tipo de información do proxecto."
-
-#~ msgid "Parent"
-#~ msgstr "Pai"
-
-#~ msgid "The parent project item, if not the root."
-#~ msgstr "O elemento pai do proxecto, se non é a raíz."
-
-#~ msgid "The file containing the script."
-#~ msgstr "O ficheiro que contén o script."
-
-#~ msgid "Scripts Directory"
-#~ msgstr "Cartafol de scripts"
-
-#~ msgid "The local path to the directory containing scripts."
-#~ msgstr "A ruta local ao cartafol contendo os scripts."
-
-#~ msgid "Provider"
-#~ msgstr "Fornecedor"
-
-#~ msgid "The Search Provider"
-#~ msgstr "O fornecedor de busca"
-
-#~ msgid "The title of the search result."
-#~ msgstr "O título dos resultados da busca."
-
-#~ msgid "Subtitle"
-#~ msgstr "Subtítulo"
-
-#~ msgid "The subtitle of the search result."
-#~ msgstr "O subtítulo dos resultados da busca."
-
-#~ msgid "Score"
-#~ msgstr "Puntuación"
-
-#~ msgid "The score of the search result."
-#~ msgstr "A puntuación dos resultados da busca."
-
-#~ msgid "Ignore Project Settings"
-#~ msgstr "Ignorar as preferencias do proxecto"
-
-#~ msgid "If project settings should be ignored."
-#~ msgstr "Indica se as preferencias do proxecto deben ignorarse."
-
-#~ msgid "Relative Path"
-#~ msgstr "Ruta relativa"
-
-#~ msgid "Schema ID"
-#~ msgstr "ID do esquema"
-
-#~ msgid "The GtkTextBuffer for the snippet."
-#~ msgstr "O GtkTextBuffer para o snippet."
-
-#~ msgid "Mark Begin"
-#~ msgstr "Marca de inicio"
-
-#~ msgid "The beginning text mark."
-#~ msgstr "A marca de inicio do texto."
-
-#~ msgid "Mark End"
-#~ msgstr "Marca de fin"
-
-#~ msgid "The ending text mark."
-#~ msgstr "A marca de final do texto."
-
-#~ msgid "The trigger for the snippet."
-#~ msgstr "O disparador para o fragmento."
-
-#~ msgid "The description for the snippet."
-#~ msgstr "A descrición para o fragmento."
-
-#~ msgid "Tab Stop"
-#~ msgstr "Tabulación"
-
-#~ msgid "The current tab stop."
-#~ msgstr "A tabulación actual."
-
-#~ msgid "The entire snippet text from the source file."
-#~ msgstr "O texto enteiro do framento desde o ficheiro fonte."
-
-#~ msgid "The snippet context."
-#~ msgstr "O contexto do fragmento."
-
-#~ msgid "Spec"
-#~ msgstr "Especificación"
-
-#~ msgid "The specification to expand using the context."
-#~ msgstr "A especificación que expandir usando o contexto."
-
-#~ msgid "The tab stop for the chunk."
-#~ msgstr "A tabulación para o anaco."
-
-#~ msgid "Text"
-#~ msgstr "Texto"
-
-#~ msgid "The text for the chunk."
-#~ msgstr "O texto para o anaco."
-
-#~ msgid "If the text property has been manually set."
-#~ msgstr "Indica se a propiedade de texto foi estabelecido manualmente"
-
-#~ msgid "Snippet"
-#~ msgstr "Fragmento"
-
-#~ msgid "The snippet to insert."
-#~ msgstr "O fragmento a insertar."
-
-#~ msgid "Source View"
-#~ msgstr "Vista de código fonte"
-
-#~ msgid "The source view to insert snippet into."
-#~ msgstr "A vista de código na que insertar o fragmento."
-
-#~ msgid "The snippets to complete with this provider."
-#~ msgstr "Os fragmentos que completar con este fornecedor."
-
-#~ msgid "The back-forward list to track jumps."
-#~ msgstr "A lista cara adiante e cara atrás para rexistrar saltos."
-
-#~ msgid "The count for movements."
-#~ msgstr "A contía de movementos."
-
-#~ msgid "File Settings"
-#~ msgstr "Preferencias do ficheiro"
-
-#~ msgid "The file settings that have been loaded for the file."
-#~ msgstr "As preferencias de ficheiro que se cargou para o ficheiro."
-
-#~ msgid "The Pango font description to use for rendering source."
-#~ msgstr ""
-#~ "A descrición do tipo de letra Pango que usar para renderizar a fonte."
-
-#~ msgid "If words from all buffers can be used to autocomplete."
-#~ msgstr "Se se poden usar as palabras de todos os búferes para o completado."
-
-#~ msgid "Font Name"
-#~ msgstr "Nome do tipo de letra"
-
-#~ msgid "The Pango font name to use for rendering source."
-#~ msgstr "O nome do tipo de letra Pango que usar para renderizar a fonte."
-
-#~ msgid "Indenter"
-#~ msgstr "Sangrador"
-
-#~ msgid "Insert a matching brace/bracket/quotation/parenthesis."
-#~ msgstr "Inserir unha chave/chave/cita/paréntese coincidente."
-
-#~ msgid "Mode Display Name"
-#~ msgstr "Nome do modo de visualización"
-
-#~ msgid "The display name of the keybinding mode."
-#~ msgstr "O nome que mostrar do modo de combinacións de teclas."
-
-#~ msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
-#~ msgstr "Sobrescribir unha chave/corchete/cita/parénteses coincidente."
-
-#~ msgid "Auto scroll to next search result without moving insertion caret."
-#~ msgstr ""
-#~ "Desprazamento automático ao seguinte resultado da busca sen mover o punto "
-#~ "de inserción."
-
-#~ msgid ""
-#~ "The number of lines between the insertion cursor and screen boundary."
-#~ msgstr ""
-#~ "O número de liñas entre o punto de inserción e o límite da pantalla."
-
-#~ msgid "Search Context"
-#~ msgstr "Contexto da busca."
-
-#~ msgid "The search context for the view."
-#~ msgstr "O contexto da busca para a vista."
-
-#~ msgid "If the background grid should be shown."
-#~ msgstr "Indica se se debe mostrar a grella de fondo."
-
-#~ msgid "If line changes should be shown in the left gutter."
-#~ msgstr "Se se deben mostrar os cambios de liñas no lateral esquerdo."
-
-#~ msgid "If line changes diagnostics should be shown in the left gutter."
-#~ msgstr ""
-#~ "Indica se se deben mostrar o diagnóstico de liñas no lateral esquerdo."
-
-#~ msgid "If search bubbles should be rendered."
-#~ msgstr "Indica se se deberían renderizar as burbullsa de busca"
-
-#~ msgid "Show Search Shadow"
-#~ msgstr "Mostrar sombra da busca"
-
-#~ msgid "If the shadow should be drawn when performing searches."
-#~ msgstr "Indica se se debería debuxar a sombra ao realizar buscas."
-
-#~ msgid "View"
-#~ msgstr "Vista"
-
-#~ msgid "The source view."
-#~ msgstr "A vista de código."
-
-#~ msgid "The name of the mode."
-#~ msgstr "O nome do modo."
-
-#~ msgid "Kind"
-#~ msgstr "Tipo"
-
-#~ msgid "Flags"
-#~ msgstr "Bandeiras"
-
-#~ msgid "The duration of the animation"
-#~ msgstr "A duración da animación"
-
-#~ msgid "An optional frame-clock to synchronize with."
-#~ msgstr "Un marco de reloxo opcional co que sincronizar."
-
-#~ msgid "Mode"
-#~ msgstr "Modo"
-
-#~ msgid "The animation mode"
-#~ msgstr "O modo de animación"
-
-#~ msgid "The target of the animation"
-#~ msgstr "O obxectivo da animación"
-
-#~ msgid "Alpha"
-#~ msgstr "Alfa"
-
-#~ msgid "background"
-#~ msgstr "fondo"
-
-#~ msgid "height"
-#~ msgstr "alto"
-
-#~ msgid "width"
-#~ msgstr "ancho"
-
-#~ msgid "x"
-#~ msgstr "x"
-
-#~ msgid "y"
-#~ msgstr "y"
-
-#~ msgid "Tarball Name"
-#~ msgstr "Nome do ficheiro tar"
-
-#~ msgid "The name of the project tarball."
-#~ msgstr "O nome do ficheiro tar do proxecto."
-
-#~ msgid "The path of the project file."
-#~ msgstr "A ruta do ficheiro do proxecto."
-
-#~ msgid "The overlay config for the compilation."
-#~ msgstr "A configuración superposta para compilación."
-
-#~ msgid "If autogen.sh should be forced to execute."
-#~ msgstr "Indica se debería forzarse a execución de autogen.sh"
-
-#~ msgid "If configure should be forced to execute."
-#~ msgstr "Indica se debería forzarse a execución de configure"
-
-#~ msgid "The root directory to scan from."
-#~ msgstr "O cartafol raíz no que analizar."
-
-#~ msgid "The root makefile to be cached."
-#~ msgstr "O makefile raíz que cachear."
-
-#~ msgid "Index"
-#~ msgstr "Índice"
-
-#~ msgid "The index in the result set."
-#~ msgstr "O índice no conxunto de resultados."
-
-#~ msgid "The Clang result set."
-#~ msgstr "O conxunto de resultados de Clang."
-
-#~ msgid "Native"
-#~ msgstr "Nativo"
-
-#~ msgid "The file used to build the translation unit."
-#~ msgstr "O ficheiro usado para construir a unidade de traducción."
-
-#~ msgid "The highlight index for the translation unit."
-#~ msgstr "O índice de realce para a unidade de tradución."
-
-#~ msgid "The native translation unit pointer."
-#~ msgstr "O punteiro da unidade de tradución nativa."
-
-#~ msgid "Serial"
-#~ msgstr "Serie"
-
-#~ msgid "A sequence number for the translation unit."
-#~ msgstr "Unha secuencia de números para a unidade de translación."
-
-#~ msgid "Action Group"
-#~ msgstr "Grupo de accións"
-
-#~ msgid "The GActionGroup containing the action."
-#~ msgstr "O GActionGroup que contén a acción."
-
-#~ msgid "The parameters for the action."
-#~ msgstr "Os parámetros para a acción."
-
-#~ msgid "Active View"
-#~ msgstr "Vista activa"
-
-#~ msgid "The last focused GbView widget."
-#~ msgstr "O último widget GbView enfocado."
-
-#~ msgid "The priority of the command provider."
-#~ msgstr "A prioridade do fornecedor de orde."
-
-#~ msgid "The command text if any."
-#~ msgstr "O texto da orde se o hai."
-
-#~ msgid "If the result is an error."
-#~ msgstr "Se o resultado é un erro."
-
-#~ msgid "If the command is still running."
-#~ msgstr "Se a orde está aínda executándose."
-
-#~ msgid "The result text if any."
-#~ msgstr "O texto do resultado se o hai."
-
-#~ msgid "The command text to execute"
-#~ msgstr "O texto da orde a executar"
-
-#~ msgid "The source view to modify."
-#~ msgstr "A vista de código fonte a modificar."
-
-#~ msgid "The file containing the ctags data."
-#~ msgstr "O ficheiro que conten os datos de ctags."
-
-#~ msgid "The uri to load."
-#~ msgstr "A uri a cargar."
-
-#~ msgid "The document for the VTE terminal view."
-#~ msgstr "O documento para a vista de terminal VTE."
-
-#~ msgid "The project information for the row."
-#~ msgstr "Os parámetros para a acción."
-
-#~ msgid "If the document has been modified from disk."
-#~ msgstr "Indica se o documento foi modificado desde o disco."
-
-#~ msgid "Auto Hide Map"
-#~ msgstr "Ocultar automáticamente o mapa"
-
-#~ msgid "The back forward list."
-#~ msgstr "A lista cara adiante e cara atrás."
-
-#~ msgid "The editor document."
-#~ msgstr "O editor do documento."
-
-#~ msgid "Show Map"
-#~ msgstr "Mostrar mapa"
-
-#~ msgid "If the overview map should be shown."
-#~ msgstr "Indica se se debería mostrar o mapa de vista xeral."
-
-#~ msgid "The language to change the settings for."
-#~ msgstr "O linguaxe para o que cambiar as configuracións."
-
-#~ msgid "The label for the pill box."
-#~ msgstr "A etiqueta para a caixa de pastillas."
-
-#~ msgid "The project information to render."
-#~ msgstr "A información do proxecto a renderizar."
-
-#~ msgid "The recent projects that have been mined."
-#~ msgstr "Os proxectos recentes que foron extraídos."
-
-#~ msgid "The buffer to monitor for changes."
-#~ msgstr "O búfer que monitorizar por cambios."
-
-#~ msgid "The document to view as HTML."
-#~ msgstr "O documento a ver como HTML."
-
-#~ msgid "The application to register keybindings for."
-#~ msgstr "O aplicativo para o que rexistrar as combinacións."
-
-#~ msgid "The name of the keybindings mode."
-#~ msgstr "O nome do modo das combinacións."
-
-#~ msgid "The title for the preferences page."
-#~ msgstr "O título para a páxina de preferencias."
-
-#~ msgid "The description for the switch."
-#~ msgstr "A descrición para o trocador."
-
-#~ msgid "Is Radio"
-#~ msgstr "É un radio"
-
-#~ msgid "If a radio button should be used."
-#~ msgstr "Indica se se debería usar un botón de radio "
-
-#~ msgid "Settings"
-#~ msgstr "Preferencias"
-
-#~ msgid "The GSettings for the setting."
-#~ msgstr "O GSettings para a preferencia."
-
-#~ msgid "Settings Schema Key"
-#~ msgstr "Chave do esquema de preferencias."
-
-#~ msgid "The settings schema key."
-#~ msgstr "A chave do esquema de preferencias."
-
-#~ msgid "Settings Schema Value"
-#~ msgstr "Valor do esquema de preferencias."
-
-#~ msgid "An action-target for the settings action."
-#~ msgstr "O acción-obxectivo para a acción das preferencias"
-
-#~ msgid "The sizing group for the control."
-#~ msgstr "O grupo de tamaño para o control."
-
-#~ msgid "The file type to create."
-#~ msgstr "O tipo de ficheiro a crear."
-
-#~ msgid "Icon Name"
-#~ msgstr "Nome da icona"
-
-#~ msgid "Max Content Height"
-#~ msgstr "Alto máximo do contido"
-
-#~ msgid "The maximum height request that can be made."
-#~ msgstr "O alto máximo solicita o que pode facerse."
-
-#~ msgid "Max Content Width"
-#~ msgstr "Ancho máximo do contido"
-
-#~ msgid "The maximum width request that can be made."
-#~ msgstr "O ancho máximo solicita o que pode facerse."
-
-#~ msgid "The active search context."
-#~ msgstr "O conxecto de busca activo."
-
-#~ msgid "The search provider"
-#~ msgstr "O fornecedor de busca"
-
-#~ msgid "The size group for the label."
-#~ msgstr "O grupo de tamaño para a etiqueta."
-
-#~ msgid "Tree"
-#~ msgstr "Árbore"
-
-#~ msgid "The GbTree the builder belongs to."
-#~ msgstr "O GbTree ao que pertence o construtor."
-
-#~ msgid "The root object of the tree."
-#~ msgstr "O obxecto raíz para a árbore."
-
-#~ msgid "The node selection."
-#~ msgstr "A selección de nodo."
-
-#~ msgid "The icon name to display."
-#~ msgstr "O nome da icona a mostrar."
-
-#~ msgid "Item"
-#~ msgstr "Elemento"
-
-#~ msgid "Optional object to associate with node."
-#~ msgstr "Obxecto opcional para asociar co nodo."
-
-#~ msgid "The parent node."
-#~ msgstr "O nodo pai."
-
-#~ msgid "The GbTree the node belongs to."
-#~ msgstr "O GbTree ao que pertence o nodo."
-
-#~ msgid "The text of the node."
-#~ msgstr "O texto do nodo."
-
-#~ msgid "Use Markup"
-#~ msgstr "Usar marcado"
-
-#~ msgid "If text should be translated as markup."
-#~ msgstr "Indica se o texto debería traducirse como marcado."
-
-#~ msgid "Use Dim Label"
-#~ msgstr "Usar etiqueta Dim"
-
-#~ msgid "If text should be rendered with a dim label."
-#~ msgstr "Indica se se debería renderizar con unha etiqueta dim."
-
-#~ msgid "Can Split"
-#~ msgstr "Pode partirse"
-
-#~ msgid "If the view can be split."
-#~ msgstr "Indica se a vista pode partirse."
-
-#~ msgid "The underlying document."
-#~ msgstr "O documento subxacente."
-
-#~ msgid "If the document has been modified."
-#~ msgstr "Indica se o documento foi modificado."
-
-#~ msgid "The view title."
-#~ msgstr "O título da vista."
-
-#~ msgid "The active view."
-#~ msgstr "A vista activa."
-
-#~ msgid "If the project is currently building."
-#~ msgstr "Se o asistente de código está procesando actualmente."
-
-#~ msgid "The IdeContext for the workbench."
-#~ msgstr "O IdeContext para o banco de traballo."
-
-#~ msgid "Position"
-#~ msgstr "Posición"
-
-#~ msgid "Which slider child is visible."
-#~ msgstr "Que deslizador fillo é visíbel."
-
-#~ msgid "The left workspace pane."
-#~ msgstr "O panel esquerdo do espazo de traballo."
-
-#~ msgid "Content Pane"
-#~ msgstr "Panel de contido"
-
-#~ msgid "The content workspace pane."
-#~ msgstr "O panel de contido do espazo de traballo."
-
-#~ msgid "The position of the pane relative to its edge."
-#~ msgstr "A posición do panel relativa ao seu borde."
-
-#~ msgid "Reveal"
-#~ msgstr "Mostrar"
-
-#~ msgid "Failed to load local keybindings: %s"
-#~ msgstr "Produciuse un fallo ao cargar os atallos de teclado locais: %s"
-
-#~ msgid "Active DocumentView"
-#~ msgstr "DocumentView activo"
-
-#~ msgid "Progress"
-#~ msgstr "Progreso"
