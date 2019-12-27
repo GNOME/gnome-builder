@@ -280,7 +280,7 @@ msgstr "Inici i final intel·ligents"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:61
 msgid "Whether or not Home moves to first non-space character."
-msgstr "Si s'ha de moure l'inici al primer caràcter no espai."
+msgstr "Si Inici mou o no el cursor al primer caràcter que no sigui un espai en blanc."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 msgid "Show grid lines"
@@ -354,7 +354,7 @@ msgstr "Habilita o deshabilita la característica desat automàtic."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 #: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Autosave Frequency"
-msgstr "Desa automàticament la freqüència"
+msgstr "Freqüència del desat automàtic"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of seconds after modification before auto saving."
@@ -813,7 +813,7 @@ msgstr "Paletes"
 
 #: src/gstyle/ui/gstyle-color-panel.ui:946 src/plugins/color-picker/gtk/color-picker.ui:49
 msgid "No open palettes"
-msgstr "Paletes no obertes"
+msgstr "No hi ha paletes obertes"
 
 #: src/gstyle/ui/gstyle-color-panel.ui:959
 msgid "Load or generate a palette using the preferences"
@@ -1064,7 +1064,7 @@ msgstr "Distingeix majúscules i minúscules"
 #: src/libide/editor/ide-editor-search-bar.c:189
 #: src/libide/editor/ide-editor-search-bar.ui:240
 msgid "Match whole word only"
-msgstr "Cerca paraules senceres"
+msgstr "Cerca només paraules senceres"
 
 #: src/libide/editor/ide-editor-search-bar.c:351
 #, c-format
@@ -1174,7 +1174,7 @@ msgstr "Espais per tabulador"
 #. List of pages that are open
 #: src/libide/editor/ide-editor-sidebar.ui:31 src/libide/gui/ide-frame-header.ui:21
 msgid "Open Pages"
-msgstr "Obre pàgines"
+msgstr "Pàgines obertes"
 
 #: src/libide/editor/ide-editor-surface-actions.c:72
 msgid "Open File"
@@ -1466,7 +1466,7 @@ msgstr "Nom de l'autor"
 
 #: src/libide/greeter/ide-clone-surface.ui:216
 msgid "Author Email"
-msgstr "E-mail autor"
+msgstr "E-mail de l'autor"
 
 #: src/libide/greeter/ide-clone-surface.ui:252
 msgid "Project Destination"
@@ -2409,7 +2409,7 @@ msgstr "Vés a la línia"
 #: src/libide/gui/ide-shortcuts-window.ui:191
 msgctxt "shortcut window"
 msgid "Find the next match"
-msgstr "Troba la coincidència  següent"
+msgstr "Troba la coincidència següent"
 
 #: src/libide/gui/ide-shortcuts-window.ui:198
 msgctxt "shortcut window"
