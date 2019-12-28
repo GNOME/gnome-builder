@@ -70,6 +70,10 @@ snippet no_main
 - desc #![no_main]
 	#![no_main]
 	$0
+snippet non_exhaustive
+- desc #[non_exhaustive]
+	#[non_exhaustive]
+	$0
 snippet inline
 - desc #[inline]
 	#[inline]
@@ -277,6 +281,9 @@ snippet unreachable
 snippet unimplemented
 - desc unimplemented!()
 	unimplemented!()$0
+snippet todo
+- desc todo!()
+	todo!()$0
 snippet assert
 - desc assert!(…)
 	assert!(${1:expression})$0
