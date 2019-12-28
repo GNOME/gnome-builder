@@ -227,7 +227,8 @@ retry:
 		return found;
 
 	/* end of the string, always valid */
-	if (*(found-1) == ' ' && *(found+1) == ' ') {
+	if ((*(found-1) == ' ' && *(found+1) == ' ') ||
+	    (*(found-1) != ' ' && *(found+1) != ' ')) {
 		haystack_new = found+1;
 		goto retry;
 	}
