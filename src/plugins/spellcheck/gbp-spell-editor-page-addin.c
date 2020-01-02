@@ -96,13 +96,13 @@ static const GActionEntry actions[] = {
   { "cancel-spellcheck", gbp_spell_editor_page_addin_cancel },
 };
 
-  static const DzlShortcutEntry spellchecker_shortcut_entry[] = {
-    { "org.gnome.builder.editor-page.spellchecker",
-      0, NULL,
-      NC_("shortcut window", "Editor shortcuts"),
-      NC_("shortcut window", "Editing"),
-      NC_("shortcut window", "Show the spellchecker panel") },
-  };
+static const DzlShortcutEntry spellchecker_shortcut_entry[] = {
+  { "org.gnome.builder.editor-page.spellchecker",
+    0, NULL,
+    N_("Editor shortcuts"),
+    N_("Editing"),
+    N_("Show the spellchecker panel") },
+};
 
 static void
 gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,

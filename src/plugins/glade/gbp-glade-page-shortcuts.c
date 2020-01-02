@@ -33,27 +33,27 @@
 static DzlShortcutEntry glade_view_shortcuts[] = {
   { "org.gnome.builder.glade-view.save",
     0, NULL,
-    NC_("shortcut window", "Glade shortcuts"),
-    NC_("shortcut window", "Designer"),
-    NC_("shortcut window", "Save the interface design") },
+    N_("Glade shortcuts"),
+    N_("Designer"),
+    N_("Save the interface design") },
 
   { "org.gnome.builder.glade-view.preview",
     0, NULL,
-    NC_("shortcut window", "Glade shortcuts"),
-    NC_("shortcut window", "Designer"),
-    NC_("shortcut window", "Preview the interface design") },
+    N_("Glade shortcuts"),
+    N_("Designer"),
+    N_("Preview the interface design") },
 
   { "org.gnome.builder.glade-view.undo",
     0, NULL,
-    NC_("shortcut window", "Glade shortcuts"),
-    NC_("shortcut window", "Designer"),
-    NC_("shortcut window", "Undo the last command") },
+    N_("Glade shortcuts"),
+    N_("Designer"),
+    N_("Undo the last command") },
 
   { "org.gnome.builder.glade-view.redo",
     0, NULL,
-    NC_("shortcut window", "Glade shortcuts"),
-    NC_("shortcut window", "Designer"),
-    NC_("shortcut window", "Redo the next command") },
+    N_("Glade shortcuts"),
+    N_("Designer"),
+    N_("Redo the next command") },
 };
 
 void

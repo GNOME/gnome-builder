@@ -40,9 +40,9 @@ struct _IdeSearchButton
 static const DzlShortcutEntry shortcuts[] = {
   { "org.gnome.builder.workspace.global-search",
     0, NULL,
-    NC_("shortcut window", "Workspace shortcuts"),
-    NC_("shortcut window", "Search"),
-    NC_("shortcut window", "Focus to the global search entry") },
+    N_("Workspace shortcuts"),
+    N_("Search"),
+    N_("Focus to the global search entry") },
 };
 
 G_DEFINE_TYPE (IdeSearchButton, ide_search_button, DZL_TYPE_SUGGESTION_BUTTON)

@@ -42,9 +42,9 @@ _ide_application_init_shortcuts (IdeApplication *self)
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("app.help"),
-                                   NC_("shortcut window", "Workbench shortcuts"),
-                                   NC_("shortcut window", "Help"),
-                                   NC_("shortcut window", "Show the help window"),
+                                   N_("Workbench shortcuts"),
+                                   N_("Help"),
+                                   N_("Show the help window"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme,
                                            "app.help",
@@ -53,9 +53,9 @@ _ide_application_init_shortcuts (IdeApplication *self)
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("app.preferences"),
-                                   NC_("shortcut window", "Workbench shortcuts"),
-                                   NC_("shortcut window", "Preferences"),
-                                   NC_("shortcut window", "Show the preferences window"),
+                                   N_("Workbench shortcuts"),
+                                   N_("Preferences"),
+                                   N_("Show the preferences window"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme,
                                            "app.preferences",
@@ -64,9 +64,9 @@ _ide_application_init_shortcuts (IdeApplication *self)
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("app.shortcuts"),
-                                   NC_("shortcut window", "Workbench shortcuts"),
-                                   NC_("shortcut window", "Help"),
-                                   NC_("shortcut window", "Show the shortcuts window"),
+                                   N_("Workbench shortcuts"),
+                                   N_("Help"),
+                                   N_("Show the shortcuts window"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme,
                                            "app.shortcuts",

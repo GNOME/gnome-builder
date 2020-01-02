@@ -354,21 +354,21 @@ static const GActionEntry terminal_actions[] = {
 static const DzlShortcutEntry gbp_terminal_shortcut_entries[] = {
   { "org.gnome.builder.workspace.new-terminal",
     0, NULL,
-    NC_("shortcut window", "Workspace shortcuts"),
-    NC_("shortcut window", "General"),
-    NC_("shortcut window", "Terminal") },
+    N_("Workspace shortcuts"),
+    N_("General"),
+    N_("Terminal") },
 
   { "org.gnome.builder.workspace.new-terminal-in-runtime",
     0, NULL,
-    NC_("shortcut window", "Workspace shortcuts"),
-    NC_("shortcut window", "General"),
-    NC_("shortcut window", "Terminal in Build Runtime") },
+    N_("Workspace shortcuts"),
+    N_("General"),
+    N_("Terminal in Build Runtime") },
 
   { "org.gnome.builder.workspace.new-terminal-in-runner",
     0, NULL,
-    NC_("shortcut window", "Workspace shortcuts"),
-    NC_("shortcut window", "General"),
-    NC_("shortcut window", "Terminal in Runtime") },
+    N_("Workspace shortcuts"),
+    N_("General"),
+    N_("Terminal in Runtime") },
 };
 
 static void

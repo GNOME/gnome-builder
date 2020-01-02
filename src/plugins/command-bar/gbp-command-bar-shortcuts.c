@@ -33,9 +33,9 @@ static const DzlShortcutEntry command_bar_shortcuts[] = {
   { "org.gnome.builder.command-bar.reveal",
     DZL_SHORTCUT_PHASE_GLOBAL | DZL_SHORTCUT_PHASE_CAPTURE,
     NULL,
-    NC_("shortcut window", "Workspace Shortcuts"),
-    NC_("shortcut window", "Command Bar"),
-    NC_("shortcut window", "Show the workspace command bar") },
+    N_("Workspace Shortcuts"),
+    N_("Command Bar"),
+    N_("Show the workspace command bar") },
 };
 
 void

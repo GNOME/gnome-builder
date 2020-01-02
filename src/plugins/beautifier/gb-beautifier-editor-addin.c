@@ -340,10 +340,10 @@ static const DzlShortcutEntry beautifier_shortcut_entry[] = {
   { "org.gnome.builder.editor-view.beautifier-default",
     0,
     "<primary><Alt>b",
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Editing"),
-    NC_("shortcut window", "Beautify the code"),
-    NC_("shortcut window", "Trigger the default entry") },
+    N_("Editor shortcuts"),
+    N_("Editing"),
+    N_("Beautify the code"),
+    N_("Trigger the default entry") },
 };
 
 static void

@@ -850,9 +850,9 @@ ide_run_manager_add_handler (IdeRunManager  *self,
 
   dzl_shortcut_manager_add_action (manager,
                                    action_name,
-                                   NC_("shortcut window", "Workbench shortcuts"),
-                                   NC_("shortcut window", "Build and Run"),
-                                   NC_("shortcut window", title),
+                                   N_("Workbench shortcuts"),
+                                   N_("Build and Run"),
+                                   g_dgettext (GETTEXT_PACKAGE, title),
                                    NULL);
 
   dzl_shortcut_theme_set_accel_for_action (theme,

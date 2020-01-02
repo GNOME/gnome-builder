@@ -32,33 +32,33 @@
 static const DzlShortcutEntry editor_surface_entries[] = {
   { "org.gnome.builder.editor.new-file",
     0, NULL,
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Files"),
-    NC_("shortcut window", "Create a new document") },
+    N_("Editor shortcuts"),
+    N_("Files"),
+    N_("Create a new document") },
 
   { "org.gnome.builder.editor.open-file",
     0, NULL,
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Files"),
-    NC_("shortcut window", "Open a document") },
+    N_("Editor shortcuts"),
+    N_("Files"),
+    N_("Open a document") },
 
   { "org.gnome.builder.editor.navigation-panel",
     0, NULL,
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Panels"),
-    NC_("shortcut window", "Toggle navigation panel") },
+    N_("Editor shortcuts"),
+    N_("Panels"),
+    N_("Toggle navigation panel") },
 
   { "org.gnome.builder.editor.utilities-panel",
     0, NULL,
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Panels"),
-    NC_("shortcut window", "Toggle utilities panel") },
+    N_("Editor shortcuts"),
+    N_("Panels"),
+    N_("Toggle utilities panel") },
 
   { "org.gnome.builder.editor.close-all",
     0, NULL,
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Files"),
-    NC_("shortcut window", "Close all files") },
+    N_("Editor shortcuts"),
+    N_("Files"),
+    N_("Close all files") },
 };
 
 void

@@ -52,9 +52,9 @@ typedef struct
 static DzlShortcutEntry symbol_tree_shortcuts[] = {
   { "org.gnome.builder.symbol-tree.search",
     0, NULL,
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Symbols"),
-    NC_("shortcut window", "Search symbols within document") },
+    N_("Editor shortcuts"),
+    N_("Symbols"),
+    N_("Search symbols within document") },
 };
 
 static void

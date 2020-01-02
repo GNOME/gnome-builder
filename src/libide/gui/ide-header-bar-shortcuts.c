@@ -31,15 +31,15 @@
 static DzlShortcutEntry workspace_shortcuts[] = {
   { "org.gnome.builder.workspace.show-menu",
     0, NULL,
-    NC_("shortcut window", "Window shortcuts"),
-    NC_("shortcut window", "General"),
-    NC_("shortcut window", "Show window menu") },
+    N_("Window shortcuts"),
+    N_("General"),
+    N_("Show window menu") },
 
   { "org.gnome.builder.workspace.fullscreen",
     0, NULL,
-    NC_("shortcut window", "Window shortcuts"),
-    NC_("shortcut window", "General"),
-    NC_("shortcut window", "Toggle window to fullscreen") },
+    N_("Window shortcuts"),
+    N_("General"),
+    N_("Toggle window to fullscreen") },
 };
 
 void
