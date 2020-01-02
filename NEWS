@@ -1,4 +1,22 @@
 ==============
+Version 3.35.3
+==============
+
+ • Many bug fixes and build system improvements
+ • Updated URLs for flatpak
+ • Performance improvement for default sourceview styles
+ • Ensure access to document portals
+ • Many improvements to language server protocol support
+ • VTE is now bundled in flatpak builds
+ • Single click support for hyperlinks in build terminals
+ • Improvements to "find other file" for similar file types
+ • Tweak styling for command bar and search button
+ • Add close button to search bar
+ • Podman improvements
+ • Markdown improvements
+ • A new stylelint plugin was added
+
+==============
 Version 3.34.0
 ==============
 
