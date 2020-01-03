@@ -52,6 +52,22 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+static gboolean
+is_symbol_information (GVariant *v)
+{
+  g_auto(GVariantDict) dict = G_VARIANT_DICT_INIT (v);
+
+  return g_variant_dict_contains (&dict, "location");
+}
+
+static gboolean
+is_document_symbol (GVariant *v)
+{
+  g_auto(GVariantDict) dict = G_VARIANT_DICT_INIT (v);
+
+  return g_variant_dict_contains (&dict, "range");
+}
+
 static void
 ide_lsp_symbol_resolver_finalize (GObject *object)
 {
@@ -378,6 +394,7 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
   while (g_variant_iter_loop (&iter, "v", &node))
     {
       g_autoptr(IdeLspSymbolNode) symbol = NULL;
+      const gchar *uri = NULL;
       const gchar *name = NULL;
       const gchar *container_name = NULL;
       gboolean deprecated = FALSE;
@@ -388,25 +405,56 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
         gint64 column;
       } begin, end;
 
-      /* Mandatory fields */
-      success = JSONRPC_MESSAGE_PARSE (node,
-        "name", JSONRPC_MESSAGE_GET_STRING (&name),
-        "kind", JSONRPC_MESSAGE_GET_INT64 (&kind),
-        "range", "{",
-          "start", "{",
-            "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
-            "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
-          "}",
-          "end", "{",
-            "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
-            "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
-          "}",
-        "}"
-      );
+      if (is_symbol_information (node))
+        {
+          success = JSONRPC_MESSAGE_PARSE (node,
+            "name", JSONRPC_MESSAGE_GET_STRING (&name),
+            "kind", JSONRPC_MESSAGE_GET_INT64 (&kind),
+            "location", "{",
+              "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+              "range", "{",
+                "start", "{",
+                  "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+                  "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
+                "}",
+                "end", "{",
+                  "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+                  "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
+                "}",
+              "}",
+            "}"
+          );
+        }
+      else if (is_document_symbol (node))
+        {
+          success = JSONRPC_MESSAGE_PARSE (node,
+            "name", JSONRPC_MESSAGE_GET_STRING (&name),
+            "kind", JSONRPC_MESSAGE_GET_INT64 (&kind),
+            "range", "{",
+              "start", "{",
+                "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+                "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
+              "}",
+              "end", "{",
+                "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+                "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
+              "}",
+            "}"
+          );
+        }
+      else
+        {
+          g_autofree gchar *vstr = g_variant_print (node, TRUE);
+          g_debug ("Unknown element in textDocument/documentSymbol reply: %s", vstr);
+          continue;
+        }
 
       if (!success)
         {
-          IDE_TRACE_MSG ("Failed to parse reply from language server");
+#ifdef IDE_ENABLE_TRACE
+          g_autofree gchar *replystr = g_variant_print (node, TRUE);
+          IDE_TRACE_MSG ("Failed to parse reply from language server: %s", replystr);
+#endif
           continue;
         }
 
