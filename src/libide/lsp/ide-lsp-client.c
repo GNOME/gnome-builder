@@ -883,6 +883,8 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
   g_assert (id != NULL);
   g_assert (JSONRPC_IS_CLIENT (client));
 
+  IDE_TRACE_MSG ("Received remote call for method \"%s\"", method);
+
   if (strcmp (method, "workspace/configuration") == 0)
     {
       g_autoptr(GVariant) config = NULL;
