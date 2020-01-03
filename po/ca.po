@@ -1955,7 +1955,7 @@ msgstr "Permet que l'editor es desplaci més enllà del final de la memòria int
 
 #: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Line Information"
-msgstr "Línia d'informació"
+msgstr "Informació de la línia"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Line numbers"
