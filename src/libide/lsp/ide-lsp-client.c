@@ -899,6 +899,8 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
           jsonrpc_client_reply_async (client, id, config, NULL, NULL, NULL);
           IDE_RETURN (TRUE);
         }
+
+      g_debug ("No configuration provided, ignoring \"workspace/configuration\" request");
     }
   else if (strcmp (method, "workspace/applyEdit") == 0)
     {
