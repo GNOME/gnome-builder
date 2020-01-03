@@ -218,11 +218,11 @@ class RlsService(Ide.Object):
         self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
-class RlsDiagnosticProvider(Ide.LspDiagnosticProvider):
+class RlsDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
     def do_load(self):
         RlsService.bind_client(self)
 
-class RlsCompletionProvider(Ide.LspCompletionProvider):
+class RlsCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
     def do_load(self, context):
         RlsService.bind_client(self)
 
@@ -231,23 +231,23 @@ class RlsCompletionProvider(Ide.LspCompletionProvider):
         # want the results. So use high priority (negative is better).
         return -1000
 
-class RlsRenameProvider(Ide.LspRenameProvider):
+class RlsRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
     def do_load(self):
         RlsService.bind_client(self)
 
-class RlsSymbolResolver(Ide.LspSymbolResolver):
+class RlsSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
     def do_load(self):
         RlsService.bind_client(self)
 
-class RlsHighlighter(Ide.LspHighlighter):
+class RlsHighlighter(Ide.LspHighlighter, Ide.Highlighter):
     def do_load(self):
         RlsService.bind_client(self)
 
-class RlsFormatter(Ide.LspFormatter):
+class RlsFormatter(Ide.LspFormatter, Ide.Formatter):
     def do_load(self):
         RlsService.bind_client(self)
 
-class RlsHoverProvider(Ide.LspHoverProvider):
+class RlsHoverProvider(Ide.LspHoverProvider, Ide.HoverProvider):
     def do_prepare(self):
         self.props.category = 'Rust'
         self.props.priority = 200
