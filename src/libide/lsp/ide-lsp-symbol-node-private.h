@@ -31,12 +31,13 @@ struct _IdeLspSymbolNode
 };
 
 IdeLspSymbolNode *ide_lsp_symbol_node_new (GFile       *file,
-                                                     const gchar *name,
-                                                     const gchar *parent_name,
-                                                     gint         kind,
-                                                     guint        begin_line,
-                                                     guint        begin_column,
-                                                     guint        end_line,
-                                                     guint        end_column);
+                                           const gchar *name,
+                                           const gchar *parent_name,
+                                           gint         kind,
+                                           guint        begin_line,
+                                           guint        begin_column,
+                                           guint        end_line,
+                                           guint        end_column,
+                                           gboolean     deprecated);
 
 G_END_DECLS

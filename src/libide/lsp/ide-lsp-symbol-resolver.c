@@ -380,6 +380,7 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
       g_autoptr(IdeLspSymbolNode) symbol = NULL;
       const gchar *name = NULL;
       const gchar *container_name = NULL;
+      gboolean deprecated = FALSE;
       gboolean success;
       gint64 kind = -1;
       struct {
@@ -411,10 +412,11 @@ ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
 
       /* Optional fields */
       JSONRPC_MESSAGE_PARSE (node, "containerName", JSONRPC_MESSAGE_GET_STRING (&container_name));
+      JSONRPC_MESSAGE_PARSE (node, "deprecated", JSONRPC_MESSAGE_GET_BOOLEAN (&deprecated));
 
       symbol = ide_lsp_symbol_node_new (file, name, container_name, kind,
                                         begin.line, begin.column,
-                                        end.line, end.column);
+                                        end.line, end.column, deprecated);
 
       g_ptr_array_add (symbols, g_steal_pointer (&symbol));
     }
