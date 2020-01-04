@@ -594,7 +594,8 @@
             "buildsystem" : "meson",
             "builddir" : true,
             "ensure-writable" : [
-                "/usr/share/vala/vapi"
+                "/usr/share/vala/vapi/gvls-0.14.vapi",
+                "/usr/share/vala/vapi/gvls-0.14.deps"
 	    ],
             "sources" : [
                 {
