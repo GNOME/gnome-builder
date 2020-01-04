@@ -8,16 +8,8 @@ libvala = dependency('libvala-@0@'.format(libvala_version))
 
 vala_sources = [
   'valaconfig.vapi',
-  'ide-vala-client.vala',
-  'ide-vala-code-indexer.vala',
-  'ide-vala-completion-item.vala',
-  'ide-vala-completion-provider.vala',
-  'ide-vala-diagnostic-provider.vala',
   'ide-vala-indenter.vala',
   'ide-vala-pipeline-addin.vala',
-  'ide-vala-preferences-addin.vala',
-  'ide-vala-symbol-resolver.vala',
-  'ide-vala-symbol-tree.vala',
   'vala-pack-plugin.vala',
 ]
 
@@ -57,8 +49,6 @@ shared_module('plugin-vala-pack', vala_sources,
                          '-Wno-incompatible-pointer-types',
                        ],
 )
-
-subdir('lang-server')
 
 configure_file(
           input: 'vala-pack.plugin',
