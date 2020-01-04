@@ -584,7 +584,12 @@
             "name" : "gvls",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=debugoptimized",
+                "-Dui=false",
+                "-Dui-tests=false",
+                "-Ddocs=false",
+                "-Dintrospection=false",
+                "-Dgedit-plugin=false"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
