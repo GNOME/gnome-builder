@@ -593,6 +593,9 @@
             ],
             "buildsystem" : "meson",
             "builddir" : true,
+            "ensure-writable" : [
+                "/usr/share/vala/vapi"
+	    ],
             "sources" : [
                 {
                     "type" : "git",
