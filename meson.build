@@ -22,7 +22,6 @@ pkglibdir = join_paths(get_option('libdir'), 'gnome-builder')
 pkgincludedir = join_paths(get_option('includedir'), 'gnome-builder')
 pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
-pkgvapidir = join_paths(get_option('datadir'), 'gnome-builder/vapi')
 
 safe_path = get_option('with_safe_path')
 
