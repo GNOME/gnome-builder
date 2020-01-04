@@ -510,7 +510,7 @@
         {
             "name" : "avahi",
             "cleanup" : [
-                "/bin"
+                "/bin/avahi-*"
             ],
             "config-opts" : [
                 "--with-distro=none",
