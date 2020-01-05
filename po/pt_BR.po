@@ -4,15 +4,15 @@
 # Gustavo Marques <gutodisse@gmail.com>, 2015.
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Enrico Nicoletto <liverig@gmail.com>, 2016, 2018.
-# Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2019.
+# Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2020.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2016-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-12-25 12:53+0000\n"
-"PO-Revision-Date: 2019-12-28 00:49-0300\n"
+"POT-Creation-Date: 2020-01-04 02:51+0000\n"
+"PO-Revision-Date: 2020-01-05 17:05-0300\n"
 "Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -128,7 +128,7 @@ msgstr "Um depurador integrado para aplicativos nativos"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Suporte a compilação com runtime do flatpak e do jhbuild"
+msgstr "Suporte a compilação com runtime do Flatpak e do JHBuild"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
 msgid "Support for viewing TODOs found within your code base"
@@ -625,7 +625,7 @@ msgstr "Clonar repositório"
 
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
-msgstr "Novo espaço de trabalho de editor"
+msgstr "Novo espaço de trabalho do editor"
 
 #: data/org.gnome.Builder.desktop.in.in:36
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
@@ -997,7 +997,6 @@ msgstr "Salvar como"
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:55
-msgctxt "shortcut window"
 msgid "Editor shortcuts"
 msgstr "Atalhos do editor"
 
@@ -1012,25 +1011,19 @@ msgstr "Atalhos do editor"
 #: src/libide/gui/ide-frame-shortcuts.c:50
 #: src/libide/gui/ide-frame-shortcuts.c:57
 #: src/libide/gui/ide-frame-shortcuts.c:64
-#: src/libide/gui/ide-shortcuts-window.ui:89
-msgctxt "shortcut window"
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
 msgid "Files"
 msgstr "Arquivos"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:35
-#: src/libide/gui/ide-shortcuts-window.ui:108
-msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Salva o documento"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:41
-msgctxt "shortcut window"
 msgid "Save the document with a new name"
 msgstr "Salva o documento com um novo nome"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:47
-#: src/libide/gui/ide-shortcuts-window.ui:122
-msgctxt "shortcut window"
 msgid "Print the document"
 msgstr "Imprime o documento"
 
@@ -1041,35 +1034,27 @@ msgstr "Imprime o documento"
 #: src/libide/editor/ide-editor-page-shortcuts.c:70
 #: src/libide/editor/ide-editor-page-shortcuts.c:76
 #: src/libide/editor/ide-editor-page-shortcuts.c:82
-#: src/libide/gui/ide-shortcuts-window.ui:165
-#: src/libide/gui/ide-shortcuts-window.ui:184
-msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Localizar e substituir"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:53
-#: src/libide/gui/ide-shortcuts-window.ui:177
-msgctxt "shortcut window"
+#: src/plugins/grep/gbp-grep-popover.ui:37
 msgid "Find"
-msgstr "Localiza"
+msgstr "Localizar"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:65
-msgctxt "shortcut window"
 msgid "Move to the next match"
 msgstr "Move à próxima ocorrência"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:71
-msgctxt "shortcut window"
 msgid "Move to the previous match"
 msgstr "Move à ocorrência anterior"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:77
-msgctxt "shortcut window"
 msgid "Move to the next error"
 msgstr "Move ao próximo erro"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:83
-msgctxt "shortcut window"
 msgid "Move to the previous error"
 msgstr "Move ao erro anterior"
 
@@ -1146,11 +1131,16 @@ msgstr "Modo de realce"
 
 #. Add our pages
 #: src/libide/editor/ide-editor-settings-dialog.ui:80
+#: src/libide/gui/ide-header-bar-shortcuts.c:35
+#: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-preferences-builtin.c:155
 #: src/libide/gui/ide-preferences-builtin.c:207
 #: src/libide/gui/ide-preferences-builtin.c:330
 #: src/libide/gui/ide-preferences-builtin.c:402
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
 msgid "General"
 msgstr "Geral"
 
@@ -1236,35 +1226,27 @@ msgid "Open"
 msgstr "Abrir"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:37
-msgctxt "shortcut window"
 msgid "Create a new document"
 msgstr "Cria um novo documento"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:43
-#: src/libide/gui/ide-shortcuts-window.ui:101
-msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Abre um documento"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:48
 #: src/libide/editor/ide-editor-surface-shortcuts.c:54
-#: src/libide/gui/ide-shortcuts-window.ui:69
-msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Painéis"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:49
-msgctxt "shortcut window"
 msgid "Toggle navigation panel"
 msgstr "Ativa o painel de navegação"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:55
-msgctxt "shortcut window"
 msgid "Toggle utilities panel"
 msgstr "Ativa o painel de utilitários"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:61
-msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Fecha todos os arquivos"
 
@@ -1437,13 +1419,10 @@ msgstr "O alvo da compilação falhou em compilar: %s"
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
-msgctxt "shortcut window"
 msgid "Workbench shortcuts"
-msgstr "Atalhos de workbench"
+msgstr "Atalhos da bancada"
 
 #: src/libide/foundry/ide-run-manager.c:854
-#: src/libide/gui/ide-shortcuts-window.ui:460
-msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Compilar e executar"
 
@@ -1625,7 +1604,8 @@ msgstr "Alternar superfície"
 msgid "Close Project"
 msgstr "Fechar projeto"
 
-#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.ui:6
+#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-application-shortcuts.c:57
+#: src/libide/gui/ide-preferences-window.ui:6
 #: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "Preferências"
@@ -1635,8 +1615,9 @@ msgstr "Preferências"
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
 
-#: src/libide/gui/gtk/menus.ui:36 src/plugins/editor/gtk/menus.ui:45
-#: src/plugins/greeter/gtk/menus.ui:34
+#: src/libide/gui/gtk/menus.ui:36 src/libide/gui/ide-application-shortcuts.c:46
+#: src/libide/gui/ide-application-shortcuts.c:68
+#: src/plugins/editor/gtk/menus.ui:45 src/plugins/greeter/gtk/menus.ui:34
 msgid "Help"
 msgstr "Ajuda"
 
@@ -1689,7 +1670,7 @@ msgstr "Mostra as preferências do aplicativo"
 
 #: src/libide/gui/ide-application-command-line.c:65
 msgid "Open project in new workbench"
-msgstr "Abre o projeto em um novo workbench"
+msgstr "Abre o projeto em uma nova bancada"
 
 #: src/libide/gui/ide-application-command-line.c:65
 msgid "FILE"
@@ -1709,31 +1690,15 @@ msgstr "Aumenta a verbosidade do log"
 msgid "Failed to open project: %s"
 msgstr "Falha ao abrir o projeto: %s"
 
-#: src/libide/gui/ide-application-shortcuts.c:46
-#: src/libide/gui/ide-application-shortcuts.c:68
-msgctxt "shortcut window"
-msgid "Help"
-msgstr "Ajuda"
-
 #: src/libide/gui/ide-application-shortcuts.c:47
-msgctxt "shortcut window"
 msgid "Show the help window"
 msgstr "Mostra a janela de ajuda"
 
-#: src/libide/gui/ide-application-shortcuts.c:57
-#: src/libide/gui/ide-shortcuts-window.ui:25
-#: src/libide/gui/ide-shortcuts-window.ui:538
-msgctxt "shortcut window"
-msgid "Preferences"
-msgstr "Preferências"
-
 #: src/libide/gui/ide-application-shortcuts.c:58
-msgctxt "shortcut window"
 msgid "Show the preferences window"
 msgstr "Mostra a janela de preferências"
 
 #: src/libide/gui/ide-application-shortcuts.c:69
-msgctxt "shortcut window"
 msgid "Show the shortcuts window"
 msgstr "Mostra a janela de atalhos"
 
@@ -1771,6 +1736,7 @@ msgid "Use the page switcher above or use one of the following:"
 msgstr "Use o alternador de páginas acima ou use um dos seguintes:"
 
 #: src/libide/gui/ide-frame-empty-state.ui:45
+#: src/libide/gui/ide-search-button.c:44
 msgid "Search"
 msgstr "Pesquisa"
 
@@ -1791,30 +1757,22 @@ msgid "New Terminal"
 msgstr "Novo terminal"
 
 #: src/libide/gui/ide-frame-shortcuts.c:37
-msgctxt "shortcut window"
 msgid "Move document to the right"
 msgstr "Move o documento para a direita"
 
 #: src/libide/gui/ide-frame-shortcuts.c:44
-msgctxt "shortcut window"
 msgid "Move document to the left"
 msgstr "Move o documento para a esquerda"
 
 #: src/libide/gui/ide-frame-shortcuts.c:51
-#: src/libide/gui/ide-shortcuts-window.ui:150
-msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Alterna para o documento anterior"
 
 #: src/libide/gui/ide-frame-shortcuts.c:58
-#: src/libide/gui/ide-shortcuts-window.ui:143
-msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Alterna para o próximo documento"
 
 #: src/libide/gui/ide-frame-shortcuts.c:65
-#: src/libide/gui/ide-shortcuts-window.ui:129
-msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Fecha o documento"
 
@@ -1832,28 +1790,14 @@ msgstr "Houve uma falha ao tentar realizar a operação."
 
 #: src/libide/gui/ide-header-bar-shortcuts.c:34
 #: src/libide/gui/ide-header-bar-shortcuts.c:40
-msgctxt "shortcut window"
 msgid "Window shortcuts"
 msgstr "Atalhos da janela"
 
-#: src/libide/gui/ide-header-bar-shortcuts.c:35
-#: src/libide/gui/ide-header-bar-shortcuts.c:41
-#: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:527
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
-msgctxt "shortcut window"
-msgid "General"
-msgstr "Geral"
-
 #: src/libide/gui/ide-header-bar-shortcuts.c:36
-msgctxt "shortcut window"
 msgid "Show window menu"
 msgstr "Mostra o menu da janela"
 
 #: src/libide/gui/ide-header-bar-shortcuts.c:42
-msgctxt "shortcut window"
 msgid "Toggle window to fullscreen"
 msgstr "Alterna a janela para tela cheia"
 
@@ -1922,6 +1866,7 @@ msgstr "editor linha espaçamento fonte monoespaçada"
 
 #. XXX: This belongs in terminal addin
 #: src/libide/gui/ide-preferences-builtin.c:109
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
 #: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
@@ -2392,18 +2337,10 @@ msgstr "Altera opções de execução"
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
-msgctxt "shortcut window"
 msgid "Workspace shortcuts"
 msgstr "Atalhos de espaço de trabalho"
 
-#: src/libide/gui/ide-search-button.c:44
-#: src/libide/gui/ide-shortcuts-window.ui:595
-msgctxt "shortcut window"
-msgid "Search"
-msgstr "Pesquisa"
-
 #: src/libide/gui/ide-search-button.c:45
-msgctxt "shortcut window"
 msgid "Focus to the global search entry"
 msgstr "Foco para a entrada de pesquisa global"
 
@@ -2412,32 +2349,41 @@ msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Atalhos do editor"
 
+#: src/libide/gui/ide-shortcuts-window.ui:14
+#: src/libide/gui/ide-shortcuts-window.ui:527
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Geral"
+
 #: src/libide/gui/ide-shortcuts-window.ui:18
 #: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pesquisa global"
 
+#: src/libide/gui/ide-shortcuts-window.ui:25
+#: src/libide/gui/ide-shortcuts-window.ui:538
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Preferências"
+
 #: src/libide/gui/ide-shortcuts-window.ui:32
 #: src/libide/gui/ide-shortcuts-window.ui:545
-#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
 #: src/libide/gui/ide-shortcuts-window.ui:552
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
 #: src/libide/gui/ide-shortcuts-window.ui:559
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
-msgstr "Terminal em runtime de compilação"
+msgstr "Terminal de compilação"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
 #: src/libide/gui/ide-shortcuts-window.ui:566
@@ -2450,6 +2396,11 @@ msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
 msgstr "Ativa o modo foco"
 
+#: src/libide/gui/ide-shortcuts-window.ui:69
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Painéis"
+
 #: src/libide/gui/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
 msgid "Toggle left panel"
@@ -2460,30 +2411,76 @@ msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Ativa o painel inferior"
 
+#: src/libide/gui/ide-shortcuts-window.ui:89
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Arquivos"
+
 #: src/libide/gui/ide-shortcuts-window.ui:94
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Cria um novo documento"
+
+#: src/libide/gui/ide-shortcuts-window.ui:101
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Abre um documento"
+
+#: src/libide/gui/ide-shortcuts-window.ui:108
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Salva o documento"
 
 #: src/libide/gui/ide-shortcuts-window.ui:115
 msgctxt "shortcut window"
 msgid "Save all documents"
 msgstr "Salva todos os documentos"
 
+#: src/libide/gui/ide-shortcuts-window.ui:122
+msgctxt "shortcut window"
+msgid "Print the document"
+msgstr "Imprime o documento"
+
+#: src/libide/gui/ide-shortcuts-window.ui:129
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Fecha o documento"
+
 #: src/libide/gui/ide-shortcuts-window.ui:136
 msgctxt "shortcut window"
 msgid "Close all documents"
 msgstr "Fecha todos os documentos"
+
+#: src/libide/gui/ide-shortcuts-window.ui:143
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Alterna para o próximo documento"
+
+#: src/libide/gui/ide-shortcuts-window.ui:150
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Alterna para o documento anterior"
 
 #: src/libide/gui/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Mostra a lista de documentos abertos"
 
+#: src/libide/gui/ide-shortcuts-window.ui:165
+#: src/libide/gui/ide-shortcuts-window.ui:184
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Localizar e substituir"
+
 #: src/libide/gui/ide-shortcuts-window.ui:170
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Ir para linha"
+
+#: src/libide/gui/ide-shortcuts-window.ui:177
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Localiza"
 
 #: src/libide/gui/ide-shortcuts-window.ui:191
 msgctxt "shortcut window"
@@ -2564,10 +2561,6 @@ msgid "Reset Zoom"
 msgstr "Restaura"
 
 #: src/libide/gui/ide-shortcuts-window.ui:294
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
-#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
-#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
-#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edição"
@@ -2692,6 +2685,11 @@ msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Desmarca tudo"
 
+#: src/libide/gui/ide-shortcuts-window.ui:460
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Compilar e executar"
+
 #: src/libide/gui/ide-shortcuts-window.ui:465
 msgctxt "shortcut window"
 msgid "Build"
@@ -2742,6 +2740,11 @@ msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atalhos do terminal"
 
+#: src/libide/gui/ide-shortcuts-window.ui:595
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Pesquisa"
+
 #: src/libide/gui/ide-shortcuts-window.ui:600
 msgctxt "shortcut window"
 msgid "Find text within terminal"
@@ -2755,7 +2758,7 @@ msgstr[0] "Instalando %u pacote"
 msgstr[1] "Instalando %u pacotes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1212
+#: src/libide/lsp/ide-lsp-client.c:1216
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falha ao inicializar o servidor de linguagem: %s"
@@ -3115,13 +3118,18 @@ msgstr "Nenhum embelezador disponível para “%s”"
 msgid "No beautifier available"
 msgstr "Nenhum embelezador disponível"
 
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
+msgid "Editing"
+msgstr "Edição"
+
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
-msgctxt "shortcut window"
 msgid "Beautify the code"
 msgstr "Embeleza o código"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
-msgctxt "shortcut window"
 msgid "Trigger the default entry"
 msgstr "Dispara a entrada padrão"
 
@@ -3796,22 +3804,22 @@ msgid "Highlight colors"
 msgstr "Realçar cores"
 
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:36
-msgctxt "shortcut window"
 msgid "Workspace Shortcuts"
 msgstr "Atalhos de espaço de trabalho"
 
+#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
+msgid "Command Bar"
+msgstr "Barra de comandos"
+
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:38
-msgctxt "shortcut window"
 msgid "Show the workspace command bar"
 msgstr "Mostra a barra de comando do espaço de trabalho"
 
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:372
-msgctxt "shortcut window"
 msgid "Comment the code"
 msgstr "Comenta o código"
 
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:378
-msgctxt "shortcut window"
 msgid "Uncomment the code"
 msgstr "Descomenta o código"
 
@@ -4384,7 +4392,7 @@ msgstr "Vai"
 
 #: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
 msgid "New Editor Workspace…"
-msgstr "Novo espaço de trabalho de editor…"
+msgstr "Novo espaço de trabalho do editor…"
 
 #: src/plugins/editor/gtk/menus.ui:95
 msgid "New File"
@@ -4457,7 +4465,7 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
 msgid "Clone a project using flatpak manifest"
-msgstr "Clonar um projeto usando manifesto do flatpak"
+msgstr "Clonar um projeto usando manifesto do Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
 msgid "MANIFEST"
@@ -4476,7 +4484,7 @@ msgstr "Baixando fontes de aplicativo…"
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Falha ao renomear manifesto do flatpak: %s"
+msgstr "Falha ao renomear manifesto do Flatpak: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
@@ -4506,7 +4514,7 @@ msgstr "Arquitetura"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
-msgstr "Criando o espaço de trabalho flatpak"
+msgstr "Criando o espaço de trabalho do Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
 msgid "Preparing build directory"
@@ -4522,7 +4530,7 @@ msgstr "Compilando dependências"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
 msgid "Finalizing flatpak build"
-msgstr "Finalizando compilação flatpak"
+msgstr "Finalizando compilação Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
 msgid "Exporting staging directory"
@@ -4530,7 +4538,7 @@ msgstr "Exportando diretório staging"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
 msgid "Creating flatpak bundle"
-msgstr "Criando um pacote flatpak"
+msgstr "Criando um pacote Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
@@ -4705,7 +4713,6 @@ msgstr "Falha ao salvar documento glade: %s"
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:42
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:48
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:54
-msgctxt "shortcut window"
 msgid "Glade shortcuts"
 msgstr "Atalhos do glade"
 
@@ -4713,27 +4720,22 @@ msgstr "Atalhos do glade"
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:43
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:49
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:55
-msgctxt "shortcut window"
 msgid "Designer"
 msgstr "Construtor"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:38
-msgctxt "shortcut window"
 msgid "Save the interface design"
 msgstr "Salva o design de interface"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:44
-msgctxt "shortcut window"
 msgid "Preview the interface design"
 msgstr "Pré-visualiza o design de interface"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:50
-msgctxt "shortcut window"
 msgid "Undo the last command"
 msgstr "Desfaz o último comando"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:56
-msgctxt "shortcut window"
 msgid "Redo the next command"
 msgstr "Refaz o próximo comando"
 
@@ -4886,10 +4888,6 @@ msgstr "Substituir por"
 msgid "Search for…"
 msgstr "Pesquisar por…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:37
-msgid "Find"
-msgstr "Localizar"
-
 #: src/plugins/grep/gbp-grep-popover.ui:54
 msgid "Search _recursively through folders"
 msgstr "Pesquisar _recursivamente pelas pastas"
@@ -5040,7 +5038,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:185
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
-"Um projeto baseado no Meson está carregado, mas meson não pode ser "
+"Um projeto baseado no Meson está carregado, mas Meson não pode ser "
 "localizado."
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
@@ -5129,7 +5127,6 @@ msgid "Python"
 msgstr "Python"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
 msgstr "Vala"
 
@@ -5318,10 +5315,6 @@ msgstr "Nome da pasta"
 #: src/plugins/project-tree/gbp-new-file-popover.ui:35
 msgid "_Create"
 msgstr "_Criar"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
-msgid "Files"
-msgstr "Arquivos"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:677
 #, c-format
@@ -5577,8 +5570,8 @@ msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
 msgstr ""
-"Não é possível iniciar no ambiente de runtime porque o encadeamento de "
-"compilação não foi inicializado"
+"Não é possível iniciar o terminal no ambiente de execução porque o "
+"encadeamento de compilação não foi inicializado"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:648
 msgid "Cannot spawn process because build pipeline is not yet available"
@@ -5622,7 +5615,7 @@ msgstr "No ambiente de compilação"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
 msgid "In Runtime Environment"
-msgstr "No ambiente de runtime"
+msgstr "No ambiente de execução"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
 msgid ""
@@ -5663,7 +5656,7 @@ msgstr "Executar no ambiente de compilação"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
 msgid "Run in runtime environment"
-msgstr "Executar no ambiente de runtime"
+msgstr "Executar no ambiente de execução"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:113
 msgid "New command"
@@ -5700,7 +5693,6 @@ msgid "Spelling"
 msgstr "Ortografia"
 
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:104
-msgctxt "shortcut window"
 msgid "Show the spellchecker panel"
 msgstr "Mostra o painel de verificação ortográfica"
 
@@ -5842,12 +5834,10 @@ msgstr ""
 "arquivo como um anexo em seu relatório de erro ou requisição de suporte."
 
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
-msgctxt "shortcut window"
 msgid "Symbols"
 msgstr "Símbolos"
 
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:57
-msgctxt "shortcut window"
 msgid "Search symbols within document"
 msgstr "Pesquisa por símbolos dentro do documento"
 
@@ -5944,10 +5934,13 @@ msgstr "Aplicativo iniciado às %s\r\n"
 msgid "Application exited\r\n"
 msgstr "Aplicativo encerrado\r\n"
 
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+msgid "Terminal in Build Runtime"
+msgstr "Terminal de compilação"
+
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
-msgctxt "shortcut window"
 msgid "Terminal in Runtime"
-msgstr "Terminal em execução"
+msgstr "Terminal de execução"
 
 #: src/plugins/terminal/gtk/menus.ui:9
 msgid "New _Terminal"
@@ -6003,15 +5996,6 @@ msgstr "TODO/FIXMEs"
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
 msgid "Vagrant"
 msgstr "Vagrant"
-
-#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
-msgid "Show errors and warnings provided by Vala"
-msgstr "Mostra erros e avisos fornecidos pelo Vala"
-
-#. translators: keywords used when searching for preferences
-#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:36
-msgid "vala diagnostics warnings errors"
-msgstr "vala diagnósticos avisos erros"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
 #: src/plugins/valgrind/valgrind_plugin.py:54
@@ -6157,6 +6141,24 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O arquivo deve estar salvo localmente para análise."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle navigation panel"
+#~ msgstr "Ativa o painel de navegação"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle utilities panel"
+#~ msgstr "Ativa o painel de utilitários"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Help"
+#~ msgstr "Ajuda"
+
+#~ msgid "Show errors and warnings provided by Vala"
+#~ msgstr "Mostra erros e avisos fornecidos pelo Vala"
+
+#~ msgid "vala diagnostics warnings errors"
+#~ msgstr "vala diagnósticos avisos erros"
 
 #~ msgid "Clone Repository…"
 #~ msgstr "Clonar repositório…"
@@ -6317,12 +6319,6 @@ msgstr "O arquivo deve estar salvo localmente para análise."
 
 #~ msgid "Language Syntax"
 #~ msgstr "Sintaxe de linguagem"
-
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Ativa o painel de navegação"
-
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Ativa o painel de utilitários"
 
 #~ msgid ""
 #~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
