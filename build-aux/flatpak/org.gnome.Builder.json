@@ -597,10 +597,6 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/esodan/gvls.git"
-                },
-                {
-                    "type" : "patch",
-                    "path" : "gvls-fix-vapi-install-dir.patch"
                 }
             ]
         },
