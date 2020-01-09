@@ -135,6 +135,7 @@ read_attr (const gchar  *str,
 
   if (g_str_has_prefix (word, "G_GNUC_") ||
       strstr (word, "AVAILABLE") ||
+      strstr (word, "INTERNAL") ||
       strcasestr (word, "export"))
     {
       *pos = tmp;
