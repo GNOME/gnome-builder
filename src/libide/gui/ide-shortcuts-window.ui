@@ -65,7 +65,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
                 <property name="title" translatable="yes" context="shortcut window">Keyboard Shortcuts</property>
-                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;question</property>
+                <property name="accelerator">&lt;ctrl&gt;question</property>
               </object>
             </child>
             <child>
@@ -578,7 +578,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
                 <property name="title" translatable="yes" context="shortcut window">Keyboard Shortcuts</property>
-                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;question</property>
+                <property name="accelerator">&lt;ctrl&gt;question</property>
               </object>
             </child>
           </object>
