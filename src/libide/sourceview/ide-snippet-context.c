@@ -420,17 +420,16 @@ filter_space (const gchar *input)
 static gchar *
 filter_descend_path (const gchar *input)
 {
-   const char* pos = strchr (input, G_DIR_SEPARATOR);
-   if (pos == input)
-     {
-       input++;
-       pos = strchr (input, G_DIR_SEPARATOR);
-     }
-   if (pos)
-     {
-       pos++;
-       return g_strdup (pos);
-     }
+  const gchar *pos;
+
+  if (input == NULL)
+    return NULL;
+
+  while (*input == G_DIR_SEPARATOR)
+    input++;
+
+  if ((pos = strchr (input, G_DIR_SEPARATOR)))
+    return g_strdup (pos + 1);
 
    return NULL;
 }
@@ -452,19 +451,22 @@ filter_stripsuffix (const gchar *input)
 static gchar *
 filter_slash_to_dots (const gchar *input)
 {
-  gunichar c;
   GString *str;
+  gunichar ch;
+
+  if (input == NULL)
+    return NULL;
 
   str = g_string_new (NULL);
 
   for (; *input; input = g_utf8_next_char (input))
     {
-      c = g_utf8_get_char (input);
+      ch = g_utf8_get_char (input);
 
-      if (c == G_DIR_SEPARATOR)
+      if (ch == G_DIR_SEPARATOR)
         g_string_append_c (str, '.');
       else
-        g_string_append_c (str, c);
+        g_string_append_unichar (str, ch);
     }
 
   return g_string_free (str, FALSE);
@@ -477,8 +479,7 @@ apply_filter (gchar       *input,
   InputFilter filter_func;
   gchar *tmp;
 
-  filter_func = g_hash_table_lookup (filters, filter);
-  if (filter_func)
+  if ((filter_func = g_hash_table_lookup (filters, filter)))
     {
       tmp = input;
       input = filter_func (input);
