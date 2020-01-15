@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ipc-git-change-monitor-impl"
 
+#include <glib/gi18n.h>
+
 #include "ipc-git-change-monitor-impl.h"
 #include "line-cache.h"
 
@@ -114,7 +116,7 @@ ipc_git_change_monitor_impl_load_blob (IpcGitChangeMonitorImpl  *self,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_FAILED,
-                   "No repository to access file contents");
+                   _("No repository to access file contents"));
       return NULL;
     }
 
@@ -182,7 +184,7 @@ ipc_git_change_monitor_impl_handle_list_changes (IpcGitChangeMonitor   *monitor,
       g_set_error (&error,
                    G_IO_ERROR,
                    G_IO_ERROR_NOT_INITIALIZED,
-                   "No contents have been set to diff");
+                   _("No contents have been set to diff"));
       goto gerror;
     }
 
@@ -259,7 +261,7 @@ gerror:
       g_set_error (&error,
                    G_IO_ERROR,
                    G_IO_ERROR_FAILED,
-                   "The operation failed. The original error was \"%s\"",
+                   _("The operation failed. The original error was \"%s\""),
                    wrapped->message);
     }
 

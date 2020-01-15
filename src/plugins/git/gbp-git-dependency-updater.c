@@ -89,7 +89,7 @@ gbp_git_dependency_updater_update_async (IdeDependencyUpdater *self,
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_FAILED,
-                                 "Git version control is not in use");
+                                 _("Git version control is not in use"));
       IDE_EXIT;
     }
 

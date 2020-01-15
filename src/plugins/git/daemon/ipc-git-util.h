@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <glib/gi18n.h>
+
 static inline gboolean
 complete_wrapped_error (GDBusMethodInvocation *invocation,
                         const GError          *error)
@@ -28,7 +30,7 @@ complete_wrapped_error (GDBusMethodInvocation *invocation,
 
   wrapped = g_error_new (G_IO_ERROR,
                          G_IO_ERROR_FAILED,
-                         "The operation failed. The original error was \"%s\"",
+                         _("The operation failed. The original error was \"%s\""),
                          error->message);
   g_dbus_method_invocation_return_gerror (invocation, wrapped);
 

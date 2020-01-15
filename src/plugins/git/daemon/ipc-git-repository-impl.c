@@ -22,6 +22,7 @@
 
 #include <libgit2-glib/ggit.h>
 #include <git2.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 
 #include "ipc-git-change-monitor-impl.h"
@@ -589,7 +590,7 @@ ipc_git_repository_impl_commit (IpcGitRepositoryImpl  *self,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_INVALID_DATA,
-                   "Cannot set AMEND and GPG_SIGN flags");
+                   _("Cannot set AMEND and GPG_SIGN flags"));
       return FALSE;
     }
 
@@ -598,7 +599,7 @@ ipc_git_repository_impl_commit (IpcGitRepositoryImpl  *self,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_INVALID_DATA,
-                   "Cannot sign commit without GPG_KEY_ID");
+                   _("Cannot sign commit without GPG_KEY_ID"));
       return FALSE;
     }
 

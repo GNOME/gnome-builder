@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "daemon/ipc-git-change-monitor.h"
@@ -395,7 +396,7 @@ gbp_git_buffer_change_monitor_new (IdeBuffer         *buffer,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_NOT_SUPPORTED,
-                   "Cannot monitor files outside the working directory");
+                   _("Cannot monitor files outside the working directory"));
       return NULL;
     }
 

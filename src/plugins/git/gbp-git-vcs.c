@@ -505,7 +505,7 @@ gbp_git_vcs_list_status_async (IdeVcs              *vcs,
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_SUPPORTED,
-                                 "Directory is not within repository");
+                                 _("Directory is not within repository"));
       return;
     }
 

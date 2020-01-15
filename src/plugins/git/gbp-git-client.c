@@ -24,6 +24,7 @@
 
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
+#include <glib/gi18n.h>
 #include <glib-unix.h>
 #include <libide-threading.h>
 
@@ -325,7 +326,7 @@ gbp_git_client_get_service_async (GbpGitClient        *self,
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_CLOSED,
-                                 "The client has been closed");
+                                 _("The client has been closed"));
       break;
 
     default:

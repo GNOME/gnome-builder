@@ -130,7 +130,7 @@ gbp_git_vcs_cloner_validate_uri (IdeVcsCloner  *cloner,
           if (!g_file_query_exists (file, NULL))
             {
               if (errmsg != NULL)
-                *errmsg = g_strdup_printf ("A resository could not be found at “%s”.", path);
+                *errmsg = g_strdup_printf (_("A resository could not be found at “%s”."), path);
               return FALSE;
             }
 
