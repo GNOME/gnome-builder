@@ -605,7 +605,7 @@ gbp_glade_page_init (GbpGladePage *self)
                              "action-target", param,
                              "child", image,
                              "has-tooltip", TRUE,
-                             "tooltip-text", pointers[i].tooltip,
+                             "tooltip-text", gettext(pointers[i].tooltip),
                              "visible", TRUE,
                              NULL);
       dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "image-button");
