@@ -158,9 +158,7 @@
           <object class="GtkGrid">
             <property name="visible">true</property>
             <property name="can_focus">false</property>
-            <style>
-              <class name="linked"/>
-            </style>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkComboBoxText" id="tool_combobox">
                 <property name="width_request">150</property>
@@ -208,6 +206,7 @@
             <property name="visible">true</property>
             <property name="can_focus">false</property>
             <property name="orientation">horizontal</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="DzlFileChooserEntry" id="path_entry">
                 <property name="visible">true</property>
