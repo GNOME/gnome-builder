@@ -145,9 +145,9 @@ on_update_available_cb (GbpUpdateManagerAppAddin *self,
       context = ide_workbench_get_context (workbench);
 
       self->update_notif = ide_notification_new ();
-      ide_notification_set_id (self->update_notif, "org.gnome.builder.update-progress");
-      ide_notification_set_icon_name (self->update_notif, "folder-download-symbolic");
-      ide_notification_set_title (self->update_notif, _("Updating Builder"));
+      ide_notification_set_id (self->update_notif, "org.gnome.builder.update-available");
+      ide_notification_set_icon_name (self->update_notif, "software-update-available-symbolic");
+      ide_notification_set_title (self->update_notif, _("Update Available"));
       ide_notification_attach (self->update_notif, IDE_OBJECT (context));
     }
 
