@@ -602,6 +602,21 @@
             ]
         },
         {
+            "name" : "libportal",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/flatpak/libportal.git"
+                }
+            ]
+        },
+        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,

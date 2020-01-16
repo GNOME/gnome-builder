@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright 2020 Christian Hergert
+Depends=editor;
+Description=Notifies the user of new Builder releases
+Embedded=_gbp_update_manager_register_types
+Hidden=true
+Module=update-manager
+Name=Update Manager

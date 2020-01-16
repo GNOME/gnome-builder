@@ -119,6 +119,7 @@ subdir('terminal')
 subdir('testui')
 subdir('todo')
 subdir('trim-spaces')
+subdir('update-manager')
 subdir('vagrant')
 subdir('vala-pack')
 subdir('valgrind')
@@ -188,6 +189,7 @@ status += [
   'Sysprof ............... : @0@'.format(get_option('plugin_sysprof')),
   'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
   'Todo .................. : @0@'.format(get_option('plugin_todo')),
+  'Update Manager ........ : @0@'.format(get_option('plugin_update_manager')),
   'Vala Language Server... : @0@'.format(get_option('plugin_gvls')),
   'Vala Pack ............. : @0@'.format(get_option('plugin_vala')),
   'Vagrant ............... : @0@'.format(get_option('plugin_vagrant')),
