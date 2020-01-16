@@ -2056,14 +2056,16 @@
 @binding-set builder-vim-source-view-normal-ctrl-w
 {
   bind "v" { "action" ("frame", "open-in-new-frame", "''") "grab_focus" () };
-  bind "<ctrl>v" { "action" ("frame", "open-in-new-frame", "''") "grab_focus" () };
+  bind "<Control>v" { "action" ("frame", "open-in-new-frame", "''") "grab_focus" () };
 
   bind "c" { "action" ("frame", "close-page", "") };
+  bind "<Control>c" { "action" ("frame", "close-page", "") };
 
   bind "s" { "action" ("frame", "split-page", "''") };
+  bind "<Control>s" { "action" ("frame", "split-page", "''") };
 
   bind "w" { "action" ("grid", "focus-neighbor", "0") };
-  bind "<ctrl>w" { "action" ("grid", "focus-neighbor", "0") };
+  bind "<Control>w" { "action" ("grid", "focus-neighbor", "0") };
 
   bind "l" { "action" ("grid", "focus-neighbor", "5") };
   bind "Right" { "action" ("grid", "focus-neighbor", "5") };
