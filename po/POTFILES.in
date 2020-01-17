@@ -264,8 +264,12 @@ src/plugins/flatpak/gbp-flatpak-transfer.c
 src/plugins/flatpak/gbp-flatpak-workbench-addin.c
 src/plugins/gcc/gbp-gcc-toolchain-provider.c
 src/plugins/gettext/ide-gettext-diagnostic-provider.c
+src/plugins/git/daemon/ipc-git-change-monitor-impl.c
 src/plugins/git/daemon/ipc-git-remote-callbacks.c
+src/plugins/git/daemon/ipc-git-repository-impl.c
+src/plugins/git/daemon/ipc-git-util.h
 src/plugins/git/gbp-git-buffer-change-monitor.c
+src/plugins/git/gbp-git-client.c
 src/plugins/git/gbp-git-dependency-updater.c
 src/plugins/git/gbp-git-pipeline-addin.c
 src/plugins/git/gbp-git-submodule-stage.c
@@ -374,6 +378,7 @@ src/plugins/testui/gbp-test-output-panel.ui
 src/plugins/testui/gbp-test-tree-addin.c
 src/plugins/todo/gbp-todo-panel.c
 src/plugins/todo/gbp-todo-workspace-addin.c
+src/plugins/update-manager/gbp-update-manager-app-addin.c
 src/plugins/vagrant/gbp-vagrant-runtime-provider.c
 src/plugins/valgrind/gtk/menus.ui
 src/plugins/valgrind/valgrind_plugin.py
