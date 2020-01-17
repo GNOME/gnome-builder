@@ -159,6 +159,7 @@ on_update_progress_cb (GbpUpdateManagerAppAddin *self,
                        guint                     n_ops,
                        guint                     op,
                        guint                     progress,
+                       XdpUpdateStatus           status,
                        const gchar              *error,
                        const gchar              *error_message,
                        XdpPortal                *portal)
