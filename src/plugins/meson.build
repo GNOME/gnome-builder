@@ -48,6 +48,7 @@ subdir('codeui')
 subdir('color-picker')
 subdir('command-bar')
 subdir('comment-code')
+subdir('copyright')
 subdir('c-pack')
 subdir('create-project')
 subdir('ctags')
@@ -148,6 +149,7 @@ status += [
   'Code Index ............ : @0@'.format(get_option('plugin_code_index')),
   'Color Pickr ........... : @0@'.format(get_option('plugin_color_picker')),
   'CTags ................. : @0@'.format(get_option('plugin_ctags')),
+  'Copyright ............. : @0@'.format(get_option('plugin_copyright')),
   'Devhelp ............... : @0@'.format(get_option('plugin_devhelp')),
   'Deviced ............... : @0@'.format(get_option('plugin_deviced')),
   'D-Bus Spy ............. : @0@'.format(get_option('plugin_dspy')),

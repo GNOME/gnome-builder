@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <chergert@redhat.com>
+Builtin=true
+Copyright=Copyright © 2020 Christian Hergert
+Description=Update copyright when files are saved
+Loader=python3
+Module=copyright_plugin
+Name=Update Copyright
+X-Builder-ABI=@PACKAGE_ABI@

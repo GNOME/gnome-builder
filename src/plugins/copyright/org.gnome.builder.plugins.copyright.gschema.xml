@@ -1,0 +1,9 @@
+<schemalist>
+  <schema id="org.gnome.builder.plugins.copyright" path="/org/gnome/builder/plugins/copyright/" gettext-domain="gnome-builder">
+    <key name="update-on-save" type="b">
+      <default>false</default>
+      <summary>Update Copyright before Saving</summary>
+      <description>Updates the copyright for the user before saving to disk.</description>
+    </key>
+  </schema>
+</schemalist>
