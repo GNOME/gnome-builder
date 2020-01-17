@@ -52,13 +52,20 @@ on_update_install_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_UPDATE_MANAGER_APP_ADDIN (self));
 
-  if (!xdp_portal_update_install_finish (portal, result, &error))
-    g_warning ("Failed to update Builder: %s", error->message);
-
   if (self->progress_notif)
     {
       ide_notification_withdraw_in_seconds (self->progress_notif, -1);
       g_clear_object (&self->progress_notif);
+    }
+
+  if (!xdp_portal_update_install_finish (portal, result, &error))
+    {
+      g_warning ("Failed to update Builder: %s", error->message);
+    }
+  else
+    {
+      ide_notification_withdraw (self->update_notif);
+      g_clear_object (&self->update_notif);
     }
 
   IDE_EXIT;
