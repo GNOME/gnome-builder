@@ -191,6 +191,8 @@ gbp_update_manager_app_addin_start_cb (GObject      *object,
 
   if (!xdp_portal_update_monitor_start_finish (portal, result, &error))
     g_warning ("Failed to start update monitor: %s", error->message);
+  else
+    g_message ("Waiting for application updates from libportal");
 
   IDE_EXIT;
 }
