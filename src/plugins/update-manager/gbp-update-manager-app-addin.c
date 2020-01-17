@@ -64,8 +64,11 @@ on_update_install_cb (GObject      *object,
     }
   else
     {
-      ide_notification_withdraw (self->update_notif);
-      g_clear_object (&self->update_notif);
+      if (self->update_notif != NULL)
+        {
+          ide_notification_withdraw (self->update_notif);
+          g_clear_object (&self->update_notif);
+        }
     }
 
   IDE_EXIT;
@@ -155,6 +158,9 @@ on_update_available_cb (GbpUpdateManagerAppAddin *self,
       ide_notification_set_id (self->update_notif, "org.gnome.builder.update-available");
       ide_notification_set_icon_name (self->update_notif, "software-update-available-symbolic");
       ide_notification_set_title (self->update_notif, _("Update Available"));
+      ide_notification_set_body (self->update_notif, _("An update to Builder is available. Builder can download and install it for you."));
+      ide_notification_set_urgent (self->update_notif, TRUE);
+      ide_notification_add_button (self->update_notif, _("Update"), NULL, "app.update-builder");
       ide_notification_attach (self->update_notif, IDE_OBJECT (context));
     }
 
