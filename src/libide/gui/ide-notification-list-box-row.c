@@ -105,8 +105,12 @@ setup_buttons_locked (IdeNotificationListBoxRow *self)
                                  "visible", TRUE,
                                  NULL);
 
+
           if (!self->compact)
-            dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "suggested-action");
+            {
+              g_object_set (button, "width-request", 100, NULL);
+              dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "suggested-action");
+            }
           else
             dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "circular");
 
