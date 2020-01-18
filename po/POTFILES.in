@@ -188,6 +188,7 @@ src/plugins/color-picker/gtk/menus.ui
 src/plugins/command-bar/gbp-command-bar-shortcuts.c
 src/plugins/comment-code/gbp-comment-code-editor-page-addin.c
 src/plugins/comment-code/gtk/menus.ui
+src/plugins/copyright/copyright_plugin.py
 src/plugins/create-project/gbp-create-project-application-addin.c
 src/plugins/create-project/gbp-create-project-surface.c
 src/plugins/create-project/gbp-create-project-surface.ui
