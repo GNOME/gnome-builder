@@ -149,6 +149,15 @@ gbp_git_workbench_addin_load_project_service_cb (GObject      *object,
   project_info = ide_task_get_task_data (task);
   directory = ide_project_info_get_directory (project_info);
 
+  if (!g_file_is_native (directory))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Cannot initialize git, not a local file-system");
+      return;
+    }
+
   ipc_git_service_call_discover (service,
                                  g_file_peek_path (directory),
                                  ide_task_get_cancellable (task),
