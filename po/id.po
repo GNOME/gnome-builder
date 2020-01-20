@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-01-13 03:28+0000\n"
-"PO-Revision-Date: 2020-01-14 17:21+0700\n"
+"POT-Creation-Date: 2020-01-18 14:58+0000\n"
+"PO-Revision-Date: 2020-01-20 12:21+0700\n"
 "Last-Translator: Sucipto <sucipto@pm.me>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -979,8 +979,6 @@ msgstr "Simpan Sebagai"
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:55
-#| msgctxt "shortcut window"
-#| msgid "Editor shortcuts"
 msgid "Editor shortcuts"
 msgstr "Pintasan penyunting"
 
@@ -1000,20 +998,14 @@ msgid "Files"
 msgstr "Berkas"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:35
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgid "Save the document"
 msgstr "Simpan dokumen"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:41
-#| msgctxt "shortcut window"
-#| msgid "Save the document with a new name"
 msgid "Save the document with a new name"
 msgstr "Simpan dokumen dengan nama baru"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:47
-#| msgctxt "shortcut window"
-#| msgid "Print the document"
 msgid "Print the document"
 msgstr "Cetak dokumen"
 
@@ -1024,8 +1016,6 @@ msgstr "Cetak dokumen"
 #: src/libide/editor/ide-editor-page-shortcuts.c:70
 #: src/libide/editor/ide-editor-page-shortcuts.c:76
 #: src/libide/editor/ide-editor-page-shortcuts.c:82
-#| msgctxt "shortcut window"
-#| msgid "Find and replace"
 msgid "Find and replace"
 msgstr "Cari dan ganti"
 
@@ -1035,26 +1025,18 @@ msgid "Find"
 msgstr "Temukan"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:65
-#| msgctxt "shortcut window"
-#| msgid "Move to the next match"
 msgid "Move to the next match"
 msgstr "Ke cocok selanjutnya"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:71
-#| msgctxt "shortcut window"
-#| msgid "Move to the previous match"
 msgid "Move to the previous match"
 msgstr "Ke cocok sebelumnya"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:77
-#| msgctxt "shortcut window"
-#| msgid "Move to the next error"
 msgid "Move to the next error"
 msgstr "Ke kesalahan selanjutnya"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:83
-#| msgctxt "shortcut window"
-#| msgid "Move to the previous error"
 msgid "Move to the previous error"
 msgstr "Ke kesalahan sebelumnya"
 
@@ -1226,21 +1208,15 @@ msgid "Open"
 msgstr "Buka"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:37
-#| msgctxt "shortcut window"
-#| msgid "Create a new document"
 msgid "Create a new document"
 msgstr "Buat dokumen baru"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:43
-#| msgctxt "shortcut window"
-#| msgid "Open a document"
 msgid "Open a document"
 msgstr "Buka suatu dokumen"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:48
 #: src/libide/editor/ide-editor-surface-shortcuts.c:54
-#| msgctxt "shortcut window"
-#| msgid "Panels"
 msgid "Panels"
 msgstr "Panel"
 
@@ -1253,8 +1229,6 @@ msgid "Toggle utilities panel"
 msgstr "Jungkitkan panel utilitas"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:61
-#| msgctxt "shortcut window"
-#| msgid "Close all files"
 msgid "Close all files"
 msgstr "Tutup semua berkas"
 
@@ -1423,14 +1397,10 @@ msgstr "Target bangun gagal dibangun: %s"
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
-#| msgctxt "shortcut window"
-#| msgid "Workbench shortcuts"
 msgid "Workbench shortcuts"
 msgstr "Pintasan meja kerja"
 
 #: src/libide/foundry/ide-run-manager.c:854
-#| msgctxt "shortcut window"
-#| msgid "Build and Run"
 msgid "Build and Run"
 msgstr "Bangun dan Jalankan"
 
@@ -1520,7 +1490,6 @@ msgid "Clone Project"
 msgstr "Klon Proyek"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
-#| msgid "Select a Folder…"
 msgid "Select a _Folder…"
 msgstr "Pilih _Folder…"
 
@@ -1661,7 +1630,8 @@ msgstr "GNOME Builder"
 msgid "translator-credits"
 msgstr ""
 "Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
-"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2018, 2019."
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2018, 2019.\n"
+"Sucipto <sucipto@pm.me>, 2020."
 
 #: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
@@ -1698,20 +1668,14 @@ msgid "Failed to open project: %s"
 msgstr "Gagal membuka proyek: %s"
 
 #: src/libide/gui/ide-application-shortcuts.c:47
-#| msgctxt "shortcut window"
-#| msgid "Show the help window"
 msgid "Show the help window"
 msgstr "Tampilkan jendela bantuan"
 
 #: src/libide/gui/ide-application-shortcuts.c:58
-#| msgctxt "shortcut window"
-#| msgid "Show the preferences window"
 msgid "Show the preferences window"
 msgstr "Tampilkan jendela preferensi"
 
 #: src/libide/gui/ide-application-shortcuts.c:69
-#| msgctxt "shortcut window"
-#| msgid "Show the shortcuts window"
 msgid "Show the shortcuts window"
 msgstr "Tampilkan jendela pintasan"
 
@@ -1771,32 +1735,22 @@ msgid "New Terminal"
 msgstr "Terminal Baru"
 
 #: src/libide/gui/ide-frame-shortcuts.c:37
-#| msgctxt "shortcut window"
-#| msgid "Move document to the right"
 msgid "Move document to the right"
 msgstr "Pindahkan dokumen ke kanan"
 
 #: src/libide/gui/ide-frame-shortcuts.c:44
-#| msgctxt "shortcut window"
-#| msgid "Move document to the left"
 msgid "Move document to the left"
 msgstr "Pindahkan dokumen ke kiri"
 
 #: src/libide/gui/ide-frame-shortcuts.c:51
-#| msgctxt "shortcut window"
-#| msgid "Switch to the previous document"
 msgid "Switch to the previous document"
 msgstr "Beralih ke dokumen sebelumnya"
 
 #: src/libide/gui/ide-frame-shortcuts.c:58
-#| msgctxt "shortcut window"
-#| msgid "Switch to the next document"
 msgid "Switch to the next document"
 msgstr "Beralih ke dokumen selanjutnya"
 
 #: src/libide/gui/ide-frame-shortcuts.c:65
-#| msgctxt "shortcut window"
-#| msgid "Close the document"
 msgid "Close the document"
 msgstr "Tutup dokumen"
 
@@ -1814,20 +1768,14 @@ msgstr "Terjadi kegagalan saat mencoba melakukan operasi."
 
 #: src/libide/gui/ide-header-bar-shortcuts.c:34
 #: src/libide/gui/ide-header-bar-shortcuts.c:40
-#| msgctxt "shortcut window"
-#| msgid "Window shortcuts"
 msgid "Window shortcuts"
 msgstr "Pintasan jendela"
 
 #: src/libide/gui/ide-header-bar-shortcuts.c:36
-#| msgctxt "shortcut window"
-#| msgid "Show window menu"
 msgid "Show window menu"
 msgstr "Tampilkan menu jendela"
 
 #: src/libide/gui/ide-header-bar-shortcuts.c:42
-#| msgctxt "shortcut window"
-#| msgid "Toggle window to fullscreen"
 msgid "Toggle window to fullscreen"
 msgstr "Jungkitkan jendela ke layar penuh"
 
@@ -2362,14 +2310,10 @@ msgstr "Ubah opsi jalankan"
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
-#| msgctxt "shortcut window"
-#| msgid "Workspace shortcuts"
 msgid "Workspace shortcuts"
 msgstr "Pintasan ruang kerja"
 
 #: src/libide/gui/ide-search-button.c:45
-#| msgctxt "shortcut window"
-#| msgid "Focus to the global search entry"
 msgid "Focus to the global search entry"
 msgstr "Fokus ke entri pencarian global"
 
@@ -2385,7 +2329,6 @@ msgid "General"
 msgstr "Umum"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#| msgid "Show Right Panel"
 msgctxt "shortcut window"
 msgid "Show help"
 msgstr "Tampilkan bantuan"
@@ -3022,7 +2965,7 @@ msgid "Configuring project"
 msgstr "Mengkonfigurasi proyek"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:162
+#: src/plugins/cargo/cargo_plugin.py:145
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
@@ -3161,20 +3104,14 @@ msgstr "Tidak ada beautifier yang tersedia"
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
-#| msgctxt "shortcut window"
-#| msgid "Editing"
 msgid "Editing"
 msgstr "Penyuntingan"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
-#| msgctxt "shortcut window"
-#| msgid "Beautify the code"
 msgid "Beautify the code"
 msgstr "Percantik kode"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
-#| msgctxt "shortcut window"
-#| msgid "Trigger the default entry"
 msgid "Trigger the default entry"
 msgstr "Memicu entri bawaan"
 
@@ -3238,7 +3175,6 @@ msgid "All Runtimes"
 msgstr "Semua Runtime"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#| msgid "Make active"
 msgid "Make _Active"
 msgstr "Jadikan _Aktif"
 
@@ -3247,7 +3183,6 @@ msgid "Select this configuration as the active configuration."
 msgstr "Pilih konfigurasi ini sebagai konfigurasi aktif."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#| msgid "Duplicate"
 msgid "_Duplicate"
 msgstr "_Duplikat"
 
@@ -3846,32 +3781,22 @@ msgid "Highlight colors"
 msgstr "Warna sorot"
 
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:36
-#| msgctxt "shortcut window"
-#| msgid "Workspace Shortcuts"
 msgid "Workspace Shortcuts"
 msgstr "Pintasan Ruang Kerja"
 
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
-#| msgctxt "shortcut window"
-#| msgid "Command Bar"
 msgid "Command Bar"
 msgstr "Bilah Perintah"
 
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:38
-#| msgctxt "shortcut window"
-#| msgid "Show the workspace command bar"
 msgid "Show the workspace command bar"
 msgstr "Tampilkan bilah perintah ruang kerja"
 
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:372
-#| msgctxt "shortcut window"
-#| msgid "Comment the code"
 msgid "Comment the code"
 msgstr "Komentar kode"
 
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:378
-#| msgctxt "shortcut window"
-#| msgid "Uncomment the code"
 msgid "Uncomment the code"
 msgstr "Hilangkan komentar kode"
 
@@ -3882,6 +3807,34 @@ msgstr "Komentar kode"
 #: src/plugins/comment-code/gtk/menus.ui:14
 msgid "Uncomment code"
 msgstr "Hilangkan komentar kode"
+
+#: src/plugins/copyright/copyright_plugin.py:110
+msgid "Update Copyright"
+msgstr "Perbarui Hak Cipta"
+
+#: src/plugins/copyright/copyright_plugin.py:111
+#| msgid ""
+#| "If enabled, Builder will automatically display completion proposals as "
+#| "you type."
+msgid ""
+"When saving a file Builder will automatically update copyright information "
+"for you"
+msgstr ""
+"Ketika menyimpan berkas Builder akan secara otomatis memperbarui informasi "
+"hak cipta untuk Anda."
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/copyright/copyright_plugin.py:113
+msgid "update copyright save"
+msgstr "perbarui menyimpan hak cipta"
+
+#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
+msgid "Update Copyright before Saving"
+msgstr "Perbarui Hak Cipta sebelum Menyimpan"
+
+#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
+msgid "Updates the copyright for the user before saving to disk."
+msgstr "Perbarui hak cipta untuk pengguna sebelum disimpan ke disk."
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:48
 msgid "Display the project creation guide"
@@ -3998,7 +3951,7 @@ msgstr "Tanpa lisensi"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:243
 msgid "Uses the Git version control system"
-msgstr "Menggunakan ssistem kontrol versi Git"
+msgstr "Menggunakan sistem kontrol versi Git"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:328
 msgid "Create Project"
@@ -4607,6 +4560,7 @@ msgstr "Instalasi"
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
 #: src/plugins/rustup/rustup_plugin.py:484
 #: src/plugins/rustup/rustup_plugin.py:488
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:163
 msgid "Update"
 msgstr "Pemutakhiran"
 
@@ -4695,6 +4649,27 @@ msgstr ""
 msgid "GCC %s Cross-Compiler (System)"
 msgstr "GCC %s Cross-Compiler (Sistem)"
 
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
+#, c-format
+msgid "No repository to access file contents"
+msgstr "Tidak ada repositori untuk akses konten berkas"
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
+#, c-format
+msgid "No contents have been set to diff"
+msgstr "Tidak ada konten yang diatur untuk dibandingkan"
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
+#: src/plugins/git/daemon/ipc-git-util.h:33
+#, c-format
+msgid "The operation failed. The original error was \"%s\""
+msgstr "Operasi gagal. Galat asli adalah \"%s\""
+
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:68
+#, c-format
+msgid "The operation has been canceled"
+msgstr "Operasi dibatalkan"
+
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
 #, c-format
 msgid ""
@@ -4703,6 +4678,31 @@ msgid ""
 msgstr ""
 "Builder gagal untuk memberikan kredensial yang tepat ketika mengkloning "
 "repositori."
+
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:593
+#, c-format
+msgid "Cannot set AMEND and GPG_SIGN flags"
+msgstr "Tidak dapat mengatur tanda AMEND dan GPG_SIGN"
+
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:602
+#, c-format
+msgid "Cannot sign commit without GPG_KEY_ID"
+msgstr "Tidak dapat menandatangani komit tanpa GPG_KEY_ID"
+
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:399
+#, c-format
+#| msgid "Repository does not have a working directory."
+msgid "Cannot monitor files outside the working directory"
+msgstr "Tidak dapat memantau berkas diluar direktori kerja"
+
+#: src/plugins/git/gbp-git-client.c:329
+msgid "The client has been closed"
+msgstr "Klien telah tertutup"
+
+#: src/plugins/git/gbp-git-dependency-updater.c:92
+#| msgid "Uses the Git version control system"
+msgid "Git version control is not in use"
+msgstr "Kontrol versi Git tidak digunakan"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -4724,6 +4724,15 @@ msgstr "Didorong."
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Mendorong ref \"%s\""
+
+#: src/plugins/git/gbp-git-vcs.c:508
+msgid "Directory is not within repository"
+msgstr "Direktori tidak ada dalam repositori"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:133
+#, c-format
+msgid "A resository could not be found at “%s”."
+msgstr "Repository tidak dapat ditemukan di “%s”."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
@@ -4769,8 +4778,6 @@ msgstr "Gagal menyimpan dokumen glade: %s"
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:42
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:48
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:54
-#| msgctxt "shortcut window"
-#| msgid "Glade shortcuts"
 msgid "Glade shortcuts"
 msgstr "Pintasan Glade"
 
@@ -4778,32 +4785,22 @@ msgstr "Pintasan Glade"
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:43
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:49
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:55
-#| msgctxt "shortcut window"
-#| msgid "Designer"
 msgid "Designer"
 msgstr "Perancang"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:38
-#| msgctxt "shortcut window"
-#| msgid "Save the interface design"
 msgid "Save the interface design"
 msgstr "Simpan desain antarmuka"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:44
-#| msgctxt "shortcut window"
-#| msgid "Preview the interface design"
 msgid "Preview the interface design"
 msgstr "Pratinjau desain antarmuka"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:50
-#| msgctxt "shortcut window"
-#| msgid "Undo the last command"
 msgid "Undo the last command"
 msgstr "Batalkan perintah sebelumnya"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:56
-#| msgctxt "shortcut window"
-#| msgid "Redo the next command"
 msgid "Redo the next command"
 msgstr "Jadikan lagi perintah sebelumnya"
 
@@ -4864,7 +4861,7 @@ msgid "Paste"
 msgstr "Tempel"
 
 #: src/plugins/glade/gtk/menus.ui:37
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:242
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
 msgid "Delete"
 msgstr "Hapus"
@@ -5140,74 +5137,74 @@ msgstr "Arsitektur sistem sysroot."
 msgid "Add Tool:"
 msgstr "Tambah Perkakas:"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
 #: src/plugins/meson/gbp-meson-utils.c:98
 msgid "Compiler"
 msgstr "Compiler"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
 #: src/plugins/meson/gbp-meson-utils.c:100
 msgid "Preprocessor"
 msgstr "Preprocessor"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
 #: src/plugins/meson/gbp-meson-utils.c:102
 msgid "Archiver"
 msgstr "Pengarsip"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
 #: src/plugins/meson/gbp-meson-utils.c:104
 msgid "Linker"
 msgstr "Linker"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
 #: src/plugins/meson/gbp-meson-utils.c:106
 msgid "Strip"
 msgstr "Strip"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
 #: src/plugins/meson/gbp-meson-utils.c:108
 msgid "Executable wrapper"
 msgstr "Executable wrapper"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
 #: src/plugins/meson/gbp-meson-utils.c:110
 msgid "Package Config"
 msgstr "Konfigurasi Paket"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
 msgid "Any language"
 msgstr "Bahasa apapun"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
 msgid "C"
 msgstr "C"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
 msgid "C++"
 msgstr "C++"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "Python"
 msgstr "Python"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
 msgid "Vala"
 msgstr "Vala"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:194
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
 msgid "Fortran"
 msgstr "Fortran"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
 msgid "D"
 msgstr "D"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:227
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
 msgid "Add Tool"
 msgstr "Tambah Perkakas"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:248
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
 msgid "Delete Toolchain"
 msgstr "Hapus Toolchain"
 
@@ -5755,8 +5752,6 @@ msgid "Spelling"
 msgstr "Ejaan"
 
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:104
-#| msgctxt "shortcut window"
-#| msgid "Show the spellchecker panel"
 msgid "Show the spellchecker panel"
 msgstr "Tampilkan panel pemeriksa ejaan"
 
@@ -5851,14 +5846,10 @@ msgid "Underline misspelled words"
 msgstr "Garis bawahi kata salah eja"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
-#| msgid "Enable Pylint"
 msgid "Enable Stylelint"
 msgstr "Fungsikan Stylelint"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
-#| msgid ""
-#| "Enable the use of eslint to find additional diagnostics in JavaScript "
-#| "files. This may result in the execution of code in your project."
 msgid ""
 "Enable the use of stylelint to find additional diagnostics in stylesheet "
 "files. This may result in the execution of code in your project."
@@ -5868,12 +5859,10 @@ msgstr ""
 "Anda."
 
 #: src/plugins/stylelint/stylelint_plugin.py:135
-#| msgid "ESlint"
 msgid "Stylelint"
 msgstr "Stylelint"
 
 #: src/plugins/stylelint/stylelint_plugin.py:136
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr ""
 "Memungkinkan penggunaan Stylelint, yang dapat mengeksekusi kode dalam proyek "
@@ -5881,7 +5870,6 @@ msgstr ""
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/stylelint/stylelint_plugin.py:138
-#| msgid "pylint python lint code execute execution"
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "stylelint stylesheet kode lint mengeksekusi eksekusi"
 
@@ -5907,14 +5895,10 @@ msgstr ""
 "sebagai lampiran pada laporan kutu atau permintaan dukungan Anda."
 
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
-#| msgctxt "shortcut window"
-#| msgid "Symbols"
 msgid "Symbols"
 msgstr "Simbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:57
-#| msgctxt "shortcut window"
-#| msgid "Search symbols within document"
 msgid "Search symbols within document"
 msgstr "Cari simbol dalam dokumen"
 
@@ -6010,14 +5994,10 @@ msgid "Application exited\r\n"
 msgstr "Aplikasi keluar\r\n"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
-#| msgctxt "shortcut window"
-#| msgid "Terminal in Build Runtime"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal pada Runtime Bangun"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
-#| msgctxt "shortcut window"
-#| msgid "Terminal in Runtime"
 msgid "Terminal in Runtime"
 msgstr "Terminal pada Runtime"
 
@@ -6070,6 +6050,24 @@ msgstr "Harap tunggu sementara kami memindai proyek Anda"
 #: src/plugins/todo/gbp-todo-workspace-addin.c:157
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXMEs"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
+#| msgid "Updating %s"
+msgid "Updating Builder"
+msgstr "Memperbarui Builder"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
+#| msgid "No tests available"
+msgid "Update Available"
+msgstr "Pembaruan Tersedia"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:161
+msgid ""
+"An update to Builder is available. Builder can download and install it for "
+"you."
+msgstr ""
+"Pembaruan Builder tersedia. Builder dapat mengunduh dan menginstallnya untuk "
+"Anda."
 
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
@@ -6280,9 +6278,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ "Ada kegagalan saat menghitung perubahan garis dari git. Galat sebenarnya "
 #~ "adalah: %s"
 
-#~ msgid "Repository does not have a working directory."
-#~ msgstr "Repositori tak punya suatu direktori kerja."
-
 #~ msgid "File is not under control of git working directory."
 #~ msgstr "Berkas tidak di bawah kendali dari direktori kerja git."
 
@@ -6461,9 +6456,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Reload tests"
 #~ msgstr "Muat ulang uji"
-
-#~ msgid "No tests available"
-#~ msgstr "Tidak ada pengujian yang tersedia"
 
 #~ msgid "Tests will be loaded after building."
 #~ msgstr "Pengujian akan dimuat setelah membangun."
