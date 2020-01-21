@@ -3141,7 +3141,7 @@ ide_buffer_on_tag_added (IdeBuffer       *self,
   g_assert (GTK_IS_TEXT_TAG_TABLE (table));
 
   /* Adjust priority of our tab-stop tag. */
-  chunk_tag = gtk_text_tag_table_lookup (table, "snippet::tab-stop");
+  chunk_tag = gtk_text_tag_table_lookup (table, TAG_SNIPPET_TAB_STOP);
   if (chunk_tag != NULL)
     gtk_text_tag_set_priority (chunk_tag,
                                gtk_text_tag_table_get_size (table) - 1);
