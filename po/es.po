@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-01-20 13:04+0000\n"
-"PO-Revision-Date: 2020-01-21 11:27+0100\n"
+"POT-Creation-Date: 2020-01-21 10:29+0000\n"
+"PO-Revision-Date: 2020-01-21 11:53+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -3845,7 +3845,6 @@ msgid "Update Copyright"
 msgstr "Actualizar Copyright"
 
 #: src/plugins/copyright/copyright_plugin.py:111
-#, fuzzy
 #| msgid ""
 #| "If enabled, Builder will automatically display completion proposals as "
 #| "you type."
@@ -3853,21 +3852,21 @@ msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
 msgstr ""
-"Si se activa, Builder completará automáticamente las propuestas a medida que "
-"escribe."
+"Al guardar un archivo, Builder actualizará automáticamente la información "
+"del copyright"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:113
 msgid "update copyright save"
-msgstr ""
+msgstr "actualizar copyright guardar"
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
-msgstr ""
+msgstr "Actualizar copyright antes de guardar"
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
-msgstr ""
+msgstr "Actualiza el copyright del usuario antes de guardar en disco."
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:48
 msgid "Display the project creation guide"
@@ -4678,18 +4677,18 @@ msgstr "GCC %s compilador cruzado (sistema)"
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
 msgid "No repository to access file contents"
-msgstr ""
+msgstr "No hay repositorio al que acceder para contenidos de archivos"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr ""
+msgstr "No se han establecido contenidos para ver las diferencias"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
 #, c-format
 msgid "The operation failed. The original error was \"%s\""
-msgstr ""
+msgstr "La operación ha fallado. El error original es «%s»"
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:68
 #, c-format
@@ -4708,7 +4707,7 @@ msgstr ""
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:593
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
-msgstr ""
+msgstr "No se pueden establecer las opciones AMEND y GPG_SIGN"
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:602
 #, c-format
@@ -4716,18 +4715,16 @@ msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "No se puede firmar un «commit» sin GPG_KEY_ID"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:399
-#, fuzzy, c-format
+#, c-format
 #| msgid "Repository does not have a working directory."
 msgid "Cannot monitor files outside the working directory"
-msgstr "El repositorio no tiene una carpeta de trabajo."
+msgstr "No se pueden monitorizar archivos fuera de la carpeta de trabajo."
 
 #: src/plugins/git/gbp-git-client.c:329
-#| msgid "If the document has been modified."
 msgid "The client has been closed"
 msgstr "Se ha cerrado el cliente."
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
-#| msgid "Uses the Git version control system"
 msgid "Git version control is not in use"
 msgstr "El control de versiones Git no está en uso"
 
@@ -4758,8 +4755,8 @@ msgstr "La carpeta no está en un repositorio"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:133
 #, c-format
-msgid "A resository could not be found at “%s”."
-msgstr ""
+msgid "A repository could not be found at “%s”."
+msgstr "No se ha podido encontrar un repositorio en «%s»."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
@@ -6088,12 +6085,10 @@ msgid "TODO/FIXMEs"
 msgstr "POR HACER/CORREGIR"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
-#| msgid "Updating %s"
 msgid "Updating Builder"
 msgstr "Actualizando Builder"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
-#| msgid "No tests available"
 msgid "Update Available"
 msgstr "Actualización disponible"
 
