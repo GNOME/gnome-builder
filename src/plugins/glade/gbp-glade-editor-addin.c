@@ -89,6 +89,7 @@ gbp_glade_editor_addin_ensure_properties (GbpGladeEditorAddin *self)
 
   /* Wire up the shortcuts to the panel too */
   _gbp_glade_page_init_shortcuts (GTK_WIDGET (self->properties));
+  _gbp_glade_page_init_shortcuts (GTK_WIDGET (self->signals));
 }
 
 static void
@@ -217,11 +218,19 @@ gbp_glade_editor_addin_page_set (IdeEditorAddin *addin,
       dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->properties),
                                         GTK_WIDGET (view),
                                         "GBP_GLADE_PAGE");
+      dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->signals),
+                                        GTK_WIDGET (view),
+                                        "GBP_GLADE_PAGE");
     }
   else
     {
       if (self->signals_dock)
         gtk_widget_hide (GTK_WIDGET (self->signals_dock));
+
+      if (self->signals)
+        dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->signals),
+                                          NULL,
+                                          "GBP_GLADE_PAGE");
 
       if (self->properties)
         dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->properties),
