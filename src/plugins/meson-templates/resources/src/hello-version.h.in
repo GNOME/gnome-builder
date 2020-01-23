@@ -1,7 +1,6 @@
 {{include "license.h"}}
 
-#ifndef {{NAME}}_VERSION_H
-#define {{NAME}}_VERSION_H
+#pragma once
 
 #if !defined({{NAME}}_INSIDE) && !defined({{NAME}}_COMPILATION)
 # error "Only <{{name}}.h> can be included directly."
@@ -77,5 +76,3 @@
          ({{PREFIX}}_MAJOR_VERSION == (major) && {{PREFIX}}_MINOR_VERSION > (minor)) || \
          ({{PREFIX}}_MAJOR_VERSION == (major) && {{PREFIX}}_MINOR_VERSION == (minor) && \
           {{PREFIX}}_MICRO_VERSION >= (micro)))
-
-#endif /* {{NAME}}_VERSION_H */
