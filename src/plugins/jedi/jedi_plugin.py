@@ -215,9 +215,7 @@ try:
 except ImportError:
     print("jedi not found, python auto-completion not possible.")
     IS_JEDI_PATCHED = False
-    HAS_JEDI = False
 else:
-    HAS_JEDI = True
     IS_JEDI_PATCHED = patch_jedi()
 GIR_PATH_LIST = []
 
