@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-01-23 21:34+0000\n"
-"PO-Revision-Date: 2020-01-24 10:36-0300\n"
+"POT-Creation-Date: 2020-01-27 20:33+0000\n"
+"PO-Revision-Date: 2020-01-28 17:55-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -2356,7 +2356,6 @@ msgid "General"
 msgstr "Geral"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#| msgid "Show Right Panel"
 msgctxt "shortcut window"
 msgid "Show help"
 msgstr "Mostra a ajuda"
@@ -3847,9 +3846,6 @@ msgid "Update Copyright"
 msgstr "Atualizar direitos autorais"
 
 #: src/plugins/copyright/copyright_plugin.py:111
-#| msgid ""
-#| "If enabled, Builder will automatically display completion proposals as "
-#| "you type."
 msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
@@ -4722,17 +4718,14 @@ msgstr "Não é possível assinar um commit sem GPG_KEY_ID"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:399
 #, c-format
-#| msgid "Repository does not have a working directory."
 msgid "Cannot monitor files outside the working directory"
 msgstr "Não é possível monitorar arquivos fora do diretório de trabalho."
 
 #: src/plugins/git/gbp-git-client.c:329
-#| msgid "The file that is being edited."
 msgid "The client has been closed"
 msgstr "O cliente foi fechado"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
-#| msgid "Uses the Git version control system"
 msgid "Git version control is not in use"
 msgstr "O controle de versão Git não está em uso"
 
@@ -5279,66 +5272,75 @@ msgid "Calendar application for GNOME"
 msgstr "Aplicativo de calendário para o GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
+msgid "Clocks"
+msgstr "Relógios"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+#| msgid "Calendar application for GNOME"
+msgid "A simple clock application for GNOME"
+msgstr "Um aplicativo de relógio simples para o GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:78
 msgid "Games"
 msgstr "Jogos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+#: src/plugins/newcomers/gbp-newcomers-section.ui:79
 msgid "Simple game launcher for GNOME"
 msgstr "Um simples lançador de jogos para o GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:79
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Gitg"
 msgstr "Gitg"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "Gitg is a graphical Git client"
 msgstr "Gitg é um cliente gráfico do Git"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:89
+#: src/plugins/newcomers/gbp-newcomers-section.ui:99
 msgid "Maps"
 msgstr "Mapas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "A simple GNOME 3 maps application"
 msgstr "Um aplicativo simples de mapas para o GNOME 3 "
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Music"
 msgstr "Música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Music player and management application"
 msgstr "Aplicativo de gerenciamento e reprodução de música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Default file manager for GNOME"
 msgstr "Gerenciador de arquivo padrão para o GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Photos"
 msgstr "Fotos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Acesse, organize e compartilhe suas fotos no GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:130
+#: src/plugins/newcomers/gbp-newcomers-section.ui:140
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "An IRC Client for GNOME"
 msgstr "Um cliente IRC para o GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:141
+#: src/plugins/newcomers/gbp-newcomers-section.ui:151
 msgid "Sound Recorder"
 msgstr "Gravador de som"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:142
+#: src/plugins/newcomers/gbp-newcomers-section.ui:152
 msgid "A simple and modern sound recorder"
 msgstr "Um gravador de som simples e moderno"
 
@@ -6091,12 +6093,10 @@ msgid "TODO/FIXMEs"
 msgstr "TODO/FIXMEs"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
-#| msgid "Updating %s"
 msgid "Updating Builder"
 msgstr "Atualizando o Builder"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
-#| msgid "No tests available"
 msgid "Update Available"
 msgstr "Atualização disponível"
 
