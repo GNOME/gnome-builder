@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-01-21 10:29+0000\n"
-"PO-Revision-Date: 2020-01-21 11:53+0100\n"
+"POT-Creation-Date: 2020-01-27 20:33+0000\n"
+"PO-Revision-Date: 2020-01-28 15:34+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -3845,9 +3845,6 @@ msgid "Update Copyright"
 msgstr "Actualizar Copyright"
 
 #: src/plugins/copyright/copyright_plugin.py:111
-#| msgid ""
-#| "If enabled, Builder will automatically display completion proposals as "
-#| "you type."
 msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
@@ -4716,7 +4713,6 @@ msgstr "No se puede firmar un «commit» sin GPG_KEY_ID"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:399
 #, c-format
-#| msgid "Repository does not have a working directory."
 msgid "Cannot monitor files outside the working directory"
 msgstr "No se pueden monitorizar archivos fuera de la carpeta de trabajo."
 
@@ -5269,66 +5265,75 @@ msgid "Calendar application for GNOME"
 msgstr "Aplicación de calendario para GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
+msgid "Clocks"
+msgstr "Relojes"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+#| msgid "Calendar application for GNOME"
+msgid "A simple clock application for GNOME"
+msgstr "Una sencilla aplicación de reloj para GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:78
 msgid "Games"
 msgstr "Juegos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+#: src/plugins/newcomers/gbp-newcomers-section.ui:79
 msgid "Simple game launcher for GNOME"
 msgstr "Un sencillo lanzador de juegos para GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:79
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Gitg"
 msgstr "Gitg"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "Gitg is a graphical Git client"
 msgstr "Gitg es un cliente gráfico de Git"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:89
+#: src/plugins/newcomers/gbp-newcomers-section.ui:99
 msgid "Maps"
 msgstr "Mapas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "A simple GNOME 3 maps application"
 msgstr "Una sencilla aplicación de mapas para GNOME 3"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Music"
 msgstr "Música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Music player and management application"
 msgstr "Aplicación para gestionar y reproducir música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Default file manager for GNOME"
 msgstr "Gestor de archivos predeterminado para GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Photos"
 msgstr "Fotos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Acceda, organice y comparta sus fotos en GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:130
+#: src/plugins/newcomers/gbp-newcomers-section.ui:140
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "An IRC Client for GNOME"
 msgstr "Un cliente de IRC para GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:141
+#: src/plugins/newcomers/gbp-newcomers-section.ui:151
 msgid "Sound Recorder"
 msgstr "Grabadora de sonidos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:142
+#: src/plugins/newcomers/gbp-newcomers-section.ui:152
 msgid "A simple and modern sound recorder"
 msgstr "Una grabadora de sonidos sencilla y moderna"
 
