@@ -78,6 +78,10 @@ class CopyrightBufferAddin(Ide.Object, Ide.BufferAddin):
             # Split based on 4-digit years
             parts = _YEAR_REGEX.split(text)
 
+            # Ignore if this year is already represented
+            if year in parts:
+                break
+
             # If we have at least 2 years, we can update them
             if len(parts) >= 2:
                 if '-' in parts:
