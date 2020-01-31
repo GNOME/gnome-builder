@@ -57,15 +57,6 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem):
     def do_get_builddir(self, pipeline):
         return self.get_context().ref_workdir().get_path()
 
-    def do_get_build_flags_async(self, file, cancellable, callback, data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.file = file
-        task.build_flags = []
-        task.return_boolean(True)
-
-    def do_get_build_flags_finish(self, result):
-        return result.build_flags
-
     def get_make_dir(self):
         return self.make_dir
 
