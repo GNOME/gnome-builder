@@ -94,6 +94,15 @@ IDE_AVAILABLE_IN_3_32
 gboolean          ide_buffer_manager_save_all_finish    (IdeBufferManager      *self,
                                                          GAsyncResult          *result,
                                                          GError               **error);
+IDE_AVAILABLE_IN_3_36
+void              ide_buffer_manager_reload_all_async   (IdeBufferManager      *self,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+IDE_AVAILABLE_IN_3_36
+gboolean          ide_buffer_manager_reload_all_finish  (IdeBufferManager      *self,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
 IDE_AVAILABLE_IN_3_32
 gboolean          ide_buffer_manager_has_file           (IdeBufferManager      *self,
                                                          GFile                 *file);

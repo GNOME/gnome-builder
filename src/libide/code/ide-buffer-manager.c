@@ -1315,3 +1315,92 @@ ide_buffer_manager_foreach (IdeBufferManager     *self,
                       (GFunc)ide_buffer_manager_foreach_cb,
                       &state);
 }
+
+static void
+ide_buffer_manager_reload_all_load_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeBufferManager *self = (IdeBufferManager *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  guint *n_active;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  n_active = ide_task_get_task_data (task);
+
+  if (!ide_buffer_manager_load_file_finish (self, result, &error))
+    g_warning ("Failed to reload buffer: %s", error->message);
+
+  (*n_active)--;
+
+  if (*n_active == 0)
+    ide_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_buffer_manager_reload_all_foreach_cb (IdeBuffer *buffer,
+                                          IdeTask   *task)
+{
+  IdeBufferManager *self;
+  guint *n_active;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  n_active = ide_task_get_task_data (task);
+
+  if (ide_buffer_get_changed_on_volume (buffer))
+    {
+      (*n_active)++;
+
+      ide_buffer_manager_load_file_async (self,
+                                          ide_buffer_get_file (buffer),
+                                          IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD,
+                                          NULL,
+                                          ide_task_get_cancellable (task),
+                                          ide_buffer_manager_reload_all_load_cb,
+                                          g_object_ref (task));
+    }
+}
+
+void
+ide_buffer_manager_reload_all_async (IdeBufferManager    *self,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  guint *n_active;
+
+  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  n_active = g_new0 (guint, 1);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buffer_manager_reload_all_async);
+  ide_task_set_task_data (task, n_active, g_free);
+
+  ide_buffer_manager_foreach (self,
+                              (IdeBufferForeachFunc)ide_buffer_manager_reload_all_foreach_cb,
+                              task);
+
+  if (*n_active == 0)
+    ide_task_return_boolean (task, TRUE);
+}
+
+gboolean
+ide_buffer_manager_reload_all_finish (IdeBufferManager  *self,
+                                      GAsyncResult      *result,
+                                      GError           **error)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
