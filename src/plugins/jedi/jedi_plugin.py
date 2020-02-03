@@ -103,23 +103,23 @@ def patch_jedi():
             from jedi.evaluate.context import Context
         from jedi.evaluate.docstrings import _evaluate_for_statement_string
         from jedi.evaluate.imports import Importer
-    
+
         class PatchedJediCompiledObject(CompiledObject):
             "A modified version of Jedi CompiledObject to work with GObject Introspection modules"
-    
+
             def __init__(self, evaluator, obj, parent_context=None, faked_class=None):
                 # we have to override __init__ to change super(CompiledObject, self)
                 # to Context, in order to prevent an infinite recursion
                 Context.__init__(self, evaluator, parent_context)
                 self.obj = obj
                 self.tree_node = faked_class
-    
+
             def _cls(self):
                 if self.obj.__class__ == IntrospectionModule:
                     return self
                 else:
                     return super()._cls(self)
-    
+
             @property
             def py__call__(self):
                 def actual(params):
@@ -130,7 +130,7 @@ def patch_jedi():
                         ret_type = ret_type.replace(' or None', '')
                     if ret_type.startswith('iter:'):
                         ret_type = ret_type[len('iter:'):]  # we don't care if it's an iterator
-    
+
                     if hasattr(__builtins__, ret_type):
                         # The function we're inspecting returns a builtin python type, that's easy
                         # (see test/test_evaluate/test_compiled.py in the jedi source code for usage)
@@ -149,7 +149,7 @@ def patch_jedi():
                             if parent_module.startswith('gi.overrides'):
                                 parent_module = parent_module[len('gi.overrides.'):]
                                 parent = '%s.%s' % (parent_module, parent)
-    
+
                         if ret_type.startswith(parent):
                             # A pygobject type in the same module
                             ret_type = ret_type[len(parent):]
@@ -162,13 +162,13 @@ def patch_jedi():
                 if type(self.obj) == FunctionInfo:
                     return actual
                 return super().py__call__
-    
+
         # we need to override CompiledBoundMethod without changing it much,
         # just so it'll not get confused due to our overriden CompiledObject
         class PatchedCompiledBoundMethod(PatchedJediCompiledObject):
             def __init__(self, func):
                 super().__init__(func.evaluator, func.obj, func.parent_context, func.tree_node)
-    
+
         class PatchedJediImporter(Importer):
             "A modified version of Jedi Importer to work with GObject Introspection modules"
             def follow(self):
@@ -182,7 +182,7 @@ def patch_jedi():
                         except ImportError:
                             pass
                 return module_list
-    
+
         try:
             # Pre 0.12 workaround
             # TODO: What needs to be fixed here for 0.12?
@@ -197,7 +197,7 @@ def patch_jedi():
             jedi.evaluate.compiled.fake.get_module = patched_jedi_get_module
         except:
             pass
-    
+
         jedi.evaluate.compiled.CompiledObject = PatchedJediCompiledObject
         try:
             jedi.evaluate.instance.CompiledBoundMethod = PatchedCompiledBoundMethod
