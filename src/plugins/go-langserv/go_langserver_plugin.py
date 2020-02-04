@@ -35,10 +35,10 @@ class GoService(Ide.Object):
             supervisor.stop()
 
     def _which_go_lanserver(self):
-        path = os.path.expanduser('~/go/bin/go-langserver')
+        path = os.path.expanduser('~/go/bin/gopls')
         if os.path.exists(path):
             return path
-        return "go-langserver"
+        return "gopls"
 
     def _ensure_started(self):
         # To avoid starting the process unconditionally at startup, lazily
@@ -62,9 +62,9 @@ class GoService(Ide.Object):
             launcher.push_argv("/bin/bash")
             launcher.push_argv("--login")
             launcher.push_argv("-c")
-            launcher.push_argv('exec %s %s -gocodecompletion' % (
+            launcher.push_argv('exec %s %s serve' % (
                 self._which_go_lanserver(),
-                "-trace" if DEV_MODE else ""))
+                "-debug" if DEV_MODE else ""))
 
             # Spawn our peer process and monitor it for
             # crashes. We may need to restart it occasionally.
