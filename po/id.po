@@ -2,23 +2,23 @@
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Andika Triwidada <andika@gmail.com>, 2015.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2018, 2019.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2020.
 # Sucipto <sucipto@pm.me>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-01-18 14:58+0000\n"
-"PO-Revision-Date: 2020-01-20 12:21+0700\n"
-"Last-Translator: Sucipto <sucipto@pm.me>\n"
+"POT-Creation-Date: 2020-01-27 20:33+0000\n"
+"PO-Revision-Date: 2020-02-07 13:38+0700\n"
+"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural= n!=1;\n"
-"X-Generator: Gtranslator 3.34.0\n"
+"X-Generator: Poedit 2.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -1630,7 +1630,7 @@ msgstr "GNOME Builder"
 msgid "translator-credits"
 msgstr ""
 "Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
-"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2018, 2019.\n"
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2020.\n"
 "Sucipto <sucipto@pm.me>, 2020."
 
 #: src/libide/gui/ide-application-actions.c:155
@@ -3813,15 +3813,12 @@ msgid "Update Copyright"
 msgstr "Perbarui Hak Cipta"
 
 #: src/plugins/copyright/copyright_plugin.py:111
-#| msgid ""
-#| "If enabled, Builder will automatically display completion proposals as "
-#| "you type."
 msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
 msgstr ""
 "Ketika menyimpan berkas Builder akan secara otomatis memperbarui informasi "
-"hak cipta untuk Anda."
+"hak cipta untuk Anda"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:113
@@ -4691,7 +4688,6 @@ msgstr "Tidak dapat menandatangani komit tanpa GPG_KEY_ID"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:399
 #, c-format
-#| msgid "Repository does not have a working directory."
 msgid "Cannot monitor files outside the working directory"
 msgstr "Tidak dapat memantau berkas diluar direktori kerja"
 
@@ -4700,7 +4696,6 @@ msgid "The client has been closed"
 msgstr "Klien telah tertutup"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
-#| msgid "Uses the Git version control system"
 msgid "Git version control is not in use"
 msgstr "Kontrol versi Git tidak digunakan"
 
@@ -4731,8 +4726,8 @@ msgstr "Direktori tidak ada dalam repositori"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:133
 #, c-format
-msgid "A resository could not be found at “%s”."
-msgstr "Repository tidak dapat ditemukan di “%s”."
+msgid "A repository could not be found at “%s”."
+msgstr "Repositori tidak dapat ditemukan di “%s”."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
@@ -5243,66 +5238,74 @@ msgid "Calendar application for GNOME"
 msgstr "Aplikasi kalender untuk GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
+msgid "Clocks"
+msgstr "Jam"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+msgid "A simple clock application for GNOME"
+msgstr "Aplikasi jam sederhana untuk GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:78
 msgid "Games"
 msgstr "Permainan"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+#: src/plugins/newcomers/gbp-newcomers-section.ui:79
 msgid "Simple game launcher for GNOME"
 msgstr "Peluncur permainan sederhana untuk GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:79
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Gitg"
 msgstr "Gitg"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "Gitg is a graphical Git client"
 msgstr "Gitg adalah klien Git grafis"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:89
+#: src/plugins/newcomers/gbp-newcomers-section.ui:99
 msgid "Maps"
 msgstr "Peta"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "A simple GNOME 3 maps application"
 msgstr "Aplikasi peta sederhana GNOME 3"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Music"
 msgstr "Musik"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
 msgid "Music player and management application"
 msgstr "Pemutar musik dan aplikasi manajemen"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Default file manager for GNOME"
 msgstr "Manajer berkas bawaan untuk GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Photos"
 msgstr "Foto"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Akses, atur, dan bagikan foto Anda di GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:130
+#: src/plugins/newcomers/gbp-newcomers-section.ui:140
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "An IRC Client for GNOME"
 msgstr "Klien IRC untuk GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:141
+#: src/plugins/newcomers/gbp-newcomers-section.ui:151
 msgid "Sound Recorder"
 msgstr "Perekam Suara"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:142
+#: src/plugins/newcomers/gbp-newcomers-section.ui:152
 msgid "A simple and modern sound recorder"
 msgstr "Suatu perekam suara modern yang sederhana"
 
@@ -6052,12 +6055,10 @@ msgid "TODO/FIXMEs"
 msgstr "TODO/FIXMEs"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
-#| msgid "Updating %s"
 msgid "Updating Builder"
 msgstr "Memperbarui Builder"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
-#| msgid "No tests available"
 msgid "Update Available"
 msgstr "Pembaruan Tersedia"
 
