@@ -4,7 +4,7 @@
     "runtime-version": "3.34",
     "sdk": "org.gnome.Sdk",
 {{if language == "rust"}}
-    "sdk-extensions" : [
+    "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable"
     ],
 {{end}}
@@ -17,11 +17,11 @@
     ],
 {{if language == "rust"}}
     "build-options": {
-        "append-path" : "/usr/lib/sdk/rust-stable/bin",
-        "build-args" : [
+        "append-path": "/usr/lib/sdk/rust-stable/bin",
+        "build-args": [
             "--share=network"
         ],
-        "env" : {
+        "env": {
             "CARGO_HOME": "/run/build/{{name}}/cargo",
             "RUST_BACKTRACE": "1",
             "RUST_LOG": "{{name}}=debug"
