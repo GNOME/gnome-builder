@@ -26,10 +26,9 @@
             "--share=network"
         ],
         "env" : {
-            "RUSTFLAGS" : "--remap-path-prefix =../ --error-format=human",
-            "CARGO_HOME" : "/run/build/{{name}}/cargo",
-            "RUST_BACKTRACE" : "1",
-            "RUST_LOG" : "{{name}}=debug"
+            "CARGO_HOME": "/run/build/{{name}}/cargo",
+            "RUST_BACKTRACE": "1",
+            "RUST_LOG": "{{name}}=debug"
         }
     },
 {{end}}
