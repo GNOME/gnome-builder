@@ -1,7 +1,6 @@
-use gtk::prelude::*;
-use gio::prelude::*;
 use gettextrs::*;
-use std::env;
+use gio::prelude::*;
+use gtk::prelude::*;
 
 mod config;
 mod window;
@@ -15,7 +14,7 @@ fn main() {
     textdomain("{{name}}");
 
     let res = gio::Resource::load(config::PKGDATADIR.to_owned() + "/{{name}}.gresource")
-                                .expect("Could not load resources");
+        .expect("Could not load resources");
     gio::resources_register(&res);
 
     let app = gtk::Application::new(Some("{{appid}}"), Default::default()).unwrap();
@@ -27,9 +26,6 @@ fn main() {
         window.widget.present();
     });
 
-
-    let args: Vec<String> = env::args().collect();
-    app.run(&args);
-
+    let ret = app.run(&std::env::args().collect::<Vec<_>>());
+    std::process::exit(ret);
 }
-

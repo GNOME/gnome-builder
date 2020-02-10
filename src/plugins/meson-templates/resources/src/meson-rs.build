@@ -18,6 +18,7 @@ configure_file(
     output: 'config.rs',
     configuration: conf
 )
+
 # Copy the config.rs output to the source directory.
 run_command(
   'cp',
