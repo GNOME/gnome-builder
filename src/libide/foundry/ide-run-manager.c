@@ -423,6 +423,32 @@ ide_run_manager_run_cb (GObject      *object,
 }
 
 static void
+copy_builtin_envvars (IdeEnvironment *environment)
+{
+  static const gchar *copy_env[] = {
+    "COLORTERM",
+    "DESKTOP_SESSION",
+    "LANG",
+    "WAYLAND_DISPLAY",
+    "XDG_CURRENT_DESKTOP",
+    "XDG_SEAT",
+    "XDG_SESSION_DESKTOP",
+    "XDG_SESSION_ID",
+    "XDG_SESSION_TYPE",
+    "XDG_VTNR",
+  };
+
+  for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
+    {
+      const gchar *key = copy_env[i];
+      const gchar *val = g_getenv (key);
+
+      if (val != NULL && ide_environment_getenv (environment, key) == NULL)
+        ide_environment_setenv (environment, key, val);
+    }
+}
+
+static void
 do_run_async (IdeRunManager *self,
               IdeTask       *task)
 {
@@ -491,6 +517,7 @@ do_run_async (IdeRunManager *self,
   environment = ide_runner_get_environment (runner);
   /* FIXME: Allow toggling this in build prefs */
   ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
+  copy_builtin_envvars (environment);
   ide_environment_copy_into (ide_config_get_environment (config), environment, TRUE);
 
   g_signal_emit (self, signals [RUN], 0, runner);
