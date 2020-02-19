@@ -26,6 +26,7 @@ by bridging them to our supervised Vala Language Server.
 
 import gi
 import os
+import sys
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -34,6 +35,7 @@ from gi.repository import Ide
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GtkSource
+from gi.repository import Json
 
 DEV_MODE = True
 
@@ -42,6 +44,22 @@ class GVlsService(Ide.Object):
     _has_started = False
     _supervisor = None
     _monitor = None
+    meson_build_system = True
+    initialized = True
+    default_namespaces = True
+    default_vapi_dirs = True
+    scan_work_space = True
+    add_using_namespaces = True
+    files = []
+    packages = []
+    vala_args = {}
+    options = []
+    build_system = None
+    pipeline = None
+    build_args = None
+    ide_config = None
+    source_file = None
+    build_monitor = None
 
     @classmethod
     def from_context(klass, context):
@@ -118,17 +136,260 @@ class GVlsService(Ide.Object):
             self._supervisor.set_launcher(launcher)
             self._supervisor.start()
 
-    def _on_load_configuration(self, client):
-        return GLib.Variant('a{sv}', {
-            'initialized': GLib.Variant.new_boolean(True),
-            'defaultNamespaces': GLib.Variant.new_boolean(True),
-            'defaultVapiDirs': GLib.Variant.new_boolean(True),
-            'scanWorkspace': GLib.Variant.new_boolean(True),
-            'addUsingNamespaces': GLib.Variant.new_boolean(True),
-            'packages': GLib.Variant.new_strv([]),
-            'options': GLib.Variant.new_strv([]),
-        })
+    def list_to_variant(self, l):
+        b = GLib.VariantBuilder(GLib.VariantType.new('av'))
+        for s in l:
+            v = GLib.Variant.new_string (s)
+            b.add_value(GLib.Variant.new_variant(v))
+        return b.end()
 
+    def dict_to_array_variant(self, d):
+        b = GLib.VariantBuilder(GLib.VariantType.new('av'))
+        for k in d.keys():
+            a = d[k]
+            b2 = GLib.VariantBuilder(GLib.VariantType.new('a{sv}'))
+            ndi = GLib.Variant.new_string ('name')
+            vndi = GLib.Variant.new_variant(GLib.Variant.new_string(k))
+            di = GLib.Variant.new_dict_entry(ndi, vndi)
+            vdi = GLib.Variant.new_variant(di)
+            b2.add_value(di)
+            vdi = GLib.Variant.new_string ('value')
+            vvdi = GLib.Variant.new_variant(GLib.Variant.new_string(a))
+            div = GLib.Variant.new_dict_entry(vdi, vvdi)
+            vdi = GLib.Variant.new_variant(div)
+            b2.add_value(div)
+            b.add_value(GLib.Variant.new_variant(b2.end()))
+        return b.end()
+    
+    def create_dict_entry_boolean(self, key, val):
+        vk = GLib.Variant.new_string (key)
+        vv = GLib.Variant.new_variant(GLib.Variant.new_boolean(val))
+        return GLib.Variant.new_dict_entry(vk, vv)
+
+    def create_configuration_variant(self):
+        try:
+            b = GLib.VariantBuilder(GLib.VariantType.new('a{sv}'))
+            b.add_value(self.create_dict_entry_boolean('initialized', self.initialized))
+            b.add_value(self.create_dict_entry_boolean('defaultNamespaces', self.default_namespaces))
+            b.add_value(self.create_dict_entry_boolean('defaultVapiDirs', self.default_vapi_dirs))
+            b.add_value(self.create_dict_entry_boolean('scanWorkspace', self.scan_work_space))
+            b.add_value(self.create_dict_entry_boolean('addUsingNamespaces', self.add_using_namespaces))
+            b.add_value(self.create_dict_entry_boolean('mesonBuildSystem', self.meson_build_system))
+            ad = GLib.Variant.new_string ('valaArgs')
+            vadi = self.dict_to_array_variant(self.vala_args)
+            adi = GLib.Variant.new_dict_entry(ad, GLib.Variant.new_variant (vadi))
+            b.add_value(adi)
+            od = GLib.Variant.new_string ('options')
+            vodi = self.list_to_variant(self.options)
+            odi = GLib.Variant.new_dict_entry(od, GLib.Variant.new_variant (vodi))
+            b.add_value(odi)
+            pd = GLib.Variant.new_string ('packages')
+            vpdi = self.list_to_variant(self.packages)
+            pdi = GLib.Variant.new_dict_entry(pd, GLib.Variant.new_variant (vpdi))
+            b.add_value(pdi)
+            fd = GLib.Variant.new_string ('files')
+            vfdi = self.list_to_variant(self.files)
+            fdi = GLib.Variant.new_dict_entry(fd, GLib.Variant.new_variant (vfdi))
+            b.add_value(fdi)
+            return GLib.Variant.new_variant (b.end())
+        except:
+            print ('>>>>>>>>>>>>>>>> On Load Configuration Error:\n\n\n')
+            return GLib.Variant ('a{sv}', {})
+            print('\n\n\n')
+    
+    def _build_config_changed(self, obj, mfile, ofile, event_type):
+        if event_type == Gio.FileMonitorEvent.CHANGED or event_type == Gio.FileMonitorEvent.CREATED:
+            self._parse_build_commands()
+            self._notify_change_configuration()
+        if event_type == Gio.FileMonitorEvent.DELETED:
+            self.build_monitor = None
+            
+    
+    def _parse_build_commands(self):
+        try:
+            self.build_args = []
+            ctx = self._client.ref_context()
+            buildmgr = Ide.BuildManager.from_context (ctx)
+            self.pipeline = buildmgr.get_pipeline ()
+            if self.pipeline != None:
+                if self.pipeline.has_configured():
+                    bcdir = Gio.File.new_for_path(self.pipeline.get_builddir())
+                    if self.meson_build_system:
+                        bcf = Gio.File.new_for_uri(bcdir.get_uri()+'/compile_commands.json')
+                        if self.build_monitor == None:
+                            self.build_monitor = bcf.monitor(Gio.FileMonitorFlags.NONE, None)
+                            self.build_monitor.connect('changed', self._build_config_changed)
+                        cc = Ide.CompileCommands.new()
+                        cc.load (bcf)
+                        commands = cc.lookup (self.source_file, '')
+                        if commands != None:
+                            self.build_args = commands[0]
+            
+            self.files = []
+            self.packages = []
+            self.vala_args = {}
+            self.options = []
+            current = ''
+            found_package = False
+            found_arg = False
+            arg_name = ''
+            for s in self.build_args:
+                if found_package:
+                    self.packages += [s]
+                    found_package = False
+                    continue
+                if found_arg:
+                    self.vala_args[arg_name] = s
+                    found_arg = False
+                    continue
+                if s == '--pkg' or s == 'pkg':
+                    found_package = True
+                if s.startswith('-') and not (s == '--pkg' or s == 'pkg'):
+                    if s.startswith('--version'):
+                        continue
+                    if s.startswith('--api-version'):
+                        continue
+                    if s == '-C' or s == '--ccode':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--use-header':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--fast-vapi':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--use-fast-vapi':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--vapi-comments':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--deps':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '-c' or s == '--compile':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '-g' or s == '--debug':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--enable-mem-profiler':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--nostdpkg':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--disable-assert':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--enable-checking':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--enable-deprecated':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--hide-internal':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--enable-experimental':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--disable-warnings':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--fatal-warnings':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--disable-since-check':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--enable-experimental-non-null':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--enable-gobject-tracing':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--save-temps':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '-q' or s == '--quiet':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '-v' or s == '--verbose':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--no-color':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--enable-version-header':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--disable-version-header':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--run-args':
+                        self.vala_args[s] = ''
+                        continue
+                    if s == '--abi-stability':
+                        self.vala_args[s] = ''
+                        continue
+                    if '=' in s:
+                        ps = s.split('=')
+                        if len(ps) == 2:
+                            self.vala_args[ps[0]] = ps[1]
+                        continue
+                    found_arg = True
+                    arg_name = s
+                    continue
+        except BaseException as exc:
+            print('\n\nParse Build Commands Error:\n')
+            print(exc.args)
+            print('\n\n\n')
+
+    def _did_change_configuration(self, source_object, result, user_data):
+        try:
+            res = self._client.send_notification_finish(result)
+        except BaseException as exc:
+            print('\n\nChange Configuration Notification error:\n')
+            print(exc.args)
+            print('\n\n\n')
+    
+    def _notify_change_configuration(self):
+        try:
+            vconf = self.create_configuration_variant(None)
+            cancellable = self._client.ref_cancellable()
+            b = GLib.VariantBuilder(GLib.VariantType.new('a{sv}'))
+            vk = GLib.Variant.new_string ('settings')
+            vv = GLib.Variant.new_variant(GLib.Variant.new_variant(vconf))
+            de = GLib.Variant.new_dict_entry(vk, vv)
+            b.add_value(de)
+            vnotify = GLib.Variant.new_variant(b.end())
+            self._client.send_notification_async("workspace/didChangeConfiguration", vnotify, cancellable, self._did_change_configuration, None)
+        except BaseException as exc:
+            print('\n\nNotify change configuration error:\n')
+            print(exc.args)
+            print('\n\n\n')
+    
+    def _on_load_configuration(self, data):
+        ctx = self._client.get_context()
+        bufm = Ide.BufferManager.from_context(ctx)
+        for i in range(bufm.get_n_items()):
+            buf = bufm.get_item(i)
+            f = buf.get_file()
+            if f.get_path().endswith('.vala'):
+                self.source_file = f
+                self._parse_build_commands()
+                break
+        return self.create_configuration_variant()
+    
+    def _on_pipeline_diagnostic(self, obj, diagnostic):
+        try:
+            self.source_file = diagnostic.get_file()
+        except BaseException as exc:
+            print('\n\nOn Pipeline Loaded start get build flags error:\n')
+            print(exc.args)
+            print('\n\n\n')
+                     
     def _gvls_spawned(self, supervisor, subprocess):
         """
         This callback is executed when the `org.gnome.gvls.stdio.Server` process is spawned.
@@ -149,6 +410,21 @@ class GVlsService(Ide.Object):
         self._client.add_language('vala')
         self._client.start()
         self.notify('client')
+        try:
+            ctx = self._client.ref_context()
+            self.build_system = Ide.BuildSystem.from_context (ctx)
+            if self.build_system.get_id () == 'meson':
+                self.meson_build_system = True
+            else:
+                self.meson_build_system = False
+            buildmgr = Ide.BuildManager.from_context (ctx)
+            self.pipeline = buildmgr.get_pipeline ()
+            self.pipeline.connect('diagnostic', self._on_pipeline_diagnostic)
+        except BaseException as exc:
+            print('\n\n\n Exception Arguments: \n')
+            print(exc.args)
+            print('\n\n')
+            
 
     def _create_launcher(self):
         """
