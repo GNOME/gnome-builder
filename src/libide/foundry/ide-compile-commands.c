@@ -269,6 +269,27 @@ ide_compile_commands_load_worker (IdeTask      *task,
           info->command = g_strdup (command);
           g_ptr_array_add (vala_info, info);
         }
+
+      if (command != NULL && strstr (command, "valac"))
+        {
+          g_auto(GStrv) argv = NULL;
+          gint argc = 0;
+
+          if (!g_shell_parse_argv (command, &argc, &argv, NULL))
+            continue;
+
+          for (guint j = 0; j < argc; j++)
+            {
+              if (strstr (argv[j], ".vala"))
+                {
+                  info = g_slice_new0 (CompileInfo);
+                  info->file = g_file_resolve_relative_path (dir, argv[j]);
+                  info->directory = g_object_ref (dir);
+                  info->command = g_strdup (command);
+                  g_ptr_array_add (vala_info, info);
+                }
+            }
+        }
     }
 
   self->info_by_file = g_steal_pointer (&info_by_file);
