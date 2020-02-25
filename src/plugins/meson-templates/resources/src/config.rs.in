@@ -1,3 +1,3 @@
-pub static PKGDATADIR: &'static str = @pkgdatadir@;
-pub static VERSION: &'static str = @VERSION@;
-pub static LOCALEDIR: &'static str = @localedir@;
+pub static PKGDATADIR: &str = @pkgdatadir@;
+pub static VERSION: &str = @VERSION@;
+pub static LOCALEDIR: &str = @localedir@;
