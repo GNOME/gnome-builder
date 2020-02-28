@@ -792,6 +792,14 @@ ide_buffer_manager_save_all_foreach_cb (IdeObject *object,
   if (ide_buffer_get_state (buffer) != IDE_BUFFER_STATE_READY)
     return;
 
+  /* If the file is externally modified on disk, don't save it either
+   * so we don't risk overwriting changed files. The user needs to
+   * explicitly overwrite those to avoid loosing work saved outside
+   * of Builder.
+   */
+  if (ide_buffer_get_changed_on_volume (buffer))
+    return;
+
   g_ptr_array_add (state->buffers, g_object_ref (buffer));
 
   state->n_active++;
