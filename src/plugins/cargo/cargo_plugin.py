@@ -87,7 +87,7 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
         if project_file.get_basename() != 'Cargo.toml':
             project_file = project_file.get_child('Cargo.toml')
 
-        cargo_toml = project_file.get_path()
+        project_dir = os.path.dirname(project_file.get_path())
         config = pipeline.get_config()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
@@ -99,19 +99,17 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
         # Fetch dependencies so that we no longer need network access
         fetch_launcher = pipeline.create_launcher()
         fetch_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
+        fetch_launcher.set_cwd(project_dir)
         fetch_launcher.push_argv(cargo)
         fetch_launcher.push_argv('fetch')
-        fetch_launcher.push_argv('--manifest-path')
-        fetch_launcher.push_argv(cargo_toml)
         self.track(pipeline.attach_launcher(Ide.PipelinePhase.DOWNLOADS, 0, fetch_launcher))
 
         # Now create our launcher to build the project
         build_launcher = pipeline.create_launcher()
         build_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
+        build_launcher.set_cwd(project_dir)
         build_launcher.push_argv(cargo)
         build_launcher.push_argv('build')
-        build_launcher.push_argv('--manifest-path')
-        build_launcher.push_argv(cargo_toml)
         build_launcher.push_argv('--message-format')
         build_launcher.push_argv('human')
 
@@ -136,10 +134,9 @@ class CargoPipelineAddin(Ide.Object, Ide.PipelineAddin):
 
         clean_launcher = pipeline.create_launcher()
         clean_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
+        clean_launcher.set_cwd(project_dir)
         clean_launcher.push_argv(cargo)
         clean_launcher.push_argv('clean')
-        clean_launcher.push_argv('--manifest-path')
-        clean_launcher.push_argv(cargo_toml)
 
         build_stage = Ide.PipelineStageLauncher.new(context, build_launcher)
         build_stage.set_name(_("Building project"))
