@@ -166,8 +166,8 @@ msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 for number "
 "of CPU."
 msgstr ""
-"Nombre de processos de treball a usar quan es fan muntatges. -1 per defecte "
-"sensible. 0 per al nombre de CPU."
+"Nombre de processos de treball a usar quan es fan muntatges. -1 per una configuració per defecte "
+"sensata. 0 per al nombre de CPU."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Allow network when metered"
@@ -191,7 +191,7 @@ msgstr "Usa Ctags per a autocompleció."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 msgid "Enable semantic highlighting"
-msgstr "Habilita el ressaltat semantic"
+msgstr "Habilita el ressaltat semàntic"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
 msgid ""
@@ -2015,7 +2015,7 @@ msgstr "Amaga automàticament el mapa de resum"
 
 #: src/libide/gui/ide-preferences-builtin.c:175
 msgid "Automatically hide map when editor loses focus"
-msgstr "Amaga automàticament el mapa quan l'editor perda el focus"
+msgstr "Amaga automàticament el mapa quan l'editor perdi el focus"
 
 #: src/libide/gui/ide-preferences-builtin.c:177
 msgid "Visible Whitespace Characters"
@@ -2980,8 +2980,7 @@ msgstr ""
 #, c-format
 msgid "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
 msgstr ""
-"Connector embellidor: no es pot crear un fitxer temporal per a «%s»: l'entrada «%s» "
-"està desactivada"
+"Connector embellidor: no es pot crear un fitxer temporal per a «%s»: l'entrada «%s» està desactivada"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:407
@@ -3628,7 +3627,7 @@ msgstr "Protanopia (vermell-cec)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
 msgid "Protanomaly (red-weak)"
-msgstr "Protanomàlia (vermell-feble)"
+msgstr "Protanomalia (vermell-feble)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
 msgid "Tritanopia (blue-blind)"
@@ -3636,7 +3635,7 @@ msgstr "Tritanopia (blau-cec)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
 msgid "Tritanomaly (blue-weak)"
-msgstr "Tritanomia (blau-feble)"
+msgstr "Tritanomalia (blau-feble)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
 msgid "Websafe"
@@ -5956,7 +5955,7 @@ msgstr "Ha fallat localitzar el directori de treball"
 #: src/plugins/vim/gb-vim.c:766
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
-msgstr "Invàlid :sintaxi de subordre: %s"
+msgstr "Invàlid: sintaxi de subordre: %s"
 
 #: src/plugins/vim/gb-vim.c:1203
 #, c-format
