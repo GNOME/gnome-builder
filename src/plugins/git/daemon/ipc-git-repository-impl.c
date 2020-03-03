@@ -34,7 +34,7 @@
 #include "ipc-git-types.h"
 #include "ipc-git-util.h"
 
-#if LIBGIT2_SOVERSION >= 28
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (git_buf, git_buf_dispose)
 #else
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (git_buf, git_buf_free)
