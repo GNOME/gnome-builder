@@ -137,14 +137,36 @@ IdeSnippet *
 ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
 {
   g_autoptr(IdeSnippet) snippet = NULL;
-  g_autoptr(IdeSnippetChunk) chunk = NULL;
+  g_autoptr(IdeSnippetChunk) plainchunk = NULL;
+  const gchar *snippet_text = NULL;
+  const gchar *text;
+  gint64 format = 0;
 
   g_return_val_if_fail (IDE_IS_LSP_COMPLETION_ITEM (self), NULL);
 
+  text = self->label;
+
+  if (JSONRPC_MESSAGE_PARSE (self->variant,
+                             "insertTextFormat", JSONRPC_MESSAGE_GET_INT64 (&format),
+                             "insertText", JSONRPC_MESSAGE_GET_STRING (&snippet_text)))
+    {
+      if (format == 2 && snippet_text != NULL)
+        {
+          g_autoptr(GError) error = NULL;
+
+          if ((snippet = ide_snippet_parser_parse_one (snippet_text, -1, &error)))
+            return g_steal_pointer (&snippet);
+
+          g_warning ("Failed to parse snippet: %s: %s",
+                     error->message, snippet_text);
+        }
+    }
+
   snippet = ide_snippet_new (NULL, NULL);
-  chunk = ide_snippet_chunk_new ();
-  ide_snippet_chunk_set_spec (chunk, self->label);
-  ide_snippet_add_chunk (snippet, chunk);
+  plainchunk = ide_snippet_chunk_new ();
+  ide_snippet_chunk_set_text (plainchunk, text);
+  ide_snippet_chunk_set_text_set (plainchunk, TRUE);
+  ide_snippet_add_chunk (snippet, plainchunk);
 
   return g_steal_pointer (&snippet);
 }
