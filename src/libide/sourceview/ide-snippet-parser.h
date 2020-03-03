@@ -49,5 +49,9 @@ gboolean          ide_snippet_parser_load_from_file (IdeSnippetParser  *parser,
                                                      GError           **error);
 IDE_AVAILABLE_IN_3_32
 GList            *ide_snippet_parser_get_snippets   (IdeSnippetParser  *parser);
+IDE_AVAILABLE_IN_3_36
+IdeSnippet       *ide_snippet_parser_parse_one      (const char        *data,
+                                                     gssize             data_len,
+                                                     GError           **error);
 
 G_END_DECLS

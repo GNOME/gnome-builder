@@ -723,3 +723,65 @@ ide_snippet_parser_init (IdeSnippetParser *parser)
   parser->scope = NULL;
   parser->cur_desc = NULL;
 }
+
+/**
+ * ide_snippet_parser_parse_one:
+ * @data: the data to parse
+ * @data_len: the length of data, or -1 for %NULL terminated
+ * @error: a location for an error
+ *
+ * Returns: (transfer full): an #IdeSnippet
+ *
+ * Since: 3.36
+ */
+IdeSnippet *
+ide_snippet_parser_parse_one (const char  *data,
+                              gssize       data_len,
+                              GError     **error)
+{
+  g_autoptr(IdeSnippetParser) parser = NULL;
+  IdeLineReader reader;
+  const gchar *line;
+  gsize line_len;
+
+  g_return_val_if_fail (data != NULL, NULL);
+
+  parser = ide_snippet_parser_new ();
+  ide_snippet_parser_feed_line (parser, "", "snippet dummy");
+
+  ide_line_reader_init (&reader, (gchar *)data, data_len);
+  while ((line = ide_line_reader_next (&reader, &line_len)))
+    {
+      g_autofree gchar *copy = NULL;
+
+      if (parser->had_error)
+        {
+          g_set_error (error,
+                       G_IO_ERROR,
+                       G_IO_ERROR_INVALID_DATA,
+                       "<data>:%d: invalid snippet",
+                       parser->lineno);
+          return NULL;
+        }
+
+      copy = g_malloc (line_len + 2);
+      copy[0] = '\t';
+      memcpy (&copy[1], line, line_len);
+      copy[1+line_len] = 0;
+
+      ide_snippet_parser_feed_line (parser, "", copy);
+    }
+
+  ide_snippet_parser_finish (parser);
+
+  if (parser->snippets != NULL)
+    return g_object_ref (parser->snippets->data);
+
+  g_set_error (error,
+               G_IO_ERROR,
+               G_IO_ERROR_INVALID_DATA,
+               "<data>:%d: invalid snippet",
+               parser->lineno);
+
+  return NULL;
+}
