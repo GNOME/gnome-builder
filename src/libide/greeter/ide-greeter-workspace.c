@@ -69,6 +69,7 @@ struct _IdeGreeterWorkspace
   GtkLabel                 *title;
   IdeGreeterButtonsSection *buttons_section;
   DzlEmptyState            *empty_state;
+  GtkGestureMultiPress     *multipress_gesture;
 
   guint                     selection_mode : 1;
 };
@@ -432,6 +433,19 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
 }
 
 static void
+ide_greeter_workspace_multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
+                                                     guint                 n_press,
+                                                     gdouble               x,
+                                                     gdouble               y,
+                                                     IdeGreeterWorkspace  *self)
+{
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
+
+  ide_workspace_set_visible_surface_name (IDE_WORKSPACE (self), "sections");
+}
+
+static void
 ide_greeter_workspace_project_activated_cb (IdeGreeterWorkspace *self,
                                             IdeProjectInfo      *project_info,
                                             IdeGreeterSection   *section)
@@ -541,6 +555,7 @@ ide_greeter_workspace_destroy (GtkWidget *widget)
   g_clear_object (&self->addins);
   g_clear_object (&self->delete_action);
   g_clear_object (&self->purge_action);
+  g_clear_object (&self->multipress_gesture);
   g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
 
   GTK_WIDGET_CLASS (ide_greeter_workspace_parent_class)->destroy (widget);
@@ -653,6 +668,8 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
   selection_action = g_property_action_new ("selection-mode", G_OBJECT (self), "selection-mode");
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (selection_action));
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
+  self->multipress_gesture = GTK_GESTURE_MULTI_PRESS (gtk_gesture_multi_press_new (GTK_WIDGET (self)));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->multipress_gesture), 8);
 
   g_signal_connect_object (self->search_entry,
                            "activate",
@@ -670,6 +687,11 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
                     "stop-search",
                     G_CALLBACK (gtk_entry_set_text),
                     (gpointer) "");
+
+  g_signal_connect (self->multipress_gesture,
+                    "pressed",
+                    G_CALLBACK (ide_greeter_workspace_multipress_gesture_pressed_cb),
+                    self);
 
   stack_notify_visible_child_cb (self, NULL, self->surfaces);
 
