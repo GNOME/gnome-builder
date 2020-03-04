@@ -41,4 +41,10 @@ _ide_greeter_workspace_init_shortcuts (IdeGreeterWorkspace *self)
                                               "<Primary>w",
                                               DZL_SHORTCUT_PHASE_DISPATCH,
                                               I_("win.close"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.greeter.back-button"),
+                                              "<alt>Left",
+                                              DZL_SHORTCUT_PHASE_DISPATCH,
+                                              I_("win.surface('sections')"));
 }
