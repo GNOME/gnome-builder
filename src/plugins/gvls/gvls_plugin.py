@@ -24,18 +24,10 @@ It builds off the generic language service components in libide
 by bridging them to our supervised Vala Language Server.
 """
 
-import gi
-import os
-import sys
-
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Ide
-from gi.repository import Gdk
-from gi.repository import Gtk
-from gi.repository import GtkSource
-from gi.repository import Json
 
 DEV_MODE = True
 
@@ -50,10 +42,13 @@ class GVlsService(Ide.Object):
     default_vapi_dirs = True
     scan_work_space = True
     add_using_namespaces = True
+    library_vapidir = ""
+    system_vapidir = ""
     files = []
     packages = []
     vala_args = {}
     options = []
+    vala_api_version = ""
     build_system = None
     pipeline = None
     build_args = None
@@ -81,19 +76,15 @@ class GVlsService(Ide.Object):
         if parent is None:
             return
 
-        context = self.get_context()
-        workdir = context.ref_workdir()
-
-
     def do_stop(self):
         """
         Stops the Vala Language Server upon request to shutdown the
         GVlsService.
         """
         if self._client is not None:
-            print ("Shutting down server")
-            _client.stop()
-            _client.destroy()
+            Ide.warning ("Shutting down server")
+            self._client.stop()
+            self._client.destroy()
 
         if self._supervisor is not None:
             supervisor, self._supervisor = self._supervisor, None
@@ -166,6 +157,11 @@ class GVlsService(Ide.Object):
         vv = GLib.Variant.new_variant(GLib.Variant.new_boolean(val))
         return GLib.Variant.new_dict_entry(vk, vv)
 
+    def create_dict_entry_string(self, key, val):
+        vk = GLib.Variant.new_string (key)
+        vv = GLib.Variant.new_variant(GLib.Variant.new_string(val))
+        return GLib.Variant.new_dict_entry(vk, vv)
+
     def create_configuration_variant(self):
         try:
             b = GLib.VariantBuilder(GLib.VariantType.new('a{sv}'))
@@ -175,6 +171,9 @@ class GVlsService(Ide.Object):
             b.add_value(self.create_dict_entry_boolean('scanWorkspace', self.scan_work_space))
             b.add_value(self.create_dict_entry_boolean('addUsingNamespaces', self.add_using_namespaces))
             b.add_value(self.create_dict_entry_boolean('mesonBuildSystem', self.meson_build_system))
+            b.add_value(self.create_dict_entry_string('libraryVapi', self.library_vapidir))
+            b.add_value(self.create_dict_entry_string('systemVapi', self.system_vapidir))
+            b.add_value(self.create_dict_entry_string('valaApiVersion', self.vala_api_version))
             ad = GLib.Variant.new_string ('valaArgs')
             vadi = self.dict_to_array_variant(self.vala_args)
             adi = GLib.Variant.new_dict_entry(ad, GLib.Variant.new_variant (vadi))
@@ -192,10 +191,9 @@ class GVlsService(Ide.Object):
             fdi = GLib.Variant.new_dict_entry(fd, GLib.Variant.new_variant (vfdi))
             b.add_value(fdi)
             return GLib.Variant.new_variant (b.end())
-        except:
-            print ('>>>>>>>>>>>>>>>> On Load Configuration Error:\n\n\n')
+        except Error as e:
+            Ide.debug ('On Load Configuration Error: {}'.format(e.message))
             return GLib.Variant ('a{sv}', {})
-            print('\n\n\n')
     
     def _build_config_changed(self, obj, mfile, ofile, event_type):
         if event_type == Gio.FileMonitorEvent.CHANGED or event_type == Gio.FileMonitorEvent.CREATED:
@@ -229,7 +227,6 @@ class GVlsService(Ide.Object):
             self.packages = []
             self.vala_args = {}
             self.options = []
-            current = ''
             found_package = False
             found_arg = False
             arg_name = ''
@@ -342,17 +339,13 @@ class GVlsService(Ide.Object):
                     arg_name = s
                     continue
         except BaseException as exc:
-            print('\n\nParse Build Commands Error:\n')
-            print(exc.args)
-            print('\n\n\n')
+            Ide.debug('Parse Build Commands Error: {}'.format(exc.args))
 
     def _did_change_configuration(self, source_object, result, user_data):
         try:
-            res = self._client.send_notification_finish(result)
+            self._client.send_notification_finish(result)
         except BaseException as exc:
-            print('\n\nChange Configuration Notification error:\n')
-            print(exc.args)
-            print('\n\n\n')
+            Ide.debug('Change Configuration Notification error: {}'.format(exc.args))
     
     def _notify_change_configuration(self):
         try:
@@ -366,9 +359,7 @@ class GVlsService(Ide.Object):
             vnotify = GLib.Variant.new_variant(b.end())
             self._client.send_notification_async("workspace/didChangeConfiguration", vnotify, cancellable, self._did_change_configuration, None)
         except BaseException as exc:
-            print('\n\nNotify change configuration error:\n')
-            print(exc.args)
-            print('\n\n\n')
+            Ide.debug('Notify change configuration error: {}'.format(exc.args))
     
     def _on_load_configuration(self, data):
         ctx = self._client.get_context()
@@ -386,10 +377,100 @@ class GVlsService(Ide.Object):
         try:
             self.source_file = diagnostic.get_file()
         except BaseException as exc:
-            print('\n\nOn Pipeline Loaded start get build flags error:\n')
-            print(exc.args)
-            print('\n\n\n')
-                     
+            Ide.debug('On Pipeline Loaded start get build flags error: {}'.format(exc.args))
+
+    def on_get_vala_data_dir(self, vdp, cancellable, data):
+        try:
+            if self.pipeline == None:
+                return
+            rt = self.pipeline.get_runtime()
+            if rt == None:
+                return
+            vdpio = vdp.get_stdout_pipe()
+            ddpp = Gio.DataInputStream.new(vdpio)
+            ldp = ddpp.read_line()
+            fgdvapi = Gio.File.new_for_path(str(ldp[0],encoding='utf8'))
+            rtfgdvapi = rt.translate_file(fgdvapi)
+            self.system_vapidir = rtfgdvapi.get_uri() + "/vala/vapi"
+        except BaseException as exc:
+            Ide.debug('On get Vala DATA VAPI DIR: {}'.format(str(exc)))
+    
+    def on_get_vapidir(self, vpkgp, cancellable, data):
+        try:
+            if self.pipeline == None:
+                return
+            rt = self.pipeline.get_runtime()
+            if rt == None:
+                return
+            vpstdio = vpkgp.get_stdout_pipe()
+            dpp = Gio.DataInputStream.new(vpstdio)
+            lp = dpp.read_line()
+            flvapi = Gio.File.new_for_path(str(lp[0],encoding='utf8'))
+            rtfvapi = rt.translate_file(flvapi)
+            self.library_vapidir = rtfvapi.get_uri()
+            flags = Gio.SubprocessFlags.STDOUT_PIPE
+            launcher = self.pipeline.create_launcher()
+            if launcher == None:
+                return
+            launcher.set_cwd(GLib.get_home_dir())
+            launcher.set_flags(flags)
+            launcher.push_args (['pkg-config','--variable','datadir','libvala-'+self.vala_api_version])
+            vdp = launcher.spawn(None)
+            vdp.wait_async(None, self.on_get_vala_data_dir, None)
+        except BaseException as exc:
+            Ide.debug('On get Vala VAPI DIR: {}'.format(str(exc)))
+    
+    def on_get_vala_api_version(self, valacp, cancellable, data):
+        try:
+            vstdio = valacp.get_stdout_pipe()
+            dp = Gio.DataInputStream.new(vstdio)
+            l = dp.read_line()
+            self.vala_api_version = str(l[0],encoding='utf8')
+            if self.pipeline == None:
+                return
+            rt = self.pipeline.get_runtime()
+            if rt == None:
+                return
+            flags = Gio.SubprocessFlags.STDOUT_PIPE
+            launcher = self.pipeline.create_launcher()
+            if launcher == None:
+                return
+            launcher.set_cwd(GLib.get_home_dir())
+            launcher.set_flags(flags)
+            launcher.push_args (['pkg-config','--variable','vapidir','libvala-'+self.vala_api_version])
+            vpkgp = launcher.spawn(None)
+            vpkgp.wait_async(None, self.on_get_vapidir, None)
+        except BaseException as exc:
+            Ide.debug('On get Vala API VERSION Runtime Configuration: {}'.format(str(exc)))
+    
+    def _update_config_from_runtime(self):
+        try:
+            if self.pipeline == None:
+                return
+            rt = self.pipeline.get_runtime()
+            if rt == None:
+                return
+            flags = Gio.SubprocessFlags.STDOUT_PIPE
+            launcher = self.pipeline.create_launcher()
+            if launcher == None:
+                return
+            launcher.set_cwd(GLib.get_home_dir())
+            launcher.set_flags(flags)
+            launcher.push_args (['valac','--api-version'])
+            valacp = launcher.spawn(None)
+            valacp.wait_async(None, self.on_get_vala_api_version, None)
+        except BaseException as exc:
+            Ide.debug('On Update Runtime Configuration: {}'.format(str(exc)))
+    
+    def on_config_changed_cb(self, data):
+        try:
+            ctx = self._client.ref_context()
+            buildmgr = Ide.BuildManager.from_context (ctx)
+            self.pipeline = buildmgr.get_pipeline ()
+            self.pipeline.connect('diagnostic', self._on_pipeline_diagnostic)
+        except BaseException as exc:
+            Ide.debug('On Config Changed CB: {}'.format(str(exc)))
+
     def _gvls_spawned(self, supervisor, subprocess):
         """
         This callback is executed when the `org.gnome.gvls.stdio.Server` process is spawned.
@@ -420,11 +501,11 @@ class GVlsService(Ide.Object):
             buildmgr = Ide.BuildManager.from_context (ctx)
             self.pipeline = buildmgr.get_pipeline ()
             self.pipeline.connect('diagnostic', self._on_pipeline_diagnostic)
+            cfgmgr = Ide.ConfigManager.from_context(ctx)
+            cfgmgr.connect('notify::current', self.on_config_changed_cb)
+            self._update_config_from_runtime()
         except BaseException as exc:
-            print('\n\n\n Exception Arguments: \n')
-            print(exc.args)
-            print('\n\n')
-            
+            Ide.debug('Exception Arguments: {}'.format(exc.args))
 
     def _create_launcher(self):
         """
