@@ -38,6 +38,7 @@ struct _GbpSymbolFrameAddin {
   GCancellable        *cancellable;
   GCancellable        *scope_cancellable;
   DzlSignalGroup      *buffer_signals;
+  IdePage             *page;
 
   guint                cursor_moved_handler;
 };
@@ -190,6 +191,9 @@ gbp_symbol_frame_addin_cursor_moved (GbpSymbolFrameAddin *self,
   g_assert (GBP_IS_SYMBOL_FRAME_ADDIN (self));
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (ide_editor_page_get_view (IDE_EDITOR_PAGE (self->page)))))
+    return;
 
   if (self->cursor_moved_handler == 0)
     {
@@ -524,6 +528,8 @@ gbp_symbol_frame_addin_set_page (IdeFrameAddin *addin,
 
   g_assert (GBP_IS_SYMBOL_FRAME_ADDIN (self));
   g_assert (!page || IDE_IS_PAGE (page));
+
+  self->page = page;
 
   /* First clear any old symbol tree */
   gbp_symbol_menu_button_set_symbol_tree (self->button, NULL);
