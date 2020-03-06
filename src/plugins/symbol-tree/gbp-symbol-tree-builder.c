@@ -89,6 +89,27 @@ gbp_symbol_tree_builder_build_children (DzlTreeBuilder *builder,
     }
 }
 
+static gboolean
+page_contains_location (IdePage     *page,
+                        IdeLocation *location)
+{
+  IdeBuffer *buffer;
+  GFile *file;
+  GFile *loc_file;
+
+  if (location == NULL || !IDE_IS_EDITOR_PAGE (page))
+    return FALSE;
+
+  buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+  file = ide_buffer_get_file (buffer);
+  loc_file = ide_location_get_file (location);
+
+  if (file == NULL || loc_file == NULL)
+    return FALSE;
+
+  return g_file_equal (file, loc_file);
+}
+
 static void
 gbp_symbol_tree_builder_get_location_cb (GObject      *object,
                                          GAsyncResult *result,
@@ -98,9 +119,13 @@ gbp_symbol_tree_builder_get_location_cb (GObject      *object,
   g_autoptr(GbpSymbolTreeBuilder) self = user_data;
   g_autoptr(IdeLocation) location = NULL;
   g_autoptr(GError) error = NULL;
-  IdeSurface *editor;
   IdeWorkspace *workspace;
+  IdeSurface *editor;
+  IdeFrame *frame;
+  IdePage *page;
   DzlTree *tree;
+  gint line;
+  gint line_offset;
 
   IDE_ENTRY;
 
@@ -120,6 +145,26 @@ gbp_symbol_tree_builder_get_location_cb (GObject      *object,
   tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
   workspace = ide_widget_get_workspace (GTK_WIDGET (tree));
   editor = ide_workspace_get_surface_by_name (workspace, "editor");
+  frame = IDE_FRAME (dzl_gtk_widget_get_relative (GTK_WIDGET (tree), IDE_TYPE_FRAME));
+  page = ide_frame_get_visible_child (frame);
+  line = ide_location_get_line (location);
+  line_offset = ide_location_get_line_offset (location);
+
+  /* Because we activated from within the document, we can ignore
+   * using ide_editor_surface_focus_location() and instead just jump
+   * to the resulting line and column.
+   */
+  if (page_contains_location (page, location))
+    {
+      if (line > 0 || line_offset > 0)
+        ide_editor_page_scroll_to_line_offset (IDE_EDITOR_PAGE (page),
+                                               MAX (0, line),
+                                               MAX (0, line_offset));
+      else
+        gtk_widget_grab_focus (GTK_WIDGET (page));
+
+      IDE_EXIT;
+    }
 
   ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), location);
 
