@@ -113,7 +113,7 @@ IDE_AVAILABLE_IN_3_32
 gchar                 *ide_subprocess_launcher_pop_argv             (IdeSubprocessLauncher  *self) G_GNUC_WARN_UNUSED_RESULT;
 IDE_AVAILABLE_IN_3_32
 void                   ide_subprocess_launcher_set_argv             (IdeSubprocessLauncher  *self,
-                                                                     const gchar * const    *argv);
+                                                                     gchar                 **args);
 IDE_AVAILABLE_IN_3_32
 IdeSubprocess         *ide_subprocess_launcher_spawn                (IdeSubprocessLauncher  *self,
                                                                      GCancellable           *cancellable,

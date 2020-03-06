@@ -966,9 +966,18 @@ ide_subprocess_launcher_take_stderr_fd (IdeSubprocessLauncher *self,
     }
 }
 
+/**
+ * ide_subprocess_launcher_set_argv:
+ * @self: an #IdeSubprocessLauncher
+ * @args: (array zero-terminated=1) (element-type utf8) (transfer none): a
+ *   %NULL terminated array of strings.
+ *
+ * Clears the previous arguments and copies @args as the new argument array for
+ * the subprocess.
+ */
 void
-ide_subprocess_launcher_set_argv (IdeSubprocessLauncher *self,
-                                  const gchar * const   *args)
+ide_subprocess_launcher_set_argv (IdeSubprocessLauncher  *self,
+                                  gchar                 **args)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 

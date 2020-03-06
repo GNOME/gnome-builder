@@ -63,7 +63,7 @@ on_build_stage_query (IdePipelineStage *stage,
         break;
     }
   g_ptr_array_add (replace, NULL);
-  ide_subprocess_launcher_set_argv (launcher, (const gchar * const *)replace->pdata);
+  ide_subprocess_launcher_set_argv (launcher, (gchar **)replace->pdata);
 
   /* If we have targets to build, specify them */
   if (targets != NULL)
