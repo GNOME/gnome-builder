@@ -195,7 +195,8 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
        *       because we know it is invalidated.
        */
       g_signal_emit_by_name (config_manager, "invalidate");
-      gtk_widget_hide (GTK_WIDGET (self->message));
+      ide_notification_withdraw (self->message);
+      g_clear_object (&self->message);
     }
 
   IDE_EXIT;
