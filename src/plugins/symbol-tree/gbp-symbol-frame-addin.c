@@ -185,6 +185,7 @@ gbp_symbol_frame_addin_cursor_moved (GbpSymbolFrameAddin *self,
                                      const GtkTextIter   *location,
                                      IdeBuffer           *buffer)
 {
+  IdeSourceView *view;
   GSource *source;
   gint64 ready_time;
 
@@ -192,7 +193,11 @@ gbp_symbol_frame_addin_cursor_moved (GbpSymbolFrameAddin *self,
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (!gtk_widget_has_focus (GTK_WIDGET (ide_editor_page_get_view (IDE_EDITOR_PAGE (self->page)))))
+  if (!IDE_IS_EDITOR_PAGE (self->page))
+    return;
+
+  view = ide_editor_page_get_view (IDE_EDITOR_PAGE (self->page));
+  if (!gtk_widget_has_focus (GTK_WIDGET (view)))
     return;
 
   if (self->cursor_moved_handler == 0)
@@ -508,6 +513,8 @@ gbp_symbol_frame_addin_unload (IdeFrameAddin *addin,
 
   g_assert (GBP_IS_SYMBOL_FRAME_ADDIN (self));
   g_assert (IDE_IS_FRAME (stack));
+
+  self->page = NULL;
 
   gtk_widget_insert_action_group (GTK_WIDGET (stack), "symbol-tree", NULL);
 
