@@ -1,3 +1,15 @@
+==============
+Version 3.36.0
+==============
+
+ • Support alt+left and mouse back button within greeter window
+ • Improvements to symbol selection and activation in editor frame
+ • Rust template improvements
+ • Support for snippets in LSP protocol
+ • Improvements to Vala language server integration
+ • Cargo build system improvements
+ • Translation updates
+
 ===============
 Version 3.35.91
 ===============

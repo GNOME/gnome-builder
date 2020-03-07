@@ -86,6 +86,15 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.36.0" date="2020-03-06">
+      <description>
+        <p>
+          Builder 3.36 provies a number of performance fixes, UI improvements, and bug fixes.
+          It also improves support for Vala, Rust, Python, and C/C++ languages.
+        </p>
+      </description>
+    </release>
+
     <release version="3.35.3" date="2020-01-02">
       <description>
         <p>
@@ -99,84 +108,6 @@
         <p>
           Builder 3.34.0 culminates six months of feature development, bugfixes, and performance improvements.
         </p>
-      </description>
-    </release>
-
-    <release version="3.33.92" date="2019-09-04">
-      <description>
-        <p>
-          Builder 3.33.92 is here as our release candidate before 3.34.
-          Please test things out and file any bugs to help us have a great 3.34 release!
-        </p>
-      </description>
-    </release>
-
-    <release version="3.33.90" date="2019-08-10">
-      <description>
-        <p>
-          Builder 3.33.90 is here as we march along towards 3.34.
-          This release includes a number of bug fixes and improvements to foundational libraries.
-          A new shellcmd plugin has been added to allow executing external commands in a number of environments.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.33.4" date="2019-08-01">
-      <description>
-        <p>
-          Builder 3.33.4 is here as we march along towards 3.34.
-          This release includes a number of bug fixes and improvements to foundational libraries.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.33.3" date="2019-06-25">
-      <description>
-        <p>
-          Builder 3.33.3 is here as we march along towards 3.34.
-          A number of new features are in this release including improved Sysprof support.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.33.1" date="2019-04-23">
-      <description>
-        <p>
-          Builder 3.33.1 is our first release as we progress towards 3.34.
-          A number of new features are in this release such as a new search button, D-Bus inspector, podman support, git improvements, and more.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.32.0" date="2019-03-12">
-      <description>
-        <p>
-          Builder 3.32 is here with many features and improvements from the ground up!
-        </p>
-        <ul>
-          <li>Multi-monitor support.</li>
-          <li>A newly designed greeter.</li>
-          <li>A newly designed omnibar with support for long running tasks with progress.</li>
-          <li>Support for non-project mode when opening files from the command-line or file-browser.</li>
-          <li>A number of new command-line options have been added.</li>
-          <li>Builder will attempt to avoid re-installs when running if no files have changed.</li>
-          <li>Many new and simplified plugin interfaces.</li>
-          <li>Support for external plugins by requiring specific ABI checks.</li>
-          <li>Add setting to disable clearing build caches at startup.</li>
-          <li>Move app-menu to application windows.</li>
-          <li>A number of plugins were redesigned to improve stability.</li>
-          <li>Editor search state is now preserved when saving session state.</li>
-          <li>Support for updating git submodules along with other dependencies.</li>
-          <li>Keybindings improvements.</li>
-          <li>Improved meson project templates.</li>
-          <li>New styling based on updates to Adwaita.</li>
-          <li>The project tree now includes version control information, build targets, and unit tests.</li>
-          <li>Additional snippets.</li>
-          <li>Improvements for Language Server Protocol.</li>
-          <li>Unit Tests now integrate a terminal panel for tracking success.</li>
-          <li>A number of new command-line options have been added such as --clone, --greeter, --editor, --create-project, --preferences, and more.</li>
-          <li>New desktop actions for the gnome-shell application context menu have been added.</li>
-        </ul>
       </description>
     </release>
   </releases>
