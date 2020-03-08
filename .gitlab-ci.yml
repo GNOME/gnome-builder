@@ -1,5 +1,7 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
+stages: ['build']
+
 variables:
     BUNDLE: "gnome-builder-git.flatpak"
 
@@ -32,5 +34,5 @@ nightly:
         - 'flatpak'
 
 foo:
-  stage: '.pre'
+  stage: 'build'
   script: ["echo 'Hello World'"]
