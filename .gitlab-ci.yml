@@ -30,3 +30,7 @@ nightly:
   extends: '.publish_nightly'
   dependencies:
         - 'flatpak'
+
+foo:
+  stage: '.pre'
+  script: ["echo 'Hello World'"]
