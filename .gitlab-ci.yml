@@ -1,9 +1,5 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
-stages:
-    - test
-    - deploy
-
 variables:
     BUNDLE: "gnome-builder-git.flatpak"
 
@@ -29,14 +25,6 @@ flatpak:
           -Dhelp=true
           -Dchannel=flatpak-nightly
           -Dplugin_deviced=true
-
-review:
-    extends: .review
-    dependencies:
-        - flatpak
-
-stop_review:
-    extends: .stop_review
 
 nightly:
   extends: '.publish_nightly'
