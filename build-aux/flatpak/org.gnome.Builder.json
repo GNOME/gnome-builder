@@ -597,7 +597,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/esodan/gvls.git"
+                    "url" : "https://gitlab.gnome.org/esodan/gvls.git",
+                    "branch": "gvls-0.14"
                 }
             ]
         },
