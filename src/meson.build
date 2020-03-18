@@ -76,25 +76,6 @@ if libsysprof_capture.found()
   gnome_builder_deps += libsysprof_capture
 endif
 
-if get_option('fusermount_wrapper')
-
-  executable('fusermount', ['fusermount-wrapper.c'],
-             gui_app: false,
-             install: true,
-         install_dir: get_option('bindir'),
-              c_args: exe_c_args + release_args,
-                 pie: true,
-       install_rpath: pkglibdir_abs,
-        dependencies: [libglib_dep],
-  )
-
-  install_data(['rofiles-fuse'],
-         install_dir: get_option('bindir'),
-        install_mode: 'rwxr-xr-x',
-  )
-
-endif
-
 gnome_builder = executable('gnome-builder', 'main.c', 'bug-buddy.c',
            gui_app: true,
            install: true,

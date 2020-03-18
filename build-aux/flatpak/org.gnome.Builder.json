@@ -625,7 +625,6 @@
                 "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Dctags_path=/app/bin/ctags",
-                "-Dfusermount_wrapper=true",
                 "-Dtcmalloc=true",
                 "-Dpython_libprefix=python3.7",
                 "-Dtracing=true",
