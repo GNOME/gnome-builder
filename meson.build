@@ -67,7 +67,6 @@ status += [
   '',
   'Tracing ............... : @0@'.format(get_option('tracing')),
   'Profiling ............. : @0@'.format(get_option('profiling')),
-  'fusermount ............ : @0@'.format(get_option('fusermount_wrapper')),
   'tcmalloc_minimal ...... : @0@'.format(get_option('tcmalloc')),
   '',
   'Help Docs ............. : @0@'.format(get_option('help')),

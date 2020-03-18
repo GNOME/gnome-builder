@@ -19,7 +19,6 @@ flatpak:
         MESON_ARGS: |
           --buildtype=debugoptimized
           -Dctags_path=/app/bin/ctags
-          -Dfusermount_wrapper=true
           -Dtcmalloc=true
           -Dtracing=true
           -Dhelp=true
