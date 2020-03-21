@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2020-03-19 14:21+0000\n"
-"PO-Revision-Date: 2020-03-21 14:06+0200\n"
+"PO-Revision-Date: 2020-03-21 16:05+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1386,10 +1386,12 @@ msgstr "приготування"
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
 msgstr ""
+"Неможливо зібрати передавання даних, перебуваючи в умовах вимірюваного"
+" з'єднання"
 
 #: src/libide/foundry/ide-run-manager.c:383
 msgid "Cannot run target, another target is running"
-msgstr ""
+msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
 #: src/libide/foundry/ide-run-manager.c:488
 msgid "Failed to locate runtime"
@@ -1466,6 +1468,8 @@ msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 msgstr ""
+"Введіть адресу сховища проєкту, який ви хочете клонувати. Адреса має бути"
+" десь такою: «https://gitlab.gnome.org/GNOME/gnome-builder.git»."
 
 #: src/libide/greeter/ide-clone-surface.ui:84
 msgid "user@host:repository.git"
@@ -1693,6 +1697,8 @@ msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
 msgstr ""
+"Для роботи «Будівника» GNOME потрібен стільничний сеанс із D-Bus. Будь ласка,"
+" встановіть значення змінної середовища DBUS_SESSION_BUS_ADDRESS."
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -1718,6 +1724,8 @@ msgstr "Відкрити файл або термінал"
 #: src/libide/gui/ide-frame-empty-state.ui:30
 msgid "Use the page switcher above or use one of the following:"
 msgstr ""
+"Скористайтеся засобом перемикання сторінок або скористайтеся одним із таких"
+" пунктів:"
 
 #: src/libide/gui/ide-frame-empty-state.ui:45
 #: src/libide/gui/ide-search-button.c:44
@@ -2197,19 +2205,19 @@ msgstr "Пробіл перед початковими фігурними дуж
 
 #: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Space before opening angles"
-msgstr ""
+msgstr "Пробіл перед початковою кутовою дужкою"
 
 #: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
-msgstr ""
+msgstr "Ставити пробіл перед двокрапкою"
 
 #: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
-msgstr ""
+msgstr "Ставити пробіл перед комою"
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
-msgstr ""
+msgstr "Ставити пробіл перед крапкою з комою"
 
 #: src/libide/gui/ide-preferences-builtin.c:362
 #: src/libide/gui/ide-preferences-builtin.c:380
@@ -2256,6 +2264,8 @@ msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr ""
+"Дозволити використання з'єднань із вимірюванням обміну даними при"
+" автоматичному отриманні залежностей"
 
 #: src/libide/gui/ide-preferences-builtin.c:420
 #: src/libide/projects/ide-projects-global.c:105
@@ -2318,7 +2328,7 @@ msgstr "Скорочення робочого простору"
 
 #: src/libide/gui/ide-search-button.c:45
 msgid "Focus to the global search entry"
-msgstr ""
+msgstr "Фокусування поля введення загального пошуку"
 
 #: src/libide/gui/ide-shortcuts-window.ui:10
 msgctxt "shortcut window"
@@ -2599,7 +2609,7 @@ msgstr "Перейменувати символ"
 #: src/libide/gui/ide-shortcuts-window.ui:370
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
-msgstr ""
+msgstr "Потребує підтримки семантики мови"
 
 #: src/libide/gui/ide-shortcuts-window.ui:378
 msgctxt "shortcut window"
@@ -2921,10 +2931,12 @@ msgstr "Не вдалося запустити підпроцес"
 #: src/libide/terminal/ide-terminal-page.c:137
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
+"Надто швидке завершення роботи засобу запуску підпроцесу. Перезапуск не"
+" виконуватиметься."
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
-msgstr ""
+msgstr "Шукати у середовищах виконання"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -2987,18 +2999,22 @@ msgstr "Кешування команд збирання"
 #, c-format
 msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
+"Додаток форматування: сталася помилка під час копіювання файла налаштувань"
+" gresource для «%s»: %s"
 
 #. translators: %s is replaced with the source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:165
 #, c-format
 msgid "Beautifier plugin: error creating temporary config file for “%s”"
 msgstr ""
+"Додаток форматування: сталася помилка під час створення тимчасового файла"
+" налаштувань для «%s»"
 
 #. translators: %s is replaced with the .ini source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:209
 #, c-format
 msgid "Beautifier plugin: Can’t read .ini file: %s"
-msgstr ""
+msgstr "Додаток форматування: не вдалося прочитати файл .ini: %s"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:257
@@ -3007,6 +3023,8 @@ msgid ""
 "Beautifier plugin: neither command nor command-pattern keys found: entry "
 "“%s” disabled"
 msgstr ""
+"Додаток форматування: не знайдено ні ключа command, ні ключа command-pattern:"
+" запис «%s» вимкнено"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:267
@@ -3015,12 +3033,15 @@ msgid ""
 "Beautifier plugin: both command and command-pattern keys found: entry “%s” "
 "disabled"
 msgstr ""
+"Додаток форматування: виявлено одразу ключ command і command-pattern: запис «"
+"%s» вимкнено"
 
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
 #, c-format
 msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 msgstr ""
+"Додаток форматування: шляху налаштувань «%s» не існує, запис «%s» вимкнено"
 
 #. translators: %s is replaced with the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:308
@@ -3028,6 +3049,8 @@ msgstr ""
 msgid ""
 "Beautifier plugin: command key out of possible values: entry “%s” disabled"
 msgstr ""
+"Додаток форматування: для ключа command вказано невідоме значення: запис «%s»"
+" вимкнено"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:333
@@ -3036,6 +3059,8 @@ msgid ""
 "Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
 "entry “%s” disabled"
 msgstr ""
+"Додаток форматування: @c@ у« ключі command-pattern «%s», але файл налаштувань"
+" не встановлено: запис «%s» вимкнено"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:365
@@ -3043,6 +3068,8 @@ msgstr ""
 msgid ""
 "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
 msgstr ""
+"Додаток форматування: не вдалося створити тимчасовий файл для «%s»: запис «"
+"%s» вимкнено"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:407
@@ -3108,7 +3135,7 @@ msgstr "Перемкнути типовий запис"
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:375
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
-msgstr ""
+msgstr "Додаток форматування: не виявлено коректних записів, вимикаємо: %s"
 
 #. translators: %s and %s are replaced with the temporary dir and the file path
 #: src/plugins/beautifier/gb-beautifier-helper.c:63
@@ -3120,6 +3147,8 @@ msgid ""
 "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
 "temporary directory: “%s”"
 msgstr ""
+"Додаток форматування: заблоковано спробу вилучити файл поза тимчасовим"
+" каталогом «%s»: «%s»"
 
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:264
@@ -3178,6 +3207,8 @@ msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
 msgstr ""
+"Дублювання налаштувань уможливлює зміну налаштувань без внесення змін до"
+" поточного файла налаштувань."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "_Remove"
@@ -3398,11 +3429,11 @@ msgstr "Параметри Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:95
 msgid "Complete Parenthesis"
-msgstr ""
+msgstr "Закривати круглі дужки"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:96
 msgid "Include parenthesis when completing clang proposals"
-msgstr ""
+msgstr "Додавати круглу дужку у записах пропозицій clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:107
 msgid "Complete Parameters"
@@ -3581,11 +3612,11 @@ msgstr "Чи будуть видимі компоненти RGB."
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
 msgid "RGB unit"
-msgstr ""
+msgstr "Модуль RGB"
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
 msgid "The unit used by RGB component and strings."
-msgstr ""
+msgstr "Модуль, який використовуватиметься компонентом і рядками RGB."
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
 msgid "Selected palette ID"
@@ -3654,6 +3685,8 @@ msgid ""
 "Select the type of unit you want to use for RGB components and strings in "
 "the panel."
 msgstr ""
+"Виберіть тип модуля, яким ви хочете скористатися для компонентів і рядків RGB"
+" на панелі."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
 msgid "Percent"
@@ -3677,27 +3710,27 @@ msgstr "Ахроматопсія (монохромазія)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
 msgid "Achromatomaly (blue cone monochromacy)"
-msgstr ""
+msgstr "Ахроматомалія (синя конусна монохромазія)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
 msgid "Deuteranopia (green-blind)"
-msgstr ""
+msgstr "Дейтеранопія (нечутливість до зеленого)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
 msgid "Deuteranomaly (green-weak)"
-msgstr ""
+msgstr "Дейтераномалія (слабке сприйняття зеленого)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
 msgid "Protanopia (red-blind)"
-msgstr ""
+msgstr "Протанопія (нечутливість до червоного)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
 msgid "Protanomaly (red-weak)"
-msgstr ""
+msgstr "Протаномалія (слабке сприйняття червоного)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
 msgid "Tritanopia (blue-blind)"
-msgstr ""
+msgstr "Тритаопія (нечутливість до синього)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
 msgid "Tritanomaly (blue-weak)"
@@ -3801,6 +3834,7 @@ msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
 msgstr ""
+"При зберігання файла «Будівник» автоматично оновлюватиме запис авторських прав"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:117
@@ -3863,6 +3897,9 @@ msgid ""
 "resources. Should be in lower case without spaces and may not start with a "
 "number."
 msgstr ""
+"Унікальна назва, яку буде використано для теки вашого проєкту та інших"
+" технічних ресурсів. Має складатися з малих латинських літер і не починатися"
+" з цифри."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:73
 msgid "Application ID"
@@ -4032,7 +4069,7 @@ msgstr "Виконати до кінця функції"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
-msgstr ""
+msgstr "Дизасемблер"
 
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:190
 msgid "Failed to start the debugger"
@@ -4615,6 +4652,8 @@ msgid ""
 "The “flatpak-builder” program is necessary for building Flatpak-based "
 "applications. Builder can install it for you."
 msgstr ""
+"Для збирання програм на основі Flatpak потрібна програма «flatpak-builder»."
+" «Будівник» може встановити цю програму."
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4883,7 +4922,7 @@ msgstr ""
 
 #: src/plugins/gradle/gradle_plugin.py:85
 msgid "Gradle Wrapper"
-msgstr ""
+msgstr "Обгортка Gradle"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:136
 msgid "Display a new greeter window"
@@ -5584,6 +5623,12 @@ msgid ""
 "                        <date>          = YYYY-MM-DD\n"
 "                        <host>          = <target-triple>"
 msgstr ""
+"Стандартні назви наборів засобів каналу випуску мають такий формат:\n"
+"                        <канал>[-<дата>][-<вузол>]\n"
+"\n"
+"                        <канал>         = stable|beta|nightly|<версія>\n"
+"                        <дата>          = РРРР-ММ-ДД\n"
+"                        <вузол>         = <трійка-цілі>"
 
 #: src/plugins/rustup/rustup_plugin.py:635
 msgid "Install Rustup to manage toolchains here!"
@@ -5606,10 +5651,13 @@ msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
 msgstr ""
+"Неможливо відкрити термінал у середовищі виконання, оскільки конвеєр збирання"
+" не ініціалізовано"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:648
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
+"Не вдалося породити процес, оскільки ще немає доступу до конвеєра збирання"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
 msgid "Change Shortcut"
@@ -5629,6 +5677,9 @@ msgid ""
 "variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
 "automatically set for the command."
 msgstr ""
+"Команду буде виконано за допомогою оболонки, наприклад «/bin/sh -c». Ви"
+" можете скористатися змінними-замінниками, наприклад «$SHELL». Для команди"
+" автоматично встановлюватимуться «$SRCDIR» та «$BUILDDIR»."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
 msgid "Command Locality"
@@ -5651,6 +5702,9 @@ msgid ""
 "If the directory is not an absolute-path, it will be relative to the source "
 "or build directory depending on the command locality."
 msgstr ""
+"Якщо шлях до каталогу не є абсолютним, він вважатиметься відносним щодо"
+" каталогу початкового коду або каталогу збирання, залежно від розташування"
+" програми команди."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
 msgid "Close on Exit"
@@ -5919,7 +5973,7 @@ msgstr "Додати sysroot"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:90
 msgid "Define a new sysroot target to build against a different target"
-msgstr ""
+msgstr "Визначити нову ціль sysroot для збирання для іншої цілі"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:138
 msgid "Sysroots"
@@ -5964,11 +6018,11 @@ msgstr "Програма завершила роботу\r\n"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgid "Terminal in Build Runtime"
-msgstr ""
+msgstr "Термінал у середовищі виконання збирання"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
 msgid "Terminal in Runtime"
-msgstr ""
+msgstr "Термінал у середовищі виконання"
 
 #: src/plugins/terminal/gtk/menus.ui:9
 msgid "New _Terminal"
