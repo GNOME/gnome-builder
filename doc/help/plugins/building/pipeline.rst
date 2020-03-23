@@ -22,7 +22,7 @@ Build Phases
   - ``Ide.PipelinePhase.CONFIGURE`` should run configuration scripts such as ``./configure``, ``meson``, or ``cmake``.
   - ``Ide.PipelinePhase.BUILD`` should perform the incremental build process such as ``make`` or ``ninja``.
   - ``Ide.PipelinePhase.INSTALL`` should install the project to the configured prefix.
-  - ``Ide.PipelinePhase.EXPORT`` should be used to attach export hooks such as buliding a Flatpak bundle, Debian, or RPM package.
+  - ``Ide.PipelinePhase.EXPORT`` should be used to attach export hooks such as building a Flatpak bundle, Debian, or RPM package.
 
 Additionally, there are phases which have special meaning.
 
