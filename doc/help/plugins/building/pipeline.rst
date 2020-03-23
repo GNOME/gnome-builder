@@ -5,7 +5,7 @@ Extending the Build Pipeline
 Builder uses the concept of a "Build Pipeline" to build a project. The build
 pipeline consistes of multiple "phases" and build "stages" run in a given phase.
 
-For example, in the ``Ide.PipelinePhase.DOWNLAODS`` phase, you might have a stage
+For example, in the ``Ide.PipelinePhase.DOWNLOADS`` phase, you might have a stage
 that downloads and installs the dependencies for your project. The Flatpak
 extension does this when building Flatpak-based project configurations.
 
