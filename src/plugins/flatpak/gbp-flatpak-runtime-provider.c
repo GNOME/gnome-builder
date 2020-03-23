@@ -598,16 +598,13 @@ gbp_flatpak_runtime_provider_bootstrap_install_cb (GObject      *object,
 
   state->count--;
 
-  if (ide_task_had_error (task))
-    return;
-
   /* We might still be able to find the runtime if the transfer fails */
   ide_transfer_manager_execute_finish (transfer_manager, result, &error);
 
   if (error != NULL)
     g_debug ("Transfer failed: %s", error->message);
 
-  if (state->count == 0)
+  if (!ide_task_had_error (task) && state->count == 0)
     gbp_flatpak_runtime_provider_bootstrap_complete (task);
 }
 
