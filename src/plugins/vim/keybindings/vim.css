@@ -2225,6 +2225,21 @@
   bind "k" { "movement" (previous-line, 1, 1, 1) };
   bind "j" { "movement" (next-line, 1, 1, 1) };
 
+  bind "p" { "begin-macro" ()
+             "delete-selection" ()
+             "paste-clipboard-extended" (1, 0, 0)
+             "movement" (previous-char, 0, 1, 0)
+             "clear-count" ()
+             "end-macro" ()
+             "set-mode" ("vim-normal", permanent) };
+  bind "<shift>p" { "begin-macro" ()
+                    "delete-selection" ()
+                    "paste-clipboard-extended" (1, 0, 0)
+                    "movement" (previous-char, 0, 1, 0)
+                    "clear-count" ()
+                    "end-macro" ()
+                    "set-mode" ("vim-normal", permanent) };
+
   bind "Left" { "movement" (previous-char, 1, 1, 1) };
   bind "Right" { "movement" (next-char, 1, 1, 1) };
   bind "Up" { "movement" (previous-line, 1, 1, 1) };
@@ -2575,6 +2590,21 @@ bind "KP_Multiply" { "save-insert-mark" ()
   bind "l" { "end-macro" ()
              "clear-selection" ()
              "set-mode" ("vim-normal", permanent) };
+
+  bind "p" { "begin-macro" ()
+             "delete-selection" ()
+             "paste-clipboard-extended" (1, 0, 0)
+             "movement" (previous-char, 0, 1, 0)
+             "clear-count" ()
+             "end-macro" ()
+             "set-mode" ("vim-normal", permanent) };
+  bind "<shift>p" { "begin-macro" ()
+                    "delete-selection" ()
+                    "paste-clipboard-extended" (1, 0, 0)
+                    "movement" (previous-char, 0, 1, 0)
+                    "clear-count" ()
+                    "end-macro" ()
+                    "set-mode" ("vim-normal", permanent) };
 
   bind "Up" { "movement" (previous-line, 1, 0, 1) };
   bind "Down" { "movement" (next-line, 1, 0, 1) };
