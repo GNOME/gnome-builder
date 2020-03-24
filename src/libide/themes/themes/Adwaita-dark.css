@@ -24,3 +24,12 @@ entry.search-missing {
 .countbox {
   background-color: #587A9E;
 }
+
+
+/* Terminal styling for legibility:
+ * https://gitlab.gnome.org/GNOME/gnome-terminal/issues/233
+ */
+vte-terminal {
+  color: white;
+  background-color: #1e1e1e;
+}
