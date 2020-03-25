@@ -46,6 +46,8 @@ struct _GbpFlatpakManifest
   gchar           **finish_args;
   gchar            *runtime;
   gchar            *runtime_version;
+  gchar            *base;
+  gchar            *base_version;
   gchar            *sdk;
   gchar           **sdk_extensions;
 
@@ -108,6 +110,11 @@ validate_properties (GbpFlatpakManifest  *self,
   branch = "master";
   if (self->runtime_version != NULL)
     branch = self->runtime_version;
+  if (self->base != NULL && self->base_version != NULL)
+    {
+      name = self->base;
+      branch = self->base_version;
+    }
 
   runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", name, arch, branch);
   ide_config_set_runtime_id (IDE_CONFIG (self), runtime_id);
@@ -408,6 +415,8 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
 
   discover_string_field (root_obj, "runtime", &self->runtime);
   discover_string_field (root_obj, "runtime-version", &self->runtime_version);
+  discover_string_field (root_obj, "base", &self->base);
+  discover_string_field (root_obj, "base-version", &self->base_version);
   discover_string_field (root_obj, "sdk", &self->sdk);
   discover_string_field (root_obj, "command", &self->command);
   discover_strv_field (root_obj, "build-args", &self->build_args);
@@ -614,6 +623,8 @@ gbp_flatpak_manifest_finalize (GObject *object)
   g_clear_pointer (&self->finish_args, g_strfreev);
   g_clear_pointer (&self->runtime, g_free);
   g_clear_pointer (&self->runtime_version, g_free);
+  g_clear_pointer (&self->base, g_free);
+  g_clear_pointer (&self->base_version, g_free);
   g_clear_pointer (&self->sdk, g_free);
   g_clear_pointer (&self->sdk_extensions, g_strfreev);
 
@@ -1082,6 +1093,9 @@ gbp_flatpak_manifest_get_runtimes (GbpFlatpakManifest *self,
 
   /* Now discover the runtime needed for running */
   g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", self->runtime, for_arch, runtime_version));
+
+  if (self->base != NULL && self->base_version != NULL)
+    g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", self->base, for_arch, self->base_version));
 
   /* Now discover any necessary SDK extensions */
   if (self->sdk_extensions != NULL)
