@@ -168,12 +168,18 @@ struct _GbpOmniGutterRenderer
   gint diag_size;
 
   /*
+   * Line that the cursor is on. Used for relative line number rendering.
+   */
+  guint cursor_line;
+
+  /*
    * Some users might want to toggle off individual features of the
    * omni gutter, and these boolean properties provide that. Other
    * components map them to GSettings values to be toggled.
    */
   guint show_line_changes : 1;
   guint show_line_numbers : 1;
+  guint show_relative_line_numbers : 1;
   guint show_line_diagnostics : 1;
 };
 
@@ -817,6 +823,8 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   self->begin_line = gtk_text_iter_get_line (begin);
   end_line = gtk_text_iter_get_line (end);
 
+  ide_source_view_get_visual_position (view, &self->cursor_line, NULL);
+
   /* Give ourselves a fresh array to stash our line info */
   g_array_set_size (self->lines, end_line - self->begin_line + 1);
   memset (self->lines->data, 0, self->lines->len * sizeof (LineInfo));
@@ -1271,8 +1279,16 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
         {
           const gchar *linestr = NULL;
           gint len;
+          guint shown_line;
 
-          len = int_to_string (line + 1, &linestr);
+          if (!self->show_relative_line_numbers || line == self->cursor_line)
+            shown_line = line + 1;
+          else if (line > self->cursor_line)
+            shown_line = line - self->cursor_line;
+          else
+            shown_line = self->cursor_line - line;
+
+          len = int_to_string (shown_line, &linestr);
           pango_layout_set_text (self->layout, linestr, len);
 
           cairo_move_to (cr, cell_area->x, cell_area->y);
@@ -1515,6 +1531,17 @@ gbp_omni_gutter_renderer_buffer_changed (GbpOmniGutterRenderer *self,
 }
 
 static void
+gbp_omni_gutter_renderer_cursor_moved (GbpOmniGutterRenderer *self,
+                                       const GtkTextIter     *iter,
+                                       GtkTextBuffer         *buffer)
+{
+  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+
+  if (self->show_relative_line_numbers)
+    gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
+}
+
+static void
 gbp_omni_gutter_renderer_notify_style_scheme (GbpOmniGutterRenderer *self,
                                               GParamSpec            *pspec,
                                               IdeBuffer             *buffer)
@@ -1715,6 +1742,11 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
   dzl_signal_group_connect_swapped (self->buffer_signals,
                                     "changed",
                                     G_CALLBACK (gbp_omni_gutter_renderer_buffer_changed),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "cursor-moved",
+                                    G_CALLBACK (gbp_omni_gutter_renderer_cursor_moved),
                                     self);
 
   self->view_signals = dzl_signal_group_new (IDE_TYPE_SOURCE_VIEW);
