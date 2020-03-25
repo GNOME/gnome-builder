@@ -163,6 +163,10 @@ _ide_editor_page_init_settings (IdeEditorPage *self)
                    source_view, "show-line-numbers",
                    G_SETTINGS_BIND_GET);
 
+  g_settings_bind (self->editor_settings, "show-relative-line-numbers",
+                   source_view, "show-relative-line-numbers",
+                   G_SETTINGS_BIND_GET);
+
   g_settings_bind (self->editor_settings, "smart-backspace",
                    source_view, "smart-backspace",
                    G_SETTINGS_BIND_GET);

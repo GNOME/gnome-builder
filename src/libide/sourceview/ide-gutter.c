@@ -57,6 +57,13 @@ ide_gutter_default_init (IdeGutterInterface *iface)
                                                              FALSE,
                                                              (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
 
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("show-relative-line-numbers",
+                                                             "Show Relative Line Numbers",
+                                                             "If line numbers should be displayed relative to the cursor line",
+                                                             FALSE,
+                                                             (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+
   signals [STYLE_CHANGED] =
     g_signal_new ("style-changed",
                   G_TYPE_FROM_INTERFACE (iface),
@@ -93,6 +100,14 @@ ide_gutter_get_show_line_numbers (IdeGutter *self)
 }
 
 gboolean
+ide_gutter_get_show_relative_line_numbers (IdeGutter *self)
+{
+  gboolean ret;
+  g_object_get (self, "show-relative-line-numbers", &ret, NULL);
+  return ret;
+}
+
+gboolean
 ide_gutter_get_show_line_diagnostics (IdeGutter *self)
 {
   gboolean ret;
@@ -116,6 +131,15 @@ ide_gutter_set_show_line_numbers (IdeGutter *self,
   g_return_if_fail (IDE_IS_GUTTER (self));
 
   g_object_set (self, "show-line-numbers", show_line_numbers, NULL);
+}
+
+void
+ide_gutter_set_show_relative_line_numbers (IdeGutter *self,
+                                           gboolean   show_relative_line_numbers)
+{
+  g_return_if_fail (IDE_IS_GUTTER (self));
+
+  g_object_set (self, "show-relative-line-numbers", show_relative_line_numbers, NULL);
 }
 
 void

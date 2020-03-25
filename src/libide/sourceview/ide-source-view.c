@@ -158,6 +158,7 @@ typedef struct
   guint                        show_line_changes : 1;
   guint                        show_line_diagnostics : 1;
   guint                        show_line_numbers : 1;
+  guint                        show_relative_line_numbers : 1;
 } IdeSourceViewPrivate;
 
 typedef struct
@@ -193,6 +194,7 @@ enum {
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SHOW_LINE_DIAGNOSTICS,
+  PROP_SHOW_RELATIVE_LINE_NUMBERS,
   PROP_OVERSCROLL,
   LAST_PROP,
 
@@ -5504,6 +5506,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_show_line_numbers (self));
       break;
 
+    case PROP_SHOW_RELATIVE_LINE_NUMBERS:
+      g_value_set_boolean (value, ide_source_view_get_show_relative_line_numbers (self));
+      break;
+
     case PROP_OVERSCROLL:
       g_value_set_int (value, priv->overscroll_num_lines);
       break;
@@ -5588,6 +5594,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SHOW_LINE_NUMBERS:
       ide_source_view_set_show_line_numbers (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_RELATIVE_LINE_NUMBERS:
+      ide_source_view_set_show_relative_line_numbers (self, g_value_get_boolean (value));
       break;
 
     case PROP_OVERSCROLL:
@@ -5803,6 +5813,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_override_property (object_class, PROP_SHOW_LINE_NUMBERS, "show-line-numbers");
+
+  properties [PROP_SHOW_RELATIVE_LINE_NUMBERS] =
+    g_param_spec_boolean ("show-relative-line-numbers",
+                          "Show Relative Line Numbers",
+                          "Show line numbers relative to the cursor line",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_OVERSCROLL] =
     g_param_spec_int ("overscroll",
@@ -7822,6 +7839,33 @@ ide_source_view_set_show_line_numbers (IdeSourceView *self,
 }
 
 gboolean
+ide_source_view_get_show_relative_line_numbers (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->show_relative_line_numbers;
+}
+
+void
+ide_source_view_set_show_relative_line_numbers (IdeSourceView *self,
+                                                gboolean       show_relative_line_numbers)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  priv->show_relative_line_numbers = !!show_relative_line_numbers;
+
+  if (priv->gutter)
+    {
+      ide_gutter_set_show_relative_line_numbers (priv->gutter, show_relative_line_numbers);
+      g_object_notify (G_OBJECT (self), "show-relative-line-numbers");
+    }
+}
+
+gboolean
 ide_source_view_is_processing_key (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -7914,6 +7958,7 @@ ide_source_view_set_gutter (IdeSourceView *self,
                                 GTK_SOURCE_GUTTER_RENDERER (gutter),
                                 0);
       ide_gutter_set_show_line_numbers (priv->gutter, priv->show_line_numbers);
+      ide_gutter_set_show_relative_line_numbers (priv->gutter, priv->show_relative_line_numbers);
       ide_gutter_set_show_line_changes (priv->gutter, priv->show_line_changes);
       ide_gutter_set_show_line_diagnostics (priv->gutter, priv->show_line_diagnostics);
       ide_gutter_style_changed (gutter);
@@ -7922,6 +7967,7 @@ ide_source_view_set_gutter (IdeSourceView *self,
   g_object_notify (G_OBJECT (self), "show-line-changes");
   g_object_notify (G_OBJECT (self), "show-line-diagnostics");
   g_object_notify (G_OBJECT (self), "show-line-numbers");
+  g_object_notify (G_OBJECT (self), "show-relative-line-numbers");
 }
 
 gboolean

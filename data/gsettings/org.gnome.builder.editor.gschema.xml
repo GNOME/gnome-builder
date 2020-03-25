@@ -50,6 +50,11 @@
       <summary>Show line numbers</summary>
       <description>If enabled, the editor will show line numbers.</description>
     </key>
+    <key name="show-relative-line-numbers" type="b">
+      <default>true</default>
+      <summary>Show relative line numbers</summary>
+      <description>If enabled, the editor will show relative line numbers.</description>
+    </key>
     <key name="smart-backspace" type="b">
       <default>true</default>
       <summary>Smart Backspace</summary>

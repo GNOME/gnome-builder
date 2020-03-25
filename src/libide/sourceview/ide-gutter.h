@@ -38,21 +38,26 @@ struct _IdeGutterInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-gboolean ide_gutter_get_show_line_changes     (IdeGutter *self);
+gboolean ide_gutter_get_show_line_changes          (IdeGutter *self);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_gutter_get_show_line_numbers     (IdeGutter *self);
+gboolean ide_gutter_get_show_line_numbers          (IdeGutter *self);
+IDE_AVAILABLE_IN_3_36
+gboolean ide_gutter_get_show_relative_line_numbers (IdeGutter *self);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_gutter_get_show_line_diagnostics (IdeGutter *self);
+gboolean ide_gutter_get_show_line_diagnostics      (IdeGutter *self);
 IDE_AVAILABLE_IN_3_32
-void     ide_gutter_set_show_line_changes     (IdeGutter *self,
-                                               gboolean   show_line_changes);
+void     ide_gutter_set_show_line_changes          (IdeGutter *self,
+                                                    gboolean   show_line_changes);
 IDE_AVAILABLE_IN_3_32
-void     ide_gutter_set_show_line_numbers     (IdeGutter *self,
-                                               gboolean   show_line_numbers);
+void     ide_gutter_set_show_line_numbers          (IdeGutter *self,
+                                                    gboolean   show_line_numbers);
+IDE_AVAILABLE_IN_3_36
+void     ide_gutter_set_show_relative_line_numbers (IdeGutter *self,
+                                                    gboolean   show_relative_line_numbers);
 IDE_AVAILABLE_IN_3_32
-void     ide_gutter_set_show_line_diagnostics (IdeGutter *self,
-                                               gboolean   show_line_diagnostics);
+void     ide_gutter_set_show_line_diagnostics      (IdeGutter *self,
+                                                    gboolean   show_line_diagnostics);
 IDE_AVAILABLE_IN_3_32
-void     ide_gutter_style_changed             (IdeGutter *self);
+void     ide_gutter_style_changed                  (IdeGutter *self);
 
 G_END_DECLS

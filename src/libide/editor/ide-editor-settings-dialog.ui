@@ -99,6 +99,13 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton">
+                        <property name="label" translatable="yes">Display relative line numbers</property>
+                        <property name="action-name">source-view.show-relative-line-numbers</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton">
                         <property name="label" translatable="yes">Display right margin</property>
                         <property name="action-name">file-settings.show-right-margin</property>
                         <property name="visible">true</property>

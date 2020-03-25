@@ -221,6 +221,26 @@ gb_vim_set_number (GtkSourceView  *source_view,
 }
 
 static gboolean
+gb_vim_set_norelativenumber (GtkSourceView  *source_view,
+                             const gchar    *key,
+                             const gchar    *value,
+                             GError        **error)
+{
+  g_object_set (source_view, "show-relative-line-numbers", FALSE, NULL);
+  return TRUE;
+}
+
+static gboolean
+gb_vim_set_relativenumber (GtkSourceView  *source_view,
+                           const gchar    *key,
+                           const gchar    *value,
+                           GError        **error)
+{
+  g_object_set (source_view, "show-relative-line-numbers", TRUE, NULL);
+  return TRUE;
+}
+
+static gboolean
 gb_vim_set_scrolloff (GtkSourceView  *source_view,
                       const gchar    *key,
                       const gchar    *value,
@@ -269,16 +289,18 @@ gb_vim_set_tabstop (GtkSourceView  *source_view,
 }
 
 static const GbVimSet vim_sets [] = {
-  { "autoindent",    gb_vim_set_autoindent },
-  { "expandtab",     gb_vim_set_expandtab },
-  { "filetype",      gb_vim_set_filetype },
-  { "noautoindent",  gb_vim_set_noautoindent },
-  { "noexpandtab",   gb_vim_set_noexpandtab },
-  { "nonumber",      gb_vim_set_nonumber },
-  { "number",        gb_vim_set_number },
-  { "scrolloff",     gb_vim_set_scrolloff },
-  { "shiftwidth",    gb_vim_set_shiftwidth },
-  { "tabstop",       gb_vim_set_tabstop },
+  { "autoindent",       gb_vim_set_autoindent },
+  { "expandtab",        gb_vim_set_expandtab },
+  { "filetype",         gb_vim_set_filetype },
+  { "noautoindent",     gb_vim_set_noautoindent },
+  { "noexpandtab",      gb_vim_set_noexpandtab },
+  { "nonumber",         gb_vim_set_nonumber },
+  { "number",           gb_vim_set_number },
+  { "norelativenumber", gb_vim_set_norelativenumber },
+  { "relativenumber",   gb_vim_set_relativenumber },
+  { "scrolloff",        gb_vim_set_scrolloff },
+  { "shiftwidth",       gb_vim_set_shiftwidth },
+  { "tabstop",          gb_vim_set_tabstop },
   { NULL }
 };
 

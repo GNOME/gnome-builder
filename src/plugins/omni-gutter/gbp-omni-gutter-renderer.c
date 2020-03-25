@@ -192,6 +192,7 @@ enum {
   PROP_0,
   PROP_SHOW_LINE_CHANGES,
   PROP_SHOW_LINE_NUMBERS,
+  PROP_SHOW_RELATIVE_LINE_NUMBERS,
   PROP_SHOW_LINE_DIAGNOSTICS,
   N_PROPS
 };
@@ -1638,6 +1639,10 @@ gbp_omni_gutter_renderer_get_property (GObject    *object,
       g_value_set_boolean (value, self->show_line_numbers);
       break;
 
+    case PROP_SHOW_RELATIVE_LINE_NUMBERS:
+      g_value_set_boolean (value, self->show_relative_line_numbers);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1663,6 +1668,10 @@ gbp_omni_gutter_renderer_set_property (GObject      *object,
 
     case PROP_SHOW_LINE_NUMBERS:
       gbp_omni_gutter_renderer_set_show_line_numbers (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_RELATIVE_LINE_NUMBERS:
+      gbp_omni_gutter_renderer_set_show_relative_line_numbers (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -1693,6 +1702,10 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
 
   properties [PROP_SHOW_LINE_NUMBERS] =
     g_param_spec_boolean ("show-line-numbers", NULL, NULL, TRUE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  properties [PROP_SHOW_RELATIVE_LINE_NUMBERS] =
+    g_param_spec_boolean ("show-relative-line-numbers", NULL, NULL, FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   properties [PROP_SHOW_LINE_DIAGNOSTICS] =
@@ -1800,6 +1813,14 @@ gbp_omni_gutter_renderer_get_show_line_numbers (GbpOmniGutterRenderer *self)
   return self->show_line_numbers;
 }
 
+gboolean
+gbp_omni_gutter_renderer_get_show_relative_line_numbers (GbpOmniGutterRenderer *self)
+{
+  g_return_val_if_fail (GBP_IS_OMNI_GUTTER_RENDERER (self), FALSE);
+
+  return self->show_relative_line_numbers;
+}
+
 void
 gbp_omni_gutter_renderer_set_show_line_changes (GbpOmniGutterRenderer *self,
                                                 gboolean               show_line_changes)
@@ -1845,6 +1866,22 @@ gbp_omni_gutter_renderer_set_show_line_numbers (GbpOmniGutterRenderer *self,
       self->show_line_numbers = show_line_numbers;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_NUMBERS]);
       gbp_omni_gutter_renderer_recalculate_size (self);
+    }
+}
+
+void
+gbp_omni_gutter_renderer_set_show_relative_line_numbers (GbpOmniGutterRenderer *self,
+                                                         gboolean               show_relative_line_numbers)
+{
+  g_return_if_fail (GBP_IS_OMNI_GUTTER_RENDERER (self));
+
+  show_relative_line_numbers = !!show_relative_line_numbers;
+
+  if (show_relative_line_numbers != self->show_relative_line_numbers)
+    {
+      self->show_relative_line_numbers = show_relative_line_numbers;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_RELATIVE_LINE_NUMBERS]);
+      gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
     }
 }
 

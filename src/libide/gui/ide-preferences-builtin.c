@@ -163,6 +163,7 @@ ide_preferences_builtin_register_editor (DzlPreferences *preferences)
 
   dzl_preferences_add_list_group (preferences, "editor", "line", _("Line Information"), GTK_SELECTION_NONE, 50);
   dzl_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-numbers", NULL, NULL, _("Line numbers"), _("Show line number at beginning of each line"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-relative-line-numbers", NULL, NULL, _("Relative line numbers"), _("Show line numbers relative to the cursor line"), NULL, 0);
   dzl_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-changes", NULL, NULL, _("Line changes"), _("Show if a line was added or modified next to line number"), NULL, 1);
   dzl_preferences_add_switch (preferences, "editor", "line", "org.gnome.builder.editor", "show-line-diagnostics", NULL, NULL, _("Line diagnostics"), _("Show an icon next to line numbers indicating type of diagnostic"), NULL, 2);
 
