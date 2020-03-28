@@ -51,7 +51,7 @@
       <description>If enabled, the editor will show line numbers.</description>
     </key>
     <key name="show-relative-line-numbers" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Show relative line numbers</summary>
       <description>If enabled, the editor will show relative line numbers.</description>
     </key>
