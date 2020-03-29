@@ -92,7 +92,7 @@ libide_lsp_deps = [
 # Library Definitions
 #
 
-libide_lsp = static_library('ide-lsp-' + libide_api_version, libide_lsp_sources,
+libide_lsp = static_library('ide-lsp-' + libide_api_version, libide_lsp_sources, libide_lsp_generated_headers,
    dependencies: libide_lsp_deps,
          c_args: libide_args + release_args + ['-DIDE_LSP_COMPILATION'],
 )
