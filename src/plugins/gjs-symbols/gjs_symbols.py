@@ -264,7 +264,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
     @staticmethod
     def _get_launcher(context, file_):
         file_path = file_.get_path()
-        script = JS_SCRIPT % file_path
+        script = JS_SCRIPT % file_path.replace('\\', '\\\\').replace("'", "\\'")
         unsaved_file = Ide.UnsavedFiles.from_context(context).get_unsaved_file(file_)
 
         if context.has_project():
