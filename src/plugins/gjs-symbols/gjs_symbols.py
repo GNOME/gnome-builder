@@ -242,14 +242,19 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
 
 JS_SCRIPT = \
 """var data;
-if (ARGV[0] === '--file') {
-  const GLib = imports.gi.GLib;
-  var ret = GLib.file_get_contents(ARGV[1]);
-  data = ret[1];
-} else {
-  data = ARGV[0];
+try {
+    if (ARGV[0] === '--file') {
+        const GLib = imports.gi.GLib;
+        var ret = GLib.file_get_contents(ARGV[1]);
+        data = ret[1];
+    } else {
+        data = ARGV[0];
+    }
+    print(JSON.stringify(Reflect.parse(data, {source: '%s'})));
+} catch (e) {
+    imports.system.exit(1);
 }
-print(JSON.stringify(Reflect.parse(data, {source: '%s'})));""".replace('\n', ' ')
+""".replace('\n', ' ')
 
 
 class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
