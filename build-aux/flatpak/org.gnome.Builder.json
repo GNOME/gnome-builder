@@ -7,6 +7,9 @@
     "tags" : [
         "nightly"
     ],
+    "config-opts" : [
+        "-Dgvls_plugin=false"
+    ],
     "desktop-file-name-prefix" : "(Nightly) ",
     "finish-args" : [
         "--require-version=1.0.0",
@@ -622,6 +625,26 @@
                     "type" : "git",
                     "url" : "https://github.com/flatpak/libportal.git"
                 }
+            ]
+        },
+        {
+            "name" : "vala-language-server",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized",
+		"-Dbuilder_abi=3.37"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/benwaffle/vala-language-server"
+                },
+		{
+		    "type": "patch",
+		    "path": "vala-language-server_Avoid-to-run-from-host-for-flatpak.patch"
+		}
             ]
         },
         {

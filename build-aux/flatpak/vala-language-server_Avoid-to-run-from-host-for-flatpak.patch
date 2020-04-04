@@ -1,0 +1,24 @@
+From c3b4a6ed88ac9672dd7925676e304b4f226c1ad0 Mon Sep 17 00:00:00 2001
+From: Alberto Fanjul <albertofanjul@gmail.com>
+Date: Sat, 4 Apr 2020 14:18:19 +0200
+Subject: [PATCH] Avoid to run from host for flatpak
+
+---
+ plugins/gnome-builder/vala_langserv.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/plugins/gnome-builder/vala_langserv.py b/plugins/gnome-builder/vala_langserv.py
+index e81cfc6f..93641d2c 100644
+--- a/plugins/gnome-builder/vala_langserv.py
++++ b/plugins/gnome-builder/vala_langserv.py
+@@ -190,7 +190,6 @@ class VlsService(Ide.Object):
+         launcher = Ide.SubprocessLauncher()
+         launcher.set_flags(flags)
+         launcher.set_cwd(GLib.get_home_dir())
+-        launcher.set_run_on_host(True)
+         return launcher
+ 
+     def _discover_sysroot(self):
+-- 
+2.26.0
+
