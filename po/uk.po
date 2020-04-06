@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-03-19 14:21+0000\n"
-"PO-Revision-Date: 2020-03-21 16:05+0200\n"
+"POT-Creation-Date: 2020-03-25 20:01+0000\n"
+"PO-Revision-Date: 2020-04-06 19:32+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.03.70\n"
+"X-Generator: Lokalize 20.07.70\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -186,9 +186,9 @@ msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
-"Увімкнути автоматизоване передавання даних під час збирання, зокрема"
-" отримання SDK та залежностей, якщо відомо, що ведеться облік і тарифікація"
-" обміну даними мережею."
+"Увімкнути автоматизоване передавання даних під час збирання, зокрема "
+"отримання SDK та залежностей, якщо відомо, що ведеться облік і тарифікація "
+"обміну даними мережею."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -207,8 +207,8 @@ msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
-"Якщо увімкнено, буде використано додаткове підсвічування підтримуваними"
-" мовами на основі даних, які видобуто із початкового коду."
+"Якщо увімкнено, буде використано додаткове підсвічування підтримуваними "
+"мовами на основі даних, які видобуто із початкового коду."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
@@ -235,8 +235,8 @@ msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
-"Якщо увімкнено, редактор показуватиме додавання і зміни у рядках поряд і"
-" початковим кодом."
+"Якщо увімкнено, редактор показуватиме додавання і зміни у рядках поряд і "
+"початковим кодом."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "Show diagnostics next to line number"
@@ -246,11 +246,11 @@ msgstr "Показувати діагностику поряд із номеро
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
-"Якщо увімкнено, редактор показувати діагностичні дані ліворуч від номерів"
-" рядків."
+"Якщо увімкнено, редактор показувати діагностичні дані ліворуч від номерів "
+"рядків."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
-#: src/libide/editor/ide-editor-settings-dialog.ui:109
+#: src/libide/editor/ide-editor-settings-dialog.ui:116
 msgid "Highlight current line"
 msgstr "Підсвічувати поточний рядок"
 
@@ -276,139 +276,149 @@ msgid "If enabled, the editor will show line numbers."
 msgstr "Якщо увімкнено, редактор показуватиме номери рядків."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#| msgid "Show line numbers"
+msgid "Show relative line numbers"
+msgstr "Показати відносні номери рядків"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:56
+#| msgid "If enabled, the editor will show line numbers."
+msgid "If enabled, the editor will show relative line numbers."
+msgstr "Якщо увімкнено, редактор показуватиме відносні номери рядків."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 #: src/libide/gui/ide-preferences-builtin.c:147
 msgid "Smart Backspace"
 msgstr "Розумне вилучення"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:56
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:61
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
-"Клавіша Backspace вилучатиме додаткові пробіли для підтримання вирівнювання"
-" за визначеним розміром відступу."
+"Клавіша Backspace вилучатиме додаткові пробіли для підтримання вирівнювання "
+"за визначеним розміром відступу."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 #: src/libide/gui/ide-preferences-builtin.c:146
 msgid "Smart Home and End"
 msgstr "Кмітливі клавіші «Home» та «End»"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:61
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Whether or not Home moves to first non-space character."
 msgstr ""
-"Визначає, чи пересуватиме натискання клавіші Home курсор до першого"
-" непробільного символу."
+"Визначає, чи пересуватиме натискання клавіші Home курсор до першого "
+"непробільного символу."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
 msgstr "Показувати лінії ґратки"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Якщо увімкнено, редактор показуватиме лінії ґратки у документі."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
-#: src/libide/gui/ide-preferences-builtin.c:174
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: src/libide/gui/ide-preferences-builtin.c:175
 msgid "Show overview map"
 msgstr "Показувати мапу коду"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:81
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
-"Якщо увімкнено, «Будівник» показуватиме оглядову мапу файла з початковим"
-" кодом поряд із вікном редактора."
+"Якщо увімкнено, «Будівник» показуватиме оглядову мапу файла з початковим "
+"кодом поряд із вікном редактора."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
 msgid "Automatically Hide Overview Map"
 msgstr "Автоматично ховати оглядову мапу"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
-"Якщо увімкнено, «Будівник» автоматично приховуватиме оглядову мапу, коли"
-" вказівник миші полишатиме вікно редактора або буде перевищено час очікування."
+"Якщо увімкнено, «Будівник» автоматично приховуватиме оглядову мапу, коли "
+"вказівник миші полишатиме вікно редактора або буде перевищено час очікування."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
 msgid "Draw Spaces"
 msgstr "Малювати пробіли"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "The various types of space to draw in the editor."
 msgstr "Різноманітні типи пробілів, які слід малювати у редакторі."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Overscroll"
 msgstr "Надпрокручування"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "Кількість рядків для гортання за кінець буфера."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Wrap Text"
 msgstr "Переносити рядки тексту"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
 msgstr ""
-"Якщо увімкнено, «Будівник» автоматично переноситиме рядки у тексті, щоб увесь"
-" текст був видимим."
+"Якщо увімкнено, «Будівник» автоматично переноситиме рядки у тексті, щоб "
+"увесь текст був видимим."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
-#: src/libide/gui/ide-preferences-builtin.c:187
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Autosave Enabled"
 msgstr "Увімкнено автозбереження"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "Увімкнути або вимкнути можливість автоматичного збереження."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
-#: src/libide/gui/ide-preferences-builtin.c:188
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: src/libide/gui/ide-preferences-builtin.c:189
 msgid "Autosave Frequency"
 msgstr "Частота автозбереження"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "Кількість секунд після внесення змін до автоматичного збереження даних."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "Кількість рядків доповнення"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
 msgstr "Кількість рядків доповнення, які слід показувати користувачеві."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/libide/gui/ide-preferences-builtin.c:107
 msgid "Line Spacing"
 msgstr "Інтервал між рядками"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The number of pixels to include above and below lines in the editor."
 msgstr "Кількість пікселів, які слід включати над і під рядками у редакторі."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: src/libide/gui/ide-preferences-builtin.c:210
 msgid "Interactive Completion"
 msgstr "Інтерактивне доповнення"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
-"Якщо увімкнено, «Будівник» автоматично показувати пропозиції доповнення під"
-" час введення тексту."
+"Якщо увімкнено, «Будівник» автоматично показувати пропозиції доповнення під "
+"час введення тексту."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -476,7 +486,7 @@ msgid "\"Projects\""
 msgstr "\"Проєкти\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:423
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Projects directory"
 msgstr "Каталог проєктів"
 
@@ -507,7 +517,8 @@ msgstr "Очищувати кеші збирання при запуску"
 #: data/gsettings/org.gnome.builder.gschema.xml:49
 msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
-"Якщо увімкнено, «Будівник» очищуватиме кеші збирання під час запуску програми."
+"Якщо увімкнено, «Будівник» очищуватиме кеші збирання під час запуску "
+"програми."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -534,8 +545,8 @@ msgstr "Показувати нехтувані файли"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
-"Якщо увімкнено, у ієрархії проєкту буде показано файли, які ігноруються"
-" системою керування версіями."
+"Якщо увімкнено, у ієрархії проєкту буде показано файли, які ігноруються "
+"системою керування версіями."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: src/plugins/project-tree/gtk/menus.ui:74
@@ -546,8 +557,8 @@ msgstr "Впорядковувати спочатку каталоги"
 msgid ""
 "If enabled, the project tree will sort directories before regular files."
 msgstr ""
-"Якщо увімкнено, у списку ієрархії проєкту каталоги стоятимуть вище за"
-" звичайні файли."
+"Якщо увімкнено, у списку ієрархії проєкту каталоги стоятимуть вище за "
+"звичайні файли."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
@@ -558,8 +569,8 @@ msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
 msgstr ""
-"Вибрані налаштування, які буде відновлено під час наступного завантаження"
-" проєкту."
+"Вибрані налаштування, які буде відновлено під час наступного завантаження "
+"проєкту."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
@@ -850,7 +861,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Завантажити або створити палітру за налаштуваннями"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4983
+#: src/libide/sourceview/ide-source-view.c:4985
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -1110,8 +1121,8 @@ msgstr "Перемикання між пошуком і пошуком із за
 #: src/libide/terminal/ide-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
-"Показати або приховати параметри пошуку, зокрема чутливість до регістру"
-" символів"
+"Показати або приховати параметри пошуку, зокрема чутливість до регістру "
+"символів"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:155
@@ -1127,9 +1138,9 @@ msgstr "Підкреслення синтаксису"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-preferences-builtin.c:155
-#: src/libide/gui/ide-preferences-builtin.c:207
-#: src/libide/gui/ide-preferences-builtin.c:330
-#: src/libide/gui/ide-preferences-builtin.c:402
+#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:403
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
@@ -1142,63 +1153,68 @@ msgid "Display line numbers"
 msgstr "Показувати номери рядків"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:102
+#| msgid "Display line numbers"
+msgid "Display relative line numbers"
+msgstr "Показувати відносні номери рядків"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:109
 msgid "Display right margin"
 msgstr "Показувати праве поле"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:116
+#: src/libide/editor/ide-editor-settings-dialog.ui:123
 msgid "Automatic indentation"
 msgstr "Автоматичний відступ"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:123
+#: src/libide/editor/ide-editor-settings-dialog.ui:130
 msgid "Smart backspace"
 msgstr "Розумне вилучення"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:125
+#: src/libide/editor/ide-editor-settings-dialog.ui:132
 msgid "Enabling smart backspace will treat multiple spaces as a tabs"
 msgstr ""
-"Вмикання кмітливого backspace призведе до обробки декількох пробілів як"
-" табуляцій"
+"Вмикання кмітливого backspace призведе до обробки декількох пробілів як "
+"табуляцій"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:133
+#: src/libide/editor/ide-editor-settings-dialog.ui:140
 msgid "Insert trailing newline"
 msgstr "Вставляти кінцевий символ нового рядка"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:140
+#: src/libide/editor/ide-editor-settings-dialog.ui:147
 msgid "Overwrite trailing braces and quotations"
 msgstr "Перезаписувати кінцеві фігурні дужки і лапки"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:152
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/editor/ide-editor-settings-dialog.ui:159
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Indentation"
 msgstr "Відступ"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:179
+#: src/libide/editor/ide-editor-settings-dialog.ui:186
 msgid "2"
 msgstr "2"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:189
+#: src/libide/editor/ide-editor-settings-dialog.ui:196
 msgid "3"
 msgstr "3"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:199
+#: src/libide/editor/ide-editor-settings-dialog.ui:206
 msgid "4"
 msgstr "4"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:209
+#: src/libide/editor/ide-editor-settings-dialog.ui:216
 msgid "8"
 msgstr "8"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:236
-#: src/libide/gui/ide-preferences-builtin.c:178
+#: src/libide/editor/ide-editor-settings-dialog.ui:243
+#: src/libide/gui/ide-preferences-builtin.c:179
 msgid "Spaces"
 msgstr "Пробіли"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:247
-#: src/libide/gui/ide-preferences-builtin.c:179
+#: src/libide/editor/ide-editor-settings-dialog.ui:254
+#: src/libide/gui/ide-preferences-builtin.c:180
 msgid "Tabs"
 msgstr "Табуляції"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:264
+#: src/libide/editor/ide-editor-settings-dialog.ui:271
 msgid "Spaces per tab"
 msgstr "Пробіли на табуляцію"
 
@@ -1322,8 +1338,8 @@ msgstr "У конвеєрі збирання сталися помилки"
 #: src/libide/foundry/ide-pipeline.c:3000
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
-"Не вдалося створити псевдотермінал. Можливості роботи із терміналом буде"
-" обмежено."
+"Не вдалося створити псевдотермінал. Можливості роботи із терміналом буде "
+"обмежено."
 
 #: src/libide/foundry/ide-pipeline.c:3206
 msgid "Cleaning…"
@@ -1386,8 +1402,8 @@ msgstr "приготування"
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
 msgstr ""
-"Неможливо зібрати передавання даних, перебуваючи в умовах вимірюваного"
-" з'єднання"
+"Неможливо зібрати передавання даних, перебуваючи в умовах вимірюваного "
+"з'єднання"
 
 #: src/libide/foundry/ide-run-manager.c:383
 msgid "Cannot run target, another target is running"
@@ -1468,8 +1484,8 @@ msgid ""
 "Enter the repository of the project you would like to clone. The URL should "
 "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 msgstr ""
-"Введіть адресу сховища проєкту, який ви хочете клонувати. Адреса має бути"
-" десь такою: «https://gitlab.gnome.org/GNOME/gnome-builder.git»."
+"Введіть адресу сховища проєкту, який ви хочете клонувати. Адреса має бути "
+"десь такою: «https://gitlab.gnome.org/GNOME/gnome-builder.git»."
 
 #: src/libide/greeter/ide-clone-surface.ui:84
 msgid "user@host:repository.git"
@@ -1553,8 +1569,8 @@ msgid ""
 "Removing project sources will delete them from your computer and cannot be "
 "undone."
 msgstr ""
-"Вилучення початкового коду проєкту призведе до вилучення даних з вашого"
-" комп'ютера. Цю дію не можна буде скасувати."
+"Вилучення початкового коду проєкту призведе до вилучення даних з вашого "
+"комп'ютера. Цю дію не можна буде скасувати."
 
 #: src/libide/greeter/ide-greeter-workspace.c:537
 msgid "Delete Project Sources"
@@ -1697,8 +1713,8 @@ msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
 msgstr ""
-"Для роботи «Будівника» GNOME потрібен стільничний сеанс із D-Bus. Будь ласка,"
-" встановіть значення змінної середовища DBUS_SESSION_BUS_ADDRESS."
+"Для роботи «Будівника» GNOME потрібен стільничний сеанс із D-Bus. Будь "
+"ласка, встановіть значення змінної середовища DBUS_SESSION_BUS_ADDRESS."
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -1724,8 +1740,8 @@ msgstr "Відкрити файл або термінал"
 #: src/libide/gui/ide-frame-empty-state.ui:30
 msgid "Use the page switcher above or use one of the following:"
 msgstr ""
-"Скористайтеся засобом перемикання сторінок або скористайтеся одним із таких"
-" пунктів:"
+"Скористайтеся засобом перемикання сторінок або скористайтеся одним із таких "
+"пунктів:"
 
 #: src/libide/gui/ide-frame-empty-state.ui:45
 #: src/libide/gui/ide-search-button.c:44
@@ -1967,335 +1983,345 @@ msgid "Show line number at beginning of each line"
 msgstr "Показувати номер на початку кожного рядка"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
+#| msgid "Display line numbers"
+msgid "Relative line numbers"
+msgstr "Відносні номери рядків"
+
+#: src/libide/gui/ide-preferences-builtin.c:166
+#| msgid "Show line number at beginning of each line"
+msgid "Show line numbers relative to the cursor line"
+msgstr "Показувати номери рядків відносно рядка курсора"
+
+#: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Line changes"
 msgstr "Зміни рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:166
+#: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Show if a line was added or modified next to line number"
 msgstr "Показувати, чи додано або змінено щось біля номеру рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Line diagnostics"
 msgstr "Діагностика у рядках"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
-"Показувати поряд із номерами рядків піктограму, яка позначатиме тип"
-" діагностичного повідомлення"
+"Показувати поряд із номерами рядків піктограму, яка позначатиме тип "
+"діагностичного повідомлення"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Highlight"
 msgstr "Підсвічування"
 
-#: src/libide/gui/ide-preferences-builtin.c:170
+#: src/libide/gui/ide-preferences-builtin.c:171
 msgid "Current line"
 msgstr "Поточний рядок"
 
-#: src/libide/gui/ide-preferences-builtin.c:170
+#: src/libide/gui/ide-preferences-builtin.c:171
 msgid "Make current line stand out with highlights"
 msgstr "Підсвічувати поточний рядок"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Matching brackets"
 msgstr "Збігання дужок"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Підсвічувати збіг дужок, що ґрунтується на положенні вказівника"
 
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Code Overview"
 msgstr "Огляд коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:174
+#: src/libide/gui/ide-preferences-builtin.c:175
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Віддалений огляд для покращення пересування по коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Automatically hide overview map"
 msgstr "Автоматично ховати карту огляду"
 
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Automatically hide map when editor loses focus"
 msgstr "Автоматично ховати карту, коли редактор втрачає фокус"
 
-#: src/libide/gui/ide-preferences-builtin.c:177
+#: src/libide/gui/ide-preferences-builtin.c:178
 msgid "Visible Whitespace Characters"
 msgstr "Видимі пробіли"
 
-#: src/libide/gui/ide-preferences-builtin.c:180
+#: src/libide/gui/ide-preferences-builtin.c:181
 msgid "New line and carriage return"
 msgstr "Новий рядок і переведення каретки"
 
-#: src/libide/gui/ide-preferences-builtin.c:181
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Non-breaking spaces"
 msgstr "Нерозривний пропуск"
 
-#: src/libide/gui/ide-preferences-builtin.c:182
+#: src/libide/gui/ide-preferences-builtin.c:183
 msgid "Spaces inside of text"
 msgstr "Пропуск всередині тексту"
 
-#: src/libide/gui/ide-preferences-builtin.c:183
+#: src/libide/gui/ide-preferences-builtin.c:184
 msgid "Trailing Only"
 msgstr "Тільки початкові"
 
-#: src/libide/gui/ide-preferences-builtin.c:184
+#: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Leading Only"
 msgstr "Тільки кінцеві"
 
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "Autosave"
 msgstr "Автозбереження"
 
-#: src/libide/gui/ide-preferences-builtin.c:187
+#: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Enable or disable autosave feature"
 msgstr "Увімкнути або вимкнути можливість автоматичного збереження"
 
-#: src/libide/gui/ide-preferences-builtin.c:188
+#: src/libide/gui/ide-preferences-builtin.c:189
 msgid "The number of seconds after modification before auto saving"
 msgstr "Кількість секунд після внесення змін до автоматичного збереження даних"
 
-#: src/libide/gui/ide-preferences-builtin.c:194
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Code Insight"
 msgstr "Розуміння коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:196
+#: src/libide/gui/ide-preferences-builtin.c:197
 #: src/libide/sourceview/gtk/menus.ui:50 src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Підсвічування"
 
-#: src/libide/gui/ide-preferences-builtin.c:197
+#: src/libide/gui/ide-preferences-builtin.c:198
 msgid "Semantic Highlighting"
 msgstr "Семантичне підсвічування"
 
-#: src/libide/gui/ide-preferences-builtin.c:197
+#: src/libide/gui/ide-preferences-builtin.c:198
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 "Використовувати підсвічення додаткової інформації, яку досліджено з коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:199
+#: src/libide/gui/ide-preferences-builtin.c:200
 #: src/plugins/editor/gbp-editor-hover-provider.c:78
 msgid "Diagnostics"
 msgstr "Діагностика"
 
-#: src/libide/gui/ide-preferences-builtin.c:205
+#: src/libide/gui/ide-preferences-builtin.c:206
 msgid "Completion"
 msgstr "Доповнення"
 
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:209
 msgid "Completions Display Size"
 msgstr "Розмір списку завершення"
 
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:209
 msgid "Number of completions to display"
 msgstr "Кількість варіантів завершення, які слід показувати"
 
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: src/libide/gui/ide-preferences-builtin.c:210
 msgid "Display code suggestions interactively as you type"
 msgstr "Показувати пропозиції завершення коду інтерактивно під час введення"
 
-#: src/libide/gui/ide-preferences-builtin.c:211
+#: src/libide/gui/ide-preferences-builtin.c:212
 msgid "Completion Providers"
 msgstr "Засоби автодоповнення"
 
-#: src/libide/gui/ide-preferences-builtin.c:217
+#: src/libide/gui/ide-preferences-builtin.c:218
 msgid "Snippets"
 msgstr "Фрагменти"
 
-#: src/libide/gui/ide-preferences-builtin.c:260
+#: src/libide/gui/ide-preferences-builtin.c:261
 msgid "Programming Languages"
 msgstr "Мови програмування"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:271
+#: src/libide/gui/ide-preferences-builtin.c:272
 msgid "Search languages…"
 msgstr "Шукати мови…"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Trim trailing whitespace"
 msgstr "Обрізати залишкові пропуски"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Коли зберігаєте, то залишкові пропуски зі змінених рядків будуть обрізані."
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Overwrite Braces"
 msgstr "Перезаписувати дужки"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Overwrite closing braces"
 msgstr "Перезаписувати завершальні дужки"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert matching character for { [ ( or \""
 msgstr "Вставляти завершальні символи для блоків { [ ( або \""
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Insert Trailing Newline"
 msgstr "Вставляти кінцевий символ нового рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Ensure files end with a newline"
 msgstr "Забезпечувати завершення файлів символом нового рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Margins"
 msgstr "Поля"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Show right margin"
 msgstr "Показувати праве поле"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Right margin position"
 msgstr "Положення правого поля"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Position in spaces for the right margin"
 msgstr "Положення в пропусках для правого поля"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Tab width"
 msgstr "Ширина табуляції"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Width of a tab character in spaces"
 msgstr "Ширина символу табуляції в пропусках"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Insert spaces instead of tabs"
 msgstr "Вставляти пропуски замість табуляції"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Prefer spaces over use of tabs"
 msgstr "Віддавати перевагу пропускам над табуляцією"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Automatically indent"
 msgstr "Автоматичний відступ"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Indent source code as you type"
 msgstr "Відступ у коді під час писання"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Spacing"
 msgstr "Інтервал"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening parentheses"
 msgstr "Пробіл перед початковими круглими дужками"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening brackets"
 msgstr "Пробіл перед початковими квадратними дужками"
 
-#: src/libide/gui/ide-preferences-builtin.c:348
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Space before opening braces"
 msgstr "Пробіл перед початковими фігурними дужками"
 
-#: src/libide/gui/ide-preferences-builtin.c:349
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Space before opening angles"
 msgstr "Пробіл перед початковою кутовою дужкою"
 
-#: src/libide/gui/ide-preferences-builtin.c:350
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before colons"
 msgstr "Ставити пробіл перед двокрапкою"
 
-#: src/libide/gui/ide-preferences-builtin.c:351
+#: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Prefer a space before commas"
 msgstr "Ставити пробіл перед комою"
 
-#: src/libide/gui/ide-preferences-builtin.c:352
+#: src/libide/gui/ide-preferences-builtin.c:353
 msgid "Prefer a space before semicolons"
 msgstr "Ставити пробіл перед крапкою з комою"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/libide/gui/ide-preferences-builtin.c:380
+#: src/libide/gui/ide-preferences-builtin.c:363
+#: src/libide/gui/ide-preferences-builtin.c:381
 msgid "Default"
 msgstr "Типовий"
 
-#: src/libide/gui/ide-preferences-builtin.c:367
-#: src/libide/gui/ide-preferences-builtin.c:385
+#: src/libide/gui/ide-preferences-builtin.c:368
+#: src/libide/gui/ide-preferences-builtin.c:386
 msgid "Number of CPU"
 msgstr "Кількість процесорів"
 
-#: src/libide/gui/ide-preferences-builtin.c:400
+#: src/libide/gui/ide-preferences-builtin.c:401
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Зібрати"
 
-#: src/libide/gui/ide-preferences-builtin.c:403
+#: src/libide/gui/ide-preferences-builtin.c:404
 msgid "Build Workers"
 msgstr "Збиральні робітники"
 
-#: src/libide/gui/ide-preferences-builtin.c:403
+#: src/libide/gui/ide-preferences-builtin.c:404
 msgid "Number of parallel build workers"
 msgstr "Кількість паралельних робітників, які збирають"
 
-#: src/libide/gui/ide-preferences-builtin.c:411
+#: src/libide/gui/ide-preferences-builtin.c:412
 msgid "Clear build cache at startup"
 msgstr "Спорожняти кеш збирання під час запуску"
 
-#: src/libide/gui/ide-preferences-builtin.c:411
+#: src/libide/gui/ide-preferences-builtin.c:412
 msgid "Expired caches will be purged when Builder is started"
 msgstr "Застарілі кеші буде витерто під час запуску «Будівника»"
 
-#: src/libide/gui/ide-preferences-builtin.c:413
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Network"
 msgstr "Мережа"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:415
 msgid "Allow downloads over metered connections"
 msgstr "Дозволити отримання даних при вимірюваних з'єднаннях"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:415
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr ""
-"Дозволити використання з'єднань із вимірюванням обміну даними при"
-" автоматичному отриманні залежностей"
+"Дозволити використання з'єднань із вимірюванням обміну даними при "
+"автоматичному отриманні залежностей"
 
-#: src/libide/gui/ide-preferences-builtin.c:420
+#: src/libide/gui/ide-preferences-builtin.c:421
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Проєкти"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Workspace"
 msgstr "Робочий простір"
 
-#: src/libide/gui/ide-preferences-builtin.c:423
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "A place for all your projects"
 msgstr "Місце для всіх ваших проєктів"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "Restore previously opened files"
 msgstr "Відновлювати раніше відкриті файли"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "Open previously opened files when loading a project"
 msgstr "Відкривати раніше відкриті файли під час завантаження проєкту"
 
-#: src/libide/gui/ide-preferences-builtin.c:546
+#: src/libide/gui/ide-preferences-builtin.c:547
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Контроль версії"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:559
+#: src/libide/gui/ide-preferences-builtin.c:560
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2858,31 +2884,31 @@ msgstr "Ві_ддалити"
 msgid "Reset"
 msgstr "Скинути"
 
-#: src/libide/sourceview/ide-source-view.c:4432
+#: src/libide/sourceview/ide-source-view.c:4434
 #, c-format
 msgid "Insert “%s”"
 msgstr "Вставити «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4434
+#: src/libide/sourceview/ide-source-view.c:4436
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замінити «%s» на «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4552
+#: src/libide/sourceview/ide-source-view.c:4554
 msgid "Apply Fix-It"
 msgstr "Застосувати латку"
 
-#: src/libide/sourceview/ide-source-view.c:4982
+#: src/libide/sourceview/ide-source-view.c:4984
 msgid "Rename symbol"
 msgstr "Перейменувати символ"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5217
+#: src/libide/sourceview/ide-source-view.c:5219
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>рядок %u, позиція %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5243
+#: src/libide/sourceview/ide-source-view.c:5245
 msgid "No references were found"
 msgstr "Посилань не знайдено"
 
@@ -2931,8 +2957,8 @@ msgstr "Не вдалося запустити підпроцес"
 #: src/libide/terminal/ide-terminal-page.c:137
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
-"Надто швидке завершення роботи засобу запуску підпроцесу. Перезапуск не"
-" виконуватиметься."
+"Надто швидке завершення роботи засобу запуску підпроцесу. Перезапуск не "
+"виконуватиметься."
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2999,16 +3025,16 @@ msgstr "Кешування команд збирання"
 #, c-format
 msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
-"Додаток форматування: сталася помилка під час копіювання файла налаштувань"
-" gresource для «%s»: %s"
+"Додаток форматування: сталася помилка під час копіювання файла налаштувань "
+"gresource для «%s»: %s"
 
 #. translators: %s is replaced with the source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:165
 #, c-format
 msgid "Beautifier plugin: error creating temporary config file for “%s”"
 msgstr ""
-"Додаток форматування: сталася помилка під час створення тимчасового файла"
-" налаштувань для «%s»"
+"Додаток форматування: сталася помилка під час створення тимчасового файла "
+"налаштувань для «%s»"
 
 #. translators: %s is replaced with the .ini source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:209
@@ -3023,8 +3049,8 @@ msgid ""
 "Beautifier plugin: neither command nor command-pattern keys found: entry "
 "“%s” disabled"
 msgstr ""
-"Додаток форматування: не знайдено ні ключа command, ні ключа command-pattern:"
-" запис «%s» вимкнено"
+"Додаток форматування: не знайдено ні ключа command, ні ключа command-"
+"pattern: запис «%s» вимкнено"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:267
@@ -3033,8 +3059,8 @@ msgid ""
 "Beautifier plugin: both command and command-pattern keys found: entry “%s” "
 "disabled"
 msgstr ""
-"Додаток форматування: виявлено одразу ключ command і command-pattern: запис «"
-"%s» вимкнено"
+"Додаток форматування: виявлено одразу ключ command і command-pattern: запис "
+"«%s» вимкнено"
 
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
@@ -3049,8 +3075,8 @@ msgstr ""
 msgid ""
 "Beautifier plugin: command key out of possible values: entry “%s” disabled"
 msgstr ""
-"Додаток форматування: для ключа command вказано невідоме значення: запис «%s»"
-" вимкнено"
+"Додаток форматування: для ключа command вказано невідоме значення: запис "
+"«%s» вимкнено"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:333
@@ -3059,8 +3085,8 @@ msgid ""
 "Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
 "entry “%s” disabled"
 msgstr ""
-"Додаток форматування: @c@ у« ключі command-pattern «%s», але файл налаштувань"
-" не встановлено: запис «%s» вимкнено"
+"Додаток форматування: @c@ у« ключі command-pattern «%s», але файл "
+"налаштувань не встановлено: запис «%s» вимкнено"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:365
@@ -3068,8 +3094,8 @@ msgstr ""
 msgid ""
 "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
 msgstr ""
-"Додаток форматування: не вдалося створити тимчасовий файл для «%s»: запис «"
-"%s» вимкнено"
+"Додаток форматування: не вдалося створити тимчасовий файл для «%s»: запис "
+"«%s» вимкнено"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:407
@@ -3147,8 +3173,8 @@ msgid ""
 "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
 "temporary directory: “%s”"
 msgstr ""
-"Додаток форматування: заблоковано спробу вилучити файл поза тимчасовим"
-" каталогом «%s»: «%s»"
+"Додаток форматування: заблоковано спробу вилучити файл поза тимчасовим "
+"каталогом «%s»: «%s»"
 
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:264
@@ -3207,8 +3233,8 @@ msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
 msgstr ""
-"Дублювання налаштувань уможливлює зміну налаштувань без внесення змін до"
-" поточного файла налаштувань."
+"Дублювання налаштувань уможливлює зміну налаштувань без внесення змін до "
+"поточного файла налаштувань."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
 msgid "_Remove"
@@ -3464,8 +3490,8 @@ msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr ""
-"Визначає, чи слід включати параметри до доповнення. Потребує ключа"
-" complete-parentheses."
+"Визначає, чи слід включати параметри до доповнення. Потребує ключа complete-"
+"parentheses."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3685,8 +3711,8 @@ msgid ""
 "Select the type of unit you want to use for RGB components and strings in "
 "the panel."
 msgstr ""
-"Виберіть тип модуля, яким ви хочете скористатися для компонентів і рядків RGB"
-" на панелі."
+"Виберіть тип модуля, яким ви хочете скористатися для компонентів і рядків "
+"RGB на панелі."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
 msgid "Percent"
@@ -3834,7 +3860,8 @@ msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
 msgstr ""
-"При зберігання файла «Будівник» автоматично оновлюватиме запис авторських прав"
+"При зберігання файла «Будівник» автоматично оновлюватиме запис авторських "
+"прав"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:117
@@ -3897,9 +3924,9 @@ msgid ""
 "resources. Should be in lower case without spaces and may not start with a "
 "number."
 msgstr ""
-"Унікальна назва, яку буде використано для теки вашого проєкту та інших"
-" технічних ресурсів. Має складатися з малих латинських літер і не починатися"
-" з цифри."
+"Унікальна назва, яку буде використано для теки вашого проєкту та інших "
+"технічних ресурсів. Має складатися з малих латинських літер і не починатися "
+"з цифри."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:73
 msgid "Application ID"
@@ -3910,9 +3937,9 @@ msgid ""
 "The Application ID is a reverse domain-name identifier used to uniquely "
 "identify your application such as “org.gnome.Builder”."
 msgstr ""
-"Ідентифікатор програми це обернений ідентифікатор домен-назва, який"
-" використовується для однозначної прив'язки вашої програми. Приклад:"
-" «org.gnome.Builder»."
+"Ідентифікатор програми це обернений ідентифікатор домен-назва, який "
+"використовується для однозначної прив'язки вашої програми. Приклад: «org."
+"gnome.Builder»."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:118
 msgid "Project Location"
@@ -3991,8 +4018,8 @@ msgstr "Радити доповнення через Ctags"
 #: src/plugins/ctags/ide-ctags-preferences-addin.c:54
 msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr ""
-"Використовувати Ctags для пропозицій доповнення декількома мовами"
-" програмування"
+"Використовувати Ctags для пропозицій доповнення декількома мовами "
+"програмування"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -4383,8 +4410,8 @@ msgstr "Виберіть файли для збереження:"
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:80
 msgid "If you close without saving, all your changes will be permanently lost."
 msgstr ""
-"Якщо ви завершите роботу програми без збереження, усі внесені вами зміни буде"
-" втрачено."
+"Якщо ви завершите роботу програми без збереження, усі внесені вами зміни "
+"буде втрачено."
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
@@ -4521,8 +4548,8 @@ msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
 msgstr ""
-"«Будівнику» потрібно встановити вказані нижче набори бібліотек програмного"
-" забезпечення для збирання вашого проєкту."
+"«Будівнику» потрібно встановити вказані нижче набори бібліотек програмного "
+"забезпечення для збирання вашого проєкту."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
@@ -4652,8 +4679,8 @@ msgid ""
 "The “flatpak-builder” program is necessary for building Flatpak-based "
 "applications. Builder can install it for you."
 msgstr ""
-"Для збирання програм на основі Flatpak потрібна програма «flatpak-builder»."
-" «Будівник» може встановити цю програму."
+"Для збирання програм на основі Flatpak потрібна програма «flatpak-builder». "
+"«Будівник» може встановити цю програму."
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4687,8 +4714,8 @@ msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr ""
-"«Будівнику» не вдалося надати належні реєстраційні дані при клонуванні"
-" сховища."
+"«Будівнику» не вдалося надати належні реєстраційні дані при клонуванні "
+"сховища."
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:593
 #, c-format
@@ -4990,8 +5017,8 @@ msgstr "У вашій системі не вистачає python3-docutils"
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
-"Цей пакунок є необхідним для роботи панелей попереднього перегляду документів"
-" на основі мов розмітки."
+"Цей пакунок є необхідним для роботи панелей попереднього перегляду "
+"документів на основі мов розмітки."
 
 #: src/plugins/html-preview/html_preview.py:345
 #: src/plugins/html-preview/html_preview.py:355
@@ -5494,8 +5521,8 @@ msgstr ""
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:53
 msgid "quick highlight words matching current selection"
 msgstr ""
-"швидке підсвічування слів слова відповідність позначене вибір вибране"
-" поточний поточне"
+"швидке підсвічування слів слова відповідність позначене вибір вибране "
+"поточний поточне"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:350
@@ -5651,8 +5678,8 @@ msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
 msgstr ""
-"Неможливо відкрити термінал у середовищі виконання, оскільки конвеєр збирання"
-" не ініціалізовано"
+"Неможливо відкрити термінал у середовищі виконання, оскільки конвеєр "
+"збирання не ініціалізовано"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:648
 msgid "Cannot spawn process because build pipeline is not yet available"
@@ -5677,9 +5704,9 @@ msgid ""
 "variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
 "automatically set for the command."
 msgstr ""
-"Команду буде виконано за допомогою оболонки, наприклад «/bin/sh -c». Ви"
-" можете скористатися змінними-замінниками, наприклад «$SHELL». Для команди"
-" автоматично встановлюватимуться «$SRCDIR» та «$BUILDDIR»."
+"Команду буде виконано за допомогою оболонки, наприклад «/bin/sh -c». Ви "
+"можете скористатися змінними-замінниками, наприклад «$SHELL». Для команди "
+"автоматично встановлюватимуться «$SRCDIR» та «$BUILDDIR»."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
 msgid "Command Locality"
@@ -5702,9 +5729,9 @@ msgid ""
 "If the directory is not an absolute-path, it will be relative to the source "
 "or build directory depending on the command locality."
 msgstr ""
-"Якщо шлях до каталогу не є абсолютним, він вважатиметься відносним щодо"
-" каталогу початкового коду або каталогу збирання, залежно від розташування"
-" програми команди."
+"Якщо шлях до каталогу не є абсолютним, він вважатиметься відносним щодо "
+"каталогу початкового коду або каталогу збирання, залежно від розташування "
+"програми команди."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
 msgid "Close on Exit"
@@ -5713,8 +5740,8 @@ msgstr "Закривати при виході"
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
 msgid "If enabled, the terminal page will close after the command executes."
 msgstr ""
-"Якщо увімкнено, сторінка термінала закриватиметься після завершення виконання"
-" команди."
+"Якщо увімкнено, сторінка термінала закриватиметься після завершення "
+"виконання команди."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
 msgid "Keyboard Shortcut"
@@ -5877,9 +5904,9 @@ msgid ""
 "Enable the use of stylelint to find additional diagnostics in stylesheet "
 "files. This may result in the execution of code in your project."
 msgstr ""
-"Увімкнути використання stylelint для пошуку додаткової діагностичної"
-" інформації "
-"у файлах таблиць стилів. Це може призвести до виконання коду у вашому проєкті."
+"Увімкнути використання stylelint для пошуку додаткової діагностичної "
+"інформації у файлах таблиць стилів. Це може призвести до виконання коду у "
+"вашому проєкті."
 
 #: src/plugins/stylelint/stylelint_plugin.py:135
 msgid "Stylelint"
@@ -5990,8 +6017,8 @@ msgstr "Шлях до налаштувань пакунків"
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
 msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
 msgstr ""
-"Необов'язковий набір відокремлених комами шляхів для визначення"
-" PKG_CONFIG_PATH."
+"Необов'язковий набір відокремлених комами шляхів для визначення "
+"PKG_CONFIG_PATH."
 
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
 #, c-format
@@ -6087,8 +6114,8 @@ msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
 msgstr ""
-"Випущено оновлення «Будівника», «Будівник» може отримати і встановити це"
-" оновлення."
+"Випущено оновлення «Будівника», «Будівник» може отримати і встановити це "
+"оновлення."
 
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
@@ -6131,86 +6158,86 @@ msgstr "%s — неправильний для %s"
 msgid "Cannot find language “%s”"
 msgstr "Не вдалося знайти мову «%s»"
 
-#: src/plugins/vim/gb-vim.c:330
+#: src/plugins/vim/gb-vim.c:352
 #, c-format
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Ця команда потребує сфокусований GtkSourceView"
 
-#: src/plugins/vim/gb-vim.c:341
+#: src/plugins/vim/gb-vim.c:363
 #, c-format
 msgid "This command requires a view to be focused"
 msgstr "Ця команда потребує сфокусований перегляд"
 
-#: src/plugins/vim/gb-vim.c:398
+#: src/plugins/vim/gb-vim.c:420
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Невідомий параметр: %s"
 
-#: src/plugins/vim/gb-vim.c:441
+#: src/plugins/vim/gb-vim.c:463
 #, c-format
 msgid "Cannot find colorscheme “%s”"
 msgstr "Не вдалося знайти схему кольорів «%s»"
 
-#: src/plugins/vim/gb-vim.c:477 src/plugins/vim/gb-vim.c:600
+#: src/plugins/vim/gb-vim.c:499 src/plugins/vim/gb-vim.c:622
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Не вдалося розмістити робочий каталог"
 
-#: src/plugins/vim/gb-vim.c:766
+#: src/plugins/vim/gb-vim.c:788
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Неправильна :синтаксична підкоманда: %s"
 
-#: src/plugins/vim/gb-vim.c:1203
+#: src/plugins/vim/gb-vim.c:1225
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Неправильний запит пошуку та заміни"
 
-#: src/plugins/vim/gb-vim.c:1213
+#: src/plugins/vim/gb-vim.c:1235
 msgid "Change the pages colorscheme"
 msgstr "Змінити схему кольорів сторінок"
 
-#: src/plugins/vim/gb-vim.c:1217
+#: src/plugins/vim/gb-vim.c:1239
 msgid "Build the project"
 msgstr "Зібрати проєкт"
 
-#: src/plugins/vim/gb-vim.c:1218
+#: src/plugins/vim/gb-vim.c:1240
 msgid "Clear search highlighting"
 msgstr "Зняти підсвічування пошуку"
 
-#: src/plugins/vim/gb-vim.c:1219
+#: src/plugins/vim/gb-vim.c:1241
 msgid "Open a file by path"
 msgstr "Відкрити файл за шляхом"
 
-#: src/plugins/vim/gb-vim.c:1220
+#: src/plugins/vim/gb-vim.c:1242
 msgid "Close the page"
 msgstr "Закрити сторінку"
 
-#: src/plugins/vim/gb-vim.c:1221
+#: src/plugins/vim/gb-vim.c:1243
 msgid "Set various buffer options"
 msgstr "Встановити різноманітні параметри буфера"
 
-#: src/plugins/vim/gb-vim.c:1222
+#: src/plugins/vim/gb-vim.c:1244
 msgid "Sort the selected lines"
 msgstr "Упорядкувати позначені рядки"
 
-#: src/plugins/vim/gb-vim.c:1223
+#: src/plugins/vim/gb-vim.c:1245
 msgid "Create a split page below the current page"
 msgstr "Створити сторінку-роздільник під поточною сторінкою"
 
-#: src/plugins/vim/gb-vim.c:1224
+#: src/plugins/vim/gb-vim.c:1246
 msgid "Toggle syntax highlighting"
 msgstr "Перемкнути підсвічування синтаксису"
 
-#: src/plugins/vim/gb-vim.c:1228
+#: src/plugins/vim/gb-vim.c:1250
 msgid "Save and close the current page"
 msgstr "Зберегти і закрити поточну сторінку"
 
-#: src/plugins/vim/gb-vim.c:1229
+#: src/plugins/vim/gb-vim.c:1251
 msgid "Save the current page"
 msgstr "Зберегти поточну сторінку"
 
-#: src/plugins/vim/gb-vim.c:1313
+#: src/plugins/vim/gb-vim.c:1335
 #, c-format
 msgid "Not a command: %s"
 msgstr "Не команда: %s"
