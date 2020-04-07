@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2020-03-25 20:01+0000\n"
-"PO-Revision-Date: 2020-04-06 19:32+0300\n"
+"PO-Revision-Date: 2020-04-07 13:08+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2690,7 +2690,7 @@ msgstr "Пересунути поле огляду до початку файл�
 #: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
-msgstr "Перемісти дужку, що збігається"
+msgstr "Перейти до парної дужки"
 
 #: src/libide/gui/ide-shortcuts-window.ui:454
 msgctxt "shortcut window"
