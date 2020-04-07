@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-01-27 20:33+0000\n"
-"PO-Revision-Date: 2020-01-28 17:55-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2020-03-30 18:07+0000\n"
+"PO-Revision-Date: 2020-04-06 18:26-0300\n"
+"Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.32.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.3\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -243,8 +243,8 @@ msgstr "Mostrar diagnósticos próximo ao número da linha"
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
-"Caso habilitado, o editor irá mostrar diagnósticos à esquerda dos números de "
-"linhas."
+"Caso habilitado, o editor irá mostrar diagnósticos à esquerda dos números "
+"das linhas."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 #: src/libide/editor/ide-editor-settings-dialog.ui:109
@@ -269,7 +269,7 @@ msgstr "Mostrar numeração de linhas"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:51
 msgid "If enabled, the editor will show line numbers."
-msgstr "Caso habilitado, o editor irá mostrar números de linhas."
+msgstr "Caso habilitado, o editor irá mostrar números das linhas."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 #: src/libide/gui/ide-preferences-builtin.c:147
@@ -915,7 +915,7 @@ msgstr "Sem título"
 #: src/libide/editor/ide-editor-page-actions.c:339
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
-#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/greeter/ide-greeter-workspace.c:536
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
@@ -996,7 +996,7 @@ msgstr "Salvar como"
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
-#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:55
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
 msgid "Editor shortcuts"
 msgstr "Atalhos do editor"
 
@@ -1064,7 +1064,7 @@ msgstr "_Recarregar"
 
 #: src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-greeter-workspace-actions.c:126
-#: src/libide/gui/ide-workbench.c:1424
+#: src/libide/gui/ide-workbench.c:1442
 #: src/plugins/buildui/gbp-buildui-log-pane.c:280
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
 #: src/plugins/testui/gbp-test-output-panel.c:69
@@ -1399,39 +1399,39 @@ msgstr "Não é possível criar transferência enquanto na conexão limitada"
 msgid "Cannot run target, another target is running"
 msgstr "Não é possível executar o alvo, pois outro alvo está em execução"
 
-#: src/libide/foundry/ide-run-manager.c:462
+#: src/libide/foundry/ide-run-manager.c:488
 msgid "Failed to locate runtime"
 msgstr "Falha ao localizar o runtime"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:516
+#: src/libide/foundry/ide-run-manager.c:543
 #, c-format
 msgid "Running %s…"
 msgstr "Executando %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:590
+#: src/libide/foundry/ide-run-manager.c:617
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "O alvo da compilação falhou em compilar: %s"
 
-#: src/libide/foundry/ide-run-manager.c:853
+#: src/libide/foundry/ide-run-manager.c:880
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Atalhos da bancada"
 
-#: src/libide/foundry/ide-run-manager.c:854
+#: src/libide/foundry/ide-run-manager.c:881
 msgid "Build and Run"
 msgstr "Compilar e executar"
 
-#: src/libide/foundry/ide-run-manager.c:1016
-#: src/libide/foundry/ide-run-manager.c:1082
+#: src/libide/foundry/ide-run-manager.c:1043
+#: src/libide/foundry/ide-run-manager.c:1109
 msgid "Failed to locate a build target"
 msgstr "Falha ao localizar o alvo da compilação"
 
-#: src/libide/foundry/ide-run-manager.c:1218 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1245 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Executar"
@@ -1536,7 +1536,7 @@ msgid "Select Project File"
 msgstr "Selecionar arquivo de projeto"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:127
-#: src/libide/gui/ide-workbench.c:1423
+#: src/libide/gui/ide-workbench.c:1441
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -1544,17 +1544,17 @@ msgstr "_Abrir"
 msgid "All Project Types"
 msgstr "Todos tipos de projetos"
 
-#: src/libide/greeter/ide-greeter-workspace.c:218
-#: src/libide/gui/ide-workbench.c:318 src/libide/gui/ide-workbench.c:843
+#: src/libide/greeter/ide-greeter-workspace.c:219
+#: src/libide/gui/ide-workbench.c:321 src/libide/gui/ide-workbench.c:846
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:326
+#: src/libide/greeter/ide-greeter-workspace.c:327
 msgid "Failed to load the project"
 msgstr "Falha ao carregar o projeto"
 
-#: src/libide/greeter/ide-greeter-workspace.c:519
+#: src/libide/greeter/ide-greeter-workspace.c:533
 msgid ""
 "Removing project sources will delete them from your computer and cannot be "
 "undone."
@@ -1562,7 +1562,7 @@ msgstr ""
 "Remover arquivos do projeto vai exclui-los de seu computador e isso não pode "
 "ser desfeito."
 
-#: src/libide/greeter/ide-greeter-workspace.c:523
+#: src/libide/greeter/ide-greeter-workspace.c:537
 msgid "Delete Project Sources"
 msgstr "Excluir arquivos de projeto"
 
@@ -1631,7 +1631,7 @@ msgid "_Quit"
 msgstr "_Sair"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1420 src/plugins/editor/gtk/menus.ui:25
+#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:25
 #: src/plugins/editor/gtk/menus.ui:103
 msgid "Open File…"
 msgstr "Abrir arquivo…"
@@ -1971,7 +1971,7 @@ msgstr "Números das linhas"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Show line number at beginning of each line"
-msgstr "Mostra número de linha no começo de cada linha"
+msgstr "Mostra número da linha no começo de cada linha"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
 msgid "Line changes"
@@ -1989,7 +1989,8 @@ msgstr "Diagnósticos de linha"
 #: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
-"Mostra um ícone próximo aos números de linha indicando o tipo de diagnóstico"
+"Mostra um ícone próximo aos números das linhas indicando o tipo de "
+"diagnóstico"
 
 #: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Highlight"
@@ -2992,7 +2993,7 @@ msgid "Configuring project"
 msgstr "Configurando projeto"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:145
+#: src/plugins/cargo/cargo_plugin.py:142
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:254
@@ -3841,11 +3842,11 @@ msgstr "Comentar código"
 msgid "Uncomment code"
 msgstr "Descomentar código"
 
-#: src/plugins/copyright/copyright_plugin.py:110
+#: src/plugins/copyright/copyright_plugin.py:114
 msgid "Update Copyright"
 msgstr "Atualizar direitos autorais"
 
-#: src/plugins/copyright/copyright_plugin.py:111
+#: src/plugins/copyright/copyright_plugin.py:115
 msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
@@ -3854,7 +3855,7 @@ msgstr ""
 "de direitos autorais (copyright) para você"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/copyright/copyright_plugin.py:113
+#: src/plugins/copyright/copyright_plugin.py:117
 msgid "update copyright save"
 msgstr "atualizar copyright direitos autorais salvar"
 
@@ -4425,7 +4426,7 @@ msgstr "Ir para linha"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:83
 msgid "Go"
-msgstr "Vai"
+msgstr "Ir"
 
 #: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
 msgid "New Editor Workspace…"
@@ -4654,11 +4655,11 @@ msgstr "Falha ao instalar o runtime"
 
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been updated"
-msgstr "O runtime foi atualização"
+msgstr "O runtime foi atualizado"
 
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:122
 msgid "Runtime has been installed"
-msgstr "O runtime foi instalada"
+msgstr "O runtime foi instalado"
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:87
 msgid "Missing system dependencies"
@@ -4719,7 +4720,7 @@ msgstr "Não é possível assinar um commit sem GPG_KEY_ID"
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:399
 #, c-format
 msgid "Cannot monitor files outside the working directory"
-msgstr "Não é possível monitorar arquivos fora do diretório de trabalho."
+msgstr "Não é possível monitorar arquivos fora do diretório de trabalho"
 
 #: src/plugins/git/gbp-git-client.c:329
 msgid "The client has been closed"
@@ -5024,11 +5025,11 @@ msgstr "Seu computador não possui python3-sphinx"
 msgid "(Preview)"
 msgstr "(Visualização)"
 
-#: src/plugins/jedi/jedi_plugin.py:657
+#: src/plugins/jedi/jedi_plugin.py:666
 msgid "Suggest completions from Python"
 msgstr "Sugerir completamentos a partir do Python"
 
-#: src/plugins/jedi/jedi_plugin.py:658
+#: src/plugins/jedi/jedi_plugin.py:667
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usa Jedi para fornecer completamentos para a linguagem Python"
 
@@ -5063,19 +5064,19 @@ msgstr "Alternar para pasta"
 msgid "Open Containing Folder"
 msgstr "Abrir pasta raiz do projeto"
 
-#: src/plugins/make/make_plugin.py:110
+#: src/plugins/make/make_plugin.py:101
 msgid "Build project"
 msgstr "Compila o projeto"
 
-#: src/plugins/make/make_plugin.py:124
+#: src/plugins/make/make_plugin.py:115
 msgid "Install project"
 msgstr "Instalar projeto"
 
-#: src/plugins/make/make_plugin.py:346
+#: src/plugins/make/make_plugin.py:337
 msgid "Empty Makefile Project"
 msgstr "Projeto com Makefile vazio"
 
-#: src/plugins/make/make_plugin.py:348
+#: src/plugins/make/make_plugin.py:339
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Criar um novo projeto vazio usando um Makefile simples"
 
@@ -5276,7 +5277,6 @@ msgid "Clocks"
 msgstr "Relógios"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:69
-#| msgid "Calendar application for GNOME"
 msgid "A simple clock application for GNOME"
 msgstr "Um aplicativo de relógio simples para o GNOME"
 
@@ -5302,7 +5302,7 @@ msgstr "Mapas"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "A simple GNOME 3 maps application"
-msgstr "Um aplicativo simples de mapas para o GNOME 3 "
+msgstr "Um aplicativo simples de mapas para o GNOME 3"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Music"
@@ -5933,11 +5933,11 @@ msgstr ""
 "O arquivo de log de suporte foi escrito em “%s”. Por favor, forneça esse "
 "arquivo como um anexo em seu relatório de erro ou requisição de suporte."
 
-#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:57
 msgid "Symbols"
 msgstr "Símbolos"
 
-#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:57
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:58
 msgid "Search symbols within document"
 msgstr "Pesquisa por símbolos dentro do documento"
 
