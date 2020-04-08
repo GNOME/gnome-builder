@@ -8,6 +8,17 @@
         "nightly"
     ],
     "desktop-file-name-prefix" : "(Nightly) ",
+    "add-extensions": {
+        "org.gnome.Builder.Plugin": {
+            "version": "master",
+            "directory": "extensions",
+            "add-ld-path": "lib",
+            "merge-dirs": "lib/gnome-builder/plugins",
+            "subdirectories": true,
+            "no-autodownload": true,
+            "autodelete": true
+        }
+    },
     "finish-args" : [
         "--require-version=1.0.0",
         "--allow=devel",

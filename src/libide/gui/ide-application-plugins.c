@@ -373,13 +373,24 @@ _ide_application_load_plugins (IdeApplication *self)
 
   if (ide_is_flatpak ())
     {
-      g_autofree gchar *plugins_dir = g_build_filename (g_get_home_dir (),
-                                                        ".local",
-                                                        "share",
-                                                        "gnome-builder",
-                                                        "plugins",
-                                                        NULL);
+      g_autofree gchar *extensions_plugins_dir = NULL;
+      g_autofree gchar *plugins_dir = NULL;
+
+      plugins_dir = g_build_filename (g_get_home_dir (),
+                                      ".local",
+                                      "share",
+                                      "gnome-builder",
+                                      "plugins",
+                                      NULL);
       peas_engine_prepend_search_path (engine, plugins_dir, plugins_dir);
+
+      extensions_plugins_dir = g_build_filename ("/app",
+                                                 "extensions",
+                                                 "lib",
+                                                 "gnome-builder",
+                                                 "plugins",
+                                                 NULL);
+      peas_engine_prepend_search_path (engine, extensions_plugins_dir, extensions_plugins_dir);
     }
 
   user_plugins_dir = g_build_filename (g_get_user_data_dir (),
