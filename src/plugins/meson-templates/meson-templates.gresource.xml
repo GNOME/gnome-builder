@@ -33,9 +33,11 @@
     <file compressed="true">resources/src/hello.py.in</file>
     <file compressed="true">resources/src/main.py</file>
     <file compressed="true">resources/src/main.rs</file>
+    <file compressed="true">resources/src/main-cli.rs</file>
     <file compressed="true">resources/src/application.in</file>
     <file compressed="true">resources/src/main.cs</file>
     <file compressed="true">resources/src/Cargo.toml</file>
+    <file compressed="true">resources/src/Cargo-cli.toml</file>
     <file compressed="true">resources/src/meson-cs.build</file>
     <file compressed="true">resources/build-aux/cargo.sh</file>
     <file compressed="true">resources/build-aux/meson/postinstall.py</file>

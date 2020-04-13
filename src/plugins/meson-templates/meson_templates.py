@@ -343,12 +343,15 @@ class EmptyProjectTemplate(MesonTemplate):
             _('Empty Project'),
             'pattern-cli',
             _('Create a new empty project'),
-            ['C', 'C++', 'C♯', 'JavaScript', 'Python', 'Vala'],
+            ['C', 'C++', 'C♯', 'JavaScript', 'Python', 'Vala', 'Rust'],
             200
          )
 
     def prepare_files(self, files):
         files['resources/src/meson-empty.build'] = 'src/meson.build'
+
+        if self.language == 'rust':
+            files['resources/src/Cargo-cli.toml'] = 'Cargo.toml'
 
 
 class CLIProjectTemplate(MesonTemplate):
@@ -358,7 +361,7 @@ class CLIProjectTemplate(MesonTemplate):
             _('Command Line Tool'),
             'pattern-cli',
             _('Create a new command line project'),
-            ['C', 'Vala'],
+            ['C', 'Vala', 'Rust'],
             200
          )
 
@@ -369,3 +372,7 @@ class CLIProjectTemplate(MesonTemplate):
             files['resources/src/main-cli.c'] = 'src/main.c'
         elif self.language == 'vala':
             files['resources/src/main-cli.vala'] = 'src/main.vala'
+        elif self.language == 'rust':
+            files['resources/src/main-cli.rs'] = 'src/main.rs'
+            files['resources/src/Cargo-cli.toml'] = 'Cargo.toml'
+            files['resources/build-aux/cargo.sh'] = 'build-aux/cargo.sh'
