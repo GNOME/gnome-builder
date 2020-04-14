@@ -4009,9 +4009,9 @@ ide_source_view_draw_snippets_background (IdeSourceView *self,
   window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
   width = gdk_window_get_width (window);
 
-  gdk_cairo_set_source_rgba (cr, &priv->snippet_area_background_rgba);
-
   cairo_save (cr);
+
+  gdk_cairo_set_source_rgba (cr, &priv->snippet_area_background_rgba);
 
   for (guint i = 0; i < priv->snippets->length; i++)
     {
@@ -4044,13 +4044,15 @@ ide_source_view_real_draw_layer (GtkTextView      *text_view,
     {
       if (priv->snippets->length)
         ide_source_view_draw_snippets_background (self, cr);
-    }
 
-  if (layer == GTK_TEXT_VIEW_LAYER_ABOVE)
-    {
       if (g_signal_has_handler_pending (self, signals [DRAW_BUBBLES], 0, FALSE))
         {
+          GdkRectangle rect;
+
+          gtk_text_view_get_visible_rect (text_view, &rect);
+
           cairo_save (cr);
+          cairo_translate (cr, rect.x, rect.y);
           g_signal_emit (self, signals [DRAW_BUBBLES], 0, cr);
           cairo_restore (cr);
         }
