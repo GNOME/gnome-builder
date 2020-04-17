@@ -180,6 +180,18 @@
   <style name="diff:location"               foreground="chameleon1"/>
   <style name="diff:special-case"           foreground="white" bold="true"/>
 
+  <!-- GTK Doc -->
+  <style name="gtk-doc:function-name"       bold="true"/>
+  <style name="gtk-doc:function"            bold="true"/>
+  <style name="gtk-doc:parameter"           bold="true"/>
+  <style name="gtk-doc:constant"            bold="true"/>
+  <style name="gtk-doc:type"                bold="true"/>
+  <style name="gtk-doc:since"               bold="true"/>
+  <style name="gtk-doc:return"              bold="true"/>
+  <style name="gtk-doc:deprecated"          bold="true"/>
+  <style name="gtk-doc:signal-name"         bold="true"/>
+  <style name="gtk-doc:property-name"       bold="true"/>
+
   <style name="gutter:added-line"           foreground="chameleon2"/>
   <style name="gutter:changed-line"         foreground="butter3"/>
   <style name="gutter:removed-line"         foreground="scarletred3"/>
