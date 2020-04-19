@@ -691,7 +691,7 @@ msgstr "%s: la paleta és buida\n"
 #: src/gstyle/gstyle-palette.c:721
 #, c-format
 msgid "%s: failed to parse\n"
-msgstr "%s: hi hagut un error en analitzar\n"
+msgstr "%s: hi ha hagut un error en analitzar\n"
 
 #: src/gstyle/gstyle-palette.c:729
 #, c-format
@@ -3015,7 +3015,7 @@ msgstr "S'estan desant a la memòria cau les ordres de muntatge"
 msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
 "Connector embellidor: error mentre es copiava el fitxer de configuració "
-"gresource per a «%s»: %s "
+"gresource per a «%s»: %s"
 
 #. translators: %s is replaced with the source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:165
@@ -3338,7 +3338,7 @@ msgstr "Dispositiu"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:237
 msgid "There is a problem with the current build configuration."
-msgstr "Hi ha un problema amb l'actual configuració de Constructor."
+msgstr "Hi ha un problema amb l'actual configuració del muntatge."
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:275
 msgid "Build status"
@@ -6121,7 +6121,7 @@ msgstr "_Terminal nou"
 
 #: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
-msgstr "Terminal _constructor nou"
+msgstr "Terminal de _muntatge nou"
 
 #: src/plugins/terminal/gtk/menus.ui:23
 msgid "New _Runtime Terminal"
@@ -6163,7 +6163,7 @@ msgstr "Espereu mentre escanegem el projecte"
 
 #: src/plugins/todo/gbp-todo-workspace-addin.c:157
 msgid "TODO/FIXMEs"
-msgstr "PENDENT/ARREGLA’M"
+msgstr "PENDENT/ARREGLA'M"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 #, fuzzy
