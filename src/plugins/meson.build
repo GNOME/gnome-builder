@@ -106,6 +106,7 @@ subdir('recent')
 subdir('restore-cursor')
 subdir('retab')
 subdir('rls')
+subdir('rust-analyzer')
 subdir('rustup')
 subdir('shellcmd')
 subdir('snippets')
@@ -185,6 +186,7 @@ status += [
   'Quick Highlight ....... : @0@'.format(get_option('plugin_quick_highlight')),
   'Retab ................. : @0@'.format(get_option('plugin_retab')),
   'RLS ................... : @0@'.format(get_option('plugin_rls')),
+  'Rust Analyzer ......... : @0@'.format(get_option('plugin_rust_analyzer')),
   'Rustup ................ : @0@'.format(get_option('plugin_rustup')),
   'Spellcheck ............ : @0@'.format(get_option('plugin_spellcheck')),
   'Stylelint ............. : @0@'.format(get_option('plugin_stylelint')),

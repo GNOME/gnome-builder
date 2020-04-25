@@ -1,0 +1,16 @@
+[Plugin]
+Authors=Günther Wagner <info@gunibert.de>
+Builtin=true
+Copyright=Copyright © 2020 Günther Wagner
+Description=Provides auto-completion, diagnostics, and other IDE features
+Loader=python3
+Module=rust_analyzer_plugin
+Name=Rust Analyzer Language Server Integration
+X-Completion-Provider-Languages=rust
+X-Diagnostic-Provider-Languages=rust
+X-Formatter-Languages=rust
+X-Highlighter-Languages=rust
+X-Hover-Provider-Languages=rust
+X-Rename-Provider-Languages=rust
+X-Symbol-Resolver-Languages=rust
+X-Builder-ABI=@PACKAGE_ABI@
