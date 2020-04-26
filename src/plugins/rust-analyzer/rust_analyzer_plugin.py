@@ -33,7 +33,7 @@ from gi.repository import Ide
 
 DEV_MODE = False
 
-class RlsService(Ide.Object):
+class RustAnalyzerService(Ide.Object):
     _client = None
     _has_started = False
     _supervisor = None
@@ -41,7 +41,7 @@ class RlsService(Ide.Object):
 
     @classmethod
     def from_context(klass, context):
-        return context.ensure_child_typed(RlsService)
+        return context.ensure_child_typed(RustAnalyzerService)
 
     @GObject.Property(type=Ide.LspClient)
     def client(self):
@@ -86,8 +86,8 @@ class RlsService(Ide.Object):
 
     def do_stop(self):
         """
-        Stops the Rust Language Server upon request to shutdown the
-        RlsService.
+        Stops the Rust Analyzer Language Server upon request to shutdown the
+        RustAnalyzerService.
         """
         if self._monitor is not None:
             monitor, self._monitor = self._monitor, None
@@ -106,9 +106,9 @@ class RlsService(Ide.Object):
         Ide.SubprocessSupervisor.
 
         Various extension points (diagnostics, symbol providers, etc) use
-        the RlsService to access the rust components they need.
+        the RustAnalyzerService to access the rust components they need.
         """
-        # To avoid starting the `rust-analyzer-linux` process unconditionally at startup,
+        # To avoid starting the `rust-analyzer` process unconditionally at startup,
         # we lazily start it when the first provider tries to bind a client
         # to its :client property.
         if not self._has_started:
@@ -130,7 +130,7 @@ class RlsService(Ide.Object):
 
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
-            path_to_rust_analyzer_bin = os.path.expanduser("~/.cargo/bin/rust-analyzer-linux")
+            path_to_rust_analyzer_bin = os.path.expanduser("~/.cargo/bin/rust-analyzer")
             if os.path.exists(path_to_rust_analyzer_bin):
                 old_path = os.getenv('PATH')
                 new_path = os.path.expanduser('~/.cargo/bin')
@@ -138,11 +138,11 @@ class RlsService(Ide.Object):
                     new_path += os.path.pathsep + old_path
                 launcher.setenv('PATH', new_path, True)
             else:
-                path_to_rls = "rust-analyzer-linux"
+                path_to_rust_analyzer_bin = "rust-analyzer"
 
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
             # so it does not require any command line options.
-            launcher.push_argv(path_to_rls)
+            launcher.push_argv(path_to_rust_analyzer_bin)
 
             # Spawn our peer process and monitor it for
             # crashes. We may need to restart it occasionally.
@@ -214,41 +214,41 @@ class RlsService(Ide.Object):
         our `rls` process has crashed.
         """
         context = provider.get_context()
-        self = RlsService.from_context(context)
+        self = RustAnalyzerService.from_context(context)
         self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
-class RlsDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
+class RustAnalyzerDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
     def do_load(self):
-        RlsService.bind_client(self)
+        RustAnalyzerService.bind_client(self)
 
-class RlsCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
+class RustAnalyzerCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
     def do_load(self, context):
-        RlsService.bind_client(self)
+        RustAnalyzerService.bind_client(self)
 
     def do_get_priority(self, context):
         # This provider only activates when it is very likely that we
         # want the results. So use high priority (negative is better).
         return -1000
 
-class RlsRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
+class RustAnalyzerRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
     def do_load(self):
-        RlsService.bind_client(self)
+        RustAnalyzerService.bind_client(self)
 
-class RlsSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
+class RustAnalyzerSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
     def do_load(self):
-        RlsService.bind_client(self)
+        RustAnalyzerService.bind_client(self)
 
-class RlsHighlighter(Ide.LspHighlighter, Ide.Highlighter):
+class RustAnalyzerHighlighter(Ide.LspHighlighter, Ide.Highlighter):
     def do_load(self):
-        RlsService.bind_client(self)
+        RustAnalyzerService.bind_client(self)
 
-class RlsFormatter(Ide.LspFormatter, Ide.Formatter):
+class RustAnalyzerFormatter(Ide.LspFormatter, Ide.Formatter):
     def do_load(self):
-        RlsService.bind_client(self)
+        RustAnalyzerService.bind_client(self)
 
-class RlsHoverProvider(Ide.LspHoverProvider, Ide.HoverProvider):
+class RustAnalyzerHoverProvider(Ide.LspHoverProvider, Ide.HoverProvider):
     def do_prepare(self):
         self.props.category = 'Rust'
         self.props.priority = 200
-        RlsService.bind_client(self)
+        RustAnalyzerService.bind_client(self)

@@ -69,6 +69,12 @@ enum {
 };
 
 enum {
+  TEXT_DOCUMENT_SYNC_NONE,
+  TEXT_DOCUMENT_SYNC_FULL,
+  TEXT_DOCUMENT_SYNC_INCREMENTAL,
+};
+
+enum {
   PROP_0,
   PROP_IO_STREAM,
   PROP_SERVER_CAPABILITIES,
@@ -208,10 +214,9 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
-  g_autofree gchar *copy = NULL;
+  GVariant *capabilities = NULL;
   gint64 version;
-  gint line;
-  gint column;
+  gint64 text_document_sync = TEXT_DOCUMENT_SYNC_NONE;
 
   IDE_ENTRY;
 
@@ -220,37 +225,79 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  copy = g_strndup (new_text, len);
+  capabilities = ide_lsp_client_get_server_capabilities (self);
+  if (capabilities != NULL) {
+    gint64 tds = 0;
+
+    // for backwards compatibility reasons LS can stick to a number instead of the structure
+    if (JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", JSONRPC_MESSAGE_GET_INT64 (&tds))
+        | JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", "{", "change", JSONRPC_MESSAGE_GET_INT64 (&tds), "}"))
+      {
+        text_document_sync = tds;
+      }
+  }
 
   uri = ide_buffer_dup_uri (buffer);
 
   /* We get called before this change is registered */
   version = (gint64)ide_buffer_get_change_count (buffer) + 1;
 
-  line = gtk_text_iter_get_line (location);
-  column = gtk_text_iter_get_line_offset (location);
+  if (text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
+    {
+      g_autofree gchar *copy = NULL;
+      gint line;
+      gint column;
 
-  params = JSONRPC_MESSAGE_NEW (
-    "textDocument", "{",
-      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-      "version", JSONRPC_MESSAGE_PUT_INT64 (version),
-    "}",
-    "contentChanges", "[",
-      "{",
-        "range", "{",
-          "start", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT64 (line),
-            "character", JSONRPC_MESSAGE_PUT_INT64 (column),
-          "}",
-          "end", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT64 (line),
-            "character", JSONRPC_MESSAGE_PUT_INT64 (column),
-          "}",
+      copy = g_strndup (new_text, len);
+
+      line = gtk_text_iter_get_line (location);
+      column = gtk_text_iter_get_line_offset (location);
+
+      params = JSONRPC_MESSAGE_NEW (
+        "textDocument", "{",
+          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
         "}",
-        "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (0),
-        "text", JSONRPC_MESSAGE_PUT_STRING (copy),
-      "}",
-    "]");
+        "contentChanges", "[",
+          "{",
+            "range", "{",
+              "start", "{",
+                "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+                "character", JSONRPC_MESSAGE_PUT_INT64 (column),
+              "}",
+              "end", "{",
+                "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+                "character", JSONRPC_MESSAGE_PUT_INT64 (column),
+              "}",
+            "}",
+            "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (0),
+            "text", JSONRPC_MESSAGE_PUT_STRING (copy),
+          "}",
+        "]");
+    }
+  else if (text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
+    {
+      g_autoptr(GBytes) content = NULL;
+      const gchar *text;
+      g_autoptr(GString) str = NULL;
+
+      content = ide_buffer_dup_content (buffer);
+      text = (const gchar *)g_bytes_get_data (content, NULL);
+      str = g_string_new (text);
+      g_string_insert_len (str, gtk_text_iter_get_offset (location), new_text, len);
+
+      params = JSONRPC_MESSAGE_NEW (
+        "textDocument", "{",
+          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+        "}",
+        "contentChanges", "[",
+          "{",
+            "text", JSONRPC_MESSAGE_PUT_STRING (str->str),
+          "}",
+        "]");
+    }
+
 
   ide_lsp_client_send_notification_async (self,
                                           "textDocument/didChange",
