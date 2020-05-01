@@ -2,7 +2,7 @@
 <interface>
   <template class="IdePreferencesWindow" parent="DzlApplicationWindow">
     <child type="titlebar">
-      <object class="IdeHeaderBar" id="header_bar">
+      <object class="GtkHeaderBar" id="header_bar">
         <property name="title" translatable="yes">Preferences</property>
         <property name="show-close-button">true</property>
         <property name="visible">true</property>
