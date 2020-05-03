@@ -345,7 +345,7 @@ snippet gobject_boxed_copy
 
 	G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_copy, $3_free)
 
-	struct _$1
+	struct _$2
 	{
 		$0;
 	};
