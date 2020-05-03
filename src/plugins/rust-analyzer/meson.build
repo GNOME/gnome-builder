@@ -1,13 +1,21 @@
 if get_option('plugin_rust_analyzer')
 
-install_data('rust_analyzer_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'rust-analyzer.c',
+  'rust-analyzer-service.c',
+  'rust-analyzer-completion-provider.c',
+  'rust-analyzer-symbol-resolver.c',
+  'rust-analyzer-diagnostic-provider.c',
+  'rust-analyzer-transfer.c',
+  'rust-analyzer-workbench-addin.c',
+])
 
-configure_file(
-          input: 'rust-analyzer.plugin',
-         output: 'rust-analyzer.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_rust_analyzer_resources = gnome.compile_resources(
+  'rust-analyzer-resources',
+  'rust-analyzer.gresource.xml',
+  c_name: 'rust_analyzer'
 )
+
+plugins_sources += plugin_rust_analyzer_resources
 
 endif
