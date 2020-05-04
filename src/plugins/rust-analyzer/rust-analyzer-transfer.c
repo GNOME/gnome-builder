@@ -89,10 +89,11 @@ _download_lsp (GObject      *source_object,
   g_autoptr(GFile) file = NULL;
   SoupRequest *request = SOUP_REQUEST (source_object);
   GInputStream *stream = NULL;
+  DownloadData *data;
 
   stream = soup_request_send_finish (request, result, NULL);
 
-  DownloadData *data = g_slice_new0 (DownloadData);
+  data = g_slice_new0 (DownloadData);
   data->filepath = g_build_filename (g_get_home_dir (), ".cargo", "bin", "rust-analyzer", NULL);
   file = g_file_new_for_path (data->filepath);
   data->transfer = IDE_TRANSFER (ide_task_get_task_data (task));
