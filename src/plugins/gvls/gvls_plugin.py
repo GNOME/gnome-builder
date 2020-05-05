@@ -55,6 +55,7 @@ class GVlsService(Ide.Object):
     ide_config = None
     source_file = None
     build_monitor = None
+    meson_compile_commands = ""
 
     @classmethod
     def from_context(klass, context):
@@ -174,6 +175,7 @@ class GVlsService(Ide.Object):
             b.add_value(self.create_dict_entry_string('libraryVapi', self.library_vapidir))
             b.add_value(self.create_dict_entry_string('systemVapi', self.system_vapidir))
             b.add_value(self.create_dict_entry_string('valaApiVersion', self.vala_api_version))
+            b.add_value(self.create_dict_entry_string('mesonCompileCommands', self.meson_compile_commands))
             ad = GLib.Variant.new_string ('valaArgs')
             vadi = self.dict_to_array_variant(self.vala_args)
             adi = GLib.Variant.new_dict_entry(ad, GLib.Variant.new_variant (vadi))
@@ -201,7 +203,13 @@ class GVlsService(Ide.Object):
             self._notify_change_configuration()
         if event_type == Gio.FileMonitorEvent.DELETED:
             self.build_monitor = None
-            
+
+    def read_meson_compile_commands(self, file):
+        ostream = Gio.MemoryOutputStream.new_resizable()
+        ostream.splice(file.read(), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE, None)
+        ostream.close()
+        b = ostream.steal_as_bytes()
+        self.meson_compile_commands = str(b.get_data(),encoding='utf8')
     
     def _parse_build_commands(self):
         try:
@@ -214,6 +222,9 @@ class GVlsService(Ide.Object):
                     bcdir = Gio.File.new_for_path(self.pipeline.get_builddir())
                     if self.meson_build_system:
                         bcf = Gio.File.new_for_uri(bcdir.get_uri()+'/compile_commands.json')
+                        if not bcf.query_exists(None):
+                            return
+                        self.read_meson_compile_commands(bcf)
                         if self.build_monitor == None:
                             self.build_monitor = bcf.monitor(Gio.FileMonitorFlags.NONE, None)
                             self.build_monitor.connect('changed', self._build_config_changed)
