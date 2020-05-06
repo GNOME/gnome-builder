@@ -55,11 +55,18 @@ _downloaded_chunk (GObject      *source_object,
                    gpointer      user_data)
 {
   g_autofree gchar *statusmsg = NULL;
+  g_autoptr(GError) error = NULL;
   GInputStream *stream = G_INPUT_STREAM (source_object);
   DownloadData *data = user_data;
 
-  gsize count = g_input_stream_read_finish (stream, result, NULL);
-  if (count == -1 || count == 0)
+  gsize count = g_input_stream_read_finish (stream, result, &error);
+  if (error != NULL)
+    {
+      ide_task_return_error (data->task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (count == 0)
     {
       g_output_stream_close (data->filestream, NULL, NULL);
       g_input_stream_close (stream, NULL, NULL);
@@ -76,7 +83,12 @@ _downloaded_chunk (GObject      *source_object,
   ide_transfer_set_status (data->transfer, statusmsg);
   ide_transfer_set_progress (data->transfer, (gdouble) data->count / data->total_bytes);
 
-  g_output_stream_write_all (data->filestream, &data->buffer, count, NULL, ide_task_get_cancellable (data->task), NULL);
+  g_output_stream_write_all (data->filestream, &data->buffer, count, NULL, ide_task_get_cancellable (data->task), &error);
+  if (error != NULL)
+    {
+      ide_task_return_error (data->task, g_steal_pointer (&error));
+      return;
+    }
   g_input_stream_read_async (stream, &data->buffer, sizeof (data->buffer), G_PRIORITY_DEFAULT, ide_task_get_cancellable (data->task), _downloaded_chunk, data);
 }
 
@@ -87,6 +99,7 @@ _download_lsp (GObject      *source_object,
 {
   g_autoptr(IdeTask) task = IDE_TASK (user_data);
   g_autoptr(GFile) file = NULL;
+  g_autoptr(GError) error = NULL;
   SoupRequest *request = SOUP_REQUEST (source_object);
   GInputStream *stream = NULL;
   DownloadData *data;
@@ -97,7 +110,12 @@ _download_lsp (GObject      *source_object,
   data->filepath = g_build_filename (g_get_home_dir (), ".cargo", "bin", "rust-analyzer", NULL);
   file = g_file_new_for_path (data->filepath);
   data->transfer = IDE_TRANSFER (ide_task_get_task_data (task));
-  data->filestream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, NULL)); // handle error
+  data->filestream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, ide_task_get_cancellable (data->task), &error));
+  if (data->filestream == NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
   data->total_bytes = soup_request_get_content_length (request);
   data->task = g_steal_pointer (&task);
 
@@ -114,6 +132,7 @@ rust_analyzer_transfer_execute_async (IdeTransfer         *transfer,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(SoupSession) session = NULL;
   g_autoptr(SoupRequest) request = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -123,9 +142,11 @@ rust_analyzer_transfer_execute_async (IdeTransfer         *transfer,
 
   session = soup_session_new ();
 
-  request = soup_session_request (session, "https://github.com/rust-analyzer/rust-analyzer/releases/download/nightly/rust-analyzer-linux", NULL);
-
-  soup_request_send_async (request, NULL, _download_lsp, g_steal_pointer (&task));
+  request = soup_session_request (session, "https://github.com/rust-analyzer/rust-analyzer/releases/download/nightly/rust-analyzer-linux", &error);
+  if (request == NULL)
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    soup_request_send_async (request, NULL, _download_lsp, g_steal_pointer (&task));
 }
 
 static gboolean
