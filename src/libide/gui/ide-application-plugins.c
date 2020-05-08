@@ -28,15 +28,41 @@
 #include "ide-application-addin.h"
 #include "ide-application-private.h"
 
+static void
+ide_application_changed_plugin_cb (GSettings      *settings,
+                                   const gchar    *key,
+                                   PeasPluginInfo *plugin_info)
+{
+  PeasEngine *engine;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SETTINGS (settings));
+  g_assert (key != NULL);
+  g_assert (plugin_info != NULL);
+
+  engine = peas_engine_get_default ();
+
+  if (!g_settings_get_boolean (settings, key))
+    peas_engine_unload_plugin (engine, plugin_info);
+  else
+    peas_engine_load_plugin (engine, plugin_info);
+
+  IDE_EXIT;
+}
+
 static GSettings *
 _ide_application_plugin_get_settings (IdeApplication *self,
-                                      const gchar    *module_name)
+                                      PeasPluginInfo *plugin_info)
 {
   GSettings *settings;
+  const gchar *module_name;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
-  g_assert (module_name != NULL);
+  g_assert (plugin_info != NULL);
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
 
   if G_UNLIKELY (self->plugin_settings == NULL)
     self->plugin_settings =
@@ -49,6 +75,11 @@ _ide_application_plugin_get_settings (IdeApplication *self,
       path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
       settings = g_settings_new_with_path ("org.gnome.builder.plugin", path);
       g_hash_table_insert (self->plugin_settings, g_strdup (module_name), settings);
+
+      g_signal_connect (settings,
+                        "changed::enabled",
+                        G_CALLBACK (ide_application_changed_plugin_cb),
+                        plugin_info);
     }
 
   return settings;
@@ -88,7 +119,7 @@ ide_application_can_load_plugin (IdeApplication *self,
   g_hash_table_add (circular, (gpointer)module_name);
 
   /* Make sure the plugin has not been disabled in settings. */
-  settings = _ide_application_plugin_get_settings (self, module_name);
+  settings = _ide_application_plugin_get_settings (self, plugin_info);
   if (!g_settings_get_boolean (settings, "enabled"))
     return FALSE;
 
