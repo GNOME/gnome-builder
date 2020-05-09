@@ -139,6 +139,7 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
   g_autoptr(IdeSnippet) snippet = NULL;
   g_autoptr(IdeSnippetChunk) plainchunk = NULL;
   const gchar *snippet_text = NULL;
+  const gchar *snippet_new_text = NULL;
   const gchar *text;
   gint64 format = 0;
 
@@ -147,10 +148,21 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
   text = self->label;
 
   if (JSONRPC_MESSAGE_PARSE (self->variant,
-                             "insertTextFormat", JSONRPC_MESSAGE_GET_INT64 (&format),
-                             "insertText", JSONRPC_MESSAGE_GET_STRING (&snippet_text)))
+                             "insertTextFormat", JSONRPC_MESSAGE_GET_INT64 (&format)))
     {
-      if (format == 2 && snippet_text != NULL)
+      JSONRPC_MESSAGE_PARSE (self->variant, "insertText", JSONRPC_MESSAGE_GET_STRING (&snippet_text));
+      JSONRPC_MESSAGE_PARSE (self->variant, "textEdit", "{", "newText", JSONRPC_MESSAGE_GET_STRING (&snippet_new_text), "}");
+      if (format == 2 && snippet_new_text != NULL)
+        {
+          g_autoptr(GError) error = NULL;
+
+          if ((snippet = ide_snippet_parser_parse_one (snippet_new_text, -1, &error)))
+            return g_steal_pointer (&snippet);
+
+          g_warning ("Failed to parse snippet: %s: %s",
+                     error->message, snippet_text);
+        }
+      else if (format == 2 && snippet_text != NULL)
         {
           g_autoptr(GError) error = NULL;
 
