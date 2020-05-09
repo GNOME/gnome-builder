@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-03-25 20:02+0000\n"
-"PO-Revision-Date: 2020-04-15 11:11+0300\n"
+"POT-Creation-Date: 2020-03-25 20:01+0000\n"
+"PO-Revision-Date: 2020-05-06 16:48+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28 [at] gmail [dot] "
 "com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
@@ -247,7 +247,7 @@ msgstr ""
 "linii."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
-#: src/libide/editor/ide-editor-settings-dialog.ui:109
+#: src/libide/editor/ide-editor-settings-dialog.ui:116
 msgid "Highlight current line"
 msgstr "Evidențiază linia curentă"
 
@@ -272,11 +272,19 @@ msgid "If enabled, the editor will show line numbers."
 msgstr "Dacă este activat, editorul va arăta numerele de linie."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid "Show relative line numbers"
+msgstr "Arată numerele de linie relative"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:56
+msgid "If enabled, the editor will show relative line numbers."
+msgstr "Dacă este activat, editorul va arăta numerele de linie relative."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 #: src/libide/gui/ide-preferences-builtin.c:147
 msgid "Smart Backspace"
 msgstr "Backspace inteligent"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:56
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:61
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -284,29 +292,29 @@ msgstr ""
 "Backspace va elimina spațiile adiționale pentru a menține alinierea la "
 "dimensiunea indentării."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 #: src/libide/gui/ide-preferences-builtin.c:146
 msgid "Smart Home and End"
 msgstr "Început și sfârșit inteligente"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:61
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Whether or not Home moves to first non-space character."
 msgstr "Dacă se mută sau nu acasă la primul caracter diferit de spațiu."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
 msgstr "Arată liniile de grilă"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Dacă este activat, editorul va arăta liniile de grilă în document."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
-#: src/libide/gui/ide-preferences-builtin.c:174
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: src/libide/gui/ide-preferences-builtin.c:175
 msgid "Show overview map"
 msgstr "Arată harta prezentării generale"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:81
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
@@ -314,11 +322,11 @@ msgstr ""
 "Dacă este activat, Builder va afișa o hartă a prezentării generale a "
 "fișierului sursă lângă editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
 msgid "Automatically Hide Overview Map"
 msgstr "Ascunde automat harta prezentării generale"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
@@ -327,28 +335,28 @@ msgstr ""
 "când focalizarea mausului părăsește editorul, sau când se întâmplă o limită "
 "de timp."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
 msgid "Draw Spaces"
 msgstr "Desenează spații"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "The various types of space to draw in the editor."
 msgstr "Tipurile variate de spațiu de desenat în editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Overscroll"
 msgstr "Derulare deasupra"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "Numărul de linii de derulat peste sfârșitul memoriei amortizor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Wrap Text"
 msgstr "Încadrează text"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
@@ -356,47 +364,47 @@ msgstr ""
 "Dacă este activat, Builder va încadra text automat pentru ca tot textul "
 "liniei să fie vizibil."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
-#: src/libide/gui/ide-preferences-builtin.c:187
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Autosave Enabled"
 msgstr "Salvare automată activată"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "Activează sau dezactivează funcționalitatea de salvare automată."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
-#: src/libide/gui/ide-preferences-builtin.c:188
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: src/libide/gui/ide-preferences-builtin.c:189
 msgid "Autosave Frequency"
 msgstr "Frecvența de salvare automată"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr "Numărul de secunde după modificare înainte de salvarea automată."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "Numărul de rânduri ale completării"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
 msgstr "Numărul de rânduri de completări de afișat utilizatorului."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/libide/gui/ide-preferences-builtin.c:107
 msgid "Line Spacing"
 msgstr "Spațierea liniilor"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The number of pixels to include above and below lines in the editor."
 msgstr "Numărul de pixeli de inclus deasupra și dedesubtul liniilor în editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: src/libide/gui/ide-preferences-builtin.c:210
 msgid "Interactive Completion"
 msgstr "Completare interactivă"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -470,7 +478,7 @@ msgid "\"Projects\""
 msgstr "„Proiecte”"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:423
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Projects directory"
 msgstr "Dosar proiecte"
 
@@ -846,7 +854,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Încărcați sau generați o paletă utilizând preferințele"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4983
+#: src/libide/sourceview/ide-source-view.c:4985
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -1124,9 +1132,9 @@ msgstr "Modul evidențiere"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-preferences-builtin.c:155
-#: src/libide/gui/ide-preferences-builtin.c:207
-#: src/libide/gui/ide-preferences-builtin.c:330
-#: src/libide/gui/ide-preferences-builtin.c:402
+#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:403
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
@@ -1139,62 +1147,66 @@ msgid "Display line numbers"
 msgstr "Afișează numerele de linie"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:102
+msgid "Display relative line numbers"
+msgstr "Afișează numerele de linie relative"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:109
 msgid "Display right margin"
 msgstr "Afișează marginea din dreapta"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:116
+#: src/libide/editor/ide-editor-settings-dialog.ui:123
 msgid "Automatic indentation"
 msgstr "Indentare automată"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:123
+#: src/libide/editor/ide-editor-settings-dialog.ui:130
 msgid "Smart backspace"
 msgstr "Backspace inteligent"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:125
+#: src/libide/editor/ide-editor-settings-dialog.ui:132
 msgid "Enabling smart backspace will treat multiple spaces as a tabs"
 msgstr ""
 "Activarea de backspace inteligent va considera spațiile multiple ca taburi"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:133
+#: src/libide/editor/ide-editor-settings-dialog.ui:140
 msgid "Insert trailing newline"
 msgstr "Introduce linie nouă din urmă"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:140
+#: src/libide/editor/ide-editor-settings-dialog.ui:147
 msgid "Overwrite trailing braces and quotations"
 msgstr "Suprascrie parantezele acolade și citatele din urmă"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:152
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/editor/ide-editor-settings-dialog.ui:159
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Indentation"
 msgstr "Indentare"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:179
+#: src/libide/editor/ide-editor-settings-dialog.ui:186
 msgid "2"
 msgstr "2"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:189
+#: src/libide/editor/ide-editor-settings-dialog.ui:196
 msgid "3"
 msgstr "3"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:199
+#: src/libide/editor/ide-editor-settings-dialog.ui:206
 msgid "4"
 msgstr "4"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:209
+#: src/libide/editor/ide-editor-settings-dialog.ui:216
 msgid "8"
 msgstr "8"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:236
-#: src/libide/gui/ide-preferences-builtin.c:178
+#: src/libide/editor/ide-editor-settings-dialog.ui:243
+#: src/libide/gui/ide-preferences-builtin.c:179
 msgid "Spaces"
 msgstr "Spații"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:247
-#: src/libide/gui/ide-preferences-builtin.c:179
+#: src/libide/editor/ide-editor-settings-dialog.ui:254
+#: src/libide/gui/ide-preferences-builtin.c:180
 msgid "Tabs"
 msgstr "Taburi"
 
-#: src/libide/editor/ide-editor-settings-dialog.ui:264
+#: src/libide/editor/ide-editor-settings-dialog.ui:271
 msgid "Spaces per tab"
 msgstr "Spații per tab"
 
@@ -1639,7 +1651,7 @@ msgstr "Builder GNOME"
 
 #: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
-msgstr "Florentina Mușat <emryslokasdottir [at] gmail [dot] com>, 2018-2020"
+msgstr "Florentina Mușat <emryslokadottir [at] gmail [dot] com>, 2018-2020"
 
 #: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
@@ -1959,109 +1971,117 @@ msgid "Show line number at beginning of each line"
 msgstr "Arată numărul de linie la începutul fiecărei linii"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
+msgid "Relative line numbers"
+msgstr "Numere de linie relative"
+
+#: src/libide/gui/ide-preferences-builtin.c:166
+msgid "Show line numbers relative to the cursor line"
+msgstr "Arată numerele de linie relative la linia cursorului"
+
+#: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Line changes"
 msgstr "Modificări de linie"
 
-#: src/libide/gui/ide-preferences-builtin.c:166
+#: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Show if a line was added or modified next to line number"
 msgstr ""
 "Arată dacă o linie a fost adăugată sau modificată lângă numărul de linie"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Line diagnostics"
 msgstr "Diagnosticări de linie"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
 "Arată o iconiță lângă numerele de linii care indică tipul de diagnostic"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Highlight"
 msgstr "Evidențiere"
 
-#: src/libide/gui/ide-preferences-builtin.c:170
+#: src/libide/gui/ide-preferences-builtin.c:171
 msgid "Current line"
 msgstr "Linie curentă"
 
-#: src/libide/gui/ide-preferences-builtin.c:170
+#: src/libide/gui/ide-preferences-builtin.c:171
 msgid "Make current line stand out with highlights"
 msgstr "Modifică linia curentă să iasă în evidență cu evidențieri"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Matching brackets"
 msgstr "Paranteze pătrate pereche"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Evidențiază parantezele pătrate pereche pe baza poziției cursorului"
 
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Code Overview"
 msgstr "Prezentare generală a codului"
 
-#: src/libide/gui/ide-preferences-builtin.c:174
+#: src/libide/gui/ide-preferences-builtin.c:175
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "O vizualizare micșorată pentru a îmbunătăți navigarea în codul sursă"
 
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Automatically hide overview map"
 msgstr "Ascunde automat harta prezentării generale"
 
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Automatically hide map when editor loses focus"
 msgstr "Ascunde automat harta când editorul pierde focalizarea"
 
-#: src/libide/gui/ide-preferences-builtin.c:177
+#: src/libide/gui/ide-preferences-builtin.c:178
 msgid "Visible Whitespace Characters"
 msgstr "Caractere de spațiere vizibile"
 
-#: src/libide/gui/ide-preferences-builtin.c:180
+#: src/libide/gui/ide-preferences-builtin.c:181
 msgid "New line and carriage return"
 msgstr "Linie nouă și retur la început de linie"
 
-#: src/libide/gui/ide-preferences-builtin.c:181
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Non-breaking spaces"
 msgstr "Spații de unire"
 
-#: src/libide/gui/ide-preferences-builtin.c:182
+#: src/libide/gui/ide-preferences-builtin.c:183
 msgid "Spaces inside of text"
 msgstr "Spații din interiorul textului"
 
-#: src/libide/gui/ide-preferences-builtin.c:183
+#: src/libide/gui/ide-preferences-builtin.c:184
 msgid "Trailing Only"
 msgstr "Doar cele din urmă"
 
-#: src/libide/gui/ide-preferences-builtin.c:184
+#: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Leading Only"
 msgstr "Doar cele din față"
 
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "Autosave"
 msgstr "Salvare automată"
 
-#: src/libide/gui/ide-preferences-builtin.c:187
+#: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Enable or disable autosave feature"
 msgstr "Activează sau dezactivează funcționalitatea de salvare automată"
 
-#: src/libide/gui/ide-preferences-builtin.c:188
+#: src/libide/gui/ide-preferences-builtin.c:189
 msgid "The number of seconds after modification before auto saving"
 msgstr "Numărul de secunde după modificare înainte de salvarea automată"
 
-#: src/libide/gui/ide-preferences-builtin.c:194
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Code Insight"
 msgstr "Înțelegere cod"
 
-#: src/libide/gui/ide-preferences-builtin.c:196
+#: src/libide/gui/ide-preferences-builtin.c:197
 #: src/libide/sourceview/gtk/menus.ui:50 src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Evidențiere"
 
-#: src/libide/gui/ide-preferences-builtin.c:197
+#: src/libide/gui/ide-preferences-builtin.c:198
 msgid "Semantic Highlighting"
 msgstr "Evidențiere semantică"
 
-#: src/libide/gui/ide-preferences-builtin.c:197
+#: src/libide/gui/ide-preferences-builtin.c:198
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
@@ -2069,190 +2089,190 @@ msgstr ""
 "Utilizează înțelegerea de cod pentru a evidenția informații adiționale "
 "descoperite în fișierul sursă"
 
-#: src/libide/gui/ide-preferences-builtin.c:199
+#: src/libide/gui/ide-preferences-builtin.c:200
 #: src/plugins/editor/gbp-editor-hover-provider.c:78
 msgid "Diagnostics"
 msgstr "Diagnosticare"
 
-#: src/libide/gui/ide-preferences-builtin.c:205
+#: src/libide/gui/ide-preferences-builtin.c:206
 msgid "Completion"
 msgstr "Completare"
 
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:209
 msgid "Completions Display Size"
 msgstr "Dimensiunea afișajului completărilor"
 
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:209
 msgid "Number of completions to display"
 msgstr "Numărul de completări de afișat"
 
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: src/libide/gui/ide-preferences-builtin.c:210
 msgid "Display code suggestions interactively as you type"
 msgstr "Afișează sugestii de cod interactiv în timp ce tastați"
 
-#: src/libide/gui/ide-preferences-builtin.c:211
+#: src/libide/gui/ide-preferences-builtin.c:212
 msgid "Completion Providers"
 msgstr "Furnizori de completări"
 
-#: src/libide/gui/ide-preferences-builtin.c:217
+#: src/libide/gui/ide-preferences-builtin.c:218
 msgid "Snippets"
 msgstr "Blocuri"
 
-#: src/libide/gui/ide-preferences-builtin.c:260
+#: src/libide/gui/ide-preferences-builtin.c:261
 msgid "Programming Languages"
 msgstr "Limbaje de programare"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:271
+#: src/libide/gui/ide-preferences-builtin.c:272
 msgid "Search languages…"
 msgstr "Caută limbajele…"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Trim trailing whitespace"
 msgstr "Scurtează spațierea din urmă"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "După salvare, spațierea din urmă de la liniile modificate va fi scurtată."
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Overwrite Braces"
 msgstr "Suprascrie parantezele acolade"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Overwrite closing braces"
 msgstr "Suprascrie parantezele acolade de închidere"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert Matching Brace"
 msgstr "Introduce paranteza pereche"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Insert matching character for { [ ( or \""
 msgstr "Introduce caracterul pereche pentru { [ ( sau \""
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Insert Trailing Newline"
 msgstr "Introduce linie nouă din urmă"
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Ensure files end with a newline"
 msgstr "Asigurare că fișierele se termină cu o linie nouă"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Margins"
 msgstr "Magini"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Show right margin"
 msgstr "Arată marginea din dreapta"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Right margin position"
 msgstr "Poziția marginei din dreapta"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Position in spaces for the right margin"
 msgstr "Poziția în spații pentru marginea din dreapta"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Tab width"
 msgstr "Lățime tab"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Width of a tab character in spaces"
 msgstr "Lățimea în spații a unui caracter tab"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Insert spaces instead of tabs"
 msgstr "Introduce spații în loc de taburi"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Prefer spaces over use of tabs"
 msgstr "Preferă spațiile în locul utilizării de taburi"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Automatically indent"
 msgstr "Indentează automat"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Indent source code as you type"
 msgstr "Indentează codul sursă în timpul tastării"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Spacing"
 msgstr "Spațiere"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening parentheses"
 msgstr "Spațiu înainte de parantezele de deschidere"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening brackets"
 msgstr "Spațiu înainte de parantezele pătrate de deschidere"
 
-#: src/libide/gui/ide-preferences-builtin.c:348
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Space before opening braces"
 msgstr "Spațiu înainte de parantezele acolade de deschidere"
 
-#: src/libide/gui/ide-preferences-builtin.c:349
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Space before opening angles"
 msgstr "Spațiu înainte de parantezele unghiulare de deschidere"
 
-#: src/libide/gui/ide-preferences-builtin.c:350
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before colons"
 msgstr "Preferă un spațiu înainte de două puncte"
 
-#: src/libide/gui/ide-preferences-builtin.c:351
+#: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Prefer a space before commas"
 msgstr "Preferă un spațiu înainte de virgule"
 
-#: src/libide/gui/ide-preferences-builtin.c:352
+#: src/libide/gui/ide-preferences-builtin.c:353
 msgid "Prefer a space before semicolons"
 msgstr "Preferă un spațiu înainte de punct și virgulă"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/libide/gui/ide-preferences-builtin.c:380
+#: src/libide/gui/ide-preferences-builtin.c:363
+#: src/libide/gui/ide-preferences-builtin.c:381
 msgid "Default"
 msgstr "Implicit"
 
-#: src/libide/gui/ide-preferences-builtin.c:367
-#: src/libide/gui/ide-preferences-builtin.c:385
+#: src/libide/gui/ide-preferences-builtin.c:368
+#: src/libide/gui/ide-preferences-builtin.c:386
 msgid "Number of CPU"
 msgstr "Numărul de CPU"
 
-#: src/libide/gui/ide-preferences-builtin.c:400
+#: src/libide/gui/ide-preferences-builtin.c:401
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Generare"
 
-#: src/libide/gui/ide-preferences-builtin.c:403
+#: src/libide/gui/ide-preferences-builtin.c:404
 msgid "Build Workers"
 msgstr "Lucrători de generare"
 
-#: src/libide/gui/ide-preferences-builtin.c:403
+#: src/libide/gui/ide-preferences-builtin.c:404
 msgid "Number of parallel build workers"
 msgstr "Numărul de lucrători de generare paralelă"
 
-#: src/libide/gui/ide-preferences-builtin.c:411
+#: src/libide/gui/ide-preferences-builtin.c:412
 msgid "Clear build cache at startup"
 msgstr "Curăță cache-ul de generare la pornirea sistemului"
 
-#: src/libide/gui/ide-preferences-builtin.c:411
+#: src/libide/gui/ide-preferences-builtin.c:412
 msgid "Expired caches will be purged when Builder is started"
 msgstr "Cache-urile expirate vor fi curățate când executarea Builder"
 
-#: src/libide/gui/ide-preferences-builtin.c:413
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Network"
 msgstr "Rețea"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:415
 msgid "Allow downloads over metered connections"
 msgstr "Permite descărcări prin conexiuni contorizate"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:415
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2260,35 +2280,35 @@ msgstr ""
 "Permite utilizarea de conexiuni la rețea contorizate când se descarcă "
 "automat dependențe"
 
-#: src/libide/gui/ide-preferences-builtin.c:420
+#: src/libide/gui/ide-preferences-builtin.c:421
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Proiecte"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Workspace"
 msgstr "Spațiu de lucru"
 
-#: src/libide/gui/ide-preferences-builtin.c:423
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "A place for all your projects"
 msgstr "Un loc pentru toate proiectele"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "Restore previously opened files"
 msgstr "Restaurează fișierele deschise anterior"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "Open previously opened files when loading a project"
 msgstr "Deschide fișierele deschise anterior la încărcarea unui proiect"
 
-#: src/libide/gui/ide-preferences-builtin.c:546
+#: src/libide/gui/ide-preferences-builtin.c:547
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Control de versiune"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:559
+#: src/libide/gui/ide-preferences-builtin.c:560
 msgid "SDKs"
 msgstr "SDK-uri"
 
@@ -2852,31 +2872,31 @@ msgstr "Micș_orare"
 msgid "Reset"
 msgstr "Restabilește"
 
-#: src/libide/sourceview/ide-source-view.c:4432
+#: src/libide/sourceview/ide-source-view.c:4434
 #, c-format
 msgid "Insert “%s”"
 msgstr "Introduce „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4434
+#: src/libide/sourceview/ide-source-view.c:4436
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Înlocuiește „%s” cu „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4552
+#: src/libide/sourceview/ide-source-view.c:4554
 msgid "Apply Fix-It"
 msgstr "Aplică repararea"
 
-#: src/libide/sourceview/ide-source-view.c:4982
+#: src/libide/sourceview/ide-source-view.c:4984
 msgid "Rename symbol"
 msgstr "Redenumește simbolul"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5217
+#: src/libide/sourceview/ide-source-view.c:5219
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5243
+#: src/libide/sourceview/ide-source-view.c:5245
 msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
@@ -3830,13 +3850,13 @@ msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
 msgstr ""
-"Când se salvează un fișier Builder vă va actualiza automat informațiile de "
-"drepturi de autor"
+"Când se salvează un fișier Builder vă va actualiza automat informațiile "
+"despre drepturile de autor"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:117
 msgid "update copyright save"
-msgstr "update copyright save actualizează drepturi de autor salvează"
+msgstr "actualizează drepturi de autor salvează"
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3845,8 +3865,7 @@ msgstr "Actualizează drepturile de autor înainte de a salva"
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
 msgstr ""
-"Actualizează drepturile de autor pentru utilizator înainte de a salva pe "
-"disc."
+"Actualizează drepturile de autor pentru utilizator înaintea salvării pe disc."
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:48
 msgid "Display the project creation guide"
@@ -4669,7 +4688,7 @@ msgstr "Nu există depozit pentru a accesa conținutul fișierului"
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr "Nu s-a stabilit conținut la diff"
+msgstr "Nu s-a stabilit niciun conținut la diff"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
@@ -4680,7 +4699,7 @@ msgstr "Operația a eșuat. Eroarea originală a fost „%s”."
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:68
 #, c-format
 msgid "The operation has been canceled"
-msgstr "Operația a eșuat"
+msgstr "Operația a fost anulată"
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
 #, c-format
@@ -4694,25 +4713,25 @@ msgstr ""
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:593
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
-msgstr "Nu se pot stabili fanionii AMEND și GPG_SIGN"
+msgstr "Nu se pot stabili fanioanele AMEND și GPG_SIGN"
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:602
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
-msgstr "Nu se poate semna comiterea fără GPG_KEY_ID"
+msgstr "Nu se poate semna comitul fără GPG_KEY_ID"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:399
 #, c-format
 msgid "Cannot monitor files outside the working directory"
-msgstr "Nu se pot monitoriza fișiere în afara directorului de lucru"
+msgstr "Nu se pot monitoriza fișierele din afara directorului de lucru"
 
 #: src/plugins/git/gbp-git-client.c:329
 msgid "The client has been closed"
-msgstr "Clientul s-a închis"
+msgstr "Clientul a fost închis"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
-msgstr "Sistemul de control al versiunii Git nu este în uz"
+msgstr "Versiunea de control Git nu este în uz"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -4737,12 +4756,12 @@ msgstr "Se împinge ref „%s”"
 
 #: src/plugins/git/gbp-git-vcs.c:508
 msgid "Directory is not within repository"
-msgstr "Directorul nu este în depozit"
+msgstr "Directorul nu este într-un depozit"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:133
 #, c-format
 msgid "A repository could not be found at “%s”."
-msgstr "Un depozit nu a putut fi găsit la „%s”."
+msgstr "Nu s-a putut găsi un depozit la „%s”."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
@@ -4808,11 +4827,11 @@ msgstr "Previzualizează modelul de interfață"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:50
 msgid "Undo the last command"
-msgstr "Anulează comanda anterioară"
+msgstr "Refă comanda anterioară"
 
 #: src/plugins/glade/gbp-glade-page-shortcuts.c:56
 msgid "Redo the next command"
-msgstr "Refă comanda următoare"
+msgstr "Repetă comanda următoare"
 
 #: src/plugins/glade/gbp-glade-page.c:483
 msgid "Switch to selection mode"
@@ -5258,7 +5277,7 @@ msgstr "Ceasuri"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:69
 msgid "A simple clock application for GNOME"
-msgstr "O aplicație ceas simplă pentru GNOME"
+msgstr "O aplicație de ceas simplă pentru GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:78
 msgid "Games"
@@ -5892,7 +5911,7 @@ msgstr "Stylelint"
 #: src/plugins/stylelint/stylelint_plugin.py:136
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr ""
-"Activează utilizarea de stylelint, care ar putea să execute cod în proiect"
+"Activează utilizarea de Stylelint, care ar putea să execute cod în proiect"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/stylelint/stylelint_plugin.py:138
@@ -6086,7 +6105,7 @@ msgstr "Se actualizează Builder"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
 msgid "Update Available"
-msgstr "Actualizare disponibilă"
+msgstr "Sunt actualizări disponibile"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:161
 msgid ""
@@ -6137,86 +6156,86 @@ msgstr "%s nu este valid pentru %s"
 msgid "Cannot find language “%s”"
 msgstr "Nu s-a putut găsi limbajul „%s”"
 
-#: src/plugins/vim/gb-vim.c:330
+#: src/plugins/vim/gb-vim.c:352
 #, c-format
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Această comandă necesită ca GtkSourceView să fie focalizată"
 
-#: src/plugins/vim/gb-vim.c:341
+#: src/plugins/vim/gb-vim.c:363
 #, c-format
 msgid "This command requires a view to be focused"
 msgstr "Această comandă necesită ca o vizualizare să fie focalizată"
 
-#: src/plugins/vim/gb-vim.c:398
+#: src/plugins/vim/gb-vim.c:420
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Opțiune necunoscută: %s"
 
-#: src/plugins/vim/gb-vim.c:441
+#: src/plugins/vim/gb-vim.c:463
 #, c-format
 msgid "Cannot find colorscheme “%s”"
 msgstr "Nu se poate găsi schema de culori „%s”"
 
-#: src/plugins/vim/gb-vim.c:477 src/plugins/vim/gb-vim.c:600
+#: src/plugins/vim/gb-vim.c:499 src/plugins/vim/gb-vim.c:622
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Nu s-a putut localiza dosarul de lucru"
 
-#: src/plugins/vim/gb-vim.c:766
+#: src/plugins/vim/gb-vim.c:788
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Subcomandă :syntax nevalidă: %s"
 
-#: src/plugins/vim/gb-vim.c:1203
+#: src/plugins/vim/gb-vim.c:1225
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Cerere de căutare și înlocuire nevalidă"
 
-#: src/plugins/vim/gb-vim.c:1213
+#: src/plugins/vim/gb-vim.c:1235
 msgid "Change the pages colorscheme"
 msgstr "Modifică schema de culori a paginilor"
 
-#: src/plugins/vim/gb-vim.c:1217
+#: src/plugins/vim/gb-vim.c:1239
 msgid "Build the project"
 msgstr "Generează proiectul"
 
-#: src/plugins/vim/gb-vim.c:1218
+#: src/plugins/vim/gb-vim.c:1240
 msgid "Clear search highlighting"
 msgstr "Curăță evidențierea căutării"
 
-#: src/plugins/vim/gb-vim.c:1219
+#: src/plugins/vim/gb-vim.c:1241
 msgid "Open a file by path"
 msgstr "Deschide un fișier după cale"
 
-#: src/plugins/vim/gb-vim.c:1220
+#: src/plugins/vim/gb-vim.c:1242
 msgid "Close the page"
 msgstr "Închide pagina"
 
-#: src/plugins/vim/gb-vim.c:1221
+#: src/plugins/vim/gb-vim.c:1243
 msgid "Set various buffer options"
 msgstr "Stabilește diverse opțiuni de preîncărcare"
 
-#: src/plugins/vim/gb-vim.c:1222
+#: src/plugins/vim/gb-vim.c:1244
 msgid "Sort the selected lines"
 msgstr "Sortează liniile selectate"
 
-#: src/plugins/vim/gb-vim.c:1223
+#: src/plugins/vim/gb-vim.c:1245
 msgid "Create a split page below the current page"
 msgstr "Creează o pagină separată sub pagina curentă"
 
-#: src/plugins/vim/gb-vim.c:1224
+#: src/plugins/vim/gb-vim.c:1246
 msgid "Toggle syntax highlighting"
 msgstr "Comută evidențierea sintaxei"
 
-#: src/plugins/vim/gb-vim.c:1228
+#: src/plugins/vim/gb-vim.c:1250
 msgid "Save and close the current page"
 msgstr "Salvează și închide pagina curentă"
 
-#: src/plugins/vim/gb-vim.c:1229
+#: src/plugins/vim/gb-vim.c:1251
 msgid "Save the current page"
 msgstr "Salvează pagina curentă"
 
-#: src/plugins/vim/gb-vim.c:1313
+#: src/plugins/vim/gb-vim.c:1335
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nu este o comandă: %s"
