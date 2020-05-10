@@ -1725,6 +1725,7 @@
   /* cycle "tabs" */
   bind "<shift>t" { "action" ("frame", "previous-page", "") };
   bind "t" { "action" ("frame", "next-page", "") };
+  bind "q" { "format-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-g-u

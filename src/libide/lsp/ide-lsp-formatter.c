@@ -356,7 +356,7 @@ ide_lsp_formatter_format_range_async (IdeFormatter        *formatter,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_lsp_formatter_format_async);
+  ide_task_set_source_tag (task, ide_lsp_formatter_format_range_async);
   ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
 
   if (gtk_text_iter_compare (begin, end) > 0)
