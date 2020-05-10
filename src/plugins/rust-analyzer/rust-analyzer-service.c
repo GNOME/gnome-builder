@@ -33,6 +33,7 @@ struct _RustAnalyzerService
   IdeObject parent_instance;
   IdeLspClient  *client;
   IdeSubprocessSupervisor *supervisor;
+  GFileMonitor *cargo_monitor;
 
   ServiceState state;
 };
@@ -51,6 +52,23 @@ RustAnalyzerService *
 rust_analyzer_service_new (void)
 {
   return g_object_new (RUST_TYPE_ANALYZER_SERVICE, NULL);
+}
+
+static void
+_cargo_toml_changed_cb (GFileMonitor      *monitor,
+                        GFile             *file,
+                        GFile             *other_file,
+                        GFileMonitorEvent  event_type,
+                        gpointer           user_data)
+{
+  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (user_data);
+
+  if (self->supervisor != NULL)
+    {
+      IdeSubprocess *subprocess = ide_subprocess_supervisor_get_subprocess (self->supervisor);
+      if (subprocess != NULL)
+        ide_subprocess_force_exit (subprocess);
+    }
 }
 
 static void
@@ -100,6 +118,42 @@ rust_analyzer_service_set_property (GObject      *object,
 }
 
 static void
+rust_analyzer_service_set_parent (IdeObject *object,
+                                  IdeObject *parent)
+{
+  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (object);
+
+  IdeContext *context = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GFile) cargo_toml = NULL;
+
+  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (object));
+  g_return_if_fail (parent != NULL);
+
+  context = ide_object_get_context (object);
+  workdir = ide_context_ref_workdir (context);
+  cargo_toml = g_file_get_child (workdir, "Cargo.toml");
+
+  if (g_file_query_exists (cargo_toml, NULL))
+    {
+      GError *error = NULL;
+
+      if (self->cargo_monitor != NULL)
+        return;
+
+      self->cargo_monitor = g_file_monitor (cargo_toml, G_FILE_MONITOR_NONE, NULL, &error);
+      if (error != NULL)
+        {
+          g_warning ("%s", error->message);
+          return;
+        }
+      g_file_monitor_set_rate_limit (self->cargo_monitor, 5 * 1000); // 5 Seconds
+      g_signal_connect (self->cargo_monitor, "changed", G_CALLBACK (_cargo_toml_changed_cb), self);
+    }
+
+}
+
+static void
 rust_analyzer_service_destroy (IdeObject *object)
 {
   RustAnalyzerService *self = RUST_ANALYZER_SERVICE (object);
@@ -124,6 +178,7 @@ rust_analyzer_service_class_init (RustAnalyzerServiceClass *klass)
   object_class->get_property = rust_analyzer_service_get_property;
   object_class->set_property = rust_analyzer_service_set_property;
 
+  i_class->parent_set = rust_analyzer_service_set_parent;
   i_class->destroy = rust_analyzer_service_destroy;
 
   properties [PROP_CLIENT] =
