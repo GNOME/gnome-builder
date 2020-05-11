@@ -19,8 +19,8 @@
 #ifndef IDE_VERSION_H
 #define IDE_VERSION_H
 
-#if !defined(IDE_INSIDE) && !defined(IDE_COMPILATION)
-# error "Only <ide.h> can be included directly."
+#if !defined(IDE_CORE_INSIDE) && !defined(IDE_CORE_COMPILATION)
+# error "Only <libide-core.h> can be included directly."
 #endif
 
 /**

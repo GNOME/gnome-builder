@@ -27,11 +27,9 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include <libide-core.h>
 #include <libide-foundry.h>
 #include <libide-threading.h>
-
-#include "ide-context.h"
-#include "ide-debug.h"
 
 #include "ide-buildconfig-config.h"
 #include "ide-buildconfig-config-provider.h"

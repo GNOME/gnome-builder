@@ -39,7 +39,6 @@
 #include <unistd.h>
 
 #include "ide-application-private.h"
-#include "ide-debug.h"
 #include "ide-thread-private.h"
 #include "ide-terminal-private.h"
 #include "ide-private.h"
