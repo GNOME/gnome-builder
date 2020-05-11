@@ -587,6 +587,8 @@ ide_application_has_network (IdeApplication *self)
        *
        * See https://gitlab.gnome.org/GNOME/glib/merge_requests/227 for more
        * information about when this is fixed.
+       *
+       * See Also: https://gitlab.gnome.org/GNOME/glib/-/issues/1718
        */
       if (!self->has_network && ide_is_flatpak ())
         self->has_network = TRUE;
