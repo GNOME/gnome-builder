@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include "ide-debug.h"
-
 #include "ide-pipeline.h"
 #include "ide-deploy-strategy.h"
 

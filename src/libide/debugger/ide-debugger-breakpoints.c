@@ -24,8 +24,6 @@
 
 #include <stdlib.h>
 
-#include "ide-debug.h"
-
 #include "ide-debugger-breakpoints.h"
 #include "ide-debugger-private.h"
 
