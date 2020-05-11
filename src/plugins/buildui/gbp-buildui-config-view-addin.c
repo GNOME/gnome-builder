@@ -392,7 +392,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
   IdeRuntimeManager *runtime_manager;
   g_autoptr(GFile) workdir = NULL;
   IdeBuildSystem *build_system;
-  IdeEnvironment *environ;
+  IdeEnvironment *environ_;
   IdeContext *context;
   GtkWidget *box;
   GtkWidget *entry;
@@ -485,12 +485,12 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
   dzl_preferences_add_custom (preferences, "general", "toolchain", create_toolchain_box (config, toolchain_manager), NULL, 10);
 
   /* Add environment selector */
-  environ = ide_config_get_environment (config);
+  environ_ = ide_config_get_environment (config);
   dzl_preferences_add_custom (preferences, "environ", "build",
                               g_object_new (GTK_TYPE_FRAME,
                                             "visible", TRUE,
                                             "child", g_object_new (IDE_TYPE_ENVIRONMENT_EDITOR,
-                                                                   "environment", environ,
+                                                                   "environment", environ_,
                                                                    "visible", TRUE,
                                                                    NULL),
                                             NULL),

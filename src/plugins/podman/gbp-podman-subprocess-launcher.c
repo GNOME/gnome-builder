@@ -73,7 +73,7 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 
   if (!g_strv_contains (argv, "podman"))
     {
-      const gchar * const *environ;
+      const gchar * const *environ_;
       const gchar *cwd;
       guint i = 0;
       gint max_fd;
@@ -125,12 +125,12 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
           copy_envvar (launcher, i++, "XDG_VTNR");
         }
 
-      if ((environ = ide_subprocess_launcher_get_environ (launcher)))
+      if ((environ_ = ide_subprocess_launcher_get_environ (launcher)))
         {
-          for (guint j = 0; environ[j]; j++)
+          for (guint j = 0; environ_[j]; j++)
             {
               ide_subprocess_launcher_insert_argv (launcher, i++, "--env");
-              ide_subprocess_launcher_insert_argv (launcher, i++, environ[j]);
+              ide_subprocess_launcher_insert_argv (launcher, i++, environ_[j]);
             }
 
           ide_subprocess_launcher_set_environ (launcher, NULL);
