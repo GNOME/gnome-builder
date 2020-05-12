@@ -31,37 +31,61 @@
 #include "ide-editor-print-operation.h"
 #include "ide-editor-settings-dialog.h"
 
+typedef struct
+{
+  IdeEditorPage *self;
+  guint line;
+  guint line_offset;
+} ReloadState;
+
+static void
+reload_state_free (ReloadState *state)
+{
+  g_clear_object (&state->self);
+  g_slice_free (ReloadState, state);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (ReloadState, reload_state_free)
+
 static void
 ide_editor_page_actions_reload_cb (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
 {
   IdeBufferManager *bufmgr = (IdeBufferManager *)object;
-  g_autoptr(IdeEditorPage) self = user_data;
+  g_autoptr(ReloadState) state = user_data;
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GError) error = NULL;
+  GtkTextIter iter;
 
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_EDITOR_PAGE (state->self));
 
-  if (self->progress_bar != NULL)
-    dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+  if (state->self->progress_bar != NULL)
+    dzl_gtk_widget_hide_with_fade (GTK_WIDGET (state->self->progress_bar));
 
   if (!(buffer = ide_buffer_manager_load_file_finish (bufmgr, result, &error)))
     {
       g_warning ("%s", error->message);
-      ide_page_report_error (IDE_PAGE (self),
+      ide_page_report_error (IDE_PAGE (state->self),
                              /* translators: %s is the error message */
                              _("Failed to load file: %s"), error->message);
-      ide_page_set_failed (IDE_PAGE (self), TRUE);
+      ide_page_set_failed (IDE_PAGE (state->self), TRUE);
     }
   else
     {
-      ide_editor_page_scroll_to_line (self, 0);
+      ide_editor_page_scroll_to_line (state->self, 0);
     }
 
-  gtk_revealer_set_reveal_child (self->modified_revealer, FALSE);
+  gtk_revealer_set_reveal_child (state->self->modified_revealer, FALSE);
+
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
+                                           &iter,
+                                           state->line,
+                                           state->line_offset);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
 }
 
 static void
@@ -73,6 +97,8 @@ ide_editor_page_actions_reload (GSimpleAction *action,
   g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(IdeContext) context = NULL;
   IdeBufferManager *bufmgr;
+  ReloadState *state;
+  GtkTextIter iter;
   IdeBuffer *buffer;
   GFile *file;
 
@@ -88,13 +114,20 @@ ide_editor_page_actions_reload (GSimpleAction *action,
 
   notif = ide_notification_new ();
 
+  ide_buffer_get_selection_bounds (buffer, &iter, NULL);
+
+  state = g_slice_new0 (ReloadState);
+  state->self = g_object_ref (self);
+  state->line = gtk_text_iter_get_line (&iter);
+  state->line_offset = gtk_text_iter_get_line_offset (&iter);
+
   ide_buffer_manager_load_file_async (bufmgr,
                                       file,
                                       IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD,
                                       notif,
                                       NULL,
                                       ide_editor_page_actions_reload_cb,
-                                      g_object_ref (self));
+                                      g_steal_pointer (&state));
 
   g_object_bind_property (notif, "progress",
                           self->progress_bar, "fraction",
