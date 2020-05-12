@@ -1588,6 +1588,14 @@ ide_buffer_save_file_async (IdeBuffer            *self,
   ide_task_set_source_tag (task, ide_buffer_save_file_async);
   ide_task_set_task_data (task, state, save_state_free);
 
+  /* Keep buffer alive during save operation */
+  ide_buffer_hold (self);
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_buffer_release),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   if (self->state == IDE_BUFFER_STATE_SAVING)
     {
       /* TODO: We could save in-flight tasks and chain to them */
