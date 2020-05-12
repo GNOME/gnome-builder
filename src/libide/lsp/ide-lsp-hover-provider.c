@@ -96,40 +96,50 @@ parse_marked_string (GVariant *v)
   if (g_variant_is_of_type (v, G_VARIANT_TYPE_VARIANT))
     v = child = g_variant_get_variant (v);
 
-  g_variant_iter_init (&iter, v);
 
-  if ((item = g_variant_iter_next_value (&iter)))
+  if (g_variant_is_of_type (v, G_VARIANT_TYPE_DICTIONARY))
     {
-      GVariant *asv = item;
-      g_autoptr(GVariant) child2 = NULL;
+      const gchar *value = "";
 
-      if (g_variant_is_of_type (item, G_VARIANT_TYPE_VARIANT))
-        asv = child2 = g_variant_get_variant (item);
-
-      if (g_variant_is_of_type (asv, G_VARIANT_TYPE_STRING))
-        g_string_append (gstr, g_variant_get_string (asv, NULL));
-      else if (g_variant_is_of_type (asv, G_VARIANT_TYPE_VARDICT))
-        {
-          const gchar *lang = "";
-          const gchar *value = "";
-
-          g_variant_lookup (asv, "language", "&s", &lang);
-          g_variant_lookup (asv, "value", "&s", &value);
-
-#if 0
-          if (!ide_str_empty0 (lang) && !ide_str_empty0 (value))
-            g_string_append_printf (str, "```%s\n%s\n```", lang, value);
-          else if (!ide_str_empty0 (value))
-            g_string_append (str, value);
-#else
-          if (!ide_str_empty0 (value))
-            g_string_append_printf (gstr, "```\n%s\n```", value);
-#endif
-        }
-
-      g_variant_unref (item);
+      g_variant_lookup (v, "value", "&s", &value);
+      if (!ide_str_empty0 (value))
+        g_string_append_printf (gstr, "%s", value);
     }
+  else
+    {
+      g_variant_iter_init (&iter, v);
+      if ((item = g_variant_iter_next_value (&iter)))
+        {
+          GVariant *asv = item;
+          g_autoptr(GVariant) child2 = NULL;
 
+          if (g_variant_is_of_type (item, G_VARIANT_TYPE_VARIANT))
+            asv = child2 = g_variant_get_variant (item);
+
+          if (g_variant_is_of_type (asv, G_VARIANT_TYPE_STRING))
+            g_string_append (gstr, g_variant_get_string (asv, NULL));
+          else if (g_variant_is_of_type (asv, G_VARIANT_TYPE_VARDICT))
+            {
+              const gchar *lang = "";
+              const gchar *value = "";
+
+              g_variant_lookup (asv, "language", "&s", &lang);
+              g_variant_lookup (asv, "value", "&s", &value);
+
+    #if 0
+              if (!ide_str_empty0 (lang) && !ide_str_empty0 (value))
+                g_string_append_printf (str, "```%s\n%s\n```", lang, value);
+              else if (!ide_str_empty0 (value))
+                g_string_append (str, value);
+    #else
+              if (!ide_str_empty0 (value))
+                g_string_append_printf (gstr, "```\n%s\n```", value);
+    #endif
+            }
+
+          g_variant_unref (item);
+        }
+    }
   if (gstr->len)
     return ide_marked_content_new_from_data (gstr->str, gstr->len, IDE_MARKED_KIND_MARKDOWN);
 

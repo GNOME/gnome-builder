@@ -1,4 +1,4 @@
-/* rust-analyzer-diagnostic-provider.c
+/* rust-analyzer-highlighter.c
  *
  * Copyright 2020 Günther Wagner <info@gunibert.de>
  *
@@ -18,47 +18,47 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "rust-analyzer-diagnostic-provider.h"
+#include "rust-analyzer-highlighter.h"
 #include "rust-analyzer-service.h"
 
-struct _RustAnalyzerDiagnosticProvider
+struct _RustAnalyzerHighlighter
 {
-  IdeLspDiagnosticProvider parent_instance;
+  IdeLspHighlighter parent_instance;
 };
 
-static void provider_iface_init (IdeDiagnosticProviderInterface *iface);
+static void provider_iface_init (IdeHighlighterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerDiagnosticProvider,
-                         rust_analyzer_diagnostic_provider,
-                         IDE_TYPE_LSP_DIAGNOSTIC_PROVIDER,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER, provider_iface_init))
+G_DEFINE_TYPE_WITH_CODE (RustAnalyzerHighlighter,
+                         rust_analyzer_highlighter,
+                         IDE_TYPE_LSP_HIGHLIGHTER,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, provider_iface_init))
 
 static void
-rust_analyzer_diagnostic_provider_class_init (RustAnalyzerDiagnosticProviderClass *klass)
+rust_analyzer_highlighter_class_init (RustAnalyzerHighlighterClass *klass)
 {
 }
 
 static void
-rust_analyzer_diagnostic_provider_init (RustAnalyzerDiagnosticProvider *self)
+rust_analyzer_highlighter_init (RustAnalyzerHighlighter *self)
 {
 }
 
 static void
-rust_analyzer_diagnostic_provider_load (IdeDiagnosticProvider *self)
+rust_analyzer_highlighter_load (IdeHighlighter *self)
 {
-  RustAnalyzerService *service = NULL;
   IdeContext *context = NULL;
+  RustAnalyzerService *service = NULL;
 
-  g_assert (RUST_IS_ANALYZER_DIAGNOSTIC_PROVIDER (self));
+  g_assert (RUST_IS_ANALYZER_HIGHLIGHTER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
-  rust_analyzer_service_ensure_started (service);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
+  rust_analyzer_service_ensure_started (service);
 }
 
 static void
-provider_iface_init (IdeDiagnosticProviderInterface *iface)
+provider_iface_init (IdeHighlighterInterface *iface)
 {
-  iface->load = rust_analyzer_diagnostic_provider_load;
+  iface->load = rust_analyzer_highlighter_load;
 }

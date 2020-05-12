@@ -25,6 +25,8 @@
 #include "rust-analyzer-symbol-resolver.h"
 #include "rust-analyzer-diagnostic-provider.h"
 #include "rust-analyzer-formatter.h"
+#include "rust-analyzer-highlighter.h"
+#include "rust-analyzer-hover-provider.h"
 #include "rust-analyzer-workbench-addin.h"
 
 _IDE_EXTERN void
@@ -45,4 +47,10 @@ _rust_analyzer_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_FORMATTER,
                                               RUST_TYPE_ANALYZER_FORMATTER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_HIGHLIGHTER,
+                                              RUST_TYPE_ANALYZER_HIGHLIGHTER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_HOVER_PROVIDER,
+                                              RUST_TYPE_ANALYZER_HOVER_PROVIDER);
 }

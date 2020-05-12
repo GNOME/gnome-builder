@@ -125,8 +125,8 @@ rust_analyzer_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
 {
   GSimpleAction *install_rust_analyzer = NULL;
 
-  g_return_if_fail (RUST_IS_ANALYZER_WORKBENCH_ADDIN (addin));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_assert (RUST_IS_ANALYZER_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
   install_rust_analyzer = g_simple_action_new ("install-rust-analyzer", NULL);
   g_simple_action_set_enabled (install_rust_analyzer, TRUE);

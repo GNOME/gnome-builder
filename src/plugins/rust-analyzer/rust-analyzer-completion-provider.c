@@ -49,8 +49,8 @@ rust_analyzer_completion_provider_load (IdeCompletionProvider *self,
 {
   RustAnalyzerService *service = NULL;
 
-  g_return_if_fail (RUST_IS_ANALYZER_COMPLETION_PROVIDER (self));
-  g_return_if_fail (IDE_IS_CONTEXT (context));
+  g_assert (RUST_IS_ANALYZER_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_CONTEXT (context));
 
   service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);

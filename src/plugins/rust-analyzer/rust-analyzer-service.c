@@ -130,7 +130,6 @@ rust_analyzer_service_set_parent (IdeObject *object,
   g_autoptr(GFile) cargo_toml = NULL;
 
   g_return_if_fail (RUST_IS_ANALYZER_SERVICE (object));
-  g_return_if_fail (parent != NULL);
 
   context = ide_object_get_context (object);
   workdir = ide_context_ref_workdir (context);

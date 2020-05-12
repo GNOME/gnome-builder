@@ -58,10 +58,11 @@ _downloaded_chunk (GObject      *source_object,
   DownloadData *data = user_data;
   g_autofree gchar *statusmsg = NULL;
   g_autoptr(GError) error = NULL;
+  gsize count;
 
   g_return_if_fail (G_IS_INPUT_STREAM (stream));
 
-  gsize count = g_input_stream_read_finish (stream, result, &error);
+  count = g_input_stream_read_finish (stream, result, &error);
   if (error != NULL)
     {
       ide_task_return_error (data->task, g_steal_pointer (&error));

@@ -49,7 +49,7 @@ rust_analyzer_formatter_load (IdeFormatter *self)
   IdeContext *context = NULL;
   RustAnalyzerService *service = NULL;
 
-  g_return_if_fail (RUST_IS_ANALYZER_FORMATTER (self));
+  g_assert (RUST_IS_ANALYZER_FORMATTER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
