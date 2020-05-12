@@ -54,10 +54,12 @@ _downloaded_chunk (GObject      *source_object,
                    GAsyncResult *result,
                    gpointer      user_data)
 {
-  g_autofree gchar *statusmsg = NULL;
-  g_autoptr(GError) error = NULL;
   GInputStream *stream = G_INPUT_STREAM (source_object);
   DownloadData *data = user_data;
+  g_autofree gchar *statusmsg = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (G_IS_INPUT_STREAM (stream));
 
   gsize count = g_input_stream_read_finish (stream, result, &error);
   if (error != NULL)
@@ -98,11 +100,14 @@ _download_lsp (GObject      *source_object,
                gpointer      user_data)
 {
   g_autoptr(IdeTask) task = IDE_TASK (user_data);
+  SoupRequest *request = SOUP_REQUEST (source_object);
   g_autoptr(GFile) file = NULL;
   g_autoptr(GError) error = NULL;
-  SoupRequest *request = SOUP_REQUEST (source_object);
   GInputStream *stream = NULL;
   DownloadData *data;
+
+  g_return_if_fail (SOUP_IS_REQUEST (request));
+  g_return_if_fail (IDE_IS_TASK (task));
 
   stream = soup_request_send_finish (request, result, NULL);
 
@@ -134,6 +139,7 @@ rust_analyzer_transfer_execute_async (IdeTransfer         *transfer,
   g_autoptr(SoupRequest) request = NULL;
   g_autoptr(GError) error = NULL;
 
+  g_return_if_fail (RUST_IS_ANALYZER_TRANSFER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);

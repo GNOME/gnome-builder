@@ -46,8 +46,13 @@ rust_analyzer_symbol_resolver_init (RustAnalyzerSymbolResolver *self)
 static void
 rust_analyzer_symbol_resolver_load (IdeSymbolResolver *self)
 {
-  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-  RustAnalyzerService *service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
+  IdeContext *context = NULL;
+  RustAnalyzerService *service = NULL;
+
+  g_return_if_fail (RUST_IS_ANALYZER_SYMBOL_RESOLVER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
   rust_analyzer_service_ensure_started (service);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
 }

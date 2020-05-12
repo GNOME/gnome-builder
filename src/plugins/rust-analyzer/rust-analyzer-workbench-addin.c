@@ -61,8 +61,8 @@ rust_analyzer_service_downloaded_lsp (GObject      *object,
                                       GAsyncResult *res,
                                       gpointer      user_data)
 {
-  RustAnalyzerService *service = NULL;
   IdeContext *context = IDE_CONTEXT (user_data);
+  RustAnalyzerService *service = NULL;
 
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
@@ -78,6 +78,8 @@ rust_analyzer_workbench_addin_remove_lsp (IdeTransfer *transfer,
   g_autofree gchar *rust_analyzer_path = NULL;
   g_autoptr(GFile) rust_analyzer_bin = NULL;
 
+  g_return_if_fail (IDE_IS_TRANSFER (transfer));
+
   rust_analyzer_path = g_build_filename (g_get_home_dir (), ".cargo", "bin", "rust-analyzer", NULL);
   rust_analyzer_bin = g_file_new_for_path (rust_analyzer_path);
   g_file_trash (rust_analyzer_bin, NULL, NULL);
@@ -88,12 +90,14 @@ rust_analyzer_workbench_addin_install_rust_analyzer (GSimpleAction *action,
                                                      GVariant      *parameter,
                                                      gpointer       user_data)
 {
+  IdeContext *context = IDE_CONTEXT (user_data);
   g_autoptr(RustAnalyzerTransfer) transfer = NULL;
   IdeNotifications *notifications = NULL;
   IdeNotification *notification = NULL;
   IdeTransferManager *transfer_manager = NULL;
 
-  IdeContext *context = IDE_CONTEXT (user_data);
+  g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
 
   notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
   notification = ide_notifications_find_by_id (notifications, "org.gnome-builder.rust-analyzer");
@@ -120,6 +124,9 @@ rust_analyzer_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
                                                IdeWorkspace      *workspace)
 {
   GSimpleAction *install_rust_analyzer = NULL;
+
+  g_return_if_fail (RUST_IS_ANALYZER_WORKBENCH_ADDIN (addin));
+  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
 
   install_rust_analyzer = g_simple_action_new ("install-rust-analyzer", NULL);
   g_simple_action_set_enabled (install_rust_analyzer, TRUE);

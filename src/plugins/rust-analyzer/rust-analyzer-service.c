@@ -63,6 +63,8 @@ _cargo_toml_changed_cb (GFileMonitor      *monitor,
 {
   RustAnalyzerService *self = RUST_ANALYZER_SERVICE (user_data);
 
+  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
+
   if (self->supervisor != NULL)
     {
       IdeSubprocess *subprocess = ide_subprocess_supervisor_get_subprocess (self->supervisor);
@@ -231,6 +233,8 @@ _handle_notification (IdeLspClient *client,
   const gchar *token = NULL;
   const gchar *kind = NULL;
 
+  g_return_if_fail (IDE_IS_LSP_CLIENT (client));
+
   if (!ide_str_equal0 (method, "$/progress"))
     return;
 
@@ -272,12 +276,15 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
                                    IdeSubprocess           *subprocess,
                                    gpointer                 user_data)
 {
+  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (user_data);
   g_autoptr(GIOStream) io_stream = NULL;
   GInputStream *input;
   GOutputStream *output;
   IdeLspClient *client = NULL;
 
-  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (user_data);
+  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
+  g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+  g_return_if_fail (IDE_IS_SUBPROCESS (subprocess));
 
   input = ide_subprocess_get_stdout_pipe (subprocess);
   output = ide_subprocess_get_stdin_pipe (subprocess);
@@ -300,11 +307,13 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
 static gboolean
 rust_analyzer_service_check_rust_analyzer_bin (RustAnalyzerService *self)
 {
-  // Check if `rust-analyzer` can be found on PATH or if there is an executable
-  // in typical location
+  /* Check if `rust-analyzer` can be found on PATH or if there is an executable
+     in typical location */
   g_autoptr(GFile) rust_analyzer_bin_file = NULL;
   g_autofree gchar *rust_analyzer_bin = NULL;
   g_autoptr(GFileInfo) file_info = NULL;
+
+  g_return_val_if_fail (RUST_IS_ANALYZER_SERVICE (self), FALSE);
 
   rust_analyzer_bin = g_find_program_in_path ("rust-analyzer");
   if (rust_analyzer_bin == NULL)
@@ -339,6 +348,8 @@ rust_analyzer_service_check_rust_analyzer_bin (RustAnalyzerService *self)
 void
 rust_analyzer_service_ensure_started (RustAnalyzerService *self)
 {
+  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
+
   if (self->state == RUST_ANALYZER_SERVICE_INIT)
     {
       if (!rust_analyzer_service_check_rust_analyzer_bin (self))

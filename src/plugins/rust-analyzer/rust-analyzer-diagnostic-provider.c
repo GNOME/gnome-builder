@@ -46,8 +46,13 @@ rust_analyzer_diagnostic_provider_init (RustAnalyzerDiagnosticProvider *self)
 static void
 rust_analyzer_diagnostic_provider_load (IdeDiagnosticProvider *self)
 {
-  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-  RustAnalyzerService *service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
+  RustAnalyzerService *service = NULL;
+  IdeContext *context = NULL;
+
+  g_return_if_fail (RUST_IS_ANALYZER_DIAGNOSTIC_PROVIDER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
   rust_analyzer_service_ensure_started (service);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
 }
