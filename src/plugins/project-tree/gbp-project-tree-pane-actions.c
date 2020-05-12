@@ -246,11 +246,16 @@ close_matching_pages (GtkWidget *widget,
   if (!IDE_IS_EDITOR_PAGE (page))
     return;
 
-  if (!(this_file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page))))
+  this_file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page));
+  if (this_file == NULL)
     return;
 
   if (g_file_equal (this_file, file))
-    gtk_widget_destroy (widget);
+    {
+      IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+      ide_buffer_save_file_async (buffer, NULL, NULL, NULL, NULL, NULL);
+      gtk_widget_destroy (widget);
+    }
 }
 
 #define DEFINE_ACTION_HANDLER(short_name, BODY)                       \
