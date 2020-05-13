@@ -17,8 +17,6 @@ option('network_tests', type: 'boolean', value: true, description: 'Allow networ
 
 option('ctags_path', type: 'string', value: '')
 
-option('python_libprefix', type: 'string')
-
 option('plugin_autotools', type: 'boolean')
 option('plugin_beautifier', type: 'boolean')
 option('plugin_c_pack', type: 'boolean')

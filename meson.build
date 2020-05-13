@@ -292,6 +292,7 @@ configure_file(output: 'config.h', configuration: config_h)
 gnome = import('gnome')
 i18n = import('i18n')
 pkgconfig = import('pkgconfig')
+pymod = import('python')
 
 subdir('data')
 subdir('src')
