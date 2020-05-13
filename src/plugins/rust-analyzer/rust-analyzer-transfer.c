@@ -79,6 +79,10 @@ _downloaded_chunk (GObject      *source_object,
       g_chmod (data->filepath, S_IRWXU);
       g_free (data->filepath);
       g_slice_free (DownloadData, data);
+
+      ide_transfer_set_title (IDE_TRANSFER (data->transfer), _("Installation of Rust Analyzer finished"));
+      ide_transfer_set_icon_name (IDE_TRANSFER (data->transfer), "emblem-ok");
+
       return;
     }
 
