@@ -21,6 +21,7 @@
 #include "rust-analyzer-workbench-addin.h"
 #include <libide-gui.h>
 #include <libide-core.h>
+#include <glib/gi18n.h>
 #include "rust-analyzer-transfer.h"
 #include "rust-analyzer-service.h"
 
@@ -62,9 +63,17 @@ rust_analyzer_service_downloaded_lsp (GObject      *object,
                                       gpointer      user_data)
 {
   IdeContext *context = IDE_CONTEXT (user_data);
+  IdeTransferManager *transfer_manager = IDE_TRANSFER_MANAGER (object);
+  g_autoptr(GError) error = NULL;
   RustAnalyzerService *service = NULL;
 
   g_return_if_fail (IDE_IS_CONTEXT (context));
+
+  ide_transfer_manager_execute_finish (transfer_manager, res, &error);
+  if (error != NULL) {
+    g_warning (_("Cannot download Rust Analyzer: %s"), error->message);
+    return;
+  }
 
   service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
   rust_analyzer_service_set_state (service, RUST_ANALYZER_SERVICE_READY);

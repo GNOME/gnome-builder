@@ -27,6 +27,7 @@
 #include <glib-unix.h>
 #include <libide-core.h>
 #include <jsonrpc-glib.h>
+#include <glib/gi18n.h>
 
 struct _RustAnalyzerService
 {
@@ -130,6 +131,9 @@ rust_analyzer_service_set_parent (IdeObject *object,
   g_autoptr(GFile) cargo_toml = NULL;
 
   g_return_if_fail (RUST_IS_ANALYZER_SERVICE (object));
+
+  if (parent == NULL)
+    return;
 
   context = ide_object_get_context (object);
   workdir = ide_context_ref_workdir (context);
@@ -360,10 +364,10 @@ rust_analyzer_service_ensure_started (RustAnalyzerService *self)
 
           notification = ide_notification_new ();
           ide_notification_set_id (notification, "org.gnome-builder.rust-analyzer");
-          ide_notification_set_title (notification, "Your computer is missing the Rust Analyzer Language Server");
-          ide_notification_set_body (notification, "The Language Server is necessary to provide IDE features like completion or diagnostic");
+          ide_notification_set_title (notification, _("Your computer is missing the Rust Analyzer Language Server"));
+          ide_notification_set_body (notification, _("The Language Server is necessary to provide IDE features like completion or diagnostic"));
           ide_notification_set_icon_name (notification, "dialog-warning-symbolic");
-          ide_notification_add_button (notification, "Install Language Server", NULL, "win.install-rust-analyzer");
+          ide_notification_add_button (notification, _("Install Language Server"), NULL, "win.install-rust-analyzer");
           ide_notification_set_urgent (notification, TRUE);
           context = ide_object_get_context (IDE_OBJECT (self));
           ide_notification_attach (notification, IDE_OBJECT (context));

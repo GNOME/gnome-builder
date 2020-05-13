@@ -25,6 +25,7 @@
 #include <glib/gstdio.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <glib/gi18n.h>
 
 struct _RustAnalyzerTransfer
 {
@@ -106,17 +107,26 @@ _download_lsp (GObject      *source_object,
   g_autoptr(GError) error = NULL;
   GInputStream *stream = NULL;
   DownloadData *data;
+  IdeTransfer *transfer = IDE_TRANSFER (ide_task_get_task_data (task));
+
+  IDE_ENTRY;
 
   g_return_if_fail (SOUP_IS_REQUEST (request));
   g_return_if_fail (IDE_IS_TASK (task));
 
-  stream = soup_request_send_finish (request, result, NULL);
+  stream = soup_request_send_finish (request, result, &error);
+  if (error != NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      ide_transfer_cancel (transfer);
+      return;
+    }
 
   data = g_slice_new0 (DownloadData);
   data->filepath = g_build_filename (g_get_home_dir (), ".cargo", "bin", "rust-analyzer", NULL);
   file = g_file_new_for_path (data->filepath);
-  data->transfer = IDE_TRANSFER (ide_task_get_task_data (task));
-  data->filestream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, ide_task_get_cancellable (data->task), &error));
+  data->transfer = transfer;
+  data->filestream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, ide_task_get_cancellable (task), &error));
   if (data->filestream == NULL)
     {
       ide_task_return_error (task, g_steal_pointer (&error));
@@ -126,6 +136,8 @@ _download_lsp (GObject      *source_object,
   data->task = g_steal_pointer (&task);
 
   g_input_stream_read_async (stream, &data->buffer, sizeof (data->buffer), G_PRIORITY_DEFAULT, ide_task_get_cancellable (data->task), _downloaded_chunk, data);
+
+  IDE_EXIT;
 }
 
 static void
@@ -180,5 +192,5 @@ rust_analyzer_transfer_class_init (RustAnalyzerTransferClass *klass)
 static void
 rust_analyzer_transfer_init (RustAnalyzerTransfer *self)
 {
-  ide_transfer_set_title (IDE_TRANSFER (self), "Installing Rust Analyzer...");
+  ide_transfer_set_title (IDE_TRANSFER (self), _("Installing Rust Analyzer..."));
 }
