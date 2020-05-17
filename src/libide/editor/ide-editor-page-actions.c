@@ -56,7 +56,6 @@ ide_editor_page_actions_reload_cb (GObject      *object,
   g_autoptr(ReloadState) state = user_data;
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GError) error = NULL;
-  GtkTextIter iter;
 
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -76,16 +75,26 @@ ide_editor_page_actions_reload_cb (GObject      *object,
     }
   else
     {
-      ide_editor_page_scroll_to_line (state->self, 0);
+      IdeSourceView *view;
+      GtkTextIter iter;
+
+      view = ide_editor_page_get_view (state->self);
+      gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
+                                               &iter,
+                                               state->line,
+                                               state->line_offset);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
+      ide_source_view_scroll_to_iter (view,
+                                      &iter,
+                                      .25,
+                                      IDE_SOURCE_SCROLL_BOTH,
+                                      1.0,
+                                      0.5,
+                                      FALSE);
+
     }
 
   gtk_revealer_set_reveal_child (state->self->modified_revealer, FALSE);
-
-  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
-                                           &iter,
-                                           state->line,
-                                           state->line_offset);
-  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
 }
 
 static void
