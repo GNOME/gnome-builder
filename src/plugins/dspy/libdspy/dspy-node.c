@@ -405,7 +405,7 @@ _dspy_property_info_to_string (DspyPropertyInfo *info)
 
   sig = _dspy_signature_humanize (info->signature);
 
-  if (info->flags == (G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE | G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE))
+  if (info->flags == (G_DBUS_PROPERTY_INFO_FLAGS_READABLE | G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE))
     rw = _("read/write");
   else if (info->flags  & G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE)
     rw = _("write-only");
