@@ -106,17 +106,18 @@ _download_lsp (GObject      *source_object,
                gpointer      user_data)
 {
   g_autoptr(IdeTask) task = IDE_TASK (user_data);
-  SoupRequest *request = SOUP_REQUEST (source_object);
   g_autoptr(GFile) file = NULL;
   g_autoptr(GError) error = NULL;
+  SoupRequest *request = (SoupRequest *)source_object;
   GInputStream *stream = NULL;
   DownloadData *data;
-  IdeTransfer *transfer = IDE_TRANSFER (ide_task_get_task_data (task));
+  IdeTransfer *transfer = ide_task_get_task_data (task);
 
   IDE_ENTRY;
 
   g_return_if_fail (SOUP_IS_REQUEST (request));
   g_return_if_fail (IDE_IS_TASK (task));
+  g_return_if_fail (IDE_IS_TRANSFER (transfer));
 
   stream = soup_request_send_finish (request, result, &error);
   if (error != NULL)

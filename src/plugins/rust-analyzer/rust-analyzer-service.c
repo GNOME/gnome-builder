@@ -229,7 +229,7 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
                                    IdeSubprocess           *subprocess,
                                    gpointer                 user_data)
 {
-  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (user_data);
+  RustAnalyzerService *self = user_data;
   g_autoptr(GIOStream) io_stream = NULL;
   GInputStream *input;
   GOutputStream *output;
@@ -260,7 +260,8 @@ static gboolean
 rust_analyzer_service_check_rust_analyzer_bin (RustAnalyzerService *self)
 {
   /* Check if `rust-analyzer` can be found on PATH or if there is an executable
-     in typical location */
+   * in typical location
+   */
   g_autoptr(GFile) rust_analyzer_bin_file = NULL;
   g_autofree gchar *rust_analyzer_bin = NULL;
   g_autoptr(GFileInfo) file_info = NULL;

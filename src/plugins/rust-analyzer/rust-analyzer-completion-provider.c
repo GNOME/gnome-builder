@@ -47,7 +47,7 @@ static void
 rust_analyzer_completion_provider_load (IdeCompletionProvider *self,
                                         IdeContext            *context)
 {
-  RustAnalyzerService *service = NULL;
+  RustAnalyzerService *service;
 
   g_assert (RUST_IS_ANALYZER_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_CONTEXT (context));
