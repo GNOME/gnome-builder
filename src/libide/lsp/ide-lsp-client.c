@@ -744,7 +744,9 @@ ide_lsp_client_real_notification (IdeLspClient *self,
   if (params != NULL)
     {
       if (g_str_equal (method, "textDocument/publishDiagnostics"))
-        ide_lsp_client_text_document_publish_diagnostics (self, params);
+        {
+          ide_lsp_client_text_document_publish_diagnostics (self, params);
+        }
       else if (g_str_equal (method, "$/progress"))
         {
           const gchar *token = NULL;
@@ -768,7 +770,7 @@ ide_lsp_client_real_notification (IdeLspClient *self,
           context = ide_object_get_context (IDE_OBJECT (self));
           notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
 
-          if (g_str_equal (kind, "begin"))
+          if (ide_str_equal0 (kind, "begin"))
             {
               notification = ide_notification_new ();
               ide_notification_set_id (notification, token);
@@ -785,7 +787,7 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                 ide_notification_set_title (notification, message);
             }
 
-          if (g_str_equal (kind, "end") && notification != NULL)
+          if (ide_str_equal0 (kind, "end") && notification != NULL)
             ide_notification_withdraw_in_seconds (notification, 3);
         }
     }
