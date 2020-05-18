@@ -224,56 +224,6 @@ rust_analyzer_service_set_client (RustAnalyzerService *self,
     }
 }
 
-static void
-_handle_notification (IdeLspClient *client,
-                      gchar        *method,
-                      GVariant     *params)
-{
-  g_autoptr(IdeNotification) notification = NULL;
-  IdeNotifications *notifications = NULL;
-  IdeContext *context = NULL;
-  const gchar *message = NULL;
-  const gchar *token = NULL;
-  const gchar *kind = NULL;
-
-  g_return_if_fail (IDE_IS_LSP_CLIENT (client));
-
-  if (!ide_str_equal0 (method, "$/progress"))
-    return;
-
-  JSONRPC_MESSAGE_PARSE (params, "token", JSONRPC_MESSAGE_GET_STRING (&token));
-
-  if (!ide_str_equal0 (token, "rustAnalyzer/startup"))
-    return;
-
-  JSONRPC_MESSAGE_PARSE (params, "value", "{", "kind", JSONRPC_MESSAGE_GET_STRING (&kind), "message", JSONRPC_MESSAGE_GET_STRING (&message), "}");
-
-  context = ide_object_get_context (IDE_OBJECT (client));
-  notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
-  notification = ide_notifications_find_by_id (notifications, "org.gnome-builder.rust-analyzer.startup");
-
-  if (notification == NULL)
-    {
-      notification = ide_notification_new ();
-      ide_notification_set_id (notification, "org.gnome-builder.rust-analyzer.startup");
-      ide_notification_set_title (notification, message);
-      ide_notification_set_has_progress (notification, TRUE);
-      ide_notification_set_progress_is_imprecise (notification, TRUE);
-      ide_notification_set_icon_name (notification, "system-run-symbolic");
-      ide_notification_attach (notification, IDE_OBJECT (context));
-    }
-  else
-    {
-      ide_notification_set_title (notification, message);
-      if (ide_str_equal0 (kind, "end"))
-        {
-          ide_notification_set_has_progress (notification, FALSE);
-          ide_notification_set_icon_name (notification, NULL);
-          ide_notification_withdraw_in_seconds (notification, 3);
-        }
-    }
-}
-
 void
 rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
                                    IdeSubprocess           *subprocess,
@@ -300,7 +250,6 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
     }
 
   client = ide_lsp_client_new (io_stream);
-  g_signal_connect (client, "notification", G_CALLBACK (_handle_notification), NULL);
   rust_analyzer_service_set_client (self, client);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (client));
   ide_lsp_client_add_language (client, "rust");

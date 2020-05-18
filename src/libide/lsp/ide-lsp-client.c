@@ -745,6 +745,49 @@ ide_lsp_client_real_notification (IdeLspClient *self,
     {
       if (g_str_equal (method, "textDocument/publishDiagnostics"))
         ide_lsp_client_text_document_publish_diagnostics (self, params);
+      else if (g_str_equal (method, "$/progress"))
+        {
+          const gchar *token = NULL;
+          const gchar *message = NULL;
+          const gchar *title = NULL;
+          const gchar *kind = NULL;
+          IdeContext *context;
+          IdeNotifications *notifications;
+          IdeNotification *notification;
+
+          JSONRPC_MESSAGE_PARSE (params, "token", JSONRPC_MESSAGE_GET_STRING (&token),
+                                         "value", "{",
+                                           "kind", JSONRPC_MESSAGE_GET_STRING (&kind),
+                                         "}");
+          JSONRPC_MESSAGE_PARSE (params, "value", "{",
+                                           "title", JSONRPC_MESSAGE_GET_STRING (&title),
+                                         "}");
+          JSONRPC_MESSAGE_PARSE (params, "value", "{",
+                                           "message", JSONRPC_MESSAGE_GET_STRING (&message),
+                                         "}");
+          context = ide_object_get_context (IDE_OBJECT (self));
+          notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
+
+          if (g_str_equal (kind, "begin"))
+            {
+              notification = ide_notification_new ();
+              ide_notification_set_id (notification, token);
+              ide_notification_set_has_progress (notification, TRUE);
+              ide_notification_set_progress_is_imprecise (notification, TRUE);
+              ide_notification_set_title (notification, title);
+              ide_notification_set_urgent (notification, TRUE);
+              ide_notification_attach (notification, IDE_OBJECT (context));
+            }
+          else
+            {
+              notification = ide_notifications_find_by_id (notifications, token);
+              if (message != NULL && notification != NULL)
+                ide_notification_set_title (notification, message);
+            }
+
+          if (g_str_equal (kind, "end") && notification != NULL)
+            ide_notification_withdraw_in_seconds (notification, 3);
+        }
     }
 
   IDE_EXIT;
@@ -957,6 +1000,10 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
         ret = ide_lsp_client_handle_apply_edit (self, client, id, params);
 
       IDE_RETURN (ret);
+    }
+  else if (strcmp (method, "window/workDoneProgress/create") == 0)
+    {
+      IDE_RETURN (TRUE);
     }
 
   IDE_RETURN (FALSE);
@@ -1428,6 +1475,9 @@ ide_lsp_client_start (IdeLspClient *self)
             "]",
           "}",
         "}",
+      "}",
+      "window", "{",
+        "workDoneProgress", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
       "}",
     "}"
   );
