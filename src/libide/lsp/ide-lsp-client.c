@@ -777,14 +777,14 @@ ide_lsp_client_real_notification (IdeLspClient *self,
               ide_notification_set_has_progress (notification, TRUE);
               ide_notification_set_progress_is_imprecise (notification, TRUE);
               ide_notification_set_title (notification, title);
-              ide_notification_set_urgent (notification, TRUE);
+              ide_notification_set_body (notification, message != NULL ? message : title);
               ide_notification_attach (notification, IDE_OBJECT (context));
             }
           else
             {
               notification = ide_notifications_find_by_id (notifications, token);
               if (message != NULL && notification != NULL)
-                ide_notification_set_title (notification, message);
+                ide_notification_set_body (notification, message);
             }
 
           if (ide_str_equal0 (kind, "end") && notification != NULL)
