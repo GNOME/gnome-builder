@@ -12,4 +12,4 @@ X-Symbol-Resolver-Languages=rust
 X-Formatter-Languages=rust
 X-Highlighter-Languages=rust
 X-Hover-Provider-Languages=rust
-#X-Rename-Provider-Languages=rust
+X-Rename-Provider-Languages=rust

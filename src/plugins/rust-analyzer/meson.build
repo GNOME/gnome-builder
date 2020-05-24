@@ -9,6 +9,7 @@ plugins_sources += files([
   'rust-analyzer-formatter.c',
   'rust-analyzer-highlighter.c',
   'rust-analyzer-hover-provider.c',
+  'rust-analyzer-rename-provider.c',
   'rust-analyzer-transfer.c',
   'rust-analyzer-workbench-addin.c',
 ])
