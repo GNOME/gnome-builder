@@ -108,10 +108,7 @@ open_project (GSimpleAction *action,
 
   workspace = ide_greeter_workspace_new (self->application);
   ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
-
   ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
-
-  dzl_gtk_widget_action (GTK_WIDGET (workspace), "win", "open", NULL);
 }
 
 static const GActionEntry actions[] = {
