@@ -39,5 +39,6 @@
 #include "ide-lsp-symbol-node.h"
 #include "ide-lsp-symbol-resolver.h"
 #include "ide-lsp-symbol-tree.h"
+#include "ide-lsp-util.h"
 
 #undef IDE_LSP_INSIDE

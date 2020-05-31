@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include "ide-search-provider.h"
 
 G_BEGIN_DECLS
 
@@ -32,21 +33,26 @@ G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
-
 IDE_AVAILABLE_IN_3_32
-IdeSearchEngine *ide_search_engine_new           (void);
+IdeSearchEngine *ide_search_engine_new             (void);
 IDE_AVAILABLE_IN_3_32
-gboolean         ide_search_engine_get_busy      (IdeSearchEngine      *self);
+gboolean         ide_search_engine_get_busy        (IdeSearchEngine      *self);
 IDE_AVAILABLE_IN_3_32
-void             ide_search_engine_search_async  (IdeSearchEngine      *self,
-                                                  const gchar          *query,
-                                                  guint                 max_results,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
+void             ide_search_engine_search_async    (IdeSearchEngine      *self,
+                                                    const gchar          *query,
+                                                    guint                 max_results,
+                                                    GCancellable         *cancellable,
+                                                    GAsyncReadyCallback   callback,
+                                                    gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-GListModel      *ide_search_engine_search_finish (IdeSearchEngine      *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
+GListModel      *ide_search_engine_search_finish   (IdeSearchEngine      *self,
+                                                    GAsyncResult         *result,
+                                                    GError              **error);
+IDE_AVAILABLE_IN_3_36
+void             ide_search_engine_add_provider    (IdeSearchEngine      *self,
+                                                    IdeSearchProvider    *provider);
+IDE_AVAILABLE_IN_3_36
+void             ide_search_engine_remove_provider (IdeSearchEngine      *self,
+                                                    IdeSearchProvider    *provider);
 
 G_END_DECLS
