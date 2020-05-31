@@ -28,6 +28,8 @@
 #include <libide-core.h>
 #include <jsonrpc-glib.h>
 #include <glib/gi18n.h>
+#include <libide-search.h>
+#include "rust-analyzer-search-provider.h"
 
 struct _RustAnalyzerService
 {
@@ -35,6 +37,7 @@ struct _RustAnalyzerService
   IdeLspClient  *client;
   IdeSubprocessSupervisor *supervisor;
   GFileMonitor *cargo_monitor;
+  RustAnalyzerSearchProvider *search_provider;
 
   ServiceState state;
 };
@@ -74,14 +77,15 @@ _cargo_toml_changed_cb (GFileMonitor      *monitor,
     }
 }
 
-static void
-rust_analyzer_service_finalize (GObject *object)
+static IdeSearchEngine *
+_get_search_engine (RustAnalyzerService *self)
 {
-  RustAnalyzerService *self = (RustAnalyzerService *)object;
+  IdeContext *context = NULL;
 
-  g_clear_object (&self->client);
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
 
-  G_OBJECT_CLASS (rust_analyzer_service_parent_class)->finalize (object);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  return ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_SEARCH_ENGINE);
 }
 
 static void
@@ -162,6 +166,7 @@ static void
 rust_analyzer_service_destroy (IdeObject *object)
 {
   RustAnalyzerService *self = RUST_ANALYZER_SERVICE (object);
+  IdeSearchEngine *search_engine = NULL;
 
   if (self->supervisor != NULL)
     {
@@ -169,6 +174,13 @@ rust_analyzer_service_destroy (IdeObject *object)
 
       ide_subprocess_supervisor_stop (supervisor);
     }
+
+  g_clear_object (&self->client);
+
+  search_engine = _get_search_engine (self);
+  if (search_engine != NULL)
+    ide_search_engine_remove_provider (search_engine, IDE_SEARCH_PROVIDER (self->search_provider));
+  g_clear_object (&self->search_provider);
 
   IDE_OBJECT_CLASS (rust_analyzer_service_parent_class)->destroy (object);
 }
@@ -179,7 +191,6 @@ rust_analyzer_service_class_init (RustAnalyzerServiceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->finalize = rust_analyzer_service_finalize;
   object_class->get_property = rust_analyzer_service_get_property;
   object_class->set_property = rust_analyzer_service_set_property;
 
@@ -254,6 +265,16 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (client));
   ide_lsp_client_add_language (client, "rust");
   ide_lsp_client_start (client);
+
+  // register SearchProvider
+  if (self->search_provider == NULL)
+    {
+      IdeSearchEngine *search_engine = _get_search_engine (self);
+
+      self->search_provider = rust_analyzer_search_provider_new ();
+      ide_search_engine_add_provider (search_engine, IDE_SEARCH_PROVIDER (self->search_provider));
+    }
+  rust_analyzer_search_provider_set_client (self->search_provider, client);
 }
 
 static gboolean

@@ -11,6 +11,8 @@ plugins_sources += files([
   'rust-analyzer-hover-provider.c',
   'rust-analyzer-rename-provider.c',
   'rust-analyzer-transfer.c',
+  'rust-analyzer-search-provider.c',
+  'rust-analyzer-search-result.c',
   'rust-analyzer-workbench-addin.c',
 ])
 
