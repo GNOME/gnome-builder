@@ -36,7 +36,6 @@ G_DEFINE_TYPE_WITH_CODE (RustAnalyzerRenameProvider,
 static void
 rust_analyzer_rename_provider_class_init (RustAnalyzerRenameProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 }
 
 static void
