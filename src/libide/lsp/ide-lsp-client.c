@@ -83,6 +83,7 @@ enum {
 };
 
 enum {
+  INITIALIZED,
   LOAD_CONFIGURATION,
   NOTIFICATION,
   PUBLISHED_DIAGNOSTICS,
@@ -1139,6 +1140,17 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+
+  signals [INITIALIZED] =
+    g_signal_new ("initialized",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeLspClientClass, initialized),
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   /**
    * IdeLspClient::load-configuration:
    * @self: a #IdeLspClient
@@ -1283,6 +1295,8 @@ ide_lsp_client_initialized_cb (GObject      *object,
 
   project = ide_project_from_context (context);
   dzl_signal_group_set_target (priv->project_signals, project);
+
+  g_signal_emit (self, signals[INITIALIZED], 0);
 
   IDE_EXIT;
 }

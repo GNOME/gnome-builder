@@ -53,6 +53,7 @@ struct _IdeLspClientClass
                                       GFile          *file,
                                       IdeDiagnostics *diagnostics);
   GVariant *(*load_configuration)    (IdeLspClient   *self);
+  void      (*initialized)           (IdeLspClient   *self);
 
   /*< private >*/
   gpointer _reserved[15];
