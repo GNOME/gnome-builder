@@ -38,6 +38,8 @@ struct _RustAnalyzerService
   IdeSubprocessSupervisor *supervisor;
   GFileMonitor *cargo_monitor;
   RustAnalyzerSearchProvider *search_provider;
+  GSettings *settings;
+  gchar *cargo_command;
 
   ServiceState state;
 };
@@ -47,6 +49,7 @@ G_DEFINE_TYPE (RustAnalyzerService, rust_analyzer_service, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_CLIENT,
+  PROP_CARGO_COMMAND,
   N_PROPS
 };
 
@@ -88,6 +91,27 @@ _get_search_engine (RustAnalyzerService *self)
   return ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_SEARCH_ENGINE);
 }
 
+static GVariant *
+rust_analyzer_service_load_configuration (IdeLspClient *client,
+                                          gpointer      user_data)
+{
+  RustAnalyzerService *self = (RustAnalyzerService *)user_data;
+  GVariant *ret = NULL;
+
+  g_assert (IDE_IS_LSP_CLIENT (client));
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+
+  IDE_ENTRY;
+
+  ret = JSONRPC_MESSAGE_NEW_ARRAY ("{",
+                                     "checkOnSave", "{",
+                                       "command", JSONRPC_MESSAGE_PUT_STRING (self->cargo_command),
+                                     "}",
+                                   "}");
+
+  IDE_RETURN (ret);
+}
+
 static void
 rust_analyzer_service_get_property (GObject    *object,
                                     guint       prop_id,
@@ -100,6 +124,9 @@ rust_analyzer_service_get_property (GObject    *object,
     {
     case PROP_CLIENT:
       g_value_set_object (value, rust_analyzer_service_get_client (self));
+      break;
+    case PROP_CARGO_COMMAND:
+      g_value_set_string (value, rust_analyzer_service_get_cargo_command (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -118,6 +145,9 @@ rust_analyzer_service_set_property (GObject      *object,
     {
     case PROP_CLIENT:
       rust_analyzer_service_set_client (self, g_value_get_object (value));
+      break;
+    case PROP_CARGO_COMMAND:
+      rust_analyzer_service_set_cargo_command (self, g_value_dup_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -204,6 +234,13 @@ rust_analyzer_service_class_init (RustAnalyzerServiceClass *klass)
                          IDE_TYPE_LSP_CLIENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_CARGO_COMMAND] =
+    g_param_spec_string ("cargo-command",
+                         "Cargo-command",
+                         "The used cargo command for rust-analyzer",
+                         "check",
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -212,6 +249,8 @@ rust_analyzer_service_init (RustAnalyzerService *self)
 {
   self->client = NULL;
   self->state = RUST_ANALYZER_SERVICE_INIT;
+  self->settings = g_settings_new ("org.gnome.builder.rust-analyzer");
+  g_settings_bind (self->settings, "cargo-command", self, "cargo-command", G_SETTINGS_BIND_DEFAULT);
 }
 
 IdeLspClient *
@@ -231,8 +270,23 @@ rust_analyzer_service_set_client (RustAnalyzerService *self,
 
   if (g_set_object (&self->client, client))
     {
+      g_signal_connect (self->client, "load-configuration", G_CALLBACK (rust_analyzer_service_load_configuration), self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
     }
+}
+
+static void
+rust_analyzer_service_lsp_initialized (IdeLspClient *client,
+                                       gpointer      user_data)
+{
+  RustAnalyzerService *self = (RustAnalyzerService *) user_data;
+  g_autoptr(GVariant) params = NULL;
+
+  g_assert (IDE_IS_LSP_CLIENT (client));
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+
+  params = JSONRPC_MESSAGE_NEW ("settings", "");
+  ide_lsp_client_send_notification_async (client, "workspace/didChangeConfiguration", params, NULL, NULL, NULL);
 }
 
 void
@@ -261,6 +315,7 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
     }
 
   client = ide_lsp_client_new (io_stream);
+  g_signal_connect (client, "initialized", G_CALLBACK (rust_analyzer_service_lsp_initialized), self);
   rust_analyzer_service_set_client (self, client);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (client));
   ide_lsp_client_add_language (client, "rust");
@@ -382,4 +437,28 @@ rust_analyzer_service_set_state (RustAnalyzerService *self,
   g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
 
   self->state = state;
+}
+
+gchar *
+rust_analyzer_service_get_cargo_command (RustAnalyzerService *self)
+{
+  g_return_val_if_fail (RUST_IS_ANALYZER_SERVICE (self), NULL);
+
+  return self->cargo_command;
+}
+
+void
+rust_analyzer_service_set_cargo_command (RustAnalyzerService *self,
+                                         const gchar         *cargo_command)
+{
+  g_autoptr(GVariant) params = NULL;
+
+  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
+  g_return_if_fail (cargo_command != NULL);
+
+  g_clear_pointer (&self->cargo_command, g_free);
+  self->cargo_command = g_strdup (cargo_command);
+
+  params = JSONRPC_MESSAGE_NEW ("settings", "");
+  ide_lsp_client_send_notification_async (self->client, "workspace/didChangeConfiguration", params, NULL, NULL, NULL);
 }

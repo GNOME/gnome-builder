@@ -14,6 +14,7 @@ plugins_sources += files([
   'rust-analyzer-search-provider.c',
   'rust-analyzer-search-result.c',
   'rust-analyzer-workbench-addin.c',
+  'rust-analyzer-preferences-addin.c',
 ])
 
 plugin_rust_analyzer_resources = gnome.compile_resources(
@@ -23,5 +24,7 @@ plugin_rust_analyzer_resources = gnome.compile_resources(
 )
 
 plugins_sources += plugin_rust_analyzer_resources
+
+install_data(['org.gnome.builder.rust-analyzer.gschema.xml'], install_dir: schema_dir)
 
 endif
