@@ -750,13 +750,14 @@ ide_lsp_client_real_notification (IdeLspClient *self,
         }
       else if (g_str_equal (method, "$/progress"))
         {
+          gboolean notification_exists = FALSE;
           const gchar *token = NULL;
           const gchar *message = NULL;
           const gchar *title = NULL;
           const gchar *kind = NULL;
           IdeContext *context;
           IdeNotifications *notifications;
-          IdeNotification *notification;
+          IdeNotification *notification = NULL;
 
           JSONRPC_MESSAGE_PARSE (params, "token", JSONRPC_MESSAGE_GET_STRING (&token),
                                          "value", "{",
@@ -770,26 +771,36 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                                          "}");
           context = ide_object_get_context (IDE_OBJECT (self));
           notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
+          notification = ide_notifications_find_by_id (notifications, token);
+          if (notification == NULL)
+            notification_exists = FALSE;
+          else
+            notification_exists = TRUE;
 
           if (ide_str_equal0 (kind, "begin"))
             {
-              notification = ide_notification_new ();
-              ide_notification_set_id (notification, token);
-              ide_notification_set_has_progress (notification, TRUE);
-              ide_notification_set_progress_is_imprecise (notification, TRUE);
+              if (!notification_exists)
+                {
+                  notification = ide_notification_new ();
+                  ide_notification_set_id (notification, token);
+                  ide_notification_set_has_progress (notification, TRUE);
+                  ide_notification_set_progress_is_imprecise (notification, TRUE);
+                }
+
               ide_notification_set_title (notification, title);
               ide_notification_set_body (notification, message != NULL ? message : title);
-              ide_notification_attach (notification, IDE_OBJECT (context));
+
+              if (!notification_exists)
+                ide_notification_attach (notification, IDE_OBJECT (context));
             }
           else
             {
-              notification = ide_notifications_find_by_id (notifications, token);
               if (message != NULL && notification != NULL)
                 ide_notification_set_body (notification, message);
             }
 
           if (ide_str_equal0 (kind, "end") && notification != NULL)
-            ide_notification_withdraw_in_seconds (notification, 3);
+            ide_notification_withdraw (notification);
         }
     }
 
