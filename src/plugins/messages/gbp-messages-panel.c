@@ -50,6 +50,7 @@ gbp_messages_panel_log_cb (GbpMessagesPanel *self,
 
   vte_terminal_feed (VTE_TERMINAL (self->terminal), message, -1);
   vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", 2);
+  dzl_dock_item_needs_attention (DZL_DOCK_ITEM (&self->parent_instance));
   gtk_widget_show (GTK_WIDGET (self));
 }
 
