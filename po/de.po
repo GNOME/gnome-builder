@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-03-25 20:02+0000\n"
-"PO-Revision-Date: 2020-03-30 12:03+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2020-05-12 00:02+0000\n"
+"PO-Revision-Date: 2020-05-24 18:10+0200\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -860,7 +860,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4983
+#: src/libide/sourceview/ide-source-view.c:4985
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -882,7 +882,7 @@ msgstr "_Umbenennen"
 msgid "unsaved file %u"
 msgstr "Ungesicherte Datei %u"
 
-#: src/libide/code/ide-buffer.c:3405
+#: src/libide/code/ide-buffer.c:3413
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -1425,9 +1425,6 @@ msgstr "Das Erstellungsziel konnte nicht erstellt werden: %s"
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Workbench shortcuts"
 msgid "Workbench shortcuts"
 msgstr "Werkbank-Tastenkombinationen"
 
@@ -2888,31 +2885,31 @@ msgstr "Ver_kleinern"
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: src/libide/sourceview/ide-source-view.c:4432
+#: src/libide/sourceview/ide-source-view.c:4434
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: src/libide/sourceview/ide-source-view.c:4434
+#: src/libide/sourceview/ide-source-view.c:4436
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: src/libide/sourceview/ide-source-view.c:4552
+#: src/libide/sourceview/ide-source-view.c:4554
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: src/libide/sourceview/ide-source-view.c:4982
+#: src/libide/sourceview/ide-source-view.c:4984
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5217
+#: src/libide/sourceview/ide-source-view.c:5219
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Zeile %u, Spalte %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5243
+#: src/libide/sourceview/ide-source-view.c:5245
 msgid "No references were found"
 msgstr "Keine Referenzen gefunden"
 
@@ -3152,11 +3149,8 @@ msgstr "Keine Schönmacher verfügbar"
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editing"
 msgid "Editing"
-msgstr "Bearbeiten"
+msgstr "Bearbeitung"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
 msgid "Beautify the code"
@@ -3895,9 +3889,8 @@ msgstr ""
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:117
-#, fuzzy
 msgid "update copyright save"
-msgstr "Urheberrecht vor dem Speichern aktualisieren"
+msgstr "aktualisieren Urheberrecht Copyright speichern"
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -4732,7 +4725,7 @@ msgstr "Es ist kein Depot vorhanden zum Zugriff auf den Dateiinhalt"
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr ""
+msgstr "Es wurde kein Inhalt für eine Differenzbildung festgelegt"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
@@ -4775,10 +4768,8 @@ msgid "The client has been closed"
 msgstr "Der Client wurde geschlossen"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
-#, fuzzy
-#| msgid "Uses the Git version control system"
 msgid "Git version control is not in use"
-msgstr "Verwendet das Versionskontrollsystem Git"
+msgstr "Versionskontrolle durch Git wird nicht eingesetzt"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -5155,11 +5146,11 @@ msgstr "Leeres Projekt"
 msgid "Create a new empty project"
 msgstr "Ein neues, leeres Projekt anlegen"
 
-#: src/plugins/meson-templates/meson_templates.py:358
+#: src/plugins/meson-templates/meson_templates.py:361
 msgid "Command Line Tool"
 msgstr "Befehlszeilenwerkzeug"
 
-#: src/plugins/meson-templates/meson_templates.py:360
+#: src/plugins/meson-templates/meson_templates.py:363
 msgid "Create a new command line project"
 msgstr "Ein neues Befehlszeilenprojekt anlegen"
 
@@ -5943,42 +5934,31 @@ msgid "Underline misspelled words"
 msgstr "Falsch geschriebene Wörter unterstreichen"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
-#, fuzzy
-#| msgid "Enable Pylint"
 msgid "Enable Stylelint"
-msgstr "Pylint aktivieren"
+msgstr "Stylelint aktivieren"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
-#, fuzzy
-#| msgid ""
-#| "Enable the use of eslint to find additional diagnostics in JavaScript "
-#| "files. This may result in the execution of code in your project."
 msgid ""
 "Enable the use of stylelint to find additional diagnostics in stylesheet "
 "files. This may result in the execution of code in your project."
 msgstr ""
-"Nutzung von ESLint für zusätzliche Fehlerdiagnosen in JavaScript-Programmen "
+"Nutzung von Stylelint für zusätzliche Fehlerdiagnosen in Stylesheets "
 "aktivieren. Das kann dazu führen, dass Code in Ihrem Projekt ausgeführt wird."
 
 #: src/plugins/stylelint/stylelint_plugin.py:135
-#| msgid "ESlint"
 msgid "Stylelint"
 msgstr "Stylelint"
 
 #: src/plugins/stylelint/stylelint_plugin.py:136
-#, fuzzy
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr ""
-"Nutzung von Pylint aktivieren, womit Code in Ihrem Projekt ausgeführt werden "
-"kann"
+"Nutzung von Stylelint einschalten, wodurch Code in Ihrem Projekt ausgeführt "
+"werden könnte"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/stylelint/stylelint_plugin.py:138
-#, fuzzy
-#| msgid "pylint python lint code execute execution"
 msgid "stylelint stylesheet lint code execute execution"
-msgstr "pylint Python lint code ausführen Ausführung"
+msgstr "Ausführung von stylelint Stylesheet lint-Code "
 
 # https://de.wikipedia.org/wiki/Sublime_Text
 #: src/plugins/sublime/gbp-sublime-preferences-addin.c:52
