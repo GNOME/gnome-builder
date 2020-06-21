@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2020-06-11 21:30+0000\n"
-"PO-Revision-Date: 2020-06-17 09:02+0200\n"
+"PO-Revision-Date: 2020-06-21 09:13+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -628,7 +628,7 @@ msgstr "Nova delovna površina"
 #: data/org.gnome.Builder.desktop.in.in:36
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
-msgstr ""
+msgstr "Nadzornik vodila D-Bus"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -1625,10 +1625,8 @@ msgid "Run Options"
 msgstr "Možnosti zagona"
 
 #: src/libide/gui/ide-application-actions.c:78
-#, fuzzy
-#| msgid "Build Preferences"
 msgid "Builder — Preferences"
-msgstr "Možnosti izgradnje"
+msgstr "Možnosti programa"
 
 #: src/libide/gui/ide-application-actions.c:149
 msgid "GNOME Builder"
@@ -2676,7 +2674,7 @@ msgstr "Izgradnja in zagon"
 #: src/libide/gui/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Build"
-msgstr "Izgradi"
+msgstr "Izgradi program"
 
 #: src/libide/gui/ide-shortcuts-window.ui:486
 msgctxt "shortcut window"
@@ -2888,10 +2886,9 @@ msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
 #: src/libide/terminal/ide-terminal-launcher.c:320
-#, fuzzy, c-format
-#| msgid "Failed to locate runtime “%s”"
+#, c-format
 msgid "Failed to create shell within runtime “%s”"
-msgstr "Iskanje izvajalnega programa »%s« je spodletelo."
+msgstr "Ustvarjanje lupine znotraj izvajalnega programa »%s« je spodletelo."
 
 #: src/libide/terminal/ide-terminal-launcher.c:646
 msgid "Untitled Terminal"
@@ -2910,20 +2907,20 @@ msgstr "Neimenovan terminal"
 #. translators: exited describes that the terminal shell process has exited
 #: src/libide/terminal/ide-terminal-page.c:107
 msgid "Exited"
-msgstr ""
+msgstr "Program je končan"
 
 #: src/libide/terminal/ide-terminal-page.c:114
 msgid "Subprocess launcher failed"
-msgstr ""
+msgstr "Zagon podrejenega opravila je spodletel"
 
 #: src/libide/terminal/ide-terminal-page.c:137
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
+"Zagon podrejenega opravila je prehitro spodletel in ne bo ponovno zagnan."
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
-#, fuzzy
 msgid "Search runtimes"
-msgstr "Nedavni dokumenti"
+msgstr "Poišči izvajalne programe"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -3815,29 +3812,25 @@ msgid "Update Copyright"
 msgstr "Posodobi avtorske pravice"
 
 #: src/plugins/copyright/copyright_plugin.py:115
-#, fuzzy
-#| msgid ""
-#| "If enabled, Builder will automatically display completion proposals as "
-#| "you type."
 msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
 msgstr ""
-"Izbrana možnost določa, da bo dopolnjevanje samodejno prikazano med "
-"tipkanjem."
+"Med shranjevanjem datoteke bodo samodejno posodobljeni podatki avtorskih "
+"pravic"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:117
 msgid "update copyright save"
-msgstr ""
+msgstr "posodobitev avtorske pravice shranjevanje"
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
-msgstr ""
+msgstr "Posodobi avtorske pravice pred shranjevanjem"
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
-msgstr ""
+msgstr "Posodobi podatke avtorskih pravic pred shranjevanjem na disk."
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:48
 msgid "Display the project creation guide"
@@ -4176,7 +4169,7 @@ msgstr "Nova stran dokumentacije"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
-msgstr ""
+msgstr "Prikaži nadzornika vodila D-Bus"
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
 msgid "D-Bus Inspector…"
@@ -4184,10 +4177,9 @@ msgstr "Nadzornik vodila D-Bus …"
 
 #. translators: %s is replaced with the address of the D-Bus bus
 #: src/plugins/dspy/libdspy/dspy-connection-button.c:81
-#, fuzzy, c-format
-#| msgid "Insert “%s”"
+#, c-format
 msgid "Connected to “%s”"
-msgstr "Vstavi »%s«"
+msgstr "Vzpostavljena je povezava s strežnikom »%s«"
 
 #: src/plugins/dspy/libdspy/dspy-connection-button.c:253
 msgid "System"
@@ -4305,7 +4297,7 @@ msgstr "Signali"
 #: src/plugins/dspy/libdspy/dspy-signature.c:79
 #, c-format
 msgid "Array of [%s]"
-msgstr ""
+msgstr "Polje [%s]"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:153
 msgid "Access Denied by Peer"
@@ -4372,9 +4364,10 @@ msgid "Select the files to save:"
 msgstr "Izbor datotek za shranjevanje:"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:80
-#, fuzzy
 msgid "If you close without saving, all your changes will be permanently lost."
-msgstr "V kolikor sprememb ne shranite, bodo trajno izgubljene."
+msgstr ""
+"V kolikor sprememb pred končanjem programa ne shranite, bodo trajno "
+"izgubljene."
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
@@ -4399,10 +4392,8 @@ msgid "Go"
 msgstr "Pojdi"
 
 #: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
-#, fuzzy
-#| msgid "New Editor Workspace"
 msgid "New Editor Workspace…"
-msgstr "Nova delovna površina"
+msgstr "Nova delovna površina …"
 
 #: src/plugins/editor/gtk/menus.ui:95
 msgid "New File"
@@ -4665,7 +4656,7 @@ msgstr "Ni skladišča za dostop do vsebine datoteke"
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr ""
+msgstr "Ni določene vsebine za primerjavo"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
@@ -4679,9 +4670,7 @@ msgid "The operation has been canceled"
 msgstr "Opravilo je preklicano"
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
-#, fuzzy, c-format
-#| msgid ""
-#| "Builder failed to provide appropriate credentials when cloning repository."
+#, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
@@ -4698,27 +4687,21 @@ msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Ni mogoče podpisati uveljavitve brez določenega ključa GPG_KEY_ID"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:399
-#, fuzzy, c-format
-#| msgid "Repository does not have a working directory."
+#, c-format
 msgid "Cannot monitor files outside the working directory"
-msgstr "Skladišče nima določene delovne mape."
+msgstr "Ni mogoče nadzorovati datotek izven delovne mape."
 
 #: src/plugins/git/gbp-git-client.c:329
-#, fuzzy
 msgid "The client has been closed"
-msgstr "Predmet, ki je povlečen"
+msgstr "Odjemalec je zaprt"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
-#, fuzzy
-#| msgid "Uses the Git version control system"
 msgid "Git version control is not in use"
-msgstr "Uporablja sistem za nadzor različic Git"
+msgstr "Sistem za nadzor različic Git ni v uporabi"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
-#, fuzzy
-#| msgid "Initialize git submodules"
 msgid "Updating Git Submodules"
-msgstr "Začni podmodule git"
+msgstr "Poteka posodabljanje podmodulov Git"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:136
 msgid "Network is not available, skipping submodule update"
@@ -4735,10 +4718,9 @@ msgid "Pushed."
 msgstr "Uspešno obljavljeno."
 
 #: src/plugins/git/gbp-git-vcs.c:244
-#, fuzzy, c-format
-#| msgid "Running test “%s”…"
+#, c-format
 msgid "Pushing ref “%s”"
-msgstr "Poteka preizkus »%s« …"
+msgstr "Poteka objavljanje sklica »%s«"
 
 #: src/plugins/git/gbp-git-vcs.c:508
 msgid "Directory is not within repository"
@@ -5557,11 +5539,11 @@ msgstr "Poteka usklajevanje posodobitev kanala"
 
 #: src/plugins/rustup/rustup_plugin.py:352
 msgid "Downloading "
-msgstr "Poteka prejemanje …"
+msgstr "Poteka prejemanje … "
 
 #: src/plugins/rustup/rustup_plugin.py:359
 msgid "Installing "
-msgstr "Poteka nameščanje …"
+msgstr "Poteka nameščanje … "
 
 #: src/plugins/rustup/rustup_plugin.py:365
 msgid "Checking for rustup updates"
@@ -5573,7 +5555,7 @@ msgstr "Prejemanje posodobitev rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:408
 msgid "Error installing "
-msgstr "Napaka nameščanja"
+msgstr "Napaka nameščanja "
 
 #: src/plugins/rustup/rustup_plugin.py:410
 msgid "Error"
@@ -5654,18 +5636,16 @@ msgid "Shell command"
 msgstr "Lupinski ukaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:569
-#, fuzzy
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
-msgstr "Ni mogoče prerazporediti na napravo. Cevovod izgradnje ni začet."
+msgstr ""
+"Ni mogoče zagnati terminala v izvajalnem okolju, ker cevovod izgradnje še ni "
+"na začet."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:648
-#, fuzzy
-#| msgid "Cannot deploy to device, build pipeline is not initialized"
 msgid "Cannot spawn process because build pipeline is not yet available"
-msgstr "Ni mogoče prerazporediti na napravo. Cevovod izgradnje ni začet."
+msgstr "Ni mogoče zagnati opravila, ker cevovod izgradnje še ni na voljo."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
 msgid "Change Shortcut"
@@ -5687,14 +5667,12 @@ msgid ""
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
-#, fuzzy
-#| msgid "Command Line Tool"
 msgid "Command Locality"
-msgstr "Orodje ukazne vrstice"
+msgstr "Krajevnost ukaza"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
 msgid "On Host"
-msgstr ""
+msgstr "Na gostitelju"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
 msgid "In Build Environment"
@@ -5709,6 +5687,8 @@ msgid ""
 "If the directory is not an absolute-path, it will be relative to the source "
 "or build directory depending on the command locality."
 msgstr ""
+"Če pot mape ni določena absolutno, bo ta sprejeta relativno na vir oziroma "
+"mapo izgradnje glede na krajevnost ukaza."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
 msgid "Close on Exit"
@@ -5717,6 +5697,7 @@ msgstr "Zapri ob končanju"
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
 msgid "If enabled, the terminal page will close after the command executes."
 msgstr ""
+"Izbrana možnost omogoča, da se terminalska stran po izvedbi ukaza zapre"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
 msgid "Keyboard Shortcut"
@@ -5748,7 +5729,7 @@ msgstr "Nov ukaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:134
 msgid "Click + to add an external command"
-msgstr ""
+msgstr "Kliknite + za dodajanje zunanjega ukaza"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
@@ -5876,34 +5857,25 @@ msgid "Enable Stylelint"
 msgstr "Omoboči Stylelint"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
-#, fuzzy
-#| msgid ""
-#| "Enable the use of eslint to find additional diagnostics in JavaScript "
-#| "files. This may result in the execution of code in your project."
 msgid ""
 "Enable the use of stylelint to find additional diagnostics in stylesheet "
 "files. This may result in the execution of code in your project."
 msgstr ""
-"Omogoči uporabo programa eslint, ki lahko izvaja poizvedbe delovanja v "
-"programih JavaScript. S tem bo omogočeno tudi izvajanje kode v programu "
+"Omogoči uporabo programa Styleint za iskanje dodatnih diagnostičnih in "
+"slogovnih datotek. S tem bo omogočeno tudi izvajanje kode v programu "
 "projekta."
 
 #: src/plugins/stylelint/stylelint_plugin.py:135
-#, fuzzy
 msgid "Stylelint"
-msgstr "Slog"
+msgstr "Stylelint"
 
 #: src/plugins/stylelint/stylelint_plugin.py:136
-#, fuzzy
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr ""
-"Omogoči uporabo programa pylint, ki lahko izvede kodo v programu projekta"
+"Omogoči uporabo programa Stileint, ki lahko izvede kodo v programu projekta"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/stylelint/stylelint_plugin.py:138
-#, fuzzy
-#| msgid "pylint python lint code execute execution"
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "pylint python lint code koda izvajanje exe execution"
 
@@ -6124,7 +6096,7 @@ msgstr "Preklopi na vejo"
 
 #: src/plugins/vcsui/gtk/menus.ui:12
 msgid "Push to origin"
-msgstr ""
+msgstr "Objavi v izvoru"
 
 #: src/plugins/vim/gb-vim.c:105
 #, c-format
