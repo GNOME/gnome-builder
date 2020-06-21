@@ -566,3 +566,9 @@ class GVlsSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
     def do_load(self):
         GVlsService.bind_client(self)
 
+class GVlsHoverProvider(Ide.LspHoverProvider, Ide.HoverProvider):
+    def do_prepare(self):
+        self.props.category = 'Vala'
+        self.props.priority = 200
+        GVlsService.bind_client(self)
+
