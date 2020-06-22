@@ -266,6 +266,7 @@ _ide_trace_shutdown (void)
   memset (&trace_vtable, 0, sizeof trace_vtable);
 }
 
+#ifdef IDE_ENABLE_TRACE
 void
 ide_trace_function (const gchar *strfunc,
                     gint64       begin_time_usec,
@@ -278,6 +279,7 @@ ide_trace_function (const gchar *strfunc,
   if (trace_vtable.function)
     trace_vtable.function (strfunc, begin_time_usec, end_time_usec);
 }
+#endif
 
 void
 _ide_trace_log (GLogLevelFlags  log_level,

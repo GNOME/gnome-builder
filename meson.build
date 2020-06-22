@@ -251,7 +251,7 @@ message('Linker supports --version-script: @0@'.format(ld_supports_version_scrip
 
 # Commonly used deps
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.37.0')
-libglib_dep = dependency('glib-2.0', version: '>= 2.61.2')
+libglib_dep = dependency('glib-2.0', version: '>= 2.65.0')
 libgio_dep = dependency('gio-2.0', version: '>= 2.61.2')
 libgiounix_dep = dependency('gio-unix-2.0')
 libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.26')
@@ -263,7 +263,7 @@ libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
 libvte_dep = dependency('vte-2.91', version: '>= 0.40.2')
-libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.22')
+libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.26')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
 check_functions = [

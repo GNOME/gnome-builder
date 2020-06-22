@@ -161,7 +161,6 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
       const gchar *build_system_name = NULL;
       const gchar *uri = uris[z];
       const gchar *diruri = NULL;
-      time_t modified;
       g_auto(GStrv) groups = NULL;
       gsize len;
 
@@ -187,8 +186,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
 
       name = g_bookmark_file_get_title (projects_file, uri, NULL);
       description = g_bookmark_file_get_description (projects_file, uri, NULL);
-      modified = g_bookmark_file_get_modified  (projects_file, uri, NULL);
-      last_modified_at = g_date_time_new_from_unix_local (modified);
+      last_modified_at = g_bookmark_file_get_modified_date_time (projects_file, uri, NULL);
 
       for (gsize i = 0; i < len; i++)
         {
