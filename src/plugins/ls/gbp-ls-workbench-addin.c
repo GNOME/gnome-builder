@@ -98,12 +98,21 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   LocateView locate = { 0 };
 
   g_assert (GBP_IS_LS_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (self->workbench));
+  g_assert (!self->workbench || IDE_IS_WORKBENCH (self->workbench));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_ls_workbench_addin_open_async);
+
+  if (self->workbench == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_CANCELLED,
+                                 "Extension was unloaded");
+      return;
+    }
 
   workspace = ide_workbench_get_current_workspace (self->workbench);
   if (!(surface = ide_workspace_get_surface_by_name (workspace, "editor")))
