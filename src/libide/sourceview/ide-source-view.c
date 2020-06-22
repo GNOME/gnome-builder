@@ -4951,6 +4951,9 @@ ide_source_view_real_begin_rename (IdeSourceView *self)
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
+  GtkTextIter word_start;
+  GtkTextIter word_end;
+  g_autofree gchar *symbol = NULL;
   GdkRectangle loc;
 
   IDE_ENTRY;
@@ -4982,9 +4985,33 @@ ide_source_view_real_begin_rename (IdeSourceView *self)
                                          GTK_TEXT_WINDOW_WIDGET,
                                          loc.x, loc.y, &loc.x, &loc.y);
 
+  // get symbol to rename (for the popup)
+  if (gtk_text_iter_inside_word (&iter) && !gtk_text_iter_starts_word (&iter))
+    {
+      word_start = iter;
+      word_end = iter;
+      gtk_text_iter_backward_word_start (&word_start);
+      gtk_text_iter_forward_word_end (&word_end);
+    }
+  else if (gtk_text_iter_starts_word (&iter))
+    {
+      word_start = iter;
+      word_end = iter;
+      gtk_text_iter_forward_word_end (&word_end);
+    }
+  else if (gtk_text_iter_ends_word (&iter))
+    {
+      word_start = iter;
+      word_end = iter;
+      gtk_text_iter_backward_word_start (&word_start);
+    }
+
+  symbol = gtk_text_iter_get_text (&word_start, &word_end);
+
   popover = g_object_new (DZL_TYPE_SIMPLE_POPOVER,
                           "title", _("Rename symbol"),
                           "button-text", _("Rename"),
+                          "text", symbol,
                           "relative-to", self,
                           "pointing-to", &loc,
                           NULL);

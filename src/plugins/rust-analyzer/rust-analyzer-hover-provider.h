@@ -1,6 +1,6 @@
-/* libide-lsp.h
+/* rust-analyzer-hover-provider.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2020 Günther Wagner <info@gunibert.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,12 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <libide-lsp.h>
 
-#define IDE_LSP_INSIDE
+G_BEGIN_DECLS
 
-#include "ide-lsp-types.h"
+#define RUST_TYPE_ANALYZER_HOVER_PROVIDER (rust_analyzer_hover_provider_get_type())
 
-#include "ide-lsp-client.h"
-#include "ide-lsp-completion-item.h"
-#include "ide-lsp-completion-provider.h"
-#include "ide-lsp-completion-results.h"
-#include "ide-lsp-diagnostic-provider.h"
-#include "ide-lsp-enums.h"
-#include "ide-lsp-formatter.h"
-#include "ide-lsp-highlighter.h"
-#include "ide-lsp-hover-provider.h"
-#include "ide-lsp-rename-provider.h"
-#include "ide-lsp-symbol-node.h"
-#include "ide-lsp-symbol-resolver.h"
-#include "ide-lsp-symbol-tree.h"
-#include "ide-lsp-util.h"
+G_DECLARE_FINAL_TYPE (RustAnalyzerHoverProvider, rust_analyzer_hover_provider, RUST, ANALYZER_HOVER_PROVIDER, IdeLspHoverProvider)
 
-#undef IDE_LSP_INSIDE
+G_END_DECLS

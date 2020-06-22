@@ -36,6 +36,7 @@ struct _IdeSearchEngine
 {
   IdeObject         parent_instance;
   PeasExtensionSet *extensions;
+  GPtrArray        *custom_provider;
   guint             active_count;
 };
 
@@ -139,6 +140,7 @@ ide_search_engine_destroy (IdeObject *object)
   IdeSearchEngine *self = (IdeSearchEngine *)object;
 
   g_clear_object (&self->extensions);
+  g_clear_object (&self->custom_provider);
 
   IDE_OBJECT_CLASS (ide_search_engine_parent_class)->destroy (object);
 }
@@ -186,6 +188,7 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
 static void
 ide_search_engine_init (IdeSearchEngine *self)
 {
+  self->custom_provider = g_ptr_array_new ();
 }
 
 IdeSearchEngine *
@@ -265,6 +268,27 @@ cleanup:
 }
 
 static void
+_provider_search_async (IdeSearchProvider *provider,
+                        Request           *request)
+{
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (request != NULL);
+  g_assert (IDE_IS_TASK (request->task));
+  g_assert (G_IS_LIST_STORE (request->store));
+
+  request->outstanding++;
+
+  ide_search_provider_search_async (provider,
+                                    request->query,
+                                    request->max_results,
+                                    ide_task_get_cancellable (request->task),
+                                    ide_search_engine_search_cb,
+                                    g_object_ref (request->task));
+
+
+}
+
+static void
 ide_search_engine_search_foreach (PeasExtensionSet *set,
                                   PeasPluginInfo   *plugin_info,
                                   PeasExtension    *exten,
@@ -280,14 +304,22 @@ ide_search_engine_search_foreach (PeasExtensionSet *set,
   g_assert (IDE_IS_TASK (r->task));
   g_assert (G_IS_LIST_STORE (r->store));
 
-  r->outstanding++;
+  _provider_search_async (provider, r);
+}
 
-  ide_search_provider_search_async (provider,
-                                    r->query,
-                                    r->max_results,
-                                    ide_task_get_cancellable (r->task),
-                                    ide_search_engine_search_cb,
-                                    g_object_ref (r->task));
+static void
+ide_search_engine_search_foreach_custom_provider (gpointer data,
+                                                  gpointer user_data)
+{
+  IdeSearchProvider *provider = (IdeSearchProvider *)data;
+  Request *r = user_data;
+
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (r != NULL);
+  g_assert (IDE_IS_TASK (r->task));
+  g_assert (G_IS_LIST_STORE (r->store));
+
+  _provider_search_async (provider, r);
 }
 
 void
@@ -322,6 +354,9 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   peas_extension_set_foreach (self->extensions,
                               ide_search_engine_search_foreach,
                               r);
+  g_ptr_array_foreach (self->custom_provider,
+                       ide_search_engine_search_foreach_custom_provider,
+                       r);
 
   self->active_count += r->outstanding;
 
@@ -356,4 +391,44 @@ ide_search_engine_search_finish (IdeSearchEngine  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+/**
+ * ide_search_engine_add_provider:
+ * @self: a #IdeSearchEngine
+ * @provider: a #IdeSearchProvider
+ *
+ * Adds a custom search provider to the #IdeSearchEngine. This enables
+ * to bring in custom #IdeSearchProvider during the runtime.
+ *
+ * Since: 3.38
+ */
+void
+ide_search_engine_add_provider (IdeSearchEngine   *self,
+                                IdeSearchProvider *provider)
+{
+  g_return_if_fail (IDE_IS_SEARCH_ENGINE (self));
+  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
+
+  g_ptr_array_add (self->custom_provider, provider);
+}
+
+/**
+ * ide_search_engine_remove_provider:
+ * @self: a #IdeSearchEngine
+ * @provider: a #IdeSearchProvider
+ *
+ * Remove a custom search provider from the #IdeSearchEngine. This removes
+ * custom #IdeSearchProvider during the runtime.
+ *
+ * Since: 3.38
+ */
+void
+ide_search_engine_remove_provider (IdeSearchEngine   *self,
+                                   IdeSearchProvider *provider)
+{
+  g_return_if_fail (IDE_IS_SEARCH_ENGINE (self));
+  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
+
+  g_ptr_array_remove (self->custom_provider, provider);
 }

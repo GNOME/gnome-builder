@@ -16,12 +16,15 @@ typedef enum {
   RUST_ANALYZER_SERVICE_LSP_STARTED,
 } ServiceState;
 
-RustAnalyzerService *rust_analyzer_service_new            (void);
-IdeLspClient        *rust_analyzer_service_get_client     (RustAnalyzerService *self);
-void                 rust_analyzer_service_set_client     (RustAnalyzerService *self,
-                                                           IdeLspClient        *client);
-void                 rust_analyzer_service_ensure_started (RustAnalyzerService *self);
-void                 rust_analyzer_service_set_state      (RustAnalyzerService *self,
-                                                           ServiceState         state);
+RustAnalyzerService *rust_analyzer_service_new               (void);
+IdeLspClient        *rust_analyzer_service_get_client        (RustAnalyzerService *self);
+void                 rust_analyzer_service_set_client        (RustAnalyzerService *self,
+                                                              IdeLspClient        *client);
+gchar               *rust_analyzer_service_get_cargo_command (RustAnalyzerService *self);
+void                 rust_analyzer_service_set_cargo_command (RustAnalyzerService *self,
+                                                              const gchar         *cargo_command);
+void                 rust_analyzer_service_ensure_started    (RustAnalyzerService *self);
+void                 rust_analyzer_service_set_state         (RustAnalyzerService *self,
+                                                              ServiceState         state);
 
 G_END_DECLS

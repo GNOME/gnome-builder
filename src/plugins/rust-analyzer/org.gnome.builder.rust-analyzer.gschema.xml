@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.rust-analyzer" path="/org/gnome/builder/plugins/rust-analyzer/" gettext-domain="gnome-builder">
+    <key name="cargo-command" type="s">
+      <choices>
+        <choice value="check"/>
+        <choice value="clippy"/>
+      </choices>
+      <default>'check'</default>
+    </key>
+  </schema>
+</schemalist>

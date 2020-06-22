@@ -1,4 +1,4 @@
-/* rust-analyzer-diagnostic-provider.c
+/* rust-analyzer-rename-provider.c
  *
  * Copyright 2020 Günther Wagner <info@gunibert.de>
  *
@@ -18,38 +18,38 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "rust-analyzer-diagnostic-provider.h"
+#include "rust-analyzer-rename-provider.h"
 #include "rust-analyzer-service.h"
 
-struct _RustAnalyzerDiagnosticProvider
+struct _RustAnalyzerRenameProvider
 {
-  IdeLspDiagnosticProvider parent_instance;
+  IdeLspRenameProvider parent_instance;
 };
 
-static void provider_iface_init (IdeDiagnosticProviderInterface *iface);
+static void provider_iface_init (IdeRenameProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerDiagnosticProvider,
-                         rust_analyzer_diagnostic_provider,
-                         IDE_TYPE_LSP_DIAGNOSTIC_PROVIDER,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER, provider_iface_init))
+G_DEFINE_TYPE_WITH_CODE (RustAnalyzerRenameProvider,
+                         rust_analyzer_rename_provider,
+                         IDE_TYPE_LSP_RENAME_PROVIDER,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_RENAME_PROVIDER, provider_iface_init))
 
 static void
-rust_analyzer_diagnostic_provider_class_init (RustAnalyzerDiagnosticProviderClass *klass)
+rust_analyzer_rename_provider_class_init (RustAnalyzerRenameProviderClass *klass)
 {
 }
 
 static void
-rust_analyzer_diagnostic_provider_init (RustAnalyzerDiagnosticProvider *self)
+rust_analyzer_rename_provider_init (RustAnalyzerRenameProvider *self)
 {
 }
 
 static void
-rust_analyzer_diagnostic_provider_load (IdeDiagnosticProvider *self)
+rust_analyzer_rename_provider_load (IdeRenameProvider *self)
 {
-  RustAnalyzerService *service = NULL;
   IdeContext *context = NULL;
+  RustAnalyzerService *service = NULL;
 
-  g_assert (RUST_IS_ANALYZER_DIAGNOSTIC_PROVIDER (self));
+  g_assert (RUST_IS_ANALYZER_RENAME_PROVIDER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
@@ -58,7 +58,7 @@ rust_analyzer_diagnostic_provider_load (IdeDiagnosticProvider *self)
 }
 
 static void
-provider_iface_init (IdeDiagnosticProviderInterface *iface)
+provider_iface_init (IdeRenameProviderInterface *iface)
 {
-  iface->load = rust_analyzer_diagnostic_provider_load;
+  iface->load = rust_analyzer_rename_provider_load;
 }

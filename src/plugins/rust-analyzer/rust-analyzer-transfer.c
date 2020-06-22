@@ -25,6 +25,7 @@
 #include <glib/gstdio.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <glib/gi18n.h>
 
 struct _RustAnalyzerTransfer
 {
@@ -54,12 +55,15 @@ _downloaded_chunk (GObject      *source_object,
                    GAsyncResult *result,
                    gpointer      user_data)
 {
-  g_autofree gchar *statusmsg = NULL;
-  g_autoptr(GError) error = NULL;
   GInputStream *stream = G_INPUT_STREAM (source_object);
   DownloadData *data = user_data;
+  g_autofree gchar *statusmsg = NULL;
+  g_autoptr(GError) error = NULL;
+  gsize count;
 
-  gsize count = g_input_stream_read_finish (stream, result, &error);
+  g_return_if_fail (G_IS_INPUT_STREAM (stream));
+
+  count = g_input_stream_read_finish (stream, result, &error);
   if (error != NULL)
     {
       ide_task_return_error (data->task, g_steal_pointer (&error));
@@ -75,6 +79,10 @@ _downloaded_chunk (GObject      *source_object,
       g_chmod (data->filepath, S_IRWXU);
       g_free (data->filepath);
       g_slice_free (DownloadData, data);
+
+      ide_transfer_set_title (IDE_TRANSFER (data->transfer), _("Installation of Rust Analyzer finished"));
+      ide_transfer_set_icon_name (IDE_TRANSFER (data->transfer), "emblem-ok");
+
       return;
     }
 
@@ -100,17 +108,30 @@ _download_lsp (GObject      *source_object,
   g_autoptr(IdeTask) task = IDE_TASK (user_data);
   g_autoptr(GFile) file = NULL;
   g_autoptr(GError) error = NULL;
-  SoupRequest *request = SOUP_REQUEST (source_object);
+  SoupRequest *request = (SoupRequest *)source_object;
   GInputStream *stream = NULL;
   DownloadData *data;
+  IdeTransfer *transfer = ide_task_get_task_data (task);
 
-  stream = soup_request_send_finish (request, result, NULL);
+  IDE_ENTRY;
+
+  g_return_if_fail (SOUP_IS_REQUEST (request));
+  g_return_if_fail (IDE_IS_TASK (task));
+  g_return_if_fail (IDE_IS_TRANSFER (transfer));
+
+  stream = soup_request_send_finish (request, result, &error);
+  if (error != NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      ide_transfer_cancel (transfer);
+      return;
+    }
 
   data = g_slice_new0 (DownloadData);
   data->filepath = g_build_filename (g_get_home_dir (), ".cargo", "bin", "rust-analyzer", NULL);
   file = g_file_new_for_path (data->filepath);
-  data->transfer = IDE_TRANSFER (ide_task_get_task_data (task));
-  data->filestream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, ide_task_get_cancellable (data->task), &error));
+  data->transfer = transfer;
+  data->filestream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, ide_task_get_cancellable (task), &error));
   if (data->filestream == NULL)
     {
       ide_task_return_error (task, g_steal_pointer (&error));
@@ -120,6 +141,8 @@ _download_lsp (GObject      *source_object,
   data->task = g_steal_pointer (&task);
 
   g_input_stream_read_async (stream, &data->buffer, sizeof (data->buffer), G_PRIORITY_DEFAULT, ide_task_get_cancellable (data->task), _downloaded_chunk, data);
+
+  IDE_EXIT;
 }
 
 static void
@@ -134,6 +157,7 @@ rust_analyzer_transfer_execute_async (IdeTransfer         *transfer,
   g_autoptr(SoupRequest) request = NULL;
   g_autoptr(GError) error = NULL;
 
+  g_return_if_fail (RUST_IS_ANALYZER_TRANSFER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -173,5 +197,5 @@ rust_analyzer_transfer_class_init (RustAnalyzerTransferClass *klass)
 static void
 rust_analyzer_transfer_init (RustAnalyzerTransfer *self)
 {
-  ide_transfer_set_title (IDE_TRANSFER (self), "Installing Rust Analyzer...");
+  ide_transfer_set_title (IDE_TRANSFER (self), _("Installing Rust Analyzer..."));
 }
