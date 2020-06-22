@@ -98,10 +98,10 @@ rust_analyzer_service_load_configuration (IdeLspClient *client,
   RustAnalyzerService *self = (RustAnalyzerService *)user_data;
   GVariant *ret = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
-
-  IDE_ENTRY;
 
   ret = JSONRPC_MESSAGE_NEW_ARRAY ("{",
                                      "checkOnSave", "{",
@@ -109,7 +109,7 @@ rust_analyzer_service_load_configuration (IdeLspClient *client,
                                      "}",
                                    "}");
 
-  IDE_RETURN (ret);
+  IDE_RETURN (g_steal_pointer (&ret));
 }
 
 static void
