@@ -8,6 +8,6 @@ custom_target('en user documentation',
   build_by_default: true
 )
 
-install_subdir(meson.current_build_dir() + '/en', install_dir: pkgdocdir_abs)
+install_subdir(meson.current_build_dir() + '/en', install_dir: pkgdocdir_abs, exclude_directories: '.doctrees')
 
 endif
