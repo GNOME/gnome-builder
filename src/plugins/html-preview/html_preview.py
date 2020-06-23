@@ -21,6 +21,7 @@
 
 import builtins
 import gi
+import html
 import io
 import locale
 import os
@@ -433,9 +434,8 @@ class HtmlPreviewPage(Ide.Page):
         self.webview = None
 
     def get_markdown(self, text):
-        text = text.replace("\"", "\\\"").replace("\n", "\\n")
         params = (HtmlPreviewData.MARKDOWN_CSS.get_data().decode('UTF-8'),
-                  text,
+                  html.escape(text),
                   HtmlPreviewData.MARKED_JS.get_data().decode('UTF-8'),
                   HtmlPreviewData.MARKDOWN_VIEW_JS.get_data().decode('UTF-8'))
 
