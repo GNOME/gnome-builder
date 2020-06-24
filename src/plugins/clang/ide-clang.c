@@ -116,10 +116,9 @@ is_cplusplus_param (const gchar *param)
         param++;
     }
 
-  if (g_str_has_prefix (param, "std="))
+  if (g_str_has_prefix (param, "std=") ||
+      g_str_has_prefix (param, "x="))
     {
-      param += 4;
-
       /* Assume + means C++ of some sort */
       if (strchr (param, '+') != NULL)
         return TRUE;
@@ -229,6 +228,10 @@ ide_clang_cook_flags (const gchar         *path,
             g_clear_pointer (&include, g_free);
         }
     }
+
+  /* Make sure we always include -xc++ if we think this is a C++ file */
+  if (!is_cplusplus && ide_path_is_cpp_like (path))
+    g_ptr_array_insert (cooked, pos++, g_strdup ("-xc++"));
 
   /* Insert -Idirname as first include if we didn't find it in the list of
    * include paths from the request. That ensures we have something that is
