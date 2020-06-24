@@ -1146,7 +1146,7 @@ ide_clang_diagnose_worker (IdeTask      *task,
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_FAILED,
-                                 "Failed to index file \"%s\", exited with code %d",
+                                 "Failed to diagnose file \"%s\", exited with code %d",
                                  state->path, code);
       return;
     }
