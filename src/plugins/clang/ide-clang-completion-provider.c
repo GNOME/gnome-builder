@@ -84,6 +84,14 @@ ide_clang_completion_provider_is_trigger (IdeCompletionProvider *provider,
   if (ch == '.' || ch == '(')
     return TRUE;
 
+  if (ch == ':')
+    {
+      GtkTextIter copy = *iter;
+
+      if (gtk_text_iter_backward_chars (&copy, 2))
+        return gtk_text_iter_get_char (&copy) == ':';
+    }
+
   if (ch == '>')
     {
       GtkTextIter copy = *iter;
