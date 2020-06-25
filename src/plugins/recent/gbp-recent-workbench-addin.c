@@ -55,15 +55,23 @@ directory_is_ignored (GFile *file)
       !g_file_has_prefix (file, projects_dir))
     return TRUE;
 
+  /* First check downloads directory as we never want that */
   downloads_dir = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD));
-
   if (downloads_dir != NULL &&
       (g_file_equal (file, downloads_dir) ||
        g_file_has_prefix (file, downloads_dir)))
     return TRUE;
 
-  /* realtive_path should be valid here because we are within the home_prefix. */
-  g_assert (relative_path != NULL);
+  /* If the directory is in the projects dir (and the projects dir is
+   * not $HOME, then short-circuit as not ignored.
+   */
+  if (!g_file_equal (home_dir, projects_dir) &&
+      g_file_has_prefix (file, projects_dir))
+    return FALSE;
+
+  /* Not in home or projects directory, ignore */
+  if (relative_path == NULL)
+    return TRUE;
 
   /*
    * Ignore dot directories, except .local.
