@@ -2474,10 +2474,19 @@ ide_buffer_apply_diagnostic (IdeBuffer     *self,
       ide_buffer_get_iter_at_location (self, &begin_iter, location);
       end_iter = begin_iter;
 
-      if (!gtk_text_iter_ends_line (&end_iter))
-        gtk_text_iter_forward_to_line_end (&end_iter);
+      if (gtk_text_iter_ends_line (&end_iter))
+        {
+          gtk_text_iter_backward_char (&begin_iter);
+        }
       else
-        gtk_text_iter_backward_char (&begin_iter);
+        {
+          /* Only highlight to next word */
+          if (_ide_source_iter_inside_word (&end_iter) ||
+              _ide_source_iter_starts_word (&end_iter))
+            _ide_source_iter_forward_visible_word_end (&end_iter);
+          else
+            gtk_text_iter_forward_to_line_end (&end_iter);
+        }
 
       gtk_text_buffer_apply_tag_by_name (GTK_TEXT_BUFFER (self), tag_name, &begin_iter, &end_iter);
     }
