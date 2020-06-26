@@ -358,8 +358,10 @@ ide_recent_projects_remove (IdeRecentProjects *self,
       g_autofree gchar *file_uri = NULL;
       GSequenceIter *iter;
       GFile *file;
+      guint position;
 
-      g_assert (IDE_IS_PROJECT_INFO (liter->data));
+      g_assert (IDE_IS_PROJECT_INFO (project_info));
+      g_assert (self->projects != NULL);
 
       iter = g_sequence_lookup (self->projects,
                                 project_info,
@@ -397,7 +399,9 @@ ide_recent_projects_remove (IdeRecentProjects *self,
           g_clear_error (&error);
         }
 
+      position = g_sequence_iter_get_position (iter);
       g_sequence_remove (iter);
+      g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
     }
 
   if (!g_bookmark_file_to_file (projects_file, self->file_uri, &error))

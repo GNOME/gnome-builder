@@ -253,7 +253,6 @@ gbp_recent_section_collect_selected_cb (GtkWidget *widget,
 
       project_info = ide_greeter_row_get_project_info (row);
       *list = g_list_prepend (*list, g_object_ref (project_info));
-      gtk_widget_destroy (GTK_WIDGET (row));
     }
 }
 
@@ -380,7 +379,6 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
 
   /* Remove the projects from the list of recent projects */
   projects = ide_recent_projects_get_default ();
-  ide_recent_projects_remove (projects, infos);
 
   /* Now asynchronously remove all the project files */
   reaper = dzl_directory_reaper_new ();
@@ -388,7 +386,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
 
   for (const GList *iter = infos; iter != NULL; iter = iter->next)
     {
-      g_autoptr(IdeProjectInfo) info = iter->data;
+      IdeProjectInfo *info = iter->data;
       const gchar *name = ide_project_info_get_name (info);
       GFile *directory = _ide_project_info_get_real_directory (info);
       GFile *file = ide_project_info_get_file (info);
@@ -507,7 +505,8 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
                                       gbp_recent_section_reap_cb,
                                       g_steal_pointer (&directories));
 
-  g_list_free (infos);
+  ide_recent_projects_remove (projects, infos);
+  g_list_free_full (infos, g_object_unref);
 }
 
 static void
