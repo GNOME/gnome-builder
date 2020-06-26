@@ -150,7 +150,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
 
   for (gsize z = 0; uris[z]; z++)
     {
-      g_autoptr(GDateTime) last_modified_at = NULL;
+      GDateTime *last_modified_at = NULL;
       g_autoptr(GFile) project_file = NULL;
       g_autoptr(GFile) directory = NULL;
       g_autoptr(GPtrArray) languages = NULL;
