@@ -86,6 +86,13 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.36.1" date="2020-06-26">
+      <description>
+        <p>
+          Builder 3.36.1 includes a number of performance, bug, and UI improvements.
+        </p>
+      </description>
+    </release>
     <release version="3.36.0" date="2020-03-06">
       <description>
         <p>

@@ -1,4 +1,21 @@
 ==============
+Version 3.36.1
+==============
+
+ • Numerous bug fixes
+ • Updated templates including Rust
+ • Improved C++ detection and usage in clang support
+ • LSP improvements
+ • Snippets improvemnts
+ • Improve fusermount support
+ • Improve bubble drawing in editor
+ • Fix buffer management when renaming files
+ • Use :: as a trigger for completion in C++
+ • Scroll to insert location after reloading a file
+ • Improve support for project directories outside of $HOME
+ • Translation updates
+
+==============
 Version 3.36.0
 ==============
 
