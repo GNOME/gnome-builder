@@ -15,4 +15,5 @@ plugin_project_tree_resources = gnome.compile_resources(
   c_name: 'gbp_project_tree',
 )
 
+plugins_deps += [libportal_dep]
 plugins_sources += plugin_project_tree_resources
