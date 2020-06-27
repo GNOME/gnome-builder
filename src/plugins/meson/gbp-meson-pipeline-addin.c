@@ -33,7 +33,7 @@ struct _GbpMesonPipelineAddin
   IdeObject parent_instance;
 };
 
-static const gchar *ninja_names[] = { "ninja", "ninja-build" };
+static const gchar *ninja_names[] = { "ninja", "ninja-build", NULL };
 
 static void
 on_build_stage_query (IdePipelineStage *stage,
