@@ -328,6 +328,67 @@ gbp_editor_workbench_addin_workspace_removed (IdeWorkbenchAddin *addin,
 }
 
 static void
+gbp_editor_workbench_addin_vcs_changed_page_cb (GtkWidget *widget,
+                                                gpointer   user_data)
+{
+  IdePage *page = (IdePage *)widget;
+  IdeBufferChangeMonitor *change_monitor;
+  IdeBuffer *buffer;
+
+  g_assert (IDE_IS_PAGE (page));
+
+  if (!IDE_IS_EDITOR_PAGE (page))
+    return;
+
+  if (!(buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page))))
+    return;
+
+  if (!(change_monitor = ide_buffer_get_change_monitor (buffer)))
+    return;
+
+  ide_buffer_change_monitor_reload (change_monitor);
+}
+
+static void
+gbp_editor_workbench_addin_vcs_index_changed_cb (IdeWorkbenchAddin *addin,
+                                                 IdeVcs            *vcs)
+{
+  GbpEditorWorkbenchAddin *self = (GbpEditorWorkbenchAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_VCS (vcs));
+
+  ide_workbench_foreach_page (self->workbench,
+                              (GtkCallback) gbp_editor_workbench_addin_vcs_changed_page_cb,
+                              NULL);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_editor_workbench_addin_vcs_changed (IdeWorkbenchAddin *addin,
+                                        IdeVcs            *vcs)
+{
+  GbpEditorWorkbenchAddin *self = (GbpEditorWorkbenchAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
+  g_assert (!vcs || IDE_IS_VCS (vcs));
+
+  if (vcs != NULL)
+    g_signal_connect_object (vcs,
+                             "changed",
+                             G_CALLBACK (gbp_editor_workbench_addin_vcs_index_changed_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
+
+  IDE_EXIT;
+}
+
+static void
 ide_workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->can_open = gbp_editor_workbench_addin_can_open;
@@ -338,4 +399,5 @@ ide_workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->unload = gbp_editor_workbench_addin_unload;
   iface->workspace_added = gbp_editor_workbench_addin_workspace_added;
   iface->workspace_removed = gbp_editor_workbench_addin_workspace_removed;
+  iface->vcs_changed = gbp_editor_workbench_addin_vcs_changed;
 }
