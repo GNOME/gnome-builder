@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Copyright 2020 Christian Hergert <christian@hergert.me>
+                                                                      
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+                                                                      
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+                                                                      
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<style-scheme id="Adwaita-dark" name="Adwaita Dark" version="1.0">
+  <author>Christian Hergert</author>
+  <description>The default color scheme for TextEditor</description>
+
+  <!-- Adwaita Palette -->
+  <color name="blue1"                       value="#99c1f1"/>
+  <color name="blue2"                       value="#62a0ea"/>
+  <color name="blue3"                       value="#3584e4"/>
+  <color name="blue4"                       value="#1c71d8"/>
+  <color name="blue5"                       value="#1a5fb4"/>
+  <color name="dark1"                       value="#77767b"/>
+  <color name="dark2"                       value="#5e5c64"/>
+  <color name="dark3"                       value="#3d3846"/>
+  <color name="dark4"                       value="#241f31"/>
+  <color name="dark5"                       value="#000000"/>
+  <color name="green1"                      value="#8ff0a4"/>
+  <color name="green2"                      value="#57e389"/>
+  <color name="green3"                      value="#33d17a"/>
+  <color name="green4"                      value="#2ec27e"/>
+  <color name="green5"                      value="#26a269"/>
+  <color name="light1"                      value="#ffffff"/>
+  <color name="light2"                      value="#f6f5f4"/>
+  <color name="light3"                      value="#deddda"/>
+  <color name="light4"                      value="#c0bfbc"/>
+  <color name="light5"                      value="#9a9996"/>
+  <color name="orange1"                     value="#ffbe6f"/>
+  <color name="orange2"                     value="#ffa348"/>
+  <color name="orange3"                     value="#ff7800"/>
+  <color name="orange4"                     value="#e66100"/>
+  <color name="orange5"                     value="#c64600"/>
+  <color name="purple1"                     value="#dc8add"/>
+  <color name="purple2"                     value="#c061cb"/>
+  <color name="purple3"                     value="#9141ac"/>
+  <color name="purple4"                     value="#813d9c"/>
+  <color name="purple5"                     value="#613583"/>
+  <color name="red1"                        value="#f66151"/>
+  <color name="red2"                        value="#ed333b"/>
+  <color name="red3"                        value="#e01b24"/>
+  <color name="red4"                        value="#c01c28"/>
+  <color name="red5"                        value="#a51d2d"/>
+  <color name="yellow1"                     value="#f9f06b"/>
+  <color name="yellow2"                     value="#f8e45c"/>
+  <color name="yellow3"                     value="#f6d32d"/>
+  <color name="yellow4"                     value="#f5c211"/>
+  <color name="yellow5"                     value="#e5a50a"/>
+
+  <color name="content_bg"                  value="#101010"/>
+  <color name="content_bg_alt"              value="#6e6e6e"/>
+  <color name="content_alt"                 value="#3e3e3e"/>
+
+
+  <!-- Global Settings -->
+  <style name="text"                        foreground="light4" background="content_bg"/>
+  <style name="map-overlay"                 background="dark1"/>
+  <style name="cursor"                      foreground="light4"/>
+  <style name="line-numbers"                foreground="content_alt" background="content_bg"/>
+  <style name="current-line"                background="#222"/>
+  <style name="current-line-number"         foreground="dark1" background="#222" bold="true"/>
+  <style name="right-margin"                foreground="content_bg_alt" background="content_bg_alt"/>
+  <style name="draw-spaces"                 foreground="dark1"/>
+  <style name="background-pattern"          background="dark4"/>
+
+  <style name="bracket-match"               background="dark2" bold="true"/>
+  <style name="bracket-mismatch"            background="red5" bold="true"/>
+  <style name="search-match"                foreground="light1" background="orange3"/>
+  <style name="misspelled-match"            foreground="light1" background="red3"/>
+
+  <style name="gtk-doc:function-name"       bold="true"/>
+  <style name="gtk-doc:function"            bold="true"/>
+  <style name="gtk-doc:parameter"           bold="true"/>
+  <style name="gtk-doc:constant"            bold="true"/>
+  <style name="gtk-doc:type"                bold="true"/>
+  <style name="gtk-doc:since"               bold="true"/>
+  <style name="gtk-doc:return"              bold="true"/>
+  <style name="gtk-doc:deprecated"          bold="true"/>
+  <style name="gtk-doc:signal-name"         bold="true"/>
+  <style name="gtk-doc:property-name"       bold="true"/>
+
+  <style name="c:storage-class"             bold="true"/>
+  <style name="c:included-file"             foreground="orange3"/>
+
+  <style name="json:string"                 foreground="light3"/>
+
+  <style name="css:property-name"           foreground="dark1" bold="true"/>
+
+  <style name="def:base-n-integer"          foreground="purple1"/>
+  <style name="def:boolean"                 foreground="purple1"/>
+  <style name="def:comment"                 foreground="light5"/>
+  <style name="def:constant"                foreground="red1"/>
+  <style name="def:decimal"                 foreground="orange4"/>
+  <style name="def:deletion"                strikethrough="true"/>
+  <style name="def:doc-comment-element"     italic="true"/>
+  <style name="def:emphasis"                italic="true"/>
+  <style name="def:error"                   line-background="red2" />
+  <style name="def:floating-point"          foreground="purple1"/>
+  <style name="def:function"                foreground="dark1" bold="true"/>
+  <style name="def:heading"                 foreground="orange4" bold="true"/>
+  <style name="def:identifier"              foreground="dark1"/>
+  <style name="def:inline-code"             foreground="purple2"/>
+  <style name="def:insertion"               underline="single"/>
+  <style name="def:keyword"                 bold="true"/>
+  <style name="def:link-destination"        italic="true" underline="true"/>
+  <style name="def:link-symbol"             foreground="blue3" bold="true"/>
+  <style name="def:link-text"               foreground="blue3"/>
+  <style name="def:list-marker"             foreground="light1" bold="true"/>
+  <style name="def:net-address"             italic="true" underline="true"/>
+  <style name="def:note"                    foreground="light1" background="orange3" bold="true"/>
+  <style name="def:preformatting-section"   foreground="purple1"/>
+  <style name="def:preprocessor"            foreground="dark2"/>
+  <style name="def:shebang"                 foreground="dark1" bold="true"/>
+  <style name="def:special-char"            foreground="blue3" bold="true"/>
+  <style name="def:special-constant"        foreground="light5"/>
+  <style name="def:statement"               foreground="green5" bold="true"/>
+  <style name="def:string"                  foreground="yellow5"/>
+  <style name="def:strong-emphasis"         foreground="green5" bold="true"/>
+  <style name="def:thematic-break"          foreground="green5" bold="true"/>
+  <style name="def:type"                    foreground="light3" bold="true"/>
+  <style name="def:warning"                 background="yellow3"/>
+
+</style-scheme>
