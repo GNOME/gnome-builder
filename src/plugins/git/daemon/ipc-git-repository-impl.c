@@ -64,8 +64,19 @@ static void
 ipc_git_repository_impl_monitor_changed_cb (IpcGitRepositoryImpl *self,
                                             IpcGitIndexMonitor   *monitor)
 {
+  GHashTableIter iter;
+  gpointer key;
+
   g_assert (IPC_IS_GIT_REPOSITORY_IMPL (self));
   g_assert (IPC_IS_GIT_INDEX_MONITOR (monitor));
+
+  g_hash_table_iter_init (&iter, self->change_monitors);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, NULL))
+    {
+      IpcGitChangeMonitorImpl *change_monitor = key;
+      g_assert (IPC_IS_GIT_CHANGE_MONITOR_IMPL (change_monitor));
+      ipc_git_change_monitor_impl_reset (change_monitor);
+    }
 
   ipc_git_repository_emit_changed (IPC_GIT_REPOSITORY (self));
 }

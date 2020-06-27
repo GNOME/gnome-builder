@@ -30,7 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IpcGitChangeMonitorImpl, ipc_git_change_monitor_impl, IPC, GIT_CHANGE_MONITOR_IMPL, IpcGitChangeMonitorSkeleton)
 
-IpcGitChangeMonitor *ipc_git_change_monitor_impl_new (GgitRepository *repository,
-                                                      const gchar    *path);
+IpcGitChangeMonitor *ipc_git_change_monitor_impl_new   (GgitRepository          *repository,
+                                                        const gchar             *path);
+void                 ipc_git_change_monitor_impl_reset (IpcGitChangeMonitorImpl *self);
 
 G_END_DECLS

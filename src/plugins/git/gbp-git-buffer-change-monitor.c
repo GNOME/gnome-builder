@@ -129,10 +129,14 @@ gbp_git_buffer_change_monitor_reload (IdeBufferChangeMonitor *monitor)
 {
   GbpGitBufferChangeMonitor *self = (GbpGitBufferChangeMonitor *)monitor;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
 
   gbp_git_buffer_change_monitor_queue_update (self, FAST);
+
+  IDE_EXIT;
 }
 
 static void
