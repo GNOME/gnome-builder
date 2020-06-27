@@ -337,6 +337,11 @@ src/plugins/recent/gbp-recent-section.c
 src/plugins/recent/gbp-recent-section.ui
 src/plugins/retab/gbp-retab-editor-page-addin.c
 src/plugins/retab/gtk/menus.ui
+src/plugins/rust-analyzer/org.gnome.builder.rust-analyzer.gschema.xml
+src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c
+src/plugins/rust-analyzer/rust-analyzer-service.c
+src/plugins/rust-analyzer/rust-analyzer-transfer.c
+src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c
 src/plugins/rustup/rustup_plugin.py
 src/plugins/shellcmd/gbp-shellcmd-command.c
 src/plugins/shellcmd/gbp-shellcmd-command-editor.c
