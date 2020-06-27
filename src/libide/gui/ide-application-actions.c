@@ -300,13 +300,19 @@ ide_application_actions_nighthack (GSimpleAction *action,
                                    gpointer       user_data)
 {
   g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *name = NULL;
 
   g_object_set (gtk_settings_get_default (),
                 "gtk-application-prefer-dark-theme", TRUE,
                 NULL);
 
   settings = g_settings_new ("org.gnome.builder.editor");
-  g_settings_set_string (settings, "style-scheme-name", "builder-dark");
+  name = g_settings_get_string (settings, "style-scheme-name");
+
+  if (g_str_has_prefix (name, "Adwaita"))
+    g_settings_set_string (settings, "style-scheme-name", "Adwaita-dark");
+  else
+    g_settings_set_string (settings, "style-scheme-name", "builder-dark");
 }
 
 static void
@@ -315,13 +321,19 @@ ide_application_actions_dayhack (GSimpleAction *action,
                                  gpointer       user_data)
 {
   g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *name = NULL;
 
   g_object_set (gtk_settings_get_default (),
                 "gtk-application-prefer-dark-theme", FALSE,
                 NULL);
 
   settings = g_settings_new ("org.gnome.builder.editor");
-  g_settings_set_string (settings, "style-scheme-name", "builder");
+  name = g_settings_get_string (settings, "style-scheme-name");
+
+  if (g_str_has_prefix (name, "Adwaita"))
+    g_settings_set_string (settings, "style-scheme-name", "Adwaita");
+  else
+    g_settings_set_string (settings, "style-scheme-name", "builder");
 }
 
 static void
