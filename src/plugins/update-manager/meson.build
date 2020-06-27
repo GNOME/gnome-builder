@@ -1,7 +1,7 @@
 if get_option('plugin_update_manager')
 
 plugins_deps += [
-  dependency('libportal', version: '>= 0.3'),
+  libportal_dep,
 ]
 
 plugins_sources += files([

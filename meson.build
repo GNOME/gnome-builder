@@ -261,6 +261,7 @@ libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.29.91')
 libm_dep = cc.find_library('m', required: false)
 libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
+libportal_dep = dependency('libportal', version: '>= 0.3', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
 libvte_dep = dependency('vte-2.91', version: '>= 0.40.2')
 libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.26')
@@ -285,6 +286,11 @@ endforeach
 libsysprof_capture = dependency('sysprof-capture-3', version: '>= 3.33.1', static: true, required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
+endif
+
+# Give sources access to know if libportal is available
+if libportal_dep.found()
+  config_h.set10('ENABLE_LIBPORTAL', true)
 endif
 
 configure_file(output: 'config.h', configuration: config_h)
