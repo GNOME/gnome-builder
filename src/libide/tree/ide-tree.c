@@ -517,14 +517,11 @@ ide_tree_query_tooltip (GtkWidget  *widget,
 {
   GtkTreeView *tree_view = (GtkTreeView *)widget;
   g_autoptr(GtkTreePath) path = NULL;
-  GtkTreeViewColumn *column;
-  gint cell_x = 0;
-  gint cell_y = 0;
 
   g_assert (IDE_IS_TREE (tree_view));
   g_assert (GTK_IS_TOOLTIP (tooltip));
 
-  if (gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, &column, &cell_x, &cell_y))
+  if (gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, NULL, NULL, NULL))
     {
       GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
       GtkTreeIter iter;
