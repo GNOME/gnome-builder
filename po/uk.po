@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-03-25 20:01+0000\n"
-"PO-Revision-Date: 2020-04-07 13:08+0300\n"
+"POT-Creation-Date: 2020-06-27 12:10+0000\n"
+"PO-Revision-Date: 2020-06-27 15:59+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:225
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Будівник"
@@ -276,12 +276,10 @@ msgid "If enabled, the editor will show line numbers."
 msgstr "Якщо увімкнено, редактор показуватиме номери рядків."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
-#| msgid "Show line numbers"
 msgid "Show relative line numbers"
 msgstr "Показати відносні номери рядків"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:56
-#| msgid "If enabled, the editor will show line numbers."
 msgid "If enabled, the editor will show relative line numbers."
 msgstr "Якщо увімкнено, редактор показуватиме відносні номери рядків."
 
@@ -861,7 +859,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Завантажити або створити палітру за налаштуваннями"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4985
+#: src/libide/sourceview/ide-source-view.c:5013
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -883,7 +881,7 @@ msgstr "_Перейменувати"
 msgid "unsaved file %u"
 msgstr "незбережений файл %u"
 
-#: src/libide/code/ide-buffer.c:3405
+#: src/libide/code/ide-buffer.c:3424
 msgid "The current language lacks a symbol resolver."
 msgstr "Цій мові бракує розпізнавання символів."
 
@@ -916,8 +914,8 @@ msgid "Untitled"
 msgstr "Без назви"
 
 #: src/libide/core/ide-transfer.c:549
-#: src/libide/editor/ide-editor-page-actions.c:239
-#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:536
@@ -937,32 +935,32 @@ msgid "A suitable debugger was not found."
 msgstr "Відповідного засобу діагностики не було знайдено."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:56
+#: src/libide/editor/ide-editor-page-actions.c:73
 #, c-format
 msgid "Failed to load file: %s"
 msgstr "Не вдалося завантажити файл: %s"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:121
+#: src/libide/editor/ide-editor-page-actions.c:163
 #, c-format
 msgid "Print failed: %s"
 msgstr "Не вдалося надрукувати: %s"
 
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/editor/ide-editor-page-actions.c:192
-#: src/libide/editor/ide-editor-page-actions.c:300
+#: src/libide/editor/ide-editor-page-actions.c:234
+#: src/libide/editor/ide-editor-page-actions.c:342
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Не вдалося зберегти файл: %s"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:278
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/testui/gbp-test-output-panel.c:65
 msgid "Save File"
 msgstr "Зберегти файл"
 
-#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
@@ -970,11 +968,11 @@ msgstr "Зберегти файл"
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/libide/editor/ide-editor-page-actions.c:335
+#: src/libide/editor/ide-editor-page-actions.c:377
 msgid "Save File As"
 msgstr "Збереження файла з новою назвою"
 
-#: src/libide/editor/ide-editor-page-actions.c:338
+#: src/libide/editor/ide-editor-page-actions.c:380
 msgid "Save As"
 msgstr "Зберегти як"
 
@@ -1153,7 +1151,6 @@ msgid "Display line numbers"
 msgstr "Показувати номери рядків"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:102
-#| msgid "Display line numbers"
 msgid "Display relative line numbers"
 msgstr "Показувати відносні номери рядків"
 
@@ -1983,12 +1980,10 @@ msgid "Show line number at beginning of each line"
 msgstr "Показувати номер на початку кожного рядка"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
-#| msgid "Display line numbers"
 msgid "Relative line numbers"
 msgstr "Відносні номери рядків"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
-#| msgid "Show line number at beginning of each line"
 msgid "Show line numbers relative to the cursor line"
 msgstr "Показувати номери рядків відносно рядка курсора"
 
@@ -2782,7 +2777,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1216
+#: src/libide/lsp/ide-lsp-client.c:1337
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -2884,31 +2879,31 @@ msgstr "Ві_ддалити"
 msgid "Reset"
 msgstr "Скинути"
 
-#: src/libide/sourceview/ide-source-view.c:4434
+#: src/libide/sourceview/ide-source-view.c:4436
 #, c-format
 msgid "Insert “%s”"
 msgstr "Вставити «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4436
+#: src/libide/sourceview/ide-source-view.c:4438
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замінити «%s» на «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4554
+#: src/libide/sourceview/ide-source-view.c:4556
 msgid "Apply Fix-It"
 msgstr "Застосувати латку"
 
-#: src/libide/sourceview/ide-source-view.c:4984
+#: src/libide/sourceview/ide-source-view.c:5012
 msgid "Rename symbol"
 msgstr "Перейменувати символ"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5219
+#: src/libide/sourceview/ide-source-view.c:5248
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>рядок %u, позиція %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5245
+#: src/libide/sourceview/ide-source-view.c:5274
 msgid "No references were found"
 msgstr "Посилань не знайдено"
 
@@ -2989,7 +2984,7 @@ msgstr "Завантаження…"
 msgid "unversioned"
 msgstr "поза керуванням версіями"
 
-#: src/main.c:138
+#: src/main.c:137
 msgid "Run a new instance of Builder"
 msgstr "Запустити новий екземпляр «Будівника»"
 
@@ -3195,7 +3190,7 @@ msgid "Beautify"
 msgstr "Форматування"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:637
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:635
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (копія)"
@@ -4951,11 +4946,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Обгортка Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:136
+#: src/plugins/greeter/gbp-greeter-application-addin.c:133
 msgid "Display a new greeter window"
 msgstr "Показати нове вікно вітання"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:144
+#: src/plugins/greeter/gbp-greeter-application-addin.c:141
 msgid "Begin cloning project from URI"
 msgstr "Почати клонування проєкту за адресою"
 
@@ -5008,28 +5003,28 @@ msgstr "Використовувати _формальні вирази"
 msgid "Open Preview"
 msgstr "Відкрити перегляд"
 
-#: src/plugins/html-preview/html_preview.py:341
+#: src/plugins/html-preview/html_preview.py:342
 msgid "Your computer is missing python3-docutils"
 msgstr "У вашій системі не вистачає python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:342
-#: src/plugins/html-preview/html_preview.py:352
+#: src/plugins/html-preview/html_preview.py:343
+#: src/plugins/html-preview/html_preview.py:353
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
 "Цей пакунок є необхідним для роботи панелей попереднього перегляду "
 "документів на основі мов розмітки."
 
-#: src/plugins/html-preview/html_preview.py:345
-#: src/plugins/html-preview/html_preview.py:355
+#: src/plugins/html-preview/html_preview.py:346
+#: src/plugins/html-preview/html_preview.py:356
 msgid "Install Package"
 msgstr "Встановити пакунок"
 
-#: src/plugins/html-preview/html_preview.py:351
+#: src/plugins/html-preview/html_preview.py:352
 msgid "Your computer is missing python3-sphinx"
 msgstr "На комп'ютері не встановлено python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:421
+#: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Перегляд)"
 
@@ -5111,11 +5106,11 @@ msgstr "Порожній проєкт"
 msgid "Create a new empty project"
 msgstr "Створити порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:358
+#: src/plugins/meson-templates/meson_templates.py:361
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
-#: src/plugins/meson-templates/meson_templates.py:360
+#: src/plugins/meson-templates/meson_templates.py:363
 msgid "Create a new command line project"
 msgstr "Створити проєкт програми для роботи у командному рядку"
 
@@ -5525,17 +5520,17 @@ msgstr ""
 "поточний поточне"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:350
-#: src/plugins/recent/gbp-recent-section.c:357
+#: src/plugins/recent/gbp-recent-section.c:349
+#: src/plugins/recent/gbp-recent-section.c:356
 #, c-format
 msgid "Removing %s\n"
 msgstr "Вилучення %s\n"
 
-#: src/plugins/recent/gbp-recent-section.c:470
+#: src/plugins/recent/gbp-recent-section.c:468
 msgid "Removing Files…"
 msgstr "Вилучаємо файли…"
 
-#: src/plugins/recent/gbp-recent-section.c:472
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "_Close"
 msgstr "_Закрити"
 
@@ -5546,6 +5541,55 @@ msgstr "Недавні проєкти"
 #: src/plugins/retab/gtk/menus.ui:9
 msgid "Reformat tabs"
 msgstr "Переформатування табуляцій"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
+msgid "Rust Analyzer: Cargo command for diagnostics"
+msgstr "Аналізатор Rust: команда Cargo для діагностики"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
+#| msgid "Undo the last command"
+msgid "the default cargo command"
+msgstr "типова команда cargo"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:76
+msgid ""
+"clippy adds additional lints to catch common mistakes but is in general "
+"slower"
+msgstr ""
+"clippy додає перевірки для виявлення типових помилок, але, загалом, є"
+" повільнішою"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:393
+#| msgid "Your computer is missing python3-docutils"
+msgid "Your computer is missing the Rust Analyzer Language Server"
+msgstr "На вашому комп'ютері не встановлено сервера мови аналізатора Rust"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:394
+msgid ""
+"The Language Server is necessary to provide IDE features like completion or "
+"diagnostic"
+msgstr ""
+"Сервер мови є необхідним для забезпечення роботи можливостей комплексного"
+" середовища для розробки, зокрема автоматичного доповнення або діагностики"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:396
+#| msgid "Install Package"
+msgid "Install Language Server"
+msgstr "Встановити сервер мови"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
+msgid "Installation of Rust Analyzer finished"
+msgstr "Встановлення аналізатора Rust завершено"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
+#| msgid "Installing rust "
+msgid "Installing Rust Analyzer..."
+msgstr "Встановлення аналізатора Rust…"
+
+#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
+#, c-format
+msgid "Cannot download Rust Analyzer: %s"
+msgstr "Не вдалося отримати аналізатор Rust: %s"
 
 #: src/plugins/rustup/rustup_plugin.py:80
 msgid "Rustup not installed"
