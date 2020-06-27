@@ -86,6 +86,15 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.37.1" date="2020-06-27">
+      <description>
+        <p>
+          Builder 3.37.1 is our first release towards 3.38.
+          It has a number of bugfixes and improvements including support for Rust Analyzer.
+        </p>
+      </description>
+    </release>
+
     <release version="3.36.0" date="2020-03-06">
       <description>
         <p>

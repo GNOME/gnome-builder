@@ -1,4 +1,30 @@
 ==============
+Version 3.37.1
+==============
+
+ • ToDo plugin fixes
+ • Improved templates
+ • Use simplified wrapper for fusermount on host
+ • Vim emulation improvements
+ • Styling improvements
+ • A new in-process style scheme for Adwaita
+ • Fixes for drawing search bubbles
+ • Save buffers before renaming files
+ • New rust-analyzer plugin instead of RLS
+ • Clang plugin improvements
+ • HTML/markdown improvements
+ • Fixes for project directories outside of $HOME
+ • Open with external program supported with libportal
+ • GVls improvements
+ • Tooltip alignment fixes
+ • Support for relative line numbers in source code editor
+ • Snippet improvements
+ • Make build system more reproducible
+ • GJS fixes
+ • Various UI improvements
+ • Translation updates
+
+==============
 Version 3.36.0
 ==============
 
