@@ -160,7 +160,7 @@ gbp_todo_panel_query_tooltip (GbpTodoPanel *self,
                               GtkTooltip   *tooltip,
                               GtkTreeView  *tree_view)
 {
-  GtkTreePath *path = NULL;
+  g_autoptr(GtkTreePath) path = NULL;
   GtkTreeModel *model;
 
   g_assert (GBP_IS_TODO_PANEL (self));
@@ -199,11 +199,9 @@ gbp_todo_panel_query_tooltip (GbpTodoPanel *self,
           g_string_append (str, "</tt>");
           gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
           gtk_tooltip_set_markup (tooltip, str->str);
+
+	  return TRUE;
         }
-
-      gtk_tree_path_free (path);
-
-      return TRUE;
     }
 
   return FALSE;
