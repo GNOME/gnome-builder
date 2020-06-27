@@ -438,29 +438,37 @@ gbp_buildui_pane_diagnostic_tooltip (GbpBuilduiPane *self,
                                      GtkTooltip     *tooltip,
                                      GtkTreeView    *tree_view)
 {
+  g_autoptr(GtkTreePath) path = NULL;
   GtkTreeModel *model = NULL;
-  GtkTreeIter iter;
 
   g_assert (GBP_IS_BUILDUI_PANE (self));
   g_assert (GTK_IS_TOOLTIP (tooltip));
   g_assert (GTK_IS_TREE_VIEW (tree_view));
 
-  if (gtk_tree_view_get_tooltip_context (tree_view, &x, &y, keyboard_mode, &model, NULL, &iter))
+  if (NULL == (model = gtk_tree_view_get_model (tree_view)))
+    return FALSE;
+
+  if (gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, NULL, NULL, NULL))
     {
-      g_autoptr(IdeDiagnostic) diag = NULL;
+      GtkTreeIter iter;
 
-      gtk_tree_model_get (model, &iter,
-                          COLUMN_DIAGNOSTIC, &diag,
-                          -1);
-
-      if (diag != NULL)
+      if (gtk_tree_model_get_iter (model, &iter, path))
         {
-          g_autofree gchar *text = ide_diagnostic_get_text_for_display (diag);
+	  g_autoptr(IdeDiagnostic) diag = NULL;
 
-          gtk_tooltip_set_text (tooltip, text);
+	  gtk_tree_model_get (model, &iter,
+			      COLUMN_DIAGNOSTIC, &diag,
+			      -1);
 
-          return TRUE;
-        }
+	  if (diag != NULL)
+	    {
+	      g_autofree gchar *text = ide_diagnostic_get_text_for_display (diag);
+
+	      gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
+	      gtk_tooltip_set_text (tooltip, text);
+	      return TRUE;
+	    }
+	}
     }
 
   return FALSE;
