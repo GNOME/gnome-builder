@@ -493,6 +493,7 @@ create_open_page_row (gpointer item,
                         "xalign", 0.0f,
                         NULL);
   g_object_bind_property (view, "title", label, "label", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (view, "title", label, "tooltip-text", G_BINDING_SYNC_CREATE);
   g_object_bind_property_full (view, "modified", label, "attributes",
                                G_BINDING_SYNC_CREATE,
                                modified_to_attrs, NULL, NULL, NULL);
