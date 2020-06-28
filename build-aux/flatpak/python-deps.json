@@ -2,7 +2,7 @@
     "name": "python3-jedi",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} jedi sphinx sphinx_rtd_theme lxml docutils"
+        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} jedi sphinx sphinx_rtd_theme lxml docutils codespell"
     ],
     "sources": [
         {
@@ -119,6 +119,11 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/e4/83/4c05db437252694660c972b5374b35a68a8a0a8cd012dc95e5fd4d7e71b0/jedi-0.13.2.tar.gz",
             "sha256": "571702b5bd167911fe9036e5039ba67f820d6502832285cde8c881ab2b2149fd"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/7e/37/b15b4133e90bbef5acecfd2f3f3871c1352ee281c042fd64a22a72735fb8/codespell-1.17.1.tar.gz",
+            "sha256": "25a2ecd86b9cdc111dc40a30d0ed28c578e13a0ce158d1c383f9d47811bfcd23"
         }
     ]
 }

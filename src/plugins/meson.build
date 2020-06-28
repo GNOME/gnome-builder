@@ -43,6 +43,7 @@ subdir('buffer-monitor')
 subdir('cargo')
 subdir('clang')
 subdir('cmake')
+subdir('codespell')
 subdir('code-index')
 subdir('codeui')
 subdir('color-picker')
@@ -147,6 +148,7 @@ status += [
   'Cargo ................. : @0@'.format(get_option('plugin_cargo')),
   'Clang ................. : @0@'.format(get_option('plugin_clang')),
   'CMake ................. : @0@'.format(get_option('plugin_cmake')),
+  'Codespell ............. : @0@'.format(get_option('plugin_codespell')),
   'Code Index ............ : @0@'.format(get_option('plugin_code_index')),
   'Color Pickr ........... : @0@'.format(get_option('plugin_color_picker')),
   'CTags ................. : @0@'.format(get_option('plugin_ctags')),
