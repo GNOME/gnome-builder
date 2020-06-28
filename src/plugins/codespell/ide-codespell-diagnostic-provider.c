@@ -90,6 +90,8 @@ ide_codespell_diagnostic_provider_communicate_cb (GObject      *object,
       g_autoptr(IdeLocation) loc_end = NULL;
       guint64 lineno;
 
+      line[len] = '\0';
+
       /* Lines that we want to parse should look something like this:
        * filename:42: misspelled word ==> correct word
        */
@@ -101,7 +103,7 @@ ide_codespell_diagnostic_provider_communicate_cb (GObject      *object,
         continue;
 
       lineno = g_ascii_strtoull (line, &line, 10);
-      if ((lineno == G_MAXUINT64 && errno == ERANGE) || ((lineno == 0) && errno == EINVAL))
+      if (lineno == G_MAXUINT64 || lineno == 0)
         continue;
       if (lineno > 0)
         lineno--;
@@ -150,12 +152,12 @@ ide_codespell_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provide
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_INHERIT |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+                                          G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
   ide_subprocess_launcher_push_argv (launcher, "codespell");
-  ide_subprocess_launcher_push_argv (launcher, "-d");
+  /* ide_subprocess_launcher_push_argv (launcher, "-d"); */
   ide_subprocess_launcher_push_argv (launcher, g_file_get_path (file));
 
   /* Spawn the process of fail immediately */
