@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-06-27 12:10+0000\n"
-"PO-Revision-Date: 2020-06-27 15:59+0300\n"
+"POT-Creation-Date: 2020-06-27 21:08+0000\n"
+"PO-Revision-Date: 2020-06-28 08:59+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -535,7 +535,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Цей параметр вважається застарілим і більше не використовується."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:76
 msgid "Show Ignored Files"
 msgstr "Показувати нехтувані файли"
 
@@ -547,7 +547,7 @@ msgstr ""
 "системою керування версіями."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:81
 msgid "Sort Directories First"
 msgstr "Впорядковувати спочатку каталоги"
 
@@ -861,7 +861,7 @@ msgstr "Завантажити або створити палітру за на�
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:5013
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:53
+#: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
 msgstr "Перейменувати"
 
@@ -3384,7 +3384,7 @@ msgstr "Спорожнити"
 msgid "Export Bundle"
 msgstr "Експортувати комплект"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:656
+#: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
 msgid "Build Issues"
 msgstr "Проблеми збирання"
@@ -5062,7 +5062,7 @@ msgstr "Навігатор каталогами"
 msgid "Switch to Folder"
 msgstr "Перемкнутися на теку"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Відкрити теку з даними"
 
@@ -5473,18 +5473,22 @@ msgid "Open With…"
 msgstr "Відкрити за допомогою…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
+msgid "_External Program…"
+msgstr "_Зовнішньої програми…"
+
+#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Редактор коду"
 
-#: src/plugins/project-tree/gtk/menus.ui:45
+#: src/plugins/project-tree/gtk/menus.ui:52
 msgid "Open in Terminal"
 msgstr "Відкрити у терміналі"
 
-#: src/plugins/project-tree/gtk/menus.ui:59
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "Move to Trash"
 msgstr "Пересунути до смітника"
 
-#: src/plugins/project-tree/gtk/menus.ui:65
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "Display Options"
 msgstr "Показувати параметри"
 
@@ -5547,7 +5551,6 @@ msgid "Rust Analyzer: Cargo command for diagnostics"
 msgstr "Аналізатор Rust: команда Cargo для діагностики"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
-#| msgid "Undo the last command"
 msgid "the default cargo command"
 msgstr "типова команда cargo"
 
@@ -5556,11 +5559,10 @@ msgid ""
 "clippy adds additional lints to catch common mistakes but is in general "
 "slower"
 msgstr ""
-"clippy додає перевірки для виявлення типових помилок, але, загалом, є"
-" повільнішою"
+"clippy додає перевірки для виявлення типових помилок, але, загалом, є "
+"повільнішою"
 
 #: src/plugins/rust-analyzer/rust-analyzer-service.c:393
-#| msgid "Your computer is missing python3-docutils"
 msgid "Your computer is missing the Rust Analyzer Language Server"
 msgstr "На вашому комп'ютері не встановлено сервера мови аналізатора Rust"
 
@@ -5569,11 +5571,10 @@ msgid ""
 "The Language Server is necessary to provide IDE features like completion or "
 "diagnostic"
 msgstr ""
-"Сервер мови є необхідним для забезпечення роботи можливостей комплексного"
-" середовища для розробки, зокрема автоматичного доповнення або діагностики"
+"Сервер мови є необхідним для забезпечення роботи можливостей комплексного "
+"середовища для розробки, зокрема автоматичного доповнення або діагностики"
 
 #: src/plugins/rust-analyzer/rust-analyzer-service.c:396
-#| msgid "Install Package"
 msgid "Install Language Server"
 msgstr "Встановити сервер мови"
 
@@ -5582,7 +5583,6 @@ msgid "Installation of Rust Analyzer finished"
 msgstr "Встановлення аналізатора Rust завершено"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
-#| msgid "Installing rust "
 msgid "Installing Rust Analyzer..."
 msgstr "Встановлення аналізатора Rust…"
 
@@ -6133,11 +6133,11 @@ msgstr "Перевірка модулів"
 msgid "Running test “%s”…"
 msgstr "Виконуємо тест «%s»…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Loading TODOs…"
 msgstr "Завантажуємо TODO…"
 
-#: src/plugins/todo/gbp-todo-panel.c:302
+#: src/plugins/todo/gbp-todo-panel.c:301
 msgid "Please wait while we scan your project"
 msgstr "Будь ласка, зачекайте на завершення сканування вашого проєкту"
 
