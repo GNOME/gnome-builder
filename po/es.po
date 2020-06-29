@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-04-06 16:33+0000\n"
-"PO-Revision-Date: 2020-04-28 12:28+0200\n"
+"POT-Creation-Date: 2020-06-27 21:08+0000\n"
+"PO-Revision-Date: 2020-06-29 12:15+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:225
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -269,12 +269,10 @@ msgid "If enabled, the editor will show line numbers."
 msgstr "Si se activa, el editor mostrará los números de línea."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
-#| msgid "Show line numbers"
 msgid "Show relative line numbers"
 msgstr "Mostrar números de línea relativos"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:56
-#| msgid "If enabled, the editor will show line numbers."
 msgid "If enabled, the editor will show relative line numbers."
 msgstr "Si se activa, el editor mostrará los números de línea relativos."
 
@@ -531,7 +529,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Esta opción está obsoleta y ya no se usa."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:76
 msgid "Show Ignored Files"
 msgstr "Mostrar archivos ignorados"
 
@@ -542,7 +540,7 @@ msgstr ""
 "Si se activa, el árbol de proyectos mostrará archivos ignorados por el VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:81
 msgid "Sort Directories First"
 msgstr "Mostrar las carpetas primero"
 
@@ -857,9 +855,9 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4985
+#: src/libide/sourceview/ide-source-view.c:5013
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:53
+#: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
 msgstr "Renombrar"
 
@@ -879,7 +877,7 @@ msgstr "_Renombrar"
 msgid "unsaved file %u"
 msgstr "%u archivos sin guardar"
 
-#: src/libide/code/ide-buffer.c:3405
+#: src/libide/code/ide-buffer.c:3424
 msgid "The current language lacks a symbol resolver."
 msgstr "Al lenguaje actual le falta un resolutor de símbolos."
 
@@ -914,8 +912,8 @@ msgid "Untitled"
 msgstr "Sin título"
 
 #: src/libide/core/ide-transfer.c:549
-#: src/libide/editor/ide-editor-page-actions.c:239
-#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:536
@@ -935,32 +933,32 @@ msgid "A suitable debugger was not found."
 msgstr "No se ha encontrado un depurador adecuado."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:56
+#: src/libide/editor/ide-editor-page-actions.c:73
 #, c-format
 msgid "Failed to load file: %s"
 msgstr "Falló al cargar el archivo: %s:"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:121
+#: src/libide/editor/ide-editor-page-actions.c:163
 #, c-format
 msgid "Print failed: %s"
 msgstr "Fallo al imprimir: %s"
 
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/editor/ide-editor-page-actions.c:192
-#: src/libide/editor/ide-editor-page-actions.c:300
+#: src/libide/editor/ide-editor-page-actions.c:234
+#: src/libide/editor/ide-editor-page-actions.c:342
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Falló al cargar el archivo: %s:"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:278
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/testui/gbp-test-output-panel.c:65
 msgid "Save File"
 msgstr "Guardar archivo"
 
-#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
@@ -968,11 +966,11 @@ msgstr "Guardar archivo"
 msgid "Save"
 msgstr "Guardar"
 
-#: src/libide/editor/ide-editor-page-actions.c:335
+#: src/libide/editor/ide-editor-page-actions.c:377
 msgid "Save File As"
 msgstr "Guardar archivo como"
 
-#: src/libide/editor/ide-editor-page-actions.c:338
+#: src/libide/editor/ide-editor-page-actions.c:380
 msgid "Save As"
 msgstr "Guardar como"
 
@@ -1152,7 +1150,6 @@ msgid "Display line numbers"
 msgstr "Mostrar números de línea"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:102
-#| msgid "Display line numbers"
 msgid "Display relative line numbers"
 msgstr "Mostrar números de línea relativos"
 
@@ -1984,12 +1981,10 @@ msgid "Show line number at beginning of each line"
 msgstr "Mover número de línea al principio de cada línea"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
-#| msgid "Display line numbers"
 msgid "Relative line numbers"
 msgstr "Números de línea relativos"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
-#| msgid "Show line number at beginning of each line"
 msgid "Show line numbers relative to the cursor line"
 msgstr "Mostrar números de línea relativos a la línea del cursor"
 
@@ -2791,7 +2786,7 @@ msgstr[0] "Instalando %u paquete"
 msgstr[1] "Instalando %u paquetes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1216
+#: src/libide/lsp/ide-lsp-client.c:1337
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falló al inicializar el lenguaje del servidor: %s"
@@ -2893,31 +2888,31 @@ msgstr "_Reducir"
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: src/libide/sourceview/ide-source-view.c:4434
+#: src/libide/sourceview/ide-source-view.c:4436
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4436
+#: src/libide/sourceview/ide-source-view.c:4438
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4554
+#: src/libide/sourceview/ide-source-view.c:4556
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:4984
+#: src/libide/sourceview/ide-source-view.c:5012
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5219
+#: src/libide/sourceview/ide-source-view.c:5248
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5245
+#: src/libide/sourceview/ide-source-view.c:5274
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -2996,7 +2991,7 @@ msgstr "Cargando…"
 msgid "unversioned"
 msgstr "sin versionar"
 
-#: src/main.c:138
+#: src/main.c:137
 msgid "Run a new instance of Builder"
 msgstr "Ejecutar una instancia de Builder nueva"
 
@@ -3206,7 +3201,7 @@ msgid "Beautify"
 msgstr "Embellecer"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:637
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:635
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (copiar)"
@@ -3402,7 +3397,7 @@ msgstr "Limpiar"
 msgid "Export Bundle"
 msgstr "Exportar como paquete"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:656
+#: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
 msgid "Build Issues"
 msgstr "Errores de construcción"
@@ -4960,11 +4955,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Envoltorio de Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:136
+#: src/plugins/greeter/gbp-greeter-application-addin.c:133
 msgid "Display a new greeter window"
 msgstr "Mostrar una ventana de bienvenida nueva"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:144
+#: src/plugins/greeter/gbp-greeter-application-addin.c:141
 msgid "Begin cloning project from URI"
 msgstr "Clonando proyecto desde URI"
 
@@ -5017,28 +5012,28 @@ msgstr "Permitir _expresiones regulares"
 msgid "Open Preview"
 msgstr "Abrir vista previa"
 
-#: src/plugins/html-preview/html_preview.py:341
+#: src/plugins/html-preview/html_preview.py:342
 msgid "Your computer is missing python3-docutils"
 msgstr "Su equipo no tiene python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:342
-#: src/plugins/html-preview/html_preview.py:352
+#: src/plugins/html-preview/html_preview.py:343
+#: src/plugins/html-preview/html_preview.py:353
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
 "Este paquete es necesario para proporcionar la vista previa de los "
 "documentos basados en marcado."
 
-#: src/plugins/html-preview/html_preview.py:345
-#: src/plugins/html-preview/html_preview.py:355
+#: src/plugins/html-preview/html_preview.py:346
+#: src/plugins/html-preview/html_preview.py:356
 msgid "Install Package"
 msgstr "Instalar paquete"
 
-#: src/plugins/html-preview/html_preview.py:351
+#: src/plugins/html-preview/html_preview.py:352
 msgid "Your computer is missing python3-sphinx"
 msgstr "Su equipo no tiene python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:421
+#: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Vista previa)"
 
@@ -5076,7 +5071,7 @@ msgstr "Examinador de carpetas"
 msgid "Switch to Folder"
 msgstr "Cambiar a la carpeta"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Abrir la carpeta contenedora"
 
@@ -5120,11 +5115,11 @@ msgstr "Proyecto vacío"
 msgid "Create a new empty project"
 msgstr "Crear un nuevo proyecto vacío"
 
-#: src/plugins/meson-templates/meson_templates.py:358
+#: src/plugins/meson-templates/meson_templates.py:361
 msgid "Command Line Tool"
 msgstr "Herramienta de línea de comandos"
 
-#: src/plugins/meson-templates/meson_templates.py:360
+#: src/plugins/meson-templates/meson_templates.py:363
 msgid "Create a new command line project"
 msgstr "Crear un proyecto de línea de comandos nuevo"
 
@@ -5489,18 +5484,22 @@ msgid "Open With…"
 msgstr "Abrir con…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
+msgid "_External Program…"
+msgstr "Programa _externo…"
+
+#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Editor de código fuente"
 
-#: src/plugins/project-tree/gtk/menus.ui:45
+#: src/plugins/project-tree/gtk/menus.ui:52
 msgid "Open in Terminal"
 msgstr "Abrir en una terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:59
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
-#: src/plugins/project-tree/gtk/menus.ui:65
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "Display Options"
 msgstr "Opciones de visualización"
 
@@ -5535,17 +5534,17 @@ msgid "quick highlight words matching current selection"
 msgstr "rápido resaltar palabras coincidentes actual selección"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:350
-#: src/plugins/recent/gbp-recent-section.c:357
+#: src/plugins/recent/gbp-recent-section.c:349
+#: src/plugins/recent/gbp-recent-section.c:356
 #, c-format
 msgid "Removing %s\n"
 msgstr "Quitando %s\n"
 
-#: src/plugins/recent/gbp-recent-section.c:470
+#: src/plugins/recent/gbp-recent-section.c:468
 msgid "Removing Files…"
 msgstr "Eliminando archivos…"
 
-#: src/plugins/recent/gbp-recent-section.c:472
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "_Close"
 msgstr "_Cerrar"
 
@@ -5556,6 +5555,55 @@ msgstr "Proyectos recientes"
 #: src/plugins/retab/gtk/menus.ui:9
 msgid "Reformat tabs"
 msgstr "Volver a formatear pestañas"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
+msgid "Rust Analyzer: Cargo command for diagnostics"
+msgstr "Analizador Rust: comando de carga para diagnósticos"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
+#| msgid "Change default branch"
+msgid "the default cargo command"
+msgstr "el comando de carga predeterminado"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:76
+msgid ""
+"clippy adds additional lints to catch common mistakes but is in general "
+"slower"
+msgstr ""
+"clippy añade comprobaciones adicionales para detectar errores comunes, pero "
+"en general es más lento"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:393
+#| msgid "Your computer is missing flatpak-builder"
+msgid "Your computer is missing the Rust Analyzer Language Server"
+msgstr "Su equipo no tiene servidor de lenguaje del analizador Rust"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:394
+msgid ""
+"The Language Server is necessary to provide IDE features like completion or "
+"diagnostic"
+msgstr ""
+"El servidor del lenguaje es necesario para proporcionar características como "
+"el completado o el diagnóstico"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:396
+#| msgid "Install Package"
+msgid "Install Language Server"
+msgstr "Instalar servidor de idiomas"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
+msgid "Installation of Rust Analyzer finished"
+msgstr "Instalación del analizador Rust terminada"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
+#| msgid "Installing rust "
+msgid "Installing Rust Analyzer..."
+msgstr "Instalando Analizador Rust…"
+
+#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
+#, c-format
+msgid "Cannot download Rust Analyzer: %s"
+msgstr "No se puede descargar el analizador Rust: %s"
 
 #: src/plugins/rustup/rustup_plugin.py:80
 msgid "Rustup not installed"
@@ -6101,11 +6149,11 @@ msgstr "Pruebas unitarias"
 msgid "Running test “%s”…"
 msgstr "Ejecutando test «%s»…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Loading TODOs…"
 msgstr "Cargando POR HACER…"
 
-#: src/plugins/todo/gbp-todo-panel.c:302
+#: src/plugins/todo/gbp-todo-panel.c:301
 msgid "Please wait while we scan your project"
 msgstr "Espere mientras se analiza su proyecto"
 
@@ -6667,9 +6715,6 @@ msgstr ""
 #~ msgid "Clone"
 #~ msgstr "Clonar"
 
-#~ msgid "Your computer is missing flatpak-builder"
-#~ msgstr "Su equipo no tiene flatpak-builder"
-
 #~ msgid "Cannot provide diff, no backing file provided."
 #~ msgstr ""
 #~ "Imposible proporcionar diferencias, no se ha proporcionado ningún archivo "
@@ -6686,9 +6731,6 @@ msgstr ""
 
 #~ msgid "Enter the URL of your project’s source code repository"
 #~ msgstr "Introduzca el URL del repositorio de código fuente de su proyecto"
-
-#~ msgid "Change default branch"
-#~ msgstr "Cambiar la rama predeterminada"
 
 #~ msgid "Failed to establish git file monitor: %s"
 #~ msgstr "Falló al establecer el archivo de monitorización de git: %s"
