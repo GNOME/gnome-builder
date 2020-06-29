@@ -60,37 +60,41 @@ struct _IdeDiagnosticsClass
 };
 
 IDE_AVAILABLE_IN_3_32
-IdeDiagnostics *ide_diagnostics_new                    (void);
+IdeDiagnostics *ide_diagnostics_new                     (void);
 IDE_AVAILABLE_IN_3_32
-IdeDiagnostics *ide_diagnostics_new_from_array         (GPtrArray                  *array);
+IdeDiagnostics *ide_diagnostics_new_from_array          (GPtrArray                  *array);
 IDE_AVAILABLE_IN_3_32
-void            ide_diagnostics_add                    (IdeDiagnostics             *self,
-                                                        IdeDiagnostic              *diagnostic);
+void            ide_diagnostics_add                     (IdeDiagnostics             *self,
+                                                         IdeDiagnostic              *diagnostic);
 IDE_AVAILABLE_IN_3_32
-void            ide_diagnostics_take                   (IdeDiagnostics             *self,
-                                                        IdeDiagnostic              *diagnostic);
+void            ide_diagnostics_take                    (IdeDiagnostics             *self,
+                                                         IdeDiagnostic              *diagnostic);
 IDE_AVAILABLE_IN_3_32
-void            ide_diagnostics_merge                  (IdeDiagnostics             *self,
-                                                        IdeDiagnostics             *other);
+void            ide_diagnostics_merge                   (IdeDiagnostics             *self,
+                                                         IdeDiagnostics             *other);
 IDE_AVAILABLE_IN_3_32
-guint           ide_diagnostics_get_n_errors           (IdeDiagnostics             *self);
+guint           ide_diagnostics_get_n_errors            (IdeDiagnostics             *self);
 IDE_AVAILABLE_IN_3_32
-gboolean        ide_diagnostics_get_has_errors         (IdeDiagnostics             *self);
+gboolean        ide_diagnostics_get_has_errors          (IdeDiagnostics             *self);
 IDE_AVAILABLE_IN_3_32
-guint           ide_diagnostics_get_n_warnings         (IdeDiagnostics             *self);
+guint           ide_diagnostics_get_n_warnings          (IdeDiagnostics             *self);
 IDE_AVAILABLE_IN_3_32
-gboolean        ide_diagnostics_get_has_warnings       (IdeDiagnostics             *self);
+gboolean        ide_diagnostics_get_has_warnings        (IdeDiagnostics             *self);
 IDE_AVAILABLE_IN_3_32
-void            ide_diagnostics_foreach_line_in_range  (IdeDiagnostics             *self,
-                                                        GFile                      *file,
-                                                        guint                       begin_line,
-                                                        guint                       end_line,
-                                                        IdeDiagnosticsLineCallback  callback,
-                                                        gpointer                    user_data);
+void            ide_diagnostics_foreach_line_in_range   (IdeDiagnostics             *self,
+                                                         GFile                      *file,
+                                                         guint                       begin_line,
+                                                         guint                       end_line,
+                                                         IdeDiagnosticsLineCallback  callback,
+                                                         gpointer                    user_data);
 IDE_AVAILABLE_IN_3_32
-IdeDiagnostic  *ide_diagnostics_get_diagnostic_at_line (IdeDiagnostics             *self,
-                                                        GFile                      *file,
-                                                        guint                       line);
+IdeDiagnostic  *ide_diagnostics_get_diagnostic_at_line  (IdeDiagnostics             *self,
+                                                         GFile                      *file,
+                                                         guint                       line);
+IDE_AVAILABLE_IN_3_38
+GPtrArray      *ide_diagnostics_get_diagnostics_at_line (IdeDiagnostics             *self,
+                                                         GFile                      *file,
+                                                         guint                       line);
 
 #define ide_diagnostics_get_size(d) ((gsize)g_list_model_get_n_items(G_LIST_MODEL(d)))
 

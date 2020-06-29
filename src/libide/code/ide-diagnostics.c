@@ -483,6 +483,54 @@ ide_diagnostics_get_diagnostic_at_line (IdeDiagnostics *self,
 }
 
 /**
+ * ide_diagnostics_get_diagnostics_at_line:
+ * @self: a #IdeDiagnostics
+ * @file: the target file
+ * @line: a line number
+ *
+ * Locates all #IdeDiagnostic in @file at @line.
+ *
+ * Returns: (transfer full) (element-type IdeDiagnostic) (nullable): an #GPtrArray or %NULL
+ *
+ * Since: 3.38
+ */
+GPtrArray *
+ide_diagnostics_get_diagnostics_at_line (IdeDiagnostics *self,
+                                         GFile          *file,
+                                         guint           line)
+{
+  IdeDiagnosticsPrivate *priv = ide_diagnostics_get_instance_private (self);
+  g_autoptr(GPtrArray) valid_diag = NULL;
+
+  g_return_val_if_fail (IDE_IS_DIAGNOSTICS (self), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  valid_diag = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (guint i = 0; i < priv->items->len; i++)
+    {
+      IdeDiagnostic *diag = g_ptr_array_index (priv->items, i);
+      IdeLocation *loc = ide_diagnostic_get_location (diag);
+      GFile *loc_file;
+      guint loc_line;
+
+      if (loc == NULL)
+        continue;
+
+      loc_file = ide_location_get_file (loc);
+      loc_line = ide_location_get_line (loc);
+
+      if (loc_line == line && g_file_equal (file, loc_file))
+        g_ptr_array_add (valid_diag, g_object_ref(diag));
+    }
+
+  if (valid_diag->len != 0)
+    return IDE_PTR_ARRAY_STEAL_FULL (&valid_diag);
+
+  return NULL;
+}
+
+/**
  * ide_diagnostics_new_from_array:
  * @array: (nullable) (element-type IdeDiagnostic): optional array
  *   of diagnostics to add.
