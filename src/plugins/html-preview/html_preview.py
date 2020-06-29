@@ -435,7 +435,7 @@ class HtmlPreviewPage(Ide.Page):
 
     def get_markdown(self, text):
         params = (HtmlPreviewData.MARKDOWN_CSS.get_data().decode('UTF-8'),
-                  html.escape(text),
+                  html.escape(text).replace('\n', '\\n'),
                   HtmlPreviewData.MARKED_JS.get_data().decode('UTF-8'),
                   HtmlPreviewData.MARKDOWN_VIEW_JS.get_data().decode('UTF-8'))
 
