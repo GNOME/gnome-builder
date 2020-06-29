@@ -62,10 +62,14 @@
   <color name="yellow3"                     value="#f6d32d"/>
   <color name="yellow4"                     value="#f5c211"/>
   <color name="yellow5"                     value="#e5a50a"/>
+  <color name="selection_bg"                value="#3285e5"/>
 
+  <!-- For Builder -->
+  <style name="debugger::breakpoint"        background="selection_bg" foreground="#ffffff"/>
 
   <!-- Global Settings -->
   <style name="text"                        foreground="dark2" background="light1"/>
+  <style name="selection"                   background="selection_bg"/>
   <style name="map-overlay"                 background="blue1"/>
   <style name="cursor"                      foreground="dark2"/>
   <style name="line-numbers"                foreground="light4" background="light1"/>
