@@ -29,6 +29,7 @@
 #include <jsonrpc-glib.h>
 #include <glib/gi18n.h>
 #include <libide-search.h>
+#include <libide-io.h>
 #include "rust-analyzer-search-provider.h"
 
 struct _RustAnalyzerService
@@ -89,6 +90,34 @@ _get_search_engine (RustAnalyzerService *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
   return ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_SEARCH_ENGINE);
+}
+
+static GFile *
+rust_analyzer_service_determine_workdir (RustAnalyzerService *self)
+{
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GPtrArray) possible_workdirs = NULL;
+  IdeContext *context = NULL;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  workdir = ide_context_ref_workdir (context);
+
+  possible_workdirs = ide_g_file_find_with_depth (workdir, "Cargo.toml", 5, NULL);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (possible_workdirs, g_object_unref);
+
+  if (possible_workdirs->len > 0)
+    {
+      // take the first directory with a Cargo.toml file as root. Multiple workspaces are only
+      // supported if a Cargo-workspace exists.
+      g_autoptr(GFile) parent = NULL;
+      parent = g_file_get_parent (g_ptr_array_index (possible_workdirs, 0));
+
+      return g_steal_pointer (&parent);
+    }
+
+  return g_steal_pointer (&workdir);
 }
 
 static GVariant *
@@ -270,7 +299,11 @@ rust_analyzer_service_set_client (RustAnalyzerService *self,
 
   if (g_set_object (&self->client, client))
     {
-      g_signal_connect (self->client, "load-configuration", G_CALLBACK (rust_analyzer_service_load_configuration), self);
+      g_signal_connect_object (self->client,
+                               "load-configuration",
+                               G_CALLBACK (rust_analyzer_service_load_configuration),
+                               self,
+                               G_CONNECT_AFTER);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
     }
 }
@@ -296,6 +329,8 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
 {
   RustAnalyzerService *self = user_data;
   g_autoptr(GIOStream) io_stream = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autofree gchar *root_uri = NULL;
   GInputStream *input;
   GOutputStream *output;
   IdeLspClient *client = NULL;
@@ -319,6 +354,9 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
   rust_analyzer_service_set_client (self, client);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (client));
   ide_lsp_client_add_language (client, "rust");
+  workdir = rust_analyzer_service_determine_workdir (self);
+  root_uri = g_file_get_uri (workdir);
+  ide_lsp_client_set_root_uri (client, root_uri);
   ide_lsp_client_start (client);
 
   // register SearchProvider
@@ -404,18 +442,18 @@ rust_analyzer_service_ensure_started (RustAnalyzerService *self)
   else if (self->state == RUST_ANALYZER_SERVICE_READY)
     {
       g_autofree gchar *newpath = NULL;
+      g_autoptr(GFile) workdir = NULL;
+      g_autofree gchar *root_path = NULL;
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      IdeContext *context = NULL;
-      GFile *workdir = NULL;
       const gchar *oldpath = NULL;
 
       launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDIN_PIPE);
       ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
       ide_subprocess_launcher_set_clear_env (launcher, TRUE);
 
-      context = ide_object_get_context (IDE_OBJECT (self));
-      workdir = ide_context_ref_workdir (context);
-      ide_subprocess_launcher_set_cwd (launcher, g_file_get_path (workdir));
+      workdir = rust_analyzer_service_determine_workdir (self);
+      root_path = g_file_get_path (workdir);
+      ide_subprocess_launcher_set_cwd (launcher, root_path);
       oldpath = g_getenv ("PATH");
       newpath = g_strdup_printf ("%s/%s:%s", g_get_home_dir (), ".cargo/bin", oldpath);
       ide_subprocess_launcher_setenv (launcher, "PATH", newpath, TRUE);

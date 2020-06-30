@@ -51,6 +51,7 @@ typedef struct
   GPtrArray      *languages;
   GVariant       *server_capabilities;
   IdeLspTrace     trace;
+  gchar          *root_uri;
 } IdeLspClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
@@ -79,6 +80,7 @@ enum {
   PROP_IO_STREAM,
   PROP_SERVER_CAPABILITIES,
   PROP_TRACE,
+  PROP_ROOT_URI,
   N_PROPS
 };
 
@@ -1034,6 +1036,7 @@ ide_lsp_client_finalize (GObject *object)
   g_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
   g_clear_pointer (&priv->server_capabilities, g_variant_unref);
   g_clear_pointer (&priv->languages, g_ptr_array_unref);
+  g_clear_pointer (&priv->root_uri, g_free);
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);
@@ -1085,6 +1088,9 @@ ide_lsp_client_get_property (GObject    *object,
       g_value_set_enum (value, ide_lsp_client_get_trace (self));
       break;
 
+    case PROP_ROOT_URI:
+      g_value_set_string (value, priv->root_uri);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1107,6 +1113,10 @@ ide_lsp_client_set_property (GObject      *object,
 
     case PROP_TRACE:
       ide_lsp_client_set_trace (self, g_value_get_enum (value));
+      break;
+
+    case PROP_ROOT_URI:
+      ide_lsp_client_set_root_uri (self, g_value_get_string (value));
       break;
 
     default:
@@ -1148,6 +1158,13 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                        IDE_TYPE_LSP_TRACE,
                        IDE_LSP_TRACE_OFF,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ROOT_URI] =
+    g_param_spec_string ("root-uri",
+                         "Root Uri",
+                         "The root uri the LSP should work on",
+                         "",
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -1397,7 +1414,9 @@ ide_lsp_client_start (IdeLspClient *self)
 
   workdir = ide_context_ref_workdir (context);
   root_path = g_file_get_path (workdir);
-  root_uri = g_file_get_uri (workdir);
+  root_uri = priv->root_uri;
+  if (root_uri == NULL)
+    root_uri = g_file_get_uri (workdir);
 
   switch (priv->trace)
     {
@@ -1907,6 +1926,22 @@ ide_lsp_client_set_trace (IdeLspClient *self,
     {
       priv->trace = trace;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRACE]);
+    }
+}
+
+void
+ide_lsp_client_set_root_uri (IdeLspClient *self,
+                             const gchar  *root_uri)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
+
+  if (!ide_str_equal0 (priv->root_uri, root_uri))
+    {
+      g_free (priv->root_uri);
+      priv->root_uri = g_strdup (root_uri);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT_URI]);
     }
 }
 
