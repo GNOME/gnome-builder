@@ -21,8 +21,8 @@
 
 import builtins
 import gi
+import html
 import io
-import json
 import locale
 import os
 import shutil
@@ -434,25 +434,28 @@ class HtmlPreviewPage(Ide.Page):
         self.webview = None
 
     def get_markdown(self, text):
-        params = (HtmlPreviewData.MARKDOWN_CSS.get_data().decode('UTF-8'),
-                  json.dumps(text),
-                  HtmlPreviewData.MARKED_JS.get_data().decode('UTF-8'),
-                  HtmlPreviewData.MARKDOWN_VIEW_JS.get_data().decode('UTF-8'))
-
-        return """
+        markdown_css = HtmlPreviewData.MARKDOWN_CSS.get_data().decode('UTF-8')
+        escaped_markdown = html.escape(text)
+        marked_js = HtmlPreviewData.MARKED_JS.get_data().decode('UTF-8')
+        markdown_view_js = HtmlPreviewData.MARKDOWN_VIEW_JS.get_data().decode('UTF-8')
+        template = """
 <html>
  <head>
-  <style>%s</style>
-  <script>var str=%s;</script>
-  <script>%s</script>
-  <script>%s</script>
+  <style>{markdown_css}</style>
+  <script>{marked_js}</script>
+  <script>{markdown_view_js}</script>
  </head>
  <body onload="preview()">
   <div class="markdown-body" id="preview">
+  <div id="markdown-source">{escaped_markdown}</div>
   </div>
  </body>
 </html>
-""" % params
+"""
+        return template.format(markdown_css=markdown_css,
+                               escaped_markdown=escaped_markdown,
+                               marked_js=marked_js,
+                               markdown_view_js=markdown_view_js)
 
     def get_rst(self, text, path):
         return publish_string(text,

@@ -10,5 +10,5 @@ marked.setOptions({
 });
 
 function preview(){
-    document.getElementById('preview').innerHTML = marked(str);
+    document.getElementById('preview').innerHTML = marked(document.getElementById('markdown-source').childNodes[0].nodeValue);
 }
