@@ -446,9 +446,8 @@ class HtmlPreviewPage(Ide.Page):
   <script>{markdown_view_js}</script>
  </head>
  <body onload="preview()">
-  <div class="markdown-body" id="preview">
+  <div class="markdown-body" id="preview"></div>
   <div id="markdown-source">{escaped_markdown}</div>
-  </div>
  </body>
 </html>
 """
