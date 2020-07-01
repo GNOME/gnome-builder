@@ -4489,9 +4489,9 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
                                      GtkWidget   *popup)
 {
   IdeSourceView *self = (IdeSourceView *)text_view;
+  g_autoptr(GPtrArray) line_diags = NULL;
   GtkSeparatorMenuItem *sep;
   IdeDiagnostics *diagnostics;
-  IdeDiagnostic *diagnostic = NULL;
   GtkTextBuffer *buffer;
   GtkMenuItem *menu_item;
   GtkTextMark *insert;
@@ -4529,60 +4529,67 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
    * If so, display the "Apply TextEdit" menu item with available fixits.
    */
   if ((diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (buffer))))
-    diagnostic = ide_diagnostics_get_diagnostic_at_line (diagnostics,
-                                                         ide_buffer_get_file (IDE_BUFFER (buffer)),
-                                                         gtk_text_iter_get_line (&iter));
-
-  if (diagnostic != NULL)
     {
-      guint num_fixits;
+      line_diags = ide_diagnostics_get_diagnostics_at_line (diagnostics,
+                                                            ide_buffer_get_file (IDE_BUFFER (buffer)),
+                                                            gtk_text_iter_get_line (&iter));
+      IDE_PTR_ARRAY_SET_FREE_FUNC (line_diags, g_object_unref);
+    }
 
-      num_fixits = ide_diagnostic_get_n_fixits (diagnostic);
-
-      if (num_fixits > 0)
+  if (line_diags != NULL)
+    {
+      for (guint j = 0; j < line_diags->len; j++)
         {
-          GtkWidget *parent;
-          GtkWidget *submenu;
-          guint i;
+          IdeDiagnostic *diag = g_ptr_array_index (line_diags, j);
+          guint num_fixits;
 
-          sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
-                              "visible", TRUE,
-                              NULL);
-          gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
+          num_fixits = ide_diagnostic_get_n_fixits (diag);
 
-          submenu = gtk_menu_new ();
-
-          parent = g_object_new (GTK_TYPE_MENU_ITEM,
-                                 "label", _("Apply Fix-It"),
-                                 "submenu", submenu,
-                                 "visible", TRUE,
-                                 NULL);
-          gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), parent);
-
-          for (i = 0; i < num_fixits; i++)
+          if (num_fixits > 0)
             {
-              IdeTextEdit *fixit;
-              gchar *label;
+              GtkWidget *parent;
+              GtkWidget *submenu;
+              guint i;
 
-              fixit = ide_diagnostic_get_fixit (diagnostic, i);
-              label = ide_source_view_get_fixit_label (self, fixit);
+              sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
+                                  "visible", TRUE,
+                                  NULL);
+              gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
 
-              menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
-                                        "label", label,
-                                        "visible", TRUE,
-                                        NULL);
-              gtk_menu_shell_append (GTK_MENU_SHELL (submenu), GTK_WIDGET (menu_item));
+              submenu = gtk_menu_new ();
 
-              g_object_set_data_full (G_OBJECT (menu_item),
-                                      "IDE_FIXIT",
-                                      g_object_ref (fixit),
-                                      (GDestroyNotify)g_object_unref);
+              parent = g_object_new (GTK_TYPE_MENU_ITEM,
+                                     "label", _("Apply Fix-It"),
+                                     "submenu", submenu,
+                                     "visible", TRUE,
+                                     NULL);
+              gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), parent);
 
-              g_signal_connect_object (menu_item,
-                                       "activate",
-                                       G_CALLBACK (ide_source_view__fixit_activate),
-                                       self,
-                                       G_CONNECT_SWAPPED);
+              for (i = 0; i < num_fixits; i++)
+                {
+                  IdeTextEdit *fixit;
+                  gchar *label;
+
+                  fixit = ide_diagnostic_get_fixit (diag, i);
+                  label = ide_source_view_get_fixit_label (self, fixit);
+
+                  menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
+                                            "label", label,
+                                            "visible", TRUE,
+                                            NULL);
+                  gtk_menu_shell_append (GTK_MENU_SHELL (submenu), GTK_WIDGET (menu_item));
+
+                  g_object_set_data_full (G_OBJECT (menu_item),
+                                          "IDE_FIXIT",
+                                          g_object_ref (fixit),
+                                          (GDestroyNotify)g_object_unref);
+
+                  g_signal_connect_object (menu_item,
+                                           "activate",
+                                           G_CALLBACK (ide_source_view__fixit_activate),
+                                           self,
+                                           G_CONNECT_SWAPPED);
+                }
             }
         }
     }
