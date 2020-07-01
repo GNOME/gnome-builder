@@ -21,8 +21,8 @@
 
 import builtins
 import gi
-import html
 import io
+import json
 import locale
 import os
 import shutil
@@ -435,7 +435,7 @@ class HtmlPreviewPage(Ide.Page):
 
     def get_markdown(self, text):
         params = (HtmlPreviewData.MARKDOWN_CSS.get_data().decode('UTF-8'),
-                  html.escape(text).replace('\n', '\\n'),
+                  json.dumps(text),
                   HtmlPreviewData.MARKED_JS.get_data().decode('UTF-8'),
                   HtmlPreviewData.MARKDOWN_VIEW_JS.get_data().decode('UTF-8'))
 
@@ -443,7 +443,7 @@ class HtmlPreviewPage(Ide.Page):
 <html>
  <head>
   <style>%s</style>
-  <script>var str="%s";</script>
+  <script>var str=%s;</script>
   <script>%s</script>
   <script>%s</script>
  </head>
