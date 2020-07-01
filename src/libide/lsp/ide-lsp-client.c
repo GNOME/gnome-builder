@@ -1414,7 +1414,7 @@ ide_lsp_client_start (IdeLspClient *self)
 
   workdir = ide_context_ref_workdir (context);
   root_path = g_file_get_path (workdir);
-  root_uri = priv->root_uri;
+  root_uri = g_strdup (priv->root_uri);
   if (root_uri == NULL)
     root_uri = g_file_get_uri (workdir);
 

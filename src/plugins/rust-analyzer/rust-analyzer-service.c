@@ -30,6 +30,9 @@
 #include <glib/gi18n.h>
 #include <libide-search.h>
 #include <libide-io.h>
+#include <libide-editor.h>
+#include <libide-gui.h>
+#include <ide-gui-private.h>
 #include "rust-analyzer-search-provider.h"
 
 struct _RustAnalyzerService
@@ -93,30 +96,108 @@ _get_search_engine (RustAnalyzerService *self)
 }
 
 static GFile *
-rust_analyzer_service_determine_workdir (RustAnalyzerService *self)
+rust_analyzer_service_get_current_file (RustAnalyzerService *self)
 {
-  g_autoptr(GFile) workdir = NULL;
-  g_autoptr(GPtrArray) possible_workdirs = NULL;
-  IdeContext *context = NULL;
+  g_autoptr(IdeContext) context = NULL;
+  IdeWorkbench *workbench = NULL;
+  IdeWorkspace *workspace = NULL;
+  IdeSurface *surface = NULL;
+  IdePage *page = NULL;
+
+  IDE_ENTRY;
 
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  workdir = ide_context_ref_workdir (context);
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  workbench = _ide_workbench_from_context (context);
+  workspace = ide_workbench_get_current_workspace (workbench);
+  surface = ide_workspace_get_surface_by_name (workspace, "editor");
+  page = ide_editor_surface_get_active_page (IDE_EDITOR_SURFACE (surface));
 
-  possible_workdirs = ide_g_file_find_with_depth (workdir, "Cargo.toml", 5, NULL);
-  IDE_PTR_ARRAY_SET_FREE_FUNC (possible_workdirs, g_object_unref);
+  if (!IDE_IS_EDITOR_PAGE (page)) return NULL;
 
-  if (possible_workdirs->len > 0)
+  IDE_RETURN (g_object_ref (ide_editor_page_get_file (IDE_EDITOR_PAGE (page))));
+}
+
+static gboolean
+rust_analyzer_service_search_cargo_root (RustAnalyzerService *self,
+                                         GFile               *dir,
+                                         GPatternSpec        *spec)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+
+  enumerator = g_file_enumerate_children (dir,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          NULL,
+                                          NULL);
+  if (enumerator == NULL)
+    return FALSE;
+
+  for (;;)
     {
-      // take the first directory with a Cargo.toml file as root. Multiple workspaces are only
-      // supported if a Cargo-workspace exists.
-      g_autoptr(GFile) parent = NULL;
-      parent = g_file_get_parent (g_ptr_array_index (possible_workdirs, 0));
+      g_autoptr(GFileInfo) info = g_file_enumerator_next_file (enumerator, NULL, NULL);
+      const gchar *name;
+      GFileType file_type;
 
-      return g_steal_pointer (&parent);
+      if (info == NULL)
+        break;
+
+      name = g_file_info_get_name (info);
+      file_type = g_file_info_get_file_type (info);
+
+      if (g_pattern_match_string (spec, name))
+        {
+          g_file_enumerator_close (enumerator, NULL, NULL);
+          IDE_RETURN (TRUE);
+        }
     }
 
+  g_file_enumerator_close (enumerator, NULL, NULL);
+  IDE_RETURN (FALSE);
+}
+
+static GFile *
+rust_analyzer_service_determine_workdir (RustAnalyzerService *self)
+{
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GPatternSpec) spec = NULL;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+
+  spec = g_pattern_spec_new ("Cargo.toml");
+
+  /* Search workbench root first */
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  workdir = ide_context_ref_workdir (context);
+  if (rust_analyzer_service_search_cargo_root (self, workdir, spec) == FALSE)
+    {
+      /* Search now from the current opened file upwards */
+      g_autoptr(GFile) current_file = NULL;
+      g_autoptr(GFile) parent = NULL;
+
+      current_file = rust_analyzer_service_get_current_file (self);
+      if (current_file == NULL) goto end;
+      parent = g_file_get_parent (current_file);
+
+      while (!g_file_equal (workdir, parent))
+        {
+          if (rust_analyzer_service_search_cargo_root (self, parent, spec))
+            {
+              return g_steal_pointer (&parent);
+            }
+          parent = g_file_get_parent (parent);
+        }
+    }
+
+end:
   return g_steal_pointer (&workdir);
 }
 
@@ -303,7 +384,7 @@ rust_analyzer_service_set_client (RustAnalyzerService *self,
                                "load-configuration",
                                G_CALLBACK (rust_analyzer_service_load_configuration),
                                self,
-                               G_CONNECT_AFTER);
+                               0);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
     }
 }
@@ -498,5 +579,6 @@ rust_analyzer_service_set_cargo_command (RustAnalyzerService *self,
   self->cargo_command = g_strdup (cargo_command);
 
   params = JSONRPC_MESSAGE_NEW ("settings", "");
-  ide_lsp_client_send_notification_async (self->client, "workspace/didChangeConfiguration", params, NULL, NULL, NULL);
+  if (self->client != NULL)
+    ide_lsp_client_send_notification_async (self->client, "workspace/didChangeConfiguration", params, NULL, NULL, NULL);
 }
