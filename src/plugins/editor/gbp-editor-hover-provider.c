@@ -62,21 +62,29 @@ gbp_editor_hover_provider_hover_async (IdeHoverProvider    *provider,
       GFile *file = ide_buffer_get_file (IDE_BUFFER (buffer));
       guint line = gtk_text_iter_get_line (iter);
       IdeDiagnostics *diagnostics;
-      IdeDiagnostic *diag;
+      g_autoptr(GPtrArray) line_diags = NULL;
 
-      if ((diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (buffer))) &&
-          (diag = ide_diagnostics_get_diagnostic_at_line (diagnostics, file, line)))
+      diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (buffer));
+      line_diags = ide_diagnostics_get_diagnostics_at_line (diagnostics, file, line);
+      IDE_PTR_ARRAY_SET_FREE_FUNC (line_diags, g_object_unref);
+
+      if (diagnostics && line_diags)
         {
-          g_autoptr(IdeMarkedContent) content = NULL;
-          g_autofree gchar *text = ide_diagnostic_get_text_for_display (diag);
+          for (guint i = 0; i < line_diags->len; i++)
+            {
+              IdeDiagnostic *diag = g_ptr_array_index (line_diags, i);
+              g_autoptr(IdeMarkedContent) content = NULL;
+              g_autofree gchar *text = ide_diagnostic_get_text_for_display (diag);
 
-          content = ide_marked_content_new_from_data (text,
-                                                      strlen (text),
-                                                      IDE_MARKED_KIND_PLAINTEXT);
-          ide_hover_context_add_content (context,
-                                         DIAGNOSTICS_HOVER_PRIORITY,
-                                         _("Diagnostics"),
-                                         content);
+              content = ide_marked_content_new_from_data (text,
+                                                          strlen (text),
+                                                          IDE_MARKED_KIND_PLAINTEXT);
+              ide_hover_context_add_content (context,
+                                             DIAGNOSTICS_HOVER_PRIORITY,
+                                             _("Diagnostics"),
+                                             content);
+
+            }
         }
     }
 
