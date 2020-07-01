@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-03-25 20:01+0000\n"
-"PO-Revision-Date: 2020-05-06 16:48+0300\n"
+"POT-Creation-Date: 2020-06-29 23:52+0000\n"
+"PO-Revision-Date: 2020-07-01 21:51+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28 [at] gmail [dot] "
 "com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:225
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -529,7 +529,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Această configurare este depășită și nu mai este în uz."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:76
 msgid "Show Ignored Files"
 msgstr "Arată fișierele ignorate"
 
@@ -541,7 +541,7 @@ msgstr ""
 "ignorate de VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:81
 msgid "Sort Directories First"
 msgstr "Sortează mai întâi dosarele"
 
@@ -854,9 +854,9 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Încărcați sau generați o paletă utilizând preferințele"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4985
+#: src/libide/sourceview/ide-source-view.c:5013
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:53
+#: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
 msgstr "Redenumește"
 
@@ -876,7 +876,7 @@ msgstr "_Redenumește"
 msgid "unsaved file %u"
 msgstr "fișier nesalvat %u"
 
-#: src/libide/code/ide-buffer.c:3405
+#: src/libide/code/ide-buffer.c:3424
 msgid "The current language lacks a symbol resolver."
 msgstr "Limbajului curent îi lipsește un rezolvator de simbol."
 
@@ -910,8 +910,8 @@ msgid "Untitled"
 msgstr "Fără titlu"
 
 #: src/libide/core/ide-transfer.c:549
-#: src/libide/editor/ide-editor-page-actions.c:239
-#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
 #: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:536
@@ -931,32 +931,32 @@ msgid "A suitable debugger was not found."
 msgstr "Nu s-a putut găsi un depanator potrivit."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:56
+#: src/libide/editor/ide-editor-page-actions.c:73
 #, c-format
 msgid "Failed to load file: %s"
 msgstr "Nu s-a putut încărca fișierul: %s"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page-actions.c:121
+#: src/libide/editor/ide-editor-page-actions.c:163
 #, c-format
 msgid "Print failed: %s"
 msgstr "Nu s-a putut tipări: %s"
 
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/editor/ide-editor-page-actions.c:192
-#: src/libide/editor/ide-editor-page-actions.c:300
+#: src/libide/editor/ide-editor-page-actions.c:234
+#: src/libide/editor/ide-editor-page-actions.c:342
 #, c-format
 msgid "Failed to save file: %s"
 msgstr "Nu s-a putut salva fișierul: %s"
 
-#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/libide/editor/ide-editor-page-actions.c:278
 #: src/plugins/buildui/gbp-buildui-log-pane.c:276
 #: src/plugins/testui/gbp-test-output-panel.c:65
 msgid "Save File"
 msgstr "Salvează fișierul"
 
-#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
@@ -964,11 +964,11 @@ msgstr "Salvează fișierul"
 msgid "Save"
 msgstr "Salvează"
 
-#: src/libide/editor/ide-editor-page-actions.c:335
+#: src/libide/editor/ide-editor-page-actions.c:377
 msgid "Save File As"
 msgstr "Salvează fișierul ca"
 
-#: src/libide/editor/ide-editor-page-actions.c:338
+#: src/libide/editor/ide-editor-page-actions.c:380
 msgid "Save As"
 msgstr "Salvează ca"
 
@@ -1651,7 +1651,9 @@ msgstr "Builder GNOME"
 
 #: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
-msgstr "Florentina Mușat <emryslokadottir [at] gmail [dot] com>, 2018-2020"
+msgstr ""
+"Florentina Mușat <emryslokadottir [at] gmail [dot] com>, 2018-2020\n"
+"Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2020"
 
 #: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
@@ -2770,7 +2772,7 @@ msgstr[1] "Se instalează %u pachete"
 msgstr[2] "Se instalează %u de pachete"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1216
+#: src/libide/lsp/ide-lsp-client.c:1337
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Nu s-a putut inițializa serverul de limbaj: %s"
@@ -2872,31 +2874,31 @@ msgstr "Micș_orare"
 msgid "Reset"
 msgstr "Restabilește"
 
-#: src/libide/sourceview/ide-source-view.c:4434
+#: src/libide/sourceview/ide-source-view.c:4436
 #, c-format
 msgid "Insert “%s”"
 msgstr "Introduce „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4436
+#: src/libide/sourceview/ide-source-view.c:4438
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Înlocuiește „%s” cu „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4554
+#: src/libide/sourceview/ide-source-view.c:4556
 msgid "Apply Fix-It"
 msgstr "Aplică repararea"
 
-#: src/libide/sourceview/ide-source-view.c:4984
+#: src/libide/sourceview/ide-source-view.c:5012
 msgid "Rename symbol"
 msgstr "Redenumește simbolul"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5219
+#: src/libide/sourceview/ide-source-view.c:5248
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5245
+#: src/libide/sourceview/ide-source-view.c:5274
 msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
@@ -2975,7 +2977,7 @@ msgstr "Se încarcă…"
 msgid "unversioned"
 msgstr "neversionat"
 
-#: src/main.c:138
+#: src/main.c:137
 msgid "Run a new instance of Builder"
 msgstr "Rulează o instanță nouă a Builder"
 
@@ -3183,7 +3185,7 @@ msgid "Beautify"
 msgstr "Cosmetizează"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:637
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:635
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (copie)"
@@ -3378,7 +3380,7 @@ msgstr "Curăță"
 msgid "Export Bundle"
 msgstr "Exportă pachetul"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:656
+#: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
 msgid "Build Issues"
 msgstr "Probleme de generare"
@@ -4710,17 +4712,17 @@ msgstr ""
 "Builder nu a putut furniza certificările adecvate în timpul clonării "
 "depozitului."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:593
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:604
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Nu se pot stabili fanioanele AMEND și GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:602
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:613
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Nu se poate semna comitul fără GPG_KEY_ID"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:399
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:403
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Nu se pot monitoriza fișierele din afara directorului de lucru"
@@ -4945,11 +4947,11 @@ msgstr ""
 msgid "Gradle Wrapper"
 msgstr "Wrapper Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:136
+#: src/plugins/greeter/gbp-greeter-application-addin.c:133
 msgid "Display a new greeter window"
 msgstr "Afișează o nouă fereastră de întâmpinare"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:144
+#: src/plugins/greeter/gbp-greeter-application-addin.c:141
 msgid "Begin cloning project from URI"
 msgstr "Începe clonarea proiectului de la URI"
 
@@ -5002,28 +5004,28 @@ msgstr "Permite _expresiile regulate"
 msgid "Open Preview"
 msgstr "Deschide previzualizarea"
 
-#: src/plugins/html-preview/html_preview.py:341
+#: src/plugins/html-preview/html_preview.py:342
 msgid "Your computer is missing python3-docutils"
 msgstr "Calculatorului îi lipsește python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:342
-#: src/plugins/html-preview/html_preview.py:352
+#: src/plugins/html-preview/html_preview.py:343
+#: src/plugins/html-preview/html_preview.py:353
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
 "Acest pachet este necesar pentru a furniza previzualizări ale documentelor "
 "bazate pe marcare."
 
-#: src/plugins/html-preview/html_preview.py:345
-#: src/plugins/html-preview/html_preview.py:355
+#: src/plugins/html-preview/html_preview.py:346
+#: src/plugins/html-preview/html_preview.py:356
 msgid "Install Package"
 msgstr "Instalează pachetul"
 
-#: src/plugins/html-preview/html_preview.py:351
+#: src/plugins/html-preview/html_preview.py:352
 msgid "Your computer is missing python3-sphinx"
 msgstr "Calculatorului îi lipsește python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:421
+#: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Previzualizare)"
 
@@ -5061,7 +5063,7 @@ msgstr "Navigator de director"
 msgid "Switch to Folder"
 msgstr "Comută la dosarul"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Deschide dosarul conținător"
 
@@ -5105,11 +5107,11 @@ msgstr "Proiect gol"
 msgid "Create a new empty project"
 msgstr "Creează un nou proiect gol"
 
-#: src/plugins/meson-templates/meson_templates.py:358
+#: src/plugins/meson-templates/meson_templates.py:361
 msgid "Command Line Tool"
 msgstr "Unealtă în linia de comandă"
 
-#: src/plugins/meson-templates/meson_templates.py:360
+#: src/plugins/meson-templates/meson_templates.py:363
 msgid "Create a new command line project"
 msgstr "Creează un nou proiect în linie de comandă"
 
@@ -5472,18 +5474,22 @@ msgid "Open With…"
 msgstr "Deschide cu…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
+msgid "_External Program…"
+msgstr "Program _extern…"
+
+#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Editor cod sursă"
 
-#: src/plugins/project-tree/gtk/menus.ui:45
+#: src/plugins/project-tree/gtk/menus.ui:52
 msgid "Open in Terminal"
 msgstr "Deschide în terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:59
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "Move to Trash"
 msgstr "Mută la gunoi"
 
-#: src/plugins/project-tree/gtk/menus.ui:65
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "Display Options"
 msgstr "Opțiuni de afișaj"
 
@@ -5519,17 +5525,17 @@ msgstr ""
 "potrivire curent selecție"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:350
-#: src/plugins/recent/gbp-recent-section.c:357
+#: src/plugins/recent/gbp-recent-section.c:349
+#: src/plugins/recent/gbp-recent-section.c:356
 #, c-format
 msgid "Removing %s\n"
 msgstr "Se elimină %s\n"
 
-#: src/plugins/recent/gbp-recent-section.c:470
+#: src/plugins/recent/gbp-recent-section.c:468
 msgid "Removing Files…"
 msgstr "Se elimină fișiere…"
 
-#: src/plugins/recent/gbp-recent-section.c:472
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "_Close"
 msgstr "În_chide"
 
@@ -5540,6 +5546,51 @@ msgstr "Proiecte recente"
 #: src/plugins/retab/gtk/menus.ui:9
 msgid "Reformat tabs"
 msgstr "Reformatează taburile"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
+msgid "Rust Analyzer: Cargo command for diagnostics"
+msgstr "Analizator Rust: Comanda cargo pentru diagnosticare"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
+msgid "the default cargo command"
+msgstr "comanda cargo implicită"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:76
+msgid ""
+"clippy adds additional lints to catch common mistakes but is in general "
+"slower"
+msgstr ""
+"clippy adaugă lints adiționale pentru a prinde greșelile comune dar este în "
+"general mailentă"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:393
+msgid "Your computer is missing the Rust Analyzer Language Server"
+msgstr "Calculatorului îi lipsește Serverul de Limbă Analizatorul Rust"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:394
+msgid ""
+"The Language Server is necessary to provide IDE features like completion or "
+"diagnostic"
+msgstr ""
+"Serverul de limbă este necesar pentru a furniza funcționalități IDE cum ar "
+"fi completarea sau diagnosticarea"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:396
+msgid "Install Language Server"
+msgstr "Instalează server de limbă"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
+msgid "Installation of Rust Analyzer finished"
+msgstr "Instalarea Analizatorului Rust a fost finalizată"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
+msgid "Installing Rust Analyzer..."
+msgstr "Se instalează Analizatorul Rust..."
+
+#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
+#, c-format
+msgid "Cannot download Rust Analyzer: %s"
+msgstr "Nu se poate descărca Analizatorul Rust: %s"
 
 #: src/plugins/rustup/rustup_plugin.py:80
 msgid "Rustup not installed"
@@ -6087,11 +6138,11 @@ msgstr "Teste unitate"
 msgid "Running test “%s”…"
 msgstr "Se rulează testul „%s”…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Loading TODOs…"
 msgstr "Se încarcă TODO-urile…"
 
-#: src/plugins/todo/gbp-todo-panel.c:302
+#: src/plugins/todo/gbp-todo-panel.c:301
 msgid "Please wait while we scan your project"
 msgstr "Așteptați până se scanează proiectul"
 
@@ -6637,9 +6688,6 @@ msgstr "Fișierul trebuie salvat local pentru a fi parsat."
 #~ msgid "Clone"
 #~ msgstr "Clonează"
 
-#~ msgid "Your computer is missing flatpak-builder"
-#~ msgstr "Calculatorul nu are flatpak-builder"
-
 #~ msgid "Cannot provide diff, no backing file provided."
 #~ msgstr "Nu se poate oferi diff, niciun fișier de rezervă furnizat."
 
@@ -6656,9 +6704,6 @@ msgstr "Fișierul trebuie salvat local pentru a fi parsat."
 
 #~ msgid "Enter the URL of your project’s source code repository"
 #~ msgstr "Introduceți URL-ul depozitului de cod sursă al proiectului"
-
-#~ msgid "Change default branch"
-#~ msgstr "Modifică ramura implicită"
 
 #~ msgid "Clone…"
 #~ msgstr "Clonează…"
