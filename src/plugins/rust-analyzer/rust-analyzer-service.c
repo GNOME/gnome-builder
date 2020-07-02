@@ -114,7 +114,8 @@ rust_analyzer_service_get_current_file (RustAnalyzerService *self)
   surface = ide_workspace_get_surface_by_name (workspace, "editor");
   page = ide_editor_surface_get_active_page (IDE_EDITOR_SURFACE (surface));
 
-  if (!IDE_IS_EDITOR_PAGE (page)) return NULL;
+  if (!IDE_IS_EDITOR_PAGE (page))
+    return NULL;
 
   IDE_RETURN (g_object_ref (ide_editor_page_get_file (IDE_EDITOR_PAGE (page))));
 }
@@ -155,16 +156,20 @@ rust_analyzer_service_determine_workdir (RustAnalyzerService *self)
       g_autoptr(GFile) parent = NULL;
 
       current_file = rust_analyzer_service_get_current_file (self);
-      if (current_file == NULL) goto end;
+      if (current_file == NULL)
+        goto end;
       parent = g_file_get_parent (current_file);
 
       while (!g_file_equal (workdir, parent))
         {
+          GFile *prev_parent = NULL;
           if (rust_analyzer_service_search_cargo_root (self, parent))
             {
               return g_steal_pointer (&parent);
             }
+          prev_parent = parent;
           parent = g_file_get_parent (parent);
+          g_object_unref (prev_parent);
         }
     }
 
