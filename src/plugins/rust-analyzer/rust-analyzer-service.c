@@ -121,45 +121,19 @@ rust_analyzer_service_get_current_file (RustAnalyzerService *self)
 
 static gboolean
 rust_analyzer_service_search_cargo_root (RustAnalyzerService *self,
-                                         GFile               *dir,
-                                         GPatternSpec        *spec)
+                                         GFile               *dir)
 {
-  g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GFile) cargofile = NULL;
 
   IDE_ENTRY;
 
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
 
-  enumerator = g_file_enumerate_children (dir,
-                                          G_FILE_ATTRIBUTE_STANDARD_NAME","
-                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
-                                          G_FILE_ATTRIBUTE_STANDARD_TYPE,
-                                          G_FILE_QUERY_INFO_NONE,
-                                          NULL,
-                                          NULL);
-  if (enumerator == NULL)
-    return FALSE;
+  cargofile = g_file_get_child (dir, "Cargo.toml");
 
-  for (;;)
-    {
-      g_autoptr(GFileInfo) info = g_file_enumerator_next_file (enumerator, NULL, NULL);
-      const gchar *name;
-      GFileType file_type;
+  if (g_file_query_exists (cargofile, NULL))
+    IDE_RETURN (TRUE);
 
-      if (info == NULL)
-        break;
-
-      name = g_file_info_get_name (info);
-      file_type = g_file_info_get_file_type (info);
-
-      if (g_pattern_match_string (spec, name))
-        {
-          g_file_enumerator_close (enumerator, NULL, NULL);
-          IDE_RETURN (TRUE);
-        }
-    }
-
-  g_file_enumerator_close (enumerator, NULL, NULL);
   IDE_RETURN (FALSE);
 }
 
@@ -168,16 +142,13 @@ rust_analyzer_service_determine_workdir (RustAnalyzerService *self)
 {
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GPatternSpec) spec = NULL;
 
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
-
-  spec = g_pattern_spec_new ("Cargo.toml");
 
   /* Search workbench root first */
   context = ide_object_ref_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
-  if (rust_analyzer_service_search_cargo_root (self, workdir, spec) == FALSE)
+  if (rust_analyzer_service_search_cargo_root (self, workdir) == FALSE)
     {
       /* Search now from the current opened file upwards */
       g_autoptr(GFile) current_file = NULL;
@@ -189,7 +160,7 @@ rust_analyzer_service_determine_workdir (RustAnalyzerService *self)
 
       while (!g_file_equal (workdir, parent))
         {
-          if (rust_analyzer_service_search_cargo_root (self, parent, spec))
+          if (rust_analyzer_service_search_cargo_root (self, parent))
             {
               return g_steal_pointer (&parent);
             }
