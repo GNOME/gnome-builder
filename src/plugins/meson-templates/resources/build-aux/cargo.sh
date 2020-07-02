@@ -9,7 +9,7 @@ export BUILDTYPE="$4"
 export APP_BIN="$5"
 
 
-if [[ $BUILDTYPE = "release" ]]
+if [ $BUILDTYPE = "release" ]
 then
     echo "RELEASE MODE"
     cargo build --manifest-path \
