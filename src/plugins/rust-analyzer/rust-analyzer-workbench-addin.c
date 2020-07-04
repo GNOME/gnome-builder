@@ -84,14 +84,16 @@ static void
 rust_analyzer_workbench_addin_remove_lsp (IdeTransfer *transfer,
                                           gpointer     user_data)
 {
-  g_autofree gchar *rust_analyzer_path = NULL;
   g_autoptr(GFile) rust_analyzer_bin = NULL;
 
   g_return_if_fail (IDE_IS_TRANSFER (transfer));
 
-  rust_analyzer_path = g_build_filename (g_get_home_dir (), ".cargo", "bin", "rust-analyzer", NULL);
-  rust_analyzer_bin = g_file_new_for_path (rust_analyzer_path);
-  g_file_trash (rust_analyzer_bin, NULL, NULL);
+  rust_analyzer_bin = g_file_new_build_filename (g_get_home_dir (),
+                                                 ".cargo",
+                                                 "bin",
+                                                 "rust-analyzer",
+                                                 NULL);
+  g_file_trash_async (rust_analyzer_bin, G_PRIORITY_DEFAULT, NULL, NULL, NULL);
 }
 
 static void
@@ -116,7 +118,10 @@ rust_analyzer_workbench_addin_install_rust_analyzer (GSimpleAction *action,
 
   transfer_manager = ide_transfer_manager_get_default ();
   transfer = rust_analyzer_transfer_new ();
-  g_signal_connect (transfer, "cancelled", G_CALLBACK (rust_analyzer_workbench_addin_remove_lsp), NULL);
+  g_signal_connect (transfer,
+                    "cancelled",
+                    G_CALLBACK (rust_analyzer_workbench_addin_remove_lsp),
+                    NULL);
 
   notification = ide_transfer_create_notification (IDE_TRANSFER (transfer));
   ide_notification_attach (notification, IDE_OBJECT (context));
@@ -141,10 +146,11 @@ rust_analyzer_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
   context = ide_workspace_get_context (workspace);
   install_rust_analyzer = g_simple_action_new ("install-rust-analyzer", NULL);
   g_simple_action_set_enabled (install_rust_analyzer, TRUE);
-  g_signal_connect (install_rust_analyzer,
-                    "activate",
-                    G_CALLBACK (rust_analyzer_workbench_addin_install_rust_analyzer),
-                    context);
+  g_signal_connect_object (install_rust_analyzer,
+                           "activate",
+                           G_CALLBACK (rust_analyzer_workbench_addin_install_rust_analyzer),
+                           context,
+                           0);
   g_action_map_add_action (G_ACTION_MAP (workspace), G_ACTION (install_rust_analyzer));
 }
 
