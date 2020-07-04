@@ -108,6 +108,8 @@ on_entry_activate_cb (GObject      *source,
   g_return_if_fail (IDE_IS_TASK (res));
 
   gtk_entry_set_text (self->commandentry, "");
+  gtk_widget_set_sensitive (GTK_WIDGET (self->commandentry), TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->commandentry));
 }
 
 static void
@@ -125,6 +127,7 @@ on_entry_activate (IdeDebuggerLogView *self,
 
   if (self->debugger != NULL)
     {
+      gtk_widget_set_sensitive (GTK_WIDGET (self->commandentry), FALSE);
       ide_debugger_interpret_async (self->debugger,
                                     text,
                                     NULL,
