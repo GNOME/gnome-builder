@@ -44,15 +44,8 @@
           <class name="commandbox"/>
         </style>
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="label">▶</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkEntry" id="commandentry">
+            <property name="primary-icon-name">pan-end-symbolic</property>
             <property name="visible">True</property>
             <property name="margin">6</property>
             <signal name="activate" handler="on_entry_activate" swapped="yes" object="IdeDebuggerLogView"/>
