@@ -10,6 +10,7 @@ plugins_sources += files([
   'ide-debugger-locals-view.c',
   'ide-debugger-registers-view.c',
   'ide-debugger-threads-view.c',
+  'ide-debugger-log-view.c',
 ])
 
 plugin_debuggerui_resources = gnome.compile_resources(

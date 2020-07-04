@@ -29,7 +29,6 @@
 #include <libide-foundry.h>
 #include <libide-gui.h>
 #include <libide-io.h>
-#include <libide-terminal.h>
 #include <glib/gi18n.h>
 
 #include "ide-debugger-breakpoints-view.h"
@@ -40,6 +39,7 @@
 #include "ide-debugger-locals-view.h"
 #include "ide-debugger-registers-view.h"
 #include "ide-debugger-threads-view.h"
+#include "ide-debugger-log-view.h"
 
 /**
  * SECTION:ide-debugger-editor-addin
@@ -71,48 +71,8 @@ struct _IdeDebuggerEditorAddin
   DzlDockWidget              *panel;
   IdeDebuggerRegistersView   *registers_view;
   IdeDebuggerThreadsView     *threads_view;
-  IdeTerminal                *log_view;
-  GtkScrollbar               *log_view_scroller;
+  IdeDebuggerLogView         *log_view;
 };
-
-static void
-debugger_log (IdeDebuggerEditorAddin *self,
-              IdeDebuggerStream       stream,
-              GBytes                 *content,
-              IdeDebugger            *debugger)
-{
-  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_DEBUGGER_STREAM (stream));
-  g_assert (content != NULL);
-  g_assert (IDE_IS_DEBUGGER (debugger));
-
-  if (stream == IDE_DEBUGGER_CONSOLE)
-    {
-      IdeLineReader reader;
-      const gchar *str;
-      gchar *line;
-      gsize len;
-      gsize line_len;
-
-      str = g_bytes_get_data (content, &len);
-
-      /*
-       * Ingnore \n so we can add \r\n. Otherwise we get problematic
-       * output in the terminal.
-       */
-      ide_line_reader_init (&reader, (gchar *)str, len);
-      while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
-        {
-          vte_terminal_feed (VTE_TERMINAL (self->log_view), line, line_len);
-
-          if ((line + line_len) < (str + len))
-            {
-              if (line[line_len] == '\r' || line[line_len] == '\n')
-                vte_terminal_feed (VTE_TERMINAL (self->log_view), "\r\n", 2);
-            }
-        }
-    }
-}
 
 static void
 debugger_stopped (IdeDebuggerEditorAddin *self,
@@ -228,6 +188,7 @@ debug_manager_notify_debugger (IdeDebuggerEditorAddin *self,
   ide_debugger_libraries_view_set_debugger (self->libraries_view, debugger);
   ide_debugger_registers_view_set_debugger (self->registers_view, debugger);
   ide_debugger_threads_view_set_debugger (self->threads_view, debugger);
+  ide_debugger_log_view_set_debugger (self->log_view, debugger);
 
   dzl_signal_group_set_target (self->debugger_signals, debugger);
 }
@@ -311,7 +272,6 @@ on_frame_activated (IdeDebuggerEditorAddin *self,
 static void
 ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
 {
-  GtkWidget *scroll_box;
   GtkWidget *box;
   GtkWidget *hpaned;
   GtkWidget *utilities;
@@ -397,28 +357,13 @@ ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
   gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->registers_view),
                                      "tab-label", _("Registers"),
                                      NULL);
-
-  scroll_box = g_object_new (GTK_TYPE_BOX,
-                             "orientation", GTK_ORIENTATION_HORIZONTAL,
-                             "visible", TRUE,
-                             NULL);
-  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (scroll_box),
-                                     "tab-label", _("Log"),
-                                     NULL);
-
-  self->log_view = g_object_new (IDE_TYPE_TERMINAL,
-                                 "hexpand", TRUE,
+  self->log_view = g_object_new (IDE_TYPE_DEBUGGER_LOG_VIEW,
                                  "visible", TRUE,
                                  NULL);
   OBSERVE_DESTROY (self->log_view);
-  gtk_container_add (GTK_CONTAINER (scroll_box), GTK_WIDGET (self->log_view));
-
-  self->log_view_scroller = g_object_new (GTK_TYPE_SCROLLBAR,
-                                          "adjustment", gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->log_view)),
-                                          "orientation", GTK_ORIENTATION_VERTICAL,
-                                          "visible", TRUE,
-                                          NULL);
-  gtk_container_add (GTK_CONTAINER (scroll_box), GTK_WIDGET (self->log_view_scroller));
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->log_view),
+                                     "tab-label", _("Console"),
+                                     NULL);
 
   utilities = ide_editor_surface_get_utilities (self->editor);
   gtk_container_add (GTK_CONTAINER (utilities), GTK_WIDGET (self->panel));
@@ -465,8 +410,8 @@ ide_debugger_editor_addin_load (IdeEditorAddin   *addin,
 
   dzl_signal_group_connect_swapped (self->debugger_signals,
                                     "log",
-                                    G_CALLBACK (debugger_log),
-                                    self);
+                                    G_CALLBACK (ide_debugger_log_view_debugger_log),
+                                    self->log_view);
 
   dzl_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",

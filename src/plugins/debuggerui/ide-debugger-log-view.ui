@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.37.0 -->
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <template class="IdeDebuggerLogView" parent="GtkBox">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <child>
+          <object class="IdeTerminal" id="terminal">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrollbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <style>
+          <class name="commandbox"/>
+        </style>
+        <child>
+          <object class="GtkEntry" id="commandentry">
+            <property name="primary-icon-name">pan-end-symbolic</property>
+            <property name="visible">True</property>
+            <property name="margin">6</property>
+            <signal name="activate" handler="on_entry_activate" swapped="yes" object="IdeDebuggerLogView"/>
+            <style>
+              <class name="commandentry"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
