@@ -71,6 +71,9 @@ GVariant     *ide_lsp_client_get_server_capabilities  (IdeLspClient         *sel
 IDE_AVAILABLE_IN_3_32
 void          ide_lsp_client_add_language             (IdeLspClient         *self,
                                                        const gchar          *language_id);
+IDE_AVAILABLE_IN_3_38
+void          ide_lsp_client_set_root_uri             (IdeLspClient         *self,
+                                                       const gchar          *root_uri);
 IDE_AVAILABLE_IN_3_32
 void          ide_lsp_client_start                    (IdeLspClient         *self);
 IDE_AVAILABLE_IN_3_32

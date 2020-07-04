@@ -133,16 +133,18 @@ rust_analyzer_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
                                                IdeWorkspace      *workspace)
 {
   GSimpleAction *install_rust_analyzer = NULL;
+  IdeContext *context = NULL;
 
   g_assert (RUST_IS_ANALYZER_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
+  context = ide_workspace_get_context (workspace);
   install_rust_analyzer = g_simple_action_new ("install-rust-analyzer", NULL);
   g_simple_action_set_enabled (install_rust_analyzer, TRUE);
   g_signal_connect (install_rust_analyzer,
                     "activate",
                     G_CALLBACK (rust_analyzer_workbench_addin_install_rust_analyzer),
-                    ide_workspace_get_context (workspace));
+                    context);
   g_action_map_add_action (G_ACTION_MAP (workspace), G_ACTION (install_rust_analyzer));
 }
 
