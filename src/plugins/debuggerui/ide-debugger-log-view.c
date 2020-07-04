@@ -114,13 +114,19 @@ static void
 on_entry_activate (IdeDebuggerLogView *self,
                    GtkEntry           *entry)
 {
+  g_autofree gchar *text = NULL;
+
   g_return_if_fail (IDE_IS_DEBUGGER_LOG_VIEW (self));
   g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  text = g_strstrip (g_strdup (gtk_entry_get_text (entry)));
+  if (ide_str_empty0 (text))
+    return;
 
   if (self->debugger != NULL)
     {
       ide_debugger_interpret_async (self->debugger,
-                                    gtk_entry_get_text (entry),
+                                    text,
                                     NULL,
                                     on_entry_activate_cb,
                                     g_object_ref (self));
