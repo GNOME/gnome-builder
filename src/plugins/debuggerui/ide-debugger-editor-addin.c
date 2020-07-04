@@ -362,7 +362,7 @@ ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
                                  NULL);
   OBSERVE_DESTROY (self->log_view);
   gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->log_view),
-                                     "tab-label", _("Log"),
+                                     "tab-label", _("Console"),
                                      NULL);
 
   utilities = ide_editor_surface_get_utilities (self->editor);
