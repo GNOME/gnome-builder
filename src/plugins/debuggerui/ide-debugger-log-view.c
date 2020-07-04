@@ -99,17 +99,32 @@ ide_debugger_log_view_set_property (GObject      *object,
 
 static void
 on_entry_activate_cb (GObject      *source,
-                      GAsyncResult *res,
+                      GAsyncResult *result,
                       gpointer      user_data)
 {
+  IdeDebugger *debugger = (IdeDebugger *)source;
   g_autoptr(IdeDebuggerLogView) self = user_data;
+  g_autoptr(GError) error = NULL;
 
-  g_return_if_fail (IDE_IS_DEBUGGER_LOG_VIEW (self));
-  g_return_if_fail (IDE_IS_TASK (res));
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER (debugger));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_DEBUGGER_LOG_VIEW (self));
 
   gtk_entry_set_text (self->commandentry, "");
   gtk_widget_set_sensitive (GTK_WIDGET (self->commandentry), TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (self->commandentry));
+
+  if (!ide_debugger_interpret_finish (debugger, result, &error))
+    {
+      vte_terminal_feed (VTE_TERMINAL (self->terminal),
+                         error->message,
+                         strlen (error->message));
+      vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", 2);
+    }
+
+  IDE_EXIT;
 }
 
 static void
@@ -124,6 +139,10 @@ on_entry_activate (IdeDebuggerLogView *self,
   text = g_strstrip (g_strdup (gtk_entry_get_text (entry)));
   if (ide_str_empty0 (text))
     return;
+
+  vte_terminal_feed (VTE_TERMINAL (self->terminal), "> ", 2);
+  vte_terminal_feed (VTE_TERMINAL (self->terminal), text, strlen (text));
+  vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", 2);
 
   if (self->debugger != NULL)
     {
