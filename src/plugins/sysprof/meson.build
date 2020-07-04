@@ -1,8 +1,8 @@
 if get_option('plugin_sysprof')
 
 plugins_deps += [
-  dependency('sysprof-3', version: '>= 3.33.4'),
-  dependency('sysprof-ui-3', version: '>= 3.33.4'),
+  dependency('sysprof-4', version: '>= 3.37.1'),
+  dependency('sysprof-ui-4', version: '>= 3.37.1'),
 ]
 
 plugins_sources += files([
