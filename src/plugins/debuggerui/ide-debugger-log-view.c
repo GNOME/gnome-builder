@@ -102,7 +102,7 @@ on_entry_activate_cb (GObject      *source,
                       GAsyncResult *res,
                       gpointer      user_data)
 {
-  IdeDebuggerLogView *self = (IdeDebuggerLogView *)user_data;
+  g_autoptr(IdeDebuggerLogView) self = user_data;
 
   g_return_if_fail (IDE_IS_DEBUGGER_LOG_VIEW (self));
   g_return_if_fail (IDE_IS_TASK (res));
@@ -123,7 +123,7 @@ on_entry_activate (IdeDebuggerLogView *self,
                                     gtk_entry_get_text (entry),
                                     NULL,
                                     on_entry_activate_cb,
-                                    self);
+                                    g_object_ref (self));
     }
 }
 
