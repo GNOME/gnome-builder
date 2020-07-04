@@ -2462,7 +2462,6 @@ gbp_gdb_debugger_interpret_async (IdeDebugger         *debugger,
   command_str = g_strdup_printf ("-interpreter-exec console \"%s\"", escaped);
 
   gbp_gdb_debugger_exec_async (self,
-                               NULL,
                                command_str,
                                cancellable,
                                gbp_gdb_debugger_interpret_cb,

@@ -1,0 +1,8 @@
+.commandentry {
+  border: none;
+  font-family: monospace;
+}
+
+.commandbox {
+  background-color: @theme_bg_color;
+}
