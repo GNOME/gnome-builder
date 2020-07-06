@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-07-04 17:29+0000\n"
-"PO-Revision-Date: 2020-07-05 13:42+0300\n"
+"POT-Creation-Date: 2020-07-05 10:44+0000\n"
+"PO-Revision-Date: 2020-07-06 13:41+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -2772,7 +2772,7 @@ msgstr[1] "Se instalează %u pachete"
 msgstr[2] "Se instalează %u de pachete"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1337
+#: src/libide/lsp/ide-lsp-client.c:1354
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Nu s-a putut inițializa serverul de limbaj: %s"
@@ -5563,11 +5563,11 @@ msgstr ""
 "clippy adaugă lints adiționale pentru a prinde greșelile comune dar este în "
 "general mailentă"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:393
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
 msgid "Your computer is missing the Rust Analyzer Language Server"
 msgstr "Calculatorului îi lipsește Serverul de Limbă Analizatorul Rust"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:394
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
 msgid ""
 "The Language Server is necessary to provide IDE features like completion or "
 "diagnostic"
@@ -5575,7 +5575,7 @@ msgstr ""
 "Serverul de limbă este necesar pentru a furniza funcționalități IDE cum ar "
 "fi completarea sau diagnosticarea"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:396
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
 msgid "Install Language Server"
 msgstr "Instalează server de limbă"
 
@@ -5819,7 +5819,7 @@ msgstr "Comandă nouă"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:134
 msgid "Click + to add an external command"
-msgstr "Dați clic pe + pentru a adăuga o comandă externă"
+msgstr "Apăsați clic pe + pentru a adăuga o comandă externă"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
