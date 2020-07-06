@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2019-09-20 17:14+0000\n"
-"PO-Revision-Date: 2019-09-22 09:01+0200\n"
+"POT-Creation-Date: 2020-06-21 17:56+0000\n"
+"PO-Revision-Date: 2020-07-06 13:21+0200\n"
 "Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -845,7 +845,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Încărcați sau generați o paletă utilizând preferințele"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4977
+#: src/libide/sourceview/ide-source-view.c:4983
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
@@ -2838,31 +2838,31 @@ msgstr "Micș_orare"
 msgid "Reset"
 msgstr "Restabilește"
 
-#: src/libide/sourceview/ide-source-view.c:4426
+#: src/libide/sourceview/ide-source-view.c:4432
 #, c-format
 msgid "Insert “%s”"
 msgstr "Introduce „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4428
+#: src/libide/sourceview/ide-source-view.c:4434
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Înlocuiește „%s” cu „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4546
+#: src/libide/sourceview/ide-source-view.c:4552
 msgid "Apply Fix-It"
 msgstr "Aplică repararea"
 
-#: src/libide/sourceview/ide-source-view.c:4976
+#: src/libide/sourceview/ide-source-view.c:4982
 msgid "Rename symbol"
 msgstr "Redenumește simbolul"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5211
+#: src/libide/sourceview/ide-source-view.c:5217
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5237
+#: src/libide/sourceview/ide-source-view.c:5243
 msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
@@ -4482,31 +4482,31 @@ msgstr ""
 msgid "Architecture"
 msgstr "Arhitectură"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Se creează spațiul de lucru flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:336
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
 msgid "Preparing build directory"
 msgstr "Se pregătește dosarul de generare"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:386
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:412
 msgid "Downloading dependencies"
 msgstr "Se descarcă dependențele"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:465
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:491
 msgid "Building dependencies"
 msgstr "Se generează dependențele"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:516
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
 msgid "Finalizing flatpak build"
 msgstr "Se finalizează generarea flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
 msgid "Exporting staging directory"
 msgstr "Se exportă dosarul de introducere"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:646
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
 msgid "Creating flatpak bundle"
 msgstr "Se creează pachetul flatpak"
 
@@ -5657,7 +5657,7 @@ msgstr "Comandă nouă"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:134
 msgid "Click + to add an external command"
-msgstr "Dați clic pe + pentru a adăuga o comandă externă"
+msgstr "Apăsați clic pe + pentru a adăuga o comandă externă"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
