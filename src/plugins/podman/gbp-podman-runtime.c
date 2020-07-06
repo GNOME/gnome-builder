@@ -49,7 +49,12 @@ maybe_start (GbpPodmanRuntime *self)
   if (self->has_started)
     return;
 
-  if (!(id = json_object_get_string_member (self->object, "ID")))
+  if (json_object_has_member (self->object, "ID"))
+    id = json_object_get_string_member (self->object, "ID");
+  else
+    id = json_object_get_string_member (self->object, "Id");
+
+  if (id == NULL)
     return;
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE |
@@ -70,6 +75,7 @@ static IdeSubprocessLauncher *
 gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
                                     GError     **error)
 {
+  const gchar *id;
   GbpPodmanRuntime *self = (GbpPodmanRuntime *)runtime;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -77,8 +83,15 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
 
   maybe_start (self);
 
+  if (json_object_has_member (self->object, "ID"))
+    id = json_object_get_string_member (self->object, "ID");
+  else
+    id = json_object_get_string_member (self->object, "Id");
+
+  g_return_val_if_fail (id != NULL, NULL);
+
   return g_object_new (GBP_TYPE_PODMAN_SUBPROCESS_LAUNCHER,
-                       "id", json_object_get_string_member (self->object, "ID"),
+                       "id", id,
                        "run-on-host", TRUE,
                        NULL);
 }
@@ -117,11 +130,27 @@ gbp_podman_runtime_new (JsonObject *object)
   GbpPodmanRuntime *self;
   const gchar *id;
   const gchar *names;
+  JsonArray *names_arr;
+  JsonNode *names_node;
 
   g_return_val_if_fail (object != NULL, NULL);
 
-  id = json_object_get_string_member (object, "ID");
-  names = json_object_get_string_member (object, "Names");
+  if (json_object_has_member (object, "ID"))
+    id = json_object_get_string_member (object, "ID");
+  else
+    id = json_object_get_string_member (object, "Id");
+
+  names_node = json_object_get_member (object, "Names");
+  if (JSON_NODE_HOLDS_ARRAY (names_node))
+    {
+      names_arr = json_node_get_array (names_node);
+      names = json_array_get_string_element (names_arr, 0);
+    }
+  else
+    {
+      names = json_node_get_string (names_node);
+    }
+
   full_id = g_strdup_printf ("podman:%s", id);
   name = g_strdup_printf ("%s %s", _("Podman"), names);
 
