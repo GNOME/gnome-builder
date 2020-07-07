@@ -84,6 +84,13 @@
   <style name="search-match"                foreground="light1" background="orange3"/>
   <style name="misspelled-match"            foreground="light1" background="red3"/>
 
+  <!-- Diffs and VCS gutter -->
+  <style name="diff:added-line"             foreground="green5"/>
+  <style name="diff:removed-line"           foreground="red3"/>
+  <style name="gutter:added-line"           foreground="green5"/>
+  <style name="gutter:changed-line"         foreground="orange3"/>
+  <style name="gutter:removed-line"         foreground="red3"/>
+
   <style name="gtk-doc:function-name"       bold="true"/>
   <style name="gtk-doc:function"            bold="true"/>
   <style name="gtk-doc:parameter"           bold="true"/>
