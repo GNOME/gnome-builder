@@ -811,4 +811,4 @@ modeline_parser_apply_modeline (GtkTextBuffer   *buffer,
 	g_free (options.language_id);
 }
 
-/* vi:ts=8 */
+// vi:ts=8
