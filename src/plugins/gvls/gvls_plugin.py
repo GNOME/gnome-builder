@@ -56,6 +56,7 @@ class GVlsService(Ide.Object):
     source_file = None
     build_monitor = None
     meson_compile_commands = ""
+    meson_targets_intro = ""
 
     @classmethod
     def from_context(klass, context):
@@ -176,6 +177,7 @@ class GVlsService(Ide.Object):
             b.add_value(self.create_dict_entry_string('systemVapi', self.system_vapidir))
             b.add_value(self.create_dict_entry_string('valaApiVersion', self.vala_api_version))
             b.add_value(self.create_dict_entry_string('mesonCompileCommands', self.meson_compile_commands))
+            b.add_value(self.create_dict_entry_string('mesonTargetsIntro', self.meson_targets_intro))
             ad = GLib.Variant.new_string ('valaArgs')
             vadi = self.dict_to_array_variant(self.vala_args)
             adi = GLib.Variant.new_dict_entry(ad, GLib.Variant.new_variant (vadi))
@@ -204,6 +206,13 @@ class GVlsService(Ide.Object):
         if event_type == Gio.FileMonitorEvent.DELETED:
             self.build_monitor = None
 
+    def read_meson_targets_intro(self, file):
+        ostream = Gio.MemoryOutputStream.new_resizable()
+        ostream.splice(file.read(), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE, None)
+        ostream.close()
+        b = ostream.steal_as_bytes()
+        self.meson_targets_intro = str(b.get_data(),encoding='utf8')
+
     def read_meson_compile_commands(self, file):
         ostream = Gio.MemoryOutputStream.new_resizable()
         ostream.splice(file.read(), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE, None)
@@ -224,16 +233,22 @@ class GVlsService(Ide.Object):
                         bcf = Gio.File.new_for_uri(bcdir.get_uri()+'/compile_commands.json')
                         if not bcf.query_exists(None):
                             return
-                        self.read_meson_compile_commands(bcf)
-                        if self.build_monitor == None:
-                            self.build_monitor = bcf.monitor(Gio.FileMonitorFlags.NONE, None)
-                            self.build_monitor.connect('changed', self._build_config_changed)
-                        cc = Ide.CompileCommands.new()
-                        cc.load (bcf)
-                        commands = cc.lookup (self.source_file, '')
-                        if commands != None:
-                            self.build_args = commands[0]
-            
+                        mtf = Gio.File.new_for_uri(bcdir.get_uri()+'/meson-info/intro-targets.json')
+                        if not mtf.query_exists(None):
+                            self.read_meson_compile_commands(bcf)
+                            if self.build_monitor == None:
+                                self.build_monitor = bcf.monitor(Gio.FileMonitorFlags.NONE, None)
+                                self.build_monitor.connect('changed', self._build_config_changed)
+                            cc = Ide.CompileCommands.new()
+                            cc.load (bcf)
+                            commands = cc.lookup (self.source_file, '')
+                            if commands != None:
+                                self.build_args = commands[0]
+                        else:
+                            self.read_meson_targets_intro(mtf)
+                            if self.build_monitor == None:
+                                self.build_monitor = mtf.monitor(Gio.FileMonitorFlags.NONE, None)
+                                self.build_monitor.connect('changed', self._build_config_changed)
             self.files = []
             self.packages = []
             self.vala_args = {}
