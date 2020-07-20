@@ -52,7 +52,7 @@ gbp_sysprof_surface_init (GbpSysprofSurface *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_widget_set_name (GTK_WIDGET (self), "profiler");
-  ide_surface_set_icon_name (IDE_SURFACE (self), "org.gnome.Sysprof-symbolic");
+  ide_surface_set_icon_name (IDE_SURFACE (self), "builder-profiler-symbolic");
   ide_surface_set_title (IDE_SURFACE (self), _("Profiler"));
 
   controller = dzl_shortcut_controller_find (GTK_WIDGET (self));

@@ -19,7 +19,7 @@
         <attribute name="label" translatable="yes">Profiler</attribute>
         <attribute name="role">normal</attribute>
         <attribute name="action">profiler.show</attribute>
-        <attribute name="verb-icon-name">org.gnome.Sysprof-symbolic</attribute>
+        <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
       </item>
     </section>
   </menu>
@@ -30,7 +30,7 @@
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">profiler.run</attribute>
         <attribute name="label" translatable="yes">Run with Profiler</attribute>
-        <attribute name="verb-icon-name">org.gnome.Sysprof-symbolic</attribute>
+        <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
         <attribute name="accel">&lt;Control&gt;F8</attribute>
       </item>
     </section>
