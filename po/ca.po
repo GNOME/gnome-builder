@@ -290,7 +290,7 @@ msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
-"El retrocés suprimirà els espais extres per mantenir-vos alineats amb "
+"La tecla de retrocés suprimirà els espais extres per mantenir-vos alineats amb "
 "l'amplada del sagnat."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
@@ -1122,7 +1122,7 @@ msgstr "Canvieu entre la «cerca» i la «cerca i substitució»"
 #: src/libide/terminal/ide-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
-"Mostra o oculta opcions de cerca com ara la distinció entre majúscules i "
+"Mostra o oculta les opcions de cerca com ara la distinció entre majúscules i "
 "minúscules"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
@@ -1935,7 +1935,7 @@ msgstr "L'inici es mou al primer caràcter no en blanc"
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
-"El retrocés suprimirà els espais extres per mantenir-vos alineats amb "
+"La tecla de retrocés suprimirà els espais extres per mantenir-vos alineats amb "
 "l'amplada del sagnat"
 
 #: src/libide/gui/ide-preferences-builtin.c:156
@@ -3069,7 +3069,7 @@ msgid ""
 "Beautifier plugin: neither command nor command-pattern keys found: entry "
 "“%s” disabled"
 msgstr ""
-"Connector embellidor: no s'ha trobat cap ordre ni les claus patró-ordre: "
+"Connector embellidor: no s'ha trobat cap ordre ni les claus ordre-patró: "
 "l'entrada «%s» està desactivada"
 
 #. translators: %s is replaced with the config entry name
@@ -3079,7 +3079,7 @@ msgid ""
 "Beautifier plugin: both command and command-pattern keys found: entry “%s” "
 "disabled"
 msgstr ""
-"Connector embellidor: s'han trobat les ordres i les claus patró-ordre: "
+"Connector embellidor: s'han trobat les ordres i les claus ordre-patró: "
 "l'entrada «%s» està desactivada"
 
 #. translators: %s and %s are replaced with the config path and the entry name
@@ -3108,7 +3108,7 @@ msgid ""
 "Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
 "entry “%s” disabled"
 msgstr ""
-"Connector embellidor: clau patró-ordre @c@ a «%s» però sense fitxer de "
+"Connector embellidor: clau ordre-patró @c@ a «%s» però sense fitxer de "
 "configuració: l'entrada «%s» està desactivada"
 
 #. translators: %s and %s are replaced with the profile name and the entry
@@ -3484,7 +3484,7 @@ msgstr "Opcions de Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:95
 msgid "Complete Parenthesis"
-msgstr "Completa Parèntesis"
+msgstr "Completa parèntesis"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:96
 msgid "Include parenthesis when completing clang proposals"
@@ -3492,7 +3492,7 @@ msgstr "Inclou parèntesis en completar propostes de Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:107
 msgid "Complete Parameters"
-msgstr "Completa Paràmetres"
+msgstr "Completa els paràmetres"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:108
 msgid "Include parameters and types when completing clang proposals"
@@ -3504,7 +3504,7 @@ msgstr "anònim"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr "Completa parèntesis"
+msgstr "Completa els parèntesis"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
@@ -3512,7 +3512,7 @@ msgstr "Si s'haurien d'incloure parèntesis en completar."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
-msgstr "Completa paràmetres"
+msgstr "Completa els paràmetres"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
@@ -3850,7 +3850,7 @@ msgstr "No s'han seleccionat paletes"
 
 #: src/plugins/color-picker/gtk/color-picker-preview.ui:58
 msgid "Select a palette file"
-msgstr "Selecciona un fitxer paleta"
+msgstr "Selecciona un fitxer de paleta"
 
 #: src/plugins/color-picker/gtk/color-picker.ui:62
 msgid "Try loading or generating a palette using the menu"
@@ -4540,7 +4540,7 @@ msgstr "ESlint"
 
 #: src/plugins/eslint/eslint_plugin.py:154
 msgid "Enable the use of ESLint, which may execute code in your project"
-msgstr "Habilita l'ús de ESLint, el qual pot executar codi al vostre projecte"
+msgstr "Habilita l'ús d'ESLint, el qual pot executar codi al vostre projecte"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/eslint/eslint_plugin.py:156
@@ -4556,7 +4556,7 @@ msgid ""
 "Enable the use of eslint to find additional diagnostics in JavaScript files."
 " This may result in the execution of code in your project."
 msgstr ""
-"Habilita l'ús de eslint per trobar diagnòstics addicionals als fitxers de "
+"Habilita l'ús d'eslint per trobar diagnòstics addicionals als fitxers de "
 "JavaScript. Això pot produir que s'executi codi al vostre projecte."
 
 #: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
