@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-06-27 21:08+0000\n"
-"PO-Revision-Date: 2020-06-29 12:15+0200\n"
+"POT-Creation-Date: 2020-07-07 15:38+0000\n"
+"PO-Revision-Date: 2020-07-29 08:44+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -855,7 +855,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5013
+#: src/libide/sourceview/ide-source-view.c:5020
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
@@ -2105,7 +2105,7 @@ msgstr ""
 "descubierta en el archivo fuente"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
-#: src/plugins/editor/gbp-editor-hover-provider.c:78
+#: src/plugins/editor/gbp-editor-hover-provider.c:84
 msgid "Diagnostics"
 msgstr "Diagnósticos"
 
@@ -2786,7 +2786,7 @@ msgstr[0] "Instalando %u paquete"
 msgstr[1] "Instalando %u paquetes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1337
+#: src/libide/lsp/ide-lsp-client.c:1354
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falló al inicializar el lenguaje del servidor: %s"
@@ -2898,21 +2898,21 @@ msgstr "Insertar «%s»"
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4556
+#: src/libide/sourceview/ide-source-view.c:4562
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:5012
+#: src/libide/sourceview/ide-source-view.c:5019
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5248
+#: src/libide/sourceview/ide-source-view.c:5255
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5274
+#: src/libide/sourceview/ide-source-view.c:5281
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -4042,7 +4042,7 @@ msgstr "Indexando el código fuente (pausado)"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:457
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:402
 msgid "Run with Debugger"
 msgstr "Ejecutar con el depurador"
 
@@ -4105,34 +4105,34 @@ msgstr "Ejecutar hasta el final de la función"
 msgid "Disassembly"
 msgstr "Desensamblado"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:190
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:150
 msgid "Failed to start the debugger"
 msgstr "Falló al inicializar el depurador"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:340
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
 #: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
 msgid "Debugger"
 msgstr "Depurador"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:356
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:316
 msgid "Threads"
 msgstr "Hilos"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:382
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
 msgid "Breakpoints"
 msgstr "Puntos de interrupción"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:390
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:350
 msgid "Libraries"
 msgstr "Bibliotecas"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:398
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:358
 msgid "Registers"
 msgstr "Registros"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:406
-msgid "Log"
-msgstr "Registro"
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:365
+msgid "Console"
+msgstr "Consola"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
@@ -4721,17 +4721,17 @@ msgstr ""
 "Builder ha fallado al proporcionar las credenciales apropiadas al clonar el "
 "repositorio."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:593
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:604
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "No se pueden establecer las opciones AMEND y GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:602
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:613
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "No se puede firmar un «commit» sin GPG_KEY_ID"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:399
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:403
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "No se pueden monitorizar archivos fuera de la carpeta de trabajo."
@@ -5395,12 +5395,12 @@ msgstr "Descargando dependencias npm"
 msgid "Bootstrapping project"
 msgstr "Inicializando proyecto"
 
-#: src/plugins/podman/gbp-podman-runtime.c:126
+#: src/plugins/podman/gbp-podman-runtime.c:155
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:134
+#: src/plugins/podman/gbp-podman-runtime.c:163
 msgid "Containers/Podman"
 msgstr "Contenedores/Podman"
 
@@ -5561,7 +5561,6 @@ msgid "Rust Analyzer: Cargo command for diagnostics"
 msgstr "Analizador Rust: comando de carga para diagnósticos"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
-#| msgid "Change default branch"
 msgid "the default cargo command"
 msgstr "el comando de carga predeterminado"
 
@@ -5573,12 +5572,11 @@ msgstr ""
 "clippy añade comprobaciones adicionales para detectar errores comunes, pero "
 "en general es más lento"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:393
-#| msgid "Your computer is missing flatpak-builder"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
 msgid "Your computer is missing the Rust Analyzer Language Server"
 msgstr "Su equipo no tiene servidor de lenguaje del analizador Rust"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:394
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
 msgid ""
 "The Language Server is necessary to provide IDE features like completion or "
 "diagnostic"
@@ -5586,8 +5584,7 @@ msgstr ""
 "El servidor del lenguaje es necesario para proporcionar características como "
 "el completado o el diagnóstico"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:396
-#| msgid "Install Package"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
 msgid "Install Language Server"
 msgstr "Instalar servidor de idiomas"
 
@@ -5596,7 +5593,6 @@ msgid "Installation of Rust Analyzer finished"
 msgstr "Instalación del analizador Rust terminada"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
-#| msgid "Installing rust "
 msgid "Installing Rust Analyzer..."
 msgstr "Instalando Analizador Rust…"
 
@@ -6326,6 +6322,9 @@ msgstr "Falló al crear el árbol XML."
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
+#~ msgid "Log"
+#~ msgstr "Registro"
 
 #~ msgid "Show errors and warnings provided by Vala"
 #~ msgstr "Mostrar errores y advertencias proporcionadas por Vala"
