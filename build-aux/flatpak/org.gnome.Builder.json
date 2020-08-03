@@ -636,6 +636,7 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=lib",
+                "--buildtype=debugoptimized",
                 "-Dctags_path=/app/bin/ctags",
                 "-Dtcmalloc=true",
                 "-Dpython_libprefix=python3.7",
