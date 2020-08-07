@@ -1,3 +1,19 @@
+===============
+Version 3.37.90
+===============
+
+ • HTML preview fixes for Markdown
+ • Style scheme improvements
+ • Fix cargo.sh usage with Dash in Rust templates
+ • Add API and interfaces to execute user-supplied GDB commands
+ • Use new Sysprof-4 ABI
+ • New codespell plugin enabled by default
+ • Fix support for multiple diagnostics on the same line
+ • Modeline parsing fixes
+ • Support for Podman v2
+ • Various CSS styling fixes
+ • Translation updates
+
 ==============
 Version 3.37.1
 ==============
