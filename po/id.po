@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-05-28 16:43+0000\n"
-"PO-Revision-Date: 2020-06-06 18:57+0700\n"
+"POT-Creation-Date: 2020-07-07 15:38+0000\n"
+"PO-Revision-Date: 2020-07-10 19:43+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -523,7 +523,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Pengaturan ini sudah usang dan tidak digunakan lagi."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:76
 msgid "Show Ignored Files"
 msgstr "Tampilkan Berkas yang Diabaikan"
 
@@ -535,7 +535,7 @@ msgstr ""
 "VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:81
 msgid "Sort Directories First"
 msgstr "Urutkan Direktori Di Awal"
 
@@ -846,9 +846,9 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4987
+#: src/libide/sourceview/ide-source-view.c:5020
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:53
+#: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
 msgstr "Ubah nama"
 
@@ -868,7 +868,7 @@ msgstr "_Ubah Nama"
 msgid "unsaved file %u"
 msgstr "berkas %u belum disimpan"
 
-#: src/libide/code/ide-buffer.c:3413
+#: src/libide/code/ide-buffer.c:3424
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -2083,7 +2083,7 @@ msgstr ""
 "berkas sumber"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
-#: src/plugins/editor/gbp-editor-hover-provider.c:78
+#: src/plugins/editor/gbp-editor-hover-provider.c:84
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
@@ -2761,7 +2761,7 @@ msgstr[0] "Memasang %u paket"
 msgstr[1] "Memasang %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1263
+#: src/libide/lsp/ide-lsp-client.c:1354
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Gagal menginisialisasi server bahasa: %s"
@@ -2873,21 +2873,21 @@ msgstr "Sisip \"%s\""
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4556
+#: src/libide/sourceview/ide-source-view.c:4562
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4986
+#: src/libide/sourceview/ide-source-view.c:5019
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5221
+#: src/libide/sourceview/ide-source-view.c:5255
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5247
+#: src/libide/sourceview/ide-source-view.c:5281
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
 
@@ -3367,7 +3367,7 @@ msgstr "Bersihkan"
 msgid "Export Bundle"
 msgstr "Ekspor Bundel"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:656
+#: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
 msgid "Build Issues"
 msgstr "Masalah Bangun"
@@ -4010,7 +4010,7 @@ msgstr "Mengindeks Kode Sumber (Dijeda)"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:457
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:402
 msgid "Run with Debugger"
 msgstr "Jalankan dengan Pengawakutu"
 
@@ -4074,34 +4074,34 @@ msgstr "Jalankan sampai akhir fungsi"
 msgid "Disassembly"
 msgstr "Disassembly"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:190
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:150
 msgid "Failed to start the debugger"
 msgstr "Gagal memulai pengawakutu"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:340
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
 #: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
 msgid "Debugger"
 msgstr "Pengawakutu"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:356
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:316
 msgid "Threads"
 msgstr "Thread"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:382
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
 msgid "Breakpoints"
 msgstr "Breakpoint"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:390
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:350
 msgid "Libraries"
 msgstr "Pustaka"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:398
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:358
 msgid "Registers"
 msgstr "Register"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:406
-msgid "Log"
-msgstr "Log"
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:365
+msgid "Console"
+msgstr "Konsol"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
@@ -4696,17 +4696,17 @@ msgstr ""
 "Builder gagal untuk memberikan kredensial yang tepat ketika mengkloning "
 "repositori."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:593
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:604
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Tidak dapat mengatur tanda AMEND dan GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:602
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:613
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Tidak dapat menandatangani komit tanpa GPG_KEY_ID"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:399
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:403
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Tidak dapat memantau berkas diluar direktori kerja"
@@ -4989,27 +4989,27 @@ msgstr "Izinkan ekspresi reguler"
 msgid "Open Preview"
 msgstr "Buka Pratinjau"
 
-#: src/plugins/html-preview/html_preview.py:341
+#: src/plugins/html-preview/html_preview.py:342
 msgid "Your computer is missing python3-docutils"
 msgstr "Komputer Anda kekurangan python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:342
-#: src/plugins/html-preview/html_preview.py:352
+#: src/plugins/html-preview/html_preview.py:343
+#: src/plugins/html-preview/html_preview.py:353
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
 "Paket ini diperlukan untuk memberikan pratinjau dokumen berbasis markup."
 
-#: src/plugins/html-preview/html_preview.py:345
-#: src/plugins/html-preview/html_preview.py:355
+#: src/plugins/html-preview/html_preview.py:346
+#: src/plugins/html-preview/html_preview.py:356
 msgid "Install Package"
 msgstr "Pasang Paket"
 
-#: src/plugins/html-preview/html_preview.py:351
+#: src/plugins/html-preview/html_preview.py:352
 msgid "Your computer is missing python3-sphinx"
 msgstr "Komputer Anda kekurangan python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:421
+#: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Pratinjau)"
 
@@ -5047,7 +5047,7 @@ msgstr "Peramban Direktori"
 msgid "Switch to Folder"
 msgstr "Beralih ke Folder"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Buka Folder Pemuat"
 
@@ -5368,12 +5368,12 @@ msgstr "Mengunduh dependensi npm"
 msgid "Bootstrapping project"
 msgstr "Mem-bootstrap proyek"
 
-#: src/plugins/podman/gbp-podman-runtime.c:126
+#: src/plugins/podman/gbp-podman-runtime.c:155
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:134
+#: src/plugins/podman/gbp-podman-runtime.c:163
 msgid "Containers/Podman"
 msgstr "Kontainer/Podman"
 
@@ -5457,18 +5457,22 @@ msgid "Open With…"
 msgstr "Buka Dengan…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
+msgid "_External Program…"
+msgstr "Program _Eksternal…"
+
+#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Penyunting Kode Sumber"
 
-#: src/plugins/project-tree/gtk/menus.ui:45
+#: src/plugins/project-tree/gtk/menus.ui:52
 msgid "Open in Terminal"
 msgstr "Buka dalam Terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:59
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "Move to Trash"
 msgstr "Buang ke Tong Sampah"
 
-#: src/plugins/project-tree/gtk/menus.ui:65
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "Display Options"
 msgstr "Opsi Tampilan"
 
@@ -5501,17 +5505,17 @@ msgid "quick highlight words matching current selection"
 msgstr "kata sorot cepat yang cocok dengan pilihan saat ini"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:350
-#: src/plugins/recent/gbp-recent-section.c:357
+#: src/plugins/recent/gbp-recent-section.c:349
+#: src/plugins/recent/gbp-recent-section.c:356
 #, c-format
 msgid "Removing %s\n"
 msgstr "Menghapus %s\n"
 
-#: src/plugins/recent/gbp-recent-section.c:470
+#: src/plugins/recent/gbp-recent-section.c:468
 msgid "Removing Files…"
 msgstr "Menghapus Berkas…"
 
-#: src/plugins/recent/gbp-recent-section.c:472
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "_Close"
 msgstr "_Tutup"
 
@@ -5522,6 +5526,51 @@ msgstr "Proyek Baru-baru Ini"
 #: src/plugins/retab/gtk/menus.ui:9
 msgid "Reformat tabs"
 msgstr "Atur ulang tab"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
+msgid "Rust Analyzer: Cargo command for diagnostics"
+msgstr "Rust Analyzer: Perintah cargo untuk diagnostik"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
+msgid "the default cargo command"
+msgstr "perintah cargo bawaan"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:76
+msgid ""
+"clippy adds additional lints to catch common mistakes but is in general "
+"slower"
+msgstr ""
+"clippy menambahkan serat tambahan untuk menangkap kesalahan umum tetapi "
+"secara umum lebih lambat"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
+msgid "Your computer is missing the Rust Analyzer Language Server"
+msgstr "Komputer Anda kehilangan Rust Analyzer Language Server"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
+msgid ""
+"The Language Server is necessary to provide IDE features like completion or "
+"diagnostic"
+msgstr ""
+"Language Server diperlukan untuk menyediakan fitur IDE seperti penyelesaian "
+"atau diagnostik"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
+msgid "Install Language Server"
+msgstr "Pasang Language Server"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
+msgid "Installation of Rust Analyzer finished"
+msgstr "Pemasangan Rust Analyzer selesai"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
+msgid "Installing Rust Analyzer..."
+msgstr "Memasang Rust Analyzer..."
+
+#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
+#, c-format
+msgid "Cannot download Rust Analyzer: %s"
+msgstr "Tidak dapat mengunduh Rust Analyzer: %s"
 
 #: src/plugins/rustup/rustup_plugin.py:80
 msgid "Rustup not installed"
@@ -6062,11 +6111,11 @@ msgstr "Pengujian Unit"
 msgid "Running test “%s”…"
 msgstr "Menjalankan tes \"%s\"…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Loading TODOs…"
 msgstr "Memuat TODO…"
 
-#: src/plugins/todo/gbp-todo-panel.c:302
+#: src/plugins/todo/gbp-todo-panel.c:301
 msgid "Please wait while we scan your project"
 msgstr "Harap tunggu sementara kami memindai proyek Anda"
 
@@ -6239,6 +6288,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Log"
+#~ msgstr "Log"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle navigation panel"
@@ -6615,9 +6667,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "Clone"
 #~ msgstr "Klon"
 
-#~ msgid "Your computer is missing flatpak-builder"
-#~ msgstr "Komputer Anda kehilangan flatpak-builder"
-
 #~ msgid "Cannot provide diff, no backing file provided."
 #~ msgstr ""
 #~ "Tidak bisa menyediakan diff, tidak ada berkas pendukung yang disediakan."
@@ -6634,9 +6683,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Enter the URL of your project’s source code repository"
 #~ msgstr "Masukkan URL repositori kode sumber proyek Anda"
-
-#~ msgid "Change default branch"
-#~ msgstr "Ubah cabang bawaan"
 
 #~ msgid "Clone…"
 #~ msgstr "Klon…"
