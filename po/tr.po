@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-06-22 18:10+0000\n"
-"PO-Revision-Date: 2020-06-23 00:54+0300\n"
+"POT-Creation-Date: 2020-07-07 15:38+0000\n"
+"PO-Revision-Date: 2020-08-11 01:29+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -530,7 +530,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Bu ayar terk edilmiştir ve artık kullanımda değildir."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:69
+#: src/plugins/project-tree/gtk/menus.ui:76
 msgid "Show Ignored Files"
 msgstr "Yoksayılan Dosyaları Göster"
 
@@ -542,7 +542,7 @@ msgstr ""
 "gösterir."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:81
 msgid "Sort Directories First"
 msgstr "Önce Dizinleri Sırala"
 
@@ -852,9 +852,9 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Tercihleri kullanarak palet yükle veya üret"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4987
+#: src/libide/sourceview/ide-source-view.c:5020
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:53
+#: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
 msgstr "Yeniden Adlandır"
 
@@ -874,7 +874,7 @@ msgstr "_Yeniden Adlandır"
 msgid "unsaved file %u"
 msgstr "kaydedilmemiş dosya %u"
 
-#: src/libide/code/ide-buffer.c:3413
+#: src/libide/code/ide-buffer.c:3424
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -2084,7 +2084,7 @@ msgstr ""
 "Kaynak dosyada keşfedilen ek bilgiyi vurgulamak için kod sezgisini kullan"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
-#: src/plugins/editor/gbp-editor-hover-provider.c:78
+#: src/plugins/editor/gbp-editor-hover-provider.c:84
 msgid "Diagnostics"
 msgstr "Tanılama"
 
@@ -2761,7 +2761,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "%u paket kuruluyor"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1263
+#: src/libide/lsp/ide-lsp-client.c:1354
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirme başarısız oldu: %s"
@@ -2873,21 +2873,21 @@ msgstr "“%s” Ekle"
 msgid "Replace “%s” with “%s”"
 msgstr "“%s” yerine “%s” Koy"
 
-#: src/libide/sourceview/ide-source-view.c:4556
+#: src/libide/sourceview/ide-source-view.c:4562
 msgid "Apply Fix-It"
 msgstr "Düzeltme Uygula"
 
-#: src/libide/sourceview/ide-source-view.c:4986
+#: src/libide/sourceview/ide-source-view.c:5019
 msgid "Rename symbol"
 msgstr "Simgeyi yeniden adlandır"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5221
+#: src/libide/sourceview/ide-source-view.c:5255
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Satır %u, Sütun %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5247
+#: src/libide/sourceview/ide-source-view.c:5281
 msgid "No references were found"
 msgstr "Referans bulunamadı"
 
@@ -3367,7 +3367,7 @@ msgstr "Temizle"
 msgid "Export Bundle"
 msgstr "Paketi Dışa Aktar"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:656
+#: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
 msgid "Build Issues"
 msgstr "İnşa Sorunları"
@@ -4008,7 +4008,7 @@ msgstr "Kaynak Kodu Dizinleme (Duraklatıldı)"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:457
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:402
 msgid "Run with Debugger"
 msgstr "Hata ayıklayıcı ile çalıştır"
 
@@ -4071,34 +4071,34 @@ msgstr "Fonksiyon sonuna dek çalıştır"
 msgid "Disassembly"
 msgstr "Disassembly"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:190
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:150
 msgid "Failed to start the debugger"
 msgstr "Hata ayıklayıcı başlatılamadı"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:340
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
 #: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
 msgid "Debugger"
 msgstr "Hata Ayıklayıcı"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:356
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:316
 msgid "Threads"
 msgstr "Kanallar"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:382
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
 msgid "Breakpoints"
 msgstr "Kesme Noktaları"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:390
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:350
 msgid "Libraries"
 msgstr "Kütüphaneler"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:398
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:358
 msgid "Registers"
 msgstr "Yazmaçlar"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:406
-msgid "Log"
-msgstr "Günlük"
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:365
+msgid "Console"
+msgstr "Konsol"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
@@ -4685,17 +4685,17 @@ msgstr ""
 "Builder, depoyu klonlarken uygun kimlik bilgilerini sağlamakta başarısız "
 "oldu."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:593
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:604
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "AMEND ve GPG_SIGN bayrakları belirlenemez"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:602
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:613
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "GPG_KEY_ID olmadan işleme imzalanamaz"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:399
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:403
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Çalışma dizini dışındaki dosyalar izlenemez"
@@ -4978,28 +4978,28 @@ msgstr "Düzenli ifadeler_e izin ver"
 msgid "Open Preview"
 msgstr "Ön İzleme Aç"
 
-#: src/plugins/html-preview/html_preview.py:341
+#: src/plugins/html-preview/html_preview.py:342
 msgid "Your computer is missing python3-docutils"
 msgstr "Bilgisayarınızda python3-docutils eksik"
 
-#: src/plugins/html-preview/html_preview.py:342
-#: src/plugins/html-preview/html_preview.py:352
+#: src/plugins/html-preview/html_preview.py:343
+#: src/plugins/html-preview/html_preview.py:353
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
 "Bu paket, biçimlendirme tabanlı belgelerin ön izlemesini sağlamak için "
 "gereklidir."
 
-#: src/plugins/html-preview/html_preview.py:345
-#: src/plugins/html-preview/html_preview.py:355
+#: src/plugins/html-preview/html_preview.py:346
+#: src/plugins/html-preview/html_preview.py:356
 msgid "Install Package"
 msgstr "Paketi Kur"
 
-#: src/plugins/html-preview/html_preview.py:351
+#: src/plugins/html-preview/html_preview.py:352
 msgid "Your computer is missing python3-sphinx"
 msgstr "Bilgisayarınızda python3-sphinx eksik"
 
-#: src/plugins/html-preview/html_preview.py:421
+#: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Ön izleme)"
 
@@ -5037,7 +5037,7 @@ msgstr "Dizin Tarayıcısı"
 msgid "Switch to Folder"
 msgstr "Klasöre Geç"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "İçeren Klasörü Aç"
 
@@ -5355,12 +5355,12 @@ msgstr "npm bağımlılıkları indiriliyor"
 msgid "Bootstrapping project"
 msgstr "Proje özyükleniyor"
 
-#: src/plugins/podman/gbp-podman-runtime.c:126
+#: src/plugins/podman/gbp-podman-runtime.c:155
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:134
+#: src/plugins/podman/gbp-podman-runtime.c:163
 msgid "Containers/Podman"
 msgstr "Konteynerler/Podman"
 
@@ -5443,18 +5443,22 @@ msgid "Open With…"
 msgstr "Birlikte Aç…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
+msgid "_External Program…"
+msgstr "_Dış Program…"
+
+#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Kaynak Kod Düzenleyici"
 
-#: src/plugins/project-tree/gtk/menus.ui:45
+#: src/plugins/project-tree/gtk/menus.ui:52
 msgid "Open in Terminal"
 msgstr "Uçbirimde Aç"
 
-#: src/plugins/project-tree/gtk/menus.ui:59
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "Move to Trash"
 msgstr "Çöpe Taşı"
 
-#: src/plugins/project-tree/gtk/menus.ui:65
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "Display Options"
 msgstr "Görüntü Seçenekleri"
 
@@ -5487,17 +5491,17 @@ msgid "quick highlight words matching current selection"
 msgstr "geçerli seçimle eşleşen sözcükleri hızlı vurgula"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:350
-#: src/plugins/recent/gbp-recent-section.c:357
+#: src/plugins/recent/gbp-recent-section.c:349
+#: src/plugins/recent/gbp-recent-section.c:356
 #, c-format
 msgid "Removing %s\n"
 msgstr "%s kaldırılıyor\n"
 
-#: src/plugins/recent/gbp-recent-section.c:470
+#: src/plugins/recent/gbp-recent-section.c:468
 msgid "Removing Files…"
 msgstr "Dosyalar Kaldırılıyor…"
 
-#: src/plugins/recent/gbp-recent-section.c:472
+#: src/plugins/recent/gbp-recent-section.c:470
 msgid "_Close"
 msgstr "_Kapat"
 
@@ -5508,6 +5512,51 @@ msgstr "Son Projeler"
 #: src/plugins/retab/gtk/menus.ui:9
 msgid "Reformat tabs"
 msgstr "Sekmeleri yeniden biçimlendir"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
+msgid "Rust Analyzer: Cargo command for diagnostics"
+msgstr "Rust Analyzer: Tanılama için Cargo komutu"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
+msgid "the default cargo command"
+msgstr "öntanımlı cargo komutu"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:76
+msgid ""
+"clippy adds additional lints to catch common mistakes but is in general "
+"slower"
+msgstr ""
+"clippy, yaygın hataları yakalamak için ek ayıklayıcılar ekler ancak "
+"genelde yavaştır"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
+msgid "Your computer is missing the Rust Analyzer Language Server"
+msgstr "Bilgisayarınızda Rust Analyzer Dil Sunucusu eksik"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
+msgid ""
+"The Language Server is necessary to provide IDE features like completion or "
+"diagnostic"
+msgstr ""
+"Dil Sunucusu, tamamlama veya tanılama gibi IDE özelliklerini sağlamak için "
+"gereklidir"
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
+msgid "Install Language Server"
+msgstr "Dil Sunucusu Kur"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
+msgid "Installation of Rust Analyzer finished"
+msgstr "Rust Analyzer’ın kurulumu bitti"
+
+#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
+msgid "Installing Rust Analyzer..."
+msgstr "Rust Analyzer kuruluyor... "
+
+#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
+#, c-format
+msgid "Cannot download Rust Analyzer: %s"
+msgstr "Rust Analyzer indirilemedi: %s"
 
 #: src/plugins/rustup/rustup_plugin.py:80
 msgid "Rustup not installed"
@@ -6048,11 +6097,11 @@ msgstr "Birim Sınamaları"
 msgid "Running test “%s”…"
 msgstr "“%s” sınaması çalışıyor…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Loading TODOs…"
 msgstr "TODOʼlar yükleniyor…"
 
-#: src/plugins/todo/gbp-todo-panel.c:302
+#: src/plugins/todo/gbp-todo-panel.c:301
 msgid "Please wait while we scan your project"
 msgstr "Projenizi tararken lütfen bekleyin"
 
@@ -6224,6 +6273,9 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "Log"
+#~ msgstr "Günlük"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle navigation panel"
@@ -6602,9 +6654,6 @@ msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
 #~ msgid "Clone"
 #~ msgstr "Klonla"
 
-#~ msgid "Your computer is missing flatpak-builder"
-#~ msgstr "Bilgisayarınızda flatpak-builder eksik"
-
 #~ msgid "Cannot provide diff, no backing file provided."
 #~ msgstr "Fark sağlanamıyor, destek dosyası sağlanmamış."
 
@@ -6620,9 +6669,6 @@ msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
 
 #~ msgid "Enter the URL of your project’s source code repository"
 #~ msgstr "Projenizin kaynak kod deposunun URL’sini (adresini) girin"
-
-#~ msgid "Change default branch"
-#~ msgstr "Öntanımlı dalı değiştir"
 
 #~ msgid "Failed to establish git file monitor: %s"
 #~ msgstr "Git dosya izleyicisi saptanamadı: %s"
