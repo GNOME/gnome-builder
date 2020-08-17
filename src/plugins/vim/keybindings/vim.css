@@ -104,6 +104,8 @@
   bind "<ctrl>k" { "action" ("frame", "show-list", "") };
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
+  bind "<ctrl>KP_Subtract" { "decrease-font-size" () };
+  bind "<ctrl>KP_Add" { "increase-font-size" () };
   bind "<ctrl>equal" { "increase-font-size" () };
   bind "<ctrl>0" { "reset-font-size" () };
   bind "<ctrl><shift>e" { "add-cursor" (column) };
