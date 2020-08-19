@@ -611,7 +611,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/esodan/gvls.git",
-                    "branch": "master"
+                    "branch": "gvls-0.15.99"
                 }
             ]
         },
