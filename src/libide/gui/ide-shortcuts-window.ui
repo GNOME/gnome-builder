@@ -370,6 +370,20 @@
                 <property name="subtitle" translatable="yes" context="shortcut window">Requires semantic language support</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;m</property>
+                <property name="title" translatable="yes" context="shortcut window">Comment code</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;m</property>
+                <property name="title" translatable="yes" context="shortcut window">Uncomment code</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
