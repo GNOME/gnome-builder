@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-06-21 17:56+0000\n"
-"PO-Revision-Date: 2020-06-21 20:04+0200\n"
+"POT-Creation-Date: 2020-07-06 11:24+0000\n"
+"PO-Revision-Date: 2020-08-19 15:28+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -4253,7 +4253,7 @@ msgstr "Polje [%s]"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:153
 msgid "Access Denied by Peer"
-msgstr ""
+msgstr "Dostop zavrnjen s strani soudeleženca"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:155
 msgid "Authentication Failed"
@@ -4277,7 +4277,7 @@ msgstr "Poveži"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:461
 msgid "Provide the address of the message bus"
-msgstr ""
+msgstr "Navedba naslova vodila sporočila"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:463
 #: src/plugins/dspy/libdspy/gtk/menus.ui:5
@@ -5575,6 +5575,9 @@ msgid ""
 "variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
 "automatically set for the command."
 msgstr ""
+"Ukaz bo izveden lupinskim ukazom, kot je » /bin/sh -c «. Uporabite lahko "
+"spremenljivo razširitev, kot je »$SHELL«. Za ukaz sta $SRCDIR »$SRCDIR« in "
+"»$BUILDDIR« nastavljena samodejno."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
 msgid "Command Locality"
