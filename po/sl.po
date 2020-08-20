@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-07-06 11:24+0000\n"
-"PO-Revision-Date: 2020-08-19 15:28+0200\n"
+"POT-Creation-Date: 2020-08-20 16:35+0000\n"
+"PO-Revision-Date: 2020-08-20 18:44+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -4301,15 +4301,21 @@ msgid "Select a bus name to introspect the peer."
 msgstr "Izbor imena vodila za pregled soležnika"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.c:260
-#, fuzzy
 msgid "There is a file with unsaved changes. Save changes before closing?"
 msgid_plural ""
 "There are files with unsaved changes. Save changes before closing?"
 msgstr[0] ""
-"%d dokumentov nima shranjenih spremembe. Ali želite shraniti pred zapiranjem?"
+"Zaznane so datoteke z neshranjenimi spremembami. Ali jih želite shraniti "
+"pred zapiranjem?"
 msgstr[1] ""
+"Zaznana je datoteka z neshranjenimi spremembami. Ali jo želite pred "
+"zapiranjem shraniti?"
 msgstr[2] ""
+"Zaznani sta datoteki z neshranjenimi spremembami. Ali ju želite pred "
+"zapiranjem shraniti?"
 msgstr[3] ""
+"Zaznane so datoteke z neshranjenimi spremembami. Ali jih želite pred "
+"zapiranjem shraniti?"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:27
 msgid "Select the files to save:"
