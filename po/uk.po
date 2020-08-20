@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-07-04 17:29+0000\n"
-"PO-Revision-Date: 2020-07-05 09:32+0300\n"
+"POT-Creation-Date: 2020-08-20 00:45+0000\n"
+"PO-Revision-Date: 2020-08-20 12:08+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.07.70\n"
+"X-Generator: Lokalize 20.11.70\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -2357,7 +2357,7 @@ msgid "Editor Shortcuts"
 msgstr "Редактор скорочень"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:541
+#: src/libide/gui/ide-shortcuts-window.ui:555
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Загальне"
@@ -2373,37 +2373,37 @@ msgid "Toogle primary menu"
 msgstr "Увімкнути або вимкнути основне меню"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:559
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Загальний пошук"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/libide/gui/ide-shortcuts-window.ui:566
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Параметри"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:573
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Командна панель"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Термінал"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:587
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Термінал у середовищі виконання збирання"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:594
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
@@ -2515,13 +2515,13 @@ msgid "Clear highlight"
 msgstr "Забрати підсвічування"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:603
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Копіювати та вставити"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:594
+#: src/libide/gui/ide-shortcuts-window.ui:608
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Копіювати вибраний текст у буфер"
@@ -2532,7 +2532,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Вирізати вибраний текст у буфер"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:601
+#: src/libide/gui/ide-shortcuts-window.ui:615
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Вставити текст з буферу"
@@ -2632,137 +2632,149 @@ msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Потребує підтримки семантики мови"
 
-#: src/libide/gui/ide-shortcuts-window.ui:378
+#: src/libide/gui/ide-shortcuts-window.ui:377
+#| msgid "Comment code"
+msgctxt "shortcut window"
+msgid "Comment code"
+msgstr "Закоментувати код"
+
+#: src/libide/gui/ide-shortcuts-window.ui:384
+#| msgid "Uncomment code"
+msgctxt "shortcut window"
+msgid "Uncomment code"
+msgstr "Розкоментувати код"
+
+#: src/libide/gui/ide-shortcuts-window.ui:392
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Пересування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Перейти до наступної помилки у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Перейти до попередньої помилки у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Перейти до попереднього місця редагування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Перейти до наступного місця редагування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Перейти до означення символу"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Пересунути вище поле огляду у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Пересунути нижче поле огляду у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Пересунути поле огляду до кінця файла"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Пересунути поле огляду до початку файла"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Перейти до парної дужки"
 
-#: src/libide/gui/ide-shortcuts-window.ui:454
+#: src/libide/gui/ide-shortcuts-window.ui:468
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Вибір"
 
-#: src/libide/gui/ide-shortcuts-window.ui:459
+#: src/libide/gui/ide-shortcuts-window.ui:473
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Вибрати все"
 
-#: src/libide/gui/ide-shortcuts-window.ui:466
+#: src/libide/gui/ide-shortcuts-window.ui:480
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Забрати вибір"
 
-#: src/libide/gui/ide-shortcuts-window.ui:474
+#: src/libide/gui/ide-shortcuts-window.ui:488
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Зібрати і запустити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:479
+#: src/libide/gui/ide-shortcuts-window.ui:493
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Зібрати"
 
-#: src/libide/gui/ide-shortcuts-window.ui:486
+#: src/libide/gui/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Перебудувати"
 
-#: src/libide/gui/ide-shortcuts-window.ui:493
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Запустити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Профіль"
 
-#: src/libide/gui/ide-shortcuts-window.ui:508
+#: src/libide/gui/ide-shortcuts-window.ui:522
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Жести дотику"
 
-#: src/libide/gui/ide-shortcuts-window.ui:515
+#: src/libide/gui/ide-shortcuts-window.ui:529
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Пересунути сторінку праворуч"
 
-#: src/libide/gui/ide-shortcuts-window.ui:516
+#: src/libide/gui/ide-shortcuts-window.ui:530
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Проведення праворуч трьома пальцями"
 
-#: src/libide/gui/ide-shortcuts-window.ui:525
+#: src/libide/gui/ide-shortcuts-window.ui:539
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Пересунути сторінку ліворуч"
 
-#: src/libide/gui/ide-shortcuts-window.ui:526
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Проведення ліворуч трьома пальцями"
 
-#: src/libide/gui/ide-shortcuts-window.ui:537
+#: src/libide/gui/ide-shortcuts-window.ui:551
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Термінальні скорочення"
 
-#: src/libide/gui/ide-shortcuts-window.ui:609
+#: src/libide/gui/ide-shortcuts-window.ui:623
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Пошук"
 
-#: src/libide/gui/ide-shortcuts-window.ui:614
+#: src/libide/gui/ide-shortcuts-window.ui:628
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Знайти текст у терміналі"
@@ -2777,7 +2789,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1337
+#: src/libide/lsp/ide-lsp-client.c:1354
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -5382,12 +5394,12 @@ msgstr "Отримуємо залежності npm"
 msgid "Bootstrapping project"
 msgstr "Самозбирання проєкту"
 
-#: src/plugins/podman/gbp-podman-runtime.c:126
+#: src/plugins/podman/gbp-podman-runtime.c:155
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:134
+#: src/plugins/podman/gbp-podman-runtime.c:163
 msgid "Containers/Podman"
 msgstr "Контейнери/Podman"
 
@@ -5562,11 +5574,11 @@ msgstr ""
 "clippy додає перевірки для виявлення типових помилок, але, загалом, є "
 "повільнішою"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:393
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
 msgid "Your computer is missing the Rust Analyzer Language Server"
 msgstr "На вашому комп'ютері не встановлено сервера мови аналізатора Rust"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:394
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
 msgid ""
 "The Language Server is necessary to provide IDE features like completion or "
 "diagnostic"
@@ -5574,7 +5586,7 @@ msgstr ""
 "Сервер мови є необхідним для забезпечення роботи можливостей комплексного "
 "середовища для розробки, зокрема автоматичного доповнення або діагностики"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:396
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
 msgid "Install Language Server"
 msgstr "Встановити сервер мови"
 
