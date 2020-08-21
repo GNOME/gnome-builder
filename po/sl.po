@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-20 11:48+0000\n"
-"PO-Revision-Date: 2020-08-20 18:32+0200\n"
+"POT-Creation-Date: 2020-08-20 19:04+0000\n"
+"PO-Revision-Date: 2020-08-21 17:50+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -4381,15 +4381,21 @@ msgid "Select a bus name to introspect the peer."
 msgstr "Izbor imena vodila za pregled soležnika"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.c:260
-#, fuzzy
 msgid "There is a file with unsaved changes. Save changes before closing?"
 msgid_plural ""
 "There are files with unsaved changes. Save changes before closing?"
 msgstr[0] ""
-"%d dokumentov nima shranjenih spremembe. Ali želite shraniti pred zapiranjem?"
+"Zaznane so datoteke z neshranjenimi spremembami. Ali jih želite pred "
+"zapiranjem shraniti?"
 msgstr[1] ""
+"Zaznana je datoteka z neshranjenimi spremembami. Ali jo želite pred "
+"zapiranjem shraniti?"
 msgstr[2] ""
+"Zaznani sta datoteki z neshranjenimi spremembami. Ali ju želite pred "
+"zapiranjem shraniti?"
 msgstr[3] ""
+"Zaznane so datoteke z neshranjenimi spremembami. Ali jih želite pred "
+"zapiranjem shraniti?"
 
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:27
 msgid "Select the files to save:"
@@ -5547,7 +5553,7 @@ msgstr "Preoblikuj tabulatorje"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
 msgid "Rust Analyzer: Cargo command for diagnostics"
-msgstr ""
+msgstr "Analizator Rust: ukaz cargo za diagnostiko"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
 msgid "the default cargo command"
@@ -5558,6 +5564,8 @@ msgid ""
 "clippy adds additional lints to catch common mistakes but is in general "
 "slower"
 msgstr ""
+"Program clippy doda dodatne možnosti zaznavanja splošnh napak, vendar je "
+"delovanje običajno počasnejše."
 
 #: src/plugins/rust-analyzer/rust-analyzer-service.c:488
 msgid "Your computer is missing the Rust Analyzer Language Server"
@@ -5568,6 +5576,8 @@ msgid ""
 "The Language Server is necessary to provide IDE features like completion or "
 "diagnostic"
 msgstr ""
+"Jezikovni strežnik je nujen za omogočanje storitev IDE, kot sta "
+"dopolnjevanje in pregledovanje"
 
 #: src/plugins/rust-analyzer/rust-analyzer-service.c:491
 msgid "Install Language Server"
@@ -5742,6 +5752,9 @@ msgid ""
 "variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
 "automatically set for the command."
 msgstr ""
+"Ukaz bo izveden lupinskim ukazom, kot je » /bin/sh -c «. Uporabite lahko "
+"spremenljivo razširitev, kot je »$SHELL«. Za ukaz sta $SRCDIR »$SRCDIR« in "
+"»$BUILDDIR« nastavljena samodejno."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
 msgid "Command Locality"
