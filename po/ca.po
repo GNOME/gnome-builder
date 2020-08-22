@@ -1301,7 +1301,7 @@ msgstr "Ha fallat en obtenir la informació del dispositiu: %s"
 #, c-format
 #| msgid "Failed to load file: %s: %s"
 msgid "Discovered device “%s”"
-msgstr "S'ha trobat el dispositiu “%s”"
+msgstr "S'ha trobat el dispositiu «%s»"
 
 #: src/libide/foundry/ide-device-manager.c:553
 msgid "Devices"
@@ -1470,7 +1470,7 @@ msgstr "Per defecte (Sistema operatiu amfitrió)"
 #: src/libide/greeter/ide-clone-surface.c:251
 #, c-format
 msgid "The directory “%s” already exists. Please choose another directory."
-msgstr "El directori “%s” ja existeix. Trieu un altre directori."
+msgstr "El directori «%s» ja existeix. Trieu un altre directori."
 
 #. translators: %s is replaced with the path to the project
 #: src/libide/greeter/ide-clone-surface.c:259
@@ -4824,12 +4824,12 @@ msgstr "El directori no està dins del repositori"
 #: src/plugins/git/gbp-git-vcs-cloner.c:133
 #, c-format, fuzzy
 msgid "A repository could not be found at “%s”."
-msgstr "No s’ha pogut trobar un repositori a “%s”."
+msgstr "No s’ha pogut trobar un repositori a «%s»."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
 msgid "The protocol “%s” is not supported."
-msgstr "El protocol “%s” no és compatible."
+msgstr "El protocol «%s» no és compatible."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:224
 msgid "Cloning repository"
