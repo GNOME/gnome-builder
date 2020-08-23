@@ -281,9 +281,10 @@ endforeach
 
 #
 # If we have sysprof-capture-4, we can export tracing information
-# to the SYSPROF_TRACE_FD.
+# to the SYSPROF_TRACE_FD. We use sysprof-4 instead since we will
+# already have to link against that for the plugin.
 #
-libsysprof_capture = dependency('sysprof-capture-4', version: '>= 3.37.1', static: true, required: false)
+libsysprof_capture = dependency('sysprof-4', version: '>= 3.37.1', required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
 endif
