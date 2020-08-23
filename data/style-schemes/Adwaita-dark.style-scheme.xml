@@ -76,7 +76,7 @@
   <style name="current-line"                background="#222"/>
   <style name="current-line-number"         foreground="dark1" background="#222" bold="true"/>
   <style name="right-margin"                foreground="content_bg_alt" background="content_bg_alt"/>
-  <style name="draw-spaces"                 foreground="dark1"/>
+  <style name="draw-spaces"                 foreground="dark3"/>
   <style name="background-pattern"          background="dark4"/>
 
   <style name="bracket-match"               background="dark2" bold="true"/>
