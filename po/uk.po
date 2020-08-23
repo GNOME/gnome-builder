@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-20 00:45+0000\n"
-"PO-Revision-Date: 2020-08-20 12:08+0300\n"
+"POT-Creation-Date: 2020-08-23 09:44+0000\n"
+"PO-Revision-Date: 2020-08-23 20:34+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -647,6 +647,20 @@ msgstr "Новий робочий простір редактора"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "Інспектор D-Bus"
+
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
+msgid "Adwaita Dark"
+msgstr "Темна Adwaita"
+
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
+#: data/style-schemes/Adwaita.style-scheme.xml:22
+#| msgid "The default color scheme for Builder"
+msgid "The default color scheme for TextEditor"
+msgstr "Типова схема кольорів для текстового редактора"
+
+#: data/style-schemes/Adwaita.style-scheme.xml:20
+msgid "Adwaita"
+msgstr "Adwaita"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -2633,13 +2647,11 @@ msgid "Requires semantic language support"
 msgstr "Потребує підтримки семантики мови"
 
 #: src/libide/gui/ide-shortcuts-window.ui:377
-#| msgid "Comment code"
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Закоментувати код"
 
 #: src/libide/gui/ide-shortcuts-window.ui:384
-#| msgid "Uncomment code"
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Розкоментувати код"
@@ -6322,6 +6334,3 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
-
-#~ msgid "Log"
-#~ msgstr "Журнал"
