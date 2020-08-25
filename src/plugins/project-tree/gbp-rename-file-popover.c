@@ -69,7 +69,7 @@ gbp_rename_file_popover_get_file (GbpRenameFilePopover *self)
 
 static void
 gbp_rename_file_popover_set_file (GbpRenameFilePopover *self,
-                                 GFile               *file)
+                                  GFile                *file)
 {
   g_return_if_fail (GBP_IS_RENAME_FILE_POPOVER (self));
   g_return_if_fail (G_IS_FILE (file));
@@ -94,7 +94,7 @@ gbp_rename_file_popover_set_file (GbpRenameFilePopover *self,
 
 static void
 gbp_rename_file_popover_set_is_directory (GbpRenameFilePopover *self,
-                                         gboolean             is_directory)
+                                          gboolean              is_directory)
 {
   g_return_if_fail (GBP_IS_RENAME_FILE_POPOVER (self));
 
@@ -109,8 +109,8 @@ gbp_rename_file_popover_set_is_directory (GbpRenameFilePopover *self,
 
 static void
 gbp_rename_file_popover__file_query_info (GObject      *object,
-                                         GAsyncResult *result,
-                                         gpointer      user_data)
+                                          GAsyncResult *result,
+                                          gpointer      user_data)
 {
   GFile *file = (GFile *)object;
   g_autoptr(GFileInfo) file_info = NULL;
@@ -152,10 +152,11 @@ gbp_rename_file_popover__file_query_info (GObject      *object,
 
 static void
 gbp_rename_file_popover__entry_changed (GbpRenameFilePopover *self,
-                                       GtkEntry            *entry)
+                                        GtkEntry             *entry)
 {
   g_autoptr(GFile) parent = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autofree gchar *stripped = NULL;
   const gchar *text;
 
   g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
@@ -170,6 +171,10 @@ gbp_rename_file_popover__entry_changed (GbpRenameFilePopover *self,
   if (ide_str_empty0 (text))
     return;
 
+  /* make sure to strip so that warnings (eg. "file already exists") are
+   * consistents with the final behavior (creating the file). */
+  stripped = g_strstrip (g_strdup (text));
+
   if (self->cancellable)
     {
       g_cancellable_cancel (self->cancellable);
@@ -179,7 +184,7 @@ gbp_rename_file_popover__entry_changed (GbpRenameFilePopover *self,
   self->cancellable = g_cancellable_new ();
 
   parent = g_file_get_parent (self->file);
-  file = g_file_get_child (parent, text);
+  file = g_file_get_child (parent, stripped);
 
   g_file_query_info_async (file,
                            G_FILE_ATTRIBUTE_STANDARD_TYPE,
@@ -192,7 +197,7 @@ gbp_rename_file_popover__entry_changed (GbpRenameFilePopover *self,
 
 static void
 gbp_rename_file_popover__entry_activate (GbpRenameFilePopover *self,
-                                        GtkEntry            *entry)
+                                         GtkEntry             *entry)
 {
   g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
@@ -236,11 +241,12 @@ gbp_rename_file_popover__entry_focus_in_event (GbpRenameFilePopover *self,
 
 static void
 gbp_rename_file_popover__button_clicked (GbpRenameFilePopover *self,
-                                        GtkButton           *button)
+                                         GtkButton            *button)
 {
   g_autoptr(GFile) file = NULL;
   g_autoptr(GFile) parent = NULL;
   g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *stripped = NULL;
   const gchar *path;
 
   g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
@@ -252,8 +258,10 @@ gbp_rename_file_popover__button_clicked (GbpRenameFilePopover *self,
   if (ide_str_empty0 (path))
     return;
 
+  stripped = g_strstrip (g_strdup (path));
+
   parent = g_file_get_parent (self->file);
-  file = g_file_get_child (parent, path);
+  file = g_file_get_child (parent, stripped);
 
   /* only activate once */
   gtk_widget_set_sensitive (GTK_WIDGET (self->button), FALSE);
@@ -302,9 +310,9 @@ gbp_rename_file_popover_finalize (GObject *object)
 
 static void
 gbp_rename_file_popover_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
 {
   GbpRenameFilePopover *self = GBP_RENAME_FILE_POPOVER (object);
 
@@ -325,9 +333,9 @@ gbp_rename_file_popover_get_property (GObject    *object,
 
 static void
 gbp_rename_file_popover_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
 {
   GbpRenameFilePopover *self = GBP_RENAME_FILE_POPOVER (object);
 

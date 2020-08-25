@@ -57,6 +57,7 @@ gbp_new_file_popover_button_clicked (GbpNewFilePopover *self,
 {
   g_autoptr(GFile) file = NULL;
   g_autoptr(IdeTask) task = NULL;
+  g_autofree char *stripped = NULL;
   const gchar *path;
 
   g_assert (GBP_IS_NEW_FILE_POPOVER (self));
@@ -69,7 +70,9 @@ gbp_new_file_popover_button_clicked (GbpNewFilePopover *self,
   if (dzl_str_empty0 (path))
     return;
 
-  file = g_file_get_child (self->directory, path);
+  stripped = g_strstrip (g_strdup (path));
+
+  file = g_file_get_child (self->directory, stripped);
 
   if ((task = g_steal_pointer (&self->task)))
     ide_task_return_pointer (task, g_steal_pointer (&file), g_object_unref);
@@ -166,18 +169,20 @@ gbp_new_file_popover_check_exists (GbpNewFilePopover *self,
 
 static void
 gbp_new_file_popover_entry_changed (GbpNewFilePopover *self,
-                                    GtkEntry         *entry)
+                                    GtkEntry          *entry)
 {
-  const gchar *text;
+  g_autofree gchar *stripped = NULL;
 
   g_assert (GBP_IS_NEW_FILE_POPOVER (self));
   g_assert (GTK_IS_ENTRY (entry));
 
-  text = gtk_entry_get_text (entry);
+  /* make sure to strip so that warnings (eg. "file already exists") are
+   * consistents with the final behavior (creating the file). */
+  stripped = g_strstrip(g_strdup (gtk_entry_get_text (entry)));
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !dzl_str_empty0 (text));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !dzl_str_empty0 (stripped));
 
-  gbp_new_file_popover_check_exists (self, self->directory, text);
+  gbp_new_file_popover_check_exists (self, self->directory, stripped);
 }
 
 static void
