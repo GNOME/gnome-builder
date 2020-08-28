@@ -2664,7 +2664,7 @@ msgstr "Navegació"
 #: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move to next error in file"
-msgstr "Vés al següent error del fitxer"
+msgstr "Vés a l'error següent del fitxer"
 
 #: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
