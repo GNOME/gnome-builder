@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-21 16:42+0000\n"
-"PO-Revision-Date: 2020-08-22 08:43+0300\n"
+"POT-Creation-Date: 2020-08-23 09:44+0000\n"
+"PO-Revision-Date: 2020-09-02 21:23+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -640,6 +640,19 @@ msgstr "Yeni Düzenleyici Çalışma Alanı"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "D-Bus İnceleyici"
+
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
+msgid "Adwaita Dark"
+msgstr "Adwaita Koyu"
+
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
+#: data/style-schemes/Adwaita.style-scheme.xml:22
+msgid "The default color scheme for TextEditor"
+msgstr "TextEditor için öntanımlı renk şeması"
+
+#: data/style-schemes/Adwaita.style-scheme.xml:20
+msgid "Adwaita"
+msgstr "Adwaita"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -5561,7 +5574,7 @@ msgstr "Rust Analyzer’ın kurulumu bitti"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
 msgid "Installing Rust Analyzer..."
-msgstr "Rust Analyzer kuruluyor... "
+msgstr "Rust Analyzer kuruluyor..."
 
 #: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
 #, c-format
