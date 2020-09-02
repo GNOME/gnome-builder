@@ -47,6 +47,8 @@ gbp_podman_runtime_provider_apply_cb (JsonArray *ar,
   g_autoptr(GbpPodmanRuntime) runtime = NULL;
   JsonObject *obj;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
 
@@ -62,6 +64,8 @@ gbp_podman_runtime_provider_apply_cb (JsonArray *ar,
       ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
       ide_runtime_manager_add (self->manager, IDE_RUNTIME (runtime));
     }
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -73,6 +77,8 @@ gbp_podman_runtime_provider_apply (GbpPodmanRuntimeProvider  *self,
   JsonArray *ar;
   JsonNode *root;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
   g_assert (json_string != NULL);
@@ -80,7 +86,7 @@ gbp_podman_runtime_provider_apply (GbpPodmanRuntimeProvider  *self,
   parser = json_parser_new ();
 
   if (!json_parser_load_from_data (parser, json_string, -1, error))
-    return FALSE;
+    IDE_RETURN(FALSE);
 
   if (!(root = json_parser_get_root (parser)) ||
       !JSON_NODE_HOLDS_ARRAY (root) ||
@@ -90,14 +96,14 @@ gbp_podman_runtime_provider_apply (GbpPodmanRuntimeProvider  *self,
                    G_IO_ERROR,
                    G_IO_ERROR_INVALID_DATA,
                    "Expected [] for root JSON node");
-      return FALSE;
+      IDE_RETURN(FALSE);
     }
 
   json_array_foreach_element (ar,
                               gbp_podman_runtime_provider_apply_cb,
                               self);
 
-  return TRUE;
+  IDE_RETURN(TRUE);
 }
 
 static void
@@ -111,6 +117,8 @@ gbp_podman_runtime_provider_load_communicate_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -123,6 +131,8 @@ gbp_podman_runtime_provider_load_communicate_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -130,6 +140,8 @@ gbp_podman_runtime_provider_has_preserve_fds (GbpPodmanRuntimeProvider  *self,
                                               const gchar               *stdout_buf,
                                               GError                   **error)
 {
+  IDE_ENTRY;
+
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
   g_assert (stdout_buf != NULL);
 
@@ -142,7 +154,7 @@ gbp_podman_runtime_provider_has_preserve_fds (GbpPodmanRuntimeProvider  *self,
       return FALSE;
     }
 
-  return TRUE;
+  IDE_RETURN(TRUE);
 }
 
 static void
@@ -157,6 +169,8 @@ gbp_podman_runtime_provider_load_sniff_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SUBPROCESS (subprocess));
@@ -189,6 +203,8 @@ gbp_podman_runtime_provider_load_sniff_cb (GObject      *object,
                                            cancellable,
                                            gbp_podman_runtime_provider_load_communicate_cb,
                                            g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -201,6 +217,8 @@ gbp_podman_runtime_provider_load_async (GbpPodmanRuntimeProvider *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
@@ -226,6 +244,8 @@ gbp_podman_runtime_provider_load_async (GbpPodmanRuntimeProvider *self,
                                            cancellable,
                                            gbp_podman_runtime_provider_load_sniff_cb,
                                            g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -233,6 +253,8 @@ gbp_podman_runtime_provider_load (IdeRuntimeProvider *provider,
                                   IdeRuntimeManager  *manager)
 {
   GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)provider;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
@@ -242,6 +264,8 @@ gbp_podman_runtime_provider_load (IdeRuntimeProvider *provider,
   self->manager = manager;
 
   gbp_podman_runtime_provider_load_async (self, self->cancellable, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -249,6 +273,8 @@ gbp_podman_runtime_provider_unload (IdeRuntimeProvider *provider,
                                     IdeRuntimeManager  *manager)
 {
   GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)provider;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
@@ -258,6 +284,8 @@ gbp_podman_runtime_provider_unload (IdeRuntimeProvider *provider,
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
+
+  IDE_EXIT;
 }
 
 static void

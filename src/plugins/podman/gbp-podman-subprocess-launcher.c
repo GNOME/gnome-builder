@@ -47,12 +47,16 @@ copy_envvar (IdeSubprocessLauncher *launcher,
 {
   const gchar *val;
 
+  IDE_ENTRY;
+
   if ((val = g_getenv (key)))
     {
       g_autofree gchar *arg = g_strdup_printf ("--env=%s=%s", key, val);
       ide_subprocess_launcher_insert_argv (launcher, *position, arg);
       (*position)++;
     }
+
+  IDE_EXIT;
 }
 
 static IdeSubprocess *
@@ -62,6 +66,8 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 {
   GbpPodmanSubprocessLauncher *self = (GbpPodmanSubprocessLauncher *)launcher;
   const gchar * const *argv;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_PODMAN_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -141,7 +147,7 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
       ide_subprocess_launcher_insert_argv (launcher, i++, self->id);
     }
 
-  return IDE_SUBPROCESS_LAUNCHER_CLASS (gbp_podman_subprocess_launcher_parent_class)->spawn (launcher, cancellable, error);
+  IDE_RETURN(IDE_SUBPROCESS_LAUNCHER_CLASS (gbp_podman_subprocess_launcher_parent_class)->spawn (launcher, cancellable, error));
 }
 
 static void
@@ -149,9 +155,13 @@ gbp_podman_subprocess_launcher_finalize (GObject *object)
 {
   GbpPodmanSubprocessLauncher *self = (GbpPodmanSubprocessLauncher *)object;
 
+  IDE_ENTRY;
+
   g_clear_pointer (&self->id, g_free);
 
   G_OBJECT_CLASS (gbp_podman_subprocess_launcher_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
