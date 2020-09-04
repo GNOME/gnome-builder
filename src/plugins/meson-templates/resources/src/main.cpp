@@ -1,15 +1,16 @@
 {{include "license.cpp"}}
 
 #include "{{prefix}}-window.h"
+#include <memory>
 
 static void
 on_activate (Glib::RefPtr<Gtk::Application> app)
 {
 	// Get the current window. If there is not one, we will create it.
-	Gtk::Window *window = app->get_active_window();
+	static std::unique_ptr<Gtk::Window> window;
 
 	if (!window) {
-		window = new {{Prefix}}Window();
+		window = std::make_unique<{{Prefix}}Window>();
 		window->property_application() = app;
 		window->property_default_width() = 600;
 		window->property_default_height() = 300;
