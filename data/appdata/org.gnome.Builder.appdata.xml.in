@@ -86,6 +86,14 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.37.92" date="2020-09-06">
+      <description>
+        <p>
+          Builder 3.37.92 contains a number of bug fixes leading up to the 3.38 release.
+        </p>
+      </description>
+    </release>
+
     <release version="3.37.1" date="2020-06-27">
       <description>
         <p>

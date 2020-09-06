@@ -1,4 +1,17 @@
 ===============
+Version 3.37.92
+===============
+
+ • Podman fixes
+ • Style scheme improvements
+ • Flatpak manifest improvements
+ • C++ GTK template improvements
+ • Trim leading and trailing spaces when creating and renaming files
+ • Show comment shortcuts in shortcut overlay
+ • Use GVls 0.16
+ • Translation updates
+
+===============
 Version 3.37.90
 ===============
 
