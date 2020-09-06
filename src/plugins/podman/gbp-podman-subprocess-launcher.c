@@ -27,7 +27,7 @@
 struct _GbpPodmanSubprocessLauncher
 {
   IdeSubprocessLauncher parent_instance;
-  gchar *id;
+  gchar                 *id;
 };
 
 enum {
