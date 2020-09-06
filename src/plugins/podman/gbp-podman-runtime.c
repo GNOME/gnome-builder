@@ -75,11 +75,16 @@ static IdeSubprocessLauncher *
 gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
                                     GError     **error)
 {
-  const gchar *id;
   GbpPodmanRuntime *self = (GbpPodmanRuntime *)runtime;
+  IdeSubprocessLauncher *launcher;
+  const gchar *runtime_id;
+  const gchar *id;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME (self));
+
+  runtime_id = ide_runtime_get_id (runtime);
+  g_return_val_if_fail (g_str_has_prefix (runtime_id, "podman:"), NULL);
 
   maybe_start (self);
 
@@ -90,10 +95,11 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
 
   g_return_val_if_fail (id != NULL, NULL);
 
-  return g_object_new (GBP_TYPE_PODMAN_SUBPROCESS_LAUNCHER,
+  launcher = g_object_new (GBP_TYPE_PODMAN_SUBPROCESS_LAUNCHER,
                        "id", id,
-                       "run-on-host", TRUE,
                        NULL);
+
+  return launcher;
 }
 
 static void
