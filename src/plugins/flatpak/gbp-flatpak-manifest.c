@@ -238,6 +238,8 @@ discover_environ (GbpFlatpakManifest *self,
         {
           if (JSON_NODE_HOLDS_VALUE (value))
             ide_environment_setenv (env, key, json_node_get_string (value));
+          else if (JSON_NODE_HOLDS_NULL (value))
+            ide_environment_setenv (env, key, "");
         }
     }
 
