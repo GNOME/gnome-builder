@@ -42,7 +42,7 @@ static GParamSpec *properties [N_PROPS];
 
 static void
 copy_envvar (IdeSubprocessLauncher *launcher,
-             guint                  position,
+             guint                 *position,
              const gchar           *key)
 {
   const gchar *val;
@@ -50,7 +50,8 @@ copy_envvar (IdeSubprocessLauncher *launcher,
   if ((val = g_getenv (key)))
     {
       g_autofree gchar *arg = g_strdup_printf ("--env=%s=%s", key, val);
-      ide_subprocess_launcher_insert_argv (launcher, position, arg);
+      ide_subprocess_launcher_insert_argv (launcher, *position, arg);
+      (*position)++;
     }
 }
 
@@ -111,19 +112,19 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 
       if (!ide_subprocess_launcher_get_clear_env (launcher))
         {
-          copy_envvar (launcher, i++, "COLORTERM");
-          copy_envvar (launcher, i++, "DBUS_SESSION_BUS_ADDRESS");
-          copy_envvar (launcher, i++, "DESKTOP_SESSION");
-          copy_envvar (launcher, i++, "DISPLAY");
-          copy_envvar (launcher, i++, "LANG");
-          copy_envvar (launcher, i++, "SSH_AUTH_SOCK");
-          copy_envvar (launcher, i++, "WAYLAND_DISPLAY");
-          copy_envvar (launcher, i++, "XDG_CURRENT_DESKTOP");
-          copy_envvar (launcher, i++, "XDG_SEAT");
-          copy_envvar (launcher, i++, "XDG_SESSION_DESKTOP");
-          copy_envvar (launcher, i++, "XDG_SESSION_ID");
-          copy_envvar (launcher, i++, "XDG_SESSION_TYPE");
-          copy_envvar (launcher, i++, "XDG_VTNR");
+          copy_envvar (launcher, &i, "COLORTERM");
+          copy_envvar (launcher, &i, "DBUS_SESSION_BUS_ADDRESS");
+          copy_envvar (launcher, &i, "DESKTOP_SESSION");
+          copy_envvar (launcher, &i, "DISPLAY");
+          copy_envvar (launcher, &i, "LANG");
+          copy_envvar (launcher, &i, "SSH_AUTH_SOCK");
+          copy_envvar (launcher, &i, "WAYLAND_DISPLAY");
+          copy_envvar (launcher, &i, "XDG_CURRENT_DESKTOP");
+          copy_envvar (launcher, &i, "XDG_SEAT");
+          copy_envvar (launcher, &i, "XDG_SESSION_DESKTOP");
+          copy_envvar (launcher, &i, "XDG_SESSION_ID");
+          copy_envvar (launcher, &i, "XDG_SESSION_TYPE");
+          copy_envvar (launcher, &i, "XDG_VTNR");
         }
 
       if ((environ_ = ide_subprocess_launcher_get_environ (launcher)))
