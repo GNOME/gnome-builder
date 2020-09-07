@@ -3597,6 +3597,7 @@ ide_buffer_guess_language (IdeBuffer *self)
   g_autofree gchar *basename = NULL;
   g_autofree gchar *content_type = NULL;
   g_autofree gchar *line = NULL;
+  const gchar *lang_id;
   const gchar *path;
   GFile *file;
   gboolean uncertain = FALSE;
@@ -3626,7 +3627,18 @@ ide_buffer_guess_language (IdeBuffer *self)
       !(lang = gtk_source_language_manager_guess_language (manager, basename, content_type)))
     return;
 
-  if (!ide_str_equal0 (gtk_source_language_get_id (lang), ide_buffer_get_language_id (self)))
+  lang_id = gtk_source_language_get_id (lang);
+
+  /* Override to python3 by default for now, until shared-mime-info
+   * gets a better way to detect the difference between the two.
+   */
+  if (ide_str_equal0 (lang_id, "python"))
+    {
+      lang_id = "python3";
+      lang = gtk_source_language_manager_get_language (manager, lang_id);
+    }
+
+  if (!ide_str_equal0 (lang_id, ide_buffer_get_language_id (self)))
     gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), lang);
 }
 
