@@ -140,10 +140,12 @@ ide_hover_popover_enter_notify_event_cb (IdeHover               *self,
   g_assert (IDE_IS_HOVER (self));
   g_assert (event != NULL);
   g_assert (IDE_IS_HOVER_POPOVER (popover));
-  g_assert (self->state == IDE_HOVER_STATE_DISPLAY);
+
+  /* Possible with DnD dragging? */
+  if (self->state != IDE_HOVER_STATE_DISPLAY)
+    return GDK_EVENT_PROPAGATE;
 
   self->state = IDE_HOVER_STATE_IN_POPOVER;
-
   dzl_clear_source (&self->dismiss_source);
 
   return GDK_EVENT_PROPAGATE;
