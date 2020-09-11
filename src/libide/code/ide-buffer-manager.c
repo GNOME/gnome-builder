@@ -1078,11 +1078,15 @@ ide_buffer_manager_apply_edits_completed_cb (IdeBufferManager *self,
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&buffer))
     {
-      IdeObjectBox *box = ide_object_box_from_object (G_OBJECT (buffer));
+      if (buffer != NULL)
+        {
+          IdeObjectBox *box = ide_object_box_from_object (G_OBJECT (buffer));
 
-      g_assert (IDE_IS_OBJECT_BOX (box));
+          g_assert (!box || IDE_IS_OBJECT_BOX (box));
 
-      ide_object_destroy (IDE_OBJECT (box));
+          if (box != NULL)
+            ide_object_destroy (IDE_OBJECT (box));
+        }
     }
 
   IDE_EXIT;
