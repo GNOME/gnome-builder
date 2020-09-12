@@ -86,6 +86,12 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.38.0" date="2020-09-12">
+      <p>
+        Builder 3.38.0 contains a number of bug fixes and performance improvements.
+        It also includes support for the rust-analyzer language server in Rust projects.
+      </p>
+    </release>
     <release version="3.37.92" date="2020-09-06">
       <description>
         <p>

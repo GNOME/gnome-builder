@@ -1,3 +1,12 @@
+==============
+Version 3.38.0
+==============
+
+ • Default to python3 when opening python source files
+ • Handle failures from windowing system more gracefully
+ • Fix crash during project-wide search and replace
+ • Translation updates
+
 ===============
 Version 3.37.92
 ===============
