@@ -4530,6 +4530,8 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
    */
   if ((diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (buffer))))
     {
+      g_assert (IDE_IS_DIAGNOSTICS (diagnostics));
+
       line_diags = ide_diagnostics_get_diagnostics_at_line (diagnostics,
                                                             ide_buffer_get_file (IDE_BUFFER (buffer)),
                                                             gtk_text_iter_get_line (&iter));

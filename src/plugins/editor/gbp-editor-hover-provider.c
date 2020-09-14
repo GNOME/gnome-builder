@@ -64,11 +64,13 @@ gbp_editor_hover_provider_hover_async (IdeHoverProvider    *provider,
       IdeDiagnostics *diagnostics;
       g_autoptr(GPtrArray) line_diags = NULL;
 
-      diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (buffer));
-      line_diags = ide_diagnostics_get_diagnostics_at_line (diagnostics, file, line);
-      IDE_PTR_ARRAY_SET_FREE_FUNC (line_diags, g_object_unref);
+      if ((diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (buffer))))
+        {
+          line_diags = ide_diagnostics_get_diagnostics_at_line (diagnostics, file, line);
+          IDE_PTR_ARRAY_SET_FREE_FUNC (line_diags, g_object_unref);
+        }
 
-      if (diagnostics && line_diags)
+      if (diagnostics != NULL && line_diags != NULL)
         {
           for (guint i = 0; i < line_diags->len; i++)
             {
