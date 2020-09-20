@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-20 00:45+0000\n"
-"PO-Revision-Date: 2020-08-20 02:00+0100\n"
+"POT-Creation-Date: 2020-08-23 09:44+0000\n"
+"PO-Revision-Date: 2020-09-02 00:20+0100\n"
 "Last-Translator: Zander Brown <zbrown@gnome.org>\n"
 "Language-Team: English - United Kingdom <en_GB@li.org>\n"
 "Language: en_GB\n"
@@ -627,6 +627,20 @@ msgstr "New Editor Workspace"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "D-Bus Inspector"
+
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
+msgid "Adwaita Dark"
+msgstr "Adwaita Dark"
+
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
+#: data/style-schemes/Adwaita.style-scheme.xml:22
+#| msgid "The default color scheme for Builder"
+msgid "The default color scheme for TextEditor"
+msgstr "The default colour scheme for TextEditor"
+
+#: data/style-schemes/Adwaita.style-scheme.xml:20
+msgid "Adwaita"
+msgstr "Adwaita"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -2603,13 +2617,11 @@ msgid "Requires semantic language support"
 msgstr "Requires semantic language support"
 
 #: src/libide/gui/ide-shortcuts-window.ui:377
-#| msgid "Comment code"
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Comment code"
 
 #: src/libide/gui/ide-shortcuts-window.ui:384
-#| msgid "Uncomment code"
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Uncomment code"
