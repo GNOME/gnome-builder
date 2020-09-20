@@ -103,7 +103,12 @@
   </glyf>
 
   <name>
-    <namerecord nameID="0" platformID="1" platEncID="0" langID="0x0" unicode="True">
+    <!-- font family -->
+    <namerecord nameID="1" platformID="0" platEncID="0" langID="0x0" unicode="True">
+      BuilderBlocks
+    </namerecord>
+    <!-- full name (recent fontconfig requires this) -->
+    <namerecord nameID="4" platformID="0" platEncID="0" langID="0x0" unicode="True">
       BuilderBlocks
     </namerecord>
   </name>
