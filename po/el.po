@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2020-07-04 17:29+0000\n"
-"PO-Revision-Date: 2020-08-08 19:27+0300\n"
+"PO-Revision-Date: 2020-09-21 22:20+0300\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -42,12 +42,18 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
+"Το Builder είναι ένα Περιβάλλον Ανάπτυξης για το GNOME. Συνδυάζει "
+"ολοκληρωμένη υποστήριξη για βασικές τεχνολογίες GNOME όπως GTK +, GLib και "
+"GNOME API με δυνατότητες που θα εκτιμήσει κάθε προγραμματιστής, όπως "
+"επισήμανση σύνταξης και snippets."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:18
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
+"Μπορείτε να βασιστείτε σε προβλέψιμες εκδόσεις του Builder με κάθε νέα "
+"έκδοση του GNOME κάθε έξι μήνες."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:22
 msgid "Features:"
@@ -59,11 +65,11 @@ msgstr "Ενσωματωμένη επισήμανση σύνταξης για α
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:25
 msgid "Side-by-side code editors"
-msgstr ""
+msgstr "Επεξεργαστές κώδικα δίπλα-δίπλα"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:26
 msgid "Multi-monitor support"
-msgstr ""
+msgstr "Υποστήριξη πολλαπλών οθονών"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
 #, fuzzy
@@ -80,6 +86,8 @@ msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
 msgstr ""
+"Ενσωμάτωση με Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize "
+"και Waf"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -103,7 +111,7 @@ msgstr "Αυτόματη προσθήκη εσοχής για C, Python, Vala, �
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:34
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
-msgstr ""
+msgstr "HTML, Markdown, και reStructuredText, και ζωντανή προεπισκόπηση Sphinx"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:35
 #, fuzzy
@@ -142,7 +150,7 @@ msgstr "Ένα μέρος για όλα σας τα έργα"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:50
 msgid "Create new projects from a variety of templates"
-msgstr ""
+msgstr "Δημιουργία νέων έργων από μια ποικιλία προτύπων"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:54
 #, fuzzy
@@ -178,7 +186,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Allow network when metered"
-msgstr ""
+msgstr "Να επιτρέπεται το δίκτυο κατά τη μέτρηση"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid ""
@@ -364,10 +372,8 @@ msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "Επιτρέπει στον επεξεργαστή να κυλιθεί στο τέλος του αρχείου"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
-#, fuzzy
-#| msgid "Plain Text"
 msgid "Wrap Text"
-msgstr "Απλό κειμένο"
+msgstr "Αναδίπλωση κειμένου"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 #, fuzzy
@@ -413,10 +419,8 @@ msgstr "Επιτρέπει στον επεξεργαστή να κυλιθεί �
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/libide/gui/ide-preferences-builtin.c:107
-#, fuzzy
-#| msgid "Spaces"
 msgid "Line Spacing"
-msgstr "Διαστήματα"
+msgstr "Διαστήματα γραμμών"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 #, fuzzy
@@ -598,6 +602,8 @@ msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
 msgstr ""
+"Η διαμόρφωση που έχει επιλεγεί και θα αποκατασταθεί την επόμενη φορά που θα "
+"φορτωθεί το έργο."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
@@ -1175,6 +1181,7 @@ msgstr "Εναλλαγή μεταξύ αναζήτησης και εύρεση �
 #: src/libide/terminal/ide-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
+"Εμφάνιση ή απόκρυψη επιλογών αναζήτησης όπως ευαισθησία πεζών-κεφαλαίων"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:155
@@ -1380,6 +1387,8 @@ msgstr "Συσκευές"
 #: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
+"Δεν είναι δυνατή η ανάπτυξη στη συσκευή, η κατασκευή του αγωγού δεν έχει "
+"προετοιμαστεί"
 
 #: src/libide/foundry/ide-fallback-build-system.c:145
 #: src/libide/greeter/ide-greeter-row.c:260
@@ -1508,9 +1517,6 @@ msgid "Workbench shortcuts"
 msgstr "Συντομεύσεις αναζήτησης"
 
 #: src/libide/foundry/ide-run-manager.c:881
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Build and Run"
 msgid "Build and Run"
 msgstr "Δόμηση και εκτέλεση"
 
@@ -1784,7 +1790,7 @@ msgstr "ΑΡΧΕΙΟ"
 
 #: src/libide/gui/ide-application-command-line.c:66
 msgid "Print version information and exit"
-msgstr ""
+msgstr "Προβολή πληροφοριών έκδοσης και έξοδος"
 
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:68
@@ -2003,9 +2009,8 @@ msgid "terminal font monospace"
 msgstr "terminal font monospace τερματικό γραμματοσειρά"
 
 #: src/libide/gui/ide-preferences-builtin.c:110
-#, fuzzy
 msgid "Bold text in terminals"
-msgstr "Εύρεση μιας λέξης μέσα στο τρέχον έγγραφο"
+msgstr "Έντονο κείμενο στα τερματικά"
 
 #: src/libide/gui/ide-preferences-builtin.c:110
 msgid "If terminals are allowed to display bold text"
@@ -2069,11 +2074,11 @@ msgstr "Επαναφέρει τον δρομέα στην τελευταία θ�
 
 #: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Enable text wrapping"
-msgstr ""
+msgstr "Ενεργοποίηση αναδίπλωσης κειμένου"
 
 #: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Wrap text that is too wide to display"
-msgstr ""
+msgstr "Αναδίπλωση κειμένου που είναι πολύ ευρύ για προβολή"
 
 #: src/libide/gui/ide-preferences-builtin.c:161
 msgid "Scroll Offset"
@@ -2130,6 +2135,8 @@ msgstr "Επισήμανση διαγνωστικών"
 #: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
+"Εμφάνιση ενός εικονιδίου δίπλα στους αριθμούς γραμμής που υποδεικνύουν τον "
+"τύπο του διαγνωστικού"
 
 #: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Highlight"
@@ -2200,7 +2207,7 @@ msgstr "Αυτόματη αποθήκευση"
 
 #: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Enable or disable autosave feature"
-msgstr ""
+msgstr "Ενεργοποίηση ή απενεργοποίηση της δυνατότητας αυτόματης αποθήκευσης"
 
 #: src/libide/gui/ide-preferences-builtin.c:189
 msgid "The number of seconds after modification before auto saving"
@@ -2301,7 +2308,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Ensure files end with a newline"
-msgstr ""
+msgstr "Βεβαιωθείτε ότι τα αρχεία τελειώνουν με μια νέα γραμμή"
 
 #: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Margins"
@@ -2411,7 +2418,7 @@ msgstr "Αριθμός εργατών για παράλληλη δόμηση"
 
 #: src/libide/gui/ide-preferences-builtin.c:412
 msgid "Clear build cache at startup"
-msgstr ""
+msgstr "Εκκαθάριση προσωρινής μνήμης της κατασκευής κατά την εκκίνηση"
 
 #: src/libide/gui/ide-preferences-builtin.c:412
 msgid "Expired caches will be purged when Builder is started"
@@ -2514,11 +2521,9 @@ msgid "General"
 msgstr "Γενικά"
 
 #: src/libide/gui/ide-shortcuts-window.ui:18
-#, fuzzy
-#| msgid "Show Map"
 msgctxt "shortcut window"
 msgid "Show help"
-msgstr "Εμφάνιση χάρτη"
+msgstr "Εμφάνιση βοήθειας"
 
 #: src/libide/gui/ide-shortcuts-window.ui:25
 msgctxt "shortcut window"
@@ -2607,12 +2612,9 @@ msgid "Save all documents"
 msgstr "Αποθήκευση όλων των εγγράφων"
 
 #: src/libide/gui/ide-shortcuts-window.ui:136
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Print the document"
-msgstr "Αποθήκευση εγγράφου"
+msgstr "Εκτύπωση εγγράφου"
 
 #: src/libide/gui/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
@@ -2897,10 +2899,9 @@ msgid "Touchpad gestures"
 msgstr "Xειρονομίες πινακίδας αφής"
 
 #: src/libide/gui/ide-shortcuts-window.ui:515
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Move page to the right"
-msgstr "έγγραφο"
+msgstr "Μετακίνηση σελίδας δεξιά"
 
 #: src/libide/gui/ide-shortcuts-window.ui:516
 #, fuzzy
@@ -2910,10 +2911,9 @@ msgid "Three finger swipe right"
 msgstr "Πέρασμα με δύο δάχτυλα δεξιά"
 
 #: src/libide/gui/ide-shortcuts-window.ui:525
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Move page to the left"
-msgstr "έγγραφο"
+msgstr "Μετακίνηση σελίδας αριστερά"
 
 #: src/libide/gui/ide-shortcuts-window.ui:526
 #, fuzzy
@@ -2947,10 +2947,9 @@ msgstr[1] "Εγκατάσταση %u πακέτων"
 
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1337
-#, fuzzy, c-format
-#| msgid "Failed to initialize defaults."
+#, c-format
 msgid "Failed to initialize language server: %s"
-msgstr "Αποτυχία αρχικοποίησης των προεπιλεγμένων."
+msgstr "Αποτυχία αρχικοποίησης διακομιστή γλώσσας: %s"
 
 #: src/libide/projects/ide-project.c:181
 msgid "Destination file must be within the project tree."
@@ -3454,10 +3453,8 @@ msgid "Build System"
 msgstr "Σύστημα δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
-#, fuzzy
-#| msgid "Installation Prefix"
 msgid "Install Prefix"
-msgstr "Πρόθεμα εγκατάστασης"
+msgstr "Εγκατάσταση προθέματος"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
 msgid "Configure Options"
@@ -3488,26 +3485,20 @@ msgid "Build Output"
 msgstr "Αποτέλεσμα δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:33
-#, fuzzy
-#| msgid "Clear _All"
 msgid "Clear build log"
-msgstr "Επιλογή όλ_ων"
+msgstr "Εκκαθάριση ιστορικού δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:50
 msgid "Cancel build"
 msgstr "Ακύρωση δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:67
-#, fuzzy
-#| msgid "Cancel build"
 msgid "Save build log"
-msgstr "Ακύρωση δόμησης"
+msgstr "Αποθήκευση ιστορικού δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
-#, fuzzy
-#| msgid "missing"
 msgid "Missing"
-msgstr "λείπει"
+msgstr "Λείπει"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
 msgid "Update project dependencies"
@@ -3586,10 +3577,8 @@ msgstr "Εξαγωγή"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
-#, fuzzy
-#| msgid "Build successful"
 msgid "Build Issues"
-msgstr "Επιτυχής δόμηση"
+msgstr "Σφάλματα δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:17
 msgid "Build status:"
@@ -3607,10 +3596,8 @@ msgid "—"
 msgstr "—"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:82
-#, fuzzy
-#| msgid "Build failed"
 msgid "Build Details"
-msgstr "Απέτυχε η δόμηση"
+msgstr "Λεπτομέρειες δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:96
 msgid "Build pipeline is empty"
@@ -3669,10 +3656,8 @@ msgid "Include parenthesis when completing clang proposals"
 msgstr ""
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:107
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete Parameters"
-msgstr "Παράμετροι"
+msgstr "Ολοκληρωμένες παράμετροι"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:108
 msgid "Include parameters and types when completing clang proposals"
@@ -3691,10 +3676,8 @@ msgid "If parentheses should be included when completing."
 msgstr ""
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete parameters"
-msgstr "Παράμετροι"
+msgstr "Ολοκληρωμένες παράμετροι"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
@@ -3707,19 +3690,15 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:197
-#, fuzzy
-#| msgid "Clone Project"
 msgid "Configure project"
-msgstr "Κλωνοποίηση έργου"
+msgstr "Ρύθμιση έργου"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:264
 #: src/plugins/phpize/phpize_plugin.py:229
-#, fuzzy
-#| msgid "Installation Prefix"
 msgid "Installing project"
-msgstr "Πρόθεμα εγκατάστασης"
+msgstr "Γίνεται εγκατάσταση έργου"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:220
 #, c-format
@@ -4420,9 +4399,8 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
 #: src/plugins/editor/gtk/menus.ui:111
-#, fuzzy
 msgid "Frame"
-msgstr "Αρχικός σκελετός εγγράφου"
+msgstr "Πλαίσιο"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:88
 msgid "Arguments"
@@ -4587,7 +4565,7 @@ msgstr "Ιδιότητες"
 #: src/plugins/dspy/libdspy/dspy-node.c:553
 #: src/plugins/glade/gbp-glade-editor-addin.c:79
 msgid "Signals"
-msgstr ""
+msgstr "Σήματα"
 
 #. translators: %s is replaced with the simple D-Bus type string
 #: src/plugins/dspy/libdspy/dspy-signature.c:79
@@ -4601,7 +4579,7 @@ msgstr ""
 
 #: src/plugins/dspy/libdspy/dspy-view.c:155
 msgid "Authentication Failed"
-msgstr ""
+msgstr "Αποτυχία πιστοποίησης"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:157
 msgid "Operation Timed Out"
@@ -5673,7 +5651,7 @@ msgstr "Ημερολόγιο"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
 msgid "Calendar application for GNOME"
-msgstr ""
+msgstr "Εφαρμογή ημερολογίου για το GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Clocks"
@@ -5695,11 +5673,11 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Gitg"
-msgstr ""
+msgstr "Gitg"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:90
 msgid "Gitg is a graphical Git client"
-msgstr ""
+msgstr "Το Gitg είναι ένα πελάτης με γραφικό περιβάλλον για το Git"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:99
 msgid "Maps"
@@ -5723,7 +5701,7 @@ msgstr "Nautilus"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:121
 msgid "Default file manager for GNOME"
-msgstr ""
+msgstr "Προεπιλεγμένος διαχειριστής αρχείων για το GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "Photos"
@@ -5784,7 +5762,7 @@ msgstr "Σύστημα δόμησης"
 
 #: src/plugins/npm/npm_plugin.py:96
 msgid "Downloading npm dependencies"
-msgstr ""
+msgstr "Λήψη εξαρτήσεων npm"
 
 #: src/plugins/phpize/phpize_plugin.py:191
 #, fuzzy
@@ -5937,10 +5915,8 @@ msgid "Removing %s\n"
 msgstr "Αφαίρεση %s\n"
 
 #: src/plugins/recent/gbp-recent-section.c:468
-#, fuzzy
-#| msgid "Recent Projects"
 msgid "Removing Files…"
-msgstr "Πρόσφατα έργα"
+msgstr "Γίνεται αφαίρεση αρχείων…"
 
 #: src/plugins/recent/gbp-recent-section.c:470
 msgid "_Close"
@@ -5984,14 +5960,12 @@ msgid ""
 msgstr ""
 
 #: src/plugins/rust-analyzer/rust-analyzer-service.c:396
-#, fuzzy
-#| msgid "Install Package"
 msgid "Install Language Server"
-msgstr "Εγκατάσταση πακέτου"
+msgstr "Γίνεται εγκατάσταση διακομιστή γλώσσας"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
 msgid "Installation of Rust Analyzer finished"
-msgstr ""
+msgstr "Ολοκληρώθηκε η εγκατάσταση του αναλυτή Rust"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
 #, fuzzy
@@ -6006,7 +5980,7 @@ msgstr ""
 
 #: src/plugins/rustup/rustup_plugin.py:80
 msgid "Rustup not installed"
-msgstr ""
+msgstr "Δεν είναι εγκατεστημένο το Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:270
 msgid "Installing rustup"
@@ -6014,7 +5988,7 @@ msgstr "Εγκαθίσταται rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:272
 msgid "Updating rustup"
-msgstr ""
+msgstr "Γίνεται ενημέρωση rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:274
 #| msgid "Installation Prefix"
@@ -6027,11 +6001,11 @@ msgstr "Έλεγχος συστήματος"
 
 #: src/plugins/rustup/rustup_plugin.py:341
 msgid "Downloading rustup-init"
-msgstr ""
+msgstr "Γίνεται λήψη rustup-init"
 
 #: src/plugins/rustup/rustup_plugin.py:346
 msgid "Syncing channel updates"
-msgstr ""
+msgstr "Συγχρονισμός ενημερώσεων καναλιού"
 
 #: src/plugins/rustup/rustup_plugin.py:352
 msgid "Downloading "
@@ -6043,7 +6017,7 @@ msgstr "Εγκαθίσταται "
 
 #: src/plugins/rustup/rustup_plugin.py:365
 msgid "Checking for rustup updates"
-msgstr ""
+msgstr "Έλεγχος για ενημερώσεις rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:370
 msgid "Downloading rustup update"
@@ -6098,10 +6072,8 @@ msgstr "Εγκατάσταση καναλιού Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
 #: src/plugins/rustup/rustup_plugin.py:609
-#, fuzzy
-#| msgid "Enter a new name for the color"
 msgid "Enter name of rust channel"
-msgstr "Εισάγετε ένα νέο όνομα για το χρώμα"
+msgstr "Εισάγετε όνομα του καναλιού rust"
 
 #: src/plugins/rustup/rustup_plugin.py:610
 msgid ""
@@ -6292,20 +6264,20 @@ msgstr "Καμία πρόταση"
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:214
 msgid "Completed spell checking"
-msgstr ""
+msgstr "Ολοκληρώθηκε ο ορθογραφικός έλεγχος"
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:257
 msgid "The word is not in the dictionary"
-msgstr ""
+msgstr "Η λέξη δεν βρίσκεται στο λεξικό"
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:428
 msgid "This word is already in the personal dictionary"
-msgstr ""
+msgstr "Η λέξη βρίσκεται ήδη στο προσωπικό λέξικό"
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:431
 #, c-format
 msgid "This word is already in the %s dictionary"
-msgstr ""
+msgstr "Η λέξη βρίσκεται ήδη στο λεξικό %s"
 
 #: src/plugins/spellcheck/gbp-spell-widget.ui:17
 msgid "Misspelled"
@@ -6776,10 +6748,8 @@ msgid "Emulates the Vim text editor"
 msgstr "Εξομοιώνει τον επεξεργαστή κειμένου Vim"
 
 #: src/plugins/waf/waf_plugin.py:125
-#, fuzzy
-#| msgid "Run project"
 msgid "Building project…"
-msgstr "Εκτέλεση έργου"
+msgstr "Γίνεται δόμηση έργου…"
 
 #: src/plugins/waf/waf_plugin.py:135
 msgid "Installing project…"
