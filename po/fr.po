@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-23 14:54+0000\n"
-"PO-Revision-Date: 2020-08-23 17:55+0200\n"
+"POT-Creation-Date: 2020-08-31 16:17+0000\n"
+"PO-Revision-Date: 2020-09-18 12:18+0200\n"
 "Last-Translator: Thibault Martin <thibaultamartin@gnome.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -4846,7 +4846,7 @@ msgstr "Clonage du dépôt"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:240
 msgid "A valid Git URL is required"
-msgstr "Un URL valide de dépôt Git est nécessaire"
+msgstr "Une URL valide de dépôt Git est nécessaire"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:91
 #: src/plugins/glade/gbp-glade-frame-addin.c:300
