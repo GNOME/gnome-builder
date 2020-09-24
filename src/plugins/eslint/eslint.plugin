@@ -7,5 +7,5 @@ Hidden=true
 Module=eslint_plugin
 Name=eslint
 X-Diagnostic-Provider-Languages-Priority=100
-X-Diagnostic-Provider-Languages=js,ts
+X-Diagnostic-Provider-Languages=js,typescript
 X-Builder-ABI=@PACKAGE_ABI@
