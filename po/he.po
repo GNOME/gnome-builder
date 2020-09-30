@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2020-08-23 09:44+0000\n"
-"PO-Revision-Date: 2020-09-30 23:00+0300\n"
+"PO-Revision-Date: 2020-09-30 23:17+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -1400,7 +1400,7 @@ msgstr "התגלה התקן „%s”"
 #: src/libide/foundry/ide-device-manager.c:553
 #| msgid "Device"
 msgid "Devices"
-msgstr "התקים"
+msgstr "התקנים"
 
 #: src/libide/foundry/ide-device-manager.c:733
 msgid "Cannot deploy to device, build pipeline is not initialized"
@@ -3409,36 +3409,32 @@ msgid "%s (Copy)"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:115
-#, fuzzy
 #| msgid "Edit build configuration"
 msgid "No build configuration"
-msgstr "עריכת תצורת בנייה"
+msgstr "אין הגדרות בנייה"
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:116
 msgid "Select a build configuration from the sidebar to modify."
-msgstr ""
+msgstr "על מנת לבצע שינויים יש לבחור הגדרות בנייה מהסרגל הצדי."
 
 #: src/plugins/buildui/gbp-buildui-config-surface.c:218
-#, fuzzy
 #| msgid "Edit build configuration"
 msgid "Build Configurations"
-msgstr "עריכת תצורת בנייה"
+msgstr "הגדרות בנייה"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
-#, fuzzy
 #| msgid "Runtime"
 msgid "All Runtimes"
-msgstr "זמן ריצה"
+msgstr "הכל בזמן ריצה"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#, fuzzy
 #| msgid "Makefile"
 msgid "Make _Active"
-msgstr "Makefile"
+msgstr "הפיכה _לפעיל"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Select this configuration as the active configuration."
-msgstr ""
+msgstr "בחירת תצורה זו כתצורה הפעילה."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
 msgid "_Duplicate"
@@ -3512,7 +3508,7 @@ msgstr "יישום זמן ריצה"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
 #| msgid "Build cancelled"
 msgid "Build Toolchain"
-msgstr "כליי בנייה"
+msgstr "כלי בנייה"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:279
 #: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
@@ -3613,7 +3609,7 @@ msgstr "ניקוי"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:530
 msgid "Export Bundle"
-msgstr ""
+msgstr "ייצוא חבילה"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
@@ -4498,7 +4494,7 @@ msgstr "הצגת חוקר D-Bus"
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
 msgid "D-Bus Inspector…"
-msgstr "חוקר D-Bus…"
+msgstr "מפקח D-Bus…"
 
 #. translators: %s is replaced with the address of the D-Bus bus
 #: src/plugins/dspy/libdspy/dspy-connection-button.c:81
@@ -6371,28 +6367,29 @@ msgstr ""
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
 msgid "Enable Stylelint"
-msgstr ""
+msgstr "לאפשר Stylelint"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
 msgid ""
 "Enable the use of stylelint to find additional diagnostics in stylesheet "
 "files. This may result in the execution of code in your project."
 msgstr ""
+"לאפשר שימוש ב־Stylelint להוספת אבחונים בקובצי גיליונות סגנון מדורגים. זה "
+"יגרום להפעלת קוד במיזם שלך."
 
 #: src/plugins/stylelint/stylelint_plugin.py:135
-#, fuzzy
 #| msgid "Style"
 msgid "Stylelint"
-msgstr "Style"
+msgstr "Stylelint"
 
 #: src/plugins/stylelint/stylelint_plugin.py:136
 msgid "Enable the use of Stylelint, which may execute code in your project"
-msgstr ""
+msgstr "לאפשר שימוש ב־Stylelint, שיריץ קוד במיזם שלך"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/stylelint/stylelint_plugin.py:138
 msgid "stylelint stylesheet lint code execute execution"
-msgstr ""
+msgstr "stylelint stylelint lint קוד הרצה הפעלה גיליונות סגנון מדורגים"
 
 #: src/plugins/sublime/gbp-sublime-preferences-addin.c:52
 #| msgid "Snippet Text"
@@ -6409,7 +6406,7 @@ msgid "Generate Support Log"
 msgstr "יצירת יומן תמיכה"
 
 #: src/plugins/support/ide-support-application-addin.c:84
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "The support log file has been written to '%s'. Please provide this file "
 #| "as an attachment on your bug report or support request."
@@ -6417,7 +6414,7 @@ msgid ""
 "The support log file has been written to “%s”. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
-"קובץ יומן התמיכה נכתב אל '%s'. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
+"קובץ יומן התמיכה נכתב אל „%s”. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
 "בבקשת תמיכה."
 
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:57
@@ -6447,10 +6444,9 @@ msgstr "בחירת סמל…"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
-#, fuzzy
 #| msgid "Documentation"
 msgid "Document Outline"
-msgstr "תיעוד"
+msgstr "מתאר מסמך"
 
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
 #: src/plugins/sysprof/gtk/menus.ui:19
@@ -6458,14 +6454,13 @@ msgid "Profiler"
 msgstr "מאפיין"
 
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
-#, fuzzy
 #| msgid "Open Profile…"
 msgid "Open Sysprof Capture…"
-msgstr "_פתיחת פרופיל"
+msgstr "פתיחת Sysprof…"
 
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Sysprof Capture (*.syscap)"
-msgstr ""
+msgstr "לוכד Sysprof‏ ‏‎(*.syscap)"
 
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
 msgid "All Files"
