@@ -639,7 +639,7 @@
                 "--buildtype=debugoptimized",
                 "-Dctags_path=/app/bin/ctags",
                 "-Dtcmalloc=true",
-                "-Dpython_libprefix=python3.7",
+                "-Dpython_libprefix=python3.8",
                 "-Dtracing=true",
                 "-Dhelp=true",
                 "-Dchannel=flatpak-nightly",
