@@ -161,6 +161,11 @@ IdeEnvironment       *ide_config_get_environment           (IdeConfig           
 IDE_AVAILABLE_IN_3_32
 void                  ide_config_set_environment           (IdeConfig             *self,
                                                             IdeEnvironment        *environment);
+IDE_AVAILABLE_IN_3_40
+IdeEnvironment       *ide_config_get_runtime_environment   (IdeConfig             *self);
+IDE_AVAILABLE_IN_3_40
+void                  ide_config_set_runtime_environment   (IdeConfig             *self,
+                                                            IdeEnvironment        *environment);
 IDE_AVAILABLE_IN_3_32
 guint                 ide_config_get_sequence              (IdeConfig             *self);
 IDE_AVAILABLE_IN_3_32

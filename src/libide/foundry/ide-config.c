@@ -51,6 +51,7 @@ typedef struct
   GFile          *build_commands_dir;
 
   IdeEnvironment *environment;
+  IdeEnvironment *runtime_environment;
 
   GHashTable     *internal;
 
@@ -253,6 +254,24 @@ ide_config_environment_changed (IdeConfig      *self,
 }
 
 static void
+ide_config_runtime_environment_changed (IdeConfig      *self,
+                                        IdeEnvironment *environment)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONFIG (self));
+  g_assert (IDE_IS_ENVIRONMENT (environment));
+
+  if (ide_object_in_destruction (IDE_OBJECT (self)))
+    return;
+
+  ide_config_set_dirty (self, TRUE);
+  ide_config_emit_changed (self);
+
+  IDE_EXIT;
+}
+
+static void
 ide_config_real_set_runtime (IdeConfig  *self,
                              IdeRuntime *runtime)
 {
@@ -291,6 +310,7 @@ ide_config_finalize (GObject *object)
 
   g_clear_object (&priv->build_commands_dir);
   g_clear_object (&priv->environment);
+  g_clear_object (&priv->runtime_environment);
 
   g_clear_pointer (&priv->build_commands, g_strfreev);
   g_clear_pointer (&priv->internal, g_hash_table_unref);
@@ -667,6 +687,7 @@ ide_config_init (IdeConfig *self)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
   g_autoptr(IdeEnvironment) env = ide_environment_new ();
+  g_autoptr(IdeEnvironment) rt_env = ide_environment_new ();
 
   priv->runtime_id = g_strdup ("host");
   priv->toolchain_id = g_strdup ("default");
@@ -676,6 +697,7 @@ ide_config_init (IdeConfig *self)
   priv->internal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _value_free);
 
   ide_config_set_environment (self, env);
+  ide_config_set_runtime_environment (self, rt_env);
 }
 
 /**
@@ -1162,6 +1184,54 @@ ide_config_set_environment (IdeConfig      *self,
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENVIRON]);
+    }
+}
+
+/**
+ * ide_config_get_runtime_environment:
+ *
+ * Returns: (transfer none): An #IdeEnvironment.
+ *
+ * Since: 3.40
+ */
+IdeEnvironment *
+ide_config_get_runtime_environment (IdeConfig *self)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIG (self), NULL);
+
+  return priv->runtime_environment;
+}
+
+void
+ide_config_set_runtime_environment (IdeConfig      *self,
+                                    IdeEnvironment *environment)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIG (self));
+  g_return_if_fail (!environment || IDE_IS_ENVIRONMENT (environment));
+
+  if (priv->runtime_environment != environment)
+    {
+      if (priv->runtime_environment != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (priv->runtime_environment,
+                                                G_CALLBACK (ide_config_runtime_environment_changed),
+                                                self);
+          g_clear_object (&priv->runtime_environment);
+        }
+
+      if (environment != NULL)
+        {
+          priv->runtime_environment = g_object_ref (environment);
+          g_signal_connect_object (priv->runtime_environment,
+                                   "changed",
+                                   G_CALLBACK (ide_config_runtime_environment_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
     }
 }
 
