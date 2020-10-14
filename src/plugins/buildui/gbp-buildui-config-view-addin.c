@@ -427,6 +427,7 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
   dzl_preferences_add_list_group (preferences, "general", "general", _("Overview"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_group (preferences, "general", "buttons", NULL, 0);
   dzl_preferences_add_group (preferences, "environ", "build", _("Build Environment"), 0);
+  dzl_preferences_add_group (preferences, "environ", "runtime", _("Runtime Environment"), 0);
 
   /* actions button box */
   box = g_object_new (GTK_TYPE_BOX,
@@ -495,6 +496,19 @@ gbp_buildui_config_view_addin_load (IdeConfigViewAddin *addin,
                                                                    NULL),
                                             NULL),
                               NULL, 0);
+
+  /* Add runtime environment selector */
+  environ_ = ide_config_get_runtime_environment (config);
+  dzl_preferences_add_custom (preferences, "environ", "runtime",
+                              g_object_new (GTK_TYPE_FRAME,
+                                            "visible", TRUE,
+                                            "child", g_object_new (IDE_TYPE_ENVIRONMENT_EDITOR,
+                                                                   "environment", environ_,
+                                                                   "visible", TRUE,
+                                                                   NULL),
+                                            NULL),
+                              NULL, 0);
+
 }
 
 static void

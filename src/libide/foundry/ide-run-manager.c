@@ -518,7 +518,7 @@ do_run_async (IdeRunManager *self,
   /* FIXME: Allow toggling this in build prefs */
   ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
   copy_builtin_envvars (environment);
-  ide_environment_copy_into (ide_config_get_environment (config), environment, TRUE);
+  ide_environment_copy_into (ide_config_get_runtime_environment (config), environment, TRUE);
 
   g_signal_emit (self, signals [RUN], 0, runner);
 
