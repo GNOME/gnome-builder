@@ -140,7 +140,7 @@ ide_search_engine_destroy (IdeObject *object)
   IdeSearchEngine *self = (IdeSearchEngine *)object;
 
   g_clear_object (&self->extensions);
-  g_clear_object (&self->custom_provider);
+  g_clear_pointer (&self->custom_provider, g_ptr_array_unref);
 
   IDE_OBJECT_CLASS (ide_search_engine_parent_class)->destroy (object);
 }
@@ -188,7 +188,7 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
 static void
 ide_search_engine_init (IdeSearchEngine *self)
 {
-  self->custom_provider = g_ptr_array_new ();
+  self->custom_provider = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
 IdeSearchEngine *
@@ -410,7 +410,7 @@ ide_search_engine_add_provider (IdeSearchEngine   *self,
   g_return_if_fail (IDE_IS_SEARCH_ENGINE (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
 
-  g_ptr_array_add (self->custom_provider, provider);
+  g_ptr_array_add (self->custom_provider, g_object_ref (provider));
 }
 
 /**
