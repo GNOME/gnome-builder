@@ -49,6 +49,7 @@
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
 #include "ide-foundry-enums.h"
+#include "ide-run-manager-private.h"
 #include "ide-runtime.h"
 #include "ide-toolchain-manager.h"
 #include "ide-toolchain.h"
@@ -392,6 +393,25 @@ static const gchar *task_type_names[] = {
   "clean",
   "rebuild",
 };
+
+static void
+drop_caches (IdePipeline *self)
+{
+  g_autoptr(IdeContext) context = NULL;
+
+  g_assert (IDE_IS_PIPELINE (self));
+
+  /* We need to notify the run manager that it should drop any cached
+   * information about the install state. This would normally be done
+   * with a signal, but to simplify backporting, we can just call private
+   * API between the two modules.
+   */
+  if ((context = ide_object_ref_context (IDE_OBJECT (self))))
+    {
+      IdeRunManager *run_manager = ide_run_manager_from_context (context);
+      _ide_run_manager_drop_caches (run_manager);
+    }
+}
 
 static void
 chained_binding_clear (gpointer data)
@@ -3424,6 +3444,8 @@ ide_pipeline_clean_async (IdePipeline         *self,
   g_assert (IDE_IS_PIPELINE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  drop_caches (self);
+
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
 
@@ -3680,12 +3702,12 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
  * Since: 3.32
  */
 void
-ide_pipeline_rebuild_async (IdePipeline    *self,
-                                  IdePipelinePhase        phase,
-                                  GPtrArray           *targets,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
+ide_pipeline_rebuild_async (IdePipeline         *self,
+                            IdePipelinePhase     phase,
+                            GPtrArray           *targets,
+                            GCancellable        *cancellable,
+                            GAsyncReadyCallback  callback,
+                            gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   TaskData *td;
@@ -3695,6 +3717,8 @@ ide_pipeline_rebuild_async (IdePipeline    *self,
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail ((phase & ~IDE_PIPELINE_PHASE_MASK) == 0);
+
+  drop_caches (self);
 
   cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
