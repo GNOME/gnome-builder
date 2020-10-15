@@ -20,7 +20,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrollbar">
+          <object class="GtkScrollbar" id="scroller">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
