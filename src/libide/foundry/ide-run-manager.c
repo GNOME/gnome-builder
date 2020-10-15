@@ -1249,3 +1249,11 @@ ide_run_manager_init (IdeRunManager *self)
                                NULL,
                                NULL);
 }
+
+void
+_ide_run_manager_drop_caches (IdeRunManager *self)
+{
+  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
+
+  self->last_change_seq = 0;
+}

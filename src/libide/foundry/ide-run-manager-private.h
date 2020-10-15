@@ -37,5 +37,6 @@ typedef struct
 } IdeRunHandlerInfo;
 
 const GList *_ide_run_manager_get_handlers (IdeRunManager *self);
+void         _ide_run_manager_drop_caches  (IdeRunManager *self);
 
 G_END_DECLS
