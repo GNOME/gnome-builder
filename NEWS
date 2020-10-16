@@ -1,4 +1,16 @@
 ==============
+Version 3.38.1
+==============
+
+ • Fix block font to load with recent fontconfig
+ • Fix eslint to support typescript
+ • Reduce delay in showing hover tooltips on code
+ • Fix various runtime warnings
+ • Fix running project after rebuild
+ • Update templates to use 3.38 SDKs
+ • Translation updates
+
+==============
 Version 3.38.0
 ==============
 
