@@ -305,6 +305,7 @@ class GnomeProjectTemplate(MesonTemplate):
             files['resources/src/config.rs.in'] = 'src/config.rs.in'
             files['resources/src/main.rs'] = 'src/main.rs'
             files['resources/src/window.rs'] = 'src/window.rs'
+            files['resources/src/Cargo.lock'] = 'Cargo.lock'
             files['resources/src/Cargo.toml'] = 'Cargo.toml'
             files['resources/build-aux/cargo.sh'] = 'build-aux/cargo.sh'
             meson_file = 'resources/src/meson-rs.build'
@@ -351,6 +352,7 @@ class EmptyProjectTemplate(MesonTemplate):
         files['resources/src/meson-empty.build'] = 'src/meson.build'
 
         if self.language == 'rust':
+            files['resources/src/Cargo.lock'] = 'Cargo.lock'
             files['resources/src/Cargo-cli.toml'] = 'Cargo.toml'
 
 
@@ -374,5 +376,6 @@ class CLIProjectTemplate(MesonTemplate):
             files['resources/src/main-cli.vala'] = 'src/main.vala'
         elif self.language == 'rust':
             files['resources/src/main-cli.rs'] = 'src/main.rs'
+            files['resources/src/Cargo.lock'] = 'Cargo.lock'
             files['resources/src/Cargo-cli.toml'] = 'Cargo.toml'
             files['resources/build-aux/cargo.sh'] = 'build-aux/cargo.sh'

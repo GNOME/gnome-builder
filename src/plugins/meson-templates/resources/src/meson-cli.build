@@ -4,6 +4,7 @@
 {{else if language == "vala"}}
   'main.vala',
 {{else if language == "rust"}}
+  cargo_sources,
   'main.rs',
 {{end}}
 ]

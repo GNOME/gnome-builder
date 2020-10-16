@@ -31,6 +31,13 @@ add_project_arguments([
 ], language: 'c')
 {{end}}
 
+{{if language == "rust"}}
+cargo_sources = files(
+  'Cargo.toml',
+  'Cargo.lock',
+)
+{{end}}
+
 {{if enable_gnome}}
 subdir('data')
 {{end}}
