@@ -84,6 +84,9 @@ struct _IdeBuffer
   GtkSourceFile          *source_file;
   GFile                  *readlink_file;
 
+  IdeTask                *in_flight_symbol_at_location;
+  gint                    in_flight_symbol_at_location_pos;
+
   /* Scalars */
   guint                   change_count;
   guint                   settling_source;
@@ -945,6 +948,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
 static void
 ide_buffer_init (IdeBuffer *self)
 {
+  self->in_flight_symbol_at_location_pos = -1;
   self->source_file = gtk_source_file_new ();
   self->can_restore_cursor = TRUE;
   self->highlight_diagnostics = TRUE;
@@ -1872,6 +1876,9 @@ ide_buffer_changed (GtkTextBuffer *buffer)
   g_assert (IDE_IS_BUFFER (self));
 
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->changed (buffer);
+
+  g_clear_object (&self->in_flight_symbol_at_location);
+  self->in_flight_symbol_at_location_pos = -1;
 
   self->change_count++;
   g_clear_pointer (&self->content, g_bytes_unref);
@@ -3321,6 +3328,7 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   LookUpSymbolData *data;
+  IdeBuffer *self;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
@@ -3328,8 +3336,12 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   data = ide_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
   g_assert (data->resolvers != NULL);
   g_assert (data->resolvers->len > 0);
+
+  g_clear_object (&self->in_flight_symbol_at_location);
+  self->in_flight_symbol_at_location_pos = -1;
 
   if ((symbol = ide_symbol_resolver_lookup_symbol_finish (symbol_resolver, result, &error)))
     {
@@ -3372,9 +3384,7 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
     }
   else
     {
-      ide_task_return_pointer (task,
-                               g_steal_pointer (&data->symbol),
-                               g_object_unref);
+      ide_task_return_object (task, g_steal_pointer (&data->symbol));
     }
 }
 
@@ -3425,6 +3435,21 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
       return;
     }
 
+  /* If this query is the same as one in-flight, then try to chain
+   * to that query instead of competing and duplicating work.
+   */
+  if (self->in_flight_symbol_at_location_pos == (int)gtk_text_iter_get_offset (location) &&
+      self->in_flight_symbol_at_location != NULL)
+    {
+      ide_task_chain (self->in_flight_symbol_at_location, task);
+      return;
+    }
+  else
+    {
+      g_set_object (&self->in_flight_symbol_at_location, task);
+      self->in_flight_symbol_at_location_pos = gtk_text_iter_get_offset (location);
+    }
+
   _ide_buffer_sync_to_unsaved_files (self);
 
   line = gtk_text_iter_get_line (location);
@@ -3466,7 +3491,7 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  return ide_task_propagate_object (IDE_TASK (result), error);
 }
 
 /**
