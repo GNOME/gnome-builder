@@ -34,7 +34,7 @@
 
 #define GRACE_X 20
 #define GRACE_Y 20
-#define MOTION_SETTLE_TIMEOUT_MSEC 500
+#define MOTION_SETTLE_TIMEOUT_MSEC 250
 
 typedef enum
 {
