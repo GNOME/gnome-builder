@@ -972,7 +972,7 @@ ide_object_insert_sorted (IdeObject        *self,
 
       if (func (child, other, user_data) <= 0)
         {
-          ide_object_insert_after (self, other, child);
+          ide_object_insert_before (self, other, child);
           goto unlock;
         }
     }
