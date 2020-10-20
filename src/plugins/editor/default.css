@@ -55,6 +55,9 @@
 
   /* Add back emoji */
   bind "<ctrl>semicolon" { "insert-emoji" () };
+
+  bind "<shift><alt>Left" { "action" ("history", "move-previous-edit", "") };
+  bind "<shift><alt>Right" { "action" ("history", "move-next-edit", "") };
 }
 
 idesourceviewmode.default {
