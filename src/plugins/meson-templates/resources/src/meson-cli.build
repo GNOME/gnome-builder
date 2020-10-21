@@ -1,6 +1,8 @@
 {{name_}}_sources = [
 {{if language == "c"}}
   'main.c',
+{{else if language == "c++"}}
+  'main.cpp',
 {{else if language == "vala"}}
   'main.vala',
 {{else if language == "rust"}}

@@ -20,6 +20,7 @@
     <file compressed="true">resources/src/main.c</file>
     <file compressed="true">resources/src/main-cli.c</file>
     <file compressed="true">resources/src/main.cpp</file>
+    <file compressed="true">resources/src/main-cli.cpp</file>
     <file compressed="true">resources/src/hello.src.gresource.xml</file>
     <file compressed="true">resources/src/window.c</file>
     <file compressed="true">resources/src/window.cpp</file>

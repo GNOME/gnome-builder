@@ -363,7 +363,7 @@ class CLIProjectTemplate(MesonTemplate):
             _('Command Line Tool'),
             'pattern-cli',
             _('Create a new command line project'),
-            ['C', 'Vala', 'Rust'],
+            ['C', 'C++', 'Vala', 'Rust'],
             200
          )
 
@@ -372,6 +372,8 @@ class CLIProjectTemplate(MesonTemplate):
 
         if self.language == 'c':
             files['resources/src/main-cli.c'] = 'src/main.c'
+        elif self.language == 'c++':
+            files['resources/src/main-cli.cpp'] = 'src/main.cpp'
         elif self.language == 'vala':
             files['resources/src/main-cli.vala'] = 'src/main.vala'
         elif self.language == 'rust':
