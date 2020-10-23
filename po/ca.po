@@ -3566,7 +3566,7 @@ msgstr "No s'ha pogut eliminar el pla d'índex: %s"
 #: src/plugins/code-index/gbp-code-index-application-addin.c:232
 #, c-format
 msgid "Failed to populate index plan: %s"
-msgstr "No s'ha pogut emplenar el plan d'índex: %s"
+msgstr "No s'ha pogut emplenar el pla de l'índex: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:267
 #, c-format
@@ -5862,7 +5862,7 @@ msgstr "Ordres externes"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
 msgid "Command"
-msgstr "Ordres"
+msgstr "Ordre"
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:114
 #, c-format
