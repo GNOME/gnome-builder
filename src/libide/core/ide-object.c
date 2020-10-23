@@ -964,7 +964,7 @@ ide_object_insert_sorted (IdeObject        *self,
   g_assert (priv->children.head != NULL);
   g_assert (priv->children.tail != NULL);
 
-  for (GList *iter = priv->children.tail; iter; iter = iter->prev)
+  for (GList *iter = priv->children.head; iter; iter = iter->head)
     {
       IdeObject *other = iter->data;
 
