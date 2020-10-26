@@ -992,3 +992,38 @@ _ide_workspace_move_front_page_mru (IdeWorkspace *self,
   g_queue_unlink (&priv->page_mru, mru_link);
   g_queue_push_head_link (&priv->page_mru, mru_link);
 }
+
+/**
+ * ide_workspace_addin_find_by_module_name:
+ * @workspace: an #IdeWorkspace
+ * @module_name: the name of the addin module
+ *
+ * Finds the addin (if any) matching the plugin's @module_name.
+ *
+ * Returns: (transfer none) (nullable): an #IdeWorkspaceAddin or %NULL
+ *
+ * Since: 3.40
+ */
+IdeWorkspaceAddin *
+ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
+                                         const gchar  *module_name)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (workspace);
+  PeasPluginInfo *plugin_info;
+  PeasExtension *ret = NULL;
+  PeasEngine *engine;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_WORKSPACE (workspace), NULL);
+  g_return_val_if_fail (module_name != NULL, NULL);
+
+  if (priv->addins == NULL)
+    return NULL;
+
+  engine = peas_engine_get_default ();
+
+  if ((plugin_info = peas_engine_get_plugin_info (engine, module_name)))
+    ret = ide_extension_set_adapter_get_extension (priv->addins, plugin_info);
+
+  return IDE_WORKSPACE_ADDIN (ret);
+}

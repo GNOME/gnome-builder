@@ -43,15 +43,18 @@ struct _IdeWorkspaceAddinInterface
 };
 
 IDE_AVAILABLE_IN_3_32
-void ide_workspace_addin_load          (IdeWorkspaceAddin *self,
-                                        IdeWorkspace      *workspace);
+void               ide_workspace_addin_load                (IdeWorkspaceAddin *self,
+                                                            IdeWorkspace      *workspace);
 IDE_AVAILABLE_IN_3_32
-void ide_workspace_addin_unload        (IdeWorkspaceAddin *self,
-                                        IdeWorkspace      *workspace);
+void               ide_workspace_addin_unload              (IdeWorkspaceAddin *self,
+                                                            IdeWorkspace      *workspace);
 IDE_AVAILABLE_IN_3_32
-void ide_workspace_addin_surface_set   (IdeWorkspaceAddin *self,
-                                        IdeSurface        *surface);
+void               ide_workspace_addin_surface_set         (IdeWorkspaceAddin *self,
+                                                            IdeSurface        *surface);
 IDE_AVAILABLE_IN_3_34
-gboolean ide_workspace_addin_can_close (IdeWorkspaceAddin *self);
+gboolean           ide_workspace_addin_can_close           (IdeWorkspaceAddin *self);
+IDE_AVAILABLE_IN_3_40
+IdeWorkspaceAddin *ide_workspace_addin_find_by_module_name (IdeWorkspace      *workspace,
+                                                            const gchar       *module_name);
 
 G_END_DECLS
