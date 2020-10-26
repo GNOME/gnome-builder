@@ -85,4 +85,24 @@
       </submenu>
     </section>
   </menu>
+  <menu id="ide-editor-page-document-menu">
+    <section id="ide-frame-menu-reveal">
+      <attribute name="after">editor-document-preferences-section</attribute>
+      <attribute name="before">editor-document-save-section</attribute>
+      <item>
+        <attribute name="id">project-tree-reveal</attribute>
+        <attribute name="label" translatable="yes">Reveal in Project</attribute>
+        <attribute name="action">project-tree.reveal</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-files-section">
+      <item>
+        <attribute name="label" translatable="yes">Reveal in Project</attribute>
+        <attribute name="action">project-tree.reveal</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

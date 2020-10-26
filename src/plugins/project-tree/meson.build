@@ -2,6 +2,7 @@ plugins_sources += files([
   'project-tree-plugin.c',
   'gbp-project-tree.c',
   'gbp-project-tree-addin.c',
+  'gbp-project-tree-frame-addin.c',
   'gbp-project-tree-pane.c',
   'gbp-project-tree-pane-actions.c',
   'gbp-project-tree-workspace-addin.c',
