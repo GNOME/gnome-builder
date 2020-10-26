@@ -28,4 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpProjectTree, gbp_project_tree, GBP, PROJECT_TREE, IdeTree)
 
+void gbp_project_tree_reveal (GbpProjectTree *self,
+                              GFile          *file);
+
 G_END_DECLS
