@@ -397,6 +397,23 @@ ide_terminal_page_on_text_inserted_cb (IdeTerminalPage *self,
   g_signal_emit (self, signals [TEXT_INSERTED], 0);
 }
 
+static GFile *
+ide_terminal_page_get_file_or_directory (IdePage *page)
+{
+  IdeTerminalPage *self = (IdeTerminalPage *)page;
+  const char *uri;
+
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
+
+  if (!(uri = vte_terminal_get_current_file_uri (VTE_TERMINAL (self->terminal_top))))
+    uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal_top));
+
+  if (uri != NULL)
+    return g_file_new_for_uri (uri);
+
+  return NULL;
+}
+
 static void
 ide_terminal_page_finalize (GObject *object)
 {
@@ -497,6 +514,7 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   widget_class->grab_focus = gbp_terminal_page_grab_focus;
 
   page_class->create_split = gbp_terminal_page_create_split;
+  page_class->get_file_or_directory = ide_terminal_page_get_file_or_directory;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-page.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_top);

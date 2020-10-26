@@ -870,3 +870,26 @@ ide_page_report_error (IdePage     *self,
                                      "position", 0,
                                      NULL);
 }
+
+/**
+ * ide_page_get_file_or_directory:
+ * @self: a #IdePage
+ *
+ * Gets a #GFile representing a file or directory that best maps to this
+ * page. A terminal might use the current working directory while an editor
+ * or designer might use the backing file.
+ *
+ * Returns: (transfer full) (nullable): a #GFile or %NULL
+ *
+ * Since: 3.40
+ */
+GFile *
+ide_page_get_file_or_directory (IdePage *self)
+{
+  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
+
+  if (IDE_PAGE_GET_CLASS (self)->get_file_or_directory)
+    return IDE_PAGE_GET_CLASS (self)->get_file_or_directory (self);
+
+  return NULL;
+}

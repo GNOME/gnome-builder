@@ -407,6 +407,16 @@ gbp_glade_page_activate_signal_handler_cb (GbpGladePage      *self,
   IDE_EXIT;
 }
 
+static GFile *
+gbp_glade_page_get_file_or_directory (IdePage *page)
+{
+  GbpGladePage *self = (GbpGladePage *)page;
+
+  g_assert (GBP_IS_GLADE_PAGE (self));
+
+  return self->file ? g_object_ref (self->file) : NULL;
+}
+
 static void
 gbp_glade_page_dispose (GObject *object)
 {
@@ -448,18 +458,19 @@ gbp_glade_page_class_init (GbpGladePageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  IdePageClass *view_class = IDE_PAGE_CLASS (klass);
+  IdePageClass *page_class = IDE_PAGE_CLASS (klass);
 
   object_class->dispose = gbp_glade_page_dispose;
   object_class->get_property = gbp_glade_page_get_property;
 
-  view_class->agree_to_close_async = gbp_glade_page_agree_to_close_async;
-  view_class->agree_to_close_finish = gbp_glade_page_agree_to_close_finish;
+  page_class->agree_to_close_async = gbp_glade_page_agree_to_close_async;
+  page_class->agree_to_close_finish = gbp_glade_page_agree_to_close_finish;
+  page_class->get_file_or_directory = gbp_glade_page_get_file_or_directory;
 
   properties [PROP_PROJECT] =
     g_param_spec_object ("project",
                          "Project",
-                         "The project for the view",
+                         "The project for the page",
                          GLADE_TYPE_PROJECT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

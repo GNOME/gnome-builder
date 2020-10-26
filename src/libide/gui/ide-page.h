@@ -46,6 +46,7 @@ struct _IdePageClass
                                            GAsyncResult         *result,
                                            GError              **error);
   IdePage       *(*create_split)          (IdePage              *self);
+  GFile         *(*get_file_or_directory) (IdePage              *self);
 
   /*< private >*/
   gpointer _reserved[16];
@@ -115,5 +116,7 @@ IDE_AVAILABLE_IN_3_32
 void           ide_page_report_error          (IdePage              *self,
                                                const gchar          *format,
                                                ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_3_40
+GFile         *ide_page_get_file_or_directory (IdePage              *self);
 
 G_END_DECLS
