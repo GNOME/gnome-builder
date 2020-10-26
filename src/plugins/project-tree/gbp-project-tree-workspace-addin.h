@@ -20,12 +20,14 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include "gbp-project-tree.h"
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_PROJECT_TREE_WORKSPACE_ADDIN (gbp_project_tree_workspace_addin_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpProjectTreeWorkspaceAddin, gbp_project_tree_workspace_addin, GBP, PROJECT_TREE_WORKSPACE_ADDIN, GObject)
+
+GbpProjectTree *gbp_project_tree_workspace_addin_get_tree (GbpProjectTreeWorkspaceAddin *self);
 
 G_END_DECLS

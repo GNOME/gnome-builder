@@ -22,10 +22,14 @@
 
 #include <libide-gui.h>
 
+#include "gbp-project-tree.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_PROJECT_TREE_PANE (gbp_project_tree_pane_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpProjectTreePane, gbp_project_tree_pane, GBP, PROJECT_TREE_PANE, IdePane)
+
+GbpProjectTree *gbp_project_tree_pane_get_tree (GbpProjectTreePane *self);
 
 G_END_DECLS

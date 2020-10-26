@@ -102,3 +102,11 @@ static void
 gbp_project_tree_workspace_addin_init (GbpProjectTreeWorkspaceAddin *self)
 {
 }
+
+GbpProjectTree *
+gbp_project_tree_workspace_addin_get_tree (GbpProjectTreeWorkspaceAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self), NULL);
+
+  return gbp_project_tree_pane_get_tree (self->pane);
+}

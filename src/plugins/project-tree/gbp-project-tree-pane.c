@@ -60,3 +60,11 @@ gbp_project_tree_pane_init (GbpProjectTreePane *self)
 
   _gbp_project_tree_pane_init_actions (self);
 }
+
+GbpProjectTree *
+gbp_project_tree_pane_get_tree (GbpProjectTreePane *self)
+{
+  g_return_val_if_fail (GBP_IS_PROJECT_TREE_PANE (self), NULL);
+
+  return GBP_PROJECT_TREE (self->tree);
+}
