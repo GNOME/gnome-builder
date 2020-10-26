@@ -2,6 +2,7 @@
 <interface>
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-placeholder1">
+      <attribute name="id">ide-primary-workspace-menu-placeholder1</attribute>
       <item>
         <attribute name="id">ide-primary-workspace-menu-new-editor-workspace</attribute>
         <attribute name="label" translatable="yes">New Editor Workspace…</attribute>
@@ -20,6 +21,7 @@
     </section>
     <section id="ide-editor-workspace-menu-placeholder2"/>
     <section id="ide-editor-workspace-menu-open-section">
+      <attribute name="id">ide-editor-workspace-menu-open-section</attribute>
       <item>
         <attribute name="id">ide-editor-workspace-menu-open</attribute>
         <attribute name="label" translatable="yes">Open File…</attribute>
@@ -28,6 +30,7 @@
       </item>
     </section>
     <section id="ide-editor-workspace-menu-app-section">
+      <attribute name="id">ide-editor-workspace-menu-app-section</attribute>
       <item>
         <attribute name="id">ide-editor-workspace-menu-preferences</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>
@@ -53,6 +56,7 @@
       </item>
     </section>
     <section id="ide-editor-workspace-menu-quit-section">
+      <attribute name="id">ide-editor-workspace-menu-quit-section</attribute>
       <item>
         <attribute name="id">ide-editor-workspace-menu-quit</attribute>
         <attribute name="label" translatable="yes">_Quit</attribute>
@@ -62,6 +66,7 @@
   </menu>
   <menu id="ide-primary-workspace-surfaces-menu">
     <section id="ide-primary-workspace-surfaces-menu-section">
+      <attribute name="id">ide-primary-workspace-surfaces-menu-section</attribute>
       <item>
         <attribute name="accel">&lt;alt&gt;1</attribute>
         <attribute name="id">ide-primary-workspace-menu-surfaces-menu-editor</attribute>
@@ -75,6 +80,7 @@
   </menu>
   <menu id="ide-editor-workspace-surfaces-menu">
     <section id="ide-editor-workspace-surfaces-menu-section">
+      <attribute name="id">ide-editor-workspace-surfaces-menu-section</attribute>
       <attribute name="label" translatable="yes">Switch Surface</attribute>
       <item>
         <attribute name="accel">&lt;alt&gt;1</attribute>
@@ -90,6 +96,7 @@
   </menu>
   <menu id="new-document-menu">
     <section id="new-document-section">
+      <attribute name="id">new-document-section</attribute>
       <item>
         <attribute name="id">new-file</attribute>
         <attribute name="label" translatable="yes">New File</attribute>
@@ -98,6 +105,7 @@
       </item>
     </section>
     <section id="open-document-section">
+      <attribute name="id">open-document-section</attribute>
       <item>
         <attribute name="id">open-file</attribute>
         <attribute name="label" translatable="yes">Open File…</attribute>
@@ -108,6 +116,7 @@
   </menu>
   <menu id="ide-frame-menu">
     <section id="ide-frame-section">
+      <attribute name="id">ide-frame-section</attribute>
       <attribute name="label" translatable="yes">Frame</attribute>
       <item>
         <attribute name="label" translatable="yes">Move Left</attribute>
@@ -125,6 +134,7 @@
   </menu>
   <menu id="ide-editor-page-document-menu">
     <section id="editor-document-section">
+      <attribute name="id">editor-document-section</attribute>
       <attribute name="label" translatable="yes">Document</attribute>
       <item>
         <attribute name="id">editor-document-open-in-new-frame</attribute>
@@ -157,6 +167,7 @@
       </item>
     </section>
     <section id="editor-document-save-section">
+      <attribute name="id">editor-document-save-section</attribute>
       <attribute name="after">editor-document-preferences-section</attribute>
       <item>
         <attribute name="action">editor-page.save</attribute>
@@ -170,6 +181,7 @@
       </item>
     </section>
     <section id="editor-document-close-section">
+      <attribute name="id">editor-document-close-section</attribute>
       <attribute name="after">editor-document-save-section</attribute>
       <item>
         <attribute name="action">frame.close-page</attribute>
