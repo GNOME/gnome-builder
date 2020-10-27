@@ -130,7 +130,7 @@ msgstr "Un depurador integrat per a aplicacions natives"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Suportat per construir amb jhbuild i temps d'execució flatpak"
+msgstr "Compabilitat per a construir amb els entorns d'execució jhbuild i flatpak"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
 msgid "Support for viewing TODOs found within your code base"
@@ -1423,7 +1423,7 @@ msgstr "No es pot executar l'objectiu, un altre objectiu està executant-se"
 
 #: src/libide/foundry/ide-run-manager.c:488
 msgid "Failed to locate runtime"
-msgstr "Ha fallat ubicar el temps d'execució"
+msgstr "Ha fallat ubicar l'entorn d'execució"
 
 #. translators: %s is replaced with the name of the users executable
 #: src/libide/foundry/ide-run-manager.c:543
@@ -2425,7 +2425,7 @@ msgstr "Terminal"
 #: src/libide/gui/ide-shortcuts-window.ui:587
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
-msgstr "Terminal en temps d'execució del muntatge"
+msgstr "Terminal en l'entorn d'execució del muntatge"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
 #: src/libide/gui/ide-shortcuts-window.ui:594
@@ -2957,7 +2957,7 @@ msgstr "_Copia l'adreça de l'enllaç"
 #: src/libide/terminal/ide-terminal-launcher.c:320
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
-msgstr "No s'ha pogut crear el shell en el temps d'execució «%s»"
+msgstr "No s'ha pogut crear el shell dins de l'entorn d'execució «%s»"
 
 #: src/libide/terminal/ide-terminal-launcher.c:646
 msgid "Untitled Terminal"
@@ -3366,7 +3366,7 @@ msgstr "Perfil del muntatge"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:167
 msgid "Runtime"
-msgstr "Temps d'execució"
+msgstr "Entorn d'execució"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:195
 msgid "Device"
@@ -4643,12 +4643,12 @@ msgstr "flatpak %s %s %s"
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
-msgstr[0] "Mostra %u temps d'execució més"
-msgstr[1] "mostra %u temps d'execució més"
+msgstr[0] "Mostra %u entorn d'execució més"
+msgstr[1] "Mostra %u entorns d'execució més"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:401
 msgid "Flatpak Runtimes"
-msgstr "Temps d'execució flatpak"
+msgstr "Entorns d'execució de flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime.c:794
 #, c-format
@@ -6126,11 +6126,11 @@ msgstr "L'aplicació s'ha tancat\r\n"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
 msgid "Terminal in Build Runtime"
-msgstr "Terminal en temps d'execució del muntatge"
+msgstr "Terminal en l'entorn d'execució del muntatge"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
 msgid "Terminal in Runtime"
-msgstr "Terminal en temps d'execució"
+msgstr "Terminal en l'entorn d'execució"
 
 #: src/plugins/terminal/gtk/menus.ui:9
 msgid "New _Terminal"
@@ -6142,7 +6142,7 @@ msgstr "Terminal de _muntatge nou"
 
 #: src/plugins/terminal/gtk/menus.ui:23
 msgid "New _Runtime Terminal"
-msgstr "Terminal _en temps d'execució nou"
+msgstr "T_erminal en l'entorn d'execució nou"
 
 #: src/plugins/testui/gbp-test-output-panel.c:135
 msgid "Unit Test Output"
@@ -6348,21 +6348,3 @@ msgstr "Ha fallat crear l'arbre XML."
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per analitzar-lo."
 
-#~ msgid "Log"
-#~ msgstr "Registre"
-
-#~ msgid "Clone Repository…"
-#~ msgstr "Clona el dipòsit…"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Help"
-#~ msgstr "Ajuda"
-
-#~ msgid "New Terminal Workspace…"
-#~ msgstr "Nou espai de treball del Terminal…"
-
-#~ msgid "Show errors and warnings provided by Vala"
-#~ msgstr "Mostra els errors i avisos proporcionats per Vala"
-
-#~ msgid "vala diagnostics warnings errors"
-#~ msgstr "Errors avisos diagnòstics Vala"
