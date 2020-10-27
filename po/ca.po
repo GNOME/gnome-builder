@@ -1523,7 +1523,7 @@ msgstr "Nom de l'autor"
 
 #: src/libide/greeter/ide-clone-surface.ui:216
 msgid "Author Email"
-msgstr "E-mail de l'autor"
+msgstr "Adreça electrònica de l'autor"
 
 #: src/libide/greeter/ide-clone-surface.ui:252
 msgid "Project Destination"
