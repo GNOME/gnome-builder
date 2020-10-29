@@ -1,13 +1,13 @@
 # Basque translation for gnome-builder.
 # Copyright (C) 2019 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020.
+# Asier Sarasua Garmendia <asier.sarasua@ni.eus>, 2019, 2020.
 #
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2020-08-23 09:44+0000\n"
-"PO-Revision-Date: 2020-06-28 10:00+0100\n"
+"PO-Revision-Date: 2020-10-29 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -1537,7 +1537,7 @@ msgstr "Ez da proiekturik aurkitu"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:154
 msgid "_Remove Projects"
-msgstr "_Kedu proiektuak"
+msgstr "_Kendu proiektuak"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:166
 msgid "Remove Projects and Sources…"
