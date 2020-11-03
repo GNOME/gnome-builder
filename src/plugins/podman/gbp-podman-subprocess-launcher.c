@@ -89,6 +89,8 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
       ide_subprocess_launcher_insert_argv (launcher, i++, "exec");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--privileged");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--interactive");
+      ide_subprocess_launcher_insert_argv (launcher, i++, "--user");
+      ide_subprocess_launcher_insert_argv (launcher, i++, g_get_user_name ());
 
       if (ide_subprocess_launcher_get_needs_tty (launcher))
         ide_subprocess_launcher_insert_argv (launcher, i++, "--tty");
