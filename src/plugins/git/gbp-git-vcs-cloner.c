@@ -226,7 +226,7 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
   /* Extract branch, leave other options to pass-through */
   g_variant_dict_init (&dict, options);
   if (!g_variant_dict_lookup (&dict, "branch", "&s", &branch))
-    branch = "master";
+    branch = "";
   g_variant_dict_remove (&dict, "branch");
 
   /* Make sure we have a real URI to connect to */
@@ -268,7 +268,7 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
   ipc_git_service_call_clone (service,
                               uristr,
                               g_file_peek_path (req->location),
-                              req->branch ?: "master",
+                              req->branch ?: "",
                               g_variant_dict_end (&dict),
                               g_dbus_interface_skeleton_get_object_path (G_DBUS_INTERFACE_SKELETON (req->progress)),
                               cancellable,

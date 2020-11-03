@@ -179,7 +179,6 @@
                               <object class="GtkEntry" id="branch_entry">
                                 <property name="visible">true</property>
                                 <property name="valign">center</property>
-                                <property name="text">master</property>
                               </object>
                               <packing>
                                 <property name="row">1</property>

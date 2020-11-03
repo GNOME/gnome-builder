@@ -560,8 +560,7 @@ ide_clone_surface_clone (IdeCloneSurface *self)
   path = g_file_peek_path (self->destination);
   branch = gtk_entry_get_text (self->branch_entry);
 
-  if (!ide_str_empty0 (branch))
-    g_variant_dict_insert (&dict, "branch", "s", branch);
+  g_variant_dict_insert (&dict, "branch", "s", branch);
 
   if (!ide_str_empty0 (author) && !g_str_equal (g_get_real_name (), author))
     g_variant_dict_insert (&dict, "user.name", "s", author);

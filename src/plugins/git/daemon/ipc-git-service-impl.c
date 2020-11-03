@@ -180,6 +180,9 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
 
   file = g_file_new_for_path (location);
 
+  if (!*branch)
+    branch = NULL;
+
   callbacks = ipc_git_remote_callbacks_new (progress);
 
   fetch_options = ggit_fetch_options_new ();
