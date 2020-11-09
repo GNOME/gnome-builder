@@ -49,7 +49,7 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"El constructor és un entorn de desenvolupament integrat activament "
+"El Constructor és un entorn de desenvolupament integrat activament "
 "desenvolupat per GNOME. Combina el suport integrat per a tecnologies GNOME "
 "essencials, com ara GTK+, GLib i les API del GNOME amb característiques que "
 "qualsevol desenvolupador apreciarà, com el ressaltat de sintaxi i els "
@@ -323,7 +323,7 @@ msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
-"Si està habilitat, el constructor mostrarà el resum del mapa del fitxer del "
+"Si està habilitat, el Constructor mostrarà el resum del mapa del fitxer del "
 "codi font al costat de l'editor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:90
@@ -335,7 +335,7 @@ msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
-"Si està habilitat, el constructor amagarà de forma automàtica el resum del "
+"Si està habilitat, el Constructor amagarà de forma automàtica el resum del "
 "mapa quan el focus del ratolí deixi l'editor, o un compte enrere succeeixi."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:95
@@ -489,7 +489,7 @@ msgstr "El directori dels projectes"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Directory for all Builder projects."
-msgstr "El directori per tots els projectes del constructor."
+msgstr "El directori per tots els projectes del Constructor."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Restore Previous Files"
@@ -514,7 +514,7 @@ msgstr "Neteja la memòria cau de construcció en iniciar"
 #: data/gsettings/org.gnome.builder.gschema.xml:49
 msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
-"Si està habilitat, el constructor netejarà les memòries cau de construcció "
+"Si està habilitat, el Constructor netejarà les memòries cau de construcció "
 "en iniciar."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
@@ -1599,7 +1599,7 @@ msgstr "Obre un projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:101
 msgid "Search all Builder projects…"
-msgstr "Cerca en tots els projectes del constructor…"
+msgstr "Cerca en tots els projectes del Constructor…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:118
 msgid "No Projects Found"
@@ -1728,7 +1728,7 @@ msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
 msgstr ""
-"El constructor GNOME requereix una sessió d'escriptori amb D-Bus. Configura "
+"El Constructor del GNOME requereix una sessió d'escriptori amb D-Bus. Configura "
 "DBUS_SESSION_BUS_ADDRESS."
 
 #: src/libide/gui/ide-command-manager.c:491
@@ -1842,7 +1842,7 @@ msgstr "Mode fosc"
 
 #: src/libide/gui/ide-preferences-builtin.c:101
 msgid "Whether Builder should use a dark theme"
-msgstr "Si constructor hauria d'usar un tema fosc"
+msgstr "Si el Constructor hauria d'usar un tema fosc"
 
 #: src/libide/gui/ide-preferences-builtin.c:101
 msgid "dark theme"
@@ -4744,7 +4744,7 @@ msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr ""
-"El constructor no ha pogut proporcionar les credencials apropiades en clonar "
+"El Constructor no ha pogut proporcionar les credencials apropiades en clonar "
 "el repositori."
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:604
