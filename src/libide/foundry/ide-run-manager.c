@@ -436,6 +436,7 @@ copy_builtin_envvars (IdeEnvironment *environment)
     "XDG_SESSION_ID",
     "XDG_SESSION_TYPE",
     "XDG_VTNR",
+    "AT_SPI_BUS_ADDRESS",
   };
 
   for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
