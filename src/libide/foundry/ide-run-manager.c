@@ -509,11 +509,7 @@ do_run_async (IdeRunManager *self,
         }
     }
 
-  /* Add our environment variables. Currently, these are coming
-   * from the *build* environment because we do not yet have a
-   * way to differentiate between build environment and runtime
-   * for the application.
-   */
+  /* Add our runtime environment variables. */
   environment = ide_runner_get_environment (runner);
   /* FIXME: Allow toggling this in build prefs */
   ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
