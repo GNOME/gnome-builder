@@ -152,6 +152,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
     }
 
   ide_subprocess_launcher_insert_argv (launcher, i++, "--talk-name=org.freedesktop.portal.*");
+  ide_subprocess_launcher_insert_argv (launcher, i++, "--talk-name=org.a11y.Bus");
 
   /* Make sure we have access to the build directory */
   project_build_dir = get_project_build_dir (self);
