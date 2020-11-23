@@ -33,7 +33,7 @@ plugins_deps = [
 ]
 
 if libwebkit_dep.found()
-  plugin_deps += [libide_webkit_dep]
+  plugins_deps += [libide_webkit_dep]
 endif
 
 subdir('auto-save')
