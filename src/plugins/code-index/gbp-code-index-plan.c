@@ -180,7 +180,6 @@ gbp_code_index_plan_cull_indexed_worker (IdeTask      *task,
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       g_autofree gchar *relative = NULL;
-      g_autoptr(IdeCodeIndexIndex) index = NULL;
       g_autoptr(GFile) indexdir = NULL;
       g_autoptr(GFile) symbol_keys = NULL;
       g_autoptr(GFile) symbol_names = NULL;
@@ -292,7 +291,6 @@ gbp_code_index_plan_cull_indexed_async (GbpCodeIndexPlan    *self,
                                         gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GFile) basedir = NULL;
   CullIndexed *state;
 
   IDE_ENTRY;

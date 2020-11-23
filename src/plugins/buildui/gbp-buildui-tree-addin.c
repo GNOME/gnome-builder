@@ -263,7 +263,6 @@ gbp_buildui_tree_addin_action_run (GSimpleAction *action,
                                    gpointer       user_data)
 {
   GbpBuilduiTreeAddin *self = user_data;
-  g_autoptr(GPtrArray) targets = NULL;
   IdeBuildManager *build_manager;
   IdeBuildTarget *target;
   IdeRunManager *run_manager;

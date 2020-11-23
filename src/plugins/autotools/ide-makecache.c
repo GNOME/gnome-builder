@@ -1472,7 +1472,6 @@ ide_makecache_get_build_targets_worker (GTask        *task,
                                         GCancellable *cancellable)
 {
   IdeMakecache *self = source_object;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(GPtrArray) makedirs = NULL;
   g_autoptr(GPtrArray) targets = NULL;
   g_autoptr(GError) error = NULL;
