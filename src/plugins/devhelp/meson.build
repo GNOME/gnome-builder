@@ -1,5 +1,9 @@
 if get_option('plugin_devhelp')
 
+if not libwebkit_dep.found()
+  error('WebKit must be enabled for devhelp support')
+endif
+
 plugins_deps += [
   dependency('libdevhelp-3.0', version: '>=3.25.1'),
 ]

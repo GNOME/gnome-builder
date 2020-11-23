@@ -22,7 +22,11 @@
 
 #include "config.h"
 
-#include <webkit2/webkit2.h>
+#include <glib/gi18n.h>
+
+#ifdef HAVE_WEBKIT
+# include <webkit2/webkit2.h>
+#endif
 
 #include "gs-markdown-private.h"
 #include "ide-marked-view.h"
@@ -78,10 +82,17 @@ ide_marked_view_new (IdeMarkedContent *content)
       break;
 
     case IDE_MARKED_KIND_HTML:
+#ifdef HAVE_WEBKIT
       child = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                             "visible", TRUE,
                             NULL);
       webkit_web_view_load_html (WEBKIT_WEB_VIEW (child), markup, NULL);
+#else
+      child = g_object_new (GTK_TYPE_LABEL,
+                            "label", _("Cannot load HTML. Missing WebKit support."),
+                            "visible", TRUE,
+                            NULL);
+#endif
       break;
 
     case IDE_MARKED_KIND_MARKDOWN:

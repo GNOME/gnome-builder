@@ -19,7 +19,10 @@ subdir('sourceview')
 subdir('lsp')
 subdir('editor')
 subdir('greeter')
-subdir('webkit')
+if libwebkit_dep.found()
+  subdir('webkit')
+endif
+
 subdir('tree')
 
 py_installation = pymod.find_installation('python3')

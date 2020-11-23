@@ -44,7 +44,6 @@ gnome_builder_deps = [
   libide_themes_dep,
   libide_threading_dep,
   libide_vcs_dep,
-  libide_webkit_dep,
   libide_tree_dep,
 ]
 
@@ -67,10 +66,14 @@ gnome_builder_static = [
   libide_threading,
   libide_tree,
   libide_vcs,
-  libide_webkit,
 
   plugins,
 ]
+
+if libwebkit_dep.found()
+  gnome_builder_deps += [libide_webkit_dep]
+  gnome_builder_static += [libide_webkit]
+endif
 
 if libsysprof_capture.found()
   gnome_builder_deps += libsysprof_capture

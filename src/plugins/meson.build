@@ -30,8 +30,11 @@ plugins_deps = [
   libide_threading_dep,
   libide_tree_dep,
   libide_vcs_dep,
-  libide_webkit_dep,
 ]
+
+if libwebkit_dep.found()
+  plugin_deps += [libide_webkit_dep]
+endif
 
 subdir('auto-save')
 subdir('autotools')
