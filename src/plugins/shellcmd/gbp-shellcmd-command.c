@@ -486,7 +486,6 @@ gbp_shellcmd_command_run_app (GbpShellcmdCommand  *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeTerminalLauncher) tlauncher = NULL;
   g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GFile) workdir = NULL;
   IdeWorkspace *workspace;
   IdeWorkbench *workbench;

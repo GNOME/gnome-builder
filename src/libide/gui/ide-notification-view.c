@@ -71,7 +71,6 @@ connect_notification (IdeNotificationView *self,
 {
   g_autofree gchar *action_name = NULL;
   g_autoptr(GVariant) target_value = NULL;
-  g_autoptr(GIcon) icon = NULL;
   guint n_buttons;
 
   g_assert (IDE_IS_NOTIFICATION_VIEW (self));

@@ -387,10 +387,8 @@ spawn_runner_launcher (IdeTerminalLauncher *self,
                        gint                 pty_fd)
 {
   g_autoptr(IdeSimpleBuildTarget) build_target = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeRunner) runner = NULL;
   g_autoptr(GPtrArray) argv = NULL;
-  g_autoptr(GError) error = NULL;
   IdeEnvironment *env;
   const gchar *shell;
 
@@ -851,8 +849,9 @@ ide_terminal_launcher_set_args (IdeTerminalLauncher *self,
 
   if ((gchar **)args != self->args)
     {
-      g_auto(GStrv) freeme = g_steal_pointer (&self->args);
+      gchar **freeme = g_steal_pointer (&self->args);
       self->args = g_strdupv ((gchar **)args);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARGS]);
+      g_strfreev (freeme);
     }
 }
