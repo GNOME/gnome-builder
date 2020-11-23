@@ -132,8 +132,8 @@ ide_application_startup (GApplication *app)
    * D-Bus environment. Bail if for some reason that is not the case.
    */
   if (g_getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)
-    g_error ("%s",
-             _("GNOME Builder requires a desktop session with D-Bus. Please set DBUS_SESSION_BUS_ADDRESS."));
+    g_warning ("%s",
+               _("GNOME Builder requires a session with D-Bus which was not found. Please set DBUS_SESSION_BUS_ADDRESS. Some features may not be available."));
 
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (app);
 
