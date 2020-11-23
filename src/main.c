@@ -49,6 +49,16 @@
 static SysprofCaptureWriter *trace_writer;
 static G_LOCK_DEFINE (tracer);
 
+static inline int
+current_cpu (void)
+{
+#ifdef HAVE_SCHED_GETCPU
+  return sched_getcpu ();
+#else
+  return 0;
+#endif
+}
+
 static void
 trace_load (void)
 {
@@ -76,7 +86,7 @@ trace_function (const gchar    *func,
       G_LOCK (tracer);
       sysprof_capture_writer_add_mark (trace_writer,
                                        begin_time_usec * 1000L,
-                                       sched_getcpu (),
+                                       current_cpu (),
                                        getpid (),
                                        (end_time_usec - begin_time_usec) * 1000L,
                                        "tracing",
@@ -96,7 +106,7 @@ trace_log (GLogLevelFlags  log_level,
       G_LOCK (tracer);
       sysprof_capture_writer_add_log (trace_writer,
                                       SYSPROF_CAPTURE_CURRENT_TIME,
-                                      sched_getcpu (),
+                                      current_cpu (),
                                       getpid (),
                                       log_level,
                                       domain,

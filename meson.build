@@ -279,6 +279,9 @@ check_functions = [
   ['HAVE_PTSNAME', 'ptsname'],
   ['HAVE_PTSNAME_R', 'ptsname_r'],
   ['HAVE_UNLOCKPT', 'unlockpt'],
+
+  # scheduling
+  ['HAVE_SCHED_GETCPU', 'sched_getcpu'],
 ]
 foreach func: check_functions
   config_h.set(func[0], cc.has_function(func[1]))
