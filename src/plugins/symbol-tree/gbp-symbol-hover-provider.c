@@ -68,8 +68,6 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GString) str = NULL;
-  g_autoptr(IdeMarkedContent) content = NULL;
   g_autofree gchar *tt = NULL;
   IdeHoverContext *context;
   const gchar *name;

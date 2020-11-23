@@ -139,8 +139,9 @@ gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
   /* If we still have access to the runtime, translate */
   if (runtime != NULL)
     {
-      g_autoptr(GFile) freeme = file;
+      GFile *freeme = file;
       file = ide_runtime_translate_file (runtime, file);
+      g_clear_object (&freeme);
     }
 
   return g_file_get_path (file);

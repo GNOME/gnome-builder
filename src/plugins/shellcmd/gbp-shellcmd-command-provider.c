@@ -67,7 +67,6 @@ gbp_shellcmd_command_provider_query_async (IdeCommandProvider  *provider,
   GbpShellcmdCommandProvider *self = (GbpShellcmdCommandProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) ret = NULL;
-  g_autofree gchar *quoted = NULL;
   IdeContext *context;
 
   g_assert (GBP_IS_SHELLCMD_COMMAND_PROVIDER (provider));
@@ -176,7 +175,6 @@ on_model_keybindings_changed_cb (GbpShellcmdCommandProvider *self,
       g_autoptr(GbpShellcmdCommand) command = NULL;
       g_autofree gchar *dzlcmdid = NULL;
       g_autofree gchar *dzlcmdaction = NULL;
-      g_autofree gchar *delimit = NULL;
       const gchar *shortcut;
       const gchar *id;
 

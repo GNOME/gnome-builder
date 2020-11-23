@@ -386,8 +386,6 @@ gbp_symbol_frame_addin_bind (GbpSymbolFrameAddin *self,
                              IdeBuffer           *buffer,
                              DzlSignalGroup      *buffer_signals)
 {
-  g_autoptr(GPtrArray) resolvers = NULL;
-
   g_assert (GBP_IS_SYMBOL_FRAME_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));

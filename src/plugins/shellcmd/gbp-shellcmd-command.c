@@ -365,7 +365,6 @@ gbp_shellcmd_command_apply (GbpShellcmdCommand    *self,
                             GFile                 *relative_to)
 {
   g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GFile) cwd = NULL;
   const gchar *builddir = NULL;
@@ -430,9 +429,7 @@ gbp_shellcmd_command_run_host (GbpShellcmdCommand  *self,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeTerminalLauncher) tlauncher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GFile) workdir = NULL;
   IdeWorkspace *workspace;
   IdeWorkbench *workbench;
@@ -621,7 +618,6 @@ gbp_shellcmd_command_run_build (GbpShellcmdCommand  *self,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeTerminalLauncher) tlauncher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) builddir = NULL;

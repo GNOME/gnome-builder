@@ -32,6 +32,7 @@ struct _GbpQemuDeviceProvider
 
 G_DEFINE_TYPE (GbpQemuDeviceProvider, gbp_qemu_device_provider, IDE_TYPE_DEVICE_PROVIDER)
 
+#ifdef __linux__
 static const struct {
   const gchar *filename;
   const gchar *arch;
@@ -41,6 +42,7 @@ static const struct {
   { "qemu-aarch64", "aarch64", N_("Aarch64 Emulation") },
   { "qemu-arm",     "arm",     N_("Arm Emulation") },
 };
+#endif
 
 #ifdef __linux__
 static gboolean

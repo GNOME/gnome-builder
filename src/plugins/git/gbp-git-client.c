@@ -55,7 +55,6 @@ gbp_git_client_subprocess_spawned (GbpGitClient            *self,
                                    IdeSubprocessSupervisor *supervisor)
 {
   g_autoptr(GIOStream) stream = NULL;
-  g_autoptr(GVariant) params = NULL;
   GOutputStream *output;
   GInputStream *input;
   GList *queued;

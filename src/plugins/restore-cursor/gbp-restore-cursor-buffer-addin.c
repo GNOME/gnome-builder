@@ -109,7 +109,6 @@ gbp_restore_cursor_buffer_addin_file_loaded (IdeBufferAddin *addin,
                                              GFile          *file)
 {
   g_autoptr(GSettings) settings = NULL;
-  g_autoptr(GFileInfo) file_info = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_RESTORE_CURSOR_BUFFER_ADDIN (addin));

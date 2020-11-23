@@ -137,7 +137,6 @@ void
 _ide_application_command_line (IdeApplication          *self,
                                GApplicationCommandLine *cmdline)
 {
-  g_autoptr(PeasExtensionSet) set = NULL;
   g_autofree gchar *project = NULL;
   GVariantDict *dict;
 

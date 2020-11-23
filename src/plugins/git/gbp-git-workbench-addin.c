@@ -174,7 +174,6 @@ gbp_git_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
 {
   GbpGitWorkbenchAddin *self = (GbpGitWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GError) error = NULL;
   GbpGitClient *client;
   IdeContext *context;
 

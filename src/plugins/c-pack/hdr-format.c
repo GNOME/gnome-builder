@@ -195,7 +195,6 @@ push_chunk (GArray      *ar,
             const gchar *str)
 {
   g_autofree gchar *attr = NULL;
-  g_autofree gchar *post = NULL;
   g_autofree gchar *return_type = NULL;
   g_autofree gchar *ident = NULL;
   const gchar *pos;

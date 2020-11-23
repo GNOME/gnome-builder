@@ -1,4 +1,5 @@
 if get_option('plugin_update_manager')
+if host_machine.system() == 'linux'
 
 plugins_deps += [
   libportal_dep,
@@ -17,4 +18,5 @@ plugin_update_manager_resources = gnome.compile_resources(
 
 plugins_sources += plugin_update_manager_resources
 
+endif
 endif

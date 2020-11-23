@@ -539,10 +539,8 @@ gbp_project_tree_pane_actions_open_in_terminal (GSimpleAction *action,
   IdeProjectFile *project_file;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GFile) file = NULL;
   IdeTreeNode *selected;
   g_autofree gchar *terminal_executable = NULL;
-  g_auto(GStrv) env = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GError) error = NULL;
 

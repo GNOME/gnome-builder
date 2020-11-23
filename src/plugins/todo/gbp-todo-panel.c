@@ -97,7 +97,6 @@ gbp_todo_panel_row_activated (GbpTodoPanel      *self,
 {
   g_autoptr(GbpTodoItem) item = NULL;
   g_autoptr(GFile) file = NULL;
-  g_autofree gchar *fragment = NULL;
   IdeWorkbench *workbench;
   GtkTreeModel *model;
   const gchar *path;

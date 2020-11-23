@@ -74,8 +74,6 @@ gbp_code_index_application_addin_foreach_cb (GFile              *directory,
                                              gpointer            user_data)
 {
   GApplicationCommandLine *cmdline = user_data;
-  g_autofree gchar *path = NULL;
-  g_autoptr(GFile) file = NULL;
 
   g_assert (G_IS_FILE (directory));
   g_assert (plan_items != NULL);

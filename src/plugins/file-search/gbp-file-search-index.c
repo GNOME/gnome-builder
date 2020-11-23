@@ -383,8 +383,6 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
           g_autoptr(GbpFileSearchResult) result = NULL;
           g_autofree gchar *escaped = NULL;
           g_autofree gchar *markup = NULL;
-          g_autofree gchar *free_me = NULL;
-          g_autofree gchar *free_me_sym = NULL;
           const gchar *filename = match->key;
           g_autofree gchar *content_type = NULL;
           g_autoptr(GIcon) themed_icon = NULL;

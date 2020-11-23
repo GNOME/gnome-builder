@@ -293,7 +293,6 @@ ide_editor_settings_dialog_class_init (IdeEditorSettingsDialogClass *klass)
 static void
 ide_editor_settings_dialog_init (IdeEditorSettingsDialog *self)
 {
-  g_autoptr(GtkListStore) store = NULL;
   GtkSourceLanguageManager *manager;
   const gchar * const *lang_ids;
   GValue idval = {0};
