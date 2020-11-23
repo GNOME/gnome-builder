@@ -119,7 +119,8 @@ test_c_args = [
   '-Werror=empty-body',
   '-Werror=implicit',
   '-Werror=implicit-function-declaration',
-  '-Werror=incompatible-pointer-types',
+  # Ignore until mkenums is fixed
+  # '-Werror=incompatible-pointer-types',
   '-Werror=init-self',
   '-Werror=int-conversion',
   '-Werror=int-to-pointer-cast',
