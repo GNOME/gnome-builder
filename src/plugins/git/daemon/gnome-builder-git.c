@@ -88,7 +88,7 @@ main (gint argc,
 #elif defined(__FreeBSD__)
   procctl (P_PID, 0, PROC_PDEATHSIG_CTL, &(int){ SIGTERM });
 #else
-#error "Please submit a patch to support parent-death signal on your OS"
+# warning "Please submit a patch to support parent-death signal on your OS"
 #endif
 
   signal (SIGPIPE, SIG_IGN);
