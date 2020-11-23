@@ -1,5 +1,9 @@
 if get_option('plugin_rust_analyzer')
 
+plugins_deps += [
+  dependency('libsoup-2.4'),
+]
+
 plugins_sources += files([
   'rust-analyzer.c',
   'rust-analyzer-service.c',
