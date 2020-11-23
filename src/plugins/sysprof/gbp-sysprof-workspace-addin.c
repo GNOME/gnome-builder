@@ -105,16 +105,10 @@ profiler_run_handler (IdeRunManager *run_manager,
 {
   GbpSysprofWorkspaceAddin *self = user_data;
   g_autoptr(SysprofProfiler) profiler = NULL;
-  g_autoptr(SysprofSource) proc_source = NULL;
-  g_autoptr(SysprofSource) perf_source = NULL;
-  g_autoptr(SysprofSource) hostinfo_source = NULL;
-  g_autoptr(SysprofSource) memory_source = NULL;
   g_autoptr(SysprofSource) app_source = NULL;
   g_autoptr(SysprofSource) gjs_source = NULL;
   g_autoptr(SysprofSource) gtk_source = NULL;
   g_autoptr(SysprofSource) symbols_source = NULL;
-  g_autoptr(SysprofSource) netdev_source = NULL;
-  g_autoptr(SysprofSource) energy_source = NULL;
   g_autoptr(SysprofSpawnable) spawnable = NULL;
   g_autoptr(GPtrArray) sources = NULL;
   g_auto(GStrv) argv = NULL;
@@ -138,18 +132,37 @@ profiler_run_handler (IdeRunManager *run_manager,
    */
   sysprof_profiler_set_whole_system (profiler, TRUE);
 
-  proc_source = sysprof_proc_source_new ();
-  g_ptr_array_add (sources, proc_source);
+#ifdef __linux__
+  {
+    g_autoptr(SysprofSource) proc_source = NULL;
+    g_autoptr(SysprofSource) perf_source = NULL;
+    g_autoptr(SysprofSource) hostinfo_source = NULL;
+    g_autoptr(SysprofSource) netdev_source = NULL;
+    g_autoptr(SysprofSource) energy_source = NULL;
+    g_autoptr(SysprofSource) memory_source = NULL;
 
-  /* TODO: Make this source non-fatal since we have other data collectors */
-  perf_source = sysprof_perf_source_new ();
-  g_ptr_array_add (sources, perf_source);
+    proc_source = sysprof_proc_source_new ();
+    g_ptr_array_add (sources, proc_source);
 
-  hostinfo_source = sysprof_hostinfo_source_new ();
-  g_ptr_array_add (sources, hostinfo_source);
+    /* TODO: Make this source non-fatal since we have other data collectors */
+    perf_source = sysprof_perf_source_new ();
+    g_ptr_array_add (sources, perf_source);
 
-  memory_source = sysprof_memory_source_new ();
-  g_ptr_array_add (sources, memory_source);
+    hostinfo_source = sysprof_hostinfo_source_new ();
+    g_ptr_array_add (sources, hostinfo_source);
+
+    memory_source = sysprof_memory_source_new ();
+    g_ptr_array_add (sources, memory_source);
+
+    energy_source = sysprof_proxy_source_new (G_BUS_TYPE_SYSTEM,
+                                              "org.gnome.Sysprof3",
+                                              "/org/gnome/Sysprof3/RAPL");
+    g_ptr_array_add (sources, energy_source);
+
+    netdev_source = sysprof_netdev_source_new ();
+    g_ptr_array_add (sources, netdev_source);
+  }
+#endif
 
   gjs_source = sysprof_gjs_source_new ();
   g_ptr_array_add (sources, gjs_source);
@@ -165,14 +178,6 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   symbols_source = sysprof_symbols_source_new ();
   g_ptr_array_add (sources, symbols_source);
-
-  energy_source = sysprof_proxy_source_new (G_BUS_TYPE_SYSTEM,
-                                            "org.gnome.Sysprof3",
-                                            "/org/gnome/Sysprof3/RAPL");
-  g_ptr_array_add (sources, energy_source);
-
-  netdev_source = sysprof_netdev_source_new ();
-  g_ptr_array_add (sources, netdev_source);
 
   /*
    * TODO:
