@@ -38,6 +38,7 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 {
   GbpFlatpakSubprocessLauncher *self = (GbpFlatpakSubprocessLauncher *)launcher;
   g_autofree gchar *build_dir_option = NULL;
+  g_autofree gchar *xdg_runtime_dir = NULL;
   const gchar * const * envp;
   const gchar * const * argv;
   IdeSubprocess *ret;
@@ -112,13 +113,18 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 
   build_dir_option = g_strdup_printf ("--build-dir=%s",
                                       ide_subprocess_launcher_get_cwd (launcher));
+  xdg_runtime_dir = g_strdup_printf ("--env=XDG_RUNTIME_DIR=%s",
+                                     g_get_user_runtime_dir ());
 
   /*
    * Since this can be called multiple times, we have to avoid re-adding
-   * the --build-dir= parameters a second (or third, or fourth) time.
+   * the --build-dir= and --env=XDG_RUNTIME_DIR parameters a second (or third,
+   * or fourth) time.
    */
   if (!g_strv_contains (argv, build_dir_option))
     ide_subprocess_launcher_insert_argv (launcher, argpos, build_dir_option);
+  if (!g_strv_contains (argv, xdg_runtime_dir))
+    ide_subprocess_launcher_insert_argv (launcher, argpos, xdg_runtime_dir);
 
 apply_env:
 
