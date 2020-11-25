@@ -465,6 +465,28 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
 }
 
 static void
+install_task_completed_cb (GbpFlatpakRuntimeProvider *self,
+                           GParamSpec                *pspec,
+                           IdeTask                   *task)
+{
+  g_autoptr(IdeContext) context = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (pspec != NULL);
+  g_assert (IDE_IS_TASK (task));
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+
+  if (context != NULL)
+    ide_build_manager_invalidate (ide_build_manager_from_context (context));
+
+  IDE_EXIT;
+}
+
+static void
 gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
                                             const gchar         *runtime_id,
                                             GCancellable        *cancellable,
@@ -494,6 +516,16 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_runtime_provider_install_async);
+
+  /* Track completion so that we can reload the build pipeline. This
+   * may be necessary to pick up new programs like "meson" that are
+   * provided in the SDK which could cause their plugin to not load.
+   */
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (install_task_completed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   if (!g_str_has_prefix (runtime_id, "flatpak:"))
     IDE_GOTO (unknown_runtime_id);
