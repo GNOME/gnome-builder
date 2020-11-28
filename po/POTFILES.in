@@ -96,6 +96,7 @@ src/libide/gui/ide-frame.c
 src/libide/gui/ide-frame.ui
 src/libide/gui/ide-header-bar-shortcuts.c
 src/libide/gui/ide-keybindings.c
+src/libide/gui/ide-marked-view.c
 src/libide/gui/ide-panel.c
 src/libide/gui/ide-preferences-builtin.c
 src/libide/gui/ide-preferences-surface.c
