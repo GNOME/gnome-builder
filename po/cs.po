@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-23 09:44+0000\n"
-"PO-Revision-Date: 2020-09-01 23:55+0200\n"
+"POT-Creation-Date: 2020-11-28 12:41+0000\n"
+"PO-Revision-Date: 2020-11-28 16:24+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:234
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -860,7 +860,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5020
+#: src/libide/sourceview/ide-source-view.c:5022
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
@@ -882,7 +882,7 @@ msgstr "_Přejmenovat"
 msgid "unsaved file %u"
 msgstr "neuložená paleta %u"
 
-#: src/libide/code/ide-buffer.c:3424
+#: src/libide/code/ide-buffer.c:3434
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
@@ -918,7 +918,7 @@ msgstr "Bez názvu"
 #: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:318
+#: src/libide/greeter/ide-clone-surface.ui:317
 #: src/libide/greeter/ide-greeter-workspace.c:536
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -926,7 +926,7 @@ msgstr "Bez názvu"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -1124,7 +1124,7 @@ msgstr ""
 "písmen"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
-#: src/plugins/editor/gtk/menus.ui:155
+#: src/plugins/editor/gtk/menus.ui:165
 msgid "Document Properties"
 msgstr "Vlastnosti dokumentu"
 
@@ -1227,7 +1227,7 @@ msgstr "Otevření souboru"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:287
 msgid "Open"
 msgstr "Otevřít"
 
@@ -1259,7 +1259,7 @@ msgstr "Zavřít všechny soubory"
 #: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
-#: src/plugins/editor/gtk/menus.ui:68 src/plugins/editor/gtk/menus.ui:82
+#: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
 msgid "Editor"
 msgstr "Editor"
 
@@ -1324,73 +1324,73 @@ msgstr "Můj počítač (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Můj počítač (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:800
+#: src/libide/foundry/ide-pipeline.c:820
 msgid "The build pipeline is in a failed state"
 msgstr "Sestavovací roura je v chybovém stavu"
 
-#: src/libide/foundry/ide-pipeline.c:810
+#: src/libide/foundry/ide-pipeline.c:830
 msgid "The build configuration has errors"
 msgstr "Konfigurace sestavení má chybu"
 
-#: src/libide/foundry/ide-pipeline.c:3000
+#: src/libide/foundry/ide-pipeline.c:3020
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Selhalo vytvoření pseudoterminálu. Schopnosti terminálu budou omezené."
 
-#: src/libide/foundry/ide-pipeline.c:3206
+#: src/libide/foundry/ide-pipeline.c:3226
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: src/libide/foundry/ide-pipeline.c:3210
-#: src/libide/foundry/ide-pipeline.c:3267
+#: src/libide/foundry/ide-pipeline.c:3230
+#: src/libide/foundry/ide-pipeline.c:3287
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Selhalo"
 
-#: src/libide/foundry/ide-pipeline.c:3212
-#: src/libide/foundry/ide-pipeline.c:3275
+#: src/libide/foundry/ide-pipeline.c:3232
+#: src/libide/foundry/ide-pipeline.c:3295
 msgid "Ready"
 msgstr "Připraveno"
 
-#: src/libide/foundry/ide-pipeline.c:3227
+#: src/libide/foundry/ide-pipeline.c:3247
 msgid "Downloading…"
 msgstr "Stahuje se…"
 
-#: src/libide/foundry/ide-pipeline.c:3231
+#: src/libide/foundry/ide-pipeline.c:3251
 msgid "Building dependencies…"
 msgstr "Sestavují se závislosti…"
 
-#: src/libide/foundry/ide-pipeline.c:3235
+#: src/libide/foundry/ide-pipeline.c:3255
 msgid "Bootstrapping…"
 msgstr "Připravuje se…"
 
-#: src/libide/foundry/ide-pipeline.c:3239
+#: src/libide/foundry/ide-pipeline.c:3259
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
 
-#: src/libide/foundry/ide-pipeline.c:3243
+#: src/libide/foundry/ide-pipeline.c:3263
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: src/libide/foundry/ide-pipeline.c:3247
+#: src/libide/foundry/ide-pipeline.c:3267
 msgid "Installing…"
 msgstr "Instaluje se…"
 
-#: src/libide/foundry/ide-pipeline.c:3251
+#: src/libide/foundry/ide-pipeline.c:3271
 msgid "Committing…"
 msgstr "Zařazuje se…"
 
-#: src/libide/foundry/ide-pipeline.c:3255
+#: src/libide/foundry/ide-pipeline.c:3275
 msgid "Exporting…"
 msgstr "Exportuje se…"
 
-#: src/libide/foundry/ide-pipeline.c:3259
-#: src/libide/foundry/ide-pipeline.c:3263
+#: src/libide/foundry/ide-pipeline.c:3279
+#: src/libide/foundry/ide-pipeline.c:3283
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Úspěšné"
 
-#: src/libide/foundry/ide-pipeline.c:3271
+#: src/libide/foundry/ide-pipeline.c:3291
 msgid "Preparing…"
 msgstr "Připravuje se…"
 
@@ -1402,39 +1402,39 @@ msgstr "Na měřeném připojení nelze provádět přenosy"
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: src/libide/foundry/ide-run-manager.c:488
+#: src/libide/foundry/ide-run-manager.c:489
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:543
+#: src/libide/foundry/ide-run-manager.c:540
 #, c-format
 msgid "Running %s…"
 msgstr "Běží %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:617
+#: src/libide/foundry/ide-run-manager.c:614
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Sestavení cíle selhalo: %s"
 
-#: src/libide/foundry/ide-run-manager.c:880
+#: src/libide/foundry/ide-run-manager.c:877
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Klávesové zkratky pracovních nástrojů"
 
-#: src/libide/foundry/ide-run-manager.c:881
+#: src/libide/foundry/ide-run-manager.c:878
 msgid "Build and Run"
 msgstr "Sestavit a spustit"
 
-#: src/libide/foundry/ide-run-manager.c:1043
-#: src/libide/foundry/ide-run-manager.c:1109
+#: src/libide/foundry/ide-run-manager.c:1040
+#: src/libide/foundry/ide-run-manager.c:1106
 msgid "Failed to locate a build target"
 msgstr "Selhalo vyhledání cíle sestavení"
 
-#: src/libide/foundry/ide-run-manager.c:1245 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1242 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Spustit"
@@ -1498,19 +1498,19 @@ msgstr "Druh repozitáře"
 msgid "Branch"
 msgstr "Větev"
 
-#: src/libide/greeter/ide-clone-surface.ui:191
+#: src/libide/greeter/ide-clone-surface.ui:190
 msgid "Author Name"
 msgstr "Jméno autora"
 
-#: src/libide/greeter/ide-clone-surface.ui:216
+#: src/libide/greeter/ide-clone-surface.ui:215
 msgid "Author Email"
 msgstr "E-mail autora"
 
-#: src/libide/greeter/ide-clone-surface.ui:252
+#: src/libide/greeter/ide-clone-surface.ui:251
 msgid "Project Destination"
 msgstr "Cíl projektu"
 
-#: src/libide/greeter/ide-clone-surface.ui:308
+#: src/libide/greeter/ide-clone-surface.ui:307
 msgid "Clone Project"
 msgstr "Klonovat projekt"
 
@@ -1599,7 +1599,7 @@ msgctxt "title"
 msgid "Clone Repository"
 msgstr "Klonování repozitáře"
 
-#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
+#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:84
 msgid "Switch Surface"
 msgstr "Přepnout plochu"
 
@@ -1609,33 +1609,33 @@ msgstr "Klonovat projekt"
 
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-preferences-window.ui:6
-#: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
+#: src/plugins/editor/gtk/menus.ui:36 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:39
+#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:42
 #: src/plugins/greeter/gtk/menus.ui:28
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové zkratky"
 
 #: src/libide/gui/gtk/menus.ui:36 src/libide/gui/ide-application-shortcuts.c:46
 #: src/libide/gui/ide-application-shortcuts.c:68
-#: src/plugins/editor/gtk/menus.ui:45 src/plugins/greeter/gtk/menus.ui:34
+#: src/plugins/editor/gtk/menus.ui:48 src/plugins/greeter/gtk/menus.ui:34
 msgid "Help"
 msgstr "Nápověda"
 
-#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:51
+#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:54
 #: src/plugins/greeter/gtk/menus.ui:40
 msgid "About Builder"
 msgstr "O aplikaci Builder"
 
-#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:58
+#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:62
 msgid "_Quit"
 msgstr "U_končit"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:25
-#: src/plugins/editor/gtk/menus.ui:103
+#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:27
+#: src/plugins/editor/gtk/menus.ui:111
 msgid "Open File…"
 msgstr "Otevřít soubor…"
 
@@ -1703,11 +1703,12 @@ msgstr "Zobrazit okno s klávesovými zkratkami"
 
 #: src/libide/gui/ide-application.c:136
 msgid ""
-"GNOME Builder requires a desktop session with D-Bus. Please set "
-"DBUS_SESSION_BUS_ADDRESS."
+"GNOME Builder requires a session with D-Bus which was not found. Please set "
+"DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
 msgstr ""
-"GNOME Builder vyžaduje sezení uživatelského prostředí se sběrnicí D-Bus. "
-"Nastavte prosím DBUS_SESSION_BUS_ADDRESS."
+"GNOME Builder vyžaduje sezení na sběrnici D-Bus, které nebylo nalezeno. "
+"Nastavte prosím DBUS_SESSION_BUS_ADDRESS. Do té doby některá funkcionalita "
+"nemusí být dostupná."
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -1799,6 +1800,10 @@ msgstr "Zobrazit nabídku okna"
 #: src/libide/gui/ide-header-bar-shortcuts.c:42
 msgid "Toggle window to fullscreen"
 msgstr "Přepnout okno na celou obrazovku"
+
+#: src/libide/gui/ide-marked-view.c:92
+msgid "Cannot load HTML. Missing WebKit support."
+msgstr "Nezdařilo se načíst HTML. Schází podpora knihovny WebKit."
 
 #: src/libide/gui/ide-preferences-builtin.c:61
 #: src/libide/gui/ide-preferences-builtin.c:62
@@ -2092,7 +2097,7 @@ msgstr ""
 "souboru se zdrojovým kódem"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
-#: src/plugins/editor/gbp-editor-hover-provider.c:84
+#: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "Diagnostika"
 
@@ -2893,26 +2898,26 @@ msgstr "Vložit „%s“"
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4562
+#: src/libide/sourceview/ide-source-view.c:4564
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: src/libide/sourceview/ide-source-view.c:5019
+#: src/libide/sourceview/ide-source-view.c:5021
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5255
+#: src/libide/sourceview/ide-source-view.c:5257
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5281
+#: src/libide/sourceview/ide-source-view.c:5283
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
+#: src/plugins/editor/gtk/menus.ui:131 src/plugins/editor/gtk/menus.ui:188
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Zavřít"
@@ -2930,7 +2935,7 @@ msgstr "_Kopírovat adresu odkazu"
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Selhalo vytvoření shellu v běhovém prostředí „%s“"
 
-#: src/libide/terminal/ide-terminal-launcher.c:646
+#: src/libide/terminal/ide-terminal-launcher.c:644
 msgid "Untitled Terminal"
 msgstr "Nepojmenovaný terminál"
 
@@ -2987,7 +2992,7 @@ msgstr "Načítá se…"
 msgid "unversioned"
 msgstr "neverzováno"
 
-#: src/main.c:137
+#: src/main.c:147
 msgid "Run a new instance of Builder"
 msgstr "Spustit novou instanci aplikace Builder"
 
@@ -3265,8 +3270,12 @@ msgstr "Přehled"
 msgid "Build Environment"
 msgstr "Sestavovací prostředí"
 
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
+msgid "Runtime Environment"
+msgstr "Běhové prostředí"
+
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
@@ -3275,34 +3284,34 @@ msgstr "Sestavovací prostředí"
 msgid "Name"
 msgstr "Název"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 msgid "Source Directory"
 msgstr "Složka se zdrojovými kódy"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
 msgid "Build System"
 msgstr "Sestavovací systém"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
 msgid "Install Prefix"
 msgstr "Prefix instalace"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
 msgid "Configure Options"
 msgstr "Volby konfigurace"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:481
 msgid "Application Runtime"
 msgstr "Běhové prostředí aplikace"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
 msgid "Build Toolchain"
 msgstr "Sada nástrojů pro sestavení"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:279
-#: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/editor/gtk/menus.ui:174 src/plugins/glade/gtk/menus.ui:8
 #: src/plugins/testui/gbp-test-output-panel.c:68
 msgid "_Save"
 msgstr "_Uložit"
@@ -3528,22 +3537,22 @@ msgstr "Vytvořit nebo aktualizovat index kódu pro projektový soubor"
 msgid "PROJECT_FILE"
 msgstr "PROJEKTOVÝ_SOUBOR"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:154
+#: src/plugins/code-index/gbp-code-index-application-addin.c:152
 #, c-format
 msgid "Failed to load flags for plan: %s"
 msgstr "Selhalo načtení příznaků pro plán: %s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:197
+#: src/plugins/code-index/gbp-code-index-application-addin.c:195
 #, c-format
 msgid "Failed to cull index plan: %s"
 msgstr "Selhalo zredukování indexu plánu: %s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:232
+#: src/plugins/code-index/gbp-code-index-application-addin.c:230
 #, c-format
 msgid "Failed to populate index plan: %s"
 msgstr "Selhalo naplnění indexu plánu: %s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:267
+#: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
 msgid "Failed to load project: %s"
 msgstr "Selhalo načtení projektu: %s"
@@ -3565,7 +3574,7 @@ msgstr ""
 #. *              file (.h) rather than a source file (.c).
 #.
 #: src/plugins/code-index/ide-code-index-index.c:343
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "Deklarace"
 
@@ -4177,7 +4186,7 @@ msgid "Thread"
 msgstr "Vlákno"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
-#: src/plugins/editor/gtk/menus.ui:111
+#: src/plugins/editor/gtk/menus.ui:120
 msgid "Frame"
 msgstr "Rám"
 
@@ -4187,7 +4196,7 @@ msgstr "Argumenty"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
 #: src/plugins/grep/gbp-grep-panel.c:482
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
 msgstr "Umístění"
@@ -4209,7 +4218,7 @@ msgstr "Vybrat dokumentaci"
 msgid "Documentation"
 msgstr "Dokumentace"
 
-#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:147
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
 msgstr "Tisk…"
 
@@ -4436,39 +4445,39 @@ msgstr "Přejít na řádek"
 msgid "Go"
 msgstr "Přejít"
 
-#: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
+#: src/plugins/editor/gtk/menus.ui:8 src/plugins/editor/gtk/menus.ui:18
 msgid "New Editor Workspace…"
 msgstr "Nová pracovní plocha editoru…"
 
-#: src/plugins/editor/gtk/menus.ui:95
+#: src/plugins/editor/gtk/menus.ui:102
 msgid "New File"
 msgstr "Nový soubor"
 
-#: src/plugins/editor/gtk/menus.ui:113
+#: src/plugins/editor/gtk/menus.ui:122
 msgid "Move Left"
 msgstr "Přesunout doleva"
 
-#: src/plugins/editor/gtk/menus.ui:117
+#: src/plugins/editor/gtk/menus.ui:126
 msgid "Move Right"
 msgstr "Přesunout doprava"
 
-#: src/plugins/editor/gtk/menus.ui:128
+#: src/plugins/editor/gtk/menus.ui:138
 msgid "Document"
 msgstr "Dokument"
 
-#: src/plugins/editor/gtk/menus.ui:131 src/plugins/terminal/gtk/menus.ui:34
+#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:34
 msgid "Open in New Frame"
 msgstr "Otevřít v novém rámu"
 
-#: src/plugins/editor/gtk/menus.ui:137
+#: src/plugins/editor/gtk/menus.ui:147
 msgid "Open in New Workspace"
 msgstr "Otevřít v nové pracovní ploše"
 
-#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:39
+#: src/plugins/editor/gtk/menus.ui:151 src/plugins/terminal/gtk/menus.ui:39
 msgid "Split"
 msgstr "Rozdělit"
 
-#: src/plugins/editor/gtk/menus.ui:168
+#: src/plugins/editor/gtk/menus.ui:179
 msgid "Save _As"
 msgstr "Uložit j_ako"
 
@@ -4730,7 +4739,7 @@ msgstr "Nelze podepsat zařazení do gitu bez GPG_KEY_ID"
 msgid "Cannot monitor files outside the working directory"
 msgstr "Nelze sledovat soubory mimo pracovní složku"
 
-#: src/plugins/git/gbp-git-client.c:329
+#: src/plugins/git/gbp-git-client.c:328
 msgid "The client has been closed"
 msgstr "Klient byl uzavřen"
 
@@ -4838,23 +4847,23 @@ msgstr "Vrátit zpět poslední příkaz"
 msgid "Redo the next command"
 msgstr "Znovu provést následující příkaz"
 
-#: src/plugins/glade/gbp-glade-page.c:483
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to selection mode"
 msgstr "Přepnout do režimu výběru"
 
-#: src/plugins/glade/gbp-glade-page.c:484
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to drag-resize mode"
 msgstr "Přepnout do režimu změny velikosti taháním"
 
-#: src/plugins/glade/gbp-glade-page.c:485
+#: src/plugins/glade/gbp-glade-page.c:496
 msgid "Switch to margin editor"
 msgstr "Přepnout do editoru okrajů"
 
-#: src/plugins/glade/gbp-glade-page.c:486
+#: src/plugins/glade/gbp-glade-page.c:497
 msgid "Switch to alignment editor"
 msgstr "Přepnout do editoru zarovnání"
 
-#: src/plugins/glade/gbp-glade-page.c:491
+#: src/plugins/glade/gbp-glade-page.c:502
 msgid "Unnamed Glade project"
 msgstr "Nepojmenovaný projekt Glade"
 
@@ -5093,27 +5102,27 @@ msgstr "Aplikace GNOME"
 msgid "Create a new GNOME application"
 msgstr "Vytvořit novou aplikaci GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:324
+#: src/plugins/meson-templates/meson_templates.py:325
 msgid "Shared Library"
 msgstr "Sdílená knihovna"
 
-#: src/plugins/meson-templates/meson_templates.py:326
+#: src/plugins/meson-templates/meson_templates.py:327
 msgid "Create a new project with a shared library"
 msgstr "Vytvořit nový projekt se sdílenou knihovnou"
 
-#: src/plugins/meson-templates/meson_templates.py:343
+#: src/plugins/meson-templates/meson_templates.py:344
 msgid "Empty Project"
 msgstr "Prázdný projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:345
+#: src/plugins/meson-templates/meson_templates.py:346
 msgid "Create a new empty project"
 msgstr "Vytvořit nový prázdný projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:361
+#: src/plugins/meson-templates/meson_templates.py:363
 msgid "Command Line Tool"
 msgstr "Nástroj příkazové řádky"
 
-#: src/plugins/meson-templates/meson_templates.py:363
+#: src/plugins/meson-templates/meson_templates.py:365
 msgid "Create a new command line project"
 msgstr "Vytvořit nový projekt pro příkazovou řádku"
 
@@ -5388,32 +5397,32 @@ msgstr "Stahují se závislosti npm"
 msgid "Bootstrapping project"
 msgstr "Připravuje se projekt"
 
-#: src/plugins/podman/gbp-podman-runtime.c:155
+#: src/plugins/podman/gbp-podman-runtime.c:161
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:163
+#: src/plugins/podman/gbp-podman-runtime.c:169
 msgid "Containers/Podman"
 msgstr "Kontejnery/Podman"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:124
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Složka s tímto názvem již existuje."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-new-file-popover.c:130
 #: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Soubor s tímto názvem již existuje."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:351
+#: src/plugins/project-tree/gbp-new-file-popover.c:356
 #: src/plugins/project-tree/gbp-new-file-popover.ui:13
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "Název souboru"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:353
+#: src/plugins/project-tree/gbp-new-file-popover.c:358
 msgid "Folder Name"
 msgstr "Název složky"
 
@@ -5497,17 +5506,22 @@ msgstr "Přesunout do koše"
 msgid "Display Options"
 msgstr "Zobrazovat volby"
 
+#: src/plugins/project-tree/gtk/menus.ui:94
+#: src/plugins/project-tree/gtk/menus.ui:103
+msgid "Reveal in Project"
+msgstr "Ukázat v projektu"
+
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
 msgstr "Emulace Aarch64"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+#: src/plugins/qemu/gbp-qemu-device-provider.c:43
 msgid "Arm Emulation"
 msgstr "Emulace Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:158
+#: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Můj počítač (%s) %s"
@@ -5724,7 +5738,7 @@ msgstr "pro přidání nové sady programátorských nástrojů."
 msgid "Shell command"
 msgstr "Příkaz shellu"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:565
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5732,7 +5746,7 @@ msgstr ""
 "Nelze spustit terminál v běhovém prostředí, protože sestavovací roura není "
 "inicializovaná"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:643
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr "Nelze spustit proces, protože sestavovací roura není zatím dostupná"
 
@@ -5803,15 +5817,15 @@ msgstr "Změnit"
 msgid "Delete Command"
 msgstr "Smazat příkaz"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:91
 msgid "Run in host environment"
 msgstr "Spustit v hostitelském prostředí"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:101
 msgid "Run in build environment"
 msgstr "Spustit v sestavovacím prostředí"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:108
 msgid "Run in runtime environment"
 msgstr "Spustit v běhovém prostředí"
 
@@ -5999,11 +6013,11 @@ msgstr "Symboly"
 msgid "Search symbols within document"
 msgstr "Hledat symboly v dokumentu"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:113
 msgid "Unnamed Symbol"
 msgstr "Nepojmenovaný symbol"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:154
 msgid "Symbol"
 msgstr "Symbol"
 
@@ -6021,19 +6035,19 @@ msgstr "Obsah dokumentace"
 msgid "Profiler"
 msgstr "Profiler"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:284
 msgid "Open Sysprof Capture…"
 msgstr "Otevřít záznam Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:293
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Záznam ze Sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:299
 msgid "All Files"
 msgstr "Všechny soubory"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:422
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Spustit s profilerem"
@@ -6136,11 +6150,11 @@ msgstr "Jednotkové testy"
 msgid "Running test “%s”…"
 msgstr "Běží test „%s“…"
 
-#: src/plugins/todo/gbp-todo-panel.c:300
+#: src/plugins/todo/gbp-todo-panel.c:299
 msgid "Loading TODOs…"
 msgstr "Načítají se úkoly…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Please wait while we scan your project"
 msgstr "Čekejte prosím, prochází se váš projekt"
 
