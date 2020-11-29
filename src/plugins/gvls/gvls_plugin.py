@@ -127,6 +127,7 @@ class GVlsService(Ide.Object):
             self._supervisor = Ide.SubprocessSupervisor()
             self._supervisor.connect('spawned', self._gvls_spawned)
             self._supervisor.set_launcher(launcher)
+            Ide.debug('GVls server supervisor has been prepared')
             self._supervisor.start()
 
     def list_to_variant(self, l):
@@ -174,7 +175,9 @@ class GVlsService(Ide.Object):
             b.add_value(self.create_dict_entry_boolean('addUsingNamespaces', self.add_using_namespaces))
             b.add_value(self.create_dict_entry_boolean('mesonBuildSystem', self.meson_build_system))
             b.add_value(self.create_dict_entry_string('libraryVapi', self.library_vapidir))
+            Ide.debug('Library VAPI dir:{0}'.format(self.library_vapidir))
             b.add_value(self.create_dict_entry_string('systemVapi', self.system_vapidir))
+            Ide.debug('System VAPI dir:{0}'.format(self.system_vapidir))
             b.add_value(self.create_dict_entry_string('valaApiVersion', self.vala_api_version))
             b.add_value(self.create_dict_entry_string('mesonCompileCommands', self.meson_compile_commands))
             b.add_value(self.create_dict_entry_string('mesonTargetsIntro', self.meson_targets_intro))
@@ -399,11 +402,18 @@ class GVlsService(Ide.Object):
                 break
         return self.create_configuration_variant()
     
+    def _on_pipeline_loaded(self, obj):
+        try:
+            Ide.debug('GVls: Pipeline loaded')
+            self._notify_change_configuration()
+        except BaseException as exc:
+            Ide.debug('On Pipeline Loaded start get build flags error: {}'.format(exc.args))
+
     def _on_pipeline_diagnostic(self, obj, diagnostic):
         try:
             self.source_file = diagnostic.get_file()
         except BaseException as exc:
-            Ide.debug('On Pipeline Loaded start get build flags error: {}'.format(exc.args))
+            Ide.debug('On Pipeline diagnostics start get build flags error: {}'.format(exc.args))
 
     def on_get_vala_data_dir(self, vdp, cancellable, data):
         try:
@@ -526,6 +536,7 @@ class GVlsService(Ide.Object):
                 self.meson_build_system = False
             buildmgr = Ide.BuildManager.from_context (ctx)
             self.pipeline = buildmgr.get_pipeline ()
+            self.pipeline.connect('loaded', self._on_pipeline_loaded)
             self.pipeline.connect('diagnostic', self._on_pipeline_diagnostic)
             cfgmgr = Ide.ConfigManager.from_context(ctx)
             cfgmgr.connect('notify::current', self.on_config_changed_cb)
@@ -551,10 +562,6 @@ class GVlsService(Ide.Object):
 
     @classmethod
     def bind_client(klass, provider):
-        """
-        This helper tracks changes to our client as it might happen when
-        our `org.gnome.gvls.Server` process has crashed.
-        """
         context = provider.get_context()
         self = GVlsService.from_context(context)
         self._ensure_started()
