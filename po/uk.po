@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-11-24 00:25+0000\n"
-"PO-Revision-Date: 2020-11-27 09:25+0200\n"
+"POT-Creation-Date: 2020-11-28 12:41+0000\n"
+"PO-Revision-Date: 2020-11-29 10:01+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1719,16 +1719,13 @@ msgid "Show the shortcuts window"
 msgstr "Показати вікно клавіатурних скорочень"
 
 #: src/libide/gui/ide-application.c:136
-#| msgid ""
-#| "GNOME Builder requires a desktop session with D-Bus. Please set "
-#| "DBUS_SESSION_BUS_ADDRESS."
 msgid ""
 "GNOME Builder requires a session with D-Bus which was not found. Please set "
 "DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
 msgstr ""
-"Для роботи «Будівника» GNOME потрібен сеанс із D-Bus, якого не виявлено. Будь "
-"ласка, встановіть значення змінної середовища DBUS_SESSION_BUS_ADDRESS. Деякі"
-" з можливостей будуть недоступні."
+"Для роботи «Будівника» GNOME потрібен сеанс із D-Bus, якого не виявлено. "
+"Будь ласка, встановіть значення змінної середовища DBUS_SESSION_BUS_ADDRESS. "
+"Деякі з можливостей будуть недоступні."
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -1822,6 +1819,10 @@ msgstr "Показати меню вікна"
 #: src/libide/gui/ide-header-bar-shortcuts.c:42
 msgid "Toggle window to fullscreen"
 msgstr "Перемкнути вікно у повноекранний режим"
+
+#: src/libide/gui/ide-marked-view.c:92
+msgid "Cannot load HTML. Missing WebKit support."
+msgstr "Не вдалося завантажити HTML. Не передбачено підтримки WebKit."
 
 #: src/libide/gui/ide-preferences-builtin.c:61
 #: src/libide/gui/ide-preferences-builtin.c:62
@@ -3281,7 +3282,6 @@ msgid "Build Environment"
 msgstr "Середовище збирання"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
-#| msgid "In Runtime Environment"
 msgid "Runtime Environment"
 msgstr "Середовище виконання"
 
@@ -5526,7 +5526,6 @@ msgstr "Показувати параметри"
 
 #: src/plugins/project-tree/gtk/menus.ui:94
 #: src/plugins/project-tree/gtk/menus.ui:103
-#| msgid "Recent Projects"
 msgid "Reveal in Project"
 msgstr "Розкрити у проєкті"
 
