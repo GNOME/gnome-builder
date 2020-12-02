@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-23 09:44+0000\n"
-"PO-Revision-Date: 2020-08-24 11:49+0200\n"
+"POT-Creation-Date: 2020-11-28 12:41+0000\n"
+"PO-Revision-Date: 2020-12-02 12:59+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:234
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -649,7 +649,6 @@ msgstr "Adwaita oscuro"
 
 #: data/style-schemes/Adwaita-dark.style-scheme.xml:22
 #: data/style-schemes/Adwaita.style-scheme.xml:22
-#| msgid "The default color scheme for Builder"
 msgid "The default color scheme for TextEditor"
 msgstr "El esquema de colores predeterminado para TextEditor"
 
@@ -869,7 +868,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5020
+#: src/libide/sourceview/ide-source-view.c:5022
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
@@ -891,7 +890,7 @@ msgstr "_Renombrar"
 msgid "unsaved file %u"
 msgstr "%u archivos sin guardar"
 
-#: src/libide/code/ide-buffer.c:3424
+#: src/libide/code/ide-buffer.c:3434
 msgid "The current language lacks a symbol resolver."
 msgstr "Al lenguaje actual le falta un resolutor de símbolos."
 
@@ -929,7 +928,7 @@ msgstr "Sin título"
 #: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:318
+#: src/libide/greeter/ide-clone-surface.ui:317
 #: src/libide/greeter/ide-greeter-workspace.c:536
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -937,7 +936,7 @@ msgstr "Sin título"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1136,7 +1135,7 @@ msgstr ""
 "mayúsculas y minúsculas"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
-#: src/plugins/editor/gtk/menus.ui:155
+#: src/plugins/editor/gtk/menus.ui:165
 msgid "Document Properties"
 msgstr "Propiedades del documento"
 
@@ -1240,7 +1239,7 @@ msgstr "Abrir archivo"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:287
 msgid "Open"
 msgstr "Abrir"
 
@@ -1272,7 +1271,7 @@ msgstr "Cerrar todos los archivos"
 #: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
-#: src/plugins/editor/gtk/menus.ui:68 src/plugins/editor/gtk/menus.ui:82
+#: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
 msgid "Editor"
 msgstr "Editor"
 
@@ -1338,75 +1337,75 @@ msgstr "Mi equipo (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Mi equipo (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:800
+#: src/libide/foundry/ide-pipeline.c:820
 msgid "The build pipeline is in a failed state"
 msgstr "LA tubería de construcción está en estado de error"
 
-#: src/libide/foundry/ide-pipeline.c:810
+#: src/libide/foundry/ide-pipeline.c:830
 msgid "The build configuration has errors"
 msgstr "La configuración de construcción tiene errores"
 
-#: src/libide/foundry/ide-pipeline.c:3000
+#: src/libide/foundry/ide-pipeline.c:3020
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Falló la creación de la pseudo-terminal. Sus características estarán "
 "limitadas."
 
-#: src/libide/foundry/ide-pipeline.c:3206
+#: src/libide/foundry/ide-pipeline.c:3226
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
-#: src/libide/foundry/ide-pipeline.c:3210
-#: src/libide/foundry/ide-pipeline.c:3267
+#: src/libide/foundry/ide-pipeline.c:3230
+#: src/libide/foundry/ide-pipeline.c:3287
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Falló"
 
-#: src/libide/foundry/ide-pipeline.c:3212
-#: src/libide/foundry/ide-pipeline.c:3275
+#: src/libide/foundry/ide-pipeline.c:3232
+#: src/libide/foundry/ide-pipeline.c:3295
 msgid "Ready"
 msgstr "Preparado"
 
-#: src/libide/foundry/ide-pipeline.c:3227
+#: src/libide/foundry/ide-pipeline.c:3247
 msgid "Downloading…"
 msgstr "Descargando…"
 
-#: src/libide/foundry/ide-pipeline.c:3231
+#: src/libide/foundry/ide-pipeline.c:3251
 msgid "Building dependencies…"
 msgstr "Construyendo dependencias…"
 
-#: src/libide/foundry/ide-pipeline.c:3235
+#: src/libide/foundry/ide-pipeline.c:3255
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/foundry/ide-pipeline.c:3239
+#: src/libide/foundry/ide-pipeline.c:3259
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/foundry/ide-pipeline.c:3243
+#: src/libide/foundry/ide-pipeline.c:3263
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Construyendo…"
 
-#: src/libide/foundry/ide-pipeline.c:3247
+#: src/libide/foundry/ide-pipeline.c:3267
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/foundry/ide-pipeline.c:3251
+#: src/libide/foundry/ide-pipeline.c:3271
 msgid "Committing…"
 msgstr "Aplicando…"
 
-#: src/libide/foundry/ide-pipeline.c:3255
+#: src/libide/foundry/ide-pipeline.c:3275
 msgid "Exporting…"
 msgstr "Exportando…"
 
-#: src/libide/foundry/ide-pipeline.c:3259
-#: src/libide/foundry/ide-pipeline.c:3263
+#: src/libide/foundry/ide-pipeline.c:3279
+#: src/libide/foundry/ide-pipeline.c:3283
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Correcto"
 
-#: src/libide/foundry/ide-pipeline.c:3271
+#: src/libide/foundry/ide-pipeline.c:3291
 msgid "Preparing…"
 msgstr "Preparando…"
 
@@ -1418,39 +1417,39 @@ msgstr "No se puede construir la transferencia en una conexión medida"
 msgid "Cannot run target, another target is running"
 msgstr "No se puede ejecutar el objetivo, ya ha otro objetivo en ejecución"
 
-#: src/libide/foundry/ide-run-manager.c:488
+#: src/libide/foundry/ide-run-manager.c:489
 msgid "Failed to locate runtime"
 msgstr "Falló al buscar la rutina"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:543
+#: src/libide/foundry/ide-run-manager.c:540
 #, c-format
 msgid "Running %s…"
 msgstr "Ejecutando %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:617
+#: src/libide/foundry/ide-run-manager.c:614
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Falló al construir el objetivo de construcción: %s"
 
-#: src/libide/foundry/ide-run-manager.c:880
+#: src/libide/foundry/ide-run-manager.c:877
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Atajos del banco de trabajo"
 
-#: src/libide/foundry/ide-run-manager.c:881
+#: src/libide/foundry/ide-run-manager.c:878
 msgid "Build and Run"
 msgstr "Construir y ejecutar"
 
-#: src/libide/foundry/ide-run-manager.c:1043
-#: src/libide/foundry/ide-run-manager.c:1109
+#: src/libide/foundry/ide-run-manager.c:1040
+#: src/libide/foundry/ide-run-manager.c:1106
 msgid "Failed to locate a build target"
 msgstr "Falló al buscar el objetivo de construcción"
 
-#: src/libide/foundry/ide-run-manager.c:1245 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1242 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Ejecutar"
@@ -1514,19 +1513,19 @@ msgstr "Tipo de repositorio"
 msgid "Branch"
 msgstr "Rama"
 
-#: src/libide/greeter/ide-clone-surface.ui:191
+#: src/libide/greeter/ide-clone-surface.ui:190
 msgid "Author Name"
 msgstr "Nombre del autor"
 
-#: src/libide/greeter/ide-clone-surface.ui:216
+#: src/libide/greeter/ide-clone-surface.ui:215
 msgid "Author Email"
 msgstr "Dirección de correo-e del autor"
 
-#: src/libide/greeter/ide-clone-surface.ui:252
+#: src/libide/greeter/ide-clone-surface.ui:251
 msgid "Project Destination"
 msgstr "Destino del proyecto"
 
-#: src/libide/greeter/ide-clone-surface.ui:308
+#: src/libide/greeter/ide-clone-surface.ui:307
 msgid "Clone Project"
 msgstr "Clonar proyecto"
 
@@ -1615,7 +1614,7 @@ msgctxt "title"
 msgid "Clone Repository"
 msgstr "Clonar repositorio"
 
-#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
+#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:84
 msgid "Switch Surface"
 msgstr "Cambiar superficie"
 
@@ -1625,33 +1624,33 @@ msgstr "Cerrar proyecto"
 
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-preferences-window.ui:6
-#: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
+#: src/plugins/editor/gtk/menus.ui:36 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:39
+#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:42
 #: src/plugins/greeter/gtk/menus.ui:28
 msgid "Keyboard Shortcuts"
 msgstr "Atajo del teclado"
 
 #: src/libide/gui/gtk/menus.ui:36 src/libide/gui/ide-application-shortcuts.c:46
 #: src/libide/gui/ide-application-shortcuts.c:68
-#: src/plugins/editor/gtk/menus.ui:45 src/plugins/greeter/gtk/menus.ui:34
+#: src/plugins/editor/gtk/menus.ui:48 src/plugins/greeter/gtk/menus.ui:34
 msgid "Help"
 msgstr "Ayuda"
 
-#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:51
+#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:54
 #: src/plugins/greeter/gtk/menus.ui:40
 msgid "About Builder"
 msgstr "Acerca de Builder"
 
-#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:58
+#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:62
 msgid "_Quit"
 msgstr "_Salir"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:25
-#: src/plugins/editor/gtk/menus.ui:103
+#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:27
+#: src/plugins/editor/gtk/menus.ui:111
 msgid "Open File…"
 msgstr "Abrir archivo…"
 
@@ -1720,12 +1719,16 @@ msgid "Show the shortcuts window"
 msgstr "Mostrar la ventana de atajos"
 
 #: src/libide/gui/ide-application.c:136
+#| msgid ""
+#| "GNOME Builder requires a desktop session with D-Bus. Please set "
+#| "DBUS_SESSION_BUS_ADDRESS."
 msgid ""
-"GNOME Builder requires a desktop session with D-Bus. Please set "
-"DBUS_SESSION_BUS_ADDRESS."
+"GNOME Builder requires a session with D-Bus which was not found. Please set "
+"DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
 msgstr ""
-"GNOME Builder necesita una sesión de escritorio don D-Bus. Configure la "
-"DBUS_SESSION_BUS_ADDRESS."
+"GNOME Builder necesita una sesión con D-Bus que no se ha encontrado. "
+"Configure DBUS_SESSION_BUS_ADDRESS. Algunas características pueden no estar "
+"disponibles."
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -1817,6 +1820,10 @@ msgstr "Mostrar el menú de la ventana"
 #: src/libide/gui/ide-header-bar-shortcuts.c:42
 msgid "Toggle window to fullscreen"
 msgstr "Cambiar ventana a pantalla completa"
+
+#: src/libide/gui/ide-marked-view.c:92
+msgid "Cannot load HTML. Missing WebKit support."
+msgstr "No se puede cargar el HTML. Falta el soporte de WebKit"
 
 #: src/libide/gui/ide-preferences-builtin.c:61
 #: src/libide/gui/ide-preferences-builtin.c:62
@@ -2119,7 +2126,7 @@ msgstr ""
 "descubierta en el archivo fuente"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
-#: src/plugins/editor/gbp-editor-hover-provider.c:84
+#: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "Diagnósticos"
 
@@ -2658,13 +2665,11 @@ msgid "Requires semantic language support"
 msgstr "Requiere soporte de lenguajes semánticos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:377
-#| msgid "Comment code"
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Comentar código"
 
 #: src/libide/gui/ide-shortcuts-window.ui:384
-#| msgid "Uncomment code"
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Descomentar código"
@@ -2924,26 +2929,26 @@ msgstr "Insertar «%s»"
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4562
+#: src/libide/sourceview/ide-source-view.c:4564
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:5019
+#: src/libide/sourceview/ide-source-view.c:5021
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5255
+#: src/libide/sourceview/ide-source-view.c:5257
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5281
+#: src/libide/sourceview/ide-source-view.c:5283
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
+#: src/plugins/editor/gtk/menus.ui:131 src/plugins/editor/gtk/menus.ui:188
 #: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Cerrar"
@@ -2961,7 +2966,7 @@ msgstr "C_opiar la dirección del enlace"
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Falló al crear la terminal con la rutina «%s»"
 
-#: src/libide/terminal/ide-terminal-launcher.c:646
+#: src/libide/terminal/ide-terminal-launcher.c:644
 msgid "Untitled Terminal"
 msgstr "Terminal sin título"
 
@@ -3017,7 +3022,7 @@ msgstr "Cargando…"
 msgid "unversioned"
 msgstr "sin versionar"
 
-#: src/main.c:137
+#: src/main.c:147
 msgid "Run a new instance of Builder"
 msgstr "Ejecutar una instancia de Builder nueva"
 
@@ -3292,8 +3297,13 @@ msgstr "Vista general"
 msgid "Build Environment"
 msgstr "Entorno de construcción"
 
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
+#| msgid "In Runtime Environment"
+msgid "Runtime Environment"
+msgstr "Entorno de ejecución"
+
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 #: src/plugins/ls/gbp-ls-page.ui:15
@@ -3302,34 +3312,34 @@ msgstr "Entorno de construcción"
 msgid "Name"
 msgstr "Nombre"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 msgid "Source Directory"
 msgstr "Carpeta de fuentes"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
 msgid "Build System"
 msgstr "Sistema de construcción"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
 msgid "Install Prefix"
 msgstr "Prefijo de instalación"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
 msgid "Configure Options"
 msgstr "Configurar opciones"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:481
 msgid "Application Runtime"
 msgstr "Rutina de la aplicación"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
 msgid "Build Toolchain"
 msgstr "«Toolchain» de construcción"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:279
-#: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/editor/gtk/menus.ui:174 src/plugins/glade/gtk/menus.ui:8
 #: src/plugins/testui/gbp-test-output-panel.c:68
 msgid "_Save"
 msgstr "_Guardar"
@@ -3555,22 +3565,22 @@ msgstr "Crear o actualizar el índice de código para un archivo de proyecto"
 msgid "PROJECT_FILE"
 msgstr "PROJECT_FILE"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:154
+#: src/plugins/code-index/gbp-code-index-application-addin.c:152
 #, c-format
 msgid "Failed to load flags for plan: %s"
 msgstr "Falló al cargar las opciones para el plan: %s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:197
+#: src/plugins/code-index/gbp-code-index-application-addin.c:195
 #, c-format
 msgid "Failed to cull index plan: %s"
 msgstr "Falló al descartar el plan del índice: %s:"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:232
+#: src/plugins/code-index/gbp-code-index-application-addin.c:230
 #, c-format
 msgid "Failed to populate index plan: %s"
 msgstr "Falló al poblar el plan del índice: %s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:267
+#: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
 msgid "Failed to load project: %s"
 msgstr "Falló al cargar el proyecto: %s"
@@ -3592,7 +3602,7 @@ msgstr ""
 #. *              file (.h) rather than a source file (.c).
 #.
 #: src/plugins/code-index/ide-code-index-index.c:343
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "Declaración"
 
@@ -4206,7 +4216,7 @@ msgid "Thread"
 msgstr "Hilo"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
-#: src/plugins/editor/gtk/menus.ui:111
+#: src/plugins/editor/gtk/menus.ui:120
 msgid "Frame"
 msgstr "Marco"
 
@@ -4216,7 +4226,7 @@ msgstr "Argumentos"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
 #: src/plugins/grep/gbp-grep-panel.c:482
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
 msgstr "Ubicación"
@@ -4238,7 +4248,7 @@ msgstr "Seleccionar documentación"
 msgid "Documentation"
 msgstr "Documentación"
 
-#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:147
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
 msgstr "Imprimir…"
 
@@ -4467,39 +4477,39 @@ msgstr "Ir a la línea"
 msgid "Go"
 msgstr "Ir"
 
-#: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
+#: src/plugins/editor/gtk/menus.ui:8 src/plugins/editor/gtk/menus.ui:18
 msgid "New Editor Workspace…"
 msgstr "Área de trabajo nueva en el editor…"
 
-#: src/plugins/editor/gtk/menus.ui:95
+#: src/plugins/editor/gtk/menus.ui:102
 msgid "New File"
 msgstr "Archivo nuevo"
 
-#: src/plugins/editor/gtk/menus.ui:113
+#: src/plugins/editor/gtk/menus.ui:122
 msgid "Move Left"
 msgstr "Mover a la izquierda"
 
-#: src/plugins/editor/gtk/menus.ui:117
+#: src/plugins/editor/gtk/menus.ui:126
 msgid "Move Right"
 msgstr "Mover a la derecha"
 
-#: src/plugins/editor/gtk/menus.ui:128
+#: src/plugins/editor/gtk/menus.ui:138
 msgid "Document"
 msgstr "Documento"
 
-#: src/plugins/editor/gtk/menus.ui:131 src/plugins/terminal/gtk/menus.ui:34
+#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:34
 msgid "Open in New Frame"
 msgstr "Abrir en un marco nuevo"
 
-#: src/plugins/editor/gtk/menus.ui:137
+#: src/plugins/editor/gtk/menus.ui:147
 msgid "Open in New Workspace"
 msgstr "Abrir en un área de trabajo nueva"
 
-#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:39
+#: src/plugins/editor/gtk/menus.ui:151 src/plugins/terminal/gtk/menus.ui:39
 msgid "Split"
 msgstr "Dividir"
 
-#: src/plugins/editor/gtk/menus.ui:168
+#: src/plugins/editor/gtk/menus.ui:179
 msgid "Save _As"
 msgstr "Guardar _como"
 
@@ -4762,7 +4772,7 @@ msgstr "No se puede firmar un «commit» sin GPG_KEY_ID"
 msgid "Cannot monitor files outside the working directory"
 msgstr "No se pueden monitorizar archivos fuera de la carpeta de trabajo."
 
-#: src/plugins/git/gbp-git-client.c:329
+#: src/plugins/git/gbp-git-client.c:328
 msgid "The client has been closed"
 msgstr "Se ha cerrado el cliente."
 
@@ -4870,23 +4880,23 @@ msgstr "Deshacer el último comanduo"
 msgid "Redo the next command"
 msgstr "Rehacer el siguiente comando"
 
-#: src/plugins/glade/gbp-glade-page.c:483
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to selection mode"
 msgstr "Cambiar al modo de selección"
 
-#: src/plugins/glade/gbp-glade-page.c:484
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to drag-resize mode"
 msgstr "Cambiar al modo de arrastrar-redimensionar"
 
-#: src/plugins/glade/gbp-glade-page.c:485
+#: src/plugins/glade/gbp-glade-page.c:496
 msgid "Switch to margin editor"
 msgstr "Cambiar al modo de editor de márgenes"
 
-#: src/plugins/glade/gbp-glade-page.c:486
+#: src/plugins/glade/gbp-glade-page.c:497
 msgid "Switch to alignment editor"
 msgstr "Cambiar al modo de editor de alineaciones"
 
-#: src/plugins/glade/gbp-glade-page.c:491
+#: src/plugins/glade/gbp-glade-page.c:502
 msgid "Unnamed Glade project"
 msgstr "Proyecto de Glade sin nombre"
 
@@ -5125,27 +5135,27 @@ msgstr "Aplicación de GNOME"
 msgid "Create a new GNOME application"
 msgstr "Crear una nueva aplicación de GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:324
+#: src/plugins/meson-templates/meson_templates.py:325
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:326
+#: src/plugins/meson-templates/meson_templates.py:327
 msgid "Create a new project with a shared library"
 msgstr "Crear un proyecto nuevo con una biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:343
+#: src/plugins/meson-templates/meson_templates.py:344
 msgid "Empty Project"
 msgstr "Proyecto vacío"
 
-#: src/plugins/meson-templates/meson_templates.py:345
+#: src/plugins/meson-templates/meson_templates.py:346
 msgid "Create a new empty project"
 msgstr "Crear un nuevo proyecto vacío"
 
-#: src/plugins/meson-templates/meson_templates.py:361
+#: src/plugins/meson-templates/meson_templates.py:363
 msgid "Command Line Tool"
 msgstr "Herramienta de línea de comandos"
 
-#: src/plugins/meson-templates/meson_templates.py:363
+#: src/plugins/meson-templates/meson_templates.py:365
 msgid "Create a new command line project"
 msgstr "Crear un proyecto de línea de comandos nuevo"
 
@@ -5421,32 +5431,32 @@ msgstr "Descargando dependencias npm"
 msgid "Bootstrapping project"
 msgstr "Inicializando proyecto"
 
-#: src/plugins/podman/gbp-podman-runtime.c:155
+#: src/plugins/podman/gbp-podman-runtime.c:161
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:163
+#: src/plugins/podman/gbp-podman-runtime.c:169
 msgid "Containers/Podman"
 msgstr "Contenedores/Podman"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:124
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Ya existe una carpeta con ese nombre."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-new-file-popover.c:130
 #: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Ya existe un archivo con ese nombre."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:351
+#: src/plugins/project-tree/gbp-new-file-popover.c:356
 #: src/plugins/project-tree/gbp-new-file-popover.ui:13
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "Nombre del archivo"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:353
+#: src/plugins/project-tree/gbp-new-file-popover.c:358
 msgid "Folder Name"
 msgstr "Nombre de la carpeta"
 
@@ -5529,17 +5539,23 @@ msgstr "Mover a la papelera"
 msgid "Display Options"
 msgstr "Opciones de visualización"
 
+#: src/plugins/project-tree/gtk/menus.ui:94
+#: src/plugins/project-tree/gtk/menus.ui:103
+#| msgid "Re_veal in Project Tree"
+msgid "Reveal in Project"
+msgstr "Mostrar en el proyecto"
+
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
 msgstr "Emulación de Aarch64"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+#: src/plugins/qemu/gbp-qemu-device-provider.c:43
 msgid "Arm Emulation"
 msgstr "Emulación de Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:158
+#: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Mi equipo (%s) %s"
@@ -5756,7 +5772,7 @@ msgstr "para añadir una «toolchain» nueva."
 msgid "Shell command"
 msgstr "Comando de shell"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:565
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5764,7 +5780,7 @@ msgstr ""
 "No se puede lanzar una terminal en el entorno de tiempo de ejecución porque "
 "la tubería de construcción no se ha inicializado"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:643
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
 "No se puede lanzar el proceso porque la tubería de construcción no está "
@@ -5838,15 +5854,15 @@ msgstr "Cambiar"
 msgid "Delete Command"
 msgstr "Eliminar comando"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:91
 msgid "Run in host environment"
 msgstr "Ejecutar en entorno de equipo anfitrión"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:101
 msgid "Run in build environment"
 msgstr "Ejecutar en entorno de construcción"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:108
 msgid "Run in runtime environment"
 msgstr "Ejecutar en entorno de tiempo de ejecución"
 
@@ -6032,11 +6048,11 @@ msgstr "Símbolos"
 msgid "Search symbols within document"
 msgstr "Buscar símbolos en el documento"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:113
 msgid "Unnamed Symbol"
 msgstr "Símbolo sin nombre"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:154
 msgid "Symbol"
 msgstr "Símbolo"
 
@@ -6054,19 +6070,19 @@ msgstr "Esquema del documento"
 msgid "Profiler"
 msgstr "Perfilador"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:284
 msgid "Open Sysprof Capture…"
 msgstr "Abrir captura de Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:293
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Capturar de sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:299
 msgid "All Files"
 msgstr "Todos los archivos"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:422
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Ejecutar con el perfilador"
@@ -6171,11 +6187,11 @@ msgstr "Pruebas unitarias"
 msgid "Running test “%s”…"
 msgstr "Ejecutando test «%s»…"
 
-#: src/plugins/todo/gbp-todo-panel.c:300
+#: src/plugins/todo/gbp-todo-panel.c:299
 msgid "Loading TODOs…"
 msgstr "Cargando POR HACER…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Please wait while we scan your project"
 msgstr "Espere mientras se analiza su proyecto"
 
@@ -6780,9 +6796,6 @@ msgstr ""
 #~ msgctxt "shortcut window"
 #~ msgid "Move a file to the trash"
 #~ msgstr "Mover un archivo a la papelera"
-
-#~ msgid "Re_veal in Project Tree"
-#~ msgstr "_Mostrar en el árbol del proyectos"
 
 #~| msgid "New File"
 #~ msgid "New _File"
