@@ -1,4 +1,4 @@
-project('{{name}}', {{if language == "c"}}'c',{{else if language == "c++"}}['cpp', 'c'],{{else if language == "vala"}}['c', 'vala'],{{else if language == "c♯"}}'cs',{{end}} 
+project('{{name}}',{{if language == "c"}} 'c',{{else if language == "c++"}} ['cpp', 'c'],{{else if language == "vala"}} ['c', 'vala'],{{else if language == "c♯"}} 'cs',{{end}}
           version: '{{project_version}}',
     meson_version: '>= 0.50.0',
   default_options: [ 'warning_level=2',
@@ -47,4 +47,5 @@ subdir('po')
 {{end}}
 
 {{if enable_gnome}}
-meson.add_install_script('build-aux/meson/postinstall.py'){{end}}
+meson.add_install_script('build-aux/meson/postinstall.py')
+{{end}}
