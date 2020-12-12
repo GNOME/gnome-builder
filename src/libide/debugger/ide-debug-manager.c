@@ -1001,6 +1001,8 @@ ide_debug_manager_start (IdeDebugManager  *self,
       IDE_GOTO (failure);
     }
 
+  IdeEnvironment *environment = ide_runner_get_environment (runner);
+  ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
   ide_debugger_prepare (debugger, runner);
 
   g_signal_connect_object (runner,
