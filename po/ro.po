@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-07-05 10:44+0000\n"
-"PO-Revision-Date: 2020-07-06 13:41+0200\n"
+"POT-Creation-Date: 2020-10-15 09:19+0000\n"
+"PO-Revision-Date: 2020-12-12 21:34+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -641,6 +641,19 @@ msgstr "Spațiu de lucru editor nou"
 msgid "D-Bus Inspector"
 msgstr "Inspector D-Bus"
 
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
+msgid "Adwaita Dark"
+msgstr "Adwaita închis"
+
+#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
+#: data/style-schemes/Adwaita.style-scheme.xml:22
+msgid "The default color scheme for TextEditor"
+msgstr "Schema de culori implicită pentru TextEditor"
+
+#: data/style-schemes/Adwaita.style-scheme.xml:20
+msgid "Adwaita"
+msgstr "Adwaita"
+
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
 msgstr "Builder întunecat"
@@ -853,7 +866,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Încărcați sau generați o paletă utilizând preferințele"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5020
+#: src/libide/sourceview/ide-source-view.c:5022
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
@@ -2092,7 +2105,7 @@ msgstr ""
 "descoperite în fișierul sursă"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
-#: src/plugins/editor/gbp-editor-hover-provider.c:84
+#: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "Diagnosticare"
 
@@ -2353,7 +2366,7 @@ msgid "Editor Shortcuts"
 msgstr "Scurtături de editor"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:541
+#: src/libide/gui/ide-shortcuts-window.ui:555
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Generale"
@@ -2369,37 +2382,37 @@ msgid "Toogle primary menu"
 msgstr "Comută meniul principal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:559
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Căutare globală"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/libide/gui/ide-shortcuts-window.ui:566
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferințe"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:573
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Bara de comenzi"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:580
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:587
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal în executarea de generare"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:594
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Scurtături de tastatură"
@@ -2511,13 +2524,13 @@ msgid "Clear highlight"
 msgstr "Eliberează evidențierea"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:603
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiere și lipire"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:594
+#: src/libide/gui/ide-shortcuts-window.ui:608
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiază textul selectat în clipboard"
@@ -2528,7 +2541,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Taie textul selectat în clipboard"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:601
+#: src/libide/gui/ide-shortcuts-window.ui:615
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Lipește text din clipboard"
@@ -2628,137 +2641,147 @@ msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Necesită suport de limbaj semantic"
 
-#: src/libide/gui/ide-shortcuts-window.ui:378
+#: src/libide/gui/ide-shortcuts-window.ui:377
+msgctxt "shortcut window"
+msgid "Comment code"
+msgstr "Comentează codul"
+
+#: src/libide/gui/ide-shortcuts-window.ui:384
+msgctxt "shortcut window"
+msgid "Uncomment code"
+msgstr "Decomentează codul"
+
+#: src/libide/gui/ide-shortcuts-window.ui:392
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigare"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Mută la eroarea următoare în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Mută la eroarea anterioară în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Mută la locația de editare anterioară"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Mută la locația de editare următoare"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Sari la definiția simbolului"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mută vizorul în sus în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mută vizorul în jos în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mută vizorul la sfârșitul fișierului"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mută vizorul la începutul fișierului"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mută la paranteza pătrată pereche"
 
-#: src/libide/gui/ide-shortcuts-window.ui:454
+#: src/libide/gui/ide-shortcuts-window.ui:468
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Selectări"
 
-#: src/libide/gui/ide-shortcuts-window.ui:459
+#: src/libide/gui/ide-shortcuts-window.ui:473
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Selectează tot"
 
-#: src/libide/gui/ide-shortcuts-window.ui:466
+#: src/libide/gui/ide-shortcuts-window.ui:480
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deselectează tot"
 
-#: src/libide/gui/ide-shortcuts-window.ui:474
+#: src/libide/gui/ide-shortcuts-window.ui:488
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Generează și rulează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:479
+#: src/libide/gui/ide-shortcuts-window.ui:493
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Generează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:486
+#: src/libide/gui/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Regenerează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:493
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Rulează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profilează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:508
+#: src/libide/gui/ide-shortcuts-window.ui:522
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gesturi touchpad"
 
-#: src/libide/gui/ide-shortcuts-window.ui:515
+#: src/libide/gui/ide-shortcuts-window.ui:529
 msgctxt "shortcut window"
 msgid "Move page to the right"
 msgstr "Mută pagina la dreapta"
 
-#: src/libide/gui/ide-shortcuts-window.ui:516
+#: src/libide/gui/ide-shortcuts-window.ui:530
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
 msgstr "Trecere la dreapta cu trei degete"
 
-#: src/libide/gui/ide-shortcuts-window.ui:525
+#: src/libide/gui/ide-shortcuts-window.ui:539
 msgctxt "shortcut window"
 msgid "Move page to the left"
 msgstr "Mută pagina la stânga"
 
-#: src/libide/gui/ide-shortcuts-window.ui:526
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
 msgstr "Trecere la stânga cu trei degete"
 
-#: src/libide/gui/ide-shortcuts-window.ui:537
+#: src/libide/gui/ide-shortcuts-window.ui:551
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Scurtături de terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:609
+#: src/libide/gui/ide-shortcuts-window.ui:623
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Caută"
 
-#: src/libide/gui/ide-shortcuts-window.ui:614
+#: src/libide/gui/ide-shortcuts-window.ui:628
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Caută text în terminal"
@@ -2884,21 +2907,21 @@ msgstr "Introduce „%s”"
 msgid "Replace “%s” with “%s”"
 msgstr "Înlocuiește „%s” cu „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4562
+#: src/libide/sourceview/ide-source-view.c:4564
 msgid "Apply Fix-It"
 msgstr "Aplică repararea"
 
-#: src/libide/sourceview/ide-source-view.c:5019
+#: src/libide/sourceview/ide-source-view.c:5021
 msgid "Rename symbol"
 msgstr "Redenumește simbolul"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5255
+#: src/libide/sourceview/ide-source-view.c:5257
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5281
+#: src/libide/sourceview/ide-source-view.c:5283
 msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
@@ -5384,32 +5407,32 @@ msgstr "Se descarcă dependențe npm"
 msgid "Bootstrapping project"
 msgstr "Se trece prin procesul de bootstrap al proiectului"
 
-#: src/plugins/podman/gbp-podman-runtime.c:126
+#: src/plugins/podman/gbp-podman-runtime.c:161
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:134
+#: src/plugins/podman/gbp-podman-runtime.c:169
 msgid "Containers/Podman"
 msgstr "Recipiente/Podman"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:124
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "Un dosar cu acel nume există deja."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-new-file-popover.c:130
 #: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "Un fișier cu acel nume există deja."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:351
+#: src/plugins/project-tree/gbp-new-file-popover.c:356
 #: src/plugins/project-tree/gbp-new-file-popover.ui:13
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "Numele fișierului"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:353
+#: src/plugins/project-tree/gbp-new-file-popover.c:358
 msgid "Folder Name"
 msgstr "Numele dosarului"
 
