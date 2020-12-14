@@ -981,6 +981,7 @@ ide_debug_manager_start (IdeDebugManager  *self,
                          GError          **error)
 {
   g_autoptr(IdeDebugger) debugger = NULL;
+  IdeEnvironment *environment;
   gboolean ret = FALSE;
 
   IDE_ENTRY;
@@ -1001,7 +1002,7 @@ ide_debug_manager_start (IdeDebugManager  *self,
       IDE_GOTO (failure);
     }
 
-  IdeEnvironment *environment = ide_runner_get_environment (runner);
+  environment = ide_runner_get_environment (runner);
   ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
   ide_debugger_prepare (debugger, runner);
 
