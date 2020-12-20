@@ -594,3 +594,7 @@ class GVlsHoverProvider(Ide.LspHoverProvider, Ide.HoverProvider):
         self.props.priority = 200
         GVlsService.bind_client(self)
 
+class GVlsFormatter(Ide.LspFormatter, Ide.Formatter):
+    def do_load(self):
+        GVlsService.bind_client(self)
+
