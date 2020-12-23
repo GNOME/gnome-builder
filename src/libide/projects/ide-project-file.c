@@ -121,7 +121,8 @@ ide_project_file_set_property (GObject      *object,
     case PROP_INFO:
       priv->info = g_value_dup_object (value);
       if (priv->info &&
-          g_file_info_has_attribute (priv->info, G_FILE_ATTRIBUTE_STANDARD_NAME))
+          g_file_info_has_attribute (priv->info, G_FILE_ATTRIBUTE_STANDARD_NAME) &&
+          g_file_info_has_attribute (priv->info, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE))
         break;
       /* Fall-through */
     default:
