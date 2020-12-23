@@ -381,7 +381,7 @@ gbp_vcsui_tree_addin_list_tags_cb (GObject      *object,
 
           child = g_object_new (IDE_TYPE_TREE_NODE,
                                 "display-name", name,
-                                "icon-name", "builder-vcs-git-symbolic",
+                                "icon-name", "builder-vcs-tag-symbolic",
                                 "item", tag,
                                 "tag", "vcs-tag",
                                 NULL);
