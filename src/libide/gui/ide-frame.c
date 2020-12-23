@@ -455,12 +455,14 @@ ide_frame_pan_begin (IdeFrame         *self,
   IdeFramePrivate *priv = ide_frame_get_instance_private (self);
   GtkAllocation alloc;
   cairo_surface_t *surface = NULL;
+  GdkDevice *device;
   IdePage *page;
   GdkWindow *window;
   GtkWidget *grid;
   cairo_t *cr;
   gdouble x, y;
   gboolean enable_animations;
+  GdkModifierType state = 0;
 
   IDE_ENTRY;
 
@@ -468,28 +470,27 @@ ide_frame_pan_begin (IdeFrame         *self,
   g_assert (GTK_IS_GESTURE_PAN (gesture));
   g_assert (priv->pan_theatric == NULL);
 
-  page = ide_frame_get_visible_child (self);
-  if (page != NULL)
-    gtk_widget_get_allocation (GTK_WIDGET (page), &alloc);
+  if (!(page = ide_frame_get_visible_child (self)) ||
+      !(device = gtk_gesture_get_device (GTK_GESTURE (gesture))) ||
+      !(window = gtk_widget_get_window (GTK_WIDGET (page))))
+    goto failure;
+
+  gtk_widget_get_allocation (GTK_WIDGET (page), &alloc);
+  gdk_device_get_state (device, window, NULL, &state);
 
   g_object_get (gtk_settings_get_default (),
                 "gtk-enable-animations", &enable_animations,
                 NULL);
 
   if (sequence != NULL ||
-      page == NULL ||
       !enable_animations ||
+      (state & GDK_SHIFT_MASK) == 0 ||
       is_uninitialized (&alloc) ||
-      NULL == (window = gtk_widget_get_window (GTK_WIDGET (page))) ||
       NULL == (surface = gdk_window_create_similar_surface (window,
                                                             CAIRO_CONTENT_COLOR,
                                                             alloc.width,
                                                             alloc.height)))
-    {
-      if (sequence != NULL)
-        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-      IDE_RETURN (FALSE);
-    }
+    goto failure;
 
   gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (gesture), &x, &y);
 
@@ -526,6 +527,12 @@ ide_frame_pan_begin (IdeFrame         *self,
   ide_frame_set_cursor (self, "none");
 
   IDE_RETURN (TRUE);
+
+failure:
+  if (sequence != NULL)
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+
+  IDE_RETURN (FALSE);
 }
 
 static void
