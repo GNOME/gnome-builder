@@ -117,7 +117,7 @@ ide_editor_page_update_icon (IdeEditorPage *self)
   content_type = g_content_type_guess (name, (const guchar *)sniff, strlen (sniff), NULL);
 
   /* Update icon to match guess */
-  icon = ide_g_content_type_get_symbolic_icon (content_type);
+  icon = ide_g_content_type_get_symbolic_icon (content_type, name);
   ide_page_set_icon (IDE_PAGE (self), icon);
 }
 

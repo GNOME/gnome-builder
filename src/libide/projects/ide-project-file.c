@@ -389,7 +389,7 @@ ide_project_file_get_symbolic_icon (IdeProjectFile *self)
         {
           g_autoptr(GIcon) override = NULL;
 
-          if ((override = ide_g_content_type_get_symbolic_icon (content_type)))
+          if ((override = ide_g_content_type_get_symbolic_icon (content_type, g_file_info_get_display_name (priv->info))))
             g_file_info_set_symbolic_icon (priv->info, override);
         }
     }

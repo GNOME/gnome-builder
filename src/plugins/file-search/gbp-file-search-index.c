@@ -395,7 +395,7 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
            * Sniffing would be way too slow here.
            */
           if ((content_type = g_content_type_guess (filename, NULL, 0, NULL)))
-            themed_icon = ide_g_content_type_get_symbolic_icon (content_type);
+            themed_icon = ide_g_content_type_get_symbolic_icon (content_type, filename);
 
           result = g_object_new (GBP_TYPE_FILE_SEARCH_RESULT,
                                  "context", context,

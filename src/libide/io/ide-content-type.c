@@ -37,9 +37,26 @@
  * Since: 3.32
  */
 GIcon *
-ide_g_content_type_get_symbolic_icon (const gchar *content_type)
+ide_g_content_type_get_symbolic_icon (const gchar *content_type,
+                                      const gchar *filename)
 {
   static GHashTable *bundled;
+  /* This ensures those files get a proper icon when they end with .md (markdown files).
+   * It can't be fixed in the shared-mime-info db because otherwise they wouldn't get detected as
+   * markdown anymore.
+   */
+  static const struct {
+    const gchar *searched_prefix;
+    const gchar *icon_name;
+  } bundled_check_by_name_prefix[] = {
+    {"README", "text-x-readme-symbolic"},
+    {"NEWS", "text-x-changelog-symbolic"},
+    {"CHANGELOG", "text-x-changelog-symbolic"},
+    {"COPYING", "text-x-copying-symbolic"},
+    {"LICENSE", "text-x-copying-symbolic"},
+    {"AUTHORS", "text-x-authors-symbolic"},
+    {"MAINTAINERS", "text-x-authors-symbolic"},
+  };
   g_autoptr(GIcon) icon = NULL;
 
   g_return_val_if_fail (content_type != NULL, NULL);
@@ -92,6 +109,12 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type)
   if (G_IS_THEMED_ICON (icon))
     {
       const gchar * const *names = g_themed_icon_get_names (G_THEMED_ICON (icon));
+
+      for (guint j = 0; j < G_N_ELEMENTS (bundled_check_by_name_prefix); j++)
+        {
+          if (g_str_has_prefix (filename, bundled_check_by_name_prefix[j].searched_prefix))
+            return g_icon_new_for_string (bundled_check_by_name_prefix[j].icon_name, NULL);
+        }
 
       if (names != NULL)
         {

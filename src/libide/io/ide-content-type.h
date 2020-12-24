@@ -24,8 +24,9 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
-GIcon *ide_g_content_type_get_symbolic_icon (const gchar *content_type);
+IDE_AVAILABLE_IN_3_40
+GIcon *ide_g_content_type_get_symbolic_icon (const gchar *content_type,
+                                             const gchar *filename);
 
 G_END_DECLS
 
