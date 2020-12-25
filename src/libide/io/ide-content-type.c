@@ -22,80 +22,98 @@
 
 #include "config.h"
 
+#include "../../gconstructor.h"
+
 #include "ide-content-type.h"
+
+static gchar bundled_lookup_table[256];
+static GHashTable *bundled;
+/* This ensures those files get a proper icon when they end with .md
+ * (markdown files).  It can't be fixed in the shared-mime-info db because
+ * otherwise they wouldn't get detected as markdown anymore.
+ */
+static const struct {
+  const gchar *searched_prefix;
+  const gchar *icon_name;
+} bundled_check_by_name_prefix[] = {
+  { "README", "text-x-readme-symbolic" },
+  { "NEWS", "text-x-changelog-symbolic" },
+  { "CHANGELOG", "text-x-changelog-symbolic" },
+  { "COPYING", "text-x-copying-symbolic" },
+  { "LICENSE", "text-x-copying-symbolic" },
+  { "AUTHORS", "text-x-authors-symbolic" },
+  { "MAINTAINERS", "text-x-authors-symbolic" },
+};
+
+#if defined (G_HAS_CONSTRUCTORS)
+# ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
+#  pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(ide_io_init_ctor)
+# endif
+G_DEFINE_CONSTRUCTOR(ide_io_init_ctor)
+#else
+# error Your platform/compiler is missing constructor support
+#endif
+
+static void
+ide_io_init_ctor (void)
+{
+  bundled = g_hash_table_new (g_str_hash, g_str_equal);
+
+  /*
+   * This needs to be updated when we add icons for specific mime-types
+   * because of how icon theme loading works (and it wanting to use
+   * Adwaita generic icons before our hicolor specific icons.
+   */
+#define ADD_ICON(t, n, v) g_hash_table_insert (t, (gpointer)n, v ? (gpointer)v : (gpointer)n)
+  ADD_ICON (bundled, "application-x-php-symbolic", NULL);
+  ADD_ICON (bundled, "text-css-symbolic", NULL);
+  ADD_ICON (bundled, "text-html-symbolic", NULL);
+  ADD_ICON (bundled, "text-markdown-symbolic", NULL);
+  ADD_ICON (bundled, "text-rust-symbolic", NULL);
+  ADD_ICON (bundled, "text-sql-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-authors-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-changelog-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-chdr-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-copying-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-cpp-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-csrc-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-javascript-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-python-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-python3-symbolic", "text-x-python-symbolic");
+  ADD_ICON (bundled, "text-x-readme-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-ruby-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-script-symbolic", NULL);
+  ADD_ICON (bundled, "text-x-vala-symbolic", NULL);
+  ADD_ICON (bundled, "text-xml-symbolic", NULL);
+#undef ADD_ICON
+
+  /* Create faster check than doing full string checks */
+  for (guint i = 0; i < G_N_ELEMENTS (bundled_check_by_name_prefix); i++)
+    bundled_lookup_table[(guint)bundled_check_by_name_prefix[i].searched_prefix[0]] = 1;
+}
 
 /**
  * ide_g_content_type_get_symbolic_icon:
+ * @content_type: the content-type to lookup
  *
  * This function is simmilar to g_content_type_get_symbolic_icon() except that
  * it takes our bundled icons into account to ensure that they are taken at a
  * higher priority than the fallbacks from the current icon theme such as
  * Adwaita.
  *
+ * In 3.40, this function was modified to add the @filename parameter.
+ *
  * Returns: (transfer full) (nullable): A #GIcon or %NULL
  *
- * Since: 3.32
+ * Since: 3.40
  */
 GIcon *
 ide_g_content_type_get_symbolic_icon (const gchar *content_type,
                                       const gchar *filename)
 {
-  static GHashTable *bundled;
-  /* This ensures those files get a proper icon when they end with .md (markdown files).
-   * It can't be fixed in the shared-mime-info db because otherwise they wouldn't get detected as
-   * markdown anymore.
-   */
-  static const struct {
-    const gchar *searched_prefix;
-    const gchar *icon_name;
-  } bundled_check_by_name_prefix[] = {
-    {"README", "text-x-readme-symbolic"},
-    {"NEWS", "text-x-changelog-symbolic"},
-    {"CHANGELOG", "text-x-changelog-symbolic"},
-    {"COPYING", "text-x-copying-symbolic"},
-    {"LICENSE", "text-x-copying-symbolic"},
-    {"AUTHORS", "text-x-authors-symbolic"},
-    {"MAINTAINERS", "text-x-authors-symbolic"},
-  };
   g_autoptr(GIcon) icon = NULL;
 
   g_return_val_if_fail (content_type != NULL, NULL);
-
-  if (g_once_init_enter (&bundled))
-    {
-      GHashTable *table = g_hash_table_new (g_str_hash, g_str_equal);
-
-      /*
-       * This needs to be updated when we add icons for specific mime-types
-       * because of how icon theme loading works (and it wanting to use
-       * Adwaita generic icons before our hicolor specific icons.
-       */
-
-#define ADD_ICON(t, n, v) g_hash_table_insert (t, (gpointer)n, v ? (gpointer)v : (gpointer)n)
-      ADD_ICON (table, "application-x-php-symbolic", NULL);
-      ADD_ICON (table, "text-css-symbolic", NULL);
-      ADD_ICON (table, "text-html-symbolic", NULL);
-      ADD_ICON (table, "text-markdown-symbolic", NULL);
-      ADD_ICON (table, "text-rust-symbolic", NULL);
-      ADD_ICON (table, "text-sql-symbolic", NULL);
-      ADD_ICON (table, "text-x-authors-symbolic", NULL);
-      ADD_ICON (table, "text-x-changelog-symbolic", NULL);
-      ADD_ICON (table, "text-x-chdr-symbolic", NULL);
-      ADD_ICON (table, "text-x-copying-symbolic", NULL);
-      ADD_ICON (table, "text-x-cpp-symbolic", NULL);
-      ADD_ICON (table, "text-x-csrc-symbolic", NULL);
-      ADD_ICON (table, "text-x-javascript-symbolic", NULL);
-      ADD_ICON (table, "text-x-python-symbolic", NULL);
-      ADD_ICON (table, "text-x-python3-symbolic", "text-x-python-symbolic");
-      ADD_ICON (table, "text-x-readme-symbolic", NULL);
-      ADD_ICON (table, "text-x-ruby-symbolic", NULL);
-      ADD_ICON (table, "text-x-script-symbolic", NULL);
-      ADD_ICON (table, "text-x-vala-symbolic", NULL);
-      ADD_ICON (table, "text-xml-symbolic", NULL);
-#undef ADD_ICON
-
-      g_once_init_leave (&bundled, table);
-    }
 
   /*
    * Basically just steal the name if we get something that is not generic,
@@ -108,13 +126,18 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
 
   if (G_IS_THEMED_ICON (icon))
     {
-      const gchar * const *names = g_themed_icon_get_names (G_THEMED_ICON (icon));
+      const gchar * const *names;
 
-      for (guint j = 0; j < G_N_ELEMENTS (bundled_check_by_name_prefix); j++)
+      if (filename != NULL && bundled_lookup_table [(guint8)filename[0]])
         {
-          if (g_str_has_prefix (filename, bundled_check_by_name_prefix[j].searched_prefix))
-            return g_icon_new_for_string (bundled_check_by_name_prefix[j].icon_name, NULL);
+          for (guint j = 0; j < G_N_ELEMENTS (bundled_check_by_name_prefix); j++)
+            {
+              if (g_str_has_prefix (filename, bundled_check_by_name_prefix[j].searched_prefix))
+                return g_icon_new_for_string (bundled_check_by_name_prefix[j].icon_name, NULL);
+            }
         }
+
+      names = g_themed_icon_get_names (G_THEMED_ICON (icon));
 
       if (names != NULL)
         {
