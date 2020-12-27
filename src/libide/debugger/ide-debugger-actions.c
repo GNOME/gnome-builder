@@ -98,13 +98,44 @@ ide_debugger_actions_stop (IdeDebugger                  *self,
   ide_debugger_interrupt_async (self, NULL, NULL, NULL, NULL);
 }
 
+static void
+ide_debugger_actions_clear_breakpoints (IdeDebugger                  *self,
+                                        const IdeDebuggerActionEntry *entry,
+                                        GVariant                     *param)
+{
+  g_autoptr (GPtrArray) breakpoints = NULL;
+  GListModel *breakpoint_list_model;
+  guint n_elements;
+
+  g_assert (IDE_IS_DEBUGGER (self));
+  g_assert (entry != NULL);
+
+  breakpoint_list_model = ide_debugger_get_breakpoints (self);
+  n_elements = g_list_model_get_n_items (breakpoint_list_model);
+  g_debug ("Number of breakpoints: %d", n_elements);
+
+  breakpoints = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (guint i = 0; i < n_elements; i++)
+    {
+      g_ptr_array_add (breakpoints, g_list_model_get_item (breakpoint_list_model, i));
+    }
+
+  for (guint i = 0; i < n_elements; i++)
+    {
+      ide_debugger_remove_breakpoint_async (self, g_ptr_array_index (breakpoints, i),
+                                            NULL, NULL, NULL);
+    }
+}
+
 static IdeDebuggerActionEntry action_info[] = {
-  { "start",     ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_START,     RUNNING_NOT_STARTED },
-  { "stop",      ide_debugger_actions_stop,     -1,                              RUNNING_STARTED | RUNNING_ACTIVE },
-  { "continue",  ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_CONTINUE,  RUNNING_STARTED | RUNNING_NOT_ACTIVE },
-  { "step-in",   ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_STEP_IN,   RUNNING_STARTED | RUNNING_NOT_ACTIVE },
-  { "step-over", ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_STEP_OVER, RUNNING_STARTED | RUNNING_NOT_ACTIVE },
-  { "finish",    ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_FINISH,    RUNNING_STARTED | RUNNING_NOT_ACTIVE },
+  { "start",                ide_debugger_actions_movement,          IDE_DEBUGGER_MOVEMENT_START,     RUNNING_NOT_STARTED },
+  { "stop",                 ide_debugger_actions_stop,              -1,                              RUNNING_STARTED | RUNNING_ACTIVE },
+  { "continue",             ide_debugger_actions_movement,          IDE_DEBUGGER_MOVEMENT_CONTINUE,  RUNNING_STARTED | RUNNING_NOT_ACTIVE },
+  { "step-in",              ide_debugger_actions_movement,          IDE_DEBUGGER_MOVEMENT_STEP_IN,   RUNNING_STARTED | RUNNING_NOT_ACTIVE },
+  { "step-over",            ide_debugger_actions_movement,          IDE_DEBUGGER_MOVEMENT_STEP_OVER, RUNNING_STARTED | RUNNING_NOT_ACTIVE },
+  { "finish",               ide_debugger_actions_movement,          IDE_DEBUGGER_MOVEMENT_FINISH,    RUNNING_STARTED | RUNNING_NOT_ACTIVE },
+  { "clear-breakpoints",    ide_debugger_actions_clear_breakpoints, -1,                              RUNNING_STARTED | RUNNING_NOT_ACTIVE },
 };
 
 static gboolean
