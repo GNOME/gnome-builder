@@ -135,6 +135,9 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   current_page = ide_workspace_get_most_recent_page (workspace);
   current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
 
+  /* When opening from the project tree, it acts like a persistent folder browser, which doesn't
+   * disappear when opening one of the files.
+   */
   view = g_object_new (GBP_TYPE_LS_PAGE,
                        "close-on-activate", FALSE,
                        "visible", TRUE,

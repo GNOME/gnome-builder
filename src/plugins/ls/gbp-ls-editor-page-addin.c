@@ -51,6 +51,9 @@ open_directory_cb (GSimpleAction *action,
   directory = g_file_get_parent (file);
 
   stack = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_STACK);
+  /* When used from an editor view right click menu, the folder browser acts like vim's directory
+   * listing, where it closes once a file is choosen.
+   */
   page = g_object_new (GBP_TYPE_LS_PAGE,
                        "close-on-activate", TRUE,
                        "visible", TRUE,
