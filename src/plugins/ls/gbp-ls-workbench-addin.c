@@ -136,7 +136,7 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
 
   view = g_object_new (GBP_TYPE_LS_PAGE,
-                       "close-on-activate", TRUE,
+                       "close-on-activate", FALSE,
                        "visible", TRUE,
                        NULL);
   if (current_frame != NULL)
