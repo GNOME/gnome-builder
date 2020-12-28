@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-11-28 12:41+0000\n"
-"PO-Revision-Date: 2020-11-29 10:01+0200\n"
+"POT-Creation-Date: 2020-12-27 18:42+0000\n"
+"PO-Revision-Date: 2020-12-28 08:42+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -942,7 +942,7 @@ msgstr "Без назви"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: src/libide/debugger/ide-debug-manager.c:1000
+#: src/libide/debugger/ide-debug-manager.c:1001
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "Відповідного засобу діагностики не було знайдено."
@@ -1424,34 +1424,34 @@ msgid "Failed to locate runtime"
 msgstr "Не вдалося знайти середовище виконання"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:540
+#: src/libide/foundry/ide-run-manager.c:538
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:614
+#: src/libide/foundry/ide-run-manager.c:612
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Не вдалося зібрати ціль збирання: %s"
 
-#: src/libide/foundry/ide-run-manager.c:877
+#: src/libide/foundry/ide-run-manager.c:875
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Скорочення майстерні"
 
-#: src/libide/foundry/ide-run-manager.c:878
+#: src/libide/foundry/ide-run-manager.c:876
 msgid "Build and Run"
 msgstr "Зібрати і запустити"
 
-#: src/libide/foundry/ide-run-manager.c:1040
-#: src/libide/foundry/ide-run-manager.c:1106
+#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1104
 msgid "Failed to locate a build target"
 msgstr "Не вдалося знайти ціль збирання"
 
-#: src/libide/foundry/ide-run-manager.c:1242 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Запустити"
@@ -2375,7 +2375,7 @@ msgid "Editor Shortcuts"
 msgstr "Редактор скорочень"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:555
+#: src/libide/gui/ide-shortcuts-window.ui:529
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Загальне"
@@ -2391,37 +2391,37 @@ msgid "Toogle primary menu"
 msgstr "Увімкнути або вимкнути основне меню"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:533
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Загальний пошук"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Параметри"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Командна панель"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Термінал"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:587
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Термінал у середовищі виконання збирання"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:594
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
@@ -2533,13 +2533,13 @@ msgid "Clear highlight"
 msgstr "Забрати підсвічування"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:603
+#: src/libide/gui/ide-shortcuts-window.ui:577
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Копіювати та вставити"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:608
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Копіювати вибраний текст у буфер"
@@ -2550,7 +2550,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Вирізати вибраний текст у буфер"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:615
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Вставити текст з буферу"
@@ -2755,42 +2755,17 @@ msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Профіль"
 
-#: src/libide/gui/ide-shortcuts-window.ui:522
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Жести дотику"
-
-#: src/libide/gui/ide-shortcuts-window.ui:529
-msgctxt "shortcut window"
-msgid "Move page to the right"
-msgstr "Пересунути сторінку праворуч"
-
-#: src/libide/gui/ide-shortcuts-window.ui:530
-msgctxt "shortcut window"
-msgid "Three finger swipe right"
-msgstr "Проведення праворуч трьома пальцями"
-
-#: src/libide/gui/ide-shortcuts-window.ui:539
-msgctxt "shortcut window"
-msgid "Move page to the left"
-msgstr "Пересунути сторінку ліворуч"
-
-#: src/libide/gui/ide-shortcuts-window.ui:540
-msgctxt "shortcut window"
-msgid "Three finger swipe left"
-msgstr "Проведення ліворуч трьома пальцями"
-
-#: src/libide/gui/ide-shortcuts-window.ui:551
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Термінальні скорочення"
 
-#: src/libide/gui/ide-shortcuts-window.ui:623
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Пошук"
 
-#: src/libide/gui/ide-shortcuts-window.ui:628
+#: src/libide/gui/ide-shortcuts-window.ui:602
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Знайти текст у терміналі"
@@ -5086,15 +5061,16 @@ msgstr "Розмір"
 msgid "Modified"
 msgstr "Змінено"
 
-#: src/plugins/ls/gtk/menus.ui:9
-msgid "Directory Browser"
-msgstr "Навігатор каталогами"
+#: src/plugins/ls/gtk/menus.ui:7
+#| msgid "New Folder…"
+msgid "Browse Folder"
+msgstr "Навігація текою"
 
-#: src/plugins/ls/gtk/menus.ui:21
+#: src/plugins/ls/gtk/menus.ui:17
 msgid "Switch to Folder"
 msgstr "Перемкнутися на теку"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:22 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Відкрити теку з даними"
 
@@ -6347,3 +6323,26 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Touchpad gestures"
+#~ msgstr "Жести дотику"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the right"
+#~ msgstr "Пересунути сторінку праворуч"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe right"
+#~ msgstr "Проведення праворуч трьома пальцями"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the left"
+#~ msgstr "Пересунути сторінку ліворуч"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe left"
+#~ msgstr "Проведення ліворуч трьома пальцями"
+
+#~ msgid "Directory Browser"
+#~ msgstr "Навігатор каталогами"
