@@ -27,7 +27,8 @@
 #include "ide-content-type.h"
 
 static gchar bundled_lookup_table[256];
-static GHashTable *bundled;
+static GHashTable *bundled_by_content_type;
+static GHashTable *bundled_by_full_filename;
 /* This ensures those files get a proper icon when they end with .md
  * (markdown files).  It can't be fixed in the shared-mime-info db because
  * otherwise they wouldn't get detected as markdown anymore.
@@ -57,7 +58,8 @@ G_DEFINE_CONSTRUCTOR(ide_io_init_ctor)
 static void
 ide_io_init_ctor (void)
 {
-  bundled = g_hash_table_new (g_str_hash, g_str_equal);
+  bundled_by_content_type = g_hash_table_new (g_str_hash, g_str_equal);
+  bundled_by_full_filename = g_hash_table_new (g_str_hash, g_str_equal);
 
   /*
    * This needs to be updated when we add icons for specific mime-types
@@ -65,26 +67,30 @@ ide_io_init_ctor (void)
    * Adwaita generic icons before our hicolor specific icons).
    */
 #define ADD_ICON(t, n, v) g_hash_table_insert (t, (gpointer)n, v ? (gpointer)v : (gpointer)n)
-  ADD_ICON (bundled, "application-x-php-symbolic", NULL);
-  ADD_ICON (bundled, "text-css-symbolic", NULL);
-  ADD_ICON (bundled, "text-html-symbolic", NULL);
-  ADD_ICON (bundled, "text-markdown-symbolic", NULL);
-  ADD_ICON (bundled, "text-rust-symbolic", NULL);
-  ADD_ICON (bundled, "text-sql-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-authors-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-changelog-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-chdr-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-copying-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-cpp-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-csrc-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-javascript-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-python-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-python3-symbolic", "text-x-python-symbolic");
-  ADD_ICON (bundled, "text-x-readme-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-ruby-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-script-symbolic", NULL);
-  ADD_ICON (bundled, "text-x-vala-symbolic", NULL);
-  ADD_ICON (bundled, "text-xml-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "application-x-php-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-css-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-html-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-markdown-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-rust-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-sql-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-authors-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-changelog-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-chdr-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-copying-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-cpp-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-csrc-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-javascript-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-python-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-python3-symbolic", "text-x-python-symbolic");
+  ADD_ICON (bundled_by_content_type, "text-x-readme-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-ruby-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-script-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-vala-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-xml-symbolic", NULL);
+
+  ADD_ICON (bundled_by_full_filename, ".editorconfig", "format-indent-more-symbolic");
+  ADD_ICON (bundled_by_full_filename, ".gitignore", "builder-vcs-git-symbolic");
+  ADD_ICON (bundled_by_full_filename, ".gitattributes", "builder-vcs-git-symbolic");
 #undef ADD_ICON
 
   /* Create faster check than doing full string checks */
@@ -127,6 +133,7 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
   if (G_IS_THEMED_ICON (icon))
     {
       const gchar * const *names;
+      const gchar *replacement_by_filename;
 
       if (filename != NULL && bundled_lookup_table [(guint8)filename[0]])
         {
@@ -137,6 +144,10 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
             }
         }
 
+      replacement_by_filename = g_hash_table_lookup (bundled_by_full_filename, filename);
+      if (replacement_by_filename)
+        return g_icon_new_for_string (replacement_by_filename, NULL);
+
       names = g_themed_icon_get_names (G_THEMED_ICON (icon));
 
       if (names != NULL)
@@ -145,7 +156,7 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
 
           for (guint i = 0; names[i] != NULL; i++)
             {
-              const gchar *replace = g_hash_table_lookup (bundled, names[i]);
+              const gchar *replace = g_hash_table_lookup (bundled_by_content_type, names[i]);
 
               if (replace != NULL)
                 return g_icon_new_for_string (replace, NULL);
