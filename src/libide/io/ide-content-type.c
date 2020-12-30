@@ -87,6 +87,9 @@ ide_io_init_ctor (void)
   ADD_ICON (bundled_by_content_type, "text-x-script-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-vala-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-xml-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-meson", "builder-build-symbolic");
+  ADD_ICON (bundled_by_content_type, "text-x-cmake", "builder-build-symbolic");
+  ADD_ICON (bundled_by_content_type, "text-x-makefile", "builder-build-symbolic");
 
   ADD_ICON (bundled_by_full_filename, ".editorconfig", "format-indent-more-symbolic");
   ADD_ICON (bundled_by_full_filename, ".gitignore", "builder-vcs-git-symbolic");
