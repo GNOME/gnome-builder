@@ -62,7 +62,7 @@ ide_io_init_ctor (void)
   /*
    * This needs to be updated when we add icons for specific mime-types
    * because of how icon theme loading works (and it wanting to use
-   * Adwaita generic icons before our hicolor specific icons.
+   * Adwaita generic icons before our hicolor specific icons).
    */
 #define ADD_ICON(t, n, v) g_hash_table_insert (t, (gpointer)n, v ? (gpointer)v : (gpointer)n)
   ADD_ICON (bundled, "application-x-php-symbolic", NULL);
@@ -96,7 +96,7 @@ ide_io_init_ctor (void)
  * ide_g_content_type_get_symbolic_icon:
  * @content_type: the content-type to lookup
  *
- * This function is simmilar to g_content_type_get_symbolic_icon() except that
+ * This function is similar to g_content_type_get_symbolic_icon() except that
  * it takes our bundled icons into account to ensure that they are taken at a
  * higher priority than the fallbacks from the current icon theme such as
  * Adwaita.
