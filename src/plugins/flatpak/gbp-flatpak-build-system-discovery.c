@@ -35,7 +35,12 @@ struct _GbpFlatpakBuildSystemDiscovery
   GObject parent_instance;
 };
 
-static GRegex *filename_regex;
+/* Returns whether @filename seems to be a JSON file, naively detected. */
+static gboolean
+maybe_is_json_file (const char *filename)
+{
+  return strlen (filename) >= strlen (".json") && g_str_has_suffix (filename, ".json");
+}
 
 static void
 gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
@@ -68,10 +73,10 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
   while (NULL != (infoptr = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
       g_autoptr(GFileInfo) info = infoptr;
-      g_autoptr(GMatchInfo) match_info = NULL;
       g_autoptr(GFile) file = NULL;
       GFileType file_type;
       const gchar *name;
+      g_autofree gchar *app_id = NULL;
 
       if (g_file_info_get_is_symlink (info))
         continue;
@@ -97,8 +102,11 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
             }
         }
 
-      g_regex_match (filename_regex, name, 0, &match_info);
-      if (!g_match_info_matches (match_info))
+      if (!maybe_is_json_file (name))
+        continue;
+
+      app_id = g_strndup (name, strlen (name) - strlen (".json"));
+      if (!g_application_id_is_valid (app_id))
         continue;
 
       g_ptr_array_add (results, g_steal_pointer (&file));
@@ -226,9 +234,6 @@ G_DEFINE_TYPE_WITH_CODE (GbpFlatpakBuildSystemDiscovery,
 static void
 gbp_flatpak_build_system_discovery_class_init (GbpFlatpakBuildSystemDiscoveryClass *klass)
 {
-  /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
-  filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
-                                G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void

@@ -76,13 +76,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
-static GRegex *app_id_regex;
-
-static gboolean
-is_valid_app_id (const gchar *str)
-{
-  return g_regex_match (app_id_regex, str, 0, NULL);
-}
 
 static gboolean
 validate_properties (GbpFlatpakManifest  *self,
@@ -397,7 +390,7 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
       json_object_has_member (root_obj, "id"))
     app_id_field = "id";
 
-  if (!discover_string_field (root_obj, app_id_field, &app_id) || !is_valid_app_id (app_id))
+  if (!discover_string_field (root_obj, app_id_field, &app_id) || !g_application_id_is_valid (app_id))
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -693,10 +686,6 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
                   0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
-  app_id_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*$",
-                              G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void
