@@ -396,6 +396,7 @@ gbp_ls_model_worker (IdeTask      *task,
 
   enumerator = g_file_enumerate_children (directory,
                                           G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE","
                                           G_FILE_ATTRIBUTE_STANDARD_SIZE","
                                           G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON","
                                           G_FILE_ATTRIBUTE_TIME_MODIFIED","
@@ -442,10 +443,16 @@ gbp_ls_model_worker (IdeTask      *task,
   while ((info = g_file_enumerator_next_file (enumerator, cancellable, &error)))
     {
       GFileType file_type = g_file_info_get_file_type (info);
+      GIcon *file_icon = NULL;
 
       /* Prefer our symbolic icon for folders */
       if (file_type == G_FILE_TYPE_DIRECTORY)
-        g_file_info_set_attribute_object (info, G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON, G_OBJECT (icon));
+        file_icon = icon;
+      else
+        file_icon = ide_g_content_type_get_symbolic_icon (g_file_info_get_content_type (info),
+                                                          g_file_info_get_display_name (info));
+
+      g_file_info_set_attribute_object (info, G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON, G_OBJECT (file_icon));
 
       g_ptr_array_add (items, info);
     }
