@@ -1,13 +1,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Daniel Korostil <ted.korostiled@gmail.com>, 2015, 2016.
-# Yuri Chornoivan <yurchor@ukr.net>, 2020.
+# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-12-27 18:42+0000\n"
-"PO-Revision-Date: 2020-12-28 08:42+0200\n"
+"POT-Creation-Date: 2020-12-31 18:08+0000\n"
+"PO-Revision-Date: 2021-01-01 00:38+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -3378,6 +3378,11 @@ msgstr "Помилки"
 msgid "Warnings"
 msgstr "Попередження"
 
+#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
+msgid "true"
+msgstr "false"
+
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
 msgid "Rebuild"
@@ -4194,7 +4199,7 @@ msgstr "Місце"
 msgid "Binary"
 msgstr "Виконуваний файл"
 
-#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:132
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:131
 msgid "Devhelp"
 msgstr "Devhelp"
 
@@ -5061,16 +5066,15 @@ msgstr "Розмір"
 msgid "Modified"
 msgstr "Змінено"
 
-#: src/plugins/ls/gtk/menus.ui:7
-#| msgid "New Folder…"
+#: src/plugins/ls/gtk/menus.ui:8
 msgid "Browse Folder"
 msgstr "Навігація текою"
 
-#: src/plugins/ls/gtk/menus.ui:17
+#: src/plugins/ls/gtk/menus.ui:18
 msgid "Switch to Folder"
 msgstr "Перемкнутися на теку"
 
-#: src/plugins/ls/gtk/menus.ui:22 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Відкрити теку з даними"
 
@@ -5502,8 +5506,9 @@ msgstr "Показувати параметри"
 
 #: src/plugins/project-tree/gtk/menus.ui:94
 #: src/plugins/project-tree/gtk/menus.ui:103
-msgid "Reveal in Project"
-msgstr "Розкрити у проєкті"
+#| msgid "Reveal in Project"
+msgid "Reveal in Project Tree"
+msgstr "Розкрити в ієрархії проєкту"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
