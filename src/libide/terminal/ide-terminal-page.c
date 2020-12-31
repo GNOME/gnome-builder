@@ -297,19 +297,14 @@ static void
 style_context_changed (GtkStyleContext *style_context,
                        IdeTerminalPage *self)
 {
-  GtkStateFlags state;
   GdkRGBA fg;
   GdkRGBA bg;
 
   g_assert (GTK_IS_STYLE_CONTEXT (style_context));
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
-  state = gtk_style_context_get_state (style_context);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_context_get_color (style_context, state, &fg);
-  gtk_style_context_get_background_color (style_context, state, &bg);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  gtk_style_context_lookup_color (style_context, "theme_text_color", &fg);
+  gtk_style_context_lookup_color (style_context, "text_view_bg", &bg);
 
   if (bg.alpha == 0.0)
     gdk_rgba_parse (&bg, "#f6f7f8");

@@ -277,10 +277,8 @@ viewport_style_changed_cb (GbpGladePage    *self,
   g_assert (GBP_IS_GLADE_PAGE (self));
   g_assert (GTK_IS_STYLE_CONTEXT (style_context));
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_context_get_color (style_context, GTK_STATE_FLAG_NORMAL, &fg);
-  gtk_style_context_get_background_color (style_context, GTK_STATE_FLAG_NORMAL, &bg);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  gtk_style_context_lookup_color (style_context, "theme_fg_color", &fg);
+  gtk_style_context_lookup_color (style_context, "theme_base_color", &bg);
 
   ide_page_set_primary_color_bg (IDE_PAGE (self), &bg);
   ide_page_set_primary_color_fg (IDE_PAGE (self), &fg);
