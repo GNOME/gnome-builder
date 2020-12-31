@@ -142,7 +142,10 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
         {
           for (guint j = 0; j < G_N_ELEMENTS (bundled_check_by_name_prefix); j++)
             {
-              if (g_str_has_prefix (filename, bundled_check_by_name_prefix[j].searched_prefix))
+              const gchar *searched_prefix = bundled_check_by_name_prefix[j].searched_prefix;
+
+              /* Check prefix but ignore case, because there might be some files named e.g. ReadMe.txt */
+              if (g_ascii_strncasecmp (filename, searched_prefix, strlen (searched_prefix)) == 0)
                 return g_icon_new_for_string (bundled_check_by_name_prefix[j].icon_name, NULL);
             }
         }
