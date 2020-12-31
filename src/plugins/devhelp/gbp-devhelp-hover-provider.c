@@ -104,7 +104,6 @@ find_and_apply_content (Hover *h)
 
       if ((item = dh_keyword_model_filter (model, word, NULL, NULL)))
         {
-          g_autoptr(IdeMarkedContent) content = NULL;
           GtkWidget *view;
 
           view = dh_assistant_view_new ();
