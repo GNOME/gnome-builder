@@ -94,6 +94,7 @@ ide_io_init_ctor (void)
   ADD_ICON (bundled_by_full_filename, ".editorconfig", "format-indent-more-symbolic");
   ADD_ICON (bundled_by_full_filename, ".gitignore", "builder-vcs-git-symbolic");
   ADD_ICON (bundled_by_full_filename, ".gitattributes", "builder-vcs-git-symbolic");
+  ADD_ICON (bundled_by_full_filename, ".gitmodules", "builder-vcs-git-symbolic");
 #undef ADD_ICON
 
   /* Create faster check than doing full string checks */
