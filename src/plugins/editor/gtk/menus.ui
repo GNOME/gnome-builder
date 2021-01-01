@@ -128,7 +128,7 @@
       </item>
       <item>
         <attribute name="action">frame.close-stack</attribute>
-        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="label" translatable="yes">Close Frame</attribute>
       </item>
     </section>
   </menu>
