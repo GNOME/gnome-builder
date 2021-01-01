@@ -10,6 +10,7 @@
             <property name="vexpand">true</property>
             <property name="headers-visible">true</property>
             <property name="visible">true</property>
+            <property name="activate-on-single-click">true</property>
             <child>
               <object class="GtkTreeViewColumn" id="name_column">
                 <property name="title" translatable="yes">Name</property>
