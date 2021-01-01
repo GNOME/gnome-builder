@@ -25,6 +25,7 @@
         <property name="label" translatable="yes">Select Documentation…</property>
         <property name="visible">true</property>
         <property name="xalign">0.5</property>
+        <property name="ellipsize">end</property>
       </object>
     </child>
   </template>
