@@ -119,11 +119,11 @@
       <attribute name="id">ide-frame-section</attribute>
       <attribute name="label" translatable="yes">Frame</attribute>
       <item>
-        <attribute name="label" translatable="yes">Move Left</attribute>
+        <attribute name="label" translatable="yes">Move Page Left</attribute>
         <attribute name="action">frame.move-left</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Move Right</attribute>
+        <attribute name="label" translatable="yes">Move Page Right</attribute>
         <attribute name="action">frame.move-right</attribute>
       </item>
       <item>
