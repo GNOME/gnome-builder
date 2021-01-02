@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-12-27 18:42+0000\n"
-"PO-Revision-Date: 2020-12-29 16:30+0200\n"
+"POT-Creation-Date: 2020-12-31 18:08+0000\n"
+"PO-Revision-Date: 2021-01-02 13:20+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -1665,7 +1665,7 @@ msgstr "Builder GNOME"
 msgid "translator-credits"
 msgstr ""
 "Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>, "
-"2018-2020\n"
+"2018-2021\n"
 "Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2020"
 
 #: src/libide/gui/ide-application-actions.c:155
@@ -3374,6 +3374,11 @@ msgstr "Erori"
 msgid "Warnings"
 msgstr "Avertismente"
 
+#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
+msgid "true"
+msgstr "true"
+
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
 msgid "Rebuild"
@@ -4191,7 +4196,7 @@ msgstr "Locație"
 msgid "Binary"
 msgstr "Binar"
 
-#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:132
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:131
 msgid "Devhelp"
 msgstr "Ajutor pentru dezvoltatori"
 
@@ -5062,15 +5067,15 @@ msgstr "Dimensiune"
 msgid "Modified"
 msgstr "Modificat"
 
-#: src/plugins/ls/gtk/menus.ui:7
+#: src/plugins/ls/gtk/menus.ui:8
 msgid "Browse Folder"
 msgstr "Navighează dosarul"
 
-#: src/plugins/ls/gtk/menus.ui:17
+#: src/plugins/ls/gtk/menus.ui:18
 msgid "Switch to Folder"
 msgstr "Comută la dosarul"
 
-#: src/plugins/ls/gtk/menus.ui:22 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Deschide dosarul conținător"
 
@@ -5502,8 +5507,8 @@ msgstr "Opțiuni de afișaj"
 
 #: src/plugins/project-tree/gtk/menus.ui:94
 #: src/plugins/project-tree/gtk/menus.ui:103
-msgid "Reveal in Project"
-msgstr "Dezvăluie în proiect"
+msgid "Reveal in Project Tree"
+msgstr "Dezvăluie în arborele proiectului"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -6630,9 +6635,6 @@ msgstr "Fișierul trebuie salvat local pentru a fi parsat."
 
 #~ msgid "Building"
 #~ msgstr "Se generează"
-
-#~ msgid "true"
-#~ msgstr "true"
 
 #~ msgctxt "button"
 #~ msgid "Build"
