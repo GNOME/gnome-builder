@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-12-31 18:08+0000\n"
-"PO-Revision-Date: 2021-01-02 13:20+0200\n"
+"POT-Creation-Date: 2021-01-02 23:08+0000\n"
+"PO-Revision-Date: 2021-01-03 15:40+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -2906,8 +2906,8 @@ msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:131 src/plugins/editor/gtk/menus.ui:188
-#: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
+#: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
+#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Închide"
 
@@ -3260,7 +3260,7 @@ msgstr "Mediu de executare"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
-#: src/plugins/ls/gbp-ls-page.ui:15
+#: src/plugins/ls/gbp-ls-page.ui:16
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
@@ -4452,12 +4452,16 @@ msgid "New File"
 msgstr "Fișier nou"
 
 #: src/plugins/editor/gtk/menus.ui:122
-msgid "Move Left"
-msgstr "Mută la stânga"
+msgid "Move Page Left"
+msgstr "Mută pagina la stânga"
 
 #: src/plugins/editor/gtk/menus.ui:126
-msgid "Move Right"
-msgstr "Mută la dreapta"
+msgid "Move Page Right"
+msgstr "Mută pagina la dreapta"
+
+#: src/plugins/editor/gtk/menus.ui:131
+msgid "Close Frame"
+msgstr "Închide cadrul"
 
 #: src/plugins/editor/gtk/menus.ui:138
 msgid "Document"
@@ -4847,23 +4851,23 @@ msgstr "Refă comanda anterioară"
 msgid "Redo the next command"
 msgstr "Repetă comanda următoare"
 
-#: src/plugins/glade/gbp-glade-page.c:494
+#: src/plugins/glade/gbp-glade-page.c:492
 msgid "Switch to selection mode"
 msgstr "Comută la modul de selecție"
 
-#: src/plugins/glade/gbp-glade-page.c:495
+#: src/plugins/glade/gbp-glade-page.c:493
 msgid "Switch to drag-resize mode"
 msgstr "Comută la modul trage-redimensionează"
 
-#: src/plugins/glade/gbp-glade-page.c:496
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to margin editor"
 msgstr "Comută la editorul de margini"
 
-#: src/plugins/glade/gbp-glade-page.c:497
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to alignment editor"
 msgstr "Comută la editorul de aliniere"
 
-#: src/plugins/glade/gbp-glade-page.c:502
+#: src/plugins/glade/gbp-glade-page.c:500
 msgid "Unnamed Glade project"
 msgstr "Proiect Glade nedenumit"
 
@@ -5049,21 +5053,21 @@ msgstr "Sugerează completări de la Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Utilizează Jedi pentru a furniza completări pentru limbajul Python"
 
-#: src/plugins/ls/gbp-ls-page.c:319
+#: src/plugins/ls/gbp-ls-page.c:315
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Nu s-a putut încărca directorul: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:391
+#: src/plugins/ls/gbp-ls-page.c:387
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Director"
 
-#: src/plugins/ls/gbp-ls-page.ui:45
+#: src/plugins/ls/gbp-ls-page.ui:46
 msgid "Size"
 msgstr "Dimensiune"
 
-#: src/plugins/ls/gbp-ls-page.ui:58
+#: src/plugins/ls/gbp-ls-page.ui:59
 msgid "Modified"
 msgstr "Modificat"
 
