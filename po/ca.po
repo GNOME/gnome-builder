@@ -135,7 +135,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
 msgid "Support for viewing TODOs found within your code base"
-msgstr "Suport per veure TODOs trobats dins de la base del codi"
+msgstr "Suport per a veure TODOs trobats dins de la base del codi"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:40
 msgid "Fast fuzzy text search across files and symbols"
@@ -291,7 +291,7 @@ msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
-"La tecla de retrocés suprimirà els espais extres per mantenir-vos alineats "
+"La tecla de retrocés suprimirà els espais extres per a mantenir-vos alineats "
 "amb l'amplada del sagnat."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
@@ -474,7 +474,7 @@ msgstr "Segueix el sistema de llum nocturna"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:26
 msgid "Use GNOME night light setting to activate night-mode."
-msgstr "Usa el paràmetre llum nocturna de GNOME per activar el mode-nocturn."
+msgstr "Usa el paràmetre llum nocturna de GNOME per a activar el mode-nocturn."
 
 #. Translators: This is the default directory name for user’s
 #. projects. Do NOT change the ASCII double quotes ("") to your
@@ -622,7 +622,8 @@ msgstr "L'alçada en píxels del quadre a sota."
 msgid "Build software for GNOME"
 msgstr "Construeix programari  per a GNOME"
 
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#. Translators: Search terms to find this application. Do NOT translate or
+#. localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
 msgstr "Construeix;Desenvolupa;"
@@ -733,7 +734,8 @@ msgstr "%s:  aquest format no està suportat\n"
 msgid "failed to parse\n"
 msgstr "ha fallat l'anàlisi\n"
 
-#. To translators: always in singular form like in: generated palette number <generated_count>
+#. To translators: always in singular form like in: generated palette number
+#. <generated_count>
 #: src/gstyle/gstyle-palette.c:831
 msgid "Generated"
 msgstr "Generat"
@@ -1061,19 +1063,19 @@ msgstr "Cerca"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:65
 msgid "Move to the next match"
-msgstr "Vés a la coincidència següent"
+msgstr "Ves a la coincidència següent"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:71
 msgid "Move to the previous match"
-msgstr "Vés a la coincidència prèvia"
+msgstr "Ves a la coincidència prèvia"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:77
 msgid "Move to the next error"
-msgstr "Vés a l'error següent"
+msgstr "Ves a l'error següent"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:83
 msgid "Move to the previous error"
-msgstr "Vés a l'error previ"
+msgstr "Ves a l'error previ"
 
 #: src/libide/editor/ide-editor-page.ui:43
 msgid "_Reload"
@@ -1335,7 +1337,8 @@ msgstr "Sistema alternatiu"
 msgid "My Computer (%s)"
 msgstr "El meu ordinador (%s)"
 
-#. translators: first %s is replaced with the host name, second with CPU architecture
+#. translators: first %s is replaced with the host name, second with CPU
+#. architecture
 #: src/libide/foundry/ide-local-device.c:150
 #, c-format
 msgid "My Computer (%s) — %s"
@@ -1591,7 +1594,7 @@ msgstr "Suprimeix fonts del projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:25
 msgid "Go back"
-msgstr "Vés enrere"
+msgstr "Ves enrere"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
 msgctxt "title"
@@ -1946,7 +1949,7 @@ msgstr "L'inici es mou al primer caràcter no en blanc"
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
-"La tecla de retrocés suprimirà els espais extres per mantenir-vos alineats "
+"La tecla de retrocés suprimirà els espais extres per a mantenir-vos alineats "
 "amb l'amplada del sagnat"
 
 #: src/libide/gui/ide-preferences-builtin.c:156
@@ -1976,7 +1979,7 @@ msgstr "Habilita l'ajustament de text"
 
 #: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Wrap text that is too wide to display"
-msgstr "Ajusta text massa ample per mostrar"
+msgstr "Ajusta text massa ample per a mostrar"
 
 #: src/libide/gui/ide-preferences-builtin.c:161
 msgid "Scroll Offset"
@@ -1984,7 +1987,8 @@ msgstr "Desplaçament desactivat"
 
 #: src/libide/gui/ide-preferences-builtin.c:161
 msgid "Minimum number of lines to keep above and below the cursor"
-msgstr "El nombre mínim de línies per mantenir per sobre i per sota del cursor"
+msgstr ""
+"El nombre mínim de línies per a mantenir per sobre i per sota del cursor"
 
 #: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Allow the editor to scroll past the end of the buffer"
@@ -2121,7 +2125,7 @@ msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
-"Utilitza la descripció de codi per ressaltar la informació addicional "
+"Utilitza la descripció de codi per a ressaltar la informació addicional "
 "descoberta al fitxer font"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
@@ -2157,7 +2161,8 @@ msgstr "Fragments"
 msgid "Programming Languages"
 msgstr "Llenguatges de programació"
 
-#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#. translators: placeholder string for the entry used to filter the languages
+#. in Preferences/Programming languages
 #: src/libide/gui/ide-preferences-builtin.c:272
 msgid "Search languages…"
 msgstr "Cerca llenguatges..."
@@ -2523,7 +2528,7 @@ msgstr "Cerca i reemplaça"
 #: src/libide/gui/ide-shortcuts-window.ui:184
 msgctxt "shortcut window"
 msgid "Goto Line"
-msgstr "Vés a la línia"
+msgstr "Ves a la línia"
 
 #: src/libide/gui/ide-shortcuts-window.ui:191
 msgctxt "shortcut window"
@@ -2681,22 +2686,22 @@ msgstr "Navegació"
 #: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Move to next error in file"
-msgstr "Vés a l'error següent del fitxer"
+msgstr "Ves a l'error següent del fitxer"
 
 #: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
-msgstr "Vés a l'error previ del fitxer"
+msgstr "Ves a l'error previ del fitxer"
 
 #: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
-msgstr "Vés a la ubicació d'edició anterior"
+msgstr "Ves a la ubicació d'edició anterior"
 
 #: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to next edit location"
-msgstr "Vés a la ubicació d'edició següent"
+msgstr "Ves a la ubicació d'edició següent"
 
 #: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
@@ -2936,7 +2941,8 @@ msgstr "Aplica Fix-It"
 msgid "Rename symbol"
 msgstr "Reanomena el símbol"
 
-#. translators: %s is the filename, then line number, column number. <> are pango markup
+#. translators: %s is the filename, then line number, column number. <> are
+#. pango markup
 #: src/libide/sourceview/ide-source-view.c:5257
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
@@ -3053,7 +3059,8 @@ msgstr "S'està construint el projecte"
 msgid "Caching build commands"
 msgstr "S'estan desant a la memòria cau les ordres de muntatge"
 
-#. translators: %s and %s are replaced with source file path and the error message
+#. translators: %s and %s are replaced with source file path and the error
+#. message
 #: src/plugins/beautifier/gb-beautifier-config.c:157
 #, c-format
 msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
@@ -3596,9 +3603,9 @@ msgstr ""
 "La cerca, la compleció automàtica i el diagnòstic poden ser limitats fins a "
 "la finalització."
 
-#. translators: "Declaration" is describing a function that is defined in a header
+#. translators: "Declaration" is describing a function that is defined in a
+#. header
 #. *              file (.h) rather than a source file (.c).
-#.
 #: src/plugins/code-index/ide-code-index-index.c:343
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
@@ -3939,7 +3946,8 @@ msgstr "El vostre projecte es crearà dins d'un directori fill nou."
 msgid "Directory already exists with that name"
 msgstr "Ja existeix un directori amb aqueix nom"
 
-#. translators: %s is replaced with a short-form file-system path to the project
+#. translators: %s is replaced with a short-form file-system path to the
+#. project
 #: src/plugins/create-project/gbp-create-project-surface.c:246
 #, c-format
 msgid "Your project will be created within %s."
@@ -3982,7 +3990,7 @@ msgid ""
 "identify your application such as “org.gnome.Builder”."
 msgstr ""
 "L'ID de l'aplicació és un identificador de domini invers que s'utilitza per "
-"identificar de forma única la vostra aplicació com ara «org.gnome.Builder»."
+"a identificar de forma única la vostra aplicació com ara «org.gnome.Builder»."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:118
 msgid "Project Location"
@@ -4459,7 +4467,8 @@ msgstr "Si tanqueu sense desar, tots els canvis es perdran definitivament."
 msgid "Use minimal editor interface"
 msgstr "Utilitza la interfície d'edició mínima"
 
-#. translators: the user selected a number outside the value range for the document.
+#. translators: the user selected a number outside the value range for the
+#. document.
 #: src/plugins/editor/gbp-editor-frame-controls.c:190
 #, c-format
 msgid "Provide a number between 1 and %u"
@@ -4467,15 +4476,15 @@ msgstr "Proporciona un número entre 1 i %u"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:23
 msgid "Go to line number"
-msgstr "Vés a la línia número"
+msgstr "Ves a la línia número"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:82
 msgid "Go to Line"
-msgstr "Vés a la línia"
+msgstr "Ves a la línia"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:83
 msgid "Go"
-msgstr "Vés"
+msgstr "Ves"
 
 #: src/plugins/editor/gtk/menus.ui:8 src/plugins/editor/gtk/menus.ui:18
 msgid "New Editor Workspace…"
@@ -4547,7 +4556,7 @@ msgid ""
 "Enable the use of eslint to find additional diagnostics in JavaScript files. "
 "This may result in the execution of code in your project."
 msgstr ""
-"Habilita l'ús d'eslint per trobar diagnòstics addicionals als fitxers de "
+"Habilita l'ús d'eslint per a trobar diagnòstics addicionals als fitxers de "
 "JavaScript. Això pot produir que s'executi codi al vostre projecte."
 
 #: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
@@ -4984,7 +4993,7 @@ msgid ""
 "Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
 msgstr ""
-"Habilita l'ús de pylint per trobar diagnòstics addicionals en programes "
+"Habilita l'ús de pylint per a trobar diagnòstics addicionals en programes "
 "Python. Això pot permetre l'execució de codi al vostre projecte."
 
 #: src/plugins/gradle/gradle_plugin.py:85
@@ -5202,7 +5211,7 @@ msgstr "No s'ha proporcionat cap eina"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
-msgstr "Un nom per identificar el sysroot."
+msgstr "Un nom per a identificar el sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
@@ -5304,11 +5313,11 @@ msgstr "Caixes"
 #: src/plugins/newcomers/gbp-newcomers-section.ui:38
 msgid "A simple GNOME 3 application to access remote or virtual systems"
 msgstr ""
-"Una aplicació del GNOME 3 senzilla per accedir a sistemes remots o virtuals"
+"Una aplicació del GNOME 3 senzilla per a accedir a sistemes remots o virtuals"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:48
 msgid "An IDE for writing GNOME-based software"
-msgstr "Un IDE per escriure programari basat amb GNOME"
+msgstr "Un IDE per a escriure programari basat amb GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Calendar"
@@ -5433,7 +5442,8 @@ msgstr "Arrancant el projecte"
 msgid "Podman"
 msgstr "Podman"
 
-#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#. translators: this is a path to browse to the runtime, likely only
+#. "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:169
 msgid "Containers/Podman"
 msgstr "Contenidors/Podman"
@@ -5467,7 +5477,8 @@ msgstr "_Crea"
 msgid "Copying 1 file"
 msgstr "S'està copiant 1 fitxer"
 
-#. translators: first %s is replaced with completed number of files, second %s with total number of files
+#. translators: first %s is replaced with completed number of files, second %s
+#. with total number of files
 #: src/plugins/project-tree/gbp-project-tree-addin.c:680
 #, c-format
 msgid "Copying %s of %s files"
@@ -5551,7 +5562,8 @@ msgstr "Emulació d'Aarch64"
 msgid "Arm Emulation"
 msgstr "Emulació d'Arm"
 
-#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#. translators: first %s is replaced with hostname, second %s with the CPU
+#. architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
@@ -5567,12 +5579,14 @@ msgstr ""
 "Ressalteu totes les coincidències de mots que concorden amb la selecció "
 "actual"
 
-#. Translators: the following are keywords used for searching to locate this preference
+#. Translators: the following are keywords used for searching to locate this
+#. preference
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:53
 msgid "quick highlight words matching current selection"
 msgstr "mots ressaltats ràpids que coincideixin amb la selecció actual"
 
-#. translators: %s is replaced with the path of the file to be deleted and \n for a new line
+#. translators: %s is replaced with the path of the file to be deleted and \n
+#. for a new line
 #: src/plugins/recent/gbp-recent-section.c:349
 #: src/plugins/recent/gbp-recent-section.c:356
 #, c-format
@@ -5730,7 +5744,8 @@ msgstr ""
 msgid "Install Rust Channel"
 msgstr "Instal·la la cadena rust"
 
-#. translators: channel is stable, beta, nightly, with optional architecture and date
+#. translators: channel is stable, beta, nightly, with optional architecture
+#. and date
 #: src/plugins/rustup/rustup_plugin.py:609
 msgid "Enter name of rust channel"
 msgstr "Introduïu el nom de la cadena rust"
@@ -5754,7 +5769,7 @@ msgstr ""
 
 #: src/plugins/rustup/rustup_plugin.py:635
 msgid "Install Rustup to manage toolchains here!"
-msgstr "Instal·la Rustup per gestionar les cadenes d'eines aquí!"
+msgstr "Instal·la Rustup per a gestionar les cadenes d'eines aquí!"
 
 #: src/plugins/rustup/rustup_plugin.py:642
 msgid "No toolchain installed. Click"
@@ -5762,7 +5777,7 @@ msgstr "Cap cadena d'eines instal·lades. Prem"
 
 #: src/plugins/rustup/rustup_plugin.py:643
 msgid "to add a new toolchain!"
-msgstr "per afegir una nova cadena d'eines!"
+msgstr "per a afegir una nova cadena d'eines!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
@@ -5903,7 +5918,6 @@ msgstr "Mostra el plafó del corrector ortogràfic"
 #. We might find ourselves in a race here and the buffer
 #. * addins are already in destruction. Therefore, silently
 #. * fail any further setup.
-#.
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:141
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:248
 msgid "Failed to initialize spellchecking, disabling"
@@ -6098,7 +6112,7 @@ msgstr "Afegeix una sysroot"
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:90
 msgid "Define a new sysroot target to build against a different target"
 msgstr ""
-"Defineix un nou objectiu sysroot per construir contra un altre objectiu"
+"Defineix un nou objectiu sysroot per a construir contra un altre objectiu"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:138
 msgid "Sysroots"
@@ -6114,7 +6128,8 @@ msgstr "Camí de configuració del paquet"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
 msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-msgstr "Un camí opcional separat per comes per especificar el PKG_CONFIG_PATH."
+msgstr ""
+"Un camí opcional separat per comes per a especificar el PKG_CONFIG_PATH."
 
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
 #, c-format
@@ -6257,12 +6272,12 @@ msgstr "No es pot trobar el llenguatge «%s»"
 #: src/plugins/vim/gb-vim.c:352
 #, c-format
 msgid "This command requires a GtkSourceView to be focused"
-msgstr "L'ordre requereix GtkSourceView per tindre el focus"
+msgstr "L'ordre requereix GtkSourceView per a tindre el focus"
 
 #: src/plugins/vim/gb-vim.c:363
 #, c-format
 msgid "This command requires a view to be focused"
-msgstr "L'ordre requereix una visualització per tindre el focus"
+msgstr "L'ordre requereix una visualització per a tindre el focus"
 
 #: src/plugins/vim/gb-vim.c:420
 #, c-format
@@ -6361,4 +6376,4 @@ msgstr "Ha fallat crear l'arbre XML."
 
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
-msgstr "El fitxer ha d'estar desat localment per analitzar-lo."
+msgstr "El fitxer ha d'estar desat localment per a analitzar-lo."
