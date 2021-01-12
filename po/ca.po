@@ -151,7 +151,7 @@ msgstr "Creeu projectes nous a partir d'una varietat de plantilles"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:54
 msgid "Integration with Git to clone your projects"
-msgstr "Integració amb Git per clonar els vostres projectes"
+msgstr "Integració amb Git per a clonar els vostres projectes"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:58
 msgid "The source code editor"
@@ -567,7 +567,7 @@ msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
 msgstr ""
-"La configuració ha estat seleccionada i serà restaurada la propera vegada "
+"La configuració ha estat seleccionada i serà restaurada la pròxima vegada "
 "que el projecte es carregui."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
@@ -2060,7 +2060,7 @@ msgstr "Resum del codi"
 
 #: src/libide/gui/ide-preferences-builtin.c:175
 msgid "A zoomed out view to enhance navigating source code"
-msgstr "Una vista ampliada per millorar el codi font de navegació"
+msgstr "Una vista ampliada per a millorar el codi font de navegació"
 
 #: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Automatically hide overview map"
@@ -2841,7 +2841,7 @@ msgstr "No s'ha pogut analitzar l'XML des del flux"
 
 #: src/libide/sourceview/gtk/menus.ui:7
 msgid "_Go to Definition"
-msgstr "_Vés a la definició"
+msgstr "_Ves a la definició"
 
 #: src/libide/sourceview/gtk/menus.ui:12
 msgid "_Find references"
@@ -5317,7 +5317,7 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:48
 msgid "An IDE for writing GNOME-based software"
-msgstr "Un IDE per a escriure programari basat amb GNOME"
+msgstr "Un IDE per a escriure programari basat en GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Calendar"
@@ -5905,7 +5905,7 @@ msgstr "Suggereix complecions des de fragments"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:54
 msgid "Use registered snippets to suggest completion proposals"
-msgstr "Utilitza fragments registrats per suggerir propostes de compleció"
+msgstr "Utilitza fragments registrats per a suggerir propostes de compleció"
 
 #: src/plugins/spellcheck/gbp-spell-editor-addin.c:53
 msgid "Spelling"
