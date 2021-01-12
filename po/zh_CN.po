@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-08-23 09:44+0000\n"
-"PO-Revision-Date: 2020-08-23 10:53-0400\n"
+"POT-Creation-Date: 2021-01-02 23:08+0000\n"
+"PO-Revision-Date: 2021-01-11 19:26-0500\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -20,12 +20,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:234
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -827,7 +827,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "使用配置加载或生成调色板"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5020
+#: src/libide/sourceview/ide-source-view.c:5022
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
@@ -849,7 +849,7 @@ msgstr "重命名(_R)"
 msgid "unsaved file %u"
 msgstr "未保存文件 %u"
 
-#: src/libide/code/ide-buffer.c:3424
+#: src/libide/code/ide-buffer.c:3434
 msgid "The current language lacks a symbol resolver."
 msgstr "当前语言缺少符号解析器。"
 
@@ -885,7 +885,7 @@ msgstr "无标题"
 #: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:318
+#: src/libide/greeter/ide-clone-surface.ui:317
 #: src/libide/greeter/ide-greeter-workspace.c:536
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -893,11 +893,11 @@ msgstr "无标题"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
 msgid "Cancel"
 msgstr "取消"
 
-#: src/libide/debugger/ide-debug-manager.c:1000
+#: src/libide/debugger/ide-debug-manager.c:1001
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "未发现适合的调试器。"
@@ -1088,7 +1088,7 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr "显示或隐藏搜索选项如是否区分大小写"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
-#: src/plugins/editor/gtk/menus.ui:155
+#: src/plugins/editor/gtk/menus.ui:165
 msgid "Document Properties"
 msgstr "文档属性"
 
@@ -1191,7 +1191,7 @@ msgstr "打开文件"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:287
 msgid "Open"
 msgstr "打开"
 
@@ -1223,7 +1223,7 @@ msgstr "关闭所有文件"
 #: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:153
-#: src/plugins/editor/gtk/menus.ui:68 src/plugins/editor/gtk/menus.ui:82
+#: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
 msgid "Editor"
 msgstr "编辑器"
 
@@ -1287,73 +1287,73 @@ msgstr "我的电脑 (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "我的电脑 (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:800
+#: src/libide/foundry/ide-pipeline.c:820
 msgid "The build pipeline is in a failed state"
 msgstr "构建管道处于失败状态"
 
-#: src/libide/foundry/ide-pipeline.c:810
+#: src/libide/foundry/ide-pipeline.c:830
 msgid "The build configuration has errors"
 msgstr "构建配置存在错误"
 
-#: src/libide/foundry/ide-pipeline.c:3000
+#: src/libide/foundry/ide-pipeline.c:3020
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "伪终端创建失败。终端特性将会被限制。"
 
-#: src/libide/foundry/ide-pipeline.c:3206
+#: src/libide/foundry/ide-pipeline.c:3226
 msgid "Cleaning…"
 msgstr "正在清理…"
 
-#: src/libide/foundry/ide-pipeline.c:3210
-#: src/libide/foundry/ide-pipeline.c:3267
+#: src/libide/foundry/ide-pipeline.c:3230
+#: src/libide/foundry/ide-pipeline.c:3287
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "失败"
 
-#: src/libide/foundry/ide-pipeline.c:3212
-#: src/libide/foundry/ide-pipeline.c:3275
+#: src/libide/foundry/ide-pipeline.c:3232
+#: src/libide/foundry/ide-pipeline.c:3295
 msgid "Ready"
 msgstr "就绪"
 
-#: src/libide/foundry/ide-pipeline.c:3227
+#: src/libide/foundry/ide-pipeline.c:3247
 msgid "Downloading…"
 msgstr "正在下载…"
 
-#: src/libide/foundry/ide-pipeline.c:3231
+#: src/libide/foundry/ide-pipeline.c:3251
 msgid "Building dependencies…"
 msgstr "正在构建依赖…"
 
-#: src/libide/foundry/ide-pipeline.c:3235
+#: src/libide/foundry/ide-pipeline.c:3255
 msgid "Bootstrapping…"
 msgstr "正在从头构建…"
 
-#: src/libide/foundry/ide-pipeline.c:3239
+#: src/libide/foundry/ide-pipeline.c:3259
 msgid "Configuring…"
 msgstr "正在配置…"
 
-#: src/libide/foundry/ide-pipeline.c:3243
+#: src/libide/foundry/ide-pipeline.c:3263
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "正在构建…"
 
-#: src/libide/foundry/ide-pipeline.c:3247
+#: src/libide/foundry/ide-pipeline.c:3267
 msgid "Installing…"
 msgstr "正在安装…"
 
-#: src/libide/foundry/ide-pipeline.c:3251
+#: src/libide/foundry/ide-pipeline.c:3271
 msgid "Committing…"
 msgstr "正在提交…"
 
-#: src/libide/foundry/ide-pipeline.c:3255
+#: src/libide/foundry/ide-pipeline.c:3275
 msgid "Exporting…"
 msgstr "正在导出…"
 
-#: src/libide/foundry/ide-pipeline.c:3259
-#: src/libide/foundry/ide-pipeline.c:3263
+#: src/libide/foundry/ide-pipeline.c:3279
+#: src/libide/foundry/ide-pipeline.c:3283
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "成功"
 
-#: src/libide/foundry/ide-pipeline.c:3271
+#: src/libide/foundry/ide-pipeline.c:3291
 msgid "Preparing…"
 msgstr "正在准备…"
 
@@ -1365,39 +1365,39 @@ msgstr "无法在使用流量计费网络时构建传输"
 msgid "Cannot run target, another target is running"
 msgstr "无法运行目标，因为另一个目标正在运行"
 
-#: src/libide/foundry/ide-run-manager.c:488
+#: src/libide/foundry/ide-run-manager.c:489
 msgid "Failed to locate runtime"
 msgstr "无法找到运行时"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:543
+#: src/libide/foundry/ide-run-manager.c:538
 #, c-format
 msgid "Running %s…"
 msgstr "正在运行 %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:617
+#: src/libide/foundry/ide-run-manager.c:612
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "该构建目标构建失败：%s"
 
-#: src/libide/foundry/ide-run-manager.c:880
+#: src/libide/foundry/ide-run-manager.c:875
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "工作区快捷键"
 
-#: src/libide/foundry/ide-run-manager.c:881
+#: src/libide/foundry/ide-run-manager.c:876
 msgid "Build and Run"
 msgstr "构建和运行"
 
-#: src/libide/foundry/ide-run-manager.c:1043
-#: src/libide/foundry/ide-run-manager.c:1109
+#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1104
 msgid "Failed to locate a build target"
 msgstr "定位构建目标失败"
 
-#: src/libide/foundry/ide-run-manager.c:1245 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "运行"
@@ -1461,19 +1461,19 @@ msgstr "仓库种类"
 msgid "Branch"
 msgstr "分支"
 
-#: src/libide/greeter/ide-clone-surface.ui:191
+#: src/libide/greeter/ide-clone-surface.ui:190
 msgid "Author Name"
 msgstr "作者名字"
 
-#: src/libide/greeter/ide-clone-surface.ui:216
+#: src/libide/greeter/ide-clone-surface.ui:215
 msgid "Author Email"
 msgstr "作者邮箱"
 
-#: src/libide/greeter/ide-clone-surface.ui:252
+#: src/libide/greeter/ide-clone-surface.ui:251
 msgid "Project Destination"
 msgstr "工程目标"
 
-#: src/libide/greeter/ide-clone-surface.ui:308
+#: src/libide/greeter/ide-clone-surface.ui:307
 msgid "Clone Project"
 msgstr "克隆工程"
 
@@ -1560,7 +1560,7 @@ msgctxt "title"
 msgid "Clone Repository"
 msgstr "克隆仓库"
 
-#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
+#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:84
 msgid "Switch Surface"
 msgstr "切换外观"
 
@@ -1570,33 +1570,33 @@ msgstr "关闭工程"
 
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-application-shortcuts.c:57
 #: src/libide/gui/ide-preferences-window.ui:6
-#: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
+#: src/plugins/editor/gtk/menus.ui:36 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "首选项"
 
-#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:39
+#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:42
 #: src/plugins/greeter/gtk/menus.ui:28
 msgid "Keyboard Shortcuts"
 msgstr "键盘快捷键"
 
 #: src/libide/gui/gtk/menus.ui:36 src/libide/gui/ide-application-shortcuts.c:46
 #: src/libide/gui/ide-application-shortcuts.c:68
-#: src/plugins/editor/gtk/menus.ui:45 src/plugins/greeter/gtk/menus.ui:34
+#: src/plugins/editor/gtk/menus.ui:48 src/plugins/greeter/gtk/menus.ui:34
 msgid "Help"
 msgstr "帮助"
 
-#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:51
+#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:54
 #: src/plugins/greeter/gtk/menus.ui:40
 msgid "About Builder"
 msgstr "关于 Builder"
 
-#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:58
+#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:62
 msgid "_Quit"
 msgstr "退出(_Q)"
 
 #: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:25
-#: src/plugins/editor/gtk/menus.ui:103
+#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:27
+#: src/plugins/editor/gtk/menus.ui:111
 msgid "Open File…"
 msgstr "打开文件…"
 
@@ -1670,11 +1670,11 @@ msgstr "显示快捷键窗口"
 
 #: src/libide/gui/ide-application.c:136
 msgid ""
-"GNOME Builder requires a desktop session with D-Bus. Please set "
-"DBUS_SESSION_BUS_ADDRESS."
+"GNOME Builder requires a session with D-Bus which was not found. Please set "
+"DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
 msgstr ""
-"GNOME Builder 需要一个使用 D-Bus 的桌面会话。请设置 "
-"DBUS_SESSION_BUS_ADDRESS。"
+"GNOME Builder 需要一个无法找到的使用 D-Bus 的会话。请设置 "
+"DBUS_SESSION_BUS_ADDRESS。一些功能可能不可用。"
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -1766,6 +1766,10 @@ msgstr "显示窗口菜单"
 #: src/libide/gui/ide-header-bar-shortcuts.c:42
 msgid "Toggle window to fullscreen"
 msgstr "切换窗口到全屏"
+
+#: src/libide/gui/ide-marked-view.c:92
+msgid "Cannot load HTML. Missing WebKit support."
+msgstr "无法加载 HTML。缺少 WebKit 支持。"
 
 #: src/libide/gui/ide-preferences-builtin.c:61
 #: src/libide/gui/ide-preferences-builtin.c:62
@@ -2053,7 +2057,7 @@ msgid ""
 msgstr "使用代码洞察高亮在源文件中发现的附加信息"
 
 #: src/libide/gui/ide-preferences-builtin.c:200
-#: src/plugins/editor/gbp-editor-hover-provider.c:84
+#: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "诊断"
 
@@ -2309,7 +2313,7 @@ msgid "Editor Shortcuts"
 msgstr "编辑器快捷键"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:555
+#: src/libide/gui/ide-shortcuts-window.ui:529
 msgctxt "shortcut window"
 msgid "General"
 msgstr "常规"
@@ -2325,37 +2329,37 @@ msgid "Toogle primary menu"
 msgstr "切换主菜单"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:533
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "全局搜索"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "首选项"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "命令栏"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "终端"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:587
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "构建运行时的终端"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:594
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "快捷键"
@@ -2467,13 +2471,13 @@ msgid "Clear highlight"
 msgstr "清除高亮"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:603
+#: src/libide/gui/ide-shortcuts-window.ui:577
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "复制和粘贴"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:608
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "复制选中文本到剪贴板"
@@ -2484,7 +2488,7 @@ msgid "Cut selected text to clipboard"
 msgstr "剪切选中文本到剪贴板"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:615
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "粘贴剪贴板中的文本"
@@ -2689,42 +2693,17 @@ msgctxt "shortcut window"
 msgid "Profile"
 msgstr "分析"
 
-#: src/libide/gui/ide-shortcuts-window.ui:522
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "触控板手势"
-
-#: src/libide/gui/ide-shortcuts-window.ui:529
-msgctxt "shortcut window"
-msgid "Move page to the right"
-msgstr "右移页面"
-
-#: src/libide/gui/ide-shortcuts-window.ui:530
-msgctxt "shortcut window"
-msgid "Three finger swipe right"
-msgstr "三指右滑"
-
-#: src/libide/gui/ide-shortcuts-window.ui:539
-msgctxt "shortcut window"
-msgid "Move page to the left"
-msgstr "左移页面"
-
-#: src/libide/gui/ide-shortcuts-window.ui:540
-msgctxt "shortcut window"
-msgid "Three finger swipe left"
-msgstr "三指左滑"
-
-#: src/libide/gui/ide-shortcuts-window.ui:551
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "终端快捷键"
 
-#: src/libide/gui/ide-shortcuts-window.ui:623
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "搜索"
 
-#: src/libide/gui/ide-shortcuts-window.ui:628
+#: src/libide/gui/ide-shortcuts-window.ui:602
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "在终端中查找文本"
@@ -2848,27 +2827,27 @@ msgstr "插入 “%s”"
 msgid "Replace “%s” with “%s”"
 msgstr "替换 “%s” 为 “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4562
+#: src/libide/sourceview/ide-source-view.c:4564
 msgid "Apply Fix-It"
 msgstr "应用 Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:5019
+#: src/libide/sourceview/ide-source-view.c:5021
 msgid "Rename symbol"
 msgstr "重命名符号"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5255
+#: src/libide/sourceview/ide-source-view.c:5257
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>行 %u, 列 %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5281
+#: src/libide/sourceview/ide-source-view.c:5283
 msgid "No references were found"
 msgstr "没有发现引用"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
-#: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
+#: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
+#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "关闭"
 
@@ -2885,7 +2864,7 @@ msgstr "复制链接地址(_C)"
 msgid "Failed to create shell within runtime “%s”"
 msgstr "无法在运行时“%s”中创建 shell"
 
-#: src/libide/terminal/ide-terminal-launcher.c:646
+#: src/libide/terminal/ide-terminal-launcher.c:644
 msgid "Untitled Terminal"
 msgstr "无标题终端"
 
@@ -2941,7 +2920,7 @@ msgstr "正在加载…"
 msgid "unversioned"
 msgstr "未受版本控制的"
 
-#: src/main.c:137
+#: src/main.c:147
 msgid "Run a new instance of Builder"
 msgstr "运行 Builder 的新实例"
 
@@ -3192,44 +3171,48 @@ msgstr "概览"
 msgid "Build Environment"
 msgstr "构建环境"
 
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
+msgid "Runtime Environment"
+msgstr "运行环境"
+
 #. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
-#: src/plugins/ls/gbp-ls-page.ui:15
+#: src/plugins/ls/gbp-ls-page.ui:16
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
 msgstr "名称"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 msgid "Source Directory"
 msgstr "源目录"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
 msgid "Build System"
 msgstr "构建系统"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:466
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
 msgid "Install Prefix"
 msgstr "安装前缀"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:475
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
 msgid "Configure Options"
 msgstr "配置选项"
 
 #. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:480
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:481
 msgid "Application Runtime"
 msgstr "应用程序运行时"
 
 #. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:484
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
 msgid "Build Toolchain"
 msgstr "构建工具链"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:279
-#: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/editor/gtk/menus.ui:174 src/plugins/glade/gtk/menus.ui:8
 #: src/plugins/testui/gbp-test-output-panel.c:68
 msgid "_Save"
 msgstr "保存(_S)"
@@ -3309,6 +3292,11 @@ msgstr "错误"
 #: src/plugins/buildui/gbp-buildui-pane.ui:140
 msgid "Warnings"
 msgstr "警告"
+
+#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
+msgid "true"
+msgstr "true"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
@@ -3453,22 +3441,22 @@ msgstr "为工程文件创建或更新代码索引"
 msgid "PROJECT_FILE"
 msgstr "PROJECT_FILE"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:154
+#: src/plugins/code-index/gbp-code-index-application-addin.c:152
 #, c-format
 msgid "Failed to load flags for plan: %s"
 msgstr "为计划加载标签失败：%s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:197
+#: src/plugins/code-index/gbp-code-index-application-addin.c:195
 #, c-format
 msgid "Failed to cull index plan: %s"
 msgstr "拣选索引计划失败：%s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:232
+#: src/plugins/code-index/gbp-code-index-application-addin.c:230
 #, c-format
 msgid "Failed to populate index plan: %s"
 msgstr "填写索引计划失败：%s"
 
-#: src/plugins/code-index/gbp-code-index-application-addin.c:267
+#: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
 msgid "Failed to load project: %s"
 msgstr "加载工程失败：%s"
@@ -3488,7 +3476,7 @@ msgstr "搜索、诊断和自动补全可能会被限制直到完成。"
 #. *              file (.h) rather than a source file (.c).
 #.
 #: src/plugins/code-index/ide-code-index-index.c:343
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "声明"
 
@@ -4091,7 +4079,7 @@ msgid "Thread"
 msgstr "线程"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
-#: src/plugins/editor/gtk/menus.ui:111
+#: src/plugins/editor/gtk/menus.ui:120
 msgid "Frame"
 msgstr "框架"
 
@@ -4101,7 +4089,7 @@ msgstr "参数"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
 #: src/plugins/grep/gbp-grep-panel.c:482
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
 msgstr "位置"
@@ -4110,7 +4098,7 @@ msgstr "位置"
 msgid "Binary"
 msgstr "二进制"
 
-#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:132
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:131
 msgid "Devhelp"
 msgstr "Devhelp"
 
@@ -4123,7 +4111,7 @@ msgstr "选择文档…"
 msgid "Documentation"
 msgstr "文档"
 
-#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:147
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
 msgstr "打印…"
 
@@ -4348,39 +4336,43 @@ msgstr "前往指定行"
 msgid "Go"
 msgstr "前往"
 
-#: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
+#: src/plugins/editor/gtk/menus.ui:8 src/plugins/editor/gtk/menus.ui:18
 msgid "New Editor Workspace…"
 msgstr "新建编辑器工作区…"
 
-#: src/plugins/editor/gtk/menus.ui:95
+#: src/plugins/editor/gtk/menus.ui:102
 msgid "New File"
 msgstr "新建文件"
 
-#: src/plugins/editor/gtk/menus.ui:113
-msgid "Move Left"
-msgstr "左移"
+#: src/plugins/editor/gtk/menus.ui:122
+msgid "Move Page Left"
+msgstr "页面左移"
 
-#: src/plugins/editor/gtk/menus.ui:117
-msgid "Move Right"
-msgstr "右移"
+#: src/plugins/editor/gtk/menus.ui:126
+msgid "Move Page Right"
+msgstr "页面右移"
 
-#: src/plugins/editor/gtk/menus.ui:128
+#: src/plugins/editor/gtk/menus.ui:131
+msgid "Close Frame"
+msgstr "关闭帧"
+
+#: src/plugins/editor/gtk/menus.ui:138
 msgid "Document"
 msgstr "文档"
 
-#: src/plugins/editor/gtk/menus.ui:131 src/plugins/terminal/gtk/menus.ui:34
+#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:34
 msgid "Open in New Frame"
 msgstr "在新框架中打开"
 
-#: src/plugins/editor/gtk/menus.ui:137
+#: src/plugins/editor/gtk/menus.ui:147
 msgid "Open in New Workspace"
 msgstr "在新工作区打开"
 
-#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:39
+#: src/plugins/editor/gtk/menus.ui:151 src/plugins/terminal/gtk/menus.ui:39
 msgid "Split"
 msgstr "拆分"
 
-#: src/plugins/editor/gtk/menus.ui:168
+#: src/plugins/editor/gtk/menus.ui:179
 msgid "Save _As"
 msgstr "另存为(_A)"
 
@@ -4636,7 +4628,7 @@ msgstr "无法在没有 GPG_KEY_ID 情况下对提交签名"
 msgid "Cannot monitor files outside the working directory"
 msgstr "无法监控在工作目录外的文件"
 
-#: src/plugins/git/gbp-git-client.c:329
+#: src/plugins/git/gbp-git-client.c:328
 msgid "The client has been closed"
 msgstr "客户端已被关闭"
 
@@ -4744,23 +4736,23 @@ msgstr "撤消上个命令"
 msgid "Redo the next command"
 msgstr "重做下个命令"
 
-#: src/plugins/glade/gbp-glade-page.c:483
+#: src/plugins/glade/gbp-glade-page.c:492
 msgid "Switch to selection mode"
 msgstr "切换到选择模式"
 
-#: src/plugins/glade/gbp-glade-page.c:484
+#: src/plugins/glade/gbp-glade-page.c:493
 msgid "Switch to drag-resize mode"
 msgstr "切换到拖拽-缩放模式"
 
-#: src/plugins/glade/gbp-glade-page.c:485
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to margin editor"
 msgstr "切换到边缘空白编辑器"
 
-#: src/plugins/glade/gbp-glade-page.c:486
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to alignment editor"
 msgstr "切换到对齐编辑器"
 
-#: src/plugins/glade/gbp-glade-page.c:491
+#: src/plugins/glade/gbp-glade-page.c:500
 msgid "Unnamed Glade project"
 msgstr "未命名 Glade 工程"
 
@@ -4941,33 +4933,33 @@ msgstr "通过 Python 提示补全"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "为 Python 语言使用 Jedi 提供补全"
 
-#: src/plugins/ls/gbp-ls-page.c:319
+#: src/plugins/ls/gbp-ls-page.c:315
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "无法加载目录：%s"
 
-#: src/plugins/ls/gbp-ls-page.c:391
+#: src/plugins/ls/gbp-ls-page.c:387
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — 目录"
 
-#: src/plugins/ls/gbp-ls-page.ui:45
+#: src/plugins/ls/gbp-ls-page.ui:46
 msgid "Size"
 msgstr "大小"
 
-#: src/plugins/ls/gbp-ls-page.ui:58
+#: src/plugins/ls/gbp-ls-page.ui:59
 msgid "Modified"
 msgstr "修改"
 
-#: src/plugins/ls/gtk/menus.ui:9
-msgid "Directory Browser"
-msgstr "目录浏览器"
+#: src/plugins/ls/gtk/menus.ui:8
+msgid "Browse Folder"
+msgstr "浏览文件夹"
 
-#: src/plugins/ls/gtk/menus.ui:21
+#: src/plugins/ls/gtk/menus.ui:18
 msgid "Switch to Folder"
 msgstr "切换到文件夹"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "打开所在文件夹"
 
@@ -4995,27 +4987,27 @@ msgstr "GNOME 应用程序"
 msgid "Create a new GNOME application"
 msgstr "新建 GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:324
+#: src/plugins/meson-templates/meson_templates.py:325
 msgid "Shared Library"
 msgstr "已共享库"
 
-#: src/plugins/meson-templates/meson_templates.py:326
+#: src/plugins/meson-templates/meson_templates.py:327
 msgid "Create a new project with a shared library"
 msgstr "用已共享库新建工程"
 
-#: src/plugins/meson-templates/meson_templates.py:343
+#: src/plugins/meson-templates/meson_templates.py:344
 msgid "Empty Project"
 msgstr "空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:345
+#: src/plugins/meson-templates/meson_templates.py:346
 msgid "Create a new empty project"
 msgstr "创建新的空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:361
+#: src/plugins/meson-templates/meson_templates.py:363
 msgid "Command Line Tool"
 msgstr "命令行工具"
 
-#: src/plugins/meson-templates/meson_templates.py:363
+#: src/plugins/meson-templates/meson_templates.py:365
 msgid "Create a new command line project"
 msgstr "创建一个新的命令行工程"
 
@@ -5285,32 +5277,32 @@ msgstr "正在下载 npm 依赖"
 msgid "Bootstrapping project"
 msgstr "自举工程"
 
-#: src/plugins/podman/gbp-podman-runtime.c:155
+#: src/plugins/podman/gbp-podman-runtime.c:161
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:163
+#: src/plugins/podman/gbp-podman-runtime.c:169
 msgid "Containers/Podman"
 msgstr "容器/Podman"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:124
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
 msgstr "该名称文件夹已存在。"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-new-file-popover.c:130
 #: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "该名称文件已存在。"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:351
+#: src/plugins/project-tree/gbp-new-file-popover.c:356
 #: src/plugins/project-tree/gbp-new-file-popover.ui:13
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "文件名称"
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:353
+#: src/plugins/project-tree/gbp-new-file-popover.c:358
 msgid "Folder Name"
 msgstr "文件夹名称"
 
@@ -5392,17 +5384,22 @@ msgstr "移至回收站"
 msgid "Display Options"
 msgstr "显示选项"
 
+#: src/plugins/project-tree/gtk/menus.ui:94
+#: src/plugins/project-tree/gtk/menus.ui:103
+msgid "Reveal in Project Tree"
+msgstr "在工程树中展示"
+
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
 msgstr "AArch64 模拟"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+#: src/plugins/qemu/gbp-qemu-device-provider.c:43
 msgid "Arm Emulation"
 msgstr "ARM 模拟"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:158
+#: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "我的电脑 (%s) %s"
@@ -5610,13 +5607,13 @@ msgstr "添加新工具链！"
 msgid "Shell command"
 msgstr "Shell 命令"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:565
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
 msgstr "由于构建管道没有初始化无法在运行环境中繁衍终端"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:643
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr "由于构建管道尚不可用无法繁衍进程"
 
@@ -5683,15 +5680,15 @@ msgstr "修改"
 msgid "Delete Command"
 msgstr "删除命令"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:91
 msgid "Run in host environment"
 msgstr "在主机环境中运行"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:101
 msgid "Run in build environment"
 msgstr "在构建环境中运行"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:108
 msgid "Run in runtime environment"
 msgstr "在运行环境中运行"
 
@@ -5876,11 +5873,11 @@ msgstr "符号"
 msgid "Search symbols within document"
 msgstr "在文档中搜索符号"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:113
 msgid "Unnamed Symbol"
 msgstr "未命名符号"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:154
 msgid "Symbol"
 msgstr "符号"
 
@@ -5898,19 +5895,19 @@ msgstr "文档大纲"
 msgid "Profiler"
 msgstr "分析器"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:284
 msgid "Open Sysprof Capture…"
 msgstr "打开 Sysprof 捕获…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:293
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof 捕获文件 (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:299
 msgid "All Files"
 msgstr "所有文件"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:422
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "带分析器运行"
@@ -6013,11 +6010,11 @@ msgstr "单元测试"
 msgid "Running test “%s”…"
 msgstr "正在运行测试“%s”…"
 
-#: src/plugins/todo/gbp-todo-panel.c:300
+#: src/plugins/todo/gbp-todo-panel.c:299
 msgid "Loading TODOs…"
 msgstr "正在加载待办事项…"
 
-#: src/plugins/todo/gbp-todo-panel.c:301
+#: src/plugins/todo/gbp-todo-panel.c:300
 msgid "Please wait while we scan your project"
 msgstr "请耐心等待我们扫描您的工程"
 
@@ -6188,6 +6185,29 @@ msgstr "无法创建 XML 树。"
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "文件必须保存在本地来解析。"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Touchpad gestures"
+#~ msgstr "触控板手势"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the right"
+#~ msgstr "右移页面"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe right"
+#~ msgstr "三指右滑"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the left"
+#~ msgstr "左移页面"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe left"
+#~ msgstr "三指左滑"
+
+#~ msgid "Directory Browser"
+#~ msgstr "目录浏览器"
 
 #~ msgid "Log"
 #~ msgstr "日志"
@@ -6490,9 +6510,6 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgid "Building"
 #~ msgstr "构建"
 
-#~ msgid "true"
-#~ msgstr "true"
-
 #~ msgctxt "button"
 #~ msgid "Build"
 #~ msgstr "构建"
@@ -6607,9 +6624,6 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgctxt "shortcut window"
 #~ msgid "Move a file to the trash"
 #~ msgstr "移动文件至回收站"
-
-#~ msgid "Re_veal in Project Tree"
-#~ msgstr "在工程树中展开(_V)"
 
 #~ msgid "New _File"
 #~ msgstr "新建文件(_F)"
