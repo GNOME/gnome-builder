@@ -88,6 +88,7 @@ subdir('gvls')
 subdir('history')
 subdir('html-completion')
 subdir('html-preview')
+subdir('intelephense')
 subdir('jedi-language-server')
 subdir('jhbuild')
 subdir('line-spacing')
@@ -182,6 +183,7 @@ status += [
   'Grep .................. : @0@'.format(get_option('plugin_grep')),
   'HTML Completion ....... : @0@'.format(get_option('plugin_html_completion')),
   'HTML Preview .......... : @0@'.format(get_option('plugin_html_preview')),
+  'Intelephense .......... : @0@'.format(get_option('plugin_intelephense')),
   'Jedi Language Server... : @0@'.format(get_option('plugin_jedi_language_server')),
   'JHBuild ............... : @0@'.format(get_option('plugin_jhbuild')),
   'Make .................. : @0@'.format(get_option('plugin_make')),
