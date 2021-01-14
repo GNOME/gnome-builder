@@ -3,14 +3,14 @@
 # Copyright (C) 2015 THE GNOME Builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the GNOME Builder package.
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015-2020.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-11-28 12:41+0000\n"
-"PO-Revision-Date: 2020-12-02 12:59+0100\n"
+"POT-Creation-Date: 2021-01-02 23:08+0000\n"
+"PO-Revision-Date: 2021-01-14 09:42+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -940,7 +940,7 @@ msgstr "Sin título"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/libide/debugger/ide-debug-manager.c:1000
+#: src/libide/debugger/ide-debug-manager.c:1001
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "No se ha encontrado un depurador adecuado."
@@ -1422,34 +1422,34 @@ msgid "Failed to locate runtime"
 msgstr "Falló al buscar la rutina"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:540
+#: src/libide/foundry/ide-run-manager.c:538
 #, c-format
 msgid "Running %s…"
 msgstr "Ejecutando %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:614
+#: src/libide/foundry/ide-run-manager.c:612
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Falló al construir el objetivo de construcción: %s"
 
-#: src/libide/foundry/ide-run-manager.c:877
+#: src/libide/foundry/ide-run-manager.c:875
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Atajos del banco de trabajo"
 
-#: src/libide/foundry/ide-run-manager.c:878
+#: src/libide/foundry/ide-run-manager.c:876
 msgid "Build and Run"
 msgstr "Construir y ejecutar"
 
-#: src/libide/foundry/ide-run-manager.c:1040
-#: src/libide/foundry/ide-run-manager.c:1106
+#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1104
 msgid "Failed to locate a build target"
 msgstr "Falló al buscar el objetivo de construcción"
 
-#: src/libide/foundry/ide-run-manager.c:1242 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Ejecutar"
@@ -1719,9 +1719,6 @@ msgid "Show the shortcuts window"
 msgstr "Mostrar la ventana de atajos"
 
 #: src/libide/gui/ide-application.c:136
-#| msgid ""
-#| "GNOME Builder requires a desktop session with D-Bus. Please set "
-#| "DBUS_SESSION_BUS_ADDRESS."
 msgid ""
 "GNOME Builder requires a session with D-Bus which was not found. Please set "
 "DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
@@ -2389,7 +2386,7 @@ msgid "Editor Shortcuts"
 msgstr "Editor de atajos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:555
+#: src/libide/gui/ide-shortcuts-window.ui:529
 msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
@@ -2405,37 +2402,37 @@ msgid "Toogle primary menu"
 msgstr "Conmutar menú primario"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:533
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Búsqueda global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:587
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tiempo de ejecución de construcción"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:594
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atajos del teclado"
@@ -2547,13 +2544,13 @@ msgid "Clear highlight"
 msgstr "Limpiar resaltado"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:603
+#: src/libide/gui/ide-shortcuts-window.ui:577
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar y pegar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:608
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar el texto seleccionado al portapapeles"
@@ -2564,7 +2561,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Cortar el texto seleccionado al portapapeles"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:615
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto del portapapeles"
@@ -2769,42 +2766,17 @@ msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:522
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Gestos del «touchpad»"
-
-#: src/libide/gui/ide-shortcuts-window.ui:529
-msgctxt "shortcut window"
-msgid "Move page to the right"
-msgstr "Mover página a la derecha"
-
-#: src/libide/gui/ide-shortcuts-window.ui:530
-msgctxt "shortcut window"
-msgid "Three finger swipe right"
-msgstr "Deslizar a la derecha con tres dedos"
-
-#: src/libide/gui/ide-shortcuts-window.ui:539
-msgctxt "shortcut window"
-msgid "Move page to the left"
-msgstr "Mover página a la izquierda"
-
-#: src/libide/gui/ide-shortcuts-window.ui:540
-msgctxt "shortcut window"
-msgid "Three finger swipe left"
-msgstr "Deslizar a la izquierda con tres dedos"
-
-#: src/libide/gui/ide-shortcuts-window.ui:551
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atajos de la terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:623
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Buscar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:628
+#: src/libide/gui/ide-shortcuts-window.ui:602
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Buscar texto en la terminal"
@@ -2948,8 +2920,8 @@ msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:131 src/plugins/editor/gtk/menus.ui:188
-#: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
+#: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
+#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Cerrar"
 
@@ -3298,7 +3270,6 @@ msgid "Build Environment"
 msgstr "Entorno de construcción"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
-#| msgid "In Runtime Environment"
 msgid "Runtime Environment"
 msgstr "Entorno de ejecución"
 
@@ -3306,7 +3277,7 @@ msgstr "Entorno de ejecución"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
-#: src/plugins/ls/gbp-ls-page.ui:15
+#: src/plugins/ls/gbp-ls-page.ui:16
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
@@ -3419,6 +3390,11 @@ msgstr "Errores"
 #: src/plugins/buildui/gbp-buildui-pane.ui:140
 msgid "Warnings"
 msgstr "Advertencias"
+
+#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
+msgid "true"
+msgstr "true"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
@@ -4235,7 +4211,7 @@ msgstr "Ubicación"
 msgid "Binary"
 msgstr "Binario"
 
-#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:132
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:131
 msgid "Devhelp"
 msgstr "Devhelp"
 
@@ -4486,12 +4462,19 @@ msgid "New File"
 msgstr "Archivo nuevo"
 
 #: src/plugins/editor/gtk/menus.ui:122
-msgid "Move Left"
-msgstr "Mover a la izquierda"
+#| msgid "Move Left"
+msgid "Move Page Left"
+msgstr "Mover página a la izquierda"
 
 #: src/plugins/editor/gtk/menus.ui:126
-msgid "Move Right"
-msgstr "Mover a la derecha"
+#| msgid "Move Right"
+msgid "Move Page Right"
+msgstr "Mover página a la derecha"
+
+#: src/plugins/editor/gtk/menus.ui:131
+#| msgid "Close Project"
+msgid "Close Frame"
+msgstr "Cerrar marco"
 
 #: src/plugins/editor/gtk/menus.ui:138
 msgid "Document"
@@ -4880,23 +4863,23 @@ msgstr "Deshacer el último comanduo"
 msgid "Redo the next command"
 msgstr "Rehacer el siguiente comando"
 
-#: src/plugins/glade/gbp-glade-page.c:494
+#: src/plugins/glade/gbp-glade-page.c:492
 msgid "Switch to selection mode"
 msgstr "Cambiar al modo de selección"
 
-#: src/plugins/glade/gbp-glade-page.c:495
+#: src/plugins/glade/gbp-glade-page.c:493
 msgid "Switch to drag-resize mode"
 msgstr "Cambiar al modo de arrastrar-redimensionar"
 
-#: src/plugins/glade/gbp-glade-page.c:496
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to margin editor"
 msgstr "Cambiar al modo de editor de márgenes"
 
-#: src/plugins/glade/gbp-glade-page.c:497
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to alignment editor"
 msgstr "Cambiar al modo de editor de alineaciones"
 
-#: src/plugins/glade/gbp-glade-page.c:502
+#: src/plugins/glade/gbp-glade-page.c:500
 msgid "Unnamed Glade project"
 msgstr "Proyecto de Glade sin nombre"
 
@@ -5081,33 +5064,34 @@ msgstr "Sugerir completado usando Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
-#: src/plugins/ls/gbp-ls-page.c:319
+#: src/plugins/ls/gbp-ls-page.c:315
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Falló al cargar la carpeta: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:391
+#: src/plugins/ls/gbp-ls-page.c:387
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Carpeta"
 
-#: src/plugins/ls/gbp-ls-page.ui:45
+#: src/plugins/ls/gbp-ls-page.ui:46
 msgid "Size"
 msgstr "Tamaño"
 
-#: src/plugins/ls/gbp-ls-page.ui:58
+#: src/plugins/ls/gbp-ls-page.ui:59
 msgid "Modified"
 msgstr "Modificado"
 
-#: src/plugins/ls/gtk/menus.ui:9
-msgid "Directory Browser"
-msgstr "Examinador de carpetas"
+#: src/plugins/ls/gtk/menus.ui:8
+#| msgid "New Folder…"
+msgid "Browse Folder"
+msgstr "Examinar carpeta"
 
-#: src/plugins/ls/gtk/menus.ui:21
+#: src/plugins/ls/gtk/menus.ui:18
 msgid "Switch to Folder"
 msgstr "Cambiar a la carpeta"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Abrir la carpeta contenedora"
 
@@ -5541,9 +5525,9 @@ msgstr "Opciones de visualización"
 
 #: src/plugins/project-tree/gtk/menus.ui:94
 #: src/plugins/project-tree/gtk/menus.ui:103
-#| msgid "Re_veal in Project Tree"
-msgid "Reveal in Project"
-msgstr "Mostrar en el proyecto"
+#| msgid "Reveal in Project"
+msgid "Reveal in Project Tree"
+msgstr "Mostrar en el árbol de proyectos"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -6365,6 +6349,29 @@ msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
 
+#~ msgctxt "shortcut window"
+#~ msgid "Touchpad gestures"
+#~ msgstr "Gestos del «touchpad»"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the right"
+#~ msgstr "Mover página a la derecha"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe right"
+#~ msgstr "Deslizar a la derecha con tres dedos"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the left"
+#~ msgstr "Mover página a la izquierda"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe left"
+#~ msgstr "Deslizar a la izquierda con tres dedos"
+
+#~ msgid "Directory Browser"
+#~ msgstr "Examinador de carpetas"
+
 #~ msgid "Log"
 #~ msgstr "Registro"
 
@@ -6671,9 +6678,6 @@ msgstr ""
 
 #~ msgid "Building"
 #~ msgstr "Construyendo"
-
-#~ msgid "true"
-#~ msgstr "true"
 
 #~ msgctxt "button"
 #~ msgid "Build"
