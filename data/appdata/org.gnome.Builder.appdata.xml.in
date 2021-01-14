@@ -86,6 +86,13 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.39.90" date="2020-01-14">
+      <p>
+        Builder 40.alpha1 is out and available for testing.
+        Numerous improvements were made this cycle to underlying components.
+      </p>
+    </release>
+
     <release version="3.38.0" date="2020-09-12">
       <p>
         Builder 3.38.0 contains a number of bug fixes and performance improvements.

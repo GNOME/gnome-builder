@@ -1,3 +1,24 @@
+===============
+Version 3.39.90
+===============
+
+This release corresponds to GNOME 40.alpha1
+
+ • Fixes for stale build pipeline information on rebuild/clean
+ • Search improvements
+ • Project tree improvements
+ • Track changes for podman/toolbox
+ • Support running GTK 4 applications
+ • Various build fixes for odd platforms
+ • WebKit support is now optional, albeit not recommended to disable
+ • Debugger improvements
+ • Vala language server robustness improvements
+ • ESLint support for TypeScript
+ • Debug messages from GLib/GTK are now only shown when debugging your
+   application, not running without debugger.
+ • Improvements to icon display for project tree
+ • Translation updates
+
 ==============
 Version 3.38.0
 ==============
