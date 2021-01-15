@@ -207,6 +207,7 @@ ide_cursor_remove_cursors (IdeCursor *self)
   if (self->cursors != NULL)
     {
       GtkTextBuffer *buffer;
+      GtkTextIter begin, end;
       VirtualCursor *vc;
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
@@ -224,6 +225,9 @@ ide_cursor_remove_cursors (IdeCursor *self)
         }
 
       g_clear_pointer (&self->cursors, g_list_free);
+
+      gtk_text_buffer_get_bounds (buffer, &begin, &end);
+      gtk_text_buffer_remove_tag (buffer, self->highlight_tag, &begin, &end);
     }
 }
 
@@ -854,4 +858,17 @@ ide_cursor_is_enabled (IdeCursor *self)
   g_return_val_if_fail (IDE_IS_CURSOR (self), FALSE);
 
   return (self->cursors != NULL);
+}
+
+void
+ide_cursor_clear_highlight (IdeCursor *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin, end;
+
+  g_return_if_fail (IDE_IS_CURSOR (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+  gtk_text_buffer_get_bounds (buffer, &begin, &end);
+  gtk_text_buffer_remove_tag (buffer, self->highlight_tag, &begin, &end);
 }

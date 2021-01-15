@@ -3156,6 +3156,9 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
 
   gtk_text_buffer_select_range (buffer, &iter, &iter);
   gtk_text_buffer_end_user_action (buffer);
+
+  if (priv->cursor != NULL)
+    ide_cursor_clear_highlight (priv->cursor);
 }
 
 static void

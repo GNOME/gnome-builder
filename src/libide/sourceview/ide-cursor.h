@@ -31,6 +31,7 @@ G_DECLARE_FINAL_TYPE (IdeCursor, ide_cursor, IDE, CURSOR, GObject)
 void         ide_cursor_add_cursor            (IdeCursor *self,
                                                guint      type);
 void         ide_cursor_remove_cursors        (IdeCursor *self);
+void         ide_cursor_clear_highlight       (IdeCursor *self);
 void         ide_cursor_insert_text           (IdeCursor *self,
                                                gchar     *text,
                                                gint       len);
