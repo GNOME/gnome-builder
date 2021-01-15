@@ -1,14 +1,14 @@
 # Czech translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Marek Černocký <marek@manet.cz>, 2015, 2016, 2017, 2018, 2019, 2020.
+# Marek Černocký <marek@manet.cz>, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-11-28 12:41+0000\n"
-"PO-Revision-Date: 2020-11-28 16:24+0100\n"
+"POT-Creation-Date: 2021-01-02 23:08+0000\n"
+"PO-Revision-Date: 2021-01-14 19:55+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -634,7 +634,7 @@ msgstr "Nová pracovní plocha editoru"
 #: data/org.gnome.Builder.desktop.in.in:36
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
-msgstr "Inspektor D-Bus"
+msgstr "Inspektor sběrnice D-Bus"
 
 #: data/style-schemes/Adwaita-dark.style-scheme.xml:20
 msgid "Adwaita Dark"
@@ -930,7 +930,7 @@ msgstr "Bez názvu"
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/libide/debugger/ide-debug-manager.c:1000
+#: src/libide/debugger/ide-debug-manager.c:1001
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "Nebyl nalezen použitelný ladicí program."
@@ -1407,34 +1407,34 @@ msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:540
+#: src/libide/foundry/ide-run-manager.c:538
 #, c-format
 msgid "Running %s…"
 msgstr "Běží %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:614
+#: src/libide/foundry/ide-run-manager.c:612
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Sestavení cíle selhalo: %s"
 
-#: src/libide/foundry/ide-run-manager.c:877
+#: src/libide/foundry/ide-run-manager.c:875
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Klávesové zkratky pracovních nástrojů"
 
-#: src/libide/foundry/ide-run-manager.c:878
+#: src/libide/foundry/ide-run-manager.c:876
 msgid "Build and Run"
 msgstr "Sestavit a spustit"
 
-#: src/libide/foundry/ide-run-manager.c:1040
-#: src/libide/foundry/ide-run-manager.c:1106
+#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1104
 msgid "Failed to locate a build target"
 msgstr "Selhalo vyhledání cíle sestavení"
 
-#: src/libide/foundry/ide-run-manager.c:1242 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Spustit"
@@ -1649,7 +1649,7 @@ msgstr "Builder — Předvolby"
 
 #: src/libide/gui/ide-application-actions.c:149
 msgid "GNOME Builder"
-msgstr "Builder GNOME"
+msgstr "Builder pro GNOME"
 
 #: src/libide/gui/ide-application-actions.c:151
 msgid "translator-credits"
@@ -1657,7 +1657,7 @@ msgstr "Marek Černocký <marek@manet.cz>"
 
 #: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
-msgstr "Zjistěte si více o aplikaci Builder GNOME"
+msgstr "Zjistěte si více o aplikaci Builder pro GNOME"
 
 #: src/libide/gui/ide-application-actions.c:158
 msgid "Funded By"
@@ -2357,7 +2357,7 @@ msgid "Editor Shortcuts"
 msgstr "Klávesové zkratky editoru"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:555
+#: src/libide/gui/ide-shortcuts-window.ui:529
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Obecné"
@@ -2373,37 +2373,37 @@ msgid "Toogle primary menu"
 msgstr "Zobrazit/skrýt hlavní nabídku"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:533
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Globální hledání"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Předvolby"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Příkazová lišta"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminál"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:587
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminál v běhovém prostředí sestavení"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:594
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové zkratky"
@@ -2515,13 +2515,13 @@ msgid "Clear highlight"
 msgstr "Zrušit zvýrazňování"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:603
+#: src/libide/gui/ide-shortcuts-window.ui:577
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopírování a vkládání"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:608
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Zkopírovat vybraný text do schránky"
@@ -2532,7 +2532,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Vyjmout vybraný text do schránky"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:615
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Vložit vybraný text ze schránky"
@@ -2737,42 +2737,17 @@ msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profilovat"
 
-#: src/libide/gui/ide-shortcuts-window.ui:522
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Dotyková gesta"
-
-#: src/libide/gui/ide-shortcuts-window.ui:529
-msgctxt "shortcut window"
-msgid "Move page to the right"
-msgstr "Přesunout stránku doprava"
-
-#: src/libide/gui/ide-shortcuts-window.ui:530
-msgctxt "shortcut window"
-msgid "Three finger swipe right"
-msgstr "Máchnout třemi prsty doprava"
-
-#: src/libide/gui/ide-shortcuts-window.ui:539
-msgctxt "shortcut window"
-msgid "Move page to the left"
-msgstr "Přesunout stránku doleva"
-
-#: src/libide/gui/ide-shortcuts-window.ui:540
-msgctxt "shortcut window"
-msgid "Three finger swipe left"
-msgstr "Máchnout třemi prsty doleva"
-
-#: src/libide/gui/ide-shortcuts-window.ui:551
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Klávesové zkratky terminálu"
 
-#: src/libide/gui/ide-shortcuts-window.ui:623
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Hledání"
 
-#: src/libide/gui/ide-shortcuts-window.ui:628
+#: src/libide/gui/ide-shortcuts-window.ui:602
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Hledat text v terminálu"
@@ -2917,8 +2892,8 @@ msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:131 src/plugins/editor/gtk/menus.ui:188
-#: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
+#: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
+#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Zavřít"
 
@@ -3278,7 +3253,7 @@ msgstr "Běhové prostředí"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
-#: src/plugins/ls/gbp-ls-page.ui:15
+#: src/plugins/ls/gbp-ls-page.ui:16
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
@@ -3392,6 +3367,11 @@ msgstr "Chyby"
 msgid "Warnings"
 msgstr "Varovnání"
 
+#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
+msgid "true"
+msgstr "true"
+
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
 msgid "Rebuild"
@@ -3403,7 +3383,7 @@ msgstr "Vyčistit"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:530
 msgid "Export Bundle"
-msgstr "Exportovat balík"
+msgstr "Export balíku"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
@@ -3836,7 +3816,7 @@ msgstr "Zkuste načíst nebo vygenerovat paletu pomocí nabídky"
 
 #: src/plugins/color-picker/gtk/menus.ui:7
 msgid "Highlight colors"
-msgstr "Barvy zvýrazňování"
+msgstr "Zvýrazňovat barvy"
 
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:36
 msgid "Workspace Shortcuts"
@@ -4205,7 +4185,7 @@ msgstr "Umístění"
 msgid "Binary"
 msgstr "Spustitelný program"
 
-#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:132
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:131
 msgid "Devhelp"
 msgstr "Devhelp"
 
@@ -4454,12 +4434,16 @@ msgid "New File"
 msgstr "Nový soubor"
 
 #: src/plugins/editor/gtk/menus.ui:122
-msgid "Move Left"
-msgstr "Přesunout doleva"
+msgid "Move Page Left"
+msgstr "Přesunout stránku doleva"
 
 #: src/plugins/editor/gtk/menus.ui:126
-msgid "Move Right"
-msgstr "Přesunout doprava"
+msgid "Move Page Right"
+msgstr "Přesunout stránku doprava"
+
+#: src/plugins/editor/gtk/menus.ui:131
+msgid "Close Frame"
+msgstr "Zavřít rám"
 
 #: src/plugins/editor/gtk/menus.ui:138
 msgid "Document"
@@ -4847,23 +4831,23 @@ msgstr "Vrátit zpět poslední příkaz"
 msgid "Redo the next command"
 msgstr "Znovu provést následující příkaz"
 
-#: src/plugins/glade/gbp-glade-page.c:494
+#: src/plugins/glade/gbp-glade-page.c:492
 msgid "Switch to selection mode"
 msgstr "Přepnout do režimu výběru"
 
-#: src/plugins/glade/gbp-glade-page.c:495
+#: src/plugins/glade/gbp-glade-page.c:493
 msgid "Switch to drag-resize mode"
 msgstr "Přepnout do režimu změny velikosti taháním"
 
-#: src/plugins/glade/gbp-glade-page.c:496
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to margin editor"
 msgstr "Přepnout do editoru okrajů"
 
-#: src/plugins/glade/gbp-glade-page.c:497
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to alignment editor"
 msgstr "Přepnout do editoru zarovnání"
 
-#: src/plugins/glade/gbp-glade-page.c:502
+#: src/plugins/glade/gbp-glade-page.c:500
 msgid "Unnamed Glade project"
 msgstr "Nepojmenovaný projekt Glade"
 
@@ -5048,33 +5032,33 @@ msgstr "Navrhovat dokončení slov z jazyka Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
-#: src/plugins/ls/gbp-ls-page.c:319
+#: src/plugins/ls/gbp-ls-page.c:315
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Selhalo načtení složky: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:391
+#: src/plugins/ls/gbp-ls-page.c:387
 #, c-format
 msgid "%s — Directory"
 msgstr "%s – Složka"
 
-#: src/plugins/ls/gbp-ls-page.ui:45
+#: src/plugins/ls/gbp-ls-page.ui:46
 msgid "Size"
 msgstr "Velikost"
 
-#: src/plugins/ls/gbp-ls-page.ui:58
+#: src/plugins/ls/gbp-ls-page.ui:59
 msgid "Modified"
 msgstr "Změněno"
 
-#: src/plugins/ls/gtk/menus.ui:9
-msgid "Directory Browser"
-msgstr "Procházet složky"
+#: src/plugins/ls/gtk/menus.ui:8
+msgid "Browse Folder"
+msgstr "Procházet složku"
 
-#: src/plugins/ls/gtk/menus.ui:21
+#: src/plugins/ls/gtk/menus.ui:18
 msgid "Switch to Folder"
 msgstr "Přepnout do složky"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Otevřít rodičovskou složku"
 
@@ -5504,12 +5488,12 @@ msgstr "Přesunout do koše"
 
 #: src/plugins/project-tree/gtk/menus.ui:72
 msgid "Display Options"
-msgstr "Zobrazovat volby"
+msgstr "Volby zobrazení"
 
 #: src/plugins/project-tree/gtk/menus.ui:94
 #: src/plugins/project-tree/gtk/menus.ui:103
-msgid "Reveal in Project"
-msgstr "Ukázat v projektu"
+msgid "Reveal in Project Tree"
+msgstr "Ukázat ve stromu projektu"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -6327,3 +6311,16 @@ msgstr "Selhalo vytvoření stromu XML"
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Touchpad gestures"
+#~ msgstr "Dotyková gesta"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe right"
+#~ msgstr "Máchnout třemi prsty doprava"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe left"
+#~ msgstr "Máchnout třemi prsty doleva"
+
