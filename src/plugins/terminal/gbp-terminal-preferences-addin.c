@@ -33,6 +33,8 @@ struct _GbpTerminalPreferencesAddin
   guint lines_id;
   guint scroll_on_output_id;
   guint scroll_on_keystroke_id;
+  guint font_id;
+  guint allow_bold_id;
 };
 
 static void
@@ -46,6 +48,28 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
 
   dzl_preferences_add_page (preferences, "terminal", _("Terminal"), 100);
   dzl_preferences_add_list_group (preferences, "terminal", "scrollback", _("Scrollback"), GTK_SELECTION_NONE, 10);
+  dzl_preferences_add_list_group (preferences, "terminal", "general", _("General"), GTK_SELECTION_NONE, 0);
+
+  self->font_id = dzl_preferences_add_font_button (preferences,
+                                                   "terminal",
+                                                   "general",
+                                                   "org.gnome.builder.terminal",
+                                                   "font-name",
+                                                   _("Terminal Font"),
+                                                   C_("Keywords", "terminal font monospace"),
+                                                   1);
+
+  self->allow_bold_id = dzl_preferences_add_switch (preferences,
+                                                    "terminal",
+                                                    "general",
+                                                    "org.gnome.builder.terminal",
+                                                    "allow-bold",
+                                                    NULL,
+                                                    NULL,
+                                                    _("Bold text in terminals"),
+                                                    _("If terminals are allowed to display bold text"),
+                                                    C_("Keywords", "terminal allow bold"),
+                                                    2);
 
   self->scroll_on_output_id = dzl_preferences_add_switch (preferences,
                                                           "terminal",
@@ -56,8 +80,7 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
                                                           NULL,
                                                           _("Scroll on output"),
                                                           _("When enabled the terminal will scroll to the bottom when new output is displayed"),
-                                                          /* translators: the following are keywords the user can search for in no particular order */
-                                                          _("scroll on output"),
+                                                          C_("Keywords", "scroll on output"),
                                                           0);
   self->scroll_on_keystroke_id = dzl_preferences_add_switch (preferences,
                                                              "terminal",
@@ -68,8 +91,7 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
                                                              NULL,
                                                              _("Scroll on keystroke"),
                                                              _("When enabled the terminal will scroll to the bottom when typing"),
-                                                             /* translators: the following are keywords the user can search for in no particular order */
-                                                             _("scroll on keystroke"),
+                                                             C_("Keywords", "scroll on keystroke"),
                                                              10);
   self->limit_id = dzl_preferences_add_switch (preferences,
                                                "terminal",
@@ -80,8 +102,7 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
                                                NULL,
                                                _("Limit Scrollback"),
                                                _("When enabled terminal scrollback will be limited to the number of lines specified below"),
-                                               /* translators: the following are keywords the user can search for in no particular order */
-                                               _("scrollback limit"),
+                                               C_("Keywords", "scrollback limit"),
                                                20);
   self->lines_id = dzl_preferences_add_spin_button (preferences,
                                                     "terminal",
@@ -91,8 +112,7 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
                                                     NULL,
                                                     _("Scrollback Lines"),
                                                     _("The number of lines to keep available for scrolling"),
-                                                    /* translators: the following are keywords the user can search for in no particular order */
-                                                    _("scrollback lines"),
+                                                    C_("Keywords", "scrollback lines"),
                                                     30);
 }
 
@@ -109,6 +129,8 @@ gbp_terminal_preferences_addin_unload (IdePreferencesAddin *addin,
   dzl_preferences_remove_id (preferences, self->lines_id);
   dzl_preferences_remove_id (preferences, self->scroll_on_keystroke_id);
   dzl_preferences_remove_id (preferences, self->scroll_on_output_id);
+  dzl_preferences_remove_id (preferences, self->allow_bold_id);
+  dzl_preferences_remove_id (preferences, self->font_id);
 }
 
 static void
