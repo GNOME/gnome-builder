@@ -6,5 +6,12 @@
     <key name="font-name" type="s">
       <default>"Monospace 11"</default>
     </key>
+    <key name="limit-scrollback" type="b">
+      <default>true</default>
+    </key>
+    <key name="scrollback-lines" type="u">
+      <range min="0" max="999999999"/>
+      <default>10000</default>
+    </key>
   </schema>
 </schemalist>

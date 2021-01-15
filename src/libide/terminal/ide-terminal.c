@@ -429,6 +429,26 @@ ide_terminal_size_allocate (GtkWidget     *widget,
 }
 
 static void
+update_scrollback_cb (IdeTerminal *self,
+                      const char  *key,
+                      GSettings   *settings)
+{
+  gboolean limit_scrollback;
+  guint scrollback_lines;
+
+  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  limit_scrollback = g_settings_get_boolean (settings, "limit-scrollback");
+  scrollback_lines = g_settings_get_uint (settings, "scrollback-lines");
+
+  if (limit_scrollback)
+    vte_terminal_set_scrollback_lines (VTE_TERMINAL (self), scrollback_lines);
+  else
+    vte_terminal_set_scrollback_lines (VTE_TERMINAL (self), -1);
+}
+
+static void
 ide_terminal_destroy (GtkWidget *widget)
 {
   IdeTerminal *self = (IdeTerminal *)widget;
@@ -555,11 +575,22 @@ ide_terminal_init (IdeTerminal *self)
   priv->settings = g_settings_new ("org.gnome.builder.terminal");
   g_settings_bind (priv->settings, "allow-bold", self, "allow-bold", G_SETTINGS_BIND_GET);
   g_signal_connect_object (priv->settings,
+                           "changed::limit-scrollback",
+                           G_CALLBACK (update_scrollback_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->settings,
+                           "changed::scrollback-lines",
+                           G_CALLBACK (update_scrollback_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->settings,
                            "changed::font-name",
                            G_CALLBACK (ide_terminal_font_changed),
                            self,
                            G_CONNECT_SWAPPED);
   ide_terminal_font_changed (self, NULL, priv->settings);
+  update_scrollback_cb (self, "scrollback-lines", priv->settings);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (style_context, "terminal");

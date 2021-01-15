@@ -27,6 +27,7 @@
 #include <libide-terminal.h>
 
 #include "gbp-terminal-application-addin.h"
+#include "gbp-terminal-preferences-addin.h"
 #include "gbp-terminal-workspace-addin.h"
 
 _IDE_EXTERN void
@@ -35,6 +36,9 @@ _gbp_terminal_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               GBP_TYPE_TERMINAL_APPLICATION_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_TERMINAL_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               GBP_TYPE_TERMINAL_WORKSPACE_ADDIN);
