@@ -3,6 +3,9 @@
     <key name="allow-bold" type="b">
       <default>true</default>
     </key>
+    <key name="allow-hyperlink" type="b">
+      <default>true</default>
+    </key>
     <key name="font-name" type="s">
       <default>"Monospace 11"</default>
     </key>

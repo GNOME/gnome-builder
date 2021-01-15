@@ -557,8 +557,6 @@ ide_terminal_init (IdeTerminal *self)
 
   dzl_widget_action_group_attach (self, "terminal");
 
-  vte_terminal_set_allow_hyperlink (VTE_TERMINAL (self), TRUE);
-
   for (guint i = 0; i < G_N_ELEMENTS (url_regexes); i++)
     {
       g_autoptr(VteRegex) regex = NULL;
@@ -574,6 +572,7 @@ ide_terminal_init (IdeTerminal *self)
 
   priv->settings = g_settings_new ("org.gnome.builder.terminal");
   g_settings_bind (priv->settings, "allow-bold", self, "allow-bold", G_SETTINGS_BIND_GET);
+  g_settings_bind (priv->settings, "allow-hyperlink", self, "allow-hyperlink", G_SETTINGS_BIND_GET);
   g_settings_bind (priv->settings, "scroll-on-output", self, "scroll-on-output", G_SETTINGS_BIND_GET);
   g_settings_bind (priv->settings, "scroll-on-keystroke", self, "scroll-on-keystroke", G_SETTINGS_BIND_GET);
   g_signal_connect_object (priv->settings,

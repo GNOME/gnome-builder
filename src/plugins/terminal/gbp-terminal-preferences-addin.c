@@ -35,6 +35,7 @@ struct _GbpTerminalPreferencesAddin
   guint scroll_on_keystroke_id;
   guint font_id;
   guint allow_bold_id;
+  guint allow_hyperlink_id;
 };
 
 static void
@@ -70,6 +71,17 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
                                                     _("If terminals are allowed to display bold text"),
                                                     C_("Keywords", "terminal allow bold"),
                                                     2);
+  self->allow_hyperlink_id = dzl_preferences_add_switch (preferences,
+                                                         "terminal",
+                                                         "general",
+                                                         "org.gnome.builder.terminal",
+                                                         "allow-hyperlink",
+                                                         NULL,
+                                                         NULL,
+                                                         _("Show hyperlinks"),
+                                                         _("When enabled hyperlinks (OSC 8 escape sequences) are recognized and displayed"),
+                                                         C_("Keywords", "terminal show hyperlinks links urls"),
+                                                         3);
 
   self->scroll_on_output_id = dzl_preferences_add_switch (preferences,
                                                           "terminal",
