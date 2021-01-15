@@ -367,7 +367,6 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
   gtk_range_set_adjustment (GTK_RANGE (self->scrollbar),
                             gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal)));
 
-  vte_terminal_set_scrollback_lines (VTE_TERMINAL (self->terminal), 1000);
   vte_terminal_set_scroll_on_output (VTE_TERMINAL (self->terminal), FALSE);
   vte_terminal_set_scroll_on_keystroke (VTE_TERMINAL (self->terminal), TRUE);
 
