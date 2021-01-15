@@ -367,9 +367,6 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
   gtk_range_set_adjustment (GTK_RANGE (self->scrollbar),
                             gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal)));
 
-  vte_terminal_set_scroll_on_output (VTE_TERMINAL (self->terminal), FALSE);
-  vte_terminal_set_scroll_on_keystroke (VTE_TERMINAL (self->terminal), TRUE);
-
   dzl_dock_widget_set_title (DZL_DOCK_WIDGET (self), _("Build Output"));
 
   gbp_buildui_log_pane_reset_view (self);

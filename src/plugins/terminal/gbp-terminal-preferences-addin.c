@@ -31,6 +31,8 @@ struct _GbpTerminalPreferencesAddin
   GObject parent_instance;
   guint limit_id;
   guint lines_id;
+  guint scroll_on_output_id;
+  guint scroll_on_keystroke_id;
 };
 
 static void
@@ -45,6 +47,30 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
   dzl_preferences_add_page (preferences, "terminal", _("Terminal"), 100);
   dzl_preferences_add_list_group (preferences, "terminal", "scrollback", _("Scrollback"), GTK_SELECTION_NONE, 10);
 
+  self->scroll_on_output_id = dzl_preferences_add_switch (preferences,
+                                                          "terminal",
+                                                          "scrollback",
+                                                          "org.gnome.builder.terminal",
+                                                          "scroll-on-output",
+                                                          NULL,
+                                                          NULL,
+                                                          _("Scroll on output"),
+                                                          _("When enabled the terminal will scroll to the bottom when new output is displayed"),
+                                                          /* translators: the following are keywords the user can search for in no particular order */
+                                                          _("scroll on output"),
+                                                          0);
+  self->scroll_on_keystroke_id = dzl_preferences_add_switch (preferences,
+                                                             "terminal",
+                                                             "scrollback",
+                                                             "org.gnome.builder.terminal",
+                                                             "scroll-on-keystroke",
+                                                             NULL,
+                                                             NULL,
+                                                             _("Scroll on keystroke"),
+                                                             _("When enabled the terminal will scroll to the bottom when typing"),
+                                                             /* translators: the following are keywords the user can search for in no particular order */
+                                                             _("scroll on keystroke"),
+                                                             10);
   self->limit_id = dzl_preferences_add_switch (preferences,
                                                "terminal",
                                                "scrollback",
@@ -56,7 +82,7 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
                                                _("When enabled terminal scrollback will be limited to the number of lines specified below"),
                                                /* translators: the following are keywords the user can search for in no particular order */
                                                _("scrollback limit"),
-                                               10);
+                                               20);
   self->lines_id = dzl_preferences_add_spin_button (preferences,
                                                     "terminal",
                                                     "scrollback",
@@ -67,7 +93,7 @@ gbp_terminal_preferences_addin_load (IdePreferencesAddin *addin,
                                                     _("The number of lines to keep available for scrolling"),
                                                     /* translators: the following are keywords the user can search for in no particular order */
                                                     _("scrollback lines"),
-                                                    20);
+                                                    30);
 }
 
 static void
@@ -81,6 +107,8 @@ gbp_terminal_preferences_addin_unload (IdePreferencesAddin *addin,
 
   dzl_preferences_remove_id (preferences, self->limit_id);
   dzl_preferences_remove_id (preferences, self->lines_id);
+  dzl_preferences_remove_id (preferences, self->scroll_on_keystroke_id);
+  dzl_preferences_remove_id (preferences, self->scroll_on_output_id);
 }
 
 static void

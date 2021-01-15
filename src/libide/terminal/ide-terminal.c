@@ -574,6 +574,8 @@ ide_terminal_init (IdeTerminal *self)
 
   priv->settings = g_settings_new ("org.gnome.builder.terminal");
   g_settings_bind (priv->settings, "allow-bold", self, "allow-bold", G_SETTINGS_BIND_GET);
+  g_settings_bind (priv->settings, "scroll-on-output", self, "scroll-on-output", G_SETTINGS_BIND_GET);
+  g_settings_bind (priv->settings, "scroll-on-keystroke", self, "scroll-on-keystroke", G_SETTINGS_BIND_GET);
   g_signal_connect_object (priv->settings,
                            "changed::limit-scrollback",
                            G_CALLBACK (update_scrollback_cb),
