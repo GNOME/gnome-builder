@@ -95,8 +95,15 @@ gbp_editorconfig_file_settings_init_worker (IdeTask      *task,
         g_object_set_property (source_object, "encoding", value);
       else if (g_str_equal (key, "max_line_length"))
         {
-          g_object_set_property (source_object, "right-margin-position", value);
-          g_object_set (source_object, "show-right-margin", TRUE, NULL);
+          if (g_value_get_int (value) <= 0)
+            {
+              g_object_set (source_object, "show-right-margin", FALSE, NULL);
+            }
+          else
+            {
+              g_object_set_property (source_object, "right-margin-position", value);
+              g_object_set (source_object, "show-right-margin", TRUE, NULL);
+            }
         }
       else if (g_str_equal (key, "end_of_line"))
         {
