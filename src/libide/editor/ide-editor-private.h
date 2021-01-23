@@ -31,6 +31,7 @@
 #include "ide-editor-search.h"
 #include "ide-editor-sidebar.h"
 #include "ide-editor-surface.h"
+#include "ide-session-private.h"
 
 G_BEGIN_DECLS
 
@@ -50,6 +51,8 @@ struct _IdeEditorSurface
   guint                prefocus_had_bottom : 1;
 
   guint                restore_panel : 1;
+
+  IdeSession          *session;
 };
 
 struct _IdeEditorPage

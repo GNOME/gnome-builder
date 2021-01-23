@@ -25,59 +25,61 @@
 #endif
 
 #include <libide-core.h>
-
-#include "ide-workbench.h"
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SESSION_ADDIN (ide_session_addin_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_41
 G_DECLARE_INTERFACE (IdeSessionAddin, ide_session_addin, IDE, SESSION_ADDIN, IdeObject)
 
 struct _IdeSessionAddinInterface
 {
   GTypeInterface parent;
 
-  void      (*save_async)     (IdeSessionAddin      *self,
-                               IdeWorkbench         *workbench,
-                               GCancellable         *cancellable,
-                               GAsyncReadyCallback   callback,
-                               gpointer              user_data);
-  GVariant *(*save_finish)    (IdeSessionAddin      *self,
-                               GAsyncResult         *result,
-                               GError              **error);
-  void      (*restore_async)  (IdeSessionAddin      *self,
-                               IdeWorkbench         *workbench,
-                               GVariant             *state,
-                               GCancellable         *cancellable,
-                               GAsyncReadyCallback   callback,
-                               gpointer              user_data);
-  gboolean  (*restore_finish) (IdeSessionAddin      *self,
-                               GAsyncResult         *result,
-                               GError              **error);
+  void      (*save_page_async)     (IdeSessionAddin      *self,
+                                    IdePage              *page,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data);
+  GVariant *(*save_page_finish)    (IdeSessionAddin      *self,
+                                    GAsyncResult         *result,
+                                    GError              **error);
+  void      (*restore_page_async)  (IdeSessionAddin      *self,
+                                    GVariant             *state,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data);
+  IdePage  *(*restore_page_finish) (IdeSessionAddin      *self,
+                                    GAsyncResult         *result,
+                                    GError              **error);
+  gboolean  (*can_save_page)       (IdeSessionAddin      *self,
+                                    IdePage              *page);
 };
 
-IDE_AVAILABLE_IN_3_32
-void      ide_session_addin_save_async     (IdeSessionAddin      *self,
-                                            IdeWorkbench         *workbench,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-GVariant *ide_session_addin_save_finish    (IdeSessionAddin      *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
-IDE_AVAILABLE_IN_3_32
-void      ide_session_addin_restore_async  (IdeSessionAddin      *self,
-                                            IdeWorkbench         *workbench,
-                                            GVariant             *state,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-gboolean  ide_session_addin_restore_finish (IdeSessionAddin      *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
+IDE_AVAILABLE_IN_41
+void      ide_session_addin_save_page_async      (IdeSessionAddin      *self,
+                                                  IdePage              *page,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_41
+GVariant *ide_session_addin_save_page_finish     (IdeSessionAddin      *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
+IDE_AVAILABLE_IN_41
+void      ide_session_addin_restore_page_async   (IdeSessionAddin      *self,
+                                                  GVariant             *state,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_41
+IdePage  *ide_session_addin_restore_page_finish  (IdeSessionAddin      *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
+IDE_AVAILABLE_IN_41
+gboolean  ide_session_addin_can_save_page (IdeSessionAddin *self,
+                                           IdePage         *page);
 
 G_END_DECLS

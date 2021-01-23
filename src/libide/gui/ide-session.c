@@ -24,10 +24,13 @@
 
 #include <libpeas/peas.h>
 #include <libide-plugins.h>
+#include <libide-gui.h>
 #include <libide-threading.h>
 
 #include "ide-session-addin.h"
 #include "ide-session-private.h"
+
+#include "ide-gui-private.h"
 
 struct _IdeSession
 {
@@ -37,19 +40,29 @@ struct _IdeSession
 
 typedef struct
 {
-  GPtrArray    *addins;
-  GVariantDict  dict;
-  gint          active;
-  guint         dict_needs_clear : 1;
+  GPtrArray      *addins;
+  GVariantBuilder pages_state;
+  guint           active;
 } Save;
 
 typedef struct
 {
-  IdeWorkbench *workbench;
-  GPtrArray    *addins;
-  GVariant     *state;
-  gint          active;
+  GPtrArray *addins;
+  GVariant  *state;
+  IdeGrid   *grid;
+  GArray    *pages;
+  guint      active;
 } Restore;
+
+typedef struct
+{
+  guint            column;
+  guint            row;
+  guint            depth;
+  IdeSessionAddin *addin;
+  GVariant        *state;
+  IdePage         *restored_page;
+} RestoreItem;
 
 G_DEFINE_TYPE (IdeSession, ide_session, IDE_TYPE_OBJECT)
 
@@ -57,10 +70,12 @@ static void
 restore_free (Restore *r)
 {
   g_assert (r != NULL);
+  g_assert (r->active == 0);
 
   g_clear_pointer (&r->addins, g_ptr_array_unref);
   g_clear_pointer (&r->state, g_variant_unref);
-  g_clear_object (&r->workbench);
+  g_clear_pointer (&r->pages, g_array_unref);
+
   g_slice_free (Restore, r);
 }
 
@@ -70,11 +85,34 @@ save_free (Save *s)
   g_assert (s != NULL);
   g_assert (s->active == 0);
 
-  if (s->dict_needs_clear)
-    g_variant_dict_clear (&s->dict);
-
   g_clear_pointer (&s->addins, g_ptr_array_unref);
+
   g_slice_free (Save, s);
+}
+
+static void
+restore_item_clear (RestoreItem *item)
+{
+  g_assert (item != NULL);
+
+  g_clear_pointer (&item->state, g_variant_unref);
+}
+
+static gint
+compare_restore_items (gconstpointer a,
+                       gconstpointer b)
+{
+  const RestoreItem *item_a = a;
+  const RestoreItem *item_b = b;
+  gint ret;
+
+  if (!(ret = item_a->column - item_b->column))
+    {
+      if (!(ret = item_a->row - item_b->row))
+        ret = item_a->depth - item_b->depth;
+    }
+
+  return ret;
 }
 
 static void
@@ -145,13 +183,46 @@ ide_session_init (IdeSession *self)
 }
 
 static void
-ide_session_restore_addin_restore_cb (GObject      *object,
-                                      GAsyncResult *result,
-                                      gpointer      user_data)
+restore_pages_to_grid (GArray  *r_items,
+                       IdeGrid *grid)
+{
+  IDE_ENTRY;
+  for (guint i = 0; i < r_items->len; i++)
+    {
+      RestoreItem *item = &g_array_index (r_items, RestoreItem, i);
+      IdeGridColumn *column;
+      IdeFrame *stack;
+
+      /* Ignore pages that couldn't be restored. */
+      if (item->restored_page == NULL)
+        continue;
+
+      /* This relies on the fact that the items are sorted. */
+      column = ide_grid_get_nth_column (grid, item->column);
+      stack = _ide_grid_get_nth_stack_for_column (grid, column, item->row);
+
+      gtk_container_add (GTK_CONTAINER (stack),
+                         GTK_WIDGET (item->restored_page));
+    }
+  IDE_EXIT;
+}
+
+typedef struct
+{
+  IdeTask     *task;
+  RestoreItem *item;
+} RestorePage;
+
+static void
+on_session_addin_page_restored_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
 {
   IdeSessionAddin *addin = (IdeSessionAddin *)object;
-  g_autoptr(IdeTask) task = user_data;
+  RestorePage *r_page = user_data;
+  g_autoptr(IdeTask) task = r_page->task;
   g_autoptr(GError) error = NULL;
+  RestoreItem *item = r_page->item;
   Restore *r;
 
   IDE_ENTRY;
@@ -167,26 +238,205 @@ ide_session_restore_addin_restore_cb (GObject      *object,
   g_assert (r->active > 0);
   g_assert (r->state != NULL);
 
-  if (!ide_session_addin_restore_finish (addin, result, &error))
-    g_warning ("%s: %s", G_OBJECT_TYPE_NAME (addin), error->message);
+  if (!(item->restored_page = ide_session_addin_restore_page_finish (addin, result, &error)))
+    g_warning ("Couldn't restore page with addin %s: %s", G_OBJECT_TYPE_NAME (addin), error->message);
 
   r->active--;
 
   if (r->active == 0)
-    ide_task_return_boolean (task, TRUE);
+    {
+      restore_pages_to_grid (r->pages, r->grid);
+
+      ide_task_return_boolean (task, TRUE);
+    }
 
   IDE_EXIT;
 }
 
+static IdeSessionAddin *
+get_addin_for_name (GPtrArray  *addins,
+                    const char *addin_name)
+{
+  GType addin_type = g_type_from_name (addin_name);
+  for (guint i = 0; i < addins->len; i++)
+    {
+      if (G_OBJECT_TYPE (addins->pdata[i]) == addin_type)
+        return addins->pdata[i];
+    }
+  return NULL;
+}
+
 static void
-ide_session_restore_load_cb (GObject      *object,
-                             GAsyncResult *result,
-                             gpointer      user_data)
+load_restore_items (Restore *r,
+                    GArray  *items)
+{
+  GVariantIter iter;
+  RestoreItem item;
+  GVariant *page_state = NULL;
+
+  g_assert (r != NULL);
+  g_assert (r->state != NULL);
+  g_assert (r->addins != NULL);
+  g_assert (items != NULL);
+
+  g_variant_iter_init (&iter, r->state);
+  while ((page_state = g_variant_iter_next_value (&iter)))
+    {
+      const char *addin_name = NULL;
+
+      g_variant_lookup (page_state, "column", "u", &item.column);
+      g_variant_lookup (page_state, "row", "u", &item.row);
+      g_variant_lookup (page_state, "depth", "u", &item.depth);
+      g_variant_lookup (page_state, "addin_name", "&s", &addin_name);
+      g_variant_lookup (page_state, "addin_page_state", "v", &item.state);
+
+      item.addin = get_addin_for_name (r->addins, addin_name);
+      g_array_append_val (items, item);
+
+      g_variant_unref (page_state);
+    }
+}
+
+static GVariant *
+migrate_pre_api_rework (GVariant *pages_variant)
+{
+  GVariantIter iter;
+  const char *uri = NULL;
+  int column, row, depth;
+  /* Freed in the loop. */
+  GVariant *search_variant;
+
+  GVariantDict version_wrapper_dict;
+  GVariantBuilder addins_states;
+
+  g_variant_dict_init (&version_wrapper_dict, NULL);
+  /* Migrate old format to first version of the new format. */
+  g_variant_dict_insert (&version_wrapper_dict, "version", "u", (guint32) 1);
+
+  g_variant_builder_init (&addins_states, G_VARIANT_TYPE_ARRAY);
+
+  g_debug ("Handling migration of the project's session.gvariant, from prior to the Session API rework…");
+
+  g_variant_iter_init (&iter, pages_variant);
+  while (g_variant_iter_next (&iter, "(&siiiv)", &uri, &column, &row, &depth, &search_variant))
+    {
+      GVariantDict addin_state;
+      GVariantDict editor_session_state;
+
+      g_variant_dict_init (&addin_state, NULL);
+      g_variant_dict_insert (&addin_state, "column", "u", (guint32) column);
+      g_variant_dict_insert (&addin_state, "row", "u", (guint32) row);
+      g_variant_dict_insert (&addin_state, "depth", "u", (guint32) depth);
+      g_variant_dict_insert (&addin_state, "addin_name", "s", "GbpEditorSessionAddin");
+
+      /* Since we need to migrate the data for the new API, let's also migrate to a dictionary
+       * instead of a tuple, for greater flexibility and extensibility in the future.
+       */
+      g_variant_dict_init (&editor_session_state, NULL);
+      g_variant_dict_insert (&editor_session_state, "uri", "s", uri);
+      /* Unbox the search_variant since we don't want to bother with multiple levels of variants,
+       * just have an a{sv}
+       */
+      g_variant_dict_insert_value (&editor_session_state, "search", g_variant_get_variant (search_variant));
+      g_variant_dict_insert (&addin_state, "addin_page_state", "v", g_variant_dict_end (&editor_session_state));
+      g_variant_builder_add_value (&addins_states, g_variant_dict_end (&addin_state));
+
+      g_variant_unref (search_variant);
+    }
+
+  g_variant_dict_insert_value (&version_wrapper_dict, "data", g_variant_builder_end (&addins_states));
+
+  g_debug ("Successfully migrated old session.gvariant to new format.");
+
+  return g_variant_take_ref (g_variant_dict_end (&version_wrapper_dict));
+}
+
+static GVariant *
+load_state_with_migrations (GBytes *bytes)
+{
+  g_autoptr(GVariant) variant = NULL;
+  /* This is the value of the "data" key in the final @variant. */
+  g_autoptr(GVariant) migrated_state = NULL;
+  GVariantDict state;
+  gboolean fully_migrated = FALSE;
+  GVariant *old_api_state = NULL;
+
+  g_assert (bytes != NULL);
+
+  variant = g_variant_take_ref (g_variant_new_from_bytes (G_VARIANT_TYPE_VARDICT, bytes, FALSE));
+
+  if (!variant)
+    {
+      g_warning ("Couldn't load the array of pages' states from session.gvariant!");
+      return NULL;
+    }
+
+  g_variant_dict_init (&state, variant);
+
+  /* Handle migrations from prior to the Session API rework, where there was only GbpEditorSessionAddin that used it */
+  old_api_state = g_variant_dict_lookup_value (&state, "GbpEditorSessionAddin", G_VARIANT_TYPE ("a(siiiv)"));
+  if (old_api_state)
+    migrated_state = migrate_pre_api_rework (old_api_state);
+  else
+    migrated_state = g_steal_pointer (&variant);
+
+  while (!fully_migrated)
+    {
+      guint32 version;
+      g_autoptr(GVariant) versioned_data = NULL;
+
+      if (!g_variant_lookup (migrated_state, "version", "u", &version))
+        {
+          g_warning ("session.gvariant isn't using the old format but doesn't have a version field, so cannot load it!");
+          fully_migrated = TRUE;
+          migrated_state = NULL;
+          break;
+        }
+
+      if (!(versioned_data = g_variant_lookup_value (migrated_state, "data", G_VARIANT_TYPE ("aa{sv}"))))
+        {
+          g_warning ("session.gvariant had a version field but the actual versioned data wasn't found, so cannot load it!");
+          fully_migrated = TRUE;
+          migrated_state = NULL;
+          break;
+        }
+
+      switch (version)
+        {
+          /* It's the current format so the rest of the code understands it natively. */
+          case 1:
+            migrated_state = g_steal_pointer (&migrated_state);
+            fully_migrated = TRUE;
+            break;
+
+          default:
+            g_warning ("Version %d of session.gvariant data is not known to Builder!", version);
+            migrated_state = NULL;
+            fully_migrated = TRUE;
+        }
+    }
+
+  if (migrated_state)
+    /* The current format (version 1) is an `aa{sv}` (array of dictionaries) with the dict's keys being:
+     * guint32 column, row, depth;
+     * char *addin_name;
+     * GVariant *addin_page_state;
+     */
+    return g_variant_lookup_value (migrated_state, "data", NULL);
+  else
+    return NULL;
+}
+
+static void
+on_session_cache_loaded_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
 {
   GFile *file = (GFile *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GBytes) bytes = NULL;
+  GArray *items = NULL;
   GCancellable *cancellable;
   Restore *r;
 
@@ -201,7 +451,7 @@ ide_session_restore_load_cb (GObject      *object,
 
   g_assert (r != NULL);
   g_assert (r->addins != NULL);
-  g_assert (r->active > 0);
+  g_assert (r->addins->len > 0);
   g_assert (r->state == NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -220,7 +470,7 @@ ide_session_restore_load_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  r->state = g_variant_new_from_bytes (G_VARIANT_TYPE_VARDICT, bytes, FALSE);
+  r->state = load_state_with_migrations (bytes);
 
   if (r->state == NULL)
     {
@@ -231,26 +481,31 @@ ide_session_restore_load_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  g_assert (r->addins != NULL);
-  g_assert (r->addins->len > 0);
+  items = g_array_new (FALSE, FALSE, sizeof (RestoreItem));
+  g_array_set_clear_func (items, (GDestroyNotify)restore_item_clear);
+  load_restore_items (r, items);
+  r->pages = items;
+  r->active = items->len;
+  g_array_sort (items, compare_restore_items);
 
-  for (guint i = 0; i < r->addins->len; i++)
+  for (guint i = 0; i < items->len; i++)
     {
-      IdeSessionAddin *addin = g_ptr_array_index (r->addins, i);
-      g_autoptr(GVariant) state = NULL;
+      RestoreItem *item = &g_array_index (items, RestoreItem, i);
+      RestorePage *r_page = g_slice_new0 (RestorePage);
+      r_page->task = g_object_ref (task);
+      r_page->item = item;
 
-      g_assert (IDE_IS_SESSION_ADDIN (addin));
+      ide_session_addin_restore_page_async (item->addin,
+                                            item->state,
+                                            cancellable,
+                                            on_session_addin_page_restored_cb,
+                                            r_page);
+    }
 
-      state = g_variant_lookup_value (r->state,
-                                      G_OBJECT_TYPE_NAME (addin),
-                                      NULL);
-
-      ide_session_addin_restore_async (addin,
-                                       r->workbench,
-                                       state,
-                                       cancellable,
-                                       ide_session_restore_addin_restore_cb,
-                                       g_object_ref (task));
+  if (r->active == 0)
+    {
+      ide_task_return_boolean (task, TRUE);
+      IDE_EXIT;
     }
 
   IDE_EXIT;
@@ -259,49 +514,51 @@ ide_session_restore_load_cb (GObject      *object,
 /**
  * ide_session_restore_async:
  * @self: an #IdeSession
- * @workbench: an #IdeWorkbench
- * @cancellable: (nullable): a #GCancellbale or %NULL
+ * @grid: an #IdeGrid
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: the callback to execute upon completion
  * @user_data: user data for callback
  *
  * This function will asynchronously restore the state of the project to
  * the point it was last saved (typically upon shutdown). This includes
- * open documents and editor splits to the degree possible.
+ * open documents and editor splits to the degree possible. Adding support
+ * for a new page type requires implementing an #IdeSessionAddin.
  *
- * Since: 3.30
+ * Since: 41
  */
 void
 ide_session_restore_async (IdeSession          *self,
-                           IdeWorkbench        *workbench,
+                           IdeGrid             *grid,
                            GCancellable        *cancellable,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autoptr(GSettings) settings = NULL;
   IdeContext *context;
   Restore *r;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SESSION (self));
-  g_return_if_fail (IDE_IS_WORKBENCH (workbench));
+  g_return_if_fail (IDE_IS_GRID (grid));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_session_restore_async);
 
   r = g_slice_new0 (Restore);
-  r->workbench = g_object_ref (workbench);
   r->addins = g_ptr_array_new_with_free_func (g_object_unref);
   ide_extension_set_adapter_foreach (self->addins, collect_addins_cb, r->addins);
-  r->active = r->addins->len;
+  r->grid = grid;
   ide_task_set_task_data (task, r, restore_free);
 
-  if (r->active == 0)
+  settings = g_settings_new ("org.gnome.builder");
+  if (!g_settings_get_boolean (settings, "restore-previous-files"))
     {
       ide_task_return_boolean (task, TRUE);
-      IDE_EXIT;
+      return;
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -309,7 +566,7 @@ ide_session_restore_async (IdeSession          *self,
 
   g_file_load_bytes_async (file,
                            cancellable,
-                           ide_session_restore_load_cb,
+                           on_session_cache_loaded_cb,
                            g_steal_pointer (&task));
 
   IDE_EXIT;
@@ -333,9 +590,9 @@ ide_session_restore_finish (IdeSession    *self,
 }
 
 static void
-ide_session_save_cb (GObject      *object,
-                     GAsyncResult *result,
-                     gpointer      user_data)
+on_state_saved_to_cache_file_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   GFile *file = (GFile *)object;
   g_autoptr(GError) error = NULL;
@@ -356,13 +613,57 @@ ide_session_save_cb (GObject      *object,
 }
 
 static void
-ide_session_save_addin_save_cb (GObject      *object,
+get_page_position (IdePage *page,
+                   guint   *out_column,
+                   guint   *out_row,
+                   guint   *out_depth)
+{
+  GtkWidget *frame_pages_stack;
+  GtkWidget *frame;
+  GtkWidget *grid_column;
+  GtkWidget *grid;
+
+  g_assert (IDE_IS_PAGE (page));
+  g_assert (out_column != NULL);
+  g_assert (out_row != NULL);
+  g_assert (out_depth != NULL);
+
+  frame_pages_stack = gtk_widget_get_ancestor (GTK_WIDGET (page), GTK_TYPE_STACK);
+  frame = gtk_widget_get_ancestor (GTK_WIDGET (frame_pages_stack), IDE_TYPE_FRAME);
+  grid_column = gtk_widget_get_ancestor (GTK_WIDGET (frame), IDE_TYPE_GRID_COLUMN);
+  grid = gtk_widget_get_ancestor (GTK_WIDGET (grid_column), IDE_TYPE_GRID);
+
+  gtk_container_child_get (GTK_CONTAINER (frame_pages_stack), GTK_WIDGET (page),
+                           "position", out_depth,
+                           NULL);
+  *out_depth = MAX (*out_depth, 0);
+
+  gtk_container_child_get (GTK_CONTAINER (grid_column), GTK_WIDGET (frame),
+                           "index", out_row,
+                           NULL);
+  *out_row = MAX (*out_row, 0);
+
+  gtk_container_child_get (GTK_CONTAINER (grid), GTK_WIDGET (grid_column),
+                           "index", out_column,
+                           NULL);
+  *out_column = MAX (*out_column, 0);
+}
+
+typedef struct {
+  IdeTask *task;
+  IdePage *page;
+} SavePage;
+
+static void
+on_session_addin_page_saved_cb (GObject      *object,
                                 GAsyncResult *result,
                                 gpointer      user_data)
 {
   IdeSessionAddin *addin = (IdeSessionAddin *)object;
-  g_autoptr(GVariant) variant = NULL;
-  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) page_state = NULL;
+  SavePage *save_page = user_data;
+  g_autoptr(IdeTask) task = save_page->task;
+  IdePage *page = save_page->page;
   g_autoptr(GError) error = NULL;
   IdeSession *self;
   Save *s;
@@ -378,21 +679,32 @@ ide_session_save_addin_save_cb (GObject      *object,
 
   g_assert (IDE_IS_SESSION (self));
   g_assert (s != NULL);
-  g_assert (s->addins != NULL);
   g_assert (s->active > 0);
 
-  variant = ide_session_addin_save_finish (addin, result, &error);
+  page_state = ide_session_addin_save_page_finish (addin, result, &error);
 
   if (error != NULL)
-    g_warning ("%s: %s", G_OBJECT_TYPE_NAME (addin), error->message);
+    g_warning ("Could not save page with addin %s: %s", G_OBJECT_TYPE_NAME (addin), error->message);
 
-  if (variant != NULL)
+  if (page_state != NULL)
     {
-      g_assert (!g_variant_is_floating (variant));
+      guint frame_column, frame_row, frame_depth;
+      GVariantDict state_dict;
 
-      s->dict_needs_clear = TRUE;
-      g_variant_dict_insert_value (&s->dict, G_OBJECT_TYPE_NAME (addin), variant);
+      g_assert (!g_variant_is_floating (page_state));
+
+      get_page_position (page, &frame_column, &frame_row, &frame_depth);
+
+      g_variant_dict_init (&state_dict, NULL);
+      g_variant_dict_insert (&state_dict, "column", "u", frame_column);
+      g_variant_dict_insert (&state_dict, "row", "u", frame_row);
+      g_variant_dict_insert (&state_dict, "depth", "u", frame_depth);
+      g_variant_dict_insert (&state_dict, "addin_name", "s", G_OBJECT_TYPE_NAME (addin));
+      g_variant_dict_insert (&state_dict, "addin_page_state", "v", page_state);
+
+      g_variant_builder_add_value (&s->pages_state, g_variant_dict_end (&state_dict));
     }
+  g_free (save_page);
 
   s->active--;
 
@@ -401,15 +713,23 @@ ide_session_save_addin_save_cb (GObject      *object,
       g_autoptr(GVariant) state = NULL;
       g_autoptr(GBytes) bytes = NULL;
       g_autoptr(GFile) file = NULL;
-      GCancellable *cancellable;
       IdeContext *context;
+      GVariantDict final_dict;
+      /* It seems that because g_steal_pointer is an inline function it'll return "task" and set it
+       * to NULL _then_ try to get the cancellable from it when using this getter inline in the
+       * function call below. This looks like a bug from GCC/whatever, as they don't evaluate
+       * expressions in the right order…
+       */
+      GCancellable *cancellable = ide_task_get_cancellable (task);
 
-      s->dict_needs_clear = FALSE;
+      g_variant_dict_init (&final_dict, NULL);
+      g_variant_dict_insert (&final_dict, "version", "u", (guint32) 1);
+      g_variant_dict_insert_value (&final_dict, "data", g_variant_builder_end (&s->pages_state));
 
-      state = g_variant_take_ref (g_variant_dict_end (&s->dict));
+      state = g_variant_ref_sink (g_variant_dict_end (&final_dict));
+      g_debug ("Saving session state for all pages with %s", g_variant_print (state, TRUE));
       bytes = g_variant_get_data_as_bytes (state);
 
-      cancellable = ide_task_get_cancellable (task);
       context = ide_object_get_context (IDE_OBJECT (self));
       file = ide_context_cache_file (context, "session.gvariant", NULL);
 
@@ -422,30 +742,68 @@ ide_session_save_addin_save_cb (GObject      *object,
                                            FALSE,
                                            G_FILE_CREATE_NONE,
                                            cancellable,
-                                           ide_session_save_cb,
+                                           on_state_saved_to_cache_file_cb,
                                            g_steal_pointer (&task));
     }
 
   IDE_EXIT;
 }
 
+static IdeSessionAddin *
+find_suitable_addin_for_page (IdePage   *page,
+                              GPtrArray *addins)
+{
+  for (guint i = 0; i < addins->len; i++)
+    {
+      IdeSessionAddin *addin = g_ptr_array_index (addins, i);
+      if (ide_session_addin_can_save_page (addin, page))
+        return addin;
+    }
+  return NULL;
+}
+
+static void
+foreach_page_in_grid_save_cb (GtkWidget *widget,
+                              gpointer   user_data)
+{
+  IdePage *page = IDE_PAGE (widget);
+  IdeTask *task = user_data;
+  Save *s = ide_task_get_task_data (task);
+  IdeSessionAddin *addin = find_suitable_addin_for_page (page, s->addins);
+  SavePage *save_page = NULL;
+
+  /* It's not a saveable page. */
+  if (addin == NULL)
+    return;
+
+  save_page = g_slice_new0 (SavePage);
+  save_page->task = g_object_ref (task);
+  save_page->page = page;
+
+  ide_session_addin_save_page_async (addin,
+                                     page,
+                                     ide_task_get_cancellable (task),
+                                     on_session_addin_page_saved_cb,
+                                     g_steal_pointer (&save_page));
+}
+
 /**
  * ide_session_save_async:
  * @self: an #IdeSession
- * @workbench: an #IdeWorkbench
+ * @grid: an #IdeGrid
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: a callback to execute upon completion
  * @user_data: user data for @callback
  *
- * This function will request that various components save their active state
- * so that the project may be restored to the current layout when the project
- * is re-opened at a later time.
+ * This function will save the position and content of the pages in the @grid,
+ * which can then be restored with ide_session_restore_async(), asking the
+ * content of the pages to the appropriate #IdeSessionAddin.
  *
- * Since: 3.30
+ * Since: 41
  */
 void
 ide_session_save_async (IdeSession          *self,
-                        IdeWorkbench        *workbench,
+                        IdeGrid             *grid,
                         GCancellable        *cancellable,
                         GAsyncReadyCallback  callback,
                         gpointer             user_data)
@@ -456,7 +814,7 @@ ide_session_save_async (IdeSession          *self,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SESSION (self));
-  g_return_if_fail (IDE_IS_WORKBENCH (workbench));
+  g_return_if_fail (IDE_IS_GRID (grid));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -465,31 +823,22 @@ ide_session_save_async (IdeSession          *self,
   s = g_slice_new0 (Save);
   s->addins = g_ptr_array_new_with_free_func (g_object_unref);
   ide_extension_set_adapter_foreach (self->addins, collect_addins_cb, s->addins);
-  s->active = s->addins->len;
-  g_variant_dict_init (&s->dict, NULL);
-  s->dict_needs_clear = TRUE;
+  s->active = ide_grid_count_pages (grid);
+
+  g_variant_builder_init (&s->pages_state, G_VARIANT_TYPE ("aa{sv}"));
   ide_task_set_task_data (task, s, save_free);
+
+  ide_grid_foreach_page (grid,
+                         foreach_page_in_grid_save_cb,
+                         task);
+
+  g_assert (s != NULL);
 
   if (s->active == 0)
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
-
-  for (guint i = 0; i < s->addins->len; i++)
-    {
-      IdeSessionAddin *addin = g_ptr_array_index (s->addins, i);
-
-      ide_session_addin_save_async (addin,
-                                    workbench,
-                                    cancellable,
-                                    ide_session_save_addin_save_cb,
-                                    g_object_ref (task));
-    }
-
-  g_assert (s != NULL);
-  g_assert (s->active > 0);
-  g_assert (s->addins->len == s->active);
 
   IDE_EXIT;
 }

@@ -3,7 +3,7 @@ Session Tracking
 ################
 
 Some plugins may want to save state when the user closes Builder.
-The `Ide.SessionAddin` allows for saving and restoring state when a project is closed or re-opened.
+The `Ide.SessionAddin` allows for saving and restoring state of an `Ide.Page` when a project is closed or re-opened.
 
 .. code-block:: python3
 
@@ -17,9 +17,12 @@ The `Ide.SessionAddin` allows for saving and restoring state when a project is c
 
    class MySessionAddin(Ide.Object, Ide.SessionAddin):
 
-       def do_save_async(self, cancellable, callback, data):
+       def can_save_page(self, page):
+           return issubclass(page, My.CustomPage)
+
+       def do_save_page_async(self, page, cancellable, callback, data):
            # Create our async task
-           task = Ide.Task.new(sel, cancellable, callback)
+           task = Ide.Task.new(self, cancellable, callback)
 
            # State is saved as a variant
            task.result = GLib.Variant.new_int(123)
@@ -31,14 +34,17 @@ The `Ide.SessionAddin` allows for saving and restoring state when a project is c
            if task.propagate_boolean():
                return task.result
 
-       def do_restore_async(self, state, cancellable, callback, data):
+       def do_restore_page_async(self, state, cancellable, callback, data):
            # Create our async task
-           task = Ide.Task.new(sel, cancellable, callback)
+           task = Ide.Task.new(self, cancellable, callback)
 
            # state is a GLib.Variant matching what we saved
+           # unpack state here
+
+           my_page = My.CustomPage.new(data_from_state)
 
            # Now complete task
-           task.return_boolean(True)
+           task.return_pointer(my_page)
 
        def do_restore_finish(self, task):
-           return task.propagate_boolean()
+           return task.propagate_pointer()

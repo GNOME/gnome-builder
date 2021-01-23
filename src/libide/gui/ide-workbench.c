@@ -38,7 +38,6 @@
 #include "ide-gui-global.h"
 #include "ide-gui-private.h"
 #include "ide-primary-workspace.h"
-#include "ide-session-private.h"
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"
 #include "ide-workspace.h"
@@ -75,7 +74,6 @@ struct _IdeWorkbench
   IdeVcs           *vcs;
   IdeVcsMonitor    *vcs_monitor;
   IdeSearchEngine  *search_engine;
-  IdeSession       *session;
 
   /* Various flags */
   guint             unloaded : 1;
@@ -222,10 +220,6 @@ ide_workbench_set_context (IdeWorkbench *self,
     self->build_system = g_object_ref (build_system);
   else
     self->build_system = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_FALLBACK_BUILD_SYSTEM);
-
-  /* Setup session monitor for future use */
-  self->session = ide_session_new ();
-  ide_object_append (IDE_OBJECT (self->context), IDE_OBJECT (self->session));
 }
 
 static void
@@ -402,7 +396,6 @@ ide_workbench_finalize (GObject *object)
   g_clear_object (&self->build_system);
   g_clear_object (&self->vcs);
   g_clear_object (&self->search_engine);
-  g_clear_object (&self->session);
   g_clear_object (&self->project_info);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->context);
@@ -967,22 +960,6 @@ ide_workbench_project_loaded_foreach_cb (PeasExtensionSet *set,
 }
 
 static void
-ide_workbench_session_restore_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
-{
-  IdeSession *session = (IdeSession *)object;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_SESSION (session));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (!ide_session_restore_finish (session, result, &error))
-    g_warning ("%s", error->message);
-}
-
-static void
 ide_workbench_load_project_completed (IdeWorkbench *self,
                                       IdeTask      *task)
 {
@@ -1034,15 +1011,6 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   peas_extension_set_foreach (self->addins,
                               ide_workbench_project_loaded_foreach_cb,
                               self);
-
-  /* And now restore the user session, but don't block our task for
-   * it since the greeter is waiting on us.
-   */
-  ide_session_restore_async (self->session,
-                             self,
-                             ide_task_get_cancellable (task),
-                             ide_workbench_session_restore_cb,
-                             NULL);
 
   /* Now that we have a workspace window for the project, we can allow
    * the build manager to start.
@@ -1546,7 +1514,6 @@ ide_workbench_unload_project_completed (IdeWorkbench *self,
                              ide_workbench_unload_foundry_cb,
                              g_object_ref (task));
 }
-
 static void
 ide_workbench_unload_project_cb (GObject      *object,
                                  GAsyncResult *result,
@@ -1580,52 +1547,6 @@ ide_workbench_unload_project_cb (GObject      *object,
 
   if (addins->len == 0)
     ide_workbench_unload_project_completed (self, task);
-}
-
-static void
-ide_workbench_session_save_cb (GObject      *object,
-                               GAsyncResult *result,
-                               gpointer      user_data)
-{
-  IdeSession *session = (IdeSession *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  IdeWorkbench *self;
-  GPtrArray *addins;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_SESSION (session));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  /* Not much we can display to the user, as we're tearing widgets down */
-  if (!ide_session_save_finish (session, result, &error))
-    g_warning ("%s", error->message);
-
-  /* Now we can request that each of our addins unload the project. */
-
-  self = ide_task_get_source_object (task);
-  addins = ide_task_get_task_data (task);
-
-  g_assert (IDE_IS_WORKBENCH (self));
-  g_assert (addins != NULL);
-
-  if (addins->len == 0)
-    {
-      ide_workbench_unload_project_completed (self, task);
-      return;
-    }
-
-  for (guint i = 0; i < addins->len; i++)
-    {
-      IdeWorkbenchAddin *addin = g_ptr_array_index (addins, i);
-
-      ide_workbench_addin_unload_project_async (addin,
-                                                self->project_info,
-                                                ide_task_get_cancellable (task),
-                                                ide_workbench_unload_project_cb,
-                                                g_object_ref (task));
-    }
 }
 
 /**
@@ -1689,19 +1610,34 @@ ide_workbench_unload_async (IdeWorkbench        *self,
    */
   if (self->project_info == NULL)
     {
-      ide_workbench_unload_project_completed (self, task);
+      ide_workbench_unload_project_completed (self, g_steal_pointer (&task));
       return;
     }
 
   addins = ide_workbench_collect_addins (self);
   ide_task_set_task_data (task, g_ptr_array_ref (addins), g_ptr_array_unref);
 
-  /* First unload the session while we are stable */
-  ide_session_save_async (self->session,
-                          self,
-                          cancellable,
-                          ide_workbench_session_save_cb,
-                          g_steal_pointer (&task));
+  if (addins->len == 0)
+    {
+      ide_workbench_unload_project_completed (self, task);
+      return;
+    }
+
+  for (guint i = 0; i < addins->len; i++)
+    {
+      IdeWorkbenchAddin *addin = g_ptr_array_index (addins, i);
+
+      ide_workbench_addin_unload_project_async (addin,
+                                                self->project_info,
+                                                ide_task_get_cancellable (task),
+                                                ide_workbench_unload_project_cb,
+                                                g_object_ref (task));
+    }
+
+  /* Since the g_steal_pointer() just before doesn't always run, ensure the
+   * task isn't freed while it hasn't yet finished running asynchronously.
+   */
+  task = NULL;
 }
 
 /**

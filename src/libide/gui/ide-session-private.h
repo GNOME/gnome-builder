@@ -21,8 +21,7 @@
 #pragma once
 
 #include <libide-core.h>
-
-#include "ide-workbench.h"
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
@@ -32,7 +31,7 @@ G_DECLARE_FINAL_TYPE (IdeSession, ide_session, IDE, SESSION, IdeObject)
 
 IdeSession *ide_session_new            (void);
 void        ide_session_restore_async  (IdeSession           *self,
-                                        IdeWorkbench         *workbench,
+                                        IdeGrid              *grid,
                                         GCancellable         *cancellable,
                                         GAsyncReadyCallback   callback,
                                         gpointer              user_data);
@@ -40,7 +39,7 @@ gboolean    ide_session_restore_finish (IdeSession           *self,
                                         GAsyncResult         *result,
                                         GError              **error);
 void        ide_session_save_async     (IdeSession           *self,
-                                        IdeWorkbench         *workbench,
+                                        IdeGrid              *grid,
                                         GCancellable         *cancellable,
                                         GAsyncReadyCallback   callback,
                                         gpointer              user_data);

@@ -83,6 +83,109 @@ set_reveal_child_without_transition (DzlDockRevealer *revealer,
   dzl_dock_revealer_set_transition_type (revealer, type);
 }
 
+/* As long as there's no individual saving/restoring of each workspace, it's better to
+ * ignore any non primary editor workspace, so opening an other workspace doesn't erase all
+ * the session state of the primary workspace.
+ */
+static gboolean
+is_primary_workspace (IdeEditorSurface *self)
+{
+  g_assert (self != NULL);
+
+  return gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_PRIMARY_WORKSPACE) != NULL;
+}
+
+static volatile gboolean async_saving_done = FALSE;
+
+static void
+ide_editor_surface_session_saved_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeSession *session = (IdeSession *)object;
+  g_autoptr(GError) error = NULL;
+  IdeEditorSurface *surface = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_EDITOR_SURFACE (surface));
+
+  async_saving_done = TRUE;
+  _ide_editor_surface_set_loading (surface, FALSE);
+
+  if (!ide_session_save_finish (session, result, &error))
+    g_warning ("Couldn't save session: %s", error->message);
+}
+
+static void
+ide_editor_surface_save_session_state (IdeEditorSurface *self)
+{
+  g_autoptr(GMainContext) ctx = NULL;
+
+  if (!is_primary_workspace (self))
+    return;
+
+  _ide_editor_surface_set_loading (self, TRUE);
+
+  /* Do the saving synchronously because if we let the async call finish after
+   * this function, then the editor surface might have already been destroyed
+   * when session addins try to save their pages.
+   */
+  ctx = g_main_context_new ();
+  g_main_context_push_thread_default (ctx);
+  ide_session_save_async (self->session,
+                          self->grid,
+                          NULL,
+                          ide_editor_surface_session_saved_cb,
+                          self);
+  while (!async_saving_done)
+    g_main_context_iteration (ctx, TRUE);
+  g_main_context_pop_thread_default (ctx);
+  async_saving_done = FALSE;
+}
+
+static void
+ide_editor_surface_session_restored_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IdeSession *session = (IdeSession *)object;
+  g_autoptr(GError) error = NULL;
+  IdeEditorSurface *surface = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_EDITOR_SURFACE (surface));
+
+  _ide_editor_surface_set_loading (surface, FALSE);
+
+  if (!ide_session_restore_finish (session, result, &error))
+    g_warning ("Couldn't restore session: %s", error->message);
+}
+
+static void
+ide_editor_surface_restore_session_state (IdeEditorSurface *self)
+{
+  g_autoptr(GSettings) settings = NULL;
+
+  if (!is_primary_workspace (self))
+    return;
+
+  settings = g_settings_new ("org.gnome.builder");
+  if (!g_settings_get_boolean (settings, "restore-previous-files"))
+      return;
+
+  _ide_editor_surface_set_loading (self, TRUE);
+
+  ide_session_restore_async (self->session,
+                             self->grid,
+                             NULL,
+                             ide_editor_surface_session_restored_cb,
+                             self);
+}
+
 static void
 ide_editor_surface_restore_panel_state (IdeEditorSurface *self)
 {
@@ -158,6 +261,7 @@ ide_editor_surface_agree_to_shutdown (IdeSurface *surface)
   g_assert (IDE_IS_EDITOR_SURFACE (self));
 
   ide_editor_surface_save_panel_state (self);
+  ide_editor_surface_save_session_state (self);
 
   return TRUE;
 }
@@ -457,6 +561,7 @@ ide_editor_surface_destroy (GtkWidget *widget)
   g_assert (IDE_IS_EDITOR_SURFACE (self));
 
   g_clear_object (&self->addins);
+  g_clear_object (&self->session);
 
   GTK_WIDGET_CLASS (ide_editor_surface_parent_class)->destroy (widget);
 }
@@ -465,10 +570,15 @@ static void
 ide_editor_surface_realize (GtkWidget *widget)
 {
   IdeEditorSurface *self = (IdeEditorSurface *)widget;
+  IdeWorkbench *workbench;
 
   g_assert (IDE_IS_EDITOR_SURFACE (self));
 
   ide_editor_surface_restore_panel_state (self);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  ide_object_append (IDE_OBJECT (ide_workbench_get_context (workbench)),
+                     IDE_OBJECT (self->session));
+  ide_editor_surface_restore_session_state (self);
 
   GTK_WIDGET_CLASS (ide_editor_surface_parent_class)->realize (widget);
 }
@@ -579,6 +689,8 @@ ide_editor_surface_init (IdeEditorSurface *self)
                             "create-page",
                             G_CALLBACK (ide_editor_surface_create_page),
                             self);
+
+  self->session = ide_session_new ();
 
   sidebar = ide_editor_surface_get_sidebar (self);
   _ide_editor_sidebar_set_open_pages (sidebar, G_LIST_MODEL (self->grid));
