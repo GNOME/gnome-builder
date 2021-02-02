@@ -1,4 +1,14 @@
 ==============
+Version 3.38.2
+==============
+
+ • Always give access to a11y bus from Flatpak
+ • Support for Flatpak's --add-policy
+ • Default to cloning remote's HEAD branch
+ • Stop showing GLib debug messages when running application unless debugging
+ • Translation updates
+
+==============
 Version 3.38.1
 ==============
 

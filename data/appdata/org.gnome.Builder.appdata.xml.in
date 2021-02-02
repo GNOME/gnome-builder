@@ -86,6 +86,11 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.38.2" date="2021-02-01">
+      <p>
+        Builder 3.38.2 contains a number of bug fixes and performance improvements.
+      </p>
+    </release>
     <release version="3.38.1" date="2020-10-15">
       <p>
         Builder 3.38.1 contains a number of bug fixes and performance improvements.
