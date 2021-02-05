@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <libide-editor.h>
+#include <libide-threading.h>
 #include <string.h>
 
 #include "gb-beautifier-private.h"
@@ -127,16 +128,25 @@ command_args_expand (GbBeautifierEditorAddin *self,
     }
 }
 
-static GSubprocess *
+static IdeSubprocess *
 gb_beautifier_process_create_generic (GbBeautifierEditorAddin  *self,
                                       ProcessState             *state,
                                       GError                  **error)
 {
-  GSubprocess *subprocess = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  IdeSubprocess *subprocess = NULL;
   g_autofree gchar *src_path = NULL;
+  g_autoptr(GFile) parent_folder = NULL;
+  g_autofree gchar *cwd = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (state != NULL);
+
+  parent_folder = g_file_get_parent (ide_buffer_get_file (IDE_BUFFER (state->source_view)));
+  if (parent_folder)
+    cwd = g_file_get_path (parent_folder);
+  else
+    cwd = g_strdup ("/");
 
   src_path = g_file_get_path (state->src_file);
 
@@ -145,21 +155,27 @@ gb_beautifier_process_create_generic (GbBeautifierEditorAddin  *self,
 
   command_args_expand (self, state->command_args_strs, state);
 
-  subprocess = g_subprocess_newv ((const gchar * const *)state->command_args_strs->pdata,
-                                  G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                  G_SUBPROCESS_FLAGS_STDERR_PIPE,
-                                  error);
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  ide_subprocess_launcher_set_argv (launcher, (gchar**)state->command_args_strs->pdata);
+  /* This is to allow beautifiers to find the project's formatting configuration file. */
+  ide_subprocess_launcher_set_cwd (launcher, cwd);
+  /* Keep the environment like PATH or more specific ones like CARGO_HOME. */
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+
+  subprocess = ide_subprocess_launcher_spawn (launcher,
+                                              NULL,
+                                              error);
 
   return subprocess;
 }
 
-static GSubprocess *
+static IdeSubprocess *
 gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
                                                ProcessState             *state,
                                                GError                  **error)
 {
-  g_autoptr(GSubprocessLauncher) launcher = NULL;
-  GSubprocess *subprocess = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  IdeSubprocess *subprocess = NULL;
   GPtrArray *args;
   g_autofree gchar *tmp_workdir = NULL;
   g_autofree gchar *tmp_config_path = NULL;
@@ -210,11 +226,12 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
   g_ptr_array_add (args, (gchar *)tmp_src_path);
   g_ptr_array_add (args, NULL);
 
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
-  g_subprocess_launcher_set_cwd (launcher, tmp_workdir);
-  subprocess = g_subprocess_launcher_spawnv (launcher,
-                                             (const gchar * const *)args->pdata,
-                                             error);
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  ide_subprocess_launcher_set_cwd (launcher, tmp_workdir);
+  ide_subprocess_launcher_set_argv (launcher, (gchar**)args->pdata);
+  subprocess = ide_subprocess_launcher_spawn (launcher,
+                                              NULL,
+                                              error);
 
   g_ptr_array_free (args, TRUE);
   return subprocess;
@@ -225,7 +242,7 @@ process_communicate_utf8_cb (GObject      *object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
-  g_autoptr(GSubprocess) process = (GSubprocess *)object;
+  g_autoptr(IdeSubprocess) process = (IdeSubprocess *)object;
   g_autoptr(IdeTask) task = (IdeTask *)user_data;
   g_autoptr(GBytes) stdout_gb = NULL;
   g_autoptr(GBytes) stderr_gb = NULL;
@@ -238,11 +255,11 @@ process_communicate_utf8_cb (GObject      *object,
   GtkTextIter end;
   ProcessState *state;
 
-  g_assert (G_IS_SUBPROCESS (process));
+  g_assert (IDE_IS_SUBPROCESS (process));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!g_subprocess_communicate_finish (process, result, &stdout_gb, &stderr_gb, &error))
+  if (!ide_subprocess_communicate_finish (process, result, &stdout_gb, &stderr_gb, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -257,7 +274,7 @@ process_communicate_utf8_cb (GObject      *object,
       !dzl_str_empty0 (stderr_str) &&
       g_utf8_validate (stderr_str, -1, NULL))
     {
-      if (g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) != 0)
+      if (ide_subprocess_get_if_exited (process) && ide_subprocess_get_exit_status (process) != 0)
         {
           ide_object_warning (state->self,
                               /* translators: %s is replaced with the command error message */
@@ -310,7 +327,7 @@ create_text_tmp_file_cb (GObject      *object,
   g_autoptr (IdeTask) task = (IdeTask *)user_data;
   g_autoptr(GError) error = NULL;
   ProcessState *state;
-  GSubprocess *process;
+  IdeSubprocess *process;
   GCancellable *cancellable;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
@@ -333,11 +350,11 @@ create_text_tmp_file_cb (GObject      *object,
       else
         {
           cancellable = ide_task_get_cancellable (task);
-          g_subprocess_communicate_async (process,
-                                          NULL,
-                                          cancellable,
-                                          process_communicate_utf8_cb,
-                                          g_steal_pointer (&task));
+          ide_subprocess_communicate_async (process,
+                                            NULL,
+                                            cancellable,
+                                            process_communicate_utf8_cb,
+                                            g_steal_pointer (&task));
         }
 
       return;
