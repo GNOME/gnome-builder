@@ -278,7 +278,7 @@ process_communicate_utf8_cb (GObject      *object,
         {
           ide_object_warning (state->self,
                               /* translators: %s is replaced with the command error message */
-                              _("Beautifier plugin: command error output: %s"),
+                              _("Beautifier plugin: command error output:\n%s"),
                               stderr_str);
         }
     }
