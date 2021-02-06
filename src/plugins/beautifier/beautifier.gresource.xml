@@ -21,6 +21,7 @@
     <file>config/objc/config.ini</file>
     <file>config/objc/objc.cfg</file>
     <file>config/python/config.ini</file>
+    <file>config/rust/config.ini</file>
     <file>config/xml/config.ini</file>
 
     <file>self/global.ini</file>
@@ -29,5 +30,6 @@
     <file>self/c/gb-uncrustify.cfg</file>
 
     <file>internal/align_makefile.py</file>
+    <file>internal/run_rustfmt.py</file>
   </gresource>
 </gresources>
