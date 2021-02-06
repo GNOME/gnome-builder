@@ -105,6 +105,7 @@ or
   with pattern substitution:
       @s@ for the selected text put in a file.
       @c@ for the config file define by the config key.
+  Such commands are launched from the file's parent directory, which means that for file in src/foo/baz.c, the PWD will be src/foo/.
 
 By adding [internal] in front of the command pattern, the command is
 searched in the Builder data dir.
