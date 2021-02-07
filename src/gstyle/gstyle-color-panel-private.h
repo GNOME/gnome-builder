@@ -32,7 +32,6 @@
 #include "gstyle-color-scale.h"
 #include "gstyle-color-widget.h"
 #include "gstyle-css-provider.h"
-#include "gstyle-eyedropper.h"
 #include "gstyle-color-filter.h"
 #include "gstyle-palette-widget.h"
 #include "gstyle-revealer.h"
@@ -72,7 +71,6 @@ struct _GstyleColorPanel
   GstyleColorWidget                   *old_swatch;
 
   GtkButton                           *picker_button;
-  GstyleEyedropper                    *eyedropper;
   GtkWidget                           *search_color_entry;
   GtkWidget                           *search_strings_popover;
   GtkWidget                           *search_strings_list;

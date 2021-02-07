@@ -16,7 +16,6 @@ libgstyle_headers = [
   'gstyle-color-widget-actions.h',
   'gstyle-colorlexer.h',
   'gstyle-css-provider.h',
-  'gstyle-eyedropper.h',
   'gstyle-hsv.h',
   'gstyle-palette.h',
   'gstyle-palette-widget.h',
@@ -56,7 +55,6 @@ libgstyle_sources = [
   'gstyle-color-widget-actions.c',
   'gstyle-colorlexer.c',
   'gstyle-css-provider.c',
-  'gstyle-eyedropper.c',
   'gstyle-hsv.c',
   'gstyle-palette.c',
   'gstyle-palette-widget.c',
@@ -71,6 +69,7 @@ libgstyle_sources = [
 libgstyle_deps = [
   libdazzle_dep,
   libgtk_dep,
+  libportal_dep,
   libm_dep,
   libxml2_dep,
 ]
@@ -107,8 +106,6 @@ libgstyle_introspection_sources = [
   'gstyle-color-scale.c',
   'gstyle-color-widget.h',
   'gstyle-color-widget.c',
-  'gstyle-eyedropper.h',
-  'gstyle-eyedropper.c',
   'gstyle-hsv.h',
   'gstyle-hsv.c',
   'gstyle-palette.h',

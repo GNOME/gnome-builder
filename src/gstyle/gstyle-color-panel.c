@@ -29,6 +29,9 @@
 #include "gstyle-revealer.h"
 #include "gstyle-color.h"
 
+#include <libportal/portal.h>
+#include <libportal/portal-gtk3.h>
+
 #define HSV_TO_SCALE_FACTOR (1.0 / 256.0)
 #define CIELAB_L_TO_SCALE_FACTOR (100.0 / 256.0)
 
@@ -585,50 +588,50 @@ update_ref_color_ramp (GstyleColorPanel *self,
 }
 
 static void
-color_picked_cb (GstyleColorPanel *self,
-                 GdkRGBA          *rgba)
+on_color_picked_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
 {
-  g_assert (GSTYLE_IS_COLOR_PANEL (self));
+  XdpPortal *portal = NULL;
+  GstyleColorPanel *color_panel = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) color_variant = NULL;
+  GdkRGBA picked_color;
 
-  gstyle_color_plane_set_rgba (self->color_plane, rgba);
-}
+  g_assert (XDP_IS_PORTAL (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GSTYLE_IS_COLOR_PANEL (user_data));
 
-static void
-grab_released_cb (GstyleColorPanel *self)
-{
-  g_assert (GSTYLE_IS_COLOR_PANEL (self));
+  portal = XDP_PORTAL (object);
+  color_panel = GSTYLE_COLOR_PANEL (user_data);
 
-  g_clear_object (&self->eyedropper);
+  color_variant = xdp_portal_pick_color_finish (portal, result, &error);
+  if (error)
+    {
+      g_warning ("Couldn't pick color using the portal: %s", error->message);
+      return;
+    }
+  g_variant_get (color_variant, "(ddd)", &picked_color.red, &picked_color.green, &picked_color.blue);
+  gstyle_color_plane_set_rgba (color_panel->color_plane, &picked_color);
 }
 
 static void
 picker_button_clicked_cb (GstyleColorPanel *self,
                           GtkButton        *picker_button)
 {
-  GdkEvent *event;
+  g_autoptr(XdpPortal) portal = NULL;
+  XdpParent *portal_parent = NULL;
+  GtkWindow *window = NULL;
 
   g_assert (GSTYLE_IS_COLOR_PANEL (self));
   g_assert (GTK_IS_BUTTON (picker_button));
 
-  event = gtk_get_current_event ();
-  g_assert (event != NULL);
+  portal = xdp_portal_new ();
+  window = GTK_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW));
+  portal_parent = xdp_parent_new_gtk (window);
 
-  self->eyedropper = g_object_ref_sink (g_object_new (GSTYLE_TYPE_EYEDROPPER,
-                                        "source-event", event,
-                                        NULL));
-  gdk_event_free (event);
-
-  g_signal_connect_object (self->eyedropper,
-                           "color-picked",
-                           G_CALLBACK (color_picked_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->eyedropper,
-                           "grab-released",
-                           G_CALLBACK (grab_released_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  xdp_portal_pick_color (portal, portal_parent, NULL, on_color_picked_cb, self);
+  xdp_parent_free (portal_parent);
 }
 
 static void
@@ -1260,7 +1263,6 @@ gstyle_color_panel_dispose (GObject *object)
   g_clear_object (&self->default_provider);
   g_clear_object (&self->degree_icon);
   g_clear_object (&self->percent_icon);
-  g_clear_object (&self->eyedropper);
   gstyle_color_panel_set_prefs_pages (self, NULL, NULL, NULL, NULL);
 
   G_OBJECT_CLASS (gstyle_color_panel_parent_class)->dispose (object);
