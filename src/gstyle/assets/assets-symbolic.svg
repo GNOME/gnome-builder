@@ -163,39 +163,5 @@
          id="rect9609"
          style="fill:none;fill-opacity:0.2118644;fill-rule:evenodd;stroke-width:0;stroke-linecap:round" />
     </g>
-    <g
-       id="eyedropper-symbolic"
-       transform="translate(20.625,-0.6875)"
-       inkscape:label="#g4291">
-      <path
-         sodipodi:nodetypes="ccc"
-         inkscape:connector-curvature="0"
-         id="path4190"
-         d="m 325.08221,181.00746 -9.39652,9.37044 c -0.0593,0.19104 -0.13503,0.70852 -0.31608,1.83278"
-         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.85961121;stroke-linecap:round;stroke-linejoin:round" />
-      <path
-         d="m 330.01187,178.39722 c 0.50034,0.49896 0.72124,1.67539 0.18776,2.20739 l -1.42563,1.42167 m 1.23974,-3.62719 c -0.50034,-0.49896 -1.67528,-0.7145 -2.20877,-0.18249 l -1.42563,1.42168"
-         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.85961121"
-         id="path4194"
-         inkscape:connector-curvature="0" />
-      <path
-         id="path4196"
-         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.36000001"
-         d="m 327.65392,180.74863 1.99551,2.00859 c 0.74951,0.75441 -0.0403,1.57988 -0.81777,0.81834 l -1.96434,-1.93901 m 0.79322,-0.88131 -2.00702,-1.95616 c -0.76156,-0.74225 -1.61765,0.0175 -0.854,0.79288 l 2.0678,2.04459"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="cscccscc" />
-      <path
-         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.85961121;stroke-linecap:round;stroke-linejoin:round"
-         d="m 327.40101,183.31981 -9.39654,9.37046 c -0.2369,0.13014 -0.79628,0.1733 -1.81098,0.35543"
-         id="path4198"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccc" />
-      <path
-         sodipodi:nodetypes="cccccc"
-         inkscape:connector-curvature="0"
-         id="path4210"
-         d="m 316.6416,191.77213 0.0909,-0.72459 c 1.08126,-1.05238 2.4727,-2.56936 3.19187,-3.26065 l 1.33643,-6e-5 -3.91848,3.9076 z"
-         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.05546677;stroke-linecap:square;stroke-linejoin:round" />
-    </g>
   </g>
 </svg>

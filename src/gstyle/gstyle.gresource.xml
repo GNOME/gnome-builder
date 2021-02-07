@@ -34,8 +34,6 @@
     <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-backdrop@2.png">assets/color-scale-slider-vertical-backdrop@2.png</file>
     <file preprocess='to-pixdata' alias="colorscale/color-scale-slider-vertical-backdrop-insensitive@2.png">assets/color-scale-slider-vertical-backdrop-insensitive@2.png</file>
 
-    <file alias="icons/scalable/actions/eyedropper-symbolic.svg">assets/eyedropper-symbolic.svg</file>
-
     <file alias="icons/unit-percent-symbolic.svg">assets/unit-percent-symbolic.svg</file>
     <file alias="icons/unit-degree-symbolic.svg">assets/unit-degree-symbolic.svg</file>
   </gresource>

@@ -1,3 +1,2 @@
-eyedropper-symbolic
 unit-percent-symbolic
 unit-degree-symbolic

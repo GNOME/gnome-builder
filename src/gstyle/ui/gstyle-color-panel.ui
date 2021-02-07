@@ -107,7 +107,7 @@
                       <object class="GtkImage">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="icon-name">eyedropper-symbolic</property>
+                        <property name="icon-name">color-select-symbolic</property>
                       </object>
                     </child>
                   </object>
