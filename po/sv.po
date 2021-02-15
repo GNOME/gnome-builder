@@ -1,16 +1,17 @@
 # Swedish translation for gnome-builder.
-# Copyright © 2015-2020 gnome-builder's COPYRIGHT HOLDER
+# Copyright © 2015-2021 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018, 2019, 2020.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Sebastian Rasmussen <sebras@gmail.com>, 2016, 2017.
 # Josef Andersson <josef.andersson@fripost.org>, 2018.
+# Luna Jernberg <droidbittin@gmail.com>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2020-11-28 12:41+0000\n"
-"PO-Revision-Date: 2020-11-30 01:27+0100\n"
+"POT-Creation-Date: 2021-01-22 19:17+0000\n"
+"PO-Revision-Date: 2021-02-15 20:45+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -23,7 +24,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:234
+#: src/libide/gui/ide-preferences-builtin.c:140 src/main.c:234
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -281,7 +282,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Om aktiverad kommer redigeraren att visa relativa radnummer."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:60
-#: src/libide/gui/ide-preferences-builtin.c:147
+#: src/libide/gui/ide-preferences-builtin.c:144
 msgid "Smart Backspace"
 msgstr "Smart backsteg"
 
@@ -294,7 +295,7 @@ msgstr ""
 "indenteringsstorleken."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/libide/gui/ide-preferences-builtin.c:146
+#: src/libide/gui/ide-preferences-builtin.c:143
 msgid "Smart Home and End"
 msgstr "Smarta Home och End"
 
@@ -311,7 +312,7 @@ msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Om aktiverad kommer redigeraren visa rutnät i dokumentet."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:85
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Show overview map"
 msgstr "Visa översiktskarta"
 
@@ -344,7 +345,7 @@ msgid "The various types of space to draw in the editor."
 msgstr "De olika typerna av blanktecken att rita ut i redigeraren."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
-#: src/libide/gui/ide-preferences-builtin.c:162
+#: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Overscroll"
 msgstr "Överrullning"
 
@@ -365,7 +366,7 @@ msgstr ""
 "textraden syns."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:111
-#: src/libide/gui/ide-preferences-builtin.c:188
+#: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Autosave Enabled"
 msgstr "Automatiskt sparande aktiverat"
 
@@ -374,7 +375,7 @@ msgid "Enable or disable autosave feature."
 msgstr "Aktivera eller inaktivera funktion för automatiskt sparande."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:117
-#: src/libide/gui/ide-preferences-builtin.c:189
+#: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Autosave Frequency"
 msgstr "Frekvens för automatiskt sparande"
 
@@ -401,7 +402,7 @@ msgstr ""
 "Antalet bildpunkter att inkludera ovanför och under rader i redigeraren."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:134
-#: src/libide/gui/ide-preferences-builtin.c:210
+#: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Interactive Completion"
 msgstr "Interaktiv komplettering"
 
@@ -477,7 +478,7 @@ msgid "\"Projects\""
 msgstr "\"Projekt\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:421
 msgid "Projects directory"
 msgstr "Projektkatalog"
 
@@ -862,7 +863,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Läs in eller generera en palett med inställningarna"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5022
+#: src/libide/sourceview/ide-source-view.c:5025
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 #: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
@@ -932,7 +933,7 @@ msgstr "Namnlös"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/libide/debugger/ide-debug-manager.c:1000
+#: src/libide/debugger/ide-debug-manager.c:1001
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "Ingen lämplig felsökare hittades."
@@ -1136,11 +1137,12 @@ msgstr "Färgmarkeringsläge"
 #: src/libide/editor/ide-editor-settings-dialog.ui:80
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
-#: src/libide/gui/ide-preferences-builtin.c:155
-#: src/libide/gui/ide-preferences-builtin.c:208
-#: src/libide/gui/ide-preferences-builtin.c:331
-#: src/libide/gui/ide-preferences-builtin.c:403
+#: src/libide/gui/ide-preferences-builtin.c:152
+#: src/libide/gui/ide-preferences-builtin.c:205
+#: src/libide/gui/ide-preferences-builtin.c:328
+#: src/libide/gui/ide-preferences-builtin.c:400
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
@@ -1181,7 +1183,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "Överskrivning av efterföljande klammerparenteser och citationstecken"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:159
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Indentation"
 msgstr "Indentering"
 
@@ -1202,12 +1204,12 @@ msgid "8"
 msgstr "8"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:243
-#: src/libide/gui/ide-preferences-builtin.c:179
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Spaces"
 msgstr "Blanksteg"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:254
-#: src/libide/gui/ide-preferences-builtin.c:180
+#: src/libide/gui/ide-preferences-builtin.c:177
 msgid "Tabs"
 msgstr "Tabbar"
 
@@ -1259,7 +1261,7 @@ msgstr "Stäng alla filer"
 
 #: src/libide/editor/ide-editor-surface.c:565
 #: src/libide/gui/ide-preferences-builtin.c:106
-#: src/libide/gui/ide-preferences-builtin.c:153
+#: src/libide/gui/ide-preferences-builtin.c:150
 #: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
 msgid "Editor"
 msgstr "Redigerare"
@@ -1413,34 +1415,34 @@ msgid "Failed to locate runtime"
 msgstr "Misslyckades med att hitta exekveringsmiljö"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:540
+#: src/libide/foundry/ide-run-manager.c:538
 #, c-format
 msgid "Running %s…"
 msgstr "Kör %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:614
+#: src/libide/foundry/ide-run-manager.c:612
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Misslyckades med att bygga byggmålet: %s"
 
-#: src/libide/foundry/ide-run-manager.c:877
+#: src/libide/foundry/ide-run-manager.c:875
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Kortkommandon för arbetsbänk"
 
-#: src/libide/foundry/ide-run-manager.c:878
+#: src/libide/foundry/ide-run-manager.c:876
 msgid "Build and Run"
 msgstr "Bygg och kör"
 
-#: src/libide/foundry/ide-run-manager.c:1040
-#: src/libide/foundry/ide-run-manager.c:1106
+#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1104
 msgid "Failed to locate a build target"
 msgstr "Misslyckades med att hitta ett byggmål"
 
-#: src/libide/foundry/ide-run-manager.c:1242 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Kör"
@@ -1662,6 +1664,7 @@ msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Sebastian Rasmussen <sebras@gmail.com>\n"
+"Luna Jernberg <droidbittin@gmail.com>\n"
 "\n"
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
@@ -1879,225 +1882,199 @@ msgctxt "Keywords"
 msgid "editor line spacing font monospace"
 msgstr "redigerare radavstånd typsnitt fast breddsteg monospace"
 
-#. XXX: This belongs in terminal addin
-#: src/libide/gui/ide-preferences-builtin.c:109
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
-#: src/plugins/terminal/gtk/menus.ui:31
-msgid "Terminal"
-msgstr "Terminal"
-
-#: src/libide/gui/ide-preferences-builtin.c:109
-msgctxt "Keywords"
-msgid "terminal font monospace"
-msgstr "terminal typsnitt fast breddsteg monospace"
-
-#: src/libide/gui/ide-preferences-builtin.c:110
-msgid "Bold text in terminals"
-msgstr "Fet text i terminaler"
-
-#: src/libide/gui/ide-preferences-builtin.c:110
-msgid "If terminals are allowed to display bold text"
-msgstr "Om terminaler tillåts att visa fet text"
-
-#: src/libide/gui/ide-preferences-builtin.c:110
-msgctxt "Keywords"
-msgid "terminal allow bold"
-msgstr "terminal tillåt fet text"
-
-#: src/libide/gui/ide-preferences-builtin.c:115
+#: src/libide/gui/ide-preferences-builtin.c:112
 msgid "Color Scheme"
 msgstr "Färgschema"
 
-#: src/libide/gui/ide-preferences-builtin.c:140
+#: src/libide/gui/ide-preferences-builtin.c:137
 msgid "Keyboard"
 msgstr "Tangentbord"
 
-#: src/libide/gui/ide-preferences-builtin.c:142
+#: src/libide/gui/ide-preferences-builtin.c:139
 msgid "Emulation"
 msgstr "Emulering"
 
-#: src/libide/gui/ide-preferences-builtin.c:143
+#: src/libide/gui/ide-preferences-builtin.c:140
 msgid "Default keybinding mode which mimics gedit"
 msgstr "Standardtangentbindningsläge som imiterar gedit"
 
-#: src/libide/gui/ide-preferences-builtin.c:145
+#: src/libide/gui/ide-preferences-builtin.c:142
 msgid "Movement"
 msgstr "Förflyttning"
 
-#: src/libide/gui/ide-preferences-builtin.c:146
+#: src/libide/gui/ide-preferences-builtin.c:143
 msgid "Home moves to first non-whitespace character"
 msgstr "Home flyttar till första tecken som inte är blanksteg"
 
-#: src/libide/gui/ide-preferences-builtin.c:147
+#: src/libide/gui/ide-preferences-builtin.c:144
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backsteg kommer ta bort extra blanktecken för att hålla dig justerad med din "
 "indentering"
 
-#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:153
 msgid "Display list of open files"
 msgstr "Visa lista över öppna filer"
 
-#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:153
 msgid "Display the list of all open files in the project sidebar"
 msgstr "Visa listan över alla öppna filer i projektets sidopanel"
 
-#: src/libide/gui/ide-preferences-builtin.c:158
+#: src/libide/gui/ide-preferences-builtin.c:155
 msgid "Cursor"
 msgstr "Markör"
 
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:156
 msgid "Restore cursor position"
 msgstr "Återställ markörposition"
 
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:156
 msgid "Restore cursor position when a file is reopened"
 msgstr "Återställ markörposition då en fil öppnas på nytt"
 
-#: src/libide/gui/ide-preferences-builtin.c:160
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Enable text wrapping"
 msgstr "Aktivera textradbrytning"
 
-#: src/libide/gui/ide-preferences-builtin.c:160
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Wrap text that is too wide to display"
 msgstr "Radbryt text som är för bred för att visas"
 
-#: src/libide/gui/ide-preferences-builtin.c:161
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Scroll Offset"
 msgstr "Rullningsavstånd"
 
-#: src/libide/gui/ide-preferences-builtin.c:161
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Minsta antal rader att behålla ovanför och under markören"
 
-#: src/libide/gui/ide-preferences-builtin.c:162
+#: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Låt textredigeraren rulla förbi slutet på bufferten"
 
-#: src/libide/gui/ide-preferences-builtin.c:164
+#: src/libide/gui/ide-preferences-builtin.c:161
 msgid "Line Information"
 msgstr "Radinformation"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Line numbers"
 msgstr "Radnummer"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Show line number at beginning of each line"
 msgstr "Visa radnumret vid varje rads början"
 
-#: src/libide/gui/ide-preferences-builtin.c:166
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Relative line numbers"
 msgstr "Relativa radnummer"
 
-#: src/libide/gui/ide-preferences-builtin.c:166
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Show line numbers relative to the cursor line"
 msgstr "Visa radnummer relativt till markörens rad"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Line changes"
 msgstr "Radändringar"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Show if a line was added or modified next to line number"
 msgstr "Visa huruvida en rad har lagts till eller ändrats intill radnumret"
 
-#: src/libide/gui/ide-preferences-builtin.c:168
+#: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Line diagnostics"
 msgstr "Raddiagnostik"
 
-#: src/libide/gui/ide-preferences-builtin.c:168
+#: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr "Visa en ikon intill radnumren som indikerar typen av diagnostik"
 
-#: src/libide/gui/ide-preferences-builtin.c:170
+#: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Highlight"
 msgstr "Färgmarkering"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Current line"
 msgstr "Aktuell rad"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Make current line stand out with highlights"
 msgstr "Få aktuell rad att sticka ut med färgmarkering"
 
-#: src/libide/gui/ide-preferences-builtin.c:172
+#: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Matching brackets"
 msgstr "Matchande parenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:172
+#: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Färgmarkera matchande parenteser baserat på markörposition"
 
-#: src/libide/gui/ide-preferences-builtin.c:174
+#: src/libide/gui/ide-preferences-builtin.c:171
 msgid "Code Overview"
 msgstr "Översiktskarta för kod"
 
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "En utzoomad vy för att förbättra källkodsnavigering"
 
-#: src/libide/gui/ide-preferences-builtin.c:176
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "Automatically hide overview map"
 msgstr "Dölj automatiskt översiktskarta"
 
-#: src/libide/gui/ide-preferences-builtin.c:176
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "Automatically hide map when editor loses focus"
 msgstr "Dölj automatiskt karta när textredigeraren tappar fokus"
 
-#: src/libide/gui/ide-preferences-builtin.c:178
+#: src/libide/gui/ide-preferences-builtin.c:175
 msgid "Visible Whitespace Characters"
 msgstr "Synliga blanktecken"
 
-#: src/libide/gui/ide-preferences-builtin.c:181
+#: src/libide/gui/ide-preferences-builtin.c:178
 msgid "New line and carriage return"
 msgstr "Nyrad och vagnretur"
 
-#: src/libide/gui/ide-preferences-builtin.c:182
+#: src/libide/gui/ide-preferences-builtin.c:179
 msgid "Non-breaking spaces"
 msgstr "Icke-brytande blanksteg"
 
-#: src/libide/gui/ide-preferences-builtin.c:183
+#: src/libide/gui/ide-preferences-builtin.c:180
 msgid "Spaces inside of text"
 msgstr "Blanksteg inuti text"
 
-#: src/libide/gui/ide-preferences-builtin.c:184
+#: src/libide/gui/ide-preferences-builtin.c:181
 msgid "Trailing Only"
 msgstr "Endast eftersläpande"
 
-#: src/libide/gui/ide-preferences-builtin.c:185
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Leading Only"
 msgstr "Endast inledande"
 
-#: src/libide/gui/ide-preferences-builtin.c:187
+#: src/libide/gui/ide-preferences-builtin.c:184
 msgid "Autosave"
 msgstr "Automatiskt sparande"
 
-#: src/libide/gui/ide-preferences-builtin.c:188
+#: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Enable or disable autosave feature"
 msgstr "Aktivera eller inaktivera funktion för automatiskt sparande"
 
-#: src/libide/gui/ide-preferences-builtin.c:189
+#: src/libide/gui/ide-preferences-builtin.c:186
 msgid "The number of seconds after modification before auto saving"
 msgstr "Antalet sekunder efter modifiering innan automatisk sparning"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:192
 msgid "Code Insight"
 msgstr "Kodinsikt"
 
-#: src/libide/gui/ide-preferences-builtin.c:197
+#: src/libide/gui/ide-preferences-builtin.c:194
 #: src/libide/sourceview/gtk/menus.ui:50 src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Färgmarkering"
 
-#: src/libide/gui/ide-preferences-builtin.c:198
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Semantic Highlighting"
 msgstr "Semantisk färgmarkering"
 
-#: src/libide/gui/ide-preferences-builtin.c:198
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
@@ -2105,189 +2082,189 @@ msgstr ""
 "Använd kodinsikt för att färgmarkera ytterligare information som hittas i "
 "källkodsfilen"
 
-#: src/libide/gui/ide-preferences-builtin.c:200
+#: src/libide/gui/ide-preferences-builtin.c:197
 #: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
-#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/libide/gui/ide-preferences-builtin.c:203
 msgid "Completion"
 msgstr "Komplettering"
 
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: src/libide/gui/ide-preferences-builtin.c:206
 msgid "Completions Display Size"
 msgstr "Kompletteringar visar storlek"
 
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: src/libide/gui/ide-preferences-builtin.c:206
 msgid "Number of completions to display"
 msgstr "Antal kompletteringar att visa"
 
-#: src/libide/gui/ide-preferences-builtin.c:210
+#: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Display code suggestions interactively as you type"
 msgstr "Visa kodförslag interaktivt medan du skriver"
 
-#: src/libide/gui/ide-preferences-builtin.c:212
+#: src/libide/gui/ide-preferences-builtin.c:209
 msgid "Completion Providers"
 msgstr "Kompletteringsleverantörer"
 
-#: src/libide/gui/ide-preferences-builtin.c:218
+#: src/libide/gui/ide-preferences-builtin.c:215
 msgid "Snippets"
 msgstr "Textsnuttar"
 
-#: src/libide/gui/ide-preferences-builtin.c:261
+#: src/libide/gui/ide-preferences-builtin.c:258
 msgid "Programming Languages"
 msgstr "Programmeringsspråk"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:272
+#: src/libide/gui/ide-preferences-builtin.c:269
 msgid "Search languages…"
 msgstr "Sök språk…"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:329
 msgid "Trim trailing whitespace"
 msgstr "Ta bort eftersläpande blanksteg"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:329
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr "Vid sparande kommer eftersläpande blanktecken att tas bort."
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:330
 msgid "Overwrite Braces"
 msgstr "Överskrivning av klammerparenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:330
 msgid "Overwrite closing braces"
 msgstr "Överskrivning av avslutande klammerparenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Insert Matching Brace"
 msgstr "Infoga matchande parenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Insert matching character for { [ ( or \""
 msgstr "Infoga matchande tecken för { [ ( eller \""
 
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Insert Trailing Newline"
 msgstr "Infoga avslutande radbrytning"
 
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Ensure files end with a newline"
 msgstr "Försäkra att filer slutar med nyrad"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:334
 msgid "Margins"
 msgstr "Marginaler"
 
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Show right margin"
 msgstr "Visa högermarginal"
 
-#: src/libide/gui/ide-preferences-builtin.c:339
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Right margin position"
 msgstr "Position för högermarginal"
 
-#: src/libide/gui/ide-preferences-builtin.c:339
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Position in spaces for the right margin"
 msgstr "Position i blanksteg för högermarginalen"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Tab width"
 msgstr "Tabbredd"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Width of a tab character in spaces"
 msgstr "Bredd för tabbtecken uttryckt i blanksteg"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Insert spaces instead of tabs"
 msgstr "Infoga blanksteg istället för tabbar"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Prefer spaces over use of tabs"
 msgstr "Föredra blanksteg istället för tabbar"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Automatically indent"
 msgstr "Automatisk indentering"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Indent source code as you type"
 msgstr "Indentera källkod allt eftersom du skriver"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Spacing"
 msgstr "Blanksteg"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Space before opening parentheses"
 msgstr "Blanksteg före inledande parenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:348
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Space before opening brackets"
 msgstr "Blanksteg före inledande hakparenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:349
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Space before opening braces"
 msgstr "Blanksteg före inledande klammerparenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:350
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening angles"
 msgstr "Blanksteg före inledande vinkelparenteser"
 
-#: src/libide/gui/ide-preferences-builtin.c:351
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Prefer a space before colons"
 msgstr "Föredra blanksteg framför kolon"
 
-#: src/libide/gui/ide-preferences-builtin.c:352
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Prefer a space before commas"
 msgstr "Föredra blanksteg framför kommatecken"
 
-#: src/libide/gui/ide-preferences-builtin.c:353
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before semicolons"
 msgstr "Föredra blanksteg framför semikolon"
 
-#: src/libide/gui/ide-preferences-builtin.c:363
-#: src/libide/gui/ide-preferences-builtin.c:381
+#: src/libide/gui/ide-preferences-builtin.c:360
+#: src/libide/gui/ide-preferences-builtin.c:378
 msgid "Default"
 msgstr "Standard"
 
-#: src/libide/gui/ide-preferences-builtin.c:368
-#: src/libide/gui/ide-preferences-builtin.c:386
+#: src/libide/gui/ide-preferences-builtin.c:365
+#: src/libide/gui/ide-preferences-builtin.c:383
 msgid "Number of CPU"
 msgstr "Antal processorer"
 
-#: src/libide/gui/ide-preferences-builtin.c:401
+#: src/libide/gui/ide-preferences-builtin.c:398
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "Bygg"
 
-#: src/libide/gui/ide-preferences-builtin.c:404
+#: src/libide/gui/ide-preferences-builtin.c:401
 msgid "Build Workers"
 msgstr "Byggarbetare"
 
-#: src/libide/gui/ide-preferences-builtin.c:404
+#: src/libide/gui/ide-preferences-builtin.c:401
 msgid "Number of parallel build workers"
 msgstr "Antal parallella byggarbetare"
 
-#: src/libide/gui/ide-preferences-builtin.c:412
+#: src/libide/gui/ide-preferences-builtin.c:409
 msgid "Clear build cache at startup"
 msgstr "Rensa byggcache vid uppstart"
 
-#: src/libide/gui/ide-preferences-builtin.c:412
+#: src/libide/gui/ide-preferences-builtin.c:409
 msgid "Expired caches will be purged when Builder is started"
 msgstr "Utgångna cachar kommer att rensas när Builder startas"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Network"
 msgstr "Nätverk"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:412
 msgid "Allow downloads over metered connections"
 msgstr "Tillåt hämtningar över anslutningar med datakvot"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:412
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2295,35 +2272,35 @@ msgstr ""
 "Tillåt användning av anslutningar med datakvot vid automatisk hämtning av "
 "beroenden"
 
-#: src/libide/gui/ide-preferences-builtin.c:421
+#: src/libide/gui/ide-preferences-builtin.c:418
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Projekt"
 
-#: src/libide/gui/ide-preferences-builtin.c:423
+#: src/libide/gui/ide-preferences-builtin.c:420
 msgid "Workspace"
 msgstr "Arbetsyta"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:421
 msgid "A place for all your projects"
 msgstr "En plats för alla dina projekt"
 
-#: src/libide/gui/ide-preferences-builtin.c:425
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Restore previously opened files"
 msgstr "Återställ tidigare öppnade filer"
 
-#: src/libide/gui/ide-preferences-builtin.c:425
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Open previously opened files when loading a project"
 msgstr "Öppna tidigare öppnade filer då ett projekt läses in"
 
-#: src/libide/gui/ide-preferences-builtin.c:547
+#: src/libide/gui/ide-preferences-builtin.c:544
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Versionshantering"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:560
+#: src/libide/gui/ide-preferences-builtin.c:557
 msgid "SDKs"
 msgstr "SDK:er"
 
@@ -2366,7 +2343,7 @@ msgid "Editor Shortcuts"
 msgstr "Kortkommandon för redigerare"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:555
+#: src/libide/gui/ide-shortcuts-window.ui:529
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Allmänt"
@@ -2382,37 +2359,37 @@ msgid "Toogle primary menu"
 msgstr "Aktivera/inaktivera primär meny"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:559
+#: src/libide/gui/ide-shortcuts-window.ui:533
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Global sökning"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:566
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Inställningar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:573
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Kommandorad"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:580
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:587
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal i exekveringsmiljö för bygge"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:594
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
@@ -2524,13 +2501,13 @@ msgid "Clear highlight"
 msgstr "Rensa färgmarkering"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:603
+#: src/libide/gui/ide-shortcuts-window.ui:577
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiera och klistra in"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:608
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiera markerad text till urklipp"
@@ -2541,7 +2518,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Klipp ut markerad text till urklipp"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:615
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Klistra in text från urklipp"
@@ -2746,42 +2723,17 @@ msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:522
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Gester för styrplatta"
-
-#: src/libide/gui/ide-shortcuts-window.ui:529
-msgctxt "shortcut window"
-msgid "Move page to the right"
-msgstr "Flytta sida till höger"
-
-#: src/libide/gui/ide-shortcuts-window.ui:530
-msgctxt "shortcut window"
-msgid "Three finger swipe right"
-msgstr "Trefingersvep åt höger"
-
-#: src/libide/gui/ide-shortcuts-window.ui:539
-msgctxt "shortcut window"
-msgid "Move page to the left"
-msgstr "Flytta sida till vänster"
-
-#: src/libide/gui/ide-shortcuts-window.ui:540
-msgctxt "shortcut window"
-msgid "Three finger swipe left"
-msgstr "Trefingersvep åt vänster"
-
-#: src/libide/gui/ide-shortcuts-window.ui:551
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Kortkommandon för terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:623
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Sök"
 
-#: src/libide/gui/ide-shortcuts-window.ui:628
+#: src/libide/gui/ide-shortcuts-window.ui:602
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Hitta text i terminal"
@@ -2896,38 +2848,38 @@ msgstr "Zooma _ut"
 msgid "Reset"
 msgstr "Återställ"
 
-#: src/libide/sourceview/ide-source-view.c:4436
+#: src/libide/sourceview/ide-source-view.c:4439
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4438
+#: src/libide/sourceview/ide-source-view.c:4441
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: src/libide/sourceview/ide-source-view.c:4564
+#: src/libide/sourceview/ide-source-view.c:4567
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
-#: src/libide/sourceview/ide-source-view.c:5021
+#: src/libide/sourceview/ide-source-view.c:5024
 msgid "Rename symbol"
 msgstr "Byt namn på symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5257
+#: src/libide/sourceview/ide-source-view.c:5260
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rad %u, Kolumn %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5283
+#: src/libide/sourceview/ide-source-view.c:5286
 msgid "No references were found"
 msgstr "Inga referenser hittades"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
-#: src/plugins/editor/gtk/menus.ui:131 src/plugins/editor/gtk/menus.ui:188
-#: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
+#: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
+#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Stäng"
 
@@ -3281,7 +3233,7 @@ msgstr "Exekveringsmiljö"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
 #: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
-#: src/plugins/ls/gbp-ls-page.ui:15
+#: src/plugins/ls/gbp-ls-page.ui:16
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
@@ -3319,7 +3271,7 @@ msgstr "Verktygskedja för bygge"
 msgid "_Save"
 msgstr "_Spara"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:374
+#: src/plugins/buildui/gbp-buildui-log-pane.c:370
 msgid "Build Output"
 msgstr "Byggutmatning"
 
@@ -3394,6 +3346,12 @@ msgstr "Fel"
 #: src/plugins/buildui/gbp-buildui-pane.ui:140
 msgid "Warnings"
 msgstr "Varningar"
+
+# Värde som sätts till true eller false
+#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
+msgid "true"
+msgstr "true"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
@@ -4204,7 +4162,7 @@ msgstr "Plats"
 msgid "Binary"
 msgstr "Binärt"
 
-#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:132
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:131
 msgid "Devhelp"
 msgstr "Devhelp"
 
@@ -4456,12 +4414,16 @@ msgid "New File"
 msgstr "Ny fil"
 
 #: src/plugins/editor/gtk/menus.ui:122
-msgid "Move Left"
-msgstr "Flytta vänster"
+msgid "Move Page Left"
+msgstr "Flytta sidan åt vänster"
 
 #: src/plugins/editor/gtk/menus.ui:126
-msgid "Move Right"
-msgstr "Flytta höger"
+msgid "Move Page Right"
+msgstr "Flytta sidan åt höger"
+
+#: src/plugins/editor/gtk/menus.ui:131
+msgid "Close Frame"
+msgstr "Stäng ram"
 
 #: src/plugins/editor/gtk/menus.ui:138
 msgid "Document"
@@ -4483,7 +4445,7 @@ msgstr "Dela"
 msgid "Save _As"
 msgstr "S_para som"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:157
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
 msgstr "Ingen fil tillhandahölls."
 
@@ -4850,23 +4812,23 @@ msgstr "Ångra det senaste kommandot"
 msgid "Redo the next command"
 msgstr "Gör om nästa kommando"
 
-#: src/plugins/glade/gbp-glade-page.c:494
+#: src/plugins/glade/gbp-glade-page.c:492
 msgid "Switch to selection mode"
 msgstr "Växla till markeringsläge"
 
-#: src/plugins/glade/gbp-glade-page.c:495
+#: src/plugins/glade/gbp-glade-page.c:493
 msgid "Switch to drag-resize mode"
 msgstr "Växla till läge för att dra och ändra storlek"
 
-#: src/plugins/glade/gbp-glade-page.c:496
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to margin editor"
 msgstr "Växla till marginalredigerare"
 
-#: src/plugins/glade/gbp-glade-page.c:497
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to alignment editor"
 msgstr "Växla till justeringsredigerare"
 
-#: src/plugins/glade/gbp-glade-page.c:502
+#: src/plugins/glade/gbp-glade-page.c:500
 msgid "Unnamed Glade project"
 msgstr "Namnlöst Glade-projekt"
 
@@ -5051,33 +5013,33 @@ msgstr "Föreslå kompletteringar från Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Använd Jedi för att tillhandahålla kompletteringar i språket Python"
 
-#: src/plugins/ls/gbp-ls-page.c:319
+#: src/plugins/ls/gbp-ls-page.c:315
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Misslyckades med att läsa in katalog: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:391
+#: src/plugins/ls/gbp-ls-page.c:387
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Katalog"
 
-#: src/plugins/ls/gbp-ls-page.ui:45
+#: src/plugins/ls/gbp-ls-page.ui:46
 msgid "Size"
 msgstr "Storlek"
 
-#: src/plugins/ls/gbp-ls-page.ui:58
+#: src/plugins/ls/gbp-ls-page.ui:59
 msgid "Modified"
 msgstr "Ändrad"
 
-#: src/plugins/ls/gtk/menus.ui:9
-msgid "Directory Browser"
-msgstr "Katalogbläddrare"
+#: src/plugins/ls/gtk/menus.ui:8
+msgid "Browse Folder"
+msgstr "Bläddra i mapp"
 
-#: src/plugins/ls/gtk/menus.ui:21
+#: src/plugins/ls/gtk/menus.ui:18
 msgid "Switch to Folder"
 msgstr "Växla till mapp"
 
-#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
 msgid "Open Containing Folder"
 msgstr "Öppna innehållande mapp"
 
@@ -5510,8 +5472,8 @@ msgstr "Visningsalternativ"
 
 #: src/plugins/project-tree/gtk/menus.ui:94
 #: src/plugins/project-tree/gtk/menus.ui:103
-msgid "Reveal in Project"
-msgstr "Visa i projekt"
+msgid "Reveal in Project Tree"
+msgstr "Visa i projektträd"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -6090,6 +6052,114 @@ msgstr "%s (systemrots-SDK)"
 msgid "Use terminal interface"
 msgstr "Använd terminalgränssnitt"
 
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gtk/menus.ui:31
+msgid "Terminal"
+msgstr "Terminal"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
+msgid "Scrollback"
+msgstr "Rullningshistorik"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
+msgid "Terminal Font"
+msgstr "Terminaltypsnitt"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:60
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "terminal typsnitt fast breddsteg monospace"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:70
+msgid "Bold text in terminals"
+msgstr "Fet text i terminaler"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:71
+msgid "If terminals are allowed to display bold text"
+msgstr "Om terminaler tillåts att visa fet text"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:72
+msgctxt "Keywords"
+msgid "terminal allow bold"
+msgstr "terminal tillåt fet text"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:81
+msgid "Show hyperlinks"
+msgstr "Visa hyperlänkar"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:82
+msgid ""
+"When enabled hyperlinks (OSC 8 escape sequences) are recognized and displayed"
+msgstr ""
+"När aktiverad kommer hyperlänkar (OSC 8-kontrollsekvenser) att kännas igen "
+"och visas"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:83
+msgctxt "Keywords"
+msgid "terminal show hyperlinks links urls"
+msgstr "terminal visa hyperlänkar länkar url"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:93
+msgid "Scroll on output"
+msgstr "Rulla vid utmatning"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:94
+msgid ""
+"When enabled the terminal will scroll to the bottom when new output is "
+"displayed"
+msgstr ""
+"När aktiverad kommer terminalen att rulla längst ner när ny utmatning visas"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:95
+msgctxt "Keywords"
+msgid "scroll on output"
+msgstr "rulla vid utmatning"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:104
+msgid "Scroll on keystroke"
+msgstr "Rulla vid tangentnedtryckning"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:105
+msgid "When enabled the terminal will scroll to the bottom when typing"
+msgstr "När aktiverad kommer terminalen att rulla längst ner vid inmatning"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:106
+msgctxt "Keywords"
+msgid "scroll on keystroke"
+msgstr "rulla vid tangentnedtryckning"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:115
+msgid "Limit Scrollback"
+msgstr "Begränsa rullningshistorik"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:116
+msgid ""
+"When enabled terminal scrollback will be limited to the number of lines "
+"specified below"
+msgstr ""
+"När aktiverad kommer terminalens rullningshistorik begränsas till antalet "
+"rader som anges nedan"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:117
+msgctxt "Keywords"
+msgid "scrollback limit"
+msgstr "rullningshistorik gräns"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
+msgid "Scrollback Lines"
+msgstr "Rader i rullningshistorik"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
+msgid "The number of lines to keep available for scrolling"
+msgstr "Antalet rader att behålla tillgängliga för rullning"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:127
+msgctxt "Keywords"
+msgid "scrollback lines"
+msgstr "rullningshistorik rader"
+
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
 msgid "Application Output"
 msgstr "Programutmatning"
@@ -6128,15 +6198,15 @@ msgstr "Ny te_rminal i exekveringsmiljö"
 msgid "Unit Test Output"
 msgstr "Enhetstestutdata"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:34
+#: src/plugins/testui/gbp-test-output-panel.ui:33
 msgid "Clear test output"
 msgstr "Rensa testutdata"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:51
+#: src/plugins/testui/gbp-test-output-panel.ui:50
 msgid "Cancel tests"
 msgstr "Avbryt tester"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:68
+#: src/plugins/testui/gbp-test-output-panel.ui:67
 msgid "Save test output"
 msgstr "Spara testutdata"
 
@@ -6327,6 +6397,29 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Touchpad gestures"
+#~ msgstr "Gester för styrplatta"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the right"
+#~ msgstr "Flytta sida till höger"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe right"
+#~ msgstr "Trefingersvep åt höger"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move page to the left"
+#~ msgstr "Flytta sida till vänster"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Three finger swipe left"
+#~ msgstr "Trefingersvep åt vänster"
+
+#~ msgid "Directory Browser"
+#~ msgstr "Katalogbläddrare"
 
 #~ msgid "Log"
 #~ msgstr "Logg"
@@ -6613,10 +6706,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "Building"
 #~ msgstr "Bygger"
-
-# Värde som sätts till true eller false
-#~ msgid "true"
-#~ msgstr "true"
 
 #~ msgctxt "button"
 #~ msgid "Build"
