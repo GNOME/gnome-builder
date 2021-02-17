@@ -478,10 +478,13 @@ install_task_completed_cb (GbpFlatpakRuntimeProvider *self,
   g_assert (pspec != NULL);
   g_assert (IDE_IS_TASK (task));
 
-  context = ide_object_ref_context (IDE_OBJECT (self));
+  if (!ide_task_had_error (task))
+    {
+      context = ide_object_ref_context (IDE_OBJECT (self));
 
-  if (context != NULL)
-    ide_build_manager_invalidate (ide_build_manager_from_context (context));
+      if (context != NULL)
+        ide_build_manager_invalidate (ide_build_manager_from_context (context));
+    }
 
   IDE_EXIT;
 }
@@ -810,6 +813,16 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
     }
   else
     {
+      /* We need to invalidate the pipeline if there are runtimes
+       * to install after they've been installed or we risk having
+       * missing bits like meson not found.
+       */
+      g_signal_connect_object (task,
+                               "notify::completed",
+                               G_CALLBACK (install_task_completed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
       /* Do not propagate cancellable to this operation or we risk cancelling
        * in-flight operations that the user is expecting to complete.
        */
