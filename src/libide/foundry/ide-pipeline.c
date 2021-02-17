@@ -662,7 +662,7 @@ extract_directory_change (IdePipeline  *self,
     return FALSE;
 
   len = &data[len - 1] - begin;
-  dir = g_strndup (begin, len);
+  dir = g_strndup ((gchar *)begin, len);
 
   if (g_utf8_validate (dir, len, NULL))
     {
