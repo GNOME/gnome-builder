@@ -104,6 +104,7 @@ gbp_podman_runtime_finalize (GObject *object)
   GbpPodmanRuntime *self = (GbpPodmanRuntime *)object;
 
   g_clear_pointer (&self->id, g_free);
+  g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS (gbp_podman_runtime_parent_class)->finalize (object);
 }
