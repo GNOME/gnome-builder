@@ -9,6 +9,8 @@ project('gnome-builder', 'c',
                    ],
 )
 
+symbolic_release = '40.alpha1'
+
 version_split = meson.project_version().split('.')
 MAJOR_VERSION = version_split[0]
 MINOR_VERSION = version_split[1]
@@ -75,6 +77,7 @@ status += [
 ]
 
 config_h = configuration_data()
+config_h.set_quoted('SYMBOLIC_RELEASE', symbolic_release)
 config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
 config_h.set_quoted('PACKAGE_ABI_S', libide_api_version)
 config_h.set('PACKAGE_ABI', libide_api_version)
