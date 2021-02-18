@@ -52,6 +52,7 @@ typedef struct
   GVariant       *server_capabilities;
   IdeLspTrace     trace;
   gchar          *root_uri;
+  gboolean        initialized;
 } IdeLspClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
@@ -1244,6 +1245,7 @@ ide_lsp_client_init (IdeLspClient *self)
 
   priv->trace = IDE_LSP_TRACE_OFF;
   priv->languages = g_ptr_array_new_with_free_func (g_free);
+  priv->initialized = FALSE;
 
   priv->diagnostics_by_file = g_hash_table_new_full ((GHashFunc)g_file_hash,
                                                      (GEqualFunc)g_file_equal,
@@ -1323,6 +1325,8 @@ ide_lsp_client_initialized_cb (GObject      *object,
 
   project = ide_project_from_context (context);
   dzl_signal_group_set_target (priv->project_signals, project);
+
+  priv->initialized = TRUE;
 
   g_signal_emit (self, signals[INITIALIZED], 0);
 
@@ -1691,6 +1695,11 @@ ide_lsp_client_call_async (IdeLspClient        *self,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_CONNECTED,
                                "No connection to language server");
+  else if (!priv->initialized)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_CONNECTED,
+                               "Server is not ready yet");
   else
     jsonrpc_client_call_async (priv->rpc_client,
                                method,
