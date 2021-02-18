@@ -7,7 +7,6 @@
   bind "<ctrl>s" { "action" ("editor-page", "save", "") };
   bind "<ctrl><shift>s" { "action" ("editor-page", "save-as", "") };
   bind "<ctrl>w" { "action" ("frame", "close-page", "") };
-  bind "<ctrl>q" { "action" ("app", "quit", "") };
 
   bind "<ctrl>z" { "clear-count" ()
                    "clear-selection" ()
