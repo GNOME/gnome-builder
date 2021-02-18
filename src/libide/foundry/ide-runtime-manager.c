@@ -280,7 +280,7 @@ ide_runtime_manager_get_runtime (IdeRuntimeManager *self,
 }
 
 static void
-install_lookup_cb (IdeExtensionSetAdapter *set,
+provides_lookup_cb (IdeExtensionSetAdapter *set,
                    PeasPluginInfo         *plugin,
                    IdeRuntimeProvider     *provider,
                    InstallLookup          *lookup)
@@ -295,7 +295,7 @@ install_lookup_cb (IdeExtensionSetAdapter *set,
 
   if (lookup->provider == NULL)
     {
-      if (ide_runtime_provider_can_install (provider, lookup->runtime_id))
+      if (ide_runtime_provider_provides (provider, lookup->runtime_id))
         lookup->provider = provider;
     }
 }
@@ -376,8 +376,15 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
    */
 
   lookup.runtime_id = runtime_id;
+
+  /*
+   * Detect extensions that are a runtime-provider for the configured runtime_id.
+   * Providers might need more time to finish setting up, but they can indicate here
+   * that they do provide the runtime for the current runtime_id. The runtime can then
+   * use the bootstrap_async method to finish the setup and let us know when it's ready.
+   */
   ide_extension_set_adapter_foreach (self->extensions,
-                                     (IdeExtensionSetAdapterForeachFunc) install_lookup_cb,
+                                     (IdeExtensionSetAdapterForeachFunc) provides_lookup_cb,
                                      &lookup);
 
   if (lookup.provider == NULL)

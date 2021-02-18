@@ -43,7 +43,7 @@ struct _IdeRuntimeProviderInterface
                                    IdeRuntimeManager    *manager);
   void        (*unload)           (IdeRuntimeProvider   *self,
                                    IdeRuntimeManager    *manager);
-  gboolean    (*can_install)      (IdeRuntimeProvider   *self,
+  gboolean    (*provides)      (IdeRuntimeProvider   *self,
                                    const gchar          *runtime_id);
   void        (*install_async)    (IdeRuntimeProvider   *self,
                                    const gchar          *runtime_id,
@@ -69,8 +69,8 @@ void        ide_runtime_provider_load             (IdeRuntimeProvider   *self,
 IDE_AVAILABLE_IN_3_32
 void        ide_runtime_provider_unload           (IdeRuntimeProvider   *self,
                                                    IdeRuntimeManager    *manager);
-IDE_AVAILABLE_IN_3_32
-gboolean    ide_runtime_provider_can_install      (IdeRuntimeProvider   *self,
+IDE_AVAILABLE_IN_3_40
+gboolean    ide_runtime_provider_provides      (IdeRuntimeProvider   *self,
                                                    const gchar          *runtime_id);
 IDE_AVAILABLE_IN_3_32
 void        ide_runtime_provider_install_async    (IdeRuntimeProvider   *self,

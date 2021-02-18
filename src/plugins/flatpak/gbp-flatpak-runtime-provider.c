@@ -263,7 +263,7 @@ gbp_flatpak_runtime_provider_init (GbpFlatpakRuntimeProvider *self)
 }
 
 static gboolean
-gbp_flatpak_runtime_provider_can_install (IdeRuntimeProvider *provider,
+gbp_flatpak_runtime_provider_provides (IdeRuntimeProvider *provider,
                                           const gchar        *runtime_id)
 {
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (provider));
@@ -857,7 +857,7 @@ runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
 {
   iface->load = gbp_flatpak_runtime_provider_load;
   iface->unload = gbp_flatpak_runtime_provider_unload;
-  iface->can_install = gbp_flatpak_runtime_provider_can_install;
+  iface->provides = gbp_flatpak_runtime_provider_provides;
   iface->install_async = gbp_flatpak_runtime_provider_install_async;
   iface->install_finish = gbp_flatpak_runtime_provider_install_finish;
   iface->bootstrap_async = gbp_flatpak_runtime_provider_bootstrap_async;

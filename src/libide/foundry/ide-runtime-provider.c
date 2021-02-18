@@ -46,7 +46,7 @@ ide_runtime_provider_real_unload (IdeRuntimeProvider *self,
 }
 
 static gboolean
-ide_runtime_provider_real_can_install (IdeRuntimeProvider *self,
+ide_runtime_provider_real_provides (IdeRuntimeProvider *self,
                                        const gchar        *runtime_id)
 {
   return FALSE;
@@ -168,7 +168,7 @@ ide_runtime_provider_default_init (IdeRuntimeProviderInterface *iface)
 {
   iface->load = ide_runtime_provider_real_load;
   iface->unload = ide_runtime_provider_real_unload;
-  iface->can_install = ide_runtime_provider_real_can_install;
+  iface->provides = ide_runtime_provider_real_provides;
   iface->install_async = ide_runtime_provider_real_install_async;
   iface->install_finish = ide_runtime_provider_real_install_finish;
   iface->bootstrap_async = ide_runtime_provider_real_bootstrap_async;
@@ -196,13 +196,13 @@ ide_runtime_provider_unload (IdeRuntimeProvider *self,
 }
 
 gboolean
-ide_runtime_provider_can_install (IdeRuntimeProvider *self,
+ide_runtime_provider_provides (IdeRuntimeProvider *self,
                                   const gchar        *runtime_id)
 {
   g_return_val_if_fail (IDE_IS_RUNTIME_PROVIDER (self), FALSE);
   g_return_val_if_fail (runtime_id != NULL, FALSE);
 
-  return IDE_RUNTIME_PROVIDER_GET_IFACE (self)->can_install (self, runtime_id);
+  return IDE_RUNTIME_PROVIDER_GET_IFACE (self)->provides (self, runtime_id);
 }
 
 void
