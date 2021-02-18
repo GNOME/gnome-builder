@@ -633,11 +633,13 @@ ide_subprocess_communicate_state_free (gpointer data)
   g_clear_object (&state->stdout_buf);
   g_clear_object (&state->stderr_buf);
 
-  if (state->cancellable_source)
+  if (state->cancellable_source != NULL)
     {
-      if (!g_source_is_destroyed (state->cancellable_source))
-        g_source_destroy (state->cancellable_source);
-      g_source_unref (state->cancellable_source);
+      GSource *source = g_steal_pointer (&state->cancellable_source);
+
+      if (!g_source_is_destroyed (source))
+        g_source_destroy (source);
+      g_source_unref (source);
     }
 
   g_slice_free (CommunicateState, state);
