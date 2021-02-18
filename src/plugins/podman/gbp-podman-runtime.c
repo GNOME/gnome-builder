@@ -31,6 +31,8 @@ struct _GbpPodmanRuntime
 {
   IdeRuntime  parent_instance;
   JsonObject *object;
+  gchar      *id;
+  GMutex      mutex;
   guint       has_started : 1;
 };
 
@@ -41,34 +43,29 @@ maybe_start (GbpPodmanRuntime *self)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  const gchar *id;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME (self));
+  g_assert (self->id != NULL);
 
   if (self->has_started)
     return;
 
-  if (json_object_has_member (self->object, "ID"))
-    id = json_object_get_string_member (self->object, "ID");
-  else
-    id = json_object_get_string_member (self->object, "Id");
-
-  if (id == NULL)
-    return;
+  g_mutex_lock (&self->mutex);
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE |
                                           G_SUBPROCESS_FLAGS_STDOUT_SILENCE);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_push_argv (launcher, "podman");
   ide_subprocess_launcher_push_argv (launcher, "start");
-  ide_subprocess_launcher_push_argv (launcher, id);
+  ide_subprocess_launcher_push_argv (launcher, self->id);
 
   if ((subprocess = ide_subprocess_launcher_spawn (launcher, NULL, NULL)))
     {
       ide_subprocess_wait_async (subprocess, NULL, NULL, NULL);
       self->has_started = TRUE;
     }
+
+  g_mutex_unlock (&self->mutex);
 }
 
 static IdeSubprocessLauncher *
@@ -77,27 +74,15 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
 {
   GbpPodmanRuntime *self = (GbpPodmanRuntime *)runtime;
   IdeSubprocessLauncher *launcher;
-  const gchar *runtime_id;
-  const gchar *id;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME (self));
-
-  runtime_id = ide_runtime_get_id (runtime);
-  g_return_val_if_fail (g_str_has_prefix (runtime_id, "podman:"), NULL);
+  g_assert (self->id != NULL);
 
   maybe_start (self);
 
-  if (json_object_has_member (self->object, "ID"))
-    id = json_object_get_string_member (self->object, "ID");
-  else
-    id = json_object_get_string_member (self->object, "Id");
-
-  g_return_val_if_fail (id != NULL, NULL);
-
   launcher = g_object_new (GBP_TYPE_PODMAN_SUBPROCESS_LAUNCHER,
-                       "id", id,
-                       NULL);
+                           "id", self->id,
+                           NULL);
 
   return launcher;
 }
@@ -108,15 +93,29 @@ gbp_podman_runtime_destroy (IdeObject *object)
   GbpPodmanRuntime *self = (GbpPodmanRuntime *)object;
 
   g_clear_pointer (&self->object, json_object_unref);
+  g_clear_pointer (&self->id, g_free);
 
   IDE_OBJECT_CLASS (gbp_podman_runtime_parent_class)->destroy (object);
 }
 
 static void
+gbp_podman_runtime_finalize (GObject *object)
+{
+  GbpPodmanRuntime *self = (GbpPodmanRuntime *)object;
+
+  g_clear_pointer (&self->id, g_free);
+
+  G_OBJECT_CLASS (gbp_podman_runtime_parent_class)->finalize (object);
+}
+
+static void
 gbp_podman_runtime_class_init (GbpPodmanRuntimeClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
   IdeRuntimeClass *runtime_class = IDE_RUNTIME_CLASS (klass);
+
+  object_class->finalize = gbp_podman_runtime_finalize;
 
   i_object_class->destroy = gbp_podman_runtime_destroy;
 
@@ -126,6 +125,7 @@ gbp_podman_runtime_class_init (GbpPodmanRuntimeClass *klass)
 static void
 gbp_podman_runtime_init (GbpPodmanRuntime *self)
 {
+  g_mutex_init (&self->mutex);
 }
 
 GbpPodmanRuntime *
@@ -170,6 +170,7 @@ gbp_podman_runtime_new (JsonObject *object)
                        "display-name", names,
                        NULL);
   self->object = json_object_ref (object);
+  self->id = g_strdup (id);
 
   return g_steal_pointer (&self);
 }
