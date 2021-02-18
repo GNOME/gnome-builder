@@ -194,7 +194,9 @@ view_populate_submenu (GbBeautifierEditorAddin *self,
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_SOURCE_VIEW (view));
   g_assert (G_IS_MENU (submenu));
-  g_assert (entries != NULL);
+
+  if (entries == NULL)
+    return;
 
   default_menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-beautify-default-section");
   g_menu_remove_all (default_menu);
