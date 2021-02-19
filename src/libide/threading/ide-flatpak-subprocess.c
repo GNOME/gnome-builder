@@ -165,17 +165,18 @@ enum {
   N_PROPS
 };
 
-static void              ide_flatpak_subprocess_sync_complete        (IdeFlatpakSubprocess  *self,
-                                                                       GAsyncResult          **result);
-static void              ide_flatpak_subprocess_sync_done            (GObject                *object,
-                                                                       GAsyncResult           *result,
-                                                                       gpointer                user_data);
+static void              ide_flatpak_subprocess_sync_complete        (IdeFlatpakSubprocess   *self,
+                                                                      GAsyncResult         **result);
+static void              ide_flatpak_subprocess_sync_done            (GObject               *object,
+                                                                      GAsyncResult          *result,
+                                                                      gpointer               user_data);
+static void              ide_flatpak_subprocess_sync_setup           (IdeFlatpakSubprocess  *self);
 static CommunicateState *ide_flatpak_subprocess_communicate_internal (IdeFlatpakSubprocess  *subprocess,
-                                                                       gboolean                add_nul,
-                                                                       GBytes                 *stdin_buf,
-                                                                       GCancellable           *cancellable,
-                                                                       GAsyncReadyCallback     callback,
-                                                                       gpointer                user_data);
+                                                                      gboolean               add_nul,
+                                                                      GBytes                *stdin_buf,
+                                                                      GCancellable          *cancellable,
+                                                                      GAsyncReadyCallback    callback,
+                                                                      gpointer               user_data);
 
 static GParamSpec *properties [N_PROPS];
 
@@ -451,6 +452,7 @@ ide_flatpak_subprocess_communicate_utf8 (IdeSubprocess  *subprocess,
     stdin_buf_len = strlen (stdin_buf);
   stdin_bytes = g_bytes_new (stdin_buf, stdin_buf_len);
 
+  ide_flatpak_subprocess_sync_setup (self);
   ide_flatpak_subprocess_communicate_internal (self,
                                                TRUE,
                                                stdin_bytes,
@@ -568,8 +570,7 @@ ide_flatpak_subprocess_force_exit (IdeSubprocess *subprocess)
 }
 
 static void
-ide_flatpak_subprocess_sync_complete (IdeFlatpakSubprocess  *self,
-                                       GAsyncResult          **result)
+ide_flatpak_subprocess_sync_setup (IdeFlatpakSubprocess *self)
 {
   g_autoptr(GMainContext) free_me = NULL;
   GMainContext *main_context = NULL;
@@ -577,8 +578,10 @@ ide_flatpak_subprocess_sync_complete (IdeFlatpakSubprocess  *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
-  g_assert (result != NULL);
-  g_assert (*result == NULL || G_IS_ASYNC_RESULT (*result));
+
+  g_mutex_lock (&self->waiter_mutex);
+
+  g_assert (self->main_context == NULL);
 
   if (NULL == (main_context = g_main_context_get_thread_default ()))
     {
@@ -588,12 +591,26 @@ ide_flatpak_subprocess_sync_complete (IdeFlatpakSubprocess  *self,
         main_context = free_me = g_main_context_new ();
     }
 
-  g_mutex_lock (&self->waiter_mutex);
   self->main_context = g_main_context_ref (main_context);
+
   g_mutex_unlock (&self->waiter_mutex);
 
+  IDE_EXIT;
+}
+
+static void
+ide_flatpak_subprocess_sync_complete (IdeFlatpakSubprocess  *self,
+                                       GAsyncResult          **result)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
+  g_assert (result != NULL);
+  g_assert (*result == NULL || G_IS_ASYNC_RESULT (*result));
+  g_assert (self->main_context != NULL);
+
   while (*result == NULL)
-    g_main_context_iteration (main_context, TRUE);
+    g_main_context_iteration (self->main_context, TRUE);
 
   IDE_EXIT;
 }
@@ -886,6 +903,7 @@ ide_flatpak_subprocess_communicate (IdeSubprocess  *subprocess,
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  ide_flatpak_subprocess_sync_setup (self);
   ide_flatpak_subprocess_communicate_internal (self,
                                                FALSE,
                                                stdin_buf,
