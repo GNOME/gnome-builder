@@ -294,7 +294,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
    * here about whether or not it is setup fully. It may be delayed due
    * to device initialization.
    */
-  if (pipeline == NULL)
+  if (pipeline == NULL || !ide_pipeline_is_ready (pipeline))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
