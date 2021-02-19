@@ -43,11 +43,12 @@ typedef struct
 
 typedef struct
 {
+  GList         link;
   IdeTask      *task;
-  const gchar  *method;
+  gchar        *method;
   GVariant     *params;
   GCancellable *cancellable;
-} LspMessage;
+} PendingMessage;
 
 typedef struct
 {
@@ -61,7 +62,7 @@ typedef struct
   IdeLspTrace     trace;
   gchar          *root_uri;
   gboolean        initialized;
-  GQueue         *pending_messages;
+  GQueue          pending_messages;
 } IdeLspClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
@@ -103,6 +104,10 @@ enum {
   N_SIGNALS
 };
 
+static void ide_lsp_client_call_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data);
+
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
@@ -132,36 +137,54 @@ async_call_unref (gpointer data)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (AsyncCall, async_call_unref);
 
-static LspMessage *
-lsp_message_new (IdeTask      *task,
-                 const gchar  *method,
-                 GVariant     *params,
-                 GCancellable *cancellable)
+static void
+pending_message_fail (PendingMessage *message)
 {
-  LspMessage *lm =  g_atomic_rc_box_new0 (LspMessage);
-  lm->task = g_object_ref (task);
-  lm->method = method;
-  lm->params = g_variant_ref (params);
-  lm->cancellable = g_object_ref (cancellable);
-  return lm;
+  g_assert (message != NULL);
+  g_assert (message->link.prev == NULL);
+  g_assert (message->link.next == NULL);
+  g_assert (message->link.data == message);
+  g_assert (IDE_IS_TASK (message->task));
+  g_assert (!message->cancellable || G_IS_CANCELLABLE (message->cancellable));
+  g_assert (message->method != NULL);
+
+  ide_task_return_new_error (message->task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_CANCELLED,
+                             "The operation has been cancelled");
+
+  g_clear_object (&message->task);
+  g_clear_object (&message->cancellable);
+  g_clear_pointer (&message->method, g_free);
+  g_clear_pointer (&message->params, g_variant_unref);
+  g_slice_free (PendingMessage, message);
 }
 
 static void
-lsp_message_finalize (gpointer data)
+pending_message_submit (PendingMessage *message,
+                        JsonrpcClient  *rpc_client)
 {
-  LspMessage *lm = data;
-  g_clear_object (&lm->task);
-  g_clear_pointer (&lm->params, g_variant_unref);
-  g_clear_pointer (&lm->cancellable, g_object_unref);
-}
+  g_assert (JSONRPC_IS_CLIENT (rpc_client));
+  g_assert (message != NULL);
+  g_assert (message->link.prev == NULL);
+  g_assert (message->link.next == NULL);
+  g_assert (message->link.data == message);
+  g_assert (IDE_IS_TASK (message->task));
+  g_assert (!message->cancellable || G_IS_CANCELLABLE (message->cancellable));
+  g_assert (message->method != NULL);
 
-static void
-lsp_message_unref (gpointer data)
-{
-  g_atomic_rc_box_release_full (data, lsp_message_finalize);
-}
+  jsonrpc_client_call_async (rpc_client,
+                             message->method,
+                             message->params,
+                             message->cancellable,
+                             ide_lsp_client_call_cb,
+                             g_steal_pointer (&message->task));
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (LspMessage, lsp_message_unref);
+  g_clear_object (&message->cancellable);
+  g_clear_pointer (&message->method, g_free);
+  g_clear_pointer (&message->params, g_variant_unref);
+  g_slice_free (PendingMessage, message);
+}
 
 static gboolean
 ide_lsp_client_supports_buffer (IdeLspClient *self,
@@ -1067,6 +1090,25 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
 }
 
 static void
+ide_lsp_client_dispose (GObject *object)
+{
+  IdeLspClient *self = (IdeLspClient *)object;
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+
+  while (priv->pending_messages.length > 0)
+    {
+      PendingMessage *message = priv->pending_messages.head->data;
+
+      g_queue_unlink (&priv->pending_messages, &message->link);
+      pending_message_fail (message);
+    }
+
+  G_OBJECT_CLASS (ide_lsp_client_parent_class)->dispose (object);
+}
+
+static void
 ide_lsp_client_finalize (GObject *object)
 {
   IdeLspClient *self = (IdeLspClient *)object;
@@ -1081,7 +1123,6 @@ ide_lsp_client_finalize (GObject *object)
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);
-  g_clear_object (&priv->pending_messages);
 
   G_OBJECT_CLASS (ide_lsp_client_parent_class)->finalize (object);
 }
@@ -1171,6 +1212,7 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = ide_lsp_client_dispose;
   object_class->finalize = ide_lsp_client_finalize;
   object_class->get_property = ide_lsp_client_get_property;
   object_class->set_property = ide_lsp_client_set_property;
@@ -1337,15 +1379,9 @@ ide_lsp_client_init (IdeLspClient *self)
 }
 
 static void
-ide_lsp_client_call_cb (GObject      *object,
-                        GAsyncResult *result,
-                        gpointer      user_data);
-
-static void
 ide_lsp_client_flush_queue (IdeLspClient *self)
 {
   IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
-  guint queue_length;
 
   IDE_ENTRY;
 
@@ -1353,32 +1389,17 @@ ide_lsp_client_flush_queue (IdeLspClient *self)
   g_assert (IDE_IS_LSP_CLIENT (self));
   g_return_if_fail (!priv->rpc_client || JSONRPC_IS_CLIENT (priv->rpc_client));
 
-  queue_length = g_queue_get_length (priv->pending_messages);
+  if (priv->pending_messages.length == 0 || priv->rpc_client == NULL)
+    IDE_EXIT;
 
-  if (queue_length > 0)
+  IDE_TRACE_MSG ("Flushing pending queue of length %u", priv->pending_messages.length);
+
+  while (priv->pending_messages.length > 0)
     {
-      g_autoptr (LspMessage) message;
-
-      while (NULL != (message = g_queue_pop_head (priv->pending_messages)))
-        {
-          g_return_if_fail (message->method != NULL);
-          g_return_if_fail (!message->cancellable || G_IS_CANCELLABLE (message->cancellable));
-
-          if (priv->rpc_client == NULL)
-            ide_task_return_new_error (message->task,
-                                       G_IO_ERROR,
-                                       G_IO_ERROR_NOT_CONNECTED,
-                                       "No connection to language server");
-
-          jsonrpc_client_call_async (priv->rpc_client,
-                                 message->method,
-                                 message->params,
-                                 message->cancellable,
-                                 ide_lsp_client_call_cb,
-                                 g_steal_pointer (&message->task));
-        }
+      PendingMessage *message = priv->pending_messages.head->data;
+      g_queue_unlink (&priv->pending_messages, &message->link);
+      pending_message_submit (message, priv->rpc_client);
     }
-  IDE_TRACE_MSG ("LSP processed build up queue of length: %d", queue_length);
 
   IDE_EXIT;
 }
@@ -1395,7 +1416,6 @@ ide_lsp_client_initialized_cb (GObject      *object,
   IdeBufferManager *buffer_manager;
   IdeProject *project;
   IdeContext *context;
-  guint queue_length;
 
   IDE_ENTRY;
 
@@ -1419,12 +1439,7 @@ ide_lsp_client_initialized_cb (GObject      *object,
 
   g_signal_emit (self, signals[INITIALIZED], 0);
 
-  queue_length = g_queue_get_length (priv->pending_messages);
-
-  if (queue_length > 0)
-    {
-      ide_lsp_client_flush_queue (self);
-    }
+  ide_lsp_client_flush_queue (self);
 
   IDE_EXIT;
 }
@@ -1511,7 +1526,6 @@ ide_lsp_client_start (IdeLspClient *self)
     }
 
   priv->rpc_client = jsonrpc_client_new (priv->io_stream);
-  priv->pending_messages = g_queue_new();
 
   workdir = ide_context_ref_workdir (context);
   root_path = g_file_get_path (workdir);
@@ -1750,6 +1764,38 @@ ide_lsp_client_call_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static void
+ide_lsp_client_queue_message (IdeLspClient *self,
+                              const char   *method,
+                              GVariant     *params,
+                              GCancellable *cancellable,
+                              IdeTask      *task)
+
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+  PendingMessage *pending;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_CLIENT (self));
+  g_assert (method != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_TASK (task));
+
+  IDE_TRACE_MSG ("Queuing LSP call to method %s", method);
+
+  pending = g_slice_new0 (PendingMessage);
+  pending->link.data = pending;
+  pending->task = g_steal_pointer (&task);
+  pending->method = g_strdup (method);
+  pending->params = params ? g_variant_ref (params) : NULL;
+  g_set_object (&pending->cancellable, cancellable);
+
+  g_queue_push_tail_link (&priv->pending_messages, &pending->link);
+
+  IDE_EXIT;
+}
+
 /**
  * ide_lsp_client_call_async:
  * @self: An #IdeLspClient
@@ -1775,7 +1821,6 @@ ide_lsp_client_call_async (IdeLspClient        *self,
 {
   IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(LspMessage) message = NULL;
 
   IDE_ENTRY;
 
@@ -1793,13 +1838,14 @@ ide_lsp_client_call_async (IdeLspClient        *self,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_CONNECTED,
                                "No connection to language server");
-  else if (!priv->initialized && !(g_str_equal(method, "initialize") || g_str_equal (method, "initialized")))
-    {
-      IDE_TRACE_MSG("queueing up method: %s", method);
-      message = lsp_message_new(g_steal_pointer(&task), method, params, g_steal_pointer (&cancellable));
-
-      g_queue_push_head(priv->pending_messages, g_steal_pointer (&message));
-    }
+  else if (!priv->initialized &&
+           !(g_str_equal (method, "initialize") ||
+             g_str_equal (method, "initialized")))
+    ide_lsp_client_queue_message (self,
+                                  method,
+                                  params,
+                                  cancellable,
+                                  g_steal_pointer (&task));
   else
     jsonrpc_client_call_async (priv->rpc_client,
                                method,
