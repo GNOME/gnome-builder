@@ -43,6 +43,14 @@ typedef struct
 
 typedef struct
 {
+  IdeTask      *task;
+  const gchar  *method;
+  GVariant     *params;
+  GCancellable *cancellable;
+} LspMessage;
+
+typedef struct
+{
   DzlSignalGroup *buffer_manager_signals;
   DzlSignalGroup *project_signals;
   JsonrpcClient  *rpc_client;
@@ -53,6 +61,7 @@ typedef struct
   IdeLspTrace     trace;
   gchar          *root_uri;
   gboolean        initialized;
+  GQueue         *pending_messages;
 } IdeLspClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
@@ -122,6 +131,37 @@ async_call_unref (gpointer data)
 }
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (AsyncCall, async_call_unref);
+
+static LspMessage *
+lsp_message_new (IdeTask      *task,
+                 const gchar  *method,
+                 GVariant     *params,
+                 GCancellable *cancellable)
+{
+  LspMessage *lm =  g_atomic_rc_box_new0 (LspMessage);
+  lm->task = g_object_ref (task);
+  lm->method = method;
+  lm->params = g_variant_ref (params);
+  lm->cancellable = g_object_ref (cancellable);
+  return lm;
+}
+
+static void
+lsp_message_finalize (gpointer data)
+{
+  LspMessage *lm = data;
+  g_clear_object (&lm->task);
+  g_clear_pointer (&lm->params, g_variant_unref);
+  g_clear_pointer (&lm->cancellable, g_object_unref);
+}
+
+static void
+lsp_message_unref (gpointer data)
+{
+  g_atomic_rc_box_release_full (data, lsp_message_finalize);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (LspMessage, lsp_message_unref);
 
 static gboolean
 ide_lsp_client_supports_buffer (IdeLspClient *self,
@@ -1041,6 +1081,7 @@ ide_lsp_client_finalize (GObject *object)
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);
+  g_clear_object (&priv->pending_messages);
 
   G_OBJECT_CLASS (ide_lsp_client_parent_class)->finalize (object);
 }
@@ -1296,6 +1337,53 @@ ide_lsp_client_init (IdeLspClient *self)
 }
 
 static void
+ide_lsp_client_call_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data);
+
+static void
+ide_lsp_client_flush_queue (IdeLspClient *self)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+  guint queue_length;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_CLIENT (self));
+  g_return_if_fail (!priv->rpc_client || JSONRPC_IS_CLIENT (priv->rpc_client));
+
+  queue_length = g_queue_get_length (priv->pending_messages);
+
+  if (queue_length > 0)
+    {
+      g_autoptr (LspMessage) message;
+
+      while (NULL != (message = g_queue_pop_head (priv->pending_messages)))
+        {
+          g_return_if_fail (message->method != NULL);
+          g_return_if_fail (!message->cancellable || G_IS_CANCELLABLE (message->cancellable));
+
+          if (priv->rpc_client == NULL)
+            ide_task_return_new_error (message->task,
+                                       G_IO_ERROR,
+                                       G_IO_ERROR_NOT_CONNECTED,
+                                       "No connection to language server");
+
+          jsonrpc_client_call_async (priv->rpc_client,
+                                 message->method,
+                                 message->params,
+                                 message->cancellable,
+                                 ide_lsp_client_call_cb,
+                                 g_steal_pointer (&message->task));
+        }
+    }
+  IDE_TRACE_MSG ("LSP processed build up queue of length: %d", queue_length);
+
+  IDE_EXIT;
+}
+
+static void
 ide_lsp_client_initialized_cb (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
@@ -1307,6 +1395,7 @@ ide_lsp_client_initialized_cb (GObject      *object,
   IdeBufferManager *buffer_manager;
   IdeProject *project;
   IdeContext *context;
+  guint queue_length;
 
   IDE_ENTRY;
 
@@ -1329,6 +1418,13 @@ ide_lsp_client_initialized_cb (GObject      *object,
   priv->initialized = TRUE;
 
   g_signal_emit (self, signals[INITIALIZED], 0);
+
+  queue_length = g_queue_get_length (priv->pending_messages);
+
+  if (queue_length > 0)
+    {
+      ide_lsp_client_flush_queue (self);
+    }
 
   IDE_EXIT;
 }
@@ -1415,6 +1511,7 @@ ide_lsp_client_start (IdeLspClient *self)
     }
 
   priv->rpc_client = jsonrpc_client_new (priv->io_stream);
+  priv->pending_messages = g_queue_new();
 
   workdir = ide_context_ref_workdir (context);
   root_path = g_file_get_path (workdir);
@@ -1678,6 +1775,7 @@ ide_lsp_client_call_async (IdeLspClient        *self,
 {
   IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
+  g_autoptr(LspMessage) message = NULL;
 
   IDE_ENTRY;
 
@@ -1695,11 +1793,13 @@ ide_lsp_client_call_async (IdeLspClient        *self,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_CONNECTED,
                                "No connection to language server");
-  else if (!priv->initialized)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_CONNECTED,
-                               "Server is not ready yet");
+  else if (!priv->initialized && !(g_str_equal(method, "initialize") || g_str_equal (method, "initialized")))
+    {
+      IDE_TRACE_MSG("queueing up method: %s", method);
+      message = lsp_message_new(g_steal_pointer(&task), method, params, g_steal_pointer (&cancellable));
+
+      g_queue_push_head(priv->pending_messages, g_steal_pointer (&message));
+    }
   else
     jsonrpc_client_call_async (priv->rpc_client,
                                method,
