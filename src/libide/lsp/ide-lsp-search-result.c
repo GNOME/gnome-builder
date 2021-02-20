@@ -1,4 +1,4 @@
-/* rust-analyzer-search-result.c
+/* ide-lsp-search-result.c
  *
  * Copyright 2020 Günther Wagner <info@gunibert.de>
  *
@@ -18,16 +18,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "rust-analyzer-search-result.h"
+#include "config.h"
+
+#include "ide-lsp-search-result.h"
+#include <libide-core.h>
 #include <libide-editor.h>
 
-struct _RustAnalyzerSearchResult
+struct _IdeLspSearchResult
 {
   IdeSearchResult  parent_instance;
   IdeLocation     *location;
 };
 
-G_DEFINE_TYPE (RustAnalyzerSearchResult, rust_analyzer_search_result, IDE_TYPE_SEARCH_RESULT)
+G_DEFINE_TYPE (IdeLspSearchResult, ide_lsp_search_result, IDE_TYPE_SEARCH_RESULT)
 
 enum {
   PROP_0,
@@ -37,13 +40,13 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-RustAnalyzerSearchResult *
-rust_analyzer_search_result_new (const gchar *title,
-                                 const gchar *subtitle,
-                                 IdeLocation *location,
-                                 const gchar *icon_name)
+IdeLspSearchResult *
+ide_lsp_search_result_new (const gchar *title,
+                           const gchar *subtitle,
+                           IdeLocation *location,
+                           const gchar *icon_name)
 {
-  return g_object_new (RUST_TYPE_ANALYZER_SEARCH_RESULT,
+  return g_object_new (IDE_TYPE_LSP_SEARCH_RESULT,
                        "title", title,
                        "subtitle", subtitle,
                        "location", location,
@@ -54,22 +57,22 @@ rust_analyzer_search_result_new (const gchar *title,
 }
 
 static void
-rust_analyzer_search_result_finalize (GObject *object)
+ide_lsp_search_result_finalize (GObject *object)
 {
-  RustAnalyzerSearchResult *self = (RustAnalyzerSearchResult *)object;
+  IdeLspSearchResult *self = (IdeLspSearchResult *)object;
 
   g_clear_object (&self->location);
 
-  G_OBJECT_CLASS (rust_analyzer_search_result_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_search_result_parent_class)->finalize (object);
 }
 
 static void
-rust_analyzer_search_result_get_property (GObject    *object,
-                                          guint       prop_id,
-                                          GValue     *value,
-                                          GParamSpec *pspec)
+ide_lsp_search_result_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
 {
-  RustAnalyzerSearchResult *self = RUST_ANALYZER_SEARCH_RESULT (object);
+  IdeLspSearchResult *self = IDE_LSP_SEARCH_RESULT (object);
 
   switch (prop_id)
     {
@@ -82,12 +85,12 @@ rust_analyzer_search_result_get_property (GObject    *object,
 }
 
 static void
-rust_analyzer_search_result_set_property (GObject      *object,
-                                          guint         prop_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec)
+ide_lsp_search_result_set_property (GObject      *object,
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
 {
-  RustAnalyzerSearchResult *self = RUST_ANALYZER_SEARCH_RESULT (object);
+  IdeLspSearchResult *self = IDE_LSP_SEARCH_RESULT (object);
 
   switch (prop_id)
     {
@@ -100,15 +103,15 @@ rust_analyzer_search_result_set_property (GObject      *object,
 }
 
 static void
-rust_analyzer_search_result_activate (IdeSearchResult *result,
-                                      GtkWidget       *last_focus)
+ide_lsp_search_result_activate (IdeSearchResult *result,
+                                GtkWidget       *last_focus)
 {
 
-  RustAnalyzerSearchResult *self = (RustAnalyzerSearchResult *)result;
+  IdeLspSearchResult *self = (IdeLspSearchResult *)result;
   IdeWorkspace *workspace;
   IdeSurface *editor;
 
-  g_assert (RUST_IS_ANALYZER_SEARCH_RESULT (self));
+  g_assert (IDE_IS_LSP_SEARCH_RESULT (self));
   g_assert (GTK_IS_WIDGET (last_focus));
 
   if (!last_focus)
@@ -120,15 +123,15 @@ rust_analyzer_search_result_activate (IdeSearchResult *result,
 }
 
 static void
-rust_analyzer_search_result_class_init (RustAnalyzerSearchResultClass *klass)
+ide_lsp_search_result_class_init (IdeLspSearchResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeSearchResultClass *search_class = IDE_SEARCH_RESULT_CLASS (klass);
 
-  object_class->finalize = rust_analyzer_search_result_finalize;
-  object_class->get_property = rust_analyzer_search_result_get_property;
-  object_class->set_property = rust_analyzer_search_result_set_property;
-  search_class->activate = rust_analyzer_search_result_activate;
+  object_class->finalize = ide_lsp_search_result_finalize;
+  object_class->get_property = ide_lsp_search_result_get_property;
+  object_class->set_property = ide_lsp_search_result_set_property;
+  search_class->activate = ide_lsp_search_result_activate;
 
   properties [PROP_LOCATION] =
     g_param_spec_object ("location",
@@ -141,6 +144,6 @@ rust_analyzer_search_result_class_init (RustAnalyzerSearchResultClass *klass)
 }
 
 static void
-rust_analyzer_search_result_init (RustAnalyzerSearchResult *self)
+ide_lsp_search_result_init (IdeLspSearchResult *self)
 {
 }

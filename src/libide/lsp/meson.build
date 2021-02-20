@@ -17,6 +17,7 @@ libide_lsp_public_headers = [
   'ide-lsp-highlighter.h',
   'ide-lsp-hover-provider.h',
   'ide-lsp-rename-provider.h',
+  'ide-lsp-search-provider.h',
   'ide-lsp-symbol-node.h',
   'ide-lsp-symbol-resolver.h',
   'ide-lsp-symbol-tree.h',
@@ -45,6 +46,8 @@ libide_lsp_public_sources = [
   'ide-lsp-highlighter.c',
   'ide-lsp-hover-provider.c',
   'ide-lsp-rename-provider.c',
+  'ide-lsp-search-provider.c',
+  'ide-lsp-search-result.c',
   'ide-lsp-symbol-node.c',
   'ide-lsp-symbol-resolver.c',
   'ide-lsp-symbol-tree.c',
@@ -86,6 +89,7 @@ libide_lsp_deps = [
   libide_projects_dep,
   libide_sourceview_dep,
   libide_threading_dep,
+  libide_editor_dep,
 ]
 
 #

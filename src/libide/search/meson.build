@@ -1,3 +1,4 @@
+libide_search_header_dir = join_paths(libide_header_dir, 'search')
 libide_search_header_subdir = join_paths(libide_header_subdir, 'search')
 libide_include_directories += include_directories('.')
 
@@ -38,6 +39,7 @@ libide_search_deps = [
   libpeas_dep,
   libide_core_dep,
   libide_threading_dep,
+  libide_plugins_dep
 ]
 
 #

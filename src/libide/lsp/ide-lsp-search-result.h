@@ -1,4 +1,4 @@
-/* rust-analyzer-search-result.h
+/* ide-lsp-search-result.h
  *
  * Copyright 2020 Günther Wagner <info@gunibert.de>
  *
@@ -20,18 +20,24 @@
 
 #pragma once
 
+#if !defined (IDE_LSP_INSIDE) && !defined (IDE_LSP_COMPILATION)
+# error "Only <libide-lsp.h> can be included directly."
+#endif
+
 #include <libide-code.h>
 #include <libide-search.h>
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_SEARCH_RESULT (rust_analyzer_search_result_get_type())
+#define IDE_TYPE_LSP_SEARCH_RESULT (ide_lsp_search_result_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerSearchResult, rust_analyzer_search_result, RUST, ANALYZER_SEARCH_RESULT, IdeSearchResult)
+IDE_AVAILABLE_IN_3_40
+G_DECLARE_FINAL_TYPE (IdeLspSearchResult, ide_lsp_search_result, IDE, LSP_SEARCH_RESULT, IdeSearchResult)
 
-RustAnalyzerSearchResult *rust_analyzer_search_result_new (const gchar *title,
-                                                           const gchar *subtitle,
-                                                           IdeLocation *location,
-                                                           const gchar *icon_name);
+IDE_AVAILABLE_IN_3_40
+IdeLspSearchResult *ide_lsp_search_result_new (const gchar *title,
+                                               const gchar *subtitle,
+                                               IdeLocation *location,
+                                               const gchar *icon_name);
 
 G_END_DECLS

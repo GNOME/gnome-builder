@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <libide-plugins.h>
 #include <libpeas/peas.h>
 #include <libide-core.h>
 #include <libide-threading.h>
@@ -34,10 +35,10 @@
 
 struct _IdeSearchEngine
 {
-  IdeObject         parent_instance;
-  PeasExtensionSet *extensions;
-  GPtrArray        *custom_provider;
-  guint             active_count;
+  IdeObject               parent_instance;
+  IdeExtensionSetAdapter *extensions;
+  GPtrArray              *custom_provider;
+  guint                   active_count;
 };
 
 typedef struct
@@ -83,21 +84,31 @@ request_destroy (Request *r)
 }
 
 static void
-on_extension_added_cb (PeasExtensionSet *set,
-                       PeasPluginInfo   *plugin_info,
-                       PeasExtension    *exten,
-                       gpointer          user_data)
+on_extension_added_cb (IdeExtensionSetAdapter *set,
+                       PeasPluginInfo         *plugin_info,
+                       PeasExtension          *exten,
+                       gpointer                user_data)
 {
-  ide_object_append (IDE_OBJECT (user_data), IDE_OBJECT (exten));
+  IdeSearchEngine *self = (IdeSearchEngine *)user_data;
+  IdeSearchProvider *provider = (IdeSearchProvider *)exten;
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (context != NULL);
+  g_assert (IDE_IS_CONTEXT (context));
+
+  ide_search_provider_load (provider, context);
 }
 
 static void
-on_extension_removed_cb (PeasExtensionSet *set,
-                         PeasPluginInfo   *plugin_info,
-                         PeasExtension    *exten,
-                         gpointer          user_data)
+on_extension_removed_cb (IdeExtensionSetAdapter *set,
+                         PeasPluginInfo         *plugin_info,
+                         PeasExtension          *exten,
+                         gpointer                user_data)
 {
-  ide_object_remove (IDE_OBJECT (user_data), IDE_OBJECT (exten));
+// FIXME ??
 }
 
 static void
@@ -115,9 +126,10 @@ ide_search_engine_parent_set (IdeObject *object,
       return;
     }
 
-  self->extensions = peas_extension_set_new (peas_engine_get_default (),
-                                             IDE_TYPE_SEARCH_PROVIDER,
-                                             NULL);
+  self->extensions = ide_extension_set_adapter_new (parent,
+                                                    peas_engine_get_default (),
+                                                    IDE_TYPE_SEARCH_PROVIDER,
+                                                    NULL, NULL);
 
   g_signal_connect (self->extensions,
                     "extension-added",
@@ -129,9 +141,9 @@ ide_search_engine_parent_set (IdeObject *object,
                     G_CALLBACK (on_extension_removed_cb),
                     self);
 
-  peas_extension_set_foreach (self->extensions,
-                              on_extension_added_cb,
-                              self);
+  ide_extension_set_adapter_foreach (self->extensions,
+                                     on_extension_added_cb,
+                                     self);
 }
 
 static void
@@ -289,7 +301,7 @@ _provider_search_async (IdeSearchProvider *provider,
 }
 
 static void
-ide_search_engine_search_foreach (PeasExtensionSet *set,
+ide_search_engine_search_foreach (IdeExtensionSetAdapter *set,
                                   PeasPluginInfo   *plugin_info,
                                   PeasExtension    *exten,
                                   gpointer          user_data)
@@ -297,7 +309,7 @@ ide_search_engine_search_foreach (PeasExtensionSet *set,
   IdeSearchProvider *provider = (IdeSearchProvider *)exten;
   Request *r = user_data;
 
-  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (r != NULL);
@@ -351,9 +363,9 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   r->outstanding = 0;
   ide_task_set_task_data (task, r, request_destroy);
 
-  peas_extension_set_foreach (self->extensions,
-                              ide_search_engine_search_foreach,
-                              r);
+  ide_extension_set_adapter_foreach (self->extensions,
+                                     ide_search_engine_search_foreach,
+                                     r);
   g_ptr_array_foreach (self->custom_provider,
                        ide_search_engine_search_foreach_custom_provider,
                        r);

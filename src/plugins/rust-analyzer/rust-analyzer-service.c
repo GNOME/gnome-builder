@@ -415,16 +415,6 @@ rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
   root_uri = g_file_get_uri (workdir);
   ide_lsp_client_set_root_uri (client, root_uri);
   ide_lsp_client_start (client);
-
-  // register SearchProvider
-  if (self->search_provider == NULL)
-    {
-      IdeSearchEngine *search_engine = _get_search_engine (self);
-
-      self->search_provider = rust_analyzer_search_provider_new ();
-      ide_search_engine_add_provider (search_engine, IDE_SEARCH_PROVIDER (self->search_provider));
-    }
-  rust_analyzer_search_provider_set_client (self->search_provider, client);
 }
 
 static gboolean

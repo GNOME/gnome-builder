@@ -26,11 +26,6 @@ G_BEGIN_DECLS
 
 #define RUST_TYPE_ANALYZER_SEARCH_PROVIDER (rust_analyzer_search_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerSearchProvider, rust_analyzer_search_provider, RUST, ANALYZER_SEARCH_PROVIDER, IdeObject)
-
-RustAnalyzerSearchProvider *rust_analyzer_search_provider_new        (void);
-IdeLspClient               *rust_analyzer_search_provider_get_client (RustAnalyzerSearchProvider *self);
-void                        rust_analyzer_search_provider_set_client (RustAnalyzerSearchProvider *self,
-                                                                      IdeLspClient               *client);
+G_DECLARE_FINAL_TYPE (RustAnalyzerSearchProvider, rust_analyzer_search_provider, RUST, ANALYZER_SEARCH_PROVIDER, IdeLspSearchProvider)
 
 G_END_DECLS
