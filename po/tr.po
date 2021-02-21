@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-01-25 17:14+0000\n"
-"PO-Revision-Date: 2021-02-12 05:35+0300\n"
+"POT-Creation-Date: 2021-02-12 02:37+0000\n"
+"PO-Revision-Date: 2021-02-21 16:34+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -6039,7 +6039,7 @@ msgstr "Uçbirim"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
 msgid "Scrollback"
-msgstr ""
+msgstr "Geri Kaydır"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
@@ -6111,32 +6111,34 @@ msgstr "tuş basımında kaydır"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:115
 msgid "Limit Scrollback"
-msgstr ""
+msgstr "Geri Kaydırmayı Sınırla"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:116
 msgid ""
 "When enabled terminal scrollback will be limited to the number of lines "
 "specified below"
 msgstr ""
+"Etkinleştirildiğinde, uçbirim geriye kaydırması aşağıda belirtilen satır "
+"sayısına sınırlanacak"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:117
 msgctxt "Keywords"
 msgid "scrollback limit"
-msgstr ""
+msgstr "geri kaydırma sınırı"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
 msgid "Scrollback Lines"
-msgstr ""
+msgstr "Geri Kaydırma Satırları"
 
 # Normalde Minumum kelimesini kullanmamayı tercih ediyoruz
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
 msgid "The number of lines to keep available for scrolling"
-msgstr ""
+msgstr "Kaydırmak için tutulacak satır sayısı"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:127
 msgctxt "Keywords"
 msgid "scrollback lines"
-msgstr ""
+msgstr "geri kaydırma satırları"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
 msgid "Application Output"
