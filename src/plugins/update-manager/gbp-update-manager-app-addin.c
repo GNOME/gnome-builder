@@ -133,6 +133,12 @@ on_update_available_cb (GbpUpdateManagerAppAddin *self,
   g_assert (GBP_IS_UPDATE_MANAGER_APP_ADDIN (self));
   g_assert (XDP_IS_PORTAL (portal));
 
+  /* The flatpak portal will send an "update available" signal each time a new
+   * flatpak push of Builder happens, so it's better to not let notifications pile up.
+   */
+  if (self->update_notif)
+    return;
+
   if (self->app != NULL)
     {
       IdeWorkbench *workbench;
