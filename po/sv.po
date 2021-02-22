@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-01-22 19:17+0000\n"
-"PO-Revision-Date: 2021-02-15 20:45+0100\n"
+"POT-Creation-Date: 2021-02-22 18:20+0000\n"
+"PO-Revision-Date: 2021-02-22 22:12+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -669,11 +669,11 @@ msgstr "Standardfärgschemat för Builder"
 msgid "Basic"
 msgstr "Enkel"
 
-#: src/gstyle/gstyle-color-panel.c:956
+#: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
 msgstr "Palett: "
 
-#: src/gstyle/gstyle-color-panel.c:958
+#: src/gstyle/gstyle-color-panel.c:961
 msgid "Palette"
 msgstr "Palett"
 
@@ -921,7 +921,7 @@ msgstr "Namnlös"
 #: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:317
+#: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:536
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -999,7 +999,7 @@ msgstr "Spara som"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:343
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
@@ -2343,7 +2343,7 @@ msgid "Editor Shortcuts"
 msgstr "Kortkommandon för redigerare"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:529
+#: src/libide/gui/ide-shortcuts-window.ui:536
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Allmänt"
@@ -2359,37 +2359,37 @@ msgid "Toogle primary menu"
 msgstr "Aktivera/inaktivera primär meny"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:533
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Global sökning"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:540
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Inställningar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Kommandorad"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal i exekveringsmiljö för bygge"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
@@ -2501,13 +2501,13 @@ msgid "Clear highlight"
 msgstr "Rensa färgmarkering"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:577
+#: src/libide/gui/ide-shortcuts-window.ui:584
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiera och klistra in"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:582
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiera markerad text till urklipp"
@@ -2518,7 +2518,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Klipp ut markerad text till urklipp"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:596
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Klistra in text från urklipp"
@@ -2585,155 +2585,160 @@ msgstr "Slå samman markerade rader"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
+msgid "Sort selected lines"
+msgstr "Sortera markerade rader"
+
+#: src/libide/gui/ide-shortcuts-window.ui:341
+msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Visa kompletteringsfönster"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Växla opacitet för kompletteringsfönster"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Aktivera/inaktivera överskrivning"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Indentera om rad"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Ta bort rad"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Byt namn på symbol"
 
-#: src/libide/gui/ide-shortcuts-window.ui:370
+#: src/libide/gui/ide-shortcuts-window.ui:377
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Kräver semantiskt språkstöd"
 
-#: src/libide/gui/ide-shortcuts-window.ui:377
+#: src/libide/gui/ide-shortcuts-window.ui:384
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Kommentera kod"
 
-#: src/libide/gui/ide-shortcuts-window.ui:384
+#: src/libide/gui/ide-shortcuts-window.ui:391
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Avkommentera kod"
 
-#: src/libide/gui/ide-shortcuts-window.ui:392
+#: src/libide/gui/ide-shortcuts-window.ui:399
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigering"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Gå till nästa fel i fil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Gå till föregående fel i fil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Gå till föregående redigeringsplats"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Gå till nästa redigeringsplats"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Hoppa till symboldefinition"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Flytta visningsområde uppåt i filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Flytta visningsområde nedåt i filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Flytta visningsområde till slutet på filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Flytta visningsområde till början på filen"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Gå till matchande parentes"
 
-#: src/libide/gui/ide-shortcuts-window.ui:468
+#: src/libide/gui/ide-shortcuts-window.ui:475
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Markeringar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:473
+#: src/libide/gui/ide-shortcuts-window.ui:480
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Markera allt"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Avmarkera allt"
 
-#: src/libide/gui/ide-shortcuts-window.ui:488
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Bygg och kör"
 
-#: src/libide/gui/ide-shortcuts-window.ui:493
+#: src/libide/gui/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Bygg"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Bygg om"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Kör"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:521
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:525
+#: src/libide/gui/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Kortkommandon för terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:597
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Sök"
 
-#: src/libide/gui/ide-shortcuts-window.ui:602
+#: src/libide/gui/ide-shortcuts-window.ui:609
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Hitta text i terminal"
@@ -2746,7 +2751,7 @@ msgstr[0] "Installerar %u paket"
 msgstr[1] "Installerar %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1354
+#: src/libide/lsp/ide-lsp-client.c:1469
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Misslyckades med att initiera språkserver: %s"
@@ -3098,33 +3103,33 @@ msgstr "Förskönarinsticksmodul: bufferten är inte skrivbar"
 msgid "Beautifier Plugin: Nothing selected"
 msgstr "Förskönarinsticksmodul: Inget är markerat"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Ingen förskönare tillgänglig för ”%s”"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:248
 #, c-format
 msgid "No beautifier available"
 msgstr "Ingen förskönare tillgänglig"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "Redigering"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:347
 msgid "Beautify the code"
 msgstr "Försköna koden"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
 msgid "Trigger the default entry"
 msgstr "Aktivera standardinmatning"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:375
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:377
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr "Förskönarinsticksmodul: inga giltiga poster, inaktiverar: %s"
@@ -4570,7 +4575,7 @@ msgstr "Installera"
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
 #: src/plugins/rustup/rustup_plugin.py:484
 #: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:163
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "Update"
 msgstr "Uppdatera"
 
@@ -5067,27 +5072,27 @@ msgstr "GNOME-program"
 msgid "Create a new GNOME application"
 msgstr "Skapa ett nytt GNOME-program"
 
-#: src/plugins/meson-templates/meson_templates.py:325
+#: src/plugins/meson-templates/meson_templates.py:328
 msgid "Shared Library"
 msgstr "Delat bibliotek"
 
-#: src/plugins/meson-templates/meson_templates.py:327
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "Create a new project with a shared library"
 msgstr "Skapa ett nytt projekt med ett delat bibliotek"
 
-#: src/plugins/meson-templates/meson_templates.py:344
+#: src/plugins/meson-templates/meson_templates.py:347
 msgid "Empty Project"
 msgstr "Tomt projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:346
+#: src/plugins/meson-templates/meson_templates.py:349
 msgid "Create a new empty project"
 msgstr "Skapa ett nytt tomt projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:363
+#: src/plugins/meson-templates/meson_templates.py:366
 msgid "Command Line Tool"
 msgstr "Kommandoradsverktyg"
 
-#: src/plugins/meson-templates/meson_templates.py:365
+#: src/plugins/meson-templates/meson_templates.py:368
 msgid "Create a new command line project"
 msgstr "Skapa ett nytt kommandoradsprojekt"
 
@@ -5362,12 +5367,12 @@ msgstr "Hämtar npm-beroenden"
 msgid "Bootstrapping project"
 msgstr "Drar igång projekt"
 
-#: src/plugins/podman/gbp-podman-runtime.c:161
+#: src/plugins/podman/gbp-podman-runtime.c:162
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:169
+#: src/plugins/podman/gbp-podman-runtime.c:170
 msgid "Containers/Podman"
 msgstr "Behållare/Podman"
 
@@ -6236,11 +6241,11 @@ msgstr "TODO/FIXME"
 msgid "Updating Builder"
 msgstr "Uppdaterar Builder"
 
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:166
 msgid "Update Available"
 msgstr "Uppdatering tillgänglig"
 
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:161
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
@@ -6397,1333 +6402,3 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
-
-#~ msgctxt "shortcut window"
-#~ msgid "Touchpad gestures"
-#~ msgstr "Gester för styrplatta"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the right"
-#~ msgstr "Flytta sida till höger"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe right"
-#~ msgstr "Trefingersvep åt höger"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the left"
-#~ msgstr "Flytta sida till vänster"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe left"
-#~ msgstr "Trefingersvep åt vänster"
-
-#~ msgid "Directory Browser"
-#~ msgstr "Katalogbläddrare"
-
-#~ msgid "Log"
-#~ msgstr "Logg"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Aktivera/inaktivera navigationspanel"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Aktivera/inaktivera verktygspanel"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Help"
-#~ msgstr "Hjälp"
-
-#~ msgid "Show errors and warnings provided by Vala"
-#~ msgstr "Visa fel och varningar som tillhandahålls av Vala"
-
-#~ msgid "vala diagnostics warnings errors"
-#~ msgstr "vala diagnostik varningar fel"
-
-#~ msgid "Clone Repository…"
-#~ msgstr "Klona arkiv…"
-
-#~ msgid "New Terminal Workspace…"
-#~ msgstr "Ny terminalarbetsyta…"
-
-#~ msgid "Press Ctrl+. to search"
-#~ msgstr "Tryck Ctrl+. för att söka"
-
-#~ msgid "Open file"
-#~ msgstr "Öppna fil"
-
-#~ msgid "New file"
-#~ msgstr "Ny fil"
-
-#~ msgid "New documentation"
-#~ msgstr "Ny dokumentation"
-
-#~ msgid ""
-#~ "There was a failure while calculating line changes from git. The exact "
-#~ "error was: %s"
-#~ msgstr ""
-#~ "Ett fel uppstod under beräkning av radändringar från git. Det exakta "
-#~ "felet var: %s"
-
-#~ msgid "File is not under control of git working directory."
-#~ msgstr "Fil kontrolleras inte av git-arbetskatalog."
-
-#~ msgid "The requested file does not exist within the git index."
-#~ msgstr "Den begärda filen existerar inte i git-indexet."
-
-#~ msgid "Todo"
-#~ msgstr "Att göra"
-
-#~ msgid "Task manager for GNOME"
-#~ msgstr "Uppgiftshanterare för GNOME"
-
-#~ msgid "Failure"
-#~ msgstr "Misslyckande"
-
-#~ msgid ""
-#~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
-#~ "with profiler</a> from the run menu to begin"
-#~ msgstr ""
-#~ "Välj <a href=\"action://run-manager.run-with-handler::profiler\">Kör med "
-#~ "profilerare</a> från körmenyn för att börja"
-
-#~ msgid "Abstract"
-#~ msgstr "Abstrakt"
-
-#~ msgid "Compact"
-#~ msgstr "Kompakt"
-
-#~ msgid "Immutable"
-#~ msgstr "Oföränderlig"
-
-#~ msgid "org.gnome.Builder"
-#~ msgstr "org.gnome.Builder"
-
-#~ msgid "<b>Missing</b>"
-#~ msgstr "<b>Saknas</b>"
-
-#~ msgid "New Window"
-#~ msgstr "Nytt fönster"
-
-#~ msgid "If enabled, the project tree will display icons next to each item."
-#~ msgstr ""
-#~ "Om aktiverad kommer projektträdet att visa ikoner intill varje objekt."
-
-#~ msgid "List available subcommands"
-#~ msgstr "Lista tillgängliga underkommandon"
-
-#~ msgid "Run Builder in standalone mode"
-#~ msgstr "Kör Builder i fristående läge"
-
-#~ msgid "Increase verbosity, may be specified multiple times"
-#~ msgstr "Öka utförlighet, kan anges flera gånger"
-
-#~ msgid "Enter GApplication Service mode"
-#~ msgstr "Ange ett serviceläge för GApplication"
-
-#~ msgid "Opens the project specified by PATH"
-#~ msgstr "Öppnar projektet angivet av SÖKVÄG"
-
-#~ msgid "PATH"
-#~ msgstr "SÖKVÄG"
-
-#~ msgid "Clones the project specified by MANIFEST"
-#~ msgstr "Klonar projektet angivet av MANIFEST"
-
-#~ msgid "COMMAND"
-#~ msgstr "KOMMANDO"
-
-#~ msgid "No commands available"
-#~ msgstr "Inga kommandon tillgängliga"
-
-#~ msgid "Please provide a command"
-#~ msgstr "Ange ett kommando"
-
-#~ msgid "No such tool"
-#~ msgstr "Inget sådant verktyg finns"
-
-#~ msgid "Please provide a worker plugin"
-#~ msgstr "Tillhandahåll en arbetarinsticksmodul"
-
-#~ msgid "Please provide a D-Bus address"
-#~ msgstr "Ange D-Bus-adress"
-
-#~ msgid "No such worker"
-#~ msgstr "Ingen sådan arbetare finns"
-
-#~ msgid "Failed to establish a monitor for background changes: %s"
-#~ msgstr ""
-#~ "Misslyckades med att etablera en övervakare för ändringar i bakgrunden: %s"
-
-#~ msgid "Buffer failed: %s"
-#~ msgstr "Buffert misslyckades: %s"
-
-#~ msgid "File too large to be opened."
-#~ msgstr "Fil för stor för att öppnas."
-
-#~ msgid "unsaved document %u"
-#~ msgstr "osparat dokument %u"
-
-#~ msgid "Duplicate the configuration"
-#~ msgstr "Duplicera konfigurationen"
-
-#~ msgid "Delete the configuration"
-#~ msgstr "Ta bort konfigurationen"
-
-#~ msgid "The prefix to use when installing the project"
-#~ msgstr "Prefixet som används när projektet installeras"
-
-#~ msgid "Options to use when bootstrapping the project"
-#~ msgstr "Alternativ som används när projektet startas upp"
-
-#~ msgid "_Wrap Around"
-#~ msgstr "Börja _om från början"
-
-#~ msgid "Cu_t"
-#~ msgstr "Klipp u_t"
-
-#~ msgid "Display"
-#~ msgstr "Visning"
-
-#~ msgid "Tabs and Indentation"
-#~ msgstr "Tabbar och indentering"
-
-#~ msgid "Auto indent new lines"
-#~ msgstr "Indentera automatiskt nya rader"
-
-#~ msgid "Language Syntax"
-#~ msgstr "Språksyntax"
-
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Varför inte <a href=\"action://app.new-project\">skapa ett nytt projekt</"
-#~ "a>?"
-
-#~ msgid "Click an item to select"
-#~ msgstr "Klicka på ett objekt för att välja"
-
-#~ msgid "Open…"
-#~ msgstr "Öppna…"
-
-#~ msgid "Select projects for removal"
-#~ msgstr "Markera projekt för borttagning"
-
-#~ msgid "Return to project selection"
-#~ msgstr "Återgå till projektval"
-
-#~ msgid "_Open Project"
-#~ msgstr "Ö_ppna projekt"
-
-#~ msgid "Save _All"
-#~ msgstr "Spara _alla"
-
-#~ msgid "Close _All"
-#~ msgstr "Stäng _alla"
-
-#~ msgid "_Preferences"
-#~ msgstr "I_nställningar"
-
-#~ msgid "Keyboard _Shortcuts"
-#~ msgstr "Tangentbord_sgenvägar"
-
-#~ msgid "_Help"
-#~ msgstr "_Hjälp"
-
-#~ msgid "You must call %s() before using libide."
-#~ msgstr "Du måste anropa %s() innan libide används."
-
-#~ msgid "An unload request is already pending"
-#~ msgstr "En inaktiveringsbegäran väntar redan"
-
-#~ msgid "Context already unloading, cannot restore."
-#~ msgstr "Kontext håller redan på att tas bort, kan inte återställa."
-
-#~ msgid "Context has already been restored."
-#~ msgstr "Kontext har redan återställts."
-
-#~ msgid "No implementations of extension point “%s”."
-#~ msgstr "Inga implementationer av tilläggspunkten ”%s”."
-
-#~ msgid "Failed to locate %s plugin."
-#~ msgstr "Misslyckades med att hitta insticksmodul %s."
-
-#~ msgid "No such extension point."
-#~ msgstr "Ingen sådan tilläggspunkt."
-
-#~ msgid "No implementations of extension point."
-#~ msgstr "Inga implementationer av tilläggspunkt."
-
-#~ msgid "Run _all tests"
-#~ msgstr "Kör _alla tester"
-
-#~ msgid "Reload tests"
-#~ msgstr "Läs om tester"
-
-#~ msgid "Tests will be loaded after building."
-#~ msgstr "Test kommer att läsas in efter bygge."
-
-#~ msgid "Clear _All"
-#~ msgstr "Rensa _allt"
-
-#~ msgid "Invalid %-encoding in URI"
-#~ msgstr "Ogiltig %-kodning i URI"
-
-#~ msgid "Non-UTF-8 characters in URI"
-#~ msgstr "Tecken som inte är UTF-8 finns i URI"
-
-#~ msgid "Invalid IP literal “%s” in URI"
-#~ msgstr "Ogiltig IP-litteral ”%s” i URI"
-
-#~ msgid "Invalid encoded IP literal “%s” in URI"
-#~ msgstr "Ogiltig kodad IP-litteral ”%s” i URI"
-
-#~ msgid "Invalid non-ASCII hostname “%s” in URI"
-#~ msgstr "Ogiltigt icke-ASCII-värdnamn ”%s” i URI"
-
-#~ msgid "Non-ASCII hostname “%s” forbidden in this URI"
-#~ msgstr "Icke-ASCII-värdnamn ”%s” är förbjudet i denna URI"
-
-#~ msgid "Could not parse port “%s” in URI"
-#~ msgstr "Kunde inte tolka port ”%s” i URI"
-
-#~ msgid "Port “%s” in URI is out of range"
-#~ msgstr "Port ”%s” i URI är utanför intervallet"
-
-#~ msgid "Base URI is not absolute"
-#~ msgstr "Bas-URI är inte absolut"
-
-#~ msgid "URI is not absolute, and no base URI was provided"
-#~ msgstr "URI är inte absolut, och ingen bas-URI angavs"
-
-#~ msgid "Could not parse “%s” as absolute URI"
-#~ msgstr "Kunde inte tolka ”%s” som en absolut URI"
-
-#~ msgid "URI “%s” has no host component"
-#~ msgstr "URI ”%s” har ingen värdkomponent"
-
-#~ msgid "Building"
-#~ msgstr "Bygger"
-
-#~ msgctxt "button"
-#~ msgid "Build"
-#~ msgstr "Bygg"
-
-#~ msgid "The project cannot be built while the build pipeline is being set up"
-#~ msgstr ""
-#~ "Projektet kan inte byggas under tiden rörledningen för bygge konfigureras"
-
-#~ msgid "Builder Statistics"
-#~ msgstr "Builder-statistik"
-
-#~ msgid "%s — Builder"
-#~ msgstr "%s — Builder"
-
-#~ msgid "Display the window in full screen"
-#~ msgstr "Visa fönstret i helskärmsläge"
-
-#~ msgid "Exit full screen"
-#~ msgstr "Avsluta helskärmsläge"
-
-#~ msgid "Transfers"
-#~ msgstr "Överföringar"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Trigger a build"
-#~ msgstr "Starta ett bygge"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all files"
-#~ msgstr "Spara alla filer"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Perspectives"
-#~ msgstr "Perspektiv"
-
-#~ msgid "Command not found: %s"
-#~ msgstr "Kommando kunde inte hittas: %s"
-
-#~ msgid "Use the entry below to execute a command"
-#~ msgstr "Använd raden nedan för att köra ett kommando"
-
-#~ msgid "New…"
-#~ msgstr "Ny…"
-
-#~ msgid "Create"
-#~ msgstr "Skapa"
-
-#~ msgid "List available templates"
-#~ msgstr "Lista tillgängliga mallar"
-
-#~ msgid "Project template to generate"
-#~ msgstr "Projektmall att generera"
-
-#~ msgid "The target language (if supported)"
-#~ msgstr "Målspråket (om stöd finns)"
-
-#~ msgid "The version control to use or “none” to disable"
-#~ msgstr ""
-#~ "Vilket versionshanteringssystem som ska användas eller ”none” för att "
-#~ "inaktivera"
-
-#~ msgid "git"
-#~ msgstr "git"
-
-#~ msgid "create-project [OPTION...] PROJECT_NAME"
-#~ msgstr "create-projekt [FLAGGA…] PROJEKTNAMN"
-
-#~ msgid "Filename must be ASCII and may not contain : or ="
-#~ msgstr "Filnamnet måste uttryckas i ASCII och får inte innehålla : eller ="
-
-#~ msgid "Please specify a project name.\n"
-#~ msgstr "Ange ett projektnamn.\n"
-
-#~ msgid "Please specify a project template with --template=\n"
-#~ msgstr "Ange en projektmall med --template=\n"
-
-#~ msgid "Clone App"
-#~ msgstr "Klona program"
-
-#~ msgid "Clone"
-#~ msgstr "Klona"
-
-# osäker
-#~ msgid "Cannot provide diff, no backing file provided."
-#~ msgstr ""
-#~ "Det går inte att tillhandahålla diff, ingen bakomliggande fil "
-#~ "tillhandahållen."
-
-#~ msgid "Apply"
-#~ msgstr "Tillämpa"
-
-#~ msgid "Remote Branch to Clone"
-#~ msgstr "Fjärrgren att klona"
-
-#~ msgid "Use Git to create a local copy of a remotely hosted project."
-#~ msgstr ""
-#~ "Använd Git för att skapa en lokal kopia av ett projekt på en fjärrserver."
-
-#~ msgid "Enter the URL of your project’s source code repository"
-#~ msgstr "Ange URL:en för ditt projekts källkodsarkiv"
-
-#~ msgid "Clone…"
-#~ msgstr "Klona…"
-
-#~ msgid "Failed to establish git file monitor: %s"
-#~ msgstr "Misslyckades med att etablera git-filövervakare: %s"
-
-#~ msgid "Contribute to an existing project"
-#~ msgstr "Bidra till ett befintligt projekt"
-
-# Sökvägen till filen kunde inte hittas
-#~ msgid "Cannot load a non-native file in terminal"
-#~ msgstr "Det går inte att läsa in en främmande fil i terminalen"
-
-#~ msgid "Failed to rename file: %s"
-#~ msgstr "Misslyckades med att byta namn på fil: %s"
-
-#~ msgid "Failed to trash file: %s"
-#~ msgstr "Misslyckades med att slänga fil i papperskorgen: %s"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Project tree"
-#~ msgstr "Projektträd"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename a file"
-#~ msgstr "Byt namn på en fil"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move a file to the trash"
-#~ msgstr "Flytta en fil till papperskorgen"
-
-#~ msgid "New _File"
-#~ msgstr "Ny _Fil"
-
-#~ msgid "_Build"
-#~ msgstr "_Bygg"
-
-#~ msgid "_Rebuild"
-#~ msgstr "Bygg _om"
-
-#~ msgid "_Collapse All Nodes"
-#~ msgstr "_Fäll ihop alla noder"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Uppdatera"
-
-#~ msgid "Updated"
-#~ msgstr "Uppdaterad"
-
-#~ msgid "Definition"
-#~ msgstr "Definition"
-
-#~ msgid "Canonical"
-#~ msgstr "Kanonisk"
-
-#~ msgid "Reset and Clear"
-#~ msgstr "Återställ och töm"
-
-#~ msgid "Buffer loaded but not in the buffer manager."
-#~ msgstr "Buffert inläst men inte i bufferthanteraren."
-
-#~ msgid "_New"
-#~ msgstr "_Ny"
-
-#~ msgid "_Empty File"
-#~ msgstr "_Tom fil"
-
-#~ msgid "System Monitor"
-#~ msgstr "Systemövervakare"
-
-#~ msgid "_About"
-#~ msgstr "_Om"
-
-#~ msgid "Shared Library (Autotools)"
-#~ msgstr "Delat bibliotek (Autotools)"
-
-#~ msgid "Create a new autotools project with a shared library"
-#~ msgstr "Skapa ett nytt autotools-projekt med ett delat bibliotek"
-
-#~ msgid "Empty Project (Autotools)"
-#~ msgstr "Tomt projekt (Autotools)"
-
-#~ msgid "Create a new empty autotools project"
-#~ msgstr "Skapa ett nytt tomt autotools-projekt"
-
-#~ msgid "GNOME Application (Autotools)"
-#~ msgstr "GNOME-program (Autotools)"
-
-#~ msgid "Create a new flatpak-ready GNOME application"
-#~ msgstr "Skapa ett nytt GNOME-program som är redo för flatpak"
-
-#~ msgid "Open Profile"
-#~ msgstr "Öppna profil"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Tillåt att textsnuttar infogas i dokumentet."
-
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Clang-baserad automatisk komplettering (Experimentell)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Använd Clang för automatisk komplettering i språken C och C++."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Aktivera automatisk komplettering av ord i dokument"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Om aktiverad kommer ord i det aktuella dokumentet vara tillgängliga för "
-#~ "automatisk komplettering."
-
-#~ msgid "Suggest words found in open files"
-#~ msgstr "Föreslå ord som hittas i alla öppna filer"
-
-#~ msgid ""
-#~ "Suggests completions as you type based on words found in any open document"
-#~ msgstr ""
-#~ "Föreslå kompletteringar allt eftersom du skriver baserat på ord som "
-#~ "hittas i alla öppna dokument"
-
-#~ msgid "Minimum word size"
-#~ msgstr "Minsta ordlängd"
-
-#~ msgid "Minimum word size for word completion"
-#~ msgstr "Minsta ordlängd för ordkomplettering"
-
-#~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
-#~ msgstr ""
-#~ "Skapa och hantera en Ctags-databas för komplettering av klassnamn, "
-#~ "funktioner och annat"
-
-#~ msgid "Suggest completions using Clang (Experimental)"
-#~ msgstr "Föreslå kompletteringar från Clang (Experimentellt)"
-
-#~ msgid "Code snippets"
-#~ msgstr "Kodsnuttar"
-
-#~ msgid "Use code fragments to increase typing efficiency"
-#~ msgstr "Använd kodfragment för att öka på skriveffektivitet"
-
-#~ msgid "Failed to load file: %s: %s"
-#~ msgstr "Misslyckades med att läsa in fil: %s: %s"
-
-#~ msgid "Click to toggle breakpoint"
-#~ msgstr "Klicka för att aktivera/inaktivera brytpunkt"
-
-#~ msgid "Builder Word Completion"
-#~ msgstr "Builders ordkomplettering"
-
-#~ msgid "Unknown failure"
-#~ msgstr "Okänt fel"
-
-#~ msgid "Clang crashed"
-#~ msgstr "Clang kraschade"
-
-#~ msgid "Invalid arguments"
-#~ msgstr "Ogiltiga argument"
-
-#~ msgid "AST read error"
-#~ msgstr "AST-läsfel"
-
-#~ msgid "Failed to create translation unit: %s"
-#~ msgstr "Misslyckades med att skapa översättningsenhet: %s"
-
-#~ msgid "clang_codeCompleteAt() only works on local files"
-#~ msgstr "clang_codeCompleteAt() fungerar bara på lokala filer"
-
-#~ msgid "Format Strings"
-#~ msgstr "Formatsträngar"
-
-#~ msgid "_Show more"
-#~ msgstr "_Visa mer"
-
-#~ msgid "Suggest Python completions"
-#~ msgstr "Föreslå Python-kompletteringar"
-
-#~ msgid "CPU"
-#~ msgstr "Processor"
-
-#~ msgid "Installing %s %s"
-#~ msgstr "Installerar %s %s"
-
-#~ msgid "The device “%s” could not be found."
-#~ msgstr "Enheten ”%s” kunde inte hittas."
-
-#~ msgid "MinGW 64-bit"
-#~ msgstr "MinGW 64-bit"
-
-#~ msgid "MinGW 32-bit"
-#~ msgstr "MinGW 32-bit"
-
-#~ msgid "Mine projects"
-#~ msgstr "Samla in projekt"
-
-#~ msgid "Search directories for projects."
-#~ msgstr "Sök kataloger efter projekt."
-
-#~ msgid "Failed to save buffer, ignoring reclamation."
-#~ msgstr "Misslyckades med att spara buffert, ignorerar återkrävande."
-
-#~ msgid "========================\n"
-#~ msgstr "========================\n"
-
-#~ msgid "           Project Name: %s\n"
-#~ msgstr "              Projektnamn: %s\n"
-
-#~ msgid " Version Control System: %s\n"
-#~ msgstr " Versionshanteringssystem: %s\n"
-
-#~ msgid "           Build System: %s\n"
-#~ msgstr "               Byggsystem: %s\n"
-
-#~ msgid "    Build Date and Time: %s\n"
-#~ msgstr "  Datum och tid för bygge: %s\n"
-
-#~ msgid "    Building for Device: %s (%s)\n"
-#~ msgstr "         Bygger för enhet: %s (%s)\n"
-
-#~ msgid "            Environment: %s\n"
-#~ msgstr "              Miljö: %s\n"
-
-#~ msgid "===============\n"
-#~ msgstr "===============\n"
-
-#~ msgid " Build Failure: %s\n"
-#~ msgstr " Byggfel: %s\n"
-
-#~ msgid " Build ran for: %"
-#~ msgstr " Bygge kördes under: %"
-
-#~ msgid "=================\n"
-#~ msgstr "=================\n"
-
-#~ msgid " Build Successful\n"
-#~ msgstr " Bygge lyckades\n"
-
-#~ msgid "   Build ran for: %"
-#~ msgstr "   Bygge kördes under: %"
-
-#~ msgid "The ID of the device to build for"
-#~ msgstr "ID:t för enheten som det byggs för"
-
-#~ msgid "local"
-#~ msgstr "lokal"
-
-#~ msgid "The runtime to use for building"
-#~ msgstr "Exekveringsmiljö att använda vid bygge"
-
-#~ msgid "host"
-#~ msgstr "värd"
-
-#~ msgid "Number of workers to use when building"
-#~ msgstr "Antal arbetare som används vid bygge"
-
-#~ msgid "CONFIG_ID"
-#~ msgstr "KONFIGURATIONS-ID"
-
-#~ msgid "Path to project file, defaults to current directory"
-#~ msgstr "Sökväg till projektfilen, standardvärdet är aktuell katalog"
-
-#~ msgid "Other Projects"
-#~ msgstr "Andra projekt"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle right panel"
-#~ msgstr "Aktivera/inaktivera högerpanel"
-
-# sebras: Den här översättningen är inte klockren, men jag kommer inte på något bättre i brådrasket.
-#~ msgid "Project Discovery"
-#~ msgstr "Projektupptäckande"
-
-#~ msgid "Discover projects on my computer"
-#~ msgstr "Upptäck projekt på min dator"
-
-#~ msgid "Scan your computer for existing projects"
-#~ msgstr "Genomsök din dator efter existerande projekt"
-
-#~ msgid "%s() may only be executed once"
-#~ msgstr "%s() kan bara köras en gång"
-
-#~ msgid "Send to Fpaste.org"
-#~ msgstr "Skicka till Fpaste.org"
-
-#~ msgid "The following URL has been copied to the clipboard"
-#~ msgstr "Följande URL har kopierats till urklipp"
-
-#~ msgid "Integrated project tree"
-#~ msgstr "Integrerat projektträd"
-
-#~ msgid "Cannot locate property %s in class %s"
-#~ msgstr "Kan inte hitta egenskap %s i klassen %s"
-
-#~ msgid "Failed to find property %s in %s"
-#~ msgstr "Misslyckades med att hitta egenskap %s i %s"
-
-#~ msgid "Failed to find property %s in %s or parent %s"
-#~ msgstr ""
-#~ "Misslyckades med att hitta egenskap %s i %s eller den överordnade %s"
-
-#~ msgid "Failed to retrieve va_list value: %s"
-#~ msgstr "Misslyckades med att hämta va_list-värde: %s"
-
-#~ msgid "Just now"
-#~ msgstr "Just nu"
-
-#~ msgid "An hour ago"
-#~ msgstr "För en timme sedan"
-
-#~ msgid "Yesterday"
-#~ msgstr "Igår"
-
-#~ msgid "About a year ago"
-#~ msgstr "Ungefär ett år sedan"
-
-#~ msgid "About %u year ago"
-#~ msgid_plural "About %u years ago"
-#~ msgstr[0] "Ungefär %u år sedan"
-#~ msgstr[1] "Ungefär %u år sedan"
-
-#~ msgid "Select"
-#~ msgstr "Välj"
-
-#~ msgid "Browse…"
-#~ msgstr "Bläddra…"
-
-# Datastrukturen trie: https://en.wikipedia.org/wiki/Trie
-#~ msgid "Traversal order %u is not supported on Trie."
-#~ msgstr "Traverseringsordning %u stöds ej för trie."
-
-#~ msgid "%s() may only be called once"
-#~ msgstr "%s() kan bara anropas en gång"
-
-#~ msgid "Parser does not contain an input stream"
-#~ msgstr "Tolk innehåller inte en inmatningsström"
-
-#~ msgid "Must parse template before expanding"
-#~ msgstr "Måste tolka mall innan expansion"
-
-#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
-#~ msgstr ""
-#~ "Om aktiverad kommer sidopanelen att vara synlig i redigerarens arbetsyta."
-
-#~ msgid "Show bottom panel"
-#~ msgstr "Visa bottenpanel"
-
-#~ msgid "Show right panel"
-#~ msgstr "Visa högerpanel"
-
-#~ msgid "Split Left"
-#~ msgstr "Dela vänster"
-
-#~ msgid "Split Right"
-#~ msgstr "Dela höger"
-
-#~ msgid "Split Down"
-#~ msgstr "Dela nedåt"
-
-#~ msgid "Move"
-#~ msgstr "Flytta"
-
-#~ msgid "_Print"
-#~ msgstr "Skriv _ut"
-
-#~ msgid "HTML/Markdown live preview"
-#~ msgstr "Direkt förhandsgranskning av HTML/Markdown"
-
-#~ msgid "Support for building with jhbuild"
-#~ msgstr "Stöd för att bygga med jhbuild"
-
-#~ msgid "%d warning"
-#~ msgid_plural "%d warnings"
-#~ msgstr[0] "%d varning"
-#~ msgstr[1] "%d varningar"
-
-#~ msgid "%d error"
-#~ msgid_plural "%d errors"
-#~ msgstr[0] "%d fel"
-#~ msgstr[1] "%d fel"
-
-#~ msgid "Status:"
-#~ msgstr "Status:"
-
-#~ msgid "Running Time:"
-#~ msgstr "Körtid:"
-
-#~ msgid "Warnings:"
-#~ msgstr "Varningar:"
-
-#~ msgid "No Diagnostics"
-#~ msgstr "Ingen diagnostik"
-
-#~ msgid ""
-#~ "<a href=\"action://build-manager.build\">Build your project</a> to show "
-#~ "diagnostics here"
-#~ msgstr ""
-#~ "<a href=\"action://build-manager.build\">Bygg ditt projekt</a> för att "
-#~ "visa diagnostik här"
-
-#~ msgid "Line %u, Column %u"
-#~ msgstr "Rad %u, kolumn %u"
-
-# Förkortning av overwrite
-#~ msgid "OVR"
-#~ msgstr "ERS"
-
-#~ msgid "Change editor settings and language"
-#~ msgstr "Ändra redigerarinställningar och språk"
-
-#~ msgid "Try opening a file by typing in the search box at the top"
-#~ msgstr "Prova att öppna en fil genom att skriva i sökfältet längst upp"
-
-#~ msgid ""
-#~ "Spell checker error: no language set. It’s maybe because no dictionaries "
-#~ "are installed."
-#~ msgstr ""
-#~ "Stavningskontrollfel: inget språk inställt. Det beror kanske på att inga "
-#~ "ordlistor finns installerade."
-
-#~ msgid "_Highlight"
-#~ msgstr "Färg_markering"
-
-#~ msgid "Search highlight mode…"
-#~ msgstr "Sök färgmarkeringsläge…"
-
-#~ msgid "Auto indent"
-#~ msgstr "Automatisk indentering"
-
-#~ msgid "Save Document As"
-#~ msgstr "Spara dokument som"
-
-#~ msgid "_Select"
-#~ msgstr "_Välj"
-
-# preferences-search
-#~ msgid "Search Preferences"
-#~ msgstr "Sök inställningar"
-
-#~ msgid "Cannot add provider more than once."
-#~ msgstr "Kan inte lägga till leverantör mer än en gång."
-
-#~ msgid "File path is NULL"
-#~ msgstr "Filsökväg är NULL"
-
-#~ msgid "Error converting UTF-8 filename to wide char"
-#~ msgstr "Fel vid konvertering av UTF-8-filnamn till breda tecken"
-
-#~ msgid "ILCreateFromPath() failed"
-#~ msgstr "ILCreateFromPath() misslyckades"
-
-#~ msgid "Cannot convert “%s” into a valid NSURL."
-#~ msgstr "Kan inte konvertera ”%s” till en giltig NSURL."
-
-#~ msgid "Connecting to org.freedesktop.FileManager1 failed: "
-#~ msgstr "Anslutning till org.freedesktop.FileManager1 misslyckades: "
-
-#~ msgid "Calling ShowItems failed: "
-#~ msgstr "Anrop av ShowItems misslyckades: "
-
-#~ msgid "Jump to previous location"
-#~ msgstr "Hoppa till föregående plats"
-
-#~ msgid "Jump to next location"
-#~ msgstr "Hoppa till nästa plats"
-
-#~ msgid "untitled document"
-#~ msgstr "namnlöst dokument"
-
-#~ msgid "Project"
-#~ msgstr "Projekt"
-
-#~ msgid "View Output"
-#~ msgstr "Visa utmatning"
-
-#~ msgid "Enable color picker"
-#~ msgstr "Aktivera färgväljare"
-
-#~ msgid "Preview as HTML"
-#~ msgstr "Förhandsgranska som HTML"
-
-#~ msgid "Current language does not support symbol resolvers"
-#~ msgstr "Aktuellt språk stöder inte symboluppslagare"
-
-#~ msgid "No symbols"
-#~ msgstr "Inga symboler"
-
-#~ msgid "Open a file to see symbols within the file"
-#~ msgstr "Öppna en fil för att se symboler i filen"
-
-#~ msgid "Run Output"
-#~ msgstr "Körningsutmatning"
-
-#~ msgid "Wow! You’ve spent with Builder %d second!\n"
-#~ msgid_plural "Wow! You’ve spent with Builder %d seconds!\n"
-#~ msgstr[0] "Wow! Du har tillbringat %d sekund med Builder!\n"
-#~ msgstr[1] "Wow! Du har tillbringat %d sekunder med Builder!\n"
-
-#~ msgid "%s does not support building"
-#~ msgstr "%s saknar stöd för byggande"
-
-#~ msgid "A build is already in progress"
-#~ msgstr "Ett bygge pågår redan"
-
-#~ msgid "Failed to open stderr stream."
-#~ msgstr "Misslyckades med att öppna stderr-strömmen."
-
-#~ msgid "Failed to open stdout stream."
-#~ msgstr "Misslyckades med att öppna stdout-strömmen."
-
-#~ msgid "Attempt to load a PyGObject script with no filename."
-#~ msgstr "Försök att läsa in ett PyGObject-skript utan något filnamn."
-
-#~ msgid "The filename for the script was not provided."
-#~ msgstr "Filnamnet för skriptet tillhandahölls inte."
-
-#~ msgid "The script must be on a local filesystem."
-#~ msgstr "Skriptet måste vara på ett lokalt filsystem."
-
-#~ msgid "%s has not implemented GAsyncInitable."
-#~ msgstr "%s har inte implementerat GAsyncInitable."
-
-#~ msgid "Target"
-#~ msgstr "Mål"
-
-#~ msgid "Install successful"
-#~ msgstr "Installation lyckades"
-
-#~ msgid "Directory must be on a locally mounted filesystem."
-#~ msgstr "Katalog måste vara på ett lokalt monterat filsystem."
-
-#~ msgid "Failed to locate device"
-#~ msgstr "Misslyckades med att hitta enhet"
-
-#~ msgid "Cannot execute build task more than once"
-#~ msgstr "Kan inte köra bygguppgift mer än en gång"
-
-# postbuild? efterbygge?
-#~ msgid "Failed to access runtime for postbuild"
-#~ msgstr "Misslyckades med att komma åt exekveringsmiljö för efterbygge"
-
-#~ msgid "'%s' is not a directory."
-#~ msgstr "”%s” är inte en katalog."
-
-#~ msgid "autogen.sh is missing from project directory (%s)."
-#~ msgstr "autogen.sh saknas i projektkatalog (%s)."
-
-#~ msgid "autogen.sh is not executable."
-#~ msgstr "autogen.sh är inte körbar."
-
-#~ msgid "autogen.sh failed to create configure (%s)"
-#~ msgstr "autogen.sh misslyckades med att skapa configure (%s)"
-
-#~ msgid "Running configure…"
-#~ msgstr "Kör configure…"
-
-#~ msgid "Invalid makefile provided, ignoring."
-#~ msgstr "Ogiltig make-fil tillhandahölls, ignorerar."
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  %(prgname) %(command) OPTIONS\n"
-#~ msgstr ""
-#~ "Användning:\n"
-#~ "  %(prgname) %(command) FLAGGOR\n"
-
-#~ msgid "Missing project name"
-#~ msgstr "Saknar projektnamn"
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  ide contribute PROJECT_NAME\n"
-#~ "\n"
-#~ "  This command will bootstrap your system to begin contributing to the "
-#~ "project\n"
-#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-#~ "that\n"
-#~ "  you have the required dependencies to build, and bootstraps the first "
-#~ "build\n"
-#~ "  of the project.\n"
-#~ "\n"
-#~ "Examples:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Användning:\n"
-#~ "  ide contribute PROJEKTNAMN\n"
-#~ "\n"
-#~ "  Detta kommando kommer att starta ditt system så att det kan börja bidra "
-#~ "till\n"
-#~ "  projektet betecknat av PROJEKTNAMN. Detta inkluderar att hämta "
-#~ "källkoden,\n"
-#~ "  säkerställa att du har de beroenden som krävs för att bygga och startar "
-#~ "det första\n"
-#~ "  bygget av projektet.\n"
-#~ "\n"
-#~ "Exempel:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-
-#~ msgid "Username"
-#~ msgstr "Användarnamn"
-
-#~ msgid "Running prebuild…"
-#~ msgstr "Kör förbygge…"
-
-#~ msgid "Running post-install…"
-#~ msgstr "Kör efterinstallation…"
-
-#~ msgid "Running post-build…"
-#~ msgstr "Kör efterbygge…"
-
-# osäker
-#~ msgid "%s() is not supported on %s build system."
-#~ msgstr "%s() stöds inte i %s-byggsystem."
-
-#~ msgid "Failed to locate configure.ac"
-#~ msgstr "Misslyckades med att hitta configure.ac"
-
-#~ msgid "Chunk does not belong to snippet."
-#~ msgstr "Stycke hör inte till textsnutt."
-
-#~ msgid "Notes"
-#~ msgstr "Anteckningar"
-
-#~ msgid "Unknown file"
-#~ msgstr "Okänd fil"
-
-#~ msgid "Installed Extensions"
-#~ msgstr "Installerade tillägg"
-
-#~ msgid "Bundled Extensions"
-#~ msgstr "Medskickade tillägg"
-
-#~ msgid "Enable / Disable left panel. Shortcut: F9"
-#~ msgstr "Aktivera/inaktivera vänsterpanel. Genväg: F9"
-
-#~ msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
-#~ msgstr "Aktivera/inaktivera bottenpanel. Genväg: Ctrl + F9"
-
-#~ msgid "Enable / Disable right panel. Shortcut: Shift + F9"
-#~ msgstr "Aktivera/inaktivera högerpanel. Genväg: Skift + F9"
-
-#~ msgid "Co_ntinue"
-#~ msgstr "_Fortsätt"
-
-#~ msgid "Add a new empty file to your project"
-#~ msgstr "Lägg till en ny tom fil till ditt projekt"
-
-#~ msgid "Search for files. Shortcut: Ctrl + ."
-#~ msgstr "Sök efter filer. Genväg: Ctrl + ."
-
-#~ msgid "Drops down a list of file operations"
-#~ msgstr "Rullar ner en lista över filoperationer"
-
-#~ msgid "From an existing project on this computer"
-#~ msgstr "Från ett existerande projekt på den här datorn"
-
-#~ msgid "Deploy"
-#~ msgstr "Sätt i drift"
-
-#~ msgid "Versioning"
-#~ msgstr "Versionering"
-
-#~ msgid "GPL 2"
-#~ msgstr "GPL 2"
-
-#~ msgid "GPL 3"
-#~ msgstr "GPL 3"
-
-#~ msgid "Pattern"
-#~ msgstr "Mönster"
-
-#~ msgid "From an existing project in a Git repository"
-#~ msgstr "Från ett befintligt projekt i ett Git-arkiv"
-
-#~ msgid "Attribution"
-#~ msgstr "Erkännande"
-
-#~ msgid "File name must not contain subdirectories."
-#~ msgstr "Filnamn får inte innehålla underkataloger."
-
-#~ msgid "Invalid snippet at line %d: %s"
-#~ msgstr "Ogiltig textsnutt på rad %d: %s"
-
-#~ msgid "%s does not implement build_async()"
-#~ msgstr "%s implementerar inte build_async()"
-
-#~ msgid "No implementation of build_async()"
-#~ msgstr "Ingen implementation av build_async()"
-
-#~ msgid "_New Document"
-#~ msgstr "_Nytt dokument"
-
-#~ msgid "Display right _margin at column:"
-#~ msgstr "Visa höger_marginal vid kolumn:"
-
-#~ msgid "Insert matching brace, bracket, quotation, and parenthesis."
-#~ msgstr ""
-#~ "Infoga matchande hakparentes, klammerparentes, citattecken och parentes."
-
-#~ msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
-#~ msgstr ""
-#~ "Skriv över avslutande hakparentes, klammerparentes, citattecken och "
-#~ "parentes."
-
-#~ msgid "From remote source code repository"
-#~ msgstr "Från fjärrarkiv för källkod"
-
-#~ msgid "Display Document Changes"
-#~ msgstr "Visa ändringar i dokument"
-
-#~ msgid "Display the line numbers next to each line of the document."
-#~ msgstr "Visa radnumret intill varje rad i dokumentet."
-
-#~ msgid "Highlight Current Line"
-#~ msgstr "Färgmarkera aktuell rad"
-
-#~ msgid "Whether or not matching brackets should be highlighted."
-#~ msgstr "Huruvida matchande klammer ska färgmarkeras eller inte."
-
-#~ msgid "Display Overview Map"
-#~ msgstr "Visa översiktskarta"
-
-#~ msgid "Automatically hide the overview map during periods of inactivity."
-#~ msgstr "Dölj automatiskt översiktskartan under inaktivitet."
-
-#~ msgid "Cursor Placement"
-#~ msgstr "Markörplacering"
-
-#~ msgid "Draw a circle over space characters."
-#~ msgstr "Rita en cirkel över blanksteg."
-
-#~ msgid "Draw an arrow over tab characters."
-#~ msgstr "Rita en pil över tabbtecken."
-
-#~ msgid "Draw a carriage return over newline characters."
-#~ msgstr "Rita ut vagnretur över nyradstecken."
-
-#~ msgid "Draw leading space only."
-#~ msgstr "Rita endast ut inledande blanksteg."
-
-#~ msgid "Draw trailing space only."
-#~ msgstr "Rita endast ut avslutande blanksteg."
-
-#~ msgid "Email"
-#~ msgstr "E-post"
-
-#~ msgid ""
-#~ "Highlight additional syntax based upon information found in the document."
-#~ msgstr "Färgmarkera ytterligare syntax baserat på information i dokumentet."
-
-#~ msgid "Key Binding Emulation"
-#~ msgstr "Tangentbindningsemulering"
-
-#~ msgid "The default keybindings for Builder."
-#~ msgstr "Tangentbindningarna som är standard för Builder."
-
-#~ msgid "Keyboard Movement"
-#~ msgstr "Förflyttning med tangentbord"
-
-#~ msgid "Plugins"
-#~ msgstr "Insticksmoduler"
-
-#~ msgid "New"
-#~ msgstr "Nytt"
-
-#~ msgid "Attempt to load a GJS script with no filename."
-#~ msgstr "Försök att läsa in ett GJS-skript utan något filnamn."
-
-#~ msgid "Failed to create JavaScript context."
-#~ msgstr "Misslyckades med att skapa Javascript-kontext"
-
-#~ msgid "Failed to set IdeContext in JavaScript runtime."
-#~ msgstr ""
-#~ "Misslyckades med att ställa in IdeContext i Javascript-exekveringsmiljö."
-
-#~ msgid "The script \"%s\" is not a JavaScript file."
-#~ msgstr "Skriptet ”%s” är inte en Javascript-fil."
-
-#~ msgid "File contained invalid UTF-8"
-#~ msgstr "Fil innehöll ogiltig UTF-8"
-
-#~ msgid "Builder requires libgit2-glib with threading support."
-#~ msgstr "Builder kräver libgit2-glib med stöd för trådar."
-
-#~ msgid "Builder requires libgit2-glib with SSH support."
-#~ msgstr "Builder kräver libgit2-glib med stöd för SSH."
-
-#~ msgid "Documentation (%s)"
-#~ msgstr "Dokumentation (%s)"
-
-#~ msgid "Symbol Tree"
-#~ msgstr "Symbolträd"
-
-#~ msgid "Terminal (%s)"
-#~ msgstr "Terminal (%s)"
-
-#~ msgid "Autotools Project (configure.ac)"
-#~ msgstr "Autotools-projekt (configure.ac)"
-
-#~ msgid "Directory|Projects"
-#~ msgstr "Katalog|Projekt"
-
-#~ msgid "(Click on items to select them)"
-#~ msgstr "(Klicka på objekt för att markera dem)"
-
-#~ msgid "restore insert cursor mark"
-#~ msgstr "återställ infoga markör markering"
-
-#~ msgid "diff renderer gutter changes git vcs"
-#~ msgstr "diff renderare marginal ändringar git vcs"
-
-#~ msgid "line lines highlight current"
-#~ msgstr "rad rader färgmarkering aktuell"
-
-#~ msgid "bracket brackets highlight matching"
-#~ msgstr "parentes parenteser färgmarkera matchande"
-
-# scrolloff: minsta antal rader ovan och under markören exempelvis vid sökning
-#~ msgid "lines margin scrolloff scroll off"
-#~ msgstr "rader marginal scrolloff rullningskontext"
-
-#~ msgid "minimap mini map overview over view"
-#~ msgstr "miniatyr karta minikarta översikt"
-
-#~ msgid ""
-#~ "draw spaces space tab newline nbsp non-breaking whitespace trailing "
-#~ "leading"
-#~ msgstr ""
-#~ "rita mellanslag blanksteg tabb nyrad nbsp icke-brytande inledande "
-#~ "avslutande"
-
-#~ msgid "git author name surname attribution source code"
-#~ msgstr "git författare namn efternamn erkännande källkod"
-
-#~ msgid "git author email mail address attribute source code"
-#~ msgstr "git författare e-post e-postadress attribut källkod"
-
-#~ msgid "experimental clang autocompletion auto complete"
-#~ msgstr "experimentell clang automatisk komplettering autokomplettering"
-
-#~ msgid "jedi python autocompletion auto complete"
-#~ msgstr "jedi python automatisk komplettering autokomplettering"
-
-#~ msgid "snippets autocompletion auto complete"
-#~ msgstr "textsnuttar automatisk komplettering autokomplettering"
-
-#~ msgid "semantic highlighting color goto declaration definition"
-#~ msgstr "semantisk färgmarkering markering färg goto deklaration definition"
-
-#~ msgid "default builder keybindings"
-#~ msgstr "standard builder tangentbindningar"
-
-#~ msgid "emacs keybindings modal"
-#~ msgstr "emacs tangentbindningar modal"
-
-#~ msgid "vim keybindings modal"
-#~ msgstr "vim tangentbindningar modal"
-
-#~ msgid "smart home end"
-#~ msgstr "smart home end"
-
-#~ msgid "smart back backspace indent align"
-#~ msgstr "smart backsteg indentering justering"
-
-#~ msgid "source style scheme source tango solarized builder syntax"
-#~ msgstr "källkodsstil schema källkod tango solarized builder syntax"
-
-#~ msgid "%s more"
-#~ msgid_plural "%s more"
-#~ msgstr[0] "%s till"
-#~ msgstr[1] "%s till"
-
-#~ msgid "Open Document"
-#~ msgstr "Öppna dokument"
-
-#~ msgid "Timed out while waiting for devices to settle.\n"
-#~ msgstr ""
-#~ "Tidsgräns överskreds under väntan på att enheter skulle bli klara.\n"
-
-#~ msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
-#~ msgstr ""
-#~ "Väntar upp till 60 sekunder på att enheter ska bli klara. Ctrl+C för att "
-#~ "avsluta.\n"
-
-#~ msgid "DEVICE_ID"
-#~ msgstr "ENHETS-ID"
-
-#~ msgid "Increase parallelism in the build."
-#~ msgstr "Öka parallellisering av bygget."
-
-#~ msgid "- Get build flags for a project file"
-#~ msgstr "- Erhåll byggflaggor för en projektfil"
-
-#~ msgid "- List devices found on the system."
-#~ msgstr "- Lista enheter som hittades på systemet."
-
-#~ msgid "No such file in project: %s\n"
-#~ msgstr "Ingen sådan fil i projekt: %s\n"
-
-#~ msgid "- List diagnostics for a file."
-#~ msgstr "- Lista diagnostik för en fil."
-
-#~ msgid "- List files found in project."
-#~ msgstr "- Lista filer som hittats i projekt."
-
-#~ msgid "No files provided to load settings for.\n"
-#~ msgstr "Inga filer tillhandahållna att läsa in inställningar för.\n"
-
-#~ msgid "PROJECT_FILE [SEARCH TERMS...]"
-#~ msgstr "PROJEKTFIL [SÖKVILLKOR...]"
-
-#~ msgid "HTML Preview"
-#~ msgstr "HTML-förhandsgranskning"
