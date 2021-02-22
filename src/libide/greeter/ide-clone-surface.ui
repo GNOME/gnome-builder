@@ -306,6 +306,7 @@
                               <object class="GtkButton" id="clone_button">
                                 <property name="label" translatable="yes">Clone Project</property>
                                 <property name="visible">true</property>
+                                <property name="can-default">True</property>
                                 <signal name="clicked" handler="ide_clone_surface_clone" object="IdeCloneSurface" swapped="true"/>
                                 <style>
                                   <class name="suggested-action"/>
