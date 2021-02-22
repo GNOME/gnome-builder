@@ -330,6 +330,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;j</property>
+                <property name="title" translatable="yes" context="shortcut window">Sort selected lines</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
                 <property name="accelerator">&lt;ctrl&gt;space</property>
                 <property name="title" translatable="yes" context="shortcut window">Show completion window</property>
               </object>
