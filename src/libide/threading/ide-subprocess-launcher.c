@@ -983,7 +983,7 @@ ide_subprocess_launcher_take_stderr_fd (IdeSubprocessLauncher *self,
  */
 void
 ide_subprocess_launcher_set_argv (IdeSubprocessLauncher  *self,
-                                  gchar                 **args)
+                                  const gchar * const    *args)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
