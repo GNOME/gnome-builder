@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-01-16 11:44+0000\n"
-"PO-Revision-Date: 2021-01-17 10:00+0100\n"
+"POT-Creation-Date: 2021-02-22 18:20+0000\n"
+"PO-Revision-Date: 2021-02-23 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -623,11 +623,11 @@ msgstr "Builder-en kolore-eskema lehenetsia"
 msgid "Basic"
 msgstr "Oinarrizkoa"
 
-#: src/gstyle/gstyle-color-panel.c:956
+#: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
 msgstr "Paleta: "
 
-#: src/gstyle/gstyle-color-panel.c:958
+#: src/gstyle/gstyle-color-panel.c:961
 msgid "Palette"
 msgstr "Paleta"
 
@@ -875,7 +875,7 @@ msgstr "Izengabea"
 #: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:317
+#: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:536
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -953,7 +953,7 @@ msgstr "Gorde honela"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:343
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
@@ -2268,7 +2268,7 @@ msgid "Editor Shortcuts"
 msgstr "Editorearen lasterbideak"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:529
+#: src/libide/gui/ide-shortcuts-window.ui:536
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Orokorra"
@@ -2284,37 +2284,37 @@ msgid "Toogle primary menu"
 msgstr "Aktibatu/desaktibatu menu nagusia"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:533
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Bilaketa globala"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:540
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Hobespenak"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Komandoen barra"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminala"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminala eraikuntzako exekuzio-garaian"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Laster-teklak"
@@ -2426,13 +2426,13 @@ msgid "Clear highlight"
 msgstr "Garbitu nabarmentzea"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:577
+#: src/libide/gui/ide-shortcuts-window.ui:584
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiatu eta itsatsi"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:582
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiatu hautatutako testua arbelean"
@@ -2443,7 +2443,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Ebaki hautatutako testua arbelera"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:596
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Itsatsi testua arbeletik"
@@ -2510,155 +2510,160 @@ msgstr "Elkartu hautatutako lerroak"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
+msgid "Sort selected lines"
+msgstr "Ordenatu hautatutako lerroak"
+
+#: src/libide/gui/ide-shortcuts-window.ui:341
+msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Erakutsi osaketaren leihoa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Txandakatu osatze-leihoaren opakutasuna"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Txandakatu gainidaztea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Birkoskatu lerroa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Ezabatu lerroa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Aldatu ikurraren izena"
 
-#: src/libide/gui/ide-shortcuts-window.ui:370
+#: src/libide/gui/ide-shortcuts-window.ui:377
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Lengoaia semantikoaren euskarri behar du"
 
-#: src/libide/gui/ide-shortcuts-window.ui:377
+#: src/libide/gui/ide-shortcuts-window.ui:384
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Iruzkindu kodea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:384
+#: src/libide/gui/ide-shortcuts-window.ui:391
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Kendu kodearen iruzkinak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:392
+#: src/libide/gui/ide-shortcuts-window.ui:399
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Nabigazioa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Joan fitxategiko hurrengo errorera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Joan fitxategiko aurreko errorera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Joan aurreko edizioaren kokalekura"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Joan hurrengo edizioaren kokalekura"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Joan ikurraren definiziora"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mugitu leihatila gora fitxategiaren baitan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mugitu leihatila behera fitxategiaren baitan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mugitu leihatila fitxategiaren amaierara"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mugitu leihatila fitxategiaren hasierara"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mugitu bat datorren kortxetera"
 
-#: src/libide/gui/ide-shortcuts-window.ui:468
+#: src/libide/gui/ide-shortcuts-window.ui:475
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Hautapenak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:473
+#: src/libide/gui/ide-shortcuts-window.ui:480
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Hautatu dena"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Desautatu dena"
 
-#: src/libide/gui/ide-shortcuts-window.ui:488
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Eraiki eta exekutatu"
 
-#: src/libide/gui/ide-shortcuts-window.ui:493
+#: src/libide/gui/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Eraiki"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Berreraiki"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Exekutatu"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:521
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profila"
 
-#: src/libide/gui/ide-shortcuts-window.ui:525
+#: src/libide/gui/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminalaren lasterbideak"
 
-#: src/libide/gui/ide-shortcuts-window.ui:597
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Bilatu"
 
-#: src/libide/gui/ide-shortcuts-window.ui:602
+#: src/libide/gui/ide-shortcuts-window.ui:609
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Bilatu testua terminalean"
@@ -2671,7 +2676,7 @@ msgstr[0] "Pakete %u instalatzen"
 msgstr[1] "%u paketa instalatzen"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1354
+#: src/libide/lsp/ide-lsp-client.c:1469
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Huts egin du lengoaia-zerbitzariak hasieratzeak: %s"
@@ -3004,33 +3009,33 @@ msgstr "Beautifier plugina: buferra ez da idazgarria"
 msgid "Beautifier Plugin: Nothing selected"
 msgstr "Beautifier plugina: ez da ezer hautatu"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Ez dago edertzailerik “%s”(e)rako"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:248
 #, c-format
 msgid "No beautifier available"
 msgstr "Ez dago edertzailerik erabilgarri"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "Edizioa"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:347
 msgid "Beautify the code"
 msgstr "Edertu kodea"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
 msgid "Trigger the default entry"
 msgstr "Aktibatu sarrera lehenetsia"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:375
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:377
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr "Beautifier plugina: ez dago baliozko sarrerarik, desgaitzen: %s"
@@ -4328,7 +4333,7 @@ msgstr "Banandu"
 msgid "Save _As"
 msgstr "Gorde _honela"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:157
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
 msgstr "Ez da fitxategirik eman."
 
@@ -4449,7 +4454,7 @@ msgstr "Instalatu"
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
 #: src/plugins/rustup/rustup_plugin.py:484
 #: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:163
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "Update"
 msgstr "Eguneratu"
 
@@ -4938,27 +4943,27 @@ msgstr "GNOME aplikazioa"
 msgid "Create a new GNOME application"
 msgstr "Sortu GNOME aplikazio berria"
 
-#: src/plugins/meson-templates/meson_templates.py:325
+#: src/plugins/meson-templates/meson_templates.py:328
 msgid "Shared Library"
 msgstr "Liburutegi partekatua"
 
-#: src/plugins/meson-templates/meson_templates.py:327
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "Create a new project with a shared library"
 msgstr "Sortu proiektu berria partekatutako liburutegi batekin"
 
-#: src/plugins/meson-templates/meson_templates.py:344
+#: src/plugins/meson-templates/meson_templates.py:347
 msgid "Empty Project"
 msgstr "Proiektu hutsa"
 
-#: src/plugins/meson-templates/meson_templates.py:346
+#: src/plugins/meson-templates/meson_templates.py:349
 msgid "Create a new empty project"
 msgstr "Sortu proiektu huts berria"
 
-#: src/plugins/meson-templates/meson_templates.py:363
+#: src/plugins/meson-templates/meson_templates.py:366
 msgid "Command Line Tool"
 msgstr "Komando-lerroko tresna"
 
-#: src/plugins/meson-templates/meson_templates.py:365
+#: src/plugins/meson-templates/meson_templates.py:368
 msgid "Create a new command line project"
 msgstr "Sortu komando-lerroko proiektu berria"
 
@@ -5228,12 +5233,12 @@ msgstr "npm mendekotasunak deskargatzen"
 msgid "Bootstrapping project"
 msgstr "Proiektua kargatzen"
 
-#: src/plugins/podman/gbp-podman-runtime.c:161
+#: src/plugins/podman/gbp-podman-runtime.c:162
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:169
+#: src/plugins/podman/gbp-podman-runtime.c:170
 msgid "Containers/Podman"
 msgstr "Edukiontziak/Podman"
 
@@ -6075,11 +6080,11 @@ msgstr "TODO/FIXMEak"
 msgid "Updating Builder"
 msgstr "Builder eguneratzen"
 
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:166
 msgid "Update Available"
 msgstr "Eguneraketa eskuragarri"
 
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:161
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
