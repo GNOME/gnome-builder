@@ -264,6 +264,22 @@ gbp_podman_runtime_provider_load (IdeRuntimeProvider *provider,
   self->cancellable = g_cancellable_new ();
   self->manager = manager;
 
+  /**
+   * We attempt to initialize the podman provider asynchronously even if podman
+   * is not configured as the runtime provider in the build configuration. This is
+   * to make sure we show available runtimes in the configuration surface.
+   *
+   * If podman is selected as the provider for the runtime used in the build
+   * configuration the _provides method will ensure that the runtime is loaded
+   * before the pipeline is marked as active.
+   *
+   * TODO: we can probably let the bootstrap process continue with this async load
+   *       when that load is not done yet before the pipeline wants us to be ready.
+   */
+  gbp_podman_runtime_provider_load_async (self,
+                                          self->cancellable,
+                                          NULL, NULL);
+
   IDE_EXIT;
 }
 
@@ -289,7 +305,7 @@ gbp_podman_runtime_provider_unload (IdeRuntimeProvider *provider,
 
 static gboolean
 gbp_podman_runtime_provider_provides (IdeRuntimeProvider *provider,
-                                         const gchar        *runtime_id)
+                                      const gchar        *runtime_id)
 {
   IDE_ENTRY;
 
