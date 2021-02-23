@@ -37,6 +37,44 @@ struct _GbpMessagesPanel
 
 G_DEFINE_TYPE (GbpMessagesPanel, gbp_messages_panel, DZL_TYPE_DOCK_WIDGET)
 
+static char *
+ensure_crlf (const char *in_s)
+{
+  GString *s = g_string_new (NULL);
+  const char *p = in_s;
+  const char *prev_p = in_s;
+
+  g_assert (in_s != NULL);
+
+  while ((p = strchr (p, '\n')) != NULL)
+    {
+      /* This is to avoid a segfault that would occur if trying to deref in_s - 1. */
+      if (p == in_s)
+        {
+          g_string_append (s, "\r\n");
+          ++p;
+        }
+      else
+        {
+          if (p[-1] == '\r')
+            {
+              ++p;
+              g_string_append_len (s, prev_p, (gssize)(p - prev_p));
+            }
+          else
+            {
+              g_string_append_len (s, prev_p, (gssize)(p - prev_p));
+              g_string_append (s, "\r\n");
+              ++p;
+            }
+        }
+
+      prev_p = p;
+    }
+
+  return g_string_free (s, FALSE);
+}
+
 static void
 gbp_messages_panel_log_cb (GbpMessagesPanel *self,
                            GLogLevelFlags    log_level,
@@ -44,11 +82,15 @@ gbp_messages_panel_log_cb (GbpMessagesPanel *self,
                            const gchar      *message,
                            IdeContext       *context)
 {
+  g_autofree char *out_message = NULL;
+
   g_assert (GBP_IS_MESSAGES_PANEL (self));
   g_assert (message != NULL);
   g_assert (IDE_IS_CONTEXT (context));
 
-  vte_terminal_feed (VTE_TERMINAL (self->terminal), message, -1);
+  out_message = ensure_crlf (message);
+
+  vte_terminal_feed (VTE_TERMINAL (self->terminal), out_message, -1);
   vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", 2);
   dzl_dock_item_needs_attention (DZL_DOCK_ITEM (&self->parent_instance));
   gtk_widget_show (GTK_WIDGET (self));
@@ -58,7 +100,7 @@ gbp_messages_panel_log_cb (GbpMessagesPanel *self,
 static gboolean
 do_log (gpointer data)
 {
-  ide_context_warning (data, "(some log message here)");
+  ide_context_warning (data, "(some log message here)\nfoo\nbaz");
   return G_SOURCE_CONTINUE;
 }
 #endif
@@ -77,6 +119,8 @@ gbp_messages_panel_set_context (GtkWidget  *widget,
 #if 0
   if (context != NULL)
     g_timeout_add (1000, do_log, context);
+
+  g_assert (g_strcmp0 (ensure_crlf ("\nfoo\r\nbar\nbaz\r\r\n"), "\r\nfoo\r\nbar\r\nbaz\r\r\n") == 0);
 #endif
 }
 
