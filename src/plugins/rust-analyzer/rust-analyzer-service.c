@@ -475,10 +475,10 @@ rust_analyzer_service_ensure_started (RustAnalyzerService *self)
 
           notification = ide_notification_new ();
           ide_notification_set_id (notification, "org.gnome-builder.rust-analyzer");
-          ide_notification_set_title (notification, _("Your computer is missing the Rust Analyzer Language Server"));
-          ide_notification_set_body (notification, _("The Language Server is necessary to provide IDE features like completion or diagnostic"));
+          ide_notification_set_title (notification, _("Rust Analyzer is missing from your computer"));
+          ide_notification_set_body (notification, _("Support for diagnostics and auto-completion may be limited until it is installed."));
           ide_notification_set_icon_name (notification, "dialog-warning-symbolic");
-          ide_notification_add_button (notification, _("Install Language Server"), NULL, "win.install-rust-analyzer");
+          ide_notification_add_button (notification, _("Install Rust Analyzer"), NULL, "win.install-rust-analyzer");
           ide_notification_set_urgent (notification, TRUE);
           context = ide_object_get_context (IDE_OBJECT (self));
           ide_notification_attach (notification, IDE_OBJECT (context));
