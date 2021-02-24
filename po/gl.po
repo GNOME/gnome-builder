@@ -2,22 +2,22 @@
 # English (United Kingdom) translations for PACKAGE package.
 # Copyright (C) 2015 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Fran Dieguez <frandieguez@gnome.org>, 2015-2021.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-22 18:20+0000\n"
-"PO-Revision-Date: 2021-02-24 13:12+0100\n"
-"Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician\n"
+"POT-Creation-Date: 2021-02-24 14:12+0000\n"
+"PO-Revision-Date: 2021-02-25 00:07+0100\n"
+"Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
+"Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Lokalize 20.12.2\n"
+"X-Generator: Gtranslator 3.38.0\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -2588,7 +2588,6 @@ msgid "Join selected lines"
 msgstr "Unir liñas seleccionadas"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
-#, fuzzy
 #| msgid "Sort the selected lines"
 msgctxt "shortcut window"
 msgid "Sort selected lines"
@@ -3152,16 +3151,21 @@ msgstr ""
 "cartafol temporal «%s»: «%s»"
 
 #. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:264
+#: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-msgid "Beautifier plugin: command error output: %s"
-msgstr "Engadido Beautifier: saída de erro da orde: %s"
+#| msgid "Beautifier plugin: command error output: %s"
+msgid ""
+"Beautifier plugin: command error output:\n"
+"%s"
+msgstr ""
+"Engadido Beautifier: saída de erro da orde:\n"
+"%s"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:274
+#: src/plugins/beautifier/gb-beautifier-process.c:291
 msgid "Beautifier plugin: the command output is empty"
 msgstr "Engadido Beautifier: a saída da orde está baleira"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:301
+#: src/plugins/beautifier/gb-beautifier-process.c:318
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Engadido Beautifier: a aínda non é un texto UTF-8 válido"
 
@@ -4574,15 +4578,10 @@ msgstr "Creando o paquete de flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/rustup/rustup_plugin.py:605
 msgid "Install"
 msgstr "Instalar"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "Update"
 msgstr "Actualizar"
@@ -5554,23 +5553,24 @@ msgstr ""
 "clippy engade comprobacións adicionais para coller erros comúns pero é "
 "xeralmente máis lento"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
-msgid "Your computer is missing the Rust Analyzer Language Server"
-msgstr ""
-"O seu computador non ten instalado o Servidor de Analizador de Linguaxe de "
-"Rust"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:477
+msgid "Rust Analyzer is missing from your computer"
+msgstr "Falta o analizador de Rust no seu computador"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:478
+#| msgid ""
+#| "Search, diagnostics, and autocompletion may be limited until complete."
 msgid ""
-"The Language Server is necessary to provide IDE features like completion or "
-"diagnostic"
+"Support for diagnostics and auto-completion may be limited until it is "
+"installed."
 msgstr ""
-"O Servidor de Linguaxe é necesario para fornecer características de DI como "
-"o completado e información de diagnóstico"
+"A compatibilidade con diagnósticos e autocompletado pode estar limitada ate "
+"que se instale."
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
-msgid "Install Language Server"
-msgstr "Instalar Servidor de Linguaxe"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:480
+#| msgid "Installing Rust Analyzer..."
+msgid "Install Rust Analyzer"
+msgstr "Instalando o Analizador de Rust"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
 msgid "Installation of Rust Analyzer finished"
@@ -5584,129 +5584,6 @@ msgstr "Instalando o Analizador de Rust…"
 #, c-format
 msgid "Cannot download Rust Analyzer: %s"
 msgstr "Non foi posíbel descarar o Analizador de Rust: %s"
-
-#: src/plugins/rustup/rustup_plugin.py:80
-msgid "Rustup not installed"
-msgstr "Rustup non instalado"
-
-#: src/plugins/rustup/rustup_plugin.py:270
-msgid "Installing rustup"
-msgstr "Instalando rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:272
-msgid "Updating rustup"
-msgstr "Actualizando rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:274
-msgid "Installing rust "
-msgstr "Instalando rust "
-
-#: src/plugins/rustup/rustup_plugin.py:276
-msgid "Checking system"
-msgstr "Comprobando o sistema"
-
-#: src/plugins/rustup/rustup_plugin.py:341
-msgid "Downloading rustup-init"
-msgstr "Descargando rustup-init"
-
-#: src/plugins/rustup/rustup_plugin.py:346
-msgid "Syncing channel updates"
-msgstr "Sincronizando canles de actualización"
-
-#: src/plugins/rustup/rustup_plugin.py:352
-msgid "Downloading "
-msgstr "Descargando "
-
-#: src/plugins/rustup/rustup_plugin.py:359
-msgid "Installing "
-msgstr "Instalando "
-
-#: src/plugins/rustup/rustup_plugin.py:365
-msgid "Checking for rustup updates"
-msgstr "Comprobando as actualizacións de rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:370
-msgid "Downloading rustup update"
-msgstr "Descargando actualización de rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:408
-msgid "Error installing "
-msgstr "Produciuse un erro ao instalar "
-
-#: src/plugins/rustup/rustup_plugin.py:410
-msgid "Error"
-msgstr "Erro"
-
-#: src/plugins/rustup/rustup_plugin.py:415
-msgid "Cancelled"
-msgstr "Cancelado"
-
-#: src/plugins/rustup/rustup_plugin.py:423
-msgid "Finished"
-msgstr "Finalizado"
-
-#: src/plugins/rustup/rustup_plugin.py:439
-msgid "Rustup"
-msgstr "Rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:440
-msgid "Rustup Toolchains"
-msgstr "Ferramentas de Rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Updating"
-msgstr "Actualizando"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Installing"
-msgstr "Instalando"
-
-#. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Make default"
-msgstr "Facer predeterminado"
-
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Makes the selected toolchain the default rust installation"
-msgstr "Fai o toolchain seleccionado a instalación de rust predeterminada"
-
-#: src/plugins/rustup/rustup_plugin.py:604
-msgid "Install Rust Channel"
-msgstr "Instalar canle de Rust"
-
-#. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:609
-msgid "Enter name of rust channel"
-msgstr "Escriba o nome da canle de rust"
-
-#: src/plugins/rustup/rustup_plugin.py:610
-msgid ""
-"Standard release channel toolchain names have the following form:\n"
-"                        <channel>[-<date>][-<host>]\n"
-"\n"
-"                        <channel>    = stable|beta|nightly|<version>\n"
-"                        <date>          = YYYY-MM-DD\n"
-"                        <host>          = <target-triple>"
-msgstr ""
-"Os nomes de toolchain de canles de publicación estándar teñen a seguinte "
-"forma:\n"
-"                        <canle>[-<data>][-<equipo>]\n"
-"\n"
-"                        <canle>    = stable|beta|nightly|<version>\n"
-"                        <data>          = YYYY-MM-DD\n"
-"                        <equipo>          = <target-triple>"
-
-#: src/plugins/rustup/rustup_plugin.py:635
-msgid "Install Rustup to manage toolchains here!"
-msgstr "Instalar Rustup para xestionar os toolchains aquí!"
-
-#: src/plugins/rustup/rustup_plugin.py:642
-msgid "No toolchain installed. Click"
-msgstr "Non hai ningún toolchain instalado. Prema"
-
-#: src/plugins/rustup/rustup_plugin.py:643
-msgid "to add a new toolchain!"
-msgstr "para engadir un novo toolchain!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
@@ -6415,6 +6292,115 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
+
+#~ msgid "Your computer is missing the Rust Analyzer Language Server"
+#~ msgstr ""
+#~ "O seu computador non ten instalado o Servidor de Analizador de Linguaxe "
+#~ "de Rust"
+
+#~ msgid ""
+#~ "The Language Server is necessary to provide IDE features like completion "
+#~ "or diagnostic"
+#~ msgstr ""
+#~ "O Servidor de Linguaxe é necesario para fornecer características de DI "
+#~ "como o completado e información de diagnóstico"
+
+#~ msgid "Install Language Server"
+#~ msgstr "Instalar Servidor de Linguaxe"
+
+#~ msgid "Rustup not installed"
+#~ msgstr "Rustup non instalado"
+
+#~ msgid "Installing rustup"
+#~ msgstr "Instalando rustup"
+
+#~ msgid "Updating rustup"
+#~ msgstr "Actualizando rustup"
+
+#~ msgid "Installing rust "
+#~ msgstr "Instalando rust "
+
+#~ msgid "Checking system"
+#~ msgstr "Comprobando o sistema"
+
+#~ msgid "Downloading rustup-init"
+#~ msgstr "Descargando rustup-init"
+
+#~ msgid "Syncing channel updates"
+#~ msgstr "Sincronizando canles de actualización"
+
+#~ msgid "Downloading "
+#~ msgstr "Descargando "
+
+#~ msgid "Installing "
+#~ msgstr "Instalando "
+
+#~ msgid "Checking for rustup updates"
+#~ msgstr "Comprobando as actualizacións de rustup"
+
+#~ msgid "Downloading rustup update"
+#~ msgstr "Descargando actualización de rustup"
+
+#~ msgid "Error installing "
+#~ msgstr "Produciuse un erro ao instalar "
+
+#~ msgid "Error"
+#~ msgstr "Erro"
+
+#~ msgid "Cancelled"
+#~ msgstr "Cancelado"
+
+#~ msgid "Finished"
+#~ msgstr "Finalizado"
+
+#~ msgid "Rustup"
+#~ msgstr "Rustup"
+
+#~ msgid "Rustup Toolchains"
+#~ msgstr "Ferramentas de Rustup"
+
+#~ msgid "Updating"
+#~ msgstr "Actualizando"
+
+#~ msgid "Installing"
+#~ msgstr "Instalando"
+
+#~ msgid "Make default"
+#~ msgstr "Facer predeterminado"
+
+#~ msgid "Makes the selected toolchain the default rust installation"
+#~ msgstr "Fai o toolchain seleccionado a instalación de rust predeterminada"
+
+#~ msgid "Install Rust Channel"
+#~ msgstr "Instalar canle de Rust"
+
+#~ msgid "Enter name of rust channel"
+#~ msgstr "Escriba o nome da canle de rust"
+
+#~ msgid ""
+#~ "Standard release channel toolchain names have the following form:\n"
+#~ "                        <channel>[-<date>][-<host>]\n"
+#~ "\n"
+#~ "                        <channel>    = stable|beta|nightly|<version>\n"
+#~ "                        <date>          = YYYY-MM-DD\n"
+#~ "                        <host>          = <target-triple>"
+#~ msgstr ""
+#~ "Os nomes de toolchain de canles de publicación estándar teñen a seguinte "
+#~ "forma:\n"
+#~ "                        <canle>[-<data>][-<equipo>]\n"
+#~ "\n"
+#~ "                        <canle>    = stable|beta|nightly|<version>\n"
+#~ "                        <data>          = YYYY-MM-DD\n"
+#~ "                        <equipo>          = <target-triple>"
+
+#~ msgid "Install Rustup to manage toolchains here!"
+#~ msgstr "Instalar Rustup para xestionar os toolchains aquí!"
+
+#~ msgid "No toolchain installed. Click"
+#~ msgstr "Non hai ningún toolchain instalado. Prema"
+
+#~ msgid "to add a new toolchain!"
+#~ msgstr "para engadir un novo toolchain!"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Touchpad gestures"
