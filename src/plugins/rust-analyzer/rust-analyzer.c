@@ -59,9 +59,11 @@ _rust_analyzer_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RENAME_PROVIDER,
                                               RUST_TYPE_ANALYZER_RENAME_PROVIDER);
+#if 0
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SEARCH_PROVIDER,
                                               RUST_TYPE_ANALYZER_SEARCH_PROVIDER);
+#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               RUST_TYPE_ANALYZER_PREFERENCES_ADDIN);
