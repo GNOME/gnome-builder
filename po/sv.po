@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-22 18:20+0000\n"
-"PO-Revision-Date: 2021-02-22 22:12+0100\n"
+"POT-Creation-Date: 2021-02-24 05:29+0000\n"
+"PO-Revision-Date: 2021-02-24 22:22+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -3148,17 +3148,21 @@ msgstr ""
 "temporära katalogen ”%s”: ”%s”"
 
 #. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:264
+#: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-msgid "Beautifier plugin: command error output: %s"
-msgstr "Förskönarinsticksmodul: felutmatning för kommando: %s"
+msgid ""
+"Beautifier plugin: command error output:\n"
+"%s"
+msgstr ""
+"Förskönarinsticksmodul: felutmatning för kommando:\n"
+"%s"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:274
+#: src/plugins/beautifier/gb-beautifier-process.c:291
 msgid "Beautifier plugin: the command output is empty"
 msgstr "Förskönarinsticksmodul: kommandoutmatningen är tom"
 
 # TODO: Beautifier in all other strings
-#: src/plugins/beautifier/gb-beautifier-process.c:301
+#: src/plugins/beautifier/gb-beautifier-process.c:318
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Förskönarinsticksmodul: utmatning är inte en giltig UTF-8-text"
 
@@ -4566,15 +4570,10 @@ msgstr "Skapar flatpak-bunt"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/rustup/rustup_plugin.py:605
 msgid "Install"
 msgstr "Installera"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "Update"
 msgstr "Uppdatera"
@@ -5548,21 +5547,21 @@ msgstr ""
 "clippy lägger till ytterligare tester för att fånga vanliga misstag men är i "
 "allmänhet långsammare"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
-msgid "Your computer is missing the Rust Analyzer Language Server"
-msgstr "Din dator saknar språkservern för Rust-analyseraren"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:469
+msgid "Rust Analyzer is missing from your computer"
+msgstr "Rust-analyseraren saknas på din dator"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:470
 msgid ""
-"The Language Server is necessary to provide IDE features like completion or "
-"diagnostic"
+"Support for diagnostics and auto-completion may be limited until it is "
+"installed."
 msgstr ""
-"Språkservern är nödvändig för att tillhandahålla utvecklingsmiljöfunktioner "
-"som komplettering eller diagnostik"
+"Stöd för diagnostik och automatisk komplettering kan vara begränsat tills "
+"den är installerad."
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
-msgid "Install Language Server"
-msgstr "Installera språkserver"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:472
+msgid "Install Rust Analyzer"
+msgstr "Installera Rust-analyseraren"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
 msgid "Installation of Rust Analyzer finished"
@@ -5576,128 +5575,6 @@ msgstr "Installerar Rust-analyseraren…"
 #, c-format
 msgid "Cannot download Rust Analyzer: %s"
 msgstr "Det går inte att hämta Rust-analyseraren: %s"
-
-#: src/plugins/rustup/rustup_plugin.py:80
-msgid "Rustup not installed"
-msgstr "Rustup inte installerat"
-
-#: src/plugins/rustup/rustup_plugin.py:270
-msgid "Installing rustup"
-msgstr "Installerar rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:272
-msgid "Updating rustup"
-msgstr "Uppdaterar rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:274
-msgid "Installing rust "
-msgstr "Installerar rust "
-
-#: src/plugins/rustup/rustup_plugin.py:276
-msgid "Checking system"
-msgstr "Kontrollerar system"
-
-#: src/plugins/rustup/rustup_plugin.py:341
-msgid "Downloading rustup-init"
-msgstr "Hämtar rustup-init"
-
-#: src/plugins/rustup/rustup_plugin.py:346
-msgid "Syncing channel updates"
-msgstr "Synkroniserar kanaluppdateringar"
-
-#: src/plugins/rustup/rustup_plugin.py:352
-msgid "Downloading "
-msgstr "Hämtar "
-
-#: src/plugins/rustup/rustup_plugin.py:359
-msgid "Installing "
-msgstr "Installerar "
-
-#: src/plugins/rustup/rustup_plugin.py:365
-msgid "Checking for rustup updates"
-msgstr "Söker efter rustup-uppdateringar"
-
-#: src/plugins/rustup/rustup_plugin.py:370
-msgid "Downloading rustup update"
-msgstr "Hämtar rustup-uppdatering"
-
-#: src/plugins/rustup/rustup_plugin.py:408
-msgid "Error installing "
-msgstr "Fel vid installation "
-
-#: src/plugins/rustup/rustup_plugin.py:410
-msgid "Error"
-msgstr "Fel"
-
-#: src/plugins/rustup/rustup_plugin.py:415
-msgid "Cancelled"
-msgstr "Avbruten"
-
-#: src/plugins/rustup/rustup_plugin.py:423
-msgid "Finished"
-msgstr "Färdig"
-
-#: src/plugins/rustup/rustup_plugin.py:439
-msgid "Rustup"
-msgstr "Rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:440
-msgid "Rustup Toolchains"
-msgstr "Rustup-verktygskedjor"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Updating"
-msgstr "Uppdaterar"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Installing"
-msgstr "Installerar"
-
-#. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Make default"
-msgstr "Sätt som standard"
-
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Makes the selected toolchain the default rust installation"
-msgstr "Gör den valda verktygskedjan till standard-rustinstallation"
-
-#: src/plugins/rustup/rustup_plugin.py:604
-msgid "Install Rust Channel"
-msgstr "Installera Rustkanal"
-
-#. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:609
-msgid "Enter name of rust channel"
-msgstr "Ange namn på rustkanal"
-
-#: src/plugins/rustup/rustup_plugin.py:610
-msgid ""
-"Standard release channel toolchain names have the following form:\n"
-"                        <channel>[-<date>][-<host>]\n"
-"\n"
-"                        <channel>    = stable|beta|nightly|<version>\n"
-"                        <date>          = YYYY-MM-DD\n"
-"                        <host>          = <target-triple>"
-msgstr ""
-"Verktygskedjenamn för standardutgåvekanal har följande form:\n"
-"                        <kanal>[-<datum>][-<värd>]\n"
-"\n"
-"                        <kanal>    = stable|beta|nightly|<version>\n"
-"                        <datum>          = ÅÅÅÅ-MM-DD\n"
-"                        <värd>          = <mål-trippel>"
-
-#: src/plugins/rustup/rustup_plugin.py:635
-msgid "Install Rustup to manage toolchains here!"
-msgstr "Installera Rustup för att hantera verktygskedjor här!"
-
-#: src/plugins/rustup/rustup_plugin.py:642
-msgid "No toolchain installed. Click"
-msgstr "Ingen verktygskedja installerad. Klicka"
-
-#: src/plugins/rustup/rustup_plugin.py:643
-msgid "to add a new toolchain!"
-msgstr "för att lägga till en ny verktygskedja!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
@@ -6402,3 +6279,109 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
+
+#~ msgid "Your computer is missing the Rust Analyzer Language Server"
+#~ msgstr "Din dator saknar språkservern för Rust-analyseraren"
+
+#~ msgid ""
+#~ "The Language Server is necessary to provide IDE features like completion "
+#~ "or diagnostic"
+#~ msgstr ""
+#~ "Språkservern är nödvändig för att tillhandahålla "
+#~ "utvecklingsmiljöfunktioner som komplettering eller diagnostik"
+
+#~ msgid "Install Language Server"
+#~ msgstr "Installera språkserver"
+
+#~ msgid "Rustup not installed"
+#~ msgstr "Rustup inte installerat"
+
+#~ msgid "Installing rustup"
+#~ msgstr "Installerar rustup"
+
+#~ msgid "Updating rustup"
+#~ msgstr "Uppdaterar rustup"
+
+#~ msgid "Installing rust "
+#~ msgstr "Installerar rust "
+
+#~ msgid "Checking system"
+#~ msgstr "Kontrollerar system"
+
+#~ msgid "Downloading rustup-init"
+#~ msgstr "Hämtar rustup-init"
+
+#~ msgid "Syncing channel updates"
+#~ msgstr "Synkroniserar kanaluppdateringar"
+
+#~ msgid "Downloading "
+#~ msgstr "Hämtar "
+
+#~ msgid "Installing "
+#~ msgstr "Installerar "
+
+#~ msgid "Checking for rustup updates"
+#~ msgstr "Söker efter rustup-uppdateringar"
+
+#~ msgid "Downloading rustup update"
+#~ msgstr "Hämtar rustup-uppdatering"
+
+#~ msgid "Error installing "
+#~ msgstr "Fel vid installation "
+
+#~ msgid "Error"
+#~ msgstr "Fel"
+
+#~ msgid "Cancelled"
+#~ msgstr "Avbruten"
+
+#~ msgid "Finished"
+#~ msgstr "Färdig"
+
+#~ msgid "Rustup"
+#~ msgstr "Rustup"
+
+#~ msgid "Rustup Toolchains"
+#~ msgstr "Rustup-verktygskedjor"
+
+#~ msgid "Updating"
+#~ msgstr "Uppdaterar"
+
+#~ msgid "Installing"
+#~ msgstr "Installerar"
+
+#~ msgid "Make default"
+#~ msgstr "Sätt som standard"
+
+#~ msgid "Makes the selected toolchain the default rust installation"
+#~ msgstr "Gör den valda verktygskedjan till standard-rustinstallation"
+
+#~ msgid "Install Rust Channel"
+#~ msgstr "Installera Rustkanal"
+
+#~ msgid "Enter name of rust channel"
+#~ msgstr "Ange namn på rustkanal"
+
+#~ msgid ""
+#~ "Standard release channel toolchain names have the following form:\n"
+#~ "                        <channel>[-<date>][-<host>]\n"
+#~ "\n"
+#~ "                        <channel>    = stable|beta|nightly|<version>\n"
+#~ "                        <date>          = YYYY-MM-DD\n"
+#~ "                        <host>          = <target-triple>"
+#~ msgstr ""
+#~ "Verktygskedjenamn för standardutgåvekanal har följande form:\n"
+#~ "                        <kanal>[-<datum>][-<värd>]\n"
+#~ "\n"
+#~ "                        <kanal>    = stable|beta|nightly|<version>\n"
+#~ "                        <datum>          = ÅÅÅÅ-MM-DD\n"
+#~ "                        <värd>          = <mål-trippel>"
+
+#~ msgid "Install Rustup to manage toolchains here!"
+#~ msgstr "Installera Rustup för att hantera verktygskedjor här!"
+
+#~ msgid "No toolchain installed. Click"
+#~ msgstr "Ingen verktygskedja installerad. Klicka"
+
+#~ msgid "to add a new toolchain!"
+#~ msgstr "för att lägga till en ny verktygskedja!"
