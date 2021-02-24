@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-22 18:20+0000\n"
-"PO-Revision-Date: 2021-02-22 22:10+0200\n"
+"POT-Creation-Date: 2021-02-24 05:29+0000\n"
+"PO-Revision-Date: 2021-02-24 09:34+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2590,7 +2590,6 @@ msgid "Join selected lines"
 msgstr "Об'єднати вибрані рядки"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
-#| msgid "Sort the selected lines"
 msgctxt "shortcut window"
 msgid "Sort selected lines"
 msgstr "Упорядкувати позначені рядки"
@@ -3155,16 +3154,21 @@ msgstr ""
 "каталогом «%s»: «%s»"
 
 #. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:264
+#: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-msgid "Beautifier plugin: command error output: %s"
-msgstr "Додаток форматування: виведено повідомлення про помилку: %s"
+#| msgid "Beautifier plugin: command error output: %s"
+msgid ""
+"Beautifier plugin: command error output:\n"
+"%s"
+msgstr ""
+"Додаток Beautifier: виведено повідомлення про помилку:\n"
+"%s"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:274
+#: src/plugins/beautifier/gb-beautifier-process.c:291
 msgid "Beautifier plugin: the command output is empty"
 msgstr "Додаток форматування: результати виконання команди є порожніми"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:301
+#: src/plugins/beautifier/gb-beautifier-process.c:318
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Додаток форматування: виведені дані не є коректним текстом UTF-8"
 
@@ -4577,15 +4581,10 @@ msgstr "Створюємо комплект flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/rustup/rustup_plugin.py:605
 msgid "Install"
 msgstr "Встановити"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "Update"
 msgstr "Оновити"
@@ -5562,21 +5561,24 @@ msgstr ""
 "clippy додає перевірки для виявлення типових помилок, але, загалом, є "
 "повільнішою"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
-msgid "Your computer is missing the Rust Analyzer Language Server"
-msgstr "На вашому комп'ютері не встановлено сервера мови аналізатора Rust"
-
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
-msgid ""
-"The Language Server is necessary to provide IDE features like completion or "
-"diagnostic"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:469
+msgid "Rust Analyzer is missing from your computer"
 msgstr ""
-"Сервер мови є необхідним для забезпечення роботи можливостей комплексного "
-"середовища для розробки, зокрема автоматичного доповнення або діагностики"
+"У вашій системі не встановлено Rust Analyzer"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
-msgid "Install Language Server"
-msgstr "Встановити сервер мови"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:470
+#| msgid ""
+#| "Search, diagnostics, and autocompletion may be limited until complete."
+msgid ""
+"Support for diagnostics and auto-completion may be limited until it is "
+"installed."
+msgstr ""
+"Доки відповідне програмне забезпечення не буде встановлено, підтримку діагностики та автоматичного доповнення коду може бути обмежено."
+
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:472
+#| msgid "Installing Rust Analyzer..."
+msgid "Install Rust Analyzer"
+msgstr "Встановити Rust Analyzer"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
 msgid "Installation of Rust Analyzer finished"
@@ -5590,128 +5592,6 @@ msgstr "Встановлення аналізатора Rust…"
 #, c-format
 msgid "Cannot download Rust Analyzer: %s"
 msgstr "Не вдалося отримати аналізатор Rust: %s"
-
-#: src/plugins/rustup/rustup_plugin.py:80
-msgid "Rustup not installed"
-msgstr "Rustup не встановлено"
-
-#: src/plugins/rustup/rustup_plugin.py:270
-msgid "Installing rustup"
-msgstr "Встановлюємо rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:272
-msgid "Updating rustup"
-msgstr "Оновлюємо rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:274
-msgid "Installing rust "
-msgstr "Встановлюємо rust "
-
-#: src/plugins/rustup/rustup_plugin.py:276
-msgid "Checking system"
-msgstr "Перевіряємо систему"
-
-#: src/plugins/rustup/rustup_plugin.py:341
-msgid "Downloading rustup-init"
-msgstr "Отримуємо rustup-init"
-
-#: src/plugins/rustup/rustup_plugin.py:346
-msgid "Syncing channel updates"
-msgstr "Синхронізуємо оновлення каналів"
-
-#: src/plugins/rustup/rustup_plugin.py:352
-msgid "Downloading "
-msgstr "Отримання "
-
-#: src/plugins/rustup/rustup_plugin.py:359
-msgid "Installing "
-msgstr "Встановлення "
-
-#: src/plugins/rustup/rustup_plugin.py:365
-msgid "Checking for rustup updates"
-msgstr "Шукаємо оновлення rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:370
-msgid "Downloading rustup update"
-msgstr "Отримуємо оновлення rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:408
-msgid "Error installing "
-msgstr "Помилка під час спроби встановити "
-
-#: src/plugins/rustup/rustup_plugin.py:410
-msgid "Error"
-msgstr "Помилка"
-
-#: src/plugins/rustup/rustup_plugin.py:415
-msgid "Cancelled"
-msgstr "Скасовано"
-
-#: src/plugins/rustup/rustup_plugin.py:423
-msgid "Finished"
-msgstr "Завершено"
-
-#: src/plugins/rustup/rustup_plugin.py:439
-msgid "Rustup"
-msgstr "Rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:440
-msgid "Rustup Toolchains"
-msgstr "Набори засобів Rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Updating"
-msgstr "Оновлення"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Installing"
-msgstr "Встановлення"
-
-#. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Make default"
-msgstr "Зробити типовим"
-
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Makes the selected toolchain the default rust installation"
-msgstr "Робить вибраний набір засобів типовим дистрибутивом rust"
-
-#: src/plugins/rustup/rustup_plugin.py:604
-msgid "Install Rust Channel"
-msgstr "Встановлення каналу rust"
-
-#. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:609
-msgid "Enter name of rust channel"
-msgstr "Введіть назву каналу rust"
-
-#: src/plugins/rustup/rustup_plugin.py:610
-msgid ""
-"Standard release channel toolchain names have the following form:\n"
-"                        <channel>[-<date>][-<host>]\n"
-"\n"
-"                        <channel>    = stable|beta|nightly|<version>\n"
-"                        <date>          = YYYY-MM-DD\n"
-"                        <host>          = <target-triple>"
-msgstr ""
-"Стандартні назви наборів засобів каналу випуску мають такий формат:\n"
-"                        <канал>[-<дата>][-<вузол>]\n"
-"\n"
-"                        <канал>         = stable|beta|nightly|<версія>\n"
-"                        <дата>          = РРРР-ММ-ДД\n"
-"                        <вузол>         = <трійка-цілі>"
-
-#: src/plugins/rustup/rustup_plugin.py:635
-msgid "Install Rustup to manage toolchains here!"
-msgstr "Встановіть Rustup, щоб керувати наборами засобів звідси!"
-
-#: src/plugins/rustup/rustup_plugin.py:642
-msgid "No toolchain installed. Click"
-msgstr "Немає встановлених наборів засобів. Натисніть"
-
-#: src/plugins/rustup/rustup_plugin.py:643
-msgid "to add a new toolchain!"
-msgstr "що додати новий набір засобів!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
@@ -6421,6 +6301,112 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Your computer is missing the Rust Analyzer Language Server"
+#~ msgstr "На вашому комп'ютері не встановлено сервера мови аналізатора Rust"
+
+#~ msgid ""
+#~ "The Language Server is necessary to provide IDE features like completion "
+#~ "or diagnostic"
+#~ msgstr ""
+#~ "Сервер мови є необхідним для забезпечення роботи можливостей комплексного "
+#~ "середовища для розробки, зокрема автоматичного доповнення або діагностики"
+
+#~ msgid "Install Language Server"
+#~ msgstr "Встановити сервер мови"
+
+#~ msgid "Rustup not installed"
+#~ msgstr "Rustup не встановлено"
+
+#~ msgid "Installing rustup"
+#~ msgstr "Встановлюємо rustup"
+
+#~ msgid "Updating rustup"
+#~ msgstr "Оновлюємо rustup"
+
+#~ msgid "Installing rust "
+#~ msgstr "Встановлюємо rust "
+
+#~ msgid "Checking system"
+#~ msgstr "Перевіряємо систему"
+
+#~ msgid "Downloading rustup-init"
+#~ msgstr "Отримуємо rustup-init"
+
+#~ msgid "Syncing channel updates"
+#~ msgstr "Синхронізуємо оновлення каналів"
+
+#~ msgid "Downloading "
+#~ msgstr "Отримання "
+
+#~ msgid "Installing "
+#~ msgstr "Встановлення "
+
+#~ msgid "Checking for rustup updates"
+#~ msgstr "Шукаємо оновлення rustup"
+
+#~ msgid "Downloading rustup update"
+#~ msgstr "Отримуємо оновлення rustup"
+
+#~ msgid "Error installing "
+#~ msgstr "Помилка під час спроби встановити "
+
+#~ msgid "Error"
+#~ msgstr "Помилка"
+
+#~ msgid "Cancelled"
+#~ msgstr "Скасовано"
+
+#~ msgid "Finished"
+#~ msgstr "Завершено"
+
+#~ msgid "Rustup"
+#~ msgstr "Rustup"
+
+#~ msgid "Rustup Toolchains"
+#~ msgstr "Набори засобів Rustup"
+
+#~ msgid "Updating"
+#~ msgstr "Оновлення"
+
+#~ msgid "Installing"
+#~ msgstr "Встановлення"
+
+#~ msgid "Make default"
+#~ msgstr "Зробити типовим"
+
+#~ msgid "Makes the selected toolchain the default rust installation"
+#~ msgstr "Робить вибраний набір засобів типовим дистрибутивом rust"
+
+#~ msgid "Install Rust Channel"
+#~ msgstr "Встановлення каналу rust"
+
+#~ msgid "Enter name of rust channel"
+#~ msgstr "Введіть назву каналу rust"
+
+#~ msgid ""
+#~ "Standard release channel toolchain names have the following form:\n"
+#~ "                        <channel>[-<date>][-<host>]\n"
+#~ "\n"
+#~ "                        <channel>    = stable|beta|nightly|<version>\n"
+#~ "                        <date>          = YYYY-MM-DD\n"
+#~ "                        <host>          = <target-triple>"
+#~ msgstr ""
+#~ "Стандартні назви наборів засобів каналу випуску мають такий формат:\n"
+#~ "                        <канал>[-<дата>][-<вузол>]\n"
+#~ "\n"
+#~ "                        <канал>         = stable|beta|nightly|<версія>\n"
+#~ "                        <дата>          = РРРР-ММ-ДД\n"
+#~ "                        <вузол>         = <трійка-цілі>"
+
+#~ msgid "Install Rustup to manage toolchains here!"
+#~ msgstr "Встановіть Rustup, щоб керувати наборами засобів звідси!"
+
+#~ msgid "No toolchain installed. Click"
+#~ msgstr "Немає встановлених наборів засобів. Натисніть"
+
+#~ msgid "to add a new toolchain!"
+#~ msgstr "що додати новий набір засобів!"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Touchpad gestures"
