@@ -18,12 +18,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-lsp-search-provider"
 
-#include <libide-search.h>
+#include "config.h"
+
 #include <jsonrpc-glib.h>
+
+#include <libide-search.h>
 
 #include "ide-lsp-client.h"
 #include "ide-lsp-util.h"
@@ -69,16 +70,15 @@ ide_lsp_search_provider_get_client (IdeLspSearchProvider *self)
 
 void
 ide_lsp_search_provider_set_client (IdeLspSearchProvider *self,
-                                    IdeLspClient               *client)
+                                    IdeLspClient         *client)
 {
   IdeLspSearchProviderPrivate *priv = ide_lsp_search_provider_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_LSP_SEARCH_PROVIDER (self));
   g_return_if_fail (!client || IDE_IS_LSP_CLIENT (client));
 
-  if (priv->client != NULL)
-    g_clear_pointer (&priv->client, g_object_unref);
-  priv->client = g_object_ref (client);
+  if (g_set_object (&priv->client, client))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
 }
 
 static void
@@ -105,6 +105,7 @@ ide_lsp_search_provider_get_property (GObject    *object,
     case PROP_CLIENT:
       g_value_set_object (value, ide_lsp_search_provider_get_client (self));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -123,6 +124,7 @@ ide_lsp_search_provider_set_property (GObject      *object,
     case PROP_CLIENT:
       ide_lsp_search_provider_set_client (self, g_value_get_object (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -153,27 +155,26 @@ ide_lsp_search_provider_init (IdeLspSearchProvider *self)
 }
 
 static void
-ide_lsp_search_provider_search_cb (GObject      *source_object,
+ide_lsp_search_provider_search_cb (GObject      *object,
                                    GAsyncResult *res,
                                    gpointer      user_data)
 {
-  IdeLspClient *client = (IdeLspClient *) source_object;
-  GPtrArray *ar;
+  IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GVariant) result = NULL;
   g_autoptr(GVariantIter) iter = NULL;
+  g_autoptr(GError) error = NULL;
   GVariant *symbol_information;
-  GError *error = NULL;
+  GPtrArray *ar;
 
   IDE_ENTRY;
 
-  ar = g_ptr_array_new ();
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
 
-  ide_lsp_client_call_finish (client, res, &result, &error);
-  if (error != NULL)
+  if (!ide_lsp_client_call_finish (client, res, &result, &error))
     {
-      ide_task_return_error (task, error);
-      return;
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   iter = g_variant_iter_new (result);
@@ -182,6 +183,7 @@ ide_lsp_search_provider_search_cb (GObject      *source_object,
     {
       g_autoptr(GFile) gfile = NULL;
       g_autoptr(IdeLocation) location = NULL;
+      g_autofree gchar *base = NULL;
       const gchar *title;
       const gchar *uri;
       gint64 kind;
@@ -207,12 +209,13 @@ ide_lsp_search_provider_search_cb (GObject      *source_object,
 
       gfile = g_file_new_for_uri (uri);
       location = ide_location_new (gfile, line, character);
+      base = g_file_get_basename (gfile);
 
-      g_ptr_array_add (ar, ide_lsp_search_result_new (title, g_file_get_basename (gfile), location, icon_name));
+      g_ptr_array_add (ar, ide_lsp_search_result_new (title, base, location, icon_name));
     }
 
   ide_task_return_pointer (task,
-                           g_steal_pointer(&ar),
+                           g_steal_pointer (&ar),
                            g_ptr_array_unref);
 
   IDE_EXIT;
@@ -236,11 +239,19 @@ ide_lsp_search_provider_search_async (IdeSearchProvider   *provider,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_LSP_SEARCH_PROVIDER (self));
   g_return_if_fail (query != NULL);
-  g_assert (priv->client != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_lsp_search_provider_search_async);
+
+  if (priv->client == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Cannot query, client not available");
+      IDE_EXIT;
+    }
 
   params = JSONRPC_MESSAGE_NEW ("query", JSONRPC_MESSAGE_PUT_STRING (query));
 
@@ -259,7 +270,15 @@ ide_lsp_search_provider_search_finish (IdeSearchProvider  *provider,
                                        GAsyncResult       *result,
                                        GError            **error)
 {
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  g_autoptr(GPtrArray) ret = NULL;
+
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (result));
+
+  if ((ret = ide_task_propagate_pointer (IDE_TASK (result), error)))
+    return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+
+  return NULL;
 }
 
 static void
