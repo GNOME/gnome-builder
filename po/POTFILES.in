@@ -345,7 +345,6 @@ src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c
 src/plugins/rust-analyzer/rust-analyzer-service.c
 src/plugins/rust-analyzer/rust-analyzer-transfer.c
 src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c
-src/plugins/rustup/rustup_plugin.py
 src/plugins/shellcmd/gbp-shellcmd-command.c
 src/plugins/shellcmd/gbp-shellcmd-command-editor.c
 src/plugins/shellcmd/gbp-shellcmd-command-editor.ui
