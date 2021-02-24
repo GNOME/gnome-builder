@@ -156,7 +156,7 @@ gb_beautifier_process_create_generic (GbBeautifierEditorAddin  *self,
   command_args_expand (self, state->command_args_strs, state);
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
-  ide_subprocess_launcher_set_argv (launcher, (gchar**)state->command_args_strs->pdata);
+  ide_subprocess_launcher_set_argv (launcher, (const gchar * const *)state->command_args_strs->pdata);
   /* This is to allow beautifiers to find the project's formatting configuration file. */
   ide_subprocess_launcher_set_cwd (launcher, cwd);
   /* Keep the environment like PATH or more specific ones like CARGO_HOME. */
@@ -228,7 +228,7 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
   ide_subprocess_launcher_set_cwd (launcher, tmp_workdir);
-  ide_subprocess_launcher_set_argv (launcher, (gchar**)args->pdata);
+  ide_subprocess_launcher_set_argv (launcher, (const gchar * const *)args->pdata);
   subprocess = ide_subprocess_launcher_spawn (launcher,
                                               NULL,
                                               error);
