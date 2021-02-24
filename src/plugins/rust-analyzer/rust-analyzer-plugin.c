@@ -1,4 +1,4 @@
-/* rust-analyzer.c
+/* rust-analyzer-plugin.c
  *
  * Copyright 2020 Günther Wagner <info@gunibert.de>
  *
