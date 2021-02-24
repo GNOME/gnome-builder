@@ -43,7 +43,8 @@ struct _RustAnalyzerService
   GFileMonitor *cargo_monitor;
   RustAnalyzerSearchProvider *search_provider;
   GSettings *settings;
-  gchar *cargo_command;
+  char *cargo_command;
+  char *rust_analyzer_path;
 
   ServiceState state;
 };
@@ -446,8 +447,15 @@ rust_analyzer_service_check_rust_analyzer_bin (RustAnalyzerService *self)
                                  G_FILE_QUERY_INFO_NONE,
                                  NULL, NULL);
 
-  return file_info != NULL &&
-         g_file_info_get_attribute_boolean (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE);
+  if (file_info != NULL &&
+      g_file_info_get_attribute_boolean (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE))
+    {
+      g_clear_pointer (&self->rust_analyzer_path, g_free);
+      self->rust_analyzer_path = g_file_get_path (rust_analyzer_bin_file);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 void
@@ -479,11 +487,11 @@ rust_analyzer_service_ensure_started (RustAnalyzerService *self)
     }
   else if (self->state == RUST_ANALYZER_SERVICE_READY)
     {
-      g_autofree gchar *newpath = NULL;
       g_autoptr(GFile) workdir = NULL;
       g_autofree gchar *root_path = NULL;
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      const gchar *oldpath = NULL;
+
+      g_assert (self->rust_analyzer_path != NULL);
 
       launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDIN_PIPE);
       ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
@@ -492,11 +500,8 @@ rust_analyzer_service_ensure_started (RustAnalyzerService *self)
       workdir = rust_analyzer_service_determine_workdir (self);
       root_path = g_file_get_path (workdir);
       ide_subprocess_launcher_set_cwd (launcher, root_path);
-      oldpath = g_getenv ("PATH");
-      newpath = g_strdup_printf ("%s/%s:%s", g_get_home_dir (), ".cargo/bin", oldpath);
-      ide_subprocess_launcher_setenv (launcher, "PATH", newpath, TRUE);
 
-      ide_subprocess_launcher_push_argv (launcher, "rust-analyzer");
+      ide_subprocess_launcher_push_argv (launcher, self->rust_analyzer_path);
 
       self->supervisor = ide_subprocess_supervisor_new ();
       g_signal_connect (self->supervisor, "spawned", G_CALLBACK (rust_analyzer_service_lsp_started), self);
