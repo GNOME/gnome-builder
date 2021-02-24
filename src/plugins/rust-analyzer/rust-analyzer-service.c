@@ -429,34 +429,25 @@ rust_analyzer_service_check_rust_analyzer_bin (RustAnalyzerService *self)
 
   g_return_val_if_fail (RUST_IS_ANALYZER_SERVICE (self), FALSE);
 
-  rust_analyzer_bin = g_find_program_in_path ("rust-analyzer");
-  if (rust_analyzer_bin == NULL)
-    {
-      g_autofree gchar *path = NULL;
-      const gchar *homedir = g_get_home_dir ();
-
-      path = g_build_path (G_DIR_SEPARATOR_S, homedir, ".cargo", "bin", "rust-analyzer", NULL);
-      rust_analyzer_bin_file = g_file_new_for_path (path);
-    }
+  if ((rust_analyzer_bin = g_find_program_in_path ("rust-analyzer")))
+    rust_analyzer_bin_file = g_file_new_for_path (rust_analyzer_bin);
   else
-    {
-      rust_analyzer_bin_file = g_file_new_for_path (rust_analyzer_bin);
-    }
+    rust_analyzer_bin_file = g_file_new_build_filename (g_get_home_dir (),
+                                                        ".cargo",
+                                                        "bin",
+                                                        "rust-analyzer",
+                                                        NULL);
 
   if (!g_file_query_exists (rust_analyzer_bin_file, NULL))
-    {
-      return FALSE;
-    }
+    return FALSE;
 
   file_info = g_file_query_info (rust_analyzer_bin_file,
-                                 "*",
+                                 G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE,
                                  G_FILE_QUERY_INFO_NONE,
                                  NULL, NULL);
 
-  if (ide_str_equal0 ("application/x-sharedlib", g_file_info_get_content_type (file_info)))
-      return TRUE;
-
-  return FALSE;
+  return file_info != NULL &&
+         g_file_info_get_attribute_boolean (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE);
 }
 
 void
