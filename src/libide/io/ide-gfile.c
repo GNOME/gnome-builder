@@ -58,7 +58,7 @@ get_ignored_locked (void)
  * ide_g_file_add_ignored_pattern:
  * @pattern: a #GPatternSpec style glob pattern
  *
- * Adds a pattern that can be used to match ingored files. These are global
+ * Adds a pattern that can be used to match ignored files. These are global
  * to the application, so they should only include well-known ignored files
  * such as those internal to a build system, or version control system, and
  * similar.
@@ -690,7 +690,7 @@ ide_g_host_file_get_contents (const gchar  *path,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  char tmpfile[32] = "ide-host-file-XXXXXX";
+  g_autofree gchar *tmpfile = NULL;
   gboolean ret = FALSE;
   int fd;
 
@@ -705,6 +705,8 @@ ide_g_host_file_get_contents (const gchar  *path,
   if (!ide_is_flatpak ())
     return g_file_get_contents (path, contents, len, error);
 
+  tmpfile = g_build_filename (g_get_tmp_dir (), ".ide-host-file-XXXXXX", NULL);
+
   /* We open a FD locally that we can write to and then pass that as our
    * stdout across the boundary so we can avoid incrementally reading
    * and instead do it once at the end.
@@ -716,7 +718,7 @@ ide_g_host_file_get_contents (const gchar  *path,
                            G_FILE_ERROR,
                            g_file_error_from_errno (errsv),
                            g_strerror (errsv));
-      goto failure;
+      return FALSE;
     }
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
