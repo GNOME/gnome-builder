@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+#include <glib/gstdio.h>
+#include <errno.h>
+
 #include <libide-threading.h>
 
 #include "ide-gfile.h"
@@ -685,6 +688,12 @@ ide_g_host_file_get_contents (const gchar  *path,
                               gsize        *len,
                               GError      **error)
 {
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  char tmpfile[32] = "ide-host-file-XXXXXX";
+  gboolean ret = FALSE;
+  int fd;
+
   g_return_val_if_fail (path != NULL, FALSE);
 
   if (contents != NULL)
@@ -696,40 +705,39 @@ ide_g_host_file_get_contents (const gchar  *path,
   if (!ide_is_flatpak ())
     return g_file_get_contents (path, contents, len, error);
 
-  {
-    g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-    g_autoptr(IdeSubprocess) subprocess = NULL;
-    g_autoptr(GBytes) stdout_buf = NULL;
+  /* We open a FD locally that we can write to and then pass that as our
+   * stdout across the boundary so we can avoid incrementally reading
+   * and instead do it once at the end.
+   */
+  if (-1 == (fd = g_mkstemp (tmpfile)))
+    {
+      int errsv = errno;
+      g_set_error_literal (error,
+                           G_FILE_ERROR,
+                           g_file_error_from_errno (errsv),
+                           g_strerror (errsv));
+      goto failure;
+    }
 
-    launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                            G_SUBPROCESS_FLAGS_STDERR_SILENCE);
-    ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-    ide_subprocess_launcher_push_argv (launcher, "cat");
-    ide_subprocess_launcher_push_argv (launcher, path);
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  ide_subprocess_launcher_take_stdout_fd (launcher, fd);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_push_argv (launcher, "cat");
+  ide_subprocess_launcher_push_argv (launcher, path);
 
-    if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, error)))
-      return FALSE;
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, error)))
+    goto failure;
 
-    if (!ide_subprocess_communicate (subprocess, NULL, NULL, &stdout_buf, NULL, error))
-      return FALSE;
+  if (!ide_subprocess_wait_check (subprocess, NULL, error))
+    goto failure;
 
-    if (len != NULL)
-      *len = g_bytes_get_size (stdout_buf);
+  ret = g_file_get_contents (tmpfile, contents, len, error);
 
-    if (contents != NULL)
-      {
-        const guint8 *data;
-        gsize n;
+failure:
+  g_unlink (tmpfile);
 
-        /* g_file_get_contents() gurantees a trailing null byte */
-        data = g_bytes_get_data (stdout_buf, &n);
-        *contents = g_malloc (n + 1);
-        memcpy (*contents, data, n);
-        (*contents)[n] = '\0';
-      }
-  }
-
-  return TRUE;
+  return ret;
 }
 
 /**
