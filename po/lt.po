@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-01-16 11:44+0000\n"
-"PO-Revision-Date: 2021-01-18 22:40+0200\n"
+"POT-Creation-Date: 2021-02-24 05:29+0000\n"
+"PO-Revision-Date: 2021-02-27 14:33+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -656,11 +656,11 @@ msgstr "Numatytoji kūrėjo spalvų schema"
 msgid "Basic"
 msgstr "Paprasta"
 
-#: src/gstyle/gstyle-color-panel.c:956
+#: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
 msgstr "Paletė: "
 
-#: src/gstyle/gstyle-color-panel.c:958
+#: src/gstyle/gstyle-color-panel.c:961
 msgid "Palette"
 msgstr "Paletė"
 
@@ -908,7 +908,7 @@ msgstr "Nepavadinta"
 #: src/libide/editor/ide-editor-page-actions.c:281
 #: src/libide/editor/ide-editor-page-actions.c:381
 #: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:317
+#: src/libide/greeter/ide-clone-surface.ui:318
 #: src/libide/greeter/ide-greeter-workspace.c:536
 #: src/libide/terminal/ide-terminal-page-actions.c:276
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -986,7 +986,7 @@ msgstr "Įrašyti taip"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:343
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
@@ -1693,9 +1693,6 @@ msgid "Show the shortcuts window"
 msgstr "Rodyti trumpinių langą"
 
 #: src/libide/gui/ide-application.c:136
-#| msgid ""
-#| "GNOME Builder requires a desktop session with D-Bus. Please set "
-#| "DBUS_SESSION_BUS_ADDRESS."
 msgid ""
 "GNOME Builder requires a session with D-Bus which was not found. Please set "
 "DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
@@ -2319,7 +2316,7 @@ msgid "Editor Shortcuts"
 msgstr "Redaktoriaus trumpiniai"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:529
+#: src/libide/gui/ide-shortcuts-window.ui:536
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Bendra"
@@ -2335,37 +2332,37 @@ msgid "Toogle primary menu"
 msgstr "Perjungti pagrindinį meniu"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:533
+#: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Visuotinė paieška"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:540
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Nuostatos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Komandų juosta"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminalas"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminalas kūrimo vykdymo aplinkoje"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatūros trumpiniai"
@@ -2477,13 +2474,13 @@ msgid "Clear highlight"
 msgstr "Išvalyti paryškinimą"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:577
+#: src/libide/gui/ide-shortcuts-window.ui:584
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopijuoti ir įdėti"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:582
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopijuoti pažymėtą tekstą į iškarpinę"
@@ -2494,7 +2491,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Iškirpti pažymėtą tekstą į iškarpinę"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:596
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Įdėti tekstą iš iškarpinės"
@@ -2560,156 +2557,162 @@ msgid "Join selected lines"
 msgstr "Sujungti pažymėtas eilutes"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
+#| msgid "Sort the selected lines"
+msgctxt "shortcut window"
+msgid "Sort selected lines"
+msgstr "Rikiuoti pažymėtas eilutes"
+
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Rodyti užbaigimo langą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Perjungti užbaigimo lango permatomumą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Perjungti perrašymą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Pakartotinai įtraukti eilutę"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Trinti eilutę"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Pervadinti simbolį"
 
-#: src/libide/gui/ide-shortcuts-window.ui:370
+#: src/libide/gui/ide-shortcuts-window.ui:377
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Reikalauja semantinio kalbos palaikymo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:377
+#: src/libide/gui/ide-shortcuts-window.ui:384
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Užkomentuoti kodą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:384
+#: src/libide/gui/ide-shortcuts-window.ui:391
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Atkomentuoti kodą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:392
+#: src/libide/gui/ide-shortcuts-window.ui:399
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Naršymas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Eiti į kitą klaidą faile"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Eiti į ankstesnę klaidą faile"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Eiti į ankstesnę redagavimo vietą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Eiti į kitą redagavimo vietą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Peršokti prie simbolio apibrėžimo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Perkelti vaizdą aukštyn faile"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Perkelti vaizdą žemyn faile"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Perkelti vaizdą į failo pabaigą"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Perkelti vaizdą į failo pradžią"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Peršokti prie porinio skliausto"
 
-#: src/libide/gui/ide-shortcuts-window.ui:468
+#: src/libide/gui/ide-shortcuts-window.ui:475
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Žymėjimai"
 
-#: src/libide/gui/ide-shortcuts-window.ui:473
+#: src/libide/gui/ide-shortcuts-window.ui:480
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Žymėti viską"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Nežymėti nieko"
 
-#: src/libide/gui/ide-shortcuts-window.ui:488
+#: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Kurti ir vykdyti"
 
-#: src/libide/gui/ide-shortcuts-window.ui:493
+#: src/libide/gui/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Kurti"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Perkurti"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Vykdyti"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:521
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profiliuoti"
 
-#: src/libide/gui/ide-shortcuts-window.ui:525
+#: src/libide/gui/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminalo trumpiniai"
 
-#: src/libide/gui/ide-shortcuts-window.ui:597
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Ieškoti"
 
-#: src/libide/gui/ide-shortcuts-window.ui:602
+#: src/libide/gui/ide-shortcuts-window.ui:609
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Ieškoti teksto terminale"
@@ -2723,7 +2726,7 @@ msgstr[1] "Diegiami %u paketai"
 msgstr[2] "Diegiama %u paketų"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1354
+#: src/libide/lsp/ide-lsp-client.c:1469
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Nepavyko inicijuoti kalbos serverio: %s"
@@ -3070,33 +3073,33 @@ msgstr "Pagražinimo įskiepis: į buferį negalima rašyti"
 msgid "Beautifier Plugin: Nothing selected"
 msgstr "Pagražinimo įskiepis: nieko nepasirinkta"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Nėra gražintojo „%s“"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:248
 #, c-format
 msgid "No beautifier available"
 msgstr "Nėra galimo gražintojo"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "Redagavimas"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:347
 msgid "Beautify the code"
 msgstr "Pagražinti kodą"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
 msgid "Trigger the default entry"
 msgstr "Iššaukti numatytąją įvestį"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:375
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:377
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr "Pagražinimo įskiepis: nėra tinkamų įrašų, išjungiama – %s"
@@ -3115,16 +3118,21 @@ msgstr ""
 "katalogo – „%s“"
 
 #. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:264
+#: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-msgid "Beautifier plugin: command error output: %s"
-msgstr "Pagražinimo įskiepis: komandos klaidos išvestis – %s"
+#| msgid "Beautifier plugin: command error output: %s"
+msgid ""
+"Beautifier plugin: command error output:\n"
+"%s"
+msgstr ""
+"Pagražinimo įskiepis: komandos klaidos išvestis:\n"
+"%s"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:274
+#: src/plugins/beautifier/gb-beautifier-process.c:291
 msgid "Beautifier plugin: the command output is empty"
 msgstr "Pagražinimo įskiepis: komandos išvestis tuščia"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:301
+#: src/plugins/beautifier/gb-beautifier-process.c:318
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Pagražinimo įskiepis: išvestis nėra tinkamas UTF-8 tekstas"
 
@@ -3197,7 +3205,6 @@ msgid "Build Environment"
 msgstr "Kūrimo aplinka"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
-#| msgid "In Runtime Environment"
 msgid "Runtime Environment"
 msgstr "Vykdymo aplinka"
 
@@ -4385,17 +4392,14 @@ msgid "New File"
 msgstr "Naujas failas"
 
 #: src/plugins/editor/gtk/menus.ui:122
-#| msgid "Move Left"
 msgid "Move Page Left"
 msgstr "Perkelti puslapį kairėn"
 
 #: src/plugins/editor/gtk/menus.ui:126
-#| msgid "Move Right"
 msgid "Move Page Right"
 msgstr "Perkelti puslapį dešinėn"
 
 #: src/plugins/editor/gtk/menus.ui:131
-#| msgid "Close Project"
 msgid "Close Frame"
 msgstr "Užverti kadrą"
 
@@ -4419,7 +4423,7 @@ msgstr "Padalinti"
 msgid "Save _As"
 msgstr "Įrašyti _taip"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:157
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
 msgstr "Nenurodytas failas."
 
@@ -4535,16 +4539,11 @@ msgstr "Kuriamas flatpak rinkinys"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/rustup/rustup_plugin.py:605
 msgid "Install"
 msgstr "Įdiegti"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:163
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "Update"
 msgstr "Atnaujinti"
 
@@ -5003,7 +5002,6 @@ msgid "Modified"
 msgstr "Pakeista"
 
 #: src/plugins/ls/gtk/menus.ui:8
-#| msgid "New Folder…"
 msgid "Browse Folder"
 msgstr "Naršyti aplanką"
 
@@ -5039,27 +5037,27 @@ msgstr "GNOME programa"
 msgid "Create a new GNOME application"
 msgstr "Sukurti naują GNOME programą"
 
-#: src/plugins/meson-templates/meson_templates.py:325
+#: src/plugins/meson-templates/meson_templates.py:328
 msgid "Shared Library"
 msgstr "Bendro naudojimo biblioteka"
 
-#: src/plugins/meson-templates/meson_templates.py:327
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "Create a new project with a shared library"
 msgstr "Sukurti naują projektą su bendro naudojimo biblioteka"
 
-#: src/plugins/meson-templates/meson_templates.py:344
+#: src/plugins/meson-templates/meson_templates.py:347
 msgid "Empty Project"
 msgstr "Tuščias projektas"
 
-#: src/plugins/meson-templates/meson_templates.py:346
+#: src/plugins/meson-templates/meson_templates.py:349
 msgid "Create a new empty project"
 msgstr "Sukurti naują tuščią projektą"
 
-#: src/plugins/meson-templates/meson_templates.py:363
+#: src/plugins/meson-templates/meson_templates.py:366
 msgid "Command Line Tool"
 msgstr "Komandų eilutės įrankis"
 
-#: src/plugins/meson-templates/meson_templates.py:365
+#: src/plugins/meson-templates/meson_templates.py:368
 msgid "Create a new command line project"
 msgstr "Sukurti naują komandų eilutės projektą"
 
@@ -5330,12 +5328,12 @@ msgstr "Parsiunčiamos npm priklausomybės"
 msgid "Bootstrapping project"
 msgstr "Vykdomos projekto pakopos"
 
-#: src/plugins/podman/gbp-podman-runtime.c:161
+#: src/plugins/podman/gbp-podman-runtime.c:162
 msgid "Podman"
 msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:169
+#: src/plugins/podman/gbp-podman-runtime.c:170
 msgid "Containers/Podman"
 msgstr "Konteineriai/Podman"
 
@@ -5441,7 +5439,6 @@ msgstr "Rodymo parametrai"
 
 #: src/plugins/project-tree/gtk/menus.ui:94
 #: src/plugins/project-tree/gtk/menus.ui:103
-#| msgid "Re_veal in Project Tree"
 msgid "Reveal in Project Tree"
 msgstr "Parodyti projekto medyje"
 
@@ -5513,21 +5510,23 @@ msgstr ""
 "clippy prideda išorines euristikas dažnoms klaidoms aptikti, bet įprastai "
 "yra lėtesnė"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
-msgid "Your computer is missing the Rust Analyzer Language Server"
-msgstr "Jūsų kompiliatoriui trūksta Rust analizatoriaus kalbos serverio"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:469
+msgid "Rust Analyzer is missing from your computer"
+msgstr "Jūsų kompiuteryje trūksta Rust analizatoriaus"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:470
+#| msgid ""
+#| "Search, diagnostics, and autocompletion may be limited until complete."
 msgid ""
-"The Language Server is necessary to provide IDE features like completion or "
-"diagnostic"
+"Support for diagnostics and auto-completion may be limited until it is "
+"installed."
 msgstr ""
-"Kalbos serveris yra būtinas IDE savybėms, tokioms kaip užbaigimas ar "
-"diagnostika"
+"Diagnostika bei automatinis užbaigimas gali būti apribotas iki įdiegimo."
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
-msgid "Install Language Server"
-msgstr "Įdiegti kalbos serverį"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:472
+#| msgid "Installing Rust Analyzer..."
+msgid "Install Rust Analyzer"
+msgstr "Įdiegti Rust analizatorių"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
 msgid "Installation of Rust Analyzer finished"
@@ -5541,128 +5540,6 @@ msgstr "Diegiamas Rust analizatorius..."
 #, c-format
 msgid "Cannot download Rust Analyzer: %s"
 msgstr "Nepavyko atsisiųsti Rust analizatoriaus: %s"
-
-#: src/plugins/rustup/rustup_plugin.py:80
-msgid "Rustup not installed"
-msgstr "Rustup neįdiegta"
-
-#: src/plugins/rustup/rustup_plugin.py:270
-msgid "Installing rustup"
-msgstr "Diegiama rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:272
-msgid "Updating rustup"
-msgstr "Atnaujinama rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:274
-msgid "Installing rust "
-msgstr "Diegiama rust "
-
-#: src/plugins/rustup/rustup_plugin.py:276
-msgid "Checking system"
-msgstr "Tikrinama sistema"
-
-#: src/plugins/rustup/rustup_plugin.py:341
-msgid "Downloading rustup-init"
-msgstr "Parsiunčiama rustup-init"
-
-#: src/plugins/rustup/rustup_plugin.py:346
-msgid "Syncing channel updates"
-msgstr "Sinchronizuojami kanalo atnaujinimai"
-
-#: src/plugins/rustup/rustup_plugin.py:352
-msgid "Downloading "
-msgstr "Parsiunčiama "
-
-#: src/plugins/rustup/rustup_plugin.py:359
-msgid "Installing "
-msgstr "Diegiama "
-
-#: src/plugins/rustup/rustup_plugin.py:365
-msgid "Checking for rustup updates"
-msgstr "Tikrinami rustup atnaujinimai"
-
-#: src/plugins/rustup/rustup_plugin.py:370
-msgid "Downloading rustup update"
-msgstr "Parsiunčiamas rustup atnaujinimas"
-
-#: src/plugins/rustup/rustup_plugin.py:408
-msgid "Error installing "
-msgstr "Klaida diegiant "
-
-#: src/plugins/rustup/rustup_plugin.py:410
-msgid "Error"
-msgstr "Klaida"
-
-#: src/plugins/rustup/rustup_plugin.py:415
-msgid "Cancelled"
-msgstr "Atsisakyta"
-
-#: src/plugins/rustup/rustup_plugin.py:423
-msgid "Finished"
-msgstr "Užbaigta"
-
-#: src/plugins/rustup/rustup_plugin.py:439
-msgid "Rustup"
-msgstr "Rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:440
-msgid "Rustup Toolchains"
-msgstr "Rustup įrankių grandinės"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Updating"
-msgstr "Atnaujinama"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Installing"
-msgstr "Diegiama"
-
-#. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Make default"
-msgstr "Padaryti numatytąja"
-
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Makes the selected toolchain the default rust installation"
-msgstr "Padaro pasirinktą įrankių grandinę numatytuoju rust diegimu"
-
-#: src/plugins/rustup/rustup_plugin.py:604
-msgid "Install Rust Channel"
-msgstr "Įdiegti Rust kanalą"
-
-#. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:609
-msgid "Enter name of rust channel"
-msgstr "Įveskite rust kanalo pavadinimą"
-
-#: src/plugins/rustup/rustup_plugin.py:610
-msgid ""
-"Standard release channel toolchain names have the following form:\n"
-"                        <channel>[-<date>][-<host>]\n"
-"\n"
-"                        <channel>    = stable|beta|nightly|<version>\n"
-"                        <date>          = YYYY-MM-DD\n"
-"                        <host>          = <target-triple>"
-msgstr ""
-"Standartinio laidos kanalo įrankių grandinių pavadinimai turi šią formą:\n"
-"                        <kanalas>[-<data>][-<serveris>]\n"
-"\n"
-"                        <kanalas>    = stable|beta|nightly|<version>\n"
-"                        <data>          = YYYY-MM-DD\n"
-"                        <serveris>          = <target-triple>"
-
-#: src/plugins/rustup/rustup_plugin.py:635
-msgid "Install Rustup to manage toolchains here!"
-msgstr "Norėdami čia tvarkyti įrankių grandines, įdiekite Rustup!"
-
-#: src/plugins/rustup/rustup_plugin.py:642
-msgid "No toolchain installed. Click"
-msgstr "Neįdiegta jokia įrankių grandinė. Spustelėkite"
-
-#: src/plugins/rustup/rustup_plugin.py:643
-msgid "to add a new toolchain!"
-msgstr "norėdami pridėti naują įrankių grandinę!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
@@ -6025,12 +5902,10 @@ msgid "Terminal"
 msgstr "Terminalas"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
-#| msgid "Fallback"
 msgid "Scrollback"
 msgstr "Grįžtamasis slinkimas"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
-#| msgid "Terminal"
 msgid "Terminal Font"
 msgstr "Terminalo šriftas"
 
@@ -6053,7 +5928,6 @@ msgid "terminal allow bold"
 msgstr "terminalas leidžia pusjuodį"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:81
-#| msgid "Show grid lines"
 msgid "Show hyperlinks"
 msgstr "Rodyti hipersaitus"
 
@@ -6089,7 +5963,6 @@ msgid "Scroll on keystroke"
 msgstr "Slinkti esant įvesčiai"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:105
-#| msgid "If enabled, the terminal page will close after the command executes."
 msgid "When enabled the terminal will scroll to the bottom when typing"
 msgstr "Jei įjungta, terminalas slinks į apačią rašant"
 
@@ -6116,12 +5989,10 @@ msgid "scrollback limit"
 msgstr "grįžtamojo slinkimo ribojimas"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
-#| msgid "Sort Lines"
 msgid "Scrollback Lines"
 msgstr "Grįžtamojo slinkimo eilutės"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "The number of lines to keep available for scrolling"
 msgstr "Kiek eilučių laikyti prieinamų slinkimui"
 
@@ -6206,11 +6077,11 @@ msgstr "TODO/FIXME"
 msgid "Updating Builder"
 msgstr "Atnaujinamas Kūrėjas"
 
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:160
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:166
 msgid "Update Available"
 msgstr "Yra atnaujinimas"
 
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:161
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
@@ -6365,6 +6236,112 @@ msgstr "Nepavyko sukurti XML medžio."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Failas turi būti įrašytas vietoje skaitymui."
+
+#~ msgid "Your computer is missing the Rust Analyzer Language Server"
+#~ msgstr "Jūsų kompiliatoriui trūksta Rust analizatoriaus kalbos serverio"
+
+#~ msgid ""
+#~ "The Language Server is necessary to provide IDE features like completion "
+#~ "or diagnostic"
+#~ msgstr ""
+#~ "Kalbos serveris yra būtinas IDE savybėms, tokioms kaip užbaigimas ar "
+#~ "diagnostika"
+
+#~ msgid "Install Language Server"
+#~ msgstr "Įdiegti kalbos serverį"
+
+#~ msgid "Rustup not installed"
+#~ msgstr "Rustup neįdiegta"
+
+#~ msgid "Installing rustup"
+#~ msgstr "Diegiama rustup"
+
+#~ msgid "Updating rustup"
+#~ msgstr "Atnaujinama rustup"
+
+#~ msgid "Installing rust "
+#~ msgstr "Diegiama rust "
+
+#~ msgid "Checking system"
+#~ msgstr "Tikrinama sistema"
+
+#~ msgid "Downloading rustup-init"
+#~ msgstr "Parsiunčiama rustup-init"
+
+#~ msgid "Syncing channel updates"
+#~ msgstr "Sinchronizuojami kanalo atnaujinimai"
+
+#~ msgid "Downloading "
+#~ msgstr "Parsiunčiama "
+
+#~ msgid "Installing "
+#~ msgstr "Diegiama "
+
+#~ msgid "Checking for rustup updates"
+#~ msgstr "Tikrinami rustup atnaujinimai"
+
+#~ msgid "Downloading rustup update"
+#~ msgstr "Parsiunčiamas rustup atnaujinimas"
+
+#~ msgid "Error installing "
+#~ msgstr "Klaida diegiant "
+
+#~ msgid "Error"
+#~ msgstr "Klaida"
+
+#~ msgid "Cancelled"
+#~ msgstr "Atsisakyta"
+
+#~ msgid "Finished"
+#~ msgstr "Užbaigta"
+
+#~ msgid "Rustup"
+#~ msgstr "Rustup"
+
+#~ msgid "Rustup Toolchains"
+#~ msgstr "Rustup įrankių grandinės"
+
+#~ msgid "Updating"
+#~ msgstr "Atnaujinama"
+
+#~ msgid "Installing"
+#~ msgstr "Diegiama"
+
+#~ msgid "Make default"
+#~ msgstr "Padaryti numatytąja"
+
+#~ msgid "Makes the selected toolchain the default rust installation"
+#~ msgstr "Padaro pasirinktą įrankių grandinę numatytuoju rust diegimu"
+
+#~ msgid "Install Rust Channel"
+#~ msgstr "Įdiegti Rust kanalą"
+
+#~ msgid "Enter name of rust channel"
+#~ msgstr "Įveskite rust kanalo pavadinimą"
+
+#~ msgid ""
+#~ "Standard release channel toolchain names have the following form:\n"
+#~ "                        <channel>[-<date>][-<host>]\n"
+#~ "\n"
+#~ "                        <channel>    = stable|beta|nightly|<version>\n"
+#~ "                        <date>          = YYYY-MM-DD\n"
+#~ "                        <host>          = <target-triple>"
+#~ msgstr ""
+#~ "Standartinio laidos kanalo įrankių grandinių pavadinimai turi šią formą:\n"
+#~ "                        <kanalas>[-<data>][-<serveris>]\n"
+#~ "\n"
+#~ "                        <kanalas>    = stable|beta|nightly|<version>\n"
+#~ "                        <data>          = YYYY-MM-DD\n"
+#~ "                        <serveris>          = <target-triple>"
+
+#~ msgid "Install Rustup to manage toolchains here!"
+#~ msgstr "Norėdami čia tvarkyti įrankių grandines, įdiekite Rustup!"
+
+#~ msgid "No toolchain installed. Click"
+#~ msgstr "Neįdiegta jokia įrankių grandinė. Spustelėkite"
+
+#~ msgid "to add a new toolchain!"
+#~ msgstr "norėdami pridėti naują įrankių grandinę!"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Touchpad gestures"
