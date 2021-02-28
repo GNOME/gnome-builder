@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-22 18:20+0000\n"
-"PO-Revision-Date: 2021-02-21 16:34+0300\n"
+"POT-Creation-Date: 2021-02-24 05:29+0000\n"
+"PO-Revision-Date: 2021-02-28 10:37+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -689,7 +689,7 @@ msgstr "Renk adı"
 
 #: src/gstyle/gstyle-color-widget-actions.c:70
 msgid "Enter a new name for the color"
-msgstr "Renk için yeni ad girin"
+msgstr "Renk için yeni ad gir"
 
 #: src/gstyle/gstyle-palette-widget.c:981
 #, c-format
@@ -1167,7 +1167,7 @@ msgstr "Sağ kenar boşluğunu göster"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:123
 msgid "Automatic indentation"
-msgstr "Kendiliğinden girintileme"
+msgstr "Kendiliğinden girintile"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:130
 msgid "Smart backspace"
@@ -2017,7 +2017,7 @@ msgstr "Genel görünüm haritasını kendiliğinden gizle"
 
 #: src/libide/gui/ide-preferences-builtin.c:173
 msgid "Automatically hide map when editor loses focus"
-msgstr "Düzenleyici odağı kaybettiğinde haritayı kendiliğinden gizle"
+msgstr "Düzenleyici odağı yitirdiğinde haritayı kendiliğinden gizle"
 
 #: src/libide/gui/ide-preferences-builtin.c:175
 msgid "Visible Whitespace Characters"
@@ -3137,16 +3137,20 @@ msgstr ""
 "çalışılırken engellendi: “%s”"
 
 #. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:264
+#: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-msgid "Beautifier plugin: command error output: %s"
-msgstr "Güzelleştirici eklentisi: komut hata çıktısı: %s"
+msgid ""
+"Beautifier plugin: command error output:\n"
+"%s"
+msgstr ""
+"Güzelleştirici eklentisi: komut hata çıktısı:\n"
+"%s"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:274
+#: src/plugins/beautifier/gb-beautifier-process.c:291
 msgid "Beautifier plugin: the command output is empty"
 msgstr "Güzelleştirici eklentisi: komut çıktısı boş"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:301
+#: src/plugins/beautifier/gb-beautifier-process.c:318
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Güzelleştirici eklentisi: çıktı geçerli bir UTF-8 metni değil"
 
@@ -3520,8 +3524,7 @@ msgstr "Kaynak Kodu Dizinleme"
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
 msgstr ""
-"Arama, tanılama ve kendiliğinden tamamlama tamamlanıncaya dek sınırlı "
-"olabilir."
+"Tamamlanana dek arama, tanılama ve kendiliğinden tamamlama sınırlı olabilir."
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3541,7 +3544,7 @@ msgstr "Palet adı"
 
 #: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
 msgid "Enter a new name for the palette"
-msgstr "Palet için yeni ad girin"
+msgstr "Palet için yeni ad gir"
 
 #. translators: %s is replaced with the name of the color palette.
 #: src/plugins/color-picker/gb-color-picker-prefs.c:88
@@ -3990,8 +3993,8 @@ msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
 msgstr ""
-"Arama, kendiliğinden tamamlama, ve simge bilgisi Ctag dizinlemesi "
-"tamamlanana dek sınırlı olabilir."
+"Ctag dizinlemesi tamamlanana dek arama, kendiliğinden tamamlama ve simge "
+"bilgisi sınırlı olabilir."
 
 #: src/plugins/ctags/ide-ctags-service.c:955
 msgid "Indexing Source Code (Paused)"
@@ -4323,7 +4326,7 @@ msgstr "İşlem Zaman Aşımına Uğradı"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:159
 msgid "Lost Connection to Bus"
-msgstr "Veriyolu Bağlantısı Kayboldu"
+msgstr "Veriyolu Bağlantısı Yitirildi"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:161
 msgid "D-Bus Connection Failed"
@@ -4373,7 +4376,7 @@ msgstr "Kaydedilecek dosyaları seçin:"
 #: src/plugins/editor/gbp-confirm-save-dialog.ui:80
 msgid "If you close without saving, all your changes will be permanently lost."
 msgstr ""
-"Kaydetmeden kapatırsanız, tüm değişiklikleriniz kalıcı olarak kaybedilecek."
+"Kaydetmeden kapatırsanız, tüm değişiklikleriniz kalıcı olarak yitirilecek."
 
 #: src/plugins/editor/gbp-editor-application-addin.c:138
 msgid "Use minimal editor interface"
@@ -4383,7 +4386,7 @@ msgstr "En küçük düzenleyici arayüzünü kullan"
 #: src/plugins/editor/gbp-editor-frame-controls.c:190
 #, c-format
 msgid "Provide a number between 1 and %u"
-msgstr "1 ile %u arasında sayı girin"
+msgstr "1 ile %u arasında sayı gir"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:23
 msgid "Go to line number"
@@ -4553,15 +4556,10 @@ msgstr "Flatpak paketi oluşturuluyor"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/rustup/rustup_plugin.py:605
 msgid "Install"
 msgstr "Kur"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/rustup/rustup_plugin.py:484
-#: src/plugins/rustup/rustup_plugin.py:488
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "Update"
 msgstr "Güncelle"
@@ -5529,21 +5527,19 @@ msgstr ""
 "clippy, yaygın hataları yakalamak için ek ayıklayıcılar ekler ancak genelde "
 "yavaştır"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:488
-msgid "Your computer is missing the Rust Analyzer Language Server"
-msgstr "Bilgisayarınızda Rust Analyzer Dil Sunucusu eksik"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:469
+msgid "Rust Analyzer is missing from your computer"
+msgstr "Bilgisayarınızda Rust Analyzer eksik"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:489
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:470
 msgid ""
-"The Language Server is necessary to provide IDE features like completion or "
-"diagnostic"
-msgstr ""
-"Dil Sunucusu, tamamlama veya tanılama gibi IDE özelliklerini sağlamak için "
-"gereklidir"
+"Support for diagnostics and auto-completion may be limited until it is "
+"installed."
+msgstr "Kuruluncaya dek tanılama ve kendiliğinden tamamlama sınırlı olabilir."
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:491
-msgid "Install Language Server"
-msgstr "Dil Sunucusu Kur"
+#: src/plugins/rust-analyzer/rust-analyzer-service.c:472
+msgid "Install Rust Analyzer"
+msgstr "Rust Analyzer kuruluyor"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
 msgid "Installation of Rust Analyzer finished"
@@ -5551,134 +5547,12 @@ msgstr "Rust Analyzer’ın kurulumu bitti"
 
 #: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
 msgid "Installing Rust Analyzer..."
-msgstr "Rust Analyzer kuruluyor..."
+msgstr "Rust Analyzer kuruluyor…"
 
 #: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
 #, c-format
 msgid "Cannot download Rust Analyzer: %s"
 msgstr "Rust Analyzer indirilemedi: %s"
-
-#: src/plugins/rustup/rustup_plugin.py:80
-msgid "Rustup not installed"
-msgstr "Rustup kurulu değil"
-
-#: src/plugins/rustup/rustup_plugin.py:270
-msgid "Installing rustup"
-msgstr "Rustup kuruluyor"
-
-#: src/plugins/rustup/rustup_plugin.py:272
-msgid "Updating rustup"
-msgstr "Rustup güncelleniyor"
-
-#: src/plugins/rustup/rustup_plugin.py:274
-msgid "Installing rust "
-msgstr "Rust kuruluyor "
-
-#: src/plugins/rustup/rustup_plugin.py:276
-msgid "Checking system"
-msgstr "Sistem denetleniyor"
-
-#: src/plugins/rustup/rustup_plugin.py:341
-msgid "Downloading rustup-init"
-msgstr "Rustup-init indiriliyor"
-
-#: src/plugins/rustup/rustup_plugin.py:346
-msgid "Syncing channel updates"
-msgstr "Kanal güncellemeleri eşzamanlanıyor"
-
-#: src/plugins/rustup/rustup_plugin.py:352
-msgid "Downloading "
-msgstr "İndiriliyor "
-
-#: src/plugins/rustup/rustup_plugin.py:359
-msgid "Installing "
-msgstr "Kuruluyor "
-
-#: src/plugins/rustup/rustup_plugin.py:365
-msgid "Checking for rustup updates"
-msgstr "Rustup güncellemeleri denetleniyor"
-
-#: src/plugins/rustup/rustup_plugin.py:370
-msgid "Downloading rustup update"
-msgstr "Rustup güncellemesi indiriliyor"
-
-#: src/plugins/rustup/rustup_plugin.py:408
-msgid "Error installing "
-msgstr "Kurulum sırasında hata "
-
-#: src/plugins/rustup/rustup_plugin.py:410
-msgid "Error"
-msgstr "Hata"
-
-#: src/plugins/rustup/rustup_plugin.py:415
-msgid "Cancelled"
-msgstr "İptal Edilmiş"
-
-#: src/plugins/rustup/rustup_plugin.py:423
-msgid "Finished"
-msgstr "Bitmiş"
-
-#: src/plugins/rustup/rustup_plugin.py:439
-msgid "Rustup"
-msgstr "Rustup"
-
-#: src/plugins/rustup/rustup_plugin.py:440
-msgid "Rustup Toolchains"
-msgstr "Rustup Araç Takımları"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Updating"
-msgstr "Güncelleniyor"
-
-#: src/plugins/rustup/rustup_plugin.py:496
-msgid "Installing"
-msgstr "Kuruluyor"
-
-#. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Make default"
-msgstr "Öntanımlı yap"
-
-#: src/plugins/rustup/rustup_plugin.py:589
-msgid "Makes the selected toolchain the default rust installation"
-msgstr "Seçili araç takımını öntanımlı rust kurulumu yapar"
-
-#: src/plugins/rustup/rustup_plugin.py:604
-msgid "Install Rust Channel"
-msgstr "Rust Kanalı Kur"
-
-#. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:609
-msgid "Enter name of rust channel"
-msgstr "Rust kanalı adı girin"
-
-#: src/plugins/rustup/rustup_plugin.py:610
-msgid ""
-"Standard release channel toolchain names have the following form:\n"
-"                        <channel>[-<date>][-<host>]\n"
-"\n"
-"                        <channel>    = stable|beta|nightly|<version>\n"
-"                        <date>          = YYYY-MM-DD\n"
-"                        <host>          = <target-triple>"
-msgstr ""
-"Standart yayım kanalı araç takımı adları alttaki biçime sahiptir:\n"
-"                        <kanal>[-<tarih>][-<makine>]\n"
-"\n"
-"                        <kanal>    = stable|beta|nightly|<sürüm>\n"
-"                        <tarih>          = YYYY-MM-DD\n"
-"                        <makine>         = <hedef-üçlü>"
-
-#: src/plugins/rustup/rustup_plugin.py:635
-msgid "Install Rustup to manage toolchains here!"
-msgstr "Burada araç takımlarını yönetmek için Rustup’ı kur!"
-
-#: src/plugins/rustup/rustup_plugin.py:642
-msgid "No toolchain installed. Click"
-msgstr "Kurulu araç takımı yok. Yeni"
-
-#: src/plugins/rustup/rustup_plugin.py:643
-msgid "to add a new toolchain!"
-msgstr "araç takımı eklemek için tıkla!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
@@ -5839,7 +5713,7 @@ msgstr "Yazım denetimi tamamlandı"
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:257
 msgid "The word is not in the dictionary"
-msgstr "Sözcük sözlükte değil"
+msgstr "Sözcük, sözlükte değil"
 
 #: src/plugins/spellcheck/gbp-spell-widget.c:428
 msgid "This word is already in the personal dictionary"
@@ -6383,6 +6257,112 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "Your computer is missing the Rust Analyzer Language Server"
+#~ msgstr "Bilgisayarınızda Rust Analyzer Dil Sunucusu eksik"
+
+#~ msgid ""
+#~ "The Language Server is necessary to provide IDE features like completion "
+#~ "or diagnostic"
+#~ msgstr ""
+#~ "Dil Sunucusu, tamamlama veya tanılama gibi IDE özelliklerini sağlamak "
+#~ "için gereklidir"
+
+#~ msgid "Install Language Server"
+#~ msgstr "Dil Sunucusu Kur"
+
+#~ msgid "Rustup not installed"
+#~ msgstr "Rustup kurulu değil"
+
+#~ msgid "Installing rustup"
+#~ msgstr "Rustup kuruluyor"
+
+#~ msgid "Updating rustup"
+#~ msgstr "Rustup güncelleniyor"
+
+#~ msgid "Installing rust "
+#~ msgstr "Rust kuruluyor "
+
+#~ msgid "Checking system"
+#~ msgstr "Sistem denetleniyor"
+
+#~ msgid "Downloading rustup-init"
+#~ msgstr "Rustup-init indiriliyor"
+
+#~ msgid "Syncing channel updates"
+#~ msgstr "Kanal güncellemeleri eşzamanlanıyor"
+
+#~ msgid "Downloading "
+#~ msgstr "İndiriliyor "
+
+#~ msgid "Installing "
+#~ msgstr "Kuruluyor "
+
+#~ msgid "Checking for rustup updates"
+#~ msgstr "Rustup güncellemeleri denetleniyor"
+
+#~ msgid "Downloading rustup update"
+#~ msgstr "Rustup güncellemesi indiriliyor"
+
+#~ msgid "Error installing "
+#~ msgstr "Kurulum sırasında hata "
+
+#~ msgid "Error"
+#~ msgstr "Hata"
+
+#~ msgid "Cancelled"
+#~ msgstr "İptal Edilmiş"
+
+#~ msgid "Finished"
+#~ msgstr "Bitmiş"
+
+#~ msgid "Rustup"
+#~ msgstr "Rustup"
+
+#~ msgid "Rustup Toolchains"
+#~ msgstr "Rustup Araç Takımları"
+
+#~ msgid "Updating"
+#~ msgstr "Güncelleniyor"
+
+#~ msgid "Installing"
+#~ msgstr "Kuruluyor"
+
+#~ msgid "Make default"
+#~ msgstr "Öntanımlı yap"
+
+#~ msgid "Makes the selected toolchain the default rust installation"
+#~ msgstr "Seçili araç takımını öntanımlı rust kurulumu yapar"
+
+#~ msgid "Install Rust Channel"
+#~ msgstr "Rust Kanalı Kur"
+
+#~ msgid "Enter name of rust channel"
+#~ msgstr "Rust kanalı adı girin"
+
+#~ msgid ""
+#~ "Standard release channel toolchain names have the following form:\n"
+#~ "                        <channel>[-<date>][-<host>]\n"
+#~ "\n"
+#~ "                        <channel>    = stable|beta|nightly|<version>\n"
+#~ "                        <date>          = YYYY-MM-DD\n"
+#~ "                        <host>          = <target-triple>"
+#~ msgstr ""
+#~ "Standart yayım kanalı araç takımı adları alttaki biçime sahiptir:\n"
+#~ "                        <kanal>[-<tarih>][-<makine>]\n"
+#~ "\n"
+#~ "                        <kanal>    = stable|beta|nightly|<sürüm>\n"
+#~ "                        <tarih>          = YYYY-MM-DD\n"
+#~ "                        <makine>         = <hedef-üçlü>"
+
+#~ msgid "Install Rustup to manage toolchains here!"
+#~ msgstr "Burada araç takımlarını yönetmek için Rustup’ı kur!"
+
+#~ msgid "No toolchain installed. Click"
+#~ msgstr "Kurulu araç takımı yok. Yeni"
+
+#~ msgid "to add a new toolchain!"
+#~ msgstr "araç takımı eklemek için tıkla!"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Touchpad gestures"
