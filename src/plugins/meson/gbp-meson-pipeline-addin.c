@@ -147,7 +147,8 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (srcdir != NULL);
 
-  for (guint i = 0; i < G_N_ELEMENTS (ninja_names); i++)
+  /* Requires NULL check so we can use g_strv_contains() elsewhere */
+  for (guint i = 0; ninja_names[i]; i++)
     {
       if (ide_runtime_contains_program_in_path (runtime, ninja_names[i], NULL))
         {
