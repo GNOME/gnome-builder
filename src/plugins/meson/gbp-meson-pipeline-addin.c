@@ -147,6 +147,14 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (srcdir != NULL);
 
+  if (NULL == (meson = ide_config_getenv (config, "MESON")))
+    meson = "meson";
+
+  /* Warn about not finding Meson, but continue setting up */
+  if (!ide_runtime_contains_program_in_path (runtime, meson, NULL))
+    ide_context_warning (context,
+                         _("A Meson-based project is loaded but meson could not be found."));
+
   /* Requires NULL check so we can use g_strv_contains() elsewhere */
   for (guint i = 0; ninja_names[i]; i++)
     {
@@ -160,11 +168,12 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   if (ninja == NULL)
     ninja = ide_config_getenv (config, "NINJA");
 
+  /* Warn about not finding ninja, but continue setting up */
   if (ninja == NULL)
     {
       ide_context_warning (context,
                            _("A Meson-based project is loaded but Ninja could not be found."));
-      IDE_EXIT;
+      ninja = "ninja";
     }
 
   /* Create all our launchers up front */
@@ -177,13 +186,6 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   prefix = ide_config_get_prefix (config);
   config_opts = ide_config_get_config_opts (config);
   parallel = ide_config_get_parallelism (config);
-
-  if (NULL == (meson = ide_config_getenv (config, "MESON")))
-    meson = "meson";
-
-  if (!ide_runtime_contains_program_in_path (runtime, meson, NULL))
-    ide_context_warning (context,
-                         _("A Meson-based project is loaded but meson could not be found."));
 
   /* Create the toolchain file if required */
   if (GBP_IS_MESON_TOOLCHAIN (toolchain))
