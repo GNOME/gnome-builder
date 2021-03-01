@@ -38,6 +38,30 @@ struct _GbpPodmanRuntimeProvider
   const gchar       *runtime_id;
 };
 
+static gboolean
+contains_runtime (GbpPodmanRuntimeProvider *self,
+                  GbpPodmanRuntime         *runtime)
+{
+  const char *id;
+  guint n_items;
+
+  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
+
+  id = ide_runtime_get_id (IDE_RUNTIME (runtime));
+  n_items = ide_object_get_n_children (IDE_OBJECT (self));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      IdeObject *ele = ide_object_get_nth_child (IDE_OBJECT (self), i);
+
+      if (g_strcmp0 (id, ide_runtime_get_id (IDE_RUNTIME (ele))) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gbp_podman_runtime_provider_apply_cb (JsonArray *ar,
                                       guint      index_,
@@ -62,8 +86,11 @@ gbp_podman_runtime_provider_apply_cb (JsonArray *ar,
 
   if ((runtime = gbp_podman_runtime_new (obj)))
     {
-      ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
-      ide_runtime_manager_add (self->manager, IDE_RUNTIME (runtime));
+      if (!contains_runtime (self, runtime))
+        {
+          ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
+          ide_runtime_manager_add (self->manager, IDE_RUNTIME (runtime));
+        }
     }
 
   IDE_EXIT;
