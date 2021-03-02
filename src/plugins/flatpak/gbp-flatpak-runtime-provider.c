@@ -643,6 +643,30 @@ gbp_flatpak_runtime_provider_bootstrap_install_cb (GObject      *object,
     gbp_flatpak_runtime_provider_bootstrap_complete (task);
 }
 
+static gchar *
+resolve_extension_branch (GbpFlatpakRuntimeProvider *self,
+                          const gchar               *sdk,
+                          const gchar               *extension)
+{
+  GbpFlatpakApplicationAddin *addin;
+  g_autofree gchar *resolved = NULL;
+  g_autofree gchar *branch = NULL;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (extension != NULL);
+
+  if (extension == NULL)
+    return NULL;
+
+  addin = gbp_flatpak_application_addin_get_default ();
+  resolved = gbp_flatpak_application_addin_resolve_extension (addin, sdk, extension);
+
+  if (resolved == NULL || !gbp_flatpak_split_id (resolved, NULL, NULL, &branch))
+    return NULL;
+
+  return g_steal_pointer (&branch);
+}
+
 static void
 gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
                                            GAsyncResult *result,
@@ -655,6 +679,7 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
   g_auto(GStrv) runtimes = NULL;
   IdeTransferManager *transfer_manager;
   BootstrapState *state;
+  const gchar *sdk;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (dialog));
@@ -678,6 +703,7 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
 
   runtimes = gbp_flatpak_install_dialog_get_runtimes (dialog);
   transfer_manager = ide_transfer_manager_get_default ();
+  sdk = gbp_flatpak_install_dialog_get_sdk (dialog);
 
   for (guint i = 0; runtimes[i]; i++)
     {
@@ -691,6 +717,9 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
           g_autoptr(IdeNotification) notif = NULL;
 
           state->count++;
+
+          if (branch == NULL)
+            branch = resolve_extension_branch (self, sdk, name);
 
           transfer = gbp_flatpak_transfer_new (name, arch, branch, FALSE);
           notif = ide_transfer_create_notification (IDE_TRANSFER (transfer));
@@ -779,6 +808,15 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   if (GBP_IS_FLATPAK_MANIFEST (state->config))
     {
       g_auto(GStrv) all = NULL;
+      g_autofree gchar *sdk_full = NULL;
+      const gchar *sdk;
+
+      /* Tell the dialog about the SDK so it can resolve common ancestors for
+       * SDK extensions missing a branch name.
+       */
+      sdk = gbp_flatpak_manifest_get_sdk (GBP_FLATPAK_MANIFEST (state->config));
+      sdk_full = g_strdup_printf ("%s/%s/%s", sdk, state->arch, state->branch);
+      gbp_flatpak_install_dialog_set_sdk (dialog, sdk_full);
 
       all = gbp_flatpak_manifest_get_runtimes (GBP_FLATPAK_MANIFEST (state->config),
                                                state->arch);
