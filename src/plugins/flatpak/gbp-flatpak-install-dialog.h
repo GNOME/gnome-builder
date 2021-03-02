@@ -29,6 +29,9 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, GBP, FLATPAK_INSTALL_DIALOG, GtkDialog)
 
 GbpFlatpakInstallDialog  *gbp_flatpak_install_dialog_new              (GtkWindow                *transient_for);
+const gchar              *gbp_flatpak_install_dialog_get_sdk          (GbpFlatpakInstallDialog  *self);
+void                      gbp_flatpak_install_dialog_set_sdk          (GbpFlatpakInstallDialog  *self,
+                                                                       const gchar              *sdk);
 void                      gbp_flatpak_install_dialog_add_runtime      (GbpFlatpakInstallDialog  *self,
                                                                        const gchar              *runtime_id);
 void                      gbp_flatpak_install_dialog_add_runtime_full (GbpFlatpakInstallDialog  *self,

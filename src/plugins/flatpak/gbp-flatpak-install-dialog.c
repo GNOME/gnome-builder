@@ -37,6 +37,7 @@ struct _GbpFlatpakInstallDialog
   GtkListStore  *liststore1;
   IdeTask       *close_task;
   gchar        **saved_runtimes;
+  gchar         *sdk;
   gint           response_id;
 };
 
@@ -117,6 +118,7 @@ gbp_flatpak_install_dialog_finalize (GObject *object)
 
   g_clear_object (&self->close_task);
   g_clear_pointer (&self->saved_runtimes, g_strfreev);
+  g_clear_pointer (&self->sdk, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_install_dialog_parent_class)->finalize (object);
 }
@@ -317,4 +319,25 @@ gbp_flatpak_install_dialog_add_runtime_full (GbpFlatpakInstallDialog *self,
 
   runtime_id = g_strdup_printf ("%s/%s/%s", name, arch, branch ?: "");
   gbp_flatpak_install_dialog_add_runtime (self, runtime_id);
+}
+
+void
+gbp_flatpak_install_dialog_set_sdk (GbpFlatpakInstallDialog *self,
+                                    const gchar             *sdk)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_INSTALL_DIALOG (self));
+
+  if (g_strcmp0 (sdk, self->sdk) != 0)
+    {
+      g_free (self->sdk);
+      self->sdk = g_strdup (sdk);
+    }
+}
+
+const gchar *
+gbp_flatpak_install_dialog_get_sdk (GbpFlatpakInstallDialog *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_INSTALL_DIALOG (self), NULL);
+
+  return self->sdk;
 }
