@@ -1478,6 +1478,7 @@ gbp_flatpak_application_addin_check_sysdeps_finish (GbpFlatpakApplicationAddin  
 
 FlatpakInstalledRef *
 gbp_flatpak_application_addin_find_extension (GbpFlatpakApplicationAddin *self,
+                                              const gchar                *sdk,
                                               const gchar                *name)
 {
   g_autofree gchar *pname = NULL;
@@ -1485,6 +1486,7 @@ gbp_flatpak_application_addin_find_extension (GbpFlatpakApplicationAddin *self,
   g_autofree gchar *pversion = NULL;
 
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), NULL);
+  g_return_val_if_fail (sdk != NULL, NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
   if (strchr (name, '/') != NULL)

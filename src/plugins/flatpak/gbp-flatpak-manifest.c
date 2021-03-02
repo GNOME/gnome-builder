@@ -562,7 +562,7 @@ find_extension (GbpFlatpakManifest *self,
    * version of the extension.
    */
   addin = gbp_flatpak_application_addin_get_default ();
-  ref = gbp_flatpak_application_addin_find_extension (addin, name);
+  ref = gbp_flatpak_application_addin_find_extension (addin, self->sdk, name);
 
   if (ref != NULL)
     ret = gbp_flatpak_runtime_new (ref, TRUE, NULL, NULL);
