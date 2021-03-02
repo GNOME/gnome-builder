@@ -1495,3 +1495,200 @@ gbp_flatpak_application_addin_find_extension (GbpFlatpakApplicationAddin *self,
 
   return gbp_flatpak_application_addin_find_ref (self, name, NULL, NULL);
 }
+
+typedef struct
+{
+  const gchar *ref;
+  const gchar *extension;
+} ResolveExtension;
+
+G_GNUC_PRINTF (2, 3)
+static const gchar *
+chunk_insert (GStringChunk *strings,
+              const gchar *format,
+              ...)
+{
+  char formatted[256];
+  const gchar *ret = NULL;
+  va_list args;
+
+  va_start (args, format);
+  if (g_vsnprintf (formatted, sizeof formatted, format, args) < sizeof formatted)
+    ret = g_string_chunk_insert_const (strings, formatted);
+  va_end (args);
+
+  return ret;
+}
+
+gchar *
+gbp_flatpak_application_addin_resolve_extension (GbpFlatpakApplicationAddin *self,
+                                                 const gchar                *sdk,
+                                                 const gchar                *extension)
+{
+  g_autoptr(GPtrArray) installations = NULL;
+  g_autofree gchar *sdk_id = NULL;
+  g_autofree gchar *sdk_arch = NULL;
+  g_autofree gchar *sdk_branch = NULL;
+  g_autoptr(GArray) maybe_extention_of = NULL;
+  g_autoptr(GArray) runtime_extensions = NULL;
+  g_autoptr(GStringChunk) strings = NULL;
+
+  /* XXX: This method is a monstrocity to all main loops. Please make something
+   *      in libflatpak that we can use instead of this.
+   */
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), NULL);
+  g_return_val_if_fail (sdk != NULL, NULL);
+  g_return_val_if_fail (extension != NULL, NULL);
+
+  if (self->installations == NULL)
+    return NULL;
+
+  /* It would be very nice to do this asynchronously someday, but we try to
+   * only use cached contents so it's not quite as bad as it could be.
+   */
+
+  if (!gbp_flatpak_split_id (sdk, &sdk_id, &sdk_arch, &sdk_branch))
+    return NULL;
+
+  strings = g_string_chunk_new (4096);
+  installations = g_ptr_array_ref (self->installations);
+
+  maybe_extention_of = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
+  runtime_extensions = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
+
+  for (guint i = 0; i < installations->len; i++)
+    {
+      InstallInfo *info = g_ptr_array_index (installations, i);
+      g_autoptr(GPtrArray) remotes = flatpak_installation_list_remotes (info->installation, NULL, NULL);
+
+      if (remotes == NULL)
+        continue;
+
+      for (guint j = 0; j < remotes->len; j++)
+        {
+          FlatpakRemote *remote = g_ptr_array_index (remotes, j);
+          const gchar *name = flatpak_remote_get_name (remote);
+          g_autoptr(GPtrArray) refs = NULL;
+
+          refs = flatpak_installation_list_remote_refs_sync_full (info->installation,
+                                                                  name,
+                                                                  FLATPAK_QUERY_FLAGS_ONLY_CACHED,
+                                                                  NULL,
+                                                                  NULL);
+
+          if (refs == NULL)
+            continue;
+
+          for (guint k = 0; k < refs->len; k++)
+            {
+              FlatpakRemoteRef *ref = g_ptr_array_index (refs, k);
+              const char *id = flatpak_ref_get_name (FLATPAK_REF (ref));
+              const char *branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
+              const char *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
+              g_autoptr(GKeyFile) keyfile = NULL;
+              g_auto(GStrv) groups = NULL;
+              GBytes *bytes;
+
+              if (flatpak_ref_get_kind (FLATPAK_REF (ref)) != FLATPAK_REF_KIND_RUNTIME ||
+                  !ide_str_equal0 (arch, sdk_arch) ||
+                  !(bytes = flatpak_remote_ref_get_metadata (ref)))
+                continue;
+
+              keyfile = g_key_file_new ();
+              if (!g_key_file_load_from_bytes (keyfile, bytes, 0, NULL))
+                continue;
+
+              groups = g_key_file_get_groups (keyfile, NULL);
+
+              for (guint l = 0; groups[l]; l++)
+                {
+                  const gchar *group = groups[l];
+                  g_autofree gchar *version = NULL;
+                  g_autofree gchar *runtime = NULL;
+                  g_autofree gchar *match = NULL;
+
+                  /* This might be our extension */
+                  if (ide_str_equal0 (group, "ExtensionOf") &&
+                      ide_str_equal0 (id, extension) &&
+                      (runtime = g_key_file_get_string (keyfile, group, "runtime", NULL)))
+                    {
+                      ResolveExtension re = {
+                        chunk_insert (strings, "%s/%s/%s", id, arch, branch),
+                        g_string_chunk_insert_const (strings, runtime) };
+
+                      g_array_append_val (maybe_extention_of, re);
+                    }
+
+                  /* This might provide the extension */
+                  if (g_str_has_prefix (group, "Extension "))
+                    {
+                      const gchar *extname = group + strlen ("Extension ");
+
+                      /* Only track extensions to the runtime itself unless it is
+                       * for our target runtime/SDK.
+                       */
+                      if (!g_str_has_prefix (extname, id))
+                        {
+                          if (!ide_str_equal0 (id, sdk_id) ||
+                              !ide_str_equal0 (arch, sdk_arch) ||
+                              !ide_str_equal0 (branch, sdk_branch))
+                            continue;
+                        }
+
+                      if (!(version = g_key_file_get_string (keyfile, group, "version", NULL)))
+                        version = g_strdup (branch);
+
+                      if (version != NULL)
+                        {
+                          ResolveExtension re = {
+                            chunk_insert (strings, "%s/%s/%s", id, arch, branch),
+                            chunk_insert (strings, "%s/%s/%s", extname, arch, version) };
+
+                          g_array_append_val (runtime_extensions, re);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+  for (guint i = 0; i < maybe_extention_of->len; i++)
+    {
+      const ResolveExtension *maybe = &g_array_index (maybe_extention_of, ResolveExtension, i);
+
+      /* First find any runtime matching the ExtensionOf (such as
+       * ExtensionOf=org.freedesktop.Sdk/x86_64/20.08.
+       */
+
+      for (guint j = 0; j < runtime_extensions->len; j++)
+        {
+          const ResolveExtension *re = &g_array_index (runtime_extensions, ResolveExtension, j);
+          g_autofree gchar *rname = NULL;
+
+          if (!ide_str_equal0 (re->ref, maybe->extension))
+            continue;
+
+          if (!gbp_flatpak_split_id (re->extension, &rname, NULL, NULL))
+            continue;
+
+          /* Now we need to find any runtime that matches the extension
+           * that is in re->extension (such as
+           * org.freedesktop.Sdk.Extension/x86_64/20.08).
+           */
+
+          for (guint k = 0; k < runtime_extensions->len; k++)
+            {
+              const ResolveExtension *target = &g_array_index (runtime_extensions, ResolveExtension, k);
+
+              if (!ide_str_equal0 (re->extension, target->extension))
+                continue;
+
+              if (ide_str_equal0 (target->ref, sdk))
+                return g_strdup (maybe->ref);
+            }
+        }
+    }
+
+  return NULL;
+}
