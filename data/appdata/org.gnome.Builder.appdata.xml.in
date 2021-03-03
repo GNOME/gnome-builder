@@ -86,6 +86,12 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.39.92" date="2021-03-02">
+      <p>
+        Builder 40.beta1 is out and available for testing.
+      </p>
+    </release>
+
     <release version="3.39.90" date="2021-01-14">
       <p>
         Builder 40.alpha1 is out and available for testing.

@@ -1,4 +1,26 @@
 ===============
+Version 3.39.92
+===============
+
+ • Update preferences for terminals including making scrollback configurable
+ • Add support for OSC 8 escape sequences in terminals
+ • Fix highlight after pasting when multiple cursors are in use
+ • Allow disabling show-right-margin with .editorconfig
+ • Reload build pipelines after bootstrapping initial runtimes
+ • Various podman runtime improvements
+ • Pass destination FD to host when reading files from host
+ • Various rust-analyzer improvements
+ • A new "gdiagnose" plugin which can find some common GObject issues
+ • The Flatpak plugin can now resolve SDK extensions through common SDK
+   ancestors improving the newcomer experience for applications such as those
+   that use org.freedesktop.Sdk.Extension.rust-stable.
+ • Improvements to the color picker and display extension
+ • Only show a single "update available" notification
+ • A new rust code formatter is available
+ • GNOME application templates now provide example icons
+ • Translation updates
+
+===============
 Version 3.39.90
 ===============
 
