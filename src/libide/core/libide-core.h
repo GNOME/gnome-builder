@@ -25,6 +25,7 @@
 #define IDE_CORE_INSIDE
 
 #include "ide-context.h"
+#include "ide-context-addin.h"
 #include "ide-debug.h"
 #include "ide-global.h"
 #include "ide-log.h"
