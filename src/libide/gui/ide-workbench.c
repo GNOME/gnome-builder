@@ -185,10 +185,10 @@ ignore_error (GError *error)
  *
  * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
  *
- * Since: 3.34
+ * Since: 3.40
  */
 IdeWorkbench *
-_ide_workbench_from_context (IdeContext *context)
+ide_workbench_from_context (IdeContext *context)
 {
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 

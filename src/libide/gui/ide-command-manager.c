@@ -60,7 +60,7 @@ static void
 query_free (Query *q)
 {
   g_assert (q->n_active == 0);
-  
+
   g_clear_object (&q->workspace);
   g_clear_pointer (&q->typed_text, g_free);
   g_clear_pointer (&q->results, g_ptr_array_unref);
@@ -99,7 +99,7 @@ ide_command_manager_provider_added_cb (IdeExtensionSetAdapter *set,
   g_debug ("Adding command provider %s", G_OBJECT_TYPE_NAME (exten));
 
   context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = _ide_workbench_from_context (context);
+  workbench = ide_workbench_from_context (context);
 
   ide_workbench_foreach_workspace (workbench,
                                    ide_command_manager_load_shortcuts_cb,
@@ -138,7 +138,7 @@ ide_command_manager_provider_removed_cb (IdeExtensionSetAdapter *set,
   g_debug ("Removing command provider %s", G_OBJECT_TYPE_NAME (exten));
 
   context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = _ide_workbench_from_context (context);
+  workbench = ide_workbench_from_context (context);
 
   ide_workbench_foreach_workspace (workbench,
                                    ide_command_manager_unload_shortcuts_cb,

@@ -788,7 +788,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
     }
 
   /* Create dialog to potentially query user if we are allowed to install */
-  workbench = _ide_workbench_from_context (context);
+  workbench = ide_workbench_from_context (context);
   workspace = ide_workbench_get_current_workspace (workbench);
   dialog = gbp_flatpak_install_dialog_new (GTK_WINDOW (workspace));
   gtk_window_group_add_window (GTK_WINDOW_GROUP (workbench), GTK_WINDOW (dialog));

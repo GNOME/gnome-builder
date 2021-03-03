@@ -39,6 +39,8 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, GtkWindowGroup)
 
+IDE_AVAILABLE_IN_3_40
+IdeWorkbench    *ide_workbench_from_context          (IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
 IdeWorkbench    *ide_workbench_new                   (void);
 IDE_AVAILABLE_IN_3_32

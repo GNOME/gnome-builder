@@ -32,7 +32,6 @@
 #include <libide-io.h>
 #include <libide-editor.h>
 #include <libide-gui.h>
-#include <ide-gui-private.h>
 #include "rust-analyzer-search-provider.h"
 
 struct _RustAnalyzerService
@@ -110,7 +109,7 @@ rust_analyzer_service_get_current_file (RustAnalyzerService *self)
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
 
   context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = _ide_workbench_from_context (context);
+  workbench = ide_workbench_from_context (context);
   workspace = ide_workbench_get_current_workspace (workbench);
   surface = ide_workspace_get_surface_by_name (workspace, "editor");
   page = ide_editor_surface_get_active_page (IDE_EDITOR_SURFACE (surface));

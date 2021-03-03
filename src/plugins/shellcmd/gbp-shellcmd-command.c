@@ -294,7 +294,7 @@ gbp_shellcmd_command_class_init (GbpShellcmdCommandClass *klass)
                          "The title of the command for display purposes",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals [CHANGED] =
@@ -443,7 +443,7 @@ gbp_shellcmd_command_run_host (GbpShellcmdCommand  *self,
   context = ide_object_ref_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
 
-  if (!(workbench = _ide_workbench_from_context (context)) ||
+  if (!(workbench = ide_workbench_from_context (context)) ||
       (!(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_PRIMARY_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_EDITOR_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_TERMINAL_WORKSPACE))) ||
@@ -499,7 +499,7 @@ gbp_shellcmd_command_run_app (GbpShellcmdCommand  *self,
   context = ide_object_ref_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
 
-  if (!(workbench = _ide_workbench_from_context (context)) ||
+  if (!(workbench = ide_workbench_from_context (context)) ||
       (!(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_PRIMARY_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_EDITOR_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_TERMINAL_WORKSPACE))) ||
@@ -566,7 +566,7 @@ gbp_shellcmd_command_run_runner (GbpShellcmdCommand  *self,
       return;
     }
 
-  if (!(workbench = _ide_workbench_from_context (context)) ||
+  if (!(workbench = ide_workbench_from_context (context)) ||
       (!(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_PRIMARY_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_EDITOR_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_TERMINAL_WORKSPACE))) ||
@@ -644,7 +644,7 @@ gbp_shellcmd_command_run_build (GbpShellcmdCommand  *self,
       return;
     }
 
-  if (!(workbench = _ide_workbench_from_context (context)) ||
+  if (!(workbench = ide_workbench_from_context (context)) ||
       (!(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_PRIMARY_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_EDITOR_WORKSPACE)) &&
        !(workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_TERMINAL_WORKSPACE))) ||
