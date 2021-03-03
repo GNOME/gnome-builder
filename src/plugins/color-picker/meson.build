@@ -1,4 +1,8 @@
-if get_option('plugin_code_index')
+if get_option('plugin_color_picker')
+
+if not libportal_dep.found()
+  error('plugin_color_picker requires libportal')
+endif
 
 install_data('gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml', install_dir: schema_dir)
 

@@ -1,3 +1,5 @@
+if libportal_dep.found()
+
 libgstyle_headers = [
   'gstyle-animation.h',
   'gstyle-cielab.h',
@@ -119,3 +121,5 @@ libgstyle_introspection_sources = [
 ]
 
 subdir('tests')
+
+endif

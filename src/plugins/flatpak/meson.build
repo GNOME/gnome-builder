@@ -4,6 +4,10 @@ if not get_option('plugin_git')
   error('-Dplugin_git=true is required for flatpak')
 endif
 
+if not libportal_dep.found()
+  error('plugin_flatpak requires access to libportal')
+endif
+
 plugins_sources += files([
   'flatpak-plugin.c',
   'gbp-flatpak-application-addin.c',
@@ -38,6 +42,7 @@ plugins_deps += [
   dependency('flatpak', version: '>= 0.8.0'),
   dependency('ostree-1'),
   dependency('libsoup-2.4', version: '>= 2.52.0'),
+  libportal_dep,
 ]
 
 plugins_sources += plugin_flatpak_resources
