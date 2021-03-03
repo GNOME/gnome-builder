@@ -863,3 +863,37 @@ _ide_context_set_has_project (IdeContext *self)
   self->project_loaded = TRUE;
   ide_object_unlock (IDE_OBJECT (self));
 }
+
+/**
+ * ide_context_addin_find_by_module_name:
+ * @context: an #IdeContext
+ * @module_name: the name of the addin module
+ *
+ * Finds the addin (if any) matching the plugin's @module_name.
+ *
+ * Returns: (transfer none) (nullable): an #IdeContextAddin or %NULL
+ *
+ * Since: 3.40
+ */
+IdeContextAddin *
+ide_context_addin_find_by_module_name (IdeContext  *context,
+                                       const gchar *module_name)
+{
+  PeasPluginInfo *plugin_info;
+  PeasExtension *ret = NULL;
+  PeasEngine *engine;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (module_name != NULL, NULL);
+
+  if (context->addins == NULL)
+    return NULL;
+
+  engine = peas_engine_get_default ();
+
+  if ((plugin_info = peas_engine_get_plugin_info (engine, module_name)))
+    ret = peas_extension_set_get_extension (context->addins, plugin_info);
+
+  return IDE_CONTEXT_ADDIN (ret);
+}

@@ -50,24 +50,27 @@ struct _IdeContextAddinInterface
                                    IdeContext           *context);
 };
 
+IDE_AVAILABLE_IN_3_40
+IdeContextAddin *ide_context_addin_find_by_module_name (IdeContext  *context,
+                                                        const gchar *module_name);
 IDE_AVAILABLE_IN_3_32
-void     ide_context_addin_load_project_async  (IdeContextAddin      *self,
-                                                IdeContext           *context,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
+void             ide_context_addin_load_project_async  (IdeContextAddin      *self,
+                                                        IdeContext           *context,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
-gboolean ide_context_addin_load_project_finish (IdeContextAddin      *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
+gboolean         ide_context_addin_load_project_finish (IdeContextAddin      *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
 IDE_AVAILABLE_IN_3_32
-void     ide_context_addin_load                (IdeContextAddin      *self,
-                                                IdeContext           *context);
+void             ide_context_addin_load                (IdeContextAddin      *self,
+                                                        IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
-void     ide_context_addin_unload              (IdeContextAddin      *self,
-                                                IdeContext           *context);
+void             ide_context_addin_unload              (IdeContextAddin      *self,
+                                                        IdeContext           *context);
 IDE_AVAILABLE_IN_3_32
-void     ide_context_addin_project_loaded      (IdeContextAddin      *self,
-                                                IdeContext           *context);
+void             ide_context_addin_project_loaded      (IdeContextAddin      *self,
+                                                        IdeContext           *context);
 
 G_END_DECLS
