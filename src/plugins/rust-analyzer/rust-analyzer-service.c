@@ -1,6 +1,7 @@
 /* rust-analyzer-service.c
  *
  * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,182 +21,226 @@
 
 #define G_LOG_DOMAIN "rust-analyzer-service"
 
-#include "rust-analyzer-service.h"
-#include "rust-analyzer-transfer.h"
-#include <gio/gunixinputstream.h>
-#include <gio/gunixoutputstream.h>
-#include <glib-unix.h>
-#include <libide-core.h>
+#include "config.h"
+
+#include <dazzle.h>
 #include <jsonrpc-glib.h>
-#include <glib/gi18n.h>
-#include <libide-search.h>
-#include <libide-io.h>
-#include <libide-editor.h>
-#include <libide-gui.h>
-#include "rust-analyzer-search-provider.h"
+
+#include "rust-analyzer-pipeline-addin.h"
+#include "rust-analyzer-service.h"
 
 struct _RustAnalyzerService
 {
-  IdeObject parent_instance;
-  IdeLspClient  *client;
+  GObject                  parent_instance;
+  IdeWorkbench            *workbench;
+  IdeLspClient            *client;
   IdeSubprocessSupervisor *supervisor;
-  GFileMonitor *cargo_monitor;
-  RustAnalyzerSearchProvider *search_provider;
-  GSettings *settings;
-  char *cargo_command;
-  char *rust_analyzer_path;
-
-  ServiceState state;
+  DzlSignalGroup          *pipeline_signals;
+  GSettings               *settings;
 };
 
-G_DEFINE_TYPE (RustAnalyzerService, rust_analyzer_service, IDE_TYPE_OBJECT)
+static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (RustAnalyzerService, rust_analyzer_service, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 enum {
   PROP_0,
   PROP_CLIENT,
-  PROP_CARGO_COMMAND,
   N_PROPS
 };
 
 static GParamSpec *properties [N_PROPS];
 
-RustAnalyzerService *
-rust_analyzer_service_new (void)
+static void
+rust_analyzer_service_pipeline_loaded_cb (RustAnalyzerService *self,
+                                          IdePipeline         *pipeline)
 {
-  return g_object_new (RUST_TYPE_ANALYZER_SERVICE, NULL);
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  IdePipelineAddin *addin;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  IDE_TRACE_MSG ("Pipeline loaded, attempting to locate rust-analyzer");
+
+  ide_subprocess_supervisor_set_launcher (self->supervisor, NULL);
+  ide_subprocess_supervisor_stop (self->supervisor);
+
+  if (!(addin = ide_pipeline_addin_find_by_module_name (pipeline, "rust-analyzer")) ||
+      !(launcher = rust_analyzer_pipeline_addin_create_launcher (RUST_ANALYZER_PIPELINE_ADDIN (addin))))
+    IDE_EXIT;
+
+  ide_subprocess_supervisor_set_launcher (self->supervisor, launcher);
+  ide_subprocess_supervisor_start (self->supervisor);
+
+  IDE_EXIT;
 }
 
 static void
-_cargo_toml_changed_cb (GFileMonitor      *monitor,
-                        GFile             *file,
-                        GFile             *other_file,
-                        GFileMonitorEvent  event_type,
-                        gpointer           user_data)
+rust_analyzer_service_bind_pipeline (RustAnalyzerService *self,
+                                     IdePipeline         *pipeline,
+                                     DzlSignalGroup      *signal_group)
 {
-  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (user_data);
-
-  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
-
-  if (self->supervisor != NULL)
-    {
-      IdeSubprocess *subprocess = ide_subprocess_supervisor_get_subprocess (self->supervisor);
-      if (subprocess != NULL)
-        ide_subprocess_force_exit (subprocess);
-    }
-}
-
-static IdeSearchEngine *
-_get_search_engine (RustAnalyzerService *self)
-{
-  IdeContext *context = NULL;
+  IDE_ENTRY;
 
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  return ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_SEARCH_ENGINE);
+  if (ide_pipeline_is_ready (pipeline))
+    rust_analyzer_service_pipeline_loaded_cb (self, pipeline);
+
+  IDE_EXIT;
 }
 
-static GFile *
-rust_analyzer_service_get_current_file (RustAnalyzerService *self)
+static void
+rust_analyzer_service_lsp_initialized_cb (RustAnalyzerService *self,
+                                          IdeLspClient        *client)
 {
-  g_autoptr(IdeContext) context = NULL;
-  IdeWorkbench *workbench = NULL;
-  IdeWorkspace *workspace = NULL;
-  IdeSurface *surface = NULL;
-  IdePage *page = NULL;
+  g_autoptr(GVariant) params = NULL;
 
   IDE_ENTRY;
 
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_LSP_CLIENT (client));
 
-  context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = ide_workbench_from_context (context);
-  workspace = ide_workbench_get_current_workspace (workbench);
-  surface = ide_workspace_get_surface_by_name (workspace, "editor");
-  page = ide_editor_surface_get_active_page (IDE_EDITOR_SURFACE (surface));
+  params = JSONRPC_MESSAGE_NEW ("settings", "");
 
-  if (!IDE_IS_EDITOR_PAGE (page))
-    return NULL;
+  ide_lsp_client_send_notification_async (client,
+                                          "workspace/didChangeConfiguration",
+                                          params,
+                                          NULL, NULL, NULL);
 
-  IDE_RETURN (g_object_ref (ide_editor_page_get_file (IDE_EDITOR_PAGE (page))));
-}
-
-static gboolean
-rust_analyzer_service_search_cargo_root (RustAnalyzerService *self,
-                                         GFile               *dir)
-{
-  g_autoptr(GFile) cargofile = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (RUST_IS_ANALYZER_SERVICE (self));
-
-  cargofile = g_file_get_child (dir, "Cargo.toml");
-
-  if (g_file_query_exists (cargofile, NULL))
-    IDE_RETURN (TRUE);
-
-  IDE_RETURN (FALSE);
-}
-
-static GFile *
-rust_analyzer_service_determine_workdir (RustAnalyzerService *self)
-{
-  g_autoptr(GFile) workdir = NULL;
-  g_autoptr(IdeContext) context = NULL;
-
-  g_assert (RUST_IS_ANALYZER_SERVICE (self));
-
-  /* Search workbench root first */
-  context = ide_object_ref_context (IDE_OBJECT (self));
-  workdir = ide_context_ref_workdir (context);
-  if (rust_analyzer_service_search_cargo_root (self, workdir) == FALSE)
-    {
-      /* Search now from the current opened file upwards */
-      g_autoptr(GFile) current_file = NULL;
-      g_autoptr(GFile) parent = NULL;
-
-      current_file = rust_analyzer_service_get_current_file (self);
-      if (current_file == NULL)
-        goto end;
-      parent = g_file_get_parent (current_file);
-
-      while (!g_file_equal (workdir, parent))
-        {
-          GFile *prev_parent = NULL;
-          if (rust_analyzer_service_search_cargo_root (self, parent))
-            {
-              return g_steal_pointer (&parent);
-            }
-          prev_parent = parent;
-          parent = g_file_get_parent (parent);
-          g_object_unref (prev_parent);
-        }
-    }
-
-end:
-  return g_steal_pointer (&workdir);
+  IDE_EXIT;
 }
 
 static GVariant *
-rust_analyzer_service_load_configuration (IdeLspClient *client,
-                                          gpointer      user_data)
+rust_analyzer_service_lsp_load_configuration_cb (RustAnalyzerService *self,
+                                                 IdeLspClient        *client)
 {
-  RustAnalyzerService *self = (RustAnalyzerService *)user_data;
-  GVariant *ret = NULL;
+  g_autoptr(GVariant) ret = NULL;
+  g_autofree gchar *command = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_CLIENT (client));
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
 
+  command = g_settings_get_string (self->settings, "cargo-command");
+
   ret = JSONRPC_MESSAGE_NEW_ARRAY ("{",
                                      "checkOnSave", "{",
-                                       "command", JSONRPC_MESSAGE_PUT_STRING (self->cargo_command),
+                                       "enable", JSONRPC_MESSAGE_PUT_BOOLEAN (command[0] != 0),
+                                       "command", JSONRPC_MESSAGE_PUT_STRING (command),
                                      "}",
                                    "}");
 
   IDE_RETURN (g_steal_pointer (&ret));
+}
+
+static void
+rust_analyzer_service_supervisor_spawned_cb (RustAnalyzerService     *self,
+                                             IdeSubprocess           *subprocess,
+                                             IdeSubprocessSupervisor *supervisor)
+{
+  g_autoptr(GIOStream) io_stream = NULL;
+  IdeSubprocessLauncher *launcher;
+  GOutputStream *output;
+  GInputStream *input;
+  const gchar *workdir;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  input = ide_subprocess_get_stdout_pipe (subprocess);
+  output = ide_subprocess_get_stdin_pipe (subprocess);
+  io_stream = g_simple_io_stream_new (input, output);
+
+  if (self->client != NULL)
+    {
+      ide_lsp_client_stop (self->client);
+      ide_object_destroy (IDE_OBJECT (self->client));
+      g_clear_object (&self->client);
+    }
+
+  self->client = ide_lsp_client_new (io_stream);
+
+  g_signal_connect_object (self->client,
+                           "load-configuration",
+                           G_CALLBACK (rust_analyzer_service_lsp_load_configuration_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->client,
+                           "initialized",
+                           G_CALLBACK (rust_analyzer_service_lsp_initialized_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  if ((launcher = ide_subprocess_supervisor_get_launcher (supervisor)) &&
+      (workdir = ide_subprocess_launcher_get_cwd (launcher)))
+    {
+      g_autoptr(GFile) file = g_file_new_for_path (workdir);
+      g_autofree gchar *root_uri = g_file_get_uri (file);
+
+      ide_lsp_client_set_root_uri (self->client, root_uri);
+    }
+
+  context = ide_workbench_get_context (self->workbench);
+  ide_lsp_client_add_language (self->client, "rust");
+  ide_object_append (IDE_OBJECT (context), IDE_OBJECT (self->client));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
+
+  ide_lsp_client_start (self->client);
+
+  IDE_EXIT;
+}
+
+static void
+rust_analyzer_service_settings_changed_cb (RustAnalyzerService *self,
+                                           const gchar         *key,
+                                           GSettings           *settings)
+{
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  if (self->client != NULL)
+    {
+      g_autoptr(GVariant) params = JSONRPC_MESSAGE_NEW ("settings", "");
+      ide_lsp_client_send_notification_async (self->client,
+                                              "workspace/didChangeConfiguration",
+                                              params,
+                                              NULL, NULL, NULL);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+rust_analyzer_service_finalize (GObject *object)
+{
+  RustAnalyzerService *self = (RustAnalyzerService *)object;
+
+  IDE_ENTRY;
+
+  g_clear_object (&self->supervisor);
+  g_clear_object (&self->pipeline_signals);
+  g_clear_object (&self->client);
+  g_clear_object (&self->settings);
+
+  G_OBJECT_CLASS (rust_analyzer_service_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -211,121 +256,26 @@ rust_analyzer_service_get_property (GObject    *object,
     case PROP_CLIENT:
       g_value_set_object (value, rust_analyzer_service_get_client (self));
       break;
-    case PROP_CARGO_COMMAND:
-      g_value_set_string (value, rust_analyzer_service_get_cargo_command (self));
-      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
-}
-
-static void
-rust_analyzer_service_set_property (GObject      *object,
-                                    guint         prop_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
-{
-  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (object);
-
-  switch (prop_id)
-    {
-    case PROP_CLIENT:
-      rust_analyzer_service_set_client (self, g_value_get_object (value));
-      break;
-    case PROP_CARGO_COMMAND:
-      rust_analyzer_service_set_cargo_command (self, g_value_dup_string (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-rust_analyzer_service_set_parent (IdeObject *object,
-                                  IdeObject *parent)
-{
-  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (object);
-
-  IdeContext *context = NULL;
-  g_autoptr(GFile) workdir = NULL;
-  g_autoptr(GFile) cargo_toml = NULL;
-
-  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (object));
-
-  if (parent == NULL)
-    return;
-
-  context = ide_object_get_context (object);
-  workdir = ide_context_ref_workdir (context);
-  cargo_toml = g_file_get_child (workdir, "Cargo.toml");
-
-  if (g_file_query_exists (cargo_toml, NULL))
-    {
-      GError *error = NULL;
-
-      if (self->cargo_monitor != NULL)
-        return;
-
-      self->cargo_monitor = g_file_monitor (cargo_toml, G_FILE_MONITOR_NONE, NULL, &error);
-      if (error != NULL)
-        {
-          g_warning ("%s", error->message);
-          return;
-        }
-      g_file_monitor_set_rate_limit (self->cargo_monitor, 5 * 1000); // 5 Seconds
-      g_signal_connect (self->cargo_monitor, "changed", G_CALLBACK (_cargo_toml_changed_cb), self);
-    }
-
-}
-
-static void
-rust_analyzer_service_destroy (IdeObject *object)
-{
-  RustAnalyzerService *self = RUST_ANALYZER_SERVICE (object);
-  IdeSearchEngine *search_engine = NULL;
-
-  if (self->supervisor != NULL)
-    {
-      g_autoptr(IdeSubprocessSupervisor) supervisor = g_steal_pointer (&self->supervisor);
-
-      ide_subprocess_supervisor_stop (supervisor);
-    }
-
-  g_clear_object (&self->client);
-
-  search_engine = _get_search_engine (self);
-  if (search_engine != NULL)
-    ide_search_engine_remove_provider (search_engine, IDE_SEARCH_PROVIDER (self->search_provider));
-  g_clear_object (&self->search_provider);
-
-  IDE_OBJECT_CLASS (rust_analyzer_service_parent_class)->destroy (object);
 }
 
 static void
 rust_analyzer_service_class_init (RustAnalyzerServiceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeObjectClass *i_class = IDE_OBJECT_CLASS (klass);
 
+  object_class->finalize = rust_analyzer_service_finalize;
   object_class->get_property = rust_analyzer_service_get_property;
-  object_class->set_property = rust_analyzer_service_set_property;
-
-  i_class->parent_set = rust_analyzer_service_set_parent;
-  i_class->destroy = rust_analyzer_service_destroy;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
                          "Client",
-                         "The Language Server client",
+                         "The language server protocol client",
                          IDE_TYPE_LSP_CLIENT,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_CARGO_COMMAND] =
-    g_param_spec_string ("cargo-command",
-                         "Cargo-command",
-                         "The used cargo command for rust-analyzer",
-                         "check",
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -333,10 +283,150 @@ rust_analyzer_service_class_init (RustAnalyzerServiceClass *klass)
 static void
 rust_analyzer_service_init (RustAnalyzerService *self)
 {
-  self->client = NULL;
-  self->state = RUST_ANALYZER_SERVICE_INIT;
   self->settings = g_settings_new ("org.gnome.builder.rust-analyzer");
-  g_settings_bind (self->settings, "cargo-command", self, "cargo-command", G_SETTINGS_BIND_DEFAULT);
+  g_signal_connect_object (self->settings,
+                           "changed",
+                           G_CALLBACK (rust_analyzer_service_settings_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  self->supervisor = ide_subprocess_supervisor_new ();
+  g_signal_connect_object (self->supervisor,
+                           "spawned",
+                           G_CALLBACK (rust_analyzer_service_supervisor_spawned_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_PIPELINE);
+  dzl_signal_group_connect_object (self->pipeline_signals,
+                                   "loaded",
+                                   G_CALLBACK (rust_analyzer_service_pipeline_loaded_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->pipeline_signals,
+                           "bind",
+                           G_CALLBACK (rust_analyzer_service_bind_pipeline),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
+rust_analyzer_service_load (IdeWorkbenchAddin *addin,
+                            IdeWorkbench      *workbench)
+{
+  RustAnalyzerService *self = (RustAnalyzerService *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  self->workbench = workbench;
+
+  IDE_EXIT;
+}
+
+static void
+rust_analyzer_service_unload (IdeWorkbenchAddin *addin,
+                              IdeWorkbench      *workbench)
+{
+  RustAnalyzerService *self = (RustAnalyzerService *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  self->workbench = NULL;
+
+  dzl_signal_group_set_target (self->pipeline_signals, NULL);
+
+  if (self->client != NULL)
+    {
+      g_autoptr(IdeLspClient) client = g_steal_pointer (&self->client);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
+      ide_lsp_client_stop (client);
+      ide_object_destroy (IDE_OBJECT (client));
+    }
+
+  if (self->supervisor != NULL)
+    {
+      ide_subprocess_supervisor_stop (self->supervisor);
+      g_clear_object (&self->supervisor);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+rust_analyzer_service_notify_pipeline_cb (RustAnalyzerService *self,
+                                          GParamSpec          *pspec,
+                                          IdeBuildManager     *build_manager)
+{
+  IdePipeline *pipeline;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  dzl_signal_group_set_target (self->pipeline_signals, pipeline);
+
+  IDE_EXIT;
+}
+
+static void
+rust_analyzer_service_project_loaded (IdeWorkbenchAddin *addin,
+                                      IdeProjectInfo    *project_info)
+{
+  RustAnalyzerService *self = (RustAnalyzerService *)addin;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_SERVICE (self));
+  g_assert (IDE_IS_WORKBENCH (self->workbench));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
+
+  /* We only start things if we have a project loaded or else there isn't
+   * a whole lot we can do safely as too many subsystems will be in play
+   * which should only be loaded when a project is active.
+   */
+
+  context = ide_workbench_get_context (self->workbench);
+  build_manager = ide_build_manager_from_context (context);
+  g_signal_connect_object (build_manager,
+                           "notify::pipeline",
+                           G_CALLBACK (rust_analyzer_service_notify_pipeline_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  rust_analyzer_service_notify_pipeline_cb (self, NULL, build_manager);
+
+  IDE_EXIT;
+}
+
+static void
+workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
+{
+  iface->load = rust_analyzer_service_load;
+  iface->unload = rust_analyzer_service_unload;
+  iface->project_loaded = rust_analyzer_service_project_loaded;
+}
+
+RustAnalyzerService *
+rust_analyzer_service_from_context (IdeContext *context)
+{
+  IdeWorkbenchAddin *addin;
+  IdeWorkbench *workbench;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  workbench = ide_workbench_from_context (context);
+  addin = ide_workbench_addin_find_by_module_name (workbench, "rust-analyzer");
+
+  return RUST_ANALYZER_SERVICE (addin);
 }
 
 IdeLspClient *
@@ -348,198 +438,36 @@ rust_analyzer_service_get_client (RustAnalyzerService *self)
 }
 
 void
-rust_analyzer_service_set_client (RustAnalyzerService *self,
-                                  IdeLspClient        *client)
-{
-  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
-  g_return_if_fail (!client || IDE_IS_LSP_CLIENT (client));
-
-  if (g_set_object (&self->client, client))
-    {
-      g_signal_connect_object (self->client,
-                               "load-configuration",
-                               G_CALLBACK (rust_analyzer_service_load_configuration),
-                               self,
-                               0);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
-    }
-}
-
-static void
-rust_analyzer_service_lsp_initialized (IdeLspClient *client,
-                                       gpointer      user_data)
-{
-  RustAnalyzerService *self = (RustAnalyzerService *) user_data;
-  g_autoptr(GVariant) params = NULL;
-
-  g_assert (IDE_IS_LSP_CLIENT (client));
-  g_assert (RUST_IS_ANALYZER_SERVICE (self));
-
-  params = JSONRPC_MESSAGE_NEW ("settings", "");
-  ide_lsp_client_send_notification_async (client, "workspace/didChangeConfiguration", params, NULL, NULL, NULL);
-}
-
-void
-rust_analyzer_service_lsp_started (IdeSubprocessSupervisor *supervisor,
-                                   IdeSubprocess           *subprocess,
-                                   gpointer                 user_data)
-{
-  RustAnalyzerService *self = user_data;
-  g_autoptr(GIOStream) io_stream = NULL;
-  g_autoptr(GFile) workdir = NULL;
-  g_autofree gchar *root_uri = NULL;
-  GInputStream *input;
-  GOutputStream *output;
-  IdeLspClient *client = NULL;
-
-  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
-  g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
-  g_return_if_fail (IDE_IS_SUBPROCESS (subprocess));
-
-  input = ide_subprocess_get_stdout_pipe (subprocess);
-  output = ide_subprocess_get_stdin_pipe (subprocess);
-  io_stream = g_simple_io_stream_new (input, output);
-
-  if (self->client != NULL)
-    {
-      ide_lsp_client_stop (self->client);
-      ide_object_destroy (IDE_OBJECT (self->client));
-    }
-
-  client = ide_lsp_client_new (io_stream);
-  g_signal_connect (client, "initialized", G_CALLBACK (rust_analyzer_service_lsp_initialized), self);
-  rust_analyzer_service_set_client (self, client);
-  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (client));
-  ide_lsp_client_add_language (client, "rust");
-  workdir = rust_analyzer_service_determine_workdir (self);
-  root_uri = g_file_get_uri (workdir);
-  ide_lsp_client_set_root_uri (client, root_uri);
-  ide_lsp_client_start (client);
-}
-
-static gboolean
-rust_analyzer_service_check_rust_analyzer_bin (RustAnalyzerService *self)
-{
-  /* Check if `rust-analyzer` can be found on PATH or if there is an executable
-   * in typical location
-   */
-  g_autoptr(GFile) rust_analyzer_bin_file = NULL;
-  g_autofree gchar *rust_analyzer_bin = NULL;
-  g_autoptr(GFileInfo) file_info = NULL;
-
-  g_return_val_if_fail (RUST_IS_ANALYZER_SERVICE (self), FALSE);
-
-  if ((rust_analyzer_bin = g_find_program_in_path ("rust-analyzer")))
-    rust_analyzer_bin_file = g_file_new_for_path (rust_analyzer_bin);
-  else
-    rust_analyzer_bin_file = g_file_new_build_filename (g_get_home_dir (),
-                                                        ".cargo",
-                                                        "bin",
-                                                        "rust-analyzer",
-                                                        NULL);
-
-  if (!g_file_query_exists (rust_analyzer_bin_file, NULL))
-    return FALSE;
-
-  file_info = g_file_query_info (rust_analyzer_bin_file,
-                                 G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE,
-                                 G_FILE_QUERY_INFO_NONE,
-                                 NULL, NULL);
-
-  if (file_info != NULL &&
-      g_file_info_get_attribute_boolean (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE))
-    {
-      g_clear_pointer (&self->rust_analyzer_path, g_free);
-      self->rust_analyzer_path = g_file_get_path (rust_analyzer_bin_file);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-void
 rust_analyzer_service_ensure_started (RustAnalyzerService *self)
 {
-  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
+  IdeSubprocessLauncher *launcher;
+  IdePipeline *pipeline;
+  IdeContext *context;
 
-  if (self->state == RUST_ANALYZER_SERVICE_INIT)
-    {
-      if (!rust_analyzer_service_check_rust_analyzer_bin (self))
-        {
-          g_autoptr(IdeNotification) notification = NULL;
-          IdeContext *context = NULL;
-
-          self->state = RUST_ANALYZER_SERVICE_OFFER_DOWNLOAD;
-
-          notification = ide_notification_new ();
-          ide_notification_set_id (notification, "org.gnome-builder.rust-analyzer");
-          ide_notification_set_title (notification, _("Rust Analyzer is missing from your computer"));
-          ide_notification_set_body (notification, _("Support for diagnostics and auto-completion may be limited until it is installed."));
-          ide_notification_set_icon_name (notification, "dialog-warning-symbolic");
-          ide_notification_add_button (notification, _("Install Rust Analyzer"), NULL, "win.install-rust-analyzer");
-          ide_notification_set_urgent (notification, TRUE);
-          context = ide_object_get_context (IDE_OBJECT (self));
-          ide_notification_attach (notification, IDE_OBJECT (context));
-        }
-      else
-          self->state = RUST_ANALYZER_SERVICE_READY;
-    }
-  else if (self->state == RUST_ANALYZER_SERVICE_READY)
-    {
-      g_autoptr(GFile) workdir = NULL;
-      g_autofree gchar *root_path = NULL;
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-
-      g_assert (self->rust_analyzer_path != NULL);
-
-      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDIN_PIPE);
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-      ide_subprocess_launcher_set_clear_env (launcher, TRUE);
-
-      workdir = rust_analyzer_service_determine_workdir (self);
-      root_path = g_file_get_path (workdir);
-      ide_subprocess_launcher_set_cwd (launcher, root_path);
-
-      ide_subprocess_launcher_push_argv (launcher, self->rust_analyzer_path);
-
-      self->supervisor = ide_subprocess_supervisor_new ();
-      g_signal_connect (self->supervisor, "spawned", G_CALLBACK (rust_analyzer_service_lsp_started), self);
-      ide_subprocess_supervisor_set_launcher (self->supervisor, launcher);
-      ide_subprocess_supervisor_start (self->supervisor);
-      self->state = RUST_ANALYZER_SERVICE_LSP_STARTED;
-    }
-}
-
-void
-rust_analyzer_service_set_state (RustAnalyzerService *self,
-                                 ServiceState         state)
-{
-  g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
-
-  self->state = state;
-}
-
-gchar *
-rust_analyzer_service_get_cargo_command (RustAnalyzerService *self)
-{
-  g_return_val_if_fail (RUST_IS_ANALYZER_SERVICE (self), NULL);
-
-  return self->cargo_command;
-}
-
-void
-rust_analyzer_service_set_cargo_command (RustAnalyzerService *self,
-                                         const gchar         *cargo_command)
-{
-  g_autoptr(GVariant) params = NULL;
+  IDE_ENTRY;
 
   g_return_if_fail (RUST_IS_ANALYZER_SERVICE (self));
-  g_return_if_fail (cargo_command != NULL);
+  g_return_if_fail (self->workbench != NULL);
 
-  g_clear_pointer (&self->cargo_command, g_free);
-  self->cargo_command = g_strdup (cargo_command);
+  /* Ignore unless a project is loaded. Without a project loaded we
+   * dont have access to foundry subsystem.
+   */
+  context = ide_workbench_get_context (self->workbench);
+  if (!ide_context_has_project (context))
+    IDE_EXIT;
 
-  params = JSONRPC_MESSAGE_NEW ("settings", "");
-  if (self->client != NULL)
-    ide_lsp_client_send_notification_async (self->client, "workspace/didChangeConfiguration", params, NULL, NULL, NULL);
+  /* Do nothing if the supervisor already has a launcher */
+  if ((launcher = ide_subprocess_supervisor_get_launcher (self->supervisor)))
+    IDE_EXIT;
+
+  /* Try again (maybe new files opened) to see if we can get launcher
+   * using a discovered Cargo.toml.
+   */
+  if (!(pipeline = dzl_signal_group_get_target (self->pipeline_signals)) ||
+      !ide_pipeline_is_ready (pipeline))
+    IDE_EXIT;
+
+  rust_analyzer_service_pipeline_loaded_cb (self, pipeline);
+
+  IDE_EXIT;
 }

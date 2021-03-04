@@ -18,6 +18,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "rust-analyzer-highlighter"
+
+#include "config.h"
+
 #include "rust-analyzer-highlighter.h"
 #include "rust-analyzer-service.h"
 
@@ -52,7 +56,7 @@ rust_analyzer_highlighter_load (IdeHighlighter *self)
   g_assert (RUST_IS_ANALYZER_HIGHLIGHTER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
+  service = rust_analyzer_service_from_context (context);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
   rust_analyzer_service_ensure_started (service);
 }

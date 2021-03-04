@@ -1,6 +1,6 @@
-/* rust-analyzer-transfer.h
+/* rust-analyzer-pipeline-addin.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_TRANSFER (rust_analyzer_transfer_get_type())
+#define RUST_TYPE_ANALYZER_PIPELINE_ADDIN (rust_analyzer_pipeline_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerTransfer, rust_analyzer_transfer, RUST, ANALYZER_TRANSFER, IdeTransfer)
+G_DECLARE_FINAL_TYPE (RustAnalyzerPipelineAddin, rust_analyzer_pipeline_addin, RUST, ANALYZER_PIPELINE_ADDIN, IdeObject)
 
-RustAnalyzerTransfer *rust_analyzer_transfer_new (void);
+IdeSubprocessLauncher *rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self);
 
 G_END_DECLS

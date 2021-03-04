@@ -38,9 +38,13 @@ rust_analyzer_hover_provider_prepare (IdeLspHoverProvider *self)
 
   g_assert (RUST_IS_ANALYZER_HOVER_PROVIDER (self));
 
+  g_object_set (self,
+                "category", "Rust",
+                "priority", 200,
+                NULL);
+
   context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_object_ensure_child_typed (IDE_OBJECT (context), RUST_TYPE_ANALYZER_SERVICE);
-  g_object_set (self, "category", "Rust", "priority", 200, NULL);
+  service = rust_analyzer_service_from_context (context);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
   rust_analyzer_service_ensure_started (service);
 }
