@@ -70,18 +70,21 @@ is_meson_project (RustAnalyzerPipelineAddin *self)
 static GFile *
 find_cargo_toml_from_file (GFile *file)
 {
-  g_autoptr(GFile) parent = g_file_get_parent (file);
-  g_autoptr(GFile) cargo_toml = g_file_get_child (parent, "Cargo.toml");
-  g_autofree gchar *name = g_file_get_basename (file);
+  if (file != NULL)
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (file);
+      g_autoptr(GFile) cargo_toml = g_file_get_child (parent, "Cargo.toml");
+      g_autofree gchar *name = g_file_get_basename (file);
 
-  if (g_strcmp0 (name, "Cargo.toml") == 0)
-    return g_steal_pointer (&parent);
+      if (g_strcmp0 (name, "Cargo.toml") == 0)
+        return g_steal_pointer (&parent);
 
-  if (g_file_query_exists (cargo_toml, NULL))
-    return g_steal_pointer (&cargo_toml);
+      if (g_file_query_exists (cargo_toml, NULL))
+        return g_steal_pointer (&cargo_toml);
 
-  if (parent != NULL)
-    return find_cargo_toml_from_file (parent);
+      if (parent != NULL)
+        return find_cargo_toml_from_file (parent);
+    }
 
   return NULL;
 }
@@ -132,14 +135,13 @@ rust_analyzer_pipeline_addin_discover_workdir (RustAnalyzerPipelineAddin  *self,
   g_assert (RUST_IS_ANALYZER_PIPELINE_ADDIN (self));
 
   if (!(context = ide_object_ref_context (IDE_OBJECT (self))) ||
-      !(workbench = ide_workbench_from_context (context)))
+      !(workbench = ide_workbench_from_context (context)) ||
+      !(project_workdir = ide_context_ref_workdir (context)))
     {
       *src_workdir = NULL;
       *build_workdir = NULL;
       IDE_EXIT;
     }
-
-  project_workdir = ide_context_ref_workdir (context);
 
   /* Use project root as workdir if it contains Cargo.toml, otherwise
    * try to look at open files and locate a workdir from the topmost
