@@ -148,8 +148,8 @@ ide_lsp_completion_provider_get_client (IdeLspCompletionProvider *self)
 
 static void
 on_notify_server_capabilities_cb (IdeLspCompletionProvider *self,
-                                  GParamSpec *pspec,
-                                  IdeLspClient *client)
+                                  GParamSpec               *pspec,
+                                  IdeLspClient             *client)
 {
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
   GVariant *capabilities;
@@ -193,12 +193,16 @@ ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
 
   if (g_set_object (&priv->client, client))
     {
-      g_signal_connect_object (client,
-                               "notify::server-capabilities",
-                               G_CALLBACK (on_notify_server_capabilities_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-      on_notify_server_capabilities_cb (self, NULL, client);
+      if (client != NULL)
+        {
+          g_signal_connect_object (client,
+                                   "notify::server-capabilities",
+                                   G_CALLBACK (on_notify_server_capabilities_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          on_notify_server_capabilities_cb (self, NULL, client);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
     }
 }
