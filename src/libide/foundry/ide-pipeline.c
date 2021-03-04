@@ -1192,6 +1192,8 @@ ide_pipeline_load_cb (IdleLoadState *state)
   state->self->loaded = TRUE;
   state->self->idle_addins_load_source = 0;
 
+  IDE_TRACE_MSG ("Pipeline ready");
+
   g_signal_emit (state->self, signals [LOADED], 0);
 
   return G_SOURCE_REMOVE;
@@ -4279,4 +4281,38 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
     }
 
   return FALSE;
+}
+
+/**
+ * ide_pipeline_addin_find_by_module_name:
+ * @pipeline: an #IdePipeline
+ * @module_name: the name of the addin module
+ *
+ * Finds the addin (if any) matching the plugin's @module_name.
+ *
+ * Returns: (transfer none) (nullable): an #IdePipelineAddin or %NULL
+ *
+ * Since: 3.40
+ */
+IdePipelineAddin *
+ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
+                                        const gchar *module_name)
+{
+  PeasPluginInfo *plugin_info;
+  PeasExtension *ret = NULL;
+  PeasEngine *engine;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_PIPELINE (pipeline), NULL);
+  g_return_val_if_fail (module_name != NULL, NULL);
+
+  if (pipeline->addins == NULL)
+    return NULL;
+
+  engine = peas_engine_get_default ();
+
+  if ((plugin_info = peas_engine_get_plugin_info (engine, module_name)))
+    ret = ide_extension_set_adapter_get_extension (pipeline->addins, plugin_info);
+
+  return IDE_PIPELINE_ADDIN (ret);
 }

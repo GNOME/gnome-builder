@@ -47,17 +47,20 @@ struct _IdePipelineAddinInterface
                    IdePipeline      *pipeline);
 };
 
+IDE_AVAILABLE_IN_3_40
+IdePipelineAddin *ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
+                                                          const gchar *module_name);
 IDE_AVAILABLE_IN_3_34
-void ide_pipeline_addin_prepare (IdePipelineAddin *self,
-                                 IdePipeline      *pipeline);
+void              ide_pipeline_addin_prepare             (IdePipelineAddin *self,
+                                                          IdePipeline      *pipeline);
 IDE_AVAILABLE_IN_3_32
-void ide_pipeline_addin_load    (IdePipelineAddin *self,
-                                 IdePipeline      *pipeline);
+void              ide_pipeline_addin_load                (IdePipelineAddin *self,
+                                                          IdePipeline      *pipeline);
 IDE_AVAILABLE_IN_3_32
-void ide_pipeline_addin_unload  (IdePipelineAddin *self,
-                                 IdePipeline      *pipeline);
+void              ide_pipeline_addin_unload              (IdePipelineAddin *self,
+                                                          IdePipeline      *pipeline);
 IDE_AVAILABLE_IN_3_32
-void ide_pipeline_addin_track   (IdePipelineAddin *self,
-                                 guint             stage_id);
+void              ide_pipeline_addin_track               (IdePipelineAddin *self,
+                                                          guint             stage_id);
 
 G_END_DECLS
