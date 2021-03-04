@@ -222,6 +222,9 @@ ide_subprocess_supervisor_start (IdeSubprocessSupervisor *self)
 
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
 
+  if (priv->supervising)
+    return;
+
   if (priv->launcher == NULL)
     {
       g_warning ("Cannot supervise process, no launcher has been set");
@@ -277,6 +280,9 @@ ide_subprocess_supervisor_stop (IdeSubprocessSupervisor *self)
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
+
+  if (!priv->supervising)
+    return;
 
   if (priv->launcher == NULL)
     {
