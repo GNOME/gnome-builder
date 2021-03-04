@@ -1506,6 +1506,7 @@ ide_lsp_client_start (IdeLspClient *self)
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *root_path = NULL;
   g_autofree gchar *root_uri = NULL;
+  g_autofree gchar *basename = NULL;
   const gchar *trace_string;
   IdeContext *context;
   GFile *workdir;
@@ -1527,6 +1528,7 @@ ide_lsp_client_start (IdeLspClient *self)
 
   priv->rpc_client = jsonrpc_client_new (priv->io_stream);
 
+  basename = ide_context_dup_title (context);
   workdir = ide_context_ref_workdir (context);
   root_path = g_file_get_path (workdir);
   root_uri = g_strdup (priv->root_uri);
@@ -1559,6 +1561,12 @@ ide_lsp_client_start (IdeLspClient *self)
     "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
     "rootUri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
+    "workspaceFolders", "[",
+      "{",
+        "uri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
+        "name", JSONRPC_MESSAGE_PUT_STRING (basename),
+      "}",
+    "]",
     "trace", JSONRPC_MESSAGE_PUT_STRING (trace_string),
     "capabilities", "{",
       "workspace", "{",
