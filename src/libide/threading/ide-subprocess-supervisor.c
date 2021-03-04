@@ -38,6 +38,7 @@ typedef struct
 {
   IdeSubprocessLauncher *launcher;
   IdeSubprocess *subprocess;
+  gchar *identifier;
   gint64 last_spawn_time;
   guint supervising : 1;
 } IdeSubprocessSupervisorPrivate;
@@ -126,6 +127,7 @@ ide_subprocess_supervisor_finalize (GObject *object)
     }
 
   g_clear_object (&priv->launcher);
+  g_clear_pointer (&priv->identifier, g_free);
 
   G_OBJECT_CLASS (ide_subprocess_supervisor_parent_class)->finalize (object);
 }
@@ -350,6 +352,8 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
   IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
   g_return_if_fail (IDE_IS_SUBPROCESS (subprocess));
 
@@ -358,16 +362,14 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
 
   g_signal_emit (self, signals [EXITED], 0, subprocess);
 
-#ifdef IDE_ENABLE_TRACE
-  {
-    if (ide_subprocess_get_if_exited (subprocess))
-      IDE_TRACE_MSG ("process exited with code: %u",
-                     ide_subprocess_get_exit_status (subprocess));
-    else
-      IDE_TRACE_MSG ("process terminated due to signal: %u",
-                     ide_subprocess_get_term_sig (subprocess));
-  }
-#endif
+  if (ide_subprocess_get_if_exited (subprocess))
+    g_debug ("process %s exited with code: %u",
+             priv->identifier,
+             ide_subprocess_get_exit_status (subprocess));
+  else
+    g_debug ("process %s terminated due to signal: %u",
+             priv->identifier,
+             ide_subprocess_get_term_sig (subprocess));
 
   /*
    * If we end up here in response to ide_subprocess_supervisor_reset() force
@@ -391,6 +393,8 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
             ide_subprocess_supervisor_start (self);
         }
     }
+
+  IDE_EXIT;
 }
 
 void
@@ -399,14 +403,22 @@ ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
 {
   IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
   g_return_if_fail (!subprocess || IDE_IS_SUBPROCESS (subprocess));
 
   if (g_set_object (&priv->subprocess, subprocess))
     {
+      g_clear_pointer (&priv->identifier, g_free);
+
       if (subprocess != NULL)
         {
           priv->last_spawn_time = g_get_monotonic_time ();
+          priv->identifier = g_strdup (ide_subprocess_get_identifier (subprocess));
+
+          g_debug ("Setting subprocess to %s", priv->identifier);
+
           ide_subprocess_wait_async (priv->subprocess,
                                      NULL,
                                      ide_subprocess_supervisor_wait_cb,
@@ -414,4 +426,6 @@ ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
           g_signal_emit (self, signals [SPAWNED], 0, subprocess);
         }
     }
+
+  IDE_EXIT;
 }
