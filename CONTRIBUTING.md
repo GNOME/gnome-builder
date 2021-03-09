@@ -21,10 +21,12 @@ and we'd be happy to review your patch and help you get it merged.
 ## Asking for Help
 
 You can often find Builder contributors on our IRC channel at
-[irc://irc.gimp.net/#gnome-builder](irc://irc.gimp.net/#gnome-builder).
+[irc://irc.gimp.net/#gnome-builder](irc://irc.gimp.net/#gnome-builder) or the
+Matrix channel at [#gnome-builder:gnome.org](https://matrix.to/#/!owVIjvsVrBaEdelYem:matrix.org).
 If you have any questions, we'd be happy to help you.
 
-If you'd like to start on a new plugin or feature, stop by our IRC channel and we'd be happy get you oriented.
+If you'd like to start on a new plugin or feature, stop by our IRC/Matrix channel and we'd be happy get you oriented.
+The IRC and Matrix channels are bridged so you will be part of the same conversation regardless of which you join.
 
 ## Portability
 
