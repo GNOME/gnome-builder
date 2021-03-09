@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-25 17:47+0000\n"
-"PO-Revision-Date: 2021-02-26 10:35+0100\n"
-"Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
+"POT-Creation-Date: 2021-02-26 20:39+0000\n"
+"PO-Revision-Date: 2021-02-28 13:19+0100\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -3721,9 +3721,8 @@ msgid "HSV"
 msgstr "HSV"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
-#, fuzzy
 msgid "Hue Saturation Value"
-msgstr "Farbton, Sättigung und Wert"
+msgstr "Farbton (Hue) Sättigung (Saturation) Wert (Value)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
 msgid "L*a*b*"
@@ -3823,9 +3822,8 @@ msgid "List"
 msgstr "Liste"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
-#, fuzzy
 msgid "Swatches"
-msgstr "Muster"
+msgstr "Farbpalette"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
 msgid "Palette management"
