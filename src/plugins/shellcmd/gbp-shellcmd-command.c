@@ -367,7 +367,11 @@ gbp_shellcmd_command_apply (GbpShellcmdCommand    *self,
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GFile) cwd = NULL;
+  g_autoptr(GFile) current_file = NULL;
   const gchar *builddir = NULL;
+  IdeWorkbench *workbench;
+  IdeWorkspace *workspace;
+  IdePage *page;
 
   g_assert (GBP_IS_SHELLCMD_COMMAND (self));
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
@@ -375,6 +379,12 @@ gbp_shellcmd_command_apply (GbpShellcmdCommand    *self,
 
   context = ide_object_ref_context (IDE_OBJECT (self));
   workdir = ide_context_ref_workdir (context);
+
+  workbench = ide_workbench_from_context (context);
+  workspace = ide_workbench_get_current_workspace (workbench);
+  if ((page = ide_workspace_get_most_recent_page (workspace)) &&
+      IDE_IS_EDITOR_PAGE (page))
+    current_file = ide_page_get_file_or_directory (page);
 
   if (ide_context_has_project (context))
     {
@@ -403,6 +413,8 @@ gbp_shellcmd_command_apply (GbpShellcmdCommand    *self,
   ide_subprocess_launcher_setenv (launcher, "SRCDIR", g_file_peek_path (workdir), TRUE);
   if (builddir != NULL)
     ide_subprocess_launcher_setenv (launcher, "BUILDDIR", builddir, TRUE);
+  if (current_file != NULL)
+    ide_subprocess_launcher_setenv (launcher, "FILE", g_file_peek_path (current_file), TRUE);
 
   if (self->environment != NULL)
     {
