@@ -38,44 +38,48 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletion, ide_completion, IDE, COMPLETION, GObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeCompletionDisplay *ide_completion_get_display         (IdeCompletion         *self);
+IdeCompletionDisplay *ide_completion_get_display          (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-GtkSourceView        *ide_completion_get_view            (IdeCompletion         *self);
+GtkSourceView        *ide_completion_get_view             (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-GtkTextBuffer        *ide_completion_get_buffer          (IdeCompletion         *self);
+GtkTextBuffer        *ide_completion_get_buffer           (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_block_interactive   (IdeCompletion         *self);
+void                  ide_completion_block_interactive    (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_unblock_interactive (IdeCompletion         *self);
+void                  ide_completion_unblock_interactive  (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_add_provider        (IdeCompletion         *self,
-                                                          IdeCompletionProvider *provider);
+void                  ide_completion_add_provider         (IdeCompletion         *self,
+                                                           IdeCompletionProvider *provider);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_remove_provider     (IdeCompletion         *self,
-                                                          IdeCompletionProvider *provider);
+void                  ide_completion_remove_provider      (IdeCompletion         *self,
+                                                           IdeCompletionProvider *provider);
 IDE_AVAILABLE_IN_3_32
-guint                 ide_completion_get_n_rows          (IdeCompletion         *self);
+guint                 ide_completion_get_n_rows           (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_set_n_rows          (IdeCompletion         *self,
-                                                          guint                  n_rows);
+void                  ide_completion_set_n_rows           (IdeCompletion         *self,
+                                                           guint                  n_rows);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_hide                (IdeCompletion         *self);
+void                  ide_completion_hide                 (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_show                (IdeCompletion         *self);
+void                  ide_completion_show                 (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_cancel              (IdeCompletion         *self);
+void                  ide_completion_cancel               (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-gboolean              ide_completion_is_visible          (IdeCompletion         *self);
+gboolean              ide_completion_is_visible           (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_32
-void                  ide_completion_move_cursor         (IdeCompletion         *self,
-                                                          GtkMovementStep        step,
-                                                          gint                   direction);
+void                  ide_completion_move_cursor          (IdeCompletion         *self,
+                                                           GtkMovementStep        step,
+                                                           gint                   direction);
 IDE_AVAILABLE_IN_3_32
-gboolean              ide_completion_fuzzy_match         (const gchar           *haystack,
-                                                          const gchar           *casefold_needle,
-                                                          guint                 *priority);
+gboolean              ide_completion_fuzzy_match          (const gchar           *haystack,
+                                                           const gchar           *casefold_needle,
+                                                           guint                 *priority);
 IDE_AVAILABLE_IN_3_32
-gchar                *ide_completion_fuzzy_highlight     (const gchar           *haystack,
-                                                          const gchar           *casefold_query);
+gchar                *ide_completion_fuzzy_highlight      (const gchar           *haystack,
+                                                           const gchar           *casefold_query);
+IDE_AVAILABLE_IN_3_40
+void                  ide_completion_remove_common_prefix (IdeCompletion         *self,
+                                                           GtkTextIter           *begin,
+                                                           const gchar           *prefix);
 
 G_END_DECLS
