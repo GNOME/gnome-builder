@@ -1522,6 +1522,8 @@ _ide_completion_activate (IdeCompletion         *self,
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (provider));
   g_return_if_fail (IDE_IS_COMPLETION_PROPOSAL (proposal));
 
+  g_debug ("Activating %s", G_OBJECT_TYPE_NAME (proposal));
+
   self->block_count++;
   ide_completion_provider_activate_poposal (provider, context, proposal, self->current_event);
   self->block_count--;
