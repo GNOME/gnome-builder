@@ -179,6 +179,35 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
 
   snippet = ide_clang_completion_item_get_snippet (item, file_settings);
 
+  /* Check the last snippet chunk and see if it matches our current
+   * position so we can omit it.
+   */
+  if (ide_snippet_get_n_chunks (snippet) > 0)
+    {
+      IdeSnippetChunk *chunk;
+      const gchar *text;
+      GtkTextIter limit;
+
+      chunk = ide_snippet_get_nth_chunk (snippet, ide_snippet_get_n_chunks (snippet) - 1);
+      text = ide_snippet_chunk_get_text (chunk);
+      limit = end;
+
+      if (text != NULL)
+        {
+          gtk_text_iter_forward_chars (&limit, g_utf8_strlen (text, -1));
+
+          if (gtk_text_iter_get_line (&limit) != gtk_text_iter_get_line (&end))
+            {
+              limit = end;
+              if (!gtk_text_iter_ends_line (&limit))
+                gtk_text_iter_forward_to_line_end (&limit);
+            }
+
+          ide_completion_remove_common_suffix (ide_completion_context_get_completion (context), &end, text);
+          begin = end;
+        }
+    }
+
   /*
    * If we are completing field or variable types, we might want to add
    * a . or -> to the snippet based on the input character.
