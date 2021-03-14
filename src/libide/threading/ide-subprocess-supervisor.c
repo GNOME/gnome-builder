@@ -40,6 +40,7 @@ typedef struct
   IdeSubprocess *subprocess;
   gchar *identifier;
   gint64 last_spawn_time;
+  guint restart_timeout;
   guint supervising : 1;
 } IdeSubprocessSupervisorPrivate;
 
@@ -225,7 +226,7 @@ ide_subprocess_supervisor_start (IdeSubprocessSupervisor *self)
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
 
   if (priv->supervising)
-    return;
+    IDE_EXIT;
 
   if (priv->launcher == NULL)
     {
@@ -243,12 +244,15 @@ ide_subprocess_supervisor_start (IdeSubprocessSupervisor *self)
 static gboolean
 ide_subprocess_supervisor_start_in_usec_cb (gpointer data)
 {
-  g_autoptr(IdeSubprocessSupervisor) self = data;
+  IdeSubprocessSupervisor *self = data;
+  IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
+  g_assert (priv->supervising == TRUE);
 
+  priv->supervising = FALSE;
   ide_subprocess_supervisor_start (self);
 
   IDE_RETURN (G_SOURCE_REMOVE);
@@ -258,6 +262,8 @@ static void
 ide_subprocess_supervisor_start_in_usec (IdeSubprocessSupervisor *self,
                                          gint64                   usec)
 {
+  IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
@@ -266,9 +272,13 @@ ide_subprocess_supervisor_start_in_usec (IdeSubprocessSupervisor *self,
    * have elapsed since our last spawn time. The amount of time required
    * will be given to us in the @usec parameter.
    */
-  g_timeout_add (MAX (250, usec / 1000L),
-                 ide_subprocess_supervisor_start_in_usec_cb,
-                 g_object_ref (self));
+  g_clear_handle_id (&priv->restart_timeout, g_source_remove);
+  priv->restart_timeout =
+    g_timeout_add_full (G_PRIORITY_DEFAULT,
+                        MAX (250, usec / 1000L),
+                        ide_subprocess_supervisor_start_in_usec_cb,
+                        g_object_ref (self),
+                        g_object_unref);
 
   IDE_EXIT;
 }
@@ -282,6 +292,8 @@ ide_subprocess_supervisor_stop (IdeSubprocessSupervisor *self)
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
+
+  g_clear_handle_id (&priv->restart_timeout, g_source_remove);
 
   if (!priv->supervising)
     return;
@@ -388,9 +400,16 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
           gint64 sleep_usec;
 
           if (ide_subprocess_supervisor_needs_rate_limit (self, &sleep_usec))
-            ide_subprocess_supervisor_start_in_usec (self, sleep_usec);
+            {
+              ide_subprocess_supervisor_start_in_usec (self, sleep_usec);
+              IDE_EXIT;
+            }
           else
-            ide_subprocess_supervisor_start (self);
+            {
+              priv->supervising = FALSE;
+              ide_subprocess_supervisor_start (self);
+              IDE_EXIT;
+            }
         }
     }
 
