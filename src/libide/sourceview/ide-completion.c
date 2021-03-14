@@ -1804,8 +1804,6 @@ find_suffix_match (const GtkTextIter *limit,
 
   g_utf8_strncpy (copy, prefix, n_chars);
 
-  g_print ("%s\n", prefix);
-
   if (gtk_text_iter_backward_search (end, copy, GTK_TEXT_SEARCH_TEXT_ONLY, &mb, &me, limit))
     {
       if (gtk_text_iter_equal (&me, end))
