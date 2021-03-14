@@ -81,5 +81,9 @@ IDE_AVAILABLE_IN_3_40
 void                  ide_completion_remove_common_prefix (IdeCompletion         *self,
                                                            GtkTextIter           *begin,
                                                            const gchar           *prefix);
+IDE_AVAILABLE_IN_3_40
+void                  ide_completion_remove_common_suffix (IdeCompletion         *self,
+                                                           GtkTextIter           *iter,
+                                                           const gchar           *suffix);
 
 G_END_DECLS

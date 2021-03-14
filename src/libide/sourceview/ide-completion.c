@@ -1792,28 +1792,25 @@ ide_completion_fuzzy_highlight (const gchar *haystack,
 }
 
 static gboolean
-find_suffix_match (const GtkTextIter *limit,
+find_prefix_match (const GtkTextIter *limit,
                    const GtkTextIter *end,
                    GtkTextIter       *found_start,
                    GtkTextIter       *found_end,
                    const char        *prefix,
+                   gsize              len,
                    gsize              n_chars)
 {
-  g_autofree gchar *copy = g_malloc (n_chars * 4 + 1);
+  g_autofree gchar *copy = g_utf8_substring (prefix, 0, n_chars);
   GtkTextIter mb, me;
-
-  g_utf8_strncpy (copy, prefix, n_chars);
 
   if (gtk_text_iter_backward_search (end, copy, GTK_TEXT_SEARCH_TEXT_ONLY, &mb, &me, limit))
     {
       if (gtk_text_iter_equal (&me, end))
-      {
-        *found_start = mb;
-        *found_end = me;
-        return TRUE;
-      }
-
-      g_print ("Blah\n");
+        {
+          *found_start = mb;
+          *found_end = me;
+          return TRUE;
+        }
     }
 
   return FALSE;
@@ -1844,7 +1841,7 @@ ide_completion_remove_common_prefix (IdeCompletion *self,
   gtk_text_iter_set_line_offset (&line_start, 0);
 
   while (count <= len &&
-         find_suffix_match (&line_start, begin, &found_start, &found_end, prefix, count))
+         find_prefix_match (&line_start, begin, &found_start, &found_end, prefix, len, count))
     {
       rm_begin = found_start;
       rm_end = found_end;
@@ -1856,5 +1853,72 @@ ide_completion_remove_common_prefix (IdeCompletion *self,
     {
       gtk_text_buffer_delete (gtk_text_iter_get_buffer (begin), &rm_begin, &rm_end);
       *begin = rm_begin;
+    }
+}
+
+static gboolean
+find_suffix_match (const GtkTextIter *iter,
+                   const GtkTextIter *end,
+                   GtkTextIter       *found_start,
+                   GtkTextIter       *found_end,
+                   const char        *suffix,
+                   gsize              len,
+                   gsize              n_chars)
+{
+  g_autofree gchar *copy = g_utf8_substring (suffix, len - n_chars, len);
+  GtkTextIter mb, me;
+
+  if (gtk_text_iter_forward_search (iter, copy, GTK_TEXT_SEARCH_TEXT_ONLY, &mb, &me, end))
+    {
+      if (gtk_text_iter_equal (&mb, iter))
+        {
+          *found_start = mb;
+          *found_end = me;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+void
+ide_completion_remove_common_suffix (IdeCompletion *self,
+                                     GtkTextIter   *iter,
+                                     const gchar   *suffix)
+{
+  GtkTextIter rm_begin;
+  GtkTextIter rm_end;
+  GtkTextIter line_end;
+  GtkTextIter found_start, found_end;
+  gboolean found = FALSE;
+  gsize len;
+  gsize count = 1;
+
+  g_return_if_fail (IDE_IS_COMPLETION (self));
+  g_return_if_fail (self->context != NULL);
+  g_return_if_fail (iter != NULL);
+
+  if (suffix == NULL || suffix[0] == 0)
+    return;
+
+  len = g_utf8_strlen (suffix, -1);
+  line_end = *iter;
+  if (gtk_text_iter_ends_line (&line_end))
+    return;
+  gtk_text_iter_forward_to_line_end (&line_end);
+
+  while (count <= len &&
+         find_suffix_match (iter, &line_end, &found_start, &found_end, suffix, len, count))
+    {
+      rm_begin = found_start;
+      rm_end = found_end;
+      count++;
+      found = TRUE;
+    }
+
+  if (found)
+    {
+      gtk_text_buffer_delete (gtk_text_iter_get_buffer (iter), &rm_begin, &rm_end);
+      *iter = rm_begin;
     }
 }
