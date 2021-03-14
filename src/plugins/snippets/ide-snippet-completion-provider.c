@@ -204,11 +204,13 @@ ide_snippet_completion_provider_activate_proposal (IdeCompletionProvider *provid
                                                    const GdkEventKey     *key)
 {
   g_autoptr(IdeSnippet) snippet = NULL;
+  IdeSnippetChunk *chunk;
   GtkTextIter begin, end;
   GtkSourceLanguage *lang;
   GtkTextBuffer *buffer;
   GtkTextView *view;
   const gchar *lang_id = NULL;
+  const gchar *text = NULL;
 
   g_assert (IDE_IS_SNIPPET_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
@@ -221,11 +223,19 @@ ide_snippet_completion_provider_activate_proposal (IdeCompletionProvider *provid
     lang_id = gtk_source_language_get_id (lang);
 
   snippet = ide_snippet_completion_item_get_snippet (IDE_SNIPPET_COMPLETION_ITEM (proposal), lang_id);
+  if ((chunk = ide_snippet_get_nth_chunk (snippet, 0)))
+    text = ide_snippet_chunk_get_spec (chunk);
 
   gtk_text_buffer_begin_user_action (buffer);
+
   if (ide_completion_context_get_bounds (context, &begin, &end))
-    gtk_text_buffer_delete (buffer, &begin, &end);
+    {
+      gtk_text_buffer_delete (buffer, &begin, &end);
+      ide_completion_remove_common_prefix (ide_completion_context_get_completion (context), &begin, text);
+    }
+
   ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
+
   gtk_text_buffer_end_user_action (buffer);
 }
 
