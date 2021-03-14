@@ -170,7 +170,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
               return;
             }
         }
-      }
+    }
 
   gtk_text_buffer_begin_user_action (buffer);
 
