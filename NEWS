@@ -1,4 +1,19 @@
 ===============
+Version 3.39.94
+===============
+
+The release candidate for GNOME 40 is here!
+
+ • Various build system improvements
+ • New libide helpers for plugins to locate addins by module name
+ • Resiliency fixes language server protocol
+ • Use rust-analyzer from SDK inside build container when possible
+ • Fix use of F7 keyboard shortcut for build commands
+ • Allow use of $FILE from external shell commands
+ • Fix duplicated text when inserting various types of completion proposals
+ • Translation updates
+
+===============
 Version 3.39.92
 ===============
 

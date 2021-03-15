@@ -1,6 +1,6 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
-          version: '3.39.92',
+          version: '3.39.94',
     meson_version: '>= 0.54.0',
   default_options: [ 'c_std=gnu11',
                      'cpp_std=gnu++2a',
@@ -9,7 +9,7 @@ project('gnome-builder', 'c',
                    ],
 )
 
-symbolic_release = '40.beta1'
+symbolic_release = '40.rc'
 
 version_split = meson.project_version().split('.')
 MAJOR_VERSION = version_split[0]
