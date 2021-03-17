@@ -22,7 +22,6 @@
             "--share=network"
         ],
         "env" : {
-            "CARGO_HOME" : "/run/build/{{name}}/cargo",
             "RUST_BACKTRACE" : "1",
             "RUST_LOG" : "{{name}}=debug"
         }
