@@ -631,6 +631,19 @@
             ]
         },
         {
+            "name": "html-tidy",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/htacg/tidy-html5.git"
+                }
+            ]
+        },
+        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,
