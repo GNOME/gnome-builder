@@ -391,6 +391,13 @@
                 <property name="title" translatable="yes" context="shortcut window">Uncomment code</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;b</property>
+                <property name="title" translatable="yes" context="shortcut window">Beautify selected code</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
