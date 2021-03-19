@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-24 05:29+0000\n"
-"PO-Revision-Date: 2021-02-24 09:34+0200\n"
+"POT-Creation-Date: 2021-03-19 16:59+0000\n"
+"PO-Revision-Date: 2021-03-19 19:02+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1081,7 +1081,7 @@ msgstr "_Оновити"
 #: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/libide/gui/ide-workbench.c:1442
 #: src/plugins/buildui/gbp-buildui-log-pane.c:280
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:154
 #: src/plugins/testui/gbp-test-output-panel.c:69
 msgid "_Cancel"
 msgstr "_Скасувати"
@@ -1345,67 +1345,67 @@ msgstr "Конвеєр збирання перебуває у стані пом�
 msgid "The build configuration has errors"
 msgstr "У конвеєрі збирання сталися помилки"
 
-#: src/libide/foundry/ide-pipeline.c:3020
+#: src/libide/foundry/ide-pipeline.c:3022
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Не вдалося створити псевдотермінал. Можливості роботи із терміналом буде "
 "обмежено."
 
-#: src/libide/foundry/ide-pipeline.c:3226
+#: src/libide/foundry/ide-pipeline.c:3228
 msgid "Cleaning…"
 msgstr "Очищення…"
 
-#: src/libide/foundry/ide-pipeline.c:3230
-#: src/libide/foundry/ide-pipeline.c:3287
+#: src/libide/foundry/ide-pipeline.c:3232
+#: src/libide/foundry/ide-pipeline.c:3289
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Помилка"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3295
+#: src/libide/foundry/ide-pipeline.c:3234
+#: src/libide/foundry/ide-pipeline.c:3297
 msgid "Ready"
 msgstr "Виконано"
 
-#: src/libide/foundry/ide-pipeline.c:3247
+#: src/libide/foundry/ide-pipeline.c:3249
 msgid "Downloading…"
 msgstr "Отримання…"
 
-#: src/libide/foundry/ide-pipeline.c:3251
+#: src/libide/foundry/ide-pipeline.c:3253
 msgid "Building dependencies…"
 msgstr "Збирання залежностей…"
 
-#: src/libide/foundry/ide-pipeline.c:3255
+#: src/libide/foundry/ide-pipeline.c:3257
 msgid "Bootstrapping…"
 msgstr "Самозбирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3259
+#: src/libide/foundry/ide-pipeline.c:3261
 msgid "Configuring…"
 msgstr "Налаштування…"
 
-#: src/libide/foundry/ide-pipeline.c:3263
+#: src/libide/foundry/ide-pipeline.c:3265
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Збирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3267
+#: src/libide/foundry/ide-pipeline.c:3269
 msgid "Installing…"
 msgstr "Встановлення…"
 
-#: src/libide/foundry/ide-pipeline.c:3271
+#: src/libide/foundry/ide-pipeline.c:3273
 msgid "Committing…"
 msgstr "Надсилання…"
 
-#: src/libide/foundry/ide-pipeline.c:3275
+#: src/libide/foundry/ide-pipeline.c:3277
 msgid "Exporting…"
 msgstr "Експортування…"
 
-#: src/libide/foundry/ide-pipeline.c:3279
-#: src/libide/foundry/ide-pipeline.c:3283
+#: src/libide/foundry/ide-pipeline.c:3281
+#: src/libide/foundry/ide-pipeline.c:3285
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Зібрано"
 
-#: src/libide/foundry/ide-pipeline.c:3291
+#: src/libide/foundry/ide-pipeline.c:3293
 msgid "Preparing…"
 msgstr "приготування"
 
@@ -2979,7 +2979,7 @@ msgid "Bootstrapping build system"
 msgstr "Самозбирання системи збирання"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:228
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Налаштовування проєкту"
@@ -2988,7 +2988,7 @@ msgstr "Налаштовування проєкту"
 #: src/plugins/cargo/cargo_plugin.py:142
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Збирання проєкту"
@@ -3156,7 +3156,6 @@ msgstr ""
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-#| msgid "Beautifier plugin: command error output: %s"
 msgid ""
 "Beautifier plugin: command error output:\n"
 "%s"
@@ -3494,7 +3493,7 @@ msgstr "Налаштувати проєкт"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Встановлення проєкту"
@@ -4529,11 +4528,11 @@ msgstr "Не вдалося вилучити маніфест flatpak: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Мережа недоступна, пропускаємо отримання даних"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:150
 msgid "Install Missing SDK?"
 msgstr "Встановити SDK, якого не вистачає?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:155
 msgid "_Install"
 msgstr "_Встановити"
 
@@ -5117,13 +5116,13 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Параметри Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
-msgid "A Meson-based project is loaded but Ninja could not be found."
-msgstr "Завантажено проєкт на основі Meson, але не вдалося знайти Ninja."
-
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:156
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "Завантажено проєкт на основі Meson, але не вдалося знайти meson."
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:175
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr "Завантажено проєкт на основі Meson, але не вдалося знайти Ninja."
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
@@ -5376,12 +5375,14 @@ msgstr "Отримуємо залежності npm"
 msgid "Bootstrapping project"
 msgstr "Самозбирання проєкту"
 
-#: src/plugins/podman/gbp-podman-runtime.c:162
-msgid "Podman"
-msgstr "Podman"
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:182
+#| msgid "Containers/Podman"
+msgid "Containers/Toolbox"
+msgstr "Контейнери/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:170
+#: src/plugins/podman/gbp-podman-runtime.c:188
 msgid "Containers/Podman"
 msgstr "Контейнери/Podman"
 
@@ -5561,43 +5562,11 @@ msgstr ""
 "clippy додає перевірки для виявлення типових помилок, але, загалом, є "
 "повільнішою"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:469
-msgid "Rust Analyzer is missing from your computer"
-msgstr ""
-"У вашій системі не встановлено Rust Analyzer"
-
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:470
-#| msgid ""
-#| "Search, diagnostics, and autocompletion may be limited until complete."
-msgid ""
-"Support for diagnostics and auto-completion may be limited until it is "
-"installed."
-msgstr ""
-"Доки відповідне програмне забезпечення не буде встановлено, підтримку діагностики та автоматичного доповнення коду може бути обмежено."
-
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:472
-#| msgid "Installing Rust Analyzer..."
-msgid "Install Rust Analyzer"
-msgstr "Встановити Rust Analyzer"
-
-#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
-msgid "Installation of Rust Analyzer finished"
-msgstr "Встановлення аналізатора Rust завершено"
-
-#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
-msgid "Installing Rust Analyzer..."
-msgstr "Встановлення аналізатора Rust…"
-
-#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
-#, c-format
-msgid "Cannot download Rust Analyzer: %s"
-msgstr "Не вдалося отримати аналізатор Rust: %s"
-
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
 msgstr "Команда оболонки"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:565
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:577
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5605,7 +5574,7 @@ msgstr ""
 "Неможливо відкрити термінал у середовищі виконання, оскільки конвеєр "
 "збирання не ініціалізовано"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:643
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:655
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
 "Не вдалося породити процес, оскільки ще немає доступу до конвеєра збирання"
@@ -6301,6 +6270,34 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Podman"
+#~ msgstr "Podman"
+
+#~ msgid "Rust Analyzer is missing from your computer"
+#~ msgstr "У вашій системі не встановлено Rust Analyzer"
+
+#~| msgid ""
+#~| "Search, diagnostics, and autocompletion may be limited until complete."
+#~ msgid ""
+#~ "Support for diagnostics and auto-completion may be limited until it is "
+#~ "installed."
+#~ msgstr ""
+#~ "Доки відповідне програмне забезпечення не буде встановлено, підтримку "
+#~ "діагностики та автоматичного доповнення коду може бути обмежено."
+
+#~| msgid "Installing Rust Analyzer..."
+#~ msgid "Install Rust Analyzer"
+#~ msgstr "Встановити Rust Analyzer"
+
+#~ msgid "Installation of Rust Analyzer finished"
+#~ msgstr "Встановлення аналізатора Rust завершено"
+
+#~ msgid "Installing Rust Analyzer..."
+#~ msgstr "Встановлення аналізатора Rust…"
+
+#~ msgid "Cannot download Rust Analyzer: %s"
+#~ msgstr "Не вдалося отримати аналізатор Rust: %s"
 
 #~ msgid "Your computer is missing the Rust Analyzer Language Server"
 #~ msgstr "На вашому комп'ютері не встановлено сервера мови аналізатора Rust"
