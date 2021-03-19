@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-03-15 03:11+0000\n"
-"PO-Revision-Date: 2021-03-18 19:48+0200\n"
+"POT-Creation-Date: 2021-03-18 17:50+0000\n"
+"PO-Revision-Date: 2021-03-19 08:23+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -33,7 +33,7 @@ msgstr "Sovelluskehitin Gnomelle"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:9
 msgid "Christian Hergert, et al."
-msgstr ""
+msgstr "Christian Hergert ja muut"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:12
 msgid ""
@@ -135,7 +135,7 @@ msgstr "Tila projekteillesi"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:50
 msgid "Create new projects from a variety of templates"
-msgstr ""
+msgstr "Luo uusia projekteja useista eri mallipohjista"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:54
 #, fuzzy
@@ -472,10 +472,8 @@ msgid "Restore previously opened files when loading a project."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:43
-#, fuzzy
-#| msgid "Open File"
 msgid "Show Open Files"
-msgstr "Avaa tiedosto"
+msgstr "Näytä avoimet tiedostot"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:44
 msgid "Display the open files list in the project sidebar."
@@ -626,7 +624,7 @@ msgstr ""
 
 #: data/style-schemes/Adwaita.style-scheme.xml:20
 msgid "Adwaita"
-msgstr ""
+msgstr "Adwaita"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 #, fuzzy
@@ -986,9 +984,6 @@ msgstr "Tallenna nimellä"
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editor shortcuts"
 msgid "Editor shortcuts"
 msgstr "Muokkaimen pikanäppäimet"
 
@@ -1008,25 +1003,16 @@ msgid "Files"
 msgstr "Tiedostot"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:35
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgid "Save the document"
 msgstr "Tallenna asiakirja"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:41
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save the document with a new name"
 msgid "Save the document with a new name"
 msgstr "Tallenna asiakirja uudella nimellä"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:47
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgid "Print the document"
-msgstr "Tallenna asiakirja"
+msgstr "Tulosta asiakirja"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:52
 #: src/libide/editor/ide-editor-page-shortcuts.c:58
@@ -1035,45 +1021,27 @@ msgstr "Tallenna asiakirja"
 #: src/libide/editor/ide-editor-page-shortcuts.c:70
 #: src/libide/editor/ide-editor-page-shortcuts.c:76
 #: src/libide/editor/ide-editor-page-shortcuts.c:82
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Find and replace"
 msgid "Find and replace"
 msgstr "Etsi ja korvaa"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:53
 #: src/plugins/grep/gbp-grep-popover.ui:37
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Find"
 msgid "Find"
 msgstr "Etsi"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:65
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the next match"
 msgid "Move to the next match"
 msgstr "Siirry seuraavaan osumaan"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:71
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the previous match"
 msgid "Move to the previous match"
 msgstr "Siirry edelliseen osumaan"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:77
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the next error"
 msgid "Move to the next error"
 msgstr "Siirry seuraavaan virheeseen"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:83
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the previous error"
 msgid "Move to the previous error"
 msgstr "Siirry edelliseen virheeseen"
 
@@ -1137,10 +1105,8 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:165
-#, fuzzy
-#| msgid "_Preferences"
 msgid "Document Properties"
-msgstr "A_setukset"
+msgstr "Asiakirjan ominaisuudet"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:22
 msgid "Highlight Mode"
@@ -1251,24 +1217,15 @@ msgid "Open"
 msgstr "Avaa"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:37
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Create a new document"
 msgid "Create a new document"
 msgstr "Luo uusi asiakirja"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:43
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Open a document"
 msgid "Open a document"
 msgstr "Avaa asiakirja"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:48
 #: src/libide/editor/ide-editor-surface-shortcuts.c:54
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Panels"
 msgid "Panels"
 msgstr "Paneelit"
 
@@ -1460,10 +1417,8 @@ msgid "Workbench shortcuts"
 msgstr "Työtilan pikanäppäimet"
 
 #: src/libide/foundry/ide-run-manager.c:876
-#, fuzzy
-#| msgid "Build status"
 msgid "Build and Run"
-msgstr "Koonnin tila"
+msgstr "Koosta ja suorita"
 
 #: src/libide/foundry/ide-run-manager.c:1038
 #: src/libide/foundry/ide-run-manager.c:1104
@@ -1557,10 +1512,8 @@ msgid "Clone Project"
 msgstr "Kloonaa projekti"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
-#, fuzzy
-#| msgid "Select a Folder…"
 msgid "Select a _Folder…"
-msgstr "Valitse kansio…"
+msgstr "Valitse _kansio…"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:70
 #: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
@@ -1618,8 +1571,6 @@ msgid "Go back"
 msgstr ""
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
-#, fuzzy
-#| msgid "Open a Project"
 msgctxt "title"
 msgid "Open a Project"
 msgstr "Avaa projekti"
@@ -1641,8 +1592,6 @@ msgid "Remove Projects and Sources…"
 msgstr "Poista projektit ja lähteet…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:188
-#, fuzzy
-#| msgid "Clone Repository"
 msgctxt "title"
 msgid "Clone Repository"
 msgstr "Kloonaa tietovarasto"
@@ -1742,23 +1691,14 @@ msgid "Failed to open project: %s"
 msgstr "Projektin avaaminen epäonnistui: %s"
 
 #: src/libide/gui/ide-application-shortcuts.c:47
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Show the help window"
 msgid "Show the help window"
 msgstr "Näytä ohjeikkuna"
 
 #: src/libide/gui/ide-application-shortcuts.c:58
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Show the preferences window"
 msgid "Show the preferences window"
 msgstr "Näytä asetusikkuna"
 
 #: src/libide/gui/ide-application-shortcuts.c:69
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Show the shortcuts window"
 msgid "Show the shortcuts window"
 msgstr "Näytä pikanäppäinikkuna"
 
@@ -1844,9 +1784,6 @@ msgid "Switch to the next document"
 msgstr "Näytä luettelo avoimista asiakirjoista"
 
 #: src/libide/gui/ide-frame-shortcuts.c:65
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Close the document"
 msgid "Close the document"
 msgstr "Sulje asiakirja"
 
@@ -1909,7 +1846,7 @@ msgstr "Tumma tila"
 
 #: src/libide/gui/ide-preferences-builtin.c:101
 msgid "Whether Builder should use a dark theme"
-msgstr ""
+msgstr "Käytetäänkö tummaa teemaa Builderissa"
 
 #: src/libide/gui/ide-preferences-builtin.c:101
 msgid "dark theme"
@@ -1929,11 +1866,11 @@ msgstr "seuraa yövaloa"
 
 #: src/libide/gui/ide-preferences-builtin.c:103
 msgid "Grid Pattern"
-msgstr ""
+msgstr "Ruudukkokuvio"
 
 #: src/libide/gui/ide-preferences-builtin.c:103
 msgid "Display a grid pattern underneath source code"
-msgstr ""
+msgstr "Näytä ruudukkokuvio lähdekoodin alla"
 
 #: src/libide/gui/ide-preferences-builtin.c:105
 msgid "Font"
@@ -1955,7 +1892,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:112
 msgid "Color Scheme"
-msgstr ""
+msgstr "Väriteema"
 
 #: src/libide/gui/ide-preferences-builtin.c:137
 msgid "Keyboard"
@@ -1984,7 +1921,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:153
 msgid "Display list of open files"
-msgstr ""
+msgstr "Näytä luettelo avoimista tiedostoista"
 
 #: src/libide/gui/ide-preferences-builtin.c:153
 msgid "Display the list of all open files in the project sidebar"
@@ -2024,7 +1961,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:161
 msgid "Line Information"
-msgstr ""
+msgstr "Rivitiedot"
 
 #: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Line numbers"
@@ -2032,7 +1969,7 @@ msgstr "Rivinumerot"
 
 #: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Show line number at beginning of each line"
-msgstr ""
+msgstr "Näytä rivinumero jokaisen rivin alussa"
 
 #: src/libide/gui/ide-preferences-builtin.c:163
 #, fuzzy
@@ -2062,7 +1999,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:167
 msgid "Highlight"
-msgstr ""
+msgstr "Korostus"
 
 #: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Current line"
@@ -2158,7 +2095,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:203
 msgid "Completion"
-msgstr ""
+msgstr "Täydennys"
 
 #: src/libide/gui/ide-preferences-builtin.c:206
 msgid "Completions Display Size"
@@ -2178,7 +2115,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:215
 msgid "Snippets"
-msgstr ""
+msgstr "Koodipätkät"
 
 #: src/libide/gui/ide-preferences-builtin.c:258
 msgid "Programming Languages"
@@ -2410,7 +2347,7 @@ msgstr "Nopea kattava haku"
 #: src/libide/gui/ide-shortcuts-window.ui:10
 msgctxt "shortcut window"
 msgid "Editor Shortcuts"
-msgstr ""
+msgstr "Muokkaimen pikanäppäimet"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
 #: src/libide/gui/ide-shortcuts-window.ui:536
@@ -2426,13 +2363,13 @@ msgstr "Näytä ohje"
 #: src/libide/gui/ide-shortcuts-window.ui:25
 msgctxt "shortcut window"
 msgid "Toogle primary menu"
-msgstr ""
+msgstr "Avaa tai sulje ensisijainen valikko"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
 #: src/libide/gui/ide-shortcuts-window.ui:540
 msgctxt "shortcut window"
 msgid "Global Search"
-msgstr ""
+msgstr "Yleinen haku"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
 #: src/libide/gui/ide-shortcuts-window.ui:547
@@ -2510,12 +2447,9 @@ msgid "Save all documents"
 msgstr "Tallenna kaikki asiakirjat"
 
 #: src/libide/gui/ide-shortcuts-window.ui:136
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Print the document"
-msgstr "Tallenna asiakirja"
+msgstr "Tulosta asiakirja"
 
 #: src/libide/gui/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
@@ -2549,8 +2483,6 @@ msgid "Find and replace"
 msgstr "Etsi ja korvaa"
 
 #: src/libide/gui/ide-shortcuts-window.ui:184
-#, fuzzy
-#| msgid "Go to Line"
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Siirry riville"
@@ -2573,7 +2505,7 @@ msgstr "Etsi edellinen osuma"
 #: src/libide/gui/ide-shortcuts-window.ui:219
 msgctxt "shortcut window"
 msgid "Clear highlight"
-msgstr ""
+msgstr "Tyhjennä korostus"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
 #: src/libide/gui/ide-shortcuts-window.ui:584
@@ -2619,25 +2551,19 @@ msgid "Redo previous command"
 msgstr "Tee uudelleen edellinen komento"
 
 #: src/libide/gui/ide-shortcuts-window.ui:281
-#, fuzzy
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom"
-msgstr "_Lähennä"
+msgstr "Lähennys ja loitonnus"
 
 #: src/libide/gui/ide-shortcuts-window.ui:286
-#, fuzzy
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom In"
-msgstr "_Lähennä"
+msgstr "Lähennä"
 
 #: src/libide/gui/ide-shortcuts-window.ui:293
-#, fuzzy
-#| msgid "Zoom _Out"
 msgctxt "shortcut window"
 msgid "Zoom Out"
-msgstr "L_oitonna"
+msgstr "Loitonna"
 
 #: src/libide/gui/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
@@ -2675,7 +2601,7 @@ msgstr "Liitä valitut rivit"
 #: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Show completion window"
-msgstr ""
+msgstr "Näytä täydennysikkuna"
 
 #: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
@@ -2705,7 +2631,7 @@ msgstr "Nimeä symboli uudelleen"
 #: src/libide/gui/ide-shortcuts-window.ui:377
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
-msgstr ""
+msgstr "Vaatii semanttisen kielen tuen"
 
 #: src/libide/gui/ide-shortcuts-window.ui:384
 #, fuzzy
@@ -2794,7 +2720,7 @@ msgstr "Älä valitse mitään"
 #: src/libide/gui/ide-shortcuts-window.ui:495
 msgctxt "shortcut window"
 msgid "Build and Run"
-msgstr ""
+msgstr "Koosta ja suorita"
 
 #: src/libide/gui/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
@@ -2863,7 +2789,7 @@ msgstr ""
 
 #: src/libide/sourceview/gtk/menus.ui:7
 msgid "_Go to Definition"
-msgstr ""
+msgstr "_Siirry määritykseen"
 
 #: src/libide/sourceview/gtk/menus.ui:12
 #, fuzzy
@@ -3541,10 +3467,8 @@ msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr ""
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:86
-#, fuzzy
-#| msgid "Options"
 msgid "Clang Options"
-msgstr "Valinnat"
+msgstr "Clang-valinnat"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:95
 msgid "Complete Parenthesis"
@@ -3962,7 +3886,7 @@ msgstr ""
 
 #: src/plugins/copyright/copyright_plugin.py:114
 msgid "Update Copyright"
-msgstr ""
+msgstr "Päivitä tekijänoikeus"
 
 #: src/plugins/copyright/copyright_plugin.py:115
 msgid ""
@@ -3977,7 +3901,7 @@ msgstr ""
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
-msgstr ""
+msgstr "Päivitä tekijänoikeus ennen tallennusta"
 
 #: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
@@ -4668,16 +4592,13 @@ msgid "Network is not available, skipping downloads"
 msgstr "Verkko ei ole käytettävissä, ohitetaan lataukset"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:150
-#, fuzzy
 #| msgid "Installing "
 msgid "Install Missing SDK?"
-msgstr "Asennetaan "
+msgstr "Asennetaanko puuttuva SDK?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:155
-#, fuzzy
-#| msgid "Install"
 msgid "_Install"
-msgstr "Asenna"
+msgstr "_Asenna"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
 msgid ""
@@ -4864,10 +4785,8 @@ msgid "The client has been closed"
 msgstr ""
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
-#, fuzzy
-#| msgid "Uses the Git version control system"
 msgid "Git version control is not in use"
-msgstr "Käyttää Git-versiohallintajärjestelmää"
+msgstr "Git-versionhallinta ei ole käytössä"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -5189,7 +5108,7 @@ msgstr ""
 
 #: src/plugins/jedi/jedi_plugin.py:666
 msgid "Suggest completions from Python"
-msgstr ""
+msgstr "Ehdota täydennyksiä Pythonista"
 
 #: src/plugins/jedi/jedi_plugin.py:667
 msgid "Use Jedi to provide completions for the Python language"
@@ -5576,7 +5495,7 @@ msgstr ""
 
 #: src/plugins/podman/gbp-podman-runtime.c:162
 msgid "Podman"
-msgstr ""
+msgstr "Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:170
@@ -5879,7 +5798,7 @@ msgstr "Uusi komento"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:134
 msgid "Click + to add an external command"
-msgstr ""
+msgstr "Napsauta + lisätäksesi ulkoisen komennon"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
@@ -6158,10 +6077,8 @@ msgid "Scrollback"
 msgstr ""
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
-#, fuzzy
-#| msgid "Terminal"
 msgid "Terminal Font"
-msgstr "Pääte"
+msgstr "Päätteen fontti"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:60
 msgctxt "Keywords"
@@ -6182,10 +6099,8 @@ msgid "terminal allow bold"
 msgstr ""
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:81
-#, fuzzy
-#| msgid "Open File"
 msgid "Show hyperlinks"
-msgstr "Avaa tiedosto"
+msgstr "Näytä hyperlinkit"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:82
 msgid ""
@@ -6317,13 +6232,13 @@ msgstr "Tallenna asiakirja"
 
 #: src/plugins/testui/gbp-test-tree-addin.c:197
 msgid "Unit Tests"
-msgstr ""
+msgstr "Yksikkötestit"
 
 #. translators: %s is replaced with the name of the unit test
 #: src/plugins/testui/gbp-test-tree-addin.c:408
 #, c-format
 msgid "Running test “%s”…"
-msgstr ""
+msgstr "Suoritetaan testi “%s”…"
 
 #: src/plugins/todo/gbp-todo-panel.c:299
 #, fuzzy
