@@ -3,25 +3,25 @@
 # This file is distributed under the same license as the gnome-builder package.
 # Gustavo Marques <gutodisse@gmail.com>, 2015.
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
-# Enrico Nicoletto <liverig@gmail.com>, 2016, 2018.
 # Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2020.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2016-2021.
 # Henrique Machado Campos <henriquecamposrj@gmail.com>, 2021.
+# Enrico Nicoletto <liverig@gmail.com>, 2016, 2018, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-24 05:29+0000\n"
-"PO-Revision-Date: 2021-02-26 23:01-0300\n"
-"Last-Translator: Henrique Machado Campos <henriquecamposrj@gmail.com>\n"
+"POT-Creation-Date: 2021-03-19 17:03+0000\n"
+"PO-Revision-Date: 2021-03-19 16:35-0300\n"
+"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -1014,7 +1014,7 @@ msgstr "Salvar como"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
@@ -1088,7 +1088,7 @@ msgstr "_Recarregar"
 #: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/libide/gui/ide-workbench.c:1442
 #: src/plugins/buildui/gbp-buildui-log-pane.c:280
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:154
 #: src/plugins/testui/gbp-test-output-panel.c:69
 msgid "_Cancel"
 msgstr "_Cancelar"
@@ -1354,67 +1354,67 @@ msgstr "O encadeamento de compilação está em um estado de falha"
 msgid "The build configuration has errors"
 msgstr "A configuração de compilação possui erros"
 
-#: src/libide/foundry/ide-pipeline.c:3020
+#: src/libide/foundry/ide-pipeline.c:3022
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Criação de pseudoterminal falhou. Os recursos de terminal serão limitados."
 
-#: src/libide/foundry/ide-pipeline.c:3226
+#: src/libide/foundry/ide-pipeline.c:3228
 msgid "Cleaning…"
 msgstr "Limpando…"
 
-#: src/libide/foundry/ide-pipeline.c:3230
-#: src/libide/foundry/ide-pipeline.c:3287
+#: src/libide/foundry/ide-pipeline.c:3232
+#: src/libide/foundry/ide-pipeline.c:3289
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Falhou"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3295
+#: src/libide/foundry/ide-pipeline.c:3234
+#: src/libide/foundry/ide-pipeline.c:3297
 msgid "Ready"
 msgstr "Pronto"
 
-#: src/libide/foundry/ide-pipeline.c:3247
+#: src/libide/foundry/ide-pipeline.c:3249
 msgid "Downloading…"
 msgstr "Baixando…"
 
-#: src/libide/foundry/ide-pipeline.c:3251
+#: src/libide/foundry/ide-pipeline.c:3253
 msgid "Building dependencies…"
 msgstr "Preferências de compilação…"
 
-#: src/libide/foundry/ide-pipeline.c:3255
+#: src/libide/foundry/ide-pipeline.c:3257
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/foundry/ide-pipeline.c:3259
+#: src/libide/foundry/ide-pipeline.c:3261
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/foundry/ide-pipeline.c:3263
+#: src/libide/foundry/ide-pipeline.c:3265
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Compilando…"
 
-#: src/libide/foundry/ide-pipeline.c:3267
+#: src/libide/foundry/ide-pipeline.c:3269
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/foundry/ide-pipeline.c:3271
+#: src/libide/foundry/ide-pipeline.c:3273
 msgid "Committing…"
 msgstr "Fazendo commit…"
 
-#: src/libide/foundry/ide-pipeline.c:3275
+#: src/libide/foundry/ide-pipeline.c:3277
 msgid "Exporting…"
 msgstr "Exportando…"
 
 # A resposta por ser Failed ou Successful -- Rafael
-#: src/libide/foundry/ide-pipeline.c:3279
-#: src/libide/foundry/ide-pipeline.c:3283
+#: src/libide/foundry/ide-pipeline.c:3281
+#: src/libide/foundry/ide-pipeline.c:3285
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Sucesso"
 
-#: src/libide/foundry/ide-pipeline.c:3291
+#: src/libide/foundry/ide-pipeline.c:3293
 msgid "Preparing…"
 msgstr "Preparando…"
 
@@ -2365,7 +2365,7 @@ msgid "Editor Shortcuts"
 msgstr "Atalhos do editor"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:536
+#: src/libide/gui/ide-shortcuts-window.ui:543
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Geral"
@@ -2381,37 +2381,37 @@ msgid "Toogle primary menu"
 msgstr "Ativa o menu primário"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:540
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pesquisa global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferências"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal de compilação"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:575
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
@@ -2523,13 +2523,13 @@ msgid "Clear highlight"
 msgstr "Limpa o realce"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:584
+#: src/libide/gui/ide-shortcuts-window.ui:591
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar e colar"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:596
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copia o texto selecionado para a área de transferência"
@@ -2540,7 +2540,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Recorta o texto selecionado para a área de transferência"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:596
+#: src/libide/gui/ide-shortcuts-window.ui:603
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Cola o texto da área de transferência"
@@ -2606,7 +2606,6 @@ msgid "Join selected lines"
 msgstr "Junta as linhas selecionadas"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
-#| msgid "Sort the selected lines"
 msgctxt "shortcut window"
 msgid "Sort selected lines"
 msgstr "Ordena as linhas selecionadas"
@@ -2656,112 +2655,117 @@ msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Descomenta o código"
 
-#: src/libide/gui/ide-shortcuts-window.ui:399
+#: src/libide/gui/ide-shortcuts-window.ui:398
+msgctxt "shortcut window"
+msgid "Beautify selected code"
+msgstr "Embeleza o código selecionado"
+
+#: src/libide/gui/ide-shortcuts-window.ui:406
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegação"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Move para o próximo erro no arquivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Move para o erro anterior no arquivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Move para o local de edição anterior"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Move para o próximo local de edição"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Pula para a definição do símbolo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Move o viewport acima no arquivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Move o viewport abaixo no arquivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Move o viewport para o fim do arquivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Move o viewport para o começo do arquivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Move o para colchete correspondente"
 
-#: src/libide/gui/ide-shortcuts-window.ui:475
+#: src/libide/gui/ide-shortcuts-window.ui:482
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Seleções"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleciona tudo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Desmarca tudo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:495
+#: src/libide/gui/ide-shortcuts-window.ui:502
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Compilar e executar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Compila"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Recompila"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:521
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Executa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:521
+#: src/libide/gui/ide-shortcuts-window.ui:528
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:532
+#: src/libide/gui/ide-shortcuts-window.ui:539
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atalhos do terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:604
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Pesquisa"
 
-#: src/libide/gui/ide-shortcuts-window.ui:609
+#: src/libide/gui/ide-shortcuts-window.ui:616
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Terminal sem título"
@@ -2992,7 +2996,7 @@ msgid "Bootstrapping build system"
 msgstr "Inicializando sistema de compilação"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:228
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Configurando projeto"
@@ -3001,7 +3005,7 @@ msgstr "Configurando projeto"
 #: src/plugins/cargo/cargo_plugin.py:142
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Compilando projeto"
@@ -3096,7 +3100,7 @@ msgstr "Plug-in embelezador: “%s”"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:508
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
 #, c-format
 msgid "Beautifier plugin: %s"
 msgstr "Plug-in embelezador: %s"
@@ -3108,49 +3112,53 @@ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
 msgstr ""
 "Plug-in embelezador: não foi possível ler o seguinte arquivo de recurso: “%s”"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:88
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+msgid "beautifier program missing, you must install it: "
+msgstr "programa embelezador em falta, você deve instalá-lo: "
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
 msgstr "Plug-in embelezador: a visão não é uma GtkSourceView"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:95
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
 msgid "Beautifier Plugin: no default beautifier found"
 msgstr "Plug-in embelezador: nenhum embelezador padrão localizado"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:101
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
 msgid "Beautifier Plugin: the buffer is not writable"
 msgstr "Plug-in embelezador: o buffer não pode ser escrito"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:109
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
 msgid "Beautifier Plugin: Nothing selected"
 msgstr "Plug-in embelezador: nada selecionado"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:249
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Nenhum embelezador disponível para “%s”"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:248
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:251
 #, c-format
 msgid "No beautifier available"
 msgstr "Nenhum embelezador disponível"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "Edição"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:347
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
 msgid "Beautify the code"
 msgstr "Embeleza o código"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:351
 msgid "Trigger the default entry"
 msgstr "Dispara a entrada padrão"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:377
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:380
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr "Plug-in embelezador: nenhuma entrada válida, desabilitando: %s"
@@ -3171,7 +3179,6 @@ msgstr ""
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-#| msgid "Beautifier plugin: command error output: %s"
 msgid ""
 "Beautifier plugin: command error output:\n"
 "%s"
@@ -3512,7 +3519,7 @@ msgstr "Configurar projeto"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Instalando projeto"
@@ -4389,7 +4396,7 @@ msgstr "Conectar a outro barramento"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:45
 msgid "Search Bus Names"
-msgstr "Pesquisar por nomes de barramentos…"
+msgstr "Pesquisar nomes de barramentos"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:59
 msgid "Bus Names"
@@ -4550,11 +4557,11 @@ msgstr "Falha ao renomear manifesto do Flatpak: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Rede não disponível, pulando os downloads"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:150
 msgid "Install Missing SDK?"
 msgstr "Instalar o SDK em falta?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:155
 msgid "_Install"
 msgstr "_Instalar"
 
@@ -5138,16 +5145,16 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Opções do Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
-msgid "A Meson-based project is loaded but Ninja could not be found."
-msgstr ""
-"Um projeto baseado no Meson está carregado, mas Ninja não pode ser "
-"localizado."
-
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:156
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
 "Um projeto baseado no Meson está carregado, mas Meson não pode ser "
+"localizado."
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:175
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr ""
+"Um projeto baseado no Meson está carregado, mas Ninja não pode ser "
 "localizado."
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
@@ -5400,12 +5407,13 @@ msgstr "Baixando dependências de npm"
 msgid "Bootstrapping project"
 msgstr "Inicializando projeto"
 
-#: src/plugins/podman/gbp-podman-runtime.c:162
-msgid "Podman"
-msgstr "Podman"
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:182
+msgid "Containers/Toolbox"
+msgstr "Contêineres/Caixa de ferramentas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:170
+#: src/plugins/podman/gbp-podman-runtime.c:188
 msgid "Containers/Podman"
 msgstr "Contêineres/Podman"
 
@@ -5580,43 +5588,11 @@ msgstr ""
 "clippy adiciona lints adicionais para detectar erros comuns, mas é "
 "geralmente mais lento"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:469
-msgid "Rust Analyzer is missing from your computer"
-msgstr "Está faltando o Rust Analyzer em seu computador"
-
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:470
-#| msgid ""
-#| "Search, diagnostics, and autocompletion may be limited until complete."
-msgid ""
-"Support for diagnostics and auto-completion may be limited until it is "
-"installed."
-msgstr ""
-"Suporte a diagnóstico e autocompletar podem ser limitados enquanto isto não "
-"for instalado."
-
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:472
-#| msgid "Installing Rust Analyzer..."
-msgid "Install Rust Analyzer"
-msgstr "Instalar Rust Analyzer"
-
-#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
-msgid "Installation of Rust Analyzer finished"
-msgstr "Instalação do Rust Analyzer concluída"
-
-#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
-msgid "Installing Rust Analyzer..."
-msgstr "Instalando Rust Analyzer..."
-
-#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
-#, c-format
-msgid "Cannot download Rust Analyzer: %s"
-msgstr "Não foi possível baixar o Rust Analyzer: %s"
-
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
 msgstr "Comando de shell"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:565
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:577
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5624,7 +5600,7 @@ msgstr ""
 "Não é possível iniciar o terminal no ambiente de execução porque o "
 "encadeamento de compilação não foi inicializado"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:643
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:655
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
 "Não é possível iniciar o processo porque o encadeamento de compilação ainda "
@@ -6318,2075 +6294,3 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O arquivo deve estar salvo localmente para análise."
-
-#~ msgid "Your computer is missing the Rust Analyzer Language Server"
-#~ msgstr "Seu computador não possui o Rust Analyzer Language Server"
-
-#~ msgid ""
-#~ "The Language Server is necessary to provide IDE features like completion "
-#~ "or diagnostic"
-#~ msgstr ""
-#~ "O Language Server é necessário para fornecer recursos de IDE como "
-#~ "autocompletar ou diagnóstico"
-
-#~ msgid "Install Language Server"
-#~ msgstr "Instalar Language Server"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "Rustup não instalado"
-
-#~ msgid "Installing rustup"
-#~ msgstr "Instalando o Rustup"
-
-#~ msgid "Updating rustup"
-#~ msgstr "Atualizando o Rustup"
-
-#~ msgid "Installing rust "
-#~ msgstr "Instalando o Rust "
-
-#~ msgid "Checking system"
-#~ msgstr "Verificando o sistema"
-
-#~ msgid "Downloading rustup-init"
-#~ msgstr "Baixando o rustup-init"
-
-#~ msgid "Syncing channel updates"
-#~ msgstr "Sincronizando atualizações de canal"
-
-#~ msgid "Downloading "
-#~ msgstr "Baixando "
-
-#~ msgid "Installing "
-#~ msgstr "Instalando "
-
-#~ msgid "Checking for rustup updates"
-#~ msgstr "Verificando por atualizações do Rustup"
-
-#~ msgid "Downloading rustup update"
-#~ msgstr "Baixando atualização do Rustup"
-
-#~ msgid "Error installing "
-#~ msgstr "Erro ao instalar "
-
-#~ msgid "Error"
-#~ msgstr "Erro"
-
-#~ msgid "Cancelled"
-#~ msgstr "Cancelado"
-
-#~ msgid "Finished"
-#~ msgstr "Concluído"
-
-#~ msgid "Rustup"
-#~ msgstr "Rustup"
-
-#~ msgid "Rustup Toolchains"
-#~ msgstr "Cadeias de ferramentas do Rustup"
-
-#~ msgid "Updating"
-#~ msgstr "Atualizando"
-
-#~ msgid "Installing"
-#~ msgstr "Instalando"
-
-#~ msgid "Make default"
-#~ msgstr "Tornar padrão"
-
-#~ msgid "Makes the selected toolchain the default rust installation"
-#~ msgstr ""
-#~ "Faz da cadeia de ferramentas selecionada a instalação padrão do Rust"
-
-#~ msgid "Install Rust Channel"
-#~ msgstr "Instalar canal do Rust"
-
-#~ msgid "Enter name of rust channel"
-#~ msgstr "Digite um nome de canal do Rust"
-
-#~ msgid ""
-#~ "Standard release channel toolchain names have the following form:\n"
-#~ "                        <channel>[-<date>][-<host>]\n"
-#~ "\n"
-#~ "                        <channel>    = stable|beta|nightly|<version>\n"
-#~ "                        <date>          = YYYY-MM-DD\n"
-#~ "                        <host>          = <target-triple>"
-#~ msgstr ""
-#~ "Nomes de cadeias de ferramentas de canais padrão lançados têm o o "
-#~ "seguinte formato:\n"
-#~ "                        <canal>[-<data>][-<host>]\n"
-#~ "\n"
-#~ "                        <canal>    = stable|beta|nightly|<versão>\n"
-#~ "                        <data>          = AAAA-MM-DD\n"
-#~ "                        <host>          = <alvo-triplo>"
-
-#~ msgid "Install Rustup to manage toolchains here!"
-#~ msgstr "Instale o Rustup para gerenciar cadeias de ferramentas aqui!"
-
-#~ msgid "No toolchain installed. Click"
-#~ msgstr "Nenhuma cadeia de ferramentas instalada. Clique"
-
-#~ msgid "to add a new toolchain!"
-#~ msgstr "para adicionar uma nova cadeia de ferramentas!"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Touchpad gestures"
-#~ msgstr "Gestos no touchpad"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the right"
-#~ msgstr "Move a página para a direita"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe right"
-#~ msgstr "Três dedos deslizados para a direita"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the left"
-#~ msgstr "Move a página para a esquerda"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe left"
-#~ msgstr "Três dedos deslizados para a esquerda"
-
-#~ msgid "Directory Browser"
-#~ msgstr "Navegador de diretório"
-
-#~ msgid "Log"
-#~ msgstr "Log"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Ativa o painel de navegação"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Ativa o painel de utilitários"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Help"
-#~ msgstr "Ajuda"
-
-#~ msgid "Show errors and warnings provided by Vala"
-#~ msgstr "Mostra erros e avisos fornecidos pelo Vala"
-
-#~ msgid "vala diagnostics warnings errors"
-#~ msgstr "vala diagnósticos avisos erros"
-
-#~ msgid "Clone Repository…"
-#~ msgstr "Clonar repositório…"
-
-#~ msgid "New Terminal Workspace…"
-#~ msgstr "Novo espaço de trabalho de terminal…"
-
-#~ msgid "Todo"
-#~ msgstr "Tarefas"
-
-#~ msgid "Task manager for GNOME"
-#~ msgstr "Gerenciador de tarefas para o GNOME"
-
-#~ msgid "Failure"
-#~ msgstr "Falha"
-
-#~ msgid ""
-#~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
-#~ "with profiler</a> from the run menu to begin"
-#~ msgstr ""
-#~ "Selecione <a href=\"action://run-manager.run-with-handler::profiler"
-#~ "\">Executar com perfilador</a> a partir do menu de execução para iniciar"
-
-#~ msgid "Press Ctrl+. to search"
-#~ msgstr "Pressione Ctrl+. para pesquisar"
-
-#~ msgid "Open file"
-#~ msgstr "Abrir arquivo"
-
-#~ msgid "New file"
-#~ msgstr "Novo arquivo"
-
-#~ msgid "New documentation"
-#~ msgstr "Nova documentação"
-
-#~ msgid ""
-#~ "There was a failure while calculating line changes from git. The exact "
-#~ "error was: %s"
-#~ msgstr ""
-#~ "Houve uma falha ao calcular alterações de linha do git. O erro exato foi: "
-#~ "%s"
-
-#~ msgid "File is not under control of git working directory."
-#~ msgstr "O arquivo não está sob controle de um diretório de trabalho do git."
-
-#~ msgid "The requested file does not exist within the git index."
-#~ msgstr "O arquivo requisitado não existe dentro do índice do git."
-
-#~ msgid "Abstract"
-#~ msgstr "Abstrato"
-
-#~ msgid "Compact"
-#~ msgstr "Compacto"
-
-#~ msgid "Immutable"
-#~ msgstr "Imutável"
-
-#~ msgid "org.gnome.Builder"
-#~ msgstr "org.gnome.Builder"
-
-#~ msgid "<b>Missing</b>"
-#~ msgstr "<b>Faltando</b>"
-
-#~ msgid "New Window"
-#~ msgstr "Nova janela"
-
-#~ msgid "Copied 1 file"
-#~ msgstr "Copiado 1 arquivo"
-
-#~ msgid "If enabled, the project tree will display icons next to each item."
-#~ msgstr ""
-#~ "Caso habilitado, a árvore de projetos irá exibir ícones próximos a cada "
-#~ "item."
-
-#~ msgid "List available subcommands"
-#~ msgstr "Lista de todos os subcomandos disponíveis"
-
-#~ msgid "Run Builder in standalone mode"
-#~ msgstr "Executa o Builder em modo independente"
-
-#~ msgid "Increase verbosity, may be specified multiple times"
-#~ msgstr "Aumentar a verbosidade, pode ser especificado várias vezes"
-
-#~ msgid "Enter GApplication Service mode"
-#~ msgstr "Entrar no modo de serviço GApplication"
-
-#~ msgid "Opens the project specified by PATH"
-#~ msgstr "Abre o projeto especificado no CAMINHO"
-
-#~ msgid "PATH"
-#~ msgstr "CAMINHO"
-
-#~ msgid "Clones the project specified by MANIFEST"
-#~ msgstr "Clona o projeto especificado por MANIFESTO"
-
-#~ msgid "COMMAND"
-#~ msgstr "COMANDO"
-
-#~ msgid "No commands available"
-#~ msgstr "Nenhum comando disponível"
-
-#~ msgid "Please provide a command"
-#~ msgstr "Por favor, forneça um comando"
-
-#~ msgid "No such tool"
-#~ msgstr "Ferramenta inexistente"
-
-# Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#~ msgid "Please provide a worker plugin"
-#~ msgstr "Por favor, forneça um plug-in de trabalho"
-
-#~ msgid "Please provide a D-Bus address"
-#~ msgstr "Por favor, forneça um endereço D-Bus"
-
-# Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#~ msgid "No such worker"
-#~ msgstr "Trabalho inexistente"
-
-#~ msgid "Failed to establish a monitor for background changes: %s"
-#~ msgstr ""
-#~ "Falha ao estabelecer um monitor para alterações de plano de fundo: %s"
-
-#~ msgid "Buffer failed: %s"
-#~ msgstr "Falha no buffer: %s"
-
-#~ msgid "File too large to be opened."
-#~ msgstr "Arquivo grande demais para ser aberto."
-
-#~ msgid "unsaved document %u"
-#~ msgstr "documento não salvo %u"
-
-#~ msgid "Duplicate the configuration"
-#~ msgstr "Duplica a configuração"
-
-#~ msgid "Delete the configuration"
-#~ msgstr "Exclui a configuração"
-
-#~ msgid "The prefix to use when installing the project"
-#~ msgstr "O prefixo a ser usado ao instalar um projeto"
-
-#~ msgid "Options to use when bootstrapping the project"
-#~ msgstr "Opções a serem usadas ao executar bootstrap no projeto"
-
-#~ msgid "_Wrap Around"
-#~ msgstr "_Voltar ao início"
-
-#~ msgid "Display"
-#~ msgstr "Exibição"
-
-#~ msgid "Tabs and Indentation"
-#~ msgstr "Tabulações e recuo"
-
-#~ msgid "Auto indent new lines"
-#~ msgstr "Recuo automático em novas linhas"
-
-#~ msgid "Language Syntax"
-#~ msgstr "Sintaxe de linguagem"
-
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Por que não <a href=\"action://app.new-project\">criar um novo projeto</"
-#~ "a>?"
-
-#~ msgid "Click an item to select"
-#~ msgstr "Clique em um item para selecionar"
-
-#~ msgid "Open…"
-#~ msgstr "Abrir…"
-
-#~ msgid "Select projects for removal"
-#~ msgstr "Selecionar projetos para a remoção"
-
-#~ msgid "Return to project selection"
-#~ msgstr "Voltar para a seleção de projetos"
-
-#~ msgid "_Open Project"
-#~ msgstr "_Abrir projeto"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Preferências"
-
-#~ msgid "Keyboard _Shortcuts"
-#~ msgstr "Atalho_s de teclado"
-
-#~ msgid "_Help"
-#~ msgstr "A_juda"
-
-#~ msgid "_About"
-#~ msgstr "_Sobre"
-
-#~ msgid "Save _All"
-#~ msgstr "_Salvar tudo"
-
-#~ msgid "Close _All"
-#~ msgstr "_Fechar tudo"
-
-#~ msgid "You must call %s() before using libide."
-#~ msgstr "Você tem que chamar %s() antes de usar libide."
-
-#~ msgid "An unload request is already pending"
-#~ msgstr "Uma requisição para descarregar já está pendente"
-
-#~ msgid "Context already unloading, cannot restore."
-#~ msgstr "O contexto já está sendo descarregado, não é possível restaurar."
-
-#~ msgid "Context has already been restored."
-#~ msgstr "O contexto já foi restaurado."
-
-#~ msgid "No implementations of extension point “%s”."
-#~ msgstr "Nenhuma implementação de ponto de extensão “%s”."
-
-#~ msgid "Failed to locate %s plugin."
-#~ msgstr "Falha ao localizar o plug-in %s."
-
-#~ msgid "No such extension point."
-#~ msgstr "Ponto de extensão inexistente."
-
-#~ msgid "No implementations of extension point."
-#~ msgstr "Nenhuma implementação de ponto de extensão."
-
-#~ msgid "Run _all tests"
-#~ msgstr "Executar _todos testes"
-
-#~ msgid "Reload tests"
-#~ msgstr "Recarregar testes"
-
-#~ msgid "Tests will be loaded after building."
-#~ msgstr "Testes serão carregados após compilação."
-
-#~ msgid "Clear _All"
-#~ msgstr "Limpar _tudo"
-
-#~ msgid "Invalid %-encoding in URI"
-#~ msgstr "%-encoding inválido na URI"
-
-#~ msgid "Non-UTF-8 characters in URI"
-#~ msgstr "Caracteres não-UTF-8 na URI"
-
-#~ msgid "Invalid IP literal “%s” in URI"
-#~ msgstr "IP literal “%s” inválido na URI"
-
-#~ msgid "Invalid encoded IP literal “%s” in URI"
-#~ msgstr "IP literal codificado “%s” inválido na URI"
-
-#~ msgid "Invalid non-ASCII hostname “%s” in URI"
-#~ msgstr "Nome de máquina não-ASCII “%s” inválido na URI"
-
-#~ msgid "Non-ASCII hostname “%s” forbidden in this URI"
-#~ msgstr "Nome de máquina não-ASCII “%s” proibido nesta URI"
-
-#~ msgid "Could not parse port “%s” in URI"
-#~ msgstr "Não foi possível analisar a porta “%s” na URI"
-
-#~ msgid "Port “%s” in URI is out of range"
-#~ msgstr "Porta “%s” na URI fora dos limites"
-
-#~ msgid "Base URI is not absolute"
-#~ msgstr "URI base não é absoluta"
-
-#~ msgid "URI is not absolute, and no base URI was provided"
-#~ msgstr "URI não é absoluta e nenhuma URI base foi fornecida"
-
-#~ msgid "Could not parse “%s” as absolute URI"
-#~ msgstr "Não foi possível analisar “%s” como URI absoluta"
-
-#~ msgid "URI “%s” has no host component"
-#~ msgstr "URI “%s” não possui um componente máquina"
-
-#~ msgid "Building"
-#~ msgstr "Compilando"
-
-#~ msgctxt "button"
-#~ msgid "Build"
-#~ msgstr "Compilar"
-
-#~ msgid "The project cannot be built while the build pipeline is being set up"
-#~ msgstr ""
-#~ "O projeto não pode ser compilado enquanto o encadeamento de compilação "
-#~ "está sendo configurado"
-
-#~ msgid "Builder Statistics"
-#~ msgstr "Estatísticas do Builder"
-
-#~ msgid "%s — Builder"
-#~ msgstr "%s — Builder"
-
-#~ msgid "Transfers"
-#~ msgstr "Transferências"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Trigger a build"
-#~ msgstr "Dispara uma compilação"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all files"
-#~ msgstr "Salva todos os arquivos"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Perspectives"
-#~ msgstr "Perspectivas"
-
-#~ msgid "Shared Library (Autotools)"
-#~ msgstr "Biblioteca compartilhada (Autotools)"
-
-#~ msgid "Create a new autotools project with a shared library"
-#~ msgstr "Criar um novo projeto de autotools com uma biblioteca compartilhada"
-
-#~ msgid "Empty Project (Autotools)"
-#~ msgstr "Projeto vazio (Autotools)"
-
-#~ msgid "Create a new empty autotools project"
-#~ msgstr "Criar um novo projeto autotools vazio"
-
-#~ msgid "GNOME Application (Autotools)"
-#~ msgstr "Aplicativo do GNOME (Autotools)"
-
-#~ msgid "Create a new flatpak-ready GNOME application"
-#~ msgstr "Criar um novo aplicativo do GNOME adaptado para flatpak"
-
-#~ msgid "Command not found: %s"
-#~ msgstr "Comando não encontrado: %s"
-
-#~ msgid "Use the entry below to execute a command"
-#~ msgstr "Use a entrada abaixo para executar um comando"
-
-#~ msgid "New…"
-#~ msgstr "Novo…"
-
-#~ msgid "Create"
-#~ msgstr "Criar"
-
-#~ msgid "List available templates"
-#~ msgstr "Lista os modelos disponíveis"
-
-#~ msgid "Project template to generate"
-#~ msgstr "Modelo de projeto para gerar"
-
-#~ msgid "The target language (if supported)"
-#~ msgstr "A linguagem alvo (se houver suporte)"
-
-#~ msgid "The version control to use or “none” to disable"
-#~ msgstr "O controle de versão para usar ou “none” para desabilitar"
-
-#~ msgid "git"
-#~ msgstr "git"
-
-#~ msgid "create-project [OPTION...] PROJECT_NAME"
-#~ msgstr "create-project [OPÇÃO…] NOME_PROJETO"
-
-#~ msgid "Filename must be ASCII and may not contain : or ="
-#~ msgstr "Nome de arquivo deve ser ASCII e não pode conter : ou ="
-
-#~ msgid "Please specify a project name.\n"
-#~ msgstr "Por favor, especifique um nome de projeto.\n"
-
-#~ msgid "Please specify a project template with --template=\n"
-#~ msgstr "Por favor, especifique um modelo de projeto com --template=\n"
-
-#~ msgid "Clone App"
-#~ msgstr "Clonar aplicativo"
-
-#~ msgid "Clone"
-#~ msgstr "Clonar"
-
-#~ msgid "Cannot provide diff, no backing file provided."
-#~ msgstr ""
-#~ "Não é possível fornecer comparação, nenhuma arquivo reserva fornecido."
-
-#~ msgid "Apply"
-#~ msgstr "Aplicar"
-
-#~ msgid "Remote Branch to Clone"
-#~ msgstr "Ramo remoto para clonar"
-
-#~ msgid "Use Git to create a local copy of a remotely hosted project."
-#~ msgstr ""
-#~ "Usa Git para criar uma cópia local de um projeto hospedado remotamente."
-
-#~ msgid "Enter the URL of your project’s source code repository"
-#~ msgstr "Digite a URL do repositório de código-fonte do seu projeto"
-
-#~ msgid "Clone…"
-#~ msgstr "Clonar…"
-
-#~ msgid "Failed to establish git file monitor: %s"
-#~ msgstr "Falha ao estabelecer o monitorador de arquivo git: %s"
-
-#~ msgid "Contribute to an existing project"
-#~ msgstr "Contribuir para um projeto existente"
-
-#~ msgid "Cannot load a non-native file in terminal"
-#~ msgstr "Não foi possível carregar um arquivo não nativo no terminal"
-
-#~ msgid "Failed to rename file: %s"
-#~ msgstr "Falha ao renomear arquivo: %s"
-
-#~ msgid "Failed to trash file: %s"
-#~ msgstr "Falha ao mover arquivo para lixeira: %s"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Project tree"
-#~ msgstr "Árvore do projeto"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename a file"
-#~ msgstr "Renomear um arquivo"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move a file to the trash"
-#~ msgstr "Mover um arquivo para a lixeira"
-
-#~ msgid "_New"
-#~ msgstr "_Novo"
-
-#~ msgid "_Empty File"
-#~ msgstr "_Arquivo vazio"
-
-#~ msgid "_Build"
-#~ msgstr "_Compilar"
-
-#~ msgid "_Rebuild"
-#~ msgstr "_Recompilar"
-
-#~ msgid "_Collapse All Nodes"
-#~ msgstr "_Fechar todos os nós"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Recarregar"
-
-#~ msgid "Updated"
-#~ msgstr "Atualizado"
-
-#~ msgid "Definition"
-#~ msgstr "Definição"
-
-#~ msgid "Canonical"
-#~ msgstr "Implementação"
-
-#~ msgid "System Monitor"
-#~ msgstr "Monitor do sistema"
-
-#~ msgid "Open Profile"
-#~ msgstr "Abrir perfil"
-
-#~ msgid "Reset and Clear"
-#~ msgstr "Redefinir e limpar"
-
-#~ msgid "Buffer loaded but not in the buffer manager."
-#~ msgstr "Buffer carregado, mas não no gerenciador de buffer."
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Permite que trechos sejam inseridos no documento."
-
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Autocompletamento baseado em Clang (Experimental)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Usar Clang para autocompletamento nas linguagens C e C++."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Habilitar autocompletamento de palavras no documento"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Caso habilitado, as palavras que estão dentro do documento atual estarão "
-#~ "disponíveis para autocompletamento."
-
-#~ msgid "Suggest words found in open files"
-#~ msgstr "Sugerir palavras encontradas em arquivos abertos"
-
-#~ msgid ""
-#~ "Suggests completions as you type based on words found in any open document"
-#~ msgstr ""
-#~ "Sugere autocompletamentos, enquanto você digita, baseado em palavras "
-#~ "encontradas em todos documentos abertos"
-
-#~ msgid "Minimum word size"
-#~ msgstr "Tamanho mínimo de palavra"
-
-#~ msgid "Minimum word size for word completion"
-#~ msgstr "Tamanho mínimo da palavra para o completamento de palavras"
-
-#~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
-#~ msgstr ""
-#~ "Cria e gerencia um banco de dados de Ctags para completar de nomes de "
-#~ "classes, funções e mais"
-
-#~ msgid "Suggest completions using Clang (Experimental)"
-#~ msgstr "Sugerir completamentos usando Clang (Experimental)"
-
-#~ msgid "Code snippets"
-#~ msgstr "Trechos de código"
-
-#~ msgid "Use code fragments to increase typing efficiency"
-#~ msgstr "Usa fragmentos de códigos para aumentar a eficiência da digitação"
-
-#~ msgid "Failed to load file: %s: %s"
-#~ msgstr "Falha ao carregar arquivo: %s: %s"
-
-#~ msgid "Click to toggle breakpoint"
-#~ msgstr "Clique para alternar o ponto de interrupção"
-
-#~ msgid "Builder Word Completion"
-#~ msgstr "Completamento de palavras do Builder"
-
-#~ msgid "Unknown failure"
-#~ msgstr "Falha desconhecida"
-
-#~ msgid "Clang crashed"
-#~ msgstr "Clang parou"
-
-#~ msgid "Invalid arguments"
-#~ msgstr "Argumentos inválidos"
-
-#~ msgid "AST read error"
-#~ msgstr "Erro de leitura AST"
-
-#~ msgid "Failed to create translation unit: %s"
-#~ msgstr "Falha ao criar unidade de tradução: %s"
-
-#~ msgid "clang_codeCompleteAt() only works on local files"
-#~ msgstr "clang_codeCompleteAt() só funciona em arquivos locais"
-
-#~ msgid "Format Strings"
-#~ msgstr "Strings de formato"
-
-#~ msgid "_Show more"
-#~ msgstr "_Mostrar mais"
-
-#~ msgid "Suggest Python completions"
-#~ msgstr "Sugerir completamentos de Python"
-
-#~ msgid "CPU"
-#~ msgstr "CPU"
-
-#~ msgid "Installing %s %s"
-#~ msgstr "Instalando %s %s"
-
-#~ msgid "MinGW 64-bit"
-#~ msgstr "MinGW 64-bit"
-
-#~ msgid "MinGW 32-bit"
-#~ msgstr "MinGW 32-bit"
-
-#~ msgid "The device “%s” could not be found."
-#~ msgstr "O dispositivo “%s” não pôde ser encontrado."
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle right panel"
-#~ msgstr "Ativa o painel direito"
-
-#~ msgid "Mine projects"
-#~ msgstr "Meus projetos"
-
-#~ msgid "Search directories for projects."
-#~ msgstr "Pesquisar por projetos em diretórios."
-
-#~ msgid "_Fullscreen"
-#~ msgstr "_Tela cheia"
-
-#~ msgid "Failed to save buffer, ignoring reclamation."
-#~ msgstr "Falha ao salvar o buffer, ignorando reclamação."
-
-#~ msgid "========================\n"
-#~ msgstr "=================================\n"
-
-#~ msgid "           Project Name: %s\n"
-#~ msgstr "           Nome do projeto: %s\n"
-
-#~ msgid " Version Control System: %s\n"
-#~ msgstr " Sistema de controle de versão: %s\n"
-
-#~ msgid "           Build System: %s\n"
-#~ msgstr "           Sistema de compilação: %s\n"
-
-#~ msgid "    Build Date and Time: %s\n"
-#~ msgstr "    Data e hora da compilação: %s\n"
-
-#~ msgid "    Building for Device: %s (%s)\n"
-#~ msgstr "    Compilação para dispositivo: %s (%s)\n"
-
-#~ msgid "            Environment: %s\n"
-#~ msgstr "            Ambiente: %s\n"
-
-#~ msgid "===============\n"
-#~ msgstr "========================\n"
-
-#~ msgid " Build Failure: %s\n"
-#~ msgstr " Falha de compilação: %s\n"
-
-#~ msgid " Build ran for: %"
-#~ msgstr " Compilação executada para: %"
-
-#~ msgid "=================\n"
-#~ msgstr "=========================\n"
-
-#~ msgid " Build Successful\n"
-#~ msgstr " Compilou com sucesso\n"
-
-#~ msgid "   Build ran for: %"
-#~ msgstr "   Compilação executada para: %"
-
-#~ msgid "The ID of the device to build for"
-#~ msgstr "O ID do dispositivo para o qual estamos compilando"
-
-#~ msgid "local"
-#~ msgstr "local"
-
-#~ msgid "The runtime to use for building"
-#~ msgstr "O runtime a ser usada para a compilação"
-
-#~ msgid "host"
-#~ msgstr "hospedeiro"
-
-# Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#~ msgid "Number of workers to use when building"
-#~ msgstr "Número de trabalhos para usar na compilação"
-
-#~ msgid "CONFIG_ID"
-#~ msgstr "ID_CONFIG"
-
-#~ msgid "Path to project file, defaults to current directory"
-#~ msgstr ""
-#~ "Caminho para o arquivo do projeto, tendo como padrão o diretório atual"
-
-#~ msgid "Other Projects"
-#~ msgstr "Outros projetos"
-
-#~ msgid "Project Discovery"
-#~ msgstr "Descoberta de projeto"
-
-#~ msgid "Discover projects on my computer"
-#~ msgstr "Descobrir projetos no meu computador"
-
-#~ msgid "Scan your computer for existing projects"
-#~ msgstr "Varre seu computador por projetos existentes"
-
-#~ msgid "%s() may only be executed once"
-#~ msgstr "%s() só pode ser executado uma vez"
-
-#~ msgid "Send to Fpaste.org"
-#~ msgstr "Enviar para fpaste.org"
-
-#~ msgid "The following URL has been copied to the clipboard"
-#~ msgstr "A seguinte URL foi copiada para a área de transferência"
-
-#~ msgid "Integrated project tree"
-#~ msgstr "Árvore de projeto integrada"
-
-#~ msgid "HTML/Markdown live preview"
-#~ msgstr "Visão instantânea de HTML/redução"
-
-#~ msgid "Support for building with jhbuild"
-#~ msgstr "Suporte a compilação com jhbuild"
-
-#~| msgid "Restore cursor position"
-#~ msgid "Execute from the current cursor position"
-#~ msgstr "Executar da posição de cursor atual"
-
-#~ msgid "Execute until reaching the current cursor position"
-#~ msgstr "Executar até alcançar a posição de cursor atual"
-
-#~ msgid "Cannot locate property %s in class %s"
-#~ msgstr "Não foi possível localizar a propriedade %s na classe %s"
-
-#~ msgid "Failed to find property %s in %s"
-#~ msgstr "Falha ao localizar a propriedade %s em %s"
-
-#~ msgid "Failed to find property %s in %s or parent %s"
-#~ msgstr "Falha ao localizar a propriedade %s em %s ou pai %s"
-
-#~ msgid "Failed to retrieve va_list value: %s"
-#~ msgstr "Falha ao recuperar o valor de va_list: %s"
-
-#~ msgid "Just now"
-#~ msgstr "Agora mesmo"
-
-#~ msgid "An hour ago"
-#~ msgstr "Uma hora atrás"
-
-#~ msgid "Yesterday"
-#~ msgstr "Ontem"
-
-#~ msgid "About a year ago"
-#~ msgstr "Cerca de ano atrás"
-
-#~ msgid "About %u year ago"
-#~ msgid_plural "About %u years ago"
-#~ msgstr[0] "Cerca de %u ano atrás"
-#~ msgstr[1] "Cerca de %u anos atrás"
-
-#~ msgid "Select"
-#~ msgstr "Selecionar"
-
-#~ msgid "Browse…"
-#~ msgstr "Navegar…"
-
-#~ msgid "Traversal order %u is not supported on Trie."
-#~ msgstr "Não há suporte a ordem transversal %u em Trie."
-
-#~ msgid "%s() may only be called once"
-#~ msgstr "%s() só pode ser chamado uma vez"
-
-#~ msgid "Parser does not contain an input stream"
-#~ msgstr "O analisador não pode conter um fluxo de entrada"
-
-#~ msgid "Must parse template before expanding"
-#~ msgstr "Deve analisar o modelo antes de expandir"
-
-#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
-#~ msgstr ""
-#~ "Caso habilitado, a barra lateral ficará visível no espaço de trabalho do "
-#~ "editor."
-
-#~ msgid "Show bottom panel"
-#~ msgstr "Mostrar painel inferior"
-
-#~ msgid "Show right panel"
-#~ msgstr "Mostrar painel direito"
-
-#~ msgid "Split Left"
-#~ msgstr "Dividir da esquerda"
-
-#~ msgid "Split Right"
-#~ msgstr "Dividir da direita"
-
-#~ msgid "Split Down"
-#~ msgstr "Dividir de baixo"
-
-#~ msgid "Move"
-#~ msgstr "Mover"
-
-#~ msgid "_Print"
-#~ msgstr "Im_primir"
-
-#~ msgid "%d warning"
-#~ msgid_plural "%d warnings"
-#~ msgstr[0] "%d aviso"
-#~ msgstr[1] "%d avisos"
-
-#~ msgid "%d error"
-#~ msgid_plural "%d errors"
-#~ msgstr[0] "%d erro"
-#~ msgstr[1] "%d erros"
-
-#~ msgid "Status:"
-#~ msgstr "Status:"
-
-#~ msgid "Running Time:"
-#~ msgstr "Tempo de execução:"
-
-#~ msgid "Warnings:"
-#~ msgstr "Avisos:"
-
-#~ msgid "No Diagnostics"
-#~ msgstr "Nenhum diagnóstico"
-
-#~ msgid ""
-#~ "<a href=\"action://build-manager.build\">Build your project</a> to show "
-#~ "diagnostics here"
-#~ msgstr ""
-#~ "<a href=\"action://build-manager.build\">Compile seu projeto</a> para "
-#~ "mostrar o diagnóstico aqui"
-
-#~ msgid "Line %u, Column %u"
-#~ msgstr "Linha %u, coluna %u"
-
-#~ msgid "OVR"
-#~ msgstr "SBR"
-
-#~ msgid "Change editor settings and language"
-#~ msgstr "Alterar configurações e linguagem do editor"
-
-#~ msgid "Try opening a file by typing in the search box at the top"
-#~ msgstr "Tente abrir um arquivo digitando na caixa de pesquisa no topo"
-
-#~ msgid ""
-#~ "Spell checker error: no language set. It’s maybe because no dictionaries "
-#~ "are installed."
-#~ msgstr ""
-#~ "Erro na verificação ortográfica: nenhum idioma definido. Talvez porque "
-#~ "nenhum dicionário esteja instado."
-
-#~ msgid "_Highlight"
-#~ msgstr "_Realçar"
-
-#~ msgid "Search highlight mode…"
-#~ msgstr "Modo de realce da pesquisa…"
-
-#~ msgid "Auto indent"
-#~ msgstr "Recuo automático"
-
-#~ msgid "Save Document"
-#~ msgstr "Salvar documento"
-
-#~ msgid "Save Document As"
-#~ msgstr "Salvar documento como"
-
-#~ msgid "_Select"
-#~ msgstr "_Selecionar"
-
-#~ msgid "Search Preferences"
-#~ msgstr "Preferências de pesquisa"
-
-#~ msgid "Cannot add provider more than once."
-#~ msgstr "Não foi possível adicionar provedor mais de uma vez."
-
-#~ msgid "File path is NULL"
-#~ msgstr "Caminho de arquivo é NULO"
-
-#~ msgid "Error converting UTF-8 filename to wide char"
-#~ msgstr "Erro ao converter nome de arquivo em UTF-8 para wide char"
-
-#~ msgid "ILCreateFromPath() failed"
-#~ msgstr "ILCreateFromPath() falhou"
-
-#~ msgid "Cannot convert “%s” into a valid NSURL."
-#~ msgstr "Não foi possível converter “%s” em uma NSURL válida."
-
-#~ msgid "Connecting to org.freedesktop.FileManager1 failed: "
-#~ msgstr "Conexão com org.freedesktop.FileManager1 falhou: "
-
-#~ msgid "Calling ShowItems failed: "
-#~ msgstr "Chamada de ShowItems falhou: "
-
-#~ msgid "Jump to previous location"
-#~ msgstr "Pular para a localização anterior"
-
-#~ msgid "Jump to next location"
-#~ msgstr "Pular para a próxima localização"
-
-#~ msgid "untitled document"
-#~ msgstr "documento sem título"
-
-#~ msgid "Project"
-#~ msgstr "Projeto"
-
-#~ msgid "View Output"
-#~ msgstr "Ver saída"
-
-#~ msgid "Enable color picker"
-#~ msgstr "Habilitar seletor de cores"
-
-#~ msgid "Preview as HTML"
-#~ msgstr "Visualizar como HTML"
-
-#~ msgid "Current language does not support symbol resolvers"
-#~ msgstr "A linguagem atual não possui suporte a resolvedores de símbolos"
-
-#~ msgid "No symbols"
-#~ msgstr "Nenhum símbolo"
-
-#~ msgid "Open a file to see symbols within the file"
-#~ msgstr "Abra um arquivo para ver o símbolos dentro o arquivo"
-
-#~ msgid "Run Output"
-#~ msgstr "Saída da execução"
-
-#~ msgid "%s does not support building"
-#~ msgstr "%s não possui suporte a compilação"
-
-#~ msgid "A build is already in progress"
-#~ msgstr "Uma compilação já está em progresso"
-
-#~ msgid "Failed to open stderr stream."
-#~ msgstr "Falha ao abrir o fluxo de saída de erro (stderr)."
-
-#~ msgid "Failed to open stdout stream."
-#~ msgstr "Falha ao abrir o fluxo de saída padrão (stdout)."
-
-#~ msgid "Target"
-#~ msgstr "Alvo"
-
-#~ msgid "Install successful"
-#~ msgstr "Instalação concluída com sucesso"
-
-#~ msgid "Directory must be on a locally mounted filesystem."
-#~ msgstr ""
-#~ "O diretório deve estar em um sistema de arquivos montado localmente."
-
-#~ msgid "Failed to locate device"
-#~ msgstr "Falha ao localizar dispositivo"
-
-#~ msgid "Cannot execute build task more than once"
-#~ msgstr "Não foi possível executar a tarefa de compilação mais de uma vez"
-
-#~ msgid "Failed to access runtime for postbuild"
-#~ msgstr "Falha ao acessar a execução para pós-compilação"
-
-#~ msgid "'%s' is not a directory."
-#~ msgstr "“%s” não é um diretório."
-
-#~ msgid "autogen.sh is missing from project directory (%s)."
-#~ msgstr "autogen.sh está faltando no diretório de projeto (%s)."
-
-#~ msgid "autogen.sh is not executable."
-#~ msgstr "autogen.sh não é um executável."
-
-#~ msgid "autogen.sh failed to create configure (%s)"
-#~ msgstr "autogen.sh falhou ao criar configuração (%s)"
-
-#~ msgid "Running configure…"
-#~ msgstr "Executando configure…"
-
-#~ msgid "Invalid makefile provided, ignoring."
-#~ msgstr "Makefile inválido fornecido, ignorando."
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  %(prgname) %(command) OPTIONS\n"
-#~ msgstr ""
-#~ "Uso:\n"
-#~ "  %(prgname) %(command) OPÇÕES\n"
-
-#~ msgid "Missing project name"
-#~ msgstr "Faltando nome do projeto"
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  ide contribute PROJECT_NAME\n"
-#~ "\n"
-#~ "  This command will bootstrap your system to begin contributing to the "
-#~ "project\n"
-#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-#~ "that\n"
-#~ "  you have the required dependencies to build, and bootstraps the first "
-#~ "build\n"
-#~ "  of the project.\n"
-#~ "\n"
-#~ "Examples:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Uso:\n"
-#~ "  ide contribute NOME_PROJETO\n"
-#~ "\n"
-#~ "  Este comando vai inicializar seu sistema para começar a contribuição "
-#~ "para o\n"
-#~ "  projeto denominado NOME_PROJETO. Isso inclui obter os fontes, garantir "
-#~ "que\n"
-#~ "  você tenha as dependências necessárias para compilar e inicializar a\n"
-#~ "  primeira compilação do projeto.\n"
-#~ "\n"
-#~ "Exemplos:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-
-#~ msgid "Username"
-#~ msgstr "Nome de usuário"
-
-#~ msgid "Wow! You've spent with Builder %d second!\n"
-#~ msgid_plural "Wow! You've spent with Builder %d seconds!\n"
-#~ msgstr[0] "Uau! Você gastou com Builder %d segundo!\n"
-#~ msgstr[1] "Uau! Você gastou com Builder %d segundos!\n"
-
-#~ msgid "Running prebuild…"
-#~ msgstr "Executando pré-compilação…"
-
-#~ msgid "Running post-install…"
-#~ msgstr "Executando pós-instalação…"
-
-#~ msgid "Running post-build…"
-#~ msgstr "Executando pós-compilação…"
-
-#~ msgid "Attempt to load a PyGObject script with no filename."
-#~ msgstr ""
-#~ "Tentativa de carregar um script PyGObject com nenhuma nome de arquivo."
-
-#~ msgid "The filename for the script was not provided."
-#~ msgstr "O nome de arquivo para o script não foi fornecido."
-
-#~ msgid "The script must be on a local filesystem."
-#~ msgstr "O script deve estar em um sistema de arquivos local."
-
-#~ msgid "%s has not implemented GAsyncInitable."
-#~ msgstr "%s não possui implementação GAsyncInitable."
-
-#~ msgid "%s() is not supported on %s build system."
-#~ msgstr "%s() não possui suporte no sistema de compilação %s."
-
-#~ msgid "Failed to locate configure.ac"
-#~ msgstr "Falha ao localizar o configure.ac"
-
-#~ msgid "Chunk does not belong to snippet."
-#~ msgstr "O bloco não pertence a um trecho."
-
-#~ msgid "Notes"
-#~ msgstr "Notas"
-
-#~ msgid "Unknown file"
-#~ msgstr "Arquivo desconhecido"
-
-#~ msgid "Installed Extensions"
-#~ msgstr "Extensões instaladas"
-
-#~ msgid "Bundled Extensions"
-#~ msgstr "Extensões empacotadas"
-
-#~ msgid "From an existing project on this computer"
-#~ msgstr "De um projeto existente neste computador"
-
-#~ msgid "Enable / Disable left panel. Shortcut: F9"
-#~ msgstr "Habilitar / Desabilitar o painel esquerdo. Atalho: F9"
-
-#~ msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
-#~ msgstr "Habilitar / Desabilitar o painel inferior. Atalho: Ctrl + F9"
-
-#~ msgid "Enable / Disable right panel. Shortcut: Shift + F9"
-#~ msgstr "Habilitar / Desabilitar o painel direito. Atalho: Shift + F9"
-
-#~ msgid "Co_ntinue"
-#~ msgstr "Co_ntinuar"
-
-#~ msgid "Add a new empty file to your project"
-#~ msgstr "Adicionar um novo arquivo vazio ao seu projeto"
-
-#~ msgid "Search for files. Shortcut: Ctrl + ."
-#~ msgstr "Pesquisar por arquivos. Atalho: Ctrl + ."
-
-#~ msgid "Drops down a list of file operations"
-#~ msgstr "Mostra em um menu suspenso uma lista de operações de arquivos"
-
-#~ msgid "Deploy"
-#~ msgstr "Implantar"
-
-#~ msgid "Versioning"
-#~ msgstr "Versionamento"
-
-#~ msgid "AGPL version 3 or later"
-#~ msgstr "AGPL versão 3 ou posterior"
-
-#~ msgid "GPL version 3 or later"
-#~ msgstr "GPL versão 3 ou posterior"
-
-#~ msgid "GPL version 2 or later"
-#~ msgstr "GPL versão 2 ou posterior"
-
-#~ msgid "LGPL version 3 or later"
-#~ msgstr "LGPL versão 3 ou posterior"
-
-#~ msgid "LGPL version 2.1 or later"
-#~ msgstr "LGPL versão 2.1 ou posterior"
-
-#~ msgid "Pattern"
-#~ msgstr "Padrão"
-
-#~ msgid "From an existing project in a Git repository"
-#~ msgstr "De um projeto existente em um repositório Git"
-
-#~ msgid "Attribution"
-#~ msgstr "Atribuição"
-
-#~ msgid "File name must not contain subdirectories."
-#~ msgstr "No de arquivo não deve conter subdiretórios."
-
-#~ msgid "Invalid snippet at line %d: %s"
-#~ msgstr "Trecho inválido à linha %d: %s"
-
-#~ msgid "%s does not implement build_async()"
-#~ msgstr "%s não implementa build_async()"
-
-#~ msgid "No implementation of build_async()"
-#~ msgstr "Nenhuma implementação de build_async()"
-
-#~ msgid "Autogening…"
-#~ msgstr "Executando autogen…"
-
-#~ msgid "packaging"
-#~ msgstr "Empacotamento"
-
-#~ msgid "Timed out while waiting for devices to settle.\n"
-#~ msgstr ""
-#~ "Atingiu tempo limite enquanto esperava por dispositivos se resolver.\n"
-
-#~ msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
-#~ msgstr ""
-#~ "Esperando até 60 segundos por dispositivos se resolver. Ctrl+C para "
-#~ "sair.\n"
-
-#~ msgid "The target device we are building for."
-#~ msgstr "O dispositivo alvo para o qual estamos compilando."
-
-#~ msgid "DEVICE_ID"
-#~ msgstr "ID_DISPOSITIVO"
-
-#~ msgid "Clean and rebuild the project."
-#~ msgstr "Limpa e recompila o projeto."
-
-#~ msgid "Increase parallelism in the build."
-#~ msgstr "Incrementa paralelismo na compilação"
-
-#~ msgid "- Get build flags for a project file"
-#~ msgstr "- Obtém opções de compilação para um arquivo de projeto"
-
-#~ msgid "- List devices found on the system."
-#~ msgstr "- Lista dispositivos detectados no sistema."
-
-#~ msgid "No such file in project: %s\n"
-#~ msgstr "arquivo inexistente no projeto: %s\n"
-
-#~ msgid "- List diagnostics for a file."
-#~ msgstr "- Lista diagnósticos para um arquivo."
-
-#~ msgid "- List files found in project."
-#~ msgstr "- Lista arquivos localizados no projeto."
-
-#~ msgid "No files provided to load settings for.\n"
-#~ msgstr ""
-#~ "Nenhuma arquivo fornecido para o qual deveria carregar configurações.\n"
-
-#~ msgid "%s result\n"
-#~ msgid_plural "%s results\n"
-#~ msgstr[0] "%s resultado\n"
-#~ msgstr[1] "%s resultados\n"
-
-#~ msgid "PROJECT_FILE [SEARCH TERMS…]"
-#~ msgstr "ARQUIVO_DE_PROJETO [TERMOS DE PESQUISAS…]"
-
-#~ msgid "_New Document"
-#~ msgstr "_Novo documento"
-
-#~ msgid "Display right _margin at column:"
-#~ msgstr "Mostrar a margem _direita da coluna:"
-
-#~ msgid "Insert matching brace, bracket, quotation, and parenthesis"
-#~ msgstr "Inserir chaves, colchetes, aspas e parêntesis correspondentes"
-
-#~ msgid "From remote source code repository"
-#~ msgstr "De um repositório de código fonte remoto"
-
-#~ msgid "Display Document Changes"
-#~ msgstr "Exibir alterações no documento"
-
-#~ msgid "Display the line numbers next to each line of the document."
-#~ msgstr "Exibe os números das linhas ao lado de cada linha no documento."
-
-#~ msgid "Highlight Current Line"
-#~ msgstr "Realçar linha atual"
-
-#~ msgid "Whether or not matching brackets should be highlighted."
-#~ msgstr "Se colchetes correspondentes deveriam ser realçados."
-
-#~ msgid "Display Overview Map"
-#~ msgstr "Exibir um mapa de visão geral"
-
-#~ msgid "Automatically hide the overview map during periods of inactivity."
-#~ msgstr ""
-#~ "Oculta automaticamnete o mapa de visão geral durante períodos de "
-#~ "inatividade."
-
-#~ msgid "Cursor Placement"
-#~ msgstr "Posição do cursor"
-
-#, fuzzy
-#~ msgid "Draw an arrow over tab characters"
-#~ msgstr "Desenha uma seta sobre os caracteres de tabulação."
-
-#, fuzzy
-#~ msgid "Draw a carriage return over newline characters"
-#~ msgstr ""
-#~ "Desenha um retorno (carriage return) sobre caracteres de nova linha."
-
-#~ msgid "Draw leading space only"
-#~ msgstr "Desenha espaço no começo da linha apenas."
-
-#, fuzzy
-#~ msgid "Draw trailing space only"
-#~ msgstr "Desenha espaço ao final apenas."
-
-#~ msgid "Email"
-#~ msgstr "E-mail"
-
-#~ msgid ""
-#~ "Highlight additional syntax based upon information found in the document."
-#~ msgstr ""
-#~ "Realça sintaxe adicional baseada na informação encontrada no documento."
-
-#~ msgid "Key Binding Emulation"
-#~ msgstr "Emulação de vínculo de tecla"
-
-#~ msgid "The default keybindings for Builder."
-#~ msgstr "As associações de teclas padrões do Builder."
-
-#~ msgid "Keyboard Movement"
-#~ msgstr "Movimento de teclado"
-
-#~ msgid "Plugins"
-#~ msgstr "Plug-ins"
-
-#~ msgid "New"
-#~ msgstr "Nova"
-
-#~ msgid "Attempt to load a GJS script with no filename."
-#~ msgstr "Tentativa de carregar um script GJS com nenhum nome de arquivo."
-
-#~ msgid "Failed to create JavaScript context."
-#~ msgstr "Falha ao criar o contexto JavaScript."
-
-#~ msgid "Failed to set IdeContext in JavaScript runtime."
-#~ msgstr "Falha ao definir IdeContext em tempo de execução do JavaScript."
-
-#~ msgid "The script \"%s\" is not a JavaScript file."
-#~ msgstr "O script \"%s\" não é um arquivo de JavaScript."
-
-#~ msgid "File contained invalid UTF-8"
-#~ msgstr "O arquivo contém UTF-8 inválido"
-
-#~ msgid "Builder requires libgit2-glib with threading support."
-#~ msgstr "Builder requer libgit2-glib com suporte a threading."
-
-#~ msgid "Builder requires libgit2-glib with SSH support."
-#~ msgstr "Builder requer libgit2-glib com suporte a SSH."
-
-#~ msgid "Argv0"
-#~ msgstr "Argv0"
-
-#, fuzzy
-#~| msgid "The name of the icon to use."
-#~ msgid "The path to the process to spawn."
-#~ msgstr "O nome do ícone a ser usado."
-
-#~ msgid "Documentation (%s)"
-#~ msgstr "Documentação (%s)"
-
-#~ msgid "Device Manager"
-#~ msgstr "Gerenciador de dispositivos"
-
-#~ msgid "Terminal (%s)"
-#~ msgstr "Terminal (%s)"
-
-#~ msgid "The DBus server address for which to connect."
-#~ msgstr "O endereço do servidor DBus para o qual se conectar"
-
-#~ msgid "Autotools Project (configure.ac)"
-#~ msgstr "Projeto de autotools (configure.ac)"
-
-#~ msgid "Directory|Projects"
-#~ msgstr "Diretório|Projetos"
-
-#~ msgid "(Click on items to select them)"
-#~ msgstr "(Clique nos itens para selecioná-los)"
-
-#~ msgid "restore insert cursor mark"
-#~ msgstr "restaurar inserir marca cursor"
-
-#~ msgid "diff renderer gutter changes git vcs"
-#~ msgstr "diff comparação renderizar gutter alterações git vcs"
-
-#~ msgid "line lines highlight current"
-#~ msgstr "linha linhas realce realçar atual"
-
-#~ msgid "bracket brackets highlight matching"
-#~ msgstr "colchete colchetes realce coincidir corresponde"
-
-#~ msgid "lines margin scrolloff scroll off"
-#~ msgstr "linhas margem deslocamento scroll"
-
-#~ msgid "minimap mini map overview over view"
-#~ msgstr "minimapa mini mapa visão geral visão-geral"
-
-#~ msgid ""
-#~ "draw spaces space tab newline nbsp non-breaking whitespace trailing "
-#~ "leading"
-#~ msgstr ""
-#~ "desenha espaços espaço tab tabulação nova linha nbsp não-quebra espaço "
-#~ "branco início final"
-
-#~ msgid "git author name surname attribution source code"
-#~ msgstr "git autor nome sobrenome atribuição código fonte"
-
-#~ msgid "git author email mail address attribute source code"
-#~ msgstr "git autor email e-mail endereço atributo código fonte"
-
-#~ msgid "experimental clang autocompletion auto complete"
-#~ msgstr "experimental clang completação automática auto-completação"
-
-#~ msgid "jedi python autocompletion auto complete"
-#~ msgstr "jedi python completação automática auto-completação"
-
-#~ msgid "snippets autocompletion auto complete"
-#~ msgstr "trechos completação automática auto-completação"
-
-#~ msgid "semantic highlighting color goto declaration definition"
-#~ msgstr "semântica realce realçar cor ir para declaração definição"
-
-#~ msgid "default builder keybindings"
-#~ msgstr "padrão builder associações teclas keybindings"
-
-#~ msgid "emacs keybindings modal"
-#~ msgstr "emacs modal associações teclas keybindings"
-
-#~ msgid "vim keybindings modal"
-#~ msgstr "vim modal associações teclas keybindings"
-
-#~ msgid "smart home end"
-#~ msgstr "início fim inteligente inteligentes"
-
-#~ msgid "smart back backspace indent align"
-#~ msgstr "back backspace inteligente inteligentes recuo alinhamento"
-
-#~ msgid "source style scheme source tango solarized builder syntax"
-#~ msgstr "fonte estilo esquema fonte tango solaizado builder sintaxe"
-
-#~ msgid "%s more"
-#~ msgid_plural "%s more"
-#~ msgstr[0] "%s mais"
-#~ msgstr[1] "%s mais"
-
-#~ msgid "Open Document"
-#~ msgstr "Abrir documento"
-
-#~ msgid "The duration of the animation"
-#~ msgstr "A duração da animação"
-
-#~ msgid "An optional frame-clock to synchronize with."
-#~ msgstr "Um relógio de quadro opcional para sincronizar com."
-
-#~ msgid "Mode"
-#~ msgstr "Modo"
-
-#~ msgid "The animation mode"
-#~ msgstr "O modo de animação"
-
-#~ msgid "Failed to load keybindings: %s"
-#~ msgstr "Falha ao carregar associações de teclas: %s"
-
-#~ msgid "Failed to load local keybindings: %s"
-#~ msgstr "Falha ao carregar associações de teclas locais: %s"
-
-#~ msgid "If code assistance is currently processing."
-#~ msgstr "Se assistência de código está processando no exato momento."
-
-#~ msgid "Buffer"
-#~ msgstr "Buffer"
-
-#~ msgid "The buffer "
-#~ msgstr "O buffer"
-
-#~ msgid ""
-#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s"
-#~ "\" (%s)"
-#~ msgstr ""
-#~ "Falha ao carregar a conexão DBus. Assistência de código será "
-#~ "desabilitada. \"%s\" (%s)"
-
-#~ msgid "The code assistant to render."
-#~ msgstr "O assistente de código para renderizar."
-
-#~ msgid "Action Group"
-#~ msgstr "Grupo de ação"
-
-#~ msgid "The GActionGroup containing the action."
-#~ msgstr "O GActionGroup contendo a ação."
-
-#~ msgid "Active DocumentView"
-#~ msgstr "DocumentView ativo"
-
-#~ msgid "The last focused GbDocumentView widget."
-#~ msgstr "O último componente GbDocumentView com foco."
-
-#~ msgid "Priority"
-#~ msgstr "Proridade"
-
-#~ msgid "The priority of the command provider."
-#~ msgstr "A prioridade do comando fornecido."
-
-#~ msgid "Command Text"
-#~ msgstr "Texto do comando"
-
-#~ msgid "The command text if any."
-#~ msgstr "O texto do comando, se houver."
-
-#~ msgid "Is Error"
-#~ msgstr "É erro"
-
-#~ msgid "If the result is an error."
-#~ msgstr "Se o resultado é um erro."
-
-#~ msgid "If the command is still running."
-#~ msgstr "Se o comando ainda está em execução."
-
-#~ msgid "The result text if any."
-#~ msgstr "O texto do resultado, se houver."
-
-#~ msgid "The command text to execute"
-#~ msgstr "O texto do comando a ser executada"
-
-#~ msgid "Source View"
-#~ msgstr "Visão fonte"
-
-#~ msgid "The source view to modify."
-#~ msgstr "O visão fonte a ser modificada."
-
-#~ msgid "The duration of the animation in millseconds."
-#~ msgstr "A duração da animação em milissegundos."
-
-#~ msgid "Progress"
-#~ msgstr "Progresso"
-
-#~ msgid "URI"
-#~ msgstr "URI"
-
-#~ msgid "The uri to load."
-#~ msgstr "A uri a ser carregada."
-
-#~ msgid "The document for the devhelp view."
-#~ msgstr "O documento para o visualizador devhelp."
-
-#~ msgid ""
-#~ "If you don't save, changes from the last %ld second will be permanently "
-#~ "lost."
-#~ msgid_plural ""
-#~ "If you don't save, changes from the last %ld seconds will be permanently "
-#~ "lost."
-#~ msgstr[0] ""
-#~ "Se você não salvar, alterações do último %ld segundo serão perdidas "
-#~ "permanentemente."
-#~ msgstr[1] ""
-#~ "Se você não salvar, alterações dos últimos %ld segundos serão perdidas "
-#~ "permanentemente."
-
-#~ msgid ""
-#~ "If you don't save, changes from the last minute will be permanently lost."
-#~ msgstr ""
-#~ "Se você não salvar, as alterações feitas no último minuto serão "
-#~ "permanentemente perdidas."
-
-#~ msgid ""
-#~ "If you don't save, changes from the last minute and %ld second will be "
-#~ "permanently lost."
-#~ msgid_plural ""
-#~ "If you don't save, changes from the last minute and %ld seconds will be "
-#~ "permanently lost."
-#~ msgstr[0] ""
-#~ "Se você não salvar, alterações do último minuto e %ld segundo serão "
-#~ "perdidas permanentemente."
-#~ msgstr[1] ""
-#~ "Se você não salvar, alterações do último minuto e %ld segundos serão "
-#~ "perdidas permanentemente."
-
-#~ msgid ""
-#~ "If you don't save, changes from the last %ld minute will be permanently "
-#~ "lost."
-#~ msgid_plural ""
-#~ "If you don't save, changes from the last %ld minutes will be permanently "
-#~ "lost."
-#~ msgstr[0] ""
-#~ "Se você não salvar, alterações do último %ld minuto serão perdidas "
-#~ "permanentemente."
-#~ msgstr[1] ""
-#~ "Se você não salvar, alterações dos últimos %ld minutos serão perdidas "
-#~ "permanentemente."
-
-#~ msgid ""
-#~ "If you don't save, changes from the last hour will be permanently lost."
-#~ msgstr ""
-#~ "Se você não salvar, as alterações feitas na última hora serão "
-#~ "permanentemente perdidas."
-
-#~ msgid ""
-#~ "If you don't save, changes from the last hour and %d minute will be "
-#~ "permanently lost."
-#~ msgid_plural ""
-#~ "If you don't save, changes from the last hour and %d minutes will be "
-#~ "permanently lost."
-#~ msgstr[0] ""
-#~ "Se você não salvar, alterações da última hora e %d minuto serão perdidas "
-#~ "permanentemente."
-#~ msgstr[1] ""
-#~ "Se você não salvar, alterações da última hora e %d minutos serão perdidas "
-#~ "permanentemente."
-
-#~ msgid ""
-#~ "If you don't save, changes from the last %d hour will be permanently lost."
-#~ msgid_plural ""
-#~ "If you don't save, changes from the last %d hours will be permanently "
-#~ "lost."
-#~ msgstr[0] ""
-#~ "Se você não salvar, alterações da última %d hora serão perdidas "
-#~ "permanentemente."
-#~ msgstr[1] ""
-#~ "Se você não salvar, alterações das últimas %d horas serão perdidas "
-#~ "permanentemente."
-
-#~ msgid "Changes to document “%s” will be permanently lost."
-#~ msgstr "Alterações do documento “%s” serão permanentemente perdidas."
-
-#~ msgid "Saving has been disabled by the system administrator."
-#~ msgstr "A gravação em disco foi desabilitada pelo administrador."
-
-#~ msgid "Changes to %d document will be permanently lost."
-#~ msgid_plural "Changes to %d documents will be permanently lost."
-#~ msgstr[0] "Alterações a %d documento serão perdidas permanentemente."
-#~ msgstr[1] "Alterações a %d documentos serão perdidas permanentemente."
-
-#~ msgid "Docum_ents with unsaved changes:"
-#~ msgstr "_Documentos com mudanças não salvas:"
-
-#~ msgid "If the document has been modified from disk."
-#~ msgstr "Se o documento foi modificado no disco."
-
-#~ msgid "The document manager for the document grid."
-#~ msgstr "O gerenciador de documento para a grade de documentos."
-
-#~ msgid "The document manager for the button."
-#~ msgstr "O gerenciador de documetons para o botão."
-
-#~ msgid "Active View"
-#~ msgstr "Visão ativa"
-
-#~ msgid "The active view within the stack."
-#~ msgstr "A visão ativa dentro da pilha."
-
-#~ msgid "The document manager for the stack."
-#~ msgstr "O gerenciador de documentos para a pilha."
-
-#~ msgid "If the view can preview."
-#~ msgstr "Se a visão pode ser pré-visualizada"
-
-#~ msgid "The widget containing the view controls."
-#~ msgstr "O componente contendo os controles da visão."
-
-#~ msgid "The document being viewed."
-#~ msgstr "O documento sendo visto."
-
-#~ msgid "No file was selected for saving."
-#~ msgstr "Nenhum arquivo foi selecionado para salvamento."
-
-#~ msgid "The change monitor for the backing file."
-#~ msgstr "O monitor de alteração para o arquivo reserva."
-
-#~ msgid "An error that may have been loaded."
-#~ msgstr "Um erro que pode ser sido carregado."
-
-#~ msgid "The backing file for the document."
-#~ msgstr "O arquivo reserva do documento."
-
-#~ msgid "File Changed on Volume"
-#~ msgstr "Arquivo alterado na unidade"
-
-#~ msgid "If the file has changed underneath the buffer."
-#~ msgstr "Se p arquivo foi alterado sob o buffer."
-
-#~ msgid "Loading or saving progress."
-#~ msgstr "Progresso de carregamento ou salvamento."
-
-#~ msgid "Style Scheme Name"
-#~ msgstr "Nome de esquema de estilo"
-
-#~ msgid "The style scheme name."
-#~ msgstr "O nome de esquema de estilo."
-
-#~ msgid "Column"
-#~ msgstr "Coluna"
-
-#~ msgid "The column within the line."
-#~ msgstr "A coluna dentro da linha."
-
-#~ msgid "The file for which to store the mark."
-#~ msgstr "O arquivo para o qual deve ser armazenado a marca."
-
-#~ msgid "The direction of the last text searched for."
-#~ msgstr "A direção do último texto pesquisado."
-
-#~ msgid "The language to change the settings for."
-#~ msgstr "A linguagem para a qual devem ser alteradas as configurações."
-
-#~ msgid "The file “%s” was modified outside of Builder."
-#~ msgstr "O arquivo “%s” foi modificado fora do Builder."
-
-#~ msgid "Auto Indent"
-#~ msgstr "Recuo automático"
-
-#~ msgid "If we should use the auto-indentation engine."
-#~ msgstr "Se nós deveríamos usar o mecanismo de recuo automático."
-
-#~ msgid "The document edited by the view."
-#~ msgstr "O documento editado pela visão."
-
-#~ msgid "If the line numbers should be shown."
-#~ msgstr "Se os números de linhas deveriam ser mostrados."
-
-#~ msgid "If we should show the right margin."
-#~ msgstr "Se nós deveríamos mostrar a margem direita."
-
-#~ msgid "Tab Width"
-#~ msgstr "Largura de tabulação"
-
-#~ msgid "The width a tab should be drawn as."
-#~ msgstr "A largura com a qual uma tabulação deve ser desenhada com."
-
-#~ msgid "Use Spaces"
-#~ msgstr "Usar espaços"
-
-#~ msgid "If spaces should be used instead of tabs."
-#~ msgstr "Se espaços deveriam ser usados ao invés de tabulações."
-
-#~ msgid "The change monitor for the gutter renderer."
-#~ msgstr "O monitor de alterações do renderizador de gutter."
-
-#~ msgid "Stack"
-#~ msgstr "Pilha"
-
-#~ msgid ""
-#~ "Christian Hergert\n"
-#~ "Alexander Larsson\n"
-#~ "Alexandre Franke\n"
-#~ "Carlos Soriano\n"
-#~ "Cosimo Cecchi\n"
-#~ "Dimitris Zenios\n"
-#~ "Fabiano Fidêncio\n"
-#~ "Florian Bäuerle\n"
-#~ "Florian Müllner\n"
-#~ "Hashem Nasarat\n"
-#~ "Hylke Bons\n"
-#~ "Igor Gnatenko\n"
-#~ "Jakub Steiner\n"
-#~ "Jasper St. Pierre\n"
-#~ "Jonathon Jongsma\n"
-#~ "Mathieu Bridon\n"
-#~ "Megh Parikh\n"
-#~ "Michael Catanzaro\n"
-#~ "Pete Travis\n"
-#~ "Ray Strode\n"
-#~ "Roberto Majadas\n"
-#~ "Ting-Wei Lan\n"
-#~ "Trinh Anh Ngoc\n"
-#~ "Yosef Or Boczko"
-#~ msgstr ""
-#~ "Christian Hergert\n"
-#~ "Alexander Larsson\n"
-#~ "Alexandre Franke\n"
-#~ "Carlos Soriano\n"
-#~ "Cosimo Cecchi\n"
-#~ "Dimitris Zenios\n"
-#~ "Fabiano Fidêncio\n"
-#~ "Florian Bäuerle\n"
-#~ "Florian Müllner\n"
-#~ "Hashem Nasarat\n"
-#~ "Hylke Bons\n"
-#~ "Igor Gnatenko\n"
-#~ "Jakub Steiner\n"
-#~ "Jasper St. Pierre\n"
-#~ "Jonathon Jongsma\n"
-#~ "Mathieu Bridon\n"
-#~ "Megh Parikh\n"
-#~ "Michael Catanzaro\n"
-#~ "Pete Travis\n"
-#~ "Ray Strode\n"
-#~ "Roberto Majadas\n"
-#~ "Ting-Wei Lan\n"
-#~ "Trinh Anh Ngoc\n"
-#~ "Yosef Or Boczko"
-
-#~ msgid "Artwork By:"
-#~ msgstr "Arte gráfica por:"
-
-#~ msgid ""
-#~ "Allan Day\n"
-#~ "Hylke Bons\n"
-#~ "Jakub Steiner"
-#~ msgstr ""
-#~ "Allan Day\n"
-#~ "Hylke Bons\n"
-#~ "Jakub Steiner"
-
-#~ msgid "Translated By:"
-#~ msgstr "Traduzido por:"
-
-#~ msgid "Special Thanks To:"
-#~ msgstr "Agradecimento especial a:"
-
-#~ msgid ""
-#~ "Andy Hertzfeld and the Eazel Team\n"
-#~ "Alberto Ruiz\n"
-#~ "Bastien Nocera\n"
-#~ "Cosimo Cecchi\n"
-#~ "Emmanuele Bassi\n"
-#~ "Federico Mena Quintero\n"
-#~ "Jasper St Pierre\n"
-#~ "Jon McCann\n"
-#~ "Jonathan Blandford\n"
-#~ "Matthias Clasen\n"
-#~ "Miguel de Icaza\n"
-#~ "Owen Taylor\n"
-#~ "Rob Taylor\n"
-#~ "Spencer Kimball\n"
-#~ "Ximian Team\n"
-#~ "\n"
-#~ "Each and every contributor to GNOME\n"
-#~ "and the Friends of GNOME"
-#~ msgstr ""
-#~ "Andy Hertzfeld e a Equipe Eazel\n"
-#~ "Alberto Ruiz\n"
-#~ "Bastien Nocera\n"
-#~ "Cosimo Cecchi\n"
-#~ "Emmanuele Bassi\n"
-#~ "Federico Mena Quintero\n"
-#~ "Jasper St Pierre\n"
-#~ "Jon McCann\n"
-#~ "Jonathan Blandford\n"
-#~ "Matthias Clasen\n"
-#~ "Miguel de Icaza\n"
-#~ "Owen Taylor\n"
-#~ "Rob Taylor\n"
-#~ "Spencer Kimball\n"
-#~ "Equipme Ximian\n"
-#~ "\n"
-#~ "A cada e todo contribuidor do GNOME\n"
-#~ "e aos Amigos do GNOME"
-
-#~ msgid ""
-#~ "Copyright 2014 Christian Hergert, et al.\n"
-#~ "Licensed under the GNU GPL 3 or newer"
-#~ msgstr ""
-#~ "Copyright 2014 Christian Hergert, et al.\n"
-#~ "Licenciado sob a GNU GPL 3 ou posterior"
-
-#~ msgid "Line 1, Column 1"
-#~ msgstr "Linha 1, Coluna 1"
-
-#~ msgid "<b>Show Line Numbers</b>"
-#~ msgstr "<b>Mostrar números das linhas</b>"
-
-#~ msgid "<b>Highlight Current Line</b>"
-#~ msgstr "<b>Realçar linha atual</b>"
-
-#~ msgid "<b>Smart Home End</b>"
-#~ msgstr "<b>Fim esperto do Home</b>"
-
-#~ msgid "<b>Show Grid Lines</b>"
-#~ msgstr "<b>Mostrar linhas da grade</b>"
-
-#~ msgid "<b>EMACS Modal Editing</b>"
-#~ msgstr "<b>Edição modal de EMACS</b>"
-
-#~ msgid "Use EMACS style modal editing in the source code editor."
-#~ msgstr "Usa edição modal de estilo EMACS no editor de código fonte."
-
-#~ msgid "Language Settings"
-#~ msgstr "Configurações de idioma"
-
-#~ msgid "Go back in history"
-#~ msgstr "Voltar no histórico"
-
-#~ msgid "Go forward in history"
-#~ msgstr "Avança o histórico"
-
-#~ msgid "Max Content Height"
-#~ msgstr "Altura máxima do conteúdo"
-
-#~ msgid "The maximum height request that can be made."
-#~ msgstr "A requisição de altura máxima pode ser feita."
-
-#~ msgid "Max Content Width"
-#~ msgstr "Largura máxima do conteúdo"
-
-#~ msgid "The maximum width request that can be made."
-#~ msgstr "A requisição de largura máxima pode ser feita."
-
-#~ msgid "The search manager for the search box."
-#~ msgstr "O gerenciador de pesquisa para a caixa de pesquisa."
-
-#~ msgid "The active search context."
-#~ msgstr "O contexto de pesquisa ativo."
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "Provider"
-#~ msgstr "Provedor"
-
-#~ msgid "The search provider"
-#~ msgstr "O provedor de pesquisa"
-
-#~ msgid "The size group for the label."
-#~ msgstr "O grupo de tamanho do rótulo."
-
-#~ msgid "Score"
-#~ msgstr "Pontuação"
-
-#~ msgid "Subtitle"
-#~ msgstr "Legenda"
-
-#~ msgid "The GtkTextBuffer for the snippet."
-#~ msgstr "O GtkTextBuffer do trecho."
-
-#~ msgid "Mark Begin"
-#~ msgstr "Início da marca"
-
-#~ msgid "The beginning text mark."
-#~ msgstr "A marca de texto inicial."
-
-#~ msgid "Mark End"
-#~ msgstr "Fim da marca"
-
-#~ msgid "The ending text mark."
-#~ msgstr "A marca de texto final."
-
-#~ msgid "The trigger for the snippet."
-#~ msgstr "O gatilho do trecho."
-
-#~ msgid "The description for the snippet."
-#~ msgstr "A descrição do trecho."
-
-#~ msgid "Tab Stop"
-#~ msgstr "Parada de tabulação"
-
-#~ msgid "The current tab stop."
-#~ msgstr "A parada de tabulação atual."
-
-#~ msgid "The snippet context."
-#~ msgstr "O contexto do trecho."
-
-#~ msgid "Spec"
-#~ msgstr "Spec"
-
-#~ msgid "The specification to expand using the contxt."
-#~ msgstr "A especificação a ser expandida usando o contexto."
-
-#~ msgid "The tab stop for the chunk."
-#~ msgstr "A parada de tabulação do bloco."
-
-#~ msgid "Text"
-#~ msgstr "Texto"
-
-#~ msgid "The text for the chunk."
-#~ msgstr "O texto do bloco."
-
-#~ msgid "Text Set"
-#~ msgstr "Texto definido"
-
-#~ msgid "If the text property has been manually set."
-#~ msgstr "Se a propriedade texto"
-
-#~ msgid "Snippet"
-#~ msgstr "Trecho"
-
-#~ msgid "The snippet to insert."
-#~ msgstr "O trecho a ser inserido."
-
-#~ msgid "The source view to insert snippet into."
-#~ msgstr "A visão fonte na qual deve ser inserido o trecho."
-
-#~ msgid "The snippets to complete with this provider."
-#~ msgstr "Os trechos a serem completados com esse provedor."
-
-#~ msgid "Alpha"
-#~ msgstr "Alfa"
-
-#~ msgid "background"
-#~ msgstr "plano de fundo"
-
-#~ msgid "height"
-#~ msgstr "altura"
-
-#~ msgid "width"
-#~ msgstr "largura"
-
-#~ msgid "x"
-#~ msgstr "x"
-
-#~ msgid "y"
-#~ msgstr "y"
-
-#~ msgid "Tree"
-#~ msgstr "Árvore"
-
-#~ msgid "The GbTree the builder belongs to."
-#~ msgstr "O GbTree ao qual pertence o construtor."
-
-#~ msgid "Root"
-#~ msgstr "Raiz"
-
-#~ msgid "The root object of the tree."
-#~ msgstr "O objeto raiz da árvore."
-
-#~ msgid "Icon Name"
-#~ msgstr "Nome do ícone"
-
-#~ msgid "The icon name to display."
-#~ msgstr "O nome do ícone a ser exibido."
-
-#~ msgid "Item"
-#~ msgstr "Item"
-
-#~ msgid "Optional object to associate with node."
-#~ msgstr "Objeto opcional a ser associado com nó."
-
-#~ msgid "Parent"
-#~ msgstr "Pai"
-
-#~ msgid "The parent node."
-#~ msgstr "O nó pai."
-
-#~ msgid "The GbTree the node belongs to."
-#~ msgstr "O GbTree ao qual pertence o nó."
-
-#~ msgid "The text of the node."
-#~ msgstr "O texto do nó."
-
-#~ msgid "Use Markup"
-#~ msgstr "Usar marcação"
-
-#~ msgid "If text should be translated as markup."
-#~ msgstr "Se texto deve ser traduzido como marcação."
-
-#~ msgid "The command manager for the workspace."
-#~ msgstr "O gerenciador de comando do espaço de trabalho."
-
-#, fuzzy
-#~ msgid "The navigation list for the workbench."
-#~ msgstr "A lista de navegação para o workbench."
