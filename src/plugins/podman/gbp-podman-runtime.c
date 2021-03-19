@@ -139,6 +139,9 @@ gbp_podman_runtime_new (JsonObject *object)
   const gchar *names;
   JsonArray *names_arr;
   JsonNode *names_node;
+  JsonNode *labels_node;
+  gboolean is_toolbox = FALSE;
+  const gchar *category;
 
   g_return_val_if_fail (object != NULL, NULL);
 
@@ -158,16 +161,39 @@ gbp_podman_runtime_new (JsonObject *object)
       names = json_node_get_string (names_node);
     }
 
+  if (json_object_has_member (object, "Labels") &&
+      (labels_node = json_object_get_member (object, "Labels")) &&
+      JSON_NODE_HOLDS_OBJECT (labels_node))
+    {
+      JsonObject *labels = json_node_get_object (labels_node);
+
+      /* Check if this is a toolbox container */
+      if (json_object_has_member (labels, "com.github.debarshiray.toolbox") ||
+          json_object_has_member (labels, "com.github.containers.toolbox"))
+        is_toolbox = TRUE;
+    }
+
   full_id = g_strdup_printf ("podman:%s", id);
-  name = g_strdup_printf ("%s %s", _("Podman"), names);
+
+  if (is_toolbox)
+    {
+      name = g_strdup_printf ("Toolbox %s", names);
+      /* translators: this is a path to browse to the runtime, likely only "containers" should be translated */
+      category = _("Containers/Toolbox");
+    }
+  else
+    {
+      name = g_strdup_printf ("Podman %s", names);
+      /* translators: this is a path to browse to the runtime, likely only "containers" should be translated */
+      category = _("Containers/Podman");
+    }
 
   g_return_val_if_fail (id != NULL, NULL);
   g_return_val_if_fail (names != NULL, NULL);
 
   self = g_object_new (GBP_TYPE_PODMAN_RUNTIME,
                        "id", full_id,
-                       /* translators: this is a path to browse to the runtime, likely only "containers" should be translated */
-                       "category", _("Containers/Podman"),
+                       "category", category,
                        "display-name", names,
                        NULL);
   self->object = json_object_ref (object);
