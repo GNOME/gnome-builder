@@ -428,6 +428,7 @@ copy_builtin_envvars (IdeEnvironment *environment)
   static const gchar *copy_env[] = {
     "COLORTERM",
     "DESKTOP_SESSION",
+    "DISPLAY",
     "LANG",
     "WAYLAND_DISPLAY",
     "XDG_CURRENT_DESKTOP",
