@@ -53,6 +53,9 @@ process_launch_async_cb (GObject      *object,
 
   if (!gb_beautifier_process_launch_finish (self, result, &error))
     {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        g_prefix_error (&error, _("beautifier program missing, you must install it: "));
+
       /* translators: %s is replaced with the error message */
       ide_object_warning (self, _("Beautifier plugin: %s"), error->message);
     }
