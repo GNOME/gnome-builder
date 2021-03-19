@@ -11,25 +11,25 @@
 # Furkan Tokaç <developmentft@gmail.com>, 2017.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
 # Çağrı Dolaz <dolazcagri@gmail.com>, 2018.
-# Muhammet Kara <muhammetk@gnome.org>, 2015, 2016, 2017, 2018.
 # Sabri Ünal <libreajans@gmail.com>, 2019.
 # Serdar Sağlam <teknomobil@yandex.com>, 2019.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017-2021.
+# Muhammet Kara <muhammetk@gmail.com>, 2015-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-02-24 05:29+0000\n"
-"PO-Revision-Date: 2021-02-28 10:37+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
-"Language-Team: Türkçe <gnome-turk@gnome.org>\n"
+"POT-Creation-Date: 2021-03-19 17:03+0000\n"
+"PO-Revision-Date: 2021-03-20 01:19+0300\n"
+"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -1001,7 +1001,7 @@ msgstr "Farklı Kaydet"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
@@ -1075,7 +1075,7 @@ msgstr "Yeniden Y_ükle"
 #: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/libide/gui/ide-workbench.c:1442
 #: src/plugins/buildui/gbp-buildui-log-pane.c:280
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:154
 #: src/plugins/testui/gbp-test-output-panel.c:69
 msgid "_Cancel"
 msgstr "_Vazgeç"
@@ -1338,65 +1338,65 @@ msgstr "İnşa boru hattı başarısız bir durum içinde"
 msgid "The build configuration has errors"
 msgstr "İnşa yapılandırmasının hataları var"
 
-#: src/libide/foundry/ide-pipeline.c:3020
+#: src/libide/foundry/ide-pipeline.c:3022
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Sahte uçbirim oluşturma başarısız. Uçbirim özellikleri kısıtlanacak."
 
-#: src/libide/foundry/ide-pipeline.c:3226
+#: src/libide/foundry/ide-pipeline.c:3228
 msgid "Cleaning…"
 msgstr "Temizleniyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3230
-#: src/libide/foundry/ide-pipeline.c:3287
+#: src/libide/foundry/ide-pipeline.c:3232
+#: src/libide/foundry/ide-pipeline.c:3289
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Başarısız oldu"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3295
+#: src/libide/foundry/ide-pipeline.c:3234
+#: src/libide/foundry/ide-pipeline.c:3297
 msgid "Ready"
 msgstr "Hazır"
 
-#: src/libide/foundry/ide-pipeline.c:3247
+#: src/libide/foundry/ide-pipeline.c:3249
 msgid "Downloading…"
 msgstr "İndiriliyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3251
+#: src/libide/foundry/ide-pipeline.c:3253
 msgid "Building dependencies…"
 msgstr "Bağımlılıklar inşa ediliyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3255
+#: src/libide/foundry/ide-pipeline.c:3257
 msgid "Bootstrapping…"
 msgstr "Özyükleniyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3259
+#: src/libide/foundry/ide-pipeline.c:3261
 msgid "Configuring…"
 msgstr "Yapılandırılıyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3263
+#: src/libide/foundry/ide-pipeline.c:3265
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "İnşa ediliyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3267
+#: src/libide/foundry/ide-pipeline.c:3269
 msgid "Installing…"
 msgstr "Kuruluyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3271
+#: src/libide/foundry/ide-pipeline.c:3273
 msgid "Committing…"
 msgstr "İşleniyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3275
+#: src/libide/foundry/ide-pipeline.c:3277
 msgid "Exporting…"
 msgstr "Dışa aktarılıyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3279
-#: src/libide/foundry/ide-pipeline.c:3283
+#: src/libide/foundry/ide-pipeline.c:3281
+#: src/libide/foundry/ide-pipeline.c:3285
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Başarılı"
 
-#: src/libide/foundry/ide-pipeline.c:3291
+#: src/libide/foundry/ide-pipeline.c:3293
 msgid "Preparing…"
 msgstr "Hazırlanıyor…"
 
@@ -2336,7 +2336,7 @@ msgid "Editor Shortcuts"
 msgstr "Düzenleyici Kısayolları"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:536
+#: src/libide/gui/ide-shortcuts-window.ui:543
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Genel"
@@ -2352,37 +2352,37 @@ msgid "Toogle primary menu"
 msgstr "Ana menüyü aç kapat"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:540
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Genel Arama"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Tercihler"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Komut Çubuğu"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Uçbirim"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "İnşa Zamanında Uçbirim"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:575
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
@@ -2494,13 +2494,13 @@ msgid "Clear highlight"
 msgstr "Vurgulamayı temizle"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:584
+#: src/libide/gui/ide-shortcuts-window.ui:591
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopyala ve Yapıştır"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:596
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Seçili metni panoya kopyala"
@@ -2511,7 +2511,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Seçili metni kes ve panoya yapıştır"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:596
+#: src/libide/gui/ide-shortcuts-window.ui:603
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Panodaki metni yapıştır"
@@ -2626,112 +2626,118 @@ msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Kodu yorumdan çıkar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:399
+#: src/libide/gui/ide-shortcuts-window.ui:398
+#| msgid "Beautify the code"
+msgctxt "shortcut window"
+msgid "Beautify selected code"
+msgstr "Seçili kodu güzelleştir"
+
+#: src/libide/gui/ide-shortcuts-window.ui:406
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Gezinme"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Dosyadaki sonraki hataya git"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Dosyadaki önceki hataya git"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Önceki düzenleme konumuna git"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Sonraki düzenleme konumuna git"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Simge tanımına git"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Görüş alanını dosyada yukarı taşı"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Görüş alanını dosyada aşağı taşı"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Görüş alanını dosyanın sonuna taşı"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Görüş alanını dosyanın başına taşı"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Eşleşen paranteze git"
 
-#: src/libide/gui/ide-shortcuts-window.ui:475
+#: src/libide/gui/ide-shortcuts-window.ui:482
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Seçimler"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Tümünü seç"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Tüm seçimleri kaldır"
 
-#: src/libide/gui/ide-shortcuts-window.ui:495
+#: src/libide/gui/ide-shortcuts-window.ui:502
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "İnşa Et ve Çalıştır"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "İnşa Et"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Yeniden İnşa Et"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:521
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Çalıştır"
 
-#: src/libide/gui/ide-shortcuts-window.ui:521
+#: src/libide/gui/ide-shortcuts-window.ui:528
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profille"
 
-#: src/libide/gui/ide-shortcuts-window.ui:532
+#: src/libide/gui/ide-shortcuts-window.ui:539
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Uçbirim Kısayolları"
 
-#: src/libide/gui/ide-shortcuts-window.ui:604
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Ara"
 
-#: src/libide/gui/ide-shortcuts-window.ui:609
+#: src/libide/gui/ide-shortcuts-window.ui:616
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Metni uçbirimde bul"
@@ -2961,7 +2967,7 @@ msgid "Bootstrapping build system"
 msgstr "İnşa sistemi özyükleniyor"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:228
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Proje yapılandırılıyor"
@@ -2970,7 +2976,7 @@ msgstr "Proje yapılandırılıyor"
 #: src/plugins/cargo/cargo_plugin.py:142
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Proje inşa ediliyor"
@@ -3064,7 +3070,7 @@ msgstr "Güzelleştirici eklentisi: “%s”"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:508
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
 #, c-format
 msgid "Beautifier plugin: %s"
 msgstr "Güzelleştirici eklentisi: %s"
@@ -3075,49 +3081,53 @@ msgstr "Güzelleştirici eklentisi: %s"
 msgid "Beautifier plugin: can’t read the following resource file: “%s”"
 msgstr "Güzelleştirici eklentisi: şu kaynak dosyası okunamadı: “%s”"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:88
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+msgid "beautifier program missing, you must install it: "
+msgstr "güzelleştirici programı eksik, kurmalısınız: "
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
 msgstr "Güzelleştirici eklentisi: görünüm GtkSourceView değil"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:95
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
 msgid "Beautifier Plugin: no default beautifier found"
 msgstr "Güzelleştirici eklentisi: öntanımlı güzelleştirici bulunamadı"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:101
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
 msgid "Beautifier Plugin: the buffer is not writable"
 msgstr "Güzelleştirici eklentisi: tampon yazılabilir değil"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:109
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
 msgid "Beautifier Plugin: Nothing selected"
 msgstr "Güzelleştirici eklentisi: Hiçbir şey seçilmedi"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:249
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "“%s” için kullanılabilir güzelleştirici yok"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:248
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:251
 #, c-format
 msgid "No beautifier available"
 msgstr "Kullanılabilir güzelleştirici yok"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "Düzenleme"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:347
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
 msgid "Beautify the code"
 msgstr "Kodu güzelleştir"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:351
 msgid "Trigger the default entry"
 msgstr "Öntanımlı girdiyi tetikle"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:377
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:380
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr ""
@@ -3476,7 +3486,7 @@ msgstr "Projeyi yapılandır"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Proje kuruluyor"
@@ -4504,11 +4514,11 @@ msgstr "Flatpak manifest kaldırılamadı: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Ağ kullanılabilir değil, indirmeler atlanıyor"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:150
 msgid "Install Missing SDK?"
 msgstr "Eksik SDKʼyı Kur?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:155
 msgid "_Install"
 msgstr "_Kur"
 
@@ -5091,13 +5101,13 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Meson Seçenekleri"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
-msgid "A Meson-based project is loaded but Ninja could not be found."
-msgstr "Meson temelli proje yüklendi ancak Ninja bulunamadı."
-
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:156
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "Meson temelli proje yüklendi fakat meson bulunamadı."
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:175
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr "Meson temelli proje yüklendi ancak Ninja bulunamadı."
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
@@ -5348,12 +5358,14 @@ msgstr "npm bağımlılıkları indiriliyor"
 msgid "Bootstrapping project"
 msgstr "Proje özyükleniyor"
 
-#: src/plugins/podman/gbp-podman-runtime.c:162
-msgid "Podman"
-msgstr "Podman"
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:182
+#| msgid "Containers/Podman"
+msgid "Containers/Toolbox"
+msgstr "Konteynerler/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:170
+#: src/plugins/podman/gbp-podman-runtime.c:188
 msgid "Containers/Podman"
 msgstr "Konteynerler/Podman"
 
@@ -5527,38 +5539,11 @@ msgstr ""
 "clippy, yaygın hataları yakalamak için ek ayıklayıcılar ekler ancak genelde "
 "yavaştır"
 
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:469
-msgid "Rust Analyzer is missing from your computer"
-msgstr "Bilgisayarınızda Rust Analyzer eksik"
-
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:470
-msgid ""
-"Support for diagnostics and auto-completion may be limited until it is "
-"installed."
-msgstr "Kuruluncaya dek tanılama ve kendiliğinden tamamlama sınırlı olabilir."
-
-#: src/plugins/rust-analyzer/rust-analyzer-service.c:472
-msgid "Install Rust Analyzer"
-msgstr "Rust Analyzer kuruluyor"
-
-#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:83
-msgid "Installation of Rust Analyzer finished"
-msgstr "Rust Analyzer’ın kurulumu bitti"
-
-#: src/plugins/rust-analyzer/rust-analyzer-transfer.c:200
-msgid "Installing Rust Analyzer..."
-msgstr "Rust Analyzer kuruluyor…"
-
-#: src/plugins/rust-analyzer/rust-analyzer-workbench-addin.c:74
-#, c-format
-msgid "Cannot download Rust Analyzer: %s"
-msgstr "Rust Analyzer indirilemedi: %s"
-
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
 msgstr "Kabuk komutu"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:565
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:577
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5566,7 +5551,7 @@ msgstr ""
 "Derleme çalıştırma zamanında uçbirim oluşturulamıyor, çünkü inşa boru hattı "
 "başlatılmadı"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:643
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:655
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr "Süreç oluşturulamıyor, çünkü inşa boru hattı başlatılmadı"
 
@@ -6257,6 +6242,30 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "Podman"
+#~ msgstr "Podman"
+
+#~ msgid "Rust Analyzer is missing from your computer"
+#~ msgstr "Bilgisayarınızda Rust Analyzer eksik"
+
+#~ msgid ""
+#~ "Support for diagnostics and auto-completion may be limited until it is "
+#~ "installed."
+#~ msgstr ""
+#~ "Kuruluncaya dek tanılama ve kendiliğinden tamamlama sınırlı olabilir."
+
+#~ msgid "Install Rust Analyzer"
+#~ msgstr "Rust Analyzer kuruluyor"
+
+#~ msgid "Installation of Rust Analyzer finished"
+#~ msgstr "Rust Analyzer’ın kurulumu bitti"
+
+#~ msgid "Installing Rust Analyzer..."
+#~ msgstr "Rust Analyzer kuruluyor…"
+
+#~ msgid "Cannot download Rust Analyzer: %s"
+#~ msgstr "Rust Analyzer indirilemedi: %s"
 
 #~ msgid "Your computer is missing the Rust Analyzer Language Server"
 #~ msgstr "Bilgisayarınızda Rust Analyzer Dil Sunucusu eksik"
