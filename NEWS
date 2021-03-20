@@ -1,3 +1,15 @@
+==============
+Version 3.40.0
+==============
+
+GNOME Builder for GNOME 40.0 is here!
+
+ • Build system improvements
+ • Group “Toolbox” containers together in build preferences
+ • Fixes for "cargo-home" usage with Rust templates
+ • More shortcuts added to shortcuts window
+ • Translation updates
+
 ===============
 Version 3.39.99
 ===============

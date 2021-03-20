@@ -86,6 +86,11 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="40.0" date="2021-03-19">
+      <p>Builder 40.0 is finally here!</p>
+      <p>In this release you'll find a number of improvements on everything from UI enhancements to foundry tooling.</p>
+    </release>
+
     <release version="3.39.94" date="2021-03-14">
       <p>
         Builder 40.rc is out and available for testing.
