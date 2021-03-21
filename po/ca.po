@@ -2847,7 +2847,7 @@ msgstr "Selecciona-ho _tot"
 
 #: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:55
 msgid "Select _None"
-msgstr "_Cap selecció"
+msgstr "_No en seleccionis cap"
 
 #: src/libide/sourceview/gtk/menus.ui:68
 msgid "All _Upper Case"
