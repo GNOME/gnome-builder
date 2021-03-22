@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-03-05 16:11+0000\n"
-"PO-Revision-Date: 2021-03-08 16:39+0100\n"
+"POT-Creation-Date: 2021-03-19 17:03+0000\n"
+"PO-Revision-Date: 2021-03-22 11:07+0100\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -1003,7 +1003,7 @@ msgstr "Salvează ca"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
@@ -2346,7 +2346,7 @@ msgid "Editor Shortcuts"
 msgstr "Scurtături de editor"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:536
+#: src/libide/gui/ide-shortcuts-window.ui:543
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Generale"
@@ -2362,37 +2362,37 @@ msgid "Toogle primary menu"
 msgstr "Comută meniul principal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:540
+#: src/libide/gui/ide-shortcuts-window.ui:547
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Căutare globală"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:554
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferințe"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:561
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Bara de comenzi"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:575
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal în executarea de generare"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:575
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Scurtături de tastatură"
@@ -2504,13 +2504,13 @@ msgid "Clear highlight"
 msgstr "Eliberează evidențierea"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:584
+#: src/libide/gui/ide-shortcuts-window.ui:591
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiere și lipire"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:589
+#: src/libide/gui/ide-shortcuts-window.ui:596
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiază textul selectat în clipboard"
@@ -2521,7 +2521,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Taie textul selectat în clipboard"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:596
+#: src/libide/gui/ide-shortcuts-window.ui:603
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Lipește text din clipboard"
@@ -2636,112 +2636,117 @@ msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Decomentează contul"
 
-#: src/libide/gui/ide-shortcuts-window.ui:399
+#: src/libide/gui/ide-shortcuts-window.ui:398
+msgctxt "shortcut window"
+msgid "Beautify selected code"
+msgstr "Cosmetizează codul selectat"
+
+#: src/libide/gui/ide-shortcuts-window.ui:406
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigare"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Mută la eroarea următoare în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Mută la eroarea anterioară în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Mută la locația de editare anterioară"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Mută la locația de editare următoare"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Sari la definiția simbolului"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mută vizorul în sus în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mută vizorul în jos în fișier"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mută vizorul la sfârșitul fișierului"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mută vizorul la începutul fișierului"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mută la paranteza pătrată pereche"
 
-#: src/libide/gui/ide-shortcuts-window.ui:475
+#: src/libide/gui/ide-shortcuts-window.ui:482
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Selectări"
 
-#: src/libide/gui/ide-shortcuts-window.ui:480
+#: src/libide/gui/ide-shortcuts-window.ui:487
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Selectează tot"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:494
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deselectează tot"
 
-#: src/libide/gui/ide-shortcuts-window.ui:495
+#: src/libide/gui/ide-shortcuts-window.ui:502
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Generează și rulează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:500
+#: src/libide/gui/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Generează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:514
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Regenerează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:521
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Rulează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:521
+#: src/libide/gui/ide-shortcuts-window.ui:528
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profilează"
 
-#: src/libide/gui/ide-shortcuts-window.ui:532
+#: src/libide/gui/ide-shortcuts-window.ui:539
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Scurtături de terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:604
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Caută"
 
-#: src/libide/gui/ide-shortcuts-window.ui:609
+#: src/libide/gui/ide-shortcuts-window.ui:616
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Caută text în terminal"
@@ -3077,7 +3082,7 @@ msgstr "Modul de cosmetizare: „%s”"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:508
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
 #, c-format
 msgid "Beautifier plugin: %s"
 msgstr "Modul de cosmetizare: %s"
@@ -3089,49 +3094,53 @@ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
 msgstr ""
 "Modul de cosmetizare: nu se poate citi următorul fișier de resursă: „%s”"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:88
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+msgid "beautifier program missing, you must install it: "
+msgstr "programul de cosmetizare lipsește, trebuie să îl instalați:"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
 msgstr "Modul de cosmetizare: vizualizarea nu este una GtkSourceView"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:95
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
 msgid "Beautifier Plugin: no default beautifier found"
 msgstr "Modul de cosmetizare: niciun modul de cosmetizare implicit disponibil"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:101
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
 msgid "Beautifier Plugin: the buffer is not writable"
 msgstr "Modul de cosmetizare: preîncărcarea nu este inscripționabilă"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:109
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
 msgid "Beautifier Plugin: Nothing selected"
 msgstr "Modul de cosmetizare: nu s-a selectat nimic"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:249
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Niciun modul de cosmetizare disponibil pentru „%s”"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:248
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:251
 #, c-format
 msgid "No beautifier available"
 msgstr "Niciun modul de cosmetizare disponibil"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "Editare"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:347
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
 msgid "Beautify the code"
 msgstr "Cosmetizează codul"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:351
 msgid "Trigger the default entry"
 msgstr "Declanșează intrarea implicită"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:377
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:380
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr "Modul de cosmetizare: nu sunt intrări valide, se dezactivează: %s"
@@ -5379,12 +5388,13 @@ msgstr "Se descarcă dependențe npm"
 msgid "Bootstrapping project"
 msgstr "Se trece prin procesul de bootstrap al proiectului"
 
-#: src/plugins/podman/gbp-podman-runtime.c:162
-msgid "Podman"
-msgstr "Podman"
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:182
+msgid "Containers/Toolbox"
+msgstr "Recipiente/Trusă de instrumente"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:170
+#: src/plugins/podman/gbp-podman-runtime.c:188
 msgid "Containers/Podman"
 msgstr "Recipiente/Podman"
 
@@ -5567,7 +5577,7 @@ msgstr ""
 msgid "Shell command"
 msgstr "Comandă shell"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:565
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:577
 msgid ""
 "Cannot spawn terminal in runtime environment because build pipeline is not "
 "initialized"
@@ -5575,7 +5585,7 @@ msgstr ""
 "Nu se poate crea terminalul în mediul de executare pentru că linia de "
 "generare nu este inițializată"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command.c:643
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:655
 msgid "Cannot spawn process because build pipeline is not yet available"
 msgstr ""
 "Nu se poate crea procesul pentru că linia de generare nu este încă "
@@ -6272,6 +6282,9 @@ msgstr "Nu s-a putut crea arborele XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fișierul trebuie salvat local pentru a fi parsat."
+
+#~ msgid "Podman"
+#~ msgstr "Podman"
 
 #~ msgid "Your computer is missing the Rust Analyzer Language Server"
 #~ msgstr "Calculatorului îi lipsește Serverul de Limbă Analizatorul Rust"
