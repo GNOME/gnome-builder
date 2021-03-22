@@ -43,8 +43,8 @@ We run these tests often so it is important that you check nothing was broken by
 
 ## Licensing
 
-Contributions should be licensed under the LGPL-2.1+ or GPL-3.
-Permissively licensed contributions will also be accepted, but we prefer that original contributions are either LGPL-2.1+ or GPL-3 licensed.
+Contributions should be licensed under the **LGPL-2.1+** or **GPL-3**. 
+Permissively licensed contributions will also be accepted, but we prefer that original contributions are either **LGPL-2.1+** or **GPL-3** licensed.
 
 ## Coding Style
 
