@@ -3435,7 +3435,7 @@ msgstr "Estat del muntatge:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:34
 msgid "Time completed:"
-msgstr "Temps completat:"
+msgstr "Temps usat:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:51
 #: src/plugins/buildui/gbp-buildui-pane.ui:66
