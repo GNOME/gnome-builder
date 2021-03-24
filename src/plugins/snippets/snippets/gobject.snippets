@@ -572,7 +572,7 @@ snippet finish
 	${$2|space} ${$1|space}          GError **error)
 	{
 		g_return_val_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self), ${3:FALSE});
-		g_return_val_if_fail (G_IS_TASK (result), $3);
+		g_return_val_if_fail (g_task_is_valid (result, self), $3);
 
 		return g_task_propagate_${4:boolean} (G_TASK (result), error);
 	}
@@ -600,7 +600,7 @@ snippet readycallback
 
 		g_assert (G_IS_OBJECT (object));
 		g_assert (G_IS_ASYNC_RESULT (result));
-		g_assert (G_IS_TASK (task));
+		g_assert (g_task_is_valid (task, object));
 
 		g_task_return_boolean (task, TRUE);
 	}
