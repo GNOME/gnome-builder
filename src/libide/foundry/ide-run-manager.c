@@ -28,6 +28,8 @@
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
 
+#include "ide-private.h"
+
 #include "ide-build-manager.h"
 #include "ide-build-system.h"
 #include "ide-build-target-provider.h"
@@ -426,29 +428,34 @@ static void
 copy_builtin_envvars (IdeEnvironment *environment)
 {
   static const gchar *copy_env[] = {
+    "AT_SPI_BUS_ADDRESS",
     "COLORTERM",
+    "DBUS_SESSION_BUS_ADDRESS",
+    "DBUS_SYSTEM_BUS_ADDRESS",
     "DESKTOP_SESSION",
-#if 0
-    /* Cannot send DISPLAY which might be different than what
-     * we run on the host (X99 in Flatpak, but X0 in the host).
-     */
     "DISPLAY",
-#endif
     "LANG",
+    "SHELL",
+    "SSH_AUTH_SOCK",
+    "USER",
     "WAYLAND_DISPLAY",
+    "XAUTHORITY",
     "XDG_CURRENT_DESKTOP",
+    "XDG_DATA_DIRS",
+    "XDG_MENU_PREFIX",
+    "XDG_RUNTIME_DIR",
     "XDG_SEAT",
     "XDG_SESSION_DESKTOP",
     "XDG_SESSION_ID",
     "XDG_SESSION_TYPE",
     "XDG_VTNR",
-    "AT_SPI_BUS_ADDRESS",
   };
+  const gchar * const *host_environ = _ide_host_environ ();
 
   for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
     {
       const gchar *key = copy_env[i];
-      const gchar *val = g_getenv (key);
+      const gchar *val = g_environ_getenv ((gchar **)host_environ, key);
 
       if (val != NULL && ide_environment_getenv (environment, key) == NULL)
         ide_environment_setenv (environment, key, val);

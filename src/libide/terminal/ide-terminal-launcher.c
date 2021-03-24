@@ -27,6 +27,8 @@
 #include <libide-foundry.h>
 #include <libide-threading.h>
 
+#include "ide-private.h"
+
 #include "ide-terminal-launcher.h"
 #include "ide-terminal-util.h"
 
@@ -101,23 +103,29 @@ static void
 copy_envvars (gpointer instance)
 {
   static const gchar *copy_env[] = {
+    "AT_SPI_BUS_ADDRESS",
     "COLORTERM",
+    "DBUS_SESSION_BUS_ADDRESS",
+    "DBUS_SYSTEM_BUS_ADDRESS",
     "DESKTOP_SESSION",
-#if 0
-    /* Cannot send DISPLAY which might be different than what
-     * we run on the host (X99 in Flatpak, but X0 in the host).
-     */
     "DISPLAY",
-#endif
     "LANG",
+    "SHELL",
+    "SSH_AUTH_SOCK",
+    "USER",
     "WAYLAND_DISPLAY",
+    "XAUTHORITY",
     "XDG_CURRENT_DESKTOP",
+    "XDG_DATA_DIRS",
+    "XDG_MENU_PREFIX",
+    "XDG_RUNTIME_DIR",
     "XDG_SEAT",
     "XDG_SESSION_DESKTOP",
     "XDG_SESSION_ID",
     "XDG_SESSION_TYPE",
     "XDG_VTNR",
   };
+  const gchar * const *host_environ;
   IdeEnvironment *env = NULL;
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (instance) || IDE_IS_RUNNER (instance));
@@ -125,9 +133,11 @@ copy_envvars (gpointer instance)
   if (IDE_IS_RUNNER (instance))
     env = ide_runner_get_environment (instance);
 
+  host_environ = _ide_host_environ ();
+
   for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
     {
-      const gchar *val = g_getenv (copy_env[i]);
+      const gchar *val = g_environ_getenv ((gchar **)host_environ, copy_env[i]);
 
       if (val != NULL)
         {
@@ -218,7 +228,7 @@ spawn_host_launcher (IdeTerminalLauncher *self,
   /* We only have sh/bash in our flatpak */
   if (self->kind == LAUNCHER_KIND_DEBUG && ide_is_flatpak ())
     shell = "/bin/bash";
- 
+
   launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_set_run_on_host (launcher, run_on_host);
   ide_subprocess_launcher_set_cwd (launcher, self->cwd ? self->cwd : g_get_home_dir ());
@@ -317,7 +327,7 @@ spawn_runtime_launcher (IdeTerminalLauncher *self,
 
   if (!(shell = ide_terminal_launcher_get_shell (self)))
     shell = ide_get_user_shell ();
- 
+
   if (!(launcher = ide_runtime_create_launcher (runtime, NULL)))
     {
       ide_task_return_new_error (task,
@@ -428,14 +438,14 @@ spawn_runner_launcher (IdeTerminalLauncher *self,
   build_target = ide_simple_build_target_new (NULL);
   ide_simple_build_target_set_argv (build_target, (const gchar * const *)argv->pdata);
   ide_simple_build_target_set_cwd (build_target, self->cwd ? self->cwd : g_get_home_dir ());
- 
+
   /* Creating runner should always succeed, but run_async() may fail */
   runner = ide_runtime_create_runner (runtime, IDE_BUILD_TARGET (build_target));
   env = ide_runner_get_environment (runner);
   ide_runner_take_tty_fd (runner, dup (pty_fd));
 
   for (guint i = 0; i < G_N_ELEMENTS (default_environment); i++)
-    ide_environment_setenv (env, 
+    ide_environment_setenv (env,
                             default_environment[i].key,
                             default_environment[i].value);
 
@@ -529,7 +539,7 @@ static void
 ide_terminal_launcher_finalize (GObject *object)
 {
   IdeTerminalLauncher *self = (IdeTerminalLauncher *)object;
-  
+
   g_clear_pointer (&self->args, g_strfreev);
   g_clear_pointer (&self->cwd, g_free);
   g_clear_pointer (&self->shell, g_free);
@@ -617,7 +627,7 @@ ide_terminal_launcher_class_init (IdeTerminalLauncherClass *klass)
                          "Arguments to shell",
                          G_TYPE_STRV,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  
+
   properties [PROP_CWD] =
     g_param_spec_string ("cwd",
                          "Cwd",
