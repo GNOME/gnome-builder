@@ -441,9 +441,12 @@ copy_builtin_envvars (IdeEnvironment *environment)
     "WAYLAND_DISPLAY",
     "XAUTHORITY",
     "XDG_CURRENT_DESKTOP",
-    "XDG_DATA_DIRS",
     "XDG_MENU_PREFIX",
+#if 0
+    /* Can't copy these as they could mess up Flatpak */
+    "XDG_DATA_DIRS",
     "XDG_RUNTIME_DIR",
+#endif
     "XDG_SEAT",
     "XDG_SESSION_DESKTOP",
     "XDG_SESSION_ID",
