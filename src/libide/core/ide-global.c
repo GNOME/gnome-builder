@@ -289,3 +289,70 @@ _ide_trace_log (GLogLevelFlags  log_level,
   if (trace_vtable.log)
     trace_vtable.log (log_level, domain, message);
 }
+
+static gchar **
+get_environ_from_stdout (GSubprocess *subprocess)
+{
+  g_autofree gchar *stdout_buf = NULL;
+
+  if (g_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdout_buf, NULL, NULL))
+    {
+      g_auto(GStrv) lines = g_strsplit (stdout_buf, "\n", 0);
+      g_autoptr(GPtrArray) env = g_ptr_array_new_with_free_func (g_free);
+
+      for (guint i = 0; lines[i]; i++)
+        {
+          const char *line = lines[i];
+
+          if (!g_ascii_isalpha (*line) && *line != '_')
+            continue;
+
+          for (const char *iter = line; *iter; iter = g_utf8_next_char (iter))
+            {
+              if (*iter == '=')
+                {
+                  g_ptr_array_add (env, g_strdup (line));
+                  break;
+                }
+
+              if (!g_ascii_isalnum (*iter) && *iter != '_')
+                break;
+            }
+        }
+
+      if (env->len > 0)
+        {
+          g_ptr_array_add (env, NULL);
+          return (gchar **)g_ptr_array_free (g_steal_pointer (&env), FALSE);
+        }
+    }
+
+  return NULL;
+}
+
+const gchar * const *
+_ide_host_environ (void)
+{
+  static gchar **host_environ;
+
+  if (host_environ == NULL)
+    {
+      if (ide_is_flatpak ())
+        {
+          g_autoptr(GSubprocessLauncher) launcher = NULL;
+          g_autoptr(GSubprocess) subprocess = NULL;
+          g_autoptr(GError) error = NULL;
+
+          launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+          subprocess = g_subprocess_launcher_spawn (launcher, &error,
+                                                    "flatpak-spawn", "--host", "printenv", NULL);
+          if (subprocess != NULL)
+            host_environ = get_environ_from_stdout (subprocess);
+        }
+
+      if (host_environ == NULL)
+        host_environ = g_get_environ ();
+    }
+
+  return (const char * const *)host_environ;
+}

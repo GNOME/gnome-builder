@@ -36,10 +36,11 @@ typedef struct
                     const gchar    *message);
 } IdeTraceVTable;
 
-void _ide_trace_init     (IdeTraceVTable *vtable);
-void _ide_trace_log      (GLogLevelFlags  log_level,
-                          const gchar    *domain,
-                          const gchar    *message);
-void _ide_trace_shutdown (void);
+void                 _ide_trace_init     (IdeTraceVTable *vtable);
+void                 _ide_trace_log      (GLogLevelFlags  log_level,
+                                          const gchar    *domain,
+                                          const gchar    *message);
+void                 _ide_trace_shutdown (void);
+const gchar * const *_ide_host_environ   (void);
 
 G_END_DECLS
