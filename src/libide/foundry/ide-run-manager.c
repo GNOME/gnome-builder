@@ -428,7 +428,12 @@ copy_builtin_envvars (IdeEnvironment *environment)
   static const gchar *copy_env[] = {
     "COLORTERM",
     "DESKTOP_SESSION",
+#if 0
+    /* Cannot send DISPLAY which might be different than what
+     * we run on the host (X99 in Flatpak, but X0 in the host).
+     */
     "DISPLAY",
+#endif
     "LANG",
     "WAYLAND_DISPLAY",
     "XDG_CURRENT_DESKTOP",
