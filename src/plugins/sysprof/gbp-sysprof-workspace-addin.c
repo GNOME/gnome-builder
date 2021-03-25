@@ -106,9 +106,6 @@ profiler_run_handler (IdeRunManager *run_manager,
   GbpSysprofWorkspaceAddin *self = user_data;
   g_autoptr(SysprofProfiler) profiler = NULL;
   g_autoptr(SysprofSource) app_source = NULL;
-  g_autoptr(SysprofSource) gjs_source = NULL;
-  g_autoptr(SysprofSource) gtk_source = NULL;
-  g_autoptr(SysprofSource) symbols_source = NULL;
   g_autoptr(SysprofSpawnable) spawnable = NULL;
   g_autoptr(GPtrArray) sources = NULL;
   g_auto(GStrv) argv = NULL;
@@ -120,7 +117,7 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
-  sources = g_ptr_array_new ();
+  sources = g_ptr_array_new_with_free_func (g_object_unref);
 
   profiler = sysprof_local_profiler_new ();
 
@@ -134,50 +131,24 @@ profiler_run_handler (IdeRunManager *run_manager,
 
 #ifdef __linux__
   {
-    g_autoptr(SysprofSource) proc_source = NULL;
-    g_autoptr(SysprofSource) perf_source = NULL;
-    g_autoptr(SysprofSource) hostinfo_source = NULL;
-    g_autoptr(SysprofSource) netdev_source = NULL;
-    g_autoptr(SysprofSource) energy_source = NULL;
-    g_autoptr(SysprofSource) memory_source = NULL;
-
-    proc_source = sysprof_proc_source_new ();
-    g_ptr_array_add (sources, proc_source);
-
-    /* TODO: Make this source non-fatal since we have other data collectors */
-    perf_source = sysprof_perf_source_new ();
-    g_ptr_array_add (sources, perf_source);
-
-    hostinfo_source = sysprof_hostinfo_source_new ();
-    g_ptr_array_add (sources, hostinfo_source);
-
-    memory_source = sysprof_memory_source_new ();
-    g_ptr_array_add (sources, memory_source);
-
-    energy_source = sysprof_proxy_source_new (G_BUS_TYPE_SYSTEM,
-                                              "org.gnome.Sysprof3",
-                                              "/org/gnome/Sysprof3/RAPL");
-    g_ptr_array_add (sources, energy_source);
-
-    netdev_source = sysprof_netdev_source_new ();
-    g_ptr_array_add (sources, netdev_source);
+    g_ptr_array_add (sources, sysprof_proc_source_new ());
+    g_ptr_array_add (sources, sysprof_perf_source_new ());
+    g_ptr_array_add (sources, sysprof_hostinfo_source_new ());
+    g_ptr_array_add (sources, sysprof_memory_source_new ());
+    g_ptr_array_add (sources, sysprof_proxy_source_new (G_BUS_TYPE_SYSTEM,
+                                                        "org.gnome.Sysprof3",
+                                                        "/org/gnome/Sysprof3/RAPL"));
+    g_ptr_array_add (sources, sysprof_netdev_source_new ());
   }
 #endif
 
-  gjs_source = sysprof_gjs_source_new ();
-  g_ptr_array_add (sources, gjs_source);
-
-  gtk_source = sysprof_tracefd_source_new ();
-  sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (gtk_source), "GTK_TRACE_FD");
-  g_ptr_array_add (sources, gtk_source);
+  g_ptr_array_add (sources, sysprof_gjs_source_new ());
+  g_ptr_array_add (sources, sysprof_symbols_source_new ());
 
   /* Allow the app to submit us data if it supports "SYSPROF_TRACE_FD" */
   app_source = sysprof_tracefd_source_new ();
   sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (app_source), "SYSPROF_TRACE_FD");
-  g_ptr_array_add (sources, app_source);
-
-  symbols_source = sysprof_symbols_source_new ();
-  g_ptr_array_add (sources, symbols_source);
+  g_ptr_array_add (sources, g_object_ref (app_source));
 
   /*
    * TODO:
@@ -217,8 +188,11 @@ profiler_run_handler (IdeRunManager *run_manager,
     {
       SysprofSource *source = g_ptr_array_index (sources, i);
 
-      sysprof_profiler_add_source (profiler, source);
-      sysprof_source_modify_spawn (source, spawnable);
+      if (source != NULL)
+        {
+          sysprof_profiler_add_source (profiler, source);
+          sysprof_source_modify_spawn (source, spawnable);
+        }
     }
 
   /* TODO: Propagate argv back to runner.
