@@ -25,12 +25,6 @@
 #include <girepository.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <libide-core.h>
-#include <libide-code.h>
-#include <libide-editor.h>
-#include <libide-greeter.h>
-#include <libide-gui.h>
-#include <libide-threading.h>
 #include <locale.h>
 #ifdef ENABLE_TRACING_SYSCAP
 # include <sysprof-capture.h>
@@ -38,10 +32,8 @@
 #include <sched.h>
 #include <unistd.h>
 
-#include "ide-application-private.h"
-#include "ide-thread-private.h"
-#include "ide-terminal-private.h"
-#include "ide-private.h"
+#include <libide-core.h>
+#include <ide-private.h>
 
 #include "bug-buddy.h"
 
@@ -191,7 +183,7 @@ is_running_in_shell (void)
    * that we are not running within a shell. Use that before checking any
    * file-descriptors since it is more reliable.
    */
-  if (ide_str_equal0 (shlvl, "0"))
+  if (g_strcmp0 (shlvl, "0") == 0)
     return FALSE;
 
   /* If stdin is not a TTY, then assume we have no access to communicate
@@ -211,7 +203,7 @@ main (gint   argc,
   g_autofree gchar *plugin = NULL;
   g_autofree gchar *type = NULL;
   g_autofree gchar *dbus_address = NULL;
-  IdeApplication *app;
+  // IdeApplication *app;
   const gchar *desktop;
   gboolean standalone = FALSE;
   int ret;
@@ -232,13 +224,6 @@ main (gint   argc,
   /* Setup various application name/id defaults. */
   g_set_prgname (ide_get_program_name ());
   g_set_application_name (_("Builder"));
-
-#if 0
-  /* TODO: allow support for parallel nightly install */
-#ifdef DEVELOPMENT_BUILD
-  ide_set_application_id ("org.gnome.Builder-Devel");
-#endif
-#endif
 
   /* Early init of logging so that we get messages in a consistent
    * format. If we deferred this to GApplication, we'd get them in
@@ -286,11 +271,18 @@ main (gint   argc,
   gtk_source_init ();
 
   /* Initialize thread pools */
+#if 0
   _ide_thread_pool_init (FALSE);
+#endif
 
   /* Guess the user shell early */
+#if 0
   _ide_guess_shell ();
+#endif
 
+  g_irepository_require (NULL, "Gtk", "4.0", 0, NULL);
+
+#if 0
   app = _ide_application_new (standalone, type, plugin, dbus_address);
   g_application_add_option_group (G_APPLICATION (app), g_irepository_get_option_group ());
   ret = g_application_run (G_APPLICATION (app), argc, argv);
@@ -299,6 +291,7 @@ main (gint   argc,
    */
   g_object_run_dispose (G_OBJECT (app));
   g_clear_object (&app);
+#endif
 
   /* Flush any outstanding logs */
   ide_log_shutdown ();

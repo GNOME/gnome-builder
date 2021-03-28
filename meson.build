@@ -254,26 +254,26 @@ ld_supports_version_script = cc.links('''
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.37.0')
 libglib_dep = dependency('glib-2.0', version: '>= 2.65.0')
 libgio_dep = dependency('gio-2.0', version: '>= 2.61.2')
+libgobject_introspection_dep = dependency('gobject-introspection-1.0', version: '>= 1.68.0')
 libgiounix_dep = dependency('gio-unix-2.0')
-libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.26')
-libgtksource_dep = dependency('gtksourceview-4', version: '>= 4.0.0')
+libgtk_dep = dependency('gtk4', version: '>= 4.1.2')
+libgtksource_dep = dependency('gtksourceview-5', version: '>= 5.0.0')
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.29.91')
 libm_dep = cc.find_library('m', required: false)
 libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
-libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
+libpeas_dep = dependency('libpeas-1.0', version: '>= 1.30.0')
 libportal_dep = dependency('libportal', version: '>= 0.3', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
-libvte_dep = dependency('vte-2.91', version: '>= 0.40.2')
-libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.26', required: false)
+# libvte_dep = dependency('vte-2.91', version: '>= 0.40.2')
+# libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.26', required: false)
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
-if libwebkit_dep.found()
-  config_h.set10('HAVE_WEBKIT', 1)
-endif
+#if libwebkit_dep.found()
+#  config_h.set10('HAVE_WEBKIT', 1)
+#endif
 
 check_functions = [
   # pty
@@ -295,7 +295,7 @@ endforeach
 # to the SYSPROF_TRACE_FD. We use sysprof-4 instead since we will
 # already have to link against that for the plugin.
 #
-libsysprof_capture = dependency('sysprof-4', version: '>= 3.37.1', required: false)
+libsysprof_capture = dependency('sysprof-capture-4', version: '>= 3.40.0', required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
 endif

@@ -34,7 +34,7 @@
 #include "ide-notifications.h"
 #include "ide-object.h"
 #include "ide-object-box.h"
-#include "ide-settings.h"
+//#include "ide-settings.h"
 #include "ide-transfer.h"
 #include "ide-transfer-manager.h"
 #include "ide-version.h"

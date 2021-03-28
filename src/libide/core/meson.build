@@ -62,7 +62,7 @@ libide_core_public_headers = [
   'ide-notifications.h',
   'ide-object.h',
   'ide-object-box.h',
-  'ide-settings.h',
+  # 'ide-settings.h',
   'ide-transfer.h',
   'ide-transfer-manager.h',
   'ide-version-macros.h',
@@ -89,7 +89,7 @@ libide_core_public_sources = [
   'ide-object.c',
   'ide-object-box.c',
   'ide-object-notify.c',
-  'ide-settings.c',
+  # 'ide-settings.c',
   'ide-transfer.c',
   'ide-transfer-manager.c',
 ]
@@ -105,7 +105,6 @@ libide_core_sources += libide_core_public_sources
 libide_core_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
   libpeas_dep,
 ]
 
@@ -121,6 +120,8 @@ libide_core_dep = declare_dependency(
   include_directories: include_directories('.'),
 )
 
+gnome_builder_deps += [libide_core_dep]
+gnome_builder_static += [libide_core]
 gnome_builder_public_sources += files(libide_core_public_sources)
 gnome_builder_public_headers += files(libide_core_public_headers)
 gnome_builder_private_headers += files(libide_core_private_headers)
