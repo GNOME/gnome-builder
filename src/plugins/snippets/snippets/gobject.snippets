@@ -600,7 +600,7 @@ snippet readycallback
 
 		g_assert (G_IS_OBJECT (object));
 		g_assert (G_IS_ASYNC_RESULT (result));
-		g_assert (g_task_is_valid (task, object));
+		g_assert (G_IS_TASK (task));
 
 		g_task_return_boolean (task, TRUE);
 	}
