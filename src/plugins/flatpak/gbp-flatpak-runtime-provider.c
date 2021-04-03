@@ -641,6 +641,8 @@ gbp_flatpak_runtime_provider_bootstrap_install_cb (GObject      *object,
 
   if (!ide_task_had_error (task) && state->count == 0)
     gbp_flatpak_runtime_provider_bootstrap_complete (task);
+  else if (!ide_task_had_error (task))
+    ide_task_return_error (task, g_steal_pointer (&error));
 }
 
 static gchar *
