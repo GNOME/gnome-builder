@@ -140,6 +140,7 @@ gbp_ls_page_style_updated (GtkWidget *widget)
 {
   GbpLsPage *self = (GbpLsPage *)widget;
   GtkStyleContext *style_context;
+  GtkStateFlags state;
   GdkRGBA bg, fg;
 
   g_assert (GBP_IS_LS_PAGE (self));
@@ -148,9 +149,12 @@ gbp_ls_page_style_updated (GtkWidget *widget)
     GTK_WIDGET_CLASS (gbp_ls_page_parent_class)->style_updated (widget);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self->tree_view));
+  state = gtk_style_context_get_state (style_context);
 
-  gtk_style_context_lookup_color (style_context, "theme_fg_color", &fg);
-  gtk_style_context_lookup_color (style_context, "theme_base_color", &bg);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_style_context_get_color (style_context, state, &fg);
+  gtk_style_context_get_background_color (style_context, state, &bg);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   ide_page_set_primary_color_bg (IDE_PAGE (self), &bg);
   ide_page_set_primary_color_fg (IDE_PAGE (self), &fg);

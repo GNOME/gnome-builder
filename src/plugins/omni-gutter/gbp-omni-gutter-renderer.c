@@ -385,7 +385,9 @@ static void
 reload_style_colors (GbpOmniGutterRenderer *self,
                      GtkSourceStyleScheme  *scheme)
 {
+  GtkStyleContext *context;
   GtkTextView *view;
+  GtkStateFlags state;
   GdkRGBA fg;
   GdkRGBA bg;
 
@@ -396,8 +398,12 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   if (view == NULL)
     return;
 
-  get_style_rgba (scheme, "line-numbers", FOREGROUND, &fg);
-  get_style_rgba (scheme, "line-numbers", BACKGROUND, &bg);
+  context = gtk_widget_get_style_context (GTK_WIDGET (view));
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get_color (context, state, &fg);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_style_context_get_background_color (context, state, &bg);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /* Extract common values from style schemes. */
   if (!get_style_rgba (scheme, "line-numbers", FOREGROUND, &self->text.fg))
