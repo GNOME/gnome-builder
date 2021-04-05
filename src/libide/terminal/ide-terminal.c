@@ -29,6 +29,7 @@
 #include "ide-terminal.h"
 
 #define BUILDER_PCRE2_MULTILINE 0x00000400u
+#define BUILDER_PCRE2_UCP 0x00020000u
 
 typedef struct
 {
@@ -63,7 +64,7 @@ enum {
 /* From vteapp.c */
 #define DINGUS1 "(((gopher|news|telnet|nntp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?"
 #define DINGUS2 DINGUS1 "/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\) ,\\\"]"
-#define FILENAME_PLUS_LOCATION "(?<filename>[a-zA-Z0-9\\+\\-\\.\\/_]+):(?<line>\\d+):(?<column>\\d+)"
+#define FILENAME_PLUS_LOCATION "(?<filename>[[:alnum:]\\+\\-\\.\\/_]+):(?<line>\\d+):(?<column>\\d+)"
 
 static guint signals[N_SIGNALS];
 static const gchar *url_regexes[] = { DINGUS1, DINGUS2, FILENAME_PLUS_LOCATION };
@@ -569,7 +570,7 @@ ide_terminal_init (IdeTerminal *self)
       gint tag;
 
       regex = vte_regex_new_for_match (pattern, DZL_LITERAL_LENGTH (pattern),
-                                       VTE_REGEX_FLAGS_DEFAULT | BUILDER_PCRE2_MULTILINE,
+                                       VTE_REGEX_FLAGS_DEFAULT | BUILDER_PCRE2_MULTILINE | BUILDER_PCRE2_UCP,
                                        NULL);
       tag = vte_terminal_match_add_regex (VTE_TERMINAL (self), regex, 0);
       vte_terminal_match_set_cursor_name (VTE_TERMINAL (self), tag, "hand2");
