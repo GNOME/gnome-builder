@@ -282,7 +282,7 @@ create_document_row (gpointer item,
                            self, 0);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (close_button), "image-button");
 
-  g_object_bind_property (item, "icon-name", image, "icon-name", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (item, "icon", image, "gicon", G_BINDING_SYNC_CREATE);
   g_object_bind_property_full (item, "modified", label, "attributes", G_BINDING_SYNC_CREATE,
                                modified_to_attrs, NULL, NULL, NULL);
   g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
