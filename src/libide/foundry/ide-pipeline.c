@@ -1061,7 +1061,7 @@ register_build_commands_stage (IdePipeline *self,
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (IDE_IS_CONFIG (self->config));
 
-  if (NULL == (build_commands = ide_config_get_build_commands (self->config)))
+  if (!(build_commands = ide_config_get_build_commands (self->config)))
     return;
 
   if ((rundir = ide_config_get_build_commands_dir (self->config)))
@@ -1072,7 +1072,7 @@ register_build_commands_stage (IdePipeline *self,
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
       g_autoptr(IdePipelineStage) stage = NULL;
 
-      if (NULL == (launcher = ide_pipeline_create_launcher (self, &error)))
+      if (!(launcher = ide_pipeline_create_launcher (self, &error)))
         {
           g_warning ("%s", error->message);
           return;
@@ -1091,19 +1091,20 @@ register_build_commands_stage (IdePipeline *self,
       stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                             "launcher", launcher,
                             NULL);
-
-      g_signal_connect (stage, "query", G_CALLBACK (build_command_query_cb), NULL);
-
+      g_signal_connect (stage,
+                        "query",
+                        G_CALLBACK (build_command_query_cb),
+                        NULL);
       ide_pipeline_attach (self,
-                                  IDE_PIPELINE_PHASE_BUILD | IDE_PIPELINE_PHASE_AFTER,
-                                  i,
-                                  stage);
+                           IDE_PIPELINE_PHASE_BUILD | IDE_PIPELINE_PHASE_AFTER,
+                           i,
+                           stage);
     }
 }
 
 static void
 register_post_install_commands_stage (IdePipeline *self,
-                                      IdeContext       *context)
+                                      IdeContext  *context)
 {
   g_autoptr(GError) error = NULL;
   const gchar * const *post_install_commands;
@@ -1112,15 +1113,15 @@ register_post_install_commands_stage (IdePipeline *self,
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (IDE_IS_CONFIG (self->config));
 
-  post_install_commands = ide_config_get_post_install_commands (self->config);
-  if (post_install_commands == NULL)
+  if (!(post_install_commands = ide_config_get_post_install_commands (self->config)))
     return;
+
   for (guint i = 0; post_install_commands[i]; i++)
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
       g_autoptr(IdePipelineStage) stage = NULL;
 
-      if (NULL == (launcher = ide_pipeline_create_launcher (self, &error)))
+      if (!(launcher = ide_pipeline_create_launcher (self, &error)))
         {
           ide_object_warning (self, "%s", error->message);
           return;
@@ -1135,9 +1136,9 @@ register_post_install_commands_stage (IdePipeline *self,
                             NULL);
 
       ide_pipeline_attach (self,
-                                  IDE_PIPELINE_PHASE_INSTALL | IDE_PIPELINE_PHASE_AFTER,
-                                  i,
-                                  stage);
+                           IDE_PIPELINE_PHASE_INSTALL | IDE_PIPELINE_PHASE_AFTER,
+                           i,
+                           stage);
     }
 }
 
