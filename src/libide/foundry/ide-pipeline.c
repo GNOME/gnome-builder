@@ -1134,7 +1134,10 @@ register_post_install_commands_stage (IdePipeline *self,
       stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                             "launcher", launcher,
                             NULL);
-
+      g_signal_connect (stage,
+                        "query",
+                        G_CALLBACK (build_command_query_cb),
+                        NULL);
       ide_pipeline_attach (self,
                            IDE_PIPELINE_PHASE_INSTALL | IDE_PIPELINE_PHASE_AFTER,
                            i,
