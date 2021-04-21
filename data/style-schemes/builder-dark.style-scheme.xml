@@ -75,6 +75,7 @@
 
   <!-- Diagnostics Underlining -->
   <style name="diagnostician::deprecated"   underline="error" underline-color="aluminium3"/>
+  <style name="diagnostician::unused"       underline="error" underline-color="chocolate2"/>
   <style name="diagnostician::error"        underline="error" underline-color="red1"/>
   <style name="diagnostician::note"         underline="error" underline-color="skyblue1"/>
   <style name="diagnostician::warning"      underline="error" underline-color="orange1"/>

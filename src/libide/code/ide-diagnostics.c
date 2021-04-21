@@ -213,6 +213,7 @@ ide_diagnostics_take (IdeDiagnostics *self,
 
     case IDE_DIAGNOSTIC_WARNING:
     case IDE_DIAGNOSTIC_DEPRECATED:
+    case IDE_DIAGNOSTIC_UNUSED:
       priv->n_warnings++;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_WARNINGS]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_N_WARNINGS]);

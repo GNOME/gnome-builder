@@ -516,6 +516,9 @@ parse_severity (const gchar *str)
   if (strstr (lower, "ignored") != NULL)
     return IDE_DIAGNOSTIC_IGNORED;
 
+  if (strstr (lower, "unused") != NULL)
+    return IDE_DIAGNOSTIC_UNUSED;
+
   if (strstr (lower, "deprecated") != NULL)
     return IDE_DIAGNOSTIC_DEPRECATED;
 

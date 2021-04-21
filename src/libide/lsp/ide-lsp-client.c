@@ -750,6 +750,9 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
             case TAG_DEPRECATED:
               severity = IDE_DIAGNOSTIC_DEPRECATED;
               break;
+            case TAG_UNNECESSARY:
+              severity = IDE_DIAGNOSTIC_UNUSED;
+              break;
             default:
               break;
             }
@@ -1673,6 +1676,7 @@ ide_lsp_client_start (IdeLspClient *self)
           "tagSupport", "{",
             "valueSet", "[",
               JSONRPC_MESSAGE_PUT_INT64 (1),
+              JSONRPC_MESSAGE_PUT_INT64 (2),
             "]",
           "}",
         "}",
