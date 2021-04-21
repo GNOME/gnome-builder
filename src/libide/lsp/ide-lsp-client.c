@@ -81,6 +81,11 @@ enum {
 };
 
 enum {
+  TAG_UNNECESSARY      = 1,
+  TAG_DEPRECATED       = 2,
+};
+
+enum {
   TEXT_DOCUMENT_SYNC_NONE,
   TEXT_DOCUMENT_SYNC_FULL,
   TEXT_DOCUMENT_SYNC_INCREMENTAL,
@@ -680,6 +685,8 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
       g_autoptr(GVariant) range = NULL;
       const gchar *message = NULL;
       const gchar *source = NULL;
+      g_autoptr(GVariantIter) tags = NULL;
+      GVariant *current_tag;
       gint64 severity = 0;
       gboolean success;
       struct {
@@ -696,6 +703,7 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
       /* Optional Fields */
       JSONRPC_MESSAGE_PARSE (value, "severity", JSONRPC_MESSAGE_GET_INT64 (&severity));
       JSONRPC_MESSAGE_PARSE (value, "source", JSONRPC_MESSAGE_GET_STRING (&source));
+      JSONRPC_MESSAGE_PARSE (value, "tags", JSONRPC_MESSAGE_GET_ITER (&tags));
 
       /* Extract location information */
       success = JSONRPC_MESSAGE_PARSE (range,
@@ -730,6 +738,21 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
         default:
           severity = IDE_DIAGNOSTIC_NOTE;
           break;
+        }
+
+      while (tags != NULL && g_variant_iter_loop (tags, "v", &current_tag))
+        {
+          if (!g_variant_is_of_type (current_tag, G_VARIANT_TYPE_INT64))
+            continue;
+
+          switch (g_variant_get_int64 (current_tag))
+            {
+            case TAG_DEPRECATED:
+              severity = IDE_DIAGNOSTIC_DEPRECATED;
+              break;
+            default:
+              break;
+            }
         }
 
       diag = ide_diagnostic_new (severity, message, begin_loc);
@@ -1643,6 +1666,13 @@ ide_lsp_client_start (IdeLspClient *self)
               JSONRPC_MESSAGE_PUT_INT64 (23),
               JSONRPC_MESSAGE_PUT_INT64 (24),
               JSONRPC_MESSAGE_PUT_INT64 (25),
+            "]",
+          "}",
+        "}",
+        "publishDiagnostics", "{",
+          "tagSupport", "{",
+            "valueSet", "[",
+              JSONRPC_MESSAGE_PUT_INT64 (1),
             "]",
           "}",
         "}",
