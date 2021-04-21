@@ -541,9 +541,9 @@ populate_diagnostics_cb (guint                 line,
   g_assert (line <= state->end_line);
 
   info = &g_array_index (state->lines, LineInfo, line - state->begin_line);
-  info->is_warning |= !!(severity & (IDE_DIAGNOSTIC_WARNING | IDE_DIAGNOSTIC_DEPRECATED));
-  info->is_error |= !!(severity & (IDE_DIAGNOSTIC_ERROR | IDE_DIAGNOSTIC_FATAL));
-  info->is_note |= !!(severity & IDE_DIAGNOSTIC_NOTE);
+  info->is_warning |= severity == IDE_DIAGNOSTIC_WARNING || severity == IDE_DIAGNOSTIC_DEPRECATED;
+  info->is_error |= severity == IDE_DIAGNOSTIC_ERROR || severity == IDE_DIAGNOSTIC_FATAL;
+  info->is_note |= severity == IDE_DIAGNOSTIC_NOTE;
 }
 
 static void
