@@ -1635,7 +1635,6 @@ gbp_flatpak_application_addin_resolve_extension (GbpFlatpakApplicationAddin *sel
                       if (!g_str_has_prefix (extname, id))
                         {
                           if (!ide_str_equal0 (id, sdk_id) ||
-                              !ide_str_equal0 (arch, sdk_arch) ||
                               !ide_str_equal0 (branch, sdk_branch))
                             continue;
                         }
