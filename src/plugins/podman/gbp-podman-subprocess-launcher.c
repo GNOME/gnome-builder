@@ -128,6 +128,8 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
           copy_envvar (launcher, &i, "SSH_AUTH_SOCK");
           copy_envvar (launcher, &i, "WAYLAND_DISPLAY");
           copy_envvar (launcher, &i, "XDG_CURRENT_DESKTOP");
+          copy_envvar (launcher, &i, "XDG_DATA_DIRS");
+          copy_envvar (launcher, &i, "XDG_RUNTIME_DIR");
           copy_envvar (launcher, &i, "XDG_SEAT");
           copy_envvar (launcher, &i, "XDG_SESSION_DESKTOP");
           copy_envvar (launcher, &i, "XDG_SESSION_ID");
