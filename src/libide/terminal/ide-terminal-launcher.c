@@ -116,9 +116,12 @@ copy_envvars (gpointer instance)
     "WAYLAND_DISPLAY",
     "XAUTHORITY",
     "XDG_CURRENT_DESKTOP",
+#if 0
+    /* Can't copy these as they could mess up Flatpak */
     "XDG_DATA_DIRS",
-    "XDG_MENU_PREFIX",
     "XDG_RUNTIME_DIR",
+#endif
+    "XDG_MENU_PREFIX",
     "XDG_SEAT",
     "XDG_SESSION_DESKTOP",
     "XDG_SESSION_ID",
