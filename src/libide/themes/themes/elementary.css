@@ -8,3 +8,8 @@
 @define-color wm_shadow alpha(#000, 0.23);
 
 @import url("resource:///org/gnome/builder/themes/shared.css");
+
+vte-terminal {
+  color: @theme_fg_color;
+  background-color: @content_view_bg;
+}
