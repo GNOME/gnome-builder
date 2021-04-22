@@ -445,7 +445,8 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
 
   if (!_ide_runtime_manager_prepare_finish (runtime_manager, result, &error))
     {
-      g_message ("Failed to prepare runtime: %s", error->message);
+      if (error != NULL)
+        g_message ("Failed to prepare runtime: %s", error->message);
       IDE_GOTO (failure);
     }
 
