@@ -1611,17 +1611,47 @@ gbp_flatpak_application_addin_resolve_extension (GbpFlatpakApplicationAddin *sel
                   g_autofree gchar *version = NULL;
                   g_autofree gchar *runtime = NULL;
                   g_autofree gchar *match = NULL;
+                  g_autofree gchar *refstr = NULL;
 
                   /* This might be our extension */
                   if (ide_str_equal0 (group, "ExtensionOf") &&
-                      ide_str_equal0 (id, extension) &&
-                      (runtime = g_key_file_get_string (keyfile, group, "runtime", NULL)))
+                      ide_str_equal0 (id, extension))
                     {
-                      ResolveExtension re = {
-                        chunk_insert (strings, "%s/%s/%s", id, arch, branch),
-                        g_string_chunk_insert_const (strings, runtime) };
+                      runtime = g_key_file_get_string (keyfile, group, "runtime", NULL);
+                      refstr = g_key_file_get_string (keyfile, group, "ref", NULL);
 
-                      g_array_append_val (maybe_extention_of, re);
+                      if (ref != NULL && g_str_has_prefix (refstr, "runtime/"))
+                        {
+                          g_autofree gchar *ref_id = NULL;
+                          g_autofree gchar *ref_arch = NULL;
+                          g_autofree gchar *ref_branch = NULL;
+
+                          if (gbp_flatpak_split_id (refstr + strlen ("runtime/"), &ref_id, &ref_arch, &ref_branch))
+                            {
+                              g_clear_pointer (&runtime, g_free);
+
+                              /* https://gitlab.gnome.org/GNOME/gnome-builder/issues/1437
+                               *
+                               * Some extensions report an incorrect ref (or a ref that is
+                               * for another architecture than the current). For example,
+                               * org.freedesktop.Sdk.Compat.i386/x86_64/19.08 will report
+                               * a ref of org.freedesktop.Sdk/i386/19.08.
+                               *
+                               * To work around this, we can simply swap the arch for the
+                               * arch of the runtime extension we're looking at.
+                               */
+                              runtime = g_strdup_printf ("%s/%s/%s", ref_id, arch, ref_branch);
+                            }
+                        }
+
+                      if (runtime != NULL)
+                        {
+                          ResolveExtension re = {
+                            chunk_insert (strings, "%s/%s/%s", id, arch, branch),
+                            g_string_chunk_insert_const (strings, runtime) };
+
+                          g_array_append_val (maybe_extention_of, re);
+                        }
                     }
 
                   /* This might provide the extension */
