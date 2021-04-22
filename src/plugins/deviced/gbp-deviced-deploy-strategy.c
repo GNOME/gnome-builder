@@ -97,6 +97,17 @@ gbp_deviced_deploy_strategy_load_async (IdeDeployStrategy   *strategy,
   IDE_EXIT;
 }
 
+static gboolean
+gbp_deviced_deploy_strategy_load_finish (IdeDeployStrategy *self,
+                                         GAsyncResult *result,
+                                         GError **error)
+{
+  g_return_val_if_fail (GBP_IS_DEVICED_DEPLOY_STRATEGY (self), FALSE);
+  g_return_val_if_fail (ide_task_is_valid (result, self), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
 static void
 deploy_install_bundle_cb (GObject      *object,
                           GAsyncResult *result,
@@ -357,13 +368,26 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   IDE_EXIT;
 }
 
+static gboolean
+gbp_deviced_deploy_strategy_deploy_finish (IdeDeployStrategy *self,
+                                           GAsyncResult *result,
+                                           GError **error)
+{
+  g_return_val_if_fail (GBP_IS_DEVICED_DEPLOY_STRATEGY (self), FALSE);
+  g_return_val_if_fail (ide_task_is_valid (result, self), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
 static void
 gbp_deviced_deploy_strategy_class_init (GbpDevicedDeployStrategyClass *klass)
 {
   IdeDeployStrategyClass *strategy_class = IDE_DEPLOY_STRATEGY_CLASS (klass);
 
   strategy_class->load_async = gbp_deviced_deploy_strategy_load_async;
+  strategy_class->load_finish = gbp_deviced_deploy_strategy_load_finish;
   strategy_class->deploy_async = gbp_deviced_deploy_strategy_deploy_async;
+  strategy_class->deploy_finish = gbp_deviced_deploy_strategy_deploy_finish;
 }
 
 static void
