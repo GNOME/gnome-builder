@@ -654,19 +654,24 @@ resolve_extension_branch (GbpFlatpakRuntimeProvider *self,
   g_autofree gchar *resolved = NULL;
   g_autofree gchar *branch = NULL;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (extension != NULL);
 
+  IDE_TRACE_MSG ("Resolving extension %s for SDK %s",
+                 extension, sdk);
+
   if (extension == NULL)
-    return NULL;
+    IDE_RETURN (NULL);
 
   addin = gbp_flatpak_application_addin_get_default ();
   resolved = gbp_flatpak_application_addin_resolve_extension (addin, sdk, extension);
 
   if (resolved == NULL || !gbp_flatpak_split_id (resolved, NULL, NULL, &branch))
-    return NULL;
+    IDE_RETURN (NULL);
 
-  return g_steal_pointer (&branch);
+  IDE_RETURN (g_steal_pointer (&branch));
 }
 
 static void

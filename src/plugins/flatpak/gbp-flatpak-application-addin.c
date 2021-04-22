@@ -1535,6 +1535,8 @@ gbp_flatpak_application_addin_resolve_extension (GbpFlatpakApplicationAddin *sel
   g_autoptr(GArray) runtime_extensions = NULL;
   g_autoptr(GStringChunk) strings = NULL;
 
+  IDE_ENTRY;
+
   /* XXX: This method is a monstrocity to all main loops. Please make something
    *      in libflatpak that we can use instead of this.
    */
@@ -1544,14 +1546,14 @@ gbp_flatpak_application_addin_resolve_extension (GbpFlatpakApplicationAddin *sel
   g_return_val_if_fail (extension != NULL, NULL);
 
   if (self->installations == NULL)
-    return NULL;
+    IDE_RETURN (NULL);
 
   /* It would be very nice to do this asynchronously someday, but we try to
    * only use cached contents so it's not quite as bad as it could be.
    */
 
   if (!gbp_flatpak_split_id (sdk, &sdk_id, &sdk_arch, &sdk_branch))
-    return NULL;
+    IDE_RETURN (NULL);
 
   strings = g_string_chunk_new (4096);
   installations = g_ptr_array_ref (self->installations);
@@ -1687,10 +1689,13 @@ gbp_flatpak_application_addin_resolve_extension (GbpFlatpakApplicationAddin *sel
                 continue;
 
               if (ide_str_equal0 (target->ref, sdk))
-                return g_strdup (maybe->ref);
+                {
+                  char *ret = g_strdup (maybe->ref);
+                  IDE_RETURN (ret);
+                }
             }
         }
     }
 
-  return NULL;
+  IDE_RETURN (NULL);
 }
