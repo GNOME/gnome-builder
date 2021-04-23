@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-01-23 18:57+0000\n"
-"PO-Revision-Date: 2021-04-14 11:51+0100\n"
+"POT-Creation-Date: 2021-04-14 10:53+0000\n"
+"PO-Revision-Date: 2021-04-23 11:49+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
-"Language-Team: Português <happyguy_pt@hotmail.com>\n"
+"Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -26,7 +26,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
-msgstr "Construtor"
+msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
 #: src/libide/gui/ide-application-actions.c:143
@@ -1688,6 +1688,8 @@ msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
 msgstr ""
+"O GNOME Builder requer uma sessão de ambiente gráfico com o D-Bus. Por "
+"favor, configure DBUS_SESSION_BUS_ADDRESS."
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -2709,7 +2711,7 @@ msgstr "Mo_ver para o lixo"
 #: src/libide/gui/ide-shortcuts-window.ui:516
 msgctxt "shortcut window"
 msgid "Three finger swipe right"
-msgstr ""
+msgstr "Deslize para a direita com três dedos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
@@ -2719,7 +2721,7 @@ msgstr "Mo_ver para o lixo"
 #: src/libide/gui/ide-shortcuts-window.ui:526
 msgctxt "shortcut window"
 msgid "Three finger swipe left"
-msgstr ""
+msgstr "Deslize para a esquerda com três dedos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:537
 msgctxt "shortcut window"
@@ -3143,7 +3145,7 @@ msgstr ""
 #: src/plugins/beautifier/gb-beautifier-process.c:264
 #, c-format
 msgid "Beautifier plugin: command error output: %s"
-msgstr ""
+msgstr "Plugin embelezador: saída de erro do comando: %s"
 
 #: src/plugins/beautifier/gb-beautifier-process.c:274
 msgid "Beautifier plugin: the command output is empty"
@@ -5022,7 +5024,7 @@ msgstr "Modificada"
 
 #: src/plugins/ls/gtk/menus.ui:9
 msgid "Directory Browser"
-msgstr ""
+msgstr "Diretório do navegador"
 
 #: src/plugins/ls/gtk/menus.ui:21
 msgid "Switch to Folder"
@@ -5508,7 +5510,7 @@ msgstr "Reformatar tabulações"
 
 #: src/plugins/rustup/rustup_plugin.py:80
 msgid "Rustup not installed"
-msgstr ""
+msgstr "Rustup não instalado"
 
 #: src/plugins/rustup/rustup_plugin.py:270
 msgid "Installing rustup"
@@ -5520,7 +5522,7 @@ msgstr "A atualizar o rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:274
 msgid "Installing rust "
-msgstr "Prefixo de Instalação"
+msgstr "A instalar rust "
 
 #: src/plugins/rustup/rustup_plugin.py:276
 msgid "Checking system"
@@ -5528,11 +5530,11 @@ msgstr "Sistema operativo anfitrião"
 
 #: src/plugins/rustup/rustup_plugin.py:341
 msgid "Downloading rustup-init"
-msgstr ""
+msgstr "A transferir rustup-init"
 
 #: src/plugins/rustup/rustup_plugin.py:346
 msgid "Syncing channel updates"
-msgstr ""
+msgstr "Atualizações do canal de sincronização"
 
 #: src/plugins/rustup/rustup_plugin.py:352
 msgid "Downloading "
@@ -5540,7 +5542,7 @@ msgstr "A transferir "
 
 #: src/plugins/rustup/rustup_plugin.py:359
 msgid "Installing "
-msgstr "Prefixo de Instalação"
+msgstr "A instalar "
 
 #: src/plugins/rustup/rustup_plugin.py:365
 msgid "Checking for rustup updates"
@@ -5572,7 +5574,7 @@ msgstr "Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:440
 msgid "Rustup Toolchains"
-msgstr ""
+msgstr "Conjuntos de ferramentas Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:496
 msgid "Updating"
@@ -5590,6 +5592,7 @@ msgstr "Padrão"
 #: src/plugins/rustup/rustup_plugin.py:589
 msgid "Makes the selected toolchain the default rust installation"
 msgstr ""
+"Torna o conjunto de ferramentas selecionado a instalação rust predefinida"
 
 #: src/plugins/rustup/rustup_plugin.py:604
 msgid "Install Rust Channel"
@@ -5609,18 +5612,25 @@ msgid ""
 "                        <date>          = YYYY-MM-DD\n"
 "                        <host>          = <target-triple>"
 msgstr ""
+"Os nomes do conjunto de ferramentas do canal de lançamento predefinido têm o "
+"seguinte formato:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
 
 #: src/plugins/rustup/rustup_plugin.py:635
 msgid "Install Rustup to manage toolchains here!"
-msgstr ""
+msgstr "Instale o Rustup para gerir conjuntos de ferramentas aqui!"
 
 #: src/plugins/rustup/rustup_plugin.py:642
 msgid "No toolchain installed. Click"
-msgstr ""
+msgstr "Nenhum conjunto de ferramentas instalado. Clique"
 
 #: src/plugins/rustup/rustup_plugin.py:643
 msgid "to add a new toolchain!"
-msgstr ""
+msgstr "para adicionar um novo conjunto de ferramentas!"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
 msgid "Shell command"
