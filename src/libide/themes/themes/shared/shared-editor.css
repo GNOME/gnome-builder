@@ -142,3 +142,9 @@ textview:not(:focus) text {
   caret-color: transparent;
   -gtk-secondary-caret-color: transparent;
 }
+
+
+vte-terminal {
+  background-color: @content_view_bg;
+  color: @theme_fg_color;
+}
