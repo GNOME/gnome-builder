@@ -814,38 +814,59 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
     {
       g_auto(GStrv) all = NULL;
       g_autofree gchar *sdk_full = NULL;
+      g_autofree gchar *platform_full = NULL;
+      const char * const *sdk_extensions;
       const gchar *sdk;
+      const gchar *platform;
 
       /* Tell the dialog about the SDK so it can resolve common ancestors for
        * SDK extensions missing a branch name.
        */
+      platform = gbp_flatpak_manifest_get_platform (GBP_FLATPAK_MANIFEST (state->config));
+      platform_full = g_strdup_printf ("%s/%s/%s", platform, state->arch, state->branch);
       sdk = gbp_flatpak_manifest_get_sdk (GBP_FLATPAK_MANIFEST (state->config));
       sdk_full = g_strdup_printf ("%s/%s/%s", sdk, state->arch, state->branch);
+      sdk_extensions = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (state->config));
+
       gbp_flatpak_install_dialog_set_sdk (dialog, sdk_full);
 
-      all = gbp_flatpak_manifest_get_runtimes (GBP_FLATPAK_MANIFEST (state->config),
-                                               state->arch);
+      /* Make sure we have the SDK installed (org.gnome.Sdk) */
+      if (!gbp_flatpak_application_addin_has_runtime (addin, sdk, state->arch, state->branch))
+        gbp_flatpak_install_dialog_add_runtime (dialog, sdk_full);
 
-      if (all != NULL)
+      /* Make sure we have the platform for running it too (org.gnome.Platform) */
+      if (!gbp_flatpak_application_addin_has_runtime (addin, platform, state->arch, state->branch))
+        gbp_flatpak_install_dialog_add_runtime (dialog, platform);
+
+      /* Resolve the extensions ASAP so we can show them in the dialog and also
+       * ensure that we have the right extension for the SDK.
+       */
+      for (guint i = 0; sdk_extensions[i]; i++)
         {
-          for (guint i = 0; all[i]; i++)
-            {
-              g_autofree gchar *item_name = NULL;
-              g_autofree gchar *item_arch = NULL;
-              g_autofree gchar *item_branch = NULL;
+          g_autofree char *resolved = gbp_flatpak_application_addin_resolve_extension (addin, sdk_full, sdk_extensions[i]);
 
-              if (gbp_flatpak_split_id (all[i], &item_name, &item_arch, &item_branch))
-                {
-                  if (!gbp_flatpak_application_addin_has_runtime (addin, item_name, item_arch, item_branch))
-                    gbp_flatpak_install_dialog_add_runtime (dialog, all[i]);
-                }
+          if (resolved == NULL)
+            {
+              gbp_flatpak_install_dialog_add_runtime (dialog, sdk_extensions[i]);
+            }
+          else
+            {
+              g_autofree char *resolved_id = NULL;
+              g_autofree char *resolved_arch = NULL;
+              g_autofree char *resolved_branch = NULL;
+
+              if (gbp_flatpak_split_id (resolved, &resolved_id, &resolved_arch, &resolved_branch) &&
+                  !gbp_flatpak_application_addin_has_runtime (addin, resolved_id, resolved_arch, resolved_branch))
+                gbp_flatpak_install_dialog_add_runtime (dialog, resolved);
             }
         }
     }
-
-  /* Add runtime specifically (in case no manifest is set) */
-  if (!gbp_flatpak_application_addin_has_runtime (addin, state->name, state->arch, state->branch))
-    gbp_flatpak_install_dialog_add_runtime_full (dialog, state->name, state->arch, state->branch);
+  else
+    {
+      /* Add runtime specifically (in case no manifest is set) */
+      if (!gbp_flatpak_application_addin_has_runtime (addin, state->name, state->arch, state->branch))
+        gbp_flatpak_install_dialog_add_runtime_full (dialog, state->name, state->arch, state->branch);
+    }
 
   runtimes = gbp_flatpak_install_dialog_get_runtimes (dialog);
 
