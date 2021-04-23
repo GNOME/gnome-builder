@@ -1085,3 +1085,11 @@ gbp_flatpak_manifest_get_runtimes (GbpFlatpakManifest *self,
 
   return (gchar **)g_ptr_array_free (ar, FALSE);
 }
+
+const char *
+gbp_flatpak_manifest_get_platform (GbpFlatpakManifest *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
+
+  return self->runtime;
+}
