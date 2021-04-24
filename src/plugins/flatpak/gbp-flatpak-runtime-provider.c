@@ -841,23 +841,26 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       /* Resolve the extensions ASAP so we can show them in the dialog and also
        * ensure that we have the right extension for the SDK.
        */
-      for (guint i = 0; sdk_extensions[i]; i++)
+      if (sdk_extensions != NULL)
         {
-          g_autofree char *resolved = gbp_flatpak_application_addin_resolve_extension (addin, sdk_full, sdk_extensions[i]);
-
-          if (resolved == NULL)
+          for (guint i = 0; sdk_extensions[i]; i++)
             {
-              gbp_flatpak_install_dialog_add_runtime (dialog, sdk_extensions[i]);
-            }
-          else
-            {
-              g_autofree char *resolved_id = NULL;
-              g_autofree char *resolved_arch = NULL;
-              g_autofree char *resolved_branch = NULL;
+              g_autofree char *resolved = gbp_flatpak_application_addin_resolve_extension (addin, sdk_full, sdk_extensions[i]);
 
-              if (gbp_flatpak_split_id (resolved, &resolved_id, &resolved_arch, &resolved_branch) &&
-                  !gbp_flatpak_application_addin_has_runtime (addin, resolved_id, resolved_arch, resolved_branch))
-                gbp_flatpak_install_dialog_add_runtime (dialog, resolved);
+              if (resolved == NULL)
+                {
+                  gbp_flatpak_install_dialog_add_runtime (dialog, sdk_extensions[i]);
+                }
+              else
+                {
+                  g_autofree char *resolved_id = NULL;
+                  g_autofree char *resolved_arch = NULL;
+                  g_autofree char *resolved_branch = NULL;
+
+                  if (gbp_flatpak_split_id (resolved, &resolved_id, &resolved_arch, &resolved_branch) &&
+                      !gbp_flatpak_application_addin_has_runtime (addin, resolved_id, resolved_arch, resolved_branch))
+                    gbp_flatpak_install_dialog_add_runtime (dialog, resolved);
+                }
             }
         }
     }
