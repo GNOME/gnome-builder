@@ -1,4 +1,18 @@
 ==============
+Version 3.40.1
+==============
+
+Changes in this release:
+
+ • Project template improvements
+ • Theme fixes for non-standard themes
+ • Improvements to Podman/Toolbox integration
+ • Sysprof integration fixes
+ • Improve resolution of SDK Extensions from Flatpak manifests
+ • Fix delivering flatpak builds via deviced to remove device
+ • Translation updates
+
+==============
 Version 3.40.0
 ==============
 
