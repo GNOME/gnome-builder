@@ -2366,7 +2366,8 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
    * like '$SHELL -c "exec $APP"' in gdb.
    */
   shell = ide_get_user_shell ();
-  if (!ide_str_equal0 (shell, "sh") && !ide_str_equal0 (shell, "bash"))
+  if (!ide_str_equal0 (shell, "/bin/sh") && !ide_str_equal0 (shell, "sh") &&
+      !ide_str_equal0 (shell, "/bin/bash") && !ide_str_equal0 (shell, "bash"))
     ide_environment_setenv (env, "SHELL", "sh");
 
   /* Connect to all our important signals */
