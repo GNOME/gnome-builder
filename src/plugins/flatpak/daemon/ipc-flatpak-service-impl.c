@@ -51,6 +51,14 @@ typedef struct
   FlatpakRef            *target;
 } IsKnown;
 
+typedef struct
+{
+  GDBusMethodInvocation *invocation;
+  GPtrArray             *installs;
+  char                  *sdk;
+  char                  *extension;
+} ResolveExtensionState;
+
 struct _IpcFlatpakServiceImpl
 {
   IpcFlatpakServiceSkeleton parent;
@@ -80,6 +88,16 @@ static void      runtime_free                                (Runtime           
 static gboolean  runtime_equal                               (const Runtime          *a,
                                                               const Runtime          *b);
 static void      is_known_free                               (IsKnown                *state);
+
+static void
+resolve_extension_state_free (ResolveExtensionState *state)
+{
+  g_clear_pointer (&state->sdk, g_free);
+  g_clear_pointer (&state->extension, g_free);
+  g_clear_pointer (&state->installs, g_ptr_array_unref);
+  g_clear_object (&state->invocation);
+  g_slice_free (ResolveExtensionState, state);
+}
 
 static inline gboolean
 str_equal0 (const char *a,
@@ -604,9 +622,9 @@ chunk_insert (GStringChunk *strings,
 }
 
 static gchar *
-resolve_extension (IpcFlatpakServiceImpl *self,
-                   const gchar           *sdk,
-                   const gchar           *extension)
+resolve_extension (GPtrArray   *installations,
+                   const gchar *sdk,
+                   const gchar *extension)
 {
   g_autofree gchar *sdk_id = NULL;
   g_autofree gchar *sdk_arch = NULL;
@@ -614,10 +632,8 @@ resolve_extension (IpcFlatpakServiceImpl *self,
   g_autoptr(GArray) maybe_extention_of = NULL;
   g_autoptr(GArray) runtime_extensions = NULL;
   g_autoptr(GStringChunk) strings = NULL;
-  GHashTableIter iter;
-  Install *info;
 
-  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (installations != NULL);
   g_assert (sdk != NULL);
   g_assert (extension != NULL);
 
@@ -635,10 +651,10 @@ resolve_extension (IpcFlatpakServiceImpl *self,
   maybe_extention_of = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
   runtime_extensions = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
 
-  g_hash_table_iter_init (&iter, self->installs);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&info))
+  for (guint i = 0; i < installations->len; i++)
     {
-      g_autoptr(GPtrArray) remotes = flatpak_installation_list_remotes (info->installation, NULL, NULL);
+      FlatpakInstallation *installation = g_ptr_array_index (installations, i);
+      g_autoptr(GPtrArray) remotes = flatpak_installation_list_remotes (installation, NULL, NULL);
 
       if (remotes == NULL)
         continue;
@@ -649,7 +665,7 @@ resolve_extension (IpcFlatpakServiceImpl *self,
           const gchar *name = flatpak_remote_get_name (remote);
           g_autoptr(GPtrArray) refs = NULL;
 
-          refs = flatpak_installation_list_remote_refs_sync_full (info->installation,
+          refs = flatpak_installation_list_remote_refs_sync_full (installation,
                                                                   name,
                                                                   FLATPAK_QUERY_FLAGS_ONLY_CACHED,
                                                                   NULL,
@@ -803,6 +819,37 @@ resolve_extension (IpcFlatpakServiceImpl *self,
   return NULL;
 }
 
+static void
+resolve_extension_worker (GTask        *task,
+                          gpointer      source_object,
+                          gpointer      task_data,
+                          GCancellable *cancellable)
+{
+  g_autofree char *resolved = NULL;
+  ResolveExtensionState *state = task_data;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (source_object));
+  g_assert (state != NULL);
+  g_assert (state->installs != NULL);
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (state->invocation));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  resolved = resolve_extension (state->installs, state->sdk, state->extension);
+
+  if (resolved == NULL)
+    g_dbus_method_invocation_return_error (g_steal_pointer (&state->invocation),
+                                           G_DBUS_ERROR,
+                                           G_DBUS_ERROR_FAILED,
+                                           "Failed to resolve extension");
+  else
+    ipc_flatpak_service_complete_resolve_extension (source_object,
+                                                    g_steal_pointer (&state->invocation),
+                                                    resolved);
+
+  g_task_return_boolean (task, TRUE);
+}
+
 static gboolean
 ipc_flatpak_service_impl_resolve_extension (IpcFlatpakService     *service,
                                             GDBusMethodInvocation *invocation,
@@ -810,24 +857,30 @@ ipc_flatpak_service_impl_resolve_extension (IpcFlatpakService     *service,
                                             const char            *extension)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
-  g_autofree char *resolved = NULL;
+  ResolveExtensionState *state;
+  g_autoptr(GTask) task = NULL;
+  GHashTableIter iter;
+  Install *install;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
   g_assert (sdk != NULL);
   g_assert (extension != NULL);
 
-  resolved = resolve_extension (self, sdk, extension);
+  state = g_slice_new0 (ResolveExtensionState);
+  state->installs = g_ptr_array_new_with_free_func (g_object_unref);
+  state->invocation = g_steal_pointer (&invocation);
+  state->sdk = g_strdup (sdk);
+  state->extension = g_strdup (extension);
 
-  if (resolved == NULL)
-    g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
-                                           G_DBUS_ERROR,
-                                           G_DBUS_ERROR_FAILED,
-                                           "Failed to resolve extension");
-  else
-    ipc_flatpak_service_complete_resolve_extension (service,
-                                                    g_steal_pointer (&invocation),
-                                                    resolved);
+  g_hash_table_iter_init (&iter, self->installs);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&install))
+    g_ptr_array_add (state->installs, g_object_ref (install->installation));
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_source_tag (task, ipc_flatpak_service_impl_resolve_extension);
+  g_task_set_task_data (task, state, (GDestroyNotify) resolve_extension_state_free);
+  g_task_run_in_thread (task, resolve_extension_worker);
 
   return TRUE;
 }
@@ -888,9 +941,9 @@ static void
 ipc_flatpak_service_impl_init (IpcFlatpakServiceImpl *self)
 {
   self->installs = g_hash_table_new_full (g_file_hash,
-                                               (GEqualFunc) g_file_equal,
-                                               g_object_unref,
-                                               (GDestroyNotify) install_free);
+                                          (GEqualFunc) g_file_equal,
+                                          g_object_unref,
+                                          (GDestroyNotify) install_free);
   self->runtimes = g_ptr_array_new_with_free_func ((GDestroyNotify) runtime_free);
 }
 
