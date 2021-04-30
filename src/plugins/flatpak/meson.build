@@ -28,7 +28,6 @@ plugins_sources += files([
   'gbp-flatpak-install-dialog.c',
   'gbp-flatpak-manifest.c',
   'gbp-flatpak-pipeline-addin.c',
-  'gbp-flatpak-preferences-addin.c',
   'gbp-flatpak-runner.c',
   'gbp-flatpak-runtime-provider.c',
   'gbp-flatpak-runtime.c',
