@@ -250,6 +250,10 @@ install_reload (IpcFlatpakServiceImpl *self,
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (install != NULL);
 
+  /* XXX: This current ignores removing known runtimes. For now, if you do that,
+   *      just restart Builder to have that picked up.
+   */
+
   if (!(refs = flatpak_installation_list_installed_refs_by_kind (install->installation,
                                                                  FLATPAK_REF_KIND_RUNTIME,
                                                                  NULL, NULL)))
