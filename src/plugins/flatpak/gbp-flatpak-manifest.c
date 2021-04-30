@@ -25,9 +25,12 @@
 #include <json-glib/json-glib.h>
 
 #include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-client.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-util.h"
+
+#include "ipc-flatpak-service.h"
 
 struct _GbpFlatpakManifest
 {
@@ -551,21 +554,27 @@ find_extension (GbpFlatpakManifest *self,
                 const gchar        *name)
 {
   g_autoptr(FlatpakInstalledRef) ref = NULL;
+  g_autofree char *resolved = NULL;
   GbpFlatpakApplicationAddin *addin;
   GbpFlatpakRuntime *ret = NULL;
+  IpcFlatpakService *service;
+  GbpFlatpakClient *client;
+  IdeContext *context;
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (self));
   g_assert (name != NULL);
 
-  /* TODO: This doesn't allow pinning to the right version
-   * of extension because we need to know the right parent
-   * version of the extension.
-   */
-  addin = gbp_flatpak_application_addin_get_default ();
-  ref = gbp_flatpak_application_addin_find_extension (addin, self->sdk, name);
+  context = ide_object_get_context (IDE_OBJECT (self));
 
-  if (ref != NULL)
-    ret = gbp_flatpak_runtime_new (ref, TRUE, NULL, NULL);
+  if ((client = gbp_flatpak_client_from_context (context)) &&
+      (service = gbp_flatpak_client_get_service (client, NULL, NULL)) &&
+      ipc_flatpak_service_call_resolve_extension_sync (service, self->sdk, name, &resolved, NULL, NULL))
+    {
+      addin = gbp_flatpak_application_addin_get_default ();
+      ref = gbp_flatpak_application_addin_find_extension (addin, self->sdk, name);
+      if (ref != NULL)
+        ret = gbp_flatpak_runtime_new (ref, TRUE, NULL, NULL);
+    }
 
   return IDE_RUNTIME (g_steal_pointer (&ret));
 }
