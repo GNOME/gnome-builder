@@ -22,6 +22,7 @@
 
 #include <dazzle.h>
 #include <libide-io.h>
+#include <libide-terminal.h>
 #include <string.h>
 
 #include "gbp-gdb-debugger.h"
@@ -2345,7 +2346,9 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
                           IdeRunner   *runner)
 {
   static const gchar *prepend_argv[] = { "gdb", "--interpreter=mi2", "--args" };
+  const char *shell;
   GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
+  IdeEnvironment *env;
   VtePty *pty;
 
   IDE_ENTRY;
@@ -2353,9 +2356,18 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (IDE_IS_RUNNER (runner));
 
+  env = ide_runner_get_environment (runner);
+
   /* Prepend arguments in reverse to preserve ordering */
   for (guint i = G_N_ELEMENTS (prepend_argv); i > 0; i--)
     ide_runner_prepend_argv (runner, prepend_argv [i-1]);
+
+  /* Override $SHELL unless it's sh or bash as that tends to break things
+   * like '$SHELL -c "exec $APP"' in gdb.
+   */
+  shell = ide_get_user_shell ();
+  if (!ide_str_equal0 (shell, "sh") && !ide_str_equal0 (shell, "bash"))
+    ide_environment_setenv (env, "SHELL", "sh");
 
   /* Connect to all our important signals */
   dzl_signal_group_set_target (self->runner_signals, runner);
