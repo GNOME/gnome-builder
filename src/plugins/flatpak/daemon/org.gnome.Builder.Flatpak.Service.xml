@@ -23,9 +23,9 @@
   <interface name="org.gnome.Builder.Flatpak.Service">
     <signal name="RuntimeAdded">
       <!--
-        Param is (name, arch, branch, sdk_name, sdk_branch, is_sdk_extension)
+        Param is (name, arch, branch, sdk_name, sdk_branch, metadata, is_sdk_extension)
       -->
-      <arg name="runtime" direction="in" type="(sssssb)"/>
+      <arg name="runtime" direction="in" type="(ssssssb)"/>
     </signal>
     <!--
       AddInstallation:
@@ -44,7 +44,7 @@
       Lists the available runtimes for use as development.
     -->
     <method name="ListRuntimes">
-      <arg name="runtimes" direction="out" type="a(sssssb)"/>
+      <arg name="runtimes" direction="out" type="a(ssssssb)"/>
     </method>
     <!--
       RuntimeIsKnown:
