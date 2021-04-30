@@ -1555,6 +1555,9 @@ gbp_flatpak_application_addin_resolve_extension (GbpFlatpakApplicationAddin *sel
   if (!gbp_flatpak_split_id (sdk, &sdk_id, &sdk_arch, &sdk_branch))
     IDE_RETURN (NULL);
 
+  if (sdk_arch == NULL)
+    sdk_arch = g_strdup (flatpak_get_default_arch ());
+
   strings = g_string_chunk_new (4096);
   installations = g_ptr_array_ref (self->installations);
 
