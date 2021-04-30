@@ -726,13 +726,16 @@ locate_deploy_dir (const gchar *sdk_id)
 }
 
 GbpFlatpakRuntime *
-gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
-                         gboolean              is_extension,
-                         GCancellable         *cancellable,
-                         GError              **error)
+gbp_flatpak_runtime_new (const char    *name,
+                         const char    *arch,
+                         const char    *branch,
+                         GBytes        *metadata,
+                         const char    *deploy_dir,
+                         gboolean       is_extension,
+                         GCancellable  *cancellable,
+                         GError       **error)
 {
   g_autofree gchar *sdk_deploy_dir = NULL;
-  g_autoptr(GBytes) metadata = NULL;
   g_autoptr(GKeyFile) keyfile = NULL;
   g_autofree gchar *sdk = NULL;
   g_autofree gchar *id = NULL;
@@ -741,19 +744,13 @@ gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
   g_autofree gchar *runtime_name = NULL;
   g_autoptr(IdeTriplet) triplet_object = NULL;
   g_autoptr(GString) category = NULL;
-  const gchar *name;
-  const gchar *arch;
-  const gchar *branch;
-  const gchar *deploy_dir;
 
-  g_return_val_if_fail (FLATPAK_IS_INSTALLED_REF (ref), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+  g_return_val_if_fail (branch != NULL, NULL);
+  g_return_val_if_fail (arch != NULL, NULL);
+  g_return_val_if_fail (deploy_dir != NULL, NULL);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
 
-  arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
-
-  name = flatpak_ref_get_name (FLATPAK_REF (ref));
-  branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
-  deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
   triplet_object = ide_triplet_new (arch);
   triplet = g_strdup_printf ("%s/%s/%s", name, arch, branch);
   id = g_strdup_printf ("flatpak:%s", triplet);
@@ -771,9 +768,6 @@ gbp_flatpak_runtime_new (FlatpakInstalledRef  *ref,
     g_string_append (category, name);
   else
     g_string_append_printf (category, "%s (%s)", name, arch);
-
-  if (!(metadata = flatpak_installed_ref_load_metadata (ref, cancellable, error)))
-    return NULL;
 
   keyfile = g_key_file_new ();
   if (!g_key_file_load_from_bytes (keyfile, metadata, 0, error))

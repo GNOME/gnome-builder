@@ -139,6 +139,7 @@ runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
                   GbpFlatpakApplicationAddin *app_addin)
 {
   g_autoptr(GbpFlatpakRuntime) new_runtime = NULL;
+  g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GError) error = NULL;
   const gchar *name;
 
@@ -170,7 +171,12 @@ runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
    * We didn't already have this runtime, so go ahead and just
    * add it now (and keep a copy so we can find it later).
    */
-  new_runtime = gbp_flatpak_runtime_new (ref, FALSE, NULL, &error);
+  new_runtime = gbp_flatpak_runtime_new (flatpak_ref_get_name (FLATPAK_REF (ref)),
+                                         flatpak_ref_get_arch (FLATPAK_REF (ref)),
+                                         flatpak_ref_get_branch (FLATPAK_REF (ref)),
+                                         (bytes = flatpak_installed_ref_load_metadata (ref, NULL, NULL)),
+                                         flatpak_installed_ref_get_deploy_dir (ref),
+                                         FALSE, NULL, &error);
 
   if (new_runtime == NULL)
     {

@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <flatpak.h>
 #include <libide-foundry.h>
 
 G_BEGIN_DECLS
@@ -29,7 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
-GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (FlatpakInstalledRef  *ref,
+GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (const char           *name,
+                                                       const char           *arch,
+                                                       const char           *branch,
+                                                       GBytes               *metadata,
+                                                       const char           *deploy_dir,
                                                        gboolean              is_extension,
                                                        GCancellable         *cancellable,
                                                        GError              **error);

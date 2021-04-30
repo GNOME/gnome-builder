@@ -560,6 +560,7 @@ find_extension (GbpFlatpakManifest *self,
   IpcFlatpakService *service;
   GbpFlatpakClient *client;
   IdeContext *context;
+  g_autoptr(GBytes) bytes = NULL;
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (self));
   g_assert (name != NULL);
@@ -573,7 +574,12 @@ find_extension (GbpFlatpakManifest *self,
       addin = gbp_flatpak_application_addin_get_default ();
       ref = gbp_flatpak_application_addin_find_extension (addin, self->sdk, name);
       if (ref != NULL)
-        ret = gbp_flatpak_runtime_new (ref, TRUE, NULL, NULL);
+        ret = gbp_flatpak_runtime_new (flatpak_ref_get_name (FLATPAK_REF (ref)),
+                                       flatpak_ref_get_arch (FLATPAK_REF (ref)),
+                                       flatpak_ref_get_branch (FLATPAK_REF (ref)),
+                                       (bytes = flatpak_installed_ref_load_metadata (ref, NULL, NULL)),
+                                       flatpak_installed_ref_get_deploy_dir (ref),
+                                       TRUE, NULL, NULL);
     }
 
   return IDE_RUNTIME (g_steal_pointer (&ret));
