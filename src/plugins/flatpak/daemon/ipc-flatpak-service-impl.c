@@ -310,6 +310,31 @@ install_reload (IpcFlatpakServiceImpl *self,
 }
 
 static gboolean
+add_installation (IpcFlatpakServiceImpl  *self,
+                  FlatpakInstallation    *installation,
+                  GError                **error)
+{
+  g_autoptr(GFile) file = NULL;
+  Install *install;
+
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (FLATPAK_IS_INSTALLATION (installation));
+
+  file = flatpak_installation_get_path (installation);
+
+  if (!(install = install_new (self, installation, error)))
+    return FALSE;
+
+  install_reload (self, install);
+
+  g_hash_table_insert (self->installs,
+                       g_steal_pointer (&file),
+                       g_steal_pointer (&install));
+
+  return TRUE;
+}
+
+static gboolean
 ipc_flatpak_service_impl_add_installation (IpcFlatpakService     *service,
                                            GDBusMethodInvocation *invocation,
                                            const gchar           *path,
@@ -328,17 +353,9 @@ ipc_flatpak_service_impl_add_installation (IpcFlatpakService     *service,
 
   if (!g_hash_table_contains (self->installs, file))
     {
-      Install *install;
-
       if (!(installation = flatpak_installation_new_for_path (file, is_user, NULL, &error)) ||
-          !(install = install_new (self, installation, &error)))
+          !add_installation (self, installation, &error))
         return complete_wrapped_error (invocation, error);
-
-      install_reload (self, install);
-
-      g_hash_table_insert (self->installs,
-                           g_steal_pointer (&file),
-                           g_steal_pointer (&install));
     }
 
   ipc_flatpak_service_complete_add_installation (service, invocation);
@@ -825,6 +842,25 @@ G_DEFINE_TYPE_WITH_CODE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC_TY
                          G_IMPLEMENT_INTERFACE (IPC_TYPE_FLATPAK_SERVICE, service_iface_init))
 
 static void
+ipc_flatpak_service_impl_constructed (GObject *object)
+{
+  IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)object;
+  g_autoptr(GPtrArray) installations = NULL;
+  g_autoptr(FlatpakInstallation) user = NULL;
+
+  G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->constructed (object);
+
+  if ((user = flatpak_installation_new_user (NULL, NULL)))
+    add_installation (self, user, NULL);
+
+  if ((installations = flatpak_get_system_installations (NULL, NULL)))
+    {
+      for (guint i = 0; i < installations->len; i++)
+        add_installation (self, g_ptr_array_index (installations, i), NULL);
+    }
+}
+
+static void
 ipc_flatpak_service_impl_finalize (GObject *object)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)object;
@@ -840,6 +876,7 @@ ipc_flatpak_service_impl_class_init (IpcFlatpakServiceImplClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ipc_flatpak_service_impl_constructed;
   object_class->finalize = ipc_flatpak_service_impl_finalize;
 }
 

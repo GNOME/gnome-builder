@@ -50,40 +50,6 @@ enum {
 G_DEFINE_TYPE (GbpFlatpakClient, gbp_flatpak_client, IDE_TYPE_OBJECT)
 
 static void
-gbp_flatpak_client_register_installations (GbpFlatpakClient  *self,
-                                           IpcFlatpakService *service)
-{
-  g_autofree char *user_path = NULL;
-  g_autofree char *system_path = NULL;
-
-  g_assert (GBP_IS_FLATPAK_CLIENT (self));
-  g_assert (IPC_IS_FLATPAK_SERVICE (service));
-
-  /*
-   * First we want to load the user installation so that it is at index 0.
-   * This naturally prefers the user installation for various operations
-   * which is precisely what we want.
-   *
-   * We can't use flatpak_installation_new_user() since that will not map to
-   * the user's real flatpak user installation. It will instead map to the
-   * reidrected XDG_DATA_DIRS version. Therefore, we synthesize the path to the
-   * location we know it should be at.
-   */
-  user_path = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
-  ipc_flatpak_service_call_add_installation (service, user_path, TRUE, NULL, NULL, NULL);
-
-  /* We can't really access any of the system installations other than the
-   * one we know about (as flatpak_get_system_installations() never really
-   * worked correctly within the Flatpak environment.
-   *
-   * We could try to fix this for distro shipped versions, but they can deal
-   * with the fallout there because we only support Flatpak upstream and the
-   * distros we work on ourselves are all going Flatpak for apps.
-   */
-  ipc_flatpak_service_call_add_installation (service, "/var/lib/flatpak", FALSE, NULL, NULL, NULL);
-}
-
-static void
 gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
                                        IdeSubprocess           *subprocess,
                                        IdeSubprocessSupervisor *supervisor)
@@ -141,8 +107,6 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
   self->get_service.head = NULL;
   self->get_service.tail = NULL;
   self->get_service.length = 0;
-
-  gbp_flatpak_client_register_installations (self, self->service);
 
   for (const GList *iter = queued; iter != NULL; iter = iter->next)
     {
