@@ -39,9 +39,6 @@ gboolean                    gbp_flatpak_application_addin_has_runtime           
                                                                                   const gchar                 *id,
                                                                                   const gchar                 *arch,
                                                                                   const gchar                 *branch);
-gchar                      *gbp_flatpak_application_addin_resolve_extension      (GbpFlatpakApplicationAddin  *self,
-                                                                                  const gchar                 *sdk,
-                                                                                  const gchar                 *extension);
 void                        gbp_flatpak_application_addin_check_sysdeps_async    (GbpFlatpakApplicationAddin  *self,
                                                                                   GCancellable                *cancellable,
                                                                                   GAsyncReadyCallback          callback,

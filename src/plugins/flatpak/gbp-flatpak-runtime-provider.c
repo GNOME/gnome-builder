@@ -29,6 +29,7 @@
 #include "ide-gui-private.h"
 
 #include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-client.h"
 #include "gbp-flatpak-install-dialog.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
@@ -650,23 +651,27 @@ resolve_extension_branch (GbpFlatpakRuntimeProvider *self,
                           const gchar               *sdk,
                           const gchar               *extension)
 {
-  GbpFlatpakApplicationAddin *addin;
   g_autofree gchar *resolved = NULL;
   g_autofree gchar *branch = NULL;
+  IdeContext *context;
+  GbpFlatpakClient *client;
+  IpcFlatpakService *service;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (extension != NULL);
 
-  IDE_TRACE_MSG ("Resolving extension %s for SDK %s",
-                 extension, sdk);
+  IDE_TRACE_MSG ("Resolving extension %s for SDK %s", extension, sdk);
 
   if (extension == NULL)
     IDE_RETURN (NULL);
 
-  addin = gbp_flatpak_application_addin_get_default ();
-  resolved = gbp_flatpak_application_addin_resolve_extension (addin, sdk, extension);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  client = gbp_flatpak_client_from_context (context);
+  service = gbp_flatpak_client_get_service (client, NULL, NULL);
+
+  ipc_flatpak_service_call_resolve_extension_sync (service, sdk, extension, &resolved, NULL, NULL);
 
   if (resolved == NULL || !gbp_flatpak_split_id (resolved, NULL, NULL, &branch))
     IDE_RETURN (NULL);
@@ -767,6 +772,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   const gchar *build_arch;
   IdeContext *context;
   IdeConfig *config;
+  GbpFlatpakClient *client;
+  IpcFlatpakService *service;
 
   IDE_ENTRY;
 
@@ -810,6 +817,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   ide_task_set_task_data (task, state, bootstrap_state_free);
 
   addin = gbp_flatpak_application_addin_get_default ();
+  client = gbp_flatpak_client_from_context (context);
+  service = gbp_flatpak_client_get_service (client, NULL, NULL);
 
   /* Add all the runtimes the manifest needs */
   if (GBP_IS_FLATPAK_MANIFEST (state->config))
@@ -847,9 +856,9 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
         {
           for (guint i = 0; sdk_extensions[i]; i++)
             {
-              g_autofree char *resolved = gbp_flatpak_application_addin_resolve_extension (addin, sdk_full, sdk_extensions[i]);
+              g_autofree char *resolved = NULL;
 
-              if (resolved == NULL)
+              if (!ipc_flatpak_service_call_resolve_extension_sync (service, sdk_full, sdk_extensions[i], &resolved, NULL, NULL))
                 {
                   gbp_flatpak_install_dialog_add_runtime (dialog, sdk_extensions[i]);
                 }

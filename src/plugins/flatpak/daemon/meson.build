@@ -36,6 +36,11 @@ test_flatpak_sources = [
   ipc_flatpak_transfer_src,
 ]
 
+plugins_sources += [
+  ipc_flatpak_service_src,
+  ipc_flatpak_transfer_src,
+]
+
 test_flatpak = executable('test-flatpak', 'test-flatpak.c', test_flatpak_sources,
   dependencies: [ libgiounix_dep ],
 )

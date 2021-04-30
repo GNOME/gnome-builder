@@ -81,6 +81,69 @@ static gboolean  runtime_equal                               (const Runtime     
                                                               const Runtime          *b);
 static void      is_known_free                               (IsKnown                *state);
 
+static inline gboolean
+str_equal0 (const char *a,
+            const char *b)
+{
+  return g_strcmp0 (a, b) == 0;
+}
+
+static inline gboolean
+str_empty0 (const char *s)
+{
+  return !s || !*s;
+}
+
+gboolean
+split_id (const gchar  *str,
+          gchar       **id,
+          gchar       **arch,
+          gchar       **branch)
+{
+  g_auto(GStrv) parts = g_strsplit (str, "/", 0);
+  guint i = 0;
+
+  if (id)
+    *id = NULL;
+
+  if (arch)
+    *arch = NULL;
+
+  if (branch)
+    *branch = NULL;
+
+  if (parts[i] != NULL)
+    {
+      if (id != NULL)
+        *id = g_strdup (parts[i]);
+    }
+  else
+    {
+      /* we require at least a runtime/app ID */
+      return FALSE;
+    }
+
+  i++;
+
+  if (parts[i] != NULL)
+    {
+      if (arch != NULL)
+        *arch = g_strdup (parts[i]);
+    }
+  else
+    return TRUE;
+
+  i++;
+
+  if (parts[i] != NULL)
+    {
+      if (branch != NULL && !str_empty0 (parts[i]))
+        *branch = g_strdup (parts[i]);
+    }
+
+  return TRUE;
+}
+
 static void
 is_known_free (IsKnown *state)
 {
@@ -495,6 +558,259 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   return TRUE;
 }
 
+typedef struct
+{
+  const gchar *ref;
+  const gchar *extension;
+} ResolveExtension;
+
+G_GNUC_PRINTF (2, 3)
+static const gchar *
+chunk_insert (GStringChunk *strings,
+              const gchar *format,
+              ...)
+{
+  char formatted[256];
+  const gchar *ret = NULL;
+  va_list args;
+
+  va_start (args, format);
+  if (g_vsnprintf (formatted, sizeof formatted, format, args) < sizeof formatted)
+    ret = g_string_chunk_insert_const (strings, formatted);
+  va_end (args);
+
+  return ret;
+}
+
+static gchar *
+resolve_extension (IpcFlatpakServiceImpl *self,
+                   const gchar           *sdk,
+                   const gchar           *extension)
+{
+  g_autofree gchar *sdk_id = NULL;
+  g_autofree gchar *sdk_arch = NULL;
+  g_autofree gchar *sdk_branch = NULL;
+  g_autoptr(GArray) maybe_extention_of = NULL;
+  g_autoptr(GArray) runtime_extensions = NULL;
+  g_autoptr(GStringChunk) strings = NULL;
+  GHashTableIter iter;
+  Install *info;
+
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (sdk != NULL);
+  g_assert (extension != NULL);
+
+  /* It would be very nice to do this asynchronously someday, but we try to
+   * only use cached contents so it's not quite as bad as it could be.
+   */
+
+  if (!split_id (sdk, &sdk_id, &sdk_arch, &sdk_branch))
+    return NULL;
+
+  if (sdk_arch == NULL)
+    sdk_arch = g_strdup (flatpak_get_default_arch ());
+
+  strings = g_string_chunk_new (4096);
+  maybe_extention_of = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
+  runtime_extensions = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
+
+  g_hash_table_iter_init (&iter, self->installs);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&info))
+    {
+      g_autoptr(GPtrArray) remotes = flatpak_installation_list_remotes (info->installation, NULL, NULL);
+
+      if (remotes == NULL)
+        continue;
+
+      for (guint j = 0; j < remotes->len; j++)
+        {
+          FlatpakRemote *remote = g_ptr_array_index (remotes, j);
+          const gchar *name = flatpak_remote_get_name (remote);
+          g_autoptr(GPtrArray) refs = NULL;
+
+          refs = flatpak_installation_list_remote_refs_sync_full (info->installation,
+                                                                  name,
+                                                                  FLATPAK_QUERY_FLAGS_ONLY_CACHED,
+                                                                  NULL,
+                                                                  NULL);
+
+          if (refs == NULL)
+            continue;
+
+          for (guint k = 0; k < refs->len; k++)
+            {
+              FlatpakRemoteRef *ref = g_ptr_array_index (refs, k);
+              const char *id = flatpak_ref_get_name (FLATPAK_REF (ref));
+              const char *branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
+              const char *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
+              g_autoptr(GKeyFile) keyfile = NULL;
+              g_auto(GStrv) groups = NULL;
+              GBytes *bytes;
+
+              if (flatpak_ref_get_kind (FLATPAK_REF (ref)) != FLATPAK_REF_KIND_RUNTIME ||
+                  !str_equal0 (arch, sdk_arch) ||
+                  !(bytes = flatpak_remote_ref_get_metadata (ref)))
+                continue;
+
+              keyfile = g_key_file_new ();
+              if (!g_key_file_load_from_bytes (keyfile, bytes, 0, NULL))
+                continue;
+
+              groups = g_key_file_get_groups (keyfile, NULL);
+
+              for (guint l = 0; groups[l]; l++)
+                {
+                  const gchar *group = groups[l];
+                  g_autofree gchar *version = NULL;
+                  g_autofree gchar *runtime = NULL;
+                  g_autofree gchar *match = NULL;
+                  g_autofree gchar *refstr = NULL;
+
+                  /* This might be our extension */
+                  if (str_equal0 (group, "ExtensionOf") &&
+                      str_equal0 (id, extension))
+                    {
+                      runtime = g_key_file_get_string (keyfile, group, "runtime", NULL);
+                      refstr = g_key_file_get_string (keyfile, group, "ref", NULL);
+
+                      if (ref != NULL && g_str_has_prefix (refstr, "runtime/"))
+                        {
+                          g_autofree gchar *ref_id = NULL;
+                          g_autofree gchar *ref_arch = NULL;
+                          g_autofree gchar *ref_branch = NULL;
+
+                          if (split_id (refstr + strlen ("runtime/"), &ref_id, &ref_arch, &ref_branch))
+                            {
+                              g_clear_pointer (&runtime, g_free);
+
+                              /* https://gitlab.gnome.org/GNOME/gnome-builder/issues/1437
+                               *
+                               * Some extensions report an incorrect ref (or a ref that is
+                               * for another architecture than the current). For example,
+                               * org.freedesktop.Sdk.Compat.i386/x86_64/19.08 will report
+                               * a ref of org.freedesktop.Sdk/i386/19.08.
+                               *
+                               * To work around this, we can simply swap the arch for the
+                               * arch of the runtime extension we're looking at.
+                               */
+                              runtime = g_strdup_printf ("%s/%s/%s", ref_id, arch, ref_branch);
+                            }
+                        }
+
+                      if (runtime != NULL)
+                        {
+                          ResolveExtension re = {
+                            chunk_insert (strings, "%s/%s/%s", id, arch, branch),
+                            g_string_chunk_insert_const (strings, runtime) };
+
+                          g_array_append_val (maybe_extention_of, re);
+                        }
+                    }
+
+                  /* This might provide the extension */
+                  if (g_str_has_prefix (group, "Extension "))
+                    {
+                      const gchar *extname = group + strlen ("Extension ");
+
+                      /* Only track extensions to the runtime itself unless it is
+                       * for our target runtime/SDK.
+                       */
+                      if (!g_str_has_prefix (extname, id))
+                        {
+                          if (!str_equal0 (id, sdk_id) ||
+                              !str_equal0 (branch, sdk_branch))
+                            continue;
+                        }
+
+                      if (!(version = g_key_file_get_string (keyfile, group, "version", NULL)))
+                        version = g_strdup (branch);
+
+                      if (version != NULL)
+                        {
+                          ResolveExtension re = {
+                            chunk_insert (strings, "%s/%s/%s", id, arch, branch),
+                            chunk_insert (strings, "%s/%s/%s", extname, arch, version) };
+
+                          g_array_append_val (runtime_extensions, re);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+  for (guint i = 0; i < maybe_extention_of->len; i++)
+    {
+      const ResolveExtension *maybe = &g_array_index (maybe_extention_of, ResolveExtension, i);
+
+      /* First find any runtime matching the ExtensionOf (such as
+       * ExtensionOf=org.freedesktop.Sdk/x86_64/20.08.
+       */
+
+      for (guint j = 0; j < runtime_extensions->len; j++)
+        {
+          const ResolveExtension *re = &g_array_index (runtime_extensions, ResolveExtension, j);
+          g_autofree gchar *rname = NULL;
+
+          if (!str_equal0 (re->ref, maybe->extension))
+            continue;
+
+          if (!split_id (re->extension, &rname, NULL, NULL))
+            continue;
+
+          /* Now we need to find any runtime that matches the extension
+           * that is in re->extension (such as
+           * org.freedesktop.Sdk.Extension/x86_64/20.08).
+           */
+
+          for (guint k = 0; k < runtime_extensions->len; k++)
+            {
+              const ResolveExtension *target = &g_array_index (runtime_extensions, ResolveExtension, k);
+
+              if (!str_equal0 (re->extension, target->extension))
+                continue;
+
+              if (str_equal0 (target->ref, sdk))
+                {
+                  char *ret = g_strdup (maybe->ref);
+                  return ret;
+                }
+            }
+        }
+    }
+
+  return NULL;
+}
+
+static gboolean
+ipc_flatpak_service_impl_resolve_extension (IpcFlatpakService     *service,
+                                            GDBusMethodInvocation *invocation,
+                                            const char            *sdk,
+                                            const char            *extension)
+{
+  IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
+  g_autofree char *resolved = NULL;
+
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (sdk != NULL);
+  g_assert (extension != NULL);
+
+  resolved = resolve_extension (self, sdk, extension);
+
+  if (resolved == NULL)
+    g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
+                                           G_DBUS_ERROR,
+                                           G_DBUS_ERROR_FAILED,
+                                           "Failed to resolve extension");
+  else
+    ipc_flatpak_service_complete_resolve_extension (service,
+                                                    g_steal_pointer (&invocation),
+                                                    resolved);
+
+  return TRUE;
+}
+
 static void
 service_iface_init (IpcFlatpakServiceIface *iface)
 {
@@ -502,6 +818,7 @@ service_iface_init (IpcFlatpakServiceIface *iface)
   iface->handle_list_runtimes = ipc_flatpak_service_impl_list_runtimes;
   iface->handle_runtime_is_known = ipc_flatpak_service_impl_runtime_is_known;
   iface->handle_install = ipc_flatpak_service_impl_install;
+  iface->handle_resolve_extension = ipc_flatpak_service_impl_resolve_extension;
 }
 
 G_DEFINE_TYPE_WITH_CODE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC_TYPE_FLATPAK_SERVICE_SKELETON,

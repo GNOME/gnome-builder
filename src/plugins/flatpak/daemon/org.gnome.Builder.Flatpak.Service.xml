@@ -67,5 +67,19 @@
       <arg name="full_ref_name" direction="in" type="s"/>
       <arg name="transfer" direction="out" type="o"/>
     </method>
+    <!--
+      ResolveExtension:
+      @sdk: the primary SDK that is being used
+      @extension: the extension name that is known
+
+      Tries to locate the proper fully qualified name of a SDK extension based
+      on a provided name by locating common parents of @sdk and possible @extension
+      matches.
+    -->
+    <method name="ResolveExtension">
+      <arg name="sdk" type="s" direction="in"/>
+      <arg name="extension" type="s" direction="in"/>
+      <arg name="resolved" type="s" direction="out"/>
+    </method>
   </interface>
 </node>
