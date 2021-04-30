@@ -79,7 +79,13 @@ get_runtimes (GbpFlatpakInstallDialog *self)
                               2, &branch,
                               -1);
 
-          g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", name, arch, branch ?: ""));
+          if (arch == NULL)
+            arch = g_strdup (flatpak_get_default_arch ());
+
+          if (branch == NULL)
+            branch = g_strdup ("");
+
+          g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", name, arch, branch));
         }
       while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->liststore1), &iter));
     }
