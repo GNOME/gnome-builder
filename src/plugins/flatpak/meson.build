@@ -8,6 +8,12 @@ if not libportal_dep.found()
   error('plugin_flatpak requires access to libportal')
 endif
 
+libflatpak_dep = dependency('flatpak', version: '>= 1.0.0')
+libostree_dep = dependency('ostree-1')
+libsoup_dep = dependency('libsoup-2.4', version: '>= 2.52.0')
+
+subdir('daemon')
+
 plugins_sources += files([
   'flatpak-plugin.c',
   'gbp-flatpak-application-addin.c',
@@ -39,10 +45,10 @@ plugin_flatpak_resources = gnome.compile_resources(
 )
 
 plugins_deps += [
-  dependency('flatpak', version: '>= 0.8.0'),
-  dependency('ostree-1'),
-  dependency('libsoup-2.4', version: '>= 2.52.0'),
+  libflatpak_dep,
+  libostree_dep,
   libportal_dep,
+  libsoup_dep,
 ]
 
 plugins_sources += plugin_flatpak_resources
