@@ -823,9 +823,18 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
               g_autofree char *resolved_arch = NULL;
               g_autofree char *resolved_branch = NULL;
 
+              /* Ignore the arch from the sdk_extension (it will be the host) and use the
+               * arch from the configuration instead.
+               */
               if (gbp_flatpak_split_id (sdk_extension, &resolved_id, &resolved_arch, &resolved_branch) &&
-                  !gbp_flatpak_application_addin_has_runtime (addin, resolved_id, resolved_arch, resolved_branch))
-                gbp_flatpak_install_dialog_add_runtime (dialog, sdk_extension);
+                  !gbp_flatpak_application_addin_has_runtime (addin, resolved_id, state->arch, resolved_branch))
+                {
+                  g_autofree char *for_arch = g_strdup_printf ("%s/%s/%s",
+                                                               resolved_id,
+                                                               state->arch,
+                                                               resolved_branch ? resolved_branch : "");
+                  gbp_flatpak_install_dialog_add_runtime (dialog, for_arch);
+                }
             }
         }
     }
