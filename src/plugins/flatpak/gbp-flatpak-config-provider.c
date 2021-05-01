@@ -88,10 +88,10 @@ manifest_save_tick (IdeTask *task)
 }
 
 static void
-gbp_flatpak_config_provider_save_async (IdeConfigProvider *provider,
-                                               GCancellable             *cancellable,
-                                               GAsyncReadyCallback       callback,
-                                               gpointer                  user_data)
+gbp_flatpak_config_provider_save_async (IdeConfigProvider   *provider,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
 {
   GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
@@ -134,8 +134,8 @@ gbp_flatpak_config_provider_save_async (IdeConfigProvider *provider,
 
 static gboolean
 gbp_flatpak_config_provider_save_finish (IdeConfigProvider  *provider,
-                                                GAsyncResult              *result,
-                                                GError                   **error)
+                                         GAsyncResult       *result,
+                                         GError            **error)
 {
   g_assert (GBP_IS_FLATPAK_CONFIG_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
@@ -267,7 +267,7 @@ reload_manifest_cb (GObject      *object,
 
 static void
 manifest_needs_reload (GbpFlatpakConfigProvider *self,
-                       GbpFlatpakManifest              *manifest)
+                       GbpFlatpakManifest       *manifest)
 {
   GFile *file;
 
@@ -293,9 +293,9 @@ manifest_needs_reload (GbpFlatpakConfigProvider *self,
 
 static void
 gbp_flatpak_config_provider_load_worker (IdeTask      *task,
-                                                gpointer      source_object,
-                                                gpointer      task_data,
-                                                GCancellable *cancellable)
+                                         gpointer      source_object,
+                                         gpointer      task_data,
+                                         GCancellable *cancellable)
 {
   GbpFlatpakConfigProvider *self = source_object;
   g_autoptr(GPtrArray) manifests = NULL;
@@ -374,7 +374,7 @@ load_find_files_cb (GObject      *object,
 
 static gboolean
 contains_file (GbpFlatpakConfigProvider *self,
-               GFile                           *file)
+               GFile                    *file)
 {
   g_autofree gchar *path = NULL;
 
@@ -457,10 +457,10 @@ gbp_flatpak_config_provider_monitor_changed (GbpFlatpakConfigProvider *self,
 }
 
 static void
-gbp_flatpak_config_provider_load_async (IdeConfigProvider *provider,
-                                               GCancellable             *cancellable,
-                                               GAsyncReadyCallback       callback,
-                                               gpointer                  user_data)
+gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
 {
   GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
@@ -535,8 +535,8 @@ guess_best_config (GPtrArray *ar)
 
 static gboolean
 gbp_flatpak_config_provider_load_finish (IdeConfigProvider  *provider,
-                                                GAsyncResult              *result,
-                                                GError                   **error)
+                                         GAsyncResult       *result,
+                                         GError            **error)
 {
   GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)provider;
   g_autoptr(GPtrArray) configs = NULL;
@@ -648,7 +648,7 @@ gbp_flatpak_config_provider_duplicate (IdeConfigProvider *provider,
 
 static void
 gbp_flatpak_config_provider_delete (IdeConfigProvider *provider,
-                                           IdeConfig         *configuration)
+                                    IdeConfig         *configuration)
 {
   GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)provider;
   GbpFlatpakManifest *manifest = (GbpFlatpakManifest *)configuration;
