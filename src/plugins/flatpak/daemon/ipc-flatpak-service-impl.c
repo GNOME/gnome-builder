@@ -908,10 +908,12 @@ ipc_flatpak_service_impl_constructed (GObject *object)
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)object;
   g_autoptr(GPtrArray) installations = NULL;
   g_autoptr(FlatpakInstallation) user = NULL;
+  g_autoptr(GFile) user_file = NULL;
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->constructed (object);
 
-  if ((user = flatpak_installation_new_user (NULL, NULL)))
+  user_file = g_file_new_build_filename (g_get_home_dir (), ".local", "share", "flatpak", "repo", NULL);
+  if ((user = flatpak_installation_new_for_path (user_file, TRUE, NULL, NULL)))
     add_installation (self, user, NULL);
 
   if ((installations = flatpak_get_system_installations (NULL, NULL)))
