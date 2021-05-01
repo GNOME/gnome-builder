@@ -36,14 +36,15 @@ on_runtime_added_cb (IpcFlatpakService *service,
   const gchar *branch;
   const gchar *sdk_name;
   const gchar *sdk_branch;
+  const gchar *metadata;
   gboolean sdk_extension;
 
   g_assert (IPC_IS_FLATPAK_SERVICE (service));
   g_assert (info != NULL);
-  g_assert (g_variant_is_of_type (info, G_VARIANT_TYPE ("(sssssb)")));
+  g_assert (g_variant_is_of_type (info, G_VARIANT_TYPE ("(ssssssb)")));
 
-  g_variant_get (info, "(&s&s&s&s&sb)",
-                 &name, &arch, &branch, &sdk_name, &sdk_branch, &sdk_extension);
+  g_variant_get (info, "(&s&s&s&s&s&sb)",
+                 &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension);
 
   if (!sdk_extension)
     g_message ("Runtime Added: %s/%s/%s with SDK %s//%s",
@@ -60,6 +61,7 @@ add_install_cb (GObject      *object,
 {
   IpcFlatpakService *service = (IpcFlatpakService *)object;
   g_autofree gchar *sizestr = NULL;
+  g_autofree gchar *resolved = NULL;
   g_autoptr(GMainLoop) main_loop = user_data;
   g_autoptr(GVariant) runtimes = NULL;
   g_autoptr(GError) error = NULL;
@@ -85,9 +87,10 @@ add_install_cb (GObject      *object,
       const gchar *branch;
       const gchar *sdk_name;
       const gchar *sdk_branch;
+      const gchar *metadata;
       gboolean sdk_extension;
 
-      while (g_variant_iter_next (&iter, "(&s&s&s&s&sb)", &name, &arch, &branch, &sdk_name, &sdk_branch, &sdk_extension))
+      while (g_variant_iter_next (&iter, "(&s&s&s&s&s&sb)", &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension))
         g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d)",
                    name, arch, branch, sdk_name, sdk_branch, sdk_extension);
     }
@@ -106,6 +109,11 @@ add_install_cb (GObject      *object,
   g_assert_true (is_known);
   sizestr = g_format_size (download_size);
   g_message ("  Found, Download Size: <=%s", sizestr);
+
+  ret = ipc_flatpak_service_call_resolve_extension_sync (service, "org.gnome.Sdk/x86_64/40", "org.freedesktop.Sdk.Extension.rust-stable", &resolved, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_true (ret);
+  g_assert_cmpstr (resolved, ==, "org.freedesktop.Sdk.Extension.rust-stable/x86_64/20.08");
 
   g_main_loop_quit (main_loop);
 }

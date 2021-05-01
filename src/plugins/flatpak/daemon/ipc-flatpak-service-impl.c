@@ -400,7 +400,7 @@ ipc_flatpak_service_impl_list_runtimes (IpcFlatpakService     *service,
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(sssssb)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ssssssb)"));
 
   for (guint i = 0; i < self->runtimes->len; i++)
     {

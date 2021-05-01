@@ -1113,18 +1113,31 @@ void
 gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
                                          IpcFlatpakService  *service)
 {
+  g_autofree char *sdk = NULL;
+
   g_return_if_fail (GBP_IS_FLATPAK_MANIFEST (self));
   g_return_if_fail (!service || IPC_IS_FLATPAK_SERVICE (service));
 
   if (self->sdk_extensions == NULL || service == NULL)
     return;
 
+  /* Technically we could have a situation where the host system
+   * does not have the SDK extension but the development platform
+   * does. We do not currently support that though. Embedded systems
+   * may very well mean we need to do that someday.
+   */
+
+  sdk = g_strdup_printf ("%s/%s/%s",
+                         self->sdk,
+                         flatpak_get_default_arch (),
+                         self->runtime_version);
+
   for (guint i = 0; self->sdk_extensions[i]; i++)
     {
       g_autofree char *resolved = NULL;
 
       ipc_flatpak_service_call_resolve_extension_sync (service,
-                                                       self->sdk,
+                                                       sdk,
                                                        self->sdk_extensions[i],
                                                        &resolved,
                                                        NULL,
