@@ -42,6 +42,7 @@
         "--talk-name=org.gnome.SettingsDaemon.Color",
         "--talk-name=org.freedesktop.PackageKit",
         "--talk-name=org.freedesktop.secrets",
+        "--filesystem=xdg-run/gvfsd",
         "--filesystem=xdg-run/keyring",
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=xdg-data/meson",
