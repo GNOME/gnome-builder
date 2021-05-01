@@ -652,39 +652,6 @@ gbp_flatpak_runtime_provider_bootstrap_install_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
 }
 
-static gchar *
-resolve_extension_branch (GbpFlatpakRuntimeProvider *self,
-                          const gchar               *sdk,
-                          const gchar               *extension)
-{
-  g_autofree gchar *resolved = NULL;
-  g_autofree gchar *branch = NULL;
-  IdeContext *context;
-  GbpFlatpakClient *client;
-  IpcFlatpakService *service;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
-  g_assert (extension != NULL);
-
-  IDE_TRACE_MSG ("Resolving extension %s for SDK %s", extension, sdk);
-
-  if (extension == NULL)
-    IDE_RETURN (NULL);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  client = gbp_flatpak_client_from_context (context);
-  service = gbp_flatpak_client_get_service (client, NULL, NULL);
-
-  ipc_flatpak_service_call_resolve_extension_sync (service, sdk, extension, &resolved, NULL, NULL);
-
-  if (resolved == NULL || !gbp_flatpak_split_id (resolved, NULL, NULL, &branch))
-    IDE_RETURN (NULL);
-
-  IDE_RETURN (g_steal_pointer (&branch));
-}
-
 static void
 gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
                                            GAsyncResult *result,
@@ -697,7 +664,6 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
   g_auto(GStrv) runtimes = NULL;
   IdeTransferManager *transfer_manager;
   BootstrapState *state;
-  const gchar *sdk;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (dialog));
@@ -721,7 +687,6 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
 
   runtimes = gbp_flatpak_install_dialog_get_runtimes (dialog);
   transfer_manager = ide_transfer_manager_get_default ();
-  sdk = gbp_flatpak_install_dialog_get_sdk (dialog);
 
   for (guint i = 0; runtimes[i]; i++)
     {
@@ -729,15 +694,12 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
       g_autofree gchar *arch = NULL;
       g_autofree gchar *branch = NULL;
 
-      if (gbp_flatpak_split_id (runtimes[i], &name, &arch, &branch))
+      if (gbp_flatpak_split_id (runtimes[i], &name, &arch, &branch) && branch != NULL)
         {
           g_autoptr(GbpFlatpakTransfer) transfer = NULL;
           g_autoptr(IdeNotification) notif = NULL;
 
           state->count++;
-
-          if (branch == NULL)
-            branch = resolve_extension_branch (self, sdk, name);
 
           transfer = gbp_flatpak_transfer_new (name, arch, branch, FALSE);
           notif = ide_transfer_create_notification (IDE_TRANSFER (transfer));
@@ -778,8 +740,6 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   const gchar *build_arch;
   IdeContext *context;
   IdeConfig *config;
-  GbpFlatpakClient *client;
-  IpcFlatpakService *service;
 
   IDE_ENTRY;
 
@@ -823,8 +783,6 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   ide_task_set_task_data (task, state, bootstrap_state_free);
 
   addin = gbp_flatpak_application_addin_get_default ();
-  client = gbp_flatpak_client_from_context (context);
-  service = gbp_flatpak_client_get_service (client, NULL, NULL);
 
   /* Add all the runtimes the manifest needs */
   if (GBP_IS_FLATPAK_MANIFEST (state->config))
@@ -855,29 +813,19 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       if (!gbp_flatpak_application_addin_has_runtime (addin, platform, state->arch, state->branch))
         gbp_flatpak_install_dialog_add_runtime (dialog, platform);
 
-      /* Resolve the extensions ASAP so we can show them in the dialog and also
-       * ensure that we have the right extension for the SDK.
-       */
+      /* The manifest should have already resolved extensions for us by this point */
       if (sdk_extensions != NULL)
         {
           for (guint i = 0; sdk_extensions[i]; i++)
             {
-              g_autofree char *resolved = NULL;
+              const char *sdk_extension = sdk_extensions[i];
+              g_autofree char *resolved_id = NULL;
+              g_autofree char *resolved_arch = NULL;
+              g_autofree char *resolved_branch = NULL;
 
-              if (!ipc_flatpak_service_call_resolve_extension_sync (service, sdk_full, sdk_extensions[i], &resolved, NULL, NULL))
-                {
-                  gbp_flatpak_install_dialog_add_runtime (dialog, sdk_extensions[i]);
-                }
-              else
-                {
-                  g_autofree char *resolved_id = NULL;
-                  g_autofree char *resolved_arch = NULL;
-                  g_autofree char *resolved_branch = NULL;
-
-                  if (gbp_flatpak_split_id (resolved, &resolved_id, &resolved_arch, &resolved_branch) &&
-                      !gbp_flatpak_application_addin_has_runtime (addin, resolved_id, resolved_arch, resolved_branch))
-                    gbp_flatpak_install_dialog_add_runtime (dialog, resolved);
-                }
+              if (gbp_flatpak_split_id (sdk_extension, &resolved_id, &resolved_arch, &resolved_branch) &&
+                  !gbp_flatpak_application_addin_has_runtime (addin, resolved_id, resolved_arch, resolved_branch))
+                gbp_flatpak_install_dialog_add_runtime (dialog, sdk_extension);
             }
         }
     }
