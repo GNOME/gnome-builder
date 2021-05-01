@@ -1108,3 +1108,32 @@ gbp_flatpak_manifest_get_platform (GbpFlatpakManifest *self)
 
   return self->runtime;
 }
+
+void
+gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
+                                         IpcFlatpakService  *service)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_MANIFEST (self));
+  g_return_if_fail (!service || IPC_IS_FLATPAK_SERVICE (service));
+
+  if (self->sdk_extensions == NULL || service == NULL)
+    return;
+
+  for (guint i = 0; self->sdk_extensions[i]; i++)
+    {
+      g_autofree char *resolved = NULL;
+
+      ipc_flatpak_service_call_resolve_extension_sync (service,
+                                                       self->sdk,
+                                                       self->sdk_extensions[i],
+                                                       &resolved,
+                                                       NULL,
+                                                       NULL);
+
+      if (!ide_str_empty0 (resolved))
+        {
+          g_free (self->sdk_extensions[i]);
+          self->sdk_extensions[i] = g_steal_pointer (&resolved);
+        }
+    }
+}

@@ -23,6 +23,8 @@
 
 #include <libide-foundry.h>
 
+#include "ipc-flatpak-service.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_MANIFEST (gbp_flatpak_manifest_get_type())
@@ -49,6 +51,8 @@ void                 gbp_flatpak_manifest_save_async         (GbpFlatpakManifest
 gboolean             gbp_flatpak_manifest_save_finish        (GbpFlatpakManifest   *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
+void                 gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest   *self,
+                                                              IpcFlatpakService    *service);
 
 
 G_END_DECLS
