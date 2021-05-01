@@ -42,4 +42,10 @@ IpcFlatpakService *gbp_flatpak_client_get_service_finish (GbpFlatpakClient     *
                                                           GAsyncResult         *result,
                                                           GError              **error);
 
+static inline GbpFlatpakClient *
+gbp_flatpak_client_ensure (IdeContext *context)
+{
+  return ide_object_ensure_child_typed (IDE_OBJECT (context), GBP_TYPE_FLATPAK_CLIENT);
+}
+
 G_END_DECLS
