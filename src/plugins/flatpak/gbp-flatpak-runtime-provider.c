@@ -811,7 +811,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
 
       /* Make sure we have the platform for running it too (org.gnome.Platform) */
       if (!gbp_flatpak_application_addin_has_runtime (addin, platform, state->arch, state->branch))
-        gbp_flatpak_install_dialog_add_runtime (dialog, platform);
+        gbp_flatpak_install_dialog_add_runtime (dialog, platform_full);
 
       /* The manifest should have already resolved extensions for us by this point */
       if (sdk_extensions != NULL)
