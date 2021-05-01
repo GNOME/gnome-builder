@@ -26,6 +26,7 @@
 #include <libide-vcs.h>
 #include <string.h>
 
+#include "gbp-flatpak-client.h"
 #include "gbp-flatpak-config-provider.h"
 #include "gbp-flatpak-manifest.h"
 
@@ -33,8 +34,9 @@
 
 struct _GbpFlatpakConfigProvider
 {
-  IdeObject  parent_instance;
-  GPtrArray *configs;
+  IdeObject          parent_instance;
+  IpcFlatpakService *service;
+  GPtrArray         *configs;
 };
 
 static void manifest_save_tick    (IdeTask                         *task);
@@ -331,6 +333,8 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
 
       g_assert (ide_config_get_dirty (IDE_CONFIG (manifest)) == FALSE);
 
+      gbp_flatpak_manifest_resolve_extensions (manifest, self->service);
+
       g_signal_connect_object (manifest,
                                "needs-reload",
                                G_CALLBACK (manifest_needs_reload),
@@ -466,6 +470,8 @@ gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
   g_autoptr(IdeTask) task = NULL;
   IdeVcsMonitor *monitor;
   IdeContext *context;
+  GbpFlatpakClient *client;
+  IpcFlatpakService *service;
   IdeVcs *vcs;
   GFile *workdir;
 
@@ -476,9 +482,13 @@ gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  client = gbp_flatpak_client_from_context (context);
+  service = gbp_flatpak_client_get_service (client, NULL, NULL);
   vcs = ide_vcs_from_context (context);
   workdir = ide_vcs_get_workdir (vcs);
   monitor = ide_context_peek_child_typed (context, IDE_TYPE_VCS_MONITOR);
+
+  g_set_object (&self->service, service);
 
   task = ide_task_new (provider, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_config_provider_load_async);
@@ -696,6 +706,7 @@ gbp_flatpak_config_provider_finalize (GObject *object)
   GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)object;
 
   g_clear_pointer (&self->configs, g_ptr_array_unref);
+  g_clear_object (&self->service);
 
   G_OBJECT_CLASS (gbp_flatpak_config_provider_parent_class)->finalize (object);
 }
