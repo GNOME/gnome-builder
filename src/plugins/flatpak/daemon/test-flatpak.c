@@ -37,6 +37,7 @@ on_runtime_added_cb (IpcFlatpakService *service,
   const gchar *branch;
   const gchar *sdk_name;
   const gchar *sdk_branch;
+  const gchar *deploy_dir;
   const gchar *metadata;
   gboolean sdk_extension;
   gboolean ret;
@@ -44,7 +45,7 @@ on_runtime_added_cb (IpcFlatpakService *service,
   g_assert (IPC_IS_FLATPAK_SERVICE (service));
   g_assert (info != NULL);
 
-  ret = runtime_variant_parse (info, &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension);
+  ret = runtime_variant_parse (info, &name, &arch, &branch, &sdk_name, &sdk_branch, &deploy_dir, &metadata, &sdk_extension);
   g_assert_true (ret);
 
   if (!sdk_extension)
@@ -89,15 +90,16 @@ add_install_cb (GObject      *object,
       const gchar *branch;
       const gchar *sdk_name;
       const gchar *sdk_branch;
+      const gchar *deploy_dir;
       const gchar *metadata;
       gboolean sdk_extension;
 
       while ((value = g_variant_iter_next_value (&iter)))
         {
-          ret = runtime_variant_parse (value, &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension);
+          ret = runtime_variant_parse (value, &name, &arch, &branch, &sdk_name, &sdk_branch, &deploy_dir, &metadata, &sdk_extension);
           g_assert_true (ret);
-          g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d)",
-                     name, arch, branch, sdk_name, sdk_branch, sdk_extension);
+          g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d) in directory %s",
+                     name, arch, branch, sdk_name, sdk_branch, sdk_extension, deploy_dir);
         }
     }
 
@@ -108,16 +110,16 @@ add_install_cb (GObject      *object,
   g_assert_false (is_known);
   g_message ("  Not found");
 
-  g_message ("Checking if org.gnome.Sdk/x86_64/40 is known");
-  ret = ipc_flatpak_service_call_runtime_is_known_sync (service, "org.gnome.Sdk/x86_64/40", &is_known, &download_size, NULL, &error);
+  g_message ("Checking if org.gnome.Sdk/x86_64/master is known");
+  ret = ipc_flatpak_service_call_runtime_is_known_sync (service, "org.gnome.Sdk/x86_64/master", &is_known, &download_size, NULL, &error);
   g_assert_no_error (error);
   g_assert_true (ret);
   g_assert_true (is_known);
   sizestr = g_format_size (download_size);
   g_message ("  Found, Download Size: <=%s", sizestr);
 
-  g_message ("Resolving org.freedesktop.Sdk.Extension.rust-stable for org.gnome.Sdk/x86_64/40");
-  ret = ipc_flatpak_service_call_resolve_extension_sync (service, "org.gnome.Sdk/x86_64/40", "org.freedesktop.Sdk.Extension.rust-stable", &resolved, NULL, &error);
+  g_message ("Resolving org.freedesktop.Sdk.Extension.rust-stable for org.gnome.Sdk/x86_64/master");
+  ret = ipc_flatpak_service_call_resolve_extension_sync (service, "org.gnome.Sdk/x86_64/master", "org.freedesktop.Sdk.Extension.rust-stable", &resolved, NULL, &error);
   g_assert_no_error (error);
   g_assert_true (ret);
   g_message (" Resolved to %s", resolved);

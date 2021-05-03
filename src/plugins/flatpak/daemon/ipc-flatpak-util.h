@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define RUNTIME_VARIANT_STRING     "(ssssssb)"
+#define RUNTIME_VARIANT_STRING     "(sssssssb)"
 #define RUNTIME_VARIANT_TYPE       G_VARIANT_TYPE(RUNTIME_VARIANT_STRING)
 #define RUNTIME_ARRAY_VARIANT_TYPE G_VARIANT_TYPE("a" RUNTIME_VARIANT_STRING)
 
@@ -49,6 +49,7 @@ runtime_variant_new (const char *name,
                      const char *branch,
                      const char *sdk_name,
                      const char *sdk_branch,
+                     const char *deploy_dir,
                      const char *metadata,
                      gboolean    is_extension)
 {
@@ -58,6 +59,7 @@ runtime_variant_new (const char *name,
                                             branch,
                                             sdk_name,
                                             sdk_branch,
+                                            deploy_dir,
                                             metadata,
                                             is_extension));
 }
@@ -69,6 +71,7 @@ runtime_variant_parse (GVariant    *variant,
                        const char **branch,
                        const char **sdk_name,
                        const char **sdk_branch,
+                       const char **deploy_dir,
                        const char **metadata,
                        gboolean    *is_extension)
 {
@@ -78,8 +81,8 @@ runtime_variant_parse (GVariant    *variant,
   if (!g_variant_is_of_type (variant, RUNTIME_VARIANT_TYPE))
     return FALSE;
 
-  g_variant_get (variant, "(&s&s&s&s&s&sb)",
-                 name, arch, branch, sdk_name, sdk_branch, metadata, is_extension);
+  g_variant_get (variant, "(&s&s&s&s&s&s&sb)",
+                 name, arch, branch, sdk_name, sdk_branch, deploy_dir, metadata, is_extension);
 
   return TRUE;
 }

@@ -37,6 +37,7 @@ typedef struct
   char *branch;
   char *sdk_name;
   char *sdk_branch;
+  char *deploy_dir;
   GBytes *metadata;
   gboolean sdk_extension : 1;
 } Runtime;
@@ -182,6 +183,7 @@ runtime_to_variant (const Runtime *runtime)
                               runtime->branch,
                               runtime->sdk_name,
                               runtime->sdk_branch,
+                              runtime->deploy_dir,
                               (const char *)g_bytes_get_data (runtime->metadata, NULL),
                               runtime->sdk_extension);
 }
@@ -225,6 +227,7 @@ runtime_free (Runtime *runtime)
   g_clear_pointer (&runtime->branch, g_free);
   g_clear_pointer (&runtime->sdk_name, g_free);
   g_clear_pointer (&runtime->sdk_branch, g_free);
+  g_clear_pointer (&runtime->deploy_dir, g_free);
   g_clear_pointer (&runtime->metadata, g_bytes_unref);
   g_slice_free (Runtime, runtime);
 }
@@ -336,6 +339,7 @@ install_reload (IpcFlatpakServiceImpl *self,
       state->branch = g_strdup (flatpak_ref_get_branch (FLATPAK_REF (ref)));
       state->sdk_name = g_strdup (flatpak_ref_get_name (sdk_ref));
       state->sdk_branch = g_strdup (flatpak_ref_get_branch (sdk_ref));
+      state->deploy_dir = g_strdup (flatpak_installed_ref_get_deploy_dir (ref));
       state->sdk_extension = exten_of != NULL;
       state->metadata = g_bytes_ref (bytes);
 
