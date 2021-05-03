@@ -111,6 +111,8 @@ main (gint argc,
   g_assert_no_error (error);
   g_assert_true (IPC_IS_FLATPAK_SERVICE (service));
 
+  g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (service), G_MAXINT);
+
   transfer = ipc_flatpak_transfer_skeleton_new ();
   g_signal_connect (transfer, "notify::message", G_CALLBACK (print_info), NULL);
   g_signal_connect (transfer, "notify::fraction", G_CALLBACK (print_info), NULL);
