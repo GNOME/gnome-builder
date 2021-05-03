@@ -64,12 +64,15 @@
     <!--
       Install:
       @full_ref_name: the full name of the target to install such as "runtime/org.gnome.Sdk/x86_64/master"
+      @transfer: the path of an org.gnome.Builder.Flatpak.Transfer object on the caller side
 
-      Installs a ref from a configured remote.
+      Begins the installation of a ref from a configured remote. The operation will not
+      complete until the installation has completed.
     -->
     <method name="Install">
       <arg name="full_ref_name" direction="in" type="s"/>
-      <arg name="transfer" direction="out" type="o"/>
+      <arg name="transfer" direction="in" type="o"/>
+      <arg name="parent_window" direction="in" type="s"/>
     </method>
     <!--
       ResolveExtension:

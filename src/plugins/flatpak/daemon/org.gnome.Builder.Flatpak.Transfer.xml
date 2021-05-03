@@ -21,10 +21,7 @@
     SPDX-License-Identifier: GPL-3.0-or-later
   -->
   <interface name="org.gnome.Builder.Flatpak.Transfer">
-    <property name="Fraction" type="d" access="read"/>
-    <property name="Message" type="s" access="read"/>
-    <signal name="Done"/>
-    <method name="Begin"/>
-    <method name="Cancel"/>
+    <property name="Fraction" type="d" access="readwrite"/>
+    <property name="Message" type="s" access="readwrite"/>
   </interface>
 </node>
