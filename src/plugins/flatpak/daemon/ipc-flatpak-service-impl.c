@@ -32,11 +32,11 @@
 typedef struct
 {
   FlatpakInstallation *installation;
-  gchar *name;
-  gchar *arch;
-  gchar *branch;
-  gchar *sdk_name;
-  gchar *sdk_branch;
+  char *name;
+  char *arch;
+  char *branch;
+  char *sdk_name;
+  char *sdk_branch;
   GBytes *metadata;
   gboolean sdk_extension : 1;
 } Runtime;
@@ -77,7 +77,7 @@ static void      ipc_flatpak_service_impl_install_changed_cb (IpcFlatpakServiceI
                                                               GFileMonitor           *monitor);
 static gboolean  ipc_flatpak_service_impl_add_installation   (IpcFlatpakService      *service,
                                                               GDBusMethodInvocation  *invocation,
-                                                              const gchar            *path,
+                                                              const char             *path,
                                                               gboolean                is_user);
 static void      add_runtime                                 (IpcFlatpakServiceImpl  *service,
                                                               Runtime                *runtime);
@@ -116,10 +116,10 @@ str_empty0 (const char *s)
 }
 
 gboolean
-split_id (const gchar  *str,
-          gchar       **id,
-          gchar       **arch,
-          gchar       **branch)
+split_id (const char  *str,
+          char       **id,
+          char       **arch,
+          char       **branch)
 {
   g_auto(GStrv) parts = g_strsplit (str, "/", 0);
   guint i = 0;
@@ -294,11 +294,11 @@ install_reload (IpcFlatpakServiceImpl *self,
       g_autoptr(FlatpakRef) sdk_ref = NULL;
       g_autoptr(GBytes) bytes = NULL;
       g_autoptr(GKeyFile) keyfile = g_key_file_new ();
-      g_autofree gchar *sdk_full_ref = NULL;
-      g_autofree gchar *name = NULL;
-      g_autofree gchar *runtime = NULL;
-      g_autofree gchar *sdk = NULL;
-      g_autofree gchar *exten_of = NULL;
+      g_autofree char *sdk_full_ref = NULL;
+      g_autofree char *name = NULL;
+      g_autofree char *runtime = NULL;
+      g_autofree char *sdk = NULL;
+      g_autofree char *exten_of = NULL;
       Runtime *state;
 
       if (!(bytes = flatpak_installed_ref_load_metadata (ref, NULL, NULL)) ||
@@ -372,7 +372,7 @@ add_installation (IpcFlatpakServiceImpl  *self,
 static gboolean
 ipc_flatpak_service_impl_add_installation (IpcFlatpakService     *service,
                                            GDBusMethodInvocation *invocation,
-                                           const gchar           *path,
+                                           const char            *path,
                                            gboolean               is_user)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
@@ -434,9 +434,9 @@ is_known_worker (GTask        *task,
   g_autoptr(GPtrArray) remotes = NULL;
   g_autoptr(GError) error = NULL;
   IsKnown *state = task_data;
-  const gchar *ref_name;
-  const gchar *ref_arch;
-  const gchar *ref_branch;
+  const char *ref_name;
+  const char *ref_arch;
+  const char *ref_branch;
   gint64 download_size = 0;
   gboolean found = FALSE;
 
@@ -462,7 +462,7 @@ is_known_worker (GTask        *task,
       for (guint i = 0; i < remotes->len; i++)
         {
           FlatpakRemote *remote = g_ptr_array_index (remotes, i);
-          const gchar *remote_name = flatpak_remote_get_name (remote);
+          const char *remote_name = flatpak_remote_get_name (remote);
           g_autoptr(GPtrArray) refs = NULL;
 
           if (!(refs = flatpak_installation_list_remote_refs_sync (install, remote_name, NULL, NULL)))
@@ -499,16 +499,16 @@ finish:
 static gboolean
 ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
                                            GDBusMethodInvocation *invocation,
-                                           const gchar           *name)
+                                           const char            *name)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
-  g_autofree gchar *full_name = NULL;
+  g_autofree char *full_name = NULL;
   g_autoptr(FlatpakRef) ref = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = NULL;
-  const gchar *ref_name;
-  const gchar *ref_arch;
-  const gchar *ref_branch;
+  const char *ref_name;
+  const char *ref_arch;
+  const char *ref_branch;
   IsKnown *state;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
@@ -758,9 +758,9 @@ find_remote_for_ref (IpcFlatpakServiceImpl *self,
 static gboolean
 ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
                                   GDBusMethodInvocation *invocation,
-                                  const gchar           *full_ref_name,
-                                  const gchar           *transfer_path,
-                                  const gchar           *parent_window)
+                                  const char            *full_ref_name,
+                                  const char            *transfer_path,
+                                  const char            *parent_window)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
@@ -815,18 +815,18 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
 
 typedef struct
 {
-  const gchar *ref;
-  const gchar *extension;
+  const char *ref;
+  const char *extension;
 } ResolveExtension;
 
 G_GNUC_PRINTF (2, 3)
-static const gchar *
+static const char *
 chunk_insert (GStringChunk *strings,
-              const gchar *format,
+              const char   *format,
               ...)
 {
   char formatted[256];
-  const gchar *ret = NULL;
+  const char *ret = NULL;
   va_list args;
 
   va_start (args, format);
@@ -837,14 +837,14 @@ chunk_insert (GStringChunk *strings,
   return ret;
 }
 
-static gchar *
+static char *
 resolve_extension (GPtrArray   *installations,
-                   const gchar *sdk,
-                   const gchar *extension)
+                   const char *sdk,
+                   const char *extension)
 {
-  g_autofree gchar *sdk_id = NULL;
-  g_autofree gchar *sdk_arch = NULL;
-  g_autofree gchar *sdk_branch = NULL;
+  g_autofree char *sdk_id = NULL;
+  g_autofree char *sdk_arch = NULL;
+  g_autofree char *sdk_branch = NULL;
   g_autoptr(GArray) maybe_extention_of = NULL;
   g_autoptr(GArray) runtime_extensions = NULL;
   g_autoptr(GStringChunk) strings = NULL;
@@ -878,7 +878,7 @@ resolve_extension (GPtrArray   *installations,
       for (guint j = 0; j < remotes->len; j++)
         {
           FlatpakRemote *remote = g_ptr_array_index (remotes, j);
-          const gchar *name = flatpak_remote_get_name (remote);
+          const char *name = flatpak_remote_get_name (remote);
           g_autoptr(GPtrArray) refs = NULL;
 
           refs = flatpak_installation_list_remote_refs_sync_full (installation,
@@ -913,11 +913,11 @@ resolve_extension (GPtrArray   *installations,
 
               for (guint l = 0; groups[l]; l++)
                 {
-                  const gchar *group = groups[l];
-                  g_autofree gchar *version = NULL;
-                  g_autofree gchar *runtime = NULL;
-                  g_autofree gchar *match = NULL;
-                  g_autofree gchar *refstr = NULL;
+                  const char *group = groups[l];
+                  g_autofree char *version = NULL;
+                  g_autofree char *runtime = NULL;
+                  g_autofree char *match = NULL;
+                  g_autofree char *refstr = NULL;
 
                   /* This might be our extension */
                   if (str_equal0 (group, "ExtensionOf") &&
@@ -928,9 +928,9 @@ resolve_extension (GPtrArray   *installations,
 
                       if (ref != NULL && g_str_has_prefix (refstr, "runtime/"))
                         {
-                          g_autofree gchar *ref_id = NULL;
-                          g_autofree gchar *ref_arch = NULL;
-                          g_autofree gchar *ref_branch = NULL;
+                          g_autofree char *ref_id = NULL;
+                          g_autofree char *ref_arch = NULL;
+                          g_autofree char *ref_branch = NULL;
 
                           if (split_id (refstr + strlen ("runtime/"), &ref_id, &ref_arch, &ref_branch))
                             {
@@ -963,7 +963,7 @@ resolve_extension (GPtrArray   *installations,
                   /* This might provide the extension */
                   if (g_str_has_prefix (group, "Extension "))
                     {
-                      const gchar *extname = group + strlen ("Extension ");
+                      const char *extname = group + strlen ("Extension ");
 
                       /* Only track extensions to the runtime itself unless it is
                        * for our target runtime/SDK.
@@ -1003,7 +1003,7 @@ resolve_extension (GPtrArray   *installations,
       for (guint j = 0; j < runtime_extensions->len; j++)
         {
           const ResolveExtension *re = &g_array_index (runtime_extensions, ResolveExtension, j);
-          g_autofree gchar *rname = NULL;
+          g_autofree char *rname = NULL;
 
           if (!str_equal0 (re->ref, maybe->extension))
             continue;
