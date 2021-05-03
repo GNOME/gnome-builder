@@ -21,6 +21,10 @@
     SPDX-License-Identifier: GPL-3.0-or-later
   -->
   <interface name="org.gnome.Builder.Flatpak.Service">
+    <!--
+      The default architecture of the system, such as "x86_64".
+    -->
+    <property name="DefaultArch" type="s" access="read"/>
     <signal name="RuntimeAdded">
       <!--
         Param is (name, arch, branch, sdk_name, sdk_branch, metadata, is_sdk_extension)

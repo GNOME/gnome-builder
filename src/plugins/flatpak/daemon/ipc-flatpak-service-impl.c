@@ -912,6 +912,8 @@ ipc_flatpak_service_impl_constructed (GObject *object)
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->constructed (object);
 
+  ipc_flatpak_service_set_default_arch (IPC_FLATPAK_SERVICE (self), flatpak_get_default_arch ());
+
   user_file = g_file_new_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
   if ((user = flatpak_installation_new_for_path (user_file, TRUE, NULL, NULL)))
     add_installation (self, user, NULL);

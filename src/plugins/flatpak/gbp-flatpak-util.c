@@ -25,6 +25,7 @@
 #include <libide-foundry.h>
 #include <libide-vcs.h>
 
+#include "gbp-flatpak-client.h"
 #include "gbp-flatpak-util.h"
 
 gchar *
@@ -127,4 +128,35 @@ gbp_flatpak_split_id (const gchar  *str,
     }
 
   return TRUE;
+}
+
+static const char *
+_gbp_flatpak_get_default_arch (IdeObject *object)
+{
+  if (object != NULL)
+    {
+      g_autoptr(IdeContext) context = ide_object_ref_context (object);
+
+      if (context != NULL)
+        {
+          g_autoptr(GbpFlatpakClient) client = gbp_flatpak_client_ensure (context);
+          IpcFlatpakService *service = gbp_flatpak_client_get_service (client, NULL, NULL);
+
+          if (service != NULL)
+            return ipc_flatpak_service_get_default_arch (service);
+        }
+    }
+
+  return ide_get_system_arch ();
+}
+
+const char *
+gbp_flatpak_get_default_arch (IdeObject *object)
+{
+  static char *default_arch;
+
+  if (default_arch == NULL)
+    default_arch = g_strdup (_gbp_flatpak_get_default_arch (object));
+
+  return default_arch;
 }

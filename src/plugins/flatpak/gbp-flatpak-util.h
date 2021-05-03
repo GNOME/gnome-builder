@@ -24,12 +24,13 @@
 
 G_BEGIN_DECLS
 
-gboolean  gbp_flatpak_is_ignored      (const gchar       *name);
-gchar    *gbp_flatpak_get_repo_dir    (IdeContext        *context);
-gchar    *gbp_flatpak_get_staging_dir (IdePipeline       *pipeline);
-gboolean  gbp_flatpak_split_id        (const gchar       *str,
-                                       gchar            **id,
-                                       gchar            **arch,
-                                       gchar            **branch);
+const char *gbp_flatpak_get_default_arch (IdeObject         *object);
+gboolean    gbp_flatpak_is_ignored       (const gchar       *name);
+gchar      *gbp_flatpak_get_repo_dir     (IdeContext        *context);
+gchar      *gbp_flatpak_get_staging_dir  (IdePipeline       *pipeline);
+gboolean    gbp_flatpak_split_id         (const gchar       *str,
+                                          gchar            **id,
+                                          gchar            **arch,
+                                          gchar            **branch);
 
 G_END_DECLS

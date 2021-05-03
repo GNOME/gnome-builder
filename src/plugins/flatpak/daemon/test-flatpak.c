@@ -166,6 +166,21 @@ main (gint argc,
   g_assert_no_error (error);
   g_assert_true (IPC_IS_FLATPAK_SERVICE (service));
 
+  {
+    const char *default_arch;
+    g_message ("Checking DefaultArch property");
+    default_arch = ipc_flatpak_service_get_default_arch (service);
+#if defined(__x86_64__)
+    g_assert_cmpstr (default_arch, ==, "x86_64");
+#elif defined(__i386__)
+    g_assert_cmpstr (default_arch, ==, "i386");
+#elif defined(__aarch64__)
+    g_assert_cmpstr (default_arch, ==, "aarch64");
+#else
+# warning "Please add your compiler to the test for default arch property!"
+#endif
+  }
+
   g_signal_connect (service,
                     "runtime-added",
                     G_CALLBACK (on_runtime_added_cb),
