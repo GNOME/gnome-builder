@@ -26,6 +26,7 @@
 #include <unistd.h>
 
 #include "ipc-flatpak-service.h"
+#include "ipc-flatpak-util.h"
 
 static void
 on_runtime_added_cb (IpcFlatpakService *service,
@@ -38,13 +39,13 @@ on_runtime_added_cb (IpcFlatpakService *service,
   const gchar *sdk_branch;
   const gchar *metadata;
   gboolean sdk_extension;
+  gboolean ret;
 
   g_assert (IPC_IS_FLATPAK_SERVICE (service));
   g_assert (info != NULL);
-  g_assert (g_variant_is_of_type (info, G_VARIANT_TYPE ("(ssssssb)")));
 
-  g_variant_get (info, "(&s&s&s&s&s&sb)",
-                 &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension);
+  ret = runtime_variant_parse (info, &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension);
+  g_assert_true (ret);
 
   if (!sdk_extension)
     g_message ("Runtime Added: %s/%s/%s with SDK %s//%s",
@@ -82,6 +83,7 @@ add_install_cb (GObject      *object,
 
   if (g_variant_iter_init (&iter, runtimes))
     {
+      GVariant *value;
       const gchar *name;
       const gchar *arch;
       const gchar *branch;
@@ -90,9 +92,13 @@ add_install_cb (GObject      *object,
       const gchar *metadata;
       gboolean sdk_extension;
 
-      while (g_variant_iter_next (&iter, "(&s&s&s&s&s&sb)", &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension))
-        g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d)",
-                   name, arch, branch, sdk_name, sdk_branch, sdk_extension);
+      while ((value = g_variant_iter_next_value (&iter)))
+        {
+          ret = runtime_variant_parse (value, &name, &arch, &branch, &sdk_name, &sdk_branch, &metadata, &sdk_extension);
+          g_assert_true (ret);
+          g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d)",
+                     name, arch, branch, sdk_name, sdk_branch, sdk_extension);
+        }
     }
 
   g_message ("Checking for a missing runtime");

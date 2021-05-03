@@ -24,6 +24,10 @@
 
 G_BEGIN_DECLS
 
+#define RUNTIME_VARIANT_STRING     "(ssssssb)"
+#define RUNTIME_VARIANT_TYPE       G_VARIANT_TYPE(RUNTIME_VARIANT_STRING)
+#define RUNTIME_ARRAY_VARIANT_TYPE G_VARIANT_TYPE("a" RUNTIME_VARIANT_STRING)
+
 static inline gboolean
 complete_wrapped_error (GDBusMethodInvocation *invocation,
                         const GError          *error)
@@ -35,6 +39,47 @@ complete_wrapped_error (GDBusMethodInvocation *invocation,
                          "The operation failed. The original error was \"%s\"",
                          error->message);
   g_dbus_method_invocation_return_gerror (invocation, wrapped);
+
+  return TRUE;
+}
+
+static inline GVariant *
+runtime_variant_new (const char *name,
+                     const char *arch,
+                     const char *branch,
+                     const char *sdk_name,
+                     const char *sdk_branch,
+                     const char *metadata,
+                     gboolean    is_extension)
+{
+  return g_variant_take_ref (g_variant_new (RUNTIME_VARIANT_STRING,
+                                            name,
+                                            arch,
+                                            branch,
+                                            sdk_name,
+                                            sdk_branch,
+                                            metadata,
+                                            is_extension));
+}
+
+static inline gboolean
+runtime_variant_parse (GVariant    *variant,
+                       const char **name,
+                       const char **arch,
+                       const char **branch,
+                       const char **sdk_name,
+                       const char **sdk_branch,
+                       const char **metadata,
+                       gboolean    *is_extension)
+{
+  if (variant == NULL)
+    return FALSE;
+
+  if (!g_variant_is_of_type (variant, RUNTIME_VARIANT_TYPE))
+    return FALSE;
+
+  g_variant_get (variant, "(&s&s&s&s&s&sb)",
+                 name, arch, branch, sdk_name, sdk_branch, metadata, is_extension);
 
   return TRUE;
 }

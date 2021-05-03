@@ -87,7 +87,6 @@ static Install  *install_new                                 (IpcFlatpakServiceI
 static void      install_free                                (Install                *install);
 static void      install_reload                              (IpcFlatpakServiceImpl  *self,
                                                               Install                *install);
-static GVariant *runtime_to_variant                          (const Runtime          *runtime);
 static void      runtime_free                                (Runtime                *runtime);
 static gboolean  runtime_equal                               (const Runtime          *a,
                                                               const Runtime          *b);
@@ -175,6 +174,18 @@ is_known_free (IsKnown *state)
   g_slice_free (IsKnown, state);
 }
 
+static GVariant *
+runtime_to_variant (const Runtime *runtime)
+{
+  return runtime_variant_new (runtime->name,
+                              runtime->arch,
+                              runtime->branch,
+                              runtime->sdk_name,
+                              runtime->sdk_branch,
+                              (const char *)g_bytes_get_data (runtime->metadata, NULL),
+                              runtime->sdk_extension);
+}
+
 static void
 add_runtime (IpcFlatpakServiceImpl *self,
              Runtime               *runtime)
@@ -225,19 +236,6 @@ runtime_equal (const Runtime *a,
   return g_str_equal (a->name, b->name) &&
          g_str_equal (a->arch, b->arch) &&
          g_str_equal (a->branch, b->branch);
-}
-
-static GVariant *
-runtime_to_variant (const Runtime *runtime)
-{
-  return g_variant_take_ref (g_variant_new ("(ssssssb)",
-                                            runtime->name,
-                                            runtime->arch,
-                                            runtime->branch,
-                                            runtime->sdk_name,
-                                            runtime->sdk_branch,
-                                            (const char *)g_bytes_get_data (runtime->metadata, NULL),
-                                            runtime->sdk_extension));
 }
 
 static Install *
@@ -411,7 +409,7 @@ ipc_flatpak_service_impl_list_runtimes (IpcFlatpakService     *service,
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ssssssb)"));
+  g_variant_builder_init (&builder, RUNTIME_ARRAY_VARIANT_TYPE);
 
   for (guint i = 0; i < self->runtimes->len; i++)
     {
