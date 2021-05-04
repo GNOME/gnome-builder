@@ -71,14 +71,19 @@ main (gint argc,
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(IpcFlatpakService) service = NULL;
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
+  g_autoptr(GPtrArray) all = g_ptr_array_new ();
   GMainLoop *main_loop;
   gboolean ret;
 
-  if (argc != 2)
+  if (argc < 2)
     {
-      g_printerr ("usage: %s REF\n", argv[0]);
+      g_printerr ("usage: %s REF [REF..]\n", argv[0]);
       return EXIT_FAILURE;
     }
+
+  for (guint i = 1; i < argc; i++)
+    g_ptr_array_add (all, argv[i]);
+  g_ptr_array_add (all, NULL);
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   subprocess = g_subprocess_launcher_spawn (launcher, &error,
@@ -122,7 +127,7 @@ main (gint argc,
 
   g_message ("Installing %s\n", argv[1]);
   ipc_flatpak_service_call_install (service,
-                                    argv[1],
+                                    (const char * const *)all->pdata,
                                     transfer_path,
                                     "",
                                     NULL,

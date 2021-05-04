@@ -44,6 +44,7 @@ const gchar         *gbp_flatpak_manifest_get_sdk            (GbpFlatpakManifest
 const gchar         *gbp_flatpak_manifest_get_platform       (GbpFlatpakManifest   *self);
 gchar              **gbp_flatpak_manifest_get_runtimes       (GbpFlatpakManifest   *self,
                                                               const gchar          *for_arch);
+const char          *gbp_flatpak_manifest_get_branch         (GbpFlatpakManifest   *self);
 void                 gbp_flatpak_manifest_save_async         (GbpFlatpakManifest   *self,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,

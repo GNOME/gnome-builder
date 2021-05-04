@@ -595,12 +595,17 @@ ipc_flatpak_service_impl_install_changed_cb (IpcFlatpakServiceImpl *self,
 
 typedef struct
 {
+  char *ref;
+  char *remote;
+} InstallRef;
+
+typedef struct
+{
   FlatpakInstallation   *installation;
   GDBusMethodInvocation *invocation;
   IpcFlatpakTransfer    *transfer;
-  char                  *remote;
-  char                  *ref;
   char                  *parent_window;
+  GArray                *refs;
 } InstallState;
 
 static void
@@ -609,8 +614,7 @@ install_state_free (InstallState *state)
   g_clear_object (&state->installation);
   g_clear_object (&state->invocation);
   g_clear_object (&state->transfer);
-  g_clear_pointer (&state->remote, g_free);
-  g_clear_pointer (&state->ref, g_free);
+  g_clear_pointer (&state->refs, g_array_unref);
   g_clear_pointer (&state->parent_window, g_free);
   g_slice_free (InstallState, state);
 }
@@ -664,6 +668,22 @@ connect_signals (FlatpakTransaction  *transaction,
   return TRUE;
 }
 
+static gboolean
+add_refs_to_transaction (FlatpakTransaction  *transaction,
+                         GArray              *refs,
+                         GError             **error)
+{
+  for (guint i = 0; i < refs->len; i++)
+    {
+      const InstallRef *ref = &g_array_index (refs, InstallRef, i);
+
+      if (!flatpak_transaction_add_install (transaction, ref->remote, ref->ref, NULL, error))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 install_worker (GTask        *task,
                 gpointer      source_object,
@@ -677,7 +697,7 @@ install_worker (GTask        *task,
   g_assert (G_IS_TASK (task));
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (source_object));
   g_assert (state != NULL);
-  g_assert (state->remote != NULL);
+  g_assert (state->refs != NULL);
   g_assert (G_IS_DBUS_METHOD_INVOCATION (state->invocation));
   g_assert (IPC_IS_FLATPAK_TRANSFER (state->transfer));
   g_assert (FLATPAK_IS_INSTALLATION (state->installation));
@@ -686,7 +706,7 @@ install_worker (GTask        *task,
   ipc_flatpak_transfer_set_message (state->transfer, "");
 
   if (!(transaction = flatpak_transaction_new_for_installation (state->installation, NULL, &error)) ||
-      !flatpak_transaction_add_install (transaction, state->remote, state->ref, NULL, &error) ||
+      !add_refs_to_transaction (transaction, state->refs, &error) ||
       !connect_signals (transaction, state->transfer, &error) ||
       !flatpak_transaction_run (transaction, cancellable, &error))
     {
@@ -759,53 +779,78 @@ find_remote_for_ref (IpcFlatpakServiceImpl *self,
   return NULL;
 }
 
+static void
+clear_install_ref (gpointer data)
+{
+  InstallRef *r = data;
+
+  g_free (r->ref);
+  g_free (r->remote);
+}
+
 static gboolean
 ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
                                   GDBusMethodInvocation *invocation,
-                                  const char            *full_ref_name,
+                                  const char * const    *full_ref_names,
                                   const char            *transfer_path,
                                   const char            *parent_window)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
-  g_autoptr(FlatpakRef) ref = NULL;
+  g_autoptr(GArray) refs = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = NULL;
-  g_autofree char *remote = NULL;
   GDBusConnection *connection;
   InstallState *state;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
-  g_assert (full_ref_name != NULL);
+  g_assert (full_ref_names != NULL);
   g_assert (transfer_path != NULL);
   g_assert (parent_window != NULL);
 
-  if (!(ref = flatpak_ref_parse (full_ref_name, &error)))
-    return complete_wrapped_error (invocation, error);
+  refs = g_array_new (FALSE, FALSE, sizeof (InstallRef));
+  g_array_set_clear_func (refs, clear_install_ref);
 
   connection = g_dbus_method_invocation_get_connection (invocation);
-  remote = find_remote_for_ref (self, ref);
   transfer = ipc_flatpak_transfer_proxy_new_sync (connection,
                                                   G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
                                                   NULL,
                                                   transfer_path,
                                                   NULL, NULL);
 
-  if (remote == NULL)
+  if (full_ref_names[0] == NULL)
     {
       g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
                                              G_DBUS_ERROR,
                                              G_DBUS_ERROR_FAILED,
-                                             "No configured remote contains ref");
+                                             "No refs to install");
       return TRUE;
+    }
+
+  for (guint i = 0; full_ref_names[i]; i++)
+    {
+      g_autoptr(FlatpakRef) ref = flatpak_ref_parse (full_ref_names[i], NULL);
+      InstallRef iref = {0};
+
+      if (ref == NULL ||
+          !(iref.remote = find_remote_for_ref (self, ref)))
+        {
+          g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
+                                                 G_DBUS_ERROR,
+                                                 G_DBUS_ERROR_FAILED,
+                                                 "No configured remote contains ref");
+          return TRUE;
+        }
+
+      iref.ref = g_strdup (full_ref_names[i]);
+      g_array_append_val (refs, iref);
     }
 
   state = g_slice_new0 (InstallState);
   state->installation = ipc_flatpak_service_impl_ref_user_installation (self);
   state->invocation = g_steal_pointer (&invocation);
-  state->ref = g_strdup (full_ref_name);
-  state->remote = g_steal_pointer (&remote);
+  state->refs = g_array_ref (refs);
   state->parent_window = parent_window[0] ? g_strdup (parent_window) : NULL;
   state->transfer = g_object_ref (transfer);
 
@@ -1105,6 +1150,59 @@ ipc_flatpak_service_impl_resolve_extension (IpcFlatpakService     *service,
   return TRUE;
 }
 
+static gboolean
+ipc_flatpak_service_impl_get_runtime (IpcFlatpakService     *service,
+                                      GDBusMethodInvocation *invocation,
+                                      const char            *runtime_id)
+{
+  IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
+  g_autoptr(FlatpakRef) ref = NULL;
+  g_autofree char *full_name = NULL;
+
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (runtime_id != NULL);
+
+  /* Homogenize names into runtime/name/arch/branch */
+  if (g_str_has_prefix (runtime_id, "runtime/"))
+    runtime_id += strlen ("runtime/");
+  full_name = g_strdup_printf ("runtime/%s", runtime_id);
+
+  if (!(ref = flatpak_ref_parse (full_name, NULL)))
+    {
+      g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
+                                             G_DBUS_ERROR,
+                                             G_DBUS_ERROR_FAILED,
+                                             "Invalid runtime id %s",
+                                             full_name);
+      return TRUE;
+    }
+
+  for (guint i = 0; i < self->runtimes->len; i++)
+    {
+      const Runtime *runtime = g_ptr_array_index (self->runtimes, i);
+
+      if (str_equal0 (flatpak_ref_get_name (ref), runtime->name) &&
+          str_equal0 (flatpak_ref_get_arch (ref), runtime->arch) &&
+          str_equal0 (flatpak_ref_get_branch (ref), runtime->branch))
+        {
+          g_autoptr(GVariant) ret = runtime_to_variant (runtime);
+          ipc_flatpak_service_complete_get_runtime (service,
+                                                    g_steal_pointer (&invocation),
+                                                    ret);
+          return TRUE;
+        }
+    }
+
+  g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
+                                         G_DBUS_ERROR,
+                                         G_DBUS_ERROR_FAILED,
+                                         "No such runtime %s",
+                                         full_name);
+
+  return TRUE;
+}
+
 static void
 service_iface_init (IpcFlatpakServiceIface *iface)
 {
@@ -1112,6 +1210,7 @@ service_iface_init (IpcFlatpakServiceIface *iface)
   iface->handle_list_runtimes = ipc_flatpak_service_impl_list_runtimes;
   iface->handle_runtime_is_known = ipc_flatpak_service_impl_runtime_is_known;
   iface->handle_install = ipc_flatpak_service_impl_install;
+  iface->handle_get_runtime = ipc_flatpak_service_impl_get_runtime;
   iface->handle_resolve_extension = ipc_flatpak_service_impl_resolve_extension;
 }
 
