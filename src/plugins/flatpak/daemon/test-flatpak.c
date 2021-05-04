@@ -100,6 +100,7 @@ add_install_cb (GObject      *object,
           g_assert_true (ret);
           g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d) in directory %s",
                      name, arch, branch, sdk_name, sdk_branch, sdk_extension, deploy_dir);
+          g_variant_unref (value);
         }
     }
 

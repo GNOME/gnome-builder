@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 

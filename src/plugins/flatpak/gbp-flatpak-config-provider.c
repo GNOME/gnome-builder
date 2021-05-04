@@ -467,11 +467,11 @@ gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
                                         gpointer             user_data)
 {
   GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)provider;
+  g_autoptr(IpcFlatpakService) service = NULL;
   g_autoptr(IdeTask) task = NULL;
   IdeVcsMonitor *monitor;
   IdeContext *context;
   GbpFlatpakClient *client;
-  IpcFlatpakService *service;
   IdeVcs *vcs;
   GFile *workdir;
 
