@@ -128,5 +128,11 @@
       <summary>Interactive Completion</summary>
       <description>If enabled, Builder will automatically display completion proposals as you type.</description>
     </key>
+    <key name="min-char-selected" type="i">
+      <default>1</default>
+      <range min="1" max="32"/>
+      <summary>Minimum characters for matching selection.</summary>
+      <description>Specify the mininum number of characters for selection matching.</description>
+    </key>
   </schema>
 </schemalist>

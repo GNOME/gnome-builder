@@ -31,6 +31,8 @@ struct _GbpQuickHighlightEditorPageAddin
 {
   GObject                 parent_instance;
 
+  GSettings              *settings;
+
   IdeEditorPage          *view;
 
   DzlSignalGroup         *buffer_signals;
@@ -51,6 +53,8 @@ do_delayed_quick_highlight (GbpQuickHighlightEditorPageAddin *self)
   IdeBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
+  int selection_length;
+  int min_length;
 
   g_assert (GBP_IS_QUICK_HIGHLIGHT_EDITOR_PAGE_ADDIN (self));
   g_assert (self->view != NULL);
@@ -58,13 +62,21 @@ do_delayed_quick_highlight (GbpQuickHighlightEditorPageAddin *self)
   self->queued_match_source = 0;
 
   /*
-   * Get the curretn selection, if any. Short circuit if we find a situation
+   * Get the current selection, if any. Short circuit if we find a situation
    * that should have caused us to cancel the current quick-highlight.
    */
   buffer = ide_editor_page_get_buffer (self->view);
   if (self->search_active ||
       !self->has_selection ||
       !gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end))
+    {
+      g_clear_object (&self->search_context);
+      return G_SOURCE_REMOVE;
+    }
+
+  min_length = g_settings_get_int (self->settings, "min-char-selected");
+  selection_length = gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin);
+  if (selection_length < min_length)
     {
       g_clear_object (&self->search_context);
       return G_SOURCE_REMOVE;
@@ -203,6 +215,8 @@ gbp_quick_highlight_editor_page_addin_load (IdeEditorPageAddin *addin,
 
   self->view = view;
 
+  self->settings = g_settings_new ("org.gnome.builder.editor");
+
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
   dzl_signal_group_connect_swapped (self->buffer_signals,
@@ -248,6 +262,8 @@ gbp_quick_highlight_editor_page_addin_unload (IdeEditorPageAddin *addin,
 
   dzl_signal_group_set_target (self->search_signals, NULL);
   g_clear_object (&self->search_signals);
+
+  g_clear_object (&self->settings);
 
   self->view = NULL;
 }
