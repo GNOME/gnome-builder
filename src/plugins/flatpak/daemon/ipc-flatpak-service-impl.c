@@ -219,6 +219,26 @@ ipc_flatpak_service_impl_ref_user_installation (IpcFlatpakServiceImpl *self)
   return g_object_ref (install->installation);
 }
 
+static gboolean
+is_installed (IpcFlatpakServiceImpl *self,
+              FlatpakRef            *ref)
+{
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (FLATPAK_IS_REF (ref));
+
+  for (guint i = 0; i < self->runtimes->len; i++)
+    {
+      const Runtime *r = g_ptr_array_index (self->runtimes, i);
+
+      if (str_equal0 (r->name, flatpak_ref_get_name (ref)) &&
+          str_equal0 (r->arch, flatpak_ref_get_arch (ref)) &&
+          str_equal0 (r->branch, flatpak_ref_get_branch (ref)))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 runtime_free (Runtime *runtime)
 {
@@ -476,9 +496,9 @@ is_known_worker (GTask        *task,
             {
               FlatpakRemoteRef *remote_ref = g_ptr_array_index (refs, j);
 
-              if (g_str_equal (ref_name, flatpak_ref_get_name (FLATPAK_REF (remote_ref))) &&
-                  g_str_equal (ref_arch, flatpak_ref_get_arch (FLATPAK_REF (remote_ref))) &&
-                  g_str_equal (ref_branch, flatpak_ref_get_branch (FLATPAK_REF (remote_ref))))
+              if (str_equal0 (ref_name, flatpak_ref_get_name (FLATPAK_REF (remote_ref))) &&
+                  str_equal0 (ref_arch, flatpak_ref_get_arch (FLATPAK_REF (remote_ref))) &&
+                  str_equal0 (ref_branch, flatpak_ref_get_branch (FLATPAK_REF (remote_ref))))
                 {
                   found = TRUE;
                   download_size = flatpak_remote_ref_get_download_size (remote_ref);
@@ -824,7 +844,7 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
 
   connection = g_dbus_method_invocation_get_connection (invocation);
   transfer = ipc_flatpak_transfer_proxy_new_sync (connection,
-                                                  G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+                                                  G_DBUS_PROXY_FLAGS_NONE,
                                                   NULL,
                                                   transfer_path,
                                                   NULL, NULL);
@@ -844,6 +864,9 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
     {
       g_autoptr(FlatpakRef) ref = flatpak_ref_parse (full_ref_names[i], NULL);
       InstallRef iref = {0};
+
+      if (ref != NULL && is_installed (self, ref))
+        continue;
 
       if (ref == NULL ||
           !(iref.remote = find_remote_for_ref (self, ref)))
@@ -1136,13 +1159,17 @@ ipc_flatpak_service_impl_resolve_extension (IpcFlatpakService     *service,
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
   ResolveExtensionState *state;
   g_autoptr(GTask) task = NULL;
-  GHashTableIter iter;
-  Install *install;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
   g_assert (sdk != NULL);
   g_assert (extension != NULL);
+
+  if (g_str_has_prefix (sdk, "runtime/"))
+    sdk += strlen ("runtime/");
+
+  if (g_str_has_prefix (extension, "runtime/"))
+    extension += strlen ("runtime/");
 
   state = g_slice_new0 (ResolveExtensionState);
   state->installs = g_ptr_array_new_with_free_func (g_object_unref);
@@ -1150,9 +1177,11 @@ ipc_flatpak_service_impl_resolve_extension (IpcFlatpakService     *service,
   state->sdk = g_strdup (sdk);
   state->extension = g_strdup (extension);
 
-  g_hash_table_iter_init (&iter, self->installs);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&install))
-    g_ptr_array_add (state->installs, g_object_ref (install->installation));
+  for (guint i = 0; i < self->installs_ordered->len; i++)
+    {
+      const Install *install = g_ptr_array_index (self->installs_ordered, i);
+      g_ptr_array_add (state->installs, g_object_ref (install->installation));
+    }
 
   task = g_task_new (self, NULL, NULL, NULL);
   g_task_set_source_tag (task, ipc_flatpak_service_impl_resolve_extension);

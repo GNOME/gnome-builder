@@ -65,6 +65,11 @@ gbp_flatpak_install_dialog_response (GtkDialog *dialog,
 
   if (self->close_task && response_id == GTK_RESPONSE_OK)
     ide_task_return_boolean (self->close_task, TRUE);
+  else
+    ide_task_return_new_error (self->close_task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_CANCELLED,
+                               "User cancelled the request");
 
   if (GTK_DIALOG_CLASS (gbp_flatpak_install_dialog_parent_class)->response)
     GTK_DIALOG_CLASS (gbp_flatpak_install_dialog_parent_class)->response (dialog, response_id);
@@ -119,24 +124,6 @@ gbp_flatpak_install_dialog_init (GbpFlatpakInstallDialog *self)
   dzl_gtk_widget_add_style_class (button, "suggested-action");
 }
 
-static void
-gbp_flatpak_install_dialog_on_close_cb (GbpFlatpakInstallDialog *self,
-                                        IdeTask                 *task)
-{
-  g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (self));
-  g_assert (IDE_IS_TASK (task));
-
-  g_signal_handlers_disconnect_by_func (self,
-                                        G_CALLBACK (gbp_flatpak_install_dialog_on_close_cb),
-                                        task);
-
-  if (self->response_id != GTK_RESPONSE_OK)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_CANCELLED,
-                               "User cancelled the request");
-}
-
 void
 gbp_flatpak_install_dialog_run_async (GbpFlatpakInstallDialog *self,
                                       GCancellable            *cancellable,
@@ -166,12 +153,6 @@ gbp_flatpak_install_dialog_run_async (GbpFlatpakInstallDialog *self,
                              G_CALLBACK (gtk_window_close),
                              self,
                              G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self,
-                           "close",
-                           G_CALLBACK (gbp_flatpak_install_dialog_on_close_cb),
-                           self->close_task,
-                           G_CONNECT_AFTER);
 
   ide_gtk_window_present (GTK_WINDOW (self));
 }

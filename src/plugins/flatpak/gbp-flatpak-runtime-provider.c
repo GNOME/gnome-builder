@@ -27,7 +27,6 @@
 #include <libide-gui.h>
 
 #include "gbp-flatpak-client.h"
-#include "gbp-flatpak-install-dialog.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-runtime-provider.h"
@@ -36,6 +35,8 @@
 #include "daemon/ipc-flatpak-service.h"
 #include "daemon/ipc-flatpak-transfer.h"
 #include "daemon/ipc-flatpak-util.h"
+
+#include "ipc-flatpak-transfer-impl.h"
 
 struct _GbpFlatpakRuntimeProvider
 {
@@ -201,15 +202,9 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
 
 typedef struct
 {
-  GbpFlatpakRuntimeProvider *self;
-  GDBusMethodInvocation *invocation;
-  IpcFlatpakTransfer *transfer;
-} Confirm;
-
-typedef struct
-{
   char               *runtime_id;
   char               *transfer_path;
+  char               *sdk;
   GPtrArray          *to_install;
   IpcFlatpakTransfer *transfer;
   IpcFlatpakService  *service;
@@ -220,88 +215,13 @@ static void
 bootstrap_free (Bootstrap *b)
 {
   g_clear_pointer (&b->runtime_id, g_free);
+  g_clear_pointer (&b->sdk, g_free);
   g_clear_pointer (&b->transfer_path, g_free);
   g_clear_object (&b->notif);
   g_clear_object (&b->service);
   g_clear_object (&b->transfer);
   g_clear_pointer (&b->to_install, g_ptr_array_unref);
   g_slice_free (Bootstrap, b);
-}
-
-static void
-gbp_flatpak_runtime_provider_handle_confirm_cb (GObject      *object,
-                                                GAsyncResult *result,
-                                                gpointer      user_data)
-{
-  GbpFlatpakInstallDialog *dialog = (GbpFlatpakInstallDialog *)object;
-  Confirm *state = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (dialog));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (state != NULL);
-  g_assert (G_IS_DBUS_METHOD_INVOCATION (state->invocation));
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (state->self));
-  g_assert (IPC_IS_FLATPAK_TRANSFER (state->transfer));
-
-  if (!gbp_flatpak_install_dialog_run_finish (dialog, result, &error))
-    g_dbus_method_invocation_return_error (g_steal_pointer (&state->invocation),
-                                           G_DBUS_ERROR,
-                                           G_DBUS_ERROR_FAILED,
-                                           "Unconfirmed request");
-  else
-    ipc_flatpak_transfer_complete_confirm (state->transfer,
-                                           g_steal_pointer (&state->invocation));
-
-  g_clear_object (&state->invocation);
-  g_clear_object (&state->transfer);
-  g_clear_object (&state->self);
-  g_slice_free (Confirm, state);
-}
-
-static gboolean
-gbp_flatpak_runtime_provider_handle_confirm (GbpFlatpakRuntimeProvider *self,
-                                             GDBusMethodInvocation     *invocation,
-                                             const char * const        *refs,
-                                             IpcFlatpakTransfer        *transfer)
-{
-  g_autoptr(IdeContext) context = NULL;
-  GbpFlatpakInstallDialog *dialog;
-  IdeWorkbench *workbench;
-  IdeWorkspace *workspace;
-  Confirm *state;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
-  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
-  g_assert (refs != NULL);
-  g_assert (IPC_IS_FLATPAK_TRANSFER (transfer));
-
-  context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = ide_workbench_from_context (context);
-  workspace = ide_workbench_get_current_workspace (workbench);
-  dialog = gbp_flatpak_install_dialog_new (GTK_WINDOW (workspace));
-
-  for (guint i = 0; refs[i]; i++)
-    gbp_flatpak_install_dialog_add_runtime (dialog, refs[i]);
-
-  if (gbp_flatpak_install_dialog_is_empty (dialog))
-    {
-      gtk_widget_destroy (GTK_WIDGET (dialog));
-      ipc_flatpak_transfer_complete_confirm (transfer, g_steal_pointer (&invocation));
-      return TRUE;
-    }
-
-  state = g_slice_new0 (Confirm);
-  state->self = g_object_ref (self);
-  state->transfer = g_object_ref (transfer);
-  state->invocation = g_object_ref (invocation);
-
-  gbp_flatpak_install_dialog_run_async (dialog,
-                                        NULL,
-                                        gbp_flatpak_runtime_provider_handle_confirm_cb,
-                                        state);
-
-  return TRUE;
 }
 
 static IdeRuntime *
@@ -357,8 +277,6 @@ gbp_flatpak_runtime_provider_bootstrap_install_cb (GObject      *object,
   else
     ide_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
 
-  ide_notification_withdraw (state->notif);
-
   IDE_EXIT;
 }
 
@@ -378,20 +296,36 @@ gbp_flatpak_runtime_provider_bootstrap_complete (gpointer data)
   state = ide_task_get_task_data (task);
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
-  g_assert (state->to_install != NULL);
-  g_assert (IPC_IS_FLATPAK_SERVICE (state->service));
-  g_assert (state->transfer_path != NULL);
-  g_assert (IDE_IS_NOTIFICATION (state->notif));
+  g_assert (state != NULL);
+  g_assert (!state->notif || IDE_IS_NOTIFICATION (state->notif));
+  g_assert (!state->service || IPC_IS_FLATPAK_SERVICE (state->service));
+  g_assert (!state->transfer || IPC_IS_FLATPAK_TRANSFER (state->transfer));
 
-  ide_notification_attach (state->notif, IDE_OBJECT (self));
+  if (state->to_install->len > 0)
+    {
+      g_assert (IDE_IS_NOTIFICATION (state->notif));
+      g_assert (IPC_IS_FLATPAK_SERVICE (state->service));
+      g_assert (IPC_IS_FLATPAK_TRANSFER (state->transfer));
 
-  ipc_flatpak_service_call_install (state->service,
-                                    (const char * const *)state->to_install->pdata,
-                                    state->transfer_path,
-                                    "",
-                                    ide_task_get_cancellable (task),
-                                    gbp_flatpak_runtime_provider_bootstrap_install_cb,
-                                    g_object_ref (task));
+      ide_notification_attach (state->notif, IDE_OBJECT (self));
+      ipc_flatpak_service_call_install (state->service,
+                                        (const char * const *)state->to_install->pdata,
+                                        state->transfer_path,
+                                        "",
+                                        ide_task_get_cancellable (task),
+                                        gbp_flatpak_runtime_provider_bootstrap_install_cb,
+                                        g_object_ref (task));
+    }
+  else
+    {
+      if (!(runtime = find_runtime (self, state->runtime_id)))
+        ide_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_CANCELLED,
+                                   "Operation was cancelled");
+      else
+        ide_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
+    }
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -431,12 +365,32 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
   /* Filter out anything we can't find or is already installed */
   for (guint i = state->to_install->len; i > 0; i--)
     {
-      const char *id = g_ptr_array_index (state->to_install, i-1);
+      char *id = g_ptr_array_index (state->to_install, i-1);
       gboolean is_known = FALSE;
       gint64 size = 0;
 
+      /* If this is a plain SDK extension name, resolve it now */
+      if (strchr (id, '/') == NULL)
+        {
+          g_autofree char *resolved = NULL;
+
+          if (ipc_flatpak_service_call_resolve_extension_sync (service, state->sdk, id, &resolved, NULL, NULL))
+            {
+              g_autofree char *old = g_steal_pointer (&id);
+              g_ptr_array_index (state->to_install, i-1) = id = g_steal_pointer (&resolved);
+            }
+        }
+
+      /* If we're missing runtime/ (or app/) prefix, add it now */
+      if (!g_str_has_prefix (id, "runtime/") && !g_str_has_prefix (id, "app/"))
+        {
+          g_autofree char *old = id;
+          g_ptr_array_index (state->to_install, i-1) = id = g_strdup_printf ("runtime/%s", old);
+        }
+
+      /* Ignore this unless we know it can be installed from a peer */
       if (!ipc_flatpak_service_call_runtime_is_known_sync (service, id, &is_known, &size, NULL, NULL) ||
-          is_known == TRUE)
+          is_known == FALSE)
         g_ptr_array_remove_index (state->to_install, i-1);
     }
 
@@ -448,28 +402,36 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
       g_autoptr(GError) error = NULL;
 
       notif = ide_notification_new ();
-      ide_notification_set_icon_name (notif, "system-software-install");
+      ide_notification_set_icon_name (notif, "system-software-install-symbolic");
       ide_notification_set_title (notif, _("Installing Necessary SDKs"));
       ide_notification_set_body (notif, _("Builder is installing Software Development Kits necessary for building your application."));
       ide_notification_set_has_progress (notif, TRUE);
       ide_notification_set_progress_is_imprecise (notif, FALSE);
 
-      transfer = ipc_flatpak_transfer_skeleton_new ();
-      g_signal_connect_object (transfer,
-                               "handle-confirm",
-                               G_CALLBACK (gbp_flatpak_runtime_provider_handle_confirm),
-                               source_object,
+      g_signal_connect_object (task,
+                               "notify::completed",
+                               G_CALLBACK (ide_notification_withdraw),
+                               notif,
                                G_CONNECT_SWAPPED);
+
+      transfer = ipc_flatpak_transfer_impl_new (context);
       g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (transfer),
                                         g_dbus_proxy_get_connection (G_DBUS_PROXY (service)),
                                         transfer_path,
-                                        NULL);
+                                        &error);
+
+      if (error != NULL)
+        {
+          g_warning ("Failed to register transfer object on D-Bus: %s", error->message);
+          g_clear_error (&error);
+        }
 
       g_object_bind_property (transfer, "fraction", notif, "progress", G_BINDING_SYNC_CREATE);
       g_object_bind_property (transfer, "message", notif, "body", G_BINDING_DEFAULT);
 
       state->service = g_object_ref (service);
       state->notif = g_object_ref (notif);
+      state->transfer = g_object_ref (transfer);
       state->transfer_path = g_strdup (transfer_path);
 
       g_ptr_array_add (state->to_install, NULL);
@@ -480,6 +442,8 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
                       gbp_flatpak_runtime_provider_bootstrap_complete,
                       g_object_ref (task),
                       g_object_unref);
+
+  IDE_EXIT;
 
 failure:
 
@@ -520,6 +484,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_runtime_provider_bootstrap_async);
   ide_task_set_task_data (task, state, bootstrap_free);
+  ide_task_set_return_on_cancel (task, FALSE);
+  ide_task_set_release_on_propagate (task, FALSE);
 
   /* Collect all of the runtimes that could be needed */
   if (GBP_IS_FLATPAK_MANIFEST (config))
@@ -545,7 +511,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       if (extensions != NULL)
         {
           for (guint i = 0; extensions[i]; i++)
-            g_ptr_array_add (state->to_install, g_strdup_printf ("runtime/%s", extensions[i]));
+            g_ptr_array_add (state->to_install, g_strdup (extensions[i]));
         }
     }
   else
@@ -571,6 +537,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
             }
         }
     }
+
+  state->sdk = g_strdup (full_sdk);
 
   if (state->to_install->len == 0)
     {

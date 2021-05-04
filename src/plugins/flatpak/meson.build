@@ -36,6 +36,7 @@ plugins_sources += files([
   'gbp-flatpak-transfer.c',
   'gbp-flatpak-util.c',
   'gbp-flatpak-workbench-addin.c',
+  'ipc-flatpak-transfer-impl.c',
 ])
 
 plugin_flatpak_resources = gnome.compile_resources(
