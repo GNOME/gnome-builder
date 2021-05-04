@@ -693,6 +693,7 @@ install_worker (GTask        *task,
   InstallState *state = task_data;
   g_autoptr(FlatpakTransaction) transaction = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GPtrArray) ref_ids = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (source_object));
@@ -705,10 +706,19 @@ install_worker (GTask        *task,
   ipc_flatpak_transfer_set_fraction (state->transfer, 0.0);
   ipc_flatpak_transfer_set_message (state->transfer, "");
 
-  if (!(transaction = flatpak_transaction_new_for_installation (state->installation, NULL, &error)) ||
-      !add_refs_to_transaction (transaction, state->refs, &error) ||
-      !connect_signals (transaction, state->transfer, &error) ||
-      !flatpak_transaction_run (transaction, cancellable, &error))
+  ref_ids = g_ptr_array_new ();
+  for (guint i = 0; i < state->refs->len; i++)
+    g_ptr_array_add (ref_ids, (gpointer)g_array_index (state->refs, InstallRef, i).ref);
+  g_ptr_array_add (ref_ids, NULL);
+
+  if (!ipc_flatpak_transfer_call_confirm_sync (state->transfer, (const char * const *)ref_ids->pdata, NULL, &error))
+    {
+      complete_wrapped_error (g_steal_pointer (&state->invocation), g_steal_pointer (&error));
+    }
+  else if (!(transaction = flatpak_transaction_new_for_installation (state->installation, NULL, &error)) ||
+           !add_refs_to_transaction (transaction, state->refs, &error) ||
+           !connect_signals (transaction, state->transfer, &error) ||
+           !flatpak_transaction_run (transaction, cancellable, &error))
     {
       ipc_flatpak_transfer_set_fraction (state->transfer, 1.0);
       ipc_flatpak_transfer_set_message (state->transfer, _("Installation failed"));
@@ -818,6 +828,8 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
                                                   NULL,
                                                   transfer_path,
                                                   NULL, NULL);
+
+  g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (transfer), G_MAXINT);
 
   if (full_ref_names[0] == NULL)
     {
