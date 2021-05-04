@@ -80,11 +80,11 @@ gbp_flatpak_is_ignored (const gchar *name)
          strstr (name, ".PlatformTheme") != NULL;
 }
 
-gboolean
-gbp_flatpak_split_id (const gchar  *str,
-                      gchar       **id,
-                      gchar       **arch,
-                      gchar       **branch)
+static gboolean
+_gbp_flatpak_split_id (const gchar  *str,
+                       gchar       **id,
+                       gchar       **arch,
+                       gchar       **branch)
 {
   g_auto(GStrv) parts = g_strsplit (str, "/", 0);
   guint i = 0;
@@ -128,6 +128,20 @@ gbp_flatpak_split_id (const gchar  *str,
     }
 
   return TRUE;
+}
+
+gboolean
+gbp_flatpak_split_id (const gchar  *str,
+                      gchar       **id,
+                      gchar       **arch,
+                      gchar       **branch)
+{
+  if (g_str_has_prefix (str, "runtime/"))
+    str += strlen ("runtime/");
+  else if (g_str_has_prefix (str, "app/"))
+    str += strlen ("app/");
+
+  return _gbp_flatpak_split_id (str, id, arch, branch);
 }
 
 static const char *

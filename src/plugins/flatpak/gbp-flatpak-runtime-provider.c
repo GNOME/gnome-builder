@@ -24,8 +24,10 @@
 
 #include <glib/gi18n.h>
 #include <libide-foundry.h>
+#include <libide-gui.h>
 
 #include "gbp-flatpak-client.h"
+#include "gbp-flatpak-install-dialog.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-runtime-provider.h"
@@ -199,6 +201,13 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
 
 typedef struct
 {
+  GbpFlatpakRuntimeProvider *self;
+  GDBusMethodInvocation *invocation;
+  IpcFlatpakTransfer *transfer;
+} Confirm;
+
+typedef struct
+{
   char               *runtime_id;
   char               *transfer_path;
   GPtrArray          *to_install;
@@ -217,6 +226,82 @@ bootstrap_free (Bootstrap *b)
   g_clear_object (&b->transfer);
   g_clear_pointer (&b->to_install, g_ptr_array_unref);
   g_slice_free (Bootstrap, b);
+}
+
+static void
+gbp_flatpak_runtime_provider_handle_confirm_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  GbpFlatpakInstallDialog *dialog = (GbpFlatpakInstallDialog *)object;
+  Confirm *state = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (state != NULL);
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (state->invocation));
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (state->self));
+  g_assert (IPC_IS_FLATPAK_TRANSFER (state->transfer));
+
+  if (!gbp_flatpak_install_dialog_run_finish (dialog, result, &error))
+    g_dbus_method_invocation_return_error (g_steal_pointer (&state->invocation),
+                                           G_DBUS_ERROR,
+                                           G_DBUS_ERROR_FAILED,
+                                           "Unconfirmed request");
+  else
+    ipc_flatpak_transfer_complete_confirm (state->transfer,
+                                           g_steal_pointer (&state->invocation));
+
+  g_clear_object (&state->invocation);
+  g_clear_object (&state->transfer);
+  g_clear_object (&state->self);
+  g_slice_free (Confirm, state);
+}
+
+static gboolean
+gbp_flatpak_runtime_provider_handle_confirm (GbpFlatpakRuntimeProvider *self,
+                                             GDBusMethodInvocation     *invocation,
+                                             const char * const        *refs,
+                                             IpcFlatpakTransfer        *transfer)
+{
+  g_autoptr(IdeContext) context = NULL;
+  GbpFlatpakInstallDialog *dialog;
+  IdeWorkbench *workbench;
+  IdeWorkspace *workspace;
+  Confirm *state;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (refs != NULL);
+  g_assert (IPC_IS_FLATPAK_TRANSFER (transfer));
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  workbench = ide_workbench_from_context (context);
+  workspace = ide_workbench_get_current_workspace (workbench);
+  dialog = gbp_flatpak_install_dialog_new (GTK_WINDOW (workspace));
+
+  for (guint i = 0; refs[i]; i++)
+    gbp_flatpak_install_dialog_add_runtime (dialog, refs[i]);
+
+  if (gbp_flatpak_install_dialog_is_empty (dialog))
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+      ipc_flatpak_transfer_complete_confirm (transfer, g_steal_pointer (&invocation));
+      return TRUE;
+    }
+
+  state = g_slice_new0 (Confirm);
+  state->self = g_object_ref (self);
+  state->transfer = g_object_ref (transfer);
+  state->invocation = g_object_ref (invocation);
+
+  gbp_flatpak_install_dialog_run_async (dialog,
+                                        NULL,
+                                        gbp_flatpak_runtime_provider_handle_confirm_cb,
+                                        state);
+
+  return TRUE;
 }
 
 static IdeRuntime *
@@ -370,6 +455,11 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
       ide_notification_set_progress_is_imprecise (notif, FALSE);
 
       transfer = ipc_flatpak_transfer_skeleton_new ();
+      g_signal_connect_object (transfer,
+                               "handle-confirm",
+                               G_CALLBACK (gbp_flatpak_runtime_provider_handle_confirm),
+                               source_object,
+                               G_CONNECT_SWAPPED);
       g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (transfer),
                                         g_dbus_proxy_get_connection (G_DBUS_PROXY (service)),
                                         transfer_path,

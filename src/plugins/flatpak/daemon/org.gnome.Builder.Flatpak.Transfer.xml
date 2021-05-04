@@ -23,5 +23,8 @@
   <interface name="org.gnome.Builder.Flatpak.Transfer">
     <property name="Fraction" type="d" access="readwrite"/>
     <property name="Message" type="s" access="readwrite"/>
+    <method name="Confirm">
+      <arg name="refs" type="as" direction="in"/>
+    </method>
   </interface>
 </node>
