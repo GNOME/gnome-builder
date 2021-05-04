@@ -113,7 +113,7 @@ ide_path_is_ignored (const gchar *path)
     {
       GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
 
-      if (g_pattern_match (pattern_spec, len, name, reversed))
+      if (g_pattern_spec_match (pattern_spec, len, name, reversed))
         {
           ret = TRUE;
           break;
@@ -165,7 +165,7 @@ ide_g_file_is_ignored (GFile *file)
     {
       GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
 
-      if (g_pattern_match (pattern_spec, len, name, reversed))
+      if (g_pattern_spec_match (pattern_spec, len, name, reversed))
         {
           ret = TRUE;
           break;
@@ -474,7 +474,7 @@ populate_descendants_matching (GFile        *file,
       name = g_file_info_get_name (info);
       file_type = g_file_info_get_file_type (info);
 
-      if (g_pattern_match_string (spec, name))
+      if (g_pattern_spec_match_string (spec, name))
         g_ptr_array_add (results, g_file_enumerator_get_child (enumerator, info));
 
       if (!g_file_info_get_is_symlink (info) && file_type == G_FILE_TYPE_DIRECTORY)
