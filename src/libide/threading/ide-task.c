@@ -1137,7 +1137,7 @@ ide_task_return (IdeTask       *self,
    * that thread cleanup must complete this to ensure objects cannot
    * be finalized in that thread.
    */
-  if (!priv->thread_called)
+  if (!priv->thread_called || IDE_IS_MAIN_THREAD ())
     priv->return_source = ide_task_complete (result);
   else if (priv->return_on_cancel && result->type == IDE_TASK_RESULT_CANCELLED)
     priv->return_source = ide_task_complete (result);
