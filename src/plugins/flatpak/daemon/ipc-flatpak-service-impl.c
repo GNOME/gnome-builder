@@ -733,15 +733,17 @@ install_worker (GTask        *task,
     g_ptr_array_add (ref_ids, (gpointer)g_array_index (state->refs, InstallRef, i).ref);
   g_ptr_array_add (ref_ids, NULL);
 
-  if (!ipc_flatpak_transfer_call_confirm_sync (state->transfer, (const char * const *)ref_ids->pdata, NULL, &error))
+  if (!ipc_flatpak_transfer_call_confirm_sync (state->transfer, (const char * const *)ref_ids->pdata, state->cancellable, &error))
     {
+      g_warning ("User confirmation failed: %s", error->message);
       complete_wrapped_error (g_steal_pointer (&state->invocation), g_steal_pointer (&error));
     }
-  else if (!(transaction = flatpak_transaction_new_for_installation (state->installation, NULL, &error)) ||
+  else if (!(transaction = flatpak_transaction_new_for_installation (state->installation, state->cancellable, &error)) ||
            !add_refs_to_transaction (transaction, state->refs, &error) ||
            !connect_signals (transaction, state->transfer, &error) ||
-           !flatpak_transaction_run (transaction, cancellable, &error))
+           !flatpak_transaction_run (transaction, state->cancellable, &error))
     {
+      g_warning ("Failed to run transaction: %s", error->message);
       ipc_flatpak_transfer_set_fraction (state->transfer, 1.0);
       ipc_flatpak_transfer_set_message (state->transfer, _("Installation failed"));
       complete_wrapped_error (g_steal_pointer (&state->invocation), g_steal_pointer (&error));
