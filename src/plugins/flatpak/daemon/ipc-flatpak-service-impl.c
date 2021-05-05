@@ -427,7 +427,6 @@ ipc_flatpak_service_impl_list_runtimes (IpcFlatpakService     *service,
                                         GDBusMethodInvocation *invocation)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
-  g_autoptr(GError) error = NULL;
   GVariantBuilder builder;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
@@ -832,7 +831,6 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)service;
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
   g_autoptr(GArray) refs = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = NULL;
   GDBusConnection *connection;
   InstallState *state;
@@ -1011,7 +1009,6 @@ resolve_extension (GPtrArray  *installations,
                   const char *group = groups[l];
                   g_autofree char *version = NULL;
                   g_autofree char *runtime = NULL;
-                  g_autofree char *match = NULL;
                   g_autofree char *refstr = NULL;
 
                   /* This might be our extension */

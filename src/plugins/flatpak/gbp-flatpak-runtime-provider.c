@@ -384,7 +384,7 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
 
           if (ipc_flatpak_service_call_resolve_extension_sync (service, state->sdk, id, &resolved, NULL, NULL))
             {
-              g_autofree char *old = g_steal_pointer (&id);
+              G_GNUC_UNUSED g_autofree char *old = g_steal_pointer (&id);
               g_ptr_array_index (state->to_install, i-1) = id = g_steal_pointer (&resolved);
             }
         }

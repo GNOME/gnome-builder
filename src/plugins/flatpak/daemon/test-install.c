@@ -35,7 +35,6 @@ install_cb (GObject      *object,
 {
   IpcFlatpakService *service = (IpcFlatpakService *)object;
   g_autoptr(GMainLoop) main_loop = user_data;
-  g_autoptr(GVariant) runtimes = NULL;
   g_autoptr(GError) error = NULL;
   gboolean ret;
 
