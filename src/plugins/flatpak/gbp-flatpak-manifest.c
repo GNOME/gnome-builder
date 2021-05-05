@@ -101,7 +101,7 @@ validate_properties (GbpFlatpakManifest  *self,
     }
 
   name = self->runtime;
-  arch = flatpak_get_default_arch ();
+  arch = gbp_flatpak_get_default_arch (IDE_OBJECT (self));
   branch = "master";
   if (self->runtime_version != NULL)
     branch = self->runtime_version;
@@ -1080,7 +1080,7 @@ gbp_flatpak_manifest_get_runtimes (GbpFlatpakManifest *self,
   ar = g_ptr_array_new ();
 
   if (for_arch == NULL)
-    for_arch = flatpak_get_default_arch ();
+    for_arch = gbp_flatpak_get_default_arch (IDE_OBJECT (self));
 
   if (self->runtime_version != NULL)
     runtime_version = self->runtime_version;
@@ -1147,7 +1147,7 @@ gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
 
   sdk = g_strdup_printf ("%s/%s/%s",
                          self->sdk,
-                         flatpak_get_default_arch (),
+                         gbp_flatpak_get_default_arch (IDE_OBJECT (self)),
                          self->runtime_version);
 
   for (guint i = 0; self->sdk_extensions[i]; i++)
