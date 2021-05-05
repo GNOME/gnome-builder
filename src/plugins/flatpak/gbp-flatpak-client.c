@@ -93,7 +93,7 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
   g_dbus_connection_start_message_processing (self->connection);
 
   self->service = ipc_flatpak_service_proxy_new_sync (self->connection,
-                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+                                                      G_DBUS_PROXY_FLAGS_NONE,
                                                       NULL,
                                                       "/org/gnome/Builder/Flatpak",
                                                       NULL,
