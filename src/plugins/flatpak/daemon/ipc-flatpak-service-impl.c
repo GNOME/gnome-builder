@@ -626,6 +626,7 @@ typedef struct
   IpcFlatpakTransfer    *transfer;
   char                  *parent_window;
   GArray                *refs;
+  GCancellable          *cancellable;
 } InstallState;
 
 static void
@@ -634,6 +635,7 @@ install_state_free (InstallState *state)
   g_clear_object (&state->installation);
   g_clear_object (&state->invocation);
   g_clear_object (&state->transfer);
+  g_clear_object (&state->cancellable);
   g_clear_pointer (&state->refs, g_array_unref);
   g_clear_pointer (&state->parent_window, g_free);
   g_slice_free (InstallState, state);
@@ -883,13 +885,20 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
     }
 
   state = g_slice_new0 (InstallState);
+  state->cancellable = g_cancellable_new ();
   state->installation = ipc_flatpak_service_impl_ref_user_installation (self);
   state->invocation = g_steal_pointer (&invocation);
   state->refs = g_array_ref (refs);
   state->parent_window = parent_window[0] ? g_strdup (parent_window) : NULL;
   state->transfer = g_object_ref (transfer);
 
-  task = g_task_new (self, NULL, NULL, NULL);
+  g_signal_connect_object (transfer,
+                           "cancel",
+                           G_CALLBACK (g_cancellable_cancel),
+                           state->cancellable,
+                           G_CONNECT_SWAPPED);
+
+  task = g_task_new (self, state->cancellable, NULL, NULL);
   g_task_set_source_tag (task, ipc_flatpak_service_impl_install);
   g_task_set_task_data (task, state, (GDestroyNotify)install_state_free);
   g_task_run_in_thread (task, install_worker);

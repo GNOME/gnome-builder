@@ -423,6 +423,11 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
                                G_CONNECT_SWAPPED);
 
       transfer = ipc_flatpak_transfer_impl_new (context);
+      g_signal_connect_object (ide_task_get_cancellable (task),
+                               "cancelled",
+                               G_CALLBACK (ipc_flatpak_transfer_emit_cancel),
+                               state->transfer,
+                               G_CONNECT_SWAPPED);
       g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (transfer),
                                         g_dbus_proxy_get_connection (G_DBUS_PROXY (service)),
                                         transfer_path,
@@ -472,8 +477,6 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_autoptr(IdeTask) task = NULL;
   g_autofree char *full_sdk = NULL;
   g_autofree char *full_platform = NULL;
-  GbpFlatpakClient *client;
-  IdeContext *context;
   const char *arch;
   Bootstrap *state;
   IdeConfig *config;
@@ -486,8 +489,6 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
 
   arch = ide_pipeline_get_arch (pipeline);
   config = ide_pipeline_get_config (pipeline);
-  context = ide_object_get_context (IDE_OBJECT (pipeline));
-  client = gbp_flatpak_client_from_context (context);
 
   state = g_slice_new0 (Bootstrap);
   state->runtime_id = g_strdup (ide_config_get_runtime_id (config));
@@ -498,16 +499,6 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   ide_task_set_task_data (task, state, bootstrap_free);
   ide_task_set_return_on_cancel (task, FALSE);
   ide_task_set_release_on_propagate (task, FALSE);
-
-  /* If a task is cancelled, we need to force-quit the client process or else
-   * it will happily keep installing runtimes for us. This should, for the
-   * most part, really test the correctness of Flatpak transactions!
-   */
-  g_signal_connect_object (ide_task_get_cancellable (task),
-                           "cancelled",
-                           G_CALLBACK (gbp_flatpak_client_force_exit),
-                           client,
-                           G_CONNECT_SWAPPED);
 
   /* Collect all of the runtimes that could be needed */
   if (GBP_IS_FLATPAK_MANIFEST (config))
