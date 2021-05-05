@@ -457,3 +457,41 @@ _ide_application_init_actions (IdeApplication *self)
                                    G_N_ELEMENTS (IdeApplicationActions),
                                    self);
 }
+
+static void
+cancellable_weak_notify (gpointer  data,
+                         GObject  *where_object_was)
+{
+  g_autofree char *name = data;
+  g_action_map_remove_action (G_ACTION_MAP (IDE_APPLICATION_DEFAULT), name);
+}
+
+char *
+ide_application_create_cancel_action (IdeApplication *self,
+                                      GCancellable   *cancellable)
+{
+  static guint cancel_count;
+  g_autofree char *action_name = NULL;
+  g_autofree char *detailed_action_name = NULL;
+  g_autoptr(GSimpleAction) action = NULL;
+  guint count;
+
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (G_IS_CANCELLABLE (cancellable), NULL);
+
+  count = ++cancel_count;
+  action_name = g_strdup_printf ("cancel_%u", count);
+  detailed_action_name = g_strdup_printf ("app.cancel_%u", count);
+  action = g_simple_action_new (action_name, NULL);
+  g_signal_connect_object (action,
+                           "activate",
+                           G_CALLBACK (g_cancellable_cancel),
+                           cancellable,
+                           G_CONNECT_SWAPPED);
+  g_object_weak_ref (G_OBJECT (cancellable),
+                     cancellable_weak_notify,
+                     g_steal_pointer (&action_name));
+  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
+
+  return g_steal_pointer (&detailed_action_name);
+}

@@ -92,5 +92,8 @@ IdeWorkbench  *ide_application_find_workbench_for_file  (IdeApplication         
 IDE_AVAILABLE_IN_3_34
 gpointer       ide_application_find_addin_by_module_name (IdeApplication           *self,
                                                           const gchar              *module_name);
+IDE_AVAILABLE_IN_3_42
+char          *ide_application_create_cancel_action      (IdeApplication           *self,
+                                                          GCancellable             *cancellable);
 
 G_END_DECLS
