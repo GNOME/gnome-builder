@@ -1,4 +1,13 @@
 ==============
+Version 3.40.2
+==============
+
+Changes in this release:
+
+ • Fixes for gdb when using zsh/fish
+ • Improve Flatpak runtime discovery when SDK extensions are used
+
+==============
 Version 3.40.1
 ==============
 

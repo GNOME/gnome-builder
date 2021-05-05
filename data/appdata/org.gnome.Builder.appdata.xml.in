@@ -86,6 +86,10 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="40.2" date="2021-05-05">
+      <p>Builder 40.2 fixes a number of integration issues with Flatpak.</p>
+    </release>
+
     <release version="40.1" date="2021-04-29">
       <p>Builder 40.1 fixes a number of integration issues found in 40.0.</p>
     </release>
