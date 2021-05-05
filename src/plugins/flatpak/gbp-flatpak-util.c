@@ -147,6 +147,8 @@ gbp_flatpak_split_id (const gchar  *str,
 static const char *
 _gbp_flatpak_get_default_arch (IdeObject *object)
 {
+  const char *ret = NULL;
+
   if (object != NULL)
     {
       g_autoptr(IdeContext) context = ide_object_ref_context (object);
@@ -157,11 +159,14 @@ _gbp_flatpak_get_default_arch (IdeObject *object)
           IpcFlatpakService *service = gbp_flatpak_client_get_service (client, NULL, NULL);
 
           if (service != NULL)
-            return ipc_flatpak_service_get_default_arch (service);
+            ret = ipc_flatpak_service_get_default_arch (service);
         }
     }
 
-  return ide_get_system_arch ();
+  if (ret == NULL)
+    ret = ide_get_system_arch ();
+
+  return ret;
 }
 
 const char *
