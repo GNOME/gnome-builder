@@ -139,7 +139,7 @@ indexer_info_matches (const IndexerInfo *info,
     {
       GPatternSpec *spec = g_ptr_array_index (info->specs, i);
 
-      if (g_pattern_match (spec, len, filename, filename_reversed))
+      if (g_pattern_spec_match (spec, len, filename, filename_reversed))
         return TRUE;
     }
 
