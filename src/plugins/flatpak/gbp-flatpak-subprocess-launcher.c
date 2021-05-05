@@ -31,6 +31,15 @@ struct _GbpFlatpakSubprocessLauncher
 
 G_DEFINE_TYPE (GbpFlatpakSubprocessLauncher, gbp_flatpak_subprocess_launcher, IDE_TYPE_SUBPROCESS_LAUNCHER)
 
+static const char * const *
+insert_argv (IdeSubprocessLauncher *launcher,
+             int                    argpos,
+             const char            *xdg_runtime_dir)
+{
+  ide_subprocess_launcher_insert_argv (launcher, argpos, xdg_runtime_dir);
+  return ide_subprocess_launcher_get_argv (launcher);
+}
+
 static IdeSubprocess *
 gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
                                        GCancellable           *cancellable,
@@ -122,12 +131,13 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
    * or fourth) time.
    */
   if (!g_strv_contains (argv, build_dir_option))
-    ide_subprocess_launcher_insert_argv (launcher, argpos, build_dir_option);
+    argv = insert_argv (launcher, argpos, build_dir_option);
   if (!g_strv_contains (argv, xdg_runtime_dir))
-    ide_subprocess_launcher_insert_argv (launcher, argpos, xdg_runtime_dir);
+    argv = insert_argv (launcher, argpos, xdg_runtime_dir);
 
 apply_env:
 
+  argv = ide_subprocess_launcher_get_argv (launcher);
   envp = ide_subprocess_launcher_get_environ (launcher);
 
   if (envp != NULL)
@@ -139,9 +149,8 @@ apply_env:
       for (guint i = 0; envp[i] != NULL; i++)
         {
           g_autofree gchar *arg = g_strdup_printf ("--env=%s", envp[i]);
-          argv = ide_subprocess_launcher_get_argv (launcher);
           if (!g_strv_contains (argv, arg))
-            ide_subprocess_launcher_insert_argv (launcher, argpos, arg);
+            argv = insert_argv (launcher, argpos, arg);
         }
 
       ide_subprocess_launcher_setenv (launcher, "PATH", NULL, TRUE);
