@@ -28,6 +28,15 @@
 #include "ipc-flatpak-service.h"
 #include "ipc-flatpak-transfer.h"
 
+static gboolean
+handle_confirm (IpcFlatpakTransfer    *transfer,
+                GDBusMethodInvocation *invocation,
+                const char * const    *refs)
+{
+  ipc_flatpak_transfer_complete_confirm (transfer, invocation);
+  return TRUE;
+}
+
 static void
 install_cb (GObject      *object,
             GAsyncResult *result,
@@ -118,6 +127,7 @@ main (gint argc,
   g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (service), G_MAXINT);
 
   transfer = ipc_flatpak_transfer_skeleton_new ();
+  g_signal_connect (transfer, "handle-confirm", G_CALLBACK (handle_confirm), NULL);
   g_signal_connect (transfer, "notify::message", G_CALLBACK (print_info), NULL);
   g_signal_connect (transfer, "notify::fraction", G_CALLBACK (print_info), NULL);
   ret = g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (transfer), connection, transfer_path, &error);
