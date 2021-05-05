@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-util"
 
-#include <flatpak.h>
 #include <string.h>
 #include <libide-foundry.h>
 #include <libide-vcs.h>

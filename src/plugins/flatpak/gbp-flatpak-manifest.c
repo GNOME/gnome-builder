@@ -21,7 +21,6 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-manifest"
 
-#include <flatpak/flatpak.h>
 #include <json-glib/json-glib.h>
 
 #include "gbp-flatpak-application-addin.h"
