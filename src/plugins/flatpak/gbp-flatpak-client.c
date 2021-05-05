@@ -346,3 +346,14 @@ gbp_flatpak_client_get_service_finish (GbpFlatpakClient  *self,
 
   return ide_task_propagate_object (IDE_TASK (result), error);
 }
+
+void
+gbp_flatpak_client_force_exit (GbpFlatpakClient *self)
+{
+  IdeSubprocess *subprocess;
+
+  g_return_if_fail (GBP_IS_FLATPAK_CLIENT (self));
+
+  if ((subprocess = ide_subprocess_supervisor_get_subprocess (self->supervisor)))
+    ide_subprocess_force_exit (subprocess);
+}

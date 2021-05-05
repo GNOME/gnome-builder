@@ -303,11 +303,19 @@ gbp_flatpak_runtime_provider_bootstrap_complete (gpointer data)
 
   if (state->to_install->len > 0)
     {
+      g_autofree char *detailed_action_name = NULL;
+      g_autoptr(GIcon) icon = g_themed_icon_new ("process-stop-symbolic");
+
       g_assert (IDE_IS_NOTIFICATION (state->notif));
       g_assert (IPC_IS_FLATPAK_SERVICE (state->service));
       g_assert (IPC_IS_FLATPAK_TRANSFER (state->transfer));
 
+      /* Register an action that can be cancelled */
+      detailed_action_name = ide_application_create_cancel_action (IDE_APPLICATION_DEFAULT,
+                                                                   ide_task_get_cancellable (task));
+      ide_notification_add_button (state->notif, _("Cancel"), icon, detailed_action_name);
       ide_notification_attach (state->notif, IDE_OBJECT (self));
+
       ipc_flatpak_service_call_install (state->service,
                                         (const char * const *)state->to_install->pdata,
                                         state->transfer_path,
@@ -464,6 +472,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_autoptr(IdeTask) task = NULL;
   g_autofree char *full_sdk = NULL;
   g_autofree char *full_platform = NULL;
+  GbpFlatpakClient *client;
+  IdeContext *context;
   const char *arch;
   Bootstrap *state;
   IdeConfig *config;
@@ -476,6 +486,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
 
   arch = ide_pipeline_get_arch (pipeline);
   config = ide_pipeline_get_config (pipeline);
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  client = gbp_flatpak_client_from_context (context);
 
   state = g_slice_new0 (Bootstrap);
   state->runtime_id = g_strdup (ide_config_get_runtime_id (config));
@@ -486,6 +498,16 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   ide_task_set_task_data (task, state, bootstrap_free);
   ide_task_set_return_on_cancel (task, FALSE);
   ide_task_set_release_on_propagate (task, FALSE);
+
+  /* If a task is cancelled, we need to force-quit the client process or else
+   * it will happily keep installing runtimes for us. This should, for the
+   * most part, really test the correctness of Flatpak transactions!
+   */
+  g_signal_connect_object (ide_task_get_cancellable (task),
+                           "cancelled",
+                           G_CALLBACK (gbp_flatpak_client_force_exit),
+                           client,
+                           G_CONNECT_SWAPPED);
 
   /* Collect all of the runtimes that could be needed */
   if (GBP_IS_FLATPAK_MANIFEST (config))

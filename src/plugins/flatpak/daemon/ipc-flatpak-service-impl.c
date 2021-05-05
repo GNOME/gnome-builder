@@ -922,7 +922,7 @@ chunk_insert (GStringChunk *strings,
 }
 
 static char *
-resolve_extension (GPtrArray   *installations,
+resolve_extension (GPtrArray  *installations,
                    const char *sdk,
                    const char *extension)
 {

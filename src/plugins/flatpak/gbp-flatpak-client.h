@@ -41,6 +41,7 @@ void               gbp_flatpak_client_get_service_async  (GbpFlatpakClient     *
 IpcFlatpakService *gbp_flatpak_client_get_service_finish (GbpFlatpakClient     *self,
                                                           GAsyncResult         *result,
                                                           GError              **error);
+void               gbp_flatpak_client_force_exit         (GbpFlatpakClient     *self);
 
 static inline GbpFlatpakClient *
 gbp_flatpak_client_ensure (IdeContext *context)
