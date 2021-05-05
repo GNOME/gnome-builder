@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-05-05 04:18+0000\n"
-"PO-Revision-Date: 2021-05-05 10:30+0200\n"
+"POT-Creation-Date: 2021-05-05 08:43+0000\n"
+"PO-Revision-Date: 2021-05-05 10:48+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -2652,7 +2652,6 @@ msgid "Uncomment code"
 msgstr "Descomentar código"
 
 #: src/libide/gui/ide-shortcuts-window.ui:398
-#| msgid "Beautify the code"
 msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Embellecer el código seleccionado"
@@ -5402,10 +5401,9 @@ msgstr "Inicializando proyecto"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:182
-#, fuzzy
 #| msgid "Containers/Podman"
 msgid "Containers/Toolbox"
-msgstr "Contenedores/Podman"
+msgstr "Contenedores/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:188
