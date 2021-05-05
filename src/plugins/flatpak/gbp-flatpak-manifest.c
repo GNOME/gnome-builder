@@ -557,6 +557,8 @@ find_extension (GbpFlatpakManifest *self,
   GbpFlatpakClient *client;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FLATPAK_MANIFEST (self));
   g_assert (runtime_id != NULL);
 
@@ -591,7 +593,7 @@ find_extension (GbpFlatpakManifest *self,
                                        metadata,
                                        is_extension);
 
-      return IDE_RUNTIME (g_steal_pointer (&ret));
+      IDE_RETURN (IDE_RUNTIME (g_steal_pointer (&ret)));
     }
 
   IDE_RETURN (NULL);
