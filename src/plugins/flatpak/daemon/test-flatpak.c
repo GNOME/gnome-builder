@@ -147,6 +147,20 @@ add_install_cb (GObject      *object,
   g_message (" Resolved to %s", resolved);
   g_assert_cmpstr (resolved, ==, "org.freedesktop.Sdk.Extension.rust-stable/x86_64/20.08");
 
+  g_message ("Resolving org.freedesktop.Sdk.Extension.rust-stable for org.gnome.Sdk/aarch64/40");
+  ret = ipc_flatpak_service_call_resolve_extension_sync (service, "org.gnome.Sdk/aarch64/40", "org.freedesktop.Sdk.Extension.rust-stable", &resolved, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_true (ret);
+  g_message (" Resolved to %s", resolved);
+  g_assert_cmpstr (resolved, ==, "org.freedesktop.Sdk.Extension.rust-stable/aarch64/20.08");
+
+  g_message ("Resolving org.freedesktop.Sdk.Extension.rust-stable for org.gnome.Sdk/aarch64/master");
+  ret = ipc_flatpak_service_call_resolve_extension_sync (service, "org.gnome.Sdk/aarch64/master", "org.freedesktop.Sdk.Extension.rust-stable", &resolved, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_true (ret);
+  g_message (" Resolved to %s", resolved);
+  g_assert_cmpstr (resolved, ==, "org.freedesktop.Sdk.Extension.rust-stable/aarch64/20.08");
+
   g_main_loop_quit (main_loop);
 }
 

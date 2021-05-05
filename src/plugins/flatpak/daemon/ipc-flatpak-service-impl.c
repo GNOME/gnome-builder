@@ -493,6 +493,7 @@ is_known_worker (GTask        *task,
   const char *ref_branch;
   gint64 download_size = 0;
   gboolean found = FALSE;
+  FlatpakQueryFlags flags = 0;
 
   g_assert (G_IS_TASK (task));
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (source_object));
@@ -505,6 +506,11 @@ is_known_worker (GTask        *task,
   ref_name = flatpak_ref_get_name (state->target);
   ref_arch = flatpak_ref_get_arch (state->target);
   ref_branch = flatpak_ref_get_branch (state->target);
+
+  if (str_equal0 (ref_arch, flatpak_get_default_arch ()))
+    flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
+  else
+    flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
 
   for (guint z = 0; z < state->installs->len; z++)
     {
@@ -519,7 +525,7 @@ is_known_worker (GTask        *task,
           const char *remote_name = flatpak_remote_get_name (remote);
           g_autoptr(GPtrArray) refs = NULL;
 
-          if (!(refs = flatpak_installation_list_remote_refs_sync (install, remote_name, NULL, NULL)))
+          if (!(refs = flatpak_installation_list_remote_refs_sync_full (install, remote_name, flags, NULL, NULL)))
             continue;
 
           for (guint j = 0; j < refs->len; j++)
@@ -804,13 +810,23 @@ static char *
 find_remote_for_ref (IpcFlatpakServiceImpl *self,
                      FlatpakRef            *ref)
 {
+  FlatpakQueryFlags flags = FLATPAK_QUERY_FLAGS_NONE;
+
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_REF (ref));
+
+  /* If this is not the default architecture, we need to force that we've
+   * loaded sub-summaries or we won't find any matches for the arch. Otherwise
+   * the cached form is fine (and faster).
+   */
+  if (str_equal0 (flatpak_get_default_arch (), flatpak_ref_get_arch (ref)))
+    flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
+  else
+    flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
 
   /* Someday we might want to prompt the user for which remote to install from,
    * but for now we'll just take the first.
    */
-
   for (guint i = 0; i < self->installs_ordered->len; i++)
     {
       Install *install = g_ptr_array_index (self->installs_ordered, i);
@@ -823,9 +839,7 @@ find_remote_for_ref (IpcFlatpakServiceImpl *self,
         {
           FlatpakRemote *remote = g_ptr_array_index (remotes, j);
           const char *name = flatpak_remote_get_name (remote);
-          g_autoptr(GPtrArray) refs = flatpak_installation_list_remote_refs_sync_full (install->installation, name,
-                                                                                       FLATPAK_QUERY_FLAGS_ONLY_CACHED,
-                                                                                       NULL, NULL);
+          g_autoptr(GPtrArray) refs = flatpak_installation_list_remote_refs_sync_full (install->installation, name, flags, NULL, NULL);
 
           if (refs == NULL)
             continue;
@@ -972,6 +986,7 @@ resolve_extension (GPtrArray  *installations,
   g_autoptr(GArray) maybe_extention_of = NULL;
   g_autoptr(GArray) runtime_extensions = NULL;
   g_autoptr(GStringChunk) strings = NULL;
+  FlatpakQueryFlags flags = FLATPAK_QUERY_FLAGS_NONE;
 
   g_assert (installations != NULL);
   g_assert (sdk != NULL);
@@ -986,6 +1001,11 @@ resolve_extension (GPtrArray  *installations,
 
   if (sdk_arch == NULL)
     sdk_arch = g_strdup (flatpak_get_default_arch ());
+
+  if (str_equal0 (sdk_arch, flatpak_get_default_arch ()))
+    flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
+  else
+    flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
 
   strings = g_string_chunk_new (4096);
   maybe_extention_of = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
@@ -1005,13 +1025,7 @@ resolve_extension (GPtrArray  *installations,
           const char *name = flatpak_remote_get_name (remote);
           g_autoptr(GPtrArray) refs = NULL;
 
-          refs = flatpak_installation_list_remote_refs_sync_full (installation,
-                                                                  name,
-                                                                  FLATPAK_QUERY_FLAGS_ONLY_CACHED,
-                                                                  NULL,
-                                                                  NULL);
-
-          if (refs == NULL)
+          if (!(refs = flatpak_installation_list_remote_refs_sync_full (installation, name, flags, NULL, NULL)))
             continue;
 
           for (guint k = 0; k < refs->len; k++)
