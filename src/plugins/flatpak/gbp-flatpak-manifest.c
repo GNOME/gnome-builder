@@ -23,7 +23,6 @@
 
 #include <json-glib/json-glib.h>
 
-#include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-client.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"

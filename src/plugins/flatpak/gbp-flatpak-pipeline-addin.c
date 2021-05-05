@@ -26,7 +26,6 @@
 #include "gbp-flatpak-download-stage.h"
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-runtime.h"
-#include "gbp-flatpak-transfer.h"
 #include "gbp-flatpak-util.h"
 
 #define VERSION_CHECK(v,a,b,c)                                         \

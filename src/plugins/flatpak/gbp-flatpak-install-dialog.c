@@ -26,7 +26,6 @@
 
 #include <libide-gui.h>
 #include <libide-threading.h>
-#include <flatpak/flatpak.h>
 
 #include "gbp-flatpak-install-dialog.h"
 #include "gbp-flatpak-util.h"

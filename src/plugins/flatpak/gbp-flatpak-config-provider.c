@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-config-provider"
 
-#include <flatpak.h>
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 #include <libide-vcs.h>

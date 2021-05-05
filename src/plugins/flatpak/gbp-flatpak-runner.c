@@ -21,7 +21,6 @@
 #define G_LOG_DOMAIN "gbp-flatpak-runner"
 
 #include <errno.h>
-#include <flatpak.h>
 #include <stdlib.h>
 #include <glib/gi18n.h>
 #include <unistd.h>

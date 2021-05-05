@@ -20,11 +20,10 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-runtime"
 
-#include <flatpak.h>
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
+#include <libide-vcs.h>
 
-#include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runner.h"
 #include "gbp-flatpak-runtime.h"
@@ -771,12 +770,12 @@ gbp_flatpak_runtime_new (const char *name,
   else if (g_str_has_prefix (name, "org.kde."))
     g_string_append (category, "KDE/");
 
-  if (ide_str_equal0 (flatpak_get_default_arch (), arch))
+  if (ide_str_equal0 (ide_get_system_arch (), arch))
     g_string_append (category, name);
   else
     g_string_append_printf (category, "%s (%s)", name, arch);
 
-  if (g_str_equal (arch, flatpak_get_default_arch ()))
+  if (g_str_equal (arch, ide_get_system_arch ()))
     display_name = g_strdup_printf (_("%s <b>%s</b>"), name, branch);
   else
     display_name = g_strdup_printf (_("%s <b>%s</b> <span fgalpha='36044'>%s</span>"), name, branch, arch);
