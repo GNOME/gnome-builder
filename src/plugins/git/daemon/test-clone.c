@@ -92,7 +92,7 @@ test_clone (IpcGitService *service,
   g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (progress), conn, PROGRESS_PATH, &error);
   g_assert_no_error (error);
 
-  ipc_git_service_call_clone (service, url, path, NULL, g_variant_dict_end (&opts), PROGRESS_PATH, NULL, test_clone_cb, g_object_ref (progress));
+  ipc_git_service_call_clone (service, url, path, "", g_variant_dict_end (&opts), PROGRESS_PATH, NULL, test_clone_cb, g_object_ref (progress));
 }
 
 gint
