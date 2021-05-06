@@ -475,7 +475,7 @@ main (gint argc,
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(IpcGitService) service = NULL;
 
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   subprocess = g_subprocess_launcher_spawn (launcher, &error, "./gnome-builder-git", NULL);
 
   if (subprocess == NULL)
