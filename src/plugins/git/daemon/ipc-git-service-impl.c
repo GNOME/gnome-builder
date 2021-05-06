@@ -142,15 +142,35 @@ ipc_git_service_impl_handle_open (IpcGitService         *service,
   return TRUE;
 }
 
-static gboolean
-ipc_git_service_impl_handle_clone (IpcGitService         *service,
-                                   GDBusMethodInvocation *invocation,
-                                   const gchar           *url,
-                                   const gchar           *location,
-                                   const gchar           *branch,
-                                   GVariant              *config_options,
-                                   const gchar           *progress_path)
+typedef struct
 {
+  GDBusMethodInvocation *invocation;
+  char                  *url;
+  char                  *location;
+  char                  *branch;
+  GVariant              *config_options;
+  char                  *progress_path;
+} Clone;
+
+static void
+clone_free (Clone *c)
+{
+  g_clear_pointer (&c->url, g_free);
+  g_clear_pointer (&c->location, g_free);
+  g_clear_pointer (&c->branch, g_free);
+  g_clear_pointer (&c->progress_path, g_free);
+  g_clear_pointer (&c->config_options, g_variant_unref);
+  g_clear_object (&c->invocation);
+  g_slice_free (Clone, c);
+}
+
+static void
+ipc_git_service_impl_clone_worker (GTask        *task,
+                                   gpointer      source_object,
+                                   gpointer      task_data,
+                                   GCancellable *cancellable)
+{
+  Clone *c = task_data;
   g_autoptr(GgitRepository) repository = NULL;
   g_autoptr(GgitCloneOptions) options = NULL;
   g_autoptr(GgitRemoteCallbacks) callbacks = NULL;
@@ -161,27 +181,20 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
   g_autoptr(GFile) clone_location = NULL;
   GVariantIter iter;
 
-  g_assert (IPC_IS_GIT_SERVICE_IMPL (service));
-  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
-  g_assert (url != NULL);
-  g_assert (branch != NULL);
-  g_assert (location != NULL);
+  g_assert (G_IS_TASK (task));
+  g_assert (IPC_IS_GIT_SERVICE_IMPL (source_object));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* XXX: Make this threaded */
-
-  progress = ipc_git_progress_proxy_new_sync (g_dbus_method_invocation_get_connection (invocation),
+  progress = ipc_git_progress_proxy_new_sync (g_dbus_method_invocation_get_connection (c->invocation),
                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
                                               NULL,
-                                              progress_path,
+                                              c->progress_path,
                                               NULL,
                                               &error);
   if (progress == NULL)
     goto gerror;
 
-  file = g_file_new_for_path (location);
-
-  if (!*branch)
-    branch = NULL;
+  file = g_file_new_for_path (c->location);
 
   callbacks = ipc_git_remote_callbacks_new (progress);
 
@@ -190,13 +203,13 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
   ggit_fetch_options_set_download_tags (fetch_options, FALSE);
 
   options = ggit_clone_options_new ();
-  ggit_clone_options_set_checkout_branch (options, branch);
+  ggit_clone_options_set_checkout_branch (options, c->branch);
   ggit_clone_options_set_fetch_options (options, fetch_options);
 
-  if (!(repository = ggit_repository_clone (url, file, options, &error)))
+  if (!(repository = ggit_repository_clone (c->url, file, options, &error)))
     goto gerror;
 
-  if (g_variant_iter_init (&iter, config_options))
+  if (g_variant_iter_init (&iter, c->config_options))
     {
       g_autoptr(GgitConfig) config = NULL;
       GVariant *value;
@@ -206,7 +219,6 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
         {
           while (g_variant_iter_loop (&iter, "{sv}", &key, &value))
             {
-              g_printerr ("%s\n", g_variant_get_type_string (value));
               if (g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
                 ggit_config_set_string (config, key, g_variant_get_string (value, NULL), NULL);
             }
@@ -214,15 +226,47 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
     }
 
   clone_location = ggit_repository_get_location (repository);
-  ipc_git_service_complete_clone (service,
-                                  invocation,
-                                  g_file_get_path (clone_location));
+  ipc_git_service_complete_clone (source_object,
+                                  g_steal_pointer (&c->invocation),
+                                  g_file_peek_path (clone_location));
 
 gerror:
   if (error != NULL)
-    complete_wrapped_error (invocation, error);
+    complete_wrapped_error (g_steal_pointer (&c->invocation), error);
 
   g_clear_pointer (&fetch_options, ggit_fetch_options_free);
+}
+
+static gboolean
+ipc_git_service_impl_handle_clone (IpcGitService         *service,
+                                   GDBusMethodInvocation *invocation,
+                                   const gchar           *url,
+                                   const gchar           *location,
+                                   const gchar           *branch,
+                                   GVariant              *config_options,
+                                   const gchar           *progress_path)
+{
+  g_autoptr(GTask) task = NULL;
+  Clone *c;
+
+  g_assert (IPC_IS_GIT_SERVICE_IMPL (service));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (url != NULL);
+  g_assert (branch != NULL);
+  g_assert (location != NULL);
+
+  c = g_slice_new0 (Clone);
+  c->url = g_strdup (url);
+  c->location = g_strdup (location);
+  c->branch = branch[0] ? g_strdup (branch) : NULL;
+  c->config_options = g_variant_ref (config_options);
+  c->progress_path = g_strdup (progress_path);
+  c->invocation = g_steal_pointer (&invocation);
+
+  task = g_task_new (service, NULL, NULL, NULL);
+  g_task_set_source_tag (task, ipc_git_service_impl_handle_clone);
+  g_task_set_task_data (task, c, (GDestroyNotify)clone_free);
+  g_task_run_in_thread (task, ipc_git_service_impl_clone_worker);
 
   return TRUE;
 }
