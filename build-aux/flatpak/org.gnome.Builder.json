@@ -504,6 +504,14 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak.git"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "d8fbf0ce3dcc7896a036490633e6a0ca839eb70c.patch"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "f2b35fae1619557c874b32cba27e9540ce8c87dd.patch"
                 }
             ]
         },

@@ -1,0 +1,138 @@
+From d8fbf0ce3dcc7896a036490633e6a0ca839eb70c Mon Sep 17 00:00:00 2001
+From: Alexander Larsson <alexl@redhat.com>
+Date: Tue, 4 May 2021 10:19:17 +0200
+Subject: [PATCH] Add FLATPAK_QUERY_FLAGS_ALL_ARCHES for list_remote_refs()
+
+This allows flatpak_installation_list_remote_refs_sync_full() to list
+refs for all arches on remotes that use the new subsummary format.
+
+Fixess #4252
+---
+ common/flatpak-dir-private.h  |  5 +++++
+ common/flatpak-dir.c          | 29 +++++++++++++++++++++++++++++
+ common/flatpak-installation.c | 25 +++++++++++++++++++------
+ common/flatpak-installation.h |  2 ++
+ 4 files changed, 55 insertions(+), 6 deletions(-)
+
+diff --git a/common/flatpak-dir-private.h b/common/flatpak-dir-private.h
+index accfe06125..3c69928cca 100644
+--- a/common/flatpak-dir-private.h
++++ b/common/flatpak-dir-private.h
+@@ -155,6 +155,11 @@ gboolean flatpak_remote_state_ensure_subsummary (FlatpakRemoteState *self,
+                                                  gboolean            only_cached,
+                                                  GCancellable       *cancellable,
+                                                  GError            **error);
++gboolean flatpak_remote_state_ensure_subsummary_all_arches (FlatpakRemoteState *self,
++                                                            FlatpakDir         *dir,
++                                                            gboolean            only_cached,
++                                                            GCancellable       *cancellable,
++                                                            GError            **error);
+ gboolean flatpak_remote_state_allow_ref (FlatpakRemoteState *self,
+                                          const char *ref);
+ gboolean flatpak_remote_state_lookup_ref (FlatpakRemoteState *self,
+diff --git a/common/flatpak-dir.c b/common/flatpak-dir.c
+index 6f2b55c481..184eb485dc 100644
+--- a/common/flatpak-dir.c
++++ b/common/flatpak-dir.c
+@@ -497,6 +497,35 @@ flatpak_remote_state_ensure_subsummary (FlatpakRemoteState *self,
+   return TRUE;
+ }
+ 
++gboolean
++flatpak_remote_state_ensure_subsummary_all_arches (FlatpakRemoteState *self,
++                                                   FlatpakDir         *dir,
++                                                   gboolean            only_cached,
++                                                   GCancellable       *cancellable,
++                                                   GError            **error)
++{
++  if (self->index_ht == NULL)
++    return TRUE; /* No subsummaries, got all arches anyway */
++
++  GLNX_HASH_TABLE_FOREACH (self->index_ht, const char *, arch)
++    {
++      g_autoptr(GError) local_error = NULL;
++
++      if (!flatpak_remote_state_ensure_subsummary (self, dir, arch, only_cached, cancellable, &local_error))
++        {
++          /* Don't error on non-cached subsummaries */
++          if (only_cached && g_error_matches (local_error, FLATPAK_ERROR, FLATPAK_ERROR_NOT_CACHED))
++            continue;
++
++          g_propagate_error (error, g_steal_pointer (&local_error));
++          return FALSE;
++        }
++    }
++
++  return TRUE;
++}
++
++
+ gboolean
+ flatpak_remote_state_allow_ref (FlatpakRemoteState *self,
+                                 const char *ref)
+diff --git a/common/flatpak-installation.c b/common/flatpak-installation.c
+index 62e23a259f..0daf3d66fc 100644
+--- a/common/flatpak-installation.c
++++ b/common/flatpak-installation.c
+@@ -2418,22 +2418,35 @@ flatpak_installation_list_remote_refs_sync_full (FlatpakInstallation *self,
+   GHashTableIter iter;
+   gpointer key;
+   gpointer value;
++  gboolean only_sideloaded = (flags & FLATPAK_QUERY_FLAGS_ONLY_SIDELOADED) != 0;
++  gboolean only_cached = (flags & FLATPAK_QUERY_FLAGS_ONLY_CACHED) != 0;
++  gboolean all_arches = (flags & FLATPAK_QUERY_FLAGS_ALL_ARCHES) != 0;
+ 
+   dir = flatpak_installation_get_dir (self, error);
+   if (dir == NULL)
+     return NULL;
+ 
+-  if (flags & FLATPAK_QUERY_FLAGS_ONLY_SIDELOADED)
+-    state = flatpak_dir_get_remote_state_local_only (dir, remote_or_uri, cancellable, error);
++  if (only_sideloaded)
++    {
++      state = flatpak_dir_get_remote_state_local_only (dir, remote_or_uri, cancellable, error);
++      if (state == NULL)
++        return NULL;
++    }
+   else
+-    state = flatpak_dir_get_remote_state (dir, remote_or_uri, (flags & FLATPAK_QUERY_FLAGS_ONLY_CACHED) != 0, cancellable, error);
+-  if (state == NULL)
+-    return NULL;
++    {
++      state = flatpak_dir_get_remote_state (dir, remote_or_uri, only_cached, cancellable, error);
++      if (state == NULL)
++        return NULL;
++
++      if (all_arches &&
++          !flatpak_remote_state_ensure_subsummary_all_arches (state, dir, only_cached, cancellable, error))
++        return NULL;
++    }
+ 
+   if (!flatpak_dir_list_remote_refs (dir, state, &ht,
+                                      cancellable, &local_error))
+     {
+-      if (flags & FLATPAK_QUERY_FLAGS_ONLY_SIDELOADED)
++      if (only_sideloaded)
+         {
+           /* Just return no sideloaded refs rather than a summary download failed error if there are none */
+           return g_steal_pointer (&refs);
+diff --git a/common/flatpak-installation.h b/common/flatpak-installation.h
+index 899163e5ef..2fb0fd591f 100644
+--- a/common/flatpak-installation.h
++++ b/common/flatpak-installation.h
+@@ -131,6 +131,7 @@ typedef enum {
+  * lot more efficient if you're doing many requests.
+  * @FLATPAK_QUERY_FLAGS_ONLY_SIDELOADED: Only list refs available from sideload
+  * repos; see flatpak(1). (Snce: 1.7)
++ * @FLATPAK_QUERY_FLAGS_ALL_ARCHES: Include refs from all arches, not just the primary ones. (Snce: 1.11.2)
+  *
+  * Flags to alter the behavior of e.g flatpak_installation_list_remote_refs_sync_full().
+  *
+@@ -140,6 +141,7 @@ typedef enum {
+   FLATPAK_QUERY_FLAGS_NONE        = 0,
+   FLATPAK_QUERY_FLAGS_ONLY_CACHED = (1 << 0),
+   FLATPAK_QUERY_FLAGS_ONLY_SIDELOADED = (1 << 1),
++  FLATPAK_QUERY_FLAGS_ALL_ARCHES = (1 << 2),
+ } FlatpakQueryFlags;
+ 
+ /**
