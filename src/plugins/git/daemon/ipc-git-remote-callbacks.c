@@ -28,11 +28,48 @@ struct _IpcGitRemoteCallbacks
 {
   GgitRemoteCallbacks  parent_instance;
   IpcGitProgress      *progress;
+  char                *message;
+  double               fraction;
+  guint                queued_progress;
   GgitCredtype         tried;
   guint                cancelled : 1;
+  guint                message_changed : 1;
+  guint                fraction_changed : 1;
 };
 
 G_DEFINE_TYPE (IpcGitRemoteCallbacks, ipc_git_remote_callbacks, GGIT_TYPE_REMOTE_CALLBACKS)
+
+static gboolean
+ipc_git_remote_callbacks_update_progress (gpointer data)
+{
+  IpcGitRemoteCallbacks *self = data;
+
+  g_assert (IPC_IS_GIT_REMOTE_CALLBACKS (self));
+
+  if (self->progress != NULL)
+    {
+      if (self->fraction_changed)
+        ipc_git_progress_set_fraction (self->progress, self->fraction);
+
+      if (self->message_changed)
+        ipc_git_progress_set_message (self->progress, self->message);
+    }
+
+  self->fraction_changed = FALSE;
+  self->message_changed = FALSE;
+  self->queued_progress = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ipc_git_remote_callbacks_queue_progress (IpcGitRemoteCallbacks *self)
+{
+  if (self->queued_progress == 0)
+    self->queued_progress = g_timeout_add (200, /* up to 5x per second */
+                                           ipc_git_remote_callbacks_update_progress,
+                                           self);
+}
 
 GgitRemoteCallbacks *
 ipc_git_remote_callbacks_new (IpcGitProgress *progress)
@@ -111,8 +148,13 @@ ipc_git_remote_callbacks_progress (GgitRemoteCallbacks *callbacks,
 
   g_assert (IPC_IS_GIT_REMOTE_CALLBACKS (self));
 
-  if (self->progress != NULL)
-    ipc_git_progress_set_message (self->progress, message);
+  if (g_strcmp0 (self->message, message) != 0)
+    {
+      g_free (self->message);
+      self->message = g_strdup (message);
+      self->message_changed = TRUE;
+      ipc_git_remote_callbacks_queue_progress (self);
+    }
 }
 
 static void
@@ -132,7 +174,12 @@ ipc_git_remote_callbacks_transfer_progress (GgitRemoteCallbacks  *callbacks,
       if (total > 0)
         fraction = (gdouble)acked / (gdouble)total;
 
-      ipc_git_progress_set_fraction (self->progress, fraction);
+      if (fraction != self->fraction)
+        {
+          self->fraction = fraction;
+          self->fraction_changed = TRUE;
+          ipc_git_remote_callbacks_queue_progress (self);
+        }
     }
 }
 
@@ -150,6 +197,8 @@ ipc_git_remote_callbacks_finalize (GObject *object)
   IpcGitRemoteCallbacks *self = (IpcGitRemoteCallbacks *)object;
 
   g_clear_object (&self->progress);
+  g_clear_pointer (&self->message, g_free);
+  g_clear_handle_id (&self->queued_progress, g_source_remove);
 
   G_OBJECT_CLASS (ipc_git_remote_callbacks_parent_class)->finalize (object);
 }
