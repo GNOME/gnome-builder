@@ -517,5 +517,8 @@ main (gint argc,
 
   g_main_loop_run (main_loop);
 
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, FALSE);
+
   return EXIT_SUCCESS;
 }
