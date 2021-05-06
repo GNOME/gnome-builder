@@ -203,7 +203,7 @@ test_clone (IpcGitService *service)
 
   g_message ("Cloning hello");
   ret = ipc_git_service_call_clone_sync (service,
-                                         "https://gitlab.gnome.org/chergert/hello",
+                                         "https://gitlab.gnome.org/chergert/hello.git",
                                          tmpdir,
                                          "master",
                                          g_variant_dict_end (&opts),
