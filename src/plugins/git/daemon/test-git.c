@@ -76,7 +76,12 @@ do_test_config (IpcGitConfig *config)
     {
       g_autofree gchar *value = NULL;
 
+      g_message ("  Looking up key: %s", keys[i]);
       ret = ipc_git_config_call_read_key_sync (config, keys[i], &value, NULL, &error);
+
+      if (error && strcmp (keys[i], "user.signingkey") == 0)
+        g_error ("This test requires that you set user.signingkey for the user account");
+
       g_assert_no_error (error);
       g_assert_true (ret);
 
