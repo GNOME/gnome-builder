@@ -109,7 +109,8 @@ ide_debugger_registers_view_list_registers_cb (GObject      *object,
 
   if (error != NULL)
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED) &&
+          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("%s", error->message);
       return;
     }
