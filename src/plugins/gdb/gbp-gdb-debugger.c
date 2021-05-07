@@ -40,6 +40,7 @@ struct _GbpGdbDebugger
   GFile                    *builddir;
 
   DzlSignalGroup           *runner_signals;
+  GSettings                *settings;
 
   /* This is the number for the fd in the inferior process.
    * It is not opened/owned by this instance (as it is in a
@@ -1471,7 +1472,10 @@ gbp_gdb_debugger_move_async (IdeDebugger         *debugger,
   switch (movement)
     {
     case IDE_DEBUGGER_MOVEMENT_START:
-      command = "-exec-run --all --start";
+      if (g_settings_get_boolean (self->settings, "debugger-breakpoint-on-main"))
+        command = "-exec-run --all --start";
+      else
+        command = "-exec-run --all";
       break;
 
     case IDE_DEBUGGER_MOVEMENT_CONTINUE:
@@ -2541,6 +2545,7 @@ gbp_gdb_debugger_finalize (GObject *object)
   /* Ensure no tasks were queued after dispose call */
   g_assert (self->cmdqueue.length == 0);
 
+  g_clear_object (&self->settings);
   g_clear_object (&self->io_stream);
   g_clear_object (&self->read_cancellable);
   g_clear_pointer (&self->parser, gdbwire_mi_parser_destroy);
@@ -2600,6 +2605,7 @@ gbp_gdb_debugger_init (GbpGdbDebugger *self)
     self, gbp_gdb_debugger_output_callback
   };
 
+  self->settings = g_settings_new ("org.gnome.builder.build");
   self->parser = gdbwire_mi_parser_create (callbacks);
   self->read_cancellable = g_cancellable_new ();
   self->read_buffer = g_malloc (READ_BUFFER_LEN);
