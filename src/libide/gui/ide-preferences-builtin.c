@@ -410,6 +410,10 @@ ide_preferences_builtin_register_build (DzlPreferences *preferences)
 
   dzl_preferences_add_list_group (preferences, "build", "network", _("Network"), GTK_SELECTION_NONE, 100);
   dzl_preferences_add_switch (preferences, "build", "network", "org.gnome.builder.build", "allow-network-when-metered", NULL, NULL, _("Allow downloads over metered connections"), _("Allow the use of metered network connections when automatically downloading dependencies"), NULL, 10);
+
+  dzl_preferences_add_page (preferences, "debugger", _("Debugger"), 550);
+  dzl_preferences_add_list_group (preferences, "debugger", "general", _("Breakpoints"), GTK_SELECTION_NONE, 0);
+  dzl_preferences_add_switch (preferences, "debugger", "general", "org.gnome.builder.build", "debugger-breakpoint-on-main", NULL, NULL, _("Insert Breakpoint at Start of Application"), _("Automatically stop execution at the start of the applications main function"), NULL, 0);
 }
 
 static void
