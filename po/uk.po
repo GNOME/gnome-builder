@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-03-19 17:04+0000\n"
-"PO-Revision-Date: 2021-03-19 19:06+0200\n"
+"POT-Creation-Date: 2021-05-07 16:43+0000\n"
+"PO-Revision-Date: 2021-05-09 09:01+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.11.70\n"
+"X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -188,6 +188,16 @@ msgstr ""
 "Увімкнути автоматизоване передавання даних під час збирання, зокрема "
 "отримання SDK та залежностей, якщо відомо, що ведеться облік і тарифікація "
 "обміну даними мережею."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Debugger Breakpoint on Main"
+msgstr ""
+"Діагностична точка зупинки у головній функції"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "Debugger should automatically insert breakpoint on main function."
+msgstr ""
+"Засіб діагностики має автоматично вставляти точку зупинки у основній функції."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -483,7 +493,7 @@ msgid "\"Projects\""
 msgstr "\"Проєкти\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:421
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "Projects directory"
 msgstr "Каталог проєктів"
 
@@ -893,7 +903,7 @@ msgstr "_Перейменувати"
 msgid "unsaved file %u"
 msgstr "незбережений файл %u"
 
-#: src/libide/code/ide-buffer.c:3434
+#: src/libide/code/ide-buffer.c:3464
 msgid "The current language lacks a symbol resolver."
 msgstr "Цій мові бракує розпізнавання символів."
 
@@ -937,7 +947,8 @@ msgstr "Без назви"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/dspy/libdspy/dspy-method-view.c:274
 #: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:316
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:262
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -1081,7 +1092,7 @@ msgstr "_Оновити"
 #: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/libide/gui/ide-workbench.c:1442
 #: src/plugins/buildui/gbp-buildui-log-pane.c:280
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:154
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/testui/gbp-test-output-panel.c:69
 msgid "_Cancel"
 msgstr "_Скасувати"
@@ -1241,7 +1252,7 @@ msgstr "Відкрити файл"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:287
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:261
 msgid "Open"
 msgstr "Відкрити"
 
@@ -1301,7 +1312,7 @@ msgstr "Шукати у вашому проєкті"
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Не вдалося ініціалізувати конвеєр збирання: %s"
 
-#: src/libide/foundry/ide-build-manager.c:526
+#: src/libide/foundry/ide-build-manager.c:527
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Не вдалося отримати дані щодо пристрою: %s"
@@ -1337,75 +1348,75 @@ msgstr "Ваш комп'ютер (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Ваш комп'ютер (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:820
+#: src/libide/foundry/ide-pipeline.c:823
 msgid "The build pipeline is in a failed state"
 msgstr "Конвеєр збирання перебуває у стані помилки"
 
-#: src/libide/foundry/ide-pipeline.c:830
+#: src/libide/foundry/ide-pipeline.c:833
 msgid "The build configuration has errors"
 msgstr "У конвеєрі збирання сталися помилки"
 
-#: src/libide/foundry/ide-pipeline.c:3022
+#: src/libide/foundry/ide-pipeline.c:3029
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Не вдалося створити псевдотермінал. Можливості роботи із терміналом буде "
 "обмежено."
 
-#: src/libide/foundry/ide-pipeline.c:3228
+#: src/libide/foundry/ide-pipeline.c:3235
 msgid "Cleaning…"
 msgstr "Очищення…"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3239
+#: src/libide/foundry/ide-pipeline.c:3296
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Помилка"
 
-#: src/libide/foundry/ide-pipeline.c:3234
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3241
+#: src/libide/foundry/ide-pipeline.c:3304
 msgid "Ready"
 msgstr "Виконано"
 
-#: src/libide/foundry/ide-pipeline.c:3249
+#: src/libide/foundry/ide-pipeline.c:3256
 msgid "Downloading…"
 msgstr "Отримання…"
 
-#: src/libide/foundry/ide-pipeline.c:3253
+#: src/libide/foundry/ide-pipeline.c:3260
 msgid "Building dependencies…"
 msgstr "Збирання залежностей…"
 
-#: src/libide/foundry/ide-pipeline.c:3257
+#: src/libide/foundry/ide-pipeline.c:3264
 msgid "Bootstrapping…"
 msgstr "Самозбирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3261
+#: src/libide/foundry/ide-pipeline.c:3268
 msgid "Configuring…"
 msgstr "Налаштування…"
 
-#: src/libide/foundry/ide-pipeline.c:3265
+#: src/libide/foundry/ide-pipeline.c:3272
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Збирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3269
+#: src/libide/foundry/ide-pipeline.c:3276
 msgid "Installing…"
 msgstr "Встановлення…"
 
-#: src/libide/foundry/ide-pipeline.c:3273
+#: src/libide/foundry/ide-pipeline.c:3280
 msgid "Committing…"
 msgstr "Надсилання…"
 
-#: src/libide/foundry/ide-pipeline.c:3277
+#: src/libide/foundry/ide-pipeline.c:3284
 msgid "Exporting…"
 msgstr "Експортування…"
 
-#: src/libide/foundry/ide-pipeline.c:3281
-#: src/libide/foundry/ide-pipeline.c:3285
+#: src/libide/foundry/ide-pipeline.c:3288
+#: src/libide/foundry/ide-pipeline.c:3292
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Зібрано"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3300
 msgid "Preparing…"
 msgstr "приготування"
 
@@ -1415,43 +1426,43 @@ msgstr ""
 "Неможливо зібрати передавання даних, перебуваючи в умовах вимірюваного "
 "з'єднання"
 
-#: src/libide/foundry/ide-run-manager.c:383
+#: src/libide/foundry/ide-run-manager.c:385
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
-#: src/libide/foundry/ide-run-manager.c:489
+#: src/libide/foundry/ide-run-manager.c:505
 msgid "Failed to locate runtime"
 msgstr "Не вдалося знайти середовище виконання"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:538
+#: src/libide/foundry/ide-run-manager.c:554
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:612
+#: src/libide/foundry/ide-run-manager.c:628
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Не вдалося зібрати ціль збирання: %s"
 
-#: src/libide/foundry/ide-run-manager.c:875
+#: src/libide/foundry/ide-run-manager.c:891
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Скорочення майстерні"
 
-#: src/libide/foundry/ide-run-manager.c:876
+#: src/libide/foundry/ide-run-manager.c:892
 msgid "Build and Run"
 msgstr "Зібрати і запустити"
 
-#: src/libide/foundry/ide-run-manager.c:1038
-#: src/libide/foundry/ide-run-manager.c:1104
+#: src/libide/foundry/ide-run-manager.c:1054
+#: src/libide/foundry/ide-run-manager.c:1120
 msgid "Failed to locate a build target"
 msgstr "Не вдалося знайти ціль збирання"
 
-#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1256 src/libide/gui/gtk/menus.ui:73
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "Запустити"
@@ -2280,35 +2291,57 @@ msgstr ""
 "Дозволити використання з'єднань із вимірюванням обміну даними при "
 "автоматичному отриманні залежностей"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
+#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
+msgid "Debugger"
+msgstr "Засіб діагностики"
+
+#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
+msgid "Breakpoints"
+msgstr "Точки зупинки"
+
+#: src/libide/gui/ide-preferences-builtin.c:416
+msgid "Insert Breakpoint at Start of Application"
+msgstr ""
+"Вставляти точку зупинки на початку програми"
+
+#: src/libide/gui/ide-preferences-builtin.c:416
+msgid ""
+"Automatically stop execution at the start of the applications main function"
+msgstr ""
+"Автоматично зупиняти виконання на початку головної функції програм"
+
+#: src/libide/gui/ide-preferences-builtin.c:422
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Проєкти"
 
-#: src/libide/gui/ide-preferences-builtin.c:420
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Workspace"
 msgstr "Робочий простір"
 
-#: src/libide/gui/ide-preferences-builtin.c:421
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "A place for all your projects"
 msgstr "Місце для всіх ваших проєктів"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Restore previously opened files"
 msgstr "Відновлювати раніше відкриті файли"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Open previously opened files when loading a project"
 msgstr "Відкривати раніше відкриті файли під час завантаження проєкту"
 
-#: src/libide/gui/ide-preferences-builtin.c:544
+#: src/libide/gui/ide-preferences-builtin.c:548
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
 msgid "Version Control"
 msgstr "Контроль версії"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:557
+#: src/libide/gui/ide-preferences-builtin.c:561
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2640,7 +2673,6 @@ msgid "Uncomment code"
 msgstr "Розкоментувати код"
 
 #: src/libide/gui/ide-shortcuts-window.ui:398
-#| msgid "Beautify the code"
 msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Форматувати позначений код"
@@ -2765,7 +2797,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1469
+#: src/libide/lsp/ide-lsp-client.c:1495
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -2909,12 +2941,12 @@ msgstr "_Відкрити посилання"
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: src/libide/terminal/ide-terminal-launcher.c:320
+#: src/libide/terminal/ide-terminal-launcher.c:339
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Не вдалося створити оболонку всередині середовища виконання «%s»"
 
-#: src/libide/terminal/ide-terminal-launcher.c:644
+#: src/libide/terminal/ide-terminal-launcher.c:663
 msgid "Untitled Terminal"
 msgstr "Термінал без назви"
 
@@ -3101,8 +3133,7 @@ msgstr "Додаток форматування: не вдалося прочи�
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
 msgid "beautifier program missing, you must install it: "
-msgstr ""
-"Не знайдено програму beautifier. Вам слід її встановити: "
+msgstr "Не знайдено програму beautifier. Вам слід її встановити: "
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
@@ -4103,18 +4134,9 @@ msgstr "Дизасемблер"
 msgid "Failed to start the debugger"
 msgstr "Не вдалося запустити засіб діагностики"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
-#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
-msgid "Debugger"
-msgstr "Засіб діагностики"
-
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:316
 msgid "Threads"
 msgstr "Потоки"
-
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
-msgid "Breakpoints"
-msgstr "Точки зупинки"
 
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:350
 msgid "Libraries"
@@ -4512,13 +4534,20 @@ msgstr ""
 "Увімкнути використання eslint для пошуку додаткової діагностичної інформації "
 "у файлах JavaScript. Це може призвести до виконання коду у вашому проєкті."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
-msgid "Clone a project using flatpak manifest"
-msgstr "Клонувати проєкт використовуючи flatpak-маніфест"
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:747
+#| msgid "Installing "
+msgid "Installation failed"
+msgstr "Встановлення завершилося невдало"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
-msgid "MANIFEST"
-msgstr "МАНІФЕСТ"
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:753
+#| msgid "Installing project"
+msgid "Installation complete"
+msgstr "Встановлення завершено"
+
+#: src/plugins/flatpak/gbp-flatpak-client.c:328
+#: src/plugins/git/gbp-git-client.c:328
+msgid "The client has been closed"
+msgstr "Клієнт закрито"
 
 #. translators: %s is replaced with the name of the flatpak manifest
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.c:144
@@ -4530,7 +4559,7 @@ msgstr "Клонуємо проєкт %s"
 msgid "Downloading application sources…"
 msgstr "Отримання початкового коду програми…"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:680
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Не вдалося вилучити маніфест flatpak: %s"
@@ -4539,11 +4568,11 @@ msgstr "Не вдалося вилучити маніфест flatpak: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Мережа недоступна, пропускаємо отримання даних"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:150
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
 msgid "Install Missing SDK?"
 msgstr "Встановити SDK, якого не вистачає?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:155
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Встановити"
 
@@ -4561,125 +4590,62 @@ msgstr ""
 msgid "Architecture"
 msgstr "Архітектура"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:175
 msgid "Creating flatpak workspace"
 msgstr "Створення робочого простору flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:361
 msgid "Preparing build directory"
 msgstr "Готуємо каталог для збирання"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:412
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
 msgid "Downloading dependencies"
 msgstr "Отримання залежностей"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:491
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
 msgid "Building dependencies"
 msgstr "Збирання залежностей"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:541
 msgid "Finalizing flatpak build"
 msgstr "Завершуємо збирання flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:586
 msgid "Exporting staging directory"
 msgstr "Експортування формувального каталогу"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:671
 msgid "Creating flatpak bundle"
 msgstr "Створюємо комплект flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-msgid "Install"
-msgstr "Встановити"
-
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
-msgid "Update"
-msgstr "Оновити"
-
-#. translators: keywords are used to match search keywords in preferences
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:297
-#, c-format
-msgid "flatpak %s %s %s"
-msgstr "flatpak %s %s %s"
-
-#. translators: %u is the number of hidden runtimes to be shown
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:312
-#, c-format
-msgid "Show %u more runtime"
-msgid_plural "show %u more runtimes"
-msgstr[0] "Показати ще %u середовище виконання"
-msgstr[1] "Показати ще %u середовища виконання"
-msgstr[2] "Показати ще %u середовищ виконання"
-msgstr[3] "Показати ще одне середовище виконання"
-
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:401
-msgid "Flatpak Runtimes"
-msgstr "Середовища Flatpak"
-
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:779
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:80
-#, c-format
-msgid "Updated %s"
-msgstr "Оновлено %s"
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:414
+#| msgid "Installing rust "
+msgid "Installing Necessary SDKs"
+msgstr "Встановлення потрібних наборів інструментів для розробки"
 
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:83
-#, c-format
-msgid "Updating %s"
-msgstr "Оновлюємо %s"
-
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:89
-#, c-format
-msgid "Installed %s"
-msgstr "Встановлено %s"
-
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:92
-#, c-format
-msgid "Installing %s"
-msgstr "Встановлюємо %s"
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
-msgid "Failed to install runtime"
-msgstr "Не вдалося встановити середовище"
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
-msgid "Runtime has been updated"
-msgstr "Оновлено середовище виконання"
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:122
-msgid "Runtime has been installed"
-msgstr "Середовище виконання встановлено"
-
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:87
-msgid "Missing system dependencies"
-msgstr "Не вистачає залежностей у системі"
-
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:88
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:415
+#| msgid ""
+#| "Builder needs to install the following software development kits to build "
+#| "your project."
 msgid ""
-"The “flatpak-builder” program is necessary for building Flatpak-based "
-"applications. Builder can install it for you."
+"Builder is installing Software Development Kits necessary for building your "
+"application."
 msgstr ""
-"Для збирання програм на основі Flatpak потрібна програма «flatpak-builder». "
-"«Будівник» може встановити цю програму."
+"«Будівник» встановлює набори інструментів для розробки, які знадобляться для збирання вашої програми."
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4702,12 +4668,12 @@ msgstr "Не вказано даних даних для визначення р
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Не вдалося виконати дію. Початкове повідомлення про помилку — «%s»"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:68
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
 #, c-format
 msgid "The operation has been canceled"
 msgstr "Виконання дії було скасовано"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4730,10 +4696,6 @@ msgstr "Неможливо підписати внесок без GPG_KEY_ID"
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Неможливо стежити за файлами поза робочим каталогом"
-
-#: src/plugins/git/gbp-git-client.c:328
-msgid "The client has been closed"
-msgstr "Клієнт закрито"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4839,23 +4801,23 @@ msgstr "Скасувати останню команду"
 msgid "Redo the next command"
 msgstr "Повторити наступну команду"
 
-#: src/plugins/glade/gbp-glade-page.c:492
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to selection mode"
 msgstr "Перемкнутись на режим вибору"
 
-#: src/plugins/glade/gbp-glade-page.c:493
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to drag-resize mode"
 msgstr "Перемкнутися у режим перетягування для зміни розмірів"
 
-#: src/plugins/glade/gbp-glade-page.c:494
+#: src/plugins/glade/gbp-glade-page.c:496
 msgid "Switch to margin editor"
 msgstr "Перемкнутися на редактор полів"
 
-#: src/plugins/glade/gbp-glade-page.c:495
+#: src/plugins/glade/gbp-glade-page.c:497
 msgid "Switch to alignment editor"
 msgstr "Перемкнутися на редактор вирівнювання"
 
-#: src/plugins/glade/gbp-glade-page.c:500
+#: src/plugins/glade/gbp-glade-page.c:502
 msgid "Unnamed Glade project"
 msgstr "Проєкт Glade без назви"
 
@@ -5040,12 +5002,12 @@ msgstr "Пропонувати доповнення з Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Використовувати Jedi для доповнень у мові Python"
 
-#: src/plugins/ls/gbp-ls-page.c:315
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "Не вдалося завантажити каталог: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:387
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — Каталог"
@@ -5875,19 +5837,19 @@ msgstr "Ескіз документа"
 msgid "Profiler"
 msgstr "Profiler"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:284
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:258
 msgid "Open Sysprof Capture…"
 msgstr "Відкрити захоплені дані Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:293
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:267
 msgid "Sysprof Capture (*.syscap)"
 msgstr "захоплені дані Sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:299
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:273
 msgid "All Files"
 msgstr "усі файли"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:422
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:396
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "Запустити з Profiler"
@@ -6131,6 +6093,10 @@ msgstr ""
 "Випущено оновлення «Будівника», «Будівник» може отримати і встановити це "
 "оновлення."
 
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
+msgid "Update"
+msgstr "Оновити"
+
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
 msgid "Vagrant"
@@ -6281,6 +6247,59 @@ msgstr "Не вдалося створити ієрархію XML."
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
 
+#~ msgid "Clone a project using flatpak manifest"
+#~ msgstr "Клонувати проєкт використовуючи flatpak-маніфест"
+
+#~ msgid "MANIFEST"
+#~ msgstr "МАНІФЕСТ"
+
+#~ msgid "Install"
+#~ msgstr "Встановити"
+
+#~ msgid "flatpak %s %s %s"
+#~ msgstr "flatpak %s %s %s"
+
+#~ msgid "Show %u more runtime"
+#~ msgid_plural "show %u more runtimes"
+#~ msgstr[0] "Показати ще %u середовище виконання"
+#~ msgstr[1] "Показати ще %u середовища виконання"
+#~ msgstr[2] "Показати ще %u середовищ виконання"
+#~ msgstr[3] "Показати ще одне середовище виконання"
+
+#~ msgid "Flatpak Runtimes"
+#~ msgstr "Середовища Flatpak"
+
+#~ msgid "Updated %s"
+#~ msgstr "Оновлено %s"
+
+#~ msgid "Updating %s"
+#~ msgstr "Оновлюємо %s"
+
+#~ msgid "Installed %s"
+#~ msgstr "Встановлено %s"
+
+#~ msgid "Installing %s"
+#~ msgstr "Встановлюємо %s"
+
+#~ msgid "Failed to install runtime"
+#~ msgstr "Не вдалося встановити середовище"
+
+#~ msgid "Runtime has been updated"
+#~ msgstr "Оновлено середовище виконання"
+
+#~ msgid "Runtime has been installed"
+#~ msgstr "Середовище виконання встановлено"
+
+#~ msgid "Missing system dependencies"
+#~ msgstr "Не вистачає залежностей у системі"
+
+#~ msgid ""
+#~ "The “flatpak-builder” program is necessary for building Flatpak-based "
+#~ "applications. Builder can install it for you."
+#~ msgstr ""
+#~ "Для збирання програм на основі Flatpak потрібна програма «flatpak-"
+#~ "builder». «Будівник» може встановити цю програму."
+
 #~ msgid "Podman"
 #~ msgstr "Podman"
 
@@ -6331,9 +6350,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Updating rustup"
 #~ msgstr "Оновлюємо rustup"
 
-#~ msgid "Installing rust "
-#~ msgstr "Встановлюємо rust "
-
 #~ msgid "Checking system"
 #~ msgstr "Перевіряємо систему"
 
@@ -6345,9 +6361,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Downloading "
 #~ msgstr "Отримання "
-
-#~ msgid "Installing "
-#~ msgstr "Встановлення "
 
 #~ msgid "Checking for rustup updates"
 #~ msgstr "Шукаємо оновлення rustup"
