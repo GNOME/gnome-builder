@@ -470,7 +470,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/ostreedev/ostree.git"
+                    "url" : "https://github.com/ostreedev/ostree.git",
+                    "branch" : "main"
                 }
             ]
         },
