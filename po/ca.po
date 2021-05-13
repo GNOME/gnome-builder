@@ -5918,7 +5918,7 @@ msgstr "Selecciona un símbol..."
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
 msgid "Document Outline"
-msgstr "Contorn del document"
+msgstr "Esquema del document"
 
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
 #: src/plugins/sysprof/gtk/menus.ui:19
@@ -6190,7 +6190,7 @@ msgstr "Vagrant"
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
 #: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
-msgstr "Executa amb Valgrind"
+msgstr "Executa amb el Valgrind"
 
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
 msgid "Branches"
