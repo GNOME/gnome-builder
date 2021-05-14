@@ -2059,7 +2059,7 @@ msgstr "Línia nova i retorn de carro"
 
 #: src/libide/gui/ide-preferences-builtin.c:179
 msgid "Non-breaking spaces"
-msgstr "Espais no trencats"
+msgstr "Espais no separables"
 
 #: src/libide/gui/ide-preferences-builtin.c:180
 msgid "Spaces inside of text"
