@@ -554,6 +554,7 @@ find_extension (GbpFlatpakManifest *self,
 {
   g_autoptr(IpcFlatpakService) service = NULL;
   g_autoptr(GVariant) info = NULL;
+  g_autoptr(GError) error = NULL;
   GbpFlatpakClient *client;
   IdeContext *context;
 
@@ -565,8 +566,8 @@ find_extension (GbpFlatpakManifest *self,
   context = ide_object_get_context (IDE_OBJECT (self));
 
   if ((client = gbp_flatpak_client_from_context (context)) &&
-      (service = gbp_flatpak_client_get_service (client, NULL, NULL)) &&
-      ipc_flatpak_service_call_get_runtime_sync (service, runtime_id, &info, NULL, NULL))
+      (service = gbp_flatpak_client_get_service (client, NULL, &error)) &&
+      ipc_flatpak_service_call_get_runtime_sync (service, runtime_id, &info, NULL, &error))
     {
       GbpFlatpakRuntime *ret = NULL;
       const gchar *name;
@@ -595,6 +596,10 @@ find_extension (GbpFlatpakManifest *self,
 
       IDE_RETURN (IDE_RUNTIME (g_steal_pointer (&ret)));
     }
+
+  if (error != NULL)
+    g_debug ("find_extension() could not resolve runtime %s: %s",
+             runtime_id, error->message);
 
   IDE_RETURN (NULL);
 }
