@@ -25,9 +25,26 @@ pkgincludedir = join_paths(get_option('includedir'), 'gnome-builder')
 pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
 
-safe_path = get_option('with_safe_path')
+# Check dependencies
+glib_req_version = '2.69'
+gtk_req_version = '3.24'
+
+glib_req = '>= @0@'.format(glib_req_version)
+gtk_req = '>= @0@'.format(gtk_req_version)
+glib_major = glib_req_version.split('.')[0].to_int()
+glib_minor = glib_req_version.split('.')[1].to_int()
+gtk_major = gtk_req_version.split('.')[0].to_int()
+gtk_minor = gtk_req_version.split('.')[1].to_int()
+
+if glib_minor % 2 == 1
+  glib_minor = glib_minor + 1
+endif
+if gtk_minor % 2 == 1
+  gtk_minor = gtk_minor + 1
+endif
 
 # These default values are obtained by running /bin/sh without setting PATH
+safe_path = get_option('with_safe_path')
 if safe_path == ''
   if host_machine.system() == 'freebsd'
     safe_path = '/bin:/usr/bin:/usr/local/bin'
@@ -113,7 +130,12 @@ add_global_arguments([
 libide_args = []
 
 cc = meson.get_compiler('c')
-global_c_args = []
+global_c_args = [
+  '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_@0@_@1@'.format(glib_major, glib_minor),
+  '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_@0@_@1@'.format(glib_major, glib_minor),
+  '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
+  '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
+]
 test_c_args = [
   '-Wcast-align',
   '-Wdeclaration-after-statement',
@@ -255,10 +277,10 @@ message('Linker supports --version-script: @0@'.format(ld_supports_version_scrip
 
 # Commonly used deps
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.37.0')
-libglib_dep = dependency('glib-2.0', version: '>= 2.69.0')
-libgio_dep = dependency('gio-2.0', version: '>= 2.61.2')
-libgiounix_dep = dependency('gio-unix-2.0')
-libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.26')
+libglib_dep = dependency('glib-2.0', version: glib_req)
+libgio_dep = dependency('gio-2.0', version: glib_req)
+libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
+libgtk_dep = dependency('gtk+-3.0', version: gtk_req)
 libgtksource_dep = dependency('gtksourceview-4', version: '>= 4.0.0')
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.29.91')
