@@ -22,7 +22,7 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
-                <property name="title" translatable="yes" context="shortcut window">Toogle primary menu</property>
+                <property name="title" translatable="yes" context="shortcut window">Toggle primary menu</property>
                 <property name="accelerator">F10</property>
               </object>
             </child>
