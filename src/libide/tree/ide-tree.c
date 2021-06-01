@@ -678,8 +678,6 @@ ide_tree_set_context_menu (IdeTree *self,
                         G_CALLBACK (gtk_widget_destroyed),
                         &priv->popover);
     }
-
-  g_return_if_fail (priv->popover == NULL);
 }
 
 void
