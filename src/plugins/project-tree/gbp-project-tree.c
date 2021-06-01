@@ -316,6 +316,22 @@ reveal_next (Reveal *r)
       ide_tree_select_node (IDE_TREE (r->tree), r->node);
       gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (r->tree),
                                     path, NULL, FALSE, 0, 0);
+
+      /* Due to the way tree views work, we need to use this function to
+       * grab keyboard focus on a particular row in the treeview. This allows
+       * pressing the menu key and navigate with the arrow keys in the tree
+       * view without leaving the keyboard :)
+       */
+      gtk_tree_view_set_cursor (GTK_TREE_VIEW (r->tree),
+                                path,
+                                NULL,
+                                FALSE);
+      /* We still need to grab the focus on the tree view widget as suggested
+       * by the documentation. ide_widget_reveal_and_grab() also makes the left
+       * dock show up automatically which is very nice because it avoids having
+       * to press F9 when it could have been revealed automatically.
+       */
+      ide_widget_reveal_and_grab (GTK_WIDGET (r->tree));
     }
 
 failure:
