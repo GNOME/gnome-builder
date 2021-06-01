@@ -1157,6 +1157,7 @@ gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
 
   for (guint i = 0; self->sdk_extensions[i]; i++)
     {
+      g_autoptr(GError) error = NULL;
       g_autofree char *resolved = NULL;
 
       ipc_flatpak_service_call_resolve_extension_sync (service,
@@ -1164,7 +1165,11 @@ gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
                                                        self->sdk_extensions[i],
                                                        &resolved,
                                                        NULL,
-                                                       NULL);
+                                                       &error);
+
+      if (error != NULL)
+        g_debug ("Failed to resolve extension %s for SDK %s: %s",
+                 self->sdk_extensions[i], sdk, error->message);
 
       if (!ide_str_empty0 (resolved))
         {
