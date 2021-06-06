@@ -538,7 +538,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
   /**
    * IdeEditorSearch:active:
    *
-   * The "active" property is %TRUE when their is an active search
+   * The "active" property is %TRUE when there is an active search
    * in progress.
    *
    * Since: 3.32
@@ -609,7 +609,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * IdeEditorSearch:match-count:
    *
    * The "match-count" property contains the number of matches that have
-   * been discovered. This is reset to zeor when the #IdeEditorSearch
+   * been discovered. This is reset to zero when the #IdeEditorSearch
    * determines it can destroy it's #GtkSourceSearchContext.
    *
    * Generally, you should only rely on it's accuracy after calling
@@ -643,7 +643,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * IdeEditorSearch:repeat:
    *
    * The number of times to repeat a move operation when calling
-   * ide_editor_search_move(). This allows for stateful moves when as
+   * ide_editor_search_move(). This allows for stateful moves which
    * might be necessary when activating keybindings.
    *
    * This property will be cleared after an attempt to move.
