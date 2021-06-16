@@ -481,8 +481,8 @@
             <property name="margin_end">24</property>
             <property name="margin_top">24</property>
             <property name="spacing">6</property>
-            <!-- translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing -->
-            <property name="homogeneous" translatable="yes">true</property>
+            <!-- TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing -->
+            <property name="homogeneous" translatable="yes">True</property>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">Build</property>
