@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-05-07 16:43+0000\n"
-"PO-Revision-Date: 2021-05-09 09:01+0300\n"
+"POT-Creation-Date: 2021-06-17 17:20+0000\n"
+"PO-Revision-Date: 2021-06-17 21:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -191,8 +191,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Debugger Breakpoint on Main"
-msgstr ""
-"Діагностична точка зупинки у головній функції"
+msgstr "Діагностична точка зупинки у головній функції"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid "Debugger should automatically insert breakpoint on main function."
@@ -2304,14 +2303,12 @@ msgstr "Точки зупинки"
 
 #: src/libide/gui/ide-preferences-builtin.c:416
 msgid "Insert Breakpoint at Start of Application"
-msgstr ""
-"Вставляти точку зупинки на початку програми"
+msgstr "Вставляти точку зупинки на початку програми"
 
 #: src/libide/gui/ide-preferences-builtin.c:416
 msgid ""
 "Automatically stop execution at the start of the applications main function"
-msgstr ""
-"Автоматично зупиняти виконання на початку головної функції програм"
+msgstr "Автоматично зупиняти виконання на початку головної функції програм"
 
 #: src/libide/gui/ide-preferences-builtin.c:422
 #: src/libide/projects/ide-projects-global.c:105
@@ -3403,10 +3400,11 @@ msgstr "Помилки"
 msgid "Warnings"
 msgstr "Попередження"
 
-#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
-msgid "true"
-msgstr "false"
+msgid "True"
+msgstr ""
+"False"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
@@ -4535,12 +4533,10 @@ msgstr ""
 "у файлах JavaScript. Це може призвести до виконання коду у вашому проєкті."
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:747
-#| msgid "Installing "
 msgid "Installation failed"
 msgstr "Встановлення завершилося невдало"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:753
-#| msgid "Installing project"
 msgid "Installation complete"
 msgstr "Встановлення завершено"
 
@@ -4633,19 +4629,16 @@ msgid "Flatpak"
 msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:414
-#| msgid "Installing rust "
 msgid "Installing Necessary SDKs"
 msgstr "Встановлення потрібних наборів інструментів для розробки"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:415
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"«Будівник» встановлює набори інструментів для розробки, які знадобляться для збирання вашої програми."
+"«Будівник» встановлює набори інструментів для розробки, які знадобляться для "
+"збирання вашої програми."
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -6246,6 +6239,9 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "true"
+#~ msgstr "false"
 
 #~ msgid "Clone a project using flatpak manifest"
 #~ msgstr "Клонувати проєкт використовуючи flatpak-маніфест"
