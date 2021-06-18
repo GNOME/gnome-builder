@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-05-09 06:04+0000\n"
-"PO-Revision-Date: 2021-06-15 13:04+0200\n"
+"POT-Creation-Date: 2021-06-17 17:20+0000\n"
+"PO-Revision-Date: 2021-06-18 13:13+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -3422,10 +3422,10 @@ msgstr "Errores"
 msgid "Warnings"
 msgstr "Advertencias"
 
-#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
-msgid "true"
-msgstr "true"
+msgid "True"
+msgstr "Cierto"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
@@ -4553,12 +4553,10 @@ msgstr ""
 "JavaScript. Esto puede ejecutar código en su proyecto."
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:747
-#| msgid "Installing "
 msgid "Installation failed"
 msgstr "Falló la instalación"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:753
-#| msgid "Installing project"
 msgid "Installation complete"
 msgstr "Instalación completada"
 
@@ -4651,14 +4649,10 @@ msgid "Flatpak"
 msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:414
-#| msgid "Installing %s %s"
 msgid "Installing Necessary SDKs"
 msgstr "Instalando los SDK necesarios"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:415
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -6263,6 +6257,9 @@ msgstr "Falló al crear el árbol XML."
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
+#~ msgid "true"
+#~ msgstr "true"
 
 #~ msgid "Clone a project using flatpak manifest"
 #~ msgstr "Clonar un proyecto usando el manifiesto de flatpak"
