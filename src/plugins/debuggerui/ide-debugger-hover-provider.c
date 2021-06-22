@@ -78,7 +78,7 @@ ide_debugger_hover_provider_hover_async (IdeHoverProvider    *provider,
   file = ide_buffer_get_file (buffer);
   line = gtk_text_iter_get_line (iter);
 
-  if (ide_debug_manager_supports_language (dbgmgr, lang_id))
+  if (ide_debug_manager_get_active(dbgmgr) && ide_debug_manager_supports_language (dbgmgr, lang_id))
     {
       GtkWidget *controls;
 
