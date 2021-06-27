@@ -26,10 +26,6 @@
 #include <libide-projects.h>
 #include <vte/vte.h>
 
-#ifdef ENABLE_LIBPORTAL
-# include <libportal/portal-gtk3.h>
-#endif
-
 #include "gbp-project-tree-private.h"
 #include "gbp-rename-file-popover.h"
 #include "gbp-new-file-popover.h"
@@ -467,36 +463,6 @@ DEFINE_ACTION_HANDLER (open_with_hint, {
                             NULL, NULL, NULL);
 });
 
-#ifdef ENABLE_LIBPORTAL
-DEFINE_ACTION_HANDLER (open_with_external, {
-  IdeProjectFile *project_file;
-  g_autoptr(XdpPortal) portal = NULL;
-  g_autoptr(GFile) file = NULL;
-  g_autofree gchar *uri = NULL;
-  IdeTreeNode *selected;
-  XdpParent *parent;
-  GtkWidget *toplevel;
-
-  if (!(selected = ide_tree_get_selected_node (self->tree)) ||
-      !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
-      !(project_file = ide_tree_node_get_item (selected)))
-    return;
-
-  toplevel = gtk_widget_get_ancestor (GTK_WIDGET (self->tree), GTK_TYPE_WINDOW);
-  file = ide_project_file_ref_file (project_file);
-  uri = g_file_get_uri (file);
-
-  portal = xdp_portal_new ();
-  parent = xdp_parent_new_gtk (GTK_WINDOW (toplevel));
-  xdp_portal_open_uri (portal,
-                       parent,
-                       uri,
-                       XDP_OPEN_URI_FLAG_ASK | XDP_OPEN_URI_FLAG_WRITABLE,
-                       NULL, NULL, NULL);
-  xdp_parent_free (parent);
-});
-#endif
-
 /* Based on gdesktopappinfo.c in GIO */
 static gchar *
 find_terminal_executable (void)
@@ -582,9 +548,6 @@ static const GActionEntry entries[] = {
   { "new-folder", gbp_project_tree_pane_actions_new_folder },
   { "open", gbp_project_tree_pane_actions_open },
   { "open-with-hint", gbp_project_tree_pane_actions_open_with_hint, "s" },
-#ifdef ENABLE_LIBPORTAL
-  { "open-with-external", gbp_project_tree_pane_actions_open_with_external },
-#endif
   { "open-containing-folder", gbp_project_tree_pane_actions_open_containing_folder },
   { "open-in-terminal", gbp_project_tree_pane_actions_open_in_terminal },
   { "rename", gbp_project_tree_pane_actions_rename },
@@ -661,11 +624,6 @@ _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
   dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-with-hint",
                              "enabled", is_file,
                              NULL);
-#ifdef ENABLE_LIBPORTAL
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-with-external",
-                             "enabled", is_file,
-                             NULL);
-#endif
   dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-containing-folder",
                              "enabled", is_file,
                              NULL);

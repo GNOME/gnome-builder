@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/open-with-external">
+    <file>open-with-external.plugin</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+  </gresource>
+</gresources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-open-section">
+      <submenu id="project-tree-menu-open-with-menu">
+        <section id="project-tree-menu-open-with-section">
+          <item>
+            <attribute name="id">project-tree-menu-open-external</attribute>
+            <attribute name="label" translatable="yes">_External Program…</attribute>
+            <attribute name="action">project-tree.open-with-hint</attribute>
+            <attribute name="target" type="s">'open-with-external'</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>

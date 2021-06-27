@@ -24,13 +24,6 @@
       </item>
       <submenu id="project-tree-menu-open-with-menu">
         <attribute name="label" translatable="yes">Open With…</attribute>
-        <section id="project-tree-menu-open-with-external">
-          <item>
-            <attribute name="id">project-tree-menu-open-external</attribute>
-            <attribute name="label" translatable="yes">_External Program…</attribute>
-            <attribute name="action">project-tree.open-with-external</attribute>
-          </item>
-        </section>
         <section id="project-tree-menu-open-with-section">
           <item>
             <attribute name="id">project-tree-menu-open-editor</attribute>

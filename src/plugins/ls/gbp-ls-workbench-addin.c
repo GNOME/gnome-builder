@@ -52,7 +52,12 @@ gbp_ls_workbench_addin_can_open (IdeWorkbenchAddin *addin,
       return TRUE;
     }
 
-  /* We can open, but super low priority */
+  /* We can open, but super low priority, to avoid needing a second menu entry
+   * in the project tree context menu, even if it doesn't fully make sense to
+   * make the ls plugin handle every file… Anyway, as the open-with-external
+   * plugin has slighter higher priority it'll be used instead as a fallback
+   * method, leaving this ls plugin for explicit use with the 'ls' hint.
+   */
   *priority = G_MAXINT;
   return TRUE;
 }

@@ -1,0 +1,9 @@
+[Plugin]
+Authors=vanadiae <vanadiae35@gmail.com>
+Builtin=true
+Copyright=Copyright © 2021 vanadiae
+Description=Provides a fallback file opener and an Open in External Program menu entry
+Embedded=_gbp_owe_register_types
+Hidden=true
+Module=open-with-external
+Name=Open with External Program
