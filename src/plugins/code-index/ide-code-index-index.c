@@ -389,7 +389,7 @@ ide_code_index_index_query_cb (GObject      *object,
           dzl_heap_insert_val (data->fuzzy_matches, fuzzy_match);
         }
     }
-  else
+  else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     {
       g_message ("%s", error->message);
     }
