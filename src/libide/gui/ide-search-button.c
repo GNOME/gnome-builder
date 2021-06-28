@@ -35,6 +35,12 @@
 struct _IdeSearchButton
 {
   DzlSuggestionButton parent_instance;
+
+  // Used to cancel previous search if it was still running when a new character is entered,
+  // to avoid having the search become sluggish if typing quickly (as the suggestion entry
+  // reacts quickly but the search can be slow and they tend to pile up in the queue, slowing
+  // down even more).
+  GCancellable *cancellable;
 };
 
 static const DzlShortcutEntry shortcuts[] = {
@@ -64,8 +70,14 @@ search_entry_search_cb (GObject      *object,
 
   if (error != NULL)
     {
-      /* TODO: Elevate to workbench message once we have that capability */
-      g_warning ("%s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          IdeWorkspace *workspace = IDE_WORKSPACE (gtk_widget_get_ancestor (GTK_WIDGET (entry), IDE_TYPE_WORKSPACE));
+          IdeContext *context = ide_workspace_get_context (workspace);
+
+          ide_context_warning (context, "%s", error->message);
+        }
+
       return;
     }
 
@@ -78,13 +90,15 @@ search_entry_search_cb (GObject      *object,
 
 
 static void
-search_entry_changed (DzlSuggestionEntry *entry)
+search_entry_changed (DzlSuggestionEntry *entry,
+                      IdeSearchButton    *self)
 {
   IdeSearchEngine *engine;
   IdeWorkbench *workbench;
   const gchar *typed_text;
 
   g_assert (DZL_IS_SUGGESTION_ENTRY (entry));
+  g_assert (IDE_IS_SEARCH_BUTTON (self));
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (entry));
   engine = ide_workbench_get_search_engine (workbench);
@@ -93,12 +107,21 @@ search_entry_changed (DzlSuggestionEntry *entry)
   if (dzl_str_empty0 (typed_text))
     dzl_suggestion_entry_set_model (entry, NULL);
   else
-    ide_search_engine_search_async (engine,
-                                    typed_text,
-                                    DEFAULT_SEARCH_MAX,
-                                    NULL,
-                                    search_entry_search_cb,
-                                    g_object_ref (entry));
+    {
+      if (ide_search_engine_get_busy (engine))
+        g_cancellable_cancel (self->cancellable);
+
+      // Never reuse a cancellable
+      g_clear_object (&self->cancellable);
+      self->cancellable = g_cancellable_new ();
+
+      ide_search_engine_search_async (engine,
+                                      typed_text,
+                                      DEFAULT_SEARCH_MAX,
+                                      self->cancellable,
+                                      search_entry_search_cb,
+                                      g_object_ref (entry));
+    }
 }
 
 static void
@@ -197,8 +220,23 @@ search_entry_focus_in (GtkEntry      *entry,
 }
 
 static void
+ide_search_button_finalize (GObject *object)
+{
+  IdeSearchButton *self = (IdeSearchButton *)object;
+
+  g_assert (IDE_IS_SEARCH_BUTTON (self));
+
+  g_clear_object (&self->cancellable);
+
+  G_OBJECT_CLASS (ide_search_button_parent_class)->finalize (object);
+}
+
+static void
 ide_search_button_class_init (IdeSearchButtonClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_search_button_finalize;
 }
 
 static void
@@ -221,7 +259,7 @@ ide_search_button_init (IdeSearchButton *self)
                                   G_ACTION_GROUP (group));
 
   dzl_gtk_widget_add_style_class (GTK_WIDGET (entry), "global-search");
-  g_signal_connect (entry, "changed", G_CALLBACK (search_entry_changed), NULL);
+  g_signal_connect (entry, "changed", G_CALLBACK (search_entry_changed), self);
   g_signal_connect (entry, "focus-in-event", G_CALLBACK (search_entry_focus_in), NULL);
   g_signal_connect (entry, "suggestion-activated", G_CALLBACK (suggestion_activated), NULL);
   dzl_suggestion_entry_set_position_func (entry, search_popover_position_func, NULL, NULL);
