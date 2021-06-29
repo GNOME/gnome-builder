@@ -43,7 +43,6 @@
                 <child>
                   <object class="GtkButton">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="focus_on_click">False</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Update project dependencies</property>
@@ -69,7 +68,6 @@
                 <child>
                   <object class="GtkButton" id="configure_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="focus_on_click">False</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Configure build preferences</property>
@@ -302,7 +300,6 @@
                     <child>
                       <object class="GtkButton">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">View build console contents</property>
@@ -485,9 +482,9 @@
             <property name="homogeneous" translatable="yes">True</property>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">Build</property>
+                <property name="label" translatable="yes">_Build</property>
+                <property name="use-underline">True</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="action_name">build-manager.build</property>
               </object>
@@ -499,9 +496,9 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">Rebuild</property>
+                <property name="label" translatable="yes">_Rebuild</property>
+                <property name="use-underline">True</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="action_name">build-manager.rebuild</property>
               </object>
@@ -513,9 +510,9 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">Clean</property>
+                <property name="label" translatable="yes">_Clean</property>
+                <property name="use-underline">True</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="action_name">build-manager.clean</property>
               </object>
@@ -527,9 +524,9 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">Export Bundle</property>
+                <property name="label" translatable="yes">_Export Bundle</property>
+                <property name="use-underline">True</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="action_name">build-manager.export</property>
                 <style>
