@@ -546,7 +546,7 @@ ide_transfer_create_notification (IdeTransfer *self)
    * using action state.
    */
   action_name = g_strdup_printf ("transfer-manager.cancel-%d", priv->unique_id);
-  ide_notification_add_button (notif, _("Cancel"), icon, action_name);
+  ide_notification_add_button (notif, _("_Cancel"), icon, action_name);
 
   g_signal_connect_object (self,
                            "notify::completed",

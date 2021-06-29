@@ -313,7 +313,7 @@ gbp_flatpak_runtime_provider_bootstrap_complete (gpointer data)
       /* Register an action that can be cancelled */
       detailed_action_name = ide_application_create_cancel_action (IDE_APPLICATION_DEFAULT,
                                                                    ide_task_get_cancellable (task));
-      ide_notification_add_button (state->notif, _("Cancel"), icon, detailed_action_name);
+      ide_notification_add_button (state->notif, _("_Cancel"), icon, detailed_action_name);
       ide_notification_attach (state->notif, IDE_OBJECT (self));
 
       ipc_flatpak_service_call_install (state->service,

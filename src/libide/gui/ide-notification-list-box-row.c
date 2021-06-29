@@ -88,6 +88,7 @@ setup_buttons_locked (IdeNotificationListBoxRow *self)
             child = g_object_new (GTK_TYPE_LABEL,
                                   "label", label,
                                   "visible", TRUE,
+                                  "use-underline", TRUE,
                                   NULL);
           else if (icon != NULL)
             child = g_object_new (GTK_TYPE_IMAGE,

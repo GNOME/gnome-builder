@@ -166,7 +166,7 @@ on_update_available_cb (GbpUpdateManagerAppAddin *self,
       ide_notification_set_title (self->update_notif, _("Update Available"));
       ide_notification_set_body (self->update_notif, _("An update to Builder is available. Builder can download and install it for you."));
       ide_notification_set_urgent (self->update_notif, TRUE);
-      ide_notification_add_button (self->update_notif, _("Update"), NULL, "app.update-builder");
+      ide_notification_add_button (self->update_notif, _("_Update"), NULL, "app.update-builder");
       ide_notification_attach (self->update_notif, IDE_OBJECT (context));
     }
 
