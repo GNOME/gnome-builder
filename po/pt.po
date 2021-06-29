@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-06-17 17:20+0000\n"
-"PO-Revision-Date: 2021-06-26 22:06+0100\n"
+"POT-Creation-Date: 2021-06-28 17:57+0000\n"
+"PO-Revision-Date: 2021-06-29 14:52+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -534,7 +534,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Essa definição está obsoleta e não é mais usada."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:76
+#: src/plugins/project-tree/gtk/menus.ui:69
 msgid "Show Ignored Files"
 msgstr "Mostrar Ficheiros Ignorados"
 
@@ -546,7 +546,7 @@ msgstr ""
 "pelo VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "Sort Directories First"
 msgstr "Ordenar Diretorias Primeiro"
 
@@ -873,7 +873,7 @@ msgstr "Carregar ou gerar uma paleta utilizando as preferências"
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:5025
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:60
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Renomear"
 
@@ -2389,8 +2389,8 @@ msgstr "Mostra a ajuda"
 
 #: src/libide/gui/ide-shortcuts-window.ui:25
 msgctxt "shortcut window"
-msgid "Toogle primary menu"
-msgstr "Ativa o menu primário"
+msgid "Toggle primary menu"
+msgstr "Mostra o menu principal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
 #: src/libide/gui/ide-shortcuts-window.ui:547
@@ -5018,7 +5018,7 @@ msgstr "Navegar na pasta"
 msgid "Switch to Folder"
 msgstr "Alternar para pasta"
 
-#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:39
 msgid "Open Containing Folder"
 msgstr "Abrir a Pasta Respetiva"
 
@@ -5431,27 +5431,23 @@ msgid "Open With…"
 msgstr "Abrir com…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
-msgid "_External Program…"
-msgstr "Programa _externo…"
-
-#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Editor de código fonte"
 
-#: src/plugins/project-tree/gtk/menus.ui:52
+#: src/plugins/project-tree/gtk/menus.ui:45
 msgid "Open in Terminal"
 msgstr "Abre no terminal"
 
-#: src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/project-tree/gtk/menus.ui:59
 msgid "Move to Trash"
 msgstr "Mover para o lixo"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
+#: src/plugins/project-tree/gtk/menus.ui:65
 msgid "Display Options"
 msgstr "Mostrar opções"
 
-#: src/plugins/project-tree/gtk/menus.ui:94
-#: src/plugins/project-tree/gtk/menus.ui:103
+#: src/plugins/project-tree/gtk/menus.ui:87
+#: src/plugins/project-tree/gtk/menus.ui:96
 msgid "Reveal in Project Tree"
 msgstr "Revelar em árvore de projeto"
 
@@ -6230,6 +6226,9 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
+
+#~ msgid "_External Program…"
+#~ msgstr "Programa _externo…"
 
 #~ msgid "true"
 #~ msgstr "verdadeiro"
