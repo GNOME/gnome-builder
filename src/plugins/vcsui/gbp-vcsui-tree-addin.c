@@ -41,39 +41,7 @@ struct _GbpVcsuiTreeAddin
   IdeTreeModel  *model;
   IdeVcs        *vcs;
   IdeVcsMonitor *monitor;
-
-  GdkRGBA        added_color;
-  GdkRGBA        changed_color;
 };
-
-static void
-get_foreground_for_class (GtkStyleContext   *style_context,
-                          const gchar       *name,
-                          GdkRGBA           *rgba)
-{
-  GtkStateFlags state;
-
-  g_assert (GTK_IS_STYLE_CONTEXT (style_context));
-  g_assert (name != NULL);
-  g_assert (rgba != NULL);
-
-  state = gtk_style_context_get_state (style_context);
-  gtk_style_context_save (style_context);
-  gtk_style_context_add_class (style_context, name);
-  gtk_style_context_get_color (style_context, state, rgba);
-  gtk_style_context_restore (style_context);
-}
-
-static void
-on_tree_style_changed_cb (GbpVcsuiTreeAddin *self,
-                          GtkStyleContext   *context)
-{
-  g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
-  g_assert (GTK_IS_STYLE_CONTEXT (context));
-
-  get_foreground_for_class (context, "vcs-added", &self->added_color);
-  get_foreground_for_class (context, "vcs-changed", &self->changed_color);
-}
 
 static void
 gbp_vcsui_tree_addin_switch_branch_cb (GObject      *object,
@@ -178,7 +146,6 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
-  GtkStyleContext *style_context;
   IdeWorkbench *workbench;
   IdeVcsMonitor *monitor;
   IdeVcs *vcs;
@@ -204,14 +171,6 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
                                   "vcsui",
                                   G_ACTION_GROUP (group));
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (tree));
-  g_signal_connect_object (style_context,
-                           "changed",
-                           G_CALLBACK (on_tree_style_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  on_tree_style_changed_cb (self, style_context);
-
   if ((workbench = ide_widget_get_workbench (GTK_WIDGET (tree))) &&
       (vcs = ide_workbench_get_vcs (workbench)) &&
       (monitor = ide_workbench_get_vcs_monitor (workbench)))
@@ -232,7 +191,6 @@ gbp_vcsui_tree_addin_unload (IdeTreeAddin *addin,
                              IdeTreeModel *model)
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
-  GtkStyleContext *style_context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
@@ -240,11 +198,6 @@ gbp_vcsui_tree_addin_unload (IdeTreeAddin *addin,
   g_assert (IDE_IS_TREE_MODEL (model));
 
   gtk_widget_insert_action_group (GTK_WIDGET (tree), "vcsui", NULL);
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (tree));
-  g_signal_handlers_disconnect_by_func (style_context,
-                                        G_CALLBACK (on_tree_style_changed_cb),
-                                        self);
 
   g_clear_object (&self->monitor);
   g_clear_object (&self->vcs);
