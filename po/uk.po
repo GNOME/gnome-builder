@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-06-17 17:20+0000\n"
-"PO-Revision-Date: 2021-06-17 21:48+0300\n"
+"POT-Creation-Date: 2021-06-28 17:57+0000\n"
+"PO-Revision-Date: 2021-06-29 08:28+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -543,7 +543,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Цей параметр вважається застарілим і більше не використовується."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:76
+#: src/plugins/project-tree/gtk/menus.ui:69
 msgid "Show Ignored Files"
 msgstr "Показувати нехтувані файли"
 
@@ -555,7 +555,7 @@ msgstr ""
 "системою керування версіями."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "Sort Directories First"
 msgstr "Впорядковувати спочатку каталоги"
 
@@ -882,7 +882,7 @@ msgstr "Завантажити або створити палітру за на�
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:5025
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:60
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "Перейменувати"
 
@@ -2390,8 +2390,10 @@ msgid "Show help"
 msgstr "Показати довідку"
 
 #: src/libide/gui/ide-shortcuts-window.ui:25
+#| msgctxt "shortcut window"
+#| msgid "Toogle primary menu"
 msgctxt "shortcut window"
-msgid "Toogle primary menu"
+msgid "Toggle primary menu"
 msgstr "Увімкнути або вимкнути основне меню"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
@@ -3403,8 +3405,7 @@ msgstr "Попередження"
 #. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
 msgid "True"
-msgstr ""
-"False"
+msgstr "False"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
@@ -5021,7 +5022,7 @@ msgstr "Навігація текою"
 msgid "Switch to Folder"
 msgstr "Перемкнутися на теку"
 
-#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:39
 msgid "Open Containing Folder"
 msgstr "Відкрити теку з даними"
 
@@ -5433,27 +5434,23 @@ msgid "Open With…"
 msgstr "Відкрити за допомогою…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
-msgid "_External Program…"
-msgstr "_Зовнішньої програми…"
-
-#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "Редактор коду"
 
-#: src/plugins/project-tree/gtk/menus.ui:52
+#: src/plugins/project-tree/gtk/menus.ui:45
 msgid "Open in Terminal"
 msgstr "Відкрити у терміналі"
 
-#: src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/project-tree/gtk/menus.ui:59
 msgid "Move to Trash"
 msgstr "Пересунути до смітника"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
+#: src/plugins/project-tree/gtk/menus.ui:65
 msgid "Display Options"
 msgstr "Показувати параметри"
 
-#: src/plugins/project-tree/gtk/menus.ui:94
-#: src/plugins/project-tree/gtk/menus.ui:103
+#: src/plugins/project-tree/gtk/menus.ui:87
+#: src/plugins/project-tree/gtk/menus.ui:96
 msgid "Reveal in Project Tree"
 msgstr "Розкрити в ієрархії проєкту"
 
@@ -6239,6 +6236,9 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "_External Program…"
+#~ msgstr "_Зовнішньої програми…"
 
 #~ msgid "true"
 #~ msgstr "false"
