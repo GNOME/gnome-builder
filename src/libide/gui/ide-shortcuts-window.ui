@@ -337,6 +337,27 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;u</property>
+                <property name="title" translatable="yes" context="shortcut window">Make selection upper case</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;l</property>
+                <property name="title" translatable="yes" context="shortcut window">Make selection lower case</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;asciitilde</property>
+                <property name="title" translatable="yes" context="shortcut window">Invert selection case</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
                 <property name="accelerator">&lt;ctrl&gt;space</property>
                 <property name="title" translatable="yes" context="shortcut window">Show completion window</property>
               </object>
@@ -437,6 +458,14 @@
                 <property name="visible">true</property>
                 <property name="accelerator">&lt;alt&gt;period</property>
                 <property name="title" translatable="yes" context="shortcut window">Jump to definition of symbol</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;space</property>
+                <!-- FIXME: find references of what? it doesn't seem to work here, there's always no results. -->
+                <property name="title" translatable="yes" context="shortcut window">Find references</property>
               </object>
             </child>
             <child>
