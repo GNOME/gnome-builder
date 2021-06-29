@@ -9,9 +9,8 @@
     </section>
     <section id="ide-source-view-popup-menu-highlighting-section">
       <submenu id="ide-source-view-popup-menu-highlighting-submenu">
-        <attribute name="label" translatable="yes">Highlighting</attribute>
         <item>
-          <attribute name="label" translatable="yes">Underline misspelled words</attribute>
+          <attribute name="label" translatable="yes">_Underline misspelled words</attribute>
           <attribute name="action">spellcheck.enabled</attribute>
         </item>
       </submenu>

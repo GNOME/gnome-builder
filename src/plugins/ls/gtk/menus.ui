@@ -5,7 +5,7 @@
       <item>
         <attribute name="id">project-tree-menu-open-editor</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Browse Folder</attribute>
+        <attribute name="label" translatable="yes">_Browse Folder</attribute>
         <attribute name="action">project-tree.open-with-hint</attribute>
         <attribute name="target" type="s">'ls'</attribute>
       </item>
@@ -15,12 +15,12 @@
     <section id="ide-source-view-popup-menu-files-section">
       <item>
         <attribute name="id">source-view-open-directory</attribute>
-        <attribute name="label" translatable="yes">Switch to Folder</attribute>
+        <attribute name="label" translatable="yes">S_witch to Folder</attribute>
         <attribute name="action">ls.open-directory</attribute>
       </item>
       <item>
         <attribute name="id">source-view-open-in-files</attribute>
-        <attribute name="label" translatable="yes">Open Containing Folder</attribute>
+        <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
         <attribute name="action">ls.open-in-files</attribute>
       </item>
     </section>

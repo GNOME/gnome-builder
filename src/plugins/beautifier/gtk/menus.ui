@@ -6,7 +6,7 @@
         <section id="gb-beautify-section">
           <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
           <submenu id="gb-beautify-submenu">
-            <attribute name="label" translatable="yes">Beautify</attribute>
+            <attribute name="label" translatable="yes">_Beautify</attribute>
             <section id="gb-beautify-default-section">
             </section>
             <section id="gb-beautify-profiles-section">

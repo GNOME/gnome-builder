@@ -47,12 +47,12 @@
     </section>
     <section id="ide-source-view-popup-menu-highlighting-section">
       <submenu id="ide-source-view-popup-menu-highlighting-submenu">
-        <attribute name="label" translatable="yes">Highlighting</attribute>
+        <attribute name="label" translatable="yes">_Highlighting</attribute>
       </submenu>
     </section>
     <section id="ide-source-view-popup-menu-selection-section">
       <submenu id="ide-source-view-popup-menu-selection-submenu">
-        <attribute name="label" translatable="yes">Selection</attribute>
+        <attribute name="label" translatable="yes">_Selection</attribute>
         <item>
           <attribute name="label" translatable="yes">Select _All</attribute>
           <attribute name="action">sourceview.select-all</attribute>
@@ -75,7 +75,7 @@
             <attribute name="target" type="(u)">(0,)</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">_Invert Case</attribute>
+            <attribute name="label" translatable="yes">In_vert Case</attribute>
             <attribute name="action">sourceview.change-case</attribute>
             <attribute name="target" type="(u)">(2,)</attribute>
           </item>
@@ -87,11 +87,11 @@
         </section>
         <section id="ide-source-view-popup-menu-line-section">
           <item>
-            <attribute name="label" translatable="yes">Join Lines</attribute>
+            <attribute name="label" translatable="yes">_Join Lines</attribute>
             <attribute name="action">sourceview.join-lines</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">Sort Lines</attribute>
+            <attribute name="label" translatable="yes">S_ort Lines</attribute>
             <attribute name="action">sourceview.sort</attribute>
             <attribute name="target" type="(bb)">(false,false)</attribute>
           </item>
@@ -100,7 +100,7 @@
     </section>
     <section id="ide-source-view-popup-menu-zoom-section">
       <submenu id="ide-source-view-popup-menu-zoom-section-submenu">
-        <attribute name="label" translatable="yes">Zoom</attribute>
+        <attribute name="label" translatable="yes">_Zoom</attribute>
         <item>
           <attribute name="label" translatable="yes">Zoom _In</attribute>
           <attribute name="action">sourceview.increase-font-size</attribute>
@@ -113,7 +113,7 @@
         </item>
         <section id="ide-source-view-popup-menu-zoom-section-submenu-reset">
           <item>
-            <attribute name="label" translatable="yes">Reset</attribute>
+            <attribute name="label" translatable="yes">_Reset</attribute>
             <attribute name="action">sourceview.reset-font-size</attribute>
             <attribute name="accel">&lt;control&gt;0</attribute>
           </item>
