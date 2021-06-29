@@ -9,11 +9,13 @@
             <attribute name="label" translatable="yes">_Comment code</attribute>
             <attribute name="action">comment-code.comment-code</attribute>
             <attribute name="target" type="s">'0'</attribute>
+            <attribute name="accel">&lt;control&gt;m</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Unco_mment code</attribute>
             <attribute name="action">comment-code.comment-code</attribute>
             <attribute name="target" type="s">'1'</attribute>
+            <attribute name="accel">&lt;control&gt;&lt;shift&gt;m</attribute>
           </item>
         </section>
       </submenu>

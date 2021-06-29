@@ -219,6 +219,7 @@ view_populate_submenu (GbBeautifierEditorAddin *self,
             {
               item = g_menu_item_new (entry->name, NULL);
               g_menu_item_set_action_and_target (item, "view.beautify-default", "s", param);
+              g_menu_item_set_attribute (item, "accel", "s", "<ctrl><alt>b");
               g_menu_append_item (default_menu, item);
 
               default_set = TRUE;
