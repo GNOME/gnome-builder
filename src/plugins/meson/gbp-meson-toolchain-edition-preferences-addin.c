@@ -114,6 +114,7 @@ toolchain_edition_preferences_get_add_widget (GbpMesonToolchainEditionPreference
                            "use-markup", TRUE,
                            "xalign", 0.0f,
                            "hexpand", TRUE,
+                           "wrap", TRUE,
                            NULL);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (subtitle), GTK_STYLE_CLASS_DIM_LABEL);
