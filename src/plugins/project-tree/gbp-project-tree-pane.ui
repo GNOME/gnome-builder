@@ -9,7 +9,7 @@
             <property name="level-indentation">16</property>
             <property name="visible">true</property>
             <style>
-              <class name="i-wanna-be-list-box"/>
+              <class name="i-wanna-be-listbox"/>
               <class name="project-tree"/>
             </style>
           </object>
