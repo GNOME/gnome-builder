@@ -117,6 +117,7 @@ ide_tree_select (IdeTree     *self,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
   path = ide_tree_node_get_path (node);
   gtk_tree_selection_select_path (selection, path);
+  gtk_tree_view_set_cursor (GTK_TREE_VIEW (self), path, NULL, FALSE);
 }
 
 static void
