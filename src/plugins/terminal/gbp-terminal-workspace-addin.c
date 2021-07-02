@@ -459,7 +459,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
 
       workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
 
-      if (ide_workbench_has_project (workbench))
+      if (ide_workbench_has_project (workbench) && IDE_IS_PRIMARY_WORKSPACE (workspace))
         {
           /* Setup terminals when a project is run */
           context = ide_widget_get_context (GTK_WIDGET (workspace));
