@@ -324,6 +324,7 @@ src/plugins/newcomers/gbp-newcomers-section.ui
 src/plugins/notification/ide-notification-addin.c
 src/plugins/npm/npm_plugin.py
 src/plugins/omni-gutter/gbp-omni-gutter-renderer.c
+src/plugins/open-with-external/gtk/menus.ui
 src/plugins/phpize/phpize_plugin.py
 src/plugins/podman/gbp-podman-runtime.c
 src/plugins/project-tree/gbp-new-file-popover.c
