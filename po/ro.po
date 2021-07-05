@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-06-30 16:28+0000\n"
-"PO-Revision-Date: 2021-07-02 20:44+0300\n"
+"POT-Creation-Date: 2021-07-04 15:55+0000\n"
+"PO-Revision-Date: 2021-07-05 21:30+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -4096,7 +4096,7 @@ msgstr "Se indexează codul sursă (Pauzat)"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:402
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:404
 msgid "Run with Debugger"
 msgstr "Rulează cu depanator"
 
@@ -5374,6 +5374,10 @@ msgstr "Generare inițializată"
 msgid "Downloading npm dependencies"
 msgstr "Se descarcă dependențe npm"
 
+#: src/plugins/open-with-external/gtk/menus.ui:9
+msgid "_External Program…"
+msgstr "Program _extern…"
+
 #: src/plugins/phpize/phpize_plugin.py:191
 msgid "Bootstrapping project"
 msgstr "Se trece prin procesul de bootstrap al proiectului"
@@ -6334,9 +6338,6 @@ msgstr "Fișierul trebuie salvat local pentru a fi parsat."
 #~ msgstr ""
 #~ "Programul „flatpak-builder” este necesar pentru generarea aplicațiilor "
 #~ "bazate pe Flatpak. Builder poate să vi-l instaleze."
-
-#~ msgid "_External Program…"
-#~ msgstr "Program _extern…"
 
 #~ msgid "Podman"
 #~ msgstr "Podman"
