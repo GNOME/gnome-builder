@@ -310,7 +310,8 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=debugoptimized",
+                "-Dflatpak_build=true"
             ],
             "cleanup" : [
                 "/bin/*",
