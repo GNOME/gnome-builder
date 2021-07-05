@@ -311,6 +311,7 @@
             "config-opts" : [
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
+                "-Dprofile=stable",
                 "-Dflatpak_build=true"
             ],
             "cleanup" : [
