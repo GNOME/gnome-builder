@@ -252,6 +252,7 @@ ide_subprocess_supervisor_start_in_usec_cb (gpointer data)
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
   g_assert (priv->supervising == TRUE);
 
+  priv->restart_timeout = 0;
   priv->supervising = FALSE;
   ide_subprocess_supervisor_start (self);
 
