@@ -132,6 +132,7 @@ subdir('vala-pack')
 subdir('valgrind')
 subdir('vcsui')
 subdir('vim')
+subdir('vls')
 subdir('waf')
 subdir('words')
 subdir('xml-pack')
@@ -199,7 +200,8 @@ status += [
   'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
   'Todo .................. : @0@'.format(get_option('plugin_todo')),
   'Update Manager ........ : @0@'.format(get_option('plugin_update_manager')),
-  'Vala Language Server... : @0@'.format(get_option('plugin_gvls')),
+  'GNOME Vala LS ......... : @0@'.format(get_option('plugin_gvls')),
+  'Vala Language Server .. : @0@'.format(get_option('plugin_vls')),
   'Vala Pack ............. : @0@'.format(get_option('plugin_vala')),
   'Vagrant ............... : @0@'.format(get_option('plugin_vagrant')),
   'Valgrind .............. : @0@'.format(get_option('plugin_valgrind')),
