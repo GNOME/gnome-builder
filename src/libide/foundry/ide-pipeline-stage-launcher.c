@@ -151,7 +151,7 @@ ide_pipeline_stage_launcher_wait_cb (GObject      *object,
   if (priv->ignore_exit_status)
     IDE_GOTO (ignore_exit_failures);
 
-  if (!g_spawn_check_exit_status (exit_status, &error))
+  if (!g_spawn_check_wait_status (exit_status, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
