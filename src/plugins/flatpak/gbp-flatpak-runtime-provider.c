@@ -304,7 +304,7 @@ gbp_flatpak_runtime_provider_bootstrap_complete (gpointer data)
   if (state->to_install->len > 0)
     {
       g_autofree char *detailed_action_name = NULL;
-      g_autoptr(GIcon) icon = g_themed_icon_new ("process-stop-symbolic");
+      g_autoptr(GIcon) icon = g_themed_icon_new ("builder-build-stop-symbolic");
 
       g_assert (IDE_IS_NOTIFICATION (state->notif));
       g_assert (IPC_IS_FLATPAK_SERVICE (state->service));

@@ -1413,11 +1413,11 @@ gbp_omni_gutter_renderer_reload_icons (GbpOmniGutterRenderer *self)
 
   self->note_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, FALSE);
   self->warning_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, FALSE);
-  self->error_surface = get_icon_surface (self, GTK_WIDGET (view), "process-stop-symbolic", self->diag_size, FALSE);
+  self->error_surface = get_icon_surface (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, FALSE);
 
   self->note_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, TRUE);
   self->warning_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, TRUE);
-  self->error_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "process-stop-symbolic", self->diag_size, TRUE);
+  self->error_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, TRUE);
 }
 
 static void
