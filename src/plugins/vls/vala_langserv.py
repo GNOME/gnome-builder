@@ -186,6 +186,6 @@ class VlsFormatter(Ide.LspFormatter):
 class VlsHoverProvider(Ide.LspHoverProvider):
     def do_prepare(self):
         self.props.category = 'Vala'
-        self.props.priority = 200
+        self.props.priority = 100
         VlsService.bind_client(self)
 

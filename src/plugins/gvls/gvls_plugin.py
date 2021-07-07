@@ -578,7 +578,7 @@ class GVlsCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
     def do_get_priority(self, context):
         # This provider only activates when it is very likely that we
         # want the results. So use high priority (negative is better).
-        return -1000
+        return -900
 
 class GVlsHighlighter(Ide.LspHighlighter, Ide.Highlighter):
     def do_load(self):
