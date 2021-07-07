@@ -34,12 +34,13 @@
 
 struct _IdeOmniBar
 {
-  GtkEventBox           parent_instance;
+  GtkBin                parent_instance;
 
   PeasExtensionSet     *addins;
   GtkGesture           *gesture;
   GtkEventController   *motion;
 
+  GtkEventBox          *entry_event_box;
   GtkStack             *top_stack;
   GtkPopover           *popover;
   DzlEntryBox          *entry_box;
@@ -65,7 +66,7 @@ DZL_DEFINE_ACTION_GROUP (IdeOmniBar, ide_omni_bar, {
   { "move-previous", ide_omni_bar_move_previous },
 })
 
-G_DEFINE_TYPE_WITH_CODE (IdeOmniBar, ide_omni_bar, GTK_TYPE_EVENT_BOX,
+G_DEFINE_TYPE_WITH_CODE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_omni_bar_init_action_group)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
@@ -446,6 +447,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-omni-bar.ui");
   gtk_widget_class_set_css_name (widget_class, "omnibar");
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, entry_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, entry_event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, inner_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, notification_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, notifications_list_box);
@@ -490,7 +492,7 @@ ide_omni_bar_init (IdeOmniBar *self)
                             G_CALLBACK (ide_omni_bar_motion_leave_cb),
                             self);
 
-  self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
+  self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self->entry_event_box));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->gesture), TRUE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->gesture), GDK_BUTTON_PRIMARY);
