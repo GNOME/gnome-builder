@@ -449,6 +449,20 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
   if (ret != NULL)
     ide_build_system_post_process_build_flags (self, ret);
 
+#ifdef IDE_ENABLE_TRACE
+  if (ret != NULL)
+    {
+      g_autoptr(GString) str = g_string_new (NULL);
+      for (guint i = 0; ret[i]; i++)
+        {
+          g_autofree char *escaped = g_shell_quote (ret[i]);
+          g_string_append (str, escaped);
+          g_string_append_c (str, ' ');
+        }
+      IDE_TRACE_MSG ("build_flags = %s", str->str);
+    }
+#endif
+
   IDE_RETURN (ret);
 }
 
