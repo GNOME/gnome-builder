@@ -293,6 +293,26 @@ install_free (Install *install)
   g_slice_free (Install, install);
 }
 
+static FlatpakInstalledRef *
+find_sdk (GPtrArray  *runtimes,
+          FlatpakRef *match)
+{
+  for (guint i = 0; i < runtimes->len; i++)
+    {
+      FlatpakInstalledRef *ref = g_ptr_array_index (runtimes, i);
+
+      if (g_strcmp0 (flatpak_ref_get_name (FLATPAK_REF (ref)),
+                     flatpak_ref_get_name (match)) == 0 &&
+          g_strcmp0 (flatpak_ref_get_arch (FLATPAK_REF (ref)),
+                     flatpak_ref_get_arch (match)) == 0 &&
+          g_strcmp0 (flatpak_ref_get_branch (FLATPAK_REF (ref)),
+                     flatpak_ref_get_branch (match)) == 0)
+        return ref;
+    }
+
+  return NULL;
+}
+
 static void
 install_reload (IpcFlatpakServiceImpl *self,
                 Install               *install)
@@ -314,9 +334,11 @@ install_reload (IpcFlatpakServiceImpl *self,
   for (guint i = 0; i < refs->len; i++)
     {
       FlatpakInstalledRef *ref = g_ptr_array_index (refs, i);
+      FlatpakInstalledRef *installed_sdk;
       g_autoptr(FlatpakRef) sdk_ref = NULL;
       g_autoptr(GBytes) bytes = NULL;
       g_autoptr(GKeyFile) keyfile = g_key_file_new ();
+      const char *deploy_dir = NULL;
       g_autofree char *sdk_full_ref = NULL;
       g_autofree char *name = NULL;
       g_autofree char *runtime = NULL;
@@ -352,6 +374,15 @@ install_reload (IpcFlatpakServiceImpl *self,
       if (!(sdk_ref = flatpak_ref_parse (sdk_full_ref, NULL)))
         continue;
 
+      /* Try to locate the installed SDK so that we can get its deploy
+       * directory instead of the runtime (or the application will not
+       * be able to locate includes/pkg-config/etc when building).
+       */
+      if ((installed_sdk = find_sdk (refs, sdk_ref)))
+        deploy_dir = flatpak_installed_ref_get_deploy_dir (installed_sdk);
+      else
+        deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
+
       state = g_slice_new0 (Runtime);
       state->installation = g_object_ref (install->installation);
       state->name = g_strdup (flatpak_ref_get_name (FLATPAK_REF (ref)));
@@ -359,7 +390,7 @@ install_reload (IpcFlatpakServiceImpl *self,
       state->branch = g_strdup (flatpak_ref_get_branch (FLATPAK_REF (ref)));
       state->sdk_name = g_strdup (flatpak_ref_get_name (sdk_ref));
       state->sdk_branch = g_strdup (flatpak_ref_get_branch (sdk_ref));
-      state->deploy_dir = g_strdup (flatpak_installed_ref_get_deploy_dir (ref));
+      state->deploy_dir = g_strdup (deploy_dir);
       state->sdk_extension = exten_of != NULL;
       state->metadata = g_bytes_ref (bytes);
 

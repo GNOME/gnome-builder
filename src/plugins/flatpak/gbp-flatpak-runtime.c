@@ -782,13 +782,6 @@ gbp_flatpak_runtime_new (const char *name,
 
   runtime_name = g_strdup_printf ("%s %s", _("Flatpak"), triplet);
 
-  /*
-   * TODO:
-   *
-   * If we have an SDK that is different from this runtime, we need to locate
-   * the SDK deploy-dir instead (for things like includes, pkg-config, etc).
-   */
-
   return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                        "id", id,
                        "triplet", triplet_object,
