@@ -38,10 +38,11 @@ struct _IdeRunButton
   GtkButton            *button;
   GtkImage             *button_image;
   DzlMenuButton        *menu_button;
-  GtkButton            *stop_button;
   GtkShortcutsShortcut *run_shortcut;
   GtkLabel             *run_tooltip_message;
   DzlShortcutTooltip   *tooltip;
+
+  char *run_handler_icon_name;
 };
 
 G_DEFINE_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
@@ -67,12 +68,37 @@ ide_run_button_handler_set (IdeRunButton  *self,
 
       if (g_strcmp0 (info->id, handler) == 0)
         {
-          g_object_set (self->button_image,
-                        "icon-name", info->icon_name,
-                        NULL);
+          self->run_handler_icon_name = g_strdup (info->icon_name);
+          g_object_set (self->button_image, "icon-name", info->icon_name, NULL);
           break;
         }
     }
+}
+
+static void
+on_run_busy_state_changed_cb (IdeRunButton  *self,
+                              GParamSpec    *pspec,
+                              IdeRunManager *run_manager)
+{
+  const char *icon_name;
+  const char *action_name;
+
+  g_assert (IDE_IS_RUN_BUTTON (self));
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+
+  if (!ide_run_manager_get_busy (run_manager))
+    {
+      icon_name = self->run_handler_icon_name;
+      action_name = "run-manager.run";
+    }
+  else
+    {
+      icon_name = "builder-run-stop-symbolic";
+      action_name = "run-manager.stop";
+    }
+
+  g_object_set (self->button_image, "icon-name", icon_name, NULL);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (self->button), action_name);
 }
 
 static void
@@ -86,10 +112,11 @@ ide_run_button_load (IdeRunButton *self,
 
   run_manager = ide_run_manager_from_context (context);
 
-  g_object_bind_property (run_manager, "busy", self->button, "visible",
-                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  g_object_bind_property (run_manager, "busy", self->stop_button, "visible",
-                          G_BINDING_SYNC_CREATE);
+  g_signal_connect_object (run_manager,
+                           "notify::busy",
+                           G_CALLBACK (on_run_busy_state_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (run_manager,
                            "notify::handler",
@@ -136,6 +163,12 @@ ide_run_button_query_tooltip (IdeRunButton *self,
   handler = ide_run_manager_get_handler (run_manager);
   list = _ide_run_manager_get_handlers (run_manager);
 
+  if (ide_run_manager_get_busy (run_manager))
+    {
+      gtk_tooltip_set_text (tooltip, _("Stop running"));
+      return TRUE;
+    }
+
   for (iter = list; iter; iter = iter->next)
     {
       const IdeRunHandlerInfo *info = iter->data;
@@ -180,7 +213,6 @@ ide_run_button_class_init (IdeRunButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, button_image);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_shortcut);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, stop_button);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_tooltip_message);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, tooltip);
 }

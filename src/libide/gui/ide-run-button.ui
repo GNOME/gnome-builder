@@ -13,32 +13,16 @@
     </style>
     <child>
       <object class="GtkButton" id="button">
-        <property name="action-name">run-manager.run</property>
         <property name="focus-on-click">false</property>
         <property name="has-tooltip">true</property>
         <property name="visible">true</property>
+        <property name="action-name">run-manager.run</property>
         <style>
           <class name="image-button"/>
         </style>
         <child>
           <object class="GtkImage" id="button_image">
             <property name="icon-name">builder-run-start-symbolic</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkButton" id="stop_button">
-        <property name="action-name">run-manager.stop</property>
-        <property name="focus-on-click">false</property>
-        <property name="tooltip-text" translatable="yes">Stop running</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkImage">
-            <property name="icon-name">builder-run-stop-symbolic</property>
             <property name="visible">true</property>
           </object>
         </child>
