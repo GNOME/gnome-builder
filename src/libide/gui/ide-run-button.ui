@@ -22,7 +22,7 @@
         </style>
         <child>
           <object class="GtkImage" id="button_image">
-            <property name="icon-name">media-playback-start-symbolic</property>
+            <property name="icon-name">builder-run-start-symbolic</property>
             <property name="visible">true</property>
           </object>
         </child>
@@ -38,7 +38,7 @@
         </style>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">media-playback-stop-symbolic</property>
+            <property name="icon-name">builder-run-stop-symbolic</property>
             <property name="visible">true</property>
           </object>
         </child>

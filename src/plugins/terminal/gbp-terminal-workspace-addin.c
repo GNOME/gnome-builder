@@ -285,7 +285,7 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
       self->run_panel = g_object_new (DZL_TYPE_DOCK_WIDGET,
                                       "child", self->run_terminal,
                                       "expand", TRUE,
-                                      "icon-name", "media-playback-start-symbolic",
+                                      "icon-name", "builder-run-start-symbolic",
                                       "title", _("Application Output"),
                                       "visible", TRUE,
                                       NULL);

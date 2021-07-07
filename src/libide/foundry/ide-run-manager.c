@@ -1254,7 +1254,7 @@ ide_run_manager_init (IdeRunManager *self)
   ide_run_manager_add_handler (self,
                                "run",
                                _("Run"),
-                               "media-playback-start-symbolic",
+                               "builder-run-start-symbolic",
                                "<primary>F5",
                                NULL,
                                NULL,
