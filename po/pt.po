@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-06-30 16:28+0000\n"
-"PO-Revision-Date: 2021-07-02 21:29+0100\n"
+"POT-Creation-Date: 2021-07-06 21:01+0000\n"
+"PO-Revision-Date: 2021-07-07 14:28+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -1674,7 +1674,7 @@ msgstr ""
 "Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Tiago Santos <tiagofsantos81@sapo.pt>\n"
 "Manuela Silva <mmsrs@sky.com>\n"
-"Hugo Carvalho <hugokarvalho@hotmail.com"
+"Hugo Carvalho <hugokarvalho@hotmail.com>"
 
 #: src/libide/gui/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
@@ -4092,7 +4092,7 @@ msgstr "A indexar o código-fonte (Em pausa)"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:402
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:404
 msgid "Run with Debugger"
 msgstr "Executar com depurador"
 
@@ -5370,6 +5370,10 @@ msgstr "Compilação inicializada"
 msgid "Downloading npm dependencies"
 msgstr "A transferir dependências de npm"
 
+#: src/plugins/open-with-external/gtk/menus.ui:9
+msgid "_External Program…"
+msgstr "Programa _externo…"
+
 #: src/plugins/phpize/phpize_plugin.py:191
 msgid "Bootstrapping project"
 msgstr "Inicializando projeto"
@@ -6266,9 +6270,6 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
-
-#~ msgid "_External Program…"
-#~ msgstr "Programa _externo…"
 
 #~ msgid "true"
 #~ msgstr "verdadeiro"
