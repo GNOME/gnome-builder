@@ -274,6 +274,7 @@ create_document_row (gpointer item,
                                                       "icon-name", "window-close-symbolic",
                                                       "visible", TRUE,
                                                       NULL),
+                               "valign", GTK_ALIGN_CENTER,
                                "visible", TRUE,
                                NULL);
   g_signal_connect_object (close_button,

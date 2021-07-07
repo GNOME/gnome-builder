@@ -31,7 +31,6 @@ ideeditorsidebar list.open-pages row box > button:last-child {
   background: none;
   box-shadow: none;
   border: none;
-  outline: none;
   padding: 0;
   margin: 0 9px 0 6px;
   color: @theme_fg_color;

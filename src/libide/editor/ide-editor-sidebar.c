@@ -502,12 +502,13 @@ create_open_page_row (gpointer item,
   button = g_object_new (GTK_TYPE_BUTTON,
                         "visible", TRUE,
                         "hexpand", FALSE,
+                        "valign", GTK_ALIGN_CENTER,
                         NULL);
   g_signal_connect_object (button,
                            "clicked",
                            G_CALLBACK (ide_editor_sidebar_close_view),
                            view, 0);
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "flat");
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "image-button");
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
 
   image = g_object_new (GTK_TYPE_IMAGE,
