@@ -774,7 +774,10 @@ foreach_page_in_grid_save_cb (GtkWidget *widget,
 
   /* It's not a saveable page. */
   if (addin == NULL)
-    return;
+    {
+      s->active--;
+      return;
+    }
 
   save_page = g_slice_new0 (SavePage);
   save_page->task = g_object_ref (task);
