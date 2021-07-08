@@ -1,6 +1,6 @@
-/* gbp-devhelp-page.h
+/* gbp-devhelp-session-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2021 vanadiae <vanadiae35@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,18 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 #pragma once
 
-#include <libide-editor.h>
+#include <ide-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_DEVHELP_PAGE (gbp_devhelp_page_get_type())
+#define GBP_TYPE_DEVHELP_SESSION_ADDIN (gbp_devhelp_session_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpDevhelpPage, gbp_devhelp_page, GBP, DEVHELP_PAGE, IdePage)
-
-void gbp_devhelp_page_set_uri (GbpDevhelpPage *self,
-                               const gchar    *uri);
-const char *gbp_devhelp_page_get_uri (GbpDevhelpPage *self);
+G_DECLARE_FINAL_TYPE (GbpDevhelpSessionAddin, gbp_devhelp_session_addin, GBP, DEVHELP_SESSION_ADDIN, IdeObject)
 
 G_END_DECLS

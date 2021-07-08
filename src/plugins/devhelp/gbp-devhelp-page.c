@@ -66,6 +66,20 @@ gbp_devhelp_page_set_uri (GbpDevhelpPage *self,
   webkit_web_view_load_uri (self->web_view1, uri);
 }
 
+/**
+ * gbp_devhelp_page_get_uri:
+ * @self: a #GbpDevhelpPage
+ *
+ * Returns: (nullable): the documentation URI loaded for page @self
+ */
+const char *
+gbp_devhelp_page_get_uri (GbpDevhelpPage *self)
+{
+  g_return_val_if_fail (GBP_IS_DEVHELP_PAGE (self), NULL);
+
+  return webkit_web_view_get_uri (self->web_view1);
+}
+
 static void
 gbp_devhelp_page_notify_title (GbpDevhelpPage *self,
                                GParamSpec     *pspec,

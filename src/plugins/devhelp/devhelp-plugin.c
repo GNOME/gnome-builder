@@ -26,6 +26,7 @@
 #include "gbp-devhelp-editor-addin.h"
 #include "gbp-devhelp-hover-provider.h"
 #include "gbp-devhelp-frame-addin.h"
+#include "gbp-devhelp-session-addin.h"
 
 _IDE_EXTERN void
 _gbp_devhelp_register_types (PeasObjectModule *module)
@@ -39,4 +40,7 @@ _gbp_devhelp_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_FRAME_ADDIN,
                                               GBP_TYPE_DEVHELP_FRAME_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SESSION_ADDIN,
+                                              GBP_TYPE_DEVHELP_SESSION_ADDIN);
 }

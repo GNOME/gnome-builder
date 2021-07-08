@@ -16,6 +16,7 @@ plugins_sources += files([
   'gbp-devhelp-menu-button.c',
   'gbp-devhelp-page.c',
   'gbp-devhelp-search.c',
+  'gbp-devhelp-session-addin.c',
 ])
 
 plugin_devhelp_resources = gnome.compile_resources(
