@@ -59,7 +59,7 @@ gbp_devhelp_session_addin_save_page_async (IdeSessionAddin     *addin,
   g_variant_dict_init (&state_dict, NULL);
   g_variant_dict_insert (&state_dict, "uri", "s", page_uri ? page_uri : "");
 
-  IDE_TRACE_MSG ("Saving devhelp page URI \"%s\"", uri);
+  IDE_TRACE_MSG ("Saving devhelp page URI \"%s\"", page_uri);
 
   ide_task_return_pointer (task, g_variant_take_ref (g_variant_dict_end (&state_dict)), g_variant_unref);
 
