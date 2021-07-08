@@ -62,13 +62,6 @@
 #define IDE_MINOR_VERSION (@MINOR_VERSION@)
 
 /**
- * IDE_MICRO_VERSION:
- *
- * libide micro version component (e.g. 3 if %IDE_VERSION is 1.2.3)
- */
-#define IDE_MICRO_VERSION (@MICRO_VERSION@)
-
-/**
  * IDE_VERSION
  *
  * libide version.
@@ -93,7 +86,7 @@
  * integer comparisons.
  */
 #define IDE_VERSION_HEX \
-        (IDE_ENCODE_VERSION (IDE_MAJOR_VERSION, IDE_MINOR_VERSION, IDE_MICRO_VERSION))
+        (IDE_ENCODE_VERSION (IDE_MAJOR_VERSION, IDE_MINOR_VERSION, 0))
 
 /**
  * IDE_CHECK_VERSION:
@@ -103,11 +96,13 @@
  *
  * Compile-time version checking. Evaluates to %TRUE if the version
  * of libide is greater than the required one.
+ *
+ * Micro is no longer used.
  */
 #define IDE_CHECK_VERSION(major,minor,micro)   \
         (IDE_MAJOR_VERSION > (major) || \
          (IDE_MAJOR_VERSION == (major) && IDE_MINOR_VERSION > (minor)) || \
          (IDE_MAJOR_VERSION == (major) && IDE_MINOR_VERSION == (minor) && \
-          IDE_MICRO_VERSION >= (micro)))
+          0 >= (micro)))
 
 #endif /* IDE_VERSION_H */

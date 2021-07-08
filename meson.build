@@ -1,6 +1,6 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
-          version: '41.0.0',
+          version: '41.alpha0',
     meson_version: '>= 0.54.0',
   default_options: [ 'c_std=gnu11',
                      'cpp_std=gnu++2a',
@@ -9,14 +9,10 @@ project('gnome-builder', 'c',
                    ],
 )
 
-symbolic_release = '41.alpha'
-
 version_split = meson.project_version().split('.')
 MAJOR_VERSION = version_split[0]
-MINOR_VERSION = version_split[1]
-MICRO_VERSION = version_split[2]
 
-libide_api_version = '@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION)
+libide_api_version = '@0@.0'.format(MAJOR_VERSION)
 
 pkgdocdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'gnome-builder')
 pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
@@ -65,14 +61,20 @@ status = [
   '', '',
 ]
 
+config_h = configuration_data()
+
 # Message of doom
-if (version_split[1].to_int() % 2 == 1)
+if (version_split[1][0] == 'a' or version_split[1][0] == 'b')
+  config_h.set10('DEVELOPMENT_BUILD', 1)
+  MINOR_VERSION = 0
   status += [
-    'You are building a debug version of GNOME builder. There may be more',
+    'You are building a development version of GNOME builder. There may be more',
     'bugs in this version that you are comfortable with. Addtionally, there',
     'is a chance it will eat all of your work and leave you sad and alone.',
     '', ''
   ]
+else
+  MINOR_VERSION = version_split[1].to_int()
 endif
 
 status += [
@@ -93,8 +95,6 @@ status += [
   '', ''
 ]
 
-config_h = configuration_data()
-config_h.set_quoted('SYMBOLIC_RELEASE', symbolic_release)
 config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
 config_h.set_quoted('PACKAGE_ABI_S', libide_api_version)
 config_h.set('PACKAGE_ABI', libide_api_version)
@@ -112,9 +112,6 @@ config_h.set('GETTEXT_PACKAGE', 'PACKAGE_NAME')
 config_h.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
 
 config_h.set10('ENABLE_NLS', true) # Always enabled
-
-# Development build setup
-config_h.set('DEVELOPMENT_BUILD', version_split[1].to_int().is_odd())
 
 # We should probably avoid using these
 config_h.set_quoted('SRCDIR', meson.source_root())

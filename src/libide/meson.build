@@ -1,4 +1,4 @@
-libide_header_subdir = join_paths('gnome-builder-@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION), 'libide')
+libide_header_subdir = join_paths('gnome-builder-@0@'.format(MAJOR_VERSION), 'libide')
 libide_header_dir = join_paths(get_option('includedir'), libide_header_subdir)
 libide_include_directories = []
 

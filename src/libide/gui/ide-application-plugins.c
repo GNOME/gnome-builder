@@ -151,8 +151,7 @@ ide_application_can_load_plugin (IdeApplication *self,
           return FALSE;
         }
 
-      if (!g_str_has_prefix (IDE_VERSION_S, abi) ||
-          IDE_VERSION_S [strlen (abi)] != '.')
+      if (g_strcmp0 (PACKAGE_ABI_S, abi) != 0)
         {
           g_critical ("Refusing to load plugin %s, expected ABI %d.%d and got %s",
                       module_name, IDE_MAJOR_VERSION, IDE_MINOR_VERSION, abi);

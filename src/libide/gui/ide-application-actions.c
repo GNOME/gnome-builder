@@ -127,12 +127,10 @@ ide_application_actions_about (GSimpleAction *action,
         }
     }
 
-  version = g_string_new (SYMBOLIC_RELEASE);
+  version = g_string_new (PACKAGE_VERSION);
 
   if (!g_str_equal (IDE_BUILD_TYPE, "release"))
-    g_string_append (version, "\n(" IDE_BUILD_IDENTIFIER ")");
-  else
-    g_string_append (version, "\n(" PACKAGE_VERSION ")");
+    g_string_append (version, " (" IDE_BUILD_IDENTIFIER ")");
 
   if (g_strcmp0 (IDE_BUILD_CHANNEL, "other") != 0)
     g_string_append (version, "\n" IDE_BUILD_CHANNEL);
