@@ -313,7 +313,7 @@ migrate_pre_api_rework (GVariant *pages_variant)
   /* Migrate old format to first version of the new format. */
   g_variant_dict_insert (&version_wrapper_dict, "version", "u", (guint32) 1);
 
-  g_variant_builder_init (&addins_states, G_VARIANT_TYPE_ARRAY);
+  g_variant_builder_init (&addins_states, G_VARIANT_TYPE ("aa{sv}"));
 
   g_debug ("Handling migration of the project's session.gvariant, from prior to the Session API rework…");
 
