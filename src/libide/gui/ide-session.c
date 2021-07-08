@@ -655,6 +655,51 @@ typedef struct {
 } SavePage;
 
 static void
+save_state_to_disk (IdeSession      *self,
+                    IdeTask         *task,
+                    GVariantBuilder *pages_state)
+{
+  g_autoptr(GVariant) state = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  g_autoptr(GFile) file = NULL;
+  IdeContext *context;
+  GVariantDict final_dict;
+  /* It seems that because g_steal_pointer is an inline function it'll return "task" and set it
+   * to NULL _then_ try to get the cancellable from it when using this getter inline in the
+   * function call below. This looks like a bug from GCC/whatever, as they don't evaluate
+   * expressions in the right order…
+   */
+  GCancellable *cancellable = ide_task_get_cancellable (task);
+
+  IDE_ENTRY;
+
+  g_variant_dict_init (&final_dict, NULL);
+  g_variant_dict_insert (&final_dict, "version", "u", (guint32) 1);
+  g_variant_dict_insert_value (&final_dict, "data", g_variant_builder_end (pages_state));
+
+  state = g_variant_ref_sink (g_variant_dict_end (&final_dict));
+  g_debug ("Saving session state for all pages with %s", g_variant_print (state, TRUE));
+  bytes = g_variant_get_data_as_bytes (state);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  file = ide_context_cache_file (context, "session.gvariant", NULL);
+
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
+
+  g_file_replace_contents_bytes_async (file,
+                                       bytes,
+                                       NULL,
+                                       FALSE,
+                                       G_FILE_CREATE_NONE,
+                                       cancellable,
+                                       on_state_saved_to_cache_file_cb,
+                                       g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
 on_session_addin_page_saved_cb (GObject      *object,
                                 GAsyncResult *result,
                                 gpointer      user_data)
@@ -710,40 +755,7 @@ on_session_addin_page_saved_cb (GObject      *object,
 
   if (s->active == 0)
     {
-      g_autoptr(GVariant) state = NULL;
-      g_autoptr(GBytes) bytes = NULL;
-      g_autoptr(GFile) file = NULL;
-      IdeContext *context;
-      GVariantDict final_dict;
-      /* It seems that because g_steal_pointer is an inline function it'll return "task" and set it
-       * to NULL _then_ try to get the cancellable from it when using this getter inline in the
-       * function call below. This looks like a bug from GCC/whatever, as they don't evaluate
-       * expressions in the right order…
-       */
-      GCancellable *cancellable = ide_task_get_cancellable (task);
-
-      g_variant_dict_init (&final_dict, NULL);
-      g_variant_dict_insert (&final_dict, "version", "u", (guint32) 1);
-      g_variant_dict_insert_value (&final_dict, "data", g_variant_builder_end (&s->pages_state));
-
-      state = g_variant_ref_sink (g_variant_dict_end (&final_dict));
-      g_debug ("Saving session state for all pages with %s", g_variant_print (state, TRUE));
-      bytes = g_variant_get_data_as_bytes (state);
-
-      context = ide_object_get_context (IDE_OBJECT (self));
-      file = ide_context_cache_file (context, "session.gvariant", NULL);
-
-      if (ide_task_return_error_if_cancelled (task))
-        IDE_EXIT;
-
-      g_file_replace_contents_bytes_async (file,
-                                           bytes,
-                                           NULL,
-                                           FALSE,
-                                           G_FILE_CREATE_NONE,
-                                           cancellable,
-                                           on_state_saved_to_cache_file_cb,
-                                           g_steal_pointer (&task));
+      save_state_to_disk (self, task, &s->pages_state);
     }
 
   IDE_EXIT;
@@ -837,9 +849,13 @@ ide_session_save_async (IdeSession          *self,
 
   g_assert (s != NULL);
 
+  /* Save the empty pages state there too because it wouldn't have
+   * been done in foreach_page_in_grid_save_cb() since there's no
+   * pages to save.
+   */
   if (s->active == 0)
     {
-      ide_task_return_boolean (task, TRUE);
+      save_state_to_disk (self, task, &s->pages_state);
       IDE_EXIT;
     }
 
