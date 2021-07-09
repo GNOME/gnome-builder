@@ -633,10 +633,22 @@ get_page_position (IdePage *page,
   grid_column = gtk_widget_get_ancestor (GTK_WIDGET (frame), IDE_TYPE_GRID_COLUMN);
   grid = gtk_widget_get_ancestor (GTK_WIDGET (grid_column), IDE_TYPE_GRID);
 
-  gtk_container_child_get (GTK_CONTAINER (frame_pages_stack), GTK_WIDGET (page),
-                           "position", out_depth,
-                           NULL);
-  *out_depth = MAX (*out_depth, 0);
+  /* When this page is the currently visible one for this frame, we want to keep it on top when
+   * restoring so that there's no need to switch back to the pages we were working on. We need to
+   * do this because the stack's "position" child property only refers to the order in which the
+   * pages were initially opened, not the most-recently-used order.
+   */
+  if (ide_frame_get_visible_child (IDE_FRAME (frame)) == page)
+    {
+      *out_depth = g_list_model_get_n_items (G_LIST_MODEL (frame));
+    }
+  else
+    {
+      gtk_container_child_get (GTK_CONTAINER (frame_pages_stack), GTK_WIDGET (page),
+                               "position", out_depth,
+                               NULL);
+      *out_depth = MAX (*out_depth, 0);
+    }
 
   gtk_container_child_get (GTK_CONTAINER (grid_column), GTK_WIDGET (frame),
                            "index", out_row,
