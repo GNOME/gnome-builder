@@ -681,7 +681,7 @@ save_state_to_disk (IdeSession      *self,
   state = g_variant_ref_sink (g_variant_dict_end (&final_dict));
   bytes = g_variant_get_data_as_bytes (state);
 
-#if IDE_ENABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     g_autofree char *str = g_variant_print (state, TRUE);
     IDE_TRACE_MSG ("Saving session state to %s", str);
