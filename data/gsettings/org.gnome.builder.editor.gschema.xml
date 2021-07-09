@@ -12,12 +12,6 @@
 
   <schema id="org.gnome.builder.editor" path="/org/gnome/builder/editor/" gettext-domain="gnome-builder">
     <key name="keybindings" type="s">
-      <choices>
-        <choice value="default"/>
-        <choice value="emacs"/>
-        <choice value="vim"/>
-        <choice value="sublime"/>
-      </choices>
       <default>'default'</default>
     </key>
     <key name="restore-insert-mark" type="b">
