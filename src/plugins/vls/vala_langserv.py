@@ -154,6 +154,16 @@ class VlsService(Ide.Object):
         self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
+    @classmethod
+    def bind_client_lazy(cls, provider):
+        """
+        This helper will bind the client to the provider, but only after the
+        client has started.
+        """
+        context = provider.get_context()
+        self = VlsService.from_context(context)
+        self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
+
 class VlsDiagnosticProvider(Ide.LspDiagnosticProvider):
     def do_load(self):
         VlsService.bind_client(self)
@@ -189,6 +199,6 @@ class VlsHoverProvider(Ide.LspHoverProvider):
         self.props.priority = 100
         VlsService.bind_client(self)
 
-class VlsSearchProvider(Ide.LspSearchProvider, Ide.SearchProvider):
+class VlsSearchProvider(Ide.LspSearchProvider):
     def do_load(self, context):
-        VlsService.bind_client(self)
+        VlsService.bind_client_lazy(self)
