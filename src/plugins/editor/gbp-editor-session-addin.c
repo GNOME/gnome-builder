@@ -240,7 +240,26 @@ static gboolean
 gbp_editor_session_addin_can_save_page (IdeSessionAddin *addin,
                                         IdePage         *page)
 {
+  g_assert (GBP_IS_EDITOR_SESSION_ADDIN (addin));
+
   return IDE_IS_EDITOR_PAGE (page);
+}
+
+static char **
+gbp_editor_session_addin_get_autosave_properties (IdeSessionAddin *addin)
+{
+  GStrvBuilder *builder = NULL;
+
+  g_assert (GBP_IS_EDITOR_SESSION_ADDIN (addin));
+
+  builder = g_strv_builder_new ();
+  /* This is not an ideal property to pick, but the editor page file URI is burried
+   * in the buffer property. In GTK 4 we'll likely be able to use GtkExpression to
+   * really access the URI in the buffer.
+   */
+  g_strv_builder_add (builder, "buffer-file");
+
+  return g_strv_builder_end (builder);
 }
 
 static void
@@ -251,6 +270,7 @@ session_addin_iface_init (IdeSessionAddinInterface *iface)
   iface->restore_page_async = gbp_editor_session_addin_restore_page_async;
   iface->restore_page_finish = gbp_editor_session_addin_restore_page_finish;
   iface->can_save_page = gbp_editor_session_addin_can_save_page;
+  iface->get_autosave_properties = gbp_editor_session_addin_get_autosave_properties;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditorSessionAddin, gbp_editor_session_addin, IDE_TYPE_OBJECT,

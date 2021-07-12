@@ -38,6 +38,7 @@ enum {
   PROP_0,
   PROP_AUTO_HIDE_MAP,
   PROP_BUFFER,
+  PROP_BUFFER_FILE,
   PROP_SEARCH,
   PROP_SHOW_MAP,
   PROP_VIEW,
@@ -536,6 +537,16 @@ ide_editor_page_update_map (IdeEditorPage *self)
 }
 
 static void
+ide_editor_page_buffer_notify_file (IdeEditorPage *self,
+                                    GParamSpec    *pspec,
+                                    gpointer       user_data)
+{
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+
+}
+
+static void
 search_revealer_notify_reveal_child (IdeEditorPage *self,
                                      GParamSpec    *pspec,
                                      GtkRevealer   *revealer)
@@ -860,6 +871,9 @@ ide_editor_page_get_property (GObject    *object,
       g_value_set_object (value, ide_editor_page_get_buffer (self));
       break;
 
+    case PROP_BUFFER_FILE:
+      g_value_set_object (value, ide_buffer_get_file (self->buffer));
+      break;
     case PROP_VIEW:
       g_value_set_object (value, ide_editor_page_get_view (self));
       break;
@@ -929,6 +943,16 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  /* It's really just there to get notify:: support for the buffer's file property
+   * but through the page, for the session addin.
+   */
+  properties [PROP_BUFFER_FILE] =
+    g_param_spec_object ("buffer-file",
+                         "Buffer file",
+                         "The buffer file for the view's buffer",
+                         G_TYPE_FILE,
+                         (G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
+
   properties [PROP_SEARCH] =
     g_param_spec_object ("search",
                          "Search",
@@ -989,6 +1013,11 @@ ide_editor_page_init (IdeEditorPage *self)
   ide_page_set_menu_id (IDE_PAGE (self), "ide-editor-page-document-menu");
 
   self->destroy_cancellable = g_cancellable_new ();
+
+  g_signal_connect_swapped (self->buffer,
+                            "notify::file",
+                            G_CALLBACK (ide_editor_page_buffer_notify_file),
+                            self);
 
   /* Setup signals to monitor on the buffer. */
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
