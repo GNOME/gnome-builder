@@ -8,4 +8,8 @@
     <file>gbp-devhelp-page.ui</file>
     <file>gbp-devhelp-search.ui</file>
   </gresource>
+
+  <gresource prefix="/org/gnome/builder/icons">
+    <file compressed="true" alias="symbolic/apps/org.gnome.Devhelp-symbolic.svg">org.gnome.Devhelp-symbolic.svg</file>
+  </gresource>
 </gresources>
