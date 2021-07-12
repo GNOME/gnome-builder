@@ -60,10 +60,11 @@ gbp_devhelp_page_set_uri (GbpDevhelpPage *self,
 {
   g_return_if_fail (GBP_IS_DEVHELP_PAGE (self));
 
-  if (uri == NULL)
+  if (uri == NULL || g_strcmp0 (uri, gbp_devhelp_page_get_uri (self)) == 0)
     return;
 
   webkit_web_view_load_uri (self->web_view1, uri);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_URI]);
 }
 
 /**
@@ -150,6 +151,24 @@ gbp_devhelp_page_set_property (GObject      *object,
 }
 
 static void
+gbp_devhelp_page_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GbpDevhelpPage *self = GBP_DEVHELP_PAGE (object);
+
+  switch (prop_id)
+    {
+    case PROP_URI:
+      g_value_set_string (value, gbp_devhelp_page_get_uri (self));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_devhelp_search_reveal (GbpDevhelpPage *self)
 {
   g_assert (GBP_IS_DEVHELP_PAGE (self));
@@ -176,6 +195,7 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
   IdePageClass *view_class = IDE_PAGE_CLASS (klass);
 
   object_class->set_property = gbp_devhelp_page_set_property;
+  object_class->get_property = gbp_devhelp_page_get_property;
 
   view_class->create_split = gbp_devhelp_page_create_split;
 
@@ -184,7 +204,7 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
                          "Uri",
                          "The uri of the documentation.",
                          NULL,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   signals [SEARCH_REVEAL] =
     g_signal_new_class_handler ("search-reveal",

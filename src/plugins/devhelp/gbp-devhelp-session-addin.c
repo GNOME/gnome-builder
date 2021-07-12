@@ -127,6 +127,18 @@ gbp_devhelp_session_addin_can_save_page (IdeSessionAddin *addin,
   return GBP_IS_DEVHELP_PAGE (page);
 }
 
+static char **
+gbp_devhelp_session_addin_get_autosave_properties (IdeSessionAddin *addin)
+{
+  GStrvBuilder *builder = NULL;
+
+  g_assert (GBP_IS_DEVHELP_SESSION_ADDIN (addin));
+
+  builder = g_strv_builder_new ();
+  g_strv_builder_add (builder, "uri");
+  return g_strv_builder_end (builder);
+}
+
 static void
 session_addin_iface_init (IdeSessionAddinInterface *iface)
 {
@@ -135,6 +147,7 @@ session_addin_iface_init (IdeSessionAddinInterface *iface)
   iface->restore_page_async = gbp_devhelp_session_addin_restore_page_async;
   iface->restore_page_finish = gbp_devhelp_session_addin_restore_page_finish;
   iface->can_save_page = gbp_devhelp_session_addin_can_save_page;
+  iface->get_autosave_properties = gbp_devhelp_session_addin_get_autosave_properties;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpDevhelpSessionAddin, gbp_devhelp_session_addin, IDE_TYPE_OBJECT,
