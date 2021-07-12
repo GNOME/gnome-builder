@@ -59,7 +59,6 @@ rust_analyzer_search_provider_load (IdeSearchProvider *self,
 
   service = rust_analyzer_service_from_context (context);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
-  rust_analyzer_service_ensure_started (service);
 
   IDE_EXIT;
 }
