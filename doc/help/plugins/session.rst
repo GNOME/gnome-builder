@@ -17,6 +17,9 @@ The `Ide.SessionAddin` allows for saving and restoring state of an `Ide.Page` wh
 
    class MySessionAddin(Ide.Object, Ide.SessionAddin):
 
+       def get_autosave_properties(self):
+           return ['uri', 'current-directory']
+
        def can_save_page(self, page):
            return issubclass(page, My.CustomPage)
 

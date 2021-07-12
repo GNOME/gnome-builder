@@ -35,7 +35,7 @@
 struct _IdeSession
 {
   IdeObject               parent_instance;
-  IdeExtensionSetAdapter *addins;
+  GPtrArray              *addins;
 };
 
 typedef struct
@@ -43,6 +43,7 @@ typedef struct
   GPtrArray      *addins;
   GVariantBuilder pages_state;
   guint           active;
+  IdeGrid        *grid;
 } Save;
 
 typedef struct
@@ -72,7 +73,6 @@ restore_free (Restore *r)
   g_assert (r != NULL);
   g_assert (r->active == 0);
 
-  g_clear_pointer (&r->addins, g_ptr_array_unref);
   g_clear_pointer (&r->state, g_variant_unref);
   g_clear_pointer (&r->pages, g_array_unref);
 
@@ -84,8 +84,6 @@ save_free (Save *s)
 {
   g_assert (s != NULL);
   g_assert (s->active == 0);
-
-  g_clear_pointer (&s->addins, g_ptr_array_unref);
 
   g_slice_free (Save, s);
 }
@@ -132,6 +130,152 @@ collect_addins_cb (IdeExtensionSetAdapter *set,
   g_ptr_array_add (ar, g_object_ref (exten));
 }
 
+static IdeSessionAddin *
+find_suitable_addin_for_page (IdePage   *page,
+                              GPtrArray *addins)
+{
+  for (guint i = 0; i < addins->len; i++)
+    {
+      IdeSessionAddin *addin = g_ptr_array_index (addins, i);
+      if (ide_session_addin_can_save_page (addin, page))
+        return addin;
+    }
+  return NULL;
+}
+
+static void
+on_session_autosaved_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  IdeSession *session = (IdeSession *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_session_save_finish (session, result, &error))
+    g_warning ("Couldn't autosave session: %s", error->message);
+}
+
+typedef struct {
+  IdeSession *session;
+  IdeGrid    *grid;
+  guint       session_autosave_source;
+} AutosaveGrid;
+
+static void
+autosave_grid_free (gpointer data,
+                    GClosure *closure)
+{
+  AutosaveGrid *self = (AutosaveGrid *)data;
+
+  if (self->session_autosave_source)
+    {
+      g_source_remove (self->session_autosave_source);
+      self->session_autosave_source = 0;
+    }
+  g_slice_free (AutosaveGrid, self);
+}
+
+static gboolean
+on_session_autosave_timeout_cb (gpointer user_data)
+{
+  AutosaveGrid *autosave_grid = (AutosaveGrid *)user_data;
+
+  g_assert (IDE_IS_SESSION (autosave_grid->session));
+  g_assert (IDE_IS_GRID (autosave_grid->grid));
+
+  ide_session_save_async (autosave_grid->session,
+                          autosave_grid->grid,
+                          NULL,
+                          on_session_autosaved_cb,
+                          NULL);
+
+  autosave_grid->session_autosave_source = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+schedule_session_autosave_timeout (AutosaveGrid *autosave_grid)
+{
+  if (!autosave_grid->session_autosave_source)
+    {
+      /* We don't want to be saving the state on each (small) change, so introduce a small
+       * timeout so changes are grouped when saving.
+       */
+      autosave_grid->session_autosave_source =
+        g_timeout_add_seconds (30,
+                               on_session_autosave_timeout_cb,
+                               autosave_grid);
+    }
+}
+
+static void
+on_autosave_property_changed_cb (GObject    *gobject,
+                                 GParamSpec *pspec,
+                                 gpointer    user_data)
+{
+  schedule_session_autosave_timeout ((AutosaveGrid *)user_data);
+}
+
+static void
+watch_pages_session_autosave (AutosaveGrid *autosave_grid,
+                              guint         start_pos,
+                              guint         end_pos)
+{
+  GListModel *list = (GListModel *)autosave_grid->grid;
+  IdeSession *session = (IdeSession *)autosave_grid->session;
+
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (G_IS_LIST_MODEL (list));
+  g_assert (g_type_is_a (g_list_model_get_item_type (list), IDE_TYPE_PAGE));
+  g_assert (start_pos <= end_pos);
+
+  for (guint i = start_pos; i < end_pos; i++)
+    {
+      IdePage *page = IDE_PAGE (g_list_model_get_object (list, i));
+      IdeSessionAddin *addin;
+      g_auto(GStrv) props = NULL;
+
+      if ((addin = find_suitable_addin_for_page (page, session->addins)) &&
+          (props = ide_session_addin_get_autosave_properties (addin)))
+        {
+          for (guint j = 0; props[j] != NULL; j++)
+            {
+              char detailed_signal[256];
+              g_snprintf (detailed_signal, sizeof detailed_signal, "notify::%s", props[j]);
+
+              g_signal_connect (page, detailed_signal, G_CALLBACK (on_autosave_property_changed_cb), autosave_grid);
+            }
+        }
+    }
+}
+
+static void
+on_grid_items_changed_cb (GListModel *list,
+                          guint       position,
+                          guint       removed,
+                          guint       added,
+                          gpointer    user_data)
+{
+  AutosaveGrid *autosave_grid = (AutosaveGrid *)user_data;
+
+  g_assert (G_IS_LIST_MODEL (list));
+  g_assert (g_type_is_a (g_list_model_get_item_type (list), IDE_TYPE_PAGE));
+
+  /* We've nothing to do when no page were added here as signals are
+   * automatically disconnected, so avoid extra work by stopping here early.
+   */
+  if (added > 0)
+    watch_pages_session_autosave (autosave_grid, position, position + added);
+
+  /* Handles autosaving both when closing/opening a page and when moving a page in the grid. */
+  schedule_session_autosave_timeout (autosave_grid);
+}
+
 static void
 ide_session_destroy (IdeObject *object)
 {
@@ -142,7 +286,7 @@ ide_session_destroy (IdeObject *object)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SESSION (self));
 
-  ide_clear_and_destroy_object (&self->addins);
+  g_clear_pointer (&self->addins, g_ptr_array_unref);
 
   IDE_OBJECT_CLASS (ide_session_parent_class)->destroy (object);
 
@@ -154,6 +298,7 @@ ide_session_parent_set (IdeObject *object,
                         IdeObject *parent)
 {
   IdeSession *self = (IdeSession *)object;
+  g_autoptr(IdeExtensionSetAdapter) extension_set = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SESSION (self));
@@ -162,10 +307,13 @@ ide_session_parent_set (IdeObject *object,
   if (parent == NULL)
     return;
 
-  self->addins = ide_extension_set_adapter_new (IDE_OBJECT (self),
-                                                peas_engine_get_default (),
-                                                IDE_TYPE_SESSION_ADDIN,
-                                                NULL, NULL);
+  extension_set = ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                                 peas_engine_get_default (),
+                                                 IDE_TYPE_SESSION_ADDIN,
+                                                 NULL, NULL);
+
+  self->addins = g_ptr_array_new_with_free_func (g_object_unref);
+  ide_extension_set_adapter_foreach (extension_set, collect_addins_cb, self->addins);
 }
 
 static void
@@ -549,8 +697,7 @@ ide_session_restore_async (IdeSession          *self,
   ide_task_set_source_tag (task, ide_session_restore_async);
 
   r = g_slice_new0 (Restore);
-  r->addins = g_ptr_array_new_with_free_func (g_object_unref);
-  ide_extension_set_adapter_foreach (self->addins, collect_addins_cb, r->addins);
+  r->addins = self->addins;
   r->grid = grid;
   ide_task_set_task_data (task, r, restore_free);
 
@@ -578,11 +725,32 @@ ide_session_restore_finish (IdeSession    *self,
                             GError       **error)
 {
   gboolean ret;
+  Restore *r;
+  GListModel *list;
+  AutosaveGrid *autosave_grid;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_SESSION (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  r = ide_task_get_task_data (IDE_TASK (result));
+  g_assert (r != NULL);
+  list = G_LIST_MODEL (r->grid);
+
+  autosave_grid = g_slice_new0 (AutosaveGrid);
+  autosave_grid->grid = r->grid;
+  autosave_grid->session = self;
+  autosave_grid->session_autosave_source = 0;
+
+  watch_pages_session_autosave (autosave_grid,
+                                0, g_list_model_get_n_items (list));
+  g_signal_connect_data (list,
+                         "items-changed",
+                         G_CALLBACK (on_grid_items_changed_cb),
+                         autosave_grid,
+                         autosave_grid_free,
+                         0);
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
@@ -776,19 +944,6 @@ on_session_addin_page_saved_cb (GObject      *object,
   IDE_EXIT;
 }
 
-static IdeSessionAddin *
-find_suitable_addin_for_page (IdePage   *page,
-                              GPtrArray *addins)
-{
-  for (guint i = 0; i < addins->len; i++)
-    {
-      IdeSessionAddin *addin = g_ptr_array_index (addins, i);
-      if (ide_session_addin_can_save_page (addin, page))
-        return addin;
-    }
-  return NULL;
-}
-
 static void
 foreach_page_in_grid_save_cb (GtkWidget *widget,
                               gpointer   user_data)
@@ -859,14 +1014,14 @@ ide_session_save_async (IdeSession          *self,
   ide_task_set_source_tag (task, ide_session_save_async);
 
   s = g_slice_new0 (Save);
-  s->addins = g_ptr_array_new_with_free_func (g_object_unref);
-  ide_extension_set_adapter_foreach (self->addins, collect_addins_cb, s->addins);
-  s->active = ide_grid_count_pages (grid);
+  s->addins = self->addins;
+  s->grid = grid;
+  s->active = ide_grid_count_pages (s->grid);
 
   g_variant_builder_init (&s->pages_state, G_VARIANT_TYPE ("aa{sv}"));
   ide_task_set_task_data (task, s, save_free);
 
-  ide_grid_foreach_page (grid,
+  ide_grid_foreach_page (s->grid,
                          foreach_page_in_grid_save_cb,
                          task);
 

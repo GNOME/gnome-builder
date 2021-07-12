@@ -77,6 +77,12 @@ ide_session_addin_real_can_save_page (IdeSessionAddin *self,
   return FALSE;
 }
 
+static char **
+ide_session_addin_real_get_autosave_properties (IdeSessionAddin *self)
+{
+  return NULL;
+}
+
 static void
 ide_session_addin_default_init (IdeSessionAddinInterface *iface)
 {
@@ -85,6 +91,7 @@ ide_session_addin_default_init (IdeSessionAddinInterface *iface)
   iface->restore_page_async = ide_session_addin_real_restore_page_async;
   iface->restore_page_finish = ide_session_addin_real_restore_page_finish;
   iface->can_save_page = ide_session_addin_real_can_save_page;
+  iface->get_autosave_properties = ide_session_addin_real_get_autosave_properties;
 }
 
 /**
@@ -205,6 +212,8 @@ ide_session_addin_restore_page_finish (IdeSessionAddin  *self,
  *
  * Checks whether @self supports saving @page. This is typically done by checking for
  * its GObject type using `FOO_IS_BAR_PAGE ()` for page types defined in the plugin.
+ * In practice it means that this @self addin supports all the different vfuncs for
+ * this @page.
  *
  * Returns: whether @self supports saving @page.
  *
@@ -218,4 +227,30 @@ ide_session_addin_can_save_page (IdeSessionAddin *self,
   g_return_val_if_fail (IDE_IS_PAGE (page), FALSE);
 
   return IDE_SESSION_ADDIN_GET_IFACE (self)->can_save_page (self, page);
+}
+
+/**
+ * ide_session_addin_get_autosave_properties:
+ * @self: an #IdeSessionAddin
+ *
+ * For the pages supported by its ide_session_addin_can_save_page() function, gets
+ * a list of properties names that should be watched for changes on this page using
+ * the GObject notify mechanism. So given an array with "foo" and "bar", the #IdeSession
+ * will connect to the "notify::foo" and "notify::bar" signals and schedule a saving
+ * operation for some minutes later, so saving operations are grouped together.
+ *
+ * A possible autosave property could be the #IdePage's "title" property, in case
+ * your state is always reflected there. But in general, it's better to use your
+ * own custom page properties as it will be more reliable.
+ *
+ * Returns: (array zero-terminated=1) (element-type utf8) (nullable) (transfer-full): A %NULL terminated array of properties names, or %NULL.
+ *
+ * Since: 41.0
+ */
+char **
+ide_session_addin_get_autosave_properties (IdeSessionAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_SESSION_ADDIN (self), NULL);
+
+  return IDE_SESSION_ADDIN_GET_IFACE (self)->get_autosave_properties (self);
 }

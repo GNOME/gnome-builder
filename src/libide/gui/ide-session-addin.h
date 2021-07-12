@@ -56,30 +56,33 @@ struct _IdeSessionAddinInterface
                                     GError              **error);
   gboolean  (*can_save_page)       (IdeSessionAddin      *self,
                                     IdePage              *page);
+  char    **(*get_autosave_properties) (IdeSessionAddin *self);
 };
 
 IDE_AVAILABLE_IN_41
-void      ide_session_addin_save_page_async      (IdeSessionAddin      *self,
-                                                  IdePage              *page,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
+void       ide_session_addin_save_page_async         (IdeSessionAddin      *self,
+                                                      IdePage              *page,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
 IDE_AVAILABLE_IN_41
-GVariant *ide_session_addin_save_page_finish     (IdeSessionAddin      *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
+GVariant  *ide_session_addin_save_page_finish        (IdeSessionAddin      *self,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
 IDE_AVAILABLE_IN_41
-void      ide_session_addin_restore_page_async   (IdeSessionAddin      *self,
-                                                  GVariant             *state,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
+void       ide_session_addin_restore_page_async      (IdeSessionAddin      *self,
+                                                      GVariant             *state,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
 IDE_AVAILABLE_IN_41
-IdePage  *ide_session_addin_restore_page_finish  (IdeSessionAddin      *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
+IdePage   *ide_session_addin_restore_page_finish     (IdeSessionAddin      *self,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
 IDE_AVAILABLE_IN_41
-gboolean  ide_session_addin_can_save_page (IdeSessionAddin *self,
-                                           IdePage         *page);
+gboolean   ide_session_addin_can_save_page           (IdeSessionAddin      *self,
+                                                      IdePage              *page);
+IDE_AVAILABLE_IN_41
+char     **ide_session_addin_get_autosave_properties (IdeSessionAddin      *self);
 
 G_END_DECLS
