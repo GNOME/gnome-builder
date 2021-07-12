@@ -168,14 +168,8 @@ ide_editor_surface_session_restored_cb (GObject      *object,
 static void
 ide_editor_surface_restore_session_state (IdeEditorSurface *self)
 {
-  g_autoptr(GSettings) settings = NULL;
-
   if (!is_primary_workspace (self))
     return;
-
-  settings = g_settings_new ("org.gnome.builder");
-  if (!g_settings_get_boolean (settings, "restore-previous-files"))
-      return;
 
   _ide_editor_surface_set_loading (self, TRUE);
 
