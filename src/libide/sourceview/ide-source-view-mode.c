@@ -39,6 +39,7 @@ struct _IdeSourceViewMode
   char                  *display_name;
   gchar                 *default_mode;
   IdeSourceViewModeType  type;
+  guint                  has_selection : 1;
 };
 
 G_DEFINE_TYPE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
@@ -50,6 +51,21 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
+
+static void
+update_selection (IdeSourceViewMode *self)
+{
+  GtkStyleContext *style_context;
+
+  g_assert (IDE_IS_SOURCE_VIEW_MODE (self));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  if (self->has_selection)
+    gtk_style_context_add_class (style_context, "has-selection");
+  else
+    gtk_style_context_remove_class (style_context, "has-selection");
+}
 
 static void
 get_param (IdeSourceViewMode *self,
@@ -496,6 +512,9 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
   gtk_style_context_restore (context);
   g_object_unref (context);
 
+  /* possibly re-apply has_selection */
+  update_selection (mode);
+
   *remove = FALSE;
   switch (mode->type)
     {
@@ -603,14 +622,9 @@ void
 ide_source_view_mode_set_has_selection (IdeSourceViewMode *self,
                                         gboolean           has_selection)
 {
-  GtkStyleContext *style_context;
-
   g_assert (IDE_IS_SOURCE_VIEW_MODE (self));
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  self->has_selection = !!has_selection;
 
-  if (has_selection)
-    gtk_style_context_add_class (style_context, "has-selection");
-  else
-    gtk_style_context_remove_class (style_context, "has-selection");
+  update_selection (self);
 }
