@@ -3,28 +3,23 @@
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <template class="IdeEditorSearchBar" parent="DzlBin">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <property name="spacing">7</property>
             <child>
               <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="row_spacing">8</property>
                 <property name="column_spacing">8</property>
                 <child>
                   <object class="IdeTaggedEntry" id="search_entry">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="primary_icon_name">edit-find-symbolic</property>
                     <property name="primary_icon_activatable">False</property>
@@ -37,7 +32,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="search_text_error">
-                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <attributes>
                       <attribute name="scale" value="0.83330000000000004"/>
@@ -54,7 +48,6 @@
                 </child>
                 <child>
                   <object class="GtkSearchEntry" id="replace_entry">
-                    <property name="can_focus">True</property>
                     <property name="width_chars">20</property>
                     <property name="max_width_chars">30</property>
                     <property name="primary_icon_name">edit-find-replace-symbolic</property>
@@ -69,19 +62,16 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
                         <property name="action_name">editor-search.move-previous</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="icon_name">go-up-symbolic</property>
                             <property name="icon_size">1</property>
                           </object>
@@ -96,13 +86,11 @@
                     <child>
                       <object class="GtkButton">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
                         <property name="action_name">editor-search.move-next</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="icon_name">go-down-symbolic</property>
                             <property name="icon_size">1</property>
                           </object>
@@ -126,7 +114,6 @@
                 <child>
                   <object class="GtkButton" id="replace_button">
                     <property name="label" translatable="yes">Replace</property>
-                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="action_name">editor-search.replace</property>
                   </object>
@@ -138,7 +125,6 @@
                 <child>
                   <object class="GtkButton" id="replace_all_button">
                     <property name="label" translatable="yes">Replace All</property>
-                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="action_name">editor-search.replace-all</property>
                   </object>
@@ -150,14 +136,12 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <property name="spacing">8</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkToggleButton">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">Switch between Search and Search-and-Replace</property>
                         <property name="image_position">right</property>
@@ -165,7 +149,6 @@
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="icon_name">edit-find-replace-symbolic</property>
                           </object>
                         </child>
@@ -179,7 +162,6 @@
                     <child>
                       <object class="GtkToggleButton" id="show_options">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">Show or hide search options such as case sensitivity</property>
@@ -187,7 +169,6 @@
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="icon_name">emblem-system-symbolic</property>
                           </object>
                         </child>
@@ -213,13 +194,11 @@
             </child>
             <child>
               <object class="GtkGrid" id="search_options">
-                <property name="can_focus">False</property>
                 <property name="column_spacing">8</property>
                 <child>
                   <object class="GtkCheckButton" id="use_regex">
                     <property name="label" translatable="yes">Regular expressions</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="focus_on_click">False</property>
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
@@ -234,7 +213,6 @@
                   <object class="GtkCheckButton" id="case_sensitive">
                     <property name="label" translatable="yes">Case sensitive</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -248,7 +226,6 @@
                   <object class="GtkCheckButton" id="whole_word">
                     <property name="label" translatable="yes">Match whole word only</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -275,7 +252,6 @@
         <child>
           <object class="GtkButton" id="close_button">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">start</property>
             <property name="hexpand">False</property>
@@ -283,7 +259,6 @@
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="icon_name">window-close-symbolic</property>
               </object>
             </child>
