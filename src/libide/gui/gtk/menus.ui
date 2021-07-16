@@ -55,12 +55,6 @@
     <section id="new-document-section">
     </section>
     <section id="open-document-section">
-      <item>
-        <attribute name="id">open-file</attribute>
-        <attribute name="label" translatable="yes">Open File…</attribute>
-        <attribute name="action">workbench.open</attribute>
-        <attribute name="accel">&lt;primary&gt;o</attribute>
-      </item>
     </section>
   </menu>
   <menu id="run-menu">
