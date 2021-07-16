@@ -99,7 +99,7 @@
       <attribute name="id">new-document-section</attribute>
       <item>
         <attribute name="id">new-file</attribute>
-        <attribute name="label" translatable="yes">New File</attribute>
+        <attribute name="label" translatable="yes">New _File</attribute>
         <attribute name="action">editor.new-file</attribute>
         <attribute name="accel">&lt;primary&gt;n</attribute>
       </item>
@@ -108,7 +108,7 @@
       <attribute name="id">open-document-section</attribute>
       <item>
         <attribute name="id">open-file</attribute>
-        <attribute name="label" translatable="yes">Open File…</attribute>
+        <attribute name="label" translatable="yes">_Open File…</attribute>
         <attribute name="action">workbench.open</attribute>
         <attribute name="accel">&lt;primary&gt;o</attribute>
       </item>
