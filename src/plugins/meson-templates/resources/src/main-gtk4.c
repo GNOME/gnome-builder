@@ -1,5 +1,7 @@
 {{include "license.c"}}
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "{{prefix}}-config.h"
