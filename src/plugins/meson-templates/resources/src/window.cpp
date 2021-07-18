@@ -26,10 +26,10 @@ std::unique_ptr<{{Prefix}}Window> {{Prefix}}Window::create()
 	// Get ApplicationWindow that is specified in the UI file but
 	// implemented in our code. So our ApplicationWindow is derived.
 	{{Prefix}}Window* window = nullptr;
-	builder->get_widget_derived("appwindow", window);
+	builder->get_widget_derived("window", window);
 
 	if (!window)
-		throw std::runtime_error("No \"appwindow\" object {{ui_file}}");
+		throw std::runtime_error("No \"window\" object {{ui_file}}");
 
 	return std::unique_ptr<{{Prefix}}Window>(window);
 }
