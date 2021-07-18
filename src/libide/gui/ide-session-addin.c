@@ -243,7 +243,8 @@ ide_session_addin_can_save_page (IdeSessionAddin *self,
  * your state is always reflected there. But in general, it's better to use your
  * own custom page properties as it will be more reliable.
  *
- * Returns: (array zero-terminated=1) (element-type utf8) (nullable) (transfer-full): A %NULL terminated array of properties names, or %NULL.
+ * Returns: (array zero-terminated=1) (element-type utf8) (nullable) (transfer full):
+ *   A %NULL terminated array of properties names, or %NULL.
  *
  * Since: 41.0
  */
