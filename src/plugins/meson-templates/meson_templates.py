@@ -147,7 +147,8 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('spaces').assign_string(" " * len(prefix_))
         scope.get('Spaces').assign_string(" " * len(PreFix))
 
-        enable_gnome = isinstance(self, GnomeProjectTemplate)
+        enable_gnome = (isinstance(self, GnomeProjectTemplate) or
+                        isinstance(self, GnomeGTK4ProjectTemplate))
         scope.get('project_version').assign_string('0.1.0')
         scope.get('enable_i18n').assign_boolean(enable_gnome)
         scope.get('enable_gnome').assign_boolean(enable_gnome)
