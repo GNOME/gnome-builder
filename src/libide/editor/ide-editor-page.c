@@ -1014,11 +1014,6 @@ ide_editor_page_init (IdeEditorPage *self)
 
   self->destroy_cancellable = g_cancellable_new ();
 
-  g_signal_connect_swapped (self->buffer,
-                            "notify::file",
-                            G_CALLBACK (ide_editor_page_buffer_notify_file),
-                            self);
-
   /* Setup signals to monitor on the buffer. */
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
@@ -1030,6 +1025,11 @@ ide_editor_page_init (IdeEditorPage *self)
   dzl_signal_group_connect_swapped (self->buffer_signals,
                                     "modified-changed",
                                     G_CALLBACK (ide_editor_page_buffer_modified_changed),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "notify::file",
+                                    G_CALLBACK (ide_editor_page_buffer_notify_file),
                                     self);
 
   dzl_signal_group_connect_swapped (self->buffer_signals,
