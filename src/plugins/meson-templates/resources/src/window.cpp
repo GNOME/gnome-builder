@@ -18,7 +18,7 @@
 	m_pLabel->set_angle(30);
 }
 
-{{Prefix}}Window* {{Prefix}}Window::create()
+std::unique_ptr<{{Prefix}}Window> {{Prefix}}Window::create()
 {
 	// Parse a resource file containing a GtkBuilder UI definition.
 	auto builder = Gtk::Builder::create_from_resource("{{appid_path}}/{{ui_file}}");
@@ -29,7 +29,7 @@
 	builder->get_widget_derived("appwindow", window);
 
 	if (!window)
-			throw std::runtime_error("No \"appwindow\" object {{ui_file}}");
+		throw std::runtime_error("No \"appwindow\" object {{ui_file}}");
 
-	return window;
+	return std::unique_ptr<{{Prefix}}Window>(window);
 }

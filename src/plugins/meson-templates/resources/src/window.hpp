@@ -14,9 +14,9 @@ public:
 	// constructor of the class should look like this. You can read
 	// more about it in the reference.
 	{{Prefix}}Window(BaseObjectType* cobject,
-			const Glib::RefPtr<Gtk::Builder>& refBuilder);
+			 const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
-	static {{Prefix}}Window* create();
+	static std::unique_ptr<{{Prefix}}Window> create();
 private:
 	Glib::RefPtr<Gtk::Builder> m_refBuilder;
 	Gtk::Label* m_pLabel;
