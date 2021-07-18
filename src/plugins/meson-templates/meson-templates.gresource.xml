@@ -2,6 +2,8 @@
 <gresources>
   <gresource prefix="/plugins/meson_templates">
     <file compressed="true">resources/src/window.ui</file>
+    <file compressed="true">resources/src/window-gtk4.ui</file>
+    <file compressed="true">resources/src/help-overlay.ui</file>
     <file compressed="true">resources/src/window.js.tmpl</file>
     <file compressed="true">resources/src/meson-py.build</file>
     <file compressed="true">resources/src/window.h</file>
@@ -13,11 +15,14 @@
     <file compressed="true">resources/src/meson-rs.build</file>
     <file compressed="true">resources/src/hello.c</file>
     <file compressed="true">resources/src/hello.h</file>
+    <file compressed="true">resources/src/application.c</file>
+    <file compressed="true">resources/src/application.h</file>
     <file compressed="true">resources/src/__init__.py</file>
     <file compressed="true">resources/src/meson-c-vala.build</file>
     <file compressed="true">resources/src/meson-empty.build</file>
     <file compressed="true">resources/src/main.js.tmpl</file>
     <file compressed="true">resources/src/main.c</file>
+    <file compressed="true">resources/src/main-gtk4.c</file>
     <file compressed="true">resources/src/main-cli.c</file>
     <file compressed="true">resources/src/main.cpp</file>
     <file compressed="true">resources/src/main-cli.cpp</file>

@@ -2,5 +2,8 @@
 <gresources>
   <gresource prefix="{{appid_path}}">
     <file>{{ui_file}}</file>
+{{if template == "gnome-app-gtk4"}}
+    <file>gtk/help-overlay.ui</file>
+{{end}}
   </gresource>
 </gresources>
