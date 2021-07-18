@@ -130,6 +130,10 @@ validate_name (const gchar *name)
   if (g_unichar_isdigit (g_utf8_get_char (name)))
     return FALSE;
 
+  // meson reserved this as keyword and therefore its not allowed as project name
+  if (ide_str_equal0 (name, "test"))
+    return FALSE;
+
   for (; *name; name = g_utf8_next_char (name))
     {
       gunichar ch = g_utf8_get_char (name);
