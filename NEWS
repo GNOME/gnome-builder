@@ -1,3 +1,16 @@
+=================
+Version 41.alpha1
+=================
+
+ • New and improved templates
+ • Toolbox improvements from Flatpak
+ • A new gnome-builder-flatpak helper, removing libflatpak from
+   the gnome-builder UI process.
+ • Improvements to gnome-builder-git to use default branch name.
+ • Improved session management
+ • A11y improvements
+ • Translation updates
+
 ==============
 Version 3.40.0
 ==============
