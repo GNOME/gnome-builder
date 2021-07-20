@@ -304,7 +304,8 @@
                             <property name="halign">end</property>
                             <child>
                               <object class="GtkButton" id="clone_button">
-                                <property name="label" translatable="yes">Clone Project</property>
+                                <property name="label" translatable="yes">Clone _Project</property>
+                                <property name="use-underline">True</property>
                                 <property name="visible">true</property>
                                 <property name="can-default">True</property>
                                 <signal name="clicked" handler="ide_clone_surface_clone" object="IdeCloneSurface" swapped="true"/>
@@ -315,7 +316,8 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="cancel_button">
-                                <property name="label" translatable="yes">Cancel</property>
+                                <property name="label" translatable="yes">_Cancel</property>
+                                <property name="use-underline">True</property>
                                 <property name="visible">true</property>
                                 <style>
                                   <class name="destructive-action"/>

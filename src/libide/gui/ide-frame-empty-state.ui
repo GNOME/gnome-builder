@@ -85,14 +85,16 @@
             <child>
               <object class="GtkButton">
                 <property name="action-name">editor.open-file</property>
-                <property name="label" translatable="yes">Open File…</property>
+                <property name="label" translatable="yes">_Open File…</property>
+                <property name="use-underline">True</property>
                 <property name="visible">true</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="action-name">win.new-terminal</property>
-                <property name="label" translatable="yes">New Terminal</property>
+                <property name="label" translatable="yes">_New Terminal</property>
+                <property name="use-underline">True</property>
                 <property name="visible">true</property>
               </object>
             </child>

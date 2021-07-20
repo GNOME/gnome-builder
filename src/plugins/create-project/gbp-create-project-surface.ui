@@ -325,7 +325,8 @@
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkButton" id="create_button">
-                        <property name="label" translatable="yes">Create Project</property>
+                        <property name="label" translatable="yes">_Create Project</property>
+                        <property name="use-underline">True</property>
                         <property name="halign">end</property>
                         <property name="visible">true</property>
                         <style>
