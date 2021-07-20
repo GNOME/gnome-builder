@@ -14,6 +14,7 @@
         <child>
           <object class="GtkCheckButton" id="check_button">
             <property name="margin-end">6</property>
+            <property name="valign">center</property>
           </object>
         </child>
         <child>
