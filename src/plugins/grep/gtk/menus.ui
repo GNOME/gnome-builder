@@ -3,6 +3,7 @@
   <menu id="project-tree-menu">
     <section id="project-tree-menu-placeholder2">
       <item>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">_Find in Files</attribute>
         <attribute name="action">grep.find-in-files</attribute>
       </item>
