@@ -101,7 +101,7 @@ gbp_deviced_device_connect_cb (GObject      *object,
   g_list_free (list);
 }
 
-static void
+void
 gbp_deviced_device_get_client_async (GbpDevicedDevice    *self,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
@@ -133,7 +133,7 @@ gbp_deviced_device_get_client_async (GbpDevicedDevice    *self,
     }
 }
 
-static DevdClient *
+DevdClient *
 gbp_deviced_device_get_client_finish (GbpDevicedDevice  *self,
                                       GAsyncResult      *result,
                                       GError           **error)
@@ -313,6 +313,7 @@ gbp_deviced_device_class_init (GbpDevicedDeviceClass *klass)
 static void
 gbp_deviced_device_init (GbpDevicedDevice *self)
 {
+  g_queue_init (&self->connecting);
 }
 
 GbpDevicedDevice *
@@ -653,3 +654,4 @@ gbp_deviced_device_install_bundle_finish (GbpDevicedDevice  *self,
 
   IDE_RETURN (ret);
 }
+

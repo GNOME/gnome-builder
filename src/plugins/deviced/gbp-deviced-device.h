@@ -49,5 +49,12 @@ void              gbp_deviced_device_install_bundle_async  (GbpDevicedDevice    
 gboolean          gbp_deviced_device_install_bundle_finish (GbpDevicedDevice       *self,
                                                             GAsyncResult           *result,
                                                             GError                **error);
+void              gbp_deviced_device_get_client_async      (GbpDevicedDevice        *self,
+                                                            GCancellable            *cancellable,
+                                                            GAsyncReadyCallback     callback,
+                                                            gpointer                user_data);
+DevdClient       *gbp_deviced_device_get_client_finish     (GbpDevicedDevice       *self,
+                                                            GAsyncResult           *result,
+                                                            GError                **error);
 
 G_END_DECLS

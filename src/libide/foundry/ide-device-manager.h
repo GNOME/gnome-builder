@@ -57,5 +57,15 @@ IDE_AVAILABLE_IN_3_32
 gboolean          ide_device_manager_deploy_finish    (IdeDeviceManager     *self,
                                                        GAsyncResult         *result,
                                                        GError              **error);
+IDE_AVAILABLE_IN_41
+void              ide_device_manager_create_runner_async  (IdeDeviceManager    *self,
+                                                           IdePipeline         *pipeline,
+                                                           GCancellable        *cancellable,
+                                                           GAsyncReadyCallback  callback,
+                                                           gpointer             user_data);
+IDE_AVAILABLE_IN_41
+IdeRunner        *ide_device_manager_create_runner_finish (IdeDeviceManager  *self,
+                                                           GAsyncResult      *result,
+                                                           GError           **error);
 
 G_END_DECLS

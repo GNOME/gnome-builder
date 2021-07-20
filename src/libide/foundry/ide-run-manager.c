@@ -36,6 +36,7 @@
 #include "ide-build-target.h"
 #include "ide-config-manager.h"
 #include "ide-config.h"
+#include "ide-device-manager.h"
 #include "ide-foundry-compat.h"
 #include "ide-run-manager-private.h"
 #include "ide-run-manager.h"
@@ -466,9 +467,14 @@ copy_builtin_envvars (IdeEnvironment *environment)
 }
 
 static void
-do_run_async (IdeRunManager *self,
-              IdeTask       *task)
+create_runner_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
 {
+  IdeRunManager *self;
+  IdeDeviceManager *device_manager = (IDE_DEVICE_MANAGER (object));
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *name = NULL;
   g_autofree gchar *title = NULL;
   IdeBuildTarget *build_target;
@@ -483,8 +489,20 @@ do_run_async (IdeRunManager *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  runner = ide_device_manager_create_runner_finish (device_manager, result, &error);
+
+  if (error != NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
 
   build_target = ide_task_get_task_data (task);
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -496,18 +514,22 @@ do_run_async (IdeRunManager *self,
   config = ide_config_manager_get_current (config_manager);
   runtime = ide_config_get_runtime (config);
 
-  if (runtime == NULL)
+  if (runner == NULL)
     {
-      ide_task_return_new_error (task,
-                                 IDE_RUNTIME_ERROR,
-                                 IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
-                                 "%s “%s”",
-                                 _("Failed to locate runtime"),
-                                 ide_config_get_runtime_id (config));
-      IDE_EXIT;
+      if (runtime == NULL)
+        {
+          ide_task_return_new_error (task,
+                                     IDE_RUNTIME_ERROR,
+                                     IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
+                                     "%s “%s”",
+                                     _("Failed to locate runtime"),
+                                     ide_config_get_runtime_id (config));
+          IDE_EXIT;
+        }
+
+      runner = ide_runtime_create_runner (runtime, build_target);
     }
 
-  runner = ide_runtime_create_runner (runtime, build_target);
   cancellable = ide_task_get_cancellable (task);
 
   g_assert (IDE_IS_RUNNER (runner));
@@ -559,6 +581,82 @@ do_run_async (IdeRunManager *self,
                         cancellable,
                         ide_run_manager_run_cb,
                         g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+deploy_cb (GObject      *object,
+           GAsyncResult *result,
+           gpointer      user_data)
+{
+  IdeDeviceManager *device_manager = (IdeDeviceManager *)object;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  IdePipeline *pipeline;
+  IdeRunManager *self;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_device_manager_deploy_finish (device_manager, result, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  self = ide_task_get_source_object (task);
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  ide_device_manager_create_runner_async (device_manager,
+                                          pipeline,
+                                          ide_task_get_cancellable (task),
+                                          create_runner_cb,
+                                          g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+do_run_async (IdeRunManager *self,
+              IdeTask       *task)
+{
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  IdeDeviceManager *device_manager;
+  IdePipeline *pipeline;
+  GCancellable *cancellable;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_TASK (task));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  device_manager = ide_device_manager_from_context (context);
+
+  cancellable = ide_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_device_manager_deploy_async (device_manager,
+                                   pipeline,
+                                   cancellable,
+                                   deploy_cb,
+                                   g_object_ref (task));
 
   IDE_EXIT;
 }

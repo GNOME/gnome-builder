@@ -9,6 +9,7 @@ plugins_sources += files([
   'gbp-deviced-deploy-strategy.c',
   'gbp-deviced-device.c',
   'gbp-deviced-device-provider.c',
+  'gbp-deviced-runner.c',
 ])
 
 plugin_deviced_resources = gnome.compile_resources(

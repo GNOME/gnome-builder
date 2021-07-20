@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include "ide-foundry-types.h"
 
 G_BEGIN_DECLS
 
@@ -56,6 +57,14 @@ struct _IdeDeployStrategyClass
   gboolean (*deploy_finish) (IdeDeployStrategy     *self,
                              GAsyncResult          *result,
                              GError               **error);
+  void       (*create_runner_async)  (IdeDeployStrategy   *self,
+                                      IdePipeline         *pipeline,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data);
+  IdeRunner *(*create_runner_finish) (IdeDeployStrategy   *self,
+                                      GAsyncResult        *result,
+                                      GError             **error);
 
   gpointer _reserved[16];
 };
@@ -83,5 +92,15 @@ IDE_AVAILABLE_IN_3_32
 gboolean ide_deploy_strategy_deploy_finish (IdeDeployStrategy      *self,
                                             GAsyncResult           *result,
                                             GError                **error);
+IDE_AVAILABLE_IN_41
+void       ide_deploy_strategy_create_runner_async  (IdeDeployStrategy   *self,
+                                                     IdePipeline         *pipeline,
+                                                     GCancellable        *cancellable,
+                                                     GAsyncReadyCallback  callback,
+                                                     gpointer             user_data);
+IDE_AVAILABLE_IN_41
+IdeRunner *ide_deploy_strategy_create_runner_finish (IdeDeployStrategy  *self,
+                                                     GAsyncResult       *result,
+                                                     GError            **error);
 
 G_END_DECLS

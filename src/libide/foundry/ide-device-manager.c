@@ -789,8 +789,6 @@ ide_device_manager_deploy_cb (GObject      *object,
   else
     ide_task_return_boolean (task, TRUE);
 
-  ide_object_destroy (IDE_OBJECT (strategy));
-
   IDE_EXIT;
 }
 
@@ -1001,6 +999,213 @@ ide_device_manager_deploy_finish (IdeDeviceManager  *self,
   g_return_val_if_fail (ide_task_is_valid (IDE_TASK (result), self), FALSE);
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+ide_device_manager_create_runner_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeDeployStrategy *strategy = (IdeDeployStrategy *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  IdeRunner *runner;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  runner = ide_deploy_strategy_create_runner_finish (strategy, result, &error);
+
+  if (error)
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, runner, g_object_unref);
+
+  ide_object_destroy (IDE_OBJECT (strategy));
+
+  IDE_EXIT;
+}
+
+static void
+ide_device_manager_create_runner_load_cb (GObject      *object,
+                                          GAsyncResult *result,
+                                          gpointer      user_data)
+{
+  IdeDeployStrategy *strategy = (IdeDeployStrategy *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  IdeDeviceManager *self;
+  DeployState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_deploy_strategy_load_finish (strategy, result, &error))
+    {
+      g_debug ("Deploy strategy failed to load: %s", error->message);
+      ide_object_destroy (IDE_OBJECT (strategy));
+      ide_device_manager_deploy_tick (task);
+      IDE_EXIT;
+    }
+
+  /* Okay, we found a match. Now run on the device. */
+
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (state != NULL);
+  g_assert (state->strategies != NULL);
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
+
+  ide_deploy_strategy_create_runner_async (strategy,
+                                           state->pipeline,
+                                           ide_task_get_cancellable (task),
+                                           ide_device_manager_create_runner_cb,
+                                           g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+ide_device_manager_create_runner_tick (IdeTask *task)
+{
+  g_autoptr(IdeDeployStrategy) strategy = NULL;
+  DeployState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->strategies != NULL);
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
+
+  if (state->strategies->len == 0)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Failed to locate deployment strategy for device");
+      IDE_EXIT;
+    }
+
+  strategy = ide_object_array_steal_index (state->strategies, 0);
+
+  ide_deploy_strategy_load_async (strategy,
+                                  state->pipeline,
+                                  ide_task_get_cancellable (task),
+                                  ide_device_manager_create_runner_load_cb,
+                                  g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_device_manager_create_runner_async:
+ * @self: a #IdeDeviceManager
+ * @pipeline: an #IdePipeline
+ * @cancellable: a #GCancellable, or %NULL
+ * @callback: a #GAsyncReadyCallback
+ * @user_data: closure data for @callback
+ *
+ * Requests an #IdeRunner that runs on the current device, if a runner
+ * other than the default is required.
+ *
+ * Since: 41
+ */
+void
+ide_device_manager_create_runner_async (IdeDeviceManager    *self,
+                                        IdePipeline         *pipeline,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  g_autoptr(PeasExtensionSet) set = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  DeployState *state;
+  IdeDevice *device;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_device_manager_create_runner_async);
+
+  if (!(device = ide_pipeline_get_device (pipeline)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Missing device in pipeline");
+      IDE_EXIT;
+    }
+
+  if (IDE_IS_LOCAL_DEVICE (device))
+    {
+      (ide_task_return_pointer) (task, NULL, NULL);
+      IDE_EXIT;
+    }
+
+  state = g_slice_new0 (DeployState);
+  state->pipeline = g_object_ref (pipeline);
+  state->strategies = ide_object_array_new ();
+  ide_task_set_task_data (task, state, deploy_state_free);
+
+  set = peas_extension_set_new (peas_engine_get_default (),
+                                IDE_TYPE_DEPLOY_STRATEGY,
+                                NULL);
+  peas_extension_set_foreach (set, collect_strategies, state->strategies);
+
+  /* Root the addins as children of us so that they get context access */
+  for (guint i = 0; i < state->strategies->len; i++)
+    ide_object_append (IDE_OBJECT (self),
+                       ide_object_array_index (state->strategies, i));
+
+  ide_device_manager_create_runner_tick (task);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_device_manager_create_runner_finish:
+ * @self: a #IdeDeviceManager
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes a request to create an #IdeRunner to run on the device.
+ *
+ * Returns: (transfer full): An #IdeRunner or %NULL.
+ *
+ * Since: 41
+ */
+IdeRunner *
+ide_device_manager_create_runner_finish (IdeDeviceManager  *self,
+                                         GAsyncResult      *result,
+                                         GError           **error)
+{
+  IdeRunner *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+  g_return_val_if_fail (ide_task_is_valid (IDE_TASK (result), self), FALSE);
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
