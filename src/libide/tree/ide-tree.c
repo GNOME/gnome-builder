@@ -398,16 +398,12 @@ ide_tree_popup (IdeTree        *self,
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   const GdkRectangle area = { target_x, target_y, 0, 0 };
-  GtkTextDirection dir;
 
   g_assert (IDE_IS_TREE (self));
   g_assert (IDE_IS_TREE_NODE (node));
   g_assert (priv->popover != NULL);
 
-  dir = gtk_widget_get_direction (GTK_WIDGET (self));
-
   gtk_popover_set_pointing_to (priv->popover, &area);
-  gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
 
   ide_tree_show_popover_at_node (self, node, priv->popover);
 }
@@ -669,11 +665,15 @@ ide_tree_set_context_menu (IdeTree *self,
 
   if (g_set_object (&priv->context_menu, menu))
     {
+      GtkTextDirection dir;
+
       if (priv->popover != NULL)
         gtk_widget_destroy (GTK_WIDGET (priv->popover));
 
       priv->popover = GTK_POPOVER (gtk_popover_new_from_model (GTK_WIDGET (self),
                                                                G_MENU_MODEL (priv->context_menu)));
+      dir = gtk_widget_get_direction (GTK_WIDGET (self));
+      gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
       g_signal_connect (priv->popover,
                         "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
