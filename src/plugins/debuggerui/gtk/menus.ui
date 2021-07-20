@@ -17,7 +17,7 @@
     <section id="project-tree-menu-run-with-section">
       <item>
         <attribute name="id">project-tree-menu-debug</attribute>
-        <attribute name="label" translatable="yes">Run with Debugger</attribute>
+        <attribute name="label" translatable="yes">Run with _Debugger</attribute>
         <attribute name="action">buildui.run-with-handler</attribute>
         <attribute name="target" type="s">'debugger'</attribute>
       </item>

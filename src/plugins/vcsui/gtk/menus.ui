@@ -4,17 +4,17 @@
     <section id="project-tree-menu-vcs">
       <item>
         <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Switch to branch</attribute>
+        <attribute name="label" translatable="yes">_Switch to branch</attribute>
         <attribute name="action">vcsui.switch-branch</attribute>
       </item>
       <item>
         <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Push to origin</attribute>
+        <attribute name="label" translatable="yes">_Push to origin</attribute>
         <attribute name="action">vcsui.push-branch</attribute>
       </item>
       <!-- item>
         <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Fetch from origin</attribute>
+        <attribute name="label" translatable="yes">_Fetch from origin</attribute>
         <attribute name="action">vcsui.fetch-branch</attribute>
       </item -->
     </section>

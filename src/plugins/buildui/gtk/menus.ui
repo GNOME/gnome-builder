@@ -18,24 +18,24 @@
       <item>
         <attribute name="id">project-tree-menu-build</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Build</attribute>
+        <attribute name="label" translatable="yes">_Build</attribute>
         <attribute name="action">buildui.build</attribute>
       </item>
       <item>
         <attribute name="id">project-tree-menu-rebuild</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Rebuild</attribute>
+        <attribute name="label" translatable="yes">R_ebuild</attribute>
         <attribute name="action">buildui.rebuild</attribute>
       </item>
       <item>
         <attribute name="id">project-tree-menu-run</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Run</attribute>
+        <attribute name="label" translatable="yes">_Run</attribute>
         <attribute name="action">buildui.run-with-handler</attribute>
         <attribute name="target" type="s">''</attribute>
       </item>
       <submenu id="project-tree-run-with-submenu">
-        <attribute name="label" translatable="yes">Run With…</attribute>
+        <attribute name="label" translatable="yes">R_un With…</attribute>
         <section id="project-tree-menu-run-with-section">
         </section>
       </submenu>
