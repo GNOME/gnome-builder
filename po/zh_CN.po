@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-03-19 17:03+0000\n"
-"PO-Revision-Date: 2021-03-25 09:42+0800\n"
+"POT-Creation-Date: 2021-07-19 22:32+0000\n"
+"PO-Revision-Date: 2021-07-20 08:17+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -31,7 +31,7 @@ msgid "Builder"
 msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/gui/ide-application-actions.c:143
+#: src/libide/gui/ide-application-actions.c:141
 msgid "An IDE for GNOME"
 msgstr "GNOME 的集成开发环境"
 
@@ -175,6 +175,14 @@ msgid ""
 "dependencies when connection is metered."
 msgstr "在使用流量计费网络时根据构建启用自动传输如 SDK 下载和依赖。"
 
+#: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Debugger Breakpoint on Main"
+msgstr "主函数上的调试器断点"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "Debugger should automatically insert breakpoint on main function."
+msgstr "调试器应在主函数上自动插入断点。"
+
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
 msgstr "基于 Ctags 的自动补全"
@@ -201,183 +209,183 @@ msgstr "Ctags 的可执行文件路径"
 msgid "The path to the ctags executable on the system."
 msgstr "系统上的 ctags 可执行文件路径。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
 msgstr "恢复上次位置"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:26
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:20
 msgid "Jump to the last position when reopening a file"
 msgstr "重新打开一个文件时跳转到上次位置"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
 msgstr "显示已修改行"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:31
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr "如果启用，编辑器将在源代码旁边显示代码行的增加和改变。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
 msgstr "在行号附近显示诊断"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:36
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr "如果启用，编辑器将在行号左边显示诊断。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 #: src/libide/editor/ide-editor-settings-dialog.ui:116
 msgid "Highlight current line"
 msgstr "高亮当前行"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:41
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr "如果启用，编辑器将高亮光标所在行。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
 msgstr "高亮匹配括号"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:46
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
 msgstr "如果启用，编辑器将高亮匹配的括号。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
 msgstr "显示行号"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:51
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
 msgstr "如果启用，编辑器将显示行号。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
 msgstr "显示相关行号"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:56
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show relative line numbers."
 msgstr "如果启用，编辑器将显示相关的行号。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:144
 msgid "Smart Backspace"
 msgstr "智能退格"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:61
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr "退格键将会移除多余的空格来保持对齐到缩进尺寸。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: src/libide/gui/ide-preferences-builtin.c:143
 msgid "Smart Home and End"
 msgstr "智能 Home/End 键"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "Whether or not Home moves to first non-space character."
 msgstr "Home 键是否将光标移动到第一个非空格字符处。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
 msgid "Show grid lines"
 msgstr "显示网格线"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "如果启用，编辑器将在文档中显示网格线。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
 #: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Show overview map"
 msgstr "显示概览图"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr "如果启用，Builder 将在编辑器旁边显示一个源文件的概览图。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid "Automatically Hide Overview Map"
 msgstr "自动隐藏概览图"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr "如果启用，Builder 将在鼠标离开编辑器或发生超时时自动隐藏概览图。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
 msgid "Draw Spaces"
 msgstr "绘制空格"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
 msgid "The various types of space to draw in the editor."
 msgstr "编辑器中绘制空格的几种类型。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
 #: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Overscroll"
 msgstr "越界滚动"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "缓冲区末尾外可滚动的行数。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
 msgid "Wrap Text"
 msgstr "文本折行"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
 msgstr "如果启用，Builder 会将文本自动折行使行内所有文字内容可见。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
 #: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Autosave Enabled"
 msgstr "启用自动保存"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Enable or disable autosave feature."
 msgstr "启用或禁用自动保存功能。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 #: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Autosave Frequency"
 msgstr "自动保存频率"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "The number of seconds after modification before auto saving."
 msgstr "修改后到自动保存前的等待时间。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Completion Row Count"
 msgstr "补全行数"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of completion rows to display to the user."
 msgstr "对用户显示补全的行的总数。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/gui/ide-preferences-builtin.c:107
 msgid "Line Spacing"
 msgstr "行距"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of pixels to include above and below lines in the editor."
 msgstr "编辑器中在行上部和下部要包含的像素数量。"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
 #: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Interactive Completion"
 msgstr "交互式补全"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -447,7 +455,7 @@ msgid "\"Projects\""
 msgstr "\"工程\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:421
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "Projects directory"
 msgstr "工程目录"
 
@@ -496,7 +504,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "该设置已被废弃且不再使用。"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:76
+#: src/plugins/project-tree/gtk/menus.ui:69
 msgid "Show Ignored Files"
 msgstr "显示忽略的文件"
 
@@ -506,7 +514,7 @@ msgid ""
 msgstr "如果启用，工程树将显示由 VCS 忽略的文件。"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "Sort Directories First"
 msgstr "优先排列文件夹"
 
@@ -829,7 +837,7 @@ msgstr "使用配置加载或生成调色板"
 #: src/gstyle/ui/gstyle-color-widget.ui:13
 #: src/libide/sourceview/ide-source-view.c:5025
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:60
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "Rename"
 msgstr "重命名"
 
@@ -849,7 +857,7 @@ msgstr "重命名(_R)"
 msgid "unsaved file %u"
 msgstr "未保存文件 %u"
 
-#: src/libide/code/ide-buffer.c:3434
+#: src/libide/code/ide-buffer.c:3464
 msgid "The current language lacks a symbol resolver."
 msgstr "当前语言缺少符号解析器。"
 
@@ -881,21 +889,15 @@ msgstr "无法保存草稿：%s"
 msgid "Untitled"
 msgstr "无标题"
 
-#: src/libide/core/ide-transfer.c:549
-#: src/libide/editor/ide-editor-page-actions.c:281
-#: src/libide/editor/ide-editor-page-actions.c:381
-#: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:318
-#: src/libide/greeter/ide-greeter-workspace.c:536
-#: src/libide/terminal/ide-terminal-page-actions.c:276
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
-#: src/plugins/dspy/libdspy/dspy-method-view.c:274
-#: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
-msgid "Cancel"
-msgstr "取消"
+#: src/libide/core/ide-transfer.c:549 src/libide/editor/ide-editor-page.ui:51
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
+#: src/libide/gui/ide-workbench.c:1410
+#: src/plugins/buildui/gbp-buildui-log-pane.c:280
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:316
+#: src/plugins/testui/gbp-test-output-panel.c:69
+msgid "_Cancel"
+msgstr "取消(_C)"
 
 #: src/libide/debugger/ide-debug-manager.c:1001
 #, c-format
@@ -936,6 +938,21 @@ msgstr "保存文件"
 msgid "Save"
 msgstr "保存"
 
+#: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:381
+#: src/libide/editor/ide-editor-surface-actions.c:76
+#: src/libide/greeter/ide-clone-surface.ui:318
+#: src/libide/greeter/ide-greeter-workspace.c:536
+#: src/libide/terminal/ide-terminal-page-actions.c:276
+#: src/plugins/color-picker/gb-color-picker-prefs.c:97
+#: src/plugins/color-picker/gb-color-picker-prefs.c:213
+#: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/dspy/libdspy/dspy-method-view.c:274
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:262
+msgid "Cancel"
+msgstr "取消"
+
 #: src/libide/editor/ide-editor-page-actions.c:377
 msgid "Save File As"
 msgstr "保存文件为"
@@ -963,7 +980,7 @@ msgstr "另存为"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
@@ -1009,7 +1026,6 @@ msgid "Find and replace"
 msgstr "查找和替换"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:53
-#: src/plugins/grep/gbp-grep-popover.ui:37
 msgid "Find"
 msgstr "查找"
 
@@ -1033,15 +1049,6 @@ msgstr "移至上个错误点"
 msgid "_Reload"
 msgstr "重新加载(_R)"
 
-#: src/libide/editor/ide-editor-page.ui:51
-#: src/libide/greeter/ide-greeter-workspace-actions.c:126
-#: src/libide/gui/ide-workbench.c:1442
-#: src/plugins/buildui/gbp-buildui-log-pane.c:280
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:154
-#: src/plugins/testui/gbp-test-output-panel.c:69
-msgid "_Cancel"
-msgstr "取消(_C)"
-
 #: src/libide/editor/ide-editor-page.ui:64
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
@@ -1049,18 +1056,15 @@ msgid ""
 msgstr "Builder 发现此文件已被外部程序修改。是否重新加载文件？"
 
 #: src/libide/editor/ide-editor-search-bar.c:180
-#: src/libide/editor/ide-editor-search-bar.ui:220
 msgid "Regular expressions"
 msgstr "正则表达式"
 
 #: src/libide/editor/ide-editor-search-bar.c:185
-#: src/libide/editor/ide-editor-search-bar.ui:235
 #: src/libide/terminal/ide-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "区分大小写"
 
 #: src/libide/editor/ide-editor-search-bar.c:190
-#: src/libide/editor/ide-editor-search-bar.ui:249
 msgid "Match whole word only"
 msgstr "仅匹配整个单词"
 
@@ -1069,23 +1073,34 @@ msgstr "仅匹配整个单词"
 msgid "%u of %u"
 msgstr "%2$u 的 %1$u"
 
+#: src/libide/editor/ide-editor-search-bar.ui:116
+msgid "_Replace"
+msgstr "替换(_R)"
+
 #: src/libide/editor/ide-editor-search-bar.ui:128
-#: src/plugins/grep/gbp-grep-panel.ui:67
-msgid "Replace"
-msgstr "替换"
+msgid "Replace _All"
+msgstr "替换所有(_A)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:140
-msgid "Replace All"
-msgstr "替换所有"
-
-#: src/libide/editor/ide-editor-search-bar.ui:162
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Switch between Search and Search-and-Replace"
 msgstr "在搜索和搜索并替换之间切换"
 
-#: src/libide/editor/ide-editor-search-bar.ui:185
+#: src/libide/editor/ide-editor-search-bar.ui:169
 #: src/libide/terminal/ide-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr "显示或隐藏搜索选项如是否区分大小写"
+
+#: src/libide/editor/ide-editor-search-bar.ui:202
+msgid "Regular _expressions"
+msgstr "正则表达式(_E)"
+
+#: src/libide/editor/ide-editor-search-bar.ui:217
+msgid "_Case sensitive"
+msgstr "区分大小写(_C)"
+
+#: src/libide/editor/ide-editor-search-bar.ui:231
+msgid "_Match whole word only"
+msgstr "仅匹配整个单词(_M)"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:165
@@ -1192,7 +1207,7 @@ msgstr "打开文件"
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:287
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:261
 msgid "Open"
 msgstr "打开"
 
@@ -1221,7 +1236,7 @@ msgstr "切换工具面板"
 msgid "Close all files"
 msgstr "关闭所有文件"
 
-#: src/libide/editor/ide-editor-surface.c:565
+#: src/libide/editor/ide-editor-surface.c:669
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:150
 #: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
@@ -1252,7 +1267,7 @@ msgstr "搜索您的工程"
 msgid "Failed to initialize build pipeline: %s"
 msgstr "无法初始化构建管道：%s"
 
-#: src/libide/foundry/ide-build-manager.c:526
+#: src/libide/foundry/ide-build-manager.c:527
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "无法获取设备信息：%s"
@@ -1288,73 +1303,73 @@ msgstr "我的电脑 (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "我的电脑 (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:820
+#: src/libide/foundry/ide-pipeline.c:823
 msgid "The build pipeline is in a failed state"
 msgstr "构建管道处于失败状态"
 
-#: src/libide/foundry/ide-pipeline.c:830
+#: src/libide/foundry/ide-pipeline.c:833
 msgid "The build configuration has errors"
 msgstr "构建配置存在错误"
 
-#: src/libide/foundry/ide-pipeline.c:3022
+#: src/libide/foundry/ide-pipeline.c:3029
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "伪终端创建失败。终端特性将会被限制。"
 
-#: src/libide/foundry/ide-pipeline.c:3228
+#: src/libide/foundry/ide-pipeline.c:3235
 msgid "Cleaning…"
 msgstr "正在清理…"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3239
+#: src/libide/foundry/ide-pipeline.c:3296
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "失败"
 
-#: src/libide/foundry/ide-pipeline.c:3234
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3241
+#: src/libide/foundry/ide-pipeline.c:3304
 msgid "Ready"
 msgstr "就绪"
 
-#: src/libide/foundry/ide-pipeline.c:3249
+#: src/libide/foundry/ide-pipeline.c:3256
 msgid "Downloading…"
 msgstr "正在下载…"
 
-#: src/libide/foundry/ide-pipeline.c:3253
+#: src/libide/foundry/ide-pipeline.c:3260
 msgid "Building dependencies…"
 msgstr "正在构建依赖…"
 
-#: src/libide/foundry/ide-pipeline.c:3257
+#: src/libide/foundry/ide-pipeline.c:3264
 msgid "Bootstrapping…"
 msgstr "正在从头构建…"
 
-#: src/libide/foundry/ide-pipeline.c:3261
+#: src/libide/foundry/ide-pipeline.c:3268
 msgid "Configuring…"
 msgstr "正在配置…"
 
-#: src/libide/foundry/ide-pipeline.c:3265
+#: src/libide/foundry/ide-pipeline.c:3272
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "正在构建…"
 
-#: src/libide/foundry/ide-pipeline.c:3269
+#: src/libide/foundry/ide-pipeline.c:3276
 msgid "Installing…"
 msgstr "正在安装…"
 
-#: src/libide/foundry/ide-pipeline.c:3273
+#: src/libide/foundry/ide-pipeline.c:3280
 msgid "Committing…"
 msgstr "正在提交…"
 
-#: src/libide/foundry/ide-pipeline.c:3277
+#: src/libide/foundry/ide-pipeline.c:3284
 msgid "Exporting…"
 msgstr "正在导出…"
 
-#: src/libide/foundry/ide-pipeline.c:3281
-#: src/libide/foundry/ide-pipeline.c:3285
+#: src/libide/foundry/ide-pipeline.c:3288
+#: src/libide/foundry/ide-pipeline.c:3292
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "成功"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3300
 msgid "Preparing…"
 msgstr "正在准备…"
 
@@ -1362,43 +1377,43 @@ msgstr "正在准备…"
 msgid "Cannot build transfer while on metered connection"
 msgstr "无法在使用流量计费网络时构建传输"
 
-#: src/libide/foundry/ide-run-manager.c:383
+#: src/libide/foundry/ide-run-manager.c:385
 msgid "Cannot run target, another target is running"
 msgstr "无法运行目标，因为另一个目标正在运行"
 
-#: src/libide/foundry/ide-run-manager.c:489
+#: src/libide/foundry/ide-run-manager.c:505
 msgid "Failed to locate runtime"
 msgstr "无法找到运行时"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:538
+#: src/libide/foundry/ide-run-manager.c:554
 #, c-format
 msgid "Running %s…"
 msgstr "正在运行 %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:612
+#: src/libide/foundry/ide-run-manager.c:628
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "该构建目标构建失败：%s"
 
-#: src/libide/foundry/ide-run-manager.c:875
+#: src/libide/foundry/ide-run-manager.c:891
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "工作区快捷键"
 
-#: src/libide/foundry/ide-run-manager.c:876
+#: src/libide/foundry/ide-run-manager.c:892
 msgid "Build and Run"
 msgstr "构建和运行"
 
-#: src/libide/foundry/ide-run-manager.c:1038
-#: src/libide/foundry/ide-run-manager.c:1104
+#: src/libide/foundry/ide-run-manager.c:1054
+#: src/libide/foundry/ide-run-manager.c:1120
 msgid "Failed to locate a build target"
 msgstr "定位构建目标失败"
 
-#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
+#: src/libide/foundry/ide-run-manager.c:1256 src/libide/gui/gtk/menus.ui:67
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "Run"
 msgstr "运行"
@@ -1457,7 +1472,7 @@ msgid "Repository Kind"
 msgstr "仓库种类"
 
 #: src/libide/greeter/ide-clone-surface.ui:165
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:111
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:104
 msgid "Branch"
 msgstr "分支"
@@ -1503,7 +1518,7 @@ msgid "Select Project File"
 msgstr "选择工程文件"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:127
-#: src/libide/gui/ide-workbench.c:1441
+#: src/libide/gui/ide-workbench.c:1409
 msgid "_Open"
 msgstr "打开(_O)"
 
@@ -1512,7 +1527,7 @@ msgid "All Project Types"
 msgstr "所有工程类型"
 
 #: src/libide/greeter/ide-greeter-workspace.c:219
-#: src/libide/gui/ide-workbench.c:321 src/libide/gui/ide-workbench.c:846
+#: src/libide/gui/ide-workbench.c:315 src/libide/gui/ide-workbench.c:839
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1595,13 +1610,7 @@ msgstr "关于 Builder"
 msgid "_Quit"
 msgstr "退出(_Q)"
 
-#: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:27
-#: src/plugins/editor/gtk/menus.ui:111
-msgid "Open File…"
-msgstr "打开文件…"
-
-#: src/libide/gui/gtk/menus.ui:68
+#: src/libide/gui/gtk/menus.ui:62
 msgid "Run Options"
 msgstr "运行选项"
 
@@ -1609,11 +1618,11 @@ msgstr "运行选项"
 msgid "Builder — Preferences"
 msgstr "构建——首选项"
 
-#: src/libide/gui/ide-application-actions.c:149
+#: src/libide/gui/ide-application-actions.c:147
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:151
+#: src/libide/gui/ide-application-actions.c:149
 msgid "translator-credits"
 msgstr ""
 "ChenYang Li <18032773381@163.com>, 2015\n"
@@ -1623,11 +1632,11 @@ msgstr ""
 "Mingcong Bai <jeffbai@aosc.xyz>, 2015, 2018\n"
 "lumingzh <lumingzh@qq.com>, 2016-2021"
 
-#: src/libide/gui/ide-application-actions.c:155
+#: src/libide/gui/ide-application-actions.c:153
 msgid "Learn more about GNOME Builder"
 msgstr "了解更多关于 GNOME Builder 的信息"
 
-#: src/libide/gui/ide-application-actions.c:158
+#: src/libide/gui/ide-application-actions.c:156
 msgid "Funded By"
 msgstr "赞助"
 
@@ -1703,7 +1712,7 @@ msgid "Use the page switcher above or use one of the following:"
 msgstr "使用上边的页面切换器或下列的一种："
 
 #: src/libide/gui/ide-frame-empty-state.ui:45
-#: src/libide/gui/ide-search-button.c:44
+#: src/libide/gui/ide-search-button.c:50
 msgid "Search"
 msgstr "搜索"
 
@@ -1718,6 +1727,11 @@ msgstr "文件选择器"
 #: src/libide/gui/ide-frame-empty-state.ui:72
 msgid "New terminal"
 msgstr "新建终端"
+
+#: src/libide/gui/ide-frame-empty-state.ui:88
+#: src/libide/gui/ide-workbench.c:1406 src/plugins/editor/gtk/menus.ui:27
+msgid "Open File…"
+msgstr "打开文件…"
 
 #: src/libide/gui/ide-frame-empty-state.ui:95
 msgid "New Terminal"
@@ -2017,7 +2031,6 @@ msgid "Code Insight"
 msgstr "代码洞察"
 
 #: src/libide/gui/ide-preferences-builtin.c:194
-#: src/libide/sourceview/gtk/menus.ui:50 src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "高亮"
 
@@ -2184,7 +2197,6 @@ msgid "Number of CPU"
 msgstr "CPU 数量"
 
 #: src/libide/gui/ide-preferences-builtin.c:398
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
 #: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "构建"
@@ -2219,35 +2231,55 @@ msgid ""
 "dependencies"
 msgstr "允许在使用流量计费网络时自动下载依赖"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
+#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
+msgid "Debugger"
+msgstr "调试器"
+
+#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
+msgid "Breakpoints"
+msgstr "中断点"
+
+#: src/libide/gui/ide-preferences-builtin.c:416
+msgid "Insert Breakpoint at Start of Application"
+msgstr "在应用开始时插入断点"
+
+#: src/libide/gui/ide-preferences-builtin.c:416
+msgid ""
+"Automatically stop execution at the start of the applications main function"
+msgstr "在应用主函数开始时自动停止运行"
+
+#: src/libide/gui/ide-preferences-builtin.c:422
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "工程"
 
-#: src/libide/gui/ide-preferences-builtin.c:420
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Workspace"
 msgstr "工作区"
 
-#: src/libide/gui/ide-preferences-builtin.c:421
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "A place for all your projects"
 msgstr "您的所有工程构建的地方"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Restore previously opened files"
 msgstr "恢复上次打开文件"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Open previously opened files when loading a project"
 msgstr "加载工程时打开上次打开的文件"
 
-#: src/libide/gui/ide-preferences-builtin.c:544
+#: src/libide/gui/ide-preferences-builtin.c:548
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:379
 msgid "Version Control"
 msgstr "版本控制"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:557
+#: src/libide/gui/ide-preferences-builtin.c:561
 msgid "SDKs"
 msgstr "SDKs"
 
@@ -2259,26 +2291,26 @@ msgstr "正在更新依赖…"
 msgid "Builder is updating your projects configured dependencies."
 msgstr "Builder 正在更新您的工程配置的依赖。"
 
+#: src/libide/gui/ide-run-button.c:168
+msgid "Stop running"
+msgstr "停止运行"
+
 #: src/libide/gui/ide-run-button.ui:6
 msgid "The project cannot be run while the build pipeline is being set up"
 msgstr "该工程无法在构建管道正在建立时运行"
 
-#: src/libide/gui/ide-run-button.ui:35
-msgid "Stop running"
-msgstr "停止运行"
-
-#: src/libide/gui/ide-run-button.ui:55
+#: src/libide/gui/ide-run-button.ui:39
 msgid "Change run options"
 msgstr "更改运行选项"
 
-#: src/libide/gui/ide-search-button.c:43
+#: src/libide/gui/ide-search-button.c:49
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
 msgid "Workspace shortcuts"
 msgstr "工作区快捷键"
 
-#: src/libide/gui/ide-search-button.c:45
+#: src/libide/gui/ide-search-button.c:51
 msgid "Focus to the global search entry"
 msgstr "聚焦到全局搜索入口"
 
@@ -2288,7 +2320,7 @@ msgid "Editor Shortcuts"
 msgstr "编辑器快捷键"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:543
+#: src/libide/gui/ide-shortcuts-window.ui:572
 msgctxt "shortcut window"
 msgid "General"
 msgstr "常规"
@@ -2300,41 +2332,41 @@ msgstr "显示帮助"
 
 #: src/libide/gui/ide-shortcuts-window.ui:25
 msgctxt "shortcut window"
-msgid "Toogle primary menu"
+msgid "Toggle primary menu"
 msgstr "切换主菜单"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:576
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "全局搜索"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:583
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "首选项"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:590
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "命令栏"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "终端"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:575
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "构建运行时的终端"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:582
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "快捷键"
@@ -2446,13 +2478,13 @@ msgid "Clear highlight"
 msgstr "清除高亮"
 
 #: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:591
+#: src/libide/gui/ide-shortcuts-window.ui:620
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "复制和粘贴"
 
 #: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:596
+#: src/libide/gui/ide-shortcuts-window.ui:625
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "复制选中文本到剪贴板"
@@ -2463,7 +2495,7 @@ msgid "Cut selected text to clipboard"
 msgstr "剪切选中文本到剪贴板"
 
 #: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:603
+#: src/libide/gui/ide-shortcuts-window.ui:632
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "粘贴剪贴板中的文本"
@@ -2529,168 +2561,187 @@ msgid "Join selected lines"
 msgstr "合并选中行"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
-#| msgid "Sort the selected lines"
 msgctxt "shortcut window"
 msgid "Sort selected lines"
 msgstr "对选中行排序"
 
 #: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
+msgid "Make selection upper case"
+msgstr "使选区上标"
+
+#: src/libide/gui/ide-shortcuts-window.ui:348
+msgctxt "shortcut window"
+msgid "Make selection lower case"
+msgstr "使选区下标"
+
+#: src/libide/gui/ide-shortcuts-window.ui:355
+msgctxt "shortcut window"
+msgid "Invert selection case"
+msgstr "反转选区大小写"
+
+#: src/libide/gui/ide-shortcuts-window.ui:362
+msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "显示补全窗口"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "切换补全窗口不透明度"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "切换覆盖模式"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "重新缩进行"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "删除行"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "重命名符号"
 
-#: src/libide/gui/ide-shortcuts-window.ui:377
+#: src/libide/gui/ide-shortcuts-window.ui:398
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "需要语言的语义解析支持"
 
-#: src/libide/gui/ide-shortcuts-window.ui:384
+#: src/libide/gui/ide-shortcuts-window.ui:405
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "注释代码"
 
-#: src/libide/gui/ide-shortcuts-window.ui:391
+#: src/libide/gui/ide-shortcuts-window.ui:412
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "取消注释代码"
 
-#: src/libide/gui/ide-shortcuts-window.ui:398
-#| msgid "Beautify the code"
+#: src/libide/gui/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "美化选中代码"
 
-#: src/libide/gui/ide-shortcuts-window.ui:406
+#: src/libide/gui/ide-shortcuts-window.ui:427
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "导航"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:432
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "移至文件中下个错误点"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:439
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "移至文件中上个错误点"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "移至上个编辑位置"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "移至下个编辑位置"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "跳转至符号定义的位置"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#. FIXME: find references of what? it doesn't seem to work here, there's always no results.
+#: src/libide/gui/ide-shortcuts-window.ui:468
+msgctxt "shortcut window"
+msgid "Find references"
+msgstr "查找参考"
+
+#: src/libide/gui/ide-shortcuts-window.ui:475
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "在文件内向上移动视窗"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:482
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "在文件内向下移动视窗"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:489
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "移动视窗到文件末尾"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:496
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "移动视窗到文件开头"
 
-#: src/libide/gui/ide-shortcuts-window.ui:474
+#: src/libide/gui/ide-shortcuts-window.ui:503
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "移动至匹配的括号"
 
-#: src/libide/gui/ide-shortcuts-window.ui:482
+#: src/libide/gui/ide-shortcuts-window.ui:511
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "选择"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:516
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "全选"
 
-#: src/libide/gui/ide-shortcuts-window.ui:494
+#: src/libide/gui/ide-shortcuts-window.ui:523
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "取消全选"
 
-#: src/libide/gui/ide-shortcuts-window.ui:502
+#: src/libide/gui/ide-shortcuts-window.ui:531
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "构建和运行"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:536
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "构建"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:543
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "重新构建"
 
-#: src/libide/gui/ide-shortcuts-window.ui:521
+#: src/libide/gui/ide-shortcuts-window.ui:550
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "运行"
 
-#: src/libide/gui/ide-shortcuts-window.ui:528
+#: src/libide/gui/ide-shortcuts-window.ui:557
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "分析"
 
-#: src/libide/gui/ide-shortcuts-window.ui:539
+#: src/libide/gui/ide-shortcuts-window.ui:568
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "终端快捷键"
 
-#: src/libide/gui/ide-shortcuts-window.ui:611
+#: src/libide/gui/ide-shortcuts-window.ui:640
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "搜索"
 
-#: src/libide/gui/ide-shortcuts-window.ui:616
+#: src/libide/gui/ide-shortcuts-window.ui:645
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "在终端中查找文本"
@@ -2702,7 +2753,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "正在安装 %u 个软件包"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1469
+#: src/libide/lsp/ide-lsp-client.c:1495
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "无法初始化语言服务器：%s"
@@ -2724,85 +2775,89 @@ msgstr "无法从数据流中解析 XML"
 msgid "_Go to Definition"
 msgstr "跳转至定义(_G)"
 
-#: src/libide/sourceview/gtk/menus.ui:12
+#: src/libide/sourceview/gtk/menus.ui:13
 msgid "_Find references"
 msgstr "查找参考(_F)"
 
-#: src/libide/sourceview/gtk/menus.ui:19
+#: src/libide/sourceview/gtk/menus.ui:21
 msgid "_Undo"
 msgstr "撤销(_U)"
 
-#: src/libide/sourceview/gtk/menus.ui:23
+#: src/libide/sourceview/gtk/menus.ui:26
 msgid "_Redo"
 msgstr "重做(_R)"
 
-#: src/libide/sourceview/gtk/menus.ui:29
+#: src/libide/sourceview/gtk/menus.ui:33
 msgid "C_ut"
 msgstr "剪切(_U)"
 
-#: src/libide/sourceview/gtk/menus.ui:34 src/libide/terminal/gtk/menus.ui:38
+#: src/libide/sourceview/gtk/menus.ui:39 src/libide/terminal/gtk/menus.ui:38
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: src/libide/sourceview/gtk/menus.ui:38 src/libide/terminal/gtk/menus.ui:42
+#: src/libide/sourceview/gtk/menus.ui:44 src/libide/terminal/gtk/menus.ui:42
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: src/libide/sourceview/gtk/menus.ui:42
+#: src/libide/sourceview/gtk/menus.ui:49
 msgid "_Delete"
 msgstr "删除(_D)"
 
-#: src/libide/sourceview/gtk/menus.ui:55 src/libide/terminal/gtk/menus.ui:48
-msgid "Selection"
-msgstr "选择"
+#: src/libide/sourceview/gtk/menus.ui:58
+msgid "_Highlighting"
+msgstr "高亮(_H)"
 
-#: src/libide/sourceview/gtk/menus.ui:57 src/libide/terminal/gtk/menus.ui:50
+#: src/libide/sourceview/gtk/menus.ui:63
+msgid "_Selection"
+msgstr "选择(_S)"
+
+#: src/libide/sourceview/gtk/menus.ui:65 src/libide/terminal/gtk/menus.ui:50
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:55
+#: src/libide/sourceview/gtk/menus.ui:71 src/libide/terminal/gtk/menus.ui:55
 msgid "Select _None"
 msgstr "不选(_N)"
 
-#: src/libide/sourceview/gtk/menus.ui:68
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "All _Upper Case"
 msgstr "全部大写字母(_U)"
 
-#: src/libide/sourceview/gtk/menus.ui:73
+#: src/libide/sourceview/gtk/menus.ui:84
 msgid "All _Lower Case"
 msgstr "全部小写字母(_L)"
 
-#: src/libide/sourceview/gtk/menus.ui:78
-msgid "_Invert Case"
-msgstr "反转大小写(_I)"
+#: src/libide/sourceview/gtk/menus.ui:90
+msgid "In_vert Case"
+msgstr "反转大小写(_V)"
 
-#: src/libide/sourceview/gtk/menus.ui:83
+#: src/libide/sourceview/gtk/menus.ui:96
 msgid "_Title Case"
 msgstr "标题大小写(_T)"
 
-#: src/libide/sourceview/gtk/menus.ui:90
-msgid "Join Lines"
-msgstr "合并行"
-
-#: src/libide/sourceview/gtk/menus.ui:94
-msgid "Sort Lines"
-msgstr "行排序"
-
 #: src/libide/sourceview/gtk/menus.ui:103
-msgid "Zoom"
-msgstr "缩放"
+msgid "_Join Lines"
+msgstr "合并行(_J)"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:108
+msgid "S_ort Lines"
+msgstr "行排序(_O)"
+
+#: src/libide/sourceview/gtk/menus.ui:118
+msgid "_Zoom"
+msgstr "缩放(_Z)"
+
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Zoom _In"
 msgstr "放大(_I)"
 
-#: src/libide/sourceview/gtk/menus.ui:110
+#: src/libide/sourceview/gtk/menus.ui:125
 msgid "Zoom _Out"
 msgstr "缩小(_O)"
 
-#: src/libide/sourceview/gtk/menus.ui:116
-msgid "Reset"
-msgstr "重置"
+#: src/libide/sourceview/gtk/menus.ui:131
+msgid "_Reset"
+msgstr "重置(_R)"
 
 #: src/libide/sourceview/ide-source-view.c:4439
 #, c-format
@@ -2846,12 +2901,16 @@ msgstr "打开链接(_O)"
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
-#: src/libide/terminal/ide-terminal-launcher.c:320
+#: src/libide/terminal/gtk/menus.ui:48
+msgid "Selection"
+msgstr "选择"
+
+#: src/libide/terminal/ide-terminal-launcher.c:339
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "无法在运行时“%s”中创建 shell"
 
-#: src/libide/terminal/ide-terminal-launcher.c:644
+#: src/libide/terminal/ide-terminal-launcher.c:663
 msgid "Untitled Terminal"
 msgstr "无标题终端"
 
@@ -3040,33 +3099,33 @@ msgstr "美化器插件：该缓冲区不可写入"
 msgid "Beautifier Plugin: Nothing selected"
 msgstr "美化器插件：未选中任何内容"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:249
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:250
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "对“%s”无可用美化器"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:251
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:252
 #, c-format
 msgid "No beautifier available"
 msgstr "无可用美化器"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "正在编辑"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:351
 msgid "Beautify the code"
 msgstr "美化代码"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:351
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:352
 msgid "Trigger the default entry"
 msgstr "触发默认输入"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:380
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:381
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr "美化器插件：无有效输入，正在禁用：%s"
@@ -3085,7 +3144,6 @@ msgstr "美化器插件：尝试移除临时文件夹“%s”外的文件已被�
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:281
 #, c-format
-#| msgid "Beautifier plugin: command error output: %s"
 msgid ""
 "Beautifier plugin: command error output:\n"
 "%s"
@@ -3102,8 +3160,8 @@ msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "美化器插件：该输出不是有效的 UTF-8 文本"
 
 #: src/plugins/beautifier/gtk/menus.ui:9
-msgid "Beautify"
-msgstr "美化"
+msgid "_Beautify"
+msgstr "美化(_B)"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:635
@@ -3233,47 +3291,47 @@ msgstr "保存构建日志"
 msgid "Missing"
 msgstr "缺失"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:48
 msgid "Update project dependencies"
 msgstr "更新工程依赖"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:75
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:73
 msgid "Configure build preferences"
 msgstr "配置构建首选项"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:140
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:138
 msgid "Build Profile"
 msgstr "构建配置文件"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:167
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:165
 msgid "Runtime"
 msgstr "运行时"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:195
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:193
 msgid "Device"
 msgstr "设备"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:237
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:235
 msgid "There is a problem with the current build configuration."
 msgstr "当前构建配置存在问题。"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:275
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:273
 msgid "Build status"
 msgstr "构建状态"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:308
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:305
 msgid "View build console contents"
 msgstr "查看构建控制台内容"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:347
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:344
 msgid "Last build"
 msgstr "上次构建"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:376
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:373
 msgid "Build result"
 msgstr "构建结果"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:405
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:402
 #: src/plugins/buildui/gbp-buildui-pane.c:122
 #: src/plugins/buildui/gbp-buildui-pane.c:190
 #: src/plugins/buildui/gbp-buildui-pane.c:227
@@ -3281,7 +3339,7 @@ msgstr "构建结果"
 msgid "Errors"
 msgstr "错误"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:435
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:432
 #: src/plugins/buildui/gbp-buildui-pane.c:113
 #: src/plugins/buildui/gbp-buildui-pane.c:189
 #: src/plugins/buildui/gbp-buildui-pane.c:226
@@ -3289,23 +3347,26 @@ msgstr "错误"
 msgid "Warnings"
 msgstr "警告"
 
-#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:482
+msgid "True"
+msgstr "True"
+
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
-msgid "true"
-msgstr "true"
+msgid "_Build"
+msgstr "构建(_B)"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
-#: src/plugins/buildui/gtk/menus.ui:27
-msgid "Rebuild"
-msgstr "重新构建"
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:499
+msgid "_Rebuild"
+msgstr "重新构建(_R)"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:516
-msgid "Clean"
-msgstr "清理"
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:513
+msgid "_Clean"
+msgstr "清理(_C)"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:530
-msgid "Export Bundle"
-msgstr "导出包"
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:527
+msgid "_Export Bundle"
+msgstr "导出包(_E)"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
@@ -3341,6 +3402,10 @@ msgstr "构建目标"
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "构建首选项"
+
+#: src/plugins/buildui/gtk/menus.ui:27
+msgid "Rebuild"
+msgstr "重新构建"
 
 #: src/plugins/buildui/gtk/menus.ui:38
 msgid "Run With…"
@@ -3731,8 +3796,8 @@ msgid "Try loading or generating a palette using the menu"
 msgstr "尝试使用菜单载入或生成调色板"
 
 #: src/plugins/color-picker/gtk/menus.ui:7
-msgid "Highlight colors"
-msgstr "高亮颜色"
+msgid "Highlight _colors"
+msgstr "高亮颜色(_C)"
 
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:36
 msgid "Workspace Shortcuts"
@@ -3755,12 +3820,12 @@ msgid "Uncomment the code"
 msgstr "取消注释代码"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
-msgid "Comment code"
-msgstr "注释代码"
+msgid "_Comment code"
+msgstr "注释代码(_C)"
 
-#: src/plugins/comment-code/gtk/menus.ui:14
-msgid "Uncomment code"
-msgstr "取消注释代码"
+#: src/plugins/comment-code/gtk/menus.ui:15
+msgid "Unco_mment code"
+msgstr "取消注释代码(_M)"
 
 #: src/plugins/copyright/copyright_plugin.py:114
 msgid "Update Copyright"
@@ -3789,36 +3854,36 @@ msgstr "保存至磁盘之前为用户更新版权。"
 msgid "Display the project creation guide"
 msgstr "显示工程创建向导"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:219
+#: src/plugins/create-project/gbp-create-project-surface.c:223
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr "您使用了可能会导致技术问题的字符作为工程名称"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:222
+#: src/plugins/create-project/gbp-create-project-surface.c:226
 #: src/plugins/create-project/gbp-create-project-surface.ui:146
 msgid "Your project will be created within a new child directory."
 msgstr "您的工程将被创建在一个新的子文件夹中。"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:228
+#: src/plugins/create-project/gbp-create-project-surface.c:232
 msgid "Directory already exists with that name"
 msgstr "已有同名目录存在"
 
 #. translators: %s is replaced with a short-form file-system path to the project
-#: src/plugins/create-project/gbp-create-project-surface.c:246
+#: src/plugins/create-project/gbp-create-project-surface.c:250
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "您的工程将被创建在 %s 中。"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:279
+#: src/plugins/create-project/gbp-create-project-surface.c:283
 msgid "Application ID is not valid."
 msgstr "应用程序 ID 无效。"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:623
+#: src/plugins/create-project/gbp-create-project-surface.c:627
 msgctxt "title"
 msgid "Start New Project"
 msgstr "开始新工程"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:792
+#: src/plugins/create-project/gbp-create-project-surface.c:796
 msgid "A failure occurred while initializing version control"
 msgstr "初始化版本控制时发生错误"
 
@@ -3937,7 +4002,7 @@ msgstr "索引源代码（已暂停）"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:402
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:404
 msgid "Run with Debugger"
 msgstr "带调试器运行"
 
@@ -4004,18 +4069,9 @@ msgstr "拆解"
 msgid "Failed to start the debugger"
 msgstr "启动调试器失败"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
-#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
-msgid "Debugger"
-msgstr "调试器"
-
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:316
 msgid "Threads"
 msgstr "线程"
-
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
-msgid "Breakpoints"
-msgstr "中断点"
 
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:350
 msgid "Libraries"
@@ -4102,7 +4158,7 @@ msgstr "Devhelp"
 msgid "Select Documentation…"
 msgstr "选择文档…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:208
+#: src/plugins/devhelp/gbp-devhelp-page.c:242
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "文档"
@@ -4112,8 +4168,8 @@ msgid "Print…"
 msgstr "打印…"
 
 #: src/plugins/devhelp/gtk/menus.ui:21
-msgid "New Documentation Page"
-msgstr "新建文档页面"
+msgid "New _Documentation Page"
+msgstr "新建文档页面(_D)"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -4337,8 +4393,12 @@ msgid "New Editor Workspace…"
 msgstr "新建编辑器工作区…"
 
 #: src/plugins/editor/gtk/menus.ui:102
-msgid "New File"
-msgstr "新建文件"
+msgid "New _File"
+msgstr "新建文件(_F)"
+
+#: src/plugins/editor/gtk/menus.ui:111
+msgid "_Open File…"
+msgstr "打开文件(_O)…"
 
 #: src/plugins/editor/gtk/menus.ui:122
 msgid "Move Page Left"
@@ -4407,13 +4467,18 @@ msgid ""
 "This may result in the execution of code in your project."
 msgstr "启用 ESLint 以诊断 JavaScript 脚本文件。这有可能会执行您项目中的代码。"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
-msgid "Clone a project using flatpak manifest"
-msgstr "克隆使用 flatpak manifest 的工程"
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:778
+msgid "Installation failed"
+msgstr "安装失败"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
-msgid "MANIFEST"
-msgstr "MANIFEST"
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:784
+msgid "Installation complete"
+msgstr "安装完成"
+
+#: src/plugins/flatpak/gbp-flatpak-client.c:328
+#: src/plugins/git/gbp-git-client.c:328
+msgid "The client has been closed"
+msgstr "客户端已被关闭"
 
 #. translators: %s is replaced with the name of the flatpak manifest
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.c:144
@@ -4425,7 +4490,7 @@ msgstr "正在克隆工程 %s"
 msgid "Downloading application sources…"
 msgstr "正在下载应用程序源代码…"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:680
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "移除 flatpak manifest 失败：%s"
@@ -4434,11 +4499,11 @@ msgstr "移除 flatpak manifest 失败：%s"
 msgid "Network is not available, skipping downloads"
 msgstr "网络不可用，跳过下载"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:150
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
 msgid "Install Missing SDK?"
 msgstr "安装缺失的 SDK 吗？"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:155
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "安装(_I)"
 
@@ -4454,122 +4519,57 @@ msgstr "Builder 需要安装以下软件开发工具集以构建您的工程。"
 msgid "Architecture"
 msgstr "架构"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:175
 msgid "Creating flatpak workspace"
 msgstr "正在创建 flatpak 工作区"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:361
 msgid "Preparing build directory"
 msgstr "正在准备构建目录"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:412
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
 msgid "Downloading dependencies"
 msgstr "正在下载依赖"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:491
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
 msgid "Building dependencies"
 msgstr "正在构建依赖"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:541
 msgid "Finalizing flatpak build"
 msgstr "正在结束 flatpak 构建"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:586
 msgid "Exporting staging directory"
 msgstr "正在导出暂存目录"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:671
 msgid "Creating flatpak bundle"
 msgstr "正在创建 flatpak 捆绑包"
 
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-msgid "Install"
-msgstr "安装"
-
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
-msgid "Update"
-msgstr "更新"
-
-#. translators: keywords are used to match search keywords in preferences
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:297
-#, c-format
-msgid "flatpak %s %s %s"
-msgstr "flatpak %s %s %s"
-
-#. translators: %u is the number of hidden runtimes to be shown
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:312
-#, c-format
-msgid "Show %u more runtime"
-msgid_plural "show %u more runtimes"
-msgstr[0] "显示 %u 个更多的运行时"
-
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:401
-msgid "Flatpak Runtimes"
-msgstr "Flatpak 运行时"
-
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:779
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:80
-#, c-format
-msgid "Updated %s"
-msgstr "已更新 %s"
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:414
+msgid "Installing Necessary SDKs"
+msgstr "正在安装必要的 SDK"
 
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:83
-#, c-format
-msgid "Updating %s"
-msgstr "正在更新 %s"
-
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:89
-#, c-format
-msgid "Installed %s"
-msgstr "已安装 %s"
-
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:92
-#, c-format
-msgid "Installing %s"
-msgstr "正在安装 %s"
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
-msgid "Failed to install runtime"
-msgstr "无法安装运行时"
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
-msgid "Runtime has been updated"
-msgstr "运行时已更新"
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:122
-msgid "Runtime has been installed"
-msgstr "运行时已安装"
-
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:87
-msgid "Missing system dependencies"
-msgstr "缺少系统依赖"
-
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:88
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:415
 msgid ""
-"The “flatpak-builder” program is necessary for building Flatpak-based "
-"applications. Builder can install it for you."
-msgstr ""
-"构建基于 Flatpak 的应用程序需要“flatpak-builder”这个程序。Builder 可以为您安"
-"装它。"
+"Builder is installing Software Development Kits necessary for building your "
+"application."
+msgstr "Builder 正在安装构建您的应用所必需的软件开发工具集。"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4592,12 +4592,12 @@ msgstr "没有对 diff 设置比较内容"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "操作失败。原始错误为“%s”"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:68
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
 #, c-format
 msgid "The operation has been canceled"
 msgstr "操作已被取消"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4618,10 +4618,6 @@ msgstr "无法在没有 GPG_KEY_ID 情况下对提交签名"
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "无法监控在工作目录外的文件"
-
-#: src/plugins/git/gbp-git-client.c:328
-msgid "The client has been closed"
-msgstr "客户端已被关闭"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4727,23 +4723,23 @@ msgstr "撤消上个命令"
 msgid "Redo the next command"
 msgstr "重做下个命令"
 
-#: src/plugins/glade/gbp-glade-page.c:492
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to selection mode"
 msgstr "切换到选择模式"
 
-#: src/plugins/glade/gbp-glade-page.c:493
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to drag-resize mode"
 msgstr "切换到拖拽-缩放模式"
 
-#: src/plugins/glade/gbp-glade-page.c:494
+#: src/plugins/glade/gbp-glade-page.c:496
 msgid "Switch to margin editor"
 msgstr "切换到边缘空白编辑器"
 
-#: src/plugins/glade/gbp-glade-page.c:495
+#: src/plugins/glade/gbp-glade-page.c:497
 msgid "Switch to alignment editor"
 msgstr "切换到对齐编辑器"
 
-#: src/plugins/glade/gbp-glade-page.c:500
+#: src/plugins/glade/gbp-glade-page.c:502
 msgid "Unnamed Glade project"
 msgstr "未命名 Glade 工程"
 
@@ -4869,23 +4865,31 @@ msgstr "在文件中查找"
 msgid "Replace With"
 msgstr "替换为"
 
+#: src/plugins/grep/gbp-grep-panel.ui:67
+msgid "Replace"
+msgstr "替换"
+
 #: src/plugins/grep/gbp-grep-popover.ui:28
 msgid "Search for…"
 msgstr "搜索…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:54
+#: src/plugins/grep/gbp-grep-popover.ui:38
+msgid "_Find"
+msgstr "查找(_F)"
+
+#: src/plugins/grep/gbp-grep-popover.ui:55
 msgid "Search _recursively through folders"
 msgstr "递归搜索文件夹(_R)"
 
-#: src/plugins/grep/gbp-grep-popover.ui:61
+#: src/plugins/grep/gbp-grep-popover.ui:62
 msgid "Match _case when searching"
 msgstr "搜索时匹配大小写(_C)"
 
-#: src/plugins/grep/gbp-grep-popover.ui:69
+#: src/plugins/grep/gbp-grep-popover.ui:70
 msgid "Match _whole words"
 msgstr "匹配整个单词(_W)"
 
-#: src/plugins/grep/gbp-grep-popover.ui:76
+#: src/plugins/grep/gbp-grep-popover.ui:77
 msgid "Allow regular _expressions"
 msgstr "允许正则表达式(_E)"
 
@@ -4924,12 +4928,12 @@ msgstr "通过 Python 提示补全"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "为 Python 语言使用 Jedi 提供补全"
 
-#: src/plugins/ls/gbp-ls-page.c:315
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "无法加载目录：%s"
 
-#: src/plugins/ls/gbp-ls-page.c:387
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "%s — 目录"
@@ -4943,16 +4947,16 @@ msgid "Modified"
 msgstr "修改"
 
 #: src/plugins/ls/gtk/menus.ui:8
-msgid "Browse Folder"
-msgstr "浏览文件夹"
+msgid "_Browse Folder"
+msgstr "浏览文件夹(_B)"
 
 #: src/plugins/ls/gtk/menus.ui:18
-msgid "Switch to Folder"
-msgstr "切换到文件夹"
+msgid "S_witch to Folder"
+msgstr "切换到文件夹(_W)"
 
-#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
-msgid "Open Containing Folder"
-msgstr "打开所在文件夹"
+#: src/plugins/ls/gtk/menus.ui:23
+msgid "_Open Containing Folder"
+msgstr "打开所在文件夹(_O)"
 
 #: src/plugins/make/make_plugin.py:101
 msgid "Build project"
@@ -4970,35 +4974,43 @@ msgstr "空白 Makefile 工程"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "使用一个简单 Makefile 新建空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:249
+#: src/plugins/meson-templates/meson_templates.py:252
+msgid "GNOME Application (Legacy)"
+msgstr "GNOME 应用程序（过时）"
+
+#: src/plugins/meson-templates/meson_templates.py:254
+msgid "Create a GNOME application with GTK 3"
+msgstr "使用 GTK 3 创建 GNOME 应用程序"
+
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "GNOME Application"
 msgstr "GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:251
-msgid "Create a new GNOME application"
-msgstr "新建 GNOME 应用程序"
+#: src/plugins/meson-templates/meson_templates.py:332
+msgid "Create a GNOME application with GTK 4"
+msgstr "使用 GTK 4 创建 GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:411
 msgid "Shared Library"
 msgstr "已共享库"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:413
 msgid "Create a new project with a shared library"
 msgstr "用已共享库新建工程"
 
-#: src/plugins/meson-templates/meson_templates.py:347
+#: src/plugins/meson-templates/meson_templates.py:430
 msgid "Empty Project"
 msgstr "空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:349
+#: src/plugins/meson-templates/meson_templates.py:432
 msgid "Create a new empty project"
 msgstr "创建新的空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:366
+#: src/plugins/meson-templates/meson_templates.py:449
 msgid "Command Line Tool"
 msgstr "命令行工具"
 
-#: src/plugins/meson-templates/meson_templates.py:368
+#: src/plugins/meson-templates/meson_templates.py:451
 msgid "Create a new command line project"
 msgstr "创建一个新的命令行工程"
 
@@ -5031,7 +5043,7 @@ msgstr "添加工具链"
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr "为指定平台定义新的自定义工具链"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:203
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:204
 msgid "Toolchain"
 msgstr "工具链"
 
@@ -5264,13 +5276,16 @@ msgstr "构建已自举"
 msgid "Downloading npm dependencies"
 msgstr "正在下载 npm 依赖"
 
+#: src/plugins/open-with-external/gtk/menus.ui:9
+msgid "_External Program…"
+msgstr "外部程序(_E)…"
+
 #: src/plugins/phpize/phpize_plugin.py:191
 msgid "Bootstrapping project"
 msgstr "自举工程"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:182
-#| msgid "Containers/Podman"
 msgid "Containers/Toolbox"
 msgstr "容器/Toolbox"
 
@@ -5358,29 +5373,32 @@ msgid "Open With…"
 msgstr "打开为…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
-msgid "_External Program…"
-msgstr "外部程序(_E)…"
-
-#: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "源代码编辑器"
 
-#: src/plugins/project-tree/gtk/menus.ui:52
+#: src/plugins/project-tree/gtk/menus.ui:39
+msgid "Open Containing Folder"
+msgstr "打开所在文件夹"
+
+#: src/plugins/project-tree/gtk/menus.ui:45
 msgid "Open in Terminal"
 msgstr "在终端打开"
 
-#: src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/project-tree/gtk/menus.ui:59
 msgid "Move to Trash"
 msgstr "移至回收站"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
+#: src/plugins/project-tree/gtk/menus.ui:65
 msgid "Display Options"
 msgstr "显示选项"
 
-#: src/plugins/project-tree/gtk/menus.ui:94
-#: src/plugins/project-tree/gtk/menus.ui:103
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "Reveal in Project Tree"
 msgstr "在工程树中展示"
+
+#: src/plugins/project-tree/gtk/menus.ui:96
+msgid "Reveal in Project _Tree"
+msgstr "在工程树中展示(_T)"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5430,8 +5448,8 @@ msgid "Recent Projects"
 msgstr "最近的工程"
 
 #: src/plugins/retab/gtk/menus.ui:9
-msgid "Reformat tabs"
-msgstr "重新格式化制表符"
+msgid "_Reformat tabs"
+msgstr "重新格式化制表符(_R)"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
 msgid "Rust Analyzer: Cargo command for diagnostics"
@@ -5660,9 +5678,9 @@ msgstr "语言(_L)"
 msgid "Check _Spelling"
 msgstr "检查拼写(_S)"
 
-#: src/plugins/spellcheck/gtk/menus.ui:14
-msgid "Underline misspelled words"
-msgstr "在拼错的词语下划线"
+#: src/plugins/spellcheck/gtk/menus.ui:13
+msgid "_Underline misspelled words"
+msgstr "在拼错的词语下划线(_U)"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
 msgid "Enable Stylelint"
@@ -5739,27 +5757,27 @@ msgstr "文档大纲"
 msgid "Profiler"
 msgstr "分析器"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:284
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:258
 msgid "Open Sysprof Capture…"
 msgstr "打开 Sysprof 捕获…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:293
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:267
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof 捕获文件 (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:299
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:273
 msgid "All Files"
 msgstr "所有文件"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:422
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:396
 #: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with Profiler"
 msgstr "带分析器运行"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
-msgid "Open Sysprof Capture…"
-msgstr "打开 Sysprof 捕获…"
+msgid "Open _Sysprof Capture…"
+msgstr "打开 _Sysprof 捕获…"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
 msgid "Add sysroot"
@@ -5802,12 +5820,10 @@ msgid "Terminal"
 msgstr "终端"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
-#| msgid "Fallback"
 msgid "Scrollback"
 msgstr "回滚"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
-#| msgid "Terminal"
 msgid "Terminal Font"
 msgstr "终端字体"
 
@@ -5830,7 +5846,6 @@ msgid "terminal allow bold"
 msgstr "终端中允许粗体字"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:81
-#| msgid "Show grid lines"
 msgid "Show hyperlinks"
 msgstr "显示超链接"
 
@@ -5864,7 +5879,6 @@ msgid "Scroll on keystroke"
 msgstr "键入时滚动"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:105
-#| msgid "If enabled, the terminal page will close after the command executes."
 msgid "When enabled the terminal will scroll to the bottom when typing"
 msgstr "当启用时终端会在键入时滚动至底部"
 
@@ -5889,12 +5903,10 @@ msgid "scrollback limit"
 msgstr "回滚限制"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
-#| msgid "Sort Lines"
 msgid "Scrollback Lines"
 msgstr "回滚行数"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
-#| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "The number of lines to keep available for scrolling"
 msgstr "为回滚保留可用的行数"
 
@@ -5989,6 +6001,10 @@ msgid ""
 "you."
 msgstr "Builder 有更新可用。Builder 可以为您下载并安装它。"
 
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
+msgid "_Update"
+msgstr "更新(_U)"
+
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
 msgid "Vagrant"
@@ -5999,11 +6015,11 @@ msgstr "Vagrant"
 msgid "Run with Valgrind"
 msgstr "带 Valgrind 运行"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:419
 msgid "Branches"
 msgstr "分支"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:476
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:429
 msgid "Tags"
 msgstr "标签"
 
@@ -6139,6 +6155,66 @@ msgstr "无法创建 XML 树。"
 msgid "File must be saved locally to parse."
 msgstr "文件必须保存在本地来解析。"
 
+#~ msgid "New File"
+#~ msgstr "新建文件"
+
+#~ msgctxt "menu label"
+#~ msgid "Open Sysprof Capture…"
+#~ msgstr "打开 Sysprof 捕获…"
+
+#~ msgid "true"
+#~ msgstr "true"
+
+#~ msgid "Clone a project using flatpak manifest"
+#~ msgstr "克隆使用 flatpak manifest 的工程"
+
+#~ msgid "MANIFEST"
+#~ msgstr "MANIFEST"
+
+#~ msgid "Install"
+#~ msgstr "安装"
+
+#~ msgid "flatpak %s %s %s"
+#~ msgstr "flatpak %s %s %s"
+
+#~ msgid "Show %u more runtime"
+#~ msgid_plural "show %u more runtimes"
+#~ msgstr[0] "显示 %u 个更多的运行时"
+
+#~ msgid "Flatpak Runtimes"
+#~ msgstr "Flatpak 运行时"
+
+#~ msgid "Updated %s"
+#~ msgstr "已更新 %s"
+
+#~ msgid "Updating %s"
+#~ msgstr "正在更新 %s"
+
+#~ msgid "Installed %s"
+#~ msgstr "已安装 %s"
+
+#~ msgid "Installing %s"
+#~ msgstr "正在安装 %s"
+
+#~ msgid "Failed to install runtime"
+#~ msgstr "无法安装运行时"
+
+#~ msgid "Runtime has been updated"
+#~ msgstr "运行时已更新"
+
+#~ msgid "Runtime has been installed"
+#~ msgstr "运行时已安装"
+
+#~ msgid "Missing system dependencies"
+#~ msgstr "缺少系统依赖"
+
+#~ msgid ""
+#~ "The “flatpak-builder” program is necessary for building Flatpak-based "
+#~ "applications. Builder can install it for you."
+#~ msgstr ""
+#~ "构建基于 Flatpak 的应用程序需要“flatpak-builder”这个程序。Builder 可以为您"
+#~ "安装它。"
+
 #~ msgid "Podman"
 #~ msgstr "Podman"
 
@@ -6185,9 +6261,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Downloading "
 #~ msgstr "正在下载 "
-
-#~ msgid "Installing "
-#~ msgstr "正在安装 "
 
 #~ msgid "Checking for rustup updates"
 #~ msgstr "正在检查 rustup 更新"
@@ -6694,15 +6767,6 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgid "Move a file to the trash"
 #~ msgstr "移动文件至回收站"
 
-#~ msgid "New _File"
-#~ msgstr "新建文件(_F)"
-
-#~ msgid "_Build"
-#~ msgstr "构建(_B)"
-
-#~ msgid "_Rebuild"
-#~ msgstr "重新构建(_R)"
-
 #~ msgid "_Collapse All Nodes"
 #~ msgstr "折叠所有节点(_C)"
 
@@ -6906,9 +6970,6 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle right panel"
 #~ msgstr "切换右侧面板"
-
-#~ msgid "Installing %s %s"
-#~ msgstr "正在安装 %s %s"
 
 #~ msgid "MinGW 64-bit"
 #~ msgstr "MinGW 64位"
