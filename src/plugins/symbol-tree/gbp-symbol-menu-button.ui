@@ -75,7 +75,8 @@
         <child type="center">
           <object class="GtkLabel" id="symbol_title">
             <property name="ellipsize">end</property>
-            <property name="label" translatable="yes">Document Outline</property>
+            <property name="label" translatable="yes">_Document Outline</property>
+            <property name="use-underline">True</property>
             <property name="visible">true</property>
           </object>
         </child>

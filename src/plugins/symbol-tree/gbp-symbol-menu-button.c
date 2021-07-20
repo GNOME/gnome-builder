@@ -311,7 +311,7 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
 
   if (dzl_str_empty0 (title))
     {
-      title = _("Select Symbol…");
+      title = _("_Select Symbol…");
       icon_name = NULL;
       symbol = NULL;
     }

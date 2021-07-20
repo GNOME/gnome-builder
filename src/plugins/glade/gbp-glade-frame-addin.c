@@ -297,7 +297,8 @@ gbp_glade_frame_addin_load (IdeFrameAddin *addin,
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->image));
 
   self->label = g_object_new (GTK_TYPE_LABEL,
-                              "label", _("Select Widget…"),
+                              "use-underline", TRUE,
+                              "label", _("_Select Widget…"),
                               "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->label));
@@ -314,6 +315,7 @@ gbp_glade_frame_addin_load (IdeFrameAddin *addin,
    */
   self->toggle_source = g_object_new (GTK_TYPE_BUTTON,
                                       "has-tooltip", TRUE,
+                                      "use-underline", TRUE,
                                       "hexpand", FALSE,
                                       "visible", FALSE,
                                       NULL);
@@ -390,7 +392,7 @@ gbp_glade_frame_addin_set_view (IdeFrameAddin *addin,
 
       if (g_str_has_suffix (name, ".ui"))
         {
-          gtk_button_set_label (self->toggle_source, _("View Design"));
+          gtk_button_set_label (self->toggle_source, _("_View Design"));
           gtk_widget_set_tooltip_text (GTK_WIDGET (self->toggle_source),
                                        _("Switch to UI designer"));
           gtk_widget_show (GTK_WIDGET (self->toggle_source));
@@ -398,7 +400,7 @@ gbp_glade_frame_addin_set_view (IdeFrameAddin *addin,
     }
   else if (GBP_IS_GLADE_PAGE (view))
     {
-      gtk_button_set_label (self->toggle_source, _("View Source"));
+      gtk_button_set_label (self->toggle_source, _("_View Source"));
       gtk_widget_set_tooltip_text (GTK_WIDGET (self->toggle_source),
                                    _("Switch to source code editor"));
       gtk_widget_show (GTK_WIDGET (self->toggle_source));
