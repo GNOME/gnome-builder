@@ -1,4 +1,4 @@
-libflatpak_dep = dependency('flatpak', version: '>= 1.0.0')
+libflatpak_dep = dependency('flatpak', version: '>= 1.11.2')
 
 gnome_builder_flatpak_deps = [
   libgiounix_dep,
