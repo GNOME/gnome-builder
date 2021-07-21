@@ -181,6 +181,7 @@ libide_gui_deps = [
   libdazzle_dep,
   libpeas_dep,
   libwebkit_dep,
+  dependency('libcmark', version: '>= 0.29.0'),
 
   libide_core_dep,
   libide_io_dep,

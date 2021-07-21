@@ -622,6 +622,24 @@
             ]
         },
         {
+            "name" : "cmark",
+            "buildsystem" : "cmake-ninja",
+            "builddir" : true,
+            "config-opts" : [
+              "-DCMARK_TESTS=OFF",
+              "-DCMARK_SHARED=OFF"
+            ],
+            "cleanup" : [
+                "/bin/cmark"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/commonmark/cmark"
+                }
+            ]
+        },
+        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,

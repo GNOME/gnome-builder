@@ -209,15 +209,17 @@ ide_marked_content_get_bytes (IdeMarkedContent *self)
 /**
  * ide_marked_content_as_string:
  * @self: a #IdeMarkedContent
+ * @len: (out) (optional): Location to store the length of the returned strings in bytes, or %NULL
  *
- * Gets the contents of the marked content as a newly allcoated C string.
+ * Gets the contents of the marked content as a C string.
  *
- * Returns: (nullable): a newly allocated string or %NULL
+ * Returns: (transfer none) (nullable): the content as a string or %NULL
  *
  * Since: 3.32
  */
-gchar *
-ide_marked_content_as_string (IdeMarkedContent *self)
+const gchar *
+ide_marked_content_as_string (IdeMarkedContent *self,
+                              gsize            *len)
 {
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (self->magic == IDE_MARKED_CONTENT_MAGIC, NULL);
@@ -225,11 +227,16 @@ ide_marked_content_as_string (IdeMarkedContent *self)
 
   if (self->data != NULL)
     {
-      const gchar *buf;
-      gsize len;
+      const gchar *result;
+      gsize length;
 
-      if ((buf = g_bytes_get_data (self->data, &len)))
-        return g_strndup (buf, len);
+      if ((result = g_bytes_get_data (self->data, &length)))
+        {
+          if (len != NULL)
+            *len = length;
+
+          return result;
+        }
     }
 
   return NULL;
