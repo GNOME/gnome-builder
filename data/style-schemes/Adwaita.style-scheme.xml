@@ -138,7 +138,7 @@
   <style name="def:special-constant"        foreground="light5"/>
   <style name="def:statement"               foreground="green5" bold="true"/>
   <style name="def:string"                  foreground="orange3"/>
-  <style name="def:strong-emphasis"         foreground="green5" bold="true"/>
+  <style name="def:strong-emphasis"         foreground="dark2" bold="true"/>
   <style name="def:thematic-break"          foreground="green5" bold="true"/>
   <style name="def:type"                    foreground="dark2" bold="true"/>
   <style name="def:warning"                 background="yellow3"/>
