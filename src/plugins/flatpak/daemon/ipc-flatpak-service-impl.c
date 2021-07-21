@@ -509,8 +509,10 @@ is_known_worker (GTask        *task,
 
   if (str_equal0 (ref_arch, flatpak_get_default_arch ()))
     flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
+#if FLATPAK_CHECK_VERSION(1, 11, 2)
   else
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
+#endif
 
   for (guint z = 0; z < state->installs->len; z++)
     {
@@ -821,8 +823,10 @@ find_remote_for_ref (IpcFlatpakServiceImpl *self,
    */
   if (str_equal0 (flatpak_get_default_arch (), flatpak_ref_get_arch (ref)))
     flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
+#if FLATPAK_CHECK_VERSION(1, 11, 2)
   else
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
+#endif
 
   /* Someday we might want to prompt the user for which remote to install from,
    * but for now we'll just take the first.
@@ -1004,8 +1008,10 @@ resolve_extension (GPtrArray  *installations,
 
   if (str_equal0 (sdk_arch, flatpak_get_default_arch ()))
     flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
+#if FLATPAK_CHECK_VERSION(1, 11, 2)
   else
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
+#endif
 
   strings = g_string_chunk_new (4096);
   maybe_extention_of = g_array_new (FALSE, FALSE, sizeof (ResolveExtension));
