@@ -1,6 +1,6 @@
 /* rust-analyzer-search-provider.c
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2020-2021 Günther Wagner <info@gunibert.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
+#define G_LOG_DOMAIN "rust-analyzer-search-provider"
 
 #include <libide-search.h>
 

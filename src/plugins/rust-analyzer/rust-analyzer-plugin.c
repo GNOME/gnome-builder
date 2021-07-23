@@ -1,6 +1,6 @@
 /* rust-analyzer-plugin.c
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2020-2021 Günther Wagner <info@gunibert.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,11 +66,9 @@ _rust_analyzer_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RENAME_PROVIDER,
                                               RUST_TYPE_ANALYZER_RENAME_PROVIDER);
-#if 0
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SEARCH_PROVIDER,
                                               RUST_TYPE_ANALYZER_SEARCH_PROVIDER);
-#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               RUST_TYPE_ANALYZER_PREFERENCES_ADDIN);
