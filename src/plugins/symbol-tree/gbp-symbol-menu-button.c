@@ -296,6 +296,7 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
 {
   const gchar *title = NULL;
   const gchar *icon_name = NULL;
+  gboolean use_underline = FALSE;
 
   IDE_ENTRY;
 
@@ -312,6 +313,7 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
   if (dzl_str_empty0 (title))
     {
       title = _("_Select Symbol…");
+      use_underline = TRUE;
       icon_name = NULL;
       symbol = NULL;
     }
@@ -322,6 +324,7 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
                 NULL);
 
   gtk_label_set_label (self->symbol_title, title);
+  gtk_label_set_use_underline (self->symbol_title, use_underline);
 
   IDE_EXIT;
 }
