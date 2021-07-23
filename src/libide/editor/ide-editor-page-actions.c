@@ -374,10 +374,10 @@ ide_editor_page_actions_save_as (GSimpleAction *action,
     }
 
   toplevel = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
-  dialog = gtk_file_chooser_native_new (_("Save File As"),
+  dialog = gtk_file_chooser_native_new (_("Save a Copy"),
                                         GTK_WINDOW (toplevel),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("Save As"),
+                                        _("Save"),
                                         _("Cancel"));
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
