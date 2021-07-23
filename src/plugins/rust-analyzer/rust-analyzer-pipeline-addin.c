@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-gui.h>
+#include <libide-core.h>
 
 #include "rust-analyzer-pipeline-addin.h"
 
@@ -283,13 +284,21 @@ rust_analyzer_pipeline_addin_prepare (IdePipelineAddin *addin,
                                       IdePipeline      *pipeline)
 {
   RustAnalyzerPipelineAddin *self = (RustAnalyzerPipelineAddin *)addin;
+  IdeContext *context = NULL;
+  IdeBuildSystem *buildsystem = NULL;
   g_autoptr(GFile) cargo_home = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autoptr(IdeNotification) notif = NULL;
 
   IDE_ENTRY;
 
   g_assert (RUST_IS_ANALYZER_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
+
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  buildsystem = ide_build_system_from_context (context);
+  if (!ide_str_equal (ide_build_system_get_id (buildsystem), "cargo"))
+      IDE_EXIT;
 
   self->pipeline = pipeline;
 
@@ -307,6 +316,13 @@ rust_analyzer_pipeline_addin_prepare (IdePipelineAddin *addin,
       set_path (self, g_file_peek_path (file), g_file_peek_path (cargo_home));
       IDE_EXIT;
     }
+
+  notif = ide_notification_new ();
+  ide_notification_set_id (notif, "org.gnome.builder.rust-analyzer");
+  ide_notification_set_title (notif, "Could not find rust-analyzer.");
+  ide_notification_set_body (notif, "Install rust-analyzer in your PATH or use the flatpak extension");
+  ide_notification_set_urgent (notif, TRUE);
+  ide_notification_attach (notif, IDE_OBJECT (pipeline));
 
   set_path (self, NULL, NULL);
 
