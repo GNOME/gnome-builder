@@ -3,6 +3,9 @@
     "runtime" : "org.gnome.Sdk",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.llvm12"
+    ],
     "command" : "gnome-builder",
     "tags" : [
         "nightly"
@@ -59,7 +62,9 @@
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH" : "../tmp/",
             "V" : "1"
-        }
+        },
+        "prepend-path": "/usr/lib/sdk/llvm12/bin",
+        "prepend-ld-library-path": "/usr/lib/sdk/llvm12/lib"
     },
     "cleanup" : [
         "/bin/rst*",
