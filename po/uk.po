@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-07-23 20:32+0000\n"
-"PO-Revision-Date: 2021-07-24 09:40+0300\n"
+"POT-Creation-Date: 2021-07-24 16:53+0000\n"
+"PO-Revision-Date: 2021-07-24 21:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -999,8 +999,7 @@ msgstr "Скасувати"
 
 #: src/libide/editor/ide-editor-page-actions.c:377
 msgid "Save a Copy"
-msgstr ""
-"Зберегти копію"
+msgstr "Зберегти копію"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:33
 #: src/libide/editor/ide-editor-page-shortcuts.c:39
@@ -2467,7 +2466,6 @@ msgid "Save the document"
 msgstr "Зберегти документ"
 
 #: src/libide/gui/ide-shortcuts-window.ui:129
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save a copy of the document"
 msgstr "Зберегти копію документа"
@@ -2986,22 +2984,23 @@ msgstr "Термінал без назви"
 msgid "Save Terminal Content As"
 msgstr "Зберегти вміст терміналу як"
 
-#: src/libide/terminal/ide-terminal-page.c:105
-#: src/libide/terminal/ide-terminal-page.c:150
-#: src/libide/terminal/ide-terminal-page.c:291
+#: src/libide/terminal/ide-terminal-page.c:112
+#: src/libide/terminal/ide-terminal-page.c:158
+#: src/libide/terminal/ide-terminal-page.c:301
 msgid "Untitled terminal"
 msgstr "Термінал без назви"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:107
+#: src/libide/terminal/ide-terminal-page.c:114
 msgid "Exited"
 msgstr "Вихід"
 
-#: src/libide/terminal/ide-terminal-page.c:114
-msgid "Subprocess launcher failed"
-msgstr "Не вдалося запустити підпроцес"
+#: src/libide/terminal/ide-terminal-page.c:121
+msgid "Failed to launch subprocess. You may need to rebuild your project."
+msgstr ""
+"Не вдалося запустити підпроцес. Можливо, вам слід повторно зібрати ваш проєкт."
 
-#: src/libide/terminal/ide-terminal-page.c:137
+#: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 "Надто швидке завершення роботи засобу запуску підпроцесу. Перезапуск не "
@@ -5910,7 +5909,7 @@ msgstr "Символ без назви"
 msgid "Symbol"
 msgstr "Символ"
 
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:314
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:315
 msgid "_Select Symbol…"
 msgstr "В_ибрати символ…"
 
@@ -6340,6 +6339,9 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Subprocess launcher failed"
+#~ msgstr "Не вдалося запустити підпроцес"
 
 #~ msgid "Save File As"
 #~ msgstr "Збереження файла з новою назвою"
