@@ -79,9 +79,13 @@ terminal_has_notification_signal (void)
 static gboolean
 destroy_widget_in_idle (GtkWidget *widget)
 {
+  IDE_ENTRY;
+
   g_assert (GTK_IS_WIDGET (widget));
+
   gtk_widget_destroy (widget);
-  return G_SOURCE_REMOVE;
+
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
@@ -94,6 +98,8 @@ ide_terminal_page_spawn_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autofree gchar *title = NULL;
   gint64 now;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_TERMINAL_LAUNCHER (launcher));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -116,7 +122,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
     }
 
   if (gtk_widget_in_destruction (GTK_WIDGET (self)))
-    return;
+    IDE_EXIT;
 
   if (!self->respawn_on_exit)
     {
@@ -127,7 +133,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
                                    g_object_unref);
       else
         vte_terminal_set_input_enabled (VTE_TERMINAL (self->terminal_top), FALSE);
-      return;
+      IDE_EXIT;
     }
 
   now = g_get_monotonic_time ();
@@ -136,7 +142,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
     {
       ide_terminal_page_feed (self, _("Subprocess launcher failed too quickly, will not respawn."));
       ide_terminal_page_feed (self, "\r\n");
-      return;
+      IDE_EXIT;
     }
 
   g_clear_object (&self->pty);
@@ -153,6 +159,8 @@ ide_terminal_page_spawn_cb (GObject      *object,
                                      NULL,
                                      ide_terminal_page_spawn_cb,
                                      g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void
