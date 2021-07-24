@@ -97,6 +97,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
   g_autoptr(IdeTerminalPage) self = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *title = NULL;
+  gboolean maybe_flapping;
   gint64 now;
 
   IDE_ENTRY;
@@ -117,16 +118,19 @@ ide_terminal_page_spawn_cb (GObject      *object,
     {
       g_autofree gchar *format = NULL;
 
-      format = g_strdup_printf ("%s: %s\r\n", _("Subprocess launcher failed"), error->message);
+      format = g_strdup_printf ("%s\r\n%s\r\n", _("Failed to launch subprocess. You may need to rebuild your project."), error->message);
       ide_terminal_page_feed (self, format);
     }
 
   if (gtk_widget_in_destruction (GTK_WIDGET (self)))
     IDE_EXIT;
 
+  now = g_get_monotonic_time ();
+  maybe_flapping = ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC;
+
   if (!self->respawn_on_exit)
     {
-      if (self->close_on_exit)
+      if (self->close_on_exit && !maybe_flapping)
         gdk_threads_add_idle_full (G_PRIORITY_LOW + 1000,
                                    (GSourceFunc) destroy_widget_in_idle,
                                    g_object_ref (self),
@@ -136,9 +140,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  now = g_get_monotonic_time ();
-
-  if (ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC)
+  if (maybe_flapping)
     {
       ide_terminal_page_feed (self, _("Subprocess launcher failed too quickly, will not respawn."));
       ide_terminal_page_feed (self, "\r\n");
