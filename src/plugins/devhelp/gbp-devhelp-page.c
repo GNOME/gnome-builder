@@ -228,6 +228,23 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
 
+static void
+setup_webview_styling (WebKitWebView *web_view)
+{
+  /* Both gi-docgen and gtk-doc use the devhelp-hidden style class to give indications of what
+   * elements should be hidden for use by devhelp. Generally it's for the sidebar but it allows
+   * to hide really anything not useful for devhelp (e.g. the TOC which already has native GTK
+   * widgets in Builder/Devhelp. So follow Devhelp here and hide them.
+   */
+  g_autoptr(WebKitUserStyleSheet) stylesheet =
+    webkit_user_style_sheet_new (".devhelp-hidden { display: none; }",
+                                 WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+                                 WEBKIT_USER_STYLE_LEVEL_USER,
+                                 NULL, NULL);
+  webkit_user_content_manager_add_style_sheet (webkit_web_view_get_user_content_manager (web_view),
+                                               stylesheet);
+}
+
 static const GActionEntry actions[] = {
   { "print", gbp_devhelp_page_actions_print },
 };
@@ -248,6 +265,8 @@ gbp_devhelp_page_init (GbpDevhelpPage *self)
   self->search_revealer = gbp_devhelp_search_get_revealer (self->search);
   self->clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
   self->web_controller = webkit_web_view_get_find_controller (self->web_view);
+
+  setup_webview_styling (self->web_view);
 
   gtk_overlay_add_overlay (self->devhelp_overlay,
                            GTK_WIDGET (self->search_revealer));
