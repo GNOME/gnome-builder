@@ -1710,7 +1710,7 @@ ide_config_set_prepend_path (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (priv->prepend_path != prepend_path)
+  if (g_strcmp0 (priv->prepend_path, prepend_path) != 0)
     {
       g_free (priv->prepend_path);
       priv->prepend_path = g_strdup (prepend_path);
@@ -1736,7 +1736,7 @@ ide_config_set_append_path (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (priv->append_path != append_path)
+  if (g_strcmp0 (priv->append_path, append_path) != 0)
     {
       g_free (priv->append_path);
       priv->append_path = g_strdup (append_path);
