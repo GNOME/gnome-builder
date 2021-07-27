@@ -66,6 +66,9 @@ gboolean               ide_subprocess_launcher_get_run_on_host      (IdeSubproce
 IDE_AVAILABLE_IN_3_32
 void                   ide_subprocess_launcher_set_run_on_host      (IdeSubprocessLauncher  *self,
                                                                      gboolean                run_on_host);
+IDE_AVAILABLE_IN_41
+void                   ide_subprocess_launcher_prepend_path         (IdeSubprocessLauncher  *self,
+                                                                     const gchar            *prepend_path);
 IDE_AVAILABLE_IN_3_32
 void                   ide_subprocess_launcher_append_path          (IdeSubprocessLauncher  *self,
                                                                      const gchar            *append_path);

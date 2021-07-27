@@ -246,6 +246,10 @@ discover_environ (GbpFlatpakManifest *self,
       (str = json_object_get_string_member (build_options, "cxxflags")))
     ide_environment_setenv (env, "CXXFLAGS", str);
 
+  if (json_object_has_member (build_options, "prepend-path") &&
+      (str = json_object_get_string_member (build_options, "prepend-path")))
+    ide_config_set_prepend_path (IDE_CONFIG (self), str);
+
   if (json_object_has_member (build_options, "append-path") &&
       (str = json_object_get_string_member (build_options, "append-path")))
     ide_config_set_append_path (IDE_CONFIG (self), str);

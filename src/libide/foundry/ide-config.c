@@ -46,6 +46,7 @@ typedef struct
   gchar          *run_opts;
   gchar          *runtime_id;
   gchar          *toolchain_id;
+  gchar          *prepend_path;
   gchar          *append_path;
 
   GFile          *build_commands_dir;
@@ -79,6 +80,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeConfig, ide_config, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_PREPEND_PATH,
   PROP_APPEND_PATH,
   PROP_APP_ID,
   PROP_BUILD_COMMANDS,
@@ -322,6 +324,8 @@ ide_config_finalize (GObject *object)
   g_clear_pointer (&priv->runtime_id, g_free);
   g_clear_pointer (&priv->app_id, g_free);
   g_clear_pointer (&priv->toolchain_id, g_free);
+  g_clear_pointer (&priv->prepend_path, g_free);
+  g_clear_pointer (&priv->append_path, g_free);
 
   G_OBJECT_CLASS (ide_config_parent_class)->finalize (object);
 }
@@ -406,6 +410,10 @@ ide_config_get_property (GObject    *object,
 
     case PROP_APP_ID:
       g_value_set_string (value, ide_config_get_app_id (self));
+      break;
+
+    case PROP_PREPEND_PATH:
+      g_value_set_string (value, ide_config_get_prepend_path (self));
       break;
 
     case PROP_APPEND_PATH:
@@ -495,6 +503,10 @@ ide_config_set_property (GObject      *object,
       ide_config_set_app_id (self, g_value_get_string (value));
       break;
 
+    case PROP_PREPEND_PATH:
+      ide_config_set_prepend_path (self, g_value_get_string (value));
+      break;
+
     case PROP_APPEND_PATH:
       ide_config_set_append_path (self, g_value_get_string (value));
       break;
@@ -522,6 +534,13 @@ ide_config_class_init (IdeConfigClass *klass)
 
   klass->get_runtime = ide_config_real_get_runtime;
   klass->set_runtime = ide_config_real_set_runtime;
+
+  properties [PROP_PREPEND_PATH] =
+    g_param_spec_string ("prepend-path",
+                         "Prepend Path",
+                         "Prepend to PATH environment variable",
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   properties [PROP_APPEND_PATH] =
     g_param_spec_string ("append-path",
@@ -1674,6 +1693,32 @@ ide_config_set_run_opts (IdeConfig   *self,
 }
 
 const gchar *
+ide_config_get_prepend_path (IdeConfig *self)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIG (self), NULL);
+
+  return priv->prepend_path;
+}
+
+void
+ide_config_set_prepend_path (IdeConfig   *self,
+                             const gchar *prepend_path)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIG (self));
+
+  if (priv->prepend_path != prepend_path)
+    {
+      g_free (priv->prepend_path);
+      priv->prepend_path = g_strdup (prepend_path);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREPEND_PATH]);
+    }
+}
+
+const gchar *
 ide_config_get_append_path (IdeConfig *self)
 {
   IdeConfigPrivate *priv = ide_config_get_instance_private (self);
@@ -1707,6 +1752,9 @@ ide_config_apply_path (IdeConfig             *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
+  if (priv->prepend_path != NULL)
+    ide_subprocess_launcher_prepend_path (launcher, priv->prepend_path);
 
   if (priv->append_path != NULL)
     ide_subprocess_launcher_append_path (launcher, priv->append_path);

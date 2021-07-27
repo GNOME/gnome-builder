@@ -58,6 +58,11 @@ struct _IdeConfigClass
   gpointer _reserved[15];
 };
 
+IDE_AVAILABLE_IN_41
+const gchar          *ide_config_get_prepend_path          (IdeConfig             *self);
+IDE_AVAILABLE_IN_41
+void                  ide_config_set_prepend_path          (IdeConfig             *self,
+                                                            const gchar           *prepend_path);
 IDE_AVAILABLE_IN_3_32
 const gchar          *ide_config_get_append_path           (IdeConfig             *self);
 IDE_AVAILABLE_IN_3_32
