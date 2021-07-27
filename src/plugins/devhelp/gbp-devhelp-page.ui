@@ -7,7 +7,7 @@
         <property name="expand">true</property>
         <property name="visible">true</property>
         <child>
-          <object class="WebKitWebView" id="web_view1">
+          <object class="WebKitWebView" id="web_view">
             <property name="visible">true</property>
             <property name="expand">true</property>
           </object>

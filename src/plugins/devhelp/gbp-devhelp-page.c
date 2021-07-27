@@ -29,7 +29,7 @@ struct _GbpDevhelpPage
 {
   IdePage         parent_instance;
 
-  WebKitWebView        *web_view1;
+  WebKitWebView        *web_view;
   WebKitFindController *web_controller;
   GtkClipboard         *clipboard;
 
@@ -63,7 +63,7 @@ gbp_devhelp_page_set_uri (GbpDevhelpPage *self,
   if (uri == NULL || g_strcmp0 (uri, gbp_devhelp_page_get_uri (self)) == 0)
     return;
 
-  webkit_web_view_load_uri (self->web_view1, uri);
+  webkit_web_view_load_uri (self->web_view, uri);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_URI]);
 }
 
@@ -78,7 +78,7 @@ gbp_devhelp_page_get_uri (GbpDevhelpPage *self)
 {
   g_return_val_if_fail (GBP_IS_DEVHELP_PAGE (self), NULL);
 
-  return webkit_web_view_get_uri (self->web_view1);
+  return webkit_web_view_get_uri (self->web_view);
 }
 
 static void
@@ -91,7 +91,7 @@ gbp_devhelp_page_notify_title (GbpDevhelpPage *self,
   g_assert (GBP_IS_DEVHELP_PAGE (self));
   g_assert (WEBKIT_IS_WEB_VIEW (web_view));
 
-  title = webkit_web_view_get_title (self->web_view1);
+  title = webkit_web_view_get_title (self->web_view);
 
   ide_page_set_title (IDE_PAGE (self), title);
 }
@@ -105,7 +105,7 @@ gbp_devhelp_page_create_split (IdePage *view)
 
   g_assert (GBP_IS_DEVHELP_PAGE (self));
 
-  uri = webkit_web_view_get_uri (self->web_view1);
+  uri = webkit_web_view_get_uri (self->web_view);
   other = g_object_new (GBP_TYPE_DEVHELP_PAGE,
                         "visible", TRUE,
                         "uri", uri,
@@ -125,7 +125,7 @@ gbp_devhelp_page_actions_print (GSimpleAction *action,
 
   g_assert (GBP_IS_DEVHELP_PAGE (self));
 
-  operation = webkit_print_operation_new (self->web_view1);
+  operation = webkit_print_operation_new (self->web_view);
   window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
   webkit_print_operation_run_dialog (operation, GTK_WINDOW (window));
   g_object_unref (operation);
@@ -173,7 +173,7 @@ gbp_devhelp_search_reveal (GbpDevhelpPage *self)
 {
   g_assert (GBP_IS_DEVHELP_PAGE (self));
 
-  webkit_web_view_can_execute_editing_command (self->web_view1, WEBKIT_EDITING_COMMAND_COPY, NULL, NULL, NULL);
+  webkit_web_view_can_execute_editing_command (self->web_view, WEBKIT_EDITING_COMMAND_COPY, NULL, NULL, NULL);
   gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
 }
 
@@ -222,7 +222,7 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/devhelp/gbp-devhelp-page.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpDevhelpPage, web_view1);
+  gtk_widget_class_bind_template_child (widget_class, GbpDevhelpPage, web_view);
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpPage, devhelp_overlay);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
@@ -247,7 +247,7 @@ gbp_devhelp_page_init (GbpDevhelpPage *self)
   self->search = g_object_new (GBP_TYPE_DEVHELP_SEARCH, NULL);
   self->search_revealer = gbp_devhelp_search_get_revealer (self->search);
   self->clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
-  self->web_controller = webkit_web_view_get_find_controller (self->web_view1);
+  self->web_controller = webkit_web_view_get_find_controller (self->web_view);
 
   gtk_overlay_add_overlay (self->devhelp_overlay,
                            GTK_WIDGET (self->search_revealer));
@@ -256,12 +256,12 @@ gbp_devhelp_page_init (GbpDevhelpPage *self)
                                   self->web_controller,
                                   self->clipboard);
 
-  g_signal_connect_object (self->web_view1,
+  g_signal_connect_object (self->web_view,
                            "notify::title",
                            G_CALLBACK (gbp_devhelp_page_notify_title),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->web_view1,
+  g_signal_connect_object (self->web_view,
                           "focus-in-event",
                            G_CALLBACK (gbp_devhelp_focus_in_event),
                            self,
