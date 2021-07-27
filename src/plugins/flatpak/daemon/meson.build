@@ -56,3 +56,6 @@ test_flatpak = executable('test-flatpak', 'test-flatpak.c', test_flatpak_sources
 test_install = executable('test-install', 'test-install.c', test_install_sources,
   dependencies: [ libgiounix_dep ],
 )
+
+# test('Test flatpak daemon', test_flatpak, depends: gnome_builder_flatpak, workdir: meson.current_build_dir())
+# test('Test flatpak daemon install', test_install, depends: gnome_builder_flatpak, workdir: meson.current_build_dir(), args: 'org.freedesktop.Sdk.Extension.rust-stable//20.08')
