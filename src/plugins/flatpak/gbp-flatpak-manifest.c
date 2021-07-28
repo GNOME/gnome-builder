@@ -344,6 +344,8 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   g_autofree gchar *run_args = NULL;
   g_autoptr(JsonParser) parser = NULL;
   g_auto(GStrv) build_commands = NULL;
+  g_auto(GStrv) make_args = NULL;
+  g_auto(GStrv) make_install_args = NULL;
   g_auto(GStrv) post_install = NULL;
   const gchar *app_id_field = "app-id";
   g_autoptr(IdeContext) context = NULL;
@@ -454,6 +456,16 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
     ide_config_set_locality (IDE_CONFIG (self), IDE_BUILD_LOCALITY_OUT_OF_TREE);
   else
     ide_config_set_locality (IDE_CONFIG (self), IDE_BUILD_LOCALITY_IN_TREE);
+
+  if (discover_strv_field (primary, "make-args", &make_args))
+    ide_config_set_args_for_phase (IDE_CONFIG (self),
+                                   IDE_PIPELINE_PHASE_BUILD,
+                                   (const gchar * const *)make_args);
+
+  if (discover_strv_field (primary, "make-install-args", &make_install_args))
+    ide_config_set_args_for_phase (IDE_CONFIG (self),
+                                   IDE_PIPELINE_PHASE_INSTALL,
+                                   (const gchar * const *)make_install_args);
 
   discover_environ (self, root_obj);
 

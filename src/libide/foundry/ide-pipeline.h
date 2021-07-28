@@ -34,6 +34,7 @@
 #include "ide-build-log.h"
 #include "ide-config.h"
 #include "ide-pipeline-stage.h"
+#include "ide-pipeline-phase.h"
 #include "ide-runtime.h"
 #include "ide-triplet.h"
 
@@ -43,25 +44,6 @@ G_BEGIN_DECLS
 #define IDE_PIPELINE_PHASE_MASK        (0xFFFFFF)
 #define IDE_PIPELINE_PHASE_WHENCE_MASK (IDE_PIPELINE_PHASE_BEFORE | IDE_PIPELINE_PHASE_AFTER)
 #define IDE_BUILD_ERROR                (ide_build_error_quark())
-
-typedef enum
-{
-  IDE_PIPELINE_PHASE_NONE         = 0,
-  IDE_PIPELINE_PHASE_PREPARE      = 1 << 0,
-  IDE_PIPELINE_PHASE_DOWNLOADS    = 1 << 1,
-  IDE_PIPELINE_PHASE_DEPENDENCIES = 1 << 2,
-  IDE_PIPELINE_PHASE_AUTOGEN      = 1 << 3,
-  IDE_PIPELINE_PHASE_CONFIGURE    = 1 << 4,
-  IDE_PIPELINE_PHASE_BUILD        = 1 << 6,
-  IDE_PIPELINE_PHASE_INSTALL      = 1 << 7,
-  IDE_PIPELINE_PHASE_COMMIT       = 1 << 8,
-  IDE_PIPELINE_PHASE_EXPORT       = 1 << 9,
-  IDE_PIPELINE_PHASE_FINAL        = 1 << 10,
-  IDE_PIPELINE_PHASE_BEFORE       = 1 << 28,
-  IDE_PIPELINE_PHASE_AFTER        = 1 << 29,
-  IDE_PIPELINE_PHASE_FINISHED     = 1 << 30,
-  IDE_PIPELINE_PHASE_FAILED       = 1 << 31,
-} IdePipelinePhase;
 
 typedef enum
 {

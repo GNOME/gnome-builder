@@ -73,7 +73,7 @@ libide_foundry_enum_headers = [
   'ide-config.h',
   'ide-device.h',
   'ide-device-info.h',
-  'ide-pipeline.h',
+  'ide-pipeline-phase.h',
   'ide-runtime.h',
   'ide-test.h',
 ]

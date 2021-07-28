@@ -28,6 +28,7 @@
 #include <libide-threading.h>
 
 #include "ide-foundry-types.h"
+#include "ide-pipeline-phase.h"
 
 G_BEGIN_DECLS
 
@@ -228,5 +229,13 @@ void                  ide_config_set_internal_object       (IdeConfig           
                                                             gpointer               instance);
 IDE_AVAILABLE_IN_3_34
 GPtrArray            *ide_config_get_extensions            (IdeConfig             *self);
+IDE_AVAILABLE_IN_41
+const gchar * const  *ide_config_get_args_for_phase        (IdeConfig             *self,
+                                                            IdePipelinePhase       phase);
+IDE_AVAILABLE_IN_41
+void                  ide_config_set_args_for_phase        (IdeConfig             *self,
+                                                            IdePipelinePhase       phase,
+                                                            const gchar *const    *args);
+
 
 G_END_DECLS

@@ -89,6 +89,9 @@ class MakePipelineAddin(Ide.Object, Ide.PipelineAddin):
         build_launcher = pipeline.create_launcher()
         build_launcher.set_cwd(build_system.get_make_dir().get_path())
         build_launcher.push_argv(make)
+        build_args = config.get_args_for_phase(Ide.PipelinePhase.BUILD)
+        if build_args:
+            build_launcher.push_args(build_args)
         if config.props.parallelism > 0:
             build_launcher.push_argv('-j{}'.format(config.props.parallelism))
 
@@ -110,6 +113,9 @@ class MakePipelineAddin(Ide.Object, Ide.PipelineAddin):
         install_launcher.set_cwd(build_system.get_make_dir().get_path())
         install_launcher.push_argv(make)
         install_launcher.push_argv('install')
+        install_args = config.get_args_for_phase(Ide.PipelinePhase.INSTALL)
+        if install_args:
+            install_launcher.push_args(install_args)
 
         install_stage = Ide.PipelineStageLauncher.new(context, install_launcher)
         install_stage.set_name(_("Install project"))

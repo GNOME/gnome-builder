@@ -48,6 +48,7 @@ typedef struct
   gchar          *toolchain_id;
   gchar          *prepend_path;
   gchar          *append_path;
+  GHashTable     *pipeline_args;
 
   GFile          *build_commands_dir;
 
@@ -316,6 +317,7 @@ ide_config_finalize (GObject *object)
 
   g_clear_pointer (&priv->build_commands, g_strfreev);
   g_clear_pointer (&priv->internal, g_hash_table_unref);
+  g_clear_pointer (&priv->pipeline_args, g_hash_table_unref);
   g_clear_pointer (&priv->config_opts, g_free);
   g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->id, g_free);
@@ -714,6 +716,7 @@ ide_config_init (IdeConfig *self)
   priv->parallelism = -1;
   priv->locality = IDE_BUILD_LOCALITY_DEFAULT;
   priv->internal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _value_free);
+  priv->pipeline_args = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) g_strfreev);
 
   ide_config_set_environment (self, env);
   ide_config_set_runtime_environment (self, rt_env);
@@ -1834,7 +1837,7 @@ _ide_config_attach (IdeConfig *self)
   /*
    * We don't start monitoring changed events until we've gotten back
    * to the main loop (in case of threaded loaders) which happens from
-   * the point where the configuration is added ot the config manager.
+   * the point where the configuration is added to the config manager.
    */
 
   if (!(context = ide_object_get_context (IDE_OBJECT (self))))
@@ -1911,4 +1914,29 @@ ide_config_get_extensions (IdeConfig *self)
     ret = g_ptr_array_new ();
 
   return g_steal_pointer (&ret);
+}
+
+const gchar * const *
+ide_config_get_args_for_phase (IdeConfig        *self,
+                               IdePipelinePhase  phase)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+  const gchar * const *args;
+
+  g_return_val_if_fail (IDE_IS_CONFIG (self), NULL);
+
+  args = g_hash_table_lookup (priv->pipeline_args, GINT_TO_POINTER (phase));
+  return args;
+}
+
+void
+ide_config_set_args_for_phase (IdeConfig           *self,
+                               IdePipelinePhase     phase,
+                               const gchar * const *args)
+{
+  IdeConfigPrivate *priv = ide_config_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIG (self));
+
+  g_hash_table_insert (priv->pipeline_args, GINT_TO_POINTER (phase), g_strdupv ((gchar **)args));
 }

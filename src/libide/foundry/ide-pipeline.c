@@ -292,7 +292,7 @@ struct _IdePipeline
 
   /*
    * Precalculation if we need to look for errors on stdout. We can't rely
-   * on @current_stage for this, becase log entries might come in
+   * on @current_stage for this, because log entries might come in
    * asynchronously and after the processes/stage has completed.
    */
   guint errors_on_stdout : 1;
