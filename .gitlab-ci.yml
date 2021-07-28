@@ -1,20 +1,22 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
 flatpak:
-    extends: .flatpak
-    variables:
-        GIT_SUBMODULE_STRATEGY: normal
+  extends: .flatpak
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
 
-        # Replace with your manifest path
-        MANIFEST_PATH: "build-aux/flatpak/org.gnome.Builder.json"
-        RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
-        # Replace with your application name, as written in the manifest
-        FLATPAK_MODULE: "gnome-builder"
-        APP_ID: "org.gnome.Builder"
-        BUNDLE: "gnome-builder-git.flatpak"
-
+    # Replace with your manifest path
+    MANIFEST_PATH: "build-aux/flatpak/org.gnome.Builder.json"
+    RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
+    # Replace with your application name, as written in the manifest
+    FLATPAK_MODULE: "gnome-builder"
+    APP_ID: "org.gnome.Builder"
+    BUNDLE: "gnome-builder-git.flatpak"
+  before_script:
+    - flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+    - flatpak --user install -y flathub-beta org.freedesktop.Sdk.Extension.llvm12//21.08beta
 
 nightly:
-  extends: '.publish_nightly'
-  dependencies:
+    extends: '.publish_nightly'
+    dependencies:
         - 'flatpak'
