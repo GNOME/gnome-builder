@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-07-24 16:53+0000\n"
-"PO-Revision-Date: 2021-07-24 21:18+0300\n"
+"POT-Creation-Date: 2021-07-27 22:52+0000\n"
+"PO-Revision-Date: 2021-07-28 14:45+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2998,7 +2998,8 @@ msgstr "Вихід"
 #: src/libide/terminal/ide-terminal-page.c:121
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
-"Не вдалося запустити підпроцес. Можливо, вам слід повторно зібрати ваш проєкт."
+"Не вдалося запустити підпроцес. Можливо, вам слід повторно зібрати ваш "
+"проєкт."
 
 #: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
@@ -4269,7 +4270,7 @@ msgstr "Devhelp"
 msgid "_Select Documentation…"
 msgstr "Ви_брати документацію…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:242
+#: src/plugins/devhelp/gbp-devhelp-page.c:259
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Документація"
@@ -5547,8 +5548,9 @@ msgid "Reveal in Project Tree"
 msgstr "Розкрити в ієрархії проєкту"
 
 #: src/plugins/project-tree/gtk/menus.ui:96
-msgid "Reveal in Project _Tree"
-msgstr "Розкрити в і_єрархії проєкту"
+#| msgid "Reveal in Project _Tree"
+msgid "Reveal File in Project _Tree"
+msgstr "Показати файл в і_єрархії проєкту"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
