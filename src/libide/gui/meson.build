@@ -58,7 +58,6 @@ install_headers(libide_gui_public_headers, subdir: libide_gui_header_subdir)
 #
 
 libide_gui_private_headers = [
-  'gs-markdown-private.h',
   'ide-application-private.h',
   'ide-environment-editor-row.h',
   'ide-frame-wrapper.h',
@@ -80,7 +79,6 @@ libide_gui_private_headers = [
 ]
 
 libide_gui_private_sources = [
-  'gs-markdown.c',
   'ide-application-actions.c',
   'ide-application-color.c',
   'ide-application-shortcuts.c',
