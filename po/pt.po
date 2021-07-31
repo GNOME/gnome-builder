@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-07-23 20:32+0000\n"
-"PO-Revision-Date: 2021-07-24 15:04+0100\n"
+"POT-Creation-Date: 2021-07-27 22:52+0000\n"
+"PO-Revision-Date: 2021-07-31 22:14+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -2980,22 +2980,23 @@ msgstr "Terminal sem título"
 msgid "Save Terminal Content As"
 msgstr "Gravar conteúdo do terminal como"
 
-#: src/libide/terminal/ide-terminal-page.c:105
-#: src/libide/terminal/ide-terminal-page.c:150
-#: src/libide/terminal/ide-terminal-page.c:291
+#: src/libide/terminal/ide-terminal-page.c:112
+#: src/libide/terminal/ide-terminal-page.c:158
+#: src/libide/terminal/ide-terminal-page.c:301
 msgid "Untitled terminal"
 msgstr "Terminal sem título"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:107
+#: src/libide/terminal/ide-terminal-page.c:114
 msgid "Exited"
 msgstr "Saíu"
 
-#: src/libide/terminal/ide-terminal-page.c:114
-msgid "Subprocess launcher failed"
-msgstr "Iniciador de subprocesso falhou"
+#: src/libide/terminal/ide-terminal-page.c:121
+msgid "Failed to launch subprocess. You may need to rebuild your project."
+msgstr ""
+"Falha ao iniciar o subprocesso. Pode precisar de recompilar o seu projeto."
 
-#: src/libide/terminal/ide-terminal-page.c:137
+#: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "Iniciador de subprocesso falhou rápido demais, não será reiniciado."
 
@@ -4264,7 +4265,7 @@ msgstr "Devhelp"
 msgid "_Select Documentation…"
 msgstr "_Selecionar documentação…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:242
+#: src/plugins/devhelp/gbp-devhelp-page.c:259
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Documentação"
@@ -5545,8 +5546,8 @@ msgid "Reveal in Project Tree"
 msgstr "Revelar em árvore de projeto"
 
 #: src/plugins/project-tree/gtk/menus.ui:96
-msgid "Reveal in Project _Tree"
-msgstr "Revelar em árvore de projet_o"
+msgid "Reveal File in Project _Tree"
+msgstr "Revelar ficheiro em árvore de proje_to"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5902,7 +5903,7 @@ msgstr "Símbolo sem nome"
 msgid "Symbol"
 msgstr "Símbolo"
 
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:314
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:315
 msgid "_Select Symbol…"
 msgstr "_Selecionar símbolo…"
 
@@ -6330,6 +6331,9 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
+
+#~ msgid "Subprocess launcher failed"
+#~ msgstr "Iniciador de subprocesso falhou"
 
 #~ msgid "Save File As"
 #~ msgstr "Guardar Ficheiros Como"
