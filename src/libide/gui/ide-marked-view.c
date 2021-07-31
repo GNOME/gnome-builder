@@ -35,7 +35,7 @@
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (cmark_node, cmark_node_free);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (cmark_iter, cmark_iter_free);
 
-// Keeps track of a markdown list we are currently rendering in.
+/* Keeps track of a markdown list we are currently rendering in. */
 struct list_context {
   cmark_list_type list_type;
   guint next_elem_number;
@@ -90,7 +90,7 @@ render_node(GString          *out,
     case CMARK_NODE_DOCUMENT:
       break;
 
-    // Leaf nodes, these will never have an exit event.
+    /* Leaf nodes, these will never have an exit event. */
     case CMARK_NODE_THEMATIC_BREAK:
     case CMARK_NODE_LINEBREAK:
       g_string_append (out, "\n");
@@ -111,7 +111,7 @@ render_node(GString          *out,
       g_string_append (out, cmark_node_get_literal (node));
       break;
 
-    // Normal nodes, these have exit events if they are not leaf nodes
+    /* Normal nodes, these have exit events if they are not leaf nodes */
     case CMARK_NODE_EMPH:
       if (entering)
         {
@@ -197,8 +197,9 @@ render_node(GString          *out,
         {
           g_string_append (out, "\n");
 
-          // When not in a list, append another newline to create vertical space
-          // between paragraphs.
+          /* When not in a list, append another newline to create vertical space
+           * between paragraphs.
+           */
           if (g_queue_is_empty (list_stack))
             g_string_append (out, "\n");
         }
@@ -221,7 +222,7 @@ render_node(GString          *out,
         {
           g_free (g_queue_pop_tail (list_stack));
 
-          // If this was the outermost list, add a newline to create vertical spacing.
+          /* If this was the outermost list, add a newline to create vertical spacing. */
           if (g_queue_is_empty (list_stack))
             g_string_append (out, "\n");
         }
@@ -236,7 +237,7 @@ render_node(GString          *out,
 
           g_return_val_if_fail (list != NULL, FALSE);
 
-          // Indent sublists by four spaces per level
+          /* Indent sublists by four spaces per level */
           for (gint i = 0; i < g_queue_get_length (list_stack) - 1; i++)
             g_string_append (out, "    ");
 
@@ -252,7 +253,7 @@ render_node(GString          *out,
         }
       break;
 
-    // Not properly implemented (yet), falls back to default implementation
+    /* Not properly implemented (yet), falls back to default implementation */
     case CMARK_NODE_BLOCK_QUOTE:
     case CMARK_NODE_HTML_BLOCK:
     case CMARK_NODE_CUSTOM_BLOCK:
