@@ -209,13 +209,12 @@ render_node(GString          *out,
         {
           g_autofree struct list_context *list = NULL;
 
-          list = g_malloc (sizeof (struct list_context));
-
+          list = g_new0 (struct list_context, 1);
           list->list_type = cmark_node_get_list_type (node);
+          list->next_elem_number = cmark_node_get_list_start (node);
 
           g_return_val_if_fail (list->list_type != CMARK_NO_LIST, FALSE);
 
-          list->next_elem_number = cmark_node_get_list_start (node);
           g_queue_push_tail (list_stack, g_steal_pointer (&list));
         }
       else
