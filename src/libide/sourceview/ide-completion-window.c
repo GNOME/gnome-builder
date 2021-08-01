@@ -46,7 +46,7 @@ enum {
 extern gpointer *gdk__private__                (void);
 static void      completion_display_iface_init (IdeCompletionDisplayInterface *);
 
-G_DEFINE_TYPE_WITH_CODE (IdeCompletionWindow, ide_completion_window, GTK_TYPE_WINDOW,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCompletionWindow, ide_completion_window, GTK_TYPE_WINDOW,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_DISPLAY,
                                                 completion_display_iface_init))
 

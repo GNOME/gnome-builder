@@ -57,7 +57,7 @@ typedef struct
 static void list_model_iface_init     (GListModelInterface *iface);
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeToolchainManager, ide_toolchain_manager, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeToolchainManager, ide_toolchain_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init))
 

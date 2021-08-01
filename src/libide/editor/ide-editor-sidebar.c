@@ -61,7 +61,7 @@ struct _IdeEditorSidebar
   GtkStack          *stack;
 };
 
-G_DEFINE_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE_TYPE_PANEL)
+G_DEFINE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE_TYPE_PANEL)
 
 static void
 ide_editor_sidebar_update_title (IdeEditorSidebar *self)

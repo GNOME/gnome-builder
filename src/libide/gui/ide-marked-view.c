@@ -326,7 +326,7 @@ struct _IdeMarkedView
   GtkBin parent_instance;
 };
 
-G_DEFINE_TYPE (IdeMarkedView, ide_marked_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeMarkedView, ide_marked_view, GTK_TYPE_BIN)
 
 static void
 ide_marked_view_class_init (IdeMarkedViewClass *klass)

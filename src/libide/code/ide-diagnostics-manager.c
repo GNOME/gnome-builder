@@ -154,7 +154,7 @@ static void     ide_diagnostics_group_queue_diagnose      (IdeDiagnosticsGroup  
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
-G_DEFINE_TYPE (IdeDiagnosticsManager, ide_diagnostics_manager, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeDiagnosticsManager, ide_diagnostics_manager, IDE_TYPE_OBJECT)
 
 static void
 free_diagnostics (gpointer data)

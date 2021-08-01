@@ -33,7 +33,7 @@
 #include "ide-terminal-search.h"
 #include "ide-terminal-search-private.h"
 
-G_DEFINE_TYPE (IdeTerminalSearch, ide_terminal_search, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, GTK_TYPE_BIN)
 
 enum {
   PROP_0,

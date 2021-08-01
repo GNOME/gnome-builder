@@ -122,7 +122,7 @@ struct _IdeTreeNode
   guint foreground_set : 1;
 };
 
-G_DEFINE_TYPE (IdeTreeNode, ide_tree_node, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeTreeNode, ide_tree_node, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

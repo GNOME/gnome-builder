@@ -50,7 +50,7 @@ typedef struct
   GtkTextMark *insert;
 } VirtualCursor;
 
-G_DEFINE_TYPE (IdeCursor, ide_cursor, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeCursor, ide_cursor, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

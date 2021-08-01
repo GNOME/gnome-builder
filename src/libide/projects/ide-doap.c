@@ -46,7 +46,7 @@ struct _IdeDoap
 };
 
 G_DEFINE_QUARK (ide_doap_error, ide_doap_error)
-G_DEFINE_TYPE (IdeDoap, ide_doap, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeDoap, ide_doap, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

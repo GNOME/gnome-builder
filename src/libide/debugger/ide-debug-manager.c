@@ -77,7 +77,7 @@ enum {
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
-G_DEFINE_TYPE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT)
 
 static gint
 compare_language_id (gconstpointer a,

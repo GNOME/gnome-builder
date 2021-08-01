@@ -43,7 +43,7 @@ struct _IdeWorkerManager
   GHashTable        *plugin_name_to_worker;
 };
 
-G_DEFINE_TYPE (IdeWorkerManager, ide_worker_manager, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeWorkerManager, ide_worker_manager, G_TYPE_OBJECT)
 
 DZL_DEFINE_COUNTER (instances, "IdeWorkerManager", "Instances", "Number of IdeWorkerManager instances")
 

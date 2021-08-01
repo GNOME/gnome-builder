@@ -86,7 +86,7 @@ typedef struct
   gchar *command;
 } CompileInfo;
 
-G_DEFINE_TYPE (IdeCompileCommands, ide_compile_commands, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeCompileCommands, ide_compile_commands, G_TYPE_OBJECT)
 
 static void
 compile_info_free (gpointer data)

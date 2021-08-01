@@ -54,7 +54,7 @@ struct _IdeTerminalLauncher
   LauncherKind           kind;
 };
 
-G_DEFINE_TYPE (IdeTerminalLauncher, ide_terminal_launcher, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeTerminalLauncher, ide_terminal_launcher, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

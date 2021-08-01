@@ -115,7 +115,7 @@ DZL_DEFINE_ACTION_GROUP (IdeEditorSearch, ide_editor_search, {
   { "at-word-boundaries", ide_editor_search_actions_at_word_boundary, "b" },
 })
 
-G_DEFINE_TYPE_WITH_CODE (IdeEditorSearch, ide_editor_search, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeEditorSearch, ide_editor_search, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_editor_search_init_action_group))
 
 static GParamSpec *properties [N_PROPS];

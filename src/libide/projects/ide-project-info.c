@@ -69,7 +69,7 @@ struct _IdeProjectInfo
   guint       is_recent : 1;
 };
 
-G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

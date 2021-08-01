@@ -36,7 +36,7 @@ struct _IdeEditorPrintOperation
   GtkSourcePrintCompositor *compositor;
 };
 
-G_DEFINE_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, GTK_TYPE_PRINT_OPERATION)
+G_DEFINE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, GTK_TYPE_PRINT_OPERATION)
 
 enum {
   PROP_0,

@@ -39,7 +39,7 @@ struct _IdeDirectoryVcs
 
 static void vcs_iface_init (IdeVcsInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeDirectoryVcs, ide_directory_vcs, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeDirectoryVcs, ide_directory_vcs, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, vcs_iface_init))
 
 enum {

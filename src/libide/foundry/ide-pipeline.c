@@ -361,7 +361,7 @@ static void ide_pipeline_tick_rebuild (IdePipeline         *self,
 static void initable_iface_init       (GInitableIface      *iface);
 static void list_model_iface_init     (GListModelInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdePipeline, ide_pipeline, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdePipeline, ide_pipeline, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 

@@ -52,7 +52,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE (IdeCompletionView, ide_completion_view, DZL_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeCompletionView, ide_completion_view, DZL_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];

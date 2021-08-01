@@ -60,7 +60,7 @@ struct _IdePrimaryWorkspace
   DzlShortcutTooltip *search_tooltip;
 };
 
-G_DEFINE_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
+G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
 
 static void
 ide_primary_workspace_context_set (IdeWorkspace *workspace,

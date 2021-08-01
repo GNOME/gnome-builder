@@ -47,7 +47,7 @@ enum {
 
 static void ide_editor_page_update_reveal_timer (IdeEditorPage *self);
 
-G_DEFINE_TYPE (IdeEditorPage, ide_editor_page, IDE_TYPE_PAGE)
+G_DEFINE_FINAL_TYPE (IdeEditorPage, ide_editor_page, IDE_TYPE_PAGE)
 
 DZL_DEFINE_COUNTER (instances, "Editor", "N Views", "Number of editor views");
 

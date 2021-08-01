@@ -30,7 +30,7 @@ struct _IdeLspSearchResult
   IdeLocation     *location;
 };
 
-G_DEFINE_TYPE (IdeLspSearchResult, ide_lsp_search_result, IDE_TYPE_SEARCH_RESULT)
+G_DEFINE_FINAL_TYPE (IdeLspSearchResult, ide_lsp_search_result, IDE_TYPE_SEARCH_RESULT)
 
 enum {
   PROP_0,

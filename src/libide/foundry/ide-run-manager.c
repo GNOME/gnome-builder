@@ -83,7 +83,7 @@ DZL_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "stop", ide_run_manager_actions_stop },
 })
 
-G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
                                                ide_run_manager_init_action_group))

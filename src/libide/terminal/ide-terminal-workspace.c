@@ -32,7 +32,7 @@ struct _IdeTerminalWorkspace
   DzlShortcutTooltip *search_shortcut;
 };
 
-G_DEFINE_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE_TYPE_WORKSPACE)
+G_DEFINE_FINAL_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE_TYPE_WORKSPACE)
 
 static void
 ide_terminal_workspace_context_set_cb (GtkWidget  *widget,

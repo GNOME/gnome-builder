@@ -96,7 +96,7 @@ DZL_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
   { "reload-tests", ide_test_manager_actions_reload },
 })
 
-G_DEFINE_TYPE_WITH_CODE (IdeTestManager, ide_test_manager, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTestManager, ide_test_manager, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
                                                 ide_test_manager_init_action_group))

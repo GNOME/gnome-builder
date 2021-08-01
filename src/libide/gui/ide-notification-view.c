@@ -39,7 +39,7 @@ struct _IdeNotificationView
   GtkImage        *default_button_image;
 };
 
-G_DEFINE_TYPE (IdeNotificationView, ide_notification_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeNotificationView, ide_notification_view, GTK_TYPE_BIN)
 
 enum {
   PROP_0,

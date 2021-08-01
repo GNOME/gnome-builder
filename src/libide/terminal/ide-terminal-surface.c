@@ -32,7 +32,7 @@ struct _IdeTerminalSurface
   IdeGrid    *grid;
 };
 
-G_DEFINE_TYPE (IdeTerminalSurface, ide_terminal_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (IdeTerminalSurface, ide_terminal_surface, IDE_TYPE_SURFACE)
 
 /**
  * ide_terminal_surface_new:

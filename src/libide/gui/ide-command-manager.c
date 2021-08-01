@@ -54,7 +54,7 @@ typedef struct
   gint          n_active;
 } Query;
 
-G_DEFINE_TYPE (IdeCommandManager, ide_command_manager, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeCommandManager, ide_command_manager, IDE_TYPE_OBJECT)
 
 static void
 query_free (Query *q)

@@ -62,7 +62,7 @@ struct _IdeHighlightEngine
   guint                enabled : 1;
 };
 
-G_DEFINE_TYPE (IdeHighlightEngine, ide_highlight_engine, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeHighlightEngine, ide_highlight_engine, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,

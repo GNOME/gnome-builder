@@ -40,7 +40,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdePkconTransfer, ide_pkcon_transfer, IDE_TYPE_TRANSFER)
+G_DEFINE_FINAL_TYPE (IdePkconTransfer, ide_pkcon_transfer, IDE_TYPE_TRANSFER)
 
 static GParamSpec *properties [N_PROPS];
 

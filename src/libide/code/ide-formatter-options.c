@@ -38,7 +38,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeFormatterOptions, ide_formatter_options, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeFormatterOptions, ide_formatter_options, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 

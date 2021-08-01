@@ -29,7 +29,7 @@ struct _IdeNotificationsButtonPopover
   GtkPopover parent_instance;
 };
 
-G_DEFINE_TYPE (IdeNotificationsButtonPopover, ide_notifications_button_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (IdeNotificationsButtonPopover, ide_notifications_button_popover, GTK_TYPE_POPOVER)
 
 static GtkSizeRequestMode
 ide_notifications_button_popover_get_request_mode (GtkWidget *widget)

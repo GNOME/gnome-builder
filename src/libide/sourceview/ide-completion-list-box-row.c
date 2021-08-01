@@ -44,7 +44,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeCompletionListBoxRow, ide_completion_list_box_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (IdeCompletionListBoxRow, ide_completion_list_box_row, GTK_TYPE_LIST_BOX_ROW)
 
 static GParamSpec *properties [N_PROPS];
 

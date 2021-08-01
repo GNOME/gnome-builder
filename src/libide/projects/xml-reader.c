@@ -59,7 +59,7 @@ enum {
 };
 
 G_DEFINE_QUARK (xml_reader_error, xml_reader_error)
-G_DEFINE_TYPE (XmlReader, xml_reader, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (XmlReader, xml_reader, G_TYPE_OBJECT)
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];

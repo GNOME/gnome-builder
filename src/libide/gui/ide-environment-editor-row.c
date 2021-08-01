@@ -49,7 +49,7 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE (IdeEnvironmentEditorRow, ide_environment_editor_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (IdeEnvironmentEditorRow, ide_environment_editor_row, GTK_TYPE_LIST_BOX_ROW)
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];

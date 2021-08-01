@@ -61,7 +61,7 @@ typedef struct
   gchar     *drafts_directory;
 } AsyncState;
 
-G_DEFINE_TYPE (IdeUnsavedFiles, ide_unsaved_files, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeUnsavedFiles, ide_unsaved_files, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,

@@ -60,7 +60,7 @@ struct _IdeSnippetContextClass
   GObjectClass parent;
 };
 
-G_DEFINE_TYPE (IdeSnippetContext, ide_snippet_context, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSnippetContext, ide_snippet_context, G_TYPE_OBJECT)
 
 enum {
   CHANGED,

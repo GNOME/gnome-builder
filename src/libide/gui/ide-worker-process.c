@@ -44,7 +44,7 @@ struct _IdeWorkerProcess
   guint            quit : 1;
 };
 
-G_DEFINE_TYPE (IdeWorkerProcess, ide_worker_process, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeWorkerProcess, ide_worker_process, G_TYPE_OBJECT)
 
 DZL_DEFINE_COUNTER (instances, "IdeWorkerProcess", "Instances", "Number of IdeWorkerProcess instances")
 

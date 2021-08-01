@@ -54,7 +54,7 @@ static void ide_editor_surface_focus_location_full (IdeEditorSurface *self,
 
 static GParamSpec *properties [N_PROPS];
 
-G_DEFINE_TYPE (IdeEditorSurface, ide_editor_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (IdeEditorSurface, ide_editor_surface, IDE_TYPE_SURFACE)
 
 static void
 ide_editor_surface_foreach_page (IdeSurface  *surface,

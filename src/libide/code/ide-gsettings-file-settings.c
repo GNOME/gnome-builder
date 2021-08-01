@@ -43,7 +43,7 @@ typedef struct
   GSettingsBindGetMapping  get_mapping;
 } SettingsMapping;
 
-G_DEFINE_TYPE (IdeGsettingsFileSettings, ide_gsettings_file_settings, IDE_TYPE_FILE_SETTINGS)
+G_DEFINE_FINAL_TYPE (IdeGsettingsFileSettings, ide_gsettings_file_settings, IDE_TYPE_FILE_SETTINGS)
 
 static gboolean
 indent_style_get (GValue   *value,

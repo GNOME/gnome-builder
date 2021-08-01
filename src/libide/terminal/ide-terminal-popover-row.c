@@ -34,7 +34,7 @@ struct _IdeTerminalPopoverRow
   GtkImage      *check;
 };
 
-G_DEFINE_TYPE (IdeTerminalPopoverRow, ide_terminal_popover_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (IdeTerminalPopoverRow, ide_terminal_popover_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void
 ide_terminal_popover_row_finalize (GObject *object)

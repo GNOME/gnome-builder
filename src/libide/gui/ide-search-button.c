@@ -51,7 +51,7 @@ static const DzlShortcutEntry shortcuts[] = {
     N_("Focus to the global search entry") },
 };
 
-G_DEFINE_TYPE (IdeSearchButton, ide_search_button, DZL_TYPE_SUGGESTION_BUTTON)
+G_DEFINE_FINAL_TYPE (IdeSearchButton, ide_search_button, DZL_TYPE_SUGGESTION_BUTTON)
 
 static void
 search_entry_search_cb (GObject      *object,

@@ -73,7 +73,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeHoverPopover, ide_hover_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (IdeHoverPopover, ide_hover_popover, GTK_TYPE_POPOVER)
 
 static GParamSpec *properties [N_PROPS];
 

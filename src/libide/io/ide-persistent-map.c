@@ -61,7 +61,7 @@ struct _IdePersistentMap
 
 G_STATIC_ASSERT (sizeof (KVPair) == 8);
 
-G_DEFINE_TYPE (IdePersistentMap, ide_persistent_map, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdePersistentMap, ide_persistent_map, G_TYPE_OBJECT)
 
 static void
 ide_persistent_map_load_file_worker (IdeTask      *task,

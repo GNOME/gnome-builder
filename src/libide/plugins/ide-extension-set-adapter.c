@@ -44,7 +44,7 @@ struct _IdeExtensionSetAdapter
   guint       reload_handler;
 };
 
-G_DEFINE_TYPE (IdeExtensionSetAdapter, ide_extension_set_adapter, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeExtensionSetAdapter, ide_extension_set_adapter, IDE_TYPE_OBJECT)
 
 enum {
   EXTENSIONS_LOADED,

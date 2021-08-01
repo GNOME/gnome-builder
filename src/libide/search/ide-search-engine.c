@@ -56,7 +56,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeSearchEngine, ide_search_engine, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 

@@ -65,7 +65,7 @@ typedef struct
   IdePage         *restored_page;
 } RestoreItem;
 
-G_DEFINE_TYPE (IdeSession, ide_session, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSession, ide_session, IDE_TYPE_OBJECT)
 
 static void
 restore_free (Restore *r)

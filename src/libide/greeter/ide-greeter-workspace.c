@@ -74,7 +74,7 @@ struct _IdeGreeterWorkspace
   guint                     selection_mode : 1;
 };
 
-G_DEFINE_TYPE (IdeGreeterWorkspace, ide_greeter_workspace, IDE_TYPE_WORKSPACE)
+G_DEFINE_FINAL_TYPE (IdeGreeterWorkspace, ide_greeter_workspace, IDE_TYPE_WORKSPACE)
 
 enum {
   PROP_0,

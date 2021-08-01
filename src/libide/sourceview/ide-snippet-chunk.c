@@ -52,7 +52,7 @@ struct _IdeSnippetChunk
   guint              text_set : 1;
 };
 
-G_DEFINE_TYPE (IdeSnippetChunk, ide_snippet_chunk, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSnippetChunk, ide_snippet_chunk, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

@@ -31,7 +31,7 @@ struct _IdeShortcutsWindow
   GtkShortcutsWindow parent_instance;
 };
 
-G_DEFINE_TYPE (IdeShortcutsWindow, ide_shortcuts_window, GTK_TYPE_SHORTCUTS_WINDOW)
+G_DEFINE_FINAL_TYPE (IdeShortcutsWindow, ide_shortcuts_window, GTK_TYPE_SHORTCUTS_WINDOW)
 
 static void
 ide_shortcuts_window_class_init (IdeShortcutsWindowClass *klass)

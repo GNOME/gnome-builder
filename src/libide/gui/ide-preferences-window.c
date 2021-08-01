@@ -29,7 +29,7 @@ struct _IdePreferencesWindow
   DzlApplicationWindow parent_window;
 };
 
-G_DEFINE_TYPE (IdePreferencesWindow, ide_preferences_window, DZL_TYPE_APPLICATION_WINDOW)
+G_DEFINE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, DZL_TYPE_APPLICATION_WINDOW)
 
 static void
 ide_preferences_window_class_init (IdePreferencesWindowClass *klass)

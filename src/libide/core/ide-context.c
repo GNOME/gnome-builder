@@ -65,7 +65,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE (IdeContext, ide_context, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeContext, ide_context, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];

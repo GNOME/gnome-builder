@@ -93,7 +93,7 @@ struct _IdeHover
 
 static gboolean ide_hover_dismiss_cb (gpointer data);
 
-G_DEFINE_TYPE (IdeHover, ide_hover, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeHover, ide_hover, G_TYPE_OBJECT)
 
 static void
 ide_hover_queue_dismiss (IdeHover *self)

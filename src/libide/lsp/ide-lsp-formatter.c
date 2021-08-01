@@ -42,7 +42,7 @@ enum {
 
 static void formatter_iface_init (IdeFormatterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeLspFormatter, ide_lsp_formatter, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeLspFormatter, ide_lsp_formatter, IDE_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeLspFormatter)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_FORMATTER, formatter_iface_init))
 

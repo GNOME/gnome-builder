@@ -63,7 +63,7 @@ struct _IdeSnippetParser
   guint    had_error : 1;
 };
 
-G_DEFINE_TYPE (IdeSnippetParser, ide_snippet_parser, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSnippetParser, ide_snippet_parser, G_TYPE_OBJECT)
 
 enum {
   PARSING_ERROR,

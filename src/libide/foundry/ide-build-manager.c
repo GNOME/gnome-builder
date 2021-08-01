@@ -117,7 +117,7 @@ DZL_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
   { "rebuild", ide_build_manager_action_rebuild },
 })
 
-G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
                                                ide_build_manager_init_action_group))

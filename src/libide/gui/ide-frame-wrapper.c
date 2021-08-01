@@ -36,7 +36,7 @@ struct _IdeFrameWrapper
   GQueue   history;
 };
 
-G_DEFINE_TYPE (IdeFrameWrapper, ide_frame_wrapper, GTK_TYPE_STACK)
+G_DEFINE_FINAL_TYPE (IdeFrameWrapper, ide_frame_wrapper, GTK_TYPE_STACK)
 
 static void
 ide_frame_wrapper_add (GtkContainer *container,

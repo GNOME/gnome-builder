@@ -32,7 +32,7 @@ struct _IdeGreeterButtonsSection
   GtkBox *box;
 };
 
-G_DEFINE_TYPE_WITH_CODE (IdeGreeterButtonsSection, ide_greeter_buttons_section, GTK_TYPE_BIN,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeGreeterButtonsSection, ide_greeter_buttons_section, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION, NULL))
 
 static void

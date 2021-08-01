@@ -35,7 +35,7 @@ struct _IdeEnvironment
 
 static void list_model_iface_init (GListModelInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeEnvironment, ide_environment, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeEnvironment, ide_environment, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {

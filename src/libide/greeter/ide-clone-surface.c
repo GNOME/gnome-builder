@@ -67,7 +67,7 @@ struct _IdeCloneSurface
   guint                vcs_valid : 1;
 };
 
-G_DEFINE_TYPE (IdeCloneSurface, ide_clone_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (IdeCloneSurface, ide_clone_surface, IDE_TYPE_SURFACE)
 
 enum {
   PROP_0,

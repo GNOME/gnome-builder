@@ -31,7 +31,7 @@ struct _IdePreferencesLanguageRow
   GtkLabel *title;
 };
 
-G_DEFINE_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, DZL_TYPE_PREFERENCES_BIN)
+G_DEFINE_FINAL_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, DZL_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,

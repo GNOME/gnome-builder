@@ -44,7 +44,7 @@ typedef struct
   Location end;
 } IdeLspSymbolNodePrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeLspSymbolNode, ide_lsp_symbol_node, IDE_TYPE_SYMBOL_NODE)
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE (IdeLspSymbolNode, ide_lsp_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 static inline gint
 location_compare (const Location *a,

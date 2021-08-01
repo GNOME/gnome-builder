@@ -41,7 +41,7 @@ struct _IdeTerminalPopover
   GtkListBox         *list_box;
 };
 
-G_DEFINE_TYPE (IdeTerminalPopover, ide_terminal_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (IdeTerminalPopover, ide_terminal_popover, GTK_TYPE_POPOVER)
 
 static void
 ide_terminal_popover_update_selected_cb (GtkWidget *widget,

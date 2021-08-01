@@ -47,7 +47,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE (IdeProject, ide_project, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeProject, ide_project, IDE_TYPE_OBJECT)
 
 static guint signals [N_SIGNALS];
 

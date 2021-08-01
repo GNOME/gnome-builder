@@ -79,7 +79,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeFrameHeader, ide_frame_header, DZL_TYPE_PRIORITY_BOX)
+G_DEFINE_FINAL_TYPE (IdeFrameHeader, ide_frame_header, DZL_TYPE_PRIORITY_BOX)
 
 static GParamSpec *properties [N_PROPS];
 

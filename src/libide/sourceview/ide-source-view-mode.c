@@ -42,7 +42,7 @@ struct _IdeSourceViewMode
   guint                  has_selection : 1;
 };
 
-G_DEFINE_TYPE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,

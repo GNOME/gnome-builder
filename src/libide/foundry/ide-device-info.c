@@ -33,7 +33,7 @@ struct _IdeDeviceInfo
   IdeDeviceKind kind;
 };
 
-G_DEFINE_TYPE (IdeDeviceInfo, ide_device_info, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeDeviceInfo, ide_device_info, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

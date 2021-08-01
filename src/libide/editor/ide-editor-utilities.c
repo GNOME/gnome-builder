@@ -45,7 +45,7 @@ struct _IdeEditorUtilities
   DzlDockStack  *stack;
 };
 
-G_DEFINE_TYPE (IdeEditorUtilities, ide_editor_utilities, IDE_TYPE_PANEL)
+G_DEFINE_FINAL_TYPE (IdeEditorUtilities, ide_editor_utilities, IDE_TYPE_PANEL)
 
 static void
 ide_editor_utilities_add (GtkContainer *container,

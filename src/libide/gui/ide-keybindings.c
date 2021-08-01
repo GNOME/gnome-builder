@@ -47,7 +47,7 @@ enum
   LAST_PROP
 };
 
-G_DEFINE_TYPE (IdeKeybindings, ide_keybindings, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeKeybindings, ide_keybindings, G_TYPE_OBJECT)
 
 static GParamSpec *properties [LAST_PROP];
 

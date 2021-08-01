@@ -41,7 +41,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeCellRendererFancy, ide_cell_renderer_fancy, GTK_TYPE_CELL_RENDERER)
+G_DEFINE_FINAL_TYPE (IdeCellRendererFancy, ide_cell_renderer_fancy, GTK_TYPE_CELL_RENDERER)
 
 static GParamSpec *properties [N_PROPS];
 

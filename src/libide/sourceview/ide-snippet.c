@@ -77,7 +77,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (IdeSnippet, ide_snippet, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSnippet, ide_snippet, G_TYPE_OBJECT)
 
 DZL_DEFINE_COUNTER (instances, "Snippets", "N Snippets", "Number of IdeSnippet instances.");
 

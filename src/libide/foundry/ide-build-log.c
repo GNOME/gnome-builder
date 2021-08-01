@@ -52,7 +52,7 @@ typedef struct
   guint               id;
 } Observer;
 
-G_DEFINE_TYPE (IdeBuildLog, ide_build_log, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeBuildLog, ide_build_log, G_TYPE_OBJECT)
 
 static gboolean
 emit_log_from_main (gpointer user_data)

@@ -52,7 +52,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE (IdeNotificationStack, ide_notification_stack, GTK_TYPE_STACK)
+G_DEFINE_FINAL_TYPE (IdeNotificationStack, ide_notification_stack, GTK_TYPE_STACK)
 
 static guint signals [N_SIGNALS];
 static GParamSpec *properties [N_PROPS];

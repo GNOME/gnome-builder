@@ -79,7 +79,7 @@ enum {
   BACKGROUND,
 };
 
-G_DEFINE_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, GTK_SOURCE_TYPE_GUTTER_RENDERER)
+G_DEFINE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, GTK_SOURCE_TYPE_GUTTER_RENDERER)
 
 static gboolean
 get_style_rgba (GtkSourceStyleScheme *scheme,

@@ -124,7 +124,7 @@ typedef struct
   IdeSymbol   *symbol;
 } LookUpSymbolData;
 
-G_DEFINE_TYPE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
+G_DEFINE_FINAL_TYPE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
 
 enum {
   PROP_0,

@@ -29,7 +29,7 @@ struct _IdeFrameEmptyState
   GtkBin parent_instance;
 };
 
-G_DEFINE_TYPE (IdeFrameEmptyState, ide_frame_empty_state, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeFrameEmptyState, ide_frame_empty_state, GTK_TYPE_BIN)
 
 static void
 ide_frame_empty_state_class_init (IdeFrameEmptyStateClass *klass)

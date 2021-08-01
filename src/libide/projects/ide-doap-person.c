@@ -34,7 +34,7 @@ struct _IdeDoapPerson
   gchar *name;
 };
 
-G_DEFINE_TYPE (IdeDoapPerson, ide_doap_person, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeDoapPerson, ide_doap_person, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

@@ -135,7 +135,7 @@ DZL_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
   { "-dump-tasks", ide_workbench_action_dump_tasks },
 })
 
-G_DEFINE_TYPE_WITH_CODE (IdeWorkbench, ide_workbench, GTK_TYPE_WINDOW_GROUP,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeWorkbench, ide_workbench, GTK_TYPE_WINDOW_GROUP,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
                                                 ide_workbench_init_action_group))
 

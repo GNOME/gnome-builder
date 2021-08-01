@@ -45,7 +45,7 @@ struct _IdeRunButton
   char *run_handler_icon_name;
 };
 
-G_DEFINE_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
 
 static void
 ide_run_button_handler_set (IdeRunButton  *self,

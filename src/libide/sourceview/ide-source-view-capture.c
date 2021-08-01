@@ -53,7 +53,7 @@ struct _IdeSourceViewCapture
   GArray        *frames;
 };
 
-G_DEFINE_TYPE (IdeSourceViewCapture, ide_source_view_capture, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSourceViewCapture, ide_source_view_capture, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

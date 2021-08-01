@@ -48,7 +48,7 @@ typedef struct
   guint active;
 } Query;
 
-G_DEFINE_TYPE (IdeHoverContext, ide_hover_context, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeHoverContext, ide_hover_context, G_TYPE_OBJECT)
 
 static void
 clear_item (Item *item)

@@ -45,7 +45,7 @@ struct _IdeExtensionAdapter
   guint           queue_handler;
 };
 
-G_DEFINE_TYPE (IdeExtensionAdapter, ide_extension_adapter, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeExtensionAdapter, ide_extension_adapter, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,

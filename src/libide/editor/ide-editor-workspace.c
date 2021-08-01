@@ -46,7 +46,7 @@ struct _IdeEditorWorkspace
   DzlShortcutTooltip *search_tooltip;
 };
 
-G_DEFINE_TYPE (IdeEditorWorkspace, ide_editor_workspace, IDE_TYPE_WORKSPACE)
+G_DEFINE_FINAL_TYPE (IdeEditorWorkspace, ide_editor_workspace, IDE_TYPE_WORKSPACE)
 
 static void
 ide_editor_workspace_surface_set (IdeWorkspace *workspace,

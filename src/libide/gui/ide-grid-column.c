@@ -41,7 +41,7 @@ typedef struct
   IdeTask *backpointer;
 } TryCloseState;
 
-G_DEFINE_TYPE (IdeGridColumn, ide_grid_column, DZL_TYPE_MULTI_PANED)
+G_DEFINE_FINAL_TYPE (IdeGridColumn, ide_grid_column, DZL_TYPE_MULTI_PANED)
 
 static void ide_grid_column_try_close_pump (IdeTask *task);
 

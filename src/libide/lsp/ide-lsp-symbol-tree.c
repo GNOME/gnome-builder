@@ -36,7 +36,7 @@ typedef struct
 static void symbol_tree_iface_init (IdeSymbolTreeInterface *iface);
 
 struct _IdeLspSymbolTree { GObject object; };
-G_DEFINE_TYPE_WITH_CODE (IdeLspSymbolTree, ide_lsp_symbol_tree, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeLspSymbolTree, ide_lsp_symbol_tree, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeLspSymbolTree)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
 

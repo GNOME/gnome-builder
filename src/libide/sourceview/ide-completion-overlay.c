@@ -43,7 +43,7 @@ enum {
 
 static void completion_display_iface_init (IdeCompletionDisplayInterface *);
 
-G_DEFINE_TYPE_WITH_CODE (IdeCompletionOverlay, ide_completion_overlay, GTK_TYPE_BIN,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCompletionOverlay, ide_completion_overlay, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_DISPLAY,
                                                 completion_display_iface_init))
 

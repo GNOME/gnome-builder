@@ -36,7 +36,7 @@ struct _IdeEnvironmentEditor
   IdeEnvironmentVariable *dummy;
 };
 
-G_DEFINE_TYPE (IdeEnvironmentEditor, ide_environment_editor, GTK_TYPE_LIST_BOX)
+G_DEFINE_FINAL_TYPE (IdeEnvironmentEditor, ide_environment_editor, GTK_TYPE_LIST_BOX)
 
 enum {
   PROP_0,

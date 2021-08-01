@@ -69,7 +69,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE (IdeEditorSearchBar, ide_editor_search_bar, DZL_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeEditorSearchBar, ide_editor_search_bar, DZL_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];

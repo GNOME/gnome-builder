@@ -35,7 +35,7 @@ struct _IdeEditorSettingsDialog
   GtkSearchEntry *entry;
 };
 
-G_DEFINE_TYPE (IdeEditorSettingsDialog, ide_editor_settings_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_FINAL_TYPE (IdeEditorSettingsDialog, ide_editor_settings_dialog, GTK_TYPE_DIALOG)
 
 enum {
   PROP_0,

@@ -152,7 +152,7 @@ struct _IdeCompletion
   guint needs_refilter : 1;
 };
 
-G_DEFINE_TYPE (IdeCompletion, ide_completion, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeCompletion, ide_completion, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

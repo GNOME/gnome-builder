@@ -31,7 +31,7 @@ struct _IdeSurfacesButton
   DzlMenuButton parent_instance;
 };
 
-G_DEFINE_TYPE (IdeSurfacesButton, ide_surfaces_button, DZL_TYPE_MENU_BUTTON)
+G_DEFINE_FINAL_TYPE (IdeSurfacesButton, ide_surfaces_button, DZL_TYPE_MENU_BUTTON)
 
 static void
 ide_surfaces_button_items_changed_cb (IdeSurfacesButton *self,

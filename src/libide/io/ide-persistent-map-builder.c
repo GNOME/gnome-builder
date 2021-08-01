@@ -72,7 +72,7 @@ struct _IdePersistentMapBuilder
 
 G_STATIC_ASSERT (sizeof (KVPair) == 8);
 
-G_DEFINE_TYPE (IdePersistentMapBuilder, ide_persistent_map_builder, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdePersistentMapBuilder, ide_persistent_map_builder, G_TYPE_OBJECT)
 
 static void
 build_state_free (gpointer data)

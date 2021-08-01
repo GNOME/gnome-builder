@@ -122,7 +122,7 @@ enum {
 
 static void ide_completion_list_box_queue_update (IdeCompletionListBox *self);
 
-G_DEFINE_TYPE_WITH_CODE (IdeCompletionListBox, ide_completion_list_box, DZL_TYPE_BIN,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCompletionListBox, ide_completion_list_box, DZL_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static GParamSpec *properties [N_PROPS];

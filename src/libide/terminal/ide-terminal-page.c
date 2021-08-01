@@ -40,7 +40,7 @@
 
 #define FLAPPING_DURATION_USEC (G_USEC_PER_SEC / 20)
 
-G_DEFINE_TYPE (IdeTerminalPage, ide_terminal_page, IDE_TYPE_PAGE)
+G_DEFINE_FINAL_TYPE (IdeTerminalPage, ide_terminal_page, IDE_TYPE_PAGE)
 
 enum {
   PROP_0,

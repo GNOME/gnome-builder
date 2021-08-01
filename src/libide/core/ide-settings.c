@@ -56,7 +56,7 @@ struct _IdeSettings
   guint                ignore_project_settings : 1;
 };
 
-G_DEFINE_TYPE (IdeSettings, ide_settings, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeSettings, ide_settings, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

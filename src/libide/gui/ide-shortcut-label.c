@@ -47,7 +47,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeShortcutLabel, ide_shortcut_label, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (IdeShortcutLabel, ide_shortcut_label, GTK_TYPE_BOX)
 
 static GParamSpec *properties [N_PROPS];
 

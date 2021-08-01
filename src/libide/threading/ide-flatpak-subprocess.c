@@ -1474,7 +1474,7 @@ initiable_iface_init (GInitableIface *iface)
   iface->init = ide_flatpak_subprocess_initable_init;
 }
 
-G_DEFINE_TYPE_EXTENDED (IdeFlatpakSubprocess, ide_flatpak_subprocess, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeFlatpakSubprocess, ide_flatpak_subprocess, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initiable_iface_init)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SUBPROCESS, subprocess_iface_init))
 

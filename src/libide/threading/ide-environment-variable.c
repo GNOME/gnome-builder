@@ -31,7 +31,7 @@ struct _IdeEnvironmentVariable
   gchar   *value;
 };
 
-G_DEFINE_TYPE (IdeEnvironmentVariable, ide_environment_variable, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeEnvironmentVariable, ide_environment_variable, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

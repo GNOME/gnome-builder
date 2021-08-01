@@ -28,7 +28,7 @@
 
 static void subprocess_iface_init (IdeSubprocessInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeSimpleSubprocess, ide_simple_subprocess, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeSimpleSubprocess, ide_simple_subprocess, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SUBPROCESS, subprocess_iface_init))
 
 static void

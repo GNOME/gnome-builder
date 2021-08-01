@@ -64,7 +64,7 @@ list_model_iface_init (GListModelInterface *iface)
   iface->get_item_type = ide_truncate_model_get_item_type;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeTruncateModel, ide_truncate_model, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTruncateModel, ide_truncate_model, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {

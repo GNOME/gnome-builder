@@ -47,7 +47,7 @@ struct _IdeVcsMonitor
   guint                    busy : 1;
 };
 
-G_DEFINE_TYPE (IdeVcsMonitor, ide_vcs_monitor, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeVcsMonitor, ide_vcs_monitor, IDE_TYPE_OBJECT)
 
 enum {
   CHANGED,

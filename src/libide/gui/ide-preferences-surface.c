@@ -38,7 +38,7 @@ struct _IdePreferencesSurface
   PeasExtensionSet   *extensions;
 };
 
-G_DEFINE_TYPE (IdePreferencesSurface, ide_preferences_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (IdePreferencesSurface, ide_preferences_surface, IDE_TYPE_SURFACE)
 
 static void
 ide_preferences_surface_addin_added_cb (PeasExtensionSet *set,

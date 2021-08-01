@@ -32,7 +32,7 @@ struct _IdeObjectBox
   guint      propagate_disposal : 1;
 };
 
-G_DEFINE_TYPE (IdeObjectBox, ide_object_box, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeObjectBox, ide_object_box, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,

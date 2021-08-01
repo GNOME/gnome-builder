@@ -39,7 +39,7 @@
 #include "ide-primary-workspace.h"
 #include "ide-worker.h"
 
-G_DEFINE_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
+G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
 
 #define IS_UI_PROCESS(app) ((app)->type == NULL)
 

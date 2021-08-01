@@ -73,7 +73,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE (IdeDebuggerBreakpoints, ide_debugger_breakpoints, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeDebuggerBreakpoints, ide_debugger_breakpoints, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];

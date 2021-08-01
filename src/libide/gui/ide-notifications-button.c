@@ -53,7 +53,7 @@ struct _IdeNotificationsButton
   GtkListBox            *list_box;
 };
 
-G_DEFINE_TYPE (IdeNotificationsButton, ide_notifications_button, DZL_TYPE_PROGRESS_MENU_BUTTON)
+G_DEFINE_FINAL_TYPE (IdeNotificationsButton, ide_notifications_button, DZL_TYPE_PROGRESS_MENU_BUTTON)
 
 static GtkWidget *
 create_notification_row (gpointer item,
