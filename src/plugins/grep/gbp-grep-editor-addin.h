@@ -1,4 +1,4 @@
-/* gbp-grep-panel.h
+/* gbp-grep-editor-addin.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,20 +20,12 @@
 
 #pragma once
 
-#include <dazzle.h>
-
-#include "gbp-grep-model.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GREP_PANEL (gbp_grep_panel_get_type())
+#define GBP_TYPE_GREP_EDITOR_ADDIN (gbp_grep_editor_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGrepPanel, gbp_grep_panel, GBP, GREP_PANEL, DzlDockWidget)
-
-GtkWidget    *gbp_grep_panel_new           (void);
-GbpGrepModel *gbp_grep_panel_get_model     (GbpGrepPanel *self);
-void          gbp_grep_panel_set_model     (GbpGrepPanel *self,
-                                            GbpGrepModel *model);
-void          gbp_grep_panel_launch_search (GbpGrepPanel *self);
+G_DECLARE_FINAL_TYPE (GbpGrepEditorAddin, gbp_grep_editor_addin, GBP, GREP_EDITOR_ADDIN, GObject)
 
 G_END_DECLS

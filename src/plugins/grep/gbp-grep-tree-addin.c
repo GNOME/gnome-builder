@@ -36,25 +36,6 @@ struct _GbpGrepTreeAddin
 };
 
 static void
-popover_closed_cb (GtkPopover *popover)
-{
-  GtkWidget *toplevel;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GTK_IS_POPOVER (popover));
-
-  /*
-   * Clear focus before destroying popover, or we risk some
-   * re-entrancy issues in libdazzle. Needs safer tracking of
-   * focus widgets as gtk is not clearing pointers in destroy.
-   */
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (popover));
-  gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
-  gtk_widget_destroy (GTK_WIDGET (popover));
-}
-
-static void
 find_in_files_action (GSimpleAction *action,
                       GVariant      *param,
                       gpointer       user_data)
@@ -81,10 +62,6 @@ find_in_files_action (GSimpleAction *action,
                               "file", file,
                               "is-directory", is_dir,
                               "position", GTK_POS_RIGHT,
-                              NULL);
-      g_signal_connect_after (popover,
-                              "closed",
-                              G_CALLBACK (popover_closed_cb),
                               NULL);
       ide_tree_show_popover_at_node (self->tree, node, popover);
     }

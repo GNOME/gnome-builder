@@ -9,14 +9,24 @@
         <property name="vexpand">true</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="vexpand">true</property>
+          <object class="GtkStack" id="stack">
             <property name="visible">true</property>
             <child>
-              <object class="GtkTreeView" id="tree_view">
-                <property name="activate-on-single-click">true</property>
-                <property name="headers-visible">true</property>
+              <object class="GtkScrolledWindow" id="scrolled_window">
+                <property name="vexpand">true</property>
                 <property name="visible">true</property>
+                <child>
+                  <object class="GtkTreeView" id="tree_view">
+                    <property name="activate-on-single-click">true</property>
+                    <property name="headers-visible">true</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinner" id="spinner">
+                <property name="visible">True</property>
               </object>
             </child>
           </object>
@@ -27,63 +37,141 @@
             <property name="margin-start">6</property>
             <property name="margin-end">6</property>
             <property name="margin-bottom">6</property>
-            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="orientation">vertical</property>
             <property name="visible">true</property>
             <child>
-              <object class="GtkSpinner" id="spinner">
-                <property name="halign">end</property>
-              </object>
-              <packing>
-                <property name="expand">true</property>
-                <property name="fill">true</property>
-                <property name="pack-type">start</property>
-                <property name="padding">12</property>
-              </packing>
-            </child>
-            <child type="center">
               <object class="GtkBox">
-                <property name="spacing">12</property>
-                <property name="hexpand">false</property>
+                <property name="visible">True</property>
+                <property name="spacing">6</property>
                 <property name="orientation">horizontal</property>
-                <property name="visible">true</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Replace With</property>
-                    <property name="xalign">1.0</property>
+                    <property name="label" translatable="yes">Find and Replace</property>
+                    <property name="halign">start</property>
                     <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
-                  </object>
-                </child>
-                <child type="center">
-                  <object class="GtkEntry" id="replace_entry">
-                    <property name="visible">true</property>
-                    <property name="width-chars">30</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                      <attribute name="scale" value="0.8333"/>
+                    </attributes>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="replace_button">
-                    <property name="label" translatable="yes">Replace</property>
-                    <property name="sensitive">false</property>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="recursive_button">
+                        <property name="visible">true</property>
+                        <property name="active">true</property>
+                        <property name="label" translatable="yes">R_ecursive</property>
+                        <property name="use-underline">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="case_button">
+                        <property name="visible">true</property>
+                        <property name="active">true</property>
+                        <property name="label" translatable="yes">Match _Case</property>
+                        <property name="use-underline">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="whole_words_button">
+                        <property name="visible">true</property>
+                        <property name="label" translatable="yes">Match _Words</property>
+                        <property name="use-underline">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="regex_button">
+                        <property name="visible">true</property>
+                        <property name="label" translatable="yes">Regular E_xpressions</property>
+                        <property name="use-underline">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="close_button">
+                        <property name="visible">False</property>
+                        <!-- Separates it a bit more from the group of check boxes -->
+                        <property name="margin-start">6</property>
+                        <property name="tooltip-text" translatable="yes">Close the panel (Escape key)</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="icon-name">window-close-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="circular" />
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="column-spacing">6</property>
+                <property name="row-spacing">6</property>
+                <child>
+                  <object class="GtkEntry" id="find_entry">
                     <property name="visible">true</property>
+                    <property name="hexpand">true</property>
+                    <accessibility>
+                      <relation target="find_button" type="labelled-by"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="find_button">
+                    <property name="visible">true</property>
+                    <property name="sensitive">false</property>
+                    <property name="label" translatable="yes">_Find in Project</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="replace_entry">
+                    <property name="visible">true</property>
+                    <property name="hexpand">true</property>
+                    <accessibility>
+                      <relation target="replace_button" type="labelled-by"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="replace_button">
+                    <property name="visible">true</property>
+                    <property name="sensitive">false</property>
+                    <property name="label" translatable="yes">_Replace in Project</property>
+                    <property name="use-underline">True</property>
                     <style>
                       <class name="destructive-action"/>
                     </style>
                   </object>
                   <packing>
-                    <property name="position">1</property>
-                    <property name="pack-type">end</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="close_button">
-                    <property name="label" translatable="yes">Close</property>
-                    <property name="visible">true</property>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                    <property name="pack-type">end</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -93,11 +181,5 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="close_button"/>
-      <widget name="replace_button"/>
-    </widgets>
-  </object>
 </interface>
+

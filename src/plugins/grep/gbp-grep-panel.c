@@ -29,18 +29,35 @@
 
 #include "gbp-grep-panel.h"
 
+#define I_ g_intern_string
+
 struct _GbpGrepPanel
 {
   DzlDockWidget      parent_instance;
+
+  GCancellable      *cancellable;
 
   /* Unowned references */
   GtkTreeView       *tree_view;
   GtkTreeViewColumn *toggle_column;
   GtkCheckButton    *check;
-  GtkButton         *close_button;
+
+  GtkStack          *stack;
+  GtkScrolledWindow *scrolled_window;
+  GtkSpinner        *spinner;
+
   GtkButton         *replace_button;
   GtkEntry          *replace_entry;
-  GtkSpinner        *spinner;
+
+  GtkButton         *find_button;
+  GtkEntry          *find_entry;
+
+  GtkCheckButton    *regex_button;
+  GtkCheckButton    *whole_words_button;
+  GtkCheckButton    *case_button;
+  GtkCheckButton    *recursive_button;
+
+  GtkButton         *close_button;
 };
 
 enum {
@@ -300,17 +317,10 @@ gbp_grep_panel_replace_edited_cb (GObject      *object,
   g_assert (GBP_IS_GREP_PANEL (self));
 
   if (!ide_buffer_manager_apply_edits_finish (bufmgr, result, &error))
-    {
-      ide_object_warning (IDE_OBJECT (bufmgr), "Failed to apply edits: %s", error->message);
-      return;
-    }
+    ide_object_warning (IDE_OBJECT (bufmgr), "Failed to apply edits: %s", error->message);
 
-  /* Make the treeview visible, but show the old content. Allows the user
-   * to jump to the positions that were edited.
-   */
-  gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), TRUE);
   gtk_spinner_stop (self->spinner);
-  gtk_widget_hide (GTK_WIDGET (self->spinner));
+  gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->scrolled_window));
 }
 
 static void
@@ -339,10 +349,9 @@ gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
 
   g_debug ("Replacing %u edit points with %s", edits->len, text);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
-  gtk_widget_show (GTK_WIDGET (self->spinner));
+  gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->spinner));
   gtk_spinner_start (self->spinner);
 
   context = ide_widget_get_context (GTK_WIDGET (self));
@@ -353,6 +362,186 @@ gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
                                         NULL,
                                         gbp_grep_panel_replace_edited_cb,
                                         g_object_ref (self));
+}
+
+static void
+gbp_grep_panel_find_entry_text_changed_cb (GbpGrepPanel *self,
+                                           GParamSpec   *pspec,
+                                           GtkEntry     *entry)
+{
+  gboolean is_query_empty;
+
+  g_assert (GBP_IS_GREP_PANEL (self));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  is_query_empty = (g_strcmp0 (gtk_entry_get_text (entry), "") == 0);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->find_button), !is_query_empty);
+}
+
+static void
+gbp_grep_panel_close_panel_action (GSimpleAction *action,
+                                   GVariant      *variant,
+                                   gpointer       user_data)
+{
+  GbpGrepPanel *self = (GbpGrepPanel *)user_data;
+  gboolean is_project_wide;
+  GbpGrepModel *model;
+
+  g_assert (GBP_IS_GREP_PANEL (self));
+
+  model = gbp_grep_panel_get_model (self);
+  is_project_wide = (model == NULL || gbp_grep_model_get_directory (model) == NULL);
+
+  if (!is_project_wide)
+    gtk_widget_destroy (GTK_WIDGET (self));
+}
+
+static void
+gbp_grep_panel_close_clicked_cb (GbpGrepPanel *self,
+                                 GtkButton    *button)
+{
+  g_assert (GBP_IS_GREP_PANEL (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  gtk_widget_destroy (GTK_WIDGET (self));
+}
+
+static void
+gbp_grep_panel_scan_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
+{
+  GbpGrepModel *model = (GbpGrepModel *)object;
+  g_autoptr(GbpGrepPanel) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_GREP_MODEL (model));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_GREP_PANEL (self));
+
+  if (!gbp_grep_model_scan_finish (model, result, &error))
+    /* TODO: For now we warn in the not-very-noticeable messages panel, but when we start
+     * depending on libadwaita we'll be able to use a status page here as an error page,
+     * in the stack.
+     */
+    ide_object_warning (ide_widget_get_context (GTK_WIDGET (self)),
+                        "Failed to find files: %s", error->message);
+  else
+    gbp_grep_panel_set_model (self, model);
+
+  g_clear_object (&self->cancellable);
+
+  gtk_spinner_stop (self->spinner);
+  gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->scrolled_window));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->find_button), TRUE);
+
+  /* The model defaults to selecting all items, so if the "Select all" header check box was
+   * unselected, then we'll end up in an inconsistent state where toggling the header check
+   * box will unselect the items when it should have selected all of them. To avoid this,
+   * just set back the "Select all" check box to "selected" when starting a new search.
+   */
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->check), TRUE);
+
+  ide_widget_reveal_and_grab (GTK_WIDGET (self->replace_entry));
+}
+
+/**
+ * gbp_grep_panel_launch_search:
+ * @self: a #GbpGrepPanel
+ *
+ * Launches the search operation with the settings coming from the model
+ * previously set with gbp_grep_panel_set_model ().
+ */
+void
+gbp_grep_panel_launch_search (GbpGrepPanel *self)
+{
+  GbpGrepModel *model;
+  g_autoptr(GFile) root_dir = NULL;
+
+  g_assert (GBP_IS_GREP_PANEL (self));
+
+  /* Nothing's really reusable between search operations (and it isn't allowed anyway by
+   * gbp_grep_model_scan_async()), so just start from a new one. The only part we keep
+   * from it is the search directory because we can't modify it in the UI and so the
+   * only place where it's actually stored is the (old) model.
+   */
+  root_dir = gbp_grep_model_get_directory (gbp_grep_panel_get_model (self));
+  if (root_dir)
+    g_object_ref (root_dir);
+  model = gbp_grep_model_new (ide_widget_get_context (GTK_WIDGET (self)));
+  gbp_grep_model_set_directory (model, root_dir);
+
+  gbp_grep_model_set_use_regex (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->regex_button)));
+  gbp_grep_model_set_at_word_boundaries (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->whole_words_button)));
+  gbp_grep_model_set_case_sensitive (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->case_button)));
+  gbp_grep_model_set_query (model, gtk_entry_get_text (self->find_entry));
+
+  gbp_grep_model_set_recursive (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->recursive_button)));
+
+  gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->spinner));
+  gtk_spinner_start (self->spinner);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->find_button), FALSE);
+
+  ide_widget_reveal_and_grab (GTK_WIDGET (self));
+
+  self->cancellable = g_cancellable_new ();
+  gbp_grep_model_scan_async (model,
+                             self->cancellable,
+                             gbp_grep_panel_scan_cb,
+                             g_object_ref (self));
+}
+
+static void
+gbp_grep_panel_find_clicked_cb (GbpGrepPanel *self,
+                                GtkButton    *button)
+{
+  g_assert (GBP_IS_GREP_PANEL (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  gbp_grep_panel_launch_search (self);
+}
+
+/* We can't really use the receives-default/grab_default() stuff as that only really
+ * works when there's only one entry+button in a popover. So here just chain up the
+ * Enter key in the entry to activate the button.
+ */
+static void
+on_entry_activate_toggle_action_button_cb (GtkEntry *entry,
+                                           gpointer  user_data)
+{
+  GtkButton *button = (GtkButton *)user_data;
+
+  g_assert (GTK_IS_ENTRY (entry));
+  g_assert (GTK_IS_BUTTON (button));
+
+  g_signal_emit_by_name (button, "activate", NULL);
+}
+
+static void
+gbp_grep_panel_grab_focus (GtkWidget *widget)
+{
+  GbpGrepPanel *self = (GbpGrepPanel *)widget;
+
+  g_assert (GBP_IS_GREP_PANEL (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->find_entry));
+}
+
+static void
+gbp_grep_panel_finalize (GObject *object)
+{
+  GbpGrepPanel *self = (GbpGrepPanel *)object;
+
+  g_assert (GBP_IS_GREP_PANEL (self));
+
+  if (self->cancellable)
+    {
+      g_cancellable_cancel (self->cancellable);
+      g_clear_object (&self->cancellable);
+    }
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "grep", NULL);
 }
 
 static void
@@ -401,6 +590,9 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
 
   object_class->get_property = gbp_grep_panel_get_property;
   object_class->set_property = gbp_grep_panel_set_property;
+  object_class->finalize = gbp_grep_panel_finalize;
+
+  widget_class->grab_focus = gbp_grep_panel_grab_focus;
 
   properties [PROP_MODEL] =
     g_param_spec_object ("model", NULL, NULL,
@@ -411,30 +603,83 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "gbpgreppanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/grep/gbp-grep-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, close_button);
+
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, stack);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, tree_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, spinner);
+
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, spinner);
-  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, tree_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, find_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, find_entry);
+
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, regex_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, whole_words_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, case_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, recursive_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, close_button);
 }
+
+static const GActionEntry actions[] = {
+  { "close-panel", gbp_grep_panel_close_panel_action },
+};
 
 static void
 gbp_grep_panel_init (GbpGrepPanel *self)
 {
+  g_autoptr(GSimpleActionGroup) group = NULL;
+  DzlShortcutController *controller;
+
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->close_button,
-                           "clicked",
-                           G_CALLBACK (gtk_widget_destroy),
-                           self,
-                           G_CONNECT_SWAPPED);
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "grep", G_ACTION_GROUP (group));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.grep"),
+                                              I_("Escape"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("grep.close-panel"));
+
+  g_signal_connect (self->find_entry,
+                    "activate",
+                    G_CALLBACK (on_entry_activate_toggle_action_button_cb),
+                    self->find_button);
+  g_signal_connect (self->replace_entry,
+                    "activate",
+                    G_CALLBACK (on_entry_activate_toggle_action_button_cb),
+                    self->replace_button);
 
   g_signal_connect_object (self->replace_button,
                            "clicked",
                            G_CALLBACK (gbp_grep_panel_replace_clicked_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->find_button,
+                           "clicked",
+                           G_CALLBACK (gbp_grep_panel_find_clicked_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->find_entry,
+                           "notify::text",
+                           G_CALLBACK (gbp_grep_panel_find_entry_text_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->close_button,
+                           "clicked",
+                           G_CALLBACK (gbp_grep_panel_close_clicked_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -509,6 +754,29 @@ gbp_grep_panel_init (GbpGrepPanel *self)
   gtk_tree_view_append_column (self->tree_view, column);
 }
 
+static char *
+sanitize_workdir (GFile *workdir,
+                  GFile *search_directory)
+{
+  g_autofree char *relative_dir = g_file_get_relative_path (workdir, search_directory);
+  /* To make it clear that it's just the directory inserted in the "Find in %s" string, ensure
+   * the path ends with a directory separator, as g_file_get_relative_path() doesn't do it.
+   * That way we won't end up with "Find in data" but instead "Find in data/".
+   */
+  gboolean is_dir = (g_file_query_file_type (search_directory, G_FILE_QUERY_INFO_NONE, NULL) == G_FILE_TYPE_DIRECTORY);
+  g_autofree char *dir_sep_terminated_path = is_dir ?
+    g_strconcat (relative_dir, G_DIR_SEPARATOR_S, NULL) : g_strdup (relative_dir);
+  /* We want a mnemonic on the buttons but paths can contain underscores, and they would
+   * be taken as if they are mnemonics underlines which is not what we want. Instead,
+   * escape the underscore by doubling it so that GTK only renders one and doesn't use
+   * it as mnemonic.
+   */
+  g_autoptr(GString) underscore_escaper = g_string_new (dir_sep_terminated_path);
+  g_string_replace (underscore_escaper, "_", "__", 0);
+
+  return g_strdup (underscore_escaper->str);
+}
+
 void
 gbp_grep_panel_set_model (GbpGrepPanel *self,
                           GbpGrepModel *model)
@@ -518,13 +786,49 @@ gbp_grep_panel_set_model (GbpGrepPanel *self,
 
   if (model != NULL)
     {
-      /* Disable replace button if we have nothing to replace. We only
-       * support setting the model after it has scanned, so this is fine.
+      GFile *search_directory = gbp_grep_model_get_directory (model);
+      IdeContext *context = ide_widget_get_context (GTK_WIDGET (self));
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
+      /* The project-wide default panel (done in the editor addin) uses NULL to indicate project-wide,
+       * but when searching from the top-level "Files" project tree row we'll have the full path
+       * even if it's effectively project-wide, not NULL. It's nice to keep the
+       * "Find in Project" label while allowing to close the panel, so differentiate both cases.
        */
-      if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (model), NULL) == 0)
-        gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
-      else
-        gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), TRUE);
+      gboolean is_initial_panel = (search_directory == NULL);
+      gboolean is_project_wide = (is_initial_panel || g_file_equal (workdir, search_directory));
+
+      gboolean has_item = (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (model), NULL) != 0);
+
+      gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), has_item);
+      gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), has_item);
+
+      gtk_entry_set_text (self->find_entry, gbp_grep_model_get_query (model));
+
+      gtk_widget_set_visible (GTK_WIDGET (self->close_button), !is_initial_panel);
+
+      /* Project wide is done in the UI file directly. */
+      if (!is_project_wide)
+        {
+          g_autofree char *mnemonic_safe_directory = sanitize_workdir (workdir, search_directory);
+          /* TRANSLATORS: %s is the directory or file from where the search was started from the project tree. */
+          g_autofree char *find_label = g_strdup_printf (_("_Find in %s"), mnemonic_safe_directory);
+          /* TRANSLATORS: %s is the directory or file from where the search was started from the project tree. */
+          g_autofree char *replace_label = g_strdup_printf (_("_Replace in %s"), mnemonic_safe_directory);
+          gboolean is_dir = (g_file_query_file_type (search_directory, G_FILE_QUERY_INFO_NONE, NULL) == G_FILE_TYPE_DIRECTORY);
+
+          gtk_button_set_label (self->find_button, find_label);
+          gtk_button_set_label (self->replace_button, replace_label);
+
+          gtk_widget_set_visible (GTK_WIDGET (self->recursive_button), is_dir);
+        }
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->regex_button),
+                                    gbp_grep_model_get_use_regex (model));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->whole_words_button),
+                                    gbp_grep_model_get_at_word_boundaries (model));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->case_button),
+                                    gbp_grep_model_get_case_sensitive (model));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->recursive_button),
+                                    gbp_grep_model_get_recursive (model));
     }
 
   gtk_tree_view_set_model (self->tree_view, GTK_TREE_MODEL (model));

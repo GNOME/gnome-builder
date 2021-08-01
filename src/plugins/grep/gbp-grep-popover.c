@@ -56,27 +56,6 @@ G_DEFINE_TYPE (GbpGrepPopover, gbp_grep_popover, GTK_TYPE_POPOVER)
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_grep_popover_scan_cb (GObject      *object,
-                          GAsyncResult *result,
-                          gpointer      user_data)
-{
-  GbpGrepModel *model = (GbpGrepModel *)object;
-  g_autoptr(GbpGrepPanel) panel = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (GBP_IS_GREP_MODEL (model));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_GREP_PANEL (panel));
-
-  if (!gbp_grep_model_scan_finish (model, result, &error))
-    g_warning ("Failed to find files: %s", error->message);
-  else
-    gbp_grep_panel_set_model (panel, model);
-
-  gtk_widget_grab_focus (GTK_WIDGET (panel));
-}
-
-static void
 gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
                                     GtkButton      *button)
 {
@@ -118,14 +97,12 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
 
   panel = gbp_grep_panel_new ();
   gtk_container_add (GTK_CONTAINER (utils), panel);
+  gbp_grep_panel_set_model (GBP_GREP_PANEL (panel), model);
   gtk_widget_show (panel);
 
-  gbp_grep_model_scan_async (model,
-                             NULL,
-                             gbp_grep_popover_scan_cb,
-                             g_object_ref (panel));
-
-  dzl_dock_item_present (DZL_DOCK_ITEM (panel));
+  /* gtk_popover_popdown (GTK_POPOVER (self)); */
+  gtk_widget_destroy (GTK_WIDGET (self));
+  gbp_grep_panel_launch_search (GBP_GREP_PANEL (panel));
 }
 
 static void

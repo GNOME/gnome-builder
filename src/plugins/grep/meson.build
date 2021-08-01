@@ -5,6 +5,7 @@ plugins_sources += files([
   'gbp-grep-panel.c',
   'gbp-grep-popover.c',
   'gbp-grep-tree-addin.c',
+  'gbp-grep-editor-addin.c',
   'grep-plugin.c',
 ])
 
