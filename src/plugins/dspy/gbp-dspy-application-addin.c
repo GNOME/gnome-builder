@@ -149,7 +149,7 @@ app_addin_iface_init (IdeApplicationAddinInterface *iface)
   iface->handle_command_line = gbp_dspy_application_addin_handle_command_line;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpDspyApplicationAddin, gbp_dspy_application_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpDspyApplicationAddin, gbp_dspy_application_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, app_addin_iface_init))
 
 static void

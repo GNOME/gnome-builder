@@ -89,7 +89,7 @@ build_target_iface_init (IdeBuildTargetInterface *iface)
   iface->get_priority = gbp_flatpak_build_target_get_priority;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakBuildTarget, gbp_flatpak_build_target, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakBuildTarget, gbp_flatpak_build_target, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_TARGET, build_target_iface_init))
 
 static GParamSpec *properties [N_PROPS];

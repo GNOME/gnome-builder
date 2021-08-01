@@ -470,7 +470,7 @@ build_target_provider_iface_init (IdeBuildTargetProviderInterface *iface)
   iface->get_targets_finish = gbp_meson_build_target_provider_get_targets_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpMesonBuildTargetProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonBuildTargetProvider,
                          gbp_meson_build_target_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_TARGET_PROVIDER,

@@ -30,7 +30,7 @@ struct _GbpVagrantSubprocessLauncher
   gchar *dir;
 };
 
-G_DEFINE_TYPE (GbpVagrantSubprocessLauncher, gbp_vagrant_subprocess_launcher, IDE_TYPE_SUBPROCESS_LAUNCHER)
+G_DEFINE_FINAL_TYPE (GbpVagrantSubprocessLauncher, gbp_vagrant_subprocess_launcher, IDE_TYPE_SUBPROCESS_LAUNCHER)
 
 static IdeSubprocess *
 gbp_vagrant_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,

@@ -58,7 +58,7 @@ build_target_iface_init (IdeBuildTargetInterface *iface)
   iface->get_name = gbp_cmake_build_target_get_name;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpCMakeBuildTarget, gbp_cmake_build_target, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCMakeBuildTarget, gbp_cmake_build_target, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_TARGET, build_target_iface_init))
 
 static void

@@ -103,7 +103,7 @@ command_iface_init (IdeCommandInterface *iface)
   iface->get_priority = gbp_vim_command_get_priority;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpVimCommand, gbp_vim_command, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVimCommand, gbp_vim_command, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMMAND, command_iface_init))
 
 static void

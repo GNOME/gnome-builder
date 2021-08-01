@@ -61,7 +61,7 @@ typedef struct
   gulong          cancel_id;
 } Call;
 
-G_DEFINE_TYPE (IdeClangClient, ide_clang_client, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeClangClient, ide_clang_client, IDE_TYPE_OBJECT)
 
 static void
 call_free (gpointer data)

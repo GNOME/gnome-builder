@@ -272,7 +272,7 @@ command_provider_iface_init (IdeCommandProviderInterface *iface)
   iface->get_command_by_id = gbp_shellcmd_command_provider_get_command_by_id;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpShellcmdCommandProvider, gbp_shellcmd_command_provider, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdCommandProvider, gbp_shellcmd_command_provider, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMMAND_PROVIDER,
                                                 command_provider_iface_init))
 

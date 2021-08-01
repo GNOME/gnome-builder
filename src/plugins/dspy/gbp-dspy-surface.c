@@ -34,7 +34,7 @@ struct _GbpDspySurface
   DspyView   *view;
 };
 
-G_DEFINE_TYPE (GbpDspySurface, gbp_dspy_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (GbpDspySurface, gbp_dspy_surface, IDE_TYPE_SURFACE)
 
 static void
 gbp_dspy_surface_class_init (GbpDspySurfaceClass *klass)

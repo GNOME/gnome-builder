@@ -417,7 +417,7 @@ async_initable_iface_init (GAsyncInitableIface *iface)
   iface->init_finish = dspy_names_model_init_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (DspyNamesModel, dspy_names_model, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (DspyNamesModel, dspy_names_model, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init))
 

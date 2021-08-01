@@ -76,7 +76,7 @@ build_system_discovery_iface_init (IdeBuildSystemDiscoveryInterface *iface)
   iface->discover = gbp_meson_build_system_discovery_discover;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpMesonBuildSystemDiscovery, gbp_meson_build_system_discovery, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonBuildSystemDiscovery, gbp_meson_build_system_discovery, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
                                                 build_system_discovery_iface_init))
 

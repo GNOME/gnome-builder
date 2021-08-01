@@ -35,7 +35,7 @@ struct _GbpMessagesPanel
   IdeTerminal  *terminal;
 };
 
-G_DEFINE_TYPE (GbpMessagesPanel, gbp_messages_panel, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpMessagesPanel, gbp_messages_panel, DZL_TYPE_DOCK_WIDGET)
 
 static char *
 ensure_crlf (const char *message)

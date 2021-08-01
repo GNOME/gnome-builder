@@ -45,7 +45,7 @@ struct _IdeXmlService
   GCancellable      *cancellable;
 };
 
-G_DEFINE_TYPE (IdeXmlService, ide_xml_service, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeXmlService, ide_xml_service, IDE_TYPE_OBJECT)
 
 static void
 ide_xml_service_build_tree_cb2 (GObject      *object,

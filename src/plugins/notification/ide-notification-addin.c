@@ -41,7 +41,7 @@ struct _IdeNotificationAddin
 
 static void addin_iface_init (IdePipelineAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeNotificationAddin,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeNotificationAddin,
                          ide_notification_addin,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))

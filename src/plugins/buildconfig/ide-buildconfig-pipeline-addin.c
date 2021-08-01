@@ -111,7 +111,7 @@ pipeline_addin_init (IdePipelineAddinInterface *iface)
 }
 
 struct _IdeBuildconfigPipelineAddin { IdeObject parent_instance; };
-G_DEFINE_TYPE_EXTENDED (IdeBuildconfigPipelineAddin, ide_buildconfig_pipeline_addin, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeBuildconfigPipelineAddin, ide_buildconfig_pipeline_addin, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, pipeline_addin_init))
 static void ide_buildconfig_pipeline_addin_class_init (IdeBuildconfigPipelineAddinClass *klass) { }
 static void ide_buildconfig_pipeline_addin_init (IdeBuildconfigPipelineAddin *self) { }

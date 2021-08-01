@@ -152,7 +152,7 @@ preferences_addin_iface_Init (IdePreferencesAddinInterface *iface)
   iface->unload = gbp_terminal_preferences_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpTerminalPreferencesAddin, gbp_terminal_preferences_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTerminalPreferencesAddin, gbp_terminal_preferences_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN,
                                                 preferences_addin_iface_Init))
 

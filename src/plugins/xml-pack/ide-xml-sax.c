@@ -35,7 +35,7 @@ struct _IdeXmlSax
   guint          initialized : 1;
 };
 
-G_DEFINE_TYPE (IdeXmlSax, ide_xml_sax, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeXmlSax, ide_xml_sax, G_TYPE_OBJECT)
 
 IdeXmlSax *
 ide_xml_sax_new (void)

@@ -61,7 +61,7 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-G_DEFINE_TYPE (GbpCreateProjectSurface, gbp_create_project_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (GbpCreateProjectSurface, gbp_create_project_surface, IDE_TYPE_SURFACE)
 
 static gboolean
 is_preferred (const gchar *name)

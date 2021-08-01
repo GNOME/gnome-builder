@@ -51,7 +51,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpGrepPopover, gbp_grep_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (GbpGrepPopover, gbp_grep_popover, GTK_TYPE_POPOVER)
 
 static GParamSpec *properties [N_PROPS];
 

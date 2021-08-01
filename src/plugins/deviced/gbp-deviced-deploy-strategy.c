@@ -42,7 +42,7 @@ typedef struct
   GDestroyNotify         progress_data_destroy;
 } DeployState;
 
-G_DEFINE_TYPE (GbpDevicedDeployStrategy, gbp_deviced_deploy_strategy, IDE_TYPE_DEPLOY_STRATEGY)
+G_DEFINE_FINAL_TYPE (GbpDevicedDeployStrategy, gbp_deviced_deploy_strategy, IDE_TYPE_DEPLOY_STRATEGY)
 
 static void
 deploy_state_free (DeployState *state)

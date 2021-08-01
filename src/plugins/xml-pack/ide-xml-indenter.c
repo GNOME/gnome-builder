@@ -38,7 +38,7 @@ struct _IdeXmlIndenter
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeXmlIndenter, ide_xml_indenter, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlIndenter, ide_xml_indenter, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
 
 static gunichar

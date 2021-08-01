@@ -247,7 +247,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->project_loaded = gbp_recent_workbench_addin_project_loaded;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpRecentWorkbenchAddin, gbp_recent_workbench_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRecentWorkbenchAddin, gbp_recent_workbench_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void

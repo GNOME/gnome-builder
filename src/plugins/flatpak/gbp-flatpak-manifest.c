@@ -62,7 +62,7 @@ struct _GbpFlatpakManifest
 
 static void initable_iface_init (GInitableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakManifest, gbp_flatpak_manifest, IDE_TYPE_CONFIG,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakManifest, gbp_flatpak_manifest, IDE_TYPE_CONFIG,
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 
 enum {

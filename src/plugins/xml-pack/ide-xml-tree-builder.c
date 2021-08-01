@@ -64,7 +64,7 @@ static void fetch_schema_state_free (FetchSchemasState *state);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (FetchSchemasState, fetch_schema_state_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (TreeBuilderState, tree_builder_state_free)
 
-G_DEFINE_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE_TYPE_OBJECT)
 
 static void
 tree_builder_state_free (TreeBuilderState *state)

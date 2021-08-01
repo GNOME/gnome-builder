@@ -61,7 +61,7 @@ typedef struct
   GFile *workdir;
 } CullIndexed;
 
-G_DEFINE_TYPE (GbpCodeIndexPlan, gbp_code_index_plan, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpCodeIndexPlan, gbp_code_index_plan, G_TYPE_OBJECT)
 
 static void
 directory_info_free (DirectoryInfo *info)

@@ -25,7 +25,7 @@
 #include "gbp-project-tree-private.h"
 #include "gbp-project-tree.h"
 
-G_DEFINE_TYPE (GbpProjectTreePane, gbp_project_tree_pane, IDE_TYPE_PANE)
+G_DEFINE_FINAL_TYPE (GbpProjectTreePane, gbp_project_tree_pane, IDE_TYPE_PANE)
 
 static void
 gbp_project_tree_pane_class_init (GbpProjectTreePaneClass *klass)

@@ -308,7 +308,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->load_project_finish = gbp_buildsystem_workbench_addin_load_project_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpBuildsystemWorkbenchAddin,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpBuildsystemWorkbenchAddin,
                          gbp_buildsystem_workbench_addin,
                          G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,

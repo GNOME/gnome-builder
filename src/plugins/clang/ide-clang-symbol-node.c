@@ -32,7 +32,7 @@ struct _IdeClangSymbolNode
   GVariant      *children;
 };
 
-G_DEFINE_TYPE (IdeClangSymbolNode, ide_clang_symbol_node, IDE_TYPE_SYMBOL_NODE)
+G_DEFINE_FINAL_TYPE (IdeClangSymbolNode, ide_clang_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 IdeSymbolNode *
 ide_clang_symbol_node_new (GVariant *node)

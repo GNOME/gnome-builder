@@ -49,7 +49,7 @@ typedef struct
   guint64           num_completed;
 } Execute;
 
-G_DEFINE_TYPE (GbpCodeIndexExecutor, gbp_code_index_executor, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpCodeIndexExecutor, gbp_code_index_executor, IDE_TYPE_OBJECT)
 
 static void
 execute_free (Execute *exec)

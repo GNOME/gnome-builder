@@ -198,7 +198,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
   iface->unload = gbp_todo_workspace_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpTodoWorkspaceAddin, gbp_todo_workspace_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTodoWorkspaceAddin, gbp_todo_workspace_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN,
                                                 workspace_addin_iface_init))
 

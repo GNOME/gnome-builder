@@ -131,7 +131,7 @@ buffer_addin_iface_init (IdeBufferAddinInterface *iface)
   iface->save_file = gbp_trim_spaces_buffer_addin_save_file;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpTrimSpacesBufferAddin, gbp_trim_spaces_buffer_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTrimSpacesBufferAddin, gbp_trim_spaces_buffer_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
 
 static void

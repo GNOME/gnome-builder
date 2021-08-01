@@ -43,7 +43,7 @@ struct _IdeDebuggerHoverControls
   GtkToggleButton *countpoint;
 };
 
-G_DEFINE_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, GTK_TYPE_BIN)
 
 static void
 ide_debugger_hover_controls_destroy (GtkWidget *widget)

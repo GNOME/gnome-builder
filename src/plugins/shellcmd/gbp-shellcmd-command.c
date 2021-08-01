@@ -73,7 +73,7 @@ enum {
 
 static void command_iface_init (IdeCommandInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpShellcmdCommand, gbp_shellcmd_command, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdCommand, gbp_shellcmd_command, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMMAND, command_iface_init))
 
 static GParamSpec *properties [N_PROPS];

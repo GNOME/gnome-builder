@@ -123,7 +123,7 @@ editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
   iface->unload = gbp_vcsui_editor_page_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpVcsuiEditorPageAddin, gbp_vcsui_editor_page_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiEditorPageAddin, gbp_vcsui_editor_page_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
 
 static void

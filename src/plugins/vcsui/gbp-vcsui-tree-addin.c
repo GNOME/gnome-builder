@@ -460,7 +460,7 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
   iface->build_children_finish = gbp_vcsui_tree_addin_build_children_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpVcsuiTreeAddin, gbp_vcsui_tree_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiTreeAddin, gbp_vcsui_tree_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void

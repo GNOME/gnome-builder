@@ -34,7 +34,7 @@ struct _IdeClangSymbolResolver
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeClangSymbolResolver, ide_clang_symbol_resolver, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeClangSymbolResolver, ide_clang_symbol_resolver, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 static void

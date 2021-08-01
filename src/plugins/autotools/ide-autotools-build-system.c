@@ -43,7 +43,7 @@ struct _IdeAutotoolsBuildSystem
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 static void build_system_iface_init (IdeBuildSystemInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsBuildSystem,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeAutotoolsBuildSystem,
                          ide_autotools_build_system,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)

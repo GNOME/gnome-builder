@@ -734,7 +734,7 @@ configuration_provider_iface_init (IdeConfigProviderInterface *iface)
   iface->unload = ide_buildconfig_config_provider_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeBuildconfigConfigProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeBuildconfigConfigProvider,
                          ide_buildconfig_config_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIG_PROVIDER,

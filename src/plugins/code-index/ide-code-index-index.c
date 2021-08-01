@@ -69,7 +69,7 @@ typedef struct
   guint               match_num;
 } FuzzyMatch;
 
-G_DEFINE_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE_TYPE_OBJECT)
 
 static void directory_index_free (DirectoryIndex *data);
 

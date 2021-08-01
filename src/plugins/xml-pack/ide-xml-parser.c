@@ -40,7 +40,7 @@ typedef struct _ColorTag
   gchar *bg;
 } ColorTag;
 
-G_DEFINE_TYPE (IdeXmlParser, ide_xml_parser, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeXmlParser, ide_xml_parser, IDE_TYPE_OBJECT)
 
 static void
 color_tag_free (gpointer *data)

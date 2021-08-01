@@ -49,7 +49,7 @@ enum {
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeCtagsSymbolResolver,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsSymbolResolver,
                          ide_ctags_symbol_resolver,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER,

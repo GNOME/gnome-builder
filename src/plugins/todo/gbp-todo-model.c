@@ -57,7 +57,7 @@ typedef struct
   GPtrArray    *items;
 } ResultInfo;
 
-G_DEFINE_TYPE (GbpTodoModel, gbp_todo_model, GTK_TYPE_LIST_STORE)
+G_DEFINE_FINAL_TYPE (GbpTodoModel, gbp_todo_model, GTK_TYPE_LIST_STORE)
 
 enum {
   PROP_0,

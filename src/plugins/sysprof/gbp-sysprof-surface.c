@@ -31,7 +31,7 @@ struct _GbpSysprofSurface
   SysprofNotebook *notebook;
 };
 
-G_DEFINE_TYPE (GbpSysprofSurface, gbp_sysprof_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (GbpSysprofSurface, gbp_sysprof_surface, IDE_TYPE_SURFACE)
 
 static void
 gbp_sysprof_surface_class_init (GbpSysprofSurfaceClass *klass)

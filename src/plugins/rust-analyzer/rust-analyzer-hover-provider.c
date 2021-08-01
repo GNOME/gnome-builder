@@ -26,7 +26,7 @@ struct _RustAnalyzerHoverProvider
   IdeLspHoverProvider parent_instance;
 };
 
-G_DEFINE_TYPE (RustAnalyzerHoverProvider,
+G_DEFINE_FINAL_TYPE (RustAnalyzerHoverProvider,
                rust_analyzer_hover_provider,
                IDE_TYPE_LSP_HOVER_PROVIDER)
 

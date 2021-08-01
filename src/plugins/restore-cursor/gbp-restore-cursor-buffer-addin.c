@@ -136,7 +136,7 @@ buffer_addin_iface_init (IdeBufferAddinInterface *iface)
   iface->file_saved = gbp_restore_cursor_buffer_addin_file_saved;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpRestoreCursorBufferAddin, gbp_restore_cursor_buffer_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRestoreCursorBufferAddin, gbp_restore_cursor_buffer_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
 
 static void

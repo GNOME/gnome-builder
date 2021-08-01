@@ -297,7 +297,7 @@ git_change_monitor_iface_init (IpcGitChangeMonitorIface *iface)
   iface->handle_close = ipc_git_change_monitor_impl_handle_close;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IpcGitChangeMonitorImpl, ipc_git_change_monitor_impl, IPC_TYPE_GIT_CHANGE_MONITOR_SKELETON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IpcGitChangeMonitorImpl, ipc_git_change_monitor_impl, IPC_TYPE_GIT_CHANGE_MONITOR_SKELETON,
                          G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_CHANGE_MONITOR, git_change_monitor_iface_init))
 
 static void

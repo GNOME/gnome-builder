@@ -29,7 +29,7 @@ struct _GbpAutotoolsBuildSystemDiscovery
   IdeSimpleBuildSystemDiscovery parent_instance;
 };
 
-G_DEFINE_TYPE (GbpAutotoolsBuildSystemDiscovery,
+G_DEFINE_FINAL_TYPE (GbpAutotoolsBuildSystemDiscovery,
                gbp_autotools_build_system_discovery,
                IDE_TYPE_SIMPLE_BUILD_SYSTEM_DISCOVERY)
 

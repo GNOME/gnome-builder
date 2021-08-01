@@ -39,7 +39,7 @@ typedef struct
 
 static void tags_builder_iface_init (IdeTagsBuilderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeCtagsBuilder, ide_ctags_builder, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsBuilder, ide_ctags_builder, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TAGS_BUILDER, tags_builder_iface_init))
 
 static GHashTable *ignored;

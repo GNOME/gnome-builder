@@ -28,7 +28,7 @@ struct _RustAnalyzerCompletionProvider
 
 static void provider_iface_init (IdeCompletionProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerCompletionProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerCompletionProvider,
                          rust_analyzer_completion_provider,
                          IDE_TYPE_LSP_COMPLETION_PROVIDER,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))

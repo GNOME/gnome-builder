@@ -36,7 +36,7 @@ struct _GbpWordCompletionProvider
 
 static void completion_provider_iface_init (IdeCompletionProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpWordCompletionProvider, gbp_word_completion_provider, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWordCompletionProvider, gbp_word_completion_provider, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, completion_provider_iface_init))
 
 static void

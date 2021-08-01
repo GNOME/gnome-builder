@@ -35,7 +35,7 @@ struct _IdeClangPreferencesAddin
 
 static void preferences_addin_iface_init (IdePreferencesAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeClangPreferencesAddin, ide_clang_preferences_addin, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeClangPreferencesAddin, ide_clang_preferences_addin, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN,
                                                preferences_addin_iface_init))
 

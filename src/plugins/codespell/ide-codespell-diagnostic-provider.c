@@ -27,7 +27,7 @@ struct _IdeCodespellDiagnosticProvider
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeCodespellDiagnosticProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCodespellDiagnosticProvider,
                          ide_codespell_diagnostic_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,

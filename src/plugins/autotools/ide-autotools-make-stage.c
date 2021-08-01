@@ -72,7 +72,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeAutotoolsMakeStage, ide_autotools_make_stage, IDE_TYPE_PIPELINE_STAGE)
+G_DEFINE_FINAL_TYPE (IdeAutotoolsMakeStage, ide_autotools_make_stage, IDE_TYPE_PIPELINE_STAGE)
 
 static GParamSpec *properties [N_PROPS];
 

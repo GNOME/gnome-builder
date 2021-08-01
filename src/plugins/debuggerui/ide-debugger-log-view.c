@@ -35,7 +35,7 @@ struct _IdeDebuggerLogView
   IdeDebugger *debugger;
 };
 
-G_DEFINE_TYPE (IdeDebuggerLogView, ide_debugger_log_view, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (IdeDebuggerLogView, ide_debugger_log_view, GTK_TYPE_BOX)
 
 enum {
   PROP_0,

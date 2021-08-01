@@ -140,7 +140,7 @@ buffer_addin_iface_init (IdeBufferAddinInterface *iface)
   iface->settle_finish = gbp_git_buffer_addin_settle_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitBufferAddin, gbp_git_buffer_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitBufferAddin, gbp_git_buffer_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
 
 static void

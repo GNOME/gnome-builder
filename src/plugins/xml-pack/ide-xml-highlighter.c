@@ -42,7 +42,7 @@ struct _IdeXmlHighlighter
 
 static void highlighter_iface_init (IdeHighlighterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeXmlHighlighter,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlHighlighter,
                          ide_xml_highlighter,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))

@@ -82,7 +82,7 @@ typedef struct
   IdeSubprocessLauncher *launcher;
 } GetBuildTargets;
 
-G_DEFINE_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
 
 DZL_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
 

@@ -32,7 +32,7 @@ struct _GbpWordProposal
   gchar *word;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GbpWordProposal, gbp_word_proposal, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWordProposal, gbp_word_proposal, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void

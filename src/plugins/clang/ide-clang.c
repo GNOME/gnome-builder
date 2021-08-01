@@ -62,7 +62,7 @@ typedef struct
   guint                 len;
 } UnsavedFiles;
 
-G_DEFINE_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
 
 static void
 unsaved_files_free (UnsavedFiles *uf)

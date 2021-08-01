@@ -33,7 +33,7 @@ struct _IdeClangCodeIndexer
 
 static void code_indexer_iface_init (IdeCodeIndexerInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeClangCodeIndexer, ide_clang_code_indexer, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangCodeIndexer, ide_clang_code_indexer, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CODE_INDEXER, code_indexer_iface_init))
 
 static void

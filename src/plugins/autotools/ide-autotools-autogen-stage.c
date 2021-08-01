@@ -29,7 +29,7 @@ struct _IdeAutotoolsAutogenStage
   gchar *srcdir;
 };
 
-G_DEFINE_TYPE (IdeAutotoolsAutogenStage, ide_autotools_autogen_stage, IDE_TYPE_PIPELINE_STAGE)
+G_DEFINE_FINAL_TYPE (IdeAutotoolsAutogenStage, ide_autotools_autogen_stage, IDE_TYPE_PIPELINE_STAGE)
 
 enum {
   PROP_0,

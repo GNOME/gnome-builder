@@ -238,7 +238,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->load_project_finish = gbp_git_workbench_addin_load_project_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitWorkbenchAddin, gbp_git_workbench_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitWorkbenchAddin, gbp_git_workbench_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void

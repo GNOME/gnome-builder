@@ -38,7 +38,7 @@ struct _IdeXmlStack
   GArray  *array;
 };
 
-G_DEFINE_TYPE (IdeXmlStack, ide_xml_stack, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeXmlStack, ide_xml_stack, G_TYPE_OBJECT)
 
 IdeXmlStack *
 ide_xml_stack_new (void)

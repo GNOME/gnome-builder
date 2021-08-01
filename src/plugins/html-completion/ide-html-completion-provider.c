@@ -32,7 +32,7 @@ struct _IdeHtmlCompletionProvider
 
 static void completion_provider_init (IdeCompletionProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeHtmlCompletionProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeHtmlCompletionProvider,
                          ide_html_completion_provider,
                          G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, completion_provider_init))

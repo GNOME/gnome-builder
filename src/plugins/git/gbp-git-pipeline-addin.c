@@ -67,7 +67,7 @@ pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
   iface->load = gbp_git_pipeline_addin_load;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitPipelineAddin, gbp_git_pipeline_addin, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitPipelineAddin, gbp_git_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN,
                                                 pipeline_addin_iface_init))
 

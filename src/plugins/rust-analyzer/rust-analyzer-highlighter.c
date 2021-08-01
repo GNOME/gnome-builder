@@ -32,7 +32,7 @@ struct _RustAnalyzerHighlighter
 
 static void provider_iface_init (IdeHighlighterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerHighlighter,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerHighlighter,
                          rust_analyzer_highlighter,
                          IDE_TYPE_LSP_HIGHLIGHTER,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, provider_iface_init))

@@ -46,7 +46,7 @@ enum {
 
 static guint signals [N_SIGNALS];
 
-G_DEFINE_TYPE (GbpShellcmdList, gbp_shellcmd_list, GTK_TYPE_FRAME)
+G_DEFINE_FINAL_TYPE (GbpShellcmdList, gbp_shellcmd_list, GTK_TYPE_FRAME)
 
 static void
 gbp_shellcmd_list_class_init (GbpShellcmdListClass *klass)

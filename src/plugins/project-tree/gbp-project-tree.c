@@ -34,7 +34,7 @@ struct _GbpProjectTree
   IdeTree parent_instance;
 };
 
-G_DEFINE_TYPE (GbpProjectTree, gbp_project_tree, IDE_TYPE_TREE)
+G_DEFINE_FINAL_TYPE (GbpProjectTree, gbp_project_tree, IDE_TYPE_TREE)
 
 static IdeTreeNodeVisit
 locate_project_files (IdeTreeNode *node,

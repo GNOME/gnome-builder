@@ -40,7 +40,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpMesonTest, gbp_meson_test, IDE_TYPE_TEST)
+G_DEFINE_FINAL_TYPE (GbpMesonTest, gbp_meson_test, IDE_TYPE_TEST)
 
 static GParamSpec *properties [N_PROPS];
 

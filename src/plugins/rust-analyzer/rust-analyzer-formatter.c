@@ -28,7 +28,7 @@ struct _RustAnalyzerFormatter
 
 static void provider_iface_init (IdeFormatterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerFormatter,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerFormatter,
                          rust_analyzer_formatter,
                          IDE_TYPE_LSP_FORMATTER,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_FORMATTER, provider_iface_init))

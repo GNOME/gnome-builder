@@ -1314,7 +1314,7 @@ service_iface_init (IpcFlatpakServiceIface *iface)
   iface->handle_resolve_extension = ipc_flatpak_service_impl_resolve_extension;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC_TYPE_FLATPAK_SERVICE_SKELETON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC_TYPE_FLATPAK_SERVICE_SKELETON,
                          G_IMPLEMENT_INTERFACE (IPC_TYPE_FLATPAK_SERVICE, service_iface_init))
 
 static void

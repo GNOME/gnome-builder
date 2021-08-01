@@ -32,7 +32,7 @@ struct _IdeXmlSymbolResolver
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 static void

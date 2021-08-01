@@ -44,7 +44,7 @@ vcs_tag_iface_init (IdeVcsTagInterface *iface)
   iface->get_name = gbp_git_tag_get_name;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitTag, gbp_git_tag, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitTag, gbp_git_tag, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_TAG, vcs_tag_iface_init))
 
 static void

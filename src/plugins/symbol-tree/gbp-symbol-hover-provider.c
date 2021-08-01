@@ -202,7 +202,7 @@ hover_provider_iface_init (IdeHoverProviderInterface *iface)
   iface->hover_finish = gbp_symbol_hover_provider_hover_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpSymbolHoverProvider, gbp_symbol_hover_provider, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSymbolHoverProvider, gbp_symbol_hover_provider, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_HOVER_PROVIDER, hover_provider_iface_init))
 
 static void

@@ -38,7 +38,7 @@ struct _GbpConfirmSaveDialog
   GtkCellRendererToggle *toggle;
 };
 
-G_DEFINE_TYPE (GbpConfirmSaveDialog, gbp_confirm_save_dialog, GTK_TYPE_MESSAGE_DIALOG)
+G_DEFINE_FINAL_TYPE (GbpConfirmSaveDialog, gbp_confirm_save_dialog, GTK_TYPE_MESSAGE_DIALOG)
 
 enum {
   COLUMN_SELECTED,

@@ -35,7 +35,7 @@ struct _GbpOweWorkbenchAddin
 
 static void addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpOweWorkbenchAddin,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOweWorkbenchAddin,
                          gbp_owe_workbench_addin,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, addin_iface_init))

@@ -53,7 +53,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeDebuggerLocalsView, ide_debugger_locals_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerLocalsView, ide_debugger_locals_view, GTK_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 

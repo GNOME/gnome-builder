@@ -37,7 +37,7 @@ struct _GbpFlatpakDownloadStage
   guint force_update : 1;
 };
 
-G_DEFINE_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
+G_DEFINE_FINAL_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
 
 enum {
   PROP_0,

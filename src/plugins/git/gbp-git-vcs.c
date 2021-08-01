@@ -549,7 +549,7 @@ vcs_iface_init (IdeVcsInterface *iface)
   iface->list_status_finish = gbp_git_vcs_list_status_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitVcs, gbp_git_vcs, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitVcs, gbp_git_vcs, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, vcs_iface_init))
 
 static GParamSpec *properties [N_PROPS];

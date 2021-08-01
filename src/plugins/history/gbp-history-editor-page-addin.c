@@ -352,7 +352,7 @@ editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface)
   iface->frame_set = gbp_history_editor_page_addin_frame_set;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpHistoryEditorPageAddin, gbp_history_editor_page_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpHistoryEditorPageAddin, gbp_history_editor_page_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN,
                                                 editor_view_addin_iface_init))
 

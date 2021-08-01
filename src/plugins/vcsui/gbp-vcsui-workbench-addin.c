@@ -116,7 +116,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->vcs_changed = gbp_vcsui_workbench_addin_vcs_changed;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpVcsuiWorkbenchAddin, gbp_vcsui_workbench_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiWorkbenchAddin, gbp_vcsui_workbench_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void

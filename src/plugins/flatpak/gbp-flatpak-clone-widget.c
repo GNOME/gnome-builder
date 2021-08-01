@@ -82,7 +82,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, IDE_TYPE_SURFACE)
 
 static void
 module_source_free (void *data)

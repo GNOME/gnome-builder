@@ -49,7 +49,7 @@ struct _GbpShellcmdCommandEditor
   GtkSwitch            *close_on_exit;
 };
 
-G_DEFINE_TYPE (GbpShellcmdCommandEditor, gbp_shellcmd_command_editor, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GbpShellcmdCommandEditor, gbp_shellcmd_command_editor, GTK_TYPE_BIN)
 
 static GbpShellcmdCommandModel *
 get_model (void)

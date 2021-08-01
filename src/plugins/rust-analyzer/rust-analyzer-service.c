@@ -41,7 +41,7 @@ struct _RustAnalyzerService
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerService, rust_analyzer_service, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerService, rust_analyzer_service, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 enum {

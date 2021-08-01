@@ -150,7 +150,7 @@ session_addin_iface_init (IdeSessionAddinInterface *iface)
   iface->get_autosave_properties = gbp_devhelp_session_addin_get_autosave_properties;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpDevhelpSessionAddin, gbp_devhelp_session_addin, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpDevhelpSessionAddin, gbp_devhelp_session_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SESSION_ADDIN, session_addin_iface_init))
 
 static void

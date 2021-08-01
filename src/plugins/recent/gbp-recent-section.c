@@ -532,7 +532,7 @@ greeter_section_iface_init (IdeGreeterSectionInterface *iface)
   iface->purge_selected = gbp_recent_section_purge_selected;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION,
                                                 greeter_section_iface_init))
 

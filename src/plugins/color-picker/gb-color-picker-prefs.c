@@ -60,7 +60,7 @@ struct _GbColorPickerPrefs
   GSettings                      *components_settings;
 };
 
-G_DEFINE_TYPE (GbColorPickerPrefs, gb_color_picker_prefs, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbColorPickerPrefs, gb_color_picker_prefs, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

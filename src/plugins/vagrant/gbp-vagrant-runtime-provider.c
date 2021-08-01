@@ -286,7 +286,7 @@ runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
   iface->load = gbp_vagrant_runtime_provider_load;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpVagrantRuntimeProvider, gbp_vagrant_runtime_provider, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVagrantRuntimeProvider, gbp_vagrant_runtime_provider, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
 
 static void

@@ -33,7 +33,7 @@ struct _IdeAutotoolsMakecacheStage
   GFile                 *cache_file;
 };
 
-G_DEFINE_TYPE (IdeAutotoolsMakecacheStage, ide_autotools_makecache_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
+G_DEFINE_FINAL_TYPE (IdeAutotoolsMakecacheStage, ide_autotools_makecache_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
 
 static void
 ide_autotools_makecache_stage_makecache_cb (GObject      *object,

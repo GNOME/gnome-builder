@@ -40,7 +40,7 @@ struct _GbpNewFilePopover
   GtkLabel     *title;
 };
 
-G_DEFINE_TYPE (GbpNewFilePopover, gbp_new_file_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (GbpNewFilePopover, gbp_new_file_popover, GTK_TYPE_POPOVER)
 
 enum {
   PROP_0,

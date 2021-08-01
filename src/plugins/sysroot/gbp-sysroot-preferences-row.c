@@ -37,7 +37,7 @@ struct _GbpSysrootPreferencesRow
   GtkWidget *popover;
 };
 
-G_DEFINE_TYPE (GbpSysrootPreferencesRow, gbp_sysroot_preferences_row, DZL_TYPE_PREFERENCES_BIN)
+G_DEFINE_FINAL_TYPE (GbpSysrootPreferencesRow, gbp_sysroot_preferences_row, DZL_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,

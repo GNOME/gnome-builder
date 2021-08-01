@@ -55,7 +55,7 @@ struct _GbpBuilduiPane
   guint                warning_count;
 };
 
-G_DEFINE_TYPE (GbpBuilduiPane, gbp_buildui_pane, IDE_TYPE_PANE)
+G_DEFINE_FINAL_TYPE (GbpBuilduiPane, gbp_buildui_pane, IDE_TYPE_PANE)
 
 enum {
   COLUMN_DIAGNOSTIC,

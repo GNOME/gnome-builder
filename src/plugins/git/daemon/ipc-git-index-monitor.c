@@ -33,7 +33,7 @@ struct _IpcGitIndexMonitor
   guint         changed_source;
 };
 
-G_DEFINE_TYPE (IpcGitIndexMonitor, ipc_git_index_monitor, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IpcGitIndexMonitor, ipc_git_index_monitor, G_TYPE_OBJECT)
 
 enum {
   CHANGED,

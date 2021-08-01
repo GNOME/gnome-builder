@@ -37,7 +37,7 @@ struct _GbpDevicedDeviceProvider
   DevdBrowser *browser;
 };
 
-G_DEFINE_TYPE (GbpDevicedDeviceProvider, gbp_deviced_device_provider, IDE_TYPE_DEVICE_PROVIDER)
+G_DEFINE_FINAL_TYPE (GbpDevicedDeviceProvider, gbp_deviced_device_provider, IDE_TYPE_DEVICE_PROVIDER)
 
 static void
 gbp_deviced_device_provider_device_added_cb (GbpDevicedDeviceProvider *self,

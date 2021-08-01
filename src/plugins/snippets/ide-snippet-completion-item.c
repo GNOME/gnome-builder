@@ -33,7 +33,7 @@ struct _IdeSnippetCompletionItem
   const IdeSnippetInfo *info;
 };
 
-G_DEFINE_TYPE_WITH_CODE (IdeSnippetCompletionItem, ide_snippet_completion_item, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSnippetCompletionItem, ide_snippet_completion_item, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void

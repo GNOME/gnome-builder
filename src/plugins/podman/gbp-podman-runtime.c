@@ -36,7 +36,7 @@ struct _GbpPodmanRuntime
   guint       has_started : 1;
 };
 
-G_DEFINE_TYPE (GbpPodmanRuntime, gbp_podman_runtime, IDE_TYPE_RUNTIME)
+G_DEFINE_FINAL_TYPE (GbpPodmanRuntime, gbp_podman_runtime, IDE_TYPE_RUNTIME)
 
 static void
 maybe_start (GbpPodmanRuntime *self)

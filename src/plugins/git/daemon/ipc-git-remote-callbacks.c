@@ -37,7 +37,7 @@ struct _IpcGitRemoteCallbacks
   guint                fraction_changed : 1;
 };
 
-G_DEFINE_TYPE (IpcGitRemoteCallbacks, ipc_git_remote_callbacks, GGIT_TYPE_REMOTE_CALLBACKS)
+G_DEFINE_FINAL_TYPE (IpcGitRemoteCallbacks, ipc_git_remote_callbacks, GGIT_TYPE_REMOTE_CALLBACKS)
 
 static gboolean
 ipc_git_remote_callbacks_update_progress (gpointer data)

@@ -53,7 +53,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpLsPage, gbp_ls_page, IDE_TYPE_PAGE)
+G_DEFINE_FINAL_TYPE (GbpLsPage, gbp_ls_page, IDE_TYPE_PAGE)
 
 static GParamSpec *properties [N_PROPS];
 

@@ -46,7 +46,7 @@ struct _GbpGitBufferChangeMonitor
 enum { SLOW, FAST };
 static const guint g_delay[] = { 750, 50 };
 
-G_DEFINE_TYPE (GbpGitBufferChangeMonitor, gbp_git_buffer_change_monitor, IDE_TYPE_BUFFER_CHANGE_MONITOR)
+G_DEFINE_FINAL_TYPE (GbpGitBufferChangeMonitor, gbp_git_buffer_change_monitor, IDE_TYPE_BUFFER_CHANGE_MONITOR)
 
 static gboolean
 queued_update_source_cb (GbpGitBufferChangeMonitor *self)

@@ -34,7 +34,7 @@ struct _GbpBuilduiRuntimeRow
   GtkImage      *image;
 };
 
-G_DEFINE_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void
 gbp_buildui_runtime_row_finalize (GObject *object)

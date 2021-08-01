@@ -37,7 +37,7 @@ struct _GbpTodoPanel
   GtkStack      *stack;
 };
 
-G_DEFINE_TYPE (GbpTodoPanel, gbp_todo_panel, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpTodoPanel, gbp_todo_panel, DZL_TYPE_DOCK_WIDGET)
 
 enum {
   PROP_0,

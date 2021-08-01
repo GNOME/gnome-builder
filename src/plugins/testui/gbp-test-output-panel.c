@@ -34,7 +34,7 @@ struct _GbpTestOutputPanel
   GtkScrollbar *scrollbar;
 };
 
-G_DEFINE_TYPE (GbpTestOutputPanel, gbp_test_output_panel, IDE_TYPE_PANE)
+G_DEFINE_FINAL_TYPE (GbpTestOutputPanel, gbp_test_output_panel, IDE_TYPE_PANE)
 
 static void
 gbp_test_output_panel_class_init (GbpTestOutputPanelClass *klass)

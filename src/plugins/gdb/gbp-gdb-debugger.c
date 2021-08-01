@@ -65,7 +65,7 @@ typedef struct
   gboolean completed;
 } SyncHandle;
 
-G_DEFINE_TYPE (GbpGdbDebugger, gbp_gdb_debugger, IDE_TYPE_DEBUGGER)
+G_DEFINE_FINAL_TYPE (GbpGdbDebugger, gbp_gdb_debugger, IDE_TYPE_DEBUGGER)
 
 #define DEBUG_LOG(dir,msg)                                 \
   G_STMT_START {                                           \

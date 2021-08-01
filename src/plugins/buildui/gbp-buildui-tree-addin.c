@@ -393,7 +393,7 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
   iface->unload = gbp_buildui_tree_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpBuilduiTreeAddin, gbp_buildui_tree_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpBuilduiTreeAddin, gbp_buildui_tree_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void

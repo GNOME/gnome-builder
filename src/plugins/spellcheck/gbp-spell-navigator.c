@@ -48,7 +48,7 @@ struct _GbpSpellNavigator
 
 static void gspell_navigator_iface_init (GspellNavigatorInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpSpellNavigator, gbp_spell_navigator, G_TYPE_INITIALLY_UNOWNED,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSpellNavigator, gbp_spell_navigator, G_TYPE_INITIALLY_UNOWNED,
                          G_IMPLEMENT_INTERFACE (GSPELL_TYPE_NAVIGATOR, gspell_navigator_iface_init))
 
 enum {

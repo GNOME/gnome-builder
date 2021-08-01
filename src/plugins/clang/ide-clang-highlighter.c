@@ -42,7 +42,7 @@ struct _IdeClangHighlighter
 static void highlighter_iface_init             (IdeHighlighterInterface *iface);
 static void ide_clang_highlighter_queue_udpate (IdeClangHighlighter     *self);
 
-G_DEFINE_TYPE_EXTENDED (IdeClangHighlighter, ide_clang_highlighter, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeClangHighlighter, ide_clang_highlighter, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
 
 static inline gboolean

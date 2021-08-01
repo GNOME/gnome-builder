@@ -112,7 +112,7 @@ application_addin_iface_init (IdeApplicationAddinInterface *iface)
 G_DEFINE_TYPE_EXTENDED (GbpFlatpakApplicationAddin,
                         gbp_flatpak_application_addin,
                         G_TYPE_OBJECT,
-                        0,
+                        G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
 
 static void

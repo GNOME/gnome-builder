@@ -50,7 +50,7 @@ typedef struct
 
 static void ide_workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbpEditorWorkbenchAddin, gbp_editor_workbench_addin, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GbpEditorWorkbenchAddin, gbp_editor_workbench_addin, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,
                                                ide_workbench_addin_iface_init))
 

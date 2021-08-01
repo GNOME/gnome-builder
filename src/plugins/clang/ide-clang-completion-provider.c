@@ -414,7 +414,7 @@ provider_iface_init (IdeCompletionProviderInterface *iface)
   iface->get_comment = ide_clang_completion_provider_get_comment;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeClangCompletionProvider, ide_clang_completion_provider, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangCompletionProvider, ide_clang_completion_provider, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 static void

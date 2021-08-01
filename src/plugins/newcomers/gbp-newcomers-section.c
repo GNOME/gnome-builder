@@ -171,7 +171,7 @@ greeter_section_iface_init (IdeGreeterSectionInterface *iface)
   iface->set_selection_mode = gbp_newcomers_section_set_selection_mode;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpNewcomersSection, gbp_newcomers_section, GTK_TYPE_BIN,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpNewcomersSection, gbp_newcomers_section, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION,
                                                 greeter_section_iface_init))
 

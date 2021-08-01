@@ -38,7 +38,7 @@ struct _GbpCommentCodeEditorPageAddin
 
 static void editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpCommentCodeEditorPageAddin, gbp_comment_code_editor_page_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCommentCodeEditorPageAddin, gbp_comment_code_editor_page_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_view_addin_iface_init))
 
 /* If there's only empty lines, G_MAXINT is returned */

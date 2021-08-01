@@ -300,7 +300,7 @@ toolchain_provider_iface_init (IdeToolchainProviderInterface *iface)
   iface->unload = gbp_sysroot_toolchain_provider_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpSysrootToolchainProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSysrootToolchainProvider,
                          gbp_sysroot_toolchain_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TOOLCHAIN_PROVIDER,

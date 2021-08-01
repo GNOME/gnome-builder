@@ -257,7 +257,7 @@ application_addin_iface_init (IdeApplicationAddinInterface *iface)
   iface->activate = gbp_greeter_application_addin_activate;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGreeterApplicationAddin, gbp_greeter_application_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGreeterApplicationAddin, gbp_greeter_application_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
 
 static void

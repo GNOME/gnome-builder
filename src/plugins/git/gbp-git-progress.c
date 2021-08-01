@@ -29,7 +29,7 @@ struct _GbpGitProgress
   guint withdraw : 1;
 };
 
-G_DEFINE_TYPE (GbpGitProgress, gbp_git_progress, IPC_TYPE_GIT_PROGRESS_SKELETON)
+G_DEFINE_FINAL_TYPE (GbpGitProgress, gbp_git_progress, IPC_TYPE_GIT_PROGRESS_SKELETON)
 
 IpcGitProgress *
 gbp_git_progress_new (GDBusConnection  *connection,

@@ -97,7 +97,7 @@ build_target_provider_iface_init (IdeBuildTargetProviderInterface *iface)
   iface->get_targets_finish = gbp_flatpak_build_target_provider_get_targets_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakBuildTargetProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakBuildTargetProvider,
                          gbp_flatpak_build_target_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_TARGET_PROVIDER,

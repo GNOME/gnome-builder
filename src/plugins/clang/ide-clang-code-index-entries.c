@@ -188,7 +188,7 @@ index_entries_iface_init (IdeCodeIndexEntriesInterface *iface)
   iface->next_entries_finish = ide_clang_code_index_entries_next_entries_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeClangCodeIndexEntries, ide_clang_code_index_entries, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangCodeIndexEntries, ide_clang_code_index_entries, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CODE_INDEX_ENTRIES, index_entries_iface_init))
 
 static void

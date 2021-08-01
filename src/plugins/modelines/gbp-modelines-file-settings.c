@@ -33,7 +33,7 @@ struct _GbpModelinesFileSettings
   IdeFileSettings parent_instance;
 };
 
-G_DEFINE_TYPE (GbpModelinesFileSettings, gbp_modelines_file_settings, IDE_TYPE_FILE_SETTINGS)
+G_DEFINE_FINAL_TYPE (GbpModelinesFileSettings, gbp_modelines_file_settings, IDE_TYPE_FILE_SETTINGS)
 
 static gboolean
 buffer_file_matches (GbpModelinesFileSettings *self,

@@ -67,7 +67,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpCodeIndexService, gbp_code_index_service, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpCodeIndexService, gbp_code_index_service, IDE_TYPE_OBJECT)
 
 static void     gbp_code_index_service_index_async    (GbpCodeIndexService  *self,
                                                        GCancellable         *cancellable,

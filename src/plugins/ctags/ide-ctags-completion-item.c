@@ -27,7 +27,7 @@
 #include "ide-ctags-index.h"
 #include "ide-ctags-results.h"
 
-G_DEFINE_TYPE_WITH_CODE (IdeCtagsCompletionItem,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsCompletionItem,
                          ide_ctags_completion_item,
                          G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))

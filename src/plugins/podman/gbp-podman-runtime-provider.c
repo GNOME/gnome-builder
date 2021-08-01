@@ -445,7 +445,7 @@ runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
   iface->bootstrap_finish = gbp_podman_runtime_provider_bootstrap_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpPodmanRuntimeProvider, gbp_podman_runtime_provider, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpPodmanRuntimeProvider, gbp_podman_runtime_provider, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
 
 static void

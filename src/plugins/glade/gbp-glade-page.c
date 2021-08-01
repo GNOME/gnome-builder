@@ -27,7 +27,7 @@
 #include "gbp-glade-page.h"
 #include "gbp-glade-private.h"
 
-G_DEFINE_TYPE (GbpGladePage, gbp_glade_page, IDE_TYPE_PAGE)
+G_DEFINE_FINAL_TYPE (GbpGladePage, gbp_glade_page, IDE_TYPE_PAGE)
 
 enum {
   PROP_0,

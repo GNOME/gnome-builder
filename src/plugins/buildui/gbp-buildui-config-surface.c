@@ -50,7 +50,7 @@ typedef struct
   IdeConfig *config;
 } AddinState;
 
-G_DEFINE_TYPE (GbpBuilduiConfigSurface, gbp_buildui_config_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (GbpBuilduiConfigSurface, gbp_buildui_config_surface, IDE_TYPE_SURFACE)
 
 enum {
   PROP_0,

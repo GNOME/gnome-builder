@@ -37,7 +37,7 @@ struct _GbpMesonToolRow
   GtkButton *delete_button;
 };
 
-G_DEFINE_TYPE (GbpMesonToolRow, gbp_meson_tool_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (GbpMesonToolRow, gbp_meson_tool_row, GTK_TYPE_LIST_BOX_ROW)
 
 enum {
   PROP_0,

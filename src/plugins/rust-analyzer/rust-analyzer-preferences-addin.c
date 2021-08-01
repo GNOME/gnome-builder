@@ -30,7 +30,7 @@ struct _RustAnalyzerPreferencesAddin
 
 static void preferences_addin_iface_init (IdePreferencesAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerPreferencesAddin,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerPreferencesAddin,
                          rust_analyzer_preferences_addin,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, preferences_addin_iface_init))

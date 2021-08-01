@@ -47,7 +47,7 @@ struct _GbpSpellDict
   guint                 update_needed : 1;
 };
 
-G_DEFINE_TYPE (GbpSpellDict, gbp_spell_dict, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpSpellDict, gbp_spell_dict, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

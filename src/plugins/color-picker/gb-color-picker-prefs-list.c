@@ -25,7 +25,7 @@ struct _GbColorPickerPrefsList
   GtkListBox parent_instance;
 };
 
-G_DEFINE_TYPE (GbColorPickerPrefsList, gb_color_picker_prefs_list, GTK_TYPE_LIST_BOX)
+G_DEFINE_FINAL_TYPE (GbColorPickerPrefsList, gb_color_picker_prefs_list, GTK_TYPE_LIST_BOX)
 
 GbColorPickerPrefsList *
 gb_color_picker_prefs_list_new (void)

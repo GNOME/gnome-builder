@@ -769,7 +769,7 @@ pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
   iface->unload = gbp_flatpak_pipeline_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakPipelineAddin, gbp_flatpak_pipeline_addin, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakPipelineAddin, gbp_flatpak_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN,
                                                 pipeline_addin_iface_init))
 

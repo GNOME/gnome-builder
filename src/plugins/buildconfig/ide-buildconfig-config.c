@@ -39,7 +39,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeBuildconfigConfig, ide_buildconfig_config, IDE_TYPE_CONFIG)
+G_DEFINE_FINAL_TYPE (IdeBuildconfigConfig, ide_buildconfig_config, IDE_TYPE_CONFIG)
 
 static GParamSpec *properties [N_PROPS];
 

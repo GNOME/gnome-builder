@@ -39,7 +39,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpTestPath, gbp_test_path, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpTestPath, gbp_test_path, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 

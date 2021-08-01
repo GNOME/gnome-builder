@@ -32,7 +32,7 @@ struct _GbpCMakeBuildStageCrossFile
   IdeToolchain *toolchain;
 };
 
-G_DEFINE_TYPE (GbpCMakeBuildStageCrossFile, gbp_cmake_build_stage_cross_file, IDE_TYPE_PIPELINE_STAGE)
+G_DEFINE_FINAL_TYPE (GbpCMakeBuildStageCrossFile, gbp_cmake_build_stage_cross_file, IDE_TYPE_PIPELINE_STAGE)
 
 static void
 _gbp_cmake_file_set (gchar       **content,

@@ -56,7 +56,7 @@ typedef struct
   guint                         uncolorize : 1;
 } QueuedColorize;
 
-G_DEFINE_TYPE (GbColorPickerDocumentMonitor, gb_color_picker_document_monitor, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbColorPickerDocumentMonitor, gb_color_picker_document_monitor, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

@@ -38,7 +38,7 @@ struct _IdeCtagsHighlighter
 
 static void highlighter_iface_init (IdeHighlighterInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeCtagsHighlighter,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsHighlighter,
                          ide_ctags_highlighter,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER,

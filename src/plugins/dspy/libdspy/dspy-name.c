@@ -47,7 +47,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (DspyName, dspy_name, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (DspyName, dspy_name, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 

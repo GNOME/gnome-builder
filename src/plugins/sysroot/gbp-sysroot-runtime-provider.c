@@ -40,7 +40,7 @@ static void runtime_provider_iface_init (IdeRuntimeProviderInterface *iface);
 G_DEFINE_TYPE_EXTENDED (GbpSysrootRuntimeProvider,
                         gbp_sysroot_runtime_provider,
                         IDE_TYPE_OBJECT,
-                        0,
+                        G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER,
                                                runtime_provider_iface_init))
 

@@ -35,7 +35,7 @@ struct _IdeClangSymbolTree
 
 static void symbol_tree_iface_init (IdeSymbolTreeInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeClangSymbolTree, ide_clang_symbol_tree, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangSymbolTree, ide_clang_symbol_tree, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
 
 enum {

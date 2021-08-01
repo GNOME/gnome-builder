@@ -38,7 +38,7 @@ static void async_initable_iface_init (GAsyncInitableIface *iface);
 G_DEFINE_TYPE_EXTENDED (GbpEditorconfigFileSettings,
                         gbp_editorconfig_file_settings,
                         IDE_TYPE_FILE_SETTINGS,
-                        0,
+                        G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                async_initable_iface_init))
 

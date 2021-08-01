@@ -66,7 +66,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpGrepPanel, gbp_grep_panel, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpGrepPanel, gbp_grep_panel, DZL_TYPE_DOCK_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 

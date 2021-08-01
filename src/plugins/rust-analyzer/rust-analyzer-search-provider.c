@@ -32,7 +32,7 @@ struct _RustAnalyzerSearchProvider
 
 static void provider_iface_init (IdeSearchProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerSearchProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerSearchProvider,
                          rust_analyzer_search_provider,
                          IDE_TYPE_LSP_SEARCH_PROVIDER,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, provider_iface_init))

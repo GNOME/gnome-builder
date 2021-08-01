@@ -28,7 +28,7 @@ struct _RustAnalyzerRenameProvider
 
 static void provider_iface_init (IdeRenameProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerRenameProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerRenameProvider,
                          rust_analyzer_rename_provider,
                          IDE_TYPE_LSP_RENAME_PROVIDER,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_RENAME_PROVIDER, provider_iface_init))

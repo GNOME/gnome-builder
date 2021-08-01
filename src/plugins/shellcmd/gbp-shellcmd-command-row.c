@@ -35,7 +35,7 @@ struct _GbpShellcmdCommandRow
   DzlShortcutLabel   *chord;
 };
 
-G_DEFINE_TYPE (GbpShellcmdCommandRow, gbp_shellcmd_command_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (GbpShellcmdCommandRow, gbp_shellcmd_command_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void
 gbp_shellcmd_command_row_finalize (GObject *object)

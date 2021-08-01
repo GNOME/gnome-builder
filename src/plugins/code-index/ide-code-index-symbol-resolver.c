@@ -225,7 +225,7 @@ symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
 
 struct _IdeCodeIndexSymbolResolver { IdeObject parent_instance; };
 
-G_DEFINE_TYPE_WITH_CODE (IdeCodeIndexSymbolResolver, ide_code_index_symbol_resolver, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCodeIndexSymbolResolver, ide_code_index_symbol_resolver, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 static void

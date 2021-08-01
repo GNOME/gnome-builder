@@ -37,7 +37,7 @@ struct _GbpGitSubmoduleStage
   guint force_update : 1;
 };
 
-G_DEFINE_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
+G_DEFINE_FINAL_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
 
 GbpGitSubmoduleStage *
 gbp_git_submodule_stage_new (IdeContext *context)

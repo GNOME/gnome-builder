@@ -39,7 +39,7 @@ struct _DspyNameMarquee
   GtkLabel        *label_pid;
 };
 
-G_DEFINE_TYPE (DspyNameMarquee, dspy_name_marquee, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (DspyNameMarquee, dspy_name_marquee, GTK_TYPE_BIN)
 
 enum {
   PROP_0,

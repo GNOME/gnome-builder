@@ -40,7 +40,7 @@ struct _GbpFileSearchProvider
 
 static void search_provider_iface_init (IdeSearchProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpFileSearchProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFileSearchProvider,
                          gbp_file_search_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))

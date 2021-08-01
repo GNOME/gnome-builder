@@ -46,7 +46,7 @@ struct _GbpSpellLanguagePopover
 
 static void language_chooser_iface_init (GspellLanguageChooserInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpSpellLanguagePopover, gbp_spell_language_popover, GTK_TYPE_BUTTON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSpellLanguagePopover, gbp_spell_language_popover, GTK_TYPE_BUTTON,
                          G_IMPLEMENT_INTERFACE (GSPELL_TYPE_LANGUAGE_CHOOSER, language_chooser_iface_init))
 
 enum {

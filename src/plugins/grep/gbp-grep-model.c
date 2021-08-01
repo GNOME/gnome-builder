@@ -82,7 +82,7 @@ struct _GbpGrepModel
 
 static void tree_model_iface_init (GtkTreeModelIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpGrepModel, gbp_grep_model, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGrepModel, gbp_grep_model, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, tree_model_iface_init))
 
 enum {

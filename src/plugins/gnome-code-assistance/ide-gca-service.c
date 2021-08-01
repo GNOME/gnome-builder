@@ -36,7 +36,7 @@ struct _IdeGcaService
   gulong           bus_closed_handler;
 };
 
-G_DEFINE_TYPE (IdeGcaService, ide_gca_service, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeGcaService, ide_gca_service, IDE_TYPE_OBJECT)
 
 static void
 on_bus_closed (GDBusConnection *bus,

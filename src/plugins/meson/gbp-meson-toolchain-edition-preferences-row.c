@@ -44,7 +44,7 @@ struct _GbpMesonToolchainEditionPreferencesRow
   GtkPopover *popover;
 };
 
-G_DEFINE_TYPE (GbpMesonToolchainEditionPreferencesRow, gbp_meson_toolchain_edition_preferences_row, DZL_TYPE_PREFERENCES_BIN)
+G_DEFINE_FINAL_TYPE (GbpMesonToolchainEditionPreferencesRow, gbp_meson_toolchain_edition_preferences_row, DZL_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,

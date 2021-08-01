@@ -39,7 +39,7 @@ struct _GbpGitVcsConfig
 
 static void vcs_config_init (IdeVcsConfigInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitVcsConfig, gbp_git_vcs_config, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitVcsConfig, gbp_git_vcs_config, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CONFIG, vcs_config_init))
 
 static const gchar *

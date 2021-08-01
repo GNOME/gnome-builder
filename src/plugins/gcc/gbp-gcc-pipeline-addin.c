@@ -73,7 +73,7 @@ addin_iface_init (IdePipelineAddinInterface *iface)
   iface->unload = gbp_gcc_pipeline_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGccPipelineAddin, gbp_gcc_pipeline_addin, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGccPipelineAddin, gbp_gcc_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))
 
 static void gbp_gcc_pipeline_addin_class_init (GbpGccPipelineAddinClass *klass) { }

@@ -35,7 +35,7 @@ struct _GbpHistoryItem
   guint        line;
 };
 
-G_DEFINE_TYPE (GbpHistoryItem, gbp_history_item, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpHistoryItem, gbp_history_item, G_TYPE_OBJECT)
 
 static void
 gbp_history_item_dispose (GObject *object)

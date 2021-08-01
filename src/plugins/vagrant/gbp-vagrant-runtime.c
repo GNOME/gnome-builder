@@ -41,7 +41,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpVagrantRuntime, gbp_vagrant_runtime, IDE_TYPE_RUNTIME)
+G_DEFINE_FINAL_TYPE (GbpVagrantRuntime, gbp_vagrant_runtime, IDE_TYPE_RUNTIME)
 
 static GParamSpec *properties [N_PROPS];
 

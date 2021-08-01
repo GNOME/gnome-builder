@@ -106,7 +106,7 @@ application_addin_iface_init (IdeApplicationAddinInterface *iface)
   iface->handle_command_line = gbp_terminal_application_addin_handle_command_line;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpTerminalApplicationAddin, gbp_terminal_application_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTerminalApplicationAddin, gbp_terminal_application_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN,
                                                 application_addin_iface_init))
 

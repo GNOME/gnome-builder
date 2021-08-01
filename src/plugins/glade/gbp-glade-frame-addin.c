@@ -43,7 +43,7 @@ struct _GbpGladeFrameAddin
 
 static void frame_addin_iface_init (IdeFrameAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpGladeFrameAddin, gbp_glade_frame_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGladeFrameAddin, gbp_glade_frame_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_FRAME_ADDIN,
                                                 frame_addin_iface_init))
 

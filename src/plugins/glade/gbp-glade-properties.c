@@ -37,7 +37,7 @@ struct _GbpGladeProperties
   DzlDockWidget    *packing_dock;
 };
 
-G_DEFINE_TYPE (GbpGladeProperties, gbp_glade_properties, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpGladeProperties, gbp_glade_properties, DZL_TYPE_DOCK_WIDGET)
 
 static void
 adjust_radio_hexpand (GtkWidget *widget,

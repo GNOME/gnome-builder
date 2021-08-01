@@ -29,7 +29,7 @@ struct _GbpFlatpakSubprocessLauncher
   guint use_run : 1;
 };
 
-G_DEFINE_TYPE (GbpFlatpakSubprocessLauncher, gbp_flatpak_subprocess_launcher, IDE_TYPE_SUBPROCESS_LAUNCHER)
+G_DEFINE_FINAL_TYPE (GbpFlatpakSubprocessLauncher, gbp_flatpak_subprocess_launcher, IDE_TYPE_SUBPROCESS_LAUNCHER)
 
 static const char * const *
 insert_argv (IdeSubprocessLauncher *launcher,

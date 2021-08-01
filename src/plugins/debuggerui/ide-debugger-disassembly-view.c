@@ -41,7 +41,7 @@ struct _IdeDebuggerDisassemblyView
   IdeDebuggerAddress  current_address;
 };
 
-G_DEFINE_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE_TYPE_PAGE)
+G_DEFINE_FINAL_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE_TYPE_PAGE)
 
 static void
 ide_debugger_disassembly_view_destroy (GtkWidget *widget)

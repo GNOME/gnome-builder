@@ -133,7 +133,7 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
   iface->selection_changed = gbp_grep_tree_addin_selection_changed;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGrepTreeAddin, gbp_grep_tree_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGrepTreeAddin, gbp_grep_tree_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void

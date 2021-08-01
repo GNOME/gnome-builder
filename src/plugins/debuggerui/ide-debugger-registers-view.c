@@ -51,7 +51,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeDebuggerRegistersView, ide_debugger_registers_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerRegistersView, ide_debugger_registers_view, GTK_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 

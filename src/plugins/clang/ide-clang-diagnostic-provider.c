@@ -135,7 +135,7 @@ diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface)
   iface->diagnose_finish = ide_clang_diagnostic_provider_diagnose_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeClangDiagnosticProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangDiagnosticProvider,
                          ide_clang_diagnostic_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,

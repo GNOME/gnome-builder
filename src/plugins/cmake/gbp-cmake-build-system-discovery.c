@@ -29,7 +29,7 @@ struct _GbpCmakeBuildSystemDiscovery
   IdeSimpleBuildSystemDiscovery parent;
 };
 
-G_DEFINE_TYPE (GbpCmakeBuildSystemDiscovery,
+G_DEFINE_FINAL_TYPE (GbpCmakeBuildSystemDiscovery,
                gbp_cmake_build_system_discovery,
                IDE_TYPE_SIMPLE_BUILD_SYSTEM_DISCOVERY)
 

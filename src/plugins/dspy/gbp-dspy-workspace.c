@@ -32,7 +32,7 @@ struct _GbpDspyWorkspace
   GbpDspySurface *surface;
 };
 
-G_DEFINE_TYPE (GbpDspyWorkspace, gbp_dspy_workspace, IDE_TYPE_WORKSPACE)
+G_DEFINE_FINAL_TYPE (GbpDspyWorkspace, gbp_dspy_workspace, IDE_TYPE_WORKSPACE)
 
 static void
 gbp_dspy_workspace_class_init (GbpDspyWorkspaceClass *klass)

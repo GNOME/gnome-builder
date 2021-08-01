@@ -101,7 +101,7 @@ iface_init (IdeEditorPageAddinInterface *iface)
   iface->unload = cpack_editor_page_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (CpackEditorPageAddin, cpack_editor_page_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (CpackEditorPageAddin, cpack_editor_page_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, iface_init))
 
 static void

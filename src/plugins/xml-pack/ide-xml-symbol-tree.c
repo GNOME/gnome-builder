@@ -31,7 +31,7 @@ struct _IdeXmlSymbolTree
 
 static void symbol_tree_iface_init (IdeSymbolTreeInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeXmlSymbolTree, ide_xml_symbol_tree, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeXmlSymbolTree, ide_xml_symbol_tree, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
 
 static guint

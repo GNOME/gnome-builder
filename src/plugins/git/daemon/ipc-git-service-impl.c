@@ -330,7 +330,7 @@ git_service_iface_init (IpcGitServiceIface *iface)
   iface->handle_load_config = ipc_git_service_impl_handle_load_config;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IpcGitServiceImpl, ipc_git_service_impl, IPC_TYPE_GIT_SERVICE_SKELETON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IpcGitServiceImpl, ipc_git_service_impl, IPC_TYPE_GIT_SERVICE_SKELETON,
                          G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_SERVICE, git_service_iface_init))
 
 static void

@@ -48,7 +48,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpSymbolMenuButton, gbp_symbol_menu_button, GTK_TYPE_MENU_BUTTON)
+G_DEFINE_FINAL_TYPE (GbpSymbolMenuButton, gbp_symbol_menu_button, GTK_TYPE_MENU_BUTTON)
 
 static GParamSpec *properties [N_PROPS];
 

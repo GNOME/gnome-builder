@@ -517,7 +517,7 @@ config_view_addin_iface_init (IdeConfigViewAddinInterface *iface)
   iface->load = gbp_buildui_config_view_addin_load;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpBuilduiConfigViewAddin, gbp_buildui_config_view_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpBuilduiConfigViewAddin, gbp_buildui_config_view_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIG_VIEW_ADDIN, config_view_addin_iface_init))
 
 static void

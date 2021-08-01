@@ -47,7 +47,7 @@ struct _GbColorPickerPrefsPaletteRow
   guint              needs_attention : 1;
 };
 
-G_DEFINE_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, DZL_TYPE_PREFERENCES_BIN)
+G_DEFINE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, DZL_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,

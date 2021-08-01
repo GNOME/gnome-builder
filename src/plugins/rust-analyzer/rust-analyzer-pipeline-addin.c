@@ -41,7 +41,7 @@ struct _RustAnalyzerPipelineAddin
 
 static void pipeline_addin_iface_init (IdePipelineAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerPipelineAddin, rust_analyzer_pipeline_addin, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerPipelineAddin, rust_analyzer_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, pipeline_addin_iface_init))
 
 static void

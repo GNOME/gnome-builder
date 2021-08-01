@@ -49,7 +49,7 @@ typedef struct
   guint completed;
 } Run;
 
-G_DEFINE_TYPE (GbpCodeIndexBuilder, gbp_code_index_builder, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpCodeIndexBuilder, gbp_code_index_builder, IDE_TYPE_OBJECT)
 
 static void
 run_free (Run *state)

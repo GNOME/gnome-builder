@@ -168,7 +168,7 @@ command_provider_iface_init (IdeCommandProviderInterface *iface)
   iface->query_finish = gbp_command_bar_command_provider_query_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpCommandBarCommandProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCommandBarCommandProvider,
                          gbp_command_bar_command_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMMAND_PROVIDER,

@@ -108,7 +108,7 @@ struct _IdeXmlRngParser
   XmlRngFlags        flags;
 };
 
-G_DEFINE_TYPE (IdeXmlRngParser, ide_xml_rng_parser, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeXmlRngParser, ide_xml_rng_parser, G_TYPE_OBJECT)
 
 static inline void
 _autofree_cleanup_xmlFree (void *p)

@@ -393,7 +393,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->open_finish = gbp_glade_workbench_addin_open_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGladeWorkbenchAddin, gbp_glade_workbench_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGladeWorkbenchAddin, gbp_glade_workbench_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void

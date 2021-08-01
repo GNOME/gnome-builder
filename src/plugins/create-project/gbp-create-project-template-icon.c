@@ -38,7 +38,7 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-G_DEFINE_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, GTK_TYPE_BIN)
 
 static void
 gbp_create_project_template_icon_get_property (GObject    *object,

@@ -31,7 +31,7 @@ struct _IdeCtagsSymbolNode
   GPtrArray                *children;
 };
 
-G_DEFINE_TYPE (IdeCtagsSymbolNode, ide_ctags_symbol_node, IDE_TYPE_SYMBOL_NODE)
+G_DEFINE_FINAL_TYPE (IdeCtagsSymbolNode, ide_ctags_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 static void
 ide_ctags_symbol_node_get_location_cb (GObject      *object,

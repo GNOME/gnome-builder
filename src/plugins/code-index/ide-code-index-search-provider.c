@@ -133,7 +133,7 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
 
 struct _IdeCodeIndexSearchProvider { IdeObject parent; };
 
-G_DEFINE_TYPE_WITH_CODE (IdeCodeIndexSearchProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCodeIndexSearchProvider,
                          ide_code_index_search_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))

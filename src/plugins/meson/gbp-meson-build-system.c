@@ -40,7 +40,7 @@ struct _GbpMesonBuildSystem
 static void async_initable_iface_init (GAsyncInitableIface     *iface);
 static void build_system_iface_init   (IdeBuildSystemInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpMesonBuildSystem, gbp_meson_build_system, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonBuildSystem, gbp_meson_build_system, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, build_system_iface_init))
 

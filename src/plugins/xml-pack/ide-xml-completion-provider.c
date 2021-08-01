@@ -82,7 +82,7 @@ static void      completion_provider_init (IdeCompletionProviderInterface *iface
 static gboolean  process_matching_state   (MatchingState                  *state,
                                            IdeXmlRngDefine                *define);
 
-G_DEFINE_TYPE_WITH_CODE (IdeXmlCompletionProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlCompletionProvider,
                          ide_xml_completion_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, completion_provider_init))

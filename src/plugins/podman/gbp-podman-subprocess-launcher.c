@@ -36,7 +36,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpPodmanSubprocessLauncher, gbp_podman_subprocess_launcher, IDE_TYPE_SUBPROCESS_LAUNCHER)
+G_DEFINE_FINAL_TYPE (GbpPodmanSubprocessLauncher, gbp_podman_subprocess_launcher, IDE_TYPE_SUBPROCESS_LAUNCHER)
 
 static GParamSpec *properties [N_PROPS];
 

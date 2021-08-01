@@ -32,7 +32,7 @@ struct _GbpSymbolTreeBuilder
   gchar *filter;
 };
 
-G_DEFINE_TYPE (GbpSymbolTreeBuilder, gbp_symbol_tree_builder, DZL_TYPE_TREE_BUILDER)
+G_DEFINE_FINAL_TYPE (GbpSymbolTreeBuilder, gbp_symbol_tree_builder, DZL_TYPE_TREE_BUILDER)
 
 static void
 gbp_symbol_tree_builder_build_children (DzlTreeBuilder *builder,

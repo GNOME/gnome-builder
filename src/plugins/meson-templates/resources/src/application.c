@@ -8,7 +8,7 @@ struct _{{PreFix}}Application
   GtkApplication parent_instance;
 };
 
-G_DEFINE_TYPE ({{PreFix}}Application, {{prefix_}}_application, GTK_TYPE_APPLICATION)
+G_DEFINE_FINAL_TYPE ({{PreFix}}Application, {{prefix_}}_application, GTK_TYPE_APPLICATION)
 
 {{PreFix}}Application *
 {{prefix_}}_application_new (gchar *application_id,

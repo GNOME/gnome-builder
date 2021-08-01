@@ -31,7 +31,7 @@ struct _GbColorPickerPrefsPaletteList
   GtkWidget     *plus_button;
 };
 
-G_DEFINE_TYPE (GbColorPickerPrefsPaletteList, gb_color_picker_prefs_palette_list, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (GbColorPickerPrefsPaletteList, gb_color_picker_prefs_palette_list, GTK_TYPE_BOX)
 
 enum {
   ADDED,

@@ -164,7 +164,7 @@ build_target_provider_iface_init (IdeBuildTargetProviderInterface *iface)
   iface->get_targets_finish = ide_autotools_build_target_provider_get_targets_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsBuildTargetProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeAutotoolsBuildTargetProvider,
                          ide_autotools_build_target_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_TARGET_PROVIDER,

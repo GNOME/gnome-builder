@@ -36,7 +36,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpCommandBarSuggestion, gbp_command_bar_suggestion, DZL_TYPE_SUGGESTION)
+G_DEFINE_FINAL_TYPE (GbpCommandBarSuggestion, gbp_command_bar_suggestion, DZL_TYPE_SUGGESTION)
 
 static GParamSpec *properties [N_PROPS];
 

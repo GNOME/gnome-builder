@@ -32,7 +32,7 @@
 #include "gbp-editor-frame-controls.h"
 
 
-G_DEFINE_TYPE (GbpEditorFrameControls, gbp_editor_frame_controls, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (GbpEditorFrameControls, gbp_editor_frame_controls, GTK_TYPE_BOX)
 
 static void
 document_cursor_moved (GbpEditorFrameControls *self,

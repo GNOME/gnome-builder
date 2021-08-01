@@ -43,7 +43,7 @@ typedef struct
   VtePty  *pty;
 } Run;
 
-G_DEFINE_TYPE (GbpMesonTestProvider, gbp_meson_test_provider, IDE_TYPE_TEST_PROVIDER)
+G_DEFINE_FINAL_TYPE (GbpMesonTestProvider, gbp_meson_test_provider, IDE_TYPE_TEST_PROVIDER)
 
 static void
 run_free (Run *run)

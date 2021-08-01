@@ -73,7 +73,7 @@ typedef enum
   NODE_WALKER_VISIBLE_DEEP
 } NodeWalker;
 
-G_DEFINE_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE_TYPE_SYMBOL_NODE)
+G_DEFINE_FINAL_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 static void
 ide_xml_symbol_node_get_location_async (IdeSymbolNode       *node,

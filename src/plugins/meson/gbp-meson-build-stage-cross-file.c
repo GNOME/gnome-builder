@@ -33,7 +33,7 @@ struct _GbpMesonBuildStageCrossFile
   IdeToolchain *toolchain;
 };
 
-G_DEFINE_TYPE (GbpMesonBuildStageCrossFile, gbp_meson_build_stage_cross_file, IDE_TYPE_PIPELINE_STAGE)
+G_DEFINE_FINAL_TYPE (GbpMesonBuildStageCrossFile, gbp_meson_build_stage_cross_file, IDE_TYPE_PIPELINE_STAGE)
 
 static void
 add_lang_executable (const gchar *lang,

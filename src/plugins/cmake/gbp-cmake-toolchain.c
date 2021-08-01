@@ -35,7 +35,7 @@ struct _GbpCMakeToolchain
   gchar                  *file_path;
 };
 
-G_DEFINE_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, IDE_TYPE_SIMPLE_TOOLCHAIN)
+G_DEFINE_FINAL_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, IDE_TYPE_SIMPLE_TOOLCHAIN)
 
 enum {
   PROP_0,

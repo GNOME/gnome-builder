@@ -47,7 +47,7 @@ enum {
   STATE_SHUTDOWN,
 };
 
-G_DEFINE_TYPE (GbpGitClient, gbp_git_client, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpGitClient, gbp_git_client, IDE_TYPE_OBJECT)
 
 static void
 gbp_git_client_subprocess_spawned (GbpGitClient            *self,

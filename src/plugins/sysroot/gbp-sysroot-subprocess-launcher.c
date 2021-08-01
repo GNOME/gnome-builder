@@ -30,7 +30,7 @@ struct _GbpSysrootSubprocessLauncher
   IdeSubprocessLauncher parent_instance;
 };
 
-G_DEFINE_TYPE (GbpSysrootSubprocessLauncher,
+G_DEFINE_FINAL_TYPE (GbpSysrootSubprocessLauncher,
                gbp_sysroot_subprocess_launcher,
                IDE_TYPE_SUBPROCESS_LAUNCHER)
 

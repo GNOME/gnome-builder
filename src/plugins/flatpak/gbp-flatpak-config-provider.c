@@ -693,7 +693,7 @@ configuration_provider_iface_init (IdeConfigProviderInterface *iface)
   iface->delete = gbp_flatpak_config_provider_delete;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakConfigProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakConfigProvider,
                          gbp_flatpak_config_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIG_PROVIDER,

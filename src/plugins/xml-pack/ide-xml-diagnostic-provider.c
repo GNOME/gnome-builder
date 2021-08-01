@@ -31,7 +31,7 @@ struct _IdeXmlDiagnosticProvider
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeXmlDiagnosticProvider, ide_xml_diagnostic_provider, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeXmlDiagnosticProvider, ide_xml_diagnostic_provider, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER, diagnostic_provider_iface_init))
 
 static void

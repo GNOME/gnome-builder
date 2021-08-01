@@ -413,7 +413,7 @@ addin_iface_init (IdePipelineAddinInterface *iface)
 
 struct _IdeAutotoolsPipelineAddin { IdeObject parent; };
 
-G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsPipelineAddin, ide_autotools_pipeline_addin, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeAutotoolsPipelineAddin, ide_autotools_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))
 
 static void

@@ -31,7 +31,7 @@
 #include "gbp-spell-private.h"
 #include "gbp-spell-widget.h"
 
-G_DEFINE_TYPE (GbpSpellWidget, gbp_spell_widget, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GbpSpellWidget, gbp_spell_widget, GTK_TYPE_BIN)
 
 #define CHECK_WORD_INTERVAL_MIN      100
 #define DICT_CHECK_WORD_INTERVAL_MIN 100

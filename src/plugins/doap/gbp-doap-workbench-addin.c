@@ -161,7 +161,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->unload = gbp_doap_workbench_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpDoapWorkbenchAddin, gbp_doap_workbench_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpDoapWorkbenchAddin, gbp_doap_workbench_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,
                                                 workbench_addin_iface_init))
 

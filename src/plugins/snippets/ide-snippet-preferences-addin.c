@@ -75,7 +75,7 @@ prefs_addin_iface_init (IdePreferencesAddinInterface *iface)
   iface->unload = ide_snippet_preferences_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeSnippetPreferencesAddin, ide_snippet_preferences_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSnippetPreferencesAddin, ide_snippet_preferences_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, prefs_addin_iface_init))
 
 static void

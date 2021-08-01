@@ -28,7 +28,7 @@ struct _RustAnalyzerSymbolResolver
 
 static void symbol_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerSymbolResolver,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerSymbolResolver,
                          rust_analyzer_symbol_resolver,
                          IDE_TYPE_LSP_SYMBOL_RESOLVER,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_iface_init))

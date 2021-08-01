@@ -143,7 +143,7 @@ dependency_udpater_iface_init (IdeDependencyUpdaterInterface *iface)
   iface->update_finish = gbp_flatpak_dependency_updater_update_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakDependencyUpdater,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakDependencyUpdater,
                          gbp_flatpak_dependency_updater,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_DEPENDENCY_UPDATER,

@@ -1074,7 +1074,7 @@ git_repository_iface_init (IpcGitRepositoryIface *iface)
   iface->handle_update_submodules = ipc_git_repository_impl_handle_update_submodules;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IpcGitRepositoryImpl, ipc_git_repository_impl, IPC_TYPE_GIT_REPOSITORY_SKELETON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IpcGitRepositoryImpl, ipc_git_repository_impl, IPC_TYPE_GIT_REPOSITORY_SKELETON,
                          G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_REPOSITORY, git_repository_iface_init))
 
 static void

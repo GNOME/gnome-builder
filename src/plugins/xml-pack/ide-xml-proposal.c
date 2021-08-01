@@ -33,7 +33,7 @@ struct _IdeXmlProposal
   gchar *text;
 };
 
-G_DEFINE_TYPE_WITH_CODE (IdeXmlProposal, ide_xml_proposal, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlProposal, ide_xml_proposal, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void

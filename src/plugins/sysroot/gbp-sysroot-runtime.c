@@ -35,7 +35,7 @@ struct _GbpSysrootRuntime
   IdeRuntime  parent_instance;
 };
 
-G_DEFINE_TYPE (GbpSysrootRuntime, gbp_sysroot_runtime, IDE_TYPE_RUNTIME)
+G_DEFINE_FINAL_TYPE (GbpSysrootRuntime, gbp_sysroot_runtime, IDE_TYPE_RUNTIME)
 
 GbpSysrootRuntime *
 gbp_sysroot_runtime_new (const gchar *sysroot_id)

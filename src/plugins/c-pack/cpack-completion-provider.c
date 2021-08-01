@@ -35,7 +35,7 @@ struct _CpackCompletionProvider
 
 static void provider_iface_init (IdeCompletionProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (CpackCompletionProvider, cpack_completion_provider, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (CpackCompletionProvider, cpack_completion_provider, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 static void

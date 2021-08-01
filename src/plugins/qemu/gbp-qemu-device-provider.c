@@ -30,7 +30,7 @@ struct _GbpQemuDeviceProvider
   IdeDeviceProvider parent_instance;
 };
 
-G_DEFINE_TYPE (GbpQemuDeviceProvider, gbp_qemu_device_provider, IDE_TYPE_DEVICE_PROVIDER)
+G_DEFINE_FINAL_TYPE (GbpQemuDeviceProvider, gbp_qemu_device_provider, IDE_TYPE_DEVICE_PROVIDER)
 
 #ifdef __linux__
 static const struct {

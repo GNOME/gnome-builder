@@ -57,7 +57,7 @@ vcs_branch_iface_init (IdeVcsBranchInterface *iface)
   iface->get_id = gbp_git_branch_get_id;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitBranch, gbp_git_branch, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitBranch, gbp_git_branch, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_BRANCH, vcs_branch_iface_init))
 
 static void

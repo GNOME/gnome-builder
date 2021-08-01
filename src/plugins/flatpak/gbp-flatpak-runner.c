@@ -37,7 +37,7 @@ struct _GbpFlatpakRunner
   gchar *manifest_command;
 };
 
-G_DEFINE_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, IDE_TYPE_RUNNER)
+G_DEFINE_FINAL_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, IDE_TYPE_RUNNER)
 
 static IdeSubprocessLauncher *
 gbp_flatpak_runner_create_launcher (IdeRunner *runner)

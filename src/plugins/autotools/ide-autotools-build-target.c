@@ -41,7 +41,7 @@ enum {
 
 static void build_target_iface_init (IdeBuildTargetInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeAutotoolsBuildTarget, ide_autotools_build_target, IDE_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeAutotoolsBuildTarget, ide_autotools_build_target, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_TARGET, build_target_iface_init))
 
 static GParamSpec *properties [N_PROPS];

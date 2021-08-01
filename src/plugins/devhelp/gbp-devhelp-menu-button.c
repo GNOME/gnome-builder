@@ -34,7 +34,7 @@ struct _GbpDevhelpMenuButton
   DhSidebar     *sidebar;
 };
 
-G_DEFINE_TYPE (GbpDevhelpMenuButton, gbp_devhelp_menu_button, GTK_TYPE_MENU_BUTTON)
+G_DEFINE_FINAL_TYPE (GbpDevhelpMenuButton, gbp_devhelp_menu_button, GTK_TYPE_MENU_BUTTON)
 
 static void
 gbp_devhelp_menu_button_pixbuf_data_func (GtkCellLayout   *cell_layout,

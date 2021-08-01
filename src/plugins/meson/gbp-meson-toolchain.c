@@ -33,7 +33,7 @@ struct _GbpMesonToolchain
   gchar                  *file_path;
 };
 
-G_DEFINE_TYPE (GbpMesonToolchain, gbp_meson_toolchain, IDE_TYPE_SIMPLE_TOOLCHAIN)
+G_DEFINE_FINAL_TYPE (GbpMesonToolchain, gbp_meson_toolchain, IDE_TYPE_SIMPLE_TOOLCHAIN)
 
 enum {
   PROP_0,

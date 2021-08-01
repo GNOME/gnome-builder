@@ -32,7 +32,7 @@ struct _GbpFileSearchResult
   gchar           *path;
 };
 
-G_DEFINE_TYPE (GbpFileSearchResult, gbp_file_search_result, IDE_TYPE_SEARCH_RESULT)
+G_DEFINE_FINAL_TYPE (GbpFileSearchResult, gbp_file_search_result, IDE_TYPE_SEARCH_RESULT)
 
 enum {
   PROP_0,

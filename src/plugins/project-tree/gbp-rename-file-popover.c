@@ -54,7 +54,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE (GbpRenameFilePopover, gbp_rename_file_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (GbpRenameFilePopover, gbp_rename_file_popover, GTK_TYPE_POPOVER)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];

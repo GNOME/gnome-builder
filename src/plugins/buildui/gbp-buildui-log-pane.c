@@ -47,7 +47,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpBuilduiLogPane, gbp_buildui_log_pane, IDE_TYPE_PANE)
+G_DEFINE_FINAL_TYPE (GbpBuilduiLogPane, gbp_buildui_log_pane, IDE_TYPE_PANE)
 
 static GParamSpec *properties [N_PROPS];
 

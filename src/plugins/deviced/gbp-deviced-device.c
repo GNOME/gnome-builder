@@ -40,7 +40,7 @@ typedef struct
   GDestroyNotify         progress_data_destroy;
 } InstallBundleState;
 
-G_DEFINE_TYPE (GbpDevicedDevice, gbp_deviced_device, IDE_TYPE_DEVICE)
+G_DEFINE_FINAL_TYPE (GbpDevicedDevice, gbp_deviced_device, IDE_TYPE_DEVICE)
 
 enum {
   PROP_0,

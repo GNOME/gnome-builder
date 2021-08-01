@@ -396,7 +396,7 @@ cmdline_addin_iface_init (IdeApplicationAddinInterface *iface)
   iface->unload = gbp_editor_application_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpEditorApplicationAddin, gbp_editor_application_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpEditorApplicationAddin, gbp_editor_application_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, cmdline_addin_iface_init))
 
 static void

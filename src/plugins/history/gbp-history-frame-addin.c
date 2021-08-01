@@ -325,7 +325,7 @@ frame_addin_iface_init (IdeFrameAddinInterface *iface)
   iface->set_page = gbp_history_frame_addin_set_view;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpHistoryFrameAddin, gbp_history_frame_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpHistoryFrameAddin, gbp_history_frame_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_FRAME_ADDIN,
                                                 frame_addin_iface_init))
 

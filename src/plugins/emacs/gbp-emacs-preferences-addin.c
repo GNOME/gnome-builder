@@ -74,7 +74,7 @@ preferences_addin_iface_init (IdePreferencesAddinInterface *iface)
   iface->unload = gbp_emacs_preferences_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpEmacsPreferencesAddin, gbp_emacs_preferences_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpEmacsPreferencesAddin, gbp_emacs_preferences_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN,
                                                 preferences_addin_iface_init))
 

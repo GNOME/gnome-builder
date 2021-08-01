@@ -135,7 +135,7 @@ vcs_initializer_iface_init (IdeVcsInitializerInterface *iface)
   iface->initialize_finish = gbp_git_vcs_initializer_initialize_finish;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpGitVcsInitializer, gbp_git_vcs_initializer, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitVcsInitializer, gbp_git_vcs_initializer, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_INITIALIZER, vcs_initializer_iface_init))
 
 static void

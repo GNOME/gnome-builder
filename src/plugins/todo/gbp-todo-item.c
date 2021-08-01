@@ -33,7 +33,7 @@ struct _GbpTodoItem
   const gchar *lines[MAX_TODO_LINES];
 };
 
-G_DEFINE_TYPE (GbpTodoItem, gbp_todo_item, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpTodoItem, gbp_todo_item, G_TYPE_OBJECT)
 
 static void
 gbp_todo_item_finalize (GObject *object)

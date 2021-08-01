@@ -39,7 +39,7 @@ struct _GbpFileSearchIndex
   gint                  max_depth;
 };
 
-G_DEFINE_TYPE (GbpFileSearchIndex, gbp_file_search_index, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpFileSearchIndex, gbp_file_search_index, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,

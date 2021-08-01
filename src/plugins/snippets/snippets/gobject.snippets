@@ -8,7 +8,7 @@ snippet gobject
 		$0
 	} ${2:$1|camelize}Private;
 
-	G_DEFINE_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+	G_DEFINE_FINAL_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
 
 	enum {
 		PROP_0,
@@ -138,7 +138,7 @@ snippet gobject_final
 		${4:GObject} parent_instance;
 	};
 
-	G_DEFINE_TYPE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
+	G_DEFINE_FINAL_TYPE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
 
 	enum {
 		PROP_0,

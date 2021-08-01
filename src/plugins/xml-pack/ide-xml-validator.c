@@ -50,7 +50,7 @@ typedef struct _ValidState
   xmlDoc           *doc;
 } ValidState;
 
-G_DEFINE_TYPE (IdeXmlValidator, ide_xml_validator, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeXmlValidator, ide_xml_validator, IDE_TYPE_OBJECT)
 
 IdeXmlSchemaKind
 ide_xml_validator_get_kind (IdeXmlValidator *self)

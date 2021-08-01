@@ -52,7 +52,7 @@ struct _GbpBuilduiOmniBarSection
   GtkRevealer    *popover_details_revealer;
 };
 
-G_DEFINE_TYPE (GbpBuilduiOmniBarSection, gbp_buildui_omni_bar_section, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GbpBuilduiOmniBarSection, gbp_buildui_omni_bar_section, GTK_TYPE_BIN)
 
 static void
 gbp_buildui_omni_bar_section_notify_can_build (GbpBuilduiOmniBarSection *self,

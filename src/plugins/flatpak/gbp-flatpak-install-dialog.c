@@ -38,7 +38,7 @@ struct _GbpFlatpakInstallDialog
   gint          response_id;
 };
 
-G_DEFINE_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_FINAL_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, GTK_TYPE_DIALOG)
 
 GbpFlatpakInstallDialog *
 gbp_flatpak_install_dialog_new (GtkWindow *transient_for)

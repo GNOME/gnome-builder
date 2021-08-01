@@ -49,7 +49,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (GbpDevhelpPage, gbp_devhelp_page, IDE_TYPE_PAGE)
+G_DEFINE_FINAL_TYPE (GbpDevhelpPage, gbp_devhelp_page, IDE_TYPE_PAGE)
 
 static GParamSpec *properties [LAST_PROP];
 

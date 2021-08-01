@@ -30,7 +30,7 @@ struct _GbpSysrootManager
   GKeyFile *key_file;
 };
 
-G_DEFINE_TYPE (GbpSysrootManager, gbp_sysroot_manager, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpSysrootManager, gbp_sysroot_manager, G_TYPE_OBJECT)
 
 enum {
   TARGET_MODIFIED,

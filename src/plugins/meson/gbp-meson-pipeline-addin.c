@@ -282,7 +282,7 @@ pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
   iface->load = gbp_meson_pipeline_addin_load;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpMesonPipelineAddin, gbp_meson_pipeline_addin, IDE_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonPipelineAddin, gbp_meson_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN,
                                                 pipeline_addin_iface_init))
 

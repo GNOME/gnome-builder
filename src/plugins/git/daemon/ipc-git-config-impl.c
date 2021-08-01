@@ -97,7 +97,7 @@ git_config_iface_init (IpcGitConfigIface *iface)
   iface->handle_close = ipc_git_config_impl_handle_close;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IpcGitConfigImpl, ipc_git_config_impl, IPC_TYPE_GIT_CONFIG_SKELETON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IpcGitConfigImpl, ipc_git_config_impl, IPC_TYPE_GIT_CONFIG_SKELETON,
                          G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_CONFIG, git_config_iface_init))
 
 static void

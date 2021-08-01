@@ -45,7 +45,7 @@ struct _GbpFlatpakRuntime
   GFile *deploy_dir_files;
 };
 
-G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
+G_DEFINE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
 
 enum {
   PROP_0,

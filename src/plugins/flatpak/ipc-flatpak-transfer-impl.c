@@ -36,7 +36,7 @@ struct _IpcFlatpakTransferImpl
 
 static void transfer_iface_init (IpcFlatpakTransferIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IpcFlatpakTransferImpl, ipc_flatpak_transfer_impl, IPC_TYPE_FLATPAK_TRANSFER_SKELETON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IpcFlatpakTransferImpl, ipc_flatpak_transfer_impl, IPC_TYPE_FLATPAK_TRANSFER_SKELETON,
                          G_IMPLEMENT_INTERFACE (IPC_TYPE_FLATPAK_TRANSFER, transfer_iface_init))
 
 typedef struct

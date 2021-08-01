@@ -37,7 +37,7 @@ enum {
 
 static guint signals [N_SIGNALS];
 
-G_DEFINE_TYPE (GbpLsTreeView, gbp_ls_tree_view, GTK_TYPE_TREE_VIEW)
+G_DEFINE_FINAL_TYPE (GbpLsTreeView, gbp_ls_tree_view, GTK_TYPE_TREE_VIEW)
 
 static void
 gbp_ls_tree_view_go_up (GbpLsTreeView *self)

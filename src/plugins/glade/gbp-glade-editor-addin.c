@@ -48,7 +48,7 @@ struct _GbpGladeEditorAddin
 
 static void editor_addin_iface_init (IdeEditorAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpGladeEditorAddin, gbp_glade_editor_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGladeEditorAddin, gbp_glade_editor_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_ADDIN, editor_addin_iface_init))
 
 static void

@@ -67,7 +67,7 @@ typedef struct
   gboolean         recursive;
 } QueuedRequest;
 
-G_DEFINE_TYPE (IdeCtagsService, ide_ctags_service, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (IdeCtagsService, ide_ctags_service, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,

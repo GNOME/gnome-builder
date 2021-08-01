@@ -28,7 +28,7 @@ struct _RustAnalyzerDiagnosticProvider
 
 static void provider_iface_init (IdeDiagnosticProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (RustAnalyzerDiagnosticProvider,
+G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerDiagnosticProvider,
                          rust_analyzer_diagnostic_provider,
                          IDE_TYPE_LSP_DIAGNOSTIC_PROVIDER,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER, provider_iface_init))

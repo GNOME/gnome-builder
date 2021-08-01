@@ -36,7 +36,7 @@ struct _GbpCommandBar
   guint               queued_dismiss;
 };
 
-G_DEFINE_TYPE (GbpCommandBar, gbp_command_bar, DZL_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GbpCommandBar, gbp_command_bar, DZL_TYPE_BIN)
 
 static void
 replace_model (GbpCommandBar *self,

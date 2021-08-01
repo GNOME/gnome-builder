@@ -30,7 +30,7 @@
 #include "gbp-devhelp-search.h"
 #include "gbp-devhelp-search-private.h"
 
-G_DEFINE_TYPE (GbpDevhelpSearch, gbp_devhelp_search, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GbpDevhelpSearch, gbp_devhelp_search, GTK_TYPE_BIN)
 
 static void
 search_text_changed_cb (IdeTaggedEntry   *search_entry,

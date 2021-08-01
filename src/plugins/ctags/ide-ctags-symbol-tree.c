@@ -71,7 +71,7 @@ symbol_tree_iface_init (IdeSymbolTreeInterface *iface)
   iface->get_nth_child = ide_ctags_symbol_tree_get_nth_child;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeCtagsSymbolTree, ide_ctags_symbol_tree, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsSymbolTree, ide_ctags_symbol_tree, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
 
 /**

@@ -438,7 +438,7 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
   iface->node_activated = gbp_test_tree_addin_node_activated;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpTestTreeAddin, gbp_test_tree_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTestTreeAddin, gbp_test_tree_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void

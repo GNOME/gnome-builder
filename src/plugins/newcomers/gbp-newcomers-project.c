@@ -45,7 +45,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpNewcomersProject, gbp_newcomers_project, IDE_TYPE_GREETER_ROW)
+G_DEFINE_FINAL_TYPE (GbpNewcomersProject, gbp_newcomers_project, IDE_TYPE_GREETER_ROW)
 
 static GParamSpec *properties [N_PROPS];
 

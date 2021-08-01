@@ -36,7 +36,7 @@ struct _DspyNameRow
   GtkLabel      *subtitle;
 };
 
-G_DEFINE_TYPE (DspyNameRow, dspy_name_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (DspyNameRow, dspy_name_row, GTK_TYPE_LIST_BOX_ROW)
 
 enum {
   PROP_0,
