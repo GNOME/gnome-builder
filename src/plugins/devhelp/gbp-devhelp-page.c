@@ -18,6 +18,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define I_ g_intern_string
+
 #include <devhelp/devhelp.h>
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
@@ -44,15 +46,9 @@ enum {
   LAST_PROP
 };
 
-enum {
-  SEARCH_REVEAL,
-  LAST_SIGNAL
-};
-
 G_DEFINE_TYPE (GbpDevhelpPage, gbp_devhelp_page, IDE_TYPE_PAGE)
 
 static GParamSpec *properties [LAST_PROP];
-static guint signals [LAST_SIGNAL];
 
 void
 gbp_devhelp_page_set_uri (GbpDevhelpPage *self,
@@ -169,12 +165,17 @@ gbp_devhelp_page_get_property (GObject    *object,
 }
 
 static void
-gbp_devhelp_search_reveal (GbpDevhelpPage *self)
+gbp_devhelp_page_actions_reveal_search (GSimpleAction *action,
+                                        GVariant      *param,
+                                        gpointer       user_data)
 {
+  GbpDevhelpPage *self = (GbpDevhelpPage *)user_data;
+
   g_assert (GBP_IS_DEVHELP_PAGE (self));
 
   webkit_web_view_can_execute_editing_command (self->web_view, WEBKIT_EDITING_COMMAND_COPY, NULL, NULL, NULL);
   gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->search));
 }
 
 static void
@@ -188,6 +189,16 @@ gbp_devhelp_focus_in_event (GbpDevhelpPage *self,
 }
 
 static void
+gbp_devhelp_page_finalize (GObject *object)
+{
+  GbpDevhelpPage *self = (GbpDevhelpPage *)object;
+
+  g_assert (GBP_IS_DEVHELP_PAGE (self));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "devhelp-view", NULL);
+}
+
+static void
 gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -196,6 +207,7 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
 
   object_class->set_property = gbp_devhelp_page_set_property;
   object_class->get_property = gbp_devhelp_page_get_property;
+  object_class->finalize = gbp_devhelp_page_finalize;
 
   view_class->create_split = gbp_devhelp_page_create_split;
 
@@ -205,19 +217,6 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
                          "The uri of the documentation.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
-
-  signals [SEARCH_REVEAL] =
-    g_signal_new_class_handler ("search-reveal",
-                                G_TYPE_FROM_CLASS (klass),
-                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                G_CALLBACK (gbp_devhelp_search_reveal),
-                                NULL, NULL, NULL,
-                                G_TYPE_NONE, 0);
-
-  gtk_binding_entry_add_signal (gtk_binding_set_by_class (klass),
-                                GDK_KEY_f,
-                                GDK_CONTROL_MASK,
-                                "search-reveal", 0);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -310,12 +309,14 @@ setup_webview (WebKitWebView *web_view)
 
 static const GActionEntry actions[] = {
   { "print", gbp_devhelp_page_actions_print },
+  { "reveal-search", gbp_devhelp_page_actions_reveal_search },
 };
 
 static void
 gbp_devhelp_page_init (GbpDevhelpPage *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
+  DzlShortcutController *controller;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -357,4 +358,11 @@ gbp_devhelp_page_init (GbpDevhelpPage *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "devhelp-view",
                                   G_ACTION_GROUP (group));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-view.reveal-search"),
+                                              "<Primary>f",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-view.reveal-search"));
 }
