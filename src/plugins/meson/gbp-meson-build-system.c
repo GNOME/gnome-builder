@@ -34,6 +34,7 @@ struct _GbpMesonBuildSystem
   IdeCompileCommands *compile_commands;
   GFileMonitor       *monitor;
   gchar              *project_version;
+  gchar             **languages;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface     *iface);
@@ -390,6 +391,7 @@ gbp_meson_build_system_finalize (GObject *object)
   g_clear_object (&self->compile_commands);
   g_clear_object (&self->monitor);
   g_clear_pointer (&self->project_version, g_free);
+  g_clear_pointer (&self->languages, g_strfreev);
 
   G_OBJECT_CLASS (gbp_meson_build_system_parent_class)->finalize (object);
 }
@@ -738,11 +740,61 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->supports_toolchain = gbp_meson_build_system_supports_toolchain;
 }
 
+/**
+ * This could be 'projectname', ['c', 'rust'], ... or 'projectname', 'rust', ...
+ */
+static char **
+parse_language (gchar *language_string)
+{
+  if (strstr(language_string, "["))
+    {
+      gchar *begin = NULL;
+      gchar *end = NULL;
+      g_autofree gchar *copy = NULL;
+      GString *gstring = NULL;
+
+      if ((begin = strstr(language_string, "[")) == NULL) goto failure;
+      if ((end = strstr(language_string, "]")) == NULL) goto failure;
+      copy = g_strndup (begin + 1, end-begin - 1);
+
+      gstring = g_string_new (copy);
+      g_string_replace (gstring, "'", "", -1);
+      g_string_replace (gstring, " ", "", -1);
+      copy = g_string_free (gstring, FALSE);
+
+      return g_strsplit (copy, ",", -1);
+    }
+  else
+    {
+      gchar **list = NULL;
+      g_autofree gchar *language = NULL;
+      GString *gstring = NULL;
+      g_autoptr(GStrvBuilder) builder = NULL;
+
+      list = g_strsplit (language_string, ",", -1);
+      language = g_strstrip (list[1]);
+
+      gstring = g_string_new (language);
+      g_string_replace (gstring, "'", "", -1);
+      language = g_string_free (gstring, FALSE);
+      g_strfreev (list);
+
+      builder = g_strv_builder_new ();
+      g_strv_builder_add (builder, g_steal_pointer (&language));
+      return g_strv_builder_end (builder);
+    }
+
+failure:
+  return NULL;
+}
+
 static void
 extract_metadata (GbpMesonBuildSystem *self,
                   const gchar         *contents)
 {
   const gchar *ptr;
+  g_autoptr(GRegex) regex = NULL;
+  g_autoptr(GMatchInfo) match_info = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
@@ -778,6 +830,16 @@ extract_metadata (GbpMesonBuildSystem *self,
           g_free (self->project_version);
           self->project_version = g_strndup (begin, end - begin);
         }
+    }
+
+  regex = g_regex_new ("^project\\((.*)\\)", G_REGEX_DOTALL | G_REGEX_UNGREEDY, 0, NULL);
+  g_regex_match (regex, contents, 0, &match_info);
+  while (g_match_info_matches (match_info))
+    {
+      gchar *str = g_match_info_fetch (match_info, 1);
+      self->languages = parse_language (str);
+
+      g_match_info_next (match_info, NULL);
     }
 
 failure:
@@ -879,4 +941,12 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 {
   iface->init_async = gbp_meson_build_system_init_async;
   iface->init_finish = gbp_meson_build_system_init_finish;
+}
+
+const gchar * const *
+gbp_meson_build_system_get_languages (GbpMesonBuildSystem *self)
+{
+  g_return_val_if_fail (GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
+
+  return (const gchar * const *)self->languages;
 }
