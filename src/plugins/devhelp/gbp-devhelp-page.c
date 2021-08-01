@@ -228,21 +228,84 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
 
-static void
-setup_webview_styling (WebKitWebView *web_view)
+static gboolean
+webview_decide_policy_cb (WebKitWebView           *web_view,
+                          WebKitPolicyDecision    *decision,
+                          WebKitPolicyDecisionType decision_type,
+                          gpointer                 user_data)
 {
+  WebKitURIRequest *request = NULL;
+  g_autoptr(GUri) uri = NULL;
+  gboolean launch_in_browser;
+
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+
+  switch (decision_type) {
+    case WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION:
+    case WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION:
+      {
+        WebKitNavigationAction *navigation_action =
+          webkit_navigation_policy_decision_get_navigation_action (WEBKIT_NAVIGATION_POLICY_DECISION (decision));
+        request = webkit_navigation_action_get_request (navigation_action);
+        launch_in_browser = TRUE;
+      }
+      break;
+    case WEBKIT_POLICY_DECISION_TYPE_RESPONSE:
+      request = webkit_response_policy_decision_get_request (WEBKIT_RESPONSE_POLICY_DECISION (decision));
+      launch_in_browser = FALSE;
+      break;
+    default:
+      return FALSE;
+  }
+
+  uri = g_uri_parse (webkit_uri_request_get_uri (request), G_URI_FLAGS_NONE, NULL);
+  if (!uri)
+    /* Don't let invalid URIs go through the firewall. */
+    {
+      webkit_policy_decision_ignore (decision);
+      return TRUE;
+    }
+  else
+    {
+      /* Allow the integrated devhelp web view to handle local documentation links,
+       * but open any non-local ones with the user's web browser (e.g. library's homepage),
+       * and deny any other remote resource.
+       */
+      if (g_strcmp0 (g_uri_get_scheme (uri), "file") == 0)
+        return FALSE;
+      else
+        {
+          if (launch_in_browser)
+            {
+              GAppLaunchContext *launch_ctx = G_APP_LAUNCH_CONTEXT (gdk_display_get_app_launch_context (gdk_display_get_default ()));
+              g_app_info_launch_default_for_uri (webkit_uri_request_get_uri (request),
+                                                 launch_ctx,
+                                                 NULL);
+            }
+          webkit_policy_decision_ignore (decision);
+          return TRUE;
+        }
+    }
+}
+
+static void
+setup_webview (WebKitWebView *web_view)
+{
+  g_autoptr(WebKitUserStyleSheet) stylesheet = NULL;
+
   /* Both gi-docgen and gtk-doc use the devhelp-hidden style class to give indications of what
    * elements should be hidden for use by devhelp. Generally it's for the sidebar but it allows
    * to hide really anything not useful for devhelp (e.g. the TOC which already has native GTK
    * widgets in Builder/Devhelp. So follow Devhelp here and hide them.
    */
-  g_autoptr(WebKitUserStyleSheet) stylesheet =
-    webkit_user_style_sheet_new (".devhelp-hidden { display: none; }",
-                                 WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
-                                 WEBKIT_USER_STYLE_LEVEL_USER,
-                                 NULL, NULL);
+  stylesheet = webkit_user_style_sheet_new (".devhelp-hidden { display: none; }",
+                                            WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+                                            WEBKIT_USER_STYLE_LEVEL_USER,
+                                            NULL, NULL);
   webkit_user_content_manager_add_style_sheet (webkit_web_view_get_user_content_manager (web_view),
                                                stylesheet);
+
+  g_signal_connect (web_view, "decide-policy", G_CALLBACK (webview_decide_policy_cb), NULL);
 }
 
 static const GActionEntry actions[] = {
@@ -266,7 +329,7 @@ gbp_devhelp_page_init (GbpDevhelpPage *self)
   self->clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
   self->web_controller = webkit_web_view_get_find_controller (self->web_view);
 
-  setup_webview_styling (self->web_view);
+  setup_webview (self->web_view);
 
   gtk_overlay_add_overlay (self->devhelp_overlay,
                            GTK_WIDGET (self->search_revealer));
