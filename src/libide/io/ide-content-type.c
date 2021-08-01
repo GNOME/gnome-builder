@@ -134,6 +134,16 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
 
   icon = g_content_type_get_symbolic_icon (content_type);
 
+  /* Special case folders to never even try to use an overridden icon. For
+   * example in the case of the LICENSES folder required by the REUSE licensing
+   * helpers, the icon would be the copyright icon. Even if in this particular
+   * case it might make sense to keep the copyright icon, it's just really
+   * confusing to have a folder without a folder icon, especially since it becomes
+   * an expanded folder icon when opening it in the project tree.
+   */
+  if (g_strcmp0 (content_type, "inode/directory") == 0)
+    return g_steal_pointer (&icon);
+
   if (G_IS_THEMED_ICON (icon))
     {
       const gchar * const *names;
