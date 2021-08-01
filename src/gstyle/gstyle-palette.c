@@ -52,7 +52,7 @@ static guint generated_count = 0;
 
 G_DEFINE_QUARK (gstyle_palette_error, gstyle_palette_error)
 
-G_DEFINE_TYPE_WITH_CODE (GstylePalette, gstyle_palette, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GstylePalette, gstyle_palette, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gstyle_palette_list_model_iface_init));
 
 enum {

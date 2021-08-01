@@ -31,7 +31,7 @@ struct _GstyleRenamePopover
   GtkLabel     *message;
 };
 
-G_DEFINE_TYPE (GstyleRenamePopover, gstyle_rename_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (GstyleRenamePopover, gstyle_rename_popover, GTK_TYPE_POPOVER)
 
 enum {
   PROP_0,

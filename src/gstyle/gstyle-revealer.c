@@ -54,7 +54,7 @@ struct _GstyleRevealer
 
 /* TODO: use spped instead of duration */
 
-G_DEFINE_TYPE (GstyleRevealer, gstyle_revealer, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GstyleRevealer, gstyle_revealer, GTK_TYPE_BIN)
 
 enum {
   PROP_0,

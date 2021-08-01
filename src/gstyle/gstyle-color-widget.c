@@ -65,7 +65,7 @@ struct _GstyleColorWidget
   guint                          is_fallback_name_visible : 1;
 };
 
-G_DEFINE_TYPE (GstyleColorWidget, gstyle_color_widget, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GstyleColorWidget, gstyle_color_widget, GTK_TYPE_BIN)
 
 #define GSTYLE_COLOR_WIDGET_DROP_BORDER_PERCENT 0.20
 #define GSTYLE_COLOR_WIDGET_DRAG_ICON_OPACITY 0.8

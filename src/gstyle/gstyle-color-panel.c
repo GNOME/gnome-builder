@@ -37,7 +37,7 @@
 
 #define PREFS_BOX_MARGIN (10)
 
-G_DEFINE_TYPE (GstyleColorPanel, gstyle_color_panel, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (GstyleColorPanel, gstyle_color_panel, GTK_TYPE_BOX)
 
 static const gchar *comp_names [N_GSTYLE_COLOR_COMPONENT] = {
   "hsv_h",

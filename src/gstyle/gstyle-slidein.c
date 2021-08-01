@@ -65,7 +65,7 @@ struct _GstyleSlidein
 
 static void gstyle_slidein_init_buildable_iface (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GstyleSlidein, gstyle_slidein, GTK_TYPE_EVENT_BOX, 0,
+G_DEFINE_TYPE_EXTENDED (GstyleSlidein, gstyle_slidein, GTK_TYPE_EVENT_BOX, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gstyle_slidein_init_buildable_iface))
 
 enum {

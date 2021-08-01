@@ -27,7 +27,7 @@ struct _GstyleCssProvider
   GtkCssProvider parent_instance;
 };
 
-G_DEFINE_TYPE (GstyleCssProvider, gstyle_css_provider, GTK_TYPE_CSS_PROVIDER)
+G_DEFINE_FINAL_TYPE (GstyleCssProvider, gstyle_css_provider, GTK_TYPE_CSS_PROVIDER)
 
 enum {
   PROP_0,

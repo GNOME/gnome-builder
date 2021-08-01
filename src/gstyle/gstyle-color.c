@@ -71,7 +71,7 @@ typedef enum
   RANGE_PERCENT_OR_255MAX
 } ComponentRange;
 
-G_DEFINE_TYPE (GstyleColor, gstyle_color, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GstyleColor, gstyle_color, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

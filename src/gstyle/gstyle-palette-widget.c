@@ -71,7 +71,7 @@ struct _GstylePaletteWidget
   guint                            is_dnd_at_end : 1;
 };
 
-G_DEFINE_TYPE (GstylePaletteWidget, gstyle_palette_widget, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GstylePaletteWidget, gstyle_palette_widget, GTK_TYPE_BIN)
 
 #define GSTYLE_DND_SPEED_THRESHOLD 50
 #define DND_INDEX_START (G_MININT)

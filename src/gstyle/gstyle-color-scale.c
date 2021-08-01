@@ -59,7 +59,7 @@ struct _GstyleColorScale
   gint                   data_stride;
 };
 
-G_DEFINE_TYPE (GstyleColorScale, gstyle_color_scale, GTK_TYPE_SCALE)
+G_DEFINE_FINAL_TYPE (GstyleColorScale, gstyle_color_scale, GTK_TYPE_SCALE)
 
 enum {
   PROP_0,
