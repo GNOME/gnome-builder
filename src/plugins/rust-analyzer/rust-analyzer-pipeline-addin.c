@@ -26,7 +26,6 @@
 #include <libide-core.h>
 
 #include "rust-analyzer-pipeline-addin.h"
-#include <meson/gbp-meson-build-system.h>
 
 #if 0
 # define DEV_MODE
@@ -299,15 +298,8 @@ rust_analyzer_pipeline_addin_prepare (IdePipelineAddin *addin,
   context = ide_object_get_context (IDE_OBJECT (pipeline));
   buildsystem = ide_build_system_from_context (context);
 
-  if (ide_str_equal (ide_build_system_get_id (buildsystem), "meson"))
-    {
-      GbpMesonBuildSystem *meson = GBP_MESON_BUILD_SYSTEM (buildsystem);
-      const gchar * const *languages = gbp_meson_build_system_get_languages (meson);
-      if (!languages || !g_strv_contains (languages, "rust"))
-        IDE_EXIT;
-    }
-  else if (!ide_str_equal (ide_build_system_get_id (buildsystem), "cargo"))
-      IDE_EXIT;
+  if (!ide_build_system_supports_language (buildsystem, "rust"))
+    IDE_EXIT;
 
   self->pipeline = pipeline;
 
