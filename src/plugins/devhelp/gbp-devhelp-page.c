@@ -358,8 +358,8 @@ gbp_devhelp_page_init (GbpDevhelpPage *self)
 
   setup_webview (self->web_view);
 
-  gtk_overlay_add_overlay (self->devhelp_overlay,
-                           GTK_WIDGET (self->search_revealer));
+  gtk_widget_show (GTK_WIDGET (self->search));
+  gtk_overlay_add_overlay (self->devhelp_overlay, GTK_WIDGET (self->search));
 
   gbp_devhelp_search_set_devhelp (self->search,
                                   self->web_controller,

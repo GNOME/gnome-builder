@@ -1,116 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkRevealer" id="search_revealer">
+  <template class="GbpDevhelpSearch" parent="GtkBin">
     <property name="halign">end</property>
     <property name="valign">start</property>
-    <property name="visible">true</property>
     <child>
-      <object class="GtkFrame">
+      <object class="GtkRevealer" id="search_revealer">
         <property name="visible">true</property>
-        <property name="margin-end">12</property>
-        <style>
-          <class name="search-frame"/>
-        </style>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkFrame">
             <property name="visible">true</property>
-            <property name="can_focus">false</property>
-            <property name="row_spacing">8</property>
-            <property name="column_spacing">8</property>
+            <property name="margin-end">12</property>
+            <style>
+              <class name="search-frame"/>
+            </style>
             <child>
-              <object class="IdeTaggedEntry" id="search_entry">
+              <object class="GtkGrid">
                 <property name="visible">true</property>
-                <property name="can_focus">true</property>
-                <property name="width-chars">20</property>
-                <property name="max-width-chars">30</property>
-                <property name="primary_icon_name">edit-find-symbolic</property>
-                <property name="primary_icon_activatable">false</property>
-                <property name="primary_icon_sensitive">false</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="homogeneous">true</property>
-                <property name="visible">true</property>
-                <property name="can_focus">false</property>
-                <property name="valign">center</property>
-                <style>
-                  <class name="linked"/>
-                </style>
+                <property name="row_spacing">8</property>
+                <property name="column_spacing">8</property>
                 <child>
-                  <object class="GtkButton" id="search_prev_button">
+                  <object class="IdeTaggedEntry" id="search_entry">
                     <property name="visible">true</property>
-                    <property name="can_focus">false</property>
-                    <property name="receives_default">true</property>
+                    <property name="width-chars">20</property>
+                    <property name="max-width-chars">30</property>
+                    <property name="primary_icon_name">edit-find-symbolic</property>
+                    <property name="primary_icon_activatable">false</property>
+                    <property name="primary_icon_sensitive">false</property>
+                    <property name="tooltip-text" translatable="yes">Reveal search bar with Ctrl+F</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="homogeneous">true</property>
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GtkButton" id="search_prev_button">
+                        <property name="visible">true</property>
+                        <property name="receives_default">true</property>
+                        <property name="tooltip-text" translatable="yes">Previous search result (Ctrl+Shift+G)</property>
+                        <property name="action-name">devhelp-search.find-previous</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">true</property>
+                            <property name="icon_name">go-up-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">false</property>
+                        <property name="fill">true</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="search_next_button">
+                        <property name="visible">true</property>
+                        <property name="receives_default">true</property>
+                        <property name="tooltip-text" translatable="yes">Next search result (Ctrl+G)</property>
+                        <property name="action-name">devhelp-search.find-next</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">true</property>
+                            <property name="icon_name">go-down-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">false</property>
+                        <property name="fill">true</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="close_button">
+                    <property name="visible">true</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="focus_on_click">false</property>
+                    <property name="tooltip-text" translatable="yes">Close search bar (Escape key)</property>
+                    <property name="action-name">devhelp-search.close</property>
+                    <style>
+                      <class name="close"/>
+                    </style>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">true</property>
-                        <property name="can_focus">false</property>
-                        <property name="icon_name">go-up-symbolic</property>
-                        <property name="icon_size">1</property>
+                        <property name="icon_name">window-close-symbolic</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">false</property>
-                    <property name="fill">true</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="search_next_button">
-                    <property name="visible">true</property>
-                    <property name="can_focus">false</property>
-                    <property name="receives_default">true</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">true</property>
-                        <property name="can_focus">false</property>
-                        <property name="icon_name">go-down-symbolic</property>
-                        <property name="icon_size">1</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">false</property>
-                    <property name="fill">true</property>
-                    <property name="position">1</property>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="visible">true</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="focus_on_click">false</property>
-                <style>
-                  <class name="close"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">true</property>
-                    <property name="icon_name">window-close-symbolic</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">0</property>
-              </packing>
             </child>
           </object>
         </child>
       </object>
     </child>
-  </object>
+  </template>
 </interface>

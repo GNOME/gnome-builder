@@ -18,10 +18,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define I_ g_intern_string
+
 #define G_LOG_DOMAIN "gbp-devhelp-search"
 #define MAX_SEARCH 100
 
-#include <fcntl.h>
 #include <glib/gi18n.h>
 #include <libide-editor.h>
 #include <webkit2/webkit2.h>
@@ -30,28 +31,6 @@
 #include "gbp-devhelp-search-private.h"
 
 G_DEFINE_TYPE (GbpDevhelpSearch, gbp_devhelp_search, GTK_TYPE_BIN)
-
-static void
-close_clicked_cb (GtkButton        *button,
-                  GbpDevhelpSearch *self)
-{
-  g_assert (GBP_IS_DEVHELP_SEARCH (self));
-
-  webkit_find_controller_search_finish (self->web_controller);
-  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
-}
-
-static void
-search_button_clicked_cb (GtkButton        *button,
-                          GbpDevhelpSearch *self)
-{
-  g_assert (GBP_IS_DEVHELP_SEARCH (self));
-
-  if (button == self->search_prev_button)
-    webkit_find_controller_search_previous (self->web_controller);
-  else
-    webkit_find_controller_search_next (self->web_controller);
-}
 
 static void
 search_text_changed_cb (IdeTaggedEntry   *search_entry,
@@ -91,9 +70,75 @@ search_revealer_cb (GtkRevealer      *search_revealer,
 }
 
 static void
+gbp_devhelp_search_actions_close (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  GbpDevhelpSearch *self = (GbpDevhelpSearch *)user_data;
+
+  g_assert (GBP_IS_DEVHELP_SEARCH (self));
+
+  webkit_find_controller_search_finish (self->web_controller);
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+}
+
+static void
+gbp_devhelp_search_actions_find_next (GSimpleAction *action,
+                                      GVariant      *param,
+                                      gpointer       user_data)
+{
+  GbpDevhelpSearch *self = (GbpDevhelpSearch *)user_data;
+
+  g_assert (GBP_IS_DEVHELP_SEARCH (self));
+
+  if (gtk_revealer_get_reveal_child (self->search_revealer) &&
+      webkit_find_controller_get_search_text (self->web_controller))
+    webkit_find_controller_search_next (self->web_controller);
+}
+
+static void
+gbp_devhelp_search_actions_find_previous (GSimpleAction *action,
+                                          GVariant      *param,
+                                          gpointer       user_data)
+{
+  GbpDevhelpSearch *self = (GbpDevhelpSearch *)user_data;
+
+  g_assert (GBP_IS_DEVHELP_SEARCH (self));
+
+  if (gtk_revealer_get_reveal_child (self->search_revealer) &&
+      webkit_find_controller_get_search_text (self->web_controller))
+    webkit_find_controller_search_previous (self->web_controller);
+}
+
+static void
+gbp_devhelp_search_grab_focus (GtkWidget *widget)
+{
+  GbpDevhelpSearch *self = (GbpDevhelpSearch *)widget;
+
+  g_assert (GBP_IS_DEVHELP_SEARCH (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+}
+
+static void
+gbp_devhelp_search_finalize (GObject *object)
+{
+  GbpDevhelpSearch *self = (GbpDevhelpSearch *)object;
+
+  g_assert (GBP_IS_DEVHELP_SEARCH (self));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "devhelp-search", NULL);
+}
+
+static void
 gbp_devhelp_search_class_init (GbpDevhelpSearchClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->finalize = gbp_devhelp_search_finalize;
+
+  widget_class->grab_focus = gbp_devhelp_search_grab_focus;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/devhelp/gbp-devhelp-search.ui");
 
@@ -104,17 +149,48 @@ gbp_devhelp_search_class_init (GbpDevhelpSearchClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpSearch, search_revealer);
 }
 
+static const GActionEntry actions[] = {
+  { "close", gbp_devhelp_search_actions_close },
+  { "find-next", gbp_devhelp_search_actions_find_next },
+  { "find-previous", gbp_devhelp_search_actions_find_previous },
+};
+
 static void
 gbp_devhelp_search_init (GbpDevhelpSearch *self)
 {
+  g_autoptr(GSimpleActionGroup) group = NULL;
+  DzlShortcutController *controller;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect (self->search_prev_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
-  g_signal_connect (self->search_next_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
-  g_signal_connect (self->close_button, "clicked", G_CALLBACK (close_clicked_cb), self);
   g_signal_connect (self->search_entry, "search-changed", G_CALLBACK (search_text_changed_cb), self);
   g_signal_connect (self->search_revealer, "notify::child-revealed", G_CALLBACK (search_revealer_cb), self);
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "devhelp-search",
+                                  G_ACTION_GROUP (group));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-search.close"),
+                                              "Escape",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-search.close"));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-search.find-next"),
+                                              "<Primary>g",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-search.find-next"));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-search.find-previous"),
+                                              "<Primary><shift>g",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-search.find-previous"));
 }
 
 void
