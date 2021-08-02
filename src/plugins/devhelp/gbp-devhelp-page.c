@@ -165,6 +165,30 @@ gbp_devhelp_page_get_property (GObject    *object,
 }
 
 static void
+gbp_devhelp_page_actions_history_next (GSimpleAction *action,
+                                       GVariant      *param,
+                                       gpointer       user_data)
+{
+  GbpDevhelpPage *self = (GbpDevhelpPage *)user_data;
+
+  g_assert (GBP_IS_DEVHELP_PAGE (self));
+
+  webkit_web_view_go_forward (self->web_view);
+}
+
+static void
+gbp_devhelp_page_actions_history_previous (GSimpleAction *action,
+                                           GVariant      *param,
+                                           gpointer       user_data)
+{
+  GbpDevhelpPage *self = (GbpDevhelpPage *)user_data;
+
+  g_assert (GBP_IS_DEVHELP_PAGE (self));
+
+  webkit_web_view_go_back (self->web_view);
+}
+
+static void
 gbp_devhelp_page_actions_reveal_search (GSimpleAction *action,
                                         GVariant      *param,
                                         gpointer       user_data)
@@ -310,6 +334,8 @@ setup_webview (WebKitWebView *web_view)
 static const GActionEntry actions[] = {
   { "print", gbp_devhelp_page_actions_print },
   { "reveal-search", gbp_devhelp_page_actions_reveal_search },
+  { "history-next", gbp_devhelp_page_actions_history_next },
+  { "history-previous", gbp_devhelp_page_actions_history_previous },
 };
 
 static void
@@ -365,4 +391,24 @@ gbp_devhelp_page_init (GbpDevhelpPage *self)
                                               "<Primary>f",
                                               DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("devhelp-view.reveal-search"));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-view.history-next"),
+                                              "<Alt>Right",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-view.history-next"));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-view.history-previous"),
+                                              "<Alt>Left",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-view.history-previous"));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-view.history-next"),
+                                              "<Alt>KP_Right",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-view.history-next"));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.devhelp-view.history-previous"),
+                                              "<Alt>KP_Left",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("devhelp-view.history-previous"));
 }
