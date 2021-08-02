@@ -55,6 +55,9 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem):
     def do_get_priority(self):
         return -200
 
+    def do_supports_language(self, language):
+        return language in ('rust',)
+
 def locate_cargo_from_config(config):
     cargo = _CARGO
 
