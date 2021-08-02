@@ -791,3 +791,27 @@ ide_build_system_get_project_version (IdeBuildSystem *self)
 
   return NULL;
 }
+
+/**
+ * ide_build_system_supports_language:
+ * @self: a #IdeBuildSystem
+ * @language: the language identifier
+ *
+ * Returns %TRUE if @self in it's current configuration is known to support @language.
+ *
+ * Returns: %TRUE if @language is supported, otherwise %FALSE.
+ *
+ * Since: 41.0
+ */
+gboolean
+ide_build_system_supports_language (IdeBuildSystem *self,
+                                    const char     *language)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), FALSE);
+  g_return_val_if_fail (language != NULL, FALSE);
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->supports_language)
+    return IDE_BUILD_SYSTEM_GET_IFACE (self)->supports_language (self, language);
+
+  return FALSE;
+}

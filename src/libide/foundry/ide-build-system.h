@@ -64,6 +64,8 @@ struct _IdeBuildSystemInterface
   gboolean    (*supports_toolchain)                (IdeBuildSystem       *self,
                                                     IdeToolchain         *toolchain);
   gchar      *(*get_project_version)               (IdeBuildSystem       *self);
+  gboolean    (*supports_language)                 (IdeBuildSystem       *self,
+                                                    const char           *language);
 };
 
 IDE_AVAILABLE_IN_3_32
@@ -114,5 +116,8 @@ void             _ide_build_system_set_project_file                (IdeBuildSyst
 IDE_AVAILABLE_IN_3_32
 gboolean         ide_build_system_supports_toolchain               (IdeBuildSystem       *self,
                                                                     IdeToolchain         *toolchain);
+IDE_AVAILABLE_IN_41
+gboolean         ide_build_system_supports_language                (IdeBuildSystem       *self,
+                                                                    const char           *language);
 
 G_END_DECLS
