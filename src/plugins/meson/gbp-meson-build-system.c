@@ -719,10 +719,25 @@ gbp_meson_build_system_get_project_version (IdeBuildSystem *build_system)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
 
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
 
   return g_strdup (self->project_version);
+}
+
+static gboolean
+gbp_meson_build_system_supports_language (IdeBuildSystem *system,
+                                          const char     *language)
+{
+  GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)system;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (language != NULL);
+
+  if (self->languages != NULL)
+    return g_strv_contains ((const char * const *)self->languages, language);
+
+  return FALSE;
 }
 
 static void
@@ -738,6 +753,7 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_builddir = gbp_meson_build_system_get_builddir;
   iface->get_project_version = gbp_meson_build_system_get_project_version;
   iface->supports_toolchain = gbp_meson_build_system_supports_toolchain;
+  iface->supports_language = gbp_meson_build_system_supports_language;
 }
 
 /**
