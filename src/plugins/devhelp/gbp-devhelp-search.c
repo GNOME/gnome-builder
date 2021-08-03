@@ -179,17 +179,17 @@ gbp_devhelp_search_init (GbpDevhelpSearch *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.devhelp-search.close"),
                                               "Escape",
-                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              DZL_SHORTCUT_PHASE_CAPTURE,
                                               I_("devhelp-search.close"));
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.devhelp-search.find-next"),
                                               "<Primary>g",
-                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              DZL_SHORTCUT_PHASE_CAPTURE,
                                               I_("devhelp-search.find-next"));
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.devhelp-search.find-previous"),
                                               "<Primary><shift>g",
-                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              DZL_SHORTCUT_PHASE_CAPTURE,
                                               I_("devhelp-search.find-previous"));
 }
 
