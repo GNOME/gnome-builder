@@ -558,6 +558,7 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       IdeConfig *config;
       const gchar *config_id;
       const gchar *runtime_id;
+      const gchar *arch;
       IdeRuntime *runtime;
       IdeContext *context;
       IdeVcs *vcs;
@@ -567,13 +568,14 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       config = ide_pipeline_get_config (pipeline);
       config_id = ide_config_get_id (config);
       runtime = ide_pipeline_get_runtime (pipeline);
-      runtime_id = ide_runtime_get_id (runtime);
+      runtime_id = ide_runtime_get_short_id (runtime);
       branch = ide_vcs_get_branch_name (vcs);
+      arch = ide_pipeline_get_arch (pipeline);
 
       if (branch != NULL)
-        name = g_strdup_printf ("%s-%s-%s", config_id, runtime_id, branch);
+        name = g_strdup_printf ("%s-%s-%s-%s", config_id, runtime_id, arch, branch);
       else
-        name = g_strdup_printf ("%s-%s", config_id, runtime_id);
+        name = g_strdup_printf ("%s-%s-%s", config_id, runtime_id, arch);
 
       g_strdelimit (name, "@:/ ", '-');
 
