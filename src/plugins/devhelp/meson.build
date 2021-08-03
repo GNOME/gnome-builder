@@ -4,8 +4,13 @@ if not libwebkit_dep.found()
   error('WebKit must be enabled for devhelp support')
 endif
 
+if not libportal_dep.found()
+  error('libportal is required for devhelp plugin support')
+endif
+
 plugins_deps += [
   dependency('libdevhelp-3.0', version: '>=3.25.1'),
+  libportal_dep,
 ]
 
 plugins_sources += files([

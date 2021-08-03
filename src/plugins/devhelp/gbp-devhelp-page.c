@@ -24,6 +24,9 @@
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
 
+#include <libportal/portal.h>
+#include <libportal/portal-gtk3.h>
+
 #include "gbp-devhelp-page.h"
 #include "gbp-devhelp-search.h"
 
@@ -251,6 +254,37 @@ gbp_devhelp_page_class_init (GbpDevhelpPageClass *klass)
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
 
+static void
+on_uri_opened_with_portal_cb (GObject      *source_object,
+                              GAsyncResult *res,
+                              gpointer      user_data)
+{
+  XdpPortal *portal = (XdpPortal *)source_object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (XDP_IS_PORTAL (portal));
+
+  if (!xdp_portal_open_uri_finish (portal, res, &error))
+    g_warning ("Couldn't open URI with portal, from devhelp's webview: %s", error->message);
+}
+
+/* We can't use g_app_info_launch_default_for_uri() because of https://gitlab.gnome.org/GNOME/glib/-/issues/1960
+ * Builder gets opened for HTML pages if we do so, and crashes because gvfs support in Builder is not really working.
+ */
+static void
+open_uri_with_portal (GtkWidget  *widget,
+                      const char *uri)
+{
+  g_autoptr(XdpPortal) portal = xdp_portal_new ();
+  XdpParent *parent = xdp_parent_new_gtk (GTK_WINDOW (gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW)));
+
+  xdp_portal_open_uri (portal, parent,
+                       uri, XDP_OPEN_URI_FLAG_NONE,
+                       NULL,
+                       on_uri_opened_with_portal_cb, NULL);
+  xdp_parent_free (parent);
+}
+
 static gboolean
 webview_decide_policy_cb (WebKitWebView           *web_view,
                           WebKitPolicyDecision    *decision,
@@ -299,12 +333,8 @@ webview_decide_policy_cb (WebKitWebView           *web_view,
       else
         {
           if (launch_in_browser)
-            {
-              GAppLaunchContext *launch_ctx = G_APP_LAUNCH_CONTEXT (gdk_display_get_app_launch_context (gdk_display_get_default ()));
-              g_app_info_launch_default_for_uri (webkit_uri_request_get_uri (request),
-                                                 launch_ctx,
-                                                 NULL);
-            }
+            open_uri_with_portal (GTK_WIDGET (web_view), webkit_uri_request_get_uri (request));
+
           webkit_policy_decision_ignore (decision);
           return TRUE;
         }
