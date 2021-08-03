@@ -93,6 +93,11 @@ IDE_AVAILABLE_IN_3_32
 void                    ide_runtime_set_id                   (IdeRuntime      *self,
                                                               const gchar     *id);
 IDE_AVAILABLE_IN_3_32
+const gchar            *ide_runtime_get_short_id             (IdeRuntime      *self);
+IDE_AVAILABLE_IN_3_32
+void                    ide_runtime_set_short_id             (IdeRuntime      *self,
+                                                              const gchar     *short_id);
+IDE_AVAILABLE_IN_3_32
 const gchar            *ide_runtime_get_category             (IdeRuntime      *self);
 IDE_AVAILABLE_IN_3_32
 void                    ide_runtime_set_category             (IdeRuntime      *self,

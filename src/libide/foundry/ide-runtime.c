@@ -38,6 +38,7 @@
 typedef struct
 {
   gchar *id;
+  gchar *short_id;
   gchar *category;
   gchar *name;
   gchar *display_name;
@@ -48,6 +49,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeRuntime, ide_runtime, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_ID,
+  PROP_SHORT_ID,
   PROP_CATEGORY,
   PROP_DISPLAY_NAME,
   PROP_NAME,
@@ -326,6 +328,7 @@ ide_runtime_finalize (GObject *object)
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
   g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->short_id, g_free);
   g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->name, g_free);
 
@@ -344,6 +347,10 @@ ide_runtime_get_property (GObject    *object,
     {
     case PROP_ID:
       g_value_set_string (value, ide_runtime_get_id (self));
+      break;
+
+    case PROP_SHORT_ID:
+      g_value_set_string (value, ide_runtime_get_short_id (self));
       break;
 
     case PROP_CATEGORY:
@@ -375,6 +382,10 @@ ide_runtime_set_property (GObject      *object,
     {
     case PROP_ID:
       ide_runtime_set_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_SHORT_ID:
+      ide_runtime_set_short_id (self, g_value_get_string (value));
       break;
 
     case PROP_CATEGORY:
@@ -418,6 +429,13 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
                          "The runtime identifier",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SHORT_ID] =
+    g_param_spec_string ("short-id",
+                         "Short Id",
+                         "The short runtime identifier",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CATEGORY] =
     g_param_spec_string ("category",
@@ -472,6 +490,33 @@ ide_runtime_set_id (IdeRuntime  *self,
       g_free (priv->id);
       priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
+    }
+}
+
+const gchar *
+ide_runtime_get_short_id (IdeRuntime  *self)
+{
+  IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+
+  return priv->short_id ? priv->short_id : priv->id;
+}
+
+void
+ide_runtime_set_short_id (IdeRuntime  *self,
+                          const gchar *short_id)
+{
+  IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNTIME (self));
+  g_return_if_fail (short_id != NULL);
+
+  if (!ide_str_equal0 (short_id, priv->short_id))
+    {
+      g_free (priv->short_id);
+      priv->short_id = g_strdup (short_id);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORT_ID]);
     }
 }
 
