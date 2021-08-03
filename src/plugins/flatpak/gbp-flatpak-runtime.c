@@ -740,6 +740,7 @@ gbp_flatpak_runtime_new (const char *name,
                          gboolean    is_extension)
 {
   g_autofree gchar *id = NULL;
+  g_autofree gchar *short_id = NULL;
   g_autofree gchar *display_name = NULL;
   g_autofree gchar *triplet = NULL;
   g_autofree gchar *runtime_name = NULL;
@@ -760,6 +761,7 @@ gbp_flatpak_runtime_new (const char *name,
   triplet_object = ide_triplet_new (arch);
   triplet = g_strdup_printf ("%s/%s/%s", name, arch, branch);
   id = g_strdup_printf ("flatpak:%s", triplet);
+  short_id = g_strdup_printf ("flatpak:%s-%s", name, branch);
 
   category = g_string_new ("Flatpak/");
 
@@ -784,6 +786,7 @@ gbp_flatpak_runtime_new (const char *name,
 
   return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                        "id", id,
+                       "short-id", short_id,
                        "triplet", triplet_object,
                        "branch", branch,
                        "category", category->str,
