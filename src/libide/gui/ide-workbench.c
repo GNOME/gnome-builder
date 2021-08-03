@@ -2220,6 +2220,27 @@ remove_non_matching_vcs_cb (IdeObject *child,
     ide_object_destroy (child);
 }
 
+static void
+ide_workbench_vcs_notify_branch_name_cb (IdeWorkbench *self,
+                                         GParamSpec   *pspec,
+                                         IdeVcs       *vcs)
+{
+  IdeBuildManager *build_manager;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (IDE_IS_VCS (vcs));
+
+  if (!ide_workbench_has_project (self))
+    IDE_EXIT;
+
+  build_manager = ide_build_manager_from_context (self->context);
+  ide_build_manager_invalidate (build_manager);
+
+  IDE_EXIT;
+}
+
 /**
  * ide_workbench_set_vcs:
  * @self: a #IdeWorkbench
@@ -2264,6 +2285,12 @@ ide_workbench_set_vcs (IdeWorkbench *self,
   peas_extension_set_foreach (self->addins,
                               ide_workbench_propagate_vcs_cb,
                               self->vcs);
+
+  g_signal_connect_object (vcs,
+                           "notify::branch-name",
+                           G_CALLBACK (ide_workbench_vcs_notify_branch_name_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VCS]);
 }
