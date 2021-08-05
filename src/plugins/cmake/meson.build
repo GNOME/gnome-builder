@@ -6,9 +6,11 @@ plugins_sources += files([
   'gbp-cmake-build-system.c',
   'gbp-cmake-build-system-discovery.c',
   'gbp-cmake-build-target.c',
+  'gbp-cmake-build-target-provider.c',
   'gbp-cmake-pipeline-addin.c',
   'gbp-cmake-toolchain.c',
   'gbp-cmake-toolchain-provider.c',
+  'gbp-cmake-build-stage-codemodel.c',
 ])
 
 plugin_cmake_resources = gnome.compile_resources(

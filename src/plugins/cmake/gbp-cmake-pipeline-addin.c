@@ -25,6 +25,7 @@
 
 #include "gbp-cmake-build-system.h"
 #include "gbp-cmake-build-stage-cross-file.h"
+#include "gbp-cmake-build-stage-codemodel.h"
 #include "gbp-cmake-toolchain.h"
 #include "gbp-cmake-pipeline-addin.h"
 
@@ -69,6 +70,7 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   GbpCMakePipelineAddin *self = (GbpCMakePipelineAddin *)addin;
+  g_autoptr(GbpCmakeBuildStageCodemodel) codemodel_stage = NULL;
   g_autoptr(IdeSubprocessLauncher) configure_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
@@ -162,6 +164,12 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
       id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, IDE_PIPELINE_STAGE (cross_file_stage));
       ide_pipeline_addin_track (addin, id);
     }
+
+  /* Setup ide integration stage for cmake */
+  codemodel_stage = gbp_cmake_build_stage_codemodel_new ();
+  ide_pipeline_stage_set_name (IDE_PIPELINE_STAGE (codemodel_stage), "Prepare Codemodel");
+  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 1, IDE_PIPELINE_STAGE (codemodel_stage));
+  ide_pipeline_addin_track (addin, id);
 
   /* Setup our configure stage. */
 
