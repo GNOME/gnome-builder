@@ -22,7 +22,7 @@ pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
 
 # Check dependencies
-glib_req_version = '2.69'
+glib_req_version = '2.69.1'
 gtk_req_version = '3.24'
 
 glib_req = '>= @0@'.format(glib_req_version)
