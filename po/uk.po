@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-07-27 22:52+0000\n"
-"PO-Revision-Date: 2021-07-28 14:45+0300\n"
+"POT-Creation-Date: 2021-08-05 01:31+0000\n"
+"PO-Revision-Date: 2021-08-05 09:19+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1473,7 +1473,7 @@ msgstr "Неочікуване завершення роботи процесу"
 msgid "Host Operating System"
 msgstr "Основна операційна система"
 
-#: src/libide/foundry/ide-runtime.c:498
+#: src/libide/foundry/ide-runtime.c:543
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Основна система"
@@ -1828,7 +1828,7 @@ msgstr "Показати меню вікна"
 msgid "Toggle window to fullscreen"
 msgstr "Перемкнути вікно у повноекранний режим"
 
-#: src/libide/gui/ide-marked-view.c:92
+#: src/libide/gui/ide-marked-view.c:383
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Не вдалося завантажити HTML. Не передбачено підтримки WebKit."
 
@@ -2374,7 +2374,7 @@ msgid "Editor Shortcuts"
 msgstr "Редактор скорочень"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:579
+#: src/libide/gui/ide-shortcuts-window.ui:586
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Загальне"
@@ -2390,37 +2390,37 @@ msgid "Toggle primary menu"
 msgstr "Увімкнути або вимкнути основне меню"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:583
+#: src/libide/gui/ide-shortcuts-window.ui:590
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Загальний пошук"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:590
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Параметри"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:597
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Командна панель"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:604
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Термінал"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:611
+#: src/libide/gui/ide-shortcuts-window.ui:618
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Термінал у середовищі виконання збирання"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:618
+#: src/libide/gui/ide-shortcuts-window.ui:625
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
@@ -2445,362 +2445,368 @@ msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Перемкнутись на нижню панель"
 
-#: src/libide/gui/ide-shortcuts-window.ui:103
+#: src/libide/gui/ide-shortcuts-window.ui:101
+msgctxt "shortcut window"
+msgid "Show Find in Project panel"
+msgstr ""
+"Показати панель «Пошук у проєкті»"
+
+#: src/libide/gui/ide-shortcuts-window.ui:110
 msgctxt "shortcut window"
 msgid "Files"
 msgstr "Файли"
 
-#: src/libide/gui/ide-shortcuts-window.ui:108
+#: src/libide/gui/ide-shortcuts-window.ui:115
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Створити новий документ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:115
+#: src/libide/gui/ide-shortcuts-window.ui:122
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Відкрити документ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:122
+#: src/libide/gui/ide-shortcuts-window.ui:129
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Зберегти документ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:129
+#: src/libide/gui/ide-shortcuts-window.ui:136
 msgctxt "shortcut window"
 msgid "Save a copy of the document"
 msgstr "Зберегти копію документа"
 
-#: src/libide/gui/ide-shortcuts-window.ui:136
+#: src/libide/gui/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
 msgid "Save all documents"
 msgstr "Зберегти всі документи"
 
-#: src/libide/gui/ide-shortcuts-window.ui:143
+#: src/libide/gui/ide-shortcuts-window.ui:150
 msgctxt "shortcut window"
 msgid "Print the document"
 msgstr "Надрукувати документ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:150
+#: src/libide/gui/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Закрити документ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:157
+#: src/libide/gui/ide-shortcuts-window.ui:164
 msgctxt "shortcut window"
 msgid "Close all documents"
 msgstr "Закрити всі документи"
 
-#: src/libide/gui/ide-shortcuts-window.ui:164
+#: src/libide/gui/ide-shortcuts-window.ui:171
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Перемкнутись на наступний документ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:171
+#: src/libide/gui/ide-shortcuts-window.ui:178
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Перемкнутись на попередній документ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:178
+#: src/libide/gui/ide-shortcuts-window.ui:185
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Показати список відкритих документів"
 
-#: src/libide/gui/ide-shortcuts-window.ui:186
-#: src/libide/gui/ide-shortcuts-window.ui:205
+#: src/libide/gui/ide-shortcuts-window.ui:193
+#: src/libide/gui/ide-shortcuts-window.ui:212
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Знайти та замінити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:191
+#: src/libide/gui/ide-shortcuts-window.ui:198
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Перейти до рядка"
 
-#: src/libide/gui/ide-shortcuts-window.ui:198
+#: src/libide/gui/ide-shortcuts-window.ui:205
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Знайти"
 
-#: src/libide/gui/ide-shortcuts-window.ui:212
+#: src/libide/gui/ide-shortcuts-window.ui:219
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Знайти наступний збіг"
 
-#: src/libide/gui/ide-shortcuts-window.ui:219
+#: src/libide/gui/ide-shortcuts-window.ui:226
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Знайти попередній збіг"
 
-#: src/libide/gui/ide-shortcuts-window.ui:226
+#: src/libide/gui/ide-shortcuts-window.ui:233
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Забрати підсвічування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:234
-#: src/libide/gui/ide-shortcuts-window.ui:627
+#: src/libide/gui/ide-shortcuts-window.ui:241
+#: src/libide/gui/ide-shortcuts-window.ui:634
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Копіювати та вставити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:239
-#: src/libide/gui/ide-shortcuts-window.ui:632
+#: src/libide/gui/ide-shortcuts-window.ui:246
+#: src/libide/gui/ide-shortcuts-window.ui:639
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Копіювати вибраний текст у буфер"
 
-#: src/libide/gui/ide-shortcuts-window.ui:246
+#: src/libide/gui/ide-shortcuts-window.ui:253
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Вирізати вибраний текст у буфер"
 
-#: src/libide/gui/ide-shortcuts-window.ui:253
-#: src/libide/gui/ide-shortcuts-window.ui:639
+#: src/libide/gui/ide-shortcuts-window.ui:260
+#: src/libide/gui/ide-shortcuts-window.ui:646
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Вставити текст з буферу"
 
-#: src/libide/gui/ide-shortcuts-window.ui:260
+#: src/libide/gui/ide-shortcuts-window.ui:267
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Дублювати поточний рядок або позначений фрагмент"
 
-#: src/libide/gui/ide-shortcuts-window.ui:268
+#: src/libide/gui/ide-shortcuts-window.ui:275
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Повернути та повторити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:273
+#: src/libide/gui/ide-shortcuts-window.ui:280
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Повернути попередню дію"
 
-#: src/libide/gui/ide-shortcuts-window.ui:280
+#: src/libide/gui/ide-shortcuts-window.ui:287
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Повторити попередню дію"
 
-#: src/libide/gui/ide-shortcuts-window.ui:288
+#: src/libide/gui/ide-shortcuts-window.ui:295
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: src/libide/gui/ide-shortcuts-window.ui:293
+#: src/libide/gui/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:300
+#: src/libide/gui/ide-shortcuts-window.ui:307
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Зменшити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:307
+#: src/libide/gui/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Відновити масштаб"
 
-#: src/libide/gui/ide-shortcuts-window.ui:315
+#: src/libide/gui/ide-shortcuts-window.ui:322
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Редагування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:320
+#: src/libide/gui/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Збільшити число на вказівнику"
 
-#: src/libide/gui/ide-shortcuts-window.ui:327
+#: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Зменшити число на вказівнику"
 
-#: src/libide/gui/ide-shortcuts-window.ui:334
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Об'єднати вибрані рядки"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Sort selected lines"
 msgstr "Упорядкувати позначені рядки"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Make selection upper case"
 msgstr "Зробити великими літери позначеного фрагмента"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Make selection lower case"
 msgstr "Зробити малими літери позначеного фрагмента"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Invert selection case"
 msgstr "Інвертувати регістр позначеного"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Показати вікно заповнення"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Перемкнути непрозорість вікна завершення"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Перемкнути перезапис"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Повторний відступ рядка"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Вилучити рядок"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Перейменувати символ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:405
+#: src/libide/gui/ide-shortcuts-window.ui:412
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Потребує підтримки семантики мови"
 
-#: src/libide/gui/ide-shortcuts-window.ui:412
+#: src/libide/gui/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Закоментувати код"
 
-#: src/libide/gui/ide-shortcuts-window.ui:419
+#: src/libide/gui/ide-shortcuts-window.ui:426
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Розкоментувати код"
 
-#: src/libide/gui/ide-shortcuts-window.ui:426
+#: src/libide/gui/ide-shortcuts-window.ui:433
 msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Форматувати позначений код"
 
-#: src/libide/gui/ide-shortcuts-window.ui:434
+#: src/libide/gui/ide-shortcuts-window.ui:441
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Пересування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Перейти до наступної помилки у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Перейти до попередньої помилки у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Перейти до попереднього місця редагування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Перейти до наступного місця редагування"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Перейти до означення символу"
 
 #. FIXME: find references of what? it doesn't seem to work here, there's always no results.
-#: src/libide/gui/ide-shortcuts-window.ui:475
+#: src/libide/gui/ide-shortcuts-window.ui:482
 msgctxt "shortcut window"
 msgid "Find references"
 msgstr "Знайти посилання"
 
-#: src/libide/gui/ide-shortcuts-window.ui:482
+#: src/libide/gui/ide-shortcuts-window.ui:489
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Пересунути вище поле огляду у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:489
+#: src/libide/gui/ide-shortcuts-window.ui:496
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Пересунути нижче поле огляду у файлі"
 
-#: src/libide/gui/ide-shortcuts-window.ui:496
+#: src/libide/gui/ide-shortcuts-window.ui:503
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Пересунути поле огляду до кінця файла"
 
-#: src/libide/gui/ide-shortcuts-window.ui:503
+#: src/libide/gui/ide-shortcuts-window.ui:510
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Пересунути поле огляду до початку файла"
 
-#: src/libide/gui/ide-shortcuts-window.ui:510
+#: src/libide/gui/ide-shortcuts-window.ui:517
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Перейти до парної дужки"
 
-#: src/libide/gui/ide-shortcuts-window.ui:518
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Вибір"
 
-#: src/libide/gui/ide-shortcuts-window.ui:523
+#: src/libide/gui/ide-shortcuts-window.ui:530
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Вибрати все"
 
-#: src/libide/gui/ide-shortcuts-window.ui:530
+#: src/libide/gui/ide-shortcuts-window.ui:537
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Забрати вибір"
 
-#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/libide/gui/ide-shortcuts-window.ui:545
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Зібрати і запустити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:543
+#: src/libide/gui/ide-shortcuts-window.ui:550
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Зібрати"
 
-#: src/libide/gui/ide-shortcuts-window.ui:550
+#: src/libide/gui/ide-shortcuts-window.ui:557
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Перебудувати"
 
-#: src/libide/gui/ide-shortcuts-window.ui:557
+#: src/libide/gui/ide-shortcuts-window.ui:564
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Запустити"
 
-#: src/libide/gui/ide-shortcuts-window.ui:564
+#: src/libide/gui/ide-shortcuts-window.ui:571
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Профіль"
 
-#: src/libide/gui/ide-shortcuts-window.ui:575
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Термінальні скорочення"
 
-#: src/libide/gui/ide-shortcuts-window.ui:647
+#: src/libide/gui/ide-shortcuts-window.ui:654
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Пошук"
 
-#: src/libide/gui/ide-shortcuts-window.ui:652
+#: src/libide/gui/ide-shortcuts-window.ui:659
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Знайти текст у терміналі"
@@ -2955,7 +2961,6 @@ msgstr "Посилань не знайдено"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
-#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Закрити"
 
@@ -3055,7 +3060,7 @@ msgid "Configuring project"
 msgstr "Налаштовування проєкту"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:142
+#: src/plugins/cargo/cargo_plugin.py:145
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
@@ -4252,7 +4257,7 @@ msgid "Arguments"
 msgstr "Аргументи"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:482
+#: src/plugins/grep/gbp-grep-panel.c:727
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -4270,7 +4275,7 @@ msgstr "Devhelp"
 msgid "_Select Documentation…"
 msgstr "Ви_брати документацію…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:259
+#: src/plugins/devhelp/gbp-devhelp-page.c:379
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Документація"
@@ -4663,17 +4668,17 @@ msgstr "Експортування формувального каталогу"
 msgid "Creating flatpak bundle"
 msgstr "Створюємо комплект flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:779
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:785
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4977,25 +4982,71 @@ msgstr "Вийти"
 msgid "Open a _Project…"
 msgstr "_Відкрити проєкт…"
 
-#: src/plugins/grep/gbp-grep-panel.c:494
+#: src/plugins/grep/gbp-grep-panel.c:739
 msgid "Match"
 msgstr "Відповідність"
 
-#: src/plugins/grep/gbp-grep-panel.c:506
+#: src/plugins/grep/gbp-grep-panel.c:751
 msgid "Path"
 msgstr "Шлях"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:814
+#, c-format
+#| msgid "_Find in Files"
+msgid "_Find in %s"
+msgstr "З_найти у %s"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:816
+#, c-format
+#| msgid "_Replace"
+msgid "_Replace in %s"
+msgstr "За_мінити у %s"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
 msgid "Find in Files"
 msgstr "Пошук у файлах"
 
-#: src/plugins/grep/gbp-grep-panel.ui:51
-msgid "Replace With"
-msgstr "Замінити на"
+#: src/plugins/grep/gbp-grep-panel.ui:50
+#| msgid "Find and replace"
+msgid "Find and Replace"
+msgstr "Знайти і замінити"
 
-#: src/plugins/grep/gbp-grep-panel.ui:67
-msgid "Replace"
-msgstr "Замінити"
+#: src/plugins/grep/gbp-grep-panel.ui:72
+msgid "R_ecursive"
+msgstr ""
+"Р_екурсивно"
+
+#: src/plugins/grep/gbp-grep-panel.ui:80
+#| msgid "Match"
+msgid "Match _Case"
+msgstr "Враховувати _регістр"
+
+#: src/plugins/grep/gbp-grep-panel.ui:87
+#| msgid "Match _whole words"
+msgid "Match _Words"
+msgstr "Тільки _цілі слова"
+
+#: src/plugins/grep/gbp-grep-panel.ui:94
+#| msgid "Regular _expressions"
+msgid "Regular E_xpressions"
+msgstr "_Формальні вирази"
+
+#: src/plugins/grep/gbp-grep-panel.ui:103
+#| msgid "Close the page"
+msgid "Close the panel (Escape key)"
+msgstr "Закрити панель (клавіша Escape)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:141
+#| msgid "Building project"
+msgid "_Find in Project"
+msgstr "З_найти у проєкті"
+
+#: src/plugins/grep/gbp-grep-panel.ui:166
+#| msgid "Recent Projects"
+msgid "_Replace in Project"
+msgstr "З_амінити у проєкті"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
 msgid "Search for…"
@@ -5092,19 +5143,19 @@ msgstr "Пере_мкнутися на теку"
 msgid "_Open Containing Folder"
 msgstr "Від_крити теку з даними"
 
-#: src/plugins/make/make_plugin.py:101
+#: src/plugins/make/make_plugin.py:104
 msgid "Build project"
 msgstr "Зібрати проєкт"
 
-#: src/plugins/make/make_plugin.py:115
+#: src/plugins/make/make_plugin.py:121
 msgid "Install project"
 msgstr "Встановити проєкт"
 
-#: src/plugins/make/make_plugin.py:337
+#: src/plugins/make/make_plugin.py:343
 msgid "Empty Makefile Project"
 msgstr "Порожній проект Makefile"
 
-#: src/plugins/make/make_plugin.py:339
+#: src/plugins/make/make_plugin.py:345
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Створити порожній проєкт з використанням простого Makefile"
 
@@ -5148,7 +5199,7 @@ msgstr "Засіб командного рядка"
 msgid "Create a new command line project"
 msgstr "Створити проєкт програми для роботи у командному рядку"
 
-#: src/plugins/meson/gbp-meson-build-system.c:468
+#: src/plugins/meson/gbp-meson-build-system.c:470
 #: src/plugins/meson/gbp-meson-config-view-addin.c:57
 msgid "Meson"
 msgstr "Meson"
@@ -5548,7 +5599,6 @@ msgid "Reveal in Project Tree"
 msgstr "Розкрити в ієрархії проєкту"
 
 #: src/plugins/project-tree/gtk/menus.ui:96
-#| msgid "Reveal in Project _Tree"
 msgid "Reveal File in Project _Tree"
 msgstr "Показати файл в і_єрархії проєкту"
 
@@ -6341,6 +6391,12 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Replace With"
+#~ msgstr "Замінити на"
+
+#~ msgid "Replace"
+#~ msgstr "Замінити"
 
 #~ msgid "Subprocess launcher failed"
 #~ msgstr "Не вдалося запустити підпроцес"
