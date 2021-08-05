@@ -456,6 +456,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
                         G_CALLBACK (gtk_widget_destroyed),
                         &self->bottom);
       gtk_container_add (GTK_CONTAINER (self->bottom_dock), GTK_WIDGET (self->bottom));
+      dzl_dock_item_present (DZL_DOCK_ITEM (self->bottom_dock));
 
       workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
 
