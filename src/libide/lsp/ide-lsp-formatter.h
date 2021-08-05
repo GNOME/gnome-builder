@@ -33,14 +33,11 @@ G_BEGIN_DECLS
 #define IDE_TYPE_LSP_FORMATTER (ide_lsp_formatter_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeLspFormatter, ide_lsp_formatter, IDE, LSP_FORMATTER, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspFormatter, ide_lsp_formatter, IDE, LSP_FORMATTER, IdeObject)
 
-struct _IdeLspFormatter
+struct _IdeLspFormatterClass
 {
-  IdeObject parent_class;
-
-  /*< private >*/
-  gpointer _reserved[4];
+  IdeObjectClass parent_class;
 };
 
 IDE_AVAILABLE_IN_3_32
