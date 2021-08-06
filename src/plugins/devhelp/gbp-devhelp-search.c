@@ -128,6 +128,8 @@ gbp_devhelp_search_finalize (GObject *object)
   g_assert (GBP_IS_DEVHELP_SEARCH (self));
 
   gtk_widget_insert_action_group (GTK_WIDGET (self), "devhelp-search", NULL);
+
+  G_OBJECT_CLASS (gbp_devhelp_search_parent_class)->finalize (object);
 }
 
 static void

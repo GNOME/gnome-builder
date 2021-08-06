@@ -223,6 +223,8 @@ gbp_devhelp_page_finalize (GObject *object)
   g_assert (GBP_IS_DEVHELP_PAGE (self));
 
   gtk_widget_insert_action_group (GTK_WIDGET (self), "devhelp-view", NULL);
+
+  G_OBJECT_CLASS (gbp_devhelp_page_parent_class)->finalize (object);
 }
 
 static void
