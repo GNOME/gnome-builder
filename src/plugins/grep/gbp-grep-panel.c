@@ -482,6 +482,8 @@ gbp_grep_panel_launch_search (GbpGrepPanel *self)
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->spinner));
   gtk_spinner_start (self->spinner);
   gtk_widget_set_sensitive (GTK_WIDGET (self->find_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
 
   ide_widget_reveal_and_grab (GTK_WIDGET (self));
 
