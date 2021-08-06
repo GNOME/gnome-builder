@@ -150,6 +150,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Tom Tryfonidis",
   "Trinh Anh Ngoc",
   "Umang Jain",
+  "vanadiae",
   "Wolf Vollprecht",
   "Yannick Inizan",
   "Yosef Or Boczko",
