@@ -461,12 +461,14 @@ gbp_grep_panel_launch_search (GbpGrepPanel *self)
 
   g_assert (GBP_IS_GREP_PANEL (self));
 
+  model = gbp_grep_panel_get_model (self);
   /* Nothing's really reusable between search operations (and it isn't allowed anyway by
    * gbp_grep_model_scan_async()), so just start from a new one. The only part we keep
    * from it is the search directory because we can't modify it in the UI and so the
    * only place where it's actually stored is the (old) model.
    */
-  root_dir = gbp_grep_model_get_directory (gbp_grep_panel_get_model (self));
+  if (model)
+    root_dir = gbp_grep_model_get_directory (model);
   if (root_dir)
     g_object_ref (root_dir);
   model = gbp_grep_model_new (ide_widget_get_context (GTK_WIDGET (self)));
