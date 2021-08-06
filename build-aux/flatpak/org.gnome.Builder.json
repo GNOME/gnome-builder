@@ -588,7 +588,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/esodan/gvls.git",
-                    "branch": "gvls-19.0"
+                    "branch": "gvls-20.0"
                 }
             ]
         },
