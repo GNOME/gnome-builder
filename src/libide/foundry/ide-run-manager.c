@@ -59,6 +59,7 @@ struct _IdeRunManager
    * secondary execution time faster.
    */
   guint64                  last_change_seq;
+  guint64                  pending_last_change_seq;
 
   guint                    busy : 1;
 };
@@ -728,6 +729,8 @@ ide_run_manager_install_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  self->last_change_seq = self->pending_last_change_seq;
+
   build_target = ide_run_manager_get_build_target (self);
 
   if (build_target == NULL)
@@ -820,7 +823,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
       IDE_EXIT;
     }
 
-  self->last_change_seq = sequence;
+  self->pending_last_change_seq = sequence;
 
   ide_build_manager_build_async (build_manager,
                                  IDE_PIPELINE_PHASE_INSTALL,
