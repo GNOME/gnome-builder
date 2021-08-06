@@ -515,7 +515,8 @@ on_entry_activate_toggle_action_button_cb (GtkEntry *entry,
   g_assert (GTK_IS_ENTRY (entry));
   g_assert (GTK_IS_BUTTON (button));
 
-  g_signal_emit_by_name (button, "activate", NULL);
+  if (gtk_widget_get_sensitive (GTK_WIDGET (button)))
+    g_signal_emit_by_name (button, "activate", NULL);
 }
 
 static void
