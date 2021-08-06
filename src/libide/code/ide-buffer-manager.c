@@ -117,6 +117,7 @@ save_all_free (SaveAll *state)
 static IdeBuffer *
 ide_buffer_manager_create_buffer (IdeBufferManager *self,
                                   GFile            *file,
+                                  gboolean          disable_addins,
                                   gboolean          is_temporary)
 {
   g_autoptr(IdeBuffer) buffer = NULL;
@@ -127,7 +128,7 @@ ide_buffer_manager_create_buffer (IdeBufferManager *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (self));
 
-  buffer = _ide_buffer_new (self, file, is_temporary);
+  buffer = _ide_buffer_new (self, file, disable_addins, is_temporary);
   box = ide_object_box_new (G_OBJECT (buffer));
 
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (box));
@@ -661,7 +662,9 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   else
     {
       /* Create the buffer and track it so we can find it later */
-      buffer = ide_buffer_manager_create_buffer (self, file, temp_file != NULL);
+      buffer = ide_buffer_manager_create_buffer (self, file,
+                                                 flags & IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS,
+                                                 temp_file != NULL);
       is_new = TRUE;
     }
 
@@ -1181,7 +1184,12 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
        */
       ide_buffer_manager_load_file_async (self,
                                           file,
-                                          IDE_BUFFER_OPEN_FLAGS_NO_VIEW,
+                                          IDE_BUFFER_OPEN_FLAGS_NO_VIEW |
+                                          /* We are only temporary loading the buffer to replace text
+                                           * there, so let's avoid any heavy useless work that the
+                                           * buffer addins might do.
+                                           */
+                                          IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS,
                                           NULL,
                                           cancellable,
                                           ide_buffer_manager_apply_edits_buffer_loaded_cb,

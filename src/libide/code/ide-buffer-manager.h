@@ -35,6 +35,7 @@ G_BEGIN_DECLS
  * @IDE_BUFFER_OPEN_FLAGS_NONE: No special processing will be performed
  * @IDE_BUFFER_OPEN_FLAGS_BACKGROUND: Open the document in the background (behind current view)
  * @IDE_BUFFER_OPEN_FLAGS_NO_VIEW: Open the document but do not create a new view for it
+ * @IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS: Disables any buffer addin for this buffer.
  *
  * The #IdeBufferOpenFlags enumeration is used to specify how a document should
  * be opened by the workbench. Plugins may want to have a bit of control over
@@ -48,6 +49,7 @@ typedef enum
   IDE_BUFFER_OPEN_FLAGS_BACKGROUND   = 1 << 0,
   IDE_BUFFER_OPEN_FLAGS_NO_VIEW      = 1 << 1,
   IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD = 1 << 2,
+  IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS = 1 << 3,
 } IdeBufferOpenFlags;
 
 /**
