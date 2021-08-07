@@ -94,6 +94,7 @@
     ],
     "modules" : [
         "python-deps.json",
+        "python3-jedi-language-server.json",
         {
             "name" : "gperftools",
             "cleanup" : [

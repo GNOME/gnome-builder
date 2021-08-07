@@ -1,0 +1,54 @@
+{
+    "name": "python3-jedi-language-server",
+    "buildsystem": "simple",
+    "build-commands": [
+        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} jedi-language-server"
+    ],
+    "sources": [
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/aa/55/62e2d4934c282a60b4243a950c9dbfa01ae7cac0e8d6c0b5315b87432c81/typing_extensions-3.10.0.0.tar.gz",
+            "sha256": "50b6f157849174217d0656f99dc82fe932884fb250826c18350e159ec6cdf342"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/b9/d2/12a808613937a6b98cd50d6467352f01322dc0d8ca9fb5b94441625d6684/pydantic-1.8.2.tar.gz",
+            "sha256": "26464e57ccaafe72b7ad156fdaa4e9b9ef051f69e175dbbb463283000c05ab7b"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/2e/35/6c4fff5ab443b57116cb1aad46421fb719bed2825664e8fe77d66d99bcbc/typing_extensions-3.10.0.0-py3-none-any.whl",
+            "sha256": "779383f6086d90c99ae41cf0ff39aac8a7937a9283ce0a414e5dd782f4c94a84"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/a0/88/2a1613174e7d05540358b2f19881f369bfe6ba737f0a673177e69eb623df/typeguard-2.12.1-py3-none-any.whl",
+            "sha256": "cc15ef2704c9909ef9c80e19c62fb8468c01f75aad12f651922acf4dbe822e02"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/e3/e2/503d039ade05fa2aeab7a1b2b79ad8af32582f42527a154348cd999b7996/pygls-0.11.2-py3-none-any.whl",
+            "sha256": "5c5b1c8717a39b97462b197f6186c12d2e16455da00631cdaaca91d25736ffcd"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/a9/c4/d5476373088c120ffed82f34c74b266ccae31a68d665b837354d4d8dc8be/parso-0.8.2-py2.py3-none-any.whl",
+            "sha256": "a8c4922db71e4fdb90e0d0bc6e50f9b273d3397925e5e60a717e719201778d22"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/07/33/1463d00e3836e71251be7ae647b537628378453f174222b81485b4826dc3/docstring_to_markdown-0.9-py3-none-any.whl",
+            "sha256": "488b9f26339651edc7fc9386caeffd3924569072a8b67b727e253f83d5b18c59"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/f9/36/7aa67ae2663025b49e8426ead0bad983fee1b73f472536e9790655da0277/jedi-0.18.0-py2.py3-none-any.whl",
+            "sha256": "18456d83f65f400ab0c2d3319e48520420ef43b23a086fdc05dff34132f0fb93"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/93/b0/a747a5349448e48432b041fa1c9b1b9fb51a3ed418db9d77ed8d89ddaf6f/jedi_language_server-0.34.1-py3-none-any.whl",
+            "sha256": "8a1b79de1408b28343b424e0697a22fdfe06b0ae5ce273f7f788cc0057014d11"
+        }
+    ]
+}
