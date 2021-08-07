@@ -223,6 +223,7 @@ src/plugins/devhelp/gbp-devhelp-menu-button.c
 src/plugins/devhelp/gbp-devhelp-menu-button.ui
 src/plugins/devhelp/gbp-devhelp-page.c
 src/plugins/devhelp/gbp-devhelp-search.c
+src/plugins/devhelp/gbp-devhelp-search.ui
 src/plugins/devhelp/gtk/menus.ui
 src/plugins/dspy/gbp-dspy-application-addin.c
 src/plugins/dspy/gbp-dspy-surface.c
@@ -294,6 +295,7 @@ src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschem
 src/plugins/gradle/gradle_plugin.py
 src/plugins/greeter/gbp-greeter-application-addin.c
 src/plugins/greeter/gtk/menus.ui
+src/plugins/grep/gbp-grep-editor-addin.c
 src/plugins/grep/gbp-grep-panel.c
 src/plugins/grep/gbp-grep-panel.ui
 src/plugins/grep/gbp-grep-popover.ui
