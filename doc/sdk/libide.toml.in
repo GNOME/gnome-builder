@@ -1,0 +1,57 @@
+[library]
+version = "@version@"
+browse_url = "https://gitlab.gnome.org/GNOME/gnome-builder/"
+repository_url = "https://gitlab.gnome.org/GNOME/gnome-builder.git"
+website_url = "https://wiki.gnome.org/Apps/Builder"
+authors = "Christian Hergert"
+logo_url = "org.gnome.Builder.svg"
+license = "GPL-3.0-or-later"
+description = "An IDE for GNOME"
+dependencies = [ "GObject-2.0", "Gtk-3.0", "Dazzle-1.0", "GLib-2.0", "Json-GLib-1.0", "GtkSource-4", "Peas-1.0" ]
+devhelp = true
+search_index = true
+
+  [dependencies."GObject-2.0"]
+  name = "GObject"
+  description = "The base type system library"
+  docs_url = "https://docs.gtk.org/gobject/"
+
+  [dependencies."Gtk-3.0"]
+  name = "Gtk+ 3"
+  description = "The GUI toolkit"
+  docs_url = "https://docs.gtk.org/gtk3/"
+
+  [dependencies."Dazzle-1.0"]
+  name = "Dazzle"
+  description = "Supporting library for Gtk Applications"
+
+  [dependencies."Json-GLib-1.0"]
+  name = "Json-GLib"
+  description = "A Json parser/generator library"
+  docs_url = "https://gnome.pages.gitlab.gnome.org/json-glib/json-glib-1.0/"
+
+  [dependencies."GLib-2.0"]
+  name = "GLib"
+  description = "The base type system library"
+  docs_url = "https://docs.gtk.org/glib/"
+
+  [dependencies."GtkSource-4"]
+  name = "GtkSourceView 4"
+  description = "A GNOME library that extends GtkTextView"
+  docs_url = "https://developer-old.gnome.org/gtksourceview/stable/"
+
+  [dependencies."Peas-1.0"]
+  name = "Libpeas"
+  description = "A GObject based plugin engine"
+  docs_url = "https://developer-old.gnome.org/libpeas/stable/"
+
+[theme]
+name = "basic"
+show_index_summary = true
+show_class_hierarchy = true
+
+[extra]
+content_images = [
+  "../../data/icons/hicolor/scalable/apps/org.gnome.Builder.svg"
+]
+urlmap_file = "urlmap.js"
