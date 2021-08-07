@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-05 01:31+0000\n"
-"PO-Revision-Date: 2021-08-05 09:19+0300\n"
+"POT-Creation-Date: 2021-08-07 12:43+0000\n"
+"PO-Revision-Date: 2021-08-07 19:50+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1023,6 +1023,7 @@ msgstr "Зберегти копію"
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
+#: src/plugins/grep/gbp-grep-editor-addin.c:55
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
 msgid "Editor shortcuts"
@@ -1265,6 +1266,7 @@ msgstr "Відкрити документ"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:48
 #: src/libide/editor/ide-editor-surface-shortcuts.c:54
+#: src/plugins/grep/gbp-grep-editor-addin.c:56
 msgid "Panels"
 msgstr "Панелі"
 
@@ -1425,43 +1427,43 @@ msgstr ""
 "Неможливо зібрати передавання даних, перебуваючи в умовах вимірюваного "
 "з'єднання"
 
-#: src/libide/foundry/ide-run-manager.c:385
+#: src/libide/foundry/ide-run-manager.c:387
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
-#: src/libide/foundry/ide-run-manager.c:505
+#: src/libide/foundry/ide-run-manager.c:526
 msgid "Failed to locate runtime"
 msgstr "Не вдалося знайти середовище виконання"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:554
+#: src/libide/foundry/ide-run-manager.c:577
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:628
+#: src/libide/foundry/ide-run-manager.c:727
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Не вдалося зібрати ціль збирання: %s"
 
-#: src/libide/foundry/ide-run-manager.c:891
+#: src/libide/foundry/ide-run-manager.c:992
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Скорочення майстерні"
 
-#: src/libide/foundry/ide-run-manager.c:892
+#: src/libide/foundry/ide-run-manager.c:993
 msgid "Build and Run"
 msgstr "Зібрати і запустити"
 
-#: src/libide/foundry/ide-run-manager.c:1054
-#: src/libide/foundry/ide-run-manager.c:1120
+#: src/libide/foundry/ide-run-manager.c:1155
+#: src/libide/foundry/ide-run-manager.c:1221
 msgid "Failed to locate a build target"
 msgstr "Не вдалося знайти ціль збирання"
 
-#: src/libide/foundry/ide-run-manager.c:1256 src/libide/gui/gtk/menus.ui:67
+#: src/libide/foundry/ide-run-manager.c:1357 src/libide/gui/gtk/menus.ui:67
 msgid "Run"
 msgstr "Запустити"
 
@@ -2448,8 +2450,7 @@ msgstr "Перемкнутись на нижню панель"
 #: src/libide/gui/ide-shortcuts-window.ui:101
 msgctxt "shortcut window"
 msgid "Show Find in Project panel"
-msgstr ""
-"Показати панель «Пошук у проєкті»"
+msgstr "Показати панель «Пошук у проєкті»"
 
 #: src/libide/gui/ide-shortcuts-window.ui:110
 msgctxt "shortcut window"
@@ -3061,7 +3062,7 @@ msgstr "Налаштовування проєкту"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
 #: src/plugins/cargo/cargo_plugin.py:145
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 #: src/plugins/phpize/phpize_plugin.py:219
@@ -3578,11 +3579,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:197
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
 msgid "Configure project"
 msgstr "Налаштувати проєкт"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:249
 #: src/plugins/maven/maven_plugin.py:100
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 #: src/plugins/phpize/phpize_plugin.py:229
@@ -4257,7 +4258,7 @@ msgid "Arguments"
 msgstr "Аргументи"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:727
+#: src/plugins/grep/gbp-grep-panel.c:730
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -4275,10 +4276,30 @@ msgstr "Devhelp"
 msgid "_Select Documentation…"
 msgstr "Ви_брати документацію…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:379
+#: src/plugins/devhelp/gbp-devhelp-page.c:381
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Документація"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:29
+msgid "Reveal search bar with Ctrl+F"
+msgstr ""
+"Відкрийте панель пошуку за допомогою Ctrl+F"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:48
+msgid "Previous search result (Ctrl+Shift+G)"
+msgstr ""
+"Попередній результат пошуку (Ctrl+Shift+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:68
+msgid "Next search result (Ctrl+G)"
+msgstr ""
+"Наступний результат пошуку (Ctrl+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:96
+#| msgid "Close the panel (Escape key)"
+msgid "Close search bar (Escape key)"
+msgstr "Закрити панель пошуку (клавіша Escape)"
 
 #: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
@@ -4982,25 +5003,29 @@ msgstr "Вийти"
 msgid "Open a _Project…"
 msgstr "_Відкрити проєкт…"
 
-#: src/plugins/grep/gbp-grep-panel.c:739
+#: src/plugins/grep/gbp-grep-editor-addin.c:57
+#| msgctxt "shortcut window"
+#| msgid "Show Find in Project panel"
+msgid "Show Find in Project panel"
+msgstr "Показати панель «Пошук у проєкті»"
+
+#: src/plugins/grep/gbp-grep-panel.c:742
 msgid "Match"
 msgstr "Відповідність"
 
-#: src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/grep/gbp-grep-panel.c:754
 msgid "Path"
 msgstr "Шлях"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:814
+#: src/plugins/grep/gbp-grep-panel.c:817
 #, c-format
-#| msgid "_Find in Files"
 msgid "_Find in %s"
 msgstr "З_найти у %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:816
+#: src/plugins/grep/gbp-grep-panel.c:819
 #, c-format
-#| msgid "_Replace"
 msgid "_Replace in %s"
 msgstr "За_мінити у %s"
 
@@ -5009,42 +5034,34 @@ msgid "Find in Files"
 msgstr "Пошук у файлах"
 
 #: src/plugins/grep/gbp-grep-panel.ui:50
-#| msgid "Find and replace"
 msgid "Find and Replace"
 msgstr "Знайти і замінити"
 
 #: src/plugins/grep/gbp-grep-panel.ui:72
 msgid "R_ecursive"
-msgstr ""
-"Р_екурсивно"
+msgstr "Р_екурсивно"
 
 #: src/plugins/grep/gbp-grep-panel.ui:80
-#| msgid "Match"
 msgid "Match _Case"
 msgstr "Враховувати _регістр"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#| msgid "Match _whole words"
 msgid "Match _Words"
 msgstr "Тільки _цілі слова"
 
 #: src/plugins/grep/gbp-grep-panel.ui:94
-#| msgid "Regular _expressions"
 msgid "Regular E_xpressions"
 msgstr "_Формальні вирази"
 
 #: src/plugins/grep/gbp-grep-panel.ui:103
-#| msgid "Close the page"
 msgid "Close the panel (Escape key)"
 msgstr "Закрити панель (клавіша Escape)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:141
-#| msgid "Building project"
 msgid "_Find in Project"
 msgstr "З_найти у проєкті"
 
 #: src/plugins/grep/gbp-grep-panel.ui:166
-#| msgid "Recent Projects"
 msgid "_Replace in Project"
 msgstr "З_амінити у проєкті"
 
