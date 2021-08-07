@@ -38,7 +38,7 @@ gboolean                _ide_buffer_can_restore_cursor       (IdeBuffer         
 IdeExtensionSetAdapter *_ide_buffer_get_addins               (IdeBuffer            *self);
 IdeBuffer              *_ide_buffer_new                      (IdeBufferManager     *self,
                                                               GFile                *file,
-                                                              gboolean              disable_addins,
+                                                              gboolean              enable_addins,
                                                               gboolean              is_temporary);
 void                    _ide_buffer_attach                   (IdeBuffer            *self,
                                                               IdeObject            *parent);

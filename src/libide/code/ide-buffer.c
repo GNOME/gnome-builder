@@ -98,7 +98,7 @@ struct _IdeBuffer
   IdeBufferState          state : 3;
   guint                   can_restore_cursor : 1;
   guint                   is_temporary : 1;
-  guint                   disable_addins : 1;
+  guint                   enable_addins : 1;
   guint                   changed_on_volume : 1;
   guint                   read_only : 1;
   guint                   highlight_diagnostics : 1;
@@ -132,7 +132,7 @@ enum {
   PROP_BUFFER_MANAGER,
   PROP_CHANGE_MONITOR,
   PROP_CHANGED_ON_VOLUME,
-  PROP_DISABLE_ADDINS,
+  PROP_ENABLE_ADDINS,
   PROP_DIAGNOSTICS,
   PROP_FAILED,
   PROP_FILE,
@@ -278,7 +278,7 @@ lookup_symbol_data_free (LookUpSymbolData *data)
 IdeBuffer *
 _ide_buffer_new (IdeBufferManager *buffer_manager,
                  GFile            *file,
-                 gboolean          disable_addins,
+                 gboolean          enable_addins,
                  gboolean          is_temporary)
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
@@ -288,7 +288,7 @@ _ide_buffer_new (IdeBufferManager *buffer_manager,
   return g_object_new (IDE_TYPE_BUFFER,
                        "buffer-manager", buffer_manager,
                        "file", file,
-                       "disable-addins", disable_addins,
+                       "enable-addins", enable_addins,
                        "is-temporary", is_temporary,
                        NULL);
 }
@@ -312,7 +312,7 @@ _ide_buffer_set_file (IdeBuffer *self,
       self->readlink_file = _ide_g_file_readlink (file);
       ide_buffer_reload_file_settings (self);
 
-      if (self->addins != NULL && !self->disable_addins)
+      if (self->addins != NULL && self->enable_addins)
         {
           IdeBufferFileLoad closure = { self, file };
           ide_extension_set_adapter_foreach (self->addins,
@@ -368,7 +368,7 @@ ide_buffer_notify_language (IdeBuffer  *self,
 
   lang_id = ide_buffer_get_language_id (self);
 
-  if (self->addins != NULL && !self->disable_addins)
+  if (self->addins != NULL && self->enable_addins)
     {
       IdeBufferLanguageSet state = { self, lang_id };
 
@@ -460,8 +460,8 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_boolean (value, ide_buffer_get_changed_on_volume (self));
       break;
 
-    case PROP_DISABLE_ADDINS:
-      g_value_set_boolean (value, self->disable_addins);
+    case PROP_ENABLE_ADDINS:
+      g_value_set_boolean (value, self->enable_addins);
       break;
 
     case PROP_DIAGNOSTICS:
@@ -539,8 +539,8 @@ ide_buffer_set_property (GObject      *object,
       ide_buffer_set_change_monitor (self, g_value_get_object (value));
       break;
 
-    case PROP_DISABLE_ADDINS:
-      self->disable_addins = g_value_get_boolean (value);
+    case PROP_ENABLE_ADDINS:
+      self->enable_addins = g_value_get_boolean (value);
       break;
 
     case PROP_DIAGNOSTICS:
@@ -637,18 +637,19 @@ ide_buffer_class_init (IdeBufferClass *klass)
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * IdeBuffer:disable-addins:
+   * IdeBuffer:enable-addins:
    *
-   * The "disable-addins" property determines whether addins will be aware of this buffer. When
-   * set to TRUE no ide_buffer_addin_*() functions will be called on this buffer.
+   * The "enable-addins" property determines whether addins will be aware of
+   * this buffer. When set to %FALSE no ide_buffer_addin_*() functions will be
+   * called on this buffer.
    *
-   * Since: 3.32
+   * Since: 41.0
    */
-  properties [PROP_DISABLE_ADDINS] =
-    g_param_spec_boolean ("disable-addins",
-                          "Disable addins",
-                          "Whether to disable addins for this buffer",
-                          FALSE,
+  properties [PROP_ENABLE_ADDINS] =
+    g_param_spec_boolean ("enable-addins",
+                          "Enable Addins",
+                          "Whether to enable addins for this buffer",
+                          TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY));
 
   /**
@@ -981,6 +982,7 @@ ide_buffer_init (IdeBuffer *self)
   self->source_file = gtk_source_file_new ();
   self->can_restore_cursor = TRUE;
   self->highlight_diagnostics = TRUE;
+  self->enable_addins = TRUE;
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
@@ -1427,7 +1429,7 @@ _ide_buffer_load_file_finish (IdeBuffer     *self,
   g_signal_emit (self, signals [LOADED], 0);
 
   /* Notify buffer addins that a file has been loaded */
-  if (self->addins != NULL && !self->disable_addins)
+  if (self->addins != NULL && self->enable_addins)
     {
       IdeBufferFileLoad closure = { self, state->file };
       ide_extension_set_adapter_foreach (self->addins,
@@ -1481,7 +1483,7 @@ ide_buffer_save_file_cb (GObject      *object,
   _ide_buffer_set_changed_on_volume (self, FALSE);
 
   /* Notify addins that a save has completed */
-  if (self->addins != NULL && !self->disable_addins)
+  if (self->addins != NULL && self->enable_addins)
     {
       IdeBufferFileSave closure = { self, state->file };
       ide_extension_set_adapter_foreach (self->addins,
@@ -1523,7 +1525,7 @@ ide_buffer_save_file_settle_cb (GObject      *object,
   g_assert (IDE_IS_NOTIFICATION (state->notif));
   g_assert (GTK_SOURCE_IS_FILE (state->source_file));
 
-  if (self->addins != NULL && !self->disable_addins)
+  if (self->addins != NULL && self->enable_addins)
     {
       IdeBufferFileSave closure = { self, state->file };
       ide_extension_set_adapter_foreach (self->addins,
@@ -2331,7 +2333,7 @@ ide_buffer_settled_cb (gpointer user_data)
   self->settling_source = 0;
   g_signal_emit (self, signals [CHANGE_SETTLED], 0);
 
-  if (self->addins != NULL && !self->disable_addins)
+  if (self->addins != NULL && self->enable_addins)
     ide_extension_set_adapter_foreach (self->addins,
                                        _ide_buffer_addin_change_settled_cb,
                                        self);
@@ -3191,7 +3193,7 @@ ide_buffer_notify_style_scheme (IdeBuffer  *self,
 
 #undef GET_TAG
 
-  if (self->addins != NULL && !self->disable_addins)
+  if (self->addins != NULL && self->enable_addins)
     ide_extension_set_adapter_foreach (self->addins,
                                        _ide_buffer_addin_style_scheme_changed_cb,
                                        self);
@@ -3913,7 +3915,7 @@ settle_async (IdeBuffer           *self,
   ide_task_set_source_tag (task, settle_async);
   ide_task_set_task_data (task, n_active, g_free);
 
-  if (self->addins != NULL && !self->disable_addins)
+  if (self->addins != NULL && self->enable_addins)
     ide_extension_set_adapter_foreach (self->addins,
                                        settle_foreach_cb,
                                        task);

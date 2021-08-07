@@ -117,7 +117,7 @@ save_all_free (SaveAll *state)
 static IdeBuffer *
 ide_buffer_manager_create_buffer (IdeBufferManager *self,
                                   GFile            *file,
-                                  gboolean          disable_addins,
+                                  gboolean          enable_addins,
                                   gboolean          is_temporary)
 {
   g_autoptr(IdeBuffer) buffer = NULL;
@@ -128,7 +128,7 @@ ide_buffer_manager_create_buffer (IdeBufferManager *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (self));
 
-  buffer = _ide_buffer_new (self, file, disable_addins, is_temporary);
+  buffer = _ide_buffer_new (self, file, enable_addins, is_temporary);
   box = ide_object_box_new (G_OBJECT (buffer));
 
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (box));
@@ -663,7 +663,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
     {
       /* Create the buffer and track it so we can find it later */
       buffer = ide_buffer_manager_create_buffer (self, file,
-                                                 flags & IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS,
+                                                 (flags & IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS) == 0,
                                                  temp_file != NULL);
       is_new = TRUE;
     }
