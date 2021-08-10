@@ -1,8 +1,8 @@
 {
-    "name": "python3-jedi",
+    "name": "python3-deps",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} jedi sphinx sphinx_rtd_theme lxml docutils codespell gi-docgen"
+        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} sphinx sphinx_rtd_theme lxml docutils codespell gi-docgen"
     ],
     "sources": [
         {
@@ -104,11 +104,6 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/dd/f8/df628d41f42793d446285767164c6a8da71d82892f2c98c43e0523836d39/Sphinx-1.8.4.tar.gz",
             "sha256": "c1c00fc4f6e8b101a0d037065043460dffc2d507257f2f11acaed71fd2b0c83c"
-        },
-        {
-            "type": "file",
-            "url": "https://files.pythonhosted.org/packages/e4/83/4c05db437252694660c972b5374b35a68a8a0a8cd012dc95e5fd4d7e71b0/jedi-0.13.2.tar.gz",
-            "sha256": "571702b5bd167911fe9036e5039ba67f820d6502832285cde8c881ab2b2149fd"
         },
         {
             "type": "file",
