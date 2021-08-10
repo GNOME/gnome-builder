@@ -34,17 +34,21 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeLspCompletionItem, ide_lsp_completion_item, IDE, LSP_COMPLETION_ITEM, GObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeLspCompletionItem *ide_lsp_completion_item_new             (GVariant             *variant);
+IdeLspCompletionItem *ide_lsp_completion_item_new                       (GVariant             *variant);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_lsp_completion_item_get_icon_name   (IdeLspCompletionItem *self);
+const gchar          *ide_lsp_completion_item_get_icon_name             (IdeLspCompletionItem *self);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_lsp_completion_item_get_return_type (IdeLspCompletionItem *self);
+const gchar          *ide_lsp_completion_item_get_return_type           (IdeLspCompletionItem *self);
 IDE_AVAILABLE_IN_3_32
-const gchar          *ide_lsp_completion_item_get_detail      (IdeLspCompletionItem *self);
+const gchar          *ide_lsp_completion_item_get_detail                (IdeLspCompletionItem *self);
 IDE_AVAILABLE_IN_3_32
-gchar                *ide_lsp_completion_item_get_markup      (IdeLspCompletionItem *self,
-                                                               const gchar          *typed_text);
+gchar                *ide_lsp_completion_item_get_markup                (IdeLspCompletionItem *self,
+                                                                         const gchar          *typed_text);
 IDE_AVAILABLE_IN_3_32
-IdeSnippet           *ide_lsp_completion_item_get_snippet     (IdeLspCompletionItem *self);
+IdeSnippet           *ide_lsp_completion_item_get_snippet               (IdeLspCompletionItem *self);
+
+IDE_AVAILABLE_IN_41
+GPtrArray            *ide_lsp_completion_item_get_additional_text_edits (IdeLspCompletionItem *self,
+                                                                         GFile                *file);
 
 G_END_DECLS

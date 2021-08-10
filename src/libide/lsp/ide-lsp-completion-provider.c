@@ -386,8 +386,25 @@ ide_lsp_completion_provider_display_proposal (IdeCompletionProvider   *provider,
 }
 
 static void
+ide_lsp_client_apply_additional_edits_cb (GObject      *object,
+                                          GAsyncResult *result,
+                                          gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_buffer_manager_apply_edits_finish (bufmgr, result, &error))
+    {
+      g_warning ("Failed to apply additional text edits for completion: %s", error->message);
+    }
+}
+
+static void
 ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                               IdeCompletionContext  *context,
+                                               IdeCompletionContext  *completion_context,
                                                IdeCompletionProposal *proposal,
                                                const GdkEventKey     *key)
 {
@@ -395,21 +412,46 @@ ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
   GtkTextBuffer *buffer;
   GtkTextView *view;
   GtkTextIter begin, end;
+  IdeContext *context;
+  g_autoptr(GPtrArray) additional_text_edits;
+  IdeBufferManager *buffer_manager;
 
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (completion_context));
   g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
 
-  buffer = ide_completion_context_get_buffer (context);
-  view = ide_completion_context_get_view (context);
+  buffer = ide_completion_context_get_buffer (completion_context);
+
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  view = ide_completion_context_get_view (completion_context);
 
   snippet = ide_lsp_completion_item_get_snippet (IDE_LSP_COMPLETION_ITEM (proposal));
 
   gtk_text_buffer_begin_user_action (buffer);
-  if (ide_completion_context_get_bounds (context, &begin, &end))
+  if (ide_completion_context_get_bounds (completion_context, &begin, &end))
     gtk_text_buffer_delete (buffer, &begin, &end);
   ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
   gtk_text_buffer_end_user_action (buffer);
+
+  additional_text_edits =
+    ide_lsp_completion_item_get_additional_text_edits (IDE_LSP_COMPLETION_ITEM (proposal),
+                                                       ide_buffer_get_file (IDE_BUFFER (buffer)));
+
+  if (additional_text_edits != NULL)
+    {
+      context = ide_object_get_context (IDE_OBJECT (provider));
+
+      g_return_if_fail (context != NULL);
+
+      buffer_manager = ide_buffer_manager_from_context (context);
+
+      ide_buffer_manager_apply_edits_async (buffer_manager,
+                                            IDE_PTR_ARRAY_STEAL_FULL (&additional_text_edits),
+                                            NULL,
+                                            ide_lsp_client_apply_additional_edits_cb,
+                                            NULL);
+    }
 }
 
 static gchar *

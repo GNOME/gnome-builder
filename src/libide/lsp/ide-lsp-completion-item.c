@@ -182,3 +182,47 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
 
   return g_steal_pointer (&snippet);
 }
+
+
+/**
+ * ide_lsp_completion_item_get_additional_text_edits:
+ * @self: a #IdeLspCompletionItem
+ * @file: The file the completion is applied to
+ *
+ * Obtain an array of all additional text edits to be applied to the project.
+ *
+ * Returns: (transfer full) (element-type IdeTextEdit) (nullable): a #GPtrArray of #IdeTextEdit
+ *
+ * Since: 41
+ */
+GPtrArray *
+ide_lsp_completion_item_get_additional_text_edits(IdeLspCompletionItem *self,
+                                                  GFile                *file)
+{
+  g_autoptr(GPtrArray) result = NULL;
+  g_autoptr(GVariantIter) text_edit_iter = NULL;
+  GVariant *text_edit;
+
+  g_return_val_if_fail (IDE_IS_LSP_COMPLETION_ITEM (self), NULL);
+
+  if (!JSONRPC_MESSAGE_PARSE (self->variant, "additionalTextEdits" , JSONRPC_MESSAGE_GET_ITER (&text_edit_iter)))
+    return NULL;
+
+  result = g_ptr_array_new_with_free_func (g_object_unref);
+
+  while (g_variant_iter_loop (text_edit_iter, "v", &text_edit))
+    {
+      IdeTextEdit *edit = ide_lsp_decode_text_edit (text_edit, file);
+
+      if (edit != NULL)
+        {
+          g_ptr_array_add (result, edit);
+        }
+      else
+        {
+          g_warning ("Additional text edit could not be parsed: %s", g_variant_print (text_edit, TRUE));
+        }
+    }
+
+  return g_steal_pointer (&result);
+}
