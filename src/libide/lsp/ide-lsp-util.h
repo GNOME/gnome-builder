@@ -29,8 +29,11 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_3_32
-IdeSymbolKind ide_lsp_decode_symbol_kind     (guint kind);
+IdeSymbolKind ide_lsp_decode_symbol_kind     (guint     kind);
 IDE_AVAILABLE_IN_3_32
-IdeSymbolKind ide_lsp_decode_completion_kind (guint kind);
+IdeSymbolKind ide_lsp_decode_completion_kind (guint     kind);
+IDE_AVAILABLE_IN_41
+IdeTextEdit  *ide_lsp_decode_text_edit       (GVariant *text_edit,
+                                              GFile    *gfile);
 
 G_END_DECLS

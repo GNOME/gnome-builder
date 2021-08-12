@@ -28,6 +28,7 @@
 
 #include "ide-lsp-client.h"
 #include "ide-lsp-rename-provider.h"
+#include "ide-lsp-util.h"
 
 typedef struct
 {
@@ -144,52 +145,6 @@ ide_lsp_rename_provider_init (IdeLspRenameProvider *self)
 {
 }
 
-/*
- * Parsing a TextEdit Variant happens here. See specification
- * https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textEdit
- * for further details
- */
-static IdeTextEdit *
-_extract_text_edit (GFile *gfile, GVariant *change)
-{
-  g_autoptr(IdeLocation) begin_location = NULL;
-  g_autoptr(IdeLocation) end_location = NULL;
-  g_autoptr(IdeRange) range = NULL;
-  const gchar *new_text = NULL;
-  gboolean success;
-  struct {
-    gint64 line;
-    gint64 column;
-  } begin, end;
-
-  success = JSONRPC_MESSAGE_PARSE (change,
-    "range", "{",
-      "start", "{",
-        "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
-        "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
-      "}",
-      "end", "{",
-        "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
-        "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
-      "}",
-    "}",
-    "newText", JSONRPC_MESSAGE_GET_STRING (&new_text)
-  );
-
-  if (!success)
-    {
-      IDE_TRACE_MSG ("Failed to extract change from variant");
-      return NULL;
-    }
-
-  begin_location = ide_location_new (gfile, begin.line, begin.column);
-  end_location = ide_location_new (gfile, end.line, end.column);
-  range = ide_range_new (begin_location, end_location);
-
-  return ide_text_edit_new (range, new_text);
-
-}
-
 static void
 ide_lsp_rename_provider_rename_cb_changes (IdeTask *task, GVariant *return_value)
 {
@@ -217,7 +172,7 @@ ide_lsp_rename_provider_rename_cb_changes (IdeTask *task, GVariant *return_value
 
       while (g_variant_iter_loop (&changes_iter, "v", &change))
         {
-          IdeTextEdit *edit = _extract_text_edit (gfile, change);
+          IdeTextEdit *edit = ide_lsp_decode_text_edit (change, gfile);
           if (edit != NULL)
             g_ptr_array_add (ret, edit);
         }
@@ -257,7 +212,7 @@ ide_lsp_rename_provider_rename_cb_document_changes (IdeTask *task, GVariant *ret
 
       while (g_variant_iter_loop (edits, "v", &edit))
         {
-          IdeTextEdit *tedit = _extract_text_edit (gfile, edit);
+          IdeTextEdit *tedit = ide_lsp_decode_text_edit (edit, gfile);
           if (tedit != NULL)
             g_ptr_array_add (ret, tedit);
         }
