@@ -185,6 +185,13 @@
                 <property name="title" translatable="yes" context="shortcut window">Show list of open documents</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;k</property>
+                <property name="title" translatable="yes" context="shortcut window">Show document outline or symbol tree</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
