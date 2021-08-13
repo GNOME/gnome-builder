@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-05 01:31+0000\n"
-"PO-Revision-Date: 2021-08-06 14:54+0100\n"
+"POT-Creation-Date: 2021-08-07 12:43+0000\n"
+"PO-Revision-Date: 2021-08-13 11:14+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -1014,6 +1014,7 @@ msgstr "Guardar uma cópia"
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
+#: src/plugins/grep/gbp-grep-editor-addin.c:55
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
 msgid "Editor shortcuts"
@@ -1256,6 +1257,7 @@ msgstr "Abrir um documento"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:48
 #: src/libide/editor/ide-editor-surface-shortcuts.c:54
+#: src/plugins/grep/gbp-grep-editor-addin.c:56
 msgid "Panels"
 msgstr "Painéis"
 
@@ -1414,44 +1416,44 @@ msgstr "A preparar…"
 msgid "Cannot build transfer while on metered connection"
 msgstr "Não é possível criar transferência enquanto na ligação limitada"
 
-#: src/libide/foundry/ide-run-manager.c:385
+#: src/libide/foundry/ide-run-manager.c:387
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Não é possível executar o objetivo, pois outro objetivo está em execução"
 
-#: src/libide/foundry/ide-run-manager.c:505
+#: src/libide/foundry/ide-run-manager.c:526
 msgid "Failed to locate runtime"
 msgstr "Não foi possível localizar a rotina \"%s\""
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:554
+#: src/libide/foundry/ide-run-manager.c:577
 #, c-format
 msgid "Running %s…"
 msgstr "A executar %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:628
+#: src/libide/foundry/ide-run-manager.c:727
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "O objetivo da compilação falhou em compilar: %s"
 
-#: src/libide/foundry/ide-run-manager.c:891
+#: src/libide/foundry/ide-run-manager.c:992
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Atalhos da bancada"
 
-#: src/libide/foundry/ide-run-manager.c:892
+#: src/libide/foundry/ide-run-manager.c:993
 msgid "Build and Run"
 msgstr "Compilar e Executar"
 
-#: src/libide/foundry/ide-run-manager.c:1054
-#: src/libide/foundry/ide-run-manager.c:1120
+#: src/libide/foundry/ide-run-manager.c:1155
+#: src/libide/foundry/ide-run-manager.c:1221
 msgid "Failed to locate a build target"
 msgstr "Não foi possível localizar um destino de compilação"
 
-#: src/libide/foundry/ide-run-manager.c:1256 src/libide/gui/gtk/menus.ui:67
+#: src/libide/foundry/ide-run-manager.c:1357 src/libide/gui/gtk/menus.ui:67
 msgid "Run"
 msgstr "Executar"
 
@@ -3053,7 +3055,7 @@ msgstr "A configurar projeto"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
 #: src/plugins/cargo/cargo_plugin.py:145
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 #: src/plugins/phpize/phpize_plugin.py:219
@@ -3575,11 +3577,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:197
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
 msgid "Configure project"
 msgstr "Configura o projeto"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:249
 #: src/plugins/maven/maven_plugin.py:100
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 #: src/plugins/phpize/phpize_plugin.py:229
@@ -4251,7 +4253,7 @@ msgid "Arguments"
 msgstr "Argumentos"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:727
+#: src/plugins/grep/gbp-grep-panel.c:730
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -4269,10 +4271,26 @@ msgstr "Devhelp"
 msgid "_Select Documentation…"
 msgstr "_Selecionar documentação…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:379
+#: src/plugins/devhelp/gbp-devhelp-page.c:381
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Documentação"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:29
+msgid "Reveal search bar with Ctrl+F"
+msgstr "Revelar a barra de pesquisa com Ctrl+F"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:48
+msgid "Previous search result (Ctrl+Shift+G)"
+msgstr "Resultado da pesquisa anterior (Ctrl+Shift+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:68
+msgid "Next search result (Ctrl+G)"
+msgstr "Próximo resultado de pesquisa (Ctrl+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:96
+msgid "Close search bar (Escape key)"
+msgstr "Fechar a barra de pesquisa (Tecla Escape)"
 
 #: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
@@ -4978,22 +4996,26 @@ msgstr "Sair"
 msgid "Open a _Project…"
 msgstr "Abrir um _projeto…"
 
-#: src/plugins/grep/gbp-grep-panel.c:739
+#: src/plugins/grep/gbp-grep-editor-addin.c:57
+msgid "Show Find in Project panel"
+msgstr "Mostrar o Localizar no painel de Projetos"
+
+#: src/plugins/grep/gbp-grep-panel.c:742
 msgid "Match"
 msgstr "Comparar"
 
-#: src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/grep/gbp-grep-panel.c:754
 msgid "Path"
 msgstr "Caminho"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:814
+#: src/plugins/grep/gbp-grep-panel.c:817
 #, c-format
 msgid "_Find in %s"
 msgstr "_Localizar em %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:816
+#: src/plugins/grep/gbp-grep-panel.c:819
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Substituir em %s"
