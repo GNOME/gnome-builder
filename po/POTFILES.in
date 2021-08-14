@@ -302,7 +302,6 @@ src/plugins/grep/gbp-grep-popover.ui
 src/plugins/grep/gtk/menus.ui
 src/plugins/html-preview/gtk/menus.ui
 src/plugins/html-preview/html_preview.py
-src/plugins/jedi/jedi_plugin.py
 src/plugins/jhbuild/jhbuild_plugin.py
 src/plugins/ls/gbp-ls-page.c
 src/plugins/ls/gbp-ls-page.ui
