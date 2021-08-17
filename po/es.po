@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-07-24 16:53+0000\n"
-"PO-Revision-Date: 2021-07-27 07:37+0200\n"
+"POT-Creation-Date: 2021-08-14 11:58+0000\n"
+"PO-Revision-Date: 2021-08-17 13:26+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -898,12 +898,12 @@ msgid "_Rename"
 msgstr "_Renombrar"
 
 #. translators: %u is replaced with an incrementing number
-#: src/libide/code/ide-buffer-manager.c:391
+#: src/libide/code/ide-buffer-manager.c:392
 #, c-format
 msgid "unsaved file %u"
 msgstr "%u archivos sin guardar"
 
-#: src/libide/code/ide-buffer.c:3464
+#: src/libide/code/ide-buffer.c:3493
 msgid "The current language lacks a symbol resolver."
 msgstr "Al lenguaje actual le falta un resolutor de símbolos."
 
@@ -1028,6 +1028,7 @@ msgstr "Guardar una copia"
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
+#: src/plugins/grep/gbp-grep-editor-addin.c:55
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
 msgid "Editor shortcuts"
@@ -1121,12 +1122,10 @@ msgid "%u of %u"
 msgstr "%u de %u"
 
 #: src/libide/editor/ide-editor-search-bar.ui:116
-#| msgid "Replace"
 msgid "_Replace"
 msgstr "_Reemplazar"
 
 #: src/libide/editor/ide-editor-search-bar.ui:128
-#| msgid "Replace All"
 msgid "Replace _All"
 msgstr "Reempla_zar todo"
 
@@ -1142,17 +1141,14 @@ msgstr ""
 "mayúsculas y minúsculas"
 
 #: src/libide/editor/ide-editor-search-bar.ui:202
-#| msgid "Regular expressions"
 msgid "Regular _expressions"
 msgstr "_Expresiones regulares"
 
 #: src/libide/editor/ide-editor-search-bar.ui:217
-#| msgid "Case sensitive"
 msgid "_Case sensitive"
 msgstr "Sensible a mayús_culas y minúsculas"
 
 #: src/libide/editor/ide-editor-search-bar.ui:231
-#| msgid "Match whole word only"
 msgid "_Match whole word only"
 msgstr "Coincidir sólo con la palabra co_mpleta"
 
@@ -1275,6 +1271,7 @@ msgstr "Abrir un documento"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:48
 #: src/libide/editor/ide-editor-surface-shortcuts.c:54
+#: src/plugins/grep/gbp-grep-editor-addin.c:56
 msgid "Panels"
 msgstr "Paneles"
 
@@ -1435,43 +1432,43 @@ msgstr "Preparando…"
 msgid "Cannot build transfer while on metered connection"
 msgstr "No se puede construir la transferencia en una conexión medida"
 
-#: src/libide/foundry/ide-run-manager.c:385
+#: src/libide/foundry/ide-run-manager.c:387
 msgid "Cannot run target, another target is running"
 msgstr "No se puede ejecutar el objetivo, ya ha otro objetivo en ejecución"
 
-#: src/libide/foundry/ide-run-manager.c:505
+#: src/libide/foundry/ide-run-manager.c:526
 msgid "Failed to locate runtime"
 msgstr "Falló al buscar la rutina"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:554
+#: src/libide/foundry/ide-run-manager.c:577
 #, c-format
 msgid "Running %s…"
 msgstr "Ejecutando %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:628
+#: src/libide/foundry/ide-run-manager.c:727
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "Falló al construir el objetivo de construcción: %s"
 
-#: src/libide/foundry/ide-run-manager.c:891
+#: src/libide/foundry/ide-run-manager.c:992
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
 msgid "Workbench shortcuts"
 msgstr "Atajos del banco de trabajo"
 
-#: src/libide/foundry/ide-run-manager.c:892
+#: src/libide/foundry/ide-run-manager.c:993
 msgid "Build and Run"
 msgstr "Construir y ejecutar"
 
-#: src/libide/foundry/ide-run-manager.c:1054
-#: src/libide/foundry/ide-run-manager.c:1120
+#: src/libide/foundry/ide-run-manager.c:1155
+#: src/libide/foundry/ide-run-manager.c:1221
 msgid "Failed to locate a build target"
 msgstr "Falló al buscar el objetivo de construcción"
 
-#: src/libide/foundry/ide-run-manager.c:1256 src/libide/gui/gtk/menus.ui:67
+#: src/libide/foundry/ide-run-manager.c:1357 src/libide/gui/gtk/menus.ui:67
 msgid "Run"
 msgstr "Ejecutar"
 
@@ -1483,7 +1480,7 @@ msgstr "El proceso ha terminado de manera inesperada"
 msgid "Host Operating System"
 msgstr "Sistema operativo del equipo anfitrión"
 
-#: src/libide/foundry/ide-runtime.c:498
+#: src/libide/foundry/ide-runtime.c:543
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Equipo anfitrión"
@@ -1547,7 +1544,6 @@ msgid "Project Destination"
 msgstr "Destino del proyecto"
 
 #: src/libide/greeter/ide-clone-surface.ui:307
-#| msgid "Clone Project"
 msgid "Clone _Project"
 msgstr "Clonar _proyecto"
 
@@ -1839,7 +1835,7 @@ msgstr "Mostrar el menú de la ventana"
 msgid "Toggle window to fullscreen"
 msgstr "Cambiar ventana a pantalla completa"
 
-#: src/libide/gui/ide-marked-view.c:92
+#: src/libide/gui/ide-marked-view.c:383
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "No se puede cargar el HTML. Falta el soporte de WebKit"
 
@@ -2400,7 +2396,7 @@ msgid "Editor Shortcuts"
 msgstr "Editor de atajos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:579
+#: src/libide/gui/ide-shortcuts-window.ui:586
 msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
@@ -2416,37 +2412,37 @@ msgid "Toggle primary menu"
 msgstr "Conmutar menú primario"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:583
+#: src/libide/gui/ide-shortcuts-window.ui:590
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Búsqueda global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:590
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:597
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:604
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:611
+#: src/libide/gui/ide-shortcuts-window.ui:618
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tiempo de ejecución de construcción"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:618
+#: src/libide/gui/ide-shortcuts-window.ui:625
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atajos del teclado"
@@ -2471,363 +2467,368 @@ msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Conmutar panel inferior"
 
-#: src/libide/gui/ide-shortcuts-window.ui:103
+#: src/libide/gui/ide-shortcuts-window.ui:101
+#| msgid "Show right panel"
+msgctxt "shortcut window"
+msgid "Show Find in Project panel"
+msgstr "Mostrar «Buscar» en el panel del proyecto"
+
+#: src/libide/gui/ide-shortcuts-window.ui:110
 msgctxt "shortcut window"
 msgid "Files"
 msgstr "Archivos"
 
-#: src/libide/gui/ide-shortcuts-window.ui:108
+#: src/libide/gui/ide-shortcuts-window.ui:115
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Crear un nuevo documento"
 
-#: src/libide/gui/ide-shortcuts-window.ui:115
+#: src/libide/gui/ide-shortcuts-window.ui:122
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Abrir un documento"
 
-#: src/libide/gui/ide-shortcuts-window.ui:122
+#: src/libide/gui/ide-shortcuts-window.ui:129
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Guardar el documento"
 
-#: src/libide/gui/ide-shortcuts-window.ui:129
-#| msgid "Save the document"
+#: src/libide/gui/ide-shortcuts-window.ui:136
 msgctxt "shortcut window"
 msgid "Save a copy of the document"
 msgstr "Guardar una copia del documento"
 
-#: src/libide/gui/ide-shortcuts-window.ui:136
+#: src/libide/gui/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
 msgid "Save all documents"
 msgstr "Guardar todos los documentos"
 
-#: src/libide/gui/ide-shortcuts-window.ui:143
+#: src/libide/gui/ide-shortcuts-window.ui:150
 msgctxt "shortcut window"
 msgid "Print the document"
 msgstr "Imprimir el documento"
 
-#: src/libide/gui/ide-shortcuts-window.ui:150
+#: src/libide/gui/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Cerrar el documento."
 
-#: src/libide/gui/ide-shortcuts-window.ui:157
+#: src/libide/gui/ide-shortcuts-window.ui:164
 msgctxt "shortcut window"
 msgid "Close all documents"
 msgstr "Cerrar todos los documentos"
 
-#: src/libide/gui/ide-shortcuts-window.ui:164
+#: src/libide/gui/ide-shortcuts-window.ui:171
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "cambiar al siguiente documento"
 
-#: src/libide/gui/ide-shortcuts-window.ui:171
+#: src/libide/gui/ide-shortcuts-window.ui:178
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Cambiar al documento anterior"
 
-#: src/libide/gui/ide-shortcuts-window.ui:178
+#: src/libide/gui/ide-shortcuts-window.ui:185
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Mostrar la lista de documentos abiertos"
 
-#: src/libide/gui/ide-shortcuts-window.ui:186
-#: src/libide/gui/ide-shortcuts-window.ui:205
+#: src/libide/gui/ide-shortcuts-window.ui:193
+#: src/libide/gui/ide-shortcuts-window.ui:212
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Buscar y reemplazar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:191
+#: src/libide/gui/ide-shortcuts-window.ui:198
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Ir a la línea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:198
+#: src/libide/gui/ide-shortcuts-window.ui:205
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Buscar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:212
+#: src/libide/gui/ide-shortcuts-window.ui:219
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Buscar la siguiente coincidencia"
 
-#: src/libide/gui/ide-shortcuts-window.ui:219
+#: src/libide/gui/ide-shortcuts-window.ui:226
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Buscar la coincidencia anterior"
 
-#: src/libide/gui/ide-shortcuts-window.ui:226
+#: src/libide/gui/ide-shortcuts-window.ui:233
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Limpiar resaltado"
 
-#: src/libide/gui/ide-shortcuts-window.ui:234
-#: src/libide/gui/ide-shortcuts-window.ui:627
+#: src/libide/gui/ide-shortcuts-window.ui:241
+#: src/libide/gui/ide-shortcuts-window.ui:634
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar y pegar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:239
-#: src/libide/gui/ide-shortcuts-window.ui:632
+#: src/libide/gui/ide-shortcuts-window.ui:246
+#: src/libide/gui/ide-shortcuts-window.ui:639
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar el texto seleccionado al portapapeles"
 
-#: src/libide/gui/ide-shortcuts-window.ui:246
+#: src/libide/gui/ide-shortcuts-window.ui:253
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Cortar el texto seleccionado al portapapeles"
 
-#: src/libide/gui/ide-shortcuts-window.ui:253
-#: src/libide/gui/ide-shortcuts-window.ui:639
+#: src/libide/gui/ide-shortcuts-window.ui:260
+#: src/libide/gui/ide-shortcuts-window.ui:646
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto del portapapeles"
 
-#: src/libide/gui/ide-shortcuts-window.ui:260
+#: src/libide/gui/ide-shortcuts-window.ui:267
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Duplicar la selección o la línea actual"
 
-#: src/libide/gui/ide-shortcuts-window.ui:268
+#: src/libide/gui/ide-shortcuts-window.ui:275
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Deshacer y rehacer"
 
-#: src/libide/gui/ide-shortcuts-window.ui:273
+#: src/libide/gui/ide-shortcuts-window.ui:280
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Deshacer el comando anterior"
 
-#: src/libide/gui/ide-shortcuts-window.ui:280
+#: src/libide/gui/ide-shortcuts-window.ui:287
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Rehacer el comando anterior"
 
-#: src/libide/gui/ide-shortcuts-window.ui:288
+#: src/libide/gui/ide-shortcuts-window.ui:295
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: src/libide/gui/ide-shortcuts-window.ui:293
+#: src/libide/gui/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Ampliar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:300
+#: src/libide/gui/ide-shortcuts-window.ui:307
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Reducir"
 
-#: src/libide/gui/ide-shortcuts-window.ui:307
+#: src/libide/gui/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Restaurar nivel de ampliación"
 
-#: src/libide/gui/ide-shortcuts-window.ui:315
+#: src/libide/gui/ide-shortcuts-window.ui:322
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edición"
 
-#: src/libide/gui/ide-shortcuts-window.ui:320
+#: src/libide/gui/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Aumentar el número en el cursor"
 
-#: src/libide/gui/ide-shortcuts-window.ui:327
+#: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Disminuir el número en el cursor"
 
-#: src/libide/gui/ide-shortcuts-window.ui:334
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Unir las líneas seleccionadas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Sort selected lines"
 msgstr "Ordenar las líneas seleccionadas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Make selection upper case"
 msgstr "Convertir la selección a mayúsculas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Make selection lower case"
 msgstr "Convertir la selección a minúsculas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Invert selection case"
 msgstr "Invertir las mayúsculas o minúsculas de la selección"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Mostrar la ventana de completado"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Conmutar la opacidad de la ventana de completado"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Conmutar sobrescritura"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Volver a sangrar la línea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Eliminar línea"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:405
+#: src/libide/gui/ide-shortcuts-window.ui:412
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Requiere soporte de lenguajes semánticos"
 
-#: src/libide/gui/ide-shortcuts-window.ui:412
+#: src/libide/gui/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Comentar código"
 
-#: src/libide/gui/ide-shortcuts-window.ui:419
+#: src/libide/gui/ide-shortcuts-window.ui:426
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Descomentar código"
 
-#: src/libide/gui/ide-shortcuts-window.ui:426
+#: src/libide/gui/ide-shortcuts-window.ui:433
 msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Embellecer el código seleccionado"
 
-#: src/libide/gui/ide-shortcuts-window.ui:434
+#: src/libide/gui/ide-shortcuts-window.ui:441
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegación"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:446
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Mover al siguiente error en el archivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Mover al anterior error en el archivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Mover a la ubicación de edición anterior"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Mover a la siguiente ubicación de edición"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Saltar a la definición del símbolo"
 
 #. FIXME: find references of what? it doesn't seem to work here, there's always no results.
-#: src/libide/gui/ide-shortcuts-window.ui:475
+#: src/libide/gui/ide-shortcuts-window.ui:482
 msgctxt "shortcut window"
 msgid "Find references"
 msgstr "Buscar referencias"
 
-#: src/libide/gui/ide-shortcuts-window.ui:482
+#: src/libide/gui/ide-shortcuts-window.ui:489
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mover la sección hacia arriba en el archivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:489
+#: src/libide/gui/ide-shortcuts-window.ui:496
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mover la sección hacia abajo en el archivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:496
+#: src/libide/gui/ide-shortcuts-window.ui:503
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mover la sección al final del archivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:503
+#: src/libide/gui/ide-shortcuts-window.ui:510
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mover la sección al principio del archivo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:510
+#: src/libide/gui/ide-shortcuts-window.ui:517
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mover al corchete coincidente"
 
-#: src/libide/gui/ide-shortcuts-window.ui:518
+#: src/libide/gui/ide-shortcuts-window.ui:525
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Selecciones"
 
-#: src/libide/gui/ide-shortcuts-window.ui:523
+#: src/libide/gui/ide-shortcuts-window.ui:530
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:530
+#: src/libide/gui/ide-shortcuts-window.ui:537
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
-#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/libide/gui/ide-shortcuts-window.ui:545
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construir y ejecutar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:543
+#: src/libide/gui/ide-shortcuts-window.ui:550
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Construir"
 
-#: src/libide/gui/ide-shortcuts-window.ui:550
+#: src/libide/gui/ide-shortcuts-window.ui:557
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Volver a construir"
 
-#: src/libide/gui/ide-shortcuts-window.ui:557
+#: src/libide/gui/ide-shortcuts-window.ui:564
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Ejecutar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:564
+#: src/libide/gui/ide-shortcuts-window.ui:571
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:575
+#: src/libide/gui/ide-shortcuts-window.ui:582
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atajos de la terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:647
+#: src/libide/gui/ide-shortcuts-window.ui:654
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Buscar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:652
+#: src/libide/gui/ide-shortcuts-window.ui:659
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Buscar texto en la terminal"
@@ -2980,7 +2981,6 @@ msgstr "No se han encontrado referencias"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
-#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "Cerrar"
 
@@ -3078,8 +3078,8 @@ msgid "Configuring project"
 msgstr "Configurando proyecto"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:142
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
+#: src/plugins/cargo/cargo_plugin.py:145
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 #: src/plugins/phpize/phpize_plugin.py:219
@@ -3522,7 +3522,6 @@ msgid "Build Preferences"
 msgstr "Preferencias de construcción"
 
 #: src/plugins/buildui/gtk/menus.ui:27
-#| msgid "Rebuild"
 msgid "R_ebuild"
 msgstr "Volv_er a construir"
 
@@ -3531,7 +3530,6 @@ msgid "_Run"
 msgstr "Ejecuta_r"
 
 #: src/plugins/buildui/gtk/menus.ui:38
-#| msgid "Run With…"
 msgid "R_un With…"
 msgstr "Ejec_utar con"
 
@@ -3604,11 +3602,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:197
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
 msgid "Configure project"
 msgstr "Configurar proyecto"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:249
 #: src/plugins/maven/maven_plugin.py:100
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 #: src/plugins/phpize/phpize_plugin.py:229
@@ -4102,7 +4100,6 @@ msgid "Uses the Git version control system"
 msgstr "Usa Git como sistema de control de versiones"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:328
-#| msgid "Create Project"
 msgid "_Create Project"
 msgstr "_Crear proyecto"
 
@@ -4146,7 +4143,6 @@ msgid "Run with Debugger"
 msgstr "Ejecutar con el depurador"
 
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#| msgid "Run with Debugger"
 msgid "Run with _Debugger"
 msgstr "Ejecutar con el _depurador"
 
@@ -4284,7 +4280,7 @@ msgid "Arguments"
 msgstr "Argumentos"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:482
+#: src/plugins/grep/gbp-grep-panel.c:732
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -4299,21 +4295,35 @@ msgid "Devhelp"
 msgstr "Devhelp"
 
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
-#| msgid "Select Documentation…"
 msgid "_Select Documentation…"
 msgstr "_Seleccionar documentación…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:242
+#: src/plugins/devhelp/gbp-devhelp-page.c:381
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Documentación"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:29
+msgid "Reveal search bar with Ctrl+F"
+msgstr "Mostrar la barra de búsqueda con Ctrl+F"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:48
+msgid "Previous search result (Ctrl+Shift+G)"
+msgstr "Resultado de búsqueda anterior (Ctrl+Shift+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:68
+msgid "Next search result (Ctrl+G)"
+msgstr "Siguiente resultado de búsqueda (Ctrl+Shift+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:96
+msgid "Close search bar (Escape key)"
+msgstr "Cerrar la barra de búsqueda (Esc)"
 
 #: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
 msgstr "Imprimir…"
 
 #: src/plugins/devhelp/gtk/menus.ui:21
-#| msgid "New Documentation Page"
 msgid "New _Documentation Page"
 msgstr "Nueva página de _documentación"
 
@@ -4535,7 +4545,6 @@ msgid "Go to Line"
 msgstr "Ir a la línea"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:83
-#| msgid "Go"
 msgid "_Go"
 msgstr "_Ir"
 
@@ -4698,17 +4707,17 @@ msgstr "Exportando carpeta de trabajo"
 msgid "Creating flatpak bundle"
 msgstr "Creando paquete flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:779
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:785
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4759,12 +4768,12 @@ msgstr ""
 "Builder ha fallado al proporcionar las credenciales apropiadas al clonar el "
 "repositorio."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:604
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:608
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "No se pueden establecer las opciones AMEND y GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:613
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:617
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "No se puede firmar un «commit» sin GPG_KEY_ID"
@@ -4826,12 +4835,10 @@ msgid "Select Widget…"
 msgstr "Seleccionar widget…"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:301
-#| msgid "Select Widget…"
 msgid "_Select Widget…"
 msgstr "_Seleccionar widget…"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:395
-#| msgid "View Design"
 msgid "_View Design"
 msgstr "_Vista de diseño"
 
@@ -4840,7 +4847,6 @@ msgid "Switch to UI designer"
 msgstr "Cambiar al diseñador de interfaces"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:403
-#| msgid "View Source"
 msgid "_View Source"
 msgstr "_Vista de código fuente"
 
@@ -4959,7 +4965,6 @@ msgid "UI Designer"
 msgstr "Diseñador de interfaces"
 
 #: src/plugins/glade/gtk/menus.ui:75
-#| msgid "UI Designer"
 msgid "_UI Designer"
 msgstr "Diseñador de _interfaces"
 
@@ -5016,32 +5021,81 @@ msgstr "Salir"
 msgid "Open a _Project…"
 msgstr "Abrir un _proyecto…"
 
-#: src/plugins/grep/gbp-grep-panel.c:494
+#: src/plugins/grep/gbp-grep-editor-addin.c:57
+#| msgid "Show right panel"
+msgid "Show Find in Project panel"
+msgstr "Mostrar «Buscar» el panel del proyecto"
+
+#: src/plugins/grep/gbp-grep-panel.c:744
 msgid "Match"
 msgstr "Coincidencia"
 
-#: src/plugins/grep/gbp-grep-panel.c:506
+#: src/plugins/grep/gbp-grep-panel.c:756
 msgid "Path"
 msgstr "Ruta"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:819
+#, c-format
+#| msgid "_Find in Files"
+msgid "_Find in %s"
+msgstr "_Buscar en %s"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:821
+#, c-format
+#| msgid "_Replace"
+msgid "_Replace in %s"
+msgstr "_Reemplazar en %s"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
 msgid "Find in Files"
 msgstr "Buscar en archivos"
 
-#: src/plugins/grep/gbp-grep-panel.ui:51
-msgid "Replace With"
-msgstr "Reemplazar con"
+#: src/plugins/grep/gbp-grep-panel.ui:50
+#| msgid "Find and replace"
+msgid "Find and Replace"
+msgstr "Buscar y reemplazar"
 
-#: src/plugins/grep/gbp-grep-panel.ui:67
-msgid "Replace"
-msgstr "Reemplazar"
+#: src/plugins/grep/gbp-grep-panel.ui:72
+msgid "R_ecursive"
+msgstr "R_ecursiva"
+
+#: src/plugins/grep/gbp-grep-panel.ui:80
+#| msgid "Match"
+msgid "Match _Case"
+msgstr "_Coincidir mayúsculas y minúsculas"
+
+#: src/plugins/grep/gbp-grep-panel.ui:87
+#| msgid "Match _whole words"
+msgid "Match _Words"
+msgstr "Coincidir con la _palabra"
+
+#: src/plugins/grep/gbp-grep-panel.ui:94
+#| msgid "Regular _expressions"
+msgid "Regular E_xpressions"
+msgstr "_Expresiones regulares"
+
+#: src/plugins/grep/gbp-grep-panel.ui:103
+#| msgid "Close the page"
+msgid "Close the panel (Escape key)"
+msgstr "Cerrar el panel (Esc)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:141
+#| msgid "_Open Project"
+msgid "_Find in Project"
+msgstr "_Buscar en el proyecto"
+
+#: src/plugins/grep/gbp-grep-panel.ui:166
+#| msgid "Recent Projects"
+msgid "_Replace in Project"
+msgstr "_Reemplazar en el proyecto"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
 msgid "Search for…"
 msgstr "Buscar…"
 
 #: src/plugins/grep/gbp-grep-popover.ui:38
-#| msgid "Find"
 msgid "_Find"
 msgstr "_Buscar"
 
@@ -5062,7 +5116,6 @@ msgid "Allow regular _expressions"
 msgstr "Permitir _expresiones regulares"
 
 #: src/plugins/grep/gtk/menus.ui:7
-#| msgid "Find in Files"
 msgid "_Find in Files"
 msgstr "_Buscar en archivos"
 
@@ -5095,14 +5148,6 @@ msgstr "Su equipo no tiene python3-sphinx"
 msgid "(Preview)"
 msgstr "(Vista previa)"
 
-#: src/plugins/jedi/jedi_plugin.py:666
-msgid "Suggest completions from Python"
-msgstr "Sugerir completado usando Python"
-
-#: src/plugins/jedi/jedi_plugin.py:667
-msgid "Use Jedi to provide completions for the Python language"
-msgstr "Usar Jedi para completado en el lenguaje Python"
-
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
@@ -5133,29 +5178,27 @@ msgstr "Cam_biar a la carpeta"
 msgid "_Open Containing Folder"
 msgstr "Abrir la carpeta c_ontenedora"
 
-#: src/plugins/make/make_plugin.py:101
+#: src/plugins/make/make_plugin.py:104
 msgid "Build project"
 msgstr "Construir proyecto"
 
-#: src/plugins/make/make_plugin.py:115
+#: src/plugins/make/make_plugin.py:121
 msgid "Install project"
 msgstr "Instalar proyecto"
 
-#: src/plugins/make/make_plugin.py:337
+#: src/plugins/make/make_plugin.py:343
 msgid "Empty Makefile Project"
 msgstr "Proyecto Makefile vacío"
 
-#: src/plugins/make/make_plugin.py:339
+#: src/plugins/make/make_plugin.py:345
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Crear un nuevo proyecto vacío usando un Makefile sencillo"
 
 #: src/plugins/meson-templates/meson_templates.py:252
-#| msgid "GNOME Application"
 msgid "GNOME Application (Legacy)"
 msgstr "Aplicación de GNOME (Heredada)"
 
 #: src/plugins/meson-templates/meson_templates.py:254
-#| msgid "Create a new GNOME application"
 msgid "Create a GNOME application with GTK 3"
 msgstr "Crear una nueva aplicación de GNOME con GTK 3"
 
@@ -5164,7 +5207,6 @@ msgid "GNOME Application"
 msgstr "Aplicación de GNOME"
 
 #: src/plugins/meson-templates/meson_templates.py:332
-#| msgid "Create a new GNOME application"
 msgid "Create a GNOME application with GTK 4"
 msgstr "Crear una nueva aplicación de GNOME con GTK 4"
 
@@ -5192,7 +5234,7 @@ msgstr "Herramienta de línea de comandos"
 msgid "Create a new command line project"
 msgstr "Crear un proyecto de línea de comandos nuevo"
 
-#: src/plugins/meson/gbp-meson-build-system.c:468
+#: src/plugins/meson/gbp-meson-build-system.c:470
 #: src/plugins/meson/gbp-meson-config-view-addin.c:57
 msgid "Meson"
 msgstr "Meson"
@@ -5546,12 +5588,10 @@ msgid "Rename %s"
 msgstr "Renombrar %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
-#| msgid "New File…"
 msgid "New Fil_e…"
 msgstr "Archivo nu_evo…"
 
 #: src/plugins/project-tree/gtk/menus.ui:14
-#| msgid "New Folder…"
 msgid "New F_older…"
 msgstr "Car_peta nueva…"
 
@@ -5560,42 +5600,34 @@ msgid "O_pen"
 msgstr "_Abrir"
 
 #: src/plugins/project-tree/gtk/menus.ui:26
-#| msgid "Open With…"
 msgid "Open _With…"
 msgstr "Abrir _con…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
-#| msgid "Source Code Editor"
 msgid "_Source Code Editor"
 msgstr "Editor de código _fuente"
 
 #: src/plugins/project-tree/gtk/menus.ui:39
-#| msgid "Open Containing Folder"
 msgid "Open _Containing Folder"
 msgstr "Abrir la carpeta _contenedora"
 
 #: src/plugins/project-tree/gtk/menus.ui:45
-#| msgid "Open in Terminal"
 msgid "Open in _Terminal"
 msgstr "Abrir en una _terminal"
 
 #: src/plugins/project-tree/gtk/menus.ui:59
-#| msgid "Move to Trash"
 msgid "_Move to Trash"
 msgstr "_Mover a la papelera"
 
 #: src/plugins/project-tree/gtk/menus.ui:65
-#| msgid "Display Options"
 msgid "_Display Options"
 msgstr "Opciones de vis_ualización"
 
 #: src/plugins/project-tree/gtk/menus.ui:69
-#| msgid "Show Ignored Files"
 msgid "S_how Ignored Files"
 msgstr "Mostrar archivos i_gnorados"
 
 #: src/plugins/project-tree/gtk/menus.ui:74
-#| msgid "Sort Directories First"
 msgid "S_ort Directories First"
 msgstr "M_ostrar las carpetas primero"
 
@@ -5604,8 +5636,9 @@ msgid "Reveal in Project Tree"
 msgstr "Mostrar en el árbol de proyectos"
 
 #: src/plugins/project-tree/gtk/menus.ui:96
-msgid "Reveal in Project _Tree"
-msgstr "Mostrar en el árbol de proyec_tos"
+#| msgid "Reveal in Project _Tree"
+msgid "Reveal File in Project _Tree"
+msgstr "Mostrar archivo en el árbol de proyec_tos"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5965,7 +5998,6 @@ msgid "Symbol"
 msgstr "Símbolo"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.c:315
-#| msgid "Select Symbol…"
 msgid "_Select Symbol…"
 msgstr "_Seleccionar símbolo…"
 
@@ -5974,7 +6006,6 @@ msgid "Document Outline"
 msgstr "Esquema del documento"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
-#| msgid "Document Outline"
 msgid "_Document Outline"
 msgstr "Esquema del _documento"
 
@@ -6001,13 +6032,11 @@ msgid "Run with Profiler"
 msgstr "Ejecutar con el perfilador"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
-#| msgid "Open Sysprof Capture…"
 msgctxt "menu label"
 msgid "Open _Sysprof Capture…"
 msgstr "Abrir captura de _Sysprof…"
 
 #: src/plugins/sysprof/gtk/menus.ui:42
-#| msgid "Run with Profiler"
 msgid "Run with _Profiler"
 msgstr "Ejecutar con el _perfilador"
 
@@ -6265,12 +6294,10 @@ msgid "Tags"
 msgstr "Etiquetas"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
-#| msgid "Switch to branch"
 msgid "_Switch to branch"
 msgstr "_Cambiar a la rama"
 
 #: src/plugins/vcsui/gtk/menus.ui:12
-#| msgid "Push to origin"
 msgid "_Push to origin"
 msgstr "_Subir al origen"
 
@@ -6398,6 +6425,18 @@ msgstr "Falló al crear el árbol XML."
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
+#~ msgid "Replace With"
+#~ msgstr "Reemplazar con"
+
+#~ msgid "Replace"
+#~ msgstr "Reemplazar"
+
+#~ msgid "Suggest completions from Python"
+#~ msgstr "Sugerir completado usando Python"
+
+#~ msgid "Use Jedi to provide completions for the Python language"
+#~ msgstr "Usar Jedi para completado en el lenguaje Python"
 
 #~ msgid "Save File As"
 #~ msgstr "Guardar archivo como"
@@ -6721,9 +6760,6 @@ msgstr ""
 #~| msgid "New…"
 #~ msgid "_New…"
 #~ msgstr "_Nuevo…"
-
-#~ msgid "_Open Project"
-#~ msgstr "_Abrir proyecto"
 
 #~ msgid "Contribute to an existing project"
 #~ msgstr "Colaborar con un proyecto existente"
@@ -7329,9 +7365,6 @@ msgstr ""
 
 #~ msgid "Show bottom panel"
 #~ msgstr "Mostrar el panel inferior"
-
-#~ msgid "Show right panel"
-#~ msgstr "Mostrar el panel derecho"
 
 #~ msgid "Split Left"
 #~ msgstr "Dividir por la izquierda"
