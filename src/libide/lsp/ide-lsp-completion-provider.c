@@ -386,20 +386,23 @@ ide_lsp_completion_provider_display_proposal (IdeCompletionProvider   *provider,
 }
 
 static void
-ide_lsp_client_apply_additional_edits_cb (GObject      *object,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
+ide_lsp_completion_provider_apply_additional_edits_cb (GObject      *object,
+                                                       GAsyncResult *result,
+                                                       gpointer      user_data)
 {
   IdeBufferManager *bufmgr = (IdeBufferManager *)object;
   g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_buffer_manager_apply_edits_finish (bufmgr, result, &error))
-    {
-      g_warning ("Failed to apply additional text edits for completion: %s", error->message);
-    }
+    g_warning ("Failed to apply additional text edits for completion: %s",
+               error->message);
+
+  IDE_EXIT;
 }
 
 static void
@@ -449,7 +452,7 @@ ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
       ide_buffer_manager_apply_edits_async (buffer_manager,
                                             IDE_PTR_ARRAY_STEAL_FULL (&additional_text_edits),
                                             NULL,
-                                            ide_lsp_client_apply_additional_edits_cb,
+                                            ide_lsp_completion_provider_apply_additional_edits_cb,
                                             NULL);
     }
 }
