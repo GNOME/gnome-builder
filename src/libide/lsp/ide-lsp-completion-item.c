@@ -193,11 +193,11 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
  *
  * Returns: (transfer full) (element-type IdeTextEdit) (nullable): a #GPtrArray of #IdeTextEdit
  *
- * Since: 41
+ * Since: 41.0
  */
 GPtrArray *
-ide_lsp_completion_item_get_additional_text_edits(IdeLspCompletionItem *self,
-                                                  GFile                *file)
+ide_lsp_completion_item_get_additional_text_edits (IdeLspCompletionItem *self,
+                                                   GFile                *file)
 {
   g_autoptr(GPtrArray) result = NULL;
   g_autoptr(GVariantIter) text_edit_iter = NULL;
@@ -225,5 +225,5 @@ ide_lsp_completion_item_get_additional_text_edits(IdeLspCompletionItem *self,
 #endif
     }
 
-  return g_steal_pointer (&result);
+  return IDE_PTR_ARRAY_STEAL_FULL (&result);
 }

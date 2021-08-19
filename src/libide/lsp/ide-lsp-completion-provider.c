@@ -412,7 +412,6 @@ ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
   GtkTextBuffer *buffer;
   GtkTextView *view;
   GtkTextIter begin, end;
-  IdeContext *context;
   g_autoptr(GPtrArray) additional_text_edits;
   IdeBufferManager *buffer_manager;
 
@@ -437,10 +436,11 @@ ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
   additional_text_edits =
     ide_lsp_completion_item_get_additional_text_edits (IDE_LSP_COMPLETION_ITEM (proposal),
                                                        ide_buffer_get_file (IDE_BUFFER (buffer)));
+  IDE_PTR_ARRAY_SET_FREE_FUNC (additional_text_edits, g_object_unref);
 
   if (additional_text_edits != NULL)
     {
-      context = ide_object_get_context (IDE_OBJECT (provider));
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (provider));
 
       g_return_if_fail (context != NULL);
 
