@@ -215,13 +215,14 @@ ide_lsp_completion_item_get_additional_text_edits(IdeLspCompletionItem *self,
       IdeTextEdit *edit = ide_lsp_decode_text_edit (text_edit, file);
 
       if (edit != NULL)
-        {
-          g_ptr_array_add (result, edit);
-        }
+        g_ptr_array_add (result, edit);
+#ifdef IDE_ENABLE_TRACE
       else
         {
-          g_warning ("Additional text edit could not be parsed: %s", g_variant_print (text_edit, TRUE));
+          g_autofree char *msg = g_variant_print (text_edit, TRUE);
+          IDE_TRACE_MSG ("Additional text edit could not be parsed: %s", msg);
         }
+#endif
     }
 
   return g_steal_pointer (&result);
