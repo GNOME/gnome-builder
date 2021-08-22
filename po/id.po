@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-14 11:58+0000\n"
-"PO-Revision-Date: 2021-08-15 18:54+0700\n"
+"POT-Creation-Date: 2021-08-19 21:08+0000\n"
+"PO-Revision-Date: 2021-08-22 11:43+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -2362,7 +2362,7 @@ msgid "Editor Shortcuts"
 msgstr "Pintasan Penyunting"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:586
+#: src/libide/gui/ide-shortcuts-window.ui:593
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Umum"
@@ -2378,37 +2378,37 @@ msgid "Toggle primary menu"
 msgstr "Jungkitkan menu utama"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:590
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pencarian Global"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:597
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferensi"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:604
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Bilah Perintah"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:611
+#: src/libide/gui/ide-shortcuts-window.ui:618
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:618
+#: src/libide/gui/ide-shortcuts-window.ui:625
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal pada Runtime Bangun"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:625
+#: src/libide/gui/ide-shortcuts-window.ui:632
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Tik"
@@ -2498,302 +2498,307 @@ msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Tampilkan daftar dokumen yang terbuka"
 
-#: src/libide/gui/ide-shortcuts-window.ui:193
-#: src/libide/gui/ide-shortcuts-window.ui:212
+#: src/libide/gui/ide-shortcuts-window.ui:192
+msgctxt "shortcut window"
+msgid "Show document outline or symbol tree"
+msgstr "Tampilkan kerangka dokumen atau pohon simbol"
+
+#: src/libide/gui/ide-shortcuts-window.ui:200
+#: src/libide/gui/ide-shortcuts-window.ui:219
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Cari dan ganti"
 
-#: src/libide/gui/ide-shortcuts-window.ui:198
+#: src/libide/gui/ide-shortcuts-window.ui:205
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "Ke Baris"
 
-#: src/libide/gui/ide-shortcuts-window.ui:205
+#: src/libide/gui/ide-shortcuts-window.ui:212
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Cari"
 
-#: src/libide/gui/ide-shortcuts-window.ui:219
+#: src/libide/gui/ide-shortcuts-window.ui:226
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Cari cocok selanjutnya"
 
-#: src/libide/gui/ide-shortcuts-window.ui:226
+#: src/libide/gui/ide-shortcuts-window.ui:233
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Cari cocok sebelumnya"
 
-#: src/libide/gui/ide-shortcuts-window.ui:233
+#: src/libide/gui/ide-shortcuts-window.ui:240
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Bersihkan sorotan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:241
-#: src/libide/gui/ide-shortcuts-window.ui:634
+#: src/libide/gui/ide-shortcuts-window.ui:248
+#: src/libide/gui/ide-shortcuts-window.ui:641
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Salin dan Tempel"
 
-#: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:639
+#: src/libide/gui/ide-shortcuts-window.ui:253
+#: src/libide/gui/ide-shortcuts-window.ui:646
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Salin teks yang dipilih ke papan klip"
 
-#: src/libide/gui/ide-shortcuts-window.ui:253
+#: src/libide/gui/ide-shortcuts-window.ui:260
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Potong teks yang dipilih ke papan klip"
 
-#: src/libide/gui/ide-shortcuts-window.ui:260
-#: src/libide/gui/ide-shortcuts-window.ui:646
+#: src/libide/gui/ide-shortcuts-window.ui:267
+#: src/libide/gui/ide-shortcuts-window.ui:653
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Tempel teks dari papan klip"
 
-#: src/libide/gui/ide-shortcuts-window.ui:267
+#: src/libide/gui/ide-shortcuts-window.ui:274
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Duplikatkan baris saat ini atau pilihan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:275
+#: src/libide/gui/ide-shortcuts-window.ui:282
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Tak Jadi dan Jadi Lagi"
 
-#: src/libide/gui/ide-shortcuts-window.ui:280
+#: src/libide/gui/ide-shortcuts-window.ui:287
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Batalkan perintah sebelumnya"
 
-#: src/libide/gui/ide-shortcuts-window.ui:287
+#: src/libide/gui/ide-shortcuts-window.ui:294
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Jadikan lagi perintah sebelumnya"
 
-#: src/libide/gui/ide-shortcuts-window.ui:295
+#: src/libide/gui/ide-shortcuts-window.ui:302
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "Zum"
 
-#: src/libide/gui/ide-shortcuts-window.ui:300
+#: src/libide/gui/ide-shortcuts-window.ui:307
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Perbesar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:307
+#: src/libide/gui/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Perkecil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:314
+#: src/libide/gui/ide-shortcuts-window.ui:321
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Atur Ulang Zum"
 
-#: src/libide/gui/ide-shortcuts-window.ui:322
+#: src/libide/gui/ide-shortcuts-window.ui:329
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Penyuntingan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:327
+#: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Naikkan angka pada kursor"
 
-#: src/libide/gui/ide-shortcuts-window.ui:334
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Turunkan angka pada kursor"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Gabungkan baris yang dipilih"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Sort selected lines"
 msgstr "Urutkan baris yang dipilih"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Make selection upper case"
 msgstr "Membuat pilihan menjadi huruf besar"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Make selection lower case"
 msgstr "Membuat pilihan menjadi huruf kecil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Invert selection case"
 msgstr "Balikkan besar kecil huruf pilihan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Tampilkan jendela pelengkapan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:383
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "Jungkitkan kegelapan (opacity)dari jendela pelengkapan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:390
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Jungkitkan penimpaan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:397
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Indentasi ulang baris"
 
-#: src/libide/gui/ide-shortcuts-window.ui:404
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Hapus baris"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
-#: src/libide/gui/ide-shortcuts-window.ui:412
+#: src/libide/gui/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Memerlukan dukungan bahasa semantik"
 
-#: src/libide/gui/ide-shortcuts-window.ui:419
+#: src/libide/gui/ide-shortcuts-window.ui:426
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "Komentar kode"
 
-#: src/libide/gui/ide-shortcuts-window.ui:426
+#: src/libide/gui/ide-shortcuts-window.ui:433
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "Hilangkan komentar kode"
 
-#: src/libide/gui/ide-shortcuts-window.ui:433
+#: src/libide/gui/ide-shortcuts-window.ui:440
 msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Percantik kode yang dipilih"
 
-#: src/libide/gui/ide-shortcuts-window.ui:441
+#: src/libide/gui/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigasi"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Ke kesalahan selanjutnya dalam berkas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Ke kesalahan sebelumnya dalam berkas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Ke lokasi sunting sebelumnya"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Ke lokasi sunting selanjutnya"
 
-#: src/libide/gui/ide-shortcuts-window.ui:474
+#: src/libide/gui/ide-shortcuts-window.ui:481
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Lompat ke definisi simbol"
 
 #. FIXME: find references of what? it doesn't seem to work here, there's always no results.
-#: src/libide/gui/ide-shortcuts-window.ui:482
+#: src/libide/gui/ide-shortcuts-window.ui:489
 msgctxt "shortcut window"
 msgid "Find references"
 msgstr "Temukan referensi"
 
-#: src/libide/gui/ide-shortcuts-window.ui:489
+#: src/libide/gui/ide-shortcuts-window.ui:496
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Naikkan viewport di dalam berkas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:496
+#: src/libide/gui/ide-shortcuts-window.ui:503
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Turunkan viewport di dalam berkas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:503
+#: src/libide/gui/ide-shortcuts-window.ui:510
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Pindahkan viewport ke akhir berkas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:510
+#: src/libide/gui/ide-shortcuts-window.ui:517
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Pindahkan viewport ke awal berkas"
 
-#: src/libide/gui/ide-shortcuts-window.ui:517
+#: src/libide/gui/ide-shortcuts-window.ui:524
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Ke tanda kurung pasangan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:525
+#: src/libide/gui/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Pilihan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:530
+#: src/libide/gui/ide-shortcuts-window.ui:537
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Pilih semua"
 
-#: src/libide/gui/ide-shortcuts-window.ui:537
+#: src/libide/gui/ide-shortcuts-window.ui:544
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Pilih tak satupun"
 
-#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/libide/gui/ide-shortcuts-window.ui:552
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Bangun dan Jalankan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:550
+#: src/libide/gui/ide-shortcuts-window.ui:557
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Bangun"
 
-#: src/libide/gui/ide-shortcuts-window.ui:557
+#: src/libide/gui/ide-shortcuts-window.ui:564
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "Bangun Ulang"
 
-#: src/libide/gui/ide-shortcuts-window.ui:564
+#: src/libide/gui/ide-shortcuts-window.ui:571
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Jalankan"
 
-#: src/libide/gui/ide-shortcuts-window.ui:571
+#: src/libide/gui/ide-shortcuts-window.ui:578
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/libide/gui/ide-shortcuts-window.ui:582
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Pintasan Terminal"
 
-#: src/libide/gui/ide-shortcuts-window.ui:654
+#: src/libide/gui/ide-shortcuts-window.ui:661
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Cari"
 
-#: src/libide/gui/ide-shortcuts-window.ui:659
+#: src/libide/gui/ide-shortcuts-window.ui:666
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Cari teks dalam terminal"
