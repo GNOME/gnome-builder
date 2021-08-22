@@ -1178,7 +1178,7 @@ msgstr "Fitxak"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:271
 msgid "Spaces per tab"
-msgstr "Zuriuneako fitxako"
+msgstr "Zuriuneak fitxako"
 
 #. List of pages that are open
 #: src/libide/editor/ide-editor-sidebar.ui:31
