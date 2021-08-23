@@ -1,6 +1,6 @@
-/* gbp-flatpak-application-addin.h
+/* ipc-flatpak-service-impl.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,17 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <flatpak/flatpak.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_FLATPAK_APPLICATION_ADDIN (gbp_flatpak_application_addin_get_type())
+#define IPC_TYPE_FLATPAK_REPO (ipc_flatpak_repo_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakApplicationAddin, gbp_flatpak_application_addin, GBP, FLATPAK_APPLICATION_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (IpcFlatpakRepo, ipc_flatpak_repo, IPC, FLATPAK_REPO, GObject)
+
+IpcFlatpakRepo      *ipc_flatpak_repo_get_default      (void);
+FlatpakInstallation *ipc_flatpak_repo_get_installation (IpcFlatpakRepo  *self);
+char                *ipc_flatpak_repo_get_path         (IpcFlatpakRepo  *self);
+char                *ipc_flatpak_repo_get_config_dir   (IpcFlatpakRepo  *self);
 
 G_END_DECLS
-

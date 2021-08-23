@@ -25,6 +25,7 @@
 #include <flatpak/flatpak.h>
 #include <glib/gi18n.h>
 
+#include "ipc-flatpak-repo.h"
 #include "ipc-flatpak-service-impl.h"
 #include "ipc-flatpak-transfer.h"
 #include "ipc-flatpak-util.h"
@@ -1321,9 +1322,11 @@ static void
 ipc_flatpak_service_impl_constructed (GObject *object)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)object;
+  IpcFlatpakRepo *repo = ipc_flatpak_repo_get_default ();
   g_autoptr(GPtrArray) installations = NULL;
   g_autoptr(FlatpakInstallation) user = NULL;
   g_autoptr(GFile) user_file = NULL;
+  FlatpakInstallation *priv_install;
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->constructed (object);
 
@@ -1337,6 +1340,18 @@ ipc_flatpak_service_impl_constructed (GObject *object)
     {
       for (guint i = 0; i < installations->len; i++)
         add_installation (self, g_ptr_array_index (installations, i), NULL);
+    }
+
+  /* Fallback for SDKs not available elsewhere */
+  if ((priv_install = ipc_flatpak_repo_get_installation (repo)))
+    {
+      g_autofree char *config_dir = ipc_flatpak_repo_get_config_dir (repo);
+      g_autofree char *path = ipc_flatpak_repo_get_path (repo);
+
+      add_installation (self, priv_install, NULL);
+      ipc_flatpak_service_set_config_dir (IPC_FLATPAK_SERVICE (self), config_dir);
+
+      g_debug ("Added installation at %s and FLATPAK_CONFIG_DIR %s", config_dir, path);
     }
 }
 
