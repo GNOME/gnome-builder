@@ -834,15 +834,15 @@ find_remote_for_ref (IpcFlatpakServiceImpl  *self,
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_REF (ref));
 
+#if FLATPAK_CHECK_VERSION(1, 11, 2)
   /* If this is not the default architecture, we need to force that we've
    * loaded sub-summaries or we won't find any matches for the arch. Otherwise
    * the cached form is fine (and faster).
    */
-  if (str_equal0 (flatpak_get_default_arch (), flatpak_ref_get_arch (ref)))
-    flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
-#if FLATPAK_CHECK_VERSION(1, 11, 2)
-  else
+  if (!str_equal0 (flatpak_get_default_arch (), flatpak_ref_get_arch (ref)))
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
+#else
+# warning "Flatpak is too old, searching for alternate arches will not work"
 #endif
 
   /* Someday we might want to prompt the user for which remote to install from,
