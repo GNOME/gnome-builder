@@ -1012,6 +1012,8 @@ resolve_extension (GPtrArray  *installations,
 #if FLATPAK_CHECK_VERSION(1, 11, 2)
   else
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
+#else
+# warning "Flatpak is too old, searching for alternate arches will not work"
 #endif
 
   strings = g_string_chunk_new (4096);
