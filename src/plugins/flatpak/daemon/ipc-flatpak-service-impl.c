@@ -654,6 +654,7 @@ ipc_flatpak_service_impl_install_changed_cb (IpcFlatpakServiceImpl *self,
 
 typedef struct
 {
+  FlatpakRef *fref;
   char *ref;
   char *remote;
 } InstallRef;
@@ -730,16 +731,29 @@ connect_signals (FlatpakTransaction  *transaction,
 }
 
 static gboolean
-add_refs_to_transaction (FlatpakTransaction  *transaction,
-                         GArray              *refs,
-                         GError             **error)
+add_refs_to_transaction (IpcFlatpakServiceImpl  *self,
+                         FlatpakTransaction     *transaction,
+                         GArray                 *refs,
+                         GError                **error)
 {
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (FLATPAK_IS_TRANSACTION (transaction));
+  g_assert (refs != NULL);
+
   for (guint i = 0; i < refs->len; i++)
     {
       const InstallRef *ref = &g_array_index (refs, InstallRef, i);
 
-      if (!flatpak_transaction_add_install (transaction, ref->remote, ref->ref, NULL, error))
-        return FALSE;
+      if (is_installed (self, ref->fref))
+        {
+          if (!flatpak_transaction_add_update (transaction, ref->ref, NULL, NULL, error))
+            return FALSE;
+        }
+      else
+        {
+          if (!flatpak_transaction_add_install (transaction, ref->remote, ref->ref, NULL, error))
+            return FALSE;
+        }
     }
 
   return TRUE;
@@ -752,6 +766,7 @@ install_worker (GTask        *task,
                 GCancellable *cancellable)
 {
   InstallState *state = task_data;
+  IpcFlatpakServiceImpl *self = source_object;
   g_autoptr(FlatpakTransaction) transaction = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) ref_ids = NULL;
@@ -778,7 +793,7 @@ install_worker (GTask        *task,
       complete_wrapped_error (g_steal_pointer (&state->invocation), g_steal_pointer (&error));
     }
   else if (!(transaction = flatpak_transaction_new_for_installation (state->installation, state->cancellable, &error)) ||
-           !add_refs_to_transaction (transaction, state->refs, &error) ||
+           !add_refs_to_transaction (self, transaction, state->refs, &error) ||
            !connect_signals (transaction, state->transfer, &error) ||
            !flatpak_transaction_run (transaction, state->cancellable, &error))
     {
@@ -867,8 +882,37 @@ clear_install_ref (gpointer data)
 {
   InstallRef *r = data;
 
+  g_clear_object (&r->fref);
   g_free (r->ref);
   g_free (r->remote);
+}
+
+static FlatpakInstallation *
+find_installation_for_refs (IpcFlatpakServiceImpl *self,
+                            GArray                *refs)
+{
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (refs != NULL);
+
+  if (refs->len == 1)
+    {
+      InstallRef *ir = &g_array_index (refs, InstallRef, 0);
+      const char *name = flatpak_ref_get_name (ir->fref);
+      const char *arch = flatpak_ref_get_arch (ir->fref);
+      const char *branch = flatpak_ref_get_branch (ir->fref);
+
+      for (guint i = 0; i < self->runtimes->len; i++)
+        {
+          const Runtime *r = g_ptr_array_index (self->runtimes, i);
+
+          if (str_equal0 (name, r->name) &&
+              str_equal0 (arch, r->arch) &&
+              str_equal0 (branch, r->branch))
+            return g_object_ref (r->installation);
+        }
+    }
+
+  return ipc_flatpak_service_impl_ref_user_installation (self);
 }
 
 static gboolean
@@ -930,17 +974,18 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
           return TRUE;
         }
 
+      iref.fref = g_steal_pointer (&ref);
       iref.ref = g_strdup (full_ref_names[i]);
       g_array_append_val (refs, iref);
     }
 
   state = g_slice_new0 (InstallState);
   state->cancellable = g_cancellable_new ();
-  state->installation = ipc_flatpak_service_impl_ref_user_installation (self);
   state->invocation = g_steal_pointer (&invocation);
   state->refs = g_array_ref (refs);
   state->parent_window = parent_window[0] ? g_strdup (parent_window) : NULL;
   state->transfer = g_object_ref (transfer);
+  state->installation = find_installation_for_refs (self, refs);
 
   g_signal_connect_object (transfer,
                            "cancel",
