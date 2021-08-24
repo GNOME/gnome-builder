@@ -161,6 +161,13 @@ add_install_cb (GObject      *object,
   g_message (" Resolved to %s", resolved);
   g_assert_cmpstr (resolved, ==, "org.freedesktop.Sdk.Extension.rust-stable/aarch64/21.08beta");
 
+  g_message ("Resolving org.freedesktop.Sdk.Extension.llvm12 for org.gnome.Sdk/x86_64/41beta");
+  ret = ipc_flatpak_service_call_resolve_extension_sync (service, "org.gnome.Sdk/x86_64/41beta", "org.freedesktop.Sdk.Extension.llvm12", &resolved, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_true (ret);
+  g_message (" Resolved to %s", resolved);
+  g_assert_cmpstr (resolved, ==, "org.freedesktop.Sdk.Extension.llvm12/x86_64/21.08beta");
+
   g_main_loop_quit (main_loop);
 }
 
