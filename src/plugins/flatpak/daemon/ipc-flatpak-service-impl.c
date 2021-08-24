@@ -1067,10 +1067,8 @@ resolve_extension (GPtrArray  *installations,
   if (sdk_arch == NULL)
     sdk_arch = g_strdup (flatpak_get_default_arch ());
 
-  if (str_equal0 (sdk_arch, flatpak_get_default_arch ()))
-    flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
 #if FLATPAK_CHECK_VERSION(1, 11, 2)
-  else
+  if (!str_equal0 (sdk_arch, flatpak_get_default_arch ()))
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
 #else
 # warning "Flatpak is too old, searching for alternate arches will not work"
