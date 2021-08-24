@@ -825,8 +825,9 @@ refs_equal (FlatpakRef *a,
 }
 
 static char *
-find_remote_for_ref (IpcFlatpakServiceImpl *self,
-                     FlatpakRef            *ref)
+find_remote_for_ref (IpcFlatpakServiceImpl  *self,
+                     FlatpakRef             *ref,
+                     FlatpakInstallation   **installation)
 {
   FlatpakQueryFlags flags = FLATPAK_QUERY_FLAGS_NONE;
 
@@ -869,10 +870,17 @@ find_remote_for_ref (IpcFlatpakServiceImpl *self,
               FlatpakRef *remote_ref = g_ptr_array_index (refs, k);
 
               if (refs_equal (ref, remote_ref))
-                return g_strdup (name);
+                {
+                  if (installation != NULL)
+                    *installation = g_object_ref (install->installation);
+                  return g_strdup (name);
+                }
             }
         }
     }
+
+  if (installation != NULL)
+    *installation = NULL;
 
   return NULL;
 }
@@ -896,11 +904,14 @@ find_installation_for_refs (IpcFlatpakServiceImpl *self,
 
   if (refs->len == 1)
     {
+      g_autoptr(FlatpakInstallation) install = NULL;
+      g_autofree char *remote = NULL;
       InstallRef *ir = &g_array_index (refs, InstallRef, 0);
       const char *name = flatpak_ref_get_name (ir->fref);
       const char *arch = flatpak_ref_get_arch (ir->fref);
       const char *branch = flatpak_ref_get_branch (ir->fref);
 
+      /* First try to find if the ref is already installed */
       for (guint i = 0; i < self->runtimes->len; i++)
         {
           const Runtime *r = g_ptr_array_index (self->runtimes, i);
@@ -910,6 +921,10 @@ find_installation_for_refs (IpcFlatpakServiceImpl *self,
               str_equal0 (branch, r->branch))
             return g_object_ref (r->installation);
         }
+
+      /* Now see if it is found in a configured remote */
+      if ((remote = find_remote_for_ref (self, ir->fref, &install)))
+        return g_steal_pointer (&install);
     }
 
   return ipc_flatpak_service_impl_ref_user_installation (self);
@@ -965,7 +980,7 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
         continue;
 
       if (ref == NULL ||
-          !(iref.remote = find_remote_for_ref (self, ref)))
+          !(iref.remote = find_remote_for_ref (self, ref, NULL)))
         {
           g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
                                                  G_DBUS_ERROR,
