@@ -73,7 +73,7 @@ _ide_application_init_shortcuts (IdeApplication *self)
                                            "<Primary>question",
                                            DZL_SHORTCUT_PHASE_GLOBAL);
   dzl_shortcut_theme_set_accel_for_action (theme,
-                                           "win.close",
+                                           "app.quit",
                                            "<Primary>q",
                                            DZL_SHORTCUT_PHASE_GLOBAL);
 }
