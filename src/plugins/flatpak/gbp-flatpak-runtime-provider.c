@@ -426,7 +426,7 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
       g_signal_connect_object (ide_task_get_cancellable (task),
                                "cancelled",
                                G_CALLBACK (ipc_flatpak_transfer_emit_cancel),
-                               state->transfer,
+                               transfer,
                                G_CONNECT_SWAPPED);
       g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (transfer),
                                         g_dbus_proxy_get_connection (G_DBUS_PROXY (service)),
