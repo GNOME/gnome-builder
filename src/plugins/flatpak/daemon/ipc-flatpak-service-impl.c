@@ -985,7 +985,8 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
           g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
                                                  G_DBUS_ERROR,
                                                  G_DBUS_ERROR_FAILED,
-                                                 "No configured remote contains ref");
+                                                 "No configured remote contains ref \"%s\"",
+                                                 full_ref_names[i]);
           return TRUE;
         }
 
