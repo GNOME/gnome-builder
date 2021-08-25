@@ -86,6 +86,25 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="41.beta1" date="2021-08-25">
+      <p>Builder 41.beta1 is ready for testing!</p>
+      <ul>
+        <li>Builder now uses a private Flatpak installation for SDKs to avoid modifying the user's flatpak installation. It automatically uses Flathub, Flathub-beta, and GNOME Nightly Flatpak repositories with appropriate filters to get access to nightly and beta SDKs. This is necessary to support development against "master" once the SDKs branch for beta.</li>
+        <li>Style scheme improvements.</li>
+        <li>Improvements in the foundry to build pipelines.</li>
+        <li>Allow loading buffers without addins to speed up text replacements.</li>
+        <li>Use jedi-language-server instead of loading Jedi in process.</li>
+        <li>Enable rust global search if the project is known to contain rust.</li>
+        <li>Improvements to Flatpak SDK extension integration.</li>
+        <li>A new markdown renderer.</li>
+        <li>Improvements to LSP autocompletion features.</li>
+        <li>Accessibility improvements.</li>
+        <li>Improved devhelp integration.</li>
+        <li>Session support for additional page types other than editors.</li>
+        <li>Improvements to grep integration including project search and replace.</li>
+      </ul>
+    </release>
+
     <release version="41.alpha1" date="2021-07-19">
       <p>Builder 41.alpha1 is ready for testing!</p>
     </release>

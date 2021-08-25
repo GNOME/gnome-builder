@@ -1,3 +1,26 @@
+================
+Version 41.beta1
+================
+
+ • Builder now uses a private Flatpak installation for SDKs to avoid
+   modifying the user's flatpak installation. It automatically uses
+   Flathub, Flathub-beta, and GNOME Nightly Flatpak repositories with
+   appropriate filters to get access to nightly and beta SDKs. This is
+   necessary to support development against "master" once the SDKs
+   branch for beta.
+ • Style scheme improvements
+ • Improvements in the foundry to build pipelines
+ • Allow loading buffers without addins to speed up text replacements
+ • Use jedi-language-server instead of loading Jedi in process
+ • Enable rust global search if the project is known to contain rust
+ • Improvements to Flatpak SDK extension integration
+ • A new markdown renderer
+ • Improvements to LSP autocompletion features
+ • Accessibility improvements
+ • Improved devhelp integration
+ • Session support for additional page types other than editors
+ • Improvements to grep integration including project search and replace
+
 =================
 Version 41.alpha1
 =================
