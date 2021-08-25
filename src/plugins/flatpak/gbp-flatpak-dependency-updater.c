@@ -22,11 +22,38 @@
 
 #include "gbp-flatpak-dependency-updater.h"
 #include "gbp-flatpak-download-stage.h"
+#include "gbp-flatpak-manifest.h"
+#include "gbp-flatpak-sdk-stage.h"
 
 struct _GbpFlatpakDependencyUpdater
 {
   IdeObject parent_instance;
 };
+
+static char **
+get_sdks (GbpFlatpakManifest *manifest)
+{
+  const char *sdk;
+  const char * const *sdks;
+  GPtrArray *ar;
+
+  g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
+
+  ar = g_ptr_array_new ();
+
+  if ((sdk = gbp_flatpak_manifest_get_sdk (manifest)))
+    g_ptr_array_add (ar, g_strdup (sdk));
+
+  if ((sdks = gbp_flatpak_manifest_get_sdk_extensions (manifest)))
+    {
+      for (guint i = 0; sdks[i]; i++)
+        g_ptr_array_add (ar, g_strdup (sdks[i]));
+    }
+
+  g_ptr_array_add (ar, NULL);
+
+  return (char **)g_ptr_array_free (ar, FALSE);
+}
 
 static void
 find_download_stage_cb (gpointer data,
@@ -72,6 +99,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
   IdePipeline *pipeline;
   IdeBuildManager *manager;
   IdeContext *context;
+  IdeConfig *config;
 
   g_assert (GBP_IS_FLATPAK_DEPENDENCY_UPDATER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -109,6 +137,18 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
     }
 
   gbp_flatpak_download_stage_force_update (stage);
+
+  config = ide_pipeline_get_config (pipeline);
+  if (GBP_IS_FLATPAK_MANIFEST (config))
+    {
+      g_auto(GStrv) sdks = get_sdks (GBP_FLATPAK_MANIFEST (config));
+      g_autoptr(GbpFlatpakSdkStage) sdk_stage = NULL;
+
+      /* Add a stage to update SDKs */
+      sdk_stage = gbp_flatpak_sdk_stage_new ((const char * const *)sdks);
+      ide_pipeline_stage_set_transient (IDE_PIPELINE_STAGE (sdk_stage), TRUE);
+      ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, 0, IDE_PIPELINE_STAGE (sdk_stage));
+    }
 
   /* Ensure downloads and everything past it is invalidated */
   ide_pipeline_invalidate_phase (pipeline, IDE_PIPELINE_PHASE_DOWNLOADS);
