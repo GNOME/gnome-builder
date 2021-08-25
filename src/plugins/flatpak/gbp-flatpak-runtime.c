@@ -801,3 +801,26 @@ gbp_flatpak_runtime_new (const char *name,
                        "sdk", sdk_name,
                        NULL);
 }
+
+char **
+gbp_flatpak_runtime_get_refs (GbpFlatpakRuntime *self)
+{
+  GPtrArray *ar;
+  g_autofree char *sdk = NULL;
+  g_autofree char *platform = NULL;
+  const char *arch;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  arch = ide_triplet_get_arch (self->triplet);
+  platform = g_strdup_printf ("runtime/%s/%s/%s", self->platform, arch, self->branch);
+  sdk = g_strdup_printf ("runtime/%s/%s/%s", self->sdk, arch, self->branch);
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_add (ar, g_steal_pointer (&sdk));
+  if (g_strcmp0 (sdk, platform) != 0)
+    g_ptr_array_add (ar, g_steal_pointer (&platform));
+  g_ptr_array_add (ar, NULL);
+
+  return (char **)g_ptr_array_free (ar, FALSE);
+}
