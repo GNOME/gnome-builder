@@ -172,6 +172,15 @@ gbp_flatpak_sdk_stage_build_finish (IdePipelineStage  *stage,
 }
 
 static void
+gbp_flatpak_sdk_stage_query (IdePipelineStage *stage,
+                             IdePipeline      *pipeline,
+                             GPtrArray        *targets,
+                             GCancellable     *cancellable)
+{
+  ide_pipeline_stage_set_completed (stage, FALSE);
+}
+
+static void
 gbp_flatpak_sdk_stage_finalize (GObject *object)
 {
   GbpFlatpakSdkStage *self = (GbpFlatpakSdkStage *)object;
@@ -189,6 +198,7 @@ gbp_flatpak_sdk_stage_class_init (GbpFlatpakSdkStageClass *klass)
 
   stage_class->build_async = gbp_flatpak_sdk_stage_build_async;
   stage_class->build_finish = gbp_flatpak_sdk_stage_build_finish;
+  stage_class->query = gbp_flatpak_sdk_stage_query;
 
   object_class->finalize = gbp_flatpak_sdk_stage_finalize;
 }
