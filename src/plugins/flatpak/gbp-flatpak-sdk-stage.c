@@ -78,6 +78,7 @@ gbp_flatpak_sdk_stage_build_async (IdePipelineStage    *stage,
   g_autofree char *transfer_path = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
+  g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(GError) error = NULL;
   IpcFlatpakService *service;
   GbpFlatpakClient *client;
@@ -122,8 +123,25 @@ gbp_flatpak_sdk_stage_build_async (IdePipelineStage    *stage,
     }
 
   ide_task_set_task_data (task, g_object_ref (transfer), g_object_unref);
-
   ide_pipeline_stage_set_active (stage, TRUE);
+
+  notif = ide_notification_new ();
+  ide_notification_set_icon_name (notif, "system-software-install-symbolic");
+  ide_notification_set_title (notif, _("Updating Necessary SDKs"));
+  ide_notification_set_body (notif, _("Builder is updating Software Development Kits necessary for building your application."));
+  ide_notification_set_has_progress (notif, TRUE);
+  ide_notification_set_progress_is_imprecise (notif, FALSE);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_notification_withdraw),
+                           notif,
+                           G_CONNECT_SWAPPED);
+
+  g_object_bind_property (transfer, "fraction", notif, "progress", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (transfer, "message", notif, "body", G_BINDING_DEFAULT);
+
+  ide_notification_attach (notif, IDE_OBJECT (self));
 
   ipc_flatpak_service_call_install (service,
                                     (const char * const *)self->sdks,
