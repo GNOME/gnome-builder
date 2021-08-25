@@ -23,6 +23,7 @@
 #include "gbp-flatpak-dependency-updater.h"
 #include "gbp-flatpak-download-stage.h"
 #include "gbp-flatpak-manifest.h"
+#include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-sdk-stage.h"
 
 struct _GbpFlatpakDependencyUpdater
@@ -31,23 +32,30 @@ struct _GbpFlatpakDependencyUpdater
 };
 
 static char **
-get_sdks (GbpFlatpakManifest *manifest)
+get_sdks (IdePipeline        *pipeline,
+          GbpFlatpakManifest *manifest)
 {
-  const char *sdk;
-  const char * const *sdks;
+  const char * const *exts;
+  IdeRuntime *runtime;
   GPtrArray *ar;
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
 
   ar = g_ptr_array_new ();
 
-  if ((sdk = gbp_flatpak_manifest_get_sdk (manifest)))
-    g_ptr_array_add (ar, g_strdup (sdk));
-
-  if ((sdks = gbp_flatpak_manifest_get_sdk_extensions (manifest)))
+  if ((runtime = ide_pipeline_get_runtime (pipeline)) &&
+      GBP_IS_FLATPAK_RUNTIME (runtime))
     {
-      for (guint i = 0; sdks[i]; i++)
-        g_ptr_array_add (ar, g_strdup (sdks[i]));
+      g_auto(GStrv) refs = gbp_flatpak_runtime_get_refs (GBP_FLATPAK_RUNTIME (runtime));
+
+      for (guint i = 0; refs[i]; i++)
+        g_ptr_array_add (ar, g_strdup (refs[i]));
+    }
+
+  if ((exts = gbp_flatpak_manifest_get_sdk_extensions (manifest)))
+    {
+      for (guint i = 0; exts[i]; i++)
+        g_ptr_array_add (ar, g_strdup (exts[i]));
     }
 
   g_ptr_array_add (ar, NULL);
@@ -141,7 +149,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
   config = ide_pipeline_get_config (pipeline);
   if (GBP_IS_FLATPAK_MANIFEST (config))
     {
-      g_auto(GStrv) sdks = get_sdks (GBP_FLATPAK_MANIFEST (config));
+      g_auto(GStrv) sdks = get_sdks (pipeline, GBP_FLATPAK_MANIFEST (config));
       g_autoptr(GbpFlatpakSdkStage) sdk_stage = NULL;
 
       /* Add a stage to update SDKs */
