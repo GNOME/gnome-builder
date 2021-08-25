@@ -146,11 +146,10 @@ always_run_query_handler (IdePipelineStage *stage,
 static IdeSubprocessLauncher *
 create_subprocess_launcher (void)
 {
-  static char *config_dir;
   IdeSubprocessLauncher *launcher;
+  const char *config_dir;
 
-  if (config_dir == NULL)
-    config_dir = g_build_filename (g_get_user_data_dir (), "gnome-builder", "flatpak", "etc", NULL);
+  config_dir = gbp_flatpak_get_config_dir ();
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                           G_SUBPROCESS_FLAGS_STDERR_PIPE);

@@ -178,3 +178,18 @@ gbp_flatpak_get_default_arch (IdeObject *object)
 
   return default_arch;
 }
+
+const char *
+gbp_flatpak_get_config_dir (void)
+{
+  static char *config_dir;
+
+  if (!config_dir)
+    config_dir = g_build_filename (g_get_user_data_dir (),
+                                   "gnome-builder",
+                                   "flatpak",
+                                   "etc",
+                                   NULL);
+
+  return config_dir;
+}

@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-flatpak-subprocess-launcher"
 
 #include "gbp-flatpak-subprocess-launcher.h"
+#include "gbp-flatpak-util.h"
 
 struct _GbpFlatpakSubprocessLauncher
 {
