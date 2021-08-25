@@ -287,7 +287,7 @@ msgstr "Když je zapnuto, bude editor zobrazovat relativní čísla řádků."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:144
 msgid "Smart Backspace"
-msgstr "Chytrý Backaspace"
+msgstr "Chytrý Backspace"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
