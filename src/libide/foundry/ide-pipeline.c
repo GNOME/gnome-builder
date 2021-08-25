@@ -801,7 +801,7 @@ ide_pipeline_release_transients (IdePipeline *self)
           IDE_TRACE_MSG ("Releasing transient stage %s at index %u",
                          G_OBJECT_TYPE_NAME (entry->stage),
                          i - 1);
-          g_array_remove_index (self->pipeline, i);
+          g_array_remove_index (self->pipeline, i - 1);
           g_list_model_items_changed (G_LIST_MODEL (self), i - 1, 1, 0);
         }
     }
