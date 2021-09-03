@@ -86,8 +86,8 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
-    <release version="41.beta1" date="2021-08-25">
-      <p>Builder 41.beta1 is ready for testing!</p>
+    <release version="41.0" date="2021-09-03">
+      <p>Builder 41.0 is here!</p>
       <ul>
         <li>Builder now uses a private Flatpak installation for SDKs to avoid modifying the user's flatpak installation. It automatically uses Flathub, Flathub-beta, and GNOME Nightly Flatpak repositories with appropriate filters to get access to nightly and beta SDKs. This is necessary to support development against "master" once the SDKs branch for beta.</li>
         <li>Style scheme improvements.</li>
@@ -103,82 +103,6 @@
         <li>Session support for additional page types other than editors.</li>
         <li>Improvements to grep integration including project search and replace.</li>
       </ul>
-    </release>
-
-    <release version="41.alpha1" date="2021-07-19">
-      <p>Builder 41.alpha1 is ready for testing!</p>
-    </release>
-
-    <release version="40.0" date="2021-03-19">
-      <p>Builder 40.0 is finally here!</p>
-      <p>In this release you'll find a number of improvements on everything from UI enhancements to foundry tooling.</p>
-    </release>
-
-    <release version="3.39.94" date="2021-03-14">
-      <p>
-        Builder 40.rc is out and available for testing.
-      </p>
-    </release>
-
-    <release version="3.39.92" date="2021-03-02">
-      <p>
-        Builder 40.beta1 is out and available for testing.
-      </p>
-    </release>
-
-    <release version="3.39.90" date="2021-01-14">
-      <p>
-        Builder 40.alpha1 is out and available for testing.
-        Numerous improvements were made this cycle to underlying components.
-      </p>
-    </release>
-
-    <release version="3.38.0" date="2020-09-12">
-      <p>
-        Builder 3.38.0 contains a number of bug fixes and performance improvements.
-        It also includes support for the rust-analyzer language server in Rust projects.
-      </p>
-    </release>
-    <release version="3.37.92" date="2020-09-06">
-      <description>
-        <p>
-          Builder 3.37.92 contains a number of bug fixes leading up to the 3.38 release.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.37.1" date="2020-06-27">
-      <description>
-        <p>
-          Builder 3.37.1 is our first release towards 3.38.
-          It has a number of bugfixes and improvements including support for Rust Analyzer.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.36.0" date="2020-03-06">
-      <description>
-        <p>
-          Builder 3.36 provies a number of performance fixes, UI improvements, and bug fixes.
-          It also improves support for Vala, Rust, Python, and C/C++ languages.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.35.3" date="2020-01-02">
-      <description>
-        <p>
-          Builder 3.35.3 provies a number of bug fixes and UI improvements.
-        </p>
-      </description>
-    </release>
-
-    <release version="3.34.0" date="2019-09-09">
-      <description>
-        <p>
-          Builder 3.34.0 culminates six months of feature development, bugfixes, and performance improvements.
-        </p>
-      </description>
     </release>
   </releases>
 

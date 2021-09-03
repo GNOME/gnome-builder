@@ -1,3 +1,13 @@
+============
+Version 41.0
+============
+
+ • Fixes to markdown presentation with Pango
+ • Template fixes
+ • Allow installation of KDE and elementary Flatpak runtimes through
+   private flatpak installation
+ • Updated translations
+
 ================
 Version 41.beta1
 ================
