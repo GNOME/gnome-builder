@@ -5,23 +5,23 @@
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2021.
 # Henrique Machado Campos <henriquecamposrj@gmail.com>, 2021.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2016-2021.
 # Enrico Nicoletto <liverig@gmail.com>, 2016, 2018, 2021.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2016-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-19 21:08+0000\n"
-"PO-Revision-Date: 2021-08-19 18:47-0300\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
+"POT-Creation-Date: 2021-08-28 11:33+0000\n"
+"PO-Revision-Date: 2021-09-02 21:12-0300\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Generator: Gtranslator 40.0\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
@@ -1358,75 +1358,75 @@ msgstr "Meu computador (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Meu computador (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:823
+#: src/libide/foundry/ide-pipeline.c:824
 msgid "The build pipeline is in a failed state"
 msgstr "O encadeamento de compilação está em um estado de falha"
 
-#: src/libide/foundry/ide-pipeline.c:833
+#: src/libide/foundry/ide-pipeline.c:834
 msgid "The build configuration has errors"
 msgstr "A configuração de compilação possui erros"
 
-#: src/libide/foundry/ide-pipeline.c:3029
+#: src/libide/foundry/ide-pipeline.c:3030
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Criação de pseudoterminal falhou. Os recursos de terminal serão limitados."
 
-#: src/libide/foundry/ide-pipeline.c:3235
+#: src/libide/foundry/ide-pipeline.c:3236
 msgid "Cleaning…"
 msgstr "Limpando…"
 
-#: src/libide/foundry/ide-pipeline.c:3239
-#: src/libide/foundry/ide-pipeline.c:3296
+#: src/libide/foundry/ide-pipeline.c:3240
+#: src/libide/foundry/ide-pipeline.c:3297
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Falhou"
 
-#: src/libide/foundry/ide-pipeline.c:3241
-#: src/libide/foundry/ide-pipeline.c:3304
+#: src/libide/foundry/ide-pipeline.c:3242
+#: src/libide/foundry/ide-pipeline.c:3305
 msgid "Ready"
 msgstr "Pronto"
 
-#: src/libide/foundry/ide-pipeline.c:3256
+#: src/libide/foundry/ide-pipeline.c:3257
 msgid "Downloading…"
 msgstr "Baixando…"
 
-#: src/libide/foundry/ide-pipeline.c:3260
+#: src/libide/foundry/ide-pipeline.c:3261
 msgid "Building dependencies…"
 msgstr "Preferências de compilação…"
 
-#: src/libide/foundry/ide-pipeline.c:3264
+#: src/libide/foundry/ide-pipeline.c:3265
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/foundry/ide-pipeline.c:3268
+#: src/libide/foundry/ide-pipeline.c:3269
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/foundry/ide-pipeline.c:3272
+#: src/libide/foundry/ide-pipeline.c:3273
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Compilando…"
 
-#: src/libide/foundry/ide-pipeline.c:3276
+#: src/libide/foundry/ide-pipeline.c:3277
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/foundry/ide-pipeline.c:3280
+#: src/libide/foundry/ide-pipeline.c:3281
 msgid "Committing…"
 msgstr "Fazendo commit…"
 
-#: src/libide/foundry/ide-pipeline.c:3284
+#: src/libide/foundry/ide-pipeline.c:3285
 msgid "Exporting…"
 msgstr "Exportando…"
 
 # A resposta por ser Failed ou Successful -- Rafael
-#: src/libide/foundry/ide-pipeline.c:3288
-#: src/libide/foundry/ide-pipeline.c:3292
+#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3293
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Sucesso"
 
-#: src/libide/foundry/ide-pipeline.c:3300
+#: src/libide/foundry/ide-pipeline.c:3301
 msgid "Preparing…"
 msgstr "Preparando…"
 
@@ -1839,7 +1839,7 @@ msgstr "Mostra o menu da janela"
 msgid "Toggle window to fullscreen"
 msgstr "Alterna a janela para tela cheia"
 
-#: src/libide/gui/ide-marked-view.c:383
+#: src/libide/gui/ide-marked-view.c:391
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Não foi possível carregar HTML. Faltando suporte a WebKit."
 
@@ -4629,11 +4629,11 @@ msgstr ""
 "Habilita o uso do ESLint para localizar diagnósticos adicionais em programa "
 "JavaScript. Isso pode resultar na execução do código de seu projeto."
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:786
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:802
 msgid "Installation failed"
 msgstr "Instalação falhou"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:792
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:808
 msgid "Installation complete"
 msgstr "Instalação concluída"
 
@@ -4683,45 +4683,45 @@ msgstr ""
 msgid "Architecture"
 msgstr "Arquitetura"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:175
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
 msgstr "Criando o espaço de trabalho do Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:361
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:381
 msgid "Preparing build directory"
 msgstr "Preparando diretório de compilação"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:431
 msgid "Downloading dependencies"
 msgstr "Baixando dependências"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:510
 msgid "Building dependencies"
 msgstr "Compilando dependências"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:541
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
 msgid "Finalizing flatpak build"
 msgstr "Finalizando compilação Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:586
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:606
 msgid "Exporting staging directory"
 msgstr "Exportando diretório staging"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:671
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:691
 msgid "Creating flatpak bundle"
 msgstr "Criando um pacote Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:785
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:787
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:785
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:789
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4736,6 +4736,33 @@ msgid ""
 msgstr ""
 "O Builder está instalando os kits de desenvolvimento de software necessários "
 "para compilar o seu aplicativo."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
+#, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to update SDKs: %s"
+msgstr "Falha ao atualizar SDKs: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
+#| msgid "Installing Necessary SDKs"
+msgid "Updating Necessary SDKs"
+msgstr "Atualizando SDKs necessários"
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
+#| msgid ""
+#| "Builder is installing Software Development Kits necessary for building "
+#| "your application."
+msgid ""
+"Builder is updating Software Development Kits necessary for building your "
+"application."
+msgstr ""
+"O Builder está atualizando os kits de desenvolvimento de software "
+"necessários para compilar o seu aplicativo."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
+#| msgid "Updating Builder"
+msgid "Updating SDK Runtime"
+msgstr "Atualizando runtime do SDK"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
