@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-19 21:08+0000\n"
-"PO-Revision-Date: 2021-08-21 10:00+0100\n"
+"POT-Creation-Date: 2021-09-03 20:22+0000\n"
+"PO-Revision-Date: 2021-09-05 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -1289,73 +1289,73 @@ msgstr "Nire ordenagailua (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Nire ordenagailua (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:823
+#: src/libide/foundry/ide-pipeline.c:824
 msgid "The build pipeline is in a failed state"
 msgstr "Eraikuntza-kanalizazioa huts egindako egoeran dago"
 
-#: src/libide/foundry/ide-pipeline.c:833
+#: src/libide/foundry/ide-pipeline.c:834
 msgid "The build configuration has errors"
 msgstr "Eraikuntza-konfigurazioak erroreak ditu"
 
-#: src/libide/foundry/ide-pipeline.c:3029
+#: src/libide/foundry/ide-pipeline.c:3030
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Sasiterminalaren sorrerak huts egin du. Terminalaren eginbideak mugatuak izango dira."
 
-#: src/libide/foundry/ide-pipeline.c:3235
+#: src/libide/foundry/ide-pipeline.c:3236
 msgid "Cleaning…"
 msgstr "Garbitzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3239
-#: src/libide/foundry/ide-pipeline.c:3296
+#: src/libide/foundry/ide-pipeline.c:3240
+#: src/libide/foundry/ide-pipeline.c:3297
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "Huts egin du"
 
-#: src/libide/foundry/ide-pipeline.c:3241
-#: src/libide/foundry/ide-pipeline.c:3304
+#: src/libide/foundry/ide-pipeline.c:3242
+#: src/libide/foundry/ide-pipeline.c:3305
 msgid "Ready"
 msgstr "Prest"
 
-#: src/libide/foundry/ide-pipeline.c:3256
+#: src/libide/foundry/ide-pipeline.c:3257
 msgid "Downloading…"
 msgstr "Deskargatzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3260
+#: src/libide/foundry/ide-pipeline.c:3261
 msgid "Building dependencies…"
 msgstr "Mendekotasunak eraikitzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3264
+#: src/libide/foundry/ide-pipeline.c:3265
 msgid "Bootstrapping…"
 msgstr "Kargatzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3268
+#: src/libide/foundry/ide-pipeline.c:3269
 msgid "Configuring…"
 msgstr "Konfiguratzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3272
+#: src/libide/foundry/ide-pipeline.c:3273
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "Eraikitzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3276
+#: src/libide/foundry/ide-pipeline.c:3277
 msgid "Installing…"
 msgstr "Instalatzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3280
+#: src/libide/foundry/ide-pipeline.c:3281
 msgid "Committing…"
 msgstr "Egikaritzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3284
+#: src/libide/foundry/ide-pipeline.c:3285
 msgid "Exporting…"
 msgstr "Esportatzen…"
 
-#: src/libide/foundry/ide-pipeline.c:3288
-#: src/libide/foundry/ide-pipeline.c:3292
+#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3293
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "Ongi burutu da"
 
-#: src/libide/foundry/ide-pipeline.c:3300
+#: src/libide/foundry/ide-pipeline.c:3301
 msgid "Preparing…"
 msgstr "Prestatzen…"
 
@@ -1757,7 +1757,7 @@ msgstr "Erakutsi leihoen menua"
 msgid "Toggle window to fullscreen"
 msgstr "Txandakatu leihoa pantaila osora"
 
-#: src/libide/gui/ide-marked-view.c:383
+#: src/libide/gui/ide-marked-view.c:391
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Ezin da HTMLa kargatu. WebKit euskarria falta da."
 
@@ -4475,11 +4475,11 @@ msgid ""
 "This may result in the execution of code in your project."
 msgstr "Gaitu eslint-en erabilera Javascript fitxategietan diagnostiko gehigarriak aurkitzeko. Horrek kodea exekutatu dezake zure proiektuan."
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:786
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:802
 msgid "Installation failed"
 msgstr "Instalazioak huts egin du"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:792
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:808
 msgid "Installation complete"
 msgstr "Instalazioa osatu da"
 
@@ -4527,45 +4527,45 @@ msgstr "Builder-ek softwarea garatzeko honako kit-ak instalatu behar du zure pro
 msgid "Architecture"
 msgstr "Arkitektura"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:175
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
 msgstr "Flatpak laneko area sortzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:361
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:381
 msgid "Preparing build directory"
 msgstr "Eraikuntza-direktorioa prestatzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:431
 msgid "Downloading dependencies"
 msgstr "Mendekotasunak deskargatzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:510
 msgid "Building dependencies"
 msgstr "Mendekotasunak eraikitzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:541
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
 msgid "Finalizing flatpak build"
 msgstr "Flatpak eraikuntza amaitzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:586
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:606
 msgid "Exporting staging directory"
 msgstr "Konfigurazio-direktorioa esportatzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:671
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:691
 msgid "Creating flatpak bundle"
 msgstr "Flatpak bilduma sortzen"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:781
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:785
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:783
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:787
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:785
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:789
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4578,6 +4578,25 @@ msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
 msgstr "Builder zure aplikazioa eraikitzeko beharrezkoak diren Software Development Kit-ak instalatzen ari da."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
+#, c-format
+msgid "Failed to update SDKs: %s"
+msgstr "Huts egin du SDKak eguneratzeak: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
+msgid "Updating Necessary SDKs"
+msgstr "Beharrezkoak diren SDKak eguneratzen"
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
+msgid ""
+"Builder is updating Software Development Kits necessary for building your "
+"application."
+msgstr "Builder zure aplikazioa eraikitzeko beharrezkoak diren Software Development Kit-ak eguneratzen ari da."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
+msgid "Updating SDK Runtime"
+msgstr "SDK exekuzio-denbora eguneratzen"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
