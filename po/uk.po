@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-28 11:33+0000\n"
-"PO-Revision-Date: 2021-08-28 15:00+0300\n"
+"POT-Creation-Date: 2021-09-07 21:22+0000\n"
+"PO-Revision-Date: 2021-09-08 12:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -76,7 +76,7 @@ msgstr "Підтримка конфігурацій із багатьма мон
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
 msgid "Code overview mini-map"
-msgstr "Мінікартка для огляду коду"
+msgstr "Мінікарта для огляду коду"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:28
 msgid "Integration with Git"
@@ -163,6 +163,11 @@ msgstr "Швидкий загальний нечіткий пошук"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Діагностика за допомогою GNU debugger"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr ""
+"Використання мінікарти для повнішого перегляду вмісту файла"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -4718,19 +4723,14 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to update SDKs: %s"
 msgstr "Не вдалося оновити SDK: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
-#| msgid "Installing Necessary SDKs"
 msgid "Updating Necessary SDKs"
 msgstr "Оновлюємо потрібні для роботи SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
-#| msgid ""
-#| "Builder is installing Software Development Kits necessary for building "
-#| "your application."
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
@@ -4739,7 +4739,6 @@ msgstr ""
 "збирання вашої програми."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
-#| msgid "Updating Builder"
 msgid "Updating SDK Runtime"
 msgstr "Оновлюємо середовище виконання SDK"
 
