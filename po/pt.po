@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-28 11:33+0000\n"
-"PO-Revision-Date: 2021-08-28 12:53+0100\n"
+"POT-Creation-Date: 2021-09-07 21:22+0000\n"
+"PO-Revision-Date: 2021-09-08 15:28+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -162,6 +162,10 @@ msgstr "Pesquisa imprecisa global rápida"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Depurar como o depurador GNU"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr "Utilize o minimapa para ver mais do ficheiro"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
