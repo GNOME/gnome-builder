@@ -15,7 +15,6 @@ subdir('daemon')
 
 plugins_sources += files([
   'flatpak-plugin.c',
-  'gbp-flatpak-application-addin.c',
   'gbp-flatpak-build-system-discovery.c',
   'gbp-flatpak-build-target-provider.c',
   'gbp-flatpak-build-target.c',
@@ -30,6 +29,7 @@ plugins_sources += files([
   'gbp-flatpak-runner.c',
   'gbp-flatpak-runtime-provider.c',
   'gbp-flatpak-runtime.c',
+  'gbp-flatpak-sdk-stage.c',
   'gbp-flatpak-sources.c',
   'gbp-flatpak-subprocess-launcher.c',
   'gbp-flatpak-util.c',

@@ -74,6 +74,7 @@ render_node(GString          *out,
             cmark_node       *node,
             cmark_event_type  ev_type)
 {
+  g_autofree char *literal_escaped = NULL;
   gboolean entering;
 
   g_assert (out != NULL);
@@ -102,21 +103,24 @@ render_node(GString          *out,
 
     case CMARK_NODE_CODE_BLOCK:
     case CMARK_NODE_CODE:
+      literal_escaped = g_markup_escape_text (cmark_node_get_literal (node), -1);
       g_string_append (out, "<tt>");
-      g_string_append (out, cmark_node_get_literal (node));
+      g_string_append (out, literal_escaped);
       g_string_append (out, "</tt>");
       break;
 
     case CMARK_NODE_TEXT:
-      g_string_append (out, cmark_node_get_literal (node));
+      literal_escaped = g_markup_escape_text (cmark_node_get_literal (node), -1);
+      g_string_append (out, literal_escaped);
       break;
 
     /* Normal nodes, these have exit events if they are not leaf nodes */
     case CMARK_NODE_EMPH:
       if (entering)
         {
+          literal_escaped = g_markup_escape_text (cmark_node_get_literal (node), -1);
           g_string_append (out, "<i>");
-          g_string_append (out, cmark_node_get_literal (node));
+          g_string_append (out, literal_escaped);
         }
       if (!entering || node_is_leaf (node))
         {
@@ -127,8 +131,9 @@ render_node(GString          *out,
     case CMARK_NODE_STRONG:
       if (entering)
         {
+          literal_escaped = g_markup_escape_text (cmark_node_get_literal (node), -1);
           g_string_append (out, "<b>");
-          g_string_append (out, cmark_node_get_literal (node));
+          g_string_append (out, literal_escaped);
         }
       if (!entering || node_is_leaf (node))
         {
@@ -263,11 +268,14 @@ render_node(GString          *out,
     default:
       if (entering)
         {
-          const gchar* literal;
+          const gchar *literal;
           literal = cmark_node_get_literal (node);
 
           if (literal != NULL)
-            g_string_append (out, literal);
+            {
+              literal_escaped = g_markup_escape_text (literal, -1);
+              g_string_append (out, literal_escaped);
+            }
         }
       break;
     }
@@ -344,7 +352,7 @@ ide_marked_view_init (IdeMarkedView *self)
 GtkWidget *
 ide_marked_view_new (IdeMarkedContent *content)
 {
-  const gchar* markup;
+  const gchar *markup;
   gsize markup_len;
   GtkWidget *child = NULL;
   IdeMarkedView *self;

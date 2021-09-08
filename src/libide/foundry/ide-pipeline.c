@@ -801,7 +801,8 @@ ide_pipeline_release_transients (IdePipeline *self)
           IDE_TRACE_MSG ("Releasing transient stage %s at index %u",
                          G_OBJECT_TYPE_NAME (entry->stage),
                          i - 1);
-          g_array_remove_index (self->pipeline, i);
+          g_array_remove_index (self->pipeline, i - 1);
+          g_list_model_items_changed (G_LIST_MODEL (self), i - 1, 1, 0);
         }
     }
 
@@ -2068,7 +2069,7 @@ ide_pipeline_task_notify_completed (IdePipeline *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
 
   /*
-   * XXX: How do we ensure transients are buildd with the part of the
+   * XXX: How do we ensure transients are built with the part of the
    *      pipeline we care about? We might just need to ensure that :busy is
    *      FALSE before adding transients.
    */

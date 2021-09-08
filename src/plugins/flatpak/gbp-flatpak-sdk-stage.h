@@ -1,6 +1,6 @@
-/* gbp-flatpak-application-addin.h
+/* gbp-flatpak-sdk-stage.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,14 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_FLATPAK_APPLICATION_ADDIN (gbp_flatpak_application_addin_get_type())
+#define GBP_TYPE_FLATPAK_SDK_STAGE (gbp_flatpak_sdk_stage_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakApplicationAddin, gbp_flatpak_application_addin, GBP, FLATPAK_APPLICATION_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpFlatpakSdkStage, gbp_flatpak_sdk_stage, GBP, FLATPAK_SDK_STAGE, IdePipelineStage)
+
+GbpFlatpakSdkStage *gbp_flatpak_sdk_stage_new (const char * const *sdks);
 
 G_END_DECLS
-

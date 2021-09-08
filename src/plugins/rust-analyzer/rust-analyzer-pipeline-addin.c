@@ -320,8 +320,8 @@ rust_analyzer_pipeline_addin_prepare (IdePipelineAddin *addin,
 
   notif = ide_notification_new ();
   ide_notification_set_id (notif, "org.gnome.builder.rust-analyzer");
-  ide_notification_set_title (notif, "Could not find rust-analyzer.");
-  ide_notification_set_body (notif, "Install rust-analyzer in your PATH or using rustup, or use the Rust flatpak extension in your manifest.");
+  ide_notification_set_title (notif, "Could not find rust-analyzer");
+  ide_notification_set_body (notif, "Install rust-analyzer in your PATH using rustup, or use the Rust flatpak extension in your manifest.");
   ide_notification_set_urgent (notif, TRUE);
   ide_notification_attach (notif, IDE_OBJECT (pipeline));
 

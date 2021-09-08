@@ -1,6 +1,6 @@
-/* gbp-flatpak-util.h
+/* ipc-flatpak-service-impl.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,17 @@
 
 #pragma once
 
-#include <libide-foundry.h>
+#include <flatpak/flatpak.h>
 
 G_BEGIN_DECLS
 
-const char *gbp_flatpak_get_config_dir   (void);
-const char *gbp_flatpak_get_default_arch (IdeObject         *object);
-gboolean    gbp_flatpak_is_ignored       (const gchar       *name);
-gchar      *gbp_flatpak_get_repo_dir     (IdeContext        *context);
-gchar      *gbp_flatpak_get_staging_dir  (IdePipeline       *pipeline);
-gboolean    gbp_flatpak_split_id         (const gchar       *str,
-                                          gchar            **id,
-                                          gchar            **arch,
-                                          gchar            **branch);
+#define IPC_TYPE_FLATPAK_REPO (ipc_flatpak_repo_get_type())
+
+G_DECLARE_FINAL_TYPE (IpcFlatpakRepo, ipc_flatpak_repo, IPC, FLATPAK_REPO, GObject)
+
+IpcFlatpakRepo      *ipc_flatpak_repo_get_default      (void);
+FlatpakInstallation *ipc_flatpak_repo_get_installation (IpcFlatpakRepo  *self);
+char                *ipc_flatpak_repo_get_path         (IpcFlatpakRepo  *self);
+char                *ipc_flatpak_repo_get_config_dir   (IpcFlatpakRepo  *self);
 
 G_END_DECLS

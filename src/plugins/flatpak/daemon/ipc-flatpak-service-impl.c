@@ -25,6 +25,7 @@
 #include <flatpak/flatpak.h>
 #include <glib/gi18n.h>
 
+#include "ipc-flatpak-repo.h"
 #include "ipc-flatpak-service-impl.h"
 #include "ipc-flatpak-transfer.h"
 #include "ipc-flatpak-util.h"
@@ -653,6 +654,7 @@ ipc_flatpak_service_impl_install_changed_cb (IpcFlatpakServiceImpl *self,
 
 typedef struct
 {
+  FlatpakRef *fref;
   char *ref;
   char *remote;
 } InstallRef;
@@ -729,16 +731,29 @@ connect_signals (FlatpakTransaction  *transaction,
 }
 
 static gboolean
-add_refs_to_transaction (FlatpakTransaction  *transaction,
-                         GArray              *refs,
-                         GError             **error)
+add_refs_to_transaction (IpcFlatpakServiceImpl  *self,
+                         FlatpakTransaction     *transaction,
+                         GArray                 *refs,
+                         GError                **error)
 {
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (FLATPAK_IS_TRANSACTION (transaction));
+  g_assert (refs != NULL);
+
   for (guint i = 0; i < refs->len; i++)
     {
       const InstallRef *ref = &g_array_index (refs, InstallRef, i);
 
-      if (!flatpak_transaction_add_install (transaction, ref->remote, ref->ref, NULL, error))
-        return FALSE;
+      if (is_installed (self, ref->fref))
+        {
+          if (!flatpak_transaction_add_update (transaction, ref->ref, NULL, NULL, error))
+            return FALSE;
+        }
+      else
+        {
+          if (!flatpak_transaction_add_install (transaction, ref->remote, ref->ref, NULL, error))
+            return FALSE;
+        }
     }
 
   return TRUE;
@@ -751,6 +766,7 @@ install_worker (GTask        *task,
                 GCancellable *cancellable)
 {
   InstallState *state = task_data;
+  IpcFlatpakServiceImpl *self = source_object;
   g_autoptr(FlatpakTransaction) transaction = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) ref_ids = NULL;
@@ -777,7 +793,7 @@ install_worker (GTask        *task,
       complete_wrapped_error (g_steal_pointer (&state->invocation), g_steal_pointer (&error));
     }
   else if (!(transaction = flatpak_transaction_new_for_installation (state->installation, state->cancellable, &error)) ||
-           !add_refs_to_transaction (transaction, state->refs, &error) ||
+           !add_refs_to_transaction (self, transaction, state->refs, &error) ||
            !connect_signals (transaction, state->transfer, &error) ||
            !flatpak_transaction_run (transaction, state->cancellable, &error))
     {
@@ -809,23 +825,24 @@ refs_equal (FlatpakRef *a,
 }
 
 static char *
-find_remote_for_ref (IpcFlatpakServiceImpl *self,
-                     FlatpakRef            *ref)
+find_remote_for_ref (IpcFlatpakServiceImpl  *self,
+                     FlatpakRef             *ref,
+                     FlatpakInstallation   **installation)
 {
   FlatpakQueryFlags flags = FLATPAK_QUERY_FLAGS_NONE;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_REF (ref));
 
+#if FLATPAK_CHECK_VERSION(1, 11, 2)
   /* If this is not the default architecture, we need to force that we've
    * loaded sub-summaries or we won't find any matches for the arch. Otherwise
    * the cached form is fine (and faster).
    */
-  if (str_equal0 (flatpak_get_default_arch (), flatpak_ref_get_arch (ref)))
-    flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
-#if FLATPAK_CHECK_VERSION(1, 11, 2)
-  else
+  if (!str_equal0 (flatpak_get_default_arch (), flatpak_ref_get_arch (ref)))
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
+#else
+# warning "Flatpak is too old, searching for alternate arches will not work"
 #endif
 
   /* Someday we might want to prompt the user for which remote to install from,
@@ -853,10 +870,17 @@ find_remote_for_ref (IpcFlatpakServiceImpl *self,
               FlatpakRef *remote_ref = g_ptr_array_index (refs, k);
 
               if (refs_equal (ref, remote_ref))
-                return g_strdup (name);
+                {
+                  if (installation != NULL)
+                    *installation = g_object_ref (install->installation);
+                  return g_strdup (name);
+                }
             }
         }
     }
+
+  if (installation != NULL)
+    *installation = NULL;
 
   return NULL;
 }
@@ -866,8 +890,44 @@ clear_install_ref (gpointer data)
 {
   InstallRef *r = data;
 
+  g_clear_object (&r->fref);
   g_free (r->ref);
   g_free (r->remote);
+}
+
+static FlatpakInstallation *
+find_installation_for_refs (IpcFlatpakServiceImpl *self,
+                            GArray                *refs)
+{
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (refs != NULL);
+
+  if (refs->len == 1)
+    {
+      g_autoptr(FlatpakInstallation) install = NULL;
+      g_autofree char *remote = NULL;
+      InstallRef *ir = &g_array_index (refs, InstallRef, 0);
+      const char *name = flatpak_ref_get_name (ir->fref);
+      const char *arch = flatpak_ref_get_arch (ir->fref);
+      const char *branch = flatpak_ref_get_branch (ir->fref);
+
+      /* First try to find if the ref is already installed */
+      for (guint i = 0; i < self->runtimes->len; i++)
+        {
+          const Runtime *r = g_ptr_array_index (self->runtimes, i);
+
+          if (str_equal0 (name, r->name) &&
+              str_equal0 (arch, r->arch) &&
+              str_equal0 (branch, r->branch))
+            return g_object_ref (r->installation);
+        }
+
+      /* Now see if it is found in a configured remote */
+      if ((remote = find_remote_for_ref (self, ir->fref, &install)))
+        return g_steal_pointer (&install);
+    }
+
+  return ipc_flatpak_service_impl_ref_user_installation (self);
 }
 
 static gboolean
@@ -920,26 +980,28 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
         continue;
 
       if (ref == NULL ||
-          !(iref.remote = find_remote_for_ref (self, ref)))
+          !(iref.remote = find_remote_for_ref (self, ref, NULL)))
         {
           g_dbus_method_invocation_return_error (g_steal_pointer (&invocation),
                                                  G_DBUS_ERROR,
                                                  G_DBUS_ERROR_FAILED,
-                                                 "No configured remote contains ref");
+                                                 "No configured remote contains ref \"%s\"",
+                                                 full_ref_names[i]);
           return TRUE;
         }
 
+      iref.fref = g_steal_pointer (&ref);
       iref.ref = g_strdup (full_ref_names[i]);
       g_array_append_val (refs, iref);
     }
 
   state = g_slice_new0 (InstallState);
   state->cancellable = g_cancellable_new ();
-  state->installation = ipc_flatpak_service_impl_ref_user_installation (self);
   state->invocation = g_steal_pointer (&invocation);
   state->refs = g_array_ref (refs);
   state->parent_window = parent_window[0] ? g_strdup (parent_window) : NULL;
   state->transfer = g_object_ref (transfer);
+  state->installation = find_installation_for_refs (self, refs);
 
   g_signal_connect_object (transfer,
                            "cancel",
@@ -1006,11 +1068,11 @@ resolve_extension (GPtrArray  *installations,
   if (sdk_arch == NULL)
     sdk_arch = g_strdup (flatpak_get_default_arch ());
 
-  if (str_equal0 (sdk_arch, flatpak_get_default_arch ()))
-    flags |= FLATPAK_QUERY_FLAGS_ONLY_CACHED;
 #if FLATPAK_CHECK_VERSION(1, 11, 2)
-  else
+  if (!str_equal0 (sdk_arch, flatpak_get_default_arch ()))
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
+#else
+# warning "Flatpak is too old, searching for alternate arches will not work"
 #endif
 
   strings = g_string_chunk_new (4096);
@@ -1321,9 +1383,11 @@ static void
 ipc_flatpak_service_impl_constructed (GObject *object)
 {
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)object;
+  IpcFlatpakRepo *repo = ipc_flatpak_repo_get_default ();
   g_autoptr(GPtrArray) installations = NULL;
   g_autoptr(FlatpakInstallation) user = NULL;
   g_autoptr(GFile) user_file = NULL;
+  FlatpakInstallation *priv_install;
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->constructed (object);
 
@@ -1337,6 +1401,18 @@ ipc_flatpak_service_impl_constructed (GObject *object)
     {
       for (guint i = 0; i < installations->len; i++)
         add_installation (self, g_ptr_array_index (installations, i), NULL);
+    }
+
+  /* Fallback for SDKs not available elsewhere */
+  if ((priv_install = ipc_flatpak_repo_get_installation (repo)))
+    {
+      g_autofree char *config_dir = ipc_flatpak_repo_get_config_dir (repo);
+      g_autofree char *path = ipc_flatpak_repo_get_path (repo);
+
+      add_installation (self, priv_install, NULL);
+      ipc_flatpak_service_set_config_dir (IPC_FLATPAK_SERVICE (self), config_dir);
+
+      g_debug ("Added installation at %s and FLATPAK_CONFIG_DIR %s", config_dir, path);
     }
 }
 

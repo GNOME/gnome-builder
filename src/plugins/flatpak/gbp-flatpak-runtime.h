@@ -41,5 +41,6 @@ const gchar         *gbp_flatpak_runtime_get_branch   (GbpFlatpakRuntime *self);
 const gchar         *gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self);
 const gchar         *gbp_flatpak_runtime_get_sdk      (GbpFlatpakRuntime *self);
 gchar               *gbp_flatpak_runtime_get_sdk_name (GbpFlatpakRuntime *self);
+char               **gbp_flatpak_runtime_get_refs     (GbpFlatpakRuntime *self);
 
 G_END_DECLS

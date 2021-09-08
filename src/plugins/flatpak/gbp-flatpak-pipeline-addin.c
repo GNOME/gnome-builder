@@ -147,11 +147,15 @@ static IdeSubprocessLauncher *
 create_subprocess_launcher (void)
 {
   IdeSubprocessLauncher *launcher;
+  const char *config_dir;
+
+  config_dir = gbp_flatpak_get_config_dir ();
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                           G_SUBPROCESS_FLAGS_STDERR_PIPE);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_setenv (launcher, "FLATPAK_CONFIG_DIR", config_dir, TRUE);
 
   return launcher;
 }
@@ -285,7 +289,7 @@ reap_staging_dir (IdePipelineStage      *stage,
 
 static gboolean
 register_build_init_stage (GbpFlatpakPipelineAddin  *self,
-                           IdePipeline         *pipeline,
+                           IdePipeline              *pipeline,
                            IdeContext               *context,
                            GError                  **error)
 {
@@ -294,6 +298,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *sdk = NULL;
   g_autofree gchar *arch = NULL;
+  const char * const *sdk_extensions = NULL;
   IdeConfig *config;
   IdeRuntime *runtime;
   const gchar *app_id;
@@ -326,6 +331,9 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   sdk = gbp_flatpak_runtime_get_sdk_name (GBP_FLATPAK_RUNTIME (runtime));
   branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
 
+  if (GBP_IS_FLATPAK_MANIFEST (config))
+    sdk_extensions = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (config));
+
   /*
    * If we got here by using a non-flatpak configuration, then there is a
    * chance we don't have a valid app-id.
@@ -350,12 +358,24 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "build-init");
+  ide_subprocess_launcher_push_argv (launcher, "--type=app");
   ide_subprocess_launcher_push_argv (launcher, arch);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
   ide_subprocess_launcher_push_argv (launcher, app_id);
   ide_subprocess_launcher_push_argv (launcher, sdk);
   ide_subprocess_launcher_push_argv (launcher, platform);
   ide_subprocess_launcher_push_argv (launcher, branch);
+
+  if (sdk_extensions != NULL)
+    {
+      for (guint i = 0; sdk_extensions[i]; i++)
+        {
+          g_auto(GStrv) split = g_strsplit (sdk_extensions[i], "/", 2);
+          g_autofree char *arg = g_strdup_printf ("--sdk-extension=%s", split[0]);
+
+          ide_subprocess_launcher_push_argv (launcher, arg);
+        }
+    }
 
   stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                         "name", _("Preparing build directory"),

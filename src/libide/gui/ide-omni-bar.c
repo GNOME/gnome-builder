@@ -496,18 +496,21 @@ ide_omni_bar_init (IdeOmniBar *self)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->gesture), TRUE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->gesture), GDK_BUTTON_PRIMARY);
-  g_signal_connect_swapped (self->gesture,
-                            "pressed",
-                            G_CALLBACK (multipress_pressed_cb),
-                            self);
-  g_signal_connect_swapped (self->gesture,
-                            "released",
-                            G_CALLBACK (multipress_released_cb),
-                            self);
-  g_signal_connect_swapped (self->gesture,
-                            "cancel",
-                            G_CALLBACK (multipress_cancel_cb),
-                            self);
+  g_signal_connect_object (self->gesture,
+                           "pressed",
+                           G_CALLBACK (multipress_pressed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->gesture,
+                           "released",
+                           G_CALLBACK (multipress_released_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->gesture,
+                           "cancel",
+                           G_CALLBACK (multipress_cancel_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->notification_stack,
                            "changed",

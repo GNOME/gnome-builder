@@ -34,6 +34,7 @@
 #include <sys/procctl.h>
 #endif
 
+#include "ipc-flatpak-repo.h"
 #include "ipc-flatpak-service.h"
 #include "ipc-flatpak-service-impl.h"
 
@@ -109,6 +110,9 @@ main (gint argc,
 
   g_dbus_connection_set_exit_on_close (connection, FALSE);
   g_signal_connect_swapped (connection, "closed", G_CALLBACK (g_main_loop_quit), main_loop);
+
+  /* Setup private flatpak installation immediately */
+  (void)ipc_flatpak_repo_get_default ();
 
   service = ipc_flatpak_service_impl_new ();
 

@@ -13,8 +13,8 @@ flatpak:
     APP_ID: "org.gnome.Builder"
     BUNDLE: "gnome-builder-git.flatpak"
   before_script:
-    - flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    - flatpak --user install -y flathub-beta org.freedesktop.Sdk.Extension.llvm12//21.08beta
+    - flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    - flatpak --user install -y flathub org.freedesktop.Sdk.Extension.llvm12//21.08
 
 nightly:
     extends: '.publish_nightly'

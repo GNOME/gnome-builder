@@ -39,7 +39,7 @@ typedef struct
   gchar               *stdout_path;
   GOutputStream       *stdout_stream;
   gint                 n_pause;
-  IdePipelinePhase        phase;
+  IdePipelinePhase     phase;
   guint                completed : 1;
   guint                disabled : 1;
   guint                transient : 1;
@@ -299,6 +299,10 @@ ide_pipeline_stage_get_property (GObject    *object,
       g_value_set_string (value, ide_pipeline_stage_get_stdout_path (self));
       break;
 
+    case PROP_TRANSIENT:
+      g_value_set_boolean (value, ide_pipeline_stage_get_transient (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -336,6 +340,10 @@ ide_pipeline_stage_set_property (GObject      *object,
 
     case PROP_STDOUT_PATH:
       ide_pipeline_stage_set_stdout_path (self, g_value_get_string (value));
+      break;
+
+    case PROP_TRANSIENT:
+      ide_pipeline_stage_set_transient (self, g_value_get_boolean (value));
       break;
 
     default:

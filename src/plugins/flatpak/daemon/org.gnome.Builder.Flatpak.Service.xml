@@ -22,6 +22,10 @@
   -->
   <interface name="org.gnome.Builder.Flatpak.Service">
     <!--
+      The directory to use for FLATPAK_CONFIG_DIR.
+    -->
+    <property name="ConfigDir" type="s" access="read"/>
+    <!--
       The default architecture of the system, such as "x86_64".
     -->
     <property name="DefaultArch" type="s" access="read"/>

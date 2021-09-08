@@ -27,7 +27,6 @@
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
-#include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-build-system-discovery.h"
 #include "gbp-flatpak-build-target-provider.h"
 #include "gbp-flatpak-config-provider.h"
@@ -40,9 +39,6 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
 {
   ide_g_file_add_ignored_pattern (".flatpak-builder");
 
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_ADDIN,
-                                              GBP_TYPE_FLATPAK_APPLICATION_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
                                               GBP_TYPE_FLATPAK_BUILD_SYSTEM_DISCOVERY);

@@ -176,6 +176,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       const gchar *builddir = NULL;
       const gchar *project_path = NULL;
       const gchar * const *build_args = NULL;
+      const gchar *config_dir = gbp_flatpak_get_config_dir ();
       g_autoptr(IdeConfigManager) config_manager = NULL;
       IdeConfig *configuration;
       IdeVcs *vcs;
@@ -193,6 +194,9 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       /* Add 'flatpak build' and the specified arguments to the launcher */
       ide_subprocess_launcher_push_argv (ret, "flatpak");
       ide_subprocess_launcher_push_argv (ret, "build");
+
+      /* Get access to override installations */
+      ide_subprocess_launcher_setenv (ret, "FLATPAK_CONFIG_DIR", config_dir, TRUE);
 
       if (GBP_IS_FLATPAK_MANIFEST (configuration))
         build_args = gbp_flatpak_manifest_get_build_args (GBP_FLATPAK_MANIFEST (configuration));
@@ -796,4 +800,27 @@ gbp_flatpak_runtime_new (const char *name,
                        "platform", name,
                        "sdk", sdk_name,
                        NULL);
+}
+
+char **
+gbp_flatpak_runtime_get_refs (GbpFlatpakRuntime *self)
+{
+  GPtrArray *ar;
+  g_autofree char *sdk = NULL;
+  g_autofree char *platform = NULL;
+  const char *arch;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  arch = ide_triplet_get_arch (self->triplet);
+  platform = g_strdup_printf ("runtime/%s/%s/%s", self->platform, arch, self->branch);
+  sdk = g_strdup_printf ("runtime/%s/%s/%s", self->sdk, arch, self->branch);
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_add (ar, g_steal_pointer (&sdk));
+  if (g_strcmp0 (sdk, platform) != 0)
+    g_ptr_array_add (ar, g_steal_pointer (&platform));
+  g_ptr_array_add (ar, NULL);
+
+  return (char **)g_ptr_array_free (ar, FALSE);
 }
