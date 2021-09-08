@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <unistd.h>
 
+#include "gbp-flatpak-aux.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runner.h"
 #include "gbp-flatpak-util.h"
@@ -108,6 +109,8 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   ide_subprocess_launcher_insert_argv (launcher, i++, "--with-appdir");
   ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
   ide_subprocess_launcher_insert_argv (launcher, i++, doc_portal);
+
+  i += gbp_flatpak_aux_apply (launcher, i);
 
   if (GBP_IS_FLATPAK_MANIFEST (config))
     {

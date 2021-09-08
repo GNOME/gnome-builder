@@ -27,6 +27,7 @@
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
+#include "gbp-flatpak-aux.h"
 #include "gbp-flatpak-build-system-discovery.h"
 #include "gbp-flatpak-build-target-provider.h"
 #include "gbp-flatpak-config-provider.h"
@@ -57,4 +58,6 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PIPELINE_ADDIN,
                                               GBP_TYPE_FLATPAK_PIPELINE_ADDIN);
+
+  gbp_flatpak_aux_init ();
 }
