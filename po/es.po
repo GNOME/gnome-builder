@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-09-03 20:22+0000\n"
-"PO-Revision-Date: 2021-09-06 12:40+0200\n"
+"POT-Creation-Date: 2021-09-07 21:22+0000\n"
+"PO-Revision-Date: 2021-09-08 17:57+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -165,6 +165,11 @@ msgstr "Búsqueda difusa global rápida"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Depurar con el depurador de GNU"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+#| msgid "The short name of the file."
+msgid "Use the minimap to see more of the file"
+msgstr "Use el minimapa para ver más del archivo"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -4740,19 +4745,14 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to update SDKs: %s"
 msgstr "Falló al actualizar los SDK: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
-#| msgid "Installing Necessary SDKs"
 msgid "Updating Necessary SDKs"
 msgstr "Actualizando los SDK necesarios"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
-#| msgid ""
-#| "Builder is installing Software Development Kits necessary for building "
-#| "your application."
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
@@ -4761,7 +4761,6 @@ msgstr ""
 "construir su aplicación."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
-#| msgid "Updating Builder"
 msgid "Updating SDK Runtime"
 msgstr "Actualizando las rutinas SDK"
 
@@ -8401,9 +8400,6 @@ msgstr ""
 
 #~ msgid "The file information for the project file."
 #~ msgstr "La información del archivo para el archivo del proyecto."
-
-#~ msgid "The short name of the file."
-#~ msgstr "El nombre corto del archivo"
 
 #~ msgid "The project directory."
 #~ msgstr "La carpeta del proyecto."
