@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-28 11:33+0000\n"
-"PO-Revision-Date: 2021-09-03 00:41+0200\n"
+"POT-Creation-Date: 2021-09-07 21:22+0000\n"
+"PO-Revision-Date: 2021-09-08 11:42+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-DL-Module: gnome-builder\n"
 "X-DL-Branch: master\n"
 "X-DL-Domain: po\n"
-"X-DL-State: None\n"
+"X-DL-State: Translating\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -163,6 +163,10 @@ msgstr "Busca difusa global rápida"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Depure co GNU debugger"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr "Use o minimapa para ver máis do ficheiro"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -4721,19 +4725,14 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to update SDKs: %s"
 msgstr "Produciuse un fallo ao actualizar os SDKs: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
-#| msgid "Installing Necessary SDKs"
 msgid "Updating Necessary SDKs"
 msgstr "Actualizando os SDKs necesarios"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
-#| msgid ""
-#| "Builder is installing Software Development Kits necessary for building "
-#| "your application."
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
@@ -4742,7 +4741,6 @@ msgstr ""
 "necesarios para construír a súa aplicación."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
-#| msgid "Updating Builder"
 msgid "Updating SDK Runtime"
 msgstr "Actualizando o Runtime do SDK"
 
