@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <ide-gfile-private.h>
+
 #include "gbp-flatpak-aux.h"
 
 #define SYSTEM_FONTS_DIR       "/usr/share/fonts"
@@ -28,7 +30,7 @@
  * /var/cache/fontconfig inside of flatpak. We really need another
  * way of checking this, but this is good enough for now.
  */
-#define SYSTEM_FONT_CACHE_DIRS "/usr/lib/fontconfig/cache:/var/cache/fontconfig"
+#define SYSTEM_FONT_CACHE_DIRS "/var/cache/fontconfig:/usr/lib/fontconfig/cache"
 
 /* The goal of this file is to help us setup things that might be
  * needed for applications to look/work right even though they are
@@ -104,7 +106,9 @@ gbp_flatpak_aux_init (void)
   system_cache_dirs = g_strsplit (SYSTEM_FONT_CACHE_DIRS, ":", 0);
   for (i = 0; system_cache_dirs[i] != NULL; i++)
     {
-      if (g_file_test (system_cache_dirs[i], G_FILE_TEST_EXISTS))
+      g_autoptr(GFile) file = g_file_new_for_path (system_cache_dirs[i]);
+
+      if (_ide_g_file_query_exists_on_host (file, NULL))
         {
           /* TODO: How can we *force* this read-only? */
           g_ptr_array_add (maps,
@@ -118,7 +122,7 @@ gbp_flatpak_aux_init (void)
   user2 = g_file_new_build_filename (g_get_home_dir (), ".fonts", NULL);
   user_cache = g_file_new_build_filename (cache_dir, "fontconfig", NULL);
 
-  if (g_file_query_exists (user1, NULL))
+  if (_ide_g_file_query_exists_on_host (user1, NULL))
     {
       g_ptr_array_add (maps, g_strdup_printf ("--filesystem=%s:ro", g_file_peek_path (user1)));
       g_string_append_printf (xml_snippet,
@@ -126,7 +130,7 @@ gbp_flatpak_aux_init (void)
                               g_file_peek_path (user1));
 
     }
-  else if (g_file_query_exists (user2, NULL))
+  else if (_ide_g_file_query_exists_on_host (user2, NULL))
     {
       g_ptr_array_add (maps, g_strdup_printf ("--filesystem=%s:ro", g_file_peek_path (user2)));
       g_string_append_printf (xml_snippet,
@@ -134,7 +138,7 @@ gbp_flatpak_aux_init (void)
                               g_file_peek_path (user2));
     }
 
-  if (g_file_query_exists (user_cache, NULL))
+  if (_ide_g_file_query_exists_on_host (user_cache, NULL))
     {
       g_ptr_array_add (maps, g_strdup_printf ("--filesystem=%s:ro", g_file_peek_path (user_cache)));
       g_ptr_array_add (maps, g_strdup_printf ("--bind-mount=/run/host/user-fonts-cache=%s",
