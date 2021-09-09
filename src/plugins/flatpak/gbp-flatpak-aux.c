@@ -23,7 +23,12 @@
 #include "gbp-flatpak-aux.h"
 
 #define SYSTEM_FONTS_DIR       "/usr/share/fonts"
-#define SYSTEM_FONT_CACHE_DIRS "/var/cache/fontconfig:/usr/lib/fontconfig/cache"
+
+/* dirs are reversed from flatpak because we will always have
+ * /var/cache/fontconfig inside of flatpak. We really need another
+ * way of checking this, but this is good enough for now.
+ */
+#define SYSTEM_FONT_CACHE_DIRS "/usr/lib/fontconfig/cache:/var/cache/fontconfig"
 
 /* The goal of this file is to help us setup things that might be
  * needed for applications to look/work right even though they are
