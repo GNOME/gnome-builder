@@ -1050,6 +1050,7 @@ _ide_g_file_query_exists_on_host (GFile        *file,
     return g_file_query_exists (file, cancellable);
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_push_argv (launcher, "ls");
   ide_subprocess_launcher_push_argv (launcher, "-d");
   ide_subprocess_launcher_push_argv (launcher, g_file_peek_path (file));
