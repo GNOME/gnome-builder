@@ -1032,3 +1032,30 @@ ide_g_file_find_in_ancestors_finish (GAsyncResult  *result,
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
+
+gboolean
+_ide_g_file_query_exists_on_host (GFile        *file,
+                                  GCancellable *cancellable)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  if (!g_file_is_native (file))
+    return FALSE;
+
+  if (!ide_is_flatpak ())
+    return g_file_query_exists (file, cancellable);
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  ide_subprocess_launcher_push_argv (launcher, "ls");
+  ide_subprocess_launcher_push_argv (launcher, "-d");
+  ide_subprocess_launcher_push_argv (launcher, g_file_peek_path (file));
+
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
+    return FALSE;
+
+  return ide_subprocess_wait_check (subprocess, cancellable, NULL);
+}

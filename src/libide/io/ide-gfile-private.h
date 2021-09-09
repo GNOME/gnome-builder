@@ -24,6 +24,8 @@
 
 G_BEGIN_DECLS
 
-GFile *_ide_g_file_readlink (GFile *file);
+GFile    *_ide_g_file_readlink             (GFile        *file);
+gboolean  _ide_g_file_query_exists_on_host (GFile        *file,
+                                            GCancellable *cancellable);
 
 G_END_DECLS
