@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-09-03 20:22+0000\n"
-"PO-Revision-Date: 2021-09-05 21:01+0200\n"
+"POT-Creation-Date: 2021-09-07 21:22+0000\n"
+"PO-Revision-Date: 2021-09-09 13:21+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -161,6 +161,10 @@ msgstr "Căutare globală rapidă fuzzy"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Depanați cu depanatorul GNU"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr "Utilizați harta în miniatură pentru a vedea mai mult din fișier"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
