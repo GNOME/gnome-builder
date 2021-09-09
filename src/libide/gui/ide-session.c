@@ -934,7 +934,8 @@ on_session_addin_page_saved_cb (GObject      *object,
 
       g_variant_builder_add_value (&s->pages_state, g_variant_dict_end (&state_dict));
     }
-  g_free (save_page);
+
+  g_slice_free (SavePage, save_page);
 
   s->active--;
 
