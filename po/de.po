@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-28 11:33+0000\n"
-"PO-Revision-Date: 2021-08-29 16:13+0200\n"
+"POT-Creation-Date: 2021-09-07 21:22+0000\n"
+"PO-Revision-Date: 2021-09-10 18:15+0200\n"
 "Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -169,6 +169,10 @@ msgstr "Schnelle, globale, fehlertolerante Suche"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Fehlerdiagnose mit dem GNU Debugger"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr "Nutzen Sie die Minimap, um mehr von der Datei zu sehen"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -1693,12 +1697,12 @@ msgstr "GNOME Builder"
 #: src/libide/gui/ide-application-actions.c:149
 msgid "translator-credits"
 msgstr ""
-"Bernd Homuth <dev@hmt.im>, 2015-2016\n"
-"Christian Kirbach <christian.kirbach@gmail.com>, 2015-2016\n"
-"Florian Bäuerle <florian.bae@gmail.com>, 2015\n"
-"Mario Blättermann <mario.blaettermann@gmail.com>, 2017\n"
-"Tim Sabsch <tim@sabsch.com>, 2018-2019, 2021\n"
-"Philipp Kiemle <philipp.kiemle@gmail.com>, 2020-2021"
+"Bernd Homuth <dev@hmt.im>\n"
+"Christian Kirbach <christian.kirbach@gmail.com>\n"
+"Florian Bäuerle <florian.bae@gmail.com>\n"
+"Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"Tim Sabsch <tim@sabsch.com>\n"
+"Philipp Kiemle <philipp.kiemle@gmail.com>"
 
 #: src/libide/gui/ide-application-actions.c:153
 msgid "Learn more about GNOME Builder"
