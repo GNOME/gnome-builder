@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-08-28 11:33+0000\n"
-"PO-Revision-Date: 2021-09-02 17:34+0300\n"
+"POT-Creation-Date: 2021-09-12 05:54+0000\n"
+"PO-Revision-Date: 2021-09-12 20:55+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -159,6 +159,11 @@ msgstr "Greita visuotinė neaiškių paieška"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Vykdyti su GNU derintuve"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+#| msgid "The short name of the file."
+msgid "Use the minimap to see more of the file"
+msgstr "Naudokite mini žemėlapį didesnei failo daliai matyti"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -1095,12 +1100,10 @@ msgid "%u of %u"
 msgstr "%u iš %u"
 
 #: src/libide/editor/ide-editor-search-bar.ui:116
-#| msgid "Replace"
 msgid "_Replace"
 msgstr "Pa_keisti"
 
 #: src/libide/editor/ide-editor-search-bar.ui:128
-#| msgid "Replace All"
 msgid "Replace _All"
 msgstr "Pakeisti _viską"
 
@@ -1114,17 +1117,14 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr "Rodyti arba slėpti tokius parametrus kaip registro skyrimas"
 
 #: src/libide/editor/ide-editor-search-bar.ui:202
-#| msgid "Regular expressions"
 msgid "Regular _expressions"
 msgstr "R_eguliariosios išraiškos"
 
 #: src/libide/editor/ide-editor-search-bar.ui:217
-#| msgid "Case sensitive"
 msgid "_Case sensitive"
 msgstr "Skirti _raidžių registrą"
 
 #: src/libide/editor/ide-editor-search-bar.ui:231
-#| msgid "Match whole word only"
 msgid "_Match whole word only"
 msgstr "Ieškoti tik _pilnų žodžių"
 
@@ -1516,7 +1516,6 @@ msgid "Project Destination"
 msgstr "Projekto paskirtis"
 
 #: src/libide/greeter/ide-clone-surface.ui:307
-#| msgid "Clone Project"
 msgid "Clone _Project"
 msgstr "Klonuoti _projektą"
 
@@ -1754,12 +1753,10 @@ msgstr "Naujas terminalas"
 
 #: src/libide/gui/ide-frame-empty-state.ui:88
 #: src/plugins/editor/gtk/menus.ui:111
-#| msgid "Open File…"
 msgid "_Open File…"
 msgstr "_Atverti failą…"
 
 #: src/libide/gui/ide-frame-empty-state.ui:96
-#| msgid "New Terminal"
 msgid "_New Terminal"
 msgstr "_Naujas terminalas"
 
@@ -2362,8 +2359,6 @@ msgid "Show help"
 msgstr "Rodyti žinyną"
 
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#| msgctxt "shortcut window"
-#| msgid "Toogle primary menu"
 msgctxt "shortcut window"
 msgid "Toggle primary menu"
 msgstr "Perjungti pagrindinį meniu"
@@ -2425,7 +2420,6 @@ msgid "Toggle bottom panel"
 msgstr "Perjungti apatinį polangį"
 
 #: src/libide/gui/ide-shortcuts-window.ui:101
-#| msgid "Show right panel"
 msgctxt "shortcut window"
 msgid "Show Find in Project panel"
 msgstr "Rodyti paiešką projekto skydelyje"
@@ -2451,7 +2445,6 @@ msgid "Save the document"
 msgstr "Įrašyti dokumentą"
 
 #: src/libide/gui/ide-shortcuts-window.ui:136
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save a copy of the document"
 msgstr "Įrašyti dokumento kopiją"
@@ -2626,7 +2619,6 @@ msgid "Make selection lower case"
 msgstr "Pakeisti žymėjimą mažosiomis raidėmis"
 
 #: src/libide/gui/ide-shortcuts-window.ui:376
-#| msgid "_Invert Case"
 msgctxt "shortcut window"
 msgid "Invert selection case"
 msgstr "Apversti žymėjimo registrą"
@@ -2713,7 +2705,6 @@ msgstr "Peršokti prie simbolio apibrėžimo"
 
 #. FIXME: find references of what? it doesn't seem to work here, there's always no results.
 #: src/libide/gui/ide-shortcuts-window.ui:489
-#| msgid "_Find references"
 msgctxt "shortcut window"
 msgid "Find references"
 msgstr "Rasti nuorodas"
@@ -2862,12 +2853,10 @@ msgid "_Delete"
 msgstr "_Trinti"
 
 #: src/libide/sourceview/gtk/menus.ui:58
-#| msgid "Highlighting"
 msgid "_Highlighting"
 msgstr "Pa_ryškinimas"
 
 #: src/libide/sourceview/gtk/menus.ui:63
-#| msgid "Selection"
 msgid "_Selection"
 msgstr "Ž_ymėjimas"
 
@@ -2888,7 +2877,6 @@ msgid "All _Lower Case"
 msgstr "Viską _mažosiomis raidėmis"
 
 #: src/libide/sourceview/gtk/menus.ui:90
-#| msgid "_Invert Case"
 msgid "In_vert Case"
 msgstr "Ap_versti registrą"
 
@@ -2897,17 +2885,14 @@ msgid "_Title Case"
 msgstr "_Pavadinimo registras"
 
 #: src/libide/sourceview/gtk/menus.ui:103
-#| msgid "Join Lines"
 msgid "_Join Lines"
 msgstr "Su_jungti eilutes"
 
 #: src/libide/sourceview/gtk/menus.ui:108
-#| msgid "Sort Lines"
 msgid "S_ort Lines"
 msgstr "Rikiu_oti eilutes"
 
 #: src/libide/sourceview/gtk/menus.ui:118
-#| msgid "Zoom"
 msgid "_Zoom"
 msgstr "_Mastelis"
 
@@ -2920,7 +2905,6 @@ msgid "Zoom _Out"
 msgstr "_Atitolinti"
 
 #: src/libide/sourceview/gtk/menus.ui:131
-#| msgid "Reset"
 msgid "_Reset"
 msgstr "_Atstatyti"
 
@@ -3240,7 +3224,6 @@ msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Pagražinimo įskiepis: išvestis nėra tinkamas UTF-8 tekstas"
 
 #: src/plugins/beautifier/gtk/menus.ui:9
-#| msgid "Beautify"
 msgid "_Beautify"
 msgstr "Pa_gražinti"
 
@@ -3445,12 +3428,10 @@ msgid "_Rebuild"
 msgstr "Pe_rkurti"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:513
-#| msgid "Clean"
 msgid "_Clean"
 msgstr "Iš_valyti"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:527
-#| msgid "Export Bundle"
 msgid "_Export Bundle"
 msgstr "_Eksportuoti rinkinį"
 
@@ -3490,7 +3471,6 @@ msgid "Build Preferences"
 msgstr "Kūrimo nuostatos"
 
 #: src/plugins/buildui/gtk/menus.ui:27
-#| msgid "Rebuild"
 msgid "R_ebuild"
 msgstr "P_erkurti"
 
@@ -3499,7 +3479,6 @@ msgid "_Run"
 msgstr "_Vykdyti"
 
 #: src/plugins/buildui/gtk/menus.ui:38
-#| msgid "Run With…"
 msgid "R_un With…"
 msgstr "Vykdyti s_u…"
 
@@ -3894,7 +3873,6 @@ msgid "Try loading or generating a palette using the menu"
 msgstr "Bandykite įkelti ar sugeneruoti paletę naudodami meniu"
 
 #: src/plugins/color-picker/gtk/menus.ui:7
-#| msgid "Highlight colors"
 msgid "Highlight _colors"
 msgstr "Paryškinimo _spalvos"
 
@@ -3919,12 +3897,10 @@ msgid "Uncomment the code"
 msgstr "Atkomentuoti kodą"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
-#| msgid "Comment code"
 msgid "_Comment code"
 msgstr "Už_komentuoti kodą"
 
 #: src/plugins/comment-code/gtk/menus.ui:15
-#| msgid "Uncomment code"
 msgid "Unco_mment code"
 msgstr "Atko_mentuoti kodą"
 
@@ -4070,7 +4046,6 @@ msgid "Uses the Git version control system"
 msgstr "Naudoja Git versijavimo sistemą"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:328
-#| msgid "Create Project"
 msgid "_Create Project"
 msgstr "Su_kurti projektą"
 
@@ -4114,7 +4089,6 @@ msgid "Run with Debugger"
 msgstr "Vykdyti su derintuve"
 
 #: src/plugins/debuggerui/gtk/menus.ui:20
-#| msgid "Run with Debugger"
 msgid "Run with _Debugger"
 msgstr "Vykdyti su _derintuve"
 
@@ -4267,7 +4241,6 @@ msgid "Devhelp"
 msgstr "Devhelp"
 
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
-#| msgid "Select Documentation…"
 msgid "_Select Documentation…"
 msgstr "Pa_sirinkti dokumentaciją…"
 
@@ -4297,7 +4270,6 @@ msgid "Print…"
 msgstr "Spausdinti…"
 
 #: src/plugins/devhelp/gtk/menus.ui:21
-#| msgid "New Documentation Page"
 msgid "New _Documentation Page"
 msgstr "Naujas _dokumentacijos puslapis"
 
@@ -4517,7 +4489,6 @@ msgid "Go to Line"
 msgstr "Eiti į eilutę"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:83
-#| msgid "Go"
 msgid "_Go"
 msgstr "_Eiti"
 
@@ -4526,7 +4497,6 @@ msgid "New Editor Workspace…"
 msgstr "Nauja redaktoriaus darbo sritis…"
 
 #: src/plugins/editor/gtk/menus.ui:102
-#| msgid "New File"
 msgid "New _File"
 msgstr "Naujas _failas"
 
@@ -4600,12 +4570,10 @@ msgstr ""
 "jūsų projekto kodą."
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:802
-#| msgid "Installing "
 msgid "Installation failed"
 msgstr "Diegiamas nepavyko"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:808
-#| msgid "Installing project"
 msgid "Installation complete"
 msgstr "Diegimas užbaigtas"
 
@@ -4698,14 +4666,10 @@ msgid "Flatpak"
 msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:414
-#| msgid "Installing %s %s"
 msgid "Installing Necessary SDKs"
 msgstr "Diegiamos reikalingos SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:415
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4715,7 +4679,6 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to update SDKs: %s"
 msgstr "Nepavyko atnaujinti SDK: %s"
 
@@ -4724,9 +4687,6 @@ msgid "Updating Necessary SDKs"
 msgstr "Atnaujinamos reikalingos SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
@@ -4735,7 +4695,6 @@ msgstr ""
 "jūsų projektą."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
-#| msgid "Updating Builder"
 msgid "Updating SDK Runtime"
 msgstr "Atnaujinama SDK vykdymo aplinka"
 
@@ -4839,12 +4798,10 @@ msgid "Select Widget…"
 msgstr "Pasirinkite valdiklį…"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:301
-#| msgid "Select Widget…"
 msgid "_Select Widget…"
 msgstr "Pa_sirinkite valdiklį…"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:395
-#| msgid "View Design"
 msgid "_View Design"
 msgstr "_Rodinio dizainas"
 
@@ -4853,7 +4810,6 @@ msgid "Switch to UI designer"
 msgstr "Persijungti į sąsajos dizainerį"
 
 #: src/plugins/glade/gbp-glade-frame-addin.c:403
-#| msgid "View Source"
 msgid "_View Source"
 msgstr "_Rodyti kodą"
 
@@ -4972,7 +4928,6 @@ msgid "UI Designer"
 msgstr "Sąsajos dizaineris"
 
 #: src/plugins/glade/gtk/menus.ui:75
-#| msgid "UI Designer"
 msgid "_UI Designer"
 msgstr "_Sąsajos dizaineris"
 
@@ -5030,7 +4985,6 @@ msgid "Open a _Project…"
 msgstr "Atverti _projektą…"
 
 #: src/plugins/grep/gbp-grep-editor-addin.c:57
-#| msgid "Show right panel"
 msgid "Show Find in Project panel"
 msgstr "Rodyti paiešką projekto skydelį"
 
@@ -5045,14 +4999,12 @@ msgstr "Kelias"
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
 #: src/plugins/grep/gbp-grep-panel.c:819
 #, c-format
-#| msgid "Find in Files"
 msgid "_Find in %s"
 msgstr "_Rasti %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
 #: src/plugins/grep/gbp-grep-panel.c:821
 #, c-format
-#| msgid "Replace With"
 msgid "_Replace in %s"
 msgstr "Pa_keisti %s"
 
@@ -5061,7 +5013,6 @@ msgid "Find in Files"
 msgstr "Rasti failuose"
 
 #: src/plugins/grep/gbp-grep-panel.ui:50
-#| msgid "Find and replace"
 msgid "Find and Replace"
 msgstr "Rasti ir pakeisti"
 
@@ -5070,32 +5021,26 @@ msgid "R_ecursive"
 msgstr "R_ekursyviai"
 
 #: src/plugins/grep/gbp-grep-panel.ui:80
-#| msgid "Match"
 msgid "Match _Case"
 msgstr "Atitikti _raidžių registrą"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#| msgid "Match _whole words"
 msgid "Match _Words"
 msgstr "Ieškoti _pilnų žodžių"
 
 #: src/plugins/grep/gbp-grep-panel.ui:94
-#| msgid "Regular expressions"
 msgid "Regular E_xpressions"
 msgstr "Re_guliariosios išraiškos"
 
 #: src/plugins/grep/gbp-grep-panel.ui:103
-#| msgid "Close the page"
 msgid "Close the panel (Escape key)"
 msgstr "Užverti skydelį (escape klavišas)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:141
-#| msgid "_Open Project"
 msgid "_Find in Project"
 msgstr "_Rasti projekte"
 
 #: src/plugins/grep/gbp-grep-panel.ui:166
-#| msgid "Recent Projects"
 msgid "_Replace in Project"
 msgstr "Pa_keisti projekte"
 
@@ -5104,7 +5049,6 @@ msgid "Search for…"
 msgstr "Ieškoti…"
 
 #: src/plugins/grep/gbp-grep-popover.ui:38
-#| msgid "Find"
 msgid "_Find"
 msgstr "_Rasti"
 
@@ -5125,7 +5069,6 @@ msgid "Allow regular _expressions"
 msgstr "Leisti _reguliariosios išraiškos"
 
 #: src/plugins/grep/gtk/menus.ui:7
-#| msgid "Find in Files"
 msgid "_Find in Files"
 msgstr "_Rasti failuose"
 
@@ -5175,17 +5118,14 @@ msgid "Modified"
 msgstr "Pakeista"
 
 #: src/plugins/ls/gtk/menus.ui:8
-#| msgid "Browse Folder"
 msgid "_Browse Folder"
 msgstr "_Naršyti aplanką"
 
 #: src/plugins/ls/gtk/menus.ui:18
-#| msgid "Switch to Folder"
 msgid "S_witch to Folder"
 msgstr "_Pereiti į aplanką"
 
 #: src/plugins/ls/gtk/menus.ui:23
-#| msgid "Open Containing Folder"
 msgid "_Open Containing Folder"
 msgstr "_Atverti išorinį aplanką"
 
@@ -5206,12 +5146,10 @@ msgid "Create a new empty project using a simple Makefile"
 msgstr "Sukurti naują tuščią projektą naudojant paprasčiausią Makefile"
 
 #: src/plugins/meson-templates/meson_templates.py:252
-#| msgid "GNOME Application"
 msgid "GNOME Application (Legacy)"
 msgstr "GNOME programa (pasenusi)"
 
 #: src/plugins/meson-templates/meson_templates.py:254
-#| msgid "Create a new GNOME application"
 msgid "Create a GNOME application with GTK 3"
 msgstr "Sukurti GNOME programą naudojant GTK 3"
 
@@ -5220,7 +5158,6 @@ msgid "GNOME Application"
 msgstr "GNOME programa"
 
 #: src/plugins/meson-templates/meson_templates.py:332
-#| msgid "Create a new GNOME application"
 msgid "Create a GNOME application with GTK 4"
 msgstr "Sukurti GNOME programą naudojant GTK 4"
 
@@ -5598,12 +5535,10 @@ msgid "Rename %s"
 msgstr "Pervadinti %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
-#| msgid "New File…"
 msgid "New Fil_e…"
 msgstr "Naujas f_ailas…"
 
 #: src/plugins/project-tree/gtk/menus.ui:14
-#| msgid "New Folder…"
 msgid "New F_older…"
 msgstr "Naujas _aplankas…"
 
@@ -5612,42 +5547,34 @@ msgid "O_pen"
 msgstr "_Atverti"
 
 #: src/plugins/project-tree/gtk/menus.ui:26
-#| msgid "Open With…"
 msgid "Open _With…"
 msgstr "Atverti _su…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
-#| msgid "Source Code Editor"
 msgid "_Source Code Editor"
 msgstr "Programos _kodo redaktorius"
 
 #: src/plugins/project-tree/gtk/menus.ui:39
-#| msgid "Open Containing Folder"
 msgid "Open _Containing Folder"
 msgstr "Atverti _išorinį aplanką"
 
 #: src/plugins/project-tree/gtk/menus.ui:45
-#| msgid "Open in Terminal"
 msgid "Open in _Terminal"
 msgstr "Atverti _terminale"
 
 #: src/plugins/project-tree/gtk/menus.ui:59
-#| msgid "Move to Trash"
 msgid "_Move to Trash"
 msgstr "Per_kelti į šiukšlinę"
 
 #: src/plugins/project-tree/gtk/menus.ui:65
-#| msgid "Display Options"
 msgid "_Display Options"
 msgstr "Ro_dymo parametrai"
 
 #: src/plugins/project-tree/gtk/menus.ui:69
-#| msgid "Show Ignored Files"
 msgid "S_how Ignored Files"
 msgstr "R_odyti nepaisomus failus"
 
 #: src/plugins/project-tree/gtk/menus.ui:74
-#| msgid "Sort Directories First"
 msgid "S_ort Directories First"
 msgstr "Pirma rikiu_oti katalogus"
 
@@ -5656,7 +5583,6 @@ msgid "Reveal in Project Tree"
 msgstr "Parodyti projekto medyje"
 
 #: src/plugins/project-tree/gtk/menus.ui:96
-#| msgid "Reveal in Project Tree"
 msgid "Reveal File in Project _Tree"
 msgstr "Parody_ti failą projekto medyje"
 
@@ -5709,7 +5635,6 @@ msgid "Recent Projects"
 msgstr "Neseni projektai"
 
 #: src/plugins/retab/gtk/menus.ui:9
-#| msgid "Reformat tabs"
 msgid "_Reformat tabs"
 msgstr "Pe_rformatuoti tabuliaciją"
 
@@ -5948,7 +5873,6 @@ msgid "Check _Spelling"
 msgstr "_Rašybos tikrinimas"
 
 #: src/plugins/spellcheck/gtk/menus.ui:13
-#| msgid "Underline misspelled words"
 msgid "_Underline misspelled words"
 msgstr "Pabra_ukti netaisyklingai parašytus žodžius"
 
@@ -6015,7 +5939,6 @@ msgid "Symbol"
 msgstr "Simbolis"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.c:315
-#| msgid "Select Symbol…"
 msgid "_Select Symbol…"
 msgstr "Pažymėti _simbolį…"
 
@@ -6024,7 +5947,6 @@ msgid "Document Outline"
 msgstr "Dokumento apžvalga"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
-#| msgid "Document Outline"
 msgid "_Document Outline"
 msgstr "_Dokumento apžvalga"
 
@@ -6051,13 +5973,11 @@ msgid "Run with Profiler"
 msgstr "Vykdyti su profiliatoriumi"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
-#| msgid "Open Sysprof Capture…"
 msgctxt "menu label"
 msgid "Open _Sysprof Capture…"
 msgstr "Atverti _Sysprof duomenis…"
 
 #: src/plugins/sysprof/gtk/menus.ui:42
-#| msgid "Run with Profiler"
 msgid "Run with _Profiler"
 msgstr "Vykdyti su _profiliatoriumi"
 
@@ -6288,7 +6208,6 @@ msgid ""
 msgstr "Yra Kūrėjo atnaujinimas. Kūrėjas gali jį atsisiųsti ir įdiegti."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
-#| msgid "Update"
 msgid "_Update"
 msgstr "Atna_ujinti"
 
@@ -6311,12 +6230,10 @@ msgid "Tags"
 msgstr "Žymos"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
-#| msgid "Switch to branch"
 msgid "_Switch to branch"
 msgstr "_Pereiti į šaką"
 
 #: src/plugins/vcsui/gtk/menus.ui:12
-#| msgid "Push to origin"
 msgid "_Push to origin"
 msgstr "_Nusiųsti į pirminį šaltinį"
 
@@ -8304,9 +8221,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "The file information for the project file."
 #~ msgstr "Projekto failo informacija."
-
-#~ msgid "The short name of the file."
-#~ msgstr "Failo trumpas pavadinimas."
 
 #~ msgid "The project directory."
 #~ msgstr "Projekto katalogas."
