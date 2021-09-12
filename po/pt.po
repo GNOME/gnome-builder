@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-09-07 21:22+0000\n"
-"PO-Revision-Date: 2021-09-08 15:28+0100\n"
+"POT-Creation-Date: 2021-09-12 05:54+0000\n"
+"PO-Revision-Date: 2021-09-12 17:56+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -3451,7 +3451,7 @@ msgstr "Avisos"
 #. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:482
 msgid "True"
-msgstr "Verdadeiro"
+msgstr "True"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
 #: src/plugins/buildui/gtk/menus.ui:21
