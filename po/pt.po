@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-05-01 11:23+0000\n"
-"PO-Revision-Date: 2021-07-07 14:34+0100\n"
+"POT-Creation-Date: 2021-09-11 13:19+0000\n"
+"PO-Revision-Date: 2021-09-12 17:59+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <happyguy_pt@hotmail.com>\n"
 "Language: pt\n"
@@ -2900,12 +2900,12 @@ msgstr "Abrir ligaçã_o"
 msgid "_Copy Link Address"
 msgstr "_Copiar endereço da ligação"
 
-#: src/libide/terminal/ide-terminal-launcher.c:336
+#: src/libide/terminal/ide-terminal-launcher.c:339
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Falha ao criar shell dentro do runtime “%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:660
+#: src/libide/terminal/ide-terminal-launcher.c:663
 msgid "Untitled Terminal"
 msgstr "Terminal sem título"
 
@@ -3368,7 +3368,7 @@ msgstr "Avisos"
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
 msgid "true"
-msgstr "verdadeiro"
+msgstr "true"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
 #: src/plugins/buildui/gtk/menus.ui:27
@@ -4693,12 +4693,12 @@ msgstr "Nenhum conteúdo foi definido para comparar"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "A operação falhou. O erro original foi “%s”"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:68
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
 #, c-format
 msgid "The operation has been canceled"
 msgstr "A operação foi cancelada"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
