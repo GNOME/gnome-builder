@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-09-07 21:22+0000\n"
+"POT-Creation-Date: 2021-09-12 17:55+0000\n"
 "PO-Revision-Date: 2021-09-08 17:57+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
@@ -167,7 +167,6 @@ msgid "Debug with the GNU debugger"
 msgstr "Depurar con el depurador de GNU"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:70
-#| msgid "The short name of the file."
 msgid "Use the minimap to see more of the file"
 msgstr "Use el minimapa para ver más del archivo"
 
@@ -6651,7 +6650,7 @@ msgstr ""
 
 #~ msgctxt "shortcut window"
 #~ msgid "Touchpad gestures"
-#~ msgstr "Gestos del «touchpad»"
+#~ msgstr "Gestos del panel táctil"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move page to the right"
