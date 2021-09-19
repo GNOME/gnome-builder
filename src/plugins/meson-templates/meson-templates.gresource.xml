@@ -50,7 +50,6 @@
     <file compressed="true">resources/build-aux/meson/postinstall.py</file>
     <file compressed="true">resources/meson.build</file>
     <file compressed="true">resources/src/meson-cli.build</file>
-    <file compressed="true">resources/flatpak.json</file>
     <file compressed="true">resources/flatpak-gtksharp.json.tmpl</file>
     <file compressed="true">resources/data/meson.build</file>
     <file compressed="true">resources/data/hello.gschema.xml</file>
@@ -62,6 +61,9 @@
     <file compressed="true">resources/po/meson.build</file>
     <file compressed="true">resources/po/POTFILES</file>
     <file compressed="true">resources/po/LINGUAS</file>
+  </gresource>
+  <gresource prefix="/plugins/meson_templates/resources">
+    <file compressed="true">flatpak.json</file>
   </gresource>
   <gresource prefix="/org/gnome/builder">
     <file compressed="true">icons/scalable/actions/pattern-legacy.svg</file>

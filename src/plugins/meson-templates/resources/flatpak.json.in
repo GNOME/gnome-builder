@@ -1,7 +1,7 @@
 {
     "app-id" : "{{appid}}",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "master",
+    "runtime-version" : "@gnome_sdk_version@",
     "sdk" : "org.gnome.Sdk",
 {{if language == "rust"}}
     "sdk-extensions" : [

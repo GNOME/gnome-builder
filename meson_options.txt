@@ -4,6 +4,8 @@ option('tcmalloc', type: 'boolean', value: false, description: 'Use tcmalloc for
 
 option('with_safe_path', type: 'string', value: '', description: 'PATH variable to run build commands (default: platform-specific)')
 
+option('gnome_sdk_version', type: 'string', value: 'master', description: 'The GNOME SDK release to use for templates')
+
 option('channel',
           type: 'combo',
        choices: [ 'other', 'flatpak-stable', 'flatpak-beta', 'flatpak-nightly' ],
