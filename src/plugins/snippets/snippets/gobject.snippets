@@ -1,4 +1,4 @@
-snippet gobject
+snippet gobject_derivable_private
 - scope c
 - desc Create GObject
 	#include "${1:$filename|stripsuffix}.h"
@@ -83,6 +83,86 @@ snippet gobject
 	$3_init ($2 *self)
 	{
 	}
+
+snippet gobject_derivable
+- scope c
+- desc Create GObject
+	#include "${1:$filename|stripsuffix}.h"
+
+	G_DEFINE_TYPE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+
+	enum {
+		PROP_0,
+		N_PROPS
+	};
+
+	static GParamSpec *properties [N_PROPS];
+
+	/**
+	 * $3_new:
+	 *
+	 * Create a new #$2.
+	 *
+	 * Returns: (transfer full): a newly created #$2
+	 */
+	$2 *
+	$3_new (void)
+	{
+		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+	}
+
+	static void
+	$3_finalize (GObject *object)
+	{
+		$2 *self = ($2 *)object;
+
+		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+	}
+
+	static void
+	$3_get_property (GObject    *object,
+	${$3|space}               guint       prop_id,
+	${$3|space}               GValue     *value,
+	${$3|space}               GParamSpec *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_set_property (GObject      *object,
+	${$3|space}               guint         prop_id,
+	${$3|space}               const GValue *value,
+	${$3|space}               GParamSpec   *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_class_init ($2Class *klass)
+	{
+		GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+		object_class->finalize = $3_finalize;
+		object_class->get_property = $3_get_property;
+		object_class->set_property = $3_set_property;
+	}
+
+	static void
+	$3_init ($2 *self)
+	{
+	}
 - scope chdr
 - desc Create GObject header
 	#pragma once
@@ -103,6 +183,7 @@ snippet gobject
 	$1 *${$1|functify}_new (void);
 	$0
 	G_END_DECLS
+snippet gobject
 - scope js
 - desc Create GObject
 	var $1 = GObject.registerClass(
@@ -220,6 +301,90 @@ snippet gobject_final
 	$1 *${$1|functify}_new (void);
 	$0
 	G_END_DECLS
+snippet gobject_final_private
+- scope c
+- desc Create GObject for a non-derivable class with private datastructure
+	#include "${1:$filename|stripsuffix}.h"
+
+	struct _${2:$1|camelize}
+	{
+		${4:GObject} parent_instance;
+	};
+
+	typedef struct
+	{
+		$0
+	} ${2:$1|camelize}Private;
+
+
+	G_DEFINE_FINAL_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
+
+	enum {
+		PROP_0,
+		N_PROPS
+	};
+
+	static GParamSpec *properties [N_PROPS];
+
+	$2 *
+	$3_new (void)
+	{
+		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+	}
+
+	static void
+	$3_finalize (GObject *object)
+	{
+		$2 *self = ($2 *)object;
+		$2Private *priv = $3_get_instance_private (self);
+
+		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+	}
+
+	static void
+	$3_get_property (GObject    *object,
+	${$3|space}               guint       prop_id,
+	${$3|space}               GValue     *value,
+	${$3|space}               GParamSpec *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_set_property (GObject      *object,
+	${$3|space}               guint         prop_id,
+	${$3|space}               const GValue *value,
+	${$3|space}               GParamSpec   *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_class_init ($2Class *klass)
+	{
+		GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+		object_class->finalize = $3_finalize;
+		object_class->get_property = $3_get_property;
+		object_class->set_property = $3_set_property;
+	}
+
+	static void
+	$3_init ($2 *self)
+	{
+	}
 snippet gobject_boxed_ref
 - scope c
 - desc Create reference counted boxed type
