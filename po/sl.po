@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-09-06 11:11+0000\n"
-"PO-Revision-Date: 2021-09-07 21:33+0200\n"
+"POT-Creation-Date: 2021-09-14 18:01+0000\n"
+"PO-Revision-Date: 2021-09-14 21:22+0200\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -158,6 +158,10 @@ msgstr "Hitro ohlapno splošno iskanje"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:66
 msgid "Debug with the GNU debugger"
 msgstr "Izvedi razhroščevanje z razhroščevalnikom GNU"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr "Uporabite mali zemljevid za pregled strukture datoteke"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
