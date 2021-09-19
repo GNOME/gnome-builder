@@ -826,3 +826,20 @@ snippet gobj_set_property
 				G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			}
 	}
+snippet testmain
+- scope c, cpp
+	#include <glib.h>
+
+	gint
+	main (gint   argc,
+	      gchar *argv[])
+	{
+		g_test_init (&argc, &argv, NULL);
+
+		$0
+
+		return g_test_run ();
+	}
+snippet testadd
+- scope c, cpp
+	g_test_add_func($1, $2);$0
