@@ -90,6 +90,15 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="41.1" date="2021-09-22">
+      <ul>
+        <li>System and user fonts are now made available when running applications</li>
+        <li>Project template updates for GTK 4</li>
+        <li>Snippet updates for GLib/GObject 2.70+</li>
+        <li>Updated translations</li>
+      </ul>
+    </release>
+
     <release version="41.0" date="2021-09-03">
       <p>Builder 41.0 is here!</p>
       <ul>
