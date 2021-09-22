@@ -1,6 +1,6 @@
 # Appdata file.
 appdata_file_untranslated = vcs_tag(
-  command: ['git', 'rev-parse', '--short', 'HEAD'],
+  command: ['git', 'rev-parse', 'HEAD'],
   input: 'org.gnome.Builder.appdata.xml.in.in',
   output: 'org.gnome.Builder.appdata.xml.in',
 )
