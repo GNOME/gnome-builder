@@ -1,12 +1,5 @@
-# Appdata file.
-appdata_file_untranslated = vcs_tag(
-  command: ['git', 'rev-parse', 'HEAD'],
-  input: 'org.gnome.Builder.appdata.xml.in.in',
-  output: 'org.gnome.Builder.appdata.xml.in',
-)
-
 appdata_file = i18n.merge_file(
-  input: appdata_file_untranslated[0],
+  input: 'org.gnome.Builder.appdata.xml.in',
   output: 'org.gnome.Builder.appdata.xml',
   po_dir: '../../po',
   install: true,
