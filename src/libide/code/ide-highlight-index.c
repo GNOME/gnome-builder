@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <string.h>
 
 #include "ide-highlight-index.h"
