@@ -557,7 +557,7 @@ ide_pipeline_stage_class_init (IdePipelineStageClass *klass)
   /**
    * IdePipelineStage::reap:
    * @self: An #IdePipelineStage
-   * @reaper: An #DzlDirectoryReaper
+   * @reaper: An #IdeDirectoryReaper
    *
    * This signal is emitted when a request to rebuild the project has
    * occurred. This allows build stages to ensure that certain files are
@@ -573,7 +573,7 @@ ide_pipeline_stage_class_init (IdePipelineStageClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdePipelineStageClass, reap),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, DZL_TYPE_DIRECTORY_REAPER);
+                  G_TYPE_NONE, 1, IDE_TYPE_DIRECTORY_REAPER);
 }
 
 static void
@@ -1085,12 +1085,12 @@ ide_pipeline_stage_clean_finish (IdePipelineStage  *self,
 
 void
 ide_pipeline_stage_emit_reap (IdePipelineStage   *self,
-                              DzlDirectoryReaper *reaper)
+                              IdeDirectoryReaper *reaper)
 {
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_PIPELINE_STAGE (self));
-  g_return_if_fail (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_return_if_fail (IDE_IS_DIRECTORY_REAPER (reaper));
 
   g_signal_emit (self, signals [REAP], 0, reaper);
 
