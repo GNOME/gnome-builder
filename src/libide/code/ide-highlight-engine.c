@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <libide-plugins.h>
@@ -43,7 +42,7 @@ struct _IdeHighlightEngine
 
   GWeakRef             buffer_wref;
 
-  DzlSignalGroup      *signal_group;
+  IdeSignalGroup      *signal_group;
   IdeHighlighter      *highlighter;
   GSettings           *settings;
 
@@ -421,10 +420,10 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
    *       called and we potentially cause a frame to drop.
    */
 
-  self->work_timeout = gdk_threads_add_idle_full (G_PRIORITY_LOW + 1,
-                                                  ide_highlight_engine_work_timeout_handler,
-                                                  self,
-                                                  NULL);
+  self->work_timeout = g_idle_add_full (G_PRIORITY_LOW + 1,
+                                        ide_highlight_engine_work_timeout_handler,
+                                        self,
+                                        NULL);
 }
 
 /**
@@ -504,7 +503,7 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  dzl_clear_source (&self->work_timeout);
+  g_clear_handle_id (&self->work_timeout, g_source_remove);
 
   buffer = g_weak_ref_get (&self->buffer_wref);
   if (buffer == NULL)
@@ -689,7 +688,7 @@ ide_highlight_engine_clear (IdeHighlightEngine *self)
 static void
 ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
                                       IdeBuffer          *buffer,
-                                      DzlSignalGroup     *group)
+                                      IdeSignalGroup     *group)
 {
   GtkTextBuffer *text_buffer = (GtkTextBuffer *)buffer;
   GtkTextIter begin;
@@ -699,7 +698,7 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (DZL_IS_SIGNAL_GROUP (group));
+  g_assert (IDE_IS_SIGNAL_GROUP (group));
   g_assert (self->invalid_begin == NULL);
   g_assert (self->invalid_end == NULL);
 
@@ -727,18 +726,18 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
 static void
 ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
-                                        DzlSignalGroup      *group)
+                                        IdeSignalGroup      *group)
 {
   g_autoptr(GtkTextBuffer) text_buffer = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (DZL_IS_SIGNAL_GROUP (group));
+  g_assert (IDE_IS_SIGNAL_GROUP (group));
 
   text_buffer = g_weak_ref_get (&self->buffer_wref);
 
-  dzl_clear_source (&self->work_timeout);
+  g_clear_handle_id (&self->work_timeout, g_source_remove);
 
   if (text_buffer != NULL)
     {
@@ -790,7 +789,7 @@ ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
   /* We can get GtkSourceBuffer intermittently here. */
   if (!buffer || IDE_IS_BUFFER (buffer))
     {
-      dzl_signal_group_set_target (self->signal_group, buffer);
+      ide_signal_group_set_target (self->signal_group, buffer);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUFFER]);
     }
 }
@@ -961,27 +960,27 @@ ide_highlight_engine_init (IdeHighlightEngine *self)
 
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
   self->enabled = g_settings_get_boolean (self->settings, "semantic-highlighting");
-  self->signal_group = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  self->signal_group = ide_signal_group_new (IDE_TYPE_BUFFER);
 
-  dzl_signal_group_connect_object (self->signal_group,
+  ide_signal_group_connect_object (self->signal_group,
                                    "insert-text",
                                    G_CALLBACK (ide_highlight_engine__buffer_insert_text_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  dzl_signal_group_connect_object (self->signal_group,
+  ide_signal_group_connect_object (self->signal_group,
                                    "delete-range",
                                    G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  dzl_signal_group_connect_object (self->signal_group,
+  ide_signal_group_connect_object (self->signal_group,
                                    "notify::language",
                                    G_CALLBACK (ide_highlight_engine__notify_language_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->signal_group,
+  ide_signal_group_connect_object (self->signal_group,
                                    "notify::style-scheme",
                                    G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
                                    self,
@@ -1172,7 +1171,7 @@ ide_highlight_engine_pause (IdeHighlightEngine *self)
 {
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  dzl_signal_group_block (self->signal_group);
+  ide_signal_group_block (self->signal_group);
 }
 
 void
@@ -1183,7 +1182,7 @@ ide_highlight_engine_unpause (IdeHighlightEngine *self)
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_return_if_fail (self->signal_group != NULL);
 
-  dzl_signal_group_unblock (self->signal_group);
+  ide_signal_group_unblock (self->signal_group);
 
   buffer = g_weak_ref_get (&self->buffer_wref);
 
