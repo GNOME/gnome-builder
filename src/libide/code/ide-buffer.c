@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libide-io.h>
 #include <libide-plugins.h>
@@ -2573,19 +2572,19 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
   table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self));
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_NOTE)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_WARNING)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_DEPRECATED)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_UNUSED)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_ERROR)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 }
 
 static void
