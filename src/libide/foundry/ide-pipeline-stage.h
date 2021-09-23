@@ -24,7 +24,6 @@
 # error "Only <libide-foundry.h> can be included directly."
 #endif
 
-#include <dazzle.h>
 #include <libide-core.h>
 
 #include "ide-build-log.h"
