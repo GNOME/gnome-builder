@@ -22,13 +22,13 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <libide-code.h>
 #include <libide-plugins.h>
 #include <libide-threading.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "ide-buffer-private.h"
 
@@ -44,7 +44,7 @@ struct _IdeDebugManager
 
   GHashTable     *breakpoints;
   IdeDebugger    *debugger;
-  DzlSignalGroup *debugger_signals;
+  IdeSignalGroup *debugger_signals;
   IdeRunner      *runner;
   GQueue          pending_breakpoints;
   GPtrArray      *supported_languages;
@@ -542,7 +542,7 @@ ide_debug_manager_dispose (GObject *object)
   g_queue_clear (&self->pending_breakpoints);
 
   g_hash_table_remove_all (self->breakpoints);
-  dzl_signal_group_set_target (self->debugger_signals, NULL);
+  ide_signal_group_set_target (self->debugger_signals, NULL);
   ide_clear_and_destroy_object (&self->debugger);
   ide_clear_and_destroy_object (&self->runner);
 
@@ -694,29 +694,29 @@ ide_debug_manager_init (IdeDebugManager *self)
                                              g_object_unref,
                                              g_object_unref);
 
-  self->debugger_signals = dzl_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debug_manager_debugger_stopped),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debug_manager_debugger_running),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-added",
                                     G_CALLBACK (ide_debug_manager_breakpoint_added),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-modified",
                                     G_CALLBACK (ide_debug_manager_breakpoint_modified),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-removed",
                                     G_CALLBACK (ide_debug_manager_breakpoint_removed),
                                     self);
@@ -1022,7 +1022,7 @@ ide_debug_manager_start (IdeDebugManager  *self,
   self->runner = g_object_ref (runner);
   self->debugger = g_steal_pointer (&debugger);
 
-  dzl_signal_group_set_target (self->debugger_signals, self->debugger);
+  ide_signal_group_set_target (self->debugger_signals, self->debugger);
 
   ide_debug_manager_set_active (self, TRUE);
 
@@ -1039,7 +1039,7 @@ ide_debug_manager_stop (IdeDebugManager *self)
 {
   g_return_if_fail (IDE_IS_DEBUG_MANAGER (self));
 
-  dzl_signal_group_set_target (self->debugger_signals, NULL);
+  ide_signal_group_set_target (self->debugger_signals, NULL);
 
   if (self->runner != NULL)
     {
