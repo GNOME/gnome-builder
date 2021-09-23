@@ -294,9 +294,9 @@ ide_vcs_cloner_clone_simple (IdeContext       *context,
 
   g_mutex_lock (&state.mutex);
 
-  gdk_threads_add_idle_full (G_PRIORITY_HIGH,
-                             (GSourceFunc) ide_vcs_cloner_clone_simple_idle_cb,
-                             &state, NULL);
+  g_idle_add_full (G_PRIORITY_HIGH,
+                   (GSourceFunc) ide_vcs_cloner_clone_simple_idle_cb,
+                   &state, NULL);
 
   g_cond_wait (&state.cond, &state.mutex);
   g_mutex_unlock (&state.mutex);
