@@ -22,8 +22,8 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-core.h>
+#include <libide-io.h>
 
 #include "ide-vcs.h"
 #include "ide-vcs-file-info.h"
@@ -35,9 +35,9 @@ struct _IdeVcsMonitor
 
   GFile                   *root;
   IdeVcs                  *vcs;
-  DzlSignalGroup          *vcs_signals;
-  DzlRecursiveFileMonitor *monitor;
-  DzlSignalGroup          *monitor_signals;
+  IdeSignalGroup          *vcs_signals;
+  IdeRecursiveFileMonitor *monitor;
+  IdeSignalGroup          *monitor_signals;
   GHashTable              *status_by_file;
 
   guint                    cache_source;
@@ -221,7 +221,7 @@ ide_vcs_monitor_changed_cb (IdeVcsMonitor           *self,
                             GFile                   *file,
                             GFile                   *other_file,
                             GFileMonitorEvent        event,
-                            DzlRecursiveFileMonitor *monitor)
+                            IdeRecursiveFileMonitor *monitor)
 {
   IDE_ENTRY;
 
@@ -229,7 +229,7 @@ ide_vcs_monitor_changed_cb (IdeVcsMonitor           *self,
   g_assert (IDE_IS_VCS_MONITOR (self));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
-  g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+  g_assert (IDE_IS_RECURSIVE_FILE_MONITOR (monitor));
 
   self->last_change_seq++;
 
@@ -280,16 +280,16 @@ ide_vcs_monitor_start_cb (GObject      *object,
                           GAsyncResult *result,
                           gpointer      user_data)
 {
-  DzlRecursiveFileMonitor *monitor = (DzlRecursiveFileMonitor *)object;
+  IdeRecursiveFileMonitor *monitor = (IdeRecursiveFileMonitor *)object;
   g_autoptr(IdeVcsMonitor) self = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+  g_assert (IDE_IS_RECURSIVE_FILE_MONITOR (monitor));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_VCS_MONITOR (self));
 
-  if (!dzl_recursive_file_monitor_start_finish (monitor, result, &error))
+  if (!ide_recursive_file_monitor_start_finish (monitor, result, &error))
     g_warning ("%s", error->message);
 
   ide_vcs_monitor_queue_reload (self);
@@ -307,20 +307,20 @@ ide_vcs_monitor_maybe_reload_locked (IdeVcsMonitor *self)
 
   if (self->monitor)
     {
-      dzl_signal_group_set_target (self->monitor_signals, NULL);
-      dzl_recursive_file_monitor_set_ignore_func (self->monitor, NULL, NULL, NULL);
-      dzl_recursive_file_monitor_cancel (self->monitor);
+      ide_signal_group_set_target (self->monitor_signals, NULL);
+      ide_recursive_file_monitor_set_ignore_func (self->monitor, NULL, NULL, NULL);
+      ide_recursive_file_monitor_cancel (self->monitor);
       g_clear_object (&self->monitor);
     }
 
   if (G_IS_FILE (self->root) && IDE_IS_VCS (self->vcs))
     {
-      self->monitor = dzl_recursive_file_monitor_new (self->root);
-      dzl_recursive_file_monitor_set_ignore_func (self->monitor,
+      self->monitor = ide_recursive_file_monitor_new (self->root);
+      ide_recursive_file_monitor_set_ignore_func (self->monitor,
                                                   ide_vcs_monitor_ignore_func,
                                                   self, NULL);
-      dzl_signal_group_set_target (self->monitor_signals, self->monitor);
-      dzl_recursive_file_monitor_start_async (self->monitor,
+      ide_signal_group_set_target (self->monitor_signals, self->monitor);
+      ide_recursive_file_monitor_start_async (self->monitor,
                                               NULL,
                                               ide_vcs_monitor_start_cb,
                                               g_object_ref (self));
@@ -339,13 +339,13 @@ ide_vcs_monitor_destroy (IdeObject *object)
 
   if (self->monitor != NULL)
     {
-      dzl_recursive_file_monitor_set_ignore_func (self->monitor, NULL, NULL, NULL);
-      dzl_recursive_file_monitor_cancel (self->monitor);
+      ide_recursive_file_monitor_set_ignore_func (self->monitor, NULL, NULL, NULL);
+      ide_recursive_file_monitor_cancel (self->monitor);
       g_clear_object (&self->monitor);
     }
 
-  dzl_signal_group_set_target (self->monitor_signals, NULL);
-  dzl_signal_group_set_target (self->vcs_signals, NULL);
+  ide_signal_group_set_target (self->monitor_signals, NULL);
+  ide_signal_group_set_target (self->vcs_signals, NULL);
 
   g_clear_object (&self->vcs);
 
@@ -500,17 +500,17 @@ ide_vcs_monitor_init (IdeVcsMonitor *self)
 {
   self->last_change_seq = 1;
 
-  self->monitor_signals = dzl_signal_group_new (DZL_TYPE_RECURSIVE_FILE_MONITOR);
+  self->monitor_signals = ide_signal_group_new (IDE_TYPE_RECURSIVE_FILE_MONITOR);
 
-  dzl_signal_group_connect_object (self->monitor_signals,
+  ide_signal_group_connect_object (self->monitor_signals,
                                    "changed",
                                    G_CALLBACK (ide_vcs_monitor_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  self->vcs_signals = dzl_signal_group_new (IDE_TYPE_VCS);
+  self->vcs_signals = ide_signal_group_new (IDE_TYPE_VCS);
 
-  dzl_signal_group_connect_object (self->vcs_signals,
+  ide_signal_group_connect_object (self->vcs_signals,
                                    "changed",
                                    G_CALLBACK (ide_vcs_monitor_vcs_changed_cb),
                                    self,
@@ -630,7 +630,7 @@ ide_vcs_monitor_set_vcs (IdeVcsMonitor *self,
   ide_object_lock (IDE_OBJECT (self));
   if (g_set_object (&self->vcs, vcs))
     {
-      dzl_signal_group_set_target (self->vcs_signals, vcs);
+      ide_signal_group_set_target (self->vcs_signals, vcs);
       ide_object_notify_by_pspec (self, properties [PROP_VCS]);
       ide_vcs_monitor_maybe_reload_locked (self);
     }
