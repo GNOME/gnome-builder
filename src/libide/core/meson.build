@@ -63,6 +63,7 @@ libide_core_public_headers = [
   'ide-object.h',
   'ide-object-box.h',
   'ide-settings.h',
+  'ide-signal-group.h',
   'ide-transfer.h',
   'ide-transfer-manager.h',
   'ide-version-macros.h',
@@ -90,6 +91,7 @@ libide_core_public_sources = [
   'ide-object-box.c',
   'ide-object-notify.c',
   'ide-settings.c',
+  'ide-signal-group.c',
   'ide-transfer.c',
   'ide-transfer-manager.c',
 ]
