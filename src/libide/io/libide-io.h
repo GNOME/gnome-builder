@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 #define IDE_IO_INSIDE
 
 #include "ide-content-type.h"
+#include "ide-directory-reaper.h"
 #include "ide-gfile.h"
 #include "ide-line-reader.h"
 #include "ide-marked-content.h"
