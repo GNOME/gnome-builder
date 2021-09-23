@@ -124,7 +124,7 @@ struct _IdePipelineStageClass
                               GPtrArray            *targets,
                               GCancellable         *cancellable);
   void     (*reap)           (IdePipelineStage     *self,
-                              DzlDirectoryReaper   *reaper);
+                              IdeDirectoryReaper   *reaper);
   gboolean (*chain)          (IdePipelineStage     *self,
                               IdePipelineStage     *next);
 
@@ -209,6 +209,6 @@ IDE_AVAILABLE_IN_3_32
 void         ide_pipeline_stage_unpause          (IdePipelineStage     *self);
 IDE_AVAILABLE_IN_3_32
 void         ide_pipeline_stage_emit_reap        (IdePipelineStage     *self,
-                                                  DzlDirectoryReaper   *reaper);
+                                                  IdeDirectoryReaper   *reaper);
 
 G_END_DECLS
