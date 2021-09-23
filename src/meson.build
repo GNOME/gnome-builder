@@ -16,7 +16,6 @@ gnome_builder_gir_extra_args = ['--pkg-export=gnome-builder-1.0']
 exe_link_args = []
 exe_c_args = []
 
-subdir('gstyle')
 subdir('libide')
 subdir('tests')
 subdir('plugins')

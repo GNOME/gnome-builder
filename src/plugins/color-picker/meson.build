@@ -1,5 +1,7 @@
 if get_option('plugin_color_picker')
 
+subdir('gstyle')
+
 if not libportal_dep.found()
   error('plugin_color_picker requires libportal')
 endif
