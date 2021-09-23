@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -927,15 +926,15 @@ ide_unsaved_files_reap_cb (GObject      *object,
                            GAsyncResult *result,
                            gpointer      user_data)
 {
-  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+  if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -948,7 +947,7 @@ ide_unsaved_files_reap_async (IdeUnsavedFiles     *self,
                               gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(IdeDirectoryReaper) reaper = NULL;
   g_autoptr(GFile) buffersdir = NULL;
   g_autofree gchar *path = NULL;
   IdeContext *context;
@@ -963,14 +962,14 @@ ide_unsaved_files_reap_async (IdeUnsavedFiles     *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_return_if_fail (context != NULL);
 
-  reaper = dzl_directory_reaper_new ();
+  reaper = ide_directory_reaper_new ();
   path = get_buffers_dir (context);
   buffersdir = g_file_new_for_path (path);
 
-  dzl_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_DAY);
+  ide_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_DAY);
 
   /* Now cleanup the old files */
-  dzl_directory_reaper_execute_async (reaper,
+  ide_directory_reaper_execute_async (reaper,
                                       cancellable,
                                       ide_unsaved_files_reap_cb,
                                       g_steal_pointer (&task));
