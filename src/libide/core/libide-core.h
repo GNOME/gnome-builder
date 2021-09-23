@@ -35,6 +35,7 @@
 #include "ide-object.h"
 #include "ide-object-box.h"
 #include "ide-settings.h"
+#include "ide-signal-group.h"
 #include "ide-transfer.h"
 #include "ide-transfer-manager.h"
 #include "ide-version.h"
