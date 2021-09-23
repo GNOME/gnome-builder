@@ -2463,9 +2463,9 @@ ide_buffer_delay_settling (IdeBuffer *self)
   g_assert (IDE_IS_BUFFER (self));
 
   g_clear_handle_id (&self->settling_source, g_source_remove);
-  self->settling_source = gdk_threads_add_timeout (SETTLING_DELAY_MSEC,
-                                                   ide_buffer_settled_cb,
-                                                   self);
+  self->settling_source = g_timeout_add (SETTLING_DELAY_MSEC,
+                                         ide_buffer_settled_cb,
+                                         self);
 }
 
 /**
