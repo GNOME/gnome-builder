@@ -91,7 +91,6 @@ libide_lsp_sources = libide_lsp_public_sources + libide_lsp_private_sources + li
 libide_lsp_deps = [
   libgio_dep,
   libjsonrpc_glib_dep,
-  libdazzle_dep,
 
   libide_code_dep,
   libide_core_dep,

@@ -164,7 +164,6 @@ libide_foundry_generated_headers += [libide_foundry_enums[1]]
 libide_foundry_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
   libpeas_dep,
   libvte_dep,
   libjson_glib_dep,

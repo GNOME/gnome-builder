@@ -62,7 +62,6 @@ libide_debugger_private_sources = [
 libide_debugger_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
 
   libide_core_dep,
   libide_io_dep,

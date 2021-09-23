@@ -56,7 +56,6 @@ libide_projects_sources = libide_projects_public_sources + libide_projects_priva
 libide_projects_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
   libtemplate_glib_dep,
   libxml2_dep,
 

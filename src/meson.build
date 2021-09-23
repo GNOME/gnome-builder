@@ -24,7 +24,6 @@ subdir('plugins')
 gnome_builder_deps = [
   libgio_dep,
   libgiounix_dep,
-  libdazzle_dep,
   libgtk_dep,
 
   libide_code_dep,
@@ -99,7 +98,7 @@ pkgconfig.generate(
      filebase: 'gnome-builder-@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION),
   description: 'Contains the plugin container for Builder.',
   install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
-     requires: [ 'gio-2.0', 'gio-unix-2.0', 'gtk+-3.0', 'gtksourceview-4', 'libdazzle-1.0', 'vte-2.91', 'template-glib-1.0', 'libpeas-1.0' ],
+     requires: [ 'gio-2.0', 'gio-unix-2.0', 'gtk4', 'vte-2.91-gtk4', 'gtksourceview-5', 'template-glib-1.0', 'libpeas-1.0' ],
 )
 
 libide_gir = gnome.generate_gir(gnome_builder,
@@ -111,7 +110,7 @@ libide_gir = gnome.generate_gir(gnome_builder,
             namespace: 'Ide',
         symbol_prefix: 'ide',
     identifier_prefix: 'Ide',
-             includes: [ 'Gio-2.0', 'Gtk-3.0', 'Dazzle-1.0', 'Peas-1.0', 'Vte-2.91', 'GtkSource-4', 'Template-1.0' ],
+             includes: [ 'Gio-2.0', 'Gtk-4.0', 'Peas-1.0', 'Vte-2.91', 'GtkSource-5', 'Template-1.0' ],
               install: true,
       install_dir_gir: pkggirdir,
   install_dir_typelib: pkgtypelibdir,

@@ -35,7 +35,6 @@ libide_search_sources = libide_search_public_sources
 
 libide_search_deps = [
   libgio_dep,
-  libdazzle_dep,
   libpeas_dep,
   libide_core_dep,
   libide_threading_dep,

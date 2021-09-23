@@ -61,7 +61,6 @@ libide_greeter_private_sources += libide_greeter_resources
 libide_greeter_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
 
   libide_core_dep,
   libide_gui_dep,
