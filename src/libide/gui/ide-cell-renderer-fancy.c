@@ -55,7 +55,6 @@ get_layout (IdeCellRendererFancy *self,
   PangoLayout *l;
   PangoAttrList *attrs;
   GtkStyleContext *style = gtk_widget_get_style_context (widget);
-  GtkStateFlags state = gtk_style_context_get_state (style);
   GdkRGBA rgba;
 
   l = gtk_widget_create_pango_layout (widget, text);
@@ -65,7 +64,7 @@ get_layout (IdeCellRendererFancy *self,
 
   attrs = pango_attr_list_new ();
 
-  gtk_style_context_get_color (style, state, &rgba);
+  gtk_style_context_get_color (style, &rgba);
   pango_attr_list_insert (attrs,
                           pango_attr_foreground_new (rgba.red * 65535,
                                                      rgba.green * 65535,
@@ -98,11 +97,11 @@ ide_cell_renderer_fancy_get_preferred_width (GtkCellRenderer *cell,
   IdeCellRendererFancy *self = (IdeCellRendererFancy *)cell;
   PangoLayout *body;
   PangoLayout *title;
-  gint body_width = 0;
-  gint title_width = 0;
-  gint dummy;
-  gint xpad;
-  gint ypad;
+  int body_width = 0;
+  int title_width = 0;
+  int dummy;
+  int xpad;
+  int ypad;
 
   if (min_width == NULL)
     min_width = &dummy;
@@ -206,22 +205,22 @@ ide_cell_renderer_fancy_get_preferred_height_for_width (GtkCellRenderer *cell,
 }
 
 static void
-ide_cell_renderer_fancy_render (GtkCellRenderer      *renderer,
-                                cairo_t              *cr,
-                                GtkWidget            *widget,
-                                const GdkRectangle   *bg_area,
-                                const GdkRectangle   *cell_area,
-                                GtkCellRendererState  flags)
+ide_cell_renderer_fancy_snapshot (GtkCellRenderer      *renderer,
+                                  GtkSnapshot          *snapshot,
+                                  GtkWidget            *widget,
+                                  const GdkRectangle   *bg_area,
+                                  const GdkRectangle   *cell_area,
+                                  GtkCellRendererState  flags)
 {
   IdeCellRendererFancy *self = (IdeCellRendererFancy *)renderer;
   PangoLayout *body;
   PangoLayout *title;
-  gint xpad;
-  gint ypad;
-  gint height;
+  GdkRGBA rgba;
+  int xpad;
+  int ypad;
+  int height;
 
   g_assert (IDE_IS_CELL_RENDERER_FANCY (self));
-  g_assert (cr != NULL);
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (bg_area != NULL);
   g_assert (cell_area != NULL);
@@ -233,13 +232,20 @@ ide_cell_renderer_fancy_render (GtkCellRenderer      *renderer,
 
   pango_layout_set_width (title, (cell_area->width - (xpad * 2)) * PANGO_SCALE);
   pango_layout_set_width (body, (cell_area->width - (xpad * 2)) * PANGO_SCALE);
-
-  cairo_move_to (cr, cell_area->x + xpad, cell_area->y + ypad);
-  pango_cairo_show_layout (cr, title);
-
   pango_layout_get_pixel_size (title, NULL, &height);
-  cairo_move_to (cr, cell_area->x + xpad, cell_area->y +ypad + + height + TITLE_SPACING);
-  pango_cairo_show_layout (cr, body);
+
+  gtk_style_context_get_color (gtk_widget_get_style_context (widget), &rgba);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot,
+                          &GRAPHENE_POINT_INIT (cell_area->x + xpad,
+                                                cell_area->y + ypad));
+  gtk_snapshot_append_layout (snapshot, title, &rgba);
+  gtk_snapshot_translate (snapshot,
+                          &GRAPHENE_POINT_INIT (0,
+                                                height + TITLE_SPACING));
+  gtk_snapshot_append_layout (snapshot, body, &rgba);
+  gtk_snapshot_restore (snapshot);
 
   g_object_unref (body);
   g_object_unref (title);
@@ -315,7 +321,7 @@ ide_cell_renderer_fancy_class_init (IdeCellRendererFancyClass *klass)
   cell_class->get_request_mode = ide_cell_renderer_fancy_get_request_mode;
   cell_class->get_preferred_width = ide_cell_renderer_fancy_get_preferred_width;
   cell_class->get_preferred_height_for_width = ide_cell_renderer_fancy_get_preferred_height_for_width;
-  cell_class->render = ide_cell_renderer_fancy_render;
+  cell_class->snapshot = ide_cell_renderer_fancy_snapshot;
 
   /* Note that we do not emit notify for these properties */
 
