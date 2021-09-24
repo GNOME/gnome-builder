@@ -29,8 +29,6 @@
 #include <libide-projects.h>
 
 #include "ide-command-manager.h"
-#include "ide-grid.h"
-#include "ide-grid-column.h"
 #include "ide-header-bar.h"
 #include "ide-notification-list-box-row-private.h"
 #include "ide-notification-stack-private.h"
