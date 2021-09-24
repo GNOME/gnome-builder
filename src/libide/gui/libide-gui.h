@@ -40,8 +40,6 @@
 #include "ide-frame-addin.h"
 #include "ide-header-bar.h"
 #include "ide-fancy-tree-view.h"
-#include "ide-grid.h"
-#include "ide-grid-column.h"
 #include "ide-gui-global.h"
 #include "ide-header-bar.h"
 #include "ide-marked-view.h"
