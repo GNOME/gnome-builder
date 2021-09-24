@@ -38,8 +38,6 @@
 #include "ide-environment-editor.h"
 #include "ide-frame.h"
 #include "ide-frame-addin.h"
-#include "ide-frame-empty-state.h"
-#include "ide-frame-header.h"
 #include "ide-header-bar.h"
 #include "ide-fancy-tree-view.h"
 #include "ide-grid.h"
