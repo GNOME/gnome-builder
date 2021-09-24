@@ -24,8 +24,7 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
-#include <libide-core.h>
+#include <libpanel.h>
 
 #include "ide-page.h"
 
@@ -33,55 +32,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FRAME (ide_frame_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeFrame, ide_frame, IDE, FRAME, GtkBox)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeFrame, ide_frame, IDE, FRAME, PanelFrame)
 
-struct _IdeFrameClass
-{
-  GtkBoxClass parent_class;
-
-  void     (*agree_to_close_async)  (IdeFrame             *stack,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data);
-  gboolean (*agree_to_close_finish) (IdeFrame             *stack,
-                                     GAsyncResult         *result,
-                                     GError              **error);
-
-  /*< private >*/
-  gpointer _reserved[16];
-};
-
-IDE_AVAILABLE_IN_3_32
-GtkWidget *ide_frame_new                   (void);
-IDE_AVAILABLE_IN_3_32
-GtkWidget *ide_frame_get_titlebar          (IdeFrame             *self);
-IDE_AVAILABLE_IN_3_32
-IdePage   *ide_frame_get_visible_child     (IdeFrame             *self);
-IDE_AVAILABLE_IN_3_32
-void       ide_frame_set_visible_child     (IdeFrame             *self,
-                                            IdePage              *page);
-IDE_AVAILABLE_IN_3_32
-gboolean   ide_frame_get_has_page          (IdeFrame             *self);
-IDE_AVAILABLE_IN_3_32
-void       ide_frame_agree_to_close_async  (IdeFrame             *self,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-gboolean   ide_frame_agree_to_close_finish (IdeFrame             *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
-IDE_AVAILABLE_IN_3_32
-void       ide_frame_foreach_page          (IdeFrame             *self,
-                                            GtkCallback           callback,
-                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-void       ide_frame_add_with_depth        (IdeFrame             *self,
-                                            GtkWidget            *widget,
-                                            guint                 position);
-IDE_AVAILABLE_IN_3_34
-void       ide_frame_set_placeholder       (IdeFrame             *self,
-                                            GtkWidget            *placeholder);
+IDE_AVAILABLE_IN_ALL
+GtkWidget *ide_frame_new          (void);
+IDE_AVAILABLE_IN_ALL
+void       ide_frame_foreach_page (IdeFrame        *self,
+                                   IdePageCallback  callback,
+                                   gpointer         user_data);
 
 G_END_DECLS

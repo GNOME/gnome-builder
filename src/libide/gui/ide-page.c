@@ -69,7 +69,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdePage, ide_page, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE (IdePage, ide_page, PANEL_TYPE_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
@@ -108,23 +108,6 @@ find_focus_child (GtkWidget *widget,
 {
   if (!*handled)
     *handled = gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
-}
-
-static void
-ide_page_grab_focus (GtkWidget *widget)
-{
-  gboolean handled = FALSE;
-
-  g_assert (IDE_IS_PAGE (widget));
-
-  /*
-   * This default grab_focus override just looks for the first child (generally
-   * something like a scrolled window) and tries to move forward on focusing
-   * the child widget. In most cases, this should work without intervention
-   * from the child subclass.
-   */
-
-  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) find_focus_child, &handled);
 }
 
 static void
@@ -297,7 +280,6 @@ ide_page_class_init (IdePageClass *klass)
   object_class->get_property = ide_page_get_property;
   object_class->set_property = ide_page_set_property;
 
-  widget_class->grab_focus = ide_page_grab_focus;
   widget_class->hierarchy_changed = ide_page_hierarchy_changed;
 
   klass->agree_to_close_async = ide_page_real_agree_to_close_async;

@@ -20,16 +20,15 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
+#include <libpanel.h>
 
 #include <libide-core.h>
 #include <libide-projects.h>
 
 #include "ide-command-manager.h"
-#include "ide-frame.h"
-#include "ide-frame-header.h"
 #include "ide-grid.h"
 #include "ide-grid-column.h"
 #include "ide-header-bar.h"
@@ -53,43 +52,6 @@ void      _ide_command_manager_execute          (IdeCommandManager   *self,
                                                  const gchar         *command);
 gboolean  _ide_gtk_widget_action_is_stateful    (GtkWidget           *widget,
                                                  const gchar         *action_name);
-void      _ide_frame_init_actions               (IdeFrame            *self);
-void      _ide_frame_init_shortcuts             (IdeFrame            *self);
-void      _ide_frame_update_actions             (IdeFrame            *self);
-void      _ide_frame_transfer                   (IdeFrame            *self,
-                                                 IdeFrame            *dest,
-                                                 IdePage             *view);
-void      _ide_grid_column_init_actions         (IdeGridColumn       *self);
-void      _ide_grid_column_update_actions       (IdeGridColumn       *self);
-gboolean  _ide_grid_column_is_empty             (IdeGridColumn       *self);
-void      _ide_grid_column_try_close            (IdeGridColumn       *self);
-IdeFrame *_ide_grid_get_nth_stack               (IdeGrid             *self,
-                                                 gint                 nth);
-IdeFrame *_ide_grid_get_nth_stack_for_column    (IdeGrid             *self,
-                                                 IdeGridColumn       *column,
-                                                 gint                 nth);
-void      _ide_grid_init_actions                (IdeGrid             *self);
-void      _ide_grid_stack_added                 (IdeGrid             *self,
-                                                 IdeFrame            *stack);
-void      _ide_grid_stack_removed               (IdeGrid             *self,
-                                                 IdeFrame            *stack);
-void      _ide_frame_request_close              (IdeFrame            *stack,
-                                                 IdePage             *view);
-void      _ide_frame_header_update              (IdeFrameHeader      *self,
-                                                 IdePage             *view);
-void      _ide_frame_header_focus_list          (IdeFrameHeader      *self);
-void      _ide_frame_header_hide                (IdeFrameHeader      *self);
-void      _ide_frame_header_popdown             (IdeFrameHeader      *self);
-void      _ide_frame_header_set_pages           (IdeFrameHeader      *self,
-                                                 GListModel          *model);
-void      _ide_frame_header_set_title           (IdeFrameHeader      *self,
-                                                 const gchar         *title);
-void      _ide_frame_header_set_modified        (IdeFrameHeader      *self,
-                                                 gboolean             modified);
-void      _ide_frame_header_set_background_rgba (IdeFrameHeader      *self,
-                                                 const GdkRGBA       *background_rgba);
-void      _ide_frame_header_set_foreground_rgba (IdeFrameHeader      *self,
-                                                 const GdkRGBA       *foreground_rgba);
 void      _ide_primary_workspace_init_actions   (IdePrimaryWorkspace *self);
 void      _ide_workspace_init_actions           (IdeWorkspace        *self);
 GList    *_ide_workspace_get_mru_link           (IdeWorkspace        *self);
