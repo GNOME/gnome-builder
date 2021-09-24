@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <dazzle.h>
 #include <libide-core.h>
 #include <libide-threading.h>
 
 #define IDE_SEARCH_INSIDE
 
+#include "ide-pattern-spec.h"
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
 #include "ide-search-reducer.h"

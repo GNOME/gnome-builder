@@ -7,6 +7,7 @@ libide_include_directories += include_directories('.')
 #
 
 libide_search_public_headers = [
+  'ide-pattern-spec.h',
   'ide-search-engine.h',
   'ide-search-provider.h',
   'ide-search-reducer.h',
@@ -21,6 +22,7 @@ install_headers(libide_search_public_headers, subdir: libide_search_header_subdi
 #
 
 libide_search_public_sources = [
+  'ide-pattern-spec.c',
   'ide-search-engine.c',
   'ide-search-provider.c',
   'ide-search-reducer.c',
