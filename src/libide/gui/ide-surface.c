@@ -27,8 +27,8 @@
 
 typedef struct
 {
-  gchar *icon_name;
-  gchar *title;
+  char *icon_name;
+  char *title;
 } IdeSurfacePrivate;
 
 enum {
@@ -38,11 +38,7 @@ enum {
   N_PROPS
 };
 
-static void dock_item_iface_init (DzlDockItemInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (IdeSurface, ide_surface, DZL_TYPE_DOCK_BIN,
-                         G_ADD_PRIVATE (IdeSurface)
-                         G_IMPLEMENT_INTERFACE (DZL_TYPE_DOCK_ITEM, dock_item_iface_init))
+G_DEFINE_TYPE_WITH_PRIVATE (IdeSurface, ide_surface, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -65,15 +61,16 @@ ide_surface_get_property (GObject    *object,
                           GParamSpec *pspec)
 {
   IdeSurface *self = IDE_SURFACE (object);
+  IdeSurfacePrivate *priv = ide_surface_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_ICON_NAME:
-      g_value_set_string (value, dzl_dock_item_get_icon_name (DZL_DOCK_ITEM (self)));
+      g_value_set_string (value, priv->icon_name);
       break;
 
     case PROP_TITLE:
-      g_value_set_string (value, dzl_dock_item_get_title (DZL_DOCK_ITEM (self)));
+      g_value_set_string (value, priv->title);
       break;
 
     default:
@@ -145,8 +142,6 @@ ide_surface_init (IdeSurface *self)
  * and the user can switch between them.
  *
  * Returns: (transfer full): an #IdeSurface or %NULL
- *
- * Since: 3.32
  */
 GtkWidget *
 ide_surface_new (void)
@@ -193,48 +188,17 @@ ide_surface_set_title (IdeSurface  *self,
  * @user_data: closure data for @callback
  *
  * Calls @callback for every page found within the surface @self.
- *
- * Since: 3.32
  */
 void
-ide_surface_foreach_page (IdeSurface  *self,
-                          GtkCallback  callback,
-                          gpointer     user_data)
+ide_surface_foreach_page (IdeSurface      *self,
+                          IdePageCallback  callback,
+                          gpointer         user_data)
 {
   g_return_if_fail (IDE_IS_SURFACE (self));
   g_return_if_fail (callback != NULL);
 
   if (IDE_SURFACE_GET_CLASS (self)->foreach_page)
     IDE_SURFACE_GET_CLASS (self)->foreach_page (self, callback, user_data);
-}
-
-static gchar *
-ide_surface_real_get_icon_name (DzlDockItem *item)
-{
-  IdeSurface *self = (IdeSurface *)item;
-  IdeSurfacePrivate *priv = ide_surface_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SURFACE (self), NULL);
-
-  return g_strdup (priv->icon_name);
-}
-
-static gchar *
-ide_surface_real_get_title (DzlDockItem *item)
-{
-  IdeSurface *self = (IdeSurface *)item;
-  IdeSurfacePrivate *priv = ide_surface_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SURFACE (self), NULL);
-
-  return g_strdup (priv->title);
-}
-
-static void
-dock_item_iface_init (DzlDockItemInterface *iface)
-{
-  iface->get_icon_name = ide_surface_real_get_icon_name;
-  iface->get_title = ide_surface_real_get_title;
 }
 
 gboolean

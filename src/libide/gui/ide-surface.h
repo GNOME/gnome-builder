@@ -24,44 +24,50 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <dazzle.h>
+#include <gtk/gtk.h>
+
 #include <libide-core.h>
+
+#include "ide-page.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SURFACE (ide_surface_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeSurface, ide_surface, IDE, SURFACE, DzlDockBin)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdeSurface, ide_surface, IDE, SURFACE, GtkWidget)
+
+typedef void (*IdeSurfaceCallback) (IdeSurface *surface,
+                                    gpointer    user_data);
 
 struct _IdeSurfaceClass
 {
-  DzlDockBinClass parent_class;
+  GtkWidget parent_class;
 
-  void     (*foreach_page)        (IdeSurface  *self,
-                                   GtkCallback  callback,
-                                   gpointer     user_data);
-  gboolean (*agree_to_shutdown)   (IdeSurface  *self);
-  void     (*set_fullscreen)      (IdeSurface  *self,
-                                   gboolean     fullscreen);
+  void     (*foreach_page)        (IdeSurface      *self,
+                                   IdePageCallback  callback,
+                                   gpointer         user_data);
+  gboolean (*agree_to_shutdown)   (IdeSurface      *self);
+  void     (*set_fullscreen)      (IdeSurface      *self,
+                                   gboolean         fullscreen);
 
   /*< private >*/
-  gpointer _reserved[16];
+  gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_surface_new               (void);
-IDE_AVAILABLE_IN_3_32
-void       ide_surface_set_icon_name     (IdeSurface  *self,
-                                          const gchar *icon_name);
-IDE_AVAILABLE_IN_3_32
-void       ide_surface_set_title         (IdeSurface  *self,
-                                          const gchar *title);
-IDE_AVAILABLE_IN_3_32
-void       ide_surface_foreach_page      (IdeSurface  *self,
-                                          GtkCallback  callback,
-                                          gpointer     user_data);
-IDE_AVAILABLE_IN_3_32
-gboolean   ide_surface_agree_to_shutdown (IdeSurface  *self);
+IDE_AVAILABLE_IN_ALL
+void       ide_surface_set_icon_name     (IdeSurface      *self,
+                                          const gchar     *icon_name);
+IDE_AVAILABLE_IN_ALL
+void       ide_surface_set_title         (IdeSurface      *self,
+                                          const gchar     *title);
+IDE_AVAILABLE_IN_ALL
+void       ide_surface_foreach_page      (IdeSurface      *self,
+                                          IdePageCallback  callback,
+                                          gpointer         user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean   ide_surface_agree_to_shutdown (IdeSurface      *self);
 
 G_END_DECLS
