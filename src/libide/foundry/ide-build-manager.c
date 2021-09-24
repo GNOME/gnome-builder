@@ -22,8 +22,9 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+
+#include <libide-core.h>
 #include <libide-code.h>
 #include <libide-threading.h>
 #include <libide-vcs.h>
@@ -72,7 +73,7 @@ struct _IdeBuildManager
 
   IdePipeline      *pipeline;
   GDateTime        *last_build_time;
-  DzlSignalGroup   *pipeline_signals;
+  IdeSignalGroup   *pipeline_signals;
 
   gchar            *branch_name;
 
@@ -108,7 +109,7 @@ static void ide_build_manager_action_export  (IdeBuildManager *self,
 static void ide_build_manager_action_install (IdeBuildManager *self,
                                               GVariant        *param);
 
-DZL_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
+IDE_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
   { "build", ide_build_manager_action_build },
   { "cancel", ide_build_manager_action_cancel },
   { "clean", ide_build_manager_action_clean },
@@ -194,14 +195,7 @@ ide_build_manager_start_timer (IdeBuildManager *self)
   else
     self->running_time = g_timer_new ();
 
-  /*
-   * We use the DzlFrameSource for our timer callback because we only want to
-   * update at a rate somewhat close to a typical monitor refresh rate.
-   * Additionally, we want to handle drift (which that source does) so that we
-   * don't constantly fall behind.
-   */
   self->timer_source = g_timeout_add_seconds (1, timer_callback, self);
-
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
 
   IDE_EXIT;
@@ -214,7 +208,7 @@ ide_build_manager_stop_timer (IdeBuildManager *self)
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  dzl_clear_source (&self->timer_source);
+  g_clear_handle_id (&self->timer_source, g_source_remove);
 
   if (self->running_time != NULL)
     {
@@ -606,7 +600,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
       g_assert (self->pipeline != NULL);
 
       self->building = FALSE;
-      dzl_clear_source (&self->timer_source);
+      g_clear_handle_id (&self->timer_source, g_source_remove);
       g_signal_emit (self, signals [BUILD_FAILED], 0, self->pipeline);
     }
 
@@ -656,7 +650,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                  "device", device,
                                  NULL);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (self->pipeline));
-  dzl_signal_group_set_target (self->pipeline_signals, self->pipeline);
+  ide_signal_group_set_target (self->pipeline_signals, self->pipeline);
 
   /*
    * Create a task to manage our async pipeline initialization state.
@@ -827,8 +821,7 @@ ide_build_manager_finalize (GObject *object)
   g_clear_pointer (&self->last_build_time, g_date_time_unref);
   g_clear_pointer (&self->running_time, g_timer_destroy);
   g_clear_pointer (&self->branch_name, g_free);
-
-  dzl_clear_source (&self->timer_source);
+  g_clear_handle_id (&self->timer_source, g_source_remove);
 
   G_OBJECT_CLASS (ide_build_manager_parent_class)->finalize (object);
 }
@@ -1192,33 +1185,33 @@ ide_build_manager_init (IdeBuildManager *self)
   self->cancellable = g_cancellable_new ();
   self->needs_rediagnose = TRUE;
 
-  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_PIPELINE);
+  self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "diagnostic",
                                    G_CALLBACK (ide_build_manager_handle_diagnostic),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "notify::busy",
                                    G_CALLBACK (ide_build_manager_notify_busy),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "notify::message",
                                    G_CALLBACK (ide_build_manager_notify_message),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "started",
                                    G_CALLBACK (ide_build_manager_pipeline_started),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "finished",
                                    G_CALLBACK (ide_build_manager_pipeline_finished),
                                    self,
@@ -1502,7 +1495,7 @@ ide_build_manager_build_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_build_manager_build_async);
@@ -1652,7 +1645,7 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_build_manager_clean_async);
@@ -1765,7 +1758,7 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_build_manager_rebuild_async);

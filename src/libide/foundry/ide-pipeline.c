@@ -23,8 +23,6 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <dazzle.h>
-#include <libide-plugins.h>
 #include <libpeas/peas.h>
 #include <string.h>
 #include <vte/vte.h>
@@ -55,7 +53,6 @@
 #include "ide-toolchain.h"
 #include "ide-triplet.h"
 
-DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
 G_DEFINE_QUARK (ide_build_error, ide_build_error)
 
 /**
@@ -1423,8 +1420,6 @@ ide_pipeline_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_pipeline_parent_class)->finalize (object);
 
-  DZL_COUNTER_DEC (Instances);
-
   IDE_EXIT;
 }
 
@@ -1811,8 +1806,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
 static void
 ide_pipeline_init (IdePipeline *self)
 {
-  DZL_COUNTER_INC (Instances);
-
   self->cancellable = g_cancellable_new ();
 
   self->position = -1;
@@ -2140,7 +2133,7 @@ ide_pipeline_build_targets_async (IdePipeline         *self,
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_pipeline_build_targets_async);
@@ -2466,10 +2459,7 @@ ide_pipeline_queue_flush (IdePipeline *self)
 
   g_assert (IDE_IS_PIPELINE (self));
 
-  gdk_threads_add_idle_full (G_PRIORITY_LOW,
-                             ide_pipeline_do_flush,
-                             g_object_ref (self),
-                             g_object_unref);
+  g_idle_add_full (G_PRIORITY_LOW, ide_pipeline_do_flush, g_object_ref (self), g_object_unref);
 
   IDE_EXIT;
 }
@@ -3469,7 +3459,7 @@ ide_pipeline_clean_async (IdePipeline         *self,
   if (!ide_pipeline_check_ready (self, task))
     return;
 
-  dzl_cancellable_chain (cancellable, self->cancellable);
+  ide_cancellable_chain (cancellable, self->cancellable);
 
   td = task_data_new (task, TASK_CLEAN);
   td->phase = phase;
@@ -3600,7 +3590,7 @@ ide_pipeline_reaper_cb (GObject      *object,
                         GAsyncResult *result,
                         gpointer      user_data)
 {
-  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   IdePipeline *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
@@ -3608,7 +3598,7 @@ ide_pipeline_reaper_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -3622,7 +3612,7 @@ ide_pipeline_reaper_cb (GObject      *object,
   g_assert (IDE_IS_PIPELINE (self));
 
   /* Make sure our reaper completed or else we bail */
-  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+  if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -3644,7 +3634,7 @@ static void
 ide_pipeline_tick_rebuild (IdePipeline *self,
                                  IdeTask          *task)
 {
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(IdeDirectoryReaper) reaper = NULL;
   GCancellable *cancellable;
 
   IDE_ENTRY;
@@ -3662,7 +3652,7 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
   }
 #endif
 
-  reaper = dzl_directory_reaper_new ();
+  reaper = ide_directory_reaper_new ();
 
   /*
    * Check if we can remove the builddir. We don't want to do this if it is the
@@ -3672,7 +3662,7 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
     {
       g_autoptr(GFile) builddir = g_file_new_for_path (self->builddir);
 
-      dzl_directory_reaper_add_directory (reaper, builddir, 0);
+      ide_directory_reaper_add_directory (reaper, builddir, 0);
     }
 
   /*
@@ -3691,7 +3681,7 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Now build the reaper to clean up the build files. */
-  dzl_directory_reaper_execute_async (reaper,
+  ide_directory_reaper_execute_async (reaper,
                                       cancellable,
                                       ide_pipeline_reaper_cb,
                                       g_object_ref (task));
@@ -3733,7 +3723,7 @@ ide_pipeline_rebuild_async (IdePipeline         *self,
 
   drop_caches (self);
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);

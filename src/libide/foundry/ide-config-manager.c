@@ -22,14 +22,14 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
-#include <libide-threading.h>
 #include <libpeas/peas.h>
 
+#include <libide-threading.h>
+
+#include "ide-config.h"
 #include "ide-config-manager.h"
 #include "ide-config-private.h"
-#include "ide-config.h"
 #include "ide-config-provider.h"
 
 #define WRITEBACK_DELAY_SEC 3
@@ -65,7 +65,7 @@ static void ide_config_manager_actions_delete    (IdeConfigManager    *self,
 static void ide_config_manager_actions_duplicate (IdeConfigManager    *self,
                                                   GVariant            *param);
 
-DZL_DEFINE_ACTION_GROUP (IdeConfigManager, ide_config_manager, {
+IDE_DEFINE_ACTION_GROUP (IdeConfigManager, ide_config_manager, {
   { "current", ide_config_manager_actions_current, "s" },
   { "delete", ide_config_manager_actions_delete, "s" },
   { "duplicate", ide_config_manager_actions_duplicate, "s" },

@@ -23,9 +23,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
+
 #include <libide-plugins.h>
 #include <libide-threading.h>
-#include <libpeas/peas.h>
 
 #include "ide-build-manager.h"
 #include "ide-pipeline.h"
@@ -94,7 +95,7 @@ static void ide_device_manager_action_deploy (IdeDeviceManager    *self,
                                               GVariant            *param);
 static void ide_device_manager_deploy_tick   (IdeTask             *task);
 
-DZL_DEFINE_ACTION_GROUP (IdeDeviceManager, ide_device_manager, {
+IDE_DEFINE_ACTION_GROUP (IdeDeviceManager, ide_device_manager, {
   { "device", ide_device_manager_action_device, "s", "'local'" },
   { "deploy", ide_device_manager_action_deploy },
 })

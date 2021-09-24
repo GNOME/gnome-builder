@@ -135,14 +135,14 @@ ide_pipeline_stage_mkdirs_build (IdePipelineStage     *stage,
 }
 
 static void
-ide_pipeline_stage_mkdirs_reap (IdePipelineStage      *stage,
-                             DzlDirectoryReaper *reaper)
+ide_pipeline_stage_mkdirs_reap (IdePipelineStage   *stage,
+                                IdeDirectoryReaper *reaper)
 {
   IdePipelineStageMkdirs *self = (IdePipelineStageMkdirs *)stage;
   IdePipelineStageMkdirsPrivate *priv = ide_pipeline_stage_mkdirs_get_instance_private (self);
 
   g_assert (IDE_IS_PIPELINE_STAGE_MKDIRS (self));
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
 
   ide_pipeline_stage_set_active (stage, TRUE);
 
@@ -153,7 +153,7 @@ ide_pipeline_stage_mkdirs_reap (IdePipelineStage      *stage,
       if (path->remove_on_rebuild)
         {
           g_autoptr(GFile) file = g_file_new_for_path (path->path);
-          dzl_directory_reaper_add_directory (reaper, file, 0);
+          ide_directory_reaper_add_directory (reaper, file, 0);
         }
     }
 
