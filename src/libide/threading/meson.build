@@ -6,6 +6,7 @@ libide_include_directories += include_directories('.')
 #
 
 libide_threading_public_headers = [
+  'ide-cancellable.h',
   'ide-environment.h',
   'ide-environment-variable.h',
   'ide-subprocess.h',
@@ -35,6 +36,7 @@ libide_threading_private_sources = [
 ]
 
 libide_threading_public_sources = [
+  'ide-cancellable.c',
   'ide-environment-variable.c',
   'ide-environment.c',
   'ide-gtask.c',
