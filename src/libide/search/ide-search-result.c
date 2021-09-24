@@ -172,9 +172,9 @@ ide_search_result_compare (gconstpointer a,
   if (ret == 0)
     {
       if (priva->score < privb->score)
-        priva->score = -1;
+        ret = -1;
       else if (priva->score > privb->score)
-        priva->score = 1;
+        ret = 1;
     }
 
   return ret;
