@@ -77,18 +77,6 @@ struct _IdeApplication
   /* The time the application was started */
   GDateTime *started_at;
 
-  /* Multi-process worker manager */
-  IdeWorkerManager *worker_manager;
-
-  /* Our type of process (optionally set to "worker" */
-  gchar *type;
-
-  /* The single plugin to load within a worker */
-  gchar *plugin;
-
-  /* The dbus-address for worker mode */
-  gchar *dbus_address;
-
   /* Sets the type of workspace to create when creating the next workspace
    * (such as when processing command line arguments).
    */
@@ -99,10 +87,7 @@ struct _IdeApplication
   guint has_network : 1;
 };
 
-IdeApplication *_ide_application_new                      (gboolean                 standalone,
-                                                           const gchar             *type,
-                                                           const gchar             *plugin,
-                                                           const gchar             *dbus_address);
+IdeApplication *_ide_application_new                      (gboolean                 standalone);
 void            _ide_application_init_color               (IdeApplication          *self);
 void            _ide_application_init_actions             (IdeApplication          *self);
 void            _ide_application_init_shortcuts           (IdeApplication          *self);
