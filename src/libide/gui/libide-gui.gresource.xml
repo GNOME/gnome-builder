@@ -5,9 +5,6 @@
   </gresource>
   <gresource prefix="/org/gnome/libide-gui/ui">
     <file preprocess="xml-stripblanks">ide-environment-editor-row.ui</file>
-    <file preprocess="xml-stripblanks">ide-frame-header.ui</file>
-    <file preprocess="xml-stripblanks">ide-frame.ui</file>
-    <file preprocess="xml-stripblanks">ide-frame-empty-state.ui</file>
     <file preprocess="xml-stripblanks">ide-header-bar.ui</file>
     <file preprocess="xml-stripblanks">ide-notification-list-box-row.ui</file>
     <file preprocess="xml-stripblanks">ide-notification-view.ui</file>
