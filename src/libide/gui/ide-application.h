@@ -24,7 +24,8 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <dazzle.h>
+#include <adwaita.h>
+
 #include <libide-core.h>
 #include <libide-projects.h>
 
@@ -35,48 +36,48 @@ G_BEGIN_DECLS
 #define IDE_TYPE_APPLICATION    (ide_application_get_type())
 #define IDE_APPLICATION_DEFAULT IDE_APPLICATION(g_application_get_default())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, DzlApplication)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, AdwApplication)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_application_has_network              (IdeApplication           *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar        **ide_application_get_argv                 (IdeApplication           *self,
                                                          GApplicationCommandLine  *cmdline);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GDateTime     *ide_application_get_started_at           (IdeApplication           *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_application_get_command_line_handled (IdeApplication           *self,
                                                          GApplicationCommandLine  *cmdline);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_application_set_command_line_handled (IdeApplication           *self,
                                                          GApplicationCommandLine  *cmdline,
                                                          gboolean                  handled);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_application_open_project_async       (IdeApplication           *self,
                                                          IdeProjectInfo           *project_info,
                                                          GType                     workspace_type,
                                                          GCancellable             *cancellable,
                                                          GAsyncReadyCallback       callback,
                                                          gpointer                  user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeWorkbench  *ide_application_open_project_finish      (IdeApplication           *self,
                                                          GAsyncResult             *result,
                                                          GError                  **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_application_set_workspace_type       (IdeApplication           *self,
                                                          GType                     workspace_type);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_application_add_workbench            (IdeApplication           *self,
                                                          IdeWorkbench             *workbench);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_application_remove_workbench         (IdeApplication           *self,
                                                          IdeWorkbench             *workbench);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_application_foreach_workbench        (IdeApplication           *self,
                                                          GFunc                     callback,
                                                          gpointer                  user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeWorkbench  *ide_application_find_workbench_for_file  (IdeApplication           *self,
                                                          GFile                    *file);
 IDE_AVAILABLE_IN_3_34

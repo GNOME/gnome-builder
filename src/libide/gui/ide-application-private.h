@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include <libide-core.h>
+
 #include <libpeas/peas.h>
 
 #include "ide-application.h"
@@ -31,7 +32,11 @@ G_BEGIN_DECLS
 
 struct _IdeApplication
 {
-  DzlApplication parent_instance;
+  AdwApplication parent_instance;
+
+  /* Our helper to merge menus together */
+  IdeMenuManager *menu_manager;
+  GHashTable *menu_merge_ids;
 
   /* Array of all of our IdeWorkebench instances (loaded projects and
    * their application windows).
@@ -100,5 +105,7 @@ void            _ide_application_load_plugins_for_startup (IdeApplication       
 void            _ide_application_load_plugins             (IdeApplication          *self);
 void            _ide_application_command_line             (IdeApplication          *self,
                                                            GApplicationCommandLine *cmdline);
+void            _ide_application_add_resources            (IdeApplication          *self,
+                                                           const char              *path);
 
 G_END_DECLS

@@ -38,11 +38,8 @@
 #include "ide-application-private.h"
 #include "ide-gui-global.h"
 #include "ide-primary-workspace.h"
-#include "ide-worker.h"
 
-G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
-
-#define IS_UI_PROCESS(app) ((app)->type == NULL)
+G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, ADW_TYPE_APPLICATION)
 
 typedef struct
 {
@@ -120,46 +117,13 @@ ide_application_register_keybindings (IdeApplication *self)
   g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
 }
 
-static int
-keybinding_key_snooper (GtkWidget   *grab_widget,
-                        GdkEventKey *key,
-                        gpointer     func_data)
-{
-  IdeApplication *self = func_data;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  /* We need to hijack <Ctrl>period because ibus is messing it up. However,
-   * we only get a release event since it gets hijacked from the compositor
-   * so we never see the event. Instead, we catch the release and then change
-   * the focus to what we want (clearlying the state created in the compositor
-   * ibus bits).
-   */
-  if (key->type == GDK_KEY_RELEASE &&
-      key->keyval == GDK_KEY_period &&
-      (key->state & GDK_CONTROL_MASK) != 0)
-    {
-      if (IDE_IS_WORKSPACE (grab_widget))
-        {
-          DzlShortcutManager *shortcuts = dzl_shortcut_manager_get_default ();
-
-          g_clear_object (&key->window);
-          key->window = g_object_ref (gtk_widget_get_window (grab_widget));
-          key->type = GDK_KEY_PRESS;
-
-          dzl_shortcut_manager_handle_event (shortcuts, key, grab_widget);
-
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 static void
 ide_application_startup (GApplication *app)
 {
   IdeApplication *self = (IdeApplication *)app;
+  g_autofree gchar *style_path = NULL;
+  GtkSourceStyleSchemeManager *styles;
+  GtkIconTheme *icon_theme;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
@@ -174,45 +138,30 @@ ide_application_startup (GApplication *app)
 
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (app);
 
-  if (IS_UI_PROCESS (self))
-    {
-      g_autofree gchar *style_path = NULL;
-      GtkSourceStyleSchemeManager *styles;
+  /* Setup access to private icons dir */
+  icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+  gtk_icon_theme_add_search_path (icon_theme, PACKAGE_ICONDIR);
 
-      /* Setup key snoopers */
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_key_snooper_install (keybinding_key_snooper, self);
-      G_GNUC_END_IGNORE_DEPRECATIONS
+  /* Add custom style locations for gtksourceview schemes */
+  styles = gtk_source_style_scheme_manager_get_default ();
+  style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-5", "styles", NULL);
+  gtk_source_style_scheme_manager_append_search_path (styles, style_path);
+  gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-5/styles/");
 
-      /* Setup access to private icons dir */
-      gtk_icon_theme_prepend_search_path (gtk_icon_theme_get_default (), PACKAGE_ICONDIR);
-
-      /* Add custom style locations for gtksourceview schemes */
-      styles = gtk_source_style_scheme_manager_get_default ();
-      style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-4", "styles", NULL);
-      gtk_source_style_scheme_manager_append_search_path (styles, style_path);
-      gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-4/styles/");
-
-      hdy_init ();
-
-      /* Load color settings (Night Light, Dark Mode, etc) */
-      _ide_application_init_color (self);
-    }
+  /* Load color settings (Night Light, Dark Mode, etc) */
+  _ide_application_init_color (self);
 
   /* And now we can load the rest of our plugins for startup. */
   _ide_application_load_plugins (self);
 
-  if (IS_UI_PROCESS (self))
-    {
-      /* Make sure our shorcuts are registered */
-      _ide_application_init_shortcuts (self);
+  /* Make sure our shorcuts are registered */
+  _ide_application_init_shortcuts (self);
 
-      /* Load keybindings from plugins and what not */
-      ide_application_register_keybindings (self);
+  /* Load keybindings from plugins and what not */
+  ide_application_register_keybindings (self);
 
-      /* Load language defaults into gsettings */
-      ide_language_defaults_init_async (NULL, NULL, NULL);
-    }
+  /* Load language defaults into gsettings */
+  ide_language_defaults_init_async (NULL, NULL, NULL);
 }
 
 static void
@@ -258,14 +207,8 @@ ide_application_activate (GApplication *app)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
-  if (ide_str_equal0 (self->type, "worker"))
-    {
-      ide_application_activate_worker (self);
-      IDE_EXIT;
-    }
-
   if ((window = gtk_application_get_active_window (GTK_APPLICATION (self))))
-    ide_gtk_window_present (window);
+    gtk_window_present (GTK_WINDOW (window));
 
   if (self->addins != NULL)
     peas_extension_set_foreach (self->addins,
@@ -322,6 +265,40 @@ ide_application_open (GApplication  *app,
   IDE_EXIT;
 }
 
+void
+_ide_application_add_resources (IdeApplication *self,
+                                const char     *resource_path)
+{
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *menu_path = NULL;
+  guint merge_id;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (resource_path != NULL);
+
+  /* We use interned strings for hash table keys */
+  resource_path = g_intern_string (resource_path);
+
+  /*
+   * If the resource path has a gtk/menus.ui file, we want to auto-load and
+   * merge the menus.
+   */
+  menu_path = g_build_filename (resource_path, "gtk", "menus.ui", NULL);
+
+  if (g_str_has_prefix (menu_path, "resource://"))
+    merge_id = ide_menu_manager_add_resource (self->menu_manager, menu_path, &error);
+  else
+    merge_id = ide_menu_manager_add_filename (self->menu_manager, menu_path, &error);
+
+  if (merge_id != 0)
+    g_hash_table_insert (self->menu_merge_ids, (gchar *)resource_path, GUINT_TO_POINTER (merge_id));
+
+  if (error != NULL &&
+      !(g_error_matches (error, G_RESOURCE_ERROR, G_RESOURCE_ERROR_NOT_FOUND) ||
+        g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT)))
+    g_warning ("%s", error->message);
+}
+
 static void
 ide_application_dispose (GObject *object)
 {
@@ -336,9 +313,11 @@ ide_application_dispose (GObject *object)
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
   g_clear_pointer (&self->argv, g_strfreev);
+  g_clear_pointer (&self->menu_merge_ids, g_hash_table_unref);
   g_clear_object (&self->addins);
   g_clear_object (&self->settings);
   g_clear_object (&self->network_monitor);
+  g_clear_object (&self->menu_manager);
 
   G_OBJECT_CLASS (ide_application_parent_class)->dispose (object);
 }
@@ -363,6 +342,8 @@ ide_application_class_init (IdeApplicationClass *klass)
 static void
 ide_application_init (IdeApplication *self)
 {
+  self->menu_merge_ids = g_hash_table_new (g_str_hash, g_str_equal);
+  self->menu_manager = ide_menu_manager_new ();
   self->started_at = g_date_time_new_now_local ();
   self->workspace_type = IDE_TYPE_PRIMARY_WORKSPACE;
   self->workbenches = g_ptr_array_new_with_free_func (g_object_unref);
@@ -375,9 +356,9 @@ ide_application_init (IdeApplication *self)
   ide_themes_init ();
 
   /* Ensure our core data is loaded early. */
-  dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-sourceview/");
-  dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-gui/");
-  dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-terminal/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-sourceview/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-gui/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-terminal/");
 
   /* Make sure our GAction are available */
   _ide_application_init_actions (self);
