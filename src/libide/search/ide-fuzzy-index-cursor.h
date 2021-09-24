@@ -1,6 +1,6 @@
-/* libide-search.h
+/* ide-fuzzy-index-cursor.h
  *
- * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2016 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
 #include <libide-core.h>
-#include <libide-threading.h>
 
-#define IDE_SEARCH_INSIDE
-
-#include "ide-fuzzy-index-builder.h"
-#include "ide-fuzzy-index-cursor.h"
 #include "ide-fuzzy-index.h"
-#include "ide-fuzzy-index-match.h"
-#include "ide-fuzzy-mutable-index.h"
-#include "ide-pattern-spec.h"
-#include "ide-search-engine.h"
-#include "ide-search-provider.h"
-#include "ide-search-reducer.h"
-#include "ide-search-result.h"
 
-#undef IDE_SEARCH_INSIDE
+G_BEGIN_DECLS
+
+#define IDE_TYPE_FUZZY_INDEX_CURSOR (ide_fuzzy_index_cursor_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeFuzzyIndexCursor, ide_fuzzy_index_cursor, IDE, FUZZY_INDEX_CURSOR, GObject)
+
+IDE_AVAILABLE_IN_ALL
+IdeFuzzyIndex *ide_fuzzy_index_cursor_get_index (IdeFuzzyIndexCursor *self);
+
+G_END_DECLS
