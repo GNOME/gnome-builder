@@ -77,16 +77,6 @@ void           ide_application_foreach_workbench        (IdeApplication         
                                                          GFunc                     callback,
                                                          gpointer                  user_data);
 IDE_AVAILABLE_IN_3_32
-void           ide_application_get_worker_async         (IdeApplication           *self,
-                                                         const gchar              *plugin_name,
-                                                         GCancellable             *cancellable,
-                                                         GAsyncReadyCallback       callback,
-                                                         gpointer                  user_data);
-IDE_AVAILABLE_IN_3_32
-GDBusProxy    *ide_application_get_worker_finish        (IdeApplication           *self,
-                                                         GAsyncResult             *result,
-                                                         GError                  **error);
-IDE_AVAILABLE_IN_3_32
 IdeWorkbench  *ide_application_find_workbench_for_file  (IdeApplication           *self,
                                                          GFile                    *file);
 IDE_AVAILABLE_IN_3_34

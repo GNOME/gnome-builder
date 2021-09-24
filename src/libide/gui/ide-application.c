@@ -234,61 +234,6 @@ ide_application_shutdown (GApplication *app)
 }
 
 static void
-ide_application_activate_worker (IdeApplication *self)
-{
-  g_autoptr(GDBusConnection) connection = NULL;
-  g_autoptr(GError) error = NULL;
-  PeasPluginInfo *plugin_info;
-  PeasExtension *extension;
-  PeasEngine *engine;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (ide_str_equal0 (self->type, "worker"));
-  g_assert (self->dbus_address != NULL);
-  g_assert (self->plugin != NULL);
-
-#ifdef __linux__
-  prctl (PR_SET_PDEATHSIG, SIGKILL);
-#endif
-
-  IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);
-
-  connection = g_dbus_connection_new_for_address_sync (self->dbus_address,
-                                                       (G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT |
-                                                        G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING),
-                                                       NULL, NULL, &error);
-
-  if (error != NULL)
-    {
-      g_error ("D-Bus failure: %s", error->message);
-      IDE_EXIT;
-    }
-
-  engine = peas_engine_get_default ();
-
-  if (!(plugin_info = peas_engine_get_plugin_info (engine, self->plugin)))
-    {
-      g_error ("No such plugin \"%s\"", self->plugin);
-      IDE_EXIT;
-    }
-
-  if (!(extension = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL)))
-    {
-      g_error ("Failed to create \"%s\" worker", self->plugin);
-      IDE_EXIT;
-    }
-
-  ide_worker_register_service (IDE_WORKER (extension), connection);
-  g_application_hold (G_APPLICATION (self));
-  g_dbus_connection_start_message_processing (connection);
-
-  IDE_EXIT;
-}
-
-static void
 ide_application_activate_cb (PeasExtensionSet *set,
                              PeasPluginInfo   *plugin_info,
                              PeasExtension    *exten,
@@ -391,13 +336,9 @@ ide_application_dispose (GObject *object)
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
   g_clear_pointer (&self->argv, g_strfreev);
-  g_clear_pointer (&self->plugin, g_free);
-  g_clear_pointer (&self->type, g_free);
-  g_clear_pointer (&self->dbus_address, g_free);
   g_clear_object (&self->addins);
   g_clear_object (&self->settings);
   g_clear_object (&self->network_monitor);
-  g_clear_object (&self->worker_manager);
 
   G_OBJECT_CLASS (ide_application_parent_class)->dispose (object);
 }
@@ -443,15 +384,12 @@ ide_application_init (IdeApplication *self)
 }
 
 IdeApplication *
-_ide_application_new (gboolean     standalone,
-                      const gchar *type,
-                      const gchar *plugin,
-                      const gchar *dbus_address)
+_ide_application_new (gboolean standalone)
 {
   GApplicationFlags flags = G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN;
   IdeApplication *self;
 
-  if (standalone || ide_str_equal0 (type, "worker"))
+  if (standalone)
     flags |= G_APPLICATION_NON_UNIQUE;
 
   self = g_object_new (IDE_TYPE_APPLICATION,
@@ -459,10 +397,6 @@ _ide_application_new (gboolean     standalone,
                        "flags", flags,
                        "resource-base-path", "/org/gnome/builder",
                        NULL);
-
-  self->type = g_strdup (type);
-  self->plugin = g_strdup (plugin);
-  self->dbus_address = g_strdup (dbus_address);
 
   /* Load plugins indicating they support startup features */
   _ide_application_load_plugins_for_startup (self);
@@ -655,94 +589,6 @@ ide_application_get_started_at (IdeApplication *self)
   g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
 
   return self->started_at;
-}
-
-static void
-ide_application_get_worker_cb (GObject      *object,
-                               GAsyncResult *result,
-                               gpointer      user_data)
-{
-  IdeWorkerManager *worker_manager = (IdeWorkerManager *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  GDBusProxy *proxy;
-
-  g_assert (IDE_IS_WORKER_MANAGER (worker_manager));
-
-  if (!(proxy = ide_worker_manager_get_worker_finish (worker_manager, result, &error)))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_steal_pointer (&proxy), g_object_unref);
-}
-
-/**
- * ide_application_get_worker_async:
- * @self: an #IdeApplication
- * @plugin_name: The name of the plugin.
- * @cancellable: (allow-none): a #GCancellable or %NULL.
- * @callback: a #GAsyncReadyCallback or %NULL.
- * @user_data: user data for @callback.
- *
- * Asynchronously requests a #GDBusProxy to a service provided in a worker
- * process. The worker should be an #IdeWorker implemented by the plugin named
- * @plugin_name. The #IdeWorker is responsible for created both the service
- * registered on the bus and the proxy to it.
- *
- * The #IdeApplication is responsible for spawning a subprocess for the worker.
- *
- * @callback should call ide_application_get_worker_finish() with the result
- * provided to retrieve the result.
- *
- * Since: 3.32
- */
-void
-ide_application_get_worker_async (IdeApplication      *self,
-                                  const gchar         *plugin_name,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  g_return_if_fail (IDE_IS_APPLICATION (self));
-  g_return_if_fail (plugin_name != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (self->worker_manager == NULL)
-    self->worker_manager = ide_worker_manager_new ();
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_application_get_worker_async);
-
-  ide_worker_manager_get_worker_async (self->worker_manager,
-                                       plugin_name,
-                                       cancellable,
-                                       ide_application_get_worker_cb,
-                                       g_steal_pointer (&task));
-}
-
-/**
- * ide_application_get_worker_finish:
- * @self: an #IdeApplication.
- * @result: a #GAsyncResult
- * @error: a location for a #GError, or %NULL.
- *
- * Completes an asynchronous request to get a proxy to a worker process.
- *
- * Returns: (transfer full): a #GDBusProxy or %NULL.
- *
- * Since: 3.32
- */
-GDBusProxy *
-ide_application_get_worker_finish (IdeApplication  *self,
-                                   GAsyncResult    *result,
-                                   GError         **error)
-{
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 /**
