@@ -24,7 +24,8 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <libpanel.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
@@ -32,14 +33,14 @@ G_BEGIN_DECLS
 #define IDE_TYPE_PAGE (ide_page_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (IdePage, ide_page, IDE, PAGE, GtkWidget)
+G_DECLARE_DERIVABLE_TYPE (IdePage, ide_page, IDE, PAGE, PanelWidget)
 
 typedef void (*IdePageCallback) (IdePage  *page,
                                  gpointer  user_data);
 
 struct _IdePageClass
 {
-  GtkWidgetClass parent_class;
+  PanelWidgetClass parent_class;
 
   void           (*agree_to_close_async)  (IdePage              *self,
                                            GCancellable         *cancellable,
