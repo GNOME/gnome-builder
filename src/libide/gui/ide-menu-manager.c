@@ -20,10 +20,11 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
 #include <string.h>
 
-#include "menus/ide-menu-manager.h"
-#include "util/ide-util-private.h"
+#include "ide-macros.h"
+#include "ide-menu-manager.h"
 
 struct _IdeMenuManager
 {
@@ -37,7 +38,7 @@ G_DEFINE_TYPE (IdeMenuManager, ide_menu_manager, G_TYPE_OBJECT)
 
 #define IDE_MENU_ATTRIBUTE_BEFORE   "before"
 #define IDE_MENU_ATTRIBUTE_AFTER    "after"
-#define IDE_MENU_ATTRIBUTE_MERGE_ID "dazzle-merge-id"
+#define IDE_MENU_ATTRIBUTE_MERGE_ID "ide-merge-id"
 
 /**
  * IdeMenuManager:

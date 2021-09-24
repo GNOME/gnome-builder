@@ -31,7 +31,6 @@
 #include "ide-global.h"
 #include "ide-log.h"
 #include "ide-macros.h"
-#include "ide-menu-manager.h"
 #include "ide-notification.h"
 #include "ide-notifications.h"
 #include "ide-object.h"

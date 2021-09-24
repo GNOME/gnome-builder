@@ -26,7 +26,7 @@
 
 #include "ide-application.h"
 #include "ide-keybindings.h"
-#include "ide-worker-manager.h"
+#include "ide-menu-manager.h"
 
 G_BEGIN_DECLS
 

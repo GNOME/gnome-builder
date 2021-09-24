@@ -47,6 +47,7 @@
 #include "ide-gui-global.h"
 #include "ide-header-bar.h"
 #include "ide-marked-view.h"
+#include "ide-menu-manager.h"
 #include "ide-notifications-button.h"
 #include "ide-omni-bar-addin.h"
 #include "ide-omni-bar.h"
