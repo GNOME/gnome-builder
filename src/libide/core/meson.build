@@ -53,6 +53,7 @@ libide_core_generated_headers += [libide_debug_h]
 #
 
 libide_core_public_headers = [
+  'ide-action-group.h',
   'ide-context.h',
   'ide-context-addin.h',
   'ide-global.h',
