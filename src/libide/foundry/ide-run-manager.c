@@ -23,10 +23,12 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libide-threading.h>
-#include <libide-vcs.h>
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
+
+#include <libide-core.h>
+#include <libide-threading.h>
+#include <libide-vcs.h>
 
 #include "ide-private.h"
 
@@ -79,7 +81,7 @@ static void ide_run_manager_actions_run_with_handler (IdeRunManager  *self,
 static void ide_run_manager_actions_stop             (IdeRunManager  *self,
                                                       GVariant       *param);
 
-DZL_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
+IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run", ide_run_manager_actions_run },
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
@@ -859,7 +861,7 @@ ide_run_manager_run_async (IdeRunManager       *self,
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
 
-  dzl_cancellable_chain (cancellable, self->cancellable);
+  ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_run_manager_run_async);
@@ -961,10 +963,6 @@ ide_run_manager_add_handler (IdeRunManager  *self,
                              GDestroyNotify  user_data_destroy)
 {
   IdeRunHandlerInfo *info;
-  DzlShortcutManager *manager;
-  DzlShortcutTheme *theme;
-  g_autofree gchar *action_name = NULL;
-  GApplication *app;
 
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
   g_return_if_fail (id != NULL);
@@ -980,6 +978,13 @@ ide_run_manager_add_handler (IdeRunManager  *self,
   info->handler_data_destroy = user_data_destroy;
 
   self->handlers = g_list_append (self->handlers, info);
+
+  /* FIXME: We need a new way to do this for GTK 4. */
+#if 0
+  DzlShortcutManager *manager;
+  DzlShortcutTheme *theme;
+  g_autofree gchar *action_name = NULL;
+  GApplication *app;
 
   app = g_application_get_default ();
   manager = dzl_application_get_shortcut_manager (DZL_APPLICATION (app));
@@ -998,6 +1003,7 @@ ide_run_manager_add_handler (IdeRunManager  *self,
                                            action_name,
                                            accel,
                                            DZL_SHORTCUT_PHASE_GLOBAL | DZL_SHORTCUT_PHASE_CAPTURE);
+#endif
 
   if (self->handler == NULL)
     self->handler = info;

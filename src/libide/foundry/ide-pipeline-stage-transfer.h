@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include <libide-io.h>
 
 #include "ide-pipeline-stage.h"
 

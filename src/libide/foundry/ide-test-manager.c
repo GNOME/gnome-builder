@@ -22,10 +22,11 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libpeas/peas.h>
+
+#include <libide-core.h>
 #include <libide-io.h>
 #include <libide-threading.h>
-#include <libpeas/peas.h>
 
 #include "ide-build-manager.h"
 #include "ide-pipeline.h"
@@ -90,7 +91,7 @@ static void ide_test_manager_actions_reload  (IdeTestManager *self,
 static void ide_test_manager_actions_cancel  (IdeTestManager *self,
                                               GVariant       *param);
 
-DZL_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
+IDE_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
   { "cancel", ide_test_manager_actions_cancel },
   { "run-all", ide_test_manager_actions_run_all },
   { "reload-tests", ide_test_manager_actions_reload },

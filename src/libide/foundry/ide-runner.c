@@ -22,14 +22,14 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <errno.h>
 #include <glib/gi18n.h>
-#include <libide-io.h>
-#include <libide-threading.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#include <libide-io.h>
+#include <libide-threading.h>
 
 #include "ide-build-target.h"
 #include "ide-config-manager.h"
