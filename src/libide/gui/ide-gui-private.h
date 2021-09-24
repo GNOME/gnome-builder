@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include <dazzle.h>
 #include <gtk/gtk.h>
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
+
 #include <libide-core.h>
 #include <libide-projects.h>
 
