@@ -80,50 +80,50 @@ ide_cell_renderer_status_get_preferred_width (GtkCellRenderer *cell,
 }
 
 static void
-ide_cell_renderer_status_render (GtkCellRenderer      *cell,
-                                 cairo_t              *cr,
-                                 GtkWidget            *widget,
-                                 const GdkRectangle   *bg_area,
-                                 const GdkRectangle   *cell_area,
-                                 GtkCellRendererState  state)
+ide_cell_renderer_status_snapshot (GtkCellRenderer      *cell,
+                                   GtkSnapshot          *snapshot,
+                                   GtkWidget            *widget,
+                                   const GdkRectangle   *bg_area,
+                                   const GdkRectangle   *cell_area,
+                                   GtkCellRendererState  state)
 {
   IdeCellRendererStatus *self = (IdeCellRendererStatus *)cell;
   GtkStyleContext *style_context;
+  cairo_t *cr;
   GdkRGBA color;
 
   g_assert (IDE_IS_CELL_RENDERER_STATUS (self));
-  g_assert (cr != NULL);
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (bg_area != NULL);
   g_assert (cell_area != NULL);
+
+  /* FIXME-GTK4: This should be ported to use symbolic icons instead */
 
   if (self->flags == 0)
     return;
 
   style_context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (style_context);
+  gtk_style_context_get_color (style_context, &color);
 
-  if (state & GTK_CELL_RENDERER_SELECTED)
-    gtk_style_context_set_state (style_context,
-                                 gtk_style_context_get_state (style_context) & GTK_STATE_FLAG_SELECTED);
-  gtk_style_context_get_color (style_context,
-                               gtk_style_context_get_state (style_context),
-                               &color);
-  gdk_cairo_set_source_rgba (cr, &color);
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (cell_area->x,
+                                                       cell_area->y,
+                                                       cell_area->width,
+                                                       cell_area->height));
 
   cairo_arc (cr,
-             cell_area->x + cell_area->width - RPAD - (CELL_WIDTH/2),
-             cell_area->y + (cell_area->height / 2),
+             cell_area->width - RPAD - (CELL_WIDTH/2),
+             (cell_area->height / 2),
              3,
              0,
              M_PI * 2);
 
+  gdk_cairo_set_source_rgba (cr, &color);
   if (self->flags & IDE_TREE_NODE_FLAGS_ADDED)
     cairo_fill_preserve (cr);
-
   cairo_stroke (cr);
 
-  gtk_style_context_restore (style_context);
+  cairo_destroy (cr);
 }
 
 static void
@@ -175,7 +175,7 @@ ide_cell_renderer_status_class_init (IdeCellRendererStatusClass *klass)
 
   renderer_class->get_preferred_height = ide_cell_renderer_status_get_preferred_height;
   renderer_class->get_preferred_width = ide_cell_renderer_status_get_preferred_width;
-  renderer_class->render = ide_cell_renderer_status_render;
+  renderer_class->snapshot = ide_cell_renderer_status_snapshot;
 
   properties [PROP_FLAGS] =
     g_param_spec_uint ("flags",
@@ -183,7 +183,7 @@ ide_cell_renderer_status_class_init (IdeCellRendererStatusClass *klass)
                        "The flags for the state",
                        0, G_MAXUINT, 0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 

@@ -1723,7 +1723,6 @@ ide_tree_node_show_popover_timeout_cb (gpointer data)
       break;
     }
 
-  gtk_popover_set_relative_to (popreq->popover, GTK_WIDGET (popreq->tree));
   gtk_popover_set_pointing_to (popreq->popover, &rect);
   gtk_popover_popup (popreq->popover);
 
