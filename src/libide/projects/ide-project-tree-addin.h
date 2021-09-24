@@ -20,14 +20,13 @@
 
 #pragma once
 
-#include <dazzle.h>
-#include <libide-core.h>
+#include <libide-tree.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_TREE_ADDIN (ide_project_tree_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeProjectTreeAddin, ide_project_tree_addin, IDE, PROJECT_TREE_ADDIN, GObject)
 
 struct _IdeProjectTreeAddinInterface
@@ -35,16 +34,16 @@ struct _IdeProjectTreeAddinInterface
   GTypeInterface parent_iface;
 
   void (*load)   (IdeProjectTreeAddin *self,
-                  DzlTree             *tree);
+                  IdeTree             *tree);
   void (*unload) (IdeProjectTreeAddin *self,
-                  DzlTree             *tree);
+                  IdeTree             *tree);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_project_tree_addin_load   (IdeProjectTreeAddin *self,
-                                    DzlTree             *tree);
-IDE_AVAILABLE_IN_3_32
+                                    IdeTree             *tree);
+IDE_AVAILABLE_IN_ALL
 void ide_project_tree_addin_unload (IdeProjectTreeAddin *self,
-                                    DzlTree             *tree);
+                                    IdeTree             *tree);
 
 G_END_DECLS
