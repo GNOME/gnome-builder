@@ -67,7 +67,7 @@ static void
 ide_tree_addin_real_node_dropped_async (IdeTreeAddin        *self,
                                         IdeTreeNode         *drag_node,
                                         IdeTreeNode         *drop_node,
-                                        GtkSelectionData    *selection,
+                                        const GValue        *value,
                                         GdkDragAction        actions,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
@@ -298,17 +298,17 @@ ide_tree_addin_node_draggable (IdeTreeAddin *self,
 }
 
 gboolean
-ide_tree_addin_node_droppable (IdeTreeAddin     *self,
-                               IdeTreeNode      *drag_node,
-                               IdeTreeNode      *drop_node,
-                               GtkSelectionData *selection)
+ide_tree_addin_node_droppable (IdeTreeAddin *self,
+                               IdeTreeNode  *drag_node,
+                               IdeTreeNode  *drop_node,
+                               const GValue *value)
 {
   g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), FALSE);
   g_return_val_if_fail (!drag_node || IDE_IS_TREE_NODE (drag_node), FALSE);
   g_return_val_if_fail (!drop_node || IDE_IS_TREE_NODE (drop_node), FALSE);
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable)
-    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drag_node, drop_node, selection);
+    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drag_node, drop_node, value);
 
   return FALSE;
 }
@@ -317,7 +317,7 @@ void
 ide_tree_addin_node_dropped_async (IdeTreeAddin        *self,
                                    IdeTreeNode         *drag_node,
                                    IdeTreeNode         *drop_node,
-                                   GtkSelectionData    *selection,
+                                   const GValue        *value,
                                    GdkDragAction        actions,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
@@ -327,13 +327,13 @@ ide_tree_addin_node_dropped_async (IdeTreeAddin        *self,
   g_return_if_fail (IDE_IS_TREE_ADDIN (self));
   g_return_if_fail (!drag_node || IDE_IS_TREE_NODE (drag_node));
   g_return_if_fail (!drop_node || IDE_IS_TREE_NODE (drop_node));
-  g_return_if_fail (selection != NULL);
+  g_return_if_fail (value != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_TREE_ADDIN_GET_IFACE (self)->node_dropped_async (self,
                                                        drag_node,
                                                        drop_node,
-                                                       selection,
+                                                       value,
                                                        actions,
                                                        cancellable,
                                                        callback,

@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TREE (ide_tree_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTree, ide_tree, IDE, TREE, GtkTreeView)
 
 struct _IdeTreeClass
@@ -37,31 +37,33 @@ struct _IdeTreeClass
   GtkTreeViewClass parent_type;
 
   /*< private >*/
-  gpointer _reserved[16];
+  gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
-GtkWidget   *ide_tree_new                  (void);
-IDE_AVAILABLE_IN_3_32
-void         ide_tree_set_context_menu     (IdeTree     *self,
-                                            GMenu       *menu);
-IDE_AVAILABLE_IN_3_32
-void         ide_tree_show_popover_at_node (IdeTree     *self,
-                                            IdeTreeNode *node,
-                                            GtkPopover  *popover);
-IDE_AVAILABLE_IN_3_32
-IdeTreeNode *ide_tree_get_selected_node    (IdeTree     *self);
-IDE_AVAILABLE_IN_3_32
-void         ide_tree_select_node          (IdeTree     *self,
-                                            IdeTreeNode *node);
-IDE_AVAILABLE_IN_3_32
-void         ide_tree_expand_node          (IdeTree     *self,
-                                            IdeTreeNode *node);
-IDE_AVAILABLE_IN_3_32
-void         ide_tree_collapse_node        (IdeTree     *self,
-                                            IdeTreeNode *node);
-IDE_AVAILABLE_IN_3_32
-gboolean     ide_tree_node_expanded        (IdeTree     *self,
-                                            IdeTreeNode *node);
+IDE_AVAILABLE_IN_ALL
+GtkWidget     *ide_tree_new                  (void);
+IDE_AVAILABLE_IN_ALL
+void           ide_tree_set_context_menu     (IdeTree     *self,
+                                              GMenu       *menu);
+IDE_AVAILABLE_IN_ALL
+void           ide_tree_show_popover_at_node (IdeTree     *self,
+                                              IdeTreeNode *node,
+                                              GtkPopover  *popover);
+IDE_AVAILABLE_IN_ALL
+IdeTreeNode   *ide_tree_get_selected_node    (IdeTree     *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_tree_select_node          (IdeTree     *self,
+                                              IdeTreeNode *node);
+IDE_AVAILABLE_IN_ALL
+void           ide_tree_expand_node          (IdeTree     *self,
+                                              IdeTreeNode *node);
+IDE_AVAILABLE_IN_ALL
+void           ide_tree_collapse_node        (IdeTree     *self,
+                                              IdeTreeNode *node);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_tree_node_expanded        (IdeTree     *self,
+                                              IdeTreeNode *node);
+IDE_AVAILABLE_IN_ALL
+GtkDropTarget *ide_tree_get_drop_target      (IdeTree     *self);
 
 G_END_DECLS
