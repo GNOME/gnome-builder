@@ -24,44 +24,43 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
-#include <handy.h>
+#include <adwaita.h>
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_HEADER_BAR (ide_header_bar_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeHeaderBar, ide_header_bar, IDE, HEADER_BAR, HdyHeaderBar)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdeHeaderBar, ide_header_bar, IDE, HEADER_BAR, AdwHeaderBar)
 
 struct _IdeHeaderBarClass
 {
-  HdyHeaderBarClass parent_class;
+  AdwHeaderBar parent_class;
 
   /*< private >*/
-  gpointer _reserved[16];
+  gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkWidget   *ide_header_bar_new                        (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_header_bar_add_primary                (IdeHeaderBar *self,
                                                         GtkWidget    *widget);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_header_bar_add_center_left            (IdeHeaderBar *self,
                                                         GtkWidget    *widget);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_header_bar_add_secondary              (IdeHeaderBar *self,
                                                         GtkWidget    *widget);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_header_bar_get_menu_id                (IdeHeaderBar *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_header_bar_set_menu_id                (IdeHeaderBar *self,
                                                         const gchar  *menu_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_header_bar_get_show_fullscreen_button (IdeHeaderBar *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_header_bar_set_show_fullscreen_button (IdeHeaderBar *self,
                                                         gboolean      show_fullscreen_button);
 

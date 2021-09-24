@@ -73,11 +73,11 @@ void             ide_workbench_focus_workspace       (IdeWorkbench         *self
                                                       IdeWorkspace         *workspace);
 IDE_AVAILABLE_IN_3_32
 void             ide_workbench_foreach_workspace     (IdeWorkbench         *self,
-                                                      GtkCallback           callback,
+                                                      IdeWorkspaceCallback  callback,
                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
 void             ide_workbench_foreach_page          (IdeWorkbench         *self,
-                                                      GtkCallback           callback,
+                                                      IdePageCallback       callback,
                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_32
 void             ide_workbench_load_project_async    (IdeWorkbench         *self,

@@ -22,8 +22,9 @@
 
 #include "config.h"
 
-#include <libide-threading.h>
 #include <string.h>
+
+#include <libide-threading.h>
 
 #include "ide-gui-global.h"
 #include "ide-gui-private.h"
@@ -68,7 +69,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdePage, ide_page, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (IdePage, ide_page, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
@@ -411,6 +412,8 @@ ide_page_class_init (IdePageClass *klass)
                   G_STRUCT_OFFSET (IdePageClass, create_split),
                   g_signal_accumulator_first_wins, NULL,
                   NULL, IDE_TYPE_PAGE, 0);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 }
 
 static void

@@ -100,7 +100,7 @@ enum {
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, HDY_TYPE_APPLICATION_WINDOW,
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICATION_WINDOW,
                                   G_ADD_PRIVATE (IdeWorkspace)
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
