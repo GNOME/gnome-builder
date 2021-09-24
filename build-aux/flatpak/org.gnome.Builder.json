@@ -277,6 +277,7 @@
             "name" : "vte",
             "buildsystem" : "meson",
             "config-opts" : [
+                "-Dgtk4=true",
                 "-Dvapi=false"
             ],
             "sources" : [
