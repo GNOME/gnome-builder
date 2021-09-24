@@ -59,10 +59,11 @@ libide_projects_deps = [
   libtemplate_glib_dep,
   libxml2_dep,
 
+  libide_code_dep,
   libide_core_dep,
   libide_io_dep,
   libide_threading_dep,
-  libide_code_dep,
+  libide_tree_dep,
   libide_vcs_dep,
 ]
 

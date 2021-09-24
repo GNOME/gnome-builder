@@ -32,8 +32,6 @@
  * The #IdeProjectTreeAddin is used to extend the project tree. Plugins
  * can add new tree builders to the tree in the load virtual function. They
  * should remove the tree builders from the unload virtual function.
- *
- * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeProjectTreeAddin, ide_project_tree_addin, G_TYPE_OBJECT)
@@ -46,14 +44,14 @@ ide_project_tree_addin_default_init (IdeProjectTreeAddinInterface *iface)
 /**
  * ide_project_tree_addin_load:
  * @self: a #IdeProjectTreeAddin
- * @tree: a #DzlTree
+ * @tree: a #IdeTree
  *
  * This function will call the IdeProjectTreeAddin::load vfunc of @self.
  *
  * This is used to initialize the project tree so that plugins can extend
  * the contents of the tree.
  *
- * Plugins should add a #DzlTreeBuilder to the tree when loading, and remove
+ * Plugins should add a #IdeTreeBuilder to the tree when loading, and remove
  * them when unloading.
  *
  * See also: ide_project_tree_addin_unload()
@@ -62,10 +60,10 @@ ide_project_tree_addin_default_init (IdeProjectTreeAddinInterface *iface)
  */
 void
 ide_project_tree_addin_load (IdeProjectTreeAddin *self,
-                             DzlTree             *tree)
+                             IdeTree             *tree)
 {
   g_return_if_fail (IDE_IS_PROJECT_TREE_ADDIN (self));
-  g_return_if_fail (DZL_IS_TREE (tree));
+  g_return_if_fail (IDE_IS_TREE (tree));
 
   if (IDE_PROJECT_TREE_ADDIN_GET_IFACE (self)->load)
     IDE_PROJECT_TREE_ADDIN_GET_IFACE (self)->load (self, tree);
@@ -74,7 +72,7 @@ ide_project_tree_addin_load (IdeProjectTreeAddin *self,
 /**
  * ide_project_tree_addin_unload:
  * @self: a #IdeProjectTreeAddin
- * @tree: a #DzlTree
+ * @tree: a #IdeTree
  *
  * This function will call the IdeProjectTreeAddin::unload vfunc of @self.
  *
@@ -88,10 +86,10 @@ ide_project_tree_addin_load (IdeProjectTreeAddin *self,
  */
 void
 ide_project_tree_addin_unload (IdeProjectTreeAddin *self,
-                               DzlTree             *tree)
+                               IdeTree             *tree)
 {
   g_return_if_fail (IDE_IS_PROJECT_TREE_ADDIN (self));
-  g_return_if_fail (DZL_IS_TREE (tree));
+  g_return_if_fail (IDE_IS_TREE (tree));
 
   if (IDE_PROJECT_TREE_ADDIN_GET_IFACE (self)->unload)
     IDE_PROJECT_TREE_ADDIN_GET_IFACE (self)->unload (self, tree);
