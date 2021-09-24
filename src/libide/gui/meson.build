@@ -171,8 +171,9 @@ libide_gui_sources += libide_gui_resources
 libide_gui_deps = [
   libgio_dep,
   libgtk_dep,
-  libadwaita_dep,
   libgtksource_dep,
+  libadwaita_dep,
+  libpanel_dep,
   libpeas_dep,
 
   dependency('libcmark', version: '>= 0.29.0'),
