@@ -175,6 +175,7 @@ libide_gui_sources += libide_gui_resources
 libide_gui_deps = [
   libgio_dep,
   libgtk_dep,
+  libadwaita_dep,
   libgtksource_dep,
   libpeas_dep,
 
