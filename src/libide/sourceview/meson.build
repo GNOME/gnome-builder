@@ -10,14 +10,7 @@ libide_sourceview_generated_headers = []
 #
 
 libide_sourceview_private_headers = [
-  'ide-completion-list-box.h',
-  'ide-completion-overlay.h',
-  'ide-completion-private.h',
-  'ide-completion-view.h',
-  'ide-completion-window.h',
   'ide-cursor.h',
-  'ide-hover-popover-private.h',
-  'ide-hover-private.h',
   'ide-source-view-capture.h',
   'ide-source-view-mode.h',
   'ide-source-view-movements.h',
@@ -25,32 +18,14 @@ libide_sourceview_private_headers = [
 ]
 
 libide_sourceview_public_headers = [
-  'ide-completion-context.h',
-  'ide-completion-display.h',
-  'ide-completion-list-box-row.h',
-  'ide-completion-proposal.h',
-  'ide-completion-provider.h',
-  'ide-completion-types.h',
-  'ide-completion.h',
   'ide-gutter.h',
-  'ide-hover-context.h',
-  'ide-hover-provider.h',
-  'ide-indenter.h',
   'ide-line-change-gutter-renderer.h',
-  'ide-snippet-chunk.h',
-  'ide-snippet-context.h',
-  'ide-snippet-parser.h',
-  'ide-snippet-storage.h',
-  'ide-snippet-types.h',
-  'ide-snippet.h',
-  'ide-source-search-context.h',
   'ide-source-view.h',
   'ide-text-util.h',
   'libide-sourceview.h',
 ]
 
 libide_sourceview_enum_headers = [
-  'ide-completion-types.h',
   'ide-source-view.h',
 ]
 
@@ -61,13 +36,7 @@ install_headers(libide_sourceview_public_headers, subdir: libide_sourceview_head
 #
 
 libide_sourceview_private_sources = [
-  'ide-completion-list-box.c',
-  'ide-completion-overlay.c',
-  'ide-completion-view.c',
-  'ide-completion-window.c',
   'ide-cursor.c',
-  'ide-hover.c',
-  'ide-hover-popover.c',
   'ide-line-change-gutter-renderer.c',
   'ide-source-view-capture.c',
   'ide-source-view-mode.c',
@@ -77,23 +46,8 @@ libide_sourceview_private_sources = [
 ]
 
 libide_sourceview_public_sources = [
-  'ide-completion-proposal.c',
-  'ide-completion-provider.c',
-  'ide-completion-context.c',
-  'ide-completion-display.c',
-  'ide-completion-list-box-row.c',
-  'ide-completion.c',
   'ide-gutter.c',
-  'ide-hover-context.c',
-  'ide-hover-provider.c',
-  'ide-indenter.c',
-  'ide-source-search-context.c',
   'ide-source-view.c',
-  'ide-snippet.c',
-  'ide-snippet-chunk.c',
-  'ide-snippet-context.c',
-  'ide-snippet-parser.c',
-  'ide-snippet-storage.c',
 ]
 
 #
