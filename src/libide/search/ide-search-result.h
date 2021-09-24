@@ -1,6 +1,6 @@
 /* ide-search-result.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,19 +24,20 @@
 # error "Only <libide-search.h> can be included directly."
 #endif
 
+#include <gtk/gtk.h>
+
 #include <libide-core.h>
-#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_RESULT (ide_search_result_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeSearchResult, ide_search_result, IDE, SEARCH_RESULT, DzlSuggestion)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdeSearchResult, ide_search_result, IDE, SEARCH_RESULT, GObject)
 
 struct _IdeSearchResultClass
 {
-  DzlSuggestionClass parent_class;
+  GObjectClass parent_class;
 
   void (*activate) (IdeSearchResult *self,
                     GtkWidget       *last_focus);
@@ -45,26 +46,33 @@ struct _IdeSearchResultClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
-IdeSearchResult *ide_search_result_new          (void);
-IDE_AVAILABLE_IN_3_32
-void             ide_search_result_activate     (IdeSearchResult *self,
-                                                 GtkWidget       *last_focus);
-IDE_AVAILABLE_IN_3_32
-gint             ide_search_result_compare      (gconstpointer    a,
-                                                 gconstpointer    b);
-IDE_AVAILABLE_IN_3_32
-gint             ide_search_result_get_priority (IdeSearchResult *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_search_result_set_priority (IdeSearchResult *self,
-                                                 gint             priority);
-IDE_AVAILABLE_IN_3_32
-gfloat           ide_search_result_get_score    (IdeSearchResult *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_search_result_set_score    (IdeSearchResult *self,
-                                                 gfloat           score);
-IDE_AVAILABLE_IN_3_32
-void             ide_search_result_set_icon     (IdeSearchResult *self,
-                                                 GIcon           *icon);
+IDE_AVAILABLE_IN_ALL
+IdeSearchResult *ide_search_result_new           (void);
+IDE_AVAILABLE_IN_ALL
+void             ide_search_result_activate      (IdeSearchResult *self,
+                                                  GtkWidget       *last_focus);
+IDE_AVAILABLE_IN_ALL
+int              ide_search_result_compare       (gconstpointer    a,
+                                                  gconstpointer    b);
+IDE_AVAILABLE_IN_ALL
+int              ide_search_result_get_priority  (IdeSearchResult *self);
+IDE_AVAILABLE_IN_ALL
+void             ide_search_result_set_priority  (IdeSearchResult *self,
+                                                  int             priority);
+IDE_AVAILABLE_IN_ALL
+float            ide_search_result_get_score     (IdeSearchResult *self);
+IDE_AVAILABLE_IN_ALL
+void             ide_search_result_set_score     (IdeSearchResult *self,
+                                                  gfloat           score);
+IDE_AVAILABLE_IN_ALL
+GdkPaintable    *ide_search_result_get_paintable (IdeSearchResult *self);
+IDE_AVAILABLE_IN_ALL
+void             ide_search_result_set_paintable (IdeSearchResult *self,
+                                                  GdkPaintable    *paintable);
+IDE_AVAILABLE_IN_ALL
+const char      *ide_search_result_get_title     (IdeSearchResult *self);
+IDE_AVAILABLE_IN_ALL
+void             ide_search_result_set_title     (IdeSearchResult *self,
+                                                  const char      *title);
 
 G_END_DECLS
