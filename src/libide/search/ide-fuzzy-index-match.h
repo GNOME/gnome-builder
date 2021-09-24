@@ -1,6 +1,6 @@
-/* libide-search.h
+/* ide-fuzzy-index-match.h
  *
- * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2016 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
 #include <libide-core.h>
-#include <libide-threading.h>
 
-#define IDE_SEARCH_INSIDE
+G_BEGIN_DECLS
 
-#include "ide-fuzzy-index-builder.h"
-#include "ide-fuzzy-index-cursor.h"
-#include "ide-fuzzy-index.h"
-#include "ide-fuzzy-index-match.h"
-#include "ide-fuzzy-mutable-index.h"
-#include "ide-pattern-spec.h"
-#include "ide-search-engine.h"
-#include "ide-search-provider.h"
-#include "ide-search-reducer.h"
-#include "ide-search-result.h"
+#define IDE_TYPE_FUZZY_INDEX_MATCH (ide_fuzzy_index_match_get_type())
 
-#undef IDE_SEARCH_INSIDE
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeFuzzyIndexMatch, ide_fuzzy_index_match, IDE, FUZZY_INDEX_MATCH, GObject)
+
+IDE_AVAILABLE_IN_ALL
+const gchar *ide_fuzzy_index_match_get_key      (IdeFuzzyIndexMatch *self);
+IDE_AVAILABLE_IN_ALL
+GVariant    *ide_fuzzy_index_match_get_document (IdeFuzzyIndexMatch *self);
+IDE_AVAILABLE_IN_ALL
+gfloat       ide_fuzzy_index_match_get_score    (IdeFuzzyIndexMatch *self);
+IDE_AVAILABLE_IN_ALL
+guint        ide_fuzzy_index_match_get_priority (IdeFuzzyIndexMatch *self);
+
+G_END_DECLS
