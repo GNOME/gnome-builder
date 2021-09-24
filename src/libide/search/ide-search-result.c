@@ -26,35 +26,24 @@
 
 typedef struct
 {
-  GIcon  *icon;
-  gfloat  score;
-  guint   priority;
+  char         *title;
+  GdkPaintable *paintable;
+  float         score;
+  guint         priority;
 } IdeSearchResultPrivate;
 
 enum {
   PROP_0,
-  PROP_SCORE,
+  PROP_PAINTABLE,
   PROP_PRIORITY,
+  PROP_SCORE,
+  PROP_TITLE,
   N_PROPS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchResult, ide_search_result, DZL_TYPE_SUGGESTION)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchResult, ide_search_result, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
-
-static GIcon *
-ide_search_result_real_get_icon (DzlSuggestion *suggestion)
-{
-  IdeSearchResult *self = (IdeSearchResult *)suggestion;
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_assert (IDE_IS_SEARCH_RESULT (self));
-
-  if (priv->icon != NULL)
-    return g_object_ref (priv->icon);
-
-  return DZL_SUGGESTION_CLASS (ide_search_result_parent_class)->get_icon (suggestion);
-}
 
 static void
 ide_search_result_finalize (GObject *object)
@@ -62,7 +51,8 @@ ide_search_result_finalize (GObject *object)
   IdeSearchResult *self = (IdeSearchResult *)object;
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
 
-  g_clear_object (&priv->icon);
+  g_clear_object (&priv->paintable);
+  g_clear_pointer (&priv->title, g_free);
 
   G_OBJECT_CLASS (ide_search_result_parent_class)->finalize (object);
 }
@@ -77,12 +67,20 @@ ide_search_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_SCORE:
-      g_value_set_float (value, ide_search_result_get_score (self));
+    case PROP_PAINTABLE:
+      g_value_set_object (value, ide_search_result_get_paintable (self));
       break;
 
     case PROP_PRIORITY:
       g_value_set_int (value, ide_search_result_get_priority (self));
+      break;
+
+    case PROP_SCORE:
+      g_value_set_float (value, ide_search_result_get_score (self));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, ide_search_result_get_title (self));
       break;
 
     default:
@@ -100,12 +98,20 @@ ide_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SCORE:
-      ide_search_result_set_score (self, g_value_get_float (value));
+    case PROP_PAINTABLE:
+      ide_search_result_set_paintable (self, g_value_get_object (value));
       break;
 
     case PROP_PRIORITY:
       ide_search_result_set_priority (self, g_value_get_int (value));
+      break;
+
+    case PROP_SCORE:
+      ide_search_result_set_score (self, g_value_get_float (value));
+      break;
+
+    case PROP_TITLE:
+      ide_search_result_set_title (self, g_value_get_string (value));
       break;
 
     default:
@@ -117,13 +123,26 @@ static void
 ide_search_result_class_init (IdeSearchResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  DzlSuggestionClass *suggestion_class = DZL_SUGGESTION_CLASS (klass);
 
   object_class->finalize = ide_search_result_finalize;
   object_class->get_property = ide_search_result_get_property;
   object_class->set_property = ide_search_result_set_property;
 
-  suggestion_class->get_icon = ide_search_result_real_get_icon;
+  properties [PROP_PAINTABLE] =
+    g_param_spec_object ("paintable",
+                      "Paintable",
+                      "The paintable for the row icon",
+                      GDK_TYPE_PAINTABLE,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PRIORITY] =
+    g_param_spec_int ("priority",
+                      "Priority",
+                      "The priority of search result group",
+                      G_MININT,
+                      G_MAXINT,
+                      0,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SCORE] =
     g_param_spec_float ("score",
@@ -134,14 +153,12 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                         0.0f,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_PRIORITY] =
-    g_param_spec_int ("priority",
-                      "Priority",
-                      "The priority of search result group",
-                      G_MININT,
-                      G_MAXINT,
-                      0,
-                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  properties [PROP_TITLE] =
+    g_param_spec_string ("title",
+                         "Title",
+                         "The title of the search result",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -157,7 +174,7 @@ ide_search_result_new (void)
   return g_object_new (IDE_TYPE_SEARCH_RESULT, NULL);
 }
 
-gint
+int
 ide_search_result_compare (gconstpointer a,
                            gconstpointer b)
 {
@@ -179,7 +196,7 @@ ide_search_result_compare (gconstpointer a,
   return 0;
 }
 
-gfloat
+float
 ide_search_result_get_score (IdeSearchResult *self)
 {
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
@@ -191,7 +208,7 @@ ide_search_result_get_score (IdeSearchResult *self)
 
 void
 ide_search_result_set_score (IdeSearchResult *self,
-                             gfloat           score)
+                             float            score)
 {
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
 
@@ -204,7 +221,7 @@ ide_search_result_set_score (IdeSearchResult *self,
     }
 }
 
-gint
+int
 ide_search_result_get_priority (IdeSearchResult *self)
 {
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
@@ -216,7 +233,7 @@ ide_search_result_get_priority (IdeSearchResult *self)
 
 void
 ide_search_result_set_priority (IdeSearchResult *self,
-                                gint             priority)
+                                int              priority)
 {
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
 
@@ -236,8 +253,6 @@ ide_search_result_set_priority (IdeSearchResult *self,
  *
  * Requests that @self activate. @last_focus is provided so that the search
  * result may activate #GAction or other context-specific actions.
- *
- * Since: 3.32
  */
 void
 ide_search_result_activate (IdeSearchResult *self,
@@ -250,14 +265,59 @@ ide_search_result_activate (IdeSearchResult *self,
     IDE_SEARCH_RESULT_GET_CLASS (self)->activate (self, last_focus);
 }
 
+/**
+ * ide_search_result_get_paintable:
+ * @self: a #IdeSearchResult
+ *
+ * Gets the paintable for the row, if any.
+ *
+ * Returns: (transfer none) (nullable): a #GdkPaintable or %NULL
+ */
+GdkPaintable *
+ide_search_result_get_paintable (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+
+  return priv->paintable;
+}
+
 void
-ide_search_result_set_icon (IdeSearchResult *self,
-                            GIcon           *icon)
+ide_search_result_set_paintable (IdeSearchResult *self,
+                                 GdkPaintable    *paintable)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+  g_return_if_fail (!paintable || GDK_IS_PAINTABLE (paintable));
+
+  if (g_set_object (&priv->paintable, paintable))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAINTABLE]);
+}
+
+const char *
+ide_search_result_get_title (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+
+  return priv->title;
+}
+
+void
+ide_search_result_set_title (IdeSearchResult *self,
+                             const char      *title)
 {
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
 
-  /* don't notify, since it's not really needed */
-  g_set_object (&priv->icon, icon);
+  if (g_strcmp0 (priv->title, title) != 0)
+    {
+      g_free (priv->title);
+      priv->title = g_strdup (title);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+    }
 }
