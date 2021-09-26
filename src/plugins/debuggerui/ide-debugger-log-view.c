@@ -29,7 +29,6 @@ struct _IdeDebuggerLogView
   GtkBox parent_instance;
 
   IdeTerminal *terminal;
-  GtkScrollbar *scroller;
   GtkEntry *commandentry;
 
   IdeDebugger *debugger;
@@ -180,7 +179,6 @@ ide_debugger_log_view_class_init (IdeDebuggerLogViewClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-log-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLogView, terminal);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLogView, commandentry);
-  gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLogView, scroller);
   gtk_widget_class_bind_template_callback (widget_class, on_entry_activate);
 }
 
@@ -188,9 +186,6 @@ static void
 ide_debugger_log_view_init (IdeDebuggerLogView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  gtk_range_set_adjustment (GTK_RANGE (self->scroller),
-                            gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal)));
 }
 
 void
