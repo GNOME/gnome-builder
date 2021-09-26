@@ -35,7 +35,6 @@ struct _GbpBuilduiLogPane
 
   IdePipeline  *pipeline;
 
-  GtkScrollbar      *scrollbar;
   IdeTerminal       *terminal;
 
   guint              log_observer;
@@ -231,7 +230,6 @@ gbp_buildui_log_pane_class_init (GbpBuilduiLogPaneClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "buildlogpanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-log-pane.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiLogPane, scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiLogPane, terminal);
 
   properties [PROP_PIPELINE] =
@@ -363,9 +361,6 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
                            G_CALLBACK (gbp_buildui_log_pane_window_title_changed),
                            self,
                            G_CONNECT_SWAPPED);
-
-  gtk_range_set_adjustment (GTK_RANGE (self->scrollbar),
-                            gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal)));
 
   dzl_dock_widget_set_title (DZL_DOCK_WIDGET (self), _("Build Output"));
 
