@@ -31,7 +31,6 @@ struct _GbpTestOutputPanel
 {
   IdePane       parent_instance;
   IdeTerminal  *terminal;
-  GtkScrollbar *scrollbar;
 };
 
 G_DEFINE_FINAL_TYPE (GbpTestOutputPanel, gbp_test_output_panel, IDE_TYPE_PANE)
@@ -42,7 +41,6 @@ gbp_test_output_panel_class_init (GbpTestOutputPanelClass *klass)
   GtkWidgetClass *widget_class = (GtkWidgetClass*)klass;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/testui/gbp-test-output-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpTestOutputPanel, scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbpTestOutputPanel, terminal);
 }
 
@@ -128,7 +126,6 @@ gbp_test_output_panel_init (GbpTestOutputPanel *self)
     { "save", gbp_testui_output_panel_save_in_file },
   };
   g_autoptr(GSimpleActionGroup) actions = NULL;
-  GtkAdjustment *vadj;
 
   gtk_widget_init_template (GTK_WIDGET(self));
 
@@ -138,9 +135,6 @@ gbp_test_output_panel_init (GbpTestOutputPanel *self)
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "test-output", G_ACTION_GROUP (actions));
-
-  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal));
-  gtk_range_set_adjustment (GTK_RANGE (self->scrollbar), vadj);
 }
 
 GtkWidget *

@@ -2,8 +2,7 @@
 <interface>
   <template class="GbpTestOutputPanel" parent="IdePane">
     <child>
-      <object class="GtkBox">
-        <property name="orientation">horizontal</property>
+      <object class="GtkScrolledWindow">
         <property name="visible">true</property>
         <child>
           <object class="IdeTerminal" id="terminal">
@@ -13,9 +12,11 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrollbar" id="scrollbar">
-            <property name="orientation">vertical</property>
+          <object class="GtkSeparator">
             <property name="visible">true</property>
+            <style>
+              <class name="sidebar"/>
+            </style>
           </object>
         </child>
         <child>
