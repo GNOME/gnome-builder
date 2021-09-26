@@ -609,6 +609,9 @@ ide_terminal_init (IdeTerminal *self)
   style_context_changed (self, style_context);
 
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+
+  vte_terminal_set_enable_fallback_scrolling (VTE_TERMINAL (self), FALSE);
+  vte_terminal_set_scroll_unit_is_pixels (VTE_TERMINAL (self), TRUE);
 }
 
 GtkWidget *
