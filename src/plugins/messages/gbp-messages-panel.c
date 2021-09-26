@@ -31,7 +31,6 @@ struct _GbpMessagesPanel
 
   DzlSignalGroup *signals;
 
-  GtkScrollbar *scrollbar;
   IdeTerminal  *terminal;
 };
 
@@ -136,21 +135,15 @@ gbp_messages_panel_class_init (GbpMessagesPanelClass *klass)
   widget_class->destroy = gbp_messages_panel_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/messages/gbp-messages-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, terminal);
 }
 
 static void
 gbp_messages_panel_init (GbpMessagesPanel *self)
 {
-  GtkAdjustment *vadj;
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   ide_widget_set_context_handler (GTK_WIDGET (self), gbp_messages_panel_set_context);
-
-  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal));
-  gtk_range_set_adjustment (GTK_RANGE (self->scrollbar), vadj);
 
   self->signals = dzl_signal_group_new (IDE_TYPE_CONTEXT);
 
