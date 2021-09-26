@@ -359,12 +359,6 @@ static void
 ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                     VteTerminal     *terminal)
 {
-  GtkAdjustment *vadj;
-
-  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (terminal));
-
-  gtk_range_set_adjustment (GTK_RANGE (self->top_scrollbar), vadj);
-
   g_signal_connect_object (terminal,
                            "focus-in-event",
                            G_CALLBACK (focus_in_event_cb),
@@ -528,7 +522,6 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-page.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_top);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, top_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_overlay_top);
 
   properties [PROP_CLOSE_ON_EXIT] =
