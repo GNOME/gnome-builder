@@ -101,7 +101,7 @@ enum {
 };
 
 enum {
-  CHNAGE_CURRENT_PAGE,
+  CHANGE_CURRENT_PAGE,
   N_SIGNALS
 };
 
@@ -869,7 +869,7 @@ ide_frame_class_init (IdeFrameClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  signals [CHNAGE_CURRENT_PAGE] =
+  signals [CHANGE_CURRENT_PAGE] =
     g_signal_new_class_handler ("change-current-page",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
