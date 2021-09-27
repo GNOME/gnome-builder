@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # gvls_plugin.py
 #
@@ -154,7 +154,7 @@ class GVlsService(Ide.Object):
             b2.add_value(div)
             b.add_value(GLib.Variant.new_variant(b2.end()))
         return b.end()
-    
+
     def create_dict_entry_boolean(self, key, val):
         vk = GLib.Variant.new_string (key)
         vv = GLib.Variant.new_variant(GLib.Variant.new_boolean(val))
@@ -201,7 +201,7 @@ class GVlsService(Ide.Object):
         except Error as e:
             Ide.debug ('On Load Configuration Error: {}'.format(e.message))
             return GLib.Variant ('a{sv}', {})
-    
+
     def _build_config_changed(self, obj, mfile, ofile, event_type):
         if event_type == Gio.FileMonitorEvent.CHANGED or event_type == Gio.FileMonitorEvent.CREATED:
             self._parse_build_commands()
@@ -222,7 +222,7 @@ class GVlsService(Ide.Object):
         ostream.close()
         b = ostream.steal_as_bytes()
         self.meson_compile_commands = str(b.get_data(),encoding='utf8')
-    
+
     def _parse_build_commands(self):
         try:
             self.build_args = []
@@ -375,7 +375,7 @@ class GVlsService(Ide.Object):
             self._client.send_notification_finish(result)
         except BaseException as exc:
             Ide.debug('Change Configuration Notification error: {}'.format(exc.args))
-    
+
     def _notify_change_configuration(self):
         try:
             vconf = self.create_configuration_variant(None)
@@ -389,7 +389,7 @@ class GVlsService(Ide.Object):
             self._client.send_notification_async("workspace/didChangeConfiguration", vnotify, cancellable, self._did_change_configuration, None)
         except BaseException as exc:
             Ide.debug('Notify change configuration error: {}'.format(exc.args))
-    
+
     def _on_load_configuration(self, data):
         ctx = self._client.get_context()
         bufm = Ide.BufferManager.from_context(ctx)
@@ -401,7 +401,7 @@ class GVlsService(Ide.Object):
                 self._parse_build_commands()
                 break
         return self.create_configuration_variant()
-    
+
     def _on_pipeline_loaded(self, obj):
         try:
             Ide.debug('GVls: Pipeline loaded')
@@ -430,7 +430,7 @@ class GVlsService(Ide.Object):
             self.system_vapidir = rtfgdvapi.get_uri() + "/vala/vapi"
         except BaseException as exc:
             Ide.debug('On get Vala DATA VAPI DIR: {}'.format(str(exc)))
-    
+
     def on_get_vapidir(self, vpkgp, cancellable, data):
         try:
             if self.pipeline == None:
@@ -455,7 +455,7 @@ class GVlsService(Ide.Object):
             vdp.wait_async(None, self.on_get_vala_data_dir, None)
         except BaseException as exc:
             Ide.debug('On get Vala VAPI DIR: {}'.format(str(exc)))
-    
+
     def on_get_vala_api_version(self, valacp, cancellable, data):
         try:
             vstdio = valacp.get_stdout_pipe()
@@ -478,7 +478,7 @@ class GVlsService(Ide.Object):
             vpkgp.wait_async(None, self.on_get_vapidir, None)
         except BaseException as exc:
             Ide.debug('On get Vala API VERSION Runtime Configuration: {}'.format(str(exc)))
-    
+
     def _update_config_from_runtime(self):
         try:
             if self.pipeline == None:
@@ -497,7 +497,7 @@ class GVlsService(Ide.Object):
             valacp.wait_async(None, self.on_get_vala_api_version, None)
         except BaseException as exc:
             Ide.debug('On Update Runtime Configuration: {}'.format(str(exc)))
-    
+
     def on_config_changed_cb(self, data):
         try:
             ctx = self._client.ref_context()
