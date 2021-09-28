@@ -81,6 +81,7 @@ static void
 gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
                                    IdeSubprocessLauncher *launcher)
 {
+  const gchar *config_dir = gbp_flatpak_get_config_dir ();
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
   g_autofree gchar *doc_portal = NULL;
   g_autofree gchar *project_build_dir = NULL;
@@ -103,6 +104,9 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 
   doc_portal = g_strdup_printf ("--bind-mount=/run/user/%u/doc=/run/user/%u/doc/by-app/%s",
                                 getuid (), getuid (), app_id);
+
+  /* Get access to override installations */
+  ide_subprocess_launcher_setenv (launcher, "FLATPAK_CONFIG_DIR", config_dir, TRUE);
 
   ide_subprocess_launcher_insert_argv (launcher, i++, "flatpak");
   ide_subprocess_launcher_insert_argv (launcher, i++, "build");
