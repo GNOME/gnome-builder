@@ -1,4 +1,12 @@
 ============
+Version 41.2
+============
+
+ • Fix an issue with comparing global search results
+ • Use multiple Flatpak transactions if runtimes are found on different installations
+ • Translation updates
+
+============
 Version 41.1
 ============
 
