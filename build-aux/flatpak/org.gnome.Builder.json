@@ -453,7 +453,6 @@
                 "/bin/flatpak-bisect",
                 "/bin/flatpak-coredumpctl",
                 "/etc/profile.d",
-                "/libexec",
                 "/lib/systemd",
                 "/share/dbus-1/interfaces/org.freedesktop.*",
                 "/share/dbus-1/services/org.freedesktop.*",
