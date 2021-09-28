@@ -967,8 +967,12 @@ find_installations_for_refs (IpcFlatpakServiceImpl *self,
             }
         }
 
-      /* Now see if it is found in a configured remote */
-      if ((remote = find_remote_for_ref (self, ir->fref, &install)))
+      /* Now see if it is found in a configured remote. We must limit things
+       * to user installations because we cannot write to the host system
+       * from within the sandbox.
+       */
+      if ((remote = find_remote_for_ref (self, ir->fref, &install)) &&
+          flatpak_installation_get_is_user (install))
         {
           g_ptr_array_add (installations, g_steal_pointer (&install));
           goto next_ref;
