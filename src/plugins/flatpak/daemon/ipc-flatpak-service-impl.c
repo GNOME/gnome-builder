@@ -796,6 +796,8 @@ install_worker (GTask        *task,
               return;
             }
 
+          flatpak_transaction_set_disable_related (transaction, TRUE);
+
           g_signal_connect_object (transaction,
                                    "new-operation",
                                    G_CALLBACK (on_new_operation_cb),
