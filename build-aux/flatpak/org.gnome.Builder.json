@@ -356,7 +356,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/template-glib.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/template-glib.git",
+                    "branch" : "main"
                 }
             ]
         },
@@ -371,7 +372,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git",
+                    "branch" : "main"
                 }
             ]
         },
@@ -662,7 +664,8 @@
                 {
                     "disable-shallow-clone" : true,
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git",
+                    "branch" : "main"
                 }
             ],
             "post-install" : [
