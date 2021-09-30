@@ -23,6 +23,7 @@ libide_core_version_h = configure_file(
 libide_core_generated_headers = [libide_core_version_h]
 
 libide_build_ident_h = vcs_tag(
+      command: ['git', 'describe'],
      fallback: meson.project_version(),
         input: 'ide-build-ident.h.in',
        output: 'ide-build-ident.h',

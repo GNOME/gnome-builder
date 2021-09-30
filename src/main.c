@@ -39,6 +39,7 @@
 #include <unistd.h>
 
 #include "ide-application-private.h"
+#include "ide-build-ident.h"
 #include "ide-thread-private.h"
 #include "ide-terminal-private.h"
 #include "ide-private.h"
@@ -250,8 +251,8 @@ main (gint   argc,
   early_params_check (&argc, &argv, &standalone, &type, &plugin, &dbus_address);
 
   /* Log some info so it shows up in logs */
-  g_message ("GNOME Builder %s starting with ABI %s",
-             PACKAGE_VERSION, PACKAGE_ABI_S);
+  g_message ("GNOME Builder %s (%s) from channel \"%s\" starting with ABI %s",
+             PACKAGE_VERSION, IDE_BUILD_IDENTIFIER, IDE_BUILD_CHANNEL, PACKAGE_ABI_S);
 
   /* Make sure $HOME is not a symlink, as that can cause issues with
    * various subsystems. Just warn super loud so that users find it
