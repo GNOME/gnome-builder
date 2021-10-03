@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Jeremy Wilkins <jeb@jdwilkins.co.uk>
+Copyright=Copyright © 2021 Jeremy Wilkins <jeb@jdwilkins.co.uk>
+Description=Provides Ruby linting using Rubocop
+Loader=python3
+Hidden=true
+Module=rubocop_plugin
+Name=rubocop
+X-Diagnostic-Provider-Languages-Priority=100
+X-Diagnostic-Provider-Languages=ruby
+X-Builder-ABI=@PACKAGE_ABI@
