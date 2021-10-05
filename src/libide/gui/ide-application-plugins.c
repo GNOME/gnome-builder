@@ -325,6 +325,14 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
    */
   peas_engine_prepend_search_path (engine, "resource:///plugins", "resource:///plugins");
 
+  /* If we are within the Flatpak, then load any extensions we've
+   * found merged into the extensions directory.
+   */
+  if (ide_is_flatpak ())
+    peas_engine_add_search_path (engine,
+                                 "/app/extensions/lib/gnome-builder/plugins",
+                                 "/app/extensions/lib/gnome-builder/plugins");
+
   /* Our first step is to load our "At-Startup" plugins, which may
    * contain things like command-line handlers. For example, the
    * greeter may handle command-line options and then show the

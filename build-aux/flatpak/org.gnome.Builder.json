@@ -673,7 +673,8 @@
                 "cp -a /usr/lib/sdk/llvm12/lib/* /app/lib/",
                 "cp -a /usr/lib/sdk/llvm12/libexec/* /app/libexec/",
                 "cp -a /usr/lib/sdk/llvm12/include/* /app/include/",
-                "cp -a /usr/lib/sdk/llvm12/share/* /app/share/"
+                "cp -a /usr/lib/sdk/llvm12/share/* /app/share/",
+                "install -d /app/extensions"
             ]
         }
     ]
