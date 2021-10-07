@@ -131,7 +131,7 @@
   <style name="def:list-marker"             foreground="dark5" bold="true"/>
   <style name="def:net-address"             italic="true" underline="true"/>
   <style name="def:note"                    foreground="light1" background="orange3" bold="true"/>
-  <style name="def:preformatting-section"   foreground="purple1"/>
+  <style name="def:preformatted-section"    foreground="purple1"/>
   <style name="def:preprocessor"            foreground="dark2"/>
   <style name="def:shebang"                 foreground="dark1" bold="true"/>
   <style name="def:special-char"            foreground="blue3"/>

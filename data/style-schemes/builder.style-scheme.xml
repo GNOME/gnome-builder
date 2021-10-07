@@ -152,7 +152,7 @@
   <style name="def:net-address"             italic="true" underline="true"/>
   <style name="def:note"                    background="orange1" bold="true"/>
   <style name="def:operator"                foreground="#a67f59"/>
-  <style name="def:preformatting-section"   foreground="purple1"/>
+  <style name="def:preformatted-section"    foreground="purple1"/>
   <style name="def:preprocessor"            foreground="pink1"/>
   <style name="def:shebang"                 foreground="blue1" bold="true"/>
   <style name="def:special-char"            foreground="pink1"/>
