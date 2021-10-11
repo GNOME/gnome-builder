@@ -36,11 +36,12 @@ class GVlsService(Ide.Object):
     _has_started = False
     _supervisor = None
     _monitor = None
+    autoconfigure = True
     meson_build_system = True
     initialized = True
     default_namespaces = True
     default_vapi_dirs = True
-    scan_work_space = True
+    scan_work_space = False
     add_using_namespaces = True
     library_vapidir = ""
     system_vapidir = ""
@@ -177,10 +178,16 @@ class GVlsService(Ide.Object):
             b.add_value(self.create_dict_entry_string('libraryVapi', self.library_vapidir))
             Ide.debug('Library VAPI dir:{0}'.format(self.library_vapidir))
             b.add_value(self.create_dict_entry_string('systemVapi', self.system_vapidir))
-            Ide.debug('System VAPI dir:{0}'.format(self.system_vapidir))
-            b.add_value(self.create_dict_entry_string('valaApiVersion', self.vala_api_version))
             b.add_value(self.create_dict_entry_string('mesonCompileCommands', self.meson_compile_commands))
             b.add_value(self.create_dict_entry_string('mesonTargetsIntro', self.meson_targets_intro))
+            Ide.debug('System VAPI dir:{0}'.format(self.system_vapidir))
+            if (self.library_vapidir == "" or self.system_vapidir == "" or self.meson_compile_commands == ""):
+                self.autoconfigure = True
+            else:
+                self.autoconfigure = False
+
+            b.add_value(self.create_dict_entry_boolean('autoConfigure', self.autoconfigure))
+            b.add_value(self.create_dict_entry_string('valaApiVersion', self.vala_api_version))
             ad = GLib.Variant.new_string ('valaArgs')
             vadi = self.dict_to_array_variant(self.vala_args)
             adi = GLib.Variant.new_dict_entry(ad, GLib.Variant.new_variant (vadi))
