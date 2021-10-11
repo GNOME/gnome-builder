@@ -590,7 +590,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/esodan/gvls.git",
-                    "branch": "gvls-20.0"
+                    "tag" : "gvls-20.1"
                 }
             ]
         },
