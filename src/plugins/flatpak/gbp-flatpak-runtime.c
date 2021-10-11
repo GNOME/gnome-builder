@@ -124,14 +124,17 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
       self->sdk != NULL &&
       !ide_str_equal0 (self->platform, self->sdk))
     {
-      g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
-      g_autoptr(IdeRuntimeManager) manager = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_RUNTIME_MANAGER);
-      g_autofree char *arch = ide_runtime_get_arch (runtime);
-      g_autofree char *sdk_id = g_strdup_printf ("flatpak:%s/%s/%s", self->sdk, arch, self->branch);
-      IdeRuntime *sdk = ide_runtime_manager_get_runtime (manager, sdk_id);
+      IdeContext* context = ide_object_get_context (IDE_OBJECT (self));
+      if (context)
+        {
+          g_autoptr(IdeRuntimeManager) manager = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_RUNTIME_MANAGER);
+          g_autofree char *arch = ide_runtime_get_arch (runtime);
+          g_autofree char *sdk_id = g_strdup_printf ("flatpak:%s/%s/%s", self->sdk, arch, self->branch);
+          IdeRuntime *sdk = ide_runtime_manager_get_runtime (manager, sdk_id);
 
-      if (sdk != NULL && sdk != runtime)
-        ret = ide_runtime_contains_program_in_path (sdk, program, cancellable);
+          if (sdk != NULL && sdk != runtime)
+            ret = ide_runtime_contains_program_in_path (sdk, program, cancellable);
+        }
     }
 
   /* Cache both positive and negative lookups */

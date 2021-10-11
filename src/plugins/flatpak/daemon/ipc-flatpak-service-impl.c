@@ -372,7 +372,7 @@ install_reload (IpcFlatpakServiceImpl *self,
        * directory instead of the runtime (or the application will not
        * be able to locate includes/pkg-config/etc when building).
        */
-      if ((installed_sdk = find_sdk (refs, sdk_ref)))
+      if ((installed_sdk = find_sdk (refs, sdk_ref)) && exten_of == NULL)
         deploy_dir = flatpak_installed_ref_get_deploy_dir (installed_sdk);
       else
         deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
