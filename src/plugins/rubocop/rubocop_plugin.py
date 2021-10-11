@@ -43,6 +43,16 @@ SEVERITY_MAP = {
 }
 
 class RubocopDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
+    has_rubocop = False
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # See if we have rubocop installed in flatpak or host if running outside
+        # of a container (this is used as a fallback if it is not found within
+        # the build container).
+        self.has_rubocop = GLib.find_program_in_path('rubocop')
+
     def create_launcher(self):
         context = self.get_context()
         srcdir = context.ref_workdir().get_path()
@@ -54,9 +64,13 @@ class RubocopDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
             if pipeline is not None:
                 srcdir = pipeline.get_srcdir()
             runtime = pipeline.get_config().get_runtime()
-            launcher = runtime.create_launcher()
+            if runtime.contains_program_in_path('rubocop'):
+                launcher = runtime.create_launcher()
 
         if launcher is None:
+            if not self.has_rubocop:
+                return None
+
             launcher = Ide.SubprocessLauncher.new(0)
 
         launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE)
@@ -65,11 +79,15 @@ class RubocopDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
         return launcher
 
     def do_diagnose_async(self, file, file_content, lang_id, cancellable, callback, user_data):
-        self.diagnostics_list = []
         task = Gio.Task.new(self, cancellable, callback)
-        task.diagnostics_list = []
 
         launcher = self.create_launcher()
+        if launcher is None:
+            task.return_error(Ide.NotSupportedError())
+            return
+
+        self.diagnostics_list = []
+        task.diagnostics_list = []
         srcdir = launcher.get_cwd()
 
         threading.Thread(target=self.execute, args=(task, launcher, srcdir, file, file_content),
@@ -89,14 +107,14 @@ class RubocopDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
             success, stdout, stderr = sub_process.communicate_utf8(stdin, None)
 
             results = json.loads(stdout)
-            
+
             for result in results.get('files', []):
                 for offense in result.get('offenses', []):
                     if 'location' not in offense:
                         continue
-                    
+
                     location = offense['location']
-                    
+
                     if 'start_line' not in location or 'start_column' not in location:
                         continue
 
