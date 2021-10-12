@@ -27,4 +27,17 @@ plugin_meson_resources = gnome.compile_resources(
 
 plugins_sources += plugin_meson_resources
 
+test_sources += files([
+  'test-meson-build-system.c',
+  'gbp-meson-build-system.c',
+  'gbp-meson-toolchain.c',
+  'gbp-meson-utils.c',
+])
+
+test_meson = executable('test-meson', test_sources,
+        c_args: test_cflags,
+  dependencies: [ libide_foundry_dep ],
+)
+test('test-meson', test_meson, env: test_env)
+
 endif

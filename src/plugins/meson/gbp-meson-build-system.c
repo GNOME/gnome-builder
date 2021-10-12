@@ -756,49 +756,66 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->supports_language = gbp_meson_build_system_supports_language;
 }
 
-/**
- * This could be 'projectname', ['c', 'rust'], ... or 'projectname', 'rust', ...
- */
+
 static char **
-parse_language (gchar *language_string)
+split_language (gchar *raw_language_string)
 {
-  if (strstr(language_string, "["))
+  g_autofree gchar *copy = NULL;
+  GString *str = g_string_new (raw_language_string);
+  g_string_replace (str, "'", "", -1);
+  g_string_replace (str, " ", "", -1);
+  g_string_replace (str, "\n", "", -1);
+  copy = g_string_free (str, FALSE);
+
+  return g_strsplit (copy, ",", -1);
+}
+
+/**
+ * This could be
+ * 1) without language
+ * 2) 'projectname', 'c' with only one language
+ * 3) 'projectname', 'c', 'c++' with variadic as languages
+ * 4) 'projectname', ['c', 'c++'] with an list as languages
+ */
+char **
+parse_languages (const gchar *raw_language_string)
+{
+  g_autofree gchar *language_string = NULL;
+  gchar *cur = (gchar *) raw_language_string;
+  gchar *cur2;
+  cur = g_strstr_len (cur, -1, ",");
+  if (cur == NULL) goto failure;
+  cur++;
+  cur2 = cur;
+  while (*cur2 != ':' || *cur2 == '\0')
+    {
+      if (*cur2 == '[')
+        {
+          cur2 = g_strstr_len (cur2, -1, "]");
+          if (cur2 == NULL) goto failure;
+          cur2++;
+          break;
+        }
+      cur2++;
+    }
+  if (*cur2 == ':') while(*cur2 != ',') cur2--;
+  if (cur2-cur <= 0) goto failure;
+  language_string = g_strndup (cur, cur2-cur);
+
+  if (strstr(language_string, "[") || strstr(language_string, "]"))
     {
       gchar *begin = NULL;
       gchar *end = NULL;
       g_autofree gchar *copy = NULL;
-      GString *gstring = NULL;
 
       if ((begin = strstr(language_string, "[")) == NULL) goto failure;
       if ((end = strstr(language_string, "]")) == NULL) goto failure;
       copy = g_strndup (begin + 1, end-begin - 1);
 
-      gstring = g_string_new (copy);
-      g_string_replace (gstring, "'", "", -1);
-      g_string_replace (gstring, " ", "", -1);
-      copy = g_string_free (gstring, FALSE);
-
-      return g_strsplit (copy, ",", -1);
+      return split_language (copy);
     }
-  else
-    {
-      gchar **list = NULL;
-      g_autofree gchar *language = NULL;
-      GString *gstring = NULL;
-      g_autoptr(GStrvBuilder) builder = NULL;
 
-      list = g_strsplit (language_string, ",", -1);
-      language = g_strstrip (list[1]);
-
-      gstring = g_string_new (language);
-      g_string_replace (gstring, "'", "", -1);
-      language = g_string_free (gstring, FALSE);
-      g_strfreev (list);
-
-      builder = g_strv_builder_new ();
-      g_strv_builder_add (builder, g_steal_pointer (&language));
-      return g_strv_builder_end (builder);
-    }
+  return split_language (language_string);
 
 failure:
   return NULL;
@@ -852,8 +869,8 @@ extract_metadata (GbpMesonBuildSystem *self,
   g_regex_match (regex, contents, 0, &match_info);
   while (g_match_info_matches (match_info))
     {
-      gchar *str = g_match_info_fetch (match_info, 1);
-      self->languages = parse_language (str);
+      const gchar *str = g_match_info_fetch (match_info, 1);
+      self->languages = parse_languages (str);
 
       g_match_info_next (match_info, NULL);
     }
