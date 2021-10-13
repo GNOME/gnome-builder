@@ -1,24 +1,24 @@
 #include <glib.h>
 
-const gchar **parse_languages (gchar *language_string);
+char **_gbp_meson_build_system_parse_languages (const char *language_string);
 
 static void
 meson_test_parse_languages (void)
 {
-  struct {
-    gchar *input;
-    gchar **expected;
+  const struct {
+    const char *input;
+    const char **expected;
   } cases[] = {
-      { .input = "'testproject', 'rust'", .expected = (gchar*[]){ "rust", NULL } },
-      { .input = "'testproject', 'rust', 'c'", .expected = (gchar*[]){ "rust", "c", NULL } },
-      { .input = "'testproject', 'rust', version: '3.0'", .expected = (gchar*[]){ "rust", NULL } },
-      { .input = "testproject, rust, version: 3.0, default_options: ['warning_level=2']", .expected = (gchar*[]){ "rust", NULL } },
-      { .input = "testproject\n\n,\n rust, \nversion: 3.0, default_options: ['warning_level=2']", .expected = (gchar*[]){ "rust", NULL } },
-      { .input = "testproject\n\n,\n ['rust'], \nversion: 3.0, default_options: ['warning_level=2']", .expected = (gchar*[]){ "rust", NULL } },
-      { .input = "testproject\n\n,\n ['rust']", .expected = (gchar*[]){ "rust", NULL } },
-      { .input = "testproject\n\n,\n ['c', 'c++'], \nversion: 3.0, default_options: ['warning_level=2']", .expected = (gchar*[]){ "c", "c++", NULL } },
+      { .input = "'testproject', 'rust'", .expected = (const char *[]){ "rust", NULL } },
+      { .input = "'testproject', 'rust', 'c'", .expected = (const char *[]){ "rust", "c", NULL } },
+      { .input = "'testproject', 'rust', version: '3.0'", .expected = (const char *[]){ "rust", NULL } },
+      { .input = "testproject, rust, version: 3.0, default_options: ['warning_level=2']", .expected = (const char *[]){ "rust", NULL } },
+      { .input = "testproject\n\n,\n rust, \nversion: 3.0, default_options: ['warning_level=2']", .expected = (const char *[]){ "rust", NULL } },
+      { .input = "testproject\n\n,\n ['rust'], \nversion: 3.0, default_options: ['warning_level=2']", .expected = (const char *[]){ "rust", NULL } },
+      { .input = "testproject\n\n,\n ['rust']", .expected = (const char *[]){ "rust", NULL } },
+      { .input = "testproject\n\n,\n ['c', 'c++'], \nversion: 3.0, default_options: ['warning_level=2']", .expected = (const char *[]){ "c", "c++", NULL } },
       { .input = "testproject\n\n,\n ['c', 'c++', \nversion: 3.0", .expected = NULL},
-      { .input = "testproject\n\n,\n 'c', 'c++', \nversion: 3.0", .expected = (gchar*[]){ "c", "c++", NULL } },
+      { .input = "testproject\n\n,\n 'c', 'c++', \nversion: 3.0", .expected = (const char *[]){ "c", "c++", NULL } },
       { .input = "testproject\n\n,\n 'c', 'c++'], \nversion: 3.0", .expected = NULL },
       { .input = "'testproject',\nversion: 3.0", .expected = NULL },
       { .input = "'projectname'", .expected = NULL },
@@ -28,19 +28,16 @@ meson_test_parse_languages (void)
 
   for (guint i = 0; i < n_cases; i++)
     {
-      const gchar **languages = parse_languages (cases[i].input);
-
+      g_auto(GStrv) languages = _gbp_meson_build_system_parse_languages (cases[i].input);
       g_assert_cmpstrv (cases[i].expected, languages);
     }
 }
 
 gint
-main (gint   argc,
-      gchar *argv[])
+main (gint  argc,
+      char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
-
   g_test_add_func("/meson/parse_languages", meson_test_parse_languages);
-
   return g_test_run ();
 }
