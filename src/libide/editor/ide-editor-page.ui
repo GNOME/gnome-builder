@@ -114,6 +114,9 @@
             <child>
               <object class="GtkSourceMap" id="map">
                 <property name="visible">false</property>
+                <style>
+                  <class name="source-map"/>
+                </style>
               </object>
             </child>
           </object>
