@@ -778,7 +778,7 @@ split_language (gchar *raw_language_string)
  * 4) 'projectname', ['c', 'c++'] with an list as languages
  */
 char **
-parse_languages (const gchar *raw_language_string)
+_gbp_meson_build_system_parse_languages (const gchar *raw_language_string)
 {
   g_autofree gchar *language_string = NULL;
   gchar *cur = (gchar *) raw_language_string;
@@ -870,7 +870,7 @@ extract_metadata (GbpMesonBuildSystem *self,
   while (g_match_info_matches (match_info))
     {
       const gchar *str = g_match_info_fetch (match_info, 1);
-      self->languages = parse_languages (str);
+      self->languages = _gbp_meson_build_system_parse_languages (str);
 
       g_match_info_next (match_info, NULL);
     }
