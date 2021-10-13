@@ -79,7 +79,8 @@ ide_editor_page_load_fonts (IdeEditorPage *self)
   font_map = pango_cairo_font_map_new_for_font_type (CAIRO_FONT_TYPE_FT);
   pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (font_map), localFontConfig);
   gtk_widget_set_font_map (GTK_WIDGET (self->map), font_map);
-  font_desc = pango_font_description_from_string ("Builder Blocks 3"); /* 3pt is 4px */
+  font_desc = pango_font_description_from_string ("BuilderBlocks");
+  pango_font_description_set_absolute_size (font_desc, (96.0/72.0) * 2 * PANGO_SCALE);
 
   g_assert (localFontConfig != NULL);
   g_assert (font_map != NULL);
