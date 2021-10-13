@@ -70,7 +70,7 @@
 
   <!-- Global Settings -->
   <style name="text"                        foreground="light4" background="content_bg"/>
-  <style name="map-overlay"                 background="dark1"/>
+  <style name="map-overlay"                 background="#rgba(47,46,48,.3)"/>
   <style name="cursor"                      foreground="light4"/>
   <style name="line-numbers"                foreground="content_alt" background="content_bg"/>
   <style name="current-line"                background="#222"/>
