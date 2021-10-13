@@ -70,7 +70,7 @@
   <!-- Global Settings -->
   <style name="text"                        foreground="dark2" background="light1"/>
   <style name="selection"                   background="selection_bg"/>
-  <style name="map-overlay"                 background="blue1"/>
+  <style name="map-overlay"                 background="#rgba(60,75,95,.3)"/>
   <style name="cursor"                      foreground="dark2"/>
   <style name="line-numbers"                foreground="light4" background="light1"/>
   <style name="current-line"                background="light2"/>
