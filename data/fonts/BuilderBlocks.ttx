@@ -12,7 +12,7 @@
   <head>
     <!-- Most of this table will be recalculated by the compiler -->
     <tableVersion value="1.0"/>
-    <fontRevision value="1.0"/>
+    <fontRevision value="1.1"/>
     <checkSumAdjustment value="0x2a3f4cae"/>
     <magicNumber value="0x5f0f3cf5"/>
     <flags value="00000000 00000010"/>
@@ -70,10 +70,10 @@
   </maxp>
 
   <hmtx>
-    <mtx name=".notdef" width="1024" lsb="0"/>
-    <mtx name="block" width="1024" lsb="0"/>
-    <mtx name="empty" width="1024" lsb="0"/>
-    <mtx name="smallblock" width="1024" lsb="0"/>
+    <mtx name=".notdef" width="768" lsb="0"/>
+    <mtx name="block" width="768" lsb="0"/>
+    <mtx name="empty" width="768" lsb="0"/>
+    <mtx name="smallblock" width="768" lsb="0"/>
   </hmtx>
 
   <loca>
@@ -95,20 +95,15 @@
       <contour>
         <pt x="0" y="0" on="1"/>
         <pt x="1024" y="0" on="1"/>
-        <pt x="1024" y="1024" on="1"/>
-        <pt x="0" y="1024" on="1"/>
+        <pt x="1024" y="1536" on="1"/>
+        <pt x="0" y="1536" on="1"/>
       </contour>
       <instructions><assembly></assembly></instructions>
     </TTGlyph>
   </glyf>
 
   <name>
-    <!-- font family -->
-    <namerecord nameID="1" platformID="0" platEncID="0" langID="0x0" unicode="True">
-      BuilderBlocks
-    </namerecord>
-    <!-- full name (recent fontconfig requires this) -->
-    <namerecord nameID="4" platformID="0" platEncID="0" langID="0x0" unicode="True">
+    <namerecord nameID="0" platformID="1" platEncID="0" langID="0x0" unicode="True">
       BuilderBlocks
     </namerecord>
   </name>
