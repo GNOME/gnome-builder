@@ -165,19 +165,18 @@ ide_search_result_compare (gconstpointer a,
   IdeSearchResult *rb = (IdeSearchResult *)b;
   IdeSearchResultPrivate *priva = ide_search_result_get_instance_private (ra);
   IdeSearchResultPrivate *privb = ide_search_result_get_instance_private (rb);
-  gint ret;
 
-  ret = priva->priority - privb->priority;
+  if (priva->priority < privb->priority)
+    return -1;
+  else if (priva->priority > privb->priority)
+    return 1;
 
-  if (ret == 0)
-    {
-      if (priva->score < privb->score)
-        ret = -1;
-      else if (priva->score > privb->score)
-        ret = 1;
-    }
+  if (priva->score > privb->score)
+    return -1;
+  else if (priva->score < privb->score)
+    return 1;
 
-  return ret;
+  return 0;
 }
 
 gfloat
