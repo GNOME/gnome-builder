@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/clang-format">
+    <file>clang-format.plugin</file>
+  </gresource>
+</gresources>

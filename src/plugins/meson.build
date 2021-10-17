@@ -45,6 +45,7 @@ subdir('buildui')
 subdir('buffer-monitor')
 subdir('cargo')
 subdir('clang')
+subdir('clang-format')
 subdir('cmake')
 subdir('codespell')
 subdir('code-index')
@@ -153,6 +154,7 @@ status += [
   'C Pack ................ : @0@'.format(get_option('plugin_c_pack')),
   'Cargo ................. : @0@'.format(get_option('plugin_cargo')),
   'Clang ................. : @0@'.format(get_option('plugin_clang')),
+  'ClangFormat ........... : @0@'.format(get_option('plugin_clang_format')),
   'CMake ................. : @0@'.format(get_option('plugin_cmake')),
   'Codespell ............. : @0@'.format(get_option('plugin_codespell')),
   'Code Index ............ : @0@'.format(get_option('plugin_code_index')),
