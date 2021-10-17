@@ -130,6 +130,12 @@ gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
     }
 }
 
+void
+gbp_buildui_log_pane_clear (GbpBuilduiLogPane *self)
+{
+  gbp_buildui_log_pane_reset_view (self);
+}
+
 static void
 gbp_buildui_log_pane_window_title_changed (GbpBuilduiLogPane *self,
                                            IdeTerminal       *terminal)

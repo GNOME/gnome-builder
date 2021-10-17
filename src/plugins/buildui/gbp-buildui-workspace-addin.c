@@ -226,6 +226,10 @@ gbp_buildui_workspace_addin_build_started (GbpBuilduiWorkspaceAddin *self,
 
   IDE_TRACE_MSG ("Pipeline phase 0x%x requested", phase);
 
+  g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
+  if (g_settings_get_boolean (settings, "clear-build-log-pane"))
+      gbp_buildui_log_pane_clear (self->log_pane);
+
   if (phase > IDE_PIPELINE_PHASE_CONFIGURE)
     dzl_dock_item_present (DZL_DOCK_ITEM (self->log_pane));
 
