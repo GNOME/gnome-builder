@@ -274,6 +274,7 @@ static void
 ide_hover_popover_init (IdeHoverPopover *self)
 {
   GtkStyleContext *style_context;
+  GtkWidget *scroller;
 
   self->context = g_object_new (IDE_TYPE_HOVER_CONTEXT, NULL);
   self->cancellable = g_cancellable_new ();
@@ -281,11 +282,20 @@ ide_hover_popover_init (IdeHoverPopover *self)
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (style_context, "hoverer");
 
+  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                           "visible", TRUE,
+                           "propagate-natural-width", TRUE,
+                           "propagate-natural-height", TRUE,
+                           "max-content-width", 600,
+                           "max-content-height", 600,
+                           NULL);
+  gtk_container_add (GTK_CONTAINER (self), scroller);
+
   self->box = g_object_new (GTK_TYPE_BOX,
                             "orientation", GTK_ORIENTATION_VERTICAL,
                             "visible", TRUE,
                             NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->box));
+  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->box));
 }
 
 IdeHoverContext *
