@@ -147,3 +147,7 @@ vte-terminal {
   background-color: @content_view_bg;
   color: @theme_fg_color;
 }
+
+textview.source-map {
+  font-size: 2px;
+}
