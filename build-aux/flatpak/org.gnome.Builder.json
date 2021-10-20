@@ -593,7 +593,7 @@
                 {
                     "type" : "git",
                     "path" : "/home/despinosa/Projects/gvls",
-                    "branch" : "gvls-20"
+                    "tag" : "gvls-20.1"
                 }
             ]
         },
