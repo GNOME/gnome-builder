@@ -148,6 +148,9 @@ vte-terminal {
   color: @theme_fg_color;
 }
 
+textview.source-map {
+  font-size: 2px;
+}
 textview.source-map .scrubber {
-  border-radius: 9px;
+  border-radius: 5px;
 }
