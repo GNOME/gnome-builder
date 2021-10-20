@@ -62,8 +62,7 @@
         "env" : {
             "V" : "1",
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
-            "MOUNT_FUSE_PATH" : "../tmp/",
-            "JSONRPC_DEBUG" : "1"
+            "MOUNT_FUSE_PATH" : "../tmp/"
         },
         "prepend-path" : "/usr/lib/sdk/llvm12/bin",
         "prepend-ld-library-path" : "/usr/lib/sdk/llvm12/lib"
@@ -593,8 +592,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/esodan/gvls.git",
-                    "branch": "gvls-20.0"
+                    "path" : "/home/despinosa/Projects/gvls",
+                    "branch" : "gvls-20"
                 }
             ]
         },
