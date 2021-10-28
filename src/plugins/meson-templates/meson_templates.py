@@ -330,7 +330,7 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             _('GNOME Application'),
             'pattern-gnome',
             _('Create a GNOME application with GTK 4'),
-            ['C'],
+            ['C', 'Rust'],
             0
          )
 
@@ -389,13 +389,14 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             files['resources/src/main.py'] = 'src/main.py'
             meson_file = 'resources/src/meson-py.build'
         elif self.language == 'rust':
-            files['resources/src/config.rs.in'] = 'src/config.rs.in'
-            files['resources/src/main.rs'] = 'src/main.rs'
-            files['resources/src/window.rs'] = 'src/window.rs'
+            files['resources/src/application.rs'] = 'src/application.rs'
+            files['resources/src/config-gtk4.rs.in'] = 'src/config.rs.in'
+            files['resources/src/main-gtk4.rs'] = 'src/main.rs'
+            files['resources/src/window-gtk4.rs'] = 'src/window.rs'
             files['resources/src/Cargo.lock'] = 'Cargo.lock'
-            files['resources/src/Cargo.toml'] = 'Cargo.toml'
+            files['resources/src/Cargo-gtk4.toml'] = 'Cargo.toml'
             files['resources/build-aux/cargo.sh'] = 'build-aux/cargo.sh'
-            meson_file = 'resources/src/meson-rs.build'
+            meson_file = 'resources/src/meson-rs-gtk4.build'
 
         if resource_name:
             files['resources/src/hello.gresource.xml'] = resource_name
