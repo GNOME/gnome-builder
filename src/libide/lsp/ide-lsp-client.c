@@ -1524,7 +1524,6 @@ ide_lsp_client_start (IdeLspClient *self)
    */
 
   params = JSONRPC_MESSAGE_NEW (
-    "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
     "rootUri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
     "workspaceFolders", "[",
