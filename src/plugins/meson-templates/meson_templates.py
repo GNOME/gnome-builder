@@ -330,7 +330,7 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             _('GNOME Application'),
             'pattern-gnome',
             _('Create a GNOME application with GTK 4'),
-            ['C', 'Rust'],
+            ['C', 'Rust', 'Python'],
             0
          )
 
@@ -385,9 +385,9 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
         elif self.language == 'python':
             files['resources/src/hello.py.in'] = 'src/%(name)s.in'
             files['resources/src/__init__.py'] = 'src/__init__.py'
-            files['resources/src/window.py'] = 'src/window.py'
-            files['resources/src/main.py'] = 'src/main.py'
-            meson_file = 'resources/src/meson-py.build'
+            files['resources/src/window-gtk4.py'] = 'src/window.py'
+            files['resources/src/main-gtk4.py'] = 'src/main.py'
+            meson_file = 'resources/src/meson-py-gtk4.build'
         elif self.language == 'rust':
             files['resources/src/application.rs'] = 'src/application.rs'
             files['resources/src/config-gtk4.rs.in'] = 'src/config.rs.in'

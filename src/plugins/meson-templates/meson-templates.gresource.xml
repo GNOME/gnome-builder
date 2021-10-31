@@ -6,6 +6,7 @@
     <file compressed="true">resources/src/help-overlay.ui</file>
     <file compressed="true">resources/src/window.js.tmpl</file>
     <file compressed="true">resources/src/meson-py.build</file>
+    <file compressed="true">resources/src/meson-py-gtk4.build</file>
     <file compressed="true">resources/src/window.h</file>
     <file compressed="true">resources/src/hello.js.in</file>
     <file compressed="true">resources/src/hello.gresource.xml</file>
@@ -33,6 +34,7 @@
     <file compressed="true">resources/src/window.cpp</file>
     <file compressed="true">resources/src/window.hpp</file>
     <file compressed="true">resources/src/window.py</file>
+    <file compressed="true">resources/src/window-gtk4.py</file>
     <file compressed="true">resources/src/window.vala</file>
     <file compressed="true">resources/src/config.rs.in</file>
     <file compressed="true">resources/src/config-gtk4.rs.in</file>
@@ -42,6 +44,7 @@
     <file compressed="true">resources/src/main-cli.vala</file>
     <file compressed="true">resources/src/hello.py.in</file>
     <file compressed="true">resources/src/main.py</file>
+    <file compressed="true">resources/src/main-gtk4.py</file>
     <file compressed="true">resources/src/main.rs</file>
     <file compressed="true">resources/src/main-gtk4.rs</file>
     <file compressed="true">resources/src/main-cli.rs</file>
