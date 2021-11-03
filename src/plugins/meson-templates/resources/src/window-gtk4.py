@@ -20,8 +20,6 @@ class AboutDialog(Gtk.AboutDialog):
         self.props.program_name = '{{name}}'
         self.props.version = "0.1.0"
         self.props.authors = ['{{author}}']
-        self.props.license_type = Gtk.License.GPL_3_0
         self.props.copyright = '(C) 2021 {{author}}'
-        self.props.website = 'https://www.gnome.org/'
         self.props.logo_icon_name = '{{appid}}'
         self.set_transient_for(parent)
