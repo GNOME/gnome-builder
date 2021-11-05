@@ -18,6 +18,7 @@
     <file compressed="true">resources/src/hello.c</file>
     <file compressed="true">resources/src/hello.h</file>
     <file compressed="true">resources/src/application.c</file>
+    <file compressed="true">resources/src/application-gtk4.vala</file>
     <file compressed="true">resources/src/application.h</file>
     <file compressed="true">resources/src/application.rs</file>
     <file compressed="true">resources/src/__init__.py</file>
@@ -36,11 +37,13 @@
     <file compressed="true">resources/src/window.py</file>
     <file compressed="true">resources/src/window-gtk4.py</file>
     <file compressed="true">resources/src/window.vala</file>
+    <file compressed="true">resources/src/window-gtk4.vala</file>
     <file compressed="true">resources/src/config.rs.in</file>
     <file compressed="true">resources/src/config-gtk4.rs.in</file>
     <file compressed="true">resources/src/window.rs</file>
     <file compressed="true">resources/src/window-gtk4.rs</file>
     <file compressed="true">resources/src/main.vala</file>
+    <file compressed="true">resources/src/main-gtk4.vala</file>
     <file compressed="true">resources/src/main-cli.vala</file>
     <file compressed="true">resources/src/hello.py.in</file>
     <file compressed="true">resources/src/main.py</file>

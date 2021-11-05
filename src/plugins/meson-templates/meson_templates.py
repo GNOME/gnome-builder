@@ -330,7 +330,7 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             _('GNOME Application'),
             'pattern-gnome',
             _('Create a GNOME application with GTK 4'),
-            ['C', 'Rust', 'Python'],
+            ['C', 'Rust', 'Python', 'Vala'],
             0
          )
 
@@ -373,8 +373,9 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             resource_name = None
             window_ui_name = None
         elif self.language == 'vala':
-            files['resources/src/main.vala'] = 'src/main.vala'
-            files['resources/src/window.vala'] = 'src/window.vala'
+            files['resources/src/main-gtk4.vala'] = 'src/main.vala'
+            files['resources/src/window-gtk4.vala'] = 'src/window.vala'
+            files['resources/src/application-gtk4.vala'] = 'src/application.vala'
         elif self.language == 'javascript':
             files['resources/src/main.js.tmpl'] = 'src/main.js'
             files['resources/src/hello.js.in'] = 'src/%(appid)s.in'
