@@ -11,6 +11,9 @@
 {{else if language == "vala"}}
   'main.vala',
   'window.vala',
+  {{if template == "gnome-app-gtk4"}}
+  'application.vala',
+  {{end}}
 {{end}}
 ]
 
