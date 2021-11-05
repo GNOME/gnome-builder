@@ -1,0 +1,25 @@
+{
+    "name": "typescript-language-server",
+    "buildsystem": "simple",
+    "build-options": {
+    	"env": {
+        	"npm_config_nodedir": "/usr/lib/sdk/node14"
+        }
+    },
+    "build-commands": [
+        "mkdir -p /app/main/ /app/bin/ /app/lib/ /app/include/ /app/share/",
+        "cp -a /usr/lib/sdk/node14/bin/* /app/bin/",
+        "cp -a /usr/lib/sdk/node14/lib/* /app/lib/",
+        "cp -a /usr/lib/sdk/node14/include/* /app/include/",
+        "cp -a /usr/lib/sdk/node14/share/* /app/share/",
+        "npm install -g typescript-language-server-0.6.4.tgz --offline --cache=$FLATPAK_BUILDER_BUILDDIR/flatpak-node/npm-cache"
+    ],
+    "sources": [
+        {
+            "type": "file",
+            "url": "https://registry.npmjs.org/typescript-language-server/-/typescript-language-server-0.6.4.tgz",
+            "sha256": "128aae2a5e0381e0605eddb7ce03dfcc2511341edcd4f97b1a21824825346a7a"
+        },
+        "typescript-language-server-deps.json"
+    ]
+}
