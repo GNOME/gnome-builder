@@ -149,4 +149,3 @@ IDE_FILE_SETTINGS_PROPERTY (TRIM_TRAILING_WHITESPACE, trim_trailing_whitespace,
                                                   (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)),
                             priv->trim_trailing_whitespace = !!trim_trailing_whitespace;,
                             boolean)
-

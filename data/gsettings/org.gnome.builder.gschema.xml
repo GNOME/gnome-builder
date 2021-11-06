@@ -48,5 +48,8 @@
       <summary>Clear build caches at startup</summary>
       <description>If enabled, Builder will clear build caches upon startup.</description>
     </key>
+    <key name="format-on-save" type="b">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>
