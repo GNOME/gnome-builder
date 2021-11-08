@@ -1,10 +1,10 @@
 {
     "app-id": "{{appid}}",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.30",
+    "runtime-version": "41",
     "sdk": "org.gnome.Sdk",
     "command": "{{exec_name}}",
-    "sdk-extensions": ["org.freedesktop.Sdk.Extension.mono5"],
+    "sdk-extensions": ["org.freedesktop.Sdk.Extension.mono6"],
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -16,10 +16,10 @@
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
     ],
     "build-options" : {
-        "append-path": "/usr/lib/sdk/mono5/bin",
-        "append-ld-library-path": "/usr/lib/sdk/mono5/lib",
+        "append-path": "/usr/lib/sdk/mono6/bin",
+        "append-ld-library-path": "/usr/lib/sdk/mono6/lib",
         "env": {
-            "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/sdk/mono5/lib/pkgconfig"
+            "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/sdk/mono6/lib/pkgconfig"
         }
     },
     "cleanup": [ "/lib/monodoc", "/lib/pkgconfig" ],
@@ -27,23 +27,11 @@
         {
             "name": "mono-runtime",
             "buildsystem": "simple",
-            "build-commands": ["/usr/lib/sdk/mono5/install.sh "],
+            "build-commands": ["/usr/lib/sdk/mono6/install.sh "],
             "build-options" : {
                 "no-debuginfo": true,
                 "strip": true
             }
-        },
-        {
-            "name" : "meson",
-            "buildsystem" : "simple",
-            "build-commands": ["pip3 install -I --prefix=/app ."],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/mesonbuild/meson.git",
-                    "branch" : "0.48.1"
-                }
-            ]
         },
         {
             "name": "gtk-sharp3",
