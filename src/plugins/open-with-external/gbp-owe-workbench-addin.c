@@ -23,7 +23,7 @@
 #include "gbp-owe-workbench-addin.h"
 
 #include <libportal/portal.h>
-#include <libportal/portal-gtk3.h>
+#include <libportal-gtk3/portal-gtk3.h>
 
 struct _GbpOweWorkbenchAddin
 {

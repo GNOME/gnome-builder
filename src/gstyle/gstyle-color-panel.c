@@ -30,7 +30,7 @@
 #include "gstyle-color.h"
 
 #include <libportal/portal.h>
-#include <libportal/portal-gtk3.h>
+#include <libportal-gtk3/portal-gtk3.h>
 
 #define HSV_TO_SCALE_FACTOR (1.0 / 256.0)
 #define CIELAB_L_TO_SCALE_FACTOR (100.0 / 256.0)
