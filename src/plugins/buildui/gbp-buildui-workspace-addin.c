@@ -214,6 +214,7 @@ gbp_buildui_workspace_addin_build_started (GbpBuilduiWorkspaceAddin *self,
                                            IdeBuildManager          *build_manager)
 {
   IdePipelinePhase phase;
+  g_autoptr(GSettings) settings = NULL;
 
   IDE_ENTRY;
 
@@ -226,7 +227,7 @@ gbp_buildui_workspace_addin_build_started (GbpBuilduiWorkspaceAddin *self,
 
   IDE_TRACE_MSG ("Pipeline phase 0x%x requested", phase);
 
-  g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
+  settings = g_settings_new ("org.gnome.builder.build");
   if (g_settings_get_boolean (settings, "clear-build-log-pane"))
       gbp_buildui_log_pane_clear (self->log_pane);
 
