@@ -598,7 +598,8 @@
             "name" : "libportal",
             "config-opts" : [
                 "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=debugoptimized",
+                "-Dbackends=gtk3"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
