@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-10-22 16:13+0000\n"
-"PO-Revision-Date: 2021-11-05 21:04+0200\n"
+"POT-Creation-Date: 2021-11-08 21:18+0000\n"
+"PO-Revision-Date: 2021-11-09 16:14+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -181,15 +181,15 @@ msgstr ""
 "автоматичне типове значення. 0 — кількість процесорів."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
-#: src/libide/gui/ide-preferences-builtin.c:409
-#| msgid "Clear build log"
+#: src/libide/gui/ide-preferences-builtin.c:410
 msgid "Clear build logs"
 msgstr "Спорожнити журнал збирання"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
-#| msgid "If enabled, the left panel will be displayed."
 msgid "If enabled, build log pane will be cleared on rebuild."
-msgstr "Якщо позначено, вміст панелі журналу збирання буде вилучено при повторному збиранні."
+msgstr ""
+"Якщо позначено, вміст панелі журналу збирання буде вилучено при повторному "
+"збиранні."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Allow network when metered"
@@ -339,7 +339,7 @@ msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Якщо увімкнено, редактор показуватиме лінії ґратки у документі."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:79
-#: src/libide/gui/ide-preferences-builtin.c:172
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "Show overview map"
 msgstr "Показувати мапу коду"
 
@@ -372,7 +372,7 @@ msgid "The various types of space to draw in the editor."
 msgstr "Різноманітні типи пробілів, які слід малювати у редакторі."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:95
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Overscroll"
 msgstr "Надпрокручування"
 
@@ -393,7 +393,7 @@ msgstr ""
 "увесь текст був видимим."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:105
-#: src/libide/gui/ide-preferences-builtin.c:185
+#: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Autosave Enabled"
 msgstr "Увімкнено автозбереження"
 
@@ -402,7 +402,7 @@ msgid "Enable or disable autosave feature."
 msgstr "Увімкнути або вимкнути можливість автоматичного збереження."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:111
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "Autosave Frequency"
 msgstr "Частота автозбереження"
 
@@ -429,7 +429,7 @@ msgid "The number of pixels to include above and below lines in the editor."
 msgstr "Кількість пікселів, які слід включати над і під рядками у редакторі."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:128
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:208
 msgid "Interactive Completion"
 msgstr "Інтерактивне доповнення"
 
@@ -507,7 +507,7 @@ msgid "\"Projects\""
 msgstr "\"Проєкти\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:426
+#: src/libide/gui/ide-preferences-builtin.c:427
 msgid "Projects directory"
 msgstr "Каталог проєктів"
 
@@ -1175,9 +1175,9 @@ msgstr "Підкреслення синтаксису"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-preferences-builtin.c:152
-#: src/libide/gui/ide-preferences-builtin.c:205
-#: src/libide/gui/ide-preferences-builtin.c:328
-#: src/libide/gui/ide-preferences-builtin.c:400
+#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:401
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
@@ -1221,7 +1221,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "Перезаписувати кінцеві фігурні дужки і лапки"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:159
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Indentation"
 msgstr "Відступ"
 
@@ -1242,12 +1242,12 @@ msgid "8"
 msgstr "8"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:243
-#: src/libide/gui/ide-preferences-builtin.c:176
+#: src/libide/gui/ide-preferences-builtin.c:177
 msgid "Spaces"
 msgstr "Пробіли"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:254
-#: src/libide/gui/ide-preferences-builtin.c:177
+#: src/libide/gui/ide-preferences-builtin.c:178
 msgid "Tabs"
 msgstr "Табуляції"
 
@@ -1951,355 +1951,364 @@ msgstr "Показати список відкритих файлів"
 msgid "Display the list of all open files in the project sidebar"
 msgstr "Показувати список усіх відкритих файлів на бічній панелі проєкту"
 
-#: src/libide/gui/ide-preferences-builtin.c:155
+#: src/libide/gui/ide-preferences-builtin.c:154
+msgid "Reformat code on save"
+msgstr ""
+"Переформатувати код при збереженні"
+
+#: src/libide/gui/ide-preferences-builtin.c:154
+msgid "Reformat current file on save"
+msgstr ""
+"Переформатувати поточний файл при збереженні"
+
+#: src/libide/gui/ide-preferences-builtin.c:156
 msgid "Cursor"
 msgstr "Вказівник"
 
-#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Restore cursor position"
 msgstr "Відновлювати положення вказівника"
 
-#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Restore cursor position when a file is reopened"
 msgstr "Відновлювати положення вказівника, коли файл повторно відкрито"
 
-#: src/libide/gui/ide-preferences-builtin.c:157
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Enable text wrapping"
 msgstr "Увімкнути перенесення рядків"
 
-#: src/libide/gui/ide-preferences-builtin.c:157
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Wrap text that is too wide to display"
 msgstr ""
 "Переносити надто довгі рядки тексту так, щоб можна було повністю бачити вміст"
 
-#: src/libide/gui/ide-preferences-builtin.c:158
+#: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Scroll Offset"
 msgstr "Відступ прокручування"
 
-#: src/libide/gui/ide-preferences-builtin.c:158
+#: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Мінімальна кількість рядків, щоб утримувати вказівник внизу та зверху"
 
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Дозволити редактору прокручуватись за межі"
 
-#: src/libide/gui/ide-preferences-builtin.c:161
+#: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Line Information"
 msgstr "Інформація про рядок"
 
-#: src/libide/gui/ide-preferences-builtin.c:162
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Line numbers"
 msgstr "Номери рядків"
 
-#: src/libide/gui/ide-preferences-builtin.c:162
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Show line number at beginning of each line"
 msgstr "Показувати номер на початку кожного рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:163
+#: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Relative line numbers"
 msgstr "Відносні номери рядків"
 
-#: src/libide/gui/ide-preferences-builtin.c:163
+#: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Show line numbers relative to the cursor line"
 msgstr "Показувати номери рядків відносно рядка курсора"
 
-#: src/libide/gui/ide-preferences-builtin.c:164
+#: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Line changes"
 msgstr "Зміни рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:164
+#: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Show if a line was added or modified next to line number"
 msgstr "Показувати, чи додано або змінено щось біля номеру рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:166
 msgid "Line diagnostics"
 msgstr "Діагностика у рядках"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:166
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
 "Показувати поряд із номерами рядків піктограму, яка позначатиме тип "
 "діагностичного повідомлення"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Highlight"
 msgstr "Підсвічування"
 
-#: src/libide/gui/ide-preferences-builtin.c:168
+#: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Current line"
 msgstr "Поточний рядок"
 
-#: src/libide/gui/ide-preferences-builtin.c:168
+#: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Make current line stand out with highlights"
 msgstr "Підсвічувати поточний рядок"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Matching brackets"
 msgstr "Збігання дужок"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Підсвічувати збіг дужок, що ґрунтується на положенні вказівника"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Code Overview"
 msgstr "Огляд коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:172
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Віддалений огляд для покращення пересування по коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Automatically hide overview map"
 msgstr "Автоматично ховати карту огляду"
 
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Automatically hide map when editor loses focus"
 msgstr "Автоматично ховати карту, коли редактор втрачає фокус"
 
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Visible Whitespace Characters"
 msgstr "Видимі пробіли"
 
-#: src/libide/gui/ide-preferences-builtin.c:178
+#: src/libide/gui/ide-preferences-builtin.c:179
 msgid "New line and carriage return"
 msgstr "Новий рядок і переведення каретки"
 
-#: src/libide/gui/ide-preferences-builtin.c:179
+#: src/libide/gui/ide-preferences-builtin.c:180
 msgid "Non-breaking spaces"
 msgstr "Нерозривний пропуск"
 
-#: src/libide/gui/ide-preferences-builtin.c:180
+#: src/libide/gui/ide-preferences-builtin.c:181
 msgid "Spaces inside of text"
 msgstr "Пропуск всередині тексту"
 
-#: src/libide/gui/ide-preferences-builtin.c:181
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Trailing Only"
 msgstr "Тільки початкові"
 
-#: src/libide/gui/ide-preferences-builtin.c:182
+#: src/libide/gui/ide-preferences-builtin.c:183
 msgid "Leading Only"
 msgstr "Тільки кінцеві"
 
-#: src/libide/gui/ide-preferences-builtin.c:184
+#: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Autosave"
 msgstr "Автозбереження"
 
-#: src/libide/gui/ide-preferences-builtin.c:185
+#: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Enable or disable autosave feature"
 msgstr "Увімкнути або вимкнути можливість автоматичного збереження"
 
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "The number of seconds after modification before auto saving"
 msgstr "Кількість секунд після внесення змін до автоматичного збереження даних"
 
-#: src/libide/gui/ide-preferences-builtin.c:192
+#: src/libide/gui/ide-preferences-builtin.c:193
 msgid "Code Insight"
 msgstr "Розуміння коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:194
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Highlighting"
 msgstr "Підсвічування"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:196
 msgid "Semantic Highlighting"
 msgstr "Семантичне підсвічування"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:196
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 "Використовувати підсвічення додаткової інформації, яку досліджено з коду"
 
-#: src/libide/gui/ide-preferences-builtin.c:197
+#: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "Діагностика"
 
-#: src/libide/gui/ide-preferences-builtin.c:203
+#: src/libide/gui/ide-preferences-builtin.c:204
 msgid "Completion"
 msgstr "Доповнення"
 
-#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Completions Display Size"
 msgstr "Розмір списку завершення"
 
-#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Number of completions to display"
 msgstr "Кількість варіантів завершення, які слід показувати"
 
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:208
 msgid "Display code suggestions interactively as you type"
 msgstr "Показувати пропозиції завершення коду інтерактивно під час введення"
 
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: src/libide/gui/ide-preferences-builtin.c:210
 msgid "Completion Providers"
 msgstr "Засоби автодоповнення"
 
-#: src/libide/gui/ide-preferences-builtin.c:215
+#: src/libide/gui/ide-preferences-builtin.c:216
 msgid "Snippets"
 msgstr "Фрагменти"
 
-#: src/libide/gui/ide-preferences-builtin.c:258
+#: src/libide/gui/ide-preferences-builtin.c:259
 msgid "Programming Languages"
 msgstr "Мови програмування"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:269
+#: src/libide/gui/ide-preferences-builtin.c:270
 msgid "Search languages…"
 msgstr "Шукати мови…"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:330
 msgid "Trim trailing whitespace"
 msgstr "Обрізати залишкові пропуски"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:330
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Коли зберігаєте, то залишкові пропуски зі змінених рядків будуть обрізані."
 
-#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Overwrite Braces"
 msgstr "Перезаписувати дужки"
 
-#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Overwrite closing braces"
 msgstr "Перезаписувати завершальні дужки"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Insert matching character for { [ ( or \""
 msgstr "Вставляти завершальні символи для блоків { [ ( або \""
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert Trailing Newline"
 msgstr "Вставляти кінцевий символ нового рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Ensure files end with a newline"
 msgstr "Забезпечувати завершення файлів символом нового рядка"
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Margins"
 msgstr "Поля"
 
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Show right margin"
 msgstr "Показувати праве поле"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Right margin position"
 msgstr "Положення правого поля"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Position in spaces for the right margin"
 msgstr "Положення в пропусках для правого поля"
 
-#: src/libide/gui/ide-preferences-builtin.c:339
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Tab width"
 msgstr "Ширина табуляції"
 
-#: src/libide/gui/ide-preferences-builtin.c:339
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Width of a tab character in spaces"
 msgstr "Ширина символу табуляції в пропусках"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Insert spaces instead of tabs"
 msgstr "Вставляти пропуски замість табуляції"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Prefer spaces over use of tabs"
 msgstr "Віддавати перевагу пропускам над табуляцією"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Automatically indent"
 msgstr "Автоматичний відступ"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Indent source code as you type"
 msgstr "Відступ у коді під час писання"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Spacing"
 msgstr "Інтервал"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Space before opening parentheses"
 msgstr "Пробіл перед початковими круглими дужками"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Space before opening brackets"
 msgstr "Пробіл перед початковими квадратними дужками"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening braces"
 msgstr "Пробіл перед початковими фігурними дужками"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening angles"
 msgstr "Пробіл перед початковою кутовою дужкою"
 
-#: src/libide/gui/ide-preferences-builtin.c:348
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Prefer a space before colons"
 msgstr "Ставити пробіл перед двокрапкою"
 
-#: src/libide/gui/ide-preferences-builtin.c:349
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before commas"
 msgstr "Ставити пробіл перед комою"
 
-#: src/libide/gui/ide-preferences-builtin.c:350
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before semicolons"
 msgstr "Ставити пробіл перед крапкою з комою"
 
-#: src/libide/gui/ide-preferences-builtin.c:360
-#: src/libide/gui/ide-preferences-builtin.c:378
+#: src/libide/gui/ide-preferences-builtin.c:361
+#: src/libide/gui/ide-preferences-builtin.c:379
 msgid "Default"
 msgstr "Типовий"
 
-#: src/libide/gui/ide-preferences-builtin.c:365
-#: src/libide/gui/ide-preferences-builtin.c:383
+#: src/libide/gui/ide-preferences-builtin.c:366
+#: src/libide/gui/ide-preferences-builtin.c:384
 msgid "Number of CPU"
 msgstr "Кількість процесорів"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:399
 msgid "Build"
 msgstr "Зібрати"
 
-#: src/libide/gui/ide-preferences-builtin.c:401
+#: src/libide/gui/ide-preferences-builtin.c:402
 msgid "Build Workers"
 msgstr "Збиральні робітники"
 
-#: src/libide/gui/ide-preferences-builtin.c:401
+#: src/libide/gui/ide-preferences-builtin.c:402
 msgid "Number of parallel build workers"
 msgstr "Кількість паралельних робітників, які збирають"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
-#| msgid "Clear build log"
+#: src/libide/gui/ide-preferences-builtin.c:410
 msgid "Clear build log pane on rebuild"
 msgstr "Спорожняти панель журналу збирання при перезбиранні"
 
-#: src/libide/gui/ide-preferences-builtin.c:410
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Clear build cache at startup"
 msgstr "Спорожняти кеш збирання під час запуску"
 
-#: src/libide/gui/ide-preferences-builtin.c:410
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Expired caches will be purged when Builder is started"
 msgstr "Застарілі кеші буде витерто під час запуску «Будівника»"
 
-#: src/libide/gui/ide-preferences-builtin.c:412
+#: src/libide/gui/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Мережа"
 
-#: src/libide/gui/ide-preferences-builtin.c:413
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Дозволити отримання даних при вимірюваних з'єднаннях"
 
-#: src/libide/gui/ide-preferences-builtin.c:413
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2307,55 +2316,55 @@ msgstr ""
 "Дозволити використання з'єднань із вимірюванням обміну даними при "
 "автоматичному отриманні залежностей"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:416
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
 #: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
 msgid "Debugger"
 msgstr "Засіб діагностики"
 
-#: src/libide/gui/ide-preferences-builtin.c:416
+#: src/libide/gui/ide-preferences-builtin.c:417
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
 msgid "Breakpoints"
 msgstr "Точки зупинки"
 
-#: src/libide/gui/ide-preferences-builtin.c:417
+#: src/libide/gui/ide-preferences-builtin.c:418
 msgid "Insert Breakpoint at Start of Application"
 msgstr "Вставляти точку зупинки на початку програми"
 
-#: src/libide/gui/ide-preferences-builtin.c:417
+#: src/libide/gui/ide-preferences-builtin.c:418
 msgid ""
 "Automatically stop execution at the start of the applications main function"
 msgstr "Автоматично зупиняти виконання на початку головної функції програм"
 
-#: src/libide/gui/ide-preferences-builtin.c:423
+#: src/libide/gui/ide-preferences-builtin.c:424
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Проєкти"
 
-#: src/libide/gui/ide-preferences-builtin.c:425
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Workspace"
 msgstr "Робочий простір"
 
-#: src/libide/gui/ide-preferences-builtin.c:426
+#: src/libide/gui/ide-preferences-builtin.c:427
 msgid "A place for all your projects"
 msgstr "Місце для всіх ваших проєктів"
 
-#: src/libide/gui/ide-preferences-builtin.c:427
+#: src/libide/gui/ide-preferences-builtin.c:428
 msgid "Restore previously opened files"
 msgstr "Відновлювати раніше відкриті файли"
 
-#: src/libide/gui/ide-preferences-builtin.c:427
+#: src/libide/gui/ide-preferences-builtin.c:428
 msgid "Open previously opened files when loading a project"
 msgstr "Відкривати раніше відкриті файли під час завантаження проєкту"
 
-#: src/libide/gui/ide-preferences-builtin.c:549
+#: src/libide/gui/ide-preferences-builtin.c:550
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:379
 msgid "Version Control"
 msgstr "Контроль версії"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:562
+#: src/libide/gui/ide-preferences-builtin.c:563
 msgid "SDKs"
 msgstr "SDK"
 
@@ -3489,7 +3498,7 @@ msgid "_Export Bundle"
 msgstr "_Експортувати комплект"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:664
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:382
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:383
 msgid "Build Issues"
 msgstr "Проблеми збирання"
 
@@ -3518,7 +3527,7 @@ msgstr "Конвеєр збирання порожній"
 msgid "Build Targets"
 msgstr "Цілі збирання"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:391
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:392
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "Налаштування збирання"
@@ -5224,27 +5233,27 @@ msgstr "Програма GNOME"
 msgid "Create a GNOME application with GTK 4"
 msgstr "Створити програму GNOME з GTK 4"
 
-#: src/plugins/meson-templates/meson_templates.py:411
+#: src/plugins/meson-templates/meson_templates.py:413
 msgid "Shared Library"
 msgstr "Спільні бібліотеки"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:415
 msgid "Create a new project with a shared library"
 msgstr "Створити проєкт із бібліотекою спільного використання"
 
-#: src/plugins/meson-templates/meson_templates.py:430
+#: src/plugins/meson-templates/meson_templates.py:432
 msgid "Empty Project"
 msgstr "Порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:434
 msgid "Create a new empty project"
 msgstr "Створити порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:449
+#: src/plugins/meson-templates/meson_templates.py:451
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:453
 msgid "Create a new command line project"
 msgstr "Створити проєкт програми для роботи у командному рядку"
 
