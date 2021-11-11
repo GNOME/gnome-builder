@@ -34,6 +34,7 @@
 
 #include "ide-lsp-client.h"
 #include "ide-lsp-enums.h"
+#include "ide-lsp-workspace-edit.h"
 
 typedef struct
 {
@@ -968,7 +969,7 @@ ide_lsp_client_handle_apply_edit (IdeLspClient  *self,
                                   GVariant      *params)
 {
   g_autoptr(GVariant) parent = NULL;
-  g_autoptr(GVariant) changes = NULL;
+  g_autoptr(IdeLspWorkspaceEdit) workspace_edit = NULL;
   g_autoptr(GPtrArray) edits = NULL;
 
   IDE_ENTRY;
@@ -983,69 +984,8 @@ ide_lsp_client_handle_apply_edit (IdeLspClient  *self,
 
   edits = g_ptr_array_new_with_free_func (g_object_unref);
 
-#if 0
-  /* We'd prefer to support this, but do not currently */
-  if (JSONRPC_MESSAGE_PARSE (edit, "documentChanges", JSONRPC_MESSAGE_GET_VARIANT (&changes)))
-    {
-    }
-#endif
-
-  if (JSONRPC_MESSAGE_PARSE (parent, "changes", JSONRPC_MESSAGE_GET_VARIANT (&changes)))
-    {
-      if (g_variant_is_of_type (changes, G_VARIANT_TYPE_VARDICT))
-        {
-          GVariantIter iter;
-          GVariant *value;
-          gchar *uri;
-
-          g_variant_iter_init (&iter, changes);
-          while (g_variant_iter_loop (&iter, "{sv}", &uri, &value))
-            {
-              GVariantIter edit_iter;
-              GVariant *item;
-              struct {
-                gint64 line;
-                gint64 column;
-              } begin, end;
-
-              g_variant_iter_init (&edit_iter, value);
-              while (g_variant_iter_loop (&edit_iter, "v", &item))
-                {
-                  const gchar *new_text = NULL;
-                  gboolean r;
-
-                  r = JSONRPC_MESSAGE_PARSE (item,
-                    "range", "{",
-                      "start", "{",
-                        "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
-                        "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
-                      "}",
-                      "end", "{",
-                        "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
-                        "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
-                      "}",
-                    "}",
-                    "newText", JSONRPC_MESSAGE_GET_STRING (&new_text)
-                  );
-
-                  if (r)
-                    {
-                      g_autoptr(IdeLocation) begin_loc = NULL;
-                      g_autoptr(IdeLocation) end_loc = NULL;
-                      g_autoptr(IdeRange) range = NULL;
-                      g_autoptr(GFile) file = NULL;
-
-                      file = g_file_new_for_uri (uri);
-                      begin_loc = ide_location_new (file, begin.line, begin.column);
-                      end_loc = ide_location_new (file, end.line, end.column);
-                      range = ide_range_new (begin_loc, end_loc);
-
-                      g_ptr_array_add (edits, ide_text_edit_new (range, new_text));
-                    }
-                }
-            }
-        }
-    }
+  workspace_edit = ide_lsp_workspace_edit_new(parent);
+  edits = ide_lsp_workspace_edit_get_edits(workspace_edit);
 
   if (edits->len > 0)
     {

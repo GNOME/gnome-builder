@@ -29,6 +29,7 @@
 #include "ide-lsp-client.h"
 #include "ide-lsp-rename-provider.h"
 #include "ide-lsp-util.h"
+#include "ide-lsp-workspace-edit.h"
 
 typedef struct
 {
@@ -146,84 +147,6 @@ ide_lsp_rename_provider_init (IdeLspRenameProvider *self)
 }
 
 static void
-ide_lsp_rename_provider_rename_cb_changes (IdeTask *task, GVariant *return_value)
-{
-  g_autoptr(GPtrArray) ret = NULL;
-  g_autoptr(GVariantIter) changes_by_uri = NULL;
-  const gchar *uri;
-  GVariant *changes;
-
-  IDE_ENTRY;
-  if (!JSONRPC_MESSAGE_PARSE (return_value, "changes", JSONRPC_MESSAGE_GET_ITER (&changes_by_uri)))
-    IDE_EXIT;
-
-  ret = g_ptr_array_new_with_free_func (g_object_unref);
-
-  while (g_variant_iter_loop (changes_by_uri, "{sv}", &uri, &changes))
-    {
-      g_autoptr(GFile) gfile = g_file_new_for_uri (uri);
-      GVariantIter changes_iter;
-      GVariant *change;
-
-      if (!g_variant_is_container (changes))
-        continue;
-
-      g_variant_iter_init (&changes_iter, changes);
-
-      while (g_variant_iter_loop (&changes_iter, "v", &change))
-        {
-          IdeTextEdit *edit = ide_lsp_decode_text_edit (change, gfile);
-          if (edit != NULL)
-            g_ptr_array_add (ret, edit);
-        }
-    }
-
-  ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
-
-  IDE_EXIT;
-}
-
-static void
-ide_lsp_rename_provider_rename_cb_document_changes (IdeTask *task, GVariant *return_value)
-{
-  g_autoptr(GPtrArray) ret = NULL;
-  g_autoptr(GVariantIter) changes_by_textdocument = NULL;
-  GVariant *changes;
-
-  IDE_ENTRY;
-
-  if (!JSONRPC_MESSAGE_PARSE (return_value, "documentChanges", JSONRPC_MESSAGE_GET_ITER (&changes_by_textdocument)))
-    IDE_EXIT;
-
-  ret = g_ptr_array_new_with_free_func (g_object_unref);
-
-  while (g_variant_iter_loop (changes_by_textdocument, "v", &changes))
-    {
-      g_autoptr(GFile) gfile = NULL;
-      g_autoptr(GVariantIter) edits = NULL;
-      const gchar *uri;
-      GVariant *edit;
-
-      JSONRPC_MESSAGE_PARSE (changes, "textDocument", "{", "uri", JSONRPC_MESSAGE_GET_STRING (&uri), "}");
-      gfile = g_file_new_for_uri (uri);
-
-      if (!JSONRPC_MESSAGE_PARSE (changes, "edits", JSONRPC_MESSAGE_GET_ITER (&edits)))
-        IDE_EXIT;
-
-      while (g_variant_iter_loop (edits, "v", &edit))
-        {
-          IdeTextEdit *tedit = ide_lsp_decode_text_edit (edit, gfile);
-          if (tedit != NULL)
-            g_ptr_array_add (ret, tedit);
-        }
-    }
-
-  ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
-
-  IDE_EXIT;
-}
-
-static void
 ide_lsp_rename_provider_rename_cb (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
@@ -232,7 +155,8 @@ ide_lsp_rename_provider_rename_cb (GObject      *object,
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GVariantDict) dict = NULL;
+  g_autoptr(IdeLspWorkspaceEdit) workspace_edit = NULL;
+  g_autoptr(GPtrArray) ret = NULL;
 
   IDE_ENTRY;
 
@@ -246,11 +170,9 @@ ide_lsp_rename_provider_rename_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  dict = g_variant_dict_new (return_value);
-  if (g_variant_dict_contains (dict, "changes"))
-    ide_lsp_rename_provider_rename_cb_changes (g_steal_pointer (&task), return_value);
-  else if (g_variant_dict_contains (dict, "documentChanges"))
-    ide_lsp_rename_provider_rename_cb_document_changes (g_steal_pointer (&task), return_value);
+  workspace_edit = ide_lsp_workspace_edit_new(return_value);
+  ret = ide_lsp_workspace_edit_get_edits(workspace_edit);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), g_ptr_array_unref);
 
   IDE_EXIT;
 }

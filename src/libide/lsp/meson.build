@@ -22,6 +22,7 @@ libide_lsp_public_headers = [
   'ide-lsp-symbol-resolver.h',
   'ide-lsp-symbol-tree.h',
   'ide-lsp-types.h',
+  'ide-lsp-workspace-edit.h',
 ]
 
 libide_lsp_private_headers = [
@@ -51,6 +52,7 @@ libide_lsp_public_sources = [
   'ide-lsp-symbol-node.c',
   'ide-lsp-symbol-resolver.c',
   'ide-lsp-symbol-tree.c',
+  'ide-lsp-workspace-edit.c',
 ]
 
 libide_lsp_private_sources = [
