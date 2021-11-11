@@ -1,12 +1,12 @@
 {
-    "name": "typescript-language-server",
-    "buildsystem": "simple",
-    "build-options": {
-    	"env": {
-        	"npm_config_nodedir": "/usr/lib/sdk/node14"
+    "name" : "typescript-language-server",
+    "buildsystem" : "simple",
+    "build-options" : {
+        "env" : {
+            "npm_config_nodedir" : "/usr/lib/sdk/node14"
         }
     },
-    "build-commands": [
+    "build-commands" : [
         "mkdir -p /app/main/ /app/bin/ /app/lib/ /app/include/ /app/share/ /app/lib/yarn/global/",
         "cp -a /usr/lib/sdk/node14/bin/* /app/bin/",
         "cp -a /usr/lib/sdk/node14/lib/* /app/lib/",
@@ -20,13 +20,13 @@
         "cd ./typescript-language-server && yarn --offline compile",
         "HOME=$PWD yarn --offline global add file:$PWD/typescript-language-server"
     ],
-    "sources": [
+    "sources" : [
         {
-			"type": "archive",
-			"url": "https://github.com/typescript-language-server/typescript-language-server/archive/refs/tags/v0.6.5.tar.gz",
-			"sha256": "a7a7a4bcf8cb76c95aadb374f78042c7d716422fa6e497bc0849995d15ba21fa",
-			"dest": "typescript-language-server"
-		},
+            "type" : "archive",
+            "url" : "https://github.com/typescript-language-server/typescript-language-server/archive/refs/tags/v0.6.5.tar.gz",
+            "sha256" : "a7a7a4bcf8cb76c95aadb374f78042c7d716422fa6e497bc0849995d15ba21fa",
+            "dest" : "typescript-language-server"
+        },
         "typescript-language-server-deps.json"
     ]
 }
