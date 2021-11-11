@@ -1,0 +1,16 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2021 Georg Vienna
+Description=Provides LSP integration for Typescript/Javascript
+Hidden=true
+Loader=python3
+Module=ts_language_server_plugin
+Name=Typescript Language Server Plugin
+X-Builder-ABI=@PACKAGE_ABI@
+X-Completion-Provider-Languages=js,jsx,typescript,typescript-jsx
+X-Symbol-Resolver-Languages=js,jsx,typescript,typescript-jsx
+X-Diagnostic-Provider-Languages=js,jsx,typescript,typescript-jsx
+X-Highlighter-Languages=js,jsx,typescript,typescript-jsx
+X-Hover-Provider-Languages=js,jsx,typescript,typescript-jsx
+X-Rename-Provider-Languages=js,jsx,typescript,typescript-jsx
+X-Formatter-Languages=js,jsx,typescript,typescript-jsx

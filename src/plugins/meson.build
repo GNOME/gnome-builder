@@ -127,6 +127,7 @@ subdir('sysroot')
 subdir('terminal')
 subdir('testui')
 subdir('todo')
+subdir('ts-language-server')
 subdir('trim-spaces')
 subdir('update-manager')
 subdir('vagrant')
@@ -203,6 +204,7 @@ status += [
   'Sysprof ............... : @0@'.format(get_option('plugin_sysprof')),
   'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
   'Todo .................. : @0@'.format(get_option('plugin_todo')),
+  'TS/JS Language Server.. : @0@'.format(get_option('plugin_ts_language_server')),
   'Update Manager ........ : @0@'.format(get_option('plugin_update_manager')),
   'GNOME Vala LS ......... : @0@'.format(get_option('plugin_gvls')),
   'Vala Language Server .. : @0@'.format(get_option('plugin_vls')),
