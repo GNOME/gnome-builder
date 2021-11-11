@@ -5,6 +5,7 @@ plugins_deps += [
 ]
 
 plugins_sources += files([
+  'rust-analyzer-code-action-provider.c',
   'rust-analyzer-completion-provider.c',
   'rust-analyzer-diagnostic-provider.c',
   'rust-analyzer-formatter.c',

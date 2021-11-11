@@ -142,3 +142,7 @@ class JediRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
     def do_load(self):
         JediService.bind_client(self)
 
+class JediCodeActionProvider(Ide.LspCodeActionProvider, Ide.CodeActionProvider):
+    def do_load(self):
+        JediService.bind_client(self)
+

@@ -229,6 +229,7 @@ enum {
   END_USER_ACTION,
   FOCUS_LOCATION,
   FORMAT_SELECTION,
+  QUERY_CODE_ACTION,
   FIND_REFERENCES,
   GOTO_DEFINITION,
   HIDE_COMPLETION,
@@ -5097,6 +5098,149 @@ ide_source_view_real_format_selection (IdeSourceView *self)
 }
 
 static void
+ide_source_view_code_action_execute_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IDE_TRACE_MSG ("ide_source_view_code_action_execute_cb done");
+}
+
+static void
+execute_code_action_cb (IdeCodeAction *code_action)
+{
+  ide_code_action_execute_async(code_action,
+                                NULL,
+                                ide_source_view_code_action_execute_cb,
+                                g_object_ref (code_action));
+}
+
+static void
+popup_menu_detach (GtkWidget *attach_widget,
+		               GtkMenu   *menu)
+{
+}
+
+static void
+ide_source_view_code_action_query_cb(GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+
+  g_autoptr(IdeSourceView) self = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GPtrArray) code_actions = NULL;
+
+  IDE_ENTRY;
+
+  g_assert(IDE_IS_SOURCE_VIEW(self));
+  g_assert(G_IS_ASYNC_RESULT(result));
+
+  code_actions = ide_buffer_code_action_query_finish(buffer, result, &error);
+
+  if (!code_actions)
+    {
+      if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        g_warning("%s", error->message);
+      IDE_EXIT;
+    }
+
+  if (code_actions->len)
+    {
+      IdeContext* context;
+      GtkTextView* text_view;
+      GtkTextIter iter;
+      GdkRectangle iter_location;
+      GdkRectangle visible_rect;
+      gboolean is_visible;
+      GtkWidget* popup_menu;
+
+      context = ide_buffer_ref_context(buffer);
+
+      popup_menu = gtk_menu_new();
+
+      gtk_style_context_add_class(gtk_widget_get_style_context(popup_menu),
+                                  GTK_STYLE_CLASS_CONTEXT_MENU);
+
+
+      gtk_menu_attach_to_widget(GTK_MENU(popup_menu),
+                                GTK_WIDGET(self),
+                                popup_menu_detach);
+
+      for (gsize i = 0; i < code_actions->len; i++)
+        {
+          IdeCodeAction* code_action;
+          GtkWidget* menu_item;
+
+          code_action = g_ptr_array_index(code_actions, i);
+          ide_object_append(IDE_OBJECT(context), IDE_OBJECT(code_action));
+          menu_item = gtk_menu_item_new_with_label(ide_code_action_get_title(code_action));
+
+          g_signal_connect_swapped(menu_item,
+                                   "activate",
+                                   G_CALLBACK(execute_code_action_cb),
+                                   code_action);
+
+
+          gtk_widget_show(menu_item);
+          gtk_menu_shell_append(GTK_MENU_SHELL(popup_menu), menu_item);
+        }
+
+      gtk_menu_shell_select_first(GTK_MENU_SHELL(popup_menu), FALSE);
+
+      text_view = GTK_TEXT_VIEW(self);
+
+      gtk_text_buffer_get_iter_at_mark(gtk_text_view_get_buffer(text_view),
+                                       &iter,
+                                       gtk_text_buffer_get_insert(gtk_text_view_get_buffer(text_view)));
+
+      gtk_text_view_get_iter_location(text_view, &iter, &iter_location);
+      gtk_text_view_get_visible_rect(text_view, &visible_rect);
+
+      is_visible = (iter_location.x + iter_location.width > visible_rect.x &&
+                    iter_location.x < visible_rect.x + visible_rect.width &&
+                    iter_location.y + iter_location.height > visible_rect.y &&
+                    iter_location.y < visible_rect.y + visible_rect.height);
+
+      if (is_visible)
+        {
+          gtk_text_view_buffer_to_window_coords(text_view,
+                                                GTK_TEXT_WINDOW_WIDGET,
+                                                iter_location.x,
+                                                iter_location.y,
+                                                &iter_location.x,
+                                                &iter_location.y);
+
+          gtk_menu_popup_at_rect(GTK_MENU(popup_menu),
+                                 gtk_widget_get_window(GTK_WIDGET(text_view)),
+                                 &iter_location,
+                                 GDK_GRAVITY_SOUTH_EAST,
+                                 GDK_GRAVITY_NORTH_WEST,
+                                 NULL);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_code_action_query (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_buffer_code_action_query_async (priv->buffer,
+                                      NULL,
+                                      ide_source_view_code_action_query_cb,
+                                      g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_real_find_references_jump (IdeSourceView *self,
                                            GtkListBoxRow *row,
                                            GtkListBox    *list_box)
@@ -6138,6 +6282,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_CALLBACK (ide_source_view_real_format_selection),
                                 NULL, NULL, NULL, G_TYPE_NONE, 0);
 
+  signals [QUERY_CODE_ACTION] =
+    g_signal_new_class_handler ("query-code-action",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_code_action_query),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   signals [GOTO_DEFINITION] =
     g_signal_new ("goto-definition",
                   G_TYPE_FROM_CLASS (klass),
@@ -6568,6 +6719,11 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 GDK_KEY_r,
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "begin-rename", 0);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_q,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "query-code-action", 0);
 
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_space,

@@ -33,6 +33,7 @@
 #include "ide-buffer-addin-private.h"
 #include "ide-buffer-manager.h"
 #include "ide-buffer-private.h"
+#include "ide-code-action-provider.h"
 #include "ide-code-enums.h"
 #include "ide-diagnostic.h"
 #include "ide-diagnostics.h"
@@ -76,6 +77,7 @@ struct _IdeBuffer
   IdeExtensionSetAdapter *symbol_resolvers;
   IdeExtensionAdapter    *rename_provider;
   IdeExtensionAdapter    *formatter;
+  IdeExtensionAdapter    *code_action_provider;
   IdeBufferManager       *buffer_manager;
   IdeBufferChangeMonitor *change_monitor;
   GBytes                 *content;
@@ -386,6 +388,9 @@ ide_buffer_notify_language (IdeBuffer  *self,
 
   if (self->formatter)
     ide_extension_adapter_set_value (self->formatter, lang_id);
+
+  if (self->code_action_provider)
+    ide_extension_adapter_set_value (self->code_action_provider, lang_id);
 }
 
 static void
@@ -420,6 +425,7 @@ ide_buffer_dispose (GObject *object)
   ide_clear_and_destroy_object (&self->rename_provider);
   ide_clear_and_destroy_object (&self->symbol_resolvers);
   ide_clear_and_destroy_object (&self->formatter);
+  ide_clear_and_destroy_object (&self->code_action_provider);
   ide_clear_and_destroy_object (&self->highlight_engine);
   g_clear_object (&self->buffer_manager);
   ide_clear_and_destroy_object (&self->change_monitor);
@@ -1031,6 +1037,21 @@ ide_buffer_formatter_notify_extension (IdeBuffer           *self,
 }
 
 static void
+ide_buffer_code_action_provider_notify_extension (IdeBuffer           *self,
+                                                  GParamSpec          *pspec,
+                                                  IdeExtensionAdapter *adapter)
+{
+  IdeCodeActionProvider *code_action_provider;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
+
+  if ((code_action_provider = ide_extension_adapter_get_extension (adapter)))
+    ide_code_action_provider_load (code_action_provider);
+}
+
+static void
 ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
                                   PeasPluginInfo         *plugin_info,
                                   PeasExtension          *extension,
@@ -1141,6 +1162,20 @@ _ide_buffer_attach (IdeBuffer *self,
                            self,
                            G_CONNECT_SWAPPED);
   ide_buffer_formatter_notify_extension (self, NULL, self->formatter);
+
+  /* Setup our code action provider, if any */
+  self->code_action_provider = ide_extension_adapter_new (parent,
+                                                          peas_engine_get_default (),
+                                                          IDE_TYPE_CODE_ACTION_PROVIDER,
+                                                          "Code-Action-Languages",
+                                                          ide_buffer_get_language_id (self));
+
+  g_signal_connect_object (self->code_action_provider,
+                           "notify::extension",
+                           G_CALLBACK (ide_buffer_code_action_provider_notify_extension),
+                           self,
+                           G_CONNECT_SWAPPED);
+  ide_buffer_code_action_provider_notify_extension (self, NULL, self->code_action_provider);
 
   /* Setup symbol resolvers */
   self->symbol_resolvers = ide_extension_set_adapter_new (parent,
@@ -2949,6 +2984,113 @@ ide_buffer_format_selection_finish (IdeBuffer     *self,
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+static void
+ide_buffer_query_code_action_cb(GObject      *object,
+                                GAsyncResult *result,
+                                gpointer user_data)
+{
+  IdeCodeActionProvider *code_action_provider = (IdeCodeActionProvider *)object;
+
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GPtrArray) code_actions = NULL;
+
+  g_assert(IDE_IS_CODE_ACTION_PROVIDER(object));
+  g_assert(G_IS_ASYNC_RESULT(result));
+  g_assert(IDE_IS_TASK(task));
+
+  code_actions = ide_code_action_provider_query_finish(code_action_provider, result, &error);
+
+  if (!code_actions)
+    ide_task_return_error(task, g_steal_pointer(&error));
+  else
+    ide_task_return_pointer(task, g_steal_pointer(&code_actions), g_ptr_array_unref);
+}
+
+/**
+ * ide_buffer_code_action_query_async:
+ * @self: an #IdeBuffer
+ * @cancellable: (nullable): a #GCancellable, or %NULL
+ * @callback: the callback upon completion
+ * @user_data: user data for @callback
+ *
+ * Queries for code actions in the current buffer.
+ *
+ * Since: 42.0
+ */
+void
+ide_buffer_code_action_query_async(IdeBuffer           *self,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer user_data)
+{
+  g_autoptr(IdeTask)     task = NULL;
+  IdeCodeActionProvider *code_action_provider;
+
+  IDE_ENTRY;
+
+  g_return_if_fail(IDE_IS_MAIN_THREAD());
+  g_return_if_fail(IDE_IS_BUFFER(self));
+  g_return_if_fail(!cancellable || G_IS_CANCELLABLE(cancellable));
+
+  task = ide_task_new(self, cancellable, callback, user_data);
+  ide_task_set_source_tag(task, ide_buffer_code_action_query_async);
+
+  if (!(code_action_provider = ide_extension_adapter_get_extension(self->code_action_provider)))
+    {
+      const gchar *language_id = ide_buffer_get_language_id(self);
+
+      if (language_id == NULL)
+        language_id = "none";
+
+      ide_task_return_new_error(task,
+                                G_IO_ERROR,
+                                G_IO_ERROR_NOT_SUPPORTED,
+                                "No code action provider registered for language %s",
+                                language_id);
+
+      IDE_EXIT;
+    }
+
+  ide_code_action_provider_query_async(code_action_provider,
+                                       self,
+                                       cancellable,
+                                       ide_buffer_query_code_action_cb,
+                                       g_steal_pointer(&task));
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_buffer_code_action_query_finish:
+ * @self: an #IdeBuffer
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to ide_buffer_query_code_action_async().
+ *
+ * Returns: (transfer full) (element-type IdeCodeAction): a #GPtrArray of #IdeCodeAction.
+ *
+ * Since: 42.0
+ */
+GPtrArray*
+ide_buffer_code_action_query_finish(IdeBuffer     *self,
+                                    GAsyncResult  *result,
+                                    GError       **error)
+{
+  GPtrArray* ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail(IDE_IS_MAIN_THREAD(), NULL);
+  g_return_val_if_fail(IDE_IS_BUFFER(self), NULL);
+  g_return_val_if_fail(IDE_IS_TASK(result), NULL);
+
+  ret = ide_task_propagate_pointer(IDE_TASK(result), error);
+
+  IDE_RETURN(ret);
 }
 
 /**

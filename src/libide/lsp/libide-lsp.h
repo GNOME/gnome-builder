@@ -27,6 +27,8 @@
 #include "ide-lsp-types.h"
 
 #include "ide-lsp-client.h"
+#include "ide-lsp-code-action.h"
+#include "ide-lsp-code-action-provider.h"
 #include "ide-lsp-completion-item.h"
 #include "ide-lsp-completion-provider.h"
 #include "ide-lsp-completion-results.h"

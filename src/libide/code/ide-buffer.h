@@ -65,6 +65,16 @@ IDE_AVAILABLE_IN_3_32
 gboolean                ide_buffer_format_selection_finish       (IdeBuffer               *self,
                                                                   GAsyncResult            *result,
                                                                   GError                 **error);
+IDE_AVAILABLE_IN_42
+void                    ide_buffer_code_action_query_async       (IdeBuffer               *self,
+                                                                  GCancellable            *cancellable,
+                                                                  GAsyncReadyCallback      callback,
+                                                                  gpointer                 user_data);
+
+IDE_AVAILABLE_IN_42
+GPtrArray*              ide_buffer_code_action_query_finish      (IdeBuffer               *self,
+                                                                  GAsyncResult            *result,
+                                                                  GError                 **error);
 IDE_AVAILABLE_IN_3_32
 guint                   ide_buffer_get_change_count              (IdeBuffer               *self);
 IDE_AVAILABLE_IN_3_32

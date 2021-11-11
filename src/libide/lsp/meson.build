@@ -9,6 +9,8 @@ libide_include_directories += include_directories('.')
 libide_lsp_public_headers = [
   'libide-lsp.h',
   'ide-lsp-client.h',
+  'ide-lsp-code-action.h',
+  'ide-lsp-code-action-provider.h',
   'ide-lsp-completion-item.h',
   'ide-lsp-completion-provider.h',
   'ide-lsp-completion-results.h',
@@ -39,6 +41,8 @@ install_headers(libide_lsp_public_headers, subdir: libide_lsp_header_subdir)
 
 libide_lsp_public_sources = [
   'ide-lsp-client.c',
+  'ide-lsp-code-action.c',
+  'ide-lsp-code-action-provider.c',
   'ide-lsp-completion-item.c',
   'ide-lsp-completion-provider.c',
   'ide-lsp-completion-results.c',

@@ -35,6 +35,8 @@ G_BEGIN_DECLS
 #include "ide-buffer-addin.h"
 #include "ide-buffer-change-monitor.h"
 #include "ide-buffer-manager.h"
+#include "ide-code-action.h"
+#include "ide-code-action-provider.h"
 #include "ide-code-index-entries.h"
 #include "ide-code-index-entry.h"
 #include "ide-code-indexer.h"
