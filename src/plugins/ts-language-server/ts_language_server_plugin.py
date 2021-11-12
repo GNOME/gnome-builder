@@ -142,3 +142,7 @@ class TypescriptRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
     def do_load(self):
         TypescriptService.bind_client(self)
 
+class TypescriptCodeActionProvider(Ide.LspCodeActionProvider, Ide.CodeActionProvider):
+    def do_load(self):
+        TypescriptService.bind_client(self)
+

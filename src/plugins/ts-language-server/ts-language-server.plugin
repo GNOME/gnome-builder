@@ -14,3 +14,4 @@ X-Highlighter-Languages=js,jsx,typescript,typescript-jsx
 X-Hover-Provider-Languages=js,jsx,typescript,typescript-jsx
 X-Rename-Provider-Languages=js,jsx,typescript,typescript-jsx
 X-Formatter-Languages=js,jsx,typescript,typescript-jsx
+X-Code-Action-Languages=js,jsx,typescript,typescript-jsx
