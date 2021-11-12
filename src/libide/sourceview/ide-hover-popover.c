@@ -322,12 +322,19 @@ void
 _ide_hover_popover_show (IdeHoverPopover *self)
 {
   GtkWidget *view;
+  g_autoptr(GCancellable) cancellable = NULL;
 
   g_return_if_fail (IDE_IS_HOVER_POPOVER (self));
   g_return_if_fail (self->context != NULL);
 
+  cancellable = g_steal_pointer(&self->cancellable);
+  self->cancellable = g_cancellable_new();
+  if (!g_cancellable_is_cancelled(cancellable))
+    {
+      g_cancellable_cancel(cancellable);
+    }
+
   if (self->has_providers &&
-      !g_cancellable_is_cancelled (self->cancellable) &&
       (view = gtk_popover_get_relative_to (GTK_POPOVER (self))) &&
       GTK_IS_TEXT_VIEW (view))
     {
