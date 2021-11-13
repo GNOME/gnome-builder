@@ -899,7 +899,8 @@ ide_lsp_client_real_notification (IdeLspClient *self,
         {
           const gchar *message = NULL;
           JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
-          ide_object_warning (self, "%s", message);
+          if (!ide_str_empty0 (message))
+            ide_object_warning (self, "%s", message);
         }
     }
 
