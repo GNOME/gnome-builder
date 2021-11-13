@@ -895,6 +895,12 @@ ide_lsp_client_real_notification (IdeLspClient *self,
           if (ide_str_equal0 (kind, "end") && notification != NULL)
             ide_notification_withdraw (notification);
         }
+      else if (g_str_equal (method, "window/showMessage"))
+        {
+          const gchar *message = NULL;
+          JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
+          ide_object_warning (self, "%s", message);
+        }
     }
 
   IDE_EXIT;
