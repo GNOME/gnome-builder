@@ -644,6 +644,7 @@
             ]
         },
         "typescript-language-server.json",
+        "intelephense-language-server.json",
         {
             "name" : "blueprint-compiler",
             "buildsystem" : "meson",

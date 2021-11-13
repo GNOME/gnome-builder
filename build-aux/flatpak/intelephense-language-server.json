@@ -1,0 +1,29 @@
+{
+    "name" : "intelephense-language-server",
+    "buildsystem" : "simple",
+    "build-options" : {
+        "env" : {
+            "npm_config_nodedir" : "/usr/lib/sdk/node14"
+        }
+    },
+    "build-commands" : [
+        "mkdir -p /app/bin/ /app/lib/ /app/include/ /app/share/ ",
+        "cp -a /usr/lib/sdk/node14/bin/* /app/bin/",
+        "cp -a /usr/lib/sdk/node14/lib/* /app/lib/",
+        "cp -a /usr/lib/sdk/node14/include/* /app/include/",
+        "cp -a /usr/lib/sdk/node14/share/* /app/share/",
+        "HOME=$PWD npm --offline -g config set offline true",
+        "HOME=$PWD npm --offline -g config set prefix /app",
+        "HOME=$PWD npm --offline -g config set cache $FLATPAK_BUILDER_BUILDDIR/flatpak-node/npm-cache",
+        "HOME=$PWD npm --offline -g install $(npm pack $FLATPAK_BUILDER_BUILDDIR/intelephense | tail -1)"
+    ],
+    "sources" : [
+        {
+            "type": "archive",
+            "url": "https://registry.npmjs.org/intelephense/-/intelephense-1.7.1.tgz",
+            "sha256": "ce89dc2a505fa978b92880cf3456de66598a3d79bcef3a17312ceb50400d533a",
+            "dest": "intelephense"
+        },
+        "intelephense-language-server-deps.json"
+    ]
+}
