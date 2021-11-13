@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2021-08-28 11:33+0000\n"
-"PO-Revision-Date: 2020-12-22 13:00+0100\n"
+"PO-Revision-Date: 2021-11-13 13:00+0100\n"
 "Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -121,7 +121,7 @@ msgstr "Edició opcional amb l'estil de Vim, Emacs i SublimeText"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:36
 msgid "An integrated software profiler for native applications"
-msgstr "Un gestor de perfils de programari integrat per a aplicacions natives"
+msgstr "Un analitzador de rendiment de programari integrat per a aplicacions natives"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:37
 msgid "An integrated debugger for native applications"
@@ -647,7 +647,7 @@ msgstr "Comença un projecte nou"
 
 #: data/org.gnome.Builder.desktop.in.in:28
 msgid "Clone Repository"
-msgstr "Clona el dipòsit"
+msgstr "Clona el repositori"
 
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
@@ -1560,7 +1560,7 @@ msgstr "_Selecciona una carpeta…"
 #: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
 #: src/plugins/greeter/gtk/menus.ui:88
 msgid "_Clone Repository…"
-msgstr "_Clona el dipòsit…"
+msgstr "_Clona un repositori…"
 
 #: src/libide/greeter/ide-greeter-row.c:259
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
@@ -1635,7 +1635,7 @@ msgstr "Suprimeix projectes i fonts…"
 #: src/libide/greeter/ide-greeter-workspace.ui:188
 msgctxt "title"
 msgid "Clone Repository"
-msgstr "Clona el dipòsit"
+msgstr "Clona un repositori"
 
 #: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:84
 msgid "Switch Surface"
@@ -2636,12 +2636,12 @@ msgstr "Allunya"
 #: src/libide/gui/ide-shortcuts-window.ui:321
 msgctxt "shortcut window"
 msgid "Reset Zoom"
-msgstr "Treu el zoom"
+msgstr "Reinicia el zoom"
 
 #: src/libide/gui/ide-shortcuts-window.ui:329
 msgctxt "shortcut window"
 msgid "Editing"
-msgstr "S'està editant"
+msgstr "Edició"
 
 #: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
@@ -2828,7 +2828,7 @@ msgstr "Executa"
 #: src/libide/gui/ide-shortcuts-window.ui:578
 msgctxt "shortcut window"
 msgid "Profile"
-msgstr "Perfil"
+msgstr "Analitza el rendiment"
 
 #: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
@@ -3054,7 +3054,7 @@ msgstr "Expressió regular"
 
 #: src/libide/terminal/ide-terminal-search.ui:180
 msgid "Match whole word"
-msgstr "Concorda el mot sencer"
+msgstr "Coincideix tota la paraula"
 
 #: src/libide/terminal/ide-terminal-search.ui:194
 msgid "Wrap around"
@@ -4522,11 +4522,11 @@ msgstr "Connecta a un altre bus"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:45
 msgid "Search Bus Names"
-msgstr "Cerca noms de bus"
+msgstr "Cerca noms dels busos"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:59
 msgid "Bus Names"
-msgstr "Noms dels bus"
+msgstr "Noms dels busos"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:123
 msgid "Select a Bus Name"
@@ -4876,7 +4876,7 @@ msgstr "El protocol «%s» no és compatible."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:224
 msgid "Cloning repository"
-msgstr "S'està clonant el dipòsit"
+msgstr "S'està clonant el repositori"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:240
 msgid "A valid Git URL is required"
@@ -5154,7 +5154,7 @@ msgstr "_Coincidència de majúscules i minúscules en cercar"
 
 #: src/plugins/grep/gbp-grep-popover.ui:70
 msgid "Match _whole words"
-msgstr "_Concorda el mot sencer"
+msgstr "_Coincideix tota la paraula"
 
 #: src/plugins/grep/gbp-grep-popover.ui:77
 msgid "Allow regular _expressions"
@@ -5291,13 +5291,13 @@ msgstr "Opcions del Meson"
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:156
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
-"S'ha carregat un projecte basat en Meson però no s'ha pogut trobar cap "
+"S'ha carregat un projecte basat en Meson però no s'ha pogut trobar "
 "Meson."
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:175
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr ""
-"S'ha carregat un projecte basat en Meson però no s'ha pogut trobar cap "
+"S'ha carregat un projecte basat en Meson però no s'ha pogut trobar "
 "Ninja."
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
@@ -5758,7 +5758,7 @@ msgid ""
 "clippy adds additional lints to catch common mistakes but is in general "
 "slower"
 msgstr ""
-"clippy afegeix tints addicionals per a atrapar errors comuns però, en "
+"clippy afegeix lints addicionals per a atrapar errors comuns però, en "
 "general, és més lent"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command.c:344
@@ -5985,7 +5985,7 @@ msgstr "Comprova l'_ortografia"
 
 #: src/plugins/spellcheck/gtk/menus.ui:13
 msgid "_Underline misspelled words"
-msgstr "_Subratlla els mots mal escrits"
+msgstr "_Subratlla les paraules mal escrites"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
 msgid "Enable Stylelint"
@@ -6066,11 +6066,11 @@ msgstr "_Esquema del document"
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
 #: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Profiler"
-msgstr "Gestor de perfils"
+msgstr "Analitzador de rendiment"
 
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:258
 msgid "Open Sysprof Capture…"
-msgstr "Obre la captura Sysprof..."
+msgstr "Obre la captura Sysprof…"
 
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:267
 msgid "Sysprof Capture (*.syscap)"
@@ -6083,7 +6083,7 @@ msgstr "Tots els fitxers"
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:396
 #: src/plugins/sysprof/gtk/menus.ui:32
 msgid "Run with Profiler"
-msgstr "Executa amb el gestor de perfils"
+msgstr "Executa amb l'analitzador de rendiment"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
@@ -6092,7 +6092,7 @@ msgstr "O_bre la captura Sysprof…"
 
 #: src/plugins/sysprof/gtk/menus.ui:42
 msgid "Run with _Profiler"
-msgstr "Executa amb el _Profiler"
+msgstr "Executa amb l'_analitzador de rendiment"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
 msgid "Add sysroot"
