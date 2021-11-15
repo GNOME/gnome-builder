@@ -68,6 +68,10 @@ gbp_cmake_build_target_provider_create_target (GbpCmakeBuildTargetProvider  *sel
 
   g_return_if_fail (GBP_IS_CMAKE_BUILD_TARGET_PROVIDER (self));
 
+  /* ignore target if no install rule is present */
+  if (!json_object_has_member (obj, "install"))
+    return;
+
   artefacts = json_object_get_array_member (obj, "artifacts");
   /* currently we support only one artefact executable */
   path_object = json_array_get_object_element (artefacts, 0);
