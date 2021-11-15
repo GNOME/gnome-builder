@@ -11,21 +11,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-09-12 17:55+0000\n"
-"PO-Revision-Date: 2021-09-14 17:22+0800\n"
+"POT-Creation-Date: 2021-11-13 17:50+0000\n"
+"PO-Revision-Date: 2021-11-15 18:55+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
-"Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
+"Language-Team: Chinese - China <Chinese - China <i18n-zh@googlegroups.com>>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 41.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:140 src/main.c:234
+#: src/libide/gui/ide-preferences-builtin.c:140 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
@@ -170,20 +170,29 @@ msgid ""
 msgstr "执行构建时使用的工作线程数量。-1 为自动选择。0 为 CPU 数量。"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
+#: src/libide/gui/ide-preferences-builtin.c:410
+msgid "Clear build logs"
+msgstr "清空构建日志"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid "If enabled, build log pane will be cleared on rebuild."
+msgstr "如果启用，构建日志面板将在重新构建时清空。"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Allow network when metered"
 msgstr "允许使用流量计费网络"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr "在使用流量计费网络时根据构建启用自动传输如 SDK 下载和依赖。"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:16
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Debugger Breakpoint on Main"
 msgstr "主函数上的调试器断点"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid "Debugger should automatically insert breakpoint on main function."
 msgstr "调试器应在主函数上自动插入断点。"
 
@@ -302,7 +311,7 @@ msgid "If enabled, the editor will show grid lines in the document."
 msgstr "如果启用，编辑器将在文档中显示网格线。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:79
-#: src/libide/gui/ide-preferences-builtin.c:172
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "Show overview map"
 msgstr "显示概览图"
 
@@ -331,7 +340,7 @@ msgid "The various types of space to draw in the editor."
 msgstr "编辑器中绘制空格的几种类型。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:95
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Overscroll"
 msgstr "越界滚动"
 
@@ -350,7 +359,7 @@ msgid ""
 msgstr "如果启用，Builder 会将文本自动折行使行内所有文字内容可见。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:105
-#: src/libide/gui/ide-preferences-builtin.c:185
+#: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Autosave Enabled"
 msgstr "启用自动保存"
 
@@ -359,7 +368,7 @@ msgid "Enable or disable autosave feature."
 msgstr "启用或禁用自动保存功能。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:111
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "Autosave Frequency"
 msgstr "自动保存频率"
 
@@ -385,7 +394,7 @@ msgid "The number of pixels to include above and below lines in the editor."
 msgstr "编辑器中在行上部和下部要包含的像素数量。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:128
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:208
 msgid "Interactive Completion"
 msgstr "交互式补全"
 
@@ -459,7 +468,7 @@ msgid "\"Projects\""
 msgstr "\"工程\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:425
+#: src/libide/gui/ide-preferences-builtin.c:427
 msgid "Projects directory"
 msgstr "工程目录"
 
@@ -837,7 +846,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "使用配置加载或生成调色板"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5025
+#: src/libide/sourceview/ide-source-view.c:5026
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "重命名"
@@ -859,7 +868,7 @@ msgstr "重命名(_R)"
 msgid "unsaved file %u"
 msgstr "未保存文件 %u"
 
-#: src/libide/code/ide-buffer.c:3493
+#: src/libide/code/ide-buffer.c:3635
 msgid "The current language lacks a symbol resolver."
 msgstr "当前语言缺少符号解析器。"
 
@@ -895,10 +904,10 @@ msgstr "无标题"
 #: src/libide/greeter/ide-clone-surface.ui:319
 #: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/libide/gui/ide-workbench.c:1410
-#: src/plugins/buildui/gbp-buildui-log-pane.c:280
+#: src/plugins/buildui/gbp-buildui-log-pane.c:284
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:316
-#: src/plugins/testui/gbp-test-output-panel.c:69
+#: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -928,8 +937,8 @@ msgid "Failed to save file: %s"
 msgstr "无法保存文件：%s"
 
 #: src/libide/editor/ide-editor-page-actions.c:278
-#: src/plugins/buildui/gbp-buildui-log-pane.c:276
-#: src/plugins/testui/gbp-test-output-panel.c:65
+#: src/plugins/buildui/gbp-buildui-log-pane.c:280
+#: src/plugins/testui/gbp-test-output-panel.c:63
 msgid "Save File"
 msgstr "保存文件"
 
@@ -1116,9 +1125,9 @@ msgstr "高亮模式"
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
 #: src/libide/gui/ide-preferences-builtin.c:152
-#: src/libide/gui/ide-preferences-builtin.c:205
-#: src/libide/gui/ide-preferences-builtin.c:328
-#: src/libide/gui/ide-preferences-builtin.c:400
+#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:401
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
@@ -1160,7 +1169,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "覆盖末尾的大括号和引号"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:159
-#: src/libide/gui/ide-preferences-builtin.c:338
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Indentation"
 msgstr "缩进"
 
@@ -1181,12 +1190,12 @@ msgid "8"
 msgstr "8"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:243
-#: src/libide/gui/ide-preferences-builtin.c:176
+#: src/libide/gui/ide-preferences-builtin.c:177
 msgid "Spaces"
 msgstr "空格"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:254
-#: src/libide/gui/ide-preferences-builtin.c:177
+#: src/libide/gui/ide-preferences-builtin.c:178
 msgid "Tabs"
 msgstr "制表符"
 
@@ -1885,399 +1894,411 @@ msgstr "显示打开的文件列表"
 msgid "Display the list of all open files in the project sidebar"
 msgstr "在工程侧边栏中显示所有打开的文件列表"
 
-#: src/libide/gui/ide-preferences-builtin.c:155
+#: src/libide/gui/ide-preferences-builtin.c:154
+msgid "Reformat code on save"
+msgstr "保存时重新格式化代码"
+
+#: src/libide/gui/ide-preferences-builtin.c:154
+msgid "Reformat current file on save"
+msgstr "保存时重新格式化当前文件"
+
+#: src/libide/gui/ide-preferences-builtin.c:156
 msgid "Cursor"
 msgstr "光标"
 
-#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Restore cursor position"
 msgstr "恢复光标位置"
 
-#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Restore cursor position when a file is reopened"
 msgstr "重新打开文件时恢复光标位置"
 
-#: src/libide/gui/ide-preferences-builtin.c:157
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Enable text wrapping"
 msgstr "启用文本折行"
 
-#: src/libide/gui/ide-preferences-builtin.c:157
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Wrap text that is too wide to display"
 msgstr "将显示不下的文本折行"
 
-#: src/libide/gui/ide-preferences-builtin.c:158
+#: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Scroll Offset"
 msgstr "滚动位移"
 
-#: src/libide/gui/ide-preferences-builtin.c:158
+#: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "光标上下方向至少保持多少行"
 
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "允许编辑器滚动超过缓冲区末尾"
 
-#: src/libide/gui/ide-preferences-builtin.c:161
+#: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Line Information"
 msgstr "行信息"
 
-#: src/libide/gui/ide-preferences-builtin.c:162
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Line numbers"
 msgstr "行号"
 
-#: src/libide/gui/ide-preferences-builtin.c:162
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Show line number at beginning of each line"
 msgstr "在每行开始处显示行号"
 
-#: src/libide/gui/ide-preferences-builtin.c:163
+#: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Relative line numbers"
 msgstr "相关行号"
 
-#: src/libide/gui/ide-preferences-builtin.c:163
+#: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Show line numbers relative to the cursor line"
 msgstr "显示光标行相应的行号"
 
-#: src/libide/gui/ide-preferences-builtin.c:164
+#: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Line changes"
 msgstr "行变化"
 
-#: src/libide/gui/ide-preferences-builtin.c:164
+#: src/libide/gui/ide-preferences-builtin.c:165
 msgid "Show if a line was added or modified next to line number"
 msgstr "在行号附近显示此行是否被添加或修改过"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:166
 msgid "Line diagnostics"
 msgstr "行诊断"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:166
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr "在行号附近显示一个图标提示诊断类型"
 
-#: src/libide/gui/ide-preferences-builtin.c:167
+#: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Highlight"
 msgstr "高亮"
 
-#: src/libide/gui/ide-preferences-builtin.c:168
+#: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Current line"
 msgstr "当前行"
 
-#: src/libide/gui/ide-preferences-builtin.c:168
+#: src/libide/gui/ide-preferences-builtin.c:169
 msgid "Make current line stand out with highlights"
 msgstr "用高亮标记出当前行"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Matching brackets"
 msgstr "括号匹配"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Highlight matching brackets based on cursor position"
 msgstr "基于光标位置高亮匹配的括号"
 
-#: src/libide/gui/ide-preferences-builtin.c:171
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Code Overview"
 msgstr "代码概览"
 
-#: src/libide/gui/ide-preferences-builtin.c:172
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "一个增强导览源代码的缩小视图"
 
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Automatically hide overview map"
 msgstr "自动隐藏概览图"
 
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Automatically hide map when editor loses focus"
 msgstr "当编辑器失去焦点时自动隐藏概览图"
 
-#: src/libide/gui/ide-preferences-builtin.c:175
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Visible Whitespace Characters"
 msgstr "可见空白字符"
 
-#: src/libide/gui/ide-preferences-builtin.c:178
+#: src/libide/gui/ide-preferences-builtin.c:179
 msgid "New line and carriage return"
 msgstr "新行和回车符"
 
-#: src/libide/gui/ide-preferences-builtin.c:179
+#: src/libide/gui/ide-preferences-builtin.c:180
 msgid "Non-breaking spaces"
 msgstr "连续空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:180
+#: src/libide/gui/ide-preferences-builtin.c:181
 msgid "Spaces inside of text"
 msgstr "文本中的空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:181
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Trailing Only"
 msgstr "右对齐"
 
-#: src/libide/gui/ide-preferences-builtin.c:182
+#: src/libide/gui/ide-preferences-builtin.c:183
 msgid "Leading Only"
 msgstr "左对齐"
 
-#: src/libide/gui/ide-preferences-builtin.c:184
+#: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Autosave"
 msgstr "自动保存"
 
-#: src/libide/gui/ide-preferences-builtin.c:185
+#: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Enable or disable autosave feature"
 msgstr "启用/禁用自动保存功能"
 
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "The number of seconds after modification before auto saving"
 msgstr "修改后到自动保存前的等待时间"
 
-#: src/libide/gui/ide-preferences-builtin.c:192
+#: src/libide/gui/ide-preferences-builtin.c:193
 msgid "Code Insight"
 msgstr "代码洞察"
 
-#: src/libide/gui/ide-preferences-builtin.c:194
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Highlighting"
 msgstr "高亮"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:196
 msgid "Semantic Highlighting"
 msgstr "语法高亮"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:196
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr "使用代码洞察高亮在源文件中发现的附加信息"
 
-#: src/libide/gui/ide-preferences-builtin.c:197
+#: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "诊断"
 
-#: src/libide/gui/ide-preferences-builtin.c:203
+#: src/libide/gui/ide-preferences-builtin.c:204
 msgid "Completion"
 msgstr "补全"
 
-#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Completions Display Size"
 msgstr "补全显示大小"
 
-#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Number of completions to display"
 msgstr "显示的补全数量"
 
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:208
 msgid "Display code suggestions interactively as you type"
 msgstr "随着您的输入交互式地显示代码建议"
 
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: src/libide/gui/ide-preferences-builtin.c:210
 msgid "Completion Providers"
 msgstr "补全提供者"
 
-#: src/libide/gui/ide-preferences-builtin.c:215
+#: src/libide/gui/ide-preferences-builtin.c:216
 msgid "Snippets"
 msgstr "片段"
 
-#: src/libide/gui/ide-preferences-builtin.c:258
+#: src/libide/gui/ide-preferences-builtin.c:259
 msgid "Programming Languages"
 msgstr "编程语言"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:269
+#: src/libide/gui/ide-preferences-builtin.c:270
 msgid "Search languages…"
 msgstr "搜索语言…"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:330
 msgid "Trim trailing whitespace"
 msgstr "修剪尾部空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:329
+#: src/libide/gui/ide-preferences-builtin.c:330
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr "保存时，从已修改行开始的尾部空格会被删除。"
 
-#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Overwrite Braces"
 msgstr "覆盖大括号"
 
-#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:331
 msgid "Overwrite closing braces"
 msgstr "覆盖闭合大括号"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Insert Matching Brace"
 msgstr "插入匹配括号"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:332
 msgid "Insert matching character for { [ ( or \""
 msgstr "为 { [ ( 或 \" 插入匹配字符"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Insert Trailing Newline"
 msgstr "插入末尾新行"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:333
 msgid "Ensure files end with a newline"
 msgstr "确保文件以新行结束"
 
-#: src/libide/gui/ide-preferences-builtin.c:334
+#: src/libide/gui/ide-preferences-builtin.c:335
 msgid "Margins"
 msgstr "边缘"
 
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:336
 msgid "Show right margin"
 msgstr "显示右侧对齐线"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Right margin position"
 msgstr "右侧对齐线位置"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:337
 msgid "Position in spaces for the right margin"
 msgstr "右侧对齐线以空格为单位的位置"
 
-#: src/libide/gui/ide-preferences-builtin.c:339
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Tab width"
 msgstr "制表符宽度"
 
-#: src/libide/gui/ide-preferences-builtin.c:339
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Width of a tab character in spaces"
 msgstr "制表符以空格为单位的宽度"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Insert spaces instead of tabs"
 msgstr "使用空格代替制表符插入"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Prefer spaces over use of tabs"
 msgstr "优先使用空格而不是制表符"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Automatically indent"
 msgstr "自动缩进"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:342
 msgid "Indent source code as you type"
 msgstr "根据您的键入缩进源代码"
 
-#: src/libide/gui/ide-preferences-builtin.c:343
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Spacing"
 msgstr "空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Space before opening parentheses"
 msgstr "开放圆括号前的空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:346
 msgid "Space before opening brackets"
 msgstr "开放方括号前的空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Space before opening braces"
 msgstr "开放花括号前的空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Space before opening angles"
 msgstr "开放尖括号前的空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:348
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Prefer a space before colons"
 msgstr "偏好在冒号前加空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:349
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Prefer a space before commas"
 msgstr "偏好在逗号前加空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:350
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Prefer a space before semicolons"
 msgstr "偏好在分号前加空格"
 
-#: src/libide/gui/ide-preferences-builtin.c:360
-#: src/libide/gui/ide-preferences-builtin.c:378
+#: src/libide/gui/ide-preferences-builtin.c:361
+#: src/libide/gui/ide-preferences-builtin.c:379
 msgid "Default"
 msgstr "默认"
 
-#: src/libide/gui/ide-preferences-builtin.c:365
-#: src/libide/gui/ide-preferences-builtin.c:383
+#: src/libide/gui/ide-preferences-builtin.c:366
+#: src/libide/gui/ide-preferences-builtin.c:384
 msgid "Number of CPU"
 msgstr "CPU 数量"
 
-#: src/libide/gui/ide-preferences-builtin.c:398
+#: src/libide/gui/ide-preferences-builtin.c:399
 msgid "Build"
 msgstr "构建"
 
-#: src/libide/gui/ide-preferences-builtin.c:401
+#: src/libide/gui/ide-preferences-builtin.c:402
 msgid "Build Workers"
 msgstr "构建工作线程"
 
-#: src/libide/gui/ide-preferences-builtin.c:401
+#: src/libide/gui/ide-preferences-builtin.c:402
 msgid "Number of parallel build workers"
 msgstr "并行构建工作线程的数量"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:410
+msgid "Clear build log pane on rebuild"
+msgstr "在重新构建时清空构建日志面板"
+
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Clear build cache at startup"
 msgstr "启动时清除构建缓存"
 
-#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/libide/gui/ide-preferences-builtin.c:411
 msgid "Expired caches will be purged when Builder is started"
 msgstr "当 Builder 启动后过期缓存将被清除"
 
-#: src/libide/gui/ide-preferences-builtin.c:411
+#: src/libide/gui/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "网络"
 
-#: src/libide/gui/ide-preferences-builtin.c:412
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "允许通过流量计费网络下载"
 
-#: src/libide/gui/ide-preferences-builtin.c:412
+#: src/libide/gui/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr "允许在使用流量计费网络时自动下载依赖"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:416
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
 #: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
 msgid "Debugger"
 msgstr "调试器"
 
-#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/gui/ide-preferences-builtin.c:417
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
 msgid "Breakpoints"
 msgstr "中断点"
 
-#: src/libide/gui/ide-preferences-builtin.c:416
+#: src/libide/gui/ide-preferences-builtin.c:418
 msgid "Insert Breakpoint at Start of Application"
 msgstr "在应用开始时插入断点"
 
-#: src/libide/gui/ide-preferences-builtin.c:416
+#: src/libide/gui/ide-preferences-builtin.c:418
 msgid ""
 "Automatically stop execution at the start of the applications main function"
 msgstr "在应用主函数开始时自动停止运行"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:424
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "工程"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Workspace"
 msgstr "工作区"
 
-#: src/libide/gui/ide-preferences-builtin.c:425
+#: src/libide/gui/ide-preferences-builtin.c:427
 msgid "A place for all your projects"
 msgstr "您的所有工程构建的地方"
 
-#: src/libide/gui/ide-preferences-builtin.c:426
+#: src/libide/gui/ide-preferences-builtin.c:428
 msgid "Restore previously opened files"
 msgstr "恢复上次打开文件"
 
-#: src/libide/gui/ide-preferences-builtin.c:426
+#: src/libide/gui/ide-preferences-builtin.c:428
 msgid "Open previously opened files when loading a project"
 msgstr "加载工程时打开上次打开的文件"
 
-#: src/libide/gui/ide-preferences-builtin.c:548
+#: src/libide/gui/ide-preferences-builtin.c:550
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:379
 msgid "Version Control"
 msgstr "版本控制"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:561
+#: src/libide/gui/ide-preferences-builtin.c:563
 msgid "SDKs"
 msgstr "SDKs"
 
@@ -2770,7 +2791,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "正在安装 %u 个软件包"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1495
+#: src/libide/lsp/ide-lsp-client.c:1442
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "无法初始化语言服务器：%s"
@@ -2876,31 +2897,31 @@ msgstr "缩小(_O)"
 msgid "_Reset"
 msgstr "重置(_R)"
 
-#: src/libide/sourceview/ide-source-view.c:4439
+#: src/libide/sourceview/ide-source-view.c:4440
 #, c-format
 msgid "Insert “%s”"
 msgstr "插入 “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4441
+#: src/libide/sourceview/ide-source-view.c:4442
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "替换 “%s” 为 “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4567
+#: src/libide/sourceview/ide-source-view.c:4568
 msgid "Apply Fix-It"
 msgstr "应用 Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:5024
+#: src/libide/sourceview/ide-source-view.c:5025
 msgid "Rename symbol"
 msgstr "重命名符号"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5260
+#: src/libide/sourceview/ide-source-view.c:5404
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>行 %u, 列 %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5286
+#: src/libide/sourceview/ide-source-view.c:5430
 msgid "No references were found"
 msgstr "没有发现引用"
 
@@ -2982,7 +3003,7 @@ msgstr "正在加载…"
 msgid "unversioned"
 msgstr "未受版本控制的"
 
-#: src/main.c:147
+#: src/main.c:148
 msgid "Run a new instance of Builder"
 msgstr "运行 Builder 的新实例"
 
@@ -3281,25 +3302,25 @@ msgstr "应用程序运行时"
 msgid "Build Toolchain"
 msgstr "构建工具链"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:279
+#: src/plugins/buildui/gbp-buildui-log-pane.c:283
 #: src/plugins/editor/gtk/menus.ui:174 src/plugins/glade/gtk/menus.ui:8
-#: src/plugins/testui/gbp-test-output-panel.c:68
+#: src/plugins/testui/gbp-test-output-panel.c:66
 msgid "_Save"
 msgstr "保存(_S)"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:370
+#: src/plugins/buildui/gbp-buildui-log-pane.c:371
 msgid "Build Output"
 msgstr "构建输出"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:33
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:40
 msgid "Clear build log"
 msgstr "清空构建日志"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:50
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:57
 msgid "Cancel build"
 msgstr "取消构建"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:67
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:74
 msgid "Save build log"
 msgstr "保存构建日志"
 
@@ -3386,7 +3407,7 @@ msgid "_Export Bundle"
 msgstr "导出包(_E)"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:664
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:383
 msgid "Build Issues"
 msgstr "构建问题"
 
@@ -3415,7 +3436,7 @@ msgstr "构建管道是空的"
 msgid "Build Targets"
 msgstr "构建目标"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:387
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:392
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Build Preferences"
 msgstr "构建首选项"
@@ -4503,11 +4524,11 @@ msgid ""
 "This may result in the execution of code in your project."
 msgstr "启用 ESLint 以诊断 JavaScript 脚本文件。这有可能会执行您项目中的代码。"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:802
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:836
 msgid "Installation failed"
 msgstr "安装失败"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:808
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:846
 msgid "Installation complete"
 msgstr "安装完成"
 
@@ -4583,17 +4604,17 @@ msgstr "正在导出暂存目录"
 msgid "Creating flatpak bundle"
 msgstr "正在创建 flatpak 捆绑包"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:785
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:788
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:787
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:790
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:789
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:792
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -5087,27 +5108,27 @@ msgstr "GNOME 应用程序"
 msgid "Create a GNOME application with GTK 4"
 msgstr "使用 GTK 4 创建 GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:411
+#: src/plugins/meson-templates/meson_templates.py:413
 msgid "Shared Library"
 msgstr "已共享库"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:415
 msgid "Create a new project with a shared library"
 msgstr "用已共享库新建工程"
 
-#: src/plugins/meson-templates/meson_templates.py:430
+#: src/plugins/meson-templates/meson_templates.py:432
 msgid "Empty Project"
 msgstr "空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:434
 msgid "Create a new empty project"
 msgstr "创建新的空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:449
+#: src/plugins/meson-templates/meson_templates.py:451
 msgid "Command Line Tool"
 msgstr "命令行工具"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:453
 msgid "Create a new command line project"
 msgstr "创建一个新的命令行工程"
 
@@ -6065,19 +6086,19 @@ msgstr "新建构建终端(_B)"
 msgid "New _Runtime Terminal"
 msgstr "新建运行时终端(_R)"
 
-#: src/plugins/testui/gbp-test-output-panel.c:135
+#: src/plugins/testui/gbp-test-output-panel.c:132
 msgid "Unit Test Output"
 msgstr "单元测试输出"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:33
+#: src/plugins/testui/gbp-test-output-panel.ui:34
 msgid "Clear test output"
 msgstr "清除测试输出"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:50
+#: src/plugins/testui/gbp-test-output-panel.ui:51
 msgid "Cancel tests"
 msgstr "取消测试"
 
-#: src/plugins/testui/gbp-test-output-panel.ui:67
+#: src/plugins/testui/gbp-test-output-panel.ui:68
 msgid "Save test output"
 msgstr "保存测试输出"
 
