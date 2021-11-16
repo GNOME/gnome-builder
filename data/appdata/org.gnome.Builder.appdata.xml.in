@@ -90,6 +90,20 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="41.2" date="2021-11-16">
+      <ul>
+        <li>Fix an issue with comparing global search results</li>
+        <li>Use multiple Flatpak transactions if runtimes are found on different installations</li>
+        <li>Fix running applications when a Flatpak private installation is needed</li>
+        <li>Improve language detection with meson</li>
+        <li>Improved styling of overview map</li>
+        <li>Improved search results</li>
+        <li>Updated project templates</li>
+        <li>Vala improvements</li>
+        <li>Updated translations</li>
+      </ul>
+    </release>
+
     <release version="41.1" date="2021-09-22">
       <ul>
         <li>System and user fonts are now made available when running applications</li>
