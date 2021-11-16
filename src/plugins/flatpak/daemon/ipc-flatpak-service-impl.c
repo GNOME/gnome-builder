@@ -965,7 +965,7 @@ find_installations_for_refs (IpcFlatpakServiceImpl *self,
               str_equal0 (branch, r->branch))
             {
               g_ptr_array_add (installations, g_object_ref (r->installation));
-              goto next_ref;
+              continue;
             }
         }
 
@@ -977,14 +977,11 @@ find_installations_for_refs (IpcFlatpakServiceImpl *self,
           flatpak_installation_get_is_user (install))
         {
           g_ptr_array_add (installations, g_steal_pointer (&install));
-          goto next_ref;
+          continue;
         }
 
       /* Default to our internal private installation */
       g_ptr_array_add (installations, g_object_ref (private_install->installation));
-
-    next_ref:
-      continue;
     }
 
   return installations;
