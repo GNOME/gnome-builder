@@ -963,9 +963,13 @@ find_installations_for_refs (IpcFlatpakServiceImpl *self,
         {
           const Runtime *r = g_ptr_array_index (self->runtimes, j);
 
+          /* Check for matching ref, but also that installation is going
+           * to be writable to us from the sandbox.
+           */
           if (str_equal0 (name, r->name) &&
               str_equal0 (arch, r->arch) &&
-              str_equal0 (branch, r->branch))
+              str_equal0 (branch, r->branch) &&
+              flatpak_installation_get_is_user (r->installation))
             {
               g_ptr_array_add (installations, g_object_ref (r->installation));
               continue;
