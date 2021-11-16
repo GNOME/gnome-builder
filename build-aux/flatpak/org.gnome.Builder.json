@@ -604,8 +604,9 @@
             "builddir" : true,
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://github.com/flatpak/libportal.git"
+                    "type" : "archive",
+                    "url" : "https://github.com/flatpak/libportal/releases/download/0.4/libportal-0.4.tar.xz",
+                    "sha256" : "3cd5f50907831cf236b40aa14c5a14ccbbf08828cecb3286efa82ce03cacef28"
                 }
             ]
         },
