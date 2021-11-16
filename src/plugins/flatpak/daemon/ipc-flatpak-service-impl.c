@@ -890,7 +890,10 @@ find_remote_for_ref (IpcFlatpakServiceImpl  *self,
       Install *install = g_ptr_array_index (self->installs_ordered, i);
       g_autoptr(GPtrArray) remotes = flatpak_installation_list_remotes (install->installation, NULL, NULL);
 
-      if (remotes == NULL)
+      /* Ignore if failure or this is a system installation (as we can't install
+       * anything for that).
+       */
+      if (remotes == NULL || !flatpak_installation_get_is_user (install->installation))
         continue;
 
       for (guint j = 0; j < remotes->len; j++)
