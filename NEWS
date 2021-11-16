@@ -4,6 +4,12 @@ Version 41.2
 
  • Fix an issue with comparing global search results
  • Use multiple Flatpak transactions if runtimes are found on different installations
+ • Fix running applications when Flatpak private installation is needed
+ • Improve language detection with meson
+ • Improve styling of overview map
+ • Improve search results
+ • Updated project templates
+ • GVls updates
  • Translation updates
 
 ============
