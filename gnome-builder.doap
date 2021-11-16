@@ -31,4 +31,12 @@
       <gnome:userid>slafargue</gnome:userid>
     </foaf:Person>
   </maintainer>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Günther Wagner</foaf:name>
+      <foaf:mbox rdf:resource="mailto:info@gunibert.de" />
+      <gnome:userid>gwagner</gnome:userid>
+    </foaf:Person>
+  </maintainer>
 </Project>
