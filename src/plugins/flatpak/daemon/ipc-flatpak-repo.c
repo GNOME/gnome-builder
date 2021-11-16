@@ -119,9 +119,6 @@ ipc_flatpak_repo_constructed (GObject *object)
         }
     }
 
-  /* Flatpak makes it's own copy of the filter file */
-  g_file_delete (filter_file, NULL, NULL);
-
 #define INSTALLATION_NAME "Installation \"gnome-builder-private\""
 
   keyfile = g_key_file_new ();
