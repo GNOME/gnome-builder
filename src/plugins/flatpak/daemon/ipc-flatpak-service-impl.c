@@ -844,9 +844,9 @@ install_worker (GTask        *task,
 
   ipc_flatpak_transfer_set_fraction (state->transfer, 1.0);
   ipc_flatpak_transfer_set_message (state->transfer, _("Installation complete"));
-  ipc_flatpak_service_complete_install (source_object, g_steal_pointer (&state->invocation));
-
   g_task_return_boolean (task, TRUE);
+
+  /* GDBusMethodInvocation completes on the main thread */
 }
 
 static gboolean
@@ -994,6 +994,39 @@ find_installations_for_refs (IpcFlatpakServiceImpl *self,
   return installations;
 }
 
+static void
+on_install_completed_cb (IpcFlatpakServiceImpl *self,
+                         GParamSpec            *pspec,
+                         GTask                 *task)
+{
+  GDBusMethodInvocation *invocation;
+  GHashTableIter iter;
+  Install *install;
+
+  g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
+  g_assert (G_IS_TASK (task));
+
+  if (g_task_had_error (task))
+    return;
+
+  /* Reload installations so that we pick up new runtimes
+   * immediately before we notify the install completed. Otherwise
+   * we risk not being able to access it from the UI when the
+   * D-Bus completion comes in.
+   */
+  g_hash_table_iter_init (&iter, self->installs);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&install))
+    {
+      if (flatpak_installation_get_is_user (install->installation))
+        install_reload (self, install);
+    }
+
+  /* Now notify the client */
+  invocation = g_object_get_data (G_OBJECT (self), "INVOCATION");
+  ipc_flatpak_service_complete_install (IPC_FLATPAK_SERVICE (self),
+                                        g_object_ref (invocation));
+}
+
 static gboolean
 ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
                                   GDBusMethodInvocation *invocation,
@@ -1089,6 +1122,15 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
                            G_CONNECT_SWAPPED);
 
   task = g_task_new (self, state->cancellable, NULL, NULL);
+  g_object_set_data_full (G_OBJECT (task),
+                          "INVOCATION",
+                          g_object_ref (invocation),
+                          g_object_unref);
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (on_install_completed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_task_set_source_tag (task, ipc_flatpak_service_impl_install);
   g_task_set_task_data (task, state, (GDestroyNotify)install_state_free);
   g_task_run_in_thread (task, install_worker);
