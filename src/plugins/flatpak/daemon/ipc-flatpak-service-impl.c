@@ -1096,8 +1096,8 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
           return TRUE;
         }
 
+      iref.ref = flatpak_ref_format_ref (ref);
       iref.fref = g_steal_pointer (&ref);
-      iref.ref = g_strdup (full_ref_names[i]);
       g_array_append_val (refs, iref);
     }
 
