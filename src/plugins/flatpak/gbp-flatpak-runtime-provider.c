@@ -91,13 +91,15 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
   const gchar *metadata;
   gboolean is_extension;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (info != NULL);
   g_assert (IPC_IS_FLATPAK_SERVICE (service));
   g_assert (g_variant_is_of_type (info, RUNTIME_VARIANT_TYPE));
 
   if (self->runtimes == NULL)
-    return;
+    IDE_EXIT;
 
   if (!runtime_variant_parse (info,
                               &name, &arch, &branch,
@@ -105,11 +107,11 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
                               &deploy_dir,
                               &metadata,
                               &is_extension))
-    return;
+    IDE_EXIT;
 
   /* Ignore extensions for now */
   if (is_extension)
-    return;
+    IDE_EXIT;
 
   context = ide_object_ref_context (IDE_OBJECT (self));
   manager = ide_runtime_manager_from_context (context);
@@ -121,9 +123,15 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
                                      deploy_dir,
                                      metadata,
                                      is_extension);
+
+  g_debug ("Discovered Flatpak runtime %s/%s/%s using SDK %s//%s from %s",
+           name, arch, branch, sdk_name, sdk_branch, deploy_dir);
+
   g_ptr_array_add (self->runtimes, g_object_ref (runtime));
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
   ide_runtime_manager_add (manager, IDE_RUNTIME (runtime));
+
+  IDE_EXIT;
 }
 
 static void
