@@ -82,6 +82,7 @@
     -->
     <method name="Install">
       <arg name="full_ref_name" direction="in" type="as"/>
+      <arg name="if_not_exists" direction="in" type="b"/>
       <arg name="transfer" direction="in" type="o"/>
       <arg name="parent_window" direction="in" type="s"/>
     </method>

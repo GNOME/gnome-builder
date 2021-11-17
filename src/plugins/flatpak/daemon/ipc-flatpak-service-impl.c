@@ -675,6 +675,7 @@ typedef struct
   FlatpakRef *fref;
   char *ref;
   char *remote;
+  guint update : 1;
 } InstallRef;
 
 typedef struct
@@ -742,7 +743,6 @@ install_worker (GTask        *task,
                 GCancellable *cancellable)
 {
   InstallState *state = task_data;
-  IpcFlatpakServiceImpl *self = source_object;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) ref_ids = NULL;
   g_autoptr(GHashTable) transactions = NULL;
@@ -808,14 +808,25 @@ install_worker (GTask        *task,
         }
 
       /* Add ref as install or update to installation's transaction */
-      if ((is_installed (self, ir->fref) &&
-           !flatpak_transaction_add_update (transaction, ir->ref, NULL, NULL, &error)) ||
-          !flatpak_transaction_add_install (transaction, ir->remote, ir->ref, NULL, &error))
+      if (ir->update)
         {
-          g_warning ("Failed to add ref to transaction: %s", error->message);
-          complete_wrapped_error (g_steal_pointer (&state->invocation), g_error_copy (error));
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
+          if (!flatpak_transaction_add_update (transaction, ir->ref, NULL, NULL, &error))
+            {
+              g_warning ("Failed to add update ref to transaction: %s", error->message);
+              complete_wrapped_error (g_steal_pointer (&state->invocation), g_error_copy (error));
+              g_task_return_error (task, g_steal_pointer (&error));
+              return;
+            }
+        }
+      else
+        {
+          if (!flatpak_transaction_add_install (transaction, ir->remote, ir->ref, NULL, &error))
+            {
+              g_warning ("Failed to add install ref to transaction: %s", error->message);
+              complete_wrapped_error (g_steal_pointer (&state->invocation), g_error_copy (error));
+              g_task_return_error (task, g_steal_pointer (&error));
+              return;
+            }
         }
     }
 
@@ -1034,6 +1045,7 @@ static gboolean
 ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
                                   GDBusMethodInvocation *invocation,
                                   const char * const    *full_ref_names,
+                                  gboolean               if_not_exists,
                                   const char            *transfer_path,
                                   const char            *parent_window)
 {
@@ -1081,9 +1093,12 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
       if (!g_str_has_prefix (name, "runtime/") && !g_str_has_prefix (name, "app/"))
         name = adjusted = g_strdup_printf ("runtime/%s", full_ref_names[i]);
 
-      ref = flatpak_ref_parse (name, NULL);
-      if (ref != NULL && is_installed (self, ref))
-        continue;
+      if ((ref = flatpak_ref_parse (name, NULL)))
+        {
+          iref.update = is_installed (self, ref);
+          if (if_not_exists && iref.update)
+            continue;
+        }
 
       if (ref == NULL ||
           !(iref.remote = find_remote_for_ref (self, ref, NULL)))
