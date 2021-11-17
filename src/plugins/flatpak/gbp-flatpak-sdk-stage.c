@@ -145,6 +145,7 @@ gbp_flatpak_sdk_stage_build_async (IdePipelineStage    *stage,
 
   ipc_flatpak_service_call_install (service,
                                     (const char * const *)self->sdks,
+                                    FALSE,
                                     transfer_path,
                                     "",
                                     ide_task_get_cancellable (task),

@@ -318,6 +318,7 @@ gbp_flatpak_runtime_provider_bootstrap_complete (gpointer data)
 
       ipc_flatpak_service_call_install (state->service,
                                         (const char * const *)state->to_install->pdata,
+                                        TRUE,
                                         state->transfer_path,
                                         "",
                                         ide_task_get_cancellable (task),
