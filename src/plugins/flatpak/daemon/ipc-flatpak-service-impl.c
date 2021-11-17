@@ -1037,9 +1037,15 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
 
   for (guint i = 0; full_ref_names[i]; i++)
     {
-      g_autoptr(FlatpakRef) ref = flatpak_ref_parse (full_ref_names[i], NULL);
+      const char *name = full_ref_names[i];
+      g_autoptr(FlatpakRef) ref = NULL;
+      g_autofree char *adjusted = NULL;
       InstallRef iref = {0};
 
+      if (!g_str_has_prefix (name, "runtime/") && !g_str_has_prefix (name, "app/"))
+        name = adjusted = g_strdup_printf ("runtime/%s", full_ref_names[i]);
+
+      ref = flatpak_ref_parse (name, NULL);
       if (ref != NULL && is_installed (self, ref))
         continue;
 
