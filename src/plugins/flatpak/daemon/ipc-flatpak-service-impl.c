@@ -1124,7 +1124,7 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   task = g_task_new (self, state->cancellable, NULL, NULL);
   g_object_set_data_full (G_OBJECT (task),
                           "INVOCATION",
-                          g_object_ref (invocation),
+                          g_object_ref (state->invocation),
                           g_object_unref);
   g_signal_connect_object (task,
                            "notify::completed",
