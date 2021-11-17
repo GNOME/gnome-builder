@@ -272,8 +272,9 @@ gbp_flatpak_runtime_provider_bootstrap_install_cb (GObject      *object,
   else if (!(runtime = find_runtime (self, state->runtime_id)))
     ide_task_return_new_error (task,
                                G_IO_ERROR,
-                               G_IO_ERROR_CANCELLED,
-                               "Operation was cancelled");
+                               G_IO_ERROR_NOT_FOUND,
+                               "Failed to locate %s after installation",
+                               state->runtime_id);
   else
     ide_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
 
@@ -329,8 +330,9 @@ gbp_flatpak_runtime_provider_bootstrap_complete (gpointer data)
       if (!(runtime = find_runtime (self, state->runtime_id)))
         ide_task_return_new_error (task,
                                    G_IO_ERROR,
-                                   G_IO_ERROR_CANCELLED,
-                                   "Operation was cancelled");
+                                   G_IO_ERROR_NOT_FOUND,
+                                   "Failed to locate runtime %s",
+                                   state->runtime_id);
       else
         ide_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
     }
