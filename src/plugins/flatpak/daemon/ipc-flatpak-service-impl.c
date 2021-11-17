@@ -1025,7 +1025,7 @@ on_install_completed_cb (IpcFlatpakServiceImpl *self,
     }
 
   /* Now notify the client */
-  invocation = g_object_get_data (G_OBJECT (self), "INVOCATION");
+  invocation = g_object_get_data (G_OBJECT (task), "INVOCATION");
   ipc_flatpak_service_complete_install (IPC_FLATPAK_SERVICE (self),
                                         g_object_ref (invocation));
 }
