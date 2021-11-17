@@ -134,7 +134,7 @@ main (gint argc,
   g_assert_no_error (error);
   g_assert_true (ret);
 
-  g_message ("Installing %s\n", argv[1]);
+  g_message ("Installing %s", argv[1]);
   ipc_flatpak_service_call_install (service,
                                     (const char * const *)all->pdata,
                                     transfer_path,
