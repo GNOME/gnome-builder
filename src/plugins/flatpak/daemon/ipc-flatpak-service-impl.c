@@ -492,7 +492,7 @@ ipc_flatpak_service_impl_list_runtimes (IpcFlatpakService     *service,
     }
 
   ipc_flatpak_service_complete_list_runtimes (service,
-                                              invocation,
+                                              g_steal_pointer (&invocation),
                                               g_variant_builder_end (&builder));
 
   return TRUE;
@@ -603,7 +603,7 @@ ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
 
   /* Parse the ref, so we can try to locate it */
   if (!(ref = flatpak_ref_parse (full_name, &error)))
-    return complete_wrapped_error (invocation, error);
+    return complete_wrapped_error (g_steal_pointer (&invocation), error);
 
   ref_name = flatpak_ref_get_name (ref);
   ref_arch = flatpak_ref_get_arch (ref);
@@ -618,7 +618,9 @@ ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
           str_equal0 (ref_arch, runtime->arch) &&
           str_equal0 (ref_branch, runtime->branch))
         {
-          ipc_flatpak_service_complete_runtime_is_known (service, invocation, TRUE, 0);
+          ipc_flatpak_service_complete_runtime_is_known (service,
+                                                         g_steal_pointer (&invocation),
+                                                         TRUE, 0);
           return TRUE;
         }
     }
@@ -1013,12 +1015,16 @@ on_install_completed_cb (IpcFlatpakServiceImpl *self,
                          GParamSpec            *pspec,
                          GTask                 *task)
 {
-  GDBusMethodInvocation *invocation;
+  g_autoptr(GDBusMethodInvocation) invocation = NULL;
   GHashTableIter iter;
   Install *install;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_TASK (task));
+
+  /* Steal the invocation object */
+  invocation = g_object_ref (g_object_get_data (G_OBJECT (task), "INVOCATION"));
+  g_object_set_data (G_OBJECT (task), "INVOCATION", NULL);
 
   if (g_task_had_error (task))
     return;
@@ -1036,9 +1042,8 @@ on_install_completed_cb (IpcFlatpakServiceImpl *self,
     }
 
   /* Now notify the client */
-  invocation = g_object_get_data (G_OBJECT (task), "INVOCATION");
   ipc_flatpak_service_complete_install (IPC_FLATPAK_SERVICE (self),
-                                        g_object_ref (invocation));
+                                        g_steal_pointer (&invocation));
 }
 
 static gboolean
