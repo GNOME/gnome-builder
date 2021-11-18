@@ -250,9 +250,9 @@ static gboolean
 runtime_equal (const Runtime *a,
                const Runtime *b)
 {
-  return g_str_equal (a->name, b->name) &&
-         g_str_equal (a->arch, b->arch) &&
-         g_str_equal (a->branch, b->branch);
+  return str_equal0 (a->name, b->name) &&
+         str_equal0 (a->arch, b->arch) &&
+         str_equal0 (a->branch, b->branch);
 }
 
 static Install *
@@ -614,9 +614,9 @@ ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
     {
       const Runtime *runtime = g_ptr_array_index (self->runtimes, i);
 
-      if (g_str_equal (ref_name, runtime->name) &&
-          g_str_equal (ref_arch, runtime->arch) &&
-          g_str_equal (ref_branch, runtime->branch))
+      if (str_equal0 (ref_name, runtime->name) &&
+          str_equal0 (ref_arch, runtime->arch) &&
+          str_equal0 (ref_branch, runtime->branch))
         {
           ipc_flatpak_service_complete_runtime_is_known (service, invocation, TRUE, 0);
           return TRUE;
