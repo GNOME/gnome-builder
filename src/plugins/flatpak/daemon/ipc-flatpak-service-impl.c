@@ -774,7 +774,7 @@ install_worker (GTask        *task,
   if (!ipc_flatpak_transfer_call_confirm_sync (state->transfer, (const char * const *)ref_ids->pdata, state->cancellable, &error))
     {
       g_warning ("User confirmation failed: %s", error->message);
-      complete_wrapped_error (g_steal_pointer (&state->invocation), g_steal_pointer (&error));
+      complete_wrapped_error (g_steal_pointer (&state->invocation), g_error_copy (error));
       g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
