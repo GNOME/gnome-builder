@@ -149,7 +149,9 @@ vte-terminal {
 }
 
 textview.source-map {
-  font-size: 2px;
+  font-size: 1.75pt;
+  /* we can't do the following in GTK 3, but supported in 4.4 */
+  /* line-height: 4px; */
 }
 textview.source-map .scrubber {
   border-radius: 5px;
