@@ -1124,7 +1124,7 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
 
   state = g_slice_new0 (InstallState);
   state->cancellable = g_cancellable_new ();
-  state->invocation = g_steal_pointer (&invocation);
+  state->invocation = g_object_ref (invocation);
   state->refs = g_array_ref (refs);
   state->parent_window = parent_window[0] ? g_strdup (parent_window) : NULL;
   state->transfer = g_object_ref (transfer);
@@ -1142,7 +1142,7 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   task = g_task_new (self, state->cancellable, NULL, NULL);
   g_object_set_data_full (G_OBJECT (task),
                           "INVOCATION",
-                          g_object_ref (state->invocation),
+                          g_object_ref (invocation),
                           g_object_unref);
   g_signal_connect_object (task,
                            "notify::completed",
@@ -1152,6 +1152,8 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   g_task_set_source_tag (task, ipc_flatpak_service_impl_install);
   g_task_set_task_data (task, state, (GDestroyNotify)install_state_free);
   g_task_run_in_thread (task, install_worker);
+
+  g_object_unref (invocation);
 
   return TRUE;
 }
