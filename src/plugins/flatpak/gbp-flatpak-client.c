@@ -176,10 +176,14 @@ gbp_flatpak_client_parent_set (IdeObject *object,
                                           G_SUBPROCESS_FLAGS_STDIN_PIPE);
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-#if 0
-  ide_subprocess_launcher_push_argv (launcher, "gdbserver");
-  ide_subprocess_launcher_push_argv (launcher, "localhost:8888");
-#endif
+
+  if (g_getenv ("BUILDER_FLATPAK_DEBUG") != NULL)
+    {
+      ide_subprocess_launcher_setenv (launcher, "G_DEBUG", "fatal-criticals", TRUE);
+      ide_subprocess_launcher_push_argv (launcher, "gdbserver");
+      ide_subprocess_launcher_push_argv (launcher, "localhost:8888");
+    }
+
   ide_subprocess_launcher_push_argv (launcher, PACKAGE_LIBEXECDIR"/gnome-builder-flatpak");
 
   self->supervisor = ide_subprocess_supervisor_new ();
