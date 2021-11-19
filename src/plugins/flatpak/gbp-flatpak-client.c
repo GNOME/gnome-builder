@@ -146,6 +146,7 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
                                        IdeSubprocess           *subprocess,
                                        IdeSubprocessSupervisor *supervisor)
 {
+  g_autofree gchar *home_install = NULL;
   GList *queued;
 
   IDE_ENTRY;
@@ -175,6 +176,13 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
 
   /* We can have long running operations, so set no timeout */
   g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (self->service), G_MAXINT);
+
+  /* Add the --user installation as our first call before queued
+   * events can submit their operations.
+   */
+  home_install = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
+  if (g_file_test (home_install, G_FILE_TEST_IS_DIR))
+    ipc_flatpak_service_call_add_installation (self->service, home_install, TRUE, NULL, NULL, NULL);
 
   queued = g_steal_pointer (&self->get_service.head);
 
