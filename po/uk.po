@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-11-08 21:18+0000\n"
-"PO-Revision-Date: 2021-11-09 16:14+0200\n"
+"POT-Creation-Date: 2021-11-19 06:18+0000\n"
+"PO-Revision-Date: 2021-11-19 16:54+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -893,7 +893,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Завантажити або створити палітру за налаштуваннями"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5025
+#: src/libide/sourceview/ide-source-view.c:5026
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Перейменувати"
@@ -915,7 +915,7 @@ msgstr "_Перейменувати"
 msgid "unsaved file %u"
 msgstr "незбережений файл %u"
 
-#: src/libide/code/ide-buffer.c:3493
+#: src/libide/code/ide-buffer.c:3635
 msgid "The current language lacks a symbol resolver."
 msgstr "Цій мові бракує розпізнавання символів."
 
@@ -953,7 +953,7 @@ msgstr "Без назви"
 #: src/libide/gui/ide-workbench.c:1410
 #: src/plugins/buildui/gbp-buildui-log-pane.c:284
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:316
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
 #: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "_Скасувати"
@@ -1718,8 +1718,9 @@ msgstr "Вивести інформацію про версію і вийти"
 
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:68
-msgid "Increase log verbosity"
-msgstr "Збільшити докладність журналу"
+#| msgid "Increase log verbosity"
+msgid "Increase log verbosity (may be repeated)"
+msgstr "Збільшити докладність журналу (можливі повторення)"
 
 #: src/libide/gui/ide-application-command-line.c:118
 #, c-format
@@ -1953,13 +1954,11 @@ msgstr "Показувати список усіх відкритих файлі
 
 #: src/libide/gui/ide-preferences-builtin.c:154
 msgid "Reformat code on save"
-msgstr ""
-"Переформатувати код при збереженні"
+msgstr "Переформатувати код при збереженні"
 
 #: src/libide/gui/ide-preferences-builtin.c:154
 msgid "Reformat current file on save"
-msgstr ""
-"Переформатувати поточний файл при збереженні"
+msgstr "Переформатувати поточний файл при збереженні"
 
 #: src/libide/gui/ide-preferences-builtin.c:156
 msgid "Cursor"
@@ -2860,7 +2859,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1495
+#: src/libide/lsp/ide-lsp-client.c:1442
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -2966,31 +2965,31 @@ msgstr "Ві_ддалити"
 msgid "_Reset"
 msgstr "С_кинути"
 
-#: src/libide/sourceview/ide-source-view.c:4439
+#: src/libide/sourceview/ide-source-view.c:4440
 #, c-format
 msgid "Insert “%s”"
 msgstr "Вставити «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4441
+#: src/libide/sourceview/ide-source-view.c:4442
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замінити «%s» на «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4567
+#: src/libide/sourceview/ide-source-view.c:4568
 msgid "Apply Fix-It"
 msgstr "Застосувати латку"
 
-#: src/libide/sourceview/ide-source-view.c:5024
+#: src/libide/sourceview/ide-source-view.c:5025
 msgid "Rename symbol"
 msgstr "Перейменувати символ"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5260
+#: src/libide/sourceview/ide-source-view.c:5404
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>рядок %u, позиція %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5286
+#: src/libide/sourceview/ide-source-view.c:5430
 msgid "No references were found"
 msgstr "Посилань не знайдено"
 
@@ -4637,15 +4636,15 @@ msgstr ""
 "Увімкнути використання eslint для пошуку додаткової діагностичної інформації "
 "у файлах JavaScript. Це може призвести до виконання коду у вашому проєкті."
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:836
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
 msgid "Installation failed"
 msgstr "Встановлення завершилося невдало"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:846
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
 msgid "Installation complete"
 msgstr "Встановлення завершено"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:328
+#: src/plugins/flatpak/gbp-flatpak-client.c:418
 #: src/plugins/git/gbp-git-client.c:328
 msgid "The client has been closed"
 msgstr "Клієнт закрито"
@@ -4670,8 +4669,9 @@ msgid "Network is not available, skipping downloads"
 msgstr "Мережа недоступна, пропускаємо отримання даних"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
-msgid "Install Missing SDK?"
-msgstr "Встановити SDK, якого не вистачає?"
+#| msgid "Install Missing SDK?"
+msgid "Install or Update SDK?"
+msgstr "Встановити чи оновити SDK?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
@@ -4733,11 +4733,11 @@ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:414
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
 msgid "Installing Necessary SDKs"
 msgstr "Встановлення потрібних наборів інструментів для розробки"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:415
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4762,7 +4762,7 @@ msgstr ""
 "«Будівник» оновлює набори інструментів для розробки, які знадобляться для "
 "збирання вашої програми."
 
-#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
 msgstr "Оновлюємо середовище виконання SDK"
 
