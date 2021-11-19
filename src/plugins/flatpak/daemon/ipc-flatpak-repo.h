@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IpcFlatpakRepo, ipc_flatpak_repo, IPC, FLATPAK_REPO, GObject)
 
 IpcFlatpakRepo      *ipc_flatpak_repo_get_default      (void);
+void                 ipc_flatpak_repo_load             (const char      *data_dir);
 FlatpakInstallation *ipc_flatpak_repo_get_installation (IpcFlatpakRepo  *self);
 char                *ipc_flatpak_repo_get_path         (IpcFlatpakRepo  *self);
 char                *ipc_flatpak_repo_get_config_dir   (IpcFlatpakRepo  *self);

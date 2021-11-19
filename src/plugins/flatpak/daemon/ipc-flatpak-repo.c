@@ -39,6 +39,8 @@ allow runtime/org.kde.*\n\
 ";
 
 static const char *remotes[] = { "flathub", "flathub-beta", "gnome-nightly" };
+static char *repo_data_dir;
+static IpcFlatpakRepo *instance;
 
 static void
 ipc_flatpak_repo_constructed (GObject *object)
@@ -57,7 +59,7 @@ ipc_flatpak_repo_constructed (GObject *object)
 
   G_OBJECT_CLASS (ipc_flatpak_repo_parent_class)->constructed (object);
 
-  flatpak = g_file_new_build_filename (g_get_user_data_dir (), "gnome-builder", "flatpak", NULL);
+  flatpak = g_file_new_build_filename (repo_data_dir, "flatpak", NULL);
   filter_file = g_file_get_child (flatpak, "filter");
   etc = g_file_get_child (flatpak, "etc");
   installations_d = g_file_get_child (etc, "installations.d");
@@ -160,6 +162,11 @@ ipc_flatpak_repo_class_init (IpcFlatpakRepoClass *klass)
 
   object_class->constructed = ipc_flatpak_repo_constructed;
   object_class->finalize = ipc_flatpak_repo_finalize;
+
+  if (repo_data_dir == NULL)
+    repo_data_dir = g_build_filename (g_get_user_data_dir (),
+                                      "gnome-builder",
+                                      NULL);
 }
 
 static void
@@ -170,8 +177,6 @@ ipc_flatpak_repo_init (IpcFlatpakRepo *self)
 IpcFlatpakRepo *
 ipc_flatpak_repo_get_default (void)
 {
-  static IpcFlatpakRepo *instance;
-
   if (!instance)
     {
       instance = g_object_new (IPC_TYPE_FLATPAK_REPO, NULL);
@@ -208,13 +213,30 @@ ipc_flatpak_repo_get_path (IpcFlatpakRepo *self)
 char *
 ipc_flatpak_repo_get_config_dir (IpcFlatpakRepo *self)
 {
-  g_autoptr(GFile) path = NULL;
-
   g_return_val_if_fail (IPC_IS_FLATPAK_REPO (self), NULL);
 
-  return g_build_filename (g_get_user_data_dir (),
-                           "gnome-builder",
+  return g_build_filename (repo_data_dir,
                            "etc",
                            "flatpak",
                            NULL);
+}
+
+void
+ipc_flatpak_repo_load (const char *data_dir)
+{
+  if (instance != NULL)
+    {
+      g_critical ("Cannot load repo, already loaded");
+      return;
+    }
+
+  if (g_strcmp0 (data_dir, repo_data_dir) != 0)
+    {
+      g_free (repo_data_dir);
+      repo_data_dir = g_strdup (data_dir);
+    }
+
+  (void)ipc_flatpak_repo_get_default ();
+
+  g_return_if_fail (IPC_IS_FLATPAK_REPO (instance));
 }
