@@ -18,16 +18,26 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
+
+#define G_LOG_DOMAIN "gnome-builder-flatpak"
+
 #include <glib-unix.h>
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 #include <flatpak/flatpak.h>
-#include <stdlib.h>
 #include <signal.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <time.h>
 #include <unistd.h>
 
 #ifdef __linux__
 #include <sys/prctl.h>
+# include <sys/types.h>
+# include <sys/syscall.h>
 #endif
 
 #ifdef __FreeBSD__
@@ -60,14 +70,91 @@ create_connection (GIOStream  *stream,
   return ret;
 }
 
+static inline gint
+log_get_thread (void)
+{
+#ifdef __linux__
+  return (gint) syscall (SYS_gettid);
+#else
+  return GPOINTER_TO_INT (g_thread_self ());
+#endif /* __linux__ */
+}
+
+static const char *
+log_level_str (GLogLevelFlags log_level)
+{
+  switch (((gulong)log_level & G_LOG_LEVEL_MASK))
+    {
+    case G_LOG_LEVEL_ERROR:    return "   ERROR";
+    case G_LOG_LEVEL_CRITICAL: return "CRITICAL";
+    case G_LOG_LEVEL_WARNING:  return " WARNING";
+    case G_LOG_LEVEL_MESSAGE:  return " MESSAGE";
+    case G_LOG_LEVEL_INFO:     return "    INFO";
+    case G_LOG_LEVEL_DEBUG:    return "   DEBUG";
+
+    default:
+      return " UNKNOWN";
+    }
+}
+
+static const char *
+log_level_str_with_color (GLogLevelFlags log_level)
+{
+  switch (((gulong)log_level & G_LOG_LEVEL_MASK))
+    {
+    case G_LOG_LEVEL_ERROR:    return "   \033[1;31mERROR\033[0m";
+    case G_LOG_LEVEL_CRITICAL: return "\033[1;35mCRITICAL\033[0m";
+    case G_LOG_LEVEL_WARNING:  return " \033[1;33mWARNING\033[0m";
+    case G_LOG_LEVEL_MESSAGE:  return " \033[1;32mMESSAGE\033[0m";
+    case G_LOG_LEVEL_INFO:     return "    \033[1;32mINFO\033[0m";
+    case G_LOG_LEVEL_DEBUG:    return "   \033[1;32mDEBUG\033[0m";
+
+    default:
+      return " UNKNOWN";
+    }
+}
+
 static void
 log_func (const gchar    *log_domain,
           GLogLevelFlags  flags,
           const gchar    *message,
           gpointer        user_data)
 {
-  g_printerr ("gnome-builder-flatpak: %s\n", message);
+  const char *level;
+  gint64 now;
+  struct tm tt;
+  time_t t;
+  char ftime[32];
+
+  if (g_log_writer_default_would_drop (flags, log_domain))
+    return;
+
+  if (user_data)
+    level = log_level_str_with_color (flags);
+  else
+    level = log_level_str (flags);
+
+  now = g_get_real_time ();
+  t = now / G_USEC_PER_SEC;
+  tt = *localtime (&t);
+  strftime (ftime, sizeof (ftime), "%H:%M:%S", &tt);
+
+  g_print ("%s.%04d  %40s[% 5d]: %s: %s\n",
+           ftime,
+           (gint)((now % G_USEC_PER_SEC) / 100L),
+           log_domain,
+           log_get_thread (),
+           level,
+           message);
 }
+
+static int read_fileno = STDIN_FILENO;
+static int write_fileno = STDOUT_FILENO;
+static GOptionEntry main_entries[] = {
+  { "read-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &read_fileno },
+  { "write-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &write_fileno },
+  { 0 }
+};
 
 gint
 main (gint argc,
@@ -94,7 +181,7 @@ main (gint argc,
 
   signal (SIGPIPE, SIG_IGN);
 
-  g_log_set_handler (NULL, G_LOG_LEVEL_MASK, log_func, NULL);
+  g_log_set_default_handler (log_func, GINT_TO_POINTER (isatty (STDOUT_FILENO)));
 
   if (!g_unix_set_fd_nonblocking (STDIN_FILENO, TRUE, &error) ||
       !g_unix_set_fd_nonblocking (STDOUT_FILENO, TRUE, &error))
