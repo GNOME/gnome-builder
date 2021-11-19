@@ -140,7 +140,7 @@ log_func (const gchar    *log_domain,
   char *str;
   int fd;
 
-  if (!verbose && flags < G_LOG_LEVEL_MESSAGE)
+  if (!verbose && flags > G_LOG_LEVEL_MESSAGE)
     return;
 
   if (user_data)

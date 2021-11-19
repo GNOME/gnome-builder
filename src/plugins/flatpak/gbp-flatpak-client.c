@@ -102,9 +102,6 @@ gbp_flatpak_client_reset (GbpFlatpakClient *self)
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
 
-  if (ide_log_get_verbosity () > 0)
-    ide_subprocess_launcher_setenv (launcher, "G_MESSAGES_DEBUG", "all", TRUE);
-
   if (g_getenv ("BUILDER_FLATPAK_DEBUG") != NULL)
     {
       ide_subprocess_launcher_setenv (launcher, "G_DEBUG", "fatal-criticals", TRUE);
@@ -121,6 +118,9 @@ gbp_flatpak_client_reset (GbpFlatpakClient *self)
   ide_subprocess_launcher_push_argv (launcher, PACKAGE_LIBEXECDIR"/gnome-builder-flatpak");
   ide_subprocess_launcher_push_argv (launcher, "--read-fd=3");
   ide_subprocess_launcher_push_argv (launcher, "--write-fd=4");
+
+  if (ide_log_get_verbosity () > 0)
+    ide_subprocess_launcher_push_argv (launcher, "--verbose");
 
   g_set_object (&self->connection, service_connection);
 
