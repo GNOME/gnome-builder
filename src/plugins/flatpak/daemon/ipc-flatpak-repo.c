@@ -111,11 +111,13 @@ ipc_flatpak_repo_constructed (GObject *object)
                          remotes[i], error->message);
               g_clear_error (&error);
             }
-          else if (!flatpak_installation_update_remote_sync (self->installation, flatpak_remote_get_name (remote), NULL, &error))
-            {
-              g_warning ("Failed to update remote %s: %s", remotes[i], error->message);
-              g_clear_error (&error);
-            }
+        }
+
+      g_debug ("Updating remote %s", remotes[i]);
+      if (!flatpak_installation_update_remote_sync (self->installation, remotes[i], NULL, &error))
+        {
+          g_warning ("Failed to update remote %s: %s", remotes[i], error->message);
+          g_clear_error (&error);
         }
     }
 
