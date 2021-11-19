@@ -597,7 +597,7 @@ is_known_worker (GTask        *task,
     }
 
 finish:
-  g_debug ("RuntimeIsKnown => (%d, %"G_GSIZE_FORMAT")", found, download_size);
+  g_debug ("RuntimeIsKnown => (%d, %"G_GINT64_FORMAT")", found, download_size);
   ipc_flatpak_service_complete_runtime_is_known (g_task_get_source_object (task),
                                                  g_steal_pointer (&state->invocation),
                                                  found,
