@@ -65,7 +65,7 @@ _ide_application_add_option_entries (IdeApplication *self)
     { "project", 'p', 0, G_OPTION_ARG_FILENAME, NULL, N_("Open project in new workbench"), N_("FILE")  },
     { "version", 'V', 0, G_OPTION_ARG_NONE, NULL, N_("Print version information and exit") },
     /* Verbose is handled in main(), but we need to add to --help here */
-    { "verbose", 'v', 0, G_OPTION_ARG_NONE, NULL, N_("Increase log verbosity") },
+    { "verbose", 'v', 0, G_OPTION_ARG_NONE, NULL, N_("Increase log verbosity (may be repeated)") },
     { NULL }
   };
 
