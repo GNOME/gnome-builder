@@ -154,7 +154,7 @@ _gbp_flatpak_get_default_arch (IdeObject *object)
 
       if (context != NULL)
         {
-          g_autoptr(GbpFlatpakClient) client = gbp_flatpak_client_ensure (context);
+          GbpFlatpakClient *client = gbp_flatpak_client_get_default ();
           IpcFlatpakService *service = gbp_flatpak_client_get_service (client, NULL, NULL);
 
           if (service != NULL)
