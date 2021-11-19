@@ -28,9 +28,9 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_CLIENT (gbp_flatpak_client_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakClient, gbp_flatpak_client, GBP, FLATPAK_CLIENT, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpFlatpakClient, gbp_flatpak_client, GBP, FLATPAK_CLIENT, GObject)
 
-GbpFlatpakClient  *gbp_flatpak_client_from_context       (IdeContext           *context);
+GbpFlatpakClient  *gbp_flatpak_client_get_default        (void);
 IpcFlatpakService *gbp_flatpak_client_get_service        (GbpFlatpakClient     *self,
                                                           GCancellable         *cancellable,
                                                           GError              **error);
@@ -42,11 +42,5 @@ IpcFlatpakService *gbp_flatpak_client_get_service_finish (GbpFlatpakClient     *
                                                           GAsyncResult         *result,
                                                           GError              **error);
 void               gbp_flatpak_client_force_exit         (GbpFlatpakClient     *self);
-
-static inline GbpFlatpakClient *
-gbp_flatpak_client_ensure (IdeContext *context)
-{
-  return ide_object_ensure_child_typed (IDE_OBJECT (context), GBP_TYPE_FLATPAK_CLIENT);
-}
 
 G_END_DECLS

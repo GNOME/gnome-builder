@@ -168,15 +168,15 @@ static void
 gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider,
                                    IdeRuntimeManager  *manager)
 {
-  g_autoptr(GbpFlatpakClient) client = NULL;
   g_autoptr(IpcFlatpakService) service = NULL;
   g_autoptr(IdeContext) context = NULL;
+  GbpFlatpakClient *client;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (provider));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
   if ((context = ide_object_ref_context (IDE_OBJECT (provider))) &&
-      (client = gbp_flatpak_client_ensure (context)) &&
+      (client = gbp_flatpak_client_get_default ()) &&
       (service = gbp_flatpak_client_get_service (client, NULL, NULL)))
     {
       g_signal_connect_object (service,
@@ -356,12 +356,12 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
                                         GCancellable *cancellable)
 {
   g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GbpFlatpakClient) client = NULL;
   g_autoptr(IpcFlatpakService) service = NULL;
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
   g_autoptr(IdeNotification) notif = NULL;
   Bootstrap *state = task_data;
   g_autoptr(GString) debug_install = NULL;
+  GbpFlatpakClient *client;
 
   IDE_ENTRY;
 
@@ -372,7 +372,7 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
   g_assert (state->to_install->len > 0);
 
   if (!(context = ide_object_ref_context (source_object)) ||
-      !(client = gbp_flatpak_client_ensure (context)) ||
+      !(client = gbp_flatpak_client_get_default ()) ||
       !(service = gbp_flatpak_client_get_service (client, NULL, NULL)))
     {
       ide_task_return_new_error (task,

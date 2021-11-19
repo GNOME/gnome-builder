@@ -481,7 +481,7 @@ gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  client = gbp_flatpak_client_from_context (context);
+  client = gbp_flatpak_client_get_default ();
   service = gbp_flatpak_client_get_service (client, NULL, NULL);
   vcs = ide_vcs_from_context (context);
   workdir = ide_vcs_get_workdir (vcs);

@@ -32,12 +32,14 @@
 
 struct _GbpFlatpakClient
 {
-  IdeObject                parent_instance;
+  GObject                  parent_instance;
   IdeSubprocessSupervisor *supervisor;
   GDBusConnection         *connection;
   IpcFlatpakService       *service;
+  GMutex                   mutex;
   GQueue                   get_service;
-  gint                     state;
+  int                      state;
+  guint                    disposed : 1;
 };
 
 enum {
@@ -47,7 +49,7 @@ enum {
   STATE_SHUTDOWN,
 };
 
-G_DEFINE_FINAL_TYPE (GbpFlatpakClient, gbp_flatpak_client, IDE_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GbpFlatpakClient, gbp_flatpak_client, G_TYPE_OBJECT)
 
 static void
 gbp_flatpak_client_reset (GbpFlatpakClient *self)
@@ -122,10 +124,10 @@ gbp_flatpak_client_reset (GbpFlatpakClient *self)
 
   g_set_object (&self->connection, service_connection);
 
-  ide_object_lock (IDE_OBJECT (self));
+  g_mutex_lock (&self->mutex);
   if (self->supervisor != NULL)
     ide_subprocess_supervisor_set_launcher (self->supervisor, launcher);
-  ide_object_unlock (IDE_OBJECT (self));
+  g_mutex_unlock (&self->mutex);
 
 handle_error:
   if (error != NULL)
@@ -152,7 +154,7 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
 
-  ide_object_lock (IDE_OBJECT (self));
+  g_mutex_lock (&self->mutex);
 
   g_assert (self->service == NULL);
   g_assert (self->connection != NULL);
@@ -189,7 +191,7 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
 
   g_list_free_full (queued, g_object_unref);
 
-  ide_object_unlock (IDE_OBJECT (self));
+  g_mutex_unlock (&self->mutex);
 
   IDE_EXIT;
 }
@@ -205,49 +207,59 @@ gbp_flatpak_client_subprocess_exited (GbpFlatpakClient        *self,
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
 
-  ide_object_lock (IDE_OBJECT (self));
+  g_mutex_lock (&self->mutex);
   if (self->state == STATE_RUNNING)
     self->state = STATE_SPAWNING;
   g_clear_object (&self->connection);
   g_clear_object (&self->service);
-  ide_object_unlock (IDE_OBJECT (self));
+  g_mutex_unlock (&self->mutex);
 
-  if (!ide_object_in_destruction (IDE_OBJECT (self)))
+  if (!self->disposed)
     gbp_flatpak_client_reset (self);
 
   IDE_EXIT;
 }
 
 static void
-gbp_flatpak_client_destroy (IdeObject *object)
+gbp_flatpak_client_dispose (GObject *object)
 {
   GbpFlatpakClient *self = (GbpFlatpakClient *)object;
   g_autoptr(IdeSubprocessSupervisor) supervisor = g_steal_pointer (&self->supervisor);
 
+  self->disposed = TRUE;
+
   if (supervisor != NULL)
     ide_subprocess_supervisor_stop (supervisor);
 
+  g_mutex_lock (&self->mutex);
   g_clear_object (&self->connection);
   g_clear_object (&self->service);
+  g_mutex_unlock (&self->mutex);
 
-  IDE_OBJECT_CLASS (gbp_flatpak_client_parent_class)->destroy (object);
+  G_OBJECT_CLASS (gbp_flatpak_client_parent_class)->dispose (object);
 }
 
 static void
-gbp_flatpak_client_parent_set (IdeObject *object,
-                               IdeObject *parent)
+gbp_flatpak_client_finalize (GObject *object)
+{
+  GbpFlatpakClient *self = (GbpFlatpakClient *)object;
+
+  g_mutex_clear (&self->mutex);
+
+  G_OBJECT_CLASS (gbp_flatpak_client_parent_class)->finalize (object);
+}
+
+static void
+gbp_flatpak_client_constructed (GObject *object)
 {
   GbpFlatpakClient *self = (GbpFlatpakClient *)object;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_CLIENT (self));
-  g_assert (!parent || IDE_IS_OBJECT (parent));
 
-  if (parent == NULL)
-    IDE_EXIT;
+  G_OBJECT_CLASS (gbp_flatpak_client_parent_class)->constructed (object);
 
-  ide_object_lock (IDE_OBJECT (self));
   self->supervisor = ide_subprocess_supervisor_new ();
   g_signal_connect_object (self->supervisor,
                            "spawned",
@@ -259,7 +271,6 @@ gbp_flatpak_client_parent_set (IdeObject *object,
                            G_CALLBACK (gbp_flatpak_client_subprocess_exited),
                            self,
                            G_CONNECT_SWAPPED);
-  ide_object_unlock (IDE_OBJECT (self));
 
   gbp_flatpak_client_reset (self);
 
@@ -269,34 +280,34 @@ gbp_flatpak_client_parent_set (IdeObject *object,
 static void
 gbp_flatpak_client_class_init (GbpFlatpakClientClass *klass)
 {
-  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  i_object_class->destroy = gbp_flatpak_client_destroy;
-  i_object_class->parent_set = gbp_flatpak_client_parent_set;
+  object_class->constructed = gbp_flatpak_client_constructed;
+  object_class->dispose = gbp_flatpak_client_dispose;
+  object_class->finalize = gbp_flatpak_client_finalize;
 }
 
 static void
 gbp_flatpak_client_init (GbpFlatpakClient *self)
 {
+  g_mutex_init (&self->mutex);
 }
 
 GbpFlatpakClient *
-gbp_flatpak_client_from_context (IdeContext *context)
+gbp_flatpak_client_get_default (void)
 {
-  GbpFlatpakClient *ret;
+  static GbpFlatpakClient *instance;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-  g_return_val_if_fail (!ide_object_in_destruction (IDE_OBJECT (context)), NULL);
-
-  if (!(ret = ide_context_peek_child_typed (context, GBP_TYPE_FLATPAK_CLIENT)))
+  if (g_once_init_enter (&instance))
     {
-      g_autoptr(GbpFlatpakClient) client = NULL;
+      GbpFlatpakClient *client;
 
-      client = ide_object_ensure_child_typed (IDE_OBJECT (context), GBP_TYPE_FLATPAK_CLIENT);
-      ret = ide_context_peek_child_typed (context, GBP_TYPE_FLATPAK_CLIENT);
+      client = g_object_new (GBP_TYPE_FLATPAK_CLIENT, NULL);
+      gbp_flatpak_client_get_service_async (client, NULL, NULL, NULL);
+      g_once_init_leave (&instance, client);
     }
 
-  return ret;
+  return instance;
 }
 
 static void
@@ -331,10 +342,10 @@ gbp_flatpak_client_get_service (GbpFlatpakClient  *self,
   g_assert (GBP_IS_FLATPAK_CLIENT (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_object_lock (IDE_OBJECT (self));
+  g_mutex_lock (&self->mutex);
   if (self->service != NULL)
     ret = g_object_ref (self->service);
-  ide_object_unlock (IDE_OBJECT (self));
+  g_mutex_unlock (&self->mutex);
 
   if (ret != NULL)
     return g_steal_pointer (&ret);
@@ -366,7 +377,7 @@ gbp_flatpak_client_get_service_async (GbpFlatpakClient    *self,
   g_assert (GBP_IS_FLATPAK_CLIENT (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_object_lock (IDE_OBJECT (self));
+  g_mutex_lock (&self->mutex);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_client_get_service_async);
@@ -374,10 +385,15 @@ gbp_flatpak_client_get_service_async (GbpFlatpakClient    *self,
   switch (self->state)
     {
     case STATE_INITIAL:
-      self->state = STATE_SPAWNING;
-      g_queue_push_tail (&self->get_service, g_steal_pointer (&task));
-      ide_subprocess_supervisor_start (self->supervisor);
-      break;
+      {
+        g_autoptr(IdeSubprocessSupervisor) supervisor = g_object_ref (self->supervisor);
+
+        self->state = STATE_SPAWNING;
+        g_queue_push_tail (&self->get_service, g_steal_pointer (&task));
+        g_mutex_unlock (&self->mutex);
+        ide_subprocess_supervisor_start (supervisor);
+        return;
+      }
 
     case STATE_SPAWNING:
       g_queue_push_tail (&self->get_service, g_steal_pointer (&task));
@@ -396,10 +412,9 @@ gbp_flatpak_client_get_service_async (GbpFlatpakClient    *self,
 
     default:
       g_assert_not_reached ();
-      break;
     }
 
-  ide_object_unlock (IDE_OBJECT (self));
+  g_mutex_unlock (&self->mutex);
 }
 
 IpcFlatpakService *

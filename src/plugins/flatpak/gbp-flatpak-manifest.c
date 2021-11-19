@@ -572,16 +572,13 @@ find_extension (GbpFlatpakManifest *self,
   g_autoptr(GVariant) info = NULL;
   g_autoptr(GError) error = NULL;
   GbpFlatpakClient *client;
-  IdeContext *context;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (self));
   g_assert (runtime_id != NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  if ((client = gbp_flatpak_client_from_context (context)) &&
+  if ((client = gbp_flatpak_client_get_default ()) &&
       (service = gbp_flatpak_client_get_service (client, NULL, &error)) &&
       ipc_flatpak_service_call_get_runtime_sync (service, runtime_id, &info, NULL, &error))
     {

@@ -94,7 +94,7 @@ gbp_flatpak_sdk_stage_build_async (IdePipelineStage    *stage,
   ide_task_set_source_tag (task, gbp_flatpak_sdk_stage_build_async);
 
   context = ide_object_get_context (IDE_OBJECT (pipeline));
-  client = gbp_flatpak_client_from_context (context);
+  client = gbp_flatpak_client_get_default ();
 
   if (!(service = gbp_flatpak_client_get_service (client, cancellable, &error)))
     {
