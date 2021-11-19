@@ -29,6 +29,15 @@
 #include "ipc-flatpak-util.h"
 
 static void
+rm_rf (const char *dir)
+{
+  g_autofree char *escaped = g_shell_quote (dir);
+  g_autofree char *command = g_strdup_printf ("rm -rf %s", escaped);
+  g_message ("Deleting test data-dir %s", dir);
+  system (command);
+}
+
+static void
 on_runtime_added_cb (IpcFlatpakService *service,
                      GVariant          *info)
 {
@@ -182,8 +191,10 @@ add_install_cb (GObject      *object,
 }
 
 static gboolean ignore_home;
+static char *data_dir;
 static GOptionEntry main_entries[] = {
   { "ignore-home", 'i', 0, G_OPTION_ARG_NONE, &ignore_home, "Ignore --user flatpak installation" },
+  { "data-dir", 'd', 0, G_OPTION_ARG_FILENAME, &data_dir, "Set the data directory to use" },
   { 0 }
 };
 
@@ -201,7 +212,9 @@ main (gint argc,
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(IpcFlatpakService) service = NULL;
   g_autoptr(GOptionContext) context = NULL;
+  g_autoptr(GPtrArray) args = g_ptr_array_new ();
   GMainLoop *main_loop;
+  gboolean data_dir_is_temp = FALSE;
 
   context = g_option_context_new ("- test gnome-builder-flatpak daemon");
   g_option_context_add_main_entries (context, main_entries, NULL);
@@ -212,12 +225,23 @@ main (gint argc,
       return EXIT_FAILURE;
     }
 
+  g_ptr_array_add (args, (char *)"./gnome-builder-flatpak");
+
+  if (!data_dir)
+    {
+      char template[] = "data-dir-XXXXXX";
+      data_dir = g_strdup (g_mkdtemp (template));
+      data_dir_is_temp = TRUE;
+    }
+
+  g_message ("Using %s for test data directory", data_dir);
+
+  g_ptr_array_add (args, (char *)"--data-dir");
+  g_ptr_array_add (args, data_dir);
+  g_ptr_array_add (args, NULL);
+
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-  subprocess = g_subprocess_launcher_spawn (launcher, &error,
-#if 0
-                                            "valgrind", "--quiet",
-#endif
-                                            "./gnome-builder-flatpak", NULL);
+  subprocess = g_subprocess_launcher_spawnv (launcher, (const char * const *)args->pdata, &error);
 
   if (subprocess == NULL)
     g_error ("%s", error->message);
@@ -265,7 +289,7 @@ main (gint argc,
 
   if (!ignore_home)
     {
-      g_message ("Adding user installation to daemon");
+      g_message ("Adding --user installation to daemon");
       ipc_flatpak_service_call_add_installation (service,
                                                  home_install,
                                                  TRUE,
@@ -276,8 +300,12 @@ main (gint argc,
     }
   else
     {
+      g_message ("Ignoring --user installation");
       begin_test (service, main_loop);
     }
+
+  if (data_dir_is_temp)
+    rm_rf (data_dir);
 
   return EXIT_SUCCESS;
 }
