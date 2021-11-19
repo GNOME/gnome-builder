@@ -571,14 +571,18 @@ is_known_worker (GTask        *task,
               continue;
             }
 
+          g_debug ("%u remote refs found", refs->len);
+
           for (guint j = 0; j < refs->len; j++)
             {
               FlatpakRemoteRef *remote_ref = g_ptr_array_index (refs, j);
 
+#if 0
               g_debug ("Found remote ref: %s/%s/%s",
                        flatpak_ref_get_name (FLATPAK_REF (remote_ref)),
                        flatpak_ref_get_arch (FLATPAK_REF (remote_ref)),
                        flatpak_ref_get_branch (FLATPAK_REF (remote_ref)));
+#endif
 
               if (str_equal0 (ref_name, flatpak_ref_get_name (FLATPAK_REF (remote_ref))) &&
                   str_equal0 (ref_arch, flatpak_ref_get_arch (FLATPAK_REF (remote_ref))) &&
