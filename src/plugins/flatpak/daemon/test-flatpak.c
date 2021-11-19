@@ -66,6 +66,12 @@ on_runtime_added_cb (IpcFlatpakService *service,
 }
 
 static void
+free_element (gpointer data)
+{
+  g_free (*(gpointer *)data);
+}
+
+static void
 begin_test (IpcFlatpakService *service,
             GMainLoop         *main_loop)
 {
@@ -74,10 +80,14 @@ begin_test (IpcFlatpakService *service,
   g_autoptr(GVariant) runtimes = NULL;
   g_autoptr(GVariant) info = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GArray) runtime_names = NULL;
   GVariantIter iter;
   gboolean is_known = TRUE;
   gboolean ret;
   gint64 download_size = 0;
+
+  runtime_names = g_array_new (TRUE, FALSE, sizeof (char*));
+  g_array_set_clear_func (runtime_names, free_element);
 
   g_message ("Listing runtimes");
   ret = ipc_flatpak_service_call_list_runtimes_sync (service, &runtimes, NULL, &error);
@@ -98,10 +108,17 @@ begin_test (IpcFlatpakService *service,
 
       while ((value = g_variant_iter_next_value (&iter)))
         {
+          char *id = NULL;
+
           ret = runtime_variant_parse (value, &name, &arch, &branch, &sdk_name, &sdk_branch, &deploy_dir, &metadata, &sdk_extension);
           g_assert_true (ret);
+
           g_message ("  %s/%s/%s with SDK %s//%s (Extension: %d) in directory %s",
                      name, arch, branch, sdk_name, sdk_branch, sdk_extension, deploy_dir);
+
+          id = g_strdup_printf ("%s/%s/%s", name, arch, branch);
+          g_array_append_val (runtime_names, id);
+
           g_variant_unref (value);
         }
     }
@@ -121,11 +138,15 @@ begin_test (IpcFlatpakService *service,
   sizestr = g_format_size (download_size);
   g_message ("  Found, Download Size: <=%s", sizestr);
 
-  g_message ("Getting runtime info for known runtime");
-  ret = ipc_flatpak_service_call_get_runtime_sync (service, "org.gnome.Sdk/x86_64/master", &info, NULL, &error);
-  g_assert_no_error (error);
-  g_assert_true (ret);
-  g_message ("  Found");
+  for (guint i = 0; i < runtime_names->len; i++)
+    {
+      const char *id = g_array_index (runtime_names, const char *, i);
+      g_message ("Getting runtime info for known runtime");
+      ret = ipc_flatpak_service_call_get_runtime_sync (service, id, &info, NULL, &error);
+      g_assert_no_error (error);
+      g_assert_true (ret);
+      g_message ("  Found");
+    }
 
   g_message ("Resolving org.freedesktop.Sdk.Extension.rust-stable for runtime/org.gnome.Sdk/x86_64/40");
   ret = ipc_flatpak_service_call_resolve_extension_sync (service, "runtime/org.gnome.Sdk/x86_64/40", "org.freedesktop.Sdk.Extension.rust-stable", &resolved, NULL, &error);
