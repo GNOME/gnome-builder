@@ -110,7 +110,7 @@ gbp_flatpak_install_dialog_init (GbpFlatpakInstallDialog *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gtk_window_set_title (GTK_WINDOW (self), _("Install Missing SDK?"));
+  gtk_window_set_title (GTK_WINDOW (self), _("Install or Update SDK?"));
   gtk_window_set_application (GTK_WINDOW (self), GTK_APPLICATION (IDE_APPLICATION_DEFAULT));
 
   gtk_dialog_add_buttons (GTK_DIALOG (self),
