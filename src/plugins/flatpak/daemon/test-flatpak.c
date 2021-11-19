@@ -236,11 +236,13 @@ main (gint argc,
 
   g_message ("Using %s for test data directory", data_dir);
 
+  g_ptr_array_add (args, (char *)"--verbose");
   g_ptr_array_add (args, (char *)"--data-dir");
   g_ptr_array_add (args, data_dir);
   g_ptr_array_add (args, NULL);
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  g_subprocess_launcher_unsetenv (launcher, "G_MESSAGES_DEBUG");
   subprocess = g_subprocess_launcher_spawnv (launcher, (const char * const *)args->pdata, &error);
 
   if (subprocess == NULL)
