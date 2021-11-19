@@ -361,6 +361,7 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
   g_autoptr(IdeNotification) notif = NULL;
   Bootstrap *state = task_data;
+  g_autoptr(GString) debug_install = NULL;
 
   IDE_ENTRY;
 
@@ -380,6 +381,15 @@ gbp_flatpak_runtime_provider_bootstrap (IdeTask      *task,
                                  "Operation was cancelled");
       IDE_GOTO (failure);
     }
+
+  debug_install = g_string_new (NULL);
+  for (guint i = 0; i < state->to_install->len; i++)
+    g_string_append_printf (debug_install,
+                            "%s, ",
+                            (char *)g_ptr_array_index(state->to_install, i));
+  if (debug_install->len > 2)
+    g_string_truncate (debug_install, debug_install->len-2);
+  g_debug ("Needed flatpak runtimes: %s", debug_install->str);
 
   /* Filter out anything we can't find or is already installed */
   for (guint i = state->to_install->len; i > 0; i--)
