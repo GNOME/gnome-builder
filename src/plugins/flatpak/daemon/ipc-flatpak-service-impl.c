@@ -537,12 +537,17 @@ is_known_worker (GTask        *task,
     flags |= FLATPAK_QUERY_FLAGS_ALL_ARCHES;
 #endif
 
+  g_debug ("%u installs available for IsKnown query",
+           state->installs->len);
+
   for (guint z = 0; z < state->installs->len; z++)
     {
       FlatpakInstallation *install = g_ptr_array_index (state->installs, z);
 
       if (!(remotes = flatpak_installation_list_remotes (install, NULL, &error)))
-        goto finish;
+        continue;
+
+      g_debug ("%u remotes found for installation %u", remotes->len, z);
 
       for (guint i = 0; i < remotes->len; i++)
         {
@@ -550,12 +555,21 @@ is_known_worker (GTask        *task,
           const char *remote_name = flatpak_remote_get_name (remote);
           g_autoptr(GPtrArray) refs = NULL;
 
+          g_debug ("Checking remote \"%s\" with flags 0x%x", remote_name, flags);
           if (!(refs = flatpak_installation_list_remote_refs_sync_full (install, remote_name, flags, NULL, NULL)))
-            continue;
+            {
+              g_debug ("Failed to access refs, skipping");
+              continue;
+            }
 
           for (guint j = 0; j < refs->len; j++)
             {
               FlatpakRemoteRef *remote_ref = g_ptr_array_index (refs, j);
+
+              g_debug ("Found remote ref: %s/%s/%s",
+                       flatpak_ref_get_name (FLATPAK_REF (remote_ref)),
+                       flatpak_ref_get_arch (FLATPAK_REF (remote_ref)),
+                       flatpak_ref_get_branch (FLATPAK_REF (remote_ref)));
 
               if (str_equal0 (ref_name, flatpak_ref_get_name (FLATPAK_REF (remote_ref))) &&
                   str_equal0 (ref_arch, flatpak_ref_get_arch (FLATPAK_REF (remote_ref))) &&
@@ -570,6 +584,7 @@ is_known_worker (GTask        *task,
     }
 
 finish:
+  g_debug ("RuntimeIsKnown => (%d, %"G_GSIZE_FORMAT")", found, download_size);
   ipc_flatpak_service_complete_runtime_is_known (g_task_get_source_object (task),
                                                  g_steal_pointer (&state->invocation),
                                                  found,
