@@ -50,15 +50,101 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpFlatpakClient, gbp_flatpak_client, IDE_TYPE_OBJECT)
 
 static void
+gbp_flatpak_client_reset (GbpFlatpakClient *self)
+{
+  g_autoptr(GInputStream) input_stream = NULL;
+  g_autoptr(GOutputStream) output_stream = NULL;
+  g_autoptr(GIOStream) io_stream = NULL;
+  g_autoptr(GDBusConnection) service_connection = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(GError) error = NULL;
+  struct {
+    int read;
+    int write;
+  } pipe_fds[2] = {{-1, -1}, {-1, -1}};
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_CLIENT (self));
+
+  if (pipe ((int *)&pipe_fds[0]) != 0)
+    IDE_GOTO (handle_error);
+
+  if (pipe ((int *)&pipe_fds[1]) != 0)
+    IDE_GOTO (handle_error);
+
+  g_assert (pipe_fds[0].read >= 0);
+  g_assert (pipe_fds[0].write >= 0);
+  g_assert (pipe_fds[1].read >= 0);
+  g_assert (pipe_fds[1].write >= 0);
+
+  if (!g_unix_set_fd_nonblocking (pipe_fds[0].read, TRUE, &error) ||
+      !g_unix_set_fd_nonblocking (pipe_fds[0].write, TRUE, &error) ||
+      !g_unix_set_fd_nonblocking (pipe_fds[1].read, TRUE, &error) ||
+      !g_unix_set_fd_nonblocking (pipe_fds[1].write, TRUE, &error))
+    IDE_GOTO (handle_error);
+
+  input_stream = g_unix_input_stream_new (pipe_fds[0].read, TRUE);
+  pipe_fds[0].read = -1;
+
+  output_stream = g_unix_output_stream_new (pipe_fds[1].write, TRUE);
+  pipe_fds[1].write = -1;
+
+  io_stream = g_simple_io_stream_new (input_stream, output_stream);
+  service_connection = g_dbus_connection_new_sync (io_stream, NULL,
+                                                   G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
+                                                   NULL, NULL, NULL);
+  g_dbus_connection_set_exit_on_close (service_connection, FALSE);
+
+  launcher = ide_subprocess_launcher_new (0);
+  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+
+  if (ide_log_get_verbosity () > 0)
+    ide_subprocess_launcher_setenv (launcher, "G_MESSAGES_DEBUG", "all", TRUE);
+
+  if (g_getenv ("BUILDER_FLATPAK_DEBUG") != NULL)
+    {
+      ide_subprocess_launcher_setenv (launcher, "G_DEBUG", "fatal-criticals", TRUE);
+      ide_subprocess_launcher_push_argv (launcher, "gdbserver");
+      ide_subprocess_launcher_push_argv (launcher, "localhost:8888");
+    }
+
+  ide_subprocess_launcher_take_fd (launcher, pipe_fds[1].read, 3);
+  pipe_fds[1].read = -1;
+
+  ide_subprocess_launcher_take_fd (launcher, pipe_fds[0].write, 4);
+  pipe_fds[0].write = -1;
+
+  ide_subprocess_launcher_push_argv (launcher, PACKAGE_LIBEXECDIR"/gnome-builder-flatpak");
+  ide_subprocess_launcher_push_argv (launcher, "--read-fd=3");
+  ide_subprocess_launcher_push_argv (launcher, "--write-fd=4");
+
+  g_set_object (&self->connection, service_connection);
+
+  ide_object_lock (IDE_OBJECT (self));
+  if (self->supervisor != NULL)
+    ide_subprocess_supervisor_set_launcher (self->supervisor, launcher);
+  ide_object_unlock (IDE_OBJECT (self));
+
+handle_error:
+  if (error != NULL)
+    g_warning ("Error resetting daemon: %s", error->message);
+
+  if (pipe_fds[0].read != -1)  close (pipe_fds[0].read);
+  if (pipe_fds[0].write != -1) close (pipe_fds[0].write);
+  if (pipe_fds[1].read != -1)  close (pipe_fds[1].read);
+  if (pipe_fds[1].write != -1) close (pipe_fds[1].write);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
                                        IdeSubprocess           *subprocess,
                                        IdeSubprocessSupervisor *supervisor)
 {
-  g_autoptr(GIOStream) stream = NULL;
-  GOutputStream *output;
-  GInputStream *input;
   GList *queued;
-  gint fd;
 
   IDE_ENTRY;
 
@@ -69,27 +155,13 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
   ide_object_lock (IDE_OBJECT (self));
 
   g_assert (self->service == NULL);
+  g_assert (self->connection != NULL);
+
+  ide_subprocess_supervisor_set_launcher (self->supervisor, NULL);
 
   if (self->state == STATE_SPAWNING)
     self->state = STATE_RUNNING;
 
-  input = ide_subprocess_get_stdout_pipe (subprocess);
-  output = ide_subprocess_get_stdin_pipe (subprocess);
-  stream = g_simple_io_stream_new (input, output);
-
-  g_assert (G_IS_UNIX_INPUT_STREAM (input));
-  g_assert (G_IS_UNIX_OUTPUT_STREAM (output));
-
-  fd = g_unix_input_stream_get_fd (G_UNIX_INPUT_STREAM (input));
-  g_unix_set_fd_nonblocking (fd, TRUE, NULL);
-
-  fd = g_unix_output_stream_get_fd (G_UNIX_OUTPUT_STREAM (output));
-  g_unix_set_fd_nonblocking (fd, TRUE, NULL);
-
-  self->connection = g_dbus_connection_new_sync (stream, NULL,
-                                                 G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
-                                                 NULL, NULL, NULL);
-  g_dbus_connection_set_exit_on_close (self->connection, FALSE);
   g_dbus_connection_start_message_processing (self->connection);
 
   self->service = ipc_flatpak_service_proxy_new_sync (self->connection,
@@ -134,13 +206,14 @@ gbp_flatpak_client_subprocess_exited (GbpFlatpakClient        *self,
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
 
   ide_object_lock (IDE_OBJECT (self));
-
   if (self->state == STATE_RUNNING)
     self->state = STATE_SPAWNING;
-
+  g_clear_object (&self->connection);
   g_clear_object (&self->service);
-
   ide_object_unlock (IDE_OBJECT (self));
+
+  if (!ide_object_in_destruction (IDE_OBJECT (self)))
+    gbp_flatpak_client_reset (self);
 
   IDE_EXIT;
 }
@@ -154,6 +227,9 @@ gbp_flatpak_client_destroy (IdeObject *object)
   if (supervisor != NULL)
     ide_subprocess_supervisor_stop (supervisor);
 
+  g_clear_object (&self->connection);
+  g_clear_object (&self->service);
+
   IDE_OBJECT_CLASS (gbp_flatpak_client_parent_class)->destroy (object);
 }
 
@@ -161,47 +237,33 @@ static void
 gbp_flatpak_client_parent_set (IdeObject *object,
                                IdeObject *parent)
 {
-  GbpFlatpakClient *self=  (GbpFlatpakClient *)object;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  GbpFlatpakClient *self = (GbpFlatpakClient *)object;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_CLIENT (self));
   g_assert (!parent || IDE_IS_OBJECT (parent));
 
   if (parent == NULL)
-    return;
+    IDE_EXIT;
 
   ide_object_lock (IDE_OBJECT (self));
-
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDIN_PIPE);
-  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-
-  if (g_getenv ("BUILDER_FLATPAK_DEBUG") != NULL)
-    {
-      ide_subprocess_launcher_setenv (launcher, "G_DEBUG", "fatal-criticals", TRUE);
-      ide_subprocess_launcher_push_argv (launcher, "gdbserver");
-      ide_subprocess_launcher_push_argv (launcher, "localhost:8888");
-    }
-
-  ide_subprocess_launcher_push_argv (launcher, PACKAGE_LIBEXECDIR"/gnome-builder-flatpak");
-
   self->supervisor = ide_subprocess_supervisor_new ();
-  ide_subprocess_supervisor_set_launcher (self->supervisor, launcher);
-
   g_signal_connect_object (self->supervisor,
                            "spawned",
                            G_CALLBACK (gbp_flatpak_client_subprocess_spawned),
                            self,
                            G_CONNECT_SWAPPED);
-
   g_signal_connect_object (self->supervisor,
                            "exited",
                            G_CALLBACK (gbp_flatpak_client_subprocess_exited),
                            self,
                            G_CONNECT_SWAPPED);
-
   ide_object_unlock (IDE_OBJECT (self));
+
+  gbp_flatpak_client_reset (self);
+
+  IDE_EXIT;
 }
 
 static void

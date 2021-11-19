@@ -166,6 +166,7 @@ main (gint argc,
   g_autoptr(GInputStream) stdin_stream = NULL;
   g_autoptr(GIOStream) stream = NULL;
   g_autoptr(GMainLoop) main_loop = NULL;
+  g_autoptr(GOptionContext) context = NULL;
   g_autoptr(GError) error = NULL;
 
   g_set_prgname ("gnome-builder-flatpak");
@@ -183,13 +184,19 @@ main (gint argc,
 
   g_log_set_default_handler (log_func, GINT_TO_POINTER (isatty (STDOUT_FILENO)));
 
-  if (!g_unix_set_fd_nonblocking (STDIN_FILENO, TRUE, &error) ||
-      !g_unix_set_fd_nonblocking (STDOUT_FILENO, TRUE, &error))
+  context = g_option_context_new ("");
+  g_option_context_add_main_entries (context, main_entries, NULL);
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    goto error;
+
+  if (!g_unix_set_fd_nonblocking (read_fileno, TRUE, &error) ||
+      !g_unix_set_fd_nonblocking (write_fileno, TRUE, &error))
     goto error;
 
   main_loop = g_main_loop_new (NULL, FALSE);
-  stdin_stream = g_unix_input_stream_new (STDIN_FILENO, FALSE);
-  stdout_stream = g_unix_output_stream_new (STDOUT_FILENO, FALSE);
+  stdin_stream = g_unix_input_stream_new (read_fileno, FALSE);
+  stdout_stream = g_unix_output_stream_new (write_fileno, FALSE);
   stream = g_simple_io_stream_new (stdin_stream, stdout_stream);
 
   if (!(connection = create_connection (stream, main_loop, &error)))
