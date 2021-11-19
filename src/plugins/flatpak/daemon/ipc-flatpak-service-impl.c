@@ -70,6 +70,7 @@ struct _IpcFlatpakServiceImpl
   GHashTable *installs;
   GPtrArray *runtimes;
   GPtrArray *installs_ordered;
+  guint ignore_system_installations : 1;
 };
 
 static void      ipc_flatpak_service_impl_install_changed_cb (IpcFlatpakServiceImpl  *self,
@@ -93,6 +94,14 @@ static void      runtime_free                                (Runtime           
 static gboolean  runtime_equal                               (const Runtime          *a,
                                                               const Runtime          *b);
 static void      is_known_free                               (IsKnown                *state);
+
+enum {
+  PROP_0,
+  PROP_IGNORE_SYSTEM_INSTALLATIONS,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 
 static void
 resolve_extension_state_free (ResolveExtensionState *state)
@@ -1553,7 +1562,7 @@ service_iface_init (IpcFlatpakServiceIface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC_TYPE_FLATPAK_SERVICE_SKELETON,
-                         G_IMPLEMENT_INTERFACE (IPC_TYPE_FLATPAK_SERVICE, service_iface_init))
+                               G_IMPLEMENT_INTERFACE (IPC_TYPE_FLATPAK_SERVICE, service_iface_init))
 
 static void
 ipc_flatpak_service_impl_constructed (GObject *object)
@@ -1567,12 +1576,17 @@ ipc_flatpak_service_impl_constructed (GObject *object)
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->constructed (object);
 
-  ipc_flatpak_service_set_default_arch (IPC_FLATPAK_SERVICE (self), flatpak_get_default_arch ());
+  ipc_flatpak_service_set_default_arch (IPC_FLATPAK_SERVICE (self),
+                                        flatpak_get_default_arch ());
 
-  if ((installations = flatpak_get_system_installations (NULL, NULL)))
+  /* Add system installations unless disabled */
+  if (!self->ignore_system_installations)
     {
-      for (guint i = 0; i < installations->len; i++)
-        add_installation (self, g_ptr_array_index (installations, i), NULL);
+      if ((installations = flatpak_get_system_installations (NULL, NULL)))
+        {
+          for (guint i = 0; i < installations->len; i++)
+            add_installation (self, g_ptr_array_index (installations, i), NULL);
+        }
     }
 
   /* Fallback for SDKs not available elsewhere */
@@ -1601,12 +1615,60 @@ ipc_flatpak_service_impl_finalize (GObject *object)
 }
 
 static void
+ipc_flatpak_service_impl_get_property (GObject    *object,
+                                       guint       prop_id,
+                                       GValue     *value,
+                                       GParamSpec *pspec)
+{
+  IpcFlatpakServiceImpl *self = IPC_FLATPAK_SERVICE_IMPL (object);
+
+  switch (prop_id)
+    {
+    case PROP_IGNORE_SYSTEM_INSTALLATIONS:
+      g_value_set_boolean (value, self->ignore_system_installations);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ipc_flatpak_service_impl_set_property (GObject      *object,
+                                       guint         prop_id,
+                                       const GValue *value,
+                                       GParamSpec   *pspec)
+{
+  IpcFlatpakServiceImpl *self = IPC_FLATPAK_SERVICE_IMPL (object);
+
+  switch (prop_id)
+    {
+    case PROP_IGNORE_SYSTEM_INSTALLATIONS:
+      self->ignore_system_installations = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ipc_flatpak_service_impl_class_init (IpcFlatpakServiceImplClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = ipc_flatpak_service_impl_constructed;
   object_class->finalize = ipc_flatpak_service_impl_finalize;
+  object_class->get_property = ipc_flatpak_service_impl_get_property;
+  object_class->set_property = ipc_flatpak_service_impl_set_property;
+
+  properties [PROP_IGNORE_SYSTEM_INSTALLATIONS] =
+    g_param_spec_boolean ("ignore-system-installations",
+                          "Ignore System Installations",
+                          "Ignore System Installations",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -1621,7 +1683,9 @@ ipc_flatpak_service_impl_init (IpcFlatpakServiceImpl *self)
 }
 
 IpcFlatpakService *
-ipc_flatpak_service_impl_new (void)
+ipc_flatpak_service_impl_new (gboolean ignore_system_installations)
 {
-  return g_object_new (IPC_TYPE_FLATPAK_SERVICE_IMPL, NULL);
+  return g_object_new (IPC_TYPE_FLATPAK_SERVICE_IMPL,
+                       "ignore-system-installations", ignore_system_installations,
+                       NULL);
 }

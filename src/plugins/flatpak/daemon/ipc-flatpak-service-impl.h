@@ -28,6 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IpcFlatpakServiceImpl, ipc_flatpak_service_impl, IPC, FLATPAK_SERVICE_IMPL, IpcFlatpakServiceSkeleton)
 
-IpcFlatpakService *ipc_flatpak_service_impl_new (void);
+IpcFlatpakService *ipc_flatpak_service_impl_new (gboolean ignore_system_installations);
 
 G_END_DECLS

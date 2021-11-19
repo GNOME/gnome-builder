@@ -118,10 +118,12 @@ static int read_fileno = STDIN_FILENO;
 static int write_fileno = STDOUT_FILENO;
 static char *data_dir;
 static gboolean verbose;
+static gboolean ignore_system_installations;
 static GOptionEntry main_entries[] = {
   { "read-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &read_fileno },
   { "write-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &write_fileno },
   { "data-dir", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME, &data_dir },
+  { "ignore-system", 0, 0, G_OPTION_ARG_NONE, &ignore_system_installations },
   { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose },
   { 0 }
 };
@@ -216,7 +218,7 @@ main (gint argc,
 
   ipc_flatpak_repo_load (data_dir);
 
-  service = ipc_flatpak_service_impl_new ();
+  service = ipc_flatpak_service_impl_new (ignore_system_installations);
 
   if (!g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (service),
                                          connection,
