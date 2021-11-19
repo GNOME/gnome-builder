@@ -88,6 +88,7 @@ ipc_flatpak_repo_constructed (GObject *object)
   for (guint i = 0; i < G_N_ELEMENTS (remotes); i++)
     {
       g_autoptr(FlatpakRemote) remote = NULL;
+      g_autoptr(GPtrArray) refs = NULL;
 
       if (!(remote = flatpak_installation_get_remote_by_name (self->installation, remotes[i], NULL, NULL)))
         {
@@ -116,11 +117,12 @@ ipc_flatpak_repo_constructed (GObject *object)
         }
 
       g_debug ("Updating remote %s", remotes[i]);
-      if (!flatpak_installation_update_remote_sync (self->installation, remotes[i], NULL, &error))
-        {
-          g_warning ("Failed to update remote %s: %s", remotes[i], error->message);
-          g_clear_error (&error);
-        }
+      refs = flatpak_installation_list_remote_refs_sync (self->installation, remotes[i], NULL, &error);
+      if (error != NULL)
+        g_warning ("Failed to update remote %s: %s", remotes[i], error->message);
+      else
+        g_debug ("Found %u refs", refs->len);
+      g_clear_error (&error);
     }
 
 #define INSTALLATION_NAME "Installation \"gnome-builder-private\""
