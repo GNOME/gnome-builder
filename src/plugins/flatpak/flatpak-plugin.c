@@ -30,6 +30,7 @@
 #include "gbp-flatpak-aux.h"
 #include "gbp-flatpak-build-system-discovery.h"
 #include "gbp-flatpak-build-target-provider.h"
+#include "gbp-flatpak-client.h"
 #include "gbp-flatpak-config-provider.h"
 #include "gbp-flatpak-dependency-updater.h"
 #include "gbp-flatpak-pipeline-addin.h"
@@ -60,4 +61,7 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
                                               GBP_TYPE_FLATPAK_PIPELINE_ADDIN);
 
   gbp_flatpak_aux_init ();
+
+  /* Load the flatpak client early */
+  (void)gbp_flatpak_client_get_default ();
 }
