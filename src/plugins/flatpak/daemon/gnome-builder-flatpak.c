@@ -150,9 +150,11 @@ log_func (const gchar    *log_domain,
 
 static int read_fileno = STDIN_FILENO;
 static int write_fileno = STDOUT_FILENO;
+static char *data_dir;
 static GOptionEntry main_entries[] = {
   { "read-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &read_fileno },
   { "write-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &write_fileno },
+  { "data-dir", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME, &data_dir },
   { 0 }
 };
 
@@ -205,8 +207,7 @@ main (gint argc,
   g_dbus_connection_set_exit_on_close (connection, FALSE);
   g_signal_connect_swapped (connection, "closed", G_CALLBACK (g_main_loop_quit), main_loop);
 
-  /* Setup private flatpak installation immediately */
-  (void)ipc_flatpak_repo_get_default ();
+  ipc_flatpak_repo_load (data_dir);
 
   service = ipc_flatpak_service_impl_new ();
 
