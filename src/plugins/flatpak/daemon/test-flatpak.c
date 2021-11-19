@@ -191,9 +191,11 @@ add_install_cb (GObject      *object,
 }
 
 static gboolean ignore_home;
+static gboolean ignore_system;
 static char *data_dir;
 static GOptionEntry main_entries[] = {
   { "ignore-home", 'i', 0, G_OPTION_ARG_NONE, &ignore_home, "Ignore --user flatpak installation" },
+  { "ignore-system", 's', 0, G_OPTION_ARG_NONE, &ignore_system, "Ignore --system flatpak installation" },
   { "data-dir", 'd', 0, G_OPTION_ARG_FILENAME, &data_dir, "Set the data directory to use" },
   { 0 }
 };
@@ -236,6 +238,8 @@ main (gint argc,
 
   g_message ("Using %s for test data directory", data_dir);
 
+  if (ignore_system)
+    g_ptr_array_add (args, (char *)"--ignore-system");
   g_ptr_array_add (args, (char *)"--verbose");
   g_ptr_array_add (args, (char *)"--data-dir");
   g_ptr_array_add (args, data_dir);
