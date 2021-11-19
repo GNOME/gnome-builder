@@ -114,6 +114,18 @@ log_level_str_with_color (GLogLevelFlags log_level)
     }
 }
 
+static int read_fileno = STDIN_FILENO;
+static int write_fileno = STDOUT_FILENO;
+static char *data_dir;
+static gboolean verbose;
+static GOptionEntry main_entries[] = {
+  { "read-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &read_fileno },
+  { "write-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &write_fileno },
+  { "data-dir", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME, &data_dir },
+  { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose },
+  { 0 }
+};
+
 static void
 log_func (const gchar    *log_domain,
           GLogLevelFlags  flags,
@@ -125,8 +137,10 @@ log_func (const gchar    *log_domain,
   struct tm tt;
   time_t t;
   char ftime[32];
+  char *str;
+  int fd;
 
-  if (g_log_writer_default_would_drop (flags, log_domain))
+  if (!verbose && flags < G_LOG_LEVEL_MESSAGE)
     return;
 
   if (user_data)
@@ -139,24 +153,17 @@ log_func (const gchar    *log_domain,
   tt = *localtime (&t);
   strftime (ftime, sizeof (ftime), "%H:%M:%S", &tt);
 
-  g_print ("%s.%04d  %40s[% 5d]: %s: %s\n",
-           ftime,
-           (gint)((now % G_USEC_PER_SEC) / 100L),
-           log_domain,
-           log_get_thread (),
-           level,
-           message);
+  str = g_strdup_printf ("%s.%04d  %40s[% 5d]: %s: %s\n",
+                         ftime,
+                         (gint)((now % G_USEC_PER_SEC) / 100L),
+                         log_domain,
+                         log_get_thread (),
+                         level,
+                         message);
+  fd = write_fileno == STDOUT_FILENO ? STDERR_FILENO : STDOUT_FILENO;
+  write (fd, str, strlen (str));
+  g_free (str);
 }
-
-static int read_fileno = STDIN_FILENO;
-static int write_fileno = STDOUT_FILENO;
-static char *data_dir;
-static GOptionEntry main_entries[] = {
-  { "read-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &read_fileno },
-  { "write-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &write_fileno },
-  { "data-dir", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME, &data_dir },
-  { 0 }
-};
 
 gint
 main (gint argc,
@@ -171,6 +178,8 @@ main (gint argc,
   g_autoptr(GOptionContext) context = NULL;
   g_autoptr(GError) error = NULL;
 
+  g_log_set_default_handler (log_func, GINT_TO_POINTER (isatty (STDOUT_FILENO)));
+
   g_set_prgname ("gnome-builder-flatpak");
   g_set_application_name ("gnome-builder-flatpak");
 
@@ -183,8 +192,6 @@ main (gint argc,
 #endif
 
   signal (SIGPIPE, SIG_IGN);
-
-  g_log_set_default_handler (log_func, GINT_TO_POINTER (isatty (STDOUT_FILENO)));
 
   context = g_option_context_new ("");
   g_option_context_add_main_entries (context, main_entries, NULL);
