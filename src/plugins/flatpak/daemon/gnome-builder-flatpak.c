@@ -122,6 +122,7 @@ main (gint argc,
                                          &error))
     goto error;
 
+  g_debug ("Message processing started.");
   g_dbus_connection_start_message_processing (connection);
   g_main_loop_run (main_loop);
 

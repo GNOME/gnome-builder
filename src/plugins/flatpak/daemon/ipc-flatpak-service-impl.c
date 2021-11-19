@@ -458,6 +458,8 @@ ipc_flatpak_service_impl_add_installation (IpcFlatpakService     *service,
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
   g_assert (path != NULL);
 
+  g_debug ("AddInstallation(%s, is_user=%d)", path, is_user);
+
   file = g_file_new_for_path (path);
 
   if (!g_hash_table_contains (self->installs, file))
@@ -481,6 +483,8 @@ ipc_flatpak_service_impl_list_runtimes (IpcFlatpakService     *service,
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+
+  g_debug ("ListRuntimes()");
 
   g_variant_builder_init (&builder, RUNTIME_ARRAY_VARIANT_TYPE);
 
@@ -591,6 +595,8 @@ ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
   const char *ref_arch;
   const char *ref_branch;
   IsKnown *state;
+
+  g_debug ("RuntimeIsKnown(%s)", name);
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
@@ -1058,6 +1064,7 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   g_autoptr(IpcFlatpakTransfer) transfer = NULL;
   g_autoptr(GArray) refs = NULL;
   g_autoptr(GTask) task = NULL;
+  g_autofree char *debug_str = NULL;
   GDBusConnection *connection;
   InstallState *state;
 
@@ -1066,6 +1073,10 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   g_assert (full_ref_names != NULL);
   g_assert (transfer_path != NULL);
   g_assert (parent_window != NULL);
+
+  debug_str = g_strjoinv (", ", (char **)full_ref_names);
+  g_debug ("Install([%s], if_not_exists=%d, transfer=%s, parent_window=%s)",
+           debug_str, if_not_exists, transfer_path, parent_window);
 
   refs = g_array_new (FALSE, FALSE, sizeof (InstallRef));
   g_array_set_clear_func (refs, clear_install_ref);
@@ -1432,6 +1443,8 @@ ipc_flatpak_service_impl_resolve_extension (IpcFlatpakService     *service,
   g_assert (sdk != NULL);
   g_assert (extension != NULL);
 
+  g_debug ("ResolveExtension(%s, %s)", sdk, extension);
+
   if (g_str_has_prefix (sdk, "runtime/"))
     sdk += strlen ("runtime/");
 
@@ -1470,6 +1483,8 @@ ipc_flatpak_service_impl_get_runtime (IpcFlatpakService     *service,
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
   g_assert (runtime_id != NULL);
+
+  g_debug ("GetRuntime(%s)", runtime_id);
 
   /* Homogenize names into runtime/name/arch/branch */
   if (g_str_has_prefix (runtime_id, "runtime/"))
