@@ -57,14 +57,11 @@ on_runtime_added_cb (IpcFlatpakService *service,
 }
 
 static void
-add_install_cb (GObject      *object,
-                GAsyncResult *result,
-                gpointer      user_data)
+begin_test (IpcFlatpakService *service,
+            GMainLoop         *main_loop)
 {
-  IpcFlatpakService *service = (IpcFlatpakService *)object;
   g_autofree gchar *sizestr = NULL;
   g_autofree gchar *resolved = NULL;
-  g_autoptr(GMainLoop) main_loop = user_data;
   g_autoptr(GVariant) runtimes = NULL;
   g_autoptr(GVariant) info = NULL;
   g_autoptr(GError) error = NULL;
@@ -72,11 +69,6 @@ add_install_cb (GObject      *object,
   gboolean is_known = TRUE;
   gboolean ret;
   gint64 download_size = 0;
-
-  ret = ipc_flatpak_service_call_add_installation_finish (service, result, &error);
-  g_assert_no_error (error);
-  g_assert_true (ret);
-  g_message ("Installation added");
 
   g_message ("Listing runtimes");
   ret = ipc_flatpak_service_call_list_runtimes_sync (service, &runtimes, NULL, &error);
@@ -171,6 +163,30 @@ add_install_cb (GObject      *object,
   g_main_loop_quit (main_loop);
 }
 
+static void
+add_install_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  IpcFlatpakService *service = (IpcFlatpakService *)object;
+  g_autoptr(GMainLoop) main_loop = user_data;
+  g_autoptr(GError) error = NULL;
+  gboolean ret;
+
+  ret = ipc_flatpak_service_call_add_installation_finish (service, result, &error);
+  g_assert_no_error (error);
+  g_assert_true (ret);
+  g_message ("Installation added");
+
+  begin_test (service, main_loop);
+}
+
+static gboolean ignore_home;
+static GOptionEntry main_entries[] = {
+  { "ignore-home", 'i', 0, G_OPTION_ARG_NONE, &ignore_home, "Ignore --user flatpak installation" },
+  { 0 }
+};
+
 gint
 main (gint argc,
       gchar *argv[])
@@ -184,7 +200,17 @@ main (gint argc,
   g_autoptr(GSubprocess) subprocess = NULL;
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(IpcFlatpakService) service = NULL;
+  g_autoptr(GOptionContext) context = NULL;
   GMainLoop *main_loop;
+
+  context = g_option_context_new ("- test gnome-builder-flatpak daemon");
+  g_option_context_add_main_entries (context, main_entries, NULL);
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      return EXIT_FAILURE;
+    }
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   subprocess = g_subprocess_launcher_spawn (launcher, &error,
@@ -237,15 +263,21 @@ main (gint argc,
                     G_CALLBACK (on_runtime_added_cb),
                     NULL);
 
-  g_message ("Adding user installation to daemon");
-  ipc_flatpak_service_call_add_installation (service,
-                                             home_install,
-                                             TRUE,
-                                             NULL,
-                                             add_install_cb,
-                                             g_main_loop_ref (main_loop));
-
-  g_main_loop_run (main_loop);
+  if (!ignore_home)
+    {
+      g_message ("Adding user installation to daemon");
+      ipc_flatpak_service_call_add_installation (service,
+                                                 home_install,
+                                                 TRUE,
+                                                 NULL,
+                                                 add_install_cb,
+                                                 g_main_loop_ref (main_loop));
+      g_main_loop_run (main_loop);
+    }
+  else
+    {
+      begin_test (service, main_loop);
+    }
 
   return EXIT_SUCCESS;
 }
