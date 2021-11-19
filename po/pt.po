@@ -1,25 +1,25 @@
 # Portuguese translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
+#
 # Tiago Santos <tiagofsantos81@sapo.pt>, 2015 - 2016.
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2015.
 # Bruno Ramalhete <bram.512@gmail.com>, 2016.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2021.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-11-08 21:18+0000\n"
-"PO-Revision-Date: 2021-11-13 15:44+0000\n"
+"POT-Creation-Date: 2021-11-19 06:18+0000\n"
+"PO-Revision-Date: 2021-11-19 18:17+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
-"Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
+"Language-Team: Portuguese <kde-i18n-doc@kde.org>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Lokalize 21.08.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -883,7 +883,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta utilizando as preferências"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5025
+#: src/libide/sourceview/ide-source-view.c:5026
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -905,7 +905,7 @@ msgstr "Renomear"
 msgid "unsaved file %u"
 msgstr "ficheiro não guardado %u"
 
-#: src/libide/code/ide-buffer.c:3493
+#: src/libide/code/ide-buffer.c:3635
 msgid "The current language lacks a symbol resolver."
 msgstr "A linguagem atual tem um símbolo de solução em falta."
 
@@ -943,7 +943,7 @@ msgstr "Sem Título"
 #: src/libide/gui/ide-workbench.c:1410
 #: src/plugins/buildui/gbp-buildui-log-pane.c:284
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:316
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
 #: src/plugins/testui/gbp-test-output-panel.c:67
 msgid "_Cancel"
 msgstr "_Cancelar"
@@ -1712,8 +1712,9 @@ msgstr "Imprimir informação da versão e sair"
 
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:68
-msgid "Increase log verbosity"
-msgstr "Aumenta a verbosidade do registo"
+#| msgid "Increase log verbosity"
+msgid "Increase log verbosity (may be repeated)"
+msgstr "Aumenta a verbosidade do registo (pode ser repetido)"
 
 #: src/libide/gui/ide-application-command-line.c:118
 #, c-format
@@ -2853,7 +2854,7 @@ msgstr[0] "A instalar %u pacote"
 msgstr[1] "A instalar %u pacotes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1495
+#: src/libide/lsp/ide-lsp-client.c:1442
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falha ao inicializar o servidor de linguagem: %s"
@@ -2959,31 +2960,31 @@ msgstr "_Reduzir"
 msgid "_Reset"
 msgstr "_Repor"
 
-#: src/libide/sourceview/ide-source-view.c:4439
+#: src/libide/sourceview/ide-source-view.c:4440
 #, c-format
 msgid "Insert “%s”"
 msgstr "Inserir \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4441
+#: src/libide/sourceview/ide-source-view.c:4442
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substituir \"%s\" por \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4567
+#: src/libide/sourceview/ide-source-view.c:4568
 msgid "Apply Fix-It"
 msgstr "Aplicar Reparar"
 
-#: src/libide/sourceview/ide-source-view.c:5024
+#: src/libide/sourceview/ide-source-view.c:5025
 msgid "Rename symbol"
 msgstr "Renomeia o símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5260
+#: src/libide/sourceview/ide-source-view.c:5404
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5286
+#: src/libide/sourceview/ide-source-view.c:5430
 msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
@@ -4632,15 +4633,15 @@ msgstr ""
 "Ativa o uso do ESLint para localizar diagnósticos adicionais em programa "
 "JavaScript. Isto pode resultar na execução do código de seu projeto."
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:836
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
 msgid "Installation failed"
 msgstr "Falha na instalação"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:846
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
 msgid "Installation complete"
 msgstr "Instalação concluída"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:328
+#: src/plugins/flatpak/gbp-flatpak-client.c:418
 #: src/plugins/git/gbp-git-client.c:328
 msgid "The client has been closed"
 msgstr "O cliente foi fechado"
@@ -4665,8 +4666,9 @@ msgid "Network is not available, skipping downloads"
 msgstr "Rede não disponível, a ignorar as transferências"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
-msgid "Install Missing SDK?"
-msgstr "Instalar o SDK em falta?"
+#| msgid "Install Missing SDK?"
+msgid "Install or Update SDK?"
+msgstr "Instalar ou atualizar o SDK?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
@@ -4728,11 +4730,11 @@ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:414
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
 msgid "Installing Necessary SDKs"
 msgstr "Instalação de SDKs necessários"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:415
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4757,7 +4759,7 @@ msgstr ""
 "O Builder está a atualizar conjuntos de desenvolvimento de software "
 "necessários para a compilação da aplicação."
 
-#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:221
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
 msgstr "A atualizar o SDK Runtime"
 
