@@ -393,21 +393,10 @@ install_reload (IpcFlatpakServiceImpl *self,
 }
 
 static gboolean
-has_private_repo (GPtrArray *installs)
+is_private_install (const Install *install)
 {
-  if (installs == NULL)
-    return FALSE;
-
-  for (guint i = installs->len; i > 0; i--)
-    {
-      Install *install = g_ptr_array_index (installs, i-1);
-
-      if (g_strcmp0 ("gnome-builder-private",
-                     flatpak_installation_get_id (install->installation)) == 0)
-        return TRUE;
-    }
-
-  return FALSE;
+  return g_strcmp0 ("gnome-builder-private",
+                    flatpak_installation_get_id (install->installation)) == 0;
 }
 
 static gboolean
@@ -417,6 +406,7 @@ add_installation (IpcFlatpakServiceImpl  *self,
 {
   g_autoptr(GFile) file = NULL;
   Install *install;
+  int position = -1;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_INSTALLATION (installation));
@@ -426,19 +416,29 @@ add_installation (IpcFlatpakServiceImpl  *self,
   if (!(install = install_new (self, installation, error)))
     return FALSE;
 
-  install_reload (self, install);
+  for (guint i = 0; i < self->installs_ordered->len; i++)
+    {
+      const Install *other = g_ptr_array_index (self->installs_ordered, i);
 
-  /* Keep our private repo at the tail of the array */
-  if (has_private_repo (self->installs_ordered))
-    g_ptr_array_insert (self->installs_ordered,
-                        self->installs_ordered->len - 1,
-                        install);
+      if ((flatpak_installation_get_is_user (install->installation) &&
+           !flatpak_installation_get_is_user (other->installation)) ||
+          is_private_install (other))
+        {
+          position = i;
+          break;
+        }
+    }
+
+  if (position > -1)
+    g_ptr_array_insert (self->installs_ordered, position, install);
   else
     g_ptr_array_add (self->installs_ordered, install);
 
   g_hash_table_insert (self->installs,
                        g_steal_pointer (&file),
-                       g_steal_pointer (&install));
+                       install);
+
+  install_reload (self, install);
 
   return TRUE;
 }
