@@ -44,12 +44,11 @@ struct _GbpGladeFrameAddin
 static void frame_addin_iface_init (IdeFrameAddinInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGladeFrameAddin, gbp_glade_frame_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_FRAME_ADDIN,
-                                                frame_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_FRAME_ADDIN, frame_addin_iface_init))
 
 static void
 gbp_glade_frame_addin_selection_changed_cb (GbpGladeFrameAddin *self,
-                                                   GladeProject             *project)
+                                            GladeProject       *project)
 {
   GList *selection = NULL;
 
