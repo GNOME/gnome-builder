@@ -264,6 +264,26 @@ count_chars (const gchar *str,
   return count;
 }
 
+static gboolean
+application_id_is_valid (const char *app_id)
+{
+  /* g_application_id_is_valid() is necessary, but also not restrictive
+   * enough for new application ids that we need to work with flatpak.
+   */
+  if (!g_application_id_is_valid (app_id))
+    return FALSE;
+
+  /* We need at least a.b.c */
+  if (count_chars (app_id, '.') < 2)
+    return FALSE;
+
+  /* - isn't allowed for Flatpak application ids */
+  if (strchr (app_id, '-') != NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 gbp_create_project_surface_app_id_changed (GbpCreateProjectSurface *self,
                                           GtkEntry               *entry)
@@ -275,21 +295,16 @@ gbp_create_project_surface_app_id_changed (GbpCreateProjectSurface *self,
 
   app_id = gtk_entry_get_text (entry);
 
-  if (!(ide_str_empty0 (app_id) ||
-        (g_application_id_is_valid (app_id) && count_chars (app_id, '.') >= 2)))
-    {
-      g_object_set (self->app_id_entry,
-                    "secondary-icon-name", "dialog-warning-symbolic",
-                    "tooltip-text", _("Application ID is not valid."),
-                    NULL);
-    }
+  if (app_id[0] && !application_id_is_valid (app_id))
+    g_object_set (self->app_id_entry,
+                  "secondary-icon-name", "dialog-warning-symbolic",
+                  "tooltip-text", _("Application ID is not valid."),
+                  NULL);
   else
-    {
-      g_object_set (self->app_id_entry,
-                    "secondary-icon-name", NULL,
-                    "tooltip-text", NULL,
-                    NULL);
-    }
+    g_object_set (self->app_id_entry,
+                  "secondary-icon-name", NULL,
+                  "tooltip-text", NULL,
+                  NULL);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
@@ -536,8 +551,7 @@ gbp_create_project_surface_is_ready (GbpCreateProjectSurface *self)
     return FALSE;
 
   app_id = gtk_entry_get_text (self->app_id_entry);
-
-  if (!(ide_str_empty0 (app_id) || g_application_id_is_valid (app_id)))
+  if (app_id[0] && !application_id_is_valid (app_id))
     return FALSE;
 
   language = dzl_radio_box_get_active_id (self->project_language_chooser);
