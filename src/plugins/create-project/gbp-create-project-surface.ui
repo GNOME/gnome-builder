@@ -97,7 +97,7 @@
                         <property name="wrap">true</property>
                         <property name="visible">true</property>
                         <property name="max-width-chars">60</property>
-                        <property name="label" translatable="yes">The Application ID is a reverse domain-name identifier used to uniquely identify your application such as “org.gnome.Builder”.</property>
+                        <property name="label" translatable="yes">The Application ID is a reverse domain-name identifier used to uniquely identify your application such as “org.gnome.Builder” and may not contain dashes.</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
