@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+#include <fcntl.h>
+#include <glib/gstdio.h>
+
 #include <libide-gui.h>
 
 #include "gbp-glade-page.h"
@@ -70,6 +73,36 @@ find_most_recent_editor (GbpGladeWorkbenchAddin *self)
 }
 
 static gboolean
+is_gtk4_template (GFile *file)
+{
+  g_autofree char *page = NULL;
+  gssize len;
+  int fd;
+
+  if (!g_file_is_native (file))
+    return FALSE;
+
+  fd = g_open (g_file_peek_path (file), O_RDONLY, 0);
+  if (fd == -1)
+    return FALSE;
+
+  page = g_malloc (4096);
+  len = read (fd, page, 4096);
+  close (fd);
+
+  if (len > 0)
+    {
+      page[MIN (len, 4095)] = 0;
+
+      if (strstr (page, "<requires lib=\"gtk\" version=\"4.0\"/>") != NULL ||
+          strstr (page, "<requires lib='gtk' version='4.0'/>") != NULL)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gbp_glade_workbench_addin_can_open (IdeWorkbenchAddin *addin,
                                     GFile             *file,
                                     const gchar       *content_type,
@@ -97,6 +130,12 @@ gbp_glade_workbench_addin_can_open (IdeWorkbenchAddin *addin,
       g_strcmp0 (content_type, "application/x-designer") == 0 ||
       (path && g_str_has_suffix (path, ".ui")))
     {
+      /* If the file is local, try to sniff the first page on disk so that
+       * we can ensure it is not a GTK 4 template.
+       */
+      if (is_gtk4_template (file))
+        return FALSE;
+
       /* Be lower priority than editor, because glade does not currently
        * handle templates well enough currently.
        */
