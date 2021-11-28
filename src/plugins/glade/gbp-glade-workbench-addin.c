@@ -94,8 +94,8 @@ is_gtk4_template (GFile *file)
     {
       page[MIN (len, 4095)] = 0;
 
-      if (strstr (page, "<requires lib=\"gtk\" version=\"4.0\"/>") != NULL ||
-          strstr (page, "<requires lib='gtk' version='4.0'/>") != NULL)
+      if (strstr (page, "<requires lib=\"gtk\" version=\"4") != NULL ||
+          strstr (page, "<requires lib='gtk' version='4") != NULL)
         return TRUE;
     }
 
