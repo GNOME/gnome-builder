@@ -38,7 +38,9 @@ struct _GbpGladeFrameAddin
   GtkButton      *toggle_source;
   GladeInspector *inspector;
   DzlSignalGroup *project_signals;
+  DzlSignalGroup *buffer_signals;
   IdePage        *view;
+  guint           queued_update;
 };
 
 static void frame_addin_iface_init (IdeFrameAddinInterface *iface);
@@ -91,16 +93,68 @@ gbp_glade_frame_addin_selection_changed_cb (GbpGladeFrameAddin *self,
   gtk_widget_hide (GTK_WIDGET (self->image));
 }
 
+static gboolean
+is_gtk4_template (IdeBuffer *buffer)
+{
+  g_autoptr(GBytes) bytes = ide_buffer_dup_content (buffer);
+  const char *data = (const char *)g_bytes_get_data (bytes, NULL);
+
+  if (strstr (data, "<requires lib=\"gtk\" version=\"4") != NULL ||
+      strstr (data, "<requires lib='gtk' version='4") != NULL)
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+gbp_glade_frame_addin_update_button (GbpGladeFrameAddin *self)
+{
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
+
+  self->queued_update = 0;
+
+  if (IDE_IS_EDITOR_PAGE (self->view))
+    {
+      IdeEditorPage *page = IDE_EDITOR_PAGE (self->view);
+      IdeBuffer *buffer = ide_editor_page_get_buffer (page);
+      GFile *file = ide_buffer_get_file (buffer);
+      g_autofree gchar *name = g_file_get_basename (file);
+      gboolean visible = g_str_has_suffix (name, ".ui") && !is_gtk4_template (buffer);
+
+      if (visible != gtk_widget_get_visible (GTK_WIDGET (self->toggle_source)))
+        gtk_widget_set_visible (GTK_WIDGET (self->toggle_source), visible);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gbp_glade_frame_addin_queue_update (GbpGladeFrameAddin *self)
+{
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
+
+  if (self->queued_update == 0)
+    self->queued_update = g_timeout_add_seconds (1, (GSourceFunc)gbp_glade_frame_addin_update_button, self);
+}
+
+static void
+gbp_glade_frame_addin_buffer_changed_cb (GbpGladeFrameAddin *self,
+                                         IdeBuffer          *buffer)
+{
+  g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  gbp_glade_frame_addin_queue_update (self);
+}
+
 static void
 gbp_glade_frame_addin_dispose (GObject *object)
 {
   GbpGladeFrameAddin *self = (GbpGladeFrameAddin *)object;
 
-  if (self->project_signals != NULL)
-    {
-      dzl_signal_group_set_target (self->project_signals, NULL);
-      g_clear_object (&self->project_signals);
-    }
+  g_clear_handle_id (&self->queued_update, g_source_remove);
+  g_clear_object (&self->project_signals);
+  g_clear_object (&self->buffer_signals);
 
   G_OBJECT_CLASS (gbp_glade_frame_addin_parent_class)->dispose (object);
 }
@@ -116,8 +170,14 @@ gbp_glade_frame_addin_class_init (GbpGladeFrameAddinClass *klass)
 static void
 gbp_glade_frame_addin_init (GbpGladeFrameAddin *self)
 {
-  self->project_signals = dzl_signal_group_new (GLADE_TYPE_PROJECT);
+  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  dzl_signal_group_connect_object (self->buffer_signals,
+                                   "changed",
+                                   G_CALLBACK (gbp_glade_frame_addin_buffer_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
+  self->project_signals = dzl_signal_group_new (GLADE_TYPE_PROJECT);
   dzl_signal_group_connect_object (self->project_signals,
                                    "selection-changed",
                                    G_CALLBACK (gbp_glade_frame_addin_selection_changed_cb),
@@ -353,15 +413,18 @@ gbp_glade_frame_addin_unload (IdeFrameAddin *addin,
 
 static void
 gbp_glade_frame_addin_set_view (IdeFrameAddin *addin,
-                                       IdePage       *view)
+                                IdePage       *view)
 {
   GbpGladeFrameAddin *self = (GbpGladeFrameAddin *)addin;
   GladeProject *project = NULL;
+  IdeBuffer *buffer_target = NULL;
 
   g_assert (GBP_IS_GLADE_FRAME_ADDIN (self));
   g_assert (!view || IDE_IS_PAGE (view));
 
   self->view = view;
+
+  g_clear_handle_id (&self->queued_update, g_source_remove);
 
   /*
    * Update related widgetry from view change.
@@ -394,7 +457,9 @@ gbp_glade_frame_addin_set_view (IdeFrameAddin *addin,
           gtk_button_set_label (self->toggle_source, _("_View Design"));
           gtk_widget_set_tooltip_text (GTK_WIDGET (self->toggle_source),
                                        _("Switch to UI designer"));
-          gtk_widget_show (GTK_WIDGET (self->toggle_source));
+          gtk_widget_set_visible (GTK_WIDGET (self->toggle_source),
+                                  !is_gtk4_template (buffer));
+          buffer_target = buffer;
         }
     }
   else if (GBP_IS_GLADE_PAGE (view))
@@ -404,6 +469,8 @@ gbp_glade_frame_addin_set_view (IdeFrameAddin *addin,
                                    _("Switch to source code editor"));
       gtk_widget_show (GTK_WIDGET (self->toggle_source));
     }
+
+  dzl_signal_group_set_target (self->buffer_signals, buffer_target);
 }
 
 static void
