@@ -146,7 +146,7 @@ add_buttons (GbpEditorWorkspaceAddin *self,
   g_assert (IDE_IS_HEADER_BAR (header));
 
   self->new_button = g_object_new (DZL_TYPE_MENU_BUTTON,
-                                   "icon-name", "document-open-symbolic",
+                                   "icon-name", "list-add-symbolic",
                                    "focus-on-click", FALSE,
                                    "show-arrow", TRUE,
                                    "show-icons", FALSE,
