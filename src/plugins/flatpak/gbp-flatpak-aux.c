@@ -26,7 +26,6 @@
 
 #define SYSTEM_FONTS_DIR       "/usr/share/fonts"
 #define SYSTEM_LOCAL_FONTS_DIR "/usr/local/share/fonts"
-#define HOST_PREFIX            "/var/run/host"
 
 /* dirs are reversed from flatpak because we will always have
  * /var/cache/fontconfig inside of flatpak. We really need another
