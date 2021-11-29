@@ -54,6 +54,8 @@ G_DEFINE_TYPE_EXTENDED (GbpEditorWorkbenchAddin, gbp_editor_workbench_addin, G_T
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,
                                                ide_workbench_addin_iface_init))
 
+static GHashTable *overrides;
+
 static void
 open_file_task_data_free (gpointer data)
 {
@@ -66,6 +68,8 @@ open_file_task_data_free (gpointer data)
 static void
 gbp_editor_workbench_addin_class_init (GbpEditorWorkbenchAddinClass *klass)
 {
+  overrides = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_add (overrides, (char *)".dts"); /* #1572 */
 }
 
 static void
@@ -104,7 +108,8 @@ gbp_editor_workbench_addin_can_open (IdeWorkbenchAddin *addin,
                                      const gchar       *content_type,
                                      gint              *priority)
 {
-  const gchar *path;
+  const char *path;
+  const char *suffix;
 
   g_assert (GBP_IS_EDITOR_WORKBENCH_ADDIN (addin));
   g_assert (G_IS_FILE (file));
@@ -125,6 +130,11 @@ gbp_editor_workbench_addin_can_open (IdeWorkbenchAddin *addin,
       if (language != NULL)
         return TRUE;
     }
+
+  /* Escape hatch in case shared-mime-info fails us */
+  suffix = strrchr (path, '.');
+  if (suffix && g_hash_table_contains (overrides, suffix))
+    return TRUE;
 
   if (content_type != NULL)
     {
