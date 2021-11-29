@@ -1183,6 +1183,9 @@ ide_pipeline_load_cb (IdleLoadState *state)
       IdePipelineAddin *addin = g_ptr_array_index (state->addins, state->addins->len - 1);
       gint64 begin, end;
 
+      /* Keep in sync with ide_pipeline_extension_added() */
+      g_object_set_data (G_OBJECT (addin), "HAS_LOADED", GINT_TO_POINTER (1));
+
       begin = g_get_monotonic_time ();
       ide_pipeline_addin_load (addin, state->self);
       end = g_get_monotonic_time ();
@@ -1357,7 +1360,7 @@ ide_pipeline_unload (IdePipeline *self)
 
   g_assert (IDE_IS_PIPELINE (self));
 
-  g_clear_object (&self->addins);
+  ide_clear_and_destroy_object (&self->addins);
 
   IDE_EXIT;
 }
