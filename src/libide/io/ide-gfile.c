@@ -1060,3 +1060,24 @@ _ide_g_file_query_exists_on_host (GFile        *file,
 
   return ide_subprocess_wait_check (subprocess, cancellable, NULL);
 }
+
+gboolean
+_ide_path_query_exists_on_host (const char *path)
+{
+  g_autofree char *locally = NULL;
+  g_autoptr(GFile) file = NULL;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (!ide_is_flatpak ())
+    return g_file_test (path, G_FILE_TEST_EXISTS);
+
+  /* First try via /var/run/host */
+  locally = g_build_filename ("/var/run/host", path, NULL);
+  if (g_file_test (locally, G_FILE_TEST_EXISTS))
+    return TRUE;
+
+  /* Fallback to using GFile functionality */
+  file = g_file_new_for_path (path);
+  return _ide_g_file_query_exists_on_host (file, NULL);
+}
