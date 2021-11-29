@@ -25,6 +25,8 @@
 #include "gbp-flatpak-aux.h"
 
 #define SYSTEM_FONTS_DIR       "/usr/share/fonts"
+#define SYSTEM_LOCAL_FONTS_DIR "/usr/local/share/fonts"
+#define HOST_PREFIX            "/var/run/host"
 
 /* dirs are reversed from flatpak because we will always have
  * /var/cache/fontconfig inside of flatpak. We really need another
@@ -85,7 +87,7 @@ gbp_flatpak_aux_init (void)
                    "<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n"
                    "<fontconfig>\n");
 
-  if (g_file_test (SYSTEM_FONTS_DIR, G_FILE_TEST_EXISTS))
+  if (_ide_path_query_exists_on_host (SYSTEM_FONTS_DIR))
     {
       /* TODO: How can we *force* this read-only? */
       g_ptr_array_add (maps, g_strdup ("--bind-mount=/run/host/fonts=" SYSTEM_FONTS_DIR));
@@ -94,7 +96,7 @@ gbp_flatpak_aux_init (void)
                               SYSTEM_FONTS_DIR);
     }
 
-  if (g_file_test ("/usr/local/share/fonts", G_FILE_TEST_EXISTS))
+  if (_ide_path_query_exists_on_host (SYSTEM_LOCAL_FONTS_DIR))
     {
       /* TODO: How can we *force* this read-only? */
       g_ptr_array_add (maps, g_strdup ("--bind-mount=/run/host/local-fonts=/usr/local/share/fonts"));
