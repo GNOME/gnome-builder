@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-11-19 06:18+0000\n"
-"PO-Revision-Date: 2021-11-19 16:54+0200\n"
+"POT-Creation-Date: 2021-11-28 18:48+0000\n"
+"PO-Revision-Date: 2021-11-29 09:06+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1718,7 +1718,6 @@ msgstr "Вивести інформацію про версію і вийти"
 
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:68
-#| msgid "Increase log verbosity"
 msgid "Increase log verbosity (may be repeated)"
 msgstr "Збільшити докладність журналу (можливі повторення)"
 
@@ -4016,16 +4015,16 @@ msgstr "Уже існує каталог із такою назвою"
 msgid "Your project will be created within %s."
 msgstr "Ваш проєкт буде створено у %s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:283
+#: src/plugins/create-project/gbp-create-project-surface.c:301
 msgid "Application ID is not valid."
 msgstr "Ідентифікатор програми є некоректним."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:627
+#: src/plugins/create-project/gbp-create-project-surface.c:641
 msgctxt "title"
 msgid "Start New Project"
 msgstr "Створити проєкт"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:796
+#: src/plugins/create-project/gbp-create-project-surface.c:810
 msgid "A failure occurred while initializing version control"
 msgstr "Під час ініціювання системи керування версіями сталася помилка"
 
@@ -4048,13 +4047,17 @@ msgid "Application ID"
 msgstr "Ідентифікатор програми"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:100
+#| msgid ""
+#| "The Application ID is a reverse domain-name identifier used to uniquely "
+#| "identify your application such as “org.gnome.Builder”."
 msgid ""
 "The Application ID is a reverse domain-name identifier used to uniquely "
-"identify your application such as “org.gnome.Builder”."
+"identify your application such as “org.gnome.Builder” and may not contain "
+"dashes."
 msgstr ""
 "Ідентифікатор програми це обернений ідентифікатор домен-назва, який "
 "використовується для однозначної прив'язки вашої програми. Приклад: «org."
-"gnome.Builder»."
+"gnome.Builder». Ідентифікатор не повинен містити дефісів."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:118
 msgid "Project Location"
@@ -4669,7 +4672,6 @@ msgid "Network is not available, skipping downloads"
 msgstr "Мережа недоступна, пропускаємо отримання даних"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
-#| msgid "Install Missing SDK?"
 msgid "Install or Update SDK?"
 msgstr "Встановити чи оновити SDK?"
 
