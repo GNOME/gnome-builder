@@ -78,6 +78,17 @@ clear_button (Button *button)
   g_clear_object (&button->icon);
 }
 
+static gchar *
+ide_notification_repr (IdeObject *object)
+{
+  IdeNotification *self = IDE_NOTIFICATION (object);
+  IdeNotificationPrivate *priv = ide_notification_get_instance_private (self);
+
+  return g_strdup_printf ("%s label=%s",
+                          G_OBJECT_TYPE_NAME (self),
+                          priv->title);
+}
+
 static void
 ide_notification_destroy (IdeObject *object)
 {
@@ -210,6 +221,7 @@ ide_notification_class_init (IdeNotificationClass *klass)
   object_class->set_property = ide_notification_set_property;
 
   ide_object_class->destroy = ide_notification_destroy;
+  ide_object_class->repr = ide_notification_repr;
 
   /**
    * IdeNotification:body:
