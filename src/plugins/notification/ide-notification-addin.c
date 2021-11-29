@@ -32,7 +32,8 @@ struct _IdeNotificationAddin
 {
   IdeObject         parent_instance;
   IdeNotification  *notif;
-  gchar            *last_msg_body;
+  char             *last_msg_body;
+  char             *shell_notif_id;
   IdePipelinePhase  requested_phase;
   gint64            last_time;
   guint             supress : 1;
@@ -42,9 +43,9 @@ struct _IdeNotificationAddin
 static void addin_iface_init (IdePipelineAddinInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeNotificationAddin,
-                         ide_notification_addin,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))
+                               ide_notification_addin,
+                               IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))
 
 static gboolean
 should_supress_message (IdeNotificationAddin *self,
@@ -72,7 +73,6 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 {
   g_autofree gchar *msg_body = NULL;
   g_autofree gchar *project_name = NULL;
-  g_autofree gchar *id = NULL;
   g_autoptr(GNotification) notification = NULL;
   g_autoptr(GIcon) icon = NULL;
   GtkApplication *app;
@@ -93,9 +93,11 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   if (gtk_window_is_active (window))
     return;
 
+  g_clear_pointer (&self->shell_notif_id, g_free);
+
   context = ide_object_get_context (IDE_OBJECT (self));
   project_name = ide_context_dup_title (context);
-  id = ide_context_dup_project_id (context);
+  self->shell_notif_id = ide_context_dup_project_id (context);
 
   if (success)
     {
@@ -116,7 +118,7 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   g_notification_set_icon (notification, icon);
 
   if (!should_supress_message (self, msg_body))
-    g_application_send_notification (g_application_get_default (), id, notification);
+    g_application_send_notification (g_application_get_default (), self->shell_notif_id, notification);
 }
 
 static void
@@ -151,18 +153,14 @@ ide_notification_addin_pipeline_started (IdeNotificationAddin *self,
 
   if (!self->supress)
     {
-      g_autoptr(IdeContext) context = NULL;
-      g_autofree gchar *id = NULL;
-
       /* Setup new in-app notification */
       self->notif = ide_notification_new ();
       g_object_bind_property (pipeline, "message", self->notif, "title", G_BINDING_SYNC_CREATE);
       ide_notification_attach (self->notif, IDE_OBJECT (pipeline));
 
       /* Withdraw previous shell notification (it's now invalid) */
-      context = ide_object_ref_context (IDE_OBJECT (pipeline));
-      id = ide_context_dup_project_id (context);
-      g_application_withdraw_notification (g_application_get_default (), id);
+      if (self->shell_notif_id)
+        g_application_withdraw_notification (g_application_get_default (), self->shell_notif_id);
     }
 }
 
@@ -223,8 +221,6 @@ ide_notification_addin_unload (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   IdeNotificationAddin *self = (IdeNotificationAddin *)addin;
-  g_autoptr(IdeContext) context = NULL;
-  g_autofree gchar *id = NULL;
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
@@ -244,11 +240,11 @@ ide_notification_addin_unload (IdePipelineAddin *addin,
     }
 
   /* Release desktop notification */
-  context = ide_object_ref_context (IDE_OBJECT (pipeline));
-  id = ide_context_dup_project_id (context);
-  g_application_withdraw_notification (g_application_get_default (), id);
+  if (self->shell_notif_id)
+    g_application_withdraw_notification (g_application_get_default (), self->shell_notif_id);
 
   g_clear_pointer (&self->last_msg_body, g_free);
+  g_clear_pointer (&self->shell_notif_id, g_free);
 }
 
 static void
