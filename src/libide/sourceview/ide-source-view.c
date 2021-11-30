@@ -1593,6 +1593,10 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
       ch[0] = '"';
       break;
 
+    case GDK_KEY_apostrophe:
+      ch[0] = '\'';
+      break;
+
     case GDK_KEY_less:
       if (!(lang_id = ide_buffer_get_language_id (IDE_BUFFER (buffer))) || !is_xmlish (lang_id))
         return FALSE;
@@ -1634,11 +1638,11 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
        * even number on this line. However, if it was the first quote on
        * the line, we still need to include a second.
        */
-      if (ch[0] == '"')
+      if (ch[0] == '"' || ch[0] == '\'')
         {
           guint count;
 
-          count = count_chars_on_line (self, '"', &iter);
+          count = count_chars_on_line (self, ch[0], &iter);
           if ((count > 1) && ((count % 2) == 0))
             return FALSE;
         }
