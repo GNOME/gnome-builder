@@ -119,6 +119,42 @@ ide_application_register_keybindings (IdeApplication *self)
   g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
 }
 
+static int
+keybinding_key_snooper (GtkWidget   *grab_widget,
+                        GdkEventKey *key,
+                        gpointer     func_data)
+{
+  IdeApplication *self = func_data;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  /* We need to hijack <Ctrl>period because ibus is messing it up. However,
+   * we only get a release event since it gets hijacked from the compositor
+   * so we never see the event. Instead, we catch the release and then change
+   * the focus to what we want (clearlying the state created in the compositor
+   * ibus bits).
+   */
+  if (key->type == GDK_KEY_RELEASE &&
+      key->keyval == GDK_KEY_period &&
+      (key->state & GDK_CONTROL_MASK) != 0)
+    {
+      if (IDE_IS_WORKSPACE (grab_widget))
+        {
+          DzlShortcutManager *shortcuts = dzl_shortcut_manager_get_default ();
+
+          g_clear_object (&key->window);
+          key->window = g_object_ref (gtk_widget_get_window (grab_widget));
+          key->type = GDK_KEY_PRESS;
+
+          dzl_shortcut_manager_handle_event (shortcuts, key, grab_widget);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 ide_application_startup (GApplication *app)
 {
@@ -141,6 +177,11 @@ ide_application_startup (GApplication *app)
     {
       g_autofree gchar *style_path = NULL;
       GtkSourceStyleSchemeManager *styles;
+
+      /* Setup key snoopers */
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      gtk_key_snooper_install (keybinding_key_snooper, self);
+      G_GNUC_END_IGNORE_DEPRECATIONS
 
       /* Setup access to private icons dir */
       gtk_icon_theme_prepend_search_path (gtk_icon_theme_get_default (), PACKAGE_ICONDIR);
