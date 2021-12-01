@@ -21,6 +21,7 @@ option('ctags_path', type: 'string', value: '')
 
 option('plugin_autotools', type: 'boolean')
 option('plugin_beautifier', type: 'boolean')
+option('plugin_blueprint', type: 'boolean')
 option('plugin_c_pack', type: 'boolean')
 option('plugin_cargo', type: 'boolean')
 option('plugin_clang', type: 'boolean')
