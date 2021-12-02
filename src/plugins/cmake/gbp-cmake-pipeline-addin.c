@@ -181,7 +181,8 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
   ide_subprocess_launcher_push_argv (configure_launcher, ".");
   ide_subprocess_launcher_push_argv (configure_launcher, srcdir);
   ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_EXPORT_COMPILE_COMMANDS=1");
-  ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_BUILD_TYPE=RelWithDebInfo");
+  if (config_opts == NULL || strstr (config_opts, "-DCMAKE_BUILD_TYPE=") == NULL)
+    ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_BUILD_TYPE=RelWithDebInfo");
   ide_subprocess_launcher_push_argv (configure_launcher, prefix_option);
   if (crossbuild_file != NULL)
     {
