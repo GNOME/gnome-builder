@@ -66,12 +66,12 @@ ide_light_bulb_realize (GtkWidget *widget)
 
   g_autoptr(GdkCursor) cursor = NULL;
 
-  g_assert(GTK_IS_WIDGET(widget));
+  g_assert (GTK_IS_WIDGET (widget));
 
-  GTK_WIDGET_CLASS (ide_light_bulb_parent_class)->realize(widget);
+  GTK_WIDGET_CLASS (ide_light_bulb_parent_class)->realize (widget);
 
-  window = gtk_widget_get_window (GTK_WIDGET(widget));
-  display = gtk_widget_get_display (GTK_WIDGET(widget));
+  window = gtk_widget_get_window (GTK_WIDGET (widget));
+  display = gtk_widget_get_display (GTK_WIDGET (widget));
   cursor = gdk_cursor_new_from_name (display, "default");
 
   gdk_window_set_events (window, GDK_ALL_EVENTS_MASK);
@@ -97,30 +97,24 @@ ide_light_bulb_destroy (GtkWidget *widget)
       gtk_text_iter_free (self->last_range_end);
     }
 
-  GTK_WIDGET_CLASS (ide_light_bulb_parent_class)->destroy(widget);
+  GTK_WIDGET_CLASS (ide_light_bulb_parent_class)->destroy (widget);
 }
 
 static void
 ide_light_bulb_class_init (IdeLightBulbClass *klass)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   widget_class->realize = ide_light_bulb_realize;
   widget_class->destroy = ide_light_bulb_destroy;
 }
 
 static void
-popup_menu_detach (GtkWidget *attach_widget,
-                   GtkMenu   *menu)
-{
-}
-
-static void
 button_clicked_cb (IdeLightBulb *self,
                    GtkButton    *button)
 {
-  gtk_menu_popup_at_widget (GTK_MENU(self->popup_menu),
-                            GTK_WIDGET(button),
+  gtk_menu_popup_at_widget (GTK_MENU (self->popup_menu),
+                            GTK_WIDGET (button),
                             GDK_GRAVITY_SOUTH_EAST,
                             GDK_GRAVITY_NORTH_WEST,
                             NULL);
@@ -130,11 +124,11 @@ static void
 popup_menu_hide_cb (GtkButton    *button,
                     GtkMenu      *menu)
 {
-  gtk_widget_unset_state_flags (GTK_WIDGET(button), GTK_STATE_FLAG_PRELIGHT);
+  gtk_widget_unset_state_flags (GTK_WIDGET (button), GTK_STATE_FLAG_PRELIGHT);
 }
 
 static void
-ide_light_bulb_init(IdeLightBulb *self)
+ide_light_bulb_init (IdeLightBulb *self)
 {
   GtkStyleContext *style_context;
   GtkWidget* button;
@@ -144,34 +138,34 @@ ide_light_bulb_init(IdeLightBulb *self)
 
   self->cancellable = g_cancellable_new ();
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET(self));
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (style_context, "light-bulb");
 
   button = gtk_button_new ();
   gtk_widget_set_focus_on_click (button, FALSE);
   gtk_widget_show (button);
-  gtk_container_add (GTK_CONTAINER(self), button);
+  gtk_container_add (GTK_CONTAINER (self), button);
 
   g_signal_connect_swapped (button,
                             "clicked",
-                            G_CALLBACK(button_clicked_cb),
+                            G_CALLBACK (button_clicked_cb),
                             self);
 
-  gtk_container_set_border_width (GTK_CONTAINER(self), 0);
+  gtk_container_set_border_width (GTK_CONTAINER (self), 0);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (box);
-  gtk_container_add (GTK_CONTAINER(button), box);
+  gtk_container_add (GTK_CONTAINER (button), box);
 
   bulb = gtk_image_new_from_icon_name ("dialog-information-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_image_set_pixel_size (GTK_IMAGE(bulb), 12);
+  gtk_image_set_pixel_size (GTK_IMAGE (bulb), 12);
   gtk_widget_show (bulb);
-  gtk_container_add (GTK_CONTAINER(box), bulb);
+  gtk_container_add (GTK_CONTAINER (box), bulb);
 
   arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_image_set_pixel_size (GTK_IMAGE(arrow), 12);
+  gtk_image_set_pixel_size (GTK_IMAGE (arrow), 12);
   gtk_widget_show (arrow);
-  gtk_container_add (GTK_CONTAINER(box), arrow);
+  gtk_container_add (GTK_CONTAINER (box), arrow);
 
   self->popup_menu = gtk_menu_new ();
   g_object_set (self->popup_menu,
@@ -179,35 +173,28 @@ ide_light_bulb_init(IdeLightBulb *self)
                 "rect-anchor-dy", -10,
                 NULL);
   g_signal_connect_swapped (self->popup_menu, "hide",
-                            G_CALLBACK(popup_menu_hide_cb),
+                            G_CALLBACK (popup_menu_hide_cb),
                             button);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context(self->popup_menu),
+  gtk_style_context_add_class (gtk_widget_get_style_context (self->popup_menu),
                                GTK_STYLE_CLASS_CONTEXT_MENU);
 
-  gtk_menu_attach_to_widget (GTK_MENU(self->popup_menu),
-                             GTK_WIDGET(self),
-                             popup_menu_detach);
+  gtk_menu_attach_to_widget (GTK_MENU (self->popup_menu),
+                             GTK_WIDGET (self),
+                             NULL);
 }
 
 static void
-ide_source_view_code_action_executed_cb (GObject      *object,
-                                         GAsyncResult *result,
-                                         gpointer user_data)
-{
-}
-
-static void
-execute_code_action_cb(IdeCodeAction *code_action)
+execute_code_action_cb (IdeCodeAction *code_action)
 {
   ide_code_action_execute_async (code_action,
                                  NULL,
-                                 ide_source_view_code_action_executed_cb,
+                                 NULL,
                                  code_action);
 }
 
 static void
-ide_light_bulb_place_at_iter(IdeLightBulb* self, GtkTextIter* iter_cursor)
+ide_light_bulb_place_at_iter (IdeLightBulb* self, GtkTextIter* iter_cursor)
 {
   g_autoptr(GtkTextIter) iter = NULL;
   g_autoptr(GtkTextIter) iter_end = NULL;
@@ -225,7 +212,7 @@ ide_light_bulb_place_at_iter(IdeLightBulb* self, GtkTextIter* iter_cursor)
 
   chars_in_line = gtk_text_iter_get_chars_in_line (iter);
   iter_end = gtk_text_iter_copy (iter);
-  gtk_text_iter_set_line_offset (iter_end, MIN(chars_in_line - 1, 4));
+  gtk_text_iter_set_line_offset (iter_end, MIN (chars_in_line - 1, 4));
   first_chars_in_line = gtk_text_iter_get_text (iter, iter_end);
   place_above_iter = !ide_str_empty0 (g_strstrip (first_chars_in_line));
 
@@ -242,7 +229,7 @@ ide_light_bulb_place_at_iter(IdeLightBulb* self, GtkTextIter* iter_cursor)
         }
     }
 
-  gtk_text_view_get_iter_location (GTK_TEXT_VIEW(self->source_view), iter, &rect);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self->source_view), iter, &rect);
 
   if (place_above_iter)
     {
@@ -254,11 +241,11 @@ ide_light_bulb_place_at_iter(IdeLightBulb* self, GtkTextIter* iter_cursor)
       /* center verically in line */
       y_pos = rect.y + (rect.height / 2) - (button_height / 2);
     }
-  gtk_text_view_move_child (GTK_TEXT_VIEW(self->source_view),
-                            GTK_WIDGET(self),
+  gtk_text_view_move_child (GTK_TEXT_VIEW (self->source_view),
+                            GTK_WIDGET (self),
                             0,
                             y_pos);
-  gtk_widget_show (GTK_WIDGET(self));
+  gtk_widget_show (GTK_WIDGET (self));
 }
 
 static void
@@ -295,7 +282,7 @@ ide_light_bulb_code_action_query_cb (GObject      *object,
 
       ide_light_bulb_place_at_iter (self, &iter);
 
-      gtk_container_foreach (GTK_CONTAINER(self->popup_menu),
+      gtk_container_foreach (GTK_CONTAINER (self->popup_menu),
                              (GtkCallback)gtk_widget_destroy,
                              NULL);
       context = ide_buffer_ref_context (buffer);
@@ -306,29 +293,29 @@ ide_light_bulb_code_action_query_cb (GObject      *object,
           GtkWidget* menu_item;
 
           code_action = g_ptr_array_index (code_actions, i);
-          ide_object_append (IDE_OBJECT(context), IDE_OBJECT(code_action));
-          menu_item = gtk_menu_item_new_with_label (ide_code_action_get_title(code_action));
+          ide_object_append (IDE_OBJECT (context), IDE_OBJECT (code_action));
+          menu_item = gtk_menu_item_new_with_label (ide_code_action_get_title (code_action));
 
           g_signal_connect_swapped (menu_item,
                                     "activate",
-                                    G_CALLBACK(execute_code_action_cb),
+                                    G_CALLBACK (execute_code_action_cb),
                                     code_action);
 
 
           gtk_widget_show (menu_item);
-          gtk_menu_shell_append (GTK_MENU_SHELL(self->popup_menu), menu_item);
+          gtk_menu_shell_append (GTK_MENU_SHELL (self->popup_menu), menu_item);
         }
     }
   else
     {
-      gtk_widget_hide (GTK_WIDGET(self));
+      gtk_widget_hide (GTK_WIDGET (self));
     }
 }
 
 static gboolean
-ide_source_get_word_from_iter(const GtkTextIter *iter,
-                              GtkTextIter *word_start,
-                              GtkTextIter *word_end)
+ide_source_get_word_from_iter (const GtkTextIter *iter,
+                               GtkTextIter *word_start,
+                               GtkTextIter *word_end)
 {
   /* Just using forward/backward to word start/end is not enough
    * because _ break words when using those functions while they
@@ -339,9 +326,9 @@ ide_source_get_word_from_iter(const GtkTextIter *iter,
   do
     {
       const gunichar c = gtk_text_iter_get_char (word_end);
-      if (!(g_unichar_isalnum(c) || c == '_'))
+      if (!(g_unichar_isalnum (c) || c == '_'))
         break;
-    }while (gtk_text_iter_forward_char (word_end));
+    } while (gtk_text_iter_forward_char (word_end));
 
   if (gtk_text_iter_equal (word_start, word_end))
     {
@@ -359,7 +346,7 @@ ide_source_get_word_from_iter(const GtkTextIter *iter,
         }
     }
 
-  return(!gtk_text_iter_equal (word_start, word_end));
+  return (!gtk_text_iter_equal (word_start, word_end));
 }
 
 static gboolean
@@ -392,8 +379,8 @@ ide_light_bulb_get_trigger_bound (IdeBuffer    *buffer,
 
       if (ide_source_get_word_from_iter (&insert, &insert_word_start, &insert_word_end))
         {
-          *trigger_start = gtk_text_iter_copy(&insert_word_start);
-          *trigger_end = gtk_text_iter_copy(&insert_word_end);
+          *trigger_start = gtk_text_iter_copy (&insert_word_start);
+          *trigger_end = gtk_text_iter_copy (&insert_word_end);
           return TRUE;
         }
     }
@@ -412,8 +399,8 @@ ide_light_bulb_get_trigger_bound (IdeBuffer    *buffer,
         }
     }
 
-  *trigger_start = gtk_text_iter_copy(&insert);
-  *trigger_end = gtk_text_iter_copy(&selection);
+  *trigger_start = gtk_text_iter_copy (&insert);
+  *trigger_end = gtk_text_iter_copy (&selection);
 
   return TRUE;
 }
@@ -422,14 +409,14 @@ static gboolean
 ide_light_bulb_delay_timeout_cb (gpointer data)
 {
   IdeLightBulb *self = data;
-  IdeBuffer* buffer = IDE_BUFFER(gtk_text_view_get_buffer (GTK_TEXT_VIEW(self->source_view)));
+  IdeBuffer* buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view)));
 
   self->delay_query_source = 0;
 
   ide_buffer_code_action_query_async (buffer,
                                       self->cancellable,
                                       ide_light_bulb_code_action_query_cb,
-                                      g_object_ref(self));
+                                      g_object_ref (self));
   return G_SOURCE_REMOVE;
 }
 
@@ -458,10 +445,10 @@ _ide_light_bulb_show (IdeLightBulb *self)
   g_autoptr(GtkTextIter) trigger_end = NULL;
   gboolean contains_word = FALSE;
 
-  g_return_if_fail (IDE_IS_LIGHT_BULB(self));
-  g_return_if_fail (GTK_IS_TEXT_VIEW(self->source_view));
+  g_return_if_fail (IDE_IS_LIGHT_BULB (self));
+  g_return_if_fail (GTK_IS_TEXT_VIEW (self->source_view));
 
-  buffer = IDE_BUFFER(gtk_text_view_get_buffer (GTK_TEXT_VIEW(self->source_view)));
+  buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view)));
 
   contains_word = ide_light_bulb_get_trigger_bound (buffer, &trigger_start, &trigger_end);
 
@@ -479,7 +466,7 @@ _ide_light_bulb_show (IdeLightBulb *self)
           gtk_text_iter_free (self->last_range_end);
           self->last_range_end = NULL;
         }
-      gtk_widget_hide (GTK_WIDGET(self));
+      gtk_widget_hide (GTK_WIDGET (self));
       return;
     }
 
@@ -518,14 +505,14 @@ _ide_light_bulb_show (IdeLightBulb *self)
 }
 
 IdeLightBulb *
-_ide_light_bulb_new(IdeSourceView* source_view)
+_ide_light_bulb_new (IdeSourceView* source_view)
 {
   IdeLightBulb* bulb = g_object_new (IDE_TYPE_LIGHT_BULB, NULL);
 
   bulb->source_view = source_view;
 
-  gtk_text_view_add_child_in_window (GTK_TEXT_VIEW(source_view),
-                                     GTK_WIDGET(g_object_ref(GTK_WIDGET(bulb))),
+  gtk_text_view_add_child_in_window (GTK_TEXT_VIEW (source_view),
+                                     GTK_WIDGET (g_object_ref (GTK_WIDGET (bulb))),
                                      GTK_TEXT_WINDOW_TEXT,
                                      0,
                                      100);
