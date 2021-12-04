@@ -94,6 +94,7 @@ ide_hover_popover_add_content (const gchar      *title,
                       "visible", TRUE,
                       NULL);
   gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (box));
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (box), "hoverer-box");
 
   if (!dzl_str_empty0 (title))
     {
