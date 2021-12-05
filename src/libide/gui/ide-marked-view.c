@@ -369,17 +369,19 @@ ide_marked_view_new (IdeMarkedContent *content)
     default:
     case IDE_MARKED_KIND_PLAINTEXT:
     case IDE_MARKED_KIND_PANGO:
-      child = g_object_new (GTK_TYPE_LABEL,
-                            "max-width-chars", 80,
-                            "selectable", TRUE,
-                            "wrap", TRUE,
-                            "xalign", 0.0f,
-                            "visible", TRUE,
-                            "use-markup", kind == IDE_MARKED_KIND_PANGO,
-                            "label", markup,
-                            NULL);
-      break;
-
+      {
+        g_autofree char *markup_nul_terminated = g_strndup (markup, markup_len);
+        child = g_object_new (GTK_TYPE_LABEL,
+                              "max-width-chars", 80,
+                              "selectable", TRUE,
+                              "wrap", TRUE,
+                              "xalign", 0.0f,
+                              "visible", TRUE,
+                              "use-markup", kind == IDE_MARKED_KIND_PANGO,
+                              "label", markup_nul_terminated,
+                              NULL);
+        break;
+      }
     case IDE_MARKED_KIND_HTML:
 #ifdef HAVE_WEBKIT
       child = g_object_new (WEBKIT_TYPE_WEB_VIEW,
