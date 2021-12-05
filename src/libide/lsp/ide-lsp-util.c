@@ -79,10 +79,17 @@ ide_lsp_decode_completion_kind (guint kind)
     case 13:  kind = IDE_SYMBOL_KIND_ENUM_VALUE;   break;
     case 14:  kind = IDE_SYMBOL_KIND_KEYWORD;      break;
     case 17:  kind = IDE_SYMBOL_KIND_FILE;         break;
+    case 20:  kind = IDE_SYMBOL_KIND_ENUM_VALUE;   break;
+    case 21:  kind = IDE_SYMBOL_KIND_CONSTANT;     break;
+    case 22:  kind = IDE_SYMBOL_KIND_STRUCT;       break;
+    case 23:  kind = IDE_SYMBOL_KIND_EVENT;        break;
+    case 24:  kind = IDE_SYMBOL_KIND_OPERATOR;     break;
+    case 25:  kind = IDE_SYMBOL_KIND_TYPE_PARAM;   break;
 
     case 15: /* Snippet */
     case 16: /* Color */
     case 18: /* Reference */
+    case 19: /* Folder */
     default:  kind = IDE_SYMBOL_KIND_NONE;         break;
     }
 
