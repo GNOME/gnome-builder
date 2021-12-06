@@ -876,7 +876,7 @@ ide_source_view__buffer_cursor_moved_cb (IdeSourceView *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  _ide_light_bulb_show (priv->light_bulb);
+  _ide_light_bulb_show(priv->light_bulb);
 }
 
 static void

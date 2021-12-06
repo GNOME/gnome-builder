@@ -541,7 +541,6 @@ ide_hover_motion_notify_event_cb (IdeHover             *self,
                                   const GdkEventMotion *event,
                                   IdeSourceView        *view)
 {
-  GdkWindow *text_window;
   GdkWindow *window;
 
   g_assert (IDE_IS_HOVER (self));
@@ -550,21 +549,6 @@ ide_hover_motion_notify_event_cb (IdeHover             *self,
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (view), GTK_TEXT_WINDOW_LEFT);
-  text_window = gtk_text_view_get_window (GTK_TEXT_VIEW (view), GTK_TEXT_WINDOW_TEXT);
-
-  /* ignore event if it did not came from the text or gutter window */
-  if (window != event->window && text_window != event->window)
-    {
-      if (self->popover != NULL)
-        {
-          _ide_hover_popover_hide (self->popover);
-        }
-
-      dzl_clear_source (&self->dismiss_source);
-
-      return GDK_EVENT_PROPAGATE;
-    }
-
 
   if (window != NULL)
     {
