@@ -38,7 +38,6 @@
 #include "ide-cursor.h"
 #include "ide-hover-private.h"
 #include "ide-indenter.h"
-#include "ide-light-bulb-private.h"
 #include "ide-snippet-chunk.h"
 #include "ide-snippet-context.h"
 #include "ide-snippet-private.h"
@@ -98,7 +97,6 @@ typedef struct
 
   IdeCompletion               *completion;
   IdeHover                    *hover;
-  IdeLightBulb                *light_bulb;
 
   DzlBindingGroup             *file_setting_bindings;
   DzlSignalGroup              *buffer_signals;
@@ -866,17 +864,6 @@ ide_source_view__buffer_changed_cb (IdeSourceView *self,
   g_assert (IDE_IS_BUFFER (buffer));
 
   priv->change_sequence++;
-}
-
-static void
-ide_source_view__buffer_cursor_moved_cb (IdeSourceView *self,
-                                         IdeBuffer     *buffer)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  _ide_light_bulb_show(priv->light_bulb);
 }
 
 static void
@@ -5594,7 +5581,6 @@ ide_source_view_dispose (GObject *object)
   g_clear_handle_id (&priv->delay_size_allocate_chainup, g_source_remove);
 
   g_clear_object (&priv->hover);
-  g_clear_object (&priv->light_bulb);
   g_clear_object (&priv->completion);
   g_clear_object (&priv->capture);
   ide_clear_and_destroy_object (&priv->indenter_adapter);
@@ -6801,7 +6787,6 @@ ide_source_view_init (IdeSourceView *self)
   priv->overscroll_num_lines = DEFAULT_OVERSCROLL_NUM_LINES;
 
   priv->hover = _ide_hover_new (self);
-  priv->light_bulb = _ide_light_bulb_new (self);
 
   priv->file_setting_bindings = dzl_binding_group_new ();
   dzl_binding_group_bind (priv->file_setting_bindings, "auto-indent",
@@ -6826,11 +6811,6 @@ ide_source_view_init (IdeSourceView *self)
   dzl_signal_group_connect_object (priv->buffer_signals,
                                    "changed",
                                    G_CALLBACK (ide_source_view__buffer_changed_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
-                                   "cursor-moved",
-                                   G_CALLBACK (ide_source_view__buffer_cursor_moved_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->buffer_signals,
