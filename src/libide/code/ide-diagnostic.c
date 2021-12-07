@@ -36,14 +36,15 @@ typedef struct
   IdeLocation           *location;
   GPtrArray             *ranges;
   GPtrArray             *fixits;
+  IdeMarkedKind          marked_kind;
 } IdeDiagnosticPrivate;
 
 enum {
   PROP_0,
+  PROP_DISPLAY_TEXT,
   PROP_LOCATION,
   PROP_SEVERITY,
   PROP_TEXT,
-  PROP_DISPLAY_TEXT,
   N_PROPS
 };
 
@@ -200,6 +201,9 @@ ide_diagnostic_class_init (IdeDiagnosticClass *klass)
 static void
 ide_diagnostic_init (IdeDiagnostic *self)
 {
+  IdeDiagnosticPrivate *priv = ide_diagnostic_get_instance_private (self);
+
+  priv->marked_kind = IDE_MARKED_KIND_PLAINTEXT;
 }
 
 /**
@@ -748,4 +752,25 @@ failure:
   g_variant_dict_clear (&dict);
 
   return self;
+}
+
+IdeMarkedKind
+ide_diagnostic_get_marked_kind (IdeDiagnostic *self)
+{
+  IdeDiagnosticPrivate *priv = ide_diagnostic_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_DIAGNOSTIC (self), IDE_MARKED_KIND_PLAINTEXT);
+
+  return priv->marked_kind;
+}
+
+void
+ide_diagnostic_set_marked_kind (IdeDiagnostic *self,
+                                IdeMarkedKind  marked_kind)
+{
+  IdeDiagnosticPrivate *priv = ide_diagnostic_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_DIAGNOSTIC (self));
+
+  priv->marked_kind = marked_kind;
 }

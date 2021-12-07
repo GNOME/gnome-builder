@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include <libide-io.h>
 
 #include "ide-code-types.h"
 
@@ -66,6 +67,11 @@ IDE_AVAILABLE_IN_3_32
 IdeLocation           *ide_diagnostic_get_location         (IdeDiagnostic         *self);
 IDE_AVAILABLE_IN_3_32
 const gchar           *ide_diagnostic_get_text             (IdeDiagnostic         *self);
+IDE_AVAILABLE_IN_42
+IdeMarkedKind          ide_diagnostic_get_marked_kind      (IdeDiagnostic         *self);
+IDE_AVAILABLE_IN_42
+void                   ide_diagnostic_set_marked_kind      (IdeDiagnostic         *self,
+                                                            IdeMarkedKind          marked_kind);
 IDE_AVAILABLE_IN_3_32
 IdeDiagnosticSeverity  ide_diagnostic_get_severity         (IdeDiagnostic         *self);
 IDE_AVAILABLE_IN_3_32
