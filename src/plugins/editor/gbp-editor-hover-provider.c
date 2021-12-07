@@ -80,7 +80,7 @@ gbp_editor_hover_provider_hover_async (IdeHoverProvider    *provider,
 
               content = ide_marked_content_new_from_data (text,
                                                           strlen (text),
-                                                          IDE_MARKED_KIND_PLAINTEXT);
+                                                          ide_diagnostic_get_marked_kind (diag));
               ide_hover_context_add_content (context,
                                              DIAGNOSTICS_HOVER_PRIORITY,
                                              _("Diagnostics"),
