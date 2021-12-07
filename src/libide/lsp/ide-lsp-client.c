@@ -64,6 +64,7 @@ typedef struct
   gchar          *root_uri;
   gboolean        initialized;
   GQueue          pending_messages;
+  guint           use_markdown_in_diagnostics : 1;
 } IdeLspClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
@@ -98,6 +99,7 @@ enum {
   PROP_SERVER_CAPABILITIES,
   PROP_TRACE,
   PROP_ROOT_URI,
+  PROP_USE_MARKDOWN_IN_DIAGNOSTICS,
   N_PROPS
 };
 
@@ -668,6 +670,7 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
                                       GFile        *file,
                                       GVariantIter *diagnostics)
 {
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
   g_autoptr(GPtrArray) ar = NULL;
   g_autoptr(IdeDiagnostics) ret = NULL;
   GVariant *value;
@@ -760,6 +763,8 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
         }
 
       diag = ide_diagnostic_new (severity, message, begin_loc);
+      if (priv->use_markdown_in_diagnostics)
+        ide_diagnostic_set_marked_kind (diag, IDE_MARKED_KIND_MARKDOWN);
       ide_diagnostic_take_range (diag, ide_range_new (begin_loc, end_loc));
 
       g_ptr_array_add (ar, g_steal_pointer (&diag));
@@ -1147,6 +1152,11 @@ ide_lsp_client_get_property (GObject    *object,
     case PROP_ROOT_URI:
       g_value_set_string (value, priv->root_uri);
       break;
+
+    case PROP_USE_MARKDOWN_IN_DIAGNOSTICS:
+      g_value_set_boolean (value, priv->use_markdown_in_diagnostics);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1163,6 +1173,10 @@ ide_lsp_client_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_USE_MARKDOWN_IN_DIAGNOSTICS:
+      priv->use_markdown_in_diagnostics = g_value_get_boolean (value);
+      break;
+
     case PROP_IO_STREAM:
       priv->io_stream = g_value_dup_object (value);
       break;
@@ -1192,6 +1206,13 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
 
   klass->notification = ide_lsp_client_real_notification;
   klass->supports_language = ide_lsp_client_real_supports_language;
+
+  properties [PROP_USE_MARKDOWN_IN_DIAGNOSTICS] =
+    g_param_spec_boolean ("use-markdown-in-diagnostics",
+                          "Use Markdown in Diagnostics",
+                          "If Diagnostics can contain markdown",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SERVER_CAPABILITIES] =
     g_param_spec_variant ("server-capabilities",
