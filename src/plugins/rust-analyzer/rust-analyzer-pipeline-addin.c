@@ -33,10 +33,11 @@
 
 struct _RustAnalyzerPipelineAddin
 {
-  IdeObject    parent_instance;
-  IdePipeline *pipeline;
-  gchar       *path;
-  gchar       *cargo_home;
+  IdeObject        parent_instance;
+  IdeNotification *notif;
+  IdePipeline     *pipeline;
+  gchar           *path;
+  gchar           *cargo_home;
 };
 
 static void pipeline_addin_iface_init (IdePipelineAddinInterface *iface);
@@ -280,15 +281,14 @@ set_path (RustAnalyzerPipelineAddin *self,
 }
 
 static void
-rust_analyzer_pipeline_addin_prepare (IdePipelineAddin *addin,
-                                      IdePipeline      *pipeline)
+rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
+                                   IdePipeline      *pipeline)
 {
   RustAnalyzerPipelineAddin *self = (RustAnalyzerPipelineAddin *)addin;
   IdeContext *context = NULL;
   IdeBuildSystem *buildsystem = NULL;
   g_autoptr(GFile) cargo_home = NULL;
   g_autoptr(GFile) file = NULL;
-  g_autoptr(IdeNotification) notif = NULL;
 
   IDE_ENTRY;
 
@@ -318,12 +318,11 @@ rust_analyzer_pipeline_addin_prepare (IdePipelineAddin *addin,
       IDE_EXIT;
     }
 
-  notif = ide_notification_new ();
-  ide_notification_set_id (notif, "org.gnome.builder.rust-analyzer");
-  ide_notification_set_title (notif, "Could not find rust-analyzer");
-  ide_notification_set_body (notif, "Install rust-analyzer in your PATH using rustup, or use the Rust flatpak extension in your manifest.");
-  ide_notification_set_urgent (notif, TRUE);
-  ide_notification_attach (notif, IDE_OBJECT (pipeline));
+  self->notif = ide_notification_new ();
+  ide_notification_set_title (self->notif, "Rust-analyzer is missing");
+  ide_notification_set_body (self->notif, "Install rust-analyzer in your PATH using rustup, or use the Rust flatpak extension in your manifest.");
+  ide_notification_set_urgent (self->notif, TRUE);
+  ide_notification_attach (self->notif, IDE_OBJECT (pipeline));
 
   set_path (self, NULL, NULL);
 
@@ -331,8 +330,29 @@ rust_analyzer_pipeline_addin_prepare (IdePipelineAddin *addin,
 }
 
 static void
+rust_analyzer_pipeline_addin_unload (IdePipelineAddin *addin,
+                                     IdePipeline      *pipeline)
+{
+  RustAnalyzerPipelineAddin *self = (RustAnalyzerPipelineAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (RUST_IS_ANALYZER_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  if (self->notif)
+    {
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 {
-  iface->prepare = rust_analyzer_pipeline_addin_prepare;
+  iface->load = rust_analyzer_pipeline_addin_load;
+  iface->unload = rust_analyzer_pipeline_addin_unload;
 }
 
