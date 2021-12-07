@@ -90,6 +90,21 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="41.3" date="2021-12-06">
+      <ul>
+        <li>Improvements to Flatpak runtime resolution on new system installations.</li>
+        <li>Improvements to overview map syling.</li>
+        <li>The Glade designer will no longer try to open UI files it knows are GTK 4 based to avoid confusion. This requires GTK 4 templates to be using appropriate &lt;requires lib="gtk" version="4.0"/&gt; elements.</li>
+        <li>The GTK 4 template has been updated.</li>
+        <li>Application id's are more restrictive in the project wizard.</li>
+        <li>Build pipelines are no properly unloaded when destroyed.</li>
+        <li>Auxillary font loading was fixed on Nix.</li>
+        <li>The editor can now insert matching single quotes (').</li>
+        <li>Work arounds for breakage in IBus with regards to stealing the search accelerator (ctrl+.).</li>
+        <li>Improvements to the CMake plugin.</li>
+        <li>Ensure diagnostics are properly formatted.</li>
+      </ul>
+    </release>
     <release version="41.2" date="2021-11-16">
       <ul>
         <li>Fix an issue with comparing global search results</li>
