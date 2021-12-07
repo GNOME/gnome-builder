@@ -172,6 +172,10 @@ rust_analyzer_service_supervisor_spawned_cb (RustAnalyzerService     *self,
 
   self->client = ide_lsp_client_new (io_stream);
 
+  g_object_set (self->client,
+                "use-markdown-in-diagnostics", TRUE,
+                NULL);
+
   g_signal_connect_object (self->client,
                            "load-configuration",
                            G_CALLBACK (rust_analyzer_service_lsp_load_configuration_cb),
