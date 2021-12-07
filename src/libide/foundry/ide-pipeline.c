@@ -4243,6 +4243,32 @@ ide_pipeline_get_arch (IdePipeline *self)
   return NULL;
 }
 
+static gboolean
+contains_in_runtime_with_alt_path (IdeRuntime *runtime,
+                                   const char *name,
+                                   const char *path)
+{
+  g_auto(GStrv) pathsplit = NULL;
+
+  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (name != NULL);
+
+  if (path == NULL)
+    return FALSE;
+
+  pathsplit = g_strsplit (path, ":", 0);
+
+  for (guint i = 0; pathsplit[i]; i++)
+    {
+      g_autofree char *filename = g_build_filename (pathsplit[i], name, NULL);
+
+      if (ide_runtime_contains_program_in_path (runtime, filename, NULL))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 /**
  * ide_pipeline_contains_program_in_path:
  * @self: a #IdePipeline
@@ -4260,13 +4286,24 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
                                        const gchar  *name,
                                        GCancellable *cancellable)
 {
+  const char *append_path = NULL;
+  const char *prepend_path = NULL;
+
   g_return_val_if_fail (IDE_IS_PIPELINE (self), FALSE);
   g_return_val_if_fail (name != NULL, FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
 
+  if (self->config != NULL)
+    {
+      append_path = ide_config_get_append_path (self->config);
+      prepend_path = ide_config_get_prepend_path (self->config);
+    }
+
   if (self->runtime != NULL)
     {
-      if (ide_runtime_contains_program_in_path (self->runtime, name, cancellable))
+      if (ide_runtime_contains_program_in_path (self->runtime, name, cancellable) ||
+          contains_in_runtime_with_alt_path (self->runtime, name, prepend_path) ||
+          contains_in_runtime_with_alt_path (self->runtime, name, append_path))
         return TRUE;
     }
 
@@ -4286,7 +4323,9 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
 
           g_assert (IDE_IS_RUNTIME (runtime));
 
-          if (ide_runtime_contains_program_in_path (runtime, name, cancellable))
+          if (ide_runtime_contains_program_in_path (runtime, name, cancellable) ||
+              contains_in_runtime_with_alt_path (runtime, name, prepend_path) ||
+              contains_in_runtime_with_alt_path (runtime, name, append_path))
             return TRUE;
         }
     }
