@@ -1163,7 +1163,7 @@ ipc_flatpak_service_impl_install (IpcFlatpakService     *service,
   if (refs->len == 0)
     {
       ipc_flatpak_service_complete_install (service, g_steal_pointer (&invocation));
-      return FALSE;
+      return TRUE;
     }
 
   state = g_slice_new0 (InstallState);
