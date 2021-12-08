@@ -168,33 +168,33 @@ render_node(GString          *out,
           switch (cmark_node_get_heading_level (node))
             {
             case 1:
-              level = "xx-large";
+              level = "14pt";
               break;
 
             case 2:
-              level = "x-large";
+              level = "13pt";
               break;
 
             case 3:
-              level = "large";
+              level = "12pt";
               break;
 
             case 4:
-              level = "medium";
+              level = "11pt";
               break;
 
             case 5:
-              level = "small";
+              level = "10pt";
               break;
 
             case 6:
-              level = "x-small";
+              level = "9pt";
               break;
 
             default:
               g_return_val_if_reached(FALSE);
+            }
 
-           }
           g_string_append_printf (out, "<span size=\"%s\">", level);
         }
       if (!entering || node_is_leaf (node))
