@@ -39,6 +39,7 @@
 #include "ide-lsp-hover-provider.h"
 #include "ide-lsp-rename-provider.h"
 #include "ide-lsp-search-provider.h"
+#include "ide-lsp-service.h"
 #include "ide-lsp-symbol-node.h"
 #include "ide-lsp-symbol-resolver.h"
 #include "ide-lsp-symbol-tree.h"
