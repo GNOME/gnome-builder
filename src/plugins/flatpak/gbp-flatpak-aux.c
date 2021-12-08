@@ -83,7 +83,7 @@ gbp_flatpak_aux_init (void)
 
   g_string_append (xml_snippet,
                    "<?xml version=\"1.0\"?>\n"
-                   "<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n"
+                   "<!DOCTYPE fontconfig SYSTEM \"urn:fontconfig:fonts.dtd\">\n"
                    "<fontconfig>\n");
 
   if (_ide_path_query_exists_on_host (SYSTEM_FONTS_DIR))
