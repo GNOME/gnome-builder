@@ -118,9 +118,15 @@ render_node(GString          *out,
     case CMARK_NODE_EMPH:
       if (entering)
         {
-          literal_escaped = g_markup_escape_text (cmark_node_get_literal (node), -1);
+          const char *literal = cmark_node_get_literal (node);
+
           g_string_append (out, "<i>");
-          g_string_append (out, literal_escaped);
+
+          if (literal)
+            {
+              literal_escaped = g_markup_escape_text (literal, -1);
+              g_string_append (out, literal_escaped);
+            }
         }
       if (!entering || node_is_leaf (node))
         {
