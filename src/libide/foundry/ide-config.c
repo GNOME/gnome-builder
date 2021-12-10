@@ -1693,6 +1693,7 @@ ide_config_set_run_opts (IdeConfig   *self,
       g_free (priv->run_opts);
       priv->run_opts = g_strdup (run_opts);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUN_OPTS]);
+      ide_config_set_dirty (self, TRUE);
     }
 }
 
