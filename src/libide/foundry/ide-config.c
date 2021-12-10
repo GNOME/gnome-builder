@@ -323,6 +323,7 @@ ide_config_finalize (GObject *object)
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->post_install_commands, g_strfreev);
   g_clear_pointer (&priv->prefix, g_free);
+  g_clear_pointer (&priv->run_opts, g_free);
   g_clear_pointer (&priv->runtime_id, g_free);
   g_clear_pointer (&priv->app_id, g_free);
   g_clear_pointer (&priv->toolchain_id, g_free);
