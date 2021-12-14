@@ -142,13 +142,76 @@ handle_error:
 }
 
 static void
+gbp_flatpak_client_proxy_created_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  g_autoptr(GbpFlatpakClient) self = user_data;
+  g_autoptr(IpcFlatpakService) service = NULL;
+  g_autoptr(GError) error = NULL;
+  GList *queued;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  g_mutex_lock (&self->mutex);
+
+  if ((service = ipc_flatpak_service_proxy_new_finish (result, &error)))
+    {
+      g_autofree char *home_install = NULL;
+
+      /* We can have long running operations, so set no timeout */
+      g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (service), G_MAXINT);
+
+      /* Add the --user installation as our first call before queued
+       * events can submit their operations.
+       */
+      home_install = g_build_filename (g_get_home_dir (),
+                                       ".local",
+                                       "share",
+                                       "flatpak",
+                                       NULL);
+      if (g_file_test (home_install, G_FILE_TEST_IS_DIR))
+        ipc_flatpak_service_call_add_installation (service, home_install, TRUE, NULL, NULL, NULL);
+    }
+
+  if (self->state == STATE_SPAWNING && service != NULL)
+    self->state = STATE_RUNNING;
+
+  g_assert (error != NULL || service != NULL);
+
+  g_set_object (&self->service, service);
+
+  queued = g_steal_pointer (&self->get_service.head);
+
+  self->get_service.head = NULL;
+  self->get_service.tail = NULL;
+  self->get_service.length = 0;
+
+  for (const GList *iter = queued; iter != NULL; iter = iter->next)
+    {
+      IdeTask *task = iter->data;
+
+      if (error)
+        ide_task_return_error (task, g_error_copy (error));
+      else
+        ide_task_return_object (task, g_object_ref (self->service));
+    }
+
+  g_list_free_full (queued, g_object_unref);
+
+  g_mutex_unlock (&self->mutex);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
                                        IdeSubprocess           *subprocess,
                                        IdeSubprocessSupervisor *supervisor)
 {
-  g_autofree gchar *home_install = NULL;
-  GList *queued;
-
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_CLIENT (self));
@@ -162,42 +225,15 @@ gbp_flatpak_client_subprocess_spawned (GbpFlatpakClient        *self,
 
   ide_subprocess_supervisor_set_launcher (self->supervisor, NULL);
 
-  if (self->state == STATE_SPAWNING)
-    self->state = STATE_RUNNING;
+  ipc_flatpak_service_proxy_new (self->connection,
+                                 G_DBUS_PROXY_FLAGS_NONE,
+                                 NULL,
+                                 "/org/gnome/Builder/Flatpak",
+                                 NULL,
+                                 gbp_flatpak_client_proxy_created_cb,
+                                 g_object_ref (self));
 
   g_dbus_connection_start_message_processing (self->connection);
-
-  self->service = ipc_flatpak_service_proxy_new_sync (self->connection,
-                                                      G_DBUS_PROXY_FLAGS_NONE,
-                                                      NULL,
-                                                      "/org/gnome/Builder/Flatpak",
-                                                      NULL,
-                                                      NULL);
-
-  /* We can have long running operations, so set no timeout */
-  g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (self->service), G_MAXINT);
-
-  /* Add the --user installation as our first call before queued
-   * events can submit their operations.
-   */
-  home_install = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
-  if (g_file_test (home_install, G_FILE_TEST_IS_DIR))
-    ipc_flatpak_service_call_add_installation (self->service, home_install, TRUE, NULL, NULL, NULL);
-
-  queued = g_steal_pointer (&self->get_service.head);
-
-  self->get_service.head = NULL;
-  self->get_service.tail = NULL;
-  self->get_service.length = 0;
-
-  for (const GList *iter = queued; iter != NULL; iter = iter->next)
-    {
-      IdeTask *task = iter->data;
-
-      ide_task_return_object (task, g_object_ref (self->service));
-    }
-
-  g_list_free_full (queued, g_object_unref);
 
   g_mutex_unlock (&self->mutex);
 
