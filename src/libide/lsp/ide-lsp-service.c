@@ -31,7 +31,7 @@ typedef struct
   guint inherit_stderr : 1;
 } IdeLspServicePrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeLspService, ide_lsp_service, IDE_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeLspService, ide_lsp_service, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
