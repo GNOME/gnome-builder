@@ -68,8 +68,8 @@ if (version_split[1][0] == 'a' or version_split[1][0] == 'b')
   config_h.set10('DEVELOPMENT_BUILD', 1)
   MINOR_VERSION = 0
   status += [
-    'You are building a development version of GNOME builder. There may be more',
-    'bugs in this version that you are comfortable with. Addtionally, there',
+    'You are building a development version of GNOME Builder. There may be more',
+    'bugs in this version than you are comfortable with. Addtionally, there',
     'is a chance it will eat all of your work and leave you sad and alone.',
     '', ''
   ]
