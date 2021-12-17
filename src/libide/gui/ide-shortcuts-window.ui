@@ -440,6 +440,13 @@
                 <property name="title" translatable="yes" context="shortcut window">Beautify selected code</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;shift&gt;&lt;alt&gt;f</property>
+                <property name="title" translatable="yes" context="shortcut window">(LSP only) Format selected code or whole document</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

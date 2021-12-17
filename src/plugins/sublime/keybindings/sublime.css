@@ -108,6 +108,7 @@
                            "request-documentation" ()
                            "clear-count" ()
                            "clear-selection" () };
+  bind "<shift><alt>f" { "format-selection" ()};
   bind "<ctrl><super>e" { "move-error" (down) };
   bind "<ctrl><super><shift>e" { "move-error" (up) };
 

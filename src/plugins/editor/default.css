@@ -21,6 +21,7 @@
   bind "<ctrl>i" { "action" ("editor-page", "goto-line", "") };
   bind "<ctrl>asciitilde" { "change-case" (toggle) };
   bind "<ctrl><alt>d" { "duplicate-entire-line" ()};
+  bind "<shift><alt>f" { "format-selection" ()};
   bind "<ctrl><shift>z" { "clear-count" ()
                           "clear-selection" ()
                           "remove-cursors" ()
