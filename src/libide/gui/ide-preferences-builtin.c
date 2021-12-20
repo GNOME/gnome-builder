@@ -282,10 +282,10 @@ ide_preferences_builtin_register_languages (DzlPreferences *preferences)
       const gchar *name;
       const gchar *section;
 
-      if (dzl_str_equal0 (language_ids [i], "def"))
+      language = gtk_source_language_manager_get_language (manager, language_ids [i]);
+      if (gtk_source_language_get_hidden (language))
         continue;
 
-      language = gtk_source_language_manager_get_language (manager, language_ids [i]);
       name = gtk_source_language_get_name (language);
       section = gtk_source_language_get_section (language);
 
