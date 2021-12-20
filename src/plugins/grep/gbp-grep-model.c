@@ -366,7 +366,7 @@ gbp_grep_model_class_init (GbpGrepModelClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  line_regex = g_regex_new ("([a-zA-Z0-9\\+\\-\\.\\/_]+):(\\d+):(.*)", 0, 0, NULL);
+  line_regex = g_regex_new ("([^:]+):(\\d+):(.*)", 0, 0, NULL);
   g_assert (line_regex != NULL);
 }
 
