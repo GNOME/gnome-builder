@@ -421,12 +421,24 @@ gbp_grep_panel_scan_cb (GObject      *object,
   g_assert (GBP_IS_GREP_PANEL (self));
 
   if (!gbp_grep_model_scan_finish (model, result, &error))
-    /* TODO: For now we warn in the not-very-noticeable messages panel, but when we start
-     * depending on libadwaita we'll be able to use a status page here as an error page,
-     * in the stack.
-     */
-    ide_object_warning (ide_widget_get_context (GTK_WIDGET (self)),
-                        "Failed to find files: %s", error->message);
+    {
+      /* When it's been cancelled, it means a new search has been launched when the previous
+       * one was still running. In that case, we don't want to update the UI like we would
+       * if the search did end correctly, since that would show back the old search results
+       * and hide the spinner, which is confusing because it will be replaced by the new
+       * search results later when they arrive. So instead, don't do any of this and just
+       * let the next pending search results update the UI accordingly when we get them.
+       */
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        return;
+      else
+        /* TODO: For now we warn in the not-very-noticeable messages panel, but when we start
+         * depending on libadwaita we'll be able to use a status page here as an error page,
+         * in the stack.
+         */
+        ide_object_warning (ide_widget_get_context (GTK_WIDGET (self)),
+                            "Failed to find files: %s", error->message);
+    }
   else
     gbp_grep_panel_set_model (self, model);
 
@@ -434,7 +446,6 @@ gbp_grep_panel_scan_cb (GObject      *object,
 
   gtk_spinner_stop (self->spinner);
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->scrolled_window));
-  gtk_widget_set_sensitive (GTK_WIDGET (self->find_button), TRUE);
 
   /* The model defaults to selecting all items, so if the "Select all" header check box was
    * unselected, then we'll end up in an inconsistent state where toggling the header check
@@ -483,12 +494,18 @@ gbp_grep_panel_launch_search (GbpGrepPanel *self)
 
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->spinner));
   gtk_spinner_start (self->spinner);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->find_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
 
   ide_widget_reveal_and_grab (GTK_WIDGET (self));
 
+  /* We allow making a new search even if there's already one running, but cancel the previous
+   * one to make sure it doesn't needlessly use resources for the grep process that's still
+   * running. Useful for example when you realize that your regex is going to match almost
+   * every single lines of the source tree and so it will never end…
+   */
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
   self->cancellable = g_cancellable_new ();
   gbp_grep_model_scan_async (model,
                              self->cancellable,
