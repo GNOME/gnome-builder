@@ -76,7 +76,6 @@
         "/bin/update-desktop-database",
         "/bin/update-mime-database",
         "/bin/chardetect",
-        "/include",
         "/lib/avahi",
         "/lib/cmake",
         "/lib/gedit",
