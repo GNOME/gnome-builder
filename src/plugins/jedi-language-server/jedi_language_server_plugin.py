@@ -36,6 +36,9 @@ class JediService(Ide.LspService):
     def do_configure_client(self, client):
         client.add_language('python')
         client.add_language('python3')
+        client.set_initialization_options(GLib.Variant('a{sv}', {
+            'autoImportModules': GLib.Variant('as', ['gi']),
+        }))
 
 class JediDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
     def do_load(self):
