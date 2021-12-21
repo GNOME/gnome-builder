@@ -32,6 +32,7 @@ libide_foundry_public_headers = [
   'ide-foundry-types.h',
   'ide-local-device.h',
   'ide-pipeline-addin.h',
+  'ide-pipeline-phase.h',
   'ide-pipeline-stage-launcher.h',
   'ide-pipeline-stage-mkdirs.h',
   'ide-pipeline-stage-transfer.h',
