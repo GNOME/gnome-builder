@@ -28,12 +28,12 @@ from gi.repository import Ide
 
 
 class TypescriptService(Ide.LspService):
-    def do_constructed(self):
-        self.set_inherit_stderr(True)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.set_program('typescript-language-server')
 
-    def do_configure_launcher(self, launcher):
-        # this needs https://github.com/typescript-language-server/typescript-language-server installed on the host
-        launcher.set_argv(["typescript-language-server", "--stdio"])
+    def do_configure_launcher(self, pipeline, launcher):
+        launcher.push_argv('--stdio')
 
     def do_configure_client(self, client):
         client.add_language('javascript')

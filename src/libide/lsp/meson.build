@@ -94,6 +94,7 @@ libide_lsp_deps = [
   libide_code_dep,
   libide_core_dep,
   libide_io_dep,
+  libide_foundry_dep,
   libide_projects_dep,
   libide_sourceview_dep,
   libide_threading_dep,

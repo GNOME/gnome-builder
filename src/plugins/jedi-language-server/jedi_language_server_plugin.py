@@ -27,11 +27,9 @@ from gi.repository import GObject
 from gi.repository import Ide
 
 class JediService(Ide.LspService):
-    def do_constructed(self):
-        self.set_inherit_stderr(True)
-
-    def do_configure_launcher(self, launcher):
-        launcher.push_argv("jedi-language-server")
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.set_program('jedi-language-server')
 
     def do_configure_client(self, client):
         client.add_language('python')
@@ -46,7 +44,6 @@ class JediDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
 
 class JediCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
     def do_load(self, context):
-        Ide.debug("load completion provider")
         JediService.bind_client(self)
 
     def do_get_priority(self, context):

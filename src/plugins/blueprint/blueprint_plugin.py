@@ -10,15 +10,15 @@ from gi.repository import GObject
 from gi.repository import Ide
 
 class BlueprintService(Ide.LspService):
-    def do_constructed(self):
-        self.set_inherit_stderr(True)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.set_program('blueprint-compiler')
 
     def do_configure_client(self, client):
         client.add_language("blueprint")
 
-    def do_configure_launcher(self, launcher):
-        launcher.set_argv(["blueprint-compiler", "lsp"])
-
+    def do_configure_launcher(self, pipeline, launcher):
+        launcher.push_argv('lsp')
 
 class BlueprintDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
     def do_load(self):

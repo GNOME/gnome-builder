@@ -25,6 +25,8 @@
 #endif
 
 #include <libide-code.h>
+#include <libide-foundry.h>
+
 #include "ide-lsp-client.h"
 
 G_BEGIN_DECLS
@@ -38,27 +40,32 @@ struct _IdeLspServiceClass
 {
   IdeObjectClass parent_class;
 
-  void (*configure_launcher)   (IdeLspService         *self,
-                                IdeSubprocessLauncher *launcher);
-  void (*configure_supervisor) (IdeLspService           *self,
-                                IdeSubprocessSupervisor *supervisor);
-  void (*configure_client)     (IdeLspService *self,
-                                IdeLspClient  *client);
+  IdeSubprocessLauncher *(*create_launcher)      (IdeLspService           *self,
+                                                  IdePipeline             *pipeline,
+                                                  GSubprocessFlags         flags);
+  void                   (*configure_launcher)   (IdeLspService           *self,
+                                                  IdePipeline             *pipeline,
+                                                  IdeSubprocessLauncher   *launcher);
+  void                   (*configure_supervisor) (IdeLspService           *self,
+                                                  IdeSubprocessSupervisor *supervisor);
+  void                   (*configure_client)     (IdeLspService           *self,
+                                                  IdeLspClient            *client);
 };
 
 IDE_AVAILABLE_IN_42
-void     ide_lsp_service_class_bind_client  (IdeLspServiceClass *klass,
-                                             IdeObject          *provider);
-
+void        ide_lsp_service_class_bind_client  (IdeLspServiceClass *klass,
+                                                IdeObject          *provider);
 IDE_AVAILABLE_IN_42
-void     ide_lsp_service_set_inherit_stderr (IdeLspService *self,
-                                             gboolean       dev_mode);
+void        ide_lsp_service_set_inherit_stderr (IdeLspService      *self,
+                                                gboolean            inherit_stderr);
 IDE_AVAILABLE_IN_42
-gboolean ide_lsp_service_get_inherit_stderr (IdeLspService *self);
-
+gboolean    ide_lsp_service_get_inherit_stderr (IdeLspService      *self);
 IDE_AVAILABLE_IN_42
-void     ide_lsp_service_stop               (IdeLspService * self);
+void        ide_lsp_service_restart            (IdeLspService      *self);
 IDE_AVAILABLE_IN_42
-void     ide_lsp_service_restart            (IdeLspService *self);
+const char *ide_lsp_service_get_program        (IdeLspService *self);
+IDE_AVAILABLE_IN_42
+void        ide_lsp_service_set_program        (IdeLspService      *self,
+                                                const char         *program);
 
 G_END_DECLS

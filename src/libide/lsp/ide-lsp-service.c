@@ -21,12 +21,22 @@
 #define G_LOG_DOMAIN "ide-lsp-service"
 
 #include "config.h"
+
 #include "ide-lsp-service.h"
+
+/**
+ * SECTION:ide-lsp-service
+ * @title: IdeLspService
+ * @short_description: Service integration for LSPs
+ *
+ * Since: 42.0
+ */
 
 typedef struct
 {
   IdeSubprocessSupervisor *supervisor;
   IdeLspClient *client;
+  char *program;
   guint has_started : 1;
   guint inherit_stderr : 1;
 } IdeLspServicePrivate;
@@ -36,12 +46,61 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeLspService, ide_lsp_service, IDE_TYPE_OB
 enum {
   PROP_0,
   PROP_CLIENT,
-  PROP_SUPERVISOR,
   PROP_INHERIT_STDERR,
+  PROP_PROGRAM,
+  PROP_SUPERVISOR,
   N_PROPS
 };
 
+enum {
+  CREATE_LAUNCHER,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
+
+static void
+ide_lsp_service_stop (IdeLspService *self)
+{
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
+  gboolean notify_client = FALSE;
+  gboolean notify_supervisor = FALSE;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_LSP_SERVICE (self));
+
+  if (priv->has_started)
+    g_debug ("Stopping LSP client %s", G_OBJECT_TYPE_NAME (self));
+
+  if (priv->client != NULL)
+    {
+      ide_lsp_client_stop (priv->client);
+      ide_object_destroy (IDE_OBJECT (priv->client));
+      priv->client = NULL;
+      notify_client = TRUE;
+    }
+
+  if (priv->supervisor != NULL)
+    {
+      ide_subprocess_supervisor_stop (priv->supervisor);
+      g_clear_object (&priv->supervisor);
+      notify_supervisor = TRUE;
+    }
+
+  priv->has_started = FALSE;
+
+  if (notify_client)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CLIENT]);
+
+  if (notify_supervisor)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUPERVISOR]);
+
+  IDE_EXIT;
+}
+
 
 static void
 ide_lsp_service_get_property (GObject    *object,
@@ -56,6 +115,10 @@ ide_lsp_service_get_property (GObject    *object,
     {
     case PROP_CLIENT:
       g_value_set_object (value, priv->client);
+      break;
+
+    case PROP_PROGRAM:
+      g_value_set_string (value, priv->program);
       break;
 
     case PROP_SUPERVISOR:
@@ -85,6 +148,10 @@ ide_lsp_service_set_property (GObject      *object,
       ide_lsp_service_set_inherit_stderr (self, g_value_get_boolean (value));
       break;
 
+    case PROP_PROGRAM:
+      ide_lsp_service_set_program (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -96,31 +163,107 @@ ide_lsp_service_destroy (IdeObject *object)
   IdeLspService *self = (IdeLspService *)object;
   IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
 
+  IDE_ENTRY;
+
   ide_lsp_service_stop (self);
 
   g_clear_object (&priv->supervisor);
   g_clear_object (&priv->client);
 
   IDE_OBJECT_CLASS (ide_lsp_service_parent_class)->destroy (object);
+
+  IDE_EXIT;
+}
+
+static IdeSubprocessLauncher *
+ide_lsp_service_real_create_launcher (IdeLspService    *self,
+                                      IdePipeline      *pipeline,
+                                      GSubprocessFlags  flags)
+{
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeContext) context = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_SERVICE (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  if (priv->program == NULL)
+    IDE_RETURN (NULL);
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+
+  /* First try in the build environment */
+  if (ide_pipeline_contains_program_in_path (pipeline, priv->program, NULL))
+    {
+      if ((launcher = ide_pipeline_create_launcher (pipeline, NULL)))
+        ide_subprocess_launcher_set_flags (launcher, flags);
+    }
+
+  /* Then try on the host if we find it there */
+  if (launcher == NULL)
+    {
+      IdeRuntimeManager *runtime_manager = ide_runtime_manager_from_context (context);
+      IdeRuntime *host = ide_runtime_manager_get_runtime (runtime_manager, "host");
+
+      if (ide_runtime_contains_program_in_path (host, priv->program, NULL))
+        {
+          if ((launcher = ide_runtime_create_launcher (host, NULL)))
+            ide_subprocess_launcher_set_flags (launcher, flags);
+        }
+    }
+
+  /* Finally fallback to Builder's execution runtime */
+  if (launcher == NULL)
+    {
+      g_autofree char *path = NULL;
+
+      if ((path = g_find_program_in_path (priv->program)))
+        launcher = ide_subprocess_launcher_new (flags);
+    }
+
+  if (launcher != NULL)
+    {
+      const char *srcdir = ide_pipeline_get_srcdir (pipeline);
+
+      ide_subprocess_launcher_set_cwd (launcher, srcdir);
+      ide_subprocess_launcher_push_argv (launcher, priv->program);
+    }
+
+  IDE_RETURN (g_steal_pointer (&launcher));
 }
 
 G_NORETURN static void
 ide_lsp_service_real_configure_client (IdeLspService *self,
                                        IdeLspClient  *client)
 {
+  g_assert (IDE_IS_LSP_SERVICE (self));
+  g_assert (IDE_IS_LSP_CLIENT (client));
+
   g_assert_not_reached ();
 }
 
 static void
 ide_lsp_service_real_configure_launcher (IdeLspService         *self,
-                                         IdeSubprocessLauncher *client)
+                                         IdePipeline           *pipeline,
+                                         IdeSubprocessLauncher *launcher)
 {
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_SERVICE (self));
+  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
+  IDE_EXIT;
 }
 
 static void
 ide_lsp_service_real_configure_supervisor (IdeLspService           *self,
                                            IdeSubprocessSupervisor *client)
 {
+  IDE_ENTRY;
+  IDE_EXIT;
 }
 
 static void
@@ -135,6 +278,7 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
 
   ide_object_class->destroy = ide_lsp_service_destroy;
 
+  service_class->create_launcher = ide_lsp_service_real_create_launcher;
   service_class->configure_client = ide_lsp_service_real_configure_client;
   service_class->configure_launcher = ide_lsp_service_real_configure_launcher;
   service_class->configure_supervisor = ide_lsp_service_real_configure_supervisor;
@@ -150,6 +294,20 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
                          "Client",
                          IDE_TYPE_LSP_CLIENT,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * IdeLspService:program:
+   *
+   * The "program" property contains the name of the executable to
+   * launch. If this is set, the create-launcher signal will use it
+   * to locate and execute the program if found.
+   */
+  properties [PROP_PROGRAM] =
+    g_param_spec_string ("program",
+                         "Program",
+                         "The program executable name",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeLspService:supervisor:
@@ -177,6 +335,31 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdeLspService::create-launcher:
+   * @self: an [class@LspService]
+   * @pipeline: a loaded [class@Pipeline]
+   * @flags: [enum@Gio.SubprocessFlags] to use for the launcher
+   *
+   * Creates the launcher to be used for the LSP.
+   *
+   * If you want to use a launcher on the host, this would be a good
+   * place to determine that.
+   *
+   * Returns: (transfer full) (nullable): a [class@SubprocessLauncher] or %NULL
+   */
+  signals [CREATE_LAUNCHER] =
+    g_signal_new ("create-launcher",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeLspServiceClass, create_launcher),
+                  g_signal_accumulator_first_wins, NULL,
+                  NULL,
+                  IDE_TYPE_SUBPROCESS_LAUNCHER,
+                  2,
+                  IDE_TYPE_PIPELINE,
+                  G_TYPE_SUBPROCESS_FLAGS);
 }
 
 static void
@@ -216,32 +399,42 @@ ide_lsp_service_set_inherit_stderr (IdeLspService *self,
 {
   IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_LSP_SERVICE (self));
 
-  if (priv->inherit_stderr == !!inherit_stderr)
-    return;
+  inherit_stderr = !!inherit_stderr;
 
-  priv->inherit_stderr = !!inherit_stderr;
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INHERIT_STDERR]);
+  if (priv->inherit_stderr != inherit_stderr)
+    {
+      priv->inherit_stderr = inherit_stderr;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INHERIT_STDERR]);
+    }
+
+  IDE_EXIT;
 }
 
 static void
-on_supervisor_spawned (IdeLspService           *self,
-                       IdeSubprocess           *subprocess,
-                       IdeSubprocessSupervisor *supervisor)
+on_supervisor_spawned_cb (IdeLspService           *self,
+                          IdeSubprocess           *subprocess,
+                          IdeSubprocessSupervisor *supervisor)
 {
   IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
-  IdeLspServiceClass *klass = IDE_LSP_SERVICE_GET_CLASS (self);
+  IdeLspServiceClass *klass;
   g_autoptr(GIOStream) iostream = NULL;
   g_autoptr(IdeLspClient) client = NULL;
   g_autoptr(GInputStream) to_stdout = NULL;
   g_autoptr(GOutputStream) to_stdin = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_LSP_SERVICE (self));
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  klass = IDE_LSP_SERVICE_GET_CLASS (self);
 
   to_stdin = ide_subprocess_get_stdin_pipe (subprocess);
   to_stdout = ide_subprocess_get_stdout_pipe (subprocess);
@@ -262,6 +455,8 @@ on_supervisor_spawned (IdeLspService           *self,
 
   priv->client = g_steal_pointer (&client);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CLIENT]);
+
+  IDE_EXIT;
 }
 
 static void
@@ -269,92 +464,61 @@ ensure_started (IdeLspService *self,
                 IdeContext    *context)
 {
   IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
-  IdeLspServiceClass *klass = IDE_LSP_SERVICE_GET_CLASS (self);
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  GSubprocessFlags flags;
-  g_autoptr(GFile) workdir = NULL;
-  g_autofree char *workdir_path = NULL;
   g_autoptr(IdeSubprocessSupervisor) supervisor = NULL;
+  IdeBuildManager *build_manager;
+  IdeLspServiceClass *klass;
+  IdePipeline *pipeline = NULL;
+  GSubprocessFlags flags;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_LSP_SERVICE (self));
   g_assert (IDE_IS_CONTEXT (context));
 
   if (priv->has_started)
-    return;
-
-  priv->has_started = TRUE;
+    IDE_EXIT;
 
   g_assert (priv->supervisor == NULL);
   g_assert (priv->client == NULL);
 
+  klass = IDE_LSP_SERVICE_GET_CLASS (self);
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  /* Delay until pipeline is ready */
+  if (!ide_pipeline_is_ready (pipeline))
+    IDE_EXIT;
+
   flags = G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE;
   if (!priv->inherit_stderr)
     flags |= G_SUBPROCESS_FLAGS_STDERR_SILENCE;
-  launcher = ide_subprocess_launcher_new (flags);
 
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  /* Allow subclasses to control launcher creation */
+  g_signal_emit (self, signals [CREATE_LAUNCHER], 0, pipeline, flags, &launcher);
+  if (launcher == NULL)
+    IDE_EXIT;
 
-  workdir = ide_context_ref_workdir (context);
-  workdir_path = g_file_get_path (workdir);
-  ide_subprocess_launcher_set_cwd (launcher, workdir_path);
-
-  klass->configure_launcher (self, launcher);
+  klass->configure_launcher (self, pipeline, launcher);
 
   supervisor = ide_subprocess_supervisor_new ();
   ide_subprocess_supervisor_set_launcher (supervisor, launcher);
   g_signal_connect_object (supervisor,
                            "spawned",
-                           G_CALLBACK (on_supervisor_spawned),
+                           G_CALLBACK (on_supervisor_spawned_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
+  priv->has_started = TRUE;
+
   klass->configure_supervisor (self, supervisor);
-
   ide_subprocess_supervisor_start (supervisor);
-
   priv->supervisor = g_steal_pointer (&supervisor);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUPERVISOR]);
-}
 
-/**
- * ide_lsp_service_stop:
- * @self: a [class@LspService]
- *
- * Stops the service and its associated process, if any. This will set [property@LspService:client]
- * to %NULL.
- */
-void
-ide_lsp_service_stop (IdeLspService *self)
-{
-  gboolean notify_client = FALSE;
-  gboolean notify_supervisor = FALSE;
-  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_LSP_SERVICE (self));
-
-  if (priv->client != NULL)
-    {
-      ide_lsp_client_stop (priv->client);
-      ide_object_destroy (IDE_OBJECT (priv->client));
-      priv->client = NULL;
-      notify_client = TRUE;
-    }
-
-  if (priv->supervisor != NULL)
-    {
-      ide_subprocess_supervisor_stop (priv->supervisor);
-      g_clear_object (&priv->supervisor);
-      notify_supervisor = TRUE;
-    }
-
-  priv->has_started = FALSE;
-
-  if (notify_client)
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CLIENT]);
-  if (notify_supervisor)
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUPERVISOR]);
+  IDE_EXIT;
 }
 
 /**
@@ -366,12 +530,63 @@ ide_lsp_service_stop (IdeLspService *self)
 void
 ide_lsp_service_restart (IdeLspService *self)
 {
+  IdeContext *context;
+
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_LSP_SERVICE (self));
   g_return_if_fail (!ide_object_in_destruction (IDE_OBJECT (self)));
 
   ide_lsp_service_stop (self);
-  ensure_started (self, ide_object_get_context (IDE_OBJECT (self)));
+
+  if ((context = ide_object_get_context (IDE_OBJECT (self))))
+    ensure_started (self, context);
+
+  IDE_EXIT;
+}
+
+static void
+on_pipeline_loaded_cb (IdeLspService *self,
+                       IdePipeline   *pipeline)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_SERVICE (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  ide_lsp_service_restart (self);
+
+  IDE_EXIT;
+}
+
+static void
+on_notify_pipeline_cb (IdeLspService   *self,
+                       GParamSpec      *pspec,
+                       IdeBuildManager *build_manager)
+{
+  IdePipeline *pipeline;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_SERVICE (self));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  ide_lsp_service_stop (self);
+
+  if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
+    {
+      if (!ide_pipeline_is_ready (pipeline))
+        g_signal_connect_object (pipeline,
+                                 "loaded",
+                                 G_CALLBACK (on_pipeline_loaded_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+      else
+        ide_lsp_service_restart (self);
+    }
+
+  IDE_EXIT;
 }
 
 /**
@@ -387,8 +602,9 @@ ide_lsp_service_class_bind_client (IdeLspServiceClass *klass,
                                    IdeObject          *provider)
 {
   IdeContext *context;
-  g_autoptr(IdeLspService) service = NULL;
   GParamSpec *pspec;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_LSP_SERVICE_CLASS (klass));
@@ -399,9 +615,59 @@ ide_lsp_service_class_bind_client (IdeLspServiceClass *klass,
 
   context = ide_object_get_context (provider);
   g_return_if_fail (IDE_IS_CONTEXT (context));
-  service = ide_object_ensure_child_typed (IDE_OBJECT (context), G_OBJECT_CLASS_TYPE (klass));
 
-  ensure_started (service, context);
+  /* If the context has a project (ie: not editor mode), then we
+   * want to track changes to the pipeline so we can reload the
+   * language server automatically.
+   */
+  if (ide_context_has_project (context))
+    {
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+      g_autoptr(IdeLspService) service = NULL;
+      gboolean do_notify = FALSE;
 
-  g_object_bind_property (service, "client", provider, "client", G_BINDING_SYNC_CREATE);
+      if (!(service = ide_object_get_child_typed (IDE_OBJECT (context), G_OBJECT_CLASS_TYPE (klass))))
+        {
+          service = ide_object_ensure_child_typed (IDE_OBJECT (context), G_OBJECT_CLASS_TYPE (klass));
+          g_signal_connect_object (build_manager,
+                                   "notify::pipeline",
+                                   G_CALLBACK (on_notify_pipeline_cb),
+                                   service,
+                                   G_CONNECT_SWAPPED);
+          do_notify = TRUE;
+        }
+
+      if (do_notify)
+        on_notify_pipeline_cb (service, NULL, build_manager);
+
+      g_object_bind_property (service, "client", provider, "client", G_BINDING_SYNC_CREATE);
+    }
+
+  IDE_EXIT;
+}
+
+const char *
+ide_lsp_service_get_program (IdeLspService *self)
+{
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LSP_SERVICE (self), NULL);
+
+  return priv->program;
+}
+
+void
+ide_lsp_service_set_program (IdeLspService *self,
+                             const char    *program)
+{
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LSP_SERVICE (self));
+
+  if (g_strcmp0 (program, priv->program) != 0)
+    {
+      g_free (priv->program);
+      priv->program = g_strdup (program);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRAM]);
+    }
 }
