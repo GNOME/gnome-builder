@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-17 20:52+0000\n"
-"PO-Revision-Date: 2021-12-18 08:25+0200\n"
+"POT-Creation-Date: 2021-12-20 23:56+0000\n"
+"PO-Revision-Date: 2021-12-21 23:24+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -440,6 +440,16 @@ msgid ""
 msgstr ""
 "Якщо увімкнено, «Будівник» автоматично показувати пропозиції доповнення під "
 "час введення тексту."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#| msgid "Words matching selection"
+msgid "Minimum characters for matching selection."
+msgstr "Мінімальна кількість символів для встановлення відповідності позначеного."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+msgid "Specify the mininum number of characters for selection matching."
+msgstr ""
+"Вказати мінімальну кількість символів для встановлення відповідності позначеного."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -2732,8 +2742,7 @@ msgstr "Форматувати позначений код"
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
-msgstr ""
-"(Лише LSP) Форматувати позначений код або увесь документ"
+msgstr "(Лише LSP) Форматувати позначений код або увесь документ"
 
 #: src/libide/gui/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
@@ -5681,21 +5690,40 @@ msgstr "Емуляція ARM"
 msgid "My Computer (%s) %s"
 msgstr "Ваш комп'ютер (%s) %s"
 
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:50
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
 msgid "Words matching selection"
 msgstr "Позначення відповідних слів"
 
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:52
 msgid "Highlight all occurrences of words matching the current selection"
 msgstr ""
 "Підсвічування усіх відповідники слів у поточному позначеному фрагменті коду"
 
 #. Translators: the following are keywords used for searching to locate this preference
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:53
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:54
 msgid "quick highlight words matching current selection"
 msgstr ""
 "швидке підсвічування слів слова відповідність позначене вибір вибране "
 "поточний поточне"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:64
+#| msgctxt "shortcut window"
+#| msgid "Clear highlight"
+msgid "Minimum length for highlight"
+msgstr "Мінімальна довжина підсвічування"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:65
+msgid "Highlight words matching at least this number of characters"
+msgstr ""
+"Підсвічувати відповідні слова, які містять принаймні цю кількість символів"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
+#| msgid "quick highlight words matching current selection"
+msgid "quick highlight words matching current selection minimum length"
+msgstr ""
+"швидке підсвічування слів слова відповідність позначене вибір вибране "
+"поточний поточне мінімальна довжина"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:349
