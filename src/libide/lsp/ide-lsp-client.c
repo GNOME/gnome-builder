@@ -60,6 +60,7 @@ typedef struct
   GHashTable     *diagnostics_by_file;
   GPtrArray      *languages;
   GVariant       *server_capabilities;
+  GVariant       *initialization_options;
   IdeLspTrace     trace;
   gchar          *root_uri;
   gboolean        initialized;
@@ -95,6 +96,7 @@ enum {
 
 enum {
   PROP_0,
+  PROP_INITIALIZATION_OPTIONS,
   PROP_IO_STREAM,
   PROP_SERVER_CAPABILITIES,
   PROP_TRACE,
@@ -1207,6 +1209,14 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
   klass->notification = ide_lsp_client_real_notification;
   klass->supports_language = ide_lsp_client_real_supports_language;
 
+  properties [PROP_INITIALIZATION_OPTIONS] =
+    g_param_spec_variant ("initialization-options",
+                          "Initialization Options",
+                          "Initialization Options",
+                          G_VARIANT_TYPE_ANY,
+                          NULL,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_USE_MARKDOWN_IN_DIAGNOSTICS] =
     g_param_spec_boolean ("use-markdown-in-diagnostics",
                           "Use Markdown in Diagnostics",
@@ -1676,6 +1686,9 @@ ide_lsp_client_start (IdeLspClient *self)
       "window", "{",
         "workDoneProgress", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
       "}",
+    "}",
+    "initializationOptions", "{",
+      JSONRPC_MESSAGE_PUT_VARIANT (priv->initialization_options),
     "}"
   );
 
@@ -2158,4 +2171,54 @@ ide_lsp_client_get_server_capabilities (IdeLspClient *self)
   g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), NULL);
 
   return priv->server_capabilities;
+}
+
+/**
+ * ide_lsp_client_set_initialization_options:
+ * @self: a [class@LspClient]
+ * @options: (nullable): a #GVariant or %NULL
+ *
+ * Sets the `initilizationOptions` to send to the language server
+ * when the server is initialized.
+ *
+ * if @options is floating, the floating reference will be taken
+ * when calling this function otherwise the reference count of
+ * @options will be incremented by one.
+ *
+ * Since: 42.0
+ */
+void
+ide_lsp_client_set_initialization_options (IdeLspClient *self,
+                                           GVariant     *options)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
+
+  if (options == priv->initialization_options)
+    return;
+
+  g_clear_pointer (&priv->initialization_options, g_variant_unref);
+  if (options)
+    priv->initialization_options = g_variant_ref_sink (options);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INITIALIZATION_OPTIONS]);
+}
+
+/**
+ * ide_lsp_client_get_initialization_options:
+ * @self: a [class@LspClient]
+ *
+ * Gets the initialization options for the client.
+ *
+ * Returns: (transfer none) (nullable): a [struct@GLib.Variant] or %NULL
+ */
+GVariant *
+ide_lsp_client_get_initialization_options (IdeLspClient *self)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), NULL);
+
+  return priv->initialization_options;
 }
