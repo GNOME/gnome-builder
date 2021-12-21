@@ -132,7 +132,7 @@
       <default>2</default>
       <range min="1" max="32"/>
       <summary>Minimum characters for matching selection.</summary>
-      <description>Specify the mininum number of characters for selection matching.</description>
+      <description>Specify the minimum number of characters for selection matching.</description>
     </key>
   </schema>
 </schemalist>
