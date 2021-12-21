@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-17 20:52+0000\n"
-"PO-Revision-Date: 2021-12-17 22:38+0000\n"
+"POT-Creation-Date: 2021-12-20 23:56+0000\n"
+"PO-Revision-Date: 2021-12-21 16:02+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -435,6 +435,14 @@ msgid ""
 msgstr ""
 "Caso ativado, o Builder irá mostrar automaticamente sugestões à medida que "
 "escreve."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+msgid "Minimum characters for matching selection."
+msgstr "Mínimo de caracteres para corresponder à seleção."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+msgid "Specify the mininum number of characters for selection matching."
+msgstr "Especificar o número mínimo de caracteres para corresponder à seleção."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -5679,18 +5687,34 @@ msgstr "Emulação de Arm"
 msgid "My Computer (%s) %s"
 msgstr "Meu computador (%s) %s"
 
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:50
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
 msgid "Words matching selection"
 msgstr "Palavras correspondendo à seleção"
 
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:52
 msgid "Highlight all occurrences of words matching the current selection"
 msgstr "Realça todas as ocorrências de palavras correspondendo à seleção atual"
 
 #. Translators: the following are keywords used for searching to locate this preference
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:53
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:54
 msgid "quick highlight words matching current selection"
-msgstr "rápido realçar realce palavras correspondência atual seleção"
+msgstr "palavras de realce rápido correspondendo à atual seleção"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:64
+msgid "Minimum length for highlight"
+msgstr "Comprimento mínimo para realçar"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:65
+msgid "Highlight words matching at least this number of characters"
+msgstr ""
+"Realçar palavras que correspondam pelo menos a este número de caracteres"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
+msgid "quick highlight words matching current selection minimum length"
+msgstr ""
+"palavras de realce rápido que correspondam ao comprimento mínimo da seleção "
+"actual"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:349
