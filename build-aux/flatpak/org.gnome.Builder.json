@@ -592,7 +592,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "path" : "/home/despinosa/Projects/gvls",
+                    "path" : "https://gitlab.gnome.org/esodan/gvls.git",
                     "tag" : "gvls-20.1"
                 }
             ]
