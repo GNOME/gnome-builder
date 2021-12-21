@@ -99,7 +99,7 @@ pkgconfig.generate(
          name: 'gnome-builder-@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION),
      filebase: 'gnome-builder-@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION),
   description: 'Contains the plugin container for Builder.',
-  install_dir: join_paths(pkglibdir, 'pkgconfig'),
+  install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
      requires: [ 'gio-2.0', 'gio-unix-2.0', 'gtk+-3.0', 'gtksourceview-4', 'libdazzle-1.0', 'vte-2.91', 'template-glib-1.0', 'libpeas-1.0' ],
 )
 
