@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-20 23:56+0000\n"
-"PO-Revision-Date: 2021-12-21 23:24+0200\n"
+"POT-Creation-Date: 2021-12-21 21:38+0000\n"
+"PO-Revision-Date: 2021-12-21 23:45+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -442,14 +442,16 @@ msgstr ""
 "час введення тексту."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:134
-#| msgid "Words matching selection"
 msgid "Minimum characters for matching selection."
-msgstr "Мінімальна кількість символів для встановлення відповідності позначеного."
+msgstr ""
+"Мінімальна кількість символів для встановлення відповідності позначеного."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
-msgid "Specify the mininum number of characters for selection matching."
+#| msgid "Specify the mininum number of characters for selection matching."
+msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
-"Вказати мінімальну кількість символів для встановлення відповідності позначеного."
+"Вказати мінімальну кількість символів для встановлення відповідності "
+"позначеного."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -959,7 +961,7 @@ msgstr "Без назви"
 
 #: src/libide/core/ide-transfer.c:549 src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-clone-surface.ui:319
-#: src/libide/greeter/ide-greeter-workspace-actions.c:126
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
 #: src/libide/gui/ide-workbench.c:1410
 #: src/plugins/buildui/gbp-buildui-log-pane.c:284
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
@@ -1583,7 +1585,7 @@ msgid "Directory"
 msgstr "Каталог"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:89
-#: src/libide/greeter/ide-greeter-workspace-actions.c:122
+#: src/libide/greeter/ide-greeter-workspace-actions.c:118
 msgid "Select Project Folder"
 msgstr "Виберіть теку проєкту"
 
@@ -1591,12 +1593,12 @@ msgstr "Виберіть теку проєкту"
 msgid "Select Project File"
 msgstr "Виберіть файл проєкту"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:127
+#: src/libide/greeter/ide-greeter-workspace-actions.c:121
 #: src/libide/gui/ide-workbench.c:1409
 msgid "_Open"
 msgstr "_Відкрити"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:138
+#: src/libide/greeter/ide-greeter-workspace-actions.c:131
 msgid "All Project Types"
 msgstr "усі типи проєктів"
 
@@ -5707,8 +5709,6 @@ msgstr ""
 "поточний поточне"
 
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:64
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "Minimum length for highlight"
 msgstr "Мінімальна довжина підсвічування"
 
@@ -5719,7 +5719,6 @@ msgstr ""
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
-#| msgid "quick highlight words matching current selection"
 msgid "quick highlight words matching current selection minimum length"
 msgstr ""
 "швидке підсвічування слів слова відповідність позначене вибір вибране "
