@@ -155,7 +155,7 @@ gbp_todo_workspace_addin_load (IdeWorkspaceAddin *addin,
   ide_editor_sidebar_add_section (sidebar,
                                   "todo",
                                   _("TODO/FIXMEs"),
-                                  "emblem-ok-symbolic",
+                                  "builder-todo-symbolic",
                                   NULL, NULL,
                                   GTK_WIDGET (self->panel),
                                   200);
