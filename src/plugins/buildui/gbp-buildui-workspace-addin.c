@@ -381,7 +381,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   ide_editor_sidebar_add_section (sidebar,
                                   "build-issues",
                                   _("Build Issues"),
-                                  "builder-build-symbolic",
+                                  "builder-build-issues-symbolic",
                                   NULL, NULL,
                                   GTK_WIDGET (self->pane),
                                   100);

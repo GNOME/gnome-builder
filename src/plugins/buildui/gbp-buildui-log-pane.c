@@ -354,7 +354,7 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  dzl_dock_widget_set_icon_name (DZL_DOCK_WIDGET (self), "builder-build-symbolic");
+  dzl_dock_widget_set_icon_name (DZL_DOCK_WIDGET (self), "builder-build-info-symbolic");
 
   g_signal_connect_object (self->terminal,
                            "size-allocate",

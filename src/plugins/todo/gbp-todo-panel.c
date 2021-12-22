@@ -298,7 +298,7 @@ gbp_todo_panel_init (GbpTodoPanel *self)
   empty = g_object_new (DZL_TYPE_EMPTY_STATE,
                         "title", _("Loading TODOs…"),
                         "subtitle", _("Please wait while we scan your project"),
-                        "icon-name", "emblem-ok-symbolic",
+                        "icon-name", "builder-todo-symbolic",
                         "valign", GTK_ALIGN_START,
                         "visible", TRUE,
                         NULL);
