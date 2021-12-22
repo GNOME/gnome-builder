@@ -764,6 +764,15 @@ ide_lsp_service_get_search_path (IdeLspService *self)
   return (const char * const *)priv->search_path;
 }
 
+/**
+ * ide_lsp_service_set_search_path:
+ * @self: a #IdeLspService
+ * @search_path: (array zero-terminated=1) (element-type utf8) (nullable):
+ *   a search path to apply when searching the host or %NULL.
+ *
+ * Sets an alternate search path to use when discovering programs on
+ * the host system.
+ */
 void
 ide_lsp_service_set_search_path (IdeLspService      *self,
                                  const char * const *search_path)
