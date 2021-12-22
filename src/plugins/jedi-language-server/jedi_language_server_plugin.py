@@ -20,16 +20,20 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import gi
+import os
 
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Ide
 
+DEV_MODE = os.getenv('DEV_MODE') and True or False
+
 class JediService(Ide.LspService):
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.set_program('jedi-language-server')
+        self.set_inherit_stderr(DEV_MODE)
 
     def do_configure_client(self, client):
         client.add_language('python')
