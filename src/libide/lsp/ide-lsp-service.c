@@ -37,6 +37,7 @@ typedef struct
   IdeSubprocessSupervisor *supervisor;
   IdeLspClient *client;
   char *program;
+  char **search_path;
   guint has_started : 1;
   guint inherit_stderr : 1;
 } IdeLspServicePrivate;
@@ -48,6 +49,7 @@ enum {
   PROP_CLIENT,
   PROP_INHERIT_STDERR,
   PROP_PROGRAM,
+  PROP_SEARCH_PATH,
   PROP_SUPERVISOR,
   N_PROPS
 };
@@ -121,6 +123,10 @@ ide_lsp_service_get_property (GObject    *object,
       g_value_set_string (value, priv->program);
       break;
 
+    case PROP_SEARCH_PATH:
+      g_value_set_boxed (value, priv->search_path);
+      break;
+
     case PROP_SUPERVISOR:
       g_value_set_object (value, priv->supervisor);
       break;
@@ -152,6 +158,10 @@ ide_lsp_service_set_property (GObject      *object,
       ide_lsp_service_set_program (self, g_value_get_string (value));
       break;
 
+    case PROP_SEARCH_PATH:
+      ide_lsp_service_set_search_path (self, g_value_get_boxed (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -169,6 +179,8 @@ ide_lsp_service_destroy (IdeObject *object)
 
   g_clear_object (&priv->supervisor);
   g_clear_object (&priv->client);
+  g_clear_pointer (&priv->program, g_free);
+  g_clear_pointer (&priv->search_path, g_strfreev);
 
   IDE_OBJECT_CLASS (ide_lsp_service_parent_class)->destroy (object);
 
@@ -183,6 +195,7 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
   IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeContext) context = NULL;
+  const char *srcdir;
 
   IDE_ENTRY;
 
@@ -193,12 +206,18 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
     IDE_RETURN (NULL);
 
   context = ide_object_ref_context (IDE_OBJECT (self));
+  srcdir = ide_pipeline_get_srcdir (pipeline);
 
   /* First try in the build environment */
   if (ide_pipeline_contains_program_in_path (pipeline, priv->program, NULL))
     {
       if ((launcher = ide_pipeline_create_launcher (pipeline, NULL)))
-        ide_subprocess_launcher_set_flags (launcher, flags);
+        {
+          ide_subprocess_launcher_set_flags (launcher, flags);
+          ide_subprocess_launcher_push_argv (launcher, priv->program);
+          ide_subprocess_launcher_set_cwd (launcher, srcdir);
+          IDE_RETURN (g_steal_pointer (&launcher));
+        }
     }
 
   /* Then try on the host if we find it there */
@@ -210,7 +229,34 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
       if (ide_runtime_contains_program_in_path (host, priv->program, NULL))
         {
           if ((launcher = ide_runtime_create_launcher (host, NULL)))
-            ide_subprocess_launcher_set_flags (launcher, flags);
+            {
+              ide_subprocess_launcher_set_flags (launcher, flags);
+              ide_subprocess_launcher_push_argv (launcher, priv->program);
+              ide_subprocess_launcher_set_cwd (launcher, srcdir);
+              IDE_RETURN (g_steal_pointer (&launcher));
+            }
+        }
+
+      /* If we didn't find it in the host, we might have an alternate
+       * search path we can try.
+       */
+      if (priv->search_path)
+        {
+          for (guint i = 0; priv->search_path[i]; i++)
+            {
+              g_autofree char *path = g_build_filename (priv->search_path[i], priv->program, NULL);
+
+              if (g_file_test (path, G_FILE_TEST_IS_EXECUTABLE))
+                {
+                  if ((launcher = ide_runtime_create_launcher (host, NULL)))
+                    {
+                      ide_subprocess_launcher_push_argv (launcher, path);
+                      ide_subprocess_launcher_set_flags (launcher, flags);
+                      ide_subprocess_launcher_set_cwd (launcher, srcdir);
+                      IDE_RETURN (g_steal_pointer (&launcher));
+                    }
+                }
+            }
         }
     }
 
@@ -220,18 +266,15 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
       g_autofree char *path = NULL;
 
       if ((path = g_find_program_in_path (priv->program)))
-        launcher = ide_subprocess_launcher_new (flags);
+        {
+          launcher = ide_subprocess_launcher_new (flags);
+          ide_subprocess_launcher_push_argv (launcher, path);
+          ide_subprocess_launcher_set_cwd (launcher, srcdir);
+          IDE_RETURN (g_steal_pointer (&launcher));
+        }
     }
 
-  if (launcher != NULL)
-    {
-      const char *srcdir = ide_pipeline_get_srcdir (pipeline);
-
-      ide_subprocess_launcher_set_cwd (launcher, srcdir);
-      ide_subprocess_launcher_push_argv (launcher, priv->program);
-    }
-
-  IDE_RETURN (g_steal_pointer (&launcher));
+  IDE_RETURN (NULL);
 }
 
 G_NORETURN static void
@@ -308,6 +351,18 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
                          "The program executable name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeLspService:search-path:
+   *
+   * An alternate search path to locate the program on the host.
+   */
+  properties [PROP_SEARCH_PATH] =
+    g_param_spec_boxed ("search-path",
+                        "Search Path",
+                        "Search Path",
+                        G_TYPE_STRV,
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeLspService:supervisor:
@@ -670,4 +725,30 @@ ide_lsp_service_set_program (IdeLspService *self,
       priv->program = g_strdup (program);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRAM]);
     }
+}
+
+const char * const *
+ide_lsp_service_get_search_path (IdeLspService *self)
+{
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LSP_SERVICE (self), NULL);
+
+  return (const char * const *)priv->search_path;
+}
+
+void
+ide_lsp_service_set_search_path (IdeLspService      *self,
+                                 const char * const *search_path)
+{
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LSP_SERVICE (self));
+
+  if ((const char * const *)priv->search_path == search_path)
+    return;
+
+  g_strfreev (priv->search_path);
+  priv->search_path = g_strdupv ((char **)search_path);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_PATH]);
 }
