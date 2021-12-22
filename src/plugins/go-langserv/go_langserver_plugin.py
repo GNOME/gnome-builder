@@ -15,6 +15,8 @@ class GoService(Ide.LspService):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.set_program('gopls')
+        self.set_inherit_stderr(DEV_MODE)
+        self.set_search_path([os.path.expanduser("~/go/bin")])
 
     def do_configure_launcher(self, pipeline, launcher):
         if DEV_MODE:
