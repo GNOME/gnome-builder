@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-20 23:56+0000\n"
-"PO-Revision-Date: 2021-12-21 16:02+0000\n"
+"POT-Creation-Date: 2021-12-22 01:42+0000\n"
+"PO-Revision-Date: 2021-12-22 14:05+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -441,7 +441,7 @@ msgid "Minimum characters for matching selection."
 msgstr "Mínimo de caracteres para corresponder à seleção."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
-msgid "Specify the mininum number of characters for selection matching."
+msgid "Specify the minimum number of characters for selection matching."
 msgstr "Especificar o número mínimo de caracteres para corresponder à seleção."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
@@ -948,7 +948,7 @@ msgstr "Sem Título"
 
 #: src/libide/core/ide-transfer.c:549 src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-clone-surface.ui:319
-#: src/libide/greeter/ide-greeter-workspace-actions.c:126
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
 #: src/libide/gui/ide-workbench.c:1410
 #: src/plugins/buildui/gbp-buildui-log-pane.c:284
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
@@ -1571,7 +1571,7 @@ msgid "Directory"
 msgstr "Diretoria"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:89
-#: src/libide/greeter/ide-greeter-workspace-actions.c:122
+#: src/libide/greeter/ide-greeter-workspace-actions.c:118
 msgid "Select Project Folder"
 msgstr "Selecionar Pasta do Projeto"
 
@@ -1579,12 +1579,12 @@ msgstr "Selecionar Pasta do Projeto"
 msgid "Select Project File"
 msgstr "Selecionar Ficheiro do Projeto"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:127
+#: src/libide/greeter/ide-greeter-workspace-actions.c:121
 #: src/libide/gui/ide-workbench.c:1409
 msgid "_Open"
 msgstr "_Abrir"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:138
+#: src/libide/greeter/ide-greeter-workspace-actions.c:131
 msgid "All Project Types"
 msgstr "Todos os Tipos de Projeto"
 
@@ -2868,7 +2868,7 @@ msgstr[0] "A instalar %u pacote"
 msgstr[1] "A instalar %u pacotes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1463
+#: src/libide/lsp/ide-lsp-client.c:1473
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falha ao inicializar o servidor de linguagem: %s"
