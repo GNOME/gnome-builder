@@ -644,17 +644,10 @@ on_notify_pipeline_cb (IdeLspService   *self,
   IDE_EXIT;
 }
 
-/**
- * ide_lsp_service_class_bind_client:
- * @klass: a [class@LspService] class structure
- * @provider: an [class@Object]
- *
- * Binds the "client" property of @property to its context's instance of @klass. If the language
- * server is not running yet, it will be started.
- */
-void
-ide_lsp_service_class_bind_client (IdeLspServiceClass *klass,
-                                   IdeObject          *provider)
+static void
+ide_lsp_service_class_bind_client_internal (IdeLspServiceClass *klass,
+                                            IdeObject          *provider,
+                                            gboolean            autostart)
 {
   IdeContext *context;
   GParamSpec *pspec;
@@ -677,6 +670,7 @@ ide_lsp_service_class_bind_client (IdeLspServiceClass *klass,
    */
   if (ide_context_has_project (context))
     {
+      IdeLspServicePrivate *priv;
       IdeBuildManager *build_manager = ide_build_manager_from_context (context);
       g_autoptr(IdeLspService) service = NULL;
       gboolean do_notify = FALSE;
@@ -692,6 +686,9 @@ ide_lsp_service_class_bind_client (IdeLspServiceClass *klass,
           do_notify = TRUE;
         }
 
+      priv = ide_lsp_service_get_instance_private (service);
+      do_notify |= (autostart && !priv->has_started);
+
       if (do_notify)
         on_notify_pipeline_cb (service, NULL, build_manager);
 
@@ -699,6 +696,36 @@ ide_lsp_service_class_bind_client (IdeLspServiceClass *klass,
     }
 
   IDE_EXIT;
+}
+
+/**
+ * ide_lsp_service_class_bind_client:
+ * @klass: a [class@LspService] class structure
+ * @provider: an [class@Object]
+ *
+ * Binds the "client" property of @property to its context's instance of
+ * @klass. If the language server is not running yet, it will be started.
+ */
+void
+ide_lsp_service_class_bind_client (IdeLspServiceClass *klass,
+                                   IdeObject          *provider)
+{
+  ide_lsp_service_class_bind_client_internal (klass, provider, TRUE);
+}
+
+/**
+ * ide_lsp_service_class_bind_client_lazy:
+ * @klass: a [class@LspService] class structure
+ * @provider: an [class@Object]
+ *
+ * Like ide_lsp_service_bind_client() but will not immediately spawn
+ * the language server.
+ */
+void
+ide_lsp_service_class_bind_client_lazy (IdeLspServiceClass *klass,
+                                        IdeObject          *provider)
+{
+  ide_lsp_service_class_bind_client_internal (klass, provider, FALSE);
 }
 
 const char *
