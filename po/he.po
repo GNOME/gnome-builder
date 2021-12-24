@@ -3,33 +3,33 @@
 # This file is distributed under the same license as the PACKAGE package.
 # יוֹסֵף אוֹר בּוֹצְ׳קוֹ <yoseforb@gnome.org>, 2015.
 # Niv Baehr <bloop93@gmail.com>, 2016.
-# Yosef Or Boczko <yoseforb@gmail.com>, 2015-2020.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2015-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-03-19 17:03+0000\n"
-"PO-Revision-Date: 2021-04-03 21:39+0300\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"POT-Creation-Date: 2021-12-22 01:29+0000\n"
+"PO-Revision-Date: 2021-12-24 12:52+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2;\n"
-"X-Generator: Poedit 2.4.2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2\n"
+"X-Generator: Gtranslator 40.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:140 src/main.c:234
+#: src/libide/gui/ide-preferences-builtin.c:140 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/gui/ide-application-actions.c:143
+#: src/libide/gui/ide-application-actions.c:141
 msgid "An IDE for GNOME"
 msgstr "סביבת פיתוח משולבת עבור GNOME"
 
@@ -154,6 +154,10 @@ msgstr "חיפוש מקיף מהיר"
 msgid "Debug with the GNU debugger"
 msgstr "ניפוי שגיאות באמצעות מנפה השגיאות של גנו (gdb)"
 
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr "שימוש במפת סקירה כדי לראות עוד מהקובץ"
+
 # פעולת בנייה במקביל, מקביליות בנייה
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -178,6 +182,14 @@ msgid ""
 msgstr ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Debugger Breakpoint on Main"
+msgstr "Debugger Breakpoint on Main"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "Debugger should automatically insert breakpoint on main function."
+msgstr "Debugger should automatically insert breakpoint on main function."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -207,19 +219,19 @@ msgstr "Path to ctags executable"
 msgid "The path to the ctags executable on the system."
 msgstr "The path to the ctags executable on the system."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
 msgstr "Restore last position"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:26
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:20
 msgid "Jump to the last position when reopening a file"
 msgstr "Jump to the last position when reopening a file"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
 msgstr "Show modified lines"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:31
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
@@ -227,61 +239,61 @@ msgstr ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
 msgstr "Show diagnostics next to line number"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:36
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 #: src/libide/editor/ide-editor-settings-dialog.ui:116
 msgid "Highlight current line"
 msgstr "הדגשת השורה הנוכחית"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:41
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr "If enabled, the editor will highlight the line containing the cursor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
 msgstr "Highlight matching brackets"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:46
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
 msgstr "If enabled, the editor will highlight matching brackets."
 
 # הערות:
 # הוספת הערה
 # vmd,
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
 msgstr "Show line numbers"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:51
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
 msgstr "If enabled, the editor will show line numbers."
 
 # הערות:
 # הוספת הערה
 # vmd,
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
 msgstr "Show relative line numbers"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:56
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show relative line numbers."
 msgstr "If enabled, the editor will show relative line numbers."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:144
 msgid "Smart Backspace"
 msgstr "מקש Backspace חכם"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:61
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -289,29 +301,29 @@ msgstr ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: src/libide/gui/ide-preferences-builtin.c:143
 msgid "Smart Home and End"
 msgstr "מקשי Home ו־End חכמים"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "Whether or not Home moves to first non-space character."
 msgstr "Whether or not Home moves to first non-space character."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
 msgid "Show grid lines"
 msgstr "Show grid lines"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "If enabled, the editor will show grid lines in the document."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
 #: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Show overview map"
 msgstr "הצגת מפת סקירה"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
@@ -319,11 +331,11 @@ msgstr ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid "Automatically Hide Overview Map"
 msgstr "Automatically Hide Overview Map"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
@@ -331,28 +343,28 @@ msgstr ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
 msgid "Draw Spaces"
 msgstr "Draw Spaces"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
 msgid "The various types of space to draw in the editor."
 msgstr "The various types of space to draw in the editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
 #: src/libide/gui/ide-preferences-builtin.c:159
 msgid "Overscroll"
 msgstr "גלילת יתר"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "The number of lines to scroll beyond the end of the buffer."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
 msgid "Wrap Text"
 msgstr "Wrap Text"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
@@ -360,47 +372,47 @@ msgstr ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
 #: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Autosave Enabled"
 msgstr "שמירה אוטומטית מאופשרת"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Enable or disable autosave feature."
 msgstr "Enable or disable autosave feature."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 #: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Autosave Frequency"
 msgstr "שמירה אוטומטית לעתים קרובות"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "The number of seconds after modification before auto saving."
 msgstr "The number of seconds after modification before auto saving."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Completion Row Count"
 msgstr "Completion Row Count"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of completion rows to display to the user."
 msgstr "The number of completion rows to display to the user."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/gui/ide-preferences-builtin.c:107
 msgid "Line Spacing"
 msgstr "מרווח שורה"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of pixels to include above and below lines in the editor."
 msgstr "The number of pixels to include above and below lines in the editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
 #: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Interactive Completion"
 msgstr "השלמה אוטומטית הדודית"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -472,7 +484,7 @@ msgid "\"Projects\""
 msgstr "\"מיזמים\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:421
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "Projects directory"
 msgstr "תיקיית המיזמים"
 
@@ -521,7 +533,6 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "This setting is deprecated and no longer in use."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:76
 msgid "Show Ignored Files"
 msgstr "הצגת קבצים מועלמים"
 
@@ -532,7 +543,6 @@ msgstr ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:81
 msgid "Sort Directories First"
 msgstr "סידור תיקייות לפני קבצים"
 
@@ -867,9 +877,8 @@ msgid "Load or generate a palette using the preferences"
 msgstr "יש לטעון או ליצור לוח צבעים בעזרת ההעדפות"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5025
+#: src/libide/sourceview/ide-source-view.c:5029
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-#: src/plugins/project-tree/gtk/menus.ui:60
 msgid "Rename"
 msgstr "שינוי שם"
 
@@ -880,16 +889,17 @@ msgstr "הסרה"
 
 #: src/gstyle/ui/gstyle-rename-popover.ui:35
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:35
+#: src/plugins/project-tree/gtk/menus.ui:53
 msgid "_Rename"
 msgstr "_שינוי שם"
 
 #. translators: %u is replaced with an incrementing number
-#: src/libide/code/ide-buffer-manager.c:391
+#: src/libide/code/ide-buffer-manager.c:392
 #, c-format
 msgid "unsaved file %u"
 msgstr "קובץ שלא נשמר %u"
 
-#: src/libide/code/ide-buffer.c:3434
+#: src/libide/code/ide-buffer.c:3493
 msgid "The current language lacks a symbol resolver."
 msgstr "לשפה הנוכחית חסר מאחזר סמלים."
 
@@ -921,21 +931,16 @@ msgstr "שמירת הטיוטה נכשלה: %s"
 msgid "Untitled"
 msgstr "ללא כותרת"
 
-#: src/libide/core/ide-transfer.c:549
-#: src/libide/editor/ide-editor-page-actions.c:281
-#: src/libide/editor/ide-editor-page-actions.c:381
-#: src/libide/editor/ide-editor-surface-actions.c:76
-#: src/libide/greeter/ide-clone-surface.ui:318
-#: src/libide/greeter/ide-greeter-workspace.c:536
-#: src/libide/terminal/ide-terminal-page-actions.c:276
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
-#: src/plugins/dspy/libdspy/dspy-method-view.c:274
-#: src/plugins/editor/gbp-confirm-save-dialog.c:198
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
-msgid "Cancel"
-msgstr "ביטול"
+#: src/libide/core/ide-transfer.c:549 src/libide/editor/ide-editor-page.ui:51
+#: src/libide/greeter/ide-clone-surface.ui:319
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
+#: src/libide/gui/ide-workbench.c:1410
+#: src/plugins/buildui/gbp-buildui-log-pane.c:280
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:316
+#: src/plugins/testui/gbp-test-output-panel.c:69
+msgid "_Cancel"
+msgstr "_ביטול"
 
 #: src/libide/debugger/ide-debug-manager.c:1001
 #, c-format
@@ -969,6 +974,7 @@ msgid "Save File"
 msgstr "שמירת קובץ"
 
 #: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:380
 #: src/libide/terminal/ide-terminal-page-actions.c:277
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
@@ -976,13 +982,23 @@ msgstr "שמירת קובץ"
 msgid "Save"
 msgstr "שמירה"
 
-#: src/libide/editor/ide-editor-page-actions.c:377
-msgid "Save File As"
-msgstr "שימרת קובץ בשם"
+#: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:381
+#: src/libide/editor/ide-editor-surface-actions.c:76
+#: src/libide/greeter/ide-greeter-workspace.c:536
+#: src/libide/terminal/ide-terminal-page-actions.c:276
+#: src/plugins/color-picker/gb-color-picker-prefs.c:97
+#: src/plugins/color-picker/gb-color-picker-prefs.c:213
+#: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/dspy/libdspy/dspy-method-view.c:274
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:262
+msgid "Cancel"
+msgstr "ביטול"
 
-#: src/libide/editor/ide-editor-page-actions.c:380
-msgid "Save As"
-msgstr "שמירה בשם"
+#: src/libide/editor/ide-editor-page-actions.c:377
+msgid "Save a Copy"
+msgstr "שמירת עותק"
 
 #: src/libide/editor/ide-editor-page-shortcuts.c:33
 #: src/libide/editor/ide-editor-page-shortcuts.c:39
@@ -1003,9 +1019,10 @@ msgstr "שמירה בשם"
 #: src/libide/gui/ide-frame-shortcuts.c:49
 #: src/libide/gui/ide-frame-shortcuts.c:56
 #: src/libide/gui/ide-frame-shortcuts.c:63
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:348
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
+#: src/plugins/grep/gbp-grep-editor-addin.c:55
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
 #: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
 msgid "Editor shortcuts"
@@ -1051,7 +1068,6 @@ msgstr "חיפוש והחלפה"
 
 # מציאה
 #: src/libide/editor/ide-editor-page-shortcuts.c:53
-#: src/plugins/grep/gbp-grep-popover.ui:37
 msgid "Find"
 msgstr "חיפוש"
 
@@ -1075,15 +1091,6 @@ msgstr "מעבר לשגיאה הקודמת"
 msgid "_Reload"
 msgstr "טעינה _מחדש"
 
-#: src/libide/editor/ide-editor-page.ui:51
-#: src/libide/greeter/ide-greeter-workspace-actions.c:126
-#: src/libide/gui/ide-workbench.c:1442
-#: src/plugins/buildui/gbp-buildui-log-pane.c:280
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:154
-#: src/plugins/testui/gbp-test-output-panel.c:69
-msgid "_Cancel"
-msgstr "_ביטול"
-
 #: src/libide/editor/ide-editor-page.ui:64
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
@@ -1092,18 +1099,15 @@ msgstr "‏Builder זיהה כי קובץ זה שונה באופן חיצוני.
 
 # לבדוק  – ביטוי סדיר
 #: src/libide/editor/ide-editor-search-bar.c:180
-#: src/libide/editor/ide-editor-search-bar.ui:220
 msgid "Regular expressions"
 msgstr "ביטויים רגולרים"
 
 #: src/libide/editor/ide-editor-search-bar.c:185
-#: src/libide/editor/ide-editor-search-bar.ui:235
 #: src/libide/terminal/ide-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "תלוי רישיות"
 
 #: src/libide/editor/ide-editor-search-bar.c:190
-#: src/libide/editor/ide-editor-search-bar.ui:249
 msgid "Match whole word only"
 msgstr "התאמה למילים שלמות בלבד"
 
@@ -1112,23 +1116,40 @@ msgstr "התאמה למילים שלמות בלבד"
 msgid "%u of %u"
 msgstr "%u מתוך %u"
 
+#: src/libide/editor/ide-editor-search-bar.ui:116
+#| msgid "Replace"
+msgid "_Replace"
+msgstr "_החלפה"
+
 #: src/libide/editor/ide-editor-search-bar.ui:128
-#: src/plugins/grep/gbp-grep-panel.ui:67
-msgid "Replace"
-msgstr "החלפה"
+#| msgid "Replace All"
+msgid "Replace _All"
+msgstr "החלפת ה_כול"
 
-#: src/libide/editor/ide-editor-search-bar.ui:140
-msgid "Replace All"
-msgstr "להחליף הכול"
-
-#: src/libide/editor/ide-editor-search-bar.ui:162
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Switch between Search and Search-and-Replace"
 msgstr "מעבר בין חיפוש לחיפוש והחלפה"
 
-#: src/libide/editor/ide-editor-search-bar.ui:185
+#: src/libide/editor/ide-editor-search-bar.ui:169
 #: src/libide/terminal/ide-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr "הצגה והסתרת אפשרויות חיפוש כגון תלות רישיות"
+
+# לבדוק  – ביטוי סדיר
+#: src/libide/editor/ide-editor-search-bar.ui:202
+#| msgid "Regular expressions"
+msgid "Regular _expressions"
+msgstr "_ביטויים רגולרים"
+
+#: src/libide/editor/ide-editor-search-bar.ui:217
+#| msgid "Case sensitive"
+msgid "_Case sensitive"
+msgstr "התאמת _רישיות"
+
+#: src/libide/editor/ide-editor-search-bar.ui:231
+#| msgid "Match whole word only"
+msgid "_Match whole word only"
+msgstr "התאמת מילים _שלמות בלבד"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:6
 #: src/plugins/editor/gtk/menus.ui:165
@@ -1226,7 +1247,7 @@ msgstr "רווחים לטאב"
 #: src/libide/editor/ide-editor-sidebar.ui:31
 #: src/libide/gui/ide-frame-header.ui:21
 msgid "Open Pages"
-msgstr "פתיחת דפים"
+msgstr "דפים פתוחים"
 
 #: src/libide/editor/ide-editor-surface-actions.c:72
 msgid "Open File"
@@ -1234,8 +1255,7 @@ msgstr "פתיחת קובץ"
 
 #: src/libide/editor/ide-editor-surface-actions.c:75
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/project-tree/gtk/menus.ui:22
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:287
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:261
 msgid "Open"
 msgstr "פתיחה"
 
@@ -1249,6 +1269,7 @@ msgstr "פתיחת מסמך"
 
 #: src/libide/editor/ide-editor-surface-shortcuts.c:48
 #: src/libide/editor/ide-editor-surface-shortcuts.c:54
+#: src/plugins/grep/gbp-grep-editor-addin.c:56
 msgid "Panels"
 msgstr "לוחות"
 
@@ -1264,7 +1285,7 @@ msgstr "הצגת לוח הכלים"
 msgid "Close all files"
 msgstr "סגירת כל הקבצים"
 
-#: src/libide/editor/ide-editor-surface.c:565
+#: src/libide/editor/ide-editor-surface.c:669
 #: src/libide/gui/ide-preferences-builtin.c:106
 #: src/libide/gui/ide-preferences-builtin.c:150
 #: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
@@ -1296,7 +1317,7 @@ msgstr "חיפוש במיזם שלך"
 msgid "Failed to initialize build pipeline: %s"
 msgstr ""
 
-#: src/libide/foundry/ide-build-manager.c:526
+#: src/libide/foundry/ide-build-manager.c:527
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "ארע כשל בקבלת מידע על ההתקן: %s"
@@ -1332,73 +1353,73 @@ msgstr "המחשב שלי ‏‎(%s)"
 msgid "My Computer (%s) — %s"
 msgstr "המחשב שלי ‏‎(%s)‏ - ‏‎%s"
 
-#: src/libide/foundry/ide-pipeline.c:820
+#: src/libide/foundry/ide-pipeline.c:824
 msgid "The build pipeline is in a failed state"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:830
+#: src/libide/foundry/ide-pipeline.c:834
 msgid "The build configuration has errors"
 msgstr "ארע כשל בהגדרת הבנייה"
 
-#: src/libide/foundry/ide-pipeline.c:3022
+#: src/libide/foundry/ide-pipeline.c:3033
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
-msgstr ""
+msgstr "יצירת מסוף דמה נכשלה. יכולות המסוף תוגבלנה."
 
-#: src/libide/foundry/ide-pipeline.c:3228
+#: src/libide/foundry/ide-pipeline.c:3239
 msgid "Cleaning…"
 msgstr "מנקה…"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3243
+#: src/libide/foundry/ide-pipeline.c:3300
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
 msgid "Failed"
 msgstr "נכשל"
 
-#: src/libide/foundry/ide-pipeline.c:3234
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3245
+#: src/libide/foundry/ide-pipeline.c:3308
 msgid "Ready"
 msgstr "מוכן"
 
-#: src/libide/foundry/ide-pipeline.c:3249
+#: src/libide/foundry/ide-pipeline.c:3260
 msgid "Downloading…"
 msgstr "בהורדה…"
 
-#: src/libide/foundry/ide-pipeline.c:3253
+#: src/libide/foundry/ide-pipeline.c:3264
 msgid "Building dependencies…"
 msgstr "בתהליך בניית תלויות…"
 
-#: src/libide/foundry/ide-pipeline.c:3257
+#: src/libide/foundry/ide-pipeline.c:3268
 msgid "Bootstrapping…"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3261
+#: src/libide/foundry/ide-pipeline.c:3272
 msgid "Configuring…"
 msgstr "בתהליך התצורה…"
 
-#: src/libide/foundry/ide-pipeline.c:3265
+#: src/libide/foundry/ide-pipeline.c:3276
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
 msgid "Building…"
 msgstr "בבנייה…"
 
-#: src/libide/foundry/ide-pipeline.c:3269
+#: src/libide/foundry/ide-pipeline.c:3280
 msgid "Installing…"
 msgstr "מתבצעת התקנה…"
 
-#: src/libide/foundry/ide-pipeline.c:3273
+#: src/libide/foundry/ide-pipeline.c:3284
 msgid "Committing…"
 msgstr "בהגשה…"
 
-#: src/libide/foundry/ide-pipeline.c:3277
+#: src/libide/foundry/ide-pipeline.c:3288
 msgid "Exporting…"
 msgstr "בתהליך ייצוא…"
 
-#: src/libide/foundry/ide-pipeline.c:3281
-#: src/libide/foundry/ide-pipeline.c:3285
+#: src/libide/foundry/ide-pipeline.c:3292
+#: src/libide/foundry/ide-pipeline.c:3296
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
 msgid "Success"
 msgstr "הצלחה"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3304
 msgid "Preparing…"
 msgstr "בהכנה…"
 
@@ -1406,46 +1427,44 @@ msgstr "בהכנה…"
 msgid "Cannot build transfer while on metered connection"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:383
+#: src/libide/foundry/ide-run-manager.c:387
 msgid "Cannot run target, another target is running"
 msgstr "לא ניתן להריץ את המטרה, מטרה נוספת בריצה"
 
-#: src/libide/foundry/ide-run-manager.c:489
+#: src/libide/foundry/ide-run-manager.c:526
 msgid "Failed to locate runtime"
 msgstr "נכשל באיתור זמן ריצה"
 
 #. translators: %s is replaced with the name of the users executable
-#: src/libide/foundry/ide-run-manager.c:538
+#: src/libide/foundry/ide-run-manager.c:577
 #, c-format
 msgid "Running %s…"
 msgstr "מריץ %s…"
 
 #. translators: %s is replaced with the specific error reason
-#: src/libide/foundry/ide-run-manager.c:612
+#: src/libide/foundry/ide-run-manager.c:727
 #, c-format
 msgid "The build target failed to build: %s"
 msgstr "מטרת הבנייה נכשלה: %s"
 
-#: src/libide/foundry/ide-run-manager.c:875
+#: src/libide/foundry/ide-run-manager.c:992
 #: src/libide/gui/ide-application-shortcuts.c:45
 #: src/libide/gui/ide-application-shortcuts.c:56
 #: src/libide/gui/ide-application-shortcuts.c:67
-#, fuzzy
 #| msgid "Workbench"
 msgid "Workbench shortcuts"
-msgstr "Workbench"
+msgstr "צירופי מקשים למרחבי עבודה"
 
-#: src/libide/foundry/ide-run-manager.c:876
+#: src/libide/foundry/ide-run-manager.c:993
 msgid "Build and Run"
 msgstr "בנייה והרצה"
 
-#: src/libide/foundry/ide-run-manager.c:1038
-#: src/libide/foundry/ide-run-manager.c:1104
+#: src/libide/foundry/ide-run-manager.c:1155
+#: src/libide/foundry/ide-run-manager.c:1221
 msgid "Failed to locate a build target"
 msgstr "ארע כשל באיתור מטרת הבנייה"
 
-#: src/libide/foundry/ide-run-manager.c:1240 src/libide/gui/gtk/menus.ui:73
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/libide/foundry/ide-run-manager.c:1357 src/libide/gui/gtk/menus.ui:67
 msgid "Run"
 msgstr "הרצה"
 
@@ -1457,7 +1476,7 @@ msgstr "התהליך הסתיים במפתיע"
 msgid "Host Operating System"
 msgstr "מערכת הפעלה מארחת"
 
-#: src/libide/foundry/ide-runtime.c:498
+#: src/libide/foundry/ide-runtime.c:543
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "מערכת מארחת"
@@ -1503,7 +1522,7 @@ msgid "Repository Kind"
 msgstr "סוג מאגר"
 
 #: src/libide/greeter/ide-clone-surface.ui:165
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:111
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:104
 msgid "Branch"
 msgstr "ענף"
@@ -1521,8 +1540,9 @@ msgid "Project Destination"
 msgstr "יעד מיזם"
 
 #: src/libide/greeter/ide-clone-surface.ui:307
-msgid "Clone Project"
-msgstr "שיבוט מיזם"
+#| msgid "Clone Project"
+msgid "Clone _Project"
+msgstr "שיבוט _מיזם"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:62
 msgid "Select a _Folder…"
@@ -1549,7 +1569,7 @@ msgid "Select Project File"
 msgstr "בחירת קובץ מיזם"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:127
-#: src/libide/gui/ide-workbench.c:1441
+#: src/libide/gui/ide-workbench.c:1409
 msgid "_Open"
 msgstr "_פתיחה"
 
@@ -1558,7 +1578,7 @@ msgid "All Project Types"
 msgstr "כל סוגי המיזמים"
 
 #: src/libide/greeter/ide-greeter-workspace.c:219
-#: src/libide/gui/ide-workbench.c:321 src/libide/gui/ide-workbench.c:846
+#: src/libide/gui/ide-workbench.c:315 src/libide/gui/ide-workbench.c:839
 #, c-format
 msgid "Builder — %s"
 msgstr "‏Builder - ‏‎%s"
@@ -1641,13 +1661,7 @@ msgstr "על אודות Builder"
 msgid "_Quit"
 msgstr "י_ציאה"
 
-#: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
-#: src/libide/gui/ide-workbench.c:1438 src/plugins/editor/gtk/menus.ui:27
-#: src/plugins/editor/gtk/menus.ui:111
-msgid "Open File…"
-msgstr "פתיחת קובץ…"
-
-#: src/libide/gui/gtk/menus.ui:68
+#: src/libide/gui/gtk/menus.ui:62
 msgid "Run Options"
 msgstr "אפשרויות ריצה"
 
@@ -1655,21 +1669,21 @@ msgstr "אפשרויות ריצה"
 msgid "Builder — Preferences"
 msgstr "‏Builder - העדפות בנייה"
 
-#: src/libide/gui/ide-application-actions.c:149
+#: src/libide/gui/ide-application-actions.c:147
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:151
+#: src/libide/gui/ide-application-actions.c:149
 msgid "translator-credits"
 msgstr ""
 "יוסף אור בוצ׳קו <yoseforb@gmail.com>\n"
 "ניב באר <bloop93@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:155
+#: src/libide/gui/ide-application-actions.c:153
 msgid "Learn more about GNOME Builder"
 msgstr "ללמוד עוד על GNOME Builder"
 
-#: src/libide/gui/ide-application-actions.c:158
+#: src/libide/gui/ide-application-actions.c:156
 msgid "Funded By"
 msgstr "מומן על ידי"
 
@@ -1712,8 +1726,7 @@ msgstr "הצגת חלון העדפות"
 msgid "Show the shortcuts window"
 msgstr "חלון צירופי המקשים"
 
-#: src/libide/gui/ide-application.c:136
-#, fuzzy
+#: src/libide/gui/ide-application.c:172
 #| msgid ""
 #| "GNOME Builder requires a desktop session with D-Bus. Please set "
 #| "DBUS_SESSION_BUS_ADDRESS."
@@ -1722,7 +1735,7 @@ msgid ""
 "DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
 msgstr ""
 "‏GNOME Builder דורש הפעלת שולחן עבודה עם D-Bus. נא להגדיר את "
-"DBUS_SESSION_BUS_ADDRESS."
+"DBUS_SESSION_BUS_ADDRESS. יתכן ומספר תכונות לא תהיינה זמינות."
 
 #: src/libide/gui/ide-command-manager.c:491
 msgid "Command failed"
@@ -1750,7 +1763,7 @@ msgid "Use the page switcher above or use one of the following:"
 msgstr "ניתן להשתמש בבורר הדפים למעלה או באחד מהבאים:"
 
 #: src/libide/gui/ide-frame-empty-state.ui:45
-#: src/libide/gui/ide-search-button.c:44
+#: src/libide/gui/ide-search-button.c:50
 msgid "Search"
 msgstr "חיפוש"
 
@@ -1766,9 +1779,16 @@ msgstr "בורר קבצים"
 msgid "New terminal"
 msgstr "מסוף חדש"
 
-#: src/libide/gui/ide-frame-empty-state.ui:95
-msgid "New Terminal"
-msgstr "מסוף חדש"
+#: src/libide/gui/ide-frame-empty-state.ui:88
+#: src/plugins/editor/gtk/menus.ui:111
+#| msgid "Open File…"
+msgid "_Open File…"
+msgstr "_פתיחת קובץ…"
+
+#: src/libide/gui/ide-frame-empty-state.ui:96
+#| msgid "New Terminal"
+msgid "_New Terminal"
+msgstr "מסוף _חדש"
 
 #: src/libide/gui/ide-frame-shortcuts.c:37
 msgid "Move document to the right"
@@ -1815,9 +1835,9 @@ msgstr "הצגת חלון התפריט"
 msgid "Toggle window to fullscreen"
 msgstr "שינוי מצב מסך מלא"
 
-#: src/libide/gui/ide-marked-view.c:92
+#: src/libide/gui/ide-marked-view.c:399
 msgid "Cannot load HTML. Missing WebKit support."
-msgstr ""
+msgstr "לא ניתן לטעון HTML. חסרה תמיכה ב־WebKit."
 
 #: src/libide/gui/ide-preferences-builtin.c:61
 #: src/libide/gui/ide-preferences-builtin.c:62
@@ -2065,7 +2085,6 @@ msgid "Code Insight"
 msgstr "ניתוח קוד"
 
 #: src/libide/gui/ide-preferences-builtin.c:194
-#: src/libide/sourceview/gtk/menus.ui:50 src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "הדגשה"
 
@@ -2232,8 +2251,6 @@ msgid "Number of CPU"
 msgstr "מספר המעבדים"
 
 #: src/libide/gui/ide-preferences-builtin.c:398
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
-#: src/plugins/buildui/gtk/menus.ui:21
 msgid "Build"
 msgstr "בנייה"
 
@@ -2268,36 +2285,56 @@ msgid ""
 "dependencies"
 msgstr "לאפשר שימוש בחיבור רשת מוגבל בעת הורדה אוטומטית של תלויות בנייה"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
+#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
+msgid "Debugger"
+msgstr "מנפה שגיאות"
+
+#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
+msgid "Breakpoints"
+msgstr "נקודת עצירה"
+
+#: src/libide/gui/ide-preferences-builtin.c:416
+msgid "Insert Breakpoint at Start of Application"
+msgstr "הוספת נקודת עצירה בתחילת היישומון"
+
+#: src/libide/gui/ide-preferences-builtin.c:416
+msgid ""
+"Automatically stop execution at the start of the applications main function"
+msgstr "עצירה אוטומטית בהרצה של הפונקציה הראשית (main) של היישום"
+
+#: src/libide/gui/ide-preferences-builtin.c:422
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "מיזמים"
 
 # לדעתי אין מדובר ב„שולחן עבודה” של המעטפת כאן
-#: src/libide/gui/ide-preferences-builtin.c:420
+#: src/libide/gui/ide-preferences-builtin.c:424
 msgid "Workspace"
 msgstr "מרחב עבודה"
 
-#: src/libide/gui/ide-preferences-builtin.c:421
+#: src/libide/gui/ide-preferences-builtin.c:425
 msgid "A place for all your projects"
 msgstr "מקום עבור כל המיזמים"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Restore previously opened files"
 msgstr "שחזור קבצים פתוחים קודמים"
 
-#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Open previously opened files when loading a project"
 msgstr "פתיחת הקבצים הפתוחים הקודמים בעת טעינת מיזם"
 
-#: src/libide/gui/ide-preferences-builtin.c:544
+#: src/libide/gui/ide-preferences-builtin.c:548
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:379
 msgid "Version Control"
 msgstr "בקרת גרסות"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:557
+#: src/libide/gui/ide-preferences-builtin.c:561
 msgid "SDKs"
 msgstr "ספריות תכנה"
 
@@ -2309,27 +2346,27 @@ msgstr "מעדכן תלויות…"
 msgid "Builder is updating your projects configured dependencies."
 msgstr "‏Builder מעדכן את התלויות המוגדרות על ידי המיזם שלך."
 
+#: src/libide/gui/ide-run-button.c:168
+msgid "Stop running"
+msgstr "עצירת הריצה"
+
 #: src/libide/gui/ide-run-button.ui:6
 msgid "The project cannot be run while the build pipeline is being set up"
 msgstr ""
 
-#: src/libide/gui/ide-run-button.ui:35
-msgid "Stop running"
-msgstr "עצירת הריצה"
-
-#: src/libide/gui/ide-run-button.ui:55
+#: src/libide/gui/ide-run-button.ui:39
 msgid "Change run options"
 msgstr "שינוי אפשרויות הריצה"
 
 # לדעתי אין מדובר ב„שולחן עבודה” של המעטפת כאן
-#: src/libide/gui/ide-search-button.c:43
+#: src/libide/gui/ide-search-button.c:49
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
 msgid "Workspace shortcuts"
 msgstr "צירופי מקשים למרחב העבודה"
 
-#: src/libide/gui/ide-search-button.c:45
+#: src/libide/gui/ide-search-button.c:51
 msgid "Focus to the global search entry"
 msgstr "מיקוד בחיפוש מקיף מהיר"
 
@@ -2339,7 +2376,7 @@ msgid "Editor Shortcuts"
 msgstr "צירופי מקשים לעורך"
 
 #: src/libide/gui/ide-shortcuts-window.ui:14
-#: src/libide/gui/ide-shortcuts-window.ui:543
+#: src/libide/gui/ide-shortcuts-window.ui:593
 msgctxt "shortcut window"
 msgid "General"
 msgstr "כללי"
@@ -2350,42 +2387,44 @@ msgid "Show help"
 msgstr "הצגת עזרה"
 
 #: src/libide/gui/ide-shortcuts-window.ui:25
+#| msgctxt "shortcut window"
+#| msgid "Toogle primary menu"
 msgctxt "shortcut window"
-msgid "Toogle primary menu"
-msgstr "הצגת התפריט העיקרי"
+msgid "Toggle primary menu"
+msgstr "החלפת תצוגת התפריט העיקרי"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
-#: src/libide/gui/ide-shortcuts-window.ui:547
+#: src/libide/gui/ide-shortcuts-window.ui:597
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "חיפוש מקיף"
 
 #: src/libide/gui/ide-shortcuts-window.ui:39
-#: src/libide/gui/ide-shortcuts-window.ui:554
+#: src/libide/gui/ide-shortcuts-window.ui:604
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "העדפות"
 
 #: src/libide/gui/ide-shortcuts-window.ui:46
-#: src/libide/gui/ide-shortcuts-window.ui:561
+#: src/libide/gui/ide-shortcuts-window.ui:611
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "שורת פקודה"
 
 #: src/libide/gui/ide-shortcuts-window.ui:53
-#: src/libide/gui/ide-shortcuts-window.ui:568
+#: src/libide/gui/ide-shortcuts-window.ui:618
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "מסוף"
 
 #: src/libide/gui/ide-shortcuts-window.ui:60
-#: src/libide/gui/ide-shortcuts-window.ui:575
+#: src/libide/gui/ide-shortcuts-window.ui:625
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "מסוף בזמן בנייה"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
-#: src/libide/gui/ide-shortcuts-window.ui:582
+#: src/libide/gui/ide-shortcuts-window.ui:632
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "צירופי מקשים"
@@ -2410,342 +2449,386 @@ msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "הצגת לוח תחתון"
 
-#: src/libide/gui/ide-shortcuts-window.ui:103
+#: src/libide/gui/ide-shortcuts-window.ui:101
+#| msgid "Show right panel"
+msgctxt "shortcut window"
+msgid "Show Find in Project panel"
+msgstr "הצגת איתור בלוח המיזם"
+
+#: src/libide/gui/ide-shortcuts-window.ui:110
 msgctxt "shortcut window"
 msgid "Files"
 msgstr "קבצים"
 
-#: src/libide/gui/ide-shortcuts-window.ui:108
+#: src/libide/gui/ide-shortcuts-window.ui:115
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "יצירת מסמך חדש"
 
-#: src/libide/gui/ide-shortcuts-window.ui:115
+#: src/libide/gui/ide-shortcuts-window.ui:122
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "פתיחת מסמך"
 
-#: src/libide/gui/ide-shortcuts-window.ui:122
+#: src/libide/gui/ide-shortcuts-window.ui:129
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "שמירת המסמך"
 
-#: src/libide/gui/ide-shortcuts-window.ui:129
+#: src/libide/gui/ide-shortcuts-window.ui:136
+#| msgid "Save the document"
+msgctxt "shortcut window"
+msgid "Save a copy of the document"
+msgstr "שמירת עותק של המסמך"
+
+#: src/libide/gui/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
 msgid "Save all documents"
 msgstr "שמירת כל המסמכים"
 
-#: src/libide/gui/ide-shortcuts-window.ui:136
+#: src/libide/gui/ide-shortcuts-window.ui:150
 msgctxt "shortcut window"
 msgid "Print the document"
 msgstr "הדפסת המסמך"
 
-#: src/libide/gui/ide-shortcuts-window.ui:143
+#: src/libide/gui/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "סגירת המסמך"
 
-#: src/libide/gui/ide-shortcuts-window.ui:150
+#: src/libide/gui/ide-shortcuts-window.ui:164
 msgctxt "shortcut window"
 msgid "Close all documents"
 msgstr "סגירת כל המסמכים"
 
-#: src/libide/gui/ide-shortcuts-window.ui:157
+#: src/libide/gui/ide-shortcuts-window.ui:171
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "מעבר למסמך הבא"
 
-#: src/libide/gui/ide-shortcuts-window.ui:164
+#: src/libide/gui/ide-shortcuts-window.ui:178
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "מעבר למסמך הקודם"
 
-#: src/libide/gui/ide-shortcuts-window.ui:171
+#: src/libide/gui/ide-shortcuts-window.ui:185
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "הצגת רשימת המסמכים הפתוחים"
 
+#: src/libide/gui/ide-shortcuts-window.ui:192
+msgctxt "shortcut window"
+msgid "Show document outline or symbol tree"
+msgstr "הצגת מתאר מסמך או עץ סמלים"
+
 # מציאה והחלפה
-#: src/libide/gui/ide-shortcuts-window.ui:179
-#: src/libide/gui/ide-shortcuts-window.ui:198
+#: src/libide/gui/ide-shortcuts-window.ui:200
+#: src/libide/gui/ide-shortcuts-window.ui:219
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "חיפוש והחלפה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:184
+#: src/libide/gui/ide-shortcuts-window.ui:205
 msgctxt "shortcut window"
 msgid "Goto Line"
 msgstr "מעבר לשורה"
 
 # מציאה
-#: src/libide/gui/ide-shortcuts-window.ui:191
+#: src/libide/gui/ide-shortcuts-window.ui:212
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "חיפוש"
 
-#: src/libide/gui/ide-shortcuts-window.ui:205
+#: src/libide/gui/ide-shortcuts-window.ui:226
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "מציאת ההתאמה הבאה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:212
+#: src/libide/gui/ide-shortcuts-window.ui:233
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "מציאת ההתאמה הקודמת"
 
-#: src/libide/gui/ide-shortcuts-window.ui:219
+#: src/libide/gui/ide-shortcuts-window.ui:240
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "ניקוי הדגשה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:227
-#: src/libide/gui/ide-shortcuts-window.ui:591
+#: src/libide/gui/ide-shortcuts-window.ui:248
+#: src/libide/gui/ide-shortcuts-window.ui:641
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "העתקה והדבקה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:232
-#: src/libide/gui/ide-shortcuts-window.ui:596
+#: src/libide/gui/ide-shortcuts-window.ui:253
+#: src/libide/gui/ide-shortcuts-window.ui:646
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "העתקת הטקסט הנבחר ללוח הגזירים"
 
-#: src/libide/gui/ide-shortcuts-window.ui:239
+#: src/libide/gui/ide-shortcuts-window.ui:260
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "גזירת הטקסט הנבחר ללוח הגזירים"
 
-#: src/libide/gui/ide-shortcuts-window.ui:246
-#: src/libide/gui/ide-shortcuts-window.ui:603
+#: src/libide/gui/ide-shortcuts-window.ui:267
+#: src/libide/gui/ide-shortcuts-window.ui:653
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "הדבקת טקסט מלוח הגזירים"
 
-#: src/libide/gui/ide-shortcuts-window.ui:253
+#: src/libide/gui/ide-shortcuts-window.ui:274
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "שכפול הבחירה או השורה הנוכחית"
 
-#: src/libide/gui/ide-shortcuts-window.ui:261
+#: src/libide/gui/ide-shortcuts-window.ui:282
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "ביטול וביצוע שוב"
 
-#: src/libide/gui/ide-shortcuts-window.ui:266
+#: src/libide/gui/ide-shortcuts-window.ui:287
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "ביטול פקודה קודמת"
 
-#: src/libide/gui/ide-shortcuts-window.ui:273
+#: src/libide/gui/ide-shortcuts-window.ui:294
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "ביצוע חוזר של פקודה קודמת"
 
-#: src/libide/gui/ide-shortcuts-window.ui:281
+#: src/libide/gui/ide-shortcuts-window.ui:302
 msgctxt "shortcut window"
 msgid "Zoom"
 msgstr "תקריב"
 
-#: src/libide/gui/ide-shortcuts-window.ui:286
+#: src/libide/gui/ide-shortcuts-window.ui:307
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "התקרבות"
 
-#: src/libide/gui/ide-shortcuts-window.ui:293
+#: src/libide/gui/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "התרחקות"
 
-#: src/libide/gui/ide-shortcuts-window.ui:300
+#: src/libide/gui/ide-shortcuts-window.ui:321
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "איפוס התקריב"
 
-#: src/libide/gui/ide-shortcuts-window.ui:308
+#: src/libide/gui/ide-shortcuts-window.ui:329
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "עריכה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:313
+#: src/libide/gui/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "הגדלת המספר תחת הסמן"
 
-#: src/libide/gui/ide-shortcuts-window.ui:320
+#: src/libide/gui/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "הקטנת המספר תחת הסמן"
 
-#: src/libide/gui/ide-shortcuts-window.ui:327
+#: src/libide/gui/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "צירוף השורות הנבחרות"
 
-#: src/libide/gui/ide-shortcuts-window.ui:334
+#: src/libide/gui/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Sort selected lines"
 msgstr "מיון השורות הנבחרות"
 
-#: src/libide/gui/ide-shortcuts-window.ui:341
+#: src/libide/gui/ide-shortcuts-window.ui:362
+msgctxt "shortcut window"
+msgid "Make selection upper case"
+msgstr "הגדלת אותיות הבחירה"
+
+#: src/libide/gui/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Make selection lower case"
+msgstr "הקטנת אותיות הבחירה"
+
+#: src/libide/gui/ide-shortcuts-window.ui:376
+#| msgid "_Invert Case"
+msgctxt "shortcut window"
+msgid "Invert selection case"
+msgstr "היפוך גודל האותיות בבחירה"
+
+#: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "הצגת חלון השלמה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:348
+#: src/libide/gui/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Toggle opacity of completion window"
 msgstr "אטימות של חלון ההשלמה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:355
+#: src/libide/gui/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "מצב דריסה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:362
+#: src/libide/gui/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "הזחה מחדש של השורה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:369
+#: src/libide/gui/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "מחיקת שורה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:376
+#: src/libide/gui/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "שינוי שם לסמל"
 
-#: src/libide/gui/ide-shortcuts-window.ui:377
+#: src/libide/gui/ide-shortcuts-window.ui:419
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "נדרשת תמיכה בתחביר השפה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:384
+#: src/libide/gui/ide-shortcuts-window.ui:426
 msgctxt "shortcut window"
 msgid "Comment code"
 msgstr "הכנסת קוד לתוך הערה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:391
+#: src/libide/gui/ide-shortcuts-window.ui:433
 msgctxt "shortcut window"
 msgid "Uncomment code"
 msgstr "הוצאת קוד מתוך הערה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:398
+#: src/libide/gui/ide-shortcuts-window.ui:440
 msgctxt "shortcut window"
 msgid "Beautify selected code"
-msgstr ""
+msgstr "ייפוי הקוד הנבחר"
 
-#: src/libide/gui/ide-shortcuts-window.ui:406
+#: src/libide/gui/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "ניווט"
 
-#: src/libide/gui/ide-shortcuts-window.ui:411
+#: src/libide/gui/ide-shortcuts-window.ui:453
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "מעבר לשגיאה הבאה בקובץ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:418
+#: src/libide/gui/ide-shortcuts-window.ui:460
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "מעבר לשגיאה הקודמת בקובץ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:425
+#: src/libide/gui/ide-shortcuts-window.ui:467
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "מעבר למקום העריכה הקודם"
 
-#: src/libide/gui/ide-shortcuts-window.ui:432
+#: src/libide/gui/ide-shortcuts-window.ui:474
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "מעבר למקום העריכה הבא"
 
-#: src/libide/gui/ide-shortcuts-window.ui:439
+#: src/libide/gui/ide-shortcuts-window.ui:481
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "קפיצה להגדרת סמל"
 
-#: src/libide/gui/ide-shortcuts-window.ui:446
+#. FIXME: find references of what? it doesn't seem to work here, there's always no results.
+#: src/libide/gui/ide-shortcuts-window.ui:489
+#| msgid "_Find references"
+msgctxt "shortcut window"
+msgid "Find references"
+msgstr "איתור הפניות"
+
+#: src/libide/gui/ide-shortcuts-window.ui:496
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "הזזת התצוגה מעלה בקובץ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:453
+#: src/libide/gui/ide-shortcuts-window.ui:503
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "הזזת התצוגה מטה בקובץ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:460
+#: src/libide/gui/ide-shortcuts-window.ui:510
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "הזזת התצוגה לסוף הקובץ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:467
+#: src/libide/gui/ide-shortcuts-window.ui:517
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "הזזת התצוגה לתחילת הקובץ"
 
-#: src/libide/gui/ide-shortcuts-window.ui:474
+#: src/libide/gui/ide-shortcuts-window.ui:524
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "מעבר לסוגר תואם"
 
-#: src/libide/gui/ide-shortcuts-window.ui:482
+#: src/libide/gui/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "בחירה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:487
+#: src/libide/gui/ide-shortcuts-window.ui:537
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "בחירת הכל"
 
 # לא בטוח שמובן מזה שהבחירה תבוטל עבור הכל ולא רק שהפעולה „בחירת הכל” תבוטל
-#: src/libide/gui/ide-shortcuts-window.ui:494
+#: src/libide/gui/ide-shortcuts-window.ui:544
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "ביטול בחירת הכל"
 
-#: src/libide/gui/ide-shortcuts-window.ui:502
+#: src/libide/gui/ide-shortcuts-window.ui:552
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "בנייה והרצה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:507
+#: src/libide/gui/ide-shortcuts-window.ui:557
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "בנייה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:514
+#: src/libide/gui/ide-shortcuts-window.ui:564
 msgctxt "shortcut window"
 msgid "Rebuild"
 msgstr "בנייה מחדש"
 
-#: src/libide/gui/ide-shortcuts-window.ui:521
+#: src/libide/gui/ide-shortcuts-window.ui:571
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "הרצה"
 
-#: src/libide/gui/ide-shortcuts-window.ui:528
+#: src/libide/gui/ide-shortcuts-window.ui:578
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "פרופיל"
 
-#: src/libide/gui/ide-shortcuts-window.ui:539
+#: src/libide/gui/ide-shortcuts-window.ui:589
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "צירופי מקשים למסוף"
 
-#: src/libide/gui/ide-shortcuts-window.ui:611
+#: src/libide/gui/ide-shortcuts-window.ui:661
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "חיפוש"
 
-#: src/libide/gui/ide-shortcuts-window.ui:616
+#: src/libide/gui/ide-shortcuts-window.ui:666
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "חיפוש טקסט במסוף"
+
+#: src/libide/gui/ide-workbench.c:1406 src/plugins/editor/gtk/menus.ui:27
+msgid "Open File…"
+msgstr "פתיחת קובץ…"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -2756,7 +2839,7 @@ msgstr[1] "מתקין %u חבילות"
 msgstr[2] "מתקין %u חבילות"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1469
+#: src/libide/lsp/ide-lsp-client.c:1495
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "ארע כשל באתחול שרת השפה: %s"
@@ -2778,117 +2861,127 @@ msgstr "לא ניתן לנתח XML מערוץ"
 msgid "_Go to Definition"
 msgstr "_מעבר להגדרה"
 
-#: src/libide/sourceview/gtk/menus.ui:12
+#: src/libide/sourceview/gtk/menus.ui:13
 msgid "_Find references"
 msgstr "העדפות _חיפוש"
 
-#: src/libide/sourceview/gtk/menus.ui:19
+#: src/libide/sourceview/gtk/menus.ui:21
 msgid "_Undo"
 msgstr "_ביטול"
 
-#: src/libide/sourceview/gtk/menus.ui:23
+#: src/libide/sourceview/gtk/menus.ui:26
 msgid "_Redo"
 msgstr "_ביצוע שוב"
 
-#: src/libide/sourceview/gtk/menus.ui:29
+#: src/libide/sourceview/gtk/menus.ui:33
 msgid "C_ut"
 msgstr "ג_זירה"
 
-#: src/libide/sourceview/gtk/menus.ui:34 src/libide/terminal/gtk/menus.ui:38
+#: src/libide/sourceview/gtk/menus.ui:39 src/libide/terminal/gtk/menus.ui:38
 msgid "_Copy"
 msgstr "הע_תקה"
 
-#: src/libide/sourceview/gtk/menus.ui:38 src/libide/terminal/gtk/menus.ui:42
+#: src/libide/sourceview/gtk/menus.ui:44 src/libide/terminal/gtk/menus.ui:42
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: src/libide/sourceview/gtk/menus.ui:42
+#: src/libide/sourceview/gtk/menus.ui:49
 msgid "_Delete"
 msgstr "_מחיקה"
 
-#: src/libide/sourceview/gtk/menus.ui:55 src/libide/terminal/gtk/menus.ui:48
-msgid "Selection"
-msgstr "בחירה"
+#: src/libide/sourceview/gtk/menus.ui:58
+#| msgid "Highlighting"
+msgid "_Highlighting"
+msgstr "ה_דגשה"
 
-#: src/libide/sourceview/gtk/menus.ui:57 src/libide/terminal/gtk/menus.ui:50
+#: src/libide/sourceview/gtk/menus.ui:63
+#| msgid "Selection"
+msgid "_Selection"
+msgstr "_בחירה"
+
+#: src/libide/sourceview/gtk/menus.ui:65 src/libide/terminal/gtk/menus.ui:50
 msgid "Select _All"
 msgstr "בחירת ה_כל"
 
-#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:55
+#: src/libide/sourceview/gtk/menus.ui:71 src/libide/terminal/gtk/menus.ui:55
 msgid "Select _None"
 msgstr "_ניקוי בחירה"
 
-#: src/libide/sourceview/gtk/menus.ui:68
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "All _Upper Case"
 msgstr "הכול לאותיות _רישיות"
 
-#: src/libide/sourceview/gtk/menus.ui:73
+#: src/libide/sourceview/gtk/menus.ui:84
 msgid "All _Lower Case"
 msgstr "הכול לאותיות _קטנות"
 
-#: src/libide/sourceview/gtk/menus.ui:78
-msgid "_Invert Case"
-msgstr "ה_חלפה בין אותיות רישיות וקטנות"
+#: src/libide/sourceview/gtk/menus.ui:90
+#| msgid "_Invert Case"
+msgid "In_vert Case"
+msgstr "הי_פוך גדלי אותיות"
 
-#: src/libide/sourceview/gtk/menus.ui:83
+#: src/libide/sourceview/gtk/menus.ui:96
 msgid "_Title Case"
 msgstr "_אות רישית בראש מילה"
 
-#: src/libide/sourceview/gtk/menus.ui:90
-msgid "Join Lines"
-msgstr "מיזוג שורות"
-
-#: src/libide/sourceview/gtk/menus.ui:94
-msgid "Sort Lines"
-msgstr "מיון שורות"
-
 #: src/libide/sourceview/gtk/menus.ui:103
-msgid "Zoom"
-msgstr "תקריב"
+#| msgid "Join Lines"
+msgid "_Join Lines"
+msgstr "מי_זוג שורות"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:108
+#| msgid "Sort Lines"
+msgid "S_ort Lines"
+msgstr "_מיון שורות"
+
+#: src/libide/sourceview/gtk/menus.ui:118
+#| msgid "Zoom"
+msgid "_Zoom"
+msgstr "_מרחק תצוגה"
+
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Zoom _In"
 msgstr "הת_קרבות"
 
-#: src/libide/sourceview/gtk/menus.ui:110
+#: src/libide/sourceview/gtk/menus.ui:125
 msgid "Zoom _Out"
 msgstr "הת_רחקות"
 
-#: src/libide/sourceview/gtk/menus.ui:116
-msgid "Reset"
-msgstr "איפוס"
+#: src/libide/sourceview/gtk/menus.ui:131
+#| msgid "Reset"
+msgid "_Reset"
+msgstr "_איפוס"
 
-#: src/libide/sourceview/ide-source-view.c:4439
+#: src/libide/sourceview/ide-source-view.c:4443
 #, c-format
 msgid "Insert “%s”"
 msgstr "הכנסת „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4441
+#: src/libide/sourceview/ide-source-view.c:4445
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "החלפת „‎%s” עם ‏„‎%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4567
+#: src/libide/sourceview/ide-source-view.c:4571
 msgid "Apply Fix-It"
 msgstr "החלת לתקן את זה (Fix-It)"
 
-#: src/libide/sourceview/ide-source-view.c:5024
+#: src/libide/sourceview/ide-source-view.c:5028
 msgid "Rename symbol"
 msgstr "שינוי שם סמל"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5260
+#: src/libide/sourceview/ide-source-view.c:5264
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "‏‎<b>%s</b> —‏ <small>שורה %u, עמודה %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5286
+#: src/libide/sourceview/ide-source-view.c:5290
 msgid "No references were found"
 msgstr "לא נמצאו הפניות"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
 #: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
-#: src/plugins/grep/gbp-grep-panel.ui:81
 msgid "Close"
 msgstr "סגירה"
 
@@ -2900,12 +2993,16 @@ msgstr "_פתח קישור"
 msgid "_Copy Link Address"
 msgstr "ה_עתקת כתובת הקישור"
 
-#: src/libide/terminal/ide-terminal-launcher.c:320
+#: src/libide/terminal/gtk/menus.ui:48
+msgid "Selection"
+msgstr "בחירה"
+
+#: src/libide/terminal/ide-terminal-launcher.c:339
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "ארע כשל ביצירת מעטפת עם זמן הריצה „%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:644
+#: src/libide/terminal/ide-terminal-launcher.c:663
 msgid "Untitled Terminal"
 msgstr "מסוף ללא כותרת"
 
@@ -2913,22 +3010,22 @@ msgstr "מסוף ללא כותרת"
 msgid "Save Terminal Content As"
 msgstr "שמירת תוכן המסוף בשם"
 
-#: src/libide/terminal/ide-terminal-page.c:105
-#: src/libide/terminal/ide-terminal-page.c:150
-#: src/libide/terminal/ide-terminal-page.c:291
+#: src/libide/terminal/ide-terminal-page.c:112
+#: src/libide/terminal/ide-terminal-page.c:158
+#: src/libide/terminal/ide-terminal-page.c:301
 msgid "Untitled terminal"
 msgstr "מסוף ללא כותרת"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:107
+#: src/libide/terminal/ide-terminal-page.c:114
 msgid "Exited"
 msgstr "נסגר"
 
-#: src/libide/terminal/ide-terminal-page.c:114
-msgid "Subprocess launcher failed"
-msgstr "נכשל שיגור תת־מעבד"
+#: src/libide/terminal/ide-terminal-page.c:121
+msgid "Failed to launch subprocess. You may need to rebuild your project."
+msgstr ""
 
-#: src/libide/terminal/ide-terminal-page.c:137
+#: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 
@@ -2961,7 +3058,7 @@ msgstr "בטעינה…"
 msgid "unversioned"
 msgstr "ללא גרסה"
 
-#: src/main.c:147
+#: src/main.c:148
 msgid "Run a new instance of Builder"
 msgstr "הרצת מופע חדש של Builder"
 
@@ -2970,10 +3067,9 @@ msgid "Building cache…"
 msgstr "מטמון Builder…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
-#, fuzzy
 #| msgid "Host operating system"
 msgid "Bootstrapping build system"
-msgstr "מערכת הפעלה מארחת"
+msgstr "מערכת בנייה ליסודות"
 
 # כריית מיזמים
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
@@ -2983,8 +3079,8 @@ msgid "Configuring project"
 msgstr "מיזם בתהליך הגדרה"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/cargo/cargo_plugin.py:142
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
+#: src/plugins/cargo/cargo_plugin.py:145
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 #: src/plugins/phpize/phpize_plugin.py:219
@@ -3096,33 +3192,33 @@ msgstr ""
 msgid "Beautifier Plugin: Nothing selected"
 msgstr ""
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:249
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:250
 #, c-format
 msgid "No beautifier available for “%s”"
-msgstr ""
+msgstr "אין מייפה זמין עבור „%s”"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:251
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:252
 #, c-format
 msgid "No beautifier available"
 msgstr "אין מייפה זמין"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
 msgid "Editing"
 msgstr "עריכה"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
-msgid "Beautify the code"
-msgstr ""
-
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:351
+msgid "Beautify the code"
+msgstr "ייפוי הקוד"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:352
 msgid "Trigger the default entry"
 msgstr ""
 
 #. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:380
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:381
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr "תוסף מייפה: אין רשומות תקפות, משבית: %s"
@@ -3155,8 +3251,9 @@ msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr ""
 
 #: src/plugins/beautifier/gtk/menus.ui:9
-msgid "Beautify"
-msgstr "מייפה"
+#| msgid "Beautify"
+msgid "_Beautify"
+msgstr "_ייפוי"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:635
@@ -3286,48 +3383,48 @@ msgstr "שמירת יומן הבנייה"
 msgid "Missing"
 msgstr "חסר"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:48
 msgid "Update project dependencies"
 msgstr "עדכון תלויות המיזם"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:75
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:73
 msgid "Configure build preferences"
 msgstr "מאפייני הגדרות הבנייה"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:140
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:138
 msgid "Build Profile"
 msgstr "פרופיל בנייה"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:167
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:165
 msgid "Runtime"
 msgstr "זמן ריצה"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:195
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:193
 msgid "Device"
 msgstr "התקן"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:237
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:235
 msgid "There is a problem with the current build configuration."
 msgstr "יש בעיה עם תצורת הבנייה הנוכחית."
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:275
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:273
 msgid "Build status"
 msgstr "מצב הבנייה"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:308
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:305
 msgid "View build console contents"
 msgstr "הצגת תוכן מסוף הבנייה"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:347
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:344
 msgid "Last build"
 msgstr "בנייה אחרונה"
 
 # פועלי בניין
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:376
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:373
 msgid "Build result"
 msgstr "תוצאות הבנייה"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:405
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:402
 #: src/plugins/buildui/gbp-buildui-pane.c:122
 #: src/plugins/buildui/gbp-buildui-pane.c:190
 #: src/plugins/buildui/gbp-buildui-pane.c:227
@@ -3335,7 +3432,7 @@ msgstr "תוצאות הבנייה"
 msgid "Errors"
 msgstr "שגיאות"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:435
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:432
 #: src/plugins/buildui/gbp-buildui-pane.c:113
 #: src/plugins/buildui/gbp-buildui-pane.c:189
 #: src/plugins/buildui/gbp-buildui-pane.c:226
@@ -3343,23 +3440,31 @@ msgstr "שגיאות"
 msgid "Warnings"
 msgstr "אזהרות"
 
-#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:482
+msgid "True"
+msgstr "True"
+
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
-msgid "true"
-msgstr ""
+#: src/plugins/buildui/gtk/menus.ui:21
+#| msgid "Build"
+msgid "_Build"
+msgstr "_בנייה"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
-#: src/plugins/buildui/gtk/menus.ui:27
-msgid "Rebuild"
-msgstr "בנייה מחדש"
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:499
+#| msgid "Rebuild"
+msgid "_Rebuild"
+msgstr "בנייה מ_חדש"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:516
-msgid "Clean"
-msgstr "ניקוי"
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:513
+#| msgid "Clean"
+msgid "_Clean"
+msgstr "_ניקוי"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:530
-msgid "Export Bundle"
-msgstr "ייצוא חבילה"
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:527
+#| msgid "Export Bundle"
+msgid "_Export Bundle"
+msgstr "יי_צוא חבילה"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:664
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:378
@@ -3397,9 +3502,19 @@ msgstr "מטרות בנייה"
 msgid "Build Preferences"
 msgstr "העדפות בנייה"
 
+#: src/plugins/buildui/gtk/menus.ui:27
+#| msgid "Rebuild"
+msgid "R_ebuild"
+msgstr "בנייה מ_חדש"
+
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "_Run"
+msgstr "ה_רצה"
+
 #: src/plugins/buildui/gtk/menus.ui:38
-msgid "Run With…"
-msgstr "הרצה עם…"
+#| msgid "Run With…"
+msgid "R_un With…"
+msgstr "ה_רצה עם…"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:68
 msgid "Clang"
@@ -3470,11 +3585,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:197
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
 msgid "Configure project"
 msgstr "הגדרת מיזם"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
 #: src/plugins/maven/maven_plugin.py:100
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 #: src/plugins/phpize/phpize_plugin.py:229
@@ -3495,10 +3610,10 @@ msgid "PROJECT_FILE"
 msgstr "PROJECT_FILE"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:152
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to load file: %s: %s"
 msgid "Failed to load flags for plan: %s"
-msgstr "נכשל בטעינת הקובץ: %s: %s"
+msgstr "נכשלה טעינת דגלונים לתכנית: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:195
 #, fuzzy, c-format
@@ -3521,16 +3636,15 @@ msgstr "טעינת המיזם נכשלה: %s"
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
 #: src/plugins/ctags/ide-ctags-service.c:998
-#, fuzzy
 #| msgid "Indent source code as you type"
 msgid "Indexing Source Code"
-msgstr "הזחת קוד המקור בעת ההקלדה"
+msgstr "קוד המקור מסודר באינדקס"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
-#, fuzzy
 #| msgid "exuberant ctags tags autocompletion auto complete"
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr "ניסיוני ניסיון clang השלמה אוטומטית אוטומטי תג תגית תגיות תגים"
+msgstr ""
+"החיפוש, הניתוח וההשלמה האוטומטית עשויים להיות מוגבלים עד להשלמת התהליך."
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3701,46 +3815,45 @@ msgid "Filters:"
 msgstr "מסננים:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
-#, fuzzy
 #| msgid "Select a filter that act on the colors or 'None'."
 msgid "Select a filter that act on the colors or “None”."
-msgstr "יש לבחור במסנן להפעיל על הצבעים או ‚ללא’."
+msgstr "יש לבחור במסנן להפעיל על הצבעים או „ללא”."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
-msgstr ""
+msgstr "אף אחד"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
 msgid "Achromatopsia (monochromacy)"
-msgstr ""
+msgstr "אכרומטופסיה (דו־צבעיות)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
 msgid "Achromatomaly (blue cone monochromacy)"
-msgstr ""
+msgstr "אכרומטומליה (חד־צבעיות של תאי מדוכים כחולים)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
 msgid "Deuteranopia (green-blind)"
-msgstr ""
+msgstr "דוטרנופיה (עיוורון לירוק)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
 msgid "Deuteranomaly (green-weak)"
-msgstr ""
+msgstr "דוטרנומליה (ירוק חלש)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
 msgid "Protanopia (red-blind)"
-msgstr ""
+msgstr "פרוטנופיה (עיוורון לאדום)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
 msgid "Protanomaly (red-weak)"
-msgstr ""
+msgstr "פרוטנומליה (אדום חלש)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
 msgid "Tritanopia (blue-blind)"
-msgstr ""
+msgstr "טריטנופיה (עיוורון לכחול)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
 msgid "Tritanomaly (blue-weak)"
-msgstr ""
+msgstr "טריטנומליה (כחול חלש)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
 msgid "Websafe"
@@ -3799,8 +3912,9 @@ msgid "Try loading or generating a palette using the menu"
 msgstr "יש לנסות לטעון או לייצר לוח צבעים באמצעות התפריט"
 
 #: src/plugins/color-picker/gtk/menus.ui:7
-msgid "Highlight colors"
-msgstr "צבעי הדגשה"
+#| msgid "Highlight colors"
+msgid "Highlight _colors"
+msgstr "צבעי ה_דגשה"
 
 #: src/plugins/command-bar/gbp-command-bar-shortcuts.c:36
 msgid "Workspace Shortcuts"
@@ -3823,12 +3937,14 @@ msgid "Uncomment the code"
 msgstr "הוצאת קוד מהערה"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
-msgid "Comment code"
-msgstr "הכנסת קוד להערכה"
+#| msgid "Comment code"
+msgid "_Comment code"
+msgstr "הוס_פת הערות לקוד"
 
-#: src/plugins/comment-code/gtk/menus.ui:14
-msgid "Uncomment code"
-msgstr "הוצאת קוד מהערה"
+#: src/plugins/comment-code/gtk/menus.ui:15
+#| msgid "Uncomment code"
+msgid "Unco_mment code"
+msgstr "ה_סרת הערות מקוד"
 
 #: src/plugins/copyright/copyright_plugin.py:114
 msgid "Update Copyright"
@@ -3857,36 +3973,36 @@ msgstr "עדכון זכויות היוצרים עבור המשתמש טרם שמ
 msgid "Display the project creation guide"
 msgstr "הצגת מדריך ליצירת מיזם"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:219
+#: src/plugins/create-project/gbp-create-project-surface.c:223
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr "קיים שימוש בתווים העלולים לגרום לבעיות טכניות בתור שם מיזם"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:222
+#: src/plugins/create-project/gbp-create-project-surface.c:226
 #: src/plugins/create-project/gbp-create-project-surface.ui:146
 msgid "Your project will be created within a new child directory."
 msgstr "המיזם שלך יווצר עם תיקייה קטנה חדשה."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:228
+#: src/plugins/create-project/gbp-create-project-surface.c:232
 msgid "Directory already exists with that name"
 msgstr "כבר קיימת תיקייה בשם זה"
 
 #. translators: %s is replaced with a short-form file-system path to the project
-#: src/plugins/create-project/gbp-create-project-surface.c:246
+#: src/plugins/create-project/gbp-create-project-surface.c:250
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "המיזם שלך יווצר עם ‎%s."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:279
+#: src/plugins/create-project/gbp-create-project-surface.c:301
 msgid "Application ID is not valid."
 msgstr "מזהה היישום אינו תקף."
 
-#: src/plugins/create-project/gbp-create-project-surface.c:623
+#: src/plugins/create-project/gbp-create-project-surface.c:641
 msgctxt "title"
 msgid "Start New Project"
 msgstr "התחלת מיזם חדש"
 
-#: src/plugins/create-project/gbp-create-project-surface.c:792
+#: src/plugins/create-project/gbp-create-project-surface.c:810
 msgid "A failure occurred while initializing version control"
 msgstr "אירע כשל בעת אתחול בקרת הגרסות"
 
@@ -3968,10 +4084,11 @@ msgid "Uses the Git version control system"
 msgstr "שימוש במערכת Git לבקרת גרסות"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:328
-msgid "Create Project"
-msgstr "יצירת מיזם"
+#| msgid "Create Project"
+msgid "_Create Project"
+msgstr "י_צירת מיזם"
 
-#: src/plugins/create-project/gbp-create-project-surface.ui:357
+#: src/plugins/create-project/gbp-create-project-surface.ui:358
 msgid "Select a Template"
 msgstr "בחירת תבנית"
 
@@ -4002,16 +4119,19 @@ msgstr ""
 "ידי Ctags."
 
 #: src/plugins/ctags/ide-ctags-service.c:955
-#, fuzzy
 #| msgid "Indent source code as you type"
 msgid "Indexing Source Code (Paused)"
-msgstr "הזחת קוד המקור בעת ההקלדה"
+msgstr "קוד המקור מסודר באינדקס (מושהה)"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
-#: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:402
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:404
 msgid "Run with Debugger"
 msgstr "הרצה עם מנפה שגיאות"
+
+#: src/plugins/debuggerui/gtk/menus.ui:20
+#| msgid "Run with Debugger"
+msgid "Run with _Debugger"
+msgstr "הרצה עם מ_נפה שגיאות"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -4076,18 +4196,9 @@ msgstr "פירוק"
 msgid "Failed to start the debugger"
 msgstr "ארע כשל בהפעלת מנפה השגיאות"
 
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
-#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
-msgid "Debugger"
-msgstr "מנפה שגיאות"
-
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:316
 msgid "Threads"
 msgstr "חוט"
-
-#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
-msgid "Breakpoints"
-msgstr "נקודת עצירה"
 
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:350
 msgid "Libraries"
@@ -4156,7 +4267,7 @@ msgid "Arguments"
 msgstr "ארגומנט"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:482
+#: src/plugins/grep/gbp-grep-panel.c:732
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -4171,21 +4282,39 @@ msgid "Devhelp"
 msgstr "DevHelp"
 
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
-msgid "Select Documentation…"
-msgstr "בחירת תיעוד…"
+#| msgid "Select Documentation…"
+msgid "_Select Documentation…"
+msgstr "_בחירת תיעוד…"
 
-#: src/plugins/devhelp/gbp-devhelp-page.c:208
+#: src/plugins/devhelp/gbp-devhelp-page.c:381
 #: src/plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "תיעוד"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:29
+msgid "Reveal search bar with Ctrl+F"
+msgstr "הצגת שורת החיפוש עם Ctrl+F"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:48
+msgid "Previous search result (Ctrl+Shift+G)"
+msgstr "תוצאת החיפוש הקודמת (Ctrl+Shift+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:68
+msgid "Next search result (Ctrl+G)"
+msgstr "תוצאת החיפוש הבאה (Ctrl+G)"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:96
+msgid "Close search bar (Escape key)"
+msgstr "סגירת סרגל החיפוש (מקש Escape)"
 
 #: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
 msgstr "הדפסה…"
 
 #: src/plugins/devhelp/gtk/menus.ui:21
-msgid "New Documentation Page"
-msgstr "דף תיעוד חדש"
+#| msgid "New Documentation Page"
+msgid "New _Documentation Page"
+msgstr "דף _תיעוד חדש"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -4321,7 +4450,7 @@ msgstr "מערך של ‏‎[%s]"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:153
 msgid "Access Denied by Peer"
-msgstr ""
+msgstr "הגישה נדחתה על ידי העמית"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:155
 msgid "Authentication Failed"
@@ -4345,20 +4474,18 @@ msgstr "התחברות"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:461
 msgid "Provide the address of the message bus"
-msgstr ""
+msgstr "אספקת כתובת אפיק ההודעות"
 
 #: src/plugins/dspy/libdspy/dspy-view.c:463
 #: src/plugins/dspy/libdspy/gtk/menus.ui:5
-#, fuzzy
 #| msgid "Not connected to D-Bus."
 msgid "Connect to Other Bus"
-msgstr "Not connected to D-Bus."
+msgstr "התחברות לאפיק אחר"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:45
-#, fuzzy
 #| msgid "Search Documents"
 msgid "Search Bus Names"
-msgstr "חיפוש מסמך"
+msgstr "חיפוש שם אפיק"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:59
 msgid "Bus Names"
@@ -4370,7 +4497,7 @@ msgstr "נא לבחור שם אפיק"
 
 #: src/plugins/dspy/libdspy/dspy-view.ui:124
 msgid "Select a bus name to introspect the peer."
-msgstr ""
+msgstr "נא לבחור את שם האפיק כדי לחקור את העמית."
 
 #: src/plugins/editor/gbp-confirm-save-dialog.c:260
 msgid "There is a file with unsaved changes. Save changes before closing?"
@@ -4409,16 +4536,18 @@ msgid "Go to Line"
 msgstr "מעבר לשורה"
 
 #: src/plugins/editor/gbp-editor-frame-controls.ui:83
-msgid "Go"
-msgstr "מעבר"
+#| msgid "Go"
+msgid "_Go"
+msgstr "_קדימה"
 
 #: src/plugins/editor/gtk/menus.ui:8 src/plugins/editor/gtk/menus.ui:18
 msgid "New Editor Workspace…"
 msgstr "מרחב עבודת עריכה חדש…"
 
 #: src/plugins/editor/gtk/menus.ui:102
-msgid "New File"
-msgstr "קובץ חדש"
+#| msgid "New File"
+msgid "New _File"
+msgstr "קובץ _חדש"
 
 #: src/plugins/editor/gtk/menus.ui:122
 msgid "Move Page Left"
@@ -4476,7 +4605,7 @@ msgstr "לאפשר שימוש ב־ESLint, שמאפשר הרצת קוד בתוך 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/eslint/eslint_plugin.py:156
 msgid "eslint javascript lint code execute execution"
-msgstr ""
+msgstr "ESLint eslint javascript lint code קוד הרצה הפעלה"
 
 #: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
 msgid "Enable ESLint"
@@ -4490,13 +4619,20 @@ msgstr ""
 "מאפשר להשתמש ב־ESLint על מנת למצוא אבחונים נוספים בקובצי JavaScript. זה "
 "ישפיע על הרצת הקוד במיזם שלך."
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
-msgid "Clone a project using flatpak manifest"
-msgstr "שיבוט מיזם באמצעות קובץ Flatpak"
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#| msgid "Installing "
+msgid "Installation failed"
+msgstr "ההתקנה נכשלה"
 
-#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
-msgid "MANIFEST"
-msgstr "MANIFEST"
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#| msgid "Installing project"
+msgid "Installation complete"
+msgstr "ההתקנה הושלמה"
+
+#: src/plugins/flatpak/gbp-flatpak-client.c:418
+#: src/plugins/git/gbp-git-client.c:328
+msgid "The client has been closed"
+msgstr "הלקוח נסגר"
 
 # כריית מיזמים
 #. translators: %s is replaced with the name of the flatpak manifest
@@ -4509,7 +4645,7 @@ msgstr "משבט מיזם ‏‎%s"
 msgid "Downloading application sources…"
 msgstr "מוריד מקורות יישום…"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:680
 #, fuzzy, c-format
 #| msgid "Failed to create translation unit: %s"
 msgid "Failed to remove flatpak manifest: %s"
@@ -4519,11 +4655,11 @@ msgstr "Failed to create translation unit: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "הרשת אינה זמינה, מדלג על ההורדות"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:150
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
 msgid "Install Missing SDK?"
 msgstr "התקנת ערכת פיתוח תכנה חסרה?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:155
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_התקנה"
 
@@ -4539,128 +4675,89 @@ msgstr "על Builder להתקין את ערכת פיתוח תכנה הבאה ע�
 msgid "Architecture"
 msgstr "ארכיטקטורה"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
-msgstr ""
+msgstr "נוצרת סביבת flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:362
-#, fuzzy
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:381
 #| msgid "Failed to create build directory."
 msgid "Preparing build directory"
-msgstr "יצירת התיקייה build נכשלה"
+msgstr "תיקיית build בהכנה"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:412
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:431
 msgid "Downloading dependencies"
 msgstr "מוריד תלויות"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:491
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:510
 msgid "Building dependencies"
 msgstr "בונה תלויות"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:542
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
 msgid "Finalizing flatpak build"
 msgstr "מסיים בניית flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:587
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:606
 msgid "Exporting staging directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:672
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:691
 msgid "Creating flatpak bundle"
 msgstr "יצירת חבילת flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
-msgid "Install"
-msgstr "התקנה"
-
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
-#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
-msgid "Update"
-msgstr "עדכון"
-
-#. translators: keywords are used to match search keywords in preferences
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:297
-#, c-format
-msgid "flatpak %s %s %s"
-msgstr ""
-
-#. translators: %u is the number of hidden runtimes to be shown
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:312
-#, c-format
-msgid "Show %u more runtime"
-msgid_plural "show %u more runtimes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:401
-#, fuzzy
-#| msgid "Runtime"
-msgid "Flatpak Runtimes"
-msgstr "זמן ריצה"
-
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:788
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:790
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:792
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:80
-#, c-format
-msgid "Updated %s"
-msgstr "‏%s עודכן"
-
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:83
-#, c-format
-msgid "Updating %s"
-msgstr "‏%s מתעדכן"
-
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:89
-#, c-format
-msgid "Installed %s"
-msgstr "‏%s הותקן"
-
-#. Translators: %s is replaced with the runtime identifier
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:92
-#, c-format
-msgid "Installing %s"
-msgstr "‏%s בהתקנה"
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:425
 #, fuzzy
-#| msgid "Failed to locate runtime"
-msgid "Failed to install runtime"
-msgstr "נכשל באיתור זמן ריצה"
+#| msgid "Installing rust "
+msgid "Installing Necessary SDKs"
+msgstr "מתקין את rust"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
-msgid "Runtime has been updated"
-msgstr ""
-
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:122
-msgid "Runtime has been installed"
-msgstr ""
-
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:87
-msgid "Missing system dependencies"
-msgstr ""
-
-#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:88
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:426
+#, fuzzy
+#| msgid ""
+#| "Builder needs to install the following software development kits to build "
+#| "your project."
 msgid ""
-"The “flatpak-builder” program is necessary for building Flatpak-based "
-"applications. Builder can install it for you."
+"Builder is installing Software Development Kits necessary for building your "
+"application."
+msgstr "על Builder להתקין את ערכת פיתוח תכנה הבאה על מנת לבנות את המיזם שלך."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
+#, fuzzy, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to update SDKs: %s"
+msgstr "ארע כשל בשמירת קובץ: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
+msgid "Updating Necessary SDKs"
 msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
+#, fuzzy
+#| msgid ""
+#| "Builder needs to install the following software development kits to build "
+#| "your project."
+msgid ""
+"Builder is updating Software Development Kits necessary for building your "
+"application."
+msgstr "על Builder להתקין את ערכת פיתוח תכנה הבאה על מנת לבנות את המיזם שלך."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
+#| msgid "Updating Builder"
+msgid "Updating SDK Runtime"
+msgstr "סביבת ריצת ה־SDK מתעדכנת"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4670,37 +4767,37 @@ msgstr ""
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
 msgid "No repository to access file contents"
-msgstr ""
+msgstr "אין מאגר לגישה אל תוכני הקובץ"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr ""
+msgstr "לא הוגדרו תכנים להבדלים"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
 #, c-format
 msgid "The operation failed. The original error was \"%s\""
-msgstr ""
+msgstr "הפעולה נכשלה. השגיאה המקורית הייתה „%s”"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:68
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
 #, c-format
 msgid "The operation has been canceled"
 msgstr "הפעולה בוטלה"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr "‏Builder נכשל במציאת אישורים מתאימים בעת שיבוט המאגר."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:604
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:608
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
-msgstr ""
+msgstr "לא ניתן להגדיר דגלוני AMEND ו־GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:613
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:617
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "לא ניתן לחתום על הגשה ללא GPG_KEY_ID"
@@ -4709,10 +4806,6 @@ msgstr "לא ניתן לחתום על הגשה ללא GPG_KEY_ID"
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "לא ניתן לנטר קבצים מחוץ לתיקיית העבודה"
-
-#: src/plugins/git/gbp-git-client.c:328
-msgid "The client has been closed"
-msgstr "הלקוח נסגר"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4762,24 +4855,30 @@ msgstr "משבט מאגר"
 msgid "A valid Git URL is required"
 msgstr "דרושה כתובת Git תקפה"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:91
-#: src/plugins/glade/gbp-glade-frame-addin.c:300
+#: src/plugins/glade/gbp-glade-frame-addin.c:93
 msgid "Select Widget…"
 msgstr "בחירת יישומון…"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:393
-msgid "View Design"
-msgstr "הצגת עיצוב"
+#: src/plugins/glade/gbp-glade-frame-addin.c:361
+#| msgid "Select Widget…"
+msgid "_Select Widget…"
+msgstr "בחירת יי_שומון…"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:395
+#: src/plugins/glade/gbp-glade-frame-addin.c:458
+#| msgid "View Design"
+msgid "_View Design"
+msgstr "הצגת _עיצוב"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:460
 msgid "Switch to UI designer"
 msgstr "מעבר למעצב ממשק המשתמש"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:401
-msgid "View Source"
-msgstr "הצגת מקור"
+#: src/plugins/glade/gbp-glade-frame-addin.c:468
+#| msgid "View Source"
+msgid "_View Source"
+msgstr "צפייה ב_מקור"
 
-#: src/plugins/glade/gbp-glade-frame-addin.c:403
+#: src/plugins/glade/gbp-glade-frame-addin.c:470
 msgid "Switch to source code editor"
 msgstr "מעבר לעורך קוד המקור"
 
@@ -4819,23 +4918,23 @@ msgstr "ביטול הפקודה האחרונה"
 msgid "Redo the next command"
 msgstr "ביצוע חוזר של הפקודה הבאה"
 
-#: src/plugins/glade/gbp-glade-page.c:492
+#: src/plugins/glade/gbp-glade-page.c:494
 msgid "Switch to selection mode"
 msgstr "מעבר למצב בחירה"
 
-#: src/plugins/glade/gbp-glade-page.c:493
+#: src/plugins/glade/gbp-glade-page.c:495
 msgid "Switch to drag-resize mode"
 msgstr "מעבר למצב גרירה ושחרור"
 
-#: src/plugins/glade/gbp-glade-page.c:494
+#: src/plugins/glade/gbp-glade-page.c:496
 msgid "Switch to margin editor"
 msgstr "מעבר לעורך שוליים"
 
-#: src/plugins/glade/gbp-glade-page.c:495
+#: src/plugins/glade/gbp-glade-page.c:497
 msgid "Switch to alignment editor"
 msgstr "מעבר לעורך יישור"
 
-#: src/plugins/glade/gbp-glade-page.c:500
+#: src/plugins/glade/gbp-glade-page.c:502
 msgid "Unnamed Glade project"
 msgstr "מיזם Glade ללא שם"
 
@@ -4889,9 +4988,14 @@ msgstr "ביטול"
 msgid "Redo"
 msgstr "ביצוע חוזר"
 
-#: src/plugins/glade/gtk/menus.ui:61 src/plugins/glade/gtk/menus.ui:75
+#: src/plugins/glade/gtk/menus.ui:61
 msgid "UI Designer"
 msgstr "מעצב ממשק משתמש"
+
+#: src/plugins/glade/gtk/menus.ui:75
+#| msgid "UI Designer"
+msgid "_UI Designer"
+msgstr "מ_עצב מנשק משתמש"
 
 #: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
 msgid "Code assistance requires a local file."
@@ -4928,11 +5032,11 @@ msgstr ""
 
 #: src/plugins/gradle/gradle_plugin.py:85
 msgid "Gradle Wrapper"
-msgstr ""
+msgstr "מעטפת Gradle"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:133
 msgid "Display a new greeter window"
-msgstr ""
+msgstr "הצגת חלון קבלת פנים חדש"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:141
 msgid "Begin cloning project from URI"
@@ -4946,44 +5050,112 @@ msgstr "יציאה"
 msgid "Open a _Project…"
 msgstr "פתיחת _מיזם…"
 
-#: src/plugins/grep/gbp-grep-panel.c:494
+#: src/plugins/grep/gbp-grep-editor-addin.c:57
+#| msgid "Show right panel"
+msgid "Show Find in Project panel"
+msgstr "הצגת איתור בלוח המיזם"
+
+#: src/plugins/grep/gbp-grep-panel.c:744
 msgid "Match"
 msgstr "התאמה"
 
-#: src/plugins/grep/gbp-grep-panel.c:506
+#: src/plugins/grep/gbp-grep-panel.c:756
 msgid "Path"
 msgstr "Path"
 
 # מציאה והחלפה
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:819
+#, c-format
+#| msgid "Find in Files"
+msgid "_Find in %s"
+msgstr "_חיפוש בתוך %s"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:821
+#, c-format
+#| msgid "Replace With"
+msgid "_Replace in %s"
+msgstr "ה_חלפה בתוך %s"
+
+# מציאה והחלפה
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
-#: src/plugins/grep/gtk/menus.ui:6
 msgid "Find in Files"
 msgstr "חיפוש בקבצים"
 
-#: src/plugins/grep/gbp-grep-panel.ui:51
-msgid "Replace With"
-msgstr "החלפה עם"
+# מציאה והחלפה
+#: src/plugins/grep/gbp-grep-panel.ui:50
+#| msgid "Find and replace"
+msgid "Find and Replace"
+msgstr "חיפוש והחלפה"
+
+#: src/plugins/grep/gbp-grep-panel.ui:72
+msgid "R_ecursive"
+msgstr "נ_סוג"
+
+#: src/plugins/grep/gbp-grep-panel.ui:80
+#| msgid "Match"
+msgid "Match _Case"
+msgstr "התאמת _רישיות"
+
+#: src/plugins/grep/gbp-grep-panel.ui:87
+#| msgid "Match _whole words"
+msgid "Match _Words"
+msgstr "התאמת מי_לים"
+
+# לבדוק  – ביטוי סדיר
+#: src/plugins/grep/gbp-grep-panel.ui:94
+#| msgid "Regular expressions"
+msgid "Regular E_xpressions"
+msgstr "_ביטויים רגולרים"
+
+#: src/plugins/grep/gbp-grep-panel.ui:103
+#| msgid "Close the page"
+msgid "Close the panel (Escape key)"
+msgstr "סגירת הלוח (מקש Escape)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:141
+#| msgid "_Open Project"
+msgid "_Find in Project"
+msgstr "_איתור במיזם"
+
+#: src/plugins/grep/gbp-grep-panel.ui:166
+#| msgid "Recent Projects"
+msgid "_Replace in Project"
+msgstr "ה_חלפה במיזם"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
 msgid "Search for…"
 msgstr "חיפוש עבור…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:54
+# מציאה
+#: src/plugins/grep/gbp-grep-popover.ui:38
+#| msgid "Find"
+msgid "_Find"
+msgstr "_איתור"
+
+#: src/plugins/grep/gbp-grep-popover.ui:55
 msgid "Search _recursively through folders"
 msgstr "חיפוש _רקורסיבי דרך התיקיות"
 
-#: src/plugins/grep/gbp-grep-popover.ui:61
+#: src/plugins/grep/gbp-grep-popover.ui:62
 msgid "Match _case when searching"
 msgstr "התאמת _רישיות בחיפוש"
 
-#: src/plugins/grep/gbp-grep-popover.ui:69
+#: src/plugins/grep/gbp-grep-popover.ui:70
 msgid "Match _whole words"
 msgstr "התאמה למילים _שלמות"
 
 # לבדוק  – ביטוי סדיר
-#: src/plugins/grep/gbp-grep-popover.ui:76
+#: src/plugins/grep/gbp-grep-popover.ui:77
 msgid "Allow regular _expressions"
 msgstr "לאפשר _ביטויים רגולרים"
+
+# מציאה והחלפה
+#: src/plugins/grep/gtk/menus.ui:7
+#| msgid "Find in Files"
+msgid "_Find in Files"
+msgstr "איתור ב_קבצים"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 msgid "Open Preview"
@@ -5013,20 +5185,12 @@ msgstr "חסר python3-sphinx במחשב"
 msgid "(Preview)"
 msgstr "(תצוגה מקדימה)"
 
-#: src/plugins/jedi/jedi_plugin.py:666
-msgid "Suggest completions from Python"
-msgstr "הצעת השלמה עבור Python"
-
-#: src/plugins/jedi/jedi_plugin.py:667
-msgid "Use Jedi to provide completions for the Python language"
-msgstr "שימוש ב־Jedi עבור השלמה אוטומטית בשפת Python"
-
-#: src/plugins/ls/gbp-ls-page.c:315
+#: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
 msgid "Failed to load directory: %s"
 msgstr "נכשל בפתיחת התיקייה: %s"
 
-#: src/plugins/ls/gbp-ls-page.c:387
+#: src/plugins/ls/gbp-ls-page.c:391
 #, c-format
 msgid "%s — Directory"
 msgstr "‏%s - תיקייה"
@@ -5040,67 +5204,81 @@ msgid "Modified"
 msgstr "מועד שינוי"
 
 #: src/plugins/ls/gtk/menus.ui:8
-msgid "Browse Folder"
-msgstr "עיון בתיקייה"
+#| msgid "Browse Folder"
+msgid "_Browse Folder"
+msgstr "_עיון בתיקייה"
 
 #: src/plugins/ls/gtk/menus.ui:18
-msgid "Switch to Folder"
-msgstr "מעבר לתיקייה"
+#| msgid "Switch to Folder"
+msgid "S_witch to Folder"
+msgstr "מ_עבר לתיקייה"
 
-#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:46
-msgid "Open Containing Folder"
-msgstr "פתיחת תיקייה מכילה"
+#: src/plugins/ls/gtk/menus.ui:23
+#| msgid "Open Containing Folder"
+msgid "_Open Containing Folder"
+msgstr "פתיחת תיקייה מ_כילה"
 
-#: src/plugins/make/make_plugin.py:101
+#: src/plugins/make/make_plugin.py:104
 msgid "Build project"
 msgstr "בניית מייזם"
 
 # כריית מיזמים
-#: src/plugins/make/make_plugin.py:115
+#: src/plugins/make/make_plugin.py:121
 msgid "Install project"
 msgstr "התקנת מיזם"
 
-#: src/plugins/make/make_plugin.py:337
+#: src/plugins/make/make_plugin.py:343
 msgid "Empty Makefile Project"
 msgstr "מיזם Makefile ריק"
 
-#: src/plugins/make/make_plugin.py:339
+#: src/plugins/make/make_plugin.py:345
 msgid "Create a new empty project using a simple Makefile"
 msgstr "יצירת מיזם ריק חדש באמצעות Makefile פשוט"
 
-#: src/plugins/meson-templates/meson_templates.py:249
+#: src/plugins/meson-templates/meson_templates.py:252
+#| msgid "GNOME Application"
+msgid "GNOME Application (Legacy)"
+msgstr "יישום GNOME (מיושן)"
+
+#: src/plugins/meson-templates/meson_templates.py:254
+#| msgid "Create a new GNOME application"
+msgid "Create a GNOME application with GTK 3"
+msgstr "יצירת יישום GNOME עם GTK 3"
+
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "GNOME Application"
 msgstr "יישום GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:251
-msgid "Create a new GNOME application"
-msgstr "יצירת יישם GNOME חדש"
+#: src/plugins/meson-templates/meson_templates.py:332
+#| msgid "Create a new GNOME application"
+msgid "Create a GNOME application with GTK 4"
+msgstr "יצירת יישום GNOME עם GTK 4"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:413
 msgid "Shared Library"
 msgstr "ספרייה משותפת"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:415
 msgid "Create a new project with a shared library"
 msgstr "יצירת מיזם חדש עם ספרייה משותפת"
 
-#: src/plugins/meson-templates/meson_templates.py:347
+#: src/plugins/meson-templates/meson_templates.py:432
 msgid "Empty Project"
 msgstr "מיזם ריק"
 
-#: src/plugins/meson-templates/meson_templates.py:349
+#: src/plugins/meson-templates/meson_templates.py:434
 msgid "Create a new empty project"
 msgstr "יצירת מיזם חדש ריק"
 
-#: src/plugins/meson-templates/meson_templates.py:366
+#: src/plugins/meson-templates/meson_templates.py:451
 msgid "Command Line Tool"
 msgstr "כלי שורת פקודה"
 
-#: src/plugins/meson-templates/meson_templates.py:368
+#: src/plugins/meson-templates/meson_templates.py:453
 msgid "Create a new command line project"
 msgstr "יצירת מיזם שורת פקודה"
 
-#: src/plugins/meson/gbp-meson-build-system.c:468
+#: src/plugins/meson/gbp-meson-build-system.c:470
 #: src/plugins/meson/gbp-meson-config-view-addin.c:57
 msgid "Meson"
 msgstr "Meson"
@@ -5129,7 +5307,7 @@ msgstr "הוספת כלים"
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr "הגדרת כלים חדשה מותאמת לפלטפורמה ייעודית מסוימת"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:203
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:204
 msgid "Toolchain"
 msgstr "כלים"
 
@@ -5174,12 +5352,12 @@ msgstr "מקשר"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
 #: src/plugins/meson/gbp-meson-utils.c:106
 msgid "Strip"
-msgstr ""
+msgstr "הפשטה"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
 #: src/plugins/meson/gbp-meson-utils.c:108
 msgid "Executable wrapper"
-msgstr ""
+msgstr "מעטפת שניתן להפעיל"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
 #: src/plugins/meson/gbp-meson-utils.c:110
@@ -5327,60 +5505,61 @@ msgstr "רשמקול"
 msgid "A simple and modern sound recorder"
 msgstr "רשמקול פשוט וחדיש"
 
-#: src/plugins/notification/ide-notification-addin.c:102
+#: src/plugins/notification/ide-notification-addin.c:104
 msgid "Build successful"
 msgstr "‫v בנייה הצליחה"
 
-#: src/plugins/notification/ide-notification-addin.c:103
+#: src/plugins/notification/ide-notification-addin.c:105
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "הושלמה בניית מיזם „%s”"
 
-#: src/plugins/notification/ide-notification-addin.c:107
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:109
+#: src/plugins/notification/ide-notification-addin.c:191
 msgid "Build failed"
 msgstr "בנייה נכשלה"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:110
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "נכשלה בניית מיזם „%s”"
 
-#: src/plugins/notification/ide-notification-addin.c:184
+#: src/plugins/notification/ide-notification-addin.c:182
 msgid "Build succeeded"
 msgstr "בנייה הצליחה"
 
-#: src/plugins/notification/ide-notification-addin.c:186
-#, fuzzy
+#: src/plugins/notification/ide-notification-addin.c:184
 #| msgid "Build failed"
 msgid "Build configured"
-msgstr "בנייה נכשלה"
+msgstr "בנייה הוגדרה"
 
-#: src/plugins/notification/ide-notification-addin.c:188
-#, fuzzy
+#: src/plugins/notification/ide-notification-addin.c:186
 #| msgid "Build failed"
 msgid "Build bootstrapped"
-msgstr "בנייה נכשלה"
+msgstr "בנייה נוסדה"
 
 #: src/plugins/npm/npm_plugin.py:96
 msgid "Downloading npm dependencies"
 msgstr "מוריד תלויות npm"
 
+#: src/plugins/open-with-external/gtk/menus.ui:9
+msgid "_External Program…"
+msgstr "_תכנית חיצונית…"
+
 #: src/plugins/phpize/phpize_plugin.py:191
-#, fuzzy
 #| msgid "Options to use when bootstrapping the project"
 msgid "Bootstrapping project"
-msgstr "אפשרויות לשימוש בעת אתחול המיזם"
+msgstr "יסודות המיזם נבנים"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:182
 msgid "Containers/Toolbox"
-msgstr ""
+msgstr "מכולות/ערכת כלים"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:188
 msgid "Containers/Podman"
-msgstr ""
+msgstr "מכולות/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
@@ -5451,43 +5630,68 @@ msgid "Rename %s"
 msgstr "שינוי שם %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
-msgid "New File…"
-msgstr "קובץ חדש…"
+#| msgid "New File…"
+msgid "New Fil_e…"
+msgstr "קובץ _חדש…"
 
 #: src/plugins/project-tree/gtk/menus.ui:14
-msgid "New Folder…"
-msgstr "תיקייה חדשה…"
+#| msgid "New Folder…"
+msgid "New F_older…"
+msgstr "_תיקייה חדשה…"
+
+#: src/plugins/project-tree/gtk/menus.ui:22
+msgid "O_pen"
+msgstr "_פתיחה"
 
 #: src/plugins/project-tree/gtk/menus.ui:26
-msgid "Open With…"
-msgstr "פתיחה באמצעות…"
+#| msgid "Open With…"
+msgid "Open _With…"
+msgstr "_פתיחה באמצעות…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
-msgid "_External Program…"
-msgstr "_תכנית חיצונית…"
+#| msgid "Source Code Editor"
+msgid "_Source Code Editor"
+msgstr "_עורך קוד מקור"
 
-#: src/plugins/project-tree/gtk/menus.ui:37
-msgid "Source Code Editor"
-msgstr "עורך קוד מקור"
+#: src/plugins/project-tree/gtk/menus.ui:39
+#| msgid "Open Containing Folder"
+msgid "Open _Containing Folder"
+msgstr "פתיחת תיקייה מ_כילה"
 
-#: src/plugins/project-tree/gtk/menus.ui:52
-msgid "Open in Terminal"
-msgstr "פתיחה במסוף"
+#: src/plugins/project-tree/gtk/menus.ui:45
+#| msgid "Open in Terminal"
+msgid "Open in _Terminal"
+msgstr "פתיחה במ_סוף"
 
-#: src/plugins/project-tree/gtk/menus.ui:66
-msgid "Move to Trash"
-msgstr "העבר לאשפה"
+#: src/plugins/project-tree/gtk/menus.ui:59
+#| msgid "Move to Trash"
+msgid "_Move to Trash"
+msgstr "ה_עברה לאשפה"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
-msgid "Display Options"
-msgstr "אפשרויות תצוגה"
+#: src/plugins/project-tree/gtk/menus.ui:65
+#| msgid "Display Options"
+msgid "_Display Options"
+msgstr "אפשרויות ת_צוגה"
 
-#: src/plugins/project-tree/gtk/menus.ui:94
-#: src/plugins/project-tree/gtk/menus.ui:103
-#, fuzzy
+#: src/plugins/project-tree/gtk/menus.ui:69
+#| msgid "Show Ignored Files"
+msgid "S_how Ignored Files"
+msgstr "ה_צגת קבצים שזכו להתעלמות"
+
+#: src/plugins/project-tree/gtk/menus.ui:74
+#| msgid "Sort Directories First"
+msgid "S_ort Directories First"
+msgstr "סידור תיקיות בה_תחלה"
+
+#: src/plugins/project-tree/gtk/menus.ui:87
 #| msgid "Re_veal in Project Tree"
 msgid "Reveal in Project Tree"
-msgstr "ה_צגה בעץ המיזם"
+msgstr "חשיפה בעץ המיזם"
+
+#: src/plugins/project-tree/gtk/menus.ui:96
+#| msgid "Re_veal in Project Tree"
+msgid "Reveal File in Project _Tree"
+msgstr "ח_שיפה בעץ המיזם"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5540,16 +5744,16 @@ msgid "Recent Projects"
 msgstr "מיזמים אחרונים"
 
 #: src/plugins/retab/gtk/menus.ui:9
-msgid "Reformat tabs"
-msgstr ""
+msgid "_Reformat tabs"
+msgstr "_עיצוב טאבים מחדש"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
 msgid "Rust Analyzer: Cargo command for diagnostics"
-msgstr ""
+msgstr "מנתח Rust: פקודת Cargo לניתוח"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
 msgid "the default cargo command"
-msgstr ""
+msgstr "פקודת ה־cargo כבררת מחדל"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:76
 msgid ""
@@ -5600,11 +5804,11 @@ msgstr "על המארח"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
 msgid "In Build Environment"
-msgstr ""
+msgstr "בסביבת הבנייה"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
 msgid "In Runtime Environment"
-msgstr ""
+msgstr "בסביבת ההרצה"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
 msgid ""
@@ -5664,16 +5868,15 @@ msgid "Command"
 msgstr "פקודה"
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:114
-#, fuzzy, c-format
+#, c-format
 #| msgid "failed to parse line %i\n"
 msgid "Failed to parse snippet “%s”"
-msgstr "ניתוח השורה %i נכשל\n"
+msgstr "ניתוח קטע הקוד „%s” נכשל"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:53
-#, fuzzy
 #| msgid "Suggest Completions using Jedi"
 msgid "Suggest Completions from Snippets"
-msgstr "הצעת השלמת מילים באמצעות Jedi"
+msgstr "הצגת השלמות מתוך מקטעי קוד"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:54
 msgid "Use registered snippets to suggest completion proposals"
@@ -5773,9 +5976,9 @@ msgstr "_שפה"
 msgid "Check _Spelling"
 msgstr "בדיקת _איות"
 
-#: src/plugins/spellcheck/gtk/menus.ui:14
-msgid "Underline misspelled words"
-msgstr ""
+#: src/plugins/spellcheck/gtk/menus.ui:13
+msgid "_Underline misspelled words"
+msgstr "_קו תחתי למילים שגויות"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
 msgid "Enable Stylelint"
@@ -5839,41 +6042,52 @@ msgstr "סמל ללא שם"
 msgid "Symbol"
 msgstr "שם"
 
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:314
-msgid "Select Symbol…"
-msgstr "בחירת סמל…"
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:315
+#| msgid "Select Symbol…"
+msgid "_Select Symbol…"
+msgstr "בחירת _סמל…"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
 msgid "Document Outline"
 msgstr "מתאר מסמך"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
+#| msgid "Document Outline"
+msgid "_Document Outline"
+msgstr "מ_תאר מסמך"
 
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
 #: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Profiler"
 msgstr "מאפיין"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:284
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:258
 msgid "Open Sysprof Capture…"
 msgstr "פתיחת Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:293
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:267
 msgid "Sysprof Capture (*.syscap)"
 msgstr "לוכד Sysprof‏ ‏‎(*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:299
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:273
 msgid "All Files"
 msgstr "כל הקבצים"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:422
-#: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:396
+#: src/plugins/sysprof/gtk/menus.ui:32
 msgid "Run with Profiler"
 msgstr "הרצה עם מאפיין"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
+#| msgid "Open Sysprof Capture…"
 msgctxt "menu label"
-msgid "Open Sysprof Capture…"
-msgstr "פתיחת לכידת Sysprof…"
+msgid "Open _Sysprof Capture…"
+msgstr "פתיחת _לכידת Sysprof…"
+
+#: src/plugins/sysprof/gtk/menus.ui:42
+#| msgid "Run with Profiler"
+msgid "Run with _Profiler"
+msgstr "הרצה עם מ_אפיין"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
 msgid "Add sysroot"
@@ -5916,10 +6130,9 @@ msgid "Terminal"
 msgstr "מסוף"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
-#, fuzzy
 #| msgid "Fallback"
 msgid "Scrollback"
-msgstr "קריסה"
+msgstr "גלילה לאחור"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
@@ -5955,11 +6168,11 @@ msgstr ""
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:83
 msgctxt "Keywords"
 msgid "terminal show hyperlinks links urls"
-msgstr ""
+msgstr "מסוף הצגת קישורים כתובות"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:93
 msgid "Scroll on output"
-msgstr ""
+msgstr "גלילה לסוף עם קבלת פלט"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:94
 msgid ""
@@ -5970,26 +6183,25 @@ msgstr ""
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:95
 msgctxt "Keywords"
 msgid "scroll on output"
-msgstr ""
+msgstr "גלילה עם הוספת פלט"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:104
 msgid "Scroll on keystroke"
-msgstr ""
+msgstr "גלילה עם לחיצת מקש"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:105
-#, fuzzy
 #| msgid "If enabled, the terminal page will close after the command executes."
 msgid "When enabled the terminal will scroll to the bottom when typing"
-msgstr "אם מאופשר, דף המסוף יסגר לאחר הרצת הפקודה."
+msgstr "כאשר פעיל, המסוף יגלול לתחתית בעת הקלדה"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:106
 msgctxt "Keywords"
 msgid "scroll on keystroke"
-msgstr ""
+msgstr "גלילה בלחיצות מקשים"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:115
 msgid "Limit Scrollback"
-msgstr ""
+msgstr "הגבלת שורות פלט לגלילה"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:116
 msgid ""
@@ -6000,24 +6212,22 @@ msgstr ""
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:117
 msgctxt "Keywords"
 msgid "scrollback limit"
-msgstr ""
+msgstr "מגבלת גלילת פלט"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
-#, fuzzy
 #| msgid "Sort Lines"
 msgid "Scrollback Lines"
-msgstr "מיון שורות"
+msgstr "שורות גלילת פלט"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
-#, fuzzy
 #| msgid "Minimum number of lines to keep above and below the cursor"
 msgid "The number of lines to keep available for scrolling"
-msgstr "מספר מזערי של שורות להותיר מעל ומתחת לסמן"
+msgstr "מספר השורות לשמירה בעת גלילה"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:127
 msgctxt "Keywords"
 msgid "scrollback lines"
-msgstr ""
+msgstr "שורות גלילת פלט"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
 msgid "Application Output"
@@ -6106,6 +6316,11 @@ msgid ""
 "you."
 msgstr "קיים עדכון זמין ל־Builder. ניתן להוריד את Builder ולהתקין אותו בשבילך."
 
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
+#| msgid "Update"
+msgid "_Update"
+msgstr "_עדכון"
+
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
 msgid "Vagrant"
@@ -6116,21 +6331,23 @@ msgstr "Vagrant"
 msgid "Run with Valgrind"
 msgstr "הרצה עם Valgrind"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:419
 msgid "Branches"
 msgstr "ענפים"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:476
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:429
 msgid "Tags"
 msgstr "תגיות"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
-msgid "Switch to branch"
-msgstr "מעבר לענף"
+#| msgid "Switch to branch"
+msgid "_Switch to branch"
+msgstr "מעבר ל_ענף"
 
 #: src/plugins/vcsui/gtk/menus.ui:12
-msgid "Push to origin"
-msgstr "לדחוף ל־origin"
+#| msgid "Push to origin"
+msgid "_Push to origin"
+msgstr "ל_דחוף ל־origin"
 
 #: src/plugins/vim/gb-vim.c:105
 #, c-format
@@ -6256,6 +6473,56 @@ msgstr "ארע כשל ביצירת עץ ה־XML."
 msgid "File must be saved locally to parse."
 msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
+#~ msgid "Save File As"
+#~ msgstr "שימרת קובץ בשם"
+
+#~ msgid "Save As"
+#~ msgstr "שמירה בשם"
+
+#~ msgid "Subprocess launcher failed"
+#~ msgstr "נכשל שיגור תת־מעבד"
+
+#~ msgid "Clone a project using flatpak manifest"
+#~ msgstr "שיבוט מיזם באמצעות קובץ Flatpak"
+
+#~ msgid "MANIFEST"
+#~ msgstr "MANIFEST"
+
+#~ msgid "Install"
+#~ msgstr "התקנה"
+
+#, fuzzy
+#~| msgid "Runtime"
+#~ msgid "Flatpak Runtimes"
+#~ msgstr "זמן ריצה"
+
+#~ msgid "Updated %s"
+#~ msgstr "‏%s עודכן"
+
+#~ msgid "Updating %s"
+#~ msgstr "‏%s מתעדכן"
+
+#~ msgid "Installed %s"
+#~ msgstr "‏%s הותקן"
+
+#~ msgid "Installing %s"
+#~ msgstr "‏%s בהתקנה"
+
+#, fuzzy
+#~| msgid "Failed to locate runtime"
+#~ msgid "Failed to install runtime"
+#~ msgstr "נכשל באיתור זמן ריצה"
+
+#~ msgid "Suggest completions from Python"
+#~ msgstr "הצעת השלמה עבור Python"
+
+#~ msgid "Use Jedi to provide completions for the Python language"
+#~ msgstr "שימוש ב־Jedi עבור השלמה אוטומטית בשפת Python"
+
+#~ msgctxt "menu label"
+#~ msgid "Open Sysprof Capture…"
+#~ msgstr "פתיחת לכידת Sysprof…"
+
 #~ msgctxt "shortcut window"
 #~ msgid "Touchpad gestures"
 #~ msgstr "מחוות משטח מגע"
@@ -6313,10 +6580,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgid "Updating rustup"
 #~ msgstr "מעדכן את rustup"
 
-#~| msgid "Installation Prefix"
-#~ msgid "Installing rust "
-#~ msgstr "מתקין את rust"
-
 #~| msgid "Host operating system"
 #~ msgid "Checking system"
 #~ msgstr "בדיקת מערכת"
@@ -6330,10 +6593,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~| msgid "Download Page"
 #~ msgid "Downloading "
 #~ msgstr "מוריד"
-
-#~| msgid "Installation Prefix"
-#~ msgid "Installing "
-#~ msgstr "מתקין"
 
 #~ msgid "Checking for rustup updates"
 #~ msgstr "בדיקה אחרי עדכונים ל־rustup"
@@ -6470,9 +6729,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgid "If enabled, the sidebar will be visible in the editor workspace."
 #~ msgstr "If enabled, the sidebar will be visible in the editor workspace."
 
-#~ msgid "_Open Project"
-#~ msgstr "_פתיחת מיזם"
-
 #~ msgid "_Preferences"
 #~ msgstr "ה_עדפות"
 
@@ -6484,9 +6740,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "Show bottom panel"
 #~ msgstr "הצגת הלוח שבתחתית"
-
-#~ msgid "Show right panel"
-#~ msgstr "הצגת הלוח שמימין"
 
 #~ msgid "Cu_t"
 #~ msgstr "ג_זירה"
