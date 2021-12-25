@@ -25,7 +25,7 @@
 #include <webkit2/webkit2.h>
 
 #include <libportal/portal.h>
-#include <libportal/portal-gtk3.h>
+#include <libportal-gtk3/portal-gtk3.h>
 
 #include "gbp-devhelp-page.h"
 #include "gbp-devhelp-search.h"
