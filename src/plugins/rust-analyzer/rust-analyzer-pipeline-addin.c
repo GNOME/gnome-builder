@@ -289,6 +289,7 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
   IdeBuildSystem *buildsystem = NULL;
   g_autoptr(GFile) cargo_home = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autofree char *local_path = NULL;
 
   IDE_ENTRY;
 
@@ -315,6 +316,14 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
   if (g_file_query_exists (file, NULL))
     {
       set_path (self, g_file_peek_path (file), g_file_peek_path (cargo_home));
+      IDE_EXIT;
+    }
+
+  /* Try ~/.local/bin/ where rust-analyzer suggests installation */
+  local_path = g_build_filename (g_get_home_dir (), ".local", "bin", "rust-analyzer", NULL);
+  if (g_file_test (local_path, G_FILE_TEST_IS_EXECUTABLE))
+    {
+      set_path (self, local_path, NULL);
       IDE_EXIT;
     }
 
