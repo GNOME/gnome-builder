@@ -152,6 +152,7 @@ src/plugins/beautifier/gb-beautifier-helper.c
 src/plugins/beautifier/gb-beautifier-process.c
 src/plugins/beautifier/gtk/menus.ui
 src/plugins/buildconfig/ide-buildconfig-config-provider.c
+src/plugins/buildstream/buildstream_plugin.py
 src/plugins/buildui/gbp-buildui-config-surface.c
 src/plugins/buildui/gbp-buildui-config-view-addin.c
 src/plugins/buildui/gbp-buildui-log-pane.c
@@ -303,6 +304,7 @@ src/plugins/grep/gbp-grep-popover.ui
 src/plugins/grep/gtk/menus.ui
 src/plugins/html-preview/gtk/menus.ui
 src/plugins/html-preview/html_preview.py
+src/plugins/intelephense/intelephense.py
 src/plugins/jhbuild/jhbuild_plugin.py
 src/plugins/ls/gbp-ls-page.c
 src/plugins/ls/gbp-ls-page.ui
