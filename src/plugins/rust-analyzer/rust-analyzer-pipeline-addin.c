@@ -24,6 +24,8 @@
 
 #include <libide-gui.h>
 #include <libide-core.h>
+#include <libide-io.h>
+#include <libide-terminal.h>
 
 #include "rust-analyzer-pipeline-addin.h"
 
@@ -214,6 +216,8 @@ rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self)
 
   if (self->run_on_host)
     {
+      const char *user_shell = ide_get_user_shell ();
+
       g_debug ("Using rust-analyzer from host");
 
       launcher = ide_subprocess_launcher_new (flags);
@@ -222,6 +226,22 @@ rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self)
 
       if (self->cargo_home != NULL)
         ide_subprocess_launcher_setenv (launcher, "CARGO_HOME", self->cargo_home, TRUE);
+
+      /* Try to use the user's shell to increase chances we get the right
+       * $PATH for the user session.
+       */
+      if (ide_shell_supports_dash_c (user_shell) &&
+          ide_shell_supports_dash_login (user_shell))
+        {
+          ide_subprocess_launcher_push_argv (launcher, user_shell);
+          ide_subprocess_launcher_push_argv (launcher, "--login");
+          ide_subprocess_launcher_push_argv (launcher, "-c");
+          ide_subprocess_launcher_push_argv (launcher, self->path);
+        }
+      else
+        {
+          ide_subprocess_launcher_push_argv (launcher, self->path);
+        }
     }
   else
     {
@@ -233,6 +253,7 @@ rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self)
       /* Unset CARGO_HOME if it's set by the runtime */
       ide_subprocess_launcher_set_flags (launcher, flags);
       ide_subprocess_launcher_set_clear_env (launcher, TRUE);
+      ide_subprocess_launcher_push_argv (launcher, self->path);
     }
 
   /* In Builder meson projects that use Cargo, we use target/cargo-home as
@@ -258,7 +279,6 @@ rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self)
   ide_subprocess_launcher_setenv (launcher, "RA_LOG", "rust_analyzer=info", TRUE);
 #endif
 
-  ide_subprocess_launcher_push_argv (launcher, self->path);
   ide_subprocess_launcher_set_cwd (launcher, src_workdir);
 
   return g_steal_pointer (&launcher);
@@ -290,8 +310,10 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
                                    IdePipeline      *pipeline)
 {
   RustAnalyzerPipelineAddin *self = (RustAnalyzerPipelineAddin *)addin;
-  IdeContext *context = NULL;
+  IdeRuntimeManager *runtime_manager;
   IdeBuildSystem *buildsystem = NULL;
+  IdeContext *context = NULL;
+  IdeRuntime *host;
   g_autoptr(GFile) cargo_home = NULL;
   g_autoptr(GFile) file = NULL;
   g_autofree char *local_path = NULL;
@@ -329,6 +351,15 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
   if (g_file_test (local_path, G_FILE_TEST_IS_EXECUTABLE))
     {
       set_path (self, local_path, NULL, TRUE);
+      IDE_EXIT;
+    }
+
+  /* Check on host, hoping to inherit PATH */
+  runtime_manager = ide_runtime_manager_from_context (context);
+  host = ide_runtime_manager_get_runtime (runtime_manager, "host");
+  if (ide_runtime_contains_program_in_path (host, "rust-analyzer", NULL))
+    {
+      set_path (self, "rust-analyzer", NULL, TRUE);
       IDE_EXIT;
     }
 
