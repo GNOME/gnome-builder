@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-21 21:38+0000\n"
-"PO-Revision-Date: 2021-12-21 23:45+0200\n"
+"POT-Creation-Date: 2021-12-26 11:01+0000\n"
+"PO-Revision-Date: 2021-12-26 13:37+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -447,7 +447,6 @@ msgstr ""
 "Мінімальна кількість символів для встановлення відповідності позначеного."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
-#| msgid "Specify the mininum number of characters for selection matching."
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 "Вказати мінімальну кількість символів для встановлення відповідності "
@@ -2876,7 +2875,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1463
+#: src/libide/lsp/ide-lsp-client.c:1473
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -3111,6 +3110,7 @@ msgid "Configuring project"
 msgstr "Налаштовування проєкту"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
+#: src/plugins/buildstream/buildstream_plugin.py:48
 #: src/plugins/cargo/cargo_plugin.py:145
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
@@ -4309,7 +4309,7 @@ msgid "Arguments"
 msgstr "Аргументи"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:732
+#: src/plugins/grep/gbp-grep-panel.c:749
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -5075,22 +5075,22 @@ msgstr "_Відкрити проєкт…"
 msgid "Show Find in Project panel"
 msgstr "Показати панель «Пошук у проєкті»"
 
-#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/grep/gbp-grep-panel.c:761
 msgid "Match"
 msgstr "Відповідність"
 
-#: src/plugins/grep/gbp-grep-panel.c:756
+#: src/plugins/grep/gbp-grep-panel.c:773
 msgid "Path"
 msgstr "Шлях"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:819
+#: src/plugins/grep/gbp-grep-panel.c:836
 #, c-format
 msgid "_Find in %s"
 msgstr "З_найти у %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:821
+#: src/plugins/grep/gbp-grep-panel.c:838
 #, c-format
 msgid "_Replace in %s"
 msgstr "За_мінити у %s"
@@ -5187,6 +5187,11 @@ msgstr "На комп'ютері не встановлено python3-sphinx"
 #: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Перегляд)"
+
+#: src/plugins/intelephense/intelephense.py:71
+#| msgid "Indexing Source Code"
+msgid "Indexing php code..."
+msgstr "Індексування коду php…"
 
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
