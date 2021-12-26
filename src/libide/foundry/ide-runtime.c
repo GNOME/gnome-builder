@@ -24,8 +24,14 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
-#include <libide-threading.h>
 #include <string.h>
+
+#include <libide-io.h>
+#include <libide-threading.h>
+
+#define IDE_TERMINAL_INSIDE
+# include "../terminal/ide-terminal-util.h"
+#undef IDE_TERMINAL_INSIDE
 
 #include "ide-build-target.h"
 #include "ide-config.h"
@@ -114,10 +120,24 @@ ide_runtime_real_contains_program_in_path (IdeRuntime   *self,
       if (NULL != (launcher = ide_runtime_create_launcher (self, NULL)))
         {
           g_autoptr(IdeSubprocess) subprocess = NULL;
+          g_autofree char *escaped = g_shell_quote (program);
+          g_autofree char *command = g_strdup_printf ("which %s", escaped);
+          const char *user_shell = ide_get_user_shell ();
 
           ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-          ide_subprocess_launcher_push_argv (launcher, "which");
-          ide_subprocess_launcher_push_argv (launcher, program);
+
+          /* Try to get a real PATH by using the preferred shell */
+          if (ide_shell_supports_dash_c (user_shell))
+            ide_subprocess_launcher_push_argv (launcher, user_shell);
+          else
+            ide_subprocess_launcher_push_argv (launcher, "sh");
+
+          /* Try a login shell as well to improve reliability */
+          if (ide_shell_supports_dash_login (user_shell))
+            ide_subprocess_launcher_push_argv (launcher, "--login");
+
+          ide_subprocess_launcher_push_argv (launcher, "-c");
+          ide_subprocess_launcher_push_argv (launcher, command);
 
           if (NULL != (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
             return ide_subprocess_wait_check (subprocess, NULL, NULL);

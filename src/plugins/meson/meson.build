@@ -36,7 +36,7 @@ test_sources += files([
 
 test_meson = executable('test-meson', test_sources,
         c_args: test_cflags,
-  dependencies: [ libide_foundry_dep ],
+  dependencies: [ libide_foundry_dep, libide_terminal_dep ],
 )
 test('test-meson', test_meson, env: test_env)
 
