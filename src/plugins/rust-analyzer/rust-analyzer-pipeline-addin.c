@@ -38,6 +38,7 @@ struct _RustAnalyzerPipelineAddin
   IdePipeline     *pipeline;
   gchar           *path;
   gchar           *cargo_home;
+  guint            run_on_host : 1;
 };
 
 static void pipeline_addin_iface_init (IdePipelineAddinInterface *iface);
@@ -211,15 +212,16 @@ rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self)
   flags &= ~G_SUBPROCESS_FLAGS_STDERR_SILENCE;
 #endif
 
-  /* If cargo_home is set, then we are executing on the host */
-  if (self->cargo_home != NULL)
+  if (self->run_on_host)
     {
-      g_debug ("Using rust-analyzer from home directory");
+      g_debug ("Using rust-analyzer from host");
 
       launcher = ide_subprocess_launcher_new (flags);
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_subprocess_launcher_set_run_on_host (launcher, self->run_on_host);
       ide_subprocess_launcher_set_clear_env (launcher, TRUE);
-      ide_subprocess_launcher_setenv (launcher, "CARGO_HOME", self->cargo_home, TRUE);
+
+      if (self->cargo_home != NULL)
+        ide_subprocess_launcher_setenv (launcher, "CARGO_HOME", self->cargo_home, TRUE);
     }
   else
     {
@@ -265,7 +267,8 @@ rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self)
 static void
 set_path (RustAnalyzerPipelineAddin *self,
           const gchar               *path,
-          const gchar               *cargo_home)
+          const gchar               *cargo_home,
+          gboolean                   run_on_host)
 {
   if (g_strcmp0 (path, self->path) != 0)
     {
@@ -278,6 +281,8 @@ set_path (RustAnalyzerPipelineAddin *self,
       g_free (self->cargo_home);
       self->cargo_home = g_strdup (cargo_home);
     }
+
+  self->run_on_host = !!run_on_host;
 }
 
 static void
@@ -306,7 +311,7 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
 
   if (ide_pipeline_contains_program_in_path (pipeline, "rust-analyzer", NULL))
     {
-      set_path (self, "rust-analyzer", NULL);
+      set_path (self, "rust-analyzer", NULL, FALSE);
       IDE_EXIT;
     }
 
@@ -315,7 +320,7 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
 
   if (g_file_query_exists (file, NULL))
     {
-      set_path (self, g_file_peek_path (file), g_file_peek_path (cargo_home));
+      set_path (self, g_file_peek_path (file), g_file_peek_path (cargo_home), TRUE);
       IDE_EXIT;
     }
 
@@ -323,7 +328,7 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
   local_path = g_build_filename (g_get_home_dir (), ".local", "bin", "rust-analyzer", NULL);
   if (g_file_test (local_path, G_FILE_TEST_IS_EXECUTABLE))
     {
-      set_path (self, local_path, NULL);
+      set_path (self, local_path, NULL, TRUE);
       IDE_EXIT;
     }
 
@@ -333,7 +338,7 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
   ide_notification_set_urgent (self->notif, TRUE);
   ide_notification_attach (self->notif, IDE_OBJECT (pipeline));
 
-  set_path (self, NULL, NULL);
+  set_path (self, NULL, NULL, FALSE);
 
   IDE_EXIT;
 }
