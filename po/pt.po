@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-22 01:42+0000\n"
-"PO-Revision-Date: 2021-12-22 14:05+0000\n"
+"POT-Creation-Date: 2021-12-26 11:01+0000\n"
+"PO-Revision-Date: 2021-12-26 21:50+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -3100,6 +3100,7 @@ msgid "Configuring project"
 msgstr "A configurar projeto"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
+#: src/plugins/buildstream/buildstream_plugin.py:48
 #: src/plugins/cargo/cargo_plugin.py:145
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
@@ -4301,7 +4302,7 @@ msgid "Arguments"
 msgstr "Argumentos"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:732
+#: src/plugins/grep/gbp-grep-panel.c:749
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -5069,22 +5070,22 @@ msgstr "Abrir um _projeto…"
 msgid "Show Find in Project panel"
 msgstr "Mostrar o Localizar no painel de Projetos"
 
-#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/grep/gbp-grep-panel.c:761
 msgid "Match"
 msgstr "Comparar"
 
-#: src/plugins/grep/gbp-grep-panel.c:756
+#: src/plugins/grep/gbp-grep-panel.c:773
 msgid "Path"
 msgstr "Caminho"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:819
+#: src/plugins/grep/gbp-grep-panel.c:836
 #, c-format
 msgid "_Find in %s"
 msgstr "_Localizar em %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:821
+#: src/plugins/grep/gbp-grep-panel.c:838
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Substituir em %s"
@@ -5159,14 +5160,14 @@ msgstr "Abrir visualização"
 
 #: src/plugins/html-preview/html_preview.py:342
 msgid "Your computer is missing python3-docutils"
-msgstr "Seu computador não possui python3-docutils"
+msgstr "O computador não possui python3-docutils"
 
 #: src/plugins/html-preview/html_preview.py:343
 #: src/plugins/html-preview/html_preview.py:353
 msgid ""
 "This package is necessary to provide previews of markup-based documents."
 msgstr ""
-"Esse pacote é necessário para fornecer visualizações de documentos baseados "
+"Este pacote é necessário para fornecer visualizações de documentos baseados "
 "em marcações."
 
 #: src/plugins/html-preview/html_preview.py:346
@@ -5176,11 +5177,16 @@ msgstr "Instalar pacote"
 
 #: src/plugins/html-preview/html_preview.py:352
 msgid "Your computer is missing python3-sphinx"
-msgstr "Seu computador não possui python3-sphinx"
+msgstr "O computador não possui python3-sphinx"
 
 #: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Visualização)"
+
+#: src/plugins/intelephense/intelephense.py:71
+#| msgid "Indexing Source Code"
+msgid "Indexing php code..."
+msgstr "Indexação do código php..."
 
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
@@ -5214,7 +5220,7 @@ msgstr "Abrir a pasta respetiva"
 
 #: src/plugins/make/make_plugin.py:104
 msgid "Build project"
-msgstr "Compila o projeto"
+msgstr "Compilar projeto"
 
 #: src/plugins/make/make_plugin.py:121
 msgid "Install project"
