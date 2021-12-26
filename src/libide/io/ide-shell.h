@@ -1,6 +1,6 @@
-/* ide-io.h
+/* ide-shell.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,23 +21,12 @@
 #pragma once
 
 #include <libide-core.h>
-#include <libide-threading.h>
 
 G_BEGIN_DECLS
 
-#define IDE_IO_INSIDE
-
-#include "ide-content-type.h"
-#include "ide-gfile.h"
-#include "ide-line-reader.h"
-#include "ide-marked-content.h"
-#include "ide-path.h"
-#include "ide-persistent-map-builder.h"
-#include "ide-persistent-map.h"
-#include "ide-pkcon-transfer.h"
-#include "ide-pty-intercept.h"
-#include "ide-shell.h"
-
-#undef IDE_IO_INSIDE
+IDE_AVAILABLE_IN_42
+gboolean ide_shell_supports_dash_c     (const char *shell);
+IDE_AVAILABLE_IN_42
+gboolean ide_shell_supports_dash_login (const char *shell);
 
 G_END_DECLS

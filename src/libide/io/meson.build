@@ -15,6 +15,7 @@ libide_io_public_headers = [
   'ide-persistent-map-builder.h',
   'ide-pkcon-transfer.h',
   'ide-pty-intercept.h',
+  'ide-shell.h',
   'libide-io.h',
 ]
 
@@ -38,6 +39,7 @@ libide_io_public_sources = [
   'ide-persistent-map-builder.c',
   'ide-pkcon-transfer.c',
   'ide-pty-intercept.c',
+  'ide-shell.c',
 ]
 
 libide_io_sources = libide_io_public_sources
