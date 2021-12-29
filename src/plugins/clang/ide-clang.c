@@ -30,7 +30,7 @@
 #define IDE_CLANG_HIGHLIGHTER_TYPE          "c:type"
 #define IDE_CLANG_HIGHLIGHTER_FUNCTION_NAME "def:function"
 #define IDE_CLANG_HIGHLIGHTER_ENUM_NAME     "def:constant"
-#define IDE_CLANG_HIGHLIGHTER_MACRO_NAME    "c:macro-name"
+#define IDE_CLANG_HIGHLIGHTER_MACRO_NAME    "c:preprocessor"
 
 #define PRIORITY_DIAGNOSE     (-200)
 #define PRIORITY_COMPLETE     (-100)
