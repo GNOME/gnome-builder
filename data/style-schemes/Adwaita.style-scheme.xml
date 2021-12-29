@@ -17,9 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<style-scheme id="Adwaita" name="Adwaita" version="1.0">
+<style-scheme id="Adwaita" _name="Adwaita" version="1.0">
   <author>Christian Hergert</author>
-  <description>The default color scheme for TextEditor</description>
+  <_description>A color scheme matching GTK's default theme</_description>
 
   <!-- Adwaita Palette -->
   <color name="blue1"                       value="#99c1f1"/>
@@ -69,14 +69,14 @@
 
   <!-- Global Settings -->
   <style name="text"                        foreground="dark2" background="light1"/>
-  <style name="selection"                   background="selection_bg"/>
-  <style name="map-overlay"                 background="#rgba(60,75,95,.3)"/>
+  <style name="selection"                   foreground="white" background="selection_bg"/>
+  <style name="map-overlay"                 background="#2e3436"/>
   <style name="cursor"                      foreground="dark2"/>
   <style name="line-numbers"                foreground="light4" background="light1"/>
   <style name="current-line"                background="light2"/>
-  <style name="current-line-number"         background="light2" bold="true"/>
+  <style name="current-line-number"         foreground="dark1" background="light2" bold="false"/>
   <style name="right-margin"                foreground="dark1" background="light4"/>
-  <style name="draw-spaces"                 foreground="light3"/>
+  <style name="draw-spaces"                 foreground="dark3"/>
   <style name="background-pattern"          background="#fafafa"/>
 
   <style name="bracket-match"               background="light3" bold="true"/>
@@ -91,18 +91,20 @@
   <style name="gutter:changed-line"         foreground="orange3"/>
   <style name="gutter:removed-line"         foreground="red3"/>
 
-  <style name="gtk-doc:function-name"       bold="true"/>
-  <style name="gtk-doc:function"            bold="true"/>
+  <style name="gtk-doc:inline-docs-section" foreground="dark1"/>
+  <style name="gtk-doc:function-name"       foreground="blue3"/>
+  <style name="gtk-doc:function"            foreground="blue3"/>
   <style name="gtk-doc:parameter"           bold="true"/>
   <style name="gtk-doc:constant"            bold="true"/>
-  <style name="gtk-doc:type"                bold="true"/>
+  <style name="gtk-doc:type"                foreground="blue3"/>
   <style name="gtk-doc:since"               bold="true"/>
   <style name="gtk-doc:return"              bold="true"/>
   <style name="gtk-doc:deprecated"          bold="true"/>
   <style name="gtk-doc:signal-name"         bold="true"/>
   <style name="gtk-doc:property-name"       bold="true"/>
 
-  <style name="c:storage-class"             bold="true"/>
+  <style name="c:keyword"                   bold="true" />
+  <style name="c:storage-class"             bold="true" />
   <style name="c:included-file"             foreground="orange3"/>
 
   <style name="json:string"                 foreground="dark3"/>
@@ -112,35 +114,34 @@
   <style name="def:base-n-integer"          foreground="purple3"/>
   <style name="def:boolean"                 foreground="purple3"/>
   <style name="def:comment"                 foreground="light5"/>
-  <style name="def:constant"                foreground="red1"/>
+  <style name="def:constant"                foreground="dark3"/>
   <style name="def:decimal"                 foreground="purple3"/>
   <style name="def:deletion"                strikethrough="true"/>
   <style name="def:doc-comment-element"     italic="true"/>
   <style name="def:emphasis"                italic="true"/>
-  <style name="def:error"                   line-background="red2" />
+  <style name="def:error"                   underline="error" underline-color="red2" />
   <style name="def:floating-point"          foreground="purple3"/>
-  <style name="def:function"                foreground="dark1" bold="true"/>
+  <style name="def:function"                foreground="dark3"/>
   <style name="def:heading"                 foreground="orange5" bold="true"/>
   <style name="def:identifier"              foreground="dark1"/>
   <style name="def:inline-code"             foreground="purple2"/>
   <style name="def:insertion"               underline="single"/>
-  <style name="def:keyword"                 foreground="dark2" bold="true"/>
-  <style name="def:link-destination"        italic="true" underline="true"/>
+  <style name="def:keyword"                 foreground="dark1" bold="true"/>
+  <style name="def:link-destination"        underline="true" foreground="blue3"/>
   <style name="def:link-symbol"             foreground="blue3" bold="true"/>
-  <style name="def:link-text"               foreground="blue3"/>
   <style name="def:list-marker"             foreground="dark5" bold="true"/>
-  <style name="def:net-address"             italic="true" underline="true"/>
-  <style name="def:note"                    foreground="light1" background="orange3" bold="true"/>
+  <style name="def:net-address"             underline="true" foreground="blue3"/>
+  <style name="def:note"                    underline="error" underline-color="light5"/>
   <style name="def:preformatted-section"    foreground="purple1"/>
-  <style name="def:preprocessor"            foreground="dark2"/>
+  <style name="def:preprocessor"            foreground="dark1"/>
   <style name="def:shebang"                 foreground="dark1" bold="true"/>
   <style name="def:special-char"            foreground="blue3"/>
-  <style name="def:special-constant"        foreground="light5"/>
+  <style name="def:special-constant"        foreground="#6C71C4"/>
   <style name="def:statement"               foreground="green5" bold="true"/>
-  <style name="def:string"                  foreground="orange3"/>
+  <style name="def:string"                  foreground="#dd4a68"/>
   <style name="def:strong-emphasis"         foreground="dark2" bold="true"/>
   <style name="def:thematic-break"          foreground="green5" bold="true"/>
   <style name="def:type"                    foreground="dark2" bold="true"/>
-  <style name="def:warning"                 background="yellow3"/>
+  <style name="def:warning"                 underline="error" underline-color="yellow5"/>
 
 </style-scheme>
