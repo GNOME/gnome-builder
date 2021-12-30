@@ -153,7 +153,7 @@
   <style name="def:emphasis"                italic="true"/>
   <style name="def:error"                   underline="error" underline-color="red2" />
   <style name="def:floating-point"          foreground="numbers"/>
-  <style name="def:function"                foreground="dark3"/>
+  <style name="def:function"                foreground="text7"/>
   <style name="def:heading"                 foreground="teal" />
   <style name="def:identifier"              foreground="text7"/>
   <style name="def:inline-code"             foreground="purple2"/>
