@@ -21,9 +21,24 @@
   <author>Christian Hergert</author>
   <_description>A color scheme matching GTK's default theme</_description>
 
+  <color name="text1" value="#a6a2a2"/>
+  <color name="text2" value="#80807a"/>
+  <color name="text3" value="#6f6c6c"/>
+  <color name="text4" value="#666664"/>
+  <color name="text5" value="#555553"/>
+  <color name="text6" value="#444442"/>
+  <color name="text7" value="#333332"/>
+  <color name="text8" value="#222221"/>
+  <color name="text9" value="#111110"/>
+
+  <color name="url_blue" value="#1073ce"/>
+  <color name="teal"  value="#03949c"/>
+  <color name="numbers"  value="#3584e4"/>
+
   <!-- Adwaita Palette -->
   <color name="blue1"                       value="#99c1f1"/>
   <color name="blue2"                       value="#62a0ea"/>
+  <color name="blue2.5"                     value="#5290ca"/>
   <color name="blue3"                       value="#3584e4"/>
   <color name="blue4"                       value="#1c71d8"/>
   <color name="blue5"                       value="#1a5fb4"/>
@@ -63,13 +78,14 @@
   <color name="yellow4"                     value="#f5c211"/>
   <color name="yellow5"                     value="#e5a50a"/>
   <color name="selection_bg"                value="#3285e5"/>
+  <color name="pink1"                       value="#da35a6"/>
 
   <!-- For Builder -->
   <style name="debugger::breakpoint"        background="selection_bg" foreground="#ffffff"/>
 
   <!-- Global Settings -->
-  <style name="text"                        foreground="dark2" background="light1"/>
   <style name="selection"                   foreground="white" background="selection_bg"/>
+  <style name="text"                        foreground="text4" background="light1"/>
   <style name="map-overlay"                 background="#2e3436"/>
   <style name="cursor"                      foreground="dark2"/>
   <style name="line-numbers"                foreground="light4" background="light1"/>
@@ -91,57 +107,73 @@
   <style name="gutter:changed-line"         foreground="orange3"/>
   <style name="gutter:removed-line"         foreground="red3"/>
 
-  <style name="gtk-doc:inline-docs-section" foreground="dark1"/>
-  <style name="gtk-doc:function-name"       foreground="blue3"/>
-  <style name="gtk-doc:function"            foreground="blue3"/>
-  <style name="gtk-doc:parameter"           bold="true"/>
-  <style name="gtk-doc:constant"            bold="true"/>
-  <style name="gtk-doc:type"                foreground="blue3"/>
-  <style name="gtk-doc:since"               bold="true"/>
-  <style name="gtk-doc:return"              bold="true"/>
-  <style name="gtk-doc:deprecated"          bold="true"/>
-  <style name="gtk-doc:signal-name"         bold="true"/>
-  <style name="gtk-doc:property-name"       bold="true"/>
+  <style name="gtk-doc:inline-docs-section" foreground="text2"/>
+  <style name="gtk-doc:function-name"       foreground="text4"/>
+  <style name="gtk-doc:function"            foreground="text4"/>
+  <style name="gtk-doc:parameter"           foreground="text4"/>
+  <style name="gtk-doc:constant"            foreground="text4"/>
+  <style name="gtk-doc:type"                foreground="text4"/>
+  <style name="gtk-doc:since"               foreground="text3"/>
+  <style name="gtk-doc:return"              foreground="text3"/>
+  <style name="gtk-doc:deprecated"          foreground="text3"/>
+  <style name="gtk-doc:signal-name"         foreground="text4"/>
+  <style name="gtk-doc:property-name"       foreground="text4"/>
 
-  <style name="c:keyword"                   bold="true" />
-  <style name="c:storage-class"             bold="true" />
-  <style name="c:included-file"             foreground="orange3"/>
+  <style name="c:keyword"                   foreground="text5" bold="true"/>
+  <style name="c:storage-class"             foreground="teal" bold="true"/>
+  <style name="c:type"                      foreground="teal" bold="true"/>
+  <style name="c:included-file"             foreground="teal"/>
 
-  <style name="json:string"                 foreground="dark3"/>
+  <style name="python:module-handler"       foreground="teal" bold="true"/>
+  <style name="python:class-name"           bold="true"/>
+  <style name="python:function-name"        foreground="teal"/>
+  <style name="python:builtin-constant"     bold="true"/>
+  <style name="python:multiline-string"     foreground="text2"/>
+
+  <style name="json:keyname"                foreground="teal" bold="true"/>
+  <style name="json:string"                 foreground="text5"/>
+  <style name="json:boolean"                bold="true"/>
+  <style name="json:decimal"                foreground="numbers"/>
+  <style name="json:float"                  foreground="numbers"/>
+  <style name="json:null-value"             bold="true"/>
+  <style name="json:special-char"           bold="true"/>
+
+  <style name="markdown:header"             foreground="teal" scale="1.1"/>
 
   <style name="css:property-name"           foreground="dark1" bold="true"/>
 
-  <style name="def:base-n-integer"          foreground="purple3"/>
-  <style name="def:boolean"                 foreground="purple3"/>
-  <style name="def:comment"                 foreground="light5"/>
-  <style name="def:constant"                foreground="dark3"/>
-  <style name="def:decimal"                 foreground="purple3"/>
+  <style name="def:base-n-integer"          foreground="numbers"/>
+  <style name="def:builtin"                 bold="true"/>
+  <style name="def:boolean"                 foreground="numbers"/>
+  <style name="def:comment"                 foreground="text1"/>
+  <style name="def:constant"                foreground="text3" bold="true"/>
+  <style name="def:decimal"                 foreground="numbers"/>
   <style name="def:deletion"                strikethrough="true"/>
   <style name="def:doc-comment-element"     italic="true"/>
   <style name="def:emphasis"                italic="true"/>
   <style name="def:error"                   underline="error" underline-color="red2" />
-  <style name="def:floating-point"          foreground="purple3"/>
+  <style name="def:floating-point"          foreground="numbers"/>
   <style name="def:function"                foreground="dark3"/>
-  <style name="def:heading"                 foreground="orange5" bold="true"/>
-  <style name="def:identifier"              foreground="dark1"/>
+  <style name="def:heading"                 foreground="teal" />
+  <style name="def:identifier"              foreground="text7"/>
   <style name="def:inline-code"             foreground="purple2"/>
   <style name="def:insertion"               underline="single"/>
-  <style name="def:keyword"                 foreground="dark1" bold="true"/>
-  <style name="def:link-destination"        underline="true" foreground="blue3"/>
-  <style name="def:link-symbol"             foreground="blue3" bold="true"/>
-  <style name="def:list-marker"             foreground="dark5" bold="true"/>
-  <style name="def:net-address"             underline="true" foreground="blue3"/>
+  <style name="def:keyword"                 foreground="text7" bold="true"/>
+  <style name="def:link-destination"        underline="true" foreground="url_blue"/>
+  <style name="def:link-symbol"             foreground="url_blue" bold="true"/>
+  <style name="def:list-marker"             foreground="text6" bold="true"/>
+  <style name="def:net-address"             underline="true" foreground="url_blue"/>
   <style name="def:note"                    underline="error" underline-color="light5"/>
   <style name="def:preformatted-section"    foreground="purple1"/>
-  <style name="def:preprocessor"            foreground="dark1"/>
-  <style name="def:shebang"                 foreground="dark1" bold="true"/>
+  <style name="def:preprocessor"            foreground="text3"/>
+  <style name="def:shebang"                 foreground="text3" bold="true"/>
   <style name="def:special-char"            foreground="blue3"/>
-  <style name="def:special-constant"        foreground="#6C71C4"/>
+  <style name="def:special-constant"        foreground="text2" bold="true"/>
   <style name="def:statement"               foreground="green5" bold="true"/>
-  <style name="def:string"                  foreground="#dd4a68"/>
+  <style name="def:string"                  foreground="pink1"/>
   <style name="def:strong-emphasis"         foreground="dark2" bold="true"/>
   <style name="def:thematic-break"          foreground="green5" bold="true"/>
-  <style name="def:type"                    foreground="dark2" bold="true"/>
+  <style name="def:type"                    foreground="text5" bold="true"/>
   <style name="def:warning"                 underline="error" underline-color="yellow5"/>
 
 </style-scheme>
