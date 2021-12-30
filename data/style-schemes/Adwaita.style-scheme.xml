@@ -21,6 +21,7 @@
   <author>Christian Hergert</author>
   <_description>A color scheme matching GTK's default theme</_description>
 
+  <color name="text0" value="#cfcece"/>
   <color name="text1" value="#a6a2a2"/>
   <color name="text2" value="#80807a"/>
   <color name="text3" value="#6f6c6c"/>
@@ -92,7 +93,7 @@
   <style name="current-line"                background="light2"/>
   <style name="current-line-number"         foreground="dark1" background="light2" bold="false"/>
   <style name="right-margin"                foreground="dark1" background="light4"/>
-  <style name="draw-spaces"                 foreground="dark3"/>
+  <style name="draw-spaces"                 foreground="text0"/>
   <style name="background-pattern"          background="#fafafa"/>
 
   <style name="bracket-match"               background="light3" bold="true"/>
@@ -129,6 +130,7 @@
   <style name="python:function-name"        foreground="teal"/>
   <style name="python:builtin-constant"     bold="true"/>
   <style name="python:multiline-string"     foreground="text2"/>
+  <style name="python:format"               foreground="blue3"/>
 
   <style name="json:keyname"                foreground="teal" bold="true"/>
   <style name="json:string"                 foreground="text5"/>
@@ -141,6 +143,14 @@
   <style name="markdown:header"             foreground="teal" scale="1.1"/>
 
   <style name="css:property-name"           foreground="dark1" bold="true"/>
+
+  <style name="xml:element-name"            foreground="teal" bold="true"/>
+  <style name="xml:attribute-name"          foreground="pink1"/>
+  <style name="xml:attribute-value"         foreground="text4"/>
+
+  <style name="meson:builtin-command"       foreground="teal" bold="true"/>
+  <style name="meson:string"                foreground="pink1"/>
+  <style name="meson:operator"              foreground="text5" bold="true"/>
 
   <style name="def:base-n-integer"          foreground="numbers"/>
   <style name="def:builtin"                 bold="true"/>
