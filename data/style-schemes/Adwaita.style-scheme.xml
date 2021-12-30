@@ -84,7 +84,7 @@
   <style name="debugger::breakpoint"        background="selection_bg" foreground="#ffffff"/>
 
   <!-- Global Settings -->
-  <style name="selection"                   foreground="white" background="selection_bg"/>
+  <style name="selection"                   foreground="#ffffff" background="selection_bg"/>
   <style name="text"                        foreground="text4" background="light1"/>
   <style name="map-overlay"                 background="#2e3436"/>
   <style name="cursor"                      foreground="dark2"/>
