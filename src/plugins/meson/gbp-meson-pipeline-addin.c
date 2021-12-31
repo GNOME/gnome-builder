@@ -22,6 +22,9 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-gui.h>
+#include <libide-projects.h>
+
 #include "gbp-meson-toolchain.h"
 #include "gbp-meson-build-stage-cross-file.h"
 #include "gbp-meson-build-system.h"
@@ -114,16 +117,23 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   g_autoptr(GError) error = NULL;
   g_autofree gchar *build_ninja = NULL;
   g_autofree gchar *crossbuild_file = NULL;
+  g_autofree gchar *meson_build = NULL;
+  g_autofree gchar *alt_meson_build = NULL;
   IdeBuildSystem *build_system;
   IdeConfig *config;
   IdeContext *context;
   IdeRuntime *runtime;
   IdeToolchain *toolchain;
+  IdeWorkbench *workbench;
+  IdeProjectInfo *project_info;
+  g_autoptr(GFile) project_dir = NULL;
+  g_autoptr(GFile) alt_meson_build_file = NULL;
   const gchar *config_opts;
   const gchar *ninja = NULL;
   const gchar *prefix;
   const gchar *srcdir;
   const gchar *meson;
+  GFile *project_file;
   guint id;
   gint parallel;
 
@@ -142,10 +152,36 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   runtime = ide_pipeline_get_runtime (pipeline);
   toolchain = ide_pipeline_get_toolchain (pipeline);
   srcdir = ide_pipeline_get_srcdir (pipeline);
+  workbench = ide_workbench_from_context (context);
+  project_info = ide_workbench_get_project_info (workbench);
+  project_file = ide_project_info_get_file (project_info);
+
+  if (project_file != NULL)
+    {
+      GFileType file_type = g_file_query_file_type (project_file, 0, NULL);
+
+      if (file_type == G_FILE_TYPE_DIRECTORY)
+        project_dir = g_object_ref (project_file);
+      else
+        project_dir = g_file_get_parent (project_file);
+
+      alt_meson_build_file = g_file_get_child (project_dir, "meson.build");
+      alt_meson_build = g_file_get_path (alt_meson_build_file);
+    }
 
   g_assert (IDE_IS_CONFIG (config));
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (srcdir != NULL);
+
+  /* If the srcdir does not contain the meson.build, perhaps the project's
+   * "Project File" directory does (and that could be in a sub-directory).
+   */
+  meson_build = g_build_filename (srcdir, "meson.build", NULL);
+  if (!g_file_test (meson_build, G_FILE_TEST_EXISTS) &&
+      alt_meson_build != NULL &&
+      project_dir != NULL &&
+      g_file_test (alt_meson_build, G_FILE_TEST_EXISTS))
+    srcdir = g_file_get_path (project_dir);
 
   if (NULL == (meson = ide_config_getenv (config, "MESON")))
     meson = "meson";
