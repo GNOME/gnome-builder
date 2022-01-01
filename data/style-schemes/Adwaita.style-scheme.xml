@@ -2,17 +2,17 @@
 <!--
 
   Copyright 2020 Christian Hergert <christian@hergert.me>
-                                                                      
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
-                                                                      
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-                                                                      
+
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -140,40 +140,65 @@
   <style name="json:null-value"             bold="true"/>
   <style name="json:special-char"           bold="true"/>
 
+  <style name="js:built-in-object"          foreground="teal" bold="true"/>
+  <style name="js:built-in-property"        bold="true"/>
+  <style name="js:built-in-function"        bold="true"/>
+  <style name="js:built-in-constructor"     bold="true"/>
+  <style name="js:built-in-method"          bold="true"/>
+  <style name="js:built-in-value"           bold="true"/>
+
+  <style name="typescript:basic-type"           foreground="teal" bold="true"/>
+  <style name="typescript:type-parameters-list" foreground="teal" bold="true"/>
+
   <style name="markdown:header"             foreground="teal" scale="1.1"/>
 
-  <style name="css:property-name"           foreground="dark1" bold="true"/>
+  <style name="css:class-selector"          foreground="pink1"/>
+  <style name="css:type-selector"           foreground="teal" bold="true"/>
+  <style name="css:property-name"           bold="true"/>
+  <style name="css:pseudo-selector"         foreground="pink1" bold="true"/>
+  <style name="css:string"                  foreground="orange3"/>
+
+  <style name="sql:keyword"                 bold="true"/>
+  <style name="sql:type"                    foreground="teal" bold="true"/>
 
   <style name="xml:element-name"            foreground="teal" bold="true"/>
-  <style name="xml:attribute-name"          foreground="pink1"/>
-  <style name="xml:attribute-value"         foreground="text4"/>
+  <style name="xml:attribute-name"          foreground="text3" bold="true"/>
+  <style name="xml:attribute-value"         foreground="pink1"/>
 
   <style name="meson:builtin-command"       foreground="teal" bold="true"/>
   <style name="meson:string"                foreground="pink1"/>
   <style name="meson:operator"              foreground="text5" bold="true"/>
 
+  <style name="rust:macro"                  foreground="text2"/>
+  <style name="rust:attribute"              foreground="text2"/>
+  <style name="rust:type"                   foreground="teal" bold="true"/>
+  <style name="rust:scope"                  foreground="teal"/>
+  <style name="rust:lifetime"               foreground="orange4" bold="true"/>
+  <style name="rust:self"                   foreground="text5" bold="true"/>
+
   <style name="def:base-n-integer"          foreground="numbers"/>
   <style name="def:builtin"                 bold="true"/>
   <style name="def:boolean"                 foreground="numbers"/>
+  <style name="def:number"                  foreground="numbers"/>
   <style name="def:comment"                 foreground="text1"/>
   <style name="def:constant"                foreground="text3" bold="true"/>
   <style name="def:decimal"                 foreground="numbers"/>
   <style name="def:deletion"                strikethrough="true"/>
   <style name="def:doc-comment-element"     italic="true"/>
   <style name="def:emphasis"                italic="true"/>
-  <style name="def:error"                   underline="error" underline-color="red2" />
+  <style name="def:error"                   underline="error" underline-color="red2"/>
   <style name="def:floating-point"          foreground="numbers"/>
   <style name="def:function"                foreground="text7"/>
   <style name="def:heading"                 foreground="teal" />
   <style name="def:identifier"              foreground="text7"/>
   <style name="def:inline-code"             foreground="purple2"/>
   <style name="def:insertion"               underline="single"/>
-  <style name="def:keyword"                 foreground="text7" bold="true"/>
+  <style name="def:keyword"                 foreground="text6" bold="true"/>
   <style name="def:link-destination"        underline="true" foreground="url_blue"/>
   <style name="def:link-symbol"             foreground="url_blue" bold="true"/>
   <style name="def:list-marker"             foreground="text6" bold="true"/>
   <style name="def:net-address"             underline="true" foreground="url_blue"/>
-  <style name="def:note"                    underline="error" underline-color="light5"/>
+  <style name="def:note"                    underline="error" underline-color="text2"/>
   <style name="def:preformatted-section"    foreground="purple1"/>
   <style name="def:preprocessor"            foreground="text3"/>
   <style name="def:shebang"                 foreground="text3" bold="true"/>
