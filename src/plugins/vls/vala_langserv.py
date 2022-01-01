@@ -140,7 +140,7 @@ class VlsService(Ide.Object):
         launcher = Ide.SubprocessLauncher()
         launcher.set_flags(flags)
         launcher.set_cwd(GLib.get_home_dir())
-        launcher.set_run_on_host(True)
+        #launcher.set_run_on_host(True)
         return launcher
 
     @classmethod
