@@ -56,10 +56,11 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
         if context.has_project():
             build_manager = Ide.BuildManager.from_context(context)
             pipeline = build_manager.get_pipeline()
-            if pipeline is not None:
+            # Check for eslint using pipeline so that it can possibly come from
+            # the SDK or SDK extensions in addition to the build environment.
+            if pipeline is not None and pipeline.contains_program_in_path('eslint'):
+                launcher = pipeline.create_launcher()
                 srcdir = pipeline.get_srcdir()
-            runtime = pipeline.get_config().get_runtime()
-            launcher = runtime.create_launcher()
 
         if launcher is None:
             launcher = Ide.SubprocessLauncher.new(0)
