@@ -152,9 +152,9 @@ ide_codespell_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provide
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_INHERIT |
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_PIPE);
+                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
 
   ide_subprocess_launcher_push_argv (launcher, "codespell");
   /* ide_subprocess_launcher_push_argv (launcher, "-d"); */
