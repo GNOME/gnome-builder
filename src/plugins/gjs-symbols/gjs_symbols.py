@@ -266,13 +266,19 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
         file_path = file_.get_path()
         script = JS_SCRIPT % file_path.replace('\\', '\\\\').replace("'", "\\'")
         unsaved_file = Ide.UnsavedFiles.from_context(context).get_unsaved_file(file_)
+        srcdir = context.ref_workdir().get_path()
+        launcher = None
 
         if context.has_project():
-            runtime = Ide.ConfigManager.from_context(context).get_current().get_runtime()
-            launcher = runtime.create_launcher()
-        else:
+            pipeline = Ide.BuildManager.from_context(context).get_pipeline()
+            if pipeline is not None and pipeline.contains_program_in_path('gjs'):
+                launcher = pipeline.create_launcher()
+                srcdir = pipeline.get_srcdir()
+
+        if launcher is None:
             launcher = Ide.SubprocessLauncher.new(0)
 
+        launcher.set_cwd(srcdir)
         launcher.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
         launcher.push_args(('gjs', '-c', script))
 
