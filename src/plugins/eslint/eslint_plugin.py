@@ -65,7 +65,7 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
         if launcher is None:
             launcher = Ide.SubprocessLauncher.new(0)
 
-        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE)
+        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
         launcher.set_cwd(srcdir)
 
         return launcher
