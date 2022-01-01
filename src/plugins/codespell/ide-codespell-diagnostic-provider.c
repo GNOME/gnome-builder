@@ -23,6 +23,7 @@
 struct _IdeCodespellDiagnosticProvider
 {
   IdeObject parent_instance;
+  char *codespell_path;
 };
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -152,6 +153,15 @@ ide_codespell_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provide
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
+  if (self->codespell_path == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Not supported");
+      return;
+    }
+
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                           G_SUBPROCESS_FLAGS_STDERR_SILENCE);
@@ -187,8 +197,30 @@ ide_codespell_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provi
 }
 
 static void
+ide_codespell_diagnostic_provider_load (IdeDiagnosticProvider *provider)
+{
+  IdeCodespellDiagnosticProvider *self = (IdeCodespellDiagnosticProvider *)provider;
+
+  g_assert (IDE_IS_CODESPELL_DIAGNOSTIC_PROVIDER (self));
+
+  self->codespell_path = g_find_program_in_path ("codespell");
+}
+
+static void
+ide_codespell_diagnostic_provider_unload (IdeDiagnosticProvider *provider)
+{
+  IdeCodespellDiagnosticProvider *self = (IdeCodespellDiagnosticProvider *)provider;
+
+  g_assert (IDE_IS_CODESPELL_DIAGNOSTIC_PROVIDER (self));
+
+  g_clear_pointer (&self->codespell_path, g_free);
+}
+
+static void
 diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface)
 {
   iface->diagnose_async = ide_codespell_diagnostic_provider_diagnose_async;
   iface->diagnose_finish = ide_codespell_diagnostic_provider_diagnose_finish;
+  iface->load = ide_codespell_diagnostic_provider_load;
+  iface->unload = ide_codespell_diagnostic_provider_unload;
 }
