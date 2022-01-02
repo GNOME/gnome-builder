@@ -2,7 +2,6 @@
 Builtin=true
 Copyright=Copyright © 2021 Georg Vienna
 Description=Provides LSP integration for Typescript/Javascript
-Hidden=true
 Loader=python3
 Module=ts_language_server_plugin
 Name=Typescript Language Server Plugin
