@@ -1,0 +1,18 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Integration with clangd
+Loader=python3
+Module=clangd_plugin
+Name=Clangd Language Server
+X-Builder-ABI=@PACKAGE_ABI@
+X-Code-Action-Languages=c,chdr,cpp,cpphdr,objc
+X-Completion-Provider-Languages=c,chdr,cpp,cpphdr,objc
+X-Diagnostic-Provider-Languages=c,chdr,cpp,cpphdr,objc
+X-Diagnostic-Provider-Languages-Priority=200
+X-Formatter-Languages=c,chdr,cpp,cpphdr,objc
+X-Highlighter-Languages=c,chdr,cpp,cpphdr,objc
+X-Hover-Provider-Languages=c,chdr,cpp,cpphdr,objc
+X-Rename-Provider-Languages=c,chdr,cpp,cpphdr,objc
+X-Symbol-Resolver-Languages=c,chdr,cpp,cpphdr,objc
+X-Symbol-Resolver-Languages-Priority=200
