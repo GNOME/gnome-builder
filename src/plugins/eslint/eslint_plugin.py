@@ -38,6 +38,8 @@ SEVERITY_MAP = {
     2: Ide.DiagnosticSeverity.ERROR
 }
 
+# Comes from typescript-language-server
+BUNDLED_ESLINT = '/app/lib/yarn/global/node_modules/typescript-language-server/node_modules/eslint/bin/eslint.js'
 
 class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
     @staticmethod
@@ -45,8 +47,14 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
         local_eslint = os.path.join(srcdir, 'node_modules', '.bin', 'eslint')
         if os.path.exists(local_eslint):
             return local_eslint
+        elif GLib.find_program_in_path('eslint'):
+            # Prefer PATH over our bundled eslint
+            return 'eslint'
+        elif os.path.exists(BUNDLED_ESLINT):
+            return BUNDLED_ESLINT
         else:
-            return 'eslint'  # Just rely on PATH
+            # Just return something, even though it wont work
+            return 'eslint'
 
     def create_launcher(self):
         context = self.get_context()
