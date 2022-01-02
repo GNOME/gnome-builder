@@ -42,40 +42,77 @@ SEVERITY_MAP = {
 BUNDLED_ESLINT = '/app/lib/yarn/global/node_modules/typescript-language-server/node_modules/eslint/bin/eslint.js'
 
 class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
-    @staticmethod
-    def _get_eslint(srcdir):
-        local_eslint = os.path.join(srcdir, 'node_modules', '.bin', 'eslint')
-        if os.path.exists(local_eslint):
-            return local_eslint
-        elif GLib.find_program_in_path('eslint'):
-            # Prefer PATH over our bundled eslint
-            return 'eslint'
-        elif os.path.exists(BUNDLED_ESLINT):
-            return BUNDLED_ESLINT
-        else:
-            # Just return something, even though it wont work
-            return 'eslint'
 
     def create_launcher(self):
+        flags = (Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
+
         context = self.get_context()
         srcdir = context.ref_workdir().get_path()
-        launcher = None
 
+        build_manager = None
+        pipeline = None
+        launcher = None
+        host = None
+
+        # We prefer to use the eslint from the projeects node_modules
+        local_eslint = os.path.join(srcdir, 'node_modules', '.bin', 'eslint')
+
+        # If we have a project, use the pipeline to access the build container
         if context.has_project():
             build_manager = Ide.BuildManager.from_context(context)
             pipeline = build_manager.get_pipeline()
-            # Check for eslint using pipeline so that it can possibly come from
-            # the SDK or SDK extensions in addition to the build environment.
-            if pipeline is not None and pipeline.contains_program_in_path('eslint'):
+            host = Ide.RuntimeManager.from_context(context).get_runtime('host')
+            srcdir = pipeline.get_srcdir()
+
+        if os.path.exists(local_eslint):
+            # If we have a project, use the build container to execute
+            if pipeline is not None:
                 launcher = pipeline.create_launcher()
-                srcdir = pipeline.get_srcdir()
+                launcher.set_flags(flags)
+                launcher.set_cwd(srcdir)
+                launcher.push_argv(local_eslint)
+                return launcher
 
-        if launcher is None:
-            launcher = Ide.SubprocessLauncher.new(0)
+            # There is no project, so just try to execute within the host
+            # environment since that is likely where things were installed
+            # and likely need access to host libraries/etc at known
+            # locations/paths.
+            launcher = Ide.SubprocessLauncher.new(flags)
+            launcher.set_cwd(srcdir)
+            launcher.push_argv(local_eslint)
+            return launcher
 
-        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
+        # At this point we want to see if we can run 'eslint' on the host
+        # since the developer does not have eslint setup within their
+        # node_modules directory. We can only ensure this if a project
+        # is loaded, otherwise we'll have to fallback to something bundled.
+        if host is not None and host.contains_program_in_path('eslint', None):
+            launcher = host.create_launcher()
+            launcher.set_flags(flags)
+            launcher.set_cwd(srcdir)
+            launcher.push_argv('eslint')
+            return launcher
+
+        # We can hit this if we're not running in Flatpak or if we
+        # have eslint bundled (we do but not in $PATH under flatpak).
+        if GLib.find_program_in_path('eslint'):
+            launcher = Ide.SubprocessLauncher.new(flags)
+            launcher.set_cwd(srcdir)
+            launcher.push_argv('eslint')
+            return launcher
+
+        # Okay, last resort. Try to get this thing working from our
+        # bundled typescript-language-server.
+        if os.path.exists('/.flatpak-info'):
+            launcher = Ide.SubprocessLauncher.new(flags)
+            launcher.set_cwd(srcdir)
+            launcher.push_argv(BUNDLED_ESLINT)
+            return launcher
+
+        # Meh, not much hope, but give a launcher anyway
+        launcher = Ide.SubprocessLauncher.new(flags)
         launcher.set_cwd(srcdir)
-
+        launcher.push_argv('eslint')
         return launcher
 
     def do_diagnose_async(self, file, file_content, lang_id, cancellable, callback, user_data):
@@ -91,7 +128,7 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
 
     def execute(self, task, launcher, srcdir, file, file_content):
         try:
-            launcher.push_args((self._get_eslint(srcdir), '-f', 'json',
+            launcher.push_args(('-f', 'json',
                                 '--ignore-pattern', '!node_modules/*',
                                 '--ignore-pattern', '!bower_components/*'))
 
