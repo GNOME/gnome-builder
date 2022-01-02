@@ -77,7 +77,12 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
             # environment since that is likely where things were installed
             # and likely need access to host libraries/etc at known
             # locations/paths.
-            launcher = Ide.SubprocessLauncher.new(flags)
+            if host is not None:
+                launcher = host.create_launcher()
+                launcher.set_flags(flags)
+            else:
+                launcher = Ide.SubprocessLauncher.new(flags)
+                launcher.set_run_on_host(True)
             launcher.set_cwd(srcdir)
             launcher.push_argv(local_eslint)
             return launcher
