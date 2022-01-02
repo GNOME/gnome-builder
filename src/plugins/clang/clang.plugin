@@ -5,7 +5,6 @@ Copyright=Copyright © 2015 Christian Hergert
 Description=Provides integration with Clang
 Depends=editor;
 Embedded=_ide_clang_register_types
-Hidden=true
 Module=clang
 Name=Clang
 X-Code-Indexer-Languages-Priority=100
