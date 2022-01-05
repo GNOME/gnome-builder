@@ -2,15 +2,15 @@
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Andika Triwidada <andika@gmail.com>, 2015.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2021.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2022.
 # Sucipto <sucipto@pm.me>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-21 21:38+0000\n"
-"PO-Revision-Date: 2021-12-23 09:52+0700\n"
+"POT-Creation-Date: 2021-12-29 06:58+0000\n"
+"PO-Revision-Date: 2022-01-05 09:06+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -668,13 +668,8 @@ msgid "Adwaita Dark"
 msgstr "Adwaita Gelap"
 
 #: data/style-schemes/Adwaita-dark.style-scheme.xml:22
-#: data/style-schemes/Adwaita.style-scheme.xml:22
 msgid "The default color scheme for TextEditor"
 msgstr "Skema warna bawaan untuk Penyunting Teks"
-
-#: data/style-schemes/Adwaita.style-scheme.xml:20
-msgid "Adwaita"
-msgstr "Adwaita"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
@@ -1480,7 +1475,7 @@ msgstr "Proses keluar tak disangka"
 msgid "Host Operating System"
 msgstr "Sistem Operasi Host"
 
-#: src/libide/foundry/ide-runtime.c:543
+#: src/libide/foundry/ide-runtime.c:563
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Sistem host"
@@ -1683,7 +1678,7 @@ msgstr "GNOME Builder"
 msgid "translator-credits"
 msgstr ""
 "Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
-"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2021.\n"
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2022.\n"
 "Sucipto <sucipto@pm.me>, 2020."
 
 #: src/libide/gui/ide-application-actions.c:153
@@ -2853,7 +2848,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Memasang %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1463
+#: src/libide/lsp/ide-lsp-client.c:1473
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Gagal menginisialisasi server bahasa: %s"
@@ -3086,6 +3081,7 @@ msgid "Configuring project"
 msgstr "Mengkonfigurasi proyek"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
+#: src/plugins/buildstream/buildstream_plugin.py:48
 #: src/plugins/cargo/cargo_plugin.py:145
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
@@ -4283,7 +4279,7 @@ msgid "Arguments"
 msgstr "Argumen"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
-#: src/plugins/grep/gbp-grep-panel.c:732
+#: src/plugins/grep/gbp-grep-panel.c:749
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
 msgid "Location"
@@ -5054,22 +5050,22 @@ msgstr "Buka _Proyek…"
 msgid "Show Find in Project panel"
 msgstr "Tampilkan Temukan di panel Proyek"
 
-#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/grep/gbp-grep-panel.c:761
 msgid "Match"
 msgstr "Cocok"
 
-#: src/plugins/grep/gbp-grep-panel.c:756
+#: src/plugins/grep/gbp-grep-panel.c:773
 msgid "Path"
 msgstr "Path"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:819
+#: src/plugins/grep/gbp-grep-panel.c:836
 #, c-format
 msgid "_Find in %s"
 msgstr "C_ari dalam %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:821
+#: src/plugins/grep/gbp-grep-panel.c:838
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Ganti di %s"
@@ -5165,6 +5161,10 @@ msgstr "Komputer Anda kekurangan python3-sphinx"
 #: src/plugins/html-preview/html_preview.py:422
 msgid "(Preview)"
 msgstr "(Pratinjau)"
+
+#: src/plugins/intelephense/intelephense.py:71
+msgid "Indexing php code..."
+msgstr "Mengindeks kode php..."
 
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
@@ -6446,6 +6446,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Adwaita"
+#~ msgstr "Adwaita"
 
 #~ msgid "Replace With"
 #~ msgstr "Timpa Dengan"
