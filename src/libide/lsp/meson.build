@@ -59,10 +59,10 @@ libide_lsp_public_sources = [
   'ide-lsp-symbol-resolver.c',
   'ide-lsp-symbol-tree.c',
   'ide-lsp-workspace-edit.c',
+  'ide-lsp-util.c',
 ]
 
 libide_lsp_private_sources = [
-  'ide-lsp-util.c',
 ]
 
 libide_lsp_enum_headers = [

@@ -103,13 +103,10 @@ ide_lsp_decode_completion_kind (guint kind)
  *
  * Attempt to parse an encoded LSP text edit into an #IdeTextEdit.
  *
- * See specification
- * https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textEdit
- * for further details.
- *
  * Returns: (transfer full) (nullable): an #IdeTextEdit
  *
  * Since: 41
+ * See_also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textEdit
  */
 IdeTextEdit *
 ide_lsp_decode_text_edit (GVariant *text_edit, GFile *gfile)
