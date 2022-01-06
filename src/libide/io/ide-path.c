@@ -46,13 +46,15 @@ gchar *
 ide_path_expand (const gchar *path)
 {
   wordexp_t state = { 0 };
-  gchar *ret = NULL;
+  char *ret = NULL;
+  char *escaped;
   int r;
 
   if (path == NULL)
     return NULL;
 
-  r = wordexp (path, &state, WRDE_NOCMD);
+  escaped = g_shell_quote (path);
+  r = wordexp (escaped, &state, WRDE_NOCMD);
   if (r == 0 && state.we_wordc > 0)
     ret = g_strdup (state.we_wordv [0]);
   wordfree (&state);
@@ -63,6 +65,8 @@ ide_path_expand (const gchar *path)
 
       ret = g_build_filename (g_get_home_dir (), freeme, NULL);
     }
+
+  g_free (escaped);
 
   return ret;
 }
