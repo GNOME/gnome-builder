@@ -1,3 +1,42 @@
+=================
+Version 42.alpha1
+=================
+
+ • Use updated libportal release
+ • Add buildstream plugin
+ • Support for "base runtimes" in flatpak manifests
+ • Use GtkScrolledWindow with terminals
+ • Allow specifying min-length for quick-highlight plugin
+ • Fixes to allow for external addons with Flatpak
+ • rubucop support
+ • Parse languages from meson.build more correctly
+ • CSS, Font, and syntax styling improvements
+ • An experimental clangd plugin, which distributions should not enable
+   by default as it consumes significantly more memory than Builder's
+   integrated clang support
+ • Search result ordering fixes
+ • Modernized mono template
+ • Clang-format integration
+ • Improved SDK download integration with Flatpak
+ • Make application-ids more restrictive when creating projects
+ • Avoid opening known GTK 4 templates with Glade
+ • Fix unloading of some pipeline addins
+ • Work around IBus breakage in how it stole our keybindings
+ • Allow markdown in diagnostics as used by some LSPs, notably rust-analyzer
+ • Improved path detection with SDKs and extensions
+ • Markdown styling improvements
+ • A new LspService object has been added for plugins who need simple integration
+   with language servers, vastly simplifying work necessary by plugins integrating
+   language servers.
+ • Fixes to wordexp() usage when calculating long/short-form paths
+ • CSS plugin now knows about additional CSS property names
+ • Many LSP integration points with newer specifications have been added
+ • You can now set run-options in build preferences
+ • Additional snippets have been added
+ • Support for integrating with intelephense language server
+ • Support for integrating with Blueprint language server and syntax
+ • Updated translations
+
 ============
 Version 41.1
 ============
