@@ -31,12 +31,12 @@
 static void
 ide_greeter_workspace_dialog_response (IdeGreeterWorkspace  *self,
                                        gint                  response_id,
-                                       GtkFileChooserNative *dialog)
+                                       GtkFileChooserDialog *dialog)
 {
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
-  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (dialog));
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
 
-  if (response_id == GTK_RESPONSE_ACCEPT)
+  if (response_id == GTK_RESPONSE_OK)
     {
       g_autoptr(IdeProjectInfo) project_info = NULL;
       g_autoptr(GFile) project_file = NULL;
@@ -65,13 +65,13 @@ ide_greeter_workspace_dialog_response (IdeGreeterWorkspace  *self,
       ide_greeter_workspace_open_project (self, project_info);
     }
 
-  g_object_unref (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
 ide_greeter_workspace_dialog_notify_filter (IdeGreeterWorkspace  *self,
                                             GParamSpec           *pspec,
-                                            GtkFileChooserNative *dialog)
+                                            GtkFileChooserDialog *dialog)
 {
   GtkFileFilter *filter;
   GtkFileChooserAction action;
@@ -79,7 +79,7 @@ ide_greeter_workspace_dialog_notify_filter (IdeGreeterWorkspace  *self,
 
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
   g_assert (pspec != NULL);
-  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (dialog));
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
 
   filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog));
 
@@ -95,7 +95,7 @@ ide_greeter_workspace_dialog_notify_filter (IdeGreeterWorkspace  *self,
     }
 
   gtk_file_chooser_set_action (GTK_FILE_CHOOSER (dialog), action);
-  gtk_native_dialog_set_title (GTK_NATIVE_DIALOG (dialog), title);
+  gtk_window_set_title (GTK_WINDOW (dialog), title);
 }
 
 static void
@@ -104,7 +104,7 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
                                     gpointer       user_data)
 {
   IdeGreeterWorkspace *self = user_data;
-  GtkFileChooserNative *dialog;
+  GtkFileChooserDialog *dialog;
   GtkFileFilter *all_filter;
   const GList *list;
   gint64 last_priority = G_MAXINT64;
@@ -115,11 +115,18 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
 
   list = peas_engine_get_plugin_list (peas_engine_get_default ());
 
-  dialog = gtk_file_chooser_native_new (_("Select Project Folder"),
-                                        (GtkWindow *) gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        _("_Open"),
-                                        _("_Cancel"));
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                         "transient-for", self,
+                         "modal", TRUE,
+                         "title", _("Select Project Folder"),
+                         "visible", TRUE,
+                         NULL);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Open"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   g_signal_connect_object (dialog,
                            "notify::filter",
@@ -228,7 +235,7 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
                                        ide_get_projects_dir ());
 
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static const GActionEntry actions[] = {
