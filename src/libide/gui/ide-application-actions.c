@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <handy.h>
 #include <ide-build-ident.h>
 #include <libide-projects.h>
 
@@ -298,19 +299,9 @@ ide_application_actions_nighthack (GSimpleAction *action,
                                    gpointer       user_data)
 {
   g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *name = NULL;
 
-  g_object_set (gtk_settings_get_default (),
-                "gtk-application-prefer-dark-theme", TRUE,
-                NULL);
-
-  settings = g_settings_new ("org.gnome.builder.editor");
-  name = g_settings_get_string (settings, "style-scheme-name");
-
-  if (g_str_has_prefix (name, "Adwaita"))
-    g_settings_set_string (settings, "style-scheme-name", "Adwaita-dark");
-  else
-    g_settings_set_string (settings, "style-scheme-name", "builder-dark");
+  settings = g_settings_new ("org.gnome.builder");
+  g_settings_set_string (settings, "style-variant", "dark");
 }
 
 static void
@@ -319,19 +310,9 @@ ide_application_actions_dayhack (GSimpleAction *action,
                                  gpointer       user_data)
 {
   g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *name = NULL;
 
-  g_object_set (gtk_settings_get_default (),
-                "gtk-application-prefer-dark-theme", FALSE,
-                NULL);
-
-  settings = g_settings_new ("org.gnome.builder.editor");
-  name = g_settings_get_string (settings, "style-scheme-name");
-
-  if (g_str_has_prefix (name, "Adwaita"))
-    g_settings_set_string (settings, "style-scheme-name", "Adwaita");
-  else
-    g_settings_set_string (settings, "style-scheme-name", "builder");
+  settings = g_settings_new ("org.gnome.builder");
+  g_settings_set_string (settings, "style-variant", "light");
 }
 
 static void

@@ -43,7 +43,6 @@
         "--talk-name=org.gnome.CodeAssist.v1.*",
         "--system-talk-name=org.freedesktop.Avahi",
         "--talk-name=org.freedesktop.FileManager1",
-        "--talk-name=org.gnome.SettingsDaemon.Color",
         "--talk-name=org.freedesktop.PackageKit",
         "--talk-name=org.freedesktop.secrets",
         "--filesystem=xdg-run/gvfsd",
