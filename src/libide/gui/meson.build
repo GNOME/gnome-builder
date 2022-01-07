@@ -177,6 +177,7 @@ libide_gui_deps = [
   libgtk_dep,
   libgtksource_dep,
   libdazzle_dep,
+  libhandy_dep,
   libpeas_dep,
   libwebkit_dep,
   dependency('libcmark', version: '>= 0.29.0'),

@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <gtksourceview/gtksource.h>
+#include <handy.h>
 
 #include "ide-application.h"
 #include "ide-application-private.h"
@@ -92,141 +93,82 @@ static void
 _ide_application_update_color (IdeApplication *self)
 {
   static gboolean ignore_reentrant = FALSE;
-  GtkSettings *gtk_settings;
-  gboolean prefer_dark_theme;
-  gboolean follow;
-  gboolean night_mode;
+  HdyStyleManager *manager;
+  g_autofree char *style_variant = NULL;
 
   g_assert (IDE_IS_APPLICATION (self));
 
   if (ignore_reentrant)
     return;
 
-  if (self->color_proxy == NULL || self->settings == NULL)
+  if (self->settings == NULL)
     return;
 
   ignore_reentrant = TRUE;
 
   g_assert (G_IS_SETTINGS (self->settings));
-  g_assert (G_IS_DBUS_PROXY (self->color_proxy));
 
-  follow = g_settings_get_boolean (self->settings, "follow-night-light");
-  night_mode = g_settings_get_boolean (self->settings, "night-mode");
+  style_variant = g_settings_get_string (self->settings, "style-variant");
+  manager = hdy_style_manager_get_default ();
 
-  /*
-   * If we are using the Follow Night Light feature, then we want to update
-   * the application color based on the D-Bus NightLightActive property from
-   * GNOME Shell.
-   */
-
-  if (follow)
-    {
-      g_autoptr(GVariant) activev = NULL;
-      g_autoptr(GSettings) editor_settings = NULL;
-      g_autofree gchar *old_name = NULL;
-      g_autofree gchar *new_name = NULL;
-      gboolean active;
-
-      /*
-       * Update our internal night-mode setting based on the GNOME Shell
-       * Night Light setting.
-       */
-
-      activev = g_dbus_proxy_get_cached_property (self->color_proxy, "NightLightActive");
-      active = g_variant_get_boolean (activev);
-
-      if (active != night_mode)
-        {
-          night_mode = active;
-          g_settings_set_boolean (self->settings, "night-mode", night_mode);
-        }
-
-      /*
-       * Now that we have our color up to date, we need to possibly update the
-       * color scheme to match the setting. We always do this (and not just when
-       * the night-mode changes) so that we pick up changes at startup.
-       *
-       * Try to locate a corresponding style-scheme for the light/dark switch
-       * based on some naming conventions. If found, switch the current style
-       * scheme to match.
-       */
-
-      editor_settings = g_settings_new ("org.gnome.builder.editor");
-      old_name = g_settings_get_string (editor_settings, "style-scheme-name");
-      new_name = find_similar_style_scheme (old_name, night_mode);
-
-      if (new_name != NULL)
-        g_settings_set_string (editor_settings, "style-scheme-name", new_name);
-    }
-
-  gtk_settings = gtk_settings_get_default ();
-
-  g_object_get (gtk_settings,
-                "gtk-application-prefer-dark-theme", &prefer_dark_theme,
-                NULL);
-
-  if (prefer_dark_theme != night_mode)
-    g_object_set (gtk_settings,
-                  "gtk-application-prefer-dark-theme", night_mode,
-                  NULL);
+  if (!g_strcmp0 (style_variant, "follow"))
+    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_PREFER_LIGHT);
+  else if (!g_strcmp0 (style_variant, "dark"))
+    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_FORCE_DARK);
+  else
+    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_FORCE_LIGHT);
 
   ignore_reentrant = FALSE;
 }
 
 static void
-ide_application_color_properties_changed (IdeApplication      *self,
-                                          GVariant            *properties,
-                                          const gchar * const *invalidated,
-                                          GDBusProxy          *proxy)
+_ide_application_update_style_scheme (IdeApplication *self)
 {
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (G_IS_DBUS_PROXY (proxy));
+  HdyStyleManager *manager;
+  g_autoptr(GSettings) editor_settings = NULL;
+  g_autofree gchar *old_name = NULL;
+  g_autofree gchar *new_name = NULL;
 
-  _ide_application_update_color (self);
+  manager = hdy_style_manager_get_default ();
+
+  /*
+   * Now that we have our color up to date, we need to possibly update the
+   * color scheme to match the setting. We always do this (and not just when
+   * the style-variant changes) so that we pick up changes at startup.
+   *
+   * Try to locate a corresponding style-scheme for the light/dark switch
+   * based on some naming conventions. If found, switch the current style
+   * scheme to match.
+   */
+
+  editor_settings = g_settings_new ("org.gnome.builder.editor");
+  old_name = g_settings_get_string (editor_settings, "style-scheme-name");
+  new_name = find_similar_style_scheme (old_name, hdy_style_manager_get_dark (manager));
+
+  if (new_name != NULL)
+    g_settings_set_string (editor_settings, "style-scheme-name", new_name);
 }
 
 void
 _ide_application_init_color (IdeApplication *self)
 {
-  g_autoptr(GDBusConnection) conn = NULL;
-  g_autoptr(GDBusProxy) proxy = NULL;
-
   g_return_if_fail (IDE_IS_APPLICATION (self));
   g_return_if_fail (G_IS_SETTINGS (self->settings));
 
   if (g_getenv ("GTK_THEME") == NULL)
     {
       g_signal_connect_object (self->settings,
-                               "changed::follow-night-light",
+                               "changed::style-variant",
                                G_CALLBACK (_ide_application_update_color),
                                self,
                                G_CONNECT_SWAPPED);
-      g_signal_connect_object (self->settings,
-                               "changed::night-mode",
-                               G_CALLBACK (_ide_application_update_color),
+      g_signal_connect_object (hdy_style_manager_get_default (),
+                               "notify::dark",
+                               G_CALLBACK (_ide_application_update_style_scheme),
                                self,
                                G_CONNECT_SWAPPED);
     }
 
-  if (NULL == (conn = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL)))
-    return;
-
-  if (NULL == (proxy = g_dbus_proxy_new_sync (conn,
-                                              G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
-                                              NULL,
-                                              "org.gnome.SettingsDaemon.Color",
-                                              "/org/gnome/SettingsDaemon/Color",
-                                              "org.gnome.SettingsDaemon.Color",
-                                              NULL, NULL)))
-    return;
-
-  g_signal_connect_object (proxy,
-                           "g-properties-changed",
-                           G_CALLBACK (ide_application_color_properties_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  self->color_proxy = g_steal_pointer (&proxy);
-
   _ide_application_update_color (self);
+  _ide_application_update_style_scheme (self);
 }

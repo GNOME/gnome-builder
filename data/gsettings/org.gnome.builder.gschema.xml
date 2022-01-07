@@ -15,15 +15,15 @@
       <summary>Window maximized</summary>
       <description>Window maximized state</description>
     </key>
-    <key name="night-mode" type="b">
-      <default>false</default>
-      <summary>Night Mode</summary>
-      <description>Prefer dark application chrome.</description>
-    </key>
-    <key name="follow-night-light" type="b">
-      <default>false</default>
-      <summary>Follow system night light</summary>
-      <description>Use GNOME night light setting to activate night-mode.</description>
+    <key name="style-variant" type="s">
+      <choices>
+        <choice value="follow"/>
+        <choice value="light"/>
+        <choice value="dark"/>
+      </choices>
+      <default>'follow'</default>
+      <summary>Style Variant</summary>
+      <description>Use the light or dark variant of the GTK theme and/or GtkSourceView style scheme.</description>
     </key>
     <key name="projects-directory" type="s">
       <!-- Translators: This is the default directory name for user’s

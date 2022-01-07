@@ -27,6 +27,7 @@
 #endif
 
 #include <glib/gi18n.h>
+#include <handy.h>
 #include <libpeas/peas-autocleanups.h>
 #include <libide-themes.h>
 
@@ -192,6 +193,8 @@ ide_application_startup (GApplication *app)
       gtk_source_style_scheme_manager_append_search_path (styles, style_path);
       gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-4/styles/");
 
+      hdy_init ();
+
       /* Load color settings (Night Light, Dark Mode, etc) */
       _ide_application_init_color (self);
     }
@@ -224,7 +227,6 @@ ide_application_shutdown (GApplication *app)
 
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_object (&self->addins);
-  g_clear_object (&self->color_proxy);
   g_clear_object (&self->settings);
   g_clear_object (&self->keybindings);
 
@@ -393,7 +395,6 @@ ide_application_dispose (GObject *object)
   g_clear_pointer (&self->type, g_free);
   g_clear_pointer (&self->dbus_address, g_free);
   g_clear_object (&self->addins);
-  g_clear_object (&self->color_proxy);
   g_clear_object (&self->settings);
   g_clear_object (&self->network_monitor);
   g_clear_object (&self->worker_manager);
