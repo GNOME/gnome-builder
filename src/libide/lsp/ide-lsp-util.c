@@ -99,7 +99,7 @@ ide_lsp_decode_completion_kind (guint kind)
 /**
  * ide_lsp_decode_text_edit:
  * @text_edit: an lsp text edit encoded in a variant
- * @file: The file the edit should be applied to
+ * @gfile: The file the edit should be applied to
  *
  * Attempt to parse an encoded LSP text edit into an #IdeTextEdit.
  *

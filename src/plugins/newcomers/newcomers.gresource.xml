@@ -14,7 +14,6 @@
     <file compressed="true" alias="scalable/apps/org.gnome.Photos.svg">icons/scalable/org.gnome.Photos.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.Calendar.svg">icons/scalable/org.gnome.Calendar.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.gitg.svg">icons/scalable/org.gnome.gitg.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.Games.svg">icons/scalable/org.gnome.Games.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.Nautilus.svg">icons/scalable/org.gnome.Nautilus.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.Polari.svg">icons/scalable/org.gnome.Polari.svg</file>
     <file compressed="true" alias="scalable/apps/org.gnome.SoundRecorder.svg">icons/scalable/org.gnome.SoundRecorder.svg</file>
@@ -26,7 +25,6 @@
     <file compressed="true" alias="symbolic/apps/org.gnome.Photos-symbolic.svg">icons/symbolic/org.gnome.Photos-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Calendar-symbolic.svg">icons/symbolic/org.gnome.Calendar-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.gitg-symbolic.svg">icons/symbolic/org.gnome.gitg-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.Games-symbolic.svg">icons/symbolic/org.gnome.Games-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Nautilus-symbolic.svg">icons/symbolic/org.gnome.Nautilus-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Polari-symbolic.svg">icons/symbolic/org.gnome.Polari-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.SoundRecorder-symbolic.svg">icons/symbolic/org.gnome.SoundRecorder-symbolic.svg</file>

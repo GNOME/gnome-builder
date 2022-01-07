@@ -75,17 +75,6 @@ Python</property>
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Games</property>
-                    <property name="description" translatable="yes">Simple game launcher for GNOME</property>
-                    <property name="icon-name">org.gnome.Games</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-games.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C
-    Vala</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Gitg</property>
                     <property name="description" translatable="yes">Gitg is a graphical Git client</property>
                     <property name="icon-name">org.gnome.gitg</property>
