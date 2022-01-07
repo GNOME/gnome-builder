@@ -98,3 +98,29 @@ window.development-version headerbar label:not(:disabled) {
 window.development-version headerbar .suggested-action label {
   color: @theme_selected_fg_color;
 }
+
+
+/* preferences overrides */
+dzlpreferencesgroup frame,
+dzlpreferencesgroup .frame {
+  background: @content_view_bg;
+  border-radius: 9px;
+}
+dzlpreferencesgroup frame border,
+dzlpreferencesgroup .frame border {
+  border-radius: 9px;
+}
+dzlpreferencesgroup list {
+  background: transparent;
+}
+dzlpreferencesgroup list row {
+  min-height: 28px;
+}
+dzlpreferencesgroup list row:first-child {
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+}
+dzlpreferencesgroup list row:last-child {
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+}
