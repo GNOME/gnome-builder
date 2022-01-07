@@ -4,14 +4,27 @@
  * The following tweaks the greeter surface by adding
  * separator lines to the list box.
  */
+.greeter list {
+  background: transparent;
+}
 .greeter list row {
   border-bottom: 1px solid alpha(@borders, 0.2);
   transition-property: background, opacity;
 }
+.greeter list row:first-child {
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
+}
 .greeter list row:last-child {
   border-bottom: none;
+  border-bottom-right-radius: 9px;
+  border-bottom-left-radius: 9px;
+}
+.greeter frame {
+  background: @content_view_bg;
+  border-radius: 9px;
 }
 .greeter frame border {
   border-color: alpha(@borders, 0.6);
+  border-radius: 9px;
 }
-
