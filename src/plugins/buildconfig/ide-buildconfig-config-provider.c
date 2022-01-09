@@ -158,18 +158,18 @@ load_strv (IdeConfig *config,
 
 static void
 load_environ (IdeConfig *config,
+              IdeEnvironment   *environment,
               GKeyFile         *key_file,
               const gchar      *group)
 {
-  IdeEnvironment *environment;
   g_auto(GStrv) keys = NULL;
   gsize len = 0;
 
   g_assert (IDE_IS_CONFIG (config));
+  g_assert (IDE_IS_ENVIRONMENT (environment));
   g_assert (key_file != NULL);
   g_assert (group != NULL);
 
-  environment = ide_config_get_environment (config);
   keys = g_key_file_get_keys (key_file, group, &len, NULL);
 
   for (gsize i = 0; i < len; i++)
@@ -188,6 +188,9 @@ ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
 {
   g_autoptr(IdeConfig) config = NULL;
   g_autofree gchar *env_group = NULL;
+  g_autofree gchar *rt_env_group = NULL;
+  IdeEnvironment   *environment;
+  IdeEnvironment   *rt_environment;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (self->key_file != NULL);
@@ -218,7 +221,17 @@ ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
 
   env_group = g_strdup_printf ("%s.environment", config_id);
   if (g_key_file_has_group (self->key_file, env_group))
-    load_environ (config, self->key_file, env_group);
+    {
+      environment = ide_config_get_environment (config);
+      load_environ (config, environment, self->key_file, env_group);
+    }
+
+  rt_env_group = g_strdup_printf ("%s.runtime_environment", config_id);
+  if (g_key_file_has_group (self->key_file, rt_env_group))
+    {
+      rt_environment = ide_config_get_runtime_environment (config);
+      load_environ (config, rt_environment, self->key_file, rt_env_group);
+    }
 
   return g_steal_pointer (&config);
 }
@@ -312,6 +325,49 @@ ide_buildconfig_config_provider_load_finish (IdeConfigProvider  *provider,
 }
 
 static void
+ide_buildconfig_config_provider_append_env (IdeEnvironment  *env,
+                                            gchar           *env_group,
+                                            GKeyFile        *key_file)
+{
+  guint n_items;
+
+  /*
+   * Remove all environment keys that are no longer specified in the
+   * environment. This allows us to just do a single pass of additions
+   * from the environment below.
+   */
+  if (g_key_file_has_group (key_file, env_group))
+    {
+      g_auto(GStrv) keys = NULL;
+
+      if (NULL != (keys = g_key_file_get_keys (key_file, env_group, NULL, NULL)))
+        {
+          for (guint j = 0; keys [j]; j++)
+            {
+              if (!ide_environment_getenv (env, keys [j]))
+                g_key_file_remove_key (key_file, env_group, keys [j], NULL);
+            }
+        }
+    }
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (env));
+
+  for (guint j = 0; j < n_items; j++)
+    {
+      g_autoptr(IdeEnvironmentVariable) var = NULL;
+      const gchar *key;
+      const gchar *value;
+
+      var = g_list_model_get_item (G_LIST_MODEL (env), j);
+      key = ide_environment_variable_get_key (var);
+      value = ide_environment_variable_get_value (var);
+
+      if (!dzl_str_empty0 (key))
+        g_key_file_set_string (key_file, env_group, key, value ?: "");
+    }
+}
+
+static void
 ide_buildconfig_config_provider_save_cb (GObject      *object,
                                                 GAsyncResult *result,
                                                 gpointer      user_data)
@@ -392,15 +448,17 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
     {
       IdeConfig *config = g_ptr_array_index (self->configs, i);
       g_autofree gchar *env_group = NULL;
+      g_autofree gchar *rt_env_group = NULL;
       const gchar *config_id;
       IdeEnvironment *env;
-      guint n_items;
+      IdeEnvironment *rt_env;
 
       if (!ide_config_get_dirty (config))
         continue;
 
       config_id = ide_config_get_id (config);
       env_group = g_strdup_printf ("%s.environment", config_id);
+      rt_env_group = g_strdup_printf ("%s.runtime_environment", config_id);
 
       /*
        * Track our known group names, so we can remove missing names after
@@ -408,6 +466,7 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
        */
       g_hash_table_insert (group_names, g_strdup (config_id), NULL);
       g_hash_table_insert (group_names, g_strdup (env_group), NULL);
+      g_hash_table_insert (group_names, g_strdup (rt_env_group), NULL);
 
 #define PERSIST_STRING_KEY(key, getter) \
       g_key_file_set_string (self->key_file, config_id, key, \
@@ -444,41 +503,10 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
         g_key_file_remove_key (self->key_file, config_id, "default", NULL);
 
       env = ide_config_get_environment (config);
+      ide_buildconfig_config_provider_append_env(env, env_group, self->key_file);
 
-      /*
-       * Remove all environment keys that are no longer specified in the
-       * environment. This allows us to just do a single pass of additions
-       * from the environment below.
-       */
-      if (g_key_file_has_group (self->key_file, env_group))
-        {
-          g_auto(GStrv) keys = NULL;
-
-          if (NULL != (keys = g_key_file_get_keys (self->key_file, env_group, NULL, NULL)))
-            {
-              for (guint j = 0; keys [j]; j++)
-                {
-                  if (!ide_environment_getenv (env, keys [j]))
-                    g_key_file_remove_key (self->key_file, env_group, keys [j], NULL);
-                }
-            }
-        }
-
-      n_items = g_list_model_get_n_items (G_LIST_MODEL (env));
-
-      for (guint j = 0; j < n_items; j++)
-        {
-          g_autoptr(IdeEnvironmentVariable) var = NULL;
-          const gchar *key;
-          const gchar *value;
-
-          var = g_list_model_get_item (G_LIST_MODEL (env), j);
-          key = ide_environment_variable_get_key (var);
-          value = ide_environment_variable_get_value (var);
-
-          if (!dzl_str_empty0 (key))
-            g_key_file_set_string (self->key_file, env_group, key, value ?: "");
-        }
+      rt_env = ide_config_get_runtime_environment (config);
+      ide_buildconfig_config_provider_append_env(rt_env, rt_env_group, self->key_file);
 
       ide_config_set_dirty (config, FALSE);
     }
