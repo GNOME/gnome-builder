@@ -105,8 +105,26 @@ editorconfig_glib_read (GFile         *file,
       else if ((g_strcmp0 (key, "insert_final_newline") == 0) ||
                (g_strcmp0 (key, "trim_trailing_whitespace") == 0))
         {
+          char *lower = g_utf8_strdown (valuestr, -1);
+
           g_value_init (value, G_TYPE_BOOLEAN);
-          g_value_set_boolean (value, g_str_equal (valuestr, "true"));
+
+          if (g_strcmp0 (lower, "true") == 0 ||
+              g_strcmp0 (lower, "yes") == 0 ||
+              g_strcmp0 (lower, "t") == 0 ||
+              g_strcmp0 (lower, "y") == 0 ||
+              g_strcmp0 (lower, "1") == 0)
+            g_value_set_boolean (value, TRUE);
+          else if (g_strcmp0 (lower, "false") == 0 ||
+                   g_strcmp0 (lower, "no") == 0 ||
+                   g_strcmp0 (lower, "f") == 0 ||
+                   g_strcmp0 (lower, "n") == 0 ||
+                   g_strcmp0 (lower, "0") == 0)
+            g_value_set_boolean (value, FALSE);
+          else
+            g_warning ("Unrecognized boolean value for %s: %s", key, valuestr);
+
+          g_free (lower);
         }
       else
         {
