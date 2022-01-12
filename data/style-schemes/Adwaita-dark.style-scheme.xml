@@ -83,7 +83,7 @@
   <color name="highlight"                   value="#2c2c2c"/>
 
   <!-- For Builder -->
-  <style name="debugger::breakpoint"        background="selection_bg" foreground="#ffffff"/>
+  <style name="debugger::breakpoint"        background="blue2.5" foreground="#ffffff"/>
 
   <!-- Global Settings -->
   <style name="text"                        foreground="text4" background="background"/>
@@ -94,7 +94,7 @@
   <style name="current-line-number"         foreground="text6" background="highlight" bold="false"/>
   <style name="right-margin"                foreground="dark1" background="light4"/>
   <style name="draw-spaces"                 foreground="text0"/>
-  <style name="background-pattern"          background="#10101044"/>
+  <style name="background-pattern"          background="#262626"/>
 
   <style name="bracket-match"               background="light3" bold="true"/>
   <style name="bracket-mismatch"            foreground="dark1" background="red3" bold="true"/>
