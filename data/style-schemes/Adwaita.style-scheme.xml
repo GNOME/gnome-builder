@@ -131,6 +131,7 @@
   <style name="python:builtin-constant"     bold="true"/>
   <style name="python:multiline-string"     foreground="text2"/>
   <style name="python:format"               foreground="blue3"/>
+  <style name="python3:f-string-curly-braces" foreground="blue3" bold="true"/>
 
   <style name="json:keyname"                foreground="teal" bold="true"/>
   <style name="json:string"                 foreground="text5"/>
@@ -150,7 +151,7 @@
   <style name="typescript:basic-type"           foreground="teal" bold="true"/>
   <style name="typescript:type-parameters-list" foreground="teal" bold="true"/>
 
-  <style name="markdown:header"             foreground="teal" scale="1.1"/>
+  <style name="markdown:header"             foreground="teal"/>
 
   <style name="css:class-selector"          foreground="pink1"/>
   <style name="css:type-selector"           foreground="teal" bold="true"/>
@@ -161,9 +162,10 @@
   <style name="sql:keyword"                 bold="true"/>
   <style name="sql:type"                    foreground="teal" bold="true"/>
 
-  <style name="xml:element-name"            foreground="teal" bold="true"/>
-  <style name="xml:attribute-name"          foreground="text3" bold="true"/>
+  <style name="xml:element-name"            foreground="teal"/>
+  <style name="xml:attribute-name"          foreground="green5"/>
   <style name="xml:attribute-value"         foreground="pink1"/>
+  <style name="xml:processing-instruction"  bold="true"/>
 
   <style name="meson:builtin-command"       foreground="teal" bold="true"/>
   <style name="meson:string"                foreground="pink1"/>
