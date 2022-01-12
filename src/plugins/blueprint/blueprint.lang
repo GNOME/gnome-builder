@@ -223,6 +223,7 @@
 
     <context id="keywords" style-ref="keyword">
       <keyword>accessibility</keyword>
+      <keyword>bidirectional</keyword>
       <keyword>bind</keyword>
       <keyword>item</keyword>
       <keyword>items</keyword>
