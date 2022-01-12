@@ -5,7 +5,7 @@
       <object class="IdeHeaderBar" id="header_bar">
         <property name="menu-id">ide-primary-workspace-menu</property>
         <property name="show-close-button">true</property>
-        <property name="show-fullscreen-button">true</property>
+        <property name="show-fullscreen-button">false</property>
         <property name="visible">true</property>
         <child type="left">
           <object class="IdeSurfacesButton" id="surface_menu_button">

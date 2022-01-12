@@ -277,7 +277,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                               "build-manager.rebuild");
 
   headerbar = ide_workspace_get_header_bar (workspace);
-  omnibar = IDE_OMNI_BAR (gtk_header_bar_get_custom_title (GTK_HEADER_BAR (headerbar)));
+  omnibar = IDE_OMNI_BAR (hdy_header_bar_get_custom_title (HDY_HEADER_BAR (headerbar)));
   workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
   context = ide_workbench_get_context (workbench);
   build_manager = ide_build_manager_from_context (context);

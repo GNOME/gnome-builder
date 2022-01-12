@@ -34,6 +34,7 @@ typedef struct
   GtkToggleButton    *fullscreen_button;
   GtkImage           *fullscreen_image;
   DzlShortcutTooltip *fullscreen_tooltip;
+
   DzlMenuButton      *menu_button;
   DzlShortcutTooltip *menu_tooltip;
   GtkBox             *primary;
@@ -51,7 +52,7 @@ enum {
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeHeaderBar, ide_header_bar, GTK_TYPE_HEADER_BAR,
+G_DEFINE_TYPE_WITH_CODE (IdeHeaderBar, ide_header_bar, HDY_TYPE_HEADER_BAR,
                          G_ADD_PRIVATE (IdeHeaderBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 

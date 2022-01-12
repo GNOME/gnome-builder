@@ -21,6 +21,7 @@
 #pragma once
 
 #include <dazzle.h>
+#include <handy.h>
 #include <libide-core.h>
 
 G_BEGIN_DECLS
@@ -28,6 +29,6 @@ G_BEGIN_DECLS
 #define IDE_TYPE_PREFERENCES_WINDOW (ide_preferences_window_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, IDE, PREFERENCES_WINDOW, DzlApplicationWindow)
+G_DECLARE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, IDE, PREFERENCES_WINDOW, HdyApplicationWindow)
 
 G_END_DECLS

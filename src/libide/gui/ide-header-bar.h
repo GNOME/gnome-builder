@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <handy.h>
 #include <libide-core.h>
 
 G_BEGIN_DECLS
@@ -32,11 +33,11 @@ G_BEGIN_DECLS
 #define IDE_TYPE_HEADER_BAR (ide_header_bar_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeHeaderBar, ide_header_bar, IDE, HEADER_BAR, GtkHeaderBar)
+G_DECLARE_DERIVABLE_TYPE (IdeHeaderBar, ide_header_bar, IDE, HEADER_BAR, HdyHeaderBar)
 
 struct _IdeHeaderBarClass
 {
-  GtkHeaderBarClass parent_class;
+  HdyHeaderBarClass parent_class;
 
   /*< private >*/
   gpointer _reserved[16];

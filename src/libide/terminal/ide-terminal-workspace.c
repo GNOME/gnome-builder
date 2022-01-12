@@ -54,7 +54,7 @@ ide_terminal_workspace_context_set_cb (GtkWidget  *widget,
       bar = g_object_new (IDE_TYPE_OMNI_BAR,
                           "visible", TRUE,
                           NULL);
-      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (self->header_bar), GTK_WIDGET (bar));
+      hdy_header_bar_set_custom_title (HDY_HEADER_BAR (self->header_bar), GTK_WIDGET (bar));
 
       label = g_object_new (GTK_TYPE_LABEL,
                             "visible", TRUE,

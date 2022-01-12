@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdePreferencesWindow" parent="DzlApplicationWindow">
-    <child type="titlebar">
-      <object class="GtkHeaderBar" id="header_bar">
-        <property name="title" translatable="yes">Preferences</property>
-        <property name="show-close-button">true</property>
-        <property name="visible">true</property>
-      </object>
-    </child>
+  <template class="IdePreferencesWindow" parent="HdyApplicationWindow">
     <child>
-      <object class="IdePreferencesSurface" id="surface">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <property name="visible">true</property>
+        <child>
+          <object class="HdyHeaderBar" id="header_bar">
+            <property name="title" translatable="yes">Preferences</property>
+            <property name="show-close-button">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="IdePreferencesSurface" id="surface">
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

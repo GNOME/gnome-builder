@@ -25,6 +25,7 @@
 #endif
 
 #include <dazzle.h>
+#include <handy.h>
 #include <libide-core.h>
 #include <libide-projects.h>
 
@@ -37,11 +38,11 @@ G_BEGIN_DECLS
 #define IDE_TYPE_WORKSPACE (ide_workspace_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeWorkspace, ide_workspace, IDE, WORKSPACE, DzlApplicationWindow)
+G_DECLARE_DERIVABLE_TYPE (IdeWorkspace, ide_workspace, IDE, WORKSPACE, HdyApplicationWindow)
 
 struct _IdeWorkspaceClass
 {
-  DzlApplicationWindowClass parent_class;
+  HdyApplicationWindowClass parent_class;
 
   const gchar *kind;
 

@@ -70,11 +70,14 @@ typedef struct
    * fullscreen overlay so that it gets delivery of crossing events.
    */
   GtkEventBox *event_box;
+  GtkBox *vbox;
 
   /* A MRU that is updated as pages are focused. It allows us to move through
    * the pages in the order they've been most-recently focused.
    */
   GQueue page_mru;
+
+  guint in_key_press : 1;
 } IdeWorkspacePrivate;
 
 typedef struct
@@ -97,10 +100,11 @@ enum {
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, DZL_TYPE_APPLICATION_WINDOW,
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, HDY_TYPE_APPLICATION_WINDOW,
                                   G_ADD_PRIVATE (IdeWorkspace)
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
+static GtkBuildableIface *parent_builder;
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
@@ -412,6 +416,7 @@ ide_workspace_real_foreach_page (IdeWorkspace *self,
                          &state);
 }
 
+#if 0
 static void
 ide_workspace_set_surface_fullscreen_cb (GtkWidget *widget,
                                          gpointer   user_data)
@@ -441,6 +446,7 @@ ide_workspace_real_set_fullscreen (DzlApplicationWindow *window,
                          ide_workspace_set_surface_fullscreen_cb,
                          GUINT_TO_POINTER (fullscreen));
 }
+#endif
 
 static void
 ide_workspace_grab_focus (GtkWidget *widget)
@@ -452,6 +458,28 @@ ide_workspace_grab_focus (GtkWidget *widget)
 
   if ((surface = ide_workspace_get_visible_surface (self)))
     gtk_widget_grab_focus (GTK_WIDGET (surface));
+}
+
+static gboolean
+ide_workspace_key_press_event (GtkWidget   *widget,
+                               GdkEventKey *event)
+{
+  IdeWorkspace *self = (IdeWorkspace *)widget;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  gboolean ret;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (event != NULL);
+
+  /* Be re-entrant safe from the shortcut manager */
+  if (priv->in_key_press)
+    return GTK_WIDGET_CLASS (ide_workspace_parent_class)->key_press_event (widget, event);
+
+  priv->in_key_press = TRUE;
+  ret = dzl_shortcut_manager_handle_event (NULL, event, widget);
+  priv->in_key_press = FALSE;
+
+  return ret;
 }
 
 static void
@@ -513,7 +541,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  DzlApplicationWindowClass *window_class = DZL_APPLICATION_WINDOW_CLASS (klass);
+  //DzlApplicationWindowClass *window_class = DZL_APPLICATION_WINDOW_CLASS (klass);
 
   object_class->finalize = ide_workspace_finalize;
   object_class->get_property = ide_workspace_get_property;
@@ -522,8 +550,9 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   widget_class->destroy = ide_workspace_destroy;
   widget_class->delete_event = ide_workspace_delete_event;
   widget_class->grab_focus = ide_workspace_grab_focus;
+  widget_class->key_press_event = ide_workspace_key_press_event;
 
-  window_class->set_fullscreen = ide_workspace_real_set_fullscreen;
+  //window_class->set_fullscreen = ide_workspace_real_set_fullscreen;
 
   klass->foreach_page = ide_workspace_real_foreach_page;
   klass->context_set = ide_workspace_real_context_set;
@@ -588,6 +617,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, event_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, overlay);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, surfaces);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, vbox);
 }
 
 static void
@@ -730,20 +760,31 @@ ide_workspace_foreach_page (IdeWorkspace *self,
 IdeHeaderBar *
 ide_workspace_get_header_bar (IdeWorkspace *self)
 {
-  GtkWidget *titlebar;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  IdeHeaderBar *ret = NULL;
+  GList *children;
 
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
 
-  if ((titlebar = gtk_window_get_titlebar (GTK_WINDOW (self))))
-    {
-      if (GTK_IS_STACK (titlebar))
-        titlebar = gtk_stack_get_visible_child (GTK_STACK (titlebar));
+  children = gtk_container_get_children (GTK_CONTAINER (priv->vbox));
 
-      if (IDE_IS_HEADER_BAR (titlebar))
-        return IDE_HEADER_BAR (titlebar);
+  for (const GList *iter = children; iter; iter = iter->next)
+    {
+      GtkWidget *widget = iter->data;
+
+      if (GTK_IS_STACK (widget))
+        widget = gtk_stack_get_visible_child (GTK_STACK (widget));
+
+      if (IDE_IS_HEADER_BAR (widget))
+        {
+          ret = IDE_HEADER_BAR (widget);
+          break;
+        }
     }
 
-  return NULL;
+  g_list_free (children);
+
+  return ret;
 }
 
 /**
@@ -889,9 +930,30 @@ ide_workspace_get_internal_child (GtkBuildable *buildable,
 }
 
 static void
+ide_workspace_add_child (GtkBuildable *buildable,
+                         GtkBuilder   *builder,
+                         GObject      *object,
+                         const char   *type)
+{
+  IdeWorkspace *self = (IdeWorkspace *)buildable;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+
+  if (g_strcmp0 (type, "titlebar") == 0 && GTK_IS_WIDGET (object))
+    gtk_box_pack_start (priv->vbox, GTK_WIDGET (object), FALSE, FALSE, 0);
+  else
+    parent_builder->add_child (buildable, builder, object, type);
+}
+
+static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
+  parent_builder = g_type_interface_peek_parent (iface);
+
   iface->get_internal_child = ide_workspace_get_internal_child;
+  iface->add_child = ide_workspace_add_child;
 }
 
 /**

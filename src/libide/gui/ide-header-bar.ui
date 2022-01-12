@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.24 -->
-  <template class="IdeHeaderBar" parent="GtkHeaderBar">
+  <template class="IdeHeaderBar" parent="HdyHeaderBar">
     <child>
       <object class="DzlPriorityBox" id="primary">
         <property name="hexpand">true</property>

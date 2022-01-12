@@ -6,7 +6,7 @@
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
         <property name="show-close-button">true</property>
-        <property name="show-fullscreen-button">true</property>
+        <property name="show-fullscreen-button">false</property>
         <property name="visible">true</property>
         <child type="title">
           <object class="GtkLabel">
