@@ -146,6 +146,29 @@ enum {
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+static void
+ide_build_manager_rediagnose (IdeBuildManager *self)
+{
+  IdeDiagnosticsManager *diagnostics;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+  guint n_items;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  buffer_manager = ide_buffer_manager_from_context (context);
+  diagnostics = ide_diagnostics_manager_from_context (context);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (buffer_manager));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeBuffer) buffer = g_list_model_get_item (G_LIST_MODEL (buffer_manager), i);
+
+      ide_diagnostics_manager_rediagnose (diagnostics, buffer);
+    }
+}
+
 static gboolean
 timer_callback (gpointer data)
 {
@@ -400,9 +423,19 @@ ide_build_manager_ensure_toolchain_cb (GObject      *object,
 
   ide_build_manager_set_can_build (self, TRUE);
 
+  if (ide_pipeline_is_ready (pipeline))
+    ide_build_manager_rediagnose (self);
+  else
+    g_signal_connect_object (pipeline,
+                             "loaded",
+                             G_CALLBACK (ide_build_manager_rediagnose),
+                             self,
+                             G_CONNECT_SWAPPED);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
   ide_task_return_boolean (task, TRUE);
+
   IDE_EXIT;
 
 failure:
@@ -765,42 +798,16 @@ static void
 ide_build_manager_real_build_finished (IdeBuildManager *self,
                                        IdePipeline     *pipeline)
 {
-  IdeDiagnosticsManager *diagnostics;
-  IdeBufferManager *bufmgr;
-  IdeContext *context;
-  guint n_items;
-
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
   ide_build_manager_stop_timer (self);
 
-  /*
-   * If this was not a full build (such as advancing to just the configure
-   * phase or so), then there is nothing more to do.
-   */
-  if (!self->needs_rediagnose)
-    return;
-
-  /*
-   * We had a successful build, so lets notify the build manager to reload
-   * dianostics on loaded buffers so the user doesn't have to make a change
-   * to force the update.
-   */
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  diagnostics = ide_diagnostics_manager_from_context (context);
-  bufmgr = ide_buffer_manager_from_context (context);
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (bufmgr));
-
-  for (guint i = 0; i < n_items; i++)
+  if (self->needs_rediagnose)
     {
-      g_autoptr(IdeBuffer) buffer = g_list_model_get_item (G_LIST_MODEL (bufmgr), i);
-
-      ide_diagnostics_manager_rediagnose (diagnostics, buffer);
+      self->needs_rediagnose = FALSE;
+      ide_build_manager_rediagnose (self);
     }
-
-  self->needs_rediagnose = FALSE;
 }
 
 static void
