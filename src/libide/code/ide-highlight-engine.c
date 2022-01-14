@@ -136,14 +136,15 @@ get_invalidation_area (GtkTextIter *begin,
 
 static void
 sync_tag_style (GtkSourceStyleScheme *style_scheme,
+                GtkSourceLanguage    *language,
                 GtkTextTag           *tag)
 {
   g_autofree gchar *foreground = NULL;
   g_autofree gchar *background = NULL;
   g_autofree gchar *tag_name = NULL;
-  gchar *style_name = NULL;
-  const gchar *colon;
-  GtkSourceStyle *style;
+  const char *style_name = NULL;
+  GtkSourceStyle *style = NULL;
+  const char *fallback;
   gboolean foreground_set = FALSE;
   gboolean background_set = FALSE;
   gboolean bold = FALSE;
@@ -182,14 +183,16 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
   if (tag_name_len > prefix_len && memcmp (tag_name, PRIVATE_TAG_PREFIX, prefix_len) == 0)
     style_name = tag_name + prefix_len + 1;
 
-  style = gtk_source_style_scheme_get_style (style_scheme, style_name);
-  if (style == NULL && (colon = strchr (style_name, ':')))
+  fallback = style_name;
+  while (style == NULL && fallback != NULL)
     {
-      gchar defname[64];
-      g_snprintf (defname, sizeof defname, "def%s", colon);
-      style = gtk_source_style_scheme_get_style (style_scheme, defname);
-      if (style == NULL)
-        return;
+      if (!(style = gtk_source_style_scheme_get_style (style_scheme, fallback)))
+        {
+          if (language)
+            fallback = gtk_source_language_get_style_fallback (language, fallback);
+          else
+            fallback = NULL;
+        }
     }
 
   g_object_get (style,
@@ -227,6 +230,7 @@ create_tag_from_style (IdeHighlightEngine *self,
 {
   g_autoptr(IdeBuffer) buffer = NULL;
   GtkSourceStyleScheme *style_scheme;
+  GtkSourceLanguage *language;
   GtkTextTag *tag = NULL;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
@@ -238,8 +242,11 @@ create_tag_from_style (IdeHighlightEngine *self,
     {
       tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (buffer), style_name, NULL);
       gtk_text_tag_set_priority (tag, 0);
+
       style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
-      sync_tag_style (style_scheme, tag);
+      language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+
+      sync_tag_style (style_scheme, language, tag);
     }
 
   return tag;
@@ -641,17 +648,19 @@ ide_highlight_engine__notify_style_scheme_cb (IdeHighlightEngine *self,
                                               IdeBuffer          *buffer)
 {
   GtkSourceStyleScheme *style_scheme;
+  GtkSourceLanguage *language;
   GSList *iter;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
 
   for (iter = self->private_tags; iter; iter = iter->next)
-    sync_tag_style (style_scheme, iter->data);
+    sync_tag_style (style_scheme, language, iter->data);
   for (iter = self->public_tags; iter; iter = iter->next)
-    sync_tag_style (style_scheme, iter->data);
+    sync_tag_style (style_scheme, language, iter->data);
 }
 
 void
