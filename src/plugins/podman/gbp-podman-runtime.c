@@ -121,6 +121,7 @@ gbp_podman_runtime_class_init (GbpPodmanRuntimeClass *klass)
   i_object_class->destroy = gbp_podman_runtime_destroy;
 
   runtime_class->create_launcher = gbp_podman_runtime_create_launcher;
+  runtime_class->translate_file = NULL;
 }
 
 static void
