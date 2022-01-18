@@ -79,7 +79,7 @@ class GVlsService(Ide.Object):
         if parent is None:
             return
 
-    def do_stop(self):
+    def do_destroy(self):
         """
         Stops the Vala Language Server upon request to shutdown the
         GVlsService.
