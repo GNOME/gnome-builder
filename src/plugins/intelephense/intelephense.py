@@ -30,7 +30,7 @@ class PhpService(Ide.Object):
         self._client = value
         self.notify('client')
 
-    def do_stop(self):
+    def do_destroy(self):
         if self._supervisor:
             supervisor, self._supervisor = self._supervisor, None
             supervisor.stop()
