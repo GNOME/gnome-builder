@@ -34,6 +34,8 @@ IDE_AVAILABLE_IN_3_34
 IdeTerminalLauncher *ide_terminal_launcher_new              (IdeContext             *context);
 IDE_AVAILABLE_IN_3_34
 IdeTerminalLauncher *ide_terminal_launcher_new_for_launcher (IdeSubprocessLauncher  *launcher);
+IDE_AVAILABLE_IN_42
+IdeTerminalLauncher *ide_terminal_launcher_new_for_config   (IdeConfig              *config);
 IDE_AVAILABLE_IN_3_34
 IdeTerminalLauncher *ide_terminal_launcher_new_for_debug    (void);
 IDE_AVAILABLE_IN_3_34

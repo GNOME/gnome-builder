@@ -39,6 +39,7 @@ typedef enum
   LAUNCHER_KIND_RUNTIME,
   LAUNCHER_KIND_RUNNER,
   LAUNCHER_KIND_LAUNCHER,
+  LAUNCHER_KIND_CONFIG,
 } LauncherKind;
 
 struct _IdeTerminalLauncher
@@ -50,6 +51,7 @@ struct _IdeTerminalLauncher
   gchar                **args;
   IdeRuntime            *runtime;
   IdeContext            *context;
+  IdeConfig             *config;
   IdeSubprocessLauncher *launcher;
   LauncherKind           kind;
 };
@@ -316,6 +318,7 @@ static void
 spawn_runtime_launcher (IdeTerminalLauncher *self,
                         IdeTask             *task,
                         IdeRuntime          *runtime,
+                        IdeConfig           *config,
                         gint                 pty_fd)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -368,6 +371,9 @@ spawn_runtime_launcher (IdeTerminalLauncher *self,
   copy_envvars (launcher);
 
   ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
+
+  if (config != NULL)
+    ide_config_apply_path (config, launcher);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
@@ -493,7 +499,11 @@ ide_terminal_launcher_spawn_async (IdeTerminalLauncher *self,
   switch (self->kind)
     {
     case LAUNCHER_KIND_RUNTIME:
-      spawn_runtime_launcher (self, task, self->runtime, pty_fd);
+      spawn_runtime_launcher (self, task, self->runtime, NULL, pty_fd);
+      break;
+
+    case LAUNCHER_KIND_CONFIG:
+      spawn_runtime_launcher (self, task, self->runtime, self->config, pty_fd);
       break;
 
     case LAUNCHER_KIND_RUNNER:
@@ -549,6 +559,7 @@ ide_terminal_launcher_finalize (GObject *object)
   g_clear_pointer (&self->title, g_free);
   g_clear_object (&self->launcher);
   g_clear_object (&self->runtime);
+  g_clear_object (&self->config);
 
   G_OBJECT_CLASS (ide_terminal_launcher_parent_class)->finalize (object);
 }
@@ -793,6 +804,35 @@ ide_terminal_launcher_new_for_debug (void)
 
   self = g_object_new (IDE_TYPE_TERMINAL_LAUNCHER, NULL);
   self->kind = LAUNCHER_KIND_DEBUG;
+
+  return g_steal_pointer (&self);
+}
+
+/**
+ * ide_terminal_launcher_new_for_config:
+ * @config: an #IdeConfig
+ *
+ * Create a new #IdeTerminalLauncher that will spawn a terminal in the runtime
+ * of the configuration with various build options applied.
+ *
+ * Returns: (transfer full): a newly created #IdeTerminalLauncher
+ */
+IdeTerminalLauncher *
+ide_terminal_launcher_new_for_config (IdeConfig *config)
+{
+  IdeTerminalLauncher *self;
+  IdeRuntime *runtime;
+
+  g_return_val_if_fail (IDE_IS_CONFIG (config), NULL);
+
+  runtime = ide_config_get_runtime (config);
+
+  self = g_object_new (IDE_TYPE_TERMINAL_LAUNCHER, NULL);
+  self->runtime = g_object_ref (runtime);
+  self->config = g_object_ref (config);
+  self->kind = LAUNCHER_KIND_CONFIG;
+
+  ide_terminal_launcher_set_title (self, ide_runtime_get_name (runtime));
 
   return g_steal_pointer (&self);
 }
