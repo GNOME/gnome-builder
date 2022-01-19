@@ -43,7 +43,11 @@ get_wrap_mode (GValue   *value,
                GVariant *variant,
                gpointer  user_data)
 {
-  if (g_variant_get_boolean (variant))
+  const gchar *wrap_mode = g_variant_get_string (variant, NULL);
+
+  if (!g_strcmp0 (wrap_mode, "always"))
+    g_value_set_enum (value, GTK_WRAP_WORD_CHAR);
+  else if (!g_strcmp0 (wrap_mode, "whitespace"))
     g_value_set_enum (value, GTK_WRAP_WORD);
   else
     g_value_set_enum (value, GTK_WRAP_NONE);

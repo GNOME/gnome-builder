@@ -95,10 +95,15 @@
       <summary>Overscroll</summary>
       <description>The number of lines to scroll beyond the end of the buffer.</description>
     </key>
-    <key name="wrap-text" type="b">
-      <default>false</default>
+    <key name="wrap-text" type="s">
+      <choices>
+        <choice value="never"/>
+        <choice value="whitespace"/>
+        <choice value="always"/>
+      </choices>
+      <default>'never'</default>
       <summary>Wrap Text</summary>
-      <description>If enabled, Builder will automatically wrap text so all of the line text is visible.</description>
+      <description>The way to wrap a long line of text for a better visibility.</description>
     </key>
     <key name="auto-save" type="b">
       <default>true</default>
