@@ -1,6 +1,6 @@
 /* gbp-cmake-build-target-provider.c
  *
- * Copyright 2021 Günther Wagner <info@gunibert.de>
+ * Copyright 2021-2022 Günther Wagner <info@gunibert.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,8 +63,11 @@ gbp_cmake_build_target_provider_create_target (GbpCmakeBuildTargetProvider  *sel
   JsonObject *path_object;
   JsonObject *install;
   JsonObject *prefix;
+  JsonArray *destination_array;
+  JsonObject *destination;
   const gchar *artefacts_path;
   const gchar *prefix_path;
+  const gchar *destination_path;
 
   g_return_if_fail (GBP_IS_CMAKE_BUILD_TARGET_PROVIDER (self));
 
@@ -80,9 +83,12 @@ gbp_cmake_build_target_provider_create_target (GbpCmakeBuildTargetProvider  *sel
   install = json_object_get_object_member (obj, "install");
   prefix = json_object_get_object_member (install, "prefix");
   prefix_path = json_object_get_string_member (prefix, "path");
+  destination_array = json_object_get_array_member (install, "destinations");
+  destination = json_array_get_object_element (destination_array, 0);
+  destination_path = json_object_get_string_member (destination, "path");
 
   install_dir = g_path_get_dirname (artefacts_path);
-  install_dir_abs = g_build_path (G_DIR_SEPARATOR_S, prefix_path, install_dir, NULL);
+  install_dir_abs = g_build_path (G_DIR_SEPARATOR_S, prefix_path, destination_path, NULL);
   install_directory = g_file_new_for_path (install_dir_abs);
 
   name = g_path_get_basename (artefacts_path);
