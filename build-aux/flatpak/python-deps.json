@@ -2,7 +2,7 @@
     "name": "python3-deps",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} sphinx sphinx_rtd_theme lxml docutils codespell gi-docgen"
+        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} sphinx sphinx_rtd_theme lxml docutils codespell gi-docgen rstcheck"
     ],
     "sources": [
         {
@@ -151,9 +151,9 @@
             "sha256": "2d5cfdf45f4d12816902cfe7e38474032779133bbb41e321fe0ec46e42726b6a"
         },
         {
-        	"type": "file",
-        	"url": "https://files.pythonhosted.org/packages/81/3f/42c187b6e0840145a45021ceb1a2c83697b9aa41068add75d1fa6757bdca/rstcheck-3.3.1.tar.gz",
-        	"sha256": "92c4f79256a54270e0402ba16a2f92d0b3c15c8f4410cb9c57127067c215741f"
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/81/3f/42c187b6e0840145a45021ceb1a2c83697b9aa41068add75d1fa6757bdca/rstcheck-3.3.1.tar.gz",
+            "sha256": "92c4f79256a54270e0402ba16a2f92d0b3c15c8f4410cb9c57127067c215741f"
         }
     ]
 }
