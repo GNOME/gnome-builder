@@ -275,6 +275,9 @@
         {
             "name" : "vte",
             "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dvapi=false"
+            ],
             "sources" : [
                 {
                     "type" : "git",
