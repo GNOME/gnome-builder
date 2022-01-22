@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Veli Tasalı <me@velitasali.com>
+Builtin=true
+Copyright=Copyright © 2022 Veli Tasalı
+Description=Provides reStructuredText linting using rstcheck
+Loader=python3
+Module=rstcheck_plugin
+Name=Rstcheck
+X-Diagnostic-Provider-Languages-Priority=100
+X-Diagnostic-Provider-Languages=rst
+X-Builder-ABI=@PACKAGE_ABI@

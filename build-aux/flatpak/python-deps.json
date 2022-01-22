@@ -149,6 +149,11 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/08/41/f01bb2d95f207a6563b5942a506a29f2e6508bd1bd9ec04d70e04b3a0eae/gi_docgen-2021.6-py2.py3-none-any.whl",
             "sha256": "2d5cfdf45f4d12816902cfe7e38474032779133bbb41e321fe0ec46e42726b6a"
+        },
+        {
+        	"type": "file",
+        	"url": "https://files.pythonhosted.org/packages/81/3f/42c187b6e0840145a45021ceb1a2c83697b9aa41068add75d1fa6757bdca/rstcheck-3.3.1.tar.gz",
+        	"sha256": "92c4f79256a54270e0402ba16a2f92d0b3c15c8f4410cb9c57127067c215741f"
         }
     ]
 }
