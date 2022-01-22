@@ -44,6 +44,7 @@ G_BEGIN_DECLS
 #include "ide-device-manager.h"
 #include "ide-device-provider.h"
 #include "ide-device.h"
+#include "ide-diagnostic-tool.h"
 #include "ide-fallback-build-system.h"
 #include "ide-foundry-compat.h"
 #include "ide-local-device.h"
