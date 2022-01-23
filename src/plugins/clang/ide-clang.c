@@ -975,6 +975,9 @@ get_path (GFile       *workdir,
   if (path == NULL)
     return path_or_uri (workdir);
 
+  if (g_path_is_absolute (path))
+    return g_strdup (path);
+
   file = g_file_new_for_path (path);
   if (g_file_has_prefix (file, workdir))
     return g_strdup (path);
