@@ -2,6 +2,7 @@ include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_
 
 flatpak:
   extends: .flatpak
+  timeout: 90m
   variables:
     GIT_SUBMODULE_STRATEGY: normal
 
