@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <json-glib/json-glib.h>
 
 #include "gbp-podman-runtime.h"
 #include "gbp-podman-subprocess-launcher.h"
@@ -34,6 +35,7 @@ struct _GbpPodmanRuntime
   gchar      *id;
   GMutex      mutex;
   guint       has_started : 1;
+  GList      *layers;
 };
 
 G_DEFINE_FINAL_TYPE (GbpPodmanRuntime, gbp_podman_runtime, IDE_TYPE_RUNTIME)
@@ -87,6 +89,236 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
   return launcher;
 }
 
+static char *
+get_layer_dir (const char *layer)
+{
+  /* We don't use XDG data dir because this might be in a container
+   * or flatpak environment that doesn't match. And generally, it's
+   * always .local.
+   */
+  return g_build_filename (g_get_home_dir (),
+                           ".local",
+                           "share",
+                           "containers",
+                           "storage",
+                           "overlay",
+                           layer,
+                           "diff",
+                           NULL);
+}
+
+static char *
+find_parent_layer (GbpPodmanRuntime *runtime,
+                   JsonParser       *parser,
+                   const char       *layer)
+{
+  JsonNode *root;
+  JsonArray *ar;
+  guint n_items;
+
+  g_assert (JSON_IS_PARSER (parser));
+  g_assert (layer != NULL);
+
+  if (!(root = json_parser_get_root (parser)) ||
+      !JSON_NODE_HOLDS_ARRAY (root) ||
+      !(ar = json_node_get_array (root)))
+    return NULL;
+
+  n_items = json_array_get_length (ar);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      JsonObject *item = json_array_get_object_element (ar, i);
+      const char *parent;
+      const char *id;
+
+      if (item == NULL ||
+          !json_object_has_member (item, "id") ||
+          !json_object_has_member (item, "parent") ||
+          !(id = json_object_get_string_member (item, "id")) ||
+          strcmp (id, layer) != 0 ||
+          !(parent = json_object_get_string_member (item, "parent")))
+        continue;
+
+      return (char *)parent;
+    }
+
+  return NULL;
+}
+
+static char *
+find_image_layer (JsonParser *parser,
+                  const char *image)
+{
+  JsonNode *root;
+  JsonArray *ar;
+  guint n_items;
+
+  g_assert (JSON_IS_PARSER (parser));
+  g_assert (image != NULL);
+
+  if (!(root = json_parser_get_root (parser)) ||
+      !JSON_NODE_HOLDS_ARRAY (root) ||
+      !(ar = json_node_get_array (root)))
+    return NULL;
+
+  n_items = json_array_get_length (ar);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      JsonObject *item = json_array_get_object_element (ar, i);
+      const char *id;
+      const char *layer;
+
+      if (item == NULL ||
+          !json_object_has_member (item, "id") ||
+          !json_object_has_member (item, "layer") ||
+          !(id = json_object_get_string_member (item, "id")) ||
+          strcmp (id, image) != 0 ||
+          !(layer = json_object_get_string_member (item, "layer")))
+        continue;
+
+      return (char *)layer;
+    }
+
+  return NULL;
+}
+
+static void
+resolve_overlay (GbpPodmanRuntime *runtime)
+{
+  gchar *podman_id;
+  g_autofree gchar *container_json = NULL;
+  g_autofree gchar *layer_json = NULL;
+  g_autofree gchar *image_json = NULL;
+  g_autoptr(JsonParser) parser;
+  g_autoptr(JsonParser) image_parser;
+  g_autoptr(GFile) overlay = NULL;
+  g_autoptr(GFileInfo) overlay_info = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *image_id = NULL;
+  JsonNode *root;
+  JsonArray *containers_arr;
+  gchar *layer = NULL;
+
+  g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
+
+  podman_id = runtime->id;
+  parser = json_parser_new ();
+  image_parser = json_parser_new ();
+
+  /* test first if overlay has the correct ownership see: https://github.com/containers/storage/issues/1068
+   * so in order for this to work this has to be fixed
+   */
+  overlay = g_file_new_build_filename (g_get_home_dir (),
+                                       ".local",
+                                       "share",
+                                       "containers",
+                                       "storage",
+                                       "overlay",
+                                       NULL);
+  overlay_info = g_file_query_info (overlay, G_FILE_ATTRIBUTE_ACCESS_CAN_READ, G_FILE_QUERY_INFO_NONE, NULL, &error);
+  if (error)
+    {
+      ide_object_warning (ide_object_get_context (IDE_OBJECT (runtime)), "Cannot read overlay folder: %s", error->message);
+      return;
+    }
+
+  if (!g_file_info_get_attribute_boolean (overlay_info, G_FILE_ATTRIBUTE_ACCESS_CAN_READ))
+    {
+      ide_object_warning (ide_object_get_context (IDE_OBJECT (runtime)), "Cannot read overlay folder: podman file translation won't work");
+      return;
+    }
+
+  container_json = g_build_filename (g_get_home_dir (),
+                                     ".local",
+                                     "share",
+                                     "containers",
+                                     "storage",
+                                     "overlay-containers",
+                                     "containers.json",
+                                     NULL);
+  layer_json = g_build_filename (g_get_home_dir (),
+                                 ".local",
+                                 "share",
+                                 "containers",
+                                 "storage",
+                                 "overlay-layers",
+                                 "layers.json",
+                                 NULL);
+
+  image_json = g_build_filename (g_get_home_dir (),
+                                 ".local",
+                                 "share",
+                                 "containers",
+                                 "storage",
+                                 "overlay-images",
+                                 "images.json",
+                                 NULL);
+
+  json_parser_load_from_file (parser, container_json, NULL);
+  root = json_parser_get_root (parser);
+  containers_arr = json_node_get_array (root);
+  for (guint i = 0; i < json_array_get_length (containers_arr); i++)
+    {
+      JsonObject *cont = json_array_get_object_element (containers_arr, i);
+      const gchar *cid = json_object_get_string_member (cont, "id");
+      if (ide_str_equal0 (cid, podman_id))
+        {
+          const gchar *layer_id = json_object_get_string_member (cont, "layer");
+          layer = get_layer_dir (layer_id);
+          image_id = json_object_get_string_member (cont, "image");
+        }
+
+    }
+
+  json_parser_load_from_file (parser, layer_json, NULL);
+  /* apply all parent layers */
+  do {
+    runtime->layers = g_list_append (runtime->layers, layer);
+  } while ((layer = find_parent_layer (runtime, parser, layer)));
+
+  /* apply image layer */
+  json_parser_load_from_file (image_parser, image_json, NULL);
+
+  if ((layer = find_image_layer (image_parser, image_id)))
+    {
+      do
+        runtime->layers = g_list_append (runtime->layers, layer);
+      while ((layer = find_parent_layer (runtime, parser, layer)));
+    }
+}
+
+/*
+ * Translation here is important as all our machinery relies on the correct files. In case of
+ * containers it is important to search for the correct files in their respective storage.
+ */
+static GFile *
+gbp_podman_runtime_translate_file (IdeRuntime *runtime,
+                                   GFile      *file)
+{
+  GbpPodmanRuntime *self = (GbpPodmanRuntime *)runtime;
+  g_autofree gchar *path = NULL;
+
+  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
+
+  path = g_file_get_path (file);
+
+  if (g_str_has_prefix (path, "/usr/") || g_str_has_prefix (path, "/etc/"))
+    {
+      /* find the correct layer */
+      for (GList *cur = self->layers; cur; cur = g_list_next (cur))
+        {
+          gchar *layer = cur->data;
+          g_autofree gchar *translated_file = g_build_filename (layer, path, NULL);
+          if (g_file_test (translated_file, G_FILE_TEST_EXISTS))
+            return g_file_new_build_filename (translated_file, NULL);
+        }
+    }
+  return NULL;
+}
+
 static void
 gbp_podman_runtime_destroy (IdeObject *object)
 {
@@ -105,6 +337,7 @@ gbp_podman_runtime_finalize (GObject *object)
 
   g_clear_pointer (&self->id, g_free);
   g_mutex_clear (&self->mutex);
+  g_clear_list (&self->layers, g_free);
 
   G_OBJECT_CLASS (gbp_podman_runtime_parent_class)->finalize (object);
 }
@@ -121,7 +354,7 @@ gbp_podman_runtime_class_init (GbpPodmanRuntimeClass *klass)
   i_object_class->destroy = gbp_podman_runtime_destroy;
 
   runtime_class->create_launcher = gbp_podman_runtime_create_launcher;
-  runtime_class->translate_file = NULL;
+  runtime_class->translate_file = gbp_podman_runtime_translate_file;
 }
 
 static void
@@ -199,6 +432,8 @@ gbp_podman_runtime_new (JsonObject *object)
                        NULL);
   self->object = json_object_ref (object);
   self->id = g_strdup (id);
+
+  resolve_overlay (self);
 
   return g_steal_pointer (&self);
 }
