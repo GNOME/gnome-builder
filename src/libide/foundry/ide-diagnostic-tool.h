@@ -46,6 +46,7 @@ struct _IdeDiagnosticToolClass
                                                   const char             *language_id);
   void                   (*populate_diagnostics) (IdeDiagnosticTool      *self,
                                                   IdeDiagnostics         *diagnostics,
+                                                  GFile                  *file,
                                                   const char             *stdout_buf,
                                                   const char             *stderr_buf);
 };

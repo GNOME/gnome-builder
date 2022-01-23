@@ -276,6 +276,7 @@ ide_diagnostic_tool_communicate_cb (GObject      *object,
   g_autofree char *stdout_buf = NULL;
   g_autofree char *stderr_buf = NULL;
   IdeDiagnosticTool *self;
+  GFile *file;
 
   IDE_ENTRY;
 
@@ -291,9 +292,12 @@ ide_diagnostic_tool_communicate_cb (GObject      *object,
 
   self = ide_task_get_source_object (task);
   diagnostics = ide_diagnostics_new ();
+  file = ide_task_get_task_data(task);
+
+  g_assert (!file || G_IS_FILE (file));
 
   if (IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics != NULL)
-    IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics (self, diagnostics, stdout_buf, stderr_buf);
+    IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics (self, diagnostics, file, stdout_buf, stderr_buf);
 
   ide_task_return_object (task, g_steal_pointer (&diagnostics));
 
@@ -351,6 +355,8 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
 
   if ((stdin_bytes = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->get_stdin_bytes (self, file, contents, lang_id)))
     stdin_data = g_bytes_get_data (stdin_bytes, NULL);
+
+  ide_task_set_task_data (task, g_object_ref(file), g_object_unref);
 
   ide_subprocess_communicate_utf8_async (subprocess,
                                          stdin_data,
