@@ -22,7 +22,7 @@ class RstcheckDiagnosticProvider(Ide.DiagnosticTool):
         # rstcheck - signifies that stdin will be used
         launcher.push_argv('-')
 
-    def do_propulate_diagnostics(self, diagnostics, stdin, stderr):
+    def do_populate_diagnostics(self, diagnostics, file, stdout, stderr):
         try:
             if stderr is None or len(stderr) < 1:
                 return
