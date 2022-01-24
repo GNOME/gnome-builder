@@ -68,7 +68,7 @@
       <default>"Monospace 11"</default>
     </key>
     <key name="style-scheme-name" type="s">
-      <default>"builder"</default>
+      <default>"Adwaita"</default>
     </key>
     <key name="scroll-offset" type="i">
       <range min="0" max="999"/>
