@@ -111,20 +111,21 @@
   <style name="def:deletion"               strikethrough="true"/>
   <style name="def:doc-comment-element"    foreground="light_7"/>
   <style name="def:floating-point"         foreground="violet_2"/>
-  <style name="def:function"               foreground="blue_3"/>
-  <style name="def:heading"                foreground="teal_4" bold="true"/>
-  <style name="def:keyword"                foreground="orange_4" bold="true"/>
+  <style name="def:function"               foreground="blue_2"/>
+  <style name="def:heading"                foreground="teal_3" bold="true"/>
+  <style name="def:keyword"                foreground="orange_2" bold="true"/>
   <style name="def:link-destination"       foreground="blue_2" italic="true" underline="low"/>
   <style name="def:link-text"              foreground="red_2"/>
   <style name="def:list-marker"            foreground="orange_4" bold="true"/>
   <style name="def:net-address"            foreground="blue_2" underline="low"/>
-  <style name="def:number"                 foreground="teal_5"/>
+  <style name="def:number"                 foreground="violet_2"/>
   <style name="def:preformatted-section"   foreground="violet_2"/>
   <style name="def:preprocessor"           foreground="orange_4"/>
-  <style name="def:special-char"           foreground="red_2" bold="false"/>
-  <style name="def:string"                 foreground="teal_4"/>
+  <style name="def:shebang"                foreground="light_7" bold="true"/>
+  <style name="def:special-char"           foreground="red_1" bold="false"/>
+  <style name="def:string"                 foreground="teal_2"/>
   <style name="def:strong-emphasis"        bold="true"/>
-  <style name="def:type"                   foreground="teal_4" bold="true"/>
+  <style name="def:type"                   foreground="teal_2" bold="true"/>
   <style name="def:underlined"             underline="single"/>
   <style name="def:warning"                underline="error" underline-color="yellow_4"/>
 
@@ -133,11 +134,10 @@
   <style name="c-sharp:preprocessor"       foreground="dark_2"/>
 
   <!-- C -->
-  <style name="c:operator"                 foreground="orange_4" bold="false"/>
   <style name="c:printf"                   foreground="violet_2"/>
-  <style name="c:signal-name"              foreground="red_3"/>
-  <style name="c:storage-class"            foreground="teal_4" bold="true"/>
-  <style name="c:type-keyword"             foreground="teal_4" bold="true"/>
+  <style name="c:signal-name"              foreground="red_1"/>
+  <style name="c:storage-class"            foreground="teal_2" bold="true"/>
+  <style name="c:type-keyword"             foreground="teal_2" bold="true"/>
 
   <!-- CSS -->
   <style name="css:id-selector"            foreground="teal_5" bold="true"/>
@@ -158,23 +158,24 @@
   <style name="go:printf"                  foreground="violet_4"/>
 
   <!-- Python 2 -->
-  <style name="python:builtin-function"    foreground="blue_3"/>
-  <style name="python:class-name"          foreground="teal_4" bold="true"/>
+  <style name="python:builtin-function"    foreground="blue_2"/>
+  <style name="python:class-name"          foreground="teal_2" bold="true"/>
   <style name="python:module-handler"      foreground="red_1"/>
 
   <!-- Rust -->
   <style name="rust:attribute"             foreground="violet_2"/>
-  <style name="rust:lifetime"              foreground="orange_4" bold="false" italic="false"/>
+  <style name="rust:lifetime"              foreground="orange_2" bold="false" italic="false"/>
   <style name="rust:macro"                 foreground="violet_2" bold="false"/>
-  <style name="rust:scope"                 foreground="orange_4"/>
+  <style name="rust:scope"                 foreground="orange_2"/>
 
   <!-- Vala -->
   <style name="vala:attributes"            foreground="light_5" bold="false"/>
 
   <!-- XML -->
-  <style name="xml:attribute-name"         foreground="orange_5"/>
-  <style name="xml:attribute-value"        foreground="violet_4"/>
-  <style name="xml:element-name"           foreground="teal_5"/>
-  <style name="xml:processing-instruction" foreground="teal_5" bold="true"/>
+  <style name="xml:attribute-name"         foreground="orange_3"/>
+  <style name="xml:attribute-value"        foreground="violet_2"/>
+  <style name="xml:element-name"           foreground="teal_3"/>
+  <style name="xml:namespace"              foreground="yellow_4"/>
+  <style name="xml:processing-instruction" foreground="yellow_4" bold="true"/>
 
 </style-scheme>

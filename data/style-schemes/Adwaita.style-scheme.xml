@@ -115,9 +115,10 @@
   <style name="def:link-text"              foreground="red_3"/>
   <style name="def:list-marker"            foreground="orange_5" bold="true"/>
   <style name="def:net-address"            foreground="blue_3" underline="low"/>
-  <style name="def:number"                 foreground="teal_5"/>
+  <style name="def:number"                 foreground="violet_4"/>
   <style name="def:preformatted-section"   foreground="violet_4"/>
   <style name="def:preprocessor"           foreground="orange_5"/>
+  <style name="def:shebang"                foreground="dark_1" bold="true"/>
   <style name="def:special-char"           foreground="red_2" bold="false"/>
   <style name="def:string"                 foreground="teal_5"/>
   <style name="def:strong-emphasis"        bold="true"/>
@@ -130,7 +131,6 @@
   <style name="c-sharp:preprocessor"       foreground="dark_2"/>
 
   <!-- C -->
-  <style name="c:operator"                 foreground="orange_5" bold="false"/>
   <style name="c:printf"                   foreground="violet_4"/>
   <style name="c:signal-name"              foreground="red_4"/>
   <style name="c:storage-class"            foreground="teal_5" bold="true"/>
@@ -172,6 +172,7 @@
   <style name="xml:attribute-name"         foreground="orange_5"/>
   <style name="xml:attribute-value"        foreground="violet_4"/>
   <style name="xml:element-name"           foreground="teal_5"/>
-  <style name="xml:processing-instruction" foreground="teal_5" bold="true"/>
+  <style name="xml:namespace"              foreground="yellow_6"/>
+  <style name="xml:processing-instruction" foreground="yellow_6" bold="true"/>
 
 </style-scheme>
