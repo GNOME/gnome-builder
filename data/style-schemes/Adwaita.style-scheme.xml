@@ -92,7 +92,7 @@
   <style name="current-line-number"        background="light_3" foreground="light_7"/>
   <style name="draw-spaces"                foreground="light_6"/>
   <style name="line-numbers"               background="light_2" foreground="light_6"/>
-  <style name="map-overlay"                background="dark_1"/>
+  <style name="map-overlay"                background="#rgba(47,46,48,.3)"/>
   <style name="right-margin"               background="dark_1" foreground="dark_1"/>
   <style name="search-match"               background="#FCF7B5" foreground="dark_4"/>
   <style name="text"                       background="light_2" foreground="dark_3"/>
