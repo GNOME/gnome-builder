@@ -99,7 +99,7 @@
   <style name="line-numbers"               background="libadwaita-dark" foreground="dark_2"/>
   <style name="map-overlay"                background="#rgba(47,46,48,.6)"/>
   <style name="right-margin"               background="dark_1" foreground="dark_1"/>
-  <style name="search-match"               background="yellow_5" foreground="dark_4"/>
+  <style name="search-match"               background="yellow_4" foreground="dark_4"/>
   <style name="text"                       background="libadwaita-dark" foreground="light_5"/>
 
   <!-- Defaults -->
