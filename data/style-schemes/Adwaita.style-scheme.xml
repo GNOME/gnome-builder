@@ -141,6 +141,13 @@
   <style name="css:type-selector"          foreground="teal_5" bold="true"/>
   <style name="css:vendor-specific"        foreground="yellow_6"/>
 
+  <!-- Diff -->
+  <style name="diff:added-line"            foreground="teal_4"/>
+  <style name="diff:changed-line"          foreground="orange_4"/>
+  <style name="diff:diff-file"             foreground="violet_4"/>
+  <style name="diff:location"              foreground="yellow_6"/>
+  <style name="diff:removed-line"          foreground="red_1"/>
+
   <!-- Go -->
   <style name="go:printf"                  foreground="violet_4"/>
 
