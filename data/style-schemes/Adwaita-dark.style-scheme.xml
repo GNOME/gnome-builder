@@ -87,6 +87,9 @@
   <color name="yellow_5"                   value="#E5A50A"/>
   <color name="yellow_6"                   value="#D38B09"/>
 
+  <!-- Builder Private (TODO: Push these Upstream) -->
+  <style name="debugger::breakpoint"       background="blue_4" foreground="light_1"/>
+
   <!-- Global Styles -->
   <style name="background-pattern"         background="libadwaita-dark-alt"/>
   <style name="bracket-match"              bold="true"/>
