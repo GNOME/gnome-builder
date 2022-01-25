@@ -427,13 +427,16 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   /* These gutter:: prefix values come from Builder's style-scheme xml
    * files, but other style schemes may also support them now too.
    */
-  if (!get_style_rgba (scheme, "gutter::added-line", FOREGROUND, &self->changes.add))
+  if (!get_style_rgba (scheme, "gutter::added-line", FOREGROUND, &self->changes.add) &&
+      !get_style_rgba (scheme, "diff:added-line", FOREGROUND, &self->changes.add))
     gdk_rgba_parse (&self->changes.add, "#8ae234");
 
-  if (!get_style_rgba (scheme, "gutter::changed-line", FOREGROUND, &self->changes.change))
+  if (!get_style_rgba (scheme, "gutter::changed-line", FOREGROUND, &self->changes.change) &&
+      !get_style_rgba (scheme, "diff:changed-line", FOREGROUND, &self->changes.change))
     gdk_rgba_parse (&self->changes.change, "#fcaf3e");
 
-  if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove))
+  if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove) &&
+      !get_style_rgba (scheme, "diff:removed-line", FOREGROUND, &self->changes.remove))
     gdk_rgba_parse (&self->changes.remove, "#ef2929");
 
   /*
