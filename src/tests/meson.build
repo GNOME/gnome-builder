@@ -35,6 +35,13 @@ test_libide_core = executable('test-libide-core', 'test-libide-core.c',
 test('test-libide-core', test_libide_core, env: test_env)
 
 
+test_libide_io = executable('test-libide-io', 'test-libide-io.c',
+        c_args: test_cflags,
+  dependencies: [ libide_io_dep ],
+)
+test('test-libide-io', test_libide_io, env: test_env)
+
+
 test_snippet_parser = executable('test-snippet-parser', 'test-snippet-parser.c',
         c_args: test_cflags,
   dependencies: [ libide_sourceview_dep ],
