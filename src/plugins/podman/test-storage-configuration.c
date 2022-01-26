@@ -19,18 +19,16 @@
  */
 
 #include <glib.h>
-
-char *_parse_toml_line (char *line);
-char *parse_storage_configuration (const char *storage_conf, int type);
+#include "gbp-podman-runtime-private.h"
 
 static void
 test_toml_parsing (void)
 {
-  char *parsed = _parse_toml_line ((char *)"graphroot = \"/etc/containers/storage.conf\"");
+  char *parsed = _gbp_podman_runtime_parse_toml_line ((char *)"graphroot = \"/etc/containers/storage.conf\"");
   g_assert_cmpstr (parsed, ==, "/etc/containers/storage.conf");
   g_free (parsed);
 
-  parsed = _parse_toml_line ((char *)"graphroot=\"/etc/containers/storage.conf\"");
+  parsed = _gbp_podman_runtime_parse_toml_line ((char *)"graphroot=\"/etc/containers/storage.conf\"");
   g_assert_cmpstr (parsed, ==, "/etc/containers/storage.conf");
   g_free (parsed);
 }
@@ -39,11 +37,11 @@ static void
 test_parse_storage_config (void)
 {
   g_autofree char *testfile = g_test_build_filename (G_TEST_DIST, "testdata", "storage.conf", NULL);
-  char *path = parse_storage_configuration (testfile, 0);
+  char *path = _gbp_podman_runtime_parse_storage_configuration (testfile, 0);
   g_assert_cmpstr (path, ==, "/var/lib/containers/storage/");
   g_free (path);
 
-  path = parse_storage_configuration (testfile, 1);
+  path = _gbp_podman_runtime_parse_storage_configuration (testfile, 1);
   g_assert_cmpstr (path, ==, "/home/user/.local/share/containers/");
 }
 

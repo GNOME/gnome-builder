@@ -26,6 +26,7 @@
 #include <json-glib/json-glib.h>
 
 #include "gbp-podman-runtime.h"
+#include "gbp-podman-runtime-private.h"
 #include "gbp-podman-subprocess-launcher.h"
 
 struct _GbpPodmanRuntime
@@ -89,32 +90,23 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
   return launcher;
 }
 
-typedef enum {
-  LOCAL_STORAGE_CONFIGURATION,
-  GLOBAL_STORAGE_CONFIGURATION
-} StorageType;
-
 char *
-_parse_toml_line (char *line)
+_gbp_podman_runtime_parse_toml_line (const char *line)
 {
-  char *ret = NULL;
-  char **elements;
+  g_auto(GStrv) elements = NULL;
 
   g_return_val_if_fail (line != NULL, NULL);
 
-  elements = g_strsplit (line, "=", -1);
+  elements = g_strsplit (line, "=", 0);
   if (g_strv_length (elements) != 2)
     return NULL;
   g_strstrip (g_strdelimit (elements[1], "\"", ' '));
-  ret = ide_path_expand (elements[1]);
-
-  g_strfreev (elements);
-  return ret;
+  return ide_path_expand (elements[1]);
 }
 
 char *
-parse_storage_configuration (const char  *storage_conf,
-                             StorageType  type)
+_gbp_podman_runtime_parse_storage_configuration (const char  *storage_conf,
+                                                 StorageType  type)
 {
   g_autoptr(GFile) storage_conf_file = NULL;
   g_autoptr(GError) error = NULL;
@@ -123,23 +115,23 @@ parse_storage_configuration (const char  *storage_conf,
   char *line = NULL;
 
   storage_conf_file = g_file_new_for_path (storage_conf);
-  fis = g_file_read (storage_conf_file, NULL, &error);
-  if (error)
+  if (!(fis = g_file_read (storage_conf_file, NULL, &error)))
     return NULL;
 
   dis = g_data_input_stream_new (G_INPUT_STREAM (fis));
 
   while ((line = g_data_input_stream_read_line (dis, NULL, NULL, &error)) != NULL)
     {
+      g_autofree char *local_line = line;
       if (type == LOCAL_STORAGE_CONFIGURATION &&
-          g_str_has_prefix (line, "graphroot"))
+          g_str_has_prefix (local_line, "graphroot"))
         {
-          return _parse_toml_line (line);
+          return _gbp_podman_runtime_parse_toml_line (line);
         }
       else if (type == GLOBAL_STORAGE_CONFIGURATION &&
-               g_str_has_prefix (line, "rootless_storage_path"))
+               g_str_has_prefix (local_line, "rootless_storage_path"))
         {
-          return _parse_toml_line (line);
+          return _gbp_podman_runtime_parse_toml_line (line);
         }
     }
 
@@ -162,7 +154,8 @@ get_storage_directory (void)
 
   if (g_file_test (user_local_storage_conf, G_FILE_TEST_EXISTS))
     {
-      return parse_storage_configuration (user_local_storage_conf, LOCAL_STORAGE_CONFIGURATION);
+      return _gbp_podman_runtime_parse_storage_configuration (user_local_storage_conf,
+                                                              LOCAL_STORAGE_CONFIGURATION);
     }
 
   /* second search for a global storage configuration */
@@ -170,24 +163,22 @@ get_storage_directory (void)
 
   if (g_file_test (global_storage_conf, G_FILE_TEST_EXISTS))
     {
-      return parse_storage_configuration (global_storage_conf, GLOBAL_STORAGE_CONFIGURATION);
+      return _gbp_podman_runtime_parse_storage_configuration (global_storage_conf,
+                                                              GLOBAL_STORAGE_CONFIGURATION);
     }
 
   return NULL;
 }
 
 static char *
-get_layer_dir (const char *layer)
+get_layer_dir (const char *storage_directory,
+               const char *layer)
 {
   /* We don't use XDG data dir because this might be in a container
    * or flatpak environment that doesn't match. And generally, it's
    * always .local.
    */
-  return g_build_filename (g_get_home_dir (),
-                           ".local",
-                           "share",
-                           "containers",
-                           "storage",
+  return g_build_filename (storage_directory,
                            "overlay",
                            layer,
                            "diff",
@@ -295,14 +286,22 @@ resolve_overlay (GbpPodmanRuntime *runtime)
   parser = json_parser_new ();
   image_parser = json_parser_new ();
 
+  /* find storage location first */
+  if ((storage_directory = get_storage_directory ()) == NULL)
+    {
+      /* assume default */
+      storage_directory = g_build_filename (g_get_home_dir (),
+                                            ".local",
+                                            "share",
+                                            "containers",
+                                            "storage",
+                                            NULL);
+    }
+
   /* test first if overlay has the correct ownership see: https://github.com/containers/storage/issues/1068
    * so in order for this to work this has to be fixed
    */
-  overlay = g_file_new_build_filename (g_get_home_dir (),
-                                       ".local",
-                                       "share",
-                                       "containers",
-                                       "storage",
+  overlay = g_file_new_build_filename (storage_directory,
                                        "overlay",
                                        NULL);
   overlay_info = g_file_query_info (overlay, G_FILE_ATTRIBUTE_ACCESS_CAN_READ, G_FILE_QUERY_INFO_NONE, NULL, &error);
@@ -318,22 +317,11 @@ resolve_overlay (GbpPodmanRuntime *runtime)
       return;
     }
 
-  /* find storage location first */
-  if ((storage_directory = get_storage_directory ()) == NULL)
-    {
-      /* assume default */
-      storage_directory = g_build_filename (g_get_home_dir (),
-                                            ".local",
-                                            "share",
-                                            "containers",
-                                            "storage",
-                                            NULL);
-    }
-
   container_json = g_build_filename (storage_directory,
                                      "overlay-containers",
                                      "containers.json",
                                      NULL);
+
   layer_json = g_build_filename (storage_directory,
                                  "overlay-layers",
                                  "layers.json",
@@ -354,7 +342,7 @@ resolve_overlay (GbpPodmanRuntime *runtime)
       if (ide_str_equal0 (cid, podman_id))
         {
           const gchar *layer_id = json_object_get_string_member (cont, "layer");
-          layer = get_layer_dir (layer_id);
+          layer = get_layer_dir (storage_directory, layer_id);
           image_id = json_object_get_string_member (cont, "image");
         }
     }
