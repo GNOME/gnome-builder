@@ -1,1 +1,65 @@
-<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;vector-effect:none;fill:#2e3436;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000" d="M2 1C.91 1 0 1.91 0 3v10c0 1.09.91 2 2 2h10c1.09 0 2-.91 2-2V9a1 1 0 0 0-1-1 1 1 0 0 0-1 1v4H2V3h8a1 1 0 0 0 1-1 1 1 0 0 0-1-1Zm12.13.543L6.839 8.836 4.42 6.418 3.006 7.832l3.832 3.832 8.707-8.707Z"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <filter id="a" height="100%" width="100%" x="0%" y="0%">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.3"/>
+        </g>
+    </mask>
+    <clipPath id="c">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="d">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="e">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="f">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="g">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="h">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="i">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="j">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="k">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <g clip-path="url(#c)" mask="url(#b)" transform="matrix(1 0 0 1 -140.019531 -320)">
+        <path d="m 142.5 351 h 10.449219 c -1.183594 0.492188 -1.296875 2.457031 0 3 h -10.449219 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#e)" mask="url(#d)" transform="matrix(1 0 0 1 -140.019531 -320)">
+        <path d="m 104 502 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#g)" mask="url(#f)" transform="matrix(1 0 0 1 -140.019531 -320)">
+        <path d="m 106 501 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g clip-path="url(#i)" mask="url(#h)" transform="matrix(1 0 0 1 -140.019531 -320)">
+        <path d="m 104 514 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#k)" mask="url(#j)" transform="matrix(1 0 0 1 -140.019531 -320)">
+        <path d="m 106 513 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g fill="#2e3436">
+        <path d="m 15.734375 2.65625 c 0.175781 -0.199219 0.261719 -0.460938 0.246094 -0.722656 c -0.019531 -0.265625 -0.140625 -0.515625 -0.339844 -0.6875 c -0.199219 -0.175782 -0.460937 -0.265625 -0.726563 -0.246094 c -0.265624 0.015625 -0.511718 0.140625 -0.6875 0.339844 l -6.296874 7.195312 l -2.242188 -2.246094 c -0.390625 -0.390624 -1.023438 -0.390624 -1.414062 0 c -0.1875 0.1875 -0.292969 0.441407 -0.292969 0.707032 s 0.105469 0.523437 0.292969 0.710937 l 3 3 c 0.195312 0.195313 0.464843 0.300781 0.742187 0.292969 c 0.273437 -0.011719 0.535156 -0.132812 0.71875 -0.34375 z m 0 0"/>
+        <path d="m 3.980469 1 c -1.644531 0 -3 1.355469 -3 3 v 8 c 0 1.644531 1.355469 3 3 3 h 8 c 1.644531 0 3 -1.355469 3 -3 v -4 c 0 -0.550781 -0.449219 -1 -1 -1 s -1 0.449219 -1 1 v 4 c 0 0.570312 -0.429688 1 -1 1 h -8 c -0.570313 0 -1 -0.429688 -1 -1 v -8 c 0 -0.570312 0.429687 -1 1 -1 h 7 c 0.550781 0 1 -0.449219 1 -1 s -0.449219 -1 -1 -1 z m 0 0"/>
+    </g>
+</svg>

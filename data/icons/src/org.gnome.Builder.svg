@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="6.5126645"
-     inkscape:cx="144.02707"
-     inkscape:cy="329.81893"
+     inkscape:zoom="1"
+     inkscape:cx="168"
+     inkscape:cy="351"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -494,12 +494,6 @@
        inkscape:label="">
       <title
          id="title1382">builder-editor</title>
-      <path
-         sodipodi:nodetypes="ccccccccc"
-         inkscape:connector-curvature="0"
-         id="path4308"
-         d="m 166.13883,205.0006 -0.99931,3.9996 h 11.99173 l -0.99931,-3.9996 h -2.99793 l -2.49005,1.9998 h -3.50581 v -1.9998 z"
-         style="fill:#2e3436;fill-opacity:1;stroke:none" />
       <rect
          style="fill:none"
          id="rect13184"
@@ -508,25 +502,18 @@
          x="163.1358"
          y="195.00317" />
       <rect
-         ry="0"
-         style="fill:#2e3436;fill-opacity:1;stroke:none"
-         id="rect13358"
-         width="11.991719"
-         height="0.99988312"
-         x="165.14409"
-         y="210.00011" />
+         ry="1"
+         style="fill:#2e3436;fill-opacity:1;stroke:none;stroke-width:0.999999"
+         id="rect2498"
+         width="13.999986"
+         height="2"
+         x="164.13582"
+         y="209.00011"
+         rx="1.0000001" />
       <path
-         style="fill:#2e3436;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 168.13927,204.00069 6.99336,-6.9993 c 0.9993,0 1.99862,0.9999 1.99862,1.9998 l -6.99517,6.99931 h -1.99862 z"
-         id="path13365"
-         sodipodi:nodetypes="cccccc"
-         inkscape:connector-curvature="0" />
-      <path
-         style="overflow:visible;fill:#2e3436;fill-opacity:1;stroke:none;enable-background:new"
-         d="m 176.05379,196.09527 c 0.99931,0 1.99863,0.9999 1.99863,1.9998 l 0.99931,-0.9999 c 0,-0.9999 -0.75134,-1.9998 -1.99863,-1.9998 z"
-         id="path13367"
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0" />
+         id="path32074"
+         style="color:#000000;display:inline;fill:#2e3436;stroke-linejoin:round"
+         d="m 175.41315,195.83203 c -0.57966,0.007 -1.16955,0.23205 -1.6914,0.75391 l -9,9 c -0.37507,0.37502 -0.58584,0.88366 -0.58594,1.41406 v 3 h 3 c 0.5304,-1e-4 1.03904,-0.21087 1.41406,-0.58594 l 9,-9 c 1.78921,-1.78921 0.0827,-4.39013 -1.88867,-4.57226 -0.0821,-0.008 -0.16524,-0.0108 -0.24805,-0.01 z m -1.77734,3.60742 1.06055,1.06055 -0.5293,0.53125 -6,6 -0.53125,0.5293 -1.06055,-1.06055 0.5293,-0.53125 6,-6 z" />
     </g>
     <g
        id="g7889"
@@ -2159,10 +2146,24 @@
          height="16"
          x="300.02048"
          y="682.51965" />
-      <path
-         id="path15809"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#2e3436;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
-         d="m 302,683.51965 c -1.0907,0 -2,0.9093 -2,2 v 10 c 0,1.0907 0.9093,2 2,2 h 10 c 1.0907,0 2,-0.9093 2,-2 v -4 a 1,1 0 0 0 -1,-1 1,1 0 0 0 -1,1 v 4 h -10 v -10 h 8 a 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 z m 12.13086,0.54297 -7.29297,7.29297 -2.41797,-2.41797 -1.41406,1.41406 3.83203,3.83203 8.70703,-8.70703 z" />
+      <g
+         style="display:inline"
+         inkscape:label="object select selection mode check approve done good active"
+         id="g9445-6"
+         transform="rotate(90,-3.6903365,515.69351)">
+        <title
+           id="title9439-0">selection-mode</title>
+        <path
+           style="color:#000000;fill:#2e3436;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+           d="m 165.79297,196.25 a 1,1 0 0 0 -1.41211,0.0937 1,1 0 0 0 0.0937,1.41211 l 7.19531,6.29687 -2.24414,2.24414 a 1,1 0 0 0 0,1.41407 1,1 0 0 0 1.41602,0 l 3,-3 a 1.0001,1.0001 0 0 0 -0.0488,-1.46094 z"
+           id="path8923-6-6" />
+        <path
+           style="color:#000000;fill:#2e3436;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:26.4;-inkscape-stroke:none"
+           d="m 143,321 c -1.6447,0 -3,1.3553 -3,3 v 8 c 0,1.6447 1.3553,3 3,3 h 8 c 1.6447,0 3,-1.3553 3,-3 v -4 c 0,-0.55228 -0.44772,-1 -1,-1 -0.55228,0 -1,0.44772 -1,1 v 4 c 0,0.5713 -0.4287,1 -1,1 h -8 c -0.5713,0 -1,-0.4287 -1,-1 v -8 c 0,-0.5713 0.4287,-1 1,-1 h 7 c 0.55228,0 1,-0.44772 1,-1 0,-0.55228 -0.44772,-1 -1,-1 z"
+           transform="rotate(-90,97.069489,253.93368)"
+           sodipodi:nodetypes="sssssssssssssssssss"
+           id="path419" />
+      </g>
     </g>
   </g>
   <g
