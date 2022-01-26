@@ -15,4 +15,21 @@ plugin_podman_resources = gnome.compile_resources(
 
 plugins_sources += plugin_podman_resources
 
+test_sources_podman = [
+  'test-storage-configuration.c',
+  'gbp-podman-runtime.c',
+  'gbp-podman-subprocess-launcher.c',
+]
+
+test_env_podman = [
+  'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+  'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+]
+
+test_podman = executable('test-podman', test_sources_podman,
+        c_args: test_cflags,
+  dependencies: [ libide_terminal_dep, libide_foundry_dep, libjson_glib_dep ],
+)
+test('test-podman', test_podman, env: test_env_podman)
+
 endif

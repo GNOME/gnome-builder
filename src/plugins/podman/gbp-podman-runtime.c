@@ -89,6 +89,93 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
   return launcher;
 }
 
+typedef enum {
+  LOCAL_STORAGE_CONFIGURATION,
+  GLOBAL_STORAGE_CONFIGURATION
+} StorageType;
+
+char *
+_parse_toml_line (char *line)
+{
+  char *ret = NULL;
+  char **elements;
+
+  g_return_val_if_fail (line != NULL, NULL);
+
+  elements = g_strsplit (line, "=", -1);
+  if (g_strv_length (elements) != 2)
+    return NULL;
+  g_strstrip (g_strdelimit (elements[1], "\"", ' '));
+  ret = ide_path_expand (elements[1]);
+
+  g_strfreev (elements);
+  return ret;
+}
+
+char *
+parse_storage_configuration (const char  *storage_conf,
+                             StorageType  type)
+{
+  g_autoptr(GFile) storage_conf_file = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFileInputStream) fis = NULL;
+  g_autoptr(GDataInputStream) dis = NULL;
+  char *line = NULL;
+
+  storage_conf_file = g_file_new_for_path (storage_conf);
+  fis = g_file_read (storage_conf_file, NULL, &error);
+  if (error)
+    return NULL;
+
+  dis = g_data_input_stream_new (G_INPUT_STREAM (fis));
+
+  while ((line = g_data_input_stream_read_line (dis, NULL, NULL, &error)) != NULL)
+    {
+      if (type == LOCAL_STORAGE_CONFIGURATION &&
+          g_str_has_prefix (line, "graphroot"))
+        {
+          return _parse_toml_line (line);
+        }
+      else if (type == GLOBAL_STORAGE_CONFIGURATION &&
+               g_str_has_prefix (line, "rootless_storage_path"))
+        {
+          return _parse_toml_line (line);
+        }
+    }
+
+  return NULL;
+}
+
+/* see man 5 containers-storage.json */
+static char *
+get_storage_directory (void)
+{
+  g_autofree char *user_local_storage_conf = NULL;
+  g_autofree char *global_storage_conf = NULL;
+
+  /* first search for user local storage configuration */
+  user_local_storage_conf = g_build_filename (g_get_home_dir (),
+                                              ".config",
+                                              "containers",
+                                              "storage.conf",
+                                              NULL);
+
+  if (g_file_test (user_local_storage_conf, G_FILE_TEST_EXISTS))
+    {
+      return parse_storage_configuration (user_local_storage_conf, LOCAL_STORAGE_CONFIGURATION);
+    }
+
+  /* second search for a global storage configuration */
+  global_storage_conf = g_build_filename ("etc", "containers", "storage.conf", NULL);
+
+  if (g_file_test (global_storage_conf, G_FILE_TEST_EXISTS))
+    {
+      return parse_storage_configuration (global_storage_conf, GLOBAL_STORAGE_CONFIGURATION);
+    }
+
+  return NULL;
+}
+
 static char *
 get_layer_dir (const char *layer)
 {
@@ -191,6 +278,7 @@ resolve_overlay (GbpPodmanRuntime *runtime)
   g_autofree gchar *container_json = NULL;
   g_autofree gchar *layer_json = NULL;
   g_autofree gchar *image_json = NULL;
+  g_autofree char *storage_directory = NULL;
   g_autoptr(JsonParser) parser;
   g_autoptr(JsonParser) image_parser;
   g_autoptr(GFile) overlay = NULL;
@@ -230,28 +318,28 @@ resolve_overlay (GbpPodmanRuntime *runtime)
       return;
     }
 
-  container_json = g_build_filename (g_get_home_dir (),
-                                     ".local",
-                                     "share",
-                                     "containers",
-                                     "storage",
+  /* find storage location first */
+  if ((storage_directory = get_storage_directory ()) == NULL)
+    {
+      /* assume default */
+      storage_directory = g_build_filename (g_get_home_dir (),
+                                            ".local",
+                                            "share",
+                                            "containers",
+                                            "storage",
+                                            NULL);
+    }
+
+  container_json = g_build_filename (storage_directory,
                                      "overlay-containers",
                                      "containers.json",
                                      NULL);
-  layer_json = g_build_filename (g_get_home_dir (),
-                                 ".local",
-                                 "share",
-                                 "containers",
-                                 "storage",
+  layer_json = g_build_filename (storage_directory,
                                  "overlay-layers",
                                  "layers.json",
                                  NULL);
 
-  image_json = g_build_filename (g_get_home_dir (),
-                                 ".local",
-                                 "share",
-                                 "containers",
-                                 "storage",
+  image_json = g_build_filename (storage_directory,
                                  "overlay-images",
                                  "images.json",
                                  NULL);
@@ -269,10 +357,11 @@ resolve_overlay (GbpPodmanRuntime *runtime)
           layer = get_layer_dir (layer_id);
           image_id = json_object_get_string_member (cont, "image");
         }
-
     }
 
-  json_parser_load_from_file (parser, layer_json, NULL);
+  json_parser_load_from_file (parser, layer_json, &error);
+  if (error)
+    return;
 
   if (layer != NULL)
     {
@@ -283,7 +372,9 @@ resolve_overlay (GbpPodmanRuntime *runtime)
     }
 
   /* apply image layer */
-  json_parser_load_from_file (image_parser, image_json, NULL);
+  json_parser_load_from_file (image_parser, image_json, &error);
+  if (error)
+    return;
 
   if ((layer = find_image_layer (image_parser, image_id)))
     {
