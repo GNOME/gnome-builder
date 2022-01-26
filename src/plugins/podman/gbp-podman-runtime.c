@@ -273,10 +273,14 @@ resolve_overlay (GbpPodmanRuntime *runtime)
     }
 
   json_parser_load_from_file (parser, layer_json, NULL);
-  /* apply all parent layers */
-  do {
-    runtime->layers = g_list_append (runtime->layers, layer);
-  } while ((layer = find_parent_layer (runtime, parser, layer)));
+
+  if (layer != NULL)
+    {
+      /* apply all parent layers */
+      do {
+        runtime->layers = g_list_append (runtime->layers, layer);
+      } while ((layer = find_parent_layer (runtime, parser, layer)));
+    }
 
   /* apply image layer */
   json_parser_load_from_file (image_parser, image_json, NULL);
