@@ -13,16 +13,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-01-24 00:23+0000\n"
-"PO-Revision-Date: 2022-01-07 20:10-0300\n"
+"POT-Creation-Date: 2022-01-24 16:50+0000\n"
+"PO-Revision-Date: 2022-01-25 19:32-0300\n"
 "Last-Translator: Matheus Barbosa <mdpb.matheus@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Generator: Gtranslator 40.0\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Project-Style: gnome\n"
 
@@ -382,6 +382,11 @@ msgstr "O número de linhas para rolar além do fim do buffer."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:105
 msgid "Wrap Text"
 msgstr "Quebra de texto"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+msgid "The way to wrap a long line of text for a better visibility."
+msgstr ""
+"A forma para dividir uma longa linha de texto para uma melhor visibilidade."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 #: src/libide/gui/ide-preferences-builtin.c:194
