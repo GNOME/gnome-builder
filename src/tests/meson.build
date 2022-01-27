@@ -1,6 +1,6 @@
-template_libdir = dependency('template-glib-1.0').get_pkgconfig_variable('libdir')
-dazzle_libdir = dependency('libdazzle-1.0').get_pkgconfig_variable('libdir')
-gsv_libdir = dependency('gtksourceview-4').get_pkgconfig_variable('libdir')
+template_libdir = dependency('template-glib-1.0').get_variable('libdir')
+dazzle_libdir = dependency('libdazzle-1.0').get_variable('libdir')
+gsv_libdir = dependency('gtksourceview-4').get_variable('libdir')
 
 typelib_dirs = [
   '@0@/src/libide'.format(meson.project_build_root()),

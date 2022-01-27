@@ -45,8 +45,8 @@ plugins_sources += plugin_clang_resources
 
 add_languages('cpp', native: false) # Needed for llvm dep
 llvm_dep = dependency('llvm', version: '>= 3.5', method: 'config-tool')
-clang_include = llvm_dep.get_configtool_variable('includedir')
-clang_libdir = llvm_dep.get_configtool_variable('libdir').split(' ')
+clang_include = llvm_dep.get_variable('includedir')
+clang_libdir = llvm_dep.get_variable('libdir').split(' ')
 
 if not cc.has_header('clang-c/Index.h', args: '-I' + clang_include)
   error('clang: Failed to find headers')
