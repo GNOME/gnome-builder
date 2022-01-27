@@ -179,7 +179,7 @@ libide_gui_deps = [
   libdazzle_dep,
   libhandy_dep,
   libpeas_dep,
-  libwebkit_dep,
+
   dependency('libcmark', version: '>= 0.29.0'),
 
   libide_core_dep,
@@ -191,6 +191,10 @@ libide_gui_deps = [
   libide_search_dep,
   libide_themes_dep,
 ]
+
+if get_option('webkit').enabled()
+  libide_gui_deps += [libwebkit_dep]
+endif
 
 #
 # Library Definitions

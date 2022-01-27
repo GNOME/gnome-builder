@@ -1,6 +1,6 @@
 if get_option('plugin_devhelp')
 
-if not libwebkit_dep.found()
+if not get_option('webkit').enabled()
   error('WebKit must be enabled for devhelp support')
 endif
 

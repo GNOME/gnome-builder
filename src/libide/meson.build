@@ -19,11 +19,11 @@ subdir('sourceview')
 subdir('editor')
 subdir('lsp')
 subdir('greeter')
-if libwebkit_dep.found()
+subdir('tree')
+
+if get_option('webkit').enabled()
   subdir('webkit')
 endif
-
-subdir('tree')
 
 py_installation = pymod.find_installation('python3')
 py_installation.install_sources('Ide.py', subdir: 'gi' / 'overrides')

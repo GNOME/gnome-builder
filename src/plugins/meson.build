@@ -32,7 +32,7 @@ plugins_deps = [
   libide_vcs_dep,
 ]
 
-if libwebkit_dep.found()
+if get_option('webkit').enabled()
   plugins_deps += [libide_webkit_dep]
 endif
 

@@ -70,7 +70,7 @@ gnome_builder_static = [
   plugins,
 ]
 
-if libwebkit_dep.found()
+if get_option('webkit').enabled()
   gnome_builder_deps += [libide_webkit_dep]
   gnome_builder_static += [libide_webkit]
 endif

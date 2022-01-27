@@ -288,10 +288,10 @@ libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
 libportal_dep = dependency('libportal-gtk3', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
 libvte_dep = dependency('vte-2.91', version: '>= 0.65.0')
-libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.26', required: false)
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
-if libwebkit_dep.found()
+if get_option('webkit').enabled()
+  libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.26')
   config_h.set10('HAVE_WEBKIT', 1)
 endif
 
