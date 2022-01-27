@@ -80,7 +80,6 @@ if libsysprof_capture.found()
 endif
 
 gnome_builder = executable('gnome-builder', 'main.c', 'bug-buddy.c',
-           gui_app: true,
            install: true,
             c_args: libide_args + exe_c_args + release_args,
          link_args: exe_link_args,

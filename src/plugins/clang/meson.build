@@ -72,7 +72,6 @@ gnome_builder_clang_deps = [
 
 executable('gnome-builder-clang', gnome_builder_clang_sources,
       dependencies: gnome_builder_clang_deps,
-           gui_app: false,
            install: true,
        install_dir: get_option('libexecdir'),
             c_args: exe_c_args,
@@ -82,7 +81,6 @@ executable('gnome-builder-clang', gnome_builder_clang_sources,
 
 executable('test-daemon', ['test-daemon.c'],
       dependencies: [libjsonrpc_glib_dep],
-           gui_app: false,
            install: false,
             c_args: exe_c_args,
                pie: true,
