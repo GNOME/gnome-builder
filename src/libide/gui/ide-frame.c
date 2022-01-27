@@ -273,6 +273,11 @@ ide_frame_change_current_page (IdeFrame *self,
 
   g_assert (IDE_IS_FRAME (self));
 
+  if (direction < -1)
+    direction = -1;
+  else if (direction > 1)
+    direction = 1;
+
   visible_child = gtk_stack_get_visible_child (priv->stack);
 
   if (visible_child == NULL)
@@ -287,7 +292,9 @@ ide_frame_change_current_page (IdeFrame *self,
   if (ar->len == 0)
     g_return_if_reached ();
 
-  visible_child = g_ptr_array_index (ar, (position + direction) % ar->len);
+  position = (position + ar->len - direction) % ar->len;
+
+  visible_child = g_ptr_array_index (ar, position);
   gtk_stack_set_visible_child (priv->stack, visible_child);
 }
 
