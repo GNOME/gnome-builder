@@ -103,7 +103,7 @@
   <style name="text"                       background="libadwaita-dark" foreground="light_5"/>
 
   <!-- Defaults -->
-  <style name="def:base-n-integer"         foreground="violet_3"/>
+  <style name="def:base-n-integer"         foreground="violet_2"/>
   <style name="def:boolean"                foreground="violet_2"/>
   <style name="def:comment"                foreground="dark_1"/>
   <style name="def:constant"               foreground="violet_2"/>
@@ -140,12 +140,12 @@
   <style name="c:type-keyword"             foreground="teal_2" bold="true"/>
 
   <!-- CSS -->
-  <style name="css:id-selector"            foreground="teal_5" bold="true"/>
-  <style name="css:property-name"          foreground="orange_5"/>
-  <style name="css:pseudo-selector"        foreground="violet_4" bold="true"/>
-  <style name="css:selector-symbol"        foreground="orange_5" bold="true"/>
-  <style name="css:type-selector"          foreground="teal_5" bold="true"/>
-  <style name="css:vendor-specific"        foreground="yellow_6"/>
+  <style name="css:id-selector"            foreground="teal_3" bold="true"/>
+  <style name="css:property-name"          foreground="orange_3"/>
+  <style name="css:pseudo-selector"        foreground="violet_2" bold="true"/>
+  <style name="css:selector-symbol"        foreground="orange_3" bold="true"/>
+  <style name="css:type-selector"          foreground="teal_3" bold="true"/>
+  <style name="css:vendor-specific"        foreground="yellow_5"/>
 
   <!-- Diff -->
   <style name="diff:added-line"            foreground="teal_3"/>
