@@ -11,7 +11,7 @@ if ctags_path == ''
                        'ctags',
                        required: false)
   if ctags.found()
-    ctags_path = ctags.path()
+    ctags_path = ctags.full_path()
   endif
 endif
 

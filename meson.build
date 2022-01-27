@@ -114,12 +114,12 @@ config_h.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
 config_h.set10('ENABLE_NLS', true) # Always enabled
 
 # We should probably avoid using these
-config_h.set_quoted('SRCDIR', meson.source_root())
-config_h.set_quoted('BUILDDIR', meson.build_root())
+config_h.set_quoted('SRCDIR', meson.project_source_root())
+config_h.set_quoted('BUILDDIR', meson.project_build_root())
 
 add_global_arguments([
   '-DHAVE_CONFIG_H',
-  '-I' + meson.build_root(), # config.h
+  '-I' + meson.project_build_root(), # config.h
   '-D_GNU_SOURCE',
   '-DIDE_COMPILATION',
 ], language: 'c')
@@ -269,7 +269,7 @@ endif
 # Check if we can use version scripts for ABI exports
 ld_supports_version_script = cc.links('''
   int main (void) { return 0; }
-''', args: '-Wl,--version-script,' + join_paths(meson.source_root(), 'libide/ide.map'))
+''', args: '-Wl,--version-script,' + join_paths(meson.project_source_root(), 'libide/ide.map'))
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
