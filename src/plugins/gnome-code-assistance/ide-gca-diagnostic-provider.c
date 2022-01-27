@@ -313,19 +313,17 @@ parse_cb (GObject      *object,
 static GVariant *
 get_parse_options (void)
 {
+  GVariantBuilder builder;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+
   if (G_UNLIKELY (gca_settings == NULL))
     gca_settings = g_settings_new ("org.gnome.builder.gnome-code-assistance");
 
   if (g_settings_get_boolean (gca_settings, "enable-pylint"))
-    {
-      GVariantBuilder builder;
+    g_variant_builder_add (&builder, "{sv}", "pylint", g_variant_new_boolean (TRUE));
 
-      g_variant_builder_init (&builder, G_VARIANT_TYPE_ARRAY);
-      g_variant_builder_add (&builder, "{sv}", "pylint", g_variant_new_boolean (TRUE));
-      return g_variant_builder_end (&builder);
-    }
-
-  return g_variant_new ("a{sv}", 0);
+  return g_variant_builder_end (&builder);
 }
 
 static void
