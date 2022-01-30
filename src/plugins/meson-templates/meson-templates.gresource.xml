@@ -25,6 +25,7 @@
     <file compressed="true">resources/src/meson-c-vala.build</file>
     <file compressed="true">resources/src/meson-empty.build</file>
     <file compressed="true">resources/src/main.js.tmpl</file>
+    <file compressed="true">resources/src/main-gtk4.js.tmpl</file>
     <file compressed="true">resources/src/main.c</file>
     <file compressed="true">resources/src/main-gtk4.c</file>
     <file compressed="true">resources/src/main-cli.c</file>
