@@ -1,11 +1,12 @@
 {{include "license.js"}}
 
-const { GObject, Gtk } = imports.gi;
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-var {{PreFix}}Window = GObject.registerClass({
+export const {{PreFix}}Window = GObject.registerClass({
     GTypeName: '{{PreFix}}Window',
     Template: 'resource://{{appid_path}}/{{ui_file}}',
-    InternalChildren: ['label']
+    InternalChildren: ['label'],
 }, class {{PreFix}}Window extends Gtk.ApplicationWindow {
     _init(application) {
         super._init({ application });

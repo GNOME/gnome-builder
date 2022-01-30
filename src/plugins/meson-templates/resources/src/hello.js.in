@@ -6,4 +6,6 @@ imports.package.init({
   libdir: "@libdir@",
   datadir: "@datadir@",
 });
-imports.package.run(imports.main);
+import("resource://@resource_path@/js/main.js")
+  .then((main) => imports.package.run(main))
+  .catch(logError);

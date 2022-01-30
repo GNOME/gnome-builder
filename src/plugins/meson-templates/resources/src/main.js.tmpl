@@ -1,17 +1,14 @@
 {{include "license.js"}}
 
+import Gio from 'gi://Gio';
+import Gtk from 'gi://Gtk?version=3.0';
+
+import { {{PreFix}}Window } from './window.js';
+
 pkg.initGettext();
 pkg.initFormat();
-pkg.require({
-  'Gio': '2.0',
-  'Gtk': '3.0'
-});
 
-const { Gio, Gtk } = imports.gi;
-
-const { {{PreFix}}Window } = imports.window;
-
-function main(argv) {
+export function main(argv) {
     const application = new Gtk.Application({
         application_id: '{{appid}}',
         flags: Gio.ApplicationFlags.FLAGS_NONE,
@@ -19,10 +16,9 @@ function main(argv) {
 
     application.connect('activate', app => {
         let activeWindow = app.activeWindow;
-        
-        if (!activeWindow) {
+
+        if (!activeWindow)
             activeWindow = new {{PreFix}}Window(app);
-        }
 
         activeWindow.present();
     });
