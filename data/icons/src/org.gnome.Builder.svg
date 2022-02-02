@@ -5,7 +5,7 @@
    viewBox="0 0 800 800.00003"
    version="1.1"
    id="svg8"
-   inkscape:version="1.1-rc (52f87abb86, 2021-05-02)"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="org.gnome.Builder.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -16,7 +16,25 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
-     id="defs2" />
+     id="defs2">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect2577"
+       is_visible="true"
+       lpeversion="1"
+       satellites_param="F,0,0,1,0,0.89263027,0,1 @ F,0,0,1,0,2.7447164,0,1 @ F,0,0,1,0,0.99673349,0,1 @ F,0,0,1,0,0.91386553,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="0"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -2164,6 +2182,25 @@
            sodipodi:nodetypes="sssssssssssssssssss"
            id="path419" />
       </g>
+    </g>
+    <g
+       transform="translate(380,642.51965)"
+       inkscape:label="package sdk development environment runtime"
+       id="g45411">
+      <title
+         id="title45405">builder-sdk</title>
+      <rect
+         style="fill:none"
+         id="rect45407"
+         width="16"
+         height="16"
+         x="59.999992"
+         y="20" />
+      <path
+         id="path45409"
+         style="color:#000000;overflow:visible;fill:#2e3436;fill-opacity:1;stroke:none;stroke-width:2;enable-background:new"
+         d="M 447.96094 340 C 447.9097 340.00001 447.85762 340.00237 447.80664 340.00781 C 447.4726 340.04536 447.15232 340.19859 446.91406 340.43555 L 440.41992 346.96289 C 439.8752 347.51739 439.8752 348.51191 440.41992 349.06641 L 446.94922 355.5918 C 447.50413 356.13612 448.49977 356.13612 449.05469 355.5918 L 455.58594 349.10156 C 456.15187 348.54449 456.15187 347.51997 455.58594 346.96289 L 449.05469 340.43555 C 449.02009 340.41021 448.98589 340.38748 448.94922 340.36523 C 448.67757 340.13084 448.31962 339.99995 447.96094 340 z M 448.02539 343.78516 A 2.7007353 2.7007353 0 0 1 450.12891 344.63086 L 452.50391 347.15234 A 1.0129652 1.0129652 0 0 1 452.47461 348.57227 L 451.10352 349.9082 A 0.89922183 0.89922183 0 0 1 449.82031 349.88086 L 448.70117 348.69336 L 446.24414 351.12305 C 445.85364 351.51347 445.22059 351.51347 444.83008 351.12305 C 444.43966 350.73254 444.43966 350.09949 444.83008 349.70898 L 447.32812 347.23633 L 446.11719 345.95117 A 0.90716663 0.90716663 0 0 1 446.14453 344.67773 L 446.2793 344.54883 A 2.7007353 2.7007353 0 0 1 448.02539 343.78516 z "
+         transform="translate(-380,-320)" />
     </g>
   </g>
   <g

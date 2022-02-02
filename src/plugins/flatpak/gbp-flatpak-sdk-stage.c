@@ -126,7 +126,7 @@ gbp_flatpak_sdk_stage_build_async (IdePipelineStage    *stage,
   ide_pipeline_stage_set_active (stage, TRUE);
 
   notif = ide_notification_new ();
-  ide_notification_set_icon_name (notif, "system-software-install-symbolic");
+  ide_notification_set_icon_name (notif, "builder-sdk-symbolic");
   ide_notification_set_title (notif, _("Updating Necessary SDKs"));
   ide_notification_set_body (notif, _("Builder is updating Software Development Kits necessary for building your application."));
   ide_notification_set_has_progress (notif, TRUE);
