@@ -786,7 +786,7 @@ gbp_shellcmd_command_get_icon (IdeCommand *command)
   g_assert (GBP_IS_SHELLCMD_COMMAND (command));
 
   if (icon == NULL)
-    icon = g_themed_icon_new ("utilities-terminal-symbolic");
+    icon = g_themed_icon_new ("builder-terminal-symbolic");
 
   return g_object_ref (icon);
 }

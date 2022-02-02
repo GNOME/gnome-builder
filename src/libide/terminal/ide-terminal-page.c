@@ -596,7 +596,7 @@ ide_terminal_page_init (IdeTerminalPage *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_page_set_icon_name (IDE_PAGE (self), "utilities-terminal-symbolic");
+  ide_page_set_icon_name (IDE_PAGE (self), "builder-terminal-symbolic");
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
   ide_page_set_menu_id (IDE_PAGE (self), "ide-terminal-page-document-menu");
 

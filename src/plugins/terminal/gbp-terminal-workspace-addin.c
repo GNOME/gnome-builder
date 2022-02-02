@@ -452,7 +452,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
 
       self->bottom_dock = g_object_new (DZL_TYPE_DOCK_WIDGET,
                                         "title", _("Terminal"),
-                                        "icon-name", "utilities-terminal-symbolic",
+                                        "icon-name", "builder-terminal-symbolic",
                                         "visible", TRUE,
                                         NULL);
       g_signal_connect (self->bottom_dock,
