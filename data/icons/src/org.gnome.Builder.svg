@@ -2272,10 +2272,10 @@
     </g>
     <g
        transform="matrix(0,1,1,0,163.99996,642.53072)"
-       inkscape:label=""
+       inkscape:label="terminal console builder term cmd commandline"
        id="g4086">
       <title
-         id="title4072">builder-view-left-pane</title>
+         id="title4072">builder-terminal</title>
       <rect
          style="color:#bebebe;overflow:visible;fill:none;stroke-width:2;marker:none"
          id="rect4074"
