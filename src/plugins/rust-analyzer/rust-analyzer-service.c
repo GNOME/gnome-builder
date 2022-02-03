@@ -152,6 +152,7 @@ rust_analyzer_service_supervisor_spawned_cb (RustAnalyzerService     *self,
   GInputStream *input;
   const gchar *workdir;
   IdeContext *context;
+  g_autoptr(GVariant) params = NULL;
 
   IDE_ENTRY;
 
@@ -171,6 +172,15 @@ rust_analyzer_service_supervisor_spawned_cb (RustAnalyzerService     *self,
     }
 
   self->client = ide_lsp_client_new (io_stream);
+
+   // Opt-in for the experimental proc-macro feature
+  // See https://rust-analyzer.github.io/manual.html#configuration for details
+  params = JSONRPC_MESSAGE_NEW (
+    "procMacro", "{",
+      "enable", JSONRPC_MESSAGE_PUT_BOOLEAN(TRUE),
+    "}"
+  );
+  ide_lsp_client_set_initialization_options (self->client, params);
 
   g_object_set (self->client,
                 "use-markdown-in-diagnostics", TRUE,
