@@ -173,13 +173,17 @@ rust_analyzer_service_supervisor_spawned_cb (RustAnalyzerService     *self,
 
   self->client = ide_lsp_client_new (io_stream);
 
-   // Opt-in for the experimental proc-macro feature
-  // See https://rust-analyzer.github.io/manual.html#configuration for details
+  /* Opt-in for experimental proc-macro feature to make gtk-rs more
+   * useful for GNOME developers.
+   *
+   * See: https://rust-analyzer.github.io/manual.html#configuration
+   */
   params = JSONRPC_MESSAGE_NEW (
     "procMacro", "{",
       "enable", JSONRPC_MESSAGE_PUT_BOOLEAN(TRUE),
     "}"
   );
+
   ide_lsp_client_set_initialization_options (self->client, params);
 
   g_object_set (self->client,
