@@ -60,7 +60,6 @@
     <file compressed="true">resources/src/Cargo-cli.toml</file>
     <file compressed="true">resources/src/meson-cs.build</file>
     <file compressed="true">resources/build-aux/cargo.sh</file>
-    <file compressed="true">resources/build-aux/meson/postinstall.py</file>
     <file compressed="true">resources/meson.build</file>
     <file compressed="true">resources/src/meson-cli.build</file>
     <file compressed="true">resources/flatpak-gtksharp.json.tmpl</file>
