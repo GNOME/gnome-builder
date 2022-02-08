@@ -471,7 +471,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/flatpak/flatpak.git"
+                    "url" : "https://github.com/flatpak/flatpak.git",
+                    "branch" : "main"
                 }
             ]
         },
@@ -480,7 +481,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/flatpak/flatpak-builder.git"
+                    "url" : "https://github.com/flatpak/flatpak-builder.git",
+                    "branch" : "main"
                 }
             ]
         },
