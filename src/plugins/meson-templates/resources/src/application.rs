@@ -39,7 +39,6 @@ mod imp {
                 window
             } else {
                 let window = {{PreFix}}Window::new(application);
-                window.set_default_size(600, 300);
                 window.upcast()
             };
 

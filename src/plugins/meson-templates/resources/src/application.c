@@ -44,8 +44,6 @@ static void
   if (window == NULL)
     window = g_object_new ({{PREFIX}}_TYPE_WINDOW,
                            "application", app,
-                           "default-width", 600,
-                           "default-height", 300,
                            NULL);
 
   /* Ask the window manager/compositor to present the window. */
