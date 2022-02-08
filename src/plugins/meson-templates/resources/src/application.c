@@ -100,6 +100,10 @@ static void
   g_signal_connect (about_action, "activate", G_CALLBACK ({{prefix_}}_application_show_about), self);
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (about_action));
 
-  const char *accels[] = {"<primary>q", NULL};
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.quit", accels);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self),
+                                         "app.quit",
+                                         (const char *[]) {
+                                           "<primary>q",
+                                           NULL,
+                                         });
 }
