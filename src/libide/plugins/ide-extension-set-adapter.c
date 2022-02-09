@@ -150,8 +150,8 @@ watch_extension (IdeExtensionSetAdapter *self,
                  PeasPluginInfo         *plugin_info,
                  GType                   interface_type)
 {
-  GSettings *settings;
-  gchar *path;
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree char *path = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
@@ -165,14 +165,14 @@ watch_extension (IdeExtensionSetAdapter *self,
 
   g_ptr_array_add (self->settings, g_object_ref (settings));
 
+  /* We have to fetch the key once to get changed events */
+  g_settings_get_boolean (settings, "enabled");
+
   g_signal_connect_object (settings,
                            "changed::enabled",
                            G_CALLBACK (ide_extension_set_adapter_enabled_changed),
                            self,
                            G_CONNECT_SWAPPED);
-
-  g_object_unref (settings);
-  g_free (path);
 }
 
 static void
