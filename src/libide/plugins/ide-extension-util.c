@@ -59,7 +59,7 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
        */
       found = peas_plugin_info_get_external_data (plugin_info, key);
       if (ide_str_empty0 (found))
-        return TRUE;
+        goto check_gsettings;
 
       return FALSE;
     }
@@ -95,7 +95,7 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
 
       /* An empty value implies "*" to match anything */
       if (!values || g_strv_contains ((const gchar * const *)values_array, "*"))
-        return TRUE;
+        goto check_gsettings;
 
       /* Otherwise actually check that the key/value matches */
       if (!g_strv_contains ((const gchar * const *)values_array, value))
@@ -107,6 +107,7 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
         *priority = atoi (priority_value);
     }
 
+check_gsettings:
   /*
    * Ensure the plugin type isn't disabled by checking our GSettings
    * for the plugin type. There is an implicit plugin issue here, in that
