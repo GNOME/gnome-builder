@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-sourceview.h>
+#include <libide-foundry.h>
 
 #include "cpack-completion-item.h"
 #include "cpack-completion-provider.h"
@@ -48,7 +49,6 @@ cpack_completion_provider_init (CpackCompletionProvider *self)
 {
 }
 
-#if 0
 static void
 cpack_completion_provider_populate_cb (GObject      *object,
                                        GAsyncResult *result,
@@ -73,18 +73,18 @@ cpack_completion_provider_get_build_flags_cb (GObject      *object,
                                               GAsyncResult *result,
                                               gpointer      user_data)
 {
-  IdeBuffer *buffer = (IdeBuffer *)object;
+  IdeBuildSystem *buildsystem = (IdeBuildSystem *)object;
   g_autoptr(CpackCompletionResults) results = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) build_flags = NULL;
   const gchar *prefix;
 
-  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUILD_SYSTEM (buildsystem));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!(build_flags = ide_buffer_get_build_flags_finish (buffer, result, &error)))
+  if (!(build_flags = ide_build_system_get_build_flags_finish (buildsystem, result, &error)))
     {
       if (error != NULL)
         ide_task_return_error (task, g_steal_pointer (&error));
@@ -106,7 +106,6 @@ cpack_completion_provider_get_build_flags_cb (GObject      *object,
                                            cpack_completion_provider_populate_cb,
                                            g_object_ref (task));
 }
-#endif
 
 static void
 cpack_completion_provider_populate_async (IdeCompletionProvider *provider,
@@ -119,6 +118,9 @@ cpack_completion_provider_populate_async (IdeCompletionProvider *provider,
   g_autofree gchar *prefix = NULL;
   GtkTextIter begin, end;
   GtkTextBuffer *buffer;
+  IdeContext *ide_context = NULL;
+  IdeBuildSystem *build_system = NULL;
+  GFile *file = NULL;
 
   g_assert (CPACK_IS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
@@ -161,23 +163,22 @@ query_filesystem:
 
   g_assert (IDE_IS_BUFFER (buffer));
 
-  ide_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "TODO need access to build flags");
-
-#if 0
   /*
    * First step is to get our list of include paths from the CFLAGS for the
    * file. After that, we can start looking for matches on the file-system
    * related to the current word.
    */
   ide_task_set_task_data (task, g_steal_pointer (&prefix), g_free);
-  ide_buffer_get_build_flags_async (IDE_BUFFER (buffer),
-                                    cancellable,
-                                    cpack_completion_provider_get_build_flags_cb,
-                                    g_steal_pointer (&task));
-#endif
+
+  ide_context = ide_buffer_ref_context (IDE_BUFFER (buffer));
+  build_system = ide_build_system_from_context (ide_context);
+  file = ide_buffer_get_file (IDE_BUFFER (buffer));
+
+  ide_build_system_get_build_flags_async (build_system,
+                                          file,
+                                          cancellable,
+                                          cpack_completion_provider_get_build_flags_cb,
+                                          g_steal_pointer (&task));
 }
 
 static GListModel *
