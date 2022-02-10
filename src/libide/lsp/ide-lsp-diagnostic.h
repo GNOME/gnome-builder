@@ -1,6 +1,6 @@
-/* ide-lsp-code-action-provider.h
+/* ide-lsp-diagnostic.h
  *
- * Copyright 2021 Georg Vienna <georg.vienna@himbarsoft.com>
+ * Copyright 2022 JCWasmx86 <JCWasmx86@t-online.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,27 +26,27 @@
 
 #include <libide-code.h>
 
-#include "ide-lsp-client.h"
-
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LSP_CODE_ACTION_PROVIDER (ide_lsp_code_action_provider_get_type())
+#define IDE_TYPE_LSP_DIAGNOSTIC (ide_lsp_diagnostic_get_type())
 
 IDE_AVAILABLE_IN_42
-G_DECLARE_DERIVABLE_TYPE (IdeLspCodeActionProvider, ide_lsp_code_action_provider, IDE, LSP_CODE_ACTION_PROVIDER, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspDiagnostic, ide_lsp_diagnostic, IDE, LSP_DIAGNOSTIC, IdeDiagnostic)
 
-struct _IdeLspCodeActionProviderClass
+struct _IdeLspDiagnosticClass
 {
-  IdeObjectClass parent_class;
+  IdeDiagnosticClass parent_class;
+
+  /*< private >*/
+  gpointer _reserved[16];
 };
 
 IDE_AVAILABLE_IN_42
-void            ide_lsp_code_action_provider_set_client      (IdeLspCodeActionProvider *self,
-                                                              IdeLspClient             *client);
+IdeLspDiagnostic *ide_lsp_diagnostic_new     (IdeDiagnosticSeverity  severity,
+                                              const gchar           *message,
+                                              IdeLocation           *location,
+                                              GVariant              *raw_value);
 IDE_AVAILABLE_IN_42
-IdeLspClient   *ide_lsp_code_action_provider_get_client      (IdeLspCodeActionProvider *self);
-IDE_AVAILABLE_IN_42
-IdeDiagnostics *ide_lsp_code_action_provider_get_diagnostics (IdeLspCodeActionProvider *self);
-
+GVariant         *ide_lsp_diagnostic_dup_raw (IdeLspDiagnostic      *self);
 
 G_END_DECLS

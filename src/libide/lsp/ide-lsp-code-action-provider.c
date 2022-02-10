@@ -28,21 +28,27 @@
 #include <libide-threading.h>
 
 #include "ide-lsp-code-action.h"
+#include "ide-lsp-diagnostic.h"
 #include "ide-lsp-code-action-provider.h"
 #include "ide-lsp-workspace-edit.h"
 
 typedef struct
 {
   IdeLspClient *client;
+  IdeDiagnostics *diagnostics;
 } IdeLspCodeActionProviderPrivate;
 
 enum {
   PROP_0,
   PROP_CLIENT,
+  PROP_DIAGNOSTICS,
   N_PROPS
 };
 
-static void code_action_provider_iface_init (IdeCodeActionProviderInterface *iface);
+static void code_action_provider_iface_init              (IdeCodeActionProviderInterface *iface);
+static void ide_lsp_code_action_provider_set_diagnostics (IdeCodeActionProvider          *code_action_provider,
+                                                          IdeDiagnostics                 *diags);
+
 
 G_DEFINE_TYPE_WITH_CODE (IdeLspCodeActionProvider, ide_lsp_code_action_provider, IDE_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeLspCodeActionProvider)
@@ -68,6 +74,24 @@ ide_lsp_code_action_provider_get_client (IdeLspCodeActionProvider *self)
   return priv->client;
 }
 
+/**
+ * ide_lsp_code_action_provider_get_diagnostics:
+ * @self: a #IdeLspCodeActionProvider
+ *
+ * Gets the diagnostics to use for the code action query.
+ *
+ * Returns: (transfer none) (nullable): An #IdeDiagnostics or %NULL.
+ */
+IdeDiagnostics *
+ide_lsp_code_action_provider_get_diagnostics (IdeLspCodeActionProvider *self)
+{
+  IdeLspCodeActionProviderPrivate *priv = ide_lsp_code_action_provider_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LSP_CODE_ACTION_PROVIDER (self), NULL);
+
+  return priv->diagnostics;
+}
+
 void
 ide_lsp_code_action_provider_set_client (IdeLspCodeActionProvider *self,
                               IdeLspClient    *client)
@@ -87,6 +111,7 @@ ide_lsp_code_action_provider_finalize (GObject *object)
   IdeLspCodeActionProviderPrivate *priv = ide_lsp_code_action_provider_get_instance_private (self);
 
   g_clear_object (&priv->client);
+  g_clear_object (&priv->diagnostics);
 
   G_OBJECT_CLASS (ide_lsp_code_action_provider_parent_class)->finalize (object);
 }
@@ -103,6 +128,10 @@ ide_lsp_code_action_provider_get_property (GObject    *object,
     {
     case PROP_CLIENT:
       g_value_set_object (value, ide_lsp_code_action_provider_get_client (self));
+      break;
+
+    case PROP_DIAGNOSTICS:
+      g_value_set_object (value, ide_lsp_code_action_provider_get_diagnostics (self));
       break;
 
     default:
@@ -124,6 +153,10 @@ ide_lsp_code_action_provider_set_property (GObject      *object,
       ide_lsp_code_action_provider_set_client (self, g_value_get_object (value));
       break;
 
+    case PROP_DIAGNOSTICS:
+      ide_code_action_provider_set_diagnostics (IDE_CODE_ACTION_PROVIDER (self), g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -143,6 +176,13 @@ ide_lsp_code_action_provider_class_init (IdeLspCodeActionProviderClass *klass)
                          "Client",
                          "The client to communicate over",
                          IDE_TYPE_LSP_CLIENT,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DIAGNOSTICS] =
+    g_param_spec_object ("diagnostics",
+                         "Diagnostics",
+                         "The diagnostics used to send to the codeAction RPC",
+                         IDE_TYPE_DIAGNOSTICS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -234,10 +274,16 @@ ide_lsp_code_action_provider_query_async (IdeCodeActionProvider *code_action_pro
   IdeLspCodeActionProviderPrivate *priv = ide_lsp_code_action_provider_get_instance_private (self);
   g_autoptr(GVariant) params = NULL;
   g_autoptr(IdeTask) task = NULL;
-  IdeRange* selection = NULL;
-  IdeLocation* start = NULL;
-  IdeLocation* end = NULL;
+  IdeRange *selection = NULL;
+  IdeLocation *start = NULL;
+  IdeLocation *end = NULL;
   g_autofree gchar *uri = NULL;
+  g_autoptr(GVariant) diagnostics = NULL;
+  g_autoptr(GVariant) diags_v = NULL;
+  g_autoptr(GPtrArray) matching = NULL;
+  GVariantDict dict;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_CODE_ACTION_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -249,6 +295,44 @@ ide_lsp_code_action_provider_query_async (IdeCodeActionProvider *code_action_pro
   selection = ide_buffer_get_selection_range (buffer);
   start = ide_range_get_begin (selection);
   end = ide_range_get_end (selection);
+  matching = g_ptr_array_new_with_free_func ((GDestroyNotify) g_variant_unref);
+
+  if (priv->diagnostics != NULL)
+    {
+      guint n_items = ide_diagnostics_get_size (priv->diagnostics);
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeDiagnostic) diag = g_list_model_get_item (G_LIST_MODEL (priv->diagnostics), i);
+          g_autoptr(GVariant) var = NULL;
+          IdeLocation *location = NULL;
+          gint line = 0;
+
+          if (!IDE_IS_LSP_DIAGNOSTIC (diag))
+            continue;
+
+          location = ide_diagnostic_get_location (diag);
+          if (!location || !start || !end)
+              continue;
+
+          line = ide_location_get_line (location);
+          if (ide_location_get_line (start) > line || ide_location_get_line (end) < line)
+              continue;
+
+          if (!(var = ide_lsp_diagnostic_dup_raw (IDE_LSP_DIAGNOSTIC (diag))))
+            continue;
+
+          g_ptr_array_add (matching, g_steal_pointer (&var));
+        }
+    }
+
+  diagnostics = g_variant_new_array (G_VARIANT_TYPE_VARDICT,
+                                     (GVariant **)(gpointer)matching->pdata,
+                                     matching->len);
+
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert_value (&dict, "diagnostics", g_variant_ref (diagnostics));
+  diags_v = g_variant_take_ref (g_variant_dict_end (&dict));
 
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
@@ -265,7 +349,7 @@ ide_lsp_code_action_provider_query_async (IdeCodeActionProvider *code_action_pro
           "}",
         "}",
     "context", "{",
-      "diagnostics", "[","]",
+      JSONRPC_MESSAGE_PUT_VARIANT (diags_v),
     "}"
   );
 
@@ -275,6 +359,8 @@ ide_lsp_code_action_provider_query_async (IdeCodeActionProvider *code_action_pro
                              cancellable,
                              ide_lsp_code_action_provider_query_call_cb,
                              g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static GPtrArray*
@@ -289,8 +375,23 @@ ide_lsp_code_action_provider_query_finish (IdeCodeActionProvider  *self,
 }
 
 static void
+ide_lsp_code_action_provider_set_diagnostics (IdeCodeActionProvider *code_action_provider,
+                                              IdeDiagnostics        *diags)
+{
+  IdeLspCodeActionProvider *self = (IdeLspCodeActionProvider *)code_action_provider;
+  IdeLspCodeActionProviderPrivate *priv = ide_lsp_code_action_provider_get_instance_private (self);
+
+  g_assert (IDE_IS_LSP_CODE_ACTION_PROVIDER (self));
+  g_assert (!diags || IDE_IS_DIAGNOSTICS (diags));
+
+  if (g_set_object (&priv->diagnostics, diags))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIAGNOSTICS]);
+}
+
+static void
 code_action_provider_iface_init (IdeCodeActionProviderInterface *iface)
 {
   iface->query_async = ide_lsp_code_action_provider_query_async;
   iface->query_finish = ide_lsp_code_action_provider_query_finish;
+  iface->set_diagnostics = ide_lsp_code_action_provider_set_diagnostics;
 }

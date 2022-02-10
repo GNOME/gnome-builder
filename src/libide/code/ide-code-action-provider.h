@@ -28,6 +28,7 @@
 #include <libide-core.h>
 
 #include "ide-code-types.h"
+#include "ide-diagnostics.h"
 
 G_BEGIN_DECLS
 
@@ -49,19 +50,24 @@ struct _IdeCodeActionProviderInterface
   GPtrArray* (*query_finish)       (IdeCodeActionProvider  *self,
                                     GAsyncResult           *result,
                                     GError                **error);
+  void       (*set_diagnostics)    (IdeCodeActionProvider  *self,
+                                    IdeDiagnostics         *diags);
 };
 
 IDE_AVAILABLE_IN_42
-void     ide_code_action_provider_load           (IdeCodeActionProvider *self);
+void       ide_code_action_provider_load            (IdeCodeActionProvider  *self);
 IDE_AVAILABLE_IN_42
-void     ide_code_action_provider_query_async    (IdeCodeActionProvider *self,
-                                                  IdeBuffer             *buffer,
-                                                  GCancellable          *cancellable,
-                                                  GAsyncReadyCallback    callback,
-                                                  gpointer               user_data);
+void       ide_code_action_provider_query_async     (IdeCodeActionProvider  *self,
+                                                     IdeBuffer              *buffer,
+                                                     GCancellable           *cancellable,
+                                                     GAsyncReadyCallback     callback,
+                                                     gpointer                user_data);
 IDE_AVAILABLE_IN_42
-GPtrArray* ide_code_action_provider_query_finish (IdeCodeActionProvider *self,
-                                                  GAsyncResult          *result,
-                                                  GError               **error);
+GPtrArray *ide_code_action_provider_query_finish    (IdeCodeActionProvider  *self,
+                                                     GAsyncResult           *result,
+                                                     GError                **error);
+IDE_AVAILABLE_IN_42
+void       ide_code_action_provider_set_diagnostics (IdeCodeActionProvider  *self,
+                                                     IdeDiagnostics         *diags);
 
 G_END_DECLS

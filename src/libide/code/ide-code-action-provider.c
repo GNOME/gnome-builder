@@ -59,10 +59,19 @@ ide_code_action_provider_real_query_finish (IdeCodeActionProvider  *self,
 }
 
 static void
+ide_code_action_provider_real_set_diagnostics (IdeCodeActionProvider  *self,
+                                               IdeDiagnostics         *diags)
+{
+  g_assert (IDE_IS_CODE_ACTION_PROVIDER (self));
+  g_assert (!diags || IDE_IS_DIAGNOSTICS (diags));
+}
+
+static void
 ide_code_action_provider_default_init (IdeCodeActionProviderInterface *iface)
 {
   iface->query_async = ide_code_action_provider_real_query_async;
   iface->query_finish = ide_code_action_provider_real_query_finish;
+  iface->set_diagnostics = ide_code_action_provider_real_set_diagnostics;
 }
 
 void
@@ -113,4 +122,13 @@ ide_code_action_provider_load (IdeCodeActionProvider *self)
 
   if (IDE_CODE_ACTION_PROVIDER_GET_IFACE (self)->load)
     IDE_CODE_ACTION_PROVIDER_GET_IFACE (self)->load (self);
+}
+
+void
+ide_code_action_provider_set_diagnostics (IdeCodeActionProvider *self,
+                                          IdeDiagnostics        *diags)
+{
+  g_return_if_fail (IDE_IS_CODE_ACTION_PROVIDER (self));
+
+  IDE_CODE_ACTION_PROVIDER_GET_IFACE (self)->set_diagnostics (self, diags);
 }

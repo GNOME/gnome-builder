@@ -33,6 +33,7 @@
 #include <unistd.h>
 
 #include "ide-lsp-client.h"
+#include "ide-lsp-diagnostic.h"
 #include "ide-lsp-enums.h"
 #include "ide-lsp-workspace-edit.h"
 
@@ -687,7 +688,7 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
     {
       g_autoptr(IdeLocation) begin_loc = NULL;
       g_autoptr(IdeLocation) end_loc = NULL;
-      g_autoptr(IdeDiagnostic) diag = NULL;
+      g_autoptr(IdeLspDiagnostic) diag = NULL;
       g_autoptr(GVariant) range = NULL;
       const gchar *message = NULL;
       const gchar *source = NULL;
@@ -764,10 +765,10 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
             }
         }
 
-      diag = ide_diagnostic_new (severity, message, begin_loc);
+      diag = ide_lsp_diagnostic_new (severity, message, begin_loc, value);
       if (priv->use_markdown_in_diagnostics)
-        ide_diagnostic_set_marked_kind (diag, IDE_MARKED_KIND_MARKDOWN);
-      ide_diagnostic_take_range (diag, ide_range_new (begin_loc, end_loc));
+        ide_diagnostic_set_marked_kind (IDE_DIAGNOSTIC (diag), IDE_MARKED_KIND_MARKDOWN);
+      ide_diagnostic_take_range (IDE_DIAGNOSTIC (diag), ide_range_new (begin_loc, end_loc));
 
       g_ptr_array_add (ar, g_steal_pointer (&diag));
     }

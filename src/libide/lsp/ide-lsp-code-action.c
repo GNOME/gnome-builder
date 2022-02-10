@@ -319,12 +319,11 @@ ide_lsp_code_action_execute_async(IdeCodeAction       *code_action,
   else
     {
       g_autoptr(GVariant) params = NULL;
-
-      params = JSONRPC_MESSAGE_NEW(
-        "command", JSONRPC_MESSAGE_PUT_STRING(priv->command),
-        "arguments", "{", JSONRPC_MESSAGE_PUT_VARIANT(priv->arguments), "}"
-      );
-
+      GVariantDict dict;
+      g_variant_dict_init (&dict, NULL);
+      g_variant_dict_insert_value (&dict, "arguments", priv->arguments);
+      g_variant_dict_insert (&dict, "command", "s", priv->command);
+      params =  g_variant_take_ref (g_variant_dict_end (&dict));
       ide_lsp_client_call_async(priv->client,
                                 "workspace/executeCommand",
                                 params,

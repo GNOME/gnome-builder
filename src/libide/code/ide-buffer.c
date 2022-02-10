@@ -2418,7 +2418,11 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
 
   if (diagnostics)
     {
+      IdeCodeActionProvider *code_action_provider;
       self->diagnostics = g_object_ref (diagnostics);
+      code_action_provider = ide_extension_adapter_get_extension (self->code_action_provider);
+      if (code_action_provider)
+        ide_code_action_provider_set_diagnostics (IDE_CODE_ACTION_PROVIDER (code_action_provider), self->diagnostics);
       ide_buffer_apply_diagnostics (self);
     }
 
