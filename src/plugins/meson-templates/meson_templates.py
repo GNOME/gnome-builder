@@ -171,7 +171,6 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'resources/src/hello.js.in': 0o750,
             'resources/src/hello.py.in': 0o750,
             'resources/src/application.in': 0o750,
-            'resources/build-aux/meson/postinstall.py': 0o750,
         }
 
         expands = {
@@ -266,7 +265,6 @@ class GnomeProjectTemplate(MesonTemplate):
         files['resources/data/icons/meson.build'] = 'data/icons/meson.build'
         files['resources/data/icons/hicolor/scalable/apps/hello.svg'] = 'data/icons/hicolor/scalable/apps/%(appid)s.svg'
         files['resources/data/icons/hicolor/symbolic/apps/hello-symbolic.svg'] = 'data/icons/hicolor/symbolic/apps/%(appid)s-symbolic.svg'
-        files['resources/build-aux/meson/postinstall.py'] = 'build-aux/meson/postinstall.py'
         files['resources/po/LINGUAS'] = 'po/LINGUAS'
         files['resources/po/meson.build'] = 'po/meson.build'
         files['resources/po/POTFILES'] = 'po/POTFILES'
@@ -344,7 +342,6 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
         files['resources/data/icons/meson.build'] = 'data/icons/meson.build'
         files['resources/data/icons/hicolor/scalable/apps/hello.svg'] = 'data/icons/hicolor/scalable/apps/%(appid)s.svg'
         files['resources/data/icons/hicolor/symbolic/apps/hello-symbolic.svg'] = 'data/icons/hicolor/symbolic/apps/%(appid)s-symbolic.svg'
-        files['resources/build-aux/meson/postinstall.py'] = 'build-aux/meson/postinstall.py'
         files['resources/po/LINGUAS'] = 'po/LINGUAS'
         files['resources/po/meson.build'] = 'po/meson.build'
         files['resources/po/POTFILES'] = 'po/POTFILES'
