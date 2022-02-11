@@ -14,7 +14,7 @@ res = cc.run(libgit_thread_safe_check,
 dependencies: libgit2_glib_dep,
 )
 if res.returncode() != 0
-error('libgit2 was not compiled with -DTHREADSAFE:BOOL=ON')
+error('libgit2 was not compiled with -DUSE_THREADS:BOOL=ON')
 endif
 
 libgit_ssh_check = '''
