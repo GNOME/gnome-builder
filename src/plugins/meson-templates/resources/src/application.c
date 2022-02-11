@@ -92,11 +92,11 @@ static void
 static void
 {{prefix_}}_application_init ({{PreFix}}Application *self)
 {
-  GSimpleAction *quit_action = g_simple_action_new ("quit", NULL);
+  g_autoptr (GSimpleAction) quit_action = g_simple_action_new ("quit", NULL);
   g_signal_connect_swapped (quit_action, "activate", G_CALLBACK (g_application_quit), self);
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (quit_action));
 
-  GSimpleAction *about_action = g_simple_action_new ("about", NULL);
+  g_autoptr (GSimpleAction) about_action = g_simple_action_new ("about", NULL);
   g_signal_connect (about_action, "activate", G_CALLBACK ({{prefix_}}_application_show_about), self);
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (about_action));
 
