@@ -247,13 +247,14 @@
             "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DBUILD_SHARED_LIBS:BOOL=ON",
-                "-DTHREADSAFE=ON"
+                "-DUSE_SSH=ON",
+                "-DUSE_THREADS=ON"
             ],
             "sources" : [
                 {
                     "type" : "git",
                     "url" : "https://github.com/libgit2/libgit2.git",
-                    "branch" : "maint/v0.28"
+                    "branch" : "main"
                 }
             ]
         },
