@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-01-24 00:23+0000\n"
-"PO-Revision-Date: 2022-01-24 08:44+0100\n"
+"POT-Creation-Date: 2022-02-12 20:50+0000\n"
+"PO-Revision-Date: 2022-02-12 21:56+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -28,7 +28,6 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/style-schemes/builder.style-scheme.xml:22
 #: src/libide/gui/ide-preferences-builtin.c:144 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
@@ -667,23 +666,6 @@ msgstr "Novo espazo de traballo do editor"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "Inspector de D-Bus"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:25
-msgid "Builder Dark"
-msgstr "Construtor escuro"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:28
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "Esquema de cor escura para Builder usando a paleta de cor Tango"
-
-#: data/style-schemes/builder.style-scheme.xml:24
-msgid "The default color scheme for Builder"
-msgstr "O esquema de cor predefinido para Builder"
-
-#: src/gstyle/data/palettes/basic.gstyle.xml:20
-#: src/plugins/color-picker/data/basic.gstyle.xml:20
-msgid "Basic"
-msgstr "Básica"
 
 #: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
@@ -1966,7 +1948,6 @@ msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Permitir ao editor desprazarse máis aló do final do búfer"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
-#| msgid "Enable text wrapping"
 msgid "Text Wrapping"
 msgstr "Axuste de texto"
 
@@ -5000,7 +4981,7 @@ msgstr "Deseñador de interface"
 msgid "_UI Designer"
 msgstr "Deseñador de _interface"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
 msgstr "A asistencia de código require un ficheiro local."
 
@@ -5171,8 +5152,9 @@ msgid "(Preview)"
 msgstr "(Previsualización)"
 
 #: src/plugins/intelephense/intelephense.py:71
-msgid "Indexing php code..."
-msgstr "Indexando o código php…"
+#| msgid "Indexing php code..."
+msgid "Indexing php code…"
+msgstr "Indexando código php…"
 
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
@@ -5220,43 +5202,43 @@ msgstr "Proxecto Makefile baleiro"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Crear un novo proxecto baleiro usando un Makefile simple"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application (Legacy)"
 msgstr "Aplicación de GNOME (Legacy)"
 
-#: src/plugins/meson-templates/meson_templates.py:254
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a GNOME application with GTK 3"
 msgstr "Crear unha nova aplicación de GNOME con GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:328
 msgid "GNOME Application"
 msgstr "Aplicación de GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "Create a GNOME application with GTK 4"
 msgstr "Crear unha nova aplicación de GNOME 4"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:410
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:412
 msgid "Create a new project with a shared library"
 msgstr "Crea un novo proxecto con unha biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:429
 msgid "Empty Project"
 msgstr "Proxecto baleiro"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:431
 msgid "Create a new empty project"
 msgstr "Crear un novo proxecto baleiro"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:448
 msgid "Command Line Tool"
 msgstr "Ferramenta de liña de ordes"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:450
 msgid "Create a new command line project"
 msgstr "Crear un novo proxecto de liña de ordes"
 
@@ -5526,12 +5508,12 @@ msgid "Bootstrapping project"
 msgstr "Inicializando o proxecto"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:183
+#: src/plugins/podman/gbp-podman-runtime.c:499
 msgid "Containers/Toolbox"
 msgstr "Contedores/Caixa de ferramentas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:189
+#: src/plugins/podman/gbp-podman-runtime.c:505
 msgid "Containers/Podman"
 msgstr "Contedores/Podman"
 
@@ -6455,6 +6437,18 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
+
+#~ msgid "Builder Dark"
+#~ msgstr "Construtor escuro"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr "Esquema de cor escura para Builder usando a paleta de cor Tango"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "O esquema de cor predefinido para Builder"
+
+#~ msgid "Basic"
+#~ msgstr "Básica"
 
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
