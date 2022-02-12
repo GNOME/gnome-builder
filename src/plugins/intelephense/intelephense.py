@@ -68,7 +68,7 @@ class PhpService(Ide.Object):
             self.notif = Ide.Notification(
                 id='org.gnome.builder.intelephense.indexing',
                 title="Intelephense",
-                body=_('Indexing php code...'),
+                body=_('Indexing php code…'),
                 has_progress=True,
                 progress_is_imprecise=True,
                 progress=0.0)
