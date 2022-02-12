@@ -3,5 +3,6 @@
   <gresource prefix="/plugins/xml-pack">
     <file>xml-pack.plugin</file>
     <file>schemas/gtkbuilder.rng</file>
+    <file>schemas/gtk4builder.rng</file>
   </gresource>
 </gresources>

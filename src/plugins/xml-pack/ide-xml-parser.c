@@ -108,6 +108,28 @@ ide_xml_parser_file_is_ui (GFile       *file,
   return FALSE;
 }
 
+static gboolean
+ide_xml_parser_file_is_gtk3 (GFile       *file,
+                             const gchar *data,
+                             gsize        size)
+{
+  g_autofree gchar *buffer = NULL;
+  gsize buffer_size;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (data != NULL);
+  g_assert (size > 0);
+
+  buffer_size = (size < 512) ? size : 512;
+  buffer = g_strndup (data, buffer_size);
+
+  if (strstr (buffer, "<requires lib=\"gtk\" version=\"3") != NULL ||
+      strstr (buffer, "<requires lib='gtk' version='3") != NULL)
+    return TRUE;
+
+  return FALSE;
+}
+
 IdeDiagnostic *
 ide_xml_parser_create_diagnostic (ParserState            *state,
                                   const gchar            *msg,
@@ -495,8 +517,8 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           else
             goto fail;
 
-          /* We skip adding gtkbuilder.rng here and add it from gresources after the parsing */
-          if (g_str_has_suffix (schema_url, "gtkbuilder.rng"))
+          /* We skip adding gtkbuilder.rng and gtk4builder.rng here and add it from gresources after the parsing */
+          if (g_str_has_suffix (schema_url, "gtkbuilder.rng") || g_str_has_suffix (schema_url, "gtk4builder.rng"))
             return;
 
           entry = ide_xml_schema_cache_entry_new ();
@@ -592,11 +614,22 @@ ide_xml_parser_get_analysis_worker (IdeTask      *task,
     }
   ide_xml_analysis_set_diagnostics (analysis, diagnostics);
 
-  if (state->file_is_ui)
+  /* by default use gtk4builder.rng and only gtkbuilder.rng if explicitly stated in the ui file.
+   * As gtkbuilder.rng is a subset of gtk4builder.rng this probably never makes problems.
+   */
+  if (state->file_is_ui && ide_xml_parser_file_is_gtk3 (state->file, doc_data, doc_size))
     {
       entry = ide_xml_schema_cache_entry_new ();
       entry->kind = SCHEMA_KIND_RNG;
       entry->file = g_file_new_for_uri ("resource:///plugins/xml-pack/schemas/gtkbuilder.rng");
+      g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
+      g_ptr_array_add (state->schemas, entry);
+    }
+  else if (state->file_is_ui)
+    {
+      entry = ide_xml_schema_cache_entry_new ();
+      entry->kind = SCHEMA_KIND_RNG;
+      entry->file = g_file_new_for_uri ("resource:///plugins/xml-pack/schemas/gtk4builder.rng");
       g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
       g_ptr_array_add (state->schemas, entry);
     }
