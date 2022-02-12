@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-01-19 17:38+0000\n"
-"PO-Revision-Date: 2022-01-20 13:22+0200\n"
+"POT-Creation-Date: 2022-02-12 20:50+0000\n"
+"PO-Revision-Date: 2022-02-12 23:00+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -20,7 +20,6 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/style-schemes/builder.style-scheme.xml:22
 #: src/libide/gui/ide-preferences-builtin.c:144 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
@@ -386,8 +385,7 @@ msgstr "Переносити рядки тексту"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "The way to wrap a long line of text for a better visibility."
-msgstr ""
-"Спосіб перенесення довгих рядків тексту для полегшення читання."
+msgstr "Спосіб перенесення довгих рядків тексту для полегшення читання."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 #: src/libide/gui/ide-preferences-builtin.c:194
@@ -670,31 +668,6 @@ msgstr "Новий робочий простір редактора"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "Інспектор D-Bus"
-
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
-msgid "Adwaita Dark"
-msgstr "Темна Adwaita"
-
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
-msgid "The default color scheme for TextEditor"
-msgstr "Типова схема кольорів для текстового редактора"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:25
-msgid "Builder Dark"
-msgstr "Темний будівник"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:28
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "Темна схема кольорів для Будівника через палітру кольорів Tango"
-
-#: data/style-schemes/builder.style-scheme.xml:24
-msgid "The default color scheme for Builder"
-msgstr "Типова схема кольорів для Будівника"
-
-#: src/gstyle/data/palettes/basic.gstyle.xml:20
-#: src/plugins/color-picker/data/basic.gstyle.xml:20
-msgid "Basic"
-msgstr "Базова"
 
 #: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
@@ -1177,9 +1150,9 @@ msgstr "Підкреслення синтаксису"
 #: src/libide/gui/ide-preferences-builtin.c:409
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:373
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:379
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:385
 msgid "General"
 msgstr "Загальне"
 
@@ -1976,24 +1949,20 @@ msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Дозволити редактору прокручуватись за межі"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
-#| msgid "Enable text wrapping"
 msgid "Text Wrapping"
 msgstr "Перенесення рядків"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
 msgid "Never"
-msgstr ""
-"Ніколи"
+msgstr "Ніколи"
 
 #: src/libide/gui/ide-preferences-builtin.c:167
 msgid "In Between Words"
-msgstr ""
-"Між словами"
+msgstr "Між словами"
 
 #: src/libide/gui/ide-preferences-builtin.c:168
 msgid "Always"
-msgstr ""
-"Завжди"
+msgstr "Завжди"
 
 #: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Line Information"
@@ -2390,9 +2359,9 @@ msgid "Change run options"
 msgstr "Змінити параметри запуску"
 
 #: src/libide/gui/ide-search-button.c:49
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:372
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:378
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:384
 msgid "Workspace shortcuts"
 msgstr "Скорочення робочого простору"
 
@@ -3017,12 +2986,12 @@ msgstr "_Копіювати адресу посилання"
 msgid "Selection"
 msgstr "Вибір"
 
-#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:342
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Не вдалося створити оболонку всередині середовища виконання «%s»"
 
-#: src/libide/terminal/ide-terminal-launcher.c:663
+#: src/libide/terminal/ide-terminal-launcher.c:674
 msgid "Untitled Terminal"
 msgstr "Термінал без назви"
 
@@ -5005,7 +4974,7 @@ msgstr "Дизайнер інтерфейсу"
 msgid "_UI Designer"
 msgstr "Дизайнер _інтерфейсу"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
 msgstr "Помічник коду потребує локальний файл."
 
@@ -5176,7 +5145,8 @@ msgid "(Preview)"
 msgstr "(Перегляд)"
 
 #: src/plugins/intelephense/intelephense.py:71
-msgid "Indexing php code..."
+#| msgid "Indexing php code..."
+msgid "Indexing php code…"
 msgstr "Індексування коду php…"
 
 #: src/plugins/ls/gbp-ls-page.c:319
@@ -5225,43 +5195,43 @@ msgstr "Порожній проект Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Створити порожній проєкт з використанням простого Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application (Legacy)"
 msgstr "Програма GNOME (застаріла)"
 
-#: src/plugins/meson-templates/meson_templates.py:254
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a GNOME application with GTK 3"
 msgstr "Створити програму GNOME з GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:328
 msgid "GNOME Application"
 msgstr "Програма GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "Create a GNOME application with GTK 4"
 msgstr "Створити програму GNOME з GTK 4"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:410
 msgid "Shared Library"
 msgstr "Спільні бібліотеки"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:412
 msgid "Create a new project with a shared library"
 msgstr "Створити проєкт із бібліотекою спільного використання"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:429
 msgid "Empty Project"
 msgstr "Порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:431
 msgid "Create a new empty project"
 msgstr "Створити порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:448
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:450
 msgid "Create a new command line project"
 msgstr "Створити проєкт програми для роботи у командному рядку"
 
@@ -5530,12 +5500,12 @@ msgid "Bootstrapping project"
 msgstr "Самозбирання проєкту"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:183
+#: src/plugins/podman/gbp-podman-runtime.c:499
 msgid "Containers/Toolbox"
 msgstr "Контейнери/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:189
+#: src/plugins/podman/gbp-podman-runtime.c:505
 msgid "Containers/Podman"
 msgstr "Контейнери/Podman"
 
@@ -6114,8 +6084,8 @@ msgid "Use terminal interface"
 msgstr "Використовувати інтерфейс термінала"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:374
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:454
 #: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
 msgstr "Термінал"
@@ -6224,25 +6194,25 @@ msgctxt "Keywords"
 msgid "scrollback lines"
 msgstr "рядки буфера гортання"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:303
 msgid "Application Output"
 msgstr "Виведені програмою дані"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:333
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Програму запущено о %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:354
 msgid "Application exited\r\n"
 msgstr "Програма завершила роботу\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:380
 msgid "Terminal in Build Runtime"
 msgstr "Термінал у середовищі виконання збирання"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:386
 msgid "Terminal in Runtime"
 msgstr "Термінал у середовищі виконання"
 
@@ -6465,6 +6435,24 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Adwaita Dark"
+#~ msgstr "Темна Adwaita"
+
+#~ msgid "The default color scheme for TextEditor"
+#~ msgstr "Типова схема кольорів для текстового редактора"
+
+#~ msgid "Builder Dark"
+#~ msgstr "Темний будівник"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr "Темна схема кольорів для Будівника через палітру кольорів Tango"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "Типова схема кольорів для Будівника"
+
+#~ msgid "Basic"
+#~ msgstr "Базова"
 
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
