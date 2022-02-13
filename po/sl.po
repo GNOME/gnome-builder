@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-06 21:27+0000\n"
-"PO-Revision-Date: 2022-02-07 20:08+0100\n"
+"POT-Creation-Date: 2022-02-13 10:06+0000\n"
+"PO-Revision-Date: 2022-02-13 17:42+0100\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -5141,8 +5141,8 @@ msgid "(Preview)"
 msgstr "(Predogled)"
 
 #: src/plugins/intelephense/intelephense.py:71
-msgid "Indexing php code..."
-msgstr "Indeksiranje kode php ..."
+msgid "Indexing php code…"
+msgstr "Indeksiranje kode php …"
 
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
@@ -5190,43 +5190,43 @@ msgstr "Izprazni projekt Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Ustvari nov prazen projekt z uporabo Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application (Legacy)"
 msgstr "Program GNOME (opuščeno)"
 
-#: src/plugins/meson-templates/meson_templates.py:254
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a GNOME application with GTK 3"
 msgstr "Ustvari program GNOME z GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:328
 msgid "GNOME Application"
 msgstr "Program GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "Create a GNOME application with GTK 4"
 msgstr "Ustvari program GNOME z GTK 4"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:410
 msgid "Shared Library"
 msgstr "Souporabna knjižnica"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:412
 msgid "Create a new project with a shared library"
 msgstr "Ustvari nov projekt s souporabno knjižnico"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:429
 msgid "Empty Project"
 msgstr "Izprazni projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:431
 msgid "Create a new empty project"
 msgstr "Ustvari nov prazen projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:448
 msgid "Command Line Tool"
 msgstr "Orodje ukazne vrstice"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:450
 msgid "Create a new command line project"
 msgstr "Ustvari nov projekt ukazne vrstice"
 
@@ -6412,7 +6412,7 @@ msgstr "Poteka izgradnja projekta …"
 msgid "Installing project…"
 msgstr "Poteka nameščanje projekta …"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Ustvarjanje drevesne strukture XML je spodletelo."
