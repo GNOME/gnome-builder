@@ -5,6 +5,7 @@
 import os
 import sys
 import signal
+import locale
 import gettext
 
 VERSION = '@VERSION@'
@@ -13,6 +14,8 @@ localedir = '@localedir@'
 
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
+locale.bindtextdomain('{{name}}', localedir)
+locale.textdomain('{{name}}')
 gettext.install('{{name}}', localedir)
 
 if __name__ == '__main__':
