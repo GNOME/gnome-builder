@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-01-19 17:38+0000\n"
-"PO-Revision-Date: 2022-01-20 16:40+0000\n"
+"POT-Creation-Date: 2022-02-12 20:50+0000\n"
+"PO-Revision-Date: 2022-02-14 13:57+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -23,7 +23,6 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/style-schemes/builder.style-scheme.xml:22
 #: src/libide/gui/ide-preferences-builtin.c:144 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
@@ -660,31 +659,6 @@ msgstr "Nova área de trabalho do editor"
 msgid "D-Bus Inspector"
 msgstr "Inspetor D-Bus"
 
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
-msgid "Adwaita Dark"
-msgstr "Adwaita Escuro"
-
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
-msgid "The default color scheme for TextEditor"
-msgstr "O esquema de cores padrão para o TextEditor"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:25
-msgid "Builder Dark"
-msgstr "Builder Escuro"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:28
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "Esquema de cor escura para o Builder, utilizando a paleta de cor Tango"
-
-#: data/style-schemes/builder.style-scheme.xml:24
-msgid "The default color scheme for Builder"
-msgstr "O esquema de cor predefinido para o Builder"
-
-#: src/gstyle/data/palettes/basic.gstyle.xml:20
-#: src/plugins/color-picker/data/basic.gstyle.xml:20
-msgid "Basic"
-msgstr "Básico"
-
 #: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
 msgstr "Paleta: "
@@ -1167,9 +1141,9 @@ msgstr "Modo de Realçar"
 #: src/libide/gui/ide-preferences-builtin.c:409
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:373
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:379
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:385
 msgid "General"
 msgstr "Geral"
 
@@ -2383,9 +2357,9 @@ msgid "Change run options"
 msgstr "Altera opções de execução"
 
 #: src/libide/gui/ide-search-button.c:49
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:372
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:378
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:384
 msgid "Workspace shortcuts"
 msgstr "Atalhos de área de trabalho"
 
@@ -3008,12 +2982,12 @@ msgstr "_Copiar endereço da ligação"
 msgid "Selection"
 msgstr "Seleção"
 
-#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:342
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Falha ao criar shell dentro do runtime “%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:663
+#: src/libide/terminal/ide-terminal-launcher.c:674
 msgid "Untitled Terminal"
 msgstr "Terminal sem título"
 
@@ -4998,7 +4972,7 @@ msgstr "Construtor de UI"
 msgid "_UI Designer"
 msgstr "Designer de _UI"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
 msgstr "Assistência de código requer um ficheiro local."
 
@@ -5169,8 +5143,8 @@ msgid "(Preview)"
 msgstr "(Visualização)"
 
 #: src/plugins/intelephense/intelephense.py:71
-msgid "Indexing php code..."
-msgstr "Indexação do código php..."
+msgid "Indexing php code…"
+msgstr "Indexação do código php…"
 
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
@@ -5218,43 +5192,43 @@ msgstr "Projeto com Makefile vazio"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Criar um novo projeto vazio usando um Makefile simples"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application (Legacy)"
 msgstr "Aplicação do GNOME (Legado)"
 
-#: src/plugins/meson-templates/meson_templates.py:254
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a GNOME application with GTK 3"
 msgstr "Criar uma nova aplicação do GNOME com GTK3"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:328
 msgid "GNOME Application"
 msgstr "Aplicação do GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:330
 msgid "Create a GNOME application with GTK 4"
 msgstr "Criar uma nova aplicação do GNOME com GTK4"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:410
 msgid "Shared Library"
 msgstr "Biblioteca partilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:412
 msgid "Create a new project with a shared library"
 msgstr "Criar um novo projeto com uma biblioteca partilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:429
 msgid "Empty Project"
 msgstr "Projeto vazio"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:431
 msgid "Create a new empty project"
 msgstr "Criar um novo projeto vazio"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:448
 msgid "Command Line Tool"
 msgstr "Ferramenta de linha de comando"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:450
 msgid "Create a new command line project"
 msgstr "Criar um novo projeto de linha de comando"
 
@@ -5526,12 +5500,12 @@ msgid "Bootstrapping project"
 msgstr "Inicializando projeto"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:183
+#: src/plugins/podman/gbp-podman-runtime.c:499
 msgid "Containers/Toolbox"
 msgstr "Contêineres/Caixa de ferramentas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:189
+#: src/plugins/podman/gbp-podman-runtime.c:505
 msgid "Containers/Podman"
 msgstr "Contêineres/Podman"
 
@@ -6103,8 +6077,8 @@ msgid "Use terminal interface"
 msgstr "Usar interface de terminal"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:374
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:454
 #: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
 msgstr "Terminal"
@@ -6211,25 +6185,25 @@ msgctxt "Keywords"
 msgid "scrollback lines"
 msgstr "linhas de rolagem para trás"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:303
 msgid "Application Output"
 msgstr "Saída da aplicação"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:333
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Aplicação iniciada às %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:354
 msgid "Application exited\r\n"
 msgstr "Aplicação terminada\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:380
 msgid "Terminal in Build Runtime"
 msgstr "Terminal de compilação"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:386
 msgid "Terminal in Runtime"
 msgstr "Terminal de execução"
 
@@ -6452,6 +6426,25 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
+
+#~ msgid "Adwaita Dark"
+#~ msgstr "Adwaita Escuro"
+
+#~ msgid "The default color scheme for TextEditor"
+#~ msgstr "O esquema de cores padrão para o TextEditor"
+
+#~ msgid "Builder Dark"
+#~ msgstr "Builder Escuro"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr ""
+#~ "Esquema de cor escura para o Builder, utilizando a paleta de cor Tango"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "O esquema de cor predefinido para o Builder"
+
+#~ msgid "Basic"
+#~ msgstr "Básico"
 
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
