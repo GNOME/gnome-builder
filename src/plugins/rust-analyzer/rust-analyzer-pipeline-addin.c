@@ -365,7 +365,7 @@ rust_analyzer_pipeline_addin_load (IdePipelineAddin *addin,
 
   self->notif = ide_notification_new ();
   ide_notification_set_title (self->notif, "Rust-analyzer is missing");
-  ide_notification_set_body (self->notif, "Install rust-analyzer in your PATH using rustup, or use the Rust flatpak extension in your manifest.");
+  ide_notification_set_body (self->notif, "Install rust-analyzer in your PATH, or use the Rust flatpak extension in your manifest.");
   ide_notification_set_urgent (self->notif, TRUE);
   ide_notification_attach (self->notif, IDE_OBJECT (pipeline));
 
