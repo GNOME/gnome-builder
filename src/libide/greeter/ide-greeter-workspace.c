@@ -705,7 +705,7 @@ ide_greeter_workspace_new (IdeApplication *app)
   return g_object_new (IDE_TYPE_GREETER_WORKSPACE,
                        "application", app,
                        "default-width", 1000,
-                       "default-height", 600,
+                       "default-height", 800,
                        NULL);
 }
 
