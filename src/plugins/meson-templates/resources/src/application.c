@@ -8,7 +8,7 @@ struct _{{PreFix}}Application
   GtkApplication parent_instance;
 };
 
-G_DEFINE_TYPE ({{PreFix}}Application, {{prefix_}}_application, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE ({{PreFix}}Application, {{prefix_}}_application, {{if is_adwaita}}ADW_TYPE_APPLICATION{{else}}GTK_TYPE_APPLICATION{{end}})
 
 {{PreFix}}Application *
 {{prefix_}}_application_new (gchar *application_id,

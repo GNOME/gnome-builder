@@ -2,6 +2,9 @@ use glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
+{{if is_adwaita}}
+use adw::subclass::prelude::*;
+{{end}}
 
 use crate::config::VERSION;
 use crate::{{PreFix}}Window;
@@ -16,7 +19,7 @@ mod imp {
     impl ObjectSubclass for {{PreFix}}Application {
         const NAME: &'static str = "{{PreFix}}Application";
         type Type = super::{{PreFix}}Application;
-        type ParentType = gtk::Application;
+        type ParentType = {{if is_adwaita}}adw::Application{{else}}gtk::Application{{end}};
     }
 
     impl ObjectImpl for {{PreFix}}Application {
@@ -48,11 +51,15 @@ mod imp {
     }
 
     impl GtkApplicationImpl for {{PreFix}}Application {}
+    {{if is_adwaita}}
+impl AdwApplicationImpl for {{PreFix}}Application {}
+{{end}}
 }
 
 glib::wrapper! {
     pub struct {{PreFix}}Application(ObjectSubclass<imp::{{PreFix}}Application>)
-        @extends gio::Application, gtk::Application,
+        @extends gio::Application, gtk::Application, {{if is_adwaita}}adw::Application,{{end}}
+
         @implements gio::ActionGroup, gio::ActionMap;
 }
 
@@ -78,7 +85,7 @@ impl {{PreFix}}Application {
 
     fn show_about(&self) {
         let window = self.active_window().unwrap();
-        let dialog = gtk::AboutDialogBuilder::new()
+        let dialog = gtk::AboutDialog::builder()
             .transient_for(&window)
             .modal(true)
             .program_name("{{name}}")

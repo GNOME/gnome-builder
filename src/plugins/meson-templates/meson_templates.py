@@ -33,7 +33,8 @@ _ = Ide.gettext
 
 class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
-        return [GnomeGTK4ProjectTemplate(),
+        return [GnomeAdwaitaProjectTemplate(),
+                GnomeGTK4ProjectTemplate(),
                 GnomeProjectTemplate(),
                 LibraryProjectTemplate(),
                 CLIProjectTemplate(),
@@ -148,12 +149,15 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('Spaces').assign_string(" " * len(PreFix))
 
         enable_gnome = (isinstance(self, GnomeProjectTemplate) or
-                        isinstance(self, GnomeGTK4ProjectTemplate))
+                        isinstance(self, GnomeGTK4ProjectTemplate) or
+                        isinstance(self, GnomeAdwaitaProjectTemplate))
         scope.get('project_version').assign_string('0.1.0')
         scope.get('enable_i18n').assign_boolean(enable_gnome)
         scope.get('enable_gnome').assign_boolean(enable_gnome)
         scope.get('language').assign_string(self.language)
         scope.get('author').assign_string(author_name)
+
+        scope.get('is_adwaita').assign_boolean(True if isinstance(self, GnomeAdwaitaProjectTemplate) else False)
 
         # Just avoiding dealing with template bugs
         if self.language in ('c', 'c++'):
@@ -329,6 +333,88 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             'pattern-gnome',
             _('Create a GNOME application with GTK 4'),
             ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
+            0
+         )
+
+    def prepare_files(self, files):
+        # Shared files
+        files['resources/flatpak.json'] = '%(appid)s.json'
+        files['resources/data/hello.desktop.in'] = 'data/%(appid)s.desktop.in'
+        files['resources/data/hello.appdata.xml.in'] = 'data/%(appid)s.appdata.xml.in'
+        files['resources/data/hello.gschema.xml'] = 'data/%(appid)s.gschema.xml'
+        files['resources/data/meson.build'] = 'data/meson.build'
+        files['resources/data/icons/meson.build'] = 'data/icons/meson.build'
+        files['resources/data/icons/hicolor/scalable/apps/hello.svg'] = 'data/icons/hicolor/scalable/apps/%(appid)s.svg'
+        files['resources/data/icons/hicolor/symbolic/apps/hello-symbolic.svg'] = 'data/icons/hicolor/symbolic/apps/%(appid)s-symbolic.svg'
+        files['resources/po/LINGUAS'] = 'po/LINGUAS'
+        files['resources/po/meson.build'] = 'po/meson.build'
+        files['resources/po/POTFILES'] = 'po/POTFILES'
+        files['resources/src/help-overlay.ui'] = 'src/gtk/help-overlay.ui'
+        window_ui_name = 'src/window.ui'
+        resource_name = 'src/%(prefix)s.gresource.xml'
+        meson_file = 'resources/src/meson-c-vala.build'
+
+        if self.language == 'c':
+            files['resources/src/main-gtk4.c'] = 'src/main.c'
+            files['resources/src/window.c'] = 'src/%(prefix)s-window.c'
+            files['resources/src/window.h'] = 'src/%(prefix)s-window.h'
+            files['resources/src/application.c'] = 'src/%(prefix)s-application.c'
+            files['resources/src/application.h'] = 'src/%(prefix)s-application.h'
+            window_ui_name = 'src/%(prefix)s-window.ui'
+        elif self.language == 'c++':
+            files['resources/src/main.cpp'] = 'src/main.cpp'
+            files['resources/src/window.cpp'] = 'src/%(prefix)s-window.cpp'
+            files['resources/src/window.hpp'] = 'src/%(prefix)s-window.h'
+            window_ui_name = 'src/%(prefix)s-window.ui'
+        elif self.language == 'c♯':
+            files['resources/src/main.cs'] = 'src/main.cs'
+            files['resources/src/application.in'] = 'src/%(exec_name)s.in'
+            files['resources/flatpak-gtksharp.json.tmpl'] = '%(appid)s.json'
+            meson_file = 'resources/src/meson-cs.build'
+            resource_name = None
+            window_ui_name = None
+        elif self.language == 'vala':
+            files['resources/src/main-gtk4.vala'] = 'src/main.vala'
+            files['resources/src/window-gtk4.vala'] = 'src/window.vala'
+            files['resources/src/application-gtk4.vala'] = 'src/application.vala'
+        elif self.language == 'javascript':
+            files['resources/src/main-gtk4.js.tmpl'] = 'src/main.js'
+            files['resources/src/hello.js.in'] = 'src/%(appid)s.in'
+            files['resources/src/window.js.tmpl'] = 'src/window.js'
+            files['resources/src/hello.src.gresource.xml'] = 'src/%(appid)s.src.gresource.xml'
+            resource_name = 'src/%(appid)s.data.gresource.xml'
+            meson_file = 'resources/src/meson-js.build'
+        elif self.language == 'python':
+            files['resources/src/hello.py.in'] = 'src/%(name)s.in'
+            files['resources/src/__init__.py'] = 'src/__init__.py'
+            files['resources/src/window-gtk4.py'] = 'src/window.py'
+            files['resources/src/main-gtk4.py'] = 'src/main.py'
+            meson_file = 'resources/src/meson-py-gtk4.build'
+        elif self.language == 'rust':
+            files['resources/src/application.rs'] = 'src/application.rs'
+            files['resources/src/config-gtk4.rs.in'] = 'src/config.rs.in'
+            files['resources/src/main-gtk4.rs'] = 'src/main.rs'
+            files['resources/src/window-gtk4.rs'] = 'src/window.rs'
+            files['resources/src/Cargo.lock'] = 'Cargo.lock'
+            files['resources/src/Cargo-gtk4.toml'] = 'Cargo.toml'
+            files['resources/build-aux/cargo.sh'] = 'build-aux/cargo.sh'
+            meson_file = 'resources/src/meson-rs-gtk4.build'
+
+        if resource_name:
+            files['resources/src/hello.gresource.xml'] = resource_name
+        if window_ui_name:
+            files['resources/src/window-gtk4.ui'] = window_ui_name
+
+        files[meson_file] = 'src/meson.build'
+
+class GnomeAdwaitaProjectTemplate(MesonTemplate):
+    def __init__(self):
+        super().__init__(
+            'gnome-app-adwaita',
+            _('GNOME Adwaita Application'),
+            'pattern-gnome',
+            _('Create a GNOME Adwaita application'),
+            ['C', 'Rust'],
             0
          )
 

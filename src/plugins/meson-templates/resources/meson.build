@@ -1,7 +1,7 @@
 project('{{name}}',{{if language == "c"}} 'c',{{else if language == "c++"}} ['cpp', 'c'],{{else if language == "vala"}} ['c', 'vala'],{{else if language == "c♯"}} 'cs',{{else if language == "rust"}} 'rust', {{end}}
 
           version: '{{project_version}}',
-    meson_version: '>= 0.57.0',
+    meson_version: '>= 0.59.0',
   default_options: [ 'warning_level=2',
 {{if language == "c"}}
                      'c_std=gnu11',
@@ -32,7 +32,7 @@ configure_file(
   configuration: config_h,
 )
 add_project_arguments([
-  '-I' + meson.build_root(),
+  '-I' + meson.project_build_root(),
 ], language: 'c')
 {{end}}
 

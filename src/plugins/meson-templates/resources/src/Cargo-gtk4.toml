@@ -5,4 +5,10 @@ edition = "2018"
 
 [dependencies]
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
-gtk = { version = "0.3", package = "gtk4" }
+gtk = { version = "0.4", package = "gtk4" }
+
+{{if is_adwaita}}
+[dependencies.adw]
+package = "libadwaita"
+version  = "0.1.0"
+{{end}}
