@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-12 20:50+0000\n"
-"PO-Revision-Date: 2022-02-12 23:00+0200\n"
+"POT-Creation-Date: 2022-02-18 10:57+0000\n"
+"PO-Revision-Date: 2022-02-18 18:52+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -5145,7 +5145,6 @@ msgid "(Preview)"
 msgstr "(Перегляд)"
 
 #: src/plugins/intelephense/intelephense.py:71
-#| msgid "Indexing php code..."
 msgid "Indexing php code…"
 msgstr "Індексування коду php…"
 
@@ -5195,43 +5194,53 @@ msgstr "Порожній проект Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Створити порожній проєкт з використанням простого Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:251
+#: src/plugins/meson-templates/meson_templates.py:255
 msgid "GNOME Application (Legacy)"
 msgstr "Програма GNOME (застаріла)"
 
-#: src/plugins/meson-templates/meson_templates.py:253
+#: src/plugins/meson-templates/meson_templates.py:257
 msgid "Create a GNOME application with GTK 3"
 msgstr "Створити програму GNOME з GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:332
 msgid "GNOME Application"
 msgstr "Програма GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:334
 msgid "Create a GNOME application with GTK 4"
 msgstr "Створити програму GNOME з GTK 4"
 
-#: src/plugins/meson-templates/meson_templates.py:410
+#: src/plugins/meson-templates/meson_templates.py:414
+#| msgid "GNOME Application"
+msgid "GNOME Adwaita Application"
+msgstr "Програма GNOME з Adwaita"
+
+#: src/plugins/meson-templates/meson_templates.py:416
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GNOME Adwaita application"
+msgstr "Створити програму GNOME з Adwaita"
+
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Спільні бібліотеки"
 
-#: src/plugins/meson-templates/meson_templates.py:412
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Створити проєкт із бібліотекою спільного використання"
 
-#: src/plugins/meson-templates/meson_templates.py:429
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:431
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Створити порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:448
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
-#: src/plugins/meson-templates/meson_templates.py:450
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Створити проєкт програми для роботи у командному рядку"
 
@@ -6427,7 +6436,7 @@ msgstr "Збирання проєкту…"
 msgid "Installing project…"
 msgstr "Встановлення проєкту…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Не вдалося створити ієрархію XML."
