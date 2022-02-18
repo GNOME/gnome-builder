@@ -8,7 +8,9 @@ _resources = {}
 _aliases = {}
 _ignore = (
   'org.gnome.Builder.svg',
+  'org.gnome.Builder.Devel.svg',
   'org.gnome.Builder-symbolic.svg',
+  'org.gnome.Builder.Devel-symbolic.svg',
 )
 
 def addResource(directory, name):
