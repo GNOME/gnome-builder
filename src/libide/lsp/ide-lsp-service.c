@@ -395,7 +395,7 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
    * IdeLspService::create-launcher:
    * @self: an [class@LspService]
    * @pipeline: a loaded [class@Pipeline]
-   * @flags: [enum@Gio.SubprocessFlags] to use for the launcher
+   * @flags: [flags@Gio.SubprocessFlags] to use for the launcher
    *
    * Creates the launcher to be used for the LSP.
    *
