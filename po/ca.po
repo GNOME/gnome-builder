@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-12 20:50+0000\n"
+"POT-Creation-Date: 2022-02-18 10:57+0000\n"
 "PO-Revision-Date: 2022-02-13 10:34+0100\n"
 "Last-Translator: maite guix <maite.guix@me.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
@@ -1884,7 +1884,7 @@ msgstr "El nombre mínim de píxels per sobre i per sota del cursor"
 #: src/libide/gui/ide-preferences-builtin.c:111
 msgctxt "Keywords"
 msgid "editor line spacing font monospace"
-msgstr "editor línia espaiat tipus de lletra monoespai"
+msgstr "editor interlineat tipus de lletra monoespai"
 
 #: src/libide/gui/ide-preferences-builtin.c:116
 msgid "Color Scheme"
@@ -5219,43 +5219,51 @@ msgstr "Projecte Makefile buit"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Crea un projecte buit nou usant un simple Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:251
+#: src/plugins/meson-templates/meson_templates.py:255
 msgid "GNOME Application (Legacy)"
 msgstr "Aplicació GNOME (antiga)"
 
-#: src/plugins/meson-templates/meson_templates.py:253
+#: src/plugins/meson-templates/meson_templates.py:257
 msgid "Create a GNOME application with GTK 3"
 msgstr "Crea una aplicació GNOME nova amb GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:332
 msgid "GNOME Application"
 msgstr "Aplicació GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:334
 msgid "Create a GNOME application with GTK 4"
 msgstr "Crea una aplicació GNOME nova amb GTK 4"
 
-#: src/plugins/meson-templates/meson_templates.py:410
+#: src/plugins/meson-templates/meson_templates.py:414
+msgid "GNOME Adwaita Application"
+msgstr "Aplicació GNOME Adwaita"
+
+#: src/plugins/meson-templates/meson_templates.py:416
+msgid "Create a GNOME Adwaita application"
+msgstr "Crea una aplicació GNOME Adwaita nova"
+
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:412
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Crea un projecte nou amb una biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:429
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Projecte buit"
 
-#: src/plugins/meson-templates/meson_templates.py:431
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Crea un projecte buit nou"
 
-#: src/plugins/meson-templates/meson_templates.py:448
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Eina de línia d'ordres"
 
-#: src/plugins/meson-templates/meson_templates.py:450
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Crea un projecte nou de línia d'ordres"
 
@@ -6452,7 +6460,7 @@ msgstr "S'està construint el projecte…"
 msgid "Installing project…"
 msgstr "S'està instal·lant el projecte…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Ha fallat crear l'arbre XML."
