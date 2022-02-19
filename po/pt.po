@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-12 20:50+0000\n"
-"PO-Revision-Date: 2022-02-14 13:57+0000\n"
+"POT-Creation-Date: 2022-02-18 10:57+0000\n"
+"PO-Revision-Date: 2022-02-19 17:41+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -5192,43 +5192,51 @@ msgstr "Projeto com Makefile vazio"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Criar um novo projeto vazio usando um Makefile simples"
 
-#: src/plugins/meson-templates/meson_templates.py:251
+#: src/plugins/meson-templates/meson_templates.py:255
 msgid "GNOME Application (Legacy)"
 msgstr "Aplicação do GNOME (Legado)"
 
-#: src/plugins/meson-templates/meson_templates.py:253
+#: src/plugins/meson-templates/meson_templates.py:257
 msgid "Create a GNOME application with GTK 3"
-msgstr "Criar uma nova aplicação do GNOME com GTK3"
+msgstr "Criar uma aplicação do GNOME com GTK3"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:332
 msgid "GNOME Application"
 msgstr "Aplicação do GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:334
 msgid "Create a GNOME application with GTK 4"
-msgstr "Criar uma nova aplicação do GNOME com GTK4"
+msgstr "Criar uma aplicação do GNOME com GTK4"
 
-#: src/plugins/meson-templates/meson_templates.py:410
+#: src/plugins/meson-templates/meson_templates.py:414
+msgid "GNOME Adwaita Application"
+msgstr "Aplicação do GNOME Adwaita"
+
+#: src/plugins/meson-templates/meson_templates.py:416
+msgid "Create a GNOME Adwaita application"
+msgstr "Criar uma aplicação do GNOME Adwaita"
+
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Biblioteca partilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:412
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Criar um novo projeto com uma biblioteca partilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:429
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Projeto vazio"
 
-#: src/plugins/meson-templates/meson_templates.py:431
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Criar um novo projeto vazio"
 
-#: src/plugins/meson-templates/meson_templates.py:448
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Ferramenta de linha de comando"
 
-#: src/plugins/meson-templates/meson_templates.py:450
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Criar um novo projeto de linha de comando"
 
@@ -6418,7 +6426,7 @@ msgstr "A compilar projeto…"
 msgid "Installing project…"
 msgstr "A instalar projeto…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Falha ao criar a árvore XML."
