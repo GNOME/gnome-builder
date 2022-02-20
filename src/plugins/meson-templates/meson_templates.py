@@ -252,9 +252,9 @@ class GnomeProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
             'gnome-app',
-            _('GNOME Application (Legacy)'),
+            _('GTK Application (Legacy)'),
             'pattern-gnome',
-            _('Create a GNOME application with GTK 3'),
+            _('Create a GTK application with GTK 3'),
             ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala', 'Rust'],
             0
          )
@@ -329,9 +329,9 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
             'gnome-app-gtk4',
-            _('GNOME Application'),
+            _('GTK Application'),
             'pattern-gnome',
-            _('Create a GNOME application with GTK 4'),
+            _('Create a GTK application'),
             ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
             0
          )
@@ -411,10 +411,10 @@ class GnomeAdwaitaProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
             'gnome-app-adwaita',
-            _('GNOME Adwaita Application'),
+            _('GNOME Application'),
             'pattern-gnome',
-            _('Create a GNOME Adwaita application'),
             ['C', 'Rust'],
+            _('Create a GNOME application'),
             0
          )
 
