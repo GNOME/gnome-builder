@@ -4,13 +4,16 @@ import sys
 import gi
 
 gi.require_version('Gtk', '4.0')
+{{if is_adwaita}}
+gi.require_version('Adw', '1')
+{{end}}
 
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio{{if is_adwaita}}, Adw{{end}}
 
 from .window import {{PreFix}}Window, AboutDialog
 
 
-class Application(Gtk.Application):
+class Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
     """The main application singleton class."""
 
     def __init__(self):

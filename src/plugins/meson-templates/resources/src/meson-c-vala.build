@@ -2,18 +2,18 @@
 {{if language == "c"}}
   'main.c',
   '{{prefix}}-window.c',
-  {{if (template == "gnome-app-gtk4") || (template == "gnome-app-adwaita")}}
+{{if (template == "gnome-app-gtk4") || (template == "gnome-app-adwaita")}}
   '{{prefix}}-application.c',
-  {{end}}
+{{end}}
 {{else if language == "c++"}}
   'main.cpp',
   '{{prefix}}-window.cpp',
 {{else if language == "vala"}}
   'main.vala',
   'window.vala',
-  {{if template == "gnome-app-gtk4"}}
+{{if (template == "gnome-app-gtk4") || (template == "gnome-app-adwaita")}}
   'application.vala',
-  {{end}}
+{{end}}
 {{end}}
 ]
 

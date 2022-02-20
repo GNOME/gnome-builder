@@ -413,8 +413,8 @@ class GnomeAdwaitaProjectTemplate(MesonTemplate):
             'gnome-app-adwaita',
             _('GNOME Application'),
             'pattern-gnome',
-            ['C', 'Rust'],
             _('Create a GNOME application'),
+            ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
             0
          )
 

@@ -1,7 +1,7 @@
 {{include "license.vala"}}
 
 namespace {{PreFix}} {
-	public class Application : Gtk.Application {
+	public class Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application {
 		private ActionEntry[] APP_ACTIONS = {
 			{ "about", on_about_action },
 			{ "preferences", on_preferences_action },
