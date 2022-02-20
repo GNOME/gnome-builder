@@ -445,6 +445,66 @@
             ]
         },
         {
+            "name" : "libyaml",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/yaml/libyaml.git",
+                    "branch" : "master"
+                }
+            ]
+        },
+        {
+            "name" : "libxmlb",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized",
+                "-Dgtkdoc=false",
+                "-Dintrospection=false",
+                "-Dtests=false",
+                "-Dcli=false"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/hughsie/libxmlb.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
+            "name" : "libstemmer",
+            "buildsystem" : "cmake-ninja",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/zvelo/libstemmer",
+                    "branch" : "master"
+                }
+            ]
+        },
+        {
+            "name" : "appstream",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized",
+                "-Dgir=false",
+                "-Dapidocs=false",
+                "-Dinstall-docs=false"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/ximion/appstream.git",
+                    "branch" : "master"
+                }
+            ]
+        },
+        {
             "name" : "flatpak",
             "config-opts" : [
                 "--disable-documentation",
