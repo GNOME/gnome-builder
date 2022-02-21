@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-01-27 20:58+0000\n"
-"PO-Revision-Date: 2022-02-12 20:54+0100\n"
+"POT-Creation-Date: 2022-02-20 21:11+0000\n"
+"PO-Revision-Date: 2022-02-21 10:22+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -4958,7 +4958,7 @@ msgstr "Návrhář rozhraní"
 msgid "_UI Designer"
 msgstr "Návrhář _rozhraní"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
 msgstr "Průvodce kódem vyžaduje místní soubor."
 
@@ -5178,43 +5178,51 @@ msgstr "Prázdný projekt používající Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Vytvořit nový prázdný projekt používající jednoduchý Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:252
-msgid "GNOME Application (Legacy)"
-msgstr "Aplikace GNOME (zastaralá)"
+#: src/plugins/meson-templates/meson_templates.py:255
+msgid "GTK Application (Legacy)"
+msgstr "Aplikace GTK (zastaralá)"
 
-#: src/plugins/meson-templates/meson_templates.py:254
-msgid "Create a GNOME application with GTK 3"
-msgstr "Vytvořit novou aplikaci GNOME s GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:257
+msgid "Create a GTK application with GTK 3"
+msgstr "Vytvořit aplikaci GTK s GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:332
+msgid "GTK Application"
+msgstr "Aplikace GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+msgid "Create a GTK application"
+msgstr "Vytvořit aplikaci GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "Aplikace GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:332
-msgid "Create a GNOME application with GTK 4"
-msgstr "Vytvořit novou aplikaci GNOMEs GTK 4"
+#: src/plugins/meson-templates/meson_templates.py:416
+msgid "Create a GNOME application"
+msgstr "Vytvořit aplikaci GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Sdílená knihovna"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Vytvořit nový projekt se sdílenou knihovnou"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Prázdný projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Vytvořit nový prázdný projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Nástroj příkazové řádky"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Vytvořit nový projekt pro příkazovou řádku"
 
@@ -5655,7 +5663,8 @@ msgstr "Shodu slov zvýrazňovat od tohoto minimálního počtu znaků"
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
 msgid "quick highlight words matching current selection minimum length"
 msgstr ""
-"rychlé zvýraznění slova odpovídající vyhovující aktuálnímu výběru nejmenší minimální délka"
+"rychlé zvýraznění slova odpovídající vyhovující aktuálnímu výběru nejmenší "
+"minimální délka"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:349
@@ -6405,7 +6414,7 @@ msgstr "Sestavuje se projekt…"
 msgid "Installing project…"
 msgstr "Instaluje se projekt…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Selhalo vytvoření stromu XML"
