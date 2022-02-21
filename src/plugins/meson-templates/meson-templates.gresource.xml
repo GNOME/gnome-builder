@@ -84,5 +84,6 @@
     <file compressed="true">icons/scalable/actions/pattern-browse.svg</file>
     <file compressed="true">icons/scalable/actions/pattern-cli.svg</file>
     <file compressed="true">icons/scalable/actions/pattern-gnome.svg</file>
+    <file compressed="true">icons/scalable/actions/pattern-gtk.svg</file>
   </gresource>
 </gresources>

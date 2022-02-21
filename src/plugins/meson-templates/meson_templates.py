@@ -253,7 +253,7 @@ class GnomeProjectTemplate(MesonTemplate):
         super().__init__(
             'gnome-app',
             _('GTK Application (Legacy)'),
-            'pattern-gnome',
+            'pattern-legacy',
             _('Create a GTK application with GTK 3'),
             ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala', 'Rust'],
             0
@@ -330,7 +330,7 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
         super().__init__(
             'gnome-app-gtk4',
             _('GTK Application'),
-            'pattern-gnome',
+            'pattern-gtk',
             _('Create a GTK application'),
             ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
             0
