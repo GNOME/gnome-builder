@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-12 20:50+0000\n"
-"PO-Revision-Date: 2022-02-18 09:00+0700\n"
+"POT-Creation-Date: 2022-02-20 21:11+0000\n"
+"PO-Revision-Date: 2022-02-21 13:42+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -5177,43 +5177,51 @@ msgstr "Proyek Makefile Kosong"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Buat proyek kosong baru dengan menggunakan Makefile sederhana"
 
-#: src/plugins/meson-templates/meson_templates.py:251
-msgid "GNOME Application (Legacy)"
-msgstr "Aplikasi GNOME (Warisan)"
+#: src/plugins/meson-templates/meson_templates.py:255
+msgid "GTK Application (Legacy)"
+msgstr "Aplikasi GTK (Warisan)"
 
-#: src/plugins/meson-templates/meson_templates.py:253
-msgid "Create a GNOME application with GTK 3"
-msgstr "Buat suatu aplikasi GNOME dengan GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:257
+msgid "Create a GTK application with GTK 3"
+msgstr "Buat suatu aplikasi GTK dengan GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:332
+msgid "GTK Application"
+msgstr "Aplikasi GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+msgid "Create a GTK application"
+msgstr "Buat suatu aplikasi GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "Aplikasi GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:330
-msgid "Create a GNOME application with GTK 4"
-msgstr "Buat suatu aplikasi GNOME dengan GTK 4"
+#: src/plugins/meson-templates/meson_templates.py:416
+msgid "Create a GNOME application"
+msgstr "Buat suatu aplikasi GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:410
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Pustaka Bersama"
 
-#: src/plugins/meson-templates/meson_templates.py:412
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Buat suatu proyek baru dengan pustaka bersama"
 
-#: src/plugins/meson-templates/meson_templates.py:429
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Proyek Kosong"
 
-#: src/plugins/meson-templates/meson_templates.py:431
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Buat proyek kosong baru"
 
-#: src/plugins/meson-templates/meson_templates.py:448
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Alat Baris Perintah"
 
-#: src/plugins/meson-templates/meson_templates.py:450
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Buat proyek baris perintah baru"
 
@@ -6395,7 +6403,7 @@ msgstr "Membangun proyek…"
 msgid "Installing project…"
 msgstr "Memasang proyek…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Gagal membuat pohon XML."
@@ -6403,6 +6411,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Buat suatu aplikasi GNOME dengan GTK 4"
 
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
