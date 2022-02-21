@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-18 10:57+0000\n"
-"PO-Revision-Date: 2022-02-18 18:52+0200\n"
+"POT-Creation-Date: 2022-02-20 21:11+0000\n"
+"PO-Revision-Date: 2022-02-21 08:51+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -5195,30 +5195,33 @@ msgid "Create a new empty project using a simple Makefile"
 msgstr "Створити порожній проєкт з використанням простого Makefile"
 
 #: src/plugins/meson-templates/meson_templates.py:255
-msgid "GNOME Application (Legacy)"
-msgstr "Програма GNOME (застаріла)"
+#| msgid "GNOME Application (Legacy)"
+msgid "GTK Application (Legacy)"
+msgstr "Програма GTK (застаріла)"
 
 #: src/plugins/meson-templates/meson_templates.py:257
-msgid "Create a GNOME application with GTK 3"
-msgstr "Створити програму GNOME з GTK 3"
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GTK application with GTK 3"
+msgstr "Створити програму GTK з GTK 3"
 
 #: src/plugins/meson-templates/meson_templates.py:332
+#| msgid "GNOME Application"
+msgid "GTK Application"
+msgstr "Програма GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+#| msgid "Create a GNOME Adwaita application"
+msgid "Create a GTK application"
+msgstr "Створити програму GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "Програма GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:334
-msgid "Create a GNOME application with GTK 4"
-msgstr "Створити програму GNOME з GTK 4"
-
-#: src/plugins/meson-templates/meson_templates.py:414
-#| msgid "GNOME Application"
-msgid "GNOME Adwaita Application"
-msgstr "Програма GNOME з Adwaita"
-
 #: src/plugins/meson-templates/meson_templates.py:416
-#| msgid "Create a GNOME application with GTK 3"
-msgid "Create a GNOME Adwaita application"
-msgstr "Створити програму GNOME з Adwaita"
+#| msgid "Create a GNOME Adwaita application"
+msgid "Create a GNOME application"
+msgstr "Створити програму GTK"
 
 #: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
@@ -6444,6 +6447,13 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Створити програму GNOME з GTK 4"
+
+#~| msgid "GNOME Application"
+#~ msgid "GNOME Adwaita Application"
+#~ msgstr "Програма GNOME з Adwaita"
 
 #~ msgid "Adwaita Dark"
 #~ msgstr "Темна Adwaita"
