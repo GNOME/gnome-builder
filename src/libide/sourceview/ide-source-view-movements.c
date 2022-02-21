@@ -319,6 +319,10 @@ ide_source_view_movements_previous_char (Movement *mv)
     {
       if (gtk_text_iter_starts_line (&mv->insert))
         break;
+
+      if (gtk_text_iter_compare (&mv->insert, &mv->selection) == 0)
+        gtk_text_iter_forward_char (&mv->selection);
+
       gtk_text_iter_backward_char (&mv->insert);
     }
 
