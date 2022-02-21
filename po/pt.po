@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-18 10:57+0000\n"
-"PO-Revision-Date: 2022-02-19 17:41+0000\n"
+"POT-Creation-Date: 2022-02-20 21:11+0000\n"
+"PO-Revision-Date: 2022-02-21 13:28+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -5193,28 +5193,28 @@ msgid "Create a new empty project using a simple Makefile"
 msgstr "Criar um novo projeto vazio usando um Makefile simples"
 
 #: src/plugins/meson-templates/meson_templates.py:255
-msgid "GNOME Application (Legacy)"
-msgstr "Aplicação do GNOME (Legado)"
+msgid "GTK Application (Legacy)"
+msgstr "Aplicação GTK (Legado)"
 
 #: src/plugins/meson-templates/meson_templates.py:257
-msgid "Create a GNOME application with GTK 3"
-msgstr "Criar uma aplicação do GNOME com GTK3"
+msgid "Create a GTK application with GTK 3"
+msgstr "Criar uma aplicação GTK com o GTK3"
 
 #: src/plugins/meson-templates/meson_templates.py:332
-msgid "GNOME Application"
-msgstr "Aplicação do GNOME"
+msgid "GTK Application"
+msgstr "Aplicação GTK"
 
 #: src/plugins/meson-templates/meson_templates.py:334
-msgid "Create a GNOME application with GTK 4"
-msgstr "Criar uma aplicação do GNOME com GTK4"
+msgid "Create a GTK application"
+msgstr "Criar uma aplicação GTK"
 
 #: src/plugins/meson-templates/meson_templates.py:414
-msgid "GNOME Adwaita Application"
-msgstr "Aplicação do GNOME Adwaita"
+msgid "GNOME Application"
+msgstr "Aplicação GNOME"
 
 #: src/plugins/meson-templates/meson_templates.py:416
-msgid "Create a GNOME Adwaita application"
-msgstr "Criar uma aplicação do GNOME Adwaita"
+msgid "Create a GNOME application"
+msgstr "Criar uma aplicação GNOME"
 
 #: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
@@ -5318,7 +5318,7 @@ msgstr "Ligador"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
 #: src/plugins/meson/gbp-meson-utils.c:106
 msgid "Strip"
-msgstr "Descascador"
+msgstr "Desmontar"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
 #: src/plugins/meson/gbp-meson-utils.c:108
@@ -6434,6 +6434,12 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Criar uma aplicação do GNOME com GTK4"
+
+#~ msgid "GNOME Adwaita Application"
+#~ msgstr "Aplicação do GNOME Adwaita"
 
 #~ msgid "Adwaita Dark"
 #~ msgstr "Adwaita Escuro"
