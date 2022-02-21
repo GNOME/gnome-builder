@@ -328,8 +328,17 @@ spawn_runtime_launcher (IdeTerminalLauncher *self,
 
   g_assert (IDE_IS_TERMINAL_LAUNCHER (self));
   g_assert (IDE_IS_TASK (task));
-  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (!runtime || IDE_IS_RUNTIME (runtime));
   g_assert (pty_fd >= 0);
+
+  if (runtime == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 _("Requested runtime is not installed"));
+      return;
+    }
 
   if (!(shell = ide_terminal_launcher_get_shell (self)))
     shell = ide_get_user_shell ();
@@ -419,8 +428,17 @@ spawn_runner_launcher (IdeTerminalLauncher *self,
 
   g_assert (IDE_IS_TERMINAL_LAUNCHER (self));
   g_assert (IDE_IS_TASK (task));
-  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (!runtime || IDE_IS_RUNTIME (runtime));
   g_assert (pty_fd >= 0);
+
+  if (runtime == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 _("Requested runtime is not installed"));
+      return;
+    }
 
   if (!(shell = ide_terminal_launcher_get_shell (self)))
     shell = ide_get_user_shell ();
