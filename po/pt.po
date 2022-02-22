@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-20 21:11+0000\n"
-"PO-Revision-Date: 2022-02-21 13:28+0000\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-22 11:13+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -127,7 +127,7 @@ msgstr "Um depurador integrado para aplicações nativas"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Suporte para a criação com jhbuild  e tempos de execução flatpak"
+msgstr "Suporte para a criação com jhbuild e tempos de execução flatpak"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
 msgid "Support for viewing TODOs found within your code base"
@@ -1408,7 +1408,7 @@ msgstr ""
 
 #: src/libide/foundry/ide-run-manager.c:526
 msgid "Failed to locate runtime"
-msgstr "Não foi possível localizar a rotina \"%s\""
+msgstr "Não foi possível localizar o tempo de execução"
 
 #. translators: %s is replaced with the name of the users executable
 #: src/libide/foundry/ide-run-manager.c:577
@@ -1463,7 +1463,7 @@ msgstr "Predefinição (Sistema Operativo Anfitrião)"
 #: src/libide/greeter/ide-clone-surface.c:251
 #, c-format
 msgid "The directory “%s” already exists. Please choose another directory."
-msgstr "A diretoria \" %s\" já existe. Por favor, escolha outra diretoria."
+msgstr "O diretório \" %s\" já existe. Escolha outro diretório."
 
 #. translators: %s is replaced with the path to the project
 #: src/libide/greeter/ide-clone-surface.c:259
@@ -2416,7 +2416,7 @@ msgstr "Terminal"
 #: src/libide/gui/ide-shortcuts-window.ui:632
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
-msgstr "Terminal de compilação"
+msgstr "Terminal no tempo de execução de compilação"
 
 #: src/libide/gui/ide-shortcuts-window.ui:67
 #: src/libide/gui/ide-shortcuts-window.ui:639
@@ -2982,12 +2982,17 @@ msgstr "_Copiar endereço da ligação"
 msgid "Selection"
 msgstr "Seleção"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+msgid "Requested runtime is not installed"
+msgstr "O tempo de execução solicitado não está instalado"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
-msgstr "Falha ao criar shell dentro do runtime “%s”"
+msgstr "Falha ao criar shell dentro do tempo de execução “%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Terminal sem título"
 
@@ -3017,7 +3022,7 @@ msgstr "Iniciador de subprocesso falhou rápido demais, não será reiniciado."
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
-msgstr "Pesquisar runtimes"
+msgstr "Pesquisar tempos de execução"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -3283,7 +3288,7 @@ msgstr "Configurações de compilação"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
 msgid "All Runtimes"
-msgstr "Todos runtimes"
+msgstr "Todos os tempos de execução"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
 msgid "Make _Active"
@@ -3407,7 +3412,7 @@ msgstr "Perfil de compilação"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:165
 msgid "Runtime"
-msgstr "Runtime"
+msgstr "Tempo de execução"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:193
 msgid "Device"
@@ -4924,7 +4929,7 @@ msgstr "Propriedades específicas do widget"
 
 #: src/plugins/glade/gbp-glade-properties.ui:46
 msgid "Container child properties"
-msgstr "Propriedades do filho do contêiner"
+msgstr "Propriedades do sub-processo do contentor"
 
 #: src/plugins/glade/gbp-glade-properties.ui:56
 msgid "Styling, alignment, and other common properties"
@@ -5510,12 +5515,12 @@ msgstr "Inicializando projeto"
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:499
 msgid "Containers/Toolbox"
-msgstr "Contêineres/Caixa de ferramentas"
+msgstr "Contentores/Caixa de ferramentas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:505
 msgid "Containers/Podman"
-msgstr "Contêineres/Podman"
+msgstr "Contentores/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
@@ -5773,7 +5778,7 @@ msgstr "No ambiente de compilação"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
 msgid "In Runtime Environment"
-msgstr "No ambiente de execução"
+msgstr "No ambiente do tempo de execução"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
 msgid ""
@@ -5814,7 +5819,7 @@ msgstr "Executar no ambiente de compilação"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:108
 msgid "Run in runtime environment"
-msgstr "Executar no ambiente de execução"
+msgstr "Executar no ambiente do tempo de execução"
 
 #: src/plugins/shellcmd/gbp-shellcmd-list.c:113
 msgid "New command"
@@ -6209,11 +6214,11 @@ msgstr "Aplicação terminada\r\n"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:380
 msgid "Terminal in Build Runtime"
-msgstr "Terminal de compilação"
+msgstr "Terminal no tempo de execução de compilação"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:386
 msgid "Terminal in Runtime"
-msgstr "Terminal de execução"
+msgstr "Terminal do tempo de execução"
 
 #: src/plugins/terminal/gtk/menus.ui:9
 msgid "New _Terminal"
@@ -6225,7 +6230,7 @@ msgstr "Novo terminal de _compilação"
 
 #: src/plugins/terminal/gtk/menus.ui:23
 msgid "New _Runtime Terminal"
-msgstr "Novo terminal de _execução"
+msgstr "Novo terminal do tempo de _execução"
 
 #: src/plugins/testui/gbp-test-output-panel.c:132
 msgid "Unit Test Output"
@@ -6571,9 +6576,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 
 #~ msgid "Runtime has been updated"
 #~ msgstr "O runtime foi atualizado"
-
-#~ msgid "Runtime has been installed"
-#~ msgstr "O runtime foi instalado"
 
 #~ msgid "Missing system dependencies"
 #~ msgstr "Dependências do sistema em falta"
