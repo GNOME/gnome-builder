@@ -539,6 +539,9 @@
         },
         {
             "name" : "flatpak-builder",
+            "config-opts" : [
+                "--with-system-debugedit"
+            ],
             "sources" : [
                 {
                     "type" : "git",
