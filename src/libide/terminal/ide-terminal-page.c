@@ -339,7 +339,7 @@ gbp_terminal_page_create_split (IdePage *page)
                        "close-on-exit", self->close_on_exit,
                        "launcher", self->launcher,
                        "manage-spawn", self->manage_spawn,
-                       "pty", self->manage_spawn ? NULL : self->pty,
+                       "pty", NULL,
                        "respawn-on-exit", self->respawn_on_exit,
                        "visible", TRUE,
                        NULL);
