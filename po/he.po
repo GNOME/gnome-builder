@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-01-19 17:38+0000\n"
-"PO-Revision-Date: 2022-01-20 21:53+0200\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-22 22:26+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
-"Language-Team: Hebrew <>\n"
+"Language-Team: Hebrew <GNOME Hebrew Translation Project>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +23,6 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/style-schemes/builder.style-scheme.xml:22
 #: src/libide/gui/ide-preferences-builtin.c:144 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
@@ -475,7 +474,6 @@ msgid "Window maximized state"
 msgstr "Window maximized state"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:25
-#| msgid "Stylelint"
 msgid "Style Variant"
 msgstr "Style Variant"
 
@@ -652,31 +650,6 @@ msgstr "מרחב עריכה חדש"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "מפקח D-Bus"
-
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
-msgid "Adwaita Dark"
-msgstr "‏Adwaita כהה"
-
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
-msgid "The default color scheme for TextEditor"
-msgstr "ערכת הצבעים בבררת המחדל עבור עורך הטקסט"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:25
-msgid "Builder Dark"
-msgstr "‏Builder כהה"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:28
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "ערכת צבעים כהה עבור Builder המשתמשת בלוח צבעי טנגו"
-
-#: data/style-schemes/builder.style-scheme.xml:24
-msgid "The default color scheme for Builder"
-msgstr "ערכת צבעים בבררת מחדל עבור Builder"
-
-#: src/gstyle/data/palettes/basic.gstyle.xml:20
-#: src/plugins/color-picker/data/basic.gstyle.xml:20
-msgid "Basic"
-msgstr "בסיסי"
 
 #: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
@@ -1171,9 +1144,9 @@ msgstr "מצב הדגשה"
 #: src/libide/gui/ide-preferences-builtin.c:409
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:373
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:379
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:385
 msgid "General"
 msgstr "כללי"
 
@@ -1845,7 +1818,6 @@ msgid "Appearance"
 msgstr "מראה"
 
 #: src/libide/gui/ide-preferences-builtin.c:101
-#| msgid "Stylelint"
 msgid "Style"
 msgstr "סגנון Stylelint"
 
@@ -1859,12 +1831,10 @@ msgid "follow"
 msgstr "לעקוב"
 
 #: src/libide/gui/ide-preferences-builtin.c:103
-#| msgid "Night Light"
 msgid "Light"
 msgstr "בהיר"
 
 #: src/libide/gui/ide-preferences-builtin.c:104
-#| msgid "Dark Mode"
 msgid "Dark"
 msgstr "כהה"
 
@@ -1965,7 +1935,6 @@ msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "מתן רשות לעורך לגלול מעבר לסוף החוצץ"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
-#| msgid "Enable text wrapping"
 msgid "Text Wrapping"
 msgstr "גלישת טקסט"
 
@@ -2373,9 +2342,9 @@ msgstr "שינוי אפשרויות הריצה"
 
 # לדעתי אין מדובר ב„שולחן עבודה” של המעטפת כאן
 #: src/libide/gui/ide-search-button.c:49
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:372
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:378
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:384
 msgid "Workspace shortcuts"
 msgstr "צירופי מקשים למרחב העבודה"
 
@@ -3004,11 +2973,18 @@ msgid "Selection"
 msgstr "בחירה"
 
 #: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+#, fuzzy
+#| msgid "Rustup not installed"
+msgid "Requested runtime is not installed"
+msgstr "‏Rustup לא מותקן"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "ארע כשל ביצירת מעטפת עם זמן הריצה „%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:663
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "מסוף ללא כותרת"
 
@@ -4016,9 +3992,6 @@ msgid "Application ID"
 msgstr "מזהה יישום"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:100
-#| msgid ""
-#| "The Application ID is a reverse domain-name identifier used to uniquely "
-#| "identify your application such as “org.gnome.Builder”."
 msgid ""
 "The Application ID is a reverse domain-name identifier used to uniquely "
 "identify your application such as “org.gnome.Builder” and may not contain "
@@ -4701,14 +4674,10 @@ msgid "Flatpak"
 msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
-#| msgid "Installing rust "
 msgid "Installing Necessary SDKs"
 msgstr "מתבצעת התקנת ערכות פיתוח תכנה נדרשות"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4716,7 +4685,6 @@ msgstr "‏Builder מתקין ערכות פיתוח תכנה הנדרשות על
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to update SDKs: %s"
 msgstr "ארע כשל בעדכון ערכות פיתוח תכנה: %s"
 
@@ -4725,9 +4693,6 @@ msgid "Updating Necessary SDKs"
 msgstr "מתבצע עדכון ערכות פיתוח תכנה נדרשות"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
@@ -4971,7 +4936,7 @@ msgstr "מעצב ממשק משתמש"
 msgid "_UI Designer"
 msgstr "מ_עצב מנשק משתמש"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
 msgstr "סיוע הכתיבה דורש קובץ מקומי."
 
@@ -5148,8 +5113,9 @@ msgid "(Preview)"
 msgstr "(תצוגה מקדימה)"
 
 #: src/plugins/intelephense/intelephense.py:71
-#| msgid "Indexing Source Code"
-msgid "Indexing php code..."
+#, fuzzy
+#| msgid "Indexing php code..."
+msgid "Indexing php code…"
 msgstr "מתבצע מפתוח קוד php…"
 
 #: src/plugins/ls/gbp-ls-page.c:319
@@ -5199,43 +5165,56 @@ msgstr "מיזם Makefile ריק"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "יצירת מיזם ריק חדש באמצעות Makefile פשוט"
 
-#: src/plugins/meson-templates/meson_templates.py:252
-msgid "GNOME Application (Legacy)"
-msgstr "יישום GNOME (מיושן)"
+#: src/plugins/meson-templates/meson_templates.py:255
+#| msgid "GNOME Application (Legacy)"
+msgid "GTK Application (Legacy)"
+msgstr "יישום GTK (מיושן)"
 
-#: src/plugins/meson-templates/meson_templates.py:254
-msgid "Create a GNOME application with GTK 3"
-msgstr "יצירת יישום GNOME עם GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:257
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GTK application with GTK 3"
+msgstr "יצירת יישום GTK עם GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:332
+#| msgid "GNOME Application"
+msgid "GTK Application"
+msgstr "יישום GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GTK application"
+msgstr "יצירת יישום GTK עם GTK 3"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "יישום GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:332
-msgid "Create a GNOME application with GTK 4"
-msgstr "יצירת יישום GNOME עם GTK 4"
+#: src/plugins/meson-templates/meson_templates.py:416
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GNOME application"
+msgstr "יצירת יישום GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "ספרייה משותפת"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "יצירת מיזם חדש עם ספרייה משותפת"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "מיזם ריק"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "יצירת מיזם חדש ריק"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "כלי שורת פקודה"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "יצירת מיזם שורת פקודה"
 
@@ -5502,12 +5481,12 @@ msgid "Bootstrapping project"
 msgstr "יסודות המיזם נבנים"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:183
+#: src/plugins/podman/gbp-podman-runtime.c:499
 msgid "Containers/Toolbox"
 msgstr "מכולות/ערכת כלים"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:189
+#: src/plugins/podman/gbp-podman-runtime.c:505
 msgid "Containers/Podman"
 msgstr "מכולות/Podman"
 
@@ -5664,8 +5643,6 @@ msgstr ""
 "נוכחי בחירה תואם מתאים מתאימה תואמת"
 
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:64
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "Minimum length for highlight"
 msgstr "מספר תווים הכרחי עבור הדגשה"
 
@@ -5675,7 +5652,6 @@ msgstr "הדגשת מילים מתאימות בגודל של לפחות מספר
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
-#| msgid "quick highlight words matching current selection"
 msgid "quick highlight words matching current selection minimum length"
 msgstr ""
 "quick highlight words matching current selection minimum length חיפוש מהיר "
@@ -6075,8 +6051,8 @@ msgid "Use terminal interface"
 msgstr "שימוש בממשק מסוף"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:374
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:454
 #: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
 msgstr "מסוף"
@@ -6123,13 +6099,13 @@ msgstr "מסוף הצגת קישורים כתובות"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:93
 msgid "Scroll on output"
-msgstr ""
+msgstr "גלילה לסוף עם קבלת פלט"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:94
 msgid ""
 "When enabled the terminal will scroll to the bottom when new output is "
 "displayed"
-msgstr ""
+msgstr "כאשר אפשרות זו פועלת, תתבצע גלילה לתחתית המסוף כאשר יוצג פלט חדש"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:95
 msgctxt "Keywords"
@@ -6177,26 +6153,26 @@ msgctxt "Keywords"
 msgid "scrollback lines"
 msgstr "שורות גלילת פלט"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:303
 msgid "Application Output"
 msgstr "פלט יישום"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:333
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "יישום התחיל ברגע %s\n"
 
 # שורת פקודה
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:354
 msgid "Application exited\r\n"
 msgstr "היישום יצא\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:380
 msgid "Terminal in Build Runtime"
 msgstr "מסוף בבניית זמן ריצה"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:386
 msgid "Terminal in Runtime"
 msgstr "מסוף בזמן ריצה"
 
@@ -6409,7 +6385,7 @@ msgstr "מיזם בבנייה…"
 msgid "Installing project…"
 msgstr "מיזם בהתקנה…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "ארע כשל ביצירת עץ ה־XML."
@@ -6417,6 +6393,27 @@ msgstr "ארע כשל ביצירת עץ ה־XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
+
+#~ msgid "Adwaita Dark"
+#~ msgstr "‏Adwaita כהה"
+
+#~ msgid "The default color scheme for TextEditor"
+#~ msgstr "ערכת הצבעים בבררת המחדל עבור עורך הטקסט"
+
+#~ msgid "Builder Dark"
+#~ msgstr "‏Builder כהה"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr "ערכת צבעים כהה עבור Builder המשתמשת בלוח צבעי טנגו"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "ערכת צבעים בבררת מחדל עבור Builder"
+
+#~ msgid "Basic"
+#~ msgstr "בסיסי"
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "יצירת יישום GNOME עם GTK 4"
 
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
@@ -6560,9 +6557,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "Cannot download Rust Analyzer: %s"
 #~ msgstr "לא ניתן להוריד מנתח עבור Rust: ‏%s"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "‏Rustup לא מותקן"
 
 #~| msgid "Install successful"
 #~ msgid "Installing rustup"
