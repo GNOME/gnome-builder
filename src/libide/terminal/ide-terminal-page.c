@@ -173,7 +173,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
 }
 
 static void
-gbp_terminal_page_realize (GtkWidget *widget)
+ide_terminal_page_realize (GtkWidget *widget)
 {
   IdeTerminalPage *self = (IdeTerminalPage *)widget;
 
@@ -213,7 +213,7 @@ gbp_terminal_page_realize (GtkWidget *widget)
 }
 
 static void
-gbp_terminal_page_get_preferred_width (GtkWidget *widget,
+ide_terminal_page_get_preferred_width (GtkWidget *widget,
                                        gint      *min_width,
                                        gint      *nat_width)
 {
@@ -228,7 +228,7 @@ gbp_terminal_page_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-gbp_terminal_page_get_preferred_height (GtkWidget *widget,
+ide_terminal_page_get_preferred_height (GtkWidget *widget,
                                         gint      *min_height,
                                         gint      *nat_height)
 {
@@ -243,7 +243,7 @@ gbp_terminal_page_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-gbp_terminal_page_set_needs_attention (IdeTerminalPage *self,
+ide_terminal_page_set_needs_attention (IdeTerminalPage *self,
                                        gboolean         needs_attention)
 {
   GtkWidget *parent;
@@ -278,7 +278,7 @@ notification_received_cb (VteTerminal     *terminal,
     return;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (terminal)))
-    gbp_terminal_page_set_needs_attention (self, TRUE);
+    ide_terminal_page_set_needs_attention (self, TRUE);
 }
 
 static gboolean
@@ -290,7 +290,7 @@ focus_in_event_cb (VteTerminal     *terminal,
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
   self->needs_attention = FALSE;
-  gbp_terminal_page_set_needs_attention (self, FALSE);
+  ide_terminal_page_set_needs_attention (self, FALSE);
   gtk_revealer_set_reveal_child (self->search_revealer_top, FALSE);
 
   return GDK_EVENT_PROPAGATE;
@@ -342,7 +342,7 @@ style_context_changed (GtkStyleContext *style_context,
 }
 
 static IdePage *
-gbp_terminal_page_create_split (IdePage *page)
+ide_terminal_page_create_split (IdePage *page)
 {
   IdeTerminalPage *self = (IdeTerminalPage *)page;
 
@@ -359,7 +359,7 @@ gbp_terminal_page_create_split (IdePage *page)
 }
 
 static void
-gbp_terminal_page_grab_focus (GtkWidget *widget)
+ide_terminal_page_grab_focus (GtkWidget *widget)
 {
   IdeTerminalPage *self = (IdeTerminalPage *)widget;
 
@@ -547,13 +547,13 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   object_class->get_property = ide_terminal_page_get_property;
   object_class->set_property = ide_terminal_page_set_property;
 
-  widget_class->realize = gbp_terminal_page_realize;
-  widget_class->get_preferred_width = gbp_terminal_page_get_preferred_width;
-  widget_class->get_preferred_height = gbp_terminal_page_get_preferred_height;
-  widget_class->grab_focus = gbp_terminal_page_grab_focus;
+  widget_class->realize = ide_terminal_page_realize;
+  widget_class->get_preferred_width = ide_terminal_page_get_preferred_width;
+  widget_class->get_preferred_height = ide_terminal_page_get_preferred_height;
+  widget_class->grab_focus = ide_terminal_page_grab_focus;
   widget_class->destroy = ide_terminal_page_destroy;
 
-  page_class->create_split = gbp_terminal_page_create_split;
+  page_class->create_split = ide_terminal_page_create_split;
   page_class->get_file_or_directory = ide_terminal_page_get_file_or_directory;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-page.ui");
