@@ -1,3 +1,29 @@
+================
+Version 42.beta1
+================
+
+ • Support for dark style preference
+ • Enable proc-macro with rust-analzyer
+ • Project template updates
+ • Improvements to podman integration
+ • Fix a number of crashes
+ • Use libhandy for window styling to match other GNOME applications
+ • Fullscreen has been temporarily removed until the GTK 4 port to allow
+   for easier transition to libhandy
+ • Updates to syntax highlighting schemes
+ • Addition of IdeDiagnosticTool to simplify plugin creation
+ • Adwaita is now the default style scheme
+ • The gutter will now try to use colors from style scheme for difffs
+ • Build system modernization
+ • Robustness fixes to terminal
+ • Fixes for header include completion
+ • gtk4 validation with RNG
+ • Clang improvements when using podman
+ • CMake integration fixes
+ • Updated icons
+ • VIM emulation fixes
+ • Updated translations
+
 =================
 Version 42.alpha1
 =================
