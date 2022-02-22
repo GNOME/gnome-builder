@@ -172,6 +172,44 @@ ide_terminal_page_spawn_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static gboolean
+ide_terminal_page_do_spawn_in_idle (IdeTerminalPage *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
+
+  if (self->destroyed)
+    IDE_RETURN (G_SOURCE_REMOVE);
+
+  self->last_respawn = g_get_monotonic_time ();
+
+  if (self->pty == NULL)
+    {
+      g_autoptr(GError) error = NULL;
+
+      if (!(self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, &error)))
+        {
+          g_critical ("Failed to create PTY for terminal: %s", error->message);
+          IDE_RETURN (G_SOURCE_REMOVE);
+        }
+    }
+
+  vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
+
+  if (!self->manage_spawn)
+    IDE_RETURN (G_SOURCE_REMOVE);
+
+  /* Spawn our terminal and wait for it to exit */
+  ide_terminal_launcher_spawn_async (self->launcher,
+                                     self->pty,
+                                     NULL,
+                                     ide_terminal_page_spawn_cb,
+                                     g_object_ref (self));
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
 static void
 ide_terminal_page_realize (GtkWidget *widget)
 {
@@ -186,30 +224,14 @@ ide_terminal_page_realize (GtkWidget *widget)
 
   self->did_defered_setup_in_realize = TRUE;
 
-  self->last_respawn = g_get_monotonic_time ();
-
-  if (self->pty == NULL)
-    {
-      g_autoptr(GError) error = NULL;
-
-      if (!(self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, &error)))
-        {
-          g_critical ("Failed to create PTY for terminal: %s", error->message);
-          return;
-        }
-    }
-
-  vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
-
-  if (!self->manage_spawn)
-    return;
-
-  /* Spawn our terminal and wait for it to exit */
-  ide_terminal_launcher_spawn_async (self->launcher,
-                                     self->pty,
-                                     NULL,
-                                     ide_terminal_page_spawn_cb,
-                                     g_object_ref (self));
+  /* We don't want to process this in realize as it could be holding things
+   * up from being mapped. Instead, wait until the GDK backend has finished
+   * reacting to realize/etc and then spawn from idle.
+   */
+  g_idle_add_full (G_PRIORITY_LOW,
+                   (GSourceFunc)ide_terminal_page_do_spawn_in_idle,
+                   g_object_ref (self),
+                   g_object_unref);
 }
 
 static void
