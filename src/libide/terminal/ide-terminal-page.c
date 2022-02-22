@@ -79,11 +79,16 @@ terminal_has_notification_signal (void)
 static gboolean
 destroy_widget_in_idle (GtkWidget *widget)
 {
+  IdeTerminalPage *self = (IdeTerminalPage *)widget;
+
   IDE_ENTRY;
 
-  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
 
-  gtk_widget_destroy (widget);
+  if (!self->destroyed)
+    gtk_widget_destroy (widget);
+
+  g_assert (self->destroyed);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -108,13 +113,12 @@ ide_terminal_page_spawn_cb (GObject      *object,
 
   self->exited = TRUE;
 
-  title = g_strdup_printf ("%s (%s)",
-                           ide_page_get_title (IDE_PAGE (self)) ?: _("Untitled terminal"),
-                           /* translators: exited describes that the terminal shell process has exited */
-                           _("Exited"));
-  ide_page_set_title (IDE_PAGE (self), title);
+  ide_terminal_launcher_spawn_finish (launcher, result, &error);
 
-  if (!ide_terminal_launcher_spawn_finish (launcher, result, &error))
+  if (self->destroyed)
+    IDE_EXIT;
+
+  if (error != NULL)
     {
       g_autofree gchar *format = NULL;
 
@@ -122,8 +126,11 @@ ide_terminal_page_spawn_cb (GObject      *object,
       ide_terminal_page_feed (self, format);
     }
 
-  if (gtk_widget_in_destruction (GTK_WIDGET (self)))
-    IDE_EXIT;
+  title = g_strdup_printf ("%s (%s)",
+                           ide_page_get_title (IDE_PAGE (self)) ?: _("Untitled terminal"),
+                           /* translators: exited describes that the terminal shell process has exited */
+                           _("Exited"));
+  ide_page_set_title (IDE_PAGE (self), title);
 
   now = g_get_monotonic_time ();
   maybe_flapping = ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC;
@@ -267,6 +274,9 @@ notification_received_cb (VteTerminal     *terminal,
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
+  if (self->destroyed)
+    return;
+
   if (!gtk_widget_has_focus (GTK_WIDGET (terminal)))
     gbp_terminal_page_set_needs_attention (self, TRUE);
 }
@@ -294,6 +304,9 @@ window_title_changed_cb (VteTerminal     *terminal,
 
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (IDE_IS_TERMINAL_PAGE (self));
+
+  if (self->destroyed)
+    return;
 
   title = vte_terminal_get_window_title (VTE_TERMINAL (self->terminal_top));
 
@@ -359,6 +372,12 @@ static void
 ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                     VteTerminal     *terminal)
 {
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
+  g_assert (VTE_IS_TERMINAL (terminal));
+
+  if (self->destroyed)
+    return;
+
   g_signal_connect_object (terminal,
                            "focus-in-event",
                            G_CALLBACK (focus_in_event_cb),
@@ -398,6 +417,9 @@ static void
 ide_terminal_page_on_text_inserted_cb (IdeTerminalPage *self,
                                        VteTerminal     *terminal)
 {
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
+  g_assert (VTE_IS_TERMINAL (terminal));
+
   g_signal_emit (self, signals [TEXT_INSERTED], 0);
 }
 
@@ -409,6 +431,9 @@ ide_terminal_page_get_file_or_directory (IdePage *page)
 
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
+  if (self->destroyed)
+    return NULL;
+
   if (!(uri = vte_terminal_get_current_file_uri (VTE_TERMINAL (self->terminal_top))))
     uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal_top));
 
@@ -416,6 +441,16 @@ ide_terminal_page_get_file_or_directory (IdePage *page)
     return g_file_new_for_uri (uri);
 
   return NULL;
+}
+
+static void
+ide_terminal_page_destroy (GtkWidget *widget)
+{
+  IdeTerminalPage *self = (IdeTerminalPage *)widget;
+
+  self->destroyed = TRUE;
+
+  GTK_WIDGET_CLASS (ide_terminal_page_parent_class)->destroy (widget);
 }
 
 static void
@@ -516,6 +551,7 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   widget_class->get_preferred_width = gbp_terminal_page_get_preferred_width;
   widget_class->get_preferred_height = gbp_terminal_page_get_preferred_height;
   widget_class->grab_focus = gbp_terminal_page_grab_focus;
+  widget_class->destroy = ide_terminal_page_destroy;
 
   page_class->create_split = gbp_terminal_page_create_split;
   page_class->get_file_or_directory = ide_terminal_page_get_file_or_directory;
@@ -629,6 +665,9 @@ ide_terminal_page_set_pty (IdeTerminalPage *self,
   g_return_if_fail (IDE_IS_TERMINAL_PAGE (self));
   g_return_if_fail (VTE_IS_PTY (pty));
 
+  if (self->destroyed)
+    return;
+
   if (g_set_object (&self->pty, pty))
     {
       vte_terminal_reset (VTE_TERMINAL (self->terminal_top), TRUE, TRUE);
@@ -641,6 +680,7 @@ ide_terminal_page_feed (IdeTerminalPage *self,
                         const gchar     *message)
 {
   g_return_if_fail (IDE_IS_TERMINAL_PAGE (self));
+  g_return_if_fail (self->destroyed == FALSE);
 
   if (self->terminal_top != NULL)
     vte_terminal_feed (VTE_TERMINAL (self->terminal_top), message, -1);
@@ -652,6 +692,7 @@ ide_terminal_page_set_launcher (IdeTerminalPage     *self,
 {
   g_return_if_fail (IDE_IS_TERMINAL_PAGE (self));
   g_return_if_fail (!launcher || IDE_IS_TERMINAL_LAUNCHER (launcher));
+  g_return_if_fail (self->destroyed == FALSE);
 
   if (g_set_object (&self->launcher, launcher))
     {
@@ -677,6 +718,7 @@ const gchar *
 ide_terminal_page_get_current_directory_uri (IdeTerminalPage *self)
 {
   g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), NULL);
+  g_return_val_if_fail (self->destroyed == FALSE, NULL);
 
   return vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal_top));
 }
