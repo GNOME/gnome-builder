@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-20 21:11+0000\n"
-"PO-Revision-Date: 2022-02-21 13:42+0700\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-23 09:35+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -2968,12 +2968,17 @@ msgstr "_Salin Alamat Taut"
 msgid "Selection"
 msgstr "Pilihan"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+msgid "Requested runtime is not installed"
+msgstr "Runtime yang diminta tidak dipasang"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Gagal membuat shell dalam runtime: \"%s\""
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Terminal Tanpa Judul"
 
@@ -6597,9 +6602,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Install Language Server"
 #~ msgstr "Pasang Language Server"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "Rustup tidak diinstal"
 
 #~ msgid "Installing rustup"
 #~ msgstr "Memasang rustup"
