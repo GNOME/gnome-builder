@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-01-24 00:23+0000\n"
-"PO-Revision-Date: 2022-01-24 19:02+0800\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-22 19:39+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -24,7 +24,6 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/style-schemes/builder.style-scheme.xml:22
 #: src/libide/gui/ide-preferences-builtin.c:144 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
@@ -621,23 +620,6 @@ msgstr "新建编辑器工作区"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "D-Bus 检测"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:25
-msgid "Builder Dark"
-msgstr "构建器暗色"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:28
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "黑暗色 Tango 样式的构建器配色方案"
-
-#: data/style-schemes/builder.style-scheme.xml:24
-msgid "The default color scheme for Builder"
-msgstr "构建器默认的配色方案"
-
-#: src/gstyle/data/palettes/basic.gstyle.xml:20
-#: src/plugins/color-picker/data/basic.gstyle.xml:20
-msgid "Basic"
-msgstr "基本"
 
 #: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
@@ -1909,7 +1891,6 @@ msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "允许编辑器滚动超过缓冲区末尾"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
-#| msgid "Enable text wrapping"
 msgid "Text Wrapping"
 msgstr "文本折行"
 
@@ -2938,12 +2919,18 @@ msgstr "复制链接地址(_C)"
 msgid "Selection"
 msgstr "选择"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+#| msgid "Rustup not installed"
+msgid "Requested runtime is not installed"
+msgstr "请求的运行时未安装"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "无法在运行时“%s”中创建 shell"
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "无标题终端"
 
@@ -4874,7 +4861,7 @@ msgstr "UI 设计器"
 msgid "_UI Designer"
 msgstr "_UI 设计器"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
 msgstr "代码助手需要一个本地文件。"
 
@@ -5041,7 +5028,7 @@ msgid "(Preview)"
 msgstr "（预览）"
 
 #: src/plugins/intelephense/intelephense.py:71
-msgid "Indexing php code..."
+msgid "Indexing php code…"
 msgstr "正在索引 php 代码…"
 
 #: src/plugins/ls/gbp-ls-page.c:319
@@ -5090,43 +5077,51 @@ msgstr "空白 Makefile 工程"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "使用一个简单 Makefile 新建空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:252
-msgid "GNOME Application (Legacy)"
-msgstr "GNOME 应用程序（过时）"
+#: src/plugins/meson-templates/meson_templates.py:255
+msgid "GTK Application (Legacy)"
+msgstr "GTK 应用程序（过时）"
 
-#: src/plugins/meson-templates/meson_templates.py:254
-msgid "Create a GNOME application with GTK 3"
-msgstr "使用 GTK 3 创建 GNOME 应用程序"
+#: src/plugins/meson-templates/meson_templates.py:257
+msgid "Create a GTK application with GTK 3"
+msgstr "使用 GTK 3 创建 GTK 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:332
+msgid "GTK Application"
+msgstr "GTK 应用程序"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+msgid "Create a GTK application"
+msgstr "创建 GTK 应用程序"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:332
-msgid "Create a GNOME application with GTK 4"
-msgstr "使用 GTK 4 创建 GNOME 应用程序"
+#: src/plugins/meson-templates/meson_templates.py:416
+msgid "Create a GNOME application"
+msgstr "创建 GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "已共享库"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "用已共享库新建工程"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "创建新的空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "命令行工具"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "创建一个新的命令行工程"
 
@@ -5393,12 +5388,12 @@ msgid "Bootstrapping project"
 msgstr "自举工程"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:183
+#: src/plugins/podman/gbp-podman-runtime.c:499
 msgid "Containers/Toolbox"
 msgstr "容器/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:189
+#: src/plugins/podman/gbp-podman-runtime.c:505
 msgid "Containers/Podman"
 msgstr "容器/Podman"
 
@@ -6286,7 +6281,7 @@ msgstr "正在构建工程…"
 msgid "Installing project…"
 msgstr "正在安装工程…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "无法创建 XML 树。"
@@ -6294,6 +6289,25 @@ msgstr "无法创建 XML 树。"
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "文件必须保存在本地来解析。"
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "使用 GTK 4 创建 GNOME 应用程序"
+
+#~| msgid "GNOME Application"
+#~ msgid "GNOME Adwaita Application"
+#~ msgstr "GNOME Adwaita 应用程序"
+
+#~ msgid "Builder Dark"
+#~ msgstr "构建器暗色"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr "黑暗色 Tango 样式的构建器配色方案"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "构建器默认的配色方案"
+
+#~ msgid "Basic"
+#~ msgstr "基本"
 
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
@@ -6448,9 +6462,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Cannot download Rust Analyzer: %s"
 #~ msgstr "无法下载 Rust 分析工具：%s"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "没有安装 Rustup"
 
 #~ msgid "Installing rustup"
 #~ msgstr "正在安装 rustup"
