@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-20 21:11+0000\n"
-"PO-Revision-Date: 2022-02-21 08:51+0200\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-23 09:11+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2986,12 +2986,18 @@ msgstr "_Копіювати адресу посилання"
 msgid "Selection"
 msgstr "Вибір"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+#| msgid "Rustup not installed"
+msgid "Requested runtime is not installed"
+msgstr "Потрібне середовище виконання не встановлено"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Не вдалося створити оболонку всередині середовища виконання «%s»"
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Термінал без назви"
 
@@ -5195,22 +5201,18 @@ msgid "Create a new empty project using a simple Makefile"
 msgstr "Створити порожній проєкт з використанням простого Makefile"
 
 #: src/plugins/meson-templates/meson_templates.py:255
-#| msgid "GNOME Application (Legacy)"
 msgid "GTK Application (Legacy)"
 msgstr "Програма GTK (застаріла)"
 
 #: src/plugins/meson-templates/meson_templates.py:257
-#| msgid "Create a GNOME application with GTK 3"
 msgid "Create a GTK application with GTK 3"
 msgstr "Створити програму GTK з GTK 3"
 
 #: src/plugins/meson-templates/meson_templates.py:332
-#| msgid "GNOME Application"
 msgid "GTK Application"
 msgstr "Програма GTK"
 
 #: src/plugins/meson-templates/meson_templates.py:334
-#| msgid "Create a GNOME Adwaita application"
 msgid "Create a GTK application"
 msgstr "Створити програму GTK"
 
@@ -5219,7 +5221,6 @@ msgid "GNOME Application"
 msgstr "Програма GNOME"
 
 #: src/plugins/meson-templates/meson_templates.py:416
-#| msgid "Create a GNOME Adwaita application"
 msgid "Create a GNOME application"
 msgstr "Створити програму GTK"
 
@@ -6644,9 +6645,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Install Language Server"
 #~ msgstr "Встановити сервер мови"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "Rustup не встановлено"
 
 #~ msgid "Installing rustup"
 #~ msgstr "Встановлюємо rustup"
