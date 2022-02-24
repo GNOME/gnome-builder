@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-12 20:50+0000\n"
-"PO-Revision-Date: 2022-02-12 21:56+0100\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-24 13:47+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -2992,12 +2992,18 @@ msgstr "_Copiar o enderezo da ligazón"
 msgid "Selection"
 msgstr "Selección"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+#| msgid "Rustup not installed"
+msgid "Requested runtime is not installed"
+msgstr "O «runtime» solicitado non está instalado"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Produciuse un fallo ao crear a shell no runtime «%s»"
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Terminal sen título"
 
@@ -5152,7 +5158,6 @@ msgid "(Preview)"
 msgstr "(Previsualización)"
 
 #: src/plugins/intelephense/intelephense.py:71
-#| msgid "Indexing php code..."
 msgid "Indexing php code…"
 msgstr "Indexando código php…"
 
@@ -5202,43 +5207,56 @@ msgstr "Proxecto Makefile baleiro"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Crear un novo proxecto baleiro usando un Makefile simple"
 
-#: src/plugins/meson-templates/meson_templates.py:251
-msgid "GNOME Application (Legacy)"
-msgstr "Aplicación de GNOME (Legacy)"
+#: src/plugins/meson-templates/meson_templates.py:255
+#| msgid "GNOME Application (Legacy)"
+msgid "GTK Application (Legacy)"
+msgstr "Aplicación de GTK (Legacy)"
 
-#: src/plugins/meson-templates/meson_templates.py:253
-msgid "Create a GNOME application with GTK 3"
-msgstr "Crear unha nova aplicación de GNOME con GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:257
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GTK application with GTK 3"
+msgstr "Crear unha aplicación de GTK con GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:332
+#| msgid "GNOME Application"
+msgid "GTK Application"
+msgstr "Aplicación de GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GTK application"
+msgstr "Crear unha aplicación de GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "Aplicación de GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:330
-msgid "Create a GNOME application with GTK 4"
-msgstr "Crear unha nova aplicación de GNOME 4"
+#: src/plugins/meson-templates/meson_templates.py:416
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GNOME application"
+msgstr "Crear unha aplicación de GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:410
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:412
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Crea un novo proxecto con unha biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:429
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Proxecto baleiro"
 
-#: src/plugins/meson-templates/meson_templates.py:431
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Crear un novo proxecto baleiro"
 
-#: src/plugins/meson-templates/meson_templates.py:448
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Ferramenta de liña de ordes"
 
-#: src/plugins/meson-templates/meson_templates.py:450
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Crear un novo proxecto de liña de ordes"
 
@@ -6429,7 +6447,7 @@ msgstr "Construíndo o proxecto…"
 msgid "Installing project…"
 msgstr "Instalando o proxecto…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Produciuse un fallo ao crear a árbore de XML."
@@ -6437,6 +6455,9 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Crear unha nova aplicación de GNOME 4"
 
 #~ msgid "Builder Dark"
 #~ msgstr "Construtor escuro"
@@ -6615,9 +6636,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 
 #~ msgid "Install Language Server"
 #~ msgstr "Instalar Servidor de Linguaxe"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "Rustup non instalado"
 
 #~ msgid "Installing rustup"
 #~ msgstr "Instalando rustup"
