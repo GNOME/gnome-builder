@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-18 10:57+0000\n"
-"PO-Revision-Date: 2022-02-19 10:34-0300\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-23 20:56-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -3003,12 +3003,17 @@ msgstr "_Copiar endereço do link"
 msgid "Selection"
 msgstr "Seleção"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+msgid "Requested runtime is not installed"
+msgstr "Runtime solicitado não está instalado"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Falha ao criar shell dentro do runtime “%s”"
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Terminal sem título"
 
@@ -5218,31 +5223,31 @@ msgstr "Projeto com Makefile vazio"
 
 #: src/plugins/make/make_plugin.py:345
 msgid "Create a new empty project using a simple Makefile"
-msgstr "Criar um novo projeto vazio usando um Makefile simples"
+msgstr "Crie um novo projeto vazio usando um Makefile simples"
 
 #: src/plugins/meson-templates/meson_templates.py:255
-msgid "GNOME Application (Legacy)"
-msgstr "Aplicativo do GNOME (Legado)"
+msgid "GTK Application (Legacy)"
+msgstr "Aplicativo GTK (Legado)"
 
 #: src/plugins/meson-templates/meson_templates.py:257
-msgid "Create a GNOME application with GTK 3"
-msgstr "Crie um aplicativo do GNOME com GTK 3"
+msgid "Create a GTK application with GTK 3"
+msgstr "Crie um aplicativo GTK com GTK 3"
 
 #: src/plugins/meson-templates/meson_templates.py:332
+msgid "GTK Application"
+msgstr "Aplicativo GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+msgid "Create a GTK application"
+msgstr "Crie um aplicativo GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "Aplicativo do GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:334
-msgid "Create a GNOME application with GTK 4"
-msgstr "Crie um aplicativo do GNOME com GTK 4"
-
-#: src/plugins/meson-templates/meson_templates.py:414
-msgid "GNOME Adwaita Application"
-msgstr "Aplicativo Adwaita do GNOME"
-
 #: src/plugins/meson-templates/meson_templates.py:416
-msgid "Create a GNOME Adwaita application"
-msgstr "Crie um aplicativo Adwaita do GNOME"
+msgid "Create a GNOME application"
+msgstr "Crie um aplicativo do GNOME"
 
 #: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
@@ -5250,7 +5255,7 @@ msgstr "Biblioteca compartilhada"
 
 #: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
-msgstr "Criar um novo projeto com uma biblioteca compartilhada"
+msgstr "Crie um novo projeto com uma biblioteca compartilhada"
 
 #: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
@@ -5258,7 +5263,7 @@ msgstr "Projeto vazio"
 
 #: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
-msgstr "Criar um novo projeto vazio"
+msgstr "Crie um novo projeto vazio"
 
 #: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
@@ -5266,7 +5271,7 @@ msgstr "Ferramenta de linha de comando"
 
 #: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
-msgstr "Criar um novo projeto de linha de comando"
+msgstr "Crie um novo projeto de linha de comando"
 
 #: src/plugins/meson/gbp-meson-build-system.c:470
 #: src/plugins/meson/gbp-meson-config-view-addin.c:57
@@ -6464,6 +6469,12 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O arquivo deve estar salvo localmente para análise."
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Crie um aplicativo do GNOME com GTK 4"
+
+#~ msgid "GNOME Adwaita Application"
+#~ msgstr "Aplicativo Adwaita do GNOME"
 
 #~ msgid "Builder Dark"
 #~ msgstr "Builder Dark"
