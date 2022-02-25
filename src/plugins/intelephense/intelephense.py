@@ -30,7 +30,8 @@ class PhpService(Ide.Object):
         self._client = value
         self.notify('client')
 
-    def do_destroy(self):
+    @staticmethod
+    def on_destroy(self):
         if self._supervisor:
             supervisor, self._supervisor = self._supervisor, None
             supervisor.stop()
@@ -137,6 +138,7 @@ class PhpService(Ide.Object):
         self = PhpService.from_context(context)
         self._context = context
         self._ensure_started()
+        self.connect('destroy', PhpService.on_destroy)
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
 class PhpLspSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):

@@ -72,24 +72,14 @@ class GVlsService(Ide.Object):
         self._client = value
         self.notify('client')
 
-    def do_parent_set(self, parent):
-        """
-        No useful for VLS
-        """
-        if parent is None:
-            return
-
-    def do_destroy(self):
+    @staticmethod
+    def on_destroy(self):
         """
         Stops the Vala Language Server upon request to shutdown the
         GVlsService.
         """
-        if self._client is not None:
-            Ide.warning ("Shutting down server")
-            self._client.stop()
-            self._client.destroy()
-
         if self._supervisor is not None:
+            Ide.warning('Stopping GVls supervisor')
             supervisor, self._supervisor = self._supervisor, None
             supervisor.stop()
 
@@ -572,6 +562,7 @@ class GVlsService(Ide.Object):
         context = provider.get_context()
         self = GVlsService.from_context(context)
         self._ensure_started()
+        self.connect('destroy', GVlsService.on_destroy)
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
 class GVlsDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
