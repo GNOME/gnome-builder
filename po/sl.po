@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-13 10:06+0000\n"
-"PO-Revision-Date: 2022-02-13 17:42+0100\n"
+"POT-Creation-Date: 2022-02-25 19:40+0000\n"
+"PO-Revision-Date: 2022-02-25 22:10+0100\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -875,7 +875,7 @@ msgstr "P_reimenuj"
 msgid "unsaved file %u"
 msgstr "neshranjena datoteka %u"
 
-#: src/libide/code/ide-buffer.c:3635
+#: src/libide/code/ide-buffer.c:3639
 msgid "The current language lacks a symbol resolver."
 msgstr "Trenutno izbrani jezik ne podpira razreševalnikov simbolov."
 
@@ -2820,7 +2820,7 @@ msgstr[2] "Poteka nameščanje %u paketov."
 msgstr[3] "Poteka nameščanje %u paketov."
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1473
+#: src/libide/lsp/ide-lsp-client.c:1474
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Ni mogoče začeti jezikovnega strežnika: %s"
@@ -2971,12 +2971,17 @@ msgstr "_Kopiraj naslov povezave"
 msgid "Selection"
 msgstr "Izbor"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+msgid "Requested runtime is not installed"
+msgstr "Zahtevane izvajalne datoteke niso nameščene."
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Ustvarjanje lupine znotraj izvajalnega programa »%s« je spodletelo."
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Neimenovan terminal"
 
@@ -2984,24 +2989,24 @@ msgstr "Neimenovan terminal"
 msgid "Save Terminal Content As"
 msgstr "Shrani vsebino terminala kot"
 
-#: src/libide/terminal/ide-terminal-page.c:112
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:301
-msgid "Untitled terminal"
-msgstr "Neimenovan terminal"
-
-#. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:114
-msgid "Exited"
-msgstr "Program je končan"
-
-#: src/libide/terminal/ide-terminal-page.c:121
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Zaganjanje podrejenega procesa je spodletelo. Najverjetneje je treba ponovno "
 "izgraditi projekt."
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:130
+#: src/libide/terminal/ide-terminal-page.c:165
+#: src/libide/terminal/ide-terminal-page.c:336
+msgid "Untitled terminal"
+msgstr "Neimenovan terminal"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:132
+msgid "Exited"
+msgstr "Program je končan"
+
+#: src/libide/terminal/ide-terminal-page.c:152
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 "Zagon podrejenega opravila je prehitro spodletel in ne bo ponovno zagnan."
@@ -5140,7 +5145,7 @@ msgstr "V sistemu ni nameščenega paketa python3-sphinx!"
 msgid "(Preview)"
 msgstr "(Predogled)"
 
-#: src/plugins/intelephense/intelephense.py:71
+#: src/plugins/intelephense/intelephense.py:72
 msgid "Indexing php code…"
 msgstr "Indeksiranje kode php …"
 
@@ -5190,43 +5195,51 @@ msgstr "Izprazni projekt Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Ustvari nov prazen projekt z uporabo Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:251
-msgid "GNOME Application (Legacy)"
-msgstr "Program GNOME (opuščeno)"
+#: src/plugins/meson-templates/meson_templates.py:255
+msgid "GTK Application (Legacy)"
+msgstr "Program GTK (opuščeno)"
 
-#: src/plugins/meson-templates/meson_templates.py:253
-msgid "Create a GNOME application with GTK 3"
-msgstr "Ustvari program GNOME z GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:257
+msgid "Create a GTK application with GTK 3"
+msgstr "Ustvari program GTK z GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:332
+msgid "GTK Application"
+msgstr "Program GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+msgid "Create a GTK application"
+msgstr "Ustvari program GTK"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "Program GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:330
-msgid "Create a GNOME application with GTK 4"
-msgstr "Ustvari program GNOME z GTK 4"
+#: src/plugins/meson-templates/meson_templates.py:416
+msgid "Create a GNOME application"
+msgstr "Ustvari program GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:410
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Souporabna knjižnica"
 
-#: src/plugins/meson-templates/meson_templates.py:412
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Ustvari nov projekt s souporabno knjižnico"
 
-#: src/plugins/meson-templates/meson_templates.py:429
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Izprazni projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:431
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Ustvari nov prazen projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:448
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Orodje ukazne vrstice"
 
-#: src/plugins/meson-templates/meson_templates.py:450
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Ustvari nov projekt ukazne vrstice"
 
@@ -6421,6 +6434,9 @@ msgstr "Ustvarjanje drevesne strukture XML je spodletelo."
 msgid "File must be saved locally to parse."
 msgstr "Za razčlenjevanje mora biti datoteka shranjena krajevno."
 
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Ustvari program GNOME z GTK 4"
+
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
 #~ "is visible."
@@ -6608,9 +6624,6 @@ msgstr "Za razčlenjevanje mora biti datoteka shranjena krajevno."
 
 #~ msgid "Install Language Server"
 #~ msgstr "Namesti jezikovni strežnik"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "Program Rustup ni nameščen"
 
 #~ msgid "Installing rustup"
 #~ msgstr "Poteka nameščanje paketa Rustup"
