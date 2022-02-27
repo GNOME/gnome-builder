@@ -163,7 +163,7 @@ ide_diagnostic_tool_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_diagnostic_tool_parent_class)->constructed (object);
 
-  if (IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics)
+  if (!IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics)
     g_critical ("%s inherits from IdeDiagnosticTool but does not implement populate_diagnostics(). This will not work.",
                 G_OBJECT_TYPE_NAME (self));
 }
