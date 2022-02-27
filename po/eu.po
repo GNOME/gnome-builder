@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-12 20:50+0000\n"
-"PO-Revision-Date: 2022-02-13 10:00+0100\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-02-27 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -2900,12 +2900,17 @@ msgstr "_Kopiatu estekaren helbidea"
 msgid "Selection"
 msgstr "Hautapena"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+msgid "Requested runtime is not installed"
+msgstr "Eskatutako exekuzio-denbora ez dago instalatuta"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Huts egin du shell-a sortzeak “%s” exekuzio-denborarekin"
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Izenik gabeko terminala"
 
@@ -5047,43 +5052,51 @@ msgstr "Makefile proiektu hutsa"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Sortu proiektu hutsa Makefile sinple bat erabilita"
 
-#: src/plugins/meson-templates/meson_templates.py:251
-msgid "GNOME Application (Legacy)"
-msgstr "GNOME aplikazioa (zaharkitua)"
+#: src/plugins/meson-templates/meson_templates.py:255
+msgid "GTK Application (Legacy)"
+msgstr "GTK aplikazioa (zaharra)"
 
-#: src/plugins/meson-templates/meson_templates.py:253
-msgid "Create a GNOME application with GTK 3"
-msgstr "Sortu GNOME aplikazioa GTK 3 liburutegiekin"
+#: src/plugins/meson-templates/meson_templates.py:257
+msgid "Create a GTK application with GTK 3"
+msgstr "Sortu GTK aplikazio bat GTK 3 liburutegiekin"
 
-#: src/plugins/meson-templates/meson_templates.py:328
+#: src/plugins/meson-templates/meson_templates.py:332
+msgid "GTK Application"
+msgstr "GTK aplikazioa"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+msgid "Create a GTK application"
+msgstr "Sortu GTK aplikazio bat"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "GNOME aplikazioa"
 
-#: src/plugins/meson-templates/meson_templates.py:330
-msgid "Create a GNOME application with GTK 4"
-msgstr "Sortu GNOME aplikazioa GTK 4 liburutegiekin"
+#: src/plugins/meson-templates/meson_templates.py:416
+msgid "Create a GNOME application"
+msgstr "Sortu GNOME aplikazio bat"
 
-#: src/plugins/meson-templates/meson_templates.py:410
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Liburutegi partekatua"
 
-#: src/plugins/meson-templates/meson_templates.py:412
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Sortu proiektu berria partekatutako liburutegi batekin"
 
-#: src/plugins/meson-templates/meson_templates.py:429
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Proiektu hutsa"
 
-#: src/plugins/meson-templates/meson_templates.py:431
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Sortu proiektu huts berria"
 
-#: src/plugins/meson-templates/meson_templates.py:448
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Komando-lerroko tresna"
 
-#: src/plugins/meson-templates/meson_templates.py:450
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Sortu komando-lerroko proiektu berria"
 
@@ -6239,7 +6252,7 @@ msgstr "Proiektua eraikitzen…"
 msgid "Installing project…"
 msgstr "Proiektua instalatzen…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Huts egin du XML zuhaitza sortzeak."
@@ -6247,6 +6260,9 @@ msgstr "Huts egin du XML zuhaitza sortzeak."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Sortu GNOME aplikazioa GTK 4 liburutegiekin"
 
 #~ msgid ""
 #~ "If enabled, Builder will automatically wrap text so all of the line text "
@@ -6424,9 +6440,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Install Language Server"
 #~ msgstr "Lengoaia-zerbitzaria instalatzen"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "Rustup ez dago instalatuta"
 
 #~ msgid "Installing rustup"
 #~ msgstr "Rustup instalatzen"
