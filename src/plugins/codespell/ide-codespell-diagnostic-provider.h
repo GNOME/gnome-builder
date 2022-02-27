@@ -1,6 +1,7 @@
 /* ide-codespell-diagnostic-provider.h
  *
  * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2022 Veli Tasalı <me@velitasali.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +21,12 @@
 
 #pragma once
 
-#include <libide-code.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_CODESPELL_DIAGNOSTIC_PROVIDER (ide_codespell_diagnostic_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeCodespellDiagnosticProvider, ide_codespell_diagnostic_provider, IDE, CODESPELL_DIAGNOSTIC_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeCodespellDiagnosticProvider, ide_codespell_diagnostic_provider, IDE, CODESPELL_DIAGNOSTIC_PROVIDER, IdeDiagnosticTool)
 
 G_END_DECLS

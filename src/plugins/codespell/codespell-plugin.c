@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
-#include <libide-code.h>
+#include <libide-foundry.h>
 
 #include "ide-codespell-diagnostic-provider.h"
 
