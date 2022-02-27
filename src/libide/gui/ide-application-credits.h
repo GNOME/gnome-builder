@@ -83,6 +83,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Florian Bäuerle",
   "Florian Müllner",
   "Fran Dieguez",
+  "Fries",
   "Gábor Kelemen",
   "Garrett Regier",
   "Gautier Pelloux-Prayer",
