@@ -174,6 +174,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         modes = {
             'resources/src/hello.js.in': 0o750,
             'resources/src/hello.py.in': 0o750,
+            'resources/src/hello-cli.py.in': 0o750,
             'resources/src/application.in': 0o750,
         }
 
@@ -534,12 +535,15 @@ class CLIProjectTemplate(MesonTemplate):
             _('Command Line Tool'),
             'pattern-cli',
             _('Create a new command line project'),
-            ['C', 'C++', 'Vala', 'Rust'],
+            ['C', 'C++', 'Vala', 'Rust', 'Python'],
             200
          )
 
     def prepare_files(self, files):
-        files['resources/src/meson-cli.build'] = 'src/meson.build'
+        if self.language == 'python':
+            files['resources/src/meson-py-cli.build'] = 'src/meson.build'
+        else:
+            files['resources/src/meson-cli.build'] = 'src/meson.build'
 
         if self.language == 'c':
             files['resources/src/main-cli.c'] = 'src/main.c'
@@ -552,3 +556,7 @@ class CLIProjectTemplate(MesonTemplate):
             files['resources/src/Cargo.lock'] = 'Cargo.lock'
             files['resources/src/Cargo-cli.toml'] = 'Cargo.toml'
             files['resources/build-aux/cargo.sh'] = 'build-aux/cargo.sh'
+        elif self.language == 'python':
+            files['resources/src/hello-cli.py.in'] = 'src/%(name)s.in'
+            files['resources/src/__init__.py'] = 'src/__init__.py'
+            files['resources/src/main-cli.py'] = 'src/main.py'

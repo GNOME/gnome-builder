@@ -1,0 +1,23 @@
+pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
+moduledir = join_paths(pkgdatadir, '{{name_}}')
+
+python = import('python')
+
+conf = configuration_data()
+conf.set('PYTHON', python.find_installation('python3').path())
+conf.set('pkgdatadir', pkgdatadir)
+
+configure_file(
+    input: '{{name}}.in',
+    output: '{{name}}',
+    configuration: conf,
+    install: true,
+    install_dir: get_option('bindir')
+)
+
+{{name_}}_sources = [
+    '__init__.py',
+    'main.py'
+]
+
+install_data({{name_}}_sources, install_dir: moduledir)
