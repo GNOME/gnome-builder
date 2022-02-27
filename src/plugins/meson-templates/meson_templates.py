@@ -203,6 +203,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'lgpl_2_1': 'LGPL-2.1-or-later',
             'lgpl_3': 'LGPL-3.0-or-later',
             'mit_x11': 'MIT',
+            'apache': 'Apache-2.0',
         }
 
         if 'license_full' in params:
