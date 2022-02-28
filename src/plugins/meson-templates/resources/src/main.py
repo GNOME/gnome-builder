@@ -10,7 +10,7 @@ from gi.repository import Gtk, Gio
 from .window import {{PreFix}}Window
 
 
-class Application(Gtk.Application):
+class {{Prefix}}Application(Gtk.Application):
     def __init__(self):
         super().__init__(application_id='{{appid}}',
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
@@ -23,5 +23,5 @@ class Application(Gtk.Application):
 
 
 def main(version):
-    app = Application()
+    app = {{Prefix}}Application()
     return app.run(sys.argv)
