@@ -19,6 +19,9 @@ class Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
     def __init__(self):
         super().__init__(application_id='{{appid}}',
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
+        self.create_action('quit', self.quit, ['<primary>q'])
+        self.create_action('about', self.on_about_action)
+        self.create_action('preferences', self.on_preferences_action)
 
     def do_activate(self):
         """Called when the application is activated.
@@ -29,9 +32,6 @@ class Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
         win = self.props.active_window
         if not win:
             win = {{PreFix}}Window(application=self)
-        self.create_action('quit', self.quit, ['<primary>q'])
-        self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action)
         win.present()
 
     def on_about_action(self, widget, _):
