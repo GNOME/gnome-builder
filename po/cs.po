@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-20 21:11+0000\n"
-"PO-Revision-Date: 2022-02-21 10:22+0100\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-03-01 11:27+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -2968,12 +2968,17 @@ msgstr "_Kopírovat adresu odkazu"
 msgid "Selection"
 msgstr "Výběr"
 
-#: src/libide/terminal/ide-terminal-launcher.c:342
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+msgid "Requested runtime is not installed"
+msgstr "Vyžadované běhové prostředí není nainstalováno"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Selhalo vytvoření shellu v běhovém prostředí „%s“"
 
-#: src/libide/terminal/ide-terminal-launcher.c:674
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Nepojmenovaný terminál"
 
