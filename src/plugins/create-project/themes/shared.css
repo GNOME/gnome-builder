@@ -1,11 +1,17 @@
 .greeter flowboxchild {
   border-radius: 11px;
-  outline-offset: -3px;
-  -gtk-outline-radius: 9px;
-  min-width: 164px;
-  min-height: 164px;
+  border: 3px solid transparent;
+  outline-offset: -6px;
+  -gtk-outline-radius: 7px;
+  min-width: 160px;
+  min-height: 160px;
+  background: transparent;
+}
+
+.greeter flowboxchild:selected {
+  border-color: @theme_selected_bg_color;
 }
 
 .greeter flowboxchild:selected label {
-  color: @theme_selected_fg_color;
+  color: @theme_text_color;
 }
