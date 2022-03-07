@@ -88,7 +88,11 @@ gbp_cmake_build_target_provider_create_target (GbpCmakeBuildTargetProvider  *sel
   destination_path = json_object_get_string_member (destination, "path");
 
   install_dir = g_path_get_dirname (artefacts_path);
-  install_dir_abs = g_build_path (G_DIR_SEPARATOR_S, prefix_path, destination_path, NULL);
+  if (g_str_has_prefix (destination_path, prefix_path))
+    install_dir_abs = g_strdup (destination_path);
+  else
+    install_dir_abs = g_build_path (G_DIR_SEPARATOR_S, prefix_path, destination_path, NULL);
+
   install_directory = g_file_new_for_path (install_dir_abs);
 
   name = g_path_get_basename (artefacts_path);
