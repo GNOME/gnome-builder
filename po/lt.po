@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2021-12-29 06:58+0000\n"
-"PO-Revision-Date: 2022-01-03 22:32+0200\n"
+"POT-Creation-Date: 2022-02-21 19:11+0000\n"
+"PO-Revision-Date: 2022-03-07 18:40+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -21,14 +21,13 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/gui/ide-preferences-builtin.c:140 src/main.c:235
+#: src/libide/gui/ide-preferences-builtin.c:144 src/main.c:235
 #: src/plugins/newcomers/gbp-newcomers-section.ui:47
 msgid "Builder"
 msgstr "Kūrėjas"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/gui/ide-application-actions.c:141
+#: src/libide/gui/ide-application-actions.c:142
 msgid "An IDE for GNOME"
 msgstr "IDE GNOME aplinkai"
 
@@ -177,13 +176,11 @@ msgstr ""
 "skaičiui naudoti."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
-#: src/libide/gui/ide-preferences-builtin.c:410
-#| msgid "Clear build log"
+#: src/libide/gui/ide-preferences-builtin.c:418
 msgid "Clear build logs"
 msgstr "Išvalyti kūrimo žurnalus"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
-#| msgid "If enabled, the left panel will be displayed."
 msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr "Jei įjungta, kūrimo žurnalo skydelis bus išvalytas perkuriant."
 
@@ -297,7 +294,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Jei įjungta, redaktorius rodys santykinius eilučių numerius."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/libide/gui/ide-preferences-builtin.c:144
+#: src/libide/gui/ide-preferences-builtin.c:148
 msgid "Smart Backspace"
 msgstr "Gudrus grįžtamasis trynimas"
 
@@ -310,7 +307,7 @@ msgstr ""
 "įtraukos plotį."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/libide/gui/ide-preferences-builtin.c:143
+#: src/libide/gui/ide-preferences-builtin.c:147
 msgid "Smart Home and End"
 msgstr "Gudrūs pradžia ir pabaiga"
 
@@ -327,7 +324,7 @@ msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Jei įjungta, redaktorius rodys tinklelio eilutes dokumente."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:79
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:181
 msgid "Show overview map"
 msgstr "Rodyti apžvalgą"
 
@@ -358,7 +355,7 @@ msgid "The various types of space to draw in the editor."
 msgstr "Įvairūs tarpai piešimui redaktoriuje."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:95
-#: src/libide/gui/ide-preferences-builtin.c:160
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Overscroll"
 msgstr "Perteklinis slinkimas"
 
@@ -366,71 +363,66 @@ msgstr "Perteklinis slinkimas"
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "Eilučių skaičius slinkimui už buferio pabaigos."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
 msgid "Wrap Text"
 msgstr "Teksto laužymas"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
-msgid ""
-"If enabled, Builder will automatically wrap text so all of the line text is "
-"visible."
-msgstr ""
-"Jei įjungta, Kūrėjas automatiškai laužys tekstą, kad visa teksto eilutė būtų "
-"matoma."
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+msgid "The way to wrap a long line of text for a better visibility."
+msgstr "Būdas laužyti ilgas eilutes geresniam matomumui."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
+#: src/libide/gui/ide-preferences-builtin.c:194
 msgid "Autosave Enabled"
 msgstr "Automatinis įrašymas įjungtas"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Enable or disable autosave feature."
 msgstr "Įjungia arba išjungia automatinį įrašymą."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
-#: src/libide/gui/ide-preferences-builtin.c:187
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Autosave Frequency"
 msgstr "Automatinio įrašymo dažnis"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "The number of seconds after modification before auto saving."
 msgstr "Kas kiek sekundžių pakeitimai bus automatiškai įrašomi."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 msgid "Completion Row Count"
 msgstr "Užbaigimo eilučių skaičius"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "The number of completion rows to display to the user."
 msgstr "Naudotojui rodomas užbaigimo eilučių skaičius."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
-#: src/libide/gui/ide-preferences-builtin.c:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
+#: src/libide/gui/ide-preferences-builtin.c:111
 msgid "Line Spacing"
 msgstr "Tarpai tarp eilučių"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "The number of pixels to include above and below lines in the editor."
 msgstr "Pikselių skaičius virš ir žemiau eilučių redaktoriuje."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:133
+#: src/libide/gui/ide-preferences-builtin.c:216
 msgid "Interactive Completion"
 msgstr "Interaktyvus užbaigimas"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
 "Jei įjungta, Kūrėjas automatiškai jums rašant rodys užbaigimo siūlymus."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
-#| msgid "Words matching selection"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid "Minimum characters for matching selection."
 msgstr "Mažiausiai simbolių pasirinkimo atitikčiai"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Nurodykite mažiausią simbolių skaičių pasirinkimo atitikčiai."
 
@@ -474,21 +466,18 @@ msgstr "Langas išdidintas"
 msgid "Window maximized state"
 msgstr "Lango išdidinimo būsena"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:20
-msgid "Night Mode"
-msgstr "Nakties veiksena"
-
-#: data/gsettings/org.gnome.builder.gschema.xml:21
-msgid "Prefer dark application chrome."
-msgstr "Naudoti tamsias spalvas programos išvaizdai."
-
 #: data/gsettings/org.gnome.builder.gschema.xml:25
-msgid "Follow system night light"
-msgstr "Sekti sistemos naktinį apšvietimą"
+#| msgid "Stylelint"
+msgid "Style Variant"
+msgstr "Stiliaus variantas"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:26
-msgid "Use GNOME night light setting to activate night-mode."
-msgstr "Naudoti GNOME naktinio apšvietimo nustatymą nakties veiksenai įjungti."
+msgid ""
+"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
+"scheme."
+msgstr ""
+"Naudoti tamsų arba šviesų GTK temos ir/ar GtkSourceView stiliaus schemos "
+"variantą."
 
 #. Translators: This is the default directory name for user’s
 #. projects. Do NOT change the ASCII double quotes ("") to your
@@ -498,7 +487,7 @@ msgid "\"Projects\""
 msgstr "\"Projektai\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/gui/ide-preferences-builtin.c:427
+#: src/libide/gui/ide-preferences-builtin.c:435
 msgid "Projects directory"
 msgstr "Projektų katalogas"
 
@@ -655,31 +644,6 @@ msgstr "Nauja redaktoriaus darbo sritis"
 #: src/plugins/dspy/gbp-dspy-workspace.ui:13
 msgid "D-Bus Inspector"
 msgstr "D-Bus inspektorius"
-
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:20
-msgid "Adwaita Dark"
-msgstr "Adwaita tamsi"
-
-#: data/style-schemes/Adwaita-dark.style-scheme.xml:22
-msgid "The default color scheme for TextEditor"
-msgstr "TextEditor numatytoji kūrėjo spalvų schema"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:25
-msgid "Builder Dark"
-msgstr "Kūrėjo tamsi"
-
-#: data/style-schemes/builder-dark.style-scheme.xml:28
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "Tamsi kūrėjo spalvų schema naudojant Tango spalvų paletę"
-
-#: data/style-schemes/builder.style-scheme.xml:24
-msgid "The default color scheme for Builder"
-msgstr "Numatytoji kūrėjo spalvų schema"
-
-#: src/gstyle/data/palettes/basic.gstyle.xml:20
-#: src/plugins/color-picker/data/basic.gstyle.xml:20
-msgid "Basic"
-msgstr "Paprasta"
 
 #: src/gstyle/gstyle-color-panel.c:959
 msgid "Palette: "
@@ -931,7 +895,7 @@ msgstr "Nepavadinta"
 
 #: src/libide/core/ide-transfer.c:549 src/libide/editor/ide-editor-page.ui:51
 #: src/libide/greeter/ide-clone-surface.ui:319
-#: src/libide/greeter/ide-greeter-workspace-actions.c:122
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
 #: src/libide/gui/ide-workbench.c:1410
 #: src/plugins/buildui/gbp-buildui-log-pane.c:284
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
@@ -1155,15 +1119,15 @@ msgstr "Paryškinimo veiksena"
 #: src/libide/editor/ide-editor-settings-dialog.ui:80
 #: src/libide/gui/ide-header-bar-shortcuts.c:35
 #: src/libide/gui/ide-header-bar-shortcuts.c:41
-#: src/libide/gui/ide-preferences-builtin.c:152
-#: src/libide/gui/ide-preferences-builtin.c:206
-#: src/libide/gui/ide-preferences-builtin.c:329
-#: src/libide/gui/ide-preferences-builtin.c:401
+#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:214
+#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:409
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:373
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:379
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:385
 msgid "General"
 msgstr "Bendra"
 
@@ -1201,7 +1165,7 @@ msgid "Overwrite trailing braces and quotations"
 msgstr "Perrašyti užsidarančius skliaustus bei kabutes"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:159
-#: src/libide/gui/ide-preferences-builtin.c:339
+#: src/libide/gui/ide-preferences-builtin.c:347
 msgid "Indentation"
 msgstr "Įtrauka"
 
@@ -1222,12 +1186,12 @@ msgid "8"
 msgstr "8"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:243
-#: src/libide/gui/ide-preferences-builtin.c:177
+#: src/libide/gui/ide-preferences-builtin.c:185
 msgid "Spaces"
 msgstr "Tarpai"
 
 #: src/libide/editor/ide-editor-settings-dialog.ui:254
-#: src/libide/gui/ide-preferences-builtin.c:178
+#: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Tabs"
 msgstr "Tabuliacija"
 
@@ -1279,7 +1243,8 @@ msgstr "Užverti visus failus"
 
 #: src/libide/editor/ide-editor-surface.c:669
 #: src/libide/gui/ide-preferences-builtin.c:106
-#: src/libide/gui/ide-preferences-builtin.c:150
+#: src/libide/gui/ide-preferences-builtin.c:110
+#: src/libide/gui/ide-preferences-builtin.c:154
 #: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
 msgid "Editor"
 msgstr "Redaktorius"
@@ -1303,12 +1268,12 @@ msgstr "Perjungti paviršių"
 msgid "Search your project"
 msgstr "Ieškoti jūsų projekto"
 
-#: src/libide/foundry/ide-build-manager.c:396
+#: src/libide/foundry/ide-build-manager.c:419
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Nepavyko inicializuoti kūrimo konvejerio: %s"
 
-#: src/libide/foundry/ide-build-manager.c:527
+#: src/libide/foundry/ide-build-manager.c:560
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Nepavyko gauti įrenginio informacijos: %s"
@@ -1466,7 +1431,7 @@ msgstr "Procesas netikėtai baigėsi"
 msgid "Host Operating System"
 msgstr "Naudojama operacinę sistemą"
 
-#: src/libide/foundry/ide-runtime.c:563
+#: src/libide/foundry/ide-runtime.c:571
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Operacinė sistema"
@@ -1549,7 +1514,7 @@ msgid "Directory"
 msgstr "Katalogas"
 
 #: src/libide/greeter/ide-greeter-workspace-actions.c:89
-#: src/libide/greeter/ide-greeter-workspace-actions.c:118
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
 msgid "Select Project Folder"
 msgstr "Pasirinkite projekto aplanką"
 
@@ -1557,12 +1522,12 @@ msgstr "Pasirinkite projekto aplanką"
 msgid "Select Project File"
 msgstr "Pasirinkite projekto failą"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:121
+#: src/libide/greeter/ide-greeter-workspace-actions.c:127
 #: src/libide/gui/ide-workbench.c:1409
 msgid "_Open"
 msgstr "_Atverti"
 
-#: src/libide/greeter/ide-greeter-workspace-actions.c:131
+#: src/libide/greeter/ide-greeter-workspace-actions.c:138
 msgid "All Project Types"
 msgstr "Visi projekto tipai"
 
@@ -1626,7 +1591,7 @@ msgid "Close Project"
 msgstr "Užverti projektą"
 
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-application-shortcuts.c:57
-#: src/libide/gui/ide-preferences-window.ui:6
+#: src/libide/gui/ide-preferences-window.ui:10
 #: src/plugins/editor/gtk/menus.ui:36 src/plugins/greeter/gtk/menus.ui:22
 msgid "Preferences"
 msgstr "Nuostatos"
@@ -1656,25 +1621,25 @@ msgstr "_Išeiti"
 msgid "Run Options"
 msgstr "Vykdymo parametrai"
 
-#: src/libide/gui/ide-application-actions.c:78
+#: src/libide/gui/ide-application-actions.c:79
 msgid "Builder — Preferences"
 msgstr "Kūrėjas – nuostatos"
 
-#: src/libide/gui/ide-application-actions.c:147
+#: src/libide/gui/ide-application-actions.c:148
 msgid "GNOME Builder"
 msgstr "GNOME Kūrėjas"
 
-#: src/libide/gui/ide-application-actions.c:149
+#: src/libide/gui/ide-application-actions.c:150
 msgid "translator-credits"
 msgstr ""
 "Išvertė:\n"
 "Aurimas Černius <aurisc4@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:153
+#: src/libide/gui/ide-application-actions.c:154
 msgid "Learn more about GNOME Builder"
 msgstr "Sužinokite daugiau apie GNOME Kūrėją"
 
-#: src/libide/gui/ide-application-actions.c:156
+#: src/libide/gui/ide-application-actions.c:157
 msgid "Funded By"
 msgstr "Rėmėjai"
 
@@ -1696,7 +1661,6 @@ msgstr "Atspausdinti versijos informaciją ir išeiti"
 
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:68
-#| msgid "Increase log verbosity"
 msgid "Increase log verbosity (may be repeated)"
 msgstr "Padidinti žurnalo išsamumą (gali būti kartojamas)"
 
@@ -1717,7 +1681,7 @@ msgstr "Rodyti nustatymų langą"
 msgid "Show the shortcuts window"
 msgstr "Rodyti trumpinių langą"
 
-#: src/libide/gui/ide-application.c:172
+#: src/libide/gui/ide-application.c:173
 msgid ""
 "GNOME Builder requires a session with D-Bus which was not found. Please set "
 "DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
@@ -1825,461 +1789,465 @@ msgstr "Perjungti langą į viso ekrano veikseną"
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Nepavyko įkelti HTML. Trūksta WebKit palaikymo."
 
-#: src/libide/gui/ide-preferences-builtin.c:61
 #: src/libide/gui/ide-preferences-builtin.c:62
+#: src/libide/gui/ide-preferences-builtin.c:63
 msgid "Extensions"
 msgstr "Plėtiniai"
 
-#: src/libide/gui/ide-preferences-builtin.c:98
+#: src/libide/gui/ide-preferences-builtin.c:99
 msgid "Appearance"
 msgstr "Išvaizda"
 
-#: src/libide/gui/ide-preferences-builtin.c:100
-msgid "Themes"
-msgstr "Temos"
-
 #: src/libide/gui/ide-preferences-builtin.c:101
-msgid "Dark Mode"
-msgstr "Tamsi veiksena"
-
-#: src/libide/gui/ide-preferences-builtin.c:101
-msgid "Whether Builder should use a dark theme"
-msgstr "Ar kūrėjas turėtų naudoti tamsią temą"
-
-#: src/libide/gui/ide-preferences-builtin.c:101
-msgid "dark theme"
-msgstr "tamsi tema"
+#| msgid "Stylelint"
+msgid "Style"
+msgstr "Stilius"
 
 #: src/libide/gui/ide-preferences-builtin.c:102
-msgid "Night Light"
-msgstr "Naktinis apšvietimas"
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:253
+msgid "System"
+msgstr "Sisteminės"
 
 #: src/libide/gui/ide-preferences-builtin.c:102
-msgid "Automatically enable dark mode at night"
-msgstr "Automatiškai įjungti tamsią veikseną naktį"
-
-#: src/libide/gui/ide-preferences-builtin.c:102
-msgid "follow night light"
-msgstr "sekti naktinį apšvietimą"
+msgid "follow"
+msgstr "sekti"
 
 #: src/libide/gui/ide-preferences-builtin.c:103
+#| msgid "height"
+msgid "Light"
+msgstr "Šviesi"
+
+#: src/libide/gui/ide-preferences-builtin.c:104
+#| msgid "Dark Mode"
+msgid "Dark"
+msgstr "Tamsi"
+
+#: src/libide/gui/ide-preferences-builtin.c:107
 msgid "Grid Pattern"
 msgstr "Tinklelio šablonas"
 
-#: src/libide/gui/ide-preferences-builtin.c:103
+#: src/libide/gui/ide-preferences-builtin.c:107
 msgid "Display a grid pattern underneath source code"
 msgstr "Rodyti tinklelio šabloną po programos kodu"
 
-#: src/libide/gui/ide-preferences-builtin.c:105
+#: src/libide/gui/ide-preferences-builtin.c:109
 msgid "Font"
 msgstr "Šriftas"
 
-#: src/libide/gui/ide-preferences-builtin.c:106
+#: src/libide/gui/ide-preferences-builtin.c:110
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "redaktorius šriftas lygiaplotis"
 
-#: src/libide/gui/ide-preferences-builtin.c:107
+#: src/libide/gui/ide-preferences-builtin.c:111
 msgid "Number of pixels above and below editor lines"
 msgstr "Pikselių skaičius virš ir žemiau redaktoriaus eilučių"
 
-#: src/libide/gui/ide-preferences-builtin.c:107
+#: src/libide/gui/ide-preferences-builtin.c:111
 msgctxt "Keywords"
 msgid "editor line spacing font monospace"
 msgstr "redaktorius eilučių tarpai lygiapločiam šriftui"
 
-#: src/libide/gui/ide-preferences-builtin.c:112
+#: src/libide/gui/ide-preferences-builtin.c:116
 msgid "Color Scheme"
 msgstr "Spalvų schema"
 
-#: src/libide/gui/ide-preferences-builtin.c:137
+#: src/libide/gui/ide-preferences-builtin.c:141
 msgid "Keyboard"
 msgstr "Klaviatūra"
 
-#: src/libide/gui/ide-preferences-builtin.c:139
+#: src/libide/gui/ide-preferences-builtin.c:143
 msgid "Emulation"
 msgstr "Emuliacija"
 
-#: src/libide/gui/ide-preferences-builtin.c:140
+#: src/libide/gui/ide-preferences-builtin.c:144
 msgid "Default keybinding mode which mimics gedit"
 msgstr "Numatytasis klavišų susiejimas, kuris imituoja Gedit"
 
-#: src/libide/gui/ide-preferences-builtin.c:142
+#: src/libide/gui/ide-preferences-builtin.c:146
 msgid "Movement"
 msgstr "Judėjimas"
 
-#: src/libide/gui/ide-preferences-builtin.c:143
+#: src/libide/gui/ide-preferences-builtin.c:147
 msgid "Home moves to first non-whitespace character"
 msgstr "Pradžios klavišas perkelia prie pirmo ne tarpo simbolio"
 
-#: src/libide/gui/ide-preferences-builtin.c:144
+#: src/libide/gui/ide-preferences-builtin.c:148
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Grįžtamasis trynimas pašalina papildomus tarpus išlaikant lygiuotę pagal "
 "įtraukos plotį"
 
-#: src/libide/gui/ide-preferences-builtin.c:153
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Display list of open files"
 msgstr "Rodyti atvertų failų sąrašą"
 
-#: src/libide/gui/ide-preferences-builtin.c:153
+#: src/libide/gui/ide-preferences-builtin.c:157
 msgid "Display the list of all open files in the project sidebar"
 msgstr "Rodyti visų atvertų failų sąrašą projekto šoninėje juostoje"
 
-#: src/libide/gui/ide-preferences-builtin.c:154
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Reformat code on save"
 msgstr "Performatuoti kodą įrašant"
 
-#: src/libide/gui/ide-preferences-builtin.c:154
+#: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Reformat current file on save"
 msgstr "Performatuoti dabartinį failą įrašant"
 
-#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Cursor"
 msgstr "Žymeklis"
 
-#: src/libide/gui/ide-preferences-builtin.c:157
+#: src/libide/gui/ide-preferences-builtin.c:161
 msgid "Restore cursor position"
 msgstr "Atkurti žymeklio padėtį"
 
-#: src/libide/gui/ide-preferences-builtin.c:157
+#: src/libide/gui/ide-preferences-builtin.c:161
 msgid "Restore cursor position when a file is reopened"
 msgstr "Atkurti žymeklio padėtį vėl atveriant failą"
 
-#: src/libide/gui/ide-preferences-builtin.c:158
-msgid "Enable text wrapping"
-msgstr "Įjungti teksto laužymą"
-
-#: src/libide/gui/ide-preferences-builtin.c:158
-msgid "Wrap text that is too wide to display"
-msgstr "Laužyti tekstą, kuris yra per platus parodymui"
-
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Scroll Offset"
 msgstr "Slinkties poslinkis"
 
-#: src/libide/gui/ide-preferences-builtin.c:159
+#: src/libide/gui/ide-preferences-builtin.c:162
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Mažiausiai eilučių virš ir žemiau žymeklio"
 
-#: src/libide/gui/ide-preferences-builtin.c:160
+#: src/libide/gui/ide-preferences-builtin.c:163
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Leisti redaktoriui slinkti už buferio pabaigos"
 
-#: src/libide/gui/ide-preferences-builtin.c:162
+#: src/libide/gui/ide-preferences-builtin.c:165
+#| msgid "Enable text wrapping"
+msgid "Text Wrapping"
+msgstr "Teksto laužymas"
+
+#: src/libide/gui/ide-preferences-builtin.c:166
+msgid "Never"
+msgstr "Niekada"
+
+#: src/libide/gui/ide-preferences-builtin.c:167
+msgid "In Between Words"
+msgstr "Tarp žodžių"
+
+#: src/libide/gui/ide-preferences-builtin.c:168
+msgid "Always"
+msgstr "Visada"
+
+#: src/libide/gui/ide-preferences-builtin.c:170
 msgid "Line Information"
 msgstr "Eilučių informacija"
 
-#: src/libide/gui/ide-preferences-builtin.c:163
+#: src/libide/gui/ide-preferences-builtin.c:171
 msgid "Line numbers"
 msgstr "Eilučių numeriai"
 
-#: src/libide/gui/ide-preferences-builtin.c:163
+#: src/libide/gui/ide-preferences-builtin.c:171
 msgid "Show line number at beginning of each line"
 msgstr "Rodyti eilučių numerius kiekvienos eilutės pradžioje"
 
-#: src/libide/gui/ide-preferences-builtin.c:164
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Relative line numbers"
 msgstr "Santykiniai eilučių numeriai"
 
-#: src/libide/gui/ide-preferences-builtin.c:164
+#: src/libide/gui/ide-preferences-builtin.c:172
 msgid "Show line numbers relative to the cursor line"
 msgstr "Rodyti eilučių numerius santykinai žymeklio eilutei"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "Line changes"
 msgstr "Eilučių pakeitimai"
 
-#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/libide/gui/ide-preferences-builtin.c:173
 msgid "Show if a line was added or modified next to line number"
 msgstr "Rodyti, ar eilutė buvo pridėta arba pakeista šalia eilutės numerio"
 
-#: src/libide/gui/ide-preferences-builtin.c:166
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Line diagnostics"
 msgstr "Eilučių diagnostika"
 
-#: src/libide/gui/ide-preferences-builtin.c:166
+#: src/libide/gui/ide-preferences-builtin.c:174
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr "Rodyti piktogramą šalia eilutės numerio, nurodančią diagnostikos tipą"
 
-#: src/libide/gui/ide-preferences-builtin.c:168
+#: src/libide/gui/ide-preferences-builtin.c:176
 msgid "Highlight"
 msgstr "Paryškinimas"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:177
 msgid "Current line"
 msgstr "Dabartinė eilutė"
 
-#: src/libide/gui/ide-preferences-builtin.c:169
+#: src/libide/gui/ide-preferences-builtin.c:177
 msgid "Make current line stand out with highlights"
 msgstr "Paryškinti redaguojamą eilutę"
 
-#: src/libide/gui/ide-preferences-builtin.c:170
+#: src/libide/gui/ide-preferences-builtin.c:178
 msgid "Matching brackets"
 msgstr "Poriniai skliaustai"
 
-#: src/libide/gui/ide-preferences-builtin.c:170
+#: src/libide/gui/ide-preferences-builtin.c:178
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Paryškinti porinius skliaustus pagal žymeklio padėtį"
 
-#: src/libide/gui/ide-preferences-builtin.c:172
+#: src/libide/gui/ide-preferences-builtin.c:180
 msgid "Code Overview"
 msgstr "Kodo apžvalga"
 
-#: src/libide/gui/ide-preferences-builtin.c:173
+#: src/libide/gui/ide-preferences-builtin.c:181
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Atitolinti vaizdą palengvinant judėjimą kode"
 
-#: src/libide/gui/ide-preferences-builtin.c:174
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Automatically hide overview map"
 msgstr "Automatiškai slėpti apžvalgą"
 
-#: src/libide/gui/ide-preferences-builtin.c:174
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Automatically hide map when editor loses focus"
 msgstr "Automatiškai slėpti apžvalgą, kai redaktorius prarandą fokusą"
 
-#: src/libide/gui/ide-preferences-builtin.c:176
+#: src/libide/gui/ide-preferences-builtin.c:184
 msgid "Visible Whitespace Characters"
 msgstr "Matomi nespausdinami simboliai"
 
-#: src/libide/gui/ide-preferences-builtin.c:179
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "New line and carriage return"
 msgstr "Nauja eilutė ir karietėlės grąžinimas"
 
-#: src/libide/gui/ide-preferences-builtin.c:180
+#: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Non-breaking spaces"
 msgstr "Nelaužantys tarpai"
 
-#: src/libide/gui/ide-preferences-builtin.c:181
+#: src/libide/gui/ide-preferences-builtin.c:189
 msgid "Spaces inside of text"
 msgstr "Tarpai tekste"
 
-#: src/libide/gui/ide-preferences-builtin.c:182
+#: src/libide/gui/ide-preferences-builtin.c:190
 msgid "Trailing Only"
 msgstr "Tik pabaigoje"
 
-#: src/libide/gui/ide-preferences-builtin.c:183
+#: src/libide/gui/ide-preferences-builtin.c:191
 msgid "Leading Only"
 msgstr "Tik pradžioje"
 
-#: src/libide/gui/ide-preferences-builtin.c:185
+#: src/libide/gui/ide-preferences-builtin.c:193
 msgid "Autosave"
 msgstr "Automatiškai įrašyti"
 
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:194
 msgid "Enable or disable autosave feature"
 msgstr "Įjungti ar išjungti automatinį įrašymą"
 
-#: src/libide/gui/ide-preferences-builtin.c:187
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "The number of seconds after modification before auto saving"
 msgstr "Kiek sekundžių po pakeitimo prieš automatiškai įrašant"
 
-#: src/libide/gui/ide-preferences-builtin.c:193
+#: src/libide/gui/ide-preferences-builtin.c:201
 msgid "Code Insight"
 msgstr "Kodo apžvalga"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:203
 msgid "Highlighting"
 msgstr "Paryškinimas"
 
-#: src/libide/gui/ide-preferences-builtin.c:196
+#: src/libide/gui/ide-preferences-builtin.c:204
 msgid "Semantic Highlighting"
 msgstr "Semantinis paryškinimas"
 
-#: src/libide/gui/ide-preferences-builtin.c:196
+#: src/libide/gui/ide-preferences-builtin.c:204
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 "Naudoti kodo analizatorių papildomai informacijai paryškinti kodo faile"
 
-#: src/libide/gui/ide-preferences-builtin.c:198
+#: src/libide/gui/ide-preferences-builtin.c:206
 #: src/plugins/editor/gbp-editor-hover-provider.c:86
 msgid "Diagnostics"
 msgstr "Diagnostika"
 
-#: src/libide/gui/ide-preferences-builtin.c:204
+#: src/libide/gui/ide-preferences-builtin.c:212
 msgid "Completion"
 msgstr "Užbaigimas"
 
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:215
 msgid "Completions Display Size"
 msgstr "Rodomų užbaigimų skaičius"
 
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:215
 msgid "Number of completions to display"
 msgstr "Kiek užbaigimų rodyti"
 
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:216
 msgid "Display code suggestions interactively as you type"
 msgstr "Rodyti interaktyvius kodo užbaigimus rašant"
 
-#: src/libide/gui/ide-preferences-builtin.c:210
+#: src/libide/gui/ide-preferences-builtin.c:218
 msgid "Completion Providers"
 msgstr "Užbaigimo tiekėjai"
 
-#: src/libide/gui/ide-preferences-builtin.c:216
+#: src/libide/gui/ide-preferences-builtin.c:224
 msgid "Snippets"
 msgstr "Iškarpos"
 
-#: src/libide/gui/ide-preferences-builtin.c:259
+#: src/libide/gui/ide-preferences-builtin.c:267
 msgid "Programming Languages"
 msgstr "Programavimo kalbos"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:270
+#: src/libide/gui/ide-preferences-builtin.c:278
 msgid "Search languages…"
 msgstr "Ieškoti kalbų…"
 
-#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Trim trailing whitespace"
 msgstr "Ištrinti tarpus eilučių pabaigose"
 
-#: src/libide/gui/ide-preferences-builtin.c:330
+#: src/libide/gui/ide-preferences-builtin.c:338
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr "Įrašant tarpai eilučių pabaigose iš pakeistų eilučių bus ištrinti."
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Overwrite Braces"
 msgstr "Perrašyti skliaustus"
 
-#: src/libide/gui/ide-preferences-builtin.c:331
+#: src/libide/gui/ide-preferences-builtin.c:339
 msgid "Overwrite closing braces"
 msgstr "Perrašyti užsidarančius skliaustus"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Insert Matching Brace"
 msgstr "Įterpti porinį skliaustą"
 
-#: src/libide/gui/ide-preferences-builtin.c:332
+#: src/libide/gui/ide-preferences-builtin.c:340
 msgid "Insert matching character for { [ ( or \""
 msgstr "Įterpti porinį simbolį įvedus { [ ( arba \""
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Insert Trailing Newline"
 msgstr "Įterpti tuščią eilutę pabaigoje"
 
-#: src/libide/gui/ide-preferences-builtin.c:333
+#: src/libide/gui/ide-preferences-builtin.c:341
 msgid "Ensure files end with a newline"
 msgstr "Užtikrinti, kad failai baigtųsi tuščia eilute"
 
-#: src/libide/gui/ide-preferences-builtin.c:335
+#: src/libide/gui/ide-preferences-builtin.c:343
 msgid "Margins"
 msgstr "Paraštės"
 
-#: src/libide/gui/ide-preferences-builtin.c:336
+#: src/libide/gui/ide-preferences-builtin.c:344
 msgid "Show right margin"
 msgstr "Rodyti dešinę paraštę"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Right margin position"
 msgstr "Dešinės paraštės padėtis"
 
-#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:345
 msgid "Position in spaces for the right margin"
 msgstr "Dešinės paraštės padėtis tarpais"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Tab width"
 msgstr "Tabuliacijos plotis"
 
-#: src/libide/gui/ide-preferences-builtin.c:340
+#: src/libide/gui/ide-preferences-builtin.c:348
 msgid "Width of a tab character in spaces"
 msgstr "Tabuliacijos simbolio plotis tarpais"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Insert spaces instead of tabs"
 msgstr "Įterpti tarpus vietoj tabuliacijos"
 
-#: src/libide/gui/ide-preferences-builtin.c:341
+#: src/libide/gui/ide-preferences-builtin.c:349
 msgid "Prefer spaces over use of tabs"
 msgstr "Teikti pirmenybę tarpams vietoj tabuliacijos"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Automatically indent"
 msgstr "Automatinė įtrauka"
 
-#: src/libide/gui/ide-preferences-builtin.c:342
+#: src/libide/gui/ide-preferences-builtin.c:350
 msgid "Indent source code as you type"
 msgstr "Įtraukti kodą rašant"
 
-#: src/libide/gui/ide-preferences-builtin.c:344
+#: src/libide/gui/ide-preferences-builtin.c:352
 msgid "Spacing"
 msgstr "Tarpai"
 
-#: src/libide/gui/ide-preferences-builtin.c:345
+#: src/libide/gui/ide-preferences-builtin.c:353
 msgid "Space before opening parentheses"
 msgstr "Tarpai prieš atsidarančius skliaustus"
 
-#: src/libide/gui/ide-preferences-builtin.c:346
+#: src/libide/gui/ide-preferences-builtin.c:354
 msgid "Space before opening brackets"
 msgstr "Tarpai prieš atsidarančius laužtinius skliaustus"
 
-#: src/libide/gui/ide-preferences-builtin.c:347
+#: src/libide/gui/ide-preferences-builtin.c:355
 msgid "Space before opening braces"
 msgstr "Tarpai prieš atsidarančius riestinius skliaustus"
 
-#: src/libide/gui/ide-preferences-builtin.c:348
+#: src/libide/gui/ide-preferences-builtin.c:356
 msgid "Space before opening angles"
 msgstr "Tarpai prieš atsidarančius kampinius skliaustus"
 
-#: src/libide/gui/ide-preferences-builtin.c:349
+#: src/libide/gui/ide-preferences-builtin.c:357
 msgid "Prefer a space before colons"
 msgstr "Teikti pirmenybę tarpams prieš dvitaškius"
 
-#: src/libide/gui/ide-preferences-builtin.c:350
+#: src/libide/gui/ide-preferences-builtin.c:358
 msgid "Prefer a space before commas"
 msgstr "Teikti pirmenybę tarpams prieš kablelius"
 
-#: src/libide/gui/ide-preferences-builtin.c:351
+#: src/libide/gui/ide-preferences-builtin.c:359
 msgid "Prefer a space before semicolons"
 msgstr "Teikti pirmenybę tarpams prieš kabliataškius"
 
-#: src/libide/gui/ide-preferences-builtin.c:361
-#: src/libide/gui/ide-preferences-builtin.c:379
+#: src/libide/gui/ide-preferences-builtin.c:369
+#: src/libide/gui/ide-preferences-builtin.c:387
 msgid "Default"
 msgstr "Numatyta"
 
-#: src/libide/gui/ide-preferences-builtin.c:366
-#: src/libide/gui/ide-preferences-builtin.c:384
+#: src/libide/gui/ide-preferences-builtin.c:374
+#: src/libide/gui/ide-preferences-builtin.c:392
 msgid "Number of CPU"
 msgstr "CPU skaičius"
 
-#: src/libide/gui/ide-preferences-builtin.c:399
+#: src/libide/gui/ide-preferences-builtin.c:407
 msgid "Build"
 msgstr "Kurti"
 
-#: src/libide/gui/ide-preferences-builtin.c:402
+#: src/libide/gui/ide-preferences-builtin.c:410
 msgid "Build Workers"
 msgstr "Kūrimo darbininkai"
 
-#: src/libide/gui/ide-preferences-builtin.c:402
+#: src/libide/gui/ide-preferences-builtin.c:410
 msgid "Number of parallel build workers"
 msgstr "Lygiagretaus kūrimo darbininkų skaičius"
 
-#: src/libide/gui/ide-preferences-builtin.c:410
-#| msgid "Clear build log"
+#: src/libide/gui/ide-preferences-builtin.c:418
 msgid "Clear build log pane on rebuild"
 msgstr "Išvalyti kūrimo žurnalą perkuriant"
 
-#: src/libide/gui/ide-preferences-builtin.c:411
+#: src/libide/gui/ide-preferences-builtin.c:419
 msgid "Clear build cache at startup"
 msgstr "Paleidžiant išvalyti kūrimo podėlį"
 
-#: src/libide/gui/ide-preferences-builtin.c:411
+#: src/libide/gui/ide-preferences-builtin.c:419
 msgid "Expired caches will be purged when Builder is started"
 msgstr "Pasenę podėliai bus ištrinti paleidžiant Kūrėją"
 
-#: src/libide/gui/ide-preferences-builtin.c:413
+#: src/libide/gui/ide-preferences-builtin.c:421
 msgid "Network"
 msgstr "Tinklas"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Allow downloads over metered connections"
 msgstr "Leisti parsiuntimus naudojant matuojamus ryšius"
 
-#: src/libide/gui/ide-preferences-builtin.c:414
+#: src/libide/gui/ide-preferences-builtin.c:422
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2287,56 +2255,56 @@ msgstr ""
 "Leisti naudoti matuojamus tinklo ryšius automatiškai parsiunčiant "
 "priklausomybes"
 
-#: src/libide/gui/ide-preferences-builtin.c:416
+#: src/libide/gui/ide-preferences-builtin.c:424
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
 #: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
 msgid "Debugger"
 msgstr "Derintuvė"
 
-#: src/libide/gui/ide-preferences-builtin.c:417
+#: src/libide/gui/ide-preferences-builtin.c:425
 #: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
 msgid "Breakpoints"
 msgstr "Sustojimo taškai"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Insert Breakpoint at Start of Application"
 msgstr "Įterpti sustojimo tašką programos pradžioje"
 
-#: src/libide/gui/ide-preferences-builtin.c:418
+#: src/libide/gui/ide-preferences-builtin.c:426
 msgid ""
 "Automatically stop execution at the start of the applications main function"
 msgstr ""
 "Automatiškai sustabdyti programos vykdymą programos main funkcijos pradžioje"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:432
 #: src/libide/projects/ide-projects-global.c:105
 msgid "Projects"
 msgstr "Projektai"
 
-#: src/libide/gui/ide-preferences-builtin.c:426
+#: src/libide/gui/ide-preferences-builtin.c:434
 msgid "Workspace"
 msgstr "Darbo sritis"
 
-#: src/libide/gui/ide-preferences-builtin.c:427
+#: src/libide/gui/ide-preferences-builtin.c:435
 msgid "A place for all your projects"
 msgstr "Vieta visiems jūsų projektams"
 
-#: src/libide/gui/ide-preferences-builtin.c:428
+#: src/libide/gui/ide-preferences-builtin.c:436
 msgid "Restore previously opened files"
 msgstr "Atkurti anksčiau atvertus failus"
 
-#: src/libide/gui/ide-preferences-builtin.c:428
+#: src/libide/gui/ide-preferences-builtin.c:436
 msgid "Open previously opened files when loading a project"
 msgstr "Atverti anksčiau atvertus failus įkeliant projektą"
 
-#: src/libide/gui/ide-preferences-builtin.c:550
+#: src/libide/gui/ide-preferences-builtin.c:558
 #: src/plugins/create-project/gbp-create-project-surface.ui:222
 #: src/plugins/vcsui/gbp-vcsui-tree-addin.c:379
 msgid "Version Control"
 msgstr "Versijavimas"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/gui/ide-preferences-builtin.c:563
+#: src/libide/gui/ide-preferences-builtin.c:571
 msgid "SDKs"
 msgstr "Programavimo komplektai"
 
@@ -2361,9 +2329,9 @@ msgid "Change run options"
 msgstr "Pakeisti vykdymo parametrus"
 
 #: src/libide/gui/ide-search-button.c:49
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:372
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:378
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:384
 msgid "Workspace shortcuts"
 msgstr "Darbo stalo trumpiniai"
 
@@ -2988,11 +2956,17 @@ msgid "Selection"
 msgstr "Žymėjimas"
 
 #: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+#| msgid "Rustup not installed"
+msgid "Requested runtime is not installed"
+msgstr "Būtina vykdymo aplinka neįdiegta"
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
 #, c-format
 msgid "Failed to create shell within runtime “%s”"
 msgstr "Nepavyko sukurti apvalkalo vykdymo aplinkoje „%s“"
 
-#: src/libide/terminal/ide-terminal-launcher.c:663
+#: src/libide/terminal/ide-terminal-launcher.c:692
 msgid "Untitled Terminal"
 msgstr "Nepavadintas terminalas"
 
@@ -3062,7 +3036,7 @@ msgid "Bootstrapping build system"
 msgstr "Daugelio žingsnių kūrimo sistema"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:228
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
 #: src/plugins/phpize/phpize_plugin.py:207
 msgid "Configuring project"
 msgstr "Konfigūruojamas projektas"
@@ -3072,7 +3046,7 @@ msgstr "Konfigūruojamas projektas"
 #: src/plugins/cargo/cargo_plugin.py:145
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
 #: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 #: src/plugins/phpize/phpize_plugin.py:219
 msgid "Building project"
 msgstr "Kuriamas projektas"
@@ -3263,7 +3237,7 @@ msgid "_Beautify"
 msgstr "Pa_gražinti"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:635
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:663
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (kopija)"
@@ -3591,7 +3565,7 @@ msgstr "Konfigūruoti projektą"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
 #: src/plugins/maven/maven_plugin.py:100
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:303
 #: src/plugins/phpize/phpize_plugin.py:229
 msgid "Installing project"
 msgstr "Diegiamas projektas"
@@ -4021,9 +3995,6 @@ msgid "Application ID"
 msgstr "Programos ID"
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:100
-#| msgid ""
-#| "The Application ID is a reverse domain-name identifier used to uniquely "
-#| "identify your application such as “org.gnome.Builder”."
 msgid ""
 "The Application ID is a reverse domain-name identifier used to uniquely "
 "identify your application such as “org.gnome.Builder” and may not contain "
@@ -4327,10 +4298,6 @@ msgstr "D-Bus inspektorius…"
 msgid "Connected to “%s”"
 msgstr "Prisijungta prie „%s“"
 
-#: src/plugins/dspy/libdspy/dspy-connection-button.c:253
-msgid "System"
-msgstr "Sisteminės"
-
 #: src/plugins/dspy/libdspy/dspy-connection-button.c:255
 msgid "Session"
 msgstr "Seanso"
@@ -4584,16 +4551,16 @@ msgstr "Emacs"
 msgid "Emulates the Emacs text editor"
 msgstr "Emuliuoja Emacs tekstų redaktorių"
 
-#: src/plugins/eslint/eslint_plugin.py:153
+#: src/plugins/eslint/eslint_plugin.py:204
 msgid "ESlint"
 msgstr "ESlint"
 
-#: src/plugins/eslint/eslint_plugin.py:154
+#: src/plugins/eslint/eslint_plugin.py:205
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr "Įjungti ESLint, kuris gali vykdyti kodą jūsų projekte"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/eslint/eslint_plugin.py:156
+#: src/plugins/eslint/eslint_plugin.py:207
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint kodo vykdymas vykdyti"
 
@@ -4642,7 +4609,6 @@ msgid "Network is not available, skipping downloads"
 msgstr "Tinklas nepasiekiamas, parsiuntimai praleidžiami"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
-#| msgid "Install Missing SDK?"
 msgid "Install or Update SDK?"
 msgstr "Įdiegti ar atnaujinti SDK?"
 
@@ -4972,7 +4938,7 @@ msgstr "Sąsajos dizaineris"
 msgid "_UI Designer"
 msgstr "_Sąsajos dizaineris"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
 msgstr "Kodo asistentui reikia vietinio failo."
 
@@ -5141,9 +5107,9 @@ msgid "(Preview)"
 msgstr "(Peržiūra)"
 
 #: src/plugins/intelephense/intelephense.py:71
-#| msgid "Indexing Source Code"
-msgid "Indexing php code..."
-msgstr "Indeksuojamas php kodas..."
+#| msgid "Indexing php code..."
+msgid "Indexing php code…"
+msgstr "Indeksuojamas php kodas…"
 
 #: src/plugins/ls/gbp-ls-page.c:319
 #, c-format
@@ -5191,43 +5157,56 @@ msgstr "Tuščias Makefile projektas"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Sukurti naują tuščią projektą naudojant paprasčiausią Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:252
-msgid "GNOME Application (Legacy)"
-msgstr "GNOME programa (pasenusi)"
+#: src/plugins/meson-templates/meson_templates.py:255
+#| msgid "GNOME Application (Legacy)"
+msgid "GTK Application (Legacy)"
+msgstr "GTK programa (pasenusi)"
 
-#: src/plugins/meson-templates/meson_templates.py:254
-msgid "Create a GNOME application with GTK 3"
-msgstr "Sukurti GNOME programą naudojant GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:257
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GTK application with GTK 3"
+msgstr "Sukurti GTK programą naudojant GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:330
+#: src/plugins/meson-templates/meson_templates.py:332
+#| msgid "GNOME Application"
+msgid "GTK Application"
+msgstr "GTK programa"
+
+#: src/plugins/meson-templates/meson_templates.py:334
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GTK application"
+msgstr "Sukurti GTK programą"
+
+#: src/plugins/meson-templates/meson_templates.py:414
 msgid "GNOME Application"
 msgstr "GNOME programa"
 
-#: src/plugins/meson-templates/meson_templates.py:332
-msgid "Create a GNOME application with GTK 4"
-msgstr "Sukurti GNOME programą naudojant GTK 4"
+#: src/plugins/meson-templates/meson_templates.py:416
+#| msgid "Create a GNOME application with GTK 3"
+msgid "Create a GNOME application"
+msgstr "Sukurti GNOME programą"
 
-#: src/plugins/meson-templates/meson_templates.py:413
+#: src/plugins/meson-templates/meson_templates.py:496
 msgid "Shared Library"
 msgstr "Bendro naudojimo biblioteka"
 
-#: src/plugins/meson-templates/meson_templates.py:415
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Create a new project with a shared library"
 msgstr "Sukurti naują projektą su bendro naudojimo biblioteka"
 
-#: src/plugins/meson-templates/meson_templates.py:432
+#: src/plugins/meson-templates/meson_templates.py:515
 msgid "Empty Project"
 msgstr "Tuščias projektas"
 
-#: src/plugins/meson-templates/meson_templates.py:434
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Create a new empty project"
 msgstr "Sukurti naują tuščią projektą"
 
-#: src/plugins/meson-templates/meson_templates.py:451
+#: src/plugins/meson-templates/meson_templates.py:534
 msgid "Command Line Tool"
 msgstr "Komandų eilutės įrankis"
 
-#: src/plugins/meson-templates/meson_templates.py:453
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Create a new command line project"
 msgstr "Sukurti naują komandų eilutės projektą"
 
@@ -5240,11 +5219,11 @@ msgstr "Meson"
 msgid "Meson Options"
 msgstr "Meson parametrai"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:156
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:192
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "Įkeltas Meson pagrindo projektas, bet meson nerastas."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:175
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:211
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr "Įkeltas Meson pagrindo projektas, bet Ninja nerastas."
 
@@ -5396,66 +5375,58 @@ msgid "A simple clock application for GNOME"
 msgstr "Paprasta laikrodžio programa GNOME aplinkai"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:78
-msgid "Games"
-msgstr "Žaidimai"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:79
-msgid "Simple game launcher for GNOME"
-msgstr "Paprasta žaidimų paleidimo programa GNOME aplinkai"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Gitg"
 msgstr "Gitg"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+#: src/plugins/newcomers/gbp-newcomers-section.ui:79
 msgid "Gitg is a graphical Git client"
 msgstr "Gitg yra grafinis Git klientas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:99
+#: src/plugins/newcomers/gbp-newcomers-section.ui:88
 msgid "Maps"
 msgstr "Žemėlapiai"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "A simple GNOME 3 maps application"
 msgstr "Paprasta GNOME 3 žemėlapių programa"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+#: src/plugins/newcomers/gbp-newcomers-section.ui:99
 msgid "Music"
 msgstr "Muzika"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
 msgid "Music player and management application"
 msgstr "Muzikos grotuvas ir tvarkymo programa"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+#: src/plugins/newcomers/gbp-newcomers-section.ui:109
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
 msgid "Default file manager for GNOME"
 msgstr "Numatytoji GNOME failų tvarkyklė"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:130
+#: src/plugins/newcomers/gbp-newcomers-section.ui:119
 msgid "Photos"
 msgstr "Fotografijos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
 msgid "Access, organize and share your photos on GNOME"
 msgstr "Pasiekite, tvarkykite ir dalinkitės nuotraukomis GNOME aplinkoje"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:140
+#: src/plugins/newcomers/gbp-newcomers-section.ui:129
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:141
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
 msgid "An IRC Client for GNOME"
 msgstr "IRC klientas GNOME aplinkai"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:151
+#: src/plugins/newcomers/gbp-newcomers-section.ui:140
 msgid "Sound Recorder"
 msgstr "Garso įrašymas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:152
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
 msgid "A simple and modern sound recorder"
 msgstr "Paprastas ir modernus garso įrašymo įrankis"
 
@@ -5503,12 +5474,12 @@ msgid "Bootstrapping project"
 msgstr "Vykdomos projekto pakopos"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:182
+#: src/plugins/podman/gbp-podman-runtime.c:499
 msgid "Containers/Toolbox"
 msgstr "Konteineriai/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:188
+#: src/plugins/podman/gbp-podman-runtime.c:505
 msgid "Containers/Podman"
 msgstr "Konteineriai/Podman"
 
@@ -5662,8 +5633,6 @@ msgid "quick highlight words matching current selection"
 msgstr "greitas dabartinį žymėjimą atitinkančių žodžių paryškinimas"
 
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:64
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "Minimum length for highlight"
 msgstr "Mažiausias ilgis paryškinimui"
 
@@ -5673,7 +5642,6 @@ msgstr "Paryškinti atitinkančius žodžius su bent tiek simbolių"
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
-#| msgid "quick highlight words matching current selection"
 msgid "quick highlight words matching current selection minimum length"
 msgstr "greitas dabartinį žymėjimą atitinkančių žodžių paryškinimas"
 
@@ -6077,8 +6045,8 @@ msgid "Use terminal interface"
 msgstr "Naudoti terminalo sąsają"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:374
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:454
 #: src/plugins/terminal/gtk/menus.ui:31
 msgid "Terminal"
 msgstr "Terminalas"
@@ -6183,25 +6151,25 @@ msgctxt "Keywords"
 msgid "scrollback lines"
 msgstr "grįžtamojo slinkimo eilutės"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:303
 msgid "Application Output"
 msgstr "Programos išvestis"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:333
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Programa pradėti %s\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:354
 msgid "Application exited\r\n"
 msgstr "Programa baigė darbą\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:380
 msgid "Terminal in Build Runtime"
 msgstr "Terminalas kūrimo vykdymo aplinkoje"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:386
 msgid "Terminal in Runtime"
 msgstr "Terminalas vykdymo aplinkoje"
 
@@ -6414,7 +6382,7 @@ msgstr "Kuriamas projektas…"
 msgid "Installing project…"
 msgstr "Diegiamas projektas…"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-parser.c:605
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:520
 msgid "Failed to create the XML tree."
 msgstr "Nepavyko sukurti XML medžio."
@@ -6422,6 +6390,74 @@ msgstr "Nepavyko sukurti XML medžio."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Failas turi būti įrašytas vietoje skaitymui."
+
+#~ msgid ""
+#~ "If enabled, Builder will automatically wrap text so all of the line text "
+#~ "is visible."
+#~ msgstr ""
+#~ "Jei įjungta, Kūrėjas automatiškai laužys tekstą, kad visa teksto eilutė "
+#~ "būtų matoma."
+
+#~ msgid "Night Mode"
+#~ msgstr "Nakties veiksena"
+
+#~ msgid "Prefer dark application chrome."
+#~ msgstr "Naudoti tamsias spalvas programos išvaizdai."
+
+#~ msgid "Follow system night light"
+#~ msgstr "Sekti sistemos naktinį apšvietimą"
+
+#~ msgid "Use GNOME night light setting to activate night-mode."
+#~ msgstr ""
+#~ "Naudoti GNOME naktinio apšvietimo nustatymą nakties veiksenai įjungti."
+
+#~ msgid "Adwaita Dark"
+#~ msgstr "Adwaita tamsi"
+
+#~ msgid "The default color scheme for TextEditor"
+#~ msgstr "TextEditor numatytoji kūrėjo spalvų schema"
+
+#~ msgid "Builder Dark"
+#~ msgstr "Kūrėjo tamsi"
+
+#~ msgid "Dark color scheme for Builder using the Tango color palette"
+#~ msgstr "Tamsi kūrėjo spalvų schema naudojant Tango spalvų paletę"
+
+#~ msgid "The default color scheme for Builder"
+#~ msgstr "Numatytoji kūrėjo spalvų schema"
+
+#~ msgid "Basic"
+#~ msgstr "Paprasta"
+
+#~ msgid "Themes"
+#~ msgstr "Temos"
+
+#~ msgid "Whether Builder should use a dark theme"
+#~ msgstr "Ar kūrėjas turėtų naudoti tamsią temą"
+
+#~ msgid "dark theme"
+#~ msgstr "tamsi tema"
+
+#~ msgid "Night Light"
+#~ msgstr "Naktinis apšvietimas"
+
+#~ msgid "Automatically enable dark mode at night"
+#~ msgstr "Automatiškai įjungti tamsią veikseną naktį"
+
+#~ msgid "follow night light"
+#~ msgstr "sekti naktinį apšvietimą"
+
+#~ msgid "Wrap text that is too wide to display"
+#~ msgstr "Laužyti tekstą, kuris yra per platus parodymui"
+
+#~ msgid "Create a GNOME application with GTK 4"
+#~ msgstr "Sukurti GNOME programą naudojant GTK 4"
+
+#~ msgid "Games"
+#~ msgstr "Žaidimai"
+
+#~ msgid "Simple game launcher for GNOME"
+#~ msgstr "Paprasta žaidimų paleidimo programa GNOME aplinkai"
 
 #~ msgid "Adwaita"
 #~ msgstr "Adwaita"
@@ -6539,9 +6575,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "Install Language Server"
 #~ msgstr "Įdiegti kalbos serverį"
-
-#~ msgid "Rustup not installed"
-#~ msgstr "Rustup neįdiegta"
 
 #~ msgid "Installing rustup"
 #~ msgstr "Diegiama rustup"
@@ -8531,9 +8564,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "background"
 #~ msgstr "fonas"
-
-#~ msgid "height"
-#~ msgstr "aukštis"
 
 #~ msgid "width"
 #~ msgstr "plotis"
