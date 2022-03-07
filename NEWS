@@ -1,3 +1,13 @@
+==============
+Version 42.rc1
+==============
+
+ • Template updates for JavaScript, Python, C, and Vala
+ • Updates for Vala and Intelephense language servers
+ • CMake integration improvements
+ • Additional license options for templates
+ • Translation updates
+
 ================
 Version 42.beta1
 ================
