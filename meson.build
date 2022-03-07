@@ -64,7 +64,7 @@ status = [
 config_h = configuration_data()
 
 # Message of doom
-if (version_split[1][0] == 'a' or version_split[1][0] == 'b')
+if version_split[1][0] in ['a', 'b', 'r']
   config_h.set10('DEVELOPMENT_BUILD', 1)
   MINOR_VERSION = 0
   status += [
