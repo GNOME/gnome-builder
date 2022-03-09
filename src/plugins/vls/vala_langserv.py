@@ -81,4 +81,11 @@ class VlsHoverProvider(Ide.LspHoverProvider):
 
 class VlsSearchProvider(Ide.LspSearchProvider):
     def do_load(self, context):
+        if not context.has_project():
+            return
+
+        build_system = Ide.BuildSystem.from_context(context)
+        if not build_system.supports_language('vala'):
+            return
+
         VlsService.bind_client_lazy(self)
