@@ -2,17 +2,15 @@
 
 namespace {{PreFix}} {
     public class Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application {
-        private ActionEntry[] APP_ACTIONS = {
-            { "about", this.on_about_action },
-            { "preferences", this.on_preferences_action },
-            { "quit", this.quit }
-        };
-
-
         public Application () {
             Object (application_id: "{{appid}}", flags: ApplicationFlags.FLAGS_NONE);
 
-            this.add_action_entries (this.APP_ACTIONS, this);
+            ActionEntry[] action_entries = {
+                { "about", this.on_about_action },
+                { "preferences", this.on_preferences_action },
+                { "quit", this.quit }
+            };
+            this.add_action_entries (action_entries, this);
             this.set_accels_for_action ("app.quit", {"<primary>q"});
         }
 
