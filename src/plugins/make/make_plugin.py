@@ -288,12 +288,20 @@ class MakeTemplateBase(Ide.TemplateBase, Ide.ProjectTemplate):
             'exec_name': name,
         }
 
-        files = {
-            'resources/.gitignore': '.gitignore',
-            'resources/Makefile': 'Makefile',
-            'resources/main.c': '%(exec_name)s.c',
-        }
-        self.prepare_files(files)
+        if self.language == 'c':
+            files = {
+                'resources/.gitignore': '.gitignore',
+                'resources/Makefile': 'Makefile',
+                'resources/main.c': '%(exec_name)s.c',
+            }
+            self.prepare_files(files)
+        elif self.language == 'c++':
+            files = {
+                'resources/.gitignore': '.gitignore',
+                'resources/Makefile': 'Makefile',
+                'resources/main.cpp': '%(exec_name)s.cpp',
+            }
+            self.prepare_files(files)
 
         modes = {}
 
