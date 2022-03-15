@@ -4,7 +4,9 @@ namespace {{PreFix}} {
     public class Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application {
         public Application () {
             Object (application_id: "{{appid}}", flags: ApplicationFlags.FLAGS_NONE);
+        }
 
+        construct {
             ActionEntry[] action_entries = {
                 { "about", this.on_about_action },
                 { "preferences", this.on_preferences_action },
