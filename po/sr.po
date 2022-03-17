@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-03-17 10:14+0100\n"
+"POT-Creation-Date: 2022-03-17 10:04+0000\n"
+"PO-Revision-Date: 2022-03-17 19:38+0100\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -183,10 +183,8 @@ msgid "Clear build logs"
 msgstr "Очисти дневнике грађења"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
-#, fuzzy
-#| msgid "If enabled, the left panel will be displayed."
 msgid "If enabled, build log pane will be cleared on rebuild."
-msgstr "Омогућава приказ леве површи."
+msgstr "Ако је омогућено, дневник грађења биће очишћен при грађењу."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Allow network when metered"
@@ -202,11 +200,13 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Debugger Breakpoint on Main"
-msgstr ""
+msgstr "Тачка прекида на главну"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid "Debugger should automatically insert breakpoint on main function."
 msgstr ""
+"Поправљач грешка треба самостално постављати тачку прекида над главном "
+"функцијом."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -375,7 +375,7 @@ msgstr "Преломи текст"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "The way to wrap a long line of text for a better visibility."
-msgstr ""
+msgstr "Начин преламања дугачких линија за бољу прегледност текста."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 #: src/libide/gui/ide-preferences-builtin.c:194
@@ -426,14 +426,12 @@ msgstr ""
 "током куцања."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:139
-#, fuzzy
-#| msgid "Words matching selection"
 msgid "Minimum characters for matching selection."
-msgstr "Речи подударне са одабиром"
+msgstr "Најмање знакова за подударни избор."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Specify the minimum number of characters for selection matching."
-msgstr ""
+msgstr "Наведите најмањи број знакова за подударање изабраног."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -484,6 +482,8 @@ msgid ""
 "Use the light or dark variant of the GTK theme and/or GtkSourceView style "
 "scheme."
 msgstr ""
+"Користи светлу или тамну варијацију ГТК теме и/или GtkSourceView стилске "
+"шеме."
 
 # Са разлогом су коришћени енглески наводници!
 #. Translators: This is the default directory name for user’s
@@ -874,7 +874,7 @@ msgstr "П_реименуј"
 msgid "unsaved file %u"
 msgstr "несачувана датотека %u"
 
-#: src/libide/code/ide-buffer.c:3635
+#: src/libide/code/ide-buffer.c:3639
 msgid "The current language lacks a symbol resolver."
 msgstr "За тренутни језик не постоји разрешавач симбола."
 
@@ -2291,12 +2291,12 @@ msgstr "Тачке прекидања"
 
 #: src/libide/gui/ide-preferences-builtin.c:426
 msgid "Insert Breakpoint at Start of Application"
-msgstr ""
+msgstr "Унеси тачку прекида на почетак програма"
 
 #: src/libide/gui/ide-preferences-builtin.c:426
 msgid ""
 "Automatically stop execution at the start of the applications main function"
-msgstr ""
+msgstr "Самостално прекини извршавање на почетку главне функције програма"
 
 #: src/libide/gui/ide-preferences-builtin.c:432
 #: src/libide/projects/ide-projects-global.c:105
@@ -2378,12 +2378,9 @@ msgid "Show help"
 msgstr "Приказује помоћ"
 
 #: src/libide/gui/ide-shortcuts-window.ui:25
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toogle primary menu"
 msgctxt "shortcut window"
 msgid "Toggle primary menu"
-msgstr "Мења стање главног менија"
+msgstr "Окида примарни изборник"
 
 #: src/libide/gui/ide-shortcuts-window.ui:32
 #: src/libide/gui/ide-shortcuts-window.ui:604
@@ -2442,11 +2439,9 @@ msgid "Toggle bottom panel"
 msgstr "Прикажи доњу површ"
 
 #: src/libide/gui/ide-shortcuts-window.ui:101
-#, fuzzy
-#| msgid "Show right panel"
 msgctxt "shortcut window"
 msgid "Show Find in Project panel"
-msgstr "Прикажи десну површ"
+msgstr "Прикажи претрагу у површи пројекта"
 
 #: src/libide/gui/ide-shortcuts-window.ui:110
 msgctxt "shortcut window"
@@ -2469,11 +2464,9 @@ msgid "Save the document"
 msgstr "Сачувај документ"
 
 #: src/libide/gui/ide-shortcuts-window.ui:136
-#, fuzzy
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save a copy of the document"
-msgstr "Сачувај документ"
+msgstr "Сачувај копију документа"
 
 #: src/libide/gui/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
@@ -2513,7 +2506,7 @@ msgstr "Приказује списак отворених датотека"
 #: src/libide/gui/ide-shortcuts-window.ui:192
 msgctxt "shortcut window"
 msgid "Show document outline or symbol tree"
-msgstr ""
+msgstr "Прикажи шему документације или стабло симбола"
 
 #: src/libide/gui/ide-shortcuts-window.ui:200
 #: src/libide/gui/ide-shortcuts-window.ui:219
@@ -2637,19 +2630,17 @@ msgstr "Поређај изабране линије"
 #: src/libide/gui/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Make selection upper case"
-msgstr ""
+msgstr "Пребаци изабрано у велика слова"
 
 #: src/libide/gui/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Make selection lower case"
-msgstr ""
+msgstr "Пребаци изабрано у мала слова"
 
 #: src/libide/gui/ide-shortcuts-window.ui:376
-#, fuzzy
-#| msgid "_Invert Case"
 msgctxt "shortcut window"
 msgid "Invert selection case"
-msgstr "Об_рни величину слова"
+msgstr "Обрни величину слова изабраног"
 
 #: src/libide/gui/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
@@ -2701,10 +2692,11 @@ msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Улепшај изабрани код"
 
+#. Translators: LSP stands for Language Server Protocol
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
-msgstr ""
+msgstr "(Само ЛСП) Обликуј изабрани код или цели документ"
 
 #: src/libide/gui/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
@@ -2738,11 +2730,9 @@ msgstr "Скочи на дефиницију симбола"
 
 #. FIXME: find references of what? it doesn't seem to work here, there's always no results.
 #: src/libide/gui/ide-shortcuts-window.ui:496
-#, fuzzy
-#| msgid "_Find references"
 msgctxt "shortcut window"
 msgid "Find references"
-msgstr "П_ронађи референце"
+msgstr "Пронађи референце"
 
 #: src/libide/gui/ide-shortcuts-window.ui:503
 msgctxt "shortcut window"
@@ -2838,7 +2828,7 @@ msgstr[2] "Инсталирам %u пакета"
 msgstr[3] "Инсталирам пакет"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1473
+#: src/libide/lsp/ide-lsp-client.c:1474
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Нисам успео да покренем језички сервер: %s"
@@ -3007,22 +2997,24 @@ msgstr "Неименовани терминал"
 msgid "Save Terminal Content As"
 msgstr "Сачувај садржај терминала као"
 
-#: src/libide/terminal/ide-terminal-page.c:112
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:301
+#: src/libide/terminal/ide-terminal-page.c:125
+msgid "Failed to launch subprocess. You may need to rebuild your project."
+msgstr ""
+"Нисам успео да покренем потпроцес. Можда би требало да поново изградите ваш "
+"пројекат."
+
+#: src/libide/terminal/ide-terminal-page.c:130
+#: src/libide/terminal/ide-terminal-page.c:165
+#: src/libide/terminal/ide-terminal-page.c:336
 msgid "Untitled terminal"
 msgstr "Неименовани терминал"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:114
+#: src/libide/terminal/ide-terminal-page.c:132
 msgid "Exited"
 msgstr "Изашао"
 
-#: src/libide/terminal/ide-terminal-page.c:121
-msgid "Failed to launch subprocess. You may need to rebuild your project."
-msgstr ""
-
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:152
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "Покретач подпроцеса није успео пребрзо, нећу га поново покренути."
 
@@ -4302,19 +4294,19 @@ msgstr "Документација"
 
 #: src/plugins/devhelp/gbp-devhelp-search.ui:29
 msgid "Reveal search bar with Ctrl+F"
-msgstr ""
+msgstr "Откриј претраживачку траку са Ctrl+F"
 
 #: src/plugins/devhelp/gbp-devhelp-search.ui:48
 msgid "Previous search result (Ctrl+Shift+G)"
-msgstr ""
+msgstr "Претходни резултат претраге (Ctrl+Shift+G)"
 
 #: src/plugins/devhelp/gbp-devhelp-search.ui:68
 msgid "Next search result (Ctrl+G)"
-msgstr ""
+msgstr "Следећи резултат претраге (Ctrl+G)"
 
 #: src/plugins/devhelp/gbp-devhelp-search.ui:96
 msgid "Close search bar (Escape key)"
-msgstr ""
+msgstr "Затвори претрагу (тастер Escape)"
 
 #: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
 msgid "Print…"
@@ -4723,38 +4715,29 @@ msgid "Installing Necessary SDKs"
 msgstr "Инсталирам потребне СДК-ове"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
-#, fuzzy
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"Градитељ мора инсталирати следеће софтверске развојне скупове алата за "
-"изградњу вашег пројекта."
+"Градитељ инсталира софтверске развојне скупове алата потребне за изградњу "
+"вашег пројекта."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
-#, fuzzy, c-format
-#| msgid "Failed to save file: %s"
+#, c-format
 msgid "Failed to update SDKs: %s"
-msgstr "Не могу да сачувам датотеку: %s"
+msgstr "Не могу да ажурирам СДК-ове: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
 msgid "Updating Necessary SDKs"
-msgstr ""
+msgstr "Ажурирам потребне СДК-ове"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
-#, fuzzy
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"Градитељ мора инсталирати следеће софтверске развојне скупове алата за "
-"изградњу вашег пројекта."
+"Градитељ ажурира софтверске развојне скупове алата потребне за изградњу "
+"вашег пројекта."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
@@ -4992,10 +4975,8 @@ msgid "UI Designer"
 msgstr "Дизајнер сучеља"
 
 #: src/plugins/glade/gtk/menus.ui:75
-#, fuzzy
-#| msgid "UI Designer"
 msgid "_UI Designer"
-msgstr "Дизајнер сучеља"
+msgstr "Дизајнер с_учеља"
 
 #: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
 msgid "Code assistance requires a local file."
@@ -5057,10 +5038,8 @@ msgid "Open a _Project…"
 msgstr "Отвори _пројекат…"
 
 #: src/plugins/grep/gbp-grep-editor-addin.c:57
-#, fuzzy
-#| msgid "Show right panel"
 msgid "Show Find in Project panel"
-msgstr "Прикажи десну површ"
+msgstr "Прикажи претрагу у површи пројекта"
 
 #: src/plugins/grep/gbp-grep-panel.c:761
 msgid "Match"
@@ -5173,7 +5152,7 @@ msgstr "На вашем рачунару недостаје програм „py
 msgid "(Preview)"
 msgstr "(Претпреглед)"
 
-#: src/plugins/intelephense/intelephense.py:71
+#: src/plugins/intelephense/intelephense.py:72
 msgid "Indexing php code…"
 msgstr "Пописујем пхп код…"
 
@@ -5196,22 +5175,16 @@ msgid "Modified"
 msgstr "Измењен"
 
 #: src/plugins/ls/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Browse Folder"
 msgid "_Browse Folder"
-msgstr "Разгледај фасциклу"
+msgstr "Раз_гледај фасциклу"
 
 #: src/plugins/ls/gtk/menus.ui:18
-#, fuzzy
-#| msgid "Switch to Folder"
 msgid "S_witch to Folder"
-msgstr "Пребаци се на фасциклу"
+msgstr "Пре_баци се на фасциклу"
 
 #: src/plugins/ls/gtk/menus.ui:23
-#, fuzzy
-#| msgid "Open Containing Folder"
 msgid "_Open Containing Folder"
-msgstr "Отвори садржану фасциклу"
+msgstr "_Отвори садржану фасциклу"
 
 #: src/plugins/make/make_plugin.py:104
 msgid "Build project"
@@ -5221,69 +5194,59 @@ msgstr "Изгради пројекат"
 msgid "Install project"
 msgstr "Инсталирај пројекат"
 
-#: src/plugins/make/make_plugin.py:343
+#: src/plugins/make/make_plugin.py:351
 msgid "Empty Makefile Project"
 msgstr "Празни Мејкфајл (Makefile) пројекат"
 
-#: src/plugins/make/make_plugin.py:345
+#: src/plugins/make/make_plugin.py:353
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Направи нови празни пројекат уз помоћ једноставног мејкфајла"
 
-#: src/plugins/meson-templates/meson_templates.py:255
-#, fuzzy
-#| msgid "GNOME Application"
-msgid "GTK Application (Legacy)"
-msgstr "Гномов програм"
-
 #: src/plugins/meson-templates/meson_templates.py:257
-#, fuzzy
-#| msgid "Create a new GNOME application"
-msgid "Create a GTK application with GTK 3"
-msgstr "Направи нови Гномов програм"
+msgid "GTK Application (Legacy)"
+msgstr "ГТК програм (застарело)"
 
-#: src/plugins/meson-templates/meson_templates.py:332
-#, fuzzy
-#| msgid "GNOME Application"
-msgid "GTK Application"
-msgstr "Гномов програм"
+#: src/plugins/meson-templates/meson_templates.py:259
+msgid "Create a GTK application with GTK 3"
+msgstr "Направи ГТК програм са ГТК 3"
 
 #: src/plugins/meson-templates/meson_templates.py:334
-#, fuzzy
-#| msgid "Create a new GNOME application"
-msgid "Create a GTK application"
-msgstr "Направи нови Гномов програм"
+msgid "GTK Application"
+msgstr "ГТК програм"
 
-#: src/plugins/meson-templates/meson_templates.py:414
+#: src/plugins/meson-templates/meson_templates.py:336
+msgid "Create a GTK application"
+msgstr "Направи ГТК програм"
+
+#: src/plugins/meson-templates/meson_templates.py:416
 msgid "GNOME Application"
 msgstr "Гномов програм"
 
-#: src/plugins/meson-templates/meson_templates.py:416
-#, fuzzy
-#| msgid "Create a new GNOME application"
+#: src/plugins/meson-templates/meson_templates.py:418
 msgid "Create a GNOME application"
-msgstr "Направи нови Гномов програм"
+msgstr "Направи Гномов програм"
 
-#: src/plugins/meson-templates/meson_templates.py:496
+#: src/plugins/meson-templates/meson_templates.py:498
 msgid "Shared Library"
 msgstr "Дељена библиотека"
 
-#: src/plugins/meson-templates/meson_templates.py:498
+#: src/plugins/meson-templates/meson_templates.py:500
 msgid "Create a new project with a shared library"
 msgstr "Направи нови пројекат са дељеном библиотеком"
 
-#: src/plugins/meson-templates/meson_templates.py:515
+#: src/plugins/meson-templates/meson_templates.py:517
 msgid "Empty Project"
 msgstr "Празан пројекат"
 
-#: src/plugins/meson-templates/meson_templates.py:517
+#: src/plugins/meson-templates/meson_templates.py:519
 msgid "Create a new empty project"
 msgstr "Направи нови празни пројекат"
 
-#: src/plugins/meson-templates/meson_templates.py:534
+#: src/plugins/meson-templates/meson_templates.py:536
 msgid "Command Line Tool"
 msgstr "Алат командне линије"
 
-#: src/plugins/meson-templates/meson_templates.py:536
+#: src/plugins/meson-templates/meson_templates.py:538
 msgid "Create a new command line project"
 msgstr "Направи нови пројекат командне линије"
 
@@ -5630,78 +5593,56 @@ msgid "Rename %s"
 msgstr "Преименуј %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
-#, fuzzy
-#| msgid "New File…"
 msgid "New Fil_e…"
-msgstr "Нова датотека…"
+msgstr "Нова датот_ека…"
 
 #: src/plugins/project-tree/gtk/menus.ui:14
-#, fuzzy
-#| msgid "New Folder…"
 msgid "New F_older…"
-msgstr "Нова фасцикла…"
+msgstr "Н_ова фасцикла…"
 
 #: src/plugins/project-tree/gtk/menus.ui:22
 msgid "O_pen"
 msgstr "О_твори"
 
 #: src/plugins/project-tree/gtk/menus.ui:26
-#, fuzzy
-#| msgid "Open With…"
 msgid "Open _With…"
-msgstr "Отвори помоћу…"
+msgstr "От_вори помоћу…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
-#, fuzzy
-#| msgid "Source Code Editor"
 msgid "_Source Code Editor"
-msgstr "Уређивач изворног кода"
+msgstr "Уређивач и_зворног кода"
 
 #: src/plugins/project-tree/gtk/menus.ui:39
-#, fuzzy
-#| msgid "Open Containing Folder"
 msgid "Open _Containing Folder"
-msgstr "Отвори садржану фасциклу"
+msgstr "Отвори _садржану фасциклу"
 
 #: src/plugins/project-tree/gtk/menus.ui:45
-#, fuzzy
-#| msgid "Open in Terminal"
 msgid "Open in _Terminal"
-msgstr "Отвори у терминалу"
+msgstr "Отвори у _терминалу"
 
 #: src/plugins/project-tree/gtk/menus.ui:59
-#, fuzzy
-#| msgid "Move to Trash"
 msgid "_Move to Trash"
-msgstr "Премести у смеће"
+msgstr "Пре_мести у смеће"
 
 #: src/plugins/project-tree/gtk/menus.ui:65
-#, fuzzy
-#| msgid "Display Options"
 msgid "_Display Options"
-msgstr "Подешавања приказа"
+msgstr "По_дешавања приказа"
 
 #: src/plugins/project-tree/gtk/menus.ui:69
-#, fuzzy
-#| msgid "Show Ignored Files"
 msgid "S_how Ignored Files"
-msgstr "Прикажи занемарене датотеке"
+msgstr "Прикажи за_немарене датотеке"
 
 #: src/plugins/project-tree/gtk/menus.ui:74
-#, fuzzy
-#| msgid "Sort Directories First"
 msgid "S_ort Directories First"
-msgstr "Поређај најпре по имену фасцикле"
+msgstr "П_оређај најпре по имену фасцикле"
 
 #: src/plugins/project-tree/gtk/menus.ui:87
 msgid "Reveal in Project Tree"
 msgstr "Прикажи у стаблу пројекта"
 
 #: src/plugins/project-tree/gtk/menus.ui:96
-#, fuzzy
-#| msgid "Reveal in Project Tree"
 msgid "Reveal File in Project _Tree"
-msgstr "Прикажи у стаблу пројекта"
+msgstr "Прикажи у с_таблу пројекта"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5734,24 +5675,20 @@ msgstr ""
 "podudaranje trenutno odabir брзо истицање речи подударање тренутно одабир"
 
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:64
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "Minimum length for highlight"
-msgstr "Поништи истицање"
+msgstr "Најмања дужина за истицање"
 
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:65
 msgid "Highlight words matching at least this number of characters"
-msgstr ""
+msgstr "Истакни речи које садрже барем оволико знакова"
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
-#, fuzzy
-#| msgid "quick highlight words matching current selection"
 msgid "quick highlight words matching current selection minimum length"
 msgstr ""
-"quick highlight words matching current selection brzo isticanje reči "
-"podudaranje trenutno odabir брзо истицање речи подударање тренутно одабир"
+"quick highlight words matching current selection minimum length brzo "
+"isticanje reči podudaranje trenutno odabir najmanja duzina брзо истицање "
+"речи подударање тренутно одабир најмања дужина"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:349
@@ -5773,10 +5710,8 @@ msgid "Recent Projects"
 msgstr "Скорашњи пројекти"
 
 #: src/plugins/retab/gtk/menus.ui:9
-#, fuzzy
-#| msgid "Reformat tabs"
 msgid "_Reformat tabs"
-msgstr "Поново уреди табулаторе"
+msgstr "Поново у_реди табулаторе"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
 msgid "Rust Analyzer: Cargo command for diagnostics"
@@ -6014,10 +5949,8 @@ msgid "Check _Spelling"
 msgstr "Провера правописа"
 
 #: src/plugins/spellcheck/gtk/menus.ui:13
-#, fuzzy
-#| msgid "Underline misspelled words"
 msgid "_Underline misspelled words"
-msgstr "Подвуци погрешно написане речи"
+msgstr "Подв_уци погрешно написане речи"
 
 #: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
 msgid "Enable Stylelint"
@@ -6086,20 +6019,16 @@ msgid "Symbol"
 msgstr "Симбол"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.c:315
-#, fuzzy
-#| msgid "Select Symbol…"
 msgid "_Select Symbol…"
-msgstr "Изабери симбол…"
+msgstr "Изабери _симбол…"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
 msgid "Document Outline"
 msgstr "Шема документације"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
-#, fuzzy
-#| msgid "Document Outline"
 msgid "_Document Outline"
-msgstr "Шема документације"
+msgstr "Шема _документације"
 
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
 #: src/plugins/sysprof/gtk/menus.ui:19
@@ -6124,17 +6053,13 @@ msgid "Run with Profiler"
 msgstr "Покрени са профилатором"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Open Sysprof Capture…"
 msgctxt "menu label"
 msgid "Open _Sysprof Capture…"
-msgstr "Отвори ухваћено сиспрофа…"
+msgstr "Отвори ухваћено _сиспрофа…"
 
 #: src/plugins/sysprof/gtk/menus.ui:42
-#, fuzzy
-#| msgid "Run with Profiler"
 msgid "Run with _Profiler"
-msgstr "Покрени са профилатором"
+msgstr "Покрени са _профилатором"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
 msgid "Add sysroot"
@@ -6369,10 +6294,8 @@ msgstr ""
 "ажурирање."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
-#, fuzzy
-#| msgid "Update"
 msgid "_Update"
-msgstr "Ажурирај"
+msgstr "Аж_урирај"
 
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
 #: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
@@ -6393,16 +6316,12 @@ msgid "Tags"
 msgstr "Ознаке"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Switch to branch"
 msgid "_Switch to branch"
-msgstr "Промени на грану"
+msgstr "Промени на _грану"
 
 #: src/plugins/vcsui/gtk/menus.ui:12
-#, fuzzy
-#| msgid "Push to origin"
 msgid "_Push to origin"
-msgstr "Погурај на порекло"
+msgstr "_Погурај на порекло"
 
 #: src/plugins/vim/gb-vim.c:105
 #, c-format
