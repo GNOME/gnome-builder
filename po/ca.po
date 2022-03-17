@@ -47,8 +47,8 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"El Constructor és un entorn de desenvolupament integrat activament "
-"desenvolupat per a GNOME. Combina el suport integrat per a tecnologies GNOME"
+"El Constructor és un entorn de desenvolupament integrat per a GNOME "
+"desenvolupat activament. Combina el suport integrat per a tecnologies GNOME"
 " essencials, com ara GTK+, GLib i les API del GNOME amb característiques que"
 " qualsevol desenvolupador apreciarà, com el ressaltat de sintaxi i els "
 "fragments."
@@ -67,7 +67,7 @@ msgstr "Característiques:"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:24
 msgid "Built in syntax highlighting for many languages"
-msgstr "Construït amb ressaltat de sintaxi per a molts llenguatges"
+msgstr "Incorpora ressaltat de sintaxi per a molts llenguatges"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:25
 msgid "Side-by-side code editors"
