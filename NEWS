@@ -1,3 +1,15 @@
+============
+Version 42.0
+============
+
+Changes since 42.rc1
+
+ • Template updates for C++ and Vala
+ • Only enable Vala search provider if Vala is supported language
+   by the projects build system to avoid spawning LSP.
+ • Build system changes to default plugins
+ • Translation updates
+
 ==============
 Version 42.rc1
 ==============
