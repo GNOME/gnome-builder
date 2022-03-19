@@ -4,6 +4,7 @@
 # __init__.py
 #
 # Copyright 2021 Jeremy Wilkins <jeb@jdwilkins.co.uk>
+# Copyright 2022 Veli Tasalı <me@velitasali.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,18 +20,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os
 import gi
 import json
-import threading
 
-from gi.repository import GLib
-from gi.repository import GObject
-from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import Ide
-
-_ = Ide.gettext
 
 
 SEVERITY_MAP = {
@@ -42,72 +36,23 @@ SEVERITY_MAP = {
     'fatal': Ide.DiagnosticSeverity.FATAL
 }
 
-class RubocopDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
-    has_rubocop = False
+class RubocopDiagnosticProvider(Ide.DiagnosticTool):
+    is_stdin = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.set_program_name('rubocop')
 
-        # See if we have rubocop installed in flatpak or host if running outside
-        # of a container (this is used as a fallback if it is not found within
-        # the build container).
-        self.has_rubocop = GLib.find_program_in_path('rubocop')
+    def do_configure_launcher(self, launcher, file, contents):
+        launcher.push_args(('--format', 'json'))
+        if contents is not None:
+            self.is_stdin = True
+            launcher.push_argv('--stdin')
+        launcher.push_argv(file.get_path())
 
-    def create_launcher(self):
-        context = self.get_context()
-        srcdir = context.ref_workdir().get_path()
-        launcher = None
-
-        if context.has_project():
-            build_manager = Ide.BuildManager.from_context(context)
-            pipeline = build_manager.get_pipeline()
-            if pipeline is not None:
-                srcdir = pipeline.get_srcdir()
-            runtime = pipeline.get_config().get_runtime()
-            if runtime.contains_program_in_path('rubocop'):
-                launcher = runtime.create_launcher()
-
-        if launcher is None:
-            if not self.has_rubocop:
-                return None
-
-            launcher = Ide.SubprocessLauncher.new(0)
-
-        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE)
-        launcher.set_cwd(srcdir)
-
-        return launcher
-
-    def do_diagnose_async(self, file, file_content, lang_id, cancellable, callback, user_data):
-        task = Gio.Task.new(self, cancellable, callback)
-
-        launcher = self.create_launcher()
-        if launcher is None:
-            task.return_error(Ide.NotSupportedError())
-            return
-
-        self.diagnostics_list = []
-        task.diagnostics_list = []
-        srcdir = launcher.get_cwd()
-
-        threading.Thread(target=self.execute, args=(task, launcher, srcdir, file, file_content),
-                         name='rubocop-thread').start()
-
-    def execute(self, task, launcher, srcdir, file, file_content):
+    def do_populate_diagnostics(self, diagnostics, file, stdout, stderr):
         try:
-            launcher.push_args(('rubocop', '--format', 'json'))
-
-            if file_content:
-                launcher.push_argv('--stdin')
-
-            launcher.push_argv(file.get_path())
-
-            sub_process = launcher.spawn()
-            stdin = file_content.get_data().decode('UTF-8')
-            success, stdout, stderr = sub_process.communicate_utf8(stdin, None)
-
             results = json.loads(stdout)
-
             for result in results.get('files', []):
                 for offense in result.get('offenses', []):
                     if 'location' not in offense:
@@ -132,7 +77,7 @@ class RubocopDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
                         end_col = start_col + location['length']
                         end = Ide.Location.new(file, end_line, end_col)
 
-                    if file_content:
+                    if self.is_stdin:
                         message = offense['cop_name'] + ': ' + offense['message']
                     else:
                         message = offense['message'] # Already prefixed when not --stdin
@@ -143,18 +88,7 @@ class RubocopDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
                         range_ = Ide.Range.new(start, end)
                         diagnostic.add_range(range_)
 
-                    task.diagnostics_list.append(diagnostic)
-        except GLib.Error as err:
-            task.return_error(err)
-        except (json.JSONDecodeError, UnicodeDecodeError, IndexError) as e:
-            task.return_error(GLib.Error('Failed to decode rubocop json: {}'.format(e)))
-        else:
-            task.return_boolean(True)
-
-    def do_diagnose_finish(self, result):
-        if result.propagate_boolean():
-            diagnostics = Ide.Diagnostics()
-            for diag in result.diagnostics_list:
-                diagnostics.add(diag)
-            return diagnostics
+                    diagnostics.add(diagnostic)
+        except Exception as e:
+            Ide.warning('Failed to decode rubocop json: {}'.format(e))
 
