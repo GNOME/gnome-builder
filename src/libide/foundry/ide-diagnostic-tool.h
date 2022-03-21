@@ -37,9 +37,13 @@ struct _IdeDiagnosticToolClass
 
   IdeSubprocessLauncher *(*create_launcher)      (IdeDiagnosticTool      *self,
                                                   const char             *program_name,
+                                                  GFile                  *file,
+                                                  GBytes                 *contents,
                                                   GError                **error);
   void                   (*configure_launcher)   (IdeDiagnosticTool      *self,
-                                                  IdeSubprocessLauncher  *launcher);
+                                                  IdeSubprocessLauncher  *launcher,
+                                                  GFile                  *file,
+                                                  GBytes                 *contents);
   GBytes                *(*get_stdin_bytes)      (IdeDiagnosticTool      *self,
                                                   GFile                  *file,
                                                   GBytes                 *contents,
@@ -56,5 +60,15 @@ const char *ide_diagnostic_tool_get_program_name (IdeDiagnosticTool *self);
 IDE_AVAILABLE_IN_42
 void        ide_diagnostic_tool_set_program_name (IdeDiagnosticTool *self,
                                                   const char        *program_name);
+IDE_AVAILABLE_IN_42
+const char *ide_diagnostic_tool_get_bundled_program_path (IdeDiagnosticTool *self);
+IDE_AVAILABLE_IN_42
+void        ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self,
+                                                          const char        *path);
+IDE_AVAILABLE_IN_42
+const char *ide_diagnostic_tool_get_local_program_path (IdeDiagnosticTool *self);
+IDE_AVAILABLE_IN_42
+void        ide_diagnostic_tool_set_local_program_path (IdeDiagnosticTool *self,
+                                                        const char        *path);
 
 G_END_DECLS

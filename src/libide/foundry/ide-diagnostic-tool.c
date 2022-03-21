@@ -33,6 +33,8 @@
 typedef struct
 {
   char *program_name;
+  char *bundled_program_path;
+  char *local_program_path;
 } IdeDiagnosticToolPrivate;
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -45,6 +47,8 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeDiagnosticTool, ide_diagnostic_tool, IDE_TY
 enum {
   PROP_0,
   PROP_PROGRAM_NAME,
+  PROP_BUNDLED_PROGRAM_PATH,
+  PROP_LOCAL_PROGRAM_PATH,
   N_PROPS
 };
 
@@ -63,23 +67,32 @@ ide_diagnostic_tool_real_get_stdin_bytes (IdeDiagnosticTool *self,
 
 static void
 ide_diagnostic_tool_real_configure_launcher (IdeDiagnosticTool     *self,
-                                             IdeSubprocessLauncher *launcher)
+                                             IdeSubprocessLauncher *launcher,
+                                             GFile                 *file,
+                                             GBytes                *contents)
 {
   g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (G_IS_FILE (file));
 }
 
 static IdeSubprocessLauncher *
 ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
                                           const char         *program_name,
+                                          GFile              *file,
+                                          GBytes             *contents,
                                           GError            **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) workdir = NULL;
   const char *srcdir = NULL;
+  const char *local_program_path;
+  const char *bundled_program_path;
+  g_autofree char *program_path = NULL;
   IdeRuntimeManager *runtime_manager;
-  IdeRuntime *host;
+  IdeRuntime *host = NULL;
+  IdePipeline *pipeline = NULL;
 
   IDE_ENTRY;
 
@@ -97,39 +110,58 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
 
   workdir = ide_context_ref_workdir (context);
   srcdir = g_file_peek_path (workdir);
+  local_program_path = ide_diagnostic_tool_get_local_program_path (self);
+  bundled_program_path = ide_diagnostic_tool_get_bundled_program_path (self);
 
   if (ide_context_has_project (context))
     {
       IdeBuildManager *build_manager = ide_build_manager_from_context (context);
-      IdePipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+      runtime_manager = ide_runtime_manager_from_context (context);
+      host = ide_runtime_manager_get_runtime (runtime_manager, "host");
+    }
 
-      if (pipeline != NULL)
-        {
-          srcdir = ide_pipeline_get_srcdir (pipeline);
+  if (pipeline != NULL)
+    srcdir = ide_pipeline_get_srcdir (pipeline);
 
-          if (ide_pipeline_contains_program_in_path (pipeline, program_name, NULL))
-            {
-              if ((launcher = ide_pipeline_create_launcher (pipeline, NULL)))
-                goto setup_launcher;
-            }
-        }
+  if (local_program_path != NULL)
+    {
+      g_autofree char *local_program = g_build_filename (srcdir, local_program_path, NULL);
+      if (g_file_test (local_program, G_FILE_TEST_EXISTS))
+        program_path = g_steal_pointer (&local_program);
+    }
 
+  if (pipeline != NULL &&
+      ((program_path && ide_pipeline_contains_program_in_path (pipeline, program_path, NULL)) ||
+      ide_pipeline_contains_program_in_path (pipeline, program_name, NULL)) &&
+      (launcher = ide_pipeline_create_launcher (pipeline, NULL)))
+    goto setup_launcher;
+
+  if (host != NULL)
+    {
       /* Now try on the host using the "host" runtime which can do
        * a better job of discovering the program on the host and
        * take into account if the user has something modifying the
        * shell like .bashrc.
        */
-      runtime_manager = ide_runtime_manager_from_context (context);
-      host = ide_runtime_manager_get_runtime (runtime_manager, "host");
-      if (ide_runtime_contains_program_in_path (host, program_name, NULL))
+      if (program_path || ide_runtime_contains_program_in_path (host, program_name, NULL))
         {
           launcher = ide_runtime_create_launcher (host, NULL);
           goto setup_launcher;
         }
     }
+  else if (program_path != NULL)
+    {
+      launcher = ide_subprocess_launcher_new (0);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      goto setup_launcher;
+    }
+
+  if (bundled_program_path != NULL && ide_is_flatpak ())
+    program_path = g_strdup (bundled_program_path);
 
   /* See if Builder itself has bundled the program */
-  if (g_find_program_in_path (program_name))
+  if (program_path || g_find_program_in_path (program_name))
     {
       launcher = ide_subprocess_launcher_new (0);
       goto setup_launcher;
@@ -144,14 +176,14 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
   IDE_RETURN (NULL);
 
 setup_launcher:
-  ide_subprocess_launcher_push_argv (launcher, program_name);
+  ide_subprocess_launcher_push_argv (launcher, program_path ? program_path : program_name);
   ide_subprocess_launcher_set_cwd (launcher, srcdir);
   ide_subprocess_launcher_set_flags (launcher,
                                      (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                       G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                       G_SUBPROCESS_FLAGS_STDERR_PIPE));
 
-  IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher);
+  IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher, file, contents);
 
   IDE_RETURN (g_steal_pointer (&launcher));
 }
@@ -175,6 +207,8 @@ ide_diagnostic_tool_finalize (GObject *object)
   IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
 
   g_clear_pointer (&priv->program_name, g_free);
+  g_clear_pointer (&priv->bundled_program_path, g_free);
+  g_clear_pointer (&priv->local_program_path, g_free);
 
   G_OBJECT_CLASS (ide_diagnostic_tool_parent_class)->finalize (object);
 }
@@ -192,7 +226,12 @@ ide_diagnostic_tool_get_property (GObject    *object,
     case PROP_PROGRAM_NAME:
       g_value_set_string (value, ide_diagnostic_tool_get_program_name (self));
       break;
-
+    case PROP_BUNDLED_PROGRAM_PATH:
+      g_value_set_string (value, ide_diagnostic_tool_get_bundled_program_path (self));
+      break;
+    case PROP_LOCAL_PROGRAM_PATH:
+      g_value_set_string (value, ide_diagnostic_tool_get_local_program_path (self));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -211,7 +250,12 @@ ide_diagnostic_tool_set_property (GObject      *object,
     case PROP_PROGRAM_NAME:
       ide_diagnostic_tool_set_program_name (self, g_value_get_string (value));
       break;
-
+    case PROP_BUNDLED_PROGRAM_PATH:
+      ide_diagnostic_tool_set_bundled_program_path (self, g_value_get_string (value));
+      break;
+    case PROP_LOCAL_PROGRAM_PATH:
+      ide_diagnostic_tool_set_local_program_path (self, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -244,6 +288,18 @@ ide_diagnostic_tool_class_init (IdeDiagnosticToolClass *klass)
                          "The name of the program executable to locate",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  properties [PROP_BUNDLED_PROGRAM_PATH] =
+    g_param_spec_string ("bundled-program-path",
+                         "Bundled Program Path",
+                         "The path of the bundled program",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  properties [PROP_LOCAL_PROGRAM_PATH] =
+    g_param_spec_string ("local-program-path",
+                         "Local Program Path",
+                         "The path of the program inside active project",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -256,12 +312,14 @@ ide_diagnostic_tool_init (IdeDiagnosticTool *self)
 static IdeSubprocessLauncher *
 ide_diagnostic_tool_create_launcher (IdeDiagnosticTool  *self,
                                      const char         *program_name,
+                                     GFile              *file,
+                                     GBytes             *contents,
                                      GError            **error)
 {
   g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
   g_assert (program_name != NULL);
 
-  return IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->create_launcher (self, program_name, error);
+  return IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->create_launcher (self, program_name, file, contents, error);
 }
 
 static void
@@ -341,7 +399,7 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
       IDE_EXIT;
     }
 
-  if (!(launcher = ide_diagnostic_tool_create_launcher (self, priv->program_name, &error)))
+  if (!(launcher = ide_diagnostic_tool_create_launcher (self, priv->program_name, file, contents, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -410,3 +468,54 @@ ide_diagnostic_tool_set_program_name (IdeDiagnosticTool *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRAM_NAME]);
     }
 }
+
+const char *
+ide_diagnostic_tool_get_bundled_program_path (IdeDiagnosticTool *self)
+{
+  IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self), NULL);
+
+  return priv->bundled_program_path;
+}
+
+void
+ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self, const char *path)
+{
+  IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self));
+
+  if (g_strcmp0 (priv->bundled_program_path, path) != 0)
+    {
+      g_free (priv->bundled_program_path);
+      priv->bundled_program_path = g_strdup (path);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUNDLED_PROGRAM_PATH]);
+    }
+}
+
+const char *
+ide_diagnostic_tool_get_local_program_path (IdeDiagnosticTool *self)
+{
+  IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self), NULL);
+
+  return priv->local_program_path;
+}
+
+void
+ide_diagnostic_tool_set_local_program_path (IdeDiagnosticTool *self, const char *path)
+{
+  IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self));
+
+  if (g_strcmp0 (priv->local_program_path, path) != 0)
+    {
+      g_free (priv->local_program_path);
+      priv->local_program_path = g_strdup (path);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOCAL_PROGRAM_PATH]);
+    }
+}
+
