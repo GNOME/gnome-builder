@@ -20,7 +20,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.props.program_name = '{{name}}'
         self.props.version = "0.1.0"
         self.props.authors = ['{{author}}']
-        self.props.copyright = '2022 {{author}}'
+        self.props.copyright = '{{year}} {{author}}'
         self.props.logo_icon_name = '{{appid}}'
         self.props.modal = True
         self.set_transient_for(parent)

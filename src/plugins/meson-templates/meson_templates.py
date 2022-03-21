@@ -18,6 +18,7 @@
 
 import gi
 import os
+import time
 from os import path
 
 from gi.repository import (
@@ -126,6 +127,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('name').assign_string(name)
         scope.get('name_').assign_string(name_)
         scope.get('NAME').assign_string(name_.upper())
+        scope.get('year').assign_string(time.strftime('%Y'))
 
         if 'app-id' in params:
             appid = params['app-id'].get_string()
