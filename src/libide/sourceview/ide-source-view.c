@@ -1496,7 +1496,7 @@ ide_source_view_maybe_overwrite (IdeSourceView *self,
     case ')': case ']': case '}': case '"': case '\'': case ';':
       if (ch == next_ch)
         {
-          if (ch == '"')
+          if (ch == '"' || ch == '\'')
             break;
 
           switch (ch)
@@ -1504,7 +1504,6 @@ ide_source_view_maybe_overwrite (IdeSourceView *self,
             case ']':  match = '[';  break;
             case '}':  match = '{';  break;
             case ')':  match = '(';  break;
-            case '\'': match = '\''; break;
             case '>':  match = '<';  break;
             default:   match = 0;    break;
             }
