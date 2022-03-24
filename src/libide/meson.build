@@ -20,7 +20,6 @@ subdir('sourceview')
 subdir('editor')
 subdir('lsp')
 subdir('greeter')
-subdir('tree')
 
 if get_option('webkit').enabled()
   subdir('webkit')
