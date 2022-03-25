@@ -25,43 +25,43 @@
 #endif
 
 #include <adwaita.h>
+#include <libpanel.h>
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+  IDE_HEADER_BAR_POSITION_LEFT,
+  IDE_HEADER_BAR_POSITION_RIGHT,
+  IDE_HEADER_BAR_POSITION_LEFT_OF_CENTER,
+  IDE_HEADER_BAR_POSITION_RIGHT_OF_CENTER,
+  IDE_HEADER_BAR_POSITION_LAST,
+} IdeHeaderBarPosition;
+
 #define IDE_TYPE_HEADER_BAR (ide_header_bar_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (IdeHeaderBar, ide_header_bar, IDE, HEADER_BAR, AdwHeaderBar)
+G_DECLARE_DERIVABLE_TYPE (IdeHeaderBar, ide_header_bar, IDE, HEADER_BAR, GtkWidget)
 
 struct _IdeHeaderBarClass
 {
-  AdwHeaderBar parent_class;
-
-  /*< private >*/
-  gpointer _reserved[8];
+  GtkWidget parent_class;
 };
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget   *ide_header_bar_new                        (void);
+GtkWidget    *ide_header_bar_new                        (void);
 IDE_AVAILABLE_IN_ALL
-void         ide_header_bar_add_primary                (IdeHeaderBar *self,
-                                                        GtkWidget    *widget);
+void          ide_header_bar_add                        (IdeHeaderBar         *self,
+                                                         IdeHeaderBarPosition  position,
+                                                         int                   priority,
+                                                         GtkWidget            *widget);
 IDE_AVAILABLE_IN_ALL
-void         ide_header_bar_add_center_left            (IdeHeaderBar *self,
-                                                        GtkWidget    *widget);
+const char   *ide_header_bar_get_menu_id                (IdeHeaderBar *self);
 IDE_AVAILABLE_IN_ALL
-void         ide_header_bar_add_secondary              (IdeHeaderBar *self,
-                                                        GtkWidget    *widget);
+void          ide_header_bar_set_menu_id                (IdeHeaderBar *self,
+                                                         const char   *menu_id);
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_header_bar_get_menu_id                (IdeHeaderBar *self);
-IDE_AVAILABLE_IN_ALL
-void         ide_header_bar_set_menu_id                (IdeHeaderBar *self,
-                                                        const gchar  *menu_id);
-IDE_AVAILABLE_IN_ALL
-gboolean     ide_header_bar_get_show_fullscreen_button (IdeHeaderBar *self);
-IDE_AVAILABLE_IN_ALL
-void         ide_header_bar_set_show_fullscreen_button (IdeHeaderBar *self,
-                                                        gboolean      show_fullscreen_button);
+PanelOmniBar *ide_header_bar_get_omni_bar               (IdeHeaderBar *self);
 
 G_END_DECLS
