@@ -1,23 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdePreferencesWindow" parent="HdyApplicationWindow">
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="IdePreferencesWindow" parent="AdwApplicationWindow">
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="visible">true</property>
         <child>
-          <object class="HdyHeaderBar" id="header_bar">
-            <property name="title" translatable="yes">Preferences</property>
-            <property name="show-close-button">true</property>
-            <property name="visible">true</property>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="AdwHeaderBar" id="left">
+                <property name="title-widget">
+                  <object class="AdwWindowTitle" id="pages_title">
+                  </object>
+                </property>
+                <property name="show-start-title-buttons">false</property>
+                <property name="show-end-title-buttons">false</property>
+                <property name="width-request">300</property>
+                <child type="start">
+                  <object class="GtkToggleButton" id="search_button">
+                    <property name="icon-name">edit-find-symbolic</property>
+                  </object>
+                </child>
+                <child type="start">
+                  <object class="GtkButton" id="back_button">
+                    <property name="icon-name">go-previous-symbolic</property>
+                    <property name="visible">false</property>
+                    <signal name="clicked" handler="go_back_cb" swapped="true" object="IdePreferencesWindow"/>
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkMenuButton" id="primary_button">
+                    <property name="icon-name">open-menu-symbolic</property>
+                    <property name="menu-model">primary_menu</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="orientation">vertical</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwHeaderBar" id="right">
+                <property name="hexpand">true</property>
+                <property name="show-end-title-buttons">true</property>
+                <property name="title-widget">
+                  <object class="AdwWindowTitle" id="page_title">
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
-          <object class="IdePreferencesSurface" id="surface">
-            <property name="visible">true</property>
+          <object class="GtkBox">
+            <property name="vexpand">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="width-request">300</property>
+                <property name="hexpand">false</property>
+                <child>
+                  <object class="GtkStack" id="pages_stack">
+                    <property name="transition-type">slide-left</property>
+                    <property name="transition-duration">300</property>
+                    <property name="vexpand">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="orientation">vertical</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStack" id="page_stack">
+                <property name="hexpand">true</property>
+                <property name="vexpand">true</property>
+                <property name="transition-type">crossfade</property>
+                <property name="transition-duration">300</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
     </child>
   </template>
+  <menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+        <attribute name="accel">&lt;ctrl&gt;question</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">win.show-help</attribute>
+        <attribute name="accel">F1</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
