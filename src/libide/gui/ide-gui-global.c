@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-threading.h>
 
 #include "ide-gui-global.h"
@@ -219,7 +218,7 @@ ide_widget_get_workspace (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return (IdeWorkspace *)dzl_gtk_widget_get_relative (widget, IDE_TYPE_WORKSPACE);
+  return IDE_WORKSPACE (gtk_widget_get_root (widget));
 }
 
 static gboolean
@@ -267,11 +266,11 @@ _ide_gtk_progress_bar_start_pulsing (GtkProgressBar *progress)
   gtk_progress_bar_set_pulse_step (progress, .5);
 
   /* We want lower than the frame rate, because that is all that is needed */
-  tick_id = dzl_frame_source_add_full (G_PRIORITY_DEFAULT,
-                                       2,
-                                       ide_gtk_progress_bar_tick_cb,
-                                       g_object_ref (progress),
-                                       g_object_unref);
+  tick_id = g_timeout_add_full (G_PRIORITY_LOW,
+                                500,
+                                ide_gtk_progress_bar_tick_cb,
+                                g_object_ref (progress),
+                                g_object_unref);
   g_object_set_data (G_OBJECT (progress), "PULSE_ID", GUINT_TO_POINTER (tick_id));
   ide_gtk_progress_bar_tick_cb (progress);
 }
