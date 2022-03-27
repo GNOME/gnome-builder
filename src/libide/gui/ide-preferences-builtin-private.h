@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include "ide-preferences-window.h"
 
 G_BEGIN_DECLS
 
-void _ide_preferences_builtin_register (DzlPreferences *preferences);
+void _ide_preferences_builtin_register (IdePreferencesWindow *window);
 
 G_END_DECLS
