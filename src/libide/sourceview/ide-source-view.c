@@ -23,29 +23,17 @@
 #include "config.h"
 
 #include <cairo-gobject.h>
-#include <dazzle.h>
 #include <glib/gi18n.h>
-#include <libide-code.h>
-#include <libide-plugins.h>
-#include <libide-threading.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <libide-code.h>
+#include <libide-plugins.h>
+#include <libide-threading.h>
+
 #include "ide-buffer-private.h"
 
-#include "ide-completion-private.h"
-#include "ide-completion.h"
 #include "ide-cursor.h"
-#include "ide-hover-private.h"
-#include "ide-indenter.h"
-#include "ide-snippet-chunk.h"
-#include "ide-snippet-context.h"
-#include "ide-snippet-private.h"
-#include "ide-snippet.h"
-#include "ide-source-view-capture.h"
-#include "ide-source-view-mode.h"
-#include "ide-source-view-movements.h"
-#include "ide-source-view-private.h"
 #include "ide-source-view.h"
 #include "ide-source-view-enums.h"
 #include "ide-text-util.h"
@@ -96,7 +84,7 @@ typedef struct
   IdeCompletion               *completion;
   IdeHover                    *hover;
 
-  DzlBindingGroup             *file_setting_bindings;
+  IdeBindingGroup             *file_setting_bindings;
   IdeSignalGroup              *buffer_signals;
 
   guint                        change_sequence;
@@ -173,7 +161,6 @@ typedef struct
 } FindReferencesTaskData;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
-DZL_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourceView instances")
 
 enum {
   PROP_0,
@@ -780,7 +767,7 @@ ide_source_view_set_file_settings (IdeSourceView   *self,
 
   if (file_settings != ide_source_view_get_file_settings (self))
     {
-      dzl_binding_group_set_source (priv->file_setting_bindings, file_settings);
+      ide_binding_group_set_source (priv->file_setting_bindings, file_settings);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_SETTINGS]);
     }
 }
@@ -5517,8 +5504,6 @@ ide_source_view_finalize (GObject *object)
   g_clear_pointer (&priv->snippets, g_queue_free);
   g_clear_pointer (&priv->include_regex, g_regex_unref);
 
-  DZL_COUNTER_DEC (instances);
-
   G_OBJECT_CLASS (ide_source_view_parent_class)->finalize (object);
 }
 
@@ -6667,8 +6652,6 @@ ide_source_view_init (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
-  DZL_COUNTER_INC (instances);
-
   gtk_widget_add_events (GTK_WIDGET (self), GDK_ENTER_NOTIFY_MASK);
   gtk_widget_set_has_tooltip (GTK_WIDGET (self), FALSE);
 
@@ -6690,22 +6673,22 @@ ide_source_view_init (IdeSourceView *self)
 
   priv->hover = _ide_hover_new (self);
 
-  priv->file_setting_bindings = dzl_binding_group_new ();
-  dzl_binding_group_bind (priv->file_setting_bindings, "auto-indent",
+  priv->file_setting_bindings = ide_binding_group_new ();
+  ide_binding_group_bind (priv->file_setting_bindings, "auto-indent",
                           self, "auto-indent", G_BINDING_SYNC_CREATE);
-  dzl_binding_group_bind (priv->file_setting_bindings, "indent-width",
+  ide_binding_group_bind (priv->file_setting_bindings, "indent-width",
                           self, "indent-width", G_BINDING_SYNC_CREATE);
-  dzl_binding_group_bind (priv->file_setting_bindings, "tab-width",
+  ide_binding_group_bind (priv->file_setting_bindings, "tab-width",
                           self, "tab-width", G_BINDING_SYNC_CREATE);
-  dzl_binding_group_bind (priv->file_setting_bindings, "right-margin-position",
+  ide_binding_group_bind (priv->file_setting_bindings, "right-margin-position",
                           self, "right-margin-position", G_BINDING_SYNC_CREATE);
-  dzl_binding_group_bind (priv->file_setting_bindings, "indent-style",
+  ide_binding_group_bind (priv->file_setting_bindings, "indent-style",
                           self, "indent-style", G_BINDING_SYNC_CREATE);
-  dzl_binding_group_bind (priv->file_setting_bindings, "show-right-margin",
+  ide_binding_group_bind (priv->file_setting_bindings, "show-right-margin",
                           self, "show-right-margin", G_BINDING_SYNC_CREATE);
-  dzl_binding_group_bind (priv->file_setting_bindings, "insert-matching-brace",
+  ide_binding_group_bind (priv->file_setting_bindings, "insert-matching-brace",
                           self, "insert-matching-brace", G_BINDING_SYNC_CREATE);
-  dzl_binding_group_bind (priv->file_setting_bindings, "overwrite-braces",
+  ide_binding_group_bind (priv->file_setting_bindings, "overwrite-braces",
                           self, "overwrite-braces", G_BINDING_SYNC_CREATE);
 
   priv->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
@@ -7577,7 +7560,7 @@ ide_source_view_get_file_settings (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
-  return (IdeFileSettings *)dzl_binding_group_get_source (priv->file_setting_bindings);
+  return (IdeFileSettings *)ide_binding_group_get_source (priv->file_setting_bindings);
 }
 
 gboolean
