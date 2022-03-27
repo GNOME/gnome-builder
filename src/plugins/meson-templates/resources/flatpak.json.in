@@ -82,7 +82,7 @@
             ]
         },
         {
-            "name" : "glibmm",
+            "name" : "glibmm-2-70",
             "buildsystem" : "meson",
             "config-opts" : [ "-Dbuild-documentation=false", "-Dmaintainer-mode=false" ],
             "sources" : [
@@ -94,7 +94,19 @@
             ]
         },
         {
-            "name" : "cairomm",
+            "name" : "glibmm-2-66",
+            "buildsystem" : "meson",
+            "config-opts" : [ "-Dbuild-documentation=false", "-Dmaintainer-mode=false" ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/glibmm/2.66/glibmm-2.66.2.tar.xz",
+                    "sha256" : "b2a4cd7b9ae987794cbb5a1becc10cecb65182b9bb841868625d6bbb123edb1d"
+                }
+            ]
+        },
+        {
+            "name" : "cairomm-1-14",
             "buildsystem" : "meson",
             "sources" : [
                 {
@@ -105,7 +117,7 @@
             ]
         },
         {
-            "name" : "cairomm",
+            "name" : "cairomm-1-16",
             "buildsystem" : "meson",
             "sources" : [
                 {
@@ -116,7 +128,18 @@
             ]
         },
         {
-            "name" : "pangomm",
+            "name" : "pangomm-2-46",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/pangomm/2.46/pangomm-2.46.2.tar.xz",
+                    "sha256" : "57442ab4dc043877bfe3839915731ab2d693fc6634a71614422fb530c9eaa6f4"
+                }
+            ]
+        },
+        {
+            "name" : "pangomm-2-50",
             "buildsystem" : "meson",
             "sources" : [
                 {
