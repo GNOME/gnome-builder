@@ -7,7 +7,7 @@ msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-02-27 10:00+0100\n"
+"PO-Revision-Date: 2022-03-27 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -3349,7 +3349,7 @@ msgstr "Abisuak"
 #. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:482
 msgid "True"
-msgstr "Egia"
+msgstr "True"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
 #: src/plugins/buildui/gtk/menus.ui:21
