@@ -65,11 +65,9 @@
 
 #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
 
-#define _GDK_RECTANGLE_X2(rect) dzl_cairo_rectangle_x2(rect)
-#define _GDK_RECTANGLE_Y2(rect) dzl_cairo_rectangle_y2(rect)
-#define _GDK_RECTANGLE_CONTAINS(rect,other) dzl_cairo_rectangle_contains_rectangle(rect,other)
-#define _GDK_RECTANGLE_CENTER_X(rect) dzl_cairo_rectangle_center(rect)
-#define _GDK_RECTANGLE_CENTER_Y(rect) dzl_cairo_rectangle_middle(rect)
+#define _GDK_RECTANGLE_X2(r) ((r)->x + (r)->width)
+#define _GDK_RECTANGLE_Y2(r) ((r)->y + (r)->height)
+#define _GDK_RECTANGLE_CONTAINS(rect,other) rectangle_contains_rectangle(rect,other)
 #define TRACE_RECTANGLE(name, rect) \
   IDE_TRACE_MSG ("%s = Rectangle(x=%d, y=%d, width=%d, height=%d)", \
                  name, (rect)->x, (rect)->y, (rect)->width, (rect)->height)
@@ -99,7 +97,7 @@ typedef struct
   IdeHover                    *hover;
 
   DzlBindingGroup             *file_setting_bindings;
-  DzlSignalGroup              *buffer_signals;
+  IdeSignalGroup              *buffer_signals;
 
   guint                        change_sequence;
 
@@ -300,6 +298,16 @@ static void     ide_source_view_maybe_overwrite          (IdeSourceView         
                                                           const gchar           *text,
                                                           gint                   len);
 
+static inline cairo_bool_t
+rectangle_contains_rectangle (const cairo_rectangle_int_t *a,
+                              const cairo_rectangle_int_t *b)
+{
+  return (a->x <= b->x &&
+          a->x + (int) a->width >= b->x + (int) b->width &&
+          a->y <= b->y &&
+          a->y + (int) a->height >= b->y + (int) b->height);
+}
+
 static gpointer
 get_selection_owner (IdeSourceView *self)
 {
@@ -450,7 +458,7 @@ ide_source_view_block_handlers (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  dzl_signal_group_block (priv->buffer_signals);
+  ide_signal_group_block (priv->buffer_signals);
 }
 
 static void
@@ -460,7 +468,7 @@ ide_source_view_unblock_handlers (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  dzl_signal_group_unblock (priv->buffer_signals);
+  ide_signal_group_unblock (priv->buffer_signals);
 }
 
 static void
@@ -1263,7 +1271,7 @@ ide_source_view__buffer__notify_can_undo (IdeSourceView *self,
 static void
 ide_source_view_bind_buffer (IdeSourceView  *self,
                              IdeBuffer      *buffer,
-                             DzlSignalGroup *group)
+                             IdeSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   g_autoptr(IdeContext) context = NULL;
@@ -1334,7 +1342,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
 static void
 ide_source_view_unbind_buffer (IdeSourceView  *self,
-                               DzlSignalGroup *group)
+                               IdeSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
@@ -3242,71 +3250,6 @@ ide_source_view_update_display_name (IdeSourceView *self)
 }
 
 static void
-ide_source_view_real_set_mode (IdeSourceView         *self,
-                               const gchar           *mode,
-                               IdeSourceViewModeType  type)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  g_autofree gchar *suggested_default = NULL;
-  gboolean overwrite;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  if (!priv->buffer)
-    IDE_EXIT;
-
-#ifdef IDE_ENABLE_TRACE
-  {
-    const gchar *old_mode = "null";
-
-    if (priv->mode)
-      old_mode = ide_source_view_mode_get_name (priv->mode);
-    IDE_TRACE_MSG ("transition from mode (%s) to (%s)", old_mode, mode ?: "<default>");
-  }
-#endif
-
-  ide_source_view_save_column (self);
-
-  if (priv->mode)
-    {
-      IdeSourceViewMode *old_mode = g_object_ref (priv->mode);
-      const gchar *str;
-
-      /* see if this mode suggested a default next mode */
-      str = ide_source_view_mode_get_default_mode (old_mode);
-      suggested_default = g_strdup (str);
-
-      g_clear_object (&priv->mode);
-      g_object_unref (old_mode);
-    }
-
-  if (mode == NULL)
-    {
-      mode = suggested_default ?: "default";
-      type = IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT;
-    }
-
-  /* reset the count when switching to permanent mode */
-  if (type == IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT)
-    priv->count = 0;
-
-  priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
-
-  overwrite = ide_source_view_mode_get_block_cursor (priv->mode);
-  if (overwrite != gtk_text_view_get_overwrite (GTK_TEXT_VIEW (self)))
-    gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), overwrite);
-  g_object_notify (G_OBJECT (self), "overwrite");
-
-  ide_source_view_update_auto_indent_override (self);
-
-  ide_source_view_update_display_name (self);
-
-  IDE_EXIT;
-}
-
-static void
 ide_source_view_real_set_overwrite (IdeSourceView *self,
                                     gboolean       overwrite)
 {
@@ -3329,36 +3272,6 @@ ide_source_view_real_swap_selection_bounds (IdeSourceView *self)
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_selection_bounds (buffer, &insert, &selection_bound);
   gtk_text_buffer_select_range (buffer, &selection_bound, &insert);
-}
-
-static void
-ide_source_view_real_movement (IdeSourceView         *self,
-                               IdeSourceViewMovement  movement,
-                               gboolean               extend_selection,
-                               gboolean               exclusive,
-                               gboolean               apply_count)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  gint count = -1;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  if (apply_count)
-    count = priv->count;
-
-  if (priv->scrolling_to_scroll_mark)
-    priv->scrolling_to_scroll_mark = FALSE;
-
-  _ide_source_view_apply_movement (self,
-                                   movement,
-                                   extend_selection,
-                                   exclusive,
-                                   count,
-                                   priv->command_str,
-                                   priv->command,
-                                   priv->modifier,
-                                   priv->search_char,
-                                   &priv->target_line_column);
 }
 
 static void
@@ -3464,8 +3377,8 @@ is_same_range (GtkTextIter *new_start,
 }
 
 static void
-ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
-                                               gboolean       move_mark)
+ide_source_view_restore_insert_mark (IdeSourceView *self,
+                                     gboolean       move_mark)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
@@ -3506,12 +3419,6 @@ ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
       insert = gtk_text_buffer_get_insert (buffer);
       ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
     }
-}
-
-static void
-ide_source_view_real_restore_insert_mark (IdeSourceView *self)
-{
-  ide_source_view_real_restore_insert_mark_full (self, TRUE);
 }
 
 void
@@ -4099,7 +4006,7 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
       priv->saved_selection_line_column = priv->saved_line_column;
     }
 
-  ide_source_view_real_restore_insert_mark_full (self, FALSE);
+  ide_source_view_restore_insert_mark (self, FALSE);
 
   /* restore line highlight if enabled */
   if (priv->highlight_current_line)
@@ -5552,7 +5459,7 @@ ide_source_view_destroy (GtkWidget *widget)
 
   /* Ensure we release the buffer immediately */
   if (priv->buffer_signals != NULL)
-    dzl_signal_group_set_target (priv->buffer_signals, NULL);
+    ide_signal_group_set_target (priv->buffer_signals, NULL);
 
   GTK_WIDGET_CLASS (ide_source_view_parent_class)->destroy (widget);
 }
@@ -5738,10 +5645,6 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       ide_source_view_set_font_desc (self, g_value_get_boxed (value));
-      break;
-
-    case PROP_HIGHLIGHT_CURRENT_LINE:
-      ide_source_view_set_highlight_current_line (self, g_value_get_boolean (value));
       break;
 
     case PROP_INDENT_STYLE:
@@ -6805,79 +6708,79 @@ ide_source_view_init (IdeSourceView *self)
   dzl_binding_group_bind (priv->file_setting_bindings, "overwrite-braces",
                           self, "overwrite-braces", G_BINDING_SYNC_CREATE);
 
-  priv->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  priv->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
 
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "changed",
                                    G_CALLBACK (ide_source_view__buffer_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "request-scroll-to-insert",
                                    G_CALLBACK (ide_source_view__buffer_request_scroll_to_insert_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_source_view__buffer_line_flags_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "notify::can-redo",
                                    G_CALLBACK (ide_source_view__buffer__notify_can_redo),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "notify::can-undo",
                                    G_CALLBACK (ide_source_view__buffer__notify_can_undo),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "notify::file-settings",
                                    G_CALLBACK (ide_source_view__buffer_notify_file_settings_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "notify::language",
                                    G_CALLBACK (ide_source_view__buffer_notify_language_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "notify::style-scheme",
                                    G_CALLBACK (ide_source_view__buffer_notify_style_scheme_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "insert-text",
                                    G_CALLBACK (ide_source_view__buffer_insert_text_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "insert-text",
                                    G_CALLBACK (ide_source_view__buffer_insert_text_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (ide_source_view__buffer_delete_range_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (ide_source_view__buffer_delete_range_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "mark-set",
                                    G_CALLBACK (ide_source_view__buffer_mark_set_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "loaded",
                                    G_CALLBACK (ide_source_view__buffer_loaded_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "notify::has-selection",
                                    G_CALLBACK (ide_source_view__buffer_notify_has_selection_cb),
                                    self,
@@ -7106,29 +7009,6 @@ ide_source_view_get_iter_at_visual_column (IdeSourceView *self,
     }
 }
 
-const gchar *
-ide_source_view_get_mode_name (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
-
-  if (priv->mode)
-    return ide_source_view_mode_get_name (priv->mode);
-
-  return NULL;
-}
-
-const gchar *
-ide_source_view_get_mode_display_name (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
-
-  return priv->display_name;
-}
-
 gboolean
 ide_source_view_get_overwrite_braces (IdeSourceView *self)
 {
@@ -7171,184 +7051,6 @@ ide_source_view_set_overwrite_braces (IdeSourceView *self,
       priv->overwrite_braces = overwrite_braces;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_OVERWRITE_BRACES]);
     }
-}
-
-void
-ide_source_view_pop_snippet (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeSnippet *snippet;
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  if ((snippet = g_queue_pop_head (priv->snippets)))
-    {
-      g_autofree gchar *new_text = NULL;
-
-      new_text = ide_snippet_get_full_text (snippet);
-
-      ide_snippet_finish (snippet);
-      g_signal_emit (self, signals [POP_SNIPPET], 0, snippet);
-      g_object_unref (snippet);
-
-      if ((snippet = g_queue_peek_head (priv->snippets)))
-        {
-          ide_snippet_replace_current_chunk_text (snippet, new_text);
-          ide_snippet_unpause (snippet);
-          ide_snippet_move_next (snippet);
-        }
-    }
-
-  ide_source_view_invalidate_window (self);
-}
-
-void
-ide_source_view_clear_snippets (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  while (priv->snippets->length)
-    ide_source_view_pop_snippet (self);
-}
-
-/**
- * ide_source_view_push_snippet:
- * @self: An #IdeSourceView
- * @snippet: An #IdeSnippet.
- * @location: (allow-none): A location for the snippet or %NULL.
- *
- * Pushes a new snippet onto the source view.
- *
- * Since: 3.32
- */
-void
-ide_source_view_push_snippet (IdeSourceView     *self,
-                              IdeSnippet  *snippet,
-                              const GtkTextIter *location)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeSnippetContext *context;
-  IdeSnippet *previous;
-  GtkTextBuffer *buffer;
-  GtkTextIter iter;
-  gboolean has_more_tab_stops;
-  gboolean insert_spaces;
-  gchar *line_prefix;
-  guint tab_width;
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (IDE_IS_SNIPPET (snippet));
-  g_return_if_fail (!location ||
-                    (gtk_text_iter_get_buffer (location) == (void*)priv->buffer));
-
-  if ((previous = g_queue_peek_head (priv->snippets)))
-    ide_snippet_pause (previous);
-
-  g_queue_push_head (priv->snippets, g_object_ref (snippet));
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  if (location != NULL)
-    iter = *location;
-  else
-    gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
-
-  context = ide_snippet_get_context (snippet);
-
-  insert_spaces = gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self));
-  ide_snippet_context_set_use_spaces (context, insert_spaces);
-
-  tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (self));
-  ide_snippet_context_set_tab_width (context, tab_width);
-
-  line_prefix = text_iter_get_line_prefix (&iter);
-  ide_snippet_context_set_line_prefix (context, line_prefix);
-  g_free (line_prefix);
-
-  g_signal_emit (self, signals [PUSH_SNIPPET], 0, snippet, &iter);
-
-  gtk_text_buffer_begin_user_action (buffer);
-  ide_source_view_block_handlers (self);
-  has_more_tab_stops = ide_snippet_begin (snippet, buffer, &iter);
-  ide_source_view_scroll_to_insert (self);
-  ide_source_view_unblock_handlers (self);
-  gtk_text_buffer_end_user_action (buffer);
-
-  if (!ide_source_view_can_animate (self))
-    {
-      GtkTextMark *mark_begin;
-      GtkTextMark *mark_end;
-
-      mark_begin = ide_snippet_get_mark_begin (snippet);
-      mark_end = ide_snippet_get_mark_end (snippet);
-
-      if (mark_begin != NULL && mark_end != NULL)
-        {
-          GtkTextIter begin;
-          GtkTextIter end;
-
-          gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark_begin);
-          gtk_text_buffer_get_iter_at_mark (buffer, &end, mark_end);
-
-          /*
-           * HACK:
-           *
-           * We need to let the GtkTextView catch up with us so that we can get
-           * a realistic area back for the location of the end iter.  Without
-           * pumping the main loop, GtkTextView will clamp the result to the
-           * height of the insert line.
-           */
-          while (gtk_events_pending ())
-            gtk_main_iteration ();
-
-          animate_expand (self, &begin, &end);
-        }
-    }
-
-  if (!has_more_tab_stops)
-    ide_source_view_pop_snippet (self);
-
-  ide_source_view_invalidate_window (self);
-}
-
-void
-ide_source_view_jump (IdeSourceView     *self,
-                      const GtkTextIter *from,
-                      const GtkTextIter *to)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  if (priv->buffer != NULL &&
-      !ide_buffer_get_loading (priv->buffer))
-    {
-      GtkTextIter dummy_from;
-      GtkTextIter dummy_to;
-
-      if (from == NULL)
-        {
-          GtkTextMark *mark;
-
-          mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
-          gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &dummy_from, mark);
-          from = &dummy_from;
-        }
-
-      if (to == NULL)
-        {
-          dummy_to = *from;
-          to = &dummy_to;
-        }
-
-      g_signal_emit (self, signals [JUMP], 0, from, to);
-    }
-
-  IDE_EXIT;
 }
 
 /**
@@ -7954,63 +7656,6 @@ ide_source_view_get_visual_position (IdeSourceView *self,
     *line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
 }
 
-gint
-ide_source_view_get_count (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), 0);
-
-  return priv->count;
-}
-
-void
-ide_source_view_set_count (IdeSourceView *self,
-                           gint           count)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  if (count < 0)
-    count = 0;
-
-  if (count != priv->count)
-    {
-      priv->count = count;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COUNT]);
-    }
-}
-
-GtkTextMark *
-_ide_source_view_get_scroll_mark (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
-
-  return priv->scroll_mark;
-}
-
-/**
- * ide_source_view_get_current_snippet:
- *
- * Gets the current snippet if there is one, otherwise %NULL.
- *
- * Returns: (transfer none) (nullable): An #IdeSnippet or %NULL.
- *
- * Since: 3.32
- */
-IdeSnippet *
-ide_source_view_get_current_snippet (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
-
-  return g_queue_peek_head (priv->snippets);
-}
-
 gboolean
 ide_source_view_get_show_line_numbers (IdeSourceView *self)
 {
@@ -8063,56 +7708,6 @@ ide_source_view_set_show_relative_line_numbers (IdeSourceView *self,
       ide_gutter_set_show_relative_line_numbers (priv->gutter, show_relative_line_numbers);
       g_object_notify (G_OBJECT (self), "show-relative-line-numbers");
     }
-}
-
-gboolean
-ide_source_view_is_processing_key (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->in_key_press > 0;
-}
-
-/**
- * ide_source_view_get_completion:
- * @self: a #IdeSourceView
- *
- * Get the completion for the #IdeSourceView
- *
- * Returns: (transfer none): an #IdeCompletion
- *
- * Since: 3.32
- */
-IdeCompletion *
-ide_source_view_get_completion (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
-
-  return priv->completion;
-}
-
-/**
- * ide_source_view_has_snippet:
- * @self: a #IdeSourceView
- *
- * Checks if there is an active snippet.
- *
- * Returns: %TRUE if there is an active snippet.
- *
- * Since: 3.32
- */
-gboolean
-ide_source_view_has_snippet (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->snippets->length > 0;
 }
 
 /**
@@ -8168,14 +7763,4 @@ ide_source_view_set_gutter (IdeSourceView *self,
   g_object_notify (G_OBJECT (self), "show-line-diagnostics");
   g_object_notify (G_OBJECT (self), "show-line-numbers");
   g_object_notify (G_OBJECT (self), "show-relative-line-numbers");
-}
-
-gboolean
-_ide_source_view_has_cursors (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->cursor != NULL && ide_cursor_is_enabled (priv->cursor);
 }
