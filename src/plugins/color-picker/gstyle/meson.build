@@ -73,6 +73,8 @@ libgstyle_deps = [
   libportal_dep,
   libm_dep,
   libxml2_dep,
+  libide_search_dep,
+  libadwaita_dep,
 ]
 
 libgstyle = static_library('gstyle-private', libgstyle_sources,

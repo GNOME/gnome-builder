@@ -725,10 +725,10 @@ search_strings_list_sort_func (GtkListBoxRow *row1,
   const gchar *name1;
   const gchar *name2;
 
-  cw1 = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (row1)));
+  cw1 = GSTYLE_COLOR_WIDGET (adw_bin_get_child (ADW_BIN (row1)));
   name1 = gstyle_color_get_name (gstyle_color_widget_get_color (cw1));
 
-  cw2 = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (row2)));
+  cw2 = GSTYLE_COLOR_WIDGET (adw_bin_get_child (ADW_BIN (row2)));
   name2 = gstyle_color_get_name (gstyle_color_widget_get_color (cw2));
 
   return g_strcmp0 (name1, name2);

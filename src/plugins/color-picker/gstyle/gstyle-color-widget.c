@@ -34,7 +34,7 @@
 
 struct _GstyleColorWidget
 {
-  GtkBin                         parent_instance;
+  AdwBin                         parent_instance;
 
   GstyleCssProvider             *default_provider;
 
@@ -65,7 +65,7 @@ struct _GstyleColorWidget
   guint                          is_fallback_name_visible : 1;
 };
 
-G_DEFINE_FINAL_TYPE (GstyleColorWidget, gstyle_color_widget, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GstyleColorWidget, gstyle_color_widget, ADW_TYPE_BIN)
 
 #define GSTYLE_COLOR_WIDGET_DROP_BORDER_PERCENT 0.20
 #define GSTYLE_COLOR_WIDGET_DRAG_ICON_OPACITY 0.8
@@ -652,7 +652,7 @@ gstyle_color_widget_get_preferred_width (GtkWidget *widget,
 
   update_border_and_margin (self);
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_get_preferred_width (child, min_width, nat_width);
 
@@ -681,7 +681,7 @@ gstyle_color_widget_get_preferred_height (GtkWidget *widget,
 
   update_border_and_margin (self);
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_get_preferred_height (child, min_height, nat_height);
 
