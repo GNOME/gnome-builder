@@ -52,15 +52,16 @@
            "buildsystem" : "meson",
            "sources" : [
                {
-                   "type" : "git",
-                   "url" : "https://gitlab.gnome.org/GNOME/mm-common.git",
-                   "tag" : "1.0.4"
+                   "type" : "archive",
+                   "url" : "https://download.gnome.org/sources/mm-common/1.0/mm-common-1.0.4.tar.xz",
+                   "sha256" : "e954c09b4309a7ef93e13b69260acdc5738c907477eb381b78bb1e414ee6dbd8"
                }
            ]
         },
         {
             "name" : "sigc++",
             "buildsystem" : "meson",
+            "config-opts" : [ "-Dbuild-documentation=false", "-Dmaintainer-mode=false" ],
             "sources" : [
                 {
                     "type" : "git",
@@ -72,11 +73,12 @@
         {
             "name" : "glibmm",
             "buildsystem" : "meson",
+            "config-opts" : [ "-Dbuild-documentation=false", "-Dmaintainer-mode=false" ],
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/glibmm.git",
-                    "tag" : "2.70.0"
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/glibmm/2.70/glibmm-2.70.0.tar.xz",
+                    "sha256" : "8008fd8aeddcc867a3f97f113de625f6e96ef98cf7860379813a9c0feffdb520"
                 }
             ]
         },
@@ -85,9 +87,9 @@
             "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://github.com/freedesktop/cairomm.git",
-                    "tag" : ""
+                    "type" : "archive",
+                    "url" : "https://cairographics.org/releases/cairomm-1.16.1.tar.xz",
+                    "sha256" : "6f6060d8e98dd4b8acfee2295fddbdd38cf487c07c26aad8d1a83bb9bff4a2c6"
                 }
             ]
         },
@@ -96,9 +98,9 @@
             "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/pangomm.git",
-                    "tag" : "2.50.0"
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/pangomm/2.50/pangomm-2.50.0.tar.xz",
+                    "sha256" : "a27aa77e017b9afce9e751d85bd1cf890abbb3a58bf59d0fac917eef82db3b5b"
                 }
             ]
         },
@@ -107,9 +109,9 @@
             "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/atkmm.git",
-                    "tag" : "2.36.1"
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/atkmm/2.36/atkmm-2.36.1.tar.xz",
+                    "sha256" : "e11324bfed1b6e330a02db25cecc145dca03fb0dff47f0710c85e317687da458"
                 }
             ]
         },
@@ -118,9 +120,9 @@
             "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gtkmm.git",
-                    "tag" : "3.24.5"
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.5.tar.xz",
+                    "sha256" : "856333de86689f6a81c123f2db15d85db9addc438bc3574c36f15736aeae22e6"
                 }
             ]
         },
