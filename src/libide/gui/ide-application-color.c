@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <gtksourceview/gtksource.h>
-#include <handy.h>
 
 #include "ide-application.h"
 #include "ide-application-private.h"
@@ -93,7 +92,7 @@ static void
 _ide_application_update_color (IdeApplication *self)
 {
   static gboolean ignore_reentrant = FALSE;
-  HdyStyleManager *manager;
+  AdwStyleManager *manager;
   g_autofree char *style_variant = NULL;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -109,14 +108,14 @@ _ide_application_update_color (IdeApplication *self)
   g_assert (G_IS_SETTINGS (self->settings));
 
   style_variant = g_settings_get_string (self->settings, "style-variant");
-  manager = hdy_style_manager_get_default ();
+  manager = adw_style_manager_get_default ();
 
   if (!g_strcmp0 (style_variant, "follow"))
-    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_PREFER_LIGHT);
+    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_PREFER_LIGHT);
   else if (!g_strcmp0 (style_variant, "dark"))
-    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_FORCE_DARK);
+    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_DARK);
   else
-    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_FORCE_LIGHT);
+    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_LIGHT);
 
   ignore_reentrant = FALSE;
 }
@@ -124,12 +123,12 @@ _ide_application_update_color (IdeApplication *self)
 static void
 _ide_application_update_style_scheme (IdeApplication *self)
 {
-  HdyStyleManager *manager;
+  AdwStyleManager *manager;
   g_autoptr(GSettings) editor_settings = NULL;
   g_autofree gchar *old_name = NULL;
   g_autofree gchar *new_name = NULL;
 
-  manager = hdy_style_manager_get_default ();
+  manager = adw_style_manager_get_default ();
 
   /*
    * Now that we have our color up to date, we need to possibly update the
@@ -143,7 +142,7 @@ _ide_application_update_style_scheme (IdeApplication *self)
 
   editor_settings = g_settings_new ("org.gnome.builder.editor");
   old_name = g_settings_get_string (editor_settings, "style-scheme-name");
-  new_name = find_similar_style_scheme (old_name, hdy_style_manager_get_dark (manager));
+  new_name = find_similar_style_scheme (old_name, adw_style_manager_get_dark (manager));
 
   if (new_name != NULL)
     g_settings_set_string (editor_settings, "style-scheme-name", new_name);
@@ -162,7 +161,7 @@ _ide_application_init_color (IdeApplication *self)
                                G_CALLBACK (_ide_application_update_color),
                                self,
                                G_CONNECT_SWAPPED);
-      g_signal_connect_object (hdy_style_manager_get_default (),
+      g_signal_connect_object (adw_style_manager_get_default (),
                                "notify::dark",
                                G_CALLBACK (_ide_application_update_style_scheme),
                                self,

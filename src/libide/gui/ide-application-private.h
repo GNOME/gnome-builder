@@ -95,7 +95,6 @@ struct _IdeApplication
 IdeApplication *_ide_application_new                      (gboolean                 standalone);
 void            _ide_application_init_color               (IdeApplication          *self);
 void            _ide_application_init_actions             (IdeApplication          *self);
-void            _ide_application_init_shortcuts           (IdeApplication          *self);
 void            _ide_application_load_addins              (IdeApplication          *self);
 void            _ide_application_unload_addins            (IdeApplication          *self);
 void            _ide_application_load_plugin              (IdeApplication          *self,

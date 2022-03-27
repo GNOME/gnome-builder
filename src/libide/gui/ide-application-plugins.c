@@ -106,10 +106,6 @@ ide_application_can_load_plugin (IdeApplication *self,
   module_dir = peas_plugin_info_get_module_dir (plugin_info);
   module_name = peas_plugin_info_get_module_name (plugin_info);
 
-  /* Short-circuit for single-plugin mode */
-  if (self->plugin != NULL)
-    return ide_str_equal0 (module_name, self->plugin);
-
   if (g_hash_table_contains (circular, module_name))
     {
       g_warning ("Circular dependency found in module %s", module_name);
@@ -122,14 +118,6 @@ ide_application_can_load_plugin (IdeApplication *self,
   settings = _ide_application_plugin_get_settings (self, plugin_info);
   if (!g_settings_get_boolean (settings, "enabled"))
     return FALSE;
-
-#if 0
-  if (self->mode == IDE_APPLICATION_MODE_WORKER)
-    {
-      if (self->worker != plugin_info)
-        return FALSE;
-    }
-#endif
 
   /*
    * If the plugin is not bundled within the Builder executable, then we
@@ -216,7 +204,7 @@ ide_application_load_plugin_resources (IdeApplication *self,
       g_resources_register (resource);
 
       resource_path = g_strdup_printf ("resource:///plugins/%s", module_name);
-      dzl_application_add_resources (DZL_APPLICATION (self), resource_path);
+      _ide_application_add_resources (self, resource_path);
     }
 }
 
@@ -273,7 +261,7 @@ ide_application_plugins_load_plugin_cb (IdeApplication *self,
    */
   if (g_str_has_prefix (data_dir, "resource://") ||
       !peas_plugin_info_is_builtin (plugin_info))
-    dzl_application_add_resources (DZL_APPLICATION (self), data_dir);
+    _ide_application_add_resources (self, data_dir);
 }
 
 static void
