@@ -26,27 +26,9 @@ G_BEGIN_DECLS
 
 #define IDE_SOURCEVIEW_INSIDE
 
-#include"ide-completion-context.h"
-#include"ide-completion-display.h"
-#include"ide-completion-proposal.h"
-#include"ide-completion-list-box-row.h"
-#include"ide-completion-provider.h"
-#include"ide-completion-types.h"
-#include"ide-completion.h"
-#include"ide-hover-context.h"
-#include"ide-hover-provider.h"
-#include"ide-line-change-gutter-renderer.h"
-#include"ide-gutter.h"
-#include"ide-indenter.h"
-#include"ide-snippet-chunk.h"
-#include"ide-snippet-context.h"
-#include"ide-snippet-parser.h"
-#include"ide-snippet-storage.h"
-#include"ide-snippet-types.h"
-#include"ide-snippet.h"
-#include"ide-source-search-context.h"
-#include"ide-source-view.h"
-#include"ide-text-util.h"
+#include "ide-cursor.h"
+#include "ide-line-change-gutter-renderer.h"
+#include "ide-source-view.h"
 
 #define IDE_SOURCEVIEW_INSIDE
 

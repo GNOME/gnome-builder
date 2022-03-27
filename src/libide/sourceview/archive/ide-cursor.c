@@ -22,10 +22,10 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libide-core.h>
 
 #include "ide-source-view.h"
-#include "ide-cursor.h"
+#include "ide-cursor-private.h"
 #include "ide-text-util.h"
 
 struct _IdeCursor
@@ -39,7 +39,7 @@ struct _IdeCursor
 
   GtkTextTag                  *highlight_tag;
 
-  DzlSignalGroup              *operations_signals;
+  IdeSignalGroup              *operations_signals;
 
   guint                        overwrite : 1;
 };
@@ -91,7 +91,7 @@ ide_cursor_dispose (GObject *object)
 
   if (self->operations_signals != NULL)
     {
-      dzl_signal_group_set_target (self->operations_signals, NULL);
+      ide_signal_group_set_target (self->operations_signals, NULL);
       g_clear_object (&self->operations_signals);
     }
 
@@ -378,7 +378,8 @@ ide_cursor_add_cursor_by_match (IdeCursor *self)
 
   gtk_text_buffer_select_range (buffer, &match_begin, &match_end);
 
-  ide_source_view_scroll_mark_onscreen (self->source_view, vc->insert, TRUE, 0.5, 0.5);
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self->source_view),
+                                      vc->insert, TRUE, 0.5, 0.5);
 }
 
 void
@@ -745,7 +746,7 @@ ide_cursor_constructed (GObject *object)
 
   self->overwrite = gtk_text_view_get_overwrite (text_view);
 
-  dzl_signal_group_set_target (self->operations_signals, self->source_view);
+  ide_signal_group_set_target (self->operations_signals, self->source_view);
 }
 
 static void
@@ -813,39 +814,39 @@ ide_cursor_init (IdeCursor *self)
                                       "underline", PANGO_UNDERLINE_SINGLE,
                                       NULL);
 
-  self->operations_signals = dzl_signal_group_new (IDE_TYPE_SOURCE_VIEW);
+  self->operations_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
 
-  dzl_signal_group_connect_object (self->operations_signals,
+  ide_signal_group_connect_object (self->operations_signals,
                                    "move-cursor",
                                    G_CALLBACK (ide_cursor_move_cursor),
                                    self,
                                    G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->operations_signals,
+  ide_signal_group_connect_object (self->operations_signals,
                                    "delete-from-cursor",
                                    G_CALLBACK (ide_cursor_delete_from_cursor),
                                    self,
                                    G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->operations_signals,
+  ide_signal_group_connect_object (self->operations_signals,
                                    "backspace",
                                    G_CALLBACK (ide_cursor_backspace),
                                    self,
                                    G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->operations_signals,
+  ide_signal_group_connect_object (self->operations_signals,
                                    "toggle-overwrite",
                                    G_CALLBACK (ide_cursor_toggle_overwrite),
                                    self,
                                    G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->operations_signals,
+  ide_signal_group_connect_object (self->operations_signals,
                                    "movement",
                                    G_CALLBACK (ide_cursor_movement),
                                    self,
                                    G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->operations_signals,
+  ide_signal_group_connect_object (self->operations_signals,
                                    "select-inner",
                                    G_CALLBACK (ide_cursor_select_inner),
                                    self,
                                    G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->operations_signals,
+  ide_signal_group_connect_object (self->operations_signals,
                                    "delete-selection",
                                    G_CALLBACK (ide_cursor_delete_selection),
                                    self,
