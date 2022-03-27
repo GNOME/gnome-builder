@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
