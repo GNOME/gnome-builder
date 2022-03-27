@@ -49,90 +49,78 @@
 {{if language == "c++"}}
         {
            "name" : "mm-common",
-           "cleanup" : [ "/" ],
+           "buildsystem" : "meson",
            "sources" : [
                {
-                   "type" : "archive",
-                   "url" : "https://download.gnome.org/sources/mm-common/0.9/mm-common-0.9.12.tar.xz",
-                   "sha256" : "ceffdcce1e5b52742884c233ec604bf6fded12eea9da077ce7a62c02c87e7c0b"
+                   "type" : "git",
+                   "url" : "https://gitlab.gnome.org/GNOME/mm-common.git",
+                   "tag" : "1.0.4"
                }
            ]
         },
         {
             "name" : "sigc++",
-            "config-opts" : [ "--disable-documentation" ],
+            "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/libsigc++/2.10/libsigc++-2.10.1.tar.xz",
-                    "sha256" : "c9a25f26178c6cbb147f9904d8c533b5a5c5111a41ac2eb781eb734eea446003"
-                }
-            ]
-        },
-        {
-            "name" : "sigc++-3",
-            "config-opts" : [ "--disable-documentation" ],
-            "sources" : [
-                {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/libsigc++/2.99/libsigc++-2.99.12.tar.xz",
-                    "sha256" : "d902ae277f5baf2d56025586e2153cc2f158472e382723c67f49049f7c6690a8"
+                    "type" : "git",
+                    "url" : "https://github.com/libsigcplusplus/libsigcplusplus.git",
+                    "tag" : "3.2.0"
                 }
             ]
         },
         {
             "name" : "glibmm",
-            "config-opts" : [ "--disable-documentation" ],
+            "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/glibmm/2.60/glibmm-2.60.0.tar.xz",
-                    "sha256" : "a3a1b1c9805479a16c0018acd84b3bfff23a122aee9e3c5013bb81231aeef2bc"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/glibmm.git",
+                    "tag" : "2.70.0"
                 }
             ]
         },
         {
             "name" : "cairomm",
-            "config-opts" : [ "--disable-documentation" ],
+            "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/cairomm/1.12/cairomm-1.12.0.tar.xz",
-                    "sha256" : "a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6"
+                    "type" : "git",
+                    "url" : "https://github.com/freedesktop/cairomm.git",
+                    "tag" : ""
                 }
             ]
         },
         {
             "name" : "pangomm",
-            "config-opts" : [ "--disable-documentation" ],
+            "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/pangomm/2.42/pangomm-2.42.0.tar.xz",
-                    "sha256" : "ca6da067ff93a6445780c0b4b226eb84f484ab104b8391fb744a45cbc7edbf56"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/pangomm.git",
+                    "tag" : "2.50.0"
                 }
             ]
         },
         {
             "name" : "atkmm",
-            "config-opts" : [ "--disable-documentation" ],
+            "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.0.tar.xz",
-                    "sha256" : "4c4cfc917fd42d3879ce997b463428d6982affa0fb660cafcc0bc2d9afcedd3a"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/atkmm.git",
+                    "tag" : "2.36.1"
                 }
             ]
         },
         {
             "name" : "gtkmm",
-            "config-opts" : [ "--disable-documentation" ],
-            "build-options" : { "cxxflags" : "-O2 -g -std=c++11" },
+            "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.1.tar.xz",
-                    "sha256" : "ddfe42ed2458a20a34de252854bcf4b52d3f0c671c045f56b42aa27c7542d2fd"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtkmm.git",
+                    "tag" : "3.24.5"
                 }
             ]
         },
