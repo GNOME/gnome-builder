@@ -59,6 +59,17 @@
            ]
         },
         {
+            "name" : "sigc++-2",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/libsigc++/2.10/libsigc++-2.10.8.tar.xz",
+                    "sha256" : "235a40bec7346c7b82b6a8caae0456353dc06e71f14bc414bcc858af1838719a"
+                }
+            ]
+        },
+        {
             "name" : "sigc++",
             "buildsystem" : "meson",
             "config-opts" : [ "-Dbuild-documentation=false", "-Dmaintainer-mode=false" ],
@@ -79,6 +90,17 @@
                     "type" : "archive",
                     "url" : "https://download.gnome.org/sources/glibmm/2.70/glibmm-2.70.0.tar.xz",
                     "sha256" : "8008fd8aeddcc867a3f97f113de625f6e96ef98cf7860379813a9c0feffdb520"
+                }
+            ]
+        },
+        {
+            "name" : "cairomm",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://cairographics.org/releases/cairomm-1.14.3.tar.xz",
+                    "sha256" : "0d37e067c5c4ca7808b7ceddabfe1932c5bd2a750ad64fb321e1213536297e78"
                 }
             ]
         },
