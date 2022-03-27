@@ -22,10 +22,10 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+
+#include <adwaita.h>
 #include <gtksourceview/gtksource.h>
-#include <handy.h>
 #include <libpeas/peas.h>
 
 #include "ide-preferences-builtin-private.h"
@@ -128,7 +128,7 @@ ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
       dzl_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
     }
 
-  if (!hdy_style_manager_get_system_supports_color_schemes (hdy_style_manager_get_default ()))
+  if (!adw_style_manager_get_system_supports_color_schemes (adw_style_manager_get_default ()))
     {
       bin = dzl_preferences_get_widget (preferences, follow_style);
       gtk_widget_set_sensitive (bin, FALSE);
@@ -572,7 +572,7 @@ ide_preferences_builtin_register_sdks (DzlPreferences *preferences)
 }
 
 void
-_ide_preferences_builtin_register (DzlPreferences *preferences)
+_ide_preferences_builtin_register (IdePreferencesWindow *window)
 {
   ide_preferences_builtin_register_appearance (preferences);
   ide_preferences_builtin_register_editor (preferences);
