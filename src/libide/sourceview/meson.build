@@ -11,9 +11,6 @@ libide_sourceview_generated_headers = []
 
 libide_sourceview_private_headers = [
   'ide-cursor.h',
-  'ide-source-view-capture.h',
-  'ide-source-view-movements.h',
-  'ide-source-view-private.h',
 ]
 
 libide_sourceview_public_headers = [
@@ -37,9 +34,6 @@ install_headers(libide_sourceview_public_headers, subdir: libide_sourceview_head
 libide_sourceview_private_sources = [
   'ide-cursor.c',
   'ide-line-change-gutter-renderer.c',
-  'ide-source-view-capture.c',
-  'ide-source-view-movements.c',
-  'ide-source-view-shortcuts.c',
   'ide-text-util.c',
 ]
 
