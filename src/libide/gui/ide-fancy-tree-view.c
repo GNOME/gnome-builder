@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-cell-renderer-fancy.h"
 #include "ide-fancy-tree-view.h"
 
@@ -52,14 +50,14 @@ typedef struct
 G_DEFINE_TYPE_WITH_PRIVATE (IdeFancyTreeView, ide_fancy_tree_view, GTK_TYPE_TREE_VIEW)
 
 static void
-ide_fancy_tree_view_destroy (GtkWidget *widget)
+ide_fancy_tree_view_dispose (GObject *object)
 {
-  IdeFancyTreeView *self = (IdeFancyTreeView *)widget;
+  IdeFancyTreeView *self = (IdeFancyTreeView *)object;
   IdeFancyTreeViewPrivate *priv = ide_fancy_tree_view_get_instance_private (self);
 
-  dzl_clear_source (&priv->relayout_source);
+  g_clear_handle_id (&priv->relayout_source, g_source_remove);
 
-  GTK_WIDGET_CLASS (ide_fancy_tree_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_fancy_tree_view_parent_class)->dispose (object);
 }
 
 static gboolean
@@ -98,16 +96,18 @@ cleanup:
 
 static void
 ide_fancy_tree_view_size_allocate (GtkWidget *widget,
-                                   GtkAllocation *alloc)
+                                   int        width,
+                                   int        height,
+                                   int        baseline)
 {
   IdeFancyTreeView *self = (IdeFancyTreeView *)widget;
   IdeFancyTreeViewPrivate *priv = ide_fancy_tree_view_get_instance_private (self);
 
   g_assert (IDE_IS_FANCY_TREE_VIEW (self));
 
-  GTK_WIDGET_CLASS (ide_fancy_tree_view_parent_class)->size_allocate (widget, alloc);
+  GTK_WIDGET_CLASS (ide_fancy_tree_view_parent_class)->size_allocate (widget, width, height, baseline);
 
-  if (priv->last_width != alloc->width)
+  if (priv->last_width != width)
     {
       /*
        * We must perform our queued relayout from an idle callback
@@ -119,10 +119,10 @@ ide_fancy_tree_view_size_allocate (GtkWidget *widget,
        */
       if (priv->relayout_source == 0)
         priv->relayout_source =
-          gdk_threads_add_idle_full (G_PRIORITY_HIGH,
-                                     queue_relayout_in_idle,
-                                     g_object_ref (self),
-                                     g_object_unref);
+          g_idle_add_full (G_PRIORITY_HIGH,
+                           queue_relayout_in_idle,
+                           g_object_ref (self),
+                           g_object_unref);
     }
 }
 
@@ -130,9 +130,11 @@ static void
 ide_fancy_tree_view_class_init (IdeFancyTreeViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ide_fancy_tree_view_dispose;
 
   widget_class->size_allocate = ide_fancy_tree_view_size_allocate;
-  widget_class->destroy = ide_fancy_tree_view_destroy;
 }
 
 static void
