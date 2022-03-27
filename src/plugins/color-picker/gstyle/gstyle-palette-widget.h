@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "gstyle-palette.h"
 #include "gstyle-types.h"
@@ -33,7 +32,7 @@ G_BEGIN_DECLS
 #define GSTYLE_TYPE_PALETTE_WIDGET_VIEW_MODE (gstyle_palette_widget_view_mode_get_type())
 #define GSTYLE_TYPE_PALETTE_WIDGET_SORT_MODE (gstyle_palette_widget_sort_mode_get_type())
 
-G_DECLARE_FINAL_TYPE (GstylePaletteWidget, gstyle_palette_widget, GSTYLE, PALETTE_WIDGET, GtkBin)
+G_DECLARE_FINAL_TYPE (GstylePaletteWidget, gstyle_palette_widget, GSTYLE, PALETTE_WIDGET, AdwBin)
 
 typedef enum
 {

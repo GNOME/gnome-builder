@@ -30,12 +30,11 @@
 
 #include "gstyle-animation.h"
 #include "gstyle-palette-widget.h"
-
 #include "gstyle-revealer.h"
 
 struct _GstyleRevealer
 {
-  GtkBin     parent_instance;
+  AdwBin     parent_instance;
 
   GdkWindow *window;
   gdouble    duration;
@@ -54,7 +53,7 @@ struct _GstyleRevealer
 
 /* TODO: use spped instead of duration */
 
-G_DEFINE_FINAL_TYPE (GstyleRevealer, gstyle_revealer, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GstyleRevealer, gstyle_revealer, ADW_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -106,7 +105,7 @@ animation_tick_cb (GtkWidget     *widget,
       self->offset = self->dst_offset;
       self->revealed = !!(self->offset);
 
-      child = gtk_bin_get_child (GTK_BIN (self));
+      child = adw_bin_get_child (ADW_BIN (self));
       if (child != NULL)
         gtk_widget_set_child_visible (child, self->revealed);
 
@@ -125,7 +124,7 @@ gstyle_revealer_set_reveal_child (GstyleRevealer *self,
 
   g_return_if_fail (GSTYLE_IS_REVEALER (self));
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child == NULL || (!self->is_animating && reveal == self->revealed))
     return;
 
@@ -188,7 +187,7 @@ gstyle_revealer_size_allocate (GtkWidget     *widget,
                             allocation->width,
                             allocation->height);
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child == NULL)
     return;
 
@@ -235,7 +234,7 @@ gstyle_revealer_get_preferred_width (GtkWidget *widget,
 
   *min_width = *nat_width = 1;
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child != NULL)
     gtk_widget_get_preferred_width (child, min_width, nat_width);
 }

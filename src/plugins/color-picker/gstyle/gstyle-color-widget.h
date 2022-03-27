@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "gstyle-color.h"
 #include "gstyle-color-filter.h"
@@ -45,7 +44,7 @@ typedef enum
 #define GSTYLE_TYPE_COLOR_WIDGET (gstyle_color_widget_get_type())
 #define GSTYLE_TYPE_COLOR_WIDGET_DND_LOCK_FLAGS (gstyle_color_widget_dnd_lock_flags_get_type ())
 
-G_DECLARE_FINAL_TYPE (GstyleColorWidget, gstyle_color_widget, GSTYLE, COLOR_WIDGET, GtkBin)
+G_DECLARE_FINAL_TYPE (GstyleColorWidget, gstyle_color_widget, GSTYLE, COLOR_WIDGET, AdwBin)
 
 GType                  gstyle_color_widget_dnd_lock_flags_get_type   (void);
 

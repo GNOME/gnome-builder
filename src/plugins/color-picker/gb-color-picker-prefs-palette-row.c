@@ -28,7 +28,7 @@
 
 struct _GbColorPickerPrefsPaletteRow
 {
-  DzlPreferencesBin  parent_instance;
+  AdwPreferencesRow  parent_instance;
 
   GtkLabel          *palette_name;
   GtkImage          *image;
@@ -47,7 +47,7 @@ struct _GbColorPickerPrefsPaletteRow
   guint              needs_attention : 1;
 };
 
-G_DEFINE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, DZL_TYPE_PREFERENCES_BIN)
+G_DEFINE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, ADW_TYPE_PREFERENCES_ROW)
 
 enum {
   PROP_0,
@@ -281,7 +281,7 @@ gb_color_picker_prefs_palette_row_set_palette_name (GbColorPickerPrefsPaletteRow
 
   g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
 
-  if (dzl_str_empty0 (new_text))
+  if (!new_text || !new_text[0])
     {
       gtk_label_set_text (self->palette_name, "No name");
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PALETTE_NAME]);

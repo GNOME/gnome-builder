@@ -41,7 +41,7 @@
 
 struct _GstylePaletteWidget
 {
-  GtkBin                           parent_instance;
+  AdwBin                           parent_instance;
 
   GstyleCssProvider               *default_provider;
   GListStore                      *palettes;
@@ -71,7 +71,7 @@ struct _GstylePaletteWidget
   guint                            is_dnd_at_end : 1;
 };
 
-G_DEFINE_FINAL_TYPE (GstylePaletteWidget, gstyle_palette_widget, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GstylePaletteWidget, gstyle_palette_widget, ADW_TYPE_BIN)
 
 #define GSTYLE_DND_SPEED_THRESHOLD 50
 #define DND_INDEX_START (G_MININT)
@@ -223,7 +223,7 @@ dnd_get_index_from_cursor (GstylePaletteWidget *self,
                            gint                 y,
                            CursorInfo          *info)
 {
-  GtkBin *bin_child;
+  AdwBin *bin_child;
   GtkAllocation alloc;
   gint len;
 
@@ -233,7 +233,7 @@ dnd_get_index_from_cursor (GstylePaletteWidget *self,
   if (self->view_mode == GSTYLE_PALETTE_WIDGET_VIEW_MODE_LIST)
     {
       gtk_widget_translate_coordinates (GTK_WIDGET (self), self->listbox, x, y, &info->dest_x, &info->dest_y);
-      bin_child = GTK_BIN (gtk_list_box_get_row_at_y (GTK_LIST_BOX (self->listbox), info->dest_y));
+      bin_child = ADW_BIN (gtk_list_box_get_row_at_y (GTK_LIST_BOX (self->listbox), info->dest_y));
       if (bin_child == NULL)
         {
           /* No child mean we are at list start or at list end */
@@ -241,47 +241,47 @@ dnd_get_index_from_cursor (GstylePaletteWidget *self,
           if (len == 0)
             return FALSE;
 
-          bin_child = GTK_BIN (gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0));
+          bin_child = ADW_BIN (gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0));
           gtk_widget_get_allocated_size (GTK_WIDGET (bin_child), &alloc, NULL);
           if (info->dest_y < alloc.y)
             {
               info->index = 0;
-              info->child = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (bin_child)));
+              info->child = GSTYLE_COLOR_WIDGET (adw_bin_get_child (ADW_BIN (bin_child)));
               return TRUE;
             }
 
-          bin_child = GTK_BIN (gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), len - 1));
+          bin_child = ADW_BIN (gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), len - 1));
         }
 
       info->index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (bin_child));
-      info->child = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (bin_child)));
+      info->child = GSTYLE_COLOR_WIDGET (adw_bin_get_child (ADW_BIN (bin_child)));
     }
   else
     {
       gtk_widget_translate_coordinates (GTK_WIDGET (self), self->flowbox, x, y, &info->dest_x, &info->dest_y);
-      bin_child = GTK_BIN (flowbox_get_child_at_xy (self, info->dest_x, info->dest_y, &info->index, &info->nb_col));
+      bin_child = ADW_BIN (flowbox_get_child_at_xy (self, info->dest_x, info->dest_y, &info->index, &info->nb_col));
       if (bin_child == NULL)
         {
           len = gstyle_palette_get_len (self->selected_palette);
           if (len == 0)
             return FALSE;
 
-          bin_child = GTK_BIN (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), 0));
+          bin_child = ADW_BIN (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), 0));
           gtk_widget_get_allocated_size (GTK_WIDGET (bin_child), &alloc, NULL);
           if (info->dest_x < alloc.x && info->dest_y < alloc.y + alloc.height)
             {
               info->index = 0;
-              info->child = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (bin_child)));
+              info->child = GSTYLE_COLOR_WIDGET (adw_bin_get_child (ADW_BIN (bin_child)));
               return TRUE;
             }
 
-          bin_child = GTK_BIN (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), len - 1));
+          bin_child = ADW_BIN (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->flowbox), len - 1));
           gtk_widget_get_allocated_size (GTK_WIDGET (bin_child), &alloc, NULL);
           info->dest_x = alloc.x + alloc.width;
         }
 
       info->index = gtk_flow_box_child_get_index (GTK_FLOW_BOX_CHILD (bin_child));
-      info->child = GSTYLE_COLOR_WIDGET (gtk_bin_get_child (GTK_BIN (bin_child)));
+      info->child = GSTYLE_COLOR_WIDGET (adw_bin_get_child (ADW_BIN (bin_child)));
     }
 
   return TRUE;
