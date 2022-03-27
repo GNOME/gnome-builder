@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <string.h>
 
 #include <libide-code.h>
@@ -35,6 +34,7 @@
 #define ANCHOR_END     "SELECTION_ANCHOR_END"
 #define JUMP_THRESHOLD 20
 
+#define X2(r) ((r)->x + (r)->width)
 #define TRACE_ITER(iter) \
   IDE_TRACE_MSG("%d:%d", gtk_text_iter_get_line(iter), \
                 gtk_text_iter_get_line_offset(iter))
@@ -726,7 +726,7 @@ ide_source_view_movements_scroll_by_chars (Movement *mv,
 
   if (chars > 0 && (rect.x < (gint)new_value))
     gtk_text_view_get_iter_at_location (text_view, &mv->insert, new_value, rect.y);
-  else if (dzl_cairo_rectangle_x2 (&rect) > (gint)(new_value + page_size))
+  else if (X2 (&rect) > (gint)(new_value + page_size))
     gtk_text_view_get_iter_at_location (text_view, &mv->insert, new_value + page_size - rect.width, rect.y);
 }
 
@@ -1430,7 +1430,7 @@ ide_source_view_movements_scroll_to_horizontal_bounds (Movement *mv)
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT:
-      offset = dzl_cairo_rectangle_x2 (&screen_rect) - dzl_cairo_rectangle_x2 (&insert_rect);
+      offset = X2 (&screen_rect) - X2 (&insert_rect);
       break;
 
     default:
@@ -2617,7 +2617,7 @@ find_html_tag (GtkTextIter      *iter,
     }
 
   name = get_html_tag_name (&cursor);
-  if (dzl_str_empty0 (name))
+  if (ide_str_empty0 (name))
     {
       g_free (name);
       tag->kind = HTML_TAG_KIND_ERROR;
@@ -2697,7 +2697,7 @@ find_non_matching_html_tag_at_left (GtkTextIter *cursor,
           last_closing_tag = g_queue_peek_head (stack);
           if (last_closing_tag != NULL)
             {
-              if (dzl_str_equal0 (tag->name, last_closing_tag->name))
+              if (ide_str_equal0 (tag->name, last_closing_tag->name))
                 {
                   g_queue_pop_head (stack);
                   free_html_tag (last_closing_tag);
@@ -2755,7 +2755,7 @@ find_non_matching_html_tag_at_right (GtkTextIter *cursor,
         {
           while ((last_closing_tag = g_queue_pop_head (stack)))
             {
-              gboolean is_names_equal = dzl_str_equal0 (tag->name, last_closing_tag->name);
+              gboolean is_names_equal = ide_str_equal0 (tag->name, last_closing_tag->name);
 
               free_html_tag (last_closing_tag);
               if (is_names_equal)
@@ -2807,7 +2807,7 @@ get_html_element (GtkTextIter cursor_left,
     {
       while ((left_tag = find_non_matching_html_tag_at_left (&cursor_left, block_cursor)))
         {
-          if (!dzl_str_equal0 (left_tag->name, right_tag->name))
+          if (!ide_str_equal0 (left_tag->name, right_tag->name))
             {
               cursor_left = left_tag->begin;
               free_html_tag (left_tag);
