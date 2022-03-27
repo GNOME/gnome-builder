@@ -108,7 +108,7 @@ parse_marked_string (GVariant *v)
   else
     {
       g_variant_iter_init (&iter, v);
-      if ((item = g_variant_iter_next_value (&iter)))
+      while ((item = g_variant_iter_next_value (&iter)))
         {
           GVariant *asv = item;
           g_autoptr(GVariant) child2 = NULL;
@@ -133,7 +133,7 @@ parse_marked_string (GVariant *v)
                 g_string_append (str, value);
     #else
               if (!ide_str_empty0 (value))
-                g_string_append_printf (gstr, "```\n%s\n```", value);
+                g_string_append_printf (gstr, "```\n%s\n```\n", value);
     #endif
             }
 
@@ -141,8 +141,11 @@ parse_marked_string (GVariant *v)
         }
     }
   if (gstr->len)
-    return ide_marked_content_new_from_data (gstr->str, gstr->len, IDE_MARKED_KIND_MARKDOWN);
-
+    {
+      while (g_ascii_isspace(gstr->str[gstr->len]))
+        g_string_erase (gstr, gstr->len - 1, 1);
+      return ide_marked_content_new_from_data (gstr->str, gstr->len, IDE_MARKED_KIND_MARKDOWN);
+    }
   return NULL;
 }
 
