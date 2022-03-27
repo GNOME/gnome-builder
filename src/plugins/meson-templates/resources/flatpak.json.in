@@ -150,7 +150,18 @@
             ]
         },
         {
-            "name" : "atkmm",
+            "name" : "atkmm-2-28",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.2.tar.xz",
+                    "sha256" : "a0bb49765ceccc293ab2c6735ba100431807d384ffa14c2ebd30e07993fd2fa4"
+                }
+            ]
+        },
+        {
+            "name" : "atkmm-2-36",
             "buildsystem" : "meson",
             "sources" : [
                 {
@@ -161,7 +172,7 @@
             ]
         },
         {
-            "name" : "gtkmm",
+            "name" : "gtkmm-3-24",
             "buildsystem" : "meson",
             "sources" : [
                 {
