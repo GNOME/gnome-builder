@@ -37,13 +37,13 @@ struct _IdeConfigViewAddinInterface
   GTypeInterface parent_iface;
 
   void (*load) (IdeConfigViewAddin   *self,
-                IdePreferencesWIndow *preferences,
+                IdePreferencesWindow *preferences,
                 IdeConfig            *configuration);
 };
 
 IDE_AVAILABLE_IN_ALL
 void ide_config_view_addin_load (IdeConfigViewAddin   *self,
-                                 IdePreferencesWIndow *preferences,
+                                 IdePreferencesWindow *preferences,
                                  IdeConfig            *configuration);
 
 G_END_DECLS
