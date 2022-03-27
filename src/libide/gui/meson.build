@@ -65,13 +65,11 @@ libide_gui_private_headers = [
   'ide-session-private.h',
   'ide-window-settings-private.h',
   'ide-shortcut-label-private.h',
-  'ide-shortcuts-window-private.h',
 ]
 
 libide_gui_private_sources = [
   'ide-application-actions.c',
   'ide-application-color.c',
-  'ide-application-shortcuts.c',
   'ide-application-plugins.c',
   'ide-environment-editor-row.c',
   'ide-header-bar-shortcuts.c',
@@ -84,7 +82,6 @@ libide_gui_private_sources = [
   'ide-primary-workspace-actions.c',
   'ide-run-button.c',
   'ide-session.c',
-  'ide-shortcuts-window.c',
   'ide-window-settings.c',
   'ide-workspace-actions.c',
 ]

@@ -27,7 +27,6 @@
 #endif
 
 #include <glib/gi18n.h>
-#include <handy.h>
 #include <libpeas/peas-autocleanups.h>
 #include <libide-themes.h>
 
@@ -153,9 +152,6 @@ ide_application_startup (GApplication *app)
 
   /* And now we can load the rest of our plugins for startup. */
   _ide_application_load_plugins (self);
-
-  /* Make sure our shorcuts are registered */
-  _ide_application_init_shortcuts (self);
 
   /* Load keybindings from plugins and what not */
   ide_application_register_keybindings (self);

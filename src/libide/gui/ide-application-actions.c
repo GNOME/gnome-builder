@@ -24,7 +24,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <handy.h>
+
 #include <ide-build-ident.h>
 #include <libide-projects.h>
 
@@ -33,7 +33,6 @@
 #include "ide-application-private.h"
 #include "ide-gui-global.h"
 #include "ide-preferences-window.h"
-#include "ide-shortcuts-window-private.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -77,7 +76,6 @@ ide_application_actions_preferences (GSimpleAction *action,
                          "default-width", 1300,
                          "default-height", 800,
                          "title", _("Builder — Preferences"),
-                         "window-position", GTK_WIN_POS_CENTER_ON_PARENT,
                          NULL);
   gtk_application_add_window (GTK_APPLICATION (self), window);
   ide_gtk_window_present (window);
@@ -157,7 +155,7 @@ ide_application_actions_about (GSimpleAction *action,
                                        _("Funded By"),
                                        ide_application_credits_funders);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
   ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
@@ -254,46 +252,6 @@ ide_application_actions_help (GSimpleAction *action,
 }
 
 static void
-ide_application_actions_shortcuts (GSimpleAction *action,
-                                   GVariant      *variant,
-                                   gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-  GtkWindow *window;
-  GtkWindow *parent = NULL;
-  GList *list;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  list = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  for (; list; list = list->next)
-    {
-      window = list->data;
-
-      if (IDE_IS_SHORTCUTS_WINDOW (window))
-        {
-          ide_gtk_window_present (window);
-          return;
-        }
-
-      if (IDE_IS_WORKBENCH (window))
-        {
-          parent = window;
-          break;
-        }
-    }
-
-  window = g_object_new (IDE_TYPE_SHORTCUTS_WINDOW,
-                         "application", self,
-                         "window-position", GTK_WIN_POS_CENTER,
-                         "transient-for", parent,
-                         NULL);
-
-  ide_gtk_window_present (GTK_WINDOW (window));
-}
-
-static void
 ide_application_actions_nighthack (GSimpleAction *action,
                                    GVariant      *variant,
                                    gpointer       user_data)
@@ -375,13 +333,13 @@ ide_application_actions_stats (GSimpleAction *action,
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
                            NULL);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (scroller));
+  gtk_window_set_child (window, GTK_WIDGET (scroller));
   text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
                             "editable", FALSE,
                             "monospace", TRUE,
                             "visible", TRUE,
                             NULL);
-  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (text_view));
+  gtk_scrolled_window_set_child(scroller, GTK_WIDGET (text_view));
   buffer = gtk_text_view_get_buffer (text_view);
 
   gtk_text_buffer_insert_at_cursor (buffer, "Count | Type\n", -1);
@@ -421,7 +379,6 @@ static const GActionEntry IdeApplicationActions[] = {
   { "load-project", ide_application_actions_load_project, "s"},
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
-  { "shortcuts",    ide_application_actions_shortcuts },
   { "help",         ide_application_actions_help },
 };
 
