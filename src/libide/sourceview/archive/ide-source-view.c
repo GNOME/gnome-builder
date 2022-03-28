@@ -4736,17 +4736,17 @@ ide_source_view_real_select_all (IdeSourceView *self,
 
 static void
 ide_source_view_rename_changed (IdeSourceView    *self,
-                                DzlSimplePopover *popover)
+                                IdeEntryPopover  *popover)
 {
   const gchar *text;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
+  g_assert (IDE_IS_ENTRY_POPOVER (popover));
 
-  text = dzl_simple_popover_get_text (popover);
-  dzl_simple_popover_set_ready (popover, text != NULL);
+  text = ide_entry_popover_get_text (popover);
+  ide_entry_popover_set_ready (popover, text != NULL);
 
   IDE_EXIT;
 }
@@ -4818,7 +4818,7 @@ ide_source_view_rename_edits_cb (GObject      *object,
 static void
 ide_source_view_rename_activate (IdeSourceView    *self,
                                  const gchar      *text,
-                                 DzlSimplePopover *popover)
+                                 IdeEntryPopover  *popover)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   g_autoptr(IdeLocation) location = NULL;
@@ -4828,7 +4828,7 @@ ide_source_view_rename_activate (IdeSourceView    *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (text != NULL);
-  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
+  g_assert (IDE_IS_ENTRY_POPOVER (popover));
 
   if (NULL == (provider = ide_buffer_get_rename_provider (priv->buffer)))
     IDE_EXIT;
@@ -4856,7 +4856,7 @@ static void
 ide_source_view_real_begin_rename (IdeSourceView *self)
 {
   IdeRenameProvider *provider;
-  DzlSimplePopover *popover;
+  IdeEntryPopover *popover;
   g_autofree gchar *title = NULL;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
