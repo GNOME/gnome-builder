@@ -8,6 +8,9 @@ libide_include_directories += include_directories('.')
 
 libide_gtk_public_headers = [
   'ide-animation.h',
+  'ide-cell-renderer-fancy.h',
+  'ide-fancy-tree-view.h',
+  'ide-menu-manager.h',
   'libide-gtk.h',
 ]
 
@@ -23,6 +26,9 @@ install_headers(libide_gtk_public_headers, subdir: libide_gtk_header_subdir)
 
 libide_gtk_public_sources = [
   'ide-animation.c',
+  'ide-cell-renderer-fancy.c',
+  'ide-fancy-tree-view.c',
+  'ide-menu-manager.c',
 ]
 
 libide_gtk_private_sources = [

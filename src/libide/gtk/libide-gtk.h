@@ -22,5 +22,8 @@
 
 #define IDE_GTK_INSIDE
 # include "ide-animation.h"
+# include "ide-cell-renderer-fancy.h"
+# include "ide-fancy-tree-view.h"
 # include "ide-gtk-enums.h"
+# include "ide-menu-manager.h"
 #undef IDE_GTK_INSIDE

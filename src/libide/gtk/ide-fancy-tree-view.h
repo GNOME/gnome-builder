@@ -20,31 +20,29 @@
 
 #pragma once
 
-#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
-# error "Only <libide-gui.h> can be included directly."
+#if !defined (IDE_GTK_INSIDE) && !defined (IDE_GTK_COMPILATION)
+# error "Only <libide-gtk.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_FANCY_TREE_VIEW (ide_fancy_tree_view_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeFancyTreeView, ide_fancy_tree_view, IDE, FANCY_TREE_VIEW, GtkTreeView)
 
 struct _IdeFancyTreeViewClass
 {
   GtkTreeViewClass parent_class;
-
-  /*< private >*/
-  gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_fancy_tree_view_new           (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_fancy_tree_view_set_data_func (IdeFancyTreeView      *self,
                                               GtkCellLayoutDataFunc  func,
                                               gpointer               func_data,
