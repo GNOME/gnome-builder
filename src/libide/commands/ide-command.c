@@ -73,8 +73,6 @@ ide_command_default_init (IdeCommandInterface *iface)
  * Runs the command, asynchronously.
  *
  * Use ide_command_run_finish() to get the result of the operation.
- *
- * Since: 3.32
  */
 void
 ide_command_run_async (IdeCommand          *self,
@@ -96,8 +94,6 @@ ide_command_run_async (IdeCommand          *self,
  *
  * Returns: %TRUE if the command was successful; otherwise %FALSE
  *   and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_command_run_finish (IdeCommand    *self,
@@ -117,10 +113,8 @@ ide_command_run_finish (IdeCommand    *self,
  * Gets the title for the command.
  *
  * Returns: a string containing the title
- *
- * Since: 3.32
  */
-gchar *
+char *
 ide_command_get_title (IdeCommand *self)
 {
   g_return_val_if_fail (IDE_IS_COMMAND (self), NULL);
@@ -138,10 +132,8 @@ ide_command_get_title (IdeCommand *self)
  * Gets the subtitle for the command.
  *
  * Returns: a string containing the subtitle
- *
- * Since: 3.32
  */
-gchar *
+char *
 ide_command_get_subtitle (IdeCommand *self)
 {
   g_return_val_if_fail (IDE_IS_COMMAND (self), NULL);
@@ -167,8 +159,6 @@ ide_command_get_subtitle (IdeCommand *self)
  * The lower the value, the higher priority.
  *
  * Returns: an integer with the sort priority
- *
- * Since: 3.34
  */
 gint
 ide_command_get_priority (IdeCommand *self)
@@ -188,8 +178,6 @@ ide_command_get_priority (IdeCommand *self)
  * Gets the icon for the command to be displayed in UI if necessary.
  *
  * Returns: (transfer full) (nullable): a #GIcon or %NULL
- *
- * Since: 3.34
  */
 GIcon *
 ide_command_get_icon (IdeCommand *self)

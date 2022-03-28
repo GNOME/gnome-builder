@@ -20,8 +20,8 @@
 
 #pragma once
 
-#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
-# error "Only <libide-gui.h> can be included directly."
+#if !defined (IDE_COMMANDS_INSIDE) && !defined (IDE_COMMANDS_COMPILATION)
+# error "Only <libide-commands.h> can be included directly."
 #endif
 
 #include <libide-core.h>
@@ -30,15 +30,15 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMMAND (ide_command_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeCommand, ide_command, IDE, COMMAND, IdeObject)
 
 struct _IdeCommandInterface
 {
   GTypeInterface parent_iface;
 
-  gchar    *(*get_title)     (IdeCommand           *self);
-  gchar    *(*get_subtitle)  (IdeCommand           *self);
+  char     *(*get_title)     (IdeCommand           *self);
+  char     *(*get_subtitle)  (IdeCommand           *self);
   void      (*run_async)     (IdeCommand           *self,
                               GCancellable         *cancellable,
                               GAsyncReadyCallback   callback,
@@ -46,24 +46,24 @@ struct _IdeCommandInterface
   gboolean  (*run_finish)    (IdeCommand           *self,
                               GAsyncResult         *result,
                               GError              **error);
-  gint      (*get_priority)  (IdeCommand           *self);
+  int       (*get_priority)  (IdeCommand           *self);
   GIcon    *(*get_icon)      (IdeCommand           *self);
 };
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 GIcon    *ide_command_get_icon     (IdeCommand           *self);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 gint      ide_command_get_priority (IdeCommand           *self);
-IDE_AVAILABLE_IN_3_32
-gchar    *ide_command_get_title    (IdeCommand           *self);
-IDE_AVAILABLE_IN_3_32
-gchar    *ide_command_get_subtitle (IdeCommand           *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
+char     *ide_command_get_title    (IdeCommand           *self);
+IDE_AVAILABLE_IN_ALL
+char     *ide_command_get_subtitle (IdeCommand           *self);
+IDE_AVAILABLE_IN_ALL
 void      ide_command_run_async    (IdeCommand           *self,
                                     GCancellable         *cancellable,
                                     GAsyncReadyCallback   callback,
                                     gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_command_run_finish   (IdeCommand           *self,
                                     GAsyncResult         *result,
                                     GError              **error);
