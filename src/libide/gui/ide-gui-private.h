@@ -28,7 +28,6 @@
 #include <libide-core.h>
 #include <libide-projects.h>
 
-#include "ide-command-manager.h"
 #include "ide-header-bar.h"
 #include "ide-notification-list-box-row-private.h"
 #include "ide-notification-stack-private.h"
@@ -41,13 +40,6 @@
 
 G_BEGIN_DECLS
 
-void      _ide_command_manager_init_shortcuts   (IdeCommandManager   *self,
-                                                 IdeWorkspace        *workspace);
-void      _ide_command_manager_unload_shortcuts (IdeCommandManager   *self,
-                                                 IdeWorkspace        *workspace);
-void      _ide_command_manager_execute          (IdeCommandManager   *self,
-                                                 IdeWorkspace        *workspace,
-                                                 const gchar         *command);
 void      _ide_primary_workspace_init_actions   (IdePrimaryWorkspace *self);
 void      _ide_workspace_init_actions           (IdeWorkspace        *self);
 GList    *_ide_workspace_get_mru_link           (IdeWorkspace        *self);
