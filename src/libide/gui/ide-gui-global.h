@@ -55,12 +55,5 @@ IDE_AVAILABLE_IN_3_32
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget                *widget);
 IDE_AVAILABLE_IN_3_32
 IdeWorkspace *ide_widget_get_workspace       (GtkWidget                *widget);
-IDE_AVAILABLE_IN_3_32
-gboolean      ide_gtk_show_uri_on_window     (GtkWindow                *window,
-                                              const gchar              *uri,
-                                              gint64                    timestamp,
-                                              GError                  **error);
-IDE_AVAILABLE_IN_3_32
-void          ide_gtk_window_present         (GtkWindow                *window);
 
 G_END_DECLS
