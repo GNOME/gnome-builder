@@ -31,11 +31,11 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
-gboolean      ide_gtk_show_uri_on_window     (GtkWindow                *window,
-                                              const gchar              *uri,
-                                              gint64                    timestamp,
-                                              GError                  **error);
+gboolean ide_gtk_show_uri_on_window (GtkWindow   *window,
+                                     const char  *uri,
+                                     gint64       timestamp,
+                                     GError     **error);
 IDE_AVAILABLE_IN_ALL
-void          ide_gtk_window_present         (GtkWindow                *window);
+void     ide_gtk_window_present     (GtkWindow   *window);
 
 G_END_DECLS
