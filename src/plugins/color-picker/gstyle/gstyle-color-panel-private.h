@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <libide-search.h>
 
 #include "gstyle-cielab.h"
 #include "gstyle-color.h"
