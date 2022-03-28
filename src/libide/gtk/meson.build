@@ -11,6 +11,7 @@ libide_gtk_public_headers = [
   'ide-cell-renderer-fancy.h',
   'ide-fancy-tree-view.h',
   'ide-menu-manager.h',
+  'ide-search-entry.h',
   'libide-gtk.h',
 ]
 
@@ -29,6 +30,7 @@ libide_gtk_public_sources = [
   'ide-cell-renderer-fancy.c',
   'ide-fancy-tree-view.c',
   'ide-menu-manager.c',
+  'ide-search-entry.c',
 ]
 
 libide_gtk_private_sources = [
@@ -49,6 +51,18 @@ libide_gtk_enums = gnome.mkenums_simple('ide-gtk-enums',
 )
 libide_gtk_generated_sources = [libide_gtk_enums[0]]
 libide_gtk_generated_headers = [libide_gtk_enums[1]]
+
+#
+# Generated Resource Files
+#
+
+libide_gtk_resources = gnome.compile_resources(
+  'ide-gtk-resources',
+  'libide-gtk.gresource.xml',
+  c_name: 'ide_gtk',
+)
+libide_gtk_generated_sources += [libide_gtk_resources[0]]
+libide_gtk_generated_headers += [libide_gtk_resources[1]]
 
 #
 # Dependencies
