@@ -13,6 +13,7 @@ libide_gtk_public_headers = [
   'ide-fancy-tree-view.h',
   'ide-gtk.h',
   'ide-menu-manager.h',
+  'ide-progress-icon.h',
   'ide-search-entry.h',
   'libide-gtk.h',
 ]
@@ -34,6 +35,7 @@ libide_gtk_public_sources = [
   'ide-fancy-tree-view.c',
   'ide-gtk.c',
   'ide-menu-manager.c',
+  'ide-progress-icon.c',
   'ide-search-entry.c',
 ]
 
