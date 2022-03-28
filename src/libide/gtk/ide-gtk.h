@@ -31,11 +31,15 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
-gboolean ide_gtk_show_uri_on_window (GtkWindow   *window,
-                                     const char  *uri,
-                                     gint64       timestamp,
-                                     GError     **error);
+gboolean ide_gtk_show_uri_on_window          (GtkWindow       *window,
+                                              const char      *uri,
+                                              gint64           timestamp,
+                                              GError         **error);
 IDE_AVAILABLE_IN_ALL
-void     ide_gtk_window_present     (GtkWindow   *window);
+void     ide_gtk_window_present              (GtkWindow       *window);
+IDE_AVAILABLE_IN_ALL
+void      ide_gtk_progress_bar_start_pulsing (GtkProgressBar  *progress);
+IDE_AVAILABLE_IN_ALL
+void      ide_gtk_progress_bar_stop_pulsing  (GtkProgressBar  *progress);
 
 G_END_DECLS
