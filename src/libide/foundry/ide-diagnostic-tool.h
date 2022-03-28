@@ -56,19 +56,19 @@ struct _IdeDiagnosticToolClass
 };
 
 IDE_AVAILABLE_IN_42
-const char *ide_diagnostic_tool_get_program_name (IdeDiagnosticTool *self);
+const char *ide_diagnostic_tool_get_program_name         (IdeDiagnosticTool *self);
 IDE_AVAILABLE_IN_42
-void        ide_diagnostic_tool_set_program_name (IdeDiagnosticTool *self,
-                                                  const char        *program_name);
-IDE_AVAILABLE_IN_42
+void        ide_diagnostic_tool_set_program_name         (IdeDiagnosticTool *self,
+                                                          const char        *program_name);
+IDE_AVAILABLE_IN_43
 const char *ide_diagnostic_tool_get_bundled_program_path (IdeDiagnosticTool *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_43
 void        ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self,
                                                           const char        *path);
-IDE_AVAILABLE_IN_42
-const char *ide_diagnostic_tool_get_local_program_path (IdeDiagnosticTool *self);
-IDE_AVAILABLE_IN_42
-void        ide_diagnostic_tool_set_local_program_path (IdeDiagnosticTool *self,
-                                                        const char        *path);
+IDE_AVAILABLE_IN_43
+const char *ide_diagnostic_tool_get_local_program_path   (IdeDiagnosticTool *self);
+IDE_AVAILABLE_IN_43
+void        ide_diagnostic_tool_set_local_program_path   (IdeDiagnosticTool *self,
+                                                          const char        *path);
 
 G_END_DECLS
