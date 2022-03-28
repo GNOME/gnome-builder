@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_MENU_MANAGER_H
-#define IDE_MENU_MANAGER_H
+#pragma once
+
+#if !defined (IDE_GTK_INSIDE) && !defined (IDE_GTK_COMPILATION)
+# error "Only <libide-gtk.h> can be included directly."
+#endif
 
 #include <gtk/gtk.h>
 
@@ -52,5 +55,3 @@ GMenu          *ide_menu_manager_get_menu_by_id (IdeMenuManager  *self,
                                                  const gchar     *menu_id);
 
 G_END_DECLS
-
-#endif /* IDE_MENU_MANAGER_H */
