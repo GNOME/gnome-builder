@@ -256,7 +256,7 @@ ide_transient_sidebar_init (IdeTransientSidebar *self)
                                  self, NULL,
                                  G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
-  if (NULL != (paned = gtk_bin_get_child (GTK_BIN (self))) &&
+  if (NULL != (paned = adw_bin_get_child (ADW_BIN (self))) &&
       DZL_IS_MULTI_PANED (paned) &&
       NULL != (stack = dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (paned), 0)) &&
       DZL_IS_DOCK_STACK (stack))
