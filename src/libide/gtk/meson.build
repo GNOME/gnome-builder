@@ -10,6 +10,7 @@ libide_gtk_public_headers = [
   'ide-animation.h',
   'ide-cell-renderer-fancy.h',
   'ide-fancy-tree-view.h',
+  'ide-gtk.h',
   'ide-menu-manager.h',
   'ide-search-entry.h',
   'libide-gtk.h',
@@ -29,6 +30,7 @@ libide_gtk_public_sources = [
   'ide-animation.c',
   'ide-cell-renderer-fancy.c',
   'ide-fancy-tree-view.c',
+  'ide-gtk.c',
   'ide-menu-manager.c',
   'ide-search-entry.c',
 ]

@@ -276,65 +276,6 @@ _ide_gtk_progress_bar_start_pulsing (GtkProgressBar *progress)
 }
 
 static void
-ide_gtk_show_uri_on_window_cb (GObject      *object,
-                               GAsyncResult *result,
-                               gpointer      user_data)
-{
-  IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (!ide_subprocess_wait_finish (subprocess, result, &error))
-    g_warning ("Subprocess failed: %s", error->message);
-}
-
-gboolean
-ide_gtk_show_uri_on_window (GtkWindow    *window,
-                            const gchar  *uri,
-                            gint64        timestamp,
-                            GError      **error)
-{
-  g_return_val_if_fail (!window || GTK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (uri != NULL, FALSE);
-
-  if (ide_is_flatpak ())
-    {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      g_autoptr(IdeSubprocess) subprocess = NULL;
-
-      /* We can't currently trust gtk_show_uri_on_window() because it tries
-       * to open our HTML page with Builder inside our current flatpak
-       * environment! We need to ensure this is fixed upstream, but it's
-       * currently unclear how to do so since we register handles for html.
-       */
-
-      launcher = ide_subprocess_launcher_new (0);
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-      ide_subprocess_launcher_push_argv (launcher, "xdg-open");
-      ide_subprocess_launcher_push_argv (launcher, uri);
-
-      if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, error)))
-        return FALSE;
-
-      ide_subprocess_wait_async (subprocess,
-                                 NULL,
-                                 ide_gtk_show_uri_on_window_cb,
-                                 NULL);
-    }
-  else
-    {
-      /* XXX: Workaround for wayland timestamp issue */
-      if (!gtk_show_uri_on_window (window, uri, timestamp / 1000L, error))
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static void
 show_parents (GtkWidget *widget)
 {
   GtkWidget *workspace;
@@ -365,15 +306,6 @@ ide_widget_reveal_and_grab (GtkWidget *widget)
 
   show_parents (widget);
   gtk_widget_grab_focus (widget);
-}
-
-void
-ide_gtk_window_present (GtkWindow *window)
-{
-  /* TODO: We need the last event time to do this properly. Until then,
-   * we'll just fake some timing info to workaround wayland issues.
-   */
-  gtk_window_present_with_time (window, g_get_monotonic_time () / 1000L);
 }
 
 static void
