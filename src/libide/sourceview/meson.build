@@ -77,9 +77,10 @@ libide_sourceview_deps = [
 
   libide_core_dep,
   libide_threading_dep,
-  libide_code_dep,
-  libide_plugins_dep,
   libide_io_dep,
+  libide_code_dep,
+  libide_gtk_dep,
+  libide_plugins_dep,
 ]
 
 #
