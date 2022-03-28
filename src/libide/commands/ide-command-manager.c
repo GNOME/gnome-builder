@@ -23,11 +23,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libpeas/peas.h>
+
 #include <libide-plugins.h>
 #include <libide-threading.h>
-
-#include "ide-gui-private.h"
 
 #include "ide-command.h"
 #include "ide-command-manager.h"
@@ -41,17 +41,17 @@ struct _IdeCommandManager
 
 typedef struct
 {
-  IdeWorkspace *workspace;
-  const gchar  *command_id;
+  GtkWidget    *widget;
+  const char   *command_id;
   IdeCommand   *command;
 } FindById;
 
 typedef struct
 {
-  gchar        *typed_text;
-  GPtrArray    *results;
-  IdeWorkspace *workspace;
-  gint          n_active;
+  char      *typed_text;
+  GPtrArray *results;
+  GtkWidget *widget;
+  gint       n_active;
 } Query;
 
 G_DEFINE_FINAL_TYPE (IdeCommandManager, ide_command_manager, IDE_TYPE_OBJECT)
@@ -61,22 +61,22 @@ query_free (Query *q)
 {
   g_assert (q->n_active == 0);
 
-  g_clear_object (&q->workspace);
+  g_clear_object (&q->widget);
   g_clear_pointer (&q->typed_text, g_free);
   g_clear_pointer (&q->results, g_ptr_array_unref);
   g_slice_free (Query, q);
 }
 
 static void
-ide_command_manager_load_shortcuts_cb (GtkWidget *workspace,
+ide_command_manager_load_shortcuts_cb (GtkWidget *native,
                                        gpointer   user_data)
 {
   IdeCommandProvider *provider = user_data;
 
-  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (GTK_IS_NATIVE (native));
   g_assert (IDE_IS_COMMAND_PROVIDER (provider));
 
-  ide_command_provider_load_shortcuts (provider, IDE_WORKSPACE (workspace));
+  ide_command_provider_load_shortcuts (provider, GTK_NATIVE (native));
 }
 
 static void
@@ -88,7 +88,7 @@ ide_command_manager_provider_added_cb (IdeExtensionSetAdapter *set,
   IdeCommandProvider *provider = (IdeCommandProvider *)exten;
   IdeCommandManager *self = user_data;
   g_autoptr(IdeContext) context = NULL;
-  IdeWorkbench *workbench;
+  const GList *windows;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
@@ -99,23 +99,31 @@ ide_command_manager_provider_added_cb (IdeExtensionSetAdapter *set,
   g_debug ("Adding command provider %s", G_OBJECT_TYPE_NAME (exten));
 
   context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = ide_workbench_from_context (context);
+  windows = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
 
-  ide_workbench_foreach_workspace (workbench,
-                                   ide_command_manager_load_shortcuts_cb,
-                                   provider);
+  for (const GList *iter = windows; iter; iter = iter->next)
+    {
+      GtkNative *window = iter->data;
+      g_autoptr(IdeContext) window_context = NULL;
+      GObjectClass *klass = G_OBJECT_GET_CLASS (window);
+
+      /* TODO: Find IdeContext, check if matches, if so ... */
+
+      if (FALSE)
+        ide_command_manager_load_shortcuts_cb (window, provider);
+    }
 }
 
 static void
-ide_command_manager_unload_shortcuts_cb (GtkWidget *workspace,
+ide_command_manager_unload_shortcuts_cb (GtkWidget *native,
                                          gpointer   user_data)
 {
   IdeCommandProvider *provider = user_data;
 
-  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (GTK_IS_NATIVE (native));
   g_assert (IDE_IS_COMMAND_PROVIDER (provider));
 
-  ide_command_provider_unload_shortcuts (provider, IDE_WORKSPACE (workspace));
+  ide_command_provider_unload_shortcuts (provider, GTK_NATIVE (native));
 }
 
 static void
@@ -212,8 +220,6 @@ ide_command_manager_init (IdeCommandManager *self)
  * This may only be called on the main thread.
  *
  * Returns: (transfer none): an #IdeCommandManager
- *
- * Since: 3.34
  */
 IdeCommandManager *
 ide_command_manager_from_context (IdeContext *context)
@@ -287,12 +293,12 @@ ide_command_manager_query_foreach_cb (IdeExtensionSetAdapter *set,
 
   g_assert (q != NULL);
   g_assert (q->typed_text != NULL);
-  g_assert (IDE_IS_WORKSPACE (q->workspace));
+  g_assert (GTK_IS_WIDGET (q->widget));
 
   q->n_active++;
 
   ide_command_provider_query_async (provider,
-                                    q->workspace,
+                                    q->widget,
                                     q->typed_text,
                                     ide_task_get_cancellable (task),
                                     ide_command_manager_query_cb,
@@ -301,8 +307,8 @@ ide_command_manager_query_foreach_cb (IdeExtensionSetAdapter *set,
 
 void
 ide_command_manager_query_async  (IdeCommandManager   *self,
-                                  IdeWorkspace        *workspace,
-                                  const gchar         *typed_text,
+                                  GtkWidget           *widget,
+                                  const char          *typed_text,
                                   GCancellable        *cancellable,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
@@ -311,7 +317,7 @@ ide_command_manager_query_async  (IdeCommandManager   *self,
   Query *q;
 
   g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (typed_text != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -321,7 +327,7 @@ ide_command_manager_query_async  (IdeCommandManager   *self,
   q = g_slice_new0 (Query);
   q->typed_text = g_strdup (typed_text);
   q->results = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_object_unref_and_destroy);
-  q->workspace = g_object_ref (workspace);
+  q->widget = g_object_ref (widget);
   q->n_active = 0;
   ide_task_set_task_data (task, q, query_free);
 
@@ -340,8 +346,6 @@ ide_command_manager_query_async  (IdeCommandManager   *self,
  *
  * Returns: (transfer full) (element-type IdeCommand): an array of
  *   #IdeCommand instances created by providers.
- *
- * Since: 3.34
  */
 GPtrArray *
 ide_command_manager_query_finish (IdeCommandManager  *self,
@@ -434,12 +438,12 @@ ide_command_manager_get_command_by_id_cb (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_COMMAND_PROVIDER (provider));
   g_assert (state != NULL);
   g_assert (state->command_id != NULL);
-  g_assert (IDE_IS_WORKSPACE (state->workspace));
+  g_assert (GTK_IS_WIDGET (state->widget));
   g_assert (!state->command || IDE_IS_COMMAND (state->command));
 
   if (state->command == NULL)
     state->command = ide_command_provider_get_command_by_id (provider,
-                                                             state->workspace,
+                                                             state->widget,
                                                              state->command_id);
 }
 
@@ -452,13 +456,11 @@ ide_command_manager_get_command_by_id_cb (IdeExtensionSetAdapter *set,
  * Gets a command from one of the loaded command providers if any.
  *
  * Returns: (transfer full) (nullable): an #IdeCommand or %NULL
- *
- * Since: 3.34
  */
 IdeCommand *
 ide_command_manager_get_command_by_id (IdeCommandManager *self,
                                        IdeWorkspace      *workspace,
-                                       const gchar       *command_id)
+                                       const char        *command_id)
 {
   FindById state = { workspace, command_id, NULL };
 
@@ -496,7 +498,7 @@ ide_command_manager_execute_cb (GObject      *object,
 void
 _ide_command_manager_execute (IdeCommandManager *self,
                               IdeWorkspace      *workspace,
-                              const gchar       *command_id)
+                              const char        *command_id)
 {
   g_autoptr(IdeCommand) command = NULL;
 

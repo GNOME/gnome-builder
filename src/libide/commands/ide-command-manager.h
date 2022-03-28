@@ -20,32 +20,37 @@
 
 #pragma once
 
+#if !defined (IDE_COMMANDS_INSIDE) && !defined (IDE_COMMANDS_COMPILATION)
+# error "Only <libide-commands.h> can be included directly."
+#endif
+
+#include <gtk/gtk.h>
+
 #include <libide-core.h>
 
 #include "ide-command.h"
-#include "ide-workspace.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_COMMAND_MANAGER (ide_command_manager_get_type())
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeCommandManager, ide_command_manager, IDE, COMMAND_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeCommandManager *ide_command_manager_from_context      (IdeContext           *context);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeCommand        *ide_command_manager_get_command_by_id (IdeCommandManager    *self,
-                                                          IdeWorkspace         *workspace,
-                                                          const gchar          *command_id);
-IDE_AVAILABLE_IN_3_34
+                                                          GtkWidget            *widget,
+                                                          const char           *command_id);
+IDE_AVAILABLE_IN_ALL
 void               ide_command_manager_query_async       (IdeCommandManager    *self,
-                                                          IdeWorkspace         *workspace,
-                                                          const gchar          *typed_text,
+                                                          GtkWidget            *widget,
+                                                          const char           *typed_text,
                                                           GCancellable         *cancellable,
                                                           GAsyncReadyCallback   callback,
                                                           gpointer              user_data);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 GPtrArray         *ide_command_manager_query_finish      (IdeCommandManager    *self,
                                                           GAsyncResult         *result,
                                                           GError              **error);

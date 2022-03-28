@@ -20,29 +20,30 @@
 
 #pragma once
 
-#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
-# error "Only <libide-gui.h> can be included directly."
+#if !defined (IDE_COMMANDS_INSIDE) && !defined (IDE_COMMANDS_COMPILATION)
+# error "Only <libide-commands.h> can be included directly."
 #endif
+
+#include <gtk/gtk.h>
 
 #include <libide-core.h>
 
 #include "ide-command.h"
-#include "ide-workspace.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_COMMAND_PROVIDER (ide_command_provider_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeCommandProvider, ide_command_provider, IDE, COMMAND_PROVIDER, GObject)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (IdeCommandProvider, ide_command_provider, IDE, COMMAND_PROVIDER, IdeObject)
 
 struct _IdeCommandProviderInterface
 {
   GTypeInterface parent_iface;
 
   void        (*query_async)       (IdeCommandProvider   *self,
-                                    IdeWorkspace         *workspace,
-                                    const gchar          *typed_text,
+                                    GtkWidget            *widget,
+                                    const char           *typed_text,
                                     GCancellable         *cancellable,
                                     GAsyncReadyCallback   callback,
                                     gpointer              user_data);
@@ -50,34 +51,34 @@ struct _IdeCommandProviderInterface
                                     GAsyncResult         *result,
                                     GError              **error);
   IdeCommand *(*get_command_by_id) (IdeCommandProvider   *self,
-                                    IdeWorkspace         *workspace,
+                                    GtkWidget            *widget,
                                     const gchar          *command_id);
   void        (*load_shortcuts)    (IdeCommandProvider   *self,
-                                    IdeWorkspace         *workspace);
+                                    GtkNative            *native);
   void        (*unload_shortcuts)  (IdeCommandProvider   *self,
-                                    IdeWorkspace         *workspace);
+                                    GtkNative            *native);
 };
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void        ide_command_provider_load_shortcuts    (IdeCommandProvider   *self,
-                                                    IdeWorkspace         *workspace);
-IDE_AVAILABLE_IN_3_34
+                                                    GtkNative            *native);
+IDE_AVAILABLE_IN_ALL
 void        ide_command_provider_unload_shortcuts  (IdeCommandProvider   *self,
-                                                    IdeWorkspace         *workspace);
-IDE_AVAILABLE_IN_3_32
+                                                    GtkNative            *native);
+IDE_AVAILABLE_IN_ALL
 void        ide_command_provider_query_async       (IdeCommandProvider   *self,
-                                                    IdeWorkspace         *workspace,
+                                                    GtkWidget            *widget,
                                                     const gchar          *typed_text,
                                                     GCancellable         *cancellable,
                                                     GAsyncReadyCallback   callback,
                                                     gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray  *ide_command_provider_query_finish      (IdeCommandProvider   *self,
                                                     GAsyncResult         *result,
                                                     GError              **error);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeCommand *ide_command_provider_get_command_by_id (IdeCommandProvider   *self,
-                                                    IdeWorkspace         *workspace,
-                                                    const gchar          *command_id);
+                                                    GtkWidget            *widget,
+                                                    const char           *command_id);
 
 G_END_DECLS
