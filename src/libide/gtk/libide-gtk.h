@@ -26,4 +26,5 @@
 # include "ide-fancy-tree-view.h"
 # include "ide-gtk-enums.h"
 # include "ide-menu-manager.h"
+# include "ide-search-entry.h"
 #undef IDE_GTK_INSIDE
