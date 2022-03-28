@@ -153,6 +153,7 @@ libide_gui_deps = [
   libide_core_dep,
   libide_io_dep,
   libide_foundry_dep,
+  libide_gtk_dep,
   libide_debugger_dep,
   libide_plugins_dep,
   libide_projects_dep,
