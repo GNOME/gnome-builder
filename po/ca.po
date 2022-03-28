@@ -112,7 +112,7 @@ msgstr "Suport a l'autosagnat per a C, Python, Vala, i XML"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:34
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr ""
-"HTML, Markdown,  reStructuredText, i previsualització en directe de Sphinx"
+"HTML, Markdown, reStructuredText, i previsualització en directe de Sphinx"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:35
 msgid "Optional Vim, Emacs, and SublimeText style editing"
@@ -231,7 +231,7 @@ msgid ""
 "based on information extracted from the source code."
 msgstr ""
 "Si està habilitat, el ressaltat addicional es proporcionarà al llenguatge "
-"suportat  basat en informació extreta del codi font."
+"suportat basat en informació extreta del codi font."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
@@ -626,7 +626,7 @@ msgstr "Posició del quadre de la dreta"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
 msgid "The width in pixel units of the right panel."
-msgstr "L'amplada en  píxels del quadre de la dreta."
+msgstr "L'amplada en píxels del quadre de la dreta."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
 msgid "Show Bottom Panel"
@@ -723,7 +723,7 @@ msgstr "No es pot obrir %s\n"
 #: src/gstyle/gstyle-palette.c:767
 #, c-format
 msgid "%s: This file format is not supported\n"
-msgstr "%s:  aquest format no està suportat\n"
+msgstr "%s: aquest format no està suportat\n"
 
 #: src/gstyle/gstyle-palette.c:824
 #, c-format
@@ -2468,12 +2468,12 @@ msgstr "Quadres"
 #: src/libide/gui/ide-shortcuts-window.ui:87
 msgctxt "shortcut window"
 msgid "Toggle left panel"
-msgstr "Commuta el quadre  de l'esquerra"
+msgstr "Commuta el quadre de l'esquerra"
 
 #: src/libide/gui/ide-shortcuts-window.ui:94
 msgctxt "shortcut window"
 msgid "Toggle bottom panel"
-msgstr "Commuta el quadre  de sota"
+msgstr "Commuta el quadre de sota"
 
 #: src/libide/gui/ide-shortcuts-window.ui:101
 msgctxt "shortcut window"
@@ -3138,7 +3138,7 @@ msgstr ""
 #: src/plugins/beautifier/gb-beautifier-config.c:209
 #, c-format
 msgid "Beautifier plugin: Can’t read .ini file: %s"
-msgstr "Connector embellidor:  no es pot llegir el fitxer .ini: %s"
+msgstr "Connector embellidor: no es pot llegir el fitxer .ini: %s"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:257
@@ -3217,7 +3217,7 @@ msgstr "Connector embellidor: %s"
 #, c-format
 msgid "Beautifier plugin: can’t read the following resource file: “%s”"
 msgstr ""
-"Connector embellidor:  no es pot llegir el següent fitxer de recursos: «%s»"
+"Connector embellidor: no es pot llegir el següent fitxer de recursos: «%s»"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
 msgid "beautifier program missing, you must install it: "
@@ -3225,7 +3225,7 @@ msgstr "falta el programa beautifier, l'heu d'instal·lar: "
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
-msgstr "Connector embellidor:  la vista no és GtkSourceView"
+msgstr "Connector embellidor: la vista no és GtkSourceView"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
 msgid "Beautifier Plugin: no default beautifier found"
@@ -6440,7 +6440,7 @@ msgstr "Cerca i petició de substitució invàlides"
 
 #: src/plugins/vim/gb-vim.c:1235
 msgid "Change the pages colorscheme"
-msgstr "Canvia les pàgines colorscheme"
+msgstr "Canvia l'esquema de color de les pàgines"
 
 #: src/plugins/vim/gb-vim.c:1239
 msgid "Build the project"
