@@ -92,3 +92,57 @@ ide_gtk_show_uri_on_window (GtkWindow    *window,
 
   return TRUE;
 }
+
+static gboolean
+ide_gtk_progress_bar_tick_cb (gpointer data)
+{
+  GtkProgressBar *progress = data;
+
+  g_assert (GTK_IS_PROGRESS_BAR (progress));
+
+  gtk_progress_bar_pulse (progress);
+  gtk_widget_queue_draw (GTK_WIDGET (progress));
+
+  return G_SOURCE_CONTINUE;
+}
+
+void
+ide_gtk_progress_bar_stop_pulsing (GtkProgressBar *progress)
+{
+  guint tick_id;
+
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (progress));
+
+  tick_id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (progress), "PULSE_ID"));
+
+  if (tick_id != 0)
+    {
+      g_source_remove (tick_id);
+      g_object_set_data (G_OBJECT (progress), "PULSE_ID", NULL);
+    }
+
+  gtk_progress_bar_set_fraction (progress, 0.0);
+}
+
+void
+ide_gtk_progress_bar_start_pulsing (GtkProgressBar *progress)
+{
+  guint tick_id;
+
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (progress));
+
+  if (g_object_get_data (G_OBJECT (progress), "PULSE_ID"))
+    return;
+
+  gtk_progress_bar_set_fraction (progress, 0.0);
+  gtk_progress_bar_set_pulse_step (progress, .5);
+
+  /* We want lower than the frame rate, because that is all that is needed */
+  tick_id = g_timeout_add_full (G_PRIORITY_LOW,
+                                500,
+                                ide_gtk_progress_bar_tick_cb,
+                                g_object_ref (progress),
+                                g_object_unref);
+  g_object_set_data (G_OBJECT (progress), "PULSE_ID", GUINT_TO_POINTER (tick_id));
+  ide_gtk_progress_bar_tick_cb (progress);
+}

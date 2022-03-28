@@ -63,8 +63,6 @@ gboolean  _ide_workbench_is_last_workspace      (IdeWorkbench        *self,
                                                  IdeWorkspace        *workspace);
 void      _ide_header_bar_init_shortcuts        (IdeHeaderBar        *self);
 void      _ide_header_bar_show_menu             (IdeHeaderBar        *self);
-void      _ide_gtk_progress_bar_start_pulsing   (GtkProgressBar      *progress);
-void      _ide_gtk_progress_bar_stop_pulsing    (GtkProgressBar      *progress);
 void      _ide_surface_set_fullscreen           (IdeSurface          *self,
                                                  gboolean             fullscreen);
 
