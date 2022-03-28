@@ -67,16 +67,39 @@ query_free (Query *q)
   g_slice_free (Query, q);
 }
 
-static void
-ide_command_manager_load_shortcuts_cb (GtkWidget *native,
-                                       gpointer   user_data)
+static gboolean
+native_is_for_context (GtkNative  *native,
+                       IdeContext *context)
 {
-  IdeCommandProvider *provider = user_data;
+  GObjectClass *klass;
+  GParamSpec *pspec;
+  GType context_type;
 
-  g_assert (GTK_IS_NATIVE (native));
-  g_assert (IDE_IS_COMMAND_PROVIDER (provider));
+  g_assert (!native || GTK_IS_NATIVE (native));
+  g_assert (!context || GTK_IS_NATIVE (context));
 
-  ide_command_provider_load_shortcuts (provider, GTK_NATIVE (native));
+  if (native == NULL || context == NULL)
+    return FALSE;
+
+  klass = G_OBJECT_GET_CLASS (native);
+  pspec = g_object_class_find_property (klass, "context");
+  context_type = IDE_TYPE_CONTEXT;
+
+  if ((pspec != NULL &&
+       G_IS_PARAM_SPEC_OBJECT (pspec) &&
+       (pspec->flags & G_PARAM_READABLE) != 0 &&
+       g_type_is_a (pspec->value_type, context_type)))
+    {
+      g_autoptr(IdeContext) native_context = NULL;
+
+      g_object_get (native,
+                    "context", &native_context,
+                    NULL);
+
+      return native_context == context;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -103,27 +126,11 @@ ide_command_manager_provider_added_cb (IdeExtensionSetAdapter *set,
 
   for (const GList *iter = windows; iter; iter = iter->next)
     {
-      GtkNative *window = iter->data;
-      g_autoptr(IdeContext) window_context = NULL;
-      GObjectClass *klass = G_OBJECT_GET_CLASS (window);
+      GtkNative *native = iter->data;
 
-      /* TODO: Find IdeContext, check if matches, if so ... */
-
-      if (FALSE)
-        ide_command_manager_load_shortcuts_cb (window, provider);
+      if (native_is_for_context (native, context))
+        ide_command_provider_load_shortcuts (provider, native);
     }
-}
-
-static void
-ide_command_manager_unload_shortcuts_cb (GtkWidget *native,
-                                         gpointer   user_data)
-{
-  IdeCommandProvider *provider = user_data;
-
-  g_assert (GTK_IS_NATIVE (native));
-  g_assert (IDE_IS_COMMAND_PROVIDER (provider));
-
-  ide_command_provider_unload_shortcuts (provider, GTK_NATIVE (native));
 }
 
 static void
@@ -135,7 +142,7 @@ ide_command_manager_provider_removed_cb (IdeExtensionSetAdapter *set,
   IdeCommandProvider *provider = (IdeCommandProvider *)exten;
   IdeCommandManager *self = user_data;
   g_autoptr(IdeContext) context = NULL;
-  IdeWorkbench *workbench;
+  const GList *windows;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
@@ -146,11 +153,15 @@ ide_command_manager_provider_removed_cb (IdeExtensionSetAdapter *set,
   g_debug ("Removing command provider %s", G_OBJECT_TYPE_NAME (exten));
 
   context = ide_object_ref_context (IDE_OBJECT (self));
-  workbench = ide_workbench_from_context (context);
+  windows = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
 
-  ide_workbench_foreach_workspace (workbench,
-                                   ide_command_manager_unload_shortcuts_cb,
-                                   provider);
+  for (const GList *iter = windows; iter; iter = iter->next)
+    {
+      GtkNative *native = iter->data;
+
+      if (native_is_for_context (native, context))
+        ide_command_provider_unload_shortcuts (provider, native);
+    }
 }
 
 static void
@@ -362,34 +373,34 @@ ide_command_manager_query_finish (IdeCommandManager  *self,
 }
 
 static void
-ide_command_manager_init_shortcuts_cb (IdeExtensionSetAdapter *set,
+ide_command_manager_load_shortcuts_cb (IdeExtensionSetAdapter *set,
                                        PeasPluginInfo         *plugin_info,
                                        PeasExtension          *exten,
                                        gpointer                user_data)
 {
   IdeCommandProvider *provider = (IdeCommandProvider *)exten;
-  IdeWorkspace *workspace = user_data;
+  GtkNative *native = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_COMMAND_PROVIDER (provider));
-  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (GTK_IS_NATIVE (native));
 
-  ide_command_provider_load_shortcuts (provider, workspace);
+  ide_command_provider_load_shortcuts (provider, native);
 }
 
 void
-_ide_command_manager_init_shortcuts (IdeCommandManager *self,
-                                     IdeWorkspace      *workspace)
+ide_command_manager_load_shortcuts (IdeCommandManager *self,
+                                    GtkNative         *native)
 {
   g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (GTK_IS_NATIVE (native));
   g_return_if_fail (self->adapter != NULL);
 
   ide_extension_set_adapter_foreach (self->adapter,
-                                     ide_command_manager_init_shortcuts_cb,
-                                     workspace);
+                                     ide_command_manager_load_shortcuts_cb,
+                                     native);
 }
 
 static void
@@ -399,28 +410,28 @@ ide_command_manager_unload_shortcuts_foreach_cb (IdeExtensionSetAdapter *set,
                                                  gpointer                user_data)
 {
   IdeCommandProvider *provider = (IdeCommandProvider *)exten;
-  IdeWorkspace *workspace = user_data;
+  GtkNative *native = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_COMMAND_PROVIDER (provider));
-  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (GTK_IS_NATIVE (native));
 
-  ide_command_provider_unload_shortcuts (provider, workspace);
+  ide_command_provider_unload_shortcuts (provider, native);
 }
 
 void
-_ide_command_manager_unload_shortcuts (IdeCommandManager *self,
-                                       IdeWorkspace      *workspace)
+ide_command_manager_unload_shortcuts (IdeCommandManager *self,
+                                      GtkNative         *native)
 {
   g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (GTK_IS_NATIVE (native));
   g_return_if_fail (self->adapter != NULL);
 
   ide_extension_set_adapter_foreach (self->adapter,
                                      ide_command_manager_unload_shortcuts_foreach_cb,
-                                     workspace);
+                                     native);
 }
 
 static void
@@ -450,7 +461,7 @@ ide_command_manager_get_command_by_id_cb (IdeExtensionSetAdapter *set,
 /**
  * ide_command_manager_get_command_by_id:
  * @self: a #IdeCommandManager
- * @workspace: an #IdeWorkspace
+ * @widget: a #GtkWidget
  * @command_id: the identifier of the command
  *
  * Gets a command from one of the loaded command providers if any.
@@ -459,14 +470,14 @@ ide_command_manager_get_command_by_id_cb (IdeExtensionSetAdapter *set,
  */
 IdeCommand *
 ide_command_manager_get_command_by_id (IdeCommandManager *self,
-                                       IdeWorkspace      *workspace,
+                                       GtkWidget         *widget,
                                        const char        *command_id)
 {
-  FindById state = { workspace, command_id, NULL };
+  FindById state = { widget, command_id, NULL };
 
   g_return_val_if_fail (IDE_IS_COMMAND_MANAGER (self), NULL);
   g_return_val_if_fail (self->adapter != NULL, NULL);
-  g_return_val_if_fail (IDE_IS_WORKSPACE (workspace), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (command_id != NULL, NULL);
 
   ide_extension_set_adapter_foreach (self->adapter,
@@ -496,24 +507,21 @@ ide_command_manager_execute_cb (GObject      *object,
 }
 
 void
-_ide_command_manager_execute (IdeCommandManager *self,
-                              IdeWorkspace      *workspace,
-                              const char        *command_id)
+ide_command_manager_execute (IdeCommandManager *self,
+                             GtkWidget         *widget,
+                             const char        *command_id)
 {
   g_autoptr(IdeCommand) command = NULL;
 
   g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (command_id != NULL);
 
-  command = ide_command_manager_get_command_by_id (self, workspace, command_id);
-
-  if (command == NULL)
+  if (!(command = ide_command_manager_get_command_by_id (self, widget, command_id)))
     {
-      IdeContext *context = ide_workspace_get_context (workspace);
-
-      ide_context_warning (context,
-                           _("Failed to locate command “%s”"),
-                           command_id);
+      ide_object_warning (IDE_OBJECT (self),
+                          _("Failed to locate command “%s”"),
+                          command_id);
       return;
     }
 

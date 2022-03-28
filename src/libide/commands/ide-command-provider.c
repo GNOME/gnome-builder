@@ -28,8 +28,8 @@ G_DEFINE_INTERFACE (IdeCommandProvider, ide_command_provider, G_TYPE_OBJECT)
 
 static void
 ide_command_provider_real_query_async (IdeCommandProvider  *self,
-                                       IdeWorkspace        *workspace,
-                                       const gchar         *typed_text,
+                                       GtkWidget           *widget,
+                                       const char          *typed_text,
                                        GCancellable        *cancellable,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
@@ -58,19 +58,19 @@ ide_command_provider_default_init (IdeCommandProviderInterface *iface)
 
 void
 ide_command_provider_query_async (IdeCommandProvider  *self,
-                                  IdeWorkspace        *workspace,
-                                  const gchar         *typed_text,
+                                  GtkWidget           *widget,
+                                  const char          *typed_text,
                                   GCancellable        *cancellable,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
   g_return_if_fail (IDE_IS_COMMAND_PROVIDER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (typed_text != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_COMMAND_PROVIDER_GET_IFACE (self)->query_async (self,
-                                                      workspace,
+                                                      widget,
                                                       typed_text,
                                                       cancellable,
                                                       callback,
@@ -88,8 +88,6 @@ ide_command_provider_query_async (IdeCommandProvider  *self,
  *
  * Returns: (transfer full) (element-type IdeCommand): a #GPtrArray of
  *   #IdeCommand, or %NULL.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_command_provider_query_finish (IdeCommandProvider  *self,
@@ -104,49 +102,47 @@ ide_command_provider_query_finish (IdeCommandProvider  *self,
 
 void
 ide_command_provider_load_shortcuts (IdeCommandProvider *self,
-                                     IdeWorkspace       *workspace)
+                                     GtkNative          *native)
 {
   g_return_if_fail (IDE_IS_COMMAND_PROVIDER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (GTK_IS_NATIVE (native));
 
   if (IDE_COMMAND_PROVIDER_GET_IFACE (self)->load_shortcuts)
-    IDE_COMMAND_PROVIDER_GET_IFACE (self)->load_shortcuts (self, workspace);
+    IDE_COMMAND_PROVIDER_GET_IFACE (self)->load_shortcuts (self, native);
 }
 
 void
 ide_command_provider_unload_shortcuts (IdeCommandProvider *self,
-                                       IdeWorkspace       *workspace)
+                                       GtkNative          *native)
 {
   g_return_if_fail (IDE_IS_COMMAND_PROVIDER (self));
-  g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+  g_return_if_fail (GTK_IS_NATIVE (native));
 
   if (IDE_COMMAND_PROVIDER_GET_IFACE (self)->unload_shortcuts)
-    IDE_COMMAND_PROVIDER_GET_IFACE (self)->unload_shortcuts (self, workspace);
+    IDE_COMMAND_PROVIDER_GET_IFACE (self)->unload_shortcuts (self, native);
 }
 
 /**
  * ide_command_provider_get_command_by_id:
  * @self: a #IdeCommandProvider
- * @workspace: an #IdeWorkspace
+ * @widget: a #GtkWidget
  * @command_id: the identifier of the command
  *
  * Looks for a command by @command_id and returns it if found.
  *
  * Returns: (transfer full) (nullable): an #IdeCommand or %NULL
- *
- * Since: 3.34
  */
 IdeCommand *
 ide_command_provider_get_command_by_id (IdeCommandProvider *self,
-                                        IdeWorkspace       *workspace,
-                                        const gchar        *command_id)
+                                        GtkWidget          *widget,
+                                        const char         *command_id)
 {
   g_return_val_if_fail (IDE_IS_COMMAND_PROVIDER (self), NULL);
-  g_return_val_if_fail (IDE_IS_WORKSPACE (workspace), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (command_id != NULL, NULL);
 
   if (IDE_COMMAND_PROVIDER_GET_IFACE (self)->get_command_by_id)
-   return IDE_COMMAND_PROVIDER_GET_IFACE (self)->get_command_by_id (self, workspace, command_id);
+   return IDE_COMMAND_PROVIDER_GET_IFACE (self)->get_command_by_id (self, widget, command_id);
 
   return NULL;
 }
