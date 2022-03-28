@@ -34,7 +34,7 @@
 
 struct _IdeOmniBar
 {
-  GtkBin                parent_instance;
+  AdwBin                parent_instance;
 
   PeasExtensionSet     *addins;
   GtkGesture           *gesture;
@@ -66,7 +66,7 @@ DZL_DEFINE_ACTION_GROUP (IdeOmniBar, ide_omni_bar, {
   { "move-previous", ide_omni_bar_move_previous },
 })
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BIN,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeOmniBar, ide_omni_bar, ADW_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_omni_bar_init_action_group)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
