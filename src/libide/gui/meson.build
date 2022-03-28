@@ -57,7 +57,6 @@ libide_gui_private_headers = [
   'ide-run-button.h',
   'ide-session-private.h',
   'ide-window-settings-private.h',
-  'ide-shortcut-label-private.h',
 ]
 
 libide_gui_private_sources = [
@@ -102,7 +101,6 @@ libide_gui_public_sources = [
   'ide-preferences-window.c',
   'ide-search-button.c',
   'ide-session-addin.c',
-  'ide-shortcut-label.c',
   'ide-surface.c',
   'ide-surfaces-button.c',
   'ide-transient-sidebar.c',
