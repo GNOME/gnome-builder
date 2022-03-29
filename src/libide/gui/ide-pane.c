@@ -24,7 +24,7 @@
 
 #include "ide-pane.h"
 
-G_DEFINE_TYPE (IdePane, ide_pane, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_TYPE (IdePane, ide_pane, PANEL_TYPE_WIDGET)
 
 static void
 ide_pane_class_init (IdePaneClass *klass)
@@ -44,8 +44,6 @@ ide_pane_init (IdePane *self)
  * These widgets are meant to be added to #IdePanel widgets.
  *
  * Returns: (transfer full): a new #IdePane
- *
- * Since: 3.32
  */
 GtkWidget *
 ide_pane_new (void)
