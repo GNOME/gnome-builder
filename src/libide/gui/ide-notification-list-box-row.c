@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-gtk.h>
+
 #include "ide-notification-list-box-row-private.h"
 
 struct _IdeNotificationListBoxRow
@@ -84,14 +86,12 @@ setup_buttons_locked (IdeNotificationListBoxRow *self)
           if (label != NULL && (!self->compact || icon == NULL))
             child = g_object_new (GTK_TYPE_LABEL,
                                   "label", label,
-                                  "visible", TRUE,
                                   "use-underline", TRUE,
                                   NULL);
           else if (icon != NULL)
             child = g_object_new (GTK_TYPE_IMAGE,
-                                  "icon-size", GTK_ICON_SIZE_MENU,
+                                  "pixel-size", 16,
                                   "gicon", icon,
-                                  "visible", TRUE,
                                   NULL);
 
           g_assert (GTK_IS_WIDGET (child));
@@ -100,23 +100,20 @@ setup_buttons_locked (IdeNotificationListBoxRow *self)
                                  "child", child,
                                  "action-name", action,
                                  "action-target", target,
-                                 "visible", TRUE,
                                  NULL);
 
 
           if (!self->compact)
             {
               g_object_set (button, "width-request", 100, NULL);
-              dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "suggested-action");
+              gtk_widget_add_css_class (GTK_WIDGET (button), "suggested-action");
             }
           else
-            dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "circular");
+            gtk_widget_add_css_class (GTK_WIDGET (button), "circular");
 
           g_assert (GTK_IS_WIDGET (button));
 
-          gtk_container_add_with_properties (GTK_CONTAINER (self->buttons), GTK_WIDGET (button),
-                                             "pack-type", GTK_PACK_END,
-                                             NULL);
+          gtk_box_append (self->buttons, GTK_WIDGET (button));
         }
     }
 
@@ -181,7 +178,7 @@ ide_notification_list_box_row_constructed (GObject *object)
                           (self->compact && ide_notification_get_n_buttons (self->notification)));
 
   if (ide_notification_get_urgent (self->notification))
-    dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "needs-attention");
+    gtk_widget_add_css_class (GTK_WIDGET (self), "needs-attention");
 
   gtk_widget_set_visible (GTK_WIDGET (self->progress),
                           ide_notification_get_has_progress (self->notification));
@@ -192,7 +189,7 @@ ide_notification_list_box_row_constructed (GObject *object)
   setup_buttons_locked (self);
 
   if (ide_notification_get_progress_is_imprecise (self->notification))
-    _ide_gtk_progress_bar_start_pulsing (self->progress);
+    ide_gtk_progress_bar_start_pulsing (self->progress);
 
   ide_object_unlock (IDE_OBJECT (self->notification));
 
@@ -201,16 +198,16 @@ chain_up:
 }
 
 static void
-ide_notification_list_box_row_destroy (GtkWidget *widget)
+ide_notification_list_box_row_dispose (GObject *object)
 {
-  IdeNotificationListBoxRow *self = (IdeNotificationListBoxRow *)widget;
+  IdeNotificationListBoxRow *self = (IdeNotificationListBoxRow *)object;
 
   if (self->progress != NULL)
-    _ide_gtk_progress_bar_stop_pulsing (self->progress);
+    ide_gtk_progress_bar_stop_pulsing (self->progress);
 
   g_clear_object (&self->notification);
 
-  GTK_WIDGET_CLASS (ide_notification_list_box_row_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_notification_list_box_row_parent_class)->dispose (object);
 }
 
 static void
@@ -266,10 +263,9 @@ ide_notification_list_box_row_class_init (IdeNotificationListBoxRowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_notification_list_box_row_constructed;
+  object_class->dispose = ide_notification_list_box_row_dispose;
   object_class->get_property = ide_notification_list_box_row_get_property;
   object_class->set_property = ide_notification_list_box_row_set_property;
-
-  widget_class->destroy = ide_notification_list_box_row_destroy;
 
   properties [PROP_COMPACT] =
     g_param_spec_boolean ("compact",
@@ -330,6 +326,7 @@ void
 ide_notification_list_box_row_set_compact (IdeNotificationListBoxRow *self,
                                            gboolean                   compact)
 {
+  GtkWidget *child;
   GtkBox *parent;
 
   g_return_if_fail (IDE_IS_NOTIFICATION_LIST_BOX_ROW (self));
@@ -340,12 +337,11 @@ ide_notification_list_box_row_set_compact (IdeNotificationListBoxRow *self,
 
       g_object_ref (self->buttons);
 
-      gtk_container_foreach (GTK_CONTAINER (self->buttons),
-                             (GtkCallback)gtk_widget_destroy,
-                             NULL);
+      while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->buttons))))
+        gtk_box_remove (self->buttons, child);
 
       parent = GTK_BOX (gtk_widget_get_parent (GTK_WIDGET (self->buttons)));
-      gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self->buttons));
+      gtk_box_remove (parent, GTK_WIDGET (self->buttons));
       gtk_widget_hide (GTK_WIDGET (parent));
 
       if (compact)
@@ -353,9 +349,7 @@ ide_notification_list_box_row_set_compact (IdeNotificationListBoxRow *self,
       else
         parent = self->lower_button_area;
 
-      gtk_container_add_with_properties (GTK_CONTAINER (parent), GTK_WIDGET (self->buttons),
-                                         "pack-type", GTK_PACK_END,
-                                         NULL);
+      gtk_box_append (parent, GTK_WIDGET (self->buttons));
 
       g_object_unref (self->buttons);
 
