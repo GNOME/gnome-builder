@@ -135,3 +135,63 @@ ide_grid_count_pages (IdeGrid *self)
 
   return count;
 }
+
+void
+ide_grid_get_page_position (IdeGrid *self,
+                            IdePage *page,
+                            guint   *out_column,
+                            guint   *out_row,
+                            guint   *out_depth)
+{
+  GtkWidget *frame;
+  GtkWidget *column;
+  GtkWidget *grid;
+  guint n_pages;
+  guint n_rows;
+  guint n_columns;
+
+  g_return_if_fail (IDE_IS_GRID (self));
+  g_return_if_fail (IDE_IS_PAGE (self));
+
+  *out_column = 0;
+  *out_row = 0;
+  *out_depth = 0;
+
+  if (!(frame = gtk_widget_get_ancestor (GTK_WIDGET (page), PANEL_TYPE_FRAME)) ||
+      !(column = gtk_widget_get_ancestor (GTK_WIDGET (frame), PANEL_TYPE_GRID_COLUMN)) ||
+      !(grid = gtk_widget_get_ancestor (GTK_WIDGET (column), PANEL_TYPE_GRID)))
+    return;
+
+  n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
+  n_rows = panel_grid_column_get_n_rows (PANEL_GRID_COLUMN (column));
+  n_columns = panel_grid_get_n_columns (PANEL_GRID (grid));
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      PanelWidget *widget = panel_frame_get_page (PANEL_FRAME (frame), i);
+
+      if (widget == PANEL_WIDGET (page))
+        {
+          *out_depth = i;
+          break;
+        }
+    }
+
+  for (guint i = 0; i < n_rows; i++)
+    {
+      if (PANEL_FRAME (frame) == panel_grid_column_get_row (PANEL_GRID_COLUMN (column), i))
+        {
+          *out_row = i;
+          break;
+        }
+    }
+
+  for (guint i = 0; i < n_columns; i++)
+    {
+      if (PANEL_GRID_COLUMN (column) == panel_grid_get_column (PANEL_GRID (grid), i))
+        {
+          *out_column = i;
+          break;
+        }
+    }
+}
