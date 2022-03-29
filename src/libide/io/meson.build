@@ -23,6 +23,7 @@ libide_io_public_headers = [
 
 libide_io_private_headers = [
   'ide-gfile-private.h',
+  'ide-shell-private.h',
 ]
 
 install_headers(libide_io_public_headers, subdir: libide_io_header_subdir)

@@ -32,7 +32,6 @@ libide_terminal_private_headers = [
   'ide-terminal-page-actions.h',
   'ide-terminal-page-private.h',
   'ide-terminal-popover-row.h',
-  'ide-terminal-private.h',
   'ide-terminal-search-private.h',
 ]
 

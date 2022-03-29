@@ -24,9 +24,11 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_42
-gboolean ide_shell_supports_dash_c     (const char *shell);
-IDE_AVAILABLE_IN_42
-gboolean ide_shell_supports_dash_login (const char *shell);
+IDE_AVAILABLE_IN_ALL
+gboolean    ide_shell_supports_dash_c     (const char *shell);
+IDE_AVAILABLE_IN_ALL
+gboolean    ide_shell_supports_dash_login (const char *shell);
+IDE_AVAILABLE_IN_ALL
+const char *ide_get_user_shell            (void);
 
 G_END_DECLS

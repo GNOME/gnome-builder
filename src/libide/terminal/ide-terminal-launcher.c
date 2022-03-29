@@ -504,7 +504,7 @@ ide_terminal_launcher_spawn_async (IdeTerminalLauncher *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_terminal_launcher_spawn_async);
 
-  if ((pty_fd = ide_vte_pty_create_slave (pty)) == -1)
+  if ((pty_fd = ide_vte_pty_create_producer (pty)) == -1)
     {
       int errsv = errno;
       ide_task_return_new_error (task,
