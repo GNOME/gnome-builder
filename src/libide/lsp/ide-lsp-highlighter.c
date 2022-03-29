@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-code.h>
 #include <jsonrpc-glib.h>
 
@@ -44,7 +43,7 @@ typedef struct
 
   IdeLspClient       *client;
   IdeHighlightIndex  *index;
-  DzlSignalGroup     *buffer_signals;
+  IdeSignalGroup     *buffer_signals;
 
   const gchar        *style_map[IDE_SYMBOL_KIND_LAST];
 
@@ -282,7 +281,7 @@ ide_lsp_highlighter_dispose (GObject *object)
 
   priv->engine = NULL;
 
-  dzl_clear_source (&priv->queued_update);
+  g_clear_handle_id (&priv->queued_update, g_source_remove);
 
   g_clear_pointer (&priv->index, ide_highlight_index_unref);
   g_clear_object (&priv->buffer_signals);
@@ -353,7 +352,7 @@ ide_lsp_highlighter_init (IdeLspHighlighter *self)
 {
   IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
-  priv->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  priv->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
 
   /*
    * We sort of cheat here by using ::line-flags-changed instead of :;changed
@@ -363,7 +362,7 @@ ide_lsp_highlighter_init (IdeLspHighlighter *self)
    * where the language server gives us an empty set back (or at least with
    * the rust language server).
    */
-  dzl_signal_group_connect_object (priv->buffer_signals,
+  ide_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_lsp_highlighter_buffer_line_flags_changed),
                                    self,
@@ -508,14 +507,14 @@ ide_lsp_highlighter_set_engine (IdeHighlighter     *highlighter,
 
   priv->engine = engine;
 
-  dzl_signal_group_set_target (priv->buffer_signals, NULL);
+  ide_signal_group_set_target (priv->buffer_signals, NULL);
 
   if (engine != NULL)
     {
       IdeBuffer *buffer;
 
       buffer = ide_highlight_engine_get_buffer (engine);
-      dzl_signal_group_set_target (priv->buffer_signals, buffer);
+      ide_signal_group_set_target (priv->buffer_signals, buffer);
       ide_lsp_highlighter_queue_update (self);
     }
 
