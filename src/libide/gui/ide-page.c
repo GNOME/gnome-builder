@@ -27,9 +27,8 @@
 #include <libide-threading.h>
 
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 #include "ide-page.h"
-#include "ide-workspace.h"
+#include "ide-workspace-private.h"
 
 typedef struct
 {
