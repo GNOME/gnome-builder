@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-application.h"
 #include "ide-header-bar.h"
 
 typedef struct
@@ -183,10 +184,17 @@ ide_header_bar_set_menu_id (IdeHeaderBar *self,
 
   if (!ide_str_equal0 (menu_id, priv->menu_id))
     {
+      GMenu *menu = NULL;
+
       g_free (priv->menu_id);
       priv->menu_id = g_strdup (menu_id);
-      g_object_set (priv->menu_button, "menu-id", menu_id, NULL);
+
+      if (menu_id != NULL)
+        menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, menu_id);
+
+      g_object_set (priv->menu_button, "menu-model", menu, NULL);
       gtk_widget_set_visible (GTK_WIDGET (priv->menu_button), !ide_str_empty0 (menu_id));
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MENU_ID]);
     }
 }
