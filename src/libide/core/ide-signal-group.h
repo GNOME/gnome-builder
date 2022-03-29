@@ -19,6 +19,10 @@
 
 #pragma once
 
+#if !defined (IDE_CORE_INSIDE) && !defined (IDE_CORE_COMPILATION)
+# error "Only <libide-core.h> can be included directly."
+#endif
+
 #include <glib-object.h>
 
 #include "ide-version-macros.h"
