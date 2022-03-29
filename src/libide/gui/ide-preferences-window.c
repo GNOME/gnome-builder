@@ -37,6 +37,8 @@ struct _IdePreferencesWindow
   GtkStack           *pages_stack;
   AdwWindowTitle     *pages_title;
 
+  GHashTable         *settings;
+
   const IdePreferencePageEntry *current_page;
 
   guint rebuild_source;
@@ -97,6 +99,59 @@ drop_page_free (gpointer data)
   g_object_unref (drop->child);
   g_object_unref (drop->stack);
   g_free (drop);
+}
+
+static GSettings *
+ide_preferences_window_get_settings (IdePreferencesWindow         *self,
+                                     const IdePreferenceItemEntry *entry)
+{
+  g_autofree char *key = NULL;
+  g_autofree char *path = NULL;
+  GSettings *settings;
+
+  g_assert (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (entry->schema_id == NULL)
+    return NULL;
+
+  if (entry->path != NULL &&
+      self->current_page != NULL &&
+      g_str_has_suffix (entry->path, "/*"))
+    {
+      const char *subkey = strrchr (self->current_page->name, '/');
+
+      if (subkey != NULL)
+        {
+          guint j = strlen (entry->path) - 1;
+          char c;
+
+          path = g_malloc0 (strlen (entry->path) + strlen (subkey) + 1);
+          memcpy (path, entry->path, j);
+          while ((c = *(subkey++)))
+            path[j++] = c;
+          path[j] = 0;
+        }
+    }
+
+  if (path == NULL && entry->path != NULL)
+    path = g_strdup (entry->path);
+
+  if (path == NULL)
+    key = g_strdup_printf ("%s:/", entry->schema_id);
+  else
+    key = g_strdup_printf ("%s:%s", entry->schema_id, path);
+
+  if (!(settings = g_hash_table_lookup (self->settings, key)))
+    {
+      if (path)
+        settings = g_settings_new_with_path (entry->schema_id, path);
+      else
+        settings = g_settings_new (entry->schema_id);
+
+      g_hash_table_insert (self->settings, g_steal_pointer (&key), settings);
+    }
+
+  return settings;
 }
 
 static gboolean
@@ -208,6 +263,7 @@ ide_preferences_window_dispose (GObject *object)
 {
   IdePreferencesWindow *self = (IdePreferencesWindow *)object;
 
+  g_clear_pointer (&self->settings, g_hash_table_unref);
   g_clear_handle_id (&self->rebuild_source, g_source_remove);
 
   if (self->info.data != NULL)
@@ -249,12 +305,14 @@ ide_preferences_window_class_init (IdePreferencesWindowClass *klass)
 static void
 ide_preferences_window_init (IdePreferencesWindow *self)
 {
-  gtk_widget_init_template (GTK_WIDGET (self));
+  self->settings = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 
   self->info.pages = g_ptr_array_new_with_free_func (g_free);
   self->info.groups = g_ptr_array_new_with_free_func (g_free);
   self->info.items = g_ptr_array_new_with_free_func (g_free);
   self->info.data = g_array_new (FALSE, FALSE, sizeof (DataDestroy));
+
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 GtkWidget *
@@ -762,4 +820,36 @@ ide_preferences_window_add_item (IdePreferencesWindow  *self,
     }
 
   ide_preferences_window_queue_rebuild (self);
+}
+
+void
+ide_preferences_window_toggle (const char                   *page_name,
+                               const IdePreferenceItemEntry *entry,
+                               AdwPreferencesGroup          *group,
+                               gpointer                      user_data)
+{
+  IdePreferencesWindow *self = user_data;
+  AdwActionRow *row;
+  GtkSwitch *child;
+  GSettings *settings;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (ADW_IS_PREFERENCES_GROUP (group));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (!(settings = ide_preferences_window_get_settings (self, entry)))
+    return;
+
+  child = g_object_new (GTK_TYPE_SWITCH,
+                        "valign", GTK_ALIGN_CENTER,
+                        NULL);
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title", entry->title,
+                      "subtitle", entry->subtitle,
+                      "activatable-widget", child,
+                      NULL);
+  adw_preferences_group_add (group, GTK_WIDGET (row));
+  adw_action_row_add_suffix (row, GTK_WIDGET (child));
+
+  g_settings_bind (settings, entry->key, child, "active", G_SETTINGS_BIND_DEFAULT);
 }

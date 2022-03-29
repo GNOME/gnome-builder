@@ -29,8 +29,8 @@
 #include <libpeas/peas.h>
 
 #include "ide-preferences-builtin-private.h"
-#include "ide-preferences-language-row-private.h"
 
+#if 0
 static gint
 sort_plugin_info (gconstpointer a,
                   gconstpointer b)
@@ -570,20 +570,114 @@ ide_preferences_builtin_register_sdks (DzlPreferences *preferences)
   /* only the page goes here, plugins will fill in the details */
   dzl_preferences_add_page (preferences, "sdk", _("SDKs"), 550);
 }
+#endif
+
+static const IdePreferencePageEntry pages[] = {
+  { NULL, "visual", "appearance", "org.gnome.Builder-appearance-symbolic", 0, "Appearance" },
+  { NULL, "visual", "editing", "org.gnome.Builder-editing-symbolic", 10, "Editing" },
+  { NULL, "visual", "keyboard", "org.gnome.Builder-shortcuts-symbolic", 20, "Shortcuts" },
+  { NULL, "code", "languages", "org.gnome.Builder-languages-symbolic", 100, "Languages" },
+  { NULL, "code", "completion", "org.gnome.Builder-completion-symbolic", 110, "Completion" },
+  { NULL, "code", "insight", "org.gnome.Builder-diagnostics-symbolic", 120, "Diagnostics" },
+  { NULL, "projects", "projects", "org.gnome.Builder-projects-symbolic", 200, "Projects" },
+  { NULL, "tools", "build", "org.gnome.Builder-build-symbolic", 300, "Build" },
+  { NULL, "tools", "debug", "org.gnome.Builder-debugger-symbolic", 310, "Debugger" },
+  { NULL, "tools", "commands", "org.gnome.Builder-command-symbolic", 320, "Commands" },
+  { NULL, "tools", "sdks", "org.gnome.Builder-sdk-symbolic", 500, "SDKs" },
+  { NULL, "plugins", "plugins", "org.gnome.Builder-plugins-symbolic", 600, "Plugins" },
+};
+
+static const IdePreferenceGroupEntry groups[] = {
+  { "appearance", "style", 0, "Appearance" },
+  { "appearance", "preview", 0, "Style" },
+  { "appearance", "schemes", 10, NULL },
+  { "appearance", "font", 20, NULL },
+  { "appearance", "accessories", 20, NULL },
+
+  { "languages/*", "general", 0, "General" },
+  { "languages/*", "margins", 10, "Margins" },
+  { "languages/*", "spacing", 20, "Spacing" },
+  { "languages/*", "indentation", 30, "Indentation" },
+};
+
+static const IdePreferenceItemEntry lang_items[] = {
+  { "languages/*", "general", "trim", 0, ide_preferences_window_toggle, "Trim Trailing Whitespace", "Upon saving, trailing whitepsace from modified lines will be trimmed.", "org.gnome.builder.editor.language", "/*", "trim-trailing-whitespace" },
+  { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle, "Overwrite Braces", "Overwrite closing braces", "org.gnome.builder.editor.language", "/*", "overwrite-brances" },
+  { "languages/*", "general", "insert-matching", 0, ide_preferences_window_toggle, "Insert Matching Brace", "Insert matching character for [[(\"'", "org.gnome.builder.editor.language", "/*", "insert-matching-brace" },
+  { "languages/*", "general", "insert-trailing", 0, ide_preferences_window_toggle, "Insert Trailing Newline", "Ensure files end with a newline", "org.gnome.builder.editor.language", "/*", "insert-trailing-newline" },
+
+  { "languages/*", "margins", "show-right-margin", 0, ide_preferences_window_toggle, "Show right margin", "Display a margin in the editor to indicate maximum desired width", "org.gnome.builder.editor.language", "/*", "show-right-margin" },
+
+#if 0
+  { "languages/*", "spacing", "before-parens", 0, ide_preferences_window_toggle, "Prefer a space before opening parentheses" },
+  { "languages/*", "spacing", "before-brackets", 0, ide_preferences_window_toggle, "Prefer a space before opening brackets" },
+  { "languages/*", "spacing", "before-braces", 0, ide_preferences_window_toggle, "Prefer a space before opening braces" },
+  { "languages/*", "spacing", "before-angles", 0, ide_preferences_window_toggle, "Prefer a space before opening angles" },
+#endif
+
+  { "languages/*", "indentation", "insert-spaces", 0, ide_preferences_window_toggle, "Insert spaces instead of tabs", "Prefer spaces over tabs", "org.gnome.builder.editor.language", "/*", "insert-spaces-instead-of-tabs" },
+  { "languages/*", "indentation", "auto-indent", 0, ide_preferences_window_toggle, "Automatically Indent", "Format source code as you type", "org.gnome.builder.editor.language", "/*", "auto-indent" },
+};
+
+static int
+compare_section (gconstpointer a,
+                 gconstpointer b)
+{
+  const IdePreferencePageEntry *pagea = a;
+  const IdePreferencePageEntry *pageb = b;
+
+  return g_strcmp0 (pagea->section, pageb->section);
+}
+
+static void
+ide_preferences_builtin_add_languages (IdePreferencesWindow *window)
+{
+  GtkSourceLanguageManager *langs;
+  const char * const *lang_ids;
+  IdePreferencePageEntry *lpages;
+  guint j = 0;
+
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+
+  langs = gtk_source_language_manager_get_default ();
+  lang_ids = gtk_source_language_manager_get_language_ids (langs);
+  lpages = g_new0 (IdePreferencePageEntry, g_strv_length ((char **)lang_ids));
+
+  for (guint i = 0; lang_ids[i]; i++)
+    {
+      GtkSourceLanguage *l = gtk_source_language_manager_get_language (langs, lang_ids[i]);
+      IdePreferencePageEntry *page;
+      char name[256];
+
+      if (gtk_source_language_get_hidden (l))
+        continue;
+
+      page = &lpages[j++];
+
+      g_snprintf (name, sizeof name, "languages/%s", lang_ids[i]);
+
+      page->parent = "languages";
+      page->section = gtk_source_language_get_section (l);
+      page->name = g_intern_string (name);
+      page->icon_name = NULL;
+      page->title = gtk_source_language_get_name (l);
+    }
+
+  qsort (lpages, j, sizeof *lpages, compare_section);
+  for (guint i = 0; i < j; i++)
+    lpages[i].priority = i;
+
+  ide_preferences_window_add_pages (window, lpages, j, NULL);
+  ide_preferences_window_add_items (window, lang_items, G_N_ELEMENTS (lang_items), window, NULL);
+
+  g_free (lpages);
+}
 
 void
 _ide_preferences_builtin_register (IdePreferencesWindow *window)
 {
-  ide_preferences_builtin_register_appearance (preferences);
-  ide_preferences_builtin_register_editor (preferences);
-  ide_preferences_builtin_register_languages (preferences);
-  ide_preferences_builtin_register_code_insight (preferences);
-  ide_preferences_builtin_register_completion (preferences);
-  ide_preferences_builtin_register_snippets (preferences);
-  ide_preferences_builtin_register_keyboard (preferences);
-  ide_preferences_builtin_register_plugins (preferences);
-  ide_preferences_builtin_register_build (preferences);
-  ide_preferences_builtin_register_projects (preferences);
-  //ide_preferences_builtin_register_vcs (preferences);
-  ide_preferences_builtin_register_sdks (preferences);
+  ide_preferences_window_add_pages (window, pages, G_N_ELEMENTS (pages), NULL);
+  ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+
+  ide_preferences_builtin_add_languages (window);
 }
