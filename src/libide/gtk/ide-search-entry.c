@@ -137,7 +137,7 @@ ide_search_entry_class_init (IdeSearchEntryClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "entry");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide/gtk/ide-search-entry.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gtk/ide-search-entry.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeSearchEntry, info);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchEntry, text);
   gtk_widget_class_bind_template_callback (widget_class, on_text_activate_cb);
