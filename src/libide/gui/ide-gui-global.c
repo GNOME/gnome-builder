@@ -30,12 +30,12 @@
 static GQuark quark_handler;
 static GQuark quark_where_context_was;
 
-static void ide_widget_notify_context    (GtkWidget  *toplevel,
-                                          GParamSpec *pspec,
-                                          GtkWidget  *widget);
-static void ide_widget_hierarchy_changed (GtkWidget  *widget,
-                                          GParamSpec *pspec,
-                                          gpointer    user_data);
+static void ide_widget_notify_context (GtkWidget  *toplevel,
+                                       GParamSpec *pspec,
+                                       GtkWidget  *widget);
+static void ide_widget_notify_root_cb (GtkWidget  *widget,
+                                       GParamSpec *pspec,
+                                       gpointer    user_data);
 
 static void
 ide_widget_notify_context (GtkWidget  *toplevel,
@@ -66,7 +66,7 @@ ide_widget_notify_context (GtkWidget  *toplevel,
                                         G_CALLBACK (ide_widget_notify_context),
                                         widget);
   g_signal_handlers_disconnect_by_func (widget,
-                                        G_CALLBACK (ide_widget_hierarchy_changed),
+                                        G_CALLBACK (ide_widget_notify_root_cb),
                                         NULL);
 
   handler (widget, context);
@@ -87,19 +87,14 @@ has_context_property (GtkWidget *widget)
 }
 
 static void
-ide_widget_hierarchy_changed (GtkWidget  *widget,
-                              GParamSpec *pspec,
-                              gpointer    user_data)
+ide_widget_notify_root_cb (GtkWidget  *widget,
+                           GParamSpec *pspec,
+                           gpointer    user_data)
 {
   GtkWidget *toplevel;
 
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (user_data == NULL);
-
-  if (GTK_IS_WINDOW (previous_toplevel))
-    g_signal_handlers_disconnect_by_func (previous_toplevel,
-                                          G_CALLBACK (ide_widget_notify_context),
-                                          widget);
 
   toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
@@ -139,14 +134,14 @@ ide_widget_set_context_handler (gpointer                widget,
   g_object_set_qdata (G_OBJECT (widget), quark_handler, handler);
 
   g_signal_connect (widget,
-                    "notify::root"
-                    G_CALLBACK (ide_widget_hierarchy_changed),
+                    "notify::root",
+                    G_CALLBACK (ide_widget_notify_root_cb),
                     NULL);
 
   toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
   if (GTK_IS_WINDOW (toplevel))
-    ide_widget_hierarchy_changed (widget, NULL, NULL);
+    ide_widget_notify_root_cb (widget, NULL, NULL);
 }
 
 /**
@@ -164,7 +159,7 @@ ide_widget_get_context (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
   if (IDE_IS_WORKSPACE (toplevel))
     return ide_workspace_get_context (IDE_WORKSPACE (toplevel));
