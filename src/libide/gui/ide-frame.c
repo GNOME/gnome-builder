@@ -201,35 +201,6 @@ ide_frame_new (void)
 }
 
 /**
- * ide_frame_foreach_page:
- * @self: a #IdeFrame
- * @callback: (scope call) (closure user_data): A callback for each page
- * @user_data: user data for @callback
- *
- * This function will call @callback for every page found in @self.
- */
-void
-ide_frame_foreach_page (IdeFrame        *self,
-                        IdePageCallback  callback,
-                        gpointer         user_data)
-{
-  guint n_pages;
-
-  g_return_if_fail (IDE_IS_FRAME (self));
-  g_return_if_fail (callback != NULL);
-
-  n_pages = panel_frame_get_n_pages (PANEL_FRAME (self));
-
-  /* Iterate backwards to allow removing of page */
-  for (guint i = n_pages; i > 0; i--)
-    {
-      PanelWidget *widget = panel_frame_get_page (PANEL_FRAME (self), i - 1);
-
-      callback (IDE_PAGE (widget), user_data);
-    }
-}
-
-/**
  * ide_frame_addin_find_by_module_name:
  * @frame: An #IdeFrame
  * @module_name: the module name which provides the addin

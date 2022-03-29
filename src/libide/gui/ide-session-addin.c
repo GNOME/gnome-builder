@@ -112,8 +112,6 @@ ide_session_addin_default_init (IdeSessionAddinInterface *iface)
  *
  * The resulting state will be provided when restoring the page
  * at a future time with ide_session_addin_restore_page_async().
- *
- * Since: 41
  */
 void
 ide_session_addin_save_page_async (IdeSessionAddin     *self,
@@ -141,8 +139,6 @@ ide_session_addin_save_page_async (IdeSessionAddin     *self,
  *
  * Returns: (transfer full) (nullable): a #GVariant or %NULL if an error prevented
  * from saving the page.
- *
- * Since: 41
  */
 GVariant *
 ide_session_addin_save_page_finish (IdeSessionAddin  *self,
@@ -166,8 +162,6 @@ ide_session_addin_save_page_finish (IdeSessionAddin  *self,
  * Asynchronously requests that addin @self restore a page's session state with
  * the provided state, previously saved by this addin using
  * ide_session_addin_save_page_async(). This only happens when opening a project.
- *
- * Since: 41
  */
 void
 ide_session_addin_restore_page_async (IdeSessionAddin     *self,
@@ -191,8 +185,6 @@ ide_session_addin_restore_page_async (IdeSessionAddin     *self,
  *
  * Returns: (transfer full) (nullable): the created page for the saved state, or %NULL if an error
  * prevented from restoring the page.
- *
- * Since: 41
  */
 IdePage *
 ide_session_addin_restore_page_finish (IdeSessionAddin  *self,
@@ -216,8 +208,6 @@ ide_session_addin_restore_page_finish (IdeSessionAddin  *self,
  * this @page.
  *
  * Returns: whether @self supports saving @page.
- *
- * Since: 41
  */
 gboolean
 ide_session_addin_can_save_page (IdeSessionAddin *self,
@@ -245,8 +235,6 @@ ide_session_addin_can_save_page (IdeSessionAddin *self,
  *
  * Returns: (array zero-terminated=1) (element-type utf8) (nullable) (transfer full):
  *   A %NULL terminated array of properties names, or %NULL.
- *
- * Since: 41.0
  */
 char **
 ide_session_addin_get_autosave_properties (IdeSessionAddin *self)
