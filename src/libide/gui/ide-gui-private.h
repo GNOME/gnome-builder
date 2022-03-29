@@ -34,7 +34,6 @@
 #include "ide-notification-view-private.h"
 #include "ide-page.h"
 #include "ide-primary-workspace.h"
-#include "ide-shortcut-label-private.h"
 #include "ide-workbench.h"
 #include "ide-workspace.h"
 
