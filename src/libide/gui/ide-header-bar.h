@@ -46,7 +46,7 @@ G_DECLARE_DERIVABLE_TYPE (IdeHeaderBar, ide_header_bar, IDE, HEADER_BAR, GtkWidg
 
 struct _IdeHeaderBarClass
 {
-  GtkWidget parent_class;
+  GtkWidgetClass parent_class;
 };
 
 IDE_AVAILABLE_IN_ALL
