@@ -54,6 +54,7 @@ libide_core_generated_headers += [libide_debug_h]
 
 libide_core_public_headers = [
   'ide-action-group.h',
+  'ide-binding-group.h',
   'ide-context.h',
   'ide-context-addin.h',
   'ide-global.h',
@@ -83,6 +84,7 @@ install_headers(libide_core_public_headers, subdir: libide_core_header_subdir)
 #
 
 libide_core_public_sources = [
+  'ide-binding-group.c',
   'ide-context.c',
   'ide-context-addin.c',
   'ide-global.c',
