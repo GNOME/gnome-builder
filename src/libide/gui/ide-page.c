@@ -35,9 +35,9 @@ typedef struct
 {
   GList        mru_link;
 
-  const gchar *menu_id;
-  const gchar *icon_name;
-  gchar       *title;
+  const char  *menu_id;
+  const char  *icon_name;
+  char        *title;
   GIcon       *icon;
 
   GdkRGBA      primary_color_bg;
@@ -103,34 +103,37 @@ ide_page_real_agree_to_close_finish (IdePage       *self,
 }
 
 static void
-find_focus_child (GtkWidget *widget,
-                  gboolean  *handled)
-{
-  if (!*handled)
-    *handled = gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
-}
-
-static void
-ide_page_hierarchy_changed (GtkWidget *widget,
-                            GtkWidget *previous_toplevel)
+ide_page_root (GtkWidget *widget)
 {
   IdePage *self = (IdePage *)widget;
   IdePagePrivate *priv = ide_page_get_instance_private (self);
   GtkWidget *toplevel;
 
   g_assert (IDE_IS_PAGE (self));
-  g_assert (!previous_toplevel || GTK_IS_WIDGET (previous_toplevel));
 
-  if (IDE_IS_WORKSPACE (previous_toplevel))
-    _ide_workspace_remove_page_mru (IDE_WORKSPACE (previous_toplevel), &priv->mru_link);
+  GTK_WIDGET_CLASS (ide_page_parent_class)->root (widget);
 
-  if (GTK_WIDGET_CLASS (ide_page_parent_class)->hierarchy_changed)
-    GTK_WIDGET_CLASS (ide_page_parent_class)->hierarchy_changed (widget, previous_toplevel);
-
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
   if (IDE_IS_WORKSPACE (toplevel))
     _ide_workspace_add_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+}
+
+static void
+ide_page_unroot (GtkWidget *widget)
+{
+  IdePage *self = (IdePage *)widget;
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+  GtkWidget *toplevel;
+
+  g_assert (IDE_IS_PAGE (self));
+
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
+
+  if (IDE_IS_WORKSPACE (toplevel))
+    _ide_workspace_remove_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+
+  GTK_WIDGET_CLASS (ide_page_parent_class)->unroot (widget);
 }
 
 /**
@@ -141,8 +144,6 @@ ide_page_hierarchy_changed (GtkWidget *widget,
  * workspaces MRU (most-recently-used) queue.
  *
  * Pages should call this when their contents have been focused.
- *
- * Since: 3.32
  */
 void
 ide_page_mark_used (IdePage *self)
@@ -280,7 +281,8 @@ ide_page_class_init (IdePageClass *klass)
   object_class->get_property = ide_page_get_property;
   object_class->set_property = ide_page_set_property;
 
-  widget_class->hierarchy_changed = ide_page_hierarchy_changed;
+  widget_class->root = ide_page_root;
+  widget_class->unroot = ide_page_unroot;
 
   klass->agree_to_close_async = ide_page_real_agree_to_close_async;
   klass->agree_to_close_finish = ide_page_real_agree_to_close_finish;
@@ -335,8 +337,6 @@ ide_page_class_init (IdePageClass *klass)
    *
    * This can be used by the layout stack to alter the color of the
    * header to match that of the content.
-   *
-   * Since: 3.32
    */
   properties [PROP_PRIMARY_COLOR_BG] =
     g_param_spec_boxed ("primary-color-bg",
@@ -353,8 +353,6 @@ ide_page_class_init (IdePageClass *klass)
    *
    * This can be used by the layout stack to alter the color of the
    * foreground to match that of the content.
-   *
-   * Since: 3.32
    */
   properties [PROP_PRIMARY_COLOR_FG] =
     g_param_spec_boxed ("primary-color-fg",
@@ -384,8 +382,6 @@ ide_page_class_init (IdePageClass *klass)
    * set to %TRUE. The default is %FALSE.
    *
    * Returns: (transfer full): A newly created #IdePage
-   *
-   * Since: 3.32
    */
   signals [CREATE_SPLIT] =
     g_signal_new (g_intern_static_string ("create-split"),
@@ -421,7 +417,7 @@ ide_page_new (void)
   return g_object_new (IDE_TYPE_PAGE, NULL);
 }
 
-const gchar *
+const char *
 ide_page_get_title (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
@@ -432,8 +428,8 @@ ide_page_get_title (IdePage *self)
 }
 
 void
-ide_page_set_title (IdePage     *self,
-                    const gchar *title)
+ide_page_set_title (IdePage    *self,
+                    const char *title)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
 
@@ -447,7 +443,7 @@ ide_page_set_title (IdePage     *self,
     }
 }
 
-const gchar *
+const char *
 ide_page_get_menu_id (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
@@ -458,8 +454,8 @@ ide_page_get_menu_id (IdePage *self)
 }
 
 void
-ide_page_set_menu_id (IdePage     *self,
-                      const gchar *menu_id)
+ide_page_set_menu_id (IdePage    *self,
+                      const char *menu_id)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
 
@@ -558,8 +554,6 @@ ide_page_set_modified (IdePage  *self,
  * Gets the #GIcon to represent the view.
  *
  * Returns: (transfer none) (nullable): A #GIcon or %NULL
- *
- * Since: 3.32
  */
 GIcon *
 ide_page_get_icon (IdePage *self)
@@ -589,7 +583,7 @@ ide_page_set_icon (IdePage *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON]);
 }
 
-const gchar *
+const char *
 ide_page_get_icon_name (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
@@ -600,8 +594,8 @@ ide_page_get_icon_name (IdePage *self)
 }
 
 void
-ide_page_set_icon_name (IdePage     *self,
-                        const gchar *icon_name)
+ide_page_set_icon_name (IdePage    *self,
+                        const char *icon_name)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
 
@@ -654,8 +648,6 @@ ide_page_set_can_split (IdePage  *self,
  * The view should be added to an #IdeLayoutStack where appropriate.
  *
  * Returns: (nullable) (transfer full): A newly created #IdePage or %NULL.
- *
- * Since: 3.32
  */
 IdePage *
 ide_page_create_split (IdePage *self)
@@ -684,8 +676,6 @@ ide_page_create_split (IdePage *self)
  * stack header to match the document contents.
  *
  * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
- *
- * Since: 3.32
  */
 const GdkRGBA *
 ide_page_get_primary_color_bg (IdePage *self)
@@ -704,8 +694,6 @@ ide_page_get_primary_color_bg (IdePage *self)
  *
  * Sets the #IdePage:primary-color-bg property.
  * If @primary_color_bg is %NULL, the property is unset.
- *
- * Since: 3.32
  */
 void
 ide_page_set_primary_color_bg (IdePage       *self,
@@ -746,8 +734,6 @@ ide_page_set_primary_color_bg (IdePage       *self,
  * stack header to match the document contents.
  *
  * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
- *
- * Since: 3.32
  */
 const GdkRGBA *
 ide_page_get_primary_color_fg (IdePage *self)
@@ -766,8 +752,6 @@ ide_page_get_primary_color_fg (IdePage *self)
  *
  * Sets the #IdePage:primary-color-fg property.
  * If @primary_color_fg is %NULL, the property is unset.
- *
- * Since: 3.32
  */
 void
 ide_page_set_primary_color_fg (IdePage       *self,
@@ -807,17 +791,14 @@ ide_page_set_primary_color_fg (IdePage       *self,
  *
  * @format should be a printf-style format string followed by the
  * arguments for the format.
- *
- * Since: 3.32
  */
 void
-ide_page_report_error (IdePage     *self,
-                       const gchar *format,
+ide_page_report_error (IdePage    *self,
+                       const char *format,
                        ...)
 {
-  g_autofree gchar *message = NULL;
+  g_autofree char *message = NULL;
   GtkInfoBar *infobar;
-  GtkWidget *content_area;
   GtkLabel *label;
   va_list args;
 
@@ -834,11 +815,11 @@ ide_page_report_error (IdePage     *self,
                           NULL);
   g_signal_connect (infobar,
                     "response",
-                    G_CALLBACK (gtk_widget_destroy),
+                    G_CALLBACK (gtk_widget_unparent),
                     NULL);
   g_signal_connect (infobar,
                     "close",
-                    G_CALLBACK (gtk_widget_destroy),
+                    G_CALLBACK (gtk_widget_unparent),
                     NULL);
 
   label = g_object_new (GTK_TYPE_LABEL,
@@ -848,12 +829,8 @@ ide_page_report_error (IdePage     *self,
                         "xalign", 0.0f,
                         NULL);
 
-  content_area = gtk_info_bar_get_content_area (infobar);
-  gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (label));
-
-  gtk_container_add_with_properties (GTK_CONTAINER (self), GTK_WIDGET (infobar),
-                                     "position", 0,
-                                     NULL);
+  gtk_info_bar_add_child (infobar, GTK_WIDGET (label));
+  gtk_widget_insert_after (GTK_WIDGET (infobar), GTK_WIDGET (self), NULL);
 }
 
 /**
@@ -865,8 +842,6 @@ ide_page_report_error (IdePage     *self,
  * or designer might use the backing file.
  *
  * Returns: (transfer full) (nullable): a #GFile or %NULL
- *
- * Since: 3.40
  */
 GFile *
 ide_page_get_file_or_directory (IdePage *self)
