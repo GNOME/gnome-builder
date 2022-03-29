@@ -40,18 +40,6 @@
 G_BEGIN_DECLS
 
 void      _ide_primary_workspace_init_actions   (IdePrimaryWorkspace *self);
-void      _ide_workspace_init_actions           (IdeWorkspace        *self);
-GList    *_ide_workspace_get_mru_link           (IdeWorkspace        *self);
-void      _ide_workspace_add_page_mru           (IdeWorkspace        *self,
-                                                 GList               *mru_link);
-void      _ide_workspace_remove_page_mru        (IdeWorkspace        *self,
-                                                 GList               *mru_link);
-void      _ide_workspace_move_front_page_mru    (IdeWorkspace        *workspace,
-                                                 GList               *mru_link);
-void      _ide_workspace_set_context            (IdeWorkspace        *workspace,
-                                                 IdeContext          *context);
-gboolean  _ide_workbench_is_last_workspace      (IdeWorkbench        *self,
-                                                 IdeWorkspace        *workspace);
 void      _ide_header_bar_init_shortcuts        (IdeHeaderBar        *self);
 void      _ide_header_bar_show_menu             (IdeHeaderBar        *self);
 void      _ide_surface_set_fullscreen           (IdeSurface          *self,

@@ -35,6 +35,9 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdePage, ide_page, IDE, PAGE, PanelWidget)
 
+typedef void (*IdePageCallback) (IdePage  *page,
+                                 gpointer  user_data);
+
 struct _IdePageClass
 {
   PanelWidgetClass parent_class;
