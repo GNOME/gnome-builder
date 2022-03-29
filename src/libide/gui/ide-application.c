@@ -103,20 +103,6 @@ ide_application_local_command_line (GApplication   *app,
 }
 
 static void
-ide_application_register_keybindings (IdeApplication *self)
-{
-  g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *name = NULL;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  settings = g_settings_new ("org.gnome.builder.editor");
-  name = g_settings_get_string (settings, "keybindings");
-  self->keybindings = ide_keybindings_new (name);
-  g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
-}
-
-static void
 ide_application_startup (GApplication *app)
 {
   IdeApplication *self = (IdeApplication *)app;
@@ -153,9 +139,6 @@ ide_application_startup (GApplication *app)
   /* And now we can load the rest of our plugins for startup. */
   _ide_application_load_plugins (self);
 
-  /* Load keybindings from plugins and what not */
-  ide_application_register_keybindings (self);
-
   /* Load language defaults into gsettings */
   ide_language_defaults_init_async (NULL, NULL, NULL);
 }
@@ -173,7 +156,6 @@ ide_application_shutdown (GApplication *app)
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_object (&self->addins);
   g_clear_object (&self->settings);
-  g_clear_object (&self->keybindings);
 
   G_APPLICATION_CLASS (ide_application_parent_class)->shutdown (app);
 }

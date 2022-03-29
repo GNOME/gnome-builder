@@ -43,7 +43,6 @@ install_headers(libide_gui_public_headers, subdir: libide_gui_header_subdir)
 libide_gui_private_headers = [
   'ide-application-private.h',
   'ide-environment-editor-row.h',
-  'ide-keybindings.h',
   'ide-notification-list-box-row-private.h',
   'ide-notification-stack-private.h',
   'ide-notification-view-private.h',
@@ -57,7 +56,6 @@ libide_gui_private_sources = [
   'ide-application-color.c',
   'ide-application-plugins.c',
   'ide-environment-editor-row.c',
-  'ide-keybindings.c',
   'ide-notification-list-box-row.c',
   'ide-notification-stack.c',
   'ide-notification-view.c',
