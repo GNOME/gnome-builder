@@ -60,7 +60,8 @@ typedef struct
    */
   GQueue page_mru;
 
-  guint in_key_press : 1;
+  /* Queued source to save window size/etc */
+  guint queued_window_save;
 } IdeWorkspacePrivate;
 
 typedef struct
@@ -79,6 +80,7 @@ enum {
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICATION_WINDOW)
 
 static GParamSpec *properties [N_PROPS];
+static GSettings *settings;
 
 static void
 ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
@@ -256,6 +258,76 @@ ide_workspace_agree_to_close_finish (IdeWorkspace *self,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static gboolean
+ide_workspace_save_settings (gpointer data)
+{
+  IdeWorkspace *self = data;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  priv->queued_window_save = 0;
+
+  if (gtk_widget_get_realized (GTK_WIDGET (self)) &&
+      gtk_widget_get_visible (GTK_WIDGET (self)))
+    {
+      GdkRectangle geom = {0};
+      gboolean maximized;
+
+      if (settings == NULL)
+        settings = g_settings_new ("org.gnome.builder");
+
+      gtk_window_get_default_size (GTK_WINDOW (self), &geom.width, &geom.height);
+
+      maximized = gtk_window_is_maximized (GTK_WINDOW (self));
+
+      g_settings_set (settings, "window-size", "(ii)", geom.width, geom.height);
+      g_settings_set_boolean (settings, "window-maximized", maximized);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_workspace_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
+{
+  IdeWorkspace *self = (IdeWorkspace *)widget;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  GTK_WIDGET_CLASS (ide_workspace_parent_class)->size_allocate (widget, width, height, baseline);
+
+  if (priv->queued_window_save == 0)
+    priv->queued_window_save = g_timeout_add_seconds (1, ide_workspace_save_settings, self);
+}
+
+static void
+ide_workspace_realize (GtkWidget *widget)
+{
+  IdeWorkspace *self = (IdeWorkspace *)widget;
+  GdkRectangle geom = {0};
+  gboolean maximized = FALSE;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder");
+
+  g_settings_get (settings, "window-size", "(ii)", &geom.width, &geom.height);
+  g_settings_get (settings, "window-maximized", "b", &maximized);
+
+  gtk_window_set_default_size (GTK_WINDOW (self), geom.width, geom.height);
+
+  GTK_WIDGET_CLASS (ide_workspace_parent_class)->realize (widget);
+
+  if (maximized)
+    gtk_window_maximize (GTK_WINDOW (self));
+}
+
 static void
 ide_workspace_finalize (GObject *object)
 {
@@ -264,6 +336,7 @@ ide_workspace_finalize (GObject *object)
 
   g_clear_object (&priv->context);
   g_clear_object (&priv->cancellable);
+  g_clear_handle_id (&priv->queued_window_save, g_source_remove);
 
   G_OBJECT_CLASS (ide_workspace_parent_class)->finalize (object);
 }
@@ -304,12 +377,16 @@ static void
 ide_workspace_class_init (IdeWorkspaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
   object_class->dispose = ide_workspace_dispose;
   object_class->finalize = ide_workspace_finalize;
   object_class->get_property = ide_workspace_get_property;
   object_class->set_property = ide_workspace_set_property;
+
+  widget_class->realize = ide_workspace_realize;
+  widget_class->size_allocate = ide_workspace_size_allocate;
 
   window_class->close_request = ide_workspace_close_request;
 

@@ -51,7 +51,6 @@ libide_gui_private_headers = [
   'ide-primary-workspace-private.h',
   'ide-run-button.h',
   'ide-session-private.h',
-  'ide-window-settings-private.h',
 ]
 
 libide_gui_private_sources = [
@@ -67,7 +66,6 @@ libide_gui_private_sources = [
   'ide-primary-workspace-actions.c',
   'ide-run-button.c',
   'ide-session.c',
-  'ide-window-settings.c',
   'ide-workspace-actions.c',
 ]
 
