@@ -337,17 +337,32 @@ parse_markdown (const gchar *markdown,
 
 struct _IdeMarkedView
 {
-  AdwBin parent_instance;
+  GtkWidget parent_instance;
 };
 
-G_DEFINE_FINAL_TYPE (IdeMarkedView, ide_marked_view, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeMarkedView, ide_marked_view, GTK_TYPE_WIDGET)
+
+static void
+ide_marked_view_dispose (GObject *object)
+{
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (object));
+       child != NULL;
+       child = gtk_widget_get_first_child (GTK_WIDGET (object)))
+    gtk_widget_unparent (child);
+
+  G_OBJECT_CLASS (ide_marked_view_parent_class)->dispose (object);
+}
 
 static void
 ide_marked_view_class_init (IdeMarkedViewClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_marked_view_dispose;
+
   gtk_widget_class_set_css_name (widget_class, "markedview");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
@@ -422,8 +437,7 @@ ide_marked_view_new (IdeMarkedContent *content)
       break;
     }
 
-  if (child != NULL)
-    gtk_container_add (GTK_CONTAINER (self), child);
+  gtk_widget_set_parent (child, GTK_WIDGET (self));
 
   return GTK_WIDGET (self);
 }
