@@ -403,15 +403,15 @@ _ide_application_load_plugins (IdeApplication *self)
    * the process space.
    */
   g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
-  if (!g_irepository_require (NULL, "GtkSource", "4", 0, &error) ||
+  if (!g_irepository_require (NULL, "GtkSource", "5", 0, &error) ||
       !g_irepository_require (NULL, "Gio", "2.0", 0, &error) ||
       !g_irepository_require (NULL, "GLib", "2.0", 0, &error) ||
-      !g_irepository_require (NULL, "Gtk", "3.0", 0, &error) ||
-      !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error) ||
+      !g_irepository_require (NULL, "Gtk", "4.0", 0, &error) ||
       !g_irepository_require (NULL, "Jsonrpc", "1.0", 0, &error) ||
       !g_irepository_require (NULL, "Template", "1.0", 0, &error) ||
+      !g_irepository_require (NULL, "Vte", "4-2.91", 0, &error) ||
 #ifdef HAVE_WEBKIT
-      !g_irepository_require (NULL, "WebKit2", "4.0", 0, &error) ||
+      !g_irepository_require (NULL, "WebKit2", "5.0", 0, &error) ||
 #endif
       !g_irepository_require (NULL, "Ide", PACKAGE_ABI_S, 0, &error))
     g_critical ("Cannot enable Python 3 plugins: %s", error->message);
