@@ -23,9 +23,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
+
+#include <libide-commands.h>
 #include <libide-debugger.h>
 #include <libide-threading.h>
-#include <libpeas/peas.h>
 
 #include "ide-build-private.h"
 #include "ide-context-private.h"
@@ -34,7 +36,6 @@
 #include "ide-transfer-manager-private.h"
 
 #include "ide-application.h"
-#include "ide-command-manager.h"
 #include "ide-gui-global.h"
 #include "ide-gui-private.h"
 #include "ide-primary-workspace.h"
