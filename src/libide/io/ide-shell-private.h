@@ -1,6 +1,6 @@
-/* ide-terminal-surface.h
+/* ide-shell-private.h
  *
- * Copyright 2018 Christian Hergert <unknown@domain.org>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,20 +20,10 @@
 
 #pragma once
 
-#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
-# error "Only <libide-terminal.h> can be included directly."
-#endif
-
-#include <libide-gui.h>
+#include "ide-shell.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_TERMINAL_SURFACE (ide_terminal_surface_get_type())
-
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeTerminalSurface, ide_terminal_surface, IDE, TERMINAL_SURFACE, IdeSurface)
-
-IDE_AVAILABLE_IN_3_32
-IdeTerminalSurface *ide_terminal_surface_new (void);
+void _ide_guess_shell (void);
 
 G_END_DECLS
