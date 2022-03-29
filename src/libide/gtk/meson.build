@@ -41,6 +41,7 @@ libide_gtk_public_sources = [
 
 libide_gtk_private_sources = [
   'ide-frame-source.c',
+  'ide-gtk-init.c',
 ]
 
 #
