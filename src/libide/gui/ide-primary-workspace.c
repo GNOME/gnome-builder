@@ -23,11 +23,10 @@
 #include "config.h"
 
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 #include "ide-header-bar.h"
 #include "ide-notifications-button.h"
 #include "ide-omni-bar.h"
-#include "ide-primary-workspace.h"
+#include "ide-primary-workspace-private.h"
 #include "ide-run-button.h"
 #include "ide-window-settings-private.h"
 

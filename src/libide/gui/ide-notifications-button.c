@@ -26,7 +26,6 @@
 
 #include "ide-notification-list-box-row-private.h"
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 
 /**
  * SECTION:ide-notifications-button:

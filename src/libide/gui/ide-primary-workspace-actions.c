@@ -23,12 +23,12 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libide-foundry.h>
 #include <libpeas/peas.h>
 
+#include <libide-foundry.h>
+
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
-#include "ide-primary-workspace.h"
+#include "ide-primary-workspace-private.h"
 
 typedef struct
 {
