@@ -25,6 +25,7 @@
 # include "ide-cell-renderer-fancy.h"
 # include "ide-entry-popover.h"
 # include "ide-fancy-tree-view.h"
+# include "ide-gtk.h"
 # include "ide-gtk-enums.h"
 # include "ide-menu-manager.h"
 # include "ide-progress-icon.h"

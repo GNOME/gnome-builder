@@ -21,12 +21,12 @@
 #pragma once
 
 #include <libide-core.h>
+#include <libide-gtk.h>
 
 #include <libpeas/peas.h>
 
 #include "ide-application.h"
 #include "ide-keybindings.h"
-#include "ide-menu-manager.h"
 
 G_BEGIN_DECLS
 

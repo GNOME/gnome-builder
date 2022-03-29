@@ -20,6 +20,10 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
 #include <libide-core.h>
 #include <libide-foundry.h>
 
@@ -38,12 +42,12 @@ struct _IdeConfigViewAddinInterface
 
   void (*load) (IdeConfigViewAddin   *self,
                 IdePreferencesWindow *preferences,
-                IdeConfig            *configuration);
+                IdeConfig            *config);
 };
 
 IDE_AVAILABLE_IN_ALL
 void ide_config_view_addin_load (IdeConfigViewAddin   *self,
                                  IdePreferencesWindow *preferences,
-                                 IdeConfig            *configuration);
+                                 IdeConfig            *config);
 
 G_END_DECLS
