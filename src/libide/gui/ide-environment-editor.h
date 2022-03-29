@@ -20,7 +20,12 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
 #include <gtk/gtk.h>
+
 #include <libide-core.h>
 #include <libide-threading.h>
 
@@ -28,14 +33,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_ENVIRONMENT_EDITOR (ide_environment_editor_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeEnvironmentEditor, ide_environment_editor, IDE, ENVIRONMENT_EDITOR, GtkListBox)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeEnvironmentEditor, ide_environment_editor, IDE, ENVIRONMENT_EDITOR, GtkWidget)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkWidget      *ide_environment_editor_new             (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeEnvironment *ide_environment_editor_get_environment (IdeEnvironmentEditor *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_environment_editor_set_environment (IdeEnvironmentEditor *self,
                                                         IdeEnvironment       *environment);
 
