@@ -62,6 +62,9 @@ typedef struct
 
   /* Queued source to save window size/etc */
   guint queued_window_save;
+
+  /* Vertical box for children */
+  GtkBox *box;
 } IdeWorkspacePrivate;
 
 typedef struct
@@ -76,7 +79,11 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICATION_WINDOW)
+static void buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICATION_WINDOW,
+                                  G_ADD_PRIVATE (IdeWorkspace)
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 static GParamSpec *properties [N_PROPS];
 static GSettings *settings;
@@ -418,12 +425,16 @@ ide_workspace_init (IdeWorkspace *self)
 
   priv->mru_link.data = self;
 
-  gtk_widget_init_template (GTK_WIDGET (self));
-
   /* Add org-gnome-Builder style CSS identifier */
   app_id = g_strdelimit (g_strdup (ide_get_application_id ()), ".", '-');
   gtk_widget_add_css_class (GTK_WIDGET (self), app_id);
   gtk_widget_add_css_class (GTK_WIDGET (self), "workspace");
+
+  /* Setup container for children widgetry */
+  priv->box = g_object_new (GTK_TYPE_BOX,
+                            "orientation", GTK_ORIENTATION_VERTICAL,
+                            NULL);
+  gtk_window_set_child (GTK_WINDOW (self), GTK_WIDGET (priv->box));
 
   /* Initialize GActions for workspace */
   _ide_workspace_init_actions (self);
@@ -648,4 +659,32 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
     ret = ide_extension_set_adapter_get_extension (priv->addins, plugin_info);
 
   return IDE_WORKSPACE_ADDIN (ret);
+}
+
+static void
+ide_workspace_add_child (GtkBuildable *buildable,
+                         GtkBuilder   *builder,
+                         GObject      *object,
+                         const char   *type)
+{
+  IdeWorkspace *self = (IdeWorkspace *)buildable;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (G_IS_OBJECT (object));
+
+  if (GTK_IS_WIDGET (object))
+    {
+      if (g_strcmp0 (type, "titlebar") == 0)
+        gtk_box_prepend (priv->box, GTK_WIDGET (object));
+      else
+        gtk_box_append (priv->box, GTK_WIDGET (object));
+    }
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->add_child = ide_workspace_add_child;
 }

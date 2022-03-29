@@ -11,13 +11,9 @@
           </object>
         </child>
         <child type="title">
-          <object class="GtkCenterBox">
+          <object class="GtkCenterBox" id="center_box">
             <child type="start">
               <object class="GtkBox" id="left_of_center">
-              </object>
-            </child>
-            <child type="center">
-              <object class="PanelOmniBar" id="omni_bar">
               </object>
             </child>
             <child type="end">

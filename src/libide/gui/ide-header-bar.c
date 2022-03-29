@@ -31,7 +31,7 @@ typedef struct
 
   AdwHeaderBar *header_bar;
   GtkMenuButton *menu_button;
-  PanelOmniBar *omni_bar;
+  GtkCenterBox *center_box;
   GtkBox *left;
   GtkBox *left_of_center;
   GtkBox *right;
@@ -50,6 +50,7 @@ G_DEFINE_TYPE_WITH_CODE (IdeHeaderBar, ide_header_bar, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (IdeHeaderBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
+static GtkBuildableIface *buildable_parent_iface;
 static GParamSpec *properties [N_PROPS];
 
 static void
@@ -123,11 +124,11 @@ ide_header_bar_class_init (IdeHeaderBarClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-header-bar.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, center_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, header_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, left);
   gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, left_of_center);
   gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, menu_button);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, omni_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, right);
   gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, right_of_center);
 }
@@ -206,14 +207,23 @@ ide_header_bar_add_child (GtkBuildable  *buildable,
                           const gchar   *type)
 {
   IdeHeaderBar *self = (IdeHeaderBar *)buildable;
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
   g_assert (IDE_IS_HEADER_BAR (self));
   g_assert (GTK_IS_BUILDER (builder));
   g_assert (G_IS_OBJECT (child));
 
+  if (ADW_IS_HEADER_BAR (child) && priv->header_bar == NULL)
+    {
+      buildable_parent_iface->add_child (buildable, builder, child, type);
+      return;
+    }
+
   if (GTK_IS_WIDGET (child))
     {
-      if (ide_str_equal0 (type, "left"))
+      if (ide_str_equal0 (type, "title"))
+        gtk_center_box_set_center_widget (priv->center_box, GTK_WIDGET (child));
+      else if (ide_str_equal0 (type, "left"))
         ide_header_bar_add (self, IDE_HEADER_BAR_POSITION_LEFT, 0, GTK_WIDGET (child));
       else if (ide_str_equal0 (type, "right"))
         ide_header_bar_add (self, IDE_HEADER_BAR_POSITION_RIGHT, 0, GTK_WIDGET (child));
@@ -236,6 +246,8 @@ failure:
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
+  buildable_parent_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = ide_header_bar_add_child;
 }
 
@@ -315,20 +327,4 @@ ide_header_bar_add (IdeHeaderBar         *self,
 
       gtk_box_insert_child_after (box, widget, sibling);
     }
-}
-
-/**
- * ide_header_bar_get_omni_bar:
- * @self: a #IdeHeaderBar
- *
- * Returns: (transfer none): a #PanelOmniBar
- */
-PanelOmniBar *
-ide_header_bar_get_omni_bar (IdeHeaderBar *self)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_HEADER_BAR (self), NULL);
-
-  return priv->omni_bar;
 }
