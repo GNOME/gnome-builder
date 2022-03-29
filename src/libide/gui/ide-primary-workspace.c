@@ -28,7 +28,6 @@
 #include "ide-omni-bar.h"
 #include "ide-primary-workspace-private.h"
 #include "ide-run-button.h"
-#include "ide-window-settings-private.h"
 
 /**
  * SECTION:ide-primary-workspace
@@ -105,5 +104,4 @@ ide_primary_workspace_init (IdePrimaryWorkspace *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   _ide_primary_workspace_init_actions (self);
-  _ide_window_settings_register (GTK_WINDOW (self));
 }
