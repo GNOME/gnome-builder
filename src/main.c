@@ -27,8 +27,6 @@
 #include <gtksourceview/gtksource.h>
 #include <libide-core.h>
 #include <libide-code.h>
-#include <libide-editor.h>
-#include <libide-greeter.h>
 #include <libide-gui.h>
 #include <libide-threading.h>
 #include <locale.h>
@@ -40,8 +38,8 @@
 
 #include "ide-application-private.h"
 #include "ide-build-ident.h"
+#include "ide-shell-private.h"
 #include "ide-thread-private.h"
-#include "ide-terminal-private.h"
 #include "ide-private.h"
 
 #include "bug-buddy.h"
@@ -137,19 +135,13 @@ verbose_cb (const gchar  *option_name,
 static void
 early_params_check (gint       *argc,
                     gchar    ***argv,
-                    gboolean   *standalone,
-                    gchar     **type,
-                    gchar     **plugin,
-                    gchar     **dbus_address)
+                    gboolean   *standalone)
 {
   g_autoptr(GOptionContext) context = NULL;
   g_autoptr(GOptionGroup) gir_group = NULL;
   GOptionEntry entries[] = {
     { "standalone", 's', 0, G_OPTION_ARG_NONE, standalone, N_("Run a new instance of Builder") },
     { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, verbose_cb },
-    { "plugin", 0, 0, G_OPTION_ARG_STRING, plugin },
-    { "type", 0, 0, G_OPTION_ARG_STRING, type },
-    { "dbus-address", 0, 0, G_OPTION_ARG_STRING, dbus_address },
     { NULL }
   };
 
@@ -211,7 +203,6 @@ main (gint   argc,
 {
   g_autofree gchar *plugin = NULL;
   g_autofree gchar *type = NULL;
-  g_autofree gchar *dbus_address = NULL;
   IdeApplication *app;
   const gchar *desktop;
   gboolean standalone = FALSE;
@@ -248,7 +239,7 @@ main (gint   argc,
   ide_log_init (TRUE, NULL);
 
   /* Extract options like -vvvv */
-  early_params_check (&argc, &argv, &standalone, &type, &plugin, &dbus_address);
+  early_params_check (&argc, &argv, &standalone);
 
   /* Log some info so it shows up in logs */
   g_message ("GNOME Builder %s (%s) from channel \"%s\" starting with ABI %s",
@@ -292,7 +283,7 @@ main (gint   argc,
   /* Guess the user shell early */
   _ide_guess_shell ();
 
-  app = _ide_application_new (standalone, type, plugin, dbus_address);
+  app = _ide_application_new (standalone);
   g_application_add_option_group (G_APPLICATION (app), g_irepository_get_option_group ());
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   /* Force disposal of the application (to help catch cleanup
