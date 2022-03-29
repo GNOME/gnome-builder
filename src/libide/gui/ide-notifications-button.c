@@ -22,8 +22,9 @@
 
 #include "config.h"
 
-#include "ide-notifications-button.h"
+#include <libide-gtk.h>
 
+#include "ide-notifications-button.h"
 #include "ide-notification-list-box-row-private.h"
 #include "ide-gui-global.h"
 
@@ -230,6 +231,8 @@ ide_notifications_button_class_init (IdeNotificationsButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, stack);
   gtk_widget_class_bind_template_callback (widget_class, ide_notifications_button_row_activated);
+
+  g_type_ensure (IDE_TYPE_ANIMATION);
 }
 
 static void
