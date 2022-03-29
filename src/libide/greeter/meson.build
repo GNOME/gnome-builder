@@ -65,6 +65,7 @@ libide_greeter_deps = [
   libide_core_dep,
   libide_gui_dep,
   libide_io_dep,
+  libide_search_dep,
   libide_threading_dep,
   libide_vcs_dep,
 ]
