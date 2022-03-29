@@ -73,7 +73,6 @@ typedef struct
 enum {
   PROP_0,
   PROP_CONTEXT,
-  PROP_VISIBLE_SURFACE,
   N_PROPS
 };
 
