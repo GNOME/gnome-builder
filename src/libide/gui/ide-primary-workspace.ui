@@ -27,13 +27,7 @@
           </object>
         </child>
         <child type="right">
-          <object class="GtkRevealer">
-            <property name="reveal-child">false</property>
-            <property name="transition-type">slide-left</property>
-            <child>
-              <object class="IdeNotificationsButton" id="notifications_button"/>
-            </child>
-          </object>
+          <object class="IdeNotificationsButton" id="notifications_button"/>
         </child>
       </object>
     </child>
