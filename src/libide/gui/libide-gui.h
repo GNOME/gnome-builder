@@ -44,7 +44,6 @@
 #include "ide-omni-bar.h"
 #include "ide-page.h"
 #include "ide-pane.h"
-#include "ide-panel.h"
 #include "ide-preferences-addin.h"
 #include "ide-preferences-surface.h"
 #include "ide-preferences-window.h"
