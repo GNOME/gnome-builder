@@ -683,3 +683,12 @@ ide_application_find_addin_by_module_name (IdeApplication *self,
 
   return peas_extension_set_get_extension (self->addins, plugin_info);
 }
+
+GMenu *
+ide_application_get_menu_by_id (IdeApplication *self,
+                                const char     *menu_id)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  return ide_menu_manager_get_menu_by_id (self->menu_manager, menu_id);
+}
