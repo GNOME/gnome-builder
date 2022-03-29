@@ -24,6 +24,7 @@
 
 #include <libide-threading.h>
 
+#include "ide-animation.h"
 #include "ide-gtk.h"
 
 void
@@ -145,4 +146,84 @@ ide_gtk_progress_bar_start_pulsing (GtkProgressBar *progress)
                                 g_object_unref);
   g_object_set_data (G_OBJECT (progress), "PULSE_ID", GUINT_TO_POINTER (tick_id));
   ide_gtk_progress_bar_tick_cb (progress);
+}
+
+static void
+show_callback (gpointer data)
+{
+  g_object_set_data (data, "IDE_FADE_ANIMATION", NULL);
+  g_object_unref (data);
+}
+
+static void
+hide_callback (gpointer data)
+{
+  GtkWidget *widget = data;
+
+  g_object_set_data (data, "IDE_FADE_ANIMATION", NULL);
+  gtk_widget_hide (widget);
+  gtk_widget_set_opacity (widget, 1.0);
+  g_object_unref (widget);
+}
+
+void
+ide_gtk_widget_show_with_fade (GtkWidget *widget)
+{
+  GdkFrameClock *frame_clock;
+  IdeAnimation *anim;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (!gtk_widget_get_visible (widget))
+    {
+      anim = g_object_get_data (G_OBJECT (widget), "IDE_FADE_ANIMATION");
+      if (anim != NULL)
+        ide_animation_stop (anim);
+
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      gtk_widget_set_opacity (widget, 0.0);
+      gtk_widget_show (widget);
+      anim = ide_object_animate_full (widget,
+                                      IDE_ANIMATION_LINEAR,
+                                      500,
+                                      frame_clock,
+                                      show_callback,
+                                      g_object_ref (widget),
+                                      "opacity", 1.0,
+                                      NULL);
+      g_object_set_data_full (G_OBJECT (widget),
+                              "IDE_FADE_ANIMATION",
+                              g_object_ref (anim),
+                              g_object_unref);
+    }
+}
+
+void
+ide_gtk_widget_hide_with_fade (GtkWidget *widget)
+{
+  GdkFrameClock *frame_clock;
+  IdeAnimation *anim;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (gtk_widget_get_visible (widget))
+    {
+      anim = g_object_get_data (G_OBJECT (widget), "IDE_FADE_ANIMATION");
+      if (anim != NULL)
+        ide_animation_stop (anim);
+
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      anim = ide_object_animate_full (widget,
+                                      IDE_ANIMATION_LINEAR,
+                                      1000,
+                                      frame_clock,
+                                      hide_callback,
+                                      g_object_ref (widget),
+                                      "opacity", 0.0,
+                                      NULL);
+      g_object_set_data_full (G_OBJECT (widget),
+                              "IDE_FADE_ANIMATION",
+                              g_object_ref (anim),
+                              g_object_unref);
+    }
 }

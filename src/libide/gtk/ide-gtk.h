@@ -41,5 +41,9 @@ IDE_AVAILABLE_IN_ALL
 void      ide_gtk_progress_bar_start_pulsing (GtkProgressBar  *progress);
 IDE_AVAILABLE_IN_ALL
 void      ide_gtk_progress_bar_stop_pulsing  (GtkProgressBar  *progress);
+IDE_AVAILABLE_IN_ALL
+void      ide_gtk_widget_show_with_fade      (GtkWidget       *widget);
+IDE_AVAILABLE_IN_ALL
+void      ide_gtk_widget_hide_with_fade      (GtkWidget       *widget);
 
 G_END_DECLS
