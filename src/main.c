@@ -226,11 +226,8 @@ main (gint   argc,
   g_set_prgname (ide_get_program_name ());
   g_set_application_name (_("Builder"));
 
-#if 0
-  /* TODO: allow support for parallel nightly install */
 #ifdef DEVELOPMENT_BUILD
-  ide_set_application_id ("org.gnome.Builder-Devel");
-#endif
+  ide_set_application_id ("org.gnome.Builder.Devel");
 #endif
 
   /* Early init of logging so that we get messages in a consistent
