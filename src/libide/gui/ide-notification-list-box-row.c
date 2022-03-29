@@ -22,9 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
-#include "ide-gui-private.h"
 #include "ide-notification-list-box-row-private.h"
 
 struct _IdeNotificationListBoxRow

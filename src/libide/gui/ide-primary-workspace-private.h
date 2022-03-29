@@ -1,6 +1,6 @@
-/* ide-notifications-button-popover-private.h
+/* ide-primary-workspace-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,10 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include "ide-primary-workspace.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_NOTIFICATIONS_BUTTON_POPOVER (ide_notifications_button_popover_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeNotificationsButtonPopover, ide_notifications_button_popover, IDE, NOTIFICATIONS_BUTTON_POPOVER, GtkPopover)
+void _ide_primary_workspace_init_actions (IdePrimaryWorkspace *self);
 
 G_END_DECLS

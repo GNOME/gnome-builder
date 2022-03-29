@@ -25,7 +25,6 @@
 #include <libide-plugins.h>
 
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 #include "ide-workspace-addin.h"
 #include "ide-workspace-private.h"
 #include "ide-workbench-private.h"
