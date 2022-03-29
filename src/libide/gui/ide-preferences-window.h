@@ -62,8 +62,12 @@ struct _IdePreferenceItemEntry
   IdePreferenceCallback callback;
 
   /* Callback specific data */
+
+  /* Title/Subtitle for helper functions */
   const char *title;
   const char *subtitle;
+
+  /* Schema info for helper functions */
   const char *schema_id;
   const char *path;
   const char *key;
@@ -104,5 +108,12 @@ void       ide_preferences_window_add_item   (IdePreferencesWindow          *sel
                                               IdePreferenceCallback          callback,
                                               gpointer                       user_data,
                                               GDestroyNotify                 user_data_destroy);
+IDE_AVAILABLE_IN_ALL
+void       ide_preferences_window_toggle     (const char                    *page_name,
+                                              const IdePreferenceItemEntry  *entry,
+                                              AdwPreferencesGroup           *group,
+                                              gpointer                       user_data);
+
+
 
 G_END_DECLS
