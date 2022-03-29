@@ -34,7 +34,7 @@ static void ide_widget_notify_context    (GtkWidget  *toplevel,
                                           GParamSpec *pspec,
                                           GtkWidget  *widget);
 static void ide_widget_hierarchy_changed (GtkWidget  *widget,
-                                          GtkWidget  *previous_toplevel,
+                                          GParamSpec *pspec,
                                           gpointer    user_data);
 
 static void
