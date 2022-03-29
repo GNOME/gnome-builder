@@ -1,6 +1,6 @@
 /* ide-notification-stack.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-notification-stack-private.h"
 #include "ide-notification-view-private.h"
 
@@ -32,9 +30,11 @@
 
 struct _IdeNotificationStack
 {
-  GtkStack         parent_instance;
-  DzlSignalGroup  *signals;
-  DzlBindingGroup *bindings;
+  GtkWidget        parent_instance;
+  GtkStack        *stack;
+  GPtrArray       *pages;
+  IdeSignalGroup  *signals;
+  IdeBindingGroup *bindings;
   GListModel      *model;
   gdouble          progress;
   guint            carousel_source;
@@ -52,7 +52,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_FINAL_TYPE (IdeNotificationStack, ide_notification_stack, GTK_TYPE_STACK)
+G_DEFINE_FINAL_TYPE (IdeNotificationStack, ide_notification_stack, GTK_TYPE_WIDGET)
 
 static guint signals [N_SIGNALS];
 static GParamSpec *properties [N_PROPS];
@@ -117,21 +117,18 @@ ide_notification_stack_items_changed_cb (IdeNotificationStack *self,
                                          GListModel           *model)
 {
   GtkWidget *urgent = NULL;
-  GList *children;
-  GList *iter;
 
   g_assert (IDE_IS_NOTIFICATION_STACK (self));
 
-  children = gtk_container_get_children (GTK_CONTAINER (self));
-  iter = g_list_nth (children, position);
+  if (self->pages == NULL)
+    return;
 
-  for (guint i = 0; i < removed; i++, iter = iter->next)
+  for (guint i = 0; i < removed; i++)
     {
-      GtkWidget *child = iter->data;
-      gtk_widget_destroy (child);
+      GtkStackPage *page = g_ptr_array_index (self->pages, position);
+      g_ptr_array_remove_index (self->pages, position);
+      gtk_stack_remove (self->stack, gtk_stack_page_get_child (page));
     }
-
-  g_list_free (children);
 
   for (guint i = 0; i < added; i++)
     {
@@ -140,10 +137,9 @@ ide_notification_stack_items_changed_cb (IdeNotificationStack *self,
                                       "notification", notif,
                                       "visible", TRUE,
                                       NULL);
+      GtkStackPage *page = gtk_stack_add_child (self->stack, view);
 
-      gtk_container_add_with_properties (GTK_CONTAINER (self), view,
-                                         "position", position + i,
-                                         NULL);
+      g_ptr_array_insert (self->pages, position + i, page);
 
       if (!urgent && ide_notification_get_urgent (notif))
         urgent = view;
@@ -151,7 +147,7 @@ ide_notification_stack_items_changed_cb (IdeNotificationStack *self,
 
   if (urgent != NULL)
     {
-      gtk_stack_set_visible_child (GTK_STACK (self), urgent);
+      gtk_stack_set_visible_child (self->stack, urgent);
       g_clear_handle_id (&self->carousel_source, g_source_remove);
     }
 
@@ -164,47 +160,57 @@ ide_notification_stack_items_changed_cb (IdeNotificationStack *self,
 }
 
 static void
-ide_notification_stack_notify_visible_child (IdeNotificationStack *self)
+ide_notification_stack_notify_visible_child (IdeNotificationStack *self,
+                                             GParamSpec           *pspec,
+                                             GtkStack             *stack)
 {
   g_assert (IDE_IS_NOTIFICATION_STACK (self));
+  g_assert (GTK_IS_STACK (stack));
 
   self->progress = 0.0;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
 
-  dzl_binding_group_set_source (self->bindings,
+  ide_binding_group_set_source (self->bindings,
                                 ide_notification_stack_get_visible (self));
 
   g_signal_emit (self, signals [CHANGED], 0);
 }
 
 static void
-ide_notification_stack_destroy (GtkWidget *widget)
+ide_notification_stack_dispose (GObject *object)
 {
-  IdeNotificationStack *self = (IdeNotificationStack *)widget;
+  IdeNotificationStack *self = (IdeNotificationStack *)object;
+
+  g_clear_pointer (&self->pages, g_ptr_array_unref);
 
   if (self->signals != NULL)
-    dzl_signal_group_set_target (self->signals, NULL);
+    {
+      ide_signal_group_set_target (self->signals, NULL);
+      g_clear_object (&self->signals);
+    }
 
   if (self->bindings != NULL)
-    dzl_binding_group_set_source (self->bindings, NULL);
+    {
+      ide_binding_group_set_source (self->bindings, NULL);
+      g_clear_object (&self->bindings);
+    }
 
-  g_clear_object (&self->bindings);
-  g_clear_object (&self->signals);
   g_clear_handle_id (&self->carousel_source, g_source_remove);
 
-  GTK_WIDGET_CLASS (ide_notification_stack_parent_class)->destroy (widget);
+  g_clear_pointer ((GtkWidget **)&self->stack, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (ide_notification_stack_parent_class)->dispose (object);
 }
 
 static void
 ide_notification_stack_class_init (IdeNotificationStackClass *klass)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_notification_stack_dispose;
   object_class->get_property = ide_notification_stack_get_property;
   object_class->set_property = ide_notification_stack_set_property;
-
-  widget_class->destroy = ide_notification_stack_destroy;
 
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
@@ -224,31 +230,37 @@ ide_notification_stack_class_init (IdeNotificationStackClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, "notificationstack");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
 ide_notification_stack_init (IdeNotificationStack *self)
 {
-  self->signals = dzl_signal_group_new (G_TYPE_LIST_MODEL);
+  self->pages = g_ptr_array_new ();
 
-  dzl_signal_group_connect_object (self->signals,
+  self->signals = ide_signal_group_new (G_TYPE_LIST_MODEL);
+  ide_signal_group_connect_object (self->signals,
                                    "items-changed",
                                    G_CALLBACK (ide_notification_stack_items_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  self->bindings = dzl_binding_group_new ();
-
-  dzl_binding_group_bind (self->bindings, "progress", self, "progress",
+  self->bindings = ide_binding_group_new ();
+  ide_binding_group_bind (self->bindings, "progress",
+                          self, "progress",
                           G_BINDING_SYNC_CREATE);
 
-  gtk_stack_set_transition_duration (GTK_STACK (self), TRANSITION_DURATION);
-  gtk_stack_set_transition_type (GTK_STACK (self), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
+  self->stack = g_object_new (GTK_TYPE_STACK,
+                              "transition-duration", TRANSITION_DURATION,
+                              "transition-type", GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN,
+                              NULL);
+  gtk_widget_set_parent (GTK_WIDGET (self->stack), GTK_WIDGET (self));
 
-  g_signal_connect (self,
-                    "notify::visible-child",
-                    G_CALLBACK (ide_notification_stack_notify_visible_child),
-                    NULL);
+  g_signal_connect_object (self->stack,
+                           "notify::visible-child",
+                           G_CALLBACK (ide_notification_stack_notify_visible_child),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 void
@@ -267,8 +279,14 @@ ide_notification_stack_bind_model (IdeNotificationStack *self,
       if (model != NULL)
         n_items = g_list_model_get_n_items (model);
 
-      gtk_container_foreach (GTK_CONTAINER (self), (GtkCallback)gtk_widget_destroy, NULL);
-      dzl_signal_group_set_target (self->signals, model);
+      while (self->pages->len > 0)
+        {
+          GtkStackPage *page = g_ptr_array_index (self->pages, 0);
+          g_ptr_array_remove_index (self->pages, 0);
+          gtk_stack_remove (self->stack, gtk_stack_page_get_child (page));
+        }
+
+      ide_signal_group_set_target (self->signals, model);
 
       if (n_items > 0)
         ide_notification_stack_items_changed_cb (self, 0, 0, n_items, model);
@@ -290,25 +308,27 @@ void
 ide_notification_stack_move_next (IdeNotificationStack *self)
 {
   GtkWidget *child;
-  gint position;
 
   g_return_if_fail (IDE_IS_NOTIFICATION_STACK (self));
 
-  if ((child = gtk_stack_get_visible_child (GTK_STACK (self))))
+  if ((child = gtk_stack_get_visible_child (self->stack)))
     {
-      GList *children;
+      for (guint i = 0; i < self->pages->len; i++)
+        {
+          GtkStackPage *page = g_ptr_array_index (self->pages, i);
 
-      gtk_container_child_get (GTK_CONTAINER (self), child,
-                               "position", &position,
-                               NULL);
-      children = gtk_container_get_children (GTK_CONTAINER (self));
-      if (!(child = g_list_nth_data (children, position + 1)))
-        child = children->data;
-      g_list_free (children);
+          if (child == gtk_stack_page_get_child (page) && i + 1 < self->pages->len)
+            {
+              page = g_ptr_array_index (self->pages, i + 1);
+              child = gtk_stack_page_get_child (page);
 
-      gtk_stack_set_transition_type (GTK_STACK (self), GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN);
-      gtk_stack_set_visible_child (GTK_STACK (self), child);
-      gtk_stack_set_transition_type (GTK_STACK (self), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
+              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN);
+              gtk_stack_set_visible_child (self->stack, child);
+              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
+
+              break;
+            }
+        }
 
       if (!self->in_carousel)
         g_clear_handle_id (&self->carousel_source, g_source_remove);
@@ -319,27 +339,27 @@ void
 ide_notification_stack_move_previous (IdeNotificationStack *self)
 {
   GtkWidget *child;
-  gint position;
 
   g_return_if_fail (IDE_IS_NOTIFICATION_STACK (self));
 
-  if ((child = gtk_stack_get_visible_child (GTK_STACK (self))))
+  if ((child = gtk_stack_get_visible_child (self->stack)))
     {
-      GList *children;
+      for (guint i = 0; i < self->pages->len; i++)
+        {
+          GtkStackPage *page = g_ptr_array_index (self->pages, i);
 
-      gtk_container_child_get (GTK_CONTAINER (self), child,
-                               "position", &position,
-                               NULL);
-      children = gtk_container_get_children (GTK_CONTAINER (self));
-      if (position == 0)
-        child = g_list_last (children)->data;
-      else
-        child = g_list_nth_data (children, position - 1);
-      g_list_free (children);
+          if (child == gtk_stack_page_get_child (page) && i > 0)
+            {
+              page = g_ptr_array_index (self->pages, i - 1);
+              child = gtk_stack_page_get_child (page);
 
-      gtk_stack_set_transition_type (GTK_STACK (self), GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
-      gtk_stack_set_visible_child (GTK_STACK (self), child);
-      gtk_stack_set_transition_type (GTK_STACK (self), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
+              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
+              gtk_stack_set_visible_child (self->stack, child);
+              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
+
+              break;
+            }
+        }
 
       if (!self->in_carousel)
         g_clear_handle_id (&self->carousel_source, g_source_remove);
@@ -353,8 +373,6 @@ ide_notification_stack_move_previous (IdeNotificationStack *self)
  * Gets the visible notification in the stack.
  *
  * Returns: (transfer none) (nullable): an #IdeNotification or %NULL
- *
- * Since: 3.32
  */
 IdeNotification *
 ide_notification_stack_get_visible (IdeNotificationStack *self)
@@ -363,7 +381,7 @@ ide_notification_stack_get_visible (IdeNotificationStack *self)
 
   g_return_val_if_fail (IDE_IS_NOTIFICATION_STACK (self), NULL);
 
-  if ((child = gtk_stack_get_visible_child (GTK_STACK (self))))
+  if ((child = gtk_stack_get_visible_child (self->stack)))
     {
       if (IDE_IS_NOTIFICATION_VIEW (child))
         return ide_notification_view_get_notification (IDE_NOTIFICATION_VIEW (child));

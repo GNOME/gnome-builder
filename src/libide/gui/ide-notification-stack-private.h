@@ -21,13 +21,14 @@
 #pragma once
 
 #include <gtk/gtk.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_NOTIFICATION_STACK (ide_notification_stack_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeNotificationStack, ide_notification_stack, IDE, NOTIFICATION_STACK, GtkStack)
+G_DECLARE_FINAL_TYPE (IdeNotificationStack, ide_notification_stack, IDE, NOTIFICATION_STACK, GtkWidget)
 
 GtkWidget       *ide_notification_stack_new           (void);
 void             ide_notification_stack_bind_model    (IdeNotificationStack *self,
