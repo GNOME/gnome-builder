@@ -80,11 +80,14 @@ void           ide_application_foreach_workbench        (IdeApplication         
 IDE_AVAILABLE_IN_ALL
 IdeWorkbench  *ide_application_find_workbench_for_file  (IdeApplication           *self,
                                                          GFile                    *file);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 gpointer       ide_application_find_addin_by_module_name (IdeApplication           *self,
                                                           const gchar              *module_name);
-IDE_AVAILABLE_IN_41
+IDE_AVAILABLE_IN_ALL
 char          *ide_application_create_cancel_action      (IdeApplication           *self,
                                                           GCancellable             *cancellable);
+IDE_AVAILABLE_IN_ALL
+GMenu         *ide_application_get_menu_by_id            (IdeApplication           *self,
+                                                          const char               *menu_id);
 
 G_END_DECLS
