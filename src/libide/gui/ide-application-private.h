@@ -26,7 +26,6 @@
 #include <libpeas/peas.h>
 
 #include "ide-application.h"
-#include "ide-keybindings.h"
 
 G_BEGIN_DECLS
 
@@ -60,11 +59,6 @@ struct _IdeApplication
    * for various keys.
    */
   GSettings *settings;
-
-  /* Tracks changes to plugins and updates the available keybindings
-   * to ensure they are loaded correctly (including .css files).
-   */
-  IdeKeybindings *keybindings;
 
   /* We need to track the GResource files that were manually loaded for
    * plugins on disk (generally Python plugins that need resources). That
