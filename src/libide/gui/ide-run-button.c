@@ -22,30 +22,23 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+
 #include <libide-foundry.h>
 
+#include "ide-application.h"
 #include "ide-gui-global.h"
 #include "ide-run-button.h"
-
 #include "ide-run-manager-private.h"
 
 struct _IdeRunButton
 {
-  GtkBox                parent_instance;
-
-  GtkButton            *button;
-  GtkImage             *button_image;
-  DzlMenuButton        *menu_button;
-  GtkShortcutsShortcut *run_shortcut;
-  GtkLabel             *run_tooltip_message;
-  DzlShortcutTooltip   *tooltip;
-
-  char *run_handler_icon_name;
+  GtkWidget       parent_instance;
+  AdwSplitButton *split_button;
+  char           *run_handler_icon_name;
 };
 
-G_DEFINE_FINAL_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_WIDGET)
 
 static void
 ide_run_button_handler_set (IdeRunButton  *self,
@@ -69,7 +62,7 @@ ide_run_button_handler_set (IdeRunButton  *self,
       if (g_strcmp0 (info->id, handler) == 0)
         {
           self->run_handler_icon_name = g_strdup (info->icon_name);
-          g_object_set (self->button_image, "icon-name", info->icon_name, NULL);
+          g_object_set (self->split_button, "icon-name", info->icon_name, NULL);
           break;
         }
     }
@@ -97,8 +90,8 @@ on_run_busy_state_changed_cb (IdeRunButton  *self,
       action_name = "run-manager.stop";
     }
 
-  g_object_set (self->button_image, "icon-name", icon_name, NULL);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (self->button), action_name);
+  g_object_set (self->split_button, "icon-name", icon_name, NULL);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (self->split_button), action_name);
 }
 
 static void
@@ -175,7 +168,10 @@ ide_run_button_query_tooltip (IdeRunButton *self,
 
       if (g_strcmp0 (info->id, handler) == 0)
         {
+          g_autofree char *text = NULL;
+
           gboolean enabled;
+
           /* Figure out if the run action is enabled. If it
            * is not, then we should inform the user that
            * the project cannot be run yet because the
@@ -190,13 +186,16 @@ ide_run_button_query_tooltip (IdeRunButton *self,
 
           if (!enabled)
             {
-              gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_tooltip_message));
+              gtk_tooltip_set_text (tooltip, _("Invalid project configuration"));
               return TRUE;
             }
 
-          /* The shortcut tooltip will set this up after us */
-          dzl_shortcut_tooltip_set_accel (self->tooltip, info->accel);
-          dzl_shortcut_tooltip_set_title (self->tooltip, info->title);
+          if (info->accel && info->title)
+            text = g_strdup_printf ("%s %s", info->accel, info->title);
+          else if (info->title)
+            text = g_strdup (info->title);
+
+          gtk_tooltip_set_text (tooltip, text);
         }
     }
 
@@ -204,25 +203,39 @@ ide_run_button_query_tooltip (IdeRunButton *self,
 }
 
 static void
+ide_run_button_dispose (GObject *object)
+{
+  IdeRunButton *self = (IdeRunButton *)object;
+
+  g_clear_pointer ((GtkWidget **)&self->split_button, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (ide_run_button_parent_class)->dispose (object);
+}
+
+static void
 ide_run_button_class_init (IdeRunButtonClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ide_run_button_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-run-button.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, button);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, button_image);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, menu_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_shortcut);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_tooltip_message);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, tooltip);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, split_button);
 }
 
 static void
 ide_run_button_init (IdeRunButton *self)
 {
+  GMenu *menu;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->button,
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "run-menu");
+  adw_split_button_set_menu_model (self->split_button, G_MENU_MODEL (menu));
+
+  g_signal_connect_object (self->split_button,
                            "query-tooltip",
                            G_CALLBACK (ide_run_button_query_tooltip),
                            self,

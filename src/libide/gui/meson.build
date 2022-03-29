@@ -25,6 +25,7 @@ libide_gui_public_headers = [
   'ide-preferences-addin.h',
   'ide-preferences-window.h',
   'ide-primary-workspace.h',
+  'ide-run-button.h',
   'ide-session-addin.h',
   'ide-workbench.h',
   'ide-workbench-addin.h',
@@ -48,7 +49,6 @@ libide_gui_private_headers = [
   'ide-notification-view-private.h',
   'ide-preferences-builtin-private.h',
   'ide-primary-workspace-private.h',
-  'ide-run-button.h',
   'ide-session-private.h',
 ]
 
@@ -63,7 +63,6 @@ libide_gui_private_sources = [
   'ide-notification-view.c',
   'ide-preferences-builtin.c',
   'ide-primary-workspace-actions.c',
-  'ide-run-button.c',
   'ide-session.c',
   'ide-workspace-actions.c',
 ]
@@ -89,6 +88,7 @@ libide_gui_public_sources = [
   'ide-primary-workspace.c',
   'ide-preferences-addin.c',
   'ide-preferences-window.c',
+  'ide-run-button.c',
   'ide-session-addin.c',
   'ide-workbench.c',
   'ide-workbench-addin.c',
