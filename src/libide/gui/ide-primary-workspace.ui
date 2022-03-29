@@ -4,33 +4,14 @@
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
         <property name="menu-id">ide-primary-workspace-menu</property>
-        <property name="show-close-button">true</property>
-        <property name="show-fullscreen-button">false</property>
-        <property name="visible">true</property>
-        <child type="left">
-          <object class="IdeSurfacesButton" id="surface_menu_button">
-            <property name="focus-on-click">false</property>
-            <property name="menu-id">ide-primary-workspace-surfaces-menu</property>
-            <property name="show-accels">true</property>
-            <property name="show-arrow">true</property>
-            <property name="show-icons">true</property>
-            <!-- disable transitions since they'll cause jitter with the
-                 whole surface changing below it. -->
-            <property name="transitions-enabled">false</property>
-            <property name="has-tooltip">true</property>
-            <property name="tooltip-text" translatable="yes">Switch surface</property>
-          </object>
-        </child>
         <child type="title">
           <object class="IdeOmniBar" id="omni_bar">
             <property name="halign">center</property>
             <property name="hexpand">false</property>
             <property name="hexpand-set">true</property>
-            <property name="visible">true</property>
             <child type="placeholder">
               <object class="GtkLabel" id="project_title">
                 <property name="ellipsize">end</property>
-                <property name="visible">true</property>
                 <property name="xalign">0.0</property>
               </object>
             </child>
@@ -38,38 +19,23 @@
         </child>
         <child type="right-of-center">
           <object class="IdeRunButton" id="run_button">
-            <property name="visible">true</property>
           </object>
         </child>
         <child type="right">
-          <object class="IdeSearchButton" id="search_button">
-            <property name="visible">true</property>
-            <child internal-child="entry">
-              <object class="DzlSuggestionEntry">
-                <property name="max-width-chars">20</property>
-              </object>
-            </child>
+          <object class="GtkButton" id="search_button">
+            <property name="icon-name">edit-find-symbolic</property>
           </object>
         </child>
         <child type="right">
           <object class="GtkRevealer">
             <property name="reveal-child">false</property>
             <property name="transition-type">slide-left</property>
-            <property name="visible">true</property>
             <child>
-              <object class="IdeNotificationsButton" id="notifications_button">
-                <property name="show-theatric">false</property>
-                <property name="visible">true</property>
-              </object>
+              <object class="IdeNotificationsButton" id="notifications_button"/>
             </child>
           </object>
         </child>
       </object>
     </child>
   </template>
-  <object class="DzlShortcutTooltip" id="search_tooltip">
-    <property name="title" translatable="yes">Search your project</property>
-    <property name="command-id">org.gnome.builder.workspace.global-search</property>
-    <property name="widget">search_button</property>
-  </object>
 </interface>
