@@ -8,7 +8,5 @@
     <file preprocess="xml-stripblanks">ide-terminal-popover.ui</file>
     <file preprocess="xml-stripblanks">ide-terminal-popover-row.ui</file>
     <file preprocess="xml-stripblanks">ide-terminal-search.ui</file>
-    <file preprocess="xml-stripblanks">ide-terminal-surface.ui</file>
-    <file preprocess="xml-stripblanks">ide-terminal-workspace.ui</file>
   </gresource>
 </gresources>

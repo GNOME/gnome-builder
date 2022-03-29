@@ -15,9 +15,7 @@ libide_terminal_public_headers = [
   'ide-terminal-popover.h',
   'ide-terminal-launcher.h',
   'ide-terminal-search.h',
-  'ide-terminal-surface.h',
   'ide-terminal-util.h',
-  'ide-terminal-workspace.h',
   'ide-terminal.h',
   'libide-terminal.h',
 ]
@@ -40,9 +38,7 @@ libide_terminal_public_sources = [
   'ide-terminal-popover.c',
   'ide-terminal-launcher.c',
   'ide-terminal-search.c',
-  'ide-terminal-surface.c',
   'ide-terminal-util.c',
-  'ide-terminal-workspace.c',
   'ide-terminal.c',
 ]
 
