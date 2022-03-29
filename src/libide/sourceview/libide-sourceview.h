@@ -26,7 +26,6 @@ G_BEGIN_DECLS
 
 #define IDE_SOURCEVIEW_INSIDE
 
-#include "ide-cursor.h"
 #include "ide-line-change-gutter-renderer.h"
 #include "ide-source-view.h"
 
