@@ -20,14 +20,22 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
 #include <gtk/gtk.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_RUN_BUTTON (ide_run_button_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeRunButton, ide_run_button, IDE, RUN_BUTTON, GtkBox)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeRunButton, ide_run_button, IDE, RUN_BUTTON, GtkWidget)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_run_button_new (void);
 
 G_END_DECLS
