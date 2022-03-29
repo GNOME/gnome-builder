@@ -31,8 +31,6 @@
 #include "ide-session-addin.h"
 #include "ide-session-private.h"
 
-#include "ide-gui-private.h"
-
 struct _IdeSession
 {
   IdeObject               parent_instance;
@@ -895,9 +893,6 @@ on_session_addin_page_saved_cb (GObject      *object,
 
 static void
 foreach_page_in_grid_save_cb (IdePage  *page,
-                              guint     column,
-                              guint     row,
-                              guint     depth,
                               gpointer  user_data)
 {
   IdeTask *task = user_data;
