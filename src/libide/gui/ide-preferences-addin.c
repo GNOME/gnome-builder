@@ -45,7 +45,7 @@ ide_preferences_addin_load (IdePreferencesAddin  *self,
                             IdePreferencesWindow *preferences)
 {
   g_return_if_fail (IDE_IS_PREFERENCES_ADDIN (self));
-  g_return_if_fail (DZL_IS_PREFERENCES (preferences));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (preferences));
 
   if (IDE_PREFERENCES_ADDIN_GET_IFACE (self)->load)
     IDE_PREFERENCES_ADDIN_GET_IFACE (self)->load (self, preferences);
@@ -65,7 +65,7 @@ ide_preferences_addin_unload (IdePreferencesAddin  *self,
                               IdePreferencesWindow *preferences)
 {
   g_return_if_fail (IDE_IS_PREFERENCES_ADDIN (self));
-  g_return_if_fail (DZL_IS_PREFERENCES (preferences));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (preferences));
 
   if (IDE_PREFERENCES_ADDIN_GET_IFACE (self)->unload)
     IDE_PREFERENCES_ADDIN_GET_IFACE (self)->unload (self, preferences);

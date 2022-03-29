@@ -26,6 +26,8 @@
 
 #include <libide-core.h>
 
+#include "ide-preferences-window.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_ADDIN (ide_preferences_addin_get_type())
