@@ -37,8 +37,6 @@
  * addin will only be loaded in the primary workspace. You may specify
  * multiple workspace kinds such as `primary` or `secondary` separated
  * by a comma such as `primary,secondary;`.
- *
- * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeWorkspaceAddin, ide_workspace_addin, G_TYPE_OBJECT)
@@ -56,8 +54,6 @@ ide_workspace_addin_default_init (IdeWorkspaceAddinInterface *iface)
  *
  * This is a good place to modify the workspace from your addin.
  * Remember to unmodify the workspace in ide_workspace_addin_unload().
- *
- * Since: 3.32
  */
 void
 ide_workspace_addin_load (IdeWorkspaceAddin *self,
@@ -79,8 +75,6 @@ ide_workspace_addin_load (IdeWorkspaceAddin *self,
  *
  * This is a good place to unmodify the workspace from anything you
  * did in ide_workspace_addin_load().
- *
- * Since: 3.32
  */
 void
 ide_workspace_addin_unload (IdeWorkspaceAddin *self,
@@ -92,49 +86,4 @@ ide_workspace_addin_unload (IdeWorkspaceAddin *self,
 
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->unload)
     IDE_WORKSPACE_ADDIN_GET_IFACE (self)->unload (self, workspace);
-}
-
-/**
- * ide_workspace_addin_surface_set:
- * @self: an #IdeWorkspaceAddin
- * @surface: (nullable): an #IdeSurface or %NULL
- *
- * This function is called to notify the addin of the current surface.
- * It may be set to %NULL before unloading the addin to allow addins
- * to do surface change state handling and cleanup in one function.
- *
- * Since: 3.32
- */
-void
-ide_workspace_addin_surface_set (IdeWorkspaceAddin *self,
-                                 IdeSurface        *surface)
-{
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_WORKSPACE_ADDIN (self));
-  g_return_if_fail (!surface || IDE_IS_SURFACE (surface));
-
-  if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->surface_set)
-    IDE_WORKSPACE_ADDIN_GET_IFACE (self)->surface_set (self, surface);
-}
-
-/**
- * ide_workspace_addin_can_close:
- * @self: an #IdeWorkspaceAddin
- *
- * This method is called to determine if the workspace can close. If the addin
- * needs to prevent the workspace closing, then return %FALSE; otherwise %TRUE.
- *
- * Returns: %TRUE if the workspace can close; otherwise %FALSE.
- *
- * Since: 3.34
- */
-gboolean
-ide_workspace_addin_can_close (IdeWorkspaceAddin *self)
-{
-  g_return_val_if_fail (IDE_IS_WORKSPACE_ADDIN (self), TRUE);
-
-  if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->can_close)
-    return IDE_WORKSPACE_ADDIN_GET_IFACE (self)->can_close (self);
-
-  return TRUE;
 }

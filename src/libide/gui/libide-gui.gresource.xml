@@ -16,6 +16,5 @@
     <file preprocess="xml-stripblanks">ide-preferences-window.ui</file>
     <file preprocess="xml-stripblanks">ide-primary-workspace.ui</file>
     <file preprocess="xml-stripblanks">ide-run-button.ui</file>
-    <file preprocess="xml-stripblanks">ide-workspace.ui</file>
   </gresource>
 </gresources>
