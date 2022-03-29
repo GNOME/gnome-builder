@@ -12,7 +12,6 @@
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
-            </child>
             <child>
               <object class="GtkBox" id="sections_box">
                 <property name="orientation">vertical</property>

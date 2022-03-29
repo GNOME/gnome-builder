@@ -48,12 +48,19 @@ struct _IdeWorkspaceClass
 
   const gchar *kind;
 
-  void     (*context_set)          (IdeWorkspace    *self,
-                                    IdeContext      *context);
-  void     (*foreach_page)         (IdeWorkspace    *self,
-                                    IdePageCallback  callback,
-                                    gpointer         user_data);
-  IdePage *(*get_most_recent_page) (IdeWorkspace    *self);
+  void     (*context_set)           (IdeWorkspace         *self,
+                                     IdeContext           *context);
+  void     (*foreach_page)          (IdeWorkspace         *self,
+                                     IdePageCallback       callback,
+                                     gpointer              user_data);
+  IdePage *(*get_most_recent_page)  (IdeWorkspace         *self);
+  void     (*agree_to_close_async)  (IdeWorkspace         *self,
+                                     GCancellable         *cancellable,
+                                     GAsyncReadyCallback   callback,
+                                     gpointer              user_data);
+  gboolean (*agree_to_close_finish) (IdeWorkspace         *self,
+                                     GAsyncResult         *result,
+                                     GError              **error);
 
   /*< private >*/
   gpointer _reserved[8];

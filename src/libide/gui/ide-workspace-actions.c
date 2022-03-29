@@ -99,7 +99,6 @@ ide_workspace_actions_command (GSimpleAction *action,
 
 static const GActionEntry actions[] = {
   { "show-menu", ide_workspace_actions_show_menu },
-  { "surface", ide_workspace_actions_surface, "s" },
   { "close", ide_workspace_actions_close },
   { "command", ide_workspace_actions_command, "s" },
 };

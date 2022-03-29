@@ -20,29 +20,13 @@
 
 #pragma once
 
-#include <adwaita.h>
-#include <libpeas/peas.h>
-#include <libpeas/peas-autocleanups.h>
-#include <libpanel.h>
-
-#include <libide-core.h>
-#include <libide-projects.h>
-
 #include "ide-header-bar.h"
-#include "ide-notification-list-box-row-private.h"
-#include "ide-notification-stack-private.h"
-#include "ide-notification-view-private.h"
-#include "ide-page.h"
 #include "ide-primary-workspace.h"
-#include "ide-workbench.h"
-#include "ide-workspace.h"
 
 G_BEGIN_DECLS
 
-void      _ide_primary_workspace_init_actions   (IdePrimaryWorkspace *self);
-void      _ide_header_bar_init_shortcuts        (IdeHeaderBar        *self);
-void      _ide_header_bar_show_menu             (IdeHeaderBar        *self);
-void      _ide_surface_set_fullscreen           (IdeSurface          *self,
-                                                 gboolean             fullscreen);
+void _ide_primary_workspace_init_actions (IdePrimaryWorkspace *self);
+void _ide_header_bar_init_shortcuts      (IdeHeaderBar        *self);
+void _ide_header_bar_show_menu           (IdeHeaderBar        *self);
 
 G_END_DECLS
