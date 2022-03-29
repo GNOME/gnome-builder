@@ -49,7 +49,6 @@
 #include "ide-preferences-addin.h"
 #include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
-#include "ide-search-button.h"
 #include "ide-session-addin.h"
 #include "ide-transient-sidebar.h"
 #include "ide-workbench.h"
