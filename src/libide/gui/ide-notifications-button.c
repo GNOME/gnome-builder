@@ -164,7 +164,7 @@ ide_notifications_button_context_set_cb (GtkWidget  *widget,
   ide_notifications_button_bind_model (self, G_LIST_MODEL (notifications));
 
   g_object_bind_property (notifications, "progress",
-                          self->icon, "progress",
+                          self->progress, "progress",
                           G_BINDING_SYNC_CREATE);
   g_signal_connect_object (notifications,
                            "notify::has-progress",
@@ -226,6 +226,7 @@ ide_notifications_button_class_init (IdeNotificationsButtonClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, icon);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, progress);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, revealer);

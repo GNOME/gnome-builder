@@ -25,7 +25,6 @@
 #endif
 
 #include <adwaita.h>
-#include <libpanel.h>
 #include <libide-core.h>
 
 G_BEGIN_DECLS
@@ -50,18 +49,16 @@ struct _IdeHeaderBarClass
 };
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget    *ide_header_bar_new                        (void);
+GtkWidget  *ide_header_bar_new         (void);
 IDE_AVAILABLE_IN_ALL
-void          ide_header_bar_add                        (IdeHeaderBar         *self,
-                                                         IdeHeaderBarPosition  position,
-                                                         int                   priority,
-                                                         GtkWidget            *widget);
+void        ide_header_bar_add         (IdeHeaderBar         *self,
+                                        IdeHeaderBarPosition  position,
+                                        int                   priority,
+                                        GtkWidget            *widget);
 IDE_AVAILABLE_IN_ALL
-const char   *ide_header_bar_get_menu_id                (IdeHeaderBar *self);
+const char *ide_header_bar_get_menu_id (IdeHeaderBar *self);
 IDE_AVAILABLE_IN_ALL
-void          ide_header_bar_set_menu_id                (IdeHeaderBar *self,
-                                                         const char   *menu_id);
-IDE_AVAILABLE_IN_ALL
-PanelOmniBar *ide_header_bar_get_omni_bar               (IdeHeaderBar *self);
+void        ide_header_bar_set_menu_id (IdeHeaderBar *self,
+                                        const char   *menu_id);
 
 G_END_DECLS
