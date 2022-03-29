@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-notification-view-private.h"
 
 struct _IdeNotificationView
@@ -31,7 +29,7 @@ struct _IdeNotificationView
   AdwBin           parent_instance;
 
   IdeNotification *notification;
-  DzlBindingGroup *bindings;
+  IdeBindingGroup *bindings;
 
   GtkLabel        *label;
   GtkBox          *buttons;
@@ -61,7 +59,8 @@ ide_notification_view_notify_icon (IdeNotificationView *self,
   g_assert (IDE_IS_NOTIFICATION (notif));
 
   icon = ide_notification_ref_icon (notif);
-  gtk_image_set_from_gicon (self->default_button_image, icon, GTK_ICON_SIZE_MENU);
+  gtk_image_set_pixel_size (self->default_button_image, 16);
+  gtk_image_set_from_gicon (self->default_button_image, icon);
   gtk_widget_set_visible (GTK_WIDGET (self->default_button), icon != NULL);
 }
 
@@ -71,12 +70,14 @@ connect_notification (IdeNotificationView *self,
 {
   g_autofree gchar *action_name = NULL;
   g_autoptr(GVariant) target_value = NULL;
+  GtkWidget *child;
   guint n_buttons;
 
   g_assert (IDE_IS_NOTIFICATION_VIEW (self));
   g_assert (!notification || IDE_IS_NOTIFICATION (notification));
 
-  gtk_container_foreach (GTK_CONTAINER (self->buttons), (GtkCallback)gtk_widget_destroy, NULL);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->buttons))))
+    gtk_box_remove (self->buttons, child);
 
   if (notification == NULL)
     {
@@ -128,15 +129,13 @@ connect_notification (IdeNotificationView *self,
           button = g_object_new (GTK_TYPE_BUTTON,
                                  "child", g_object_new (GTK_TYPE_IMAGE,
                                                         "gicon", button_icon,
-                                                        "visible", TRUE,
                                                         NULL),
                                  "action-name", action,
                                  "action-target", target,
                                  "has-tooltip", TRUE,
                                  "tooltip-text", label,
-                                 "visible", TRUE,
                                  NULL);
-          gtk_container_add (GTK_CONTAINER (self->buttons), GTK_WIDGET (button));
+          gtk_box_append (self->buttons, GTK_WIDGET (button));
         }
     }
 
@@ -208,8 +207,6 @@ ide_notification_view_class_init (IdeNotificationViewClass *klass)
    * IdeNotificationView:notification:
    *
    * The "notification" property is the #IdeNotification to be displayed.
-   *
-   * Since: 3.32
    */
   properties [PROP_NOTIFICATION] =
     g_param_spec_object ("notification",
@@ -233,9 +230,9 @@ ide_notification_view_init (IdeNotificationView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->bindings = dzl_binding_group_new ();
+  self->bindings = ide_binding_group_new ();
 
-  dzl_binding_group_bind (self->bindings, "title", self->label, "label", G_BINDING_SYNC_CREATE);
+  ide_binding_group_bind (self->bindings, "title", self->label, "label", G_BINDING_SYNC_CREATE);
 }
 
 /**
@@ -245,8 +242,6 @@ ide_notification_view_init (IdeNotificationView *self)
  * the #IdeOmniBar.
  *
  * Returns: (transfer full): a newly created #IdeNotificationView
- *
- * Since: 3.32
  */
 GtkWidget *
 ide_notification_view_new (void)
@@ -261,8 +256,6 @@ ide_notification_view_new (void)
  * Gets the #IdeNotification that is being viewed.
  *
  * Returns: (transfer none) (nullable): an #IdeNotification or %NULL
- *
- * Since: 3.32
  */
 IdeNotification *
 ide_notification_view_get_notification (IdeNotificationView *self)
@@ -283,7 +276,7 @@ ide_notification_view_set_notification (IdeNotificationView *self,
 
   if (g_set_object (&self->notification, notification))
     {
-      dzl_binding_group_set_source (self->bindings, notification);
+      ide_binding_group_set_source (self->bindings, notification);
       connect_notification (self, notification);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NOTIFICATION]);
     }
