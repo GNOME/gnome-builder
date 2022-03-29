@@ -23,6 +23,8 @@
 #include "config.h"
 
 #include "ide-notifications-button.h"
+
+#include "ide-notification-list-box-row-private.h"
 #include "ide-gui-global.h"
 #include "ide-gui-private.h"
 
@@ -37,23 +39,26 @@
  *
  * The button itself will show a "combined" progress of all the active
  * notifications.
- *
- * Since: 3.32
  */
 
 struct _IdeNotificationsButton
 {
-  DzlProgressMenuButton  parent_instance;
+  GtkWidget              parent_instance;
 
   GListModel            *model;
-  DzlListModelFilter    *filter;
+  GtkFilterListModel    *filter;
 
   /* Template widgets */
+  GtkStack              *stack;
+  GtkImage              *icon;
+  IdeProgressIcon       *progress;
+  GtkMenuButton         *menu_button;
   GtkPopover            *popover;
   GtkListBox            *list_box;
+  GtkRevealer           *revealer;
 };
 
-G_DEFINE_FINAL_TYPE (IdeNotificationsButton, ide_notifications_button, DZL_TYPE_PROGRESS_MENU_BUTTON)
+G_DEFINE_FINAL_TYPE (IdeNotificationsButton, ide_notifications_button, GTK_TYPE_WIDGET)
 
 static GtkWidget *
 create_notification_row (gpointer item,
@@ -76,10 +81,10 @@ create_notification_row (gpointer item,
 }
 
 static gboolean
-filter_by_has_progress (GObject  *object,
-                        gpointer  user_data)
+filter_by_has_progress (gpointer item,
+                        gpointer user_data)
 {
-  IdeNotification *notif = (IdeNotification *)object;
+  IdeNotification *notif = item;
 
   g_assert (IDE_IS_NOTIFICATION (notif));
   g_assert (user_data == NULL);
@@ -91,18 +96,20 @@ static void
 ide_notifications_button_bind_model (IdeNotificationsButton *self,
                                      GListModel             *model)
 {
+  static GtkCustomFilter *custom;
+
   g_assert (IDE_IS_NOTIFICATIONS_BUTTON (self));
   g_assert (G_IS_LIST_MODEL (model));
+
+  if (custom == NULL)
+    custom = gtk_custom_filter_new (filter_by_has_progress, NULL, NULL);
 
   if (g_set_object (&self->model, model))
     {
       g_clear_object (&self->filter);
 
-      self->filter = dzl_list_model_filter_new (model);
-      dzl_list_model_filter_set_filter_func (self->filter,
-                                             filter_by_has_progress,
-                                             NULL, NULL);
-
+      self->filter = gtk_filter_list_model_new (g_object_ref (model),
+                                                g_object_ref (GTK_FILTER (custom)));
       gtk_list_box_bind_model (self->list_box,
                                G_LIST_MODEL (self->filter),
                                create_notification_row,
@@ -115,46 +122,32 @@ ide_notifications_button_notify_has_progress_cb (IdeNotificationsButton *self,
                                                  GParamSpec             *pspec,
                                                  IdeNotifications       *notifications)
 {
-  GtkWidget *parent;
-
   g_assert (IDE_IS_NOTIFICATIONS_BUTTON (self));
   g_assert (IDE_IS_NOTIFICATIONS (notifications));
 
-  parent = gtk_widget_get_parent (GTK_WIDGET (self));
-
-  /* If we are in a revealer, just toggle the revealer
-   * instead of falling back to using fading widgetry.
-   */
-  if (GTK_IS_REVEALER (parent))
-    {
-      if (ide_notifications_get_has_progress (notifications))
-        {
-          gtk_revealer_set_reveal_child (GTK_REVEALER (parent), TRUE);
-        }
-      else
-        {
-          GtkPopover *popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (self));
-
-          if (gtk_widget_get_visible (GTK_WIDGET (popover)))
-            gtk_widget_hide (GTK_WIDGET (popover));
-
-          gtk_revealer_set_reveal_child (GTK_REVEALER (parent), FALSE);
-        }
-
-      return;
-    }
-
-  /* Fallback to using widget opacity to hide/show from/to view. */
   if (ide_notifications_get_has_progress (notifications))
     {
-      if (!gtk_widget_get_visible (GTK_WIDGET (self)))
-        dzl_gtk_widget_show_with_fade (GTK_WIDGET (self));
+      gtk_revealer_set_reveal_child (self->revealer, TRUE);
     }
   else
     {
-      if (gtk_widget_get_visible (GTK_WIDGET (self)))
-        dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self));
+      gtk_menu_button_popdown (self->menu_button);
+      gtk_revealer_set_reveal_child (self->revealer, FALSE);
     }
+}
+
+static void
+ide_notifications_button_notify_progress_is_imprecise_cb (IdeNotificationsButton *self,
+                                                          GParamSpec             *pspec,
+                                                          IdeNotifications       *notifications)
+{
+  g_assert (IDE_IS_NOTIFICATIONS_BUTTON (self));
+  g_assert (IDE_IS_NOTIFICATIONS (notifications));
+
+  if (ide_notifications_get_progress_is_imprecise (notifications))
+    gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->icon));
+  else
+    gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->progress));
 }
 
 static void
@@ -170,16 +163,21 @@ ide_notifications_button_context_set_cb (GtkWidget  *widget,
   notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
   ide_notifications_button_bind_model (self, G_LIST_MODEL (notifications));
 
-  g_object_bind_property (notifications, "progress", self, "progress",
+  g_object_bind_property (notifications, "progress",
+                          self->icon, "progress",
                           G_BINDING_SYNC_CREATE);
   g_signal_connect_object (notifications,
                            "notify::has-progress",
                            G_CALLBACK (ide_notifications_button_notify_has_progress_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  g_object_bind_property (notifications, "progress-is-imprecise", self, "show-progress",
-                          G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
+  g_signal_connect_object (notifications,
+                           "notify::has-progress",
+                           G_CALLBACK (ide_notifications_button_notify_progress_is_imprecise_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
+  ide_notifications_button_notify_progress_is_imprecise_cb (self, NULL, notifications);
   ide_notifications_button_notify_has_progress_cb (self, NULL, notifications);
 }
 
@@ -188,8 +186,8 @@ ide_notifications_button_row_activated (IdeNotificationsButton    *self,
                                         IdeNotificationListBoxRow *row,
                                         GtkListBox                *list_box)
 {
-  g_autofree gchar *default_action = NULL;
   g_autoptr(GVariant) default_target = NULL;
+  g_autofree char *default_action = NULL;
   IdeNotification *notif;
 
   g_assert (IDE_IS_NOTIFICATIONS_BUTTON (self));
@@ -199,48 +197,39 @@ ide_notifications_button_row_activated (IdeNotificationsButton    *self,
   notif = ide_notification_list_box_row_get_notification (row);
 
   if (ide_notification_get_default_action (notif, &default_action, &default_target))
-    {
-      gchar *name = strchr (default_action, '.');
-      gchar *group = default_action;
-
-      if (name != NULL)
-        {
-          *name = '\0';
-          name++;
-        }
-      else
-        {
-          group = NULL;
-          name = default_action;
-        }
-
-      dzl_gtk_widget_action (GTK_WIDGET (list_box), group, name, default_target);
-    }
+    gtk_widget_activate_action_variant (GTK_WIDGET (row), default_action, default_target);
 }
 
 static void
-ide_notifications_button_destroy (GtkWidget *widget)
+ide_notifications_button_dispose (GObject *object)
 {
-  IdeNotificationsButton *self = (IdeNotificationsButton *)widget;
+  IdeNotificationsButton *self = (IdeNotificationsButton *)object;
 
   g_assert (IDE_IS_NOTIFICATIONS_BUTTON (self));
 
   g_clear_object (&self->filter);
   g_clear_object (&self->model);
+  g_clear_pointer ((GtkWidget **)&self->revealer, gtk_widget_unparent);
 
-  GTK_WIDGET_CLASS (ide_notifications_button_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_notifications_button_parent_class)->dispose (object);
 }
 
 static void
 ide_notifications_button_class_init (IdeNotificationsButtonClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = ide_notifications_button_destroy;
+  object_class->dispose = ide_notifications_button_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-notifications-button.ui");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, icon);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, popover);
+  gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, progress);
+  gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeNotificationsButton, stack);
   gtk_widget_class_bind_template_callback (widget_class, ide_notifications_button_row_activated);
 }
 
@@ -259,8 +248,6 @@ ide_notifications_button_init (IdeNotificationsButton *self)
  * Create a new #IdeNotificationsButton.
  *
  * Returns: (transfer full): a newly created #IdeNotificationsButton
- *
- * Since: 3.32
  */
 GtkWidget *
 ide_notifications_button_new (void)
