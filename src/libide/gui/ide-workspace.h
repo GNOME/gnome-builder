@@ -31,7 +31,6 @@
 
 #include "ide-header-bar.h"
 #include "ide-page.h"
-#include "ide-surface.h"
 
 G_BEGIN_DECLS
 
@@ -49,13 +48,12 @@ struct _IdeWorkspaceClass
 
   const gchar *kind;
 
-  void (*context_set)  (IdeWorkspace    *self,
-                        IdeContext      *context);
-  void (*foreach_page) (IdeWorkspace    *self,
-                        IdePageCallback  callback,
-                        gpointer         user_data);
-  void (*surface_set)  (IdeWorkspace    *self,
-                        IdeSurface      *surface);
+  void     (*context_set)          (IdeWorkspace    *self,
+                                    IdeContext      *context);
+  void     (*foreach_page)         (IdeWorkspace    *self,
+                                    IdePageCallback  callback,
+                                    gpointer         user_data);
+  IdePage *(*get_most_recent_page) (IdeWorkspace    *self);
 
   /*< private >*/
   gpointer _reserved[8];
@@ -74,26 +72,6 @@ IDE_AVAILABLE_IN_ALL
 void          ide_workspace_foreach_page             (IdeWorkspace      *self,
                                                       IdePageCallback    callback,
                                                       gpointer           user_data);
-IDE_AVAILABLE_IN_ALL
-void          ide_workspace_foreach_surface          (IdeWorkspace       *self,
-                                                      IdeSurfaceCallback  callback,
-                                                      gpointer            user_data);
-IDE_AVAILABLE_IN_ALL
-void          ide_workspace_add_surface              (IdeWorkspace      *self,
-                                                      IdeSurface        *surface);
-IDE_AVAILABLE_IN_ALL
-IdeSurface   *ide_workspace_get_surface_by_name      (IdeWorkspace      *self,
-                                                      const gchar       *name);
-IDE_AVAILABLE_IN_ALL
-void          ide_workspace_set_visible_surface_name (IdeWorkspace      *self,
-                                                      const gchar       *visible_surface_name);
-IDE_AVAILABLE_IN_ALL
-IdeSurface   *ide_workspace_get_visible_surface      (IdeWorkspace      *self);
-IDE_AVAILABLE_IN_ALL
-void          ide_workspace_set_visible_surface      (IdeWorkspace      *self,
-                                                      IdeSurface        *surface);
-IDE_AVAILABLE_IN_ALL
-GtkOverlay   *ide_workspace_get_overlay              (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
 IdePage      *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
 

@@ -105,7 +105,7 @@ ide_grid_foreach_page (IdeGrid         *self,
   for (guint i = 0; i < pages->len; i++)
     {
       const PageInfo *info = &g_array_index (pages, PageInfo, i);
-      callback (info->page, info->column, info->row, info->depth, user_data);
+      callback (info->page, user_data);
     }
 }
 

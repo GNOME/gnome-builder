@@ -25,7 +25,6 @@
 #include <libide-threading.h>
 
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 #include "ide-workspace.h"
 
 static GQuark quark_handler;
@@ -81,24 +80,28 @@ has_context_property (GtkWidget *widget)
   g_assert (GTK_IS_WIDGET (widget));
 
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (widget), "context");
-  return pspec != NULL && g_type_is_a (pspec->value_type, IDE_TYPE_CONTEXT);
+
+  return pspec != NULL &&
+         (pspec->flags & G_PARAM_READABLE) != 0 &&
+         g_type_is_a (pspec->value_type, IDE_TYPE_CONTEXT);
 }
 
 static void
-ide_widget_hierarchy_changed (GtkWidget *widget,
-                              GtkWidget *previous_toplevel,
-                              gpointer   user_data)
+ide_widget_hierarchy_changed (GtkWidget  *widget,
+                              GParamSpec *pspec,
+                              gpointer    user_data)
 {
   GtkWidget *toplevel;
 
   g_assert (GTK_IS_WIDGET (widget));
+  g_assert (user_data == NULL);
 
   if (GTK_IS_WINDOW (previous_toplevel))
     g_signal_handlers_disconnect_by_func (previous_toplevel,
                                           G_CALLBACK (ide_widget_notify_context),
                                           widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
   if (GTK_IS_WINDOW (toplevel) && has_context_property (toplevel))
     {
@@ -117,8 +120,6 @@ ide_widget_hierarchy_changed (GtkWidget *widget,
  * @handler: (scope async): A callback to handle the context
  *
  * Calls @handler when the #IdeContext has been set for @widget.
- *
- * Since: 3.32
  */
 void
 ide_widget_set_context_handler (gpointer                widget,
@@ -138,11 +139,11 @@ ide_widget_set_context_handler (gpointer                widget,
   g_object_set_qdata (G_OBJECT (widget), quark_handler, handler);
 
   g_signal_connect (widget,
-                    "hierarchy-changed",
+                    "notify::root"
                     G_CALLBACK (ide_widget_hierarchy_changed),
                     NULL);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
   if (GTK_IS_WINDOW (toplevel))
     ide_widget_hierarchy_changed (widget, NULL, NULL);
@@ -155,8 +156,6 @@ ide_widget_set_context_handler (gpointer                widget,
  * Gets the context for the widget.
  *
  * Returns: (nullable) (transfer none): an #IdeContext, or %NULL
- *
- * Since: 3.32
  */
 IdeContext *
 ide_widget_get_context (GtkWidget *widget)
@@ -180,8 +179,6 @@ ide_widget_get_context (GtkWidget *widget)
  * Gets the #IdeWorkbench that contains @widget.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
- *
- * Since: 3.32
  */
 IdeWorkbench *
 ide_widget_get_workbench (GtkWidget *widget)
@@ -190,7 +187,7 @@ ide_widget_get_workbench (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
   if (GTK_IS_WINDOW (toplevel))
     {
@@ -210,46 +207,11 @@ ide_widget_get_workbench (GtkWidget *widget)
  * Gets the #IdeWorkspace containing @widget.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkspace or %NULL
- *
- * Since: 3.32
  */
 IdeWorkspace *
 ide_widget_get_workspace (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return IDE_WORKSPACE (gtk_widget_get_root (widget));
-}
-
-static void
-show_parents (GtkWidget *widget)
-{
-  GtkWidget *workspace;
-  GtkWidget *parent;
-
-  g_assert (GTK_IS_WIDGET (widget));
-
-  workspace = gtk_widget_get_ancestor (widget, IDE_TYPE_WORKSPACE);
-  parent = gtk_widget_get_parent (widget);
-
-  if (DZL_IS_DOCK_REVEALER (widget))
-    dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (widget), TRUE);
-
-  if (IDE_IS_SURFACE (widget))
-    ide_workspace_set_visible_surface (IDE_WORKSPACE (workspace), IDE_SURFACE (widget));
-
-  if (GTK_IS_STACK (parent))
-    gtk_stack_set_visible_child (GTK_STACK (parent), widget);
-
-  if (parent != NULL)
-    show_parents (parent);
-}
-
-void
-ide_widget_reveal_and_grab (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  show_parents (widget);
-  gtk_widget_grab_focus (widget);
+  return IDE_WORKSPACE (gtk_widget_get_native (widget));
 }

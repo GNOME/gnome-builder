@@ -20,7 +20,12 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
 #include <gtk/gtk.h>
+
 #include <libide-core.h>
 
 #include "ide-workbench.h"
@@ -44,16 +49,14 @@ G_BEGIN_DECLS
 typedef void (*IdeWidgetContextHandler) (GtkWidget  *widget,
                                          IdeContext *context);
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_widget_set_context_handler (gpointer                  widget,
                                               IdeWidgetContextHandler   handler);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeContext   *ide_widget_get_context         (GtkWidget                *widget);
-IDE_AVAILABLE_IN_3_32
-void          ide_widget_reveal_and_grab     (GtkWidget                *widget);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget                *widget);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeWorkspace *ide_widget_get_workspace       (GtkWidget                *widget);
 
 G_END_DECLS

@@ -27,6 +27,7 @@
 
 #include <libide-commands.h>
 #include <libide-debugger.h>
+#include <libide-gtk.h>
 #include <libide-threading.h>
 
 #include "ide-build-private.h"
@@ -37,11 +38,10 @@
 
 #include "ide-application.h"
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 #include "ide-primary-workspace.h"
-#include "ide-workbench.h"
 #include "ide-workbench-addin.h"
-#include "ide-workspace.h"
+#include "ide-workbench-private.h"
+#include "ide-workspace-private.h"
 
 /**
  * SECTION:ide-workbench
@@ -55,8 +55,6 @@
  * Usually, windows within the #IdeWorkbench are an #IdeWorkspace. They can
  * react to changes in the #IdeContext or its descendants to represent the
  * project and it's state.
- *
- * Since: 3.32
  */
 
 struct _IdeWorkbench
@@ -127,7 +125,7 @@ static void ide_workbench_action_reload_all  (IdeWorkbench *self,
                                               GVariant     *param);
 
 
-DZL_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
+IDE_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
   { "close", ide_workbench_action_close },
   { "open", ide_workbench_action_open },
   { "reload-files", ide_workbench_action_reload_all },
@@ -183,8 +181,6 @@ ignore_error (GError *error)
  * Helper to get the #IdeWorkbench for a given context.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
- *
- * Since: 3.40
  */
 IdeWorkbench *
 ide_workbench_from_context (IdeContext *context)
@@ -272,7 +268,7 @@ ide_workbench_addin_added_cb (PeasExtensionSet *set,
     ide_workbench_addin_load_project_async (addin, self->project_info, NULL, NULL, NULL);
 
   ide_workbench_foreach_workspace (self,
-                                   (GtkCallback)ide_workbench_addin_added_workspace_cb,
+                                   (IdeWorkspaceCallback)ide_workbench_addin_added_workspace_cb,
                                    addin);
 }
 
@@ -294,7 +290,7 @@ ide_workbench_addin_removed_cb (PeasExtensionSet *set,
    * track them for cleanup.
    */
   ide_workbench_foreach_workspace (self,
-                                   (GtkCallback)ide_workbench_addin_removed_workspace_cb,
+                                   (IdeWorkspaceCallback)ide_workbench_addin_removed_workspace_cb,
                                    addin);
 
   ide_workbench_addin_unload (addin, self);
@@ -315,7 +311,7 @@ ide_workbench_notify_context_title (IdeWorkbench *self,
   title = ide_context_dup_title (context);
   formatted = g_strdup_printf (_("Builder — %s"), title);
   ide_workbench_foreach_workspace (self,
-                                   (GtkCallback)gtk_window_set_title,
+                                   (IdeWorkspaceCallback)gtk_window_set_title,
                                    formatted);
 }
 
@@ -463,8 +459,6 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
    *
    * The #IdeContext is the root #IdeObject used in the tree of
    * objects representing the project and the workings of the IDE.
-   *
-   * Since: 3.32
    */
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -480,8 +474,6 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
    * system that is currently loaded for the project.
    *
    * The #IdeVcs is registered by an #IdeWorkbenchAddin when loading a project.
-   *
-   * Since: 3.32
    */
   properties [PROP_VCS] =
     g_param_spec_object ("vcs",
@@ -549,8 +541,6 @@ ide_workbench_find_addin (IdeWorkbench *self,
  * be created based on the kind of workspace you want to display to the user.
  *
  * Returns: an #IdeWorkbench
- *
- * Since: 3.32
  */
 IdeWorkbench *
 ide_workbench_new (void)
@@ -566,8 +556,6 @@ ide_workbench_new (void)
  * Creates a new #IdeWorkbench using @context for the #IdeWorkbench:context.
  *
  * Returns: (transfer full): an #IdeWorkbench
- *
- * Since: 3.32
  */
 IdeWorkbench *
 ide_workbench_new_for_context (IdeContext *context)
@@ -586,8 +574,6 @@ ide_workbench_new_for_context (IdeContext *context)
  * Gets the #IdeContext for the workbench.
  *
  * Returns: (transfer none): an #IdeContext
- *
- * Since: 3.32
  */
 IdeContext *
 ide_workbench_get_context (IdeWorkbench *self)
@@ -605,8 +591,6 @@ ide_workbench_get_context (IdeWorkbench *self)
  * Finds the #IdeWorkbench associated with a widget.
  *
  * Returns: (nullable) (transfer none): an #IdeWorkbench or %NULL
- *
- * Since: 3.32
  */
 IdeWorkbench *
 ide_workbench_from_widget (GtkWidget *widget)
@@ -622,7 +606,7 @@ ide_workbench_from_widget (GtkWidget *widget)
    * just need to get the toplevel window group property, and cast.
    */
 
-  if ((toplevel = gtk_widget_get_toplevel (widget)) &&
+  if ((toplevel = GTK_WIDGET (gtk_widget_get_native (widget))) &&
       GTK_IS_WINDOW (toplevel) &&
       (group = gtk_window_get_group (GTK_WINDOW (toplevel))) &&
       IDE_IS_WORKBENCH (group))
@@ -634,18 +618,16 @@ ide_workbench_from_widget (GtkWidget *widget)
 /**
  * ide_workbench_foreach_workspace:
  * @self: an #IdeWorkbench
- * @callback: (scope call): a #GtkCallback to call for each #IdeWorkspace
+ * @callback: (scope call): a #IdeWorkspaceCallback to call for each #IdeWorkspace
  * @user_data: user data for @callback
  *
  * Iterates the available workspaces in the workbench. Workspaces are iterated
  * in most-recently-used order.
- *
- * Since: 3.32
  */
 void
-ide_workbench_foreach_workspace (IdeWorkbench *self,
-                                 GtkCallback   callback,
-                                 gpointer      user_data)
+ide_workbench_foreach_workspace (IdeWorkbench         *self,
+                                 IdeWorkspaceCallback  callback,
+                                 gpointer              user_data)
 {
   GList *copy;
 
@@ -660,7 +642,7 @@ ide_workbench_foreach_workspace (IdeWorkbench *self,
     {
       IdeWorkspace *workspace = iter->data;
       g_assert (IDE_IS_WORKSPACE (workspace));
-      callback (GTK_WIDGET (workspace), user_data);
+      callback (workspace, user_data);
     }
 
   g_list_free (copy);
@@ -674,13 +656,11 @@ ide_workbench_foreach_workspace (IdeWorkbench *self,
  *
  * Calls @callback for every page loaded in the workbench, by iterating
  * workspaces in order of most-recently-used.
- *
- * Since: 3.32
  */
 void
-ide_workbench_foreach_page (IdeWorkbench *self,
-                            GtkCallback   callback,
-                            gpointer      user_data)
+ide_workbench_foreach_page (IdeWorkbench    *self,
+                            IdePageCallback  callback,
+                            gpointer         user_data)
 {
   GList *copy;
 
@@ -699,15 +679,15 @@ ide_workbench_foreach_page (IdeWorkbench *self,
 }
 
 static void
-ide_workbench_workspace_has_toplevel_focus_cb (IdeWorkbench *self,
-                                               GParamSpec   *pspec,
-                                               IdeWorkspace *workspace)
+ide_workbench_workspace_is_active_cb (IdeWorkbench *self,
+                                      GParamSpec   *pspec,
+                                      IdeWorkspace *workspace)
 {
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
   g_assert (gtk_window_get_group (GTK_WINDOW (workspace)) == GTK_WINDOW_GROUP (self));
 
-  if (gtk_window_has_toplevel_focus (GTK_WINDOW (workspace)))
+  if (gtk_window_is_active (GTK_WINDOW (workspace)))
     {
       GList *mru_link = _ide_workspace_get_mru_link (workspace);
 
@@ -758,8 +738,6 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
  * @workspace: an #IdeWorkspace
  *
  * Adds @workspace to @workbench.
- *
- * Since: 3.32
  */
 void
 ide_workbench_add_workspace (IdeWorkbench *self,
@@ -811,8 +789,8 @@ ide_workbench_add_workspace (IdeWorkbench *self,
 
   /* Track toplevel focus changes to maintain a most-recently-used queue. */
   g_signal_connect_object (workspace,
-                           "notify::has-toplevel-focus",
-                           G_CALLBACK (ide_workbench_workspace_has_toplevel_focus_cb),
+                           "notify::is-active",
+                           G_CALLBACK (ide_workbench_workspace_is_active_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -843,7 +821,7 @@ ide_workbench_add_workspace (IdeWorkbench *self,
 
   /* Load shortcuts for commands */
   command_manager = ide_command_manager_from_context (self->context);
-  _ide_command_manager_init_shortcuts (command_manager, workspace);
+  ide_command_manager_load_shortcuts (command_manager, GTK_NATIVE (workspace));
 }
 
 /**
@@ -852,8 +830,6 @@ ide_workbench_add_workspace (IdeWorkbench *self,
  * @workspace: an #IdeWorkspace
  *
  * Removes @workspace from @workbench.
- *
- * Since: 3.32
  */
 void
 ide_workbench_remove_workspace (IdeWorkbench *self,
@@ -873,12 +849,12 @@ ide_workbench_remove_workspace (IdeWorkbench *self,
   mru_link = _ide_workspace_get_mru_link (workspace);
   g_queue_unlink (&self->mru_queue, mru_link);
   g_signal_handlers_disconnect_by_func (workspace,
-                                        G_CALLBACK (ide_workbench_workspace_has_toplevel_focus_cb),
+                                        G_CALLBACK (ide_workbench_workspace_is_active_cb),
                                         self);
 
   /* Remove any shortcuts that were registered by command providers */
   command_manager = ide_command_manager_from_context (self->context);
-  _ide_command_manager_unload_shortcuts (command_manager, workspace);
+  ide_command_manager_unload_shortcuts (command_manager, GTK_NATIVE (workspace));
 
   /* Notify all the addins about losing the workspace. */
   if ((addins = ide_workbench_collect_addins (self)))
@@ -928,8 +904,6 @@ ide_workbench_remove_workspace (IdeWorkbench *self,
  *
  * Requests that @workspace be raised in the windows of @self, and
  * displayed to the user.
- *
- * Since: 3.32
  */
 void
 ide_workbench_focus_workspace (IdeWorkbench *self,
@@ -1005,7 +979,7 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
 
   /* Give workspaces access to the various GActionGroups */
   ide_workbench_foreach_workspace (self,
-                                   (GtkCallback)insert_action_groups_foreach_cb,
+                                   (IdeWorkspaceCallback)insert_action_groups_foreach_cb,
                                    self);
 
   /* Notify addins that projects have loaded */
@@ -1128,8 +1102,6 @@ ide_workbench_init_foundry_cb (GObject      *object,
  *
  * @callback should call ide_workbench_load_project_finish() to obtain the
  * result of the open request.
- *
- * Since: 3.32
  */
 void
 ide_workbench_load_project_async (IdeWorkbench        *self,
@@ -1284,8 +1256,6 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
  *
  * Returns: %TRUE if the project was successfully opened; otherwise %FALSE
  *   and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_workbench_load_project_finish (IdeWorkbench  *self,
@@ -1392,12 +1362,37 @@ ide_workbench_action_reload_all (IdeWorkbench *self,
 }
 
 static void
+ide_workbench_action_open_response_cb (IdeWorkbench         *self,
+                                       int                   response,
+                                       GtkFileChooserNative *chooser)
+{
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (chooser));
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      g_autoptr(GListModel) model = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (chooser));
+      guint n_items = g_list_model_get_n_items (model);
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(GFile) file = g_list_model_get_item (model, i);
+
+          g_assert (G_IS_FILE (file));
+
+          ide_workbench_open_async (self, file, NULL, 0, NULL, NULL, NULL);
+        }
+    }
+
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (chooser));
+}
+
+static void
 ide_workbench_action_open (IdeWorkbench *self,
                            GVariant     *param)
 {
   GtkFileChooserNative *chooser;
   IdeWorkspace *workspace;
-  gint ret;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (param == NULL);
@@ -1410,26 +1405,15 @@ ide_workbench_action_open (IdeWorkbench *self,
                                          _("_Open"),
                                          _("_Cancel"));
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), FALSE);
-  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), FALSE);
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), TRUE);
 
-  ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (chooser));
+  g_signal_connect_object (chooser,
+                           "response",
+                           G_CALLBACK (ide_workbench_action_open_response_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  if (ret == GTK_RESPONSE_ACCEPT)
-    {
-      g_autoslist(GFile) files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (chooser));
-
-      for (const GSList *iter = files; iter; iter = iter->next)
-        {
-          GFile *file = iter->data;
-
-          g_assert (G_IS_FILE (file));
-
-          ide_workbench_open_async (self, file, NULL, 0, NULL, NULL, NULL);
-        }
-    }
-
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (chooser));
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
 }
 
 /**
@@ -1439,8 +1423,6 @@ ide_workbench_action_open (IdeWorkbench *self,
  * Gets the search engine for the workbench, if any.
  *
  * Returns: (transfer none): an #IdeSearchEngine
- *
- * Since: 3.32
  */
 IdeSearchEngine *
 ide_workbench_get_search_engine (IdeWorkbench *self)
@@ -1463,8 +1445,6 @@ ide_workbench_get_search_engine (IdeWorkbench *self)
  * currently, loading.
  *
  * Returns: (transfer none) (nullable): an #IdeProjectInfo or %NULL
- *
- * Since: 3.32
  */
 IdeProjectInfo *
 ide_workbench_get_project_info (IdeWorkbench *self)
@@ -1508,7 +1488,15 @@ ide_workbench_unload_project_completed (IdeWorkbench *self,
   g_assert (IDE_IS_TASK (task));
 
   g_clear_object (&self->addins);
-  ide_workbench_foreach_workspace (self, (GtkCallback)gtk_widget_destroy, NULL);
+
+  while (self->mru_queue.head != NULL)
+    {
+      IdeWorkspace *workspace = self->mru_queue.head->data;
+
+      g_assert (IDE_IS_WORKSPACE (workspace));
+
+      gtk_window_destroy (GTK_WINDOW (workspace));
+    }
 
   _ide_foundry_unload_async (self->context,
                              ide_task_get_cancellable (task),
@@ -1561,8 +1549,6 @@ ide_workbench_unload_project_cb (GObject      *object,
  *
  * All #IdeWorkspace windows will be closed after calling this
  * function.
- *
- * Since: 3.32
  */
 void
 ide_workbench_unload_async (IdeWorkbench        *self,
@@ -1651,8 +1637,6 @@ ide_workbench_unload_async (IdeWorkbench        *self,
  *
  * Returns: %TRUE if the workbench was unloaded successfully,
  *   otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_workbench_unload_finish (IdeWorkbench *self,
@@ -1709,8 +1693,6 @@ ide_workbench_open_all_cb (GObject      *object,
  *
  * Call ide_workbench_open_finish() from @callback to complete this
  * operation.
- *
- * Since: 3.32
  */
 void
 ide_workbench_open_all_async (IdeWorkbench         *self,
@@ -1776,8 +1758,6 @@ ide_workbench_open_all_async (IdeWorkbench         *self,
  * module name of the plugin.
  *
  * @flags may be ignored by some backends.
- *
- * Since: 3.32
  */
 void
 ide_workbench_open_async (IdeWorkbench        *self,
@@ -2005,8 +1985,6 @@ ide_workbench_open_query_info_cb (GObject      *object,
  *
  * Use ide_workbench_open_finish() to receive teh result of this
  * asynchronous operation.
- *
- * Since: 3.32
  */
 void
 ide_workbench_open_at_async (IdeWorkbench        *self,
@@ -2101,8 +2079,6 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
  *
  * Returns: %TRUE if the file was successfully opened; otherwise
  *   %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_workbench_open_finish (IdeWorkbench  *self,
@@ -2123,8 +2099,6 @@ ide_workbench_open_finish (IdeWorkbench  *self,
  * deliver events such as opening new pages.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkspace or %NULL
- *
- * Since: 3.32
  */
 IdeWorkspace *
 ide_workbench_get_current_workspace (IdeWorkbench *self)
@@ -2142,8 +2116,6 @@ ide_workbench_get_current_workspace (IdeWorkbench *self)
  * @self: a #IdeWorkbench
  *
  * This function will attempt to raise the most recently focused workspace.
- *
- * Since: 3.32
  */
 void
 ide_workbench_activate (IdeWorkbench *self)
@@ -2180,8 +2152,6 @@ ide_workbench_propagate_vcs_cb (PeasExtensionSet *set,
  * Gets the #IdeVcs that has been loaded for the workbench, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeVcs or %NULL
- *
- * Since: 3.32
  */
 IdeVcs *
 ide_workbench_get_vcs (IdeWorkbench *self)
@@ -2198,8 +2168,6 @@ ide_workbench_get_vcs (IdeWorkbench *self)
  * Gets the #IdeVcsMonitor for the workbench, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeVcsMonitor or %NULL
- *
- * Since: 3.32
  */
 IdeVcsMonitor *
 ide_workbench_get_vcs_monitor (IdeWorkbench *self)
@@ -2248,8 +2216,6 @@ ide_workbench_vcs_notify_branch_name_cb (IdeWorkbench *self,
  * @vcs: (nullable): an #IdeVcs
  *
  * Sets the #IdeVcs for the workbench.
- *
- * Since: 3.32
  */
 void
 ide_workbench_set_vcs (IdeWorkbench *self,
@@ -2303,8 +2269,6 @@ ide_workbench_set_vcs (IdeWorkbench *self,
  * Gets the #IdeBuildSystem for the workbench, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeBuildSystem or %NULL
- *
- * Since: 3.32
  */
 IdeBuildSystem *
 ide_workbench_get_build_system (IdeWorkbench *self)
@@ -2337,8 +2301,6 @@ remove_non_matching_build_systems_cb (IdeObject      *child,
  * If @build_system is %NULL, then a fallback build system will be used
  * instead. It does not provide building capabilities, but allows for some
  * components that require a build system to continue functioning.
- *
- * Since: 3.32
  */
 void
 ide_workbench_set_build_system (IdeWorkbench   *self,
@@ -2387,8 +2349,6 @@ ide_workbench_set_build_system (IdeWorkbench   *self,
  * Gets the most-recently-used workspace that matches @type.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkspace or %NULL
- *
- * Since: 3.32
  */
 IdeWorkspace *
 ide_workbench_get_workspace_by_type (IdeWorkbench *self,
@@ -2426,8 +2386,6 @@ _ide_workbench_is_last_workspace (IdeWorkbench *self,
  * workbench.
  *
  * Returns: %TRUE if the workbench has a project
- *
- * Since: 3.32
  */
 gboolean
 ide_workbench_has_project (IdeWorkbench *self)
@@ -2446,8 +2404,6 @@ ide_workbench_has_project (IdeWorkbench *self)
  * Finds the addin (if any) matching the plugin's @module_name.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkbenchAddin or %NULL
- *
- * Since: 3.32
  */
 IdeWorkbenchAddin *
 ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
@@ -2534,8 +2490,6 @@ ide_workbench_resolve_file_worker (IdeTask      *task,
  *
  * If no file was discovered, some attempt will be made to locate a file
  * that matches appropriately.
- *
- * Since: 3.32
  */
 void
 ide_workbench_resolve_file_async (IdeWorkbench        *self,
@@ -2590,8 +2544,6 @@ ide_workbench_resolve_file_async (IdeWorkbench        *self,
  * Completes an asynchronous request to ide_workbench_resolve_file_async().
  *
  * Returns: (transfer full): a #GFile, or %NULL and @error is set
- *
- * Since: 3.32
  */
 GFile *
 ide_workbench_resolve_file_finish (IdeWorkbench  *self,

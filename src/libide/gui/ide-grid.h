@@ -34,12 +34,6 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GRID (ide_grid_get_type())
 
-typedef void (*IdePageCallback) (IdePage  *page,
-                                 guint     column,
-                                 guint     row,
-                                 guint     depth,
-                                 gpointer  user_data);
-
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeGrid, ide_grid, IDE, GRID, PanelGrid)
 
