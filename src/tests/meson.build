@@ -42,13 +42,6 @@ test_libide_io = executable('test-libide-io', 'test-libide-io.c',
 test('test-libide-io', test_libide_io, env: test_env)
 
 
-test_snippet_parser = executable('test-snippet-parser', 'test-snippet-parser.c',
-        c_args: test_cflags,
-  dependencies: [ libide_sourceview_dep ],
-)
-test('test-snippet-parser', test_snippet_parser, env: test_env)
-
-
 test_line_reader = executable('test-line-reader', 'test-line-reader.c',
         c_args: test_cflags,
   dependencies: [ libide_io_dep ],
@@ -103,10 +96,3 @@ test_compile_commands = executable('test-compile-commands', 'test-compile-comman
   dependencies: [ libide_foundry_dep ],
 )
 test('test-compile-commands', test_compile_commands, env: test_env)
-
-
-test_completion_fuzzy = executable('test-completion-fuzzy', 'test-completion-fuzzy.c',
-        c_args: test_cflags,
-  dependencies: [ libide_sourceview_dep ],
-)
-test('test-completion-fuzzy', test_completion_fuzzy, env: test_env)
