@@ -61,7 +61,7 @@ main (gint argc,
       gchar *argv[])
 {
   g_test_init (&argc, &argv, NULL);
-  gtk_init (&argc, &argv);
+  gtk_init ();
   g_test_add_func ("/Ide/TextIter/current_symbol", test_current_symbol);
   return g_test_run ();
 }
