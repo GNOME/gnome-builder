@@ -127,9 +127,9 @@ value_entry_activate (GtkWidget               *entry,
 }
 
 static void
-ide_environment_editor_row_destroy (GtkWidget *widget)
+ide_environment_editor_row_dispose (GObject *object)
 {
-  IdeEnvironmentEditorRow *self = (IdeEnvironmentEditorRow *)widget;
+  IdeEnvironmentEditorRow *self = (IdeEnvironmentEditorRow *)object;
 
   if (self->variable != NULL)
     {
@@ -137,7 +137,7 @@ ide_environment_editor_row_destroy (GtkWidget *widget)
       g_clear_object (&self->variable);
     }
 
-  GTK_WIDGET_CLASS (ide_environment_editor_row_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_environment_editor_row_parent_class)->dispose (object);
 }
 
 static void
@@ -184,10 +184,9 @@ ide_environment_editor_row_class_init (IdeEnvironmentEditorRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_environment_editor_row_dispose;
   object_class->get_property = ide_environment_editor_row_get_property;
   object_class->set_property = ide_environment_editor_row_set_property;
-
-  widget_class->destroy = ide_environment_editor_row_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-environment-editor-row.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEnvironmentEditorRow, delete_button);
