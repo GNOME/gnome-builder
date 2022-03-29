@@ -335,38 +335,16 @@ ide_omni_bar_move_previous (IdeOmniBar *self,
  *
  * Adds a status-icon style widget to the end of the omnibar. Generally,
  * you'll want this to be either a GtkButton, GtkLabel, or something simple.
- *
- * Since: 3.32
  */
 void
 ide_omni_bar_add_status_icon (IdeOmniBar *self,
                               GtkWidget  *widget,
-                              gint        priority)
+                              int         priority)
 {
   g_return_if_fail (IDE_IS_OMNI_BAR (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->inner_box), widget,
-                                     "pack-type", GTK_PACK_END,
-                                     "priority", priority,
-                                     NULL);
-}
-
-void
-ide_omni_bar_add_button (IdeOmniBar  *self,
-                         GtkWidget   *widget,
-                         GtkPackType  pack_type,
-                         gint         priority)
-{
-  g_return_if_fail (IDE_IS_OMNI_BAR (self));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (pack_type == GTK_PACK_START ||
-                    pack_type == GTK_PACK_END);
-
-  gtk_container_add_with_properties (GTK_CONTAINER (self->outer_box), widget,
-                                     "pack-type", pack_type,
-                                     "priority", priority,
-                                     NULL);
+  panel_omni_bar_add_suffix (PANEL_OMNI_BAR (self), priority, widget);
 }
 
 void
@@ -386,7 +364,7 @@ ide_omni_bar_set_placeholder (IdeOmniBar *self,
 
   if (self->placeholder)
     {
-      gtk_stack_add_child_named (self->stack, self->placeholder, "placeholder");
+      gtk_stack_add_named (self->stack, self->placeholder, "placeholder");
       if (self->notification_stack == NULL ||
           ide_notification_stack_is_empty (self->notification_stack))
         gtk_stack_set_visible_child_name (self->stack, "placeholder");
@@ -418,6 +396,9 @@ buildable_iface_init (GtkBuildableIface *iface)
   iface->add_child = ide_omni_bar_add_child;
 }
 
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
+
 /**
  * ide_omni_bar_add_popover_section:
  * @self: an #IdeOmniBar
@@ -429,12 +410,23 @@ buildable_iface_init (GtkBuildableIface *iface)
 void
 ide_omni_bar_add_popover_section (IdeOmniBar *self,
                                   GtkWidget  *widget,
-                                  gint        priority)
+                                  int         priority)
 {
+  GtkWidget *sibling = NULL;
+
   g_return_if_fail (IDE_IS_OMNI_BAR (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->sections_box), widget,
-                                     "priority", priority,
-                                     NULL);
+  SET_PRIORITY (widget, priority);
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (priority < GET_PRIORITY (child))
+        break;
+      sibling = child;
+    }
+
+  gtk_box_insert_child_after (self->sections_box, widget, sibling);
 }
