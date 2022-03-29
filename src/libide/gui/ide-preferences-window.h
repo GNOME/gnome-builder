@@ -41,12 +41,6 @@ typedef struct
   const char *icon_name;
   int priority;
   const char *title;
-
-  /*< private >*/
-  gconstpointer reserved1;
-  gconstpointer reserved2;
-  gconstpointer reserved3;
-  gconstpointer reserved4;
 } IdePreferencePageEntry;
 
 typedef struct
@@ -55,12 +49,6 @@ typedef struct
   const char *name;
   int priority;
   const char *title;
-
-  /*< private >*/
-  gconstpointer reserved1;
-  gconstpointer reserved2;
-  gconstpointer reserved3;
-  gconstpointer reserved4;
 } IdePreferenceGroupEntry;
 
 struct _IdePreferenceItemEntry
@@ -68,14 +56,20 @@ struct _IdePreferenceItemEntry
   const char *page;
   const char *group;
   const char *name;
+
   int priority;
+
   IdePreferenceCallback callback;
 
+  /* Callback specific data */
+  const char *title;
+  const char *subtitle;
+  const char *schema_id;
+  const char *path;
+  const char *key;
+
   /*< private >*/
-  gconstpointer reserved1;
-  gconstpointer reserved2;
-  gconstpointer reserved3;
-  gconstpointer reserved4;
+  gconstpointer user_data;
 };
 
 #define IDE_TYPE_PREFERENCES_WINDOW (ide_preferences_window_get_type())

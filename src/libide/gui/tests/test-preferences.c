@@ -64,23 +64,22 @@ static const IdePreferenceItemEntry items[] = {
 };
 
 static const IdePreferenceItemEntry lang_items[] = {
-  { "languages/*", "general", "trim", 0, toggle_cb, NULL, "Trim Trailing Whitespace", "Upon saving, trailing whitepsace from modified lines will be trimmed." },
-  { "languages/*", "general", "overwrite", 0, toggle_cb, NULL, "Overwrite Braces", "Overwrite closing braces" },
-  { "languages/*", "general", "insert-matching", 0, toggle_cb, NULL, "Insert Matching Brace", "Insert matching character for [[(\"'" },
-  { "languages/*", "general", "insert-trailing", 0, toggle_cb, NULL, "Insert Trailing Newline", "Ensure files end with a newline" },
+  { "languages/*", "general", "trim", 0, toggle_cb, "Trim Trailing Whitespace", "Upon saving, trailing whitepsace from modified lines will be trimmed." },
+  { "languages/*", "general", "overwrite", 0, toggle_cb, "Overwrite Braces", "Overwrite closing braces" },
+  { "languages/*", "general", "insert-matching", 0, toggle_cb, "Insert Matching Brace", "Insert matching character for [[(\"'" },
+  { "languages/*", "general", "insert-trailing", 0, toggle_cb, "Insert Trailing Newline", "Ensure files end with a newline" },
 
-  { "languages/*", "margins", "show-right-margin", 0, toggle_cb, NULL, "Show right margin", "Display a margin in the editor to indicate maximum desired width" },
-  { "languages/*", "margins", "right-margin", 0, spin_cb, NULL, "Right margin position", "The position of the right margin in characters" },
+  { "languages/*", "margins", "show-right-margin", 0, toggle_cb, "Show right margin", "Display a margin in the editor to indicate maximum desired width" },
+  { "languages/*", "margins", "right-margin", 0, spin_cb, "Right margin position", "The position of the right margin in characters" },
 
-  { "languages/*", "spacing", "before-parens", 0, toggle_cb, NULL, "Prefer a space before opening parentheses" },
-  { "languages/*", "spacing", "before-brackets", 0, toggle_cb, NULL, "Prefer a space before opening brackets" },
-  { "languages/*", "spacing", "before-braces", 0, toggle_cb, NULL, "Prefer a space before opening braces" },
-  { "languages/*", "spacing", "before-angles", 0, toggle_cb, NULL, "Prefer a space before opening angles" },
+  { "languages/*", "spacing", "before-parens", 0, toggle_cb, "Prefer a space before opening parentheses" },
+  { "languages/*", "spacing", "before-brackets", 0, toggle_cb, "Prefer a space before opening brackets" },
+  { "languages/*", "spacing", "before-braces", 0, toggle_cb, "Prefer a space before opening braces" },
+  { "languages/*", "spacing", "before-angles", 0, toggle_cb, "Prefer a space before opening angles" },
 
-  { "languages/*", "indentation", "tab-width", 0, spin_cb, NULL, "Tab width", "Width of a tab character in spaces" },
-  { "languages/*", "indentation", "insert-spaces", 0, toggle_cb, NULL, "Insert spaces instead of tabs", "Prefer spaces over tabs" },
-  { "languages/*", "indentation", "auto-indent", 0, toggle_cb, NULL, "Automatically Indent", "Format source code as you type" },
-
+  { "languages/*", "indentation", "tab-width", 0, spin_cb, "Tab width", "Width of a tab character in spaces" },
+  { "languages/*", "indentation", "insert-spaces", 0, toggle_cb, "Insert spaces instead of tabs", "Prefer spaces over tabs" },
+  { "languages/*", "indentation", "auto-indent", 0, toggle_cb, "Automatically Indent", "Format source code as you type" },
 };
 
 static int
@@ -284,8 +283,8 @@ toggle_cb (const char                   *page,
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title", item->reserved2,
-                      "subtitle", item->reserved3,
+                      "title", item->title,
+                      "subtitle", item->subtitle,
                       "activatable-widget", child,
                       NULL);
   adw_preferences_group_add (pref_group, GTK_WIDGET (row));
@@ -305,8 +304,8 @@ spin_cb (const char                   *page,
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title", item->reserved2,
-                      "subtitle", item->reserved3,
+                      "title", item->title,
+                      "subtitle", item->subtitle,
                       "activatable-widget", child,
                       NULL);
   adw_preferences_group_add (pref_group, GTK_WIDGET (row));

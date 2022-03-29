@@ -470,7 +470,7 @@ ide_preferences_window_page_activated_cb (IdePreferencesWindow *self,
 
               if (entry_matches (item->page, entry->name) &&
                   entry_matches (item->group, group->name))
-                item->callback (entry->name, item, pref_group, (gpointer)item->reserved1);
+                item->callback (entry->name, item, pref_group, (gpointer)item->user_data);
             }
 
           adw_preferences_page_add (page, pref_group);
@@ -704,7 +704,12 @@ ide_preferences_window_add_items (IdePreferencesWindow         *self,
       entry.page = g_intern_string (entry.page);
       entry.group = g_intern_string (entry.group);
       entry.name = g_intern_string (entry.name);
-      entry.reserved1 = user_data;
+      entry.title = g_intern_string (entry.title);
+      entry.subtitle = g_intern_string (entry.subtitle);
+      entry.schema_id = g_intern_string (entry.schema_id);
+      entry.path = g_intern_string (entry.path);
+      entry.key = g_intern_string (entry.key);
+      entry.user_data = user_data;
 
       g_ptr_array_add (self->info.items, g_memdup2 (&entry, sizeof entry));
     }
@@ -732,7 +737,7 @@ ide_preferences_window_add_item (IdePreferencesWindow  *self,
                                  gpointer               user_data,
                                  GDestroyNotify         user_data_destroy)
 {
-  IdePreferenceItemEntry entry;
+  IdePreferenceItemEntry entry = {0};
 
   g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
   g_return_if_fail (page != NULL);
@@ -742,7 +747,7 @@ ide_preferences_window_add_item (IdePreferencesWindow  *self,
   entry.page = g_intern_string (page);
   entry.group = g_intern_string (group);
   entry.name = g_intern_string (name);
-  entry.reserved1 = user_data;
+  entry.user_data = user_data;
 
   g_ptr_array_add (self->info.items, g_memdup2 (&entry, sizeof entry));
 
