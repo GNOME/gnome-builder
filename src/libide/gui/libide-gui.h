@@ -20,8 +20,10 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
+
 #include <libide-core.h>
+#include <libide-gtk.h>
 #include <libide-io.h>
 #include <libide-projects.h>
 #include <libide-threading.h>
@@ -35,10 +37,10 @@
 #include "ide-frame.h"
 #include "ide-frame-addin.h"
 #include "ide-header-bar.h"
+#include "ide-grid.h"
 #include "ide-gui-global.h"
 #include "ide-header-bar.h"
 #include "ide-marked-view.h"
-#include "ide-menu-manager.h"
 #include "ide-notifications-button.h"
 #include "ide-omni-bar-addin.h"
 #include "ide-omni-bar.h"

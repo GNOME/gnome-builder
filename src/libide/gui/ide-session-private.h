@@ -21,7 +21,8 @@
 #pragma once
 
 #include <libide-core.h>
-#include <libide-gui.h>
+
+#include "ide-grid.h"
 
 G_BEGIN_DECLS
 

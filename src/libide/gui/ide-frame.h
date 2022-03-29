@@ -36,10 +36,6 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeFrame, ide_frame, IDE, FRAME, PanelFrame)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_frame_new          (void);
-IDE_AVAILABLE_IN_ALL
-void       ide_frame_foreach_page (IdeFrame        *self,
-                                   IdePageCallback  callback,
-                                   gpointer         user_data);
+GtkWidget *ide_frame_new (void);
 
 G_END_DECLS
