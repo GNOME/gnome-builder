@@ -53,7 +53,6 @@
 #include "ide-session-addin.h"
 #include "ide-surface.h"
 #include "ide-surfaces-button.h"
-#include "ide-transfer-button.h"
 #include "ide-transient-sidebar.h"
 #include "ide-workbench.h"
 #include "ide-workbench-addin.h"
