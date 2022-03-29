@@ -20,17 +20,17 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-#include <gobject/gvaluecollector.h>
-
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
-
 #include <stdlib.h>
 #include <string.h>
 
+#include <glib/gi18n.h>
+#include <gobject/gvaluecollector.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+
 #include "ide-animation.h"
 #include "ide-frame-source-private.h"
+#include "ide-gtk-enums.h"
 
 #define FALLBACK_FRAME_RATE 60
 
@@ -927,34 +927,6 @@ ide_animation_init (IdeAnimation *animation)
   animation->last_offset = -G_MINDOUBLE;
 }
 
-
-/**
- * ide_animation_mode_get_type:
- *
- * Retrieves the GType for #IdeAnimationMode.
- *
- * Returns: A GType.
- * Side effects: GType registered on first call.
- */
-GType
-ide_animation_mode_get_type (void)
-{
-  static GType type_id = 0;
-  static const GEnumValue values[] = {
-    { IDE_ANIMATION_LINEAR, "IDE_ANIMATION_LINEAR", "linear" },
-    { IDE_ANIMATION_EASE_IN_QUAD, "IDE_ANIMATION_EASE_IN_QUAD", "ease-in-quad" },
-    { IDE_ANIMATION_EASE_IN_OUT_QUAD, "IDE_ANIMATION_EASE_IN_OUT_QUAD", "ease-in-out-quad" },
-    { IDE_ANIMATION_EASE_OUT_QUAD, "IDE_ANIMATION_EASE_OUT_QUAD", "ease-out-quad" },
-    { IDE_ANIMATION_EASE_IN_CUBIC, "IDE_ANIMATION_EASE_IN_CUBIC", "ease-in-cubic" },
-    { IDE_ANIMATION_EASE_OUT_CUBIC, "IDE_ANIMATION_EASE_OUT_CUBIC", "ease-out-cubic" },
-    { IDE_ANIMATION_EASE_IN_OUT_CUBIC, "IDE_ANIMATION_EASE_IN_OUT_CUBIC", "ease-in-out-cubic" },
-    { 0 }
-  };
-
-  if (G_UNLIKELY (!type_id))
-    type_id = g_enum_register_static ("IdeAnimationMode", values);
-  return type_id;
-}
 
 /**
  * ide_object_animatev:

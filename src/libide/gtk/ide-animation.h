@@ -18,19 +18,22 @@
 
 #pragma once
 
+#if !defined (IDE_GTK_INSIDE) && !defined (IDE_GTK_COMPILATION)
+# error "Only <libide-gtk.h> can be included directly."
+#endif
+
 #include <gdk/gdk.h>
 
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_ANIMATION      (ide_animation_get_type())
-#define IDE_TYPE_ANIMATION_MODE (ide_animation_mode_get_type())
+#define IDE_TYPE_ANIMATION (ide_animation_get_type())
 
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeAnimation, ide_animation, IDE, ANIMATION, GInitiallyUnowned)
 
-enum _IdeAnimationMode
+typedef enum _IdeAnimationMode
 {
   IDE_ANIMATION_LINEAR,
   IDE_ANIMATION_EASE_IN_QUAD,
@@ -41,12 +44,8 @@ enum _IdeAnimationMode
   IDE_ANIMATION_EASE_IN_OUT_CUBIC,
 
   IDE_ANIMATION_LAST
-};
+} IdeAnimationMode;
 
-typedef enum   _IdeAnimationMode    IdeAnimationMode;
-
-IDE_AVAILABLE_IN_ALL
-GType         ide_animation_mode_get_type      (void);
 IDE_AVAILABLE_IN_ALL
 void          ide_animation_start              (IdeAnimation     *animation);
 IDE_AVAILABLE_IN_ALL
