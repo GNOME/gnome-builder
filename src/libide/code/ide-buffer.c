@@ -196,7 +196,6 @@ static void     ide_buffer_notify_style_scheme     (IdeBuffer              *self
 static void     ide_buffer_reload_file_settings    (IdeBuffer              *self);
 static void     ide_buffer_set_file_settings       (IdeBuffer              *self,
                                                     IdeFileSettings        *file_settings);
-static void     ide_buffer_emit_cursor_moved       (IdeBuffer              *self);
 static void     ide_buffer_changed                 (GtkTextBuffer          *buffer);
 static void     ide_buffer_delete_range            (GtkTextBuffer          *buffer,
                                                     GtkTextIter            *start,
@@ -205,9 +204,6 @@ static void     ide_buffer_insert_text             (GtkTextBuffer          *buff
                                                     GtkTextIter            *location,
                                                     const gchar            *text,
                                                     gint                    len);
-static void     ide_buffer_mark_set                (GtkTextBuffer          *buffer,
-                                                    const GtkTextIter      *iter,
-                                                    GtkTextMark            *mark);
 static void     ide_buffer_delay_settling          (IdeBuffer              *self);
 static gboolean ide_buffer_settled_cb              (gpointer                user_data);
 static void     ide_buffer_apply_diagnostics       (IdeBuffer              *self);
@@ -668,7 +664,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
   buffer_class->changed = ide_buffer_changed;
   buffer_class->delete_range = ide_buffer_delete_range;
   buffer_class->insert_text = ide_buffer_insert_text;
-  buffer_class->mark_set = ide_buffer_mark_set;
 
   /**
    * IdeBuffer:buffer-manager:
@@ -962,32 +957,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
   g_signal_set_va_marshaller (signals [CHANGE_SETTLED],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__VOIDv);
-
-  /**
-   * IdeBuffer::cursor-moved:
-   * @self: an #IdeBuffer
-   * @location: a #GtkTextIter
-   *
-   * This signal is emitted when the insertion location has moved. You might
-   * want to attach to this signal to update the location of the insert mark in
-   * the display.
-   *
-   * Since: 3.32
-   */
-  signals [CURSOR_MOVED] =
-    g_signal_new ("cursor-moved",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__BOXED,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (signals [CURSOR_MOVED],
-                              G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__BOXEDv);
 
   /**
    * IdeBuffer::line-flags-changed:
@@ -1977,23 +1946,6 @@ ide_buffer_reload_file_settings (IdeBuffer *self)
     }
 }
 
-static void
-ide_buffer_emit_cursor_moved (IdeBuffer *self)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER (self));
-
-  if (!ide_buffer_get_loading (self))
-    {
-      GtkTextMark *mark;
-      GtkTextIter iter;
-
-      mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
-      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), &iter, mark);
-      g_signal_emit (self, signals [CURSOR_MOVED], 0, &iter);
-    }
-}
-
 /**
  * ide_buffer_get_loading:
  * @self: an #IdeBuffer
@@ -2061,8 +2013,6 @@ ide_buffer_delete_range (GtkTextBuffer *buffer,
 
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->delete_range (buffer, begin, end);
 
-  ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
-
   IDE_EXIT;
 }
 
@@ -2093,31 +2043,10 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
 
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->insert_text (buffer, location, text, len);
 
-  ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
-
   if G_UNLIKELY (recheck_language)
     ide_buffer_guess_language (IDE_BUFFER (buffer));
 
   IDE_EXIT;
-}
-
-static void
-ide_buffer_mark_set (GtkTextBuffer     *buffer,
-                     const GtkTextIter *iter,
-                     GtkTextMark       *mark)
-{
-  IdeBuffer *self = (IdeBuffer *)buffer;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER (self));
-
-  GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->mark_set (buffer, iter, mark);
-
-  if (!ide_buffer_get_loading (self))
-    {
-      if (mark == gtk_text_buffer_get_insert (buffer))
-        ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
-    }
 }
 
 /**
