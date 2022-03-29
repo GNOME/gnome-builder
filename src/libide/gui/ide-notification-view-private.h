@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
