@@ -243,14 +243,14 @@ ide_line_change_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer
   gboolean is_add = gtk_source_gutter_lines_has_qclass (lines, line, added_quark);
   gboolean is_change = gtk_source_gutter_lines_has_qclass (lines, line, changed_quark);
   gboolean is_delete = gtk_source_gutter_lines_has_qclass (lines, line, deleted_quark);
-  guint line_y;
-  guint line_height;
+  int line_y;
+  int line_height;
   int width;
 
   if (!is_add && !is_change && !is_delete)
     return;
 
-  gtk_source_gutter_lines_get_yrange (lines, line, &line_y, &line_height);
+  gtk_source_gutter_lines_get_line_yrange (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
   width = gtk_widget_get_width (GTK_WIDGET (renderer));
 
   if (is_add || is_change)
