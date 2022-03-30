@@ -25,6 +25,8 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include <libide-projects.h>
+
 #include "ide-greeter-private.h"
 #include "ide-greeter-workspace.h"
 
@@ -65,7 +67,7 @@ ide_greeter_workspace_dialog_response (IdeGreeterWorkspace  *self,
       ide_greeter_workspace_open_project (self, project_info);
     }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -108,6 +110,7 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
   GtkFileFilter *all_filter;
   const GList *list;
   gint64 last_priority = G_MAXINT64;
+  g_autoptr(GFile) projects_dir = NULL;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (param == NULL);
@@ -232,8 +235,8 @@ ide_greeter_workspace_actions_open (GSimpleAction *action,
   if (last_priority == G_MAXINT64)
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
 
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
-                                       ide_get_projects_dir ());
+  projects_dir = g_file_new_for_path (ide_get_projects_dir ());
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), projects_dir, NULL);
 
   ide_gtk_window_present (GTK_WINDOW (dialog));
 }
