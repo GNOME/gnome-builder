@@ -28,7 +28,7 @@
                 <child>
                   <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Boxes</property>
-                    <property name="description" translatable="yes">A simple GNOME 3 application to access remote or virtual systems</property>
+                    <property name="description" translatable="yes">A GNOME application to access remote or virtual systems</property>
                     <property name="icon-name">org.gnome.Boxes-symbolic</property>
                     <property name="uri">https://gitlab.gnome.org/GNOME/gnome-boxes.git</property>
                     <property name="languages">Vala</property>
@@ -47,7 +47,7 @@
                 <child>
                   <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Calendar</property>
-                    <property name="description" translatable="yes">Calendar application for GNOME</property>
+                    <property name="description" translatable="yes">A calendar application for GNOME</property>
                     <property name="icon-name">org.gnome.Calendar-symbolic</property>
                     <property name="uri">https://gitlab.gnome.org/GNOME/gnome-calendar.git</property>
                     <property name="languages">C</property>
@@ -56,7 +56,7 @@
                 <child>
                   <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Clocks</property>
-                    <property name="description" translatable="yes">A simple clock application for GNOME</property>
+                    <property name="description" translatable="yes">A clock application for GNOME</property>
                     <property name="icon-name">org.gnome.clocks-symbolic</property>
                     <property name="uri">http://gitlab.gnome.org/gnome/gnome-clocks.git</property>
                     <property name="languages">Vala</property>
@@ -74,7 +74,7 @@
                 <child>
                   <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Maps</property>
-                    <property name="description" translatable="yes">A simple GNOME 3 maps application</property>
+                    <property name="description" translatable="yes">A GNOME maps application</property>
                     <property name="icon-name">org.gnome.Maps-symbolic</property>
                     <property name="uri">https://gitlab.gnome.org/GNOME/gnome-maps.git</property>
                     <property name="languages">C
@@ -121,7 +121,7 @@
                 <child>
                   <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Sound Recorder</property>
-                    <property name="description" translatable="yes">A simple and modern sound recorder</property>
+                    <property name="description" translatable="yes">A modern sound recorder for GNOME</property>
                     <property name="icon-name">org.gnome.SoundRecorder-symbolic</property>
                     <property name="uri">https://gitlab.gnome.org/GNOME/gnome-sound-recorder.git</property>
                     <property name="languages">JavaScript</property>
