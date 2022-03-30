@@ -6,6 +6,7 @@
         <property name="menu-id">ide-primary-workspace-menu</property>
         <child type="title">
           <object class="IdeOmniBar" id="omni_bar">
+            <property name="icon-name">builder-build-symbolic</property>
             <child type="placeholder">
               <object class="GtkLabel" id="project_title">
                 <property name="ellipsize">end</property>

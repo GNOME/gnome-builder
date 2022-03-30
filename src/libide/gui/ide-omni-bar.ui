@@ -7,7 +7,7 @@
     <property name="popover">
       <object class="GtkPopover" id="popover">
         <property name="width-request">500</property>
-        <property name="position">top</property>
+        <property name="position">bottom</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
@@ -38,25 +38,15 @@
           <class name="pan"/>
         </style>
         <child>
-          <object class="GtkButton">
-            <property name="action-name">omnibar.move-previous</property>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">pan-up-symbolic</property>
-                <property name="pixel-size">12</property>
-              </object>
-            </child>
+          <object class="GtkImage">
+            <property name="icon-name">pan-up-symbolic</property>
+            <property name="pixel-size">12</property>
           </object>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="action-name">omnibar.move-next</property>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">pan-down-symbolic</property>
-                <property name="pixel-size">12</property>
-              </object>
-            </child>
+          <object class="GtkImage">
+            <property name="icon-name">pan-down-symbolic</property>
+            <property name="pixel-size">12</property>
           </object>
         </child>
       </object>
