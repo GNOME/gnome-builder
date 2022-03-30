@@ -20,21 +20,19 @@
 
 #define G_LOG_DOMAIN "gbp-messages-panel"
 
-#include <libide-editor.h>
+#include <libide-gui.h>
 #include <libide-terminal.h>
 
 #include "gbp-messages-panel.h"
 
 struct _GbpMessagesPanel
 {
-  DzlDockWidget parent_instance;
-
-  DzlSignalGroup *signals;
-
-  IdeTerminal  *terminal;
+  IePane          parent_instance;
+  IdeSignalGroup *signals;
+  IdeTerminal    *terminal;
 };
 
-G_DEFINE_FINAL_TYPE (GbpMessagesPanel, gbp_messages_panel, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpMessagesPanel, gbp_messages_panel, IDE_TYPE_PANE)
 
 static char *
 ensure_crlf (const char *message)
@@ -85,7 +83,7 @@ gbp_messages_panel_log_cb (GbpMessagesPanel *self,
 
   vte_terminal_feed (VTE_TERMINAL (self->terminal), message, -1);
   vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", 2);
-  dzl_dock_item_needs_attention (DZL_DOCK_ITEM (&self->parent_instance));
+  panel_widget_set_needs_attention (PANEL_WIDGET (self), TRUE);
   gtk_widget_show (GTK_WIDGET (self));
 }
 
@@ -107,7 +105,7 @@ gbp_messages_panel_set_context (GtkWidget  *widget,
   g_assert (GBP_IS_MESSAGES_PANEL (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
-  dzl_signal_group_set_target (self->signals, context);
+  ide_signal_group_set_target (self->signals, context);
 
 #if 0
   if (context != NULL)
@@ -145,9 +143,9 @@ gbp_messages_panel_init (GbpMessagesPanel *self)
 
   ide_widget_set_context_handler (GTK_WIDGET (self), gbp_messages_panel_set_context);
 
-  self->signals = dzl_signal_group_new (IDE_TYPE_CONTEXT);
+  self->signals = ide_signal_group_new (IDE_TYPE_CONTEXT);
 
-  dzl_signal_group_connect_object (self->signals,
+  ide_signal_group_connect_object (self->signals,
                                    "log",
                                    G_CALLBACK (gbp_messages_panel_log_cb),
                                    self,

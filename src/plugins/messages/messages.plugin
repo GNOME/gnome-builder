@@ -8,3 +8,4 @@ Embedded=_gbp_messages_register_types
 Hidden=true
 Module=messages
 Name=Internal Logging
+X-Workspace-Kind=primary;editor;

@@ -1,4 +1,4 @@
-/* gbp-messages-editor-addin.c
+/* gbp-messages-workspace-addin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,30 +18,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-messages-editor-addin"
+#define G_LOG_DOMAIN "gbp-messages-workspace-addin"
 
-#include <libide-editor.h>
+#include <libide-gui.h>
 
-#include "gbp-messages-editor-addin.h"
+#include "gbp-messages-workspace-addin.h"
 #include "gbp-messages-panel.h"
 
-struct _GbpMessagesEditorAddin
+struct _GbpMessagesWorkspaceAddin
 {
   GObject           parent_instance;
   GbpMessagesPanel *panel;
 };
 
 static void
-gbp_messages_editor_addin_load (IdeEditorAddin   *addin,
-                                IdeEditorSurface *editor)
+gbp_messages_workspace_addin_load (IdeWorkspaceAddin *addin,
+                                   IdeWorkspace      *workspace)
 {
-  GbpMessagesEditorAddin *self = (GbpMessagesEditorAddin *)addin;
+  GbpMessagesWorkspaceAddin *self = (GbpMessagesWorkspaceAddin *)addin;
   GtkWidget *utilities;
 
-  g_assert (GBP_IS_MESSAGES_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_SURFACE (editor));
+  g_assert (GBP_IS_MESSAGES_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
-  utilities = ide_editor_surface_get_utilities (editor);
+#if 0
+  utilities = ide_workspace_surface_get_utilities (workspace);
 
   /* hidden by default */
   self->panel = g_object_new (GBP_TYPE_MESSAGES_PANEL, NULL);
@@ -50,39 +51,42 @@ gbp_messages_editor_addin_load (IdeEditorAddin   *addin,
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->panel);
   gtk_container_add (GTK_CONTAINER (utilities), GTK_WIDGET (self->panel));
+#endif
 }
 
 static void
-gbp_messages_editor_addin_unload (IdeEditorAddin       *addin,
-                                  IdeEditorSurface *editor)
+gbp_messages_workspace_addin_unload (IdeWorkspaceAddin *addin,
+                                     IdeWorkspace      *workspace)
 {
-  GbpMessagesEditorAddin *self = (GbpMessagesEditorAddin *)addin;
+  GbpMessagesWorkspaceAddin *self = (GbpMessagesWorkspaceAddin *)addin;
 
-  g_assert (GBP_IS_MESSAGES_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_SURFACE (editor));
+  g_assert (GBP_IS_MESSAGES_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
+#if 0
   if (self->panel != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->panel));
+#endif
 
   g_assert (self->panel == NULL);
 }
 
 static void
-editor_addin_iface_init (IdeEditorAddinInterface *iface)
+workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
-  iface->load = gbp_messages_editor_addin_load;
-  iface->unload = gbp_messages_editor_addin_unload;
+  iface->load = gbp_messages_workspace_addin_load;
+  iface->unload = gbp_messages_workspace_addin_unload;
 }
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMessagesEditorAddin, gbp_messages_editor_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_ADDIN, editor_addin_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMessagesWorkspaceAddin, gbp_messages_workspace_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
-gbp_messages_editor_addin_class_init (GbpMessagesEditorAddinClass *klass)
+gbp_messages_workspace_addin_class_init (GbpMessagesWorkspaceAddinClass *klass)
 {
 }
 
 static void
-gbp_messages_editor_addin_init (GbpMessagesEditorAddin *self)
+gbp_messages_workspace_addin_init (GbpMessagesWorkspaceAddin *self)
 {
 }

@@ -1,5 +1,5 @@
 plugins_sources += files([
-  'gbp-messages-editor-addin.c',
+  'gbp-messages-workspace-addin.c',
   'gbp-messages-panel.c',
   'messages-plugin.c',
 ])
