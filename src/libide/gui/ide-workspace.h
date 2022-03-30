@@ -66,9 +66,9 @@ struct _IdeWorkspaceClass
   void     (*add_pane)              (IdeWorkspace         *self,
                                      IdePane              *pane,
                                      IdePanelPosition     *position);
-
-  /*< private >*/
-  gpointer _reserved[8];
+  void     (*restore_size)          (IdeWorkspace         *self,
+                                     int                   width,
+                                     int                   height);
 };
 
 IDE_AVAILABLE_IN_ALL

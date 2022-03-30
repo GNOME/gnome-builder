@@ -312,6 +312,16 @@ ide_workspace_size_allocate (GtkWidget *widget,
 }
 
 static void
+ide_workspace_restore_size (IdeWorkspace *workspace,
+                            int           width,
+                            int           height)
+{
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  gtk_window_set_default_size (GTK_WINDOW (workspace), width, height);
+}
+
+static void
 ide_workspace_realize (GtkWidget *widget)
 {
   IdeWorkspace *self = (IdeWorkspace *)widget;
@@ -326,7 +336,8 @@ ide_workspace_realize (GtkWidget *widget)
   g_settings_get (settings, "window-size", "(ii)", &geom.width, &geom.height);
   g_settings_get (settings, "window-maximized", "b", &maximized);
 
-  gtk_window_set_default_size (GTK_WINDOW (self), geom.width, geom.height);
+  if (IDE_WORKSPACE_GET_CLASS (self)->restore_size)
+    IDE_WORKSPACE_GET_CLASS (self)->restore_size (self, geom.width, geom.height);
 
   GTK_WIDGET_CLASS (ide_workspace_parent_class)->realize (widget);
 
@@ -400,6 +411,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   klass->context_set = ide_workspace_real_context_set;
   klass->agree_to_close_async = ide_workspace_agree_to_close_async;
   klass->agree_to_close_finish = ide_workspace_agree_to_close_finish;
+  klass->restore_size = ide_workspace_restore_size;
 
   /**
    * IdeWorkspace:context:
