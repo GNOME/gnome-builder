@@ -49,6 +49,21 @@
           <object class="IdeGrid">
           </object>
         </child>
+        <child type="start">
+          <object class="PanelPaned" id="edge_start">
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="PanelPaned" id="edge_end">
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <child type="bottom">
+          <object class="PanelPaned" id="edge_bottom">
+            <property name="orientation">horizontal</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
