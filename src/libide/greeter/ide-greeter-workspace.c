@@ -650,6 +650,9 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
 
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Left, GDK_ALT_MASK, "win.page", "s", "overview");
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_w, GDK_CONTROL_MASK, "window.close", NULL);
+
   g_type_ensure (IDE_TYPE_CLONE_SURFACE);
   g_type_ensure (IDE_TYPE_GREETER_BUTTONS_SECTION);
 }
