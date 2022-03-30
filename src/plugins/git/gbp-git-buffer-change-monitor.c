@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -35,7 +34,7 @@ struct _GbpGitBufferChangeMonitor
 {
   IdeBufferChangeMonitor  parent;
   IpcGitChangeMonitor    *proxy;
-  DzlSignalGroup         *buffer_signals;
+  IdeSignalGroup         *buffer_signals;
   LineCache              *cache;
   guint                   last_change_count;
   guint                   queued_source;
@@ -80,11 +79,11 @@ gbp_git_buffer_change_monitor_queue_update (GbpGitBufferChangeMonitor *self,
   g_clear_handle_id (&self->queued_source, g_source_remove);
 
   self->queued_source =
-    gdk_threads_add_timeout_full (G_PRIORITY_HIGH,
-                                  delay,
-                                  (GSourceFunc) queued_update_source_cb,
-                                  g_object_ref (self),
-                                  g_object_unref);
+    g_timeout_add_full (G_PRIORITY_HIGH,
+                        delay,
+                        (GSourceFunc) queued_update_source_cb,
+                        g_object_ref (self),
+                        g_object_unref);
 }
 
 static void
@@ -94,7 +93,7 @@ gbp_git_buffer_change_monitor_destroy (IdeObject *object)
 
   if (self->buffer_signals)
     {
-      dzl_signal_group_set_target (self->buffer_signals, NULL);
+      ide_signal_group_set_target (self->buffer_signals, NULL);
       g_clear_object (&self->buffer_signals);
     }
 
@@ -120,7 +119,7 @@ gbp_git_buffer_change_monitor_load (IdeBufferChangeMonitor *monitor,
   g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  dzl_signal_group_set_target (self->buffer_signals, buffer);
+  ide_signal_group_set_target (self->buffer_signals, buffer);
   gbp_git_buffer_change_monitor_queue_update (self, FAST);
 }
 
@@ -348,24 +347,24 @@ gbp_git_buffer_change_monitor_class_init (GbpGitBufferChangeMonitorClass *klass)
 static void
 gbp_git_buffer_change_monitor_init (GbpGitBufferChangeMonitor *self)
 {
-  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
 
-  dzl_signal_group_connect_object (self->buffer_signals,
+  ide_signal_group_connect_object (self->buffer_signals,
                                    "insert-text",
                                    G_CALLBACK (buffer_insert_text_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->buffer_signals,
+  ide_signal_group_connect_object (self->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (buffer_delete_range_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->buffer_signals,
+  ide_signal_group_connect_object (self->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (buffer_delete_range_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  dzl_signal_group_connect_object (self->buffer_signals,
+  ide_signal_group_connect_object (self->buffer_signals,
                                    "changed",
                                    G_CALLBACK (buffer_changed_after_cb),
                                    self,
