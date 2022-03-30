@@ -146,7 +146,6 @@ ide_application_actions_about (GSimpleAction *action,
                          "program-name", _("GNOME Builder"),
                          "transient-for", parent,
                          "translator-credits", _("translator-credits"),
-                         "use-header-bar", TRUE,
                          "version", version->str,
                          "website", "https://wiki.gnome.org/Apps/Builder",
                          "website-label", _("Learn more about GNOME Builder"),
@@ -155,7 +154,6 @@ ide_application_actions_about (GSimpleAction *action,
                                        _("Funded By"),
                                        ide_application_credits_funders);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
   ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
