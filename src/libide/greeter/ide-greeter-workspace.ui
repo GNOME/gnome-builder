@@ -47,29 +47,30 @@
         </child>
       </object>
     </child>
-    <child internal-child="surfaces">
-      <object class="GtkStack" id="surfaces">
+    <child>
+      <object class="GtkStack" id="pages">
         <property name="transition-type">crossfade</property>
         <signal name="notify::visible-child" handler="stack_notify_visible_child_cb" object="IdeGreeterWorkspace" swapped="true"/>
         <child>
-          <object class="IdeSurface" id="sections_surface">
+          <object class="GtkStackPage">
+            <property name="name">overview</property>
             <property name="title" translatable="yes" context="title">Open a Project</property>
-            <style>
-              <class name="sectionssurface"/>
-            </style>
-            <child>
+            <property name="child">
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="expand">true</property>
+                    <property name="vexpand">true</property>
                     <property name="hscrollbar-policy">never</property>
                     <child>
                       <object class="GtkViewport">
-                        <property name="expand">true</property>
+                        <property name="vexpand">true</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">32</property>
+                            <property name="margin-top">32</property>
+                            <property name="margin-start">32</property>
+                            <property name="margin-end">32</property>
+                            <property name="margin-bottom">32</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">24</property>
                             <child>
@@ -100,7 +101,7 @@
                 </child>
                 <child>
                   <object class="GtkActionBar" id="projects_action_bar">
-                    <child>
+                    <child type="center">
                       <object class="IdeGreeterButtonsSection" id="buttons_section">
                         <property name="halign">center</property>
                       </object>
@@ -109,6 +110,7 @@
                 </child>
                 <child>
                   <object class="GtkActionBar" id="action_bar">
+                    <property name="visible">false</property>
                     <child type="center">
                       <object class="GtkBox">
                         <property name="width-request">600</property>
@@ -144,10 +146,7 @@
                   </object>
                 </child>
               </object>
-            </child>
-            <layout>
-              <property name="name">overview</property>
-            </layout>
+            </property>
           </object>
         </child>
       </object>
