@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/ui">
+  <gresource prefix="/org/gnome/libide-greeter/">
     <file preprocess="xml-stripblanks">ide-greeter-row.ui</file>
     <file preprocess="xml-stripblanks">ide-greeter-workspace.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>style.css</file>
   </gresource>
 </gresources>

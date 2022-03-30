@@ -5,7 +5,7 @@
       <item>
         <attribute name="id">ide-greeter-workspace-menu-clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
-        <attribute name="action">win.surface</attribute>
+        <attribute name="action">win.page</attribute>
         <attribute name="target" type="s">'clone'</attribute>
       </item>
     </section>
@@ -48,29 +48,19 @@
         <attribute name="action">app.quit</attribute>
       </item>
     </section>
-    <!--
-    <section id="ide-greeter-workspace-menu-debug-section">
-      <attribute name="label" translatable="yes">Debugging</attribute>
-      <item>
-        <attribute name="id">ide-greeter-workspace-menu-stats</attribute>
-        <attribute name="label" translatable="yes">Type Statistics</attribute>
-        <attribute name="action">app.about:types</attribute>
-      </item>
-    </section>
-    -->
   </menu>
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section">
       <item>
         <attribute name="id">ide-primary-workspace-menu-open</attribute>
         <attribute name="label" translatable="yes">Open a _Project…</attribute>
-        <attribute name="action">app.present-greeter-with-surface</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">''</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
-        <attribute name="action">app.present-greeter-with-surface</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'clone'</attribute>
       </item>
     </section>
@@ -80,13 +70,13 @@
       <item>
         <attribute name="id">ide-editor-workspace-menu-open</attribute>
         <attribute name="label" translatable="yes">Open a _Project…</attribute>
-        <attribute name="action">app.present-greeter-with-surface</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">''</attribute>
       </item>
       <item>
         <attribute name="id">ide-editor-workspace-menu-clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
-        <attribute name="action">app.present-greeter-with-surface</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'clone'</attribute>
       </item>
     </section>
