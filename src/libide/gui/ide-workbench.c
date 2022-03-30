@@ -1484,19 +1484,21 @@ static void
 ide_workbench_unload_project_completed (IdeWorkbench *self,
                                         IdeTask      *task)
 {
+  GList *copy;
+
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_TASK (task));
 
   g_clear_object (&self->addins);
 
-  while (self->mru_queue.head != NULL)
+  copy = g_list_copy_deep (self->mru_queue.head, (GCopyFunc)g_object_ref, NULL);
+  for (const GList *iter = copy; iter; iter = iter->next)
     {
-      IdeWorkspace *workspace = self->mru_queue.head->data;
-
+      IdeWorkspace *workspace = iter->data;
       g_assert (IDE_IS_WORKSPACE (workspace));
-
       gtk_window_destroy (GTK_WINDOW (workspace));
     }
+  g_list_free_full (copy, g_object_unref);
 
   _ide_foundry_unload_async (self->context,
                              ide_task_get_cancellable (task),
