@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-frame.h"
 #include "ide-grid.h"
 #include "ide-gui-global.h"
 #include "ide-header-bar.h"
@@ -53,6 +54,9 @@ struct _IdePrimaryWorkspace
   IdeHeaderBar       *header_bar;
   IdeRunButton       *run_button;
   GtkLabel           *project_title;
+  PanelPaned         *edge_start;
+  PanelPaned         *edge_end;
+  PanelPaned         *edge_bottom;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -81,6 +85,62 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
 }
 
 static void
+ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
+                                IdePane          *pane,
+                                IdePanelPosition *position)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+  PanelDockPosition edge;
+  PanelPaned *paned;
+  GtkWidget *parent;
+  guint depth;
+  guint nth = 0;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+  g_assert (IDE_IS_PANE (pane));
+  g_assert (position != NULL);
+
+  ide_panel_position_get_edge (position, &edge);
+
+  switch (edge)
+    {
+    case PANEL_DOCK_POSITION_START:
+      paned = self->edge_start;
+      ide_panel_position_get_row (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_END:
+      paned = self->edge_end;
+      ide_panel_position_get_row (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_BOTTOM:
+      paned = self->edge_bottom;
+      ide_panel_position_get_column (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_TOP:
+    case PANEL_DOCK_POSITION_CENTER:
+    default:
+      g_warning ("Primary workspace only supports left/right/bottom edges");
+      return;
+    }
+
+  while (!(parent = panel_paned_get_nth_child (paned, nth)))
+    panel_paned_append (paned, panel_frame_new ());
+
+  if (ide_panel_position_get_depth (position, &depth))
+    {
+      /* TODO: setup position */
+      panel_frame_add (PANEL_FRAME (parent), PANEL_WIDGET (pane));
+    }
+  else
+    {
+      panel_frame_add (PANEL_FRAME (parent), PANEL_WIDGET (pane));
+    }
+}
+
+static void
 ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -89,11 +149,15 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   ide_workspace_class_set_kind (workspace_class, "primary");
 
   workspace_class->context_set = ide_primary_workspace_context_set;
+  workspace_class->add_pane = ide_primary_workspace_add_pane;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-primary-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_start);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_end);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_bottom);
 
   g_type_ensure (IDE_TYPE_GRID);
   g_type_ensure (IDE_TYPE_NOTIFICATIONS_BUTTON);
