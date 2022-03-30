@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-grid.h"
 #include "ide-gui-global.h"
 #include "ide-header-bar.h"
 #include "ide-notifications-button.h"
@@ -94,6 +95,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
 
+  g_type_ensure (IDE_TYPE_GRID);
   g_type_ensure (IDE_TYPE_NOTIFICATIONS_BUTTON);
   g_type_ensure (IDE_TYPE_OMNI_BAR);
   g_type_ensure (IDE_TYPE_RUN_BUTTON);
