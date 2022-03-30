@@ -31,6 +31,8 @@
 
 #include "ide-header-bar.h"
 #include "ide-page.h"
+#include "ide-pane.h"
+#include "ide-panel-position.h"
 
 G_BEGIN_DECLS
 
@@ -61,6 +63,9 @@ struct _IdeWorkspaceClass
   gboolean (*agree_to_close_finish) (IdeWorkspace         *self,
                                      GAsyncResult         *result,
                                      GError              **error);
+  void     (*add_pane)              (IdeWorkspace         *self,
+                                     IdePane              *pane,
+                                     IdePanelPosition     *position);
 
   /*< private >*/
   gpointer _reserved[8];
@@ -81,5 +86,9 @@ void          ide_workspace_foreach_page             (IdeWorkspace      *self,
                                                       gpointer           user_data);
 IDE_AVAILABLE_IN_ALL
 IdePage      *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+void          ide_workspace_add_pane                 (IdeWorkspace      *self,
+                                                      IdePane           *pane,
+                                                      IdePanelPosition  *position);
 
 G_END_DECLS
