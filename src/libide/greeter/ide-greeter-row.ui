@@ -10,7 +10,6 @@
         <property name="margin-end">18</property>
         <property name="orientation">horizontal</property>
         <property name="spacing">12</property>
-        <property name="visible">true</property>
         <child>
           <object class="GtkCheckButton" id="check_button">
             <property name="margin-end">6</property>
@@ -29,11 +28,9 @@
             <property name="hexpand">true</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
-            <property name="visible">true</property>
             <child>
               <object class="GtkLabel" id="title">
                 <property name="ellipsize">end</property>
-                <property name="visible">true</property>
                 <property name="xalign">0.0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -43,7 +40,6 @@
             <child>
               <object class="GtkLabel" id="subtitle">
                 <property name="ellipsize">end</property>
-                <property name="visible">true</property>
                 <property name="xalign">0.0</property>
                 <style>
                   <class name="dim-label"/>
@@ -56,14 +52,12 @@
           <object class="GtkBox" id="tags">
             <property name="spacing">6</property>
             <property name="valign">center</property>
-            <property name="visible">true</property>
           </object>
         </child>
         <child>
           <object class="GtkImage">
             <property name="icon-name">go-next-symbolic</property>
             <property name="margin-start">6</property>
-            <property name="visible">true</property>
           </object>
         </child>
       </object>

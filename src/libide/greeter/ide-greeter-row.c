@@ -74,23 +74,14 @@ ide_greeter_row_new (void)
 }
 
 static void
-ide_greeter_row_get_preferred_width (GtkWidget *widget,
-                                     gint      *min_width,
-                                     gint      *nat_width)
-{
-  *min_width = 600;
-  *nat_width = 600;
-}
-
-static void
-ide_greeter_row_finalize (GObject *object)
+ide_greeter_row_dispose (GObject *object)
 {
   IdeGreeterRow *self = (IdeGreeterRow *)object;
   IdeGreeterRowPrivate *priv = ide_greeter_row_get_instance_private (self);
 
   g_clear_object (&priv->project_info);
 
-  G_OBJECT_CLASS (ide_greeter_row_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_greeter_row_parent_class)->dispose (object);
 }
 
 static void
@@ -149,11 +140,9 @@ ide_greeter_row_class_init (IdeGreeterRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = ide_greeter_row_finalize;
+  object_class->dispose = ide_greeter_row_dispose;
   object_class->get_property = ide_greeter_row_get_property;
   object_class->set_property = ide_greeter_row_set_property;
-
-  widget_class->get_preferred_width = ide_greeter_row_get_preferred_width;
 
   /**
    * IdeGreeterRow:project-info:
@@ -211,15 +200,16 @@ static void
 ide_greeter_row_clear (IdeGreeterRow *self)
 {
   IdeGreeterRowPrivate *priv = ide_greeter_row_get_instance_private (self);
+  GtkWidget *child;
 
   g_assert (IDE_IS_GREETER_ROW (self));
 
   g_object_set (priv->image, "icon-name", NULL, NULL);
   gtk_label_set_label (priv->title, NULL);
   gtk_label_set_label (priv->subtitle, NULL);
-  gtk_container_foreach (GTK_CONTAINER (priv->tags),
-                         (GtkCallback)gtk_widget_destroy,
-                         NULL);
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (priv->tags))))
+    gtk_box_remove (priv->tags, child);
 }
 
 /**
@@ -311,13 +301,13 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
           for (guint i = 0; i < parts->len; i++)
             {
               const gchar *key = g_ptr_array_index (parts, i);
-              DzlPillBox *tag;
+              GtkLabel *tag;
 
-              tag = g_object_new (DZL_TYPE_PILL_BOX,
-                                  "visible", TRUE,
+              tag = g_object_new (GTK_TYPE_LABEL,
                                   "label", key,
                                   NULL);
-              gtk_container_add (GTK_CONTAINER (priv->tags), GTK_WIDGET (tag));
+              gtk_widget_add_css_class (GTK_WIDGET (tag), "pill");
+              gtk_box_append (priv->tags, GTK_WIDGET (tag));
             }
 
           if (icon != NULL)
