@@ -36,7 +36,6 @@
         <child type="end">
           <object class="GtkBox" id="right">
             <property name="hexpand">true</property>
-            <property name="spacing">6</property>
           </object>
         </child>
       </object>
