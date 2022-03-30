@@ -644,7 +644,7 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
 
   ide_workspace_class_set_kind (workspace_class, "greeter");
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-workspace.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-greeter/ide-greeter-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, action_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, buttons_section);

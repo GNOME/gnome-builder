@@ -168,7 +168,7 @@ ide_greeter_row_class_init (IdeGreeterRowClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-greeter/ide-greeter-row.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, check_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, image);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, subtitle);
@@ -304,6 +304,7 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
               GtkLabel *tag;
 
               tag = g_object_new (GTK_TYPE_LABEL,
+                                  "css-name", "button",
                                   "label", key,
                                   NULL);
               gtk_widget_add_css_class (GTK_WIDGET (tag), "pill");
