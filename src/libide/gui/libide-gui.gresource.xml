@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/ui">
-    <file preprocess="xml-stripblanks">help-overlay.ui</file>
+  <gresource prefix="/org/gnome/builder">
+    <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
   </gresource>
   <gresource prefix="/org/gnome/libide-gui">
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
