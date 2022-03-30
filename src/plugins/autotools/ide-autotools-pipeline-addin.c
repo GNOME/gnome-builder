@@ -273,7 +273,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
       ide_subprocess_launcher_push_argv (launcher, prefix_arg);
     }
 
-  if (!dzl_str_empty0 (config_opts))
+  if (!ide_str_empty0 (config_opts))
     {
       g_auto(GStrv) argv = NULL;
       gint argc = 0;

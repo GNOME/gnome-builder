@@ -138,7 +138,7 @@ create_launcher (IdeAutotoolsMakeStage  *self,
    * we can parse the directory changes (Entering directory foo). Otherwise,
    * we can't really give users diagnostics that are in the proper directory.
    */
-  if (dzl_str_equal0 ("all", make_target))
+  if (ide_str_equal0 ("all", make_target))
     {
       ide_subprocess_launcher_setenv (launcher, "LANG", "C.UTF-8", TRUE);
       ide_subprocess_launcher_setenv (launcher, "LC_ALL", "C.UTF-8", TRUE);
