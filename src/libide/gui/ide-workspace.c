@@ -423,6 +423,10 @@ ide_workspace_init (IdeWorkspace *self)
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
   g_autofree gchar *app_id = NULL;
 
+#ifdef DEVELOPMENT_BUILD
+  gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
+#endif
+
   priv->mru_link.data = self;
 
   /* Add org-gnome-Builder style CSS identifier */
