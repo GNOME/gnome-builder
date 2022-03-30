@@ -77,7 +77,7 @@ gbp_newcomers_section_filter (IdeGreeterSection *section,
 
   for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
        child != NULL;
-       child = gtk_widget_get_next_sibling (GTK_WIDGET (self->list_box)))
+       child = gtk_widget_get_next_sibling (child))
     {
       if (GBP_IS_NEWCOMERS_PROJECT (child))
         {
