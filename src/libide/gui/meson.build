@@ -12,6 +12,7 @@ libide_gui_public_headers = [
   'ide-application-addin.h',
   'ide-config-view-addin.h',
   'ide-environment-editor.h',
+  'ide-frame.h',
   'ide-frame-addin.h',
   'ide-grid.h',
   'ide-gui-global.h',
