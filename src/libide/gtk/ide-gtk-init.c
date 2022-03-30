@@ -31,6 +31,7 @@
 #include "ide-fancy-tree-view.h"
 #include "ide-progress-icon.h"
 #include "ide-search-entry.h"
+#include "ide-truncate-model.h"
 
 void
 _ide_gtk_init (void)
@@ -41,6 +42,7 @@ _ide_gtk_init (void)
   g_type_ensure (IDE_TYPE_FANCY_TREE_VIEW);
   g_type_ensure (IDE_TYPE_PROGRESS_ICON);
   g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
+  g_type_ensure (IDE_TYPE_TRUNCATE_MODEL);
 
   g_resources_register (ide_gtk_get_resource ());
 }
