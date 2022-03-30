@@ -22,11 +22,9 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
-#include "ide-clone-surface.h"
 #include "ide-greeter-buttons-section.h"
 #include "ide-greeter-private.h"
 #include "ide-greeter-workspace.h"
@@ -55,7 +53,6 @@ struct _IdeGreeterWorkspace
   GSimpleAction            *purge_action;
 
   /* Template Widgets */
-  IdeCloneSurface          *clone_surface;
   IdeHeaderBar             *header_bar;
   DzlPriorityBox           *sections;
   DzlPriorityBox           *left_box;
@@ -366,6 +363,7 @@ void
 ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
                                     IdeProjectInfo      *project_info)
 {
+#if 0
   IdeWorkbench *workbench;
   const gchar *vcs_uri = NULL;
   GFile *file;
@@ -430,6 +428,7 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
                                     g_object_ref (self));
 
   IDE_EXIT;
+#endif
 }
 
 static void
@@ -638,7 +637,6 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, action_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, buttons_section);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, clone_surface);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, empty_state);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, left_box);
