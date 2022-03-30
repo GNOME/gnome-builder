@@ -66,6 +66,11 @@ struct _IdeApplication
    */
   GHashTable *plugin_gresources;
 
+  /* CSS providers for each plugin that is loaded, indexed by the resource
+   * path for the plugin/internal library.
+   */
+  GHashTable *css_providers;
+
   /* We need to stash the unmodified argv for the application somewhere
    * so that we can pass it to a remote instance. Otherwise we lose
    * the ability by cmdline-addins to determine if any options were
