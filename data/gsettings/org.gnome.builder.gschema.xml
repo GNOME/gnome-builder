@@ -12,11 +12,11 @@
     </key>
     <key name="style-variant" type="s">
       <choices>
-        <choice value="follow"/>
+        <choice value="default"/>
         <choice value="light"/>
         <choice value="dark"/>
       </choices>
-      <default>'follow'</default>
+      <default>'default'</default>
       <summary>Style Variant</summary>
       <description>Use the light or dark variant of the GTK theme and/or GtkSourceView style scheme.</description>
     </key>

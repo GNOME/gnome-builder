@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-theme-section">
+      <item>
+        <attribute name="custom">theme_selector</attribute>
+      </item>
+    </section>
     <section id="ide-primary-workspace-menu-projects-section"/>
     <section id="ide-primary-workspace-menu-placeholder1"/>
     <section id="ide-primary-workspace-menu-placeholder2"/>

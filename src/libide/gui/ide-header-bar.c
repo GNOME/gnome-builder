@@ -165,6 +165,33 @@ ide_header_bar_get_menu_id (IdeHeaderBar *self)
   return priv->menu_id;
 }
 
+static gboolean
+menu_has_custom (GMenuModel *model,
+                 const char *name)
+{
+  guint n_items;
+
+  if (model == NULL || name == NULL)
+    return FALSE;
+
+  n_items = g_menu_model_get_n_items (model);
+  for (int i = 0; i < n_items; i++)
+    {
+      g_autofree char *custom = NULL;
+      g_autoptr(GMenuModel) section = NULL;
+
+      if (g_menu_model_get_item_attribute (model, i, "custom", "s", &custom) &&
+          g_strcmp0 (custom, name) == 0)
+        return TRUE;
+
+      if ((section = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION)) &&
+          menu_has_custom (section, name))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 /**
  * ide_header_bar_set_menu_id:
  * @self: a #IdeHeaderBar
@@ -185,6 +212,7 @@ ide_header_bar_set_menu_id (IdeHeaderBar *self,
 
   if (!ide_str_equal0 (menu_id, priv->menu_id))
     {
+      GtkPopover *popover;
       GMenu *menu = NULL;
 
       g_free (priv->menu_id);
@@ -195,6 +223,14 @@ ide_header_bar_set_menu_id (IdeHeaderBar *self,
 
       g_object_set (priv->menu_button, "menu-model", menu, NULL);
       gtk_widget_set_visible (GTK_WIDGET (priv->menu_button), !ide_str_empty0 (menu_id));
+
+      popover = gtk_menu_button_get_popover (priv->menu_button);
+      if (menu_has_custom (G_MENU_MODEL (menu), "theme_selector"))
+        gtk_popover_menu_add_child (GTK_POPOVER_MENU (popover),
+                                    g_object_new (PANEL_TYPE_THEME_SELECTOR,
+                                                  "action-name", "app.style-variant",
+                                                  NULL),
+                                    "theme_selector");
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MENU_ID]);
     }

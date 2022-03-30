@@ -110,9 +110,11 @@ _ide_application_update_color (IdeApplication *self)
   style_variant = g_settings_get_string (self->settings, "style-variant");
   manager = adw_style_manager_get_default ();
 
-  if (!g_strcmp0 (style_variant, "follow"))
+  g_debug ("Style variant changed to %s", style_variant);
+
+  if (g_strcmp0 (style_variant, "follow") == 0)
     adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_PREFER_LIGHT);
-  else if (!g_strcmp0 (style_variant, "dark"))
+  else if (g_strcmp0 (style_variant, "dark") == 0)
     adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_DARK);
   else
     adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_LIGHT);
@@ -156,6 +158,12 @@ _ide_application_init_color (IdeApplication *self)
 
   if (g_getenv ("GTK_THEME") == NULL)
     {
+      g_autofree char *style_variant = NULL;
+
+      /* We must read "style-variant" to get changed notifications */
+      style_variant = g_settings_get_string (self->settings, "style-variant");
+      g_debug ("Initialized with style-variant %s", style_variant);
+
       g_signal_connect_object (self->settings,
                                "changed::style-variant",
                                G_CALLBACK (_ide_application_update_color),
