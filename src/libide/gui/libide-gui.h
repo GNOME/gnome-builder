@@ -45,6 +45,7 @@
 # include "ide-omni-bar.h"
 # include "ide-page.h"
 # include "ide-pane.h"
+# include "ide-panel-position.h"
 # include "ide-preferences-addin.h"
 # include "ide-preferences-window.h"
 # include "ide-primary-workspace.h"

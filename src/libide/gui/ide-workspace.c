@@ -662,6 +662,23 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
   return IDE_WORKSPACE_ADDIN (ret);
 }
 
+void
+ide_workspace_add_pane (IdeWorkspace     *self,
+                        IdePane          *pane,
+                        IdePanelPosition *position)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_PANE (pane));
+  g_return_if_fail (position != NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->add_pane)
+    IDE_WORKSPACE_GET_CLASS (self)->add_pane (self, pane, position);
+  else
+    g_critical ("%s does not support adding panels",
+                G_OBJECT_TYPE_NAME (self));
+
+}
+
 static void
 ide_workspace_add_child (GtkBuildable *buildable,
                          GtkBuilder   *builder,
