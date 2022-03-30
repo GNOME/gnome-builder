@@ -183,15 +183,6 @@
             <property name="name">sections</property>
           </packing>
         </child>
-        <child>
-          <object class="IdeCloneSurface" id="clone_surface">
-            <property name="title" translatable="yes" context="title">Clone Repository</property>
-            <property name="visible">true</property>
-          </object>
-          <packing>
-            <property name="name">clone</property>
-          </packing>
-        </child>
       </object>
     </child>
   </template>
