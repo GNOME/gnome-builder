@@ -300,7 +300,7 @@ ide_greeter_workspace_constructed (GObject *object)
                               self);
 
   /* Ensure that no plugin changed our page */
-  ide_greeter_workspace_set_page (self, "overview");
+  ide_greeter_workspace_set_page_name (self, "overview");
 
   gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
 }
@@ -415,7 +415,7 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
       else
         {
           ide_clone_page_set_uri (self->clone_page, vcs_uri);
-          ide_greeter_workspace_set_page (self, "clone");
+          ide_greeter_workspace_set_page_name (self, "clone");
           return;
         }
     }
@@ -459,7 +459,7 @@ ide_greeter_workspace_click_pressed_cb (IdeGreeterWorkspace *self,
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
   g_assert (GTK_IS_GESTURE_CLICK (gesture));
 
-  ide_greeter_workspace_set_page (self, "overview");
+  ide_greeter_workspace_set_page_name (self, "overview");
 }
 
 static void
@@ -876,9 +876,44 @@ ide_greeter_workspace_set_selection_mode (IdeGreeterWorkspace *self,
     }
 }
 
+/**
+ * ide_greeter_workspace_get_page:
+ *
+ * Returns: (transfer none) (nullable): the current page, or %NULL if not
+ *   page has been added yet.
+ */
+GtkWidget *
+ide_greeter_workspace_get_page (IdeGreeterWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_GREETER_WORKSPACE (self), NULL);
+
+  return gtk_stack_get_visible_child (self->pages);
+}
+
 void
 ide_greeter_workspace_set_page (IdeGreeterWorkspace *self,
-                                const char          *name)
+                                GtkWidget           *page)
+{
+  g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
+  g_return_if_fail (!page || GTK_IS_WIDGET (page));
+
+  if (page != NULL)
+    gtk_stack_set_visible_child (self->pages, page);
+  else
+    gtk_stack_set_visible_child_name (self->pages, "overview");
+}
+
+const char *
+ide_greeter_workspace_get_page_name (IdeGreeterWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_GREETER_WORKSPACE (self), NULL);
+
+  return gtk_stack_get_visible_child_name (self->pages);
+}
+
+void
+ide_greeter_workspace_set_page_name (IdeGreeterWorkspace *self,
+                                     const char          *name)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
 
