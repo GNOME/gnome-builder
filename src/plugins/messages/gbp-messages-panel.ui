@@ -7,7 +7,7 @@
       <object class="GtkScrolledWindow">
         <property name="hexpand">true</property>
         <child>
-          <object class="IdeTerminal" id="terminal">
+          <object class="VteTerminal" id="terminal">
             <property name="hexpand">true</property>
             <property name="scroll-on-output">false</property>
           </object>

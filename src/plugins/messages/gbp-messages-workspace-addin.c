@@ -36,22 +36,16 @@ gbp_messages_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpMessagesWorkspaceAddin *self = (GbpMessagesWorkspaceAddin *)addin;
-  GtkWidget *utilities;
+  g_autoptr(IdePanelPosition) position = NULL;
 
   g_assert (GBP_IS_MESSAGES_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-#if 0
-  utilities = ide_workspace_surface_get_utilities (workspace);
+  position = ide_panel_position_new ();
+  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
 
-  /* hidden by default */
   self->panel = g_object_new (GBP_TYPE_MESSAGES_PANEL, NULL);
-  g_signal_connect (self->panel,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->panel);
-  gtk_container_add (GTK_CONTAINER (utilities), GTK_WIDGET (self->panel));
-#endif
+  ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
 }
 
 static void
@@ -59,16 +53,15 @@ gbp_messages_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                      IdeWorkspace      *workspace)
 {
   GbpMessagesWorkspaceAddin *self = (GbpMessagesWorkspaceAddin *)addin;
+  GtkWidget *frame;
 
   g_assert (GBP_IS_MESSAGES_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-#if 0
-  if (self->panel != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->panel));
-#endif
+  frame = gtk_widget_get_ancestor (GTK_WIDGET (self->panel), PANEL_TYPE_FRAME);
+  panel_frame_remove (PANEL_FRAME (frame), PANEL_WIDGET (self->panel));
 
-  g_assert (self->panel == NULL);
+  self->panel = NULL;
 }
 
 static void
