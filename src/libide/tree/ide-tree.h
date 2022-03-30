@@ -63,7 +63,5 @@ void           ide_tree_collapse_node        (IdeTree     *self,
 IDE_AVAILABLE_IN_ALL
 gboolean       ide_tree_node_expanded        (IdeTree     *self,
                                               IdeTreeNode *node);
-IDE_AVAILABLE_IN_ALL
-GtkDropTarget *ide_tree_get_drop_target      (IdeTree     *self);
 
 G_END_DECLS
