@@ -65,6 +65,14 @@ ide_grid_new (void)
   return g_object_new (IDE_TYPE_GRID, NULL);
 }
 
+/**
+ * ide_grid_foreach_page:
+ * @self: a #IdeGrid
+ * @callback: (scope call): callback to execute for each page found
+ * @user_data: closure data for @callback
+ *
+ * Calls @callback for each #IdePage found in the grid.
+ */
 void
 ide_grid_foreach_page (IdeGrid         *self,
                        IdePageCallback  callback,
