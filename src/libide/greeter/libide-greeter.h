@@ -27,7 +27,6 @@
 
 #define IDE_GREETER_INSIDE
 
-#include "ide-clone-surface.h"
 #include "ide-greeter-row.h"
 #include "ide-greeter-section.h"
 #include "ide-greeter-workspace.h"

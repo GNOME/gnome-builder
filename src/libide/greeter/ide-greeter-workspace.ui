@@ -26,14 +26,11 @@
           </object>
         </child>
         <child type="left">
-          <object class="DzlPriorityBox" id="left_box">
+          <object class="GtkBox" id="left_box">
             <property name="spacing">6</property>
             <property name="hexpand">false</property>
             <property name="homogeneous">true</property>
           </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
         </child>
         <child type="right">
           <object class="GtkToggleButton" id="select_button">
@@ -47,9 +44,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
       </object>
     </child>
@@ -86,18 +80,16 @@
                               </object>
                             </child>
                             <child>
-                              <object class="DzlPriorityBox" id="sections">
+                              <object class="GtkBox" id="sections">
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">32</property>
                               </object>
                             </child>
                             <child>
-                              <object class="DzlEmptyState" id="empty_state">
+                              <object class="AdwStatusPage" id="empty_state">
                                 <property name="icon-name">edit-find-symbolic</property>
-                                <property name="pixel-size">64</property>
                                 <property name="title" translatable="yes">No Projects Found</property>
                                 <property name="vexpand">true</property>
-                                <property name="valign">center</property>
                               </object>
                             </child>
                           </object>
@@ -153,10 +145,10 @@
                 </child>
               </object>
             </child>
+            <layout>
+              <property name="name">overview</property>
+            </layout>
           </object>
-          <packing>
-            <property name="name">sections</property>
-          </packing>
         </child>
       </object>
     </child>
