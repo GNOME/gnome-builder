@@ -273,7 +273,11 @@ main (gint   argc,
              gtk_get_minor_version (),
              gtk_get_micro_version ());
 
+  /* Init libraries with initializers */
+  gtk_init ();
   gtk_source_init ();
+  adw_init ();
+  panel_init ();
 
   /* Initialize thread pools */
   _ide_thread_pool_init (FALSE);

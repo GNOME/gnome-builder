@@ -275,7 +275,6 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, sections_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, stack);
   gtk_widget_class_bind_template_callback (widget_class, ide_omni_bar_notification_row_activated);
-  gtk_widget_class_set_css_name (widget_class, "omnibar");
 
   g_type_ensure (IDE_TYPE_NOTIFICATION_STACK);
 }

@@ -8,29 +8,35 @@
         <child type="start">
           <object class="GtkBox" id="left">
             <property name="hexpand">true</property>
+            <property name="spacing">6</property>
           </object>
         </child>
         <child type="title">
           <object class="GtkCenterBox" id="center_box">
             <child type="start">
               <object class="GtkBox" id="left_of_center">
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
               </object>
             </child>
             <child type="end">
               <object class="GtkBox" id="right_of_center">
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
               </object>
             </child>
           </object>
         </child>
         <child type="end">
+          <object class="GtkMenuButton" id="menu_button">
+            <property name="icon-name">open-menu-symbolic</property>
+            <property name="primary">true</property>
+          </object>
+        </child>
+        <child type="end">
           <object class="GtkBox" id="right">
             <property name="hexpand">true</property>
-            <child>
-              <object class="GtkMenuButton" id="menu_button">
-                <property name="icon-name">open-menu-symbolic</property>
-                <property name="primary">true</property>
-              </object>
-            </child>
+            <property name="spacing">6</property>
           </object>
         </child>
       </object>

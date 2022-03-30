@@ -434,7 +434,8 @@ ide_workspace_init (IdeWorkspace *self)
   priv->box = g_object_new (GTK_TYPE_BOX,
                             "orientation", GTK_ORIENTATION_VERTICAL,
                             NULL);
-  gtk_window_set_child (GTK_WINDOW (self), GTK_WIDGET (priv->box));
+  adw_application_window_set_content (ADW_APPLICATION_WINDOW (self),
+                                      GTK_WIDGET (priv->box));
 
   /* Initialize GActions for workspace */
   _ide_workspace_init_actions (self);
