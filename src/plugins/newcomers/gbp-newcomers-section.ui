@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpNewcomersSection" parent="GtkBin">
+  <template class="GbpNewcomersSection" parent="GtkWidget">
     <property name="halign">center</property>
     <property name="hexpand">true</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
-        <property name="visible">true</property>
         <property name="width-request">600</property>
         <property name="halign">center</property>
         <property name="valign">start</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">true</property>
             <property name="xalign">0.0</property>
             <property name="label" translatable="yes">Suggested GNOME Projects</property>
             <style>
@@ -25,126 +23,111 @@
           </object>
         </child>
         <child>
-          <object class="GtkFrame">
-            <property name="shadow-type">in</property>
-            <property name="visible">true</property>
+          <object class="GtkListBox" id="list_box">
+            <property name="selection-mode">browse</property>
+            <style>
+              <class name="boxed-list"/>
+            </style>
             <child>
-              <object class="GtkListBox" id="list_box">
-                <property name="visible">true</property>
-                <property name="selection-mode">browse</property>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Boxes</property>
-                    <property name="description" translatable="yes">A simple GNOME 3 application to access remote or virtual systems</property>
-                    <property name="icon-name">org.gnome.Boxes</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-boxes.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">Vala</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Builder</property>
-                    <property name="description" translatable="yes">An IDE for writing GNOME-based software</property>
-                    <property name="icon-name">org.gnome.Builder</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-builder.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Boxes</property>
+                <property name="description" translatable="yes">A simple GNOME 3 application to access remote or virtual systems</property>
+                <property name="icon-name">org.gnome.Boxes</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-boxes.git</property>
+                <property name="languages">Vala</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Builder</property>
+                <property name="description" translatable="yes">An IDE for writing GNOME-based software</property>
+                <property name="icon-name">org.gnome.Builder</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-builder.git</property>
+                <property name="languages">C
 Python</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Calendar</property>
-                    <property name="description" translatable="yes">Calendar application for GNOME</property>
-                    <property name="icon-name">org.gnome.Calendar</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-calendar.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Clocks</property>
-                    <property name="description" translatable="yes">A simple clock application for GNOME</property>
-                    <property name="icon-name">org.gnome.clocks</property>
-                    <property name="uri">http://gitlab.gnome.org/gnome/gnome-clocks.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">Vala</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Gitg</property>
-                    <property name="description" translatable="yes">Gitg is a graphical Git client</property>
-                    <property name="icon-name">org.gnome.gitg</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gitg.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">Vala</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Maps</property>
-                    <property name="description" translatable="yes">A simple GNOME 3 maps application</property>
-                    <property name="icon-name">org.gnome.Maps</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-maps.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C
-    JavaScript</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Music</property>
-                    <property name="description" translatable="yes">Music player and management application</property>
-                    <property name="icon-name">org.gnome.Music</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-music.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">Python</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Nautilus</property>
-                    <property name="description" translatable="yes">Default file manager for GNOME</property>
-                    <property name="icon-name">org.gnome.Nautilus</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/nautilus.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Photos</property>
-                    <property name="description" translatable="yes">Access, organize and share your photos on GNOME</property>
-                    <property name="icon-name">org.gnome.Photos</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-photos.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Polari</property>
-                    <property name="description" translatable="yes">An IRC Client for GNOME</property>
-                    <property name="icon-name">org.gnome.Polari</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/polari.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">C
-    JavaScript</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Sound Recorder</property>
-                    <property name="description" translatable="yes">A simple and modern sound recorder</property>
-                    <property name="icon-name">org.gnome.SoundRecorder</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-sound-recorder.git</property>
-                    <property name="visible">true</property>
-                    <property name="languages">JavaScript</property>
-                  </object>
-                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Calendar</property>
+                <property name="description" translatable="yes">Calendar application for GNOME</property>
+                <property name="icon-name">org.gnome.Calendar</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-calendar.git</property>
+                <property name="languages">C</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Clocks</property>
+                <property name="description" translatable="yes">A simple clock application for GNOME</property>
+                <property name="icon-name">org.gnome.clocks</property>
+                <property name="uri">http://gitlab.gnome.org/gnome/gnome-clocks.git</property>
+                <property name="languages">Vala</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Gitg</property>
+                <property name="description" translatable="yes">Gitg is a graphical Git client</property>
+                <property name="icon-name">org.gnome.gitg</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gitg.git</property>
+                <property name="languages">Vala</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Maps</property>
+                <property name="description" translatable="yes">A simple GNOME 3 maps application</property>
+                <property name="icon-name">org.gnome.Maps</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-maps.git</property>
+                <property name="languages">C
+JavaScript</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Music</property>
+                <property name="description" translatable="yes">Music player and management application</property>
+                <property name="icon-name">org.gnome.Music</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-music.git</property>
+                <property name="languages">Python</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Nautilus</property>
+                <property name="description" translatable="yes">Default file manager for GNOME</property>
+                <property name="icon-name">org.gnome.Nautilus</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/nautilus.git</property>
+                <property name="languages">C</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Photos</property>
+                <property name="description" translatable="yes">Access, organize and share your photos on GNOME</property>
+                <property name="icon-name">org.gnome.Photos</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-photos.git</property>
+                <property name="languages">C</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Polari</property>
+                <property name="description" translatable="yes">An IRC Client for GNOME</property>
+                <property name="icon-name">org.gnome.Polari</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/polari.git</property>
+                <property name="languages">C
+JavaScript</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Sound Recorder</property>
+                <property name="description" translatable="yes">A simple and modern sound recorder</property>
+                <property name="icon-name">org.gnome.SoundRecorder</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-sound-recorder.git</property>
+                <property name="languages">JavaScript</property>
               </object>
             </child>
           </object>

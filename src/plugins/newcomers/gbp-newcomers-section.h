@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_NEWCOMERS_SECTION (gbp_newcomers_section_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpNewcomersSection, gbp_newcomers_section, GBP, NEWCOMERS_SECTION, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpNewcomersSection, gbp_newcomers_section, GBP, NEWCOMERS_SECTION, GtkWidget)
 
 G_END_DECLS
