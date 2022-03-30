@@ -127,7 +127,17 @@ ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
     }
 
   while (!(parent = panel_paned_get_nth_child (paned, nth)))
-    panel_paned_append (paned, panel_frame_new ());
+    {
+      parent = panel_frame_new ();
+
+      if (edge == PANEL_DOCK_POSITION_START ||
+          edge == PANEL_DOCK_POSITION_END)
+        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_VERTICAL);
+      else
+        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_HORIZONTAL);
+
+      panel_paned_append (paned, parent);
+    }
 
   if (ide_panel_position_get_depth (position, &depth))
     {
