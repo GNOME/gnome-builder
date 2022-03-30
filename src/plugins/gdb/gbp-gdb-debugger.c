@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "gbp-gdb-debugger"
 
-#include <dazzle.h>
 #include <libide-io.h>
 #include <libide-terminal.h>
 #include <string.h>
@@ -39,7 +38,7 @@ struct _GbpGdbDebugger
   GHashTable               *register_names;
   GFile                    *builddir;
 
-  DzlSignalGroup           *runner_signals;
+  IdeSignalGroup           *runner_signals;
   GSettings                *settings;
 
   /* This is the number for the fd in the inferior process.
@@ -126,7 +125,7 @@ gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
     return NULL;
 
   /* Discover the current runtime for path translation */
-  runner = dzl_signal_group_get_target (self->runner_signals);
+  runner = ide_signal_group_get_target (self->runner_signals);
   if (runner != NULL)
     runtime = ide_runner_get_runtime (runner);
 
@@ -2375,7 +2374,7 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
     ide_environment_setenv (env, "SHELL", "sh");
 
   /* Connect to all our important signals */
-  dzl_signal_group_set_target (self->runner_signals, runner);
+  ide_signal_group_set_target (self->runner_signals, runner);
 
   /*
    * If there is a PTY device to display the contents of the inferior, then
@@ -2613,9 +2612,9 @@ gbp_gdb_debugger_init (GbpGdbDebugger *self)
 
   g_queue_init (&self->cmdqueue);
 
-  self->runner_signals = dzl_signal_group_new (IDE_TYPE_RUNNER);
+  self->runner_signals = ide_signal_group_new (IDE_TYPE_RUNNER);
 
-  dzl_signal_group_connect_object (self->runner_signals,
+  ide_signal_group_connect_object (self->runner_signals,
                                    "spawned",
                                    G_CALLBACK (gbp_gdb_debugger_on_runner_spawned),
                                    self,
