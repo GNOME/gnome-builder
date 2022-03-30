@@ -72,7 +72,7 @@ get_object_id (GObject *object)
   if (GTK_IS_BUILDABLE (object))
     return gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
   else
-    return g_object_get_data (object, "gtk-builder-name");
+    return g_object_get_data (object, "gtk-builder-id");
 }
 
 static void
