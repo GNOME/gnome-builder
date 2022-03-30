@@ -26,7 +26,7 @@
       <item>
         <attribute name="id">ide-greeter-workspace-menu-shortcuts</attribute>
         <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
-        <attribute name="action">app.shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
         <attribute name="accel">&lt;primary&gt;question</attribute>
       </item>
       <item>
