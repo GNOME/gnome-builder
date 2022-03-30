@@ -28,22 +28,38 @@
 
 struct _IdeGreeterButtonsSection
 {
-  GtkBin  parent_instance;
-  GtkBox *box;
+  GtkWidget  parent_instance;
+  GtkBox    *box;
 };
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeGreeterButtonsSection, ide_greeter_buttons_section, GTK_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION, NULL))
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeGreeterButtonsSection, ide_greeter_buttons_section, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION, NULL))
+
+static void
+ide_greeter_buttons_section_dispose (GObject *object)
+{
+  IdeGreeterButtonsSection *self = (IdeGreeterButtonsSection *)object;
+
+  g_clear_pointer ((GtkWidget **)&self->box, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (ide_greeter_buttons_section_parent_class)->dispose (object);
+}
 
 static void
 ide_greeter_buttons_section_class_init (IdeGreeterButtonsSectionClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->dispose = ide_greeter_buttons_section_dispose;
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
 ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
 {
-  self->box = g_object_new (DZL_TYPE_PRIORITY_BOX,
+  self->box = g_object_new (GTK_TYPE_BOX,
                             "margin-bottom", 6,
                             "margin-top", 6,
                             "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -54,7 +70,7 @@ ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
                             "width-request", 600,
                             "visible", TRUE,
                             NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->box));
+  gtk_widget_set_parent (GTK_WIDGET (self->box), GTK_WIDGET (self));
 
   ide_greeter_buttons_section_add_button (self,
                                           0,
@@ -75,15 +91,29 @@ ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
                                                         NULL));
 }
 
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
+
 void
 ide_greeter_buttons_section_add_button (IdeGreeterButtonsSection *self,
                                         gint                      priority,
                                         GtkWidget                *widget)
 {
+  GtkWidget *sibling = NULL;
+
   g_return_if_fail (IDE_IS_GREETER_BUTTONS_SECTION (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->box), widget,
-                                     "priority", priority,
-                                     NULL);
+  SET_PRIORITY (widget, priority);
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (priority < GET_PRIORITY (child))
+        break;
+      sibling = child;
+    }
+
+  gtk_box_insert_child_after (self->box, widget, sibling);
 }

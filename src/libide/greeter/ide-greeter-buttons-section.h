@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GREETER_BUTTONS_SECTION (ide_greeter_buttons_section_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGreeterButtonsSection, ide_greeter_buttons_section, IDE, GREETER_BUTTONS_SECTION, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeGreeterButtonsSection, ide_greeter_buttons_section, IDE, GREETER_BUTTONS_SECTION, GtkWidget)
 
 IdeGreeterButtonsSection *ide_greeter_buttons_section_new        (void);
 void                      ide_greeter_buttons_section_add_button (IdeGreeterButtonsSection *self,
