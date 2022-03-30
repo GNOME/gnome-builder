@@ -27,6 +27,7 @@
 
 #include "ide-greeter-buttons-section.h"
 #include "ide-greeter-private.h"
+#include "ide-greeter-resources.h"
 #include "ide-greeter-row.h"
 #include "ide-greeter-workspace.h"
 
@@ -661,6 +662,8 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
 
   g_type_ensure (IDE_TYPE_GREETER_BUTTONS_SECTION);
   g_type_ensure (IDE_TYPE_GREETER_ROW);
+
+  g_resources_register (ide_greeter_get_resource ());
 }
 
 static void
