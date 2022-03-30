@@ -61,7 +61,14 @@ IDE_AVAILABLE_IN_ALL
 void                 ide_greeter_workspace_open_project       (IdeGreeterWorkspace *self,
                                                                IdeProjectInfo      *project_info);
 IDE_AVAILABLE_IN_ALL
+GtkWidget           *ide_greeter_workspace_get_page           (IdeGreeterWorkspace *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_greeter_workspace_set_page           (IdeGreeterWorkspace *self,
+                                                               GtkWidget           *page);
+IDE_AVAILABLE_IN_ALL
+const char          *ide_greeter_workspace_get_page_name      (IdeGreeterWorkspace *self);
+IDE_AVAILABLE_IN_ALL
+void                 ide_greeter_workspace_set_page_name      (IdeGreeterWorkspace *self,
                                                                const char          *name);
 
 
