@@ -61,4 +61,6 @@ IDE_AVAILABLE_IN_ALL
 void              ide_panel_position_set_depth  (IdePanelPosition  *self,
                                                  guint              depth);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdePanelPosition, ide_panel_position_free)
+
 G_END_DECLS
