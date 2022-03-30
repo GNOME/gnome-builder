@@ -1,4 +1,4 @@
-/* gbp-messages-editor-addin.h
+/* gbp-messages-workspace-addin.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MESSAGES_EDITOR_ADDIN (gbp_messages_editor_addin_get_type())
+#define GBP_TYPE_MESSAGES_WORKSPACE_ADDIN (gbp_messages_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpMessagesEditorAddin, gbp_messages_editor_addin, GBP, MESSAGES_EDITOR_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpMessagesWorkspaceAddin, gbp_messages_workspace_addin, GBP, MESSAGES_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

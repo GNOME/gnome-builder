@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpMessagesPanel" parent="DzlDockWidget">
+  <template class="GbpMessagesPanel" parent="IdePane">
     <property name="icon-name">dialog-information-symbolic</property>
     <property name="title" translatable="yes">Messages</property>
     <child>
       <object class="GtkScrolledWindow">
         <property name="hexpand">true</property>
-        <property name="visible">true</property>
         <child>
           <object class="IdeTerminal" id="terminal">
             <property name="hexpand">true</property>
             <property name="scroll-on-output">false</property>
-            <property name="visible">true</property>
           </object>
         </child>
       </object>
