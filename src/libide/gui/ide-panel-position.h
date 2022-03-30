@@ -30,12 +30,18 @@
 
 G_BEGIN_DECLS
 
+#define IDE_TYPE_PANEL_POSITION (ide_panel_position_get_type())
+
 typedef struct _IdePanelPosition IdePanelPosition;
 
 IDE_AVAILABLE_IN_ALL
+GType             ide_panel_position_get_type   (void) G_GNUC_CONST;
+IDE_AVAILABLE_IN_ALL
 IdePanelPosition *ide_panel_position_new        (void);
 IDE_AVAILABLE_IN_ALL
-void              ide_panel_position_free       (IdePanelPosition  *self);
+IdePanelPosition *ide_panel_position_ref        (IdePanelPosition  *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_panel_position_unref      (IdePanelPosition  *self);
 IDE_AVAILABLE_IN_ALL
 gboolean          ide_panel_position_get_edge   (IdePanelPosition  *self,
                                                  PanelDockPosition *edge);
@@ -61,6 +67,6 @@ IDE_AVAILABLE_IN_ALL
 void              ide_panel_position_set_depth  (IdePanelPosition  *self,
                                                  guint              depth);
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdePanelPosition, ide_panel_position_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdePanelPosition, ide_panel_position_unref)
 
 G_END_DECLS

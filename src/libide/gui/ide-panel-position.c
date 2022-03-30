@@ -36,16 +36,24 @@ struct _IdePanelPosition
   guint edge_set : 1;
 };
 
+G_DEFINE_BOXED_TYPE (IdePanelPosition, ide_panel_position, ide_panel_position_ref, ide_panel_position_unref)
+
 IdePanelPosition *
 ide_panel_position_new (void)
 {
-  return g_slice_new0 (IdePanelPosition);
+  return g_rc_box_alloc0 (sizeof (IdePanelPosition));
+}
+
+IdePanelPosition *
+ide_panel_position_ref (IdePanelPosition *self)
+{
+  return g_rc_box_acquire (self);
 }
 
 void
-ide_panel_position_free (IdePanelPosition *self)
+ide_panel_position_unref (IdePanelPosition *self)
 {
-  g_slice_free (IdePanelPosition, self);
+  g_rc_box_release (self);
 }
 
 gboolean
