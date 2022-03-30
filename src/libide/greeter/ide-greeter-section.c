@@ -83,7 +83,7 @@ ide_greeter_section_get_priority (IdeGreeterSection *self)
 /**
  * ide_greeter_section_filter:
  * @self: a #IdeGreeterSection
- * @spec: (nullable): a #DzlPatternSpec or %NULL
+ * @spec: (nullable): a #IdePatternSpec or %NULL
  *
  * Refilter the visibile items based on the current search.
  *
@@ -93,7 +93,7 @@ ide_greeter_section_get_priority (IdeGreeterSection *self)
  */
 gboolean
 ide_greeter_section_filter (IdeGreeterSection *self,
-                            DzlPatternSpec    *spec)
+                            IdePatternSpec    *spec)
 {
   g_return_val_if_fail (IDE_IS_GREETER_SECTION (self), FALSE);
 
