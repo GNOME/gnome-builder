@@ -250,28 +250,6 @@ ide_application_actions_help (GSimpleAction *action,
 }
 
 static void
-ide_application_actions_nighthack (GSimpleAction *action,
-                                   GVariant      *variant,
-                                   gpointer       user_data)
-{
-  g_autoptr(GSettings) settings = NULL;
-
-  settings = g_settings_new ("org.gnome.builder");
-  g_settings_set_string (settings, "style-variant", "dark");
-}
-
-static void
-ide_application_actions_dayhack (GSimpleAction *action,
-                                 GVariant      *variant,
-                                 gpointer       user_data)
-{
-  g_autoptr(GSettings) settings = NULL;
-
-  settings = g_settings_new ("org.gnome.builder");
-  g_settings_set_string (settings, "style-variant", "light");
-}
-
-static void
 ide_application_actions_load_project (GSimpleAction *action,
                                       GVariant      *args,
                                       gpointer       user_data)
@@ -372,8 +350,6 @@ ide_application_actions_stats (GSimpleAction *action,
 static const GActionEntry IdeApplicationActions[] = {
   { "about:types",  ide_application_actions_stats },
   { "about",        ide_application_actions_about },
-  { "dayhack",      ide_application_actions_dayhack },
-  { "nighthack",    ide_application_actions_nighthack },
   { "load-project", ide_application_actions_load_project, "s"},
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
@@ -383,6 +359,8 @@ static const GActionEntry IdeApplicationActions[] = {
 void
 _ide_application_init_actions (IdeApplication *self)
 {
+  g_autoptr(GAction) style_action = NULL;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
@@ -390,6 +368,9 @@ _ide_application_init_actions (IdeApplication *self)
                                    IdeApplicationActions,
                                    G_N_ELEMENTS (IdeApplicationActions),
                                    self);
+
+  style_action = g_settings_create_action (self->settings, "style-variant");
+  g_action_map_add_action (G_ACTION_MAP (self), style_action);
 }
 
 static void
