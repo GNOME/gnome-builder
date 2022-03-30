@@ -303,7 +303,7 @@ _ide_application_add_resources (IdeApplication *self,
     {
       g_autoptr(GBytes) bytes = NULL;
 
-      css_path = g_build_filename (resource_path + strlen ("resource://"), "stylesheet.css", NULL);
+      css_path = g_build_filename (resource_path + strlen ("resource://"), "style.css", NULL);
       bytes = g_resources_lookup_data (css_path, 0, NULL);
 
       if (bytes != NULL)
