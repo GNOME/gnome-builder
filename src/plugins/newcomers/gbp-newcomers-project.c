@@ -20,7 +20,7 @@
 
 #define G_LOG_DOMAIN "gbp-newcomers-project"
 
-#include <dazzle.h>
+#include "config.h"
 
 #include "gbp-newcomers-project.h"
 
@@ -60,13 +60,13 @@ gbp_newcomers_project_constructed (GObject *object)
 }
 
 static void
-gbp_newcomers_project_destroy (GtkWidget *widget)
+gbp_newcomers_project_dispose (GObject *object)
 {
-  GbpNewcomersProject *self = GBP_NEWCOMERS_PROJECT (widget);
+  GbpNewcomersProject *self = (GbpNewcomersProject *)object;
 
   g_clear_object (&self->project_info);
 
-  GTK_WIDGET_CLASS (gbp_newcomers_project_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_newcomers_project_parent_class)->dispose (object);
 }
 
 static void
@@ -135,13 +135,11 @@ static void
 gbp_newcomers_project_class_init (GbpNewcomersProjectClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gbp_newcomers_project_constructed;
+  object_class->dispose = gbp_newcomers_project_dispose;
   object_class->get_property = gbp_newcomers_project_get_property;
   object_class->set_property = gbp_newcomers_project_set_property;
-
-  widget_class->destroy = gbp_newcomers_project_destroy;
 
   properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
