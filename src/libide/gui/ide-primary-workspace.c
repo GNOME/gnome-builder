@@ -54,6 +54,7 @@ struct _IdePrimaryWorkspace
   IdeHeaderBar       *header_bar;
   IdeRunButton       *run_button;
   GtkLabel           *project_title;
+  GtkMenuButton      *add_button;
   PanelPaned         *edge_start;
   PanelPaned         *edge_end;
   PanelPaned         *edge_bottom;
@@ -162,6 +163,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->add_pane = ide_primary_workspace_add_pane;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-primary-workspace.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, add_button);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
@@ -178,7 +180,12 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 static void
 ide_primary_workspace_init (IdePrimaryWorkspace *self)
 {
+  GMenu *menu;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "new-document-menu");
+  gtk_menu_button_set_menu_model (self->add_button, G_MENU_MODEL (menu));
 
   _ide_primary_workspace_init_actions (self);
 }

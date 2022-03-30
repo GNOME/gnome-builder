@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-primary-workspace-surfaces-menu">
-    <section id="ide-primary-workspace-surfaces-menu-section">
-      <attribute name="label" translatable="yes">Switch Surface</attribute>
-    </section>
-    <section id="ide-primary-workspace-surfaces-menu-utils-section"/>
-  </menu>
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section"/>
     <section id="ide-primary-workspace-menu-placeholder1"/>
@@ -58,17 +52,21 @@
     </section>
   </menu>
   <menu id="run-menu">
-    <section id="run-menu-section">
-      <attribute name="label" translatable="yes">Run Options</attribute>
+    <section id="run-menu-observation-section">
+      <attribute name="label" translatable="yes">Observation</attribute>
       <item>
         <attribute name="id">default-run-handler</attribute>
-        <attribute name="action">run-manager.run-with-handler</attribute>
-        <attribute name="target">run</attribute>
-        <attribute name="label" translatable="yes">Run</attribute>
+        <attribute name="action">run-manager.handler</attribute>
+        <attribute name="target" type='s'>'disabled'</attribute>
+        <attribute name="label" translatable="yes">Disabled</attribute>
         <attribute name="verb-icon-name">builder-run-start-symbolic</attribute>
-        <attribute name="accel">&lt;Control&gt;F5</attribute>
       </item>
     </section>
+  </menu>
+  <menu id="new-document-menu">
+    <section id="new-document-section"/>
+    <section id="open-document-section"/>
+    <section id="terminal-section"/>
   </menu>
   <menu id="project-tree-menu">
     <section id="project-tree-menu-placeholder0"/>
