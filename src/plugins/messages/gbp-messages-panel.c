@@ -21,15 +21,15 @@
 #define G_LOG_DOMAIN "gbp-messages-panel"
 
 #include <libide-gui.h>
-#include <libide-terminal.h>
+#include <vte/vte.h>
 
 #include "gbp-messages-panel.h"
 
 struct _GbpMessagesPanel
 {
-  IePane          parent_instance;
+  IdePane         parent_instance;
   IdeSignalGroup *signals;
-  IdeTerminal    *terminal;
+  VteTerminal    *terminal;
 };
 
 G_DEFINE_FINAL_TYPE (GbpMessagesPanel, gbp_messages_panel, IDE_TYPE_PANE)
@@ -87,15 +87,6 @@ gbp_messages_panel_log_cb (GbpMessagesPanel *self,
   gtk_widget_show (GTK_WIDGET (self));
 }
 
-#if 0
-static gboolean
-do_log (gpointer data)
-{
-  ide_context_warning (data, "(some log message here)\nfoo\nbaz");
-  return G_SOURCE_CONTINUE;
-}
-#endif
-
 static void
 gbp_messages_panel_set_context (GtkWidget  *widget,
                                 IdeContext *context)
@@ -106,31 +97,25 @@ gbp_messages_panel_set_context (GtkWidget  *widget,
   g_assert (!context || IDE_IS_CONTEXT (context));
 
   ide_signal_group_set_target (self->signals, context);
-
-#if 0
-  if (context != NULL)
-    g_timeout_add (1000, do_log, context);
-
-  g_assert (g_strcmp0 (ensure_crlf ("\nfoo\r\nbar\nbaz\r\r\n"), "\r\nfoo\r\nbar\r\nbaz\r\r\n") == 0);
-#endif
 }
 
 static void
-gbp_messages_panel_destroy (GtkWidget *widget)
+gbp_messages_panel_dispose (GObject *object)
 {
-  GbpMessagesPanel *self = (GbpMessagesPanel *)widget;
+  GbpMessagesPanel *self = (GbpMessagesPanel *)object;
 
   g_clear_object (&self->signals);
 
-  GTK_WIDGET_CLASS (gbp_messages_panel_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_messages_panel_parent_class)->dispose (object);
 }
 
 static void
 gbp_messages_panel_class_init (GbpMessagesPanelClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = gbp_messages_panel_destroy;
+  object_class->dispose = gbp_messages_panel_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/messages/gbp-messages-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, terminal);
