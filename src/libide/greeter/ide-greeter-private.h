@@ -26,7 +26,6 @@
 
 G_BEGIN_DECLS
 
-void _ide_greeter_workspace_init_actions   (IdeGreeterWorkspace *self);
-void _ide_greeter_workspace_init_shortcuts (IdeGreeterWorkspace *self);
+void _ide_greeter_workspace_init_actions (IdeGreeterWorkspace *self);
 
 G_END_DECLS
