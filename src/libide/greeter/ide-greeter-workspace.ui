@@ -20,7 +20,6 @@
             </style>
             <child>
               <object class="GtkImage">
-                <property name="visible">true</property>
                 <property name="icon-name">go-previous-symbolic</property>
               </object>
             </child>
@@ -31,7 +30,6 @@
             <property name="spacing">6</property>
             <property name="hexpand">false</property>
             <property name="homogeneous">true</property>
-            <property name="visible">true</property>
           </object>
           <packing>
             <property name="pack-type">start</property>
@@ -40,14 +38,12 @@
         <child type="right">
           <object class="GtkToggleButton" id="select_button">
             <property name="action-name">win.selection-mode</property>
-            <property name="visible">true</property>
             <style>
               <class name="image-button"/>
             </style>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">object-select-symbolic</property>
-                <property name="visible">true</property>
               </object>
             </child>
           </object>
@@ -64,34 +60,28 @@
         <child>
           <object class="IdeSurface" id="sections_surface">
             <property name="title" translatable="yes" context="title">Open a Project</property>
-            <property name="visible">true</property>
             <style>
               <class name="sectionssurface"/>
             </style>
             <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
-                <property name="visible">true</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="expand">true</property>
                     <property name="hscrollbar-policy">never</property>
-                    <property name="visible">true</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="expand">true</property>
-                        <property name="visible">true</property>
                         <child>
                           <object class="GtkBox">
                             <property name="margin">32</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">24</property>
-                            <property name="visible">true</property>
                             <child>
                               <object class="GtkSearchEntry" id="search_entry">
                                 <property name="placeholder-text" translatable="yes">Search all Builder projects…</property>
                                 <property name="halign">center</property>
-                                <property name="visible">true</property>
                                 <property name="width-chars">45</property>
                               </object>
                             </child>
@@ -99,7 +89,6 @@
                               <object class="DzlPriorityBox" id="sections">
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">32</property>
-                                <property name="visible">true</property>
                               </object>
                             </child>
                             <child>
@@ -119,11 +108,9 @@
                 </child>
                 <child>
                   <object class="GtkActionBar" id="projects_action_bar">
-                    <property name="visible">true</property>
                     <child>
                       <object class="IdeGreeterButtonsSection" id="buttons_section">
                         <property name="halign">center</property>
-                        <property name="visible">true</property>
                       </object>
                     </child>
                   </object>
@@ -138,13 +125,11 @@
                         <property name="margin-bottom">6</property>
                         <property name="margin-top">6</property>
                         <property name="spacing">10</property>
-                        <property name="visible">true</property>
                         <child>
                           <object class="GtkButton" id="remove_button">
                             <property name="action-name">win.delete-selected-rows</property>
                             <property name="label" translatable="yes">_Remove Projects</property>
                             <property name="use-underline">true</property>
-                            <property name="visible">true</property>
                             <property name="sensitive">false</property>
                             <style>
                               <class name="destructive-action"/>
@@ -156,7 +141,6 @@
                             <property name="action-name">win.purge-selected-rows</property>
                             <property name="label" translatable="yes">Remove Projects and Sources…</property>
                             <property name="use-underline">true</property>
-                            <property name="visible">true</property>
                             <property name="sensitive">false</property>
                             <style>
                               <class name="destructive-action"/>
