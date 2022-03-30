@@ -243,12 +243,34 @@ ide_application_open (GApplication  *app,
   IDE_EXIT;
 }
 
+static GtkCssProvider *
+get_css_provider (IdeApplication *self,
+                  const char     *key)
+{
+  GtkCssProvider *ret;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (key != NULL);
+
+  if (!(ret = g_hash_table_lookup (self->css_providers, key)))
+    {
+      ret = gtk_css_provider_new ();
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (ret),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_THEME+1);
+      g_hash_table_insert (self->css_providers, g_strdup (key), ret);
+    }
+
+  return ret;
+}
+
 void
 _ide_application_add_resources (IdeApplication *self,
                                 const char     *resource_path)
 {
   g_autoptr(GError) error = NULL;
   g_autofree gchar *menu_path = NULL;
+  g_autofree gchar *css_path = NULL;
   guint merge_id;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -275,6 +297,31 @@ _ide_application_add_resources (IdeApplication *self,
       !(g_error_matches (error, G_RESOURCE_ERROR, G_RESOURCE_ERROR_NOT_FOUND) ||
         g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT)))
     g_warning ("%s", error->message);
+  g_clear_error (&error);
+
+  if (g_str_has_prefix (resource_path, "resource://"))
+    {
+      g_autoptr(GBytes) bytes = NULL;
+
+      css_path = g_build_filename (resource_path + strlen ("resource://"), "stylesheet.css", NULL);
+      bytes = g_resources_lookup_data (css_path, 0, NULL);
+
+      if (bytes != NULL)
+        {
+          GtkCssProvider *provider = get_css_provider (self, resource_path);
+          gtk_css_provider_load_from_resource (provider, css_path);
+        }
+    }
+  else
+    {
+      css_path = g_build_filename (resource_path, "style.css", NULL);
+
+      if (g_file_test (css_path, G_FILE_TEST_IS_REGULAR))
+        {
+          GtkCssProvider *provider = get_css_provider (self, resource_path);
+          gtk_css_provider_load_from_path (provider, css_path);
+        }
+    }
 }
 
 static void
@@ -290,6 +337,7 @@ ide_application_dispose (GObject *object)
   g_clear_pointer (&self->workbenches, g_ptr_array_unref);
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
+  g_clear_pointer (&self->css_providers, g_hash_table_unref);
   g_clear_pointer (&self->argv, g_strfreev);
   g_clear_pointer (&self->menu_merge_ids, g_hash_table_unref);
   g_clear_object (&self->addins);
@@ -328,6 +376,7 @@ ide_application_init (IdeApplication *self)
   self->settings = g_settings_new ("org.gnome.builder");
   self->plugin_gresources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                    (GDestroyNotify)g_resource_unref);
+  self->css_providers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref );
 
   g_application_set_default (G_APPLICATION (self));
   gtk_window_set_default_icon_name (ide_get_application_id ());
@@ -336,6 +385,7 @@ ide_application_init (IdeApplication *self)
   /* Ensure our core data is loaded early. */
   _ide_application_add_resources (self, "resource:///org/gnome/libide-sourceview/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-gui/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-greeter/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-terminal/");
 
   /* Make sure our GAction are available */
