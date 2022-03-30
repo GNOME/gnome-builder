@@ -666,6 +666,15 @@ ide_application_find_addin_by_module_name (IdeApplication *self,
   return peas_extension_set_get_extension (self->addins, plugin_info);
 }
 
+/**
+ * ide_application_get_menu_by_id:
+ * @self: a #IdeApplication
+ * @menu_id: the menu identifier
+ *
+ * Gets the merged menu by it's identifier.
+ *
+ * Returns: (transfer none): a #GMenu
+ */
 GMenu *
 ide_application_get_menu_by_id (IdeApplication *self,
                                 const char     *menu_id)
