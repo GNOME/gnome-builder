@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.24 -->
+  <requires lib="gtk" version="4.0"/>
   <template class="IdeGreeterWorkspace" parent="IdeWorkspace">
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
         <property name="menu-id">ide-greeter-workspace-menu</property>
-        <property name="show-fullscreen-button">false</property>
-        <property name="show-close-button">true</property>
-        <property name="visible">true</property>
         <child type="title">
-          <object class="GtkLabel" id="title">
-            <property name="visible">true</property>
-            <property name="hexpand">true</property>
-            <style>
-              <class name="title"/>
-            </style>
-          </object>
+          <object class="AdwWindowTitle" id="title"/>
         </child>
         <child type="left">
           <object class="GtkButton" id="back_button">

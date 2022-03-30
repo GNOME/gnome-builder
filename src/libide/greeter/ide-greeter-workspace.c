@@ -63,7 +63,7 @@ struct _IdeGreeterWorkspace
   GtkButton                *select_button;
   GtkActionBar             *action_bar;
   GtkActionBar             *projects_action_bar;
-  GtkLabel                 *title;
+  AdwWindowTitle           *title;
   IdeGreeterButtonsSection *buttons_section;
   DzlEmptyState            *empty_state;
   GtkGestureMultiPress     *multipress_gesture;
@@ -216,7 +216,7 @@ stack_notify_visible_child_cb (IdeGreeterWorkspace *self,
         full_title = g_strdup_printf (_("Builder — %s"), title);
     }
 
-  gtk_label_set_label (self->title, title);
+  adw_window_title_set_title (self->title, title);
   gtk_window_set_title (GTK_WINDOW (self), full_title);
 
   sections = ide_str_equal0 ("sections", gtk_stack_get_visible_child_name (stack));
