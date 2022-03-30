@@ -20,21 +20,33 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_GTK_INSIDE) && !defined (IDE_GTK_COMPILATION)
+# error "Only <libide-gtk.h> can be included directly."
+#endif
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TRUNCATE_MODEL (ide_truncate_model_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTruncateModel, ide_truncate_model, IDE, TRUNCATE_MODEL, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeTruncateModel *ide_truncate_model_new             (GListModel       *child_model);
+IDE_AVAILABLE_IN_ALL
 GListModel       *ide_truncate_model_get_child_model (IdeTruncateModel *self);
+IDE_AVAILABLE_IN_ALL
 guint             ide_truncate_model_get_max_items   (IdeTruncateModel *self);
+IDE_AVAILABLE_IN_ALL
 void              ide_truncate_model_set_max_items   (IdeTruncateModel *self,
                                                       guint             max_items);
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_truncate_model_get_can_expand  (IdeTruncateModel *self);
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_truncate_model_get_expanded    (IdeTruncateModel *self);
+IDE_AVAILABLE_IN_ALL
 void              ide_truncate_model_set_expanded    (IdeTruncateModel *self,
                                                       gboolean          expanded);
 
