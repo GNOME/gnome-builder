@@ -8,17 +8,6 @@
 
   <!-- Icons used by the greeter for newcomer projects -->
   <gresource prefix="/org/gnome/builder/icons">
-    <file compressed="true" alias="scalable/apps/org.gnome.Boxes.svg">icons/scalable/org.gnome.Boxes.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.Maps.svg">icons/scalable/org.gnome.Maps.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.Music.svg">icons/scalable/org.gnome.Music.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.Photos.svg">icons/scalable/org.gnome.Photos.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.Calendar.svg">icons/scalable/org.gnome.Calendar.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.gitg.svg">icons/scalable/org.gnome.gitg.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.Nautilus.svg">icons/scalable/org.gnome.Nautilus.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.Polari.svg">icons/scalable/org.gnome.Polari.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.SoundRecorder.svg">icons/scalable/org.gnome.SoundRecorder.svg</file>
-    <file compressed="true" alias="scalable/apps/org.gnome.clocks.svg">icons/scalable/org.gnome.clocks.svg</file>
-
     <file compressed="true" alias="symbolic/apps/org.gnome.Boxes-symbolic.svg">icons/symbolic/org.gnome.Boxes-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Maps-symbolic.svg">icons/symbolic/org.gnome.Maps-symbolic.svg</file>
     <file compressed="true" alias="symbolic/apps/org.gnome.Music-symbolic.svg">icons/symbolic/org.gnome.Music-symbolic.svg</file>
