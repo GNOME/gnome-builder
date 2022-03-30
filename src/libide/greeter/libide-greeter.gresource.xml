@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/ui">
-    <file preprocess="xml-stripblanks">ide-clone-surface.ui</file>
     <file preprocess="xml-stripblanks">ide-greeter-row.ui</file>
     <file preprocess="xml-stripblanks">ide-greeter-workspace.ui</file>
   </gresource>

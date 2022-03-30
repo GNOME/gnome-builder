@@ -25,35 +25,33 @@
 #endif
 
 #include <gtk/gtk.h>
+
 #include <libide-projects.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_GREETER_ROW (ide_greeter_row_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeGreeterRow, ide_greeter_row, IDE, GREETER_ROW, GtkListBoxRow)
 
 struct _IdeGreeterRowClass
 {
   GtkListBoxRowClass parent_class;
-
-  /*< private >*/
-  gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeGreeterRow  *ide_greeter_row_new                (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeProjectInfo *ide_greeter_row_get_project_info   (IdeGreeterRow  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_greeter_row_set_project_info   (IdeGreeterRow  *self,
                                                     IdeProjectInfo *project_info);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar          *ide_greeter_row_get_search_text    (IdeGreeterRow  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_greeter_row_get_selection_mode (IdeGreeterRow  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_greeter_row_set_selection_mode (IdeGreeterRow  *self,
                                                     gboolean        selection_mode);
 

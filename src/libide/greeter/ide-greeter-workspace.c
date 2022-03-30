@@ -27,6 +27,7 @@
 
 #include "ide-greeter-buttons-section.h"
 #include "ide-greeter-private.h"
+#include "ide-greeter-row.h"
 #include "ide-greeter-workspace.h"
 
 /**
@@ -34,13 +35,11 @@
  * @title: IdeGreeterWorkspace
  * @short_description: The greeter upon starting Builder
  *
- * Use the #IdeWorkspace APIs to add surfaces for user guides such
+ * Use the #IdeWorkspace APIs to add pages for user guides such
  * as the git workflow or project creation wizard.
  *
  * You can add buttons to the headerbar and use actions to change
- * surfaces such as "win.surface::'surface-name'".
- *
- * Since: 3.32
+ * pages such as "win.page::'page-name'".
  */
 
 struct _IdeGreeterWorkspace
@@ -48,16 +47,15 @@ struct _IdeGreeterWorkspace
   IdeWorkspace              parent_instance;
 
   PeasExtensionSet         *addins;
-  DzlPatternSpec           *pattern_spec;
+  IdePatternSpec           *pattern_spec;
   GSimpleAction            *delete_action;
   GSimpleAction            *purge_action;
 
   /* Template Widgets */
   IdeHeaderBar             *header_bar;
-  DzlPriorityBox           *sections;
-  DzlPriorityBox           *left_box;
-  GtkStack                 *surfaces;
-  IdeSurface               *sections_surface;
+  GtkBox                   *sections;
+  GtkBox                   *left_box;
+  GtkStack                 *pages;
   GtkSearchEntry           *search_entry;
   GtkButton                *back_button;
   GtkButton                *select_button;
@@ -65,8 +63,7 @@ struct _IdeGreeterWorkspace
   GtkActionBar             *projects_action_bar;
   AdwWindowTitle           *title;
   IdeGreeterButtonsSection *buttons_section;
-  DzlEmptyState            *empty_state;
-  GtkGestureMultiPress     *multipress_gesture;
+  AdwStatusPage            *empty_state;
 
   guint                     selection_mode : 1;
 };
@@ -81,29 +78,48 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static void
-ide_greeter_workspace_has_match_cb (GtkWidget *widget,
-                                    gpointer   user_data)
-{
-  gboolean *match = user_data;
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
 
-  if (IDE_IS_GREETER_SECTION (widget))
-    *match |= gtk_widget_get_visible (widget);
+static void
+add_with_priority (GtkWidget *parent,
+                   GtkWidget *widget,
+                   int        priority)
+{
+  GtkWidget *sibling = NULL;
+
+  g_return_if_fail (GTK_IS_WIDGET (parent));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  SET_PRIORITY (widget, priority);
+
+  for (GtkWidget *child = gtk_widget_get_first_child (parent);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (priority < GET_PRIORITY (child))
+        break;
+      sibling = child;
+    }
+
+  gtk_widget_insert_after (widget, parent, sibling);
 }
 
 static gboolean
 ide_greeter_workspace_has_match (IdeGreeterWorkspace *self)
 {
-  gboolean match = FALSE;
-
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
 
-  gtk_container_foreach (GTK_CONTAINER (self->sections),
-                         ide_greeter_workspace_has_match_cb,
-                         &match);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (IDE_IS_GREETER_SECTION (child) && gtk_widget_get_visible (child))
+        return TRUE;
+    }
 
-  return match;
+  return FALSE;
 }
 
 static void
@@ -135,10 +151,10 @@ ide_greeter_workspace_apply_filter_all (IdeGreeterWorkspace *self)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
 
-  g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
+  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
 
-  if (NULL != (text = gtk_entry_get_text (GTK_ENTRY (self->search_entry))))
-    self->pattern_spec = dzl_pattern_spec_new (text);
+  if (NULL != (text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry))))
+    self->pattern_spec = ide_pattern_spec_new (text);
 
   if (self->addins != NULL)
     peas_extension_set_foreach (self->addins,
@@ -150,38 +166,25 @@ ide_greeter_workspace_apply_filter_all (IdeGreeterWorkspace *self)
 }
 
 static void
-ide_greeter_workspace_activate_cb (GtkWidget *widget,
-                                   gpointer   user_data)
-{
-  gboolean *handled = user_data;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GTK_IS_WIDGET (widget));
-  g_assert (handled != NULL);
-
-  if (!IDE_IS_GREETER_SECTION (widget))
-    return;
-
-  if (!*handled)
-    *handled = ide_greeter_section_activate_first (IDE_GREETER_SECTION (widget));
-}
-
-static void
 ide_greeter_workspace_search_entry_activate (IdeGreeterWorkspace *self,
                                              GtkSearchEntry      *search_entry)
 {
-  gboolean handled = FALSE;
-
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
-  gtk_container_foreach (GTK_CONTAINER (self->sections),
-                         ide_greeter_workspace_activate_cb,
-                         &handled);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (IDE_IS_GREETER_SECTION (child))
+        {
+          if (ide_greeter_section_activate_first (IDE_GREETER_SECTION (child)))
+            return;
+        }
+    }
 
-  if (!handled)
-    gdk_window_beep (gtk_widget_get_window (GTK_WIDGET (search_entry)));
+  gtk_widget_error_bell (GTK_WIDGET (search_entry));
 }
 
 static void
@@ -202,28 +205,30 @@ stack_notify_visible_child_cb (IdeGreeterWorkspace *self,
 {
   g_autofree gchar *title = NULL;
   g_autofree gchar *full_title = NULL;
+  GtkStackPage *page;
   GtkWidget *visible_child;
-  gboolean sections;
+  gboolean overview;
 
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
   g_assert (GTK_IS_STACK (stack));
 
   visible_child = gtk_stack_get_visible_child (stack);
+  page = gtk_stack_get_page (stack, visible_child);
 
-  if (DZL_IS_DOCK_ITEM (visible_child))
+  if (page != NULL)
     {
-      if ((title = dzl_dock_item_get_title (DZL_DOCK_ITEM (visible_child))))
+      if ((title = g_strdup (gtk_stack_page_get_title (page))))
         full_title = g_strdup_printf (_("Builder — %s"), title);
     }
 
   adw_window_title_set_title (self->title, title);
   gtk_window_set_title (GTK_WINDOW (self), full_title);
 
-  sections = ide_str_equal0 ("sections", gtk_stack_get_visible_child_name (stack));
+  overview = ide_str_equal0 ("overview", gtk_stack_get_visible_child_name (stack));
 
-  gtk_widget_set_visible (GTK_WIDGET (self->left_box), sections);
-  gtk_widget_set_visible (GTK_WIDGET (self->back_button), !sections);
-  gtk_widget_set_visible (GTK_WIDGET (self->select_button), sections);
+  gtk_widget_set_visible (GTK_WIDGET (self->left_box), overview);
+  gtk_widget_set_visible (GTK_WIDGET (self->back_button), !overview);
+  gtk_widget_set_visible (GTK_WIDGET (self->select_button), overview);
 }
 
 static void
@@ -256,13 +261,15 @@ ide_greeter_workspace_addin_removed_cb (PeasExtensionSet *set,
                                         gpointer          user_data)
 {
   IdeGreeterSection *section = (IdeGreeterSection *)exten;
+  GtkBox *box;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_GREETER_SECTION (section));
   g_assert (IDE_IS_GREETER_WORKSPACE (user_data));
 
-  gtk_widget_destroy (GTK_WIDGET (section));
+  box = GTK_BOX (gtk_widget_get_parent (GTK_WIDGET (section)));
+  gtk_box_remove (box, GTK_WIDGET (section));
 }
 
 static void
@@ -272,7 +279,7 @@ ide_greeter_workspace_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_greeter_workspace_parent_class)->constructed (object);
 
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "greeter");
+  gtk_widget_add_css_class (GTK_WIDGET (self), "greeter");
 
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_GREETER_SECTION,
@@ -293,9 +300,25 @@ ide_greeter_workspace_constructed (GObject *object)
                               self);
 
   /* Ensure that no plugin changed our page */
-  ide_workspace_set_visible_surface_name (IDE_WORKSPACE (self), "sections");
+  ide_greeter_workspace_set_page (self, "overview");
 
   gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+}
+
+static void
+tear_workbench_down (GtkDialog    *dialog,
+                     int           response,
+                     IdeWorkbench *workbench)
+{
+  IDE_ENTRY;
+
+  g_assert (GTK_IS_DIALOG (dialog));
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  gtk_window_destroy (GTK_WINDOW (dialog));
+  ide_workbench_unload_async (workbench, NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -328,21 +351,18 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
                     "secondary-text", error->message,
                     NULL);
 
-      g_signal_connect (dialog,
-                        "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-      g_signal_connect_swapped (dialog,
-                                "response",
-                                G_CALLBACK (gtk_widget_destroy),
-                                workbench);
+      g_signal_connect_object (dialog,
+                               "response",
+                               G_CALLBACK (tear_workbench_down),
+                               workbench,
+                               0);
 
-      ide_gtk_window_present (GTK_WINDOW (dialog));
+      gtk_window_present (GTK_WINDOW (dialog));
 
       ide_greeter_workspace_end (self);
     }
 
-  gtk_widget_destroy (GTK_WIDGET (self));
+  gtk_window_destroy (GTK_WINDOW (self));
 
   IDE_EXIT;
 }
@@ -354,10 +374,8 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
  *
  * Opens the project described by @project_info.
  *
- * This is useful by greeter workspace extensions that add new surfaces
+ * This is useful by greeter workspace extensions that add new pages
  * which may not have other means to activate a project.
- *
- * Since: 3.32
  */
 void
 ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
@@ -396,8 +414,8 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
         }
       else
         {
-          ide_clone_surface_set_uri (self->clone_surface, vcs_uri);
-          ide_workspace_set_visible_surface_name (IDE_WORKSPACE (self), "clone");
+          ide_clone_page_set_uri (self->clone_page, vcs_uri);
+          ide_greeter_workspace_set_page (self, "clone");
           return;
         }
     }
@@ -432,16 +450,16 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
 }
 
 static void
-ide_greeter_workspace_multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
-                                                     guint                 n_press,
-                                                     gdouble               x,
-                                                     gdouble               y,
-                                                     IdeGreeterWorkspace  *self)
+ide_greeter_workspace_click_pressed_cb (IdeGreeterWorkspace *self,
+                                        guint                n_press,
+                                        double               x,
+                                        double               y,
+                                        GtkGestureClick     *gesture)
 {
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
-  g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
+  g_assert (GTK_IS_GESTURE_CLICK (gesture));
 
-  ide_workspace_set_visible_surface_name (IDE_WORKSPACE (self), "sections");
+  ide_greeter_workspace_set_page (self, "overview");
 }
 
 static void
@@ -457,14 +475,6 @@ ide_greeter_workspace_project_activated_cb (IdeGreeterWorkspace *self,
 }
 
 static void
-ide_greeter_workspace_delete_selected_rows_cb (GtkWidget *widget,
-                                               gpointer   user_data)
-{
-  if (IDE_IS_GREETER_SECTION (widget))
-    ide_greeter_section_delete_selected (IDE_GREETER_SECTION (widget));
-}
-
-static void
 ide_greeter_workspace_delete_selected_rows (GSimpleAction *action,
                                             GVariant      *param,
                                             gpointer       user_data)
@@ -475,19 +485,16 @@ ide_greeter_workspace_delete_selected_rows (GSimpleAction *action,
   g_assert (param == NULL);
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
 
-  gtk_container_foreach (GTK_CONTAINER (self->sections),
-                         ide_greeter_workspace_delete_selected_rows_cb,
-                         NULL);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (IDE_IS_GREETER_SECTION (child))
+        ide_greeter_section_delete_selected (IDE_GREETER_SECTION (child));
+    }
+
   ide_greeter_workspace_apply_filter_all (self);
   ide_greeter_workspace_set_selection_mode (self, FALSE);
-}
-
-static void
-ide_greeter_workspace_purge_selected_rows_cb (GtkWidget *widget,
-                                              gpointer   user_data)
-{
-  if (IDE_IS_GREETER_SECTION (widget))
-    ide_greeter_section_purge_selected (IDE_GREETER_SECTION (widget));
 }
 
 static void
@@ -500,14 +507,19 @@ purge_selected_rows_response (IdeGreeterWorkspace *self,
 
   if (response == GTK_RESPONSE_OK)
     {
-      gtk_container_foreach (GTK_CONTAINER (self->sections),
-                             ide_greeter_workspace_purge_selected_rows_cb,
-                             NULL);
+      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections));
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (IDE_IS_GREETER_SECTION (child))
+            ide_greeter_section_purge_selected (IDE_GREETER_SECTION (child));
+        }
+
       ide_greeter_workspace_apply_filter_all (self);
       ide_greeter_workspace_set_selection_mode (self, FALSE);
     }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -536,7 +548,7 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
                           _("Delete Project Sources"), GTK_RESPONSE_OK,
                           NULL);
   button = gtk_dialog_get_widget_for_response (dialog, GTK_RESPONSE_OK);
-  dzl_gtk_widget_add_style_class (button, "destructive-action");
+  gtk_widget_add_css_class (button, "destructive-action");
   g_signal_connect_data (dialog,
                          "response",
                          G_CALLBACK (purge_selected_rows_response),
@@ -547,17 +559,16 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
 }
 
 static void
-ide_greeter_workspace_destroy (GtkWidget *widget)
+ide_greeter_workspace_dispose (GObject *object)
 {
-  IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)widget;
+  IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)object;
 
   g_clear_object (&self->addins);
   g_clear_object (&self->delete_action);
   g_clear_object (&self->purge_action);
-  g_clear_object (&self->multipress_gesture);
-  g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
+  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
 
-  GTK_WIDGET_CLASS (ide_greeter_workspace_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_greeter_workspace_parent_class)->dispose (object);
 }
 
 static void
@@ -606,10 +617,9 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   IdeWorkspaceClass *workspace_class = IDE_WORKSPACE_CLASS (klass);
 
   object_class->constructed = ide_greeter_workspace_constructed;
+  object_class->dispose = ide_greeter_workspace_dispose;
   object_class->get_property = ide_greeter_workspace_get_property;
   object_class->set_property = ide_greeter_workspace_set_property;
-
-  widget_class->destroy = ide_greeter_workspace_destroy;
 
   /**
    * IdeGreeterWorkspace:selection-mode:
@@ -619,8 +629,6 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
    * and cached data.
    *
    * This is usually used by the checkmark button to toggle selections.
-   *
-   * Since: 3.32
    */
   properties [PROP_SELECTION_MODE] =
     g_param_spec_boolean ("selection-mode",
@@ -644,33 +652,37 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, sections);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, select_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, surfaces);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, pages);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Left, GDK_ALT_MASK, "win.page", "s", "overview");
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_w, GDK_CONTROL_MASK, "window.close", NULL);
 
-  g_type_ensure (IDE_TYPE_CLONE_SURFACE);
   g_type_ensure (IDE_TYPE_GREETER_BUTTONS_SECTION);
+  g_type_ensure (IDE_TYPE_GREETER_ROW);
 }
 
 static void
 ide_greeter_workspace_init (IdeGreeterWorkspace *self)
 {
-  g_autoptr(GPropertyAction) selection_action = NULL;
   static const GActionEntry actions[] = {
     { "purge-selected-rows", ide_greeter_workspace_purge_selected_rows },
     { "delete-selected-rows", ide_greeter_workspace_delete_selected_rows },
   };
+
+  g_autoptr(GPropertyAction) selection_action = NULL;
+  GtkGesture *gesture;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   selection_action = g_property_action_new ("selection-mode", G_OBJECT (self), "selection-mode");
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (selection_action));
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
-  self->multipress_gesture = GTK_GESTURE_MULTI_PRESS (gtk_gesture_multi_press_new (GTK_WIDGET (self)));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->multipress_gesture), 8);
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 8);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   g_signal_connect_object (self->search_entry,
                            "activate",
@@ -686,18 +698,18 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
 
   g_signal_connect (self->search_entry,
                     "stop-search",
-                    G_CALLBACK (gtk_entry_set_text),
+                    G_CALLBACK (gtk_editable_set_text),
                     (gpointer) "");
 
-  g_signal_connect (self->multipress_gesture,
-                    "pressed",
-                    G_CALLBACK (ide_greeter_workspace_multipress_gesture_pressed_cb),
-                    self);
+  g_signal_connect_object (gesture,
+                           "pressed",
+                           G_CALLBACK (ide_greeter_workspace_click_pressed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  stack_notify_visible_child_cb (self, NULL, self->surfaces);
+  stack_notify_visible_child_cb (self, NULL, self->pages);
 
   _ide_greeter_workspace_init_actions (self);
-  _ide_greeter_workspace_init_shortcuts (self);
 }
 
 IdeGreeterWorkspace *
@@ -716,8 +728,6 @@ ide_greeter_workspace_new (IdeApplication *app)
  * @section: an #IdeGreeterSection based #GtkWidget
  *
  * Adds the #IdeGreeterSection to the display.
- *
- * Since: 3.32
  */
 void
 ide_greeter_workspace_add_section (IdeGreeterWorkspace *self,
@@ -732,9 +742,9 @@ ide_greeter_workspace_add_section (IdeGreeterWorkspace *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->sections), GTK_WIDGET (section),
-                                     "priority", ide_greeter_section_get_priority (section),
-                                     NULL);
+  add_with_priority (GTK_WIDGET (self->sections),
+                     GTK_WIDGET (section),
+                     ide_greeter_section_get_priority (section));
 
   gtk_widget_set_visible (GTK_WIDGET (section),
                           ide_greeter_section_filter (section, NULL));
@@ -753,8 +763,6 @@ ide_greeter_workspace_add_section (IdeGreeterWorkspace *self,
  *
  * Plugins should clean up after themselves when they are unloaded, which may
  * include calling this function.
- *
- * Since: 3.32
  */
 void
 ide_greeter_workspace_remove_section (IdeGreeterWorkspace *self,
@@ -762,8 +770,9 @@ ide_greeter_workspace_remove_section (IdeGreeterWorkspace *self,
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
   g_return_if_fail (IDE_IS_GREETER_SECTION (section));
+  g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (section)) == GTK_WIDGET (self->sections));
 
-  gtk_container_remove (GTK_CONTAINER (self->sections), GTK_WIDGET (section));
+  gtk_box_remove (self->sections, GTK_WIDGET (section));
 }
 
 void
@@ -788,8 +797,6 @@ ide_greeter_workspace_add_button (IdeGreeterWorkspace *self,
  * Actions such as switching guides will be disabled during this process.
  *
  * See ide_greeter_workspace_end() to restore actions.
- *
- * Since: 3.32
  */
 void
 ide_greeter_workspace_begin (IdeGreeterWorkspace *self)
@@ -798,12 +805,8 @@ ide_greeter_workspace_begin (IdeGreeterWorkspace *self)
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->sections), FALSE);
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "open",
-                             "enabled", FALSE,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "surface",
-                             "enabled", FALSE,
-                             NULL);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.page", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.open", FALSE);
 }
 
 /**
@@ -811,20 +814,14 @@ ide_greeter_workspace_begin (IdeGreeterWorkspace *self)
  * @self: a #IdeGreeterWorkspace
  *
  * Restores actions after a call to ide_greeter_workspace_begin().
- *
- * Since: 3.32
  */
 void
 ide_greeter_workspace_end (IdeGreeterWorkspace *self)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "open",
-                             "enabled", TRUE,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "surface",
-                             "enabled", TRUE,
-                             NULL);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.page", TRUE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.open", TRUE);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->sections), TRUE);
 }
@@ -837,8 +834,6 @@ ide_greeter_workspace_end (IdeGreeterWorkspace *self)
  * allows selecting projects for removal.
  *
  * Returns: %TRUE if in selection mode, otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_greeter_workspace_get_selection_mode (IdeGreeterWorkspace *self)
@@ -848,23 +843,12 @@ ide_greeter_workspace_get_selection_mode (IdeGreeterWorkspace *self)
   return self->selection_mode;
 }
 
-static void
-ide_greeter_workspace_set_selection_mode_cb (GtkWidget *widget,
-                                             gpointer   user_data)
-{
-  if (IDE_IS_GREETER_SECTION (widget))
-    ide_greeter_section_set_selection_mode (IDE_GREETER_SECTION (widget),
-                                            GPOINTER_TO_INT (user_data));
-}
-
 /**
  * ide_greeter_workspace_set_selection_mode:
  * @self: a #IdeGreeterWorkspace
  * @selection_mode: if the workspace should be in selection mode
  *
  * Sets the workspace in selection mode.
- *
- * Since: 3.32
  */
 void
 ide_greeter_workspace_set_selection_mode (IdeGreeterWorkspace *self,
@@ -877,11 +861,29 @@ ide_greeter_workspace_set_selection_mode (IdeGreeterWorkspace *self,
   if (selection_mode != self->selection_mode)
     {
       self->selection_mode = selection_mode;
-      gtk_container_foreach (GTK_CONTAINER (self->sections),
-                             ide_greeter_workspace_set_selection_mode_cb,
-                             GINT_TO_POINTER (selection_mode));
+
+      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections));
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (IDE_IS_GREETER_SECTION (child))
+            ide_greeter_section_set_selection_mode (IDE_GREETER_SECTION (child), selection_mode);
+        }
+
       gtk_widget_set_visible (GTK_WIDGET (self->action_bar), selection_mode);
       gtk_widget_set_visible (GTK_WIDGET (self->projects_action_bar), !selection_mode);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SELECTION_MODE]);
     }
+}
+
+void
+ide_greeter_workspace_set_page (IdeGreeterWorkspace *self,
+                                const char          *name)
+{
+  g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
+
+  if (name == NULL)
+    name = "overview";
+
+  gtk_stack_set_visible_child_name (self->pages, name);
 }
