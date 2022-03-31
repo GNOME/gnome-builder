@@ -135,7 +135,6 @@ libide_gui_deps = [
   libide_plugins_dep,
   libide_projects_dep,
   libide_search_dep,
-  libide_themes_dep,
 ]
 
 if get_option('webkit').enabled()

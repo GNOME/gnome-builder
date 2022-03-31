@@ -28,7 +28,6 @@
 
 #include <glib/gi18n.h>
 #include <libpeas/peas-autocleanups.h>
-#include <libide-themes.h>
 
 #include "ide-language-defaults.h"
 
@@ -380,7 +379,6 @@ ide_application_init (IdeApplication *self)
 
   g_application_set_default (G_APPLICATION (self));
   gtk_window_set_default_icon_name (ide_get_application_id ());
-  ide_themes_init ();
 
   /* Ensure our core data is loaded early. */
   _ide_application_add_resources (self, "resource:///org/gnome/libide-sourceview/");
