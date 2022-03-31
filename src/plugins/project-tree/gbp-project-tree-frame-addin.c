@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <libide-gui.h>
-#include <libide-editor.h>
 
 #include "gbp-project-tree-frame-addin.h"
 #include "gbp-project-tree-workspace-addin.h"
