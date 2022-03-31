@@ -39,8 +39,7 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
                                        IdeWorkspace      *workspace)
 {
   GbpProjectTreeWorkspaceAddin *self = (GbpProjectTreeWorkspaceAddin *)addin;
-  IdeEditorSidebar *sidebar;
-  IdeSurface *surface;
+  g_autoptr(IdePanelPosition) position = NULL;
 
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
