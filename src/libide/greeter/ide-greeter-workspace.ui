@@ -81,9 +81,16 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkBox" id="sections">
+                              <object class="AdwClamp">
+                                <property name="halign">center</property>
+                                <property name="maximum-size">600</property>
                                 <property name="orientation">vertical</property>
-                                <property name="spacing">32</property>
+                                <child>
+                                  <object class="GtkBox" id="sections">
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">32</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
