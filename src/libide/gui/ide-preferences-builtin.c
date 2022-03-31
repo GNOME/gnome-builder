@@ -573,44 +573,72 @@ ide_preferences_builtin_register_sdks (DzlPreferences *preferences)
 #endif
 
 static const IdePreferencePageEntry pages[] = {
-  { NULL, "visual", "appearance", "org.gnome.Builder-appearance-symbolic", 0, "Appearance" },
-  { NULL, "visual", "editing", "org.gnome.Builder-editing-symbolic", 10, "Editing" },
-  { NULL, "visual", "keyboard", "org.gnome.Builder-shortcuts-symbolic", 20, "Shortcuts" },
-  { NULL, "code", "languages", "org.gnome.Builder-languages-symbolic", 100, "Languages" },
-  { NULL, "code", "completion", "org.gnome.Builder-completion-symbolic", 110, "Completion" },
-  { NULL, "code", "insight", "org.gnome.Builder-diagnostics-symbolic", 120, "Diagnostics" },
-  { NULL, "projects", "projects", "org.gnome.Builder-projects-symbolic", 200, "Projects" },
-  { NULL, "tools", "build", "org.gnome.Builder-build-symbolic", 300, "Build" },
-  { NULL, "tools", "debug", "org.gnome.Builder-debugger-symbolic", 310, "Debugger" },
-  { NULL, "tools", "commands", "org.gnome.Builder-command-symbolic", 320, "Commands" },
-  { NULL, "tools", "sdks", "org.gnome.Builder-sdk-symbolic", 500, "SDKs" },
-  { NULL, "plugins", "plugins", "org.gnome.Builder-plugins-symbolic", 600, "Plugins" },
+  { NULL, "visual",   "appearance", "org.gnome.Builder-appearance-symbolic",    0, N_("Appearance") },
+  { NULL, "visual",   "editing",    "org.gnome.Builder-editing-symbolic",      10, N_("Editing") },
+  { NULL, "visual",   "keyboard",   "org.gnome.Builder-shortcuts-symbolic",    20, N_("Shortcuts") },
+  { NULL, "code",     "languages",  "org.gnome.Builder-languages-symbolic",   100, N_("Languages") },
+  { NULL, "code",     "completion", "org.gnome.Builder-completion-symbolic",  110, N_("Completion") },
+  { NULL, "code",     "insight",    "org.gnome.Builder-diagnostics-symbolic", 120, N_("Diagnostics") },
+  { NULL, "projects", "projects",   "org.gnome.Builder-projects-symbolic",    200, N_("Projects") },
+  { NULL, "tools",    "build",      "org.gnome.Builder-build-symbolic",       300, N_("Build") },
+  { NULL, "tools",    "debug",      "org.gnome.Builder-debugger-symbolic",    310, N_("Debugger") },
+  { NULL, "tools",    "commands",   "org.gnome.Builder-command-symbolic",     320, N_("Commands") },
+  { NULL, "tools",    "sdks",       "org.gnome.Builder-sdk-symbolic",         500, N_("SDKs") },
+  { NULL, "plugins",  "plugins",    "org.gnome.Builder-plugins-symbolic",     600, N_("Plugins") },
 };
 
 static const IdePreferenceGroupEntry groups[] = {
-  { "appearance", "style", 0, "Appearance" },
-  { "appearance", "preview", 0, "Style" },
-  { "appearance", "schemes", 10, NULL },
-  { "appearance", "font", 20, NULL },
-  { "appearance", "accessories", 20, NULL },
+  { "appearance", "style",        0, N_("Appearance") },
+  { "appearance", "preview",      0, N_("Style") },
+  { "appearance", "schemes",     10, NULL },
+  { "appearance", "font",        20, NULL },
+  { "appearance", "accessories", 30, NULL },
 
-  { "languages/*", "general", 0, "General" },
-  { "languages/*", "margins", 10, "Margins" },
-  { "languages/*", "spacing", 20, "Spacing" },
-  { "languages/*", "indentation", 30, "Indentation" },
+  { "languages/*", "general",      0, N_("General") },
+  { "languages/*", "margins",     10, N_("Margins") },
+  { "languages/*", "spacing",     20, N_("Spacing") },
+  { "languages/*", "indentation", 30, N_("Indentation") },
+
+  { "completion", "general",       0, N_("General") },
 };
 
 static const IdePreferenceItemEntry items[] = {
-  { "appearance", "accessories", "grid", 0, ide_preferences_window_toggle, "Show Grid Pattern", "Display a grid pattern underneath source code", "org.gnome.builder.editor", NULL, "show-grid-lines" },
+  { "appearance", "accessories", "grid", 0, ide_preferences_window_toggle,
+    N_("Show Grid Pattern"),
+    N_("Display a grid pattern underneath source code"),
+    "org.gnome.builder.editor", NULL, "show-grid-lines" },
+
+  { "completion", "general", "interactive", 10, ide_preferences_window_toggle,
+    N_("Suggest Completions While Typing"),
+    N_("Automatically suggest completions while typing within the file"),
+    "org.gnome.builder.editor", NULL, "interactive-completion" },
 };
 
 static const IdePreferenceItemEntry lang_items[] = {
-  { "languages/*", "general", "trim", 0, ide_preferences_window_toggle, "Trim Trailing Whitespace", "Upon saving, trailing whitepsace from modified lines will be trimmed.", "org.gnome.builder.editor.language", "/*", "trim-trailing-whitespace" },
-  { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle, "Overwrite Braces", "Overwrite closing braces", "org.gnome.builder.editor.language", "/*", "overwrite-braces" },
-  { "languages/*", "general", "insert-matching", 0, ide_preferences_window_toggle, "Insert Matching Brace", "Insert matching character for [[(\"'", "org.gnome.builder.editor.language", "/*", "insert-matching-brace" },
-  { "languages/*", "general", "insert-trailing", 0, ide_preferences_window_toggle, "Insert Trailing Newline", "Ensure files end with a newline", "org.gnome.builder.editor.language", "/*", "insert-trailing-newline" },
+  { "languages/*", "general", "trim", 0, ide_preferences_window_toggle,
+    N_("Trim Trailing Whitespace"),
+    N_("Upon saving, trailing whitepsace from modified lines will be trimmed"),
+    "org.gnome.builder.editor.language", "/*", "trim-trailing-whitespace" },
 
-  { "languages/*", "margins", "show-right-margin", 0, ide_preferences_window_toggle, "Show right margin", "Display a margin in the editor to indicate maximum desired width", "org.gnome.builder.editor.language", "/*", "show-right-margin" },
+  { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle,
+    N_("Overwrite Braces"),
+    N_("Overwrite closing braces"),
+    "org.gnome.builder.editor.language", "/*", "overwrite-braces" },
+
+  { "languages/*", "general", "insert-matching", 0, ide_preferences_window_toggle,
+    N_("Insert Matching Brace"),
+    N_("Insert matching character for [[(\"'"),
+    "org.gnome.builder.editor.language", "/*", "insert-matching-brace" },
+
+  { "languages/*", "general", "insert-trailing", 0, ide_preferences_window_toggle,
+    N_("Insert Trailing Newline"),
+    N_("Ensure files end with a newline"),
+    "org.gnome.builder.editor.language", "/*", "insert-trailing-newline" },
+
+  { "languages/*", "margins", "show-right-margin", 0, ide_preferences_window_toggle,
+    N_("Show right margin"),
+    N_("Display a margin in the editor to indicate maximum desired width"),
+    "org.gnome.builder.editor.language", "/*", "show-right-margin" },
 
 #if 0
   { "languages/*", "spacing", "before-parens", 0, ide_preferences_window_toggle, "Prefer a space before opening parentheses" },
@@ -619,8 +647,15 @@ static const IdePreferenceItemEntry lang_items[] = {
   { "languages/*", "spacing", "before-angles", 0, ide_preferences_window_toggle, "Prefer a space before opening angles" },
 #endif
 
-  { "languages/*", "indentation", "insert-spaces", 0, ide_preferences_window_toggle, "Insert spaces instead of tabs", "Prefer spaces over tabs", "org.gnome.builder.editor.language", "/*", "insert-spaces-instead-of-tabs" },
-  { "languages/*", "indentation", "auto-indent", 0, ide_preferences_window_toggle, "Automatically Indent", "Format source code as you type", "org.gnome.builder.editor.language", "/*", "auto-indent" },
+  { "languages/*", "indentation", "insert-spaces", 0, ide_preferences_window_toggle,
+    N_("Insert spaces instead of tabs"),
+    N_("Prefer spaces over tabs"),
+    "org.gnome.builder.editor.language", "/*", "insert-spaces-instead-of-tabs" },
+
+  { "languages/*", "indentation", "auto-indent", 0, ide_preferences_window_toggle,
+    N_("Automatically Indent"),
+    N_("Format source code as you type"),
+    "org.gnome.builder.editor.language", "/*", "auto-indent" },
 };
 
 static int
