@@ -60,8 +60,8 @@ static void
 ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
 {
   self->box = g_object_new (GTK_TYPE_BOX,
-                            "margin-bottom", 6,
-                            "margin-top", 6,
+                            "margin-bottom", 3,
+                            "margin-top", 3,
                             "orientation", GTK_ORIENTATION_HORIZONTAL,
                             "homogeneous", TRUE,
                             "halign", GTK_ALIGN_CENTER,
