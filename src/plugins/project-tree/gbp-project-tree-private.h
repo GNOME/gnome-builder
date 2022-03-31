@@ -31,6 +31,7 @@ struct _GbpProjectTreePane
 {
   IdePane       parent_instance;
   IdeTree      *tree;
+  GActionGroup *actions;
   guint         has_loaded : 1;
 };
 

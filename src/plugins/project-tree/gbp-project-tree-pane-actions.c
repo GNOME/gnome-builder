@@ -27,6 +27,8 @@
 #if 0
 #include <libide-editor.h>
 #endif
+
+#include <libide-gtk.h>
 #include <libide-projects.h>
 
 #include "gbp-project-tree-private.h"
@@ -169,7 +171,7 @@ gbp_project_tree_pane_actions_new_cb (GObject      *object,
   else
     g_assert_not_reached ();
 
-  gtk_widget_destroy (GTK_WIDGET (popover));
+  gtk_popover_popdown (GTK_POPOVER (popover));
 }
 
 static void
@@ -238,17 +240,16 @@ gbp_project_tree_pane_actions_new (GbpProjectTreePane *self,
 }
 
 static void
-close_matching_pages (GtkWidget *widget,
-                      gpointer   user_data)
+close_matching_pages (IdePage  *page,
+                      gpointer  user_data)
 {
-  IdePage *page = (IdePage *)widget;
+#if 0
   GFile *file = user_data;
   GFile *this_file;
 
   g_assert (IDE_IS_PAGE (page));
   g_assert (G_IS_FILE (file));
 
-#if 0
   if (!IDE_IS_EDITOR_PAGE (page))
     return;
 
@@ -341,7 +342,7 @@ gbp_project_tree_pane_actions_rename_display_cb (GObject      *object,
   g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(dst = gbp_rename_file_popover_display_finish (popover, result, &error)))
-    goto destroy;
+    goto done;
 
   src = gbp_rename_file_popover_get_file (popover);
   context = ide_widget_get_context (GTK_WIDGET (self));
@@ -354,8 +355,8 @@ gbp_project_tree_pane_actions_rename_display_cb (GObject      *object,
                                  gbp_project_tree_pane_actions_rename_cb,
                                  g_object_ref (self));
 
-destroy:
-  gtk_widget_destroy (GTK_WIDGET (popover));
+done:
+  gtk_popover_popdown (GTK_POPOVER (popover));
 }
 
 DEFINE_ACTION_HANDLER (rename, {
@@ -586,7 +587,25 @@ _gbp_project_tree_pane_init_actions (GbpProjectTreePane *self)
                                   "project-tree",
                                   G_ACTION_GROUP (actions));
 
+  self->actions = g_object_ref (G_ACTION_GROUP (actions));
+
   _gbp_project_tree_pane_update_actions (self);
+}
+
+G_GNUC_NULL_TERMINATED static void
+action_map_set (GActionMap *map,
+                const char *name,
+                const char *first_property,
+                ...)
+{
+  GAction *action;
+  va_list args;
+
+  action = g_action_map_lookup_action (map, name);
+
+  va_start (args, first_property);
+  g_object_set_valist (G_OBJECT (action), first_property, args);
+  va_end (args);
 }
 
 void
@@ -613,28 +632,28 @@ _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
         }
     }
 
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-file",
-                             "enabled", is_file,
-                             NULL);
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-folder",
-                             "enabled", is_file,
-                             NULL);
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "trash",
-                             "enabled", is_file,
-                             NULL);
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "rename",
-                             "enabled", is_file,
-                             NULL);
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open",
-                             "enabled", is_file && !is_dir,
-                             NULL);
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-with-hint",
-                             "enabled", is_file,
-                             NULL);
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-containing-folder",
-                             "enabled", is_file,
-                             NULL);
-  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-in-terminal",
-                             "enabled", is_file,
-                             NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "new-file",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "new-folder",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "trash",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "rename",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open",
+                  "enabled", is_file && !is_dir,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open-with-hint",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open-containing-folder",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open-in-terminal",
+                  "enabled", is_file,
+                  NULL);
 }
