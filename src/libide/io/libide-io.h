@@ -29,8 +29,10 @@ G_BEGIN_DECLS
 
 #include "ide-content-type.h"
 #include "ide-directory-reaper.h"
+#include "ide-file-transfer.h"
 #include "ide-gfile.h"
 #include "ide-line-reader.h"
+#include "ide-io-enums.h"
 #include "ide-marked-content.h"
 #include "ide-path.h"
 #include "ide-persistent-map-builder.h"
