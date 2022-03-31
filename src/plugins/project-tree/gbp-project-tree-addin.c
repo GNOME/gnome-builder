@@ -553,14 +553,11 @@ gbp_project_tree_addin_load (IdeTreeAddin *addin,
                              IdeTree      *tree,
                              IdeTreeModel *model)
 {
-  static const GtkTargetEntry drag_targets[] = {
-    { (gchar *)"GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 },
-    { (gchar *)"text/uri-list", 0, 0 },
-  };
-
   GbpProjectTreeAddin *self = (GbpProjectTreeAddin *)addin;
   IdeVcsMonitor *monitor;
   IdeWorkbench *workbench;
+  g_autoptr(GdkContentFormats) formats = NULL;
+  GdkContentFormatsBuilder *builder;
 
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE_MODEL (model));
@@ -583,12 +580,17 @@ gbp_project_tree_addin_load (IdeTreeAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
+  gdk_content_formats_builder_add_gtype (builder, GTK_TYPE_TREE_ROW_DATA);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tree),
                                           GDK_BUTTON1_MASK,
-                                          drag_targets, G_N_ELEMENTS (drag_targets),
+                                          formats,
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tree),
-                                        drag_targets, G_N_ELEMENTS (drag_targets),
+                                        formats,
                                         GDK_ACTION_COPY | GDK_ACTION_MOVE);
 }
 
@@ -617,10 +619,9 @@ static gboolean
 gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
                                        IdeTreeNode      *drag_node,
                                        IdeTreeNode      *drop_node,
-                                       GtkSelectionData *selection)
+                                       const GValue     *value)
 {
   IdeProjectFile *drop_file = NULL;
-  g_auto(GStrv) uris = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (addin));
@@ -638,9 +639,13 @@ gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
     return FALSE;
 
   /* We need a uri list or file node */
-  uris = gtk_selection_data_get_uris (selection);
-  if ((uris == NULL || uris[0] == NULL) && drag_node == NULL)
-    return FALSE;
+  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    {
+      const GList *files = g_value_get_boxed (value);
+
+      if ((files == NULL || !G_IS_FILE (files->data)) && drag_node == NULL)
+        return FALSE;
+    }
 
   /* If we have a drag node, make sure it's a file */
   if (drag_node != NULL &&
@@ -807,7 +812,7 @@ static void
 gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
                                            IdeTreeNode         *drag_node,
                                            IdeTreeNode         *drop_node,
-                                           GtkSelectionData    *selection,
+                                           const GValue        *value,
                                            GdkDragAction        actions,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
@@ -820,11 +825,11 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   g_autoptr(GFile) dst_dir = NULL;
   g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(GPtrArray) srcs = NULL;
-  g_auto(GStrv) uris = NULL;
   IdeProjectFile *drag_file;
   IdeProjectFile *drop_file;
   IdeBufferManager *buffer_manager;
   IdeContext *context;
+  const GList *files = NULL;
 
   IDE_ENTRY;
 
@@ -836,19 +841,20 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_project_tree_addin_node_dropped_async);
 
-  if (!gbp_project_tree_addin_node_droppable (addin, drag_node, drop_node, selection))
+  if (!gbp_project_tree_addin_node_droppable (addin, drag_node, drop_node, value))
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
   srcs = g_ptr_array_new_with_free_func (g_object_unref);
-  uris = gtk_selection_data_get_uris (selection);
+  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    files = g_value_get_boxed (value);
 
-  if (uris != NULL)
+  if (files != NULL)
     {
-      for (guint i = 0; uris[i]; i++)
-        g_ptr_array_add (srcs, g_file_new_for_uri (uris[i]));
+      for (const GList *iter = files; iter; iter = iter->next)
+        g_ptr_array_add (srcs, g_object_ref (iter->data));
     }
 
   drop_file = ide_tree_node_get_item (drop_node);
