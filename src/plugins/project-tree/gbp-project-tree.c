@@ -174,6 +174,8 @@ gbp_project_tree_init (GbpProjectTree *self)
 {
   ide_widget_set_context_handler (GTK_WIDGET (self),
                                   gbp_project_tree_context_set);
+
+  gtk_tree_view_set_show_expanders (GTK_TREE_VIEW (self), FALSE);
 }
 
 static IdeTreeNode *
