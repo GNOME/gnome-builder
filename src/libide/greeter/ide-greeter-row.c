@@ -23,8 +23,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libide-projects.h>
 #include <stdlib.h>
+
+#include <libide-gtk.h>
+#include <libide-projects.h>
 
 #include "ide-project-info-private.h"
 
@@ -36,6 +38,8 @@ typedef struct
 
   /* Template Widgets */
   GtkCheckButton *check_button;
+  GtkRevealer    *revealer;
+  GtkImage       *next_image;
   GtkLabel       *title;
   GtkLabel       *subtitle;
   GtkImage       *image;
@@ -171,6 +175,8 @@ ide_greeter_row_class_init (IdeGreeterRowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-greeter/ide-greeter-row.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, check_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, image);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, next_image);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, revealer);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, subtitle);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, tags);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, title);
@@ -366,5 +372,11 @@ ide_greeter_row_set_selection_mode (IdeGreeterRow *self,
 
   g_return_if_fail (IDE_IS_GREETER_ROW (self));
 
-  gtk_widget_set_visible (GTK_WIDGET (priv->check_button), selection_mode);
+  gtk_revealer_set_reveal_child (priv->revealer, selection_mode);
+  ide_object_animate (priv->next_image,
+                      IDE_ANIMATION_EASE_OUT_CUBIC,
+                      300,
+                      NULL,
+                      "opacity", selection_mode ? 0.0 : 1.0,
+                      NULL);
 }

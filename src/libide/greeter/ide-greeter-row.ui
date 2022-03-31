@@ -9,16 +9,22 @@
         <property name="margin-start">18</property>
         <property name="margin-end">18</property>
         <property name="orientation">horizontal</property>
-        <property name="spacing">12</property>
         <child>
-          <object class="GtkCheckButton" id="check_button">
-            <property name="margin-end">6</property>
-            <property name="valign">center</property>
-            <property name="visible">false</property>
+          <object class="GtkRevealer" id="revealer">
+            <property name="reveal-child">false</property>
+            <property name="transition-type">slide-right</property>
+            <child>
+              <object class="GtkCheckButton" id="check_button">
+                <property name="margin-end">12</property>
+                <property name="valign">center</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkImage" id="image">
+            <property name="visible">false</property>
+            <property name="margin-end">18</property>
             <style>
               <class name="lowres-icon"/>
             </style>
@@ -51,14 +57,15 @@
         </child>
         <child>
           <object class="GtkBox" id="tags">
-            <property name="spacing">6</property>
+            <property name="margin-start">6</property>
+            <property name="spacing">3</property>
             <property name="valign">center</property>
           </object>
         </child>
         <child>
-          <object class="GtkImage">
+          <object class="GtkImage" id="next_image">
             <property name="icon-name">go-next-symbolic</property>
-            <property name="margin-start">6</property>
+            <property name="margin-start">12</property>
           </object>
         </child>
       </object>
