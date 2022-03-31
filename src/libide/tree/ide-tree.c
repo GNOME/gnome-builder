@@ -703,9 +703,20 @@ ide_tree_show_popover_at_node (IdeTree     *self,
                                IdeTreeNode *node,
                                GtkPopover  *popover)
 {
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  g_clear_pointer ((GtkWidget **)&priv->popover, gtk_widget_unparent);
+  priv->popover = popover;
+  gtk_widget_set_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
+  g_signal_connect_object (popover,
+                           "closed",
+                           G_CALLBACK (ide_tree_popover_closed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   _ide_tree_node_show_popover (node, self, popover);
 }
