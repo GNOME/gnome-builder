@@ -34,14 +34,14 @@
 
 struct _GbpRecentSection
 {
-  GtkWidget         parent_instance;
+  GtkWidget            parent_instance;
 
-  IdeTruncateModel *truncate;
+  IdeTruncateModel    *truncate;
 
-  GtkBox           *box;
-  GtkListBox       *listbox;
+  AdwPreferencesGroup *group;
+  GtkListBox          *listbox;
 
-  guint             selection_mode : 1;
+  guint                selection_mode : 1;
 };
 
 enum {
@@ -80,12 +80,15 @@ gbp_recent_section_get_has_selection (GbpRecentSection *self)
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      gboolean selected;
+      if (IDE_IS_GREETER_ROW (child))
+        {
+          gboolean selected;
 
-      g_object_get (child, "selected", &selected, NULL);
+          g_object_get (child, "selected", &selected, NULL);
 
-      if (selected)
-        return TRUE;
+          if (selected)
+            return TRUE;
+        }
     }
 
   return FALSE;
@@ -118,19 +121,22 @@ gbp_recent_section_filter (IdeGreeterSection *section,
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      gboolean match = spec == NULL;
-
-      if (spec != NULL)
+      if (IDE_IS_GREETER_ROW (child))
         {
-          g_autofree gchar *search_text = NULL;
+          gboolean match = spec == NULL;
 
-          if ((search_text = ide_greeter_row_get_search_text (IDE_GREETER_ROW (child))))
-            match = ide_pattern_spec_match (spec, search_text);
+          if (spec != NULL)
+            {
+              g_autofree gchar *search_text = NULL;
+
+              if ((search_text = ide_greeter_row_get_search_text (IDE_GREETER_ROW (child))))
+                match = ide_pattern_spec_match (spec, search_text);
+            }
+
+          gtk_widget_set_visible (child, match);
+
+          found |= match;
         }
-
-      gtk_widget_set_visible (child, match);
-
-      found |= match;
     }
 
   return found;
@@ -147,7 +153,8 @@ gbp_recent_section_activate_first (IdeGreeterSection *section)
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      if (gtk_widget_get_visible (child))
+      if (IDE_IS_GREETER_ROW (child) &&
+          gtk_widget_get_visible (child))
         {
           IdeProjectInfo *project_info;
 
@@ -173,8 +180,11 @@ gbp_recent_section_set_selection_mode (IdeGreeterSection *section,
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      ide_greeter_row_set_selection_mode (IDE_GREETER_ROW (child), selection_mode);
-      g_object_set (child, "selected", FALSE, NULL);
+      if (IDE_IS_GREETER_ROW (child))
+        {
+          ide_greeter_row_set_selection_mode (IDE_GREETER_ROW (child), selection_mode);
+          g_object_set (child, "selected", FALSE, NULL);
+        }
     }
 
   self->selection_mode = selection_mode;
@@ -303,11 +313,14 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      gboolean selected;
+      if (IDE_IS_GREETER_ROW (child))
+        {
+          gboolean selected;
 
-      g_object_get (child, "selected", &selected, NULL);
-      if (selected)
-        infos = g_list_prepend (infos, ide_greeter_row_get_project_info (IDE_GREETER_ROW (child)));
+          g_object_get (child, "selected", &selected, NULL);
+          if (selected)
+            infos = g_list_prepend (infos, ide_greeter_row_get_project_info (IDE_GREETER_ROW (child)));
+        }
     }
 
   /* Remove the projects from the list of recent projects */
@@ -547,7 +560,7 @@ gbp_recent_section_dispose (GObject *object)
   GbpRecentSection *self = (GbpRecentSection *)object;
 
   g_clear_object (&self->truncate);
-  g_clear_pointer ((GtkWidget **)&self->box, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **)&self->group, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gbp_recent_section_parent_class)->dispose (object);
 }
@@ -627,8 +640,8 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "recent");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/recent/gbp-recent-section.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpRecentSection, group);
   gtk_widget_class_bind_template_child (widget_class, GbpRecentSection, listbox);
-  gtk_widget_class_bind_template_child (widget_class, GbpRecentSection, box);
   gtk_widget_class_bind_template_callback (widget_class, gbp_recent_section_row_activated);
 }
 
