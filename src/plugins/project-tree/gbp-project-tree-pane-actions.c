@@ -22,9 +22,12 @@
 
 #include "config.h"
 
-#include <libide-editor.h>
-#include <libide-projects.h>
 #include <vte/vte.h>
+
+#if 0
+#include <libide-editor.h>
+#endif
+#include <libide-projects.h>
 
 #include "gbp-project-tree-private.h"
 #include "gbp-rename-file-popover.h"
@@ -72,8 +75,10 @@ new_action_completed_cb (GObject      *object,
       if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (self->tree))))
         return;
 
+#if 0
       if (state->file != NULL)
         ide_workbench_open_async (workbench, state->file, "editor", 0, NULL, NULL, NULL);
+#endif
     }
 }
 
@@ -243,6 +248,7 @@ close_matching_pages (GtkWidget *widget,
   g_assert (IDE_IS_PAGE (page));
   g_assert (G_IS_FILE (file));
 
+#if 0
   if (!IDE_IS_EDITOR_PAGE (page))
     return;
 
@@ -256,6 +262,7 @@ close_matching_pages (GtkWidget *widget,
       ide_buffer_save_file_async (buffer, NULL, NULL, NULL, NULL, NULL);
       gtk_widget_destroy (widget);
     }
+#endif
 }
 
 #define DEFINE_ACTION_HANDLER(short_name, BODY)                       \
