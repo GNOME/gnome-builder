@@ -637,6 +637,8 @@ static const IdePreferenceGroupEntry groups[] = {
   { "build",      "general",        0, N_("General") },
 
   { "network",    "downloads",      0, N_("Downloads") },
+
+  { "keyboard",   "movement",      10, N_("Movements") },
 };
 
 static const IdePreferenceItemEntry items[] = {
@@ -674,6 +676,16 @@ static const IdePreferenceItemEntry items[] = {
     N_("Allow Downloads over Metered Connections"),
     N_("Allow the use of metered network connections when automatically downloading dependencies"),
     "org.gnome.builder.build", NULL, "allow-network-when-metered" },
+
+  { "keyboard", "movement", "smart-home-end", 0, ide_preferences_window_toggle,
+    N_("Smart Home and End"),
+    N_("Home moves to first non-whitespace character"),
+    "org.gnome.builder.editor", NULL, "smart-home-end" },
+
+  { "keyboard", "movement", "smart-backspace", 0, ide_preferences_window_toggle,
+    N_("Smart Backspace"),
+    N_("Backspace will remove extra space to keep you aligned with your indentation"),
+    "org.gnome.builder.editor", NULL, "smart-backspace" },
 };
 
 static const IdePreferenceItemEntry lang_items[] = {
