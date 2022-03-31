@@ -101,7 +101,7 @@ ide_greeter_row_get_property (GObject    *object,
 
     case PROP_SELECTED:
       g_value_set_boolean (value,
-                           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->check_button)));
+                           gtk_check_button_get_active (GTK_CHECK_BUTTON (priv->check_button)));
       break;
 
     default:
@@ -125,8 +125,8 @@ ide_greeter_row_set_property (GObject      *object,
       break;
 
     case PROP_SELECTED:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check_button),
-                                    g_value_get_boolean (value));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (priv->check_button),
+                                   g_value_get_boolean (value));
       break;
 
     default:
