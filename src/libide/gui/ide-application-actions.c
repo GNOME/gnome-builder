@@ -361,6 +361,7 @@ void
 _ide_application_init_actions (IdeApplication *self)
 {
   g_autoptr(GAction) style_action = NULL;
+  g_autoptr(GAction) style_scheme_action = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
@@ -372,6 +373,9 @@ _ide_application_init_actions (IdeApplication *self)
 
   style_action = g_settings_create_action (self->settings, "style-variant");
   g_action_map_add_action (G_ACTION_MAP (self), style_action);
+
+  style_scheme_action = g_settings_create_action (self->editor_settings, "style-scheme-name");
+  g_action_map_add_action (G_ACTION_MAP (self), style_scheme_action);
 }
 
 static void
