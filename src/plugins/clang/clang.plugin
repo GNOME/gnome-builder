@@ -7,6 +7,7 @@ Depends=editor;
 Embedded=_ide_clang_register_types
 Module=clang
 Name=Clang
+X-Category=compilers
 X-Code-Indexer-Languages-Priority=100
 X-Code-Indexer-Languages=c,chdr,cpp,cpphdr,objc
 X-Completion-Provider-Languages=c,chdr,cpp,cpphdr,objc

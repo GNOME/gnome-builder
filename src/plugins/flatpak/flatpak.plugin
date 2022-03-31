@@ -9,3 +9,4 @@ Hidden=true
 Module=flatpak
 Name=Flatpak
 X-At-Startup=true
+X-Category=sdks

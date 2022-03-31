@@ -7,3 +7,4 @@ Description=Provides support for podman containers
 Embedded=_gbp_podman_register_types
 Module=podman
 Name=Podman
+X-Category=sdks

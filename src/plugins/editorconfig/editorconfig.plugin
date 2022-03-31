@@ -7,3 +7,4 @@ Description=Editorconfig integration
 Embedded=_gbp_editorconfig_register_types
 Module=editorconfig
 Name=Editorconfig
+X-Category=editing
