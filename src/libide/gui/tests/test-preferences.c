@@ -1,8 +1,6 @@
-#include "ide-preferences-window.h"
-#include "ide-gui-enums.h"
-
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <libide-gui.h>
 
 static void create_source_view_cb (const char                   *page,
                                    const IdePreferenceItemEntry *item,
