@@ -176,8 +176,8 @@ ide_application_color_style_scheme_changed_cb (IdeApplication *self,
   if (scheme == NULL)
     return;
 
-  if ((css = _ide_recoloring_generate_css (scheme)))
-    gtk_css_provider_load_from_data (self->recoloring, css, -1);
+  css = _ide_recoloring_generate_css (scheme);
+  gtk_css_provider_load_from_data (self->recoloring, css ? css : "", -1);
 }
 
 void
