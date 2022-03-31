@@ -645,44 +645,45 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, gbp_recent_section_row_activated);
 }
 
-#if 0
-static gboolean
-on_button_press_event_cb (GtkListBox       *listbox,
-                          GdkEventButton   *ev,
-                          GbpRecentSection *self)
+static void
+gbp_recent_section_click_pressed_cb (GbpRecentSection *self,
+                                     int               n_presses,
+                                     double            x,
+                                     double            y,
+                                     GtkGestureClick  *gesture)
 {
-  GtkListBoxRow *row;
+  IdeWorkspace *workspace;
+  GtkWidget *pick;
 
-  g_assert (GTK_IS_LIST_BOX (listbox));
   g_assert (GBP_IS_RECENT_SECTION (self));
+  g_assert (GTK_IS_GESTURE_CLICK (gesture));
 
-  if (ev->button == GDK_BUTTON_SECONDARY)
-    {
-      GtkWidget *workspace;
+  pick = gtk_widget_pick (GTK_WIDGET (self), x, y, GTK_PICK_NON_TARGETABLE);
+  if (!GTK_IS_LIST_BOX_ROW (pick))
+    pick = gtk_widget_get_ancestor (pick, GTK_TYPE_LIST_BOX_ROW);
 
-      workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE);
-      ide_greeter_workspace_set_selection_mode (IDE_GREETER_WORKSPACE (workspace), TRUE);
+  if (pick == NULL)
+    return;
 
-      if ((row = gtk_list_box_get_row_at_y (listbox, ev->y)))
-        {
-          g_object_set (row, "selected", TRUE, NULL);
-          return GDK_EVENT_STOP;
-        }
-    }
-
-  return GDK_EVENT_PROPAGATE;
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  ide_greeter_workspace_set_selection_mode (IDE_GREETER_WORKSPACE (workspace), TRUE);
+  g_object_set (pick, "selected", TRUE, NULL);
 }
-#endif
 
 static void
 gbp_recent_section_init (GbpRecentSection *self)
 {
+  GtkGesture *gesture;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
-#if 0
-  g_signal_connect (self->listbox,
-                    "button-press-event",
-                    G_CALLBACK (on_button_press_event_cb),
-                    self);
-#endif
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 3);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
+  g_signal_connect_object (gesture,
+                           "pressed",
+                           G_CALLBACK (gbp_recent_section_click_pressed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 }
