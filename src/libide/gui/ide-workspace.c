@@ -439,6 +439,8 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
                          (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_comma, GDK_CONTROL_MASK, "app.preferences", NULL);
 }
 
 static void
