@@ -7,3 +7,4 @@ Loader=python3
 Module=jhbuild_plugin
 Name=JHBuild
 X-Builder-ABI=@PACKAGE_ABI@
+X-Category=sdks

@@ -7,3 +7,4 @@ Embedded=_gbp_newcomers_register_types
 Module=newcomers
 Depends=greeter;
 Name=GNOME Newcomers
+X-Category=templates

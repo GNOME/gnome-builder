@@ -6,3 +6,4 @@ Description=Support for the Git version control system
 Embedded=_gbp_git_register_types
 Module=git
 Name=Git
+X-Category=vcs

@@ -7,3 +7,4 @@ Description=Integration with deviced devices
 Embedded=_gbp_deviced_register_types
 Module=deviced
 Name=Deviced
+X-Category=devices

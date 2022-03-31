@@ -2,10 +2,10 @@
 Authors=Alex Mitchel, Christian Hergert
 Copyright=Copyright 2019 Alex Mitchell, 2019 Christian Hergert
 Description=Provides integration with the Waf build system
-Hidden=true
 Loader=python3
 Module=waf_plugin
 Name=Waf
+X-Category=buildsystems
 X-Project-File-Filter-Name=Waf (waf)
 X-Project-File-Filter-Pattern=wscript
 X-Builder-ABI=@PACKAGE_ABI@
