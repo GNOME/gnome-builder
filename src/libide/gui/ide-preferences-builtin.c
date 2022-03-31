@@ -606,7 +606,7 @@ static const IdePreferenceItemEntry items[] = {
 
 static const IdePreferenceItemEntry lang_items[] = {
   { "languages/*", "general", "trim", 0, ide_preferences_window_toggle, "Trim Trailing Whitespace", "Upon saving, trailing whitepsace from modified lines will be trimmed.", "org.gnome.builder.editor.language", "/*", "trim-trailing-whitespace" },
-  { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle, "Overwrite Braces", "Overwrite closing braces", "org.gnome.builder.editor.language", "/*", "overwrite-brances" },
+  { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle, "Overwrite Braces", "Overwrite closing braces", "org.gnome.builder.editor.language", "/*", "overwrite-braces" },
   { "languages/*", "general", "insert-matching", 0, ide_preferences_window_toggle, "Insert Matching Brace", "Insert matching character for [[(\"'", "org.gnome.builder.editor.language", "/*", "insert-matching-brace" },
   { "languages/*", "general", "insert-trailing", 0, ide_preferences_window_toggle, "Insert Trailing Newline", "Ensure files end with a newline", "org.gnome.builder.editor.language", "/*", "insert-trailing-newline" },
 
