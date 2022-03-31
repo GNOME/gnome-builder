@@ -69,6 +69,9 @@ struct _IdeWorkspaceClass
   void     (*restore_size)          (IdeWorkspace         *self,
                                      int                   width,
                                      int                   height);
+  gboolean (*save_size)             (IdeWorkspace         *self,
+                                     int                  *width,
+                                     int                  *height);
 };
 
 IDE_AVAILABLE_IN_ALL
