@@ -890,10 +890,15 @@ ide_preferences_window_add_groups (IdePreferencesWindow          *self,
   for (gsize i = 0; i < n_groups; i++)
     {
       IdePreferenceGroupEntry entry = groups[i];
+      g_autofree char *title_esc = NULL;
+      const char *title;
+
+      title = g_dgettext (translation_domain, entry.title);
+      title_esc = g_markup_escape_text (title ? title : "", -1);
 
       entry.page = g_intern_string (entry.page);
       entry.name = g_intern_string (entry.name);
-      entry.title = g_intern_string (g_dgettext (translation_domain, entry.title));
+      entry.title = g_intern_string (title_esc);
 
       g_ptr_array_add (self->info.groups, g_memdup2 (&entry, sizeof entry));
     }
@@ -998,6 +1003,8 @@ ide_preferences_window_toggle (const char                   *page_name,
                                gpointer                      user_data)
 {
   IdePreferencesWindow *self = user_data;
+  g_autofree char *title_esc = NULL;
+  g_autofree char *subtitle_esc = NULL;
   AdwActionRow *row;
   GtkSwitch *child;
   GSettings *settings;
@@ -1009,12 +1016,15 @@ ide_preferences_window_toggle (const char                   *page_name,
   if (!(settings = ide_preferences_window_get_settings (self, entry)))
     return;
 
+  title_esc = g_markup_escape_text (entry->title ? entry->title : "", -1);
+  subtitle_esc = g_markup_escape_text (entry->subtitle ? entry->subtitle : "", -1);
+
   child = g_object_new (GTK_TYPE_SWITCH,
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title", entry->title,
-                      "subtitle", entry->subtitle,
+                      "title", title_esc,
+                      "subtitle", subtitle_esc,
                       "activatable-widget", child,
                       NULL);
   adw_preferences_group_add (group, GTK_WIDGET (row));
