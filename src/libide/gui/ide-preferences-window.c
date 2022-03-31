@@ -23,8 +23,12 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-gui-enums.h"
+#include "ide-config-view-addin.h"
+#include "ide-preferences-addin.h"
+#include "ide-preferences-builtin-private.h"
 #include "ide-preferences-window.h"
 
 struct _IdePreferencesWindow
@@ -32,6 +36,8 @@ struct _IdePreferencesWindow
   AdwApplicationWindow parent_window;
 
   IdePreferencesMode mode;
+
+  PeasExtensionSet *addins;
 
   GtkToggleButton    *search_button;
   GtkButton          *back_button;
@@ -270,9 +276,92 @@ search_changed_cb (IdePreferencesWindow *self,
 }
 
 static void
+ide_preferences_window_extension_added (PeasExtensionSet *set,
+                                        PeasPluginInfo   *plugin_info,
+                                        PeasExtension    *exten,
+                                        gpointer          user_data)
+{
+  IdePreferencesWindow *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (IDE_IS_PREFERENCES_ADDIN (exten))
+    {
+      ide_preferences_addin_load (IDE_PREFERENCES_ADDIN (exten), self);
+      IDE_EXIT;
+    }
+
+  g_assert_not_reached ();
+}
+
+static void
+ide_preferences_window_extension_removed (PeasExtensionSet *set,
+                                          PeasPluginInfo   *plugin_info,
+                                          PeasExtension    *exten,
+                                          gpointer          user_data)
+{
+  IdePreferencesWindow *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (IDE_IS_PREFERENCES_ADDIN (exten))
+    {
+      ide_preferences_addin_unload (IDE_PREFERENCES_ADDIN (exten), self);
+      IDE_EXIT;
+    }
+
+  g_assert_not_reached ();
+}
+
+static void
+ide_preferences_window_load_addins (IdePreferencesWindow *self)
+{
+  g_assert (IDE_IS_PREFERENCES_WINDOW (self));
+  g_assert (self->addins == NULL);
+
+  _ide_preferences_builtin_register (self);
+
+  if (self->mode == IDE_PREFERENCES_MODE_APPLICATION)
+    self->addins = peas_extension_set_new (peas_engine_get_default (),
+                                           IDE_TYPE_PREFERENCES_ADDIN,
+                                           NULL);
+  else if (self->mode == IDE_PREFERENCES_MODE_PROJECT)
+    self->addins = peas_extension_set_new (peas_engine_get_default (),
+                                           IDE_TYPE_CONFIG_VIEW_ADDIN,
+                                           NULL);
+
+  if (self->addins == NULL)
+    return;
+
+  g_signal_connect (self->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_preferences_window_extension_added),
+                    self);
+
+  g_signal_connect (self->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_preferences_window_extension_removed),
+                    self);
+
+  peas_extension_set_foreach (self->addins,
+                              ide_preferences_window_extension_added,
+                              self);
+}
+
+static void
 ide_preferences_window_dispose (GObject *object)
 {
   IdePreferencesWindow *self = (IdePreferencesWindow *)object;
+
+  g_clear_object (&self->addins);
 
   g_clear_pointer (&self->settings, g_hash_table_unref);
   g_clear_handle_id (&self->rebuild_source, g_source_remove);
@@ -298,7 +387,11 @@ ide_preferences_window_dispose (GObject *object)
 static void
 ide_preferences_window_constructed (GObject *object)
 {
+  IdePreferencesWindow *self = (IdePreferencesWindow *)object;
+
   G_OBJECT_CLASS (ide_preferences_window_parent_class)->constructed (object);
+
+  ide_preferences_window_load_addins (self);
 }
 
 static void
@@ -922,4 +1015,12 @@ ide_preferences_window_toggle (const char                   *page_name,
   adw_action_row_add_suffix (row, GTK_WIDGET (child));
 
   g_settings_bind (settings, entry->key, child, "active", G_SETTINGS_BIND_DEFAULT);
+}
+
+IdePreferencesMode
+ide_preferences_window_get_mode (IdePreferencesWindow *self)
+{
+  g_return_val_if_fail (IDE_IS_PREFERENCES_WINDOW (self), 0);
+
+  return self->mode;
 }

@@ -89,37 +89,39 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, IDE, PREFERENCES_WINDOW, AdwApplicationWindow)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_preferences_window_new        (IdePreferencesMode            mode);
+GtkWidget          *ide_preferences_window_new        (IdePreferencesMode             mode);
 IDE_AVAILABLE_IN_ALL
-void       ide_preferences_window_add_pages  (IdePreferencesWindow         *self,
-                                              const IdePreferencePageEntry *pages,
-                                              gsize                         n_pages,
-                                              const char                   *translation_domain);
+IdePreferencesMode  ide_preferences_window_get_mode   (IdePreferencesWindow          *self);
 IDE_AVAILABLE_IN_ALL
-void       ide_preferences_window_add_groups (IdePreferencesWindow          *self,
-                                              const IdePreferenceGroupEntry *groups,
-                                              gsize                          n_groups,
-                                              const char                   *translation_domain);
+void                ide_preferences_window_add_pages  (IdePreferencesWindow          *self,
+                                                       const IdePreferencePageEntry  *pages,
+                                                       gsize                          n_pages,
+                                                       const char                    *translation_domain);
 IDE_AVAILABLE_IN_ALL
-void       ide_preferences_window_add_items  (IdePreferencesWindow          *self,
-                                              const IdePreferenceItemEntry  *items,
-                                              gsize                          n_items,
-                                              gpointer                       user_data,
-                                              GDestroyNotify                 user_data_destroy);
+void                ide_preferences_window_add_groups (IdePreferencesWindow          *self,
+                                                       const IdePreferenceGroupEntry *groups,
+                                                       gsize                          n_groups,
+                                                       const char                    *translation_domain);
 IDE_AVAILABLE_IN_ALL
-void       ide_preferences_window_add_item   (IdePreferencesWindow          *self,
-                                              const char                    *page,
-                                              const char                    *group,
-                                              const char                    *name,
-                                              int                            priority,
-                                              IdePreferenceCallback          callback,
-                                              gpointer                       user_data,
-                                              GDestroyNotify                 user_data_destroy);
+void                ide_preferences_window_add_items  (IdePreferencesWindow          *self,
+                                                       const IdePreferenceItemEntry  *items,
+                                                       gsize                          n_items,
+                                                       gpointer                       user_data,
+                                                       GDestroyNotify                 user_data_destroy);
 IDE_AVAILABLE_IN_ALL
-void       ide_preferences_window_toggle     (const char                    *page_name,
-                                              const IdePreferenceItemEntry  *entry,
-                                              AdwPreferencesGroup           *group,
-                                              gpointer                       user_data);
+void                ide_preferences_window_add_item   (IdePreferencesWindow          *self,
+                                                       const char                    *page,
+                                                       const char                    *group,
+                                                       const char                    *name,
+                                                       int                            priority,
+                                                       IdePreferenceCallback          callback,
+                                                       gpointer                       user_data,
+                                                       GDestroyNotify                 user_data_destroy);
+IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_toggle     (const char                    *page_name,
+                                                       const IdePreferenceItemEntry  *entry,
+                                                       AdwPreferencesGroup           *group,
+                                                       gpointer                       user_data);
 
 
 

@@ -676,8 +676,20 @@ ide_preferences_builtin_add_languages (IdePreferencesWindow *window)
 void
 _ide_preferences_builtin_register (IdePreferencesWindow *window)
 {
-  ide_preferences_window_add_pages (window, pages, G_N_ELEMENTS (pages), NULL);
-  ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+  IdePreferencesMode mode;
 
-  ide_preferences_builtin_add_languages (window);
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (window));
+
+  mode = ide_preferences_window_get_mode (window);
+
+  if (mode == IDE_PREFERENCES_MODE_APPLICATION)
+    {
+      ide_preferences_window_add_pages (window, pages, G_N_ELEMENTS (pages), NULL);
+      ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+
+      ide_preferences_builtin_add_languages (window);
+    }
+  else if (mode == IDE_PREFERENCES_MODE_PROJECT)
+    {
+    }
 }

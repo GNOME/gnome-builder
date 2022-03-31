@@ -72,6 +72,7 @@ ide_application_actions_preferences (GSimpleAction *action,
    * maximize the window if necessary.
    */
   window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
+                         "mode", IDE_PREFERENCES_MODE_APPLICATION,
                          "transient-for", toplevel,
                          "default-width", 1300,
                          "default-height", 800,
