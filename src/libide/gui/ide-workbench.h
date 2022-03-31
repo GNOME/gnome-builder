@@ -152,5 +152,10 @@ GFile           *ide_workbench_resolve_file_finish   (IdeWorkbench         *self
                                                       GAsyncResult         *result,
                                                       GError              **error);
 
+static inline IdeWorkbench *
+ide_workspace_get_workbench (IdeWorkspace *workspace)
+{
+  return IDE_WORKBENCH (gtk_window_get_group (GTK_WINDOW (workspace)));
+}
 
 G_END_DECLS
