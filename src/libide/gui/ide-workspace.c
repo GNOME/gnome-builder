@@ -269,27 +269,25 @@ ide_workspace_save_settings (gpointer data)
 {
   IdeWorkspace *self = data;
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GdkRectangle geom = {0};
+  gboolean maximized;
 
   g_assert (IDE_IS_WORKSPACE (self));
 
   priv->queued_window_save = 0;
 
-  if (gtk_widget_get_realized (GTK_WIDGET (self)) &&
-      gtk_widget_get_visible (GTK_WIDGET (self)))
-    {
-      GdkRectangle geom = {0};
-      gboolean maximized;
+  if (!gtk_widget_get_realized (GTK_WIDGET (self)) ||
+      !gtk_widget_get_visible (GTK_WIDGET (self)) ||
+      !IDE_WORKSPACE_GET_CLASS (self)->save_size (self, &geom.width, &geom.height))
+    return G_SOURCE_REMOVE;
 
-      if (settings == NULL)
-        settings = g_settings_new ("org.gnome.builder");
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder");
 
-      gtk_window_get_default_size (GTK_WINDOW (self), &geom.width, &geom.height);
+  maximized = gtk_window_is_maximized (GTK_WINDOW (self));
 
-      maximized = gtk_window_is_maximized (GTK_WINDOW (self));
-
-      g_settings_set (settings, "window-size", "(ii)", geom.width, geom.height);
-      g_settings_set_boolean (settings, "window-maximized", maximized);
-    }
+  g_settings_set (settings, "window-size", "(ii)", geom.width, geom.height);
+  g_settings_set_boolean (settings, "window-maximized", maximized);
 
   return G_SOURCE_REMOVE;
 }
@@ -307,7 +305,8 @@ ide_workspace_size_allocate (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (ide_workspace_parent_class)->size_allocate (widget, width, height, baseline);
 
-  if (priv->queued_window_save == 0)
+  if (priv->queued_window_save == 0 &&
+      IDE_WORKSPACE_GET_CLASS (self)->save_size != NULL)
     priv->queued_window_save = g_timeout_add_seconds (1, ide_workspace_save_settings, self);
 }
 
@@ -319,6 +318,18 @@ ide_workspace_restore_size (IdeWorkspace *workspace,
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   gtk_window_set_default_size (GTK_WINDOW (workspace), width, height);
+}
+
+static gboolean
+ide_workspace_save_size (IdeWorkspace *workspace,
+                         int          *width,
+                         int          *height)
+{
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  gtk_window_get_default_size (GTK_WINDOW (workspace), width, height);
+
+  return TRUE;
 }
 
 static void
@@ -412,6 +423,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   klass->agree_to_close_async = ide_workspace_agree_to_close_async;
   klass->agree_to_close_finish = ide_workspace_agree_to_close_finish;
   klass->restore_size = ide_workspace_restore_size;
+  klass->save_size = ide_workspace_save_size;
 
   /**
    * IdeWorkspace:context:

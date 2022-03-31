@@ -673,6 +673,7 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   object_class->set_property = ide_greeter_workspace_set_property;
 
   workspace_class->restore_size = NULL;
+  workspace_class->save_size = NULL;
 
   /**
    * IdeGreeterWorkspace:selection-mode:
