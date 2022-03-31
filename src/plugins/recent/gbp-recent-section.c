@@ -587,8 +587,8 @@ gbp_recent_section_constructed (GObject *object)
                       "visible", TRUE,
                       NULL);
   image = g_object_new (GTK_TYPE_IMAGE,
-                        "margin-top", 8,
-                        "margin-bottom", 8,
+                        "margin-top", 12,
+                        "margin-bottom", 12,
                         "margin-start", 8,
                         "margin-end", 8,
                         "icon-name", "view-more-symbolic",
