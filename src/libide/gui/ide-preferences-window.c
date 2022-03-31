@@ -142,10 +142,13 @@ ide_preferences_window_get_settings (IdePreferencesWindow         *self,
           guint j = strlen (entry->path) - 1;
           char c;
 
-          path = g_malloc0 (strlen (entry->path) + strlen (subkey) + 1);
+          subkey++;
+
+          path = g_malloc0 (strlen (entry->path) + strlen (subkey) + 2);
           memcpy (path, entry->path, j);
           while ((c = *(subkey++)))
             path[j++] = c;
+          path[j++] = '/';
           path[j] = 0;
         }
     }
