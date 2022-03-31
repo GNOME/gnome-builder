@@ -1,4 +1,4 @@
-/* libide-gtk.h
+/* ide-file-manager.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,16 +20,11 @@
 
 #pragma once
 
-#define IDE_GTK_INSIDE
-# include "ide-animation.h"
-# include "ide-cell-renderer-fancy.h"
-# include "ide-entry-popover.h"
-# include "ide-fancy-tree-view.h"
-# include "ide-file-manager.h"
-# include "ide-gtk.h"
-# include "ide-gtk-enums.h"
-# include "ide-menu-manager.h"
-# include "ide-progress-icon.h"
-# include "ide-search-entry.h"
-# include "ide-truncate-model.h"
-#undef IDE_GTK_INSIDE
+#include <gio/gio.h>
+
+G_BEGIN_DECLS
+
+gboolean ide_file_manager_show (GFile   *file,
+                                GError **error);
+
+G_END_DECLS
