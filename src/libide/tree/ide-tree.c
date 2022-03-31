@@ -60,6 +60,9 @@ typedef struct
   /* Our context menu popover */
   GtkPopover *popover;
 
+  /* Temporary for show_at_node API */
+  GtkPopover *show_at_node_popover;
+
   /* Stashed drop information to propagate on drop */
   GdkDragAction drop_action;
   GtkTreePath *drop_path;
@@ -407,7 +410,9 @@ ide_tree_popup (IdeTree        *self,
 
   g_assert (IDE_IS_TREE (self));
   g_assert (IDE_IS_TREE_NODE (node));
-  g_assert (priv->popover != NULL);
+
+  if (priv->popover == NULL)
+    return;
 
   gtk_popover_set_pointing_to (priv->popover, &area);
 
@@ -430,7 +435,6 @@ ide_tree_click_pressed_cb (IdeTree         *self,
 
   if (!(model = ide_tree_get_model (self)))
     return;
-
 
   if (!gtk_widget_has_focus (GTK_WIDGET (self)))
     gtk_widget_grab_focus (GTK_WIDGET (self));
@@ -515,27 +519,13 @@ ide_tree_size_allocate (GtkWidget *widget,
 
   g_assert (IDE_IS_TREE (self));
 
+  GTK_WIDGET_CLASS (ide_tree_parent_class)->size_allocate (widget, width, height, baseline);
+
   if (priv->popover != NULL)
     gtk_popover_present (priv->popover);
-}
 
-static gboolean
-ide_tree_popup_menu_cb (IdeTree *tree,
-                        gpointer user_data)
-{
-  IdeTreePrivate *priv = ide_tree_get_instance_private (tree);
-  IdeTreeNode *selected_node = NULL;
-
-  g_assert (priv != NULL);
-
-  selected_node = ide_tree_get_selected_node (tree);
-
-  if (selected_node)
-    {
-      ide_tree_show_popover_at_node (tree, selected_node, priv->popover);
-      return TRUE;
-    }
-  return FALSE;
+  if (priv->show_at_node_popover != NULL)
+    gtk_popover_present (priv->show_at_node_popover);
 }
 
 static void
@@ -551,6 +541,7 @@ ide_tree_dispose (GObject *object)
     _ide_tree_model_release_addins (model);
 
   g_clear_pointer ((GtkWidget **)&priv->popover, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **)&priv->show_at_node_popover, gtk_widget_unparent);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (self), NULL);
 
@@ -593,7 +584,7 @@ ide_tree_init (IdeTree *self)
 
   /* Show popover on right-click */
   gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 2);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 3);
   g_signal_connect_object (gesture,
                            "pressed",
                            G_CALLBACK (ide_tree_click_pressed_cb),
@@ -610,11 +601,6 @@ ide_tree_init (IdeTree *self)
                            G_CALLBACK (ide_tree_selection_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (self,
-                           "popup-menu",
-                           G_CALLBACK (ide_tree_popup_menu_cb),
-                           NULL,
-                           0);
 
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self), FALSE);
   gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (self), TRUE);
@@ -668,6 +654,11 @@ ide_tree_popover_closed_cb (IdeTree    *self,
       gtk_widget_unparent (GTK_WIDGET (popover));
       priv->popover = NULL;
     }
+  else if (priv->show_at_node_popover == popover)
+    {
+      gtk_widget_unparent (GTK_WIDGET (popover));
+      priv->show_at_node_popover = NULL;
+    }
 }
 
 void
@@ -689,11 +680,6 @@ ide_tree_set_context_menu (IdeTree *self,
       priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (priv->context_menu)));
       dir = gtk_widget_get_direction (GTK_WIDGET (self));
       gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
-      g_signal_connect_object (priv->popover,
-                               "closed",
-                               G_CALLBACK (ide_tree_popover_closed_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
       gtk_widget_set_parent (GTK_WIDGET (priv->popover), GTK_WIDGET (self));
     }
 }
@@ -708,9 +694,10 @@ ide_tree_show_popover_at_node (IdeTree     *self,
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (GTK_IS_POPOVER (popover));
+  g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (popover)) == NULL);
 
-  g_clear_pointer ((GtkWidget **)&priv->popover, gtk_widget_unparent);
-  priv->popover = popover;
+  g_clear_pointer ((GtkWidget **)&priv->show_at_node_popover, gtk_widget_unparent);
+  priv->show_at_node_popover = popover;
   gtk_widget_set_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
   g_signal_connect_object (popover,
                            "closed",
