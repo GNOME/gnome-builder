@@ -614,6 +614,29 @@ add_page (IdePreferencesWindow         *self,
   return row;
 }
 
+static gboolean
+group_is_empty (AdwPreferencesGroup *group)
+{
+  GtkWidget *box;
+  GtkWidget *listbox_box;
+  GtkWidget *listbox;
+
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+
+  /* Not exactly awesome that this is hard coded as the implementation
+   * could very well change, but until we have a way to get this out of
+   * AdwPreferencesGroup, this will suffice.
+   */
+  return (box = gtk_widget_get_first_child (GTK_WIDGET (group))) &&
+         GTK_IS_BOX (box) &&
+         (listbox_box = gtk_widget_get_last_child (box)) &&
+         GTK_IS_BOX (listbox_box) &&
+         (listbox = gtk_widget_get_first_child (listbox_box)) &&
+         GTK_IS_LIST_BOX (listbox) &&
+         gtk_widget_get_first_child (listbox) == NULL &&
+         gtk_widget_get_last_child (listbox_box) == listbox;
+}
+
 static void
 ide_preferences_window_page_activated_cb (IdePreferencesWindow *self,
                                           GtkListBoxRow        *row,
@@ -699,7 +722,8 @@ ide_preferences_window_page_activated_cb (IdePreferencesWindow *self,
                 item->callback (entry->name, item, pref_group, (gpointer)item->user_data);
             }
 
-          adw_preferences_page_add (page, pref_group);
+          if (!group_is_empty (pref_group))
+            adw_preferences_page_add (page, pref_group);
         }
     }
 
