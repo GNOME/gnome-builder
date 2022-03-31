@@ -25,7 +25,6 @@ plugins_deps = [
   libide_search_dep,
   libide_sourceview_dep,
   libide_terminal_dep,
-  libide_themes_dep,
   libide_threading_dep,
   libide_tree_dep,
   libide_vcs_dep,
