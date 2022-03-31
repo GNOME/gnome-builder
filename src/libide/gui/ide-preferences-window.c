@@ -968,6 +968,7 @@ ide_preferences_window_add_item (IdePreferencesWindow  *self,
   entry.page = g_intern_string (page);
   entry.group = g_intern_string (group);
   entry.name = g_intern_string (name);
+  entry.callback = callback;
   entry.user_data = user_data;
 
   g_ptr_array_add (self->info.items, g_memdup2 (&entry, sizeof entry));

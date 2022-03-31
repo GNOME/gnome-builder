@@ -600,6 +600,10 @@ static const IdePreferenceGroupEntry groups[] = {
   { "languages/*", "indentation", 30, "Indentation" },
 };
 
+static const IdePreferenceItemEntry items[] = {
+  { "appearance", "accessories", "grid", 0, ide_preferences_window_toggle, "Show Grid Pattern", "Display a grid pattern underneath source code", "org.gnome.builder.editor", NULL, "show-grid-lines" },
+};
+
 static const IdePreferenceItemEntry lang_items[] = {
   { "languages/*", "general", "trim", 0, ide_preferences_window_toggle, "Trim Trailing Whitespace", "Upon saving, trailing whitepsace from modified lines will be trimmed.", "org.gnome.builder.editor.language", "/*", "trim-trailing-whitespace" },
   { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle, "Overwrite Braces", "Overwrite closing braces", "org.gnome.builder.editor.language", "/*", "overwrite-brances" },
@@ -673,6 +677,73 @@ ide_preferences_builtin_add_languages (IdePreferencesWindow *window)
   g_free (lpages);
 }
 
+static void
+ide_preferences_builtin_add_schemes (const char                   *page_name,
+                                     const IdePreferenceItemEntry *entry,
+                                     AdwPreferencesGroup          *group,
+                                     gpointer                      user_data)
+{
+  IdePreferencesWindow *window = user_data;
+  g_autoptr(GtkSourceBuffer) buffer = NULL;
+  GtkSourceStyleSchemeManager *manager;
+  const char * const *scheme_ids;
+  GtkSourceLanguage *language;
+  GtkSourceView *preview;
+  GtkFlowBox *flowbox;
+  GtkFrame *frame;
+
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+  g_assert (entry != NULL);
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+
+#define PREVIEW_TEXT "\
+#include <glib.h>\n\
+"
+
+  language = gtk_source_language_manager_get_language (gtk_source_language_manager_get_default (), "c");
+  buffer = g_object_new (GTK_SOURCE_TYPE_BUFFER,
+                         "language", language,
+                         "text", PREVIEW_TEXT,
+                         NULL);
+  preview = g_object_new (GTK_SOURCE_TYPE_VIEW,
+                          "buffer", buffer,
+                          "monospace", TRUE,
+                          "left-margin", 6,
+                          "top-margin", 6,
+                          "bottom-margin", 6,
+                          "right-margin", 6,
+                          "show-line-numbers", TRUE,
+                          "highlight-current-line", TRUE,
+                          "show-right-margin", TRUE,
+                          "right-margin-position", 60,
+                          NULL);
+  frame = g_object_new (GTK_TYPE_FRAME,
+                        "child", preview,
+                        "margin-bottom", 12,
+                        NULL);
+  adw_preferences_group_add (group, GTK_WIDGET (frame));
+
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+
+  flowbox = g_object_new (GTK_TYPE_FLOW_BOX,
+                          "activate-on-single-click", TRUE,
+                          "column-spacing", 6,
+                          "row-spacing", 6,
+                          "max-children-per-line", 4,
+                          NULL);
+
+  for (guint i = 0; scheme_ids[i]; i++)
+    {
+      GtkSourceStyleScheme *scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_ids[i]);
+      GtkWidget *selector = gtk_source_style_scheme_preview_new (scheme);
+
+      gtk_flow_box_append (flowbox, selector);
+    }
+
+  adw_preferences_group_add (group, GTK_WIDGET (flowbox));
+}
+
 void
 _ide_preferences_builtin_register (IdePreferencesWindow *window)
 {
@@ -686,6 +757,9 @@ _ide_preferences_builtin_register (IdePreferencesWindow *window)
     {
       ide_preferences_window_add_pages (window, pages, G_N_ELEMENTS (pages), NULL);
       ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+      ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
+      ide_preferences_window_add_item (window, "appearance", "preview", "scheme", 0,
+                                       ide_preferences_builtin_add_schemes, window, NULL);
 
       ide_preferences_builtin_add_languages (window);
     }
