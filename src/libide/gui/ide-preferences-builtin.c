@@ -30,8 +30,9 @@
 
 #include "ide-preferences-builtin-private.h"
 
-#if 0
-static gint
+static gboolean is_plugin_category (const char *name);
+
+static int
 sort_plugin_info (gconstpointer a,
                   gconstpointer b)
 {
@@ -47,20 +48,17 @@ sort_plugin_info (gconstpointer a,
 }
 
 static void
-ide_preferences_builtin_register_plugins (DzlPreferences *preferences)
+ide_preferences_builtin_add_plugins (IdePreferencesWindow *window)
 {
   PeasEngine *engine;
   const GList *list;
   GList *copy;
   guint i = 0;
 
-  g_assert (DZL_IS_PREFERENCES (preferences));
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 
   engine = peas_engine_get_default ();
   list = peas_engine_get_plugin_list (engine);
-
-  dzl_preferences_add_page (preferences, "plugins", _("Extensions"), 700);
-  dzl_preferences_add_list_group (preferences, "plugins", "plugins", _("Extensions"), GTK_SELECTION_NONE, 100);
 
   copy = g_list_sort (g_list_copy ((GList *)list), sort_plugin_info);
 
@@ -69,24 +67,43 @@ ide_preferences_builtin_register_plugins (DzlPreferences *preferences)
       PeasPluginInfo *plugin_info = iter->data;
       g_autofree gchar *path = NULL;
       g_autofree gchar *keywords = NULL;
+      IdePreferenceItemEntry item = {0};
+      const gchar *category;
       const gchar *desc;
       const gchar *name;
+      const gchar *module_name;
 
       if (peas_plugin_info_is_hidden (plugin_info))
         continue;
 
+      category = peas_plugin_info_get_external_data (plugin_info, "Category");
+      if (!is_plugin_category (category))
+        category = "other";
+
+      module_name = peas_plugin_info_get_module_name (plugin_info);
       name = peas_plugin_info_get_name (plugin_info);
       desc = peas_plugin_info_get_description (plugin_info);
       keywords = g_strdup_printf ("%s %s", name, desc);
-      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/",
-                              peas_plugin_info_get_module_name (plugin_info));
+      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
 
-      dzl_preferences_add_switch (preferences, "plugins", "plugins", "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, keywords, i);
+      item.page = "plugins";
+      item.group = category;
+      item.name = module_name;
+      item.priority = i++;
+      item.callback = ide_preferences_window_toggle;
+      item.title = name;
+      item.subtitle = desc;
+      item.schema_id = "org.gnome.builder.plugin";
+      item.path = path;
+      item.key = "enabled";
+
+      ide_preferences_window_add_items (window, &item, 1, window, NULL);
     }
 
   g_list_free (copy);
 }
 
+#if 0
 static void
 ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
 {
@@ -600,6 +617,17 @@ static const IdePreferenceGroupEntry groups[] = {
   { "languages/*", "indentation", 30, N_("Indentation") },
 
   { "completion", "general",       0, N_("General") },
+
+  { "plugins",    "vcs",            0, N_("Version Control") },
+  { "plugins",    "sdks",          10, N_("SDKs") },
+  { "plugins",    "lsps",          20, N_("Language Servers") },
+  { "plugins",    "devices",       30, N_("Devices & Simulators") },
+  { "plugins",    "diagnostics",   40, N_("Diagnostics") },
+  { "plugins",    "buildsystems",  50, N_("Build Systems") },
+  { "plugins",    "compilers",     60, N_("Compilers") },
+  { "plugins",    "templates",     70, N_("Templates") },
+  { "plugins",    "editing",       80, N_("Editing & Formatting") },
+  { "plugins",    "other",        500, N_("Additional") },
 };
 
 static const IdePreferenceItemEntry items[] = {
@@ -657,6 +685,27 @@ static const IdePreferenceItemEntry lang_items[] = {
     N_("Format source code as you type"),
     "org.gnome.builder.editor.language", "/*", "auto-indent" },
 };
+
+static gboolean
+is_plugin_category (const char *name)
+{
+  static GHashTable *categories;
+
+  if (name == NULL)
+    return FALSE;
+
+  if (categories == NULL)
+    {
+      categories = g_hash_table_new (g_str_hash, g_str_equal);
+      for (guint i = 0; i < G_N_ELEMENTS (groups); i++)
+        {
+          if (strcmp (groups[i].page, "plugins") == 0)
+            g_hash_table_add (categories, (char *)groups[i].name);
+        }
+    }
+
+  return g_hash_table_contains (categories, name);
+}
 
 static int
 compare_section (gconstpointer a,
@@ -797,6 +846,7 @@ _ide_preferences_builtin_register (IdePreferencesWindow *window)
                                        ide_preferences_builtin_add_schemes, window, NULL);
 
       ide_preferences_builtin_add_languages (window);
+      ide_preferences_builtin_add_plugins (window);
     }
   else if (mode == IDE_PREFERENCES_MODE_PROJECT)
     {
