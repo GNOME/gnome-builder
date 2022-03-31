@@ -87,6 +87,7 @@
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkBox" id="sections">
+                                    <property name="width-request">600</property>
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">32</property>
                                   </object>
