@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="ide-greeter-workspace-menu">
+    <section id="ide-greeter-workspace-menu-theme">
+      <item>
+        <attribute name="custom">theme_selector</attribute>
+      </item>
+    </section>
     <section id="ide-greeter-workspace-menu-projects">
       <item>
         <attribute name="id">ide-greeter-workspace-menu-clone</attribute>
