@@ -77,7 +77,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  OPEN_PROJECT,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 #define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
 #define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
@@ -368,31 +374,43 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
   IDE_EXIT;
 }
 
-/**
- * ide_greeter_workspace_open_project:
- * @self: an #IdeGreeterWorkspace
- * @project_info: an #IdeProjectInfo
- *
- * Opens the project described by @project_info.
- *
- * This is useful by greeter workspace extensions that add new pages
- * which may not have other means to activate a project.
- */
-void
-ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
-                                    IdeProjectInfo      *project_info)
+static gboolean
+ide_greeter_workspace_real_open_project (IdeGreeterWorkspace *self,
+                                         IdeProjectInfo      *project_info)
 {
-#if 0
-  IdeWorkbench *workbench;
   const gchar *vcs_uri = NULL;
-  GFile *file;
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
-  g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
 
-  /* If there is a VCS Uri and no project file/directory, then we want
+  /* If there is a VCS Uri and no project file/directory, then we might
+   * be able to guess the directory based on the clone vcs uri directory
+   * name. Use that to see if we can skip cloning again.
+   */
+  if (!ide_project_info_get_file (project_info) &&
+      !ide_project_info_get_directory (project_info) &&
+      (vcs_uri = ide_project_info_get_vcs_uri (project_info)))
+    {
+      g_autoptr(IdeVcsUri) uri = ide_vcs_uri_new (vcs_uri);
+      g_autofree gchar *suggested = NULL;
+      g_autofree gchar *checkout = NULL;
+
+      if (uri != NULL &&
+          (suggested = ide_vcs_uri_get_clone_name (uri)) &&
+          (checkout = g_build_filename (ide_get_projects_dir (), suggested, NULL)) &&
+          g_file_test (checkout, G_FILE_TEST_IS_DIR))
+        {
+          g_autoptr(GFile) directory = g_file_new_for_path (checkout);
+          ide_project_info_set_directory (project_info, directory);
+        }
+    }
+
+  return FALSE;
+
+#if 0
+  /*
    * to switch to the clone dialog. However, we can use the VCS Uri to
    * determine what the check-out directory would be, and if so, we can
    * just open that directory.
@@ -420,13 +438,46 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
           return;
         }
     }
+#endif
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  IDE_RETURN (FALSE);
+}
+
+/**
+ * ide_greeter_workspace_open_project:
+ * @self: an #IdeGreeterWorkspace
+ * @project_info: an #IdeProjectInfo
+ *
+ * Opens the project described by @project_info.
+ *
+ * This is useful by greeter workspace extensions that add new pages
+ * which may not have other means to activate a project.
+ */
+void
+ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
+                                    IdeProjectInfo      *project_info)
+{
+  IdeWorkbench *workbench;
+  gboolean ret = FALSE;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
+
+  g_signal_emit (self, signals [OPEN_PROJECT], 0, project_info, &ret);
+
+  if (ret)
+    IDE_GOTO (not_ready);
+
+  workbench = ide_workspace_get_workbench (IDE_WORKSPACE (self));
 
   ide_greeter_workspace_begin (self);
 
   if (ide_project_info_get_directory (project_info) == NULL)
     {
+      GFile *file;
+
       if ((file = ide_project_info_get_file (project_info)))
         {
           g_autoptr(GFile) parent = g_file_get_parent (file);
@@ -446,8 +497,8 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
                                     ide_greeter_workspace_open_project_cb,
                                     g_object_ref (self));
 
+not_ready:
   IDE_EXIT;
-#endif
 }
 
 static void
@@ -641,6 +692,15 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [OPEN_PROJECT] =
+    g_signal_new_class_handler ("open-project",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_greeter_workspace_real_open_project),
+                                g_signal_accumulator_true_handled, NULL,
+                                NULL,
+                                G_TYPE_BOOLEAN, 1, IDE_TYPE_PROJECT_INFO);
 
   ide_workspace_class_set_kind (workspace_class, "greeter");
 
