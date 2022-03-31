@@ -592,8 +592,8 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
   dialog = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
                          "modal", TRUE,
                          "transient-for", parent,
-                         "attached-to", parent,
-                         "text", _("Removing project sources will delete them from your computer and cannot be undone."),
+                         "text", _("Delete Project Sources?"),
+                         "secondary-text", _("Deleting the project source code from your computer cannot be undone."),
                          NULL);
   gtk_dialog_add_buttons (dialog,
                           _("Cancel"), GTK_RESPONSE_CANCEL,
@@ -601,13 +601,12 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
                           NULL);
   button = gtk_dialog_get_widget_for_response (dialog, GTK_RESPONSE_OK);
   gtk_widget_add_css_class (button, "destructive-action");
-  g_signal_connect_data (dialog,
-                         "response",
-                         G_CALLBACK (purge_selected_rows_response),
-                         g_object_ref (self),
-                         (GClosureNotify)g_object_unref,
-                         G_CONNECT_SWAPPED);
-  ide_gtk_window_present (GTK_WINDOW (dialog));
+  g_signal_connect_object (dialog,
+                           "response",
+                           G_CALLBACK (purge_selected_rows_response),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
