@@ -76,13 +76,20 @@ struct _IdePreferenceItemEntry
   gconstpointer user_data;
 };
 
+typedef enum
+{
+  IDE_PREFERENCES_MODE_EMPTY,
+  IDE_PREFERENCES_MODE_APPLICATION,
+  IDE_PREFERENCES_MODE_PROJECT,
+} IdePreferencesMode;
+
 #define IDE_TYPE_PREFERENCES_WINDOW (ide_preferences_window_get_type())
 
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, IDE, PREFERENCES_WINDOW, AdwApplicationWindow)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_preferences_window_new        (void);
+GtkWidget *ide_preferences_window_new        (IdePreferencesMode            mode);
 IDE_AVAILABLE_IN_ALL
 void       ide_preferences_window_add_pages  (IdePreferencesWindow         *self,
                                               const IdePreferencePageEntry *pages,

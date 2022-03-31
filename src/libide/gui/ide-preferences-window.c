@@ -24,11 +24,14 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-gui-enums.h"
 #include "ide-preferences-window.h"
 
 struct _IdePreferencesWindow
 {
   AdwApplicationWindow parent_window;
+
+  IdePreferencesMode mode;
 
   GtkToggleButton    *search_button;
   GtkButton          *back_button;
@@ -73,6 +76,14 @@ typedef struct
 } Page;
 
 G_DEFINE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, ADW_TYPE_APPLICATION_WINDOW)
+
+enum {
+  PROP_0,
+  PROP_MODE,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 
 static gboolean
 drop_page_cb (gpointer data)
@@ -285,12 +296,69 @@ ide_preferences_window_dispose (GObject *object)
 }
 
 static void
+ide_preferences_window_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (ide_preferences_window_parent_class)->constructed (object);
+}
+
+static void
+ide_preferences_window_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  IdePreferencesWindow *self = IDE_PREFERENCES_WINDOW (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODE:
+      g_value_set_enum (value, self->mode);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_preferences_window_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  IdePreferencesWindow *self = IDE_PREFERENCES_WINDOW (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODE:
+      self->mode = g_value_get_enum (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_preferences_window_class_init (IdePreferencesWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_preferences_window_constructed;
   object_class->dispose = ide_preferences_window_dispose;
+  object_class->get_property = ide_preferences_window_get_property;
+  object_class->set_property = ide_preferences_window_set_property;
+
+  properties [PROP_MODE] =
+    g_param_spec_enum ("mode",
+                       "Mode",
+                       "The mode for the preferences window",
+                       IDE_TYPE_PREFERENCES_MODE,
+                       IDE_PREFERENCES_MODE_EMPTY,
+                       (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-preferences-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesWindow, page_stack);
@@ -316,9 +384,11 @@ ide_preferences_window_init (IdePreferencesWindow *self)
 }
 
 GtkWidget *
-ide_preferences_window_new (void)
+ide_preferences_window_new (IdePreferencesMode mode)
 {
-  return g_object_new (IDE_TYPE_PREFERENCES_WINDOW, NULL);
+  return g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
+                       "mode", mode,
+                       NULL);
 }
 
 static int

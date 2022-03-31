@@ -1,4 +1,5 @@
-#include "../ide-preferences-window.h"
+#include "ide-preferences-window.h"
+#include "ide-gui-enums.h"
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
@@ -108,7 +109,7 @@ main (int argc,
   gtk_source_init ();
 
   main_loop = g_main_loop_new (NULL, FALSE);
-  window = IDE_PREFERENCES_WINDOW (ide_preferences_window_new ());
+  window = IDE_PREFERENCES_WINDOW (ide_preferences_window_new (IDE_PREFERENCES_MODE_EMPTY));
 
   gtk_window_set_default_size (GTK_WINDOW (window), 1200, 900);
 
