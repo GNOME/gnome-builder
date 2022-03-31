@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpRecentSection" parent="GtkBin">
+  <template class="GbpRecentSection" parent="GtkWidget">
     <property name="halign">center</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <property name="hexpand">true</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
-        <property name="visible">true</property>
         <child>
-          <object class="DzlBox">
+          <object class="GtkBox">
             <property name="halign">center</property>
             <property name="hexpand">false</property>
             <property name="orientation">vertical</property>
-            <property name="visible">true</property>
-            <property name="max-width-request">600</property>
             <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
-                <property name="visible">true</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">true</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Recent Projects</property>
@@ -40,17 +35,12 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkFrame">
-                    <property name="halign">center</property>
-                    <property name="visible">true</property>
-                    <property name="width-request">600</property>
-                    <child>
-                      <object class="GtkListBox" id="listbox">
-                        <property name="visible">true</property>
-                        <property name="selection-mode">none</property>
-                        <signal name="row-activated" swapped="true" object="GbpRecentSection" handler="gbp_recent_section_row_activated"/>
-                      </object>
-                    </child>
+                  <object class="GtkListBox" id="listbox">
+                    <property name="selection-mode">none</property>
+                    <signal name="row-activated" swapped="true" object="GbpRecentSection" handler="gbp_recent_section_row_activated"/>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
                   </object>
                 </child>
               </object>

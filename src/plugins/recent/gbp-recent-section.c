@@ -20,22 +20,25 @@
 
 #define G_LOG_DOMAIN "gbp-recent-section"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
+
+#include <libide-gtk.h>
 #include <libide-greeter.h>
 #include <libide-projects.h>
 
 #include "ide-project-info-private.h"
 
-#include "ide-truncate-model.h"
-
 #include "gbp-recent-section.h"
 
 struct _GbpRecentSection
 {
-  GtkBin            parent_instance;
+  GtkWidget         parent_instance;
 
   IdeTruncateModel *truncate;
 
+  GtkBox           *box;
   GtkListBox       *listbox;
 
   guint             selection_mode : 1;
@@ -68,29 +71,24 @@ clear_settings_with_path (const gchar *schema_id,
     g_settings_reset (settings, keys[i]);
 }
 
-static void
-gbp_recent_section_get_has_selection_cb (GtkWidget *widget,
-                                         gpointer   user_data)
-{
-  gboolean *has_selection = user_data;
-  gboolean selected = FALSE;
-
-  g_object_get (widget, "selected", &selected, NULL);
-  *has_selection |= selected;
-}
-
 static gboolean
 gbp_recent_section_get_has_selection (GbpRecentSection *self)
 {
-  gboolean has_selection = FALSE;
-
   g_assert (GBP_IS_RECENT_SECTION (self));
 
-  gtk_container_foreach (GTK_CONTAINER (self->listbox),
-                         gbp_recent_section_get_has_selection_cb,
-                         &has_selection);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->listbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      gboolean selected;
 
-  return has_selection;
+      g_object_get (child, "selected", &selected, NULL);
+
+      if (selected)
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gint
@@ -99,43 +97,12 @@ gbp_recent_section_get_priority (IdeGreeterSection *section)
   return -100;
 }
 
-static void
-gbp_recent_section_filter_cb (GtkListBoxRow *row,
-                              gpointer       user_data)
-{
-  struct {
-    DzlPatternSpec *spec;
-    gboolean found;
-  } *filter = user_data;
-  gboolean match = TRUE;
-
-  if (!IDE_IS_GREETER_ROW (row))
-    return;
-
-  g_assert (filter != NULL);
-
-  if (filter->spec != NULL)
-    {
-      g_autofree gchar *search_text = NULL;
-
-      if ((search_text = ide_greeter_row_get_search_text (IDE_GREETER_ROW (row))))
-        match = dzl_pattern_spec_match (filter->spec, search_text);
-    }
-
-  gtk_widget_set_visible (GTK_WIDGET (row), match);
-
-  filter->found |= match;
-}
-
 static gboolean
 gbp_recent_section_filter (IdeGreeterSection *section,
-                           DzlPatternSpec    *spec)
+                           IdePatternSpec    *spec)
 {
   GbpRecentSection *self = (GbpRecentSection *)section;
-  struct {
-    DzlPatternSpec *spec;
-    gboolean found;
-  } filter = { spec, FALSE };
+  gboolean found = FALSE;
 
   g_assert (GBP_IS_RECENT_SECTION (self));
 
@@ -147,72 +114,51 @@ gbp_recent_section_filter (IdeGreeterSection *section,
    * rows matched. We have to hide our widget if there are
    * no visible matches.
    */
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->listbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      gboolean match = spec == NULL;
 
-  gtk_container_foreach (GTK_CONTAINER (self->listbox),
-                         (GtkCallback) gbp_recent_section_filter_cb,
-                         &filter);
+      if (spec != NULL)
+        {
+          g_autofree gchar *search_text = NULL;
 
-  return filter.found;
-}
+          if ((search_text = ide_greeter_row_get_search_text (IDE_GREETER_ROW (child))))
+            match = ide_pattern_spec_match (spec, search_text);
+        }
 
-static void
-gbp_recent_section_activate_first_cb (GtkWidget *widget,
-                                      gpointer   user_data)
-{
-  IdeProjectInfo *project_info;
-  struct {
-    GbpRecentSection *self;
-    gboolean handled;
-  } *activate = user_data;
+      gtk_widget_set_visible (child, match);
 
-  g_assert (activate != NULL);
+      found |= match;
+    }
 
-  if (!IDE_IS_GREETER_ROW (widget) ||
-      activate->handled ||
-      !gtk_widget_get_visible (widget))
-    return;
-
-  project_info = ide_greeter_row_get_project_info (IDE_GREETER_ROW (widget));
-  ide_greeter_section_emit_project_activated (IDE_GREETER_SECTION (activate->self), project_info);
-
-  activate->handled = TRUE;
+  return found;
 }
 
 static gboolean
 gbp_recent_section_activate_first (IdeGreeterSection *section)
 {
   GbpRecentSection *self = (GbpRecentSection *)section;
-  struct {
-    GbpRecentSection *self;
-    gboolean handled;
-  } activate;
 
   g_return_val_if_fail (GBP_IS_RECENT_SECTION (self), FALSE);
 
-  activate.self = self;
-  activate.handled = FALSE;
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->listbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (gtk_widget_get_visible (child))
+        {
+          IdeProjectInfo *project_info;
 
-  gtk_container_foreach (GTK_CONTAINER (self->listbox),
-                         gbp_recent_section_activate_first_cb,
-                         &activate);
+          project_info = ide_greeter_row_get_project_info (IDE_GREETER_ROW (child));
+          ide_greeter_section_emit_project_activated (IDE_GREETER_SECTION (self), project_info);
 
-  return activate.handled;
-}
+          return TRUE;
+        }
+    }
 
-static void
-gbp_recent_section_set_selection_mode_cb (GtkWidget *widget,
-                                          gpointer   user_data)
-{
-  IdeGreeterRow *row = (IdeGreeterRow *)widget;
-  gboolean *selection_mode = user_data;
-
-  g_assert (selection_mode != NULL);
-
-  if (!IDE_IS_GREETER_ROW (row))
-    return;
-
-  ide_greeter_row_set_selection_mode (row, *selection_mode);
-  g_object_set (row, "selected", FALSE, NULL);
+  return FALSE;
 }
 
 static void
@@ -223,37 +169,17 @@ gbp_recent_section_set_selection_mode (IdeGreeterSection *section,
 
   g_assert (GBP_IS_RECENT_SECTION (self));
 
-  gtk_container_foreach (GTK_CONTAINER (self->listbox),
-                         gbp_recent_section_set_selection_mode_cb,
-                         &selection_mode);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->listbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      ide_greeter_row_set_selection_mode (IDE_GREETER_ROW (child), selection_mode);
+      g_object_set (child, "selected", FALSE, NULL);
+    }
 
   self->selection_mode = selection_mode;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SELECTION]);
-}
-
-static void
-gbp_recent_section_collect_selected_cb (GtkWidget *widget,
-                                        gpointer   user_data)
-{
-  IdeGreeterRow *row = (IdeGreeterRow *)widget;
-  GList **list = user_data;
-  gboolean selected = FALSE;
-
-  g_assert (list != NULL);
-
-  if (!IDE_IS_GREETER_ROW (row))
-    return;
-
-  g_object_get (row, "selected", &selected, NULL);
-
-  if (selected)
-    {
-      IdeProjectInfo *project_info;
-
-      project_info = ide_greeter_row_get_project_info (row);
-      *list = g_list_prepend (*list, g_object_ref (project_info));
-    }
 }
 
 static gboolean
@@ -303,17 +229,17 @@ gbp_recent_section_reap_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
 {
-  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   g_autoptr(GPtrArray) directories = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (directories != NULL);
 
-  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+  if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     {
       g_warning ("Failed to purge directories: %s", error->message);
       return;
@@ -330,14 +256,14 @@ gbp_recent_section_reap_cb (GObject      *object,
 }
 
 static void
-gbp_recent_section_remove_file (DzlDirectoryReaper *reaper,
+gbp_recent_section_remove_file (IdeDirectoryReaper *reaper,
                                 GFile              *file,
                                 GtkTextBuffer      *buffer)
 {
   GtkTextIter iter;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_FILE (file));
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
@@ -363,7 +289,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
                                         gboolean           purge_sources)
 {
   GbpRecentSection *self = (GbpRecentSection *)section;
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(IdeDirectoryReaper) reaper = NULL;
   g_autoptr(GPtrArray) directories = NULL;
   IdeRecentProjects *projects;
   GtkWidget *workspace;
@@ -371,17 +297,24 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
 
   g_assert (GBP_IS_RECENT_SECTION (self));
 
-  workspace = gtk_widget_get_toplevel (GTK_WIDGET (section));
+  workspace = GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (section)));
 
-  gtk_container_foreach (GTK_CONTAINER (self->listbox),
-                         gbp_recent_section_collect_selected_cb,
-                         &infos);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->listbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      gboolean selected;
+
+      g_object_get (child, "selected", &selected, NULL);
+      if (selected)
+        infos = g_list_prepend (infos, ide_greeter_row_get_project_info (IDE_GREETER_ROW (child)));
+    }
 
   /* Remove the projects from the list of recent projects */
   projects = ide_recent_projects_get_default ();
 
   /* Now asynchronously remove all the project files */
-  reaper = dzl_directory_reaper_new ();
+  reaper = ide_directory_reaper_new ();
   directories = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (const GList *iter = infos; iter != NULL; iter = iter->next)
@@ -422,7 +355,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
         {
           if (can_purge_project_directory (directory))
             {
-              dzl_directory_reaper_add_directory (reaper, directory, 0);
+              ide_directory_reaper_add_directory (reaper, directory, 0);
               g_ptr_array_add (directories, g_object_ref (directory));
             }
         }
@@ -444,7 +377,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
                                              "projects",
                                              id,
                                              NULL);
-          dzl_directory_reaper_add_directory (reaper, cache, 0);
+          ide_directory_reaper_add_directory (reaper, cache, 0);
           g_ptr_array_add (directories, g_steal_pointer (&cache));
         }
 
@@ -470,20 +403,24 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
       gtk_dialog_add_button (dialog, _("_Close"), GTK_RESPONSE_CLOSE);
       gtk_window_set_default_size (GTK_WINDOW (dialog), 700, 500);
       content_area = gtk_dialog_get_content_area (dialog);
-      gtk_container_set_border_width (GTK_CONTAINER (content_area), 12);
+      g_object_set (content_area,
+                    "margin-top", 12,
+                    "margin-bottom", 12,
+                    "margin-start", 12,
+                    "margin-end", 12,
+                    NULL);
       gtk_box_set_spacing (GTK_BOX (content_area), 12);
 
-      scroller = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroller), GTK_SHADOW_IN);
+      scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW, NULL);
       gtk_widget_set_vexpand (scroller, TRUE);
-      gtk_container_add (GTK_CONTAINER (content_area), scroller);
+      gtk_box_append (GTK_BOX (content_area), scroller);
       gtk_widget_show (scroller);
 
       view = gtk_text_view_new ();
       gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
       gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-      gtk_container_add (GTK_CONTAINER (scroller), view);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), view);
       gtk_widget_show (view);
 
       g_signal_connect_object (reaper,
@@ -494,13 +431,13 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
 
       g_signal_connect (dialog,
                         "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (gtk_window_destroy),
                         NULL);
 
       ide_gtk_window_present (GTK_WINDOW (dialog));
     }
 
-  dzl_directory_reaper_execute_async (reaper,
+  ide_directory_reaper_execute_async (reaper,
                                       NULL,
                                       gbp_recent_section_reap_cb,
                                       g_steal_pointer (&directories));
@@ -532,9 +469,8 @@ greeter_section_iface_init (IdeGreeterSectionInterface *iface)
   iface->purge_selected = gbp_recent_section_purge_selected;
 }
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION,
-                                                greeter_section_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION, greeter_section_iface_init))
 
 static void
 gbp_recent_section_notify_row_selected (GbpRecentSection *self,
@@ -550,10 +486,10 @@ gbp_recent_section_notify_row_selected (GbpRecentSection *self,
 static void
 gbp_recent_section_row_activated (GbpRecentSection *self,
                                   IdeGreeterRow    *row,
-                                  GtkListBox       *list_box)
+                                  GtkListBox       *listbox)
 {
   g_assert (GBP_IS_RECENT_SECTION (self));
-  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (GTK_IS_LIST_BOX (listbox));
 
   if (!IDE_IS_GREETER_ROW (row))
     {
@@ -606,13 +542,14 @@ create_widget_func (gpointer item,
 }
 
 static void
-gbp_recent_section_destroy (GtkWidget *widget)
+gbp_recent_section_dispose (GObject *object)
 {
-  GbpRecentSection *self = (GbpRecentSection *)widget;
+  GbpRecentSection *self = (GbpRecentSection *)object;
 
   g_clear_object (&self->truncate);
+  g_clear_pointer ((GtkWidget **)&self->box, gtk_widget_unparent);
 
-  GTK_WIDGET_CLASS (gbp_recent_section_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_recent_section_parent_class)->dispose (object);
 }
 
 static void
@@ -637,12 +574,15 @@ gbp_recent_section_constructed (GObject *object)
                       "visible", TRUE,
                       NULL);
   image = g_object_new (GTK_TYPE_IMAGE,
-                        "margin", 8,
+                        "margin-top", 8,
+                        "margin-bottom", 8,
+                        "margin-start", 8,
+                        "margin-end", 8,
                         "icon-name", "view-more-symbolic",
                         "visible", TRUE,
                         NULL);
-  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (image));
-  gtk_container_add (GTK_CONTAINER (self->listbox), GTK_WIDGET (row));
+  gtk_list_box_row_set_child (row, GTK_WIDGET (image));
+  gtk_list_box_append (self->listbox, GTK_WIDGET (row));
 
   g_object_bind_property (self->truncate, "can-expand", row, "visible",
                           G_BINDING_SYNC_CREATE);
@@ -674,9 +614,8 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gbp_recent_section_constructed;
+  object_class->dispose = gbp_recent_section_dispose;
   object_class->get_property = gbp_recent_section_get_property;
-
-  widget_class->destroy = gbp_recent_section_destroy;
 
   properties [PROP_HAS_SELECTION] =
     g_param_spec_boolean ("has-selection", NULL, NULL,
@@ -685,12 +624,15 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "recent");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/recent/gbp-recent-section.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpRecentSection, listbox);
+  gtk_widget_class_bind_template_child (widget_class, GbpRecentSection, box);
   gtk_widget_class_bind_template_callback (widget_class, gbp_recent_section_row_activated);
 }
 
+#if 0
 static gboolean
 on_button_press_event_cb (GtkListBox       *listbox,
                           GdkEventButton   *ev,
@@ -717,15 +659,17 @@ on_button_press_event_cb (GtkListBox       *listbox,
 
   return GDK_EVENT_PROPAGATE;
 }
-
+#endif
 
 static void
 gbp_recent_section_init (GbpRecentSection *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+#if 0
   g_signal_connect (self->listbox,
                     "button-press-event",
                     G_CALLBACK (on_button_press_event_cb),
                     self);
+#endif
 }
