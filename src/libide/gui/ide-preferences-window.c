@@ -223,6 +223,8 @@ go_back_cb (IdePreferencesWindow *self,
 
   if (!(page = get_page (self, page->parent)))
     {
+      self->current_page = NULL;
+
       gtk_stack_set_visible_child_name (self->pages_stack, "default");
 
       gtk_widget_hide (GTK_WIDGET (self->back_button));
