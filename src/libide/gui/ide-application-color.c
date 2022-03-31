@@ -26,6 +26,7 @@
 
 #include "ide-application.h"
 #include "ide-application-private.h"
+#include "ide-recoloring-private.h"
 
 static void
 add_style_name (GPtrArray   *ar,
@@ -130,6 +131,8 @@ _ide_application_update_style_scheme (IdeApplication *self)
   g_autofree gchar *old_name = NULL;
   g_autofree gchar *new_name = NULL;
 
+  g_assert (IDE_IS_APPLICATION (self));
+
   manager = adw_style_manager_get_default ();
 
   /*
@@ -150,9 +153,38 @@ _ide_application_update_style_scheme (IdeApplication *self)
     g_settings_set_string (editor_settings, "style-scheme-name", new_name);
 }
 
+static void
+ide_application_color_style_scheme_changed_cb (IdeApplication *self,
+                                               const char     *key,
+                                               GSettings      *editor_settings)
+{
+  GtkSourceStyleSchemeManager *manager;
+  GtkSourceStyleScheme *scheme;
+  g_autofree char *style_scheme_name = NULL;
+  g_autofree char *css = NULL;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (g_strcmp0 (key, "style-scheme-name") == 0);
+  g_assert (G_IS_SETTINGS (editor_settings));
+
+  style_scheme_name = g_settings_get_string (editor_settings, key);
+  g_debug ("Style scheme changed to %s", style_scheme_name);
+
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (manager, style_scheme_name);
+
+  if (scheme == NULL)
+    return;
+
+  if ((css = _ide_recoloring_generate_css (scheme)))
+    gtk_css_provider_load_from_data (self->recoloring, css, -1);
+}
+
 void
 _ide_application_init_color (IdeApplication *self)
 {
+  g_autofree char *style_scheme_name = NULL;
+
   g_return_if_fail (IDE_IS_APPLICATION (self));
   g_return_if_fail (G_IS_SETTINGS (self->settings));
 
@@ -176,6 +208,18 @@ _ide_application_init_color (IdeApplication *self)
                                G_CONNECT_SWAPPED);
     }
 
+  style_scheme_name = g_settings_get_string (self->editor_settings, "style-scheme-name");
+  g_debug ("Initialized with style scheme %s", style_scheme_name);
+  g_signal_connect_object (self->editor_settings,
+                           "changed::style-scheme-name",
+                           G_CALLBACK (ide_application_color_style_scheme_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (self->recoloring),
+                                              GTK_STYLE_PROVIDER_PRIORITY_THEME+1);
+
   _ide_application_update_color (self);
   _ide_application_update_style_scheme (self);
+  ide_application_color_style_scheme_changed_cb (self, "style-scheme-name", self->editor_settings);
 }
