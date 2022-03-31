@@ -601,7 +601,8 @@ static const IdePreferencePageEntry pages[] = {
   { NULL, "tools",    "debug",      "org.gnome.Builder-debugger-symbolic",    310, N_("Debugger") },
   { NULL, "tools",    "commands",   "org.gnome.Builder-command-symbolic",     320, N_("Commands") },
   { NULL, "tools",    "sdks",       "org.gnome.Builder-sdk-symbolic",         500, N_("SDKs") },
-  { NULL, "plugins",  "plugins",    "org.gnome.Builder-plugins-symbolic",     600, N_("Plugins") },
+  { NULL, "network",  "network",    "org.gnome.Builder-network-symbolic",     600, N_("Network") },
+  { NULL, "plugins",  "plugins",    "org.gnome.Builder-plugins-symbolic",     700, N_("Plugins") },
 };
 
 static const IdePreferenceGroupEntry groups[] = {
@@ -628,6 +629,14 @@ static const IdePreferenceGroupEntry groups[] = {
   { "plugins",    "templates",     70, N_("Templates") },
   { "plugins",    "editing",       80, N_("Editing & Formatting") },
   { "plugins",    "other",        500, N_("Additional") },
+
+  { "projects",   "workspace",      0, N_("Workspace") },
+
+  { "debug",      "breakpoints",    0, N_("Breakpoints") },
+
+  { "build",      "general",        0, N_("General") },
+
+  { "network",    "downloads",      0, N_("Downloads") },
 };
 
 static const IdePreferenceItemEntry items[] = {
@@ -640,6 +649,31 @@ static const IdePreferenceItemEntry items[] = {
     N_("Suggest Completions While Typing"),
     N_("Automatically suggest completions while typing within the file"),
     "org.gnome.builder.editor", NULL, "interactive-completion" },
+
+  { "projects", "workspace", "restore", 0, ide_preferences_window_toggle,
+    N_("Restore Previous Session"),
+    N_("Open previously opened files when loading a project"),
+    "org.gnome.builder", NULL, "restore-previous-files" },
+
+  { "debug", "breakpoints", "break-on-main", 0, ide_preferences_window_toggle,
+    N_("Break on Main"),
+    N_("Automatically insert a breakpoint at the start of teh application"),
+    "org.gnome.builder.build", NULL, "debugger-breakpoint-on-main" },
+
+  { "build", "general", "clear-build-logs", 10, ide_preferences_window_toggle,
+    N_("Clear Build Logs"),
+    N_("Upon rebulding the project the build log will be cleared"),
+    "org.gnome.builder.build", NULL, "clear-build-log-pane" },
+
+  { "build", "general", "clear-build-cache", 20, ide_preferences_window_toggle,
+    N_("Clear Expired Artifacts"),
+    N_("Artifcats which have expired will be deleted when Builder is started"),
+    "org.gnome.builder", NULL, "clear-cache-at-startup" },
+
+  { "network", "downloads", "metered", 0, ide_preferences_window_toggle,
+    N_("Allow Downloads over Metered Connections"),
+    N_("Allow the use of metered network connections when automatically downloading dependencies"),
+    "org.gnome.builder.build", NULL, "allow-network-when-metered" },
 };
 
 static const IdePreferenceItemEntry lang_items[] = {
