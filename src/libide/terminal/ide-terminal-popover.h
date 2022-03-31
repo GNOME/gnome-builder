@@ -33,12 +33,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_POPOVER (ide_terminal_popover_get_type())
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTerminalPopover, ide_terminal_popover, IDE, TERMINAL_POPOVER, GtkPopover)
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 GtkWidget  *ide_terminal_popover_new         (void);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeRuntime *ide_terminal_popover_get_runtime (IdeTerminalPopover *self);
 
 G_END_DECLS
