@@ -124,8 +124,8 @@
                         <property name="width-request">600</property>
                         <property name="orientation">horizontal</property>
                         <property name="homogeneous">true</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-top">6</property>
+                        <property name="margin-bottom">3</property>
+                        <property name="margin-top">3</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkButton" id="remove_button">
