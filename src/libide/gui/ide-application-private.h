@@ -59,6 +59,7 @@ struct _IdeApplication
    * for various keys.
    */
   GSettings *settings;
+  GSettings *editor_settings;
 
   /* We need to track the GResource files that were manually loaded for
    * plugins on disk (generally Python plugins that need resources). That
@@ -70,6 +71,9 @@ struct _IdeApplication
    * path for the plugin/internal library.
    */
   GHashTable *css_providers;
+
+  /* The CSS provider to recolor all of the widgetry based on style schemes */
+  GtkCssProvider *recoloring;
 
   /* We need to stash the unmodified argv for the application somewhere
    * so that we can pass it to a remote instance. Otherwise we lose

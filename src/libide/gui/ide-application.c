@@ -339,7 +339,9 @@ ide_application_dispose (GObject *object)
   g_clear_pointer (&self->css_providers, g_hash_table_unref);
   g_clear_pointer (&self->argv, g_strfreev);
   g_clear_pointer (&self->menu_merge_ids, g_hash_table_unref);
+  g_clear_object (&self->recoloring);
   g_clear_object (&self->addins);
+  g_clear_object (&self->editor_settings);
   g_clear_object (&self->settings);
   g_clear_object (&self->network_monitor);
   g_clear_object (&self->menu_manager);
@@ -373,9 +375,11 @@ ide_application_init (IdeApplication *self)
   self->workspace_type = IDE_TYPE_PRIMARY_WORKSPACE;
   self->workbenches = g_ptr_array_new_with_free_func (g_object_unref);
   self->settings = g_settings_new ("org.gnome.builder");
+  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
   self->plugin_gresources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                    (GDestroyNotify)g_resource_unref);
   self->css_providers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref );
+  self->recoloring = gtk_css_provider_new ();
 
   g_application_set_default (G_APPLICATION (self));
   gtk_window_set_default_icon_name (ide_get_application_id ());
