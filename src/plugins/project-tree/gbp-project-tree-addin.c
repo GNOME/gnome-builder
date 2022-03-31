@@ -22,8 +22,8 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+
 #include <libide-gui.h>
 #include <libide-projects.h>
 #include <libide-tree.h>
@@ -651,23 +651,23 @@ gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
 }
 
 static void
-gbp_project_tree_addin_notify_progress_cb (DzlFileTransfer *transfer,
+gbp_project_tree_addin_notify_progress_cb (IdeFileTransfer *transfer,
                                            GParamSpec      *pspec,
                                            IdeNotification *notif)
 {
   g_autofree gchar *body = NULL;
-  DzlFileTransferStat stbuf;
+  IdeFileTransferStat stbuf;
   gchar count[16];
   gchar total[16];
   gdouble progress;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_FILE_TRANSFER (transfer));
+  g_assert (IDE_IS_FILE_TRANSFER (transfer));
   g_assert (IDE_IS_NOTIFICATION (notif));
 
-  dzl_file_transfer_stat (transfer, &stbuf);
+  ide_file_transfer_stat (transfer, &stbuf);
 
-  progress = dzl_file_transfer_get_progress (transfer);
+  progress = ide_file_transfer_get_progress (transfer);
   ide_notification_set_progress (notif, progress);
 
   g_snprintf (count, sizeof count, "%"G_GINT64_FORMAT, stbuf.n_files);
@@ -687,17 +687,17 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
-  DzlFileTransfer *transfer = (DzlFileTransfer *)object;
+  IdeFileTransfer *transfer = (IdeFileTransfer *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GbpProjectTreeAddin *self;
   IdeNotification *notif;
-  DzlFileTransferStat stbuf;
+  IdeFileTransferStat stbuf;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_FILE_TRANSFER (transfer));
+  g_assert (IDE_IS_FILE_TRANSFER (transfer));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -711,7 +711,7 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
   gbp_project_tree_addin_notify_progress_cb (transfer, NULL, notif);
   ide_notification_set_progress (notif, 1.0);
 
-  if (!dzl_file_transfer_execute_finish (transfer, result, &error))
+  if (!ide_file_transfer_execute_finish (transfer, result, &error))
     {
       ide_notification_set_title (notif, _("Failed to copy files"));
       ide_notification_set_body (notif, error->message);
@@ -725,7 +725,7 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
 
       ide_notification_set_title (notif, _("Files copied"));
 
-      dzl_file_transfer_stat (transfer, &stbuf);
+      ide_file_transfer_stat (transfer, &stbuf);
       g_snprintf (count, sizeof count, "%"G_GINT64_FORMAT, stbuf.n_files_total);
       format = g_strdup_printf (ngettext ("Copied %s file", "Copied %s files", stbuf.n_files_total), count);
       ide_notification_set_body (notif, format);
@@ -815,7 +815,7 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
 {
   GbpProjectTreeAddin *self = (GbpProjectTreeAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(DzlFileTransfer) transfer = NULL;
+  g_autoptr(IdeFileTransfer) transfer = NULL;
   g_autoptr(GFile) src_file = NULL;
   g_autoptr(GFile) dst_dir = NULL;
   g_autoptr(IdeNotification) notif = NULL;
@@ -866,8 +866,8 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   dst_dir = ide_project_file_ref_file (drop_file);
   g_assert (G_IS_FILE (dst_dir));
 
-  transfer = dzl_file_transfer_new ();
-  dzl_file_transfer_set_flags (transfer, DZL_FILE_TRANSFER_FLAGS_NONE);
+  transfer = ide_file_transfer_new ();
+  ide_file_transfer_set_flags (transfer, IDE_FILE_TRANSFER_FLAGS_NONE);
   g_signal_connect_object (transfer,
                            "notify::progress",
                            G_CALLBACK (gbp_project_tree_addin_notify_progress_cb),
@@ -899,7 +899,7 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
           IDE_EXIT;
         }
 
-      dzl_file_transfer_add (transfer, source, dst_file);
+      ide_file_transfer_add (transfer, source, dst_file);
 
       /* If there are any buffers that are open with this file as an
        * ancester, then we need to rename there file to point at the
@@ -925,7 +925,7 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   ide_notification_attach (notif, IDE_OBJECT (self->model));
   ide_task_set_task_data (task, g_object_ref (notif), g_object_unref);
 
-  dzl_file_transfer_execute_async (transfer,
+  ide_file_transfer_execute_async (transfer,
                                    G_PRIORITY_DEFAULT,
                                    cancellable,
                                    gbp_project_tree_addin_transfer_cb,
