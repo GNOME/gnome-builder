@@ -51,6 +51,7 @@ libide_gui_private_headers = [
   'ide-notification-view-private.h',
   'ide-preferences-builtin-private.h',
   'ide-primary-workspace-private.h',
+  'ide-recoloring-private.h',
   'ide-session-private.h',
 ]
 
@@ -64,6 +65,7 @@ libide_gui_private_sources = [
   'ide-notification-view.c',
   'ide-preferences-builtin.c',
   'ide-primary-workspace-actions.c',
+  'ide-recoloring.c',
   'ide-session.c',
   'ide-workspace-actions.c',
 ]
@@ -137,6 +139,8 @@ libide_gui_sources += [libide_gui_enums[0]]
 #
 
 libide_gui_deps = [
+  cc.find_library('m', required: false),
+
   libgio_dep,
   libgtk_dep,
   libgtksource_dep,
