@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-greeter.h>
 #include <libide-gui.h>
 

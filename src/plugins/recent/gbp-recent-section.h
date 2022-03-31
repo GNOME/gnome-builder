@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_RECENT_SECTION (gbp_recent_section_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpRecentSection, gbp_recent_section, GBP, RECENT_SECTION, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpRecentSection, gbp_recent_section, GBP, RECENT_SECTION, GtkWidget)
 
 G_END_DECLS
