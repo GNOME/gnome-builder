@@ -437,7 +437,7 @@ DEFINE_ACTION_HANDLER (open_containing_folder, {
     return;
 
   file = ide_project_file_ref_file (project_file);
-  dzl_file_manager_show (file, NULL);
+  ide_file_manager_show (file, NULL);
 });
 
 DEFINE_ACTION_HANDLER (open_with_hint, {
@@ -606,28 +606,28 @@ _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
         }
     }
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-file",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-file",
                              "enabled", is_file,
                              NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-folder",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-folder",
                              "enabled", is_file,
                              NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "trash",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "trash",
                              "enabled", is_file,
                              NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "rename",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "rename",
                              "enabled", is_file,
                              NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open",
                              "enabled", is_file && !is_dir,
                              NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-with-hint",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-with-hint",
                              "enabled", is_file,
                              NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-containing-folder",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-containing-folder",
                              "enabled", is_file,
                              NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-in-terminal",
+  ide_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-in-terminal",
                              "enabled", is_file,
                              NULL);
 }

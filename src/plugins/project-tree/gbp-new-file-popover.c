@@ -67,7 +67,7 @@ gbp_new_file_popover_button_clicked (GbpNewFilePopover *self,
     return;
 
   path = gtk_entry_get_text (self->entry);
-  if (dzl_str_empty0 (path))
+  if (ide_str_empty0 (path))
     return;
 
   stripped = g_strstrip (g_strdup (path));
@@ -180,7 +180,7 @@ gbp_new_file_popover_entry_changed (GbpNewFilePopover *self,
    * consistents with the final behavior (creating the file). */
   stripped = g_strstrip(g_strdup (gtk_entry_get_text (entry)));
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !dzl_str_empty0 (stripped));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !ide_str_empty0 (stripped));
 
   gbp_new_file_popover_check_exists (self, self->directory, stripped);
 }
