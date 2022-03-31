@@ -41,6 +41,8 @@ struct _IdePaneClass
 };
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_pane_new (void);
+GtkWidget *ide_pane_new     (void);
+IDE_AVAILABLE_IN_ALL
+void       ide_pane_destroy (IdePane *self);
 
 G_END_DECLS

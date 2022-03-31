@@ -50,3 +50,14 @@ ide_pane_new (void)
 {
   return g_object_new (IDE_TYPE_PANE, NULL);
 }
+
+void
+ide_pane_destroy (IdePane *self)
+{
+  GtkWidget *frame;
+
+  g_return_if_fail (IDE_IS_PANE (self));
+
+  if ((frame = gtk_widget_get_ancestor (GTK_WIDGET (self), PANEL_TYPE_FRAME)))
+    panel_frame_remove (PANEL_FRAME (frame), PANEL_WIDGET (self));
+}
