@@ -53,6 +53,7 @@ libide_gui_private_headers = [
   'ide-primary-workspace-private.h',
   'ide-recoloring-private.h',
   'ide-session-private.h',
+  'ide-style-variant-preview-private.h',
 ]
 
 libide_gui_private_sources = [
@@ -67,6 +68,7 @@ libide_gui_private_sources = [
   'ide-primary-workspace-actions.c',
   'ide-recoloring.c',
   'ide-session.c',
+  'ide-style-variant-preview.c',
   'ide-workspace-actions.c',
 ]
 

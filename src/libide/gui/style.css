@@ -1,0 +1,42 @@
+/* Preferences */
+window.preferences list.boxed-list.style-variant button {
+  padding: 0;
+  margin: 0;
+  border: 3px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+}
+window.preferences list.boxed-list.style-variant button:checked {
+  border-color: @theme_selected_bg_color;
+}
+stylevariantpreview widget.wallpaper {
+  border-radius: 6px;
+  box-shadow: 0 0 9px 1px rgba(0,0,0,.2);
+}
+stylevariantpreview widget.window {
+  box-shadow: 0 0 9px 2px rgba(0,0,0,.25);
+  border-radius: 7px;
+  border: 1px solid alpha(white, .075);
+}
+stylevariantpreview widget.window.dark {
+  background: #242424;
+}
+stylevariantpreview widget.window.light {
+  background: #fafafa;
+}
+stylevariantpreview widget.header {
+  border-radius: 7px 7px 0 0;
+  border-bottom: 1px solid alpha(white, 0.075);
+}
+stylevariantpreview widget.header.dark {
+  background: #484848;
+}
+stylevariantpreview widget.header.light {
+  background: #cccccc;
+}
+frame.text-preview,
+GtkSourceStyleSchemePreview frame {
+  box-shadow: 0 0 0 1px rgba(0,0,0,.03),
+              0 1px 3px 1px rgba(0,0,0,.07),
+              0 2px 6px 2px rgba(0,0,0,.03);
+}

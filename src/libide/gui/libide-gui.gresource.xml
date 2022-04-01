@@ -5,6 +5,10 @@
   </gresource>
   <gresource prefix="/org/gnome/libide-gui">
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>images/style-preview-dark.png</file>
+    <file>images/style-preview-default.png</file>
+    <file>images/style-preview-light.png</file>
+    <file>style.css</file>
   </gresource>
   <gresource prefix="/org/gnome/libide-gui/ui">
     <file preprocess="xml-stripblanks">ide-environment-editor-row.ui</file>
@@ -16,5 +20,6 @@
     <file preprocess="xml-stripblanks">ide-preferences-window.ui</file>
     <file preprocess="xml-stripblanks">ide-primary-workspace.ui</file>
     <file preprocess="xml-stripblanks">ide-run-button.ui</file>
+    <file preprocess="xml-stripblanks">ide-style-variant-preview.ui</file>
   </gresource>
 </gresources>

@@ -479,6 +479,7 @@ ide_preferences_window_init (IdePreferencesWindow *self)
   self->info.data = g_array_new (FALSE, FALSE, sizeof (DataDestroy));
 
   gtk_widget_init_template (GTK_WIDGET (self));
+  gtk_widget_add_css_class (GTK_WIDGET (self), "preferences");
 }
 
 GtkWidget *

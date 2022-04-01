@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeStyleVariantPreview" parent="GtkWidget">
+    <child>
+      <object class="AdwBin">
+        <style>
+          <class name="wallpaper"/>
+        </style>
+        <property name="margin-top">2</property>
+        <property name="margin-bottom">2</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
+        <property name="overflow">hidden</property>
+        <child>
+          <object class="GtkPicture" id="wallpaper">
+            <property name="keep-aspect-ratio">false</property>
+            <property name="width-request">164</property>
+            <property name="height-request">90</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwBin" id="back">
+        <style>
+          <class name="window"/>
+        </style>
+        <property name="width-request">75</property>
+        <property name="height-request">50</property>
+        <layout>
+          <property name="transform">translate(60, 15)</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="AdwBin" id="back_header">
+        <style>
+          <class name="header"/>
+        </style>
+        <property name="width-request">75</property>
+        <property name="height-request">10</property>
+        <layout>
+          <property name="transform">translate(60, 15)</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwBin" id="front">
+        <style>
+          <class name="window"/>
+        </style>
+        <property name="width-request">75</property>
+        <property name="height-request">50</property>
+        <layout>
+          <property name="transform">translate(20, 30)</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="AdwBin" id="front_header">
+        <style>
+          <class name="header"/>
+        </style>
+        <property name="width-request">75</property>
+        <property name="height-request">10</property>
+        <layout>
+          <property name="transform">translate(20, 30)</property>
+        </layout>
+      </object>
+    </child>
+
+  </template>
+</interface>
