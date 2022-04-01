@@ -5,31 +5,17 @@
     <property name="default-height">700</property>
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
-        <property name="show-close-button">true</property>
-        <property name="show-fullscreen-button">false</property>
-        <property name="visible">true</property>
+        <property name="menu-id">dspy-workspace-menu</property>
         <child type="title">
-          <object class="GtkLabel">
-            <property name="label" translatable="yes">D-Bus Inspector</property>
-            <property name="visible">true</property>
-            <style>
-              <class name="title"/>
-            </style>
+          <object class="AdwWindowTitle">
+            <property name="title" translatable="yes">D-Bus Inspector</property>
           </object>
         </child>
       </object>
     </child>
-    <child internal-child="surfaces">
-      <object class="GtkStack" id="surfaces">
-        <property name="visible">true</property>
-        <child>
-          <object class="GbpDspySurface" id="surface">
-            <property name="visible">true</property>
-          </object>
-          <packing>
-            <property name="name">dspy</property>
-          </packing>
-        </child>
+    <child type="content">
+      <object class="DspyView" id="view">
+        <property name="vexpand">true</property>
       </object>
     </child>
   </template>

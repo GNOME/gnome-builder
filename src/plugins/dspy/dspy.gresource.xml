@@ -3,7 +3,6 @@
   <gresource prefix="/plugins/dspy">
     <file>dspy.plugin</file>
     <file>gtk/menus.ui</file>
-    <file preprocess="xml-stripblanks">gbp-dspy-surface.ui</file>
     <file preprocess="xml-stripblanks">gbp-dspy-workspace.ui</file>
   </gresource>
 </gresources>

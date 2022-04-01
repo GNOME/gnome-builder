@@ -16,4 +16,10 @@
       </item>
     </section>
   </menu>
+  <menu id="dspy-workspace-menu">
+    <item>
+      <attribute name="label" translatable="yes">Close</attribute>
+      <attribute name="action">window.close</attribute>
+    </item>
+  </menu>
 </interface>

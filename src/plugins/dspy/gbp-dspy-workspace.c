@@ -22,14 +22,15 @@
 
 #include "config.h"
 
-#include "gbp-dspy-surface.h"
+#include <dspy.h>
+
 #include "gbp-dspy-workspace.h"
 
 struct _GbpDspyWorkspace
 {
   IdeWorkspace    parent_instance;
   IdeHeaderBar   *header_bar;
-  GbpDspySurface *surface;
+  DspyView       *view;
 };
 
 G_DEFINE_FINAL_TYPE (GbpDspyWorkspace, gbp_dspy_workspace, IDE_TYPE_WORKSPACE)
@@ -44,7 +45,9 @@ gbp_dspy_workspace_class_init (GbpDspyWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/dspy/gbp-dspy-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpDspyWorkspace, header_bar);
-  gtk_widget_class_bind_template_child (widget_class, GbpDspyWorkspace, surface);
+  gtk_widget_class_bind_template_child (widget_class, GbpDspyWorkspace, view);
+
+  g_type_ensure (DSPY_TYPE_VIEW);
 }
 
 static void
