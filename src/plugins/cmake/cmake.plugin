@@ -6,6 +6,6 @@ Description=Provides integration with the CMake build system
 Embedded=_gbp_cmake_register_types
 Module=cmake
 Name=CMake
-X-Category=cmake
+X-Category=buildsystems
 X-Project-File-Filter-Name=CMake Project (CMakeLists.txt)
 X-Project-File-Filter-Pattern=CMakeLists.txt
