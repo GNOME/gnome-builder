@@ -31,6 +31,7 @@ libide_terminal_private_headers = [
   'ide-terminal-page-private.h',
   'ide-terminal-popover-row.h',
   'ide-terminal-search-private.h',
+  'ide-terminal-private.h',
 ]
 
 libide_terminal_public_sources = [
@@ -43,6 +44,7 @@ libide_terminal_public_sources = [
 ]
 
 libide_terminal_private_sources = [
+  'ide-terminal-init.c',
   'ide-terminal-page-actions.c',
   'ide-terminal-popover-row.c',
 ]

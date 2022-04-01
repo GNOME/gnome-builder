@@ -40,6 +40,7 @@
 #include "ide-build-ident.h"
 #include "ide-gtk-private.h"
 #include "ide-shell-private.h"
+#include "ide-terminal-private.h"
 #include "ide-thread-private.h"
 #include "ide-private.h"
 
@@ -287,6 +288,7 @@ main (gint   argc,
 
   /* Ensure availability of some symbols possibly dropped in link */
   _ide_gtk_init ();
+  _ide_terminal_init ();
 
   app = _ide_application_new (standalone);
   g_application_add_option_group (G_APPLICATION (app), g_irepository_get_option_group ());
