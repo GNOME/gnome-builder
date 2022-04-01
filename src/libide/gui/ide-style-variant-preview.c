@@ -118,6 +118,25 @@ ide_style_variant_preview_snapshot (GtkWidget   *widget,
 }
 
 static void
+ide_style_variant_preview_measure (GtkWidget      *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline)
+{
+  GTK_WIDGET_CLASS (ide_style_variant_preview_parent_class)->measure (widget, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
+
+  /* Work around GtkPicture wierdness */
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      *natural = *minimum;
+      *natural_baseline = *minimum_baseline;
+    }
+}
+
+static void
 ide_style_variant_preview_dispose (GObject *object)
 {
   IdeStyleVariantPreview *self = (IdeStyleVariantPreview *)object;
@@ -178,6 +197,7 @@ ide_style_variant_preview_class_init (IdeStyleVariantPreviewClass *klass)
   object_class->set_property = ide_style_variant_preview_set_property;
 
   widget_class->snapshot = ide_style_variant_preview_snapshot;
+  widget_class->measure = ide_style_variant_preview_measure;
 
   properties [PROP_COLOR_SCHEME] =
     g_param_spec_enum ("color-scheme",
