@@ -686,8 +686,9 @@ static const IdePreferenceGroupEntry groups[] = {
   { "plugins",    "diagnostics",   40, N_("Diagnostics") },
   { "plugins",    "buildsystems",  50, N_("Build Systems") },
   { "plugins",    "compilers",     60, N_("Compilers") },
-  { "plugins",    "templates",     70, N_("Templates") },
-  { "plugins",    "editing",       80, N_("Editing & Formatting") },
+  { "plugins",    "debuggers",     70, N_("Debuggers") },
+  { "plugins",    "templates",     80, N_("Templates") },
+  { "plugins",    "editing",       90, N_("Editing & Formatting") },
   { "plugins",    "other",        500, N_("Additional") },
 
   { "projects",   "workspace",      0, N_("Workspace") },
