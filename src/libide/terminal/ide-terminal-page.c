@@ -86,9 +86,7 @@ destroy_widget_in_idle (GtkWidget *widget)
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
   if (!self->destroyed)
-    gtk_widget_destroy (widget);
-
-  g_assert (self->destroyed);
+    panel_widget_close (PANEL_WIDGET (self));
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -138,12 +136,12 @@ ide_terminal_page_spawn_cb (GObject      *object,
   if (!self->respawn_on_exit)
     {
       if (self->close_on_exit && !maybe_flapping)
-        gdk_threads_add_idle_full (G_PRIORITY_LOW + 1000,
-                                   (GSourceFunc) destroy_widget_in_idle,
-                                   g_object_ref (self),
-                                   g_object_unref);
+        g_idle_add_full (G_PRIORITY_LOW + 1000,
+                         (GSourceFunc) destroy_widget_in_idle,
+                         g_object_ref (self),
+                         g_object_unref);
       else
-        vte_terminal_set_input_enabled (VTE_TERMINAL (self->terminal_top), FALSE);
+        vte_terminal_set_input_enabled (VTE_TERMINAL (self->terminal), FALSE);
       IDE_EXIT;
     }
 
@@ -155,9 +153,9 @@ ide_terminal_page_spawn_cb (GObject      *object,
     }
 
   g_clear_object (&self->pty);
-  vte_terminal_reset (VTE_TERMINAL (self->terminal_top), TRUE, TRUE);
+  vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
   self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
-  vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
+  vte_terminal_set_pty (VTE_TERMINAL (self->terminal), self->pty);
 
   /* Spawn our terminal and wait for it to exit */
   self->last_respawn = now;
@@ -195,7 +193,7 @@ ide_terminal_page_do_spawn_in_idle (IdeTerminalPage *self)
         }
     }
 
-  vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
+  vte_terminal_set_pty (VTE_TERMINAL (self->terminal), self->pty);
 
   if (!self->manage_spawn)
     IDE_RETURN (G_SOURCE_REMOVE);
@@ -235,59 +233,6 @@ ide_terminal_page_realize (GtkWidget *widget)
 }
 
 static void
-ide_terminal_page_get_preferred_width (GtkWidget *widget,
-                                       gint      *min_width,
-                                       gint      *nat_width)
-{
-  /*
-   * Since we are placing the terminal in a GtkStack, we need
-   * to fake the size a bit. Otherwise, GtkStack tries to keep the
-   * widget at its natural size (which prevents us from getting
-   * appropriate size requests.
-   */
-  GTK_WIDGET_CLASS (ide_terminal_page_parent_class)->get_preferred_width (widget, min_width, nat_width);
-  *nat_width = *min_width;
-}
-
-static void
-ide_terminal_page_get_preferred_height (GtkWidget *widget,
-                                        gint      *min_height,
-                                        gint      *nat_height)
-{
-  /*
-   * Since we are placing the terminal in a GtkStack, we need
-   * to fake the size a bit. Otherwise, GtkStack tries to keep the
-   * widget at its natural size (which prevents us from getting
-   * appropriate size requests.
-   */
-  GTK_WIDGET_CLASS (ide_terminal_page_parent_class)->get_preferred_height (widget, min_height, nat_height);
-  *nat_height = *min_height;
-}
-
-static void
-ide_terminal_page_set_needs_attention (IdeTerminalPage *self,
-                                       gboolean         needs_attention)
-{
-  GtkWidget *parent;
-
-  g_assert (IDE_IS_TERMINAL_PAGE (self));
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (self));
-
-  if (GTK_IS_STACK (parent) &&
-      !gtk_widget_in_destruction (GTK_WIDGET (self)) &&
-      !gtk_widget_in_destruction (parent))
-    {
-      if (!gtk_widget_in_destruction (GTK_WIDGET (self->terminal_top)))
-        self->needs_attention = !!needs_attention;
-
-      gtk_container_child_set (GTK_CONTAINER (parent), GTK_WIDGET (self),
-                               "needs-attention", needs_attention,
-                               NULL);
-    }
-}
-
-static void
 notification_received_cb (VteTerminal     *terminal,
                           const gchar     *summary,
                           const gchar     *body,
@@ -300,22 +245,18 @@ notification_received_cb (VteTerminal     *terminal,
     return;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (terminal)))
-    ide_terminal_page_set_needs_attention (self, TRUE);
+    panel_widget_set_needs_attention (PANEL_WIDGET (self), TRUE);
 }
 
-static gboolean
-focus_in_event_cb (VteTerminal     *terminal,
-                   GdkEvent        *event,
-                   IdeTerminalPage *self)
+static void
+focus_in_event_cb (GtkEventControllerFocus *focus,
+                   IdeTerminalPage         *self)
 {
-  g_assert (VTE_IS_TERMINAL (terminal));
+  g_assert (GTK_IS_EVENT_CONTROLLER_FOCUS (focus));
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
-  self->needs_attention = FALSE;
-  ide_terminal_page_set_needs_attention (self, FALSE);
-  gtk_revealer_set_reveal_child (self->search_revealer_top, FALSE);
-
-  return GDK_EVENT_PROPAGATE;
+  panel_widget_set_needs_attention (PANEL_WIDGET (self), FALSE);
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
 }
 
 static void
@@ -330,37 +271,12 @@ window_title_changed_cb (VteTerminal     *terminal,
   if (self->destroyed)
     return;
 
-  title = vte_terminal_get_window_title (VTE_TERMINAL (self->terminal_top));
+  title = vte_terminal_get_window_title (VTE_TERMINAL (self->terminal));
 
   if (title == NULL || title[0] == '\0')
     title = _("Untitled terminal");
 
   ide_page_set_title (IDE_PAGE (self), title);
-}
-
-static void
-style_context_changed (GtkStyleContext *style_context,
-                       IdeTerminalPage *self)
-{
-  GtkStateFlags state;
-  GdkRGBA fg;
-  GdkRGBA bg;
-
-  g_assert (GTK_IS_STYLE_CONTEXT (style_context));
-  g_assert (IDE_IS_TERMINAL_PAGE (self));
-
-  state = gtk_style_context_get_state (style_context);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_context_get_color (style_context, state, &fg);
-  gtk_style_context_get_background_color (style_context, state, &bg);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (bg.alpha == 0.0)
-    gdk_rgba_parse (&bg, "#f6f7f8");
-
-  ide_page_set_primary_color_fg (IDE_PAGE (self), &fg);
-  ide_page_set_primary_color_bg (IDE_PAGE (self), &bg);
 }
 
 static IdePage *
@@ -380,31 +296,54 @@ ide_terminal_page_create_split (IdePage *page)
                        NULL);
 }
 
-static void
+static gboolean
 ide_terminal_page_grab_focus (GtkWidget *widget)
 {
   IdeTerminalPage *self = (IdeTerminalPage *)widget;
 
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
-  gtk_widget_grab_focus (GTK_WIDGET (self->terminal_top));
+  return gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
+}
+
+static void
+on_colors_changed_cb (IdeTerminal     *terminal,
+                      IdeTerminalPage *self)
+{
+  GdkRGBA bg, fg;
+
+  ide_terminal_get_colors (terminal, &bg, &fg);
+  ide_page_set_primary_color_fg (IDE_PAGE (self), &fg);
+  ide_page_set_primary_color_bg (IDE_PAGE (self), &bg);
 }
 
 static void
 ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                     VteTerminal     *terminal)
 {
+  GtkEventController *controller;
+
   g_assert (IDE_IS_TERMINAL_PAGE (self));
-  g_assert (VTE_IS_TERMINAL (terminal));
+  g_assert (IDE_IS_TERMINAL (terminal));
 
   if (self->destroyed)
     return;
 
   g_signal_connect_object (terminal,
-                           "focus-in-event",
+                           "colors-changed",
+                           G_CALLBACK (on_colors_changed_cb),
+                           self,
+                           0);
+  on_colors_changed_cb (IDE_TERMINAL (terminal), self);
+
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect_object (controller,
+                           "enter",
                            G_CALLBACK (focus_in_event_cb),
                            self,
                            0);
+  gtk_widget_add_controller (GTK_WIDGET (terminal), controller);
+
 
   g_signal_connect_object (terminal,
                            "window-title-changed",
@@ -456,8 +395,8 @@ ide_terminal_page_get_file_or_directory (IdePage *page)
   if (self->destroyed)
     return NULL;
 
-  if (!(uri = vte_terminal_get_current_file_uri (VTE_TERMINAL (self->terminal_top))))
-    uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal_top));
+  if (!(uri = vte_terminal_get_current_file_uri (VTE_TERMINAL (self->terminal))))
+    uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal));
 
   if (uri != NULL)
     return g_file_new_for_uri (uri);
@@ -466,26 +405,18 @@ ide_terminal_page_get_file_or_directory (IdePage *page)
 }
 
 static void
-ide_terminal_page_destroy (GtkWidget *widget)
-{
-  IdeTerminalPage *self = (IdeTerminalPage *)widget;
-
-  self->destroyed = TRUE;
-
-  GTK_WIDGET_CLASS (ide_terminal_page_parent_class)->destroy (widget);
-}
-
-static void
-ide_terminal_page_finalize (GObject *object)
+ide_terminal_page_dispose (GObject *object)
 {
   IdeTerminalPage *self = IDE_TERMINAL_PAGE (object);
 
+  self->destroyed = TRUE;
+
   g_clear_object (&self->launcher);
-  g_clear_object (&self->save_as_file_top);
+  g_clear_object (&self->save_as_file);
   g_clear_pointer (&self->selection_buffer, g_free);
   g_clear_object (&self->pty);
 
-  G_OBJECT_CLASS (ide_terminal_page_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_terminal_page_parent_class)->dispose (object);
 }
 
 static void
@@ -565,22 +496,19 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   IdePageClass *page_class = IDE_PAGE_CLASS (klass);
 
-  object_class->finalize = ide_terminal_page_finalize;
+  object_class->dispose = ide_terminal_page_dispose;
   object_class->get_property = ide_terminal_page_get_property;
   object_class->set_property = ide_terminal_page_set_property;
 
   widget_class->realize = ide_terminal_page_realize;
-  widget_class->get_preferred_width = ide_terminal_page_get_preferred_width;
-  widget_class->get_preferred_height = ide_terminal_page_get_preferred_height;
   widget_class->grab_focus = ide_terminal_page_grab_focus;
-  widget_class->destroy = ide_terminal_page_destroy;
 
   page_class->create_split = ide_terminal_page_create_split;
   page_class->get_file_or_directory = ide_terminal_page_get_file_or_directory;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-page.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_top);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_overlay_top);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_overlay);
 
   properties [PROP_CLOSE_ON_EXIT] =
     g_param_spec_boolean ("close-on-exit",
@@ -635,8 +563,6 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
 static void
 ide_terminal_page_init (IdeTerminalPage *self)
 {
-  GtkStyleContext *style_context;
-
   self->close_on_exit = TRUE;
   self->respawn_on_exit = TRUE;
   self->manage_spawn = TRUE;
@@ -644,11 +570,11 @@ ide_terminal_page_init (IdeTerminalPage *self)
   self->tsearch = g_object_new (IDE_TYPE_TERMINAL_SEARCH,
                                 "visible", TRUE,
                                 NULL);
-  self->search_revealer_top = ide_terminal_search_get_revealer (self->tsearch);
+  self->search_revealer = ide_terminal_search_get_revealer (self->tsearch);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->terminal_top,
+  g_signal_connect_object (self->terminal,
                            "text-inserted",
                            G_CALLBACK (ide_terminal_page_on_text_inserted_cb),
                            self,
@@ -658,24 +584,13 @@ ide_terminal_page_init (IdeTerminalPage *self)
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
   ide_page_set_menu_id (IDE_PAGE (self), "ide-terminal-page-document-menu");
 
-  gtk_overlay_add_overlay (self->terminal_overlay_top, GTK_WIDGET (self->tsearch));
+  gtk_overlay_add_overlay (self->terminal_overlay, GTK_WIDGET (self->tsearch));
 
-  ide_terminal_page_connect_terminal (self, VTE_TERMINAL (self->terminal_top));
+  ide_terminal_page_connect_terminal (self, VTE_TERMINAL (self->terminal));
 
-  ide_terminal_search_set_terminal (self->tsearch, VTE_TERMINAL (self->terminal_top));
+  ide_terminal_search_set_terminal (self->tsearch, VTE_TERMINAL (self->terminal));
 
   ide_terminal_page_actions_init (self);
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self->terminal_top));
-  gtk_style_context_add_class (style_context, "terminal");
-  g_signal_connect_object (style_context,
-                           "changed",
-                           G_CALLBACK (style_context_changed),
-                           self,
-                           0);
-  style_context_changed (style_context, self);
-
-  gtk_widget_set_can_focus (GTK_WIDGET (self->terminal_top), TRUE);
 
   ide_widget_set_context_handler (self, ide_terminal_page_context_set);
 }
@@ -692,8 +607,8 @@ ide_terminal_page_set_pty (IdeTerminalPage *self,
 
   if (g_set_object (&self->pty, pty))
     {
-      vte_terminal_reset (VTE_TERMINAL (self->terminal_top), TRUE, TRUE);
-      vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), pty);
+      vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
+      vte_terminal_set_pty (VTE_TERMINAL (self->terminal), pty);
     }
 }
 
@@ -704,8 +619,8 @@ ide_terminal_page_feed (IdeTerminalPage *self,
   g_return_if_fail (IDE_IS_TERMINAL_PAGE (self));
   g_return_if_fail (self->destroyed == FALSE);
 
-  if (self->terminal_top != NULL)
-    vte_terminal_feed (VTE_TERMINAL (self->terminal_top), message, -1);
+  if (self->terminal != NULL)
+    vte_terminal_feed (VTE_TERMINAL (self->terminal), message, -1);
 }
 
 void
@@ -742,5 +657,5 @@ ide_terminal_page_get_current_directory_uri (IdeTerminalPage *self)
   g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), NULL);
   g_return_val_if_fail (self->destroyed == FALSE, NULL);
 
-  return vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal_top));
+  return vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal));
 }

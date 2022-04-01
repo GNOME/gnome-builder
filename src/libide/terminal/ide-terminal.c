@@ -36,6 +36,8 @@ typedef struct
   GtkWidget *popup_menu;
   GSettings *settings;
   gchar     *url;
+  GdkRGBA    bg;
+  GdkRGBA    fg;
 } IdeTerminalPrivate;
 
 typedef struct
@@ -58,6 +60,7 @@ enum {
   POPULATE_POPUP,
   SELECT_ALL,
   SEARCH_REVEAL,
+  COLORS_CHANGED,
   N_SIGNALS
 };
 
@@ -92,10 +95,28 @@ static const GdkRGBA solarized_palette[] = {
   { 0.992156, 0.964705, 0.890196, 1 },
 };
 
+void
+ide_terminal_get_colors (IdeTerminal *self,
+                         GdkRGBA     *bg,
+                         GdkRGBA     *fg)
+{
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_TERMINAL (self));
+
+  if (bg)
+    *bg = priv->bg;
+
+  if (fg)
+    *fg = priv->fg;
+}
+
 static void
 ide_terminal_css_changed (GtkWidget         *widget,
                           GtkCssStyleChange *change)
 {
+  IdeTerminal *self = (IdeTerminal *)widget;
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
   GtkStyleContext *style_context;
   GdkRGBA fg;
   GdkRGBA bg;
@@ -113,6 +134,11 @@ ide_terminal_css_changed (GtkWidget         *widget,
   vte_terminal_set_colors (VTE_TERMINAL (widget),
                            &fg, &bg,
                            solarized_palette, G_N_ELEMENTS (solarized_palette));
+
+  priv->fg = fg;
+  priv->bg = bg;
+
+  g_signal_emit (self, signals [COLORS_CHANGED], 0);
 }
 
 #if 0
@@ -493,6 +519,14 @@ ide_terminal_class_init (IdeTerminalClass *klass)
 
   filename_regex = g_regex_new (FILENAME_PLUS_LOCATION, 0, 0, NULL);
   g_assert (filename_regex != NULL);
+
+  signals [COLORS_CHANGED] =
+    g_signal_new ("colors-changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 
   signals [COPY_LINK_ADDRESS] =
     g_signal_new ("copy-link-address",
