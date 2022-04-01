@@ -247,6 +247,28 @@ ide_omni_bar_notification_row_activated (IdeOmniBar                *self,
 }
 
 static void
+ide_omni_bar_measure (GtkWidget      *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
+{
+  g_assert (IDE_IS_OMNI_BAR (widget));
+
+  GTK_WIDGET_CLASS (ide_omni_bar_parent_class)->measure (widget, orientation, for_size,
+                                                         minimum, natural,
+                                                         minimum_baseline, natural_baseline);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      if (*natural < 500)
+        *natural = 500;
+    }
+}
+
+static void
 ide_omni_bar_dispose (GObject *object)
 {
   IdeOmniBar *self = (IdeOmniBar *)object;
@@ -267,6 +289,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   object_class->dispose = ide_omni_bar_dispose;
 
   widget_class->query_tooltip = ide_omni_bar_query_tooltip;
+  widget_class->measure = ide_omni_bar_measure;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-omni-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, notification_stack);
