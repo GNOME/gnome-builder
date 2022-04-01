@@ -34,6 +34,7 @@ ide_pane_class_init (IdePaneClass *klass)
 static void
 ide_pane_init (IdePane *self)
 {
+  panel_widget_set_kind (PANEL_WIDGET (self), PANEL_WIDGET_KIND_UTILITY);
 }
 
 /**
