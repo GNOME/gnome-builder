@@ -20,20 +20,15 @@
 
 #include "config.h"
 
-#include <libide-gui.h>
-#include <libide-editor.h>
 #include <libpeas/peas.h>
 
-#include <libdspy-resources.h>
+#include <libide-gui.h>
 
 #include "gbp-dspy-application-addin.h"
 
 _IDE_EXTERN void
 _gbp_dspy_register_types (PeasObjectModule *module)
 {
-  g_resources_register (libdspy_get_resource ());
-  dzl_application_add_resources (DZL_APPLICATION (IDE_APPLICATION_DEFAULT), "resource:///org/gnome/dspy");
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               GBP_TYPE_DSPY_APPLICATION_ADDIN);
