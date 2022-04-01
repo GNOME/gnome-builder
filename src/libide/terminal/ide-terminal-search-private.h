@@ -20,20 +20,21 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-#include <libide-gui.h>
+#include "ide-terminal-search.h"
+
+#include <libide-gtk.h>
 
 G_BEGIN_DECLS
 
 struct _IdeTerminalSearch
 {
-  GtkBin               parent_instance;
+  AdwBin               parent_instance;
 
   VteTerminal         *terminal;
 
   GtkRevealer         *search_revealer;
 
-  IdeTaggedEntry      *search_entry;
+  IdeSearchEntry      *search_entry;
 
   GtkButton           *search_prev_button;
   GtkButton           *search_next_button;
@@ -52,7 +53,6 @@ struct _IdeTerminalSearch
   gchar               *regex_pattern;
   VteRegex            *regex;
 
-  GtkClipboard        *clipboard;
   gchar               *selected_text;
   gchar               *selection_buffer;
 };
