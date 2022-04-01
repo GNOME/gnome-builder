@@ -57,6 +57,8 @@
     </child>
     <child>
       <object class="PanelDock" id="dock">
+        <property name="start-width">300</property>
+        <property name="reveal-start">true</property>
         <property name="vexpand">true</property>
         <child type="center">
           <object class="IdeGrid">
