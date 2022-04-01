@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-todo-panel"
 
 #include <glib/gi18n.h>
+
 #include <libide-code.h>
 #include <libide-gui.h>
 
@@ -29,7 +30,7 @@
 
 struct _GbpTodoPanel
 {
-  DzlDockWidget  parent_instance;
+  IdePane        parent_instance;
 
   GbpTodoModel  *model;
 
@@ -37,7 +38,7 @@ struct _GbpTodoPanel
   GtkStack      *stack;
 };
 
-G_DEFINE_FINAL_TYPE (GbpTodoPanel, gbp_todo_panel, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpTodoPanel, gbp_todo_panel, IDE_TYPE_PANE)
 
 enum {
   PROP_0,
@@ -207,9 +208,9 @@ gbp_todo_panel_query_tooltip (GbpTodoPanel *self,
 }
 
 static void
-gbp_todo_panel_destroy (GtkWidget *widget)
+gbp_todo_panel_dispose (GObject *object)
 {
-  GbpTodoPanel *self = (GbpTodoPanel *)widget;
+  GbpTodoPanel *self = (GbpTodoPanel *)object;
 
   g_assert (GBP_IS_TODO_PANEL (self));
 
@@ -218,7 +219,7 @@ gbp_todo_panel_destroy (GtkWidget *widget)
 
   g_clear_object (&self->model);
 
-  GTK_WIDGET_CLASS (gbp_todo_panel_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_todo_panel_parent_class)->dispose (object);
 }
 
 static void
@@ -263,12 +264,10 @@ static void
 gbp_todo_panel_class_init (GbpTodoPanelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gbp_todo_panel_dispose;
   object_class->get_property = gbp_todo_panel_get_property;
   object_class->set_property = gbp_todo_panel_set_property;
-
-  widget_class->destroy = gbp_todo_panel_destroy;
 
   properties [PROP_MODEL] =
     g_param_spec_object ("model",
@@ -290,36 +289,24 @@ gbp_todo_panel_init (GbpTodoPanel *self)
   self->stack = g_object_new (GTK_TYPE_STACK,
                               "transition-duration", 333,
                               "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
-                              "homogeneous", FALSE,
-                              "visible", TRUE,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->stack));
+  panel_widget_set_child (PANEL_WIDGET (self), GTK_WIDGET (self->stack));
 
-  empty = g_object_new (DZL_TYPE_EMPTY_STATE,
+  empty = g_object_new (ADW_TYPE_STATUS_PAGE,
                         "title", _("Loading TODOs…"),
-                        "subtitle", _("Please wait while we scan your project"),
+                        "description", _("Please wait while we scan your project"),
                         "icon-name", "builder-todo-symbolic",
-                        "valign", GTK_ALIGN_START,
-                        "visible", TRUE,
                         NULL);
-  gtk_container_add (GTK_CONTAINER (self->stack), empty);
+  gtk_stack_add_named (self->stack, empty, "empty");
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                           "visible", TRUE,
                            "vexpand", TRUE,
                            NULL);
-  gtk_container_add_with_properties (GTK_CONTAINER (self->stack), scroller,
-                                     "name", "todos",
-                                     NULL);
+  gtk_stack_add_named (self->stack, scroller, "todos");
 
   self->tree_view = g_object_new (IDE_TYPE_FANCY_TREE_VIEW,
                                   "has-tooltip", TRUE,
-                                  "visible", TRUE,
                                   NULL);
-  g_signal_connect (self->tree_view,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->tree_view);
   g_signal_connect_swapped (self->tree_view,
                             "row-activated",
                             G_CALLBACK (gbp_todo_panel_row_activated),
@@ -328,8 +315,8 @@ gbp_todo_panel_init (GbpTodoPanel *self)
                             "query-tooltip",
                             G_CALLBACK (gbp_todo_panel_query_tooltip),
                             self);
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->tree_view), "i-wanna-be-listbox");
-  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree_view));
+  gtk_widget_add_css_class (GTK_WIDGET (self->tree_view), "i-wanna-be-listbox");
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), GTK_WIDGET (self->tree_view));
 
   selection = gtk_tree_view_get_selection (self->tree_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_NONE);

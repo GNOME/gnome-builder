@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015-2018 Christian Hergert
-Depends=editor;
 Description=Find and present To-Do items from source code
 Embedded=_gbp_todo_register_types
 Module=todo
