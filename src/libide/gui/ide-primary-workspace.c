@@ -58,6 +58,7 @@ struct _IdePrimaryWorkspace
   PanelPaned         *edge_start;
   PanelPaned         *edge_end;
   PanelPaned         *edge_bottom;
+  IdeGrid            *grid;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -83,6 +84,49 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
     g_object_bind_property (project_info, "name",
                             self->project_title, "label",
                             G_BINDING_SYNC_CREATE);
+}
+
+static void
+ide_primary_workspace_add_page (IdeWorkspace     *workspace,
+                                IdePage          *page,
+                                IdePanelPosition *position)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+  PanelFrame *frame;
+  PanelDockPosition edge;
+  guint column;
+  guint row;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+  g_assert (IDE_IS_PAGE (page));
+  g_assert (position != NULL);
+
+  ide_panel_position_get_edge (position, &edge);
+
+  switch (edge)
+    {
+    case PANEL_DOCK_POSITION_START:
+    case PANEL_DOCK_POSITION_END:
+    case PANEL_DOCK_POSITION_BOTTOM:
+    case PANEL_DOCK_POSITION_TOP:
+    default:
+      g_warning ("Primary workspace only supports center position");
+      return;
+
+    case PANEL_DOCK_POSITION_CENTER:
+      break;
+    }
+
+  if (!ide_panel_position_get_column (position, &column))
+    column = 0;
+
+  if (!ide_panel_position_get_row (position, &row))
+    row = 0;
+
+  frame = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (self->grid), column), row);
+
+  /* TODO: Handle depth */
+  panel_frame_add (frame, PANEL_WIDGET (page));
 }
 
 static void
@@ -160,16 +204,18 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   ide_workspace_class_set_kind (workspace_class, "primary");
 
   workspace_class->context_set = ide_primary_workspace_context_set;
+  workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-primary-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, add_button);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_bottom);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_end);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_start);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, grid);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_start);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_end);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_bottom);
 
   g_type_ensure (IDE_TYPE_GRID);
   g_type_ensure (IDE_TYPE_NOTIFICATIONS_BUTTON);
