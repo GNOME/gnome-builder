@@ -29,6 +29,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-preferences-builtin-private.h"
+#include "ide-style-variant-preview-private.h"
 
 static gboolean is_plugin_category (const char *name);
 
@@ -580,14 +581,73 @@ ide_preferences_builtin_register_vcs (DzlPreferences *preferences)
   g_clear_object (&extensions);
 }
 #endif
+#endif
 
 static void
-ide_preferences_builtin_register_sdks (DzlPreferences *preferences)
+handle_style_variant (const char                   *page_name,
+                      const IdePreferenceItemEntry *entry,
+                      AdwPreferencesGroup          *group,
+                      gpointer                      user_data)
 {
-  /* only the page goes here, plugins will fill in the details */
-  dzl_preferences_add_page (preferences, "sdk", _("SDKs"), 550);
+  static const struct {
+    const char *key;
+    AdwColorScheme color_scheme;
+    const char *title;
+  } variants[] = {
+    { "default", ADW_COLOR_SCHEME_DEFAULT, N_("Follow") },
+    { "light", ADW_COLOR_SCHEME_FORCE_LIGHT, N_("Light") },
+    { "dark", ADW_COLOR_SCHEME_FORCE_DARK, N_("Dark") },
+  };
+  GtkBox *box;
+  GtkBox *options;
+
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "css-name", "list",
+                      NULL);
+  gtk_widget_add_css_class (GTK_WIDGET (box), "boxed-list");
+  gtk_widget_add_css_class (GTK_WIDGET (box), "style-variant");
+
+  options = g_object_new (GTK_TYPE_BOX,
+                          "halign", GTK_ALIGN_CENTER,
+                          NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (variants); i++)
+    {
+      IdeStyleVariantPreview *preview;
+      GtkButton *button;
+      GtkLabel *label;
+      GtkBox *vbox;
+
+      vbox = g_object_new (GTK_TYPE_BOX,
+                           "orientation", GTK_ORIENTATION_VERTICAL,
+                           "spacing", 8,
+                           "margin-top", 18,
+                           "margin-bottom", 18,
+                           "margin-start", 9,
+                           "margin-end", 9,
+                           NULL);
+      preview = g_object_new (IDE_TYPE_STYLE_VARIANT_PREVIEW,
+                              "color-scheme", variants[i].color_scheme,
+                              NULL);
+      button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                             "action-name", "app.style-variant",
+                             "child", preview,
+                             NULL);
+      gtk_actionable_set_action_target (GTK_ACTIONABLE (button), "s", variants[i].key);
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "xalign", 0.5f,
+                            "label", g_dgettext (NULL, variants[i].title),
+                            NULL);
+      gtk_box_append (vbox, GTK_WIDGET (button));
+      gtk_box_append (vbox, GTK_WIDGET (label));
+      gtk_box_append (options, GTK_WIDGET (vbox));
+    }
+
+  gtk_box_append (box, GTK_WIDGET (options));
+  adw_preferences_group_add (group, GTK_WIDGET (box));
 }
-#endif
 
 static const IdePreferencePageEntry pages[] = {
   { NULL, "visual",   "appearance", "org.gnome.Builder-appearance-symbolic",    0, N_("Appearance") },
@@ -642,6 +702,8 @@ static const IdePreferenceGroupEntry groups[] = {
 };
 
 static const IdePreferenceItemEntry items[] = {
+  { "appearance", "style", "style-variant", 0, handle_style_variant },
+
   { "appearance", "accessories", "grid", 0, ide_preferences_window_toggle,
     N_("Show Grid Pattern"),
     N_("Display a grid pattern underneath source code"),
@@ -851,6 +913,7 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
                         "child", preview,
                         "margin-bottom", 12,
                         NULL);
+  gtk_widget_add_css_class (GTK_WIDGET (frame), "text-preview");
   adw_preferences_group_add (group, GTK_WIDGET (frame));
 
   manager = gtk_source_style_scheme_manager_get_default ();
@@ -867,6 +930,9 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
     {
       GtkSourceStyleScheme *scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_ids[i]);
       GtkWidget *selector = gtk_source_style_scheme_preview_new (scheme);
+
+      gtk_actionable_set_action_name (GTK_ACTIONABLE (selector), "app.style-scheme-name");
+      gtk_actionable_set_action_target (GTK_ACTIONABLE (selector), "s", scheme_ids[i]);
 
       gtk_flow_box_append (flowbox, selector);
     }
