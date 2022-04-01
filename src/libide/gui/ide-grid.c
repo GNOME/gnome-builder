@@ -43,7 +43,17 @@ G_DEFINE_TYPE (IdeGrid, ide_grid, PANEL_TYPE_GRID)
 static PanelFrame *
 ide_grid_real_create_frame (PanelGrid *grid)
 {
-  return PANEL_FRAME (ide_frame_new ());
+  PanelFrame *frame;
+  PanelFrameHeader *header;
+
+  g_assert (PANEL_IS_GRID (grid));
+
+  frame = PANEL_FRAME (ide_frame_new ());
+  header = PANEL_FRAME_HEADER (panel_frame_header_bar_new ());
+
+  panel_frame_set_header (frame, header);
+
+  return frame;
 }
 
 static void
@@ -57,6 +67,13 @@ ide_grid_class_init (IdeGridClass *klass)
 static void
 ide_grid_init (IdeGrid *self)
 {
+  PanelGridColumn *column;
+  PanelFrame *row;
+
+  column = panel_grid_get_column (PANEL_GRID (self), 0);
+  row = panel_grid_column_get_row (column, 0);
+
+  (void)row;
 }
 
 GtkWidget *
