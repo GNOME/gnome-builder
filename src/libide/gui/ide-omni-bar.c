@@ -24,6 +24,7 @@
 
 #include <libpeas/peas.h>
 
+#include "ide-application.h"
 #include "ide-gui-global.h"
 #include "ide-notification-list-box-row-private.h"
 #include "ide-notification-stack-private.h"
@@ -59,7 +60,14 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeOmniBar, ide_omni_bar, PANEL_TYPE_OMNI_BAR,
                                G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_omni_bar_init_action_group)
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
+enum {
+  PROP_0,
+  PROP_MENU_ID,
+  N_PROPS
+};
+
 static GtkBuildableIface *parent_buildable_iface;
+static GParamSpec *properties [N_PROPS];
 
 static void
 ide_omni_bar_notification_stack_changed_cb (IdeOmniBar           *self,
@@ -281,15 +289,48 @@ ide_omni_bar_dispose (GObject *object)
 }
 
 static void
+ide_omni_bar_set_property (GObject      *object,
+                           guint         prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
+{
+  IdeOmniBar *self = IDE_OMNI_BAR (object);
+
+  switch (prop_id)
+    {
+    case PROP_MENU_ID:
+      {
+        const char *menu_id = g_value_get_string (value);
+        GMenu *menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, menu_id);
+        g_object_set (self, "menu-model", menu, NULL);
+        break;
+      }
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_omni_bar_class_init (IdeOmniBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ide_omni_bar_dispose;
+  object_class->set_property = ide_omni_bar_set_property;
 
   widget_class->query_tooltip = ide_omni_bar_query_tooltip;
   widget_class->measure = ide_omni_bar_measure;
+
+  properties [PROP_MENU_ID] =
+    g_param_spec_string ("menu-id",
+                         "Menu ID",
+                         "The identifier for the merged menu",
+                         NULL,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-omni-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, notification_stack);

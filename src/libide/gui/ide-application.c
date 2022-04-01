@@ -721,17 +721,20 @@ ide_application_find_addin_by_module_name (IdeApplication *self,
 /**
  * ide_application_get_menu_by_id:
  * @self: a #IdeApplication
- * @menu_id: the menu identifier
+ * @menu_id: (nullable): the menu identifier
  *
  * Gets the merged menu by it's identifier.
  *
- * Returns: (transfer none): a #GMenu
+ * Returns: (transfer none) (nullable): a #GMenu or %NULL if @menu_id is %NULL
  */
 GMenu *
 ide_application_get_menu_by_id (IdeApplication *self,
                                 const char     *menu_id)
 {
   g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  if (menu_id == NULL)
+    return NULL;
 
   return ide_menu_manager_get_menu_by_id (self->menu_manager, menu_id);
 }
