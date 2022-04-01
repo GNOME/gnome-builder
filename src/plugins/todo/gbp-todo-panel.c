@@ -315,7 +315,6 @@ gbp_todo_panel_init (GbpTodoPanel *self)
                             "query-tooltip",
                             G_CALLBACK (gbp_todo_panel_query_tooltip),
                             self);
-  gtk_widget_add_css_class (GTK_WIDGET (self->tree_view), "i-wanna-be-listbox");
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), GTK_WIDGET (self->tree_view));
 
   selection = gtk_tree_view_get_selection (self->tree_view);
