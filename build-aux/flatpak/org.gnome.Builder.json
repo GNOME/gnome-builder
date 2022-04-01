@@ -419,7 +419,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git",
+                    "branch" : "sysprof-3-44"
                 }
             ]
         },
