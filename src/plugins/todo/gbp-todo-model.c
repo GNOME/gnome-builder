@@ -20,9 +20,10 @@
 
 #define G_LOG_DOMAIN "gbp-todo-model"
 
+#include <string.h>
+
 #include <libide-code.h>
 #include <libide-gui.h>
-#include <string.h>
 
 #include "gbp-todo-model.h"
 #include "gbp-todo-item.h"
@@ -502,7 +503,7 @@ gbp_todo_model_mine_worker (IdeTask      *task,
           continue;
         }
 
-      if (dzl_str_empty0 (line) || len > 256)
+      if (ide_str_empty0 (line) || len > 256)
         {
           /* cancel anything if the line is too long so that we don't get into
            * pathological cases.
@@ -607,9 +608,9 @@ gbp_todo_model_mine_worker (IdeTask      *task,
   info->self = g_object_ref (source_object);
   info->items = g_steal_pointer (&items);
 
-  gdk_threads_add_idle_full (G_PRIORITY_LOW + 100,
-                             gbp_todo_model_merge_results,
-                             info, result_info_free);
+  g_idle_add_full (G_PRIORITY_LOW + 100,
+                   gbp_todo_model_merge_results,
+                   info, result_info_free);
 
   ide_task_return_boolean (task, TRUE);
 }
