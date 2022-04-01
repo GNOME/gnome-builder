@@ -66,6 +66,9 @@ struct _IdeWorkspaceClass
   void     (*add_pane)              (IdeWorkspace         *self,
                                      IdePane              *pane,
                                      IdePanelPosition     *position);
+  void     (*add_page)              (IdeWorkspace         *self,
+                                     IdePage              *page,
+                                     IdePanelPosition     *position);
   void     (*restore_size)          (IdeWorkspace         *self,
                                      int                   width,
                                      int                   height);
@@ -92,6 +95,10 @@ IdePage      *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
 void          ide_workspace_add_pane                 (IdeWorkspace      *self,
                                                       IdePane           *pane,
+                                                      IdePanelPosition  *position);
+IDE_AVAILABLE_IN_ALL
+void          ide_workspace_add_page                 (IdeWorkspace      *self,
+                                                      IdePage           *pane,
                                                       IdePanelPosition  *position);
 
 G_END_DECLS

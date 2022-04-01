@@ -693,6 +693,22 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
 }
 
 void
+ide_workspace_add_page (IdeWorkspace     *self,
+                        IdePage          *page,
+                        IdePanelPosition *position)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_PAGE (page));
+  g_return_if_fail (position != NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->add_page)
+    IDE_WORKSPACE_GET_CLASS (self)->add_page (self, page, position);
+  else
+    g_critical ("%s does not support adding pages",
+                G_OBJECT_TYPE_NAME (self));
+}
+
+void
 ide_workspace_add_pane (IdeWorkspace     *self,
                         IdePane          *pane,
                         IdePanelPosition *position)
@@ -706,7 +722,6 @@ ide_workspace_add_pane (IdeWorkspace     *self,
   else
     g_critical ("%s does not support adding panels",
                 G_OBJECT_TYPE_NAME (self));
-
 }
 
 static void
