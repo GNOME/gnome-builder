@@ -22,8 +22,8 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+
 #include <libide-gui.h>
 
 #include "ide-terminal.h"
@@ -93,30 +93,29 @@ static const GdkRGBA solarized_palette[] = {
 };
 
 static void
-style_context_changed (IdeTerminal *self,
-                       GtkStyleContext *style_context)
+ide_terminal_css_changed (GtkWidget         *widget,
+                          GtkCssStyleChange *change)
 {
-  GtkStateFlags state;
+  GtkStyleContext *style_context;
   GdkRGBA fg;
   GdkRGBA bg;
 
-  g_assert (GTK_IS_STYLE_CONTEXT (style_context));
-  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (IDE_IS_TERMINAL (widget));
 
-  state = gtk_style_context_get_state (style_context);
+  style_context = gtk_widget_get_style_context (widget);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_context_get_color (style_context, state, &fg);
-  gtk_style_context_get_background_color (style_context, state, &bg);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  if (!gtk_style_context_lookup_color (style_context, "window_fg_color", &fg))
+    gdk_rgba_parse (&fg, "#eeeeec");
 
-  if (bg.alpha == 0.0)
-    gdk_rgba_parse (&bg, "#f6f7f8");
+  if (!gtk_style_context_lookup_color (style_context, "window_bg_color", &bg))
+    gdk_rgba_parse (&bg, "#242424");
 
-  vte_terminal_set_colors (VTE_TERMINAL (self), &fg, &bg,
+  vte_terminal_set_colors (VTE_TERMINAL (widget),
+                           &fg, &bg,
                            solarized_palette, G_N_ELEMENTS (solarized_palette));
 }
 
+#if 0
 static void
 popup_menu_detach (GtkWidget *attach_widget,
                    GtkMenu   *menu)
@@ -219,49 +218,47 @@ ide_terminal_popup_menu (GtkWidget *widget)
   return TRUE;
 }
 
-static gboolean
-ide_terminal_button_press_event (GtkWidget      *widget,
-                                 GdkEventButton *button)
+static void
+ide_terminal_click_pressed_cb (IdeTerminal     *self,
+                               int              n_presses,
+                               double           x,
+                               double           y,
+                               GtkGestureClick *click)
 {
   IdeTerminal *self = (IdeTerminal *)widget;
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  int button;
 
   g_assert (IDE_IS_TERMINAL (self));
-  g_assert (button != NULL);
+  g_assert (GTK_IS_GESTURE_CLICK (click));
 
-  if (button->type == GDK_BUTTON_PRESS)
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click));
+
+  if (button == 1)
     {
-      if (button->button == GDK_BUTTON_PRIMARY)
+      g_autofree gchar *pattern = NULL;
+
+      pattern = vte_terminal_match_check_event (VTE_TERMINAL (self), (GdkEvent *)button, NULL);
+
+      if (pattern != NULL)
         {
-          g_autofree gchar *pattern = NULL;
+          gboolean ret = GDK_EVENT_PROPAGATE;
 
-          pattern = vte_terminal_match_check_event (VTE_TERMINAL (self), (GdkEvent *)button, NULL);
+          g_free (priv->url);
+          priv->url = g_steal_pointer (&pattern);
 
-          if (pattern != NULL)
-            {
-              gboolean ret = GDK_EVENT_PROPAGATE;
-
-              g_free (priv->url);
-              priv->url = g_steal_pointer (&pattern);
-
-              g_signal_emit (self, signals [OPEN_LINK], 0, &ret);
-
-              return ret;
-            }
-        }
-      else if (button->button == GDK_BUTTON_SECONDARY)
-        {
-          if (!gtk_widget_has_focus (GTK_WIDGET (self)))
-            gtk_widget_grab_focus (GTK_WIDGET (self));
-
-          ide_terminal_do_popup (self, (GdkEvent *)button);
-
-          return GDK_EVENT_STOP;
+          g_signal_emit (self, signals [OPEN_LINK], 0, &ret);
         }
     }
+  else if (button == 3)
+    {
+      if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+        gtk_widget_grab_focus (GTK_WIDGET (self));
 
-  return GTK_WIDGET_CLASS (ide_terminal_parent_class)->button_press_event (widget, button);
+      ide_terminal_do_popup (self, (GdkEvent *)button);
+    }
 }
+#endif
 
 static void
 ide_terminal_real_select_all (IdeTerminal *self,
@@ -286,8 +283,7 @@ ide_terminal_copy_link_address (IdeTerminal *self)
   if (ide_str_empty0 (priv->url))
     return FALSE;
 
-  gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD),
-                          priv->url, strlen (priv->url));
+  gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self)), priv->url);
 
   return TRUE;
 }
@@ -366,6 +362,21 @@ ide_terminal_open_link (IdeTerminal *self)
   return FALSE;
 }
 
+static GtkWidget *
+find_child_typed (GtkWidget *parent,
+                  GType      child_type)
+{
+  for (GtkWidget *child = gtk_widget_get_first_child (parent);
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (g_type_is_a (G_OBJECT_TYPE (child), child_type))
+        return child;
+    }
+
+  return NULL;
+}
+
 static void
 ide_terminal_real_search_reveal (IdeTerminal *self)
 {
@@ -377,7 +388,7 @@ ide_terminal_real_search_reveal (IdeTerminal *self)
 
   if (parent_overlay != NULL)
     {
-      GtkRevealer *revealer = dzl_gtk_widget_find_child_typed (parent_overlay, GTK_TYPE_REVEALER);
+      GtkRevealer *revealer = GTK_REVEALER (find_child_typed (parent_overlay, GTK_TYPE_REVEALER));
 
       if (revealer != NULL && !gtk_revealer_get_child_revealed (revealer))
         gtk_revealer_set_reveal_child (revealer, TRUE);
@@ -405,30 +416,28 @@ ide_terminal_font_changed (IdeTerminal *self,
 }
 
 static void
-ide_terminal_size_allocate (GtkWidget     *widget,
-                            GtkAllocation *alloc)
+ide_terminal_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   IdeTerminal *self = (IdeTerminal *)widget;
-  glong width;
-  glong height;
-  glong columns;
-  glong rows;
+  int char_width, char_height;
+  int columns, rows;
 
-  GTK_WIDGET_CLASS (ide_terminal_parent_class)->size_allocate (widget, alloc);
+  GTK_WIDGET_CLASS (ide_terminal_parent_class)->size_allocate (widget, width, height, baseline);
 
-  if ((alloc->width == 0) || (alloc->height == 0))
+  if (width == 0 || height == 0)
     return;
 
-  width = vte_terminal_get_char_width (VTE_TERMINAL (self));
-  height = vte_terminal_get_char_height (VTE_TERMINAL (self));
-
-  if ((width == 0) || (height == 0))
+  char_width = vte_terminal_get_char_width (VTE_TERMINAL (self));
+  char_height = vte_terminal_get_char_height (VTE_TERMINAL (self));
+  if (char_width == 0 || char_height == 0)
     return;
 
-  columns = alloc->width / width;
-  rows = alloc->height / height;
-
-  if ((columns < 2) || (rows < 2))
+  columns = width / char_width;
+  rows = height / char_height;
+  if (columns < 2 || rows < 2)
     return;
 
   vte_terminal_set_size (VTE_TERMINAL (self), columns, rows);
@@ -455,28 +464,26 @@ update_scrollback_cb (IdeTerminal *self,
 }
 
 static void
-ide_terminal_destroy (GtkWidget *widget)
+ide_terminal_dispose (GObject *object)
 {
-  IdeTerminal *self = (IdeTerminal *)widget;
+  IdeTerminal *self = (IdeTerminal *)object;
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
-
-  g_assert (IDE_IS_TERMINAL (self));
 
   g_clear_object (&priv->settings);
   g_clear_pointer (&priv->url, g_free);
 
-  GTK_WIDGET_CLASS (ide_terminal_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_terminal_parent_class)->dispose (object);
 }
 
 static void
 ide_terminal_class_init (IdeTerminalClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkBindingSet *binding_set;
 
-  widget_class->destroy = ide_terminal_destroy;
-  widget_class->button_press_event = ide_terminal_button_press_event;
-  widget_class->popup_menu = ide_terminal_popup_menu;
+  object_class->dispose = ide_terminal_dispose;
+
+  widget_class->css_changed = ide_terminal_css_changed;
   widget_class->size_allocate = ide_terminal_size_allocate;
 
   klass->copy_link_address = ide_terminal_copy_link_address;
@@ -534,34 +541,15 @@ ide_terminal_class_init (IdeTerminalClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_c,
-                                GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "copy-clipboard",
-                                0);
-
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_v,
-                                GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "paste-clipboard",
-                                0);
-
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_f,
-                                GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "search-reveal",
-                                0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_c, GDK_SHIFT_MASK|GDK_CONTROL_MASK, "copy-clipboard", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_v, GDK_SHIFT_MASK|GDK_CONTROL_MASK, "paste-clipboard", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_f, GDK_SHIFT_MASK|GDK_CONTROL_MASK, "search-reveal", NULL);
 }
 
 static void
 ide_terminal_init (IdeTerminal *self)
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
-  GtkStyleContext *style_context;
-
-  dzl_widget_action_group_attach (self, "terminal");
 
   for (guint i = 0; i < G_N_ELEMENTS (url_regexes); i++)
     {
@@ -569,7 +557,7 @@ ide_terminal_init (IdeTerminal *self)
       const gchar *pattern = url_regexes[i];
       gint tag;
 
-      regex = vte_regex_new_for_match (pattern, DZL_LITERAL_LENGTH (pattern),
+      regex = vte_regex_new_for_match (pattern, strlen (pattern),
                                        VTE_REGEX_FLAGS_DEFAULT | BUILDER_PCRE2_MULTILINE | BUILDER_PCRE2_UCP,
                                        NULL);
       tag = vte_terminal_match_add_regex (VTE_TERMINAL (self), regex, 0);
@@ -598,17 +586,6 @@ ide_terminal_init (IdeTerminal *self)
                            G_CONNECT_SWAPPED);
   ide_terminal_font_changed (self, NULL, priv->settings);
   update_scrollback_cb (self, "scrollback-lines", priv->settings);
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_add_class (style_context, "terminal");
-  g_signal_connect_object (style_context,
-                           "changed",
-                           G_CALLBACK (style_context_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-  style_context_changed (self, style_context);
-
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
   vte_terminal_set_enable_fallback_scrolling (VTE_TERMINAL (self), FALSE);
   vte_terminal_set_scroll_unit_is_pixels (VTE_TERMINAL (self), TRUE);
