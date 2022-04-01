@@ -594,7 +594,7 @@ handle_style_variant (const char                   *page_name,
     AdwColorScheme color_scheme;
     const char *title;
   } variants[] = {
-    { "default", ADW_COLOR_SCHEME_DEFAULT, N_("Follow") },
+    { "default", ADW_COLOR_SCHEME_DEFAULT, N_("Default") },
     { "light", ADW_COLOR_SCHEME_FORCE_LIGHT, N_("Light") },
     { "dark", ADW_COLOR_SCHEME_FORCE_DARK, N_("Dark") },
   };
