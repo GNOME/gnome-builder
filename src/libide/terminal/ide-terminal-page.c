@@ -125,10 +125,10 @@ ide_terminal_page_spawn_cb (GObject      *object,
     }
 
   title = g_strdup_printf ("%s (%s)",
-                           ide_page_get_title (IDE_PAGE (self)) ?: _("Untitled terminal"),
+                           panel_widget_get_title (PANEL_WIDGET (self)) ?: _("Untitled terminal"),
                            /* translators: exited describes that the terminal shell process has exited */
                            _("Exited"));
-  ide_page_set_title (IDE_PAGE (self), title);
+  panel_widget_set_title (PANEL_WIDGET (self), title);
 
   now = g_get_monotonic_time ();
   maybe_flapping = ABS (now - self->last_respawn) < FLAPPING_DURATION_USEC;
@@ -160,7 +160,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
   /* Spawn our terminal and wait for it to exit */
   self->last_respawn = now;
   self->exited = FALSE;
-  ide_page_set_title (IDE_PAGE (self), _("Untitled terminal"));
+  panel_widget_set_title (PANEL_WIDGET (self), _("Untitled terminal"));
   ide_terminal_launcher_spawn_async (self->launcher,
                                      self->pty,
                                      NULL,
@@ -276,7 +276,7 @@ window_title_changed_cb (VteTerminal     *terminal,
   if (title == NULL || title[0] == '\0')
     title = _("Untitled terminal");
 
-  ide_page_set_title (IDE_PAGE (self), title);
+  panel_widget_set_title (PANEL_WIDGET (self), title);
 }
 
 static IdePage *
@@ -307,17 +307,6 @@ ide_terminal_page_grab_focus (GtkWidget *widget)
 }
 
 static void
-on_colors_changed_cb (IdeTerminal     *terminal,
-                      IdeTerminalPage *self)
-{
-  GdkRGBA bg, fg;
-
-  ide_terminal_get_colors (terminal, &bg, &fg);
-  ide_page_set_primary_color_fg (IDE_PAGE (self), &fg);
-  ide_page_set_primary_color_bg (IDE_PAGE (self), &bg);
-}
-
-static void
 ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                     VteTerminal     *terminal)
 {
@@ -328,13 +317,6 @@ ide_terminal_page_connect_terminal (IdeTerminalPage *self,
 
   if (self->destroyed)
     return;
-
-  g_signal_connect_object (terminal,
-                           "colors-changed",
-                           G_CALLBACK (on_colors_changed_cb),
-                           self,
-                           0);
-  on_colors_changed_cb (IDE_TERMINAL (terminal), self);
 
   controller = gtk_event_controller_focus_new ();
   g_signal_connect_object (controller,
@@ -580,7 +562,7 @@ ide_terminal_page_init (IdeTerminalPage *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_page_set_icon_name (IDE_PAGE (self), "builder-terminal-symbolic");
+  panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-terminal-symbolic");
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
   ide_page_set_menu_id (IDE_PAGE (self), "ide-terminal-page-document-menu");
 
@@ -638,7 +620,7 @@ ide_terminal_page_set_launcher (IdeTerminalPage     *self,
       if (launcher != NULL)
         {
           const gchar *title = ide_terminal_launcher_get_title (launcher);
-          ide_page_set_title (IDE_PAGE (self), title);
+          panel_widget_set_title (PANEL_WIDGET (self), title);
           can_split = ide_terminal_launcher_can_respawn (launcher);
         }
       else
