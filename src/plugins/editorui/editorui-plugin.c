@@ -27,6 +27,7 @@
 #include <libide-gui.h>
 
 #include "gbp-editorui-workbench-addin.h"
+#include "gbp-editorui-workspace-addin.h"
 #include "gbp-editorui-resources.h"
 
 _IDE_EXTERN void
@@ -37,4 +38,7 @@ _gbp_editorui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_EDITORUI_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_EDITORUI_WORKSPACE_ADDIN);
 }

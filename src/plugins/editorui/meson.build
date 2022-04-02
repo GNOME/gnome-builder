@@ -1,6 +1,7 @@
 plugins_sources += files([
   'editorui-plugin.c',
   'gbp-editorui-workbench-addin.c',
+  'gbp-editorui-workspace-addin.c',
 ])
 
 plugin_editorui_resources = gnome.compile_resources(
