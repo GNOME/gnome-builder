@@ -31,9 +31,6 @@ G_BEGIN_DECLS
 #include "ide-editor-page.h"
 #include "ide-editor-page-addin.h"
 #include "ide-editor-search.h"
-#include "ide-editor-sidebar.h"
-#include "ide-editor-surface.h"
-#include "ide-editor-utilities.h"
 #include "ide-editor-workspace.h"
 
 #undef IDE_EDITOR_INSIDE
