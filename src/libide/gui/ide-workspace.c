@@ -400,19 +400,6 @@ ide_workspace_get_property (GObject    *object,
 }
 
 static void
-ide_workspace_set_property (GObject      *object,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 ide_workspace_class_init (IdeWorkspaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -422,7 +409,6 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   object_class->dispose = ide_workspace_dispose;
   object_class->finalize = ide_workspace_finalize;
   object_class->get_property = ide_workspace_get_property;
-  object_class->set_property = ide_workspace_set_property;
 
   widget_class->realize = ide_workspace_realize;
   widget_class->size_allocate = ide_workspace_size_allocate;
