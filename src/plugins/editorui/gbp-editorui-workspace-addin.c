@@ -22,17 +22,23 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-editor.h>
 
 #include "gbp-editorui-workspace-addin.h"
 
 struct _GbpEditoruiWorkspaceAddin
 {
-  GObject        parent_instance;
+  GObject          parent_instance;
 
-  IdeWorkspace  *workspace;
+  IdeWorkspace    *workspace;
+  PanelStatusbar  *statusbar;
 
-  GtkMenuButton *indentation;
+  IdeSignalGroup  *view_signals;
+
+  GtkMenuButton   *indentation;
+  GtkLabel        *indentation_label;
 };
 
 #define clear_from_statusbar(s,w) clear_from_statusbar(s, (GtkWidget **)w)
@@ -49,11 +55,42 @@ static void
 }
 
 static void
+notify_indentation_cb (GbpEditoruiWorkspaceAddin *self)
+{
+  IdeSourceView *view;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  if ((view = ide_signal_group_get_target (self->view_signals)))
+    {
+      g_autofree char *label = NULL;
+      gboolean insert_spaces_instead_of_tabs;
+      guint tab_width;
+      int indent_width;
+
+      g_object_get (view,
+                    "tab-width", &tab_width,
+                    "indent-width", &indent_width,
+                    "insert-spaces-instead-of-tabs", &insert_spaces_instead_of_tabs,
+                    NULL);
+
+      if (indent_width <= 0)
+        indent_width = tab_width;
+
+      label = g_strdup_printf ("%s %u:%u",
+                               insert_spaces_instead_of_tabs ?  _("Space") : _("Tab"),
+                               indent_width, tab_width);
+      gtk_label_set_label (self->indentation_label, label);
+    }
+
+  gtk_widget_set_visible (GTK_WIDGET (self->indentation), view != NULL);
+}
+
+static void
 gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
-  PanelStatusbar *statusbar;
   GMenu *menu;
 
   IDE_ENTRY;
@@ -62,16 +99,34 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   self->workspace = workspace;
+  self->statusbar = ide_workspace_get_statusbar (workspace);
 
-  statusbar = ide_workspace_get_statusbar (workspace);
+  self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
+  ide_signal_group_connect_object (self->view_signals,
+                                   "notify::indent-width",
+                                   G_CALLBACK (notify_indentation_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  ide_signal_group_connect_object (self->view_signals,
+                                   "notify::tab-width",
+                                   G_CALLBACK (notify_indentation_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  ide_signal_group_connect_object (self->view_signals,
+                                   "notify::insert-spaces-instead-of-tabs",
+                                   G_CALLBACK (notify_indentation_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
-  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editor-indentation");
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-indent-menu");
+  self->indentation_label = g_object_new (GTK_TYPE_LABEL, NULL);
   self->indentation = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "menu-model", menu,
                                     "direction", GTK_ARROW_UP,
                                     "visible", FALSE,
+                                    "child", self->indentation_label,
                                     NULL);
-  panel_statusbar_add_suffix (statusbar, GTK_WIDGET (self->indentation));
+  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->indentation));
 
   IDE_EXIT;
 }
@@ -81,18 +136,18 @@ gbp_editorui_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                      IdeWorkspace      *workspace)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
-  PanelStatusbar *statusbar;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  statusbar = ide_workspace_get_statusbar (workspace);
+  g_clear_object (&self->view_signals);
 
-  clear_from_statusbar (statusbar, &self->indentation);
+  clear_from_statusbar (self->statusbar, &self->indentation);
 
   self->workspace = NULL;
+  self->statusbar = NULL;
 
   IDE_EXIT;
 }
@@ -102,6 +157,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
                                            IdePage           *page)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
+  IdeSourceView *view = NULL;
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (!page || IDE_IS_PAGE (page));
@@ -109,7 +165,12 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
 
-  gtk_widget_set_visible (GTK_WIDGET (self->indentation), page != NULL);
+  if (page != NULL)
+    view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
+
+  ide_signal_group_set_target (self->view_signals, view);
+
+  notify_indentation_cb (self);
 }
 
 static void
