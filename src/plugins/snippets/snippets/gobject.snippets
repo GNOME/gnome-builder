@@ -188,8 +188,8 @@ snippet gobject
 - desc Create GObject
 	var $1 = GObject.registerClass(
 	class ${1:ClassName} extends ${2:GObject.Object} {
-		_init(${3}) {
-			super._init();
+		constructor(${3}) {
+			super();
 			$0
 		}
 	});
