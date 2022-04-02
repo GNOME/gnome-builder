@@ -35,9 +35,6 @@ typedef struct
   GList        mru_link;
 
   const char  *menu_id;
-  const char  *icon_name;
-  char        *title;
-  GIcon       *icon;
 
   guint        failed : 1;
   guint        modified : 1;
@@ -48,11 +45,7 @@ enum {
   PROP_0,
   PROP_CAN_SPLIT,
   PROP_FAILED,
-  PROP_ICON,
-  PROP_ICON_NAME,
   PROP_MENU_ID,
-  PROP_MODIFIED,
-  PROP_TITLE,
   N_PROPS
 };
 
@@ -61,7 +54,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdePage, ide_page, PANEL_TYPE_WIDGET)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdePage, ide_page, PANEL_TYPE_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
@@ -179,24 +172,8 @@ ide_page_get_property (GObject    *object,
       g_value_set_boolean (value, ide_page_get_failed (self));
       break;
 
-    case PROP_ICON_NAME:
-      g_value_set_static_string (value, ide_page_get_icon_name (self));
-      break;
-
-    case PROP_ICON:
-      g_value_set_object (value, ide_page_get_icon (self));
-      break;
-
     case PROP_MENU_ID:
       g_value_set_static_string (value, ide_page_get_menu_id (self));
-      break;
-
-    case PROP_MODIFIED:
-      g_value_set_boolean (value, ide_page_get_modified (self));
-      break;
-
-    case PROP_TITLE:
-      g_value_set_string (value, ide_page_get_title (self));
       break;
 
     default:
@@ -222,24 +199,8 @@ ide_page_set_property (GObject      *object,
       ide_page_set_failed (self, g_value_get_boolean (value));
       break;
 
-    case PROP_ICON_NAME:
-      ide_page_set_icon_name (self, g_value_get_string (value));
-      break;
-
-    case PROP_ICON:
-      ide_page_set_icon (self, g_value_get_object (value));
-      break;
-
     case PROP_MENU_ID:
       ide_page_set_menu_id (self, g_value_get_string (value));
-      break;
-
-    case PROP_MODIFIED:
-      ide_page_set_modified (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_TITLE:
-      ide_page_set_title (self, g_value_get_string (value));
       break;
 
     default:
@@ -277,38 +238,10 @@ ide_page_class_init (IdePageClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_ICON] =
-    g_param_spec_object ("icon",
-                         "Icon",
-                         "A GIcon for the view",
-                         G_TYPE_ICON,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_ICON_NAME] =
-    g_param_spec_string ("icon-name",
-                         "Icon Name",
-                         "The icon-name describing the view content",
-                         "text-x-generic-symbolic",
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_MENU_ID] =
     g_param_spec_string ("menu-id",
                          "Menu ID",
                          "The identifier of the GMenu to use in the document popover",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_MODIFIED] =
-    g_param_spec_boolean ("modified",
-                          "Modified",
-                          "If the view has been modified from the saved content",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_TITLE] =
-    g_param_spec_string ("title",
-                         "Title",
-                         "The title of the document or view",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -354,38 +287,6 @@ ide_page_init (IdePage *self)
    * stash a simple action somewhere.
    */
   gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (group));
-}
-
-GtkWidget *
-ide_page_new (void)
-{
-  return g_object_new (IDE_TYPE_PAGE, NULL);
-}
-
-const char *
-ide_page_get_title (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->title;
-}
-
-void
-ide_page_set_title (IdePage    *self,
-                    const char *title)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  if (g_strcmp0 (title, priv->title) != 0)
-    {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
-    }
 }
 
 const char *
@@ -462,97 +363,6 @@ ide_page_set_failed (IdePage  *self,
     {
       priv->failed = failed;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FAILED]);
-    }
-}
-
-gboolean
-ide_page_get_modified (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), FALSE);
-
-  return priv->modified;
-}
-
-void
-ide_page_set_modified (IdePage  *self,
-                       gboolean  modified)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  modified = !!modified;
-
-  if (priv->modified != modified)
-    {
-      priv->modified = modified;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODIFIED]);
-    }
-}
-
-/**
- * ide_page_get_icon:
- * @self: a #IdePage
- *
- * Gets the #GIcon to represent the view.
- *
- * Returns: (transfer none) (nullable): A #GIcon or %NULL
- */
-GIcon *
-ide_page_get_icon (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  if (priv->icon == NULL)
-    {
-      if (priv->icon_name != NULL)
-        priv->icon = g_icon_new_for_string (priv->icon_name, NULL);
-    }
-
-  return priv->icon;
-}
-
-void
-ide_page_set_icon (IdePage *self,
-                   GIcon   *icon)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  if (g_set_object (&priv->icon, icon))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON]);
-}
-
-const char *
-ide_page_get_icon_name (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->icon_name;
-}
-
-void
-ide_page_set_icon_name (IdePage    *self,
-                        const char *icon_name)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  icon_name = g_intern_string (icon_name);
-
-  if (icon_name != priv->icon_name)
-    {
-      priv->icon_name = icon_name;
-      g_clear_object (&priv->icon);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
     }
 }
 
