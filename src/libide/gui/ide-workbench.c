@@ -1836,15 +1836,15 @@ ide_workbench_open_cb (GObject      *object,
 
   next = g_ptr_array_index (o->addins, 0);
 
-  ide_workbench_addin_open_at_async (next,
-                                     o->file,
-                                     o->content_type,
-                                     o->at_line,
-                                     o->at_line_offset,
-                                     o->flags,
-                                     cancellable,
-                                     ide_workbench_open_cb,
-                                     g_steal_pointer (&task));
+  ide_workbench_addin_open_async (next,
+                                  o->file,
+                                  o->content_type,
+                                  o->at_line,
+                                  o->at_line_offset,
+                                  o->flags,
+                                  cancellable,
+                                  ide_workbench_open_cb,
+                                  g_steal_pointer (&task));
 }
 
 static gint
@@ -1953,15 +1953,15 @@ ide_workbench_open_query_info_cb (GObject      *object,
 
   first = g_ptr_array_index (o->addins, 0);
 
-  ide_workbench_addin_open_at_async (first,
-                                     o->file,
-                                     o->content_type,
-                                     o->at_line,
-                                     o->at_line_offset,
-                                     o->flags,
-                                     cancellable,
-                                     ide_workbench_open_cb,
-                                     g_steal_pointer (&task));
+  ide_workbench_addin_open_async (first,
+                                  o->file,
+                                  o->content_type,
+                                  o->at_line,
+                                  o->at_line_offset,
+                                  o->flags,
+                                  cancellable,
+                                  ide_workbench_open_cb,
+                                  g_steal_pointer (&task));
 }
 
 /**
