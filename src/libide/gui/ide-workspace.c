@@ -441,7 +441,7 @@ ide_workspace_dispose (GObject *object)
   /* A reference is held during this so it is safe to run code after
    * chaining up to dispose. Force release teh context now.
    */
-  g_clear_object (&self->context);
+  g_clear_object (&priv->context);
 }
 
 static void
