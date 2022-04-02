@@ -2,6 +2,8 @@
 #include <gtksourceview/gtksource.h>
 #include <libide-gui.h>
 
+#include "ide-gui-resources.h"
+
 static void create_source_view_cb (const char                   *page,
                                    const IdePreferenceItemEntry *item,
                                    AdwPreferencesGroup          *pref_group,
@@ -105,6 +107,8 @@ main (int argc,
   gtk_init ();
   adw_init ();
   gtk_source_init ();
+
+  g_resources_register (ide_gui_get_resource ());
 
   main_loop = g_main_loop_new (NULL, FALSE);
   window = IDE_PREFERENCES_WINDOW (ide_preferences_window_new (IDE_PREFERENCES_MODE_EMPTY));
