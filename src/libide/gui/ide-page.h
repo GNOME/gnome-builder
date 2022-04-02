@@ -96,16 +96,6 @@ IDE_AVAILABLE_IN_ALL
 void           ide_page_set_title             (IdePage              *self,
                                                const gchar          *title);
 IDE_AVAILABLE_IN_ALL
-const GdkRGBA *ide_page_get_primary_color_bg  (IdePage              *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_page_set_primary_color_bg  (IdePage              *self,
-                                               const GdkRGBA        *primary_color_bg);
-IDE_AVAILABLE_IN_ALL
-const GdkRGBA *ide_page_get_primary_color_fg  (IdePage              *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_page_set_primary_color_fg  (IdePage              *self,
-                                               const GdkRGBA        *primary_color_fg);
-IDE_AVAILABLE_IN_ALL
 void           ide_page_agree_to_close_async  (IdePage              *self,
                                                GCancellable         *cancellable,
                                                GAsyncReadyCallback   callback,

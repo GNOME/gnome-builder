@@ -39,14 +39,9 @@ typedef struct
   char        *title;
   GIcon       *icon;
 
-  GdkRGBA      primary_color_bg;
-  GdkRGBA      primary_color_fg;
-
   guint        failed : 1;
   guint        modified : 1;
   guint        can_split : 1;
-  guint        primary_color_bg_set : 1;
-  guint        primary_color_fg_set : 1;
 } IdePagePrivate;
 
 enum {
@@ -57,8 +52,6 @@ enum {
   PROP_ICON_NAME,
   PROP_MENU_ID,
   PROP_MODIFIED,
-  PROP_PRIMARY_COLOR_BG,
-  PROP_PRIMARY_COLOR_FG,
   PROP_TITLE,
   N_PROPS
 };
@@ -202,14 +195,6 @@ ide_page_get_property (GObject    *object,
       g_value_set_boolean (value, ide_page_get_modified (self));
       break;
 
-    case PROP_PRIMARY_COLOR_BG:
-      g_value_set_boxed (value, ide_page_get_primary_color_bg (self));
-      break;
-
-    case PROP_PRIMARY_COLOR_FG:
-      g_value_set_boxed (value, ide_page_get_primary_color_fg (self));
-      break;
-
     case PROP_TITLE:
       g_value_set_string (value, ide_page_get_title (self));
       break;
@@ -251,14 +236,6 @@ ide_page_set_property (GObject      *object,
 
     case PROP_MODIFIED:
       ide_page_set_modified (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_PRIMARY_COLOR_BG:
-      ide_page_set_primary_color_bg (self, g_value_get_boxed (value));
-      break;
-
-    case PROP_PRIMARY_COLOR_FG:
-      ide_page_set_primary_color_fg (self, g_value_get_boxed (value));
       break;
 
     case PROP_TITLE:
@@ -328,38 +305,6 @@ ide_page_class_init (IdePageClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  /**
-   * IdePage:primary-color-bg:
-   *
-   * The "primary-color-bg" property should describe the primary color
-   * of the content of the view (if any).
-   *
-   * This can be used by the layout stack to alter the color of the
-   * header to match that of the content.
-   */
-  properties [PROP_PRIMARY_COLOR_BG] =
-    g_param_spec_boxed ("primary-color-bg",
-                        "Primary Color Background",
-                        "The primary foreground color of the content",
-                        GDK_TYPE_RGBA,
-                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  /**
-   * IdePage:primary-color-fg:
-   *
-   * The "primary-color-fg" property should describe the foreground
-   * to use for content above primary-color-bg.
-   *
-   * This can be used by the layout stack to alter the color of the
-   * foreground to match that of the content.
-   */
-  properties [PROP_PRIMARY_COLOR_FG] =
-    g_param_spec_boxed ("primary-color-fg",
-                        "Primary Color Foreground",
-                        "The primary foreground color of the content",
-                        GDK_TYPE_RGBA,
-                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
@@ -391,6 +336,7 @@ ide_page_class_init (IdePageClass *klass)
                   NULL, IDE_TYPE_PAGE, 0);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, "page");
 }
 
 static void
@@ -663,122 +609,6 @@ ide_page_create_split (IdePage *self)
     }
 
   return ret;
-}
-
-/**
- * ide_page_get_primary_color_bg:
- * @self: a #IdePage
- *
- * Gets the #IdePage:primary-color-bg property if it has been set.
- *
- * The primary-color-bg can be used to alter the color of the layout
- * stack header to match the document contents.
- *
- * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
- */
-const GdkRGBA *
-ide_page_get_primary_color_bg (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->primary_color_bg_set ?  &priv->primary_color_bg : NULL;
-}
-
-/**
- * ide_page_set_primary_color_bg:
- * @self: a #IdePage
- * @primary_color_bg: (nullable): a #GdkRGBA or %NULL
- *
- * Sets the #IdePage:primary-color-bg property.
- * If @primary_color_bg is %NULL, the property is unset.
- */
-void
-ide_page_set_primary_color_bg (IdePage       *self,
-                               const GdkRGBA *primary_color_bg)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-  gboolean old_set;
-  GdkRGBA old;
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  old_set = priv->primary_color_bg_set;
-  old = priv->primary_color_bg;
-
-  if (primary_color_bg != NULL)
-    {
-      priv->primary_color_bg = *primary_color_bg;
-      priv->primary_color_bg_set = TRUE;
-    }
-  else
-    {
-      memset (&priv->primary_color_bg, 0, sizeof priv->primary_color_bg);
-      priv->primary_color_bg_set = FALSE;
-    }
-
-  if (old_set != priv->primary_color_bg_set ||
-      !gdk_rgba_equal (&old, &priv->primary_color_bg))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR_BG]);
-}
-
-/**
- * ide_page_get_primary_color_fg:
- * @self: a #IdePage
- *
- * Gets the #IdePage:primary-color-fg property if it has been set.
- *
- * The primary-color-fg can be used to alter the foreground color of the layout
- * stack header to match the document contents.
- *
- * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
- */
-const GdkRGBA *
-ide_page_get_primary_color_fg (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->primary_color_fg_set ?  &priv->primary_color_fg : NULL;
-}
-
-/**
- * ide_page_set_primary_color_fg:
- * @self: a #IdePage
- * @primary_color_fg: (nullable): a #GdkRGBA or %NULL
- *
- * Sets the #IdePage:primary-color-fg property.
- * If @primary_color_fg is %NULL, the property is unset.
- */
-void
-ide_page_set_primary_color_fg (IdePage       *self,
-                               const GdkRGBA *primary_color_fg)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-  gboolean old_set;
-  GdkRGBA old;
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  old_set = priv->primary_color_fg_set;
-  old = priv->primary_color_fg;
-
-  if (primary_color_fg != NULL)
-    {
-      priv->primary_color_fg = *primary_color_fg;
-      priv->primary_color_fg_set = TRUE;
-    }
-  else
-    {
-      memset (&priv->primary_color_fg, 0, sizeof priv->primary_color_fg);
-      priv->primary_color_fg_set = FALSE;
-    }
-
-  if (old_set != priv->primary_color_fg_set ||
-      !gdk_rgba_equal (&old, &priv->primary_color_fg))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR_FG]);
 }
 
 /**
