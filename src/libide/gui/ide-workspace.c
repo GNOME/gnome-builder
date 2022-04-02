@@ -65,6 +65,12 @@ typedef struct
 
   /* Vertical box for children */
   GtkBox *box;
+
+  /* Raw pointer to the last IdePage that was focused. This is never
+   * dereferenced and only used to compare to determine if we've changed focus
+   * into a new IdePage that must be propagated to the addins.
+   */
+  gpointer current_page_ptr;
 } IdeWorkspacePrivate;
 
 typedef struct
@@ -88,6 +94,22 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICAT
 static GParamSpec *properties [N_PROPS];
 static GSettings *settings;
 
+static IdePage *
+ide_workspace_get_focus_page (IdeWorkspace *self)
+{
+  GtkWidget *focus;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  if ((focus = gtk_root_get_focus (GTK_ROOT (self))))
+    {
+      if (!IDE_IS_PAGE (focus))
+        focus = gtk_widget_get_ancestor (focus, IDE_TYPE_PAGE);
+    }
+
+  return IDE_PAGE (focus);
+}
+
 static void
 ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
                               PeasPluginInfo         *plugin_info,
@@ -96,6 +118,7 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
   IdeWorkspace *self = user_data;
+  IdePage *page;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
@@ -106,6 +129,9 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
            peas_plugin_info_get_module_name (plugin_info));
 
   ide_workspace_addin_load (addin, self);
+
+  if ((page = ide_workspace_get_focus_page (self)))
+    ide_workspace_addin_page_changed (addin, page);
 }
 
 static void
@@ -125,7 +151,25 @@ ide_workspace_addin_removed_cb (IdeExtensionSetAdapter *set,
   g_debug ("Unloading workspace addin from module %s",
            peas_plugin_info_get_module_name (plugin_info));
 
+  ide_workspace_addin_page_changed (addin, NULL);
   ide_workspace_addin_unload (addin, self);
+}
+
+static void
+ide_workspace_addin_page_changed_cb (IdeExtensionSetAdapter *set,
+                                     PeasPluginInfo         *plugin_info,
+                                     PeasExtension          *exten,
+                                     gpointer                user_data)
+{
+  IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
+  IdePage *page = user_data;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
+  g_assert (!page || IDE_IS_PAGE (page));
+
+  ide_workspace_addin_page_changed (addin, page);
 }
 
 static void
@@ -201,6 +245,39 @@ ide_workspace_close_request (GtkWindow *window)
                                                         NULL);
 
   return TRUE;
+}
+
+static void
+ide_workspace_notify_focus_widget (IdeWorkspace *self,
+                                   GParamSpec   *pspec,
+                                   gpointer      user_data)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  IdePage *focus;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (pspec != NULL);
+  g_assert (user_data == NULL);
+
+  focus = ide_workspace_get_focus_page (self);
+
+  if ((gpointer)focus != priv->current_page_ptr)
+    {
+      priv->current_page_ptr = focus;
+
+      if (priv->addins != NULL)
+        {
+          g_object_ref (focus);
+          ide_extension_set_adapter_foreach (priv->addins,
+                                             ide_workspace_addin_page_changed_cb,
+                                             focus);
+          g_object_unref (focus);
+        }
+    }
+
+  IDE_EXIT;
 }
 
 /**
@@ -463,6 +540,12 @@ ide_workspace_init (IdeWorkspace *self)
                             NULL);
   adw_application_window_set_content (ADW_APPLICATION_WINDOW (self),
                                       GTK_WIDGET (priv->box));
+
+  /* Track focus change to propagate to addins */
+  g_signal_connect (self,
+                    "notify::focus-widget",
+                    G_CALLBACK (ide_workspace_notify_focus_widget),
+                    NULL);
 
   /* Initialize GActions for workspace */
   _ide_workspace_init_actions (self);
