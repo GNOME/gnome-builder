@@ -15,9 +15,6 @@ libide_editor_public_headers = [
   'ide-editor-page.h',
   'ide-editor-page-addin.h',
   'ide-editor-search.h',
-  'ide-editor-sidebar.h',
-  'ide-editor-surface.h',
-  'ide-editor-utilities.h',
   'ide-editor-workspace.h',
   'libide-editor.h',
 ]
@@ -39,9 +36,6 @@ libide_editor_public_sources = [
   'ide-editor-page.c',
   'ide-editor-page-addin.c',
   'ide-editor-search.c',
-  'ide-editor-sidebar.c',
-  'ide-editor-surface.c',
-  'ide-editor-utilities.c',
   'ide-editor-workspace.c',
 ]
 
@@ -54,8 +48,6 @@ libide_editor_private_sources = [
   'ide-editor-search-bar.c',
   'ide-editor-search-bar-shortcuts.c',
   'ide-editor-settings-dialog.c',
-  'ide-editor-surface-actions.c',
-  'ide-editor-surface-shortcuts.c',
 ]
 
 libide_editor_sources += libide_editor_public_sources
