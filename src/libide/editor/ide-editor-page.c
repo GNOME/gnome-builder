@@ -36,14 +36,44 @@ G_DEFINE_TYPE (IdeEditorPage, ide_editor_page, IDE_TYPE_PAGE)
 static GParamSpec *properties [N_PROPS];
 
 static void
+ide_editor_page_modified_changed_cb (IdeEditorPage *self,
+                                     IdeBuffer     *buffer)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  panel_widget_set_modified (PANEL_WIDGET (self),
+                             gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)));
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_page_set_buffer (IdeEditorPage *self,
                             IdeBuffer     *buffer)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_EDITOR_PAGE (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   if (g_set_object (&self->buffer, buffer))
-    gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->view), GTK_TEXT_BUFFER (buffer));
+    {
+      gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->view), GTK_TEXT_BUFFER (buffer));
+
+      g_signal_connect_object (buffer,
+                               "modified-changed",
+                               G_CALLBACK (ide_editor_page_modified_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_object_bind_property (buffer, "title", self, "title", G_BINDING_SYNC_CREATE);
+      ide_editor_page_modified_changed_cb (self, buffer);
+    }
+
+  IDE_EXIT;
 }
 
 static gboolean
