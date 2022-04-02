@@ -20,6 +20,13 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
+#include <libide-core.h>
+
+#include "ide-page.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS
@@ -33,10 +40,12 @@ struct _IdeWorkspaceAddinInterface
 {
   GTypeInterface parent_iface;
 
-  void     (*load)        (IdeWorkspaceAddin *self,
-                           IdeWorkspace      *workspace);
-  void     (*unload)      (IdeWorkspaceAddin *self,
-                           IdeWorkspace      *workspace);
+  void     (*load)          (IdeWorkspaceAddin *self,
+                             IdeWorkspace      *workspace);
+  void     (*unload)        (IdeWorkspaceAddin *self,
+                             IdeWorkspace      *workspace);
+  void     (*page_changed)  (IdeWorkspaceAddin *self,
+                             IdePage           *page);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -45,6 +54,9 @@ void               ide_workspace_addin_load                (IdeWorkspaceAddin *s
 IDE_AVAILABLE_IN_ALL
 void               ide_workspace_addin_unload              (IdeWorkspaceAddin *self,
                                                             IdeWorkspace      *workspace);
+IDE_AVAILABLE_IN_ALL
+void               ide_workspace_addin_page_changed        (IdeWorkspaceAddin *self,
+                                                            IdePage           *page);
 IDE_AVAILABLE_IN_ALL
 IdeWorkspaceAddin *ide_workspace_addin_find_by_module_name (IdeWorkspace      *workspace,
                                                             const gchar       *module_name);
