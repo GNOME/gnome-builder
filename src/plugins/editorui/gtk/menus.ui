@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="editor-indentation">
+    <section>
+      <attribute name="label" translatable="yes">Indentation</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Tabs</attribute>
+        <attribute name="action">indent.style('tabs')</attribute>
+        <attribute name="role">radio</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Spaces</attribute>
+        <attribute name="action">indent.style('spaces')</attribute>
+        <attribute name="role">radio</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">Spaces per Tab</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">2</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">3</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">4</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">5</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">8</attribute>
+          </item>
+        </section>
+      </submenu>
+      <submenu>
+        <attribute name="label" translatable="yes">Indentation Size</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">2</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">3</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">4</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">5</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">8</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>

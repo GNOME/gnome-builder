@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/editorui">
     <file>editorui.plugin</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
   </gresource>
 </gresources>
