@@ -87,3 +87,22 @@ ide_workspace_addin_unload (IdeWorkspaceAddin *self,
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->unload)
     IDE_WORKSPACE_ADDIN_GET_IFACE (self)->unload (self, workspace);
 }
+
+/**
+ * ide_workspace_addin_page_changed:
+ * @self: a #IdeWorkspaceAddin
+ * @page: (nullable): an #IdePage or %NULL
+ *
+ * Called when the current page has changed based on focus within
+ * the workspace.
+ */
+void
+ide_workspace_addin_page_changed (IdeWorkspaceAddin *self,
+                                  IdePage           *page)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE_ADDIN (self));
+  g_return_if_fail (!page || IDE_IS_PAGE (page));
+
+  if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->page_changed)
+    IDE_WORKSPACE_ADDIN_GET_IFACE (self)->page_changed (self, page);
+}
