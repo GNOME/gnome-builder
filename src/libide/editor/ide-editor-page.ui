@@ -27,6 +27,7 @@
                     <property name="reveal-child">true</property>
                     <child>
                       <object class="GtkSourceMap" id="map">
+                        <property name="left-margin">6</property>
                         <property name="view">view</property>
                       </object>
                     </child>
