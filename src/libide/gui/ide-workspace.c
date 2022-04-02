@@ -69,10 +69,7 @@ typedef struct
   /* Vertical box for children */
   GtkBox *box;
 
-  /* Raw pointer to the last IdePage that was focused. This is never
-   * dereferenced and only used to compare to determine if we've changed focus
-   * into a new IdePage that must be propagated to the addins.
-   */
+  /* Weak pointer to the current page. */
   gpointer current_page_ptr;
 } IdeWorkspacePrivate;
 
@@ -266,9 +263,14 @@ ide_workspace_notify_focus_widget (IdeWorkspace *self,
 
   focus = ide_workspace_get_focus_page (self);
 
-  if ((gpointer)focus != priv->current_page_ptr)
+  if (priv->current_page_ptr != (gpointer)focus)
     {
-      priv->current_page_ptr = focus;
+      /* Focus changed, but old page is still valid */
+      if (focus == NULL)
+        IDE_EXIT;
+
+      /* Focus changed, and we have a new widget */
+      g_set_weak_pointer (&priv->current_page_ptr, focus);
 
       if (priv->addins != NULL)
         {
@@ -440,6 +442,8 @@ ide_workspace_dispose (GObject *object)
   GtkWindowGroup *group;
 
   g_assert (IDE_IS_WORKSPACE (self));
+
+  g_clear_weak_pointer (&priv->current_page_ptr);
 
   /* Unload addins immediately */
   ide_clear_and_destroy_object (&priv->addins);
