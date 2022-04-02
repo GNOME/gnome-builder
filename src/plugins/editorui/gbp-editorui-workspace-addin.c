@@ -35,10 +35,16 @@ struct _GbpEditoruiWorkspaceAddin
   IdeWorkspace    *workspace;
   PanelStatusbar  *statusbar;
 
+  IdeSignalGroup  *buffer_signals;
   IdeSignalGroup  *view_signals;
 
   GtkMenuButton   *indentation;
   GtkLabel        *indentation_label;
+
+  GtkMenuButton   *position;
+  GtkLabel        *position_label;
+
+  guint            queued_cursor_moved;
 };
 
 #define clear_from_statusbar(s,w) clear_from_statusbar(s, (GtkWidget **)w)
@@ -52,6 +58,24 @@ static void
       panel_statusbar_remove (statusbar, *widget);
       *widget = NULL;
     }
+}
+
+static GtkLabel *
+tnum_label_new (void)
+{
+  static cairo_font_options_t *options;
+  GtkWidget *label;
+
+  if (options == NULL)
+    {
+      options = cairo_font_options_create ();
+      cairo_font_options_set_variations (options, "tnum");
+    }
+
+  label = gtk_label_new (NULL);
+  gtk_widget_set_font_options (label, options);
+
+  return GTK_LABEL (label);
 }
 
 static void
@@ -82,8 +106,43 @@ notify_indentation_cb (GbpEditoruiWorkspaceAddin *self)
                                indent_width, tab_width);
       gtk_label_set_label (self->indentation_label, label);
     }
+}
 
-  gtk_widget_set_visible (GTK_WIDGET (self->indentation), view != NULL);
+static void
+update_position (GbpEditoruiWorkspaceAddin *self)
+{
+  g_autofree char *label = NULL;
+  IdeSourceView *view;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  if ((view = ide_signal_group_get_target (self->view_signals)))
+    label = ide_source_view_dup_position_label (view);
+
+  gtk_label_set_label (self->position_label, label);
+}
+
+static gboolean
+update_position_idle (gpointer data)
+{
+  GbpEditoruiWorkspaceAddin *self = data;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  self->queued_cursor_moved = 0;
+  update_position (self);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+cursor_moved_cb (GbpEditoruiWorkspaceAddin *self)
+{
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  if (self->queued_cursor_moved)
+    return;
+
+  self->queued_cursor_moved = g_idle_add (update_position_idle, self);
 }
 
 static void
@@ -100,6 +159,13 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
   self->statusbar = ide_workspace_get_statusbar (workspace);
+
+  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
+  ide_signal_group_connect_object (self->buffer_signals,
+                                   "cursor-moved",
+                                   G_CALLBACK (cursor_moved_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
   ide_signal_group_connect_object (self->view_signals,
@@ -118,8 +184,9 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    self,
                                    G_CONNECT_SWAPPED);
 
+  /* Indentation status, tabs/spaces/etc */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-indent-menu");
-  self->indentation_label = g_object_new (GTK_TYPE_LABEL, NULL);
+  self->indentation_label = tnum_label_new ();
   self->indentation = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "menu-model", menu,
                                     "direction", GTK_ARROW_UP,
@@ -127,6 +194,15 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                     "child", self->indentation_label,
                                     NULL);
   panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->indentation));
+
+  /* Label for cursor position and jump to line/column */
+  self->position_label = tnum_label_new ();
+  self->position = g_object_new (GTK_TYPE_MENU_BUTTON,
+                                 "direction", GTK_ARROW_UP,
+                                 "visible", FALSE,
+                                 "child", self->position_label,
+                                 NULL);
+  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->position));
 
   IDE_EXIT;
 }
@@ -142,9 +218,16 @@ gbp_editorui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
+  g_clear_object (&self->buffer_signals);
   g_clear_object (&self->view_signals);
 
+  g_clear_handle_id (&self->queued_cursor_moved, g_source_remove);
+
   clear_from_statusbar (self->statusbar, &self->indentation);
+  clear_from_statusbar (self->statusbar, &self->position);
+
+  self->indentation_label = NULL;
+  self->position_label = NULL;
 
   self->workspace = NULL;
   self->statusbar = NULL;
@@ -158,19 +241,30 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
   IdeSourceView *view = NULL;
+  IdeBuffer *buffer = NULL;
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (!page || IDE_IS_PAGE (page));
+
+  g_clear_handle_id (&self->queued_cursor_moved, g_source_remove);
 
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
 
   if (page != NULL)
-    view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
+    {
+      view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
+      buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+    }
 
+  ide_signal_group_set_target (self->buffer_signals, buffer);
   ide_signal_group_set_target (self->view_signals, view);
 
   notify_indentation_cb (self);
+  update_position (self);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->indentation), page != NULL);
+  gtk_widget_set_visible (GTK_WIDGET (self->position), page != NULL);
 }
 
 static void
