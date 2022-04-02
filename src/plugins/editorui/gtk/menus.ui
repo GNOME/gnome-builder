@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="editor-indentation">
-    <section>
+  <menu id="editorui-indent-menu">
+    <section id="editorui-indent-section">
       <attribute name="label" translatable="yes">Indentation</attribute>
       <item>
         <attribute name="label" translatable="yes">Tabs</attribute>
@@ -14,46 +14,42 @@
         <attribute name="role">radio</attribute>
       </item>
     </section>
-    <section>
-      <submenu>
+    <section id="editorui-tab-section">
+      <submenu id="editorui-tab-submenu">
         <attribute name="label" translatable="yes">Spaces per Tab</attribute>
-        <section>
-          <item>
-            <attribute name="label" translatable="yes">2</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">3</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">4</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">5</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">8</attribute>
-          </item>
-        </section>
+        <item>
+          <attribute name="label" translatable="yes">2</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">3</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">4</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">5</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">8</attribute>
+        </item>
       </submenu>
-      <submenu>
+      <submenu id="editorui-indent-submenu">
         <attribute name="label" translatable="yes">Indentation Size</attribute>
-        <section>
-          <item>
-            <attribute name="label" translatable="yes">2</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">3</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">4</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">5</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">8</attribute>
-          </item>
-        </section>
+        <item>
+          <attribute name="label" translatable="yes">2</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">3</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">4</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">5</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">8</attribute>
+        </item>
       </submenu>
     </section>
   </menu>
