@@ -203,24 +203,6 @@ ide_workspace_close_request (GtkWindow *window)
   return TRUE;
 }
 
-static void
-ide_workspace_dispose (GObject *object)
-{
-  IdeWorkspace *self = (IdeWorkspace *)object;
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  GtkWindowGroup *group;
-
-  g_assert (IDE_IS_WORKSPACE (self));
-
-  ide_clear_and_destroy_object (&priv->addins);
-
-  group = gtk_window_get_group (GTK_WINDOW (self));
-  if (IDE_IS_WORKBENCH (group))
-    ide_workbench_remove_workspace (IDE_WORKBENCH (group), self);
-
-  G_OBJECT_CLASS (ide_workspace_parent_class)->dispose (object);
-}
-
 /**
  * ide_workspace_class_set_kind:
  * @klass: a #IdeWorkspaceClass
@@ -354,6 +336,35 @@ ide_workspace_realize (GtkWidget *widget)
 
   if (maximized)
     gtk_window_maximize (GTK_WINDOW (self));
+}
+
+static void
+ide_workspace_dispose (GObject *object)
+{
+  IdeWorkspace *self = (IdeWorkspace *)object;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GtkWindowGroup *group;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  /* Unload addins immediately */
+  ide_clear_and_destroy_object (&priv->addins);
+
+  /* Remove the workspace from the workbench MRU/etc */
+  group = gtk_window_get_group (GTK_WINDOW (self));
+  if (IDE_IS_WORKBENCH (group))
+    ide_workbench_remove_workspace (IDE_WORKBENCH (group), self);
+
+  /* Chain up to ensure the GtkWindow cleans up any widgets or other
+   * state attached to the workspace. We keep the context alive during
+   * this process.
+   */
+  G_OBJECT_CLASS (ide_workspace_parent_class)->dispose (object);
+
+  /* A reference is held during this so it is safe to run code after
+   * chaining up to dispose. Force release teh context now.
+   */
+  g_clear_object (&self->context);
 }
 
 static void
