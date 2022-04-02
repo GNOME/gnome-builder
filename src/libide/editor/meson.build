@@ -11,6 +11,7 @@ libide_editor_generated_headers = []
 #
 
 libide_editor_public_headers = [
+  'ide-editor.h',
   'ide-editor-page.h',
   'libide-editor.h',
 ]
@@ -25,6 +26,7 @@ install_headers(libide_editor_public_headers, subdir: libide_editor_header_subdi
 #
 
 libide_editor_public_sources = [
+  'ide-editor.c',
   'ide-editor-page.c',
 ]
 
