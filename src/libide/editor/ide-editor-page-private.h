@@ -1,6 +1,6 @@
-/* ide-editor-settings-dialog.h
+/* ide-editor-page-private.h
  *
- * Copyright 2018 Christian Hergert <unknown@domain.org>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,22 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-#include <libide-editor.h>
+#include "ide-editor-page.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_SETTINGS_DIALOG (ide_editor_settings_dialog_get_type())
+struct _IdeEditorPage
+{
+  IdePage            parent_instance;
 
-G_DECLARE_FINAL_TYPE (IdeEditorSettingsDialog, ide_editor_settings_dialog, IDE, EDITOR_SETTINGS_DIALOG, GtkDialog)
+  /* Owned references */
+  IdeBuffer         *buffer;
 
-IdeEditorSettingsDialog *ide_editor_settings_dialog_new (IdeEditorPage *page);
+  /* Template widgets */
+  IdeSourceView     *view;
+  GtkScrolledWindow *scroller;
+  GtkSourceMap      *map;
+  GtkRevealer       *map_revealer;
+};
 
 G_END_DECLS

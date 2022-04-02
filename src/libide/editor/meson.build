@@ -11,18 +11,11 @@ libide_editor_generated_headers = []
 #
 
 libide_editor_public_headers = [
-  'ide-editor-addin.h',
   'ide-editor-page.h',
-  'ide-editor-page-addin.h',
-  'ide-editor-search.h',
-  'ide-editor-workspace.h',
   'libide-editor.h',
 ]
 
 libide_editor_private_headers = [
-  'ide-editor-print-operation.h',
-  'ide-editor-search-bar.h',
-  'ide-editor-settings-dialog.h',
 ]
 
 install_headers(libide_editor_public_headers, subdir: libide_editor_header_subdir)
@@ -32,22 +25,12 @@ install_headers(libide_editor_public_headers, subdir: libide_editor_header_subdi
 #
 
 libide_editor_public_sources = [
-  'ide-editor-addin.c',
   'ide-editor-page.c',
-  'ide-editor-page-addin.c',
-  'ide-editor-search.c',
-  'ide-editor-workspace.c',
 ]
 
 
 libide_editor_private_sources = [
-  'ide-editor-page-actions.c',
-  'ide-editor-page-settings.c',
-  'ide-editor-page-shortcuts.c',
-  'ide-editor-print-operation.c',
-  'ide-editor-search-bar.c',
-  'ide-editor-search-bar-shortcuts.c',
-  'ide-editor-settings-dialog.c',
+  'ide-editor-init.c',
 ]
 
 libide_editor_sources += libide_editor_public_sources

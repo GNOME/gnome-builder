@@ -38,6 +38,7 @@
 
 #include "ide-application-private.h"
 #include "ide-build-ident.h"
+#include "ide-editor-private.h"
 #include "ide-gtk-private.h"
 #include "ide-shell-private.h"
 #include "ide-terminal-private.h"
@@ -288,6 +289,7 @@ main (gint   argc,
 
   /* Ensure availability of some symbols possibly dropped in link */
   _ide_gtk_init ();
+  _ide_editor_init ();
   _ide_terminal_init ();
 
   app = _ide_application_new (standalone);
