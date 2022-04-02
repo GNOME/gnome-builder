@@ -14,6 +14,8 @@
                     <child>
                       <object class="IdeSourceView" id="view">
                         <property name="monospace">true</property>
+                        <property name="hexpand">true</property>
+                        <property name="vexpand">true</property>
                       </object>
                     </child>
                   </object>
