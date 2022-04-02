@@ -1,6 +1,6 @@
-/* editorui-plugin.c
+/* gbp-editorui-workbench-addin.h
  *
- * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,23 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "editorui-plugin"
+#pragma once
 
-#include "config.h"
+#include <glib-object.h>
 
-#include <libpeas/peas.h>
+G_BEGIN_DECLS
 
-#include <libide-gui.h>
+#define GBP_TYPE_EDITORUI_WORKBENCH_ADDIN (gbp_editorui_workbench_addin_get_type())
 
-#include "gbp-editorui-workbench-addin.h"
-#include "gbp-editorui-resources.h"
+G_DECLARE_FINAL_TYPE (GbpEditoruiWorkbenchAddin, gbp_editorui_workbench_addin, GBP, EDITORUI_WORKBENCH_ADDIN, GObject)
 
-_IDE_EXTERN void
-_gbp_editorui_register_types (PeasObjectModule *module)
-{
-  g_resources_register (gbp_editorui_get_resource ());
-
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_EDITORUI_WORKBENCH_ADDIN);
-}
+G_END_DECLS
