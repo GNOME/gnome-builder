@@ -1,9 +1,9 @@
 snippet import
-	import "${1:./module.js}";
+	import '${1:./module.js}';
 	$0
 snippet from
 - desc import … from
-	import ${1:{ Module }} from "${2:./module.js}";
+	import ${1:{ Module }} from '${2:./module.js}';
 	$0
 snippet imports
 	const ${1:Module} = imports.${2:path}.${$1|decapitalize};
@@ -17,7 +17,7 @@ snippet lang
 	const ${1:Lang} = imports.${$1|decapitalize};
 	$0
 snippet require
-	const ${1:Module} = require("${2:./}${3:$1|lower}");
+	const ${1:Module} = require('${2:./}${3:$1|lower}');
 	$0
 snippet class
 	class ${1:ClassName} {
@@ -104,10 +104,10 @@ snippet let
 snippet var
 	var ${1:variable} = ${2:expression};$0
 snippet log
-	console.log("${1:message}");$0
+	console.log('${1:message}');$0
 snippet error
-	console.error("${1:message}");$0
+	console.error('${1:message}');$0
 snippet info
-	console.info("${1:message}");$0
+	console.info('${1:message}');$0
 snippet warn
-	console.warn("${1:message}");$0
+	console.warn('${1:message}');$0
