@@ -147,6 +147,16 @@ ide_editor_page_init (IdeEditorPage *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
+GtkWidget *
+ide_editor_page_new (IdeBuffer *buffer)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
+
+  return g_object_new (IDE_TYPE_EDITOR_PAGE,
+                       "buffer", buffer,
+                       NULL);
+}
+
 /**
  * ide_editor_page_get_view:
  * @self: a #IdeEditorPage
