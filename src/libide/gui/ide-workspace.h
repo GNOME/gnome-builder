@@ -51,6 +51,9 @@ struct _IdeWorkspaceClass
 
   const gchar *kind;
 
+  guint has_statusbar : 1;
+  guint _unused_flags : 31;
+
   void      (*context_set)           (IdeWorkspace         *self,
                                       IdeContext           *context);
   void      (*foreach_page)          (IdeWorkspace         *self,
@@ -80,29 +83,31 @@ struct _IdeWorkspaceClass
 };
 
 IDE_AVAILABLE_IN_ALL
-void          ide_workspace_class_set_kind           (IdeWorkspaceClass *klass,
+void            ide_workspace_class_set_kind           (IdeWorkspaceClass *klass,
                                                       const gchar       *kind);
 IDE_AVAILABLE_IN_ALL
-IdeHeaderBar *ide_workspace_get_header_bar           (IdeWorkspace      *self);
+IdeHeaderBar   *ide_workspace_get_header_bar           (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
-IdeContext   *ide_workspace_get_context              (IdeWorkspace      *self);
+IdeContext     *ide_workspace_get_context              (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
-GCancellable *ide_workspace_get_cancellable          (IdeWorkspace      *self);
+GCancellable   *ide_workspace_get_cancellable          (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
-void          ide_workspace_foreach_page             (IdeWorkspace      *self,
-                                                      IdePageCallback    callback,
-                                                      gpointer           user_data);
+void            ide_workspace_foreach_page             (IdeWorkspace      *self,
+                                                        IdePageCallback    callback,
+                                                        gpointer           user_data);
 IDE_AVAILABLE_IN_ALL
-IdePage      *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
+IdePage        *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
-IdeFrame     *ide_workspace_get_most_recent_frame    (IdeWorkspace      *self);
+IdeFrame       *ide_workspace_get_most_recent_frame    (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
-void          ide_workspace_add_pane                 (IdeWorkspace      *self,
-                                                      IdePane           *pane,
-                                                      IdePanelPosition  *position);
+void            ide_workspace_add_pane                 (IdeWorkspace      *self,
+                                                        IdePane           *pane,
+                                                        IdePanelPosition  *position);
 IDE_AVAILABLE_IN_ALL
-void          ide_workspace_add_page                 (IdeWorkspace      *self,
-                                                      IdePage           *pane,
-                                                      IdePanelPosition  *position);
+void            ide_workspace_add_page                 (IdeWorkspace      *self,
+                                                        IdePage           *pane,
+                                                        IdePanelPosition  *position);
+IDE_AVAILABLE_IN_ALL
+PanelStatusbar *ide_workspace_get_statusbar            (IdeWorkspace      *self);
 
 G_END_DECLS

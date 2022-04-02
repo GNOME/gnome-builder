@@ -82,7 +82,7 @@
         </child>
       </object>
     </child>
-    <child>
+    <child internal-child="statusbar">
       <object class="PanelStatusbar">
         <child type="suffix">
           <object class="PanelDockSwitcher">
