@@ -272,7 +272,8 @@ ide_page_init (IdePage *self)
   IdePagePrivate *priv = ide_page_get_instance_private (self);
   g_autoptr(GSimpleActionGroup) group = g_simple_action_group_new ();
 
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
+  gtk_widget_set_hexpand (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
   panel_widget_set_icon_name (PANEL_WIDGET (self), "text-x-generic-symbolic");
 
   priv->mru_link.data = self;
