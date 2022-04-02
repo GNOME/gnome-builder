@@ -32,6 +32,8 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSourceView, ide_source_view, IDE, SOURCE_VIEW, GtkSourceView)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_source_view_new (void);
+GtkWidget *ide_source_view_new              (void);
+IDE_AVAILABLE_IN_ALL
+void       ide_source_view_scroll_to_insert (IdeSourceView *self);
 
 G_END_DECLS

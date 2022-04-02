@@ -95,3 +95,20 @@ static void
 ide_source_view_init (IdeSourceView *self)
 {
 }
+
+void
+ide_source_view_scroll_to_insert (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextView *view;
+  GtkTextMark *mark;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  view = GTK_TEXT_VIEW (self);
+  buffer = gtk_text_view_get_buffer (view);
+  mark = gtk_text_buffer_get_insert (buffer);
+
+  /* TODO: use margin to implement  "scroll offset" */
+  gtk_text_view_scroll_to_mark (view, mark, .5, FALSE, .0, .0);
+}
