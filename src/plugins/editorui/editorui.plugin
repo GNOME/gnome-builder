@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2014-2022 Christian Hergert
+Embedded=_gbp_editorui_register_types
+Hidden=true
+Module=editorui
+Name=Editor UI
+X-At-Startup=true
+X-Workspace-Kind=primary;editor;
