@@ -55,6 +55,9 @@ typedef struct
    */
   IdeExtensionSetAdapter *addins;
 
+  /* A statusbar, if any, that was added to the workspace */
+  PanelStatusbar *statusbar;
+
   /* A MRU that is updated as pages are focused. It allows us to move through
    * the pages in the order they've been most-recently focused.
    */
@@ -556,6 +559,12 @@ ide_workspace_init (IdeWorkspace *self)
   adw_application_window_set_content (ADW_APPLICATION_WINDOW (self),
                                       GTK_WIDGET (priv->box));
 
+  if (IDE_WORKSPACE_GET_CLASS (self)->has_statusbar)
+    {
+      priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
+      gtk_box_append (priv->box, GTK_WIDGET (priv->statusbar));
+    }
+
   /* Track focus change to propagate to addins */
   g_signal_connect (self,
                     "notify::focus-widget",
@@ -851,14 +860,66 @@ ide_workspace_add_child (GtkBuildable *buildable,
   if (GTK_IS_WIDGET (object))
     {
       if (g_strcmp0 (type, "titlebar") == 0)
-        gtk_box_prepend (priv->box, GTK_WIDGET (object));
+        {
+          gtk_box_prepend (priv->box, GTK_WIDGET (object));
+        }
       else
-        gtk_box_append (priv->box, GTK_WIDGET (object));
+        {
+          gtk_box_append (priv->box, GTK_WIDGET (object));
+
+          if (priv->statusbar != NULL)
+            gtk_box_reorder_child_after (priv->box, GTK_WIDGET (priv->statusbar), GTK_WIDGET (object));
+        }
     }
+}
+
+static GObject *
+ide_workspace_get_internal_child (GtkBuildable *buildable,
+                                  GtkBuilder   *builder,
+                                  const char   *id)
+{
+  IdeWorkspace *self = (IdeWorkspace *)buildable;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (id != NULL);
+
+  if (g_strcmp0 (id, "statusbar") == 0)
+    {
+      if (priv->statusbar == NULL)
+        {
+          priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
+          gtk_box_append (priv->box, GTK_WIDGET (priv->statusbar));
+        }
+
+      return G_OBJECT (priv->statusbar);
+    }
+
+  return NULL;
 }
 
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->add_child = ide_workspace_add_child;
+  iface->get_internal_child = ide_workspace_get_internal_child;
+}
+
+/**
+ * ide_workspace_get_statusbar:
+ * @self: a #IdeWorkspace
+ *
+ * Gets the statusbar if any.
+ *
+ * Returns: (transfer none) (nullable): a #PanelStatusbar or %NULL
+ */
+PanelStatusbar *
+ide_workspace_get_statusbar (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+
+  return priv->statusbar;
 }
