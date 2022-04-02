@@ -46,6 +46,12 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
     gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->view), GTK_TEXT_BUFFER (buffer));
 }
 
+static gboolean
+ide_editor_page_grab_focus (GtkWidget *widget)
+{
+  return gtk_widget_grab_focus (GTK_WIDGET (IDE_EDITOR_PAGE (widget)->view));
+}
+
 static void
 ide_editor_page_dispose (GObject *object)
 {
@@ -107,6 +113,8 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   object_class->dispose = ide_editor_page_dispose;
   object_class->get_property = ide_editor_page_get_property;
   object_class->set_property = ide_editor_page_set_property;
+
+  widget_class->grab_focus = ide_editor_page_grab_focus;
 
   /**
    * IdeEditorPage:buffer:

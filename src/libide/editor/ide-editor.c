@@ -162,6 +162,8 @@ focus_complete (Focus        *focus,
           gtk_text_buffer_select_range (GTK_TEXT_BUFFER (focus->buffer), &iter, &iter);
           ide_source_view_scroll_to_insert (view);
         }
+
+      gtk_widget_grab_focus (GTK_WIDGET (page));
     }
 
   focus_free (focus);
