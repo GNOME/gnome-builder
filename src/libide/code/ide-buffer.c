@@ -288,6 +288,7 @@ _ide_buffer_new (IdeBufferManager *buffer_manager,
                        "enable-addins", enable_addins,
                        "is-temporary", is_temporary,
                        "implicit-trailing-newline", FALSE,
+                       "style-scheme-name", "Adwaita",
                        NULL);
 }
 
