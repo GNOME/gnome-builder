@@ -388,6 +388,7 @@ ide_application_init (IdeApplication *self)
   _ide_application_add_resources (self, "resource:///org/gnome/libide-sourceview/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-gui/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-greeter/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-editor/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-terminal/");
 
   /* Make sure our GAction are available */
