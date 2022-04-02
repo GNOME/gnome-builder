@@ -1,6 +1,6 @@
 /* ide-editor-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,89 +20,10 @@
 
 #pragma once
 
-#include <libide-gui.h>
-#include <libide-plugins.h>
-#include <libide-sourceview.h>
-#include <libpeas/peas.h>
-
-#include "ide-editor-addin.h"
-#include "ide-editor-page.h"
-#include "ide-editor-search-bar.h"
-#include "ide-editor-search.h"
-#include "ide-editor-sidebar.h"
-#include "ide-editor-surface.h"
-#include "ide-session-private.h"
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-struct _IdeEditorSurface
-{
-  IdeSurface           parent_instance;
-
-  PeasExtensionSet    *addins;
-
-  /* Template widgets */
-  IdeGrid             *grid;
-  GtkOverlay          *overlay;
-  GtkStack            *loading_stack;
-
-  /* State before entering focus mode */
-  guint                prefocus_had_left : 1;
-  guint                prefocus_had_bottom : 1;
-
-  guint                restore_panel : 1;
-
-  IdeSession          *session;
-};
-
-struct _IdeEditorPage
-{
-  IdePage                  parent_instance;
-
-  IdeExtensionSetAdapter  *addins;
-
-  GSettings               *editor_settings;
-  GSettings               *insight_settings;
-
-  IdeBuffer               *buffer;
-  DzlBindingGroup         *buffer_bindings;
-  DzlSignalGroup          *buffer_signals;
-
-  IdeEditorSearch         *search;
-
-  GCancellable            *destroy_cancellable;
-
-  GtkSourceMap            *map;
-  GtkRevealer             *map_revealer;
-  GtkOverlay              *overlay;
-  GtkProgressBar          *progress_bar;
-  IdeSourceView           *source_view;
-  GtkScrolledWindow       *scroller;
-  GtkBox                  *scroller_box;
-  IdeEditorSearchBar      *search_bar;
-  GtkRevealer             *search_revealer;
-  GtkRevealer             *modified_revealer;
-  GtkButton               *modified_cancel_button;
-
-  /* Raw pointer used to determine when frame changes */
-  IdeFrame                *last_frame_ptr;
-
-  guint                    toggle_map_source;
-
-  guint                    auto_hide_map : 1;
-  guint                    show_map : 1;
-};
-
-void _ide_editor_page_init_actions         (IdeEditorPage      *self);
-void _ide_editor_page_init_settings        (IdeEditorPage      *self);
-void _ide_editor_page_init_shortcuts       (IdeEditorPage      *self);
-void _ide_editor_page_update_actions       (IdeEditorPage      *self);
-void _ide_editor_search_bar_init_shortcuts (IdeEditorSearchBar *self);
-void _ide_editor_sidebar_set_open_pages    (IdeEditorSidebar   *self,
-                                            GListModel         *open_pages);
-void _ide_editor_surface_set_loading       (IdeEditorSurface   *self,
-                                            gboolean            loading);
-void _ide_editor_surface_init_actions      (IdeEditorSurface   *self);
-void _ide_editor_surface_init_shortcuts    (IdeEditorSurface   *self);
+void _ide_editor_init (void);
 
 G_END_DECLS

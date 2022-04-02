@@ -14,7 +14,7 @@ plugins_deps = [
   libide_code_dep,
   libide_core_dep,
   libide_debugger_dep,
-  #libide_editor_dep,
+  libide_editor_dep,
   libide_foundry_dep,
   libide_greeter_dep,
   libide_gui_dep,

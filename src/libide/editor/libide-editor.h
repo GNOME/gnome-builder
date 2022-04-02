@@ -1,6 +1,6 @@
 /* libide-editor.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,6 @@
 
 #pragma once
 
-#include <libide-gui.h>
-#include <libide-sourceview.h>
-
-G_BEGIN_DECLS
-
 #define IDE_EDITOR_INSIDE
-
-#include "ide-editor-addin.h"
-#include "ide-editor-page.h"
-#include "ide-editor-page-addin.h"
-#include "ide-editor-search.h"
-#include "ide-editor-workspace.h"
-
+# include "ide-editor-page.h"
 #undef IDE_EDITOR_INSIDE
-
-G_END_DECLS
