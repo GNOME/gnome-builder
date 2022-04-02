@@ -1,6 +1,6 @@
-/* libide-editor.h
+/* ide-editor.h
  *
- * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,19 @@
 
 #pragma once
 
-#define IDE_EDITOR_INSIDE
-# include "ide-editor.h"
-# include "ide-editor-page.h"
-#undef IDE_EDITOR_INSIDE
+#include <libide-core.h>
+#include <libide-code.h>
+#include <libide-gui.h>
+
+G_BEGIN_DECLS
+
+IDE_AVAILABLE_IN_ALL
+void ide_editor_focus_location (IdeWorkspace *workspace,
+                                IdeFrame     *frame,
+                                IdeLocation  *location);
+IDE_AVAILABLE_IN_ALL
+void ide_editor_focus_buffer   (IdeWorkspace *workspace,
+                                IdeFrame     *frame,
+                                IdeBuffer    *buffer);
+
+G_END_DECLS
