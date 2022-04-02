@@ -145,12 +145,6 @@ ide_page_mark_used (IdePage *self)
 static void
 ide_page_finalize (GObject *object)
 {
-  IdePage *self = (IdePage *)object;
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_clear_pointer (&priv->title, g_free);
-  g_clear_object (&priv->icon);
-
   G_OBJECT_CLASS (ide_page_parent_class)->finalize (object);
 }
 
@@ -279,9 +273,9 @@ ide_page_init (IdePage *self)
   g_autoptr(GSimpleActionGroup) group = g_simple_action_group_new ();
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
+  panel_widget_set_icon_name (PANEL_WIDGET (self), "text-x-generic-symbolic");
 
   priv->mru_link.data = self;
-  priv->icon_name = g_intern_string ("text-x-generic-symbolic");
 
   /* Add an action group out of convenience to plugins that want to
    * stash a simple action somewhere.
