@@ -57,24 +57,12 @@ struct _IdePageClass
 };
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget     *ide_page_new                   (void);
-IDE_AVAILABLE_IN_ALL
 gboolean       ide_page_get_can_split         (IdePage              *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_page_set_can_split         (IdePage              *self,
                                                gboolean              can_split);
 IDE_AVAILABLE_IN_ALL
 IdePage       *ide_page_create_split          (IdePage              *self);
-IDE_AVAILABLE_IN_ALL
-const gchar   *ide_page_get_icon_name         (IdePage              *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_page_set_icon_name         (IdePage              *self,
-                                               const gchar          *icon_name);
-IDE_AVAILABLE_IN_ALL
-GIcon         *ide_page_get_icon              (IdePage              *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_page_set_icon              (IdePage              *self,
-                                               GIcon                *icon);
 IDE_AVAILABLE_IN_ALL
 gboolean       ide_page_get_failed            (IdePage              *self);
 IDE_AVAILABLE_IN_ALL
@@ -85,16 +73,6 @@ const gchar   *ide_page_get_menu_id           (IdePage              *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_page_set_menu_id           (IdePage              *self,
                                                const gchar          *menu_id);
-IDE_AVAILABLE_IN_ALL
-gboolean       ide_page_get_modified          (IdePage              *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_page_set_modified          (IdePage              *self,
-                                               gboolean              modified);
-IDE_AVAILABLE_IN_ALL
-const gchar   *ide_page_get_title             (IdePage              *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_page_set_title             (IdePage              *self,
-                                               const gchar          *title);
 IDE_AVAILABLE_IN_ALL
 void           ide_page_agree_to_close_async  (IdePage              *self,
                                                GCancellable         *cancellable,
