@@ -29,6 +29,7 @@
 #include <libide-core.h>
 #include <libide-projects.h>
 
+#include "ide-frame.h"
 #include "ide-header-bar.h"
 #include "ide-page.h"
 #include "ide-pane.h"
@@ -50,31 +51,32 @@ struct _IdeWorkspaceClass
 
   const gchar *kind;
 
-  void     (*context_set)           (IdeWorkspace         *self,
-                                     IdeContext           *context);
-  void     (*foreach_page)          (IdeWorkspace         *self,
-                                     IdePageCallback       callback,
-                                     gpointer              user_data);
-  IdePage *(*get_most_recent_page)  (IdeWorkspace         *self);
-  void     (*agree_to_close_async)  (IdeWorkspace         *self,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data);
-  gboolean (*agree_to_close_finish) (IdeWorkspace         *self,
-                                     GAsyncResult         *result,
-                                     GError              **error);
-  void     (*add_pane)              (IdeWorkspace         *self,
-                                     IdePane              *pane,
-                                     IdePanelPosition     *position);
-  void     (*add_page)              (IdeWorkspace         *self,
-                                     IdePage              *page,
-                                     IdePanelPosition     *position);
-  void     (*restore_size)          (IdeWorkspace         *self,
-                                     int                   width,
-                                     int                   height);
-  gboolean (*save_size)             (IdeWorkspace         *self,
-                                     int                  *width,
-                                     int                  *height);
+  void      (*context_set)           (IdeWorkspace         *self,
+                                      IdeContext           *context);
+  void      (*foreach_page)          (IdeWorkspace         *self,
+                                      IdePageCallback       callback,
+                                      gpointer              user_data);
+  IdePage  *(*get_most_recent_page)  (IdeWorkspace         *self);
+  IdeFrame *(*get_most_recent_frame) (IdeWorkspace         *self);
+  void      (*agree_to_close_async)  (IdeWorkspace         *self,
+                                      GCancellable         *cancellable,
+                                      GAsyncReadyCallback   callback,
+                                      gpointer              user_data);
+  gboolean  (*agree_to_close_finish) (IdeWorkspace         *self,
+                                      GAsyncResult         *result,
+                                      GError              **error);
+  void      (*add_pane)              (IdeWorkspace         *self,
+                                      IdePane              *pane,
+                                      IdePanelPosition     *position);
+  void      (*add_page)              (IdeWorkspace         *self,
+                                      IdePage              *page,
+                                      IdePanelPosition     *position);
+  void      (*restore_size)          (IdeWorkspace         *self,
+                                      int                   width,
+                                      int                   height);
+  gboolean  (*save_size)             (IdeWorkspace         *self,
+                                      int                  *width,
+                                      int                  *height);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -92,6 +94,8 @@ void          ide_workspace_foreach_page             (IdeWorkspace      *self,
                                                       gpointer           user_data);
 IDE_AVAILABLE_IN_ALL
 IdePage      *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+IdeFrame     *ide_workspace_get_most_recent_frame    (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL
 void          ide_workspace_add_pane                 (IdeWorkspace      *self,
                                                       IdePane           *pane,

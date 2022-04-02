@@ -415,6 +415,20 @@ ide_workspace_realize (GtkWidget *widget)
     gtk_window_maximize (GTK_WINDOW (self));
 }
 
+static IdeFrame *
+ide_workspace_real_get_most_recent_frame (IdeWorkspace *self)
+{
+  IdePage *page;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  if (!(page = ide_workspace_get_most_recent_page (self)))
+    return NULL;
+
+  return IDE_FRAME (gtk_widget_get_ancestor (GTK_WIDGET (page), IDE_TYPE_FRAME));
+
+}
+
 static void
 ide_workspace_dispose (GObject *object)
 {
@@ -498,6 +512,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   klass->agree_to_close_finish = ide_workspace_agree_to_close_finish;
   klass->restore_size = ide_workspace_restore_size;
   klass->save_size = ide_workspace_save_size;
+  klass->get_most_recent_frame = ide_workspace_real_get_most_recent_frame;
 
   /**
    * IdeWorkspace:context:
@@ -683,6 +698,22 @@ ide_workspace_get_most_recent_page (IdeWorkspace *self)
     return IDE_PAGE (priv->page_mru.head->data);
 
   return NULL;
+}
+
+/**
+ * ide_workspace_get_most_recent_frame:
+ * @self: a #IdeWorkspace
+ *
+ * Gets the most recently selected frame.
+ *
+ * Returns: (transfer none) (nullable): an #IdeFrame or %NULL
+ */
+IdeFrame *
+ide_workspace_get_most_recent_frame (IdeWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+
+  return IDE_WORKSPACE_GET_CLASS (self)->get_most_recent_frame (self);
 }
 
 void

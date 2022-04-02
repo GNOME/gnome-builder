@@ -195,6 +195,16 @@ ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
     }
 }
 
+static IdeFrame *
+ide_primary_workspace_get_most_recent_frame (IdeWorkspace *workspace)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+
+  return IDE_FRAME (panel_grid_get_most_recent_frame (PANEL_GRID (self->grid)));
+}
+
 static void
 ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 {
@@ -206,6 +216,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->context_set = ide_primary_workspace_context_set;
   workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
+  workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-primary-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, add_button);
