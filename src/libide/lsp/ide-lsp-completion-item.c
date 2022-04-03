@@ -114,6 +114,68 @@ ide_lsp_completion_item_get_detail (IdeLspCompletionItem *self)
   return self->detail;
 }
 
+void
+ide_lsp_completion_item_display (IdeLspCompletionItem    *self,
+                                 GtkSourceCompletionCell *cell,
+                                 const char              *typed_text)
+{
+  GtkSourceCompletionColumn column;
+
+  g_return_if_fail (IDE_IS_LSP_COMPLETION_ITEM (self));
+  g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CELL (cell));
+
+  column = gtk_source_completion_cell_get_column (cell);
+
+  switch (column)
+    {
+    case GTK_SOURCE_COMPLETION_COLUMN_ICON:
+      gtk_source_completion_cell_set_icon_name (cell, ide_lsp_completion_item_get_icon_name (self));
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT:
+      {
+        PangoAttrList *attrs;
+
+        attrs = gtk_source_completion_fuzzy_highlight (self->label, typed_text);
+        gtk_source_completion_cell_set_text_with_attributes (cell, self->label, attrs);
+        pango_attr_list_unref (attrs);
+
+        break;
+      }
+
+    case GTK_SOURCE_COMPLETION_COLUMN_COMMENT:
+      if (self->detail != NULL && self->detail[0] != 0)
+        {
+          const char *endptr = strchr (self->detail, '\n');
+
+          if (endptr == NULL)
+            {
+              gtk_source_completion_cell_set_text (cell, self->detail);
+            }
+          else
+            {
+              g_autofree char *detail = g_strndup (self->detail, endptr - self->detail);
+              gtk_source_completion_cell_set_text (cell, detail);
+            }
+        }
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_DETAILS:
+      /* TODO: If there is markdown, we *could* use a markedview here
+       * and set_child() with the WebKit view.
+       */
+      gtk_source_completion_cell_set_text (cell, self->detail);
+      break;
+
+    default:
+    case GTK_SOURCE_COMPLETION_COLUMN_AFTER:
+    case GTK_SOURCE_COMPLETION_COLUMN_BEFORE:
+      /* TODO: Can we get this info from LSP? */
+      gtk_source_completion_cell_set_text (cell, NULL);
+      break;
+    }
+}
+
 /**
  * ide_lsp_completion_item_get_snippet:
  * @self: a #IdeLspCompletionItem
