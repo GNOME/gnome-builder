@@ -20,12 +20,20 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
+#if !defined (IDE_SOURCEVIEW_INSIDE) && !defined (IDE_SOURCEVIEW_COMPILATION)
+# error "Only <libide-sourceview.h> can be included directly."
+#endif
+
+#include <gtk/gtk.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 void ide_text_util_delete_line          (GtkTextView *text_view,
                                          int         count);
+IDE_AVAILABLE_IN_ALL
 void ide_text_util_remove_common_prefix (GtkTextIter *begin,
                                          const gchar *prefix);
 

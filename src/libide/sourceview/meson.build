@@ -16,6 +16,7 @@ libide_sourceview_private_headers = [
 libide_sourceview_public_headers = [
   'ide-line-change-gutter-renderer.h',
   'ide-source-view.h',
+  'ide-text-util.h',
   'libide-sourceview.h',
 ]
 
@@ -30,12 +31,12 @@ install_headers(libide_sourceview_public_headers, subdir: libide_sourceview_head
 #
 
 libide_sourceview_private_sources = [
-  'ide-text-util.c',
 ]
 
 libide_sourceview_public_sources = [
   'ide-line-change-gutter-renderer.c',
   'ide-source-view.c',
+  'ide-text-util.c',
 ]
 
 #
