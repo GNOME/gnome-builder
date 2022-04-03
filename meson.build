@@ -72,7 +72,7 @@ config_h = configuration_data()
 
 # Message of doom
 if version_split[1][0] in ['a', 'b', 'r']
-  config_h.set10('DEVELOPMENT_BUILD', 1)
+  config_h.set10('DEVELOPMENT_BUILD', true)
   MINOR_VERSION = 0
   status += [
     'You are building a development version of GNOME Builder. There may be more',
@@ -301,7 +301,7 @@ libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
 if get_option('webkit').enabled()
   libwebkit_dep = dependency('webkit2gtk-5.0')
-  config_h.set10('HAVE_WEBKIT', 1)
+  config_h.set10('HAVE_WEBKIT', true)
 endif
 
 check_functions = [
