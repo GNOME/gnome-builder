@@ -191,7 +191,7 @@ ide_lsp_completion_results_refilter (IdeLspCompletionResults *self,
       if (!g_variant_lookup (node, "label", "&s", &label))
         continue;
 
-      if (ide_completion_fuzzy_match (label, query, &priority))
+      if (gtk_source_completion_fuzzy_match (label, query, &priority))
         {
           Item item = { .index = index, .priority = priority };
           g_array_append_val (self->items, item);
