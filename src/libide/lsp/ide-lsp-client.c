@@ -856,6 +856,7 @@ ide_lsp_client_real_notification (IdeLspClient *self,
           const gchar *message = NULL;
           const gchar *title = NULL;
           const gchar *kind = NULL;
+          gint64 percentage = -1;
           IdeContext *context;
           IdeNotifications *notifications;
           IdeNotification *notification = NULL;
@@ -869,6 +870,9 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                                          "}");
           JSONRPC_MESSAGE_PARSE (params, "value", "{",
                                            "message", JSONRPC_MESSAGE_GET_STRING (&message),
+                                         "}");
+          JSONRPC_MESSAGE_PARSE (params, "value", "{",
+                                           "percentage", JSONRPC_MESSAGE_GET_INT64 (&percentage),
                                          "}");
           context = ide_object_get_context (IDE_OBJECT (self));
           notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
@@ -885,19 +889,22 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                   notification = ide_notification_new ();
                   ide_notification_set_id (notification, token);
                   ide_notification_set_has_progress (notification, TRUE);
-                  ide_notification_set_progress_is_imprecise (notification, TRUE);
+                  ide_notification_set_progress_is_imprecise (notification, percentage == -1);
                 }
 
               ide_notification_set_title (notification, title);
               ide_notification_set_body (notification, message != NULL ? message : title);
-
+              if (percentage != -1)
+                ide_notification_set_progress (notification, percentage / 100.0);
               if (!notification_exists)
                 ide_notification_attach (notification, IDE_OBJECT (context));
             }
-          else
+          else if (notification != NULL)
             {
-              if (message != NULL && notification != NULL)
+              if (message != NULL)
                 ide_notification_set_body (notification, message);
+              if (percentage != -1)
+                ide_notification_set_progress (notification, percentage / 100.0);
             }
 
           if (ide_str_equal0 (kind, "end") && notification != NULL)
