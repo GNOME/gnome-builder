@@ -35,15 +35,16 @@
 typedef struct
 {
   IdeLspClient  *client;
-  gchar         *word;
-  gchar        **trigger_chars;
+  char          *word;
+  char         **trigger_chars;
+  char          *refilter_word;
 } IdeLspCompletionProviderPrivate;
 
-static void provider_iface_init (IdeCompletionProviderInterface *iface);
+static void provider_iface_init (GtkSourceCompletionProviderInterface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLspCompletionProvider, ide_lsp_completion_provider, IDE_TYPE_OBJECT,
                                   G_ADD_PRIVATE (IdeLspCompletionProvider)
-                                  G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
+                                  G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 enum {
   PROP_0,
@@ -208,8 +209,8 @@ ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
 }
 
 static gint
-ide_lsp_completion_provider_get_priority (IdeCompletionProvider *provider,
-                                          IdeCompletionContext  *context)
+ide_lsp_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
+                                          GtkSourceCompletionContext  *context)
 {
   return IDE_LSP_COMPLETION_PROVIDER_PRIORITY;
 }
@@ -251,20 +252,20 @@ ide_lsp_completion_provider_complete_cb (GObject      *object,
 }
 
 static void
-ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
-                                            IdeCompletionContext  *context,
-                                            GCancellable          *cancellable,
-                                            GAsyncReadyCallback    callback,
-                                            gpointer               user_data)
+ide_lsp_completion_provider_populate_async (GtkSourceCompletionProvider *provider,
+                                            GtkSourceCompletionContext  *context,
+                                            GCancellable                *cancellable,
+                                            GAsyncReadyCallback          callback,
+                                            gpointer                     user_data)
 {
   IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
-  IdeCompletionActivation activation;
+  GtkSourceCompletionActivation activation;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
-  g_autofree gchar *uri = NULL;
+  g_autofree char *uri = NULL;
   GtkTextIter iter, end;
-  GtkTextBuffer *buffer;
+  GtkSourceBuffer *buffer;
   gint trigger_kind;
   gint line;
   gint column;
@@ -272,7 +273,10 @@ ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
   IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (self));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+
+  g_clear_pointer (&self->refilter_word, g_free);
+  g_clear_pointer (&self->word, g_free);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_lsp_completion_provider_populate_async);
@@ -286,19 +290,18 @@ ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
       IDE_EXIT;
     }
 
-  ide_completion_context_get_bounds (context, &iter, &end);
+  gtk_source_completion_context_get_bounds (context, &iter, &end);
 
-  activation = ide_completion_context_get_activation (context);
+  activation = gtk_source_completion_context_get_activation (context);
 
-  if (activation == IDE_COMPLETION_TRIGGERED)
+  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
     trigger_kind = 2;
   else
     trigger_kind = 1;
 
-  g_clear_pointer (&priv->word, g_free);
-  priv->word = ide_completion_context_get_word (context);
+  priv->word = gtk_source_completion_context_get_word (context);
 
-  buffer = ide_completion_context_get_buffer (context);
+  buffer = gtk_source_completion_context_get_buffer (context);
   uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
 
   line = gtk_text_iter_get_line (&iter);
@@ -328,15 +331,15 @@ ide_lsp_completion_provider_populate_async (IdeCompletionProvider *provider,
 }
 
 static GListModel *
-ide_lsp_completion_provider_populate_finish (IdeCompletionProvider  *provider,
-                                             GAsyncResult           *result,
-                                             GError                **error)
+ide_lsp_completion_provider_populate_finish (GtkSourceCompletionProvider  *provider,
+                                             GAsyncResult                 *result,
+                                             GError                      **error)
 {
   GListModel *ret;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
+  g_assert (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_object (IDE_TASK (result), error);
@@ -345,44 +348,46 @@ ide_lsp_completion_provider_populate_finish (IdeCompletionProvider  *provider,
 }
 
 static gboolean
-ide_lsp_completion_provider_refilter (IdeCompletionProvider *provider,
-                                      IdeCompletionContext  *context,
-                                      GListModel            *model)
+ide_lsp_completion_provider_refilter (GtkSourceCompletionProvider *provider,
+                                      GtkSourceCompletionContext  *context,
+                                      GListModel                  *model)
 {
+  IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
   IdeLspCompletionResults *results = (IdeLspCompletionResults *)model;
-  g_autofree gchar *word = NULL;
+  g_autofree char *word = NULL;
 
-  g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_LSP_COMPLETION_RESULTS (results));
 
-  word = ide_completion_context_get_word (context);
-  ide_lsp_completion_results_refilter (results, word);
+  g_clear_pointer (&self->refilter_word, g_free);
+  self->refilter_word = gtk_source_completion_context_get_word (context);
+
+  ide_lsp_completion_results_refilter (results, self->refilter_word);
 
   return TRUE;
 }
 
 static void
-ide_lsp_completion_provider_display_proposal (IdeCompletionProvider   *provider,
-                                              IdeCompletionListBoxRow *row,
-                                              IdeCompletionContext    *context,
-                                              const gchar             *typed_text,
-                                              IdeCompletionProposal   *proposal)
+ide_lsp_completion_provider_display (GtkSourceCompletionProvider *provider,
+                                     GtkSourceCompletionContext  *context,
+                                     GtkSourceCompletionProposal *proposal,
+                                     GtkSourceCompletionCell     *cell)
 {
   IdeLspCompletionItem *item = (IdeLspCompletionItem *)proposal;
-  g_autofree gchar *markup = NULL;
+  const char *typed_text;
 
   g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CELL (cell));
 
-  markup = ide_lsp_completion_item_get_markup (item, typed_text);
+  if (self->refilter_word)
+    typed_text = self->refilter_word;
+  else
+    typed_text = self->word;
 
-  ide_completion_list_box_row_set_icon_name (row, ide_lsp_completion_item_get_icon_name (item));
-  ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_center_markup (row, markup);
-  ide_completion_list_box_row_set_right (row, NULL);
+  ide_lsp_completion_item_display (item, cell, typed_text);
 }
 
 static void
@@ -406,39 +411,39 @@ ide_lsp_completion_provider_apply_additional_edits_cb (GObject      *object,
 }
 
 static void
-ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                               IdeCompletionContext  *completion_context,
-                                               IdeCompletionProposal *proposal,
-                                               const GdkEventKey     *key)
+ide_lsp_completion_provider_activate_proposal (GtkSourceCompletionProvider *provider,
+                                               GtkSourceCompletionContext  *completion_context,
+                                               GtkSourceCompletionProposal *proposal,
+                                               const GdkEventKey           *key)
 {
-  g_autoptr(IdeSnippet) snippet = NULL;
-  IdeSnippetChunk *chunk;
+  g_autoptr(GtkSourceSnippet) snippet = NULL;
+  GtkSourceSnippetChunk *chunk;
   GtkTextBuffer *buffer;
   GtkTextView *view;
   GtkTextIter begin, end;
   g_autoptr(GPtrArray) additional_text_edits = NULL;
   IdeBufferManager *buffer_manager;
-  const gchar *text = NULL;
+  const char *text = NULL;
 
-  g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (completion_context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (completion_context));
   g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
 
-  buffer = ide_completion_context_get_buffer (completion_context);
+  buffer = gtk_source_completion_context_get_buffer (completion_context);
 
   g_assert (IDE_IS_BUFFER (buffer));
 
-  view = ide_completion_context_get_view (completion_context);
+  view = gtk_source_completion_context_get_view (completion_context);
 
   snippet = ide_lsp_completion_item_get_snippet (IDE_LSP_COMPLETION_ITEM (proposal));
-  if ((chunk = ide_snippet_get_nth_chunk (snippet, 0)))
-    text = ide_snippet_chunk_get_text (chunk);
+  if ((chunk = gtk_source_snippet_get_nth_chunk (snippet, 0)))
+    text = gtk_source_snippet_chunk_get_text (chunk);
 
   gtk_text_buffer_begin_user_action (buffer);
-  if (ide_completion_context_get_bounds (completion_context, &begin, &end))
+  if (gtk_source_completion_context_get_bounds (completion_context, &begin, &end))
     {
       gtk_text_buffer_delete (buffer, &begin, &end);
-      ide_completion_remove_common_prefix (ide_completion_context_get_completion (completion_context), &begin, text);
+      ide_completion_remove_common_prefix (gtk_source_completion_context_get_completion (completion_context), &begin, text);
     }
   ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
   gtk_text_buffer_end_user_action (buffer);
@@ -464,20 +469,20 @@ ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
     }
 }
 
-static gchar *
-ide_lsp_completion_provider_get_comment (IdeCompletionProvider *provider,
-                                         IdeCompletionProposal *proposal)
+static char *
+ide_lsp_completion_provider_get_comment (GtkSourceCompletionProvider *provider,
+                                         GtkSourceCompletionProposal *proposal)
 {
-  g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
+  g_assert (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_LSP_COMPLETION_ITEM (proposal));
 
   return g_strdup (ide_lsp_completion_item_get_detail (IDE_LSP_COMPLETION_ITEM (proposal)));
 }
 
 static gboolean
-ide_lsp_completion_provider_is_trigger (IdeCompletionProvider *provider,
-                                        const GtkTextIter     *iter,
-                                        gunichar               ch)
+ide_lsp_completion_provider_is_trigger (GtkSourceCompletionProvider *provider,
+                                        const GtkTextIter           *iter,
+                                        gunichar                     ch)
 {
   IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
@@ -489,7 +494,7 @@ ide_lsp_completion_provider_is_trigger (IdeCompletionProvider *provider,
     {
       for (guint i = 0; priv->trigger_chars[i]; i++)
         {
-          const gchar *trigger = priv->trigger_chars[i];
+          const char *trigger = priv->trigger_chars[i];
 
           /* Technically, since these are strings they can be more than
            * one character long. But I haven't seen anything actually
@@ -504,7 +509,7 @@ ide_lsp_completion_provider_is_trigger (IdeCompletionProvider *provider,
 }
 
 static void
-provider_iface_init (IdeCompletionProviderInterface *iface)
+provider_iface_init (GtkSourceCompletionProviderInterface *iface)
 {
   iface->get_priority = ide_lsp_completion_provider_get_priority;
   iface->populate_async = ide_lsp_completion_provider_populate_async;
