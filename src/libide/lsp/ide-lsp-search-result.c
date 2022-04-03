@@ -18,9 +18,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "ide-lsp-search-result"
+
 #include "config.h"
 
 #include "ide-lsp-search-result.h"
+
 #include <libide-core.h>
 #include <libide-editor.h>
 
@@ -109,17 +112,17 @@ ide_lsp_search_result_activate (IdeSearchResult *result,
 
   IdeLspSearchResult *self = (IdeLspSearchResult *)result;
   IdeWorkspace *workspace;
-  IdeSurface *editor;
+  IdeFrame *frame;
 
   g_assert (IDE_IS_LSP_SEARCH_RESULT (self));
   g_assert (GTK_IS_WIDGET (last_focus));
 
-  if (!last_focus)
+  if (!last_focus ||
+      !(workspace = ide_widget_get_workspace (last_focus)))
     return;
 
-  if ((workspace = ide_widget_get_workspace (last_focus)) &&
-      (editor = ide_workspace_get_surface_by_name (workspace, "editor")))
-    ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), self->location);
+  frame = ide_workspace_get_most_recent_frame (workspace);
+  ide_editor_focus_location (workspace, frame, self->location);
 }
 
 static void
