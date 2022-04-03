@@ -37,6 +37,6 @@ IDE_AVAILABLE_IN_3_32
 IdeLspCompletionResults *ide_lsp_completion_results_new      (GVariant                *results);
 IDE_AVAILABLE_IN_3_32
 void                     ide_lsp_completion_results_refilter (IdeLspCompletionResults *self,
-                                                              const gchar             *typed_text);
+                                                              const char              *typed_text);
 
 G_END_DECLS
