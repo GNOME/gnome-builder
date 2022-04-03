@@ -43,7 +43,7 @@ typedef struct
 static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeLspCompletionResults, ide_lsp_completion_results, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static void
 ide_lsp_completion_results_finalize (GObject *object)
@@ -116,7 +116,7 @@ ide_lsp_completion_results_get_n_items (GListModel *model)
 
 static gpointer
 ide_lsp_completion_results_get_item (GListModel *model,
-                                          guint       position)
+                                     guint       position)
 {
   IdeLspCompletionResults *self = (IdeLspCompletionResults *)model;
   g_autoptr(GVariant) child = NULL;
@@ -148,7 +148,7 @@ compare_items (const Item *a,
 
 void
 ide_lsp_completion_results_refilter (IdeLspCompletionResults *self,
-                                          const gchar                  *typed_text)
+                                     const char              *typed_text)
 {
   g_autofree gchar *query = NULL;
   GVariantIter iter;
