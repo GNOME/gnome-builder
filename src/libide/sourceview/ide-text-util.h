@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <gtksourceview/gtksource.h>
 
 G_BEGIN_DECLS
 
-void ide_text_util_delete_line (GtkTextView *text_view,
-                                gint         count);
+void ide_text_util_delete_line          (GtkTextView *text_view,
+                                         int         count);
+void ide_text_util_remove_common_prefix (GtkTextIter *begin,
+                                         const gchar *prefix);
 
 G_END_DECLS
