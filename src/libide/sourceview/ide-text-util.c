@@ -123,3 +123,57 @@ ide_text_util_delete_line (GtkTextView *text_view,
 		gtk_widget_error_bell (GTK_WIDGET (text_view));
 	}
 }
+
+static gboolean
+find_prefix_match (const GtkTextIter *limit,
+                   const GtkTextIter *end,
+                   GtkTextIter       *found_start,
+                   GtkTextIter       *found_end,
+                   const char        *prefix,
+                   gsize              len,
+                   gsize              n_chars)
+{
+  g_autofree gchar *copy = g_utf8_substring (prefix, 0, n_chars);
+
+  if (gtk_text_iter_backward_search (end, copy, GTK_TEXT_SEARCH_TEXT_ONLY, found_start, found_end, limit))
+    return gtk_text_iter_equal (found_end, end);
+
+  return FALSE;
+}
+
+void
+ide_text_util_remove_common_prefix (GtkTextIter *begin,
+                                    const gchar *prefix)
+{
+  GtkTextIter rm_begin;
+  GtkTextIter rm_end;
+  GtkTextIter line_start;
+  GtkTextIter found_start, found_end;
+  gboolean found = FALSE;
+  gsize len;
+  gsize count = 1;
+
+  g_return_if_fail (begin != NULL);
+
+  if (prefix == NULL || prefix[0] == 0)
+    return;
+
+  len = g_utf8_strlen (prefix, -1);
+  line_start = *begin;
+  gtk_text_iter_set_line_offset (&line_start, 0);
+
+  while (count <= len &&
+         find_prefix_match (&line_start, begin, &found_start, &found_end, prefix, len, count))
+    {
+      rm_begin = found_start;
+      rm_end = found_end;
+      count++;
+      found = TRUE;
+    }
+
+  if (found)
+    {
+      gtk_text_buffer_delete (gtk_text_iter_get_buffer (begin), &rm_begin, &rm_end);
+      *begin = rm_begin;
+    }
+}
