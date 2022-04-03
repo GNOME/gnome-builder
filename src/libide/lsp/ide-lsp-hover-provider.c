@@ -23,7 +23,9 @@
 #include "config.h"
 
 #include <jsonrpc-glib.h>
+
 #include <libide-code.h>
+#include <libide-gui.h>
 #include <libide-sourceview.h>
 #include <libide-threading.h>
 
@@ -37,24 +39,23 @@
  * The #IdeLspHoverProvider provides integration with language servers
  * that support hover requests. This can display markup in the interactive
  * tooltip that is displayed in the editor.
- *
- * Since: 3.30
  */
 
 typedef struct
 {
   IdeLspClient *client;
-  gchar *category;
-  gint priority;
+  char *category;
+  int priority;
+  guint did_prepare : 1;
 } IdeLspHoverProviderPrivate;
 
-static void hover_provider_iface_init (IdeHoverProviderInterface *iface);
+static void hover_provider_iface_init (GtkSourceHoverProviderInterface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLspHoverProvider,
                                   ide_lsp_hover_provider,
                                   IDE_TYPE_OBJECT,
                                   G_ADD_PRIVATE (IdeLspHoverProvider)
-                                  G_IMPLEMENT_INTERFACE (IDE_TYPE_HOVER_PROVIDER, hover_provider_iface_init))
+                                  G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_HOVER_PROVIDER, hover_provider_iface_init))
 
 enum {
   PROP_0,
@@ -85,7 +86,7 @@ parse_marked_string (GVariant *v)
   if (g_variant_is_of_type (v, G_VARIANT_TYPE_STRING))
     {
       gsize len = 0;
-      const gchar *str = g_variant_get_string (v, &len);
+      const char *str = g_variant_get_string (v, &len);
 
       if (str && *str == '\0')
         return NULL;
@@ -99,7 +100,7 @@ parse_marked_string (GVariant *v)
 
   if (g_variant_is_of_type (v, G_VARIANT_TYPE_DICTIONARY))
     {
-      const gchar *value = "";
+      const char *value = "";
 
       g_variant_lookup (v, "value", "&s", &value);
       if (!ide_str_empty0 (value))
@@ -120,21 +121,21 @@ parse_marked_string (GVariant *v)
             g_string_append (gstr, g_variant_get_string (asv, NULL));
           else if (g_variant_is_of_type (asv, G_VARIANT_TYPE_VARDICT))
             {
-              const gchar *lang = "";
-              const gchar *value = "";
+              const char *lang = "";
+              const char *value = "";
 
               g_variant_lookup (asv, "language", "&s", &lang);
               g_variant_lookup (asv, "value", "&s", &value);
 
-    #if 0
+#if 0
               if (!ide_str_empty0 (lang) && !ide_str_empty0 (value))
                 g_string_append_printf (str, "```%s\n%s\n```", lang, value);
               else if (!ide_str_empty0 (value))
                 g_string_append (str, value);
-    #else
+#else
               if (!ide_str_empty0 (value))
                 g_string_append_printf (gstr, "```\n%s\n```\n", value);
-    #endif
+#endif
             }
 
           g_variant_unref (item);
@@ -147,6 +148,12 @@ parse_marked_string (GVariant *v)
       return ide_marked_content_new_from_data (gstr->str, gstr->len, IDE_MARKED_KIND_MARKDOWN);
     }
   return NULL;
+}
+
+static void
+ide_lsp_hover_provider_real_prepare (IdeLspHoverProvider *self)
+{
+  g_assert (IDE_IS_LSP_HOVER_PROVIDER (self));
 }
 
 static void
@@ -167,9 +174,9 @@ ide_lsp_hover_provider_dispose (GObject *object)
 
 static void
 ide_lsp_hover_provider_get_property (GObject    *object,
-                                          guint       prop_id,
-                                          GValue     *value,
-                                          GParamSpec *pspec)
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   IdeLspHoverProvider *self = IDE_LSP_HOVER_PROVIDER (object);
   IdeLspHoverProviderPrivate *priv = ide_lsp_hover_provider_get_instance_private (self);
@@ -195,9 +202,9 @@ ide_lsp_hover_provider_get_property (GObject    *object,
 
 static void
 ide_lsp_hover_provider_set_property (GObject      *object,
-                                          guint         prop_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec)
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
 {
   IdeLspHoverProvider *self = IDE_LSP_HOVER_PROVIDER (object);
   IdeLspHoverProviderPrivate *priv = ide_lsp_hover_provider_get_instance_private (self);
@@ -231,13 +238,13 @@ ide_lsp_hover_provider_class_init (IdeLspHoverProviderClass *klass)
   object_class->get_property = ide_lsp_hover_provider_get_property;
   object_class->set_property = ide_lsp_hover_provider_set_property;
 
+  klass->prepare = ide_lsp_hover_provider_real_prepare;
+
   /**
    * IdeLspHoverProvider:client:
    *
    * The "client" property is the #IdeLspClient that should be used to
    * communicate with the Language Server peer process.
-   *
-   * Since: 3.30
    */
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
@@ -251,8 +258,6 @@ ide_lsp_hover_provider_class_init (IdeLspHoverProviderClass *klass)
    *
    * The "category" property is the category name to use when displaying
    * the hover contents.
-   *
-   * Since: 3.30
    */
   properties [PROP_CATEGORY] =
     g_param_spec_string ("category",
@@ -280,18 +285,17 @@ ide_lsp_hover_provider_init (IdeLspHoverProvider *self)
 
 static void
 ide_lsp_hover_provider_hover_cb (GObject      *object,
-                                      GAsyncResult *result,
-                                      gpointer      user_data)
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
-  IdeLspHoverProvider *self;
-  IdeLspHoverProviderPrivate *priv;
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GVariant) contents = NULL;
   g_autoptr(IdeMarkedContent) marked = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeHoverContext *context;
+  GtkSourceHoverDisplay *display;
+  IdeLspHoverProvider *self;
 
   IDE_ENTRY;
 
@@ -300,9 +304,10 @@ ide_lsp_hover_provider_hover_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
-  priv = ide_lsp_hover_provider_get_instance_private (self);
+  display = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_LSP_HOVER_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_HOVER_DISPLAY (display));
 
   if (!ide_lsp_client_call_finish (client, result, &reply, &error))
     {
@@ -329,15 +334,7 @@ ide_lsp_hover_provider_hover_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  context = ide_task_get_task_data (task);
-
-  g_assert (context != NULL);
-  g_assert (IDE_IS_HOVER_CONTEXT (context));
-
-  ide_hover_context_add_content (context,
-                                 priv->priority,
-                                 priv->category,
-                                 marked);
+  gtk_source_hover_display_append (display, ide_marked_view_new (marked));
 
   ide_task_return_boolean (task, TRUE);
 
@@ -345,33 +342,40 @@ ide_lsp_hover_provider_hover_cb (GObject      *object,
 }
 
 static void
-ide_lsp_hover_provider_hover_async (IdeHoverProvider    *provider,
-                                         IdeHoverContext     *context,
-                                         const GtkTextIter   *iter,
-                                         GCancellable        *cancellable,
-                                         GAsyncReadyCallback  callback,
-                                         gpointer             user_data)
+ide_lsp_hover_provider_populate_async (GtkSourceHoverProvider *provider,
+                                       GtkSourceHoverContext  *context,
+                                       GtkSourceHoverDisplay  *display,
+                                       GCancellable           *cancellable,
+                                       GAsyncReadyCallback     callback,
+                                       gpointer                user_data)
 {
   IdeLspHoverProvider *self = (IdeLspHoverProvider *)provider;
   IdeLspHoverProviderPrivate *priv = ide_lsp_hover_provider_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
-  g_autofree gchar *uri = NULL;
+  g_autofree char *uri = NULL;
   IdeBuffer *buffer;
-  gint line;
-  gint column;
+  GtkTextIter iter;
+  int line;
+  int column;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_LSP_HOVER_PROVIDER (self));
-  g_assert (IDE_IS_HOVER_CONTEXT (context));
-  g_assert (iter != NULL);
+  g_assert (GTK_SOURCE_IS_HOVER_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_HOVER_DISPLAY (display));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_task_data (task, g_object_ref (context), g_object_unref);
-  ide_task_set_source_tag (task, ide_lsp_hover_provider_hover_async);
+  ide_task_set_task_data (task, g_object_ref (display), g_object_unref);
+  ide_task_set_source_tag (task, ide_lsp_hover_provider_populate_async);
+
+  if (!priv->did_prepare)
+    {
+      priv->did_prepare = TRUE;
+      IDE_LSP_HOVER_PROVIDER_GET_CLASS (self)->prepare (self);
+    }
 
   if (priv->client == NULL)
     {
@@ -382,10 +386,12 @@ ide_lsp_hover_provider_hover_async (IdeHoverProvider    *provider,
       return;
     }
 
-  buffer = IDE_BUFFER (gtk_text_iter_get_buffer (iter));
+  buffer = IDE_BUFFER (gtk_source_hover_context_get_buffer (context));
   uri = ide_buffer_dup_uri (buffer);
-  line = gtk_text_iter_get_line (iter);
-  column = gtk_text_iter_get_line_offset (iter);
+
+  gtk_source_hover_context_get_iter (context, &iter);
+  line = gtk_text_iter_get_line (&iter);
+  column = gtk_text_iter_get_line_offset (&iter);
 
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
@@ -400,19 +406,19 @@ ide_lsp_hover_provider_hover_async (IdeHoverProvider    *provider,
   g_assert (IDE_IS_LSP_CLIENT (priv->client));
 
   ide_lsp_client_call_async (priv->client,
-                                  "textDocument/hover",
-                                  params,
-                                  cancellable,
-                                  ide_lsp_hover_provider_hover_cb,
-                                  g_steal_pointer (&task));
+                             "textDocument/hover",
+                             params,
+                             cancellable,
+                             ide_lsp_hover_provider_hover_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static gboolean
-ide_lsp_hover_provider_hover_finish (IdeHoverProvider  *provider,
-                                          GAsyncResult      *result,
-                                          GError           **error)
+ide_lsp_hover_provider_populate_finish (GtkSourceHoverProvider  *provider,
+                                        GAsyncResult            *result,
+                                        GError                 **error)
 {
   gboolean ret;
 
@@ -427,28 +433,10 @@ ide_lsp_hover_provider_hover_finish (IdeHoverProvider  *provider,
 }
 
 static void
-ide_lsp_hover_provider_real_load (IdeHoverProvider *provider,
-                                       IdeSourceView    *view)
+hover_provider_iface_init (GtkSourceHoverProviderInterface *iface)
 {
-  IdeLspHoverProvider *self = (IdeLspHoverProvider *)provider;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LSP_HOVER_PROVIDER (self));
-
-  if (IDE_LSP_HOVER_PROVIDER_GET_CLASS (self)->prepare)
-    IDE_LSP_HOVER_PROVIDER_GET_CLASS (self)->prepare (self);
-
-  IDE_EXIT;
-}
-
-static void
-hover_provider_iface_init (IdeHoverProviderInterface *iface)
-{
-  iface->load = ide_lsp_hover_provider_real_load;
-  iface->hover_async = ide_lsp_hover_provider_hover_async;
-  iface->hover_finish = ide_lsp_hover_provider_hover_finish;
+  iface->populate_async = ide_lsp_hover_provider_populate_async;
+  iface->populate_finish = ide_lsp_hover_provider_populate_finish;
 }
 
 /**
@@ -458,8 +446,6 @@ hover_provider_iface_init (IdeHoverProviderInterface *iface)
  * Gets the client that is used for communication.
  *
  * Returns: (transfer none) (nullable): an #IdeLspClient or %NULL
- *
- * Since: 3.30
  */
 IdeLspClient *
 ide_lsp_hover_provider_get_client (IdeLspHoverProvider *self)
@@ -477,12 +463,10 @@ ide_lsp_hover_provider_get_client (IdeLspHoverProvider *self)
  * @client: an #IdeLspClient
  *
  * Sets the client to be used to query for hover information.
- *
- * Since: 3.30
  */
 void
 ide_lsp_hover_provider_set_client (IdeLspHoverProvider *self,
-                                        IdeLspClient        *client)
+                                   IdeLspClient        *client)
 {
   IdeLspHoverProviderPrivate *priv = ide_lsp_hover_provider_get_instance_private (self);
 

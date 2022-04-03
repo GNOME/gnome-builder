@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_HOVER_PROVIDER (ide_lsp_hover_provider_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspHoverProvider, ide_lsp_hover_provider, IDE, LSP_HOVER_PROVIDER, IdeObject)
 
 struct _IdeLspHoverProviderClass
@@ -38,14 +38,11 @@ struct _IdeLspHoverProviderClass
   IdeObjectClass parent_class;
 
   void (*prepare) (IdeLspHoverProvider *self);
-
-  /*< private >*/
-  gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_hover_provider_get_client (IdeLspHoverProvider *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_hover_provider_set_client (IdeLspHoverProvider *self,
                                                  IdeLspClient        *client);
 
