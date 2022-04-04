@@ -24,6 +24,7 @@
 
 #include <string.h>
 
+#include <libide-gtk.h>
 #include <libide-threading.h>
 
 #include "ide-gui-global.h"
@@ -32,13 +33,17 @@
 
 typedef struct
 {
-  GList        mru_link;
+  GList           mru_link;
 
-  const char  *menu_id;
+  const char     *menu_id;
 
-  guint        failed : 1;
-  guint        modified : 1;
-  guint        can_split : 1;
+  GtkBox         *content_box;
+  GtkOverlay     *overlay;
+  GtkProgressBar *progress_bar;
+
+  guint           failed : 1;
+  guint           modified : 1;
+  guint           can_split : 1;
 } IdePagePrivate;
 
 enum {
@@ -54,8 +59,13 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdePage, ide_page, PANEL_TYPE_WIDGET)
+static void buildable_iface_init (GtkBuildableIface *iface);
 
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdePage, ide_page, PANEL_TYPE_WIDGET,
+                                  G_ADD_PRIVATE (IdePage)
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
+
+static GtkBuildableIface *parent_buildable;
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
@@ -264,24 +274,20 @@ ide_page_class_init (IdePageClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "page");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-page.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, IdePage, content_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdePage, overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, IdePage, progress_bar);
 }
 
 static void
 ide_page_init (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
-  g_autoptr(GSimpleActionGroup) group = g_simple_action_group_new ();
 
-  gtk_widget_set_hexpand (GTK_WIDGET (self), TRUE);
-  gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
-  panel_widget_set_icon_name (PANEL_WIDGET (self), "text-x-generic-symbolic");
+  gtk_widget_init_template (GTK_WIDGET (self));
 
   priv->mru_link.data = self;
-
-  /* Add an action group out of convenience to plugins that want to
-   * stash a simple action somewhere.
-   */
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (group));
 }
 
 const char *
@@ -486,4 +492,68 @@ ide_page_get_file_or_directory (IdePage *self)
     return IDE_PAGE_GET_CLASS (self)->get_file_or_directory (self);
 
   return NULL;
+}
+
+static void
+ide_page_add_child (GtkBuildable *buildable,
+                    GtkBuilder   *builder,
+                    GObject      *object,
+                    const char   *name)
+{
+  IdePage *self = (IdePage *)buildable;
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+
+  g_assert (IDE_IS_PAGE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (G_IS_OBJECT (object));
+
+  if (GTK_IS_WIDGET (object))
+    {
+      if (g_strcmp0 (name, "content") == 0)
+        {
+          gtk_box_append (priv->content_box, GTK_WIDGET (object));
+          return;
+        }
+    }
+
+  parent_buildable->add_child (buildable, builder, object, name);
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable = g_type_interface_peek_parent (iface);
+  iface->add_child = ide_page_add_child;
+}
+
+/**
+ * ide_page_set_progress:
+ * @self: a #IdePage
+ * @notification: (nullable): an #IdeNotification or %NULL
+ *
+ * Set interactive progress for the page.
+ *
+ * When the operation is completed, the caller shoudl call this method
+ * again and reutrn a value of %NULL for @notification.
+ */
+void
+ide_page_set_progress (IdePage         *self,
+                       IdeNotification *notification)
+{
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (!notification || IDE_IS_NOTIFICATION (notification));
+
+  if (notification == NULL)
+    {
+      ide_gtk_widget_hide_with_fade (GTK_WIDGET (priv->progress_bar));
+      return;
+    }
+
+  gtk_progress_bar_set_fraction (priv->progress_bar, .0);
+  gtk_widget_show (GTK_WIDGET (priv->progress_bar));
+  g_object_bind_property (notification, "progress",
+                          priv->progress_bar, "fraction",
+                          G_BINDING_SYNC_CREATE);
 }
