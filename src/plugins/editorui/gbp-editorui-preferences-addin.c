@@ -125,6 +125,30 @@ compare_section (gconstpointer a,
 }
 
 static void
+notify_style_scheme_cb (IdeApplication *app,
+                        GParamSpec     *pspec,
+                        GtkFlowBox     *flowbox)
+{
+  const char *style_scheme;
+
+  g_assert (IDE_IS_APPLICATION (app));
+  g_assert (GTK_IS_FLOW_BOX (flowbox));
+
+  style_scheme = ide_application_get_style_scheme (app);
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (flowbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      GtkSourceStyleSchemePreview *preview = GTK_SOURCE_STYLE_SCHEME_PREVIEW (gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child)));
+      GtkSourceStyleScheme *scheme = gtk_source_style_scheme_preview_get_scheme (preview);
+      gboolean selected = g_strcmp0 (style_scheme, gtk_source_style_scheme_get_id (scheme)) == 0;
+
+      gtk_source_style_scheme_preview_set_selected (preview, selected);
+    }
+}
+
+static void
 ide_preferences_builtin_add_schemes (const char                   *page_name,
                                      const IdePreferenceItemEntry *entry,
                                      AdwPreferencesGroup          *group,
@@ -191,6 +215,13 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
 
       gtk_flow_box_append (flowbox, selector);
     }
+
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::style-scheme",
+                           G_CALLBACK (notify_style_scheme_cb),
+                           flowbox,
+                           0);
+  notify_style_scheme_cb (IDE_APPLICATION_DEFAULT, NULL, flowbox);
 
   adw_preferences_group_add (group, GTK_WIDGET (flowbox));
 }
