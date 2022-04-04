@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-gui.h>
 #include <libide-vcs.h>
 
@@ -30,9 +29,8 @@
 
 struct _GbpVcsuiWorkbenchAddin
 {
-  GObject parent_instance;
-
-  DzlSignalGroup *vcs_signals;
+  GObject         parent_instance;
+  IdeSignalGroup *vcs_signals;
 };
 
 static void
@@ -71,7 +69,7 @@ gbp_vcsui_workbench_addin_vcs_changed (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_VCSUI_WORKBENCH_ADDIN (self));
   g_assert (!vcs || IDE_IS_VCS (vcs));
 
-  dzl_signal_group_set_target (self->vcs_signals, vcs);
+  ide_signal_group_set_target (self->vcs_signals, vcs);
 
   if (vcs != NULL)
     on_notify_branch_name (self, NULL, vcs);
@@ -87,8 +85,8 @@ gbp_vcsui_workbench_addin_load (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_VCSUI_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  self->vcs_signals = dzl_signal_group_new (G_TYPE_OBJECT);
-  dzl_signal_group_connect_object (self->vcs_signals,
+  self->vcs_signals = ide_signal_group_new (G_TYPE_OBJECT);
+  ide_signal_group_connect_object (self->vcs_signals,
                                    "notify::branch-name",
                                    G_CALLBACK (on_notify_branch_name),
                                    self,
@@ -104,7 +102,7 @@ gbp_vcsui_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_VCSUI_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  dzl_signal_group_set_target (self->vcs_signals, NULL);
+  ide_signal_group_set_target (self->vcs_signals, NULL);
   g_clear_object (&self->vcs_signals);
 }
 
@@ -117,7 +115,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiWorkbenchAddin, gbp_vcsui_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
 gbp_vcsui_workbench_addin_class_init (GbpVcsuiWorkbenchAddinClass *klass)
