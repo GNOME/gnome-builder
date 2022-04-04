@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.24 -->
-  <template class="IdeCloneSurface" parent="IdeSurface">
+  <template class="GbpVcsuiCloneWidget" parent="GtkWidget">
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkScrolledWindow" id="scroller">
         <property name="propagate-natural-width">true</property>
         <property name="propagate-natural-height">true</property>
         <property name="hscrollbar-policy">never</property>

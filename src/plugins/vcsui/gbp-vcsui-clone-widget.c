@@ -1,4 +1,4 @@
-/* ide-clone-surface.c
+/* gbp-vcsui-clone-widget.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-clone-surface"
+#define G_LOG_DOMAIN "gbp-vcsui-clone-widget"
 
 #include "config.h"
 
@@ -26,11 +26,11 @@
 #include <libpeas/peas.h>
 #include <libide-vcs.h>
 
-#include "ide-clone-surface.h"
+#include "gbp-vcsui-clone-widget.h"
 #include "ide-greeter-private.h"
 #include "ide-greeter-workspace.h"
 
-struct _IdeCloneSurface
+struct _GbpVcsuiCloneWidget
 {
   IdeSurface           parent_instance;
 
@@ -50,6 +50,7 @@ struct _IdeCloneSurface
   GFile               *destination;
 
   /* Template Widgets */
+  GtkWidget           *scroller;
   DzlFileChooserEntry *destination_chooser;
   GtkLabel            *destination_label;
   DzlRadioBox         *kind_radio;
@@ -67,7 +68,7 @@ struct _IdeCloneSurface
   guint                vcs_valid : 1;
 };
 
-G_DEFINE_FINAL_TYPE (IdeCloneSurface, ide_clone_surface, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (GbpVcsuiCloneWidget, gbp_vcsui_clone_widget, IDE_TYPE_SURFACE)
 
 enum {
   PROP_0,
@@ -78,35 +79,35 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 /**
- * ide_clone_surface_new:
+ * gbp_vcsui_clone_widget_new:
  *
- * Create a new #IdeCloneSurface.
+ * Create a new #GbpVcsuiCloneWidget.
  *
- * Returns: (transfer full): a newly created #IdeCloneSurface
+ * Returns: (transfer full): a newly created #GbpVcsuiCloneWidget
  *
  * Since: 3.32
  */
-IdeCloneSurface *
-ide_clone_surface_new (void)
+GbpVcsuiCloneWidget *
+gbp_vcsui_clone_widget_new (void)
 {
-  return g_object_new (IDE_TYPE_CLONE_SURFACE, NULL);
+  return g_object_new (GBP_TYPE_VCSUI_CLONE_WIDGET, NULL);
 }
 
 static void
-ide_clone_surface_addin_added_cb (PeasExtensionSet *set,
+gbp_vcsui_clone_widget_addin_added_cb (PeasExtensionSet *set,
                                   PeasPluginInfo   *plugin_info,
                                   PeasExtension    *exten,
                                   gpointer          user_data)
 {
   IdeVcsCloner *cloner = (IdeVcsCloner *)exten;
-  IdeCloneSurface *self = user_data;
+  GbpVcsuiCloneWidget *self = user_data;
   g_autofree gchar *title = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_VCS_CLONER (cloner));
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
   self->n_addins++;
 
@@ -124,18 +125,18 @@ ide_clone_surface_addin_added_cb (PeasExtensionSet *set,
 }
 
 static void
-ide_clone_surface_addin_removed_cb (PeasExtensionSet *set,
+gbp_vcsui_clone_widget_addin_removed_cb (PeasExtensionSet *set,
                                     PeasPluginInfo   *plugin_info,
                                     PeasExtension    *exten,
                                     gpointer          user_data)
 {
-  IdeCloneSurface *self = user_data;
+  GbpVcsuiCloneWidget *self = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_VCS_CLONER (exten));
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
   self->n_addins--;
 
@@ -152,7 +153,7 @@ ide_clone_surface_addin_removed_cb (PeasExtensionSet *set,
 }
 
 static void
-ide_clone_surface_validate_cb (PeasExtensionSet *set,
+gbp_vcsui_clone_widget_validate_cb (PeasExtensionSet *set,
                                PeasPluginInfo   *plugin_info,
                                PeasExtension    *exten,
                                gpointer          user_data)
@@ -177,7 +178,7 @@ ide_clone_surface_validate_cb (PeasExtensionSet *set,
 }
 
 static void
-ide_clone_surface_validate (IdeCloneSurface *self)
+gbp_vcsui_clone_widget_validate (GbpVcsuiCloneWidget *self)
 {
   struct {
     const gchar *text;
@@ -185,7 +186,7 @@ ide_clone_surface_validate (IdeCloneSurface *self)
     gboolean     valid;
   } validate;
 
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
   validate.text = gtk_entry_get_text (self->uri_entry);
   validate.errmsg = NULL;
@@ -193,7 +194,7 @@ ide_clone_surface_validate (IdeCloneSurface *self)
 
   if (self->addins != NULL)
     peas_extension_set_foreach (self->addins,
-                                ide_clone_surface_validate_cb,
+                                gbp_vcsui_clone_widget_validate_cb,
                                 &validate);
 
   if (validate.valid)
@@ -210,7 +211,7 @@ ide_clone_surface_validate (IdeCloneSurface *self)
 }
 
 static void
-ide_clone_surface_update (IdeCloneSurface *self)
+gbp_vcsui_clone_widget_update (GbpVcsuiCloneWidget *self)
 {
   g_autoptr(GFile) file = NULL;
   g_autoptr(GFile) child_file = NULL;
@@ -221,9 +222,9 @@ ide_clone_surface_update (IdeCloneSurface *self)
   const gchar *text;
   GtkEntry *entry;
 
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
-  ide_clone_surface_validate (self);
+  gbp_vcsui_clone_widget_validate (self);
 
   file = dzl_file_chooser_entry_get_file (self->destination_chooser);
   text = gtk_entry_get_text (self->uri_entry);
@@ -268,54 +269,54 @@ ide_clone_surface_update (IdeCloneSurface *self)
 }
 
 static void
-ide_clone_surface_uri_entry_changed (IdeCloneSurface *self,
+gbp_vcsui_clone_widget_uri_entry_changed (GbpVcsuiCloneWidget *self,
                                      GtkEntry        *entry)
 {
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
 
-  ide_clone_surface_update (self);
+  gbp_vcsui_clone_widget_update (self);
 }
 
 static void
-ide_clone_surface_destination_changed (IdeCloneSurface     *self,
+gbp_vcsui_clone_widget_destination_changed (GbpVcsuiCloneWidget     *self,
                                        GParamSpec          *pspec,
                                        DzlFileChooserEntry *chooser)
 {
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
   g_assert (DZL_IS_FILE_CHOOSER_ENTRY (chooser));
 
-  ide_clone_surface_update (self);
+  gbp_vcsui_clone_widget_update (self);
 }
 
 static void
-ide_clone_surface_grab_focus (GtkWidget *widget)
+gbp_vcsui_clone_widget_grab_focus (GtkWidget *widget)
 {
-  gtk_widget_grab_focus (GTK_WIDGET (IDE_CLONE_SURFACE (widget)->uri_entry));
+  gtk_widget_grab_focus (GTK_WIDGET (GBP_VCSUI_CLONE_WIDGET (widget)->uri_entry));
 }
 
 static void
-ide_clone_surface_destroy (GtkWidget *widget)
+gbp_vcsui_clone_widget_dispose (GObject *object)
 {
-  IdeCloneSurface *self = (IdeCloneSurface *)widget;
+  GbpVcsuiCloneWidget *self = (GbpVcsuiCloneWidget *)object;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
   g_clear_object (&self->addins);
   g_clear_object (&self->destination);
 
-  GTK_WIDGET_CLASS (ide_clone_surface_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_vcsui_clone_widget_parent_class)->dispose (object);
 }
 
 static void
-ide_clone_surface_context_set (GtkWidget  *widget,
+gbp_vcsui_clone_widget_context_set (GtkWidget  *widget,
                                IdeContext *context)
 {
-  IdeCloneSurface *self = (IdeCloneSurface *)widget;
+  GbpVcsuiCloneWidget *self = (GbpVcsuiCloneWidget *)widget;
   g_autoptr(GFile) file = NULL;
 
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
   gtk_entry_set_text (self->author_entry, g_get_real_name ());
@@ -333,33 +334,33 @@ ide_clone_surface_context_set (GtkWidget  *widget,
 
   g_signal_connect (self->addins,
                     "extension-added",
-                    G_CALLBACK (ide_clone_surface_addin_added_cb),
+                    G_CALLBACK (gbp_vcsui_clone_widget_addin_added_cb),
                     self);
 
   g_signal_connect (self->addins,
                     "extension-removed",
-                    G_CALLBACK (ide_clone_surface_addin_removed_cb),
+                    G_CALLBACK (gbp_vcsui_clone_widget_addin_removed_cb),
                     self);
 
   peas_extension_set_foreach (self->addins,
-                              ide_clone_surface_addin_added_cb,
+                              gbp_vcsui_clone_widget_addin_added_cb,
                               self);
 
-  ide_clone_surface_update (self);
+  gbp_vcsui_clone_widget_update (self);
 }
 
 static void
-ide_clone_surface_get_property (GObject    *object,
+gbp_vcsui_clone_widget_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  IdeCloneSurface *self = IDE_CLONE_SURFACE (object);
+  GbpVcsuiCloneWidget *self = GBP_VCSUI_CLONE_WIDGET (object);
 
   switch (prop_id)
     {
     case PROP_URI:
-      g_value_set_string (value, ide_clone_surface_get_uri (self));
+      g_value_set_string (value, gbp_vcsui_clone_widget_get_uri (self));
       break;
 
     default:
@@ -368,17 +369,17 @@ ide_clone_surface_get_property (GObject    *object,
 }
 
 static void
-ide_clone_surface_set_property (GObject      *object,
+gbp_vcsui_clone_widget_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  IdeCloneSurface *self = IDE_CLONE_SURFACE (object);
+  GbpVcsuiCloneWidget *self = GBP_VCSUI_CLONE_WIDGET (object);
 
   switch (prop_id)
     {
     case PROP_URI:
-      ide_clone_surface_set_uri (self, g_value_get_string (value));
+      gbp_vcsui_clone_widget_set_uri (self, g_value_get_string (value));
       break;
 
     default:
@@ -387,19 +388,19 @@ ide_clone_surface_set_property (GObject      *object,
 }
 
 static void
-ide_clone_surface_class_init (IdeCloneSurfaceClass *klass)
+gbp_vcsui_clone_widget_class_init (GbpVcsuiCloneWidgetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = ide_clone_surface_get_property;
-  object_class->set_property = ide_clone_surface_set_property;
+  object_class->dispose = gbp_vcsui_clone_widget_dispose;
+  object_class->get_property = gbp_vcsui_clone_widget_get_property;
+  object_class->set_property = gbp_vcsui_clone_widget_set_property;
 
-  widget_class->destroy = ide_clone_surface_destroy;
-  widget_class->grab_focus = ide_clone_surface_grab_focus;
+  widget_class->grab_focus = gbp_vcsui_clone_widget_grab_focus;
 
   /**
-   * IdeCloneSurface:uri:
+   * GbpVcsuiCloneWidget:uri:
    *
    * The "uri" property is the URI of the version control repository to
    * be cloned. Usually, this is something like
@@ -417,42 +418,44 @@ ide_clone_surface_class_init (IdeCloneSurfaceClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-clone-surface.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, author_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, branch_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, button_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, cancel_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, clone_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, destination_chooser);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, destination_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, email_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, kind_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, kind_radio);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, status_message);
-  gtk_widget_class_bind_template_child (widget_class, IdeCloneSurface, uri_entry);
-  gtk_widget_class_bind_template_callback (widget_class, ide_clone_surface_clone);
-  gtk_widget_class_bind_template_callback (widget_class, ide_clone_surface_destination_changed);
-  gtk_widget_class_bind_template_callback (widget_class, ide_clone_surface_uri_entry_changed);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/vcsui/gbp-vcsui-clone-widget.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, scroller);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, author_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, branch_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, button_stack);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, clone_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, destination_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, destination_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, email_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, kind_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, kind_radio);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, status_message);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiCloneWidget, uri_entry);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_vcsui_clone_widget_clone);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_vcsui_clone_widget_destination_changed);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_vcsui_clone_widget_uri_entry_changed);
 }
 
 static void
-ide_clone_surface_init (IdeCloneSurface *self)
+gbp_vcsui_clone_widget_init (GbpVcsuiCloneWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  ide_widget_set_context_handler (self, ide_clone_surface_context_set);
+  ide_widget_set_context_handler (self, gbp_vcsui_clone_widget_context_set);
 }
 
 const gchar *
-ide_clone_surface_get_uri (IdeCloneSurface *self)
+gbp_vcsui_clone_widget_get_uri (GbpVcsuiCloneWidget *self)
 {
-  g_return_val_if_fail (IDE_IS_CLONE_SURFACE (self), NULL);
+  g_return_val_if_fail (GBP_IS_VCSUI_CLONE_WIDGET (self), NULL);
 
   return gtk_entry_get_text (self->uri_entry);
 }
 
 void
-ide_clone_surface_set_uri (IdeCloneSurface *self,
+gbp_vcsui_clone_widget_set_uri (GbpVcsuiCloneWidget *self,
                            const gchar     *uri)
 {
   static const struct {
@@ -466,7 +469,7 @@ ide_clone_surface_set_uri (IdeCloneSurface *self,
   };
   g_autofree gchar *expanded = NULL;
 
-  g_return_if_fail (IDE_IS_CLONE_SURFACE (self));
+  g_return_if_fail (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
   if (uri != NULL)
     {
@@ -483,19 +486,19 @@ ide_clone_surface_set_uri (IdeCloneSurface *self,
 }
 
 static void
-ide_clone_surface_clone_cb (GObject      *object,
+gbp_vcsui_clone_widget_clone_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
 {
   IdeVcsCloner *cloner = (IdeVcsCloner *)object;
-  g_autoptr(IdeCloneSurface) self = user_data;
+  g_autoptr(GbpVcsuiCloneWidget) self = user_data;
   g_autoptr(IdeProjectInfo) project_info = NULL;
   g_autoptr(GError) error = NULL;
   GtkWidget *workspace;
 
   g_assert (IDE_IS_VCS_CLONER (cloner));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_CLONE_SURFACE (self));
+  g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
   workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE);
   ide_greeter_workspace_end (IDE_GREETER_WORKSPACE (workspace));
@@ -526,7 +529,7 @@ ide_clone_surface_clone_cb (GObject      *object,
 }
 
 void
-ide_clone_surface_clone (IdeCloneSurface *self)
+gbp_vcsui_clone_widget_clone (GbpVcsuiCloneWidget *self)
 {
   PeasEngine *engine = peas_engine_get_default ();
   g_autoptr(IdeNotification) notif = NULL;
@@ -542,7 +545,7 @@ ide_clone_surface_clone (IdeCloneSurface *self)
   const gchar *email;
   GtkWidget *workspace;
 
-  g_return_if_fail (IDE_IS_CLONE_SURFACE (self));
+  g_return_if_fail (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
   if (!(module_name = dzl_radio_box_get_active_id (self->kind_radio)) ||
       !(plugin_info = peas_engine_get_plugin_info (engine, module_name)) ||
@@ -589,7 +592,7 @@ ide_clone_surface_clone (IdeCloneSurface *self)
                               g_variant_dict_end (&dict),
                               notif,
                               cancellable,
-                              ide_clone_surface_clone_cb,
+                              gbp_vcsui_clone_widget_clone_cb,
                               g_object_ref (self));
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->uri_entry), FALSE);

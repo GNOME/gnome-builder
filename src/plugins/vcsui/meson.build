@@ -3,7 +3,7 @@ plugins_sources += files([
   'gbp-vcsui-tree-addin.c',
   'gbp-vcsui-editor-page-addin.c',
   'gbp-vcsui-workbench-addin.c',
-  'ide-clone-surface.c',
+  'gbp-vcsui-clone-widget.c',
 ])
 
 plugin_vcsui_resources = gnome.compile_resources(
