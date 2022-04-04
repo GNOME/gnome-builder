@@ -124,6 +124,9 @@ gbp_editorui_preview_constructed (GObject *object)
   g_settings_bind (self->editor_settings,
                    "highlight-matching-brackets", buffer, "highlight-matching-brackets",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (self->editor_settings,
+                   "show-line-numbers", self, "show-line-numbers",
+                   G_SETTINGS_BIND_GET);
 
   gbp_editorui_preview_load_text (self);
 }
