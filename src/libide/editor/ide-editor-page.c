@@ -209,6 +209,10 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, view);
   gtk_widget_class_bind_template_callback (widget_class, ide_editor_page_focus_enter_cb);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_s, GDK_CONTROL_MASK, "page.save", NULL);
+
+  _ide_editor_page_class_actions_init (klass);
 }
 
 static void
