@@ -34,6 +34,7 @@ libide_editor_public_sources = [
 
 libide_editor_private_sources = [
   'ide-editor-init.c',
+  'ide-editor-page-actions.c',
   'ide-editor-page-settings.c',
 ]
 

@@ -42,7 +42,8 @@ struct _IdeEditorPage
   GtkRevealer       *map_revealer;
 };
 
-void _ide_editor_page_settings_init   (IdeEditorPage *self);
-void _ide_editor_page_settings_reload (IdeEditorPage *self);
+void _ide_editor_page_class_actions_init (IdeEditorPageClass *klass);
+void _ide_editor_page_settings_init      (IdeEditorPage *self);
+void _ide_editor_page_settings_reload    (IdeEditorPage *self);
 
 G_END_DECLS
