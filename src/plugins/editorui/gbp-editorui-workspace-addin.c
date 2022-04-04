@@ -26,25 +26,26 @@
 
 #include <libide-editor.h>
 
+#include "gbp-editorui-position-label.h"
 #include "gbp-editorui-workspace-addin.h"
 
 struct _GbpEditoruiWorkspaceAddin
 {
-  GObject          parent_instance;
+  GObject                   parent_instance;
 
-  IdeWorkspace    *workspace;
-  PanelStatusbar  *statusbar;
+  IdeWorkspace             *workspace;
+  PanelStatusbar           *statusbar;
 
-  IdeSignalGroup  *buffer_signals;
-  IdeSignalGroup  *view_signals;
+  IdeSignalGroup           *buffer_signals;
+  IdeSignalGroup           *view_signals;
 
-  GtkMenuButton   *indentation;
-  GtkLabel        *indentation_label;
+  GtkMenuButton            *indentation;
+  GtkLabel                 *indentation_label;
 
-  GtkMenuButton   *position;
-  GtkLabel        *position_label;
+  GtkMenuButton            *position;
+  GbpEditoruiPositionLabel *position_label;
 
-  guint            queued_cursor_moved;
+  guint                     queued_cursor_moved;
 };
 
 #define clear_from_statusbar(s,w) clear_from_statusbar(s, (GtkWidget **)w)
@@ -58,24 +59,6 @@ static void
       panel_statusbar_remove (statusbar, *widget);
       *widget = NULL;
     }
-}
-
-static GtkLabel *
-tnum_label_new (void)
-{
-  static cairo_font_options_t *options;
-  GtkWidget *label;
-
-  if (options == NULL)
-    {
-      options = cairo_font_options_create ();
-      cairo_font_options_set_variations (options, "tnum");
-    }
-
-  label = gtk_label_new (NULL);
-  gtk_widget_set_font_options (label, options);
-
-  return GTK_LABEL (label);
 }
 
 static void
@@ -111,15 +94,17 @@ notify_indentation_cb (GbpEditoruiWorkspaceAddin *self)
 static void
 update_position (GbpEditoruiWorkspaceAddin *self)
 {
-  g_autofree char *label = NULL;
   IdeSourceView *view;
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
 
   if ((view = ide_signal_group_get_target (self->view_signals)))
-    label = ide_source_view_dup_position_label (view);
+    {
+      guint line, column;
 
-  gtk_label_set_label (self->position_label, label);
+      ide_source_view_get_visual_position (view, &line, &column);
+      gbp_editorui_position_label_update (self->position_label, line, column);
+    }
 }
 
 static gboolean
@@ -186,7 +171,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   /* Indentation status, tabs/spaces/etc */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-indent-menu");
-  self->indentation_label = tnum_label_new ();
+  self->indentation_label = g_object_new (GTK_TYPE_LABEL, NULL);
   self->indentation = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "menu-model", menu,
                                     "direction", GTK_ARROW_UP,
@@ -196,7 +181,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->indentation));
 
   /* Label for cursor position and jump to line/column */
-  self->position_label = tnum_label_new ();
+  self->position_label = g_object_new (GBP_TYPE_EDITORUI_POSITION_LABEL, NULL);
   self->position = g_object_new (GTK_TYPE_MENU_BUTTON,
                                  "direction", GTK_ARROW_UP,
                                  "visible", FALSE,

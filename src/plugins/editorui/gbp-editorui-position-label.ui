@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpEditoruiPositionLabel" parent="GtkWidget">
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">Ln</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="line">
+        <property name="xalign">1</property>
+        <property name="width-chars">2</property>
+        <property name="margin-start">6</property>
+        <attributes>
+          <attribute name="font-features" value="tnum"/>
+        </attributes>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="margin-start">6</property>
+        <property name="label" translatable="yes">Col</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="column">
+        <property name="xalign">1</property>
+        <property name="width-chars">2</property>
+        <property name="margin-start">6</property>
+        <attributes>
+          <attribute name="font-features" value="tnum"/>
+        </attributes>
+      </object>
+    </child>
+  </template>
+</interface>

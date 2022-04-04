@@ -3,5 +3,6 @@
   <gresource prefix="/plugins/editorui">
     <file>editorui.plugin</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">gbp-editorui-position-label.ui</file>
   </gresource>
 </gresources>
