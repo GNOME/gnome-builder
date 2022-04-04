@@ -147,8 +147,10 @@ typedef struct
   gint          priority;
 } IdeTaskCancel;
 
-typedef struct
+struct _IdeTask
 {
+  GObject parent_instance;
+
   /*
    * @global_link is used to store a pointer to the task in the global
    * queue during the lifetime of the task. This is a debugging feature
@@ -319,8 +321,7 @@ typedef struct
    * If we have dispatched to a thread already.
    */
   guint thread_called : 1;
-
-} IdeTaskPrivate;
+};
 
 static void     async_result_init_iface (GAsyncResultIface *iface);
 static void     ide_task_data_free      (IdeTaskData       *task_data);
@@ -332,9 +333,8 @@ static void     ide_task_release        (IdeTask           *self,
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeTaskData, ide_task_data_free);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeTaskResult, ide_task_result_free);
 
-G_DEFINE_TYPE_WITH_CODE (IdeTask, ide_task, G_TYPE_OBJECT,
-                         G_ADD_PRIVATE (IdeTask)
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_RESULT, async_result_init_iface))
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTask, ide_task, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_RESULT, async_result_init_iface))
 
 enum {
   PROP_0,
@@ -519,20 +519,20 @@ ide_task_thread_func (gpointer data)
   g_autoptr(GObject) source_object = NULL;
   g_autoptr(GCancellable) cancellable = NULL;
   g_autoptr(IdeTask) task = data;
-  IdeTaskPrivate *priv = ide_task_get_instance_private (task);
+  IdeTask *self = task;
   gpointer task_data = NULL;
   IdeTaskThreadFunc thread_func;
 
   g_assert (IDE_IS_TASK (task));
 
-  g_mutex_lock (&priv->mutex);
-  source_object = priv->source_object ? g_object_ref (priv->source_object) : NULL;
-  cancellable = priv->cancellable ? g_object_ref (priv->cancellable) : NULL;
-  if (priv->task_data)
-    task_data = priv->task_data->data;
-  thread_func = priv->thread_func;
-  priv->thread_func = NULL;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  source_object = self->source_object ? g_object_ref (self->source_object) : NULL;
+  cancellable = self->cancellable ? g_object_ref (self->cancellable) : NULL;
+  if (self->task_data)
+    task_data = self->task_data->data;
+  thread_func = self->thread_func;
+  self->thread_func = NULL;
+  g_mutex_unlock (&self->mutex);
 
   g_assert (thread_func != NULL);
 
@@ -541,22 +541,22 @@ ide_task_thread_func (gpointer data)
   g_clear_object (&source_object);
   g_clear_object (&cancellable);
 
-  g_mutex_lock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
 
   /*
    * We've delayed our ide_task_return() until we reach here, so now
    * we can steal our object instance and complete the task along with
    * ensuring the object wont be finalized from this thread.
    */
-  if (priv->thread_result)
+  if (self->thread_result)
     {
-      IdeTaskResult *result = g_steal_pointer (&priv->thread_result);
+      IdeTaskResult *result = g_steal_pointer (&self->thread_result);
 
       g_assert (result->task == task);
       g_clear_object (&result->task);
       result->task = g_steal_pointer (&task);
 
-      priv->return_source = ide_task_complete (g_steal_pointer (&result));
+      self->return_source = ide_task_complete (g_steal_pointer (&result));
 
       g_assert (source_object == NULL);
       g_assert (cancellable == NULL);
@@ -571,7 +571,7 @@ ide_task_thread_func (gpointer data)
        */
     }
 
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_unlock (&self->mutex);
 
   g_assert (source_object == NULL);
   g_assert (cancellable == NULL);
@@ -581,15 +581,14 @@ static void
 ide_task_dispose (GObject *object)
 {
   IdeTask *self = (IdeTask *)object;
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
   g_assert (IDE_IS_TASK (self));
 
   ide_task_release (self, TRUE);
 
-  g_mutex_lock (&priv->mutex);
-  g_clear_pointer (&priv->result, ide_task_result_free);
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  g_clear_pointer (&self->result, ide_task_result_free);
+  g_mutex_unlock (&self->mutex);
 
   G_OBJECT_CLASS (ide_task_parent_class)->dispose (object);
 }
@@ -598,39 +597,38 @@ static void
 ide_task_finalize (GObject *object)
 {
   IdeTask *self = (IdeTask *)object;
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
   G_LOCK (global_task_list);
-  g_queue_unlink (&global_task_list, &priv->global_link);
+  g_queue_unlink (&global_task_list, &self->global_link);
   G_UNLOCK (global_task_list);
 
-  if (!priv->return_called)
+  if (!self->return_called)
     g_critical ("%s [%s] finalized before completing",
                 G_OBJECT_TYPE_NAME (self),
-                priv->name ?: "unnamed");
-  else if (priv->chained && priv->chained->len)
+                self->name ?: "unnamed");
+  else if (self->chained && self->chained->len)
     g_critical ("%s [%s] finalized before dependents were notified",
                 G_OBJECT_TYPE_NAME (self),
-                priv->name ?: "unnamed");
-  else if (priv->thread_func)
+                self->name ?: "unnamed");
+  else if (self->thread_func)
     g_critical ("%s [%s] finalized while thread_func is active",
                 G_OBJECT_TYPE_NAME (self),
-                priv->name ?: "unnamed");
-  else if (!priv->completed)
+                self->name ?: "unnamed");
+  else if (!self->completed)
     g_critical ("%s [%s] finalized before completion",
                 G_OBJECT_TYPE_NAME (self),
-                priv->name ?: "unnamed");
+                self->name ?: "unnamed");
 
-  g_assert (priv->return_source == 0);
-  g_assert (priv->result == NULL);
-  g_assert (priv->task_data == NULL);
-  g_assert (priv->source_object == NULL);
-  g_assert (priv->chained == NULL);
-  g_assert (priv->thread_result == NULL);
+  g_assert (self->return_source == 0);
+  g_assert (self->result == NULL);
+  g_assert (self->task_data == NULL);
+  g_assert (self->source_object == NULL);
+  g_assert (self->chained == NULL);
+  g_assert (self->thread_result == NULL);
 
-  g_clear_pointer (&priv->main_context, g_main_context_unref);
-  g_clear_object (&priv->cancellable);
-  g_mutex_clear (&priv->mutex);
+  g_clear_pointer (&self->main_context, g_main_context_unref);
+  g_clear_object (&self->cancellable);
+  g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS (ide_task_parent_class)->finalize (object);
 }
@@ -682,19 +680,17 @@ ide_task_class_init (IdeTaskClass *klass)
 static void
 ide_task_init (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
+  g_mutex_init (&self->mutex);
 
-  g_mutex_init (&priv->mutex);
-
-  priv->check_cancellable = TRUE;
-  priv->release_on_propagate = TRUE;
-  priv->priority = G_PRIORITY_DEFAULT;
-  priv->complete_priority = PRIORITY_REDRAW + 1;
-  priv->main_context = g_main_context_ref_thread_default ();
-  priv->global_link.data = self;
+  self->check_cancellable = TRUE;
+  self->release_on_propagate = TRUE;
+  self->priority = G_PRIORITY_DEFAULT;
+  self->complete_priority = PRIORITY_REDRAW + 1;
+  self->main_context = g_main_context_ref_thread_default ();
+  self->global_link.data = self;
 
   G_LOCK (global_task_list);
-  g_queue_push_tail_link (&global_task_list, &priv->global_link);
+  g_queue_push_tail_link (&global_task_list, &self->global_link);
   G_UNLOCK (global_task_list);
 }
 
@@ -721,14 +717,13 @@ ide_task_init (IdeTask *self)
 gpointer
 ide_task_get_source_object (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gpointer ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), NULL);
 
-  g_mutex_lock (&priv->mutex);
-  ret = priv->source_object;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = self->source_object;
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -758,20 +753,18 @@ IdeTask *
                 gpointer             user_data)
 {
   g_autoptr(IdeTask) self = NULL;
-  IdeTaskPrivate *priv;
 
   g_return_val_if_fail (!source_object || G_IS_OBJECT (source_object), NULL);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
 
   self = g_object_new (IDE_TYPE_TASK, NULL);
-  priv = ide_task_get_instance_private (self);
 
-  priv->source_object = source_object ? g_object_ref (source_object) : NULL;
-  priv->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-  priv->callback = callback;
-  priv->user_data = user_data;
+  self->source_object = source_object ? g_object_ref (source_object) : NULL;
+  self->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+  self->callback = callback;
+  self->user_data = user_data;
 #ifdef ENABLE_TIME_CHART
-  priv->begin_time = g_get_monotonic_time ();
+  self->begin_time = g_get_monotonic_time ();
 #endif
 
   return g_steal_pointer (&self);
@@ -792,9 +785,7 @@ gboolean
 ide_task_is_valid (gpointer self,
                    gpointer source_object)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
-  return IDE_IS_TASK (self) && priv->source_object == source_object;
+  return IDE_IS_TASK (self) && IDE_TASK (self)->source_object == source_object;
 }
 
 /**
@@ -814,14 +805,13 @@ ide_task_is_valid (gpointer self,
 gboolean
 ide_task_get_completed (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gboolean ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
 
-  g_mutex_lock (&priv->mutex);
-  ret = priv->completed;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = self->completed;
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -829,14 +819,13 @@ ide_task_get_completed (IdeTask *self)
 gint
 ide_task_get_priority (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gint ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), 0);
 
-  g_mutex_lock (&priv->mutex);
-  ret = priv->priority;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = self->priority;
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -845,26 +834,23 @@ void
 ide_task_set_priority (IdeTask *self,
                        gint     priority)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
 
-  g_mutex_lock (&priv->mutex);
-  priv->priority = priority;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->priority = priority;
+  g_mutex_unlock (&self->mutex);
 }
 
 gint
 ide_task_get_complete_priority (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gint ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), 0);
 
-  g_mutex_lock (&priv->mutex);
-  ret = priv->complete_priority;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = self->complete_priority;
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -873,13 +859,11 @@ void
 ide_task_set_complete_priority (IdeTask *self,
                                 gint     complete_priority)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
 
-  g_mutex_lock (&priv->mutex);
-  priv->complete_priority = complete_priority;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->complete_priority = complete_priority;
+  g_mutex_unlock (&self->mutex);
 }
 
 /**
@@ -895,19 +879,15 @@ ide_task_set_complete_priority (IdeTask *self,
 GCancellable *
 ide_task_get_cancellable (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_TASK (self), NULL);
 
-  return priv->cancellable;
+  return self->cancellable;
 }
 
 static void
 ide_task_deliver_result (IdeTask       *self,
                          IdeTaskResult *result)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_assert (IDE_IS_TASK (self));
   g_assert (result != NULL);
   g_assert (result->task == NULL);
@@ -920,36 +900,35 @@ ide_task_deliver_result (IdeTask       *self,
    */
 
   result->task = g_object_ref (self);
-  result->main_context = g_main_context_ref (priv->main_context);
-  result->complete_priority = priv->complete_priority;
+  result->main_context = g_main_context_ref (self->main_context);
+  result->complete_priority = self->complete_priority;
 
-  g_mutex_lock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
 
-  priv->return_called = TRUE;
-  priv->return_source = ide_task_complete (g_steal_pointer (&result));
+  self->return_called = TRUE;
+  self->return_source = ide_task_complete (g_steal_pointer (&result));
 
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_unlock (&self->mutex);
 }
 
 static void
 ide_task_release (IdeTask  *self,
                   gboolean  force)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(IdeTaskData) task_data = NULL;
   g_autoptr(GObject) source_object = NULL;
   g_autoptr(GPtrArray) chained = NULL;
 
   g_assert (IDE_IS_TASK (self));
 
-  g_mutex_lock (&priv->mutex);
-  if (force || priv->release_on_propagate)
+  g_mutex_lock (&self->mutex);
+  if (force || self->release_on_propagate)
     {
-      source_object = g_steal_pointer (&priv->source_object);
-      task_data = g_steal_pointer (&priv->task_data);
-      chained = g_steal_pointer (&priv->chained);
+      source_object = g_steal_pointer (&self->source_object);
+      task_data = g_steal_pointer (&self->task_data);
+      chained = g_steal_pointer (&self->chained);
     }
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_unlock (&self->mutex);
 
   if (chained)
     {
@@ -976,7 +955,6 @@ ide_task_return_cb (gpointer user_data)
   g_autoptr(GPtrArray) chained = NULL;
   GAsyncReadyCallback callback = NULL;
   gpointer callback_data = NULL;
-  IdeTaskPrivate *priv;
 
   g_assert (result != NULL);
   g_assert (IDE_IS_TASK (result->task));
@@ -986,54 +964,53 @@ ide_task_return_cb (gpointer user_data)
    * a reference cycle.
    */
   self = g_steal_pointer (&result->task);
-  priv = ide_task_get_instance_private (self);
 
 #ifdef ENABLE_TIME_CHART
   g_message ("TASK-END: %s: duration=%lf",
-             priv->name,
-             (g_get_monotonic_time () - priv->begin_time) / (gdouble)G_USEC_PER_SEC);
+             self->name,
+             (g_get_monotonic_time () - self->begin_time) / (gdouble)G_USEC_PER_SEC);
 #endif
 
-  g_mutex_lock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
 
-  g_assert (priv->return_source != 0);
+  g_assert (self->return_source != 0);
 
-  priv->return_source = 0;
+  self->return_source = 0;
 
-  if (priv->got_cancel && priv->result != NULL)
+  if (self->got_cancel && self->result != NULL)
     {
       /* We can discard this since we already handled a result for the
        * task. We delivered this here just so that we could finalize
        * any objects back inside them main context.
        */
-      g_mutex_unlock (&priv->mutex);
+      g_mutex_unlock (&self->mutex);
       return G_SOURCE_REMOVE;
     }
 
-  g_assert (priv->result == NULL);
-  g_assert (priv->return_called == TRUE);
+  g_assert (self->result == NULL);
+  g_assert (self->return_called == TRUE);
 
-  priv->result = g_steal_pointer (&result);
+  self->result = g_steal_pointer (&result);
 
-  callback = priv->callback;
-  callback_data = priv->user_data;
+  callback = self->callback;
+  callback_data = self->user_data;
 
-  priv->callback = NULL;
-  priv->user_data = NULL;
+  self->callback = NULL;
+  self->user_data = NULL;
 
-  source_object = priv->source_object ? g_object_ref (priv->source_object) : NULL;
-  cancellable = priv->cancellable ? g_object_ref (priv->cancellable) : NULL;
+  source_object = self->source_object ? g_object_ref (self->source_object) : NULL;
+  cancellable = self->cancellable ? g_object_ref (self->cancellable) : NULL;
 
-  chained = g_steal_pointer (&priv->chained);
+  chained = g_steal_pointer (&self->chained);
 
   /* Make a private copy of the result data if we're going to need to notify
    * other tasks of our result. We can't guarantee the result in @task will
    * stay alive during our dispatch callbacks, so we need to have a copy.
    */
   if (chained != NULL && chained->len > 0)
-    result_copy = ide_task_result_copy (priv->result);
+    result_copy = ide_task_result_copy (self->result);
 
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_unlock (&self->mutex);
 
   if (callback)
     callback (source_object, G_ASYNC_RESULT (self), callback_data);
@@ -1049,9 +1026,9 @@ ide_task_return_cb (gpointer user_data)
         }
     }
 
-  g_mutex_lock (&priv->mutex);
-  priv->completed = TRUE;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->completed = TRUE;
+  g_mutex_unlock (&self->mutex);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COMPLETED]);
 
@@ -1070,22 +1047,21 @@ static void
 ide_task_return (IdeTask       *self,
                  IdeTaskResult *result)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GMutexLocker) locker = NULL;
 
   g_assert (IDE_IS_TASK (self));
   g_assert (result != NULL);
   g_assert (result->task == NULL);
 
-  locker = g_mutex_locker_new (&priv->mutex);
+  locker = g_mutex_locker_new (&self->mutex);
 
-  if (priv->cancel_handler && priv->cancellable)
+  if (self->cancel_handler && self->cancellable)
     {
-      g_cancellable_disconnect (priv->cancellable, priv->cancel_handler);
-      priv->cancel_handler = 0;
+      g_cancellable_disconnect (self->cancellable, self->cancel_handler);
+      self->cancel_handler = 0;
     }
 
-  if (priv->return_called)
+  if (self->return_called)
     {
       GSource *source;
 
@@ -1102,8 +1078,8 @@ ide_task_return (IdeTask       *self,
       /* If we haven't been cancelled, then we reached this path multiple
        * times by programmer error.
        */
-      if (!priv->got_cancel)
-        g_critical ("Attempted to set result on task [%s] multiple times", priv->name);
+      if (!self->got_cancel)
+        g_critical ("Attempted to set result on task [%s] multiple times", self->name);
 
       /*
        * This task has already returned, but we need to ensure that we pass
@@ -1117,32 +1093,32 @@ ide_task_return (IdeTask       *self,
                              ide_task_return_dummy_cb,
                              result,
                              (GDestroyNotify)ide_task_result_free);
-      g_source_attach (source, priv->main_context);
+      g_source_attach (source, self->main_context);
       g_source_unref (source);
 
       return;
     }
 
-  priv->return_called = TRUE;
+  self->return_called = TRUE;
 
   if (result->type == IDE_TASK_RESULT_CANCELLED)
-    priv->got_cancel = TRUE;
+    self->got_cancel = TRUE;
 
   result->task = g_object_ref (self);
-  result->main_context = g_main_context_ref (priv->main_context);
-  result->complete_priority = priv->complete_priority;
+  result->main_context = g_main_context_ref (self->main_context);
+  result->complete_priority = self->complete_priority;
 
   /* We can queue the result immediately if we're not being called
    * while we're inside of a ide_task_run_in_thread() callback. Otherwise,
    * that thread cleanup must complete this to ensure objects cannot
    * be finalized in that thread.
    */
-  if (!priv->thread_called || IDE_IS_MAIN_THREAD ())
-    priv->return_source = ide_task_complete (result);
-  else if (priv->return_on_cancel && result->type == IDE_TASK_RESULT_CANCELLED)
-    priv->return_source = ide_task_complete (result);
+  if (!self->thread_called || IDE_IS_MAIN_THREAD ())
+    self->return_source = ide_task_complete (result);
+  else if (self->return_on_cancel && result->type == IDE_TASK_RESULT_CANCELLED)
+    self->return_source = ide_task_complete (result);
   else
-    priv->thread_result = result;
+    self->thread_result = result;
 }
 
 /**
@@ -1365,16 +1341,15 @@ ide_task_return_new_error (IdeTask     *self,
 gboolean
 ide_task_return_error_if_cancelled (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gboolean failed;
 
   g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
 
-  g_mutex_lock (&priv->mutex);
-  failed = g_cancellable_is_cancelled (priv->cancellable) ||
-    (IDE_IS_OBJECT (priv->source_object) &&
-     ide_object_in_destruction (IDE_OBJECT (priv->source_object)));
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  failed = g_cancellable_is_cancelled (self->cancellable) ||
+    (IDE_IS_OBJECT (self->source_object) &&
+     ide_object_in_destruction (IDE_OBJECT (self->source_object)));
+  g_mutex_unlock (&self->mutex);
 
   if (failed)
     ide_task_return_new_error (self,
@@ -1404,15 +1379,13 @@ void
 ide_task_set_release_on_propagate (IdeTask  *self,
                                    gboolean  release_on_propagate)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
 
   release_on_propagate = !!release_on_propagate;
 
-  g_mutex_lock (&priv->mutex);
-  priv->release_on_propagate = release_on_propagate;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->release_on_propagate = release_on_propagate;
+  g_mutex_unlock (&self->mutex);
 }
 
 /**
@@ -1429,13 +1402,11 @@ void
 ide_task_set_source_tag (IdeTask  *self,
                          gpointer  source_tag)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
 
-  g_mutex_lock (&priv->mutex);
-  priv->source_tag = source_tag;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->source_tag = source_tag;
+  g_mutex_unlock (&self->mutex);
 }
 
 /**
@@ -1454,15 +1425,13 @@ void
 ide_task_set_check_cancellable (IdeTask  *self,
                                 gboolean  check_cancellable)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
 
   check_cancellable = !!check_cancellable;
 
-  g_mutex_lock (&priv->mutex);
-  priv->check_cancellable = check_cancellable;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->check_cancellable = check_cancellable;
+  g_mutex_unlock (&self->mutex);
 }
 
 /**
@@ -1482,36 +1451,35 @@ void
 ide_task_run_in_thread (IdeTask           *self,
                         IdeTaskThreadFunc  thread_func)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_TASK (self));
   g_return_if_fail (thread_func != NULL);
 
-  g_mutex_lock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
 
-  if (priv->completed == TRUE)
+  if (self->completed == TRUE)
     {
       g_critical ("Task already completed, cannot run in thread");
       goto unlock;
     }
 
-  if (priv->thread_called)
+  if (self->thread_called)
     {
       g_critical ("Run in thread already called, cannot run again");
       goto unlock;
     }
 
-  priv->thread_called = TRUE;
-  priv->thread_func = thread_func;
+  self->thread_called = TRUE;
+  self->thread_func = thread_func;
 
-  ide_thread_pool_push_with_priority ((IdeThreadPoolKind)priv->kind,
-                                      priv->priority,
+  ide_thread_pool_push_with_priority ((IdeThreadPoolKind)self->kind,
+                                      self->priority,
                                       ide_task_thread_func,
                                       g_object_ref (self));
 
 unlock:
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_unlock (&self->mutex);
 
   if (error != NULL)
     ide_task_return_error (self, g_steal_pointer (&error));
@@ -1522,72 +1490,71 @@ ide_task_propagate_locked (IdeTask            *self,
                            IdeTaskResultType   expected_type,
                            GError            **error)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   IdeTaskResult *ret = NULL;
 
   g_assert (IDE_IS_TASK (self));
   g_assert (expected_type > IDE_TASK_RESULT_NONE);
 
-  if (priv->result == NULL)
+  if (self->result == NULL)
     {
-      g_autoptr(GMainContext) context = g_main_context_ref (priv->main_context);
+      g_autoptr(GMainContext) context = g_main_context_ref (self->main_context);
 
-      while (priv->return_source)
+      while (self->return_source)
         {
-          g_mutex_unlock (&priv->mutex);
+          g_mutex_unlock (&self->mutex);
           g_main_context_iteration (context, FALSE);
-          g_mutex_lock (&priv->mutex);
+          g_mutex_lock (&self->mutex);
         }
     }
 
-  if (priv->result == NULL)
+  if (self->result == NULL)
     {
       g_set_error_literal (error,
                            G_IO_ERROR,
                            G_IO_ERROR_FAILED,
                            "No result available for task");
     }
-  else if (priv->result->type == IDE_TASK_RESULT_ERROR)
+  else if (self->result->type == IDE_TASK_RESULT_ERROR)
     {
       if (error != NULL)
-        *error = g_error_copy (priv->result->u.v_error);
+        *error = g_error_copy (self->result->u.v_error);
     }
-  else if ((priv->check_cancellable && g_cancellable_is_cancelled (priv->cancellable)) ||
-           priv->result->type == IDE_TASK_RESULT_CANCELLED)
+  else if ((self->check_cancellable && g_cancellable_is_cancelled (self->cancellable)) ||
+           self->result->type == IDE_TASK_RESULT_CANCELLED)
     {
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_CANCELLED,
                    "The operation was cancelled");
     }
-  else if (IDE_IS_OBJECT (priv->source_object) &&
-           ide_object_in_destruction (IDE_OBJECT (priv->source_object)))
+  else if (IDE_IS_OBJECT (self->source_object) &&
+           ide_object_in_destruction (IDE_OBJECT (self->source_object)))
     {
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_CANCELLED,
                    "The object was destroyed while the task executed");
     }
-  else if (priv->result->type != expected_type)
+  else if (self->result->type != expected_type)
     {
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_FAILED,
                    "Task expected result of %s got %s",
                    result_type_name (expected_type),
-                   result_type_name (priv->result->type));
+                   result_type_name (self->result->type));
     }
   else
     {
-      g_assert (priv->result != NULL);
-      g_assert (priv->result->type == expected_type);
+      g_assert (self->result != NULL);
+      g_assert (self->result->type == expected_type);
 
-      if (priv->release_on_propagate)
-        ret = g_steal_pointer (&priv->result);
-      else if (priv->result->type == IDE_TASK_RESULT_POINTER)
-        ret = g_steal_pointer (&priv->result);
+      if (self->release_on_propagate)
+        ret = g_steal_pointer (&self->result);
+      else if (self->result->type == IDE_TASK_RESULT_POINTER)
+        ret = g_steal_pointer (&self->result);
       else
-        ret = ide_task_result_copy (priv->result);
+        ret = ide_task_result_copy (self->result);
 
       g_assert (ret != NULL);
     }
@@ -1599,13 +1566,12 @@ gboolean
 ide_task_propagate_boolean (IdeTask  *self,
                             GError  **error)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GMutexLocker) locker = NULL;
   g_autoptr(IdeTaskResult) res = NULL;
 
   g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
 
-  locker = g_mutex_locker_new (&priv->mutex);
+  locker = g_mutex_locker_new (&self->mutex);
 
   if (!(res = ide_task_propagate_locked (self, IDE_TASK_RESULT_BOOLEAN, error)))
     return FALSE;
@@ -1617,13 +1583,12 @@ gpointer
 ide_task_propagate_boxed (IdeTask  *self,
                           GError  **error)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GMutexLocker) locker = NULL;
   g_autoptr(IdeTaskResult) res = NULL;
 
   g_return_val_if_fail (IDE_IS_TASK (self), NULL);
 
-  locker = g_mutex_locker_new (&priv->mutex);
+  locker = g_mutex_locker_new (&self->mutex);
 
   if (!(res = ide_task_propagate_locked (self, IDE_TASK_RESULT_BOXED, error)))
     return NULL;
@@ -1635,13 +1600,12 @@ gssize
 ide_task_propagate_int (IdeTask  *self,
                         GError  **error)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GMutexLocker) locker = NULL;
   g_autoptr(IdeTaskResult) res = NULL;
 
   g_return_val_if_fail (IDE_IS_TASK (self), 0);
 
-  locker = g_mutex_locker_new (&priv->mutex);
+  locker = g_mutex_locker_new (&self->mutex);
 
   if (!(res = ide_task_propagate_locked (self, IDE_TASK_RESULT_INT, error)))
     return 0;
@@ -1668,13 +1632,12 @@ gpointer
 ide_task_propagate_object (IdeTask  *self,
                            GError  **error)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GMutexLocker) locker = NULL;
   g_autoptr(IdeTaskResult) res = NULL;
 
   g_return_val_if_fail (IDE_IS_TASK (self), NULL);
 
-  locker = g_mutex_locker_new (&priv->mutex);
+  locker = g_mutex_locker_new (&self->mutex);
 
   if (!(res = ide_task_propagate_locked (self, IDE_TASK_RESULT_OBJECT, error)))
     return NULL;
@@ -1686,14 +1649,13 @@ gpointer
 ide_task_propagate_pointer (IdeTask  *self,
                             GError  **error)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GMutexLocker) locker = NULL;
   g_autoptr(IdeTaskResult) res = NULL;
   gpointer ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), NULL);
 
-  locker = g_mutex_locker_new (&priv->mutex);
+  locker = g_mutex_locker_new (&self->mutex);
 
   if (!(res = ide_task_propagate_locked (self, IDE_TASK_RESULT_POINTER, error)))
     return NULL;
@@ -1725,17 +1687,15 @@ void
 ide_task_chain (IdeTask *self,
                 IdeTask *other_task)
 {
-  IdeTaskPrivate *self_priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
   g_return_if_fail (IDE_IS_TASK (other_task));
   g_return_if_fail (self != other_task);
 
-  g_mutex_lock (&self_priv->mutex);
+  g_mutex_lock (&self->mutex);
 
-  if (self_priv->result)
+  if (self->result)
     {
-      IdeTaskResult *copy = ide_task_result_copy (self_priv->result);
+      IdeTaskResult *copy = ide_task_result_copy (self->result);
 
       if (copy != NULL)
         ide_task_deliver_result (other_task, g_steal_pointer (&copy));
@@ -1747,25 +1707,24 @@ ide_task_chain (IdeTask *self,
     }
   else
     {
-      if (self_priv->chained == NULL)
-        self_priv->chained = g_ptr_array_new_with_free_func (g_object_unref);
-      g_ptr_array_add (self_priv->chained, g_object_ref (other_task));
+      if (self->chained == NULL)
+        self->chained = g_ptr_array_new_with_free_func (g_object_unref);
+      g_ptr_array_add (self->chained, g_object_ref (other_task));
     }
 
-  g_mutex_unlock (&self_priv->mutex);
+  g_mutex_unlock (&self->mutex);
 }
 
 gpointer
 ide_task_get_source_tag (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gpointer ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), NULL);
 
-  g_mutex_lock (&priv->mutex);
-  ret = priv->source_tag;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = self->source_tag;
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -1773,14 +1732,13 @@ ide_task_get_source_tag (IdeTask *self)
 IdeTaskKind
 ide_task_get_kind (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   IdeTaskKind kind;
 
   g_return_val_if_fail (IDE_IS_TASK (self), 0);
 
-  g_mutex_lock (&priv->mutex);
-  kind = priv->kind;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  kind = self->kind;
+  g_mutex_unlock (&self->mutex);
 
   return kind;
 }
@@ -1789,15 +1747,13 @@ void
 ide_task_set_kind (IdeTask     *self,
                    IdeTaskKind  kind)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
   g_return_if_fail (kind >= IDE_TASK_KIND_DEFAULT);
   g_return_if_fail (kind < IDE_TASK_KIND_LAST);
 
-  g_mutex_lock (&priv->mutex);
-  priv->kind = kind;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->kind = kind;
+  g_mutex_unlock (&self->mutex);
 }
 
 /**
@@ -1813,15 +1769,14 @@ ide_task_set_kind (IdeTask     *self,
 gpointer
 ide_task_get_task_data (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gpointer task_data = NULL;
 
   g_assert (IDE_IS_TASK (self));
 
-  g_mutex_lock (&priv->mutex);
-  if (priv->task_data)
-    task_data = priv->task_data->data;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  if (self->task_data)
+    task_data = self->task_data->data;
+  g_mutex_unlock (&self->mutex);
 
   return task_data;
 }
@@ -1839,7 +1794,6 @@ void
                           gpointer        task_data,
                           GDestroyNotify  task_data_destroy)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(IdeTaskData) old_task_data = NULL;
   g_autoptr(IdeTaskData) new_task_data = NULL;
 
@@ -1849,18 +1803,18 @@ void
   new_task_data->data = task_data;
   new_task_data->data_destroy = task_data_destroy;
 
-  g_mutex_lock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
 
-  if (priv->return_called)
+  if (self->return_called)
     {
       g_critical ("Cannot set task data after returning value");
       goto unlock;
     }
 
-  old_task_data = g_steal_pointer (&priv->task_data);
-  priv->task_data = g_steal_pointer (&new_task_data);
+  old_task_data = g_steal_pointer (&self->task_data);
+  self->task_data = g_steal_pointer (&new_task_data);
 
-  if (priv->thread_called && old_task_data)
+  if (self->thread_called && old_task_data)
     {
       GSource *source;
 
@@ -1870,13 +1824,13 @@ void
       g_source_set_callback (source,
                              ide_task_set_task_data_cb,
                              NULL, NULL);
-      g_source_set_priority (source, priv->priority);
-      g_source_attach (source, priv->main_context);
+      g_source_set_priority (source, self->priority);
+      g_source_attach (source, self->main_context);
       g_source_unref (source);
     }
 
 unlock:
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_unlock (&self->mutex);
 }
 
 static gboolean
@@ -1908,7 +1862,7 @@ ide_task_cancellable_cancelled_cb (GCancellable  *cancellable,
 
   /*
    * This can be called synchronously from g_cancellable_connect(), which
-   * could still be holding priv->mutex. So we need to queue the cancellation
+   * could still be holding self->mutex. So we need to queue the cancellation
    * request back through the main context.
    */
 
@@ -1933,14 +1887,13 @@ ide_task_cancellable_cancelled_cb (GCancellable  *cancellable,
 gboolean
 ide_task_get_return_on_cancel (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gboolean ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
 
-  g_mutex_lock (&priv->mutex);
-  ret = priv->return_on_cancel;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = self->return_on_cancel;
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -1965,21 +1918,20 @@ void
 ide_task_set_return_on_cancel (IdeTask  *self,
                                gboolean  return_on_cancel)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(GMutexLocker) locker = NULL;
 
   g_return_if_fail (IDE_IS_TASK (self));
 
-  locker = g_mutex_locker_new (&priv->mutex);
+  locker = g_mutex_locker_new (&self->mutex);
 
-  if (priv->cancellable == NULL)
+  if (self->cancellable == NULL)
     return;
 
   return_on_cancel = !!return_on_cancel;
 
-  if (priv->return_on_cancel != return_on_cancel)
+  if (self->return_on_cancel != return_on_cancel)
     {
-      priv->return_on_cancel = return_on_cancel;
+      self->return_on_cancel = return_on_cancel;
 
       if (return_on_cancel)
         {
@@ -1989,12 +1941,12 @@ ide_task_set_return_on_cancel (IdeTask  *self,
            * appropriate ide_task_return() API is called.
            */
           cancel = g_slice_new0 (IdeTaskCancel);
-          cancel->main_context = g_main_context_ref (priv->main_context);
+          cancel->main_context = g_main_context_ref (self->main_context);
           cancel->task = g_object_ref (self);
-          cancel->priority = priv->priority;
+          cancel->priority = self->priority;
 
-          priv->cancel_handler =
-            g_cancellable_connect (priv->cancellable,
+          self->cancel_handler =
+            g_cancellable_connect (self->cancellable,
                                    G_CALLBACK (ide_task_cancellable_cancelled_cb),
                                    g_steal_pointer (&cancel),
                                    (GDestroyNotify)ide_task_cancel_free);
@@ -2002,10 +1954,10 @@ ide_task_set_return_on_cancel (IdeTask  *self,
         }
       else
         {
-          if (priv->cancel_handler)
+          if (self->cancel_handler)
             {
-              g_cancellable_disconnect (priv->cancellable, priv->cancel_handler);
-              priv->cancel_handler = 0;
+              g_cancellable_disconnect (self->cancellable, self->cancel_handler);
+              self->cancel_handler = 0;
             }
         }
     }
@@ -2047,14 +1999,13 @@ ide_task_report_new_error (gpointer              source_object,
 const gchar *
 ide_task_get_name (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   const gchar *ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), NULL);
 
-  g_mutex_lock (&priv->mutex);
-  ret = priv->name;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = self->name;
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -2081,15 +2032,13 @@ void
 ide_task_set_name (IdeTask *self,
                    const gchar *name)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TASK (self));
 
   name = g_intern_string (name);
 
-  g_mutex_lock (&priv->mutex);
-  priv->name = name;
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  self->name = name;
+  g_mutex_unlock (&self->mutex);
 
 #ifdef ENABLE_TIME_CHART
   g_message ("TASK-BEGIN: %s", name);
@@ -2109,15 +2058,14 @@ ide_task_set_name (IdeTask *self,
 gboolean
 ide_task_had_error (IdeTask *self)
 {
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   gboolean ret;
 
   g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
 
-  g_mutex_lock (&priv->mutex);
-  ret = (priv->result != NULL && priv->result->type == IDE_TASK_RESULT_ERROR) ||
-        (priv->thread_result != NULL && priv->thread_result->type == IDE_TASK_RESULT_ERROR);
-  g_mutex_unlock (&priv->mutex);
+  g_mutex_lock (&self->mutex);
+  ret = (self->result != NULL && self->result->type == IDE_TASK_RESULT_ERROR) ||
+        (self->thread_result != NULL && self->thread_result->type == IDE_TASK_RESULT_ERROR);
+  g_mutex_unlock (&self->mutex);
 
   return ret;
 }
@@ -2126,22 +2074,20 @@ static gpointer
 ide_task_get_user_data (GAsyncResult *result)
 {
   IdeTask *self = (IdeTask *)result;
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
   g_assert (IDE_IS_TASK (self));
 
-  return priv->user_data;
+  return self->user_data;
 }
 
 static GObject *
 ide_task_get_source_object_full (GAsyncResult *result)
 {
   IdeTask *self = (IdeTask *)result;
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
   g_assert (IDE_IS_TASK (self));
 
-  return priv->source_object ? g_object_ref (priv->source_object) : NULL;
+  return self->source_object ? g_object_ref (self->source_object) : NULL;
 }
 
 static gboolean
@@ -2149,11 +2095,10 @@ ide_task_is_tagged (GAsyncResult *result,
                     gpointer      source_tag)
 {
   IdeTask *self = (IdeTask *)result;
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
   g_assert (IDE_IS_TASK (self));
 
-  return source_tag == priv->source_tag;
+  return source_tag == self->source_tag;
 }
 
 static void
@@ -2174,10 +2119,9 @@ _ide_dump_tasks (void)
   for (const GList *iter = global_task_list.head; iter; iter = iter->next)
     {
       IdeTask *self = iter->data;
-      IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
-      g_printerr ("[%02d]: %s %s\n", i++, priv->name,
-                  priv->completed ? "completed" : "");
+      g_printerr ("[%02d]: %s %s\n", i++, self->name,
+                  self->completed ? "completed" : "");
     }
 
   G_UNLOCK (global_task_list);
