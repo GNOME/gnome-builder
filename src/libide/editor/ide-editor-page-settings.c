@@ -76,6 +76,10 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
   g_return_if_fail (self->buffer_file_settings == NULL);
   g_return_if_fail (self->view_file_settings == NULL);
 
+  g_object_bind_property (IDE_APPLICATION_DEFAULT, "style-scheme",
+                          self->buffer, "style-scheme-name",
+                          G_BINDING_SYNC_CREATE);
+
   self->buffer_file_settings = ide_binding_group_new ();
   ide_binding_group_bind (self->buffer_file_settings,
                           "insert-trailing-newline", self->buffer, "implicit-trailing-newline",
