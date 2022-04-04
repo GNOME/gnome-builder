@@ -1636,6 +1636,7 @@ ide_buffer_save_file_settle_cb (GObject      *object,
  * @self: an #IdeBuffer
  * @file: (nullable): a #GFile or %NULL
  * @cancellable: (nullable): a #GCancellable
+ * @notif: (out) (optional) (transfer full): a location for an #IdeNotification or %NULL
  * @callback: a #GAsyncReadyCallback to execute upon completion
  * @user_data: closure data for @callback
  *
