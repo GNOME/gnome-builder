@@ -93,6 +93,25 @@ ide_editor_page_grab_focus (GtkWidget *widget)
 }
 
 static void
+ide_editor_page_focus_enter_cb (IdeEditorPage           *self,
+                                GtkEventControllerFocus *controller)
+{
+  g_autofree char *title = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (GTK_IS_EVENT_CONTROLLER_FOCUS (controller));
+
+  title = ide_buffer_dup_title (self->buffer);
+  g_debug ("Keyboard focus entered page \"%s\"", title);
+
+  ide_page_mark_used (IDE_PAGE (self));
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_page_dispose (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
@@ -189,6 +208,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, map_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, view);
+  gtk_widget_class_bind_template_callback (widget_class, ide_editor_page_focus_enter_cb);
 }
 
 static void
