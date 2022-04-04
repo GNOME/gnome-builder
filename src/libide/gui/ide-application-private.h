@@ -75,6 +75,10 @@ struct _IdeApplication
   /* The CSS provider to recolor all of the widgetry based on style schemes */
   GtkCssProvider *recoloring;
 
+  /* A D-Bus proxy to settings portal */
+  GDBusProxy *settings_portal;
+  char *system_font_name;
+
   /* We need to stash the unmodified argv for the application somewhere
    * so that we can pass it to a remote instance. Otherwise we lose
    * the ability by cmdline-addins to determine if any options were
@@ -98,6 +102,7 @@ struct _IdeApplication
 IdeApplication *_ide_application_new                      (gboolean                 standalone);
 void            _ide_application_init_color               (IdeApplication          *self);
 void            _ide_application_init_actions             (IdeApplication          *self);
+void            _ide_application_init_settings            (IdeApplication          *self);
 void            _ide_application_load_addins              (IdeApplication          *self);
 void            _ide_application_unload_addins            (IdeApplication          *self);
 void            _ide_application_load_plugin              (IdeApplication          *self,
