@@ -182,6 +182,7 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
                           "row-spacing", 6,
                           "max-children-per-line", 4,
                           NULL);
+  gtk_widget_add_css_class (GTK_WIDGET (flowbox), "style-schemes");
 
   for (guint i = 0; scheme_ids[i]; i++)
     {
