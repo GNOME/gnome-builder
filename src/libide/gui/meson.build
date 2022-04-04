@@ -60,6 +60,7 @@ libide_gui_private_sources = [
   'ide-application-actions.c',
   'ide-application-color.c',
   'ide-application-plugins.c',
+  'ide-application-settings.c',
   'ide-environment-editor-row.c',
   'ide-notification-list-box-row.c',
   'ide-notification-stack.c',

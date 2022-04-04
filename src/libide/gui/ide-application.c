@@ -37,8 +37,6 @@
 #include "ide-gui-global.h"
 #include "ide-primary-workspace.h"
 
-G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, ADW_TYPE_APPLICATION)
-
 typedef struct
 {
   IdeApplication  *self;
@@ -46,6 +44,17 @@ typedef struct
   gint             n_files;
   const gchar     *hint;
 } OpenData;
+
+G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, ADW_TYPE_APPLICATION)
+
+enum {
+  PROP_0,
+  PROP_STYLE_SCHEME,
+  PROP_SYSTEM_FONT_NAME,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
 
 static void
 ide_application_add_platform_data (GApplication    *app,
@@ -131,6 +140,9 @@ ide_application_startup (GApplication *app)
   style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-5", "styles", NULL);
   gtk_source_style_scheme_manager_append_search_path (styles, style_path);
   gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-5/styles/");
+
+  /* Setup access to portal settings */
+  _ide_application_init_settings (self);
 
   /* Load color settings (Night Light, Dark Mode, etc) */
   _ide_application_init_color (self);
@@ -324,6 +336,48 @@ _ide_application_add_resources (IdeApplication *self,
 }
 
 static void
+ide_application_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  IdeApplication *self = IDE_APPLICATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_STYLE_SCHEME:
+      g_value_set_string (value, ide_application_get_style_scheme (self));
+      break;
+
+    case PROP_SYSTEM_FONT_NAME:
+      g_value_set_string (value, ide_application_get_system_font_name (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_application_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  IdeApplication *self = IDE_APPLICATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_STYLE_SCHEME:
+      ide_application_set_style_scheme (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_application_dispose (GObject *object)
 {
   IdeApplication *self = (IdeApplication *)object;
@@ -339,6 +393,7 @@ ide_application_dispose (GObject *object)
   g_clear_pointer (&self->css_providers, g_hash_table_unref);
   g_clear_pointer (&self->argv, g_strfreev);
   g_clear_pointer (&self->menu_merge_ids, g_hash_table_unref);
+  g_clear_pointer (&self->system_font_name, g_free);
   g_clear_object (&self->recoloring);
   g_clear_object (&self->addins);
   g_clear_object (&self->editor_settings);
@@ -356,6 +411,8 @@ ide_application_class_init (IdeApplicationClass *klass)
   GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
 
   object_class->dispose = ide_application_dispose;
+  object_class->get_property = ide_application_get_property;
+  object_class->set_property = ide_application_set_property;
 
   app_class->activate = ide_application_activate;
   app_class->open = ide_application_open;
@@ -364,11 +421,28 @@ ide_application_class_init (IdeApplicationClass *klass)
   app_class->local_command_line = ide_application_local_command_line;
   app_class->startup = ide_application_startup;
   app_class->shutdown = ide_application_shutdown;
+
+  properties[PROP_STYLE_SCHEME] =
+    g_param_spec_string ("style-scheme",
+                         "Style Scheme",
+                         "The style scheme for the editor",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_SYSTEM_FONT_NAME] =
+    g_param_spec_string ("system-font-name",
+                         "System Font Name",
+                         "System Font Name",
+                         "Monospace 11",
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_application_init (IdeApplication *self)
 {
+  self->system_font_name = g_strdup ("Monospace 11");
   self->menu_merge_ids = g_hash_table_new (g_str_hash, g_str_equal);
   self->menu_manager = ide_menu_manager_new ();
   self->started_at = g_date_time_new_now_local ();
@@ -738,4 +812,12 @@ ide_application_get_menu_by_id (IdeApplication *self,
     return NULL;
 
   return ide_menu_manager_get_menu_by_id (self->menu_manager, menu_id);
+}
+
+const char *
+ide_application_get_system_font_name (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  return self->system_font_name;
 }
