@@ -15,6 +15,7 @@ libide_sourceview_private_headers = [
 
 libide_sourceview_public_headers = [
   'ide-line-change-gutter-renderer.h',
+  'ide-source-style-scheme.h',
   'ide-source-view.h',
   'ide-text-util.h',
   'libide-sourceview.h',
@@ -35,6 +36,7 @@ libide_sourceview_private_sources = [
 
 libide_sourceview_public_sources = [
   'ide-line-change-gutter-renderer.c',
+  'ide-source-style-scheme.c',
   'ide-source-view.c',
   'ide-text-util.c',
 ]
