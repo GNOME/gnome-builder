@@ -1,6 +1,6 @@
-/* ide-clone-surface.h
+/* gbp-vcsui-clone-widget.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,19 +24,14 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CLONE_SURFACE (ide_clone_surface_get_type())
+#define GBP_TYPE_VCSUI_CLONE_WIDGET (gbp_vcsui_clone_widget_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeCloneSurface, ide_clone_surface, IDE, CLONE_SURFACE, IdeSurface)
+G_DECLARE_FINAL_TYPE (GbpVcsuiCloneWidget, gbp_vcsui_clone_widget, GBP, VCSUI_CLONE_WIDGET, GtkWidget)
 
-IDE_AVAILABLE_IN_3_32
-IdeCloneSurface *ide_clone_surface_new     (void);
-IDE_AVAILABLE_IN_3_32
-const gchar     *ide_clone_surface_get_uri (IdeCloneSurface *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_clone_surface_set_uri (IdeCloneSurface *self,
-                                            const gchar     *uri);
-IDE_AVAILABLE_IN_3_32
-void             ide_clone_surface_clone   (IdeCloneSurface *self);
+GbpVcsuiCloneWidget *gbp_vcsui_clone_widget_new     (void);
+const gchar         *gbp_vcsui_clone_widget_get_uri (GbpVcsuiCloneWidget *self);
+void                 gbp_vcsui_clone_widget_set_uri (GbpVcsuiCloneWidget *self,
+                                                     const gchar         *uri);
+void                 gbp_vcsui_clone_widget_clone   (GbpVcsuiCloneWidget *self);
 
 G_END_DECLS
