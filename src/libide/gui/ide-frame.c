@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <adwaita.h>
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
@@ -180,14 +181,19 @@ static void
 ide_frame_class_init (IdeFrameClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ide_frame_dispose;
   object_class->constructed = ide_frame_constructed;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-frame.ui");
 }
 
 static void
 ide_frame_init (IdeFrame *self)
 {
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   g_signal_connect (self,
                     "notify::visible-child",
                     G_CALLBACK (ide_frame_notify_visible_child),
