@@ -17,6 +17,7 @@ libide_editor_public_headers = [
 ]
 
 libide_editor_private_headers = [
+  'ide-editor-page-private.h',
 ]
 
 install_headers(libide_editor_public_headers, subdir: libide_editor_header_subdir)
@@ -33,6 +34,7 @@ libide_editor_public_sources = [
 
 libide_editor_private_sources = [
   'ide-editor-init.c',
+  'ide-editor-page-settings.c',
 ]
 
 libide_editor_sources += libide_editor_public_sources

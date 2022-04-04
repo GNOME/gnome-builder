@@ -69,8 +69,18 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
                                self,
                                G_CONNECT_SWAPPED);
 
-      g_object_bind_property (buffer, "title", self, "title", G_BINDING_SYNC_CREATE);
+      g_signal_connect_object (buffer,
+                               "notify::file-settings",
+                               G_CALLBACK (_ide_editor_page_settings_reload),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_object_bind_property (buffer, "title",
+                              self, "title",
+                              G_BINDING_SYNC_CREATE);
+
       ide_editor_page_modified_changed_cb (self, buffer);
+      _ide_editor_page_settings_init (self);
     }
 
   IDE_EXIT;
@@ -87,6 +97,8 @@ ide_editor_page_dispose (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
 
+  g_clear_object (&self->buffer_file_settings);
+  g_clear_object (&self->view_file_settings);
   g_clear_object (&self->buffer);
 
   G_OBJECT_CLASS (ide_editor_page_parent_class)->dispose (object);
