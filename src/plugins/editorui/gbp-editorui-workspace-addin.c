@@ -135,6 +135,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
+  GtkPopover *popover;
   GMenu *menu;
 
   IDE_ENTRY;
@@ -181,11 +182,16 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->indentation));
 
   /* Label for cursor position and jump to line/column */
+  popover = g_object_new (IDE_TYPE_ENTRY_POPOVER,
+                          "button-text", _("Go"),
+                          "title", _("Go to Line"),
+                          NULL);
   self->position_label = g_object_new (GBP_TYPE_EDITORUI_POSITION_LABEL, NULL);
   self->position = g_object_new (GTK_TYPE_MENU_BUTTON,
                                  "direction", GTK_ARROW_UP,
                                  "visible", FALSE,
                                  "child", self->position_label,
+                                 "popover", popover,
                                  NULL);
   panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->position));
 
