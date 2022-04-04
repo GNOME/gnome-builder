@@ -1,40 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeEditorPage" parent="IdePage">
-    <child>
-      <object class="GtkOverlay" id="overlay">
+    <child type="content">
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="vexpand">true</property>
         <child>
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
+          <object class="GtkScrolledWindow" id="scroller">
             <child>
-              <object class="GtkBox">
-                <property name="orientation">horizontal</property>
+              <object class="IdeSourceView" id="view">
+                <property name="monospace">true</property>
+                <property name="hexpand">true</property>
+                <property name="vexpand">true</property>
+                <!-- until we have custom gutter renderer ported -->
+                <property name="show-line-numbers">true</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scroller">
-                    <child>
-                      <object class="IdeSourceView" id="view">
-                        <property name="monospace">true</property>
-                        <property name="hexpand">true</property>
-                        <property name="vexpand">true</property>
-                        <!-- until we have custom gutter renderer ported -->
-                        <property name="show-line-numbers">true</property>
-                      </object>
-                    </child>
+                  <object class="GtkEventControllerFocus">
+                    <signal name="enter" handler="ide_editor_page_focus_enter_cb" swapped="true" object="IdeEditorPage"/>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkRevealer" id="map_revealer">
-                    <property name="transition-type">slide-left</property>
-                    <property name="transition-duration">300</property>
-                    <property name="reveal-child">true</property>
-                    <child>
-                      <object class="GtkSourceMap" id="map">
-                        <property name="left-margin">6</property>
-                        <property name="view">view</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="map_revealer">
+            <property name="transition-type">slide-left</property>
+            <property name="transition-duration">300</property>
+            <property name="reveal-child">true</property>
+            <child>
+              <object class="GtkSourceMap" id="map">
+                <property name="left-margin">6</property>
+                <property name="view">view</property>
               </object>
             </child>
           </object>
