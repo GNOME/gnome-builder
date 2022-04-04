@@ -100,8 +100,11 @@ static void
 gbp_editorui_preview_constructed (GObject *object)
 {
   GbpEditoruiPreview *self = (GbpEditoruiPreview *)object;
+  GtkTextBuffer *buffer;
 
   G_OBJECT_CLASS (gbp_editorui_preview_parent_class)->constructed (object);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   g_signal_connect_object (IDE_APPLICATION_DEFAULT,
                            "notify::style-scheme",
@@ -115,6 +118,12 @@ gbp_editorui_preview_constructed (GObject *object)
                                 "show-grid-lines", self, "background-pattern",
                                 G_SETTINGS_BIND_GET,
                                 show_grid_lines_to_bg, NULL, NULL, NULL);
+  g_settings_bind (self->editor_settings,
+                   "highlight-current-line", self, "highlight-current-line",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (self->editor_settings,
+                   "highlight-matching-brackets", buffer, "highlight-matching-brackets",
+                   G_SETTINGS_BIND_GET);
 
   gbp_editorui_preview_load_text (self);
 }
