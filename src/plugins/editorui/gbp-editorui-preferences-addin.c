@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 
 #include "gbp-editorui-preferences-addin.h"
+#include "gbp-editorui-preview.h"
 
 struct _GbpEditoruiPreferencesAddin
 {
@@ -155,44 +156,21 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
                                      gpointer                      user_data)
 {
   IdePreferencesWindow *window = user_data;
-  g_autoptr(GtkSourceBuffer) buffer = NULL;
   GtkSourceStyleSchemeManager *manager;
   const char * const *scheme_ids;
-  GtkSourceLanguage *language;
-  GtkSourceView *preview;
   GtkFlowBox *flowbox;
+  GtkWidget *preview;
   GtkFrame *frame;
 
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
   g_assert (entry != NULL);
   g_assert (ADW_IS_PREFERENCES_GROUP (group));
 
-#define PREVIEW_TEXT "\
-#include <glib.h>\n\
-"
-
-  language = gtk_source_language_manager_get_language (gtk_source_language_manager_get_default (), "c");
-  buffer = g_object_new (GTK_SOURCE_TYPE_BUFFER,
-                         "language", language,
-                         "text", PREVIEW_TEXT,
-                         NULL);
-  preview = g_object_new (GTK_SOURCE_TYPE_VIEW,
-                          "buffer", buffer,
-                          "monospace", TRUE,
-                          "left-margin", 6,
-                          "top-margin", 6,
-                          "bottom-margin", 6,
-                          "right-margin", 6,
-                          "show-line-numbers", TRUE,
-                          "highlight-current-line", TRUE,
-                          "show-right-margin", TRUE,
-                          "right-margin-position", 60,
-                          NULL);
+  preview = gbp_editorui_preview_new ();
   frame = g_object_new (GTK_TYPE_FRAME,
                         "child", preview,
                         "margin-bottom", 12,
                         NULL);
-  gtk_widget_add_css_class (GTK_WIDGET (frame), "text-preview");
   adw_preferences_group_add (group, GTK_WIDGET (frame));
 
   manager = gtk_source_style_scheme_manager_get_default ();
