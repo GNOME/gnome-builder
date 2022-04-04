@@ -90,5 +90,8 @@ void           ide_page_report_error          (IdePage              *self,
                                                ...) G_GNUC_PRINTF (2, 3);
 IDE_AVAILABLE_IN_ALL
 GFile         *ide_page_get_file_or_directory (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_page_set_progress          (IdePage              *self,
+                                               IdeNotification      *notification);
 
 G_END_DECLS
