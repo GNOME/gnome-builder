@@ -42,6 +42,9 @@ struct _GbpEditoruiWorkspaceAddin
   GtkMenuButton            *indentation;
   GtkLabel                 *indentation_label;
 
+  GtkMenuButton            *line_ends;
+  GtkLabel                 *line_ends_label;
+
   GtkMenuButton            *position;
   GbpEditoruiPositionLabel *position_label;
 
@@ -170,6 +173,19 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    self,
                                    G_CONNECT_SWAPPED);
 
+  /* Line ending */
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-line-ends-menu");
+  self->line_ends_label = g_object_new (GTK_TYPE_LABEL,
+                                        "label", "LF",
+                                        NULL);
+  self->line_ends = g_object_new (GTK_TYPE_MENU_BUTTON,
+                                  "menu-model", menu,
+                                  "direction", GTK_ARROW_UP,
+                                  "visible", FALSE,
+                                  "child", self->line_ends_label,
+                                  NULL);
+  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->line_ends));
+
   /* Indentation status, tabs/spaces/etc */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-indent-menu");
   self->indentation_label = g_object_new (GTK_TYPE_LABEL, NULL);
@@ -255,6 +271,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   update_position (self);
 
   gtk_widget_set_visible (GTK_WIDGET (self->indentation), page != NULL);
+  gtk_widget_set_visible (GTK_WIDGET (self->line_ends), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->position), page != NULL);
 }
 
