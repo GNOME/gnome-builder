@@ -29,6 +29,7 @@
 struct _GbpEditoruiPreview
 {
   GtkSourceView parent_instance;
+  GSettings *editor_settings;
 };
 
 G_DEFINE_TYPE (GbpEditoruiPreview, gbp_editorui_preview, GTK_SOURCE_TYPE_VIEW)
@@ -83,6 +84,18 @@ notify_style_scheme_cb (GbpEditoruiPreview *self,
   IDE_EXIT;
 }
 
+static gboolean
+show_grid_lines_to_bg (GValue   *value,
+                       GVariant *variant,
+                       gpointer  user_data)
+{
+  if (g_variant_get_boolean (variant))
+    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID);
+  else
+    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+  return TRUE;
+}
+
 static void
 gbp_editorui_preview_constructed (GObject *object)
 {
@@ -98,6 +111,11 @@ gbp_editorui_preview_constructed (GObject *object)
 
   notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
 
+  g_settings_bind_with_mapping (self->editor_settings,
+                                "show-grid-lines", self, "background-pattern",
+                                G_SETTINGS_BIND_GET,
+                                show_grid_lines_to_bg, NULL, NULL, NULL);
+
   gbp_editorui_preview_load_text (self);
 }
 
@@ -105,6 +123,8 @@ static void
 gbp_editorui_preview_dispose (GObject *object)
 {
   GbpEditoruiPreview *self = (GbpEditoruiPreview *)object;
+
+  g_clear_object (&self->editor_settings);
 
   G_OBJECT_CLASS (gbp_editorui_preview_parent_class)->dispose (object);
 }
@@ -121,6 +141,8 @@ gbp_editorui_preview_class_init (GbpEditoruiPreviewClass *klass)
 static void
 gbp_editorui_preview_init (GbpEditoruiPreview *self)
 {
+  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
+
   gtk_text_view_set_monospace (GTK_TEXT_VIEW (self), TRUE);
   gtk_source_view_set_show_line_numbers (GTK_SOURCE_VIEW (self), TRUE);
 
