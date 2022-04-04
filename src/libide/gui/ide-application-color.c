@@ -223,3 +223,11 @@ _ide_application_init_color (IdeApplication *self)
   _ide_application_update_style_scheme (self);
   ide_application_color_style_scheme_changed_cb (self, "style-scheme-name", self->editor_settings);
 }
+
+gboolean
+ide_application_get_dark (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+
+  return adw_style_manager_get_dark (adw_style_manager_get_default ());
+}
