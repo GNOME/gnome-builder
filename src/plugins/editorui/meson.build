@@ -1,6 +1,7 @@
 plugins_sources += files([
   'editorui-plugin.c',
   'gbp-editorui-position-label.c',
+  'gbp-editorui-preferences-addin.c',
   'gbp-editorui-workbench-addin.c',
   'gbp-editorui-workspace-addin.c',
 ])
