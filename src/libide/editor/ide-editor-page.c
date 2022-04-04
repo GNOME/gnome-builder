@@ -61,6 +61,8 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
 
   if (g_set_object (&self->buffer, buffer))
     {
+      ide_buffer_hold (buffer);
+
       gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->view), GTK_TEXT_BUFFER (buffer));
 
       g_signal_connect_object (buffer,
@@ -118,7 +120,12 @@ ide_editor_page_dispose (GObject *object)
 
   g_clear_object (&self->buffer_file_settings);
   g_clear_object (&self->view_file_settings);
-  g_clear_object (&self->buffer);
+
+  if (self->buffer != NULL)
+    {
+      ide_buffer_release (self->buffer);
+      g_clear_object (&self->buffer);
+    }
 
   G_OBJECT_CLASS (ide_editor_page_parent_class)->dispose (object);
 }
