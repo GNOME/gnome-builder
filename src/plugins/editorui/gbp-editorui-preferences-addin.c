@@ -24,6 +24,8 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-sourceview.h>
+
 #include "gbp-editorui-preferences-addin.h"
 #include "gbp-editorui-preview.h"
 
@@ -131,11 +133,13 @@ notify_style_scheme_cb (IdeApplication *app,
                         GtkFlowBox     *flowbox)
 {
   const char *style_scheme;
+  gboolean dark;
 
   g_assert (IDE_IS_APPLICATION (app));
   g_assert (GTK_IS_FLOW_BOX (flowbox));
 
   style_scheme = ide_application_get_style_scheme (app);
+  dark = ide_application_get_dark (app);
 
   for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (flowbox));
        child != NULL;
@@ -143,9 +147,11 @@ notify_style_scheme_cb (IdeApplication *app,
     {
       GtkSourceStyleSchemePreview *preview = GTK_SOURCE_STYLE_SCHEME_PREVIEW (gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child)));
       GtkSourceStyleScheme *scheme = gtk_source_style_scheme_preview_get_scheme (preview);
+      gboolean visible = dark == ide_source_style_scheme_is_dark (scheme);
       gboolean selected = g_strcmp0 (style_scheme, gtk_source_style_scheme_get_id (scheme)) == 0;
 
       gtk_source_style_scheme_preview_set_selected (preview, selected);
+      gtk_widget_set_visible (child, visible);
     }
 }
 
