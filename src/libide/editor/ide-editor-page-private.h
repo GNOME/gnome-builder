@@ -31,11 +31,18 @@ struct _IdeEditorPage
   /* Owned references */
   IdeBuffer         *buffer;
 
+  /* Settings Management */
+  IdeBindingGroup   *buffer_file_settings;
+  IdeBindingGroup   *view_file_settings;
+
   /* Template widgets */
   IdeSourceView     *view;
   GtkScrolledWindow *scroller;
   GtkSourceMap      *map;
   GtkRevealer       *map_revealer;
 };
+
+void _ide_editor_page_settings_init   (IdeEditorPage *self);
+void _ide_editor_page_settings_reload (IdeEditorPage *self);
 
 G_END_DECLS
