@@ -51,17 +51,22 @@ static const IdePreferenceGroupEntry groups[] = {
 };
 
 static const IdePreferenceItemEntry items[] = {
+  { "appearance", "accessories", "show-line-numbers", 0, ide_preferences_window_toggle,
+    N_("Show Line Numbers"),
+    N_("Display line numbers next to each line of source code"),
+    "org.gnome.builder.editor", NULL, "show-line-numbers" },
+
   { "appearance", "accessories", "show-grid-lines", 10, ide_preferences_window_toggle,
     N_("Show Grid Pattern"),
     N_("Display a grid pattern underneath source code"),
     "org.gnome.builder.editor", NULL, "show-grid-lines" },
 
-  { "appearance", "accessories", "highlight-current-line", 0, ide_preferences_window_toggle,
+  { "appearance", "accessories", "highlight-current-line", 20, ide_preferences_window_toggle,
     N_("Highlight Current Line"),
     N_("Make current line stand out with highlights"),
     "org.gnome.builder.editor", NULL, "highlight-current-line" },
 
-  { "appearance", "accessories", "highlight-matching-brackets", 0, ide_preferences_window_toggle,
+  { "appearance", "accessories", "highlight-matching-brackets", 30, ide_preferences_window_toggle,
     N_("Highlight Matching Brackets"),
     N_("Use cursor position to highlight matching brackets, braces, parenthesis, and more"),
     "org.gnome.builder.editor", NULL, "highlight-matching-brackets" },
