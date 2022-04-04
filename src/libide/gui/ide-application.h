@@ -96,5 +96,7 @@ const char    *ide_application_get_style_scheme          (IdeApplication        
 IDE_AVAILABLE_IN_ALL
 void           ide_application_set_style_scheme          (IdeApplication           *self,
                                                           const char               *style_scheme);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_application_get_dark                  (IdeApplication           *self);
 
 G_END_DECLS
