@@ -4,16 +4,16 @@
   <template class="IdeEntryPopover" parent="GtkPopover">
     <child>
       <object class="GtkBox">
-        <property name="margin-top">12</property>
-        <property name="margin-bottom">12</property>
-        <property name="margin-start">12</property>
-        <property name="margin-end">12</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkLabel" id="title">
-            <property name="xalign">0.0</property>
+            <property name="xalign">0.5</property>
             <property name="visible">true</property>
             <attributes>
               <attribute name="weight" value="bold"/>
