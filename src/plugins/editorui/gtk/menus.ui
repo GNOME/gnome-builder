@@ -53,4 +53,21 @@
       </submenu>
     </section>
   </menu>
+  <menu id="editorui-line-ends-menu">
+    <section id="editorui-line-ends-section">
+      <attribute name="label">Line Ending</attribute>
+      <item>
+        <attribute name="label">Linux (LF)</attribute>
+        <attribute name="action">editorui.newline('lf')</attribute>
+      </item>
+      <item>
+        <attribute name="label">Windows (CR/LF)</attribute>
+        <attribute name="action">editorui.newline('crlf')</attribute>
+      </item>
+      <item>
+        <attribute name="label">Mac Classic (CR)</attribute>
+        <attribute name="action">editorui.newline('cr')</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
