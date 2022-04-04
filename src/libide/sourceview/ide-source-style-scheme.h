@@ -1,6 +1,6 @@
-/* libide-sourceview.h
+/* ide-source-style-scheme.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,21 @@
 
 #pragma once
 
-#include <libide-code.h>
+#if !defined (IDE_SOURCEVIEW_INSIDE) && !defined (IDE_SOURCEVIEW_COMPILATION)
+# error "Only <libide-sourceview.h> can be included directly."
+#endif
+
+#include <gtksourceview/gtksource.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_SOURCEVIEW_INSIDE
+IDE_AVAILABLE_IN_ALL
+gboolean              ide_source_style_scheme_is_dark     (GtkSourceStyleScheme *scheme);
+IDE_AVAILABLE_IN_ALL
+GtkSourceStyleScheme *ide_source_style_scheme_get_variant (GtkSourceStyleScheme *scheme,
+                                                           const char           *variant);
 
-#include "ide-line-change-gutter-renderer.h"
-#include "ide-source-style-scheme.h"
-#include "ide-source-view.h"
-#include "ide-text-util.h"
-
-#define IDE_SOURCEVIEW_INSIDE
 
 G_END_DECLS

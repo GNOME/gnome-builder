@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-sourceview.h>
+
 #include "ide-application-private.h"
 #include "ide-recoloring-private.h"
 
@@ -200,7 +202,7 @@ ide_application_get_style_scheme (IdeApplication *self)
     variant = "light";
 
   style_scheme = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, style_scheme_id);
-  style_scheme = _ide_source_style_scheme_get_variant (style_scheme, variant);
+  style_scheme = ide_source_style_scheme_get_variant (style_scheme, variant);
 
   return gtk_source_style_scheme_get_id (style_scheme);
 }

@@ -22,6 +22,8 @@
 
 #include <math.h>
 
+#include <libide-sourceview.h>
+
 #include "ide-recoloring-private.h"
 
 #define SHARED_CSS \
@@ -183,36 +185,6 @@ premix_colors (GdkRGBA       *dest,
 }
 #endif
 
-gboolean
-_ide_source_style_scheme_is_dark (GtkSourceStyleScheme *scheme)
-{
-  const char *id = gtk_source_style_scheme_get_id (scheme);
-  const char *variant = gtk_source_style_scheme_get_metadata (scheme, "variant");
-  GdkRGBA text_bg;
-
-  if (g_strcmp0 (variant, "light") == 0)
-    return FALSE;
-  else if (g_strcmp0 (variant, "dark") == 0)
-    return TRUE;
-  else if (strstr (id, "-dark") != NULL)
-    return TRUE;
-
-  if (get_background (scheme, "text", &text_bg))
-    {
-      /* http://alienryderflex.com/hsp.html */
-      double r = text_bg.red * 255.0;
-      double g = text_bg.green * 255.0;
-      double b = text_bg.blue * 255.0;
-      double hsp = sqrt (0.299 * (r * r) +
-                         0.587 * (g * g) +
-                         0.114 * (b * b));
-
-      return hsp <= 127.5;
-    }
-
-  return FALSE;
-}
-
 char *
 _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
 {
@@ -238,7 +210,7 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
     return NULL;
 
   name = gtk_source_style_scheme_get_name (style_scheme);
-  is_dark = _ide_source_style_scheme_is_dark (style_scheme);
+  is_dark = ide_source_style_scheme_is_dark (style_scheme);
   alt = is_dark ? &white : &black;
 
   str = g_string_new (SHARED_CSS);
@@ -316,53 +288,3 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
 
   return g_string_free (str, FALSE);
 }
-
-GtkSourceStyleScheme *
-_ide_source_style_scheme_get_variant (GtkSourceStyleScheme *scheme,
-                                      const char           *variant)
-{
-  GtkSourceStyleSchemeManager *style_scheme_manager;
-  GtkSourceStyleScheme *ret;
-  g_autoptr(GString) str = NULL;
-  g_autofree char *key = NULL;
-  const char *mapping;
-
-  g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (scheme), NULL);
-  g_return_val_if_fail (g_strcmp0 (variant, "light") == 0 ||
-                        g_strcmp0 (variant, "dark") == 0, NULL);
-
-  style_scheme_manager = gtk_source_style_scheme_manager_get_default ();
-
-  /* If the scheme provides "light-variant" or "dark-variant" metadata,
-   * we will prefer those if the variant is available.
-   */
-  key = g_strdup_printf ("%s-variant", variant);
-  if ((mapping = gtk_source_style_scheme_get_metadata (scheme, key)))
-    {
-      if ((ret = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, mapping)))
-        return ret;
-    }
-
-  /* Try to find a match by replacing -light/-dark with @variant */
-  str = g_string_new (gtk_source_style_scheme_get_id (scheme));
-
-  if (g_str_has_suffix (str->str, "-light"))
-    g_string_truncate (str, str->len - strlen ("-light"));
-  else if (g_str_has_suffix (str->str, "-dark"))
-    g_string_truncate (str, str->len - strlen ("-dark"));
-
-  g_string_append_printf (str, "-%s", variant);
-
-  /* Look for "Foo-variant" directly */
-  if ((ret = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, str->str)))
-    return ret;
-
-  /* Look for "Foo" */
-  g_string_truncate (str, str->len - strlen (variant) - 1);
-  if ((ret = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, str->str)))
-    return ret;
-
-  /* Fallback to what we were provided */
-  return ret;
-}
-
