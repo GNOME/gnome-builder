@@ -1,0 +1,6 @@
+window.preferences preferencesgroup flowbox.style-schemes flowboxchild {
+  outline-offset: -3px;
+  border-radius: 14px;
+  outline-width: 2px;
+}
+
