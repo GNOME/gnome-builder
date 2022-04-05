@@ -1,6 +1,8 @@
 plugins_sources += files([
   'vim-plugin.c',
+  'gbp-vim-editor-page-addin.c',
   'gbp-vim-preferences-addin.c',
+  'gbp-vim-workspace-addin.c',
 ])
 
 plugin_vim_resources = gnome.compile_resources(

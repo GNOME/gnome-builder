@@ -6,3 +6,4 @@ Description=Emulation of various VIM features
 Embedded=_gbp_vim_register_types
 Module=vim
 Name=VIM Emulation
+X-Workspace-Kind=editor;primary;
