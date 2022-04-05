@@ -23,4 +23,5 @@
 #define IDE_EDITOR_INSIDE
 # include "ide-editor.h"
 # include "ide-editor-page.h"
+# include "ide-editor-page-addin.h"
 #undef IDE_EDITOR_INSIDE

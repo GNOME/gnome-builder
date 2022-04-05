@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-editor-page-addin.h"
 #include "ide-editor-page-private.h"
 
 enum {
@@ -114,9 +115,107 @@ ide_editor_page_focus_enter_cb (IdeEditorPage           *self,
 }
 
 static void
+ide_editor_page_notify_frame_set (IdeExtensionSetAdapter *set,
+                                  PeasPluginInfo         *plugin_info,
+                                  PeasExtension          *exten,
+                                  gpointer                user_data)
+{
+  IdeFrame *frame = user_data;
+  IdeEditorPageAddin *addin = (IdeEditorPageAddin *)exten;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_FRAME (frame));
+
+  ide_editor_page_addin_frame_set (addin, frame);
+}
+
+static void
+ide_editor_page_addin_added (IdeExtensionSetAdapter *set,
+                             PeasPluginInfo         *plugin_info,
+                             PeasExtension          *exten,
+                             gpointer                user_data)
+{
+  IdeEditorPage *self = user_data;
+  IdeEditorPageAddin *addin = (IdeEditorPageAddin *)exten;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  ide_editor_page_addin_load (addin, self);
+}
+
+static void
+ide_editor_page_addin_removed (IdeExtensionSetAdapter *set,
+                               PeasPluginInfo         *plugin_info,
+                               PeasExtension          *exten,
+                               gpointer                user_data)
+{
+  IdeEditorPage *self = user_data;
+  IdeEditorPageAddin *addin = (IdeEditorPageAddin *)exten;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  ide_editor_page_addin_unload (addin, self);
+}
+
+static void
+ide_editor_page_root (GtkWidget *widget)
+{
+  IdeEditorPage *self = (IdeEditorPage *)widget;
+  IdeContext *context;
+  GtkWidget *frame;
+
+  IDE_ENTRY;
+
+  GTK_WIDGET_CLASS (ide_editor_page_parent_class)->root (widget);
+
+  context = ide_widget_get_context (widget);
+  frame = gtk_widget_get_ancestor (widget, IDE_TYPE_FRAME);
+
+  if (self->addins == NULL && context != NULL)
+    {
+      self->addins = ide_extension_set_adapter_new (IDE_OBJECT (context),
+                                                    peas_engine_get_default (),
+                                                    IDE_TYPE_EDITOR_PAGE_ADDIN,
+                                                    "Editor-Page-Languages",
+                                                    ide_buffer_get_language_id (self->buffer));
+
+      g_signal_connect (self->addins,
+                        "extension-added",
+                        G_CALLBACK (ide_editor_page_addin_added),
+                        self);
+
+      g_signal_connect (self->addins,
+                        "extension-removed",
+                        G_CALLBACK (ide_editor_page_addin_removed),
+                        self);
+
+      ide_extension_set_adapter_foreach (self->addins,
+                                         ide_editor_page_addin_added,
+                                         self);
+    }
+
+  if (self->addins != NULL && frame != NULL)
+    ide_extension_set_adapter_foreach (self->addins,
+                                       ide_editor_page_notify_frame_set,
+                                       frame);
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_page_dispose (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
+
+  ide_clear_and_destroy_object (&self->addins);
 
   g_clear_object (&self->buffer_file_settings);
   g_clear_object (&self->view_file_settings);
@@ -183,6 +282,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   object_class->set_property = ide_editor_page_set_property;
 
   widget_class->grab_focus = ide_editor_page_grab_focus;
+  widget_class->root = ide_editor_page_root;
 
   /**
    * IdeEditorPage:buffer:
