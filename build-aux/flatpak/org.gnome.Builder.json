@@ -669,15 +669,15 @@
             "config-opts" : [
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
-                "-Dbackends=gtk3"
+                "-Dbackends=gtk4"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/libportal/releases/download/0.5/libportal-0.5.tar.xz",
-                    "sha256" : "d8c8cb18a34e5eeb26a39c94044c955995b01de0e139caac5e18c076cf821b3b"
+                    "url" : "https://github.com/flatpak/libportal/releases/download/0.6/libportal-0.6.tar.xz",
+                    "sha256" : "88a12c3ba71bc31acff7238c280de697d609cebc50830c3766776ec35abc6566"
                 }
             ]
         },
@@ -715,6 +715,29 @@
         },
         "typescript-language-server.json",
         "intelephense-language-server.json",
+        {
+            "name" : "libpanel",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/chergert/libpanel.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
+            "name" : "gtksourceview",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git"
+                }
+            ]
+        },
         {
             "name" : "blueprint-compiler",
             "buildsystem" : "meson",
