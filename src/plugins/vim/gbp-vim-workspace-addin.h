@@ -28,9 +28,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpVimWorkspaceAddin, gbp_vim_workspace_addin, GBP, VIM_WORKSPACE_ADDIN, GObject)
 
-void gbp_vim_workspace_addin_set_command     (GbpVimWorkspaceAddin *self,
-                                              const char           *command);
-void gbp_vim_workspace_addin_set_command_bar (GbpVimWorkspaceAddin *self,
-                                              const char           *command_bar);
+gboolean gbp_vim_workspace_addin_get_active      (GbpVimWorkspaceAddin *self);
+void     gbp_vim_workspace_addin_set_command     (GbpVimWorkspaceAddin *self,
+                                                  const char           *command);
+void     gbp_vim_workspace_addin_set_command_bar (GbpVimWorkspaceAddin *self,
+                                                  const char           *command_bar);
 
 G_END_DECLS
