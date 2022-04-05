@@ -43,20 +43,26 @@ gbp_vim_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpVimWorkspaceAddin *self = (GbpVimWorkspaceAddin *)addin;
   PanelStatusbar *statusbar;
+  PangoAttrList *attrs;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_family_new ("Monospace"));
+
   self->command_bar = g_object_new (GTK_TYPE_LABEL,
+                                    "attributes", attrs,
                                     "hexpand", TRUE,
                                     "selectable", TRUE,
                                     "xalign", .0f,
                                     NULL);
   self->command = g_object_new (GTK_TYPE_LABEL,
-                                "xalign", 1.f,
+                                "attributes", attrs,
                                 "visible", FALSE,
+                                "xalign", 1.f,
                                 NULL);
 
   statusbar = ide_workspace_get_statusbar (workspace);
@@ -64,6 +70,8 @@ gbp_vim_workspace_addin_load (IdeWorkspaceAddin *addin,
   /* TODO: priorities for packing */
   panel_statusbar_add_prefix (statusbar, GTK_WIDGET (self->command_bar));
   panel_statusbar_add_prefix (statusbar, GTK_WIDGET (self->command));
+
+  pango_attr_list_unref (attrs);
 
   IDE_EXIT;
 }
