@@ -30,12 +30,14 @@ struct _IdeBuildconfigConfig
 
   gchar            **prebuild;
   gchar            **postbuild;
+  gchar            **run_command;
 };
 
 enum {
   PROP_0,
   PROP_PREBUILD,
   PROP_POSTBUILD,
+  PROP_RUN_COMMAND,
   N_PROPS
 };
 
@@ -50,6 +52,7 @@ ide_buildconfig_config_finalize (GObject *object)
 
   g_clear_pointer (&self->prebuild, g_strfreev);
   g_clear_pointer (&self->postbuild, g_strfreev);
+  g_clear_pointer (&self->run_command, g_strfreev);
 
   G_OBJECT_CLASS (ide_buildconfig_config_parent_class)->finalize (object);
 }
@@ -70,6 +73,10 @@ ide_buildconfig_config_get_property (GObject    *object,
 
     case PROP_POSTBUILD:
       g_value_set_boxed (value, ide_buildconfig_config_get_postbuild (self));
+      break;
+
+    case PROP_RUN_COMMAND:
+      g_value_set_boxed (value, ide_buildconfig_config_get_run_command (self));
       break;
 
     default:
@@ -95,6 +102,10 @@ ide_buildconfig_config_set_property (GObject      *object,
       ide_buildconfig_config_set_postbuild (self, g_value_get_boxed (value));
       break;
 
+    case PROP_RUN_COMMAND:
+      ide_buildconfig_config_set_run_command (self, g_value_get_boxed (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -116,6 +127,11 @@ ide_buildconfig_config_class_init (IdeBuildconfigConfigClass *klass)
 
   properties [PROP_POSTBUILD] =
     g_param_spec_boxed ("postbuild", NULL, NULL,
+                        G_TYPE_STRV,
+                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  properties [PROP_RUN_COMMAND] =
+    g_param_spec_boxed ("run-command", NULL, NULL,
                         G_TYPE_STRV,
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -168,5 +184,27 @@ ide_buildconfig_config_set_postbuild (IdeBuildconfigConfig *self,
       g_strfreev (self->postbuild);
       self->postbuild = g_strdupv ((gchar **)postbuild);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POSTBUILD]);
+    }
+}
+
+const gchar * const *
+ide_buildconfig_config_get_run_command (IdeBuildconfigConfig *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILDCONFIG_CONFIG (self), NULL);
+
+  return (const gchar * const *)self->run_command;
+}
+
+void
+ide_buildconfig_config_set_run_command (IdeBuildconfigConfig *self,
+                                        const gchar * const  *run_command)
+{
+  g_return_if_fail (IDE_IS_BUILDCONFIG_CONFIG (self));
+
+  if (self->run_command != (gchar **)run_command)
+    {
+      g_strfreev (self->run_command);
+      self->run_command = g_strdupv ((gchar **)run_command);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUN_COMMAND]);
     }
 }

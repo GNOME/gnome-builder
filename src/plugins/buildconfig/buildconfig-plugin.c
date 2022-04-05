@@ -23,14 +23,19 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-foundry.h>
 
+#include "ide-buildconfig-build-target-provider.h"
 #include "ide-buildconfig-config-provider.h"
 #include "ide-buildconfig-pipeline-addin.h"
 
 _IDE_EXTERN void
 _gbp_buildconfig_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_TARGET_PROVIDER,
+                                              IDE_TYPE_BUILDCONFIG_BUILD_TARGET_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIG_PROVIDER,
                                               IDE_TYPE_BUILDCONFIG_CONFIG_PROVIDER);

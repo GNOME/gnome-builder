@@ -157,6 +157,36 @@ load_strv (IdeConfig   *config,
 }
 
 static void
+load_argv (IdeConfig   *config,
+           GKeyFile    *key_file,
+           const gchar *group,
+           const gchar *key,
+           const gchar *property)
+{
+  g_assert (IDE_IS_CONFIG (config));
+  g_assert (key_file != NULL);
+  g_assert (group != NULL);
+  g_assert (key != NULL);
+
+  if (g_key_file_has_key (key_file, group, key, NULL))
+    {
+      g_autofree char *str = NULL;
+      g_auto(GValue) value = G_VALUE_INIT;
+      g_auto(GStrv) argv = NULL;
+      int argc = 0;
+
+      if ((str = g_key_file_get_string (key_file, group, key, NULL)) &&
+          str[0] != 0 &&
+          g_shell_parse_argv (str, &argc, &argv, NULL))
+        {
+          g_value_init (&value, G_TYPE_STRV);
+          g_value_take_boxed (&value, g_steal_pointer (&argv));
+          g_object_set_property (G_OBJECT (config), property, &value);
+        }
+    }
+}
+
+static void
 load_environ (IdeConfig      *config,
               IdeEnvironment *environment,
               GKeyFile       *key_file,
@@ -210,6 +240,7 @@ ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
   load_string (config, self->key_file, config_id, "app-id", "app-id");
   load_strv (config, self->key_file, config_id, "prebuild", "prebuild");
   load_strv (config, self->key_file, config_id, "postbuild", "postbuild");
+  load_argv (config, self->key_file, config_id, "run-command", "run-command");
 
   if (g_key_file_has_key (self->key_file, config_id, "builddir", NULL))
     {
@@ -476,6 +507,16 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
       gsize vlen = val ? g_strv_length ((gchar **)val) : 0; \
       g_key_file_set_string_list (self->key_file, config_id, key, val, vlen); \
 } G_STMT_END
+#define PERSIST_ARGV_KEY(key, getter) G_STMT_START { \
+      const gchar * const *val = ide_buildconfig_config_##getter (IDE_BUILDCONFIG_CONFIG (config)); \
+      if (val) \
+        { \
+          g_autofree char *str = g_strjoinv (" ", (char **)val); \
+          g_key_file_set_string (self->key_file, config_id, key, str); \
+        } \
+      else \
+        g_key_file_set_string (self->key_file, config_id, key, ""); \
+} G_STMT_END
 
       PERSIST_STRING_KEY ("name", get_display_name);
       PERSIST_STRING_KEY ("runtime", get_runtime_id);
@@ -486,6 +527,7 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
       PERSIST_STRING_KEY ("app-id", get_app_id);
       PERSIST_STRV_KEY ("postbuild", get_postbuild);
       PERSIST_STRV_KEY ("prebuild", get_prebuild);
+      PERSIST_ARGV_KEY ("run-command", get_run_command);
 
 #undef PERSIST_STRING_KEY
 #undef PERSIST_STRV_KEY

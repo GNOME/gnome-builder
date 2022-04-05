@@ -34,5 +34,8 @@ void                 ide_buildconfig_config_set_prebuild    (IdeBuildconfigConfi
 const gchar * const *ide_buildconfig_config_get_postbuild   (IdeBuildconfigConfig *self);
 void                 ide_buildconfig_config_set_postbuild   (IdeBuildconfigConfig *self,
                                                              const gchar * const  *postbuild);
+const gchar * const *ide_buildconfig_config_get_run_command (IdeBuildconfigConfig *self);
+void                 ide_buildconfig_config_set_run_command (IdeBuildconfigConfig *self,
+                                                             const gchar * const  *postbuild);
 
 G_END_DECLS
