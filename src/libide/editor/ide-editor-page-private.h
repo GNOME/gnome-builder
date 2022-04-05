@@ -20,26 +20,29 @@
 
 #pragma once
 
+#include <libide-plugins.h>
+
 #include "ide-editor-page.h"
 
 G_BEGIN_DECLS
 
 struct _IdeEditorPage
 {
-  IdePage            parent_instance;
+  IdePage                  parent_instance;
 
   /* Owned references */
-  IdeBuffer         *buffer;
+  IdeExtensionSetAdapter  *addins;
+  IdeBuffer               *buffer;
 
   /* Settings Management */
-  IdeBindingGroup   *buffer_file_settings;
-  IdeBindingGroup   *view_file_settings;
+  IdeBindingGroup         *buffer_file_settings;
+  IdeBindingGroup         *view_file_settings;
 
   /* Template widgets */
-  IdeSourceView     *view;
-  GtkScrolledWindow *scroller;
-  GtkSourceMap      *map;
-  GtkRevealer       *map_revealer;
+  IdeSourceView           *view;
+  GtkScrolledWindow       *scroller;
+  GtkSourceMap            *map;
+  GtkRevealer             *map_revealer;
 };
 
 void _ide_editor_page_class_actions_init (IdeEditorPageClass *klass);
