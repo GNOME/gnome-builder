@@ -72,7 +72,6 @@ libide_editor_deps = [
 ]
 
 libide_editor_internal_deps = [
-  libpangoft2_dep,
 ]
 
 #
