@@ -28,11 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBuildconfigConfig, ide_buildconfig_config, IDE, BUILDCONFIG_CONFIG, IdeConfig)
 
-const gchar * const *ide_buildconfig_config_get_prebuild  (IdeBuildconfigConfig *self);
-void                 ide_buildconfig_config_set_prebuild  (IdeBuildconfigConfig *self,
-                                                                  const gchar * const         *prebuild);
-const gchar * const *ide_buildconfig_config_get_postbuild (IdeBuildconfigConfig *self);
-void                 ide_buildconfig_config_set_postbuild (IdeBuildconfigConfig *self,
-                                                                  const gchar * const         *postbuild);
+const gchar * const *ide_buildconfig_config_get_prebuild    (IdeBuildconfigConfig *self);
+void                 ide_buildconfig_config_set_prebuild    (IdeBuildconfigConfig *self,
+                                                             const gchar * const  *prebuild);
+const gchar * const *ide_buildconfig_config_get_postbuild   (IdeBuildconfigConfig *self);
+void                 ide_buildconfig_config_set_postbuild   (IdeBuildconfigConfig *self,
+                                                             const gchar * const  *postbuild);
 
 G_END_DECLS

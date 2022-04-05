@@ -92,7 +92,7 @@ add_suffix:
 
 static gchar *
 get_next_id (IdeConfigManager *manager,
-             const gchar             *id)
+             const gchar      *id)
 {
   g_autoptr(GPtrArray) tries = NULL;
 
@@ -111,11 +111,11 @@ get_next_id (IdeConfigManager *manager,
 }
 
 static void
-load_string (IdeConfig *config,
-             GKeyFile         *key_file,
-             const gchar      *group,
-             const gchar      *key,
-             const gchar      *property)
+load_string (IdeConfig   *config,
+             GKeyFile    *key_file,
+             const gchar *group,
+             const gchar *key,
+             const gchar *property)
 {
   g_assert (IDE_IS_CONFIG (config));
   g_assert (key_file != NULL);
@@ -133,11 +133,11 @@ load_string (IdeConfig *config,
 }
 
 static void
-load_strv (IdeConfig *config,
-           GKeyFile         *key_file,
-           const gchar      *group,
-           const gchar      *key,
-           const gchar      *property)
+load_strv (IdeConfig   *config,
+           GKeyFile    *key_file,
+           const gchar *group,
+           const gchar *key,
+           const gchar *property)
 {
   g_assert (IDE_IS_CONFIG (config));
   g_assert (key_file != NULL);
@@ -157,10 +157,10 @@ load_strv (IdeConfig *config,
 }
 
 static void
-load_environ (IdeConfig *config,
-              IdeEnvironment   *environment,
-              GKeyFile         *key_file,
-              const gchar      *group)
+load_environ (IdeConfig      *config,
+              IdeEnvironment *environment,
+              GKeyFile       *key_file,
+              const gchar    *group)
 {
   g_auto(GStrv) keys = NULL;
   gsize len = 0;
@@ -184,7 +184,7 @@ load_environ (IdeConfig *config,
 
 static IdeConfig *
 ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
-                                               const gchar                         *config_id)
+                                        const gchar                  *config_id)
 {
   g_autoptr(IdeConfig) config = NULL;
   g_autofree gchar *env_group = NULL;
@@ -237,10 +237,10 @@ ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
 }
 
 static void
-ide_buildconfig_config_provider_load_async (IdeConfigProvider *provider,
-                                                   GCancellable             *cancellable,
-                                                   GAsyncReadyCallback       callback,
-                                                   gpointer                  user_data)
+ide_buildconfig_config_provider_load_async (IdeConfigProvider   *provider,
+                                            GCancellable        *cancellable,
+                                            GAsyncReadyCallback  callback,
+                                            gpointer             user_data)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(IdeConfig) fallback = NULL;
@@ -314,8 +314,8 @@ complete:
 
 static gboolean
 ide_buildconfig_config_provider_load_finish (IdeConfigProvider  *provider,
-                                                    GAsyncResult              *result,
-                                                    GError                   **error)
+                                             GAsyncResult       *result,
+                                             GError            **error)
 {
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
@@ -325,9 +325,9 @@ ide_buildconfig_config_provider_load_finish (IdeConfigProvider  *provider,
 }
 
 static void
-ide_buildconfig_config_provider_append_env (IdeEnvironment  *env,
-                                            gchar           *env_group,
-                                            GKeyFile        *key_file)
+ide_buildconfig_config_provider_append_env (IdeEnvironment *env,
+                                            gchar          *env_group,
+                                            GKeyFile       *key_file)
 {
   guint n_items;
 
@@ -369,8 +369,8 @@ ide_buildconfig_config_provider_append_env (IdeEnvironment  *env,
 
 static void
 ide_buildconfig_config_provider_save_cb (GObject      *object,
-                                                GAsyncResult *result,
-                                                gpointer      user_data)
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
 {
   GFile *file = (GFile *)object;
   g_autoptr(IdeTask) task = user_data;

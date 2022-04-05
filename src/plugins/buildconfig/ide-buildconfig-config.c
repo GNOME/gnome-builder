@@ -26,7 +26,7 @@
 
 struct _IdeBuildconfigConfig
 {
-  IdeConfig   parent_instance;
+  IdeConfig          parent_instance;
 
   gchar            **prebuild;
   gchar            **postbuild;
@@ -56,9 +56,9 @@ ide_buildconfig_config_finalize (GObject *object)
 
 static void
 ide_buildconfig_config_get_property (GObject    *object,
-                                            guint       prop_id,
-                                            GValue     *value,
-                                            GParamSpec *pspec)
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   IdeBuildconfigConfig *self = (IdeBuildconfigConfig *)object;
 
@@ -79,9 +79,9 @@ ide_buildconfig_config_get_property (GObject    *object,
 
 static void
 ide_buildconfig_config_set_property (GObject      *object,
-                                            guint         prop_id,
-                                            const GValue *value,
-                                            GParamSpec   *pspec)
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
 {
   IdeBuildconfigConfig *self = (IdeBuildconfigConfig *)object;
 
@@ -145,7 +145,7 @@ ide_buildconfig_config_get_postbuild (IdeBuildconfigConfig *self)
 
 void
 ide_buildconfig_config_set_prebuild (IdeBuildconfigConfig *self,
-                                            const gchar * const         *prebuild)
+                                     const gchar * const  *prebuild)
 {
   g_return_if_fail (IDE_IS_BUILDCONFIG_CONFIG (self));
 
@@ -159,7 +159,7 @@ ide_buildconfig_config_set_prebuild (IdeBuildconfigConfig *self,
 
 void
 ide_buildconfig_config_set_postbuild (IdeBuildconfigConfig *self,
-                                             const gchar * const         *postbuild)
+                                      const gchar * const  *postbuild)
 {
   g_return_if_fail (IDE_IS_BUILDCONFIG_CONFIG (self));
 
