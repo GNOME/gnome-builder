@@ -965,6 +965,7 @@ ide_preferences_window_add_items (IdePreferencesWindow         *self,
       entry.schema_id = g_intern_string (entry.schema_id);
       entry.path = g_intern_string (entry.path);
       entry.key = g_intern_string (entry.key);
+      entry.value = g_intern_string (entry.value);
       entry.user_data = user_data;
 
       g_ptr_array_add (self->info.items, g_memdup2 (&entry, sizeof entry));
@@ -1056,6 +1057,102 @@ ide_preferences_window_toggle (const char                   *page_name,
   adw_action_row_add_suffix (row, GTK_WIDGET (child));
 
   g_settings_bind (settings, entry->key, child, "active", G_SETTINGS_BIND_DEFAULT);
+}
+
+static gboolean
+check_get_mapping (GValue   *to,
+                   GVariant *from,
+                   gpointer  user_data)
+{
+  GVariant *expected = user_data;
+
+  if (expected == NULL)
+    {
+      if (g_variant_is_of_type (from, G_VARIANT_TYPE_BOOLEAN))
+        {
+          g_value_set_boolean (to, g_variant_get_boolean (from));
+          return TRUE;
+        }
+
+      return FALSE;
+    }
+
+  if (g_variant_equal (expected, from))
+    g_value_set_boolean (to, TRUE);
+  else
+    g_value_set_boolean (to, FALSE);
+
+  return TRUE;
+}
+
+static GVariant *
+check_set_mapping (const GValue       *from,
+                   const GVariantType *expected_type,
+                   gpointer            user_data)
+{
+  GVariant *expected = user_data;
+
+  if (G_VALUE_HOLDS_BOOLEAN (from))
+    {
+      if (expected != NULL)
+        return g_variant_ref (expected);
+      else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_BOOLEAN))
+        return g_variant_new_boolean (g_value_get_boolean (from));
+    }
+
+  return NULL;
+}
+
+void
+ide_preferences_window_check (const char                   *page_name,
+                              const IdePreferenceItemEntry *entry,
+                              AdwPreferencesGroup          *group,
+                              gpointer                      user_data)
+{
+  IdePreferencesWindow *self = user_data;
+  g_autofree char *title_esc = NULL;
+  g_autofree char *subtitle_esc = NULL;
+  g_autoptr(GError) error = NULL;
+  AdwActionRow *row;
+  GtkWidget *child;
+  GSettings *settings;
+  GVariant *value;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (ADW_IS_PREFERENCES_GROUP (group));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (!(settings = ide_preferences_window_get_settings (self, entry)))
+    return;
+
+  title_esc = g_markup_escape_text (entry->title ? entry->title : "", -1);
+  subtitle_esc = g_markup_escape_text (entry->subtitle ? entry->subtitle : "", -1);
+
+  child = g_object_new (GTK_TYPE_CHECK_BUTTON,
+                        "valign", GTK_ALIGN_CENTER,
+                        NULL);
+  gtk_widget_add_css_class (child, "preferences-check");
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title", title_esc,
+                      "subtitle", subtitle_esc,
+                      "activatable-widget", child,
+                      NULL);
+  adw_preferences_group_add (group, GTK_WIDGET (row));
+  adw_action_row_add_suffix (row, GTK_WIDGET (child));
+
+  if (entry->value)
+    value = g_variant_parse (NULL, entry->value, NULL, NULL, &error);
+  else
+    value = NULL;
+
+  if (error != NULL)
+    g_warning ("Failed to parse GVariant: %s", error->message);
+
+  g_settings_bind_with_mapping (settings, entry->key, child, "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                check_get_mapping, check_set_mapping,
+                                value,
+                                value ? (GDestroyNotify)g_variant_unref : NULL);
 }
 
 IdePreferencesMode

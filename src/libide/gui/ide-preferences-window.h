@@ -71,6 +71,7 @@ struct _IdePreferenceItemEntry
   const char *schema_id;
   const char *path;
   const char *key;
+  const char *value;
 
   /*< private >*/
   gconstpointer user_data;
@@ -122,7 +123,10 @@ void                ide_preferences_window_toggle     (const char               
                                                        const IdePreferenceItemEntry  *entry,
                                                        AdwPreferencesGroup           *group,
                                                        gpointer                       user_data);
-
-
+IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_check      (const char                    *page_name,
+                                                       const IdePreferenceItemEntry  *entry,
+                                                       AdwPreferencesGroup           *group,
+                                                       gpointer                       user_data);
 
 G_END_DECLS
