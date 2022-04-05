@@ -33,25 +33,27 @@ struct _GbpVcsuiEditorPageAddin
 
 static void
 on_push_snippet_cb (GbpVcsuiEditorPageAddin *self,
-                    IdeSnippet              *snippet,
+                    GtkSourceSnippet        *snippet,
                     GtkTextIter             *iter,
                     IdeSourceView           *source_view)
 {
   g_autoptr(IdeVcsConfig) vcs_config = NULL;
   g_autoptr(IdeContext) ide_context = NULL;
-  IdeSnippetContext *context;
+  GtkSourceSnippetContext *context;
   IdeBuffer *buffer;
   IdeVcs *vcs;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VCSUI_EDITOR_PAGE_ADDIN (self));
-  g_assert (IDE_IS_SNIPPET (snippet));
+  g_assert (GTK_SOURCE_IS_SNIPPET (snippet));
   g_assert (iter != NULL);
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
   buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view)));
   ide_context = ide_buffer_ref_context (buffer);
-  context = ide_snippet_get_context (snippet);
+  context = gtk_source_snippet_get_context (snippet);
 
   if ((vcs = ide_vcs_from_context (ide_context)) &&
        (vcs_config = ide_vcs_get_config (vcs)))
@@ -64,9 +66,9 @@ on_push_snippet_cb (GbpVcsuiEditorPageAddin *self,
 
       if (!ide_str_empty0 (g_value_get_string (&value)))
         {
-          ide_snippet_context_add_shared_variable (context, "author", g_value_get_string (&value));
-          ide_snippet_context_add_shared_variable (context, "fullname", g_value_get_string (&value));
-          ide_snippet_context_add_shared_variable (context, "username", g_value_get_string (&value));
+          gtk_source_snippet_context_set_variable (context, "author", g_value_get_string (&value));
+          gtk_source_snippet_context_set_variable (context, "fullname", g_value_get_string (&value));
+          gtk_source_snippet_context_set_variable (context, "username", g_value_get_string (&value));
         }
 
       g_value_reset (&value);
@@ -74,10 +76,12 @@ on_push_snippet_cb (GbpVcsuiEditorPageAddin *self,
       ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_EMAIL, &value);
 
       if (!ide_str_empty0 (g_value_get_string (&value)))
-        ide_snippet_context_add_shared_variable (context, "email", g_value_get_string (&value));
+        gtk_source_snippet_context_set_variable (context, "email", g_value_get_string (&value));
 
       g_value_unset (&value);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -124,7 +128,7 @@ editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiEditorPageAddin, gbp_vcsui_editor_page_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
 
 static void
 gbp_vcsui_editor_page_addin_class_init (GbpVcsuiEditorPageAddinClass *klass)
