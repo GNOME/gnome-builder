@@ -1130,6 +1130,7 @@ ide_preferences_window_check (const char                   *page_name,
 
   child = g_object_new (GTK_TYPE_CHECK_BUTTON,
                         "valign", GTK_ALIGN_CENTER,
+                        "can-target", FALSE,
                         NULL);
   gtk_widget_add_css_class (child, "preferences-check");
   row = g_object_new (ADW_TYPE_ACTION_ROW,
