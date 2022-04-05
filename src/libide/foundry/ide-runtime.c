@@ -247,17 +247,21 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
   if (argv && argv[0] && !g_path_is_absolute (argv[0]))
     {
       const gchar *slash = strchr (argv[0], '/');
-      g_autofree gchar *copy = g_strdup (slash ? (slash + 1) : argv[0]);
 
-      g_free (argv[0]);
-
-      if (installdir != NULL)
+      if (slash != NULL)
         {
-          g_autoptr(GFile) dest = g_file_get_child (installdir, copy);
-          argv[0] = g_file_get_path (dest);
+          g_autofree gchar *copy = g_strdup (slash ? (slash + 1) : argv[0]);
+
+          g_free (argv[0]);
+
+          if (installdir != NULL)
+            {
+              g_autoptr(GFile) dest = g_file_get_child (installdir, copy);
+              argv[0] = g_file_get_path (dest);
+            }
+          else
+            argv[0] = g_steal_pointer (&copy);
         }
-      else
-        argv[0] = g_steal_pointer (&copy);
     }
 
   if (installdir != NULL)
