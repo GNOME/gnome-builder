@@ -101,10 +101,9 @@ gbp_vim_editor_page_addin_update (GbpVimEditorPageAddin *self)
       self->workspace_addin = NULL;
     }
 
-  workspace = ide_widget_get_workspace (GTK_WIDGET (self->page));
-  workspace_addin = ide_workspace_addin_find_by_module_name (workspace, "vim");
-
-  if (workspace_addin == NULL || !GBP_IS_VIM_WORKSPACE_ADDIN (workspace_addin))
+  if (!(workspace = ide_widget_get_workspace (GTK_WIDGET (self->page))) ||
+      !(workspace_addin = ide_workspace_addin_find_by_module_name (workspace, "vim")) ||
+      !GBP_IS_VIM_WORKSPACE_ADDIN (workspace_addin))
     IDE_GOTO (disabled);
 
   self->workspace_addin = GBP_VIM_WORKSPACE_ADDIN (workspace_addin);

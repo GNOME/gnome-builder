@@ -219,8 +219,11 @@ gbp_vim_workspace_addin_set_command (GbpVimWorkspaceAddin *self,
 {
   g_return_if_fail (GBP_IS_VIM_WORKSPACE_ADDIN (self));
 
-  gtk_label_set_label (self->command, command);
-  gtk_widget_set_visible (GTK_WIDGET (self->command), command && *command);
+  if (self->command != NULL)
+    {
+      gtk_label_set_label (self->command, command);
+      gtk_widget_set_visible (GTK_WIDGET (self->command), !ide_str_empty0 (command));
+    }
 }
 
 void
