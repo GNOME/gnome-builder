@@ -88,12 +88,12 @@ struct _IdeBuffer
   GFile                  *readlink_file;
 
   IdeTask                *in_flight_symbol_at_location;
-  gint                    in_flight_symbol_at_location_pos;
+  int                     in_flight_symbol_at_location_pos;
 
-  /* Scalars */
   guint                   change_count;
   guint                   settling_source;
-  gint                    hold;
+  int                     hold;
+  guint                   release_in_idle;
 
   /* Bit-fields */
   IdeBufferState          state : 3;
@@ -487,6 +487,7 @@ ide_buffer_dispose (GObject *object)
   g_assert (IDE_IS_MAIN_THREAD ());
 
   g_clear_handle_id (&self->settling_source, g_source_remove);
+  g_clear_handle_id (&self->release_in_idle, g_source_remove);
 
   /* Remove ourselves from the object-tree if necessary */
   if ((box = ide_object_box_from_object (object)) &&
@@ -3927,7 +3928,25 @@ ide_buffer_hold (IdeBuffer *self)
 
   self->hold++;
 
+  g_clear_handle_id (&self->release_in_idle, g_source_remove);
+
   return g_object_ref (self);
+}
+
+static gboolean
+ide_buffer_release_in_idle (gpointer data)
+{
+  IdeBuffer *self = data;
+  IdeObjectBox *box;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  self->release_in_idle = 0;
+
+  if ((box = ide_object_box_from_object (G_OBJECT (self))))
+    ide_object_destroy (IDE_OBJECT (box));
+
+  return G_SOURCE_REMOVE;
 }
 
 /**
@@ -3952,10 +3971,13 @@ ide_buffer_release (IdeBuffer *self)
 
   if (self->hold == 0)
     {
-      IdeObjectBox *box = ide_object_box_from_object (G_OBJECT (self));
-
-      if (box != NULL)
-        ide_object_destroy (IDE_OBJECT (box));
+      g_assert (self->release_in_idle == 0);
+      self->release_in_idle =
+        g_idle_add_full (G_PRIORITY_DEFAULT,
+                         ide_buffer_release_in_idle,
+                         self,
+                         g_object_unref);
+      return;
     }
 
   g_object_unref (self);
