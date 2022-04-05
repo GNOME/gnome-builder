@@ -67,6 +67,7 @@ on_keybindings_changed_cb (GbpVimWorkspaceAddin *self,
   if (active != self->active)
     {
       self->active = active;
+      gtk_widget_set_visible (GTK_WIDGET (self->command_bar), active);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVE]);
     }
 }
