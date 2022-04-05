@@ -14,8 +14,12 @@ window.preferences list check {
   outline: none;
   box-shadow: none;
   border: none;
-  -gtk-icon-source: -gtk-icontheme('object-select-symbolic');
+  color: @window_fg_color;
+  -gtk-icon-source: none;
   -gtk-icon-size: 18px;
+}
+window.preferences list check:checked {
+  -gtk-icon-source: -gtk-icontheme('object-select-symbolic');
 }
 stylevariantpreview widget.wallpaper {
   border-radius: 6px;
