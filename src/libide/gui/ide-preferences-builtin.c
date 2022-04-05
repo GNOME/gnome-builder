@@ -718,6 +718,11 @@ static const IdePreferenceItemEntry items[] = {
     N_("Allow Downloads over Metered Connections"),
     N_("Allow the use of metered network connections when automatically downloading dependencies"),
     "org.gnome.builder.build", NULL, "allow-network-when-metered" },
+
+  { "keyboard", "keybindings", "default", 0, ide_preferences_window_check,
+    N_("Builder"),
+    N_("Keyboard shortcuts similar to GNOME Text Editor"),
+    "org.gnome.builder.editor", NULL, "keybindings", "'default'" },
 };
 
 static gboolean
