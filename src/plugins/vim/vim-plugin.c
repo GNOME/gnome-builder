@@ -23,10 +23,10 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-core.h>
 #include <libide-gui.h>
 
-#include "gbp-vim-command-provider.h"
 #include "gbp-vim-preferences-addin.h"
 
 _IDE_EXTERN void
@@ -35,7 +35,4 @@ _gbp_vim_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               GBP_TYPE_VIM_PREFERENCES_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMMAND_PROVIDER,
-                                              GBP_TYPE_VIM_COMMAND_PROVIDER);
 }
