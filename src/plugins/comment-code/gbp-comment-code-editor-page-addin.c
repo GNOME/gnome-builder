@@ -18,11 +18,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gbp-comment-code-editor-page-addin"
+
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
-#include <gtksourceview/gtksource.h>
+
+#include <libide-sourceview.h>
 #include <libide-editor.h>
 
 #include "gbp-comment-code-editor-page-addin.h"
@@ -39,7 +41,7 @@ struct _GbpCommentCodeEditorPageAddin
 static void editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCommentCodeEditorPageAddin, gbp_comment_code_editor_page_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_view_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_view_addin_iface_init))
 
 /* If there's only empty lines, G_MAXINT is returned */
 static gint
@@ -150,8 +152,8 @@ gbp_comment_code_editor_page_addin_comment_line (GtkTextBuffer *buffer,
   gboolean res;
 
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
-  g_assert (!dzl_str_empty0 (start_tag));
-  g_assert ((is_block_tag && !dzl_str_empty0 (end_tag)) || !is_block_tag);
+  g_assert (!ide_str_empty0 (start_tag));
+  g_assert ((is_block_tag && !ide_str_empty0 (end_tag)) || !is_block_tag);
   g_assert (line >= 0 && line < gtk_text_buffer_get_line_count(buffer));
 
   if (!is_line_commentable (buffer, line, start_tag))
@@ -206,8 +208,8 @@ gbp_comment_code_editor_page_addin_uncomment_line (GtkTextBuffer *buffer,
   gboolean res;
 
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
-  g_assert (!dzl_str_empty0 (start_tag));
-  g_assert ((is_block_tag && !dzl_str_empty0 (end_tag)) || !is_block_tag);
+  g_assert (!ide_str_empty0 (start_tag));
+  g_assert ((is_block_tag && !ide_str_empty0 (end_tag)) || !is_block_tag);
   g_assert (line >= 0 && line < gtk_text_buffer_get_line_count(buffer));
 
   if (!is_line_uncommentable (buffer, line, start_tag, &tag_begin, &tag_end))
@@ -265,12 +267,12 @@ gbp_comment_code_editor_page_addin_comment_action (GSimpleAction *action,
                                                    GVariant      *variant,
                                                    gpointer       user_data)
 {
-  GbpCommentCodeEditorPageAddin *self = GBP_COMMENT_CODE_EDITOR_PAGE_ADDIN (user_data);
-  IdeEditorPage *editor_view = self->editor_view;
+  GbpCommentCodeEditorPageAddin *self = user_data;
+  IdeEditorPage *editor_view;
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
   const gchar *param;
-  IdeCompletion *completion;
+  GtkSourceCompletion *completion;
   GtkSourceLanguage *lang;
   const gchar *start_tag;
   const gchar *end_tag = NULL;
@@ -282,21 +284,23 @@ gbp_comment_code_editor_page_addin_comment_action (GSimpleAction *action,
   gboolean editable;
   gboolean block_comment = TRUE;
 
+  g_assert (GBP_IS_COMMENT_CODE_EDITOR_PAGE_ADDIN (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
+  editor_view = self->editor_view;
   buffer = GTK_TEXT_BUFFER (ide_editor_page_get_buffer (editor_view));
   source_view = ide_editor_page_get_view (editor_view);
   if (source_view == NULL || !GTK_SOURCE_IS_VIEW (source_view))
     return;
 
   editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (source_view));
-  completion = ide_source_view_get_completion (IDE_SOURCE_VIEW (source_view));
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (source_view));
   lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
   if (!editable || lang == NULL)
     return;
 
-  if (dzl_str_equal0 (gtk_source_language_get_id(lang), "c"))
+  if (ide_str_equal0 (gtk_source_language_get_id(lang), "c"))
     {
       start_tag = gtk_source_language_get_metadata (lang, "block-comment-start");
       end_tag = gtk_source_language_get_metadata (lang, "block-comment-end");
@@ -337,46 +341,32 @@ gbp_comment_code_editor_page_addin_comment_action (GSimpleAction *action,
   if (*param == '0')
     {
       indent = get_buffer_range_min_indent (buffer, start_line, end_line);
-     if (indent == G_MAXINT)
-       return;
+      if (indent == G_MAXINT)
+        return;
 
-      ide_completion_block_interactive (completion);
+      gtk_source_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
 
       for (gint line = start_line; line <= end_line; ++line)
         gbp_comment_code_editor_page_addin_comment_line (buffer, start_tag, end_tag, line, indent, block_comment);
 
       gtk_text_buffer_end_user_action (buffer);
-      ide_completion_unblock_interactive (completion);
+      gtk_source_completion_unblock_interactive (completion);
     }
   else if (*param == '1')
     {
-      ide_completion_block_interactive (completion);
+      gtk_source_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
 
       for (gint line = start_line; line <= end_line; ++line)
         gbp_comment_code_editor_page_addin_uncomment_line (buffer, start_tag, end_tag, line, block_comment);
 
       gtk_text_buffer_end_user_action (buffer);
-      ide_completion_unblock_interactive (completion);
+      gtk_source_completion_unblock_interactive (completion);
     }
   else
     g_assert_not_reached ();
 }
-
-static const DzlShortcutEntry comment_code_shortcut_entries[] = {
-  { "org.gnome.builder.editor-page.comment-code",
-    0, NULL,
-    N_("Editor shortcuts"),
-    N_("Editing"),
-    N_("Comment the code") },
-
-  { "org.gnome.builder.editor-page.uncomment-code",
-    0, NULL,
-    N_("Editor shortcuts"),
-    N_("Editing"),
-    N_("Uncomment the code") },
-};
 
 static const GActionEntry actions[] = {
   { "comment-code", gbp_comment_code_editor_page_addin_comment_action, "s" },
@@ -388,7 +378,6 @@ gbp_comment_code_editor_page_addin_load (IdeEditorPageAddin *addin,
 {
   GbpCommentCodeEditorPageAddin *self;
   g_autoptr(GSimpleActionGroup) group = NULL;
-  DzlShortcutController *controller;
 
   g_assert (GBP_IS_COMMENT_CODE_EDITOR_PAGE_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_PAGE (view));
@@ -402,24 +391,6 @@ gbp_comment_code_editor_page_addin_load (IdeEditorPageAddin *addin,
                                    G_N_ELEMENTS (actions),
                                    self);
   gtk_widget_insert_action_group (GTK_WIDGET (view), "comment-code", G_ACTION_GROUP (group));
-
-  controller = dzl_shortcut_controller_find (GTK_WIDGET (view));
-  dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.editor-page.comment-code",
-                                              I_("<primary>m"),
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
-                                              "comment-code.comment-code::0");
-
-  dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.editor-page.uncomment-code",
-                                              I_("<primary><shift>m"),
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
-                                              "comment-code.comment-code::1");
-
-  dzl_shortcut_manager_add_shortcut_entries (NULL,
-                                             comment_code_shortcut_entries,
-                                             G_N_ELEMENTS (comment_code_shortcut_entries),
-                                             GETTEXT_PACKAGE);
 }
 
 static void
