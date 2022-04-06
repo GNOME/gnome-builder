@@ -269,7 +269,7 @@ get_css_provider (IdeApplication *self,
       ret = gtk_css_provider_new ();
       gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                                   GTK_STYLE_PROVIDER (ret),
-                                                  GTK_STYLE_PROVIDER_PRIORITY_THEME+1);
+                                                  GTK_STYLE_PROVIDER_PRIORITY_USER-1);
       g_hash_table_insert (self->css_providers, g_strdup (key), ret);
     }
 
