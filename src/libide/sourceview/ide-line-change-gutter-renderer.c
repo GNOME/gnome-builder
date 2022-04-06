@@ -201,6 +201,10 @@ populate_changes_cb (guint               line,
 {
   GtkSourceGutterLines *lines = user_data;
 
+  if (line < gtk_source_gutter_lines_get_first (lines) ||
+      line > gtk_source_gutter_lines_get_last (lines))
+    return;
+
   if (change & IDE_BUFFER_LINE_CHANGE_ADDED)
     gtk_source_gutter_lines_add_qclass (lines, line, added_quark);
 
@@ -227,8 +231,8 @@ ide_line_change_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
       !(monitor = ide_buffer_get_change_monitor (IDE_BUFFER (self->buffer))))
     return;
 
-  first = MAX (0, (int)gtk_source_gutter_lines_get_first (lines) - 1);
-  last = gtk_source_gutter_lines_get_last (lines) + 1;
+  first = gtk_source_gutter_lines_get_first (lines);
+  last = gtk_source_gutter_lines_get_last (lines);
 
   ide_buffer_change_monitor_foreach_change (monitor, first, last, populate_changes_cb, lines);
 }
@@ -258,7 +262,9 @@ ide_line_change_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer
                                is_add ? &self->changes.add : &self->changes.change,
                                &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
 
-  if (!is_delete && gtk_source_gutter_lines_has_qclass (lines, line+1, deleted_quark))
+  if (!is_delete &&
+      line < gtk_source_gutter_lines_get_last (lines) &&
+      gtk_source_gutter_lines_has_qclass (lines, line+1, deleted_quark))
     gtk_snapshot_append_color (snapshot,
                                &self->changes.remove,
                                &GRAPHENE_RECT_INIT (0, line_y+line_height/2., width, line_height/2.));
