@@ -64,9 +64,24 @@ _ide_editor_page_settings_reload (IdeEditorPage *self)
   IDE_EXIT;
 }
 
+static gboolean
+show_map_to_vscrollbar_policy (GValue   *value,
+                               GVariant *variant,
+                               gpointer  user_data)
+{
+  if (g_variant_get_boolean (variant))
+    g_value_set_enum (value, GTK_POLICY_EXTERNAL);
+  else
+    g_value_set_enum (value, GTK_POLICY_AUTOMATIC);
+
+  return TRUE;
+}
+
 void
 _ide_editor_page_settings_init (IdeEditorPage *self)
 {
+  static GSettings *editor_settings;
+
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -75,6 +90,9 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
   g_return_if_fail (IDE_IS_BUFFER (self->buffer));
   g_return_if_fail (self->buffer_file_settings == NULL);
   g_return_if_fail (self->view_file_settings == NULL);
+
+  if (editor_settings == NULL)
+    editor_settings = g_settings_new ("org.gnome.builder.editor");
 
   g_object_bind_property (IDE_APPLICATION_DEFAULT, "style-scheme",
                           self->buffer, "style-scheme-name",
@@ -105,6 +123,15 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
   ide_binding_group_bind (self->view_file_settings,
                           "tab-width", self->view, "tab-width",
                           G_BINDING_SYNC_CREATE);
+
+  g_settings_bind (editor_settings, "show-map",
+                   self->map_revealer, "reveal-child",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind_with_mapping (editor_settings, "show-map",
+                                self->scroller, "vscrollbar-policy",
+                                G_SETTINGS_BIND_GET,
+                                show_map_to_vscrollbar_policy,
+                                NULL, NULL, NULL);
 
 #if 0
   ide_binding_group_bind (self->view_file_settings,
