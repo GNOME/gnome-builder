@@ -343,7 +343,7 @@ buffer_addin_iface_init (IdeBufferAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpBufferMonitorBufferAddin, gbp_buffer_monitor_buffer_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
 
 static void
 gbp_buffer_monitor_buffer_addin_class_init (GbpBufferMonitorBufferAddinClass *klass)
