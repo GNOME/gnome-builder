@@ -37,10 +37,28 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeEditorPage, ide_editor_page, IDE, EDITOR_PAGE, IdePage)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget     *ide_editor_page_new        (IdeBuffer     *buffer);
+GtkWidget     *ide_editor_page_new                    (IdeBuffer            *buffer);
 IDE_AVAILABLE_IN_ALL
-IdeBuffer     *ide_editor_page_get_buffer (IdeEditorPage *self);
+IdeBuffer     *ide_editor_page_get_buffer             (IdeEditorPage        *self);
 IDE_AVAILABLE_IN_ALL
-IdeSourceView *ide_editor_page_get_view   (IdeEditorPage *self);
+IdeSourceView *ide_editor_page_get_view               (IdeEditorPage        *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_discard_changes_async  (IdeEditorPage        *self,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_editor_page_discard_changes_finish (IdeEditorPage        *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_save_async             (IdeEditorPage        *self,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_editor_page_save_finish            (IdeEditorPage        *self,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
 
 G_END_DECLS

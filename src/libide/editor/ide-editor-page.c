@@ -22,6 +22,11 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
+#include <libide-code.h>
+#include <libide-threading.h>
+
 #include "ide-editor-page-addin.h"
 #include "ide-editor-page-private.h"
 
@@ -368,4 +373,250 @@ ide_editor_page_get_buffer (IdeEditorPage *self)
   g_return_val_if_fail (IDE_IS_EDITOR_PAGE (self), NULL);
 
   return self->buffer;
+}
+
+static void
+ide_editor_page_save_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeEditorPage *self;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  ide_page_set_progress (IDE_PAGE (self), NULL);
+
+  if (!ide_buffer_save_file_finish (buffer, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_editor_page_save_response (GtkFileChooserNative *native,
+                               int                   response,
+                               IdeTask              *task)
+{
+  IdeEditorPage *self;
+  IdeBuffer *buffer;
+
+  IDE_ENTRY;
+
+  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  buffer = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+      g_autoptr(IdeNotification) notif = NULL;
+
+      ide_buffer_save_file_async (buffer,
+                                  file,
+                                  ide_task_get_cancellable (task),
+                                  &notif,
+                                  ide_editor_page_save_cb,
+                                  g_object_ref (task));
+
+      ide_page_set_progress (IDE_PAGE (self), notif);
+    }
+
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (task);
+
+  IDE_EXIT;
+}
+
+void
+ide_editor_page_save_async (IdeEditorPage       *self,
+                            GCancellable        *cancellable,
+                            GAsyncReadyCallback  callback,
+                            gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeNotification) notif = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (IDE_IS_BUFFER (self->buffer));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_editor_page_save_async);
+  ide_task_set_task_data (task, ide_buffer_hold (self->buffer), ide_buffer_release);
+
+  if (ide_buffer_get_is_temporary (self->buffer))
+    {
+      g_autoptr(GFile) workdir = NULL;
+      GtkFileChooserNative *dialog;
+      IdeWorkspace *workspace;
+      IdeContext *context;
+
+      workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+      context = ide_workspace_get_context (workspace);
+      workdir = ide_context_ref_workdir (context);
+
+      dialog = gtk_file_chooser_native_new (_("Save File"),
+                                            GTK_WINDOW (workspace),
+                                            GTK_FILE_CHOOSER_ACTION_SAVE,
+                                            _("Save"), _("Cancel"));
+
+      g_object_set (dialog,
+                    "do-overwrite-confirmation", TRUE,
+                    "modal", TRUE,
+                    "select-multiple", FALSE,
+                    "show-hidden", FALSE,
+                    NULL);
+
+      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), workdir, NULL);
+
+      g_signal_connect (dialog,
+                        "response",
+                        G_CALLBACK (ide_editor_page_save_response),
+                        g_object_ref (task));
+
+      gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+
+      IDE_EXIT;
+    }
+
+  ide_buffer_save_file_async (self->buffer,
+                              ide_buffer_get_file (self->buffer),
+                              cancellable,
+                              &notif,
+                              ide_editor_page_save_cb,
+                              g_steal_pointer (&task));
+
+  ide_page_set_progress (IDE_PAGE (self), notif);
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_editor_page_save_finish (IdeEditorPage  *self,
+                             GAsyncResult   *result,
+                             GError        **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_EDITOR_PAGE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+ide_editor_page_discard_changes_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(IdeBuffer) buffer = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeEditorPage *self;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  ide_page_set_progress (IDE_PAGE (self), NULL);
+
+  if (!(buffer = ide_buffer_manager_load_file_finish (bufmgr, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  g_assert (!buffer || IDE_IS_BUFFER (buffer));
+
+  IDE_EXIT;
+}
+
+void
+ide_editor_page_discard_changes_async (IdeEditorPage       *self,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeNotification) notif = NULL;
+  IdeBufferManager *bufmgr;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (IDE_IS_BUFFER (self->buffer));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_editor_page_discard_changes_async);
+  ide_task_set_task_data (task, ide_buffer_hold (self->buffer), ide_buffer_release);
+
+  if (ide_buffer_get_is_temporary (self->buffer))
+    {
+      ide_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+  bufmgr = ide_buffer_manager_from_context (context);
+  notif = ide_notification_new ();
+  ide_page_set_progress (IDE_PAGE (self), notif);
+
+  ide_buffer_manager_load_file_async (bufmgr,
+                                      ide_buffer_get_file (self->buffer),
+                                      IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD | IDE_BUFFER_OPEN_FLAGS_NO_VIEW,
+                                      notif,
+                                      cancellable,
+                                      ide_editor_page_discard_changes_cb,
+                                      g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_editor_page_discard_changes_finish (IdeEditorPage  *self,
+                                        GAsyncResult   *result,
+                                        GError        **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_EDITOR_PAGE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
