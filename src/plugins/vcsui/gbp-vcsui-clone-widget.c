@@ -51,7 +51,7 @@ struct _GbpVcsuiCloneWidget
 
   /* Template Widgets */
   GtkWidget           *scroller;
-  DzlFileChooserEntry *destination_chooser;
+  IdeFileChooserEntry *destination_chooser;
   GtkLabel            *destination_label;
   DzlRadioBox         *kind_radio;
   GtkLabel            *kind_label;
@@ -84,8 +84,6 @@ static GParamSpec *properties [N_PROPS];
  * Create a new #GbpVcsuiCloneWidget.
  *
  * Returns: (transfer full): a newly created #GbpVcsuiCloneWidget
- *
- * Since: 3.32
  */
 GbpVcsuiCloneWidget *
 gbp_vcsui_clone_widget_new (void)
@@ -95,9 +93,9 @@ gbp_vcsui_clone_widget_new (void)
 
 static void
 gbp_vcsui_clone_widget_addin_added_cb (PeasExtensionSet *set,
-                                  PeasPluginInfo   *plugin_info,
-                                  PeasExtension    *exten,
-                                  gpointer          user_data)
+                                       PeasPluginInfo   *plugin_info,
+                                       PeasExtension    *exten,
+                                       gpointer          user_data)
 {
   IdeVcsCloner *cloner = (IdeVcsCloner *)exten;
   GbpVcsuiCloneWidget *self = user_data;
@@ -126,9 +124,9 @@ gbp_vcsui_clone_widget_addin_added_cb (PeasExtensionSet *set,
 
 static void
 gbp_vcsui_clone_widget_addin_removed_cb (PeasExtensionSet *set,
-                                    PeasPluginInfo   *plugin_info,
-                                    PeasExtension    *exten,
-                                    gpointer          user_data)
+                                         PeasPluginInfo   *plugin_info,
+                                         PeasExtension    *exten,
+                                         gpointer          user_data)
 {
   GbpVcsuiCloneWidget *self = user_data;
 
@@ -154,9 +152,9 @@ gbp_vcsui_clone_widget_addin_removed_cb (PeasExtensionSet *set,
 
 static void
 gbp_vcsui_clone_widget_validate_cb (PeasExtensionSet *set,
-                               PeasPluginInfo   *plugin_info,
-                               PeasExtension    *exten,
-                               gpointer          user_data)
+                                    PeasPluginInfo   *plugin_info,
+                                    PeasExtension    *exten,
+                                    gpointer          user_data)
 {
   IdeVcsCloner *cloner = (IdeVcsCloner *)exten;
   struct {
@@ -188,7 +186,7 @@ gbp_vcsui_clone_widget_validate (GbpVcsuiCloneWidget *self)
 
   g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
-  validate.text = gtk_entry_get_text (self->uri_entry);
+  validate.text = gtk_editable_get_text (GTK_EDITABLE (self->uri_entry));
   validate.errmsg = NULL;
   validate.valid = FALSE;
 
@@ -200,7 +198,7 @@ gbp_vcsui_clone_widget_validate (GbpVcsuiCloneWidget *self)
   if (validate.valid)
     dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->uri_entry), "error");
   else
-    dzl_gtk_widget_add_style_class (GTK_WIDGET (self->uri_entry), "error");
+    gtk_widget_add_css_class (GTK_WIDGET (self->uri_entry), "error");
 
   if (validate.errmsg)
     gtk_widget_set_tooltip_text (GTK_WIDGET (self->uri_entry), validate.errmsg);
@@ -226,8 +224,8 @@ gbp_vcsui_clone_widget_update (GbpVcsuiCloneWidget *self)
 
   gbp_vcsui_clone_widget_validate (self);
 
-  file = dzl_file_chooser_entry_get_file (self->destination_chooser);
-  text = gtk_entry_get_text (self->uri_entry);
+  file = ide_file_chooser_entry_get_file (self->destination_chooser);
+  text = gtk_editable_get_text (GTK_EDITABLE (self->uri_entry));
   uri = ide_vcs_uri_new (text);
 
   self->vcs_valid = uri != NULL;
@@ -244,21 +242,21 @@ gbp_vcsui_clone_widget_update (GbpVcsuiCloneWidget *self)
 
   collapsed = ide_path_collapse (g_file_peek_path (child_file));
 
-  entry = dzl_file_chooser_entry_get_entry (self->destination_chooser);
+  entry = ide_file_chooser_entry_get_entry (self->destination_chooser);
 
   if (g_file_query_exists (child_file, NULL))
     {
       /* translators: %s is replaced with the path to the project */
       formatted = g_strdup_printf (_("The directory “%s” already exists. Please choose another directory."),
                                    collapsed);
-      dzl_gtk_widget_add_style_class (GTK_WIDGET (entry), "error");
+      gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
       self->dir_valid = FALSE;
     }
   else
     {
       /* translators: %s is replaced with the path to the project */
       formatted = g_strdup_printf (_("Your project will be created at %s"), collapsed);
-      dzl_gtk_widget_remove_style_class (GTK_WIDGET (entry), "error");
+      gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
       self->dir_valid = TRUE;
     }
 
@@ -270,7 +268,7 @@ gbp_vcsui_clone_widget_update (GbpVcsuiCloneWidget *self)
 
 static void
 gbp_vcsui_clone_widget_uri_entry_changed (GbpVcsuiCloneWidget *self,
-                                     GtkEntry        *entry)
+                                          GtkEntry            *entry)
 {
   g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
@@ -279,9 +277,9 @@ gbp_vcsui_clone_widget_uri_entry_changed (GbpVcsuiCloneWidget *self,
 }
 
 static void
-gbp_vcsui_clone_widget_destination_changed (GbpVcsuiCloneWidget     *self,
-                                       GParamSpec          *pspec,
-                                       DzlFileChooserEntry *chooser)
+gbp_vcsui_clone_widget_destination_changed (GbpVcsuiCloneWidget *self,
+                                            GParamSpec          *pspec,
+                                            IdeFileChooserEntry *chooser)
 {
   g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
   g_assert (DZL_IS_FILE_CHOOSER_ENTRY (chooser));
@@ -311,7 +309,7 @@ gbp_vcsui_clone_widget_dispose (GObject *object)
 
 static void
 gbp_vcsui_clone_widget_context_set (GtkWidget  *widget,
-                               IdeContext *context)
+                                    IdeContext *context)
 {
   GbpVcsuiCloneWidget *self = (GbpVcsuiCloneWidget *)widget;
   g_autoptr(GFile) file = NULL;
@@ -322,7 +320,7 @@ gbp_vcsui_clone_widget_context_set (GtkWidget  *widget,
   gtk_entry_set_text (self->author_entry, g_get_real_name ());
 
   file = g_file_new_for_path (ide_get_projects_dir ());
-  dzl_file_chooser_entry_set_file (self->destination_chooser, file);
+  ide_file_chooser_entry_set_file (self->destination_chooser, file);
 
   if (context == NULL)
     return;
@@ -351,9 +349,9 @@ gbp_vcsui_clone_widget_context_set (GtkWidget  *widget,
 
 static void
 gbp_vcsui_clone_widget_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   GbpVcsuiCloneWidget *self = GBP_VCSUI_CLONE_WIDGET (object);
 
@@ -370,9 +368,9 @@ gbp_vcsui_clone_widget_get_property (GObject    *object,
 
 static void
 gbp_vcsui_clone_widget_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
 {
   GbpVcsuiCloneWidget *self = GBP_VCSUI_CLONE_WIDGET (object);
 
@@ -406,8 +404,6 @@ gbp_vcsui_clone_widget_class_init (GbpVcsuiCloneWidgetClass *klass)
    * be cloned. Usually, this is something like
    *
    *   "https://gitlab.gnome.org/GNOME/gnome-builder.git"
-   *
-   * Since: 3.32
    */
   properties [PROP_URI] =
     g_param_spec_string ("uri",
@@ -451,12 +447,12 @@ gbp_vcsui_clone_widget_get_uri (GbpVcsuiCloneWidget *self)
 {
   g_return_val_if_fail (GBP_IS_VCSUI_CLONE_WIDGET (self), NULL);
 
-  return gtk_entry_get_text (self->uri_entry);
+  return gtk_editable_get_text (GTK_EDITABLE (self->uri_entry));
 }
 
 void
 gbp_vcsui_clone_widget_set_uri (GbpVcsuiCloneWidget *self,
-                           const gchar     *uri)
+                                const gchar         *uri)
 {
   static const struct {
     const gchar *prefix;
@@ -487,8 +483,8 @@ gbp_vcsui_clone_widget_set_uri (GbpVcsuiCloneWidget *self,
 
 static void
 gbp_vcsui_clone_widget_clone_cb (GObject      *object,
-                            GAsyncResult *result,
-                            gpointer      user_data)
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   IdeVcsCloner *cloner = (IdeVcsCloner *)object;
   g_autoptr(GbpVcsuiCloneWidget) self = user_data;
@@ -521,7 +517,7 @@ gbp_vcsui_clone_widget_clone_cb (GObject      *object,
     }
 
   project_info = ide_project_info_new ();
-  ide_project_info_set_vcs_uri (project_info, gtk_entry_get_text (self->uri_entry));
+  ide_project_info_set_vcs_uri (project_info, gtk_editable_get_text (GTK_EDITABLE (self->uri_entry)));
   ide_project_info_set_file (project_info, self->destination);
   ide_project_info_set_directory (project_info, self->destination);
 
@@ -557,11 +553,11 @@ gbp_vcsui_clone_widget_clone (GbpVcsuiCloneWidget *self)
 
   g_variant_dict_init (&dict, NULL);
 
-  uri = gtk_entry_get_text (self->uri_entry);
-  author = gtk_entry_get_text (self->author_entry);
-  email = gtk_entry_get_text (self->email_entry);
+  uri = gtk_editable_get_text (GTK_EDITABLE (self->uri_entry));
+  author = gtk_editable_get_text (GTK_EDITABLE (self->author_entry));
+  email = gtk_editable_get_text (GTK_EDITABLE (self->email_entry));
   path = g_file_peek_path (self->destination);
-  branch = gtk_entry_get_text (self->branch_entry);
+  branch = gtk_editable_get_text (GTK_EDITABLE (self->branch_entry));
 
   g_variant_dict_insert (&dict, "branch", "s", branch);
 
