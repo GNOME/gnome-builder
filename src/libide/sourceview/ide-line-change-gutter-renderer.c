@@ -244,12 +244,19 @@ ide_line_change_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer
                                                guint                    line)
 {
   IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
-  gboolean is_add = gtk_source_gutter_lines_has_qclass (lines, line, added_quark);
-  gboolean is_change = gtk_source_gutter_lines_has_qclass (lines, line, changed_quark);
-  gboolean is_delete = gtk_source_gutter_lines_has_qclass (lines, line, deleted_quark);
+  gboolean is_add;
+  gboolean is_change;
+  gboolean is_delete;
   int line_y;
   int line_height;
   int width;
+
+  if (!gtk_source_gutter_lines_has_any_class (lines, line))
+    return;
+
+  is_add = gtk_source_gutter_lines_has_qclass (lines, line, added_quark);
+  is_change = gtk_source_gutter_lines_has_qclass (lines, line, changed_quark);
+  is_delete = gtk_source_gutter_lines_has_qclass (lines, line, deleted_quark);
 
   if (!is_add && !is_change && !is_delete)
     return;
