@@ -24,9 +24,7 @@
 
 #include <vte/vte.h>
 
-#if 0
 #include <libide-editor.h>
-#endif
 
 #include <libide-gtk.h>
 #include <libide-projects.h>
@@ -77,10 +75,8 @@ new_action_completed_cb (GObject      *object,
       if (!(workbench = ide_widget_get_workbench (GTK_WIDGET (self->tree))))
         return;
 
-#if 0
       if (state->file != NULL)
-        ide_workbench_open_async (workbench, state->file, "editor", 0, NULL, NULL, NULL);
-#endif
+        ide_workbench_open_async (workbench, state->file, "editorui", 0, NULL, NULL, NULL);
     }
 }
 
