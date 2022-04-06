@@ -31,6 +31,9 @@
 #include "ide-primary-workspace-private.h"
 #include "ide-run-button.h"
 
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
+
 /**
  * SECTION:ide-primary-workspace
  * @title: IdePrimaryWorkspace
@@ -86,6 +89,45 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
 }
 
 static void
+add_to_frame_with_depth (PanelFrame  *frame,
+                         PanelWidget *widget,
+                         guint        depth,
+                         gboolean     depth_set)
+{
+  PanelWidget *previous_page;
+  guint n_pages;
+
+  g_assert (PANEL_IS_FRAME (frame));
+  g_assert (PANEL_IS_WIDGET (widget));
+
+  previous_page = panel_frame_get_visible_child (frame);
+
+  if (!depth_set || depth > G_MAXINT)
+    depth = G_MAXINT;
+
+  SET_PRIORITY (widget, depth);
+
+  n_pages = panel_frame_get_n_pages (frame);
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      PanelWidget *child = panel_frame_get_page (frame, i);
+
+      if ((int)depth < GET_PRIORITY (child))
+        {
+          panel_frame_add_before (frame, widget, child);
+          panel_frame_set_visible_child (frame, widget);
+          return;
+        }
+    }
+
+  panel_frame_add (frame, widget);
+
+  if (previous_page != NULL)
+    panel_frame_set_visible_child (frame, previous_page);
+}
+
+static void
 ide_primary_workspace_add_page (IdeWorkspace     *workspace,
                                 IdePage          *page,
                                 IdePanelPosition *position)
@@ -93,6 +135,8 @@ ide_primary_workspace_add_page (IdeWorkspace     *workspace,
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
   PanelFrame *frame;
   PanelDockPosition edge;
+  gboolean depth_set;
+  guint depth = 0;
   guint column;
   guint row;
 
@@ -122,10 +166,9 @@ ide_primary_workspace_add_page (IdeWorkspace     *workspace,
   if (!ide_panel_position_get_row (position, &row))
     row = 0;
 
+  depth_set = ide_panel_position_get_depth (position, &depth);
   frame = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (self->grid), column), row);
-
-  /* TODO: Handle depth */
-  panel_frame_add (frame, PANEL_WIDGET (page));
+  add_to_frame_with_depth (frame, PANEL_WIDGET (page), depth, depth_set);
 }
 
 static void
@@ -137,6 +180,7 @@ ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
   PanelDockPosition edge;
   PanelPaned *paned;
   GtkWidget *parent;
+  gboolean depth_set;
   guint depth;
   guint nth = 0;
 
@@ -183,15 +227,8 @@ ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
       panel_paned_append (paned, parent);
     }
 
-  if (ide_panel_position_get_depth (position, &depth))
-    {
-      /* TODO: setup position */
-      panel_frame_add (PANEL_FRAME (parent), PANEL_WIDGET (pane));
-    }
-  else
-    {
-      panel_frame_add (PANEL_FRAME (parent), PANEL_WIDGET (pane));
-    }
+  depth_set = ide_panel_position_get_depth (position, &depth);
+  add_to_frame_with_depth (PANEL_FRAME (parent), PANEL_WIDGET (pane), depth, depth_set);
 }
 
 static IdeFrame *
