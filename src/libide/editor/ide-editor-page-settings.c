@@ -77,6 +77,21 @@ show_map_to_vscrollbar_policy (GValue   *value,
   return TRUE;
 }
 
+static gboolean
+font_name_to_font_desc (GValue   *value,
+                        GVariant *variant,
+                        gpointer  user_data)
+{
+  const char *str;
+
+  if ((str = g_variant_get_string (variant, NULL)))
+    g_value_take_boxed (value, pango_font_description_from_string (str));
+  else
+    g_value_set_boxed (value, NULL);
+
+  return TRUE;
+}
+
 void
 _ide_editor_page_settings_init (IdeEditorPage *self)
 {
@@ -131,6 +146,12 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                                 self->scroller, "vscrollbar-policy",
                                 G_SETTINGS_BIND_GET,
                                 show_map_to_vscrollbar_policy,
+                                NULL, NULL, NULL);
+
+  g_settings_bind_with_mapping (editor_settings, "font-name",
+                                self->view, "font-desc",
+                                G_SETTINGS_BIND_GET,
+                                font_name_to_font_desc,
                                 NULL, NULL, NULL);
 
 #if 0
