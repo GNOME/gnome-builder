@@ -38,6 +38,10 @@ struct _IdeLineChangeGutterRenderer
 
   GtkSourceBuffer        *buffer;
   gulong                  buffer_notify_style_scheme;
+  gulong                  buffer_notify_change_monitor;
+
+  IdeBufferChangeMonitor *change_monitor;
+  gulong                  change_monitor_changed;
 
   struct {
     GdkRGBA add;
@@ -129,11 +133,18 @@ disconnect_buffer (IdeLineChangeGutterRenderer *self)
 {
   disconnect_style_scheme (self);
 
-  if (self->buffer && self->buffer_notify_style_scheme)
+  if (self->buffer)
     {
-      g_signal_handler_disconnect (self->buffer, self->buffer_notify_style_scheme);
-      self->buffer_notify_style_scheme = 0;
+      g_clear_signal_handler (&self->buffer_notify_style_scheme, self->buffer);
+      g_clear_signal_handler (&self->buffer_notify_change_monitor, self->buffer);
+
       g_clear_weak_pointer (&self->buffer);
+    }
+
+  if (self->change_monitor)
+    {
+      g_clear_signal_handler (&self->change_monitor_changed, self->change_monitor);
+      g_clear_object (&self->change_monitor);
     }
 }
 
@@ -171,19 +182,59 @@ notify_style_scheme_cb (GtkTextBuffer               *buffer,
 }
 
 static void
+notify_change_monitor_cb (IdeBuffer                   *buffer,
+                          GParamSpec                  *pspec,
+                          IdeLineChangeGutterRenderer *self)
+{
+  IdeBufferChangeMonitor *change_monitor;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
+
+  change_monitor = ide_buffer_get_change_monitor (buffer);
+
+  if (change_monitor == self->change_monitor)
+    return;
+
+  if (self->change_monitor)
+    g_clear_signal_handler (&self->change_monitor_changed, self->change_monitor);
+
+  g_set_object (&self->change_monitor, change_monitor);
+
+  if (self->change_monitor)
+    self->change_monitor_changed =
+      g_signal_connect_object (self->change_monitor,
+                               "changed",
+                               G_CALLBACK (gtk_widget_queue_draw),
+                               self,
+                               G_CONNECT_SWAPPED);
+}
+
+static void
 connect_buffer (IdeLineChangeGutterRenderer *self)
 {
-  GtkSourceBuffer *buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
+  GtkSourceBuffer *buffer;
 
-  if (buffer)
-    {
-      g_set_weak_pointer (&self->buffer, buffer);
-      self->buffer_notify_style_scheme = g_signal_connect (buffer,
-                                                           "notify::style-scheme",
-                                                           G_CALLBACK (notify_style_scheme_cb),
-                                                           self);
-      connect_style_scheme (self);
-    }
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
+
+  buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
+  if (!IDE_IS_BUFFER (buffer))
+    return;
+
+  g_set_weak_pointer (&self->buffer, buffer);
+  self->buffer_notify_style_scheme =
+    g_signal_connect (buffer,
+                      "notify::style-scheme",
+                      G_CALLBACK (notify_style_scheme_cb),
+                      self);
+  self->buffer_notify_change_monitor =
+    g_signal_connect (buffer,
+                      "notify::change-monitor",
+                      G_CALLBACK (notify_change_monitor_cb),
+                      self);
+
+  connect_style_scheme (self);
+  notify_change_monitor_cb (IDE_BUFFER (buffer), NULL, self);
 }
 
 static void
@@ -220,21 +271,23 @@ ide_line_change_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
                                        GtkSourceGutterLines    *lines)
 {
   IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
-  IdeBufferChangeMonitor *monitor;
-  int first;
-  int last;
+  guint first;
+  guint last;
 
   g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
   g_assert (lines != NULL);
 
-  if (!IDE_IS_BUFFER (self->buffer) ||
-      !(monitor = ide_buffer_get_change_monitor (IDE_BUFFER (self->buffer))))
+  if (self->change_monitor == NULL)
     return;
 
   first = gtk_source_gutter_lines_get_first (lines);
   last = gtk_source_gutter_lines_get_last (lines);
 
-  ide_buffer_change_monitor_foreach_change (monitor, first, last, populate_changes_cb, lines);
+  ide_buffer_change_monitor_foreach_change (self->change_monitor,
+                                            first,
+                                            last,
+                                            populate_changes_cb,
+                                            lines);
 }
 
 static void
