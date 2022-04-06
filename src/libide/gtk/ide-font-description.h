@@ -1,4 +1,4 @@
-/* libide-gtk.h
+/* ide-font-description.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,17 +20,14 @@
 
 #pragma once
 
-#define IDE_GTK_INSIDE
-# include "ide-animation.h"
-# include "ide-cell-renderer-fancy.h"
-# include "ide-entry-popover.h"
-# include "ide-fancy-tree-view.h"
-# include "ide-file-manager.h"
-# include "ide-font-description.h"
-# include "ide-gtk.h"
-# include "ide-gtk-enums.h"
-# include "ide-menu-manager.h"
-# include "ide-progress-icon.h"
-# include "ide-search-entry.h"
-# include "ide-truncate-model.h"
-#undef IDE_GTK_INSIDE
+#if !defined (IDE_GTK_INSIDE) && !defined (IDE_GTK_COMPILATION)
+# error "Only <libide-gtk.h> can be included directly."
+#endif
+
+#include <pango/pango.h>
+
+G_BEGIN_DECLS
+
+char *ide_font_description_to_css (const PangoFontDescription *font_desc);
+
+G_END_DECLS
