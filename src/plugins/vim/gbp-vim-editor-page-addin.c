@@ -28,20 +28,23 @@
 #include "gbp-vim-editor-page-addin.h"
 #include "gbp-vim-workspace-addin.h"
 
-static void gbp_vim_editor_page_addin_load                       (IdeEditorPageAddin    *addin,
-                                                                  IdeEditorPage         *page);
-static void gbp_vim_editor_page_addin_unload                     (IdeEditorPageAddin    *addin,
-                                                                  IdeEditorPage         *page);
-static void gbp_vim_editor_page_addin_notify_active_cb           (GbpVimEditorPageAddin *self,
-                                                                  GParamSpec            *pspec,
-                                                                  GbpVimWorkspaceAddin  *workspace_addin);
-static void gbp_vim_editor_page_addin_notify_command_bar_text_cb (GbpVimEditorPageAddin *self,
-                                                                  GParamSpec            *pspec,
-                                                                  GtkSourceVimIMContext *im_context);
-static void gbp_vim_editor_page_addin_notify_command_text_cb     (GbpVimEditorPageAddin *self,
-                                                                  GParamSpec            *pspec,
-                                                                  GtkSourceVimIMContext *im_context);
-static void gbp_vim_editor_page_addin_update                     (GbpVimEditorPageAddin *self);
+static void     gbp_vim_editor_page_addin_load                       (IdeEditorPageAddin    *addin,
+                                                                      IdeEditorPage         *page);
+static void     gbp_vim_editor_page_addin_unload                     (IdeEditorPageAddin    *addin,
+                                                                      IdeEditorPage         *page);
+static void     gbp_vim_editor_page_addin_notify_active_cb           (GbpVimEditorPageAddin *self,
+                                                                      GParamSpec            *pspec,
+                                                                      GbpVimWorkspaceAddin  *workspace_addin);
+static gboolean gbp_vim_editor_page_addin_execute_command_cb         (GbpVimEditorPageAddin *self,
+                                                                      const char            *command,
+                                                                      GtkSourceVimIMContext *im_context);
+static void     gbp_vim_editor_page_addin_notify_command_bar_text_cb (GbpVimEditorPageAddin *self,
+                                                                      GParamSpec            *pspec,
+                                                                      GtkSourceVimIMContext *im_context);
+static void     gbp_vim_editor_page_addin_notify_command_text_cb     (GbpVimEditorPageAddin *self,
+                                                                      GParamSpec            *pspec,
+                                                                      GtkSourceVimIMContext *im_context);
+static void     gbp_vim_editor_page_addin_update                     (GbpVimEditorPageAddin *self);
 
 struct _GbpVimEditorPageAddin
 {
@@ -212,6 +215,12 @@ gbp_vim_editor_page_addin_load (IdeEditorPageAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (im_context,
+                           "execute-command",
+                           G_CALLBACK (gbp_vim_editor_page_addin_execute_command_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   g_object_unref (im_context);
 
   gbp_vim_editor_page_addin_update (self);
@@ -244,4 +253,158 @@ gbp_vim_editor_page_addin_unload (IdeEditorPageAddin *addin,
   self->workspace_addin = NULL;
 
   IDE_EXIT;
+}
+
+static void
+gbp_vim_editor_page_addin_save_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeEditorPage *page = (IdeEditorPage *)object;
+  g_autoptr(GbpVimEditorPageAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (page));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_VIM_EDITOR_PAGE_ADDIN (self));
+
+  if (!ide_editor_page_save_finish (page, result, &error))
+    g_warning ("Failed to save page: %s", error->message);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_vim_editor_page_addin_save_and_close_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  IdeEditorPage *page = (IdeEditorPage *)object;
+  g_autoptr(GbpVimEditorPageAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (page));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_VIM_EDITOR_PAGE_ADDIN (self));
+
+  if (!ide_editor_page_save_finish (page, result, &error))
+    g_warning ("Failed to save page: %s", error->message);
+  else if (self->page != NULL)
+    panel_widget_close (PANEL_WIDGET (self->page));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_vim_editor_page_addin_discard_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  IdeEditorPage *page = (IdeEditorPage *)object;
+  g_autoptr(GbpVimEditorPageAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (page));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_VIM_EDITOR_PAGE_ADDIN (self));
+
+  if (!ide_editor_page_discard_changes_finish (page, result, &error))
+    g_warning ("Failed to discard changes: %s", error->message);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_vim_editor_page_addin_discard_and_close_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  IdeEditorPage *page = (IdeEditorPage *)object;
+  g_autoptr(GbpVimEditorPageAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (page));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_VIM_EDITOR_PAGE_ADDIN (self));
+
+  if (!ide_editor_page_discard_changes_finish (page, result, &error))
+    g_warning ("Failed to discard changes: %s", error->message);
+  else if (self->page != NULL)
+    panel_widget_close (PANEL_WIDGET (self->page));
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
+                                              const char            *command,
+                                              GtkSourceVimIMContext *im_context)
+{
+  IdeBuffer *buffer;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VIM_EDITOR_PAGE_ADDIN (self));
+  g_assert (GTK_SOURCE_IS_VIM_IM_CONTEXT (im_context));
+  g_assert (IDE_IS_EDITOR_PAGE (self->page));
+
+  g_debug ("Request to execute command %s", command);
+
+  buffer = ide_editor_page_get_buffer (self->page);
+
+  if (g_str_equal (command, ":q") ||
+      g_str_equal (command, ":quit") ||
+      g_str_equal (command, "^Wc"))
+    {
+      panel_widget_close (PANEL_WIDGET (self->page));
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, ":q!") || g_str_equal (command, ":quit!"))
+    {
+      ide_editor_page_discard_changes_async (self->page,
+                                             NULL,
+                                             gbp_vim_editor_page_addin_discard_and_close_cb,
+                                             g_object_ref (self));
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, ":w") || g_str_equal (command, ":write"))
+    {
+      ide_editor_page_save_async (self->page,
+                                  NULL,
+                                  gbp_vim_editor_page_addin_save_cb,
+                                  g_object_ref (self));
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, ":wq"))
+    {
+      ide_editor_page_save_async (self->page,
+                                  NULL,
+                                  gbp_vim_editor_page_addin_save_and_close_cb,
+                                  g_object_ref (self));
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, ":e!") ||
+      (g_str_equal (command, ":e") &&
+       !gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer))))
+    {
+      ide_editor_page_discard_changes_async (self->page,
+                                             NULL,
+                                             gbp_vim_editor_page_addin_discard_cb,
+                                             NULL);
+      IDE_RETURN (TRUE);
+    }
+
+  IDE_RETURN (FALSE);
 }
