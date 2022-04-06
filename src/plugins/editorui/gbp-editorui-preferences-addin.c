@@ -35,11 +35,13 @@ struct _GbpEditoruiPreferencesAddin
 };
 
 static const IdePreferenceGroupEntry groups[] = {
-  { "appearance", "preview",     10, N_("Style") },
-  { "appearance", "schemes",     20, NULL },
-  { "appearance", "font",        30, NULL },
-  { "appearance", "effects",     40, NULL },
-  { "appearance", "accessories", 50, NULL },
+  { "appearance", "preview",      10, N_("Style") },
+  { "appearance", "schemes",      20, NULL },
+  { "appearance", "font",         30, NULL },
+  { "appearance", "effects",      40, NULL },
+  { "appearance", "lines",        50, NULL },
+  { "appearance", "brackets",     60, NULL },
+  { "appearance", "accessories", 100, NULL },
 
   { "languages/*", "general",      0, N_("General") },
   { "languages/*", "margins",     10, N_("Margins") },
@@ -62,17 +64,17 @@ static const IdePreferenceItemEntry items[] = {
     N_("Use an overview map instead of a scrollbar"),
     "org.gnome.builder.editor", NULL, "show-map" },
 
-  { "appearance", "accessories", "show-line-numbers", 0, ide_preferences_window_toggle,
+  { "appearance", "lines", "show-line-numbers", 0, ide_preferences_window_toggle,
     N_("Show Line Numbers"),
     N_("Display line numbers next to each line of source code"),
     "org.gnome.builder.editor", NULL, "show-line-numbers" },
 
-  { "appearance", "accessories", "highlight-current-line", 20, ide_preferences_window_toggle,
+  { "appearance", "lines", "highlight-current-line", 20, ide_preferences_window_toggle,
     N_("Highlight Current Line"),
     N_("Make current line stand out with highlights"),
     "org.gnome.builder.editor", NULL, "highlight-current-line" },
 
-  { "appearance", "accessories", "highlight-matching-brackets", 30, ide_preferences_window_toggle,
+  { "appearance", "brackets", "highlight-matching-brackets", 30, ide_preferences_window_toggle,
     N_("Highlight Matching Brackets"),
     N_("Use cursor position to highlight matching brackets, braces, parenthesis, and more"),
     "org.gnome.builder.editor", NULL, "highlight-matching-brackets" },
