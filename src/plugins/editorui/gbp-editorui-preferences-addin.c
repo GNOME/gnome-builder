@@ -38,7 +38,8 @@ static const IdePreferenceGroupEntry groups[] = {
   { "appearance", "preview",     10, N_("Style") },
   { "appearance", "schemes",     20, NULL },
   { "appearance", "font",        30, NULL },
-  { "appearance", "accessories", 40, NULL },
+  { "appearance", "effects",     40, NULL },
+  { "appearance", "accessories", 50, NULL },
 
   { "languages/*", "general",      0, N_("General") },
   { "languages/*", "margins",     10, N_("Margins") },
@@ -51,15 +52,20 @@ static const IdePreferenceGroupEntry groups[] = {
 };
 
 static const IdePreferenceItemEntry items[] = {
+  { "appearance", "effects", "show-grid-lines", 10, ide_preferences_window_toggle,
+    N_("Show Grid Pattern"),
+    N_("Display a grid pattern underneath source code"),
+    "org.gnome.builder.editor", NULL, "show-grid-lines" },
+
+  { "appearance", "effects", "show-map", 10, ide_preferences_window_toggle,
+    N_("Show Overview Map"),
+    N_("Use an overview map instead of a scrollbar"),
+    "org.gnome.builder.editor", NULL, "show-map" },
+
   { "appearance", "accessories", "show-line-numbers", 0, ide_preferences_window_toggle,
     N_("Show Line Numbers"),
     N_("Display line numbers next to each line of source code"),
     "org.gnome.builder.editor", NULL, "show-line-numbers" },
-
-  { "appearance", "accessories", "show-grid-lines", 10, ide_preferences_window_toggle,
-    N_("Show Grid Pattern"),
-    N_("Display a grid pattern underneath source code"),
-    "org.gnome.builder.editor", NULL, "show-grid-lines" },
 
   { "appearance", "accessories", "highlight-current-line", 20, ide_preferences_window_toggle,
     N_("Highlight Current Line"),
