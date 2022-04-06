@@ -134,10 +134,8 @@ find_preferred_workspace_cb (IdeWorkspace *workspace,
 
   if (IDE_IS_PRIMARY_WORKSPACE (workspace))
     *out_workspace = workspace;
-#if 0
   else if (*out_workspace == NULL && IDE_IS_EDITOR_WORKSPACE (workspace))
     *out_workspace = workspace;
-#endif
 }
 
 static void
