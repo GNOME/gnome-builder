@@ -42,8 +42,6 @@
  *
  * See ide_workbench_open_async() for how to select another workspace type
  * when opening a project.
- *
- * Returns: (transfer full): an #IdePrimaryWorkspace
  */
 
 struct _IdePrimaryWorkspace
