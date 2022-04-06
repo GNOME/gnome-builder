@@ -330,7 +330,18 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 static void
 ide_editor_page_init (IdeEditorPage *self)
 {
+  GtkSourceGutterRenderer *renderer;
+  GtkSourceGutter *gutter;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  /* Until we get the omnigutter in place */
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->view),
+                                       GTK_TEXT_WINDOW_LEFT);
+  renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                           "width-request", 2,
+                           NULL);
+  gtk_source_gutter_insert (gutter, renderer, 100);
 }
 
 GtkWidget *
