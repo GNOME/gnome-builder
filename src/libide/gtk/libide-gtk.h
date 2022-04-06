@@ -25,6 +25,7 @@
 # include "ide-cell-renderer-fancy.h"
 # include "ide-entry-popover.h"
 # include "ide-fancy-tree-view.h"
+# include "ide-file-chooser-entry.h"
 # include "ide-file-manager.h"
 # include "ide-font-description.h"
 # include "ide-gtk.h"
