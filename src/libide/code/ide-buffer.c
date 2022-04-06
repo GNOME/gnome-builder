@@ -2820,8 +2820,7 @@ ide_buffer_dup_content (IdeBuffer *self)
        * files will restore to a buffer, for which \n is acceptable.
        */
       len = strlen (text);
-      if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self)) &&
-          (len == 0 || text[len - 1] != '\n'))
+      if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self)))
         {
           if (!ide_buffer_can_do_newline_hack (self, len))
             {
