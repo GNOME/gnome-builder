@@ -259,7 +259,7 @@ gbp_editorui_application_addin_handle_command_line (IdeApplicationAddin     *add
   ide_workbench_open_all_async (workbench,
                                 (GFile **)(gpointer)files->pdata,
                                 files->len,
-                                "editor",
+                                "editorui",
                                 NULL,
                                 gbp_editorui_application_addin_open_all_cb,
                                 g_object_ref (cmdline));
@@ -308,7 +308,7 @@ gbp_editorui_application_addin_open (IdeApplicationAddin  *addin,
   ide_workbench_open_all_async (workbench,
                                 files,
                                 n_files,
-                                "editor",
+                                "editorui",
                                 NULL,
                                 gbp_editorui_application_addin_open_all_cb,
                                 NULL);
