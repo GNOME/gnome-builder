@@ -206,6 +206,7 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
                           "activate-on-single-click", TRUE,
                           "column-spacing", 12,
                           "row-spacing", 12,
+                          "margin-top", 6,
                           "max-children-per-line", 4,
                           NULL);
   gtk_widget_add_css_class (GTK_WIDGET (flowbox), "style-schemes");
