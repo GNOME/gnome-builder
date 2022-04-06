@@ -126,7 +126,7 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
 
   g_settings_bind (editor_settings, "show-map",
                    self->map_revealer, "reveal-child",
-                   G_SETTINGS_BIND_DEFAULT);
+                   G_SETTINGS_BIND_GET);
   g_settings_bind_with_mapping (editor_settings, "show-map",
                                 self->scroller, "vscrollbar-policy",
                                 G_SETTINGS_BIND_GET,
