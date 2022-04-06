@@ -1,6 +1,6 @@
-/* libide-editor.h
+/* ide-editor-workspace.h
  *
- * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,20 @@
 
 #pragma once
 
-#define IDE_EDITOR_INSIDE
-# include "ide-editor.h"
-# include "ide-editor-page.h"
-# include "ide-editor-page-addin.h"
-# include "ide-editor-workspace.h"
-#undef IDE_EDITOR_INSIDE
+#if !defined (IDE_EDITOR_INSIDE) && !defined (IDE_EDITOR_COMPILATION)
+# error "Only <libide-editor.h> can be included directly."
+#endif
+
+#include <libide-gui.h>
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_EDITOR_WORKSPACE (ide_editor_workspace_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeEditorWorkspace, ide_editor_workspace, IDE, EDITOR_WORKSPACE, IdeWorkspace)
+
+IDE_AVAILABLE_IN_ALL
+IdeEditorWorkspace *ide_editor_workspace_new (IdeApplication *application);
+
+G_END_DECLS
