@@ -189,26 +189,23 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
   const char * const *scheme_ids;
   GtkFlowBox *flowbox;
   GtkWidget *preview;
-  GtkFrame *frame;
 
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
   g_assert (entry != NULL);
   g_assert (ADW_IS_PREFERENCES_GROUP (group));
 
   preview = gbp_editorui_preview_new ();
-  frame = g_object_new (GTK_TYPE_FRAME,
-                        "child", preview,
-                        "margin-bottom", 12,
-                        NULL);
-  adw_preferences_group_add (group, GTK_WIDGET (frame));
+  gtk_widget_add_css_class (GTK_WIDGET (preview), "card");
+  gtk_widget_set_margin_bottom (preview, 12);
+  adw_preferences_group_add (group, preview);
 
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
 
   flowbox = g_object_new (GTK_TYPE_FLOW_BOX,
                           "activate-on-single-click", TRUE,
-                          "column-spacing", 6,
-                          "row-spacing", 6,
+                          "column-spacing", 12,
+                          "row-spacing", 12,
                           "max-children-per-line", 4,
                           NULL);
   gtk_widget_add_css_class (GTK_WIDGET (flowbox), "style-schemes");
@@ -216,12 +213,14 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
   for (guint i = 0; scheme_ids[i]; i++)
     {
       GtkSourceStyleScheme *scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_ids[i]);
-      GtkWidget *selector = gtk_source_style_scheme_preview_new (scheme);
+      GtkSourceStyleSchemePreview *selector;
 
-      gtk_actionable_set_action_name (GTK_ACTIONABLE (selector), "app.style-scheme-name");
+      selector = g_object_new (GTK_SOURCE_TYPE_STYLE_SCHEME_PREVIEW,
+                               "action-name", "app.style-scheme-name",
+                               "scheme", scheme,
+                               NULL);
       gtk_actionable_set_action_target (GTK_ACTIONABLE (selector), "s", scheme_ids[i]);
-
-      gtk_flow_box_append (flowbox, selector);
+      gtk_flow_box_append (flowbox, GTK_WIDGET (selector));
     }
 
   g_signal_connect_object (IDE_APPLICATION_DEFAULT,
