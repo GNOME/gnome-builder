@@ -111,6 +111,8 @@ ide_cell_renderer_status_snapshot (GtkCellRenderer      *cell,
                                                        cell_area->width,
                                                        cell_area->height));
 
+  cairo_translate (cr, cell_area->x, cell_area->y);
+
   cairo_arc (cr,
              cell_area->width - RPAD - (CELL_WIDTH/2),
              (cell_area->height / 2),
