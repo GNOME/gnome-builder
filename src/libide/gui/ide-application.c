@@ -50,6 +50,7 @@ G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, ADW_TYPE_APPLICATION)
 enum {
   PROP_0,
   PROP_STYLE_SCHEME,
+  PROP_SYSTEM_FONT,
   PROP_SYSTEM_FONT_NAME,
   N_PROPS
 };
@@ -353,6 +354,12 @@ ide_application_get_property (GObject    *object,
       g_value_set_string (value, ide_application_get_system_font_name (self));
       break;
 
+    case PROP_SYSTEM_FONT: {
+      const char *system_font_name = ide_application_get_system_font_name (self);
+      g_value_take_boxed (value, pango_font_description_from_string (system_font_name));
+      break;
+    }
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -428,6 +435,13 @@ ide_application_class_init (IdeApplicationClass *klass)
                          "The style scheme for the editor",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_SYSTEM_FONT] =
+    g_param_spec_boxed ("system-font",
+                        "System Font",
+                        "System Font",
+                        PANGO_TYPE_FONT_DESCRIPTION,
+                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_SYSTEM_FONT_NAME] =
     g_param_spec_string ("system-font-name",

@@ -58,6 +58,7 @@ on_portal_settings_changed_cb (IdeApplication *self,
       g_free (self->system_font_name);
       self->system_font_name = g_strdup (g_variant_get_string (value, NULL));
       g_object_notify (G_OBJECT (self), "system-font-name");
+      g_object_notify (G_OBJECT (self), "system-font");
     }
 }
 
