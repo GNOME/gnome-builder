@@ -342,6 +342,14 @@ ide_editor_page_init (IdeEditorPage *self)
                            "width-request", 2,
                            NULL);
   gtk_source_gutter_insert (gutter, renderer, 100);
+
+  /* Add gutter changes to the overview map */
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->map),
+                                       GTK_TEXT_WINDOW_LEFT);
+  renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                           "width-request", 1,
+                           NULL);
+  gtk_source_gutter_insert (gutter, renderer, 100);
 }
 
 GtkWidget *
