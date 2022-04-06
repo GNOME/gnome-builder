@@ -292,6 +292,7 @@ _ide_buffer_new (IdeBufferManager *buffer_manager,
                        "file", file,
                        "enable-addins", enable_addins,
                        "is-temporary", is_temporary,
+                       "implicit-trailing-newline", FALSE,
                        NULL);
 }
 
@@ -348,9 +349,84 @@ ide_buffer_set_state (IdeBuffer      *self,
 }
 
 static void
+ide_buffer_update_implicit_newline (IdeBuffer *self)
+{
+  IdeFileSettings *file_settings;
+  gboolean was_implicit;
+  gboolean now_implicit;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (!ide_buffer_get_loading (self));
+
+  if (!(file_settings = ide_buffer_get_file_settings (self)))
+    IDE_EXIT;
+
+  /* If the new file-settings object does not match our
+   * current setting for trailing newlines, then we need
+   * to adjust that immediately to ensure our buffer contains
+   * the contents as expected.
+   *
+   * Otherwise, buffer change monitors will not line up with
+   * the the expectation on storage.
+   */
+  was_implicit = gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self));
+  now_implicit = ide_file_settings_get_insert_trailing_newline (file_settings);
+
+  if (was_implicit != now_implicit)
+    {
+      GtkTextIter iter;
+
+      gtk_source_buffer_set_implicit_trailing_newline (GTK_SOURCE_BUFFER (self), now_implicit);
+
+      if (now_implicit)
+        {
+          gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (self), &iter);
+
+          if (gtk_text_iter_starts_line (&iter))
+            {
+              GtkTextIter begin = iter;
+
+              gtk_text_iter_backward_char (&begin);
+
+              if (!gtk_text_iter_equal (&begin, &iter))
+                {
+                  gboolean modified = gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self));
+
+                  gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (self));
+                  gtk_text_buffer_delete (GTK_TEXT_BUFFER (self), &begin, &iter);
+                  gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (self));
+
+                  if (!modified)
+                    gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (self), modified);
+                }
+            }
+        }
+      else
+        {
+          gboolean modified = gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self));
+
+          gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (self), &iter);
+
+          gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (self));
+          gtk_text_buffer_insert (GTK_TEXT_BUFFER (self), &iter, "\n", 1);
+          gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (self));
+
+          if (!modified)
+            gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (self), modified);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_buffer_real_loaded (IdeBuffer *self)
 {
   g_assert (IDE_IS_BUFFER (self));
+
+  ide_buffer_update_implicit_newline (self);
 
   if (self->buffer_manager != NULL)
     _ide_buffer_manager_buffer_loaded (self->buffer_manager, self);
@@ -1859,12 +1935,17 @@ ide_buffer_set_file_settings (IdeBuffer       *self,
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
 
   if (self->file_settings == file_settings)
     return;
 
   ide_clear_and_destroy_object (&self->file_settings);
   self->file_settings = g_object_ref (file_settings);
+
+  if (!ide_buffer_get_loading (self))
+    ide_buffer_update_implicit_newline (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_SETTINGS]);
 }
 
