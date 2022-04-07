@@ -828,7 +828,7 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
  * Adds @page to @workspace.
  *
  * In future versions, @position may be updated to reflect the
- * postion in which @page was added.
+ * position in which @page was added.
  */
 void
 ide_workspace_add_page (IdeWorkspace     *self,
@@ -855,7 +855,7 @@ ide_workspace_add_page (IdeWorkspace     *self,
  * Adds @pane to @workspace.
  *
  * In future versions, @position may be updated to reflect the
- * postion in which @pane was added.
+ * position in which @pane was added.
  */
 void
 ide_workspace_add_pane (IdeWorkspace     *self,
@@ -1069,6 +1069,12 @@ find_most_recent_frame (IdeWorkspace *workspace,
     }
 }
 
+static gboolean
+dummy_cb (gpointer data)
+{
+  return G_SOURCE_REMOVE;
+}
+
 void
 _ide_workspace_add_widget (IdeWorkspace     *self,
                            PanelWidget      *widget,
@@ -1078,14 +1084,9 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
                            PanelPaned       *dock_bottom,
                            IdeGrid          *grid)
 {
-  PanelDockPosition edge;
-  PanelPaned *paned = NULL;
-  GtkWidget *parent;
+  PanelFrame *frame;
   gboolean depth_set;
   guint depth;
-  guint column = 0;
-  guint row = 0;
-  guint nth = 0;
 
   IDE_ENTRY;
 
@@ -1097,32 +1098,53 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
   g_return_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom));
   g_return_if_fail (IDE_IS_GRID (grid));
 
+  if (!(frame = _ide_workspace_find_frame (self, position, dock_start, dock_end, dock_bottom, grid)))
+    {
+      /* Extreme failure case, try to be nice and wait until
+       * end of the main loop to destroy
+       */
+      g_idle_add_full (G_PRIORITY_LOW,
+                       dummy_cb,
+                       g_object_ref_sink (widget),
+                       g_object_unref);
+      IDE_EXIT;
+    }
+
+  depth_set = ide_panel_position_get_depth (position, &depth);
+  add_to_frame_with_depth (frame, widget, depth, depth_set);
+
+  IDE_EXIT;
+}
+
+PanelFrame *
+_ide_workspace_find_frame (IdeWorkspace     *self,
+                           IdePanelPosition *position,
+                           PanelPaned       *dock_start,
+                           PanelPaned       *dock_end,
+                           PanelPaned       *dock_bottom,
+                           IdeGrid          *grid)
+{
+  PanelDockPosition edge;
+  PanelPaned *paned = NULL;
+  PanelFrame *ret;
+  GtkWidget *parent;
+  guint column = 0;
+  guint row = 0;
+  guint nth = 0;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+  g_return_val_if_fail (position != NULL, NULL);
+  g_return_val_if_fail (!dock_start || PANEL_IS_PANED (dock_start), NULL);
+  g_return_val_if_fail (!dock_end || PANEL_IS_PANED (dock_end), NULL);
+  g_return_val_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom), NULL);
+
   if (!ide_panel_position_get_edge (position, &edge))
-    {
-      if (IDE_IS_PAGE (widget))
-        edge = PANEL_DOCK_POSITION_CENTER;
-      else
-        edge = PANEL_DOCK_POSITION_START;
-    }
-
-  /* Force pages to be always be loaded in the center */
-  if (IDE_IS_PAGE (widget) && edge != PANEL_DOCK_POSITION_CENTER)
-    {
-      g_warning ("Attempt to add a page to a position other than center. Ignoring.");
-      edge = PANEL_DOCK_POSITION_CENTER;
-    }
-
-  /* Don't allow non-pages to be added to the center */
-  if (!IDE_IS_PAGE (widget) && edge == PANEL_DOCK_POSITION_CENTER)
-    {
-      g_warning ("Attempt to add a non-page to the center. Ignoring.");
-      edge = PANEL_DOCK_POSITION_START;
-    }
+    edge = PANEL_DOCK_POSITION_CENTER;
 
   if (edge == PANEL_DOCK_POSITION_CENTER)
     {
-      PanelFrame *frame;
-
       /* If we are adding a page, and no row or column is set, then the next
        * best thing to do is to try to find an open frame. If we can't do that
        * then we'll try to find the most recent frame.
@@ -1134,11 +1156,9 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
             find_most_recent_frame (self, grid, &column, &row);
         }
 
-      depth_set = ide_panel_position_get_depth (position, &depth);
-      frame = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (grid), column), row);
-      add_to_frame_with_depth (frame, widget, depth, depth_set);
+      ret = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (grid), column), row);
 
-      IDE_EXIT;
+      IDE_RETURN (ret);
     }
 
   switch (edge)
@@ -1160,11 +1180,11 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
 
     case PANEL_DOCK_POSITION_TOP:
       g_warning ("Top panel is not supported");
-      return;
+      return NULL;
 
     case PANEL_DOCK_POSITION_CENTER:
     default:
-      return;
+      return NULL;
     }
 
   while (!(parent = panel_paned_get_nth_child (paned, nth)))
@@ -1180,8 +1200,27 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
       panel_paned_append (paned, parent);
     }
 
-  depth_set = ide_panel_position_get_depth (position, &depth);
-  add_to_frame_with_depth (PANEL_FRAME (parent), widget, depth, depth_set);
+  IDE_RETURN (PANEL_FRAME (parent));
+}
 
-  IDE_EXIT;
+/**
+ * ide_workspace_get_frame_at_position:
+ * @self: an #IdeWorkspace
+ * @position: an #IdePanelPosition
+ *
+ * Attempts to locate the #PanelFrame at a given position.
+ *
+ * Returns: (transfer none) (nullable): a #PaneFrame or %NULL
+ */
+PanelFrame *
+ide_workspace_get_frame_at_position (IdeWorkspace     *self,
+                                     IdePanelPosition *position)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+  g_return_val_if_fail (position != NULL, NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->get_frame_at_position)
+    return IDE_WORKSPACE_GET_CLASS (self)->get_frame_at_position (self, position);
+
+  return NULL;
 }

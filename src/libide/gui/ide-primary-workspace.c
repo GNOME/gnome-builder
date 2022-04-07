@@ -132,6 +132,23 @@ ide_primary_workspace_get_most_recent_frame (IdeWorkspace *workspace)
   return IDE_FRAME (panel_grid_get_most_recent_frame (PANEL_GRID (self->grid)));
 }
 
+static PanelFrame *
+ide_primary_workspace_get_frame_at_position (IdeWorkspace     *workspace,
+                                             IdePanelPosition *position)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+  g_assert (position != NULL);
+
+  return _ide_workspace_find_frame (workspace,
+                                    position,
+                                    self->edge_start,
+                                    self->edge_end,
+                                    self->edge_bottom,
+                                    self->grid);
+}
+
 static void
 ide_primary_workspace_dispose (GObject *object)
 {
@@ -160,6 +177,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
   workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
+  workspace_class->get_frame_at_position = ide_primary_workspace_get_frame_at_position;
 
   ide_workspace_class_set_kind (workspace_class, "primary");
 
