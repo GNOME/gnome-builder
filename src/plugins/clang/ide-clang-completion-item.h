@@ -59,10 +59,13 @@ ide_clang_completion_item_get_result (const IdeClangCompletionItem *self)
   return g_steal_pointer (&child);
 }
 
-IdeClangCompletionItem *ide_clang_completion_item_new         (GVariant               *results,
-                                                               guint                   index,
-                                                               const gchar            *keyword);
-GtkSourceSnippet       *ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
-                                                               IdeFileSettings        *file_settings);
+IdeClangCompletionItem *ide_clang_completion_item_new         (GVariant                *results,
+                                                               guint                    index,
+                                                               const gchar             *keyword);
+GtkSourceSnippet       *ide_clang_completion_item_get_snippet (IdeClangCompletionItem  *self,
+                                                               IdeFileSettings         *file_settings);
+void                    ide_clang_completion_item_display     (IdeClangCompletionItem  *self,
+                                                               GtkSourceCompletionCell *cell,
+                                                               const char              *typed_text);
 
 G_END_DECLS
