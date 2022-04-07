@@ -88,4 +88,24 @@
       </item>
     </section>
   </menu>
+  <menu id="new-document-menu">
+    <section id="new-document-section">
+      <attribute name="id">new-document-section</attribute>
+      <item>
+        <attribute name="id">new-file</attribute>
+        <attribute name="label" translatable="yes">New _File</attribute>
+        <attribute name="action">editorui.new-file</attribute>
+        <attribute name="accel">&lt;primary&gt;n</attribute>
+      </item>
+    </section>
+    <section id="open-document-section">
+      <attribute name="id">open-document-section</attribute>
+      <item>
+        <attribute name="id">open-file</attribute>
+        <attribute name="label" translatable="yes">_Open File…</attribute>
+        <attribute name="action">workbench.open</attribute>
+        <attribute name="accel">&lt;primary&gt;o</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
