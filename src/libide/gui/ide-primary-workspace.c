@@ -30,9 +30,7 @@
 #include "ide-omni-bar.h"
 #include "ide-primary-workspace-private.h"
 #include "ide-run-button.h"
-
-#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
-#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
+#include "ide-workspace-private.h"
 
 /**
  * SECTION:ide-primary-workspace
@@ -89,86 +87,21 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
 }
 
 static void
-add_to_frame_with_depth (PanelFrame  *frame,
-                         PanelWidget *widget,
-                         guint        depth,
-                         gboolean     depth_set)
-{
-  PanelWidget *previous_page;
-  guint n_pages;
-
-  g_assert (PANEL_IS_FRAME (frame));
-  g_assert (PANEL_IS_WIDGET (widget));
-
-  previous_page = panel_frame_get_visible_child (frame);
-
-  if (!depth_set || depth > G_MAXINT)
-    depth = G_MAXINT;
-
-  SET_PRIORITY (widget, depth);
-
-  n_pages = panel_frame_get_n_pages (frame);
-
-  for (guint i = 0; i < n_pages; i++)
-    {
-      PanelWidget *child = panel_frame_get_page (frame, i);
-
-      if ((int)depth < GET_PRIORITY (child))
-        {
-          panel_frame_add_before (frame, widget, child);
-          panel_frame_set_visible_child (frame, widget);
-          return;
-        }
-    }
-
-  panel_frame_add (frame, widget);
-
-  if (previous_page != NULL)
-    panel_frame_set_visible_child (frame, previous_page);
-}
-
-static void
 ide_primary_workspace_add_page (IdeWorkspace     *workspace,
                                 IdePage          *page,
                                 IdePanelPosition *position)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
-  PanelFrame *frame;
-  PanelDockPosition edge;
-  gboolean depth_set;
-  guint depth = 0;
-  guint column;
-  guint row;
 
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
-  g_assert (IDE_IS_PAGE (page));
-  g_assert (position != NULL);
 
-  ide_panel_position_get_edge (position, &edge);
-
-  switch (edge)
-    {
-    case PANEL_DOCK_POSITION_START:
-    case PANEL_DOCK_POSITION_END:
-    case PANEL_DOCK_POSITION_BOTTOM:
-    case PANEL_DOCK_POSITION_TOP:
-    default:
-      g_warning ("Primary workspace only supports center position");
-      return;
-
-    case PANEL_DOCK_POSITION_CENTER:
-      break;
-    }
-
-  if (!ide_panel_position_get_column (position, &column))
-    column = 0;
-
-  if (!ide_panel_position_get_row (position, &row))
-    row = 0;
-
-  depth_set = ide_panel_position_get_depth (position, &depth);
-  frame = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (self->grid), column), row);
-  add_to_frame_with_depth (frame, PANEL_WIDGET (page), depth, depth_set);
+  _ide_workspace_add_widget (workspace,
+                             PANEL_WIDGET (page),
+                             position,
+                             self->edge_start,
+                             self->edge_end,
+                             self->edge_bottom,
+                             self->grid);
 }
 
 static void
@@ -177,58 +110,16 @@ ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
                                 IdePanelPosition *position)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
-  PanelDockPosition edge;
-  PanelPaned *paned;
-  GtkWidget *parent;
-  gboolean depth_set;
-  guint depth;
-  guint nth = 0;
 
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
-  g_assert (IDE_IS_PANE (pane));
-  g_assert (position != NULL);
 
-  ide_panel_position_get_edge (position, &edge);
-
-  switch (edge)
-    {
-    case PANEL_DOCK_POSITION_START:
-      paned = self->edge_start;
-      ide_panel_position_get_row (position, &nth);
-      break;
-
-    case PANEL_DOCK_POSITION_END:
-      paned = self->edge_end;
-      ide_panel_position_get_row (position, &nth);
-      break;
-
-    case PANEL_DOCK_POSITION_BOTTOM:
-      paned = self->edge_bottom;
-      ide_panel_position_get_column (position, &nth);
-      break;
-
-    case PANEL_DOCK_POSITION_TOP:
-    case PANEL_DOCK_POSITION_CENTER:
-    default:
-      g_warning ("Primary workspace only supports left/right/bottom edges");
-      return;
-    }
-
-  while (!(parent = panel_paned_get_nth_child (paned, nth)))
-    {
-      parent = panel_frame_new ();
-
-      if (edge == PANEL_DOCK_POSITION_START ||
-          edge == PANEL_DOCK_POSITION_END)
-        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_VERTICAL);
-      else
-        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_HORIZONTAL);
-
-      panel_paned_append (paned, parent);
-    }
-
-  depth_set = ide_panel_position_get_depth (position, &depth);
-  add_to_frame_with_depth (PANEL_FRAME (parent), PANEL_WIDGET (pane), depth, depth_set);
+  _ide_workspace_add_widget (workspace,
+                             PANEL_WIDGET (pane),
+                             position,
+                             self->edge_start,
+                             self->edge_end,
+                             self->edge_bottom,
+                             self->grid);
 }
 
 static IdeFrame *

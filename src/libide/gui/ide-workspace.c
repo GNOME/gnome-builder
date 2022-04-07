@@ -30,6 +30,9 @@
 #include "ide-workbench-private.h"
 
 #define MUX_ACTIONS_KEY "IDE_WORKSPACE_MUX_ACTIONS"
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
+
 
 typedef struct
 {
@@ -926,4 +929,136 @@ ide_workspace_get_statusbar (IdeWorkspace *self)
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
 
   return priv->statusbar;
+}
+
+static void
+add_to_frame_with_depth (PanelFrame  *frame,
+                         PanelWidget *widget,
+                         guint        depth,
+                         gboolean     depth_set)
+{
+  PanelWidget *previous_page;
+  guint n_pages;
+
+  g_assert (PANEL_IS_FRAME (frame));
+  g_assert (PANEL_IS_WIDGET (widget));
+
+  previous_page = panel_frame_get_visible_child (frame);
+
+  if (!depth_set || depth > G_MAXINT)
+    depth = G_MAXINT;
+
+  SET_PRIORITY (widget, depth);
+
+  n_pages = panel_frame_get_n_pages (frame);
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      PanelWidget *child = panel_frame_get_page (frame, i);
+
+      if ((int)depth < GET_PRIORITY (child))
+        {
+          panel_frame_add_before (frame, widget, child);
+          panel_frame_set_visible_child (frame, widget);
+          return;
+        }
+    }
+
+  panel_frame_add (frame, widget);
+
+  if (previous_page != NULL)
+    panel_frame_set_visible_child (frame, previous_page);
+}
+
+void
+_ide_workspace_add_widget (IdeWorkspace     *self,
+                           PanelWidget      *widget,
+                           IdePanelPosition *position,
+                           PanelPaned       *dock_start,
+                           PanelPaned       *dock_end,
+                           PanelPaned       *dock_bottom,
+                           IdeGrid          *grid)
+{
+  PanelDockPosition edge;
+  PanelPaned *paned = NULL;
+  GtkWidget *parent;
+  gboolean depth_set;
+  guint depth;
+  guint column;
+  guint row;
+  guint nth = 0;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (PANEL_IS_WIDGET (widget));
+  g_return_if_fail (position != NULL);
+  g_return_if_fail (!dock_start || PANEL_IS_PANED (dock_start));
+  g_return_if_fail (!dock_end || PANEL_IS_PANED (dock_end));
+  g_return_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom));
+  g_return_if_fail (IDE_IS_GRID (grid));
+
+  if (!ide_panel_position_get_edge (position, &edge))
+    edge = PANEL_DOCK_POSITION_CENTER;
+
+  if (edge == PANEL_DOCK_POSITION_CENTER)
+    {
+      PanelFrame *frame;
+
+      if (!ide_panel_position_get_column (position, &column))
+        column = 0;
+
+      if (!ide_panel_position_get_row (position, &row))
+        row = 0;
+
+      depth_set = ide_panel_position_get_depth (position, &depth);
+      frame = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (grid), column), row);
+      add_to_frame_with_depth (frame, widget, depth, depth_set);
+
+      IDE_EXIT;
+    }
+
+  switch (edge)
+    {
+    case PANEL_DOCK_POSITION_START:
+      paned = dock_start;
+      ide_panel_position_get_row (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_END:
+      paned = dock_end;
+      ide_panel_position_get_row (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_BOTTOM:
+      paned = dock_bottom;
+      ide_panel_position_get_column (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_TOP:
+      g_warning ("Top panel is not supported");
+      return;
+
+    case PANEL_DOCK_POSITION_CENTER:
+    default:
+      return;
+    }
+
+  while (!(parent = panel_paned_get_nth_child (paned, nth)))
+    {
+      parent = panel_frame_new ();
+
+      if (edge == PANEL_DOCK_POSITION_START ||
+          edge == PANEL_DOCK_POSITION_END)
+        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_VERTICAL);
+      else
+        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_HORIZONTAL);
+
+      panel_paned_append (paned, parent);
+    }
+
+  depth_set = ide_panel_position_get_depth (position, &depth);
+  add_to_frame_with_depth (PANEL_FRAME (parent), widget, depth, depth_set);
+
+  IDE_EXIT;
 }
