@@ -26,47 +26,30 @@ struct _RustAnalyzerCompletionProvider
   IdeLspCompletionProvider parent_instance;
 };
 
-static void provider_iface_init (IdeCompletionProviderInterface *iface);
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerCompletionProvider,
-                         rust_analyzer_completion_provider,
-                         IDE_TYPE_LSP_COMPLETION_PROVIDER,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
+G_DEFINE_FINAL_TYPE (RustAnalyzerCompletionProvider, rust_analyzer_completion_provider, IDE_TYPE_LSP_COMPLETION_PROVIDER)
 
 static void
-rust_analyzer_completion_provider_class_init (RustAnalyzerCompletionProviderClass *klass)
-{
-}
-
-static void
-rust_analyzer_completion_provider_init (RustAnalyzerCompletionProvider *self)
-{
-}
-
-static void
-rust_analyzer_completion_provider_load (IdeCompletionProvider *self,
-                                        IdeContext            *context)
+rust_analyzer_completion_provider_prepare (IdeCompletionProvider *self)
 {
   RustAnalyzerService *service;
 
   g_assert (RUST_IS_ANALYZER_COMPLETION_PROVIDER (self));
-  g_assert (IDE_IS_CONTEXT (context));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
   service = rust_analyzer_service_from_context (context);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
   rust_analyzer_service_ensure_started (service);
 }
 
-static gint
-rust_analyzer_completion_provider_get_priority (IdeCompletionProvider *provider,
-                                                IdeCompletionContext  *context)
+static void
+rust_analyzer_completion_provider_class_init (RustAnalyzerCompletionProviderClass *klass)
 {
-  return -1000;
+  IdeLspCompletionProviderClass *provider_class = IDE_LSP_COMPLETION_PROVIDER_CLASS (klass);
+
+  provider_class->prepare = rust_analyzer_completion_provider_prepare;
 }
 
 static void
-provider_iface_init (IdeCompletionProviderInterface *iface)
+rust_analyzer_completion_provider_init (RustAnalyzerCompletionProvider *self)
 {
-  iface->load = rust_analyzer_completion_provider_load;
-  iface->get_priority = rust_analyzer_completion_provider_get_priority;
 }

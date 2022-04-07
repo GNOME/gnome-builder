@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <jsonrpc-glib.h>
 
 #include "rust-analyzer-pipeline-addin.h"
@@ -35,7 +34,7 @@ struct _RustAnalyzerService
   IdeWorkbench            *workbench;
   IdeLspClient            *client;
   IdeSubprocessSupervisor *supervisor;
-  DzlSignalGroup          *pipeline_signals;
+  IdeSignalGroup          *pipeline_signals;
   GSettings               *settings;
 };
 
@@ -82,13 +81,13 @@ rust_analyzer_service_pipeline_loaded_cb (RustAnalyzerService *self,
 static void
 rust_analyzer_service_bind_pipeline (RustAnalyzerService *self,
                                      IdePipeline         *pipeline,
-                                     DzlSignalGroup      *signal_group)
+                                     IdeSignalGroup      *signal_group)
 {
   IDE_ENTRY;
 
   g_assert (RUST_IS_ANALYZER_SERVICE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
+  g_assert (IDE_IS_SIGNAL_GROUP (signal_group));
 
   if (ide_pipeline_is_ready (pipeline))
     rust_analyzer_service_pipeline_loaded_cb (self, pipeline);
@@ -315,8 +314,8 @@ rust_analyzer_service_init (RustAnalyzerService *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_PIPELINE);
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "loaded",
                                    G_CALLBACK (rust_analyzer_service_pipeline_loaded_cb),
                                    self,
@@ -357,7 +356,7 @@ rust_analyzer_service_unload (IdeWorkbenchAddin *addin,
 
   self->workbench = NULL;
 
-  dzl_signal_group_set_target (self->pipeline_signals, NULL);
+  ide_signal_group_set_target (self->pipeline_signals, NULL);
 
   if (self->client != NULL)
     {
@@ -389,7 +388,7 @@ rust_analyzer_service_notify_pipeline_cb (RustAnalyzerService *self,
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   pipeline = ide_build_manager_get_pipeline (build_manager);
-  dzl_signal_group_set_target (self->pipeline_signals, pipeline);
+  ide_signal_group_set_target (self->pipeline_signals, pipeline);
 
   IDE_EXIT;
 }
@@ -481,7 +480,7 @@ rust_analyzer_service_ensure_started (RustAnalyzerService *self)
   /* Try again (maybe new files opened) to see if we can get launcher
    * using a discovered Cargo.toml.
    */
-  if (!(pipeline = dzl_signal_group_get_target (self->pipeline_signals)) ||
+  if (!(pipeline = ide_signal_group_get_target (self->pipeline_signals)) ||
       !ide_pipeline_is_ready (pipeline))
     IDE_EXIT;
 
