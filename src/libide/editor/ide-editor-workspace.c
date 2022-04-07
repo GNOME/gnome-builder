@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ide-editor-workspace.h"
+#include "ide-workspace-private.h"
 
 /**
  * SECTION:ide-editor-workspace
@@ -109,41 +110,16 @@ ide_editor_workspace_add_page (IdeWorkspace     *workspace,
                                IdePanelPosition *position)
 {
   IdeEditorWorkspace *self = (IdeEditorWorkspace *)workspace;
-  PanelFrame *frame;
-  PanelDockPosition edge;
-  guint column;
-  guint row;
 
   g_assert (IDE_IS_EDITOR_WORKSPACE (self));
-  g_assert (IDE_IS_PAGE (page));
-  g_assert (position != NULL);
 
-  ide_panel_position_get_edge (position, &edge);
-
-  switch (edge)
-    {
-    case PANEL_DOCK_POSITION_START:
-    case PANEL_DOCK_POSITION_END:
-    case PANEL_DOCK_POSITION_BOTTOM:
-    case PANEL_DOCK_POSITION_TOP:
-    default:
-      g_warning ("Editor workspace only supports center position");
-      return;
-
-    case PANEL_DOCK_POSITION_CENTER:
-      break;
-    }
-
-  if (!ide_panel_position_get_column (position, &column))
-    column = 0;
-
-  if (!ide_panel_position_get_row (position, &row))
-    row = 0;
-
-  frame = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (self->grid), column), row);
-
-  /* TODO: Handle depth */
-  panel_frame_add (frame, PANEL_WIDGET (page));
+  _ide_workspace_add_widget (workspace,
+                             PANEL_WIDGET (page),
+                             position,
+                             self->edge_start,
+                             self->edge_end,
+                             self->edge_bottom,
+                             self->grid);
 }
 
 static void
@@ -152,64 +128,16 @@ ide_editor_workspace_add_pane (IdeWorkspace     *workspace,
                                IdePanelPosition *position)
 {
   IdeEditorWorkspace *self = (IdeEditorWorkspace *)workspace;
-  PanelDockPosition edge;
-  PanelPaned *paned;
-  GtkWidget *parent;
-  guint depth;
-  guint nth = 0;
 
   g_assert (IDE_IS_EDITOR_WORKSPACE (self));
-  g_assert (IDE_IS_PANE (pane));
-  g_assert (position != NULL);
 
-  ide_panel_position_get_edge (position, &edge);
-
-  switch (edge)
-    {
-    case PANEL_DOCK_POSITION_START:
-      paned = self->edge_start;
-      ide_panel_position_get_row (position, &nth);
-      break;
-
-    case PANEL_DOCK_POSITION_END:
-      paned = self->edge_end;
-      ide_panel_position_get_row (position, &nth);
-      break;
-
-    case PANEL_DOCK_POSITION_BOTTOM:
-      paned = self->edge_bottom;
-      ide_panel_position_get_column (position, &nth);
-      break;
-
-    case PANEL_DOCK_POSITION_TOP:
-    case PANEL_DOCK_POSITION_CENTER:
-    default:
-      g_warning ("Editor workspace only supports left/right/bottom edges");
-      return;
-    }
-
-  while (!(parent = panel_paned_get_nth_child (paned, nth)))
-    {
-      parent = panel_frame_new ();
-
-      if (edge == PANEL_DOCK_POSITION_START ||
-          edge == PANEL_DOCK_POSITION_END)
-        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_VERTICAL);
-      else
-        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_HORIZONTAL);
-
-      panel_paned_append (paned, parent);
-    }
-
-  if (ide_panel_position_get_depth (position, &depth))
-    {
-      /* TODO: setup position */
-      panel_frame_add (PANEL_FRAME (parent), PANEL_WIDGET (pane));
-    }
-  else
-    {
-      panel_frame_add (PANEL_FRAME (parent), PANEL_WIDGET (pane));
-    }
+  _ide_workspace_add_widget (workspace,
+                             PANEL_WIDGET (pane),
+                             position,
+                             self->edge_start,
+                             self->edge_end,
+                             self->edge_bottom,
+                             self->grid);
 }
 
 static IdeFrame *

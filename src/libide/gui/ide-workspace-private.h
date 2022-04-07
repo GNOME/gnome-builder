@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "ide-grid.h"
+#include "ide-panel-position.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS
@@ -34,5 +36,12 @@ void   _ide_workspace_move_front_page_mru    (IdeWorkspace        *workspace,
                                               GList               *mru_link);
 void   _ide_workspace_set_context            (IdeWorkspace        *workspace,
                                               IdeContext          *context);
+void   _ide_workspace_add_widget             (IdeWorkspace        *workspace,
+                                              PanelWidget         *widget,
+                                              IdePanelPosition    *position,
+                                              PanelPaned          *dock_start,
+                                              PanelPaned          *dock_end,
+                                              PanelPaned          *dock_bottom,
+                                              IdeGrid             *grid);
 
 G_END_DECLS
