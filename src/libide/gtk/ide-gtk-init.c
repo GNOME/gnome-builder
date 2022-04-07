@@ -26,11 +26,13 @@
 
 #include "ide-animation.h"
 #include "ide-entry-popover.h"
+#include "ide-file-chooser-entry.h"
 #include "ide-gtk-private.h"
 #include "ide-cell-renderer-fancy.h"
 #include "ide-fancy-tree-view.h"
 #include "ide-progress-icon.h"
 #include "ide-search-entry.h"
+#include "ide-three-grid.h"
 #include "ide-truncate-model.h"
 
 void
@@ -40,8 +42,10 @@ _ide_gtk_init (void)
   g_type_ensure (IDE_TYPE_CELL_RENDERER_FANCY);
   g_type_ensure (IDE_TYPE_ENTRY_POPOVER);
   g_type_ensure (IDE_TYPE_FANCY_TREE_VIEW);
+  g_type_ensure (IDE_TYPE_FILE_CHOOSER_ENTRY);
   g_type_ensure (IDE_TYPE_PROGRESS_ICON);
   g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
+  g_type_ensure (IDE_TYPE_THREE_GRID);
   g_type_ensure (IDE_TYPE_TRUNCATE_MODEL);
 
   g_resources_register (ide_gtk_get_resource ());
