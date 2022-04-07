@@ -315,7 +315,7 @@ ide_source_view_scroll_to_insert (IdeSourceView *self)
   mark = gtk_text_buffer_get_insert (buffer);
 
   /* TODO: use margin to implement  "scroll offset" */
-  gtk_text_view_scroll_to_mark (view, mark, .5, FALSE, .0, .0);
+  gtk_text_view_scroll_to_mark (view, mark, .25, FALSE, .0, .0);
 }
 
 void
