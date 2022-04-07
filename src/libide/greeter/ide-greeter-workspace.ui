@@ -50,6 +50,8 @@
     <child>
       <object class="GtkStack" id="pages">
         <property name="transition-type">crossfade</property>
+        <property name="hhomogeneous">false</property>
+        <property name="vhomogeneous">false</property>
         <signal name="notify::visible-child" handler="stack_notify_visible_child_cb" object="IdeGreeterWorkspace" swapped="true"/>
         <child>
           <object class="GtkStackPage">
