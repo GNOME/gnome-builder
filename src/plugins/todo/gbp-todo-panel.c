@@ -149,7 +149,7 @@ gbp_todo_panel_row_activated (GbpTodoPanel      *self,
                                lineno,
                                -1,
                                IDE_BUFFER_OPEN_FLAGS_NONE,
-                               NULL, NULL, NULL);
+                               NULL, NULL, NULL, NULL);
 }
 
 static gboolean

@@ -20,6 +20,11 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
+#include "ide-panel-position.h"
 #include "ide-workbench.h"
 #include "ide-workspace.h"
 
@@ -70,6 +75,7 @@ struct _IdeWorkbenchAddinInterface
                                      int                    at_line,
                                      int                    at_line_offset,
                                      IdeBufferOpenFlags     flags,
+                                     IdePanelPosition      *position,
                                      GCancellable          *cancellable,
                                      GAsyncReadyCallback    callback,
                                      gpointer               user_data);
@@ -127,6 +133,7 @@ void               ide_workbench_addin_open_async            (IdeWorkbenchAddin 
                                                               int                   at_line,
                                                               int                   at_line_offset,
                                                               IdeBufferOpenFlags    flags,
+                                                              IdePanelPosition     *position,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);

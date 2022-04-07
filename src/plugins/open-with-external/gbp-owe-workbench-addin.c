@@ -94,6 +94,7 @@ gbp_owe_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
                                     int                    line,
                                     int                    line_offset,
                                     IdeBufferOpenFlags     flags,
+                                    IdePanelPosition      *position,
                                     GCancellable          *cancellable,
                                     GAsyncReadyCallback    callback,
                                     gpointer               user_data)

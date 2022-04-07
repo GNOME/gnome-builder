@@ -260,7 +260,7 @@ gbp_project_tree_addin_node_activated (IdeTreeAddin *addin,
       file = ide_project_file_ref_file (project_file);
       workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
 
-      ide_workbench_open_async (workbench, file, NULL, 0, NULL, NULL, NULL);
+      ide_workbench_open_async (workbench, file, NULL, 0, NULL, NULL, NULL, NULL);
 
       return TRUE;
     }

@@ -36,6 +36,7 @@ struct _GbpEditoruiWorkbenchAddin
 
 typedef struct
 {
+  IdePanelPosition   *position;
   GFile              *file;
   IdeBufferOpenFlags  flags;
   gint                at_line;
@@ -50,6 +51,7 @@ open_file_task_data_free (gpointer data)
   OpenFileTaskData *td = data;
 
   g_clear_object (&td->file);
+  g_clear_pointer (&td->position, ide_panel_position_unref);
   g_slice_free (OpenFileTaskData, td);
 }
 
@@ -222,6 +224,7 @@ gbp_editorui_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
                                          gint                 at_line,
                                          gint                 at_line_offset,
                                          IdeBufferOpenFlags   flags,
+                                         IdePanelPosition    *position,
                                          GCancellable        *cancellable,
                                          GAsyncReadyCallback  callback,
                                          gpointer             user_data)
@@ -236,6 +239,7 @@ gbp_editorui_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
+  g_assert (position != NULL);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   state = g_slice_new0 (OpenFileTaskData);
@@ -243,6 +247,7 @@ gbp_editorui_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
   state->file = g_object_ref (file);
   state->at_line = at_line;
   state->at_line_offset = at_line_offset;
+  state->position = ide_panel_position_ref (position);
   ide_task_set_task_data (task, state, open_file_task_data_free);
 
   context = ide_workbench_get_context (self->workbench);
