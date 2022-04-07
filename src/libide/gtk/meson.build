@@ -18,6 +18,7 @@ libide_gtk_public_headers = [
   'ide-menu-manager.h',
   'ide-progress-icon.h',
   'ide-search-entry.h',
+  'ide-three-grid.h',
   'ide-truncate-model.h',
   'libide-gtk.h',
 ]
@@ -44,6 +45,7 @@ libide_gtk_public_sources = [
   'ide-menu-manager.c',
   'ide-progress-icon.c',
   'ide-search-entry.c',
+  'ide-three-grid.c',
   'ide-truncate-model.c',
 ]
 
